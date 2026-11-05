@@ -83,8 +83,8 @@ effN64Vtx flowers_v[41] = {
     {-11, -5, 0, 0, 0, 100, 160, 60, 255},
 };
 
-void effKemuri4Main(EffectEntry* effect);
-void effKemuri4Disp(CameraId cameraId, void* param);
+static void effKemuri4Main(EffectEntry* effect);
+static void effKemuri4Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns one flower-smoke puff ("dash" in the effect table) at (x, y, z) drifting sideways from the angle,
@@ -138,7 +138,7 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
  * Moves and spins the puff and lowers its alpha field by 12 per frame (Disp never reads it);
  * type 0 stalls its timer while Mario is in MARIO_MOTION_STAY, until the puff's velocity has turned negative.
  */
-void effKemuri4Main(EffectEntry* effect) {
+static void effKemuri4Main(EffectEntry* effect) {
     EffKemuri4N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -195,7 +195,7 @@ void effKemuri4Main(EffectEntry* effect) {
 }
 
 /** Draws a textured quad (texture 0x4C or 0x4D, picked randomly at spawn), then an untextured vertex-colored shape. */
-void effKemuri4Disp(CameraId cameraId, void* param) {
+static void effKemuri4Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     effN64Vtx* vtx1;

@@ -80,7 +80,7 @@ s32 offscreenEntry(const char* name) {
  * Draw callback on the offscreen camera: copies each entry's bounding box from the frame buffer into a freshly
  * allocated texture so it can be drawn back later in the frame.
  */
-void offscreenDisp(CameraId camId, void* param) {
+static void offscreenDisp(CameraId camId, void* param) {
     OffscreenWork* wp = offscreenGetWorkGp();
     int i, count;
     OffscreenEntry* entry;

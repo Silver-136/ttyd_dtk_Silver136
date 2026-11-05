@@ -26,8 +26,8 @@ typedef struct EffMistWork {
     u8 pad;
 } EffMistWork;
 
-void effMistMain(EffectEntry* effect);
-void effMistDisp(CameraId cameraId, void* param);
+static void effMistMain(EffectEntry* effect);
+static void effMistDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns the mist at (x, y, z) for `life` frames (0 or less: until soft-deleted); type 0-6 selects the colour
@@ -133,7 +133,7 @@ EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
  * types fade in and out over and over), fades everything over the last 32 frames and deletes the effect at the
  * end of its life.
  */
-void effMistMain(EffectEntry* effect) {
+static void effMistMain(EffectEntry* effect) {
     EffMistWork* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
@@ -204,7 +204,7 @@ void effMistMain(EffectEntry* effect) {
 }
 
 /** Draws each puff as a camera-facing textured quad (effect texture 0x44) tinted by its r, g, b. */
-void effMistDisp(CameraId cameraId, void* param) {
+static void effMistDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffMistWork* work = effect->userdata;
     Mtx trans;

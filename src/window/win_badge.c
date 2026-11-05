@@ -71,7 +71,7 @@ void winBadgeExit(void) {
  * so they show the L Emblem / W Emblem outfits (a_mario_l, a_mario_w, a_mario_wl),
  * or the matching 8-bit Mario animations when Mario is in 8-bit form.
  */
-void mario_change(WindowWork* w, s32 unused) {
+static void mario_change(WindowWork* w, s32 unused) {
     s32 hasLeft = pouchEquipCheckBadge(ITEM_L_EMBLEM);
     s32 hasRight = pouchEquipCheckBadge(ITEM_W_EMBLEM);
     const char* model;
@@ -301,7 +301,7 @@ void winBadgeMain2(WindowWork* w) {
     }
 }
 
-void badge_disp(WindowWork* w, f32 xo, f32 yo);
+static void badge_disp(WindowWork* w, f32 xo, f32 yo);
 
 /**
  * Draws the Badges window (menu slot n): the two tabs,
@@ -390,7 +390,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #if VERSION <= VERSION_DEMO_JP
 static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
 #else
-void badge_disp(WindowWork* w, f32 xo, f32 yo) {
+static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     WindowWork* p0;
 #endif
 

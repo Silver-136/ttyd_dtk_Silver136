@@ -99,8 +99,8 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
 }
 
 // local prototypes
-void iconDisp(CameraId camId, void* param);
-void iconGX(Mtx mtx, IconEntry* entry);
+static void iconDisp(CameraId camId, void* param);
+static void iconGX(Mtx mtx, IconEntry* entry);
 
 #define iconGetWork() (gp->inBattle ? &work[1] : &work[0])
 
@@ -140,7 +140,7 @@ static void _callback_tpl(s32 error, DVDFileInfo* info) {
 }
 
 /** DVD read callback for icon.bin (per-icon size and animation frames): closes the file and marks it ready. */
-void _callback_bin(s32 error, DVDFileInfo* info) {
+static void _callback_bin(s32 error, DVDFileInfo* info) {
     DVDMgrClose(info->cb.userData);
     icon_bin_ok = TRUE;
 }
@@ -395,7 +395,7 @@ void iconChange(const char* name, u16 iconId) {
  * Draw callback for a named icon: places it at its position and scale,
  * turned to face the camera (billboarded on the y axis), and draws it.
  */
-void iconDisp(CameraId camId, void* param) {
+static void iconDisp(CameraId camId, void* param) {
     IconEntry* entry = param;
     CameraEntry* camera;
     Mtx trans, scale, rot, mtx;
@@ -617,7 +617,7 @@ void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
 #if VERSION <= VERSION_DEMO_JP
 static void iconGX(Mtx mtx, IconEntry* entry) {
 #else
-void iconGX(Mtx mtx, IconEntry* entry) {
+static void iconGX(Mtx mtx, IconEntry* entry) {
 #endif
     static char dummy[] ATTRIBUTE_ALIGN(32) = "";
     f32 x, y, w, hn;

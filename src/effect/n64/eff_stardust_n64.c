@@ -79,8 +79,8 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, 8, 0, 4928, 704, 0, 0, 0, 255},
 };
 
-void effStardustMain(EffectEntry* effect);
-void effStardustDisp(CameraId cameraId, void* param);
+static void effStardustMain(EffectEntry* effect);
+static void effStardustDisp(CameraId cameraId, void* param);
 
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     s32 lifeA;
@@ -217,7 +217,7 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
  * sparkle is done.
  * Each sparkle cycles through 8 shapes; drawn on the work's camera, layer 2.
  */
-void effStardustMain(EffectEntry* effect) {
+static void effStardustMain(EffectEntry* effect) {
     EffStardustN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -313,7 +313,7 @@ void effStardustMain(EffectEntry* effect) {
  * coloured from color_rotation_data scaled by the work's tint (see effStardustN64SetColor),
  * each sparkle one step further on.
  */
-void effStardustDisp(CameraId cameraId, void* param) {
+static void effStardustDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffStardustN64Work* work;
     s32 i;

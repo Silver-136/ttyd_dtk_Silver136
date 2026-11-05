@@ -28,9 +28,9 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_save_flags.h"
 
-void itemUseDisp(WinMgrEntry* entry);
-void itemUseDisp2(WinMgrEntry* entry);
-void item_disp(WindowWork* w, f32 xo, f32 yo);
+static void itemUseDisp(WinMgrEntry* entry);
+static void itemUseDisp2(WinMgrEntry* entry);
+static void item_disp(WindowWork* w, f32 xo, f32 yo);
 
 
 /** Pages of Super Luigi volume 1 for the book reader in the item menu, ending with NULL. */
@@ -796,7 +796,7 @@ void winItemDisp(s32 camId, void* param, s32 n) {
  * Draws the scrolling two-column item list (items not usable in the field are grayed on the Items tab),
  * the page arrows, the Z sort hint, and the open book panel.
  */
-void item_disp(WindowWork* w, f32 xo, f32 yo) {
+static void item_disp(WindowWork* w, f32 xo, f32 yo) {
     GXColor white = {255, 255, 255, 255};
     GXColor white2;
     GXColor black = {0, 0, 0, 255};
@@ -919,7 +919,7 @@ static const char* hpfp_name_table[7][2] = {
 #if VERSION <= VERSION_DEMO_JP
 static void itemUseDisp(WinMgrEntry* entry) {
 #else
-void itemUseDisp(WinMgrEntry* entry) {
+static void itemUseDisp(WinMgrEntry* entry) {
 #endif
     WindowWork* w = winGetPtr();
     GXColor black = {0, 0, 0, 255};
@@ -1088,7 +1088,7 @@ void itemUseDisp(WinMgrEntry* entry) {
  * centres msg_window_select_5 in it (US and later resize it to the text's line count and squeeze
  * long text).
  */
-void itemUseDisp2(WinMgrEntry* entry) {
+static void itemUseDisp2(WinMgrEntry* entry) {
     WindowWork* wp = winGetPtr();
     GXColor color = {0, 0, 0, 255};
     if (!winMgrAction(wp->useWin[1])) {

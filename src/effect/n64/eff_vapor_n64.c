@@ -66,8 +66,8 @@ static effN64Vtx size64x64_tex32x32_vtx[] = {
 static const GXColor kColor1;
 static const GXColor kColor2;
 
-void effVaporMain(EffectEntry* effect);
-void effVaporDisp(CameraId cameraId, void* param);
+static void effVaporMain(EffectEntry* effect);
+static void effVaporDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a steam puff at (x, y, z) of the given scale; a lifetime of 0 or less lasts until soft-deleted.
@@ -114,7 +114,7 @@ EffectEntry* effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
  * and fades it over the last 16 frames, which a delete request starts (lifetime 1000 means endless).
  * CAMERA_3D, layer 2.
  */
-void effVaporMain(EffectEntry* effect) {
+static void effVaporMain(EffectEntry* effect) {
     EffVaporN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -163,7 +163,7 @@ void effVaporMain(EffectEntry* effect) {
  * cross-fading between frames of the smoke strip (texture 0x69 for types 0/2, 0x6A otherwise)
  * and shaded between the work's two colours.
  */
-void effVaporDisp(CameraId cameraId, void* param) {
+static void effVaporDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffVaporN64Work* work;
     s32 frame;

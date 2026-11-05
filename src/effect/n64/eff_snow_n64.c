@@ -19,8 +19,8 @@ typedef struct EffSnowN64Work {
     s32 timer;      // 0x28
 } EffSnowN64Work;
 
-void effSnowMain(EffectEntry* effect);
-void effSnowDisp(CameraId cameraId, void* param);
+static void effSnowMain(EffectEntry* effect);
+static void effSnowDisp(CameraId cameraId, void* param);
 
 /** Spawns one snowflake at (x, y, z) living `lifetime` frames; consecutive flakes alternate their spin direction.
  * Reached only through evt_eff64 "snow_n64"; no script callers found. */
@@ -57,7 +57,7 @@ EffectEntry* effSnowN64Entry(s32 lifetime, f32 x, f32 y, f32 z) {
  * it wraps to stay within 200 units of Mario on X and Z so the snow follows him.
  * Deletes when the timer runs out. CAMERA_3D, layer 2.
  */
-void effSnowMain(EffectEntry* effect) {
+static void effSnowMain(EffectEntry* effect) {
     EffSnowN64Work* work = effect->userdata;
     MarioWork* mario;
     Vec position;
@@ -103,7 +103,7 @@ void effSnowMain(EffectEntry* effect) {
  * Draws the flake as a 32x32 white quad of texture 7 (tiled twice) at its position,
  * facing the camera and then tilted and turned by its rotation.
  */
-void effSnowDisp(CameraId cameraId, void* param) {
+static void effSnowDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffSnowN64Work* work;

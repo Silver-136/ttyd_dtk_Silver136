@@ -69,7 +69,7 @@ s32 ac_signaltiming_ok_frame_range_2[7] = {30, 30, 30, 30, 25, 20, 15};
 static void actionCommandDisp(f32 x, f32 y);
 
 /** Frames a signal stays pressable: params[7] plus 20 down to 2 by difficulty, or 30 down to 15 when params[1] is 1. */
-s32 _get_ok_frame_range(s32 difficulty) {
+static s32 _get_ok_frame_range(s32 difficulty) {
     BattleWork* work = _battleWorkPointer;
     switch (work->actionCommands.params[SIGNAL_PARAM_MODE]) {
         case 1:

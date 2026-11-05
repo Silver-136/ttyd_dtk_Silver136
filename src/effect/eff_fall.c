@@ -105,10 +105,10 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
-void effFallMain(EffectEntry* effect);
-void effFallDisp(CameraId cameraId, void* payload);
-void effFallDispInseki(CameraId cameraId, void* payload);
-void effFallDispWater(CameraId cameraId, void* payload);
+static void effFallMain(EffectEntry* effect);
+static void effFallDisp(CameraId cameraId, void* payload);
+static void effFallDispInseki(CameraId cameraId, void* payload);
+static void effFallDispWater(CameraId cameraId, void* payload);
 
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
     const char* sfxName;
@@ -274,7 +274,7 @@ static inline void effFallRelease(EffectEntry* effect) {
 
 // FAKE: the seven sfx names are spelled SFX_NAME_WORD("lit") at each call (no locals) so each becomes a hoisted
 // loop-invariant temporary; plain literals in calls are not hoisted. Same string addresses.
-void effFallMain(EffectEntry* effect) {
+static void effFallMain(EffectEntry* effect) {
     Vec sndPos;
     EffFallElem* e;
     s32 i;
@@ -807,7 +807,7 @@ void effFallMain(EffectEntry* effect) {
  * Draws the falling objects other than water and meteors: bugs and fork as textured quads, the tub, bucket,
  * Koopa and light as animation poses.
  */
-void effFallDisp(CameraId cameraId, void* payload) {
+static void effFallDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     Mtx trans;
     Mtx scl;
@@ -1000,7 +1000,7 @@ void effFallDisp(CameraId cameraId, void* payload) {
 }
 
 /** Draws the meteor (EFF_inseki) animation poses at the object's position. */
-void effFallDispInseki(CameraId cameraId, void* payload) {
+static void effFallDispInseki(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     Mtx trans;
     Mtx scl;
@@ -1057,7 +1057,7 @@ void effFallDispInseki(CameraId cameraId, void* payload) {
 /** Opaque white, the tint register colour the falling water is drawn with in effFallDispWater. */
 static const GXColor white255 = { 255, 255, 255, 255 };
 /** Draws the falling water (type 3) as a translucent quad, plus the splash display lists once it has landed. */
-void effFallDispWater(CameraId cameraId, void* payload) {
+static void effFallDispWater(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     Mtx trans;
     Mtx scl;

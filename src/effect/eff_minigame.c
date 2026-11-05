@@ -30,8 +30,8 @@ typedef struct EffMiniGameWork {
     s32 alpha;  // 0x34
 } EffMiniGameWork;
 
-void effMiniGameMain(EffectEntry* effect);
-void effMiniGameDisp(CameraId cameraId, void* param);
+static void effMiniGameMain(EffectEntry* effect);
+static void effMiniGameDisp(CameraId cameraId, void* param);
 
 #if VERSION >= VERSION_US
 typedef struct MiniGameTbl {
@@ -208,7 +208,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
  * EVT_GAME_START1 for the start letters), deletes the effect when finished or on a soft delete, and
  * registers the 2D draw callback.
  */
-void effMiniGameMain(EffectEntry* effect) {
+static void effMiniGameMain(EffectEntry* effect) {
     EffMiniGameWork* work = effect->userdata;
     Vec pos;
     Vec tmp;
@@ -456,7 +456,7 @@ void effMiniGameMain(EffectEntry* effect) {
  * Draws the banner text pieces as 2D textured quads, shadow pass first; from US on the texture set follows the
  * current language.
  */
-void effMiniGameDisp(CameraId cameraId, void* param) {
+static void effMiniGameDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffMiniGameWork* work = effect->userdata;
     CameraEntry* cam;

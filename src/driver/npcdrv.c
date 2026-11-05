@@ -290,7 +290,7 @@ static inline void npcDimColor(NpcEntry* entry) {
  * Draw callback for a translucent NPC (colour alpha below 255):
  * draws all three material passes in one go, with the dimming and the Luigi pose flip.
  */
-void npcDisp_xlu(CameraId cameraId, void* param) {
+static void npcDisp_xlu(CameraId cameraId, void* param) {
     NpcEntry* entry = param;
     Mtx mtx;
     GXColor color;
@@ -320,7 +320,7 @@ void npcDisp_xlu(CameraId cameraId, void* param) {
  * mode 0 updates and draws the opaque pass, modes 1 and 2 the other two passes.
  * US and later apply the dimmed colour before the switch; JP and the early demos only in mode 0.
  */
-void npcDisp(CameraId camId, void* param) {
+static void npcDisp(CameraId camId, void* param) {
     NpcEntry* entry = param;
     Mtx mtx;
     GXColor color;
@@ -371,7 +371,7 @@ void npcDisp(CameraId camId, void* param) {
  * Like npcDisp_xlu, but draws into the NPC's offscreen buffer (offscreenId)
  * and records the GX bounding box of what it drew there.
  */
-void npcDisp_offscreen_xlu(CameraId camId, void* param) {
+static void npcDisp_offscreen_xlu(CameraId camId, void* param) {
     NpcEntry* entry = param;
     u16 left, top, right, bottom;
     Mtx mtx;
@@ -399,7 +399,7 @@ void npcDisp_offscreen_xlu(CameraId camId, void* param) {
  * and records the GX bounding box of what it drew there.
  * Same per-version difference in where the dimming happens.
  */
-void npcDisp_offscreen(CameraId camId, void* param) {
+static void npcDisp_offscreen(CameraId camId, void* param) {
     NpcEntry* entry = param;
     u16 left, top, right, bottom;
     Mtx mtx;
@@ -444,7 +444,7 @@ void npcDisp_offscreen(CameraId camId, void* param) {
  * four copies at positionHistory[4..1], offset 2 units along the camera yaw and more opaque toward the newest,
  * then restores the material flags.
  */
-void npcDisp_blur(CameraId camId, void* param) {
+static void npcDisp_blur(CameraId camId, void* param) {
     s32 alpha;
     NpcEntry* entry = param;
     s32 i;
@@ -650,7 +650,7 @@ void npcDelete(NpcEntry* entry) {
 }
 
 /** Deletes this NPC, everything linked after it with next, and all their slaves, last link first. */
-void _npcDeleteGroup(NpcEntry* entry) {
+static void _npcDeleteGroup(NpcEntry* entry) {
     int i;
 
     if (entry->next) {
@@ -680,7 +680,7 @@ void npcDeleteGroup(NpcEntry* entry) {
     _npcDeleteGroup(entry);
 }
 
-void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param);
+static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param);
 void fbatTalkMode(void);
 void fbatBattleMode(void);
 s32 kpaJumpChk(void);
@@ -1752,7 +1752,7 @@ void npcStrippedAnnouncePool(f32* f) {
  * a coloured window sized to the message with the shaking white text at the banner's x/y.
  * US and later split the text into up to four lines.
  */
-void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
+static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
 #if VERSION >= VERSION_US
     s32 height;
 #endif
@@ -1828,7 +1828,7 @@ void* fbatHitCheck(u32 flags, void* result);
 
 void marioChgMotJump2(void);
 f32 marioGetDispDir(void);
-void npcKoopaModeEncountCheck(void);
+static void npcKoopaModeEncountCheck(void);
 
 /** Yaw of the 3D camera in degrees (0-360), from its look direction. */
 static inline f32 fbat_camAngle(void) {
@@ -2521,7 +2521,7 @@ void _npcDead(NpcEntry* npc, u16 reason) {
 }
 
 /** Marks this NPC, everything linked after it with next, and all their slaves dead, last link first. */
-void _npcGroupDead(NpcEntry* entry, u16 reason) {
+static void _npcGroupDead(NpcEntry* entry, u16 reason) {
     int i;
 
     if (entry->next) {
@@ -2580,8 +2580,8 @@ typedef struct FbatHitResult {
     u32 bits; // 0xC
 } FbatHitResult;
 
-NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
-NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
+static NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
+static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 
 #if VERSION <= VERSION_DEMO_JP
 
@@ -3075,7 +3075,7 @@ void npcStrippedHitPool(f32* f) {
  * Sphere test of the point (x, y, z) with radius r against an NPC's upright cylinder (half its width);
  * writes the distance to *dist and returns the NPC on a hit, else NULL.
  */
-NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r) {
+static NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r) {
     f32 dx = x - npc->position.x;
     f32 dy = y - npc->position.y;
     f32 dz = z - npc->position.z;
@@ -3098,7 +3098,7 @@ NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 
  * Tests the hammer head at every frame of the swing (0 to 11) against an NPC;
  * returns the NPC at the first frame that hits, with the distance in *dist.
  */
-NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
+static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
     f32 t;
     f32 d;
 #if VERSION <= VERSION_DEMO_JP
@@ -3736,7 +3736,7 @@ void npcKoopaModeMain(void) {
  * takes Bowser's power down on a hit, or kills it when it stands on lava ("a_magu").
  * Each reason only once (hazardFlags).
  */
-void npcKoopaModeEncountCheck(void) {
+static void npcKoopaModeEncountCheck(void) {
     NpcWork* wp;
     FieldBattleData* data;
     s32 i;

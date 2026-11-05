@@ -11,8 +11,8 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 
-void effCrystalMain(EffectEntry* effect);
-void effCrystalDisp(CameraId cameraId, void* param);
+static void effCrystalMain(EffectEntry* effect);
+static void effCrystalDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a crystal glint at (x, y, z) for `lifetime` frames (0 or less, or 100 and more: until soft deleted).
@@ -80,7 +80,7 @@ EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
  * Fades in over 16 frames and out over the last 16 (a delete request cuts the life to 30).
  * Sets the tint and alpha for the variant: some pulse with a sine, the later ones keep growing by 10% per frame.
  */
-void effCrystalMain(EffectEntry* effect) {
+static void effCrystalMain(EffectEntry* effect) {
     EffCrystalN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -231,7 +231,7 @@ effN64Vtx size100x100_tex32x32_vtx[] = {
  * Draws a camera-facing glint: types below 3 draw both quads with texture 0x6D, spun against each other;
  * other types draw the 100x100 quad alone with texture 0x6E.
  */
-void effCrystalDisp(CameraId cameraId, void* param) {
+static void effCrystalDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffCrystalN64Work* work;

@@ -45,7 +45,7 @@ static s32 touch_wall_ct;
 #endif
 
 BOOL party_slit(PartyEntry* party);
-BOOL party_roll(PartyEntry* party);
+static BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
 
@@ -334,9 +334,9 @@ static f32 partyGetDirGndY(Vec u, f32 md);
 static u32 partyGetFrontAttrFar(PartyEntry* party);
 static void partyGorFix(PartyEntry* party);
 static void partyPoseA2(PartyEntry* party);
-s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
+static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
-void party_force_reset_outofscreen(PartyEntry* party);
+static void party_force_reset_outofscreen(PartyEntry* party);
 
 #if VERSION <= VERSION_DEMO_JP
 void partyWalkSe(PartyEntry* party, s32 arg) {
@@ -3388,7 +3388,7 @@ BOOL party_slit(PartyEntry* party) {
  * Guess: an unused partner tube mode.
  */
 #if VERSION >= VERSION_JP
-BOOL party_roll(PartyEntry* party) {
+static BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
     f32 x;
 
@@ -3538,7 +3538,7 @@ static f32 partyHomingOff(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
 #else
-s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
+static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
 #endif
     f32 s2, c2;
     HitCheckQuery q2;
@@ -3721,7 +3721,7 @@ static inline void partyDownDirY(HitCheckQuery* q) {
 #if VERSION <= VERSION_DEMO_JP
 static void party_force_reset_outofscreen(PartyEntry* party) {
 #else
-void party_force_reset_outofscreen(PartyEntry* party) {
+static void party_force_reset_outofscreen(PartyEntry* party) {
 #endif
     MarioWork* m2;
     s32 i;

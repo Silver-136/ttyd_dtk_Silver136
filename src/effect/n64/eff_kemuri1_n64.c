@@ -32,7 +32,7 @@ typedef struct EffKemuri1Work {
     s32 duration;       // 0x4C, header: frames for the 16 texture frames
 } EffKemuri1Work;
 
-void effKemuri1Main(EffectEntry* effect);
+static void effKemuri1Main(EffectEntry* effect);
 
 EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     EffectEntry* effect;
@@ -208,13 +208,13 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     return effect;
 }
 
-void effKemuri1Disp(CameraId cameraId, void* param);
+static void effKemuri1Disp(CameraId cameraId, void* param);
 
 /**
  * Steps an animation index through 16 frames across the effect's duration (15 to 129 frames),
  * moves each sprite by its velocity and deletes the effect when the animation ends.
  */
-void effKemuri1Main(EffectEntry* effect) {
+static void effKemuri1Main(EffectEntry* effect) {
     EffKemuri1Work* work = effect->userdata;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
@@ -283,7 +283,7 @@ void effKemuri1Main(EffectEntry* effect) {
  * Draws each smoke sprite as a camera-facing quad with texture 0x28, picking the animation frame from the timer;
  * types 5-7 are half size.
  */
-void effKemuri1Disp(CameraId cameraId, void* param) {
+static void effKemuri1Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     Mtx mtx, scale, rot, view;
     GXTexObj tex;

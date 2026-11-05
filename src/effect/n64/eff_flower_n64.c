@@ -30,8 +30,8 @@ typedef struct EffFlowerN64Work {
     s32 texIdx;   // 0x44
 } EffFlowerN64Work;
 
-void effFlowerMain(EffectEntry* effect);
-void effFlowerDisp(CameraId cameraId, void* param);
+static void effFlowerMain(EffectEntry* effect);
+static void effFlowerDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a flower that rises from just above (x, y, z) for lifetime frames.
@@ -90,7 +90,7 @@ EffectEntry* effFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
  * Accelerates the flower upward and, once lifetime drops below 150, drifts it to one side and spins it;
  * type 1 counts a swing value between 0 and 20 (the draw code never reads it). Deletes it at the end of the life.
  */
-void effFlowerMain(EffectEntry* effect) {
+static void effFlowerMain(EffectEntry* effect) {
     EffFlowerN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -151,7 +151,7 @@ void effFlowerMain(EffectEntry* effect) {
 }
 
 /** Draws the flower with texture 0x4C in two passes (the flowers_v meshes), tilted by rotX/rotY. */
-void effFlowerDisp(CameraId cameraId, void* param) {
+static void effFlowerDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffFlowerN64Work* work;

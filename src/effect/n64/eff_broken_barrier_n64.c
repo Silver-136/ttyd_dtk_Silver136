@@ -37,8 +37,8 @@ typedef struct EffBrokenBarrierN64Work {
     f32 rotVelB;    // 0x68
 } EffBrokenBarrierN64Work;
 
-void effBrokenBarrierMain(EffectEntry* effect);
-void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect);
+static void effBrokenBarrierMain(EffectEntry* effect);
+static void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx viewMtx);
 
 /** Shard size over its 20-frame cycle: swells to 1.5 then shrinks (the ten steps are listed twice). */
@@ -138,7 +138,7 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
  * flies out (or in, for types 2-3) spinning, and shrinks along a scale table.
  * The whole effect fades in its last 8 frames.
  */
-void effBrokenBarrierMain(EffectEntry* effect) {
+static void effBrokenBarrierMain(EffectEntry* effect) {
     s32 w;
     s32 h;
     EffBrokenBarrierN64Work* work = effect->userdata;
@@ -265,7 +265,7 @@ void effBrokenBarrierMain(EffectEntry* effect) {
 }
 
 /** Draws the shard cloud three times: as is, and rotated by +/-120 degrees about a tilted axis. */
-void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
+static void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     Mtx scaleMtx;
     Mtx rotMtx;

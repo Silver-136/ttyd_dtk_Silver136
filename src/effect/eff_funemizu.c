@@ -16,8 +16,8 @@
 #include "libc_decls.h"
 
 void effFunemizuMain(EffectEntry* effect);
-void effFunemizuDisp(CameraId cameraId, EffectEntry* effect);
-void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect);
+static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect);
+static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect);
 
 typedef struct ColorEntry {
     char* name;
@@ -350,7 +350,7 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     s32 b;
 
 #else
-void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
+static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;
@@ -544,7 +544,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
+static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;

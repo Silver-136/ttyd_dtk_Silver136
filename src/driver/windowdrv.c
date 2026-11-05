@@ -697,7 +697,7 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
  * the frame for the window type (normal, boss, TEC-XX, Shadow Sirens)
  * and the tail from the balloon toward (tailX, tailY) as set by tailFlags.
  */
-void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY) {
+static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY) {
     CameraEntry* camera;
     Mtx trans, scale;
     Mtx norm_mtx1, norm_mtx2, norm_mtx3, norm_mtx4;

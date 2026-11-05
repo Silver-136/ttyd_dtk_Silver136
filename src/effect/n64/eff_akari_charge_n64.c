@@ -24,8 +24,8 @@ static effN64Vtx size2x8_tex8x16_vtx[] = {
     {-4, 20, 0, 0, 1024, 255, 0, 0, 255},
 };
 
-void effAkariChargeMain(EffectEntry* effect);
-void effAkariChargeDisp(CameraId cameraId, void* param);
+static void effAkariChargeMain(EffectEntry* effect);
+static void effAkariChargeDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns the glow at (x, y, z), `size` times its normal scale,
@@ -83,7 +83,7 @@ EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
  * random-walking from the centre and remembering its last two positions as a trail;
  * each picks a random texture column.
  */
-void effAkariChargeMain(EffectEntry* effect) {
+static void effAkariChargeMain(EffectEntry* effect) {
     EffAkariChargeN64Elem* p = effect->userdata;
     s32 i;
     s32 type;
@@ -167,7 +167,7 @@ void effAkariChargeMain(EffectEntry* effect) {
  * with the texture column and scroll animated; type 1 temporarily switches to the 3D camera's projection with
  * depth testing off.
  */
-void effAkariChargeDisp(CameraId cameraId, void* param) {
+static void effAkariChargeDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffAkariChargeN64Elem* p;

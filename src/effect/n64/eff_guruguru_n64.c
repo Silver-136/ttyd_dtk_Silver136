@@ -19,8 +19,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 32, 0, 0, 0, 255},
 };
 
-void effGuruguruMain(EffectEntry* effect);
-void effGuruguruDisp(CameraId cameraId, void* param);
+static void effGuruguruMain(EffectEntry* effect);
+static void effGuruguruDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns num yellow sprites circling (x, y, z); the radius opens up to the given radius.
@@ -63,7 +63,7 @@ EffectEntry* effGuruguruN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 rad
  * Opens the radius by 10% of the remaining distance each frame and advances every sprite around the circle,
  * spinning each in Z by 20 degrees per frame.
  */
-void effGuruguruMain(EffectEntry* effect) {
+static void effGuruguruMain(EffectEntry* effect) {
     EffGuruguruN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -101,7 +101,7 @@ void effGuruguruMain(EffectEntry* effect) {
 }
 
 /** Draws each sprite as a camera-facing yellow quad (texture 0x1D) at its position on the circle. */
-void effGuruguruDisp(CameraId cameraId, void* param) {
+static void effGuruguruDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     EffGuruguruN64Work* work = effect->userdata;

@@ -29,35 +29,35 @@
 double __fabs(double);
 
 
-void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front);
 
 #if VERSION <= VERSION_DEMO_JP
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front);
 #endif
 
-void BattleAudienceCtrlProcessKinopioSingSub(s32 index);
-void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
+static void BattleAudienceCtrlProcessKinopioSingSub(s32 index);
+static void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
 
 /**
  * Per-frame update of one audience member, whatever its kind (the "Kinopio" Toad routine is shared by all):
@@ -191,7 +191,7 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
  * then starts a fidget (turn around, tilt the head, hop) or a cheer,
  * more often the fuller the crowd is relative to its expected size. A member hit by Mario switches to status 10.
  */
-void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
     f32 a;
@@ -364,7 +364,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 /** Status 1, "furimuki" (looking back): turns 180 degrees over 15 frames, holds, turns back, then idles again. */
-void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
@@ -385,7 +385,7 @@ void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
 }
 
 /** Status 2, "kubi katamuke" (head tilt): sways the sprite sideways and back over 60 frames, then idles again. */
-void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
@@ -409,7 +409,7 @@ void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
 }
 
 /** Status 3, idle hop: one small hop (three higher ones for Punies), then back to idle. */
-void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
@@ -446,7 +446,7 @@ void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
 }
 
 /** Status 4, cheering with raised arms: bobs up and down for counterF cycles of 30 frames. */
-void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 0) {
         BattleAudience_SetAnim(index, AUD_ANIM_RAISE_BACK, FALSE);
@@ -474,7 +474,7 @@ void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
 }
 
 /** Status 5, cheering: one excited hop of slightly random height. */
-void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
@@ -502,7 +502,7 @@ void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
 }
 
 /** Status 6, big cheer: two higher hops while spinning. */
-void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
@@ -536,7 +536,7 @@ void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
  * If Mario or a partner hits the member first, the item is dropped, the member is knocked back (status 10) and,
  * unless item slot 0 holds junk (ITEM_AUDIENCE_CAN up to the badges), the crowd's target size shrinks a little.
  */
-void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
@@ -572,7 +572,7 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
  * Status 8, throwing: plays the throw animation, then idles.
  * Being hit during the throw knocks it back as in status 7.
  */
-void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudience_SetAnim(index, AUD_ANIM_ITEM_THROW_BACK, FALSE);
     if (BattleAudience_GetAnimEnd(index) == 1) {
@@ -593,7 +593,7 @@ void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
 }
 
 /** Status 9, booing: bobs with the arms-up animation for counterF cycles of 30 frames, then idles. */
-void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudience_SetAnim(index, AUD_ANIM_RAISE_BACK, FALSE);
     switch (m->step) {
@@ -622,7 +622,7 @@ void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
  * Status 10, hit by Mario or a partner: knocked up and squashed,
  * then flees screaming (status 12) when allowed to leave, otherwise goes back to idle.
  */
-void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
@@ -662,7 +662,7 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
  * Status 11, arriving: walks in to the member's seat (Piranha Plants rise from below after a random delay),
  * then idles. Also used to send phase-event members back to their seats.
  */
-void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     BattleAudienceMember* m;
     f32 dx;
     f32 dz;
@@ -741,7 +741,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
 }
 
 /** Status 12, leaving: walks out of the stands (Piranha Plants sink into the floor) and removes the member. */
-void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
@@ -888,7 +888,7 @@ static BattleWeapon weapon_teresa_trans = {
  * unless it is already invisible or shadow-guarded, turns it invisible (weapon_teresa_trans),
  * then returns to its seat.
  */
-void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     static f32 x;
@@ -959,7 +959,7 @@ static const Vec v0 = {0.0f, 0.0f, 0.0f};
  * and sets off the stage nozzle (BattleStage_NozzleWorkCheck) while running off the side;
  * then it returns to its seat. At rank 0 it always makes a prop fall.
  */
-void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m;
     PouchData* pouch;
@@ -1169,7 +1169,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
  * Status 16, Crazee Dayzee phase event: spins, sings (with floating notes) for 120 frames,
  * and puts the rest of the crowd to sleep.
  */
-void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     f32 y;
@@ -1225,7 +1225,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
  * Puts one member to sleep (status 13; statusDelay 3 wakes it after three enemy phases) for the Dayzee's song,
  * redirecting a wide member's tail seat to its owner and sparing Koopas hiding in their shells.
  */
-void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
+static void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) {
         BattleAudienceCtrlProcessKinopioSingSub(index - 1);
@@ -1239,7 +1239,7 @@ void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
  * Status 17, Koopa phase event: after a random delay the Koopa hops into its shell (with the shell sound),
  * stays inside until released, then hops out and idles.
  */
-void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->step >= 2 && m->step <= 5) {
         BattleAudience_SetAnim(index, AUD_ANIM_SHELL_BACK, FALSE);
@@ -1291,7 +1291,7 @@ void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
 }
 
 /** Status 18, Bulky Bob-omb phase event: lights its fuse (sound for 180 frames) and counts down to the blast. */
-void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_FRONT, FALSE);
@@ -1325,7 +1325,7 @@ void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
  * Status 19, Bulky Bob-omb explosion: swells, explodes with a blast effect (front rows only)
  * and clears the members in the surrounding seats via BattleAudienceCtrlProcessKinopioFireSub.
  */
-void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
     s32 i;
@@ -1382,7 +1382,7 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
  * Applies a Bulky Bob-omb blast to one seat: another Bulky Bob-omb catches and explodes too (status 19),
  * anyone else except a shelled Koopa is removed from the crowd and the target count drops by one.
  */
-void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
+static void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) {
@@ -1406,7 +1406,7 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
  * turns to it and eats it (removing it from the crowd), then idles.
  * Goes straight back to idle when no one is in reach.
  */
-void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
     BattleStage* stage;

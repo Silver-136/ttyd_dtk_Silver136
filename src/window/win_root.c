@@ -34,30 +34,30 @@ typedef struct WinSortData {
 } WinSortData;
 
 void winLogDisp(s32 camId, WindowWork* wp, s32 n);
-void winMailDisp(WindowWork* wp);
-void winMsgDisp(WindowWork* wp, f32 x, f32 y);
-void winSortGX(WindowWork* wp);
+static void winMailDisp(WindowWork* wp);
+static void winMsgDisp(WindowWork* wp, f32 x, f32 y);
+static void winSortGX(WindowWork* wp);
 
-void sort_1_1_func(WindowWork* wp);
-void sort_1_2_func(WindowWork* wp);
-void sort_2_1_func(WindowWork* wp);
-void sort_2_2_func(WindowWork* wp);
-void sort_3_1_func(WindowWork* wp);
-void sort_3_2_func(WindowWork* wp);
-void sort_3_3_func(WindowWork* wp);
-void sort_4_1_func(WindowWork* wp);
-void sort_4_2_func(WindowWork* wp);
-void sort_4_3_func(WindowWork* wp);
-void sort_5_1_func(WindowWork* wp);
-void sort_5_2_func(WindowWork* wp);
-void sort_5_3_func(WindowWork* wp);
-void sort_6_1_func(WindowWork* wp);
-void sort_6_2_func(WindowWork* wp);
-void sort_7_1_func(WindowWork* wp);
-void sort_7_2_func(WindowWork* wp);
-void sort_7_3_func(WindowWork* wp);
-void sort_8_1_func(WindowWork* wp);
-void sort_8_2_func(WindowWork* wp);
+static void sort_1_1_func(WindowWork* wp);
+static void sort_1_2_func(WindowWork* wp);
+static void sort_2_1_func(WindowWork* wp);
+static void sort_2_2_func(WindowWork* wp);
+static void sort_3_1_func(WindowWork* wp);
+static void sort_3_2_func(WindowWork* wp);
+static void sort_3_3_func(WindowWork* wp);
+static void sort_4_1_func(WindowWork* wp);
+static void sort_4_2_func(WindowWork* wp);
+static void sort_4_3_func(WindowWork* wp);
+static void sort_5_1_func(WindowWork* wp);
+static void sort_5_2_func(WindowWork* wp);
+static void sort_5_3_func(WindowWork* wp);
+static void sort_6_1_func(WindowWork* wp);
+static void sort_6_2_func(WindowWork* wp);
+static void sort_7_1_func(WindowWork* wp);
+static void sort_7_2_func(WindowWork* wp);
+static void sort_7_3_func(WindowWork* wp);
+static void sort_8_1_func(WindowWork* wp);
+static void sort_8_2_func(WindowWork* wp);
 
 #if VERSION >= VERSION_JP
 u8 enemy_monoshiri_sort_table[] = {
@@ -102,9 +102,9 @@ void winRootBgCaptureDisp(CameraId unused, void* param);
         w->tabNum++;                    \
     }
 
-void winBgMain(WindowWork* wp);
-void winMsgMain(WindowWork* wp);
-void winSortMain(WindowWork* wp);
+static void winBgMain(WindowWork* wp);
+static void winMsgMain(WindowWork* wp);
+static void winSortMain(WindowWork* wp);
 
 #if VERSION >= VERSION_US
 #define WR_FRAMES(n) (gp->framerate * (n) / 60)
@@ -549,7 +549,7 @@ static void winTabDisp(WindowWork* wp) {
  * 20/21 and 30/31 in from the right or left on a tab change (24 frames), 40/41 out to the left.
  * 100 = settled, -1 = off.
  */
-void winBgMain(WindowWork* wp) {
+static void winBgMain(WindowWork* wp) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
@@ -733,7 +733,7 @@ void winBgGX(WindowWork* wp, s32 type, f32 x, f32 y) {
  * and scrolls its text two lines per C-stick up/down with a sound.
  * US and later freeze the scrolling while a letter is being read (item.state 202).
  */
-void winMsgMain(WindowWork* wp) {
+static void winMsgMain(WindowWork* wp) {
     switch (wp->msgState) {
         case 0:
             wp->msgOfsX = -800.0f;
@@ -797,7 +797,7 @@ void winMsgMain(WindowWork* wp) {
  * and blinking scroll arrows when it has more than two lines.
  * "msg_lottery_number" gets the Lottery Pick number filled in.
  */
-void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
+static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
     GXColor black = { 0x00, 0x00, 0x00, 0xFF };
     GXColor waku = { 0xFF, 0xFF, 0xFF, 0xFF };
@@ -1659,7 +1659,7 @@ WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort
 #endif
 
 /** Items list by name (pouchSortItem 0, reversed 7), then rebuilds the Important Items list (winMakeSkipList). */
-void sort_1_1_func(WindowWork* wp) {
+static void sort_1_1_func(WindowWork* wp) {
     s32 sel = wp->item.cursor[0];
     s32 mode;
 
@@ -1677,7 +1677,7 @@ void sort_1_1_func(WindowWork* wp) {
 }
 
 /** Items list by type (pouchSortItem 1, reversed 8). */
-void sort_1_2_func(WindowWork* wp) {
+static void sort_1_2_func(WindowWork* wp) {
     s32 sel = wp->item.cursor[0];
 
     pouchGetHaveItemCnt();
@@ -1690,7 +1690,7 @@ void sort_1_2_func(WindowWork* wp) {
 }
 
 /** Important items list by name (pouchSortItem 2, reversed 9). */
-void sort_2_1_func(WindowWork* wp) {
+static void sort_2_1_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 2 : 9);
     wp->sortRev = 1 - wp->sortRev;
     winMakeSkipList(wp);
@@ -1699,7 +1699,7 @@ void sort_2_1_func(WindowWork* wp) {
 }
 
 /** Important items list by type (pouchSortItem 3, reversed 10). */
-void sort_2_2_func(WindowWork* wp) {
+static void sort_2_2_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 3 : 10);
     wp->sortRev = 1 - wp->sortRev;
     winMakeSkipList(wp);
@@ -1708,7 +1708,7 @@ void sort_2_2_func(WindowWork* wp) {
 }
 
 /** Badges page, all badges by name (pouchSortItem 4, reversed 11), then rebuilds the equipped list. */
-void sort_3_1_func(WindowWork* wp) {
+static void sort_3_1_func(WindowWork* wp) {
     s32 sel = wp->badge.sel[0];
 
     pouchGetHaveBadgeCnt();
@@ -1721,7 +1721,7 @@ void sort_3_1_func(WindowWork* wp) {
 }
 
 /** All badges by type (pouchSortItem 5, reversed 12). */
-void sort_3_2_func(WindowWork* wp) {
+static void sort_3_2_func(WindowWork* wp) {
     s32 sel = wp->badge.sel[0];
 
     pouchGetHaveBadgeCnt();
@@ -1737,7 +1737,7 @@ void sort_3_2_func(WindowWork* wp) {
  * All badges by BP cost (pouchSortItem 6, reversed 13).
  * The early demos sort by name first; JP and later just repeat the BP sort.
  */
-void sort_3_3_func(WindowWork* wp) {
+static void sort_3_3_func(WindowWork* wp) {
     s32 sel = wp->badge.sel[0];
 
     pouchGetHaveBadgeCnt();
@@ -1821,7 +1821,7 @@ s32 compare_func4_2_r(const void* a, const void* b) {
 }
 
 /** Sorts the equipped badge list by name through compare_func4_1 (or its reverse). */
-void sort_4_1_func(WindowWork* wp) {
+static void sort_4_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_1);
     } else {
@@ -1843,7 +1843,7 @@ static void sort_4_2_func(WindowWork* wp) {
 #else
 
 /** Sorts the equipped badge list by type through compare_func4_2 (or its reverse). */
-void sort_4_2_func(WindowWork* wp) {
+static void sort_4_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_2);
     } else {
@@ -1866,7 +1866,7 @@ static void sort_4_3_func(WindowWork* wp) {
 #else
 
 /** Sorts the equipped badge list by BP cost, breaking ties by type_sort_order (or reversing both). */
-void sort_4_3_func(WindowWork* wp) {
+static void sort_4_3_func(WindowWork* wp) {
     ItemData* db;
     ItemData* da;
     WinBadgeEnt tmp;
@@ -1926,7 +1926,7 @@ void sort_4_3_func(WindowWork* wp) {
 
 
 /** Journal badge log by name, JP and later: names normalized through pouchHiraToKata first. */
-s32 compare_func5_1(const void* a, const void* b) {
+static s32 compare_func5_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
@@ -1953,7 +1953,7 @@ s32 compare_func5_1(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func5_1. */
-s32 compare_func5_1_r(const void* a, const void* b) {
+static s32 compare_func5_1_r(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
@@ -1993,7 +1993,7 @@ s32 compare_func5_2(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func5_2. */
-s32 compare_func5_2_r(const void* a, const void* b) {
+static s32 compare_func5_2_r(const void* a, const void* b) {
     s16 ia = itemDataTable[(s16)(*(s16*)a + BADGE_MIN)].type_sort_order;
     s16 ib = itemDataTable[(s16)(*(s16*)b + BADGE_MIN)].type_sort_order;
 
@@ -2006,7 +2006,7 @@ s32 compare_func5_2_r(const void* a, const void* b) {
 }
 
 /** Journal badge log (log.badgeIds) by name. */
-void sort_5_1_func(WindowWork* wp) {
+static void sort_5_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1);
     } else {
@@ -2018,7 +2018,7 @@ void sort_5_1_func(WindowWork* wp) {
 }
 
 /** Journal badge log by type. */
-void sort_5_2_func(WindowWork* wp) {
+static void sort_5_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_2);
     } else {
@@ -2033,7 +2033,7 @@ void sort_5_2_func(WindowWork* wp) {
  * Journal badge log by BP cost.
  * The early demos sort by name first, then bubble by BP cost only; their first press puts the highest cost first.
  */
-void sort_5_3_func(WindowWork* wp) {
+static void sort_5_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
         ItemData* db;
         ItemData* da;
@@ -2118,7 +2118,7 @@ void sort_5_3_func(WindowWork* wp) {
 }
 
 /** Journal recipe log by name, JP and later: names normalized through pouchHiraToKata first. */
-s32 compare_func6_1(const void* a, const void* b) {
+static s32 compare_func6_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
@@ -2145,7 +2145,7 @@ s32 compare_func6_1(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func6_1. */
-s32 compare_func6_1_r(const void* a, const void* b) {
+static s32 compare_func6_1_r(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
@@ -2185,7 +2185,7 @@ s32 compare_func6_2(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func6_2. */
-s32 compare_func6_2_r(const void* a, const void* b) {
+static s32 compare_func6_2_r(const void* a, const void* b) {
     s16 ia = itemDataTable[(s16)(*(s16*)a + ITEM_SHROOM_FRY)].type_sort_order;
     s16 ib = itemDataTable[(s16)(*(s16*)b + ITEM_SHROOM_FRY)].type_sort_order;
 
@@ -2198,7 +2198,7 @@ s32 compare_func6_2_r(const void* a, const void* b) {
 }
 
 /** Journal recipe log (log.recipeIds) by name. */
-void sort_6_1_func(WindowWork* wp) {
+static void sort_6_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.recipeIds, wp->log.recipe.num, sizeof(s16), compare_func6_1);
     } else {
@@ -2210,7 +2210,7 @@ void sort_6_1_func(WindowWork* wp) {
 }
 
 /** Journal recipe log by type. */
-void sort_6_2_func(WindowWork* wp) {
+static void sort_6_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.recipeIds, wp->log.recipe.num, sizeof(s16), compare_func6_2);
     } else {
@@ -2222,7 +2222,7 @@ void sort_6_2_func(WindowWork* wp) {
 }
 
 /** qqsort compare for the Tattle Log (WinSortEnt) by its log number (kind, from enemy_monoshiri_sort_table). */
-s32 compare_func1(const void* a, const void* b) {
+static s32 compare_func1(const void* a, const void* b) {
     if (*(u8*)a > *(u8*)b) {
         return 1;
     } else if (*(u8*)a < *(u8*)b) {
@@ -2232,7 +2232,7 @@ s32 compare_func1(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func1. */
-s32 compare_func1_r(const void* a, const void* b) {
+static s32 compare_func1_r(const void* a, const void* b) {
     if (*(u8*)a < *(u8*)b) {
         return 1;
     } else if (*(u8*)a > *(u8*)b) {
@@ -2242,7 +2242,7 @@ s32 compare_func1_r(const void* a, const void* b) {
 }
 
 /** Tattle Log by log number. */
-void sort_7_1_func(WindowWork* wp) {
+static void sort_7_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
     } else {
@@ -2297,7 +2297,7 @@ WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort
 #endif
 
 /** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
-s32 compare_func2(const void* a, const void* b) {
+static s32 compare_func2(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
     s32 ia = getMonosiriPlace(ta->locationTag);
@@ -2312,7 +2312,7 @@ s32 compare_func2(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func2. */
-s32 compare_func2_r(const void* a, const void* b) {
+static s32 compare_func2_r(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
     s32 ia = getMonosiriPlace(ta->locationTag);
@@ -2327,7 +2327,7 @@ s32 compare_func2_r(const void* a, const void* b) {
 }
 
 /** Tattle Log by place: sorts by number first, then by place. */
-void sort_7_2_func(WindowWork* wp) {
+static void sort_7_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
         qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func2);
@@ -2342,7 +2342,7 @@ void sort_7_2_func(WindowWork* wp) {
 
 /** Tattle Log by name, JP and later: normalized, with Doopliss's entries under his current name. */
 #if VERSION >= VERSION_JP
-s32 compare_func3(const void* a, const void* b) {
+static s32 compare_func3(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
@@ -2371,7 +2371,7 @@ s32 compare_func3(const void* a, const void* b) {
 #if VERSION >= VERSION_JP
 
 /** Reverse of compare_func3 (JP and later). */
-s32 compare_func3_r(const void* a, const void* b) {
+static s32 compare_func3_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
@@ -2425,7 +2425,7 @@ static s32 compare_func3_r(const void* a, const void* b) {
 #endif
 
 /** Tattle Log by name (by number first, then by name). */
-void sort_7_3_func(WindowWork* wp) {
+static void sort_7_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
         qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func3);
@@ -2439,7 +2439,7 @@ void sort_7_3_func(WindowWork* wp) {
 }
 
 /** qqsort compare for the mail list by letter title (MailData name). */
-s32 compare_func4(const void* a, const void* b) {
+static s32 compare_func4(const void* a, const void* b) {
     MailData* ma = mailGetPtr(((WinSortEnt*)a)->id);
     MailData* mb = mailGetPtr(((WinSortEnt*)b)->id);
     const char* sa = msgSearch(ma->name);
@@ -2449,7 +2449,7 @@ s32 compare_func4(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func4. */
-s32 compare_func4_r(const void* a, const void* b) {
+static s32 compare_func4_r(const void* a, const void* b) {
     MailData* ma = mailGetPtr(((WinSortEnt*)a)->id);
     MailData* mb = mailGetPtr(((WinSortEnt*)b)->id);
     const char* sa = msgSearch(ma->name);
@@ -2459,7 +2459,7 @@ s32 compare_func4_r(const void* a, const void* b) {
 }
 
 /** Mail list (item.mail) by title. */
-void sort_8_1_func(WindowWork* wp) {
+static void sort_8_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->item.mail, wp->item.mailNum, sizeof(WinSortEnt), compare_func4);
     } else {
@@ -2471,7 +2471,7 @@ void sort_8_1_func(WindowWork* wp) {
 }
 
 /** qqsort compare for the mail list by letter number (kind, the order the letters arrived in). */
-s32 compare_func5(const void* a, const void* b) {
+static s32 compare_func5(const void* a, const void* b) {
     if (*(u8*)a > *(u8*)b) {
         return 1;
     } else if (*(u8*)a < *(u8*)b) {
@@ -2481,7 +2481,7 @@ s32 compare_func5(const void* a, const void* b) {
 }
 
 /** Reverse of compare_func5. */
-s32 compare_func5_r(const void* a, const void* b) {
+static s32 compare_func5_r(const void* a, const void* b) {
     if (*(u8*)a < *(u8*)b) {
         return 1;
     } else if (*(u8*)a > *(u8*)b) {
@@ -2491,7 +2491,7 @@ s32 compare_func5_r(const void* a, const void* b) {
 }
 
 /** Mail list by letter number. */
-void sort_8_2_func(WindowWork* wp) {
+static void sort_8_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->item.mail, wp->item.mailNum, sizeof(WinSortEnt), compare_func5);
     } else {
@@ -2509,7 +2509,7 @@ void sort_8_2_func(WindowWork* wp) {
  * The PAL demo and PAL clear sortRev whenever the cursor moves.
  * While open it points the cursor hand at the option and shows the option's help text.
  */
-void winSortMain(WindowWork* wp) {
+static void winSortMain(WindowWork* wp) {
     u32 trg = wp->buttonTrg;
     u32 rep = wp->dirRep;
 
@@ -2596,7 +2596,7 @@ static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h
  * each showing its label texture (chosen from the option's message tag);
  * the selected row is lit with a shadow, the rest grey. The mail sort is clipped to the mail window.
  */
-void winSortGX(WindowWork* wp) {
+static void winSortGX(WindowWork* wp) {
     f32 x = wp->sortPosX;
     f32 y = wp->sortPosY;
     s32 i;
@@ -2808,7 +2808,7 @@ void winZClear(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void winMailDisp(WindowWork* wp) {
 #else
-void winMailDisp(WindowWork* wp) {
+static void winMailDisp(WindowWork* wp) {
 #endif
     s32 i;
     s32 id;

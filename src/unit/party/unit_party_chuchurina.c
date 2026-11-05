@@ -2580,7 +2580,7 @@ USER_FUNC(_chuchu_item_steal) {
  * Display callback that copies the current 608x480 frame into a new intensity (greyscale) texture in the unit's
  * screenTexBuf for Kiss Thief, then makes the unit's main part visible again.
  */
-void mono_capture(CameraId camId, void* param) {
+static void mono_capture(CameraId camId, void* param) {
     BattleUnit* unit = param;
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
     unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_MAP);
@@ -2595,7 +2595,7 @@ void mono_capture(CameraId camId, void* param) {
  * Display callback that draws the captured greyscale frame full-screen with alpha mono_alpha and
  * then redraws the partner's main part over it, so Ms. Mowz stays in colour during Kiss Thief.
  */
-void mono_disp(CameraId camId, void* payload) {
+static void mono_disp(CameraId camId, void* payload) {
     BattleUnit* unit = payload;
     CameraEntry* cam = camGetPtr(camId);
     BattleUnit* party;

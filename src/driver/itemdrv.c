@@ -70,13 +70,13 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
-void winNameDisp(WinMgrEntry* win);
-void winNameDisp2(WinMgrEntry* win);
-void winHelpMain(WinMgrEntry* win);
-void winHelpDisp(WinMgrEntry* win);
-void winFullDisp(WinMgrEntry* win);
+static void winNameDisp(WinMgrEntry* win);
+static void winNameDisp2(WinMgrEntry* win);
+static void winHelpMain(WinMgrEntry* win);
+static void winHelpDisp(WinMgrEntry* win);
+static void winFullDisp(WinMgrEntry* win);
 
-HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
+static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
 void itemseq_GetItem(ItemEntry* entry);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
@@ -233,7 +233,7 @@ void itemCoinDrop(Vec* position) {
 static BOOL itemGetCheck(ItemEntry* entry) {
     s32 fbatMode = fbatGetPointer()->mode;
 #else
-BOOL itemGetCheck(ItemEntry* entry) {
+static BOOL itemGetCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
     ItemWork* wp;
@@ -355,7 +355,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
 static BOOL itemGetNokoCheck(ItemEntry* entry) {
     s32 fbatMode = fbatGetPointer()->mode;
 #else
-BOOL itemGetNokoCheck(ItemEntry* entry) {
+static BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
 
     MarioWork* mario = marioGetPtr();
@@ -1085,7 +1085,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
  * Draws the "You got X!" box during an item get, with "badge" wording for badges;
  * US, PAL and the September demos format the message per language and size the box by its line count; JP and the early demos use sprintf and fixed height.
  */
-void winNameDisp(WinMgrEntry* win) {
+static void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
     u16 width;
@@ -1135,7 +1135,7 @@ void winNameDisp(WinMgrEntry* win) {
 
 
 /** Draws the box that names an item Mario let go of (msg_window_item_release) when his pouch was full. */
-void winNameDisp2(WinMgrEntry* win) {
+static void winNameDisp2(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
     u16 width;
@@ -1173,12 +1173,12 @@ void winNameDisp2(WinMgrEntry* win) {
 
 
 /** Per-frame update of the item description box shown under the get box. */
-void winHelpMain(WinMgrEntry* win) {
+static void winHelpMain(WinMgrEntry* win) {
     winMgrHelpMain(win);
 }
 
 /** Draws the got item's description in the help box, once the help box has finished animating. */
-void winHelpDisp(WinMgrEntry* win) {
+static void winHelpDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
 
     if (!winMgrAction(entry->winId[1])) {
@@ -1192,7 +1192,7 @@ void winHelpDisp(WinMgrEntry* win) {
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
 #else
-void winFullDisp(WinMgrEntry* win) {
+static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     BOOL isBadge = FALSE;
     u16 width;
@@ -2017,7 +2017,7 @@ void itemGetSound(ItemEntry* entry) {
  * Wall check for a moving item: casts a ray along its motion (dx, dz) and, on a wall,
  * returns the hit and the corrected position and reflected direction (degrees) in outX, outZ and angle.
  */
-HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle) {
+static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle) {
     HitEntry* hit;
     f32 a, b;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;

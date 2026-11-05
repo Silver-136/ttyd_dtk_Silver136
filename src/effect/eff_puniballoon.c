@@ -12,8 +12,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-void effPuniBalloonMain(EffectEntry* effect);
-void effPuniBalloonDisp(CameraId cameraId, void* param);
+static void effPuniBalloonMain(EffectEntry* effect);
+static void effPuniBalloonDisp(CameraId cameraId, void* param);
 static void balloon_1(CameraId cameraId, EffectEntry* effect);
 static void balloon_0(CameraId cameraId, EffectEntry* effect);
 
@@ -69,7 +69,7 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * Per frame: advances the frame counter and the burst pieces; a balloon (type 0) lasts until soft-deleted, then
  * pops 16 frames later into a type 1 burst, which ends after 30 frames; registers the draw callback.
  */
-void effPuniBalloonMain(EffectEntry* effect) {
+static void effPuniBalloonMain(EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     Vec pos;
     Vec tmp;
@@ -114,7 +114,7 @@ void effPuniBalloonMain(EffectEntry* effect) {
 }
 
 /** Draw callback: dispatches to balloon_0 (the balloon) or balloon_1 (the burst) by type. */
-void effPuniBalloonDisp(CameraId cameraId, void* param) {
+static void effPuniBalloonDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     PuniBalloonWork* work = effect->userdata;
     if (work->type == 0) {

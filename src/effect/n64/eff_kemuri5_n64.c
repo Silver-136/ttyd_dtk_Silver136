@@ -42,9 +42,9 @@ static effN64Vtx kmr_a_1_v[] = {
     {7, -8, 0, 512, 512, 255, 255, 255, 255},
 };
 
-void effKemuri5Main(EffectEntry* effect);
+static void effKemuri5Main(EffectEntry* effect);
 
-void effKemuri5Disp(CameraId cameraId, void* param);
+static void effKemuri5Disp(CameraId cameraId, void* param);
 
 #pragma opt_propagation off
 /**
@@ -94,7 +94,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
 }
 
 /** Pulses each puff size with a sine/cosine of its angle, drifts it outward and up, widens it while its height shrinks, fades late in life. */
-void effKemuri5Main(EffectEntry* effect) {
+static void effKemuri5Main(EffectEntry* effect) {
     EffKemuri5N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -145,7 +145,7 @@ void effKemuri5Main(EffectEntry* effect) {
 #pragma opt_propagation reset
 
 /** Draws each puff as a camera-facing (Y-billboarded) textured quad using effect texture 0x4E. */
-void effKemuri5Disp(CameraId cameraId, void* param) {
+static void effKemuri5Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri5N64Work* work = effect->userdata;

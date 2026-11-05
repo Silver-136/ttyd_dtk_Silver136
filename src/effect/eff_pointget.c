@@ -23,8 +23,8 @@ typedef struct EffPointGetWork {
     s32 state;     // 0x20
 } EffPointGetWork;
 
-void effPointGetMain(EffectEntry* effect);
-void effPointGetDisp(CameraId cameraId, EffectEntry* effect);
+static void effPointGetMain(EffectEntry* effect);
+static void effPointGetDisp(CameraId cameraId, EffectEntry* effect);
 
 #if VERSION >= VERSION_US
 typedef struct PointGetTex {
@@ -109,7 +109,7 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
 #if VERSION <= VERSION_DEMO_JP
 static void effPointGetMain(EffectEntry* effect) {
 #else
-void effPointGetMain(EffectEntry* effect) {
+static void effPointGetMain(EffectEntry* effect) {
 #endif
 
     EffPointGetWork* work = effect->userdata;
@@ -164,7 +164,7 @@ void effPointGetMain(EffectEntry* effect) {
 /** The early demos draw the point count as three fixed digit cells (leading zeros skipped) left of the word texture. */
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
+static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #if VERSION >= VERSION_US
     f32 w;
     f32 w1;

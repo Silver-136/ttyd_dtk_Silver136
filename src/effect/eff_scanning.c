@@ -9,8 +9,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 
-void effScanningMain(EffectEntry* effect);
-void effScanningDisp(CameraId camId, void* param);
+static void effScanningMain(EffectEntry* effect);
+static void effScanningDisp(CameraId camId, void* param);
 
 /**
  * Spawns the scan animation at (x, y, z); `type` is stored but not otherwise used.
@@ -42,7 +42,7 @@ EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Loads the EFF_Scan animation group, starts animation Z_1 and deletes the effect after one loop. */
-void effScanningMain(EffectEntry* effect) {
+static void effScanningMain(EffectEntry* effect) {
     effScanningData* data = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -82,7 +82,7 @@ void effScanningMain(EffectEntry* effect) {
 }
 
 /** Draws the EFF_Scan pose billboarded to the camera yaw. */
-void effScanningDisp(CameraId camId, void* param) {
+static void effScanningDisp(CameraId camId, void* param) {
     effScanningData* data = ((EffectEntry*)param)->userdata;
     Mtx mtx;
     Mtx scale;

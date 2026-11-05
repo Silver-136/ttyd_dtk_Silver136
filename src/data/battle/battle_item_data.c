@@ -35,8 +35,8 @@
 #include "eff/eff_naniga.h"
 #include "driver/mapdrv.h"
 
-void _nancy_disp(CameraId cameraId, void* param);
-void _disp_item_icon(CameraId cameraId, void* param);
+static void _nancy_disp(CameraId cameraId, void* param);
+static void _disp_item_icon(CameraId cameraId, void* param);
 
 USER_FUNC(_cam_rot);
 USER_FUNC(_get_throw_first_pos);
@@ -4905,7 +4905,7 @@ USER_FUNC(_throw_item_icon) {
 }
 
 /** Draws the thrown item's icon at its current position. */
-void _disp_item_icon(CameraId cameraId, void* param) {
+static void _disp_item_icon(CameraId cameraId, void* param) {
     EventEntry* event = param;
     iconDispGx(&((ThrowWork*)event->userdatap[0])->pos, 0, itemDataTable[event->userdata[1]].icon_id, 1.0f);
 }
@@ -4943,7 +4943,7 @@ USER_FUNC(_nancy_mirage) {
 }
 
 /** Draws the cook's image for _nancy_mirage, scaled up and translucent as it fades. */
-void _nancy_disp(CameraId cameraId, void* param) {
+static void _nancy_disp(CameraId cameraId, void* param) {
     EventEntry* event = param;
     Mtx mtx;
     Mtx scale;

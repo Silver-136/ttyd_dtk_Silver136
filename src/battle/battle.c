@@ -36,8 +36,8 @@ BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, BATTLE_PHASE_PLAYER }
 
 // forward declarations
 BOOL BattleMain(void);
-void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
-void BattlePartyInfoWorkInit(BattleWork* wp);
+static void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
+static void BattlePartyInfoWorkInit(BattleWork* wp);
 void BattleCheckUnitBroken(BattleWork* wp);
 
 /**
@@ -642,7 +642,7 @@ void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
  * Refund, Simplifier and Unsimplifier count for anyone;
  * the other badges count for Mario or for partners (P badges) according to the flags.
  */
-void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
+static void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
     if (type == ITEM_NULL) {
         return;
     }
@@ -868,7 +868,7 @@ void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
  * Resets the saved per-partner state (size, status flags and turns,
  * and in US and later the disabled-command bits) kept while partners are swapped out.
  */
-void BattlePartyInfoWorkInit(BattleWork* wp) {
+static void BattlePartyInfoWorkInit(BattleWork* wp) {
     BattleWorkPartyInfo* partyInfo;
     int i;
 

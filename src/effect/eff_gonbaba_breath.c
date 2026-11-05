@@ -56,12 +56,12 @@ u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};
 #pragma force_active reset
 #endif
 
-void effGonbabaBreathMain(EffectEntry* effect);
-void effGonbabaBreathDisp(CameraId cameraId, void* param);
+static void effGonbabaBreathMain(EffectEntry* effect);
+static void effGonbabaBreathDisp(CameraId cameraId, void* param);
 
 #pragma opt_propagation off
 /** Initialises one breath particle for the given type: delay by index, start offset, velocity and lifetime. */
-void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
+static void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
     f32 ang;
     f32 spd;
     f32 rad;
@@ -223,7 +223,7 @@ EffectEntry* effGonbabaBreathEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 
 }
 
 /** Moves and ages each particle, and on soft delete fades the breath over 32 frames (also soft-deleting the child). */
-void effGonbabaBreathMain(EffectEntry* effect) {
+static void effGonbabaBreathMain(EffectEntry* effect) {
     EffGonbabaBreathWork* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
@@ -358,7 +358,7 @@ void effGonbabaBreathMain(EffectEntry* effect) {
 }
 
 /** Draws the particles as camera-facing quads, coloured by type; companion layers sit slightly off the camera plane. */
-void effGonbabaBreathDisp(CameraId cameraId, void* param) {
+static void effGonbabaBreathDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffGonbabaBreathWork* work = effect->userdata;
     Mtx trans;

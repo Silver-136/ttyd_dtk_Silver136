@@ -45,13 +45,13 @@
 void FontDrawString(f32 x, f32 y, const char* str);
 
 // local prototypes
-void BattleObjectConfig(void);
-void _mobj_shake_main(BattleStageObject* obj);
-void _Nozzle_Change_Check(u8 index, u8* rate);
-void _disp_escape_wall_message(CameraId camera, void* param);
-void _nozzle_type_init(void);
-s32 _get_nozzle_attack_index(u8 index);
-void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src);
+static void BattleObjectConfig(void);
+static void _mobj_shake_main(BattleStageObject* obj);
+static void _Nozzle_Change_Check(u8 index, u8* rate);
+static void _disp_escape_wall_message(CameraId camera, void* param);
+static void _nozzle_type_init(void);
+static s32 _get_nozzle_attack_index(u8 index);
+static void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src);
 USER_FUNC(_object_fall_attack);
 USER_FUNC(_object_fall_wait);
 USER_FUNC(_nozzle_work_get_weapon_address);
@@ -466,7 +466,7 @@ void BattleStageObjectMain(void) {
 /**
  * Empty in every version; called at the end of BattleStageObjectMain each frame.
  */
-void BattleObjectConfig(void) {
+static void BattleObjectConfig(void) {
     // does nothing
 }
 
@@ -3078,7 +3078,7 @@ USER_FUNC(_set_mobj_shake) {
 }
 
 /** Advances one piece's wobble a frame: rotation.x swings +-5 degrees as a sine over its shake period. */
-void _mobj_shake_main(BattleStageObject* obj) {
+static void _mobj_shake_main(BattleStageObject* obj) {
     obj->shakePeriodPosition++;
     if (obj->shakePeriodPosition >= obj->shakePeriodLength) {
         obj->shakePeriodPosition = 0;
@@ -3107,7 +3107,7 @@ void BattleStage_NozzleDirChangeCheck(void) {
  * Picks direction 0-3 for nozzle index from the four weights in rate (0 upright, 1-3 aimed);
  * if it differs and the nozzle is not already turning, starts _nozzle_turn_event toward it.
  */
-void _Nozzle_Change_Check(u8 index, u8* rate) {
+static void _Nozzle_Change_Check(u8 index, u8* rate) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
     u8* cur = &sw->nozzleDir[index];
     EventEntry* evt;
@@ -3264,7 +3264,7 @@ USER_FUNC(_announce_wall_message) {
  * 2D draw callback for the JP and early-demo wall banner:
  * a white window frame with btl_msg_escape_wall_close2 centred in the lower half of the screen.
  */
-void _disp_escape_wall_message(CameraId camera, void* param) {
+static void _disp_escape_wall_message(CameraId camera, void* param) {
     const char* msg = msgSearch("btl_msg_escape_wall_close2");
     s32 width = FontGetMessageWidth(msg);
     f32 x;
@@ -3424,7 +3424,7 @@ void BattleStage_NozzleWorkCheck(s32 type) {
 }
 
 /** Picks the battle's nozzle type 0-3 once from the rank's typeRate weights; nozzleType stays -1 until then. */
-void _nozzle_type_init(void) {
+static void _nozzle_type_init(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
     BattleStageNozzleData* data = sw->nozzleData;
@@ -3468,7 +3468,7 @@ USER_FUNC(_nozzle_work_wait) {
 }
 
 /** Spray angle in degrees for a nozzle's direction: -45 for 1, -135 for 3, -90 for 2 or upright. */
-f32 _get_nozzle_dir(s32 index) {
+static f32 _get_nozzle_dir(s32 index) {
     switch (_battleWorkPointer->stageObjectWork.nozzleDir[index]) {
         case NOZZLE_DIR_PLUS_45:
             return -45.0f;
@@ -3712,7 +3712,7 @@ USER_FUNC(_nozzle_work_attack_set) {
  * Which side nozzle index hits with its current direction:
  * 0 Mario's side, 1 the enemy side, -1 neither (upright or aimed away).
  */
-s32 _get_nozzle_attack_index(u8 index) {
+static s32 _get_nozzle_attack_index(u8 index) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
 
     // Unmatched directions fall through the remaining nozzle cases to the final -1.
@@ -3752,7 +3752,7 @@ s32 _get_nozzle_attack_index(u8 index) {
  * Merges one status inflict pair into a weapon:
  * keeps the higher chance and adds the turns, when the source has one.
  */
-void _rate_mix(s8* dstChance, s8* dstTime, s8* srcChance, s8* srcTime) {
+static void _rate_mix(s8* dstChance, s8* dstTime, s8* srcChance, s8* srcTime) {
     if (*srcChance <= 0) {
         return;
     }
@@ -3766,7 +3766,7 @@ void _rate_mix(s8* dstChance, s8* dstTime, s8* srcChance, s8* srcTime) {
  * Like _rate_mix for statuses with a strength (size, defence):
  * also adds the strengths, and drops the status if the strengths cancel to 0.
  */
-void _rate_mix_3(s8* dstChance, s8* dstTime, s8* dstStrength, s8* srcChance, s8* srcTime, s8* srcStrength) {
+static void _rate_mix_3(s8* dstChance, s8* dstTime, s8* dstStrength, s8* srcChance, s8* srcTime, s8* srcStrength) {
     if (*srcChance <= 0) {
         return;
     }
@@ -3786,7 +3786,7 @@ void _rate_mix_3(s8* dstChance, s8* dstTime, s8* dstStrength, s8* srcChance, s8*
  * FP/SP costs and damage parameters summed, element replaced, statuses merged with _rate_mix.
  * Attack change is not merged, and poison adds src's strength to dst's turns, as in the original.
  */
-void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src) {
+static void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src) {
     s8* d;
     s8* s;
     int i;

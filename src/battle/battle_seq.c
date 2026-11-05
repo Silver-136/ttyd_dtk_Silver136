@@ -51,14 +51,14 @@
 
 // local prototypes
 USER_FUNC(_set_haikei_entry_scale);
-void battleMakePhaseEvtTable(BattleWork* wp);
-void btlseqPhaseFirstProcess(BattleWork* wp);
+static void battleMakePhaseEvtTable(BattleWork* wp);
+static void btlseqPhaseFirstProcess(BattleWork* wp);
 void btlseqTurnFirstProcess(BattleWork* wp);
 void btlseqAct(BattleWork* wp);
-BOOL BattlePhaseEndCheck(void);
-void btlseqMove(BattleWork* wp);
-void btlseqPhase(BattleWork* wp);
-void _rule_disp(CameraId cameraId, void* param);
+static BOOL BattlePhaseEndCheck(void);
+static void btlseqMove(BattleWork* wp);
+static void btlseqPhase(BattleWork* wp);
+static void _rule_disp(CameraId cameraId, void* param);
 USER_FUNC(_set_effect_luck);
 
 /**
@@ -85,10 +85,10 @@ EVT_BEGIN(_default_haikei_set_entry_event)
 EVT_END()
 #endif
 
-void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
+static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
 void btlseqInit(BattleWork* wp);
-void btlseqFirstAct(BattleWork* wp);
-void btlseqTurn(BattleWork* wp);
+static void btlseqFirstAct(BattleWork* wp);
+static void btlseqTurn(BattleWork* wp);
 
 // Lucky Start badge: _set_effect_luck copies this weapon and keeps one of its four statuses (Electric, Dodgy,
 // HP Regen or FP Regen) at random
@@ -220,7 +220,7 @@ void BattleSequenceManager(void) {
  * SFX_BTL_DANGER1 if Mario or the partner is in Peril, else SFX_BTL_PINCH1 for Danger.
  * Only the first unit with the flag is looked at. With neither, clears Mario's work[MARIO_WORK_PINCH_VOICE] and the timer.
  */
-void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
+static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     BattleUnit* unit;
     BOOL alert;
     int i;
@@ -386,7 +386,7 @@ BattleWeapon* _GetFirstAttackWeapon(s32 type) {
  * closes the walls in no-escape battles; applies Lucky Start; runs the stage nozzle check;
  * then starts the turn loop. Ends the battle at once if the first strike decided it.
  */
-void btlseqFirstAct(BattleWork* wp) {
+static void btlseqFirstAct(BattleWork* wp) {
     s32 type;
     int i;
     BattleUnit* unit;
@@ -736,7 +736,7 @@ USER_FUNC(_set_effect_luck) {
 #if VERSION <= VERSION_DEMO_JP
 static void btlseqTurn(BattleWork* wp) {
 #else
-void btlseqTurn(BattleWork* wp) {
+static void btlseqTurn(BattleWork* wp) {
 #endif
 
     Vec pos;
@@ -1872,7 +1872,7 @@ void btlseqTurn(BattleWork* wp) {
     }
 }
 
-void _rule_disp(CameraId cameraId, void* param) {
+static void _rule_disp(CameraId cameraId, void* param) {
     FieldBattleInfo* info = _battleWorkPointer->fbatInfo;
     char buf[256];
     f32 x;
@@ -1903,7 +1903,7 @@ void _rule_disp(CameraId cameraId, void* param) {
  * SEQ_PHASE steps: runs btlseqMove through each of the turn's five phases (before player, player, after player,
  * enemy, after enemy), then hands back to the next SEQ_TURN step.
  */
-void btlseqPhase(BattleWork* wp) {
+static void btlseqPhase(BattleWork* wp) {
     switch (BattleGetSeq(wp, SEQ_PHASE)) {
         case BATTLE_PHASE_INIT:
             BattleIncSeq(wp, SEQ_PHASE);
@@ -1926,7 +1926,7 @@ void btlseqPhase(BattleWork* wp) {
 #if VERSION <= VERSION_DEMO_JP
 static void btlseqMove(BattleWork* wp) {
 #else
-void btlseqMove(BattleWork* wp) {
+static void btlseqMove(BattleWork* wp) {
 #endif
     int j;
     BattleUnit* unit;
@@ -2162,7 +2162,7 @@ void btlseqMove(BattleWork* wp) {
 #if VERSION <= VERSION_DEMO_JP
 static BOOL BattlePhaseEndCheck(void) {
 #else
-BOOL BattlePhaseEndCheck(void) {
+static BOOL BattlePhaseEndCheck(void) {
 #endif
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -2501,7 +2501,7 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
 #if VERSION <= VERSION_DEMO_JP
 static void btlseqPhaseFirstProcess(BattleWork* wp) {
 #else
-void btlseqPhaseFirstProcess(BattleWork* wp) {
+static void btlseqPhaseFirstProcess(BattleWork* wp) {
 #endif
     BattleUnit* unit;
     BattleUnitPart* part;
@@ -2597,7 +2597,7 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
  * Fills phaseEvtTable with every unit that takes turns, in the order their phase events run:
  * units left of centre first, nearest the centre first, then units right of centre, nearest first.
  */
-void battleMakePhaseEvtTable(BattleWork* wp) {
+static void battleMakePhaseEvtTable(BattleWork* wp) {
     BattlePhaseEvtEntry* table;
     int i;
     BattleUnit* unit;
@@ -2816,7 +2816,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
  * after its scale was changed. BattleStageObjectMain treats flag 2 as "changed" (and clears it),
  * so it rewrites the object's map translation and rotation on its next update.
  */
-void _mapobj_data_touch_scale(s32 layer) {
+static void _mapobj_data_touch_scale(s32 layer) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
     int i;

@@ -44,8 +44,8 @@ static effN64Vtx kmr_a_1_v[] = {
     {7, -8, 0, 512, 512, 255, 255, 255, 255},
 };
 
-void effKemuri6Main(EffectEntry* effect);
-void effKemuri6Disp(CameraId cameraId, void* param);
+static void effKemuri6Main(EffectEntry* effect);
+static void effKemuri6Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns one randomly sized and rotated cloud-smoke puff ("walking" in the effect table) at (x, y, z);
@@ -88,7 +88,7 @@ EffectEntry* effKemuri6N64Entry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Pulses the puff size, raises it with a decelerating velocity and fades it; type 0 stops at 5 frames left (not drawn) while Mario is in MARIO_MOTION_STAY. */
-void effKemuri6Main(EffectEntry* effect) {
+static void effKemuri6Main(EffectEntry* effect) {
     EffKemuri6N64Work* work;
     int i;
     BOOL disp;
@@ -139,7 +139,7 @@ void effKemuri6Main(EffectEntry* effect) {
 }
 
 /** Draws the puff as a Y-billboarded textured quad (effect texture 0x4E) rolled by its rotation. */
-void effKemuri6Disp(CameraId cameraId, void* param) {
+static void effKemuri6Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri6N64Work* work;

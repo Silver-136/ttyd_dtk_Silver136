@@ -24,8 +24,8 @@ typedef struct EffUpdownWork {
     u8 alpha;     // 0x24
 } EffUpdownWork;
 
-void effUpdownMain(EffectEntry* effect);
-void effUpdownDisp(CameraId cameraId, void* param);
+static void effUpdownMain(EffectEntry* effect);
+static void effUpdownDisp(CameraId cameraId, void* param);
 
 /** Digit icons 0-9 used to draw the number. */
 static u16 icon_id[10] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 };
@@ -72,7 +72,7 @@ EffectEntry* effUpdownEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 timer
  * plays the 15-frame squash-and-stretch pop-in, then bobs scaleY gently,
  * and draws through effUpdownDisp on CAMERA_3D.
  */
-void effUpdownMain(EffectEntry* effect) {
+static void effUpdownMain(EffectEntry* effect) {
     EffUpdownWork* work = effect->userdata;
     s32 type = work->type;
     s32 mode;
@@ -173,7 +173,7 @@ static void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 
  * Draws a coloured background quad (effect texture 0x1D, rotated 180 degrees for negative numbers),
  * the last digit of |number| (an icon texture) and a plus or minus sign icon.
  */
-void effUpdownDisp(CameraId cameraId, void* param) {
+static void effUpdownDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffUpdownWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);

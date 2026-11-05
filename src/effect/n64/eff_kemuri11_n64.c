@@ -58,8 +58,8 @@ static effN64Vtx stg_thruhammer_v[] = {
     {0, -2, 40, 0, 1024, 255, 255, 255, 255},
 };
 
-void effKemuri11Main(EffectEntry* effect);
-void effKemuri11Disp(CameraId cameraId, EffectEntry* effect);
+static void effKemuri11Main(EffectEntry* effect);
+static void effKemuri11Disp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx camMtx);
 
 EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
@@ -208,7 +208,7 @@ EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
  * frame while its textures scroll (the velocity it is given is never applied);
  * the whole effect fades after the first 8 frames.
  */
-void effKemuri11Main(EffectEntry* effect) {
+static void effKemuri11Main(EffectEntry* effect) {
     EffKemuri11N64Work* work = effect->userdata;
     s32 i;
     s32 type;
@@ -331,7 +331,7 @@ void effKemuri11Main(EffectEntry* effect) {
  * Picks the smoke texture (0x23-0x25) for the pattern and draws the puffs twice,
  * once culling back faces and once front faces, so both sides of the puffs show.
  */
-void effKemuri11Disp(CameraId cameraId, EffectEntry* effect) {
+static void effKemuri11Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffKemuri11N64Work* work;
     u8 r1, g1, b1, r2, g2, b2;

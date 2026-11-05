@@ -41,8 +41,8 @@ typedef struct EffSnowfallWork {
     EffSnowfallParticle p[1];  // 0x34
 } EffSnowfallWork;
 
-void effSnowfallMain(EffectEntry* effect);
-void effSnowfallDisp(CameraId cameraId, void* param);
+static void effSnowfallMain(EffectEntry* effect);
+static void effSnowfallDisp(CameraId cameraId, void* param);
 
 /**
  * A loose cluster of eight small flake quads drawn for every snowfall particle,
@@ -88,7 +88,7 @@ static effN64Vtx eff_snowfall_v[] = {
  * (target x, the mean of target and eye y, and (target z + viewDistance) / 2 for z);
  * below the box it either wraps to the top or, when life < 100, stops and hides the particle.
  */
-void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
+static void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 cx, cy, cz, py, pz;
     s32 d;
@@ -187,7 +187,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
 #if VERSION <= VERSION_DEMO_JP
 static void effSnowfallMain(EffectEntry* effect) {
 #else
-void effSnowfallMain(EffectEntry* effect) {
+static void effSnowfallMain(EffectEntry* effect) {
 #endif
 
     s32 i, life, count, h;
@@ -253,7 +253,7 @@ void effSnowfallMain(EffectEntry* effect) {
  * after copying texture 100's 16x16 image into 99's mip chain each frame.
  * White, or the map's blend colour when the first map entry has blending on.
  */
-void effSnowfallDisp(CameraId cameraId, void* param) {
+static void effSnowfallDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* cam;
     EffSnowfallParticle* p;

@@ -51,7 +51,7 @@
 #include "driver/npcdrv.h"
 #include "koopa_motion.h"
 #include "eff/eff_mobj_broken.h"
-s32 mobj_lock(MapObjectEntry* mobj);
+static s32 mobj_lock(MapObjectEntry* mobj);
 
 
 // The objects JP, US and the US September demo strip (the A/B ride switches, red tornado switch, arrow,
@@ -393,7 +393,7 @@ USER_FUNC(evt_mobj_hit_onoff) {
  * plays the press animation and sound, then sparkles, sets the save flag (flagVar) to 1 and deletes itself.
  * Already-set switches start at state 99 and vanish at once.
  */
-s32 mobj_switch_blue(MapObjectEntry* mobj) {
+static s32 mobj_switch_blue(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -568,7 +568,7 @@ USER_FUNC(evt_mobj_tornadoswitch_blue) {
  * Main function of the red (reusable) switches:
  * every hit runs the object's event and replays the press animation; the switch stays and can be pressed again.
  */
-s32 mobj_switch_red(MapObjectEntry* mobj) {
+static s32 mobj_switch_red(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -738,7 +738,7 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #else
-s32 mobj_timerswitch(MapObjectEntry* mobj) {
+static s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #endif
 
     MapObjectEntry* other = mobjNameToPtr(mobj->linkedName);
@@ -1046,7 +1046,7 @@ USER_FUNC(evt_mobj_rideswitch_green) {
  * Main function of the light blue ride switch: stepping on it runs the event and flattens it;
  * when Mario leaves it runs the second (release) event and springs back up.
  */
-s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
+static s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     f32 x, y, z;
     AnimationPoseData* data;
     f32 mag;
@@ -1165,7 +1165,7 @@ USER_FUNC(evt_mobj_rideswitch_lightblue) {
     return EVT_RETURN_DONE;
 }
 
-s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
+static s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     EventEntry* ev;
     partyGetPtr(marioGetPartyId());
@@ -1268,7 +1268,7 @@ USER_FUNC(evt_mobj_jumpstand_red) {
  * (marioChgJumpStandMotion), runs the event and plays the spring sounds; field battles stay off
  * (SYSTEM_LEVEL_NO_FIELD_BATTLE) until the event ends.
  */
-s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
+static s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     switch (mobj->state) {
     case 0:
@@ -1375,7 +1375,7 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
 #else
-s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
+static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
 #endif
     char oname[16] = "o_";
     char iname[16] = "i_";
@@ -1538,7 +1538,7 @@ USER_FUNC(evt_mobj_lv_blk) {
  * on their own they show "S_1" (solid, no shadow) when they rest on a floor just below them and "A_1" otherwise;
  * when linked they follow the switch's A_1-A_3 animation.
  */
-s32 mobj_float_blk(MapObjectEntry* mobj) {
+static s32 mobj_float_blk(MapObjectEntry* mobj) {
     MapObjectEntry* other;
     const char* cur;
     switch (mobj->state) {
@@ -1676,7 +1676,7 @@ static inline s32 switchAnimIdx(s32 poseId) {
  * with a nonzero timer it springs back after 120 frames.
  * typeData[1] records the animation index and which way it was switched for the event.
  */
-s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
+static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
     const s8* cur;
     s32 anim;
     BOOL a;
@@ -1913,7 +1913,7 @@ EVT_END()
 
 extern s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 
-s32 mobj_lock(MapObjectEntry* mobj) {
+static s32 mobj_lock(MapObjectEntry* mobj) {
 #if VERSION >= VERSION_US
     s32 i;
     s32 item;
@@ -2156,7 +2156,7 @@ static inline void mobj_itemb(MapObjectEntry* mobj) {
  * runs the check event (which can cancel with MOBJ_FLAG_EXEC_CANCEL), plays the opening sound and animation,
  * runs the open event (item get), then sets the flag variable and stays open.
  */
-s32 mobj_itembox(MapObjectEntry* mobj) {
+static s32 mobj_itembox(MapObjectEntry* mobj) {
     EventEntry* ev;
     switch (mobj->state) {
     case 0:
@@ -2650,7 +2650,7 @@ EVT_BEGIN(mobj_save_blk_sysevt)
     RETURN
 EVT_END()
 
-s32 mobj_save_blk(MapObjectEntry* mobj) {
+static s32 mobj_save_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -2927,7 +2927,7 @@ USER_FUNC(evt_mobj_blk) {
  * which is collected at once and sets the flag), or runs the event instead if one is set.
  * The block then turns into an empty block that just bounces when hit again.
  */
-s32 mobj_badgeblk(MapObjectEntry* mobj) {
+static s32 mobj_badgeblk(MapObjectEntry* mobj) {
     ItemEntry* item;
     switch (mobj->state) {
     case 0:
@@ -3058,7 +3058,7 @@ USER_FUNC(evt_mobj_badgeblk) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_powerupblk(MapObjectEntry* mobj) {
 #else
-s32 mobj_powerupblk(MapObjectEntry* mobj) {
+static s32 mobj_powerupblk(MapObjectEntry* mobj) {
 #endif
     switch (mobj->state) {
     case 0:
@@ -3265,7 +3265,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_10countblk(MapObjectEntry* mobj) {
 #else
-s32 mobj_10countblk(MapObjectEntry* mobj) {
+static s32 mobj_10countblk(MapObjectEntry* mobj) {
 #endif
     switch (mobj->state) {
     case 0:
@@ -3469,7 +3469,7 @@ USER_FUNC(evt_mobj_brick) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
 #else
-s32 mobj_breaking_floor(MapObjectEntry* mobj) {
+static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
 #endif
     MarioWork* mario = marioGetPtr();
     GXColor c3;
@@ -3654,7 +3654,7 @@ static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
  * or anything on it gives the half flip that carries Mario, partners, NPCs and items with it.
  * US and later skip a partner with flag 0x100 set.
  */
-s32 mobj_kururing_floor(MapObjectEntry* mobj) {
+static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     PartyEntry* party;
     MarioWork* mario = marioGetPtr();
     s32 mode;
@@ -4088,7 +4088,7 @@ USER_FUNC(kpa_powerup) {
  * Breaking one runs the event, sets the flag, scores 400 (500 while invincible),
  * shatters it and launches a Bros. Meat power-up.
  */
-s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
+static s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     ItemEntry* item;
     Vec dv;
@@ -4207,7 +4207,7 @@ void mobj_koopa_stone_blk(void) {
  * Main function of the Bowser-stage stone blocks:
  * they never react (the strings only keep stripped names in .rodata).
  */
-s32 mobj_koopa_stone_blk_evt(MapObjectEntry* mobj) {
+static s32 mobj_koopa_stone_blk_evt(MapObjectEntry* mobj) {
     return 0;
 }
 
@@ -4251,7 +4251,7 @@ USER_FUNC(evt_mobj_koopa_stone_blk) {
  * A head bump that cannot break one just bounces it.
  * Breaking one runs the event, sets the flag, scores 400 (500 while invincible) and shatters it.
  */
-s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
+static s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     switch (mobj->state) {
     case 0:
@@ -4397,7 +4397,7 @@ USER_FUNC(evt_mobj_koopa_brick) {
  * blocks: a head bump gives the item (a Bros. Meat power-up), a coin to Bowser's tally, or runs the event;
  * the empty block left behind only breaks at level 3. Hidden blocks get their collision when first bumped.
  */
-s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
+static s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
     ItemEntry* item;
     BOOL ok;
     marioGetPtr();
@@ -4583,7 +4583,7 @@ USER_FUNC(evt_mobj_koopa_hidden_blk) {
  * Main function of the plain Bowser-stage blocks:
  * they break only at level 3, running the event and setting the flag variable.
  */
-s32 mobj_koopa_blk(MapObjectEntry* mobj) {
+static s32 mobj_koopa_blk(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     switch (mobj->state) {
     case 0:
@@ -4657,7 +4657,7 @@ USER_FUNC(evt_mobj_koopa_blk) {
  * Main function of the green pipes in Bowser's stages: fire breath breaks them at levels 1-2, anything at level
  * 3. Breaking one runs the event, sets the flag, scores 400 (500 while invincible) and shatters it.
  */
-s32 mobj_koopa_dokan_evt(MapObjectEntry* mobj) {
+static s32 mobj_koopa_dokan_evt(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     switch (mobj->state) {
     case 0:
@@ -4799,7 +4799,7 @@ USER_FUNC(fire_func) {
  * setting the flag and scoring 400 (500 while invincible);
  * it then lights three staggered evt_fire flames up the coral before crumbling and deleting itself.
  */
-s32 mobj_koopa_sango_evt(MapObjectEntry* mobj) {
+static s32 mobj_koopa_sango_evt(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     EventEntry* ev;
     switch (mobj->state) {
@@ -4921,7 +4921,7 @@ USER_FUNC(evt_mobj_koopa_sango) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
 #else
-s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
+static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
 #endif
     Mtx mtx;
     Mtx rot;
@@ -5199,7 +5199,7 @@ USER_FUNC(kpa_score_to_str) {
 }
 
 /** Draw callback that prints the pole score text at half size at the stored position. */
-void kpa_disp_pole_score(CameraId camId, void* param) {
+static void kpa_disp_pole_score(CameraId camId, void* param) {
     Mtx trans;
     Mtx scale;
     PSMTXTrans(trans, psw->x, psw->y, 300.0f);
@@ -5465,7 +5465,7 @@ EVT_BEGIN(kpa_move_to_toride)
     RETURN
 EVT_END()
 
-s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
+static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     s32 score;
     s32 next = 0;

@@ -40,33 +40,33 @@ u16 pouchEquipBadge(s32 index);
 s32 select_comp_bteresa(const void* a, const void* b);
 #endif
 
-void select_main(WinMgrEntry* entry);
+static void select_main(WinMgrEntry* entry);
 
 #if VERSION <= VERSION_DEMO_JP
 static void select_disp(WinMgrEntry* entry);
 static void select_disp_party(WinMgrEntry* entry);
 #else
-void select_disp(WinMgrEntry* entry);
-void select_disp_party(WinMgrEntry* entry);
+static void select_disp(WinMgrEntry* entry);
+static void select_disp_party(WinMgrEntry* entry);
 #endif
 
-void select_disp_mario(WinMgrEntry* entry);
+static void select_disp_mario(WinMgrEntry* entry);
 
 #if VERSION <= VERSION_DEMO_JP
 static void select_disp_luigi(WinMgrEntry* entry);
 #else
-void select_disp_luigi(WinMgrEntry* entry);
+static void select_disp_luigi(WinMgrEntry* entry);
 #endif
 
-void select_disp2(WinMgrEntry* entry);
-void select_main3(WinMgrEntry* entry);
-void select_disp3(WinMgrEntry* entry);
-void select_disp3_party(WinMgrEntry* entry);
+static void select_disp2(WinMgrEntry* entry);
+static void select_main3(WinMgrEntry* entry);
+static void select_disp3(WinMgrEntry* entry);
+static void select_disp3_party(WinMgrEntry* entry);
 
 #if VERSION <= VERSION_DEMO_JP
 static void select_disp3_mario(WinMgrEntry* entry);
 #else
-void select_disp3_mario(WinMgrEntry* entry);
+static void select_disp3_mario(WinMgrEntry* entry);
 #endif
 
 void winMgrSeq(WinMgrEntry* entry);
@@ -335,7 +335,7 @@ void winMgrReInit(void) {
  * rotated and scaled by the open/close animation, then the blue title tabs for dispType 1 (one),
  * 3 (two) or 4/5 (two, list and value columns), then the descriptor's own disp function.
  */
-void winMgrDisp(CameraId camId, void* param) {
+static void winMgrDisp(CameraId camId, void* param) {
     WinMgrEntry* entry = param;
     Mtx rot;
     Mtx scale;
@@ -1243,7 +1243,7 @@ s32 winMgrSelectGetCursor(WinMgrSelect* sel) {
 }
 #endif
 
-void select_main(WinMgrEntry* entry) {
+static void select_main(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     s32 prev;
     s32 i;
@@ -1356,7 +1356,7 @@ void select_main(WinMgrEntry* entry) {
  * a currency icon above the price column (coin; Star Piece for 13, Pianta token for 16), the hand cursor and scroll arrows.
  * From US on, worn badges in the sell list get a mark.
  */
-void select_disp(WinMgrEntry* entry) {
+static void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
@@ -1614,7 +1614,7 @@ static inline s32 select_party_icon(u16 id) {
 static void select_disp_party(WinMgrEntry* entry) {
     s32 i;
 #else
-void select_disp_party(WinMgrEntry* entry) {
+static void select_disp_party(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
@@ -1732,7 +1732,7 @@ void select_disp_party(WinMgrEntry* entry) {
  * the stat's name, icon, current value and, unless refused,
  * the value after raising or lowering it by its step (5, 5, 3).
  */
-void select_disp_mario(WinMgrEntry* entry) {
+static void select_disp_mario(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
@@ -1859,7 +1859,7 @@ void select_disp_mario(WinMgrEntry* entry) {
  * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
  * and for type 17 the price of unread entries (with a coin icon from JP on). Despite the name it serves both 17 and 18.
  */
-void select_disp_luigi(WinMgrEntry* entry) {
+static void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
@@ -1968,7 +1968,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
     }
 }
 
-void select_disp2(WinMgrEntry* entry) {
+static void select_disp2(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     const char* msg;
     u16 w;
@@ -2044,12 +2044,12 @@ void select_disp2(WinMgrEntry* entry) {
 }
 
 /** Main function of a selection list's help window: scrolls its text (winMgrHelpMain). */
-void select_main3(WinMgrEntry* entry) {
+static void select_main3(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
 
 /** Help window of an item list: shows the description of the item under the cursor. */
-void select_disp3(WinMgrEntry* entry) {
+static void select_disp3(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
 
     if (!(wp->entries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
@@ -2059,7 +2059,7 @@ void select_disp3(WinMgrEntry* entry) {
     }
 }
 
-void select_disp3_party(WinMgrEntry* entry) {
+static void select_disp3_party(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     PouchData* pouch;
     char buf[0x48];
@@ -2087,7 +2087,7 @@ void select_disp3_party(WinMgrEntry* entry) {
     }
 }
 
-void select_disp3_mario(WinMgrEntry* entry) {
+static void select_disp3_mario(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     char buf[0x48];
     const char* help;

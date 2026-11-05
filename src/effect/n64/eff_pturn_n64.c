@@ -67,10 +67,10 @@ effN64Vtx size16x24_tex32x32_r_pturn_vtx[] = {
     {-4, 12, 0, 0, 1024, 250, 250, 0, 255},
 };
 
-void effPturnMain(EffectEntry* effect);
-void effPturnDisp(CameraId cameraId, EffectEntry* effect);
-void pturn_main_dispp(CameraId cameraId, EffectEntry* effect);
-void pturn_num_dispp(CameraId cameraId, EffectEntry* effect);
+static void effPturnMain(EffectEntry* effect);
+static void effPturnDisp(CameraId cameraId, EffectEntry* effect);
+static void pturn_main_dispp(CameraId cameraId, EffectEntry* effect);
+static void pturn_num_dispp(CameraId cameraId, EffectEntry* effect);
 
 /**
  * A bobbing badge (N64 texture 0x92) with a one- or two-digit count (texture 0x53) above (x, y, z);
@@ -134,7 +134,7 @@ EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
  * Steps the displayed count toward its target (one per 8 frames), bobs the badge,
  * and on delete tumbles it away with gravity while fading.
  */
-void effPturnMain(EffectEntry* effect) {
+static void effPturnMain(EffectEntry* effect) {
     PturnElem* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -237,7 +237,7 @@ void effPturnMain(EffectEntry* effect) {
 }
 
 /** Draws the badge, and the digits for every type except 1, while the effect is active. */
-void effPturnDisp(CameraId cameraId, EffectEntry* effect) {
+static void effPturnDisp(CameraId cameraId, EffectEntry* effect) {
     PturnElem* work = effect->userdata;
     if (work->active != 0) {
         pturn_main_dispp(cameraId, effect);
@@ -251,7 +251,7 @@ void effPturnDisp(CameraId cameraId, EffectEntry* effect) {
  * Draws the badge sprite (texture 0x92) as a camera-facing quad with the bob offset, scale and alpha,
  * once the count is above zero (always for type 10).
  */
-void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
+static void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     PturnElem* p;
     GXTexObj texObj;
@@ -319,7 +319,7 @@ void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the one- or two-digit count (texture 0x53, digits 32 rows apart) over the badge when it is above zero. */
-void pturn_num_dispp(CameraId cameraId, EffectEntry* effect) {
+static void pturn_num_dispp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     GXTexObj texObj;
     Mtx mtx;

@@ -84,10 +84,10 @@ f32 evt_yoshi_spd;
 s32 evt_yoshi_frm;
 f32 jumpheight;
 
-void inertia(PartyEntry* party);
-void searchGround(PartyEntry* party);
-void searchGround2(PartyEntry* party);
-void checkWall(PartyEntry* party, f32 spd, f32 dir);
+static void inertia(PartyEntry* party);
+static void searchGround(PartyEntry* party);
+static void searchGround2(PartyEntry* party);
+static void checkWall(PartyEntry* party, f32 spd, f32 dir);
 void getStick(PartyEntry* party, f32* angle, f32* speed);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -1212,7 +1212,7 @@ void yoshiFlyMove(PartyEntry* party) {
  * With the stick released it brakes (harder against a wall);
  * in US and later it brakes only during the flutter and stops at once otherwise.
  */
-void inertia(PartyEntry* party) {
+static void inertia(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 sx = party->stickX;
     f32 vx = mario->mot.yoshi.velX;
@@ -1290,7 +1290,7 @@ void inertia(PartyEntry* party) {
 /** The early demos search 11 up into locals and has the older landing and step code. */
 static void searchGround(PartyEntry* party) {
 #else
-void searchGround(PartyEntry* party) {
+static void searchGround(PartyEntry* party) {
 #endif
     HitEntry* hit;
     MarioWork* mario;
@@ -1433,7 +1433,7 @@ void searchGround(PartyEntry* party) {
 /** The early demos search into locals, always record the hit object, and stops the flutter sound on landing. */
 static void searchGround2(PartyEntry* party) {
 #else
-void searchGround2(PartyEntry* party) {
+static void searchGround2(PartyEntry* party) {
 #endif
     HitEntry* hit = NULL;
     MarioWork* mario = party->playerPtr;
@@ -1514,7 +1514,7 @@ static void searchHead(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
 #else
-void checkWall(PartyEntry* party, f32 spd, f32 dir) {
+static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
 #endif
     MarioWork* mario = marioGetPtr();
     HitEntry* hit;

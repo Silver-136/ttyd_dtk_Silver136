@@ -23,8 +23,8 @@ typedef struct EffSunlightN64Work {
     s32 alphaMax;  // 0x3C
 } EffSunlightN64Work;
 
-void effSunlightMain(EffectEntry* effect);
-void effSunlightDisp(CameraId cameraId, void* payload);
+static void effSunlightMain(EffectEntry* effect);
+static void effSunlightDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns sunlight beams at (x, y, z); `w` is stored but never read. A lifetime of 0 or less lasts until soft-deleted.
@@ -76,7 +76,7 @@ EffectEntry* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f3
  * and drifts each of the five shafts' texture scroll on two sine waves.
  * Drawn on layer 2 in JP and the early demos, 10 in US and later.
  */
-void effSunlightMain(EffectEntry* effect) {
+static void effSunlightMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     EffSunlightN64Work* work;
@@ -147,7 +147,7 @@ void effSunlightMain(EffectEntry* effect) {
  * mirrored left-right for type 0: shaft shape from texture 0x42, shimmer from texture 0x43 scrolled per shaft,
  * shaded between the work's two colours at half alpha. Skipped while alpha is 0.
  */
-void effSunlightDisp(CameraId cameraId, void* payload) {
+static void effSunlightDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera = camGetPtr(cameraId);
     EffSunlightN64Work* work = effect->userdata;

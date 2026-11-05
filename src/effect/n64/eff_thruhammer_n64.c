@@ -57,8 +57,8 @@ static effN64Vtx stg_thruhammer_v[] = {
     {0, -2, 40, 0, 1024, 255, 255, 255, 255},
 };
 
-void effThruHammerMain(EffectEntry* effect);
-void effThruHammerDisp(CameraId cameraId, EffectEntry* effect);
+static void effThruHammerMain(EffectEntry* effect);
+static void effThruHammerDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
 /**
@@ -115,7 +115,7 @@ EffectEntry* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
  * scroll slows (capped at 128), the colour texture's scrolls at a constant 32.
  * After 8 frames the shared alpha drops 20% per frame; deletes when the timer runs out. CAMERA_3D, layer 2.
  */
-void effThruHammerMain(EffectEntry* effect) {
+static void effThruHammerMain(EffectEntry* effect) {
     EffThruHammerN64Work* work = effect->userdata;
     s32 i;
     Vec position;
@@ -174,7 +174,7 @@ void effThruHammerMain(EffectEntry* effect) {
  * Draws the ring mesh (stg_thruhammer_v, via main_dl) camera-facing with texture 0x23 as the alpha mask
  * and 0x24 shaded between the work's two colours: back faces culled first, then front faces, so both sides show.
  */
-void effThruHammerDisp(CameraId cameraId, EffectEntry* effect) {
+static void effThruHammerDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffThruHammerN64Work* work;
     u8 r1, g1, b1, r2, g2, b2;

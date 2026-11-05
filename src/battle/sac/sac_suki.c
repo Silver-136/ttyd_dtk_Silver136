@@ -77,7 +77,7 @@ static void disp_2D(CameraId cam, void* param);
 static SukiWork* get_ptr(void);
 static void main_star(void);
 static void main_base(void);
-void main_button(s32 idx);
+static void main_button(s32 idx);
 void _disp_2D(s32 side, s32 idx);
 
 static BattleWeapon weapon = {
@@ -300,7 +300,7 @@ static void main_base(void) {
 }
 
 /** Deals button idx of a new round: places it in the row and picks A, B, X or Y at random. */
-void main_button(s32 idx) {
+static void main_button(s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b = &w->btn[idx];
     s32 tbl[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
@@ -881,7 +881,7 @@ static inline GXColor grayColor(u8 v) {
 }
 
 /** Map TEV callback for the flash: draws the stage as a flat grey of the current flash brightness. */
-void set_tev(MapTevCallbackInfo* info) {
+static void set_tev(MapTevCallbackInfo* info) {
     u8 v = get_ptr()->flash;
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

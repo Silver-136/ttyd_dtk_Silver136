@@ -27,9 +27,9 @@ typedef struct EffGarekiN64Work {
     f32 rotVelY;   // 0x3C
 } EffGarekiN64Work;
 
-void gareki_dl(s32 type);
-void effGarekiMain(EffectEntry* effect);
-void effGarekiDisp(CameraId cameraId, void* param);
+static void gareki_dl(s32 type);
+static void effGarekiMain(EffectEntry* effect);
+static void effGarekiDisp(CameraId cameraId, void* param);
 
 #if VERSION <= VERSION_DEMO_JP
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
@@ -160,7 +160,7 @@ EffectEntry* effGarekiN64Entry(s32 type, f32 x, f32 y, f32 z, f32 groundY) {
  * State 0: the whole chunk accelerates downward and tumbles until it reaches groundY.
  * State 1: the eight pieces fly apart with gravity for 20 frames, fading out over the last 10.
  */
-void effGarekiMain(EffectEntry* effect) {
+static void effGarekiMain(EffectEntry* effect) {
     EffGarekiN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -205,7 +205,7 @@ void effGarekiMain(EffectEntry* effect) {
  * Draws the whole chunk with texture 23 while it falls,
  * then each of the eight pieces at its own offset and rotation.
  */
-void effGarekiDisp(CameraId cameraId, void* param) {
+static void effGarekiDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffGarekiN64Work* work;
@@ -281,7 +281,7 @@ void effGarekiDisp(CameraId cameraId, void* param) {
 }
 
 /** Draws piece number type of the rubble from the stg__s_v vertices (0 is the whole chunk, 1-8 are the pieces). */
-void gareki_dl(s32 type) {
+static void gareki_dl(s32 type) {
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(stg__s_v);
     switch (type) {

@@ -156,7 +156,7 @@ s32 ARCConvertPathToEntrynum(ARCHandle* handle, const char* pathPtr) {
 }
 
 /** Copies up to maxlen characters without a terminator; returns the count copied. */
-u32 myStrncpy(char* dest, char* src, u32 maxlen) {
+static u32 myStrncpy(char* dest, char* src, u32 maxlen) {
     u32 i = maxlen;
     while ((i > 0) && (*src != 0)) {
         *dest++ = *src++;
@@ -186,7 +186,7 @@ static u32 entryToPath(ARCHandle* handle, u32 entry, char* path, u32 maxlen) {
 }
 
 /** Writes the full path of an entry (with a trailing / for directories); FALSE if it did not fit. */
-BOOL ARCConvertEntrynumToPath(ARCHandle* handle, s32 entrynum, char* path, u32 maxlen) {
+static BOOL ARCConvertEntrynumToPath(ARCHandle* handle, s32 entrynum, char* path, u32 maxlen) {
     u32 loc;
     FSTEntry* FstStart = (FSTEntry*)handle->FSTStart;
 

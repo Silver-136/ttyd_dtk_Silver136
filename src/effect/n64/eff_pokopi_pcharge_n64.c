@@ -102,8 +102,8 @@ static effN64Vtx size128x10_tex32x32_2_vtx[] = {
     {0, 5, 0, 1024, 4096, 0, 0, 0, 255},
 };
 
-void effPokopiPchargeMain(EffectEntry* effect);
-void effPokopiPchargeDisp(CameraId cameraId, void* param);
+static void effPokopiPchargeMain(EffectEntry* effect);
+static void effPokopiPchargeDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns an energy-charge effect at (x, y, z): 10-20 streaks (count by type) spaced evenly around a ring,
@@ -235,7 +235,7 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
  * Fades the effect in and out; each streak slides along its ray, restarts at a random angle when its cycle ends,
  * and pulses its alpha with a sine over the cycle.
  */
-void effPokopiPchargeMain(EffectEntry* effect) {
+static void effPokopiPchargeMain(EffectEntry* effect) {
     EffPokopiPchargeN64Elem* p = effect->userdata;
     s32 i;
     s32 lifetime;
@@ -294,7 +294,7 @@ void effPokopiPchargeMain(EffectEntry* effect) {
 }
 
 /** Draws each streak as a camera-facing sprite (texture 0x86) pushed out along its ray, in a shape chosen by type. */
-void effPokopiPchargeDisp(CameraId cameraId, void* param) {
+static void effPokopiPchargeDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffPokopiPchargeN64Elem* p;

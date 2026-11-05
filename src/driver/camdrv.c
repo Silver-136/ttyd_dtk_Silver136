@@ -42,8 +42,8 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
 CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 top, f32 bottom, f32 left, f32 right,
                            f32 near, f32 far, f32 nearZ, f32 farZ, const char* name);
 void cam3dMain(CameraEntry* camera);
-void cam3dImgMain(CameraEntry* camera);
-void camEffMain(CameraEntry* camera);
+static void cam3dImgMain(CameraEntry* camera);
+static void camEffMain(CameraEntry* camera);
 inline Vec makeVecByValue(f32 x, f32 y, f32 z);
 
 /**
@@ -664,7 +664,7 @@ void cam3dMain(CameraEntry* camera) {
  * Update callback of the 3D image camera: rebuilds its projection from its current field of view,
  * aspect and planes.
  */
-void cam3dImgMain(CameraEntry* camera) {
+static void cam3dImgMain(CameraEntry* camera) {
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
 }
 
@@ -676,7 +676,7 @@ void cam3dImgMain(CameraEntry* camera) {
 #if VERSION <= VERSION_DEMO_JP
 static void camEffMain(CameraEntry* camera) {
 #else
-void camEffMain(CameraEntry* camera) {
+static void camEffMain(CameraEntry* camera) {
 #endif
 
     CameraEntry* camera3D = camGetPtr(CAMERA_3D);
@@ -754,7 +754,7 @@ void getScreenPoint(Vec* model, Vec* screen) {
  * Draws the black letterbox bars across the top and bottom of the screen at the 2D camera's current bar heights
  * and alpha, unless globally disabled.
  */
-void camLetterBoxDraw(CameraId cameraId, void* param) {
+static void camLetterBoxDraw(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     f32 viewport[GX_VIEWPORT_SZ];
     f32 projection[GX_PROJECTION_SZ];

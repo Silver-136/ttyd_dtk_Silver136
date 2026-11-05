@@ -60,8 +60,8 @@ static effN64Vtx balloon_vtx[] = {
     {0, 0, 0, 0, 512, 0, 0, 0, 255},
 };
 
-void effBalloonMain(EffectEntry* effect);
-void effBalloonDisp(CameraId cameraId, void* payload);
+static void effBalloonMain(EffectEntry* effect);
+static void effBalloonDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns the balloon at (x, y, z) that grows to `targetScale`,
@@ -95,7 +95,7 @@ EffectEntry* effBalloonN64Entry(s32 type, f32 x, f32 y, f32 z, f32 targetScale, 
  * Eases the scale toward the target with a sine pulse and rebuilds the 20 wobbling outline points each frame.
  * Once soft deleted it counts down 99 frames while its offset rises.
  */
-void effBalloonMain(EffectEntry* effect) {
+static void effBalloonMain(EffectEntry* effect) {
     s32 lifetime;
     EffBalloonN64Work* work = effect->userdata;
     EffBalloonN64Point* pt = work->points;
@@ -155,7 +155,7 @@ void effBalloonMain(EffectEntry* effect) {
  * without the rising offset) is joined in only before the soft delete.
  * The texture is chosen from the lifetime counter.
  */
-void effBalloonDisp(CameraId cameraId, void* payload) {
+static void effBalloonDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera = camGetPtr(cameraId);
     EffBalloonN64Work* work = effect->userdata;

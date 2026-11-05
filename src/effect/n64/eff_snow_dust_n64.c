@@ -13,8 +13,8 @@
 #include "libc_decls.h"
 
 
-void effSnowDustMain(EffectEntry* effect);
-void effSnowDustDisp(CameraId cameraId, void* param);
+static void effSnowDustMain(EffectEntry* effect);
+static void effSnowDustDisp(CameraId cameraId, void* param);
 
 /** Size of a pulsing puff (types 2 and 3) or a type 5 sparkle over its 30-step cycle: three quick swells. */
 static u8 scale_data[] = {
@@ -168,7 +168,7 @@ EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
  * and 4/5 are stationary sparkles in random pale colours.
  * With under 30 frames left, finished cycles restart at step 20 instead of respawning.
  */
-void effSnowDustMain(EffectEntry* effect) {
+static void effSnowDustMain(EffectEntry* effect) {
     s32 wi, hi;
     s32 lifetime;
     EffSnowDustN64Work* work = effect->userdata;
@@ -335,7 +335,7 @@ void effSnowDustMain(EffectEntry* effect) {
  * shaped by 0x66 and coloured by 0x65, types 2/3 a 12x12 frame from the 0x67 strip (type 2 picks the frame per
  * particle), and types 4/5 a 16x16 sparkle from 0x68 plus the glow diamond.
  */
-void effSnowDustDisp(CameraId cameraId, void* param) {
+static void effSnowDustDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* cam;
     EffSnowDustN64Work* work;

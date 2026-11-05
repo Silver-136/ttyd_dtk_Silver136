@@ -188,13 +188,13 @@ MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
 /** Recovery icon animation (79 frames), started by effRecoveryEntry; moves the central icon, its number and label. */
 MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
 
-void effRecoveryMain(EffectEntry* effect);
-void effRecoveryMain2(EffectEntry* effect);
+static void effRecoveryMain(EffectEntry* effect);
+static void effRecoveryMain2(EffectEntry* effect);
 
-void effRecoveryDisp(CameraId cameraId, void* param);
-void effRecoveryDisp2(CameraId cameraId, void* param);
-void effRecoveryDisp3(CameraId cameraId, void* param);
-void effRecoveryDisp4(CameraId cameraId, void* param);
+static void effRecoveryDisp(CameraId cameraId, void* param);
+static void effRecoveryDisp2(CameraId cameraId, void* param);
+static void effRecoveryDisp3(CameraId cameraId, void* param);
+static void effRecoveryDisp4(CameraId cameraId, void* param);
 
 /**
  * Spawns the HP/FP recovery icons at (x, y, z);
@@ -345,7 +345,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 #if VERSION <= VERSION_DEMO_JP
 static void effRecoveryMain(EffectEntry* effect) {
 #else
-void effRecoveryMain(EffectEntry* effect) {
+static void effRecoveryMain(EffectEntry* effect) {
 #endif
 
     RecoveryWork* work = effect->userdata;
@@ -538,7 +538,7 @@ void effRecoveryMain(EffectEntry* effect) {
 }
 
 /** Per frame: Main for the sparkle-only form (type 6). */
-void effRecoveryMain2(EffectEntry* effect) {
+static void effRecoveryMain2(EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     Vec calc;
     Vec pos = { 0.0f, 0.0f, 0.0f };
@@ -592,7 +592,7 @@ void effRecoveryMain2(EffectEntry* effect) {
 }
 
 /** Draws the central icon (moved by the animation) and the small icons in cycling colours as camera-facing quads. */
-void effRecoveryDisp(CameraId cameraId, void* param) {
+static void effRecoveryDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
@@ -705,7 +705,7 @@ void effRecoveryDisp(CameraId cameraId, void* param) {
  * centred and facing the camera: number style 0 for HP, 1 for FP (the switch also lists types 2 and 3,
  * which never register this callback).
  */
-void effRecoveryDisp2(CameraId cameraId, void* param) {
+static void effRecoveryDisp2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     s32 type;
@@ -757,7 +757,7 @@ void effRecoveryDisp2(CameraId cameraId, void* param) {
  * a dark shadow offset by 2 units, then the label in pink for HP (type 4) or green for FP (type 5).
  * Texture 111/110 in US and later (173/172 for LANGUAGE_SP), 0x8B/0x8A in JP and the early demos.
  */
-void effRecoveryDisp3(CameraId cameraId, void* param) {
+static void effRecoveryDisp3(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     CameraEntry* cam;
@@ -855,7 +855,7 @@ void effRecoveryDisp3(CameraId cameraId, void* param) {
  * the others are texture 20 (the HP form's small icon) pointed along their flight angle,
  * their colour cycling through color_rotation_data.
  */
-void effRecoveryDisp4(CameraId cameraId, void* param) {
+static void effRecoveryDisp4(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     CameraEntry* cam;

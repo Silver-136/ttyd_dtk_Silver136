@@ -48,12 +48,12 @@ void FontDrawString(f32 x, f32 y, const char* str);
 static ShopWork* _wp;
 char mapname[16];
 
-void list_disp(WinMgrEntry* entry);
-void title_disp(WinMgrEntry* entry);
-void point_disp(WinMgrEntry* entry);
-void help_disp(WinMgrEntry* entry);
-void help_main(WinMgrEntry* entry);
-void name_disp(WinMgrEntry* entry);
+static void list_disp(WinMgrEntry* entry);
+static void title_disp(WinMgrEntry* entry);
+static void point_disp(WinMgrEntry* entry);
+static void help_disp(WinMgrEntry* entry);
+static void help_main(WinMgrEntry* entry);
+static void name_disp(WinMgrEntry* entry);
 
 USER_FUNC(disp_off);
 USER_FUNC(get_ptr);
@@ -792,7 +792,7 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
-void name_disp(WinMgrEntry* entry) {
+static void name_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
     const char* name;
     s32 i;
@@ -825,12 +825,12 @@ void name_disp(WinMgrEntry* entry) {
 }
 
 /** Updates the item description window (winMgrHelpMain). */
-void help_main(WinMgrEntry* entry) {
+static void help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
 
 /** Draws the description of the shelf item Mario stands in front of in the help window. */
-void help_disp(WinMgrEntry* entry) {
+static void help_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
     ShopItem* item = &wp->items[wp->cur];
 
@@ -845,7 +845,7 @@ void help_disp(WinMgrEntry* entry) {
  * and a counter that rolls a tenth of the way toward the pouch's shop points each frame,
  * so gains count up visibly.
  */
-void point_disp(WinMgrEntry* entry) {
+static void point_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
     s32 diff;
@@ -886,7 +886,7 @@ void point_disp(WinMgrEntry* entry) {
 }
 
 /** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; US and later squeeze it to fit. */
-void title_disp(WinMgrEntry* entry) {
+static void title_disp(WinMgrEntry* entry) {
     const char* msg;
 
 #if VERSION >= VERSION_US
@@ -930,7 +930,7 @@ void title_disp(WinMgrEntry* entry) {
  * prizes already claimed in red.
  * US and later scale long headings and names to fit.
  */
-void list_disp(WinMgrEntry* entry) {
+static void list_disp(WinMgrEntry* entry) {
     PouchData* pouch;
     const char* msg;
 

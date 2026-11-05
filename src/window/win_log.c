@@ -1168,7 +1168,7 @@ void winLogMain2(WindowWork* w) {
 }
 
 void mapGX(WindowWork* w, f32 x, f32 y);
-void monoshiriGX(WindowWork* w, f32 x, f32 y);
+static void monoshiriGX(WindowWork* w, f32 x, f32 y);
 
 
 /**
@@ -1460,7 +1460,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
 #if VERSION <= VERSION_DEMO_JP
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #else
-void monoshiriGX(WindowWork* w, f32 x, f32 y) {
+static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #endif
     GXColor k1;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};

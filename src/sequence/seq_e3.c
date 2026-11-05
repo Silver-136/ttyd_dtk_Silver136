@@ -119,8 +119,8 @@ static void e3Disp(CameraId cameraId, void* param);
 static void e3DispOffscreen(CameraId cameraId, void* param);
 static void e3DispShadow(f32 x, f32 y, f32 z);
 #else
-void e3Disp(CameraId cameraId, void* param);
-void e3DispOffscreen(CameraId cameraId, void* param);
+static void e3Disp(CameraId cameraId, void* param);
+static void e3DispOffscreen(CameraId cameraId, void* param);
 #endif
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION != VERSION_DEMO_JP
@@ -190,7 +190,7 @@ EVT_END()
 #if VERSION >= VERSION_US
 static void alarm_handler(OSAlarm* alarm, OSContext* context) {
 #else
-void alarm_handler(OSAlarm* alarm, OSContext* context) {
+static void alarm_handler(OSAlarm* alarm, OSContext* context) {
 #endif
     gp->flags |= GW_FLAG_E3_TIMEOUT;
 }
@@ -615,7 +615,7 @@ static void e3Disp(CameraId cameraId, void* param) {
     Mtx poseMtx;
     Mtx poseScale;
 #else
-void e3Disp(CameraId cameraId, void* param) {
+static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 #endif
     Mtx mtx;
@@ -913,7 +913,7 @@ f32 forceSdata(void) {
  * Page-flip offscreen callback: switches to the next page, draws it,
  * and registers its drawn bounding box with the fOff_peron offscreen.
  */
-void e3DispOffscreen(CameraId cameraId, void* param) {
+static void e3DispOffscreen(CameraId cameraId, void* param) {
     u16 left, top, right, bottom;
 
     wp->curScreen = wp->nextScreen;

@@ -25,8 +25,8 @@ typedef struct EffConfettiN64Work {
     s32 camId;    // 0x34
 } EffConfettiN64Work;
 
-void effConfettiMain(EffectEntry* effect);
-void effConfettiDisp(CameraId cameraId, void* param);
+static void effConfettiMain(EffectEntry* effect);
+static void effConfettiDisp(CameraId cameraId, void* param);
 
 /** Twelve pastel RGB colours for the confetti pieces, one per piece in turn. */
 u8 color_table[] = {
@@ -189,7 +189,7 @@ EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 sc
  * type 3 pieces respawn at the top after their 120-frame life,
  * types 4-6 damp their speed and then fall with accelY.
  */
-void effConfettiMain(EffectEntry* effect) {
+static void effConfettiMain(EffectEntry* effect) {
     s32 mod;
     EffConfettiN64Work* w;
     s32 i;
@@ -280,7 +280,7 @@ void effConfettiMain(EffectEntry* effect) {
  * Draws each active piece as a camera-facing sprite from texture 0x4B,
  * stepping through the six-entry anm_seq flutter cycle. Type 3 draws four small quads per piece.
  */
-void effConfettiDisp(CameraId cameraId, void* param) {
+static void effConfettiDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 anm;
     s32 type;

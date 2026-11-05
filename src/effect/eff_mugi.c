@@ -39,8 +39,8 @@ typedef struct effMugiKemuriData {
     s32 poseId; //0x60
 } effMugiKemuriData;
 
-void effMugiKemuriMain(EffectEntry* effect);
-void effMugiKemuriDisp(CameraId camId, void* param);
+static void effMugiKemuriMain(EffectEntry* effect);
+static void effMugiKemuriDisp(CameraId camId, void* param);
 
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
@@ -106,8 +106,8 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     return effect;
 }
 
-void effMugiKemuri2Main(EffectEntry* effect);
-void effMugiKemuri2Disp(CameraId camId, void* param);
+static void effMugiKemuri2Main(EffectEntry* effect);
+static void effMugiKemuri2Disp(CameraId camId, void* param);
 
 /** Spawns the second smoke form at (x, y, z) with `angle` and a left/right `dir`; called from mario_kemuri.c. */
 EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 dir) {
@@ -164,7 +164,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
  * Per frame: loads the EFF_Mugi (EFF_Hana on win) pose for each puff, moves them (no fade: alpha stays 255),
  * and deletes the effect when their 60-frame timers have run out.
  */
-void effMugiKemuriMain(EffectEntry* effect) {
+static void effMugiKemuriMain(EffectEntry* effect) {
     s32 i;
     effMugiKemuriData* data;
     effMugiKemuriData* p;
@@ -245,7 +245,7 @@ void effMugiKemuriMain(EffectEntry* effect) {
  * Per frame: like effMugiKemuriMain for the second form, with sideways drift scaled by the vertical speed, a spin
  * and a fade; type 0 puffs wait while rising and Mario stands still. Deletes the effect once all have faded.
  */
-void effMugiKemuri2Main(EffectEntry* effect) {
+static void effMugiKemuri2Main(EffectEntry* effect) {
     s32 i;
     effMugiKemuriData* data;
     effMugiKemuriData* p;
@@ -338,7 +338,7 @@ void effMugiKemuri2Main(EffectEntry* effect) {
 }
 
 /** Draws each puff's animation pose at its position, rotation and scale. */
-void effMugiKemuriDisp(CameraId camId, void* param) {
+static void effMugiKemuriDisp(CameraId camId, void* param) {
     EffectEntry* effect = param;
     effMugiKemuriData* data;
     s32 i;
@@ -369,7 +369,7 @@ void effMugiKemuriDisp(CameraId camId, void* param) {
 }
 
 /** Draws each puff of the second form from its animation pose with its drift rotation. */
-void effMugiKemuri2Disp(CameraId camId, void* param) {
+static void effMugiKemuri2Disp(CameraId camId, void* param) {
     EffectEntry* effect = param;
     effMugiKemuriData* data;
     s32 i;

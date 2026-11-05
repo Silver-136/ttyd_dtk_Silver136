@@ -40,8 +40,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-void effRappaMain(EffectEntry* effect);
-void effRappaDisp(CameraId cameraId, void* payload);
+static void effRappaMain(EffectEntry* effect);
+static void effRappaDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns `num` sparks at (x, y, z) fired along pitch/yaw (degrees), living 30 frames;
@@ -100,7 +100,7 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
  * over the last 10 frames the alpha drops 20% per frame and each spark grows by speed/10.
  * Deletes when the lifetime runs out. CAMERA_3D, layer 2.
  */
-void effRappaMain(EffectEntry* effect) {
+static void effRappaMain(EffectEntry* effect) {
     EffRappaN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -149,7 +149,7 @@ static inline GXColor mkcol(u8 r, u8 g, u8 b, u8 a) {
  * each spark is one step further along the table and the whole set advances one step (3 bytes) per frame,
  * so the colours cycle.
  */
-void effRappaDisp(CameraId cameraId, void* payload) {
+static void effRappaDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     s32 j0, j1, j2;

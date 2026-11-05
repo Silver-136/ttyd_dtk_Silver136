@@ -34,8 +34,8 @@ typedef struct EffPacknBfireWork {
     f32 drot;     // 0x78
 } EffPacknBfireWork;
 
-void effPacknBfireMain(EffectEntry* effect);
-void effPacknBfireDisp(CameraId cameraId, void* param);
+static void effPacknBfireMain(EffectEntry* effect);
+static void effPacknBfireDisp(CameraId cameraId, void* param);
 
 /** 64x64 camera-facing quad drawn for each fire puff and spark of the Piranha Plant's fire breath. */
 static effN64Vtx size64x64_tex32x32_vtx[] = {
@@ -144,7 +144,7 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
  * and spawns the type 2 burst just before it ends;
  * type 2 sparks fall with gravity, bounce on the ground (y = 0) and shrink.
  */
-void effPacknBfireMain(EffectEntry* effect) {
+static void effPacknBfireMain(EffectEntry* effect) {
     EffPacknBfireWork* work;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -218,7 +218,7 @@ void effPacknBfireMain(EffectEntry* effect) {
  * Draws each type 1/2 fire puff as a camera-facing 64x64 quad with a flame texture (0x71) and a scrolling one (0x72);
  * type 0 draws nothing.
  */
-void effPacknBfireDisp(CameraId cameraId, void* param) {
+static void effPacknBfireDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffPacknBfireWork* work;

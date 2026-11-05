@@ -16,7 +16,7 @@
 void psndSFX_pit(s32 id, s32 pitch);
 
 // local prototypes
-s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask);
+static s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask);
 
 /** Clears the action-command manager at battle start: resets its pad history and drops every command callback. */
 void BattleActionCommandManagerInit(BattleWork* wp) {
@@ -239,7 +239,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
 }
 
 /** Returns the buttons in mask that were newly pressed frame frames ago in the action-command pad history. */
-s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask) {
+static s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask) {
     return _battleWorkPointer->actionCommands.pad.buttonsPressedHistory[frame] & mask;
 }
 

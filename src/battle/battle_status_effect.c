@@ -25,7 +25,7 @@
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i))
 
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit);
-void _st_chg_msg_disp(void);
+static void _st_chg_msg_disp(void);
 
 typedef struct StChgMsgData {
     s8 type;
@@ -131,15 +131,15 @@ s8 _st_pri_data[] = {
 
 //local prototypes
 void BSE_Sleep(BattleUnit* unit);
-void BSE_SleepDelete(BattleUnit* unit);
-void BSE_Biribiri(BattleUnit* unit);
-void BSE_BiribiriDelete(BattleUnit* unit);
-void BSE_Fire(BattleUnit* unit);
-void BSE_FireDelete(BattleUnit* unit);
-void BSE_Freeze(BattleUnit* unit);
-void BSE_FreezeDelete(BattleUnit* unit);
+static void BSE_SleepDelete(BattleUnit* unit);
+static void BSE_Biribiri(BattleUnit* unit);
+static void BSE_BiribiriDelete(BattleUnit* unit);
+static void BSE_Fire(BattleUnit* unit);
+static void BSE_FireDelete(BattleUnit* unit);
+static void BSE_Freeze(BattleUnit* unit);
+static void BSE_FreezeDelete(BattleUnit* unit);
 void BSE_Kagegakure(BattleUnit* unit);
-void BSE_KagegakureDelete(BattleUnit* unit);
+static void BSE_KagegakureDelete(BattleUnit* unit);
 
 /**
  * Status-effect setup for a new unit, called from BtlUnit_Entry;
@@ -209,7 +209,7 @@ void BSE_Sleep(BattleUnit* unit) {
 }
 
 /** Deletes the unit's sleep effect if it has one. */
-void BSE_SleepDelete(BattleUnit* unit) {
+static void BSE_SleepDelete(BattleUnit* unit) {
     if (unit->sleepEff != NULL) {
         effDelete(unit->sleepEff);
         unit->sleepEff = NULL;
@@ -221,7 +221,7 @@ void BSE_SleepDelete(BattleUnit* unit) {
  * While the unit is Electrified, keeps a spark effect around the middle of its body part (half its width as
  * radius, half its height up, 10 units in front); deletes it when the status ends.
  */
-void BSE_Biribiri(BattleUnit* unit) {
+static void BSE_Biribiri(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
     f32 dy;
@@ -250,7 +250,7 @@ void BSE_Biribiri(BattleUnit* unit) {
 }
 
 /** Deletes the unit's Electrified spark effect if it has one. */
-void BSE_BiribiriDelete(BattleUnit* unit) {
+static void BSE_BiribiriDelete(BattleUnit* unit) {
     if (unit->sparkEff != NULL) {
         effDelete(unit->sparkEff);
         unit->sparkEff = NULL;
@@ -261,7 +261,7 @@ void BSE_BiribiriDelete(BattleUnit* unit) {
  * While the unit is Burned, keeps a flame effect on it at the unit kind's burnFlameOffset (mirrored by facing
  * direction and scaled by size); deletes it when the burn ends.
  */
-void BSE_Fire(BattleUnit* unit) {
+static void BSE_Fire(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
     BOOL on = FALSE;
@@ -287,7 +287,7 @@ void BSE_Fire(BattleUnit* unit) {
 }
 
 /** Deletes the unit's Burn flame effect if it has one. */
-void BSE_FireDelete(BattleUnit* unit) {
+static void BSE_FireDelete(BattleUnit* unit) {
     if (unit->fireEff != NULL) {
         effDelete(unit->fireEff);
         unit->fireEff = NULL;
@@ -299,7 +299,7 @@ void BSE_FireDelete(BattleUnit* unit) {
  * scaled to the smaller of width/20 and height/36 (times the size multiplier)
  * and raised by 20 units per scale step.
  */
-void BSE_Freeze(BattleUnit* unit) {
+static void BSE_Freeze(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
     f32 widthScale, heightScale, scale;
@@ -333,7 +333,7 @@ void BSE_Freeze(BattleUnit* unit) {
  * Removes the unit's ice-block effect with effSoftDelete, so instead of vanishing it plays its animation on from
  * frame 90 to the end and then deletes itself (effIceMain).
  */
-void BSE_FreezeDelete(BattleUnit* unit) {
+static void BSE_FreezeDelete(BattleUnit* unit) {
     if (unit->iceEff != NULL) {
         effSoftDelete(unit->iceEff);
         unit->iceEff = NULL;
@@ -363,7 +363,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
 }
 
 /** Deletes the unit's Veil icon if it has one. */
-void BSE_KagegakureDelete(BattleUnit* unit) {
+static void BSE_KagegakureDelete(BattleUnit* unit) {
     if (unit->kageIcon != NULL) {
         iconDelete(unit->kageIcon->name);
         unit->kageIcon = NULL;
@@ -465,7 +465,7 @@ void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
  * 24 for the first entry of _st_pri_data (Charge) down to 1 for the last, -1 if the status is not listed.
  * type is a StatusEffectType stored as s8 in _st_pri_data
  */
-s32 _get_pri(s8 type) {
+static s32 _get_pri(s8 type) {
     s8* val;
     s32 priority = 24;
 
@@ -702,7 +702,7 @@ typedef void (*WakuColByRefFunc)(u16, GXColor*, f32, f32, f32, f32, f32);
  * Draws the current status-change text centred in the lower half of the screen (y -120) in a white-bordered window
  * sized to the text, 29 units per line.
  */
-void _st_chg_msg_disp(void) {
+static void _st_chg_msg_disp(void) {
     StChgWork* st = &_battleWorkPointer->announce.stChg;
     f32 y;
     f32 x;

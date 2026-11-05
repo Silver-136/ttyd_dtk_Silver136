@@ -25,7 +25,7 @@ static ImageWork* wp = &work;
 //local prototypes
 
 
-void imgShadowDisp(CameraId camId, void* param);
+static void imgShadowDisp(CameraId camId, void* param);
 
 /**
  * Draws a full-view quad at depth -1000 that writes only depth (a Z8 texture of 0xFF,
@@ -98,7 +98,7 @@ static void zFill(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void imgDisp(CameraId camId, void* param) {
 #else
-void imgDisp(CameraId camId, void* param) {
+static void imgDisp(CameraId camId, void* param) {
 #endif
 
     ImageEntry* entry = param;
@@ -241,7 +241,7 @@ void imgDisp(CameraId camId, void* param) {
  * Draw callback for an image's shadow: shadowId 1 blends
  * and 2 subtracts the projected shadow over a full-screen quad on the image camera; 0 draws nothing.
  */
-void imgDisp_ProjPlane(CameraId camId, void* param) {
+static void imgDisp_ProjPlane(CameraId camId, void* param) {
     ImageEntry* entry = param;
     static const Vec lightPos = {0.0f, 0.0f, 0.0f};
     static const GXColor color1 = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -337,7 +337,7 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
 static void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #else
-void imgCapture_Prim(ImageEntry* entry, s32 id) {
+static void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #endif
 
     ImageShadow* sh = &entry->shadows[id];
@@ -637,7 +637,7 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) {
 #if VERSION <= VERSION_DEMO_JP
 static void imgShadowDisp(CameraId camId, void* param) {
 #else
-void imgShadowDisp(CameraId camId, void* param) {
+static void imgShadowDisp(CameraId camId, void* param) {
 #endif
     ImageShadow* sh;
     ImageEntry* entry = param;

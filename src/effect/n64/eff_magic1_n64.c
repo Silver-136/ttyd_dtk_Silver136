@@ -16,8 +16,8 @@
 /** Colour pulse of the magic bolt: a phase and an RGB colour for each of the three sprites in a ring (main_dl). */
 static u8 anime_data[12] = {0x00, 0xFF, 0xD0, 0x1A, 0x78, 0x4D, 0xD0, 0xFE, 0xF0, 0xFE, 0x4C, 0x6E};
 
-void effMagic1Main(EffectEntry* effect);
-void effMagic1Disp(CameraId cameraId, EffectEntry* effect);
+static void effMagic1Main(EffectEntry* effect);
+static void effMagic1Disp(CameraId cameraId, EffectEntry* effect);
 
 /**
  * Spawns a Magikoopa-style magic bolt (type 0) at (x, y, z) that travels to (tx, ty, tz) in life frames,
@@ -75,7 +75,7 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
 #if VERSION <= VERSION_DEMO_JP
 static void effMagic1Main(EffectEntry* effect) {
 #else
-void effMagic1Main(EffectEntry* effect) {
+static void effMagic1Main(EffectEntry* effect) {
 #endif
 
     EffMagic1N64Work* work = effect->userdata;
@@ -239,7 +239,7 @@ static void main_dl(EffectEntry* effect, Mtx base) {
 }
 
 /** Draws the bolt once, or the burst as twelve copies rotated 30 degrees apart around the Z axis. */
-void effMagic1Disp(CameraId cameraId, EffectEntry* effect) {
+static void effMagic1Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffMagic1N64Work* w;
     f32 yaw;

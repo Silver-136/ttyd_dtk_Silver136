@@ -135,11 +135,11 @@ static inline s32 harborKind(HitEntry* hit) {
         return TRUE;                                                                                \
     }
 
-BOOL checkHarbor(Vec* out);
+static BOOL checkHarbor(Vec* out);
 
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
-void shipMove(void);
+static void shipMove(void);
 /**
  * Facing bit of the boat (motShip flag 2) for the partner follow code in party.c,
  * which seats the partners on the matching side; 0 when no boat work is allocated.
@@ -998,7 +998,7 @@ BOOL marioChkShipMoveMode(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void shipMove(void) {
 #else
-void shipMove(void) {
+static void shipMove(void) {
 #endif
     MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_JP
@@ -1177,7 +1177,7 @@ void shipStrippedPool(f32* p) {
  * Looks for a harbour (boat panel dock) 40 units ahead, to the left and to the right of Mario;
  * stores its rounded position in *out.
  */
-BOOL checkHarbor(Vec* out) {
+static BOOL checkHarbor(Vec* out) {
     f32 ix, iy, iz;
     f32 tx, ty, tz, sn, cs, hx, hy, hz, dist, nx, ny, nz;
     Vec p1, p2, p3;

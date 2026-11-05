@@ -9,7 +9,7 @@
 #include "icon_ids.h"
 
 //local prototypes
-void _accrobat_timing_icon_disp(CameraId camId, void* param);
+static void _accrobat_timing_icon_disp(CameraId camId, void* param);
 
 /**
  * Arms a Stylish timing check for unitId (btlevtcmd_ACRStart's first call):
@@ -94,7 +94,7 @@ s32 BattleAcrobatMain(BattleWork* work) {
 }
 
 /** Draws the Timing Tutor "!" icon just above and right of the unit's head. */
-void _accrobat_timing_icon_disp(CameraId camId, void* param) {
+static void _accrobat_timing_icon_disp(CameraId camId, void* param) {
     BattleUnit* unit = param;
     Vec pos;
 

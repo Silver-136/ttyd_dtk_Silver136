@@ -525,8 +525,8 @@ f32 scroll_tbl[] = {
 };
 #endif
 
-void effUltraHammerMain(EffectEntry* effect);
-void effUltraHammerDisp(CameraId camId, void* param);
+static void effUltraHammerMain(EffectEntry* effect);
+static void effUltraHammerDisp(CameraId camId, void* param);
 
 /**
  * Spawns the effect at (x, y, z) for `counter` frames (0 or less: until removed).
@@ -578,7 +578,7 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
 #if VERSION <= VERSION_DEMO_JP
 static void effUltraHammerMain(EffectEntry* effect) {
 #else
-void effUltraHammerMain(EffectEntry* effect) {
+static void effUltraHammerMain(EffectEntry* effect) {
 #endif
 
     EffUltraHammerData* data;
@@ -629,7 +629,7 @@ inline Vec initializeVec(Vec* input) {
 }
 
 /** Draws each ring whose start delay has run out with the scrolling texture, mirrored in x if `mode` is non-zero. */
-void effUltraHammerDisp(CameraId camId, void* param) {
+static void effUltraHammerDisp(CameraId camId, void* param) {
     u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
     CameraEntry* cam;
     EffUltraHammerData* data;

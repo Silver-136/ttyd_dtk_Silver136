@@ -66,7 +66,7 @@ BinaryFontHeader* pfh; //pointer to font header
 
 //local prototypes
 void JUTFont_DrawStart(GXColor color);
-void _JUTFont_DrawPos(u16 code, s16 x, s16 y);
+static void _JUTFont_DrawPos(u16 code, s16 x, s16 y);
 u16 JUTFont_CodeToGlyph(u32 code);
 
 /** Glyph of a single-byte character. */
@@ -1197,7 +1197,7 @@ static inline void fontPos(const s16 x, s16 y, GXColor* hsv, u8 hue) {
  * and random noise texture coordinates (used only when FontDrawRainbowColor or FontDrawNoise add their stage).
  * US and later trim 2 px off the cell.
  */
-void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
+static void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     s32 row;
     u8 hue;
     s16 x1;

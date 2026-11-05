@@ -329,9 +329,9 @@ s32 g_modeling_mtx_lv;
 
 // local declarations
 void animPoseRefresh(void);
-void animPaperPoseDisp(CameraId camId, void* param);
+static void animPaperPoseDisp(CameraId camId, void* param);
 void animPaperPoseDispSub(s32 unused, AnimationPose* pose);
-void evalProc(s32 parentId, s32 groupId);
+static void evalProc(s32 parentId, s32 groupId);
 
 /** Returns the animation driver's work (files, textures, pose pool, scratch buffers). */
 AnimationWork* animGetPtr(void) {
@@ -350,7 +350,7 @@ OSTime animTimeGetTime(BOOL globalTime) {
 }
 
 /** Allocates the 1.5 MB pose vertex heap on first use and rewinds it. */
-void initTestHeap(void) {
+static void initTestHeap(void) {
     if (!wp->testHeap) { // allocate 1.5MiB test heap
         wp->testHeap = __memAlloc(HEAP_DEFAULT, TESTHEAP_SIZE);
     }
@@ -443,7 +443,7 @@ inline AnimationPoseData* animPoseGetBaseData(AnimationPose* pose) {
  * animPoseGetBaseData is animPoseGetAnimBaseDataPtr for a pose pointer;
  * the original inlines that lookup at every use.
  */
-void animPose_AllocBuffer(AnimationPose* pose) {
+static void animPose_AllocBuffer(AnimationPose* pose) {
     pose->bufferVtxPos = testAlloc(sizeof(Vec) * animPoseGetBaseData(pose)->bufferPosNum);
     pose->vtxArrayPos = testAlloc(sizeof(Vec) * animPoseGetBaseData(pose)->bufferPosNum);
 
@@ -1739,7 +1739,7 @@ void animPoseMain(s32 poseId) {
 
 /** the early demos always build every matrix and concatenate them all; JP and later build only the parts in use */
 #if VERSION >= VERSION_JP
-void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
+static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
     Mtx rc1, rc2, rc3;
@@ -1867,7 +1867,7 @@ void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
  * Pushes the modelling matrix of a joint node (translation, two rotations and a scale,
  * cancelling the parent's scale): JP and later version, which builds and concatenates only the parts in use.
  */
-void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
+static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
     Mtx trans, scale, iscale, rot, tmp;
     MtxPtr p;
     u32 flags;
@@ -2019,7 +2019,7 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
  * (rotation, translation, scale).
  * The local declaration order is load-bearing: it decides the register colouring (see the FAKE note below).
  */
-void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile) {
+static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile) {
     s32 texCount;
     s32* texIdRemap;
     AnimPoseTexEntry* pTexEntries;
@@ -2833,7 +2833,7 @@ void renderProc(s32 shapeId, s32 unused) {
 #if VERSION <= VERSION_DEMO_JP
 static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #else
-void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
+static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #endif
     AnimPoseGroup* group;
     AnimPoseGroup* parent;
@@ -3359,7 +3359,7 @@ void animPoseAutoRelease(s32 type) {
 }
 
 /** Offscreen draw callback: renders every pose that has a paper overlay into its own texture. */
-void animPaperPoseDisp(CameraId camId, void* param) {
+static void animPaperPoseDisp(CameraId camId, void* param) {
     int i;
     AnimationPose* pose;
 
@@ -3753,7 +3753,7 @@ BOOL animPoseTestXLU(s32 poseId) {
  * Walks the pose's group tree from groupId and pushes each visible group's node matrix,
  * storing the groups' world positions or matrices when the pose asked for them; it does not draw.
  */
-void evalProc(s32 parentId, s32 groupId) {
+static void evalProc(s32 parentId, s32 groupId) {
     AnimPoseGroup* group;
     AnimPoseGroup* parent;
     AnimPoseNode* node;

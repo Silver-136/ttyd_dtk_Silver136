@@ -31,7 +31,7 @@ FileManagerWork fileWork;
 FileManagerWork* afp = &fileWork;
 
 //local prototypes
-FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));
+static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));
 s32 fileAsync(const char* filename, s32 type, FileCallback callback);
 
 /** Boot-time setup: allocates the 1024 file entries and chains them all into the free list. */
@@ -77,7 +77,7 @@ typedef struct FileReloc9 {
  * poses, animation data, TPL textures and the other relocated formats), so the data can be moved;
  * undone by fileGarbageDataAdrSet.
  */
-void fileGarbageDataAdrClear(FileEntry* entry) {
+static void fileGarbageDataAdrClear(FileEntry* entry) {
     u16 i;
     u32 off;
     TEXPalette* tpl;
@@ -613,7 +613,7 @@ FileEntry* fileAlloc(const char* filename, s32 type) {
  * reading it into a 32-byte-aligned smart heap block. Frees cached files when no entry is left.
  * callback is unused.
  */
-FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*)) {
+static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*)) {
     void* handle;
     FileEntry* search;
     smartEntry* smart;

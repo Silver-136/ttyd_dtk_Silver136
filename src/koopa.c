@@ -28,11 +28,11 @@
 #include "mario/mario_kemuri.h"
 #include "driver/mapdrv.h"
 
-void kpa2DMain(void);
-void kpa3DMain(void);
-void kpaFireAttack(void);
+static void kpa2DMain(void);
+static void kpa3DMain(void);
+static void kpaFireAttack(void);
 void kpaFireMain(void);
-void kpaFall(void);
+static void kpaFall(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
 
@@ -324,7 +324,7 @@ void kpaMain(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void kpa2DMain(void) {
 #else
-void kpa2DMain(void) {
+static void kpa2DMain(void) {
 #endif
 
     MarioWork* mp = marioGetPtr();
@@ -436,7 +436,7 @@ void kpa2DMain(void) {
  * hit checks, item pickup, the fire attack, the star timer and the normal player movement,
  * floor and fall checks, then partner, effects and camera. Damage and plane motions skip the movement.
  */
-void kpa3DMain(void) {
+static void kpa3DMain(void) {
     MarioWork* mp = marioGetPtr();
     struct HitEntry* h = kpaHitCheck();
     MarioWork* m2;
@@ -619,7 +619,7 @@ void kpa_jumpNpc(void) {
  * elsewhere also slows his forward speed and floats while A is held,
  * landing on floors and ride objects (and passing through hits with attribute 0x200).
  */
-void kpaFall(void) {
+static void kpaFall(void) {
     MarioWork* mario = marioGetPtr();
     f32 fs;
     f32 ly;
@@ -749,7 +749,7 @@ void kpaAttackStart2(void) {
  * States 1-24 are the standing attack, 30-44 the swimming one (its end picks the pose of the current motion);
  * the looping sound plays while flames come out.
  */
-void kpaFireAttack(void) {
+static void kpaFireAttack(void) {
     MarioWork* mario = marioGetPtr();
     switch (mario->kpaWork->attackState) {
     case KPA_ATTACK_START:

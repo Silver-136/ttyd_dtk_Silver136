@@ -27,7 +27,7 @@
 #include <math.h>
 
 
-BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     marioGetPtr();
     if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
@@ -53,7 +53,7 @@ BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
  * like chkfilter, but surfaces with 0x800000 still collide and only attribute 0x4 is skipped.
  * Hidden blocks are passed through.
  */
-BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     marioGetPtr();
     if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
@@ -82,7 +82,7 @@ BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
  * skips any surface with attribute 0x800005 (checked before the 0x80080 override, unlike chkfilter)
  * and passes through hidden blocks.
  */
-BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     marioGetPtr();
     if (entry->attributes & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) {

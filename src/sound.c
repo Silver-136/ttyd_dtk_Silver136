@@ -41,13 +41,13 @@ static inline char* _ssGetStr(void) {
 }
 
 // local prototypes
-void SoundEfxMain(void);
+static void SoundEfxMain(void);
 void SoundDVDMain(void);
 
-void SoundSSMainInt(void);
-void SoundSSMain(void);
+static void SoundSSMainInt(void);
+static void SoundSSMain(void);
 
-void SoundAIDMACallback(void);
+static void SoundAIDMACallback(void);
 
 /** MusyX allocation hook: allocates from the default heap. */
 void* sndMalloc(size_t size) {
@@ -300,7 +300,7 @@ void SoundSetFadeTime(u16 in, u16 out) {
  * MusyX sample upload callback: reads bytes at offset of the current sample file (.samp) from the disc into the
  * 128 KB staging buffer and returns it, or NULL on a read error.
  */
-void* loadDVD_callback(u32 offset, u32 bytes) {
+static void* loadDVD_callback(u32 offset, u32 bytes) {
     DVDFileInfo info;
 
     if (!DVDOpen(sound.filepath, &info)) {
@@ -1270,7 +1270,7 @@ inline void SoundEfxCheckCh(s32 chan) {
  * and heading (velocity from the last frame's move), updates every 3D emitter's position and volume,
  * and frees channels whose sound has ended.
  */
-void SoundEfxMain(void) {
+static void SoundEfxMain(void) {
     SND_FVECTOR* dir;
     SoundEffect* effect;
     int i;
@@ -1419,9 +1419,9 @@ void SoundDVDMain(void) {
     }
 }
 
-void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo);
-void cache_flush(u32 pointerToARQRequest);
-void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
+static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo);
+static void cache_flush(u32 pointerToARQRequest);
+static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
 void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
 
 /** Disables interrupts for stream bookkeeping; nests. */
@@ -1541,7 +1541,7 @@ inline void _ssResetEntries(SoundStream* stream) {
 #if VERSION <= VERSION_DEMO_JP
 static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #else
-void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
+static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     int i;
 #endif
     SoundStream* stream;
@@ -1672,7 +1672,7 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
  * ARQ callback after a chunk of an ARAM-cached stream was copied from ARAM into its load buffer:
  * finishes it like a disc read (_ssDVDReadAsync_activeChk).
  */
-void cache_flush(u32 pointerToARQRequest) {
+static void cache_flush(u32 pointerToARQRequest) {
     _ssDVDReadAsync_activeChk(0, &((SoundStreamEntry*)((ARQRequest*)pointerToARQRequest)->owner)->dvd->info);
 }
 
@@ -1680,7 +1680,7 @@ void cache_flush(u32 pointerToARQRequest) {
  * ARQ callback for ARAM-cached streams: when the whole stream is in ARAM,
  * rewinds both channels and starts playing from the beginning; otherwise reads the next chunk.
  */
-void _ssDVDReadAsync_cache_aram(u32 pointerToARQRequest) {
+static void _ssDVDReadAsync_cache_aram(u32 pointerToARQRequest) {
     u32 len;
     SoundStream* stream;
 
@@ -1713,7 +1713,7 @@ void _ssDVDReadAsync_cache_aram(u32 pointerToARQRequest) {
  * Disc read callback while caching a stream into ARAM:
  * copies the chunk just read into the stream's ARAM slot with an ARQ request and advances the offsets.
  */
-void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo) {
+static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo) {
     static u32 owner_no;
     SoundStream* stream;
     u32 dest;
@@ -1825,10 +1825,10 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #else
 #if VERSION >= VERSION_US
-u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
+static u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     u32 len1;
 #else
-u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
+static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #endif
 #endif
     s16* dst;
@@ -2474,7 +2474,7 @@ void SoundSSMuteOff(s32 chan) {
  * Per-frame stream update: carries out deferred stops and runs volume fades:
  * fade-to-pause, fade-out (stopping at silence) and fade-in.
  */
-void SoundSSMain(void) {
+static void SoundSSMain(void) {
     u32 i;
     SoundStream* stream;
 
@@ -2528,7 +2528,7 @@ void SoundSSMain(void) {
  * Audio-interrupt stream service: starts the disc read for whichever load buffer has been consumed (both
  * channels of a stereo stream), so playback never runs dry.
  */
-void SoundSSMainInt(void) {
+static void SoundSSMainInt(void) {
     int i;
     SoundStream* stream;
 
@@ -2593,7 +2593,7 @@ void SoundSSMainInt(void) {
  * then copies the frame's output (byte-swapped, one channel) into the two 1024-sample banks in sound.samples,
  * a running record of what is being played.
  */
-void SoundAIDMACallback(void) {
+static void SoundAIDMACallback(void) {
     s32 length;
     u8* address;
     u16* dst;

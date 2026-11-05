@@ -14,7 +14,7 @@
 #include "driver/effdrv.h"
 
 // local prototypes
-void effSleepDisp(CameraId camId, void* param);
+static void effSleepDisp(CameraId camId, void* param);
 
 /**
  * Spawns the sleep marks at (x, y, z).
@@ -110,7 +110,7 @@ static inline void sleepPos(f32 x, f32 one, f32 y) { GXPosition3f32(x, one * y, 
  * Draws each visible mark as a camera-facing strip of 8 quads whose x offset follows a sine wave,
  * giving a wavy ribbon texture.
  */
-void effSleepDisp(CameraId camId, void* param) {
+static void effSleepDisp(CameraId camId, void* param) {
     EffectEntry* effect = param;
     s32 off;
     f32 tau;

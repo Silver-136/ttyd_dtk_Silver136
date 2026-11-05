@@ -75,7 +75,7 @@ static StatusWindowWork* wp;
 
 void statusWinDisp(CameraId camId, void* param);
 BOOL valueCheck(void);
-void valueUpdate(void);
+static void valueUpdate(void);
 
 /**
  * Allocates the field HUD state at boot and sets its open
@@ -255,7 +255,7 @@ void statusWinMain(void) {
  * Draws the Star Power gauge at (x, y): one 32-pixel slot per crystal star obtained,
  * full slots for each 100 of sp and the partly filled slot in 15 steps.
  */
-void gaugeDisp(s32 sp, f32 x, f32 y) {
+static void gaugeDisp(s32 sp, f32 x, f32 y) {
     s32 i;
     s32 max;
     s32 full;
@@ -482,7 +482,7 @@ void statusWinDisp(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_JP
 static void statusGetValue(StatusValue* values) {
 #else
-void statusGetValue(StatusValue* values) {
+static void statusGetValue(StatusValue* values) {
 #endif
     BattleWork* bw;
     BattleUnit* mario;
@@ -623,7 +623,7 @@ static inline s32 calcStep(s32 target, s32 cur) {
 #if VERSION <= VERSION_DEMO_JP
 static void valueUpdate(void) {
 #else
-void valueUpdate(void) {
+static void valueUpdate(void) {
 #endif
     static s32 count;
     StatusValue v;

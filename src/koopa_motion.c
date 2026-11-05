@@ -126,7 +126,7 @@ BOOL kpaHipAttackOk(void) {
  * and slows down when the stick is released (faster against a wall).
  * Sets kpaSpeed, baseSpeed and facing; returns the speed.
  */
-f32 kpaStickSpd(s32 dash) {
+static f32 kpaStickSpd(s32 dash) {
     MarioWork* mario = marioGetPtr();
     f32 stick = mario->wStickDir1;
     f32 spd;

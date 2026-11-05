@@ -64,9 +64,9 @@ u32 water_damage_tex[32] __attribute__((aligned(32))) = {
 };
 #endif
 
-void effWaterDamageMain(EffectEntry* effect);
-void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect);
-void effWaterDamageDisp2(CameraId cameraId, void* param);
+static void effWaterDamageMain(EffectEntry* effect);
+static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect);
+static void effWaterDamageDisp2(CameraId cameraId, void* param);
 
 /**
  * Spawns water droplets and mist at (x, y, z); type picks the splash shape.
@@ -201,7 +201,7 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
  * The whole effect fades over its last 4 frames (a delete request sets 16 left; lifetime 1000 means endless).
  * Drawn on layer 8 by effWaterDamageDisp, or Disp2 for nonzero variants.
  */
-void effWaterDamageMain(EffectEntry* effect) {
+static void effWaterDamageMain(EffectEntry* effect) {
     EffWaterDamageN64Work* work = effect->userdata;
     Vec calcPos;
     Vec pos = { 0.0f, 0.0f, 0.0f };
@@ -263,7 +263,7 @@ void effWaterDamageMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
+static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
 
     EffWaterDamageN64Work* work;
@@ -384,7 +384,7 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
  * Plain variant of effWaterDamageDisp: the same camera-facing 8x8 droplet quads of texture 0x89 in pale cyan,
  * with no refraction layer.
  */
-void effWaterDamageDisp2(CameraId cameraId, void* param) {
+static void effWaterDamageDisp2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffWaterDamageN64Work* work;
     CameraEntry* cam;

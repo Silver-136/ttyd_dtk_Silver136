@@ -273,8 +273,8 @@ MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
 /** The damage badge animation (65 frames), started by effDamageStarEntry and positioning the number. */
 MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
 
-void effDamageStarMain(EffectEntry* effect);
-void effDamageStarDisp(CameraId cameraId, void* payload);
+static void effDamageStarMain(EffectEntry* effect);
+static void effDamageStarDisp(CameraId cameraId, void* payload);
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
@@ -342,7 +342,7 @@ EffectEntry* effDamageStarEntry(s32 type, s32 number, f32 x, f32 y, f32 z, f32 s
  * Advances the Maya animation and the star physics for each elapsed retrace (decay factor 0.75 per step)
  * and deletes the effect when life runs out.
  */
-void effDamageStarMain(EffectEntry* effect) {
+static void effDamageStarMain(EffectEntry* effect) {
     DamageStarWork* work = effect->userdata;
     Vec calcPos;
     Vec pos = { 0.0f, 0.0f, 0.0f };
@@ -417,7 +417,7 @@ static inline void damageStarQuad(f32 h, f32 u) {
 }
 
 /** Draws the star sprites and the damage number as digit quads in front of them. */
-void effDamageStarDisp(CameraId cameraId, void* payload) {
+static void effDamageStarDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* cam;
     GXColor color;

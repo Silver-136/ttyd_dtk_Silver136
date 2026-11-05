@@ -75,7 +75,7 @@ static u8 scale_dt[] = {
     174, 109, 176, 108, 178, 107, 180, 107, 181, 106, 183, 105, 185, 104, 187, 104, 189, 103, 192, 102,
 };
 
-void effFireMain(EffectEntry* effect);
+static void effFireMain(EffectEntry* effect);
 /** Emits one flame quad iw wide and ih tall: white at the top, black at the base. */
 static inline void effFireQuad(s32 iw, s32 ih) {
     f32 w, h;
@@ -95,9 +95,9 @@ static inline void effFireQuad(s32 iw, s32 ih) {
     GXColor4u8(0x00, 0x00, 0x00, 0xFF);
     GXTexCoord2f32(0.0f, 1.0f);
 }
-void effFireDisp(CameraId cameraId, void* payload);
-void effFireDisp2(CameraId cameraId, void* payload);
-void effFireDisp3(CameraId cameraId, EffectEntry* effect);
+static void effFireDisp(CameraId cameraId, void* payload);
+static void effFireDisp2(CameraId cameraId, void* payload);
+static void effFireDisp3(CameraId cameraId, EffectEntry* effect);
 
 /** Slower looping 200-frame swell of the flame's size (up to 1.2) for flame type 4; read by effFireMain. */
 #if VERSION >= VERSION_JP
@@ -109,8 +109,8 @@ FireScaleKey scale2[] = {
 };
 #endif
 
-void effFireSmokeDisp(CameraId cameraId, void* payload);
-void effFireSmokeMain(EffectEntry* effect);
+static void effFireSmokeDisp(CameraId cameraId, void* payload);
+static void effFireSmokeMain(EffectEntry* effect);
 
 static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale);
 
@@ -200,7 +200,7 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
  * Per frame: fades out over 16 frames on soft delete, steps the glow's scale from the key table (types 3, 4, 8),
  * and from time to time spawns sparks (types 5-7) or a smoke puff (types 0-2).
  */
-void effFireMain(EffectEntry* effect) {
+static void effFireMain(EffectEntry* effect) {
     EffFireWork* work = effect->userdata;
     s32 type = work->type;
     FireScaleKey* tbl;
@@ -321,7 +321,7 @@ void effFireMain(EffectEntry* effect) {
 }
 
 /** Draws the main flame billboard with an animated texture, using alpha blending. */
-void effFireDisp(CameraId cameraId, void* payload) {
+static void effFireDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     s32 w;
     s32 h;
@@ -438,7 +438,7 @@ void effFireDisp(CameraId cameraId, void* payload) {
  * Draws the flame of types 3, 4 and 8: texture 0x48 mixed from two animation frames, then a glow quad
  * (texture 0x5F, 0x60 for type 4) sized by pulseScale.
  */
-void effFireDisp2(CameraId cameraId, void* payload) {
+static void effFireDisp2(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffFireWork* work;
@@ -608,7 +608,7 @@ void effFireDisp2(CameraId cameraId, void* payload) {
 #if VERSION <= VERSION_DEMO_JP
 static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
 #else
-void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
+static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
 #endif
 
     CameraEntry* camera;
@@ -851,7 +851,7 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
 }
 
 /** Moves the puff by its velocity, ages it, and fades it out over its last 16 frames. */
-void effFireSmokeMain(EffectEntry* effect) {
+static void effFireSmokeMain(EffectEntry* effect) {
     EffFireSmokeWork* work = effect->userdata;
 
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
@@ -883,7 +883,7 @@ void effFireSmokeMain(EffectEntry* effect) {
 }
 
 /** Draws the smoke puff as a billboard scaled by scale_dt for its age. */
-void effFireSmokeDisp(CameraId cameraId, void* payload) {
+static void effFireSmokeDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     EffFireSmokeWork* work = effect->userdata;
     CameraEntry* camera;

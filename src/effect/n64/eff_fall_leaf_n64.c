@@ -39,8 +39,8 @@ static effN64Vtx size12x12_tex64x64_vtx[] = {
     {-6, 6, 0, 0, 4096, 0x30, 0x6C, 0x25, 0xFF},
 };
 
-void effFallLeafMain(EffectEntry* effect);
-void effFallLeafDisp(CameraId cameraId, void* param);
+static void effFallLeafMain(EffectEntry* effect);
+static void effFallLeafDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns four leaves that drift down around (x, y, z) for lifetime frames;
@@ -97,7 +97,7 @@ EffectEntry* effFallLeafN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
 }
 
 /** Counts the life down, fading the leaves in over the first 10 frames and out over the last 10, and moves and spins each leaf. */
-void effFallLeafMain(EffectEntry* effect) {
+static void effFallLeafMain(EffectEntry* effect) {
     EffFallLeafN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -163,7 +163,7 @@ void effFallLeafMain(EffectEntry* effect) {
  * Draws each leaf as a two-sided quad turned by its angles; types 0 and 1 use N64 texture 0x14 coloured by the
  * vertex colours, types 2-4 use effect texture 0x87 tinted by a per-type colour.
  */
-void effFallLeafDisp(CameraId cameraId, void* param) {
+static void effFallLeafDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffFallLeafN64Work* work;

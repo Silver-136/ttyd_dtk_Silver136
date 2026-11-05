@@ -27,8 +27,8 @@ typedef struct EffSheepWork {
     s32 sfxId;      // 0x30
 } EffSheepWork;
 
-void effSheepDisp(CameraId cameraId, void* param);
-void effSheepMain(EffectEntry* effect);
+static void effSheepDisp(CameraId cameraId, void* param);
+static void effSheepMain(EffectEntry* effect);
 
 /**
  * Spawns the flock: 50 sheep records after the header, placed off to the left at random depth, scale,
@@ -89,7 +89,7 @@ EffectEntry* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
  * then runs left to right to x = 500 (hopping on a parabola if it is a hopper) leaving smoke puffs.
  * The first and last sheep carry the looping 3D sleep sounds.
  */
-void effSheepMain(EffectEntry* effect) {
+static void effSheepMain(EffectEntry* effect) {
     EffSheepWork* work = effect->userdata;
     const char* sfx1;
     const char* sfx2;
@@ -207,7 +207,7 @@ void effSheepMain(EffectEntry* effect) {
 }
 
 /** Draws every active sheep pose at its offset and scale relative to the effect position. */
-void effSheepDisp(CameraId cameraId, void* param) {
+static void effSheepDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffSheepWork* work = effect->userdata;
     Mtx trans;

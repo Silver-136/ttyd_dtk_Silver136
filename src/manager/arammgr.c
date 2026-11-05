@@ -40,7 +40,7 @@ void aramMgrInit(void) {
  * ARQ completion for the compaction copies: clears the busy flag the copy loop spins on
  * and invalidates the bounce buffer.
  */
-void aramCallbackGarbage(u32 request) {
+static void aramCallbackGarbage(u32 request) {
     wp->busy = 0;
     DCInvalidateRange(wp->buffer, wp->bufferSize);
     ICInvalidateRange(wp->buffer, wp->bufferSize);
@@ -117,7 +117,7 @@ void aramMgrGarbage(void) {
     wp->nextAddr = addr;
 }
 
-void arqCallbackToAram(u32 request) {
+static void arqCallbackToAram(u32 request) {
     ARAMEntry* entry;
 
     for (entry = wp->head; entry != NULL; entry = entry->next) {
@@ -182,7 +182,7 @@ ARAMEntry* aramMgrToAram(void* src, u32 size) {
     return entry;
 }
 
-void arqCallbackToMram(u32 request) {
+static void arqCallbackToMram(u32 request) {
     ARAMEntry* entry;
 
     for (entry = wp->head; entry != NULL; entry = entry->next) {

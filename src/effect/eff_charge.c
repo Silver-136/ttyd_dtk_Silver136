@@ -33,7 +33,7 @@ typedef struct EffChargeWork {
 } EffChargeWork;
 
 /** Draws the sparkles as additive billboards from texture 30, tinted between the two colours chosen by type. */
-void effChargeDisp(CameraId cameraId, void* param) {
+static void effChargeDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffChargeWork* work = effect->userdata;
     s32 i;
@@ -115,7 +115,7 @@ void effChargeDisp(CameraId cameraId, void* param) {
  * moves every sparkle inward along its spiral each frame (the yaw and pitch steps swap on odd frames),
  * and deletes the effect once the duration (1000 or more means endless) expires.
  */
-void effChargeMain(EffectEntry* effect) {
+static void effChargeMain(EffectEntry* effect) {
     s32 frame;
     s32 odd;
     EffChargeWork* work = effect->userdata;

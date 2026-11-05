@@ -177,7 +177,7 @@ s32 camRoadSetup(const char* name) {
  * and a look-at point turned by rot degrees about the sideways axis.
  * Without a state the camera sits at (0, 100, 100) looking at the origin.
  */
-void calcCurrentCamState(CameraParams* out) {
+static void calcCurrentCamState(CameraParams* out) {
     Mtx m;
     Vec v;
     Vec res;
@@ -278,7 +278,7 @@ static inline BOOL crVecIsZero(Vec a) {
  * returns 1 and sets *dist to the hit height when it hits at least as high as *dist.
  * Used to find which curve's floor area is under the target.
  */
-s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
+static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     Vec dir = {0.0f, -1.0f, 0.0f};
     Vec nz;
     Vec hit;
@@ -348,7 +348,7 @@ static inline f32 crLen2(f32 x, f32 z) {
  * finds the curve segment beside pos and fills hit with the interpolated point, direction and height,
  * clamping the sideways distance to the curve's limits (flag 2 when clamped). Returns 1 on a hit.
  */
-s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
+static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
     f32 lx0;
     f32 ang0, yA, yB, minDist, cx, side;
     f32 dpx, dpz, sgn, s, limA, limB, x0, y0, z0, x1, z1, cz, r0, r1, rp, r0x, r0z, c1;
@@ -809,7 +809,7 @@ static inline void camRoadSgn2(f32 s, f32 t, f32* p1, f32* p2) {
  * limiting how far the point may move from prev along the curve's two axes. g is stored as the sideways shift.
  * Without a curve it keeps the previous one, or passes the inputs through.
  */
-void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
+static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
     f32 ax, az; // FAKE: named dA.x/dA.z copies declared first (numbered low, below l2) -> see camRoadSgn2
     f32 nx;
     f32 ny;
@@ -1164,7 +1164,7 @@ static inline f32 crSq(f32 x) { return x * x; }
  * 0x20 near the curve end) and sets *outSpeed to 1 over the blend length (20 to 90 frames' worth from the angle,
  * rotation, distance and position changes).
  */
-u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
+static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     u32 flags = 0;
     s32 d;
     s32 n;
@@ -1304,7 +1304,7 @@ static inline f32 angleLerp(f32 from, f32 to, f32 r) {
  * position (snapped to to when type is 0), heading the short way round, distance, angle,
  * rotation and shift rate. The third state (unused) is not read.
  */
-void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {
+static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {
     f32 r, a0, a1, a2;
     r = hokanRate(t, 0.0f, 0.0f, 1.0f, 0.0f);
     if (type) {

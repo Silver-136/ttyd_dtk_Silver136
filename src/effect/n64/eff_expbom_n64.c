@@ -49,8 +49,8 @@ f32 bom_ry[10] = {
     1260.0f, 1404.0f, 1638.0f, 1902.0f, 1976.0f
 };
 
-void effExpBomMain(EffectEntry* effect);
-void effExpBomDisp(CameraId camId, void* param);
+static void effExpBomMain(EffectEntry* effect);
+static void effExpBomDisp(CameraId camId, void* param);
 
 /**
  * Spawns an explosion made of ten fragments thrown out in the directions of bom_dir at the speeds of bom_spd;
@@ -104,7 +104,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
  * Moves each fragment after its start delay, slows it by 1.25x once its slow delay ends,
  * and deletes the effect when no fragment is left alive.
  */
-void effExpBomMain(EffectEntry* effect) {
+static void effExpBomMain(EffectEntry* effect) {
     effExpBomData* data;
     int i;
     BOOL disp;
@@ -151,7 +151,7 @@ void effExpBomMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effExpBomDisp(CameraId camId, void* param) {
 #else
-void effExpBomDisp(CameraId camId, void* param) {
+static void effExpBomDisp(CameraId camId, void* param) {
 #endif
 
     EffectEntry* effect = param;

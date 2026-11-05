@@ -623,7 +623,7 @@ HitEntry* kpaHitCheck(void) {
 }
 
 /** Hit filter for the fire breath: ignores hidden ? blocks and plain blocks, so flames only hit other objects. */
-BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry) {
+static BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj = mobjHitObjPtrToPtr(entry);
     if (!strcmp(mobj->animName, "MOBJ_HiddenHatenaBlock")) {
         return FALSE;

@@ -267,7 +267,7 @@ static u8 tmp1[0x100];
 static QSortCompare comp;
 
 /** Sorts an array of n element pointers with a quicksort, comparing through the callback qqsort stored in comp. */
-void fsort(void** base, u32 n) {
+static void fsort(void** base, u32 n) {
     static void** lo;
     static void** hi;
     static void** gt;

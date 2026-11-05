@@ -34,7 +34,7 @@ EVT_BEGIN(kpa_score_disp_evt)
     RETURN
 EVT_END()
 
-void kpaScoreDisp(CameraId cameraId, void* param) {
+static void kpaScoreDisp(CameraId cameraId, void* param) {
     Mtx m;
     Mtx scale;
     s32 i;

@@ -14,7 +14,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-void effKemuriDisp(CameraId camId, void* param);
+static void effKemuriDisp(CameraId camId, void* param);
 static void effKemuri2Main(EffectEntry* entry);
 static void effKemuri2Disp(CameraId camId, void* param);
 
@@ -260,7 +260,7 @@ static void effKemuri2Main(EffectEntry* entry) {
 #pragma opt_propagation reset
 
 /** Draws the smoke puffs as camera-facing quads with an animated texture. */
-void effKemuriDisp(CameraId camId, void* param) {
+static void effKemuriDisp(CameraId camId, void* param) {
     Mtx t, s, r, m, m2;
     GXTexObj tex;
     s32 i, j, off;

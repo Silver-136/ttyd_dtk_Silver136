@@ -19,9 +19,9 @@
 #include "driver/shadowdrv.h"
 #include "eff/n64/eff_stardust_n64.h"
 
-void effStarStoneDisp_2(CameraId cameraId, void* param);
-void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect);
-void effStarStoneMain(EffectEntry* effect);
+static void effStarStoneDisp_2(CameraId cameraId, void* param);
+static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect);
+static void effStarStoneMain(EffectEntry* effect);
 
 #if VERSION <= VERSION_DEMO_JP
 s16 diamond_1_vertex_tbl[] __attribute__((aligned(32))) = { 18386, 5751, 0, 7281, 9135, 0, 0, 19109, 0, -7281, 9135, 0, -18386, 5751, 0, -11781, -4714, 0, -11363, -15863, 0, 0, -13273, 0, 11363, -15863, 0, 11781, -4714, 0, 6676, 1460, -6799, 0, 6311, -6799, -6676, 1460, -6799, -4126, -6387, -6799, 4126, -6387, -6799, 6676, 1460, 6799, 0, 6311, 6799, -6676, 1460, 6799, -4126, -6387, 6799, 4126, -6387, 6799, 18629, 5827, 0, 7377, 9256, 0, 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 4180, -6472, 6889};
@@ -446,7 +446,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 #if VERSION <= VERSION_DEMO_JP
 static void effStarStoneMain(EffectEntry* effect) {
 #else
-void effStarStoneMain(EffectEntry* effect) {
+static void effStarStoneMain(EffectEntry* effect) {
 #endif
 
     EffStarStoneWork* w = effect->userdata;
@@ -643,7 +643,7 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     u8** dl;
     u32 n;
 #else
-void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
+static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 #endif
     Mtx m;
     Mtx s;
@@ -823,7 +823,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 #endif
 
 /** Draws the stones that split in two (types 1-5): an untextured shell for each half, then each half textured. */
-void effStarStoneDisp_2(CameraId cameraId, void* param) {
+static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     Mtx m;
     Mtx s;

@@ -21,12 +21,12 @@
 #include <string.h>
 
 void FontDrawString(f32 x, f32 y, const char* str);
-void nameBG(void);
-void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
+static void nameBG(void);
+static void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);
 
-s32 nameMain(void);
-void nameEntDisp(CameraId cameraId, void* param);
+static s32 nameMain(void);
+static void nameEntDisp(CameraId cameraId, void* param);
 
 //.data
 #if VERSION >= VERSION_US
@@ -343,7 +343,7 @@ static s32 nameMain(void) {
     s32 off;
     s32 idx;
 #else
-s32 nameMain(void) {
+static s32 nameMain(void) {
     s32 len;
     s32 j;
     s32 off;
@@ -822,7 +822,7 @@ s32 nameMain(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void nameEntDisp(CameraId cameraId, void* param) {
 #else
-void nameEntDisp(CameraId cameraId, void* param) {
+static void nameEntDisp(CameraId cameraId, void* param) {
 #endif
     GXColor white2;
     GXColor white;
@@ -942,7 +942,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
  * Draws the screen background from name.tpl: a 32-pixel strip on each side (textures 0x22 and 0x23)
  * and the 544-pixel middle (0x21), all 480 high.
  */
-void nameBG(void) {
+static void nameBG(void) {
     Mtx m1, m2, m3;
     GXTexObj obj1, obj2, obj3;
     f32 sy;
@@ -1060,7 +1060,7 @@ static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
  * Draws the panel the character grid sits on (kirinuki, a cut-out) from eight name.tpl quads:
  * 8-pixel corners, the top and left edges, and the middle texture (which also fills the right and bottom edges).
  */
-void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
+static void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);
     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);

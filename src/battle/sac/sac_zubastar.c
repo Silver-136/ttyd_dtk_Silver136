@@ -134,7 +134,7 @@ BattleWeapon weapon_zubastar = {
     marioAttackEvent_ZubaStar, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
+static s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
 /** Starts the star's appearance over Mario. */
 static USER_FUNC(star_stone_appear) {
@@ -148,7 +148,7 @@ USER_FUNC(wait_star_stone_up) {
     return GetZubaStarPtr()->star.state == 4 ? 2 : 0;
 }
 
-void zubaStarDispStar(CameraId cam, void* param);
+static void zubaStarDispStar(CameraId cam, void* param);
 
 
 /**
@@ -222,7 +222,7 @@ static USER_FUNC(main_star) {
 }
 
 /** Translucent 3D draw callback for the star; draws nothing (the effect draws it). */
-void zubaStarDispStar(CameraId cam, void* param) {
+static void zubaStarDispStar(CameraId cam, void* param) {
 }
 
 /** Returns the Supernova work, which lives in the battle's action command work area. */
@@ -240,7 +240,7 @@ u32 weaponGetPower_ZubaStar(BattleUnit* a, BattleWeapon* weapon, BattleUnit* tar
 
 
 /** Adds a polygon of n points to the list of screen pieces the cut picture is made of. */
-void zubastar_create_takaku(s32 n, Vec* pts) {
+static void zubastar_create_takaku(s32 n, Vec* pts) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSObj* t;
     s32 i;
@@ -262,7 +262,7 @@ void zubastar_create_takaku(s32 n, Vec* pts) {
  * Cuts every screen piece the line from p0 to p1 crosses into two, replacing it with both halves,
  * each given a random fallFrame and fallDuration (zubastar_bomb resets both when the shatter starts).
  */
-void zubastar_bunkatu(Vec* p0, Vec* p1) {
+static void zubastar_bunkatu(Vec* p0, Vec* p1) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSObj* t;
     s32 i;
@@ -356,7 +356,7 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
  * Intersects the line through (x1, y1)-(x2, y2) with the segment (x3, y3)-(x4, y4):
  * stores the crossing in ox, oy and returns 1 if it lies on the segment, else 0 (also 0 for parallel lines).
  */
-s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
+static s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 dx1 = x2 - x1;
     f32 d, a, t, e1, e2, dx2, b;
     if (dx1 == 0.0f && (x4 - x3) == 0.0f) {
@@ -400,7 +400,7 @@ static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -120, 140, 0)
     RETURN
 EVT_END()
-void zubastar_disp2D(CameraId cam, void* param);
+static void zubastar_disp2D(CameraId cam, void* param);
 void psndSFX_pit(s32 id, s32 pitch);
 
 /**
@@ -829,8 +829,8 @@ USER_FUNC(zubastar_main) {
     return 0;
 }
 
-void zubastar_disp_bomb(CameraId cam, void* param);
-void zubastar_capture(CameraId cam, void* param);
+static void zubastar_disp_bomb(CameraId cam, void* param);
+static void zubastar_capture(CameraId cam, void* param);
 
 /**
  * Shatters the screen after the damage: captures the frame on the first call,
@@ -938,7 +938,7 @@ USER_FUNC(zubastar_end) {
 }
 
 /** 2D draw callback: copies the frame into the screen capture the shattering pieces are textured with. */
-void zubastar_capture(CameraId cam, void* param) {
+static void zubastar_capture(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     GXSetTexCopySrc(0xd0, 0, 400, 480);
     GXSetTexCopyDst(400, 480, GX_TF_RGB565, GX_FALSE);
@@ -947,7 +947,7 @@ void zubastar_capture(CameraId cam, void* param) {
 }
 
 /** Draws every screen piece as a triangle fan textured with the captured frame, at its falling position and spin. */
-void zubastar_disp_bomb(CameraId cam, void* param) {
+static void zubastar_disp_bomb(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx tc;
@@ -1018,7 +1018,7 @@ static inline void dispA(Mtx m, s32 i) {
  * Draws the minigame's 2D layer: the A button and the gauge, the slash lines pulsing in brightness,
  * and the cursor with its trail while it slashes.
  */
-void zubastar_disp2D(CameraId cam, void* param) {
+static void zubastar_disp2D(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSCursor* cur = &w->cursor;
     ZSLine* l;

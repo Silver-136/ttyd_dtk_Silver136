@@ -37,7 +37,7 @@
 USER_FUNC(_vivian_make_extra_work_area);
 USER_FUNC(_disp_heart_entry_stop_check);
 USER_FUNC(_disp_heart_entry_stop);
-void _disp_heart(CameraId camera, void* param);
+static void _disp_heart(CameraId camera, void* param);
 USER_FUNC(_disp_heart_entry);
 USER_FUNC(_make_kagenuke_weapon);
 USER_FUNC(_get_vivian_attack_position);
@@ -1645,7 +1645,7 @@ USER_FUNC(_disp_heart_entry) {
  * Display callback for _disp_heart_entry: draws the speech-bubble and heart icons at the target's hit position,
  * scaled through the pop-in animation.
  */
-void _disp_heart(CameraId camera, void* param) {
+static void _disp_heart(CameraId camera, void* param) {
     EventEntry* w;
     f32 scale;
     Vec p, b, a, c;

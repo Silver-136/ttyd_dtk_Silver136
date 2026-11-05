@@ -707,7 +707,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     return slot;
 }
 
-void driveParty(PartyEntry* party);
+static void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
 /** Lets partyPreDisp draw the partner's shadow again. */
 static void partyShadowOn(PartyEntry* party) {
@@ -1073,10 +1073,10 @@ void partyMain(void) {
     }
 }
 
-void partyPreDisp(PartyEntry* party);
+static void partyPreDisp(PartyEntry* party);
 void partyRideMain(PartyEntry* party);
 s32 partyRideYoshiMain(PartyEntry* party);
-void party_damage_return(PartyEntry* party);
+static void party_damage_return(PartyEntry* party);
 s32 partyDokanInit(PartyEntry* party);
 s32 partyDokanMain(PartyEntry* party);
 
@@ -1088,7 +1088,7 @@ s32 partyDokanMain(PartyEntry* party);
 #if VERSION <= VERSION_DEMO_JP
 static void driveParty(PartyEntry* party) {
 #else
-void driveParty(PartyEntry* party) {
+static void driveParty(PartyEntry* party) {
 #endif
     MarioWork* mario;
     f32 x, y, z;
@@ -1945,7 +1945,7 @@ void allPartyRideJabara(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void getRidePos(PartyEntry* party, Vec* pos) {
 #else
-void getRidePos(PartyEntry* party, Vec* pos) {
+static void getRidePos(PartyEntry* party, Vec* pos) {
 #endif
     MarioWork* mario = party->playerPtr;
     PartyEntry* ride;
@@ -2892,7 +2892,7 @@ s32 partyRideYoshiMain(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static void party_damage_return(PartyEntry* party) {
 #else
-void party_damage_return(PartyEntry* party) {
+static void party_damage_return(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;
     f32 x, y, z;
@@ -3140,7 +3140,7 @@ void partyMakeDispDir(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static void partyPreDisp(PartyEntry* party) {
 #else
-void partyPreDisp(PartyEntry* party) {
+static void partyPreDisp(PartyEntry* party) {
 #endif
     Vec screen;
     f32 z;

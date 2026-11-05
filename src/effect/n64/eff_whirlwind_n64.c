@@ -49,8 +49,8 @@ effN64Vtx eff_whirlwind_v[] = {
     {-5, 2, -9, 597, 512, 0xFF, 0xFF, 0xFF, 0xFF},
 };
 
-void effWhirlwindMain(EffectEntry* effect);
-void effWhirlwindDisp(CameraId cameraId, void* param);
+static void effWhirlwindMain(EffectEntry* effect);
+static void effWhirlwindDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns four wind bands around a Mario work target (may be NULL) for `life` frames. Odd types spin the other
@@ -161,7 +161,7 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
  * widen toward twice the base size and their spin slows to a stop. Deletes when the life runs out.
  * CAMERA_3D, layer 2.
  */
-void effWhirlwindMain(EffectEntry* effect) {
+static void effWhirlwindMain(EffectEntry* effect) {
     EffWhirlwindN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -236,7 +236,7 @@ void effWhirlwindMain(EffectEntry* effect) {
  * set out from the centre (types below 8 pull in as they widen) and turned by its rotations,
  * around the camera-facing centre.
  */
-void effWhirlwindDisp(CameraId cameraId, void* param) {
+static void effWhirlwindDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffWhirlwindN64Work* work;

@@ -13,8 +13,8 @@
 double sin(float);
 double cos(float);
 
-void effSweatMain(EffectEntry* effect);
-void effSweatDisp(CameraId cameraId, void* payload);
+static void effSweatMain(EffectEntry* effect);
+static void effSweatDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns sweat drops at (x, y, z) for `life` frames, fanned around `angle`.
@@ -97,7 +97,7 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
  * it fades in over 8 frames and out over its last 16. The effect deletes once every drop's life is over.
  * CAMERA_3D, layer 2.
  */
-void effSweatMain(EffectEntry* effect) {
+static void effSweatMain(EffectEntry* effect) {
     EffSweatN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -152,7 +152,7 @@ void effSweatMain(EffectEntry* effect) {
  * Draws each started drop as a camera-facing 6.4 x 9.6 white quad of the TTYD sweat-drop texture 93,
  * tilted by its angle and mirrored when the angle is positive.
  */
-void effSweatDisp(CameraId cameraId, void* payload) {
+static void effSweatDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffSweatN64Work* work;

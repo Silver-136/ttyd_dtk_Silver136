@@ -67,7 +67,7 @@ typedef struct AirPw {
 } AirPw;
 
 static void actionCommandDisp(f32 x, f32 y);
-f32 _GetGaugeDecValue(void);
+static f32 _GetGaugeDecValue(void);
 
 /**
  * Per-frame driver of action command 14, used by Flurrie's Gale Force.
@@ -236,7 +236,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
 #if VERSION <= VERSION_DEMO_JP
 static f32 _GetGaugeDecValue(void) {
 #else
-f32 _GetGaugeDecValue(void) {
+static f32 _GetGaugeDecValue(void) {
 #endif
 
     BattleWork* work = _battleWorkPointer;

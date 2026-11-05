@@ -59,8 +59,8 @@ static u8 radius_data[13] = {10, 20, 28, 35, 42, 48, 53, 57, 60, 62, 63, 64, 65}
 /** Fire-type colour blend on each frame: full fire colour for two frames, then fading out over three. */
 static u8 fire_data[13] = {255, 255, 200, 130, 60};
 
-void effHitMain(EffectEntry* effect);
-void effHitDisp(CameraId cameraId, EffectEntry* effect);
+static void effHitMain(EffectEntry* effect);
+static void effHitDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
 /**
@@ -148,7 +148,7 @@ EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) 
  * Plays the flash for cnt_table[type] frames, reading anim_data for the progress
  * and radius_data for how far the pieces have spread, then deletes it.
  */
-void effHitMain(EffectEntry* effect) {
+static void effHitMain(EffectEntry* effect) {
     EffHitN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -192,7 +192,7 @@ void effHitMain(EffectEntry* effect) {
  * Picks the colour pair for the type (fire fades with fire_data, electric alternates every frame)
  * and draws the flash three times around the (1, 1, 1) axis at 120-degree steps with texture 0x4A.
  */
-void effHitDisp(CameraId cameraId, EffectEntry* effect) {
+static void effHitDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffHitN64Work* work;
     GXTexObj texObj;

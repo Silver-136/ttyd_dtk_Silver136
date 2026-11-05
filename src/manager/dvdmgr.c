@@ -20,7 +20,7 @@ static DVDMgrCallback _callback;
 BOOL dvdmgr_thread_on;
 
 /** Body of the DVD manager thread: services the read queue once and yields, forever. */
-void* proc_main(void* param) {
+static void* proc_main(void* param) {
     while (1) {
         DVDMgrMain();
         OSYieldThread();

@@ -69,14 +69,14 @@ typedef enum SeqEndDispFlags {
     SEQEND_DISP_LVUP_HELP = (1 << 5),           // 0x20, level-up help message (_lvup_disp_flag_onoff)
 } SeqEndDispFlags;
 
-void _GetExpIcon_Init(BattleSeqEndWork* work);
+static void _GetExpIcon_Init(BattleSeqEndWork* work);
 
-void _GetExpIcon_Main(BattleWork* wp);
-void _LvupParamConfirmDisp(CameraId camId, void* param);
+static void _GetExpIcon_Main(BattleWork* wp);
+static void _LvupParamConfirmDisp(CameraId camId, void* param);
 void _LvupParamHelpMsgDisp(CameraId camId, void* param);
-void _MarioExpDisp(CameraId camId, void* param);
-void _GetExpIcon_Disp(CameraId camId, void* param);
-void _lvup_select_object_disp(CameraId camId, void* param);
+static void _MarioExpDisp(CameraId camId, void* param);
+static void _GetExpIcon_Disp(CameraId camId, void* param);
+static void _lvup_select_object_disp(CameraId camId, void* param);
 
 USER_FUNC(_check_guard_koura);
 USER_FUNC(_disable_enemy_unit_disp);
@@ -144,7 +144,7 @@ EVT_END()
 
 
 
-RankUpData* _get_rank_data(s32 level) {
+static RankUpData* _get_rank_data(s32 level) {
     RankUpData* rank;
 
     for (rank = _rank_up_data; level != rank->startLevel; rank++) {
@@ -177,14 +177,14 @@ const char* BattleGetRankNameLabel(s32 level) {
 }
 
 
-void _ExecAllUnitBattleEndEvent(void);
-void _check_audience_battle_end_exec(void);
-void _BattleMarioKouraDelete(void);
+static void _ExecAllUnitBattleEndEvent(void);
+static void _check_audience_battle_end_exec(void);
+static void _BattleMarioKouraDelete(void);
 void _audience_Whistle_control(void);
-void btlseqEnd_DispInit(BattleWork* wp);
-void btlseqEnd_DispMain(CameraId camId, void* param);
+static void btlseqEnd_DispInit(BattleWork* wp);
+static void btlseqEnd_DispMain(CameraId camId, void* param);
 
-void _GetExpIcon_End(BattleSeqEndWork* work);
+static void _GetExpIcon_End(BattleSeqEndWork* work);
 
 extern PoseTableEntry pose_table_nokotarou_stay[];
 
@@ -820,7 +820,7 @@ void btlseqEnd(BattleWork* wp) {
  * Starts every unit's battle-end event (unit data entry 0x3F) bound to that unit;
  * run on a win once all events have finished, on a loss, and when the battle is fled or aborted.
  */
-void _ExecAllUnitBattleEndEvent(void) {
+static void _ExecAllUnitBattleEndEvent(void) {
     BattleUnit* unit;
     BattleWork* wp = _battleWorkPointer;
     s32 i;
@@ -841,7 +841,7 @@ void _ExecAllUnitBattleEndEvent(void) {
 }
 
 /** Clears the result display flags when the end-of-battle work is allocated. */
-void btlseqEnd_DispInit(BattleWork* wp) {
+static void btlseqEnd_DispInit(BattleWork* wp) {
     wp->seqEndWork->flags = 0;
 }
 
@@ -849,7 +849,7 @@ void btlseqEnd_DispInit(BattleWork* wp) {
  * Called at the end of every btlseqEnd frame: steps the Star Point icons
  * and queues each result display whose SeqEndDispFlags bit is set.
  */
-void btlseqEnd_DispMain(CameraId camId, void* param) {
+static void btlseqEnd_DispMain(CameraId camId, void* param) {
     BattleWork* wp = (BattleWork*)param;
     BattleSeqEndWork* work = wp->seqEndWork;
 
@@ -877,7 +877,7 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
     }
 }
 
-void _MarioExpDisp(CameraId camId, void* param) {
+static void _MarioExpDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
     char buf[0x10];
     Vec pos;
@@ -902,7 +902,7 @@ void _MarioExpDisp(CameraId camId, void* param) {
     }
 }
 
-void _LvupParamConfirmDisp(CameraId camId, void* param) {
+static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     Vec pos;
     f32 zero = 0.0f;
     u32 len;
@@ -981,7 +981,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
  * ten large ones (one per 10 points, centred on the count) and nine small ones (single points),
  * and turns on their display.
  */
-void _GetExpIcon_Init(BattleSeqEndWork* work) {
+static void _GetExpIcon_Init(BattleSeqEndWork* work) {
     s32 i;
     char name[16];
 
@@ -1016,7 +1016,7 @@ void _GetExpIcon_Init(BattleSeqEndWork* work) {
  * Per frame: shows expDisp / 10 large and expDisp % 10 small Star Point icons, fading them in by 0x40 a frame,
  * hides the rest and re-centres the large row as the count drops.
  */
-void _GetExpIcon_Main(BattleWork* wp) {
+static void _GetExpIcon_Main(BattleWork* wp) {
     s32 digits[2]; // FAKE: register-promoted array (tens, ones); two scalars differ
     BattleSeqEndWork* work = wp->seqEndWork;
     s32 exp = work->expDisp;
@@ -1068,12 +1068,12 @@ void _GetExpIcon_Main(BattleWork* wp) {
 }
 
 /** Draws the translucent white window behind the Star Point icons. */
-void _GetExpIcon_Disp(CameraId camId, void* param) {
+static void _GetExpIcon_Disp(CameraId camId, void* param) {
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0x80}, -76.899994f, 21.0f, 165.79999f, 24.199999f, 10.0f);
 }
 
 /** Turns the Star Point icon display off and deletes the 19 icons. */
-void _GetExpIcon_End(BattleSeqEndWork* work) {
+static void _GetExpIcon_End(BattleSeqEndWork* work) {
     s32 i;
 
     work->flags &= ~SEQEND_DISP_EXP_ICON;
@@ -1945,7 +1945,7 @@ USER_FUNC(_lvup_select_object_init) {
  * Returns the number of decimal digits in n (1 for 0, sign ignored); keta is Japanese for digit.
  * Used to place the level-up numbers.
  */
-s32 _keta_get(s32 n) {
+static s32 _keta_get(s32 n) {
 
     s32 k = 0;
 
@@ -1993,7 +1993,7 @@ s32 _keta_get(s32 n) {
  * draws each block and its label (per-language label textures in the US and later), and below it the old value,
  * an arrow and the new value (paramDisp 1) or the new value alone (2 and 5).
  */
-void _lvup_select_object_disp(CameraId camId, void* param) {
+static void _lvup_select_object_disp(CameraId camId, void* param) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     SeqEndObj* obj;
     s32 i;
@@ -2072,7 +2072,7 @@ void _lvup_select_object_disp(CameraId camId, void* param) {
     }
 }
 
-void _check_audience_battle_end_exec(void) {
+static void _check_audience_battle_end_exec(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleGroupSetup* group = wp->fbatInfo->setup->groupSetup;
     s32 level = group->enemyData[0].unitKindParams->level;
@@ -2140,7 +2140,7 @@ void _audience_Whistle_control(void) {
  * After a win (and after a field post-battle event),
  * starts _koura_delete_event on Mario to clear a Shell Shield still guarding him.
  */
-void _BattleMarioKouraDelete(void) {
+static void _BattleMarioKouraDelete(void) {
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     EventEntry* evt = evtEntry(_koura_delete_event, 10, 0);
 

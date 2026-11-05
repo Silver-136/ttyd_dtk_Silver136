@@ -97,11 +97,11 @@ void FontDrawString(f32 x, f32 y, const char* str);
 #if VERSION <= VERSION_DEMO_JP
 static BOOL loadMain(SequenceWork* seq);
 #else
-void loadMain(SequenceWork* seq);
+static void loadMain(SequenceWork* seq);
 #endif
 
-void loadDraw(CameraId camera, void* param);
-void continueGame(void);
+static void loadDraw(CameraId camera, void* param);
+static void continueGame(void);
 
 #if VERSION <= VERSION_DEMO_JP
 s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
@@ -295,7 +295,7 @@ static inline BOOL loadStart(void) {
 #if VERSION <= VERSION_DEMO_JP
 static BOOL loadMain(SequenceWork* seq) {
 #else
-void loadMain(SequenceWork* seq) {
+static void loadMain(SequenceWork* seq) {
 #endif
     u32 trg;
     u32 dir;
@@ -932,7 +932,7 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
 #if VERSION <= VERSION_DEMO_JP
 static void loadDraw(CameraId camera, void* param) {
 #else
-void loadDraw(CameraId camera, void* param) {
+static void loadDraw(CameraId camera, void* param) {
 #endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXColor white = {255, 255, 255, 255};
@@ -1445,7 +1445,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 static void continueGame(void) {
 #else
-void continueGame(void) {
+static void continueGame(void) {
 #endif
     cardCopy2Main(wp->slot);
     gp->saveSlot = wp->slot;

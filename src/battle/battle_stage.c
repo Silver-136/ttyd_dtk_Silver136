@@ -73,14 +73,14 @@ EVT_END()
 
 
 // forward declarations
-void batSpotDisp(CameraId camId, void* param);
-BattleSpotEntry* batSpotEntry(void);
-void BattleStageDispDark(CameraId camId, void* param);
-void BattleStageDispLight(CameraId camId, void* param);
-void batSpotInit(void);
+static void batSpotDisp(CameraId camId, void* param);
+static BattleSpotEntry* batSpotEntry(void);
+static void BattleStageDispDark(CameraId camId, void* param);
+static void BattleStageDispLight(CameraId camId, void* param);
+static void batSpotInit(void);
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x);
-void batSpotMain(void);
-void drawCone(CameraId camId, BattleSpotEntry* e);
+static void batSpotMain(void);
+static void drawCone(CameraId camId, BattleSpotEntry* e);
 
 /**
  * Returns the stage lighting state inside the battle work (_battleWorkPointer->stage):
@@ -262,7 +262,7 @@ void BattleStageDisp(void) {
 
 #pragma dont_inline on
 /** Emits one vertex of a darkening quad: the position, coloured black at the given alpha. */
-void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
+static void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
     GXPosition3f32(x, y, z);
     GXColor4u8(0, 0, 0, alpha);
 }
@@ -270,7 +270,7 @@ void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
 
 #pragma dont_inline on
 /** Draws one black quad of the given alpha at depth z with corners (x0, y0) and (x1, y1). */
-void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
+static void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     DarkByPoint(alpha, x0, y0, z);
     DarkByPoint(alpha, x1, y0, z);
@@ -284,7 +284,7 @@ void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
  * two at the audience darkness (audDark.cur) with opposite depth tests and windings,
  * then one at the stage darkness (stgDark.cur).
  */
-void BattleStageDispDark(CameraId camId, void* param) {
+static void BattleStageDispDark(CameraId camId, void* param) {
     BattleStage* s = STG;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     StageDark* aud;
@@ -328,7 +328,7 @@ void BattleStageDispDark(CameraId camId, void* param) {
  * a fan of 18 triangles from the light's position out to twice the distance of its target with radius width,
  * turning the up vector 20 degrees around the beam axis per triangle.
  */
-void BattleStageDispLight(CameraId camId, void* param) {
+static void BattleStageDispLight(CameraId camId, void* param) {
     s32 i, j;
     f32 width;
     BattleStage* s = &_battleWorkPointer->stage;
@@ -630,7 +630,7 @@ void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
  * Starts a fade of a darkness layer's current alpha to v over time frames with interpolation curve mode;
  * time 0 sets it at once.
  */
-void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode) {
+static void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode) {
     d->start = d->cur;
     d->target = v;
     d->time = time;
@@ -647,7 +647,7 @@ void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode) {
  * Starts a fade of a darkness layer's base alpha (the level the Return functions go back to) to v over time
  * frames; time 0 sets it at once.
  */
-void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode) {
+static void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode) {
     d->baseStart = d->base;
     d->baseTarget = v;
     d->baseTime = time;
@@ -728,7 +728,7 @@ BattleSpotWork* BatSpotGetPtr(void) {
  * and places them in a row (x -100 to 100, z -50), white, 20 x 20 x 150.
  * They stay hidden until _lvup_spot_on sets flag 2.
  */
-void batSpotInit(void) {
+static void batSpotInit(void) {
     int i;
     BattleSpotEntry* entry;
 
@@ -751,7 +751,7 @@ void batSpotInit(void) {
  * Per-frame from BattleStageMain: queues batSpotDisp on the 3D image camera
  * while skipRender is nonzero (despite the name, nonzero means draw). The loop over the cones is empty.
  */
-void batSpotMain(void) {
+static void batSpotMain(void) {
     s32 count = wp->count;
 
     while (count-- > 0) {}
@@ -776,7 +776,7 @@ void batSpotEnd(void) {
  * back faces into the frame alpha, front faces clearing it, then the cone colour blended by destination alpha,
  * so the colour only lands inside the cone's volume.
  */
-void batSpotDisp(CameraId camId, void* param) {
+static void batSpotDisp(CameraId camId, void* param) {
     int i;
     BattleSpotEntry* e;
 
@@ -830,7 +830,7 @@ void batSpotDisp(CameraId camId, void* param) {
  * a 30-segment rim at z -1 with a third of that alpha, placed by the entry's position,
  * rotation (degrees) and scale.
  */
-void drawCone(CameraId camId, BattleSpotEntry* e) {
+static void drawCone(CameraId camId, BattleSpotEntry* e) {
     Mtx trans, scale, m, rx, ry, rz;
     CameraEntry* cam;
     s32 i;
@@ -872,7 +872,7 @@ void drawCone(CameraId camId, BattleSpotEntry* e) {
  * With all cones taken it would write one entry past the end of the array, but its only caller, batSpotInit,
  * claims exactly the five cones it allocates.
  */
-BattleSpotEntry* batSpotEntry(void) {
+static BattleSpotEntry* batSpotEntry(void) {
     int i;
     BattleSpotEntry* entry = wp->entries;
 

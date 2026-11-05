@@ -575,7 +575,7 @@ void marioGetRubInit(void) {
  * Looks at the last ten stick angles in the rub history and decides which way the stick is turning:
  * 0 one way, 1 the other (no steps against it and at least four with it), or -1 when it is not turning steadily.
  */
-s32 chkRevolveDir(s32* cw, s32* ccw) {
+static s32 chkRevolveDir(s32* cw, s32* ccw) {
     s32 base;
     s32 i;
     RubWork* rw = &rubwork;
@@ -637,7 +637,7 @@ s32 chkRevolveDir(s32* cw, s32* ccw) {
  * 1 when the newest stick step has passed the angle where the current rotation started,
  * i.e. one full turn of the stick in direction dir; 0 otherwise, -1 when there is not enough history.
  */
-s32 checkOneRevolution(s32 dir) {
+static s32 checkOneRevolution(s32 dir) {
     RubWork* rw;
     s32 j;
     s32 cur;

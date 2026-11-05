@@ -31,8 +31,8 @@ static effN64Vtx size24x24_tex32x32_vtx[] = {
     {-12, 12, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-void effRotHammerFailMain(EffectEntry* effect);
-void effRotHammerFailDisp(CameraId cameraId, void* payload);
+static void effRotHammerFailMain(EffectEntry* effect);
+static void effRotHammerFailDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns one smoke puff at (x, y, z) that plays its 7-frame animation over `time` frames.
@@ -78,7 +78,7 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
  * eases the spread distance from 10 toward 30 by 10% per frame and places the puff that far out along +Z
  * while it rises (vy +0.04 per frame, damped 10%). Deletes when the lifetime runs out. CAMERA_3D, layer 2.
  */
-void effRotHammerFailMain(EffectEntry* effect) {
+static void effRotHammerFailMain(EffectEntry* effect) {
     EffRotHammerFailN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -113,7 +113,7 @@ void effRotHammerFailMain(EffectEntry* effect) {
  * Draws the puff as a camera-facing 24x24 quad of the 7-frame strip in texture 0xD,
  * cross-fading between the current and next frame, in pale grey (E6,DE,DE).
  */
-void effRotHammerFailDisp(CameraId cameraId, void* payload) {
+static void effRotHammerFailDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffRotHammerFailN64Work* work;

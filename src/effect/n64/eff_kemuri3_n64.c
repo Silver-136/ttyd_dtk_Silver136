@@ -34,8 +34,8 @@ typedef struct EffKemuri3N64Work {
     f32 cosAngle;     // 0x84
 } EffKemuri3N64Work;
 
-void effKemuri3Main(EffectEntry* effect);
-void effKemuri3Disp(CameraId cameraId, void* param);
+static void effKemuri3Main(EffectEntry* effect);
+static void effKemuri3Disp(CameraId cameraId, void* param);
 
 #pragma opt_propagation off
 /**
@@ -88,7 +88,7 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
 
 #pragma opt_propagation reset
 /** Moves each puff outward (slowing 15% per frame) in a rise-then-fall arc and tilts it; deletes when all expire. */
-void effKemuri3Main(EffectEntry* effect) {
+static void effKemuri3Main(EffectEntry* effect) {
     EffKemuri3N64Work* work = effect->userdata;
     s32 i;
     BOOL alive;
@@ -146,7 +146,7 @@ void effKemuri3Main(EffectEntry* effect) {
 }
 
 /** Draws each live puff as a 16x16 quad (effect texture 0xF) tinted brown-yellow with the puff alpha. */
-void effKemuri3Disp(CameraId cameraId, void* param) {
+static void effKemuri3Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri3N64Work* work;

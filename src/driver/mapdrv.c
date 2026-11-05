@@ -53,9 +53,9 @@ MapWork* mapWork; //allocates two entries
 
 // Implementation forward declarations; definitions retain target order.
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
-void mapSetMaterial(MapObject* obj, void* material);
-void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
-void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
+static void mapSetMaterial(MapObject* obj, void* material);
+static void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
+static void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
 
 /** Single-precision sine for this file, routed through the double sin() of math.h. */
 static inline f32 sinf(f32 x) { return sin(x); }
@@ -120,7 +120,7 @@ s32 mapGetActiveGroup(void) {
 }
 
 /** Recursive helper of mapGetJoints: counts this joint, its children and its later siblings into *numJoints. */
-void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) {
+static void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) {
     (*numJoints)++;
     if (joint->child) {
         mapGetJointsSub(joint->child, numJoints);
@@ -201,7 +201,7 @@ static inline s32 mapSearchTexName(MapTexTable* table, char* name) {
  * Points every material sampler of obj and its subtree at its image in the map's texture.tpl (matched by name,
  * falling back to image 0) and converts the TPL format code into the map's own texture format numbering.
  */
-void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
+static void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
     int i;
     int j;
     int k;
@@ -394,7 +394,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
  * Creates the MapObject for joint and, recursively, its children and (unless it is the root) its later siblings,
  * linking them into the child/next tree.
  */
-MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index) {
+static MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index) {
     MapObject* obj = _mapEnt(joint, parent, mtx, index);
     if (joint->child) {
         obj->child = mapEntrySub(joint->child, obj, obj->modelWorldMtx, FALSE, index);
@@ -844,7 +844,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     u32 r4, r7, r0;
     u32 sizeCheck;
 #else
-void _mapLoad(MapWork* wp, BOOL group, const char* map) {
+static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     int i;
 #endif
@@ -1555,7 +1555,7 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
  * or animated matrix plus the script transform,
  * and walks the children (forced when the parent changed) and siblings.
  */
-void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
+static void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
     BOOL dirty = FALSE;
 
     if (obj->flags & MAP_OBJ_FLAG_MTX_DIRTY) {
@@ -1959,7 +1959,7 @@ void mapMain(void) {
     }
 }
 
-void mapSetTextureMatrix(MapMaterial* mat);
+static void mapSetTextureMatrix(MapMaterial* mat);
 
 static inline void mapSetObjFog(MapObject* obj);
 
@@ -1999,7 +1999,7 @@ static inline void callPackedLists(MapFileMesh* mesh) {
  * siblings; then loads its matrices, cull mode and fog and draws each part from the prebuilt display lists
  * or by setting up the material and mesh. Skips hidden or fully transparent group members.
  */
-void _mapDispMapObj(CameraId cam, MapObject* obj) {
+static void _mapDispMapObj(CameraId cam, MapObject* obj) {
     CameraEntry* camera;
     MapFileJoint* joint;
     f32 scale;
@@ -2146,7 +2146,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
 }
 
 /** Draws a group: the object, its children, and for group members (flag 0x20) the later siblings. */
-void _mapDispMapGrp(CameraId cam, MapObject* obj) {
+static void _mapDispMapGrp(CameraId cam, MapObject* obj) {
     _mapDispMapObj(cam, obj);
     if (obj->child) {
         _mapDispMapGrp(cam, obj->child);
@@ -2157,13 +2157,13 @@ void _mapDispMapGrp(CameraId cam, MapObject* obj) {
 }
 
 /** dispdrv callback that draws a single map object (queued by mapDisp). */
-void mapDispMapObj(CameraId cam, void* payload) {
+static void mapDispMapObj(CameraId cam, void* payload) {
     MapObject* obj = payload;
     _mapDispMapObj(cam, obj);
 }
 
 /** dispdrv callback that draws a group map object and its members (queued by mapDisp). */
-void mapDispMapGrp(CameraId cam, void* payload) {
+static void mapDispMapGrp(CameraId cam, void* payload) {
     MapObject* obj = payload;
     _mapDispMapGrp(cam, obj);
 }
@@ -2172,7 +2172,7 @@ void mapDispMapGrp(CameraId cam, void* payload) {
  * dispdrv callback for an object drawn into its offscreen buffer:
  * draws it and adds the screen rectangle it covered to that offscreen entry.
  */
-void mapDispMapObj_off(CameraId cam, void* payload) {
+static void mapDispMapObj_off(CameraId cam, void* payload) {
     MapObject* obj = payload;
     u16 left, top, right, bottom;
 
@@ -2185,7 +2185,7 @@ void mapDispMapObj_off(CameraId cam, void* payload) {
 }
 
 /** As mapDispMapObj_off for a whole group. */
-void mapDispMapGrp_off(CameraId cam, void* payload) {
+static void mapDispMapGrp_off(CameraId cam, void* payload) {
     MapObject* obj = payload;
     u16 left, top, right, bottom;
 
@@ -2228,7 +2228,7 @@ void test_kururing_mapdisp(CameraId cam) {
  * Draws the object's meshes in flat black with no material, lighting or texture,
  * for measuring its screen rectangle.
  */
-void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj) {
+static void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj) {
     Mtx mtx;
     Mtx nrm;
     int i;
@@ -2252,7 +2252,7 @@ void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj) {
 }
 
 /** _mapDispMapObj_NoMaterial over a group: the object, its children and, for group members, the later siblings. */
-void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
+static void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
     _mapDispMapObj_NoMaterial(cam, obj);
     if (obj->child) {
         _mapDispMapGrp_NoMaterial(cam, obj->child);
@@ -2276,7 +2276,7 @@ void mapDispMapObj_bbox(CameraId cam, void* payload) {
 }
 
 /** As mapDispMapObj_bbox for a whole group. */
-void mapDispMapGrp_bbox(CameraId cam, void* payload) {
+static void mapDispMapGrp_bbox(CameraId cam, void* payload) {
     MapObject* obj = payload;
     sysWaitDrawSync();
     GXClearBoundingBox();
@@ -2444,7 +2444,7 @@ void mapDisp(void) {
  * the map lights picked by its draw mode's light mask,
  * then (draw mode flag 8) the nearest other lights to its centre; returns how many.
  */
-s32 mapSetLight(MapObject* obj, LightEntry** lights) {
+static s32 mapSetLight(MapObject* obj, LightEntry** lights) {
     Vec pos;
     s32 count;
     s32 i;
@@ -3286,7 +3286,7 @@ static inline void mapSetObjFog(MapObject* obj) {
  * with a texture matrix for the animated scroll,
  * scale and rotation (about the transform centre) when it is not the identity.
  */
-void mapSetTextureMatrix(MapMaterial* mat) {
+static void mapSetTextureMatrix(MapMaterial* mat) {
     s32 j;
     s32 k;
     s32 i;
@@ -3351,7 +3351,7 @@ void mapSetTextureMatrix(MapMaterial* mat) {
  * up to 8 lights (point, spot, directional) with the ambient light, the material colour and lighting mode,
  * the textures from the map's texture.tpl, then the TEV stages.
  */
-void mapSetMaterial(MapObject* obj, void* material) {
+static void mapSetMaterial(MapObject* obj, void* material) {
     MapMaterial* mat = material;
     GXColor ambient;
     GXColor ambColor = {0x00, 0x00, 0x00, 0xFF};
@@ -3625,7 +3625,7 @@ const GXVtxAttrFmtList attr_fmt[12] = {
  * Sends the mesh's geometry to GX: older map files as indexed float triangle strips written vertex by vertex,
  * ver1.02 files as packed s16 vertex arrays and the file's display lists.
  */
-void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
+static void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
     MapWork* wp;
     void* pos;
     void* nrm;
@@ -3702,7 +3702,7 @@ void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
 }
 
 /** Sets the GX vertex descriptors, formats and arrays for a ver1.02 packed mesh, ahead of calling its display lists. */
-void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh) {
+static void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh) {
     MapWork* wp;
     u32 mask;
     MapVcdTable* vcd;
@@ -3742,7 +3742,7 @@ void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh) {
 }
 
 /** Depth-first search of the joint tree (children, then later siblings) for the joint called name. */
-MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name) {
+static MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name) {
     MapFileJoint* found;
 
     if (!strcmp(joint->name, name)) {
@@ -3767,7 +3767,7 @@ MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name) {
  * Depth-first search by full path: matches name against the joint's "|"-separated path from the root (prefix
  * plus its name).
  */
-MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const char* prefix) {
+static MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const char* prefix) {
     MapFileJoint* found;
     char path[256];
 
@@ -3875,7 +3875,7 @@ void mapObjFlagOff(const char* name, u32 flags) {
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     obj->flags |= flags;
 #else
-void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
+static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
     }
@@ -3889,7 +3889,7 @@ void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
 }
 
 /** Clears flags on obj and its whole subtree, and its later siblings when doNext. */
-void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext) {
+static void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext) {
     obj->flags &= ~flags;
     if (obj->child) {
         mapFlgOff(obj->child, flags, TRUE);
@@ -3933,7 +3933,7 @@ void mapGrpFlagOff(const char* name, u32 flags) {
  * Assigns offscreen buffer id to obj and its subtree (and later siblings when doNext),
  * setting the offscreen flag 0x80, or clearing it for id -1.
  */
-void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
+static void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
     // Requires a non-NULL object; group offscreen operations pass their lookup result without a check.
     obj->offscreenId = id;
     if (id != -1) {
@@ -4076,7 +4076,7 @@ void mapObjScale(const char* name, f32 x, f32 y, f32 z) {
  * Adds the world-space centre of each leaf object under obj (and its later siblings when doNext) to *sum,
  * counting them in *count.
  */
-void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext) {
+static void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext) {
     Vec pos;
 
     if (obj->child) {
@@ -4206,7 +4206,7 @@ void mapObjSetColor(const char* name, GXColor* color) {
 }
 
 /** Sets the tint colour and flag 0x40 on obj, its subtree and, when doNext, its later siblings. */
-void setColor(MapObject* obj, GXColor color, BOOL doNext) {
+static void setColor(MapObject* obj, GXColor color, BOOL doNext) {
     if (obj) {
         obj->color = color;
         obj->flags |= MAP_OBJ_FLAG_COLOR;

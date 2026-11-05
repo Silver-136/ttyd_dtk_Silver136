@@ -285,7 +285,7 @@ static inline void booSetArrays(void) {
     DLS(p, 31)
 
 /** Calls the display lists of the first of three Boo model frames (the walk cycle). */
-void boo_polygon_0(void) {
+static void boo_polygon_0(void) {
     booSetArrays();
     GXCallDisplayList(boo_dl_0_0, 0x40);
     GXCallDisplayList(boo_dl_0_1, 0x40);
@@ -295,7 +295,7 @@ void boo_polygon_0(void) {
 }
 
 /** Calls the display lists of the second Boo model frame. */
-void boo_polygon_1(void) {
+static void boo_polygon_1(void) {
     booSetArrays();
     GXCallDisplayList(boo_dl_1_0, 0x40);
     GXCallDisplayList(boo_dl_1_1, 0x40);
@@ -305,7 +305,7 @@ void boo_polygon_1(void) {
 }
 
 /** Calls the display lists of the third Boo model frame. */
-void boo_polygon_2(void) {
+static void boo_polygon_2(void) {
     booSetArrays();
     GXCallDisplayList(boo_dl_2_0, 0x40);
     GXCallDisplayList(boo_dl_2_1, 0x40);
@@ -314,8 +314,8 @@ void boo_polygon_2(void) {
     DLS_ALL(boo_dl_2_)
 }
 
-void effBoobooMain(EffectEntry* effect);
-void effBoobooDisp(CameraId cameraId, EffectEntry* effect);
+static void effBoobooMain(EffectEntry* effect);
+static void effBoobooDisp(CameraId cameraId, EffectEntry* effect);
 
 /**
  * Creates the effect with 11 empty Boo slots; the arguments are ignored,
@@ -353,7 +353,7 @@ EffectEntry* effBoobooN64Entry(void) {
  * Per slot runs the state animation (still, bob, hop or sway, driven by sine tables) and,
  * when the slot's flag 2 is set, moves on to its queued next state after the animation finishes.
  */
-void effBoobooMain(EffectEntry* effect) {
+static void effBoobooMain(EffectEntry* effect) {
     EffBoobooN64Work* work = effect->userdata;
     s32 i;
     s32 done;
@@ -442,7 +442,7 @@ static inline void booTexCommon(s32 id, GXTevColorArg d, GXTexObj* texObj) {
  * for a slot with flag 8 while map entry 0 has MAP_ENTRY_BLEND it multiplies in the map blend colour,
  * and returns TRUE (skip the slot) when that colour is black.
  */
-BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
+static BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
     EffBoobooN64Work* work = effect->userdata;
     GXTexObj texObj;
     GXColor blend;
@@ -509,7 +509,7 @@ BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
  * Draws every enabled slot as the current walk-cycle Boo model, scaled by 10, facing its rotation;
  * skins 8 and 9 pulse by changing the TEV colour.
  */
-void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
+static void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     Mtx scl;
     Mtx rot;

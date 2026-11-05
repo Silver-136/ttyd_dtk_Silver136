@@ -252,7 +252,7 @@ static inline void jabTail(BOOL stay) {
     allPartyRideOff();      \
     jabTail(TRUE);
 
-void swingMain(void);
+static void swingMain(void);
 void jabaraSwingStart(s32 s);
 void jabaraSwingWalk(void);
 
@@ -919,7 +919,7 @@ void jabaraSwingWalk(void) {
  * spins mario->rot.x up and down per mario->mot.jabara.state
  * and lets A or B cut the push short.
  */
-void swingMain(void) {
+static void swingMain(void) {
     MarioWork* mario = marioGetPtr();
     if (marioGetPtr()->motStruct) {
         if (mario->currSubMotionId < 0x5a && (mario->buttonTrg & (PAD_BUTTON_A | PAD_BUTTON_B)) && !(marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING)) {

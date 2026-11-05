@@ -283,9 +283,9 @@ void bomhei_use_post(PartyEntry* party) {
 }
 #endif
 
-void bomhei_use_main(PartyEntry* party);
-void mario_controll(PartyEntry* party);
-HitEntry* check_front(PartyEntry* party);
+static void bomhei_use_main(PartyEntry* party);
+static void mario_controll(PartyEntry* party);
+static HitEntry* check_front(PartyEntry* party);
 
 /**
  * Party table use handler, run every frame of the bomb ability:
@@ -462,7 +462,7 @@ static inline void bomheiSetHoldPos(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static void bomhei_use_main(PartyEntry* party) {
 #else
-void bomhei_use_main(PartyEntry* party) {
+static void bomhei_use_main(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;
     f32 x, z;
@@ -915,7 +915,7 @@ s32 mario_bomhei_keychk2(void) {
  * 40-41 a 40-frame stand when the fuse runs out in his hands,
  * 30-36 the throw pose M_C_1 and its 50+10 frame recovery; 100 is idle.
  */
-void mario_controll(PartyEntry* party) {
+static void mario_controll(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     s32 cnt;
 
@@ -1117,7 +1117,7 @@ void partyGetReturnPos(Vec* out) {
  * facing, else a bomb rock below, else a bomb rock he stands on;
  * otherwise the floor below, or his standing floor hit if no floor was found below.
  */
-HitEntry* check_front(PartyEntry* party) {
+static HitEntry* check_front(PartyEntry* party) {
     const s32 angles[8] = {0, 45, -45, 90, -90, 135, -135, 180};
     static const Vec down = {0.0f, -1.0f, 0.0f};
     HitCheckQuery q;

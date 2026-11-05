@@ -254,7 +254,7 @@ typedef enum RomFontLanguage {
     ROM_FONT_LANGUAGE_ASCII = 1,
 } RomFontLanguage;
 
-void romFontMake(void);
+static void romFontMake(void);
 
 /**
  * Returns system message msg (progressive-scan prompt, disc errors, language names) in the console's language.
@@ -297,7 +297,7 @@ void romFontInit(void) {
  * loads the IPL font from ROM and stores one texel glyph and width per character in wp->glyphs.
  * The temporary buffers are freed.
  */
-void romFontMake(void) {
+static void romFontMake(void) {
     char c[16];
     s32 width;
     OSFontHeader* fontData;

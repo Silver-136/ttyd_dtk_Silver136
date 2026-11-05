@@ -38,7 +38,7 @@ double __fabs(double);
 /** Absolute value through the __fabs intrinsic; scissor_intersection uses it to pick each segment's major axis. */
 // FAKE: my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object
 static inline double my_fabsf(float x) { return __fabs(x); }
-void scissor_disp_control(CameraId camera, void* param);
+static void scissor_disp_control(CameraId camera, void* param);
 
 typedef struct ScissorTri {
     f32 x[3]; // 0x0
@@ -89,12 +89,12 @@ typedef struct ScissorWork {
 } ScissorWork;
 
 
-void scissor_disp_region(CameraId camera, void* param);
-void scissor_capture(CameraId camera, void* param);
+static void scissor_disp_region(CameraId camera, void* param);
+static void scissor_capture(CameraId camera, void* param);
 void tess(Pt* buf, s32 count);
-void star_disp2D_sub(s32 idx, s32 alpha);
-s32 scissor_damage_sub2(Vec pt);
-void scissor_damage_sub(BattleUnit* unit, s32* out);
+static void star_disp2D_sub(s32 idx, s32 alpha);
+static s32 scissor_damage_sub2(Vec pt);
+static void scissor_damage_sub(BattleUnit* unit, s32* out);
 
 /**
  * Art Attack's per-loop hit: scissor_damage hits each enemy inside a closed loop with it, for the power
@@ -188,7 +188,7 @@ ScissorWork* GetScissorPtr(void) {
  * handling vertical and horizontal ones separately;
  * returns 1 with the crossing point in *ox, *oy when they cross, 0 otherwise.
  */
-s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
+static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 a1, a2, d;
     f32 dx1, dy1, dx2, dy2;
     f32 minx, miny, maxx, maxy;
@@ -368,7 +368,7 @@ s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4,
 }
 
 /** scissor_intersection, but segments that share an endpoint do not count as crossing. */
-s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
+static s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     if (x1 == x3 && y1 == y3) {
         return 0;
     }
@@ -388,7 +388,7 @@ s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
  * scissor_intersection with the first segment stretched 1000 units both ways,
  * testing that whole line against the second segment.
  */
-s32 scissor_intersection3(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
+static s32 scissor_intersection3(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 dx = x2 - x1;
     f32 slope;
     if (dx != 0.0f) {
@@ -417,7 +417,7 @@ s32 scissor_intersection3(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
 }
 
 /** scissor_intersection3, but a shared endpoint counts as a crossing at that point. */
-s32 scissor_intersection4(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
+static s32 scissor_intersection4(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     if (x1 == x3 && y1 == y3) {
         *ox = x1;
         *oy = y1;
@@ -446,7 +446,7 @@ s32 scissor_intersection4(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
  * it must cross no edge and its midpoint must lie inside (crossings counted along the chord's line).
  * Returns 1 if so; used by tess.
  */
-s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n) {
+static s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n) {
     f32 xs[512];
     f32 ys[512];
     Pt* cur;
@@ -548,7 +548,7 @@ s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n) {
  * Triangulates the closed loop the player drew (a copy of the stroke points) into the triangle list
  * and flushes it for the GPU, so the region can be drawn and hit-tested.
  */
-s32 scissor_tess(void) {
+static s32 scissor_tess(void) {
     ScissorWork* w = GetScissorPtr();
     void* p = BattleAlloc(w->stars.count * sizeof(Pt));
     memcpy(p, w->points, w->stars.count * sizeof(Pt));
@@ -639,14 +639,14 @@ typedef struct StarTrail {
     /* 0x50 */ f32 ty[4];
 } StarTrail;
 
-void star_disp2D(CameraId camera, void* param);
+static void star_disp2D(CameraId camera, void* param);
 
 /**
  * Event helper for the star: rises out of Mario spinning, flies up off screen,
  * then drops in as the drawing cursor and stays there.
  * Keeps a four-point trail and registers star_disp2D from the cursor phase on.
  */
-s32 star_control(EventEntry* evt, BOOL first) {
+static s32 star_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();
     struct ScissorStars* s = &w->stars;
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -750,7 +750,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
 }
 
 /** Draws the drawing cursor with its four fading trail copies. */
-void star_disp2D(CameraId camera, void* param) {
+static void star_disp2D(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     if (w->star.state >= 2 && w->star.state <= 6) {
         star_disp2D_sub(0, 255);
@@ -766,7 +766,7 @@ void star_disp2D(CameraId camera, void* param) {
  * once time is up (phase 6) fades them all out over 30 calls: the shared timer steps on every star drawn
  * (5 per frame), so the fade takes about 6 frames.
  */
-void star_disp2D_sub(s32 idx, s32 alpha) {
+static void star_disp2D_sub(s32 idx, s32 alpha) {
     ScissorWork* w = GetScissorPtr();
     Mtx rotMtx;
     Mtx transMtx;
@@ -810,7 +810,7 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
 }
 
 /** Returns the frames left on the drawing timer in args[0]; at 59 or less also starts the star fade. */
-s32 scissor_timer_get(EventEntry* evt) {
+static s32 scissor_timer_get(EventEntry* evt) {
     ScissorWork* w = GetScissorPtr();
     EvtWord* args = evt->args;
     if (w->timer <= 59) {
@@ -824,7 +824,7 @@ s32 scissor_timer_get(EventEntry* evt) {
  * The drawing timer: slides the timer in, counts down the 959-frame limit,
  * slides it back out at 59 frames left and finishes when it reaches 0.
  */
-s32 scissor_timer_main(void) {
+static s32 scissor_timer_main(void) {
     ScissorWork* w = GetScissorPtr();
     switch (w->state) {
     case 0:
@@ -875,7 +875,7 @@ GXColor HSV2RGB(GXColor hsv);
  * and finishes once the newest segment crosses an earlier one, closing the loop and capturing the screen.
  * Also finishes when time runs out; until then draws the line each frame.
  */
-s32 scissor_control(EventEntry* evt, BOOL first) {
+static s32 scissor_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();
     Pt* buf = w->points;
     Pt* p;
@@ -967,7 +967,7 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 scissor_damage(EventEntry* evt, BOOL first) {
 #else
-s32 scissor_damage(EventEntry* evt, BOOL first) {
+static s32 scissor_damage(EventEntry* evt, BOOL first) {
 #endif
 
     BattleWork* wp;
@@ -1057,7 +1057,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
  * Samples a 10x10 grid over the unit's cut box on screen
  * and sets *out to the power from the share inside the loop: 1 from 30%, 2 from 60%, 3 from 90%.
  */
-void scissor_damage_sub(BattleUnit* unit, s32* out) {
+static void scissor_damage_sub(BattleUnit* unit, s32* out) {
     Vec pos;
     Vec p;
     s32 i, j;
@@ -1102,7 +1102,7 @@ void scissor_damage_sub(BattleUnit* unit, s32* out) {
 }
 
 /** Whether screen point pt is inside any triangle of the drawn loop. */
-s32 scissor_damage_sub2(Vec pt) {
+static s32 scissor_damage_sub2(Vec pt) {
     ScissorWork* w = GetScissorPtr();
     s32 n = w->triCount;
     f32 y0, x0;
@@ -1127,7 +1127,7 @@ s32 scissor_damage_sub2(Vec pt) {
 }
 
 /** Returns 1 in args[0] when the loop drawn off-screen covered any pixels (scissor_disp_region), else 0. */
-s32 scissor_ofscreen_ok(EventEntry* evt) {
+static s32 scissor_ofscreen_ok(EventEntry* evt) {
     EvtWord* args = evt->args;
     ScissorWork* w = GetScissorPtr();
     if (w->flags & 1) {
@@ -1139,7 +1139,7 @@ s32 scissor_ofscreen_ok(EventEntry* evt) {
 }
 
 /** Copies the screen into the capture texture when a loop closes, for the cut-out image. */
-void scissor_capture(CameraId camera, void* param) {
+static void scissor_capture(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
     GXSetTexCopyDst(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE);
@@ -1151,7 +1151,7 @@ void scissor_capture(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
 static void scissor_disp_control(CameraId camera, void* param) {
 #else
-void scissor_disp_control(CameraId camera, void* param) {
+static void scissor_disp_control(CameraId camera, void* param) {
 #endif
     ScissorWork* w = GetScissorPtr();
     f32* pts = (f32*)w->points;
@@ -1276,7 +1276,7 @@ void scissor_disp_control(CameraId camera, void* param) {
 #endif
 
 /** Registers scissor_disp_region on the off-screen camera to draw the closed loop. */
-s32 scissor_offscreen(void) {
+static s32 scissor_offscreen(void) {
     GetScissorPtr();
     dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_ALPHA_TEST, scissor_disp_region, NULL);
     return 2;
@@ -1287,7 +1287,7 @@ s32 scissor_offscreen(void) {
  * records whether anything was drawn, and gives the bounding box to the "ofs" off-screen used for the cut-out
  * image.
  */
-void scissor_disp_region(CameraId camera, void* param) {
+static void scissor_disp_region(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     GXTexObj texObj;
     Mtx mtx;
@@ -1339,7 +1339,7 @@ void scissor_disp_region(CameraId camera, void* param) {
 }
 
 /** Sets up the work: the 959-frame timer, the stroke point and triangle buffers, the star at the centre. */
-s32 scissor_init(void) {
+static s32 scissor_init(void) {
     ScissorWork* w = GetScissorPtr();
     memset(w, 0, sizeof(ScissorWork));
     w->timer = 959;
@@ -1353,7 +1353,7 @@ s32 scissor_init(void) {
 }
 
 /** Cleanup when the move ends: deletes the star effect and frees the capture and the two buffers. */
-s32 scissor_end(void) {
+static s32 scissor_end(void) {
     ScissorWork* w = GetScissorPtr();
     effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
     effDelete(w->star.eff);
@@ -1374,7 +1374,7 @@ static s32 star_stone_appear(void) {
 }
 
 /** Waits until the star has dropped into place as the drawing cursor. */
-s32 wait_star_standby(void) {
+static s32 wait_star_standby(void) {
     return GetScissorPtr()->star.state == 5 ? 2 : 0;
 }
 

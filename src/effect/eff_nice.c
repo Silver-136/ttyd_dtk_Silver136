@@ -96,7 +96,7 @@ s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; // includes nonexistent textu
 s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
 #endif
 
-void effNiceMain(EffectEntry* effect);
+static void effNiceMain(EffectEntry* effect);
 
 /**
  * Starts loading the rating-text animations for the current language into `group`;
@@ -202,11 +202,11 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-void effNiceDisp(CameraId cameraId, void* param);
-void acrobatMain(EffectEntry* effect);
+static void effNiceDisp(CameraId cameraId, void* param);
+static void acrobatMain(EffectEntry* effect);
 
 /** Per frame: advances the text's squash-and-stretch animation, fades it and deletes the effect when finished. */
-void effNiceMain(EffectEntry* effect) {
+static void effNiceMain(EffectEntry* effect) {
     NiceEffectWork* wp = effect->userdata;
     Vec pos;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -332,7 +332,7 @@ void effNiceMain(EffectEntry* effect) {
  * Draw callback: draws the rating text pose facing the camera, scaled by overallScale times 8
  * (US and later shrink some language/type pairs to 0.7 more).
  */
-void effNiceDisp(CameraId cameraId, void* param) {
+static void effNiceDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     NiceEffectWork* wp = effect->userdata;
     Mtx trans, rot, scale, mtx;
@@ -359,7 +359,7 @@ void effNiceDisp(CameraId cameraId, void* param) {
     animPoseDrawMtx(wp->poseId, mtx, 3, 0.0f, 1.0f);
 }
 
-void effAcrobatDisp(CameraId cameraId, void* param);
+static void effAcrobatDisp(CameraId cameraId, void* param);
 
 /**
  * Per-frame update for type 7 (called from effNiceMain):
@@ -367,7 +367,7 @@ void effAcrobatDisp(CameraId cameraId, void* param);
  * squashes, waits its turn, springs back to full size while spreading out, holds 16 frames,
  * then flattens wide and stretches tall and thin until it vanishes. Deletes when every letter is done.
  */
-void acrobatMain(EffectEntry* effect) {
+static void acrobatMain(EffectEntry* effect) {
     NiceEffectWork* wp = effect->userdata;
     int i;
     int done = 0;
@@ -473,7 +473,7 @@ void acrobatMain(EffectEntry* effect) {
  * the current language) at its offset and squash/stretch, with no depth test.
  * US and later skip letters whose texture id is -1.
  */
-void effAcrobatDisp(CameraId cameraId, void* param) {
+static void effAcrobatDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     NiceEffectWork* wp = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);

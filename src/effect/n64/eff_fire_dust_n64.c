@@ -74,8 +74,8 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, 8, 0, 4928, 704, 0, 0, 0, 255},
 };
 
-void effFireDustMain(EffectEntry* effect);
-void effFireDustDisp(CameraId cameraId, EffectEntry* effect);
+static void effFireDustMain(EffectEntry* effect);
+static void effFireDustDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
 /**
@@ -133,7 +133,7 @@ EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
  * Each particle runs a 20-step cycle: it respawns on the ring at a random angle and height, flies outward,
  * and eases toward half its speed while its scale follows scale_data. A delete request leaves 16 more frames, fading over the last 8.
  */
-void effFireDustMain(EffectEntry* effect) {
+static void effFireDustMain(EffectEntry* effect) {
     s32 height;
     EffFireDustWork* p;
     Vec position;
@@ -211,7 +211,7 @@ void effFireDustMain(EffectEntry* effect) {
  * Draws the particle set three times, turned 120 degrees apart around Y, with texture 0x20;
  * main_dl does the per-particle drawing under each camera matrix.
  */
-void effFireDustDisp(CameraId cameraId, EffectEntry* effect) {
+static void effFireDustDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFireDustWork* work;
     GXTexObj texObj;

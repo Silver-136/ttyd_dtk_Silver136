@@ -12,8 +12,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-void effMarioBalloonMain(EffectEntry* effect);
-void effMarioBalloonDisp(CameraId cameraId, void* payload);
+static void effMarioBalloonMain(EffectEntry* effect);
+static void effMarioBalloonDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a balloon over Mario (npc NULL) or over the given NPC;
@@ -45,7 +45,7 @@ EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc) {
 }
 
 /** Per frame: follows Mario or the NPC's position and registers the draw callback. */
-void effMarioBalloonMain(EffectEntry* effect) {
+static void effMarioBalloonMain(EffectEntry* effect) {
     MarioBalloonWork* work = effect->userdata;
     NpcEntry* npc;
     Vec pos;
@@ -73,7 +73,7 @@ void effMarioBalloonMain(EffectEntry* effect) {
  * Draws the balloon icon as textured quads (effect textures 15/14 for type 0, 17/16 for type 1): a blended
  * shadow, then the front face and a grey back face with alpha test.
  */
-void effMarioBalloonDisp(CameraId cameraId, void* payload) {
+static void effMarioBalloonDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     MarioBalloonWork* work = effect->userdata;
     Mtx mT, mR, mS, mTA, mN;

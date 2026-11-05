@@ -118,17 +118,17 @@ static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
 static USER_FUNC(start_game);
 USER_FUNC(wait_star_stone_take_on);
-void create_timing(void);
-void yuka_disp(CameraId cam, void* param);
-void yuka_capture(CameraId cam, void* param);
+static void create_timing(void);
+static void yuka_disp(CameraId cam, void* param);
+static void yuka_capture(CameraId cam, void* param);
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
-void main_enemy_sub(BattleUnit* unit, s32* n);
-void main_enemy(void);
+static void main_enemy_sub(BattleUnit* unit, s32* n);
+static void main_enemy(void);
 static void main_star(void);
-void main_timing(s32 idx);
-void main_gauge(void);
+static void main_timing(s32 idx);
+static void main_gauge(void);
 static void main_base(void);
 static void yuka_main(void);
 static void yuka_init(void);
@@ -494,7 +494,7 @@ static void main_base(void) {
 }
 
 /** Gauge display states: 30 frames to appear, then shown; after a miss it blinks for 80 frames, then slides off over 30 (as after the fifth round). */
-void main_gauge(void) {
+static void main_gauge(void) {
     DekaWork* w = get_ptr();
 
     switch (w->gaugeState) {
@@ -547,7 +547,7 @@ void main_gauge(void) {
  * Per-marker upkeep: clears the type of an unused marker, keeps a waiting one fully opaque,
  * and moves a hit marker to its settled state.
  */
-void main_timing(s32 idx) {
+static void main_timing(s32 idx) {
     DekaWork* w = get_ptr();
     DekaTiming* t = &w->timing[idx];
 
@@ -759,7 +759,7 @@ static void main_star(void) {
 }
 
 /** Moves every enemy-side unit with the floor ripple (main_enemy_sub) and records their ids, -1 for unused slots. */
-void main_enemy(void) {
+static void main_enemy(void) {
     BattleWork* bw = _battleWorkPointer;
     DekaWork* w = get_ptr();
     s32 n = 0;
@@ -783,7 +783,7 @@ void main_enemy(void) {
  * and spins by 20 degrees a frame. Ceiling units only react where the floor rises past 120.
  * Gravity 1.25; it lands back at its home height.
  */
-void main_enemy_sub(BattleUnit* unit, s32* n) {
+static void main_enemy_sub(BattleUnit* unit, s32* n) {
     DekaWork* w = get_ptr();
     YukaMesh* m = w->mesh->address;
     f32 x;
@@ -995,7 +995,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
  * Photographs the stage floor once: points the camera straight down at the floor's centre with a 25-degree view
  * framing its bounds, draws the map and copies the frame into the floor texture, then restores the camera.
  */
-void yuka_capture(CameraId cam, void* param) {
+static void yuka_capture(CameraId cam, void* param) {
     CameraEntry save;
     Vec c;
     DekaWork* w = get_ptr();
@@ -1260,7 +1260,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 static void yuka_disp(CameraId cam, void* param) {
 #else
-void yuka_disp(CameraId cam, void* param) {
+static void yuka_disp(CameraId cam, void* param) {
 #endif
     DekaWork* w;
     CameraEntry* camera;
@@ -1326,7 +1326,7 @@ static DekaWork* get_ptr(void) {
  * then places round + 3 stars at random spots at least 15.75 apart,
  * with the last one at the gauge's end and the first no later than 70.
  */
-void create_timing(void) {
+static void create_timing(void) {
     DekaWork* w = get_ptr();
     DekaTiming* ta;
     DekaTiming* t;

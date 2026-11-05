@@ -11,8 +11,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-void effMahojinMain(EffectEntry* effect);
-void effMahojinDisp(CameraId cameraId, void* payload);
+static void effMahojinMain(EffectEntry* effect);
+static void effMahojinDisp(CameraId cameraId, void* payload);
 
 s32 mahojin_rate;
 
@@ -130,7 +130,7 @@ EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
  * the star pieces, for type 7 fades in the purple tint once the last piece has played, and fades out and deletes
  * the effect on a delete request.
  */
-void effMahojinMain(EffectEntry* effect) {
+static void effMahojinMain(EffectEntry* effect) {
     EffMahojinWork* p;
     s32 i;
     EffMahojinWork* work = effect->userdata;
@@ -285,7 +285,7 @@ void effMahojinMain(EffectEntry* effect) {
  * Draws the magic circle's front poses, then its back poses, at the effect position, star pieces sorted by depth,
  * with fog off; in the second pass it also calls each piece's attached draw function (gor_01's star stones).
  */
-void effMahojinDisp(CameraId cameraId, void* payload) {
+static void effMahojinDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     Mtx mtx;
     f32 z[16];

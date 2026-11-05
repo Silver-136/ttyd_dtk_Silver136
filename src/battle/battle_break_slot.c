@@ -37,7 +37,7 @@ typedef struct {
     s32 v[5];
 } SlotCards5;
 
-void BattleBreakSlotDispReel(CameraId camId, void* param);
+static void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
 
 /** Card textures (small and big reels) by card number; the early demos' battle texture ids. */
@@ -859,7 +859,7 @@ void BattleBreakSlot_Disp(void) {
  * Draws the Bingo reels: the small card row while cards are being filled,
  * the big spinning reels during the BINGO! sequence.
  */
-void BattleBreakSlotDispReel(CameraId camId, void* param) {
+static void BattleBreakSlotDispReel(CameraId camId, void* param) {
     Mtx trans;
     Mtx scale;
     Mtx pivot;

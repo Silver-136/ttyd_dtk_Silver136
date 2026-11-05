@@ -9010,8 +9010,8 @@ BOOL init_f = 0;
 BOOL _psndPushGroup_trg = 0;
 
 // defined below; psndMain calls them first
-void psndBGMMain(void);
-void psndENVMain(void);
+static void psndBGMMain(void);
+static void psndENVMain(void);
 void psndSFXMain(void);
 
 // Angle of the vector (x2 - x1, y2 - y1) in degrees: 0 toward -y, 90 toward +x, 180 toward +y, 270 toward -x. The
@@ -9488,7 +9488,7 @@ void psndBGM_rate(s32 id, u16 rate) {
  * applies the master BGM volume (65% while the letterbox is shown and not disabled, unless the BGM is exempt via psndBGMScope),
  * and runs fade-in, fade-out, hold and dip/undip volume ramps for both channels.
  */
-void psndBGMMain(void) {
+static void psndBGMMain(void) {
     PaperSoundBGM* bgm;
     PaperSoundFade* fade;
     s32 i;
@@ -10788,7 +10788,7 @@ u8 psndSFX_get_vol(s32 id) {
 }
 
 /** Stops every environment sound entry belonging to environment id, switching off their effects. */
-void psndENV_stop(u32 id) {
+static void psndENV_stop(u32 id) {
     s32 i;
     PaperSoundEnv* e;
 
@@ -10969,7 +10969,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
 #if VERSION <= VERSION_DEMO_JP
 static void psndENVMain(void) {
 #else
-void psndENVMain(void) {
+static void psndENVMain(void) {
 #endif
     s32 i;
     PaperSoundEnv* e;

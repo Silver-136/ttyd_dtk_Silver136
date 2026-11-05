@@ -97,7 +97,7 @@ void effKemuTestDrawCam(EffectEntry* effect, s32 camera) {
 
 #pragma opt_loop_invariants off
 /** Draws the smoke pieces (texture 0x28) with three TEV stages; billboarded unless type 11. */
-void effKemuTestDisp(CameraId cameraId, void* param) {
+static void effKemuTestDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     Mtx trans;
     Mtx scl;

@@ -3,10 +3,10 @@
 #include "battle/battle_actrecord.h"
 #include "battle/battle.h"
 
-s32 _check_turn_count_0_end(s32 n);
-s32 _check_turn_count_0_turn(s32 n);
-s32 _check_use(s32 n);
-s32 _check_no_use(s32 n);
+static s32 _check_turn_count_0_end(s32 n);
+static s32 _check_turn_count_0_turn(s32 n);
+static s32 _check_use(s32 n);
+static s32 _check_no_use(s32 n);
 
 /** Increments one battle action-record counter (moves used, items used, ...), capped at 100. */
 void BtlActRec_AddCount(u8* count) {
@@ -325,7 +325,7 @@ void BtlActRec_JudgeRuleKeep(void) {
  * Judges a "do it at least ruleParam times" condition:
  * 6 when count n reached ruleParam, otherwise 2 if it reached ruleParam2, else 1.
  */
-s32 _check_use(s32 n) {
+static s32 _check_use(s32 n) {
     FieldBattleInfo* rec = _battleWorkPointer->fbatInfo;
     if (n >= rec->ruleParam) {
         return 6;
@@ -337,7 +337,7 @@ s32 _check_use(s32 n) {
  * Judges a "do it fewer than N times" condition:
  * 1 when count n reached ruleParam2, 2 when it reached ruleParam, else 6 (kept).
  */
-s32 _check_no_use(s32 n) {
+static s32 _check_no_use(s32 n) {
     FieldBattleInfo* rec = _battleWorkPointer->fbatInfo;
     if (n >= rec->ruleParam2) {
         return 1;
@@ -350,7 +350,7 @@ s32 _check_no_use(s32 n) {
  * kept (6) while still inside ruleParam turns with n == 0; 0xFF in a turn limit means no limit.
  * Stores and returns fbatInfo->ruleKeepResult.
  */
-s32 _check_turn_count_0_turn(s32 n) {
+static s32 _check_turn_count_0_turn(s32 n) {
     BattleWork* wp = _battleWorkPointer;
     FieldBattleInfo* rec = wp->fbatInfo;
     BattleActRecord* ar = &wp->actRecord;
@@ -372,7 +372,7 @@ s32 _check_turn_count_0_turn(s32 n) {
 }
 
 /** Same check as _check_turn_count_0_turn, used for the end-of-battle judgement. */
-s32 _check_turn_count_0_end(s32 n) {
+static s32 _check_turn_count_0_end(s32 n) {
     BattleWork* wp = _battleWorkPointer;
     FieldBattleInfo* rec = wp->fbatInfo;
     BattleActRecord* ar = &wp->actRecord;

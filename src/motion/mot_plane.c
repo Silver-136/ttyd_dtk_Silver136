@@ -24,7 +24,7 @@
 #include "driver/animdrv.h"
 #include "mot/mot_jump.h"
 
-BOOL chkCollision(f32* outY);
+static BOOL chkCollision(f32* outY);
 static void flyMain(void);
 
 
@@ -878,7 +878,7 @@ static f32 planeDead270(void) {
 #if VERSION <= VERSION_DEMO_JP
 static BOOL chkCollision(f32* outY) {
 #else
-BOOL chkCollision(f32* outY) {
+static BOOL chkCollision(f32* outY) {
 #endif
     Vec dir, hpos, v, v2;
     f32 s1, c1, s0, c0, s2, c2;

@@ -25,7 +25,7 @@ s8 Nrm[3] ATTRIBUTE_ALIGN(32) = { 0, 0, 127 };
 u8 Col[4] ATTRIBUTE_ALIGN(32) = { 0xFF, 0xFF, 0xFF, 0xFF };
 
 
-void vivihimoDisp(CameraId camId, HimoWork* w);
+static void vivihimoDisp(CameraId camId, HimoWork* w);
 
 /**
  * Draws the ribbon (himo) of a Vivian-flagged model part between matrices a and b:
@@ -120,7 +120,7 @@ static inline void himoMtx(HimoWork* w, Mtx out, f32 t, Vec* p) {
  * Draws the ribbon as 15 quads along the spline in camera camId, tapering the width along a tangent curve;
  * uses two position matrix slots so each quad joins the previous one.
  */
-void vivihimoDisp(CameraId camId, HimoWork* w) {
+static void vivihimoDisp(CameraId camId, HimoWork* w) {
     CameraEntry* cam;
     Vec* pts;
     f32* t1;

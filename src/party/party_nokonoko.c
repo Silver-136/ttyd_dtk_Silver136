@@ -32,11 +32,11 @@ static s32 nokoSe;
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
-HitEntry* ccwall(PartyEntry* party, s32 mode);
-void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
-void lookupSafetyPos3(Vec pos, f32 height, Vec* out);
-void lookupSafetyPos2(Vec pos, f32 height, Vec* out);
-u32 lookupSafetyPos(Vec pos, f32 height, Vec* out);
+static HitEntry* ccwall(PartyEntry* party, s32 mode);
+static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
+static void lookupSafetyPos3(Vec pos, f32 height, Vec* out);
+static void lookupSafetyPos2(Vec pos, f32 height, Vec* out);
+static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out);
 
 /**
  * Where Koops is in his Shell Toss, from his use-motion state:
@@ -963,7 +963,7 @@ void nokotaro_hold_cancel(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static HitEntry* ccwall(PartyEntry* party, s32 mode) {
 #else
-HitEntry* ccwall(PartyEntry* party, s32 mode) {
+static HitEntry* ccwall(PartyEntry* party, s32 mode) {
 #endif
     f32 s;
     f32 c;
@@ -1133,7 +1133,7 @@ void nokoStrippedPool(f32* p) {
  * and returns the bit mask of probes that found floor (1 behind, 2 and 4 the sides, 8 front),
  * with *out set to the best spot or pos itself.
  */
-u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
+static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     Vec p[4];
     f32 dist;
     f32 hx;
@@ -1274,7 +1274,7 @@ static inline f32 nokoSin(f32 rad) { return (f32)sin(rad); }
  * the first of Mario's collision width toward +x, toward -x, pos itself, then toward -z that has floor under it,
  * else pos.
  */
-void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
+static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     f32 rad;
     f32 dx;
     f32 dz;
@@ -1354,7 +1354,7 @@ void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
  * Landing spot used when only the front probe of lookupSafetyPos found floor:
  * tries Mario's collision width toward +x, then toward -x of pos, else pos.
  */
-void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
+static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     f32 y;
     f32 rad;
     f32 dx;
@@ -1409,7 +1409,7 @@ void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
  * Returns the point Mario's collision width away from pos in the given direction (degrees), raised by height,
  * if there is floor under it, else pos; nokonoko_use picks the direction from the lookupSafetyPos probe mask.
  */
-void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
+static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     f32 rad;
     f32 x;
     f32 y;

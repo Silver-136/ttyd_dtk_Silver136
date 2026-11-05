@@ -42,7 +42,7 @@ typedef struct ShotTargetWork {
 
 static void _ac_disp_init(BattleWork* work);
 static void actionCommandDisp(f32 x, f32 y);
-void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp);
+static void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp);
 
 /**
  * Per-frame driver of action command 8, used by Flurrie's Body Slam.
@@ -198,7 +198,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
  * Picks the next random drift for one axis of the cursor:
  * a 120-239 frame half-sine push of 15 units either way, scaled by difficulty from x0.25 to x3.
  */
-void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp) {
+static void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp) {
     *period = irand(120) + 120;
     *count = *period - 1;
     *amp = 25.0f;

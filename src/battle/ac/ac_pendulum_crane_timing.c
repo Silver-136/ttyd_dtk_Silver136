@@ -53,8 +53,8 @@ typedef struct PendulumWork {
  */
 u16 _hp_tbl[] = {20, 2, 35, 4, 45, 6, 55, 8, 65, 6, 80, 4, 100, 2};
 
-s32 _get_angle_hp(s32 hp);
-s32 _get_angle_rate(f32 angle);
+static s32 _get_angle_hp(s32 hp);
+static s32 _get_angle_rate(f32 angle);
 
 /**
  * Per-frame driver of action command 12, used by Koops's Shell Shield.
@@ -326,7 +326,7 @@ static void actionCommandDisp(f32 x, f32 y) {
 }
 
 /** Maps a swing angle of -45..45 degrees to a gauge position of 0..100. */
-s32 _get_angle_rate(f32 angle) {
+static s32 _get_angle_rate(f32 angle) {
     s32 r;
     f32 a;
     angle = compAngle(0.0f, angle);
@@ -344,7 +344,7 @@ s32 _get_angle_rate(f32 angle) {
 }
 
 /** Looks up the Shell Shield HP for a gauge position in _hp_tbl: 2 at the ends rising to 8 between 45 and 55. */
-s32 _get_angle_hp(s32 hp) {
+static s32 _get_angle_hp(s32 hp) {
     u16* p = _hp_tbl;
     while (hp > p[0]) {
         p += 2;

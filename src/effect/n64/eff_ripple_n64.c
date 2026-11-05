@@ -33,7 +33,7 @@ void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
  * which gives the alpha; N64 texture 0x22 is loaded into map 1 with a matrix scrolling by `offset`, but the
  * single TEV stage reads only map 0. Types 1, 3, 10 and 30 are black, the rest white.
  */
-void effRippleDisp(CameraId cameraId, void* payload) {
+static void effRippleDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     s32 type;
@@ -103,7 +103,7 @@ void effRippleDisp(CameraId cameraId, void* payload) {
  * Types 1-3 spawn a second ring (type x10) at the same spot and tilt 15 frames before they end.
  * Deletes when the lifetime runs out; drawn on the work's camera, layer 2.
  */
-void effRippleMain(EffectEntry* effect) {
+static void effRippleMain(EffectEntry* effect) {
     EffRippleN64Work* work;
     EffectEntry* e;
     EffRippleN64Work* w;

@@ -40,8 +40,8 @@ typedef struct EffKemuri8N64Work {
     s32 camId;      // 0x58
 } EffKemuri8N64Work;
 
-void effKemuri8Main(EffectEntry* effect);
-void effKemuri8Disp(CameraId cameraId, void* param);
+static void effKemuri8Main(EffectEntry* effect);
+static void effKemuri8Disp(CameraId cameraId, void* param);
 
 /** Sets the camera the smoke is drawn with (the entry defaults to CAMERA_3D). */
 void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
@@ -137,7 +137,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
 
 #pragma opt_propagation reset
 /** Steps the shared 16-frame texture animation over 17 frames and flies each puff outward; deletes at the end. */
-void effKemuri8Main(EffectEntry* effect) {
+static void effKemuri8Main(EffectEntry* effect) {
     EffKemuri8N64Work* work = effect->userdata;
     s32 i;
     s32 cur;
@@ -181,7 +181,7 @@ void effKemuri8Main(EffectEntry* effect) {
  * Draws each puff twice as a billboarded quad (texture 0x28): a dark offset shadow, then the puff.
  * Hot puffs shift from white through yellow to red as their counter grows.
  */
-void effKemuri8Disp(CameraId cameraId, void* param) {
+static void effKemuri8Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri8N64Work* work;

@@ -45,8 +45,8 @@ typedef struct EffDogabonAttackN64Work {
     s32 timer[PIECES];  // 0x734
 } EffDogabonAttackN64Work;
 
-void effDogabonAttackMain(EffectEntry* effect);
-void effDogabonAttackDisp(CameraId cameraId, void* param);
+static void effDogabonAttackMain(EffectEntry* effect);
+static void effDogabonAttackDisp(CameraId cameraId, void* param);
 
 /** Piece height (in percent) of a squash-and-stretch wobble that repeats every 7 frames (width = 200 minus this). */
 static u8 scale_data[7] = {94, 92, 100, 105, 107, 105, 100};
@@ -130,7 +130,7 @@ EffectEntry* effDogabonAttackN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     return effect;
 }
 
-void effDogabonAttackMain(EffectEntry* effect) {
+static void effDogabonAttackMain(EffectEntry* effect) {
     EffDogabonAttackN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -312,7 +312,7 @@ void effDogabonAttackMain(EffectEntry* effect) {
 }
 
 /** Draws the 25 pieces with texture 140, scaled by each piece's scaleX/scaleY. */
-void effDogabonAttackDisp(CameraId cameraId, void* param) {
+static void effDogabonAttackDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffDogabonAttackN64Work* work;

@@ -25,8 +25,8 @@ typedef struct EffOpukuWcurtainN64Work {
     f32 speed[12];  // 0x5C
 } EffOpukuWcurtainN64Work;
 
-void effOpukuWcurtainMain(EffectEntry* effect);
-void effOpukuWcurtainDisp(CameraId cameraId, void* param);
+static void effOpukuWcurtainMain(EffectEntry* effect);
+static void effOpukuWcurtainDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a water curtain at (x, y, z) scaled by scale, lasting lifetime frames (<= 0 means until deleted):
@@ -71,7 +71,7 @@ EffectEntry* effOpukuWcurtainN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
  * Fades the curtain in and out and accelerates each strip downward (speed gains -0.05 per frame; the easing
  * toward 5 above a speed of 5 never applies, as the speed only falls).
  */
-void effOpukuWcurtainMain(EffectEntry* effect) {
+static void effOpukuWcurtainMain(EffectEntry* effect) {
     EffOpukuWcurtainN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -114,7 +114,7 @@ void effOpukuWcurtainMain(EffectEntry* effect) {
  * Builds twelve vertical vertex columns (texture 0x8F, alpha dropping 20 per column),
  * scales and positions them in world space, and draws them as a row of 11 quads.
  */
-void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
+static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffOpukuWcurtainN64Work* work;

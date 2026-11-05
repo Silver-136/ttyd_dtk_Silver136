@@ -98,8 +98,8 @@ static inline f32 pt_frand(void) {
     return (f32)(u32)seed * 2.3283064e-10f;
 }
 
-void effParticleDisp(CameraId cameraId, void* payload);
-void effParticleMain(EffectEntry* effect);
+static void effParticleDisp(CameraId cameraId, void* payload);
+static void effParticleMain(EffectEntry* effect);
 
 /** Gaussian-distributed random number (polar Box-Muller), caching the second value for the next call. */
 static inline f32 pt_gauss(void) {
@@ -131,7 +131,7 @@ void particleStrippedPool(f32* f, s32 i) {
 }
 
 /** Initialises one particle from the emitter: random direction in a cone around the emitter axis at work->speed, Gaussian life. */
-void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* emitter) {
+static void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* emitter) {
     ParticleWork* work = effect->userdata;
     f32 w;
     f32 r;
@@ -155,7 +155,7 @@ void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* emitter
 }
 
 /** Spawns the next batch of particles for an emitter. */
-void EmitterEmit(EffectEntry* effect, ParticleEmitter* emitter) {
+static void EmitterEmit(EffectEntry* effect, ParticleEmitter* emitter) {
     ParticleWork* work = effect->userdata;
     u32 prev, n;
     s32 idx;
@@ -253,7 +253,7 @@ EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32
 }
 
 /** Per frame: emits new particles, moves and ages the live ones and deletes the effect when its life runs out. */
-void effParticleMain(EffectEntry* effect) {
+static void effParticleMain(EffectEntry* effect) {
     ParticleWork* work = effect->userdata;
     Vec zero = {0.0f, 0.0f, 0.0f};
     Vec pos;
@@ -307,7 +307,7 @@ void effParticleMain(EffectEntry* effect) {
 }
 
 /** Draws every live particle as a camera-facing textured quad (effect texture 0x61). */
-void effParticleDisp(CameraId cameraId, void* payload) {
+static void effParticleDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     ParticleWork* work = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);

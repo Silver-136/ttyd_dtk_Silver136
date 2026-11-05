@@ -160,9 +160,9 @@ AIDCallback OldAIDCallback;
 BOOL Initialized;
 
 // Forward Declarations
-void __THPSimpleDVDCallback(s32 result, DVDFileInfo* fileInfo);
+static void __THPSimpleDVDCallback(s32 result, DVDFileInfo* fileInfo);
 BOOL VideoDecode(u8* videoFrame);
-void THPAudioMixCallback(void);
+static void THPAudioMixCallback(void);
 void THPGXRestore(void);
 void THPGXYuv2RgbSetup(GXRenderModeObj* rmode);
 void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 textureWidth, s16 textureHeight,
@@ -427,7 +427,7 @@ void ReadFrameAsync(void) {
  * takes the next frame's size from the frame header,
  * advances the ring and chains the next read if that buffer is free. Flags a fatal DVD error.
  */
-void __THPSimpleDVDCallback(s32 result, DVDFileInfo* fileInfo) {
+static void __THPSimpleDVDCallback(s32 result, DVDFileInfo* fileInfo) {
     if (result == DVD_RESULT_FATAL_ERROR) {
         SimpleControl.dvdError = TRUE;
     } else if (result != DVD_RESULT_CANCELED) {
@@ -658,7 +658,7 @@ s32 THPSimpleDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW
  * added to source (the sound library's output) with clamping;
  * silence or source alone when no movie audio is ready.
  */
-void MixAudio(s16* destination, s16* source, u32 sample) {
+static void MixAudio(s16* destination, s16* source, u32 sample) {
     u32 sampleNum, requestSample, i;
     s32 mix;
     s16 *dst, *libsrc, *thpsrc;
@@ -848,7 +848,7 @@ u32 THPSimpleGetTotalFrame(void) {
  * after running the previous callback so the sound library's output is mixed in (audioSystem 1 lags it one
  * buffer).
  */
-void THPAudioMixCallback(void) {
+static void THPAudioMixCallback(void) {
     BOOL old;
 
     if (AudioSystem == 0) {

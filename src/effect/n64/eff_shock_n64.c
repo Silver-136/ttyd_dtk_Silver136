@@ -117,8 +117,8 @@ effN64Vtx testsrc_shock_v[] = {
     {-178, -103, 0, 453, -330, 0xFF, 0xFF, 0xFF, 0xFF},
 };
 
-void effShockMain(EffectEntry* effect);
-void effShockDisp(CameraId cameraId, void* param);
+static void effShockMain(EffectEntry* effect);
+static void effShockDisp(CameraId cameraId, void* param);
 
 EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
@@ -175,7 +175,7 @@ EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
  * the type-1 yellow layer fades 10% per frame and the main alpha fades 20% per frame over the last 5 frames.
  * Deletes when the life runs out. CAMERA_3D, layer 2.
  */
-void effShockMain(EffectEntry* effect) {
+static void effShockMain(EffectEntry* effect) {
     EffShockN64Work* w = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -223,7 +223,7 @@ void effShockMain(EffectEntry* effect) {
  * an outer ring textured with 0x85 (yellow and fading for type 1) and an untextured inner pass,
  * both in the work's two colours. Type 0 and types above 3 draw nothing.
  */
-void effShockDisp(CameraId cameraId, void* param) {
+static void effShockDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffShockN64Work* w;

@@ -145,8 +145,8 @@ effN64Vtx size6x22_tex32x32_vtx[] = {
 static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
 #endif
 
-void effOpukuJetwMain(EffectEntry* effect);
-void effOpukuJetwDisp(CameraId cameraId, void* payload);
+static void effOpukuJetwMain(EffectEntry* effect);
+static void effOpukuJetwDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a spray of blobs at (x, y, z) scaled by scale, lasting lifetime frames (<= 0 until deleted).
@@ -192,7 +192,7 @@ EffectEntry* effOpukuJetwN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
  * Fades the spray in over the first 8 frames and counts down its lifetime;
  * a delete request starts a 16-frame wind-down.
  */
-void effOpukuJetwMain(EffectEntry* effect) {
+static void effOpukuJetwMain(EffectEntry* effect) {
     EffOpukuJetwN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -223,7 +223,7 @@ void effOpukuJetwMain(EffectEntry* effect) {
  * Draws a central blob, then three streams of 16x16 sprites (texture 0x34) whose positions, sizes,
  * rotations and alphas come from step tables and advance with the frame.
  */
-void effOpukuJetwDisp(CameraId cameraId, void* payload) {
+static void effOpukuJetwDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     Mtx mtx;
     Mtx scale;

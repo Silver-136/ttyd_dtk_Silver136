@@ -38,8 +38,8 @@ static effN64Vtx size16x32_tex16x32_vtx[] = {
     {-8, 32, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-void effOnpuMain(EffectEntry* effect);
-void effOnpuDisp(CameraId cameraId, void* payload);
+static void effOnpuMain(EffectEntry* effect);
+static void effOnpuDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns one music note at (x, y, z) living 64 frames.
@@ -89,7 +89,7 @@ EffectEntry* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Grows and fades the note in, moves it by its easing velocity, and fades it out over the last 10 frames. */
-void effOnpuMain(EffectEntry* effect) {
+static void effOnpuMain(EffectEntry* effect) {
     EffOnpuN64Work* work = effect->userdata;
     s32 lifetime;
     Vec position;
@@ -124,7 +124,7 @@ void effOnpuMain(EffectEntry* effect) {
  * Draws the note as a camera-facing 16x32 quad using two note textures (0x28, 0x29), both showing the note cell
  * picked at spawn (texOfs, one of seven), with the color cycling.
  */
-void effOnpuDisp(CameraId cameraId, void* payload) {
+static void effOnpuDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffOnpuN64Work* work;

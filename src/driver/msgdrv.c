@@ -43,12 +43,12 @@ const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 // MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
 // A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
-void msgWindow_Disp(CameraId camId, void* param);
+static void msgWindow_Disp(CameraId camId, void* param);
 void msgWindow_Main(WindowEntry* window);
 void msgWindow_Clear_Main(WindowEntry* window);
-void msgWindow_Delete(WindowEntry* window);
-void selectWindow_Main(WindowEntry* window);
-void selectWindow_Disp(CameraId camId, void* param);
+static void msgWindow_Delete(WindowEntry* window);
+static void selectWindow_Main(WindowEntry* window);
+static void selectWindow_Disp(CameraId camId, void* param);
 
 
 typedef struct MsgLookupEntry {
@@ -136,8 +136,8 @@ s32 msgWindowOpen_SE_Data[] = {
     0x24, 0x25, 0x26, 0x27, 0x1E, 0x1F, -1, -1
 };
 #endif
-int msg_compare(const void* a, const void* b);
-void msgDispKeyWait_render(s32 wXluStage);
+static int msg_compare(const void* a, const void* b);
+static void msgDispKeyWait_render(s32 wXluStage);
 
 /**
  * Sets up the message system at boot: the blinking star (hoshi_2) pose drawn at key waits
@@ -777,7 +777,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
  * GX set-up hook for the key-wait star pose: draws it on top of everything (Z always passes, no blending, alpha
  * test).
  */
-void msgDispKeyWait_render(s32 wXluStage) {
+static void msgDispKeyWait_render(s32 wXluStage) {
     AnimationWork* wp = animGetPtr();
 
     GXSetZMode(GX_TRUE, GX_ALWAYS, GX_FALSE);
@@ -1723,7 +1723,7 @@ MessageWork* msgGetWork(void) {
 }
 
 /** qsort comparator for the message lookup table: orders entries by tag string, so msgSearch can binary-search. */
-int msg_compare(const void* a, const void* b) {
+static int msg_compare(const void* a, const void* b) {
     s32 result = strcmp((char*)msgSortDvdData + *(u32*)a, (char*)msgSortDvdData + *(u32*)b);
     if (result > 0) {
         return 1;
@@ -1943,7 +1943,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
 
 #pragma optimize_for_size on
 /** Window delete callback: frees the message window's parsed text. */
-void msgWindow_Delete(WindowEntry* window) {
+static void msgWindow_Delete(WindowEntry* window) {
     MsgWinData* data;
     s32 i;
 
@@ -2312,7 +2312,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
 #if VERSION <= VERSION_DEMO_JP
 static void msgWindow_Disp(CameraId camId, void* param) {
 #else
-void msgWindow_Disp(CameraId camId, void* param) {
+static void msgWindow_Disp(CameraId camId, void* param) {
 #endif
     CameraEntry* camera = camGetCurPtr();
     BOOL ret = FALSE;
@@ -2427,7 +2427,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
  * fades in, moves the choice with the stick or D-pad (wrapping), confirms with A,
  * and on B cancels to the option given by the markup (or -1) unless cancelling is off; then fades out.
  */
-void selectWindow_Main(WindowEntry* window) {
+static void selectWindow_Main(WindowEntry* window) {
     MsgWinData* data = window->userdata->address;
     s8 prev;
 
@@ -2506,7 +2506,7 @@ void selectWindow_Main(WindowEntry* window) {
  * Draw callback for a selection list: the white frame, the options,
  * and the pointing-hand cursor gliding to the selected line.
  */
-void selectWindow_Disp(CameraId camId, void* param) {
+static void selectWindow_Disp(CameraId camId, void* param) {
     WindowEntry* window = param;
     MsgWinData* data = window->userdata->address;
     Vec pos;

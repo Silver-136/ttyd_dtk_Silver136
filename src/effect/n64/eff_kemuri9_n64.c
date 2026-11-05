@@ -51,8 +51,8 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
 };
 #endif
 
-void effKemuri9Main(EffectEntry* effect);
-void effKemuri9Disp(CameraId cameraId, EffectEntry* effect);
+static void effKemuri9Main(EffectEntry* effect);
+static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect);
 
 /**
  * Spawns a ring of count smoke puffs around (x, y, z), starting at the angle,
@@ -115,7 +115,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
 #if VERSION <= VERSION_DEMO_JP
 static void effKemuri9Main(EffectEntry* effect) {
 #else
-void effKemuri9Main(EffectEntry* effect) {
+static void effKemuri9Main(EffectEntry* effect) {
 #endif
 
     EffKemuri9N64Work* work = effect->userdata;
@@ -177,7 +177,7 @@ static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     s32 u;
     s32 blend;
 #else
-void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
+static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;

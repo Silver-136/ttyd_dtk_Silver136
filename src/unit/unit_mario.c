@@ -340,7 +340,7 @@ EVT_BEGIN(mario_ride_btl_entry_event)
     RETURN
 EVT_END()
 
-s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
+static s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 
 #if VERSION <= VERSION_DEMO_JP
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -393,7 +393,7 @@ USER_FUNC(_get_local_frame) {
  * Pose sound callback for the low-HP pant pose M_S_3:
  * plays Mario's relief voice, alternating between the two clips by counting in unit work 8.
  */
-s32 mario_pinch_pose_sound_callback(BattleUnit* unit) {
+static s32 mario_pinch_pose_sound_callback(BattleUnit* unit) {
     s32 ret;
 
     if (unit->work[MARIO_WORK_PINCH_VOICE] & 1) {

@@ -33,7 +33,7 @@
 #include "battle/unit_work.h"
 
 
-s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
+static s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 
 
 /**
@@ -323,7 +323,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     BattleRunHitEvent(target, result);
 }
 
-u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
+static u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
     BattleWork* wp = _battleWorkPointer;
     s32 table[5] = {0};
     s32 count = 0;
@@ -640,7 +640,7 @@ skip:
  * Computes the FP damage weapon deals (its fpDamageFn), reduced by one when guarded;
  * zero for heals, immune parts and an All or Nothing miss.
  */
-s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* resultFlags, u32 flags) {
+static s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* resultFlags, u32 flags) {
     BattleWork* wp = _battleWorkPointer;
     s32 damage = 0;
     s32 reduce = 0;
@@ -682,7 +682,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
  * Returns weapon's base chance (percent) of inflicting status type (1 sleep, 2 stop, 3 dizzy, 4 poison,
  * 5 confuse, 6 electric, 7 dodgy, 8 burn, 9 freeze, ... in the order of BattleSetStatusDamageFromWeapon).
  */
-s32 _getSickStatusRate(BattleWeapon* weapon, s32 type) {
+static s32 _getSickStatusRate(BattleWeapon* weapon, s32 type) {
     switch (type) {
         case STATUS_SLEEP: return weapon->sleepChance;
         case STATUS_STOP: return weapon->stopChance;
@@ -750,7 +750,7 @@ s32 _getSickStatusRate(BattleWeapon* weapon, s32 type) {
  * Each extra copy of the badge move equipped adds 2 turns (Shrink Stomp, Sleepy Stomp, Soft Stomp, Head Rattle,
  * Ice Smash), extra unused Defend badges add strength, and extra Charge badges raise the charge.
  */
-void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength) {
+static void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength) {
     s32 time;
     s32 strength;
     s32 badge;
@@ -949,7 +949,7 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
 }
 
 /** Returns unit's resistance rate (percent of the base chance that still lands) against status type. */
-u8 _getRegistStatus(BattleUnit* unit, s32 type) {
+static u8 _getRegistStatus(BattleUnit* unit, s32 type) {
     BattleVulnerableStatus* v = unit->vulnStatus;
     switch (type) {
         case STATUS_SLEEP: return v->sleepRate;
@@ -1587,7 +1587,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     return 1;
 }
 
-s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
+static s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     s32 kind = unit->currentKind;
     if (kind == UNIT_MARIO) {
         if (pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
@@ -1922,7 +1922,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
  * Finds the bodyguard covering unitIdx (as BattleAttackDeclare) and returns it in outUnit/outPart,
  * -1 when there is none, starting the same guard events.
  */
-void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
+static void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
     s32 i;
     BattleUnit* unit;
     BattleUnitPart* part;

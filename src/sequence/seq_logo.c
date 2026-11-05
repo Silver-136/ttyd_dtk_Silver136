@@ -45,9 +45,9 @@ static s32 logoTexTbl[6][2] = {{24, 25}, {24, 25}, {26, 27}, {28, 29}, {30, 31},
 #define OSIsRestart() ((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)
 
 //local prototypes
-void logoDisp(CameraId camId, void* param);
-void dummy_draw(CameraId camId, void* param);
-void progDisp(CameraId camId, void* param);
+static void logoDisp(CameraId camId, void* param);
+static void dummy_draw(CameraId camId, void* param);
+static void progDisp(CameraId camId, void* param);
 
 
 #if VERSION < VERSION_US
@@ -537,7 +537,7 @@ void seq_logoMain(SequenceWork* work) {
 }
 
 
-void logoDisp(CameraId camId, void* param) {
+static void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;
     // stack variables
@@ -849,7 +849,7 @@ static s32 logoAsyncFirst(void) {
  * sets the display copy and a 608x480 viewport and scissor for the interlaced
  * or progressive (PAL: 50 or 60 Hz) render mode.
  */
-void dummy_draw(CameraId camId, void* param) {
+static void dummy_draw(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 scale;
     u16 height;
@@ -900,10 +900,10 @@ void dummy_draw(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_JP
 static void progDisp(CameraId camId, void* param) {
 #else
-void progDisp(CameraId camId, void* param) {
+static void progDisp(CameraId camId, void* param) {
 #endif
 #else
-void progDisp(CameraId camId, void* param) {
+static void progDisp(CameraId camId, void* param) {
 #endif
     static OSTime time;
     const char* msg;

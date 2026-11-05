@@ -40,8 +40,8 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
     {-3200, 6400, 0, 0, 2048, 0, 0, 0, 0xFF},
 };
 
-void effMagicHoraoMain(EffectEntry* effect);
-void effMagicHoraoDisp(CameraId cameraId, void* payload);
+static void effMagicHoraoMain(EffectEntry* effect);
+static void effMagicHoraoDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a "Horao" battle magic sprite at (x, y, z):
@@ -81,7 +81,7 @@ EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 startSize,
 }
 
 /** Runs a six-state sequence: ease in, hold, wait, fall to the ground (kicking up two dust puffs), wait, fade out. */
-void effMagicHoraoMain(EffectEntry* effect) {
+static void effMagicHoraoMain(EffectEntry* effect) {
     EffMagicHoraoN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -152,7 +152,7 @@ void effMagicHoraoMain(EffectEntry* effect) {
  * In the hold state (1) draws two flat quads (texture 0x56, then 0x57 fading in); in every other state draws a
  * wobbling ribbon of 15 strips (texture 0x56 while easing in, 0x57 from state 2 on).
  */
-void effMagicHoraoDisp(CameraId cameraId, void* payload) {
+static void effMagicHoraoDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     effN64Vtx* vtx;
     effN64Vtx* v;

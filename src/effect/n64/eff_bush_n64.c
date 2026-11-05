@@ -38,8 +38,8 @@ static effN64Vtx size12x12_tex64x64_vtx[] = {
     {-6, 6, 0, 0, 4096, 0x30, 0x6C, 0x25, 0xFF},
 };
 
-void effBushMain(EffectEntry* effect);
-void effBushDisp(CameraId cameraId, void* param);
+static void effBushMain(EffectEntry* effect);
+static void effBushDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns four leaves at random offsets around (x, y, z).
@@ -84,7 +84,7 @@ EffectEntry* effBushN64Entry(s32 type, f32 x, f32 y, f32 z) {
  * Each leaf drifts with gravity, a sine-driven sideways push and a random spin;
  * fades in over 10 frames and out at the end of its 100.
  */
-void effBushMain(EffectEntry* effect) {
+static void effBushMain(EffectEntry* effect) {
     EffBushN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -151,7 +151,7 @@ void effBushMain(EffectEntry* effect) {
 }
 
 /** Draws each leaf as a two-sided quad tilted around Z and Y, with the leaf texture. */
-void effBushDisp(CameraId cameraId, void* param) {
+static void effBushDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffBushN64Work* work;

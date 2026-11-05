@@ -79,10 +79,10 @@ static WindowWork* wp;
 #include "data/party_data.h"
 #include "manager/evtmgr_cmd.h"
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
-void winLectureKeyMask(void);
+static void winLectureKeyMask(void);
 void iconGetTexObj(GXTexObj* obj, u16 iconId);
 void winDisp(CameraId camId, void* param);
-void winDispKoopa(CameraId camId, void* param);
+static void winDispKoopa(CameraId camId, void* param);
 
 
 /** Returns the pause menu's work area (shared by every menu tab). */
@@ -514,7 +514,7 @@ void winDisp(CameraId camId, void* param) {
 }
 
 /** 2D draw callback used while playing as Bowser: his pause screen is just one texture (0xB7) from win.tpl. */
-void winDispKoopa(CameraId camId, void* param) {
+static void winDispKoopa(CameraId camId, void* param) {
     winTexInit(*wp->res->data);
     winTexSet(0xB7, (Vec){ 0.0f, 50.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 }
@@ -1707,7 +1707,7 @@ USER_FUNC(lecture_key_mask_off) {
  * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
  * through while WINDOW_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
  */
-void winLectureKeyMask(void) {
+static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
         if (wp->flags & WINDOW_FLAG_LECTURE_KEY_MASK) {
             wp->buttonTrg = 0;

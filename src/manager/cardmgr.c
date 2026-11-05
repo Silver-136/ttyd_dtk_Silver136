@@ -83,11 +83,11 @@ static void memcard_get_serial(void);
 void memcard_open(void);
 static void memcard_close(void);
 
-void write_main(void);
-void write_header_main(void);
+static void write_main(void);
+static void write_header_main(void);
 void read_main(void);
-void read_all_main(void);
-void create_main(void);
+static void read_all_main(void);
+static void create_main(void);
 static void format_main(void);
 static void delete_main(void);
 
@@ -546,7 +546,7 @@ static void memcard_probe(void) {
  * and writes the new data to the other copy first and then over the valid one, so a power cut never loses both.
  * Ends by closing the file and unmounting.
  */
-void write_main(void) {
+static void write_main(void) {
     if (wp->result) {
         wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
@@ -649,7 +649,7 @@ void cardWriteHeader(void) {
 }
 
 /** Step machine for cardWriteHeader: mount, check, open, write the header block, close, unmount. */
-void write_header_main(void) {
+static void write_header_main(void) {
     if (wp->result) {
         wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
@@ -798,7 +798,7 @@ void cardReadAll(void) {
     }
 }
 
-void read_all_main(void) {
+static void read_all_main(void) {
     s32 saveType; //invalid = -1, main = 0, backup = 1
 
     if (wp->result) {
@@ -910,7 +910,7 @@ void cardCreate(void) {
  * writes an empty header and slots, then sets the comment,
  * banner and animated icon in the card's directory entry.
  */
-void create_main(void) {
+static void create_main(void) {
     if (wp->result) {
         wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
@@ -1272,7 +1272,7 @@ static void make_data(void) {
 }
 
 /** Card-removed callback for CARDMountAsync; does nothing. */
-void mountDetachCallback(s32 chan, s32 result) {
+static void mountDetachCallback(s32 chan, s32 result) {
     ; //empty
 }
 
@@ -1280,7 +1280,7 @@ void mountDetachCallback(s32 chan, s32 result) {
  * Mount completion: stores the result, treating BROKEN and ENCODING as success
  * so the following check step reports them.
  */
-void mountAttachCallback(s32 chan, s32 result) {
+static void mountAttachCallback(s32 chan, s32 result) {
     wp->result = result;
     if (result == CARD_RESULT_BROKEN || result == CARD_RESULT_ENCODING) {
         wp->result = CARD_RESULT_READY;
@@ -1313,7 +1313,7 @@ static void memcard_unmount(void) {
 }
 
 /** CARDCheckAsync completion: stores the result and clears the in-flight flag. */
-void checkCallback(s32 chan, s32 result) {
+static void checkCallback(s32 chan, s32 result) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }
@@ -1325,7 +1325,7 @@ static void memcard_check(void) {
 }
 
 /** CARDFormatAsync completion: stores the result and clears the in-flight flag. */
-void formatCallback(s32 chan, s32 result) {
+static void formatCallback(s32 chan, s32 result) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }
@@ -1359,7 +1359,7 @@ static void memcard_delete(void) {
 }
 
 /** CARDCreateAsync completion: stores the result and clears the in-flight flag. */
-void createCallback(s32 chan, s32 result) {
+static void createCallback(s32 chan, s32 result) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }
@@ -1371,7 +1371,7 @@ static void memcard_create(void) {
 }
 
 /** CARDWriteAsync completion: stores the result and clears the in-flight flag. */
-void writeCallback(s32 chan, s32 result) {
+static void writeCallback(s32 chan, s32 result) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }
@@ -1383,7 +1383,7 @@ static void memcard_write(void* addr, s32 length, s32 offset) {
 }
 
 /** CARDReadAsync completion: stores the result and clears the in-flight flag. */
-void readCallback(s32 chan, s32 result) {
+static void readCallback(s32 chan, s32 result) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }
@@ -1395,7 +1395,7 @@ static void memcard_read(void* addr, s32 length, s32 offset) {
 }
 
 /** CARDSetStatusAsync completion: stores the result and clears the in-flight flag. */
-void statusCallback(s32 chan, s32 result) {
+static void statusCallback(s32 chan, s32 result) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }

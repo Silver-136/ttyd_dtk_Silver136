@@ -24,8 +24,8 @@ typedef struct EffMagic3N64Work {
     s32 age;      // 0x2C
 } EffMagic3N64Work;
 
-void effMagic3Main(EffectEntry* effect);
-void effMagic3Disp(CameraId cameraId, void* payload);
+static void effMagic3Main(EffectEntry* effect);
+static void effMagic3Disp(CameraId cameraId, void* payload);
 
 #pragma opt_propagation off
 /**
@@ -115,7 +115,7 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
 inline f32 magic3_scale(f32 a, f32 b) { return 3.0f * a + b; }
 
 /** Slows each spark (80% per frame, 70% near the end), fades alpha in then out, and pulses its size with sine waves. */
-void effMagic3Main(EffectEntry* effect) {
+static void effMagic3Main(EffectEntry* effect) {
     s32 life;
     EffMagic3N64Work* work = effect->userdata;
     Vec position;
@@ -160,7 +160,7 @@ void effMagic3Main(EffectEntry* effect) {
 }
 
 /** Draws each spark as a camera-facing, rotated streak quad (32x16, effect texture 0x1E). */
-void effMagic3Disp(CameraId cameraId, void* payload) {
+static void effMagic3Disp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffMagic3N64Work* work;

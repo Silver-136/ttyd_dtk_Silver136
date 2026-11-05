@@ -26,8 +26,8 @@
 #include "sfx_name_word.h"
 
 
-void effFukidashiMain(EffectEntry* effect);
-void effFukidashiDisp(CameraId cameraId, EffectEntry* effect);
+static void effFukidashiMain(EffectEntry* effect);
+static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect);
 
 extern u8 moja_model_dl_0_1[], moja_model_dl_0_2[], moja_model_dl_0_3[], moja_model_dl_0_4[],
     moja_model_dl_0_5[], moja_model_dl_0_6[], moja_model_dl_0_7[], moja_model_dl_0_8[],
@@ -145,7 +145,7 @@ static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin)
  * Places the bubble above its speaker (Mario, a partner, or an NPC; otherwise at the base point),
  * tilted by the bubble angle plus 20 degrees per slot.
  */
-void calc_pos(EffFukidashiWork* work, s32 flag) {
+static void calc_pos(EffFukidashiWork* work, s32 flag) {
     CameraEntry* camera;
     Vec axis;
     Mtx rot;
@@ -294,7 +294,7 @@ static inline s32 getAnim(EffFukidashiWork* w, s32 type) {
  * Advances the pop-up animation; type 6 spins in, holds about 120 frames and spins out (it ignores the duration).
  * Deletes the effect when the table ends or the duration runs out.
  */
-void effFukidashiMain(EffectEntry* effect) {
+static void effFukidashiMain(EffectEntry* effect) {
     EffFukidashiWork* work = effect->userdata;
     Vec position;
     s32 type;
@@ -361,7 +361,7 @@ void effFukidashiMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
+static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
 
     CameraEntry* camera;

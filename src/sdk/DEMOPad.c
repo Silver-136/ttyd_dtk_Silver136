@@ -15,7 +15,7 @@ u32 PadChanMask[PAD_MAX_CONTROLLERS] = {PAD_CHAN0_BIT, PAD_CHAN1_BIT, PAD_CHAN2_
  * newly pressed and released buttons and directions, and stick deltas.
  * On a transfer error the edges are cleared and the last state kept.
  */
-void DEMOPadCopy(PADStatus* pad, DEMOPadStatus* dmpad) {
+static void DEMOPadCopy(PADStatus* pad, DEMOPadStatus* dmpad) {
     u16 dirs;
 
     if (pad->err != PAD_ERR_TRANSFER) {

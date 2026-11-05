@@ -23,8 +23,8 @@ static inline void Vec2Vtx(Vec* v, s16* o) {
     OSf32tos16(&v->z, &o[2]);
 }
 
-void effKamekiTornadeMain(EffectEntry* effect);
-void effKamekiTornadeDisp(CameraId cameraId, void* payload);
+static void effKamekiTornadeMain(EffectEntry* effect);
+static void effKamekiTornadeDisp(CameraId cameraId, void* payload);
 
 EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -79,7 +79,7 @@ EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
  * Each layer follows the one below it, so the column leans as the base moves (rot is clamped to 90 degrees);
  * also advances the twist and the texture scroll.
  */
-void effKamekiTornadeMain(EffectEntry* effect) {
+static void effKamekiTornadeMain(EffectEntry* effect) {
     EffKamekiTornadeN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -146,7 +146,7 @@ void effKamekiTornadeMain(EffectEntry* effect) {
  * Builds a 16-point ring of vertices (15 segments drawn) and draws seven stacked, twisted layers, each tilted and scaled,
  * using texture 0x6C on both texture maps.
  */
-void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
+static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     f32 scale;
     s32 i;

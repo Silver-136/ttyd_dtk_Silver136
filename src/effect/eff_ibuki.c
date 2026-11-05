@@ -11,8 +11,8 @@
 #include "libc_decls.h"
 #include "eff/n64/eff_vapor_n64.h"
 
-void effIbukiMain(EffectEntry* effect);
-void effIbukiDisp(CameraId cameraId, void* param);
+static void effIbukiMain(EffectEntry* effect);
+static void effIbukiDisp(CameraId cameraId, void* param);
 
 typedef struct EffIbukiWork {
     s32 type;      // 0x0
@@ -119,7 +119,7 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
 }
 
 /** Releases each puff after its delay and drifts it outward, spawns vapor puffs, fades out on soft delete. */
-void effIbukiMain(EffectEntry* effect) {
+static void effIbukiMain(EffectEntry* effect) {
     s32 delay;
     EffIbukiWork* work = effect->userdata;
     s32 i;
@@ -216,7 +216,7 @@ void effIbukiMain(EffectEntry* effect) {
  * Draws the breath stream: the strip mesh from the display lists with two scrolling textures (mirrored for
  * type != 0), then each released puff as a textured quad faded by its own alpha.
  */
-void effIbukiDisp(CameraId cameraId, void* param) {
+static void effIbukiDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 i;
     u8* sz;

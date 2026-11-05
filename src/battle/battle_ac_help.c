@@ -34,7 +34,7 @@ void BattleAcHelpInit(void) {
 // stubbed in every version
 }
 
-void _ac_help_disp(CameraId cameraId, void* param);
+static void _ac_help_disp(CameraId cameraId, void* param);
 
 /** Per-frame battle hook: queues the hint box draw when a hint is set and shown, except during a First Strike. */
 void BattleAcHelpMain(void) {
@@ -50,7 +50,7 @@ void BattleAcHelpMain(void) {
  * Draws the action-command hint: a white framed window near the top of the screen sized to the message,
  * with the text centred inside. Falls back to a "message not found" string when the id is missing.
  */
-void _ac_help_disp(CameraId cameraId, void* param) {
+static void _ac_help_disp(CameraId cameraId, void* param) {
     u16 lines;
     const char* msgs[2]; // FAKE: register-promoted array; one msg pointer differs
     BattleWork* wp = _battleWorkPointer;

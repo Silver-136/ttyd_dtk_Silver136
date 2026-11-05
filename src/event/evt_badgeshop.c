@@ -204,7 +204,7 @@ void badgeShop_init(void) {
 }
 
 /** qqsort comparator for badgeShop_bottakuruGeneration: orders (item, key) pairs by the key in word 1, ascending. */
-s32 bottakuruComp(const void* paramA, const void* paramB) {
+static s32 bottakuruComp(const void* paramA, const void* paramB) {
     const s32* sortA = paramA;
     const s32* sortB = paramB;
     s32 a, b;

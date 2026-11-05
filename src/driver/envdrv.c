@@ -210,7 +210,7 @@ void envCapture2(CameraId camId, void* param) {
  * depth of field, motion blur and the radial lines of envDisp_FF,
  * restoring the viewport and projection afterwards.
  */
-void envDisp(CameraId camId, void *param) {
+static void envDisp(CameraId camId, void *param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
 
@@ -228,7 +228,7 @@ void envDisp(CameraId camId, void *param) {
  * DISP_MODE_CUSTOM_LAST band): draws the glare (bloom) filter the current type picks (envGlare0..3) over its
  * screen rectangle, restoring the viewport and projection afterwards.
  */
-void envDisp2(CameraId camId, void *param) {
+static void envDisp2(CameraId camId, void *param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
     EnvironmentWork* wp;

@@ -31,7 +31,7 @@
 #include "mario/mariost.h"
 #include "party/party_vivian.h"
 
-s32 partyMoveMain(PartyEntry* party, s32 hosei);
+static s32 partyMoveMain(PartyEntry* party, s32 hosei);
 static void flyMain(PartyEntry* party);
 
 Footmark footmarkBuf[2][80];
@@ -1070,7 +1070,7 @@ void partyMoveNoHosei(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
 #else
-s32 partyMoveMain(PartyEntry* party, s32 hosei) {
+static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
 #endif
     Vec pos;
     Vec pos2;

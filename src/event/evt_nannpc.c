@@ -218,7 +218,7 @@ void nanNPCOption(void) {
  * qsort comparator ordering crowd NPCs by Z, larger first; nannpc_ext_disp draws the sorted list from its end,
  * so the smaller Z draw first.
  */
-s32 nannpc_zcompare(const void* paramA, const void* paramB) {
+static s32 nannpc_zcompare(const void* paramA, const void* paramB) {
     const NanNPCSort* a = paramA;
     const NanNPCSort* b = paramB;
     if (a->z < b->z) {
@@ -252,7 +252,7 @@ static inline void nannpc_loadTev(void) {
  * With work flag 0x1 each NPC's sprite is drawn separately, sorted by Z and tinted by its colour;
  * otherwise extdrv draws all the poses in one batch.
  */
-void nannpc_ext_disp() {
+static void nannpc_ext_disp() {
     NanNPCWork* w = nanNPCWork;
     s32 i;
     s32 idx;
@@ -286,7 +286,7 @@ void nannpc_ext_disp() {
 }
 
 /** Draws the crowd's shadows through extdrv with a fixed 10x scale matrix. */
-void nannpc_ext_shadow_disp() {
+static void nannpc_ext_shadow_disp() {
     static Mtx mt = {{10.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 10.0f, 0.0f, 0.1f}, {0.0f, 0.0f, 10.0f, 0.0f}};
     extLoadShadowMtx(mt);
     extLoadShadowRenderMode();
@@ -296,7 +296,7 @@ void nannpc_ext_shadow_disp() {
 }
 
 /** Default extdrv init for the crowd: hides every pose 1000 units below the map with no rotation. */
-void nannpc_ext_init() {
+static void nannpc_ext_init() {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
     for (i = extGetPoseNum() - 1; i >= 0; i--, pose++) {
@@ -356,7 +356,7 @@ void nannpc_ext_main_sub_fast() {
 }
 
 /** Default extdrv main callback: runs the three crowd sub functions (set by evt_nannpc_set_subfunc) in order. */
-void nannpc_ext_main() {
+static void nannpc_ext_main() {
     NanNPCWork* w = nanNPCWork;
     if (w->subfunc0) {
         w->subfunc0();
@@ -373,7 +373,7 @@ void nannpc_ext_main() {
  * Registers the crowd's draw and shadow callbacks with dispdrv each frame;
  * the sprites go in render mode 1, or 2 with work flag 0x1.
  */
-void nannpc_ext_dispent() {
+static void nannpc_ext_dispent() {
     if (!(nanNPCWork->flags & NANNPC_WORK_DEPTH_SORT)) {
         dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, nannpc_ext_disp, 0);
         dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_shadow_disp, 0);

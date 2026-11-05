@@ -56,7 +56,7 @@ void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void FontDrawString(f32 x, f32 y, const char* msg);
 unsigned long strlen(const char* s);
-BOOL BattleCommandAttackAudienceCheck(void);
+static BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
 USER_FUNC(_get_msg);
 void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param);
@@ -72,7 +72,7 @@ extern BattleWeapon marioDefaultWeapon_Jump;
 extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioDefaultWeapon_Hammer;
 void BattleDrawEnemyHP(CameraId camId, void* param);
-s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon);
+static s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon);
 
 typedef struct BattleCheckPartyEntry {
     s32 kind;          // 0x0
@@ -81,9 +81,9 @@ typedef struct BattleCheckPartyEntry {
     const char* help;  // 0xC
 } BattleCheckPartyEntry;
 
-u16 _battleGetPartyIcon(s32 kind);
-s32 _btlcmd_MakePartyTable(BattleWork* wp);
-void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type);
+static u16 _battleGetPartyIcon(s32 kind);
+static s32 _btlcmd_MakePartyTable(BattleWork* wp);
+static void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type);
 
 /** Jump badges listed in Mario's Jump menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
 s32 _jump_badge_table[8] = {ITEM_POWER_JUMP, ITEM_MULTIBOUNCE, ITEM_SHRINK_STOMP, ITEM_SLEEPY_STOMP, ITEM_SOFT_STOMP, ITEM_TORNADO_JUMP, ITEM_POWER_BOUNCE, ITEM_MEGA_JUMP};
@@ -116,7 +116,7 @@ void BattleCommandInit(BattleWork* wp) {
  * being veiled by Vivian or flipped, and the tutorial (lecture) locks.
  * The Jump and Hammer icons follow the boots and hammer level.
  */
-void _btlcmd_MakeActClassTable(BattleWork* wp) {
+static void _btlcmd_MakeActClassTable(BattleWork* wp) {
     PouchData* pouch;
     BattleUnit* unit;
     BattleCommand* cmd;
@@ -371,7 +371,7 @@ void _btlcmd_GetCursorPtr(BattleCommand* cmd, u32 type, BattleCursor** out) {
 #pragma dont_inline on
 
 /** Icon of the jump moves in the weapon list: normal, Super or Ultra Boots by the pouch jumpLevel. */
-s32 _getJumpIconId(void) {
+static s32 _getJumpIconId(void) {
     switch (pouchGetPtr()->jumpLevel) {
         case 3:
             return ICON_ITEM_ULTRA_BOOTS;
@@ -386,7 +386,7 @@ s32 _getJumpIconId(void) {
 #pragma dont_inline on
 
 /** Icon of the hammer moves in the weapon list: normal, Super or Ultra Hammer by the pouch hammerLevel. */
-s32 _getHammerIconId(void) {
+static s32 _getHammerIconId(void) {
     switch (pouchGetPtr()->hammerLevel) {
         case 3:
             return ICON_ITEM_ULTRA_HAMMER;
@@ -407,7 +407,7 @@ s32 _getHammerIconId(void) {
  * In the tutorial the basic Jump or Hammer is swapped for the lecture unit's weapon.
  * Then marks which entries are usable.
  */
-s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
+static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     s32 top;
     BattleUnit* unit;
     BattleCommand* cmd;
@@ -711,7 +711,7 @@ EVT_BEGIN(_btl_cmd_error_msg_event)
 EVT_END()
 #endif
 
-void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
+static void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
     BattleUnit* unit;
     BattleCommand* cmd;
     BattleCursor* cursor;
@@ -760,7 +760,7 @@ void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
  * Number of targets the unit could pick with the weapon:
  * 0 with no weapon or no attack script, -1 when the unit cannot pay its cost.
  */
-s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon) {
+static s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon) {
     BattleWorkWeaponTargets targets;
     s32 belong;
 
@@ -786,7 +786,7 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
  * Run Away is greyed out in no-escape battles or when the unit cannot act, and most entries while veiled.
  * The early demos leave the cost of the free entries unset.
  */
-void _btlcmd_MakeOperationTable(BattleWork* wp) {
+static void _btlcmd_MakeOperationTable(BattleWork* wp) {
     PouchData* pouch;
     NpcBattleInfo* info;
     BattleUnit* unit;
@@ -945,7 +945,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
  * a single item, then Double Dip and Triple Dip with their FP cost (the P versions' names and icons for a
  * partner).
  */
-void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
+static void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
     BattleUnit* unit;
     BattleCommand* cmd;
     BattleCursor* cursor;
@@ -1021,7 +1021,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
  * Menu icon of a partner kind from _checkPartyTable; Yoshi's follows the colour he hatched with.
  * 0 for a kind that is not a partner.
  */
-u16 _battleGetPartyIcon(s32 kind) {
+static u16 _battleGetPartyIcon(s32 kind) {
     BattleCheckPartyEntry* entry;
     s32 i;
 
@@ -1062,7 +1062,7 @@ u16 _battleGetPartyIcon(s32 kind) {
  * The partner already out and KO'd partners are greyed out, and the cursor starts on the current one.
  * Returns the count, 0 when there is no partner out.
  */
-s32 _btlcmd_MakePartyTable(BattleWork* wp) {
+static s32 _btlcmd_MakePartyTable(BattleWork* wp) {
     BattleUnit* unit;
     BattleUnit* partner;
     BattleCommand* cmd;
@@ -1125,7 +1125,7 @@ s32 _btlcmd_MakePartyTable(BattleWork* wp) {
 }
 
 #pragma dont_inline on
-s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
+static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
     BattleUnit* unit;
@@ -1183,7 +1183,7 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp);
 void _commandRestoreRec(void);
-s32 _check_present_item(void);
+static s32 _check_present_item(void);
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
 
 /**
@@ -1533,7 +1533,7 @@ void BattleCommandDisplay(BattleWork* wp) {
 #pragma dont_inline on
 
 /** Puts a menu cursor back on the first entry. */
-void _cursor_init(BattleCursor* cursor) {
+static void _cursor_init(BattleCursor* cursor) {
     cursor->absPos = 0;
     cursor->relPos = 0;
 }
@@ -2507,7 +2507,7 @@ void BattleCommandDisplay_AllEnd(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-s32 _check_weapon_type_attack(BattleWeapon* weapon);
+static s32 _check_weapon_type_attack(BattleWeapon* weapon);
 
 /**
  * Turns the decided command into the unit's attackEventCode and flags for btlseqAct
@@ -2765,7 +2765,7 @@ BattleWeapon* BattleGetSelectWeapon(BattleWork* wp) {
  * any other item closes the menus and forces the audience-item action (actType 12) and returns 1.
  * Returns 0 otherwise.
  */
-s32 _check_present_item(void) {
+static s32 _check_present_item(void) {
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
     s32 id;
@@ -3144,7 +3144,7 @@ void _commandRestoreRec(void) {
  * targets the audience member BattleAudience_GetItemOn reports,
  * closes the menu and decides the audience-attack action (actType 11). TRUE when that happened.
  */
-BOOL BattleCommandAttackAudienceCheck(void) {
+static BOOL BattleCommandAttackAudienceCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;
 
@@ -3209,7 +3209,7 @@ USER_FUNC(_get_msg) {
  * confuse, burn, freeze, shrink, ATK or DEF down, OHKO, fright, gale force, slow).
  * Used to count attack against support moves and items in the action record.
  */
-s32 _check_weapon_type_attack(BattleWeapon* weapon) {
+static s32 _check_weapon_type_attack(BattleWeapon* weapon) {
     if (!weapon) {
         return 0;
     }

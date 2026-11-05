@@ -49,8 +49,8 @@ static u8 color_rotation_data[] = {
 };
 #endif
 
-void effHagetakaFlushMain(EffectEntry* effect);
-void effHagetakaFlushDisp(CameraId cameraId, void* param);
+static void effHagetakaFlushMain(EffectEntry* effect);
+static void effHagetakaFlushDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a short twinkle at (x, y, z) that lasts 10 frames; it is drawn in the color_rotation_data colours
@@ -84,7 +84,7 @@ EffectEntry* effHagetakaFlushN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z,
 }
 
 /** Grows the twinkle by 0.2 each frame and halves its scale over the last 4 frames, then deletes it. */
-void effHagetakaFlushMain(EffectEntry* effect) {
+static void effHagetakaFlushMain(EffectEntry* effect) {
     EffHagetakaFlushN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -116,7 +116,7 @@ void effHagetakaFlushMain(EffectEntry* effect) {
 }
 
 /** Draws a camera-facing 16x16 sprite from texture 0x1C, scaled by baseScale * scale. */
-void effHagetakaFlushDisp(CameraId cameraId, void* param) {
+static void effHagetakaFlushDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffHagetakaFlushN64Work* work;

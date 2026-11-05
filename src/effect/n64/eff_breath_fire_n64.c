@@ -9,8 +9,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-void effBreathFireMain(EffectEntry* effect);
-void effBreathFireDisp(CameraId cameraId, void* param);
+static void effBreathFireMain(EffectEntry* effect);
+static void effBreathFireDisp(CameraId cameraId, void* param);
 
 /**
  * Mesh of a fire-breath flame: two quads of five vertices (corners + centre) at z 0 and z 5;
@@ -94,7 +94,7 @@ EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, 
  * Moves the flame blob along the line to the end point with random drift, scaling and fading by type.
  * At frame `seed` + 1 it spawns the next flame with count - 1, so one entry makes a chain of `count` flames.
  */
-void effBreathFireMain(EffectEntry* effect) {
+static void effBreathFireMain(EffectEntry* effect) {
     s32 remaining;
     EffBreathFireN64Work* work;
     Vec position;
@@ -159,7 +159,7 @@ void effBreathFireMain(EffectEntry* effect) {
  * Draws the flame as one camera-facing quad (four triangles around its centre vertex), blending two adjacent
  * frames of the texture strip by the fraction of texFrame, so the strip frame advances with age.
  */
-void effBreathFireDisp(CameraId cameraId, void* param) {
+static void effBreathFireDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffBreathFireN64Work* work;

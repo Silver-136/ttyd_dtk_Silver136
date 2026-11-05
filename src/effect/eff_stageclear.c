@@ -35,8 +35,8 @@ typedef struct StageClearWork {
 } StageClearWork;
 
 
-void effStageClearMain(EffectEntry* effect);
-void effStageClearDisp(CameraId cameraId, void* payload);
+static void effStageClearMain(EffectEntry* effect);
+static void effStageClearDisp(CameraId cameraId, void* payload);
 
 #if VERSION < VERSION_US
 #if VERSION <= VERSION_DEMO_JP
@@ -227,7 +227,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
  * starts a camera-shake event as each letter lands and sets `done` once all have.
  * Never deletes itself; the owner removes it after effStageClearEndChk. Type 1 also drops confetti.
  */
-void effStageClearMain(EffectEntry* effect) {
+static void effStageClearMain(EffectEntry* effect) {
     StageClearWork* work = effect->userdata;
     Vec pos;
     Vec tmp;
@@ -299,7 +299,7 @@ void effStageClearMain(EffectEntry* effect) {
  * a dark offset shadow pass first, then the letters,
  * with a scrolling rainbow texture blended over the type 0 text.
  */
-void effStageClearDisp(CameraId cameraId, void* payload) {
+static void effStageClearDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     StageClearWork* work = effect->userdata;
     CameraEntry* cam;

@@ -102,8 +102,8 @@ effN64Vtx size16x24_tex32x32_r_flower_vtx[] = {
     {-4, 9, 0, 0, 1024, 36, 190, 20, 255},
 };
 
-void effRecoverHeartMain(EffectEntry* effect);
-void effRecoverHeartDisp(CameraId cameraId, void* payload);
+static void effRecoverHeartMain(EffectEntry* effect);
+static void effRecoverHeartDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns one rising heart (types 0 and 2) or flower (other types) sprite at (x, y, z) lasting 46 frames;
@@ -175,7 +175,7 @@ EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
  * while tilting up to 30 degrees (both damped over the last 20 frames);
  * over the last 10 frames it fades and its rise slows 10%/frame.
  */
-void effRecoverHeartMain(EffectEntry* effect) {
+static void effRecoverHeartMain(EffectEntry* effect) {
     s32 lifetime;
     EffRecoverHeartN64Work* work = effect->userdata;
     Vec position;
@@ -237,7 +237,7 @@ void effRecoverHeartMain(EffectEntry* effect) {
  * one digit under 10, otherwise two (with `flag` set it always draws two, the left glyph being strip slot 10
  * instead of the tens digit). Type 2 draws a 16x16 heart without digits.
  */
-void effRecoverHeartDisp(CameraId cameraId, void* payload) {
+static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     s32 j;
     CameraEntry* camera;

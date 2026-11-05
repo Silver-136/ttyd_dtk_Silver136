@@ -17,7 +17,7 @@
 #endif
 
 
-void _disp(CameraId cameraId, void* param);
+static void _disp(CameraId cameraId, void* param);
 
 /** s32 type, s32 x, s32 y, const char* msg, s32 frames */
 USER_FUNC(btlevtcmd_AnnounceMessage) {
@@ -80,7 +80,7 @@ USER_FUNC(btlevtcmd_AnnounceMessage) {
  * a white framed window sized to the text, centred on announce->x with its top near announce->y + 120,
  * and the text inside it.
  */
-void _disp(CameraId cameraId, void* param) {
+static void _disp(CameraId cameraId, void* param) {
     BattleAnnounce* announce = &_battleWorkPointer->announce;
     GXColor* col;
     u16 lines;

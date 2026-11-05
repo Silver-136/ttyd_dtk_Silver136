@@ -1527,7 +1527,7 @@ USER_FUNC(evt_npc_set_camid) {
 }
 
 /** Angle in degrees from the NPC to the target named targetName ("mario" or any name evtNpcNameToPtr accepts). */
-f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
+static f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
     Vec target, position, diff;
 
     if (strcmp(targetName, "mario") == 0) {
@@ -2217,12 +2217,12 @@ USER_FUNC(evt_npc_get_drop_flower) {
 }
 
 /** Adds the NPC's battle coin drop count to *value. */
-void _npc_check_coin(NpcEntry* npc, s32* value) {
+static void _npc_check_coin(NpcEntry* npc, s32* value) {
     *value += npc->btlCoinDropCount;
 }
 
 /** Adds up the coin drops of an NPC, its slaves and every NPC linked after it in its group. */
-void _npc_check_coin_group(NpcEntry* npc, s32* value) {
+static void _npc_check_coin_group(NpcEntry* npc, s32* value) {
     NpcEntry* next = npc->next;
     int i;
 

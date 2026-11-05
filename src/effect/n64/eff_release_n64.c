@@ -38,8 +38,8 @@ typedef struct AnimeEntry {
     u16 value;
 } AnimeEntry;
 
-void effReleaseMain(EffectEntry* effect);
-void effReleaseDisp(CameraId cameraId, void* payload);
+static void effReleaseMain(EffectEntry* effect);
+static void effReleaseDisp(CameraId cameraId, void* payload);
 
 /**
  * Growth of the orb's glow rings over the 30 steps after the release flash:
@@ -253,7 +253,7 @@ EffectEntry* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
  * state 4 shrinks ring 1 by anime_data_2 over 30 steps; state 5 hides everything.
  * State 100 keeps growing its rings until deleted; it is never reached, since variant 3 starts in state 1.
  */
-void effReleaseMain(EffectEntry* effect) {
+static void effReleaseMain(EffectEntry* effect) {
     EffReleaseN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -429,7 +429,7 @@ void effReleaseMain(EffectEntry* effect) {
  * Variants 2 and 3 also flash the whole screen white (the 0xD0 material colour supplies only the alpha)
  * for a few frames at the release and at state 5.
  */
-void effReleaseDisp(CameraId cameraId, void* payload) {
+static void effReleaseDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffReleaseN64Work* work;

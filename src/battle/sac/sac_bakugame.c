@@ -107,18 +107,18 @@ typedef struct BakuWork {
     u8 pad2b4[4];
 } BakuWork;
 
-void bakuGameDecideButton(s32 first);
-BOOL bakuGamePartyExist(BattleUnit* unit);
-BOOL bakuGameAudienceCanThrowPos(s32 idx);
-void bakuGameMarioSurpriseReset(BattleUnit* mario, BattleUnit* party);
-void bakuGameEnemySurpriseReset(void);
-void bakuGameAudienceSurpriseReset(void);
-void bakuGameMarioSurprise(BattleUnit* mario, BattleUnit* party);
-void bakuGameEnemySurprise(void);
-void bakuGameAudienceSurprise(void);
-void bakuGameDisp2D(CameraId cam, void* param);
-void bakuGameDisp3D(CameraId cam, void* param);
-void bakuGameDispStar(CameraId cam, void* param);
+static void bakuGameDecideButton(s32 first);
+static BOOL bakuGamePartyExist(BattleUnit* unit);
+static BOOL bakuGameAudienceCanThrowPos(s32 idx);
+static void bakuGameMarioSurpriseReset(BattleUnit* mario, BattleUnit* party);
+static void bakuGameEnemySurpriseReset(void);
+static void bakuGameAudienceSurpriseReset(void);
+static void bakuGameMarioSurprise(BattleUnit* mario, BattleUnit* party);
+static void bakuGameEnemySurprise(void);
+static void bakuGameAudienceSurprise(void);
+static void bakuGameDisp2D(CameraId cam, void* param);
+static void bakuGameDisp3D(CameraId cam, void* param);
+static void bakuGameDispStar(CameraId cam, void* param);
 
 static BattleWeapon weapon = {
     "btl_wn_sac_bakugame", // name
@@ -1191,7 +1191,7 @@ USER_FUNC(bakuGameHeihoReturn) {
  * the enemies and the audience (one of the six orders at random) and moves the button icons there.
  * After the first call it also blocks presses for 60 frames.
  */
-void bakuGameDecideButton(s32 first) {
+static void bakuGameDecideButton(s32 first) {
     BakuWork* w = GetBakuGamePtr();
     Vec pos[3] = {
         {-125.0f, 50.0f, 0.0f},
@@ -1215,7 +1215,7 @@ void bakuGameDecideButton(s32 first) {
 }
 
 /** TRUE when the partner exists, is not KO'd (STATUS_INSTANT_KILL) and can act. */
-BOOL bakuGamePartyExist(BattleUnit* unit) {
+static BOOL bakuGamePartyExist(BattleUnit* unit) {
     if (unit == NULL) {
         return FALSE;
     }
@@ -1229,7 +1229,7 @@ BOOL bakuGamePartyExist(BattleUnit* unit) {
  * TRUE for the audience seats that can catch and throw the bomb:
  * indices 8-11, 28-31 and 48-51 (the four middle seats of each of the first three rows, Guess from the layout).
  */
-BOOL bakuGameAudienceCanThrowPos(s32 idx) {
+static BOOL bakuGameAudienceCanThrowPos(s32 idx) {
     s32 i;
     for (i = 0; i < 3; i++) {
         if (idx >= i * 20 + 8 && idx <= i * 20 + 11) {
@@ -1240,7 +1240,7 @@ BOOL bakuGameAudienceCanThrowPos(s32 idx) {
 }
 
 /** Returns Mario and the partner from their startled pose to their normal pose. */
-void bakuGameMarioSurpriseReset(BattleUnit* mario, BattleUnit* party) {
+static void bakuGameMarioSurpriseReset(BattleUnit* mario, BattleUnit* party) {
     btlDispPoseAnime(BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario)));
     if (bakuGamePartyExist(party)) {
         btlDispPoseAnime(BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party)));
@@ -1248,7 +1248,7 @@ void bakuGameMarioSurpriseReset(BattleUnit* mario, BattleUnit* party) {
 }
 
 /** Returns every active, living enemy from its startled pose to its normal pose. */
-void bakuGameEnemySurpriseReset(void) {
+static void bakuGameEnemySurpriseReset(void) {
     s32 i;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* u;
@@ -1264,7 +1264,7 @@ void bakuGameEnemySurpriseReset(void) {
 /**
  * Turns every audience member back to face the stage and releases all but the throwing seats from event control.
  */
-void bakuGameAudienceSurpriseReset(void) {
+static void bakuGameAudienceSurpriseReset(void) {
     s32 i;
     BattleAudienceMember* m;
 
@@ -1284,7 +1284,7 @@ void bakuGameAudienceSurpriseReset(void) {
  * Mario M_N_7, and each partner (Goombella, Koops, Yoshi, Flurrie, Vivian, Bobbery,
  * Ms. Mowz) its own startled animation.
  */
-void bakuGameMarioSurprise(BattleUnit* mario, BattleUnit* party) {
+static void bakuGameMarioSurprise(BattleUnit* mario, BattleUnit* party) {
     BtlUnit_SetBodyAnim(mario, "M_N_7");
     if (bakuGamePartyExist(party)) {
         switch (party->initialKind) {
@@ -1314,7 +1314,7 @@ void bakuGameMarioSurprise(BattleUnit* mario, BattleUnit* party) {
 }
 
 /** Every active, living enemy plays its startled animation (anim type 0x27) as the bomb lands on their side. */
-void bakuGameEnemySurprise(void) {
+static void bakuGameEnemySurprise(void) {
     s32 i;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* u;
@@ -1333,7 +1333,7 @@ void bakuGameEnemySurprise(void) {
  * the others anim 7 (the walk of status 11) facing the stage or away at random.
  * Guess: the throwers brace while the rest scramble.
  */
-void bakuGameAudienceSurprise(void) {
+static void bakuGameAudienceSurprise(void) {
     s32 i;
     BattleAudienceMember* m;
 
@@ -1357,7 +1357,7 @@ void bakuGameAudienceSurprise(void) {
 }
 
 /** Draws the A/B/X button icons over their targets and the mash gauge, which flashes once it reaches 100. */
-void bakuGameDisp2D(CameraId cam, void* param) {
+static void bakuGameDisp2D(CameraId cam, void* param) {
     BakuWork* w = GetBakuGamePtr();
     BattleACDispParams* disp = &_battleWorkPointer->actionCommands.disp;
     BakuBtn* b;
@@ -1409,7 +1409,7 @@ void bakuGameDisp2D(CameraId cam, void* param) {
  * when a big enemy (width 100+) or an all-ceiling enemy party needs it, the Shy Guy stand-in as a textured quad from the audience texture
  * palette.
  */
-void bakuGameDisp3D(CameraId cam, void* param) {
+static void bakuGameDisp3D(CameraId cam, void* param) {
     BakuWork* w = GetBakuGamePtr();
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     Mtx scl;
@@ -1467,7 +1467,7 @@ void bakuGameDisp3D(CameraId cam, void* param) {
 }
 
 /** Empty display callback registered by main_star; the star-stone effect draws the Crystal Star itself. */
-void bakuGameDispStar(CameraId cam, void* param) {
+static void bakuGameDispStar(CameraId cam, void* param) {
 }
 
 /**

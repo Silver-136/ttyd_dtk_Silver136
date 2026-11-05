@@ -18,9 +18,9 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-void effSplashMain(EffectEntry* effect);
-void effSplashDisp(CameraId cameraId, EffectEntry* effect);
-void effSplashGetCol(CameraId cameraId, EffectEntry* effect);
+static void effSplashMain(EffectEntry* effect);
+static void effSplashDisp(CameraId cameraId, EffectEntry* effect);
+static void effSplashGetCol(CameraId cameraId, EffectEntry* effect);
 
 typedef struct EffSplashWork {
     s32 type;      // 0x0
@@ -228,7 +228,7 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
  * afterwards integrates each column and droplet (velocity, gravity, delay) and deletes after 30,
  * 60 or 71 frames depending on type.
  */
-void effSplashMain(EffectEntry* effect) {
+static void effSplashMain(EffectEntry* effect) {
     EffSplashWork* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
@@ -332,7 +332,7 @@ void effSplashMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #else
-void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
+static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #endif
 
     EffSplashWork* work = effect->userdata;
@@ -391,7 +391,7 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
+static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
 
     EffSplashWork* work = effect->userdata;

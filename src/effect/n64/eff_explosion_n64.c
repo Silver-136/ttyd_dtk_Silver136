@@ -30,8 +30,8 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 16, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-void effExplosionMain(EffectEntry* effect);
-void effExplosionDisp(CameraId cameraId, void* param);
+static void effExplosionMain(EffectEntry* effect);
+static void effExplosionDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a single explosion sprite at (x, y, z) that lasts duration frames.
@@ -70,7 +70,7 @@ EffectEntry* effExplosionN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f
  * steps the spin angle (40 degrees per frame for types other than 0; unused when drawing),
  * grows type 0 by 0.1 per frame, and deletes at end of life.
  */
-void effExplosionMain(EffectEntry* effect) {
+static void effExplosionMain(EffectEntry* effect) {
     EffExplosionN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -94,7 +94,7 @@ void effExplosionMain(EffectEntry* effect) {
 }
 
 /** Draws a camera-facing explosion sprite using texture 14, picking the frame from progress. */
-void effExplosionDisp(CameraId cameraId, void* param) {
+static void effExplosionDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 last;
     s32 s;

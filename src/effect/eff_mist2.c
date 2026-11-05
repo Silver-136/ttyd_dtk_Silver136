@@ -13,8 +13,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-void effMist2Main(EffectEntry* effect);
-void effMist2Disp(CameraId cameraId, void* param);
+static void effMist2Main(EffectEntry* effect);
+static void effMist2Disp(CameraId cameraId, void* param);
 
 /** Spawns the second mist effect at (x, y, z) for `life` frames; called through evt_eff ("mist2", the black mist). */
 EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b) {
@@ -78,7 +78,7 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
 }
 
 /** Per frame: grows, spins and fades each puff (respawning it once faded) and deletes the effect when its life is over. */
-void effMist2Main(EffectEntry* effect) {
+static void effMist2Main(EffectEntry* effect) {
     EffMist2Work* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
@@ -149,7 +149,7 @@ void effMist2Main(EffectEntry* effect) {
 }
 
 /** Draws each puff as a rotated textured quad (effect texture 0x5E). */
-void effMist2Disp(CameraId cameraId, void* param) {
+static void effMist2Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffMist2Work* work = effect->userdata;
     Mtx trans;

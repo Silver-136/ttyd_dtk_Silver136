@@ -42,8 +42,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-void effCoinMain(EffectEntry* effect);
-void effCoinDisp(CameraId cameraId, void* param);
+static void effCoinMain(EffectEntry* effect);
+static void effCoinDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns four coin sprites around (x, y, z) at the preset offsets and delays in _data, each scaled by scale.
@@ -85,7 +85,7 @@ EffectEntry* effCoinN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scal
  * Counts the 14-frame life down, starts each coin after its own delay and steps its 10-frame animation,
  * then deletes the effect.
  */
-void effCoinMain(EffectEntry* effect) {
+static void effCoinMain(EffectEntry* effect) {
     EffCoinN64Work* work = effect->userdata;
     s32 i;
     Vec position;
@@ -121,7 +121,7 @@ void effCoinMain(EffectEntry* effect) {
  * Draws each started coin as a camera-facing sprite from texture 0x84,
  * shifting the texture window to the animation frame (two animation frames per texture step).
  */
-void effCoinDisp(CameraId cameraId, void* param) {
+static void effCoinDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffCoinN64Work* work;

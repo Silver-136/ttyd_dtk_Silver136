@@ -36,7 +36,7 @@ EventWork* evtGetWork(void) {
  * Builds this frame's run order for evtmgrMain:
  * every active event's slot and id, sorted by priority, highest first.
  */
-void make_pri_table(void) {
+static void make_pri_table(void) {
     EventWork* wp = evtGetWork();
     EventEntry* entry = wp->entries;
     s32 idI, idJ;
@@ -160,7 +160,7 @@ void evtmgrReInit(void) {
  * Re-applies the current system level (marioStSystemLevel: pause menus and the like) by stopping all events of
  * the types it suspends, so an event started while the game is paused starts paused too.
  */
-void evtEntryRunCheck(EventEntry* entry) {
+static void evtEntryRunCheck(EventEntry* entry) {
     switch (_mariostSystemLevel) {
         case 1:
             evtStopAll(1);

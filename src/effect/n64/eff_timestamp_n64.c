@@ -60,8 +60,8 @@ static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255
 static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
 #endif
 
-void effTimestampMain(EffectEntry* effect);
-void effTimestampDisp(CameraId cameraId, void* param);
+static void effTimestampMain(EffectEntry* effect);
+static void effTimestampDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns ten digit sprites around (x, y, z) that fade in with staggered delays;
@@ -116,7 +116,7 @@ EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 
  * and over the last 32 the pieces wash to white.
  * Each of the ten pieces starts fading in (8 per frame) once its pos_data delay runs out. CAMERA_3D, layer 2.
  */
-void effTimestampMain(EffectEntry* effect) {
+static void effTimestampMain(EffectEntry* effect) {
     EffTimestampN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -178,7 +178,7 @@ void effTimestampMain(EffectEntry* effect) {
  * and draws the ten pieces on it at their pos_data offsets with textures 0x5A/0x5B,
  * each in its own colour and size, turned to face the camera.
  */
-void effTimestampDisp(CameraId cameraId, void* param) {
+static void effTimestampDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffTimestampN64Work* work;

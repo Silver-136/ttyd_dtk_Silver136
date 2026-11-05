@@ -2974,8 +2974,8 @@ USER_FUNC(btlevtcmd_JumpSetting) {
     return EVT_RETURN_DONE;
 }
 
-void _UnitMoveSoundControl(BattleUnit* unit);
-void _UnitMoveSoundControlEnd(BattleUnit* unit);
+static void _UnitMoveSoundControl(BattleUnit* unit);
+static void _UnitMoveSoundControlEnd(BattleUnit* unit);
 
 /**
  * Builds a Vec for a 3D sound position; becMvVecA to becMvVecE are identical copies, one per call site,
@@ -3577,7 +3577,7 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
     return EVT_RETURN_DONE;
 }
 
-void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
+static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 /**
@@ -4896,8 +4896,8 @@ USER_FUNC(btlevtcmd_JumpPartsContinue) {
     return EVT_RETURN_BLOCK;
 }
 
-void _PartsMoveSoundControl(BattleUnitPart* part);
-void _PartsMoveSoundControlEnd(BattleUnitPart* part);
+static void _PartsMoveSoundControl(BattleUnitPart* part);
+static void _PartsMoveSoundControlEnd(BattleUnitPart* part);
 
 /**
  * Script: drops part args[1] of the unit args[0] to (args[2..4]) over args[5] frames,
@@ -6865,14 +6865,14 @@ USER_FUNC(btlevtcmd_SetPartsJumpSound) {
 }
 
 /** Per-frame movement sound for a moving unit, at its position. */
-void _UnitMoveSoundControl(BattleUnit* unit) {
+static void _UnitMoveSoundControl(BattleUnit* unit) {
     f32 x, y, z;
     BtlUnit_GetPos(unit, &x, &y, &z);
     _MoveSoundControlCore(unit, &unit->moveSnd, NULL, x, y, z);
 }
 
 /** Per-frame movement sound for a moving part, at its position. */
-void _PartsMoveSoundControl(BattleUnitPart* part) {
+static void _PartsMoveSoundControl(BattleUnitPart* part) {
     f32 x, y, z;
     BtlUnit_GetPartsPos(part, &x, &y, &z);
     _MoveSoundControlCore(part->owner, &part->moveSnd, part, x, y, z);
@@ -6923,12 +6923,12 @@ void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* p
 }
 
 /** Stops a unit's looping movement sound when its move ends. */
-void _UnitMoveSoundControlEnd(BattleUnit* unit) {
+static void _UnitMoveSoundControlEnd(BattleUnit* unit) {
     _MoveSoundControlEndCore(unit, &unit->moveSnd);
 }
 
 /** Stops a part's looping movement sound when its move ends. */
-void _PartsMoveSoundControlEnd(BattleUnitPart* part) {
+static void _PartsMoveSoundControlEnd(BattleUnitPart* part) {
     _MoveSoundControlEndCore(part->owner, &part->moveSnd);
 }
 
@@ -6950,7 +6950,7 @@ const char* _mario_attack_voice_table[10] = {
 };
 
 /** Stops the looping movement sound in the work, if one is playing. */
-void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work) {
+static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work) {
     if ((u32)work->sfxId != 0xFFFFFFFF) {
         psndSFXOff(work->sfxId);
         work->sfxId = -1;

@@ -15,8 +15,8 @@
 #include "libc_decls.h"
 #include <math.h>
 
-void effCloudMain(EffectEntry* effect);
-void effCloudDisp(CameraId cameraId, void* param);
+static void effCloudMain(EffectEntry* effect);
+static void effCloudDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a ribbon-like cloud trail whose head starts at (x, y, z) and keeps a 30-point history of its path.
@@ -134,7 +134,7 @@ EffectEntry* effCloudN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
  * whenever the head moved, a new trail point is added to the ring buffer along with its age
  * and the running path length.
  */
-void effCloudMain(EffectEntry* effect) {
+static void effCloudMain(EffectEntry* effect) {
     EffCloudN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -209,7 +209,7 @@ void effCloudMain(EffectEntry* effect) {
  * first by the texture; types 2-3 blend it into the vertex colour instead, so older points shift from white
  * through yellow and red toward black.
  */
-void effCloudDisp(CameraId cameraId, void* param) {
+static void effCloudDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffCloudN64Work* work;
     f32 scale;

@@ -42,13 +42,13 @@ typedef struct StickRotateWork {
 
 
 static void actionCommandDisp(f32 x, f32 y);
-void actionCommandDisp2(f32 x, f32 y);
+static void actionCommandDisp2(f32 x, f32 y);
 
 /**
  * Reads the Control Stick as one of eight directions, 1 up then clockwise to 8 up-left, or 0 when centred.
  * Returns -1 when the command needs a button held (params[2]) and it is not.
  */
-s32 _GetInputDir(void) {
+static s32 _GetInputDir(void) {
     u32 button = _battleWorkPointer->actionCommands.params[STICK_ROTATE_PARAM_BUTTON]; // pad mask
 
     if (button != 0 && !BattlePadCheckNow(button)) {
@@ -79,7 +79,7 @@ s32 _GetInputDir(void) {
  * Which way the stick turned since last frame: +1 clockwise, -1 anticlockwise, 0 when centred, jumping or new;
  * an unchanged direction keeps the current roll.
  */
-s32 _CalcRollDir(void) {
+static s32 _CalcRollDir(void) {
     StickRotateWork* w = (StickRotateWork*)_battleWorkPointer->actionCommands.work;
     s8 cur = w->dir;
     s8 prev = w->prevDir;
@@ -477,7 +477,7 @@ static void actionCommandDisp(f32 x, f32 y) {
  * Stick icon for the free mode: spins through the eight directions as a hint,
  * following the player's turn direction.
  */
-void actionCommandDisp2(f32 x, f32 y) {
+static void actionCommandDisp2(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     StickRotateWork* sw = (StickRotateWork*)ac->work;

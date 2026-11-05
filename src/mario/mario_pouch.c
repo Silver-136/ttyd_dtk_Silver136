@@ -691,7 +691,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 /** The early demos compare the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
 #else
-s32 comp_aiueo(const void* a, const void* b) {
+static s32 comp_aiueo(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
 #endif
@@ -710,7 +710,7 @@ s32 comp_aiueo(const void* a, const void* b) {
 }
 
 /** qqsort comparator: items by type_sort_order from the item table, ascending (pouchSortItem modes 1 and 3). */
-s32 comp_kind(const void* paramA, const void* paramB) {
+static s32 comp_kind(const void* paramA, const void* paramB) {
     const s16* a = paramA;
     const s16* b = paramB;
     s16 x = itemDataTable[*a].type_sort_order;
@@ -725,7 +725,7 @@ s32 comp_kind(const void* paramA, const void* paramB) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 comp_aiueo_r(const void* a, const void* b) {
 #else
-s32 comp_aiueo_r(const void* a, const void* b) {
+static s32 comp_aiueo_r(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
 #endif
@@ -744,7 +744,7 @@ s32 comp_aiueo_r(const void* a, const void* b) {
 }
 
 /** qqsort comparator: items by type_sort_order, descending (pouchSortItem modes 8 and 10). */
-s32 comp_kind_r(const void* paramA, const void* paramB) {
+static s32 comp_kind_r(const void* paramA, const void* paramB) {
     const s16* a = paramA;
     const s16* b = paramB;
     s16 x = itemDataTable[*a].type_sort_order;

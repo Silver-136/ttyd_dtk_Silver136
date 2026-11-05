@@ -164,7 +164,7 @@ static USER_FUNC(evt_unitwin_select_func);
 USER_FUNC(evt_unitwin_select_func);
 #endif
 
-void evt_unitwin_disp_func(CameraId cameraId, void* param);
+static void evt_unitwin_disp_func(CameraId cameraId, void* param);
 
 void unitwin_help_main(WinMgrEntry* entry);
 void unitwin_help_disp(WinMgrEntry* entry);
@@ -1265,7 +1265,7 @@ static inline const char* unitwin_party_name(s32 i) {
 #if VERSION <= VERSION_DEMO_JP
 static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 #else
-void evt_unitwin_disp_func(CameraId cameraId, void* param) {
+static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 #endif
     PouchData* pouch = pouchGetPtr();
     UnitWinWork* wp = (UnitWinWork*)param;

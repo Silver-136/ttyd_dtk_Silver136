@@ -90,9 +90,9 @@ static void disp_2D(CameraId cam, void* param);
 static MukiWork* get_ptr(void);
 static void main_star(void);
 static void main_base(void);
-void main_icon(s32 idx);
-void main_point(s32 idx);
-void main_cursor(void);
+static void main_icon(s32 idx);
+static void main_point(s32 idx);
+static void main_cursor(void);
 
 
 EvtWord marioAttackEvent_Muki[];
@@ -356,7 +356,7 @@ static inline void sacMukiAudienceCall(s32 num) {
 #if VERSION <= VERSION_DEMO_JP
 static void main_cursor(void) {
 #else
-void main_cursor(void) {
+static void main_cursor(void) {
 #endif
 
     MukiWork* w = get_ptr();
@@ -522,7 +522,7 @@ void main_cursor(void) {
  * then while the game runs now and then spawns an arrow or mushroom (main_icon) in it when empty,
  * and shrinks away at the end.
  */
-void main_point(s32 idx) {
+static void main_point(s32 idx) {
     MukiWork* w = get_ptr();
     Muki3D* o = &w->o3d[idx];
     s32 i;
@@ -597,7 +597,7 @@ void main_point(s32 idx) {
  * One arrow or poison mushroom in a square: spins in as a random type (0 attack, 1 defense, 2 mushroom),
  * stays 90 frames, then spins out; a hit removes it at once and the end of the game fades it.
  */
-void main_icon(s32 idx) {
+static void main_icon(s32 idx) {
     MukiWork* w = get_ptr();
     MukiObj* o = &w->obj[idx];
 

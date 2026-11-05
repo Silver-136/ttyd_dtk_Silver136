@@ -89,7 +89,7 @@ static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 
 USER_FUNC(bgm_start_wait);
 USER_FUNC(stone_bg);
-void coingetDisp(WinMgrEntry* entry);
+static void coingetDisp(WinMgrEntry* entry);
 
 #if VERSION < VERSION_US
 s32 evt_sub_mail_event_end[1];
@@ -2043,7 +2043,7 @@ USER_FUNC(evt_sub_countdown_set_restart_time) {
  * work[0] is the coin count, work[1] turns the text on.
  * US and later widen the window to fit the message and format it per language.
  */
-void coingetDisp(WinMgrEntry* entry) {
+static void coingetDisp(WinMgrEntry* entry) {
     s32* work = entry->param;
     char buf[0x400];
     if (work[1]) {

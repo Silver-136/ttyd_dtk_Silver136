@@ -40,8 +40,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF},
 };
 
-void effBlowMain(EffectEntry* effect);
-void effBlowDisp(CameraId cameraId, void* payload);
+static void effBlowMain(EffectEntry* effect);
+static void effBlowDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns `count` streaks at (x, y, z) travelling along the direction (dx, dy, dz);
@@ -151,7 +151,7 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
  * Streaks respawn while state is 0; the effect ends once state goes from 1 to 2.
  * Nothing in the tree sets state 1 (and no script spawns blow_n64), so as built it runs until deleted.
  */
-void effBlowMain(EffectEntry* effect) {
+static void effBlowMain(EffectEntry* effect) {
     EffBlowN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -245,7 +245,7 @@ void effBlowMain(EffectEntry* effect) {
 }
 
 /** Draws each streak as a rotated, stretched camera-facing quad tinted light cyan. */
-void effBlowDisp(CameraId cameraId, void* payload) {
+static void effBlowDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffBlowN64Work* work;

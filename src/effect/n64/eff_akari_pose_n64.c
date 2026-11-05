@@ -60,8 +60,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-void effAkariPoseMain(EffectEntry* effect);
-void effAkariPoseDisp(CameraId cameraId, void* param);
+static void effAkariPoseMain(EffectEntry* effect);
+static void effAkariPoseDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns `count` flares around (x, y, z), `scale` times the base size,
@@ -107,7 +107,7 @@ EffectEntry* effAkariPoseN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
  * it begins 16 units out at an evenly spaced angle, moves outward with decaying velocity,
  * and takes scale and alpha from the sequence tables.
  */
-void effAkariPoseMain(EffectEntry* effect) {
+static void effAkariPoseMain(EffectEntry* effect) {
     EffAkariPoseN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -193,7 +193,7 @@ void effAkariPoseMain(EffectEntry* effect) {
 }
 
 /** Draws each started flare as a rotated, camera-facing 16x16 textured quad. */
-void effAkariPoseDisp(CameraId cameraId, void* param) {
+static void effAkariPoseDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* cam;
     EffAkariPoseN64Work* work;

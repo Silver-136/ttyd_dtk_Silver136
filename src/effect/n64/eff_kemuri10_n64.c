@@ -53,8 +53,8 @@ static effN64Vtx stg_houki_kemuri_v[] = {
     {0, 50, 20, 1024, 512, 255, 255, 255, 255},
 };
 
-void effKemuri10Main(EffectEntry* effect);
-void effKemuri10Disp(CameraId cameraId, void* payload);
+static void effKemuri10Main(EffectEntry* effect);
+static void effKemuri10Disp(CameraId cameraId, void* payload);
 
 /**
  * Spawns smoke effect 10 at (x, y, z), oriented by (dx, dy, dz) and drifting the opposite way
@@ -160,7 +160,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
 #if VERSION <= VERSION_DEMO_JP
 static void effKemuri10Main(EffectEntry* effect) {
 #else
-void effKemuri10Main(EffectEntry* effect) {
+static void effKemuri10Main(EffectEntry* effect) {
 #endif
 
     EffKemuri10N64Work* work;
@@ -215,7 +215,7 @@ void effKemuri10Main(EffectEntry* effect) {
 }
 
 /** Draws the smoke cloud mesh (stg_houki_kemuri_v, 64 triangles = 192 vertex indices) with texture 0x1F, oriented by the direction frame. */
-void effKemuri10Disp(CameraId cameraId, void* payload) {
+static void effKemuri10Disp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri10N64Work* work = effect->userdata;

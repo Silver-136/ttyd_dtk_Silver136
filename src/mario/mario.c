@@ -80,8 +80,8 @@ Vec R_last_position;
 s32 blurPosId;
 
 //local prototypes
-const char* toRearPose(const char* name);
-const char* toFrontPose(const char* name);
+static const char* toRearPose(const char* name);
+static const char* toFrontPose(const char* name);
 
 /** Returns Mario's work (MarioWork), allocated once by marioInit; the main way the rest of the game reaches Mario. */
 MarioWork* marioGetPtr(void) {
@@ -2306,7 +2306,7 @@ inline BOOL marioChkRevDir(f32 angle) {
  * Draws one ghost of Mario's motion-blur trail at recorded position blurId, more transparent for a higher slot index;
  * used by marioDispBlur.
  */
-void marioDispBlurSub(Mtx unused, s32 blurId) {
+static void marioDispBlurSub(Mtx unused, s32 blurId) {
     MarioWork* wp = mp;
     Mtx mtx;
     Mtx rotMtx;
@@ -2526,7 +2526,7 @@ void marioDisp(CameraId camId, void* param) {
 }
 
 /** Returns the back-facing version of a Mario or Peach pose name, or NULL if it has none; the PAL demo and PAL add M_I_3. */
-const char* toRearPose(const char* name) {
+static const char* toRearPose(const char* name) {
     const char* rear = NULL;
     if (mp->characterId == CHARACTER_PEACH && !(mp->peachFlags & PEACH_FLAG_GUNDAN)) {
         if (!strcmp(name, "P_Z_1")) {
@@ -2632,7 +2632,7 @@ const char* toRearPose(const char* name) {
 }
 
 /** Returns the front-facing version of a back-facing pose name (the reverse of toRearPose), or NULL. */
-const char* toFrontPose(const char* name) {
+static const char* toFrontPose(const char* name) {
     const char* front = NULL;
     if (mp->characterId == CHARACTER_PEACH && !(mp->peachFlags & PEACH_FLAG_GUNDAN)) {
         if (!strcmp(name, "P_Z_1R")) {

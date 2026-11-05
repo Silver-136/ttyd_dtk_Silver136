@@ -25,9 +25,9 @@ typedef struct EffBattenWork {
     s32 pad58;     // 0x58
 } EffBattenWork;
 
-void effBattenMain(EffectEntry* effect);
-void effBattenDisp(CameraId cameraId, void* payload);
-void effBattenDisp2(CameraId cameraId, void* payload);
+static void effBattenMain(EffectEntry* effect);
+static void effBattenDisp(CameraId cameraId, void* payload);
+static void effBattenDisp2(CameraId cameraId, void* payload);
 
 /**
  * Spawns a Magnus von Grapple 2.0 part: type 0 allocates a header and three X-mark layers,
@@ -78,7 +78,7 @@ EffectEntry* effBattenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
  * Loads the EFF_batten_x / EFF_batten_rocket pose for types 1-3, steps the type 0 layers through their states,
  * fades out over 32 frames on soft delete, then releases the pose and deletes the effect.
  */
-void effBattenMain(EffectEntry* effect) {
+static void effBattenMain(EffectEntry* effect) {
     EffBattenWork* work;
     s32 done;
     s32 type;
@@ -192,7 +192,7 @@ void effBattenMain(EffectEntry* effect) {
  * As effBattenMain steps them, each layer starts 10 frames after the one before, shrinks from scale 3 to 1
  * while fading in to half alpha, and then all three grow to scale 10 and fade out together.
  */
-void effBattenDisp(CameraId cameraId, void* payload) {
+static void effBattenDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     EffBattenWork* work;
     s32 i;
@@ -260,7 +260,7 @@ void effBattenDisp(CameraId cameraId, void* payload) {
  * Draws the pose-animated variants (types 1-3: EFF_batten_x, EFF_batten_rocket) facing the camera
  * with animPoseDrawMtx.
  */
-void effBattenDisp2(CameraId cameraId, void* payload) {
+static void effBattenDisp2(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     EffBattenWork* work;
     Mtx mtx;

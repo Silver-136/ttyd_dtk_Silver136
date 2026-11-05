@@ -29,9 +29,9 @@ typedef struct KissWork {
     s32 pad;      // 0x34
 } KissWork;
 
-void effKissMain(EffectEntry* effect);
-void effKissDisp(CameraId cameraId, void* payload);
-void effKissDisp2(CameraId cameraId, void* payload);
+static void effKissMain(EffectEntry* effect);
+static void effKissDisp(CameraId cameraId, void* payload);
+static void effKissDisp2(CameraId cameraId, void* payload);
 
 /**
  * Per-frame keys of the type 1 kiss hearts over 24 frames: distance from the centre (they burst outward and
@@ -152,7 +152,7 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
  * Moves the hearts with decay, fades them over the last 15 frames (not type 4), and for type 4 ends with a
  * stardust puff.
  */
-void effKissMain(EffectEntry* effect) {
+static void effKissMain(EffectEntry* effect) {
     KissWork* work = effect->userdata;
     Vec pos;
     s32 type;
@@ -271,7 +271,7 @@ static inline void effKissGXSetup(void) {
 }
 
 /** Draws the lip mark and the hearts in two passes. */
-void effKissDisp(CameraId cameraId, void* payload) {
+static void effKissDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     KissWork* work = effect->userdata;
     CameraEntry* cam;
@@ -454,7 +454,7 @@ void effKissDisp(CameraId cameraId, void* payload) {
 }
 
 /** Draws the small pink hearts (texture 20) of types 4 and 5. */
-void effKissDisp2(CameraId cameraId, void* payload) {
+static void effKissDisp2(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     KissWork* work = effect->userdata;
     CameraEntry* cam;

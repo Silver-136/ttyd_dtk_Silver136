@@ -49,13 +49,13 @@ s32 _status_pose_table[] = {
 };
 
 //local prototypes
-void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor color, f32 rotation);
-void btlUnitItemDisp(CameraId camId, BattleUnit* unit);
-void _pose_def(BattleUnitPart* part);
-void _pose_one_pattern(BattleUnitPart* part);
-void _pose_two_pattern(BattleUnitPart* part);
-void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color);
-void _btlStockExpDisp(CameraId camId, void* param);
+static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor color, f32 rotation);
+static void btlUnitItemDisp(CameraId camId, BattleUnit* unit);
+static void _pose_def(BattleUnitPart* part);
+static void _pose_one_pattern(BattleUnitPart* part);
+static void _pose_two_pattern(BattleUnitPart* part);
+static void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color);
+static void _btlStockExpDisp(CameraId camId, void* param);
 
 /**
  * Returns the animation name for a pose type from a unit part's pose table:
@@ -77,7 +77,7 @@ const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
  * Shared 2D render state for the battle overlays:
  * no culling, alpha blending, Z test always passing without writes, one vertex-colour channel.
  */
-void btlDispGXInit2DSub(void) {
+static void btlDispGXInit2DSub(void) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -128,12 +128,12 @@ void btlDispGXInit2D(void) {
 
 void BattleStockExpDisp(void);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
-void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
-void floatOffsetControl(BattleUnitPart* part);
+static void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
+static void floatOffsetControl(BattleUnitPart* part);
 f32 getFloatDispOffset(BattleUnitPart* part);
 f32 getGravityDispOffset(BattleUnitPart* part);
-void gravityOffsetControl(BattleUnitPart* part);
-void statusPoseControl(BattleUnitPart* part);
+static void gravityOffsetControl(BattleUnitPart* part);
+static void statusPoseControl(BattleUnitPart* part);
 /** Emits one vertex of a flat-coloured quad at (x, y) on the 2D plane. */
 void btlDispGXPoint2DRasta(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a) {
     GXPosition3f32(x, y, 0.0f);
@@ -169,7 +169,7 @@ void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
  * GX state for the battle texture planes: textured, colour and alpha from the vertices
  * (lighting off; only the ambient source is the register).
  */
-void btlDispTexPlaneInit(void) {
+static void btlDispTexPlaneInit(void) {
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -189,7 +189,7 @@ void btlDispTexPlaneInit(void) {
  * sized to the texture, with one colour per corner.
  * Intensity (I4) textures are drawn as a colour mask, others are modulated.
  */
-void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3) {
+static void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3) {
     GXTexObj texobj;
     f32 x, y;
 
@@ -324,7 +324,7 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
 
 void btlUnitPartsBlurDisp(CameraId camId, void* payload);
 void btlUnitItemDisp2(CameraId camId, void* payload);
-void btlUnitStolenItemDisp(CameraId camId, void* param);
+static void btlUnitStolenItemDisp(CameraId camId, void* param);
 void btlUnitPartsDisp(CameraId camId, void* part);
 
 /**
@@ -907,7 +907,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
 #pragma push
 // Dead-assignment optimisation off for btlUnitItemDisp only (until the pop): the original register allocation needs it.
 #pragma opt_dead_assignments off
-void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
+static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     s32 item;
     f32 height;
@@ -951,7 +951,7 @@ void btlUnitItemDisp2(CameraId camId, void* payload) {
 }
 
 /** Draws an item stolen from Mario (by a Bandit or similar) floating above the thief's head. */
-void btlUnitStolenItemDisp(CameraId camId, void* param) {
+static void btlUnitStolenItemDisp(CameraId camId, void* param) {
     BattleUnit* unit = param;
     Vec pos;
     s32 item = unit->heldItem;
@@ -962,7 +962,7 @@ void btlUnitStolenItemDisp(CameraId camId, void* param) {
     ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
 }
 
-void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation) {
+static void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation) {
     if (part->attributes & kMotionBlur) {
         _partsBlurControl(part, 1, orientation, color, rotation);
     } else {
@@ -974,7 +974,7 @@ void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, 
  * Shifts the part's 10-entry blur history down one and stores this frame's matrix,
  * colour and blur colours in entry 0.
  */
-void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor color, f32 rotation) {
+static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor color, f32 rotation) {
     BattleWorkUnitPartBlur* blur;
     int i;
 
@@ -1090,7 +1090,7 @@ void btlDispPoseAnime(BattleUnitPart* part) {
  * while the battle is in zero gravity (and the unit does not float on its own),
  * and eases it back to rest when it ends; the cycle is 120 frames.
  */
-void gravityOffsetControl(BattleUnitPart* part) {
+static void gravityOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = part->owner;
@@ -1117,7 +1117,7 @@ f32 getGravityDispOffset(BattleUnitPart* part) {
     return 4.0f * sinfd((part->gravityTimer * 3 + 270) % 360) + 4.0f;
 }
 
-void floatOffsetControl(BattleUnitPart* part) {
+static void floatOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
     BattleUnit* unit = part->owner;
 
@@ -1149,7 +1149,7 @@ f32 getFloatDispOffset(BattleUnitPart* part) {
  * Runs the per-frame effect animation for the part's draw type:
  * one-shot effects for types 2, 3 and 7, cycling effects for 4 to 6, default (no effect) otherwise.
  */
-void statusPoseControl(BattleUnitPart* part) {
+static void statusPoseControl(BattleUnitPart* part) {
     switch (part->look) {
         case PART_LOOK_NONE:
             break;
@@ -1170,7 +1170,7 @@ void statusPoseControl(BattleUnitPart* part) {
 }
 
 /** Clears the part's effect animation once; paper-craft units (no backface flip) also get the paper-craft light. */
-void _pose_def(BattleUnitPart* part) {
+static void _pose_def(BattleUnitPart* part) {
     switch (part->poseState) {
         case 0:
             part->poseState = 1;
@@ -1188,7 +1188,7 @@ void _pose_def(BattleUnitPart* part) {
  * the draw code and btlevtcmd only give a part types 0, 1, 4 and 7.
  * Guess: C and F are a stone-like and a frozen look, from the effect names.
  */
-void _pose_one_pattern(BattleUnitPart* part) {
+static void _pose_one_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
     case 0:
         part->poseState = 1;
@@ -1215,7 +1215,7 @@ void _pose_one_pattern(BattleUnitPart* part) {
  * types 5 and 6 hold PM_C_1A or PM_F_2 for a random while,
  * then play PM_C_1B or PM_F_1B for 22 frames and start over.
  */
-void _pose_two_pattern(BattleUnitPart* part) {
+static void _pose_two_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
         case 0:
             part->poseState = 1;
@@ -1353,7 +1353,7 @@ void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color) {
  * Draws one quadrant of btlDispTex4: scaled, mirrored by scale2, offset by pos2,
  * then rotated (Z, X, Y) and placed at pos.
  */
-void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color) {
+static void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color) {
     Mtx mtx, trans, scl, rotX, rotY, rotZ, trans2, scl2;
 
     PSMTXIdentity(mtx);
@@ -1397,7 +1397,7 @@ void BattleStockExpDisp(void) {
  * Draws the earned Star Points in the lower right as star icons:
  * a large one per ten and a small one per unit, up to 100.
  */
-void _btlStockExpDisp(CameraId camId, void* param) {
+static void _btlStockExpDisp(CameraId camId, void* param) {
     static f32 y;
     static f32 x;
     s32 exp;

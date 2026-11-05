@@ -30,8 +30,8 @@ typedef struct EffNozleWork {
     f32 rotY;       // 0x40
 } EffNozleWork;
 
-void effNozleMain(EffectEntry* effect);
-void effNozleDisp(CameraId cameraId, EffectEntry* effect);
+static void effNozleMain(EffectEntry* effect);
+static void effNozleDisp(CameraId cameraId, EffectEntry* effect);
 
 static s16 nozle_1_vertex_tbl[] __attribute__((aligned(32))) = {
     -796, 0, 0, 796, 0, 0,
@@ -501,7 +501,7 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
 #if VERSION <= VERSION_DEMO_JP
 static void effNozleMain(EffectEntry* effect) {
 #else
-void effNozleMain(EffectEntry* effect) {
+static void effNozleMain(EffectEntry* effect) {
 #endif
 
     EffNozleWork* work = effect->userdata;
@@ -596,7 +596,7 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 #if VERSION <= VERSION_DEMO_JP
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
+static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     void** dl5;
     u8* sz5;

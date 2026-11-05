@@ -119,21 +119,21 @@ USER_FUNC(recover_cmd_disable);
 USER_FUNC(star_appear);
 USER_FUNC(status_on);
 USER_FUNC(get_score);
-s32 object_get_num(void);
-void object_entry(void);
-void weapon_entry(void);
+static s32 object_get_num(void);
+static void object_entry(void);
+static void weapon_entry(void);
 USER_FUNC(main_genki);
 USER_FUNC(end_genki);
 static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
 static USER_FUNC(start_game);
-void main_star1(void);
-void main_star0(s32 idx);
+static void main_star1(void);
+static void main_star0(s32 idx);
 static void main_star(void);
-void main_object(s32 idx);
-void main_weapon(s32 idx);
-void main_target(void);
-void main_mario(void);
+static void main_object(s32 idx);
+static void main_weapon(s32 idx);
+static void main_target(void);
+static void main_mario(void);
 static void main_base(void);
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
@@ -346,7 +346,7 @@ static void main_base(void) {
  * Hitting a poison mushroom (state 3) leaves him dizzy and unable to shoot for 180 frames;
  * when time is up and the last item is gone he stops and the aim reticle is hidden.
  */
-void main_mario(void) {
+static void main_mario(void) {
     GenkiWork* w = get_ptr();
     s32 stick = keyGetStickX(0);
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -416,7 +416,7 @@ void main_mario(void) {
  * Swings the aim reticle between 0 and 60 degrees and back, 1.25 degrees a frame;
  * main_weapon launches stars in that direction. targetAngle only spins the reticle texture.
  */
-void main_target(void) {
+static void main_target(void) {
     GenkiWork* w = get_ptr();
     switch (w->targetState) {
     case 0:
@@ -464,7 +464,7 @@ void main_target(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void main_weapon(s32 idx) {
 #else
-void main_weapon(s32 idx) {
+static void main_weapon(s32 idx) {
 #endif
 
     GenkiWork* w = get_ptr();
@@ -676,7 +676,7 @@ void main_weapon(s32 idx) {
  * flower or partner icon, in Sweet Feast sometimes a big one, or a poison mushroom) and starts under a star;
  * it then falls until it reaches Mario's feet, where it vanishes in stardust without scoring.
  */
-void main_object(s32 idx) {
+static void main_object(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiObject* o = &w->object[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -776,7 +776,7 @@ static void main_star(void) {
  * flies to a random spot along the top of the stage and sways back
  * and forth there (items drop from its position) until time runs out, then hides.
  */
-void main_star0(s32 idx) {
+static void main_star0(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiStar* s = &w->star[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -882,7 +882,7 @@ void main_star0(s32 idx) {
  * Sweet Feast's single big star: the same fly-up and sway as main_star0, larger and alone;
  * it rises straight up 50 instead of circling Mario.
  */
-void main_star1(void) {
+static void main_star1(void) {
     GenkiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     EffStarStoneWork* ew;
@@ -1406,7 +1406,7 @@ static GenkiWork* get_ptr(void) {
  * Fires a star: picks a random idle shot slot (3 in Sweet Treat, 7 in Sweet Feast),
  * arms it with a 7-frame delay and plays Mario's throwing pose; does nothing when every slot is in flight.
  */
-void weapon_entry(void) {
+static void weapon_entry(void) {
     GenkiWork* w = get_ptr();
     s32 cnt = 0;
     s32 idx[7];
@@ -1433,7 +1433,7 @@ void weapon_entry(void) {
  * Starts the first idle object.
  * main_base calls it at each drop interval while time is left.
  */
-void object_entry(void) {
+static void object_entry(void) {
     GenkiWork* w = get_ptr();
     s32 i;
     for (i = 0; i < 10; i++) {
@@ -1447,7 +1447,7 @@ void object_entry(void) {
 }
 
 /** Counts the objects in state 2 (called by main_mario to see whether any item is still falling). */
-s32 object_get_num(void) {
+static s32 object_get_num(void) {
     GenkiWork* w = get_ptr();
     s32 i;
     s32 n;

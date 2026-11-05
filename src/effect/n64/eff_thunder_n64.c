@@ -33,8 +33,8 @@ typedef struct EffThunderN64Work {
 } EffThunderN64Work;
 
 
-void effThunderMain(EffectEntry* effect);
-void effThunderDisp(CameraId cameraId, void* payload);
+static void effThunderMain(EffectEntry* effect);
+static void effThunderDisp(CameraId cameraId, void* payload);
 
 /**
  * The lightning bolt mesh (inazuma, "lightning"): several jagged bolt shapes,
@@ -661,7 +661,7 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
  * types 3+ fade 13 per frame after frame 6. The 25-per-frame fade for types 0-2 below life 10 never runs
  * (the delete request skips straight to -1), and their draw does not use the alpha. CAMERA_3D, layer 2.
  */
-void effThunderMain(EffectEntry* effect) {
+static void effThunderMain(EffectEntry* effect) {
     EffThunderN64Work* work;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -754,7 +754,7 @@ void effThunderMain(EffectEntry* effect) {
  * two scrolled layers: magenta-pink (FF,2F,C6) for types 0-2, yellow with the fading alpha for types 3+.
  * Type 1 stays hidden for its first 18 frames.
  */
-void effThunderDisp(CameraId cameraId, void* payload) {
+static void effThunderDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     EffThunderN64Work* work;

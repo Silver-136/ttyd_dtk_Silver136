@@ -28,7 +28,7 @@
 double cos(float);
 #endif
 
-HitEntry* hitEstimate(s32* out);
+static HitEntry* hitEstimate(s32* out);
 
 // hitEstimate's *out: what the swing will hit; it picks the pose, the effect and the swing length.
 enum {
@@ -755,7 +755,7 @@ void mot_ham2_post(void) {
 #if VERSION <= VERSION_DEMO_JP
 static HitEntry* hitEstimate(s32* out) {
 #else
-HitEntry* hitEstimate(s32* out) {
+static HitEntry* hitEstimate(s32* out) {
 #endif
     MarioWork* mario;
     HitCheckQuery q;

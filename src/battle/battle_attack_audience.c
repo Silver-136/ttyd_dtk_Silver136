@@ -123,7 +123,7 @@ s32 _check_aud_item_type(EventEntry* event, BOOL isFirstCall) {
  * Script helper: clears the item an audience member is throwing,
  * returning its id in args[0] unless that is EVT_NULLPTR.
  */
-s32 _delete_present_item(EventEntry* event, BOOL isFirstCall) {
+static s32 _delete_present_item(EventEntry* event, BOOL isFirstCall) {
     s32 out = event->args[0];
     s32 item = BattleAudience_GetPresentItemNo();
 
@@ -138,7 +138,7 @@ s32 _delete_present_item(EventEntry* event, BOOL isFirstCall) {
  * Script helper: gives the thrown item to its target:
  * into Mario's pouch for the player's side, otherwise as the enemy's held item if it has none.
  */
-s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
+static s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
     s32 id = BattleAudience_GetPresentTargetUnitId();
@@ -153,7 +153,7 @@ s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: returns the unit id the audience item was thrown at in args[0]. */
-s32 _get_present_target_id(EventEntry* event, BOOL isFirstCall) {
+static s32 _get_present_target_id(EventEntry* event, BOOL isFirstCall) {
     s32 out = event->args[0];
 
     evtSetValue(event, out, BattleAudience_GetPresentTargetUnitId());
@@ -201,7 +201,7 @@ void _get_item_announce_disp(CameraId cameraId, void* param) {
  * Script helper: shows the caught item floating above the target unit
  * and the "Got <item>!" window for 90 frames, then removes the item entity.
  */
-s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
+static s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
 
@@ -237,7 +237,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
  * Script helper: applies the damage of a harmful thrown item (the audience's presentWeapon) to the target unit's
  * body part. args[0] is read but unused.
  */
-s32 _damage(EventEntry* event, BOOL isFirstCall) {
+static s32 _damage(EventEntry* event, BOOL isFirstCall) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = BattleAudience_GetPresentTargetUnitId();

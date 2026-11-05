@@ -44,10 +44,10 @@ typedef struct EffNanigaWork {
     s32 sfxId;     // 0x4C
 } EffNanigaWork;
 
-void effNanigaMain(EffectEntry* effect);
-void effNanigaDisp(CameraId cameraId, void* param);
-void effNanigaDisp2(CameraId cameraId, void* param);
-void effNanigaDisp3(CameraId cameraId, void* param);
+static void effNanigaMain(EffectEntry* effect);
+static void effNanigaDisp(CameraId cameraId, void* param);
+static void effNanigaDisp2(CameraId cameraId, void* param);
+static void effNanigaDisp3(CameraId cameraId, void* param);
 
 /**
  * Plays SFX_ITEM_WHAT3, 4 and 5 at the effect's position (LW 0-2), 833 ms apart;
@@ -131,7 +131,7 @@ EffectEntry* effNanigaEntry(s32 type, f32 x, f32 y, f32 z, s32* list, s32 item) 
  * Per frame: runs the state machine (smoke burst, reel spin and stop with "what" sounds, EFF_naniga animation,
  * item sparkles, fade) and deletes the effect at the end.
  */
-void effNanigaMain(EffectEntry* effect) {
+static void effNanigaMain(EffectEntry* effect) {
     EffNanigaWork* work = effect->userdata;
     BOOL inBattle;
     Vec pos;
@@ -298,7 +298,7 @@ void effNanigaMain(EffectEntry* effect) {
  * clipped by a scissor to a 40x40 window (scaled 1.5x) around the effect's screen position.
  * Used while the reel spins and settles (states 2-5 and 10).
  */
-void effNanigaDisp(CameraId cameraId, void* param) {
+static void effNanigaDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
@@ -378,7 +378,7 @@ void effNanigaDisp(CameraId cameraId, void* param) {
  * Draws the EFF_naniga animation pose (groups 1-3) 20 units below the effect, facing the camera,
  * tinted white at the work's alpha. Registered every frame while the pose is loaded.
  */
-void effNanigaDisp2(CameraId cameraId, void* param) {
+static void effNanigaDisp2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;
     Mtx mT, mR, mS, mC;
@@ -397,7 +397,7 @@ void effNanigaDisp2(CameraId cameraId, void* param) {
     animPoseDrawMtx(work->pose, mC, 3, 0.0f, 10.0f);
 }
 
-void effNanigaDisp3(CameraId cameraId, void* param) {
+static void effNanigaDisp3(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;
     ItemData* item;

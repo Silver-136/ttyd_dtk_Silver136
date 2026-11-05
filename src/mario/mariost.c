@@ -294,8 +294,8 @@ GXRenderModeObj GXNtsc480ProgMarioStPal = {
 #endif
 
 //local prototypes
-void viPostCallback(u32 retraceCount);
-void* gcDvdCheckThread(void* param);
+static void viPostCallback(u32 retraceCount);
+static void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);
 void gcResetCheck(void);
 
@@ -661,7 +661,7 @@ u32 marioStGetSystemLevel(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void viPostCallback(u32 retraceCount) {
 #else
-void viPostCallback(u32 retraceCount) {
+static void viPostCallback(u32 retraceCount) {
 #endif
     OSTime time;
     u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
@@ -761,7 +761,7 @@ exitcheck:
 #if VERSION <= VERSION_DEMO_JP
 static void* gcDvdCheckThread(void* param) {
 #else
-void* gcDvdCheckThread(void* param) {
+static void* gcDvdCheckThread(void* param) {
 #if VERSION >= VERSION_US
     s32 prevStatus = 0;
     s32 stableCount = 0;

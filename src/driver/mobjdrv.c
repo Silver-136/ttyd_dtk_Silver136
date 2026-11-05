@@ -352,7 +352,7 @@ static MapObjectWork* mobjGetWork(void) {
  * Draw callback for a translucent map object: draws its pose's opaque and translucent parts in one go,
  * with its paper texture if it has one.
  */
-void mobjDispXLU(CameraId camId, void* param) {
+static void mobjDispXLU(CameraId camId, void* param) {
     MapObjectEntry* entry = param;
 
     if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
@@ -409,7 +409,7 @@ void mobjDisp(CameraId camId, void* param) {
  * Draw callback on the offscreen camera for a map object with an offscreen region:
  * draws its pose and grows the region by the screen box it covered.
  */
-void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
+static void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
     MapObjectEntry* entry = param;
     u16 left, top, right, bottom;
 

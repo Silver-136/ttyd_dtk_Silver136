@@ -25,7 +25,7 @@ static ExtdrvWork work[2];
 // Field or battle work. A macro: as an inline function the object changes.
 #define extGetWork() (gp->inBattle ? &work[1] : &work[0])
 
-void extMakeTexture(CameraId camId, void* param);
+static void extMakeTexture(CameraId camId, void* param);
 static s32 compare(const void* a, const void* b);
 
 /** Sine of each whole degree, 450 entries so cosine is 90 further on: extMain turns each copy to its heading. */
@@ -145,7 +145,7 @@ void extEntry(s32 poseNum, ExtTexInfo* texInfo, void (*initFunc)(void), void (*m
  * Offscreen draw callback queued by extEntry: renders each listed animation frame (group, animation, frame) to a
  * texture and builds that texture's quad, sized from the rendered bounds at half scale, as a display list.
  */
-void extMakeTexture(CameraId camId, void* param) {
+static void extMakeTexture(CameraId camId, void* param) {
     ExtdrvWork* wp = extGetWork();
     ExtTexInfo* info;
     ExtdrvTex* tex;

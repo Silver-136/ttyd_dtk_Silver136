@@ -127,7 +127,7 @@ void marioHitCheckWidth(void) {
  * or any of user1's.
  * marioHitCheckAttr2Inl passes 0x4 / 0x800000, so only 0x4 surfaces without 0x800000 are skipped.
  */
-BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
     BOOL ret = FALSE;
     s32 attr = entry->attributes;
     if ((attr & query->user0) == 0 || (attr & query->user1) != 0) {
@@ -141,7 +141,7 @@ BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
  * always tests 0x80 / 0x80000 hits, skips 0x4 hits unless they also have 0x800000,
  * and skips the map objects of hidden ? Blocks, hidden badge blocks and hidden 10-coin blocks.
  */
-BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
@@ -165,7 +165,7 @@ BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry) {
  * chkfilterVec for tube mode: 0x80000 hits are skipped like 0x4 ones (unless 0x800000),
  * so the tube rolls through them; hidden blocks are skipped as well.
  */
-BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     if (entry->attributes & HIT_ATTR_SHIP_ONLY) {
         return TRUE;
@@ -189,7 +189,7 @@ BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
  * chkfilterVec while Mario hides in Vivian's shadow:
  * 0x4, 0x800 (spike) and 0x80000 hits are skipped unless they have 0x800000; hidden blocks are skipped as well.
  */
-BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     if ((entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_SPIKES | HIT_ATTR_ROLL_THROUGH)) && !(entry->attributes & HIT_ATTR_BERO)) {
         return FALSE;

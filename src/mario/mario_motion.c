@@ -58,8 +58,8 @@ typedef struct MarioMotTblEntry {
     void (*post)(void);
 } MarioMotTblEntry;
 
-void mot_talk(void);
-void mot_getItem(void);
+static void mot_talk(void);
+static void mot_getItem(void);
 void mot_kaze(void);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -69,10 +69,10 @@ static void mot_cloud_post(void);
 void mot_bottomless(void);
 #endif
 
-void mot_forceReset(void);
-void mot_shadow(void);
-void mot_partyUse(void);
-void mot_dummy(void);
+static void mot_forceReset(void);
+static void mot_shadow(void);
+static void mot_partyUse(void);
+static void mot_dummy(void);
 
 
 BOOL marioCreviceWallChk(Vec pos);
@@ -931,7 +931,7 @@ static f32 marioDemoHalf(f32 x) {
  * the M_I_2 pose (M_I_3 in PAL and the PAL demo) returns to M_S_1 after 60 frames.
  * Peach uses peach_talk, Bowser his own pose.
  */
-void mot_talk(void) {
+static void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc;
     f32 camYaw;
@@ -999,7 +999,7 @@ void mot_talk(void) {
 }
 
 /** Item pickup motion: stops Mario and shows the item-up pose M_I_U until the item code changes the motion. */
-void mot_getItem(void) {
+static void mot_getItem(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -1274,7 +1274,7 @@ void mot_kaze(void) {
  * The look is like Paper Mario 64's KnockDownPlayer map scripts, but those draw a separate rotating sprite during a
  * cutscene; this only tilts Mario and waits for B. Same code in all versions.
  */
-void mot_shadow(void) {
+static void mot_shadow(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -1300,12 +1300,12 @@ void mot_shadow(void) {
 }
 
 /** Empty motion slot MARIO_MOTION_PARTY_USE; nothing in the tree enters it. */
-void mot_partyUse(void) {
+static void mot_partyUse(void) {
     marioGetPtr();
 }
 
 /** Empty last motion slot (MARIO_MOTION_DUMMY). */
-void mot_dummy(void) {
+static void mot_dummy(void) {
     marioGetPtr();
 }
 
@@ -1427,7 +1427,7 @@ void mot_bottomless(void) {
  * Its second step (marioReset, partner and follower moved to Mario) only runs
  * if MARIO_FLAG_CHG_MOT_DISABLED blocked that stand change.
  */
-void mot_forceReset(void) {
+static void mot_forceReset(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {

@@ -20,11 +20,11 @@ struct IconDispTableEntry {
     s32 something2;
 };
 
-BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
+static BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
-BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
+static BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 
 IconDispTableEntry _disp_table[0x17] = {
 #if VERSION >= VERSION_US
@@ -297,7 +297,7 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
  * attack and defense changes, Dodgy, Huge, Tiny, Confused, Invisible, Payback):
  * fills the entry with the status's icon and turn count and returns TRUE if the unit has the status.
  */
-BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
+static BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s8 turns, strength;
     s32 kind;
@@ -432,7 +432,7 @@ BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
  * tinting it back and forth over 60 frames between pink-red and yellow (HP) or green and cyan (FP).
  * Returns FALSE when the unit lacks the status or for any other status.
  */
-BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
+static BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s16* ctr;
     GXColor c0, c1, col;

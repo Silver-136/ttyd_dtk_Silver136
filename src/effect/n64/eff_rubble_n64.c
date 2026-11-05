@@ -97,8 +97,8 @@ effN64Vtx stg_hahen_v[58] = {
     {-1, -3, -1, -282, 0, 140, 140, 140, 255},
 };
 
-void effRubbleMain(EffectEntry* effect);
-void effRubbleDisp(CameraId cameraId, void* param);
+static void effRubbleMain(EffectEntry* effect);
+static void effRubbleDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a rubble chunk at (x, y, z) thrown with velY and gravity toward groundY.
@@ -142,7 +142,7 @@ EffectEntry* effRubbleN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
  * on landing it snaps to the ground, kicks up a dust puff (effHokoriN64Entry type 2) and sets 30 frames left.
  * Over the last 10 frames alpha drops 20% per frame; deletes when the lifetime runs out.
  */
-void effRubbleMain(EffectEntry* effect) {
+static void effRubbleMain(EffectEntry* effect) {
     EffRubbleN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -181,7 +181,7 @@ void effRubbleMain(EffectEntry* effect) {
  * Draws the chunk as an untextured shard mesh from stg_hahen_v (three shapes: types 0/3, 1/4, 2/5),
  * tumbled by its X/Y/Z rotation and scaled, in khaki (D7,D7,6E) shaded by the vertex colours.
  */
-void effRubbleDisp(CameraId cameraId, void* param) {
+static void effRubbleDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffRubbleN64Work* work;

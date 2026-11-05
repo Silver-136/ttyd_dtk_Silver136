@@ -11,8 +11,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-void effRadiationMain(EffectEntry* effect);
-void effRadiationDisp(CameraId cameraId, void* param);
+static void effRadiationMain(EffectEntry* effect);
+static void effRadiationDisp(CameraId cameraId, void* param);
 
 /** 150x20 quad, starting at the centre and reaching outward, drawn for each ray of types 0-1. */
 effN64Vtx size150x20_tex32x32[] = {
@@ -157,7 +157,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * (the rays of types 2 and up fade out over those frames).
  * Drawn on layer 2, or 8 when `flag` is set.
  */
-void effRadiationMain(EffectEntry* effect) {
+static void effRadiationMain(EffectEntry* effect) {
     s32 base1;
     s32 base2;
     s32 base;
@@ -314,7 +314,7 @@ void effRadiationMain(EffectEntry* effect) {
  * alpha with a factor picked by i & 3 and whose length grows from 0.75 to 1 with it (type 3 turned 45 degrees about Z).
  * Both faces drawn; with `flag` set it uses plain alpha blending without depth test or writes.
  */
-void effRadiationDisp(CameraId cameraId, void* param) {
+static void effRadiationDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffRadiationN64Work* p;

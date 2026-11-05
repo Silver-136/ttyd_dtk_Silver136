@@ -42,8 +42,8 @@ effN64Vtx foot_vtx[] = {
     {-5, 0, 5, 0, 0, 0, 0, 0, 255},
 };
 
-void effKemuri7Main(EffectEntry* effect);
-void effKemuri7Disp(CameraId cameraId, void* param);
+static void effKemuri7Main(EffectEntry* effect);
+static void effKemuri7Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns one snow footprint at (x, y, z), offset 5 units to the side given by side (0 or 1)
@@ -95,7 +95,7 @@ EffectEntry* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 side) {
  * Places the footprint on the ground and fades it by one alpha step per frame for up to 255 frames,
  * then deletes it.
  */
-void effKemuri7Main(EffectEntry* effect) {
+static void effKemuri7Main(EffectEntry* effect) {
     EffKemuri7N64Work* work = effect->userdata;
     s32 i;
     BOOL alive;
@@ -131,7 +131,7 @@ void effKemuri7Main(EffectEntry* effect) {
 }
 
 /** Draws the footprint as a flat 10x10 textured quad (effect texture 0x4F), mirrored when side is 0. */
-void effKemuri7Disp(CameraId cameraId, void* param) {
+static void effKemuri7Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri7N64Work* work;

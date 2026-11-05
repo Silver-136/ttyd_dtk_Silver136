@@ -35,12 +35,12 @@ void DrawMainMenu(BattleWork* wp);
 #if VERSION <= VERSION_DEMO_JP
 static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party);
 #else
-void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y);
+static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y);
 #endif
 
-void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s);
-void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s);
-void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
+static void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s);
+static void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s);
+static void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #include "mario/mariost.h"
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
@@ -137,7 +137,7 @@ void battleMenuDispEnd(void) {
  * Screen-space centre of the command ring: the acting unit's screen position moved 22.5 right and 105 up,
  * with x kept at -180 or more so the ring stays on screen.
  */
-void GetRingCenter(Vec* out) {
+static void GetRingCenter(Vec* out) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
 
@@ -154,7 +154,7 @@ void GetRingCenter(Vec* out) {
  * Offset of a ring icon at angle (radians, 0 = front/bottom of the ring) on the 80 x 35 ellipse of the command
  * ring.
  */
-void GetRingOffset(f32 angle, f32* x, f32* y) {
+static void GetRingOffset(f32 angle, f32* x, f32* y) {
     f32 t = 4.712389f - angle;
     *x = 80.0f * (f32)cos(t);
     *y = 35.0f * (f32)sin(t);
@@ -165,7 +165,7 @@ void GetRingOffset(f32 angle, f32* x, f32* y) {
  * the selected one as a speech-bubble label (iconFlags bit 1), the rest as round icons.
  * Only icons with iconFlags bit 0 are drawn.
  */
-void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f32* c) {
+static void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f32* c) {
     s32 order[5];
     f32 z[6];
     BattleWork* wp = _battleWorkPointer;
@@ -215,7 +215,7 @@ void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f
  * with a drop shadow that shifts as the bubble turns about y by s degrees; disabled commands are greyed.
  * US and later squeeze names wider than 90 units.
  */
-void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s) {
+static void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s) {
     GXColor tev;
     GXColor col;
     Mtx rot;
@@ -309,7 +309,7 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
  * scaled and darkened by its depth v.z so the far side of the ring looks smaller and dimmer;
  * disabled commands are greyed.
  */
-void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s) {
+static void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s) {
     GXColor tev;
     Mtx rot;
     Mtx scl;
@@ -404,7 +404,7 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
 #if VERSION <= VERSION_DEMO_JP
 static void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party) {
 #else
-void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party, s32 y) {
+static void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party, s32 y) {
 #endif
 
     Mtx out[7];
@@ -435,7 +435,7 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
 #if VERSION <= VERSION_DEMO_JP
 static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party) {
 #else
-void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
+static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
 #endif
     BattleWork* wp = _battleWorkPointer;
     CameraEntry* cam;
@@ -748,7 +748,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
  * between the two with the SFX_BTL_SYS_CAUTION_THROW1 sound as it starts,
  * or above Mario without a sound if he has no partner.
  */
-void DrawMenuPartyChangeButton(void) {
+static void DrawMenuPartyChangeButton(void) {
     Vec p;
     Vec q;
     s32 id;
@@ -806,7 +806,7 @@ void DrawMenuPartyChangeButton(void) {
 }
 
 /** Draws battle texture plane id at screen x, y, turned about y by angle degrees (used to flip the button in). */
-void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
+static void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
     Mtx mtx;
 
     PSMTXRotRad(mtx, 'y', 0.017453292f * angle);
@@ -836,7 +836,7 @@ void DrawMenuMarioPinchMark(void) {
 /**
  * Draws the DANGER/PERIL marks for Mario, then for his partner.
  */
-void DrawMenuPinchMark(void) {
+static void DrawMenuPinchMark(void) {
     Mtx m;
     Mtx out;
     GXTexObj texobj;
@@ -1000,7 +1000,7 @@ void DrawMenuPartyPinchMark(void) {
  * Draws the DANGER/PERIL marks for Mario and his partner,
  * drawing first whichever stands behind (from Mario's x position) so the front one stays on top.
  */
-void DrawMenuPinchMark(void) {
+static void DrawMenuPinchMark(void) {
     BattleUnit* unit = BattleGetMarioPtr(_battleWorkPointer);
     btlDispGXInit2D();
     if (unit->position.x > -120.0f) {
@@ -1024,7 +1024,7 @@ void DrawMenuPinchMark(void) {
  * strips its <tags> and draws its first three lines at 0.8 scale.
  * With no message it shows a Japanese placeholder (there is no description!!).
  */
-void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
+static void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
     f32 tx;
     s8 lines[4][0x30];
     s32 line;
@@ -1086,7 +1086,7 @@ void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
  * Draws the sub-menu cursor icon on the selected visible row and the bobbing up/down arrows
  * when the list can scroll further.
  */
-void DrawMenuCursorAndScrollArrow(const Vec* v) {
+static void DrawMenuCursorAndScrollArrow(const Vec* v) {
     Vec pos;
     BattleWork* wp = _battleWorkPointer;
     BattleSubMenu* menu = wp->commandMenu.subMenu;
@@ -1133,7 +1133,7 @@ void DrawMenuCursorAndScrollArrow(const Vec* v) {
  * sets every row to flip in one frame after the row above,
  * and returns the acting unit's command-ring cursor (Mario's or the partner's) through mainCursor.
  */
-void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, BattleCursor* cursor) {
+static void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, BattleCursor* cursor) {
     BattleWork* wp = _battleWorkPointer;
     s32 i;
 
@@ -1165,7 +1165,7 @@ void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, Ba
  * Sets up the command-ring icons for a sub-menu that opens from the ring:
  * the selected command flies to the bubble at the upper left (iconState 0), the others shrink away (10).
  */
-void InitSubMenuCommonProcess2(BattleSubMenu* menu, BattleCursor* cursor) {
+static void InitSubMenuCommonProcess2(BattleSubMenu* menu, BattleCursor* cursor) {
     s32 i;
     s32 idx = cursor->absPos;
 
@@ -1189,7 +1189,7 @@ void InitSubMenuCommonProcess2(BattleSubMenu* menu, BattleCursor* cursor) {
  * Sets up the command-ring icons for a sub-menu shown without the ring animation:
  * the selected command already sits in the bubble (iconState 1) and the others are hidden (11).
  */
-void InitSubMenuCommonProcess3(BattleSubMenu* menu, BattleCursor* cursor) {
+static void InitSubMenuCommonProcess3(BattleSubMenu* menu, BattleCursor* cursor) {
     s32 i;
     s32 idx = cursor->absPos;
 
@@ -1214,7 +1214,7 @@ void InitSubMenuCommonProcess3(BattleSubMenu* menu, BattleCursor* cursor) {
  * one row down (10) or up (20), or the wrap-around jumps from bottom to top (30) and top to bottom (40).
  * key is the number of visible rows.
  */
-void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32 prev, s32 key) {
+static void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32 prev, s32 key) {
     s32 i;
 
     if (key == 6 && cursor->count > 6 && prev == cursor->count - 6 && cursor->relPos == 0 && cursor->absPos != 1) {
@@ -1262,7 +1262,7 @@ void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32
  * the ring icons leaving for the bubble (filling a, b and c with their matrices, positions and angles)
  * and the rows flipping in (d). Returns the help window position in x, y.
  */
-void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
+static void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     Mtx tm;
     Mtx sm;
     f32 ox;

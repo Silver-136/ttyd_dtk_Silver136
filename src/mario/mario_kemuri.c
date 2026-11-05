@@ -21,7 +21,7 @@
 extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
 
 void kemuri(void);
-void kemuri_mugi(void);
+static void kemuri_mugi(void);
 void mario_kemuri_landon(void);
 
 
@@ -174,7 +174,7 @@ void mario_kemuri_landon(void) {
  * elsewhere it throws up mugi (wheat) puffs on jumping and every few frames while walking or dashing.
  * Guess: 0x1000 marks tall grass or wet ground, from the effects used.
  */
-void kemuri_mugi(void) {
+static void kemuri_mugi(void) {
     static f32 dir = 0;
     static s32 ct = 4;
     static s32 ct2 = 10;

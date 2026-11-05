@@ -14,8 +14,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-void effMahorn2Main(EffectEntry *effect);
-void effMahorn2Disp(CameraId cameraId, EffectEntry *effect);
+static void effMahorn2Main(EffectEntry *effect);
+static void effMahorn2Disp(CameraId cameraId, EffectEntry *effect);
 
 EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX, f32 dstY, f32 dstZ, f32 scale, f32 radius) {
     EffectEntry *effect;
@@ -108,7 +108,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
  * Per frame: moves the shot (type 3 element) toward the destination by hitDistance per frame; on arrival spawns
  * the hit effect, after which the burst pieces fly out and fade; deletes the effect once they have faded.
  */
-void effMahorn2Main(EffectEntry *effect) {
+static void effMahorn2Main(EffectEntry *effect) {
     effMahorn2Data *data = effect->userdata;
     Vec position;
     Vec target;
@@ -183,7 +183,7 @@ void effMahorn2Main(EffectEntry *effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
+static void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
 #endif
 
     effMahorn2Data *data = effect->userdata;

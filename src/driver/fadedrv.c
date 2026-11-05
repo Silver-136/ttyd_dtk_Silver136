@@ -33,10 +33,10 @@ const f32 float_0_8041f774 = 0.0f;
 static FadeWork* wp;
 
 //local prototypes
-void disp_texture(CameraId camId, void* param);
+static void disp_texture(CameraId camId, void* param);
 void disp_maku(CameraId camId, void* param);
 void disp_tec(CameraId camId, void* param);
-void disp_dummy_black(CameraId camId, void* param);
+static void disp_dummy_black(CameraId camId, void* param);
 
 /**
  * DVD read callback for the asynchronous fade.tpl load:
@@ -1244,7 +1244,7 @@ void fadeMain(void) {
  * or spot texture scaled around the spot position (growing with the fifth power of progress) or a flat colour,
  * and nothing more once a fade-in has finished.
  */
-void disp_texture(CameraId camId, void* param) {
+static void disp_texture(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_JP
     static u8 i4tex[1] ATTRIBUTE_ALIGN(32) = {0xFF};
 #else
@@ -1653,7 +1653,7 @@ void disp_tec(CameraId camId, void* param) {
  * Draws a black (while a pipe transition holds the screen black) or white rectangle over the whole camera view,
  * for the black screen and the white-out cover.
  */
-void disp_dummy_black(CameraId camId, void* param) {
+static void disp_dummy_black(CameraId camId, void* param) {
     CameraEntry* camera;
     f32 proj[GX_PROJECTION_SZ];
 

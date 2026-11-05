@@ -39,10 +39,10 @@ typedef struct EffMagic2N64Work {
 static u8 color_rotation_data[24] = {0xFF, 0xC5, 0x9C, 0xFF, 0x9C, 0xFF, 0xFF, 0x73, 0xD6, 0xFF, 0x9C, 0xFF,
                                      0xFF, 0xC5, 0x7B, 0xFF, 0xB4, 0xFF, 0xDE, 0x73, 0xFF, 0xFF, 0x94, 0x9C};
 
-void effMagic2Main(EffectEntry* effect);
-void effMagic2Disp(CameraId cameraId, void* param);
-void magic2_2_line_dl(void);
-void magic2_4_dl(void);
+static void effMagic2Main(EffectEntry* effect);
+static void effMagic2Disp(CameraId cameraId, void* param);
+static void magic2_2_line_dl(void);
+static void magic2_4_dl(void);
 
 /** Type 0 mesh: a 12-sided tube of long streaks reaching 2000 units deep. */
 effN64Vtx stg_magic2_2_line_v[] = {
@@ -152,7 +152,7 @@ EffectEntry* effMagic2N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scal
  * Fades the burst in over 10 frames and out over the last 6, eases its scale with a sine pulse,
  * projects the world position to screen coordinates for the draw, and scrolls the two texture offsets.
  */
-void effMagic2Main(EffectEntry* effect) {
+static void effMagic2Main(EffectEntry* effect) {
     EffMagic2N64Work* w = effect->userdata;
     Vec position;
     Vec pos2;
@@ -223,7 +223,7 @@ void effMagic2Main(EffectEntry* effect) {
  * Draws the burst with an N64-style perspective projection (narrow for type 0, wide for type 1) once per record,
  * scrolling two textures and cycling a color table.
  */
-void effMagic2Disp(CameraId cameraId, void* param) {
+static void effMagic2Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 fov;
     s32 half;
@@ -314,7 +314,7 @@ void effMagic2Disp(CameraId cameraId, void* param) {
 }
 
 /** Draws type 0: a 12-sided tube of long streaks (2000 units deep, texture 17). */
-void magic2_2_line_dl(void) {
+static void magic2_2_line_dl(void) {
     GXTexObj texObj;
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
@@ -358,7 +358,7 @@ void magic2_2_line_dl(void) {
 }
 
 /** Draws type 1: a 12-sided short ring (50 units deep) using textures 18 and 19. */
-void magic2_4_dl(void) {
+static void magic2_4_dl(void) {
     GXTexObj texObj;
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);

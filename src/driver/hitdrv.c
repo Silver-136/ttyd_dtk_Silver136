@@ -13,9 +13,9 @@
 #include <string.h>
 
 // forward declarations: these functions are defined further down
-BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
+static BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
 s32 hitCalcVtxPosition(HitEntry* hit);
-void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
+static void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 
 s32 unk_8041840C;
 
@@ -53,7 +53,7 @@ void hitReInit(void) {
     }
 }
 
-HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapIndex) {
+static HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapIndex) {
     MapWork* wp = mapGetWork();
     HitEntry* hit = wp->entries[mapIndex].hitEntries;
     Mtx trans, scale, rotX, rotY, rotZ;
@@ -144,7 +144,7 @@ HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapI
  * Builds collision objects for joint and its children (and, unless ignoreSiblings,
  * its following siblings) below parent, recursively; returns the object for joint.
  */
-HitEntry* hitEntrySub(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, BOOL ignoreSiblings, s32 mapIndex) {
+static HitEntry* hitEntrySub(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, BOOL ignoreSiblings, s32 mapIndex) {
     HitEntry* entry = _hitEnt(joint, parent, parentMtx, mapIndex);
     if (joint->child != NULL) {
         entry->child = hitEntrySub(joint->child, entry, entry->worldMtx, FALSE, mapIndex);
@@ -333,7 +333,7 @@ void hitObjFlagOff(const char* name, u16 mask) {
 }
 
 /** Sets flag bits mask on hit and all its descendants, and on its following siblings too when r is set. */
-void hitFlgOn(HitEntry* hit, u16 mask, s32 r) {
+static void hitFlgOn(HitEntry* hit, u16 mask, s32 r) {
     hit->flags |= mask;
     if (hit->child != NULL) {
         hitFlgOn(hit->child, mask, 1);
@@ -344,7 +344,7 @@ void hitFlgOn(HitEntry* hit, u16 mask, s32 r) {
 }
 
 /** Clears flag bits mask on hit and all its descendants, and on its following siblings too when r is set. */
-void hitFlgOff(HitEntry* hit, u16 mask, s32 r) {
+static void hitFlgOff(HitEntry* hit, u16 mask, s32 r) {
     hit->flags &= ~mask;
     if (hit->child != NULL) {
         hitFlgOff(hit->child, mask, 1);
@@ -398,7 +398,7 @@ void hitObjAttrOff(const char* name, u32 mask) {
 }
 
 /** Sets attribute bits mask on hit and all its descendants, and on its following siblings too when r is set. */
-void hitAtrOn(HitEntry* hit, u32 mask, s32 r) {
+static void hitAtrOn(HitEntry* hit, u32 mask, s32 r) {
     hit->attributes |= mask;
     if (hit->child != NULL) {
         hitAtrOn(hit->child, mask, 1);
@@ -409,7 +409,7 @@ void hitAtrOn(HitEntry* hit, u32 mask, s32 r) {
 }
 
 /** Clears attribute bits mask on hit and all its descendants, and on its following siblings too when r is set. */
-void hitAtrOff(HitEntry* hit, u32 mask, s32 r) {
+static void hitAtrOff(HitEntry* hit, u32 mask, s32 r) {
     hit->attributes &= ~mask;
     if (hit->child != NULL) {
         hitAtrOff(hit->child, mask, 1);
@@ -456,7 +456,7 @@ void hitReCalcMatrix(HitEntry* hit, Mtx mtx) {
  * Recomputes world matrices and triangles down the tree from hit for the objects flagged dirty (0x40)
  * and everything below them, applying an animation matrix (0x10) or a bound map object's transform (0x20).
  */
-void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion) {
+static void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion) {
     int doCalc;
 
     doCalc = 0;
@@ -1128,7 +1128,7 @@ HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* 
  * Ray test for a horizontal ray against one triangle (walls):
  * on a hit closer than the best so far stores the distance, hit point and facing normal in query.
  */
-BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector) {
+static BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector) {
     Vec v1, v2, v3;
     f32 cosAngle;
     f32 distToTrianglePlane;
@@ -1225,7 +1225,7 @@ BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry) {
 }
 
 /** hitCheckAttr's filter: accepts collision objects that have none of the attribute bits in query->user0. */
-BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry) {
+static BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry) {
     return (entry->attributes & query->user0) == 0;
 }
 
@@ -1366,7 +1366,7 @@ HitEntry* hitNameToPtr(const char* name) {
  * Adds the world centres of the leaf objects below hit (and of its following siblings when recursing) to
  * position and counts them.
  */
-void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion) {
+static void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion) {
     Vec center;
 
     if (hit->child != NULL) {
