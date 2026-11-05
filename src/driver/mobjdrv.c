@@ -1214,6 +1214,7 @@ s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
 
 
 #if VERSION <= VERSION_DEMO_JP
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
 void mobjStrippedFallPool(MapObjectEntry* entry) {
     entry->velocity.y = 0.0f;
     entry->position.y = 1.0f;

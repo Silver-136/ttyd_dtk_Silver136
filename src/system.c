@@ -1084,11 +1084,9 @@ void* memcpy_as4(void* dest, const void* src, u32 count) {
 // stayed in the literal pools. These stand-ins recreate the pool contents in order.
 #if VERSION >= VERSION_US
 /**
- * US and later pool the int->float constant between the strings and the doubles;
- * functions are emitted in reverse order, so the doubles come first in the source
+ * FAKE stand-in: US and later pool the int-to-float constant between the strings and the doubles; functions
+ * are emitted in reverse order, so the doubles come first in the source. Removing it changes the object.
  */
-// US and later pool the int->float constant between the strings and the doubles; functions are emitted in
-// reverse order, so the doubles come first in the source
 void systemStrippedPool1b(f32* f, f64* d) {
     d[0] = 1.5;
     d[1] = 2.5;

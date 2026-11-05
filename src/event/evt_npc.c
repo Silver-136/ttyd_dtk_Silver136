@@ -1091,6 +1091,7 @@ USER_FUNC(evt_npc_homing_target) {
 
     finished = FALSE;
     PSVECSubtract(&npc->jumpTargetPos, &npc->position, &diff);
+    // FAKE: discarded sqrtf call; removing it changes the object
     sqrtf((diff.x * diff.x) + (diff.z * diff.z));
 
     if (npc->moveTime && npc->moveTime <= npc->moveElapsed) {

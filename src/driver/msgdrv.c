@@ -839,7 +839,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 check;
     u16 glyph;
     s16 x;
-    s16 y; // s16 in the original: extsh before every int->float use (0x20b0, 0x2b98) and after <pos> (0x23b0)
+    s16 y; // s16 in the original: sign-extended (extsh) before every int-to-float use
     s16 rubyX;
     s32 time;
     u32 flags;
@@ -1949,6 +1949,7 @@ static void msgWindow_Delete(WindowEntry* window) {
 
     if (window->userdata) {
         data = window->userdata->address;
+        // FAKE: empty loop over charCount; removing it changes the object
         for (i = 0; i < data->charCount; i++) {
         }
         smartFree(window->userdata);

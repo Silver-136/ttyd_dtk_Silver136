@@ -8,7 +8,7 @@ struct BattleWork;
 struct BattleUnit;
 
 //battle_status_effect
-//should be an s8, typecasting for now
+// Status effect ids (the unit status APIs take them as s8).
 typedef enum StatusEffectType {
     STATUS_ALLERGIC, //0x0
     STATUS_SLEEP, //0x1
@@ -46,13 +46,6 @@ void BattleStatusEffectMain(struct BattleUnit* unit);
 void BSE_TurnFirstProcessEffectEntry(struct BattleUnit* unit, s16 active);
 BOOL BSE_TurnFirstProcessEffectMain(struct BattleUnit* unit);
 void BattleStatusChangeInfoWorkInit(struct BattleUnit* unit);
-
-
-
-
-
-
-
 
 void BattleStatusChangeMsgWorkInit(void);
 

@@ -415,7 +415,7 @@ static void shadowDisp(CameraId cameraId, void* param) {
             case DISP_MODE_XLU_BEFORE_OPAQUE:
                 shadowCharShadowDisp_Collision(cameraId, param);
                 if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
-                    cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment; removing it changes codegen
+                    cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment through cam, which is not set yet on this path (uninitialised pointer read); removing it changes codegen
                     cam = camGetPtr(CAMERA_3D);
                     cfg->pos.x = cam->cameraAt.x;
                     cfg->pos.y = 1000.0f + cam->cameraAt.y;

@@ -437,6 +437,7 @@ static void npcDisp_offscreen(CameraId camId, void* param) {
 }
 
 #pragma push
+// FAKE: optimization level 2 for npcDisp_blur only
 #pragma optimization_level 2
 
 /**
@@ -1305,6 +1306,7 @@ void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
     strcpy(MarioTalkPose, talkPose);
 }
 
+// FAKE: opt_propagation and opt_lifetimes off for npcSetTalkPose .. npcCheckHitMarioSide
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 void npcSetTalkPose(char* name) {
@@ -1742,6 +1744,8 @@ void fbatSetAttackAnnounceEnable(void) {
 
 /** Plain multiply, so the banner's coordinates are scaled by 0.1 in the order the original code did it. */
 static inline f32 mulf(f32 a, f32 b) { return a * b; }
+
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
 void npcStrippedAnnouncePool(f32* f) {
     f[0] = -600.0f;
     f[1] = 600.0f;
@@ -3066,6 +3070,7 @@ void* fbatHitCheck(u32 flags, void* result) {
 }
 
 #if VERSION >= VERSION_JP
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
 void npcStrippedHitPool(f32* f) {
     f[0] = 15.0f;
 }
@@ -3693,6 +3698,7 @@ void npcClearDeadInfo(void) {
     memset(gp->fbatData->deadInfo, 0, sizeof(gp->fbatData->deadInfo));
 }
 
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
 void npcStrippedKoopaPool(f32* f, const char** p) {
     f[0] = 60.0f;
     f[1] = 365.0f;

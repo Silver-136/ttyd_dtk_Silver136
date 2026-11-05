@@ -981,7 +981,7 @@ typedef struct BattleUnit {
     BattleWorkHpGauge hpGauge;                   // 0x1F8
     EvtWord work[16];                            // 0x214, unit work words (btlevtcmd_SetUnitWork / GetUnitWork): numbers, effect and work pointers; floats stored in the word (SetUnitWorkFloat / GetUnitWorkFloat)
     BattleUnitPart* currentTarget;           // 0x254
-    s32 reserved_258;                            // 0x258 (US 0x25C), only cleared at turn start (battle_seq)
+    s32 reserved_258;                            // 0x258 (US 0x25C), cleared when the unit's action ends (btlseqAct 0x6000009)
     s16 hpDamageCount;                           // 0x25C, hits taken this turn (BattleCheckDamage; SPECIAL_DIMINISH_BY_HIT subtracts it)
     u8 pad_25E[0x260 - 0x25E];                   // 0x25E, never accessed
     s32 totalHpDamageTaken;                      // 0x260

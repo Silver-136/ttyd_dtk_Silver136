@@ -2001,6 +2001,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
 #endif
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
     FontDrawStart();
+    // FAKE: 0.0f held in x so the expression is 0.0f - w (a subtraction, not a negation)
     x = 0.0f;
     FontDrawString(x - w, 27.0f, buf);
 #if VERSION >= VERSION_US

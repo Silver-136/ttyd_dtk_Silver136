@@ -177,6 +177,7 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
     return effect;
 }
 
+// FAKE: opt_propagation and opt_lifetimes off for alphaf and effSmallStarMain
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 

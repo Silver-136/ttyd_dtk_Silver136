@@ -46,6 +46,7 @@ static void effKemuri5Main(EffectEntry* effect);
 
 static void effKemuri5Disp(CameraId cameraId, void* param);
 
+// FAKE: opt_propagation off for effKemuri5N64Entry and effKemuri5Main
 #pragma opt_propagation off
 /**
  * Spawns eight cloud-smoke puffs ("landing" in the effect table) at (x, y, z), 45 degrees apart from the angle,

@@ -2504,8 +2504,8 @@ const Vec vec3_802ce0ac = {0.0f, 0.0f, 0.0f};
 const Vec vec3_802ce0b8 = {0.0f, 0.0f, 0.0f};
 #endif
 
-/** Stand-in for a function the original linker dead-stripped; it created 90.0f and 20.0f (0.0f in the early demos) in the .sdata2 pool here. */
-// Stand-in for a function the original linker dead-stripped; it created 90.0f and 20.0f in the .sdata2 pool here.
+// FAKE: stand-in for a function the linker stripped; nothing calls it. It places 90.0f and 20.0f (0.0f in the
+// early demos) in the .sdata2 pool here. Removing it changes the object.
 static void partyMoveStrippedPool(f32* f) {
 #if VERSION <= VERSION_DEMO_JP
     f[0] = 0.0f;

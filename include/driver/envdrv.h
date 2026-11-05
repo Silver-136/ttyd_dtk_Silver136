@@ -71,7 +71,7 @@ typedef struct EnvTexMtxWork {
 
 // EnvironmentWork.blur (envBlurOn, envDisp_Blur)
 typedef struct EnvBlurWork {
-    u16 flags;     // 0x0, bit 0: blur on
+    u16 flags;     // 0x0, bit 0: set by envBlurOn for type != 0: capture stops after the first frame and the blur alpha fades from 255 to 0; otherwise it keeps capturing
     u8 pad_02[6];  // 0x2, never accessed
     OSTime time;   // 0x8
     s32 msec;      // 0x10

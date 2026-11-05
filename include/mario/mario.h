@@ -393,7 +393,7 @@ typedef enum MarioCharacter {
 typedef struct MarioWork {
     u32 flags;                     // 0x0
     u32 dispFlags;                 // 0x4, MarioDispFlags
-    u32 rollFlags;                 // 0x8, mot_roll: 0x10 while rolling (motion 0x16), 0 when done; evt_mario waits for 0
+    u32 rollFlags;                 // 0x8, mot_roll: 0x10 while rolling (motion MARIO_MOTION_ROLL), 0 when done; evt_mario waits for 0
     u32 trigFlags;                 // 0xC
     s32 peachFlags;                // 0x10, PeachFlags
     u32 stageFlags;                // 0x14, Bowser stages: bit0 set = side-scrolling view (kpaGetStageViewType returns 0), bit1 = kpa_03
@@ -413,7 +413,7 @@ typedef struct MarioWork {
     s8 partyUseDelay;              // 0x3B, frames before partyDoWork after the partner button (5); blocks marioChkTransform while nonzero
     s8 characterId;                // 0x3C
     s8 colorId;                    // 0x3D
-    s8 dokanType;                  // 0x3E, pipe kind set by evt_mario before motion 0x1D (mot_dokan)
+    s8 dokanType;                  // 0x3E, pipe kind set by evt_mario before motion MARIO_MOTION_DOKAN (mot_dokan)
     s8 wallPushTimer;              // 0x3F, frames pushed into a wall before hitobjPush is set
     s8 wMotionTimer;               // 0x40
     s8 hammerChargeTimer;          // 0x41, mot_hammer charge frames (capped at 20)
@@ -441,14 +441,14 @@ typedef struct MarioWork {
     s16 idleTimer;                 // 0x58, mot_stay: frames standing (idle pose after 4 s)
     s16 idleKeyTimer;              // 0x5A, mot_stay: frames before the stay sub-motion reacts
     s16 zoomOffDelay;              // 0x5C, frames before marioCamZoomOff fires (32 on request)
-    s16 zoomOffTimer;              // 0x5E, frames until dispFlags 0x100000 (zoomed) clears
+    s16 zoomOffTimer;              // 0x5E, frames until MARIO_DISP_FLAG_ZOOM clears
     s16 zoomLevel;                 // 0x60, 1..3 picks the zoom distance (520/475/440, else 450)
     s16 zoomOffTime;               // 0x62, zoom-out time in 10 ms units (passed to evt_cam3d_evt_off)
     f32 camZoomWeight;             // 0x64, camShiftZ; scales the projection shift in camdrv
     f32 camZoom;                   // 0x68, zoom factor (2.0 default) for the camdrv projection shift
     Vec camZoomOfs;                // 0x6C, zoom focus offset from position
     s16 kpaNoHitTimer;             // 0x78, Bowser: frames of no enemy contact (kpaNoHitEnemyCheck)
-    s16 itemGetDisableTimer;       // 0x7A, frames until flag 0x4000 (item get disabled) clears
+    s16 itemGetDisableTimer;       // 0x7A, frames until MARIO_FLAG_ITEM_GET_DISABLED clears
     f32 jumpVelocityY;             // 0x7C, JP0 in marioMakeJumpPara: position step per frame
     f32 jumpAccelerationY;         // 0x80, JP1: velocity += this / div
     f32 jumpJerkY;                 // 0x84, JP2: acceleration += this / div
@@ -496,7 +496,7 @@ typedef struct MarioWork {
     f32 targetYaw;                 // 0x198
     f32 moveDirection;                    // 0x19C
     f32 directionView;             // 0x1A0
-    f32 forceDir;                  // 0x1A4, forced view direction while flags 0x40 (evt_mario_set_force_dir)
+    f32 forceDir;                  // 0x1A4, forced view direction while MARIO_FLAG_USE_FORCE_DIRECTION (evt_mario_set_force_dir)
     f32 displayDirection;                           // 0x1A8
     f32 displayDirectionTarget;                     // 0x1AC
     f32 savedDisplayDirection;     // 0x1B0, displayDirection saved by mot_hammer

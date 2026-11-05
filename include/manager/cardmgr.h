@@ -67,7 +67,7 @@ typedef enum CardFlags {
     CARD_FLAG_EXEC = (1 << 1),            // 0x2, an operation is running (cardIsExec)
     CARD_FLAG_DONE = (1 << 8),            // 0x100, the last operation finished
     CARD_FLAG_FAILED = (1 << 9),          // 0x200, the last operation stopped with a card error
-    CARD_FLAG_HEADER_INVALID = (1 << 10), // 0x400, read_main: headerCheck failed
+    CARD_FLAG_HEADER_INVALID = (1 << 10), // 0x400, read_main / read_all_main: headerCheck failed (cleared when the next operation starts)
     CARD_FLAG_ERASE = (1 << 11),          // 0x800, cardErase: clear the slot copy once the write is done
     CARD_FLAG_WRITTEN = (1 << 13),        // 0x2000, a write completed (memcard_open rechecks the serial)
     CARD_FLAG_INSERT_CHANGED = (1 << 14), // 0x4000, cardInsertChanged
@@ -100,7 +100,7 @@ typedef struct {
     s32 opStep; //0xD8, step within the current operation
     u8 pad_DC[0xE0 - 0xDC]; //0xDC
     s32 op; //0xE0, current operation (0 = idle, 8 = finishing/error)
-    s32 prevInserted; //0xE4, last CARDProbe result; a change sets flag 0x4000
+    s32 prevInserted; //0xE4, last CARDProbe result; a change sets CARD_FLAG_INSERT_CHANGED
     u8 pad_E8[0xEC - 0xE8]; //0xE8
     s32 busyFrames; //0xEC, counts down; nonzero keeps cardIsExec returning TRUE
 } CardWork;

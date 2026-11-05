@@ -1396,7 +1396,7 @@ static void select_disp(WinMgrEntry* entry) {
                 continue;
             }
 
-            // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
+            // FAKE: ofs is a local that is always 0.0f and is added to every row y; the no-op update ofs = ofs + 0.0f is part of it; removing either changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
@@ -1653,7 +1653,7 @@ static void select_disp_party(WinMgrEntry* entry) {
                 continue;
             }
 
-            // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
+            // FAKE: ofs is a local that is always 0.0f and is added to every row y; the no-op update ofs = ofs + 0.0f is part of it; removing either changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
@@ -1770,7 +1770,7 @@ static void select_disp_mario(WinMgrEntry* entry) {
                 continue;
             }
 
-            // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
+            // FAKE: ofs is a local that is always 0.0f and is added to every row y; the no-op update ofs = ofs + 0.0f is part of it; removing either changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }

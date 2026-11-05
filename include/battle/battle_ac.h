@@ -34,7 +34,7 @@ typedef struct BattleACDispParams {
 } BattleACDispParams;
 
 // FAKE: slideTimer read through a byte offset from a register-held index (i = 4 maps to slideTimer); the plain field schedules the
-// address differently (ac_power_gauge_lv 98.86%, (&slideTimer)[i - 4] 78.95%). Used by ac_air_gauge, ac_power_gauge_lv, ac_timing_a.
+// address differently (the plain disp->slideTimer or (&disp->slideTimer)[i - 4] changes the object). Used by ac_air_gauge, ac_power_gauge_lv, ac_timing_a.
 #define AC_SLIDE_TIMER_AT(disp, i) (*(s32*)((u8*)&(disp)->slideTimer + (i) - 4))
 
 // BattleActions.acFlags (btlevtcmd_AcSetFlag): each action command reads its own bits, so each has its own set.

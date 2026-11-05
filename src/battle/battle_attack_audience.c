@@ -269,6 +269,7 @@ void* btlataudGetMoveEventPtr(s32 id) {
 }
 
 #if VERSION < VERSION_US
+// FAKE: 4-byte placement object that keeps the JP .data layout; removing it changes the object.
 __declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
 #endif
 

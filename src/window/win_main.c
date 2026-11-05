@@ -416,7 +416,7 @@ void winMain(void) {
             case WIN_MENU_ITEM_USE: {
 #if VERSION < VERSION_DEMO_EU
 #if VERSION >= VERSION_US
-                WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
+                WindowPartyDt* list[11]; // FAKE: US frame is 96 bytes; only 7 entries used
 #else
                 WindowPartyDt* list[7];
 #endif
@@ -1791,6 +1791,8 @@ BOOL winLectureCheck(void) {
 // the object in both versions
 const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
 
+// FAKE: stand-in; nothing calls it. It only places the int-to-float conversion constant in this object's
+// constant pool. Removing it changes the object.
 void winMainStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

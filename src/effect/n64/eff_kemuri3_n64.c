@@ -37,6 +37,7 @@ typedef struct EffKemuri3N64Work {
 static void effKemuri3Main(EffectEntry* effect);
 static void effKemuri3Disp(CameraId cameraId, void* param);
 
+// FAKE: opt_propagation off for effKemuri3N64Entry only
 #pragma opt_propagation off
 /**
  * Spawns five flower-smoke puffs ("jump" in the effect table) at (x, y, z), 72 degrees apart around the angle;

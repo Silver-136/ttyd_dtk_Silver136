@@ -904,6 +904,7 @@ static void _MarioExpDisp(CameraId camId, void* param) {
 
 static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     Vec pos;
+    // FAKE: 0.0f held in zero so the expression is 0.0f - w, not a negation
     f32 zero = 0.0f;
     u32 len;
     s32 *cursorPtr;

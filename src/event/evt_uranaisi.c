@@ -214,6 +214,7 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type);
 s32 uranaisi_data_make_starpiece(const char* prefix, s32 type);
 s32 uranaisi_data_make_next(const char* prefix, s32 type);
 
+// Statement macro: parses one <tag,...> into the caller's tag, tagNum, mbbpos, tagdone, tagdata, initEndPos and tagEndPos.
 #define URANAI_PARSE_TAG()                          \
     tagNum = 0;                                     \
     mbbpos = 0;                                     \
@@ -232,6 +233,7 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type);
             switch (tagdata[0]) {                   \
                 case '>':                           \
                     tagdone = TRUE;                 \
+                    /* falls through to ',' */      \
                 case ',':                           \
                     tagdata++;                      \
                     if (tagNum == 0) {              \

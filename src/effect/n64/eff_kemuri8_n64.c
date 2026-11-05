@@ -51,6 +51,7 @@ void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
 /** Returns a * -b (used for the x position of each puff in the ring). */
 static inline f32 inline_fn(f32 a, f32 b) { return a * (-b); }
 
+// FAKE: opt_propagation off for effKemuri8N64Entry only
 #pragma opt_propagation off
 /**
  * Spawns a ring of smoke puffs (6/8/10 for type 0/1/other after the header element, radius 14/28/42) around

@@ -2380,6 +2380,7 @@ static void marioDispBlurSub(Mtx unused, s32 blurId) {
     animPoseDrawMtx(wp->paperAnimGroupId[marioAnimeId()], mtx, 3, 0.0f, 1.0f);
 }
 
+// FAKE: opt_dead_assignments off keeps the never-used sin/cos quadrant computation (s, c, sg, cg, sy from targetYaw) in marioDispBlur; removing the pragma or the code changes the object
 #pragma opt_dead_assignments off
 
 /**

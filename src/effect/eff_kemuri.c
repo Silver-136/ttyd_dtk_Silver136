@@ -115,6 +115,7 @@ EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
     return entry;
 }
 
+// FAKE: opt_propagation off for effKemuri2Entry only; the spare temporaries below only make sense under it
 #pragma opt_propagation off
 /**
  * Spawns one smoke puff at (x, y, z) that drifts along (dx, dz) while rising and spinning.
@@ -220,6 +221,7 @@ static void effKemuriMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effKemuriDisp, effect);
 }
 
+// FAKE: opt_propagation off for effKemuri2Main only; the pointer re-assignment data = p / p = data steers register choice
 #pragma opt_propagation off
 /**
  * Moves the puff along its direction at a constant speed while its rise and spin slow down, grows then shrinks it,

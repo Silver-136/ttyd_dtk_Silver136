@@ -3528,6 +3528,7 @@ static s32 BattleAudience_GetPPAudienceNum_L(void) {
 }
 
 #pragma push
+// FAKE: loop invariants optimisation off for BattleAudience_GetPPAudienceNum_RL_Sub only; with it on the object changes
 #pragma opt_loop_invariants off
 /**
  * Counts the members in one half of the stands (offset 0 = left ten columns, 10 = right) that are present

@@ -1155,7 +1155,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     u32 flags;
     MarioWork* player = marioGetPtr();
     w = player->wPlayerCollisionBox.x;
-    // FAKE: comma makes the first rad web an early-coloured temp (target f31; same value)
+    // FAKE: comma makes the first rad an early-coloured temp (same value); removing it changes the object
     rad = (0, (3.1415927f * revise360(toMovedir(player->displayDirectionTarget) - 180.0f)) / 180.0f);
     x = w * (f32)sin(rad) + pos.x;
     p[3].x = x;
@@ -1164,7 +1164,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[3].y = y;
     z = w * -c + pos.z;
     p[3].z = z;
-    // FAKE: y + height held in the dead c (named copy into the f2 arg) gives the target probe-1 schedule; same value
+    // FAKE: y + height held in the otherwise dead c; removing it changes the object
     c = y + height;
     dist = 0.1f + height;
     h0 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, c, z, 0.0f, (-1.0f), 0.0f);

@@ -457,6 +457,7 @@ void smartReInit(void) {
 }
 #endif
 
+// FAKE: dont_inline keeps smartAutoFree a call; removing it changes the object
 #pragma dont_inline on
 /**
  * Frees the smart heap blocks of group type; group 4 blocks are demoted to group 3 instead of freed.

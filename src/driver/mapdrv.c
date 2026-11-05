@@ -2515,6 +2515,7 @@ static u32 texture_0[64] ATTRIBUTE_ALIGN(32) = {
 };
 
 #pragma push
+// FAKE: lifetimes optimisation off for mapSetMaterialTev only; with it on the object changes
 #pragma opt_lifetimes off
 /**
  * Sets up the GX TEV stages for a map or model material:

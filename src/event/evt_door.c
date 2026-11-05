@@ -1458,6 +1458,7 @@ USER_FUNC(animation) {
     return EVT_RETURN_DONE;
 }
 
+// Generator: the same body for the On and Off variants (FN, ICONFN).
 #define NPC_LIGHT_BODY(FN, ICONFN)                                                                      \
     HouseWork* w = (HouseWork*)evtGetValue(event, *event->args);                                        \
     MarioWork* mario = marioGetPtr();                                                                   \
@@ -1669,6 +1670,7 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
     }
 }
 
+// Generator: the same body for the On and Off variants (FN, ICONFN).
 #define DARK_SUB_BODY(FN, ICONFN)                                                               \
     if (mario) {                                                                                \
         FN(mario->paperAnimGroupId[0], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \

@@ -125,7 +125,8 @@ static inline f32 pt_gauss(void) {
     return y1;
 }
 
-// Stand-in for a function the original linker dead-stripped; its signed int->float constant is last in .rodata.
+// FAKE: stand-in for a function the linker stripped; nothing calls it. Its signed int-to-float constant is the
+// last item in .rodata. Removing it changes the object.
 void particleStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

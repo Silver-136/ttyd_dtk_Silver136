@@ -2318,12 +2318,13 @@ USER_FUNC(evt_sub_check_intersect) {
     return EVT_RETURN_DONE;
 }
 
+// Statement macro on irai_mail_check's locals (i, u, ret, arg): for an active, unfinished request more than 7200 s old it sets ret and, if arg, marks it done and sends the mail.
 #define IRAI_CHECK(flag, done, base, mail)                         \
     if (swGet(flag) && !swGet(done)) {                             \
         for (i = 0; i < 8; i++) {                                  \
             u.b[i] = swByteGet(base + i);                          \
         }                                                          \
-        if (OSTicksToSeconds(gp->playTime - u.t) > 7200) { \
+        if (OSTicksToSeconds(gp->playTime - u.t) > 7200) {         \
             ret = 1;                                               \
             if (arg) {                                             \
                 swSet(done);                                       \

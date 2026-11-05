@@ -75,8 +75,8 @@ USER_FUNC(btlevtcmd_SetPartsRotateOffset);
 USER_FUNC(btlevtcmd_AddPartsRotateOffset);
 USER_FUNC(btlevtcmd_SetRotateOffsetFromCenterOffset);
 USER_FUNC(btlevtcmd_SetCutBaseOffset);
-USER_FUNC(btlevtcmd_SetBintaHitOffset); //Love Slap
-USER_FUNC(btlevtcmd_SetKissHitOffset); //Lip Lock
+USER_FUNC(btlevtcmd_SetBintaHitOffset); // Love Slap (binta) hit offset
+USER_FUNC(btlevtcmd_SetKissHitOffset); // Lip Lock (kiss) hit offset
 USER_FUNC(btlevtcmd_SetCutWidth);
 USER_FUNC(btlevtcmd_SetCutHeight);
 USER_FUNC(btlevtcmd_SetPossessionItemOffset);

@@ -6,6 +6,7 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
+// Generators: one USER_FUNC per pouch setter/getter (see the uses below).
 #define SETTER(name, fn)                                 \
     USER_FUNC(name) {                                    \
         fn(evtGetValue(event, event->args[0]));          \

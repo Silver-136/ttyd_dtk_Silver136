@@ -64,6 +64,7 @@ EffectEntry* effKumokumoChipN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 
     dy = ty - y;
     dz = tz - z;
     dist = dx * dx + dy * dy + dz * dz;
+    // FAKE: square root written out by hand (frsqrte plus three Newton steps) instead of sqrtf
     zero = 0.0f;
     if (dist != zero) {
         f32 r;

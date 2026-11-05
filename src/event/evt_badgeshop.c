@@ -40,7 +40,7 @@ s32 badge_bottakuru_table[] = { //Charlieton Rogueport
 };
 #endif
 
-//.sdata
+//.data
 s32 badge_special_table[] = { //Lovely Howz of Badges
     ITEM_PIERCING_BLOW, ITEM_POWER_JUMP, ITEM_SIMPLIFIER, ITEM_UNSIMPLIFIER,
     ITEM_FP_DRAIN, ITEM_LAST_STAND, ITEM_LAST_STAND_P, ITEM_HAPPY_FLOWER,

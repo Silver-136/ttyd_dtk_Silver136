@@ -2072,6 +2072,7 @@ static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
 f64 SoundDemoStrippedRate(const char* ext, f64 t) {
     f64 adp = t * 3.5;
     f64 song = t * 4.0;

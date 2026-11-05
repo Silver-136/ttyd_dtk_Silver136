@@ -38,6 +38,7 @@ void marioSetForceMove(f32 dir, s32 frames, f32 spd);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
 #endif
 
+// Generator: one USER_FUNC per field (see the uses below).
 #define HITOBJ(n, field)                       \
     USER_FUNC(evt_mario_get_name_hitobj_##n) { \
         EvtWord id = event->args[0];           \
@@ -50,6 +51,7 @@ void marioSetForceMove(s32 frames, f32 dir, f32 spd);
         return EVT_RETURN_DONE;                \
     }
 
+// Generator: one USER_FUNC per field (see the uses below).
 #define FLAGONOFF(n, field)                            \
     USER_FUNC(evt_mario_##n##_onoff) {                 \
         EvtWord* args = event->args;                   \
@@ -206,6 +208,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     f32 s, c;
 #endif
     {
+        // FAKE: unreferenced table of the six DOKAN_* pose names with hand padding; kept for its string literals
         static const char names[] = "DOKAN_TATE_DOWNIN\0\0\0DOKAN_TATE_UPIN\0DOKAN_TATE_DOWNOUT\0\0DOKAN_TATE_UPOUT\0\0\0\0DOKAN_YOKO_IN\0\0\0DOKAN_YOKO_OUT\0";
     }
 

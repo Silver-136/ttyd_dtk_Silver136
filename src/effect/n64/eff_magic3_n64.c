@@ -27,6 +27,7 @@ typedef struct EffMagic3N64Work {
 static void effMagic3Main(EffectEntry* effect);
 static void effMagic3Disp(CameraId cameraId, void* payload);
 
+// FAKE: opt_propagation off for effMagic3N64Entry only
 #pragma opt_propagation off
 /**
  * Spawns five sparks at (x, y, z) that shoot upward in a 100-degree fan facing the camera and
@@ -57,6 +58,7 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     nx *= inv;
     ny *= inv;
     nz *= inv;
+    // The perpendicular vector (px, py, pz) and the second inv are computed but never used; retail code, kept.
     if (nx) {
         px = -ny / nx;
         py = 1.0f;

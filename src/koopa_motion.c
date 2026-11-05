@@ -765,6 +765,7 @@ void kpa_powdown(void) {
     }
 }
 
+// FAKE: dont_inline keeps kpaSwimMove a real call; removing it changes the object
 #pragma dont_inline on
 /**
  * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40

@@ -1241,7 +1241,7 @@ EVT_BEGIN(dmg_evt)
 EVT_END()
 
 // Writes one vertex position through the local FIFO pointer, reading the components z, y, x first.
-// A macro, not an inline function: as a function the object changes.
+// FAKE: volatile FIFO pointer and component read order z, y, x; a macro, not an inline function (as a function, or with plain stores, the object changes).
 #define YUKA_POSITION(fifo, v) \
     {                          \
         f32 _x, _y, _z;        \

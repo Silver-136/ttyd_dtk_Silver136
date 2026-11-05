@@ -2624,8 +2624,8 @@ static inline void partyJumpCalc(PartyEntry* party, MarioWork* mario, f32 d) {
     }
     t = 0.5f * party->moveFrames;
     dy = partyJumpHeight(party->moveTarget.y - party->position.y);
-    // FAKE: dead int-guarded re-definition (folded only by the post-RA peephole) keeps the moveDistance value d live
-    // across the jump-height block so it takes f5 and dy f6 as in the target; behaviour-identical (gz is 0).
+    // FAKE: dead guard (gz is 0) keeps the moveDistance value d live across the jump-height block;
+    // removing it changes the object.
     gz = 0;
     if (gz != 0) {
         t = d;

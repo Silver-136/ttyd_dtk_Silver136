@@ -10,7 +10,7 @@ typedef struct BattleAudienceItemKind {
     s32 chance;    // 0x4
 } BattleAudienceItemKind;
 
-/* seems unused, just static table size
+/* Slot order of the audience_anim_* tables in battle_audience_kind_data.c (BattleAudienceKind.animTable is typed s32** and indexes them); kept as documentation, not used as a type.
 typedef struct BattleAudienceAnimTable {
     s32* animWaitFront;     // 0x0
     s32* animWaitBack;      // 0x4

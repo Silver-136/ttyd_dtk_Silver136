@@ -324,6 +324,7 @@ Mtx g_modeling_mtx_stack[32];
 static AnimationWork* wp = &work;
 
 //.sbss
+// Real retail .sbss slot: nothing references it (the symbol map has an unnamed 4-byte gap here).
 s32 anim_unused_sbss;
 //.sbss
 Mtx* g_modeling_mtx;
@@ -3168,6 +3169,7 @@ static inline void apdEval(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale)
     evalProc(-1, data->groupCount - 1);
 }
 #pragma push
+// FAKE: lifetimes optimisation off for animPoseDrawMtx only; with it on the object changes
 #pragma opt_lifetimes off
 /**
  * Draws pose poseId with matrix for draw stage xluMode, rotY and scale.
@@ -3544,6 +3546,7 @@ inline s32 animPoseSearchName(const char* name, s32 type) {
 }
 
 #pragma push
+// FAKE: lifetimes optimisation off for animPoseDisp_MakeExtTexture only; with it on the object changes
 #pragma opt_lifetimes off
 /**
  * Renders frame frame of animation anim of the loaded pose group at scale into the EFB (white material, no paper
@@ -3717,6 +3720,7 @@ const char* animGetTexName(const char* name) {
     return "";
 }
 
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
 void animStrippedPool(f32* p, u32 n) {
     p[0] = 0.0f;
     p[1] = 0.017453292f * p[1];

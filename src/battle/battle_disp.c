@@ -927,6 +927,7 @@ static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
         pos.x += unit->heldItemOffset.x;
         pos.y += unit->heldItemOffset.y;
         pos.z += unit->heldItemOffset.z;
+        // FAKE: float-first cast of iconDispGx; the plain call changes the object
         ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
     }
 }

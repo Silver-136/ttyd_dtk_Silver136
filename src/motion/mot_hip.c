@@ -332,6 +332,7 @@ void mot_hip(void) {
 }
 
 #if VERSION >= VERSION_JP
+// FAKE: dont_inline keeps chkground a call while mot_hip_post still inlines
 #pragma dont_inline on
 #endif
 

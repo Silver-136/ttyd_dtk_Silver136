@@ -44,6 +44,7 @@ typedef struct KemuTestWork {
 
 static void effKemuTestMain(EffectEntry* effect);
 
+// FAKE: defer_codegen off, and the file-scope const aggregates kemu_a..kemu_h, kemu_pos, kemu_tmp are copied into locals (effKemuTestEntry, effKemuTestMain) in place of local aggregate initialisers
 #pragma defer_codegen off
 
 typedef struct {
@@ -95,6 +96,7 @@ void effKemuTestDrawCam(EffectEntry* effect, s32 camera) {
     ((KemuTestWork*)effect->userdata)->camera = camera;
 }
 
+// FAKE: opt_loop_invariants off for effKemuTestDisp only
 #pragma opt_loop_invariants off
 /** Draws the smoke pieces (texture 0x28) with three TEV stages; billboarded unless type 11. */
 static void effKemuTestDisp(CameraId cameraId, void* param) {

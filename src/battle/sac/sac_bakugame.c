@@ -287,9 +287,7 @@ USER_FUNC(bakuGameDecideWeapon) {
     if (v != -1) {
         if (w->gauge >= 100.0f) {
             q[2] = 127;
-            // FAKE: same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def
-            // pointer (addi r28) with no in-block copy. That keeps the q addi at height 1, so lis issues before
-            // `mr w,r3` and takes r4, as in the target.
+            // FAKE: q is re-pointed at the same address (&w->weapon.sleepChance == q already); removing the second assignment changes the object
             q = &w->weapon.sleepChance;
         } else {
             q[2] = 100;

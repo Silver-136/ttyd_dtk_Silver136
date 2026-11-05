@@ -329,8 +329,8 @@ USER_FUNC(btlevtcmd_ChangeParty) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to set current) */
-//s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to set current)
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to set current) */
+//s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to set current)
 USER_FUNC(btlevtcmd_SetPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -362,8 +362,8 @@ USER_FUNC(btlevtcmd_SetPos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -412,8 +412,8 @@ USER_FUNC(btlevtcmd_GetPartsPos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetPartsPos) {
     EvtWord* args = event->args;
     f32 x, y, z, currX, currY, currZ;
@@ -442,8 +442,8 @@ USER_FUNC(btlevtcmd_SetPartsPos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddPartsPos) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
@@ -466,8 +466,8 @@ USER_FUNC(btlevtcmd_AddPartsPos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetDispOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -485,8 +485,8 @@ USER_FUNC(btlevtcmd_SetDispOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetPartsDispOffset) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
@@ -506,8 +506,8 @@ USER_FUNC(btlevtcmd_SetPartsDispOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddPartsDispOffset) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
@@ -527,8 +527,8 @@ USER_FUNC(btlevtcmd_AddPartsDispOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetTogeOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -577,8 +577,8 @@ USER_FUNC(btlevtcmd_GetHomePos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetHomePos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -596,8 +596,8 @@ USER_FUNC(btlevtcmd_SetHomePos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddHomePos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -615,8 +615,8 @@ USER_FUNC(btlevtcmd_AddHomePos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetPartsHomePos) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
@@ -667,8 +667,8 @@ USER_FUNC(btlevtcmd_GetHitPos) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetHitOffset) {
     EvtWord* args = event->args;
     s32 partId;
@@ -690,8 +690,8 @@ USER_FUNC(btlevtcmd_SetHitOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetHitCursorOffset) {
     EvtWord* args = event->args;
     s32 partId;
@@ -908,8 +908,8 @@ USER_FUNC(btlevtcmd_SetRGB) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip) */
-//s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip)
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
+//s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip)
 USER_FUNC(btlevtcmd_GetRotate) {
     EvtWord* args = event->args;
     f32 rotateX, rotateY, rotateZ;
@@ -937,8 +937,8 @@ USER_FUNC(btlevtcmd_GetRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip) */
-//s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip)
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
+//s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip)
 USER_FUNC(btlevtcmd_SetRotate) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -969,8 +969,8 @@ USER_FUNC(btlevtcmd_SetRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddRotate) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -988,8 +988,8 @@ USER_FUNC(btlevtcmd_AddRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_GetPartsRotate) {
     EvtWord* args = event->args;
     s32 id, partId, indexX, indexY, indexZ;
@@ -1011,8 +1011,8 @@ USER_FUNC(btlevtcmd_GetPartsRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetPartsRotate) {
     EvtWord* args = event->args;
     s32 btlId;
@@ -1031,8 +1031,8 @@ USER_FUNC(btlevtcmd_SetPartsRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddPartsRotate) {
     EvtWord* args = event->args;
     s32 btlId;
@@ -1051,8 +1051,8 @@ USER_FUNC(btlevtcmd_AddPartsRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip) */
-//s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip)
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
+//s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip)
 USER_FUNC(btlevtcmd_SetBaseRotate) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1114,8 +1114,8 @@ USER_FUNC(btlevtcmd_SetPartsBaseRotate) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetRotateOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1133,8 +1133,8 @@ USER_FUNC(btlevtcmd_SetRotateOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetPartsRotateOffset) {
     EvtWord* args = event->args;
     s32 btlId;
@@ -1153,8 +1153,8 @@ USER_FUNC(btlevtcmd_SetPartsRotateOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, s32* partId, f32* x, f32* y, f32* z */
-//s32* battleId, s32* partId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* partId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_AddPartsRotateOffset) {
     EvtWord* args = event->args;
     s32 btlId;
@@ -1186,8 +1186,8 @@ USER_FUNC(btlevtcmd_SetRotateOffsetFromCenterOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetCutBaseOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1207,8 +1207,8 @@ USER_FUNC(btlevtcmd_SetCutBaseOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetBintaHitOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1228,8 +1228,8 @@ USER_FUNC(btlevtcmd_SetBintaHitOffset) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z */
-//s32* battleId, f32* x, f32* y, f32* z
+/** s32* battleId, s32* x, s32* y, s32* z */
+//s32* battleId, s32* x, s32* y, s32* z
 USER_FUNC(btlevtcmd_SetKissHitOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1281,8 +1281,8 @@ USER_FUNC(btlevtcmd_SetCutHeight) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip) */
-//s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip)
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
+//s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip)
 USER_FUNC(btlevtcmd_SetPossessionItemOffset) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1361,8 +1361,8 @@ USER_FUNC(btlevtcmd_SetPartsBaseScale) {
     return EVT_RETURN_DONE;
 }
 
-/** s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip) */
-//s32* battleId, f32* x, f32* y, f32* z (can be EVTDAT_POINTER_MAX to skip)
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
+//s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip)
 USER_FUNC(btlevtcmd_GetScale) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;

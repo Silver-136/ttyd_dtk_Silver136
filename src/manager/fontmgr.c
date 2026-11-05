@@ -334,6 +334,7 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
     u16 code;
     f32 x;
 
+    // FAKE: walks the string through a local copy (msg = str); using str directly or calling FontDrawStringVecPitch changes the registers
     msg = str;
     camera = camGetCurPtr();
     x = pos.x;

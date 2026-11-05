@@ -101,7 +101,8 @@ s32 camRoadSetup(const char* name) {
 }
 #endif
 
-/** The demo pools the two strings ahead of camRoadSetup's, so the stand-in follows camRoadSetup. */
+// FAKE: stand-in for a stripped debug report; nothing calls it. It only places its two strings in the pool (the
+// demo pools them ahead of camRoadSetup's, so it follows camRoadSetup). Removing it changes the object.
 static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
     OSReport("%scam = %d\n", p, a);
     OSReport("%scurve = %d\n", p, b);
@@ -266,6 +267,7 @@ static inline Vec crVecCross(Vec a, Vec b) {
 static inline f32 crVecDot(Vec a, Vec b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
+/** Unused: TRUE when all three components of a are zero (kept: the 0.0f it contains may shape the constant pool). */
 static inline BOOL crVecIsZero(Vec a) {
     if (a.x == 0.0f && a.y == 0.0f && a.z == 0.0f) {
         return TRUE;

@@ -277,6 +277,7 @@ static inline void booSetArrays(void) {
     GXSetArray(GX_VA_TEX0, boo_texcoord0_tbl, 4);
 }
 
+// Generator: calls display lists p4..p31, 0x20 bytes each (the first four of each frame use 0x40 and are written out).
 #define DLS(p, a) GXCallDisplayList(p##a, 0x20);
 #define DLS_ALL(p)                                                                                     \
     DLS(p, 4) DLS(p, 5) DLS(p, 6) DLS(p, 7) DLS(p, 8) DLS(p, 9) DLS(p, 10) DLS(p, 11) DLS(p, 12)       \

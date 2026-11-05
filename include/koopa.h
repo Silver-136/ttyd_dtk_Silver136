@@ -69,7 +69,7 @@ typedef struct KpaWork {
     u8 pad_08[0x10 - 0x8];        // 0x008, never accessed
     f32 standParamA;              // 0x010, koopa_motion stand init writes 0.02, never read
     f32 standParamB;              // 0x014, koopa_motion stand init writes -0.02, never read
-    struct HitEntry* flameHit;    // 0x018, kpaFlameHitCheck result (kpaFireEntry2)
+    struct HitEntry* flameHit;    // 0x018, kpaFlameHitCheck result (stored by kpaFireMain)
     struct HitEntry* objHit;      // 0x01C, kpaGetHitobj
     struct HitEntry* headHit[10]; // 0x020, kpaSearchHead
     s32 pad_48;                   // 0x048, never accessed (slot after headHit[10])

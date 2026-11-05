@@ -132,14 +132,14 @@ typedef struct WinLogPage {
 #if VERSION >= VERSION_US
     s32 page;       // US and later: page shown in the "%d/%d" counter
 #endif
-    s32 cursor;     // 0x14
+    s32 cursor;     // 0x14 (offsets from here on are JP; US and later add 4 for the page field)
     s32 idx;        // 0x18, first row shown
     f32 scroll;     // 0x1C
     f32 scrollTgt;  // 0x20
     f32 iconX;      // 0x24, x of the selected-entry icon box (texture 0x95/0x96 + item icon; page counter from US on); eases toward iconTx
-    f32 iconTx;     // 0x28, target of iconX (not in the field list: partner of f24, renamed to match)
+    f32 iconTx;     // 0x28, target of iconX
     f32 iconY;      // 0x2C, y of the selected-entry icon box; eases toward iconTy
-    f32 iconTy;     // 0x30, target of iconY (not in the field list: partner of f2C, renamed to match)
+    f32 iconTy;     // 0x30, target of iconY
 } WinLogPage;
 
 typedef struct WinLogMenu {

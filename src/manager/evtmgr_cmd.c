@@ -1851,7 +1851,7 @@ s32 evt_debug_put_reg(EventEntry* entry) { // 115
         reg += EVTDAT_GSW_BASE;
         val = swByteGet(reg);
         if (val <= EVTDAT_ADDR_MAX) {
-            sprintf(str, "GSW(%3d) [%08X]", val); // two conversions, one argument: as in the original
+            sprintf(str, "GSW(%3d) [%08X]", val); // BUG: two conversions, one argument (the second reads an undefined value); as in the original
         } else if (val <= EVTDAT_FLOAT_MAX) {
             sprintf(str, "GSW(%3d) [%4.2f]", reg, check_float(val));
         } else {
@@ -1861,7 +1861,7 @@ s32 evt_debug_put_reg(EventEntry* entry) { // 115
         reg += EVTDAT_LSW_BASE;
         val = _swByteGet(reg);
         if (val <= EVTDAT_ADDR_MAX) {
-            sprintf(str, "LSW(%3d) [%08X]", val); // two conversions, one argument: as in the original
+            sprintf(str, "LSW(%3d) [%08X]", val); // BUG: two conversions, one argument (the second reads an undefined value); as in the original
         } else if (val <= EVTDAT_FLOAT_MAX) {
             sprintf(str, "LSW(%3d)  [%4.2f]", reg, check_float(val));
         } else {
