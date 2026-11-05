@@ -49,21 +49,9 @@ void chorogun_ext_init(void);
 BattleUnit* chorogun_get_ptr(void);
 
 BattleUnitKind unit_chorobon_gundan;
-typedef struct {
-    BattleUnitDefense v;
-    u8 pad[3];
-} DefencePad;
-typedef struct {
-    BattleUnitDefenseAttr v;
-    u8 pad[3];
-} DefenceAttrPad;
-typedef struct {
-    StatusVulnerability v;
-    u8 pad[2];
-} RegistPad;
-static DefencePad defence;
-static DefenceAttrPad defence_attr;
-static RegistPad regist;
+static BattleUnitDefense defence;
+static BattleUnitDefenseAttr defence_attr;
+static StatusVulnerability regist;
 static PoseTableEntry pose_table[15];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
@@ -162,7 +150,7 @@ BattleUnitKind unit_chorobon_gundan = {
 #else
     kUnitLeader | kUnitNoSpin,
 #endif
-    &regist.v,
+    &regist,
     1,
     parts,
     init_event,
@@ -173,13 +161,13 @@ BattleUnitKind unit_chorobon_gundan = {
  * Defence of Fuzzy Horde per element (normal, fire, ice, explosion, electric), subtracted from each hit:
  * none.
  */
-static DefencePad defence = {{{0, 0, 0, 0, 0}}, {0}};
+static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Fuzzy Horde: none, every element hits normally. */
-static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
+static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Status vulnerability of Fuzzy Horde: immune to every status effect. */
-static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0}};
+static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /**
  * Pose table of Fuzzy Horde: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
@@ -217,7 +205,7 @@ static BattleDataEntry data_table[] = {
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_chorobon_gundan", "c_chorobon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence.v, &defence_attr.v, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW, 0, pose_table},
+    {1, "btl_un_chorobon_gundan", "c_chorobon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW, 0, pose_table},
 };
 
 /** Attack data of Fuzzy Horde's attack: base damage 1, 100% accuracy. */

@@ -45,28 +45,9 @@ extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
 
-// The demos (early and September) have no padding after these three (the release sizes are aligned up).
-typedef struct {
-    BattleUnitDefense v;
-#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
-    u8 pad[3];
-#endif
-} DefencePad;
-typedef struct {
-    BattleUnitDefenseAttr v;
-#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
-    u8 pad[3];
-#endif
-} DefenceAttrPad;
-typedef struct {
-    StatusVulnerability v;
-#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
-    u8 pad[2];
-#endif
-} RegistPad;
-static DefencePad defence;
-static DefenceAttrPad defence_attr;
-static RegistPad regist;
+static BattleUnitDefense defence;
+static BattleUnitDefenseAttr defence_attr;
+static StatusVulnerability regist;
 static PoseTableEntry pose_table[15];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
@@ -153,7 +134,7 @@ BattleUnitKind unit_chorobon_gundan = {
 #else
     kUnitLeader | kUnitNoSpin, // attributeFlags
 #endif
-    &regist.v, // statusVulnerability
+    &regist, // statusVulnerability
     1, // numParts
     parts, // parts
     init_event, // initEventCode
@@ -161,25 +142,13 @@ BattleUnitKind unit_chorobon_gundan = {
 };
 
 /** Defence of the Fuzzy Horde's body per damage type: 0 against every damage type. */
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
-static DefencePad defence = {{{0, 0, 0, 0, 0}}};
-#else
-static DefencePad defence = {{{0, 0, 0, 0, 0}}, {0}};
-#endif
+static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Fuzzy Horde's body: none, so every damage type is dealt normally. */
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
-static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}};
-#else
-static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
-#endif
+static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Status vulnerability of the Fuzzy Horde: every rate is 0, so it is immune to every status. */
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
-static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-#else
-static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0}};
-#endif
+static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /**
  * Pose table of the Fuzzy Horde:
@@ -211,7 +180,7 @@ static BattleDataEntry data_table[] = {
 
 /** Body part of the Fuzzy Horde: a single part using the model "c_chorobon". */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_chorobon_gundan", "c_chorobon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence.v, &defence_attr.v, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
+    {1, "btl_un_chorobon_gundan", "c_chorobon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
 /** Fuzzy Horde's attack: 1 damage to a single target, a plain attack. */

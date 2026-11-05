@@ -221,9 +221,8 @@ pushed commit (cleanup_notes, round 22):
 - Header placement (Zephiles): scanner cleanup_tools/header_placement_scan.py. Done: one version numbering,
   HEAP_TYPE, shared types (cloud rooms, minigame driver, Monte tables, Glitz Pit ranking), per-version values in
   owner headers, unit work-slot names (0f45e78cd), unit types repeated across REL copies (a9f65232b,
-  221646136, 73cf4945d). Left of that: ZakoGunWork (three different views of one block in muj zako group1-3),
-  rsh unit_boss_moamoa's own Moamoa/MoamoaWork (same names as include/moamoa.h, other structs), chorobon
-  DefencePad/RegistPad (padding differs by version), tst unit_yoshi slots 2/4/5 (UW_YOSHI_*; partner names slots
-  4/5 as step pitch, tst as slide sound volume: unresolved). Also left: eff_balloon_n64's
+  221646136, 73cf4945d). Then ZakoGunWork one struct in zakogun.h,
+  the rsh battle swarm types renamed ExtMoamoa*, chorobon size padding gone (configs follow), Yoshi work slots shared
+  (include/battle/unit/unit_party_yoshi.h; slots 4/5 are pitch: BtlUnit_snd_se arg 4). Also left: eff_balloon_n64's
   effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
   9 placeholder names in headers (--detail unk).

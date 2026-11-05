@@ -30,14 +30,15 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 
-typedef struct MoamoaGroup {
+// The battle swarm is drawn through extdrv (ext_moamoa_main), so its types differ from the field swarm in moamoa.h.
+typedef struct ExtMoamoaGroup {
     char anim[16];
     char pose[8];
     f32 speed;
     s32 start;
     s32 num;
-} MoamoaGroup;
-typedef struct Moamoa {
+} ExtMoamoaGroup;
+typedef struct ExtMoamoa {
     u16 flags;
     u8 field_0x2[2];
     Vec pos;
@@ -53,13 +54,13 @@ typedef struct Moamoa {
     Vec vel;
     Vec pos2;
     u8 field_0x4c[4];
-} Moamoa;
-typedef struct MoamoaWork {
+} ExtMoamoa;
+typedef struct ExtMoamoaWork {
     s32 field_0x0;
     s32 count;
-    Moamoa* elems;
+    ExtMoamoa* elems;
     s32 numGroups;
-    MoamoaGroup groups[32];
+    ExtMoamoaGroup groups[32];
     s16 chainNum[128];
     s16 chainIdx[128][2];
     s32 poseId[5];
@@ -69,8 +70,8 @@ typedef struct MoamoaWork {
     f32 radius;
     f32 targetScale;
     f32 scale;
-} MoamoaWork;
-static MoamoaWork* wp;
+} ExtMoamoaWork;
+static ExtMoamoaWork* wp;
 
 #if VERSION >= VERSION_DEMO_EU
 // PAL: a seeded generator for the swarm's start positions (moamoa_srand / moamoa_randf)
@@ -970,7 +971,7 @@ static ExtTexInfo ext_moamoa_data[] = {
  */
 USER_FUNC(moamoa_guruguru) {
     s32 i;
-    Moamoa* elem;
+    ExtMoamoa* elem;
     ExtdrvPose* pose;
     f32 cnt;
     f32 ang;
@@ -1025,11 +1026,11 @@ USER_FUNC(moamoa_guruguru) {
  */
 USER_FUNC(moamoa_bomb) {
     ExtdrvPose* p2;
-    Moamoa* e2;
+    ExtMoamoa* e2;
     s32 k;
     s32 i;
     ExtdrvPose* pose;
-    Moamoa* elem;
+    ExtMoamoa* elem;
     s32 n;
 
     BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
@@ -1104,7 +1105,7 @@ USER_FUNC(moamoa1_on) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
     s32 i;
     BattleUnitPart* part;
-    Moamoa* elem;
+    ExtMoamoa* elem;
     AnimationPose* ap;
     s32 j;
     Vec* p;
@@ -1158,7 +1159,7 @@ USER_FUNC(moamoa1_on) {
  */
 USER_FUNC(moamoa2_on) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
-    Moamoa* elem;
+    ExtMoamoa* elem;
     AnimationPose* ap;
     Vec* p;
     s32 i;
@@ -1200,7 +1201,7 @@ USER_FUNC(moamoa2_on) {
  */
 USER_FUNC(moamoa_on) {
     s32 i;
-    Moamoa* elem;
+    ExtMoamoa* elem;
     ExtTexInfo* d;
     s32 j;
     AnimationPose* ap;
@@ -1213,11 +1214,11 @@ USER_FUNC(moamoa_on) {
     char anim[32];
     char pose[32];
 
-    wp = BTL_ALLOC(sizeof(MoamoaWork));
-    memset(wp, 0, sizeof(MoamoaWork));
+    wp = BTL_ALLOC(sizeof(ExtMoamoaWork));
+    memset(wp, 0, sizeof(ExtMoamoaWork));
     wp->count = 750;
-    wp->elems = BTL_ALLOC(wp->count * sizeof(Moamoa));
-    memset(wp->elems, 0, wp->count * sizeof(Moamoa));
+    wp->elems = BTL_ALLOC(wp->count * sizeof(ExtMoamoa));
+    memset(wp->elems, 0, wp->count * sizeof(ExtMoamoa));
     elem = wp->elems;
 #if VERSION >= VERSION_DEMO_EU
     moamoa_srand(seeds[rand() & 3]);
@@ -1362,7 +1363,7 @@ static EVT_BEGIN(evt_moamoa)
     RETURN
 EVT_END()
 
-void moamoa_pose(Moamoa* elem) {
+void moamoa_pose(ExtMoamoa* elem) {
     static const char* group_tbl[][2] = {
         {"c_n_moa_a", "S_1"},
         {"c_n_moa_b", "S_1"},
@@ -1376,7 +1377,7 @@ void moamoa_pose(Moamoa* elem) {
         {"c_konari", "G_1"},
         {"c_n_moa_a", "S_2"},
     };
-    MoamoaGroup* grp;
+    ExtMoamoaGroup* grp;
     s32 i;
     const char* pose;
     const char* anim;
@@ -1402,7 +1403,7 @@ void moamoa_pose(Moamoa* elem) {
 static void ext_moamoa_init(void) {
     s32 i;
     ExtdrvPose* pose;
-    Moamoa* elem;
+    ExtMoamoa* elem;
 
     pose = extGetPosePtr();
     elem = wp->elems;
@@ -1425,9 +1426,9 @@ EVT_BEGIN(MOAMOA_SET_BODYSCALE)
 EVT_END()
 
 static void ext_moamoa_main(void) {
-    Moamoa* elem;
-    Moamoa* e4;
-    Moamoa* e2;
+    ExtMoamoa* elem;
+    ExtMoamoa* e4;
+    ExtMoamoa* e2;
     s32 k4;
     s32 k3;
     s32 k;
@@ -1438,7 +1439,7 @@ static void ext_moamoa_main(void) {
     AnimationPose* ap;
     Vec* a;
     Vec* b;
-    MoamoaGroup* grp;
+    ExtMoamoaGroup* grp;
     s32 n;
     f32 t;
     f32 s;

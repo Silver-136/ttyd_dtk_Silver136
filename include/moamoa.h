@@ -1,7 +1,7 @@
 #pragma once
 
 // Smorg (moamoa) swarm on the field: shared by the map RELs that run it (eki_00, rsh_05, rsh_06). The Smorg battle
-// unit (unit_boss_moamoa) and the rsh_00 window scene (MoamoaSprite) use their own structs; rsh_00 shares MoamoaPoseDef.
+// unit (unit_boss_moamoa: ExtMoamoa*) and the rsh_00 window scene (MoamoaSprite) use their own structs; rsh_00 shares MoamoaPoseDef.
 
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>

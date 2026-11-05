@@ -32,6 +32,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
 #include "unit/party/unit_party_yoshi.h"
+#include "battle/unit/unit_party_yoshi.h"
 
 // FAKE: _btlYoshiDisp calls btlDispTexPlane through this float-first prototype so the float arguments are evaluated
 // first; same registers as (id, color, 0, x, y, z, sX, sY), behaviour-identical.
@@ -53,14 +54,7 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i);
 #include "battle/battle_damage.h"
 #include "mario/mario_pouch.h"
 
-// Unit work slots of Yoshi (btlevtcmd_SetUnitWork / GetUnitWork, unit->work).
 // Slot 3 is set to -1 when Ground Pound starts (as the partner Yoshi does) and never read, so it keeps its number.
-enum {
-    UNIT_WORK_SWALLOWED = 1,          // 1 once Gulp has eaten the target outright; he then walks home alone
-    UW_YOSHI_GROUND_POUND_ACTIVE = 2, // 1 while Ground Pound runs
-    UW_YOSHI_SLIDE_SOUND_POWER = 4,   // slide sound strength, following the action-command power (power * 2387 / 100)
-    UW_YOSHI_SLIDE_SOUND_PERCENT = 5, // percent of the slide sound strength played (falls as he slides)
-};
 
 typedef struct YoshiSweatWork {
     s32 pad0;
@@ -305,7 +299,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_GROUND_POUND_ACTIVE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_POUND, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 15, 13)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 6, 6)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), STRING("SFX_PARTY_BATTLE_LANDING1"))
@@ -724,7 +718,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
 
 /**
  * Footstep sounds for Ground Pound's run-up and slide, one per step of each pose;
- * their volume follows the run's power.
+ * their pitch follows the run's power.
  */
 PoseSoundTiming posesound_normal_attack[] = {
     {"PYS_W_1", 0.01f, _yoshi_slide_move_sound, "SFX_PARTY_BATTLE_MOVE1L", 0, 1},
@@ -746,7 +740,7 @@ PoseSoundTiming posesound_normal_attack[] = {
 
 /**
  * Yoshi's basic attack (partyWeapon_YoshiNormalAttack), first entry of his move menu:
- * a charge-up (PYS_W_1, PYS_R_5) while a sibling event ramps the slide sound's volume,
+ * a charge-up (PYS_W_1, PYS_R_5) while a sibling event ramps the step sounds' pitch,
  * then a jump and flutter over the chosen enemy (btl_yoshi_yoroyoro_jump_*) with an action command whose
  * result sets how many times he pounds it.
  * Its weapon name btl_wn_pys_normal is Ground Pound in English (description msg_pys_hip_drop).
@@ -773,14 +767,14 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_GROUND_POUND_ACTIVE, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_POUND, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, -1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_SLIDE_SOUND_POWER, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_SLIDE_SOUND_PERCENT, 100)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STEP_PITCH, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STEP_PITCH_SCALE, 100)
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(posesound_normal_attack))
     CALL(btlevtcmd_AcSetOutputParam, 1, 0)
 
-    // He winds up in place and switches to the run pose while the slide sound ramps up over 25 frames.
+    // He winds up in place and switches to the run pose while the step sounds' pitch ramps up over 25 frames.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_W_1"))
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(0), 0)
@@ -789,7 +783,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
             SET_VALUE(LW(1), 2387)
             MULTIPLY(LW(1), LW(0))
             DIVIDE(LW(1), 100)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_SLIDE_SOUND_POWER, LW(1))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STEP_PITCH, LW(1))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
@@ -869,7 +863,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         CASE_DEFAULT
     END_SWITCH
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_GROUND_POUND_ACTIVE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_POUND, 0)
     IF_INT_LESS(LW(13), 2)
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 20, 20, 0)
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -1428,47 +1422,47 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiEggAttack_Minimini))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&partyWeapon_YoshiEggAttack_Minimini), LW(3), LW(4))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 3, LW(3))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 4, LW(4))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 5, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 6, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 7, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_TARGET, LW(3))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_TARGET_PART, LW(4))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_PRECHECK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_LAST_AT_TARGET, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_EVENT, 0)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiEggAttack_Minimini))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&partyWeapon_YoshiEggAttack_Minimini), LW(10), LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 3, LW(10))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 4, LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 5, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 6, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 7, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_TARGET, LW(10))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_TARGET_PART, LW(11))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_PRECHECK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_LAST_AT_TARGET, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_EVENT, 0)
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiEggAttack_Minimini))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&partyWeapon_YoshiEggAttack_Minimini), LW(10), LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, 3, LW(10))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, 4, LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, 5, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, 6, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, 7, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, PARTS_WORK_TARGET, LW(10))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, PARTS_WORK_TARGET_PART, LW(11))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, PARTS_WORK_PRECHECK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, PARTS_WORK_LAST_AT_TARGET, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, PARTS_WORK_EVENT, 0)
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiEggAttack_Minimini))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&partyWeapon_YoshiEggAttack_Minimini), LW(10), LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, 3, LW(10))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, 4, LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, 5, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, 6, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, 7, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, PARTS_WORK_TARGET, LW(10))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, PARTS_WORK_TARGET_PART, LW(11))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, PARTS_WORK_PRECHECK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, PARTS_WORK_LAST_AT_TARGET, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, PARTS_WORK_EVENT, 0)
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiEggAttack_Minimini))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&partyWeapon_YoshiEggAttack_Minimini), LW(10), LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, 3, LW(10))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, 4, LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, 5, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, 6, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, 7, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, PARTS_WORK_TARGET, LW(10))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, PARTS_WORK_TARGET_PART, LW(11))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, PARTS_WORK_PRECHECK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, PARTS_WORK_LAST_AT_TARGET, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, PARTS_WORK_EVENT, 0)
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiEggAttack_Minimini))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&partyWeapon_YoshiEggAttack_Minimini), LW(10), LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 3, LW(10))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 4, LW(11))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 5, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 6, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 7, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_TARGET, LW(10))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_TARGET_PART, LW(11))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_PRECHECK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_LAST_AT_TARGET, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_EVENT, 0)
 
     // The camera frames Yoshi and the Mini-Egg action command is set up.
     CALL(evt_btl_camera_set_mode, 0, 10)
@@ -1557,7 +1551,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     // A laid egg gets a random colour (green, yellow or pink) and drops from Yoshi to the floor.
     LABEL(10)
     CALL(evt_sub_random, 2, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 0, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EGG_KIND, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(12), PTR(pose_table_egg_y))
@@ -1568,7 +1562,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 1, 4)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 2, PTR(&partyWeapon_YoshiEggAttack_Minimini))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_WEAPON, PTR(&partyWeapon_YoshiEggAttack_Minimini))
     LABEL(20)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
     CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, LW(12), FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
@@ -1614,25 +1608,25 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
 
     // Eggs aimed at the same enemy are grouped so that only the last of them counts as the final hit.
     LABEL(25)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 6, -1)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 6, -1)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, 6, -1)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, 6, -1)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, 6, -1)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 6, -1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_LAST_AT_TARGET, -1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_LAST_AT_TARGET, -1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 4, PARTS_WORK_LAST_AT_TARGET, -1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 5, PARTS_WORK_LAST_AT_TARGET, -1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 6, PARTS_WORK_LAST_AT_TARGET, -1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_LAST_AT_TARGET, -1)
     SET_VALUE(LW(12), LW(13))
     LABEL(26)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 6, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, LW(0))
     IF_INT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 6, 1)
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, 1)
         SET_VALUE(LW(14), LW(12))
         LABEL(27)
         SUBTRACT(LW(14), 1)
         IF_INT_GREATER_OR_EQUAL(LW(14), 2)
-            CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 3, LW(0))
-            CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(14), 3, LW(1))
+            CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET, LW(0))
+            CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(14), PARTS_WORK_TARGET, LW(1))
             IF_INT_EQUAL(LW(0), LW(1))
-                CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(14), 6, 0)
+                CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(14), PARTS_WORK_LAST_AT_TARGET, 0)
             END_IF
             GOTO(27)
         END_IF
@@ -1643,39 +1637,39 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     END_IF
     SET_VALUE(LW(12), 2)
     LABEL(28)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 6, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 3, LW(0))
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 4, LW(1))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET, LW(0))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET_PART, LW(1))
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(0), LW(1), 256, LW(6))
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 5, LW(6))
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_PRECHECK, LW(6))
         IF_INT_EQUAL(LW(6), 1)
             SET_VALUE(LW(14), LW(12))
             LABEL(29)
             ADD(LW(14), 1)
             IF_INT_LESS_OR_EQUAL(LW(14), LW(13))
-                CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 3, LW(0))
-                CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(14), 3, LW(1))
+                CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET, LW(0))
+                CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(14), PARTS_WORK_TARGET, LW(1))
                 IF_INT_EQUAL(LW(0), LW(1))
-                    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(14), 6, LW(0))
+                    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(14), PARTS_WORK_LAST_AT_TARGET, LW(0))
                     IF_INT_NOT_EQUAL(LW(0), 0)
-                        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(14), 6, 2)
+                        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(14), PARTS_WORK_LAST_AT_TARGET, 2)
                     END_IF
                 END_IF
                 GOTO(29)
             END_IF
         END_IF
         CASE_EQUAL(1)
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 3, LW(0))
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 4, LW(1))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET, LW(0))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET_PART, LW(1))
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(0), LW(1), 256, LW(6))
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 5, LW(6))
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_PRECHECK, LW(6))
         CASE_DEFAULT
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 3, LW(0))
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 4, LW(1))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET, LW(0))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET_PART, LW(1))
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(0), LW(1), 1048832, LW(6))
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 5, LW(6))
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_PRECHECK, LW(6))
     END_SWITCH
     IF_INT_LESS(LW(12), LW(13))
         ADD(LW(12), 1)
@@ -1692,7 +1686,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 0, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EGG_KIND, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
         SET_VALUE(LW(6), STRING("PYS_A3_1"))
@@ -1714,15 +1708,15 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL_CHILD(_egg_attack_event)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 7, LW(15))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EVENT, LW(15))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     LABEL(90)
     IF_INT_NOT_EQUAL(LW(12), LW(13))
         ADD(LW(12), 1)
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 3, LW(3))
-        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 4, LW(4))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET, LW(3))
+        CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET_PART, LW(4))
         GOTO(30)
     END_IF
 
@@ -1748,10 +1742,10 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     LABEL(95)
     SET_VALUE(LW(12), 2)
     LABEL(96)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 7, LW(15))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EVENT, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 7, 0)
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EVENT, 0)
     END_IF
     ADD(LW(12), 1)
     IF_INT_LESS_OR_EQUAL(LW(12), LW(13))
@@ -1806,7 +1800,7 @@ EVT_BEGIN(_egg_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_EGG2"), 0)
     CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(0.5996094f), 0, 0, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 5, LW(6))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_PRECHECK, LW(6))
     IF_INT_NOT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(6), 3)
             CALL(btlevtcmd_StartAvoid, LW(3), 38)
@@ -1819,8 +1813,8 @@ EVT_BEGIN(_egg_attack_event)
         END_IF
         GOTO(89)
     END_IF
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 2, LW(0))
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 6, LW(1))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_WEAPON, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(0), DAMAGE_RESULT_AC_SUCCESS | DAMAGE_RESULT_STATUS_EVERY_HIT, LW(5))
     ELSE
@@ -2196,7 +2190,7 @@ USER_FUNC(_yoshi_slide_move) {
     pos.x = dist * event->userWork[3] + event->userWork[1];
     pos.z = event->userWork[2] + event->userWork[0] / 15 * (tz - event->userWork[2]);
     BtlUnit_SetPos(unit, pos.x, pos.y, pos.z);
-    unit->work[UW_YOSHI_SLIDE_SOUND_PERCENT] = 100.0f - 50.0f * dist / _yoshi_slide_distance(15);
+    unit->work[UNIT_WORK_STEP_PITCH_SCALE] = 100.0f - 50.0f * dist / _yoshi_slide_distance(15);
     return event->userWork[0] < 15 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
@@ -2218,14 +2212,14 @@ typedef struct YoshiSlideAcWork {
     u8 pad_0[0xC];
     u32 flags; // 0xC, bit 0 -> arg 1
     u8 pad_10[0x40 - 0x10];
-    s32 power; // 0x40, percent of the slide sound value
+    s32 power; // 0x40, AC power in percent (sets the step pitch)
     s32 stage; // 0x44, 1-3: run pose
 } YoshiSlideAcWork;
 
 /**
  * arg 0 (in/out): last stage seen; arg 1 (out): AC flag bit 0.
  * Follows the action command: a new stage changes the run pose,
- * and unit work 4 (the slide sound value) follows the AC power.
+ * and UNIT_WORK_STEP_PITCH follows the AC power.
  */
 USER_FUNC(_yoshi_slide_ac_check) {
     BattleWork* wp = _battleWorkPointer;
@@ -2256,7 +2250,7 @@ USER_FUNC(_yoshi_slide_ac_check) {
                 break;
         }
     }
-    unit->work[UW_YOSHI_SLIDE_SOUND_POWER] = ac->power * 2387 / 100;
+    unit->work[UNIT_WORK_STEP_PITCH] = ac->power * 2387 / 100;
     if (ac->flags & 1) {
         evtSetValue(event, flagArg, 1);
     } else {
@@ -2362,7 +2356,7 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     BtlUnit_GetPartsPtr(unit, 1);
     unit->moveCurrentPos.y = unit->moveSpeedY + (unit->moveStartPos.y + (unit->moveTargetPos.y - unit->moveStartPos.y) * (unit->moveTotalFrames - (f32)unit->moveFrames) / unit->moveTotalFrames);
     unit->moveSpeedY = sweatAngle;
-    unit->work[UW_YOSHI_SLIDE_SOUND_PERCENT] = (s32)(75.0f - 25.0f * sinfd(360.0f * (unit->moveTotalFrames - (f32)(unit->moveFrames % 90)) / 90.0f));
+    unit->work[UNIT_WORK_STEP_PITCH_SCALE] = (s32)(75.0f - 25.0f * sinfd(360.0f * (unit->moveTotalFrames - (f32)(unit->moveFrames % 90)) / 90.0f));
     BtlUnit_SetPos(unit, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
     event->userdata[1]++;
     if (event->userdata[1] > 20) {
@@ -2389,9 +2383,9 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Pose sound callback: plays the slide sound effect with a volume of work[4] * work[5] / 100. */
+/** Pose sound callback: plays the footstep sound at pitch UNIT_WORK_STEP_PITCH * UNIT_WORK_STEP_PITCH_SCALE / 100. */
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
-    BtlUnit_snd_se(unit, s->sfxName, -250000000, (s16)(unit->work[UW_YOSHI_SLIDE_SOUND_POWER] * unit->work[UW_YOSHI_SLIDE_SOUND_PERCENT] / 100)); // work[4] * work[5] / 100: slide sound volume
+    BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[UNIT_WORK_STEP_PITCH] * unit->work[UNIT_WORK_STEP_PITCH_SCALE] / 100)); // the step sound's pitch
 }
 
 #if VERSION >= VERSION_JP // the JP demo has no _get_nomikomi_hit_position
@@ -2726,7 +2720,7 @@ static EVT_BEGIN(attack_audience_event)
         CALL(evt_btl_camera_set_zoom, 0, 200)
     END_SIBLING_EVENT
     CALL(evt_sub_random, 2, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 0, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EGG_KIND, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(12), PTR(pose_table_egg_y))
@@ -2739,7 +2733,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(12), FLOAT(7.5f))
     CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(12), FLOAT(0.099609375f))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), 0, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EGG_KIND, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
         SET_VALUE(LW(6), STRING("PYS_A3_1"))

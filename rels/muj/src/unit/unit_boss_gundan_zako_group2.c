@@ -34,28 +34,6 @@
 #define UNIT_WORK_HIT_LANDED 1 // fall attack: 1 once a hit landed; the final hit then skips the avoid check
 
 
-#if VERSION >= VERSION_US
-#define ZAKOGUNWORK_PAD 0x54
-#else
-#define ZAKOGUNWORK_PAD 0x48
-#endif
-
-typedef struct ZakoGunWork {
-    s32 flag;
-    s32 targetId;
-#if VERSION >= VERSION_US
-    Vec targetPos;
-    u8 field_0x14[ZAKOGUNWORK_PAD - 0x14];
-#else
-    u8 field_0x8[ZAKOGUNWORK_PAD - 0x8];
-#endif
-    Vec start;
-    Vec end;
-    s32 timer;
-    s32 steps;
-    s32 count;
-    s32 sfx;
-} ZakoGunWork;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 
@@ -532,14 +510,14 @@ USER_FUNC(down_ceil) {
     if (isFirstCall) {
         work->start = (Vec){0.0f, 250.0f, 0.0f};
         work->end = (Vec){0.0f, 130.0f, 0.0f};
-        work->timer = 120;
+        work->timer2 = 120;
         work->steps = 120;
         *ceil &= ~STAGE_OBJ_FLAG_IRON_FRAME_GONE;
         work->sfx = work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
-    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
-    work->timer--;
-    if (work->timer < 0) {
+    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer2, work->steps);
+    work->timer2--;
+    if (work->timer2 < 0) {
         psndSFXOff(work->sfx);
         return EVT_RETURN_DONE;
     }
@@ -555,14 +533,14 @@ USER_FUNC(up_ceil) {
     if (isFirstCall) {
         work->start = (Vec){0.0f, 130.0f, 0.0f};
         work->end = (Vec){0.0f, 250.0f, 0.0f};
-        work->timer = 120;
+        work->timer2 = 120;
         work->steps = 120;
         *ceil |= STAGE_OBJ_FLAG_IRON_FRAME_GONE;
         work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
-    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
-    work->timer--;
-    if (work->timer < 0) {
+    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer2, work->steps);
+    work->timer2--;
+    if (work->timer2 < 0) {
         psndSFXOff(work->sfx);
         return EVT_RETURN_DONE;
     }
@@ -580,11 +558,11 @@ USER_FUNC(shake_ceil) {
     if (isFirstCall) {
         work->start = (Vec){0.0f, 130.0f, 0.0f};
         work->end = (Vec){0.0f, 135.0f, 0.0f};
-        work->timer = 0;
+        work->timer2 = 0;
     }
-    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->timer, 9);
-    work->timer++;
-    if (work->timer > 17) {
+    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->timer2, 9);
+    work->timer2++;
+    if (work->timer2 > 17) {
         body->position.y = wire->position.y = 130.0f;
         return EVT_RETURN_DONE;
     }

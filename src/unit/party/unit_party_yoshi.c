@@ -7,6 +7,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "unit/party/unit_party_yoshi.h"
+#include "battle/unit/unit_party_yoshi.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"
@@ -47,19 +48,6 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_sweat_n64.h"
 #include "icon_ids.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SWALLOWED 1        // 1 once partyYoshiAttack_Nomikomi swallowed the target (it clears it first); only then does the run home offer the stylish window (ACRStart)
-#define UNIT_WORK_STEP_PITCH 4       // base pitch of the run-up step sounds in partyYoshiAttack_NormalAttack (0, then ramps 95..2387 over 25 frames)
-#define UNIT_WORK_STEP_PITCH_SCALE 5 // percent applied to slot 4 by _yoshi_slide_move_sound (100 at the start of partyYoshiAttack_NormalAttack; btl_yoshi_yoroyoro_jump_move swings it between 50 and 100)
-// BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
-#define PARTS_WORK_EGG_KIND 0       // random 0-2 on egg parts 2-7: pose table (0 pose_table_egg_g, 1 pose_table_egg_y, 2 pose_table_egg_p) and Yoshi's throw poses (PYS_A2_*, PYS_A3_*, PYS_A4_*)
-#define PARTS_WORK_WEAPON 2         // weapon the egg hits with (partyWeapon_YoshiEggAttack_Minimini); _egg_attack_event passes it to CheckDamage
-#define PARTS_WORK_TARGET 3         // target unit of this egg (parts 2-7: each a ChoiceSamplingEnemy pick)
-#define PARTS_WORK_TARGET_PART 4    // target part of this egg (pairs with slot 3)
-#define PARTS_WORK_PRECHECK 5       // CommandPreCheckDamage result for this egg (1 hit; 2 miss, 3 lucky, 6 dodgy start the matching StartAvoid)
-#define PARTS_WORK_LAST_AT_TARGET 6 // -1 while sorting; 1 the last egg aimed at its target (CheckDamage with the final-hit flag), 0 an earlier egg at the same target (no final-hit flag), 2 the last egg after an earlier one already hit (pre-checked without evasion)
-#define PARTS_WORK_EVENT 7          // id of the egg's _egg_attack_event sibling event (0 none); the end of the attack waits for it and clears it
 
 USER_FUNC(yoshi_original_color_anim_set);
 USER_FUNC(_gundan_yoshi_run_effect);
@@ -329,7 +317,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_POUND, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 15, 13)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 6, 6)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), STRING("SFX_PARTY_BATTLE_LANDING1"))
@@ -762,7 +750,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     // He faces the enemy and revs his legs in place, the footsteps speeding up.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_POUND, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, -1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STEP_PITCH, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STEP_PITCH_SCALE, 100)
@@ -853,7 +841,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         CASE_DEFAULT
     END_SWITCH
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_POUND, 0)
     IF_INT_LESS(LW(13), 2)
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 20, 20, 0)
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
