@@ -54,7 +54,6 @@
 
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
-void FontDrawString(f32 x, f32 y, const char* msg);
 unsigned long strlen(const char* s);
 static BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);

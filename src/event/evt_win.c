@@ -63,7 +63,6 @@
 #endif
 
 
-void FontDrawString(f32 x, f32 y, const char* str);
 
 typedef enum UnitWinItemFlags {
     UNITWIN_ITEM_UNAVAILABLE = 1 << 0, // empty goods slot or already purchased

@@ -20,7 +20,6 @@
 #include "dolphin/gx.h"
 #include <string.h>
 
-void FontDrawString(f32 x, f32 y, const char* str);
 static void nameBG(void);
 static void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);

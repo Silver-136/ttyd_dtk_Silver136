@@ -57,7 +57,6 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
 
-void FontDrawString(f32 x, f32 y, const char* msg);
 
 
 // BattleSeqEndWork.flags: the result-screen displays btlseqEnd_DispMain adds (0x1 is only ever cleared)

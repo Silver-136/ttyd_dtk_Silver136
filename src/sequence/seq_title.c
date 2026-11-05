@@ -23,7 +23,6 @@
 #include "seq/seq_e3.h"
 
 
-void FontDrawString(f32 x, f32 y, const char* msg);
 
 TitleWork work2;
 /**

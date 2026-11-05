@@ -89,9 +89,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg);
 u16 FontGetMessageWidth(const char* message);
 void FontDrawStringMtx(Mtx mtx, const char* message);
 void FontDrawColor(GXColor color);
-
-
-
+void FontDrawString(f32 x, f32 y, const char* msg);
 
 u16 kanjiSearch(u32 code);
 u16 kanjiGetWidth(u16 code);
