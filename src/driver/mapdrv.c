@@ -1179,6 +1179,7 @@ void bmapUnLoad(void) {
     MapEntry* entry;
     MapEntry* entry2;
     int i;
+    s32 gz;
 #else
 void bmapUnLoad(void) {
     MapEntry* entry2;
@@ -1241,11 +1242,9 @@ void bmapUnLoad(void) {
     // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
 #if VERSION <= VERSION_DEMO_JP
     j = 0;
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            j = 0;
-        }
+    gz = 0;
+    if (gz != 0) {
+        j = 0;
     }
     wp2 = mapWork;
     activeGroup = j;

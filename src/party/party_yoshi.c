@@ -455,6 +455,7 @@ void yoshi_use(PartyEntry* party) {
     f32 speed;
     f32 ox;
     f32 oz;
+    MarioWork* m;
 
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
@@ -1058,10 +1059,8 @@ void yoshi_use(PartyEntry* party) {
                 if (party->useMotionId == 50) {
                     party->useMotionId = 51;
                 }
-                {
-                    MarioWork* m = marioGetPtr();
-                    m->mot.yoshi.bobSpeed += m->mot.yoshi.bobOfs;
-                }
+                m = marioGetPtr();
+                m->mot.yoshi.bobSpeed += m->mot.yoshi.bobOfs;
             }
             if (mario->mot.yoshi.bobSpeed <= -10.0f) {
                 mario->mot.yoshi.bobSpeed = -10.0f;

@@ -2130,6 +2130,11 @@ void partyRideMain(PartyEntry* party) {
     Vec s;
     f32 dy0;
     u8* mario = (u8*)party->playerPtr;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 h;
+    f32 dy;
     switch (party->motionStep) {
         case 0:
             getRidePos(party, &pos);
@@ -2242,51 +2247,45 @@ void partyRideMain(PartyEntry* party) {
 
         case 100:
 
-        case 101: {
-                f32 x;
-                f32 y;
-                f32 z;
-                f32 h;
-                f32 dy;
+        case 101:
 #if VERSION >= VERSION_JP
-                party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
+            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
 #endif
-                x = ((MarioWork*)mario)->position.x;
-                y = ((MarioWork*)mario)->position.y;
-                z = ((MarioWork*)mario)->position.z;
-                party->position.x = x;
-                party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
-                party->position.z = z;
-                if (party->motionStep == 100) {
-                    partyGetAppearPos(party, &party->moveTarget);
-                } else {
-                    partyGetAppearPos2(party, &party->moveTarget);
-                }
-                party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
-                party->moveFrames = 16;
-                party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
-                party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
-                party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
-                h = 0.5f * (f32)party->moveFrames;
-                dy = party->moveTarget.y - party->position.y;
-                if (__fabsf(dy) < 1.0f) {
-                    dy = 10.0f;
-                } else if (dy >= 0.0f) {
-                    dy += 0.5f * party->height;
-                } else {
-                    dy = 10.0f;
-                }
-                dy = (dy + dy) / (h * h - h);
-                party->velY = dy * h;
-                party->accelY = -dy;
-                party->flags |= PARTY_FLAG_IS_JUMPING;
-#if VERSION >= VERSION_JP
-                party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-#endif
-                partyShadowOn(party);
-                party->motionStep = 110;
-                break;
+            x = ((MarioWork*)mario)->position.x;
+            y = ((MarioWork*)mario)->position.y;
+            z = ((MarioWork*)mario)->position.z;
+            party->position.x = x;
+            party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
+            party->position.z = z;
+            if (party->motionStep == 100) {
+                partyGetAppearPos(party, &party->moveTarget);
+            } else {
+                partyGetAppearPos2(party, &party->moveTarget);
             }
+            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+            party->moveFrames = 16;
+            party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
+            party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
+            party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
+            h = 0.5f * (f32)party->moveFrames;
+            dy = party->moveTarget.y - party->position.y;
+            if (__fabsf(dy) < 1.0f) {
+                dy = 10.0f;
+            } else if (dy >= 0.0f) {
+                dy += 0.5f * party->height;
+            } else {
+                dy = 10.0f;
+            }
+            dy = (dy + dy) / (h * h - h);
+            party->velY = dy * h;
+            party->accelY = -dy;
+            party->flags |= PARTY_FLAG_IS_JUMPING;
+#if VERSION >= VERSION_JP
+            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
+#endif
+            partyShadowOn(party);
+            party->motionStep = 110;
+            break;
 
         case 110:
             partyMoveNoHosei(party);

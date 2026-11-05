@@ -4670,11 +4670,9 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     f32 gy;
     f32 t;
 
-    {
-        f32 t = partyGetFollowDir(party);
-        t += 180.0f;
-        party->homeDir = revise360(t);
-    }
+    t = partyGetFollowDir(party);
+    t += 180.0f;
+    party->homeDir = revise360(t);
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         sp = 1.5f * mario->wPlayerCollisionBox.x;

@@ -1413,6 +1413,7 @@ void weapon_entry(void) {
     s32 i;
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
+    GenkiWeapon* wp;
     for (i = 0; i < w->weaponNum; i++) {
         if (w->weapon[i].state == 0) {
             idx[cnt] = i;
@@ -1421,11 +1422,9 @@ void weapon_entry(void) {
     }
     if (cnt >= 1) {
         i = idx[irand(cnt)];
-        {
-            GenkiWeapon* wp = &w->weapon[i];
-            wp->state = 1;
-            wp->timer = 7;
-        }
+        wp = &w->weapon[i];
+        wp->state = 1;
+        wp->timer = 7;
         BtlUnit_SetAnim(part, "M_C_2C");
     }
 }

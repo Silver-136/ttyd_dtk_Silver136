@@ -4089,11 +4089,10 @@ USER_FUNC(kpa_powerup) {
 s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     ItemEntry* item;
+    Vec dv;
 #if !MOBJ_EXTRA_OBJS
     // FAKE: unused Vec local; removing the block changes the object
-    {
-        Vec dv = (Vec){0.0f, -2000.0f, 0.0f};
-    }
+    dv = (Vec){0.0f, -2000.0f, 0.0f};
 #endif
     switch (mobj->state) {
     case 0:

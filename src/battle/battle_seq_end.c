@@ -208,6 +208,8 @@ void btlseqEnd(BattleWork* wp) {
     NpcBattleInfo* fd;
     MarioWork* mw;
     PartyEntry* pe;
+    FieldBattleData* fb;
+    NpcEntry* p;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -772,18 +774,15 @@ void btlseqEnd(BattleWork* wp) {
     case SEQ_END_RUN_OFF:
         BattleSetSeq(wp, SEQ_END, SEQ_END_LEAVE);
         break;
-    case SEQ_END_LEAVE: {
-        FieldBattleData* fb;
-        NpcEntry* p;
-        BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
-        BattleAudienceSoundSetVolAll(0, 30);
+    case SEQ_END_LEAVE:
+    BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
+    BattleAudienceSoundSetVolAll(0, 30);
 #if VERSION >= VERSION_JP
-        fb = fbatGetPointer();
-        p = fb->target;
-        if (p) p->interruptFlags |= NPC_INTERRUPT_NO_FIND;
+    fb = fbatGetPointer();
+    p = fb->target;
+    if (p) p->interruptFlags |= NPC_INTERRUPT_NO_FIND;
 #endif
-        break;
-    }
+    break;
     case SEQ_END_FADE_OUT:
     fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
     BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT_WAIT);

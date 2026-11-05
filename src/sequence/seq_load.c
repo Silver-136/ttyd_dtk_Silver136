@@ -1055,15 +1055,14 @@ void loadDraw(CameraId camera, void* param) {
 #endif
                 break;
             }
-            default: {
-                winTexInit_x2(*wp->file->data);
+            default:
+            winTexInit_x2(*wp->file->data);
 #if VERSION >= VERSION_US
-                winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #else
-                winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #endif
-                break;
-            }
+            break;
         }
     }
 
