@@ -40,7 +40,7 @@
                                         // the others)
 #define MAJO_WORK_LOW_HP_ATTACK 7       // set to 1 by those lines; the unit's attack choice then weights in its strong attack
 
-// Barriern satellites (unit_barriern*_satellite in aji, mri and moo), set up by the Barriern that spawns them
+// Barriern satellites (unit_barriern*_satellite in aji, mri, moo and tst), set up by the Barriern that spawns them
 #define BARRIERN_SATELLITE_WORK_OWNER 0       // unit id of that Barriern
 #define BARRIERN_SATELLITE_WORK_IDLE_POSE 1   // 1 lets its wait event play the S_4 pose at random times
 #define BARRIERN_SATELLITE_PARTS_WORK_SPLINE 2 // part 1: the spline table of its last move (the Barriern's

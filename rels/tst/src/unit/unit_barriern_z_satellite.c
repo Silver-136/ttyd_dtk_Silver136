@@ -11,12 +11,7 @@
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_sub.h"
 #include "tst.h"
-
-// Unit work slots of a Mini-Z-Yux (btlevtcmd_SetUnitWork / GetUnitWork).
-enum {
-    UW_BARRIERN_Z_SATELLITE_PARENT = 0, // unit id of the Yux it orbits (set by the Yux when it spawns it)
-    BARRIERN_SATELLITE_WORK_IDLE_POSE = 1    // non-zero once the Yux lets it play its idle pose
-};
+#include "battle/unit_work.h"
 
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
 

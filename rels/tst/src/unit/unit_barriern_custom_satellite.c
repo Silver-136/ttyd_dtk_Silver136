@@ -11,12 +11,7 @@
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_sub.h"
 #include "tst.h"
-
-// Unit work slots of the Mini-X-Yux (btlevtcmd_Get/SetUnitWork); the X-Yux that spawns it fills both.
-enum {
-    UW_BARRIERN_CUSTOM_SATELLITE_PARENT_ID = 0, // unit id of the X-Yux that spawned it
-    BARRIERN_SATELLITE_WORK_IDLE_POSE = 1, // set to 1 at spawn: the wait event plays the S_4 pose now and then
-};
+#include "battle/unit_work.h"
 
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
 
