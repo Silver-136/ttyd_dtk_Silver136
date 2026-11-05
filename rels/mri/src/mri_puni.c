@@ -3948,36 +3948,35 @@ void puniModeFunbari(PuniData* p) {
     Vec d2;
     f32 dist;
     f32 s;
+    PuniTarget* t;
+    int i;
 
     switch (p->modeStep) {
-        case 0: {
-            PuniTarget* t;
-            int i;
-            t = Punigp->targets;
-            for (i = 0; i < 10; i++, t++) {
-                if ((t->flags & PUNI_TARGET_FLAG_ON) && (t->flags & PUNI_TARGET_FLAG_MASS)) break;
-            }
-            if (i >= 10) {
-                p->modeStep = 10;
-                break;
-            }
-            if (p->pos.x > t->pos.x) {
-                p->modeF2 = -1.0f;
-                p->dir = 270.0f;
-            } else {
-                p->modeF2 = 1.0f;
-                p->dir = 90.0f;
-            }
-            p->vel.x = 0.5f;
-            p->timer = 68;
-            p->modeF0 = 1.0f;
-#if VERSION >= VERSION_US
-            p->dispOfs.y = 0.0f;
-#endif
-            p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
-            p->modeStep = 1;
+        case 0:
+        t = Punigp->targets;
+        for (i = 0; i < 10; i++, t++) {
+            if ((t->flags & PUNI_TARGET_FLAG_ON) && (t->flags & PUNI_TARGET_FLAG_MASS)) break;
+        }
+        if (i >= 10) {
+            p->modeStep = 10;
             break;
         }
+        if (p->pos.x > t->pos.x) {
+            p->modeF2 = -1.0f;
+            p->dir = 270.0f;
+        } else {
+            p->modeF2 = 1.0f;
+            p->dir = 90.0f;
+        }
+        p->vel.x = 0.5f;
+        p->timer = 68;
+        p->modeF0 = 1.0f;
+#if VERSION >= VERSION_US
+        p->dispOfs.y = 0.0f;
+#endif
+        p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
+        p->modeStep = 1;
+        break;
         case 1:
         case 2:
             s = sin(3.1415927f * p->modeF0 / 180.0f);

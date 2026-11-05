@@ -1154,35 +1154,32 @@ static void ext_moamoa_main(void) {
                 }
                 break;
 
-            case MOAMOA_STATE_APPROACH: {
-                    f32 z;
-                    f32 x;
-                    r = randf(-45.0f, 45.0f);
-                    a = wp->angle;
-                    a += r;
-                    a += 180.0f;
-                    d = wp->dist;
-                    x = (*pose->mtx)[0][3] + (30.0f * polySinf((6.2831855f * a) / 360.0f));
-                    y = (*pose->mtx)[1][3];
-                    z = (*pose->mtx)[2][3];
-                    {
-                        f32 b;
-                        f32 k;
-                        f32 r1 = rand() / 32767.0f;
-                        f32 r2;
-                        a2 = 2.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f);
-                        r2 = rand() / 32767.0f;
-                        b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
-                        // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-                        x2 = x;
-                        y2 = y;
-                        z2 = z;
-                        s2 = a2;
-                        g2 = b;
-                        moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
-                    }
-                    break;
+            case MOAMOA_STATE_APPROACH:
+                r = randf(-45.0f, 45.0f);
+                a = wp->angle;
+                a += r;
+                a += 180.0f;
+                d = wp->dist;
+                x = (*pose->mtx)[0][3] + (30.0f * polySinf((6.2831855f * a) / 360.0f));
+                y = (*pose->mtx)[1][3];
+                z = (*pose->mtx)[2][3];
+                {
+                    f32 b;
+                    f32 k;
+                    f32 r1 = rand() / 32767.0f;
+                    f32 r2;
+                    a2 = 2.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f);
+                    r2 = rand() / 32767.0f;
+                    b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
+                    // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
+                    x2 = x;
+                    y2 = y;
+                    z2 = z;
+                    s2 = a2;
+                    g2 = b;
+                    moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
                 }
+                break;
 
             case MOAMOA_STATE_JUMP:
                 (*pose->mtx)[1][3] += moa->vy;
