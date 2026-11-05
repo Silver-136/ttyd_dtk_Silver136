@@ -35,8 +35,6 @@
 #include "party.h"
 #include "mario/mario_hit.h"
 
-extern double sin(double x);
-
 typedef struct MotShipWork {
     u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = marioShipGetDir; set to 0/1/2 by shipDecideDir
     f32 baseY;                    // 0x04: y the hull floats at; copied from harborPos.y when docking

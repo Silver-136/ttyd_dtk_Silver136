@@ -53,7 +53,6 @@
 #define ROCKET_PUNCH_WORK_WAIT 1
 
 #include "unit/unit_boss_magnum_battender.h"
-double atan(double x);
 typedef struct TargetWork {
     s32 state;
     s32 count;

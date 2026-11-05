@@ -19,8 +19,6 @@
 #include "battle/battle_item_data.h"
 #include "libc_decls.h"
 
-double sin(double);
-
 void DrawMultiItemWin(void);
 void DrawChangePartyWin(void);
 void DrawOperationWin(void);

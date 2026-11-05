@@ -29,8 +29,6 @@
 #include "evt/evt_item.h"
 #include "driver/itemdrv.h"
 
-double __fabs(double);
-
 
 // The C functions are defined in the reverse of their order in the object: the compiler defers inlining and
 // emits functions in reverse definition order.

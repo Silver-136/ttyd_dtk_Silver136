@@ -1305,8 +1305,6 @@ const char* winGetMapTplName(void) {
     return "map7.tpl";
 }
 
-double __fabs(double);
-
 /** Local fabs on the __fabs intrinsic, used for the map arrows' bobbing offset. */
 static inline double fabs(double x) { return __fabs(x); }
 

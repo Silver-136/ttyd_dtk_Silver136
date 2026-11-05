@@ -564,6 +564,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario_sbr.c | marioGetRub | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/mario/mariost.c | gcDvdCheckThread | s32 -> f32 -> s32 round trip; the plain assignment changes the object | see comment |
 | Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |
+| JP, US, PAL, US demo 2, PAL demo | src/motion/mot_hammer.c | (file scope) cos | cos declared with a float parameter | libc_decls.h's `double cos(double)`: changes the object |
 | Both | src/motion/mot_jabara.c | mot_jabara | spare copy of hitobjStandOn in its own block; passing the field directly changes the object | see comment |
 | Both | src/motion/mot_jump.c | mot_jumpNpc | one Vec holds the front distance (x) and the sin/cos pair (z, y); an f32 out with the s, c locals (as in mot_jumpSw) changes the object | see comment |
 | Both | src/motion/mot_plane.c | planeDead270 | stand-in that nothing calls; it only places its 270.0f literal in this object's constant pool | see comment |

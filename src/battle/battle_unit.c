@@ -19,8 +19,7 @@
 #include "driver/animdrv.h"
 #include "manager/evtmgr.h"
 #include "memory.h"
-
-double pow(double, double);
+#include "libc_decls.h"
 
 /**
  * Items an enemy can use in battle (attack, status and healing items; 0 ends the list). Besides badges, only

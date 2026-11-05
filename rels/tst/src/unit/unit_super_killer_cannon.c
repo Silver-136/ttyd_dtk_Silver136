@@ -11,6 +11,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "libc_decls.h"
 
 static USER_FUNC(killer_get_angle);
 extern BattleUnitKind unit_super_killer;
@@ -647,8 +648,6 @@ static EVT_BEGIN(friend_event_sky)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kHammerlikeCannotTarget)
     RETURN
 EVT_END()
-
-double atan(double x);
 
 /**
  * Script helper: args[0]-args[1] and args[2]-args[3] are two points;

@@ -12,9 +12,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSFastCast.h>
 #include <string.h>
-
-double sin(double);
-double cos(double);
+#include "libc_decls.h"
 
 typedef struct EffBalloonN64Point {
     f32 x, y;

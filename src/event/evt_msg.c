@@ -17,6 +17,7 @@
 #include "party.h"
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
+#include "libc_decls.h"
 
 /** Message-script setup hook called at startup; empty in every release. */
 void evt_msg_init(void) {
@@ -216,8 +217,6 @@ const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 #if VERSION >= VERSION_DEMO_EU
 static const char* msgArticlePad[7] = {0};
 #endif
-
-char* strstr(const char* s, const char* sub);
 
 // clang-format on
 #endif

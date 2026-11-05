@@ -38,7 +38,6 @@
 #include "driver/itemdrv.h"
 
 #if VERSION >= VERSION_US
-char* strstr(const char* str, const char* sub);
 #endif
 
 #include "driver/msgdrv.h"

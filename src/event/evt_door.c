@@ -32,8 +32,6 @@
 #include "system.h"
 #include "driver/casedrv.h"
 
-double atan(double);
-
 typedef struct HouseData {
     s32 type;               // 0x0
     const char* hit[4];     // 0x4, hit object names

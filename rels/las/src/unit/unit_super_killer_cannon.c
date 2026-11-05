@@ -14,6 +14,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "libc_decls.h"
 
 static USER_FUNC(killer_get_angle);
 static USER_FUNC(killer_copy_status);
@@ -660,8 +661,6 @@ static EVT_BEGIN(friend_event_sky)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kHammerlikeCannotTarget)
     RETURN
 EVT_END()
-
-double atan(double x);
 
 /**
  * Script helper: returns in args[4] the angle in degrees of the line from (args[0], args[1]) to (args[2],
