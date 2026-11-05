@@ -130,7 +130,7 @@ void particleStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }
 
-/** Initialises one particle from the emitter: random direction and speed, life and size. */
+/** Initialises one particle from the emitter: random direction in a cone around the emitter axis at work->speed, Gaussian life. */
 void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* emitter) {
     ParticleWork* work = effect->userdata;
     f32 w;
@@ -184,7 +184,8 @@ void EmitterEmit(EffectEntry* effect, ParticleEmitter* emitter) {
 }
 
 /**
- * Spawns an emitter at (x, y, z) that throws `count` particles toward (dx, dy, dz) for `life` frames;
+ * Spawns an emitter at (x, y, z) that throws up to `count` live particles toward (dx, dy, dz) for `life` frames
+ * (0 or less: until soft-deleted);
  * reached through evt_eff ("particle").
  */
 EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 count, s32 life) {
@@ -251,7 +252,7 @@ EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32
     return effect;
 }
 
-/** Per frame: emits new particles, moves and ages the live ones and deletes the effect when none remain. */
+/** Per frame: emits new particles, moves and ages the live ones and deletes the effect when its life runs out. */
 void effParticleMain(EffectEntry* effect) {
     ParticleWork* work = effect->userdata;
     Vec zero = {0.0f, 0.0f, 0.0f};

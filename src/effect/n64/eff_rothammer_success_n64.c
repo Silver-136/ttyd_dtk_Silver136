@@ -37,7 +37,7 @@ void effRotHammerSuccessDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns `count` star sprites flying out from (x, y, z) for `lifetime` frames.
- * Spawned by event scripts through evt_eff.
+ * Reached only through evt_eff64 "rothammer_success_n64"; no script callers found.
  */
 EffectEntry* effRotHammerSuccessN64Entry(s32 type, f32 x, f32 y, f32 z, s32 count, s32 lifetime) {
     EffectEntry* effect;

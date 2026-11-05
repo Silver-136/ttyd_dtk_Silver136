@@ -530,7 +530,8 @@ void effUltraHammerDisp(CameraId camId, void* param);
 
 /**
  * Spawns the effect at (x, y, z) for `counter` frames (0 or less: until removed).
- * `mode` mirrors the rings for a right-turning swing. Caller: Mario's Ultra Hammer swing (mot_hammer).
+ * A non-zero `mode` mirrors the rings in x; the caller, Mario's Ultra Hammer spin in mot_hammer,
+ * passes hammerDir != 0 and the spin's multiTimer as `counter`.
  */
 EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 counter) {
     EffectEntry* effect;
@@ -571,7 +572,8 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
 
 /**
  * Counts down and fades alpha in the last 16 frames;
- * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
+ * each of the three rings waits for its start delay (0, 30, 15 frames), then runs the 25-step scroll table,
+ * waits 15 frames and repeats. The early demos also grow the scale through scale_tbl; JP and later hold it at 3.5.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effUltraHammerMain(EffectEntry* effect) {
@@ -617,10 +619,6 @@ void effUltraHammerMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effUltraHammerDisp, effect);
 }
 
-/**
- * unknown function, is used for many functions to "initialize"/copy some value into the local stack,
- * with an extra vec
- */
 // Returns a copy of *input, built in a zero-initialized temporary
 inline Vec initializeVec(Vec* input) {
     Vec temp = (Vec){ 0.0f, 0.0f, 0.0f };
@@ -630,7 +628,7 @@ inline Vec initializeVec(Vec* input) {
     return temp;
 }
 
-/** Draws the three ring models with the scrolling texture, mirrored in x if `mode` is non-zero. */
+/** Draws each ring whose start delay has run out with the scrolling texture, mirrored in x if `mode` is non-zero. */
 void effUltraHammerDisp(CameraId camId, void* param) {
     u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
     CameraEntry* cam;

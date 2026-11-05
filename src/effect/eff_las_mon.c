@@ -1,4 +1,4 @@
-// "LasMon" effect: plays the MOBJ_EFF_las_mon animation at a point; types 0 and 1 pick the animation.
+// "LasMon" effect: plays the MOBJ_EFF_las_mon animation at a point; the type is stored but never read.
 
 #include "eff/eff_las_mon.h"
 #include "driver/animdrv.h"

@@ -1,5 +1,6 @@
 // Underwater bubbles (mizutama, 水中の泡) released at an angle that slow down and drift upward; types 0-3 while
-// swimming and 4-7 after diving in, the size grows with the type (radius type + 1). Used by Bowser swimming.
+// swimming and 4-7 after diving in (effdrv's debug names); the spread (radius 10 * (type + 1)) and the bubble
+// count grow with the type. Used by Bowser swimming (type 0).
 
 #include "eff/eff_mizutama.h"
 #include "driver/dispdrv.h"
@@ -97,7 +98,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     return effect;
 }
 
-/** Per frame: slows each bubble horizontally, lets it drift upward and deletes the effect when all are gone. */
+/** Per frame: slows each bubble, lets it drift upward while it shrinks, and deletes the effect when all are gone. */
 void effMizutamaMain(EffectEntry* effect) {
     EffMizutamaWork* work = effect->userdata;
     Vec position;

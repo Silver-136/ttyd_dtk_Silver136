@@ -66,7 +66,7 @@ static void main_dl(EffectEntry* effect, Mtx mtx);
 /**
  * Spawns a hit flash at (x, y, z). type is the damage flavour: 0 white, 1 fire, 2 electric, 3 ice.
  * size sets the number of radiating pieces ((size * 5 + 20) / 3).
- * Called through effHitEntry by battle damage code.
+ * Called through effHitEntry (battle damage, Special Moves, the audience, a few effects) and directly by evt_eff64.
  */
 EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

@@ -1,4 +1,4 @@
-// Debris from a broken map object (MObjBroken); types 0-7 pick the object, one type shows the EFF_sango model.
+// Debris from a broken map object (MObjBroken); types 0-7 pick the object, type 7 shows the EFF_sango model.
 
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -33,7 +33,10 @@ static void effMObjBrokenMain(EffectEntry* effect);
 static void effMObjBrokenDisp(CameraId cameraId, void* param);
 static void effMObjBrokenDisp2(CameraId cameraId, void* param);
 
-/** Spawns the debris of a broken map object at (x, y, z); evt_mobj.c calls it with a type per object kind (0-7). */
+/**
+ * Spawns the debris of a broken map object at (x, y, z); evt_mobj.c calls it with a type per object kind (0-6;
+ * nothing in our code passes type 7).
+ */
 EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMObjBrokenWork* work;
@@ -135,8 +138,8 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 /**
- * Per frame: throws each fragment outward with gravity, fades it and releases its pose;
- * deletes the effect at the end.
+ * Per frame: throws each fragment outward with gravity and spins it; once all have fallen 100 below the origin,
+ * releases the poses and deletes the effect. Fragments do not fade (alpha is never changed).
  */
 static void effMObjBrokenMain(EffectEntry* effect) {
     EffMObjBrokenWork* work = effect->userdata;
@@ -217,7 +220,10 @@ static void effMObjBrokenMain(EffectEntry* effect) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-/** Draws the fragments as textured quads (effect textures 56-59) with alpha blending. */
+/**
+ * Draws the fragments as flattened textured cubes (effect texture 56-58 by type, 59 for type 6) with alpha
+ * blending: a half-transparent black offset shadow pass, then a white pass.
+ */
 static void effMObjBrokenDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffMObjBrokenWork* work = effect->userdata;
@@ -315,7 +321,10 @@ static void rendermodeFunc(s32 wXluStage) {
     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
 }
 
-/** Draws the EFF_sango model pieces for the type that shows them, tinted with an event colour for fading. */
+/**
+ * Draws the EFF_sango model pieces (type 7) twice through the event colour: a half-transparent black offset
+ * shadow, then white.
+ */
 static void effMObjBrokenDisp2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 off;

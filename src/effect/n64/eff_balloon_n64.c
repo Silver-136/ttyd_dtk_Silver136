@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: balloon that inflates to a target scale while rotating; type picks the shape.
+// Paper Mario 64 effect: balloon that inflates to a target scale at a fixed tilt and wobbles; type is stored
+// but not read.
 
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -153,8 +154,9 @@ void effBalloonMain(EffectEntry* effect) {
 
 /**
  * Builds the vertices in a temporary buffer (from the template, via fast-cast conversions),
- * then draws the outline as a fan of triangles around one vertex;
- * the texture is chosen from the lifetime counter (Guess).
+ * then draws the outline as a fan of triangles around one vertex; vertex 0 (placed at the effect position,
+ * without the rising offset) is joined in only before the soft delete.
+ * The texture is chosen from the lifetime counter.
  */
 void effBalloonDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;

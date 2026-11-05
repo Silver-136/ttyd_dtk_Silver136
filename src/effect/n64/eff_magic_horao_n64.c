@@ -1,4 +1,4 @@
-// Paper Mario 64 magic effect (horao); types 0-5, some types spawn dust (hokori) puffs.
+// Paper Mario 64 magic effect (horao); the type is stored but never read; on landing it spawns two dust (hokori) puffs.
 
 #include "driver/camdrv.h"
 #include "eff/eff_magic1_n64.h"
@@ -45,7 +45,8 @@ void effMagicHoraoDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a "Horao" battle magic sprite at (x, y, z):
- * scale and alpha ease from (a, b) toward (c, d) at rate e, and it is deleted after f frames.
+ * size and alpha ease from (startSize, startAlpha) toward (endSize, endAlpha) at blendRate, and it is deleted
+ * after lifetime frames.
  * Via evt_eff64 "magic_horao_n64"; no script callers found.
  */
 EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 startSize, s32 startAlpha, f32 endSize, s32 endAlpha,
@@ -147,7 +148,10 @@ void effMagicHoraoMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMagicHoraoDisp, effect);
 }
 
-/** Draws a wobbling 16-strip ribbon (textures 0x56/0x57) while easing in; in the hold state draws two flat textures. */
+/**
+ * In the hold state (1) draws two flat quads (texture 0x56, then 0x57 fading in); in every other state draws a
+ * wobbling ribbon of 15 strips (texture 0x56 while easing in, 0x57 from state 2 on).
+ */
 void effMagicHoraoDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     effN64Vtx* vtx;

@@ -215,7 +215,7 @@ void effPacknBfireMain(EffectEntry* effect) {
 }
 
 /**
- * Draws each type 1/2 fire puff as a camera-facing 64x64 quad with two scrolling flame textures (0x71, 0x72);
+ * Draws each type 1/2 fire puff as a camera-facing 64x64 quad with a flame texture (0x71) and a scrolling one (0x72);
  * type 0 draws nothing.
  */
 void effPacknBfireDisp(CameraId cameraId, void* param) {

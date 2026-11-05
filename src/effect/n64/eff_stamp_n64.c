@@ -10,7 +10,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-/** Tapered quad for each stamp piece, clear at its base by the centre and solid at its outer end. */
+/** Tapered quad for each stamp piece; its vertex alpha (0 at the base by the centre, 255 at the outer end) blends the two tint colours. */
 static effN64Vtx size16x16_tex64x32_vtx[] = {
     {-8, 0, 0, 0, 0, 0, 0, 0, 0},
     {8, 0, 0, 2048, 0, 0, 0, 0, 0},
@@ -21,7 +21,7 @@ static effN64Vtx size16x16_tex64x32_vtx[] = {
 void effStampMain(EffectEntry* effect);
 void effStampDisp(CameraId cameraId, void* param);
 
-/** Spawns the stamp burst at (x, y, z); type 0-2 picks the tint. Used by the battle damage code (battle_damage.c). */
+/** Spawns the stamp burst at (x, y, z); type 0-2 picks the tint. Used by battle_damage.c, sac_genki.c, sac_muki.c, eff_kiss.c and evt_eff. */
 EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffStampN64Work* work;

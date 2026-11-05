@@ -30,7 +30,7 @@ static u8 offset_tbl[] = {
 
 /**
  * Spawns the coin price bubble at (x, y, z) showing `number`; duration <= 0 keeps it until soft-deleted.
- * Spawned by coin blocks (evt_mobj.c).
+ * Spawned by the coin-charging recovery block (mobj_recovery_blk, evt_mobj.c) as its price bubble.
  */
 EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;

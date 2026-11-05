@@ -79,7 +79,7 @@ EffectEntry* effStarPowerN64Entry(s32 id, s32 lifetime, f32 x, f32 y, f32 z, f32
 
 /**
  * Fades in over the first 16 frames and out over 16 after a delete request (lifetime 1000 means endless).
- * For id 1 the star tumbles on all three axes (4 degrees per frame on X), pulses its size 0.7-1.0,
+ * For id 1 the star tumbles on all three axes (4 degrees per frame on X), pulses its size 0.4-1.0,
  * pulses the glow alpha and drifts both colours on slow sine waves; other ids keep the entry colours.
  * The previous frame's pose is kept for the afterimage. CAMERA_3D, layer 2.
  */

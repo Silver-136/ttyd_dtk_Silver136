@@ -38,7 +38,7 @@ static void effKemuri2Disp(CameraId cameraId, void* param);
 /**
  * Spawns a single smoke puff at (x, y, z) that drifts along (dirX, dirZ) and rises.
  * Type 2 uses the longer animation; types 0-2 pick the texture and size.
- * Spawned only from event scripts through evt_eff.
+ * Spawned only from event scripts through evt_eff64 "kemuri2_n64".
  */
 EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dirZ) {
     EffectEntry* effect;

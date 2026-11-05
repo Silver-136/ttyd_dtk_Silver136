@@ -1,5 +1,5 @@
-// Paper Mario 64 effect: horao spell, two wavy 16-segment glow ribbons at fixed angles that sway, scroll their texture
-// and cycle through a 17-step green colour table; fades in over 16 frames and out over the last 16.
+// Paper Mario 64 effect: horao spell, two wavy 15-segment glow ribbons at fixed angles that sway, scroll their texture
+// and cycle through a 17-step pale blue colour table; fades in over 16 frames and out over the last 16.
 
 #include "driver/camdrv.h"
 #include "eff/eff_magic1_n64.h"
@@ -29,12 +29,15 @@ typedef struct EffHoraoSpellN64Work {
     f32 scale;    // 0x38
 } EffHoraoSpellN64Work;
 
-/** Red of the glow ribbon's colour at each of its 17 points, shifting along the ribbon. */
+/**
+ * Red of the ribbon colour on each of the 17 steps it cycles through, one step per frame
+ * (the second ribbon runs 4 steps ahead).
+ */
 static u8 colr[17] = {0x78, 0x82, 0x8C, 0x96, 0xA0, 0xAA, 0xB4, 0xBE, 0xC8, 0xC8, 0xBE, 0xB4, 0xAA, 0xA0, 0x96, 0x8C, 0x82};
 
-/** Green of the glow ribbon's colour at each of its 17 points. */
+/** Green of the ribbon colour on each of the 17 steps. */
 static u8 colg[17] = {0xAA, 0xA0, 0x96, 0x8C, 0x82, 0x78, 0x82, 0x8C, 0x96, 0xA0, 0xAA, 0xB4, 0xBE, 0xC8, 0xC8, 0xBE, 0xB4};
-/** Blue of the glow ribbon's colour at each of its 17 points (always full). */
+/** Blue of the ribbon colour on each of the 17 steps (always full). */
 static u8 colb[17] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 /** Template points of a glow ribbon: top and bottom vertex pairs that are copied and swayed each frame. */
 effN64Vtx horao_spell_vtx[] = {
@@ -148,7 +151,7 @@ void effHoraoSpellMain(EffectEntry* effect) {
 }
 
 /**
- * Draws two 16-segment ribbons 36 degrees apart that sway with a sine and scroll texture 0x73.
+ * Draws two 15-segment (16-point) ribbons 36 degrees apart that sway with a sine and scroll texture 0x73.
  * The vertices are rebuilt every frame in smartAlloc memory.
  */
 void effHoraoSpellDisp(CameraId cameraId, void* payload) {

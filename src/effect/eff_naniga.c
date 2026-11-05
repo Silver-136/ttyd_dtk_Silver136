@@ -1,4 +1,5 @@
-// Item-reveal effect (naniga: "what is it") with "what" sounds and a smoke burst for the item shown.
+// Item-reveal effect (naniga: "what is it"): a smoke burst, then a reel of item icons that spins and stops on the
+// item, with "what" sounds and sparkles when the item is shown.
 
 #include "data/item_data.h"
 #include "driver/animdrv.h"
@@ -127,8 +128,8 @@ EffectEntry* effNanigaEntry(s32 type, f32 x, f32 y, f32 z, s32* list, s32 item) 
 }
 
 /**
- * Per frame: runs the state machine ("what" sounds, EFF_naniga animation, smoke burst)
- * and deletes the effect at the end.
+ * Per frame: runs the state machine (smoke burst, reel spin and stop with "what" sounds, EFF_naniga animation,
+ * item sparkles, fade) and deletes the effect at the end.
  */
 void effNanigaMain(EffectEntry* effect) {
     EffNanigaWork* work = effect->userdata;

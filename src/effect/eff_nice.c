@@ -89,13 +89,10 @@ typedef struct AcrobatSet {
 AcrobatSet acrobat_tbl[6] = { { acrobat_jp, 7 }, { acrobat_us, 8 }, { acrobat_lang3, 5 }, { acrobat_lang4, 6 }, { acrobat_lang5, 9 }, { acrobat_lang6, 10 } };
 #else
 static const char** anim_tbl[2] = { anim_jp, anim_us };
-/**
- * Letter textures spelling the Stylish text (type 7) in each language, drawn left to right;
- * -1 leaves a gap.
- */
+/** Letter textures spelling the Stylish text (type 7) in each language, drawn left to right. */
 s32 acrobat_jp[] = {179, 180, 181, 182, 183, 184, 185};
 s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; // includes nonexistent textures
-/** Stylish letter list and letter count for each language, read by acrobatMain and the type 7 draw. */
+/** Stylish letter list for each language, read by the type 7 draw (the letter count is fixed in effNiceEntry). */
 s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
 #endif
 
@@ -334,7 +331,10 @@ void effNiceMain(EffectEntry* effect) {
     }
 }
 
-/** Draw callback: draws the rating text pose, scaled by the work's stretch factors. */
+/**
+ * Draw callback: draws the rating text pose facing the camera, scaled by overallScale times 8
+ * (US and later shrink some language/type pairs to 0.7 more).
+ */
 void effNiceDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     NiceEffectWork* wp = effect->userdata;
@@ -474,7 +474,7 @@ void acrobatMain(EffectEntry* effect) {
 /**
  * Draw callback for type 7: draws each letter as a camera-facing textured quad (textures from acrobat_tbl for
  * the current language) at its offset and squash/stretch, with no depth test.
- * US and PAL skip letters whose texture id is -1.
+ * US and later skip letters whose texture id is -1.
  */
 void effAcrobatDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

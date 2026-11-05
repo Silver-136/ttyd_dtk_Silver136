@@ -1,4 +1,5 @@
-// Smoke puff (kemuri: smoke) spread in a ring around a point; types 0-2 pick the size and how long it lasts.
+// Smoke puff (kemuri: smoke) at a point (type 0: two puffs sliding apart sideways); types 0-2 pick the size and
+// how long it lasts.
 // Also holds effKemuri2Entry, a second smoke effect that drifts along a direction (dx, dz).
 
 #include "eff/eff_kemuri.h"
@@ -42,7 +43,7 @@ u8 heavy_scale[30][2] = {
 };
 
 /**
- * Spawns smoke puffs around (x, y, z): type 0 touchdown (2 puffs), 1 and 2 (1 puff); dir biases the spread.
+ * Spawns smoke puffs around (x, y, z): type 0 touchdown (2 puffs), 1 and 2 (1 puff); dir is not read.
  * Spawned when Mario lands or moves (mario_kemuri.c, evt_mario.c) and by event scripts.
  */
 EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
@@ -160,7 +161,10 @@ EffectEntry* effKemuri2Entry(f32 x, f32 y, f32 z, f32 dx, f32 dz) {
 }
 #pragma opt_propagation reset
 
-/** Steps each puff's texture frame, scales it from the touchdown/heavy tables, slides it outward, and deletes it. */
+/**
+ * Steps each puff's texture frame, scales it from the touchdown/heavy tables, slides type 0 puffs outward, and
+ * deletes the effect once a puff reaches its lifetime.
+ */
 void effKemuriMain(EffectEntry* effect) {
     effKemuriData* data = effect->userdata;
     Vec pos2;
@@ -216,7 +220,10 @@ void effKemuriMain(EffectEntry* effect) {
 }
 
 #pragma opt_propagation off
-/** Moves the puff along its direction with friction, spins it, and deletes it after 30 frames. */
+/**
+ * Moves the puff along its direction at a constant speed while its rise and spin slow down, grows then shrinks it,
+ * fades it after frame 15, and deletes it after 30 frames.
+ */
 static void effKemuri2Main(EffectEntry* entry) {
     effKemuri2Data* data;
     effKemuri2Data* p = entry->userdata;

@@ -51,7 +51,7 @@ void effFreezeDisp(CameraId cameraId, void* param);
 /**
  * Spawns an ice block around (x, y, z) for lifetime frames (0 = until soft-deleted),
  * with a snow-dust effect attached.
- * battle_seq.c spawns it with life 1 above units recovering from freeze; event scripts via evt_eff.
+ * battle_seq.c spawns it with life 1 above units recovering from freeze; event scripts via evt_eff64.
  */
 EffectEntry* effFreezeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

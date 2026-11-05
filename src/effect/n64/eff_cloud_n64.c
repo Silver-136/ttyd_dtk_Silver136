@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: cloud puff sprite scaled by the given scale; types 0-3 pick the colours.
+// Paper Mario 64 effect: cloud trail, a ribbon drawn along the path of a moving head (only type 3 moves it);
+// types 0-3 pick the colours.
 
 #include "eff/n64/eff_cloud_n64.h"
 #include "eff/eff_n64.h"
@@ -204,8 +205,9 @@ void effCloudMain(EffectEntry* effect) {
 
 /**
  * Builds a camera-facing triangle strip along the trail (width grows with the age of each point)
- * and draws it with texture 0x83 scrolling along the path length;
- * older points shift in colour toward the second tint.
+ * and draws it with texture 0x83 scrolling along the path length. Types 0-1 blend the second tint into the
+ * first by the texture; types 2-3 blend it into the vertex colour instead, so older points shift from white
+ * through yellow and red toward black.
  */
 void effCloudDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

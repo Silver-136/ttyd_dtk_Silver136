@@ -31,8 +31,9 @@ void effSmallStarMain(EffectEntry* effect);
 void effSmallStarDisp(CameraId cameraId, void* param);
 
 /**
- * Spawns `count` small stars at (x, y, z); type picks the spread pattern and (dx, dy, dz) the base velocity.
- * Used by the Koopa partner (party_nokonoko), eff_small_star.c and event scripts.
+ * Spawns `count` small stars at (x, y, z); type picks the spread pattern and (dx, dy, dz) the base direction
+ * (normalised, reversed and scaled to speed 8). Returns NULL for count 0 or a zero direction.
+ * Used by the Koopa partner (party_nokonoko), eff_small_star.c and evt_eff64 (no script callers found).
  */
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz) {
     EffectEntry* effect;
@@ -252,7 +253,7 @@ void effSmallStarMain(EffectEntry* effect) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-/** RGB colours the small stars cycle through (pinks, purples and blues), three bytes per step. */
+/** RGB colours the small stars cycle through (12 pastel steps around the colour wheel), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,

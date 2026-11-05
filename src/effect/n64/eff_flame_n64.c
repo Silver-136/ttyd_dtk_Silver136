@@ -61,7 +61,7 @@ static inline void xf(Mtx m, effN64Vtx* dst, effN64Vtx* src) {
     OSf32tos16(&v.z, &dst->z);
 }
 
-/** Flame mesh for the default (yellowish) flame: eight vertices in two layers for the scrolling textures. */
+/** Flame mesh for type 0: eight vertices in two layers for the scrolling textures. */
 static effN64Vtx stg_flame_v[] = {
     {-50, -20, 2, 0, 0, 255, 255, 255, 255},
     {50, -20, 2, 1024, 0, 255, 255, 255, 255},
@@ -73,7 +73,10 @@ static effN64Vtx stg_flame_v[] = {
     {-50, 100, -2, 0, 1024, 255, 255, 255, 255},
 };
 
-/** Flame mesh for type 2 (the blue-green flame that spins about Y). */
+/**
+ * Flame mesh for type 2 and above; type 2 is turned about Y by work->rot (always 0) instead of facing the
+ * camera.
+ */
 static effN64Vtx stg_flame_2_v[] = {
     {-60, 0, 18, 0, 0, 255, 255, 255, 255},
     {60, 0, 18, 2048, 0, 255, 255, 255, 255},
@@ -85,7 +88,7 @@ static effN64Vtx stg_flame_2_v[] = {
     {-60, 120, -18, 0, 2048, 255, 255, 255, 255},
 };
 
-/** Flame mesh for type 0 (the grey flame). */
+/** Flame mesh for type 1 (a square, centred quad). */
 static effN64Vtx stg_flame_3_v[] = {
     {-50, -50, 2, 0, 0, 255, 255, 255, 255},
     {50, -50, 2, 1024, 0, 255, 255, 255, 255},
@@ -99,8 +102,9 @@ static effN64Vtx stg_flame_3_v[] = {
 
 /**
  * Spawns a flame at (x, y, z) scaled by scale.
- * Type 0 is grey, type 2 blue-green and the default yellowish;
- * the colours and texture scroll targets are set per type. Spawned from event scripts through evt_eff.
+ * Types 0 and 1 share a grey first colour (second colour pale yellow / red), type 2 is blue-green and
+ * the default yellowish; the colours and texture scroll targets are set per type.
+ * Reached only through evt_eff64; no script in the tree spawns it.
  */
 EffectEntry* effFlameN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

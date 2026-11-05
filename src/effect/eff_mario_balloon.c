@@ -17,7 +17,7 @@ void effMarioBalloonDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a balloon over Mario (npc NULL) or over the given NPC;
- * called from mario_balloon.c and some Rogueport (gor) scenes. Types 0 and 1 select the balloon texture set.
+ * called from mario_balloon.c, gor_03 and the evt_lect copies (gor, hei, muj, tou, usu, win). Types 0 and 1 select the balloon texture set.
  */
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc) {
     EffectEntry* effect;
@@ -69,7 +69,10 @@ void effMarioBalloonMain(EffectEntry* effect) {
     dispEntry(work->camera, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, effMarioBalloonDisp, effect);
 }
 
-/** Draws the balloon icon as textured quads (effect textures 14-17) with alpha blending. */
+/**
+ * Draws the balloon icon as textured quads (effect textures 15/14 for type 0, 17/16 for type 1): a blended
+ * shadow, then the front face and a grey back face with alpha test.
+ */
 void effMarioBalloonDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     MarioBalloonWork* work = effect->userdata;

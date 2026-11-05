@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: music notes (onpu: musical note) at a point; types 0 and 1.
+// Paper Mario 64 effect: music notes (onpu: musical note) at a point; types 0-2.
 
 #include "eff/n64/eff_onpu_n64.h"
 #include "eff/eff_n64.h"
@@ -44,7 +44,7 @@ void effOnpuDisp(CameraId cameraId, void* payload);
 /**
  * Spawns one music note at (x, y, z) living 64 frames.
  * Type 0 rises straight up; type 1 drifts left and type 2 right while slowing to a stop.
- * Pansy units spawn types 1 and 2 via evt_eff64 "onpu_n64".
+ * Pansy units spawn types 1 and 2 via evt_eff64 "onpu_n64"; battle_audience_kinopio.c spawns type 0.
  */
 EffectEntry* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -121,8 +121,8 @@ void effOnpuMain(EffectEntry* effect) {
 }
 
 /**
- * Draws the note as a camera-facing 16x32 quad using two scrolling note textures (0x28, 0x29) with the color
- * cycling.
+ * Draws the note as a camera-facing 16x32 quad using two note textures (0x28, 0x29), both showing the note cell
+ * picked at spawn (texOfs, one of seven), with the color cycling.
  */
 void effOnpuDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;

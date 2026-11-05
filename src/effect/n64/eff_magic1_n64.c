@@ -13,7 +13,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-/** Colour pulse of the magic bolt's three rings: a phase and an RGB colour for each ring. */
+/** Colour pulse of the magic bolt: a phase and an RGB colour for each of the three sprites in a ring (main_dl). */
 static u8 anime_data[12] = {0x00, 0xFF, 0xD0, 0x1A, 0x78, 0x4D, 0xD0, 0xFE, 0xF0, 0xFE, 0x4C, 0x6E};
 
 void effMagic1Main(EffectEntry* effect);
@@ -22,7 +22,8 @@ void effMagic1Disp(CameraId cameraId, EffectEntry* effect);
 /**
  * Spawns a Magikoopa-style magic bolt (type 0) at (x, y, z) that travels to (tx, ty, tz) in life frames,
  * or a burst of sparks (type 1, 24 frames) that the bolt spawns when it arrives.
- * Called by the kamec units (Magikoopas, Kammy).
+ * Called by the kamec battle units (Magikoopas, Kammy), the field Magikoopa's kamec_fire_magic (npc_event.c)
+ * and evt_eff64 "magic1_n64".
  */
 EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz) {
     EffectEntry* effect;
@@ -70,7 +71,7 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
 
 /**
  * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
- * From JP on, it only draws while the system level is nonzero.
+ * From JP on, while the system level is nonzero it is frozen: drawn but not moved or aged.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effMagic1Main(EffectEntry* effect) {

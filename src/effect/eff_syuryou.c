@@ -12,8 +12,8 @@
 
 /**
  * Spawns Grodus's effect at (x, y, z): type 0 his staff animation, type 1 his barrier.
- * `duration` is in frames (0 or less: until soft deleted);
- * the aji (X-Naut Fortress) fights spawn the barrier with a 1000-frame duration.
+ * `duration` is in frames; 0 or less becomes 1000, and the timer only counts down below 1000,
+ * so 1000 or more keeps it until soft deleted. The barrier callers (Yux units, Grodus, las_28) pass 1000.
  */
 EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;

@@ -632,7 +632,7 @@ void effStarStoneMain(EffectEntry* effect) {
  * Each loop walks a display-list table and its size table (32-byte units).
  * The loops are written the way the compiler saw them:
  * some share the function's loop variables, others have their own block,
- * and the demo orders the loop variables differently; each form gives the original register allocation.
+ * and the early demos order the loop variables differently; each form gives the original register allocation.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {

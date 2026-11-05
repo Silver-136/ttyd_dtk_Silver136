@@ -85,7 +85,7 @@ void effFireworksDisp(CameraId cameraId, void* param);
 /**
  * Spawns a firework at (x, y, z) travelling with velocity (vx, vy, vz) that bursts into the pattern selected by
  * type; w is the final burst scale. lifetime is in frames, with 32 extra for the launch.
- * Event scripts via evt_eff.
+ * Reached only through evt_eff64; no script in the tree spawns it.
  */
 EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, f32 w) {
     EffectEntry* effect;

@@ -24,7 +24,6 @@ typedef struct EffWangFlushN64Work {
     s32 frame;      // 0x30
 } EffWangFlushN64Work;
 
-/** 16x16 quad drawn for both the colour-cycling flash and the spinning white sprite. */
 #if VERSION <= VERSION_DEMO_JP
 static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,
@@ -33,6 +32,7 @@ static u8 color_rotation_data[] = {
 };
 #endif
 
+/** 16x16 quad drawn for both the colour-cycling flash and the spinning white sprite. */
 static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, -8, 0, 0, 1024, 0, 0, 0, 255},
     {8, -8, 0, 2048, 1024, 0, 0, 0, 255},

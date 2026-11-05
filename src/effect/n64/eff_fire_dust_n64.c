@@ -79,8 +79,8 @@ void effFireDustDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
 /**
- * Spawns count particles of glowing fire dust around (x, y, z) on a ring of radius a with a vertical spread of
- * b, running for lifetime frames (0 = until soft-deleted). Each starts after a staggered delay.
+ * Spawns count particles of glowing fire dust around (x, y, z) on a ring of radius range with a vertical spread
+ * of height, running for lifetime frames (0 = until soft-deleted). Each starts after a staggered delay.
  */
 EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 range, f32 height) {
     EffectEntry* effect;
@@ -131,7 +131,7 @@ EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
 
 /**
  * Each particle runs a 20-step cycle: it respawns on the ring at a random angle and height, flies outward,
- * and eases toward half its speed while its scale follows scale_data. A delete request leaves 16 frames of fade.
+ * and eases toward half its speed while its scale follows scale_data. A delete request leaves 16 more frames, fading over the last 8.
  */
 void effFireDustMain(EffectEntry* effect) {
     s32 height;

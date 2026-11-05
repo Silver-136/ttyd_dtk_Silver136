@@ -431,7 +431,8 @@ static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 
 #endif
 
 /**
- * Spawns a nozzle model (type picks the model) at (x, y, z) rotated by rx and ry for `life` frames;
+ * Spawns a nozzle model (type picks the model; type 1 spawns effKemuTestEntry type 3 smoke instead) at (x, y, z)
+ * rotated by rx and ry for `life` frames (0 or less: until soft-deleted);
  * battle_stage_object.c uses it for the stage nozzle objects.
  */
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 life) {
@@ -492,7 +493,11 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
     return effect;
 }
 
-/** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
+/**
+ * Per frame: grows/shrinks types 0 and 2 and scrolls their textures, moves the type 3 pieces, counts the life
+ * down and deletes the effect at the end; JP and later draw type 3 in layer 8 and the rest in layer 2
+ * (the early demos draw every type in layer 2).
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effNozleMain(EffectEntry* effect) {
 #else

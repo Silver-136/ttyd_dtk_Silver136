@@ -1,4 +1,4 @@
-// Helper that draws a number (printed with "%d") from effect digit textures; the type picks the texture set.
+// Helper that draws a number (printed with "%d") from effect digit textures; the type picks the colour pair.
 
 #include "driver/camdrv.h"
 #include "driver/effdrv.h"
@@ -9,7 +9,10 @@
 #include "version.h"
 #include "eff/eff_number.h"
 
-/** Draws `number` as digit textures with the colour pair chosen by `type`, transformed by mtx and faded by `alpha`. */
+/**
+ * Draws `number` as digit textures with the colour pair chosen by `type`, transformed by mtx and faded by `alpha`;
+ * `extra` adds that many more passes with a second texture, each shifted 2 units.
+ */
 void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
     CameraEntry* cam;
     GXColor cols[2];

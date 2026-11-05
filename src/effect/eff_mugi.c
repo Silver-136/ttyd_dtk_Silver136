@@ -47,10 +47,9 @@ inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
     return 6.2831855f * reviseAngle(data->rot.y);
 }
 
-/** Spawns the wheat/flower smoke puffs behind Mario at (x, y, z) heading `angle`; called from mario_kemuri.c. */
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The demo has one more entry function here.
+ * The early demos have one more entry function here.
  * Nothing calls it, so the linker drops it, but its type string stays at the end of the unit's .rodata.
  */
 EffectEntry* effMugiEntry(void) {
@@ -60,7 +59,10 @@ EffectEntry* effMugiEntry(void) {
 }
 #endif
 
-/** Spawns the wheat/flower smoke puffs behind Mario at (x, y, z) heading `angle`; called from mario_kemuri.c. */
+/**
+ * Spawns five wheat/flower puffs at (x, y, z) that spread out 72 degrees apart starting from `angle`;
+ * called from mario_kemuri.c.
+ */
 EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;
     effMugiKemuriData* data;
@@ -160,8 +162,8 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
 }
 
 /**
- * Per frame: loads the EFF_Mugi (EFF_Hana on win) pose for each puff, moves and fades them,
- * deletes the effect at the end.
+ * Per frame: loads the EFF_Mugi (EFF_Hana on win) pose for each puff, moves them (no fade: alpha stays 255),
+ * and deletes the effect when their 60-frame timers have run out.
  */
 void effMugiKemuriMain(EffectEntry* effect) {
     s32 i;
@@ -240,7 +242,10 @@ void effMugiKemuriMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effMugiKemuriDisp, effect);
 }
 
-/** Per frame: same as effMugiKemuriMain for the second form, with sideways drift scaled by the vertical speed. */
+/**
+ * Per frame: like effMugiKemuriMain for the second form, with sideways drift scaled by the vertical speed, a spin
+ * and a fade; type 0 puffs wait while rising and Mario stands still. Deletes the effect once all have faded.
+ */
 void effMugiKemuri2Main(EffectEntry* effect) {
     s32 i;
     effMugiKemuriData* data;

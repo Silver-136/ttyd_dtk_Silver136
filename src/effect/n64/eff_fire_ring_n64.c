@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: fire ring, one 90-vertex mesh with two scrolling flame textures that grows, spawns fire
+// Paper Mario 64 effect: fire ring, one 60-vertex mesh with two scrolling flame textures that grows, spawns fire
 // dust and fades out over its last 10 frames.
 
 #include "eff/eff_n64.h"
@@ -30,7 +30,7 @@ typedef struct EffFireRingN64Work {
 void effFireRingMain(EffectEntry* effect);
 void effFireRingDisp(CameraId cameraId, void* param);
 
-/** The fire ring mesh: 90 vertices of a flat ring, with coordinates for the two scrolling flame textures. */
+/** The fire ring mesh: 60 vertices of a flat ring (drawn as 30 triangles), with coordinates for the two scrolling flame textures. */
 static effN64Vtx stg__s_v[] = {
     {99, 0, 205, 9173, 4096, 255, 255, 255, 255},
     {54, 0, 113, 9641, 2048, 255, 255, 255, 255},
@@ -96,7 +96,7 @@ static effN64Vtx stg__s_v[] = {
 
 /**
  * Spawns an expanding ring of fire at (x, y, z) that grows by 0.1 * scale per frame for lifetime frames
- * and scrolls two flame textures. The only caller is event scripts through evt_eff.
+ * and scrolls two flame textures. Reached only through evt_eff64; no script in the tree spawns it.
  */
 EffectEntry* effFireRingN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

@@ -20,7 +20,7 @@ effN64Vtx size16x16_tex32x32_0_vtx[] = {
 
 
 __declspec(section ".rodata") static Vec vec3_802fb520 = {0.0f, 0.0f, 0.0f};
-/** Sets the x/z rotation of the ripple plane (degrees), so it can lie on a slanted surface. Used by bom_01. */
+/** Sets the x/z rotation of the ripple plane (degrees), so it can lie on a slanted surface. Used by bom_01 and eff_ripple.c. */
 void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
     EffRippleN64Work* work = effect->userdata;
     work->rx = rx;
@@ -30,7 +30,8 @@ void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
 /**
  * Draws the ripple as one flat quad (tilted by rx/rz) scaled by scale*scaleY:
  * shape texture 0x5B from the TTYD set for types 1-3/10/20/30, else N64 texture 0x21,
- * masked by N64 texture 0x22 scrolling with `offset`. Types 1, 3, 10 and 30 are black, the rest white.
+ * which gives the alpha; N64 texture 0x22 is loaded into map 1 with a matrix scrolling by `offset`, but the
+ * single TEV stage reads only map 0. Types 1, 3, 10 and 30 are black, the rest white.
  */
 void effRippleDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
@@ -97,7 +98,8 @@ void effRippleDisp(CameraId cameraId, void* payload) {
 
 /**
  * Grows the ring by 0.1 per frame (types 2/3 and 20/30 also by 5%),
- * eases alpha toward 120 and fades it over the last 32 frames, and scrolls the texture.
+ * eases alpha toward 120 and fades it over the last 32 frames (the whole 32-frame life, so the fade sets the
+ * alpha from the second frame on), and scrolls the texture.
  * Types 1-3 spawn a second ring (type x10) at the same spot and tilt 15 frames before they end.
  * Deletes when the lifetime runs out; drawn on the work's camera, layer 2.
  */
@@ -154,7 +156,7 @@ void effRippleMain(EffectEntry* effect) {
 
 /**
  * Spawns a ripple at (x, y, z); type 1/2/3 (or 10/20/30) select the start scale.
- * Used by eff_ripple.c and event scripts.
+ * Used by eff_ripple.c, las_29, mario_kemuri, party_vivian and event scripts.
  */
 EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
     EffectEntry* effect;

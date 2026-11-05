@@ -72,8 +72,8 @@ EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32
 }
 
 /**
- * Per frame: counts down each ring's delay, grows its scale along the scale curve,
- * fades it out near the end of the duration and deletes the effect when the last ring is gone.
+ * Per frame: counts down each ring's delay, pulses its scale along its scale curve while its own alpha decays
+ * slowly, fades all rings out over the last 16 frames of the duration and then deletes the effect.
  */
 void effMahornMain(EffectEntry* effect) {
     EffMahornWork* work = effect->userdata;

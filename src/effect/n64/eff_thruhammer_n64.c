@@ -31,8 +31,8 @@ typedef struct EffThruHammerN64Work {
 } EffThruHammerN64Work;
 
 /**
- * The ring mesh: a flared band, solid at its inner edge and clear at its outer rim,
- * scaled out into each ring.
+ * The ring mesh: a flared band, scaled out into each ring. Its vertex alphas (255 at the inner edge, 0 at
+ * the outer rim) are not used: the draw has no colour channel, so only the textures shape it.
  */
 static effN64Vtx stg_thruhammer_v[] = {
     {-34, -2, 20, 4267, 1024, 255, 255, 255, 255},
@@ -110,8 +110,9 @@ EffectEntry* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
 
 /**
  * Starts each ring in turn (negative delay counts up to 0):
- * it resets to the centre with a direction from its Z angle,
- * then widens 0.2 per frame on X and Z while its height eases from 10 down to 0.1 and its texture scroll slows.
+ * it resets to the centre (a velocity from its Z angle is set but never applied),
+ * then widens 0.2 per frame on X and Z while its height eases from 10 down to 0.1; the mask texture's
+ * scroll slows (capped at 128), the colour texture's scrolls at a constant 32.
  * After 8 frames the shared alpha drops 20% per frame; deletes when the timer runs out. CAMERA_3D, layer 2.
  */
 void effThruHammerMain(EffectEntry* effect) {
@@ -225,7 +226,7 @@ void effThruHammerDisp(CameraId cameraId, EffectEntry* effect) {
     main_dl(effect, mtx);
 }
 
-/** Draws each active ring as a scaled, rotated textured quad. */
+/** Draws each active ring as the scaled, rotated ring mesh (18 triangles) with its two texture scrolls. */
 static void main_dl(EffectEntry* effect, Mtx camMtx) {
     EffThruHammerN64Work* work = effect->userdata;
     s32 i;

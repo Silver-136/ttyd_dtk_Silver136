@@ -7,14 +7,15 @@
 #include <string.h>
 
 /**
- * Spawns a water ripple of the given type at (x, y, z) by creating the PM64-style ripple effect;
- * callers are Mario's water steps (mario_kemuri.c), Vivian and evt_eff ("ripple").
+ * Spawns a ripple of the given type at (x, y, z) by creating the PM64-style ripple effect (effect table names:
+ * 0 normal, 1 Vivian's, 2 cannon shock wave, 3 Shadow Queen black smoke);
+ * callers are Mario's water steps (mario_kemuri.c), Vivian, las_29 and evt_eff ("ripple").
  */
 EffectEntry* effRippleEntry(s32 type, f32 x, f32 y, f32 z) {
     return effRippleN64Entry(type, x, y, z, 0.0f);
 }
 
-/** Sets the ripple's tilt around X and Z in degrees (las_29 uses rz = 176 for a ripple on a tilted surface). */
+/** Sets the ripple's tilt around X and Z in degrees (las_29 sets rz = 176 on a type 3 ripple). */
 void effRippleSetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
     effRippleN64SetRxRz(effect, rx, rz);
 }

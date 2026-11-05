@@ -111,7 +111,8 @@ void effChargeDisp(CameraId cameraId, void* param) {
 }
 
 /**
- * Ramps alpha up over the first 20 frames, moves the sparkles every other frame,
+ * Ramps the header's alpha up over the first 20 frames (effChargeDisp reads only the sparkles' own alpha),
+ * moves every sparkle inward along its spiral each frame (the yaw and pitch steps swap on odd frames),
  * and deletes the effect once the duration (1000 or more means endless) expires.
  */
 void effChargeMain(EffectEntry* effect) {
@@ -179,7 +180,7 @@ void effChargeMain(EffectEntry* effect) {
 
 /**
  * Spawns a charge glow with 30 sparkles at (x, y, z); type 0-2 select the colour pair.
- * Spawned by Palace of Shadow boss units (las).
+ * Spawned via evt_eff by Palace of Shadow boss units (las) and an item script in battle_item_data.c.
  */
 EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

@@ -68,8 +68,8 @@ EffectEntry* effOpukuWcurtainN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
 }
 
 /**
- * Fades the curtain in and out and accelerates each strip downward (speed gains -0.05 per frame, with a cap near
- * 5).
+ * Fades the curtain in and out and accelerates each strip downward (speed gains -0.05 per frame; the easing
+ * toward 5 above a speed of 5 never applies, as the speed only falls).
  */
 void effOpukuWcurtainMain(EffectEntry* effect) {
     EffOpukuWcurtainN64Work* work = effect->userdata;
@@ -111,8 +111,8 @@ void effOpukuWcurtainMain(EffectEntry* effect) {
 }
 
 /**
- * Builds twelve vertical strips (texture 0x8F, alpha dropping 20 per strip),
- * scales and positions them in world space, and draws them as a row of quads.
+ * Builds twelve vertical vertex columns (texture 0x8F, alpha dropping 20 per column),
+ * scales and positions them in world space, and draws them as a row of 11 quads.
  */
 void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

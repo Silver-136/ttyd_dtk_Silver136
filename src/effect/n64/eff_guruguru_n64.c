@@ -24,7 +24,7 @@ void effGuruguruDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns num yellow sprites circling (x, y, z); the radius opens up to the given radius.
- * Used by the Palace of Shadow rels las_09 and las_28 and by event scripts through evt_eff.
+ * Used by the Palace of Shadow rels las_09 and las_28; also reachable through evt_eff64 (no script uses that).
  */
 EffectEntry* effGuruguruN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 radius) {
     EffectEntry* effect;

@@ -1,4 +1,4 @@
-// Paper Mario 64 smoke effect 10 (kemuri: smoke) moving along a direction vector with a scale.
+// Paper Mario 64 smoke effect 10 (kemuri: smoke) drifting against a direction vector, with a scale.
 
 #include "version.h"
 #include "eff/n64/eff_kemuri10_n64.h"
@@ -13,7 +13,7 @@
 #include "libc_decls.h"
 #include <math.h>
 
-/** Smoke cloud mesh (192 vertices) of the puff left beside a moving NPC. */
+/** Smoke cloud mesh (36 vertices, drawn as 64 triangles) of the puff left behind Kammy's broom (evt_npc.c). */
 static effN64Vtx stg_houki_kemuri_v[] = {
     {0, -50, 20, 0, 512, 255, 255, 255, 255},
     {35, -35, 20, 256, 512, 255, 255, 255, 255},
@@ -57,9 +57,9 @@ void effKemuri10Main(EffectEntry* effect);
 void effKemuri10Disp(CameraId cameraId, void* payload);
 
 /**
- * Spawns smoke effect 10 at (x, y, z) heading along (dx, dy, dz);
- * a zero direction makes no effect (NULL is returned).
- * Spawned by evt_npc.c beside a moving NPC and by event scripts through evt_eff.
+ * Spawns smoke effect 10 at (x, y, z), oriented by (dx, dy, dz) and drifting the opposite way
+ * (velocity -4 times the unit direction); a zero direction returns NULL.
+ * Spawned by evt_npc.c (_kamek_houki_kemuri, behind the broom of a flying NPC) and by event scripts through evt_eff64.
  */
 EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 scale) {
     EffectEntry* effect;
@@ -154,7 +154,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
 
 /**
  * Lives 16 frames.
- * The alpha rises and the velocity decays for the first 11 frames, then both drop off quickly;
+ * The alpha rises and the velocity decays for the first 10 frames, then (after one frame with neither) both drop off quickly;
  * the scale grows by 5% per frame and the texture offset scrolls.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -214,7 +214,7 @@ void effKemuri10Main(EffectEntry* effect) {
 #endif
 }
 
-/** Draws the smoke cloud mesh (stg_houki_kemuri_v, 192 vertices) with texture 0x1F, oriented by the direction frame. */
+/** Draws the smoke cloud mesh (stg_houki_kemuri_v, 64 triangles = 192 vertex indices) with texture 0x1F, oriented by the direction frame. */
 void effKemuri10Disp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera = camGetPtr(cameraId);

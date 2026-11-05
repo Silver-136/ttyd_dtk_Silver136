@@ -77,7 +77,7 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
     return effect;
 }
 
-/** Per frame: grows, spins and fades each puff and deletes the effect when its life is over. */
+/** Per frame: grows, spins and fades each puff (respawning it once faded) and deletes the effect when its life is over. */
 void effMist2Main(EffectEntry* effect) {
     EffMist2Work* work = effect->userdata;
     Vec position;

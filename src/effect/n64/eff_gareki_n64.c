@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: rubble (gareki), eight debris pieces that fall to a ground height and fade.
+// Paper Mario 64 effect: rubble (gareki), a chunk that falls to a ground height, then breaks into eight pieces
+// that fade.
 
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -108,7 +109,8 @@ static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 
 /**
  * Spawns a falling rubble chunk (gareki = rubble) at (x, y, z) that drops until it reaches groundY,
- * then breaks into eight pieces. type is not read. Spawned only from event scripts through evt_eff.
+ * then breaks into eight pieces. type is not read. Reached only through evt_eff64; no script in the tree
+ * spawns it.
  */
 EffectEntry* effGarekiN64Entry(s32 type, f32 x, f32 y, f32 z, f32 groundY) {
     f32* tp;

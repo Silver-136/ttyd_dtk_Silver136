@@ -328,9 +328,9 @@ void effButterflyMain(EffectEntry* effect) {
 }
 
 /**
- * Draws the butterfly facing its heading, bobbing with y_data.
- * bobIdx also selects the six-vertex set in but_02_v;
- * the wing tips rise from set to set (y 31, 42, 58, 79 ...), so the wings flap.
+ * Draws the butterfly facing its heading, bobbing with 0.3 times y_data.
+ * bobIdx also selects the six-vertex set in but_02_v; it advances by 3 per frame, so every third set is shown
+ * (wing-tip y 31, 79, 160, 240 ...) and the wings flap.
  */
 void effButterflyDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

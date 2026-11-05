@@ -53,8 +53,9 @@ void effWhirlwindMain(EffectEntry* effect);
 void effWhirlwindDisp(CameraId cameraId, void* param);
 
 /**
- * Spawns four wind bands around a Mario work target for `life` frames; type is nonzero when facing left.
- * Used by battle_mario, battle_event_subset and event scripts.
+ * Spawns four wind bands around a Mario work target (may be NULL) for `life` frames. Odd types spin the other
+ * way, types 2-7 pick the band colours, other types (8) tumble. Used by battle_mario and battle_event_subset
+ * (target NULL, type 1 when the unit faces left) and event scripts.
  */
 EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 life) {
     f32 quarter;
@@ -153,7 +154,7 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
 }
 
 /**
- * Follows the target's position each frame.
+ * Follows the target's position each frame when a target is set.
  * Type 8: alpha eases to 255, size shrinks with the remaining life and it fades over the last 10 frames,
  * while each band tumbles and alternate bands spin opposite ways (40 degrees per frame).
  * Other types: alpha eases to 100, the bands spin about Y, and over the last 10 frames they fade 20% per frame,

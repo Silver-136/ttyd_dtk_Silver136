@@ -653,11 +653,13 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
 }
 
 /**
- * A delete request ends it next frame; the lifetime only counts down from below 100.
+ * A delete request ends it the same frame; the lifetime only counts down from below 100, so types 0-2
+ * (lifetime 100) last until a delete request and types 3+ for 30 frames.
  * At the end it also deletes its charge and flare child effects (the flare goes after 18 frames anyway).
  * Types 0-2 (other types for their first 6 frames) scroll the two bolt texture layers,
  * some steps only every interval0/interval1 frames;
- * types 3+ fade 13 per frame after frame 6, types 0-2 fade 25 per frame over their last 10. CAMERA_3D, layer 2.
+ * types 3+ fade 13 per frame after frame 6. The 25-per-frame fade for types 0-2 below life 10 never runs
+ * (the delete request skips straight to -1), and their draw does not use the alpha. CAMERA_3D, layer 2.
  */
 void effThunderMain(EffectEntry* effect) {
     EffThunderN64Work* work;

@@ -1358,8 +1358,8 @@ void effHolographyDisp(CameraId cameraId, void* payload);
 /**
  * Spawns the holography effect at (x, y, z), scaled by 0.1 * scale,
  * for lifetime frames (0 = until soft-deleted).
- * The Fright Mask item script (ItemEvent_Attiike_Shisshi) spawns it twice through evt_eff64 as its scary
- * hologram; the effect table labels it ホログラフ (holograph).
+ * The Fright Mask item script (ItemEvent_Attiike_Shisshi) spawns it once through evt_eff64 (one call per
+ * version branch) as its scary hologram; the effect table labels it ホログラフ (holograph).
  */
 EffectEntry* effHolographyN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

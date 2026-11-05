@@ -52,7 +52,7 @@ void effOpukuWgunDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a water-gun shot from (x1, y1, z1) to (x2, y2, z2) living `lifetime` frames at `scale`.
- * Spawned only by event scripts through evt_eff.
+ * Spawned only by event scripts through evt_eff64 "opuku_wgun_n64".
  */
 EffectEntry* effOpukuWgunN64Entry(s32 type, s32 lifetime, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2,
                                   f32 scale) {

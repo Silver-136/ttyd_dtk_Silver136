@@ -1,4 +1,5 @@
-// Boat water (funemizu: boat water): ripples and splash spray around a boat, tinted with a per-map water colour.
+// Boat water (funemizu: boat water): ripples and splash spray around a boat, tinted with a per-map water colour
+// (JP and later; the early demos ease the tint toward the framebuffer colour under the wake).
 
 #include "version.h"
 #include "eff/eff_funemizu.h"
@@ -137,17 +138,13 @@ static u8 gor_fune_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x0
 static u8* gor_fune_dl_0_tbl[] = { gor_fune_dl_0_0, gor_fune_dl_0_1 };
 /**
  * Sizes in 32-byte units of the base-layer display lists of the type 2 wake, the second wake mesh gor_00
- * shows beside the ship arriving in Rogueport harbour; used by effFunemizuDisp.
+ * shows beside the ship arriving in Rogueport harbour (muj_20 and muj_21 use it too); used by effFunemizuDisp.
  * The outer layer's lists and sizes follow.
  */
 static u8 gor_fune_dl_0_size_tbl[] = { 0x02, 0x02};
 static u8* gor_fune_dl_1_tbl[] = { gor_fune_dl_1_0, gor_fune_dl_1_1 };
 static u8 gor_fune_dl_1_size_tbl[] = { 0x02, 0x02};
 
-/**
- * Returns the water colour for the current map:
- * exact name match in the table first, then a 3-letter area prefix, then the default.
- */
 // Descriptive name (not in the symbol maps); placeholder unk_80224298, JP 0x80224298. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
@@ -178,8 +175,8 @@ GXColor effFunemizuGetMapColor(void) {
 
 /**
  * Spawns boat water: types 0 and 2 are the ripple wake,
- * type 1 a spray burst (size picks how many pieces, max 10).
- * Spawned by the ship motion (mot_ship.c) and by scripts in gor and muj.
+ * type 1 a spray burst (size picks how many pieces, at most 9).
+ * Spawned by the ship motion (mot_ship.c), by itself (the wake's spray) and by room code in gor_00 and muj.
  */
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) {
     EffectEntry* effect;
@@ -229,7 +226,11 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
     return effect;
 }
 
-/** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
+/**
+ * Wake (types 0, 2): eases the two wave layers toward the current size, scrolls them and, while the size is
+ * above 0.1, spawns a spray burst every 10 frames. Spray (type 1): moves and fades its pieces and deletes the
+ * effect once every piece has fallen below y 0.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effFunemizuMain(EffectEntry* effect) {
 #else
@@ -338,7 +339,10 @@ static inline void funemizuCallDL(u32 *p_u) {
     *p_u = u;
 }
 
-/** Draws the wake ripple mesh tinted with the map's water colour. */
+/**
+ * Draws the wake ripple mesh (both layers, front and back faces) tinted with the map's water colour; the early
+ * demos instead ease the tint toward the framebuffer pixel under the wake.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #else
@@ -536,7 +540,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-/** Draws the spray (shibuki) pieces as camera-facing quads. */
+/** Draws the spray (shibuki) pieces as quads turned by the spray's yaw relative to the camera. */
 #if VERSION <= VERSION_DEMO_JP
 static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #else

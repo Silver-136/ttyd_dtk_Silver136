@@ -1,4 +1,4 @@
-// Shadow Queen charge-up (queen2): a dark sphere fades in and grows while a charge light gathers,
+// Shadow Queen charge-up (queen2): a dark sphere fades in and changes size, then a charge light gathers,
 // then two flashes (Boo and indirect effects) as the sphere fades out.
 
 #include "eff/eff_queen2.h"
@@ -56,7 +56,10 @@ EffectEntry* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-/** Per frame: fades in and grows the sphere, soft-deletes the charge light, then ends the effect after the flashes. */
+/**
+ * Per frame: fades the sphere in (60 frames), scales it from its start scale to 3 (120 frames), starts the charge
+ * light, then two flashes 30 frames apart; soft-deletes the charge light at the second and ends the next frame.
+ */
 void effQueen2Main(EffectEntry* effect) {
     EffQueen2Work* work = effect->userdata;
     Vec position;
@@ -125,7 +128,7 @@ void effQueen2Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effQueen2Disp, effect);
 }
 
-/** Draws the dark sphere scaled by the camera distance so it keeps its apparent size. */
+/** Draws the dark sphere at radius 10 x scale (the scale starts at the spawn-time camera distance / 10). */
 void effQueen2Disp(CameraId cameraId, EffectEntry* effect) {
     EffQueen2Work* work = effect->userdata;
     CameraEntry* camera;

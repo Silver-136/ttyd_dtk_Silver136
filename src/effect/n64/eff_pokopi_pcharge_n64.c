@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: pokopi charge (pcharge) at a point with a scale and lifetime; types 0-9.
+// Paper Mario 64 effect: pokopi charge (pcharge) at a point with a scale and lifetime; types 0-12.
 
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_n64.h"
@@ -12,8 +12,8 @@
 #include "eff/eff_magic1_n64.h"
 
 /**
- * Number of charge streaks in the ring for each type.
- * vx_data: speed of the streaks along their rays for each type.
+ * Number of effect records for each type: one header plus the charge streaks of the ring.
+ * vx_data: distance from the centre added to every streak's position along its ray, for each type.
  */
 u8 n_data[13] = {11, 11, 11, 11, 17, 11, 11, 21, 21, 21, 21, 21, 21};
 
@@ -108,7 +108,8 @@ void effPokopiPchargeDisp(CameraId cameraId, void* param);
 /**
  * Spawns an energy-charge effect at (x, y, z): 10-20 streaks (count by type) spaced evenly around a ring,
  * flowing inward (negative speed: types 0-2, 6, 7, 9) or outward. lifetime <= 0 means until deleted.
- * Soft-deletable. Used by map scripts in gor, tik and tou2 via evt_eff64 "pokopi_pcharge_n64"; type 9 is orange.
+ * Soft-deletable. Used by map scripts in gor, tik and tou2 via evt_eff64 "pokopi_pcharge_n64" and directly from C
+ * (las_29, the Kamek units); type 9 is orange.
  */
 EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffPokopiPchargeN64Elem* work;

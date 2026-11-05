@@ -48,17 +48,17 @@ typedef struct EffDogabonAttackN64Work {
 void effDogabonAttackMain(EffectEntry* effect);
 void effDogabonAttackDisp(CameraId cameraId, void* param);
 
-/** Piece size (in percent) while it settles into place: a small squash, then a bounce back to full size. */
+/** Piece height (in percent) of a squash-and-stretch wobble that repeats every 7 frames (width = 200 minus this). */
 static u8 scale_data[7] = {94, 92, 100, 105, 107, 105, 100};
 
 /** Piece size (in percent) as it grows in over eight frames. */
 u8 scale_data_2[8] = {20, 40, 58, 73, 85, 92, 97, 100};
 
-/** Progress (in percent) of a piece flying from its spiral spot to the target, easing in over 15 frames. */
+/** Progress (in percent) of a piece flying from its outer spot (radius 120) in to its inner spot (radius 15), easing in over 15 frames. */
 u8 move_data_1[15] = {0, 2, 5, 9, 14, 20, 27, 35, 44, 54, 64, 74, 84, 94, 100};
-/** Progress (in percent) of a piece on the miss (hazure) path: it flies past the target to 145% over 20 frames. */
+/** Progress (in percent) of a piece on the miss (hazure) path: it flies past its inner spot to 145% over 20 frames. */
 u8 move_data_hazure[20] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 109, 117, 124, 130, 135, 139, 142, 144, 145};
-/** Progress (in percent) of a piece over its 70-frame swing: out to 145% and back. */
+/** Swirl factor (in percent) over the 70-frame twist: it rises to 145% and back twice; the radius is 15 divided by its square. */
 u8 move_data_2[70] = {
     100, 100, 100, 100, 100, 100, 100, 100, 101, 102, 102, 103, 103, 104, 104, 104, 107, 107,
     110, 110, 118, 118, 126, 126, 134, 142, 145, 145, 145, 142, 134, 126, 126, 118, 118, 110,
@@ -79,7 +79,6 @@ effN64Vtx size12x12_tex32x32_vtx[] = {
  * each starting after a staggered delay.
  * The effect table labels it ドガボン (dogabon) and kemuri11_n64 ドガボンけむり (dogabon smoke).
  * Reached only through evt_eff64; no script in the tree spawns it.
- * Guess: dogabon is a crash-and-boom sound word.
  */
 EffectEntry* effDogabonAttackN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

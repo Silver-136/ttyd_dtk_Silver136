@@ -165,8 +165,8 @@ void effKemuri9Main(EffectEntry* effect) {
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The demo draws the smoke as N64 quads, blending two frames of one texture strip;
- * the later versions use a 16-cell GX texture and draw the quads directly.
+ * The early demos draw the smoke as N64 quads, blending two of the 8 frames of texture strip 0xE;
+ * JP and later use the 16-cell GX texture 0x28 and draw the quads directly.
  */
 static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);

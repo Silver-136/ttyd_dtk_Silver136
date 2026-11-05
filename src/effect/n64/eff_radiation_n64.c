@@ -1,6 +1,6 @@
-// Paper Mario 64 effect: pale-yellow rays from a point: types 0-1 eight rays that rise and fade, other
-// types 16 spinning rays with scrolling textures; type + 10 draws in another display layer with plain alpha blending
-// and no depth test.
+// Paper Mario 64 effect: rays from a point: types 0-1 eight pale-yellow textured rays that move out and fade, other
+// types 16 spinning near-white untextured rays (their texture scroll offsets are advanced but never drawn);
+// type + 10 draws in another display layer with plain alpha blending and no depth test.
 
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_radiation_n64.h"
@@ -149,11 +149,12 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 }
 
 /**
- * Types 0-1: each ray climbs by its yVel, fades in over 10 frames and out over its last 5,
+ * Types 0-1: each ray moves out along its own direction by yVel, fades in over 10 frames and out over its last 5,
  * then respawns at a random tilt (0-179 degrees per axis).
  * Other types scroll four texture offsets, fade each ray in and out over 5 frames,
  * spin it about Z at a speed from r_data and respawn it on its fixed r_data pose.
- * The effect itself only counts down once a delete request sets its life to 10, then fades and deletes.
+ * The effect itself only counts down once a delete request sets its life to 10, then deletes
+ * (the rays of types 2 and up fade out over those frames).
  * Drawn on layer 2, or 8 when `flag` is set.
  */
 void effRadiationMain(EffectEntry* effect) {
@@ -307,8 +308,8 @@ void effRadiationMain(EffectEntry* effect) {
 
 /**
  * Types 0-1 draw each ray as a 150x20 quad of texture 0x2C tinted pale yellow;
- * other types draw an untextured 300x40 triangle in near-white whose length follows its alpha,
- * with every fourth ray a different length (type 3 turned 45 degrees about Z).
+ * other types draw an untextured 300x40 triangle in near-white, fading toward its tip, whose width follows its
+ * alpha with a factor picked by i & 3 and whose length grows from 0.75 to 1 with it (type 3 turned 45 degrees about Z).
  * Both faces drawn; with `flag` set it uses plain alpha blending without depth test or writes.
  */
 void effRadiationDisp(CameraId cameraId, void* param) {

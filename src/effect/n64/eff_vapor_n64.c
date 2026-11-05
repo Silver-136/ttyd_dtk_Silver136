@@ -71,7 +71,8 @@ void effVaporDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a steam puff at (x, y, z) of the given scale; a lifetime of 0 or less lasts until soft-deleted.
- * Used by battle damage, the Poison Pokey units (jon, mri), eff_ibuki and event scripts.
+ * Used by battle damage, the unit_dokugassun units (jon, mri, win, tst), the unit_poison_pakkun units
+ * (muj, tst), eff_ibuki and event scripts.
  */
 EffectEntry* effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: Magikoopa (kameki) tornado of eight spinning, scrolling layers around a point.
+// Paper Mario 64 effect: Magikoopa (kameki) tornado of seven spinning, scrolling bands (between eight rings) around
+// a point.
 
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "eff/eff_magic1_n64.h"
@@ -142,7 +143,7 @@ void effKamekiTornadeMain(EffectEntry* effect) {
 }
 
 /**
- * Builds a 16-segment ring of vertices and draws seven stacked, twisted layers, each tilted and scaled,
+ * Builds a 16-point ring of vertices (15 segments drawn) and draws seven stacked, twisted layers, each tilted and scaled,
  * using texture 0x6C on both texture maps.
  */
 void effKamekiTornadeDisp(CameraId cameraId, void* payload) {

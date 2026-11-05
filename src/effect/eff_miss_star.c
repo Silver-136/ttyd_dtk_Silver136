@@ -24,7 +24,7 @@ typedef struct EffMissStarWork {
 
 /**
  * Launch directions of the miss stars, fanning from straight up round the side to straight down;
- * the caller's index picks the first and each star takes the next one.
+ * the caller's index picks the first and each star takes the next one. Only entries 0-7 are read (index % 8).
  */
 Vec spd_tbl[15] = {
     { 0.0f, 4.5f, 0.0f },  { 1.0f, 4.0f, 0.0f },  { 2.0f, 3.0f, 0.0f },
@@ -34,7 +34,7 @@ Vec spd_tbl[15] = {
     { 2.0f, -3.0f, 0.0f }, { 1.0f, -4.0f, 0.0f }, { 0.0f, -4.5f, 0.0f },
 };
 
-/** Size of each miss star in turn, between 0.8 and 1.1 so the burst looks uneven. */
+/** Size of each miss star in turn, between 0.8 and 1.1 (X only; entries 0-7 are read, i % 8). */
 Vec scale_tbl[15] = {
     { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },    { 0.9f, 0.9f, 0.9f },
     { 1.1f, 1.1f, 1.1f },    { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },
@@ -44,8 +44,8 @@ Vec scale_tbl[15] = {
 };
 
 /**
- * Spawns `count` small stars around (x, y, z) after `delay` frames;
- * battle_damage.c uses it when an attack misses (index selects the direction).
+ * Spawns `count` small stars around (x, y, z), drawn after `delay` frames (count 0 or less: one smaller star);
+ * battle_damage.c uses it when an attack misses (index selects the direction, a negative one mirrors it).
  */
 EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 index) {
     EffectEntry* effect;
@@ -105,8 +105,8 @@ EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 ind
 }
 
 /**
- * Per frame: moves, spins and fades each star, turns it to face the camera and deletes the effect
- * when all are gone.
+ * Per frame: moves and spins each star (slowing it after 4 frames), turns it to face the camera and deletes
+ * the effect 10 frames after the first star's life runs out. alpha is never changed or drawn.
  */
 void effMissStarMain(EffectEntry* effect) {
     EffMissStarWork* work = effect->userdata;

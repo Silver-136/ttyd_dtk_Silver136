@@ -1,5 +1,5 @@
 // Emote bubble (Fukidashi: speech balloon) above Mario, a partner or an NPC; types pick the mark or icon shown,
-// with a sound for the surprise and question marks.
+// with a sound for the surprise and question marks when they appear over a partner or an NPC.
 
 #include "version.h"
 #include "eff/eff_fukidashi.h"
@@ -142,7 +142,7 @@ static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin)
 }
 
 /**
- * Places the bubble above its speaker (Mario, a partner, or an NPC; otherwise relative to the base point),
+ * Places the bubble above its speaker (Mario, a partner, or an NPC; otherwise at the base point),
  * tilted by the bubble angle plus 20 degrees per slot.
  */
 void calc_pos(EffFukidashiWork* work, s32 flag) {
@@ -290,7 +290,10 @@ static inline s32 getAnim(EffFukidashiWork* w, s32 type) {
     return anim_data_table_2[type][w->frame / 2];
 }
 
-/** Advances the pop-up animation and, for type 6, its spin-in stages; deletes the effect when the table ends. */
+/**
+ * Advances the pop-up animation; type 6 spins in, holds about 120 frames and spins out (it ignores the duration).
+ * Deletes the effect when the table ends or the duration runs out.
+ */
 void effFukidashiMain(EffectEntry* effect) {
     EffFukidashiWork* work = effect->userdata;
     Vec position;
@@ -351,7 +354,10 @@ void effFukidashiMain(EffectEntry* effect) {
     }
 }
 
-/** Draws the bubble from the moja model display lists with its mark or icon, lit by a GX light. */
+/**
+ * Draws the bubble (textured quad with a shadow) and its content: the "!"/"?" mark, the swirl (type 2, the moja
+ * model display lists lit by a GX light), the coin and number, the dots, the scribble or the bouncing icon.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 #else

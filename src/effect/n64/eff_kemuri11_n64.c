@@ -34,7 +34,7 @@ typedef struct EffKemuri11N64Work {
 } EffKemuri11N64Work;
 
 
-/** Smoke body mesh (54 vertices) each puff of smoke effect 11 is drawn with. */
+/** Smoke body mesh (20 vertices, drawn as 18 triangles) each puff of smoke effect 11 is drawn with. */
 static effN64Vtx stg_thruhammer_v[] = {
     {-34, -2, 20, 4267, 1024, 255, 255, 255, 255},
     {-52, 50, 0, 3840, 2048, 255, 255, 255, 0},
@@ -203,8 +203,9 @@ EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /**
- * Runs for 60 frames.
- * Each puff is released after its delay with its own scale and texture scroll speeds, then drifts;
+ * Runs for 60 frames (internal types 2, 3, 5) or 50 (types 4, 6, 7).
+ * Each puff is released after its delay with its own scale and texture scroll speeds, then grows by 0.2% per
+ * frame while its textures scroll (the velocity it is given is never applied);
  * the whole effect fades after the first 8 frames.
  */
 void effKemuri11Main(EffectEntry* effect) {
@@ -427,7 +428,7 @@ void effKemuri11Disp(CameraId cameraId, EffectEntry* effect) {
     main_dl(effect, mtx);
 }
 
-/** Draws every released puff as a 54-vertex smoke body under the matrix camMtx, scrolling its two textures. */
+/** Draws every released puff as an 18-triangle smoke body under the matrix camMtx, scrolling its two textures. */
 static void main_dl(EffectEntry* effect, Mtx camMtx) {
     EffKemuri11N64Work* work = effect->userdata;
     s32 i;

@@ -35,7 +35,7 @@ void effExplosionDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a single explosion sprite at (x, y, z) that lasts duration frames.
- * Type 0 grows; other types spin at 40 degrees per frame. Spawned only from event scripts through evt_eff.
+ * Type 0 grows; other types spin at 40 degrees per frame. Reached only through evt_eff64; no script in the tree spawns it.
  */
 EffectEntry* effExplosionN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

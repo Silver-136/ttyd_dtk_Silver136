@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: akari (light) charge, 21 yellow sparks spin around a glow; type 0 draws in the 3D scene,
+// Paper Mario 64 effect: akari (light) charge, 7 yellow sparks (each with a two-copy trail, 21 streaks) flicker
+// around a point; type 0 draws in the 3D scene,
 // other types as a 2D overlay.
 
 #include "eff/n64/eff_akari_charge_n64.h"
@@ -30,7 +31,7 @@ void effAkariChargeDisp(CameraId cameraId, void* param);
  * Spawns the glow at (x, y, z), `size` times its normal scale,
  * for `lifetime` frames (0 or less: until soft deleted).
  * Type 0 draws on the 3D camera, other types on the 2D camera.
- * Used for spell charge-ups (mahorn and kurokumorn units, aji).
+ * Used for charge-ups (mahorn and kurokumorn units, Magnus von Grapple, aji/mri/usu rooms, eff_queen2, eff_thunder_n64).
  */
 EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;

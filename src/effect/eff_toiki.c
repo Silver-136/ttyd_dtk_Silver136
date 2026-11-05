@@ -1,5 +1,5 @@
 // Shadow Queen's breath (toiki, 影の女王・吐息): a cloud that drifts and slows while its texture scrolls, releasing
-// mist puffs along the way; type 0 dark breath, 1 confusion breath, 2 poison breath.
+// mist puffs along the way; type 0 sigh, 1 temptation, 2 poison breath (the Shadow Queen's three breath attacks).
 
 #include "eff/eff_toiki.h"
 #include "driver/dispdrv.h"
@@ -140,7 +140,7 @@ static u8 queen_toiki_dl_0_size_tbl[] = { 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 
 /**
  * Spawns the breath cloud at (x, y, z) lasting `duration` frames (1000 or more: until removed).
- * Type 0 dark breath, 1 confusion, 2 poison; it drifts up and left at an initial speed of 2.5.
+ * Type 0 sigh, 1 temptation, 2 poison; it drifts left and slightly down (200 degrees) at an initial speed of 2.5.
  */
 EffectEntry* effToikiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -171,8 +171,8 @@ EffectEntry* effToikiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 
 /**
  * Moves the cloud with 5% damping per frame, scrolls its texture,
- * and every 20 frames drops a mist puff (effMistEntry of type + 1) near its leading edge
- * while the scroll is between 1 and 4.
+ * and drops a mist puff (effMistEntry of type + 1) near its leading edge on frames where the timer
+ * is a multiple of 20, while the scroll is between 1 and 4.
  */
 void effToikiMain(EffectEntry* effect) {
     EffToikiWork* work = effect->userdata;

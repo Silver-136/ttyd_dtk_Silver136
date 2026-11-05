@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: pikkyolo effect at a point with a scale and life.
+// Paper Mario 64 effect: pikkyolo, six coloured fragments thrown out from a point that bounce on the ground.
 
 #include "eff/n64/eff_pikkyolo_n64.h"
 #include "driver/effdrv.h"
@@ -29,8 +29,8 @@ typedef struct EffPikkyoloN64Work {
 } EffPikkyoloN64Work;
 
 /**
- * Four 16x16 quads, one per animation cell of the fragment texture,
- * that each tumbling fragment steps through.
+ * Four 16x16 quads, one per animation cell of the fragment texture;
+ * fragment i always uses cell i & 3.
  */
 static effN64Vtx size16x16_tex16x16_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},

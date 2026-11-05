@@ -1,5 +1,5 @@
 // Up/down number pop-up: a signed number drawn from icon textures that bounces in and fades;
-// used in battle for status strength changes (types 0 and 1 choose the style).
+// used in battle for attack/defense changes (types 0-3: attack, defense, and their non-bouncing forms).
 
 #include "icon_ids.h"
 #include "driver/camdrv.h"
@@ -169,7 +169,10 @@ static void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 
     GXTexCoord2f32(0.0f, t);
 }
 
-/** Draws a coloured square background, the last digit of |number| (an icon texture) and the up or down arrow icon. */
+/**
+ * Draws a coloured background quad (effect texture 0x1D, rotated 180 degrees for negative numbers),
+ * the last digit of |number| (an icon texture) and a plus or minus sign icon.
+ */
 void effUpdownDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffUpdownWork* work = effect->userdata;

@@ -22,7 +22,8 @@ typedef struct EffSnowN64Work {
 void effSnowMain(EffectEntry* effect);
 void effSnowDisp(CameraId cameraId, void* param);
 
-/** Spawns one snowflake at (x, y, z) living `lifetime` frames. Spawned by event scripts through evt_eff. */
+/** Spawns one snowflake at (x, y, z) living `lifetime` frames; consecutive flakes alternate their spin direction.
+ * Reached only through evt_eff64 "snow_n64"; no script callers found. */
 EffectEntry* effSnowN64Entry(s32 lifetime, f32 x, f32 y, f32 z) {
     static s32 kaiten;
     EffectEntry* effect;

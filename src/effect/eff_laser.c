@@ -1,4 +1,4 @@
-// Laser effect: plays the MOBJ_EFF_laser animation at a point; types 0-3, one type also fades in white.
+// Laser effect: plays the MOBJ_EFF_laser animation at a point; the type is stored but never read, and the white-fade state is never reached.
 
 #include "eff/eff_laser.h"
 #include "driver/animdrv.h"
@@ -23,7 +23,10 @@ typedef struct EffLaserWork {
     s32 alpha;      // 0x30
 } EffLaserWork;
 
-/** Spawns a laser strike on (x, y, z), starting 1000 units above the target. Spawned by an event script in tik. */
+/**
+ * Spawns a laser strike on (x, y, z), placed 1000 units above the target until effLaserMain eases it down from
+ * 500 above. Spawned by an event script in tik.
+ */
 EffectEntry* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffLaserWork* work;
@@ -51,7 +54,10 @@ EffectEntry* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-/** Eases the beam down over 60 frames, then flashes the screen white and fades the laser out. */
+/**
+ * Eases the beam down over 60 frames, then plays A_1 and fades the laser out (alpha 1 per frame). State 2, the
+ * white screen fade, is skipped: state 1 jumps to 3.
+ */
 void effLaserMain(EffectEntry* effect) {
     EffLaserWork* work = effect->userdata;
     Vec position;

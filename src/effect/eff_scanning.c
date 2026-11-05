@@ -13,7 +13,7 @@ void effScanningMain(EffectEntry* effect);
 void effScanningDisp(CameraId camId, void* param);
 
 /**
- * Spawns the scan animation at (x, y, z); `int2` is stored as the type but not otherwise used.
+ * Spawns the scan animation at (x, y, z); `type` is stored but not otherwise used.
  * Callers: Rampell's scan attack (jin, las) and evt_eff "scanning".
  */
 EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {

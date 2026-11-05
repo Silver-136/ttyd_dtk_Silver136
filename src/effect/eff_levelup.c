@@ -1,4 +1,5 @@
-// Level-up effect drawn in 2D at a point with a sound; types 0-4, type 0 also starts a screen-shake event.
+// Level-up banner drawn in 2D at a point; the type is stored but not read. The first piece's landings shake the
+// camera and play a sound.
 
 #include "version.h"
 #include "eff/eff_levelup.h"
@@ -26,7 +27,10 @@ typedef struct EffLevelupWork {
     f32 scaleY;   // 0x20
 } EffLevelupWork;
 
-/** Effect texture ids of the banner's six letter sprites, one row per language (all rows are the same). */
+/**
+ * Effect texture ids of the banner's three pieces (entries 0-2) and their shadows (3-5), one row per language
+ * (all rows are the same).
+ */
 #if VERSION >= VERSION_US
 static s32 texid_tbl[6][6] = {
     { 118, 119, 120, 121, 122, 123 },
@@ -54,7 +58,10 @@ u16 y_trans[] = {
     5, 10, 15, 20, 25, 20, 15, 10, 4, 0,
 };
 
-/** Effect texture ids of the banner's six letter sprites, one row per language (all rows are the same). */
+/**
+ * Effect texture ids of the banner's three pieces (entries 0-2) and their shadows (3-5); row 0 for Japanese,
+ * row 1 for the other languages (both the same).
+ */
 #if VERSION < VERSION_US
 #if VERSION >= VERSION_JP
 static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };
@@ -62,7 +69,7 @@ static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148
 #endif
 
 /**
- * Per-frame vertical stretch in percent of the banner letters after the first two, once landed: they grow
+ * Per-frame vertical stretch in percent of the third banner piece, once landed: it grows
  * from nothing up to 175%, squash to 50% and settle at 100%. Read by effLevelupMain.
  */
 u8 y_scale[] = { 0, 13, 40, 69, 98, 126, 149, 166, 175, 165, 136, 100, 67, 50, 73, 117, 130, 113, 100 };
@@ -141,8 +148,8 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
 }
 
 /**
- * Drops the letters in along y_trans (shaking the screen on landing), squashes them, holds,
- * slides them off sideways and deletes the effect.
+ * Drops the pieces in along y_trans (shaking the screen on landing), stretches the third one in, holds,
+ * slides the first off to the right and the others to the left, and deletes the effect.
  */
 void effLevelupMain(EffectEntry* effect) {
     EffLevelupWork* work = effect->userdata;

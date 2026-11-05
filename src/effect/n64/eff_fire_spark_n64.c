@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: fire sparks, count sparks launched within a range with a set upward and forward speed.
+// Paper Mario 64 effect: fire sparks, count sparks launched within a range with a set starting and eased-toward upward speed.
 
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_fire_spark_n64.h"
@@ -49,7 +49,8 @@ effN64Vtx size4x4_tex32x32_vtx[] = {
 
 /**
  * Spawns count small sparks that rise from a strip of width rangeX and height rangeY around (x, y, z);
- * speedY and speedZ set how fast they drift. eff_fire.c spawns it for fire embers; event scripts via evt_eff.
+ * speedY scales each spark's starting rise speed and speedZ the rise speed it eases toward (both act on Y).
+ * eff_fire.c spawns it for fire embers; event scripts via evt_eff64.
  */
 EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 rangeX, f32 rangeY,
                                   f32 scale, f32 speedY, f32 speedZ) {
@@ -102,7 +103,8 @@ EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
 /**
  * Fades in over the first 16 frames and out over the last 16.
  * Each spark runs a 30-step cycle: it respawns at a random spot in the strip,
- * drifts with a velocity that eases toward a random target, and scales by scale_data.
+ * drifts with a velocity that eases toward a random target, and stores a scale from scale_data
+ * (the draw code never reads it; every spark uses the spawn scale).
  */
 void effFireSparkMain(EffectEntry* effect) {
     Vec position;

@@ -1,5 +1,5 @@
-// Flame (Fire): a flickering flame with smoke puffs; types 0-8 pick the look, types 5-7 also throw sparks.
-// Used for burning units and fire attacks.
+// Flame (Fire): a flickering flame; types 0-8 pick the look, types 0-2 also give off smoke puffs and types 5-7
+// throw sparks. Used for the flame bodies of fire units (dou, jon), torches and other fires in scripts.
 
 #include "version.h"
 #include "eff/eff_fire.h"
@@ -42,10 +42,7 @@ FireScaleKey scale1[] = {
     { 160, 0.95f },  { 180, 1.025f }, { 200, 1.0f },
 };
 
-/**
- * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
- * and green (7). Read by effFireDisp3.
- */
+// The early demos define scale2 (described below) here.
 #if VERSION <= VERSION_DEMO_JP
 FireScaleKey scale2[] = {
     {0, 1.0f},
@@ -55,6 +52,10 @@ FireScaleKey scale2[] = {
 };
 #endif
 
+/**
+ * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
+ * and green (7). Read by effFireDisp3.
+ */
 static GXColor col_tbl[3][8] = {
     { { 0xAC, 0x2E, 0x00, 0xFF }, { 0xE0, 0x22, 0x00, 0xFF }, { 0xFD, 0x5F, 0x00, 0xFF }, { 0xFD, 0x5F, 0x04, 0xFF },
       { 0xFF, 0x69, 0x00, 0xFF }, { 0xFF, 0x8A, 0x00, 0xFF }, { 0xFF, 0xB7, 0x00, 0xFF }, { 0xFF, 0xD7, 0x00, 0xFF } },
@@ -115,7 +116,7 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale);
 
 /**
  * Spawns a flame of the given type at (x, y, z); duration <= 0 keeps it burning until soft-deleted.
- * Used for the burn status, fire attacks and event scripts.
+ * Used by fire units (dou, jon), the cooking fire in gor_01 and event scripts via evt_eff (kpa, las).
  */
 EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -196,8 +197,8 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
 }
 
 /**
- * Per frame: steps the scale animation from the type's key table, fades out over 16 frames on soft delete,
- * and spawns smoke puffs.
+ * Per frame: fades out over 16 frames on soft delete, steps the glow's scale from the key table (types 3, 4, 8),
+ * and from time to time spawns sparks (types 5-7) or a smoke puff (types 0-2).
  */
 void effFireMain(EffectEntry* effect) {
     EffFireWork* work = effect->userdata;
@@ -434,7 +435,10 @@ void effFireDisp(CameraId cameraId, void* payload) {
     effFireQuad(w, h);
 }
 
-/** Draws the second flame layer (texture 0x48) using two texture coordinate sets. */
+/**
+ * Draws the flame of types 3, 4 and 8: texture 0x48 mixed from two animation frames, then a glow quad
+ * (texture 0x5F, 0x60 for type 4) sized by pulseScale.
+ */
 void effFireDisp2(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
@@ -598,7 +602,10 @@ void effFireDisp2(CameraId cameraId, void* payload) {
     }
 }
 
-/** Draws the spark particles (types 5-7) around the flame. */
+/**
+ * Draws the flame of types 5-7 as two layered strips coloured from col_tbl (the second smaller and in front)
+ * and records the flame's screen bounding box (scrMinX..scrMaxY, bboxValid). The sparks are separate effects.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
 #else

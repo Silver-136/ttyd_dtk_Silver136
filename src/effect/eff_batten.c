@@ -1,4 +1,4 @@
-// Magnus von Grapple 2.0 effects (batten, バッテンダーエックス): type 0 the X mark (four expanding layers),
+// Magnus von Grapple effects (batten, バッテンダーエックス): type 0 the X mark (three expanding layers),
 // types 1-2 the target reticle and its lock-on (EFF_batten_x), type 3 the rocket jets (EFF_batten_rocket).
 
 #include "driver/animdrv.h"

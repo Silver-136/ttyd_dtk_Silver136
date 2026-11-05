@@ -41,7 +41,8 @@ typedef struct MiniGameTbl {
 
 /**
  * Letters of the mini-game start banner in each language (Japanese, English, German, French, Spanish,
- * Italian): a letter texture then its drop-shadow texture for each letter, left to right.
+ * Italian): a letter texture then its drop-shadow texture for each letter, left to right. The first three
+ * pairs are the countdown numbers shown before the start letters.
  */
 u8 start_jp_tbl[] = {0x9E, 0xA5, 0x9F, 0xA6, 0xA0, 0xA7, 0xA1, 0xA8, 0xA2, 0xA9, 0xA3, 0xAA, 0xA4, 0xAB, 0xA2, 0xA9};
 u8 start_us_tbl[] = {0xA8, 0xAF, 0xA9, 0xB0, 0xAA, 0xB1, 0xAB, 0xB2, 0xAC, 0xB3, 0xAD, 0xB4, 0xAE, 0xB5, 0xAC, 0xB3};
@@ -69,13 +70,13 @@ MiniGameTbl finish_tbl[] = {{finish_jp_tbl, 0xc}, {finish_us_tbl, 0xc}, {finish_
 MiniGameTbl retire_tbl[] = {{retire_jp_tbl, 0xc}, {retire_us_tbl, 0xc}, {retire_lang3_tbl, 0xa}, {retire_lang4_tbl, 0xa}, {retire_lang5_tbl, 0x10}, {retire_lang6_tbl, 0xa}};
 MiniGameTbl* type_tbl[] = {start_tbl, finish_tbl, retire_tbl};
 #else
-/** Each banner's per-language letter list and its length in bytes; type_tbl picks the banner type. */
+/** Each banner's letter list (letter and shadow texture per letter); one set for all languages before US. */
 u8 start_tbl[16] = "hifgdez{}~jkwx}~";
 u8 finish_tbl[12] = "norsuvrs|{pq";
 u8 retire_tbl[] = {0x79, 0x78, 0x6C, 0x6D, 0x7F, 0x7E, 0x74, 0x73, 0x79, 0x78, 0x6C, 0x6D};
 /**
  * Starting animation state of each letter of the start, finish and retire banners;
- * later builds set these in effMiniGameEntry instead.
+ * US and later set these in effMiniGameEntry instead.
  */
 u8 start_type[] = {0x00, 0x00, 0x00, 0x14, 0x14, 0x14, 0x14, 0x14};
 u8 finish_type[] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x00, 0x00};
@@ -203,8 +204,9 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /**
- * Per frame: runs the banner's state machine with its sounds (SFX ids 0x8D1/0x8D2),
- * deletes the effect when finished, and registers the 2D draw callback.
+ * Per frame: runs the banner's state machine with its sounds (EVT_GAME_COUNT1 per countdown number,
+ * EVT_GAME_START1 for the start letters), deletes the effect when finished or on a soft delete, and
+ * registers the 2D draw callback.
  */
 void effMiniGameMain(EffectEntry* effect) {
     EffMiniGameWork* work = effect->userdata;
@@ -450,7 +452,10 @@ void effMiniGameMain(EffectEntry* effect) {
     }
 }
 
-/** Draws the banner text pieces as 2D textured quads, choosing the texture set for the current language. */
+/**
+ * Draws the banner text pieces as 2D textured quads, shadow pass first; from US on the texture set follows the
+ * current language.
+ */
 void effMiniGameDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffMiniGameWork* work = effect->userdata;

@@ -19,7 +19,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-/** 48x48 four-point flash the odd shard types add at the end of their glint cycle; its edges fade out. */
+/** Four-point flash (64 units across) the odd shard types add at the end of their glint cycle; its edges fade out. */
 static effN64Vtx size48x48_tex32x32_vtx[5] = {
     {-32, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -32, 0, 1024, 0, 255, 255, 255, 0},
@@ -34,7 +34,7 @@ void effGlassMain(EffectEntry* effect);
 /**
  * Spawns one tumbling glass shard at (x, y, z) with a random velocity and spin.
  * Types 0-1 are white and 2-3 are green; the type parity picks the texture column.
- * Used by effFreezeMain, barrier units in aji/las/moo, evt_eff.
+ * Used by effFreezeMain, the Yux units (aji, moo, mri, tst), Sir Grodus (las) and evt_eff64.
  */
 EffectEntry* effGlassN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

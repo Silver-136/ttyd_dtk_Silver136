@@ -20,7 +20,7 @@ s32 mahojin_rate;
  * Animation names for the seven star pieces around the magic circle, three per piece:
  * appear (A_2), shown (S_2) and already placed (S_3).
  * A new piece plays its appear animation and then S_2;
- * pieces already placed when the effect starts show S_3 at once, or S_2 for types 7 and 8.
+ * pieces already placed when the effect starts fade in showing S_3, or S_2 for types 7 and 8.
  */
 static const char* name_tbl[] = {
     "A_2_1", "S_2_1", "S_3_1", "A_2_2", "S_2_2", "S_3_2", "A_2_3", "S_2_3", "S_3_3", "A_2_4", "S_2_4",
@@ -65,8 +65,8 @@ static void callback(MapTevCallbackInfo* info) {
 }
 
 /**
- * Spawns the magic circle (2 work records: front and back animation) at (x, y, z); type is stored.
- * Called from evt_eff ("mahojin").
+ * Spawns the magic circle at (x, y, z): two records for the circle (each with a front and a back pose), plus one
+ * per star piece, type of them (at most 7; type 8 shows all 7 as already placed). Called from evt_eff ("mahojin").
  */
 EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -126,8 +126,9 @@ EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /**
- * Per frame: sets up the omote/ura animations, advances them, switches to the "S_1" animation after the loop,
- * and fades out and deletes the effect on a delete request.
+ * Per frame: sets up the omote/ura animations, switches the circle to S_1/S_4 after the first loop, brings in
+ * the star pieces, for type 7 fades in the purple tint once the last piece has played, and fades out and deletes
+ * the effect on a delete request.
  */
 void effMahojinMain(EffectEntry* effect) {
     EffMahojinWork* p;
@@ -282,8 +283,8 @@ void effMahojinMain(EffectEntry* effect) {
 }
 
 /**
- * Draws the magic circle's front and back animation poses at the effect position,
- * applying the purple tint callback.
+ * Draws the magic circle's front poses, then its back poses, at the effect position, star pieces sorted by depth,
+ * with fog off; in the second pass it also calls each piece's attached draw function (gor_01's star stones).
  */
 void effMahojinDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;

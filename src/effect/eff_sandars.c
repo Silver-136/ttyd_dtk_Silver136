@@ -1,5 +1,5 @@
 // Sandars: explosion; types 0-4 spawn a bomb burst (types 3 and 4 also play the EFF_bakuhatu "explosion" animation);
-// type 5 is a line of growing, spinning sprites.
+// type 5 is a line of growing sprites (the last one spins).
 
 #include "eff/eff_sandars.h"
 #include "driver/animdrv.h"
@@ -25,7 +25,7 @@ static u8 scale_data[] = { 0, 0, 0, 13, 28, 44, 60, 75, 89, 101, 111, 117, 120, 
 /**
  * Spawns the effect at (x, y, z).
  * Types 0-2 are field bursts (small, then larger) and 3/4 the battle bomb-game success/failure;
- * type 5 allocates 6 records for the steam sprites, with `radius` as their direction in degrees.
+ * type 5 allocates 6 records (the effect plus 5 steam sprites), with `radius` as their direction in degrees.
  * Callers include Bobbery's party attack, the Toad audience and the bomb minigame.
  */
 EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
@@ -220,7 +220,7 @@ void effSandarsDisp(CameraId cameraId, void* param) {
     animPoseDrawMtx(work->poseId, view, 3, 0.0f, 4.0f);
 }
 
-/** Draws the type 5 steam sprites as camera-facing textured quads, each spinning around its own centre. */
+/** Draws the type 5 steam sprites as camera-facing textured quads, each rotated by its own angle (only the last one spins). */
 void effSandarsDisp2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffSandarsWork* work;

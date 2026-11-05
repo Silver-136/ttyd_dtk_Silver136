@@ -1,5 +1,5 @@
 // Peach speech bubble (fukidashi: speech balloon) placed next to the speaker's head; types 0-2.
-// effSetPeachFukiBatu sets the name of the cross ("batu") mark.
+// effSetPeachFukiBatu turns on the cross ("batu") mark of the bubble effect with a given name.
 
 #include "version.h"
 #include "eff/eff_peach_fukidashi.h"
@@ -27,7 +27,6 @@ typedef struct EffPeachFukidashiWork {
 } EffPeachFukidashiWork;
 
 /** place the bubble next to the speaker's head, rotated around the camera's view axis */
-// place the bubble next to the speaker's head, rotated around the camera's view axis
 static inline void _setPosition(EffPeachFukidashiWork* work, f32 offset) {
     CameraEntry* camera;
     Vec axis;
@@ -143,7 +142,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     // red cross over the icon
     if (work->flags & PEACH_FUKI_FLAG_CROSS) {
 #if VERSION >= VERSION_US
-        char text[32] = "ﾗ"; // US: Latin-1 multiplication sign
+        char text[32] = "ﾗ"; // US and later: Latin-1 multiplication sign
 #else
         char text[32] = "×";
 #endif
@@ -164,7 +163,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-/** Sets the name of the cross (batu) mark; rels/aji/src/aji_17.c calls it from an event script. */
+/** Turns on the cross (batu) mark of the bubble effect named `name`; rels/aji/src/aji_17.c calls it from an event script. */
 void effSetPeachFukiBatu(const char* name) {
     ((EffPeachFukidashiWork*)effNameToPtr(name)->userdata)->flags |= PEACH_FUKI_FLAG_CROSS;
 }

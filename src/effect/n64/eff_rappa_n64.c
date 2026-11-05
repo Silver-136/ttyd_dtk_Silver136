@@ -25,7 +25,7 @@ typedef struct EffRappaN64Work {
     s32 frame;    // 0x34
 } EffRappaN64Work;
 
-/** RGB colours the trumpet sparks cycle through (pinks, purples and blues), three bytes per step. */
+/** RGB colours the trumpet sparks cycle through (12 pastel steps around the colour wheel), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
@@ -147,7 +147,7 @@ static inline GXColor mkcol(u8 r, u8 g, u8 b, u8 a) {
 
 /**
  * Draws each spark as a camera-facing 16x16 quad of texture 0x1D in a flat colour from color_rotation_data;
- * each spark is one step further along the table and the whole set advances 3 steps per frame,
+ * each spark is one step further along the table and the whole set advances one step (3 bytes) per frame,
  * so the colours cycle.
  */
 void effRappaDisp(CameraId cameraId, void* payload) {

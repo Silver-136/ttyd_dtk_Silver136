@@ -1,4 +1,4 @@
-// Kiss effect at a point; types 0-5, type 4 lasts longer, type 3 adds stardust and type 5 adds a stamp effect.
+// Kiss effect at a point; types 0-5, type 4 lasts longer and ends with stardust, type 5 adds a stamp effect.
 
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -72,7 +72,7 @@ static u8 color_rotation_data[] = {
 
 /**
  * Spawns a kiss at (x, y, z) facing `angle`: a lip mark plus hearts; type 4 lasts 60 frames instead of 40.
- * Type 5 also spawns a PM64 stamp. Spawned by event scripts in gon, gor and mri.
+ * Type 5 also spawns a PM64 stamp. Spawned by event scripts (partner battle moves, gon, gor, mri, tou, win).
  */
 EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;
@@ -148,7 +148,10 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     return effect;
 }
 
-/** Moves the hearts with decay, fades them over the last 15 frames, and for type 4 ends with a stardust puff. */
+/**
+ * Moves the hearts with decay, fades them over the last 15 frames (not type 4), and for type 4 ends with a
+ * stardust puff.
+ */
 void effKissMain(EffectEntry* effect) {
     KissWork* work = effect->userdata;
     Vec pos;
@@ -453,7 +456,7 @@ void effKissDisp(CameraId cameraId, void* payload) {
     }
 }
 
-/** Draws the small pink hearts (texture 20) around the kiss. */
+/** Draws the small pink hearts (texture 20) of types 4 and 5. */
 void effKissDisp2(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     KissWork* work = effect->userdata;

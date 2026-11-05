@@ -1,5 +1,6 @@
 // Stage clear banner: letter sprites pop in one by one with confetti and camera shake; type 0 is the stage-clear
-// text (per language), type 1 a shorter variant. effStageClearEndChk reports when it has finished.
+// text (per language), type 1 the shorter goal-in text (Japanese only; other languages get the minigame effect).
+// effStageClearEndChk reports when it has finished.
 
 #include "version.h"
 #include "eff/eff_minigame.h"
@@ -63,7 +64,7 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 #endif
 
-/** Letter textures of the stage-clear banner, Japanese then English, each with a matching shadow list. */
+/** Letter textures of the stage-clear banner for each language, each with a matching shadow list; -1 is a gap. */
 #if VERSION >= VERSION_US
 static s16 tex_jp[] = {128, 129, 130, 131, 132, 133, 134, 135};
 s16 tex_shadow_jp[] = {136, 137, 138, 139, 140, 141, 142, 143};
@@ -84,7 +85,7 @@ typedef struct TexSet {
 } TexSet;
 /** Banner letters, shadows and letter count for each language. */
 static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shadow_us, 14 }, { tex_lang3, tex_shadow_lang3, 12 }, { tex_lang4, tex_shadow_lang4, 16 }, { tex_lang5, tex_shadow_lang5, 12 }, { tex_lang6, tex_shadow_lang6, 8 } };
-/** Rainbow (niji) texture laid over the banner letters, Japanese then English. */
+/** Rainbow (niji) texture laid over the banner letters, one per language. */
 u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
 #endif
 
@@ -103,7 +104,7 @@ EVT_END()
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
 s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
 #endif
-/** Banner letters, shadows and letter count for each language. */
+/** Banner letters and shadows, Japanese then English (indexed by language * 2). */
 #if VERSION >= VERSION_JP
 static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
 #endif

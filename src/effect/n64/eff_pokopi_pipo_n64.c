@@ -1,5 +1,5 @@
-// Paper Mario 64 effect: a green blob lobbed from a start point to an end point along an arc,
-// squashing and stretching as it moves; lasts `duration` frames plus a fade-out.
+// Paper Mario 64 effect: a blob lobbed from a start point to an end point along an arc,
+// squashing and stretching when it lands; lasts `duration` frames plus 60 (alpha stays 255).
 
 #include "eff/n64/eff_pokopi_pipo_n64.h"
 #include "eff/eff_n64.h"
@@ -104,8 +104,9 @@ EffectEntry* effPokopiPipoN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, 
 }
 
 /**
- * Moves the blob under gravity (-0.2 per frame), bounces it off a floor at height 14.3,
- * and at the end of the flight plays a squash-and-stretch table; deletes 60 frames after the flight.
+ * Moves the blob under gravity (-0.2 per frame), stops its fall at a floor at height 14.3 (vertical speed zeroed),
+ * and at the end of the flight reverses its vertical speed and plays a squash-and-stretch table before moving on;
+ * deletes 60 frames after the flight.
  */
 void effPokopiPipoMain(EffectEntry* effect) {
     EffPokopiPipoN64Work* work = effect->userdata;
@@ -156,7 +157,10 @@ void effPokopiPipoMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effPokopiPipoDisp, effect);
 }
 
-/** Draws the blob as a camera-facing, spinning quad (texture 0x95 for type 0, otherwise 0x96). */
+/**
+ * Draws the blob as a camera-facing, spinning quad (texture 0x95 for type 0, otherwise 0x96); the TEV stage
+ * replaces with the texture, so the colour set in TEVREG0 has no effect.
+ */
 void effPokopiPipoDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;

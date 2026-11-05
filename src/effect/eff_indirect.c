@@ -29,8 +29,9 @@ typedef struct EffIndirectWork {
 } EffIndirectWork;
 
 /**
- * Spawns a screen distortion centred at (x, y, z), allocating a 64x64 IA8 capture buffer; type 0-1.
- * duration is the lifetime in frames (1000 or more is endless). Spawned by scripts (tik, battle items).
+ * Spawns a screen distortion centred at (x, y, z), allocating a 64x64 IA8 buffer (loaded as a third texture only
+ * in the early demos); type 0-1. duration is the lifetime in frames (1000 or more is endless). Spawned by scripts
+ * (tik, battle items, sac_suki) and by eff_queen2.
  */
 EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -96,7 +97,10 @@ void effIndirectMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effIndirectDisp, effect);
 }
 
-/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
+/**
+ * Copies the frame buffer into a texture and redraws it over the point, projected from the quad's position and
+ * masked by the type's texture. No indirect TEV stage is set up (the early demos only load an indirect matrix).
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #else

@@ -26,8 +26,8 @@ typedef struct EffThunderflareN64Elem {
 } EffThunderflareN64Elem;
 
 /**
- * 16x16 quad drawn for each spark, white at the top shading to red at the bottom,
- * followed by an unused larger copy turned 45 degrees.
+ * 16x16 quad drawn for the even sparks, followed by a 24x24 copy with its texture turned 45 degrees for the
+ * odd sparks. The vertex colours (white top, red bottom) are not used: the draw has no colour channel.
  */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 250, 250, 250, 255},
@@ -43,7 +43,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effThunderflareMain(EffectEntry* effect);
 void effThunderflareDisp(CameraId cameraId, void* payload);
 
-/** Spawns a glowing flare at (x, y, z). Used by the Kamec units (tik, tou2, las) and event scripts. */
+/** Spawns a glowing flare at (x, y, z). Used by the Kamec units (tik, tou2, las, tst), the thunder effect and event scripts. */
 EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffThunderflareN64Elem* work;
@@ -97,7 +97,7 @@ EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z
 }
 
 /**
- * The glow fades in over 20 frames and flickers (half alpha on odd frames);
+ * The first work's alpha fades in over 20 frames and halves on odd frames, but the draw never reads it;
  * the lifetime counts down only from below
  * 100. Each spark spirals in toward the centre on a sphere, its distance shrinking 2-8 units per frame while it grows
  * brighter and smaller, and vanishes on reaching the centre. Deletes when the lifetime runs out.
@@ -165,7 +165,7 @@ void effThunderflareMain(EffectEntry* effect) {
 }
 
 /**
- * Draws each remaining spark as a camera-facing 16x16 quad of texture 0x55,
+ * Draws each remaining spark as a camera-facing quad of texture 0x55 (16x16 even, 24x24 odd sparks),
  * its colour mixed between the work's colour pair by the texture, with the spark's own alpha.
  */
 void effThunderflareDisp(CameraId cameraId, void* payload) {

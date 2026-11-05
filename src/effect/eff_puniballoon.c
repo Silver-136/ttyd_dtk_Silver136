@@ -19,7 +19,7 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect);
 
 /**
  * Spawns a Puni balloon (type 0) or its pop burst (type 1) at (x, y, z) scaled by `scale`;
- * used by the Great Tree (mri) Puni scenes and evt_eff ("puniballoon").
+ * used by the Great Tree (mri) Puni scenes and evt_eff ("puni_balloon").
  */
 EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -65,7 +65,10 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
-/** Per frame: advances the frame counter, ends the effect after the pop and registers the draw callback. */
+/**
+ * Per frame: advances the frame counter and the burst pieces; a balloon (type 0) lasts until soft-deleted, then
+ * pops 16 frames later into a type 1 burst, which ends after 30 frames; registers the draw callback.
+ */
 void effPuniBalloonMain(EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     Vec pos;

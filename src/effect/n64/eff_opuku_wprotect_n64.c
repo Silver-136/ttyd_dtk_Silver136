@@ -86,7 +86,7 @@ EffectEntry* effOpukuWprotectN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
 }
 
 /**
- * Fades the shield in and out, pulses its color, scrolls the texture and moves the bubbles upward;
+ * Fades the shield in (type 0 also fades out over its last 16 frames), pulses its color, scrolls the texture and moves the bubbles upward;
  * at the end of a type 1 shield it spawns two water-damage splashes above the shield.
  */
 void effOpukuWprotectMain(EffectEntry* effect) {
@@ -181,8 +181,8 @@ void effOpukuWprotectMain(EffectEntry* effect) {
 }
 
 /**
- * The water shield's 40-vertex box (position, texture coordinate, grey colour),
- * drawn with the upper vertices jittering every frame.
+ * The water shield's 40-vertex box (position, texture coordinate, per-vertex grey or tinted colour),
+ * drawn with every vertex above the base (y != 0) jittering every frame.
  */
 PointData point_data[40] = {
     {25, 4, -25, 1025, 72, 176, 176, 176},
@@ -236,7 +236,7 @@ static effN64Vtx size8x8_tex32x32_vtx[4] = {
 };
 
 /**
- * Draws the shield as a 40-point box whose upper vertices jitter each frame (texture 0x90),
+ * Draws the shield as a 40-point box whose vertices above the base jitter each frame (texture 0x90),
  * plus the rising bubble sprites (texture 0x91).
  */
 void effOpukuWprotectDisp(CameraId cameraId, void* param) {

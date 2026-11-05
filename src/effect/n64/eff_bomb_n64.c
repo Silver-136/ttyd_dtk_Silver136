@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: bomb blast, a flash and burst that spawns smoke and confetti; types 0-2 pick the size.
+// Paper Mario 64 effect: bomb blast, a flash and burst that spawns smoke and confetti; types 0-2 pick the size,
+// types 3-5 are the same sizes with the other smoke (effKemuri8N64Entry type + 3).
 
 #include "eff/n64/eff_bomb_n64.h"
 #include "eff/eff_n64.h"

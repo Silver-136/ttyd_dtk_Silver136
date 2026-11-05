@@ -102,7 +102,7 @@ void effRubbleDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a rubble chunk at (x, y, z) thrown with velY and gravity toward groundY.
- * Spawned by event scripts through evt_eff.
+ * Reached only through evt_eff64 "rubble_n64"; no script callers found.
  */
 EffectEntry* effRubbleN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 groundY, f32 velY, f32 gravity, f32 scale) {
     EffectEntry* effect;

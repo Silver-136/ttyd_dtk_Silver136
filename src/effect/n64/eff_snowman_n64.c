@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: a snowman that drops in, then hops along a preset path kicking up snow dust and vapor.
+// Paper Mario 64 effect: a snowman that drops in, then hops along a preset path kicking up snow dust and vapor
+// (the body itself is not drawn).
 
 #include "version.h"
 #include "eff/eff_n64.h"
@@ -31,14 +32,14 @@ typedef struct EffSnowmanN64Work {
 } EffSnowmanN64Work;
 
 /**
- * Width of the snowman in percent over a hop: it crouches, stretches as it leaves the ground,
- * then settles. The height is set to the opposite, so it keeps its volume.
+ * Width of the snowman in percent over a hop: it narrows to 70 (taller), widens to 120 (flatter) as it leaves
+ * the ground, then eases back. The height is set to the opposite (200 minus the width).
  */
 static s8 jump_hscale_data[] = {100, 90, 82, 76, 72, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 /** Width in percent over the 27-frame landing squash, written as characters ('d' is 100). */
 static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";
 
-/** Width in percent over the long spinning hop: a long crouch, then the stretch as it takes off. */
+/** Width in percent over the long spinning hop: it narrows to 70 and holds there, then widens as it takes off. */
 static u8 jump2_hscale_data[] = {100, 90, 82, 76, 72, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 
 /** Turn in degrees over the long spinning hop: two sways back and forth before it leaves the ground. */
@@ -70,7 +71,7 @@ void effSnowmanDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a snowman at (x, y, z); a lifetime of 0 or less lasts until soft-deleted.
- * Spawned by event scripts through evt_eff.
+ * Reached only through evt_eff64 "snowman_n64"; no script callers found.
  */
 EffectEntry* effSnowmanN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -116,7 +117,7 @@ EffectEntry* effSnowmanN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
 /**
  * Fades in over 16 frames (and out over 16 after a delete request; lifetime 1000 means endless) and turns
  * while moving sideways.
- * States: 0 a 27-frame landing squash, 1 a hop (moves from its 8th frame), 3 a spinning hop,
+ * States: 0 a 27-frame landing squash, 1 a hop (moves from its 8th frame), 3 a spinning hop (no phase enters it),
  * 2 airborne under gravity; each landing starts the next phase of a fixed route:
  * squash, three diagonal hops, one long hop along +X, then stop.
  * Every 8 frames it puffs a vapor cloud (effVaporN64Entry) and snow dust (effSnowDustN64Entry type 1).

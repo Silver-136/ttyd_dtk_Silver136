@@ -25,7 +25,7 @@ typedef struct EffTeresaWork {
 /**
  * Spawns a Boo sprite at (x, y, z).
  * Type 0 starts at scale 30 and plays a sound on creation (the Creepy Steeple caller);
- * type 1 starts small and black (the Shadow Queen shockwave in the effect table).
+ * type 1 starts small and black (twice in the Shadow Queen charge-up, eff_queen2).
  */
 EffectEntry* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;

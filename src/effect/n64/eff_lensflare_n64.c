@@ -58,7 +58,7 @@ void effLensflareDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a lens flare at (x, y, z): one main record plus five orbiting streak elements with random angle
- * and size. lifetime <= 0 keeps it until deleted.
+ * and size. lifetime <= 0 (or 100 and above: only values below 100 count down) keeps it until deleted.
  * Played from map scripts in gor, tik and las via evt_eff64 "lensflare_n64".
  */
 EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {

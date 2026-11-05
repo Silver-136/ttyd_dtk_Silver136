@@ -17,7 +17,7 @@
 /**
  * Wobble frames of the lightning bolt (yuragi, "sway"), one row per frame:
  * twelve sideways offsets of the bolt's points,
- * then twelve ribbon widths that thin it out toward the far end. Used by types 0 and 2.
+ * then twelve ribbon widths, one per point. Used by types 0 and 2.
  */
 u8 yuragi_data[11][24] = {
     {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 9, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -56,9 +56,10 @@ void effPokopiThunderDisp(CameraId cameraId, void* param);
 /**
  * Spawns a lightning bolt from (x, y, z) to (x2, y2, z2) scaled by scale,
  * lasting duration frames (<= 0 means until deleted).
- * Type 10 and above (type mod 10 picks the shape) draws with camera 8 instead of 4.
+ * Type 10 and above (type mod 10 picks the shape) draws with CAMERA_2D instead of CAMERA_3D.
  * Returns NULL if the two points coincide.
- * Used by Dark Puff-type units, the X-Naut leader fight and aji_10 via evt_eff64.
+ * Used by Dark Puff-type units and aji_10 via evt_eff64, and from C by las_29 and the X-Naut leader and
+ * Shadow Queen units.
  */
 EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 x2, f32 y2, f32 z2, f32 scale) {
     EffectEntry* effect;

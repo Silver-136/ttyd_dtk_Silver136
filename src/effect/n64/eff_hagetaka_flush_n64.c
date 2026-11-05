@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: hagetaka flash, a 10-frame green twinkle that grows and then shrinks over its last 4
+// Paper Mario 64 effect: hagetaka flash, a 10-frame yellow twinkle that grows and then shrinks over its last 4
 // frames; itemdrv spawns it at random around coins and Pianta tokens.
 
 #include "version.h"
@@ -24,7 +24,6 @@ typedef struct EffHagetakaFlushN64Work {
     f32 scale;     // 0x2C
 } EffHagetakaFlushN64Work;
 
-/** Camera-facing 16x16 twinkle sprite. */
 #if VERSION <= VERSION_DEMO_JP
 static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,
@@ -33,6 +32,7 @@ static u8 color_rotation_data[] = {
 };
 #endif
 
+/** Camera-facing 16x16 twinkle sprite. */
 static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, -8, 0, 0, 1024, 0, 0, 0, 255},
     {8, -8, 0, 2048, 1024, 0, 0, 0, 255},
@@ -53,8 +53,9 @@ void effHagetakaFlushMain(EffectEntry* effect);
 void effHagetakaFlushDisp(CameraId cameraId, void* param);
 
 /**
- * Spawns a short green twinkle at (x, y, z) that lasts 10 frames.
- * itemdrv.c spawns it randomly around field items 0x79 and 0x7A, and event scripts spawn it via evt_eff.
+ * Spawns a short twinkle at (x, y, z) that lasts 10 frames; it is drawn in the color_rotation_data colours
+ * (the green r/g/b set here is never read).
+ * itemdrv.c spawns it randomly around coins and Pianta tokens, and event scripts spawn it via evt_eff64.
  */
 EffectEntry* effHagetakaFlushN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

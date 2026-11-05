@@ -84,7 +84,8 @@ static effN64Vtx eff_snowfall_v[] = {
 };
 
 /**
- * Wraps a particle back into the box of half-width w and half-height h around the camera target;
+ * Wraps a particle back into the box of half-width w and half-height h around a centre taken from the camera
+ * (target x, the mean of target and eye y, and (target z + viewDistance) / 2 for z);
  * below the box it either wraps to the top or, when life < 100, stops and hides the particle.
  */
 void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
@@ -179,7 +180,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
  * Moves the particles by their velocity (after each one's start delay)
  * and wraps them around the camera with cam_clip_chk;
  * the life only counts down from below 100, fading alpha over the last 10 frames.
- * US and PAL draw on layer 10 (the battle camera in battle), JP on layer 10, the early demos on layer 2.
+ * US and later draw on layer 10 (on CAMERA_3D_EFFECTB in battle), JP on layer 10, the early demos on layer 2.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effSnowfallMain(EffectEntry* effect) {

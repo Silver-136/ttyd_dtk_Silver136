@@ -46,7 +46,7 @@ effN64Vtx size32x32_tex32x32_heart_vtx[] = {
     {-16, 16, 0, 0, 1024, 255, 255, 255, 255},
 };
 
-/** 16x16 quad for the smaller hearts or flowers that float up beside the large one. */
+/** 16x16 quad for the small heart drawn instead of the large one for type 2 (no digits). */
 effN64Vtx size16x16_tex32x32_heart_vtx[] = {
     {-8, -8, 0, 0, 0, 255, 255, 255, 255},
     {8, -8, 0, 1024, 0, 255, 255, 255, 255},
@@ -106,7 +106,9 @@ void effRecoverHeartMain(EffectEntry* effect);
 void effRecoverHeartDisp(CameraId cameraId, void* payload);
 
 /**
- * Spawns a rising heart sprite at (x, y, z) lasting 46 frames; a negative count selects the alternate texture.
+ * Spawns one rising heart (types 0 and 2) or flower (other types) sprite at (x, y, z) lasting 46 frames;
+ * a negative count selects the alternate heart texture and digit layout. The setup loop's branch for pieces
+ * after the first never runs (the effect has one header and one piece).
  * Spawned by event scripts through evt_eff.
  */
 EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
@@ -232,7 +234,8 @@ void effRecoverHeartMain(EffectEntry* effect) {
  * Draws each piece camera-facing: types 0 and 2 use heart texture 0x50 (0x51 when `flag` is set),
  * others the flower texture 0x52.
  * Except for type 2, the first piece is a large 32x32 icon with the amount drawn on it from digit strip 0x53:
- * one digit under 10, otherwise two (with `flag` set the left glyph is strip slot 10 instead of the tens digit).
+ * one digit under 10, otherwise two (with `flag` set it always draws two, the left glyph being strip slot 10
+ * instead of the tens digit). Type 2 draws a 16x16 heart without digits.
  */
 void effRecoverHeartDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;

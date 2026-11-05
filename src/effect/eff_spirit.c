@@ -168,7 +168,7 @@ void effSpiritMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSpiritDisp, effect);
 }
 
-/** Draws the orb as one additive, camera-facing quad tinted with the current colour. */
+/** Draws the orb as one camera-facing quad tinted with the current colour. */
 void effSpiritDisp(CameraId cameraId, EffectEntry* effect) {
     EffSpiritWork* work = effect->userdata;
     CameraEntry* camera;

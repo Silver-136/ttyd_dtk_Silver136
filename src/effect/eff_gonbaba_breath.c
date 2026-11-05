@@ -1,6 +1,6 @@
 // Fire breath (gonbaba_breath, ファイアブレス): type % 10 picks the colour set in col_tbl (0 normal, 1 poison, 2 mega,
 // 3 cold, 4 confusion, 5 sleep, 6 mini, 7 Bowser); each type 0-7 also spawns its companion layer as type + 10.
-// Particles drift out along a yaw. Used by Hooktail, Bonetail and Bowser.
+// Particles drift out along a yaw. Used by Hooktail, Gloomtail, Bonetail and Bowser.
 
 #include "version.h"
 #include "eff/eff_gonbaba_breath.h"
@@ -152,9 +152,10 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
 #pragma opt_propagation reset
 
 /**
- * Spawns a breath of the given type (0-7, plus companion layers 10-17) at (x, y, z) pointing along yaw;
+ * Spawns a breath of the given type (0-7, plus companion layers 10-17) at (x, y, z); the last argument (named
+ * yaw) is stored as the breath's scale, and the direction (work->yaw) starts at 0 for callers to set.
  * life <= 0 keeps it endless.
- * Spawned by the Hooktail Castle, Pit of 100 Trials and Palace of Shadow bosses and event scripts.
+ * Spawned via evt_eff by the dragon bosses (gon, jon, las, tst) and Bowser (las, tou2), and by koopa.c.
  */
 EffectEntry* effGonbabaBreathEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     EffectEntry* effect;

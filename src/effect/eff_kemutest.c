@@ -1,4 +1,5 @@
-// Burst of smoke (kemu test) around a point with a stage-burst sound; the type picks the smoke pattern.
+// Burst of smoke (kemu test) around a point; the type picks the smoke pattern (type 3 adds a stage-burst sound and
+// confetti).
 
 #include "version.h"
 #include "eff/eff_kemu_test.h"
@@ -58,9 +59,9 @@ static const KemuF3 kemu_c = { { 0.5f, 0.3f, 0.8f } };
 static const KemuF3 kemu_a = { { 0.0f, 10.0f, 10.0f } };
 /** Starting heights of the three type 19 grey puffs, rising one above the other. */
 static const KemuF3 kemu_b = { { 0.0f, 5.0f, 20.0f } };
-/** Launch angles in degrees of the type 5 puffs, fanned out from the centre at speed 3. */
+/** Launch angles in degrees of the three type 5 puffs (entries 1-3; entry 0 is not read), at speed 3. */
 static const KemuF4 kemu_d = { { 0.0f, 120.0f, 180.0f, 240.0f } };
-/** Launch angles in degrees of the three type 21 puffs, 120 degrees apart. */
+/** Launch angles in degrees of the two type 21 puffs (entries 1-2; entry 0 is not read), 120 degrees apart. */
 static const KemuF3 kemu_e = { { 0.0f, 120.0f, 240.0f } };
 /** X offsets of the three small type 22 puffs. */
 static const KemuF3 kemu_f = { { 0.0f, 5.0f, -5.0f } };
@@ -73,7 +74,10 @@ static const Vec kemu_pos = { 0.0f, 0.0f, 0.0f };
 /** Zero vector effKemuTestMain starts its per-frame scratch position from. */
 static const Vec kemu_tmp = { 0.0f, 0.0f, 0.0f };
 
-/** Sets the X and Z rotation used by type 11, which is drawn tilted rather than camera-facing. */
+/**
+ * Launch direction (degrees, plus 90) and half speed of the ten type 4 and 13 puffs; file scope in the early
+ * demos, statics in effKemuTestEntry from JP on.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static f32 bom_dir[10] = {10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f};
 static f32 bom_spd[10] = {2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f};
@@ -383,8 +387,8 @@ static void effKemuTestMain(EffectEntry* effect) {
 }
 
 /**
- * Spawns the smoke burst at (x, y, z): the type (0-19) picks the piece count and motion.
- * Spawned by the hammer motion (mot_hammer.c), partner code and event scripts.
+ * Spawns the smoke burst at (x, y, z): the type (0-22) picks the piece count and motion.
+ * Spawned by the hammer motion (mot_hammer.c), partner code, other effects and event scripts.
  */
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 #if VERSION >= VERSION_JP
@@ -783,7 +787,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
-// FAKE: zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them
+// FAKE: zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP and the early demos); without them
 // the object changes
 static __declspec(section ".rodata") const u32 gap_04_802FDD34_rodata[1] = {0};
 

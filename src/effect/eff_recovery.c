@@ -1,5 +1,6 @@
-// HP/FP recovery (type 0: HP heart, 1: FP flower, 4/5: large HP/FP): `amount` icons rise one after another with
-// shine sounds and sparkles; type 6 is the sparkle-only form.
+// HP/FP recovery (type 0: HP heart, 1: FP flower, 4/5: HP/FP MAX, 7/8: 0/1 without the closing stardust): a central icon with `amount` small icons that
+// spread into a ring, swirl and fall back into the centre, ending with a shine sound and stardust;
+// type 6 is the sparkle-only form.
 
 #include "version.h"
 #include "driver/camdrv.h"
@@ -184,7 +185,7 @@ MayaPoly recovery_effAnimRST[] = {
 
 /** Part list of the recovery icon animation. */
 MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
-/** Recovery icon animation (79 frames), started by effRecoveryEntry and drawn under each icon. */
+/** Recovery icon animation (79 frames), started by effRecoveryEntry; moves the central icon, its number and label. */
 MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
 
 void effRecoveryMain(EffectEntry* effect);
@@ -197,8 +198,9 @@ void effRecoveryDisp4(CameraId cameraId, void* param);
 
 /**
  * Spawns the HP/FP recovery icons at (x, y, z);
- * type selects HP, FP, large forms or sparkle-only and `amount` the icon count.
- * Called from battle_damage.c and battle_seq.c.
+ * type selects HP, FP, the MAX forms or sparkle-only and `amount` the icon count and shown number
+ * (types 2-6 set their own count).
+ * Called from battle code (battle_damage.c, battle_seq*.c, sac_genki.c), win_main.c and evt_eff.
  */
 EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -336,7 +338,10 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-/** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
+/**
+ * Per frame: after 10 frames sends the small icons out into a ring, swirls them and pulls them back into the
+ * centre; when all are back, plays the shine sound and stardust (not for types 7/8) and deletes the effect.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void effRecoveryMain(EffectEntry* effect) {
 #else
@@ -584,7 +589,7 @@ void effRecoveryMain2(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, effRecoveryDisp4, effect);
 }
 
-/** Draws the rising icons as textured quads. */
+/** Draws the central icon (moved by the animation) and the small icons in cycling colours as camera-facing quads. */
 void effRecoveryDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
@@ -695,8 +700,9 @@ void effRecoveryDisp(CameraId cameraId, void* param) {
 }
 
 /**
- * Draws the recovered amount above the icons for the HP/FP forms (types 0-3, 7, 8) with effNumberGX,
- * centred and facing the camera: number style 0 for HP (types 0, 2, 7), 1 for FP (types 1, 3, 8).
+ * Draws the recovered amount on the central icon for the HP/FP forms (types 0, 1, 7, 8) with effNumberGX,
+ * centred and facing the camera: number style 0 for HP, 1 for FP (the switch also lists types 2 and 3,
+ * which never register this callback).
  */
 void effRecoveryDisp2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -746,9 +752,9 @@ void effRecoveryDisp2(CameraId cameraId, void* param) {
 }
 
 /**
- * Draws the label for the large forms (types 4/5) as a camera-facing 108x40 quad, twice:
+ * Draws the label for the MAX forms (types 4/5) as a camera-facing 108x40 quad, twice:
  * a dark shadow offset by 2 units, then the label in pink for HP (type 4) or green for FP (type 5).
- * Texture 111/110 in US and PAL (173/172 when gp->language is 4), 0x8B/0x8A in JP and the early demos.
+ * Texture 111/110 in US and later (173/172 for LANGUAGE_SP), 0x8B/0x8A in JP and the early demos.
  */
 void effRecoveryDisp3(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -844,8 +850,8 @@ void effRecoveryDisp3(CameraId cameraId, void* param) {
 
 /**
  * Draws the sparkle-only form (type 6) camera-facing:
- * the first piece is a white glow (texture 18) that fades in to half alpha;
- * the others are sparkles (texture 20) pointed along their flight angle,
+ * the first piece is texture 18 (the HP heart) in white, fading in to half alpha;
+ * the others are texture 20 (the HP form's small icon) pointed along their flight angle,
  * their colour cycling through color_rotation_data.
  */
 void effRecoveryDisp4(CameraId cameraId, void* param) {

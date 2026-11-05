@@ -212,7 +212,10 @@ void effIbukiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effIbukiDisp, effect);
 }
 
-/** Draws the puffs from display lists, fading by per-puff alpha. */
+/**
+ * Draws the breath stream: the strip mesh from the display lists with two scrolling textures (mirrored for
+ * type != 0), then each released puff as a textured quad faded by its own alpha.
+ */
 void effIbukiDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 i;

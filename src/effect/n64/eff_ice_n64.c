@@ -57,7 +57,7 @@ static void effIceDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns eight ice shards at (x, y, z) that fly up and spin for 30 frames.
- * battle_damage.c spawns it on ice damage; event scripts also use it through evt_eff.
+ * battle_damage.c spawns it on ice damage; also reachable through evt_eff64 (no script uses that).
  */
 EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;

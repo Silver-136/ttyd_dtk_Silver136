@@ -1,4 +1,4 @@
-// The ice shards' face tables: one block in retail, each after its hermit table in the early demos (ICE_FACE selects one).
+// The ice shards' face tables: one block from JP on, each after its hermit table in the early demos (ICE_FACE selects one).
 #pragma once off
 #if !defined(ICE_FACE) || ICE_FACE == 1
 /** Ice shard 1: the top triangle of the block face's top-left quarter, with texture coordinates. */

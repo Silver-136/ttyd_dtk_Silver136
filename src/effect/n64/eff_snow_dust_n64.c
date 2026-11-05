@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: puffs of snowy dust; used by the freeze and Crystal Star effects.
+// Paper Mario 64 effect: puffs of snowy dust; used by the Crystal Star effect (eff_starstone) and las_29.
 
 #include "eff/n64/eff_snow_dust_n64.h"
 #include "eff/eff_magic1_n64.h"
@@ -64,7 +64,7 @@ static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, 8, 0, 0, 2048, 0, 0, 0, 255},
 };
 
-/** 32x32 glow diamond behind each sparkle: clear corners fading in to a solid centre vertex. */
+/** Glow diamond (64 units across) behind each sparkle: clear corners fading in to a solid centre vertex. */
 static effN64Vtx size32x32_tex32x32_vtx[5] = {
     {-32, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -32, 0, 1024, 0, 255, 255, 255, 0},
@@ -331,9 +331,9 @@ void effSnowDustMain(EffectEntry* effect) {
 
 /**
  * Draws each live particle camera-facing, scaled by its size and the effect alpha:
- * types 0/6 a 4x4 flake from texture 8 masked by scrolling texture 0x65, type 1 an 8x8 flake from 0x66,
- * types 2/3 a 12x12 frame from the 0x67 strip (type 2 picks the frame per particle),
- * and types 4/5 a 16x16 sparkle from 0x68 plus a 32x32 glow quad.
+ * types 0/6 a 4x4 flake shaped (alpha) by texture 8 and coloured by scrolling texture 0x65, type 1 an 8x8 flake
+ * shaped by 0x66 and coloured by 0x65, types 2/3 a 12x12 frame from the 0x67 strip (type 2 picks the frame per
+ * particle), and types 4/5 a 16x16 sparkle from 0x68 plus the glow diamond.
  */
 void effSnowDustDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

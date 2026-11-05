@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: a star that streaks across the screen toward a target point, leaving a trail of 8 copies.
+// Paper Mario 64 effect: a star that streaks across the screen toward a target point, leaving a dust trail.
 
 #include "version.h"
 #include "driver/camdrv.h"
@@ -47,7 +47,7 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
     {-30, 30, 0, 0, 2048, 0, 0, 0, 191},
 };
 
-/** 128x128 glow diamond around the star: clear corners fading in to a solid centre vertex. */
+/** Glow diamond (256 units across) around the star: clear corners fading in to a solid centre vertex. */
 effN64Vtx size128x128_tex32x32_vtx[] = {
     {-128, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -128, 0, 1024, 0, 255, 255, 255, 0},
@@ -58,7 +58,7 @@ effN64Vtx size128x128_tex32x32_vtx[] = {
 
 /**
  * Template for the star's dust trail: five pairs of top and bottom points, widening along the trail,
- * copied into the work and placed along the last eight frames' positions.
+ * copied into the work and placed by five of the eight stored frame matrices (3 to 7 frames back).
  */
 effN64Vtx shooting_dust_vtx[10] = {
     {0, 8, 0, 0, 0, 0, 0, 0, 191},
@@ -77,8 +77,8 @@ void effSstarMain(EffectEntry* effect);
 void effSstarDisp(CameraId cameraId, void* param);
 
 /**
- * Spawns a star at (x, y, z) flying toward (tx, ty, tz) at `speed` per frame.
- * Spawned by event scripts through evt_eff.
+ * Spawns a star at (x, y, z) flying toward (tx, ty, tz) at `speed` per frame; the life it computes from the
+ * distance is never counted down. Spawned by battle item scripts through evt_eff64 "sstar_n64".
  */
 EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, f32 speed) {
     EffectEntry* effect;
@@ -155,9 +155,9 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
 
 /**
  * Moves the star by its velocity.
- * Subtypes 2+ bounce off the ground below (hitCheckFilter):
- * each bounce keeps 60% of the fall speed and 70% of the sideways speed and spin,
- * then gravity (-0.5) and spin take over; 10 bounces end it.
+ * Subtypes 2+ bounce off the ground below (hitCheckFilter), but only once (the bounce clears `type`, which the
+ * test requires): it keeps 60% of the fall speed and 70% of the x and screen speed and spin,
+ * then gravity (-0.5) and spin take over; the 10-bounce end is never reached.
  * It also ends 300 units below Mario (in battle, below y = -300; the early demos only check Mario).
  * CAMERA_3D, layer 2.
  */
@@ -229,9 +229,9 @@ void effSstarMain(EffectEntry* effect) {
 }
 
 /**
- * Draws the star camera-facing: a 64x64 star from texture 9 in its colour plus a 128x128 glow, then,
- * until its second bounce, a five-segment dust trail built from the last eight frames' matrices with texture 0xA
- * (0xB for subtype 3).
+ * Draws the star camera-facing: a 60x60 star from texture 9 in its colour plus the glow diamond, then,
+ * while it has bounced at most once (always), a four-segment dust trail placed by five of the eight stored frame
+ * matrices with texture 0xA (0xB for subtype 3).
  */
 void effSstarDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

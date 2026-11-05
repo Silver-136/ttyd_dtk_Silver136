@@ -83,8 +83,8 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
 
 /**
  * Spawns 60 barrier shards around (x, y, z) for `life` frames (0 or less: until soft deleted).
- * Type 0 is the staff barrier breaking, 2 plays in reverse (shards flow inward); 1 is Peach's (Guess).
- * Used in the Palace of Shadow (las_29).
+ * Pattern names in the effect table: type 0 the staff barrier breaking, 1 Peach's transformation coming undone,
+ * 2 reverse playback (shards flow inward). Used in the Palace of Shadow (las_29, types 1 and 2).
  */
 EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

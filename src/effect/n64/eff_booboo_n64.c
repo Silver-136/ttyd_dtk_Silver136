@@ -137,7 +137,7 @@ GXColor boo_color0_tbl[] __attribute__((aligned(32))) = {
 };
 #endif
 
-/* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/texcoord indices, 32-byte padded), drawn with GXCallDisplayList */
+/* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/colour/texcoord indices, 32-byte padded), drawn with GXCallDisplayList */
 u32 boo_dl_0_0[] __attribute__((aligned(32))) = {0x98000A0E, 0x2B020714, 0x2A050B0F, 0x10020615, 0x2C050A10, 0x14020816, 0x2D050911, 0x15020817, 0x2E05090D, 0x0D020612, 0x28050A00, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 boo_dl_0_1[] __attribute__((aligned(32))) = {0x98000902, 0x01000100, 0x03000303, 0x0000001D, 0x18020C18, 0x1D020E1C, 0x19020D1B, 0x1A020D04, 0x06000306, 0x09000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 boo_dl_0_2[] __attribute__((aligned(32))) = {0x98000803, 0x00000018, 0x1D020E0B, 0x0B010519, 0x1C020E08, 0x1E01051A, 0x1B020C06, 0x0900001B, 0x1A020D00, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
@@ -439,7 +439,8 @@ static inline void booTexCommon(s32 id, GXTevColorArg d, GXTexObj* texObj) {
 
 /**
  * Loads the skin texture and TEV setup for a Boo type 0-9;
- * returns TRUE when the slot should be skipped because the map blend is black.
+ * for a slot with flag 8 while map entry 0 has MAP_ENTRY_BLEND it multiplies in the map blend colour,
+ * and returns TRUE (skip the slot) when that colour is black.
  */
 BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
     EffBoobooN64Work* work = effect->userdata;

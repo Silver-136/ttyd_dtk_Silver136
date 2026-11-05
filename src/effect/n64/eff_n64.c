@@ -1,5 +1,5 @@
 // Shared support for the Paper Mario 64 effects: texture loading, the effect set table and vertex/triangle helpers.
-// The demo build also stores a name, description and user list for each effect.
+// The early demos also store a description and a pattern-name list (per type) for each effect.
 
 #include "version.h"
 #include "eff/eff_n64.h"

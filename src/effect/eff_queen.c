@@ -101,7 +101,7 @@ void effQueenMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effQueenDisp, effect);
 }
 
-/** Draws the tornado pose in three segments scaled by 10. */
+/** Draws the camera-facing tornado pose in xlu modes 1-3 at draw scale 10. */
 void effQueenDisp(CameraId cameraId, EffectEntry* effect) {
     EffQueenWork* work = effect->userdata;
     Mtx mtx;

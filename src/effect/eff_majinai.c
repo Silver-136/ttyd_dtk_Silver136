@@ -1,4 +1,4 @@
-// Spell effect (majinai: charm/spell): plays the MOBJ_EFF_majinai animation while the map darkens and Mario glows,
+// Spell effect (majinai: charm/spell): plays the MOBJ_EFF_majinai animation while the map darkens and Mario stays lit,
 // with a stardust burst, then restores the map (states 0-3: load, darken, wait, restore). The type is stored, never read.
 
 #include "version.h"
@@ -44,8 +44,8 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /**
- * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
- * wait, restore) and deletes the effect when the animation has looped.
+ * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map while Mario's poses
+ * skip the map colour, wait for the loop, restore while fading out) and deletes the effect when the fade ends.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effMajinaiMain(EffectEntry* effect) {
@@ -85,7 +85,7 @@ void effMajinaiMain(EffectEntry* effect) {
             work->state++;
             break;
         case 1:
-            // darken the map and make Mario glow
+            // darken the map; Mario's poses skip the map colour
             map = mapGetWork();
             color = map->entries[0].color.r - 5;
             if (color < 64) {

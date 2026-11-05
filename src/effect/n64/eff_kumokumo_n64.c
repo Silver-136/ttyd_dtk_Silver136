@@ -63,7 +63,7 @@ GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
 };
 #endif
 
-/* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/texcoord indices, 32-byte padded), drawn with GXCallDisplayList */
+/* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/color/texcoord0/texcoord1 indices, 32-byte padded), drawn with GXCallDisplayList */
 u32 cloud_dl_0_0[] __attribute__((aligned(32))) = {0x98000E1E, 0x00001E1E, 0x1F00001F, 0x1F190001, 0x19191A00, 0x031A1A14, 0x00011414, 0x15000315, 0x150F0001, 0x0F0F1000, 0x0310100A, 0x00010A0A, 0x0B00030B, 0x0B050000, 0x00000600, 0x01010100, 0x00000303, 0x01000002, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 cloud_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00001F1F, 0x20000020, 0x201A0003, 0x1A1A1B00, 0x041B1B15, 0x00031515, 0x16000416, 0x16100003, 0x10101100, 0x0411110B, 0x00030B0B, 0x0C00040C, 0x0C060001, 0x01010700, 0x02040401, 0x00000202, 0x02000005, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 cloud_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00002020, 0x21000021, 0x211B0004, 0x1B1B1C00, 0x031C1C16, 0x00041616, 0x17000317, 0x17110004, 0x11111200, 0x0312120C, 0x00040C0C, 0x0D00030D, 0x0D070002, 0x04040800, 0x01060602, 0x00000505, 0x03000007, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
@@ -123,7 +123,7 @@ GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
 };
 #endif
 
-/* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/texcoord indices, 32-byte padded), drawn with GXCallDisplayList */
+/* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/color/texcoord0/texcoord1 indices, 32-byte padded), drawn with GXCallDisplayList */
 u32 batten_dl_0_0[] __attribute__((aligned(32))) = {0x98000E1E, 0x00021E1E, 0x1F00021F, 0x1F190000, 0x19191A00, 0x041A1A14, 0x00001414, 0x15000415, 0x150F0000, 0x0F0F1000, 0x0410100A, 0x00000A0A, 0x0B00040B, 0x0B050000, 0x00000600, 0x01010100, 0x00020303, 0x01000202, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 batten_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00021F1F, 0x20000220, 0x201A0004, 0x1A1A1B00, 0x051B1B15, 0x00041515, 0x16000516, 0x16100004, 0x10101100, 0x0511110B, 0x00040B0B, 0x0C00050C, 0x0C060001, 0x01010700, 0x03040401, 0x00020202, 0x02000205, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 batten_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00022020, 0x21000221, 0x211B0005, 0x1B1B1C00, 0x041C1C16, 0x00051616, 0x17000417, 0x17110005, 0x11111200, 0x0412120C, 0x00050C0C, 0x0D00040D, 0x0D070003, 0x04040800, 0x01060602, 0x00020505, 0x03000207, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
@@ -178,7 +178,8 @@ void effKumokumoDisp(CameraId cameraId, void* param);
  * Record 0 is the main cloud model (colors, alpha, texture scroll); records 1+ are textured puff sprites.
  * Types 0-4 pick colors and motion: 0 and 4 puffs drift outward, 1 is the model alone,
  * 2 uses an X-shaped model with converging puffs, 3 is a blue swirl of five clouds.
- * Used for Flurrie's breath (party_cloud.c, unit_party_clauda.c).
+ * Used for Flurrie's breath (party_cloud.c, unit_party_clauda.c, type 0), Mario's battle helper in unit_act_mario.c,
+ * Magnus 2.0's inhale (type 2), the ice barrier in unit_bllizard.c (type 3) and evt_eff64.
  */
 EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale) {
     EffectEntry* effect;

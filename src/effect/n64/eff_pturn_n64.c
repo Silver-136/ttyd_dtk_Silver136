@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: a bobbing counter sprite whose digit steps toward the count given as `lifetime` (one step
-// every 8 frames); each step down drops a type-10 copy that falls away and fades. Type 1 shows no digit.
+// every 8 frames); a step down would drop a type-10 copy that falls away and fades, but the count starts at 0 and
+// the target is fixed at entry, so it only counts up. Type 1 shows no digit.
 
 #include "eff/n64/eff_pturn_n64.h"
 #include "driver/camdrv.h"
@@ -246,7 +247,10 @@ void effPturnDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-/** Draws the badge sprite (texture 0x92) as a camera-facing quad with the bob offset, scale and alpha. */
+/**
+ * Draws the badge sprite (texture 0x92) as a camera-facing quad with the bob offset, scale and alpha,
+ * once the count is above zero (always for type 10).
+ */
 void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     PturnElem* p;

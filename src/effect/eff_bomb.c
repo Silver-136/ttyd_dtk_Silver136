@@ -52,7 +52,7 @@ static void effBombMain(EffectEntry* effect);
 /**
  * Spawns a bomb blast at (x, y, z): eight rays (four at 90 degree steps, four offset by 45)
  * and a confetti burst.
- * Spawned by battle damage code (battle_damage.c), scripts in gor_03 and event scripts via evt_eff.
+ * Spawned by battle damage code (battle_damage.c), an NPC function in gor_03 and event scripts via evt_eff.
  */
 EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

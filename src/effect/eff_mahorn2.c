@@ -1,4 +1,5 @@
-/* Mahon = Wizzerd */
+// Wizzerd (mahorn) shot: rings at the start point, then a shot that travels to the destination, spawns a hit
+// effect there and bursts into eight fading pieces. Element 0 is the header.
 
 #include "version.h"
 #include "eff/eff_mahorn2.h"
@@ -104,8 +105,8 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
 }
 
 /**
- * Per frame: moves the effect elements along the path to the destination,
- * updates their scale and alpha and deletes the effect once every element has finished.
+ * Per frame: moves the shot (type 3 element) toward the destination by hitDistance per frame; on arrival spawns
+ * the hit effect, after which the burst pieces fly out and fade; deletes the effect once they have faded.
  */
 void effMahorn2Main(EffectEntry *effect) {
     effMahorn2Data *data = effect->userdata;

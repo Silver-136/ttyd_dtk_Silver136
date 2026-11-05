@@ -9,7 +9,7 @@
 #include <dolphin/mtx.h>
 
 
-/** Camera-facing 32x32 smoke puff, used by types 0-2. */
+/** Camera-facing 32x32 smoke puff, used by types 0 and 2. */
 static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, -16, 0, 0, 0, 0, 0, 0, 255},
     {16, -16, 0, -1024, 0, 0, 0, 0, 255},
@@ -17,7 +17,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 16, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-/** Lava-coloured (yougan) smoke mesh with extra quads, used by types above 2. */
+/** Lava (yougan) smoke mesh with two extra quads behind the front one, used by type 1 and types above 2. */
 effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
     {-16, -16, 15, 0, 0, 0, 0, 0, 255},
     {16, -16, 15, -1024, 0, 0, 0, 0, 255},
@@ -39,7 +39,7 @@ void effKemuri12Disp(CameraId cameraId, void* param);
 /**
  * Spawns an expanding smoke puff at (x, y, z) for duration frames.
  * Type 0 is black, 1 red, anything else white-purple.
- * battle_damage.c uses type 0 for explosion hits, gor_01 uses scale 2; event scripts via evt_eff.
+ * battle_damage.c uses type 0 for fire and explosion hits, gor_01 uses scale 2; event scripts via evt_eff64.
  */
 EffectEntry* effKemuri12N64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -106,7 +106,7 @@ void effKemuri12Main(EffectEntry* effect) {
 /**
  * Draws the smoke with texture 0xE, cross-fading two 32-pixel texture windows,
  * the current animation frame and the next, by the fraction of progress (TEV register 1 alpha);
- * types above 2 use the lava-coloured (yougan) mesh with extra quads.
+ * type 1 and types above 2 use the lava (yougan) mesh with extra quads.
  */
 void effKemuri12Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

@@ -70,7 +70,7 @@ void effWaterDamageDisp2(CameraId cameraId, void* param);
 
 /**
  * Spawns water droplets and mist at (x, y, z); type picks the splash shape.
- * Used by Mario's water code (mario_kemuri), eff_splash, eff_fall and event scripts.
+ * Used by Mario's water code (mario_kemuri), eff_splash, eff_fall, gor_00, muj_20, muj_21 and event scripts.
  */
 EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     s32 variant;
@@ -256,9 +256,9 @@ void effWaterDamageMain(EffectEntry* effect) {
 }
 
 /**
- * Draws each droplet as a camera-facing 8x8 quad of texture 0x89 (frame cycling every two retraces) in pale cyan
+ * Draws each droplet as a camera-facing 8x8 quad of texture 0x89 (the quad shape cycling every two retraces) in pale cyan
  * with a refraction layer: the early demos copy the screen each frame and sample it shifted by the droplet's position,
- * the retail builds use the small built-in water_damage_tex instead.
+ * JP and later use the small built-in water_damage_tex instead.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {

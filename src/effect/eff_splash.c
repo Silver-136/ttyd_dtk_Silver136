@@ -326,8 +326,8 @@ void effSplashMain(EffectEntry* effect) {
 }
 
 /**
- * Projects the splash position to the screen and reads the frame buffer pixel there for the water tint (the
- * retail build then overrides it with the map colour from eff_funemizu).
+ * Projects the splash position to the screen and reads the frame buffer pixel there for the water tint (JP and
+ * later then override it with the map colour from eff_funemizu; the early demos only for some muj, dou and gor maps).
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {

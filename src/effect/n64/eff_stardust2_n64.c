@@ -27,7 +27,7 @@ typedef struct EffStardust2N64Work {
 void effStardust2Main(EffectEntry* effect);
 void effStardust2Disp(CameraId cameraId, void* param);
 
-/** RGB colours the sparkles cycle through (pinks, purples and blues), three bytes per step. */
+/** RGB colours the sparkles cycle through (12 pastel steps round the colour wheel), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
@@ -172,8 +172,9 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
 
 /**
  * Types 0/1: each sparkle bursts out along its direction (speed_data, scale_data) for 14 frames,
- * then turns into type 10 and drifts outward in a fan, slowing 4% per frame, sinking and shrinking.
- * Type 3 only pulses for 14 frames, then drifts as type 30. Types 0/1/3 end with the effect life.
+ * then gets a fan velocity and its own type set to 10. Type 3 only pulses for 14 frames, then sets its own
+ * type to 30. The switch reads the effect's type (first work), not the sparkle's, so the type 10/30 drift case
+ * never runs: after frame 14 the sparkles hold their place. Types 0/1/3 end with the effect life.
  * Other types run a staggered life per sparkle (hidden until its last 30 frames):
  * it pops in, then falls (type 5 from the start), type 4 also circling the Y axis 12 degrees per frame;
  * the effect ends when every sparkle is done. Each sparkle cycles through 8 shapes; drawn on the work's camera.
@@ -321,7 +322,7 @@ void effStardust2Main(EffectEntry* effect) {
 }
 
 /**
- * Draws each visible sparkle as a camera-facing 8x8 quad cut from the 8-frame sparkle strip (texture 0x20),
+ * Draws each visible sparkle as a camera-facing 16x16 quad cut from the 8-frame sparkle strip (texture 0x20),
  * coloured from color_rotation_data and tinted per type:
  * orange for 0-2/10, pale peach for 3/30, yellow for 5, pink otherwise.
  */

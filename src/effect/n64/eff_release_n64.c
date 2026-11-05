@@ -179,7 +179,7 @@ effN64Vtx size16x16_tex64x64_0_vtx[] = {
     {-8, 8, 0, 2048, 0, 0, 0, 0, 255},
 };
 
-/** Full-screen 640x480 rectangle drawn for the light-grey screen flash of variants 2 and 3. */
+/** Full-screen 640x480 rectangle drawn for the white screen flash of variants 2 and 3. */
 effN64Vtx rectangle_vtx[] = {
     {0, 0, 0, 2048, 1024, 0, 0, 0, 255},
     {640, 0, 0, 0, 1024, 0, 0, 0, 255},
@@ -188,8 +188,9 @@ effN64Vtx rectangle_vtx[] = {
 };
 
 /**
- * Spawns the glowing orb at (x, y, z); the 0xFF00 bits of `type` pick the variant,
- * and a lifetime of 0 or less lasts until soft-deleted. Spawned by event scripts through evt_eff.
+ * Spawns the glowing orb at (x, y, z); the low byte of `type` picks the variant (variant 3 starts in state 1,
+ * the release), the 0xFF00 bits, when nonzero, make the orb wobble and release after 50 frames;
+ * a lifetime of 0 or less lasts until soft-deleted. Spawned by event scripts through evt_eff.
  */
 EffectEntry* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -250,7 +251,7 @@ EffectEntry* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
  * after 50 frames starts the release (state 100 for variant 3, else 1).
  * State 1: a 2-frame flash, then rings 1-2 grow and fade by anime_data over 30 steps;
  * state 4 shrinks ring 1 by anime_data_2 over 30 steps; state 5 hides everything.
- * State 100 keeps growing its rings until deleted.
+ * State 100 keeps growing its rings until deleted; it is never reached, since variant 3 starts in state 1.
  */
 void effReleaseMain(EffectEntry* effect) {
     EffReleaseN64Work* work = effect->userdata;
@@ -425,7 +426,8 @@ void effReleaseMain(EffectEntry* effect) {
  * 0 the core (texture 0x44), 1 a four-band ring strip (0x45),
  * 2 a large glow (0x46, skipped for variant 1; it falls through and also draws layer 3's quads)
  * and 3 the flash (0x47).
- * Variants 2 and 3 also flash the whole screen light grey for a few frames at the release and at state 5.
+ * Variants 2 and 3 also flash the whole screen white (the 0xD0 material colour supplies only the alpha)
+ * for a few frames at the release and at state 5.
  */
 void effReleaseDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;

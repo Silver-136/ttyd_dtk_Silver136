@@ -43,7 +43,7 @@ typedef struct EffKemuri8N64Work {
 void effKemuri8Main(EffectEntry* effect);
 void effKemuri8Disp(CameraId cameraId, void* param);
 
-/** Sets the camera the smoke is drawn with (the entry defaults to camera 4). */
+/** Sets the camera the smoke is drawn with (the entry defaults to CAMERA_3D). */
 void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
     ((EffKemuri8N64Work*)effect->userdata)->camId = camId;
 }
@@ -53,8 +53,8 @@ static inline f32 inline_fn(f32 a, f32 b) { return a * (-b); }
 
 #pragma opt_propagation off
 /**
- * Spawns a ring of smoke puffs (7/9/11 for type 0/1/other, radius 14/28/42) around (x, y, z) that fly outward in
- * the screen plane. Types 3 and up use the same sizes with a hot variant.
+ * Spawns a ring of smoke puffs (6/8/10 for type 0/1/other after the header element, radius 14/28/42) around
+ * (x, y, z) that fly outward in the screen plane. Types 3 and up use the same sizes with a hot variant.
  * Used by the bomb effect and evt_eff64 "kemuri8_n64".
  */
 EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {

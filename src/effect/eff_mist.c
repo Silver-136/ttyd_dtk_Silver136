@@ -1,4 +1,4 @@
-// Mist effect rising around a point for a given life; types 0-6.
+// Mist effect drifting around a point for a given life; types 0-6.
 
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -30,9 +30,9 @@ void effMistMain(EffectEntry* effect);
 void effMistDisp(CameraId cameraId, void* param);
 
 /**
- * Spawns the rising mist at (x, y, z) for `life` frames; type 0-6 selects the colour and motion.
- * Called from evt_eff ("mist") and from the Fahr Outpost (bom) code, which uses type 4 around Mario,
- * partners and NPCs.
+ * Spawns the mist at (x, y, z) for `life` frames (0 or less: until soft-deleted); type 0-6 selects the colour
+ * and motion (type 4: a single puff). Called from evt_eff ("mist"), eff_toiki, las_29 and the Fahr Outpost (bom)
+ * code, which uses type 4 around Mario, partners and NPCs.
  */
 EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     EffectEntry* effect;
@@ -129,8 +129,9 @@ EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
 }
 
 /**
- * Per frame: moves each puff by its velocity and acceleration,
- * fades it with age and deletes the effect at the end of its life.
+ * Per frame: moves each puff by its velocity (type 4 also by its acceleration, growing and fading out; the other
+ * types fade in and out over and over), fades everything over the last 32 frames and deletes the effect at the
+ * end of its life.
  */
 void effMistMain(EffectEntry* effect) {
     EffMistWork* work = effect->userdata;

@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: a yellow electric shock flash that expands and fades; also spawned by the thunder effect.
+// Paper Mario 64 effect: a yellow electric shock flash that expands and fades (green for type 2); used by the
+// Flower Fuzzy units through evt_eff64 and by the Shadow Queen unit from C.
 
 #include "eff/n64/eff_shock_n64.h"
 #include "eff/eff_n64.h"

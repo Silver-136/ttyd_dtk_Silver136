@@ -53,7 +53,7 @@ EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-/** Per frame: loads the banner animation, fades it in, and deletes the effect after one loop. */
+/** Per frame: loads the banner animation, fades it out late in the loop, and deletes the effect after one loop. */
 void effRankupMain(EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Vec position;
@@ -113,7 +113,7 @@ void effRankupMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRankupDisp, effect);
 }
 
-/** Draws the banner animation pose in three segments scaled by 6. */
+/** Draws the camera-facing banner animation pose in xlu modes 1-3 at draw scale 6. */
 void effRankupDisp(CameraId cameraId, EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Mtx mtx;

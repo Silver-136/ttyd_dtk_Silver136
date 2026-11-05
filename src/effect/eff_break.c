@@ -80,7 +80,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     count = texid_tbl[gp->language].count + 1;
 #else
     effect = effEntry();
-    // retail reads the language here (both languages use 7 entries)
+    // JP and the early demos read the language here (both languages use 7 entries)
     count = 7;
     if (gp->language != LANGUAGE_JP) {
         count = 7;
@@ -129,7 +129,8 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 }
 
 /**
- * Steps each letter through its states (drop with stardust, bounce along ty_data, wait, fly off)
+ * Steps each letter through its states (wait its turn, slide in along ty_data with stardust each time it lands,
+ * wait, hold for the duration, slide off along ty_data2)
  * and deletes the effect when every letter is done.
  */
 void effBreakMain(EffectEntry* effect) {

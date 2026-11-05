@@ -56,7 +56,7 @@ static effN64Vtx size16x16_tex16x16_vtx[] = {
     {-8, 8, 0, 0, 512, 255, 255, 255, 255},
 };
 
-/** The Fire Flower itself: 32x32 quads, one vertex set per bloom stage. */
+/** The Fire Flower itself: one 32x32 quad; the bloom stage picks the texture rows drawn on it. */
 static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 0, 2, 0, 0, 255, 255, 255, 255},
     {16, 0, 2, 1024, 0, 255, 255, 255, 255},
@@ -74,7 +74,7 @@ void effFireFlowerDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns the Fire Flower effect at (x, y, z): a flower that unfolds and shoots 30 sparks to the side,
- * holding for lifetime frames. type 1 mirrors it (flip). Spawned from event scripts through evt_eff.
+ * holding for lifetime frames. type 1 mirrors it (flip). Spawned from event scripts through evt_eff64.
  */
 EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
     EffectEntry* effect;
@@ -249,8 +249,8 @@ void effFireFlowerMain(EffectEntry* effect) {
 }
 
 /**
- * Draws the flower with texture 0x36 and the spark sprites with 0x37;
- * work->stage picks the vertex set for the flower's bloom stage.
+ * Draws the spark sprites with texture 0x36 (states 4-6 only) and the flower with 0x37;
+ * work->stage picks the two texture rows blended for the flower's bloom stage.
  */
 void effFireFlowerDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

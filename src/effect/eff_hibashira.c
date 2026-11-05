@@ -69,7 +69,7 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
     }
     work->frame = 0;
 
-    // spread the pillars evenly from start to end
+    // spread the pillars evenly from the start toward the end (the last one stops one step short of it)
     dx = endX - x;
     dy = endY - y;
     dz = endZ - z;
@@ -92,7 +92,10 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
     return effect;
 }
 
-/** Fades the pillars in and out, spreading pillars for types 3-5 and loading their flame animations. */
+/**
+ * Starts each pillar's flame animation after its delay (4 frames apart), fades each pillar out from its sixth
+ * frame, and fades the whole effect over 16 frames on soft delete or at the end of the duration.
+ */
 void effHibashiraMain(EffectEntry* effect) {
     s32 k;
     EffHibashiraWork* work = effect->userdata;

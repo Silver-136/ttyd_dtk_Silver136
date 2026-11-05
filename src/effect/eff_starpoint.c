@@ -27,7 +27,6 @@ typedef struct EffStarPointWork {
 } EffStarPointWork;
 
 /** Cosine approximation by a quartic polynomial, valid for x in [0, 2pi]. */
-// Cheap polynomial cosine approximation, valid for x in [0, 2pi]
 static inline f32 _cosf(f32 x) {
     f32 a = 0.03705f;
     f32 b = 0.4967f;
@@ -69,7 +68,7 @@ static inline f32 _cosf(f32 x) {
 
 /**
  * Spawns `count` star icons at (x, y, z), each launched at a random horizontal angle
- * and release delay (staggered every 3 frames). Caller: the evt_eff "starpoint" effect.
+ * and release delay (staggered every 3 frames). Caller: the evt_eff "star_point" effect (battle event scripts).
  */
 EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     s32 delay;

@@ -70,7 +70,7 @@ static PointGetTexSet texid_tbl[6] = {
     { { tex_lang6, tex_shadow_lang6 }, 2 },
 };
 #else
-/** Star Point message for each language: its one-point and plural piece lists and their piece count. */
+/** Star Point textures for JP (row 0) and the other languages (row 1): word, word shadow, digits, digit shadow. */
 static s32 texid_tbl[2][4] = { { 0x98, 0x99, 0x9A, 0x9B }, { 0x98, 0x99, 0x9A, 0x9B } };
 #endif
 
@@ -161,7 +161,7 @@ void effPointGetMain(EffectEntry* effect) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
+/** The early demos draw the point count as three fixed digit cells (leading zeros skipped) left of the word texture. */
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {

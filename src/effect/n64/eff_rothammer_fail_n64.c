@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: a single flat sprite that stretches over `time` frames (progress 0-7);
+// Paper Mario 64 effect: a single camera-facing smoke puff that plays a 7-frame strip over `time` frames (progress 0-7);
 // the failure counterpart of eff_rothammer_success_n64.c.
 
 #include "eff/eff_n64.h"
@@ -35,8 +35,8 @@ void effRotHammerFailMain(EffectEntry* effect);
 void effRotHammerFailDisp(CameraId cameraId, void* payload);
 
 /**
- * Spawns one smoke puff at (x, y, z) that plays its 7-frame animation over `time` frames (scale is ignored).
- * Spawned by event scripts through evt_eff.
+ * Spawns one smoke puff at (x, y, z) that plays its 7-frame animation over `time` frames.
+ * Reached only through evt_eff64 "rothammer_fail_n64"; no script callers found.
  */
 EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     EffectEntry* effect;

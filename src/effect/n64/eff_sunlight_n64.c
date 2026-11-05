@@ -27,7 +27,7 @@ void effSunlightMain(EffectEntry* effect);
 void effSunlightDisp(CameraId cameraId, void* payload);
 
 /**
- * Spawns sunlight beams at (x, y, z) of width `w`; a lifetime of 0 or less lasts until soft-deleted.
+ * Spawns sunlight beams at (x, y, z); `w` is stored but never read. A lifetime of 0 or less lasts until soft-deleted.
  * Spawned by event scripts through evt_eff.
  */
 EffectEntry* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 w) {
@@ -71,9 +71,10 @@ EffectEntry* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f3
 
 /**
  * Eases the alpha 8 per frame toward alphaMax (clamped 0-255),
- * drops it 16 per frame over the last 16 frames (a delete request starts that; lifetime 1000 means endless)
+ * drops it 16 per frame over the last 16 frames, before that ease, so the net drop is 8 per frame
+ * (a delete request starts that; lifetime 1000 means endless)
  * and drifts each of the five shafts' texture scroll on two sine waves.
- * Drawn on layer 2 in JP and the early demos, 10 in US and PAL.
+ * Drawn on layer 2 in JP and the early demos, 10 in US and later.
  */
 void effSunlightMain(EffectEntry* effect) {
     Vec position;
@@ -240,7 +241,7 @@ void effSunlightDisp(CameraId cameraId, void* payload) {
     GXSetProjectionv(proj);
 }
 
-/** Five long slanted light shafts in screen space, each a textured quad, drawn for the sunlight beams. */
+/** Five long slanted light shafts in screen space (shafts 0 and 3 two quads each, the rest one), drawn for the sunlight beams. */
 effN64Vtx testsrc__s_v[] = {
     {531, 442, 25, 0, 0, 255, 255, 255, 255},
     {707, 284, 25, 512, 0, 255, 255, 255, 255},

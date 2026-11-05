@@ -12,7 +12,10 @@
 void effBreathFireMain(EffectEntry* effect);
 void effBreathFireDisp(CameraId cameraId, void* param);
 
-/** Mesh of a fire-breath flame: two stacked quads whose texture strip frame advances as the flame ages. */
+/**
+ * Mesh of a fire-breath flame: two quads of five vertices (corners + centre) at z 0 and z 5;
+ * the draw uses only the second.
+ */
 static effN64Vtx stg_fire_breath_v[] = {
     {100, -100, 0, 3072, 0, 0, 0, 0, 255},
     {100, 100, 0, 3072, 1024, 0, 0, 0, 255},
@@ -28,8 +31,9 @@ static effN64Vtx stg_fire_breath_v[] = {
 
 /**
  * Spawns `count` flames (random `seed`) living `lifetime` frames,
- * streaming from (x, y, z) toward (endX, endY, endZ); the table names it Bowser breathing fire.
- * Spawned only by event scripts through evt_eff.
+ * streaming from (x, y, z) toward (endX, endY, endZ); the effect table calls it breathing fire, with
+ * patterns fire breath, trickling fire and general-purpose breath for types 0-2.
+ * Reached through evt_eff ("breath_fire_n64", and "breath_fire" via effBreathFireEntry, e.g. Yoshi's battle fire).
  */
 EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, f32 x, f32 y, f32 z, f32 endX,
                                    f32 endY, f32 endZ) {
@@ -151,7 +155,10 @@ void effBreathFireMain(EffectEntry* effect) {
     }
 }
 
-/** Draws the flame as two stacked textured quads whose texture strip frame advances with age. */
+/**
+ * Draws the flame as one camera-facing quad (four triangles around its centre vertex), blending two adjacent
+ * frames of the texture strip by the fraction of texFrame, so the strip frame advances with age.
+ */
 void effBreathFireDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;

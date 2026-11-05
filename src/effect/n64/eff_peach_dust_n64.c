@@ -50,7 +50,7 @@ static u8 scale_data[] = {
 char data[768] = ".......+..............@.#...........$%&.*=..........-...;>.........,'....)!.......~~......{.......~~......]@@^....~/........(_......#:<.....+.......[}|.....+.......1.......23......45.....677......8......7.......90......7.......a22b...c...........deee............f++++..........ff....+........ff......+........+......+.......+.......ff......+........+...f++.........+..ff...........+f..+............+.ff............+..+............+..f+.f+++f.....+....+f..+......+.......+.......+.......+.......+........+++++++f.....gh............+g.ggg..........g...hh..........g....g..........hh..hh.hh.......g..hg+ghgg......hghg.g...g.......hggg.....+.....g+.h......g....g..........g....g..........g.....g.........g.....g.........hgg...g...........g...g.........hg.....gggggggggh...";
 #endif
 
-/** RGB colours the Peach dust particles cycle through (pinks, purples and blues), three bytes per step. */
+/** RGB colours the Peach dust particles cycle through (12 pastel steps around the colour wheel), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
@@ -100,8 +100,9 @@ void effPeachDustDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns up to 100 dust particles at (x, y, z) arranged by one of three 16x16 masks selected by type (every
- * non-'.' cell gets a particle, with jitter), turned by scale degrees.
- * Record 0 holds the shared header; 80 frames. Via evt_eff64 "peach_dust_n64"; no script callers found.
+ * non-'.' cell gets a particle, with jitter), turned by rotY degrees about the y axis.
+ * Record 0 holds the shared header (its lifetime of 80 is counted down but never tested; the effect ends when
+ * every particle has expired). Via evt_eff64 "peach_dust_n64"; no script callers found.
  */
 EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32 rotY) {
     char* base;

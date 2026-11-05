@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: Bob-omb (bomhei) sprite scaled over its duration; non-zero types also spin it.
+// Paper Mario 64 effect: Bob-omb (bomhei) sprite that steps through its texture frames over its duration;
+// non-zero types also spin it.
 
 #include "eff/n64/eff_bomhei_n64.h"
 #include "eff/eff_n64.h"

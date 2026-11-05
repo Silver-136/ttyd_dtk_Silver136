@@ -23,11 +23,11 @@ void effItemUseDisp(CameraId cameraId, void* payload);
  * and settles at 100%. Read by effItemGetMain.
  */
 static u8 scale_data[12] = { 0x00, 0x12, 0x26, 0x3B, 0x4E, 0x60, 0x6E, 0x78, 0x79, 0x72, 0x69, 0x64 };
-/** Light grey-white used as the sparkles' highlight colour beside the per-type tint; set by both draw functions. */
+/** Light grey-white used as the sparkles' highlight colour beside the per-type tint; set by effItemGetDisp. */
 GXColor white = { 0xE1, 0xE1, 0xE1, 0xFF };
 /**
  * Sparkle tint per effect type 0-9 (gold, green, lime, red, yellow-green, blue, orange, pink, slate
- * blue, gold). Read by effItemGetDisp and effItemUseDisp.
+ * blue, gold). Read by effItemGetDisp (effItemUseDisp draws untinted).
  */
 static GXColor color_tbl[10] = {
     { 0xC8, 0xB2, 0x25, 0xFF }, { 0x26, 0xA3, 0x52, 0xFF }, { 0x5C, 0xCA, 0x10, 0xFF }, { 0xCB, 0x4C, 0x4D, 0xFF },
@@ -44,7 +44,8 @@ u8 size_tbl[10] = { 0x32, 0x32, 0x32, 0x28, 0x0C, 0x0C, 0x0C, 0x0A, 0x0A, 0x0F};
 
 /**
  * Spawns item sparkles at (x, y, z): types 0, 3 and 9 use seven, type 10 (battle item use) five.
- * Spawned when Mario obtains or uses an item (itemdrv.c, battle_event_cmd.c).
+ * Spawned when Mario obtains or uses an item (itemdrv.c, battle_event_cmd.c), and by evt_sub.c, eff_naniga.c and
+ * event scripts.
  */
 EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -102,7 +103,10 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-/** Pops the sparkle scale in over 12 frames, moves the sparkles, fades out over 16 frames and deletes when done. */
+/**
+ * Pops the sparkle scale in over 12 frames and moves the sparkles while each fades in and out; a soft delete fades
+ * the whole effect out over 16 frames and deletes it. Type 10 is also deleted once all its sparkles have faded.
+ */
 void effItemGetMain(EffectEntry* effect) {
     ItemGetWork* work = effect->userdata;
     Vec tmp;

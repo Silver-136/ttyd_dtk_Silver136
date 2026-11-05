@@ -1,4 +1,5 @@
-// Paper Mario 64 effect: crystal shine that scales in over its lifetime; types 0-9 pick the variant.
+// Paper Mario 64 effect: crystal shine; types 0-6 pick a colour variant (types 3-6 keep growing),
+// any other type shrinks toward scale 0.1 over its lifetime.
 
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/eff_n64.h"
@@ -14,7 +15,7 @@ void effCrystalMain(EffectEntry* effect);
 void effCrystalDisp(CameraId cameraId, void* param);
 
 /**
- * Spawns a crystal glint at (x, y, z).
+ * Spawns a crystal glint at (x, y, z) for `lifetime` frames (0 or less, or 100 and more: until soft deleted).
  * Types 0-6 pick one of seven colour/animation variants;
  * any other type shrinks from scale toward 0.1 over lifetime.
  * sac_suki.c spawns type 6 with life 60; event scripts via evt_eff.
@@ -226,7 +227,10 @@ effN64Vtx size100x100_tex32x32_vtx[] = {
     {-50, 50, -1, 0, 1024, 0, 0, 0, 255},
 };
 
-/** Draws a camera-facing glint of 108x108 or 100x100 units; types below 3 use textures 0x6D and 0x6E. */
+/**
+ * Draws a camera-facing glint: types below 3 draw both quads with texture 0x6D, spun against each other;
+ * other types draw the 100x100 quad alone with texture 0x6E.
+ */
 void effCrystalDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;

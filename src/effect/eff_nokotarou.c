@@ -10,7 +10,7 @@
 #include "driver/mapdrv.h"
 
 /**
- * Spawns the Koops effect at (x, y, z) scaled by `size` for `duration` frames;
+ * Spawns the Koops effect at (x, y, z) scaled by `size` for `duration` frames (0 or less: until soft-deleted);
  * called by the Koops party unit and a tst test script.
  */
 EffectEntry* effNokotarouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size) {
@@ -90,7 +90,10 @@ void effNokotarouMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effNokotarouDisp, effect);
 }
 
-/** Draws the pose in three stretched segments from the start point to the current point. */
+/**
+ * Draws two camera-facing poses (draw passes 1-3 each): S_1 scaled evenly, and A_1 stretched by the offset
+ * from the start point to the current point.
+ */
 void effNokotarouDisp(CameraId cameraId, EffectEntry* effect) {
     EffNokotarouWork* work = effect->userdata;
     Mtx mtx;

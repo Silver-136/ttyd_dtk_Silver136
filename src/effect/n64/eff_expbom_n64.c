@@ -54,7 +54,7 @@ void effExpBomDisp(CameraId camId, void* param);
 
 /**
  * Spawns an explosion made of ten fragments thrown out in the directions of bom_dir at the speeds of bom_spd;
- * each lives 16-21 frames (random). Event scripts spawn it through evt_eff.
+ * each lives 16-21 frames (random). Event scripts spawn it through evt_eff64.
  */
 EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     EffectEntry* effect;
