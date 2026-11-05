@@ -570,7 +570,7 @@ static EVT_BEGIN(stop_1)
     RETURN
 EVT_END()
 
-/** Arrival braking of the return-trip train: like stop_1 with the return-trip sound variants. */
+/** Arrival braking for a train coming in from the other side (starts at -3000 instead of 3000): like stop_1, with its own platform sound for hom_00. */
 static EVT_BEGIN(stop_2)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -681,7 +681,8 @@ static const char* pika_tbl_rsh_06[] = {
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
  * zeroes the wheel speeds and spawns the wheel, rod,
- * background and star scripts (plus lamp and sparks on the maps that have them).
+ * star and lamp scripts (the background scroll only on hom_10 to hom_12 and rsh_06_a),
+ * and marks the lit (pika) objects to use the train light callback.
  */
 static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)

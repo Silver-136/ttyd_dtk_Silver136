@@ -292,7 +292,7 @@ static BeroEntry bero_entry_data[] = {
  * The Shadow Sirens' first scene, spawned by the init script up to STG2_00:
  * once Mario has entered, he and both partners walk in
  * and spot the Sirens (Vivian, Marilyn and Beldam at x -535 to -455) as their theme plays.
- * Beldam names their goals (find Mario, steal the map), Vivian shows a necklace she found by a tree,
+ * Beldam quizzes Vivian on their goals (find Mario, steal the map), Vivian shows a necklace she found by a tree,
  * they bicker over who lost the sketch, Marilyn points out a mustached man,
  * and Beldam snatches the necklace as punishment, leaving Vivian in tears (stg2_win_e01_00 to 14).
  * The story becomes STG2_01_A_SIREN_ARGUMENT.
@@ -628,7 +628,7 @@ EVT_BEGIN(witchtrio_picture)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg2_win_e06_03"), 0, STRING("マジョリン"))
 
-    // Marilyn realizes they already met him; Beldam blames Vivian and promises punishment.
+    // Marilyn jumps up and down; Beldam blames Vivian and promises punishment.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("マリリン"), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position_nohit, STRING("マリリン"), LW(0), LW(1), LW(2), 225, 30)
@@ -881,8 +881,8 @@ EVT_BEGIN(get_necklace)
 EVT_END()
 
 /**
- * Background loop that keeps the "necklace" item at the position of the dummy Beldam NPC ("ダミー")
- * while she carries it.
+ * Background loop that keeps the "necklace" item at the position of the hidden stand-in NPC ("ダミー", model c_majyorin)
+ * while it bounces along the ground after Beldam flees.
  */
 EVT_BEGIN(witchtrio_lose_item)
     LOOP(0)

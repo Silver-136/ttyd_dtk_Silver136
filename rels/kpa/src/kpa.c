@@ -419,9 +419,11 @@ USER_FUNC(kpa_set_scale) {
 }
 
 /**
- * Background music controller for the side-scrolling stages, spawned by the stage start.
+ * Background music controller for the side-scrolling stages, spawned by kpa_stage_start (kpa_04 and kpa_06 spawn it
+ * from their init).
  * Every frame it picks a track from the stage (LSW(1) = 0..2) and the time left:
- * the normal theme, a faster "UP1" variant when 30 s or less remain (and "UP2" for the first stage).
+ * the normal theme, a faster "UP1" variant when 30 s or less remain (or "UP2", always the first stage's theme, when
+ * the script started with 30 s or less left).
  * It switches to the invincibility music (BGM_STGK_FIELD2) while Bowser is invincible,
  * the defeat jingle when LSWF(4) is set and the goal jingle when LSWF(5) is set, then stops.
  * Changes wait 300 ms.
@@ -501,11 +503,11 @@ EVT_BEGIN(kpa_bgm_change)
 EVT_END()
 
 /**
- * Stage intro, spawned by each side-scrolling map:
+ * Stage intro, spawned by kpa_02, kpa_03 and kpa_05 (the stages that start from the left edge):
  * fades out the sound, shrinks Bowser, frames him with the camera,
  * shows the cross and infinity 2D icons ("batu", "mugen") and prints the try message from kpa_get_msg.
- * Then it fades in, restores Bowser's size and control,
- * starts the music controller and sets LSWF(2) (intro done), which also starts kpa_time.
+ * Then it fades the screen out, starts the music controller, restores Bowser's size,
+ * fades in, gives back control and sets LSWF(2) (intro done), which also starts kpa_time.
  */
 EVT_BEGIN(kpa_stage_start)
     CALL(evt_cam_letter_box_disable, 1)
@@ -657,9 +659,9 @@ USER_FUNC(kpa_muteki_check) {
 
 /**
  * Draw callback of the Bowser HUD, queued each frame by kpa_status_main:
- * the stage/score/tries/time labels (language- specific icons), the six-digit score, the coin count,
+ * the stage/score/tries/time labels (language-specific icons), the six-digit score, the coin count,
  * the stage number, the try counter (leading zero dropped) and the three-digit time.
- * US and later move the number icons up by 8.
+ * US and later use different icon ids for the labels and the digits.
  */
 void kpa_status_disp(CameraId camera, void* param) {
     Vec pos;

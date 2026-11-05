@@ -41,7 +41,7 @@ EvtWord moo_02_init_evt[132];
 
 /**
  * Bero-in script of the north entry (n_bero): hides the partner,
- * places Mario at the bero position and runs the bero entry; returns 1 in LW(0).
+ * places Mario at the bero position and registers the exit triggers (bero_case_entry); returns 1 in LW(0).
  */
 EVT_BEGIN(n_bero_in)
     CALL(evt_mario_bgmode_on)
@@ -156,7 +156,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Event script: Bobbery blows up the rock S_iwa_04 that hides the pipe back to the X-Naut Fortress.
+ * Event script: Bobbery blows up the rock S_iwa_04.
  * The rock crumbles, the pipe appears, and the story progress is set to STG7_07_A_PIPE_APPEARS.
  */
 static EVT_BEGIN(dokan_evt)
@@ -281,7 +281,7 @@ EVT_END()
 
 /**
  * Map init script for moo_02: entry bero, Moon music and ambience, star animations,
- * a Star Piece at (-55, 0, -135), the pipe rock (S_iwa_04, blown up before STG7_07_A_PIPE_APPEARS),
+ * a Star Piece at (-55, 0, -135), the pipe rock (S_iwa_04, blowable while the story is below STG7_07_A_PIPE_APPEARS, removed afterwards),
  * the two Bobbery rocks and a Power Punch at (330, 0, 403).
  */
 EVT_BEGIN(moo_02_init_evt)

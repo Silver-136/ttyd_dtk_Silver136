@@ -102,7 +102,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-/** Hit areas of the electrified floor panels, in panel order. */
+/** Hit areas of the electrified floor panels in the order the lit route visits them (some panels appear twice). */
 const char* hit_list[] = {
     "A_hikaru_01",
     "A_hikaru_02",
@@ -361,7 +361,7 @@ static USER_FUNC(mario_chk) {
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, HIT_ATTR_SPIKES);
 #if VERSION >= VERSION_US
-    // This version exposes a third route entry; the other version exposes two.
+    // US and PAL expose a third route entry; the earlier versions expose two.
     j++;
     if (j >= 50) {
         j = 49;

@@ -1,5 +1,5 @@
 // aji_03 (敵のアジト, X-Naut Fortress): the crane game room: the UFO-catcher crane (ufo_main) and its prizes
-// (keihin) and badges, the clockwork (zenmai) switches.
+// (keihin) and badges, the clockwork gears (zenmai) and the three crane power switches (sui).
 
 #include "version.h"
 #include "evt/evt_window.h"
@@ -186,8 +186,8 @@ EVT_BEGIN(evt_kaitentou2)
 EVT_END()
 
 /**
- * Swings the needle (hari) map object named in LW(10) (S_hari01 to S_hari06, started when the crane game is
- * switched on) around its Z axis: picks random target angles up to 90 degrees (alternating sides)
+ * Swings the needle (hari) map object named in LW(10) (S_hari01 and S_hari02 once all three switches are
+ * pressed, S_hari04 to S_hari06 one per switch) around its Z axis: picks random target angles up to 90 degrees (alternating sides)
  * over 1.5 to 3 seconds each, until GF(15) is raised by a switch reset, then eases it back to 0 over one second.
  */
 static EVT_BEGIN(evt_hari)

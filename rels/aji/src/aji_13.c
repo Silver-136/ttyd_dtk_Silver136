@@ -924,7 +924,7 @@ EVT_BEGIN(shikake_init)
 EVT_END()
 
 /**
- * Clockwork switch script that reveals the off-screen staircase:
+ * Script of the blue floor switch (sw) that reveals the off-screen staircase:
  * pans the camera to the stairs, builds a paper-and-offscreen image of S_kaidan (OFF_hei_07) using animation A_1,
  * and sets the story progress to STG7_18_OFF_SCREEN_STAIRS.
  */

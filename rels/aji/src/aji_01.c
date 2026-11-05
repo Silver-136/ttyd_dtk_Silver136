@@ -1,5 +1,6 @@
-// aji_01 (敵のアジト, X-Naut Fortress): the central hall: its many doors, the card-key elevators (ele_1,
-// ele_2, key_lock), the password (evt_aikotoba), the X-Naut underlings, and Peach's visits.
+// aji_01 (敵のアジト, X-Naut Fortress): the central hall: its many doors, the key elevators (ele_1,
+// ele_2), the locked exits (key_lock, last_key_lock), the password (evt_aikotoba), the X-Naut underlings, and
+// Peach's visits.
 
 #include "version.h"
 #include "battle/battle_unit.h"

@@ -1,4 +1,4 @@
-// win_05 (ウィンディん家周辺, Flurrie's house in Boggly Woods): Flurrie's bedroom, with its canopy bed.
+// win_05 (ウィンディん家周辺, Flurrie's house in Boggly Woods): the interior of Flurrie's house, with a chest and a spinning floor panel.
 
 #include "version.h"
 #include "battle/battle_unit.h"

@@ -1,4 +1,4 @@
-// moo_01 (月, the Moon): a crater field between moo_00 and moo_05, with a rock to blow up.
+// moo_01 (月, the Moon): a crater field between moo_00 and moo_05, with two rocks to blow up.
 
 #include "version.h"
 #include "battle/battle_unit.h"

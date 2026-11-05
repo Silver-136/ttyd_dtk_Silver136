@@ -690,7 +690,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("peach_aji_09"), 0, STRING("手下１"))
 
-    // He mentions Mario; Peach reacts and Grodus orders the underlings to guard her closely.
+    // Peach reacts to the name Mario; Grodus has her taken back to the holding room and tells the underlings to take good care of her.
     CALL(evt_msg_print, 0, STRING("peach_aji_10"), 0, STRING("mario"))
     CALL(evt_npc_move_position, STRING("シュリョー"), 190, 0, 300, 0, 0)
     WAIT_MS(300)
@@ -743,7 +743,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL_CHILD(PTR(monitor_off))
     WAIT_MS(700)
 
-    // Grodus sends Lord Crump to deal with Mario (peach_aji_17 to 19).
+    // Grodus sends Lord Crump back to the Boggly Woods to hasten the excavation (peach_aji_17 to 19).
     CALL(evt_msg_print, 0, STRING("peach_aji_17"), 0, STRING("シュリョー"))
     CALL(evt_cam3d_evt_set, 0, 119, 183, 0, 80, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -795,7 +795,7 @@ static EVT_BEGIN(peach_evt_stg1)
     LABEL(100)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 
-    // Beldam, Marilyn and Vivian appear; Grodus tells them to find the map (peach_aji_26 to 33).
+    // Beldam, Marilyn and Vivian appear; Grodus tells them to take care of Mario, who now has the map (peach_aji_26 to 33).
     CALL(evt_msg_print, 0, STRING("peach_aji_25_01"), 0, 0)
     CALL(evt_cam3d_evt_set, 40, 95, 283, 40, 43, -13, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)

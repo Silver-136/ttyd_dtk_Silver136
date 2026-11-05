@@ -182,8 +182,8 @@ EVT_BEGIN(sekizou_kaiten)
 EVT_END()
 
 /**
- * Turns the statue's head back from LW(0) degrees to 0 over LW(1) ms with the quake sound SFX_STG7_QUAKE2;
- * used between questions and at the end.
+ * Turns the statue's head back from LW(0) degrees to 0 over LW(1) ms with the rotation sound
+ * SFX_STG7_DSN_ROUND1 and ends with the quake sound SFX_STG7_QUAKE2; used between questions and at the end.
  */
 EVT_BEGIN(sekizou_kaiten2)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
@@ -525,9 +525,10 @@ EVT_END()
  * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
  * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
  * turning its head and flapping its mouth with every text.
- * Wrong answers (counted in LW(15)) earn a scolding and an offer to stop; right answers are counted in LW(14).
- * Five right or three wrong answers end the loop: both exits create the elevator key and set
- * STG7_13_QUIZ_CLEARED, and after the fifth right answer the statue turns around.
+ * Wrong answers (counted in LW(15)) earn a taunt; right answers are counted in LW(14).
+ * Five right answers end the loop (the statue spins 1080 degrees and concedes); the third wrong answer makes the
+ * two X-Yux (バリアーン１/２) drop in for battle 15 and ends the loop after the fight. Both exits create the
+ * elevator key and set STG7_13_QUIZ_CLEARED.
  */
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)

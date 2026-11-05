@@ -106,7 +106,7 @@ EvtWord dmo_00_init_evt[262];
  * Script helper that starts the opening demo: clears the DemoWork state,
  * hides the status window and mutes sound effects, loads demo.tpl (blocks until the file is in),
  * and sets the fade-in for the map (black after the logo sequence,
- * white after the title screen in the demo versions; black otherwise).
+ * white otherwise in the early demos; always black in JP and later).
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(demo_init) {
@@ -611,7 +611,7 @@ USER_FUNC(eff_cam1) {
 /**
  * Script helper: args[0] is a message name; measures its width and line count
  * and builds the text window tags (clear, window position/size, once_stop) into buf so the narration is centred.
- * The vertical offset differs slightly in the demo versions.
+ * The vertical offset is -90 in the early demos and -84 in JP and later.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(make_msg) {

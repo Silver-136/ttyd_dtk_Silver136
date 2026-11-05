@@ -1,4 +1,4 @@
-// moo_04 (月, the Moon): a scene map: a flight scene with an X-Naut (stg7_aji messages) and an epilogue scene (ep_45).
+// moo_04 (月, the Moon): a space backdrop used by four scenes: the flight to the Moon, Lord Crump blasted off, the crystal flash (stg7_aji_63) and the epilogue text (ep_45).
 
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
@@ -39,7 +39,7 @@ static NpcSetupInfo npcEnt[2];
 static EvtWord epilogue_evt[64];
 EvtWord moo_04_init_evt[220];
 
-/** Three control points (x, y, z) of the path the partner flies along during the five seconds of the flight scene. */
+/** Three control points (x, y, z) of the path Mario and his partner fly along during the five seconds of the flight scene. */
 static f32 spline_dt[] = {
     -12.916925f, 123.84991f, 512.97614f, 17.94919f, 46.050007f, 5.011878f, 65.15421f, 48.400024f,
     -75.32023f,
@@ -136,7 +136,7 @@ EVT_END()
  * while the story is still before STG7_20_LORD_CRUMP_DEFEATED:
  * he spins as he flies off at shrinking scale with the SFX_STG7_3RD_FLY1 sound,
  * a flash (wangflush) lights up and the map changes back to aji_14 at "tuzuki",
- * where the aftermath sets that flag.
+ * where the aftermath sets that story progress.
  */
 EVT_BEGIN(kanbu_fly)
     WAIT_MS(2000)

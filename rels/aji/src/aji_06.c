@@ -385,7 +385,7 @@ EVT_END()
 /**
  * Takes the potion LW(0) out of a slot: sets the matching "have it" flag (LSWF(1) to 4),
  * removes the potion item object (kusuri_aka, kusuri_ao, kusuri_ki or kusuri_mid) and,
- * if the machine had been started (LSWF(5)), cancels the start and silences the siren.
+ * if the start had already been armed (LSWF(5)), cancels it and silences the siren.
  */
 EVT_BEGIN(peach_evt_pick_kusuri)
     SWITCH(LW(0))
@@ -414,9 +414,9 @@ EVT_END()
 
 /**
  * Checks whether all four slots are filled (their potion numbers sum to 10, which is 1+2+3+4).
- * If so, asks whether to start mixing (peach_aji_227);
- * on yes the mixing case script (peach_evt_tyogo) is attached to the start switch A_sui1
- * and the siren S_pato1 starts to turn.
+ * If so, asks whether the potions are placed to her liking (peach_aji_227);
+ * on yes (peach_aji_229) the mixing case script (peach_evt_tyogo_entry) is attached to the start switch A_sui1
+ * and the siren S_pato1 starts to turn; on no (peach_aji_228) nothing is armed.
  */
 EVT_BEGIN(peach_evt_check_all_kusuri_set)
     SET_VALUE(LW(0), LSW_AJI_06_SLOT_1_POTION)
@@ -1342,7 +1342,8 @@ EVT_END()
  * Starts the machine (case script on the start switch A_sui1):
  * closes the hatches, stops the sirens, runs the needle (peach_evt_hari_on) and the arm,
  * then calls peach_evt_tyogo_sub.
- * Afterwards asks whether to drink the result (peach_aji_231): yes attaches peach_evt_kusuri_nomu to A_bika1;
+ * Afterwards asks whether the potion came out correctly (peach_aji_231): yes has Peach asked to drink it
+ * (peach_aji_232, 233) and attaches peach_evt_kusuri_nomu to A_bika1;
  * no empties the machine and opens the hatches for another try.
  */
 EVT_BEGIN(peach_evt_tyogo)
@@ -1792,7 +1793,7 @@ EVT_END()
 
 /**
  * Chapter 5 setup of the potion lab on re-entry:
- * same potion shelves as peach_evt_stg5 at fixed positions,
+ * the four potions already sit at the slot positions (x = -110, -65, -10, 35),
  * with the wrong-potion scripts (peach_evt_matigai_kusuri) on three of the four machine slots
  * and the right-potion script (peach_evt_tadashii_kusuri) on the fourth.
  * It then switches off the s_bero entrance, attaches peach_evt_door to it, shows peach_aji_251 to 254,

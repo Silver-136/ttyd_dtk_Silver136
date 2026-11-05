@@ -108,7 +108,7 @@ static USER_FUNC(viewport);
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
 
 #if VERSION >= VERSION_US
-// US: map save blocks call the US save wrapper script
+// US and PAL: map save blocks call the save wrapper script
 #define SAVE_EVT evt_memcard_save_wrapper
 #else
 #define SAVE_EVT evt_memcard_save
@@ -396,14 +396,14 @@ EVT_END()
 
 /**
  * First scene when the party returns to TEC's room at STG7_25_00_1_BOWSER_POSHLEY_SANCTUM:
- * TEC's lights flicker, the party reacts (stg7_aji_46),
+ * the party asks where they are (stg7_aji_46), TEC's lights flicker and its screen powers up,
  * and TEC speaks over its screen with noise and fades (stg7_aji_47 to 57)
  * before the map changes to aji_16 entered as "peach" for the Last Mail scene.
  * It is TEC's farewell: it introduces itself, asks Mario to save Peach from Grodus in the Palace of Shadow,
  * tells him to use the teleporter while backup power lasts, and says it will cease to exist.
  */
 EVT_BEGIN(evt_last)
-    // The party enters TEC's room; the music stops and the lights flicker.
+    // The party enters TEC's room and the music stops.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -411,7 +411,7 @@ EVT_BEGIN(evt_last)
     CALL(evt_party_stop, 0)
     WAIT_MS(800)
 
-    // Mario and his partner react to the flickering.
+    // The partner asks where they are (stg7_aji_46); then the lights flicker and TEC's screen powers up.
     CALL(evt_msg_print_party, STRING("stg7_aji_46"))
     WAIT_MS(300)
     LOOP(3)
@@ -917,7 +917,7 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_MS(300)
     CALL(evt_map_replayanim, 0, STRING("moza"))
 
-    // TEC defends Sir Grodus; Peach argues back (peach_aji_48 to 52).
+    // TEC defends Sir Grodus; Peach asks why it called her here and TEC describes its malfunction (peach_aji_48 to 52).
     CALL(evt_msg_print, 0, STRING("peach_aji_48"), 0, 0)
     CALL(evt_map_pauseanim, 0, STRING("moza"))
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -1012,7 +1012,7 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_MS(500)
     CALL(evt_map_replayanim, 0, STRING("moza"))
 
-    // TEC says she may contact someone, and Peach types a mail to Mario (peach_aji_65 to 69).
+    // Peach asks to contact someone, TEC lets her use its communicator and she types a mail (peach_aji_65 to 69).
     CALL(evt_msg_print, 0, STRING("peach_aji_65"), 0, 0)
     CALL(evt_map_pauseanim, 0, STRING("moza"))
     CALL(evt_cam3d_evt_set, 0, 140, 332, 0, 75, -13, 0, EASING_SINE_IN_OUT)
@@ -1318,7 +1318,7 @@ EVT_END()
 /**
  * Shows a button prompt for the dance: sets the flag for the bubble that is used (4096, 8192 or 16384 for LW(1)
  * = 0, 1,
- * 2) and spawns it with dance_btn_disp_sub.
+ * 2) and creates it with dance_btn_disp_sub.
  */
 EVT_BEGIN(dance_btn_disp)
     SWITCH(LW(1))
@@ -2127,7 +2127,7 @@ static EVT_BEGIN(peach_evt_stg3_1)
     CALL(evt_mario_set_dispdir, 0)
     WAIT_MS(300)
 
-    // TEC asks whether she dislikes the world; she answers that nobody likes everything about it.
+    // TEC asks whether she likes the world; she answers that nobody likes everything about it but she loves the good parts.
     CALL(evt_msg_print, 0, STRING("peach_aji_157_02"), 0, 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_1"), STRING("P_T_1"))
     CALL(evt_msg_print, 0, STRING("peach_aji_157_03"), 0, STRING("mario"))

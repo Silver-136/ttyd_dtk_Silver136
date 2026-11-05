@@ -60,7 +60,7 @@ EvtWord win_03_init_evt[108];
 #endif
 
 /**
- * Bero enter script of Flurrie's front door: locks Mario's keys
+ * Bero-style script that nothing in the tree references: locks Mario's keys
  * and changes the map to win_04 at its "w_bero" entry (Flurrie's house interior); returns LW(0) = 1.
  */
 EVT_BEGIN(clouda_house_in)
@@ -87,14 +87,14 @@ EVT_BEGIN(clouda_house_out)
     RETURN
 EVT_END()
 
-/** Bero exit script: plays the wooden door-shut sound at Flurrie's door (306, 23, -448); returns LW(0) = 0. */
+/** Enter script of the "n_bero" entry (Mario arrives back from Flurrie's house): plays the wooden door-shut sound at her door (306, 23, -448); returns LW(0) = 0. */
 EVT_BEGIN(cloud_out)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_WOOD2"), 306, 23, -448, 0)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
 
-/** Bero enter script: plays the wooden door-open sound at Flurrie's door (306, 23, -448); returns LW(0) = 0. */
+/** Exit script of the "n_bero" entry (Mario leaves for Flurrie's house): plays the wooden door-open sound at her door (306, 23, -448); returns LW(0) = 0. */
 EVT_BEGIN(cloud_in)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD3"), 306, 23, -448, 0)
     SET_VALUE(LW(0), 0)

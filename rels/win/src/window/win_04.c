@@ -1,5 +1,5 @@
-// win_04 (ウィンディん家周辺, Flurrie's house in Boggly Woods): the red-walled main room of Flurrie's house, with its
-// chandelier and mirror ball; exits west to win_03 and east through Flurrie's door to her bedroom win_05.
+// win_04 (ウィンディん家周辺, Flurrie's house in Boggly Woods): the main room of Flurrie's house, with its mirror ball;
+// exits west to win_03 and east through Flurrie's door to win_05.
 
 #include "version.h"
 #include "battle/battle_unit.h"

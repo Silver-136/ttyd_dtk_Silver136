@@ -317,7 +317,8 @@ EVT_END()
 /**
  * Departure cutscene: the door opens, a startled Bowser meets the out-of-breath Kammy Koopa and the two talk,
  * with a choice in the middle (kpa_stg1_032).
- * Kammy then flies off, and play returns to kpa_00 for the flight to Petalburg.
+ * After the news that Princess Peach was abducted, Bowser leaves through the wall in his airship, Kammy follows on
+ * her broom, and play returns to kpa_00 for the flight to Petalburg.
  * Plays when Bowser reaches x = 625 or re-enters from the other side.
  */
 EVT_BEGIN(kpa_01_syuppatu_evt)
@@ -420,7 +421,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     END_INLINE_EVENT
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("U_1"), STRING("T_5"))
 
-    // Kammy confesses she took a picnic break in Petal Meadows and Bowser explodes in rage, shaking the room
+    // Kammy says she stopped in Petal Meadows and planned a picnic there, and Bowser explodes in rage, shaking the room
     // and scaring the guards.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_034"), PTR(kpa_stg1_034_cb), STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
@@ -917,7 +918,7 @@ EVT_BEGIN(togenoko_B_talk_evt)
     RETURN
 EVT_END()
 
-/** Init for the third Spiny guard: standard NPC init, then it is set to jump and land on the floor. */
+/** Init for the third Spiny guard: standard NPC init, then gravity, floor collision and NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(togenoko_C_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)

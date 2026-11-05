@@ -203,7 +203,7 @@ static DoorParam door_1 = {
  * and the scene ends with a white fade to gor_10.
  */
 static EVT_BEGIN(evt_prologue)
-    // The house music fades in and the screen is letterboxed; Luigi and Parakarry are hidden for now.
+    // The house music fades in, the screen is letterboxed and Mario is placed.
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MARIO_HOUSE1"))
@@ -223,7 +223,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_mario_set_pos, -150, 30, -330)
     CALL(evt_party_set_pos, 0, -150, 30, -330)
     BEGIN_INLINE_EVENT
-        // The camera pulls back slowly while the two trees outside slide apart like curtains.
+        // The two trees outside slide apart like curtains while the camera moves in slowly.
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 1500, 4000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -265,7 +265,7 @@ static EVT_BEGIN(evt_prologue)
     END_INLINE_EVENT
 #endif
 
-    // Parakarry glides in to the mailbox, with wing-beat sounds at intervals in the retail versions.
+    // Parakarry glides in to the mailbox, with movement sounds at intervals in JP and later.
     CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
 
     // The mailbox shakes as she drops the mail in.
@@ -443,7 +443,7 @@ static void draw(CameraId camera, void* param) {
 
 /**
  * Prologue part 2 (entered from the map with the bero name "prologue2"):
- * Luigi shows Mario the Magical Map, the mariost.tpl picture (Guess: the story book illustration) fades in over
+ * Luigi shows Mario the Magical Map, the mariost.tpl title picture fades in over
  * the scene, and the game moves on to muj_20 with the story at STG0_02_MARIOS_HOUSE.
  */
 EVT_BEGIN(evt_prologue2)

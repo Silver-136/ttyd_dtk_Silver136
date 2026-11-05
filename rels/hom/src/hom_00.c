@@ -571,7 +571,7 @@ EVT_END()
 
 /**
  * Exit event of the train door on the second trip:
- * Mario boards, the crossing barrier closes, attendant 2 calls the train off,
+ * Mario boards, attendant 2 calls the train off, the crossing barrier opens,
  * the train starts (hom_10_evt_resha_start, or start2 on the return trip),
  * the train-leg counter is set to 1 (outbound) or 3 (return) and the map changes to rsh_02_c.
  */

@@ -124,7 +124,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Exit event of the first exit (hit area on the changing-room side) in Peach's section:
- * without the X-Naut disguise (GSWF_AJI_PEACH_IN_UNIFORM = 0) she says she cannot go out like this
+ * without the X-Naut disguise (GSWF_AJI_PEACH_IN_UNIFORM = 0) TEC's voice tells her she must change first
  * (peach_aji_133) and LW(0) = 1 tells the exit to be cancelled; disguised, LW(0) = 0 lets her through.
  */
 EVT_BEGIN(peach_evt_bero_out1)
@@ -167,7 +167,7 @@ BeroEntry bero_data_peach1[] = {
 
 /**
  * Exit event of the second exit in Peach's section, the mirror of peach_evt_bero_out1:
- * while disguised she says peach_aji_155_01 (she should not leave in the disguise)
+ * while disguised TEC's voice says peach_aji_155_01 (she must change back into the dress before leaving)
  * and LW(0) = 1 cancels the exit; undisguised, LW(0) = 0 lets her through.
  */
 EVT_BEGIN(peach_evt_bero_out2)

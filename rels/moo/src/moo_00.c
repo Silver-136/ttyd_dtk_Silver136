@@ -135,7 +135,7 @@ static EVT_BEGIN(party_damage_pose)
     RETURN
 EVT_END()
 
-/** Event script: puts the active partner into its second "hurt" pose (getting up), used after the crash landing. */
+/** Event script: puts the active partner into its second "hurt" pose, set when the partner lands in the crash landing. */
 EVT_BEGIN(party_damage_pose2)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -417,7 +417,7 @@ EVT_END()
 
 /**
  * Map init script for moo_00, the Moon landing site:
- * places Mario at the entrance (or runs the entry bero), plays the Moon music (BGM_STG7_MON1) and ambience,
+ * registers the exits on the first visit (the crash landing places Mario) and otherwise runs the map-entry script, plays the Moon music (BGM_STG7_MON1) and ambience,
  * animates the stars, puts a save block at (245, 49, -205),
  * plays the crash landing cutscene before the Moon story starts,
  * sets up the two Bobbery rocks (or removes them once they have been blown up)
