@@ -151,20 +151,19 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
         fa = (f32)(rand() % randA) / 1000.0f;
         fb = (f32)(rand() % randB) / 1000.0f;
         switch (type) {
-        case 0: {
-            p->ay = 0.0f;
-            a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
-            sn = (f32)sin(a1);
-            a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
-            angle = (f32)sin(a2);
-            p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-            sn = (f32)sin(a1);
-            angle = (f32)cos(a2);
-            p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-            p->position.z = 0.0f;
-            p->sub = 0;
-            break;
-        }
+        case 0:
+        p->ay = 0.0f;
+        a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
+        sn = (f32)sin(a1);
+        a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
+        angle = (f32)sin(a2);
+        p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+        sn = (f32)sin(a1);
+        angle = (f32)cos(a2);
+        p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+        p->position.z = 0.0f;
+        p->sub = 0;
+        break;
         case 1:
         case 2:
             angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);

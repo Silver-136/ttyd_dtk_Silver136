@@ -516,6 +516,7 @@ USER_FUNC(evt_map_replace_mapobj) {
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 type = evtGetValue(event, args[1]);
     Vec pos;
+    EffectEntry* eff;
     mapObjGetPos(name, &pos);
     mapObjFlagOn(name, MAP_OBJ_FLAG_DISABLED);
     switch (type) {
@@ -527,11 +528,10 @@ USER_FUNC(evt_map_replace_mapobj) {
             effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
         break;
 #else
-    case 1: {
-        EffectEntry* eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
-        ((EffFireWork*)eff->userdata)->useMapBlend = 1;
-        break;
-    }
+    case 1:
+    eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
+    ((EffFireWork*)eff->userdata)->useMapBlend = 1;
+    break;
 #endif
     }
     return EVT_RETURN_DONE;

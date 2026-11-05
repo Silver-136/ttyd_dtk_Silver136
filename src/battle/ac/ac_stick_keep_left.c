@@ -62,6 +62,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     s32 i;
     s32 diff;
     s32 j;
+    s32 k;
 
     autoCommand = 0;
     cw = (SklWork*)work->actionCommands.work;
@@ -214,13 +215,11 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                 }
                 break;
-            case AC_STATE_RUN + 3: {
-                s32 k;
-                // retail runs this empty loop over the signal sound slots 0..idx-2
-                j = cw->idx - 2;
-                if (j >= 0) {
-                    for (k = 0; k <= j; k++) {
-                    }
+            case AC_STATE_RUN + 3:
+            // retail runs this empty loop over the signal sound slots 0..idx-2
+            j = cw->idx - 2;
+            if (j >= 0) {
+                for (k = 0; k <= j; k++) {
                 }
             }
                 work->actionCommands.acState = AC_STATE_RUN + 4;

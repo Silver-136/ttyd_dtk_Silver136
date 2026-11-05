@@ -112,6 +112,7 @@ void effMugiKemuri2Disp(CameraId camId, void* param);
 /** Spawns the second smoke form at (x, y, z) with `angle` and a left/right `dir`; called from mario_kemuri.c. */
 EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 dir) {
     EffectEntry* effect;
+    f32 rad;
     effMugiKemuriData* data;
     s32 i;
     // FAKE: unused zero vector; deleting it changes the object
@@ -151,11 +152,9 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
         data->rot.x = 0.0f;
         data->rot.z = 0.0f;
         data->flip = ((rand() % 100) >> 4) & 1;
-        {
-            f32 rad = (6.2831855f * reviseAngle(angle + (dir ? -90 : 90))) / 360.0f;
-            data->dirX = (f32)sin(rad);
-            data->dirZ = (f32)cos(rad);
-        }
+        rad = (6.2831855f * reviseAngle(angle + (dir ? -90 : 90))) / 360.0f;
+        data->dirX = (f32)sin(rad);
+        data->dirZ = (f32)cos(rad);
         data->poseId = -1;
     }
     return effect;

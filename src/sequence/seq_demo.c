@@ -175,29 +175,29 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
  * FALSE on failure.
  */
 BOOL THPSimpleInit(s32 audioSystem) {
+    BOOL old;
+
     memset(&SimpleControl, 0, sizeof(THPSimple));
     LCEnable();
     if (THPInit() == FALSE) {
         return FALSE;
     }
 
-    {
-        BOOL old = OSDisableInterrupts();
+    old = OSDisableInterrupts();
 
-        AudioSystem = audioSystem;
-        SoundBufferIndex = 0;
-        LastAudioBuffer = NULL;
-        CurAudioBuffer = NULL;
+    AudioSystem = audioSystem;
+    SoundBufferIndex = 0;
+    LastAudioBuffer = NULL;
+    CurAudioBuffer = NULL;
 
-        OldAIDCallback = AIRegisterDMACallback(THPAudioMixCallback);
-        if (OldAIDCallback == NULL && AudioSystem != 0) {
-            AIRegisterDMACallback(NULL);
-            OSRestoreInterrupts(old);
-            return FALSE;
-        }
-
+    OldAIDCallback = AIRegisterDMACallback(THPAudioMixCallback);
+    if (OldAIDCallback == NULL && AudioSystem != 0) {
+        AIRegisterDMACallback(NULL);
         OSRestoreInterrupts(old);
+        return FALSE;
     }
+
+    OSRestoreInterrupts(old);
 
     if (AudioSystem == 0) {
         memset(SoundBuffer, 0, BYTES_PER_AUDIO_FRAME << 1);
@@ -211,14 +211,14 @@ BOOL THPSimpleInit(s32 audioSystem) {
 
 /** Shuts the player down: disables the locked cache and restores the previous AI DMA callback. */
 void THPSimpleQuit(void) {
+    BOOL old;
+
     LCDisable();
-    {
-        BOOL old = OSDisableInterrupts();
-        if (OldAIDCallback) {
-            AIRegisterDMACallback(OldAIDCallback);
-        }
-        OSRestoreInterrupts(old);
+    old = OSDisableInterrupts();
+    if (OldAIDCallback) {
+        AIRegisterDMACallback(OldAIDCallback);
     }
+    OSRestoreInterrupts(old);
     Initialized = FALSE;
 }
 
@@ -558,6 +558,7 @@ s32 THPSimpleDecode(s32 audioTrack) {
     u32 i;
     u8* ptr;
     u32 *compSizePtr, sample;
+    BOOL old;
 
     if (SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].isValid) {
         compSizePtr = (u32*)(SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].ptr + 8);
@@ -580,15 +581,13 @@ s32 THPSimpleDecode(s32 audioTrack) {
                         case 1:
                             sample = THPAudioDecode(SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].buffer,
                                                     ptr + (*compSizePtr) * audioTrack, 0);
-                            {
-                                BOOL old = OSDisableInterrupts();
+                            old = OSDisableInterrupts();
 
-                                SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].validSample = sample;
-                                SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].curPtr =
-                                    SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].buffer;
+                            SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].validSample = sample;
+                            SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].curPtr =
+                                SimpleControl.audioBuffer[SimpleControl.audioDecodeIndex].buffer;
 
-                                OSRestoreInterrupts(old);
-                            }
+                            OSRestoreInterrupts(old);
                             SimpleControl.audioDecodeIndex++;
                             if (SimpleControl.audioDecodeIndex >= AUDIO_BUFFER_NUM) {
                                 SimpleControl.audioDecodeIndex = 0;
@@ -892,6 +891,7 @@ void THPAudioMixCallback(void) {
 /** Sets the movie volume (0..127, squared through VolumeTable) with a linear ramp over time ms (max 60 s). */
 BOOL THPSimpleSetVolume(s32 vol, s32 time) {
     s32 samplePerMs;
+    BOOL old;
 
     if (SimpleControl.open && SimpleControl.audioExist) {
         if (AIGetDSPSampleRate() == AI_SAMPLERATE_32KHZ) {
@@ -914,21 +914,19 @@ BOOL THPSimpleSetVolume(s32 vol, s32 time) {
             time = 0;
         }
 
-        {
-            BOOL old = OSDisableInterrupts();
+        old = OSDisableInterrupts();
 
-            SimpleControl.targetVolume = (f32)vol;
-            if (time) {
-                SimpleControl.rampCount = samplePerMs * time;
-                SimpleControl.deltaVolume =
-                    (SimpleControl.targetVolume - SimpleControl.curVolume) / (f32)SimpleControl.rampCount;
-            } else {
-                SimpleControl.rampCount = 0;
-                SimpleControl.curVolume = SimpleControl.targetVolume;
-            }
-
-            OSRestoreInterrupts(old);
+        SimpleControl.targetVolume = (f32)vol;
+        if (time) {
+            SimpleControl.rampCount = samplePerMs * time;
+            SimpleControl.deltaVolume =
+                (SimpleControl.targetVolume - SimpleControl.curVolume) / (f32)SimpleControl.rampCount;
+        } else {
+            SimpleControl.rampCount = 0;
+            SimpleControl.curVolume = SimpleControl.targetVolume;
         }
+
+        OSRestoreInterrupts(old);
 
         return TRUE;
     }

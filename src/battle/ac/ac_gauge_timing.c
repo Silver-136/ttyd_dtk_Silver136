@@ -54,6 +54,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
     BOOL autoCommand;
     BattleACDispParams* disp;
     BattleActions* ac;
+    f32 angle;
 
     ac = &work->actionCommands;
     autoCommand = FALSE;
@@ -177,29 +178,61 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                 cw->cnt++;
             }
             switch (work->actionCommands.params[GAUGE_PARAM_MODE]) {
-                case 1: {
-                    f32 angle = reviseAngle((f32)(cw->cnt * 360 / work->actionCommands.params[GAUGE_PARAM_PERIOD]));
-                    if (angle <= 90.0f) {
-                        cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)angle, 90);
-                    } else if (angle <= 180.0f) {
-                        cw->gauge = intplGetValue(EASING_CUBIC_IN, 100.0f, 0.0f, (s32)(angle - 90.0f), 90);
-                    } else if (angle <= 270.0f) {
-                        cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)(angle - 180.0f), 90);
-                    } else {
-                        cw->gauge = intplGetValue(EASING_CUBIC_IN, 100.0f, 0.0f, (s32)(angle - 270.0f), 90);
-                    }
+                case 1:
+                angle = reviseAngle((f32)(cw->cnt * 360 / work->actionCommands.params[GAUGE_PARAM_PERIOD]));
+                if (angle <= 90.0f) {
+                    cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)angle, 90);
+                } else if (angle <= 180.0f) {
+                    cw->gauge = intplGetValue(EASING_CUBIC_IN, 100.0f, 0.0f, (s32)(angle - 90.0f), 90);
+                } else if (angle <= 270.0f) {
+                    cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)(angle - 180.0f), 90);
+                } else {
+                    cw->gauge = intplGetValue(EASING_CUBIC_IN, 100.0f, 0.0f, (s32)(angle - 270.0f), 90);
+                }
+                if (cw->timer > 0) {
+                    cw->timer--;
                     if (cw->timer > 0) {
-                        cw->timer--;
-                        if (cw->timer > 0) {
-                            cw->gauge = 0.0f;
-                            cw->inRange = 0;
-                            goto done;
+                        cw->gauge = 0.0f;
+                        cw->inRange = 0;
+                        goto done;
+                    }
+                } else if ((work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
+                    // BUG: the same bit is tested twice, so the 30-frame else branch below can never run. Same at the
+                    // wrap test below.
+                    if ((s32)cw->gauge <= 0) {
+                        cw->hits++;
+                        cw->gauge = 0.0f;
+                        cw->inRange = 0;
+                        if (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
+                            cw->timer = 15;
+                        } else {
+                            cw->timer = 30;
                         }
-                    } else if ((work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
-                        // BUG: the same bit is tested twice, so the 30-frame else branch below can never run. Same at the
-                        // wrap test below.
-                        if ((s32)cw->gauge <= 0) {
-                            cw->hits++;
+                        goto done;
+                    }
+                }
+                if (cw->gauge >= (f32)work->actionCommands.params[GAUGE_PARAM_TARGET]) {
+                    cw->inRange = 1;
+                } else {
+                    cw->inRange = 0;
+                }
+                break;
+                default:
+                if (cw->timer > 0) {
+                    cw->timer--;
+                    if (cw->timer > 0) {
+                        cw->gauge = 0.0f;
+                        cw->inRange = 0;
+                        goto done;
+                    }
+                }
+                cw->gauge = (f32)work->actionCommands.params[GAUGE_PARAM_PERIOD] / 100.0f * (f32)cw->cnt + 50.0f;
+                if (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_WRAP) {
+                    s32 g = (s32)cw->gauge;
+                    if ((work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
+                        s32 q = g / 100;
+                        if (q > cw->hits) {
+                            cw->hits = q;
                             cw->gauge = 0.0f;
                             cw->inRange = 0;
                             if (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
@@ -210,49 +243,15 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                             goto done;
                         }
                     }
-                    if (cw->gauge >= (f32)work->actionCommands.params[GAUGE_PARAM_TARGET]) {
-                        cw->inRange = 1;
-                    } else {
-                        cw->inRange = 0;
-                    }
-                    break;
+                    g %= 100;
+                    cw->gauge = (f32)g;
                 }
-                default: {
-                    if (cw->timer > 0) {
-                        cw->timer--;
-                        if (cw->timer > 0) {
-                            cw->gauge = 0.0f;
-                            cw->inRange = 0;
-                            goto done;
-                        }
-                    }
-                    cw->gauge = (f32)work->actionCommands.params[GAUGE_PARAM_PERIOD] / 100.0f * (f32)cw->cnt + 50.0f;
-                    if (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_WRAP) {
-                        s32 g = (s32)cw->gauge;
-                        if ((work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
-                            s32 q = g / 100;
-                            if (q > cw->hits) {
-                                cw->hits = q;
-                                cw->gauge = 0.0f;
-                                cw->inRange = 0;
-                                if (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
-                                    cw->timer = 15;
-                                } else {
-                                    cw->timer = 30;
-                                }
-                                goto done;
-                            }
-                        }
-                        g %= 100;
-                        cw->gauge = (f32)g;
-                    }
-                    if (__fabs(cw->gauge - 50.0f) <= 12.0) {
-                        cw->inRange = 1;
-                    } else {
-                        cw->inRange = 0;
-                    }
-                    break;
+                if (__fabs(cw->gauge - 50.0f) <= 12.0) {
+                    cw->inRange = 1;
+                } else {
+                    cw->inRange = 0;
                 }
+                break;
             }
         done:
             if (autoCommand && cw->inRange) {
@@ -412,35 +411,34 @@ static void actionCommandDisp(f32 x, f32 y) {
             }
             break;
         }
-        default: {
-            BattleAcDrawGauge((s32)x, (s32)y, 0.0f, 0xB2, 100, 100, 100, 100, 0);
-            if (cw->timer <= 0) {
-                CameraEntry* cam = camGetPtr(CAMERA_2D);
-                rx = (-200.0f + x - 88.0f) + 173.0f * cw->gauge / 100.0f;
-                ry = 49.0f + y;
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-                btlDispGXQuads2DRasta(rx, ry, rx + 10.0f, ry - 16.0f, 0, 255, 0, 255);
-            }
-            n = ac->params[GAUGE_PARAM_TARGET];
-            bx = -288.0f + x;
-            by = 20.0f + y;
-            for (i = 0; i < n; i++) {
-                u16 icon = ICON_AC_OFF;
-                f32 step;
-                step = 100.0f / (f32)(n + 1) * (f32)(i + 1);
-                if (cw->inRange) {
-                    icon = ICON_AC_ON;
-                }
-                {
-                    Vec pos = {0.0f, 0.0f, 0.0f};
-                    pos.x = bx + 176.0f * step / 100.0f;
-                    pos.y = by;
-                    iconDispGx(&pos, ICON_FLAG_2D, icon, 0.8f);
-                }
-            }
-            break;
+        default:
+        BattleAcDrawGauge((s32)x, (s32)y, 0.0f, 0xB2, 100, 100, 100, 100, 0);
+        if (cw->timer <= 0) {
+            CameraEntry* cam = camGetPtr(CAMERA_2D);
+            rx = (-200.0f + x - 88.0f) + 173.0f * cw->gauge / 100.0f;
+            ry = 49.0f + y;
+            btlDispGXInit2DRasta();
+            GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+            btlDispGXQuads2DRasta(rx, ry, rx + 10.0f, ry - 16.0f, 0, 255, 0, 255);
         }
+        n = ac->params[GAUGE_PARAM_TARGET];
+        bx = -288.0f + x;
+        by = 20.0f + y;
+        for (i = 0; i < n; i++) {
+            u16 icon = ICON_AC_OFF;
+            f32 step;
+            step = 100.0f / (f32)(n + 1) * (f32)(i + 1);
+            if (cw->inRange) {
+                icon = ICON_AC_ON;
+            }
+            {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = bx + 176.0f * step / 100.0f;
+                pos.y = by;
+                iconDispGx(&pos, ICON_FLAG_2D, icon, 0.8f);
+            }
+        }
+        break;
     }
 
     switch (ac->params[GAUGE_PARAM_TYPE]) {

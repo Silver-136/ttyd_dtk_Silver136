@@ -663,6 +663,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     BattleAudienceMember* m;
     f32 dx;
     f32 dz;
+    f32 d;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
     camGetPtr(CAMERA_2D);
@@ -713,15 +714,13 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
             if (m->counter <= 0) {
                 dx = m->homePosition.x - m->position.x;
                 dz = m->homePosition.z - m->position.z;
-                {
-                    f32 d = (f32)sqrt(dx * dx + dz * dz);
-                    m->velocity.x = 10.0f * (dx / d);
-                    m->velocity.y = 0.0f;
-                    m->velocity.z = 10.0f * (dz / d);
-                    m->counterF = 10.0f;
-                    m->workF1 = 10.0f;
-                    m->workF2 = d;
-                }
+                d = (f32)sqrt(dx * dx + dz * dz);
+                m->velocity.x = 10.0f * (dx / d);
+                m->velocity.y = 0.0f;
+                m->velocity.z = 10.0f * (dz / d);
+                m->counterF = 10.0f;
+                m->workF1 = 10.0f;
+                m->workF2 = d;
                 m->step++;
             }
             break;

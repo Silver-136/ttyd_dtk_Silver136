@@ -87,6 +87,8 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     f32 r;
     f32 s;
     f32 c;
+    f32 dx;
+    f32 dz;
 
     effect = effEntry();
     n1 = 0;
@@ -213,12 +215,10 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         r = 6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f;
         s = (f32)sin(r);
         c = (f32)cos(r);
-        {
-            f32 dx = size * (-30.0f * s);
-            f32 dz = size * (30.0f * c);
+        dx = size * (-30.0f * s);
+        dz = size * (30.0f * c);
 
-            effKemuTestEntry(6, x + dx, y + 5.0f * size, z + dz, size);
-        }
+        effKemuTestEntry(6, x + dx, y + 5.0f * size, z + dz, size);
     }
     return effect;
 }

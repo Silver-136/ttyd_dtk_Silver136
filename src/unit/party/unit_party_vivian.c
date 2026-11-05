@@ -1651,25 +1651,23 @@ void _disp_heart(CameraId camera, void* param) {
     }
     w = param;
     if (w->heart.unit != NULL) {
-        {
-            if (w->heart.cur <= w->heart.start) {
-                scale = intplGetValue(EASING_CUBIC_OUT, 0.0f, 1.2f, w->heart.cur, w->heart.start);
-            } else if (w->heart.cur <= w->heart.end) {
-                scale = intplGetValue(EASING_SINE_IN_OUT, 1.2f, 1.0f, w->heart.cur - w->heart.start, w->heart.end - w->heart.start);
-            } else {
-                scale = 1.0f;
-            }
-            unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(w, w->heart.unitId));
-            BtlUnit_GetHitPos(unit, BtlUnit_GetPartsPtr(unit, w->heart.partId), &p.x, &p.y, &p.z);
-            p.z += 10.0f;
-            a = p;
-            b = p;
-            c = p;
-            b.y = 16.0f * scale + a.y;
-            b.z = 5.0f + a.z;
-            iconDispGx(&a, 0, ICON_FUKIDASHI, scale);
-            iconDispGx(&b, 0, ICON_ITEM_HEART, scale);
+        if (w->heart.cur <= w->heart.start) {
+            scale = intplGetValue(EASING_CUBIC_OUT, 0.0f, 1.2f, w->heart.cur, w->heart.start);
+        } else if (w->heart.cur <= w->heart.end) {
+            scale = intplGetValue(EASING_SINE_IN_OUT, 1.2f, 1.0f, w->heart.cur - w->heart.start, w->heart.end - w->heart.start);
+        } else {
+            scale = 1.0f;
         }
+        unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(w, w->heart.unitId));
+        BtlUnit_GetHitPos(unit, BtlUnit_GetPartsPtr(unit, w->heart.partId), &p.x, &p.y, &p.z);
+        p.z += 10.0f;
+        a = p;
+        b = p;
+        c = p;
+        b.y = 16.0f * scale + a.y;
+        b.z = 5.0f + a.z;
+        iconDispGx(&a, 0, ICON_FUKIDASHI, scale);
+        iconDispGx(&b, 0, ICON_ITEM_HEART, scale);
     }
 }
 

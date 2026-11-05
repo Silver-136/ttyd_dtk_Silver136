@@ -47,84 +47,83 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
     do {
         allDone = 0;
         switch (ac->acState) {
-            case AC_STATE_INIT: {
-                    ac->result = AC_RESULT_RUNNING;
-                    memset(disp, 0, sizeof(BattleACDispParams));
-                    disp->iconX = -300.0f;
-                    disp->iconY = 0.0f;
-                    disp->slideTimer = 20;
-                    memset(p->button, 0, sizeof(p->button));
-                    memset(p->pressed, 1, sizeof(p->pressed));
-                    for (i = 0; i < (work->actionCommands.params[2]); i++) {
-                        switch (work->actionCommands.params[3]) {
-                            case -2:
-                                p->button[(u32)i] = (irand(100) < 50) ? PAD_BUTTON_A : PAD_BUTTON_B;
+            case AC_STATE_INIT:
+                ac->result = AC_RESULT_RUNNING;
+                memset(disp, 0, sizeof(BattleACDispParams));
+                disp->iconX = -300.0f;
+                disp->iconY = 0.0f;
+                disp->slideTimer = 20;
+                memset(p->button, 0, sizeof(p->button));
+                memset(p->pressed, 1, sizeof(p->pressed));
+                for (i = 0; i < (work->actionCommands.params[2]); i++) {
+                    switch (work->actionCommands.params[3]) {
+                        case -2:
+                            p->button[(u32)i] = (irand(100) < 50) ? PAD_BUTTON_A : PAD_BUTTON_B;
+                            p->pressed[(u32)i] = 0;
+                            break;
+
+                        case -4:
+                            p->button[(u32)i] = (irand(100) < 50) ? PAD_BUTTON_B : PAD_BUTTON_X;
+                            p->pressed[(u32)i] = 0;
+                            break;
+
+                        case -3:
+                            if ((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_ALLOW_REPEATS) {
+                                p->button[(u32)i] = _button_table[irand(4)];
                                 p->pressed[(u32)i] = 0;
-                                break;
-
-                            case -4:
-                                p->button[(u32)i] = (irand(100) < 50) ? PAD_BUTTON_B : PAD_BUTTON_X;
-                                p->pressed[(u32)i] = 0;
-                                break;
-
-                            case -3:
-                                if ((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_ALLOW_REPEATS) {
-                                    p->button[(u32)i] = _button_table[irand(4)];
-                                    p->pressed[(u32)i] = 0;
-                                } else {
-                                    s32 found = 0;
-                                    u32 cand;
-                                    while (!found) {
-                                        s32 j;
-                                        s32 ok;
-                                        cand = _button_table[irand(4)];
-                                        ok = 1;
-                                        for (j = i - 1; j >= 0; j--) {
-                                            if (p->button[(u32)j] == cand) {
-                                                ok = 0;
-                                            }
-                                        }
-
-                                        if (ok) {
-                                            found = 1;
+                            } else {
+                                s32 found = 0;
+                                u32 cand;
+                                while (!found) {
+                                    s32 j;
+                                    s32 ok;
+                                    cand = _button_table[irand(4)];
+                                    ok = 1;
+                                    for (j = i - 1; j >= 0; j--) {
+                                        if (p->button[(u32)j] == cand) {
+                                            ok = 0;
                                         }
                                     }
 
-                                    p->button[(u32)i] = cand;
-                                    p->pressed[(u32)i] = 0;
+                                    if (ok) {
+                                        found = 1;
+                                    }
                                 }
-                                break;
 
-                            default: {
-                                    s32 found = 0;
-                                    u32 cand;
-                                    while (!found) {
-                                        s32 ok;
-                                        cand = _button_table[irand(7)];
-                                        ok = 1;
-                                        for (j = i - 1; j >= 0; j--) {
-                                            if (p->button[(u32)j] == cand) {
-                                                ok = 0;
-                                            }
-                                        }
+                                p->button[(u32)i] = cand;
+                                p->pressed[(u32)i] = 0;
+                            }
+                            break;
 
-                                        if (ok) {
-                                            found = 1;
+                        default: {
+                                s32 found = 0;
+                                u32 cand;
+                                while (!found) {
+                                    s32 ok;
+                                    cand = _button_table[irand(7)];
+                                    ok = 1;
+                                    for (j = i - 1; j >= 0; j--) {
+                                        if (p->button[(u32)j] == cand) {
+                                            ok = 0;
                                         }
                                     }
 
-                                    p->button[(u32)i] = cand;
-                                    p->pressed[(u32)i] = 0;
-                                    break;
+                                    if (ok) {
+                                        found = 1;
+                                    }
                                 }
 
-                        }
+                                p->button[(u32)i] = cand;
+                                p->pressed[(u32)i] = 0;
+                                break;
+                            }
 
                     }
 
-                    ac->acState = AC_STATE_WAIT_START;
-                    break;
                 }
+
+                ac->acState = AC_STATE_WAIT_START;
+                break;
 
             case AC_STATE_WAIT_START:
                 break;

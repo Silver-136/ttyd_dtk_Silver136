@@ -9092,6 +9092,12 @@ u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     f32 pd, ang;
     s16 pan, srndPan, t;
     PaperSoundWork* wp = &psnd;
+    f32 c;
+    f32 ac;
+    f32 q;
+    f32 dx;
+    f32 dy;
+    f32 dz;
 
     if (id & PSND_SFX_LISTENER_OFFSET) {
         v.x += wp->position.x;
@@ -9127,42 +9133,37 @@ u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     }
     pan = t;
 
-    {
-        f32 dx = v.x - wp->position.x;
-        f32 dy = v.y - wp->position.y;
-        f32 dz = v.z - wp->position.z;
-        d = dx * dx + dy * dy + dz * dz;
-        // d = sqrtf(d): the steps of the math.h sqrtf, written out
-        if (d > 0.0f) {
-            f64 guess = __frsqrte(d);
-            guess = 0.5 * guess * (3.0 - guess * guess * d);
-            guess = 0.5 * guess * (3.0 - guess * guess * d);
-            guess = 0.5 * guess * (3.0 - guess * guess * d);
-            d = d * guess;
-        } else if (d < 0.0) {
-            d = NAN;
-        } else if (isnan(d)) {
-            d = NAN;
-        }
+    dx = v.x - wp->position.x;
+    dy = v.y - wp->position.y;
+    dz = v.z - wp->position.z;
+    d = dx * dx + dy * dy + dz * dz;
+    // d = sqrtf(d): the steps of the math.h sqrtf, written out
+    if (d > 0.0f) {
+        f64 guess = __frsqrte(d);
+        guess = 0.5 * guess * (3.0 - guess * guess * d);
+        guess = 0.5 * guess * (3.0 - guess * guess * d);
+        guess = 0.5 * guess * (3.0 - guess * guess * d);
+        d = d * guess;
+    } else if (d < 0.0) {
+        d = NAN;
+    } else if (isnan(d)) {
+        d = NAN;
     }
-    {
-        f32 c = d * (f32)cos((f32)(3.14 * ang));
-        f32 ac = __fabsf(c);
-        f32 q;
-        if (ac > 2048.0f) {
-            ac = 2048.0f;
+    c = d * (f32)cos((f32)(3.14 * ang));
+    ac = __fabsf(c);
+    if (ac > 2048.0f) {
+        ac = 2048.0f;
+    }
+    q = 64.0f * ac / 2048.0f;
+    if (__fabsf(ang) < 0.5f) {
+        t = 64.0f - q;
+        if (t < 1) {
+            t = 1;
         }
-        q = 64.0f * ac / 2048.0f;
-        if (__fabsf(ang) < 0.5f) {
-            t = 64.0f - q;
-            if (t < 1) {
-                t = 1;
-            }
-        } else {
-            t = 64.0f + q;
-            if (t > 127) {
-                t = 127;
-            }
+    } else {
+        t = 64.0f + q;
+        if (t > 127) {
+            t = 127;
         }
     }
     if (t <= 64) {
@@ -9499,6 +9500,8 @@ void psndBGMMain(void) {
     s32 c;
 
     PaperSoundBGM* tmpp2;
+    PaperSoundFade* f0;
+    u32 alive;
     if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) {
         maxv = 65;
     }
@@ -9519,26 +9522,23 @@ void psndBGMMain(void) {
         if (SoundSSCheck(bgm->streamId) & SOUND_STREAM_FLAG_MUTE) {
             SoundSSMuteOff(bgm->streamId);
         }
-        {
-            u32 alive;
-            if (bgm->listId == -1) {
-                alive = 0;
-            } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
-                if (SoundSSCheck(bgm->streamId)) {
-                    alive = 1;
-                } else {
-                    alive = 0;
-                }
-            } else if (SoundSongCheck(bgm->streamId) == 0) {
-                alive = 0;
-            } else {
+        if (bgm->listId == -1) {
+            alive = 0;
+        } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
+            if (SoundSSCheck(bgm->streamId)) {
                 alive = 1;
+            } else {
+                alive = 0;
             }
+        } else if (SoundSongCheck(bgm->streamId) == 0) {
+            alive = 0;
+        } else {
+            alive = 1;
+        }
 
-            if (!alive) {
-                bgm->listId = -1;
-                continue;
-            }
+        if (!alive) {
+            bgm->listId = -1;
+            continue;
         }
         if (bgm->scopeTimer != 0 && bgm->scopeTimer != 0xFF) {
             bgm->scopeTimer--;
@@ -9549,30 +9549,26 @@ void psndBGMMain(void) {
         }
 
         // FAKE: f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object
-        {
-            PaperSoundFade* f0 = &bgm->fade;
-            if (f0->state == PSND_FADE_STATE_IDLE) {
-                a = bgm->volume;
-            } else {
-                a = (u8)((bgm->volume * f0->timeMax) / f0->time);
-            }
-            if (f0->dipState == PSND_DIP_STATE_IDLE) {
-                b = 0x7F;
-            } else {
-                b = (u8)((f0->dipTime * 0x7F) / f0->dipTimeMax);
-            }
+        f0 = &bgm->fade;
+        if (f0->state == PSND_FADE_STATE_IDLE) {
+            a = bgm->volume;
+        } else {
+            a = (u8)((bgm->volume * f0->timeMax) / f0->time);
+        }
+        if (f0->dipState == PSND_DIP_STATE_IDLE) {
+            b = 0x7F;
+        } else {
+            b = (u8)((f0->dipTime * 0x7F) / f0->dipTimeMax);
         }
         a = (u8)(a * b / 127);
-        {
-            // FAKE: tmpp2 and psbgm[i & 0xF] are the same entry, read both ways; reading every field through tmpp2
-            // changes the object
-            tmpp2 = &psbgm[i & 0xF];
-            if (tmpp2->listId != -1) {
-                if (psbgmlist[psbgm[i & 0xF].listId].flags & PSND_BGM_STREAM) {
-                    SoundSSSetVolCh(tmpp2->streamId, (u8)(a * vol / 100));
-                } else {
-                    SoundSongSetVolCh(psbgm[i & 0xF].streamId, (u8)(a * vol / 100));
-                }
+        // FAKE: tmpp2 and psbgm[i & 0xF] are the same entry, read both ways; reading every field through tmpp2
+        // changes the object
+        tmpp2 = &psbgm[i & 0xF];
+        if (tmpp2->listId != -1) {
+            if (psbgmlist[psbgm[i & 0xF].listId].flags & PSND_BGM_STREAM) {
+                SoundSSSetVolCh(tmpp2->streamId, (u8)(a * vol / 100));
+            } else {
+                SoundSongSetVolCh(psbgm[i & 0xF].streamId, (u8)(a * vol / 100));
             }
         }
         if (fade->state == PSND_FADE_STATE_IN) {

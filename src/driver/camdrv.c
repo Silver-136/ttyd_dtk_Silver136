@@ -292,6 +292,8 @@ void camEvalNearFar(CameraEntry* camera) {
     f32 minDepth;
     f32 maxDepth;
     int i;
+    f32 near;
+    f32 far;
 
     nearVZ = 1.0f;
     farVZ = 32768.0f;
@@ -333,18 +335,16 @@ void camEvalNearFar(CameraEntry* camera) {
         }
     }
 
-    {
-        f32 near = -nearVZ;
-        f32 far = -farVZ;
-        if (far < 1.0f) {
-            far = 1.0f;
-        }
-
-        // near is written twice: the 1.0f is overwritten at once by the computed value
-        camera->near = 1.0f;
-        camera->near = near;
-        camera->far = far;
+    near = -nearVZ;
+    far = -farVZ;
+    if (far < 1.0f) {
+        far = 1.0f;
     }
+
+    // near is written twice: the 1.0f is overwritten at once by the computed value
+    camera->near = 1.0f;
+    camera->near = near;
+    camera->far = far;
 }
 
 /**
@@ -444,6 +444,9 @@ void camSetCurNo(CameraId cameraId) {
 }
 
 void cam3dMain(CameraEntry* camera) {
+    CameraParams work;
+    CameraParams work2;
+
     if (camera->flags & CAMERA_FLAG_CTRL_OFF) {
         return;
     }
@@ -552,72 +555,68 @@ void cam3dMain(CameraEntry* camera) {
                 }
             }
 
+
+            work.fovY = 25.0f;
+            work.aspect = 1.0f;
+            work.far = 32768.0f;
+            work.pos.x = camera->storedPos.x;
+            work.pos.y = camera->storedPos.y;
+            work.pos.z = camera->storedPos.z;
+            work.at.x = camera->storedAt.x;
+            work.at.y = camera->storedAt.y;
+            work.at.z = camera->storedAt.z;
+
+            switch (camera->stateA) {
+                case CAM_MOVE_NONE:
+                case CAM_MOVE_BACK:
+                case CAM_MOVE_TO_UNUSED:
+                    if (camera->flags & CAMERA_FLAG_ROAD) {
+                        MarioWork* mario = marioGetPtr();
+                        f32 bank = 0.0f;
+                        f32 dolly;
+                        f32 oldx, oldy, oldz;
+
+                        camShiftMain(camera, mario, &bank);
+                        camRoadMain(&work2, camera->blendPos.x, camera->blendPos.y, camera->blendPos.z,
+                                    camera->blendAt.x, camera->blendAt.y, camera->blendAt.z, bank);
+                        dolly = camera->dollyPercent;
+                        oldx = work2.pos.x;
+                        oldy = work2.pos.y;
+                        oldz = work2.pos.z;
+
+                        work2.pos.x = oldx + (work2.at.x - oldx) * dolly / 100.0f;
+                        work2.pos.y = oldy + (work2.at.y - oldy) * dolly / 100.0f;
+                        work2.pos.z = oldz + (work2.at.z - oldz) * dolly / 100.0f;
+                    } else {
+                        work2 = work;
+                    }
+                    break;
+
+                case CAM_MOVE_TO_STORED:
+                    work2.fovY = work.fovY;
+                    work2.aspect = work.aspect;
+                    work2.far = work.far;
+                    work2.pos.x = camera->presetPos.x;
+                    work2.pos.y = camera->presetPos.y;
+                    work2.pos.z = camera->presetPos.z;
+                    work2.at.x = camera->presetAt.x;
+                    work2.at.y = camera->presetAt.y;
+                    work2.at.z = camera->presetAt.z;
+                    break;
+            }
+
+            camShiftPostMain();
+
             {
-                CameraParams work;
-                CameraParams work2;
-
-                work.fovY = 25.0f;
-                work.aspect = 1.0f;
-                work.far = 32768.0f;
-                work.pos.x = camera->storedPos.x;
-                work.pos.y = camera->storedPos.y;
-                work.pos.z = camera->storedPos.z;
-                work.at.x = camera->storedAt.x;
-                work.at.y = camera->storedAt.y;
-                work.at.z = camera->storedAt.z;
-
-                switch (camera->stateA) {
-                    case CAM_MOVE_NONE:
-                    case CAM_MOVE_BACK:
-                    case CAM_MOVE_TO_UNUSED:
-                        if (camera->flags & CAMERA_FLAG_ROAD) {
-                            MarioWork* mario = marioGetPtr();
-                            f32 bank = 0.0f;
-                            f32 dolly;
-                            f32 oldx, oldy, oldz;
-
-                            camShiftMain(camera, mario, &bank);
-                            camRoadMain(&work2, camera->blendPos.x, camera->blendPos.y, camera->blendPos.z,
-                                        camera->blendAt.x, camera->blendAt.y, camera->blendAt.z, bank);
-                            dolly = camera->dollyPercent;
-                            oldx = work2.pos.x;
-                            oldy = work2.pos.y;
-                            oldz = work2.pos.z;
-
-                            work2.pos.x = oldx + (work2.at.x - oldx) * dolly / 100.0f;
-                            work2.pos.y = oldy + (work2.at.y - oldy) * dolly / 100.0f;
-                            work2.pos.z = oldz + (work2.at.z - oldz) * dolly / 100.0f;
-                        } else {
-                            work2 = work;
-                        }
-                        break;
-
-                    case CAM_MOVE_TO_STORED:
-                        work2.fovY = work.fovY;
-                        work2.aspect = work.aspect;
-                        work2.far = work.far;
-                        work2.pos.x = camera->presetPos.x;
-                        work2.pos.y = camera->presetPos.y;
-                        work2.pos.z = camera->presetPos.z;
-                        work2.at.x = camera->presetAt.x;
-                        work2.at.y = camera->presetAt.y;
-                        work2.at.z = camera->presetAt.z;
-                        break;
-                }
-
-                camShiftPostMain();
-
-                {
-                    f32 t, it;
-                    t = intplGetValue(camera->curveA, 0.0f, 1.0f, (s32)(100000.0f * (1.0f - camera->progressA)), 100000);
-                    it = 1.0f - t;
-                    camera->cameraAt.x = (work.at.x * it) + (work2.at.x * t);
-                    camera->cameraAt.y = (work.at.y * it) + (work2.at.y * t);
-                    camera->cameraAt.z = (work.at.z * it) + (work2.at.z * t);
-                    camera->cameraPos.x = (work.pos.x * it) + (work2.pos.x * t);
-                    camera->cameraPos.y = (work.pos.y * it) + (work2.pos.y * t);
-                    camera->cameraPos.z = (work.pos.z * it) + (work2.pos.z * t);
-                }
+                f32 t, it;
+                t = intplGetValue(camera->curveA, 0.0f, 1.0f, (s32)(100000.0f * (1.0f - camera->progressA)), 100000);
+                it = 1.0f - t;
+                camera->cameraAt.x = (work.at.x * it) + (work2.at.x * t);
+                camera->cameraAt.y = (work.at.y * it) + (work2.at.y * t);
+                camera->cameraAt.z = (work.at.z * it) + (work2.at.z * t);
+                camera->cameraPos.x = (work.pos.x * it) + (work2.pos.x * t);
+                camera->cameraPos.y = (work.pos.y * it) + (work2.pos.y * t);
+                camera->cameraPos.z = (work.pos.z * it) + (work2.pos.z * t);
             }
 
             camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);

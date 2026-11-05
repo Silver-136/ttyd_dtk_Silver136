@@ -547,6 +547,7 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
     YuuNpcPose* pose = &yuunpc_wp->pose[npc->poseId];
     f32 t;
     f32 a;
+    f32 rot;
 
     if (!(ext->flags & EXT_POSE_FLAG_BILLBOARD)) {
         f32 c, s;
@@ -577,14 +578,12 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
     switch (npc->flags & YUUNPC_SP_MASK) {
         case YUUNPC_SP_YUUSP0:
         case YUUNPC_SP_YUUSP1:
-        case YUUNPC_SP_YUUSP2: {
-            f32 rot;
-            animPoseSetLocalTime(npc->npc->poseId, (s32)(pose->frames * t));
-            rot = 3600.0f + (90.0f - ext->dir);
-            npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
-            npc->npc->position = npc->pos;
-            break;
-        }
+        case YUUNPC_SP_YUUSP2:
+        animPoseSetLocalTime(npc->npc->poseId, (s32)(pose->frames * t));
+        rot = 3600.0f + (90.0f - ext->dir);
+        npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
+        npc->npc->position = npc->pos;
+        break;
         case 0:
             if (npc->poseId != yuunpc_wp->chusanPose) {
                 ext->texId = pose->start + (s32)(pose->count * t);

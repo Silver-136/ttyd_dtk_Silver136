@@ -82,6 +82,7 @@ void battleCameraMain(void) {
     s16 moveLv2, zoomLv2;
     s32 phase2;
     s16 moveLv3;
+    BattleAudienceMember* m;
 
     part2 = 0; // FAKE: dead store, moves part2's variable record first so its case-8 web is a split temp (target r27)
     unit = BattleGetMarioPtr(wp); // FAKE: real zero-code first web of unit (the self-assign below emits nothing), so the case-8 unit web is a split temp (target r26)
@@ -356,10 +357,9 @@ void battleCameraMain(void) {
         strcpy(name, "\202\251\202\337\202\347\201\100\202\121\202\317\201\133\202\302\202\251\202\361\202\302\202\242\202\321");
         break;
     }
-    case BTL_CAM_MODE_AUDIENCE_MEMBER: {
-            BattleAudienceMember* m = &aud->members[wp->cameraWork.audienceId];
-            battleCameraMoveTo(1, 0, m->position.x, 200.0f, 400.0f + m->position.z, m->position.x, 0.0f, m->position.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        }
+    case BTL_CAM_MODE_AUDIENCE_MEMBER:
+        m = &aud->members[wp->cameraWork.audienceId];
+        battleCameraMoveTo(1, 0, m->position.x, 200.0f, 400.0f + m->position.z, m->position.x, 0.0f, m->position.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\251\202\361\202\253\202\341\202\255\202\302\202\242\202\321");
         break;
     case BTL_CAM_MODE_UNIT_TO_AUDIENCE:
@@ -883,6 +883,7 @@ USER_FUNC(evt_btl_camera_set_homing_unit_audience) {
     BattleUnitPart* part;
     Vec pos;
     Vec hit;
+    BattleAudienceMember* m;
 
     pri = evtGetValue(event, args[0]);
     unit = evtGetValue(event, args[1]);
@@ -901,10 +902,8 @@ USER_FUNC(evt_btl_camera_set_homing_unit_audience) {
     BtlUnit_GetHitPos(u, part, &hit.x, &hit.y, &hit.z);
     wp->cameraWork.homingOffset = (Vec){pos.x, pos.y, pos.z};
     wp->cameraWork.audienceId = audId;
-    {
-        BattleAudienceMember* m = &aud->members[audId];
-        wp->cameraWork.homingOffset2 = (Vec){m->position.x, m->position.y, m->position.z};
-    }
+    m = &aud->members[audId];
+    wp->cameraWork.homingOffset2 = (Vec){m->position.x, m->position.y, m->position.z};
     return EVT_RETURN_DONE;
 }
 

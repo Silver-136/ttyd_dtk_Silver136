@@ -345,6 +345,7 @@ USER_FUNC(bakuGameMain) {
     f32 v200 = -200.0f;
     f32 v100 = -100.0f;
     f32 frames = 40.0f;
+    s32 r;
 
     args = event->args;
     if (isFirstCall) {
@@ -547,17 +548,15 @@ state_end:
         w->hsteps = 30;
     case 2:
         w->hpos.x = intplGetValue(EASING_LINEAR, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
-        {
-            s32 r = w->htimer % 12;
-            if (r >= 0 && r <= 3) {
-                w->texIdx = 0x5A;
-            }
-            if (r >= 4 && r <= 7) {
-                w->texIdx = 0x5B;
-            }
-            if (r >= 8 && r <= 11) {
-                w->texIdx = 0x5C;
-            }
+        r = w->htimer % 12;
+        if (r >= 0 && r <= 3) {
+            w->texIdx = 0x5A;
+        }
+        if (r >= 4 && r <= 7) {
+            w->texIdx = 0x5B;
+        }
+        if (r >= 8 && r <= 11) {
+            w->texIdx = 0x5C;
         }
         w->htimer++;
         if (w->htimer > w->hsteps) {
@@ -1135,6 +1134,7 @@ main_end:
  */
 USER_FUNC(bakuGameHeihoReturn) {
     BakuWork* w = GetBakuGamePtr();
+    s32 r;
 
     if (!(w->flags & 1)) {
         return EVT_RETURN_DONE;
@@ -1166,17 +1166,15 @@ USER_FUNC(bakuGameHeihoReturn) {
         w->hsteps = 30;
     case 10:
         w->hpos.x = intplGetValue(EASING_LINEAR, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
-        {
-            s32 r = w->htimer % 12;
-            if (r >= 0 && r <= 3) {
-                w->texIdx = 0x5A;
-            }
-            if (r >= 4 && r <= 7) {
-                w->texIdx = 0x5B;
-            }
-            if (r >= 8 && r <= 11) {
-                w->texIdx = 0x5C;
-            }
+        r = w->htimer % 12;
+        if (r >= 0 && r <= 3) {
+            w->texIdx = 0x5A;
+        }
+        if (r >= 4 && r <= 7) {
+            w->texIdx = 0x5B;
+        }
+        if (r >= 8 && r <= 11) {
+            w->texIdx = 0x5C;
         }
         w->htimer++;
         if (w->htimer > w->hsteps) {

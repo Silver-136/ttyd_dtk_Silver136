@@ -219,17 +219,15 @@ USER_FUNC(replace_evt) {
     WanaWork* wp;
     s32 w;
     s32 h;
+    Vec min;
+    Vec max;
 
-    {
-        Vec min;
-        Vec max;
 
-        min = (Vec){data->bboxMin.x, data->bboxMin.y, data->bboxMin.z};
-        max = (Vec){data->bboxMax.x, data->bboxMax.y, data->bboxMax.z};
+    min = (Vec){data->bboxMin.x, data->bboxMin.y, data->bboxMin.z};
+    max = (Vec){data->bboxMax.x, data->bboxMax.y, data->bboxMax.z};
 
-        w = 2.0f * (max.x - min.x);
-        h = 2.0f * (max.z - min.z);
-    }
+    w = 2.0f * (max.x - min.x);
+    h = 2.0f * (max.z - min.z);
     w += w & 1;
     h += h & 1;
     wp = BTL_ALLOC(sizeof(WanaWork));

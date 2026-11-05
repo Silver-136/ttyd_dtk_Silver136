@@ -154,6 +154,8 @@ void effBrokenBarrierMain(EffectEntry* effect) {
     f32 t;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
+    f32 lat;
+    f32 lon;
 
     tmp.x = work->position.x;
     tmp.y = work->position.y;
@@ -202,13 +204,11 @@ void effBrokenBarrierMain(EffectEntry* effect) {
             t = (f32)(rand() % 360);
             switch (type) {
             case 0:
-            case 2: {
-                    f32 lat = 6.2831855f * t / 360.0f;
-                    f32 lon;
-                    work->position.x = width * (f32)sin(lon = 6.2831855f * a / 360.0f) * (f32)cos(lat);
-                    work->position.y = height * (f32)cos(lon) * (f32)cos(lat);
-                    work->position.z = width * (f32)sin(lat);
-                }
+            case 2:
+                lat = 6.2831855f * t / 360.0f;
+                work->position.x = width * (f32)sin(lon = 6.2831855f * a / 360.0f) * (f32)cos(lat);
+                work->position.y = height * (f32)cos(lon) * (f32)cos(lat);
+                work->position.z = width * (f32)sin(lat);
                 work->velocity.x = 0.4f * work->position.x;
                 work->velocity.y = 0.4f * work->position.y;
                 work->velocity.z = 0.4f * work->position.z;

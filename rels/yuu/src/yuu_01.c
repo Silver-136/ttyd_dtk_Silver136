@@ -901,25 +901,23 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         if (i < 5) {
             break;
         }
-        {
-            for (i = 5; i < 13; i++) {
-                mapObjGetPos(s_nametbl[i], &pos);
-                pos.y = mario->position.y;
-                for (j = 0; j < 3; j++) {
-                    if (PSVECSquareDistance(&box[j], &pos) <= 225.0f) {
-                        if (!marioChkSwirlPower()) {
-                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO2), &mario->position);
-                            data->result--;
-                        }
-                        data->index = i;
-                        marioSetSwirlPower(1000, 8.0f, irand(91) + hoko_tbl[data->index] - 45);
-                        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-                        break;
+        for (i = 5; i < 13; i++) {
+            mapObjGetPos(s_nametbl[i], &pos);
+            pos.y = mario->position.y;
+            for (j = 0; j < 3; j++) {
+                if (PSVECSquareDistance(&box[j], &pos) <= 225.0f) {
+                    if (!marioChkSwirlPower()) {
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO2), &mario->position);
+                        data->result--;
                     }
-                }
-                if (j < 3) {
+                    data->index = i;
+                    marioSetSwirlPower(1000, 8.0f, irand(91) + hoko_tbl[data->index] - 45);
+                    mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
                     break;
                 }
+            }
+            if (j < 3) {
+                break;
             }
         }
         if (i < 13) {

@@ -2042,6 +2042,7 @@ USER_FUNC(yuka_anim_reverse_replay) {
  */
 USER_FUNC(yuka_anim_reverse_play) {
     f32 frame;
+    f32 dt;
 
     if (isFirstCall) {
         yuka_anim.anim = (YukaAnimData*)mapSearchAnmObj("yuka");
@@ -2054,11 +2055,9 @@ USER_FUNC(yuka_anim_reverse_play) {
         return EVT_RETURN_DONE;
     }
     if (!(yuka_anim.flags & 1)) {
-        {
-            f32 dt = 60.0f * (f32)(u64)(YUKA_NOW() - yuka_anim.anim->time) / 1000.0f;
+        dt = 60.0f * (f32)(u64)(YUKA_NOW() - yuka_anim.anim->time) / 1000.0f;
 
-            yuka_anim.anim->frame -= dt * yuka_anim.anim->speed;
-        }
+        yuka_anim.anim->frame -= dt * yuka_anim.anim->speed;
         if (yuka_anim.anim->frame <= 0.0f) {
             for (frame = yuka_anim.anim->frame; frame < 0.0f; frame += yuka_anim.anim->data->length) {
             }

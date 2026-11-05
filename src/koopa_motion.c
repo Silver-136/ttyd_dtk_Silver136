@@ -133,6 +133,7 @@ f32 kpaStickSpd(s32 dash) {
     f32 max;
     f32 lim = 70.0f;
     f32 k;
+    f32 a;
     if (stick >= lim) {
         stick = lim;
     }
@@ -175,11 +176,9 @@ f32 kpaStickSpd(s32 dash) {
     }
     mario->kpaSpeed = spd;
     mario->baseSpeed = __fabsf(spd);
-    {
-        f32 a = angleABf(0.0f, 0.0f, spd, 0.0f);
-        if (mario->baseSpeed) {
-            mario->directionView = a;
-        }
+    a = angleABf(0.0f, 0.0f, spd, 0.0f);
+    if (mario->baseSpeed) {
+        mario->directionView = a;
     }
     return mario->baseSpeed;
 }

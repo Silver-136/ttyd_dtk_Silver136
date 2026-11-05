@@ -435,6 +435,7 @@ int __gl_meshDelete(GLUhalfEdge* eDel) {
 GLUhalfEdge* __gl_meshAddEdgeVertex(GLUhalfEdge* eOrg) {
     GLUhalfEdge* eNewSym;
     GLUhalfEdge* eNew = MakeEdge(eOrg);
+    GLUvertex* newVertex;
     if (eNew == NULL) return NULL;
 
     eNewSym = eNew->Sym;
@@ -444,12 +445,10 @@ GLUhalfEdge* __gl_meshAddEdgeVertex(GLUhalfEdge* eOrg) {
 
     /* Set the vertex and face information */
     eNew->Org = eOrg->Dst;
-    {
-        GLUvertex* newVertex = allocVertex();
-        if (newVertex == NULL) return NULL;
+    newVertex = allocVertex();
+    if (newVertex == NULL) return NULL;
 
-        MakeVertex(newVertex, eNewSym, eNew->Org);
-    }
+    MakeVertex(newVertex, eNewSym, eNew->Org);
     eNew->Lface = eNewSym->Lface = eOrg->Lface;
 
     return eNew;

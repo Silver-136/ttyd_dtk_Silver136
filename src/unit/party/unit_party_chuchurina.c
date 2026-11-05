@@ -2598,6 +2598,7 @@ void mono_capture(CameraId camId, void* param) {
 void mono_disp(CameraId camId, void* payload) {
     BattleUnit* unit = payload;
     CameraEntry* cam = camGetPtr(camId);
+    BattleUnit* party;
     smartEntry* texBuf = unit->screenTexBuf;
     void* buf = NULL;
     GXTexObj tex;
@@ -2639,15 +2640,13 @@ void mono_disp(CameraId camId, void* payload) {
         GXTexCoord2f32(1.0f, 1.0f);
         GXPosition3f32(-304.0f, -240.0f, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
-        {
-            BattleUnit* party = BattleGetPartyPtr(_battleWorkPointer);
-            if (party != NULL) {
-                BattleUnitPart* part = BtlUnit_GetPartsPtr(party, 1);
-                CameraId prevCamId = camGetCurNo();
-                camSetCurNo(CAMERA_3D);
-                btlUnitPartsDisp(CAMERA_3D, part);
-                camSetCurNo(prevCamId);
-            }
+        party = BattleGetPartyPtr(_battleWorkPointer);
+        if (party != NULL) {
+            BattleUnitPart* part = BtlUnit_GetPartsPtr(party, 1);
+            CameraId prevCamId = camGetCurNo();
+            camSetCurNo(CAMERA_3D);
+            btlUnitPartsDisp(CAMERA_3D, part);
+            camSetCurNo(prevCamId);
         }
     }
 }

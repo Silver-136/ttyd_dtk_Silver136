@@ -403,6 +403,8 @@ USER_FUNC(evt_bero_get_info) {
     BeroEntry** table;
     int i;
     s32* switches;
+    BeroEntry* e;
+    BeroEntry* en;
 
     table = BeroINFOARR;
     for (i = 0; i < 16; i++) {
@@ -410,32 +412,27 @@ USER_FUNC(evt_bero_get_info) {
     }
     table = BeroINFOARR;
 
-    {
-        BeroEntry* en;
-        for (en = (BeroEntry*)event->lwData[0];; en++) {
-            HitEntry* hit = hitNameToPtr(en->hitName);
-            if (!en->hitName) {
-                break;
-            }
-            if (!hit) {
-                mapErrorEntry(1, en->hitName);
-            }
+    for (en = (BeroEntry*)event->lwData[0];; en++) {
+        HitEntry* hit = hitNameToPtr(en->hitName);
+        if (!en->hitName) {
+            break;
+        }
+        if (!hit) {
+            mapErrorEntry(1, en->hitName);
         }
     }
-    {
-        BeroEntry* e = (BeroEntry*)event->lwData[0];
-        switches = BeroSW;
-        i = 0;
-        while (1) {
-            if (!e->hitName) {
-                break;
-            }
-            *table = e;
-            switches[i] = -1;
-            table++;
-            i++;
-            e++;
+    e = (BeroEntry*)event->lwData[0];
+    switches = BeroSW;
+    i = 0;
+    while (1) {
+        if (!e->hitName) {
+            break;
         }
+        *table = e;
+        switches[i] = -1;
+        table++;
+        i++;
+        e++;
     }
     BeroNUM = i;
     BeroEXEC = 0;
@@ -633,6 +630,7 @@ USER_FUNC(bero_get_position_normal) {
     Vec start;
     f32 *hxPtr;
     Vec end;
+    f32 c0;
     start.x = pos[0];
     start.y = pos[1];
     start.z = pos[2];
@@ -666,10 +664,8 @@ USER_FUNC(bero_get_position_normal) {
         tmp.x = start.x - (30.0f * (f32)sin(rad));
         tmp.y = start.y;
         // FAKE: block-scoped temporary for cos(rad); the direct expression changes the object
-        {
-            f32 c0 = (f32) cos(rad);
-            tmp.z = start.z - (30.0f * (-c0));
-        }
+        c0 = (f32) cos(rad);
+        tmp.z = start.z - (30.0f * (-c0));
 
         // FAKE: repeated store of dist and a spare pointer to hx; dropping both changes the object
         dist = 1000000.0f;

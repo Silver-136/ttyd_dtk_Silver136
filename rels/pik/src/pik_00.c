@@ -2347,23 +2347,21 @@ static USER_FUNC(zoom) {
 #if VERSION >= VERSION_US
     CameraParams out;
     f32 bank = 0.0f;
+    Vec pos;
+    Vec at;
 
     camShiftMain(cam, mario, &bank);
     camRoadMain(&out, cam->blendPos.x, cam->blendPos.y, cam->blendPos.z, cam->blendAt.x, cam->blendAt.y, cam->blendAt.z, bank);
-    {
-        Vec pos;
-        Vec at;
 
-        at = zoom_zero_b;
-        pos = zoom_zero_a;
-        at.x = out.at.x;
-        at.y = out.at.y;
-        at.z = out.at.z;
-        pos.x = out.pos.x;
-        pos.y = out.pos.y;
-        pos.z = out.pos.z;
-        PSVECSubtract(&pos, &at, &v);
-    }
+    at = zoom_zero_b;
+    pos = zoom_zero_a;
+    at.x = out.at.x;
+    at.y = out.at.y;
+    at.z = out.at.z;
+    pos.x = out.pos.x;
+    pos.y = out.pos.y;
+    pos.z = out.pos.z;
+    PSVECSubtract(&pos, &at, &v);
 #else
     PSVECSubtract(&cam->cameraPos, &cam->cameraAt, &v);
 #endif

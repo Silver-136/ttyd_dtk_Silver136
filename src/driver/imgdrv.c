@@ -33,6 +33,8 @@ void imgShadowDisp(CameraId camId, void* param);
  * imgDisp uses it for images with no virtual point.
  */
 static void zFill(void) {
+    f32 t;
+
     static s32 depth_image[32] ATTRIBUTE_ALIGN(32) = { // GX texture: 32-byte aligned
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
@@ -43,11 +45,9 @@ static void zFill(void) {
     Mtx mtx;
 
     camera = camGetCurPtr();
-    {
-        f32 t = (6.2831855f * camera->fovY) / 360.0f;
-        y0 = (camera->near + camera->far) / 2.0f;
-        y0 = y0 * (f32)tan(0.5f * t);
-    }
+    t = (6.2831855f * camera->fovY) / 360.0f;
+    y0 = (camera->near + camera->far) / 2.0f;
+    y0 = y0 * (f32)tan(0.5f * t);
     x1 = (y0 * camera->aspect);
     y1 = -y0;
     x0 = -x1;
@@ -185,18 +185,16 @@ void imgDisp(CameraId camId, void* param) {
         zoff = d - t;
     }
 #if VERSION <= VERSION_DEMO_JP
-    {
-        if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
-            fl = entry->shadows[first].rect.left;
-            ft = entry->shadows[first].rect.top;
-            rectW = entry->shadows[first].rect.width;
-            rectH = entry->shadows[first].rect.height;
-        } else {
-            fl = entry->shadows[first].x;
-            ft = entry->shadows[first].y;
-            rectW = entry->width;
-            rectH = entry->height;
-        }
+    if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
+        fl = entry->shadows[first].rect.left;
+        ft = entry->shadows[first].rect.top;
+        rectW = entry->shadows[first].rect.width;
+        rectH = entry->shadows[first].rect.height;
+    } else {
+        fl = entry->shadows[first].x;
+        ft = entry->shadows[first].y;
+        rectW = entry->width;
+        rectH = entry->height;
     }
     PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)DEMOGetRenderModeObj()->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)DEMOGetRenderModeObj()->efbHeight), zoff);
 #else

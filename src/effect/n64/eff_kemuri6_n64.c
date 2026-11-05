@@ -94,6 +94,7 @@ void effKemuri6Main(EffectEntry* effect) {
     BOOL disp;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
+    f32 s;
 
     disp = FALSE;
     work = effect->userdata;
@@ -111,10 +112,8 @@ void effKemuri6Main(EffectEntry* effect) {
         }
         disp = TRUE;
         work->angle = reviseAngle(12.0f + work->angle);
-        {
-            f32 s = (f32)sin((6.2831855f * work->angle) / 360.0f);
-            work->scaleX = 0.1f * s + work->baseX;
-        }
+        s = (f32)sin((6.2831855f * work->angle) / 360.0f);
+        work->scaleX = 0.1f * s + work->baseX;
         work->scaleY = 0.1f * (f32)cos((6.2831855f * work->angle) / 360.0f) + work->baseY;
         // Holding this puff returns from the whole update, so the remaining elements and this frame's dispEntry are skipped.
         if (work->type == 0 && work->timer > 4 && work->timer <= 5 && marioGetPtr()->currMotionId == MARIO_MOTION_STAY) {

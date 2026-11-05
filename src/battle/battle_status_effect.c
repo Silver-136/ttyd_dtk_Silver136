@@ -304,6 +304,7 @@ void BSE_Freeze(BattleUnit* unit) {
     f32* wk;
     f32 widthScale, heightScale, scale;
     BOOL on = FALSE;
+    BattleUnitPart* parts;
 
     if (BtlUnit_CheckStatus(unit, STATUS_FREEZE)) {
         on = TRUE;
@@ -313,15 +314,13 @@ void BSE_Freeze(BattleUnit* unit) {
             unit->iceEff = effIceEntry(0, -1, -1000.0f, -1000.0f, -1000.0f, 1.0f);
         }
         wk = (f32*)unit->iceEff->userdata;
-        {
-            BattleUnitPart* parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-            widthScale = unit->width / 20.0f;
-            heightScale = unit->height / 36.0f;
-            scale = widthScale <= heightScale ? widthScale : heightScale;
-            scale *= unit->sizeMultiplier;
-            wk[4] = scale;
-            BtlUnit_GetPartsWorldPos(parts, &x, &y, &z);
-        }
+        parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+        widthScale = unit->width / 20.0f;
+        heightScale = unit->height / 36.0f;
+        scale = widthScale <= heightScale ? widthScale : heightScale;
+        scale *= unit->sizeMultiplier;
+        wk[4] = scale;
+        BtlUnit_GetPartsWorldPos(parts, &x, &y, &z);
         wk[1] = x;
         wk[2] = 20.0f * scale + y;
         wk[3] = 10.0f + z;

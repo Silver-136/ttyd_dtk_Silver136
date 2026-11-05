@@ -84,6 +84,7 @@ EffectEntry* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, 
 void effSpiritMain(EffectEntry* effect) {
     EffSpiritWork* work = effect->userdata;
     Vec position;
+    f32 ang;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
 
@@ -121,11 +122,9 @@ void effSpiritMain(EffectEntry* effect) {
                 work->position.x = intplGetValue(EASING_SINE_IN_OUT, work->startPos.x, work->endPos.x, work->step, work->steps);
                 work->position.y = intplGetValue(EASING_SINE_IN_OUT, work->startPos.y, work->endPos.y, work->step, work->steps);
                 work->position.z = intplGetValue(EASING_SINE_IN_OUT, work->startPos.z, work->endPos.z, work->step, work->steps);
-                {
-                    f32 ang = 3.1415927f * ((f32)work->step / (f32)work->steps);
-                    ang = sin(ang);
-                    work->position.y += 50.0f * ang;
-                }
+                ang = 3.1415927f * ((f32)work->step / (f32)work->steps);
+                ang = sin(ang);
+                work->position.y += 50.0f * ang;
                 work->scale = intplGetValue(EASING_SINE_IN_OUT, 1.0f, 0.0f, work->step, work->steps);
             } else {
                 effDelete(effect);

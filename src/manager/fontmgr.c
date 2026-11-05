@@ -589,15 +589,14 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
     u8 width;
     u16 code;
     f32 sx, sy;
+    s32 gz;
 
 #if VERSION >= VERSION_US
     // FAKE: dead guard (folded after register allocation, emits no code). It only creates the -1.0f
     // .sdata2 literal at this point, which puts it before the 28.0f of FontDrawStringMtx like the target.
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            x = -1.0f;
-        }
+    gz = 0;
+    if (gz != 0) {
+        x = -1.0f;
     }
 #endif
     camera = camGetCurPtr();

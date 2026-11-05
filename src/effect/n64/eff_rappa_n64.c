@@ -56,6 +56,7 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
     f32 speed;
     f32 sinA;
     f32 rad;
+    f32 c;
 
     effect = effEntry();
     if (num == 0) {
@@ -84,10 +85,8 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
         sinA = sin(radP);
         rad = 6.2831855f * (yaw + (f32)((i & 2) * (i / 2) * 4)) / 360.0f;
         // FAKE: block-local temporary for cos(rad); the plain expression changes the object
-        {
-            f32 c = cos(rad);
-            work->velocity.x = c * sinA;
-        }
+        c = cos(rad);
+        work->velocity.x = c * sinA;
         work->velocity.y = (f32)sin(rad);
         work->velocity.z = (f32)cos(rad) * (f32)cos(radP);
         work->speed = speed;

@@ -354,27 +354,26 @@ static inline void shipDecideDir(MarioWork* m, Vec* pp1, Vec* pp2) {
     MarioWork* m2;
     s32 r;
     f32 ff;
-    {
-        HitEntry* hit = (HitEntry*)m->hitobjJumpFrom;
-        s32 attr;
-        m2 = marioGetPtr();
-        attr = hitGetAttr(hit);
-        r = 0;
-        if (attr & HIT_ATTR_SHIP_PANEL1) {
-            hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp1);
-            ff = revise360(angleABf(m2->position.x, m2->position.z, pp1->x, pp1->z) - m2->targetYaw);
-            r = (ff >= 180.0f) ? 2 : 1;
-        } else if (attr & HIT_ATTR_SHIP_PANEL2) {
-            hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp2);
-            ff = revise360(angleABf(m2->position.x, m2->position.z, pp2->x, pp2->z) - m2->targetYaw);
-            r = (ff >= 180.0f) ? 2 : 1;
-        } else if (attr & HIT_ATTR_SHIP_PANEL3) {
-            r = 2;
-        } else if (attr & HIT_ATTR_SHIP_PANEL4) {
-            r = 1;
-        }
-        marioGetPtr()->motShip->flags = r;
+    HitEntry* hit;
+    s32 attr;
+    hit = (HitEntry*)m->hitobjJumpFrom;
+    m2 = marioGetPtr();
+    attr = hitGetAttr(hit);
+    r = 0;
+    if (attr & HIT_ATTR_SHIP_PANEL1) {
+        hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp1);
+        ff = revise360(angleABf(m2->position.x, m2->position.z, pp1->x, pp1->z) - m2->targetYaw);
+        r = (ff >= 180.0f) ? 2 : 1;
+    } else if (attr & HIT_ATTR_SHIP_PANEL2) {
+        hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp2);
+        ff = revise360(angleABf(m2->position.x, m2->position.z, pp2->x, pp2->z) - m2->targetYaw);
+        r = (ff >= 180.0f) ? 2 : 1;
+    } else if (attr & HIT_ATTR_SHIP_PANEL3) {
+        r = 2;
+    } else if (attr & HIT_ATTR_SHIP_PANEL4) {
+        r = 1;
     }
+    marioGetPtr()->motShip->flags = r;
 }
 
 /**

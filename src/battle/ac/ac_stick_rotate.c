@@ -126,6 +126,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
     BattleACDispParams* disp;
     BattleActions* ac = &work->actionCommands;
     BOOL restart;
+    s32 r;
     sw = (StickRotateWork*)ac->work;
     disp = &work->actionCommands.disp;
 
@@ -197,133 +198,131 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     sw->prevDir = 4;
                 }
                 break;
-            case AC_STATE_RUN + 1: {
-                s32 r;
-                if (ac->countdown > 0) {
-                    ac->countdown--;
-                    ac->result = AC_RESULT_SUCCESS;
-                    restart = TRUE;
-                    ac->acState = AC_STATE_RUN + 2;
-                    ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
+            case AC_STATE_RUN + 1:
+            if (ac->countdown > 0) {
+                ac->countdown--;
+                ac->result = AC_RESULT_SUCCESS;
+                restart = TRUE;
+                ac->acState = AC_STATE_RUN + 2;
+                ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
+            }
+            sw->timer--;
+            sw->stepFrames++;
+            if (work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON] != 0 && !BattlePadCheckNow(work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON])) {
+                sw->timer = 0;
+            }
+            if (sw->timer < 0) {
+                if ((s32)ac->outputParams[0] >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] && !BattlePadCheckNow(work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON])) {
+                    ac->result |= AC_RESULT_SUCCESS;
                 }
-                sw->timer--;
-                sw->stepFrames++;
-                if (work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON] != 0 && !BattlePadCheckNow(work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON])) {
-                    sw->timer = 0;
+                ac->result &= ~AC_RESULT_RUNNING;
+                restart = TRUE;
+                ac->acState = AC_STATE_RUN + 2;
+                break;
+            }
+            sw->dir = _GetInputDir();
+            if (sw->dir == -1) {
+                if ((s32)ac->outputParams[0] >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT]) {
+                    ac->result |= AC_RESULT_SUCCESS;
                 }
-                if (sw->timer < 0) {
-                    if ((s32)ac->outputParams[0] >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] && !BattlePadCheckNow(work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON])) {
-                        ac->result |= AC_RESULT_SUCCESS;
-                    }
-                    ac->result &= ~AC_RESULT_RUNNING;
+                ac->result &= ~AC_RESULT_RUNNING;
+                restart = TRUE;
+                ac->acState = AC_STATE_RUN + 2;
+                break;
+            }
+            if (sw->dir == 0) {
+                sw->roll = 0;
+                if ((work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) && sw->prevDir != 0) {
+                    stickRotateFail(work);
                     restart = TRUE;
-                    ac->acState = AC_STATE_RUN + 2;
                     break;
                 }
-                sw->dir = _GetInputDir();
-                if (sw->dir == -1) {
-                    if ((s32)ac->outputParams[0] >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT]) {
-                        ac->result |= AC_RESULT_SUCCESS;
-                    }
-                    ac->result &= ~AC_RESULT_RUNNING;
-                    restart = TRUE;
-                    ac->acState = AC_STATE_RUN + 2;
-                    break;
-                }
-                if (sw->dir == 0) {
-                    sw->roll = 0;
-                    if ((work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) && sw->prevDir != 0) {
+            } else if (sw->prevDir != 0) {
+                r = _CalcRollDir();
+                if ((s8)r != 0) {
+                    if (sw->roll == 0) {
+                        s8 t;
+                        sw->roll = r;
+                        t = sw->dir + sw->roll;
+                        if (t >= 9) {
+                            t = 1;
+                        }
+                        if (t <= 0) {
+                            t = 8;
+                        }
+                        sw->expectDir = sw->dir;
+                        sw->nextDir = t;
+                    } else if ((s8)sw->roll != (s8)r) {
                         stickRotateFail(work);
                         restart = TRUE;
                         break;
                     }
-                } else if (sw->prevDir != 0) {
-                    r = _CalcRollDir();
-                    if ((s8)r != 0) {
-                        if (sw->roll == 0) {
-                            s8 t;
-                            sw->roll = r;
-                            t = sw->dir + sw->roll;
-                            if (t >= 9) {
-                                t = 1;
-                            }
-                            if (t <= 0) {
-                                t = 8;
-                            }
-                            sw->expectDir = sw->dir;
-                            sw->nextDir = t;
-                        } else if ((s8)sw->roll != (s8)r) {
-                            stickRotateFail(work);
-                            restart = TRUE;
-                            break;
+                    if (sw->prevDir != sw->dir) {
+                        sw->steps++;
+                        ac->outputParams[0] = (sw->steps + 7) / 8;
+                        if ((s32)ac->outputParams[0] > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT]) {
+                            ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
                         }
-                        if (sw->prevDir != sw->dir) {
-                            sw->steps++;
-                            ac->outputParams[0] = (sw->steps + 7) / 8;
-                            if ((s32)ac->outputParams[0] > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT]) {
-                                ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
-                            }
-                            if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) {
-                                if (sw->steps > 1) {
-                                    s8 st = sw->stepFrames;
-                                    if (st > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_STEP_FRAMES]) {
-                                        stickRotateFail(work);
-                                        restart = TRUE;
-                                        break;
-                                    } else if (st < work->actionCommands.params[STICK_ROTATE_PARAM_FAST_STEP_FRAMES]) {
-                                        sw->fastSteps++;
-                                        if (sw->fastSteps > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_FAST_STEPS]) {
-                                            stickRotateFail(work);
-                                            restart = TRUE;
-                                            break;
-                                        }
-                                    }
-                                }
-                                sw->stepFrames = 0;
-                                if (sw->roll != 0 && (s8)sw->roll != (s8)r) {
+                        if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) {
+                            if (sw->steps > 1) {
+                                s8 st = sw->stepFrames;
+                                if (st > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_STEP_FRAMES]) {
                                     stickRotateFail(work);
                                     restart = TRUE;
                                     break;
-                                }
-                                if (sw->dir != sw->expectDir) {
-                                    stickRotateFail(work);
-                                    restart = TRUE;
-                                    break;
-                                } else {
-                                    s8 t = sw->nextDir + sw->roll;
-                                    if (t >= 9) {
-                                        t = 1;
-                                    }
-                                    if (t <= 0) {
-                                        t = 8;
-                                    }
-                                    sw->prevDir = sw->dir;
-                                    sw->expectDir = sw->nextDir;
-                                    sw->nextDir = t;
-                                    if (sw->steps >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] * 8) {
-                                        ac->result |= AC_RESULT_SUCCESS;
+                                } else if (st < work->actionCommands.params[STICK_ROTATE_PARAM_FAST_STEP_FRAMES]) {
+                                    sw->fastSteps++;
+                                    if (sw->fastSteps > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_FAST_STEPS]) {
                                         stickRotateFail(work);
                                         restart = TRUE;
                                         break;
                                     }
                                 }
                             }
+                            sw->stepFrames = 0;
+                            if (sw->roll != 0 && (s8)sw->roll != (s8)r) {
+                                stickRotateFail(work);
+                                restart = TRUE;
+                                break;
+                            }
+                            if (sw->dir != sw->expectDir) {
+                                stickRotateFail(work);
+                                restart = TRUE;
+                                break;
+                            } else {
+                                s8 t = sw->nextDir + sw->roll;
+                                if (t >= 9) {
+                                    t = 1;
+                                }
+                                if (t <= 0) {
+                                    t = 8;
+                                }
+                                sw->prevDir = sw->dir;
+                                sw->expectDir = sw->nextDir;
+                                sw->nextDir = t;
+                                if (sw->steps >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] * 8) {
+                                    ac->result |= AC_RESULT_SUCCESS;
+                                    stickRotateFail(work);
+                                    restart = TRUE;
+                                    break;
+                                }
+                            }
                         }
-                    } else if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
-                        sw->roll = 0;
-                        // retail tests GUIDED a second time (always true here)
-                        if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
-                            stickRotateFail(work);
-                            restart = TRUE;
-                            break;
-                        }
-                    } else if (sw->roll != 0) {
-                        sw->roll = 0;
                     }
+                } else if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
+                    sw->roll = 0;
+                    // retail tests GUIDED a second time (always true here)
+                    if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
+                        stickRotateFail(work);
+                        restart = TRUE;
+                        break;
+                    }
+                } else if (sw->roll != 0) {
+                    sw->roll = 0;
                 }
-                sw->prevDir = sw->dir;
-                break;
             }
+            sw->prevDir = sw->dir;
+            break;
             case AC_STATE_RUN + 2:
                 ac->acState = AC_STATE_RUN + 3;
                 break;

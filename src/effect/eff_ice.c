@@ -978,6 +978,7 @@ static void effIceMain(EffectEntry* effect) {
     EffIceWork* work = effect->userdata;
     Vec calcPos;
     Vec pos = { 0.0f, 0.0f, 0.0f };
+    OSTime now;
 
     pos.x = work->position.x;
     pos.y = work->position.y;
@@ -988,10 +989,8 @@ static void effIceMain(EffectEntry* effect) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->frame = 90;
         work->state = 1;
-        {
-            OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
-            work->anim->startTime = OSTicksToMilliseconds(now) - (u64)(1000.0f / gp->framerate) * work->frame;
-        }
+        now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
+        work->anim->startTime = OSTicksToMilliseconds(now) - (u64)(1000.0f / gp->framerate) * work->frame;
     }
 
     switch (work->state) {

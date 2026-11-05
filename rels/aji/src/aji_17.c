@@ -3525,6 +3525,9 @@ void peach_capture(CameraId cameraId, void* param) {
     NpcEntry* holo;
     NpcEntry* holo2;
     NpcEntry* npc;
+    Vec pos;
+    Vec up;
+    Vec target;
 
     holo = npcNameToPtr("\203z\203\215\203O\203\211\203\200");
     holo2 = npcNameToPtr("\203z\203\215\203O\203\211\203\2002");
@@ -3551,17 +3554,12 @@ void peach_capture(CameraId cameraId, void* param) {
     GXSetScissor(1, 1, 606, 478);
     C_MTXOrtho(projMtx, 28.0f, 0.0f, -14.0f, 14.0f, 1.0f, 100.0f);
     GXSetProjection(projMtx, GX_ORTHOGRAPHIC);
-    {
-        Vec pos;
-        Vec up;
-        Vec target;
 
-        target = horogram_target;
-        up = horogram_up;
-        pos = horogram_pos;
+    target = horogram_target;
+    up = horogram_up;
+    pos = horogram_pos;
 
-        C_MTXLookAt(lookAt, &pos, &up, &target);
-    }
+    C_MTXLookAt(lookAt, &pos, &up, &target);
     PSMTXCopy(lookAt, camGetCurPtr()->view);
     PSMTXIdentity(ident);
     animPoseSetMaterialFlagOff(npc->poseId, MAP_OBJ_FLAG_COLOR);

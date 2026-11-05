@@ -113,6 +113,9 @@ USER_FUNC(_2d_dead_jump) {
     f32 h;
     NpcEntry* npc;
     Vec d;
+    f32 c;
+    f32 s;
+    f32 dy;
     npc = evtNpcNameToPtr(event, id);
     h = vy;
     npc->statusFlags |= NPC_STATUS_UPDATE;
@@ -145,41 +148,35 @@ USER_FUNC(_2d_dead_jump) {
         npc->moveOffset.y = 0.0f;
         npc->jumpVelY = 0.0f;
         npc->jumpYScale = 1.0f;
-        {
-            f32 dy = npc->jumpTargetPos.y - npc->jumpStartPos.y;
-            if (vy) {
-                f32 g, half, apex;
-                if (dy > 0.0f) {
-                    h += dy;
-                }
-                npc->jumpVelY = 0.0f;
-                if (t == 0.0f) {
-                    npc->jumpVelY = vy;
-                } else {
-                    g = -980.0f * npc->jumpGravity;
-                    half = 0.5f * t;
-                    npc->jumpVelY = -(t * (g * t)) / t;
-                    apex = npc->jumpVelY * half + half * (-980.0f * npc->jumpGravity * half);
-                    if (apex != 0.0f) {
-                        npc->jumpYScale = h / apex;
-                    }
-                }
+        dy = npc->jumpTargetPos.y - npc->jumpStartPos.y;
+        if (vy) {
+            f32 g, half, apex;
+            if (dy > 0.0f) {
+                h += dy;
+            }
+            npc->jumpVelY = 0.0f;
+            if (t == 0.0f) {
+                npc->jumpVelY = vy;
             } else {
-                if (dy >= 0.0f) {
-                    return EVT_RETURN_YIELD;
+                g = -980.0f * npc->jumpGravity;
+                half = 0.5f * t;
+                npc->jumpVelY = -(t * (g * t)) / t;
+                apex = npc->jumpVelY * half + half * (-980.0f * npc->jumpGravity * half);
+                if (apex != 0.0f) {
+                    npc->jumpYScale = h / apex;
                 }
+            }
+        } else {
+            if (dy >= 0.0f) {
+                return EVT_RETURN_YIELD;
             }
         }
         return EVT_RETURN_BLOCK;
     }
-    {
-        f32 s = (f32)sin(6.2831855f * npc->moveDir / 360.0f);
-        npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * s);
-    }
-    {
-        f32 c = (f32)cos(6.2831855f * npc->moveDir / 360.0f);
-        npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -c);
-    }
+    s = (f32)sin(6.2831855f * npc->moveDir / 360.0f);
+    npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * s);
+    c = (f32)cos(6.2831855f * npc->moveDir / 360.0f);
+    npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -c);
     if (npc->position.y >= gy) {
         return EVT_RETURN_BLOCK;
     }

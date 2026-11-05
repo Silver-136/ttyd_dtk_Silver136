@@ -361,6 +361,8 @@ void btlDispMain(void) {
     f32 wz;
     s8 turns;
     s8 strength;
+    s32 k;
+    f64 a;
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(_battleWorkPointer, i);
@@ -383,14 +385,12 @@ void btlDispMain(void) {
                 switch (unit->work[SHELL_SHIELD_WORK_FOLLOW]) {
                     case 2:
                         // FAKE: double temp for the fabs result (register order of the diff/fabs webs)
-                        {
-                            f64 a = __fabs(pos.x - tpos.x);
-                            if (a > 10.0) {
-                                if (tpos.x > pos.x) {
-                                    pos.x = pos.x + ((tpos.x - pos.x) - 10.0f);
-                                } else {
-                                    pos.x = pos.x - ((pos.x - tpos.x) - 10.0f);
-                                }
+                        a = __fabs(pos.x - tpos.x);
+                        if (a > 10.0) {
+                            if (tpos.x > pos.x) {
+                                pos.x = pos.x + ((tpos.x - pos.x) - 10.0f);
+                            } else {
+                                pos.x = pos.x - ((pos.x - tpos.x) - 10.0f);
                             }
                         }
                         BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
@@ -592,18 +592,16 @@ next:
             }
 
             // FAKE: unsigned range tests written out by hand; k >= a && k <= b changes the object
-            {
-                s32 k = unit->currentKind;
+            k = unit->currentKind;
 
-                if (k == UNIT_VIVIAN || k == UNIT_DOOPLISS_CHAPTER8_VIVIAN || k == UNIT_MARILYN_CHAPTER8
-                    || (u32)(k - UNIT_BELDAM_CHAPTER2) <= UNIT_VIVIAN_CHAPTER2 - UNIT_BELDAM_CHAPTER2
-                    || (u32)(k - UNIT_UNUSED_BELDAM2) <= UNIT_UNUSED_MARILYN3 - UNIT_UNUSED_BELDAM2
-                    || k == UNIT_BELDAM_CHAPTER8) {
-                    viv.x = unit->work[SHADOW_TAIL_WORK_X];
-                    viv.y = unit->work[SHADOW_TAIL_WORK_Y];
-                    viv.z = unit->work[SHADOW_TAIL_WORK_Z];
-                    animPoseVivianMain(part->poseId, &viv);
-                }
+            if (k == UNIT_VIVIAN || k == UNIT_DOOPLISS_CHAPTER8_VIVIAN || k == UNIT_MARILYN_CHAPTER8
+                || (u32)(k - UNIT_BELDAM_CHAPTER2) <= UNIT_VIVIAN_CHAPTER2 - UNIT_BELDAM_CHAPTER2
+                || (u32)(k - UNIT_UNUSED_BELDAM2) <= UNIT_UNUSED_MARILYN3 - UNIT_UNUSED_BELDAM2
+                || k == UNIT_BELDAM_CHAPTER8) {
+                viv.x = unit->work[SHADOW_TAIL_WORK_X];
+                viv.y = unit->work[SHADOW_TAIL_WORK_Y];
+                viv.z = unit->work[SHADOW_TAIL_WORK_Z];
+                animPoseVivianMain(part->poseId, &viv);
             }
             BtlUnit_ControlPoseSoundMain(part);
         }

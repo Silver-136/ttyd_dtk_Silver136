@@ -99,6 +99,8 @@ void effSheepMain(EffectEntry* effect) {
     s32 inBattle;
     Vec position;
     Vec tmp = { 0.0f, 0.0f, 0.0f };
+    EffSheepWork* q;
+    s32 k;
 
     tmp.x = work->position.x;
     tmp.y = work->position.y;
@@ -108,16 +110,12 @@ void effSheepMain(EffectEntry* effect) {
 
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
-        {
-            EffSheepWork* q;
-            s32 k;
 
-            q = effect->userdata;
-            q++;
-            for (k = 1; k < effect->count; k++, q++) {
-                if (q->poseId != -1) {
-                    animPoseRelease(q->poseId);
-                }
+        q = effect->userdata;
+        q++;
+        for (k = 1; k < effect->count; k++, q++) {
+            if (q->poseId != -1) {
+                animPoseRelease(q->poseId);
             }
         }
         psndSFXOff(((EffSheepWork*)effect->userdata)[1].sfxId);

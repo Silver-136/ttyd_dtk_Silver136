@@ -375,6 +375,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 arr[4];
     s32 i, count, flags, phase;
     f32 target;
+    f32 w;
     camGetPtr(CAMERA_2D);
     {
         s32 numIcons;
@@ -510,10 +511,8 @@ static void actionCommandDisp(f32 x, f32 y) {
         Mtx m3, m1, m2;
         s32 number = (s32)ac->outputParams[2] + ac->params[7];
         // FAKE: spare temporary w for the 108.0f offset; the plain constant changes the object
-        {
-            f32 w = 108.0f;
-            PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f);
-        }
+        w = 108.0f;
+        PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f);
         PSMTXScale(m2, 1.0f, 1.0f, 1.0f);
         PSMTXConcat(m1, m2, m3);
         iconNumberDispGx(m3, number, FALSE, (GXColor){255, 255, 255, 255});

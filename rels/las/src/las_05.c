@@ -329,6 +329,7 @@ USER_FUNC(kurokaron_move_position) {
     f32 step;
     f32 marioDist;
     f32 dist;
+    f32 temp;
 
     npc->statusFlags |= NPC_STATUS_UPDATE;
     if (isFirstCall) {
@@ -414,12 +415,10 @@ USER_FUNC(kurokaron_move_position) {
     } else {
         speed = npc->moveSpeed;
     }
-    {
-        f32 temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
-        npc->moveOffset.x += npc->moveDt * (speed * temp);
-        temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
-        npc->moveOffset.z += npc->moveDt * (speed * -temp);
-    }
+    temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
+    npc->moveOffset.x += npc->moveDt * (speed * temp);
+    temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
+    npc->moveOffset.z += npc->moveDt * (speed * -temp);
     if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
         if (npc->footstepToggle != 0) {
             if (npc->footstepSfxA != NULL) {

@@ -399,35 +399,35 @@ void btlseqFirstAct(BattleWork* wp) {
     FieldBattleInfo* fb = wp->fbatInfo;
     // FAKE: u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object
     u8* info;
+    s32* id;
     type = (s32)fb->firstAttack;
 
     switch (BattleGetSeq(wp, SEQ_FIRST_ACT)) {
         case 0x2000000:
             switch (type) {
-                case 0: {
-                        wp->ruleDispTimer = 0;
-                        evtEntry(_default_haikei_set_entry_event, 10, 0);
-                        info = (u8*)wp->fbatInfo->setup;
-                        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
-                            unit = BattleGetUnitPtr(wp, i);
-                            if (unit && unit->entryEventCode) {
-                                if ((((NpcBattleInfo*)info)->battleFlags & NPC_BATTLE_NO_PARTY_ENTRY) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
-                                    continue;
-                                }
-                                if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {
-                                    evt = evtEntry(BtlUnit_GetData(unit, UNIT_DATA_RIDE_ENTRY_EVENT), 10, 0);
-                                    unit->entryEventId = evt->eventId;
-                                    evt->unitId = unit->unitId;
-                                } else {
-                                    evt = evtEntry(unit->entryEventCode, 10, 0);
-                                    unit->entryEventId = evt->eventId;
-                                    evt->unitId = unit->unitId;
-                                }
+                case 0:
+                    wp->ruleDispTimer = 0;
+                    evtEntry(_default_haikei_set_entry_event, 10, 0);
+                    info = (u8*)wp->fbatInfo->setup;
+                    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
+                        unit = BattleGetUnitPtr(wp, i);
+                        if (unit && unit->entryEventCode) {
+                            if ((((NpcBattleInfo*)info)->battleFlags & NPC_BATTLE_NO_PARTY_ENTRY) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
+                                continue;
+                            }
+                            if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {
+                                evt = evtEntry(BtlUnit_GetData(unit, UNIT_DATA_RIDE_ENTRY_EVENT), 10, 0);
+                                unit->entryEventId = evt->eventId;
+                                evt->unitId = unit->unitId;
+                            } else {
+                                evt = evtEntry(unit->entryEventCode, 10, 0);
+                                unit->entryEventId = evt->eventId;
+                                evt->unitId = unit->unitId;
                             }
                         }
-                        BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
-                        goto done_fa;
                     }
+                    BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
+                    goto done_fa;
             }
             switch (type) {
                 case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
@@ -570,14 +570,13 @@ void btlseqFirstAct(BattleWork* wp) {
             }
             break;
 
-        case 0x2000009: {
-                s32* id = &wp->stageObjectWork.closeWallEvtId;
-                if (*id != 0 && !evtCheckID(*id)) {
-                    *id = 0;
-                }
-                if (*id == 0) {
-                    BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000A);
-                }
+        case 0x2000009:
+            id = &wp->stageObjectWork.closeWallEvtId;
+            if (*id != 0 && !evtCheckID(*id)) {
+                *id = 0;
+            }
+            if (*id == 0) {
+                BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000A);
             }
             break;
 
@@ -670,6 +669,7 @@ USER_FUNC(_set_effect_luck) {
     BattleUnitPart* part;
     NiceEffectWork* effect;
     int i;
+    EffectEntry* e;
 
     // FAKE: pointer locals set through comma expressions `(0, &x)`; passing &weapon, &y and &z directly changes the object
     pw = (0, &weapon);
@@ -717,11 +717,9 @@ USER_FUNC(_set_effect_luck) {
             BtlUnit_GetPos(unit, &x, py, pz);
             psndSFXOn(SFX_NAME_WORD("SFX_SYSTEM_LUCKY1"));
             // FAKE: block-local EffectEntry* temporary; assigning effNiceEntry(...)->userdata directly changes the object
-            {
-                EffectEntry* e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
-                effect = e->userdata;
-                effect->overallScale = 0.75f;
-            }
+            e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
+            effect = e->userdata;
+            effect->overallScale = 0.75f;
         }
     }
     return EVT_RETURN_DONE;

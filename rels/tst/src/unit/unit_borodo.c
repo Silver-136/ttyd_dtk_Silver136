@@ -778,72 +778,70 @@ static USER_FUNC(_steal_item) {
         }
         return EVT_RETURN_DONE;
     }
-    {
-        item = 0;
-        count = 0;
+    item = 0;
+    count = 0;
 
-        for (i = 0; i < MAX_HELD_ITEMS; i++) {
-            if (pouch->heldItems[i] != 0) {
-                count++;
+    for (i = 0; i < MAX_HELD_ITEMS; i++) {
+        if (pouch->heldItems[i] != 0) {
+            count++;
+        }
+    }
+    if (count <= 0) {
+        return EVT_RETURN_DONE;
+    }
+    r = irand(count);
+    if (r >= count) {
+        s32 j;
+
+        r -= count;
+#if VERSION >= VERSION_JP
+        sysDebugReport("unit_borodo_main.c", 673, "%d個目のバッジを盗みます\n", r + 1);
+#endif
+        for (j = 0; j < 200; j++) {
+            if (pouch->badges[j] != 0) {
+                if (--r < 0) {
+                    item = pouch->badges[j];
+                    break;
+                }
             }
         }
-        if (count <= 0) {
+    } else {
+        s32 k;
+
+#if VERSION >= VERSION_JP
+        sysDebugReport("unit_borodo_main.c", 686, "%d個目のアイテムを盗みます\n", r + 1);
+#endif
+        for (k = 0; k < MAX_HELD_ITEMS; k++) {
+            if (pouch->heldItems[k] != 0) {
+                if (--r < 0) {
+                    item = pouch->heldItems[k];
+                    break;
+                }
+            }
+        }
+    }
+    if (item != 0) {
+#if VERSION >= VERSION_JP
+        sysDebugReport("unit_borodo_main.c", 701, "%sを盗みました\n", msgSearch(itemDataTable[item].name));
+#endif
+        if (!pouchRemoveItem(item)) {
+#if VERSION >= VERSION_JP
+            __assert2("unit_borodo_main.c", 703, "0", "持ってるはずのないアイテムを盗んだ");
+#endif
             return EVT_RETURN_DONE;
         }
-        r = irand(count);
-        if (r >= count) {
-            s32 j;
-
-            r -= count;
-#if VERSION >= VERSION_JP
-            sysDebugReport("unit_borodo_main.c", 673, "%d個目のバッジを盗みます\n", r + 1);
-#endif
-            for (j = 0; j < 200; j++) {
-                if (pouch->badges[j] != 0) {
-                    if (--r < 0) {
-                        item = pouch->badges[j];
-                        break;
-                    }
-                }
+        TST_BATTLE_UNIT(unit)->heldItem = item;
+        if (item >= BADGE_MIN && item < BADGE_MAX) {
+            if (target->currentKind == UNIT_MARIO) {
+                BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
+            } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
+                BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
             }
-        } else {
-            s32 k;
-
-#if VERSION >= VERSION_JP
-            sysDebugReport("unit_borodo_main.c", 686, "%d個目のアイテムを盗みます\n", r + 1);
-#endif
-            for (k = 0; k < MAX_HELD_ITEMS; k++) {
-                if (pouch->heldItems[k] != 0) {
-                    if (--r < 0) {
-                        item = pouch->heldItems[k];
-                        break;
-                    }
-                }
-            }
+            pouchReviseMarioParam();
+            pouchRevisePartyParam();
         }
-        if (item != 0) {
-#if VERSION >= VERSION_JP
-            sysDebugReport("unit_borodo_main.c", 701, "%sを盗みました\n", msgSearch(itemDataTable[item].name));
-#endif
-            if (!pouchRemoveItem(item)) {
-#if VERSION >= VERSION_JP
-                __assert2("unit_borodo_main.c", 703, "0", "持ってるはずのないアイテムを盗んだ");
-#endif
-                return EVT_RETURN_DONE;
-            }
-            TST_BATTLE_UNIT(unit)->heldItem = item;
-            if (item >= BADGE_MIN && item < BADGE_MAX) {
-                if (target->currentKind == UNIT_MARIO) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
-                } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
-                }
-                pouchReviseMarioParam();
-                pouchRevisePartyParam();
-            }
-            evtSetValue(event, itemVar, item);
-            evtSetValue(event, iconVar, itemDataTable[item].icon_id);
-        }
+        evtSetValue(event, itemVar, item);
+        evtSetValue(event, iconVar, itemDataTable[item].icon_id);
     }
     return EVT_RETURN_DONE;
 }

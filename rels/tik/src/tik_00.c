@@ -791,6 +791,7 @@ void uranai_cap(CameraId cameraId, void* param) {
     Vec bmin;
     Vec bmax;
     f32 scale;
+    f32 t;
 
     GXGetViewportv(viewport);
     GXGetProjectionv(proj);
@@ -814,11 +815,9 @@ void uranai_cap(CameraId cameraId, void* param) {
         pos = uranai_pos;
         half = 0.5f;
         pos.y = h / 3.0f;
-        {
-            f32 t = tan(0.21816616f);
+        t = tan(0.21816616f);
 
-            pos.z = 0.7f * ((h * half) / t);
-        }
+        pos.z = 0.7f * ((h * half) / t);
         C_MTXLookAt(lookAt, &pos, &up, &target);
     }
     saved = *camGetPtr(cameraId);

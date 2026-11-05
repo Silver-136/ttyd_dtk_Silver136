@@ -1787,16 +1787,16 @@ USER_FUNC(evt_sub_area_check) {
     f32 px = evtGetValue(event, args[4]);
     f32 py = evtGetValue(event, args[5]);
     s32 result;
+    f32 dist;
     switch (mode) {
-    case 0: {
-        f32 dist = distABf(cx, cy, px, py);
-        if (range < dist) {
-            result = 0;
-        } else {
-            result = 1;
-        }
-        break;
+    case 0:
+    dist = distABf(cx, cy, px, py);
+    if (range < dist) {
+        result = 0;
+    } else {
+        result = 1;
     }
+    break;
     case 1:
         result = 1;
         if (cx - range > px) {

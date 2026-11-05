@@ -275,45 +275,42 @@ void effNiceMain(EffectEntry* effect) {
 #else
             break;
         }
-        case 2: {
-            len = data->loopInfo->end;
-            start = (gp->language == LANGUAGE_JP) ? 35.0f : 37.0f;
-            if (pose->localFrame > start) {
-                t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) {
-                    t = 0.0f;
-                }
-                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
-                animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
+        case 2:
+        len = data->loopInfo->end;
+        start = (gp->language == LANGUAGE_JP) ? 35.0f : 37.0f;
+        if (pose->localFrame > start) {
+            t = 1.0f - (pose->localFrame - start) / (len - start);
+            if (t < 0.0f) {
+                t = 0.0f;
             }
-            break;
+            animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
+            animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
         }
-        case 3: {
-            len = data->loopInfo->end;
-            start = (gp->language == LANGUAGE_JP) ? 45.0f : 40.0f;
-            if (pose->localFrame > start) {
-                t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) {
-                    t = 0.0f;
-                }
-                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
-                animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
+        break;
+        case 3:
+        len = data->loopInfo->end;
+        start = (gp->language == LANGUAGE_JP) ? 45.0f : 40.0f;
+        if (pose->localFrame > start) {
+            t = 1.0f - (pose->localFrame - start) / (len - start);
+            if (t < 0.0f) {
+                t = 0.0f;
             }
-            break;
+            animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
+            animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
         }
-        case 4: {
-            len = data->loopInfo->end;
-            start = (gp->language == LANGUAGE_JP) ? 48.0f : 40.0f;
-            if (pose->localFrame > start) {
-                t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) {
-                    t = 0.0f;
-                }
-                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
-                animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
+        break;
+        case 4:
+        len = data->loopInfo->end;
+        start = (gp->language == LANGUAGE_JP) ? 48.0f : 40.0f;
+        if (pose->localFrame > start) {
+            t = 1.0f - (pose->localFrame - start) / (len - start);
+            if (t < 0.0f) {
+                t = 0.0f;
             }
-            break;
+            animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
+            animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
         }
+        break;
         case 6:
 #endif
             break;

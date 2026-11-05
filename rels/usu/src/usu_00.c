@@ -2796,6 +2796,8 @@ s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag) {
 void kpaSen_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 i;
+    s32 lo;
+    s32 hi;
 
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
         switch (kpaSen[i].state) {
@@ -2830,11 +2832,9 @@ void kpaSen_ext_main(void) {
                 if (i < 100) {
                     pose->texId = calcPose(i, kpaSen[i].pose99Lo, kpaSen[i].pose99Hi, 0);
                 } else {
-                    {
-                        s32 lo = kpaSen[i].pose99Lo;
-                        s32 hi = kpaSen[i].pose99Hi;
-                        pose->texId = calcPose(i - 100, lo, hi, 0);
-                    }
+                    lo = kpaSen[i].pose99Lo;
+                    hi = kpaSen[i].pose99Hi;
+                    pose->texId = calcPose(i - 100, lo, hi, 0);
                 }
                 break;
             case -1:

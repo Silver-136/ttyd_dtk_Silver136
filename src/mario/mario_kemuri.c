@@ -248,12 +248,10 @@ void kemuri(void) {
         if (ct++ > 6) {
             ct = 0;
             sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);
-            {
-            x = mario->position.x + 0.2f * (mario->wPlayerCollisionBox.x * s);
-            y = 1.5f + mario->position.y;
-            z = mario->position.z + 0.2f * (mario->wPlayerCollisionBox.x * c);
-            eff = effKemuri2Entry(0, x, y, z, s, c);
-            }
+        x = mario->position.x + 0.2f * (mario->wPlayerCollisionBox.x * s);
+        y = 1.5f + mario->position.y;
+        z = mario->position.z + 0.2f * (mario->wPlayerCollisionBox.x * c);
+        eff = effKemuri2Entry(0, x, y, z, s, c);
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 ((effKemuri2Data*)eff->userdata)->scale2 = 0.6f;
             }

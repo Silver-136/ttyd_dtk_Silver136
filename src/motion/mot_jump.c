@@ -202,13 +202,11 @@ void mot_jumpSw(void) {
                     mario->moveDirection = mario->directionView = revise360(180.0f + mario->directionView);
                 }
                 }
-                {
-                sincosf(&s, &c, mario->directionView);
-                x = 30.0f * s + ((MapObjectEntry*)mobj)->position.x;
-                z = 30.0f * c + ((MapObjectEntry*)mobj)->position.z;
-                mario->multiTimer = 20;
-                mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)(s32)mario->multiTimer;
-                }
+            sincosf(&s, &c, mario->directionView);
+            x = 30.0f * s + ((MapObjectEntry*)mobj)->position.x;
+            z = 30.0f * c + ((MapObjectEntry*)mobj)->position.z;
+            mario->multiTimer = 20;
+            mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)(s32)mario->multiTimer;
             }
         } else {
             dir = revise360(180.0f + mario->directionView);

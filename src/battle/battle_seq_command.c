@@ -762,6 +762,7 @@ void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
  */
 s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon) {
     BattleWorkWeaponTargets targets;
+    s32 belong;
 
     if (weapon == NULL) {
         return 0;
@@ -772,11 +773,9 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
     if (!BtlUnit_CheckWeaponCost(unit, weapon)) {
         return -1;
     }
-    {
-        s32 belong = BtlUnit_GetEnemyBelong(unit);
-        BattleSamplingEnemy(&targets, weapon, unit->unitId, belong, weapon->targetClassFlags,
-            weapon->targetPropertyFlags, -wp->alliances[belong].attackDirection);
-    }
+    belong = BtlUnit_GetEnemyBelong(unit);
+    BattleSamplingEnemy(&targets, weapon, unit->unitId, belong, weapon->targetClassFlags,
+        weapon->targetPropertyFlags, -wp->alliances[belong].attackDirection);
     return targets.numTargets;
 }
 

@@ -88,6 +88,10 @@ static inline const char* getAreaName(void) {
  * a change from a nonempty map other than gor_01 to another map other than gor_01 sets that flag.
  */
 void seq_mapChangeInit(SequenceWork* work) {
+    int c0;
+    int c1;
+    int c2;
+
     strcpy(_next_area, "");
     strcpy(_next_map, "");
     strcpy(_next_bero, "");
@@ -100,17 +104,15 @@ void seq_mapChangeInit(SequenceWork* work) {
     }
     psndENVOff(PSND_FADEOUT);
     psndENVOff(PSND_FADEOUT | PSND_SLOT(1));
-    {
-        int c0 = strcmp(gp->currentMapName, "");
-        int c1 = strcmp(gp->currentMapName, "gor_01");
-        int c2 = strcmp(_next_map, "gor_01");
-        if (c0 && c1 && c2) {
-            bdsw->restockFlags |= BADGESHOP_RESTOCK_PENDING;
-        } else if (!c2 && bdsw->restockFlags & BADGESHOP_RESTOCK_PENDING) {
-            badgeShop_bargainGeneration();
-            badgeShop_bottakuruGeneration();
-            bdsw->restockFlags &= 0xFFFE;
-        }
+    c0 = strcmp(gp->currentMapName, "");
+    c1 = strcmp(gp->currentMapName, "gor_01");
+    c2 = strcmp(_next_map, "gor_01");
+    if (c0 && c1 && c2) {
+        bdsw->restockFlags |= BADGESHOP_RESTOCK_PENDING;
+    } else if (!c2 && bdsw->restockFlags & BADGESHOP_RESTOCK_PENDING) {
+        badgeShop_bargainGeneration();
+        badgeShop_bottakuruGeneration();
+        bdsw->restockFlags &= 0xFFFE;
     }
 }
 

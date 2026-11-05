@@ -52,6 +52,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     s32 flag = 0;
     s32 pressed;
     s32 i;
+    s32 w;
     if (ac->acUnit->badgesEquipped.AutoCommand) {
         flag = 1;
     }
@@ -114,15 +115,13 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
                 break;
             }
             pressed = BattlePadCheckNow(g->button) != 0;
-            {
-                s32 w = sysMsec2Frame(750);
-                g->inZone = 1;
-                for (i = 0; i < 3; i++) {
-                    s32 z = g->zones[i];
-                    if (g->timer >= z && g->timer < z + w) {
-                        g->inZone = 0;
-                        break;
-                    }
+            w = sysMsec2Frame(750);
+            g->inZone = 1;
+            for (i = 0; i < 3; i++) {
+                s32 z = g->zones[i];
+                if (g->timer >= z && g->timer < z + w) {
+                    g->inZone = 0;
+                    break;
                 }
             }
             if (flag) {

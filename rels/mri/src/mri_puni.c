@@ -588,6 +588,7 @@ void _ymode_mri_16_00(PuniData* p) {
  */
 void _ymode_mri_16_01(PuniData* p) {
     u32 old = p->flags2;
+    f32 bz;
     p->flags2 &= ~PUNI_FLAG2_ON_SLOPE;
     if (p->pos.y <= 100.0f && p->pos.y >= 0.0f) {
         if (p->pos.x <= 40.0f && p->pos.x >= -200.0f && p->pos.z > -200.0f && p->pos.z < 200.0f) {
@@ -611,10 +612,8 @@ void _ymode_mri_16_01(PuniData* p) {
                 } else {
                     u = 0.0f;
                 }
-                {
-                    f32 bz = (0.0f);
-                    p->pos.y = 10.0f * u + bz;
-                }
+                bz = (0.0f);
+                p->pos.y = 10.0f * u + bz;
             } else {
                 p->pos.y = 0.0f;
             }
@@ -1526,6 +1525,8 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     f32 nx, ny, nz;
     f32 d;
     int ret = 1;
+    f32 dp;
+    f32 t;
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
@@ -1547,11 +1548,9 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
             PSVECScale(&refl, &p->vel, dist);
             ret = 0;
         }
-        {
-            f32 dp = PSVECDotProduct(&dir, &n);
-            f32 t = -(dist - d);
-            PSVECScale(&n, &n, dp * t + 0.1f);
-        }
+        dp = PSVECDotProduct(&dir, &n);
+        t = -(dist - d);
+        PSVECScale(&n, &n, dp * t + 0.1f);
         PSVECAdd(&p->pos, &n, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);

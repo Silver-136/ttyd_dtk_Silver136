@@ -198,25 +198,24 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
                 e->sway = 0.0f;
                 e->scale = 0.5f;
                 break;
-            case 3: {
-                e->speedY = 0.0f;
-                e->gravity = 0.1f;
-                e->pos.x = 0.0f;
-                e->pos.y = 200.0f;
-                e->pos.z = 0.0f;
-                e->vel.x = 0.0f;
-                e->vel.y = 0.0f;
-                e->vel.z = 0.0f;
-                e->scale = 1.0f;
-                {
-                    Vec v = { 0.0f, 0.0f, 0.0f };
-                    v.x = x;
-                    v.y = y;
-                    v.z = z;
-                    e->sfx = psndSFXOn_3D(sfxName, &v);
-                }
-                break;
+            case 3:
+            e->speedY = 0.0f;
+            e->gravity = 0.1f;
+            e->pos.x = 0.0f;
+            e->pos.y = 200.0f;
+            e->pos.z = 0.0f;
+            e->vel.x = 0.0f;
+            e->vel.y = 0.0f;
+            e->vel.z = 0.0f;
+            e->scale = 1.0f;
+            {
+                Vec v = { 0.0f, 0.0f, 0.0f };
+                v.x = x;
+                v.y = y;
+                v.z = z;
+                e->sfx = psndSFXOn_3D(sfxName, &v);
             }
+            break;
             case 4:
             case 5:
                 e->speedY = 0.0f;
@@ -292,6 +291,8 @@ void effFallMain(EffectEntry* effect) {
     f32 a;
     s32 j;
     f32 rotY;
+    f32 c;
+    f32 s;
     e = effect->userdata;
     {
         Vec v = { 0.0f, 0.0f, 0.0f };
@@ -409,15 +410,14 @@ void effFallMain(EffectEntry* effect) {
                             psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_FORK1"), &sndPos);
                         }
                         break;
-                    case 1: {
-                        f32 s = (f32)sin((62.831856f * e->timer) / 60.0f);
-                        e->sway = ((60.0f - e->timer) * s) / 60.0f;
-                        e->timer++;
-                        if (e->timer > 60) {
-                            e->state++;
-                        }
-                        break;
+                    case 1:
+                    s = (f32)sin((62.831856f * e->timer) / 60.0f);
+                    e->sway = ((60.0f - e->timer) * s) / 60.0f;
+                    e->timer++;
+                    if (e->timer > 60) {
+                        e->state++;
                     }
+                    break;
                     case 2:
                         e->timer++;
                         if (e->timer > 30) {
@@ -539,10 +539,8 @@ void effFallMain(EffectEntry* effect) {
                         }
                         e->pos.x += 2.0f * (f32)sin(a);
                         // FAKE: block temporary for the cosine; plain `e->pos.z += 2.0f * -(f32)cos(a);` changes the object
-                        {
-                            f32 c = (f32)cos(a);
-                            e->pos.z += 2.0f * -c;
-                        }
+                        c = (f32)cos(a);
+                        e->pos.z += 2.0f * -c;
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->speedY *= -0.5f;

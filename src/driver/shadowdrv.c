@@ -252,6 +252,7 @@ void shadowInit(void) {
     CharShadowWork* wp;
     void* ramp;
     u32 i;
+    u32 j;
 
     cswp->base.flags = 0;
     cswp->base.drawCount = 0;
@@ -269,29 +270,24 @@ void shadowInit(void) {
     wp->base.texBuffer = smartAlloc(bufferSize, SMART_GROUP_PERMANENT);
     depthShadowInit();
 
-    {
-        bufferSize = GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0);
-        ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0));
-        for (i = 0; i < 256; i++) {
-            ((u8*)ramp)[(((i & 0x3) * 8) + (((i & 0xC) * 16) + (((i & 0x80) / 4) + ((i & 0x70) / 16))))] = i;
-        }
-        GXInitTexObj(&rampTex8, ramp, 0x10, 0x10, GX_TF_I8, GX_CLAMP, GX_REPEAT, GX_FALSE);
-        GXInitTexObjLOD(&rampTex8, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        DCFlushRange(ramp, bufferSize);
+    bufferSize = GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0);
+    ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0));
+    for (i = 0; i < 256; i++) {
+        ((u8*)ramp)[(((i & 0x3) * 8) + (((i & 0xC) * 16) + (((i & 0x80) / 4) + ((i & 0x70) / 16))))] = i;
     }
-    {
-        u32 j;
+    GXInitTexObj(&rampTex8, ramp, 0x10, 0x10, GX_TF_I8, GX_CLAMP, GX_REPEAT, GX_FALSE);
+    GXInitTexObjLOD(&rampTex8, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    DCFlushRange(ramp, bufferSize);
 
-        // FAKE: the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object
-        i = GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0);
-        ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0));
-        for (j = 0; j < 0x10000; j++) {
-            ((u16*)ramp)[(((j & 0x3) * 4) + (((j & 0xFC) * 256) + (((j & 0xFC00) / 64) + ((j & 0x300) / 256))))] = j;
-        }
-        GXInitTexObj(&rampTex16, ramp, 0x100, 0x100, GX_TF_IA8, GX_CLAMP, GX_REPEAT, GX_FALSE);
-        GXInitTexObjLOD(&rampTex16, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        DCFlushRange(ramp, i);
+    // FAKE: the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object
+    i = GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0);
+    ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0));
+    for (j = 0; j < 0x10000; j++) {
+        ((u16*)ramp)[(((j & 0x3) * 4) + (((j & 0xFC) * 256) + (((j & 0xFC00) / 64) + ((j & 0x300) / 256))))] = j;
     }
+    GXInitTexObj(&rampTex16, ramp, 0x100, 0x100, GX_TF_IA8, GX_CLAMP, GX_REPEAT, GX_FALSE);
+    GXInitTexObjLOD(&rampTex16, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    DCFlushRange(ramp, i);
     projShadowInit();
 }
 
@@ -393,6 +389,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
 void shadowDisp(CameraId cameraId, void* param) {
     DispEntry* disp;
     CameraEntry* cam;
+    ShadowConfig* cfg;
 
     disp = dispGetCurWork();
 
@@ -415,27 +412,25 @@ void shadowDisp(CameraId cameraId, void* param) {
         shadowCharShadowDisp_Texture(cameraId, param);
     } else if (cameraId == CAMERA_SHADOW) {
         switch (disp->renderMode) {
-            case DISP_MODE_XLU_BEFORE_OPAQUE: {
-                ShadowConfig* cfg;
-                shadowCharShadowDisp_Collision(cameraId, param);
-                if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
-                    cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment; removing it changes codegen
-                    cam = camGetPtr(CAMERA_3D);
-                    cfg->pos.x = cam->cameraAt.x;
-                    cfg->pos.y = 1000.0f + cam->cameraAt.y;
-                    cfg->pos.z = cam->cameraAt.z;
-                    cfg->up.x = 0.0f;
-                    cfg->up.y = 0.0f;
-                    cfg->up.z = -1.0f;
-                    cfg->target.x = cam->cameraAt.x;
-                    cfg->target.y = cam->cameraAt.y;
-                    cfg->target.z = cam->cameraAt.z;
-                }
-                shadowBegin(&cswp->base, FALSE);
-                shadowCharShadowDisp_Projection(cameraId, param);
-                projShadowEnd(cameraId, &cswp->base);
-                break;
+            case DISP_MODE_XLU_BEFORE_OPAQUE:
+            shadowCharShadowDisp_Collision(cameraId, param);
+            if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
+                cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment; removing it changes codegen
+                cam = camGetPtr(CAMERA_3D);
+                cfg->pos.x = cam->cameraAt.x;
+                cfg->pos.y = 1000.0f + cam->cameraAt.y;
+                cfg->pos.z = cam->cameraAt.z;
+                cfg->up.x = 0.0f;
+                cfg->up.y = 0.0f;
+                cfg->up.z = -1.0f;
+                cfg->target.x = cam->cameraAt.x;
+                cfg->target.y = cam->cameraAt.y;
+                cfg->target.z = cam->cameraAt.z;
             }
+            shadowBegin(&cswp->base, FALSE);
+            shadowCharShadowDisp_Projection(cameraId, param);
+            projShadowEnd(cameraId, &cswp->base);
+            break;
             case DISP_MODE_OPAQUE:
                 shadowBegin(pswp, FALSE);
                 break;

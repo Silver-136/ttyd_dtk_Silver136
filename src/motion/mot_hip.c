@@ -127,6 +127,7 @@ void mot_hip(void) {
     f32 tmp2;
     f32 d;
     u32 attr;
+    s32 f;
 
     mario = marioGetPtr();
     if (mario->characterId == CHARACTER_BOWSER) {
@@ -139,13 +140,11 @@ void mot_hip(void) {
         mario->flags |= MARIO_FLAG_IS_FALLING;
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioAdjustMoveDir();
-        {
-            s32 f = 0;
-            if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-                f = 1;
-            }
-            mario->moveDirection = toMovedir(f ? 180.0f : 0.0f);
+        f = 0;
+        if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
+            f = 1;
         }
+        mario->moveDirection = toMovedir(f ? 180.0f : 0.0f);
         mario->directionView = mario->moveDirection;
         marioChgPose("M_A_1A");
         mario->jumpVelocityY = 5.2f;

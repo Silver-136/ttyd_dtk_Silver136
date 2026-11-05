@@ -414,6 +414,8 @@ USER_FUNC(zubastar_main) {
     Vec pts[4] = {{0.0f, 240.0f, 0.0f}, {304.0f, 240.0f, 0.0f}, {304.0f, -240.0f, 0.0f}, {0.0f, -240.0f, 0.0f}};
     s32 audience = BattleAudience_GetAudienceNum();
     s32 i;
+    ZSLine* l;
+    s32 v;
     if (isFirstCall) {
         w->capture = smartAlloc(GXGetTexBufferSize(400, 480, 4, 0, 0), SMART_GROUP_MAP);
         pts[0] = (Vec){-96.0f, 240.0f, 0.0f};
@@ -451,10 +453,8 @@ USER_FUNC(zubastar_main) {
             w->phase = 20;
             w->level++;
             ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
-            {
-                s32 v = w->level + 1;
-                ev->lwData[0] = v < 6 ? v : 6;
-            }
+            v = w->level + 1;
+            ev->lwData[0] = v < 6 ? v : 6;
             psndSFXOff(w->sfx);
             break;
         }
@@ -694,11 +694,9 @@ USER_FUNC(zubastar_main) {
         w->ltimer++;
         w->cursor.pos.x = intplGetValue(EASING_LINEAR, w->lstart.x, w->lend.x, w->ltimer, 15);
         w->cursor.pos.y = intplGetValue(EASING_LINEAR, w->lstart.y, w->lend.y, w->ltimer, 15);
-        {
-            ZSLine* l = &w->lines[w->lidx];
-            l->x1 = w->cursor.pos.x;
-            l->y1 = w->cursor.pos.y;
-        }
+        l = &w->lines[w->lidx];
+        l->x1 = w->cursor.pos.x;
+        l->y1 = w->cursor.pos.y;
         if (w->ltimer >= 15) {
             w->cursor.timer = 27;
             w->cursor.phaseTimer = 0;
@@ -844,23 +842,23 @@ USER_FUNC(zubastar_bomb) {
     const char* sfx;
     s32 i;
     s32 k;
+    s32 c;
     if (isFirstCall) {
         dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, zubastar_capture, NULL);
         w->phase = 0;
         return 0;
     }
     switch (w->phase) {
-    case 0: {
-        s32 c = 0;
-        for (i = 0; i < w->count; i++) {
-            if (w->ptrs[i]->a != 10) {
-                break;
-            }
-            c++;
+    case 0:
+    c = 0;
+    for (i = 0; i < w->count; i++) {
+        if (w->ptrs[i]->a != 10) {
+            break;
         }
-        if (c == w->count) {
-            return 2;
-        }
+        c++;
+    }
+    if (c == w->count) {
+        return 2;
     }
     }
     sfx = "SFX_BTL_SAC_ZUBA_STAR3";

@@ -332,6 +332,7 @@ void effFireDisp(CameraId cameraId, void* payload) {
     s32 frame;
     GXTexObj texObj;
     Mtx trans, scaleMtx, rot, mtx, offsetMtx;
+    f32 s;
 
     work = effect->userdata;
     camera = camGetPtr(cameraId);
@@ -374,11 +375,9 @@ void effFireDisp(CameraId cameraId, void* payload) {
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
-    {
-        f32 s = 20.0f * work->scale;
-        s *= 0.03125f;
-        PSMTXScale(scaleMtx, s * work->scaleX, s * work->scaleY, s);
-    }
+    s = 20.0f * work->scale;
+    s *= 0.03125f;
+    PSMTXScale(scaleMtx, s * work->scaleX, s * work->scaleY, s);
     PSMTXConcat(trans, rot, mtx);
     PSMTXConcat(mtx, scaleMtx, mtx);
     PSMTXConcat(camera->view, mtx, mtx);

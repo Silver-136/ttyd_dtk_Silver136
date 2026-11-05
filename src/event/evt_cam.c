@@ -63,6 +63,7 @@ USER_FUNC(evt_cam_shake) {
     f32 len;
     s32 onTime, offTime;
     u64 last;
+    s32 gz;
 
     id = evtGetValue(event, args[0]);
     x = evtGetFloat(event, args[1]);
@@ -100,11 +101,9 @@ USER_FUNC(evt_cam_shake) {
     if (onTime && offTime) {
         // FAKE: dead int guard (COLOURING W): its division temps survive to RA and add interference, then the
         // post-RA peephole folds the branch and deletes the arm (no code). Colours the first u64 compare's dummy r24.
-        {
-            s32 gz = 0;
-            if (gz != 0) {
-                offTime = ((offTime / onTime) / (onTime / offTime)) / (((offTime + 1) / onTime) / (onTime / (offTime + 1)));
-            }
+        gz = 0;
+        if (gz != 0) {
+            offTime = ((offTime / onTime) / (onTime / offTime)) / (((offTime + 1) / onTime) / (onTime / (offTime + 1)));
         }
         if (!event->userWork[3]) {
             padRumbleOn(0);

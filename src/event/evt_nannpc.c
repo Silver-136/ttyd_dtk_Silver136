@@ -96,6 +96,7 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
     Vec dir;
     Vec rayOrigin;
     Vec rayDir;
+    f32 dot;
     origin = npc->pos;
     origin.y += 1.0f;
     PSVECNormalize(&npc->move, &dir);
@@ -123,10 +124,8 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
             C_VECReflect(&rayDir, &normal, &reflected);
             PSVECScale(&reflected, &npc->move, mag);
             clear = 0;
-            {
-                f32 dot = PSVECDotProduct(&rayDir, &normal);
-                PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
-            }
+            dot = PSVECDotProduct(&rayDir, &normal);
+            PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
             PSVECAdd(&npc->pos, &normal, &npc->pos);
             PSVECSubtract(&npc->pos, &prevPos, &step);
             dist = PSVECMag(&step);

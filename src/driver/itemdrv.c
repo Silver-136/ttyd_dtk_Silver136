@@ -236,6 +236,9 @@ static BOOL itemGetCheck(ItemEntry* entry) {
 BOOL itemGetCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
+    ItemWork* wp;
+    ItemEntry* item;
+    int i;
 
 #if VERSION <= VERSION_DEMO_JP
     if (!entry) {
@@ -314,14 +317,10 @@ BOOL itemGetCheck(ItemEntry* entry) {
         return FALSE;
     }
 #endif
-    {
-        ItemWork* wp = itemGetWork();
-        ItemEntry* item;
-        int i;
-        for (item = wp->entries, i = 0; i < wp->count; i++, item++) {
-            if (item->flags & ITEM_FLAG_ACTIVE && item->mode == ITEM_MODE_GET) {
-                return FALSE;
-            }
+    wp = itemGetWork();
+    for (item = wp->entries, i = 0; i < wp->count; i++, item++) {
+        if (item->flags & ITEM_FLAG_ACTIVE && item->mode == ITEM_MODE_GET) {
+            return FALSE;
         }
     }
 #if VERSION <= VERSION_DEMO_JP

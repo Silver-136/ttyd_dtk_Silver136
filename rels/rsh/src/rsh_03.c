@@ -1637,6 +1637,8 @@ static EVT_BEGIN(evt_yuka_simi)
         CALL(evt_msg_print_party, STRING("stg6_rsh_52"))
         CALL(evt_party_run, 0)
     END_IF
+    // BUG: as in rsh_02's copy, this write is unconditional, so checking the stain again after the story has
+    // passed STG6_03 sets it back to STG6_03.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_03_STAINED_CARPET)
     CALL(evt_mario_key_onoff, 1)
     RETURN

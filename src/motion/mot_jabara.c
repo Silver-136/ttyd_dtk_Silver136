@@ -277,6 +277,9 @@ void mot_jabara(void) {
     s32 headHit;
     f32 headRange;
     f32 rr;
+    f32 spd;
+    void* land;
+
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->mot.word[0] = 0;
@@ -503,9 +506,8 @@ void mot_jabara(void) {
         marioChgPaper("PM_J_1D");
         marioSetFallPara();
         mario->currSubMotionId = 0x1f;
-    case 0x1f: {
-        f32 spd = marioGetFallSpd();
-        void* land;
+    case 0x1f:
+        spd = marioGetFallSpd();
         if (spd < -6.0f) {
             spd = -6.0f;
         }
@@ -526,7 +528,6 @@ void mot_jabara(void) {
 #endif
         jabTail(TRUE);
         return;
-    }
     }
     switch (mario->currSubMotionId) {
     case 0x28:

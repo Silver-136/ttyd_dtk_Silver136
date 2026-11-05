@@ -2206,6 +2206,7 @@ USER_FUNC(_tsuranuki_effect_control) {
     EffectEntry* effect;
     Vec pos;
     s32 id, target;
+    f32 size;
 
     id = evtGetValue(event, event->args[0]);
     wp = _battleWorkPointer;
@@ -2232,16 +2233,14 @@ USER_FUNC(_tsuranuki_effect_control) {
             }
         }
     }
-    {
-        f32 size = 2.0f + 0.006f * event->userdata[1];
+    size = 2.0f + 0.006f * event->userdata[1];
 
-        size *= unit->sizeMultiplier;
-        effect = event->userdatap[0];
-        ((EffNokotarouWork*)effect->userdata)->position.x = pos.x;
-        ((EffNokotarouWork*)effect->userdata)->position.y = pos.y;
-        ((EffNokotarouWork*)effect->userdata)->position.z = pos.z;
-        ((EffNokotarouWork*)effect->userdata)->size = size;
-    }
+    size *= unit->sizeMultiplier;
+    effect = event->userdatap[0];
+    ((EffNokotarouWork*)effect->userdata)->position.x = pos.x;
+    ((EffNokotarouWork*)effect->userdata)->position.y = pos.y;
+    ((EffNokotarouWork*)effect->userdata)->position.z = pos.z;
+    ((EffNokotarouWork*)effect->userdata)->size = size;
     if (part->work[PARTS_WORK_EFFECT_END]) {
         part->work[PARTS_WORK_EFFECT_END] = 0;
         effSoftDelete(effect);

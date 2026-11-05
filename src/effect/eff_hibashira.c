@@ -34,6 +34,7 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
     EffHibashiraWork* pillar;
     s32 num, i;
     f32 dx, dy, dz;
+    f32 s;
 
     effect = effEntry();
     num = 1;
@@ -79,10 +80,8 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
         pillar->position.y = (i - 1) * (dy / (num - 1));
         pillar->position.z = (i - 1) * (dz / (num - 1));
         // FAKE: block-scoped temporary; `pillar->scale = (f32)sin(...) + 0.5f` changes the object
-        {
-            f32 s = sin(3.1415927f * i / (effect->count - 1));
-            pillar->scale = s + 0.5f;
-        }
+        s = sin(3.1415927f * i / (effect->count - 1));
+        pillar->scale = s + 0.5f;
         pillar->poseId = -1;
         pillar->alpha = 255;
         pillar->timer = 0;

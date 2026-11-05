@@ -199,6 +199,10 @@ void btlseqEnd(BattleWork* wp) {
     BattleSeqEndWork* work = (BattleSeqEndWork*)wp->seqEndWork;
     FieldBattleInfo* info = wp->fbatInfo;
     PouchData* pouch = pouchGetPtr();
+    s32 flag;
+    BattleUnit* mario;
+    BattleUnit* party;
+    s8 i;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -278,16 +282,15 @@ void btlseqEnd(BattleWork* wp) {
         nw->state = 0;
         return;
     }
-    case SEQ_END_LOSE_FADE: {
-        _ExecAllUnitBattleEndEvent();
-        btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
-        btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFEAT);
-        btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
-        fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
-        psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
-        BattleSetSeq(wp, SEQ_END, SEQ_END_LOSE_FADE_WAIT);
-        break;
-    }
+    case SEQ_END_LOSE_FADE:
+    _ExecAllUnitBattleEndEvent();
+    btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
+    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFEAT);
+    btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
+    fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
+    psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
+    BattleSetSeq(wp, SEQ_END, SEQ_END_LOSE_FADE_WAIT);
+    break;
     case SEQ_END_LOSE_FADE_WAIT:
         if (!fadeIsFinish()) break;
         if (!((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_GAME_OVER)) {
@@ -296,39 +299,37 @@ void btlseqEnd(BattleWork* wp) {
         }
         BattleSetSeq(wp, SEQ_END, SEQ_END_CLEANUP);
         break;
-    case SEQ_END_WIN_CLEAR_STATUS: {
-        BattleUnit* mario = BattleGetMarioPtr(wp);
-        BattleUnit* party = BattleGetPartyPtr(wp);
-        s8 i;
-        if (party && BtlUnit_CheckStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED)) {
-            party->flippedTurns = 0;
-            BtlUnit_OffStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED);
-            BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party))->poseTable = pose_table_nokotarou_stay;
-        }
-        BattleConsumeReserveItem();
-        for (i = 0; i < STATUS_INVALID; i++) {
-            switch (i) {
-                case STATUS_FRIGHT:
-                case STATUS_GALE_FORCE:
-                case STATUS_INSTANT_KILL:
-                    break;
-                default:
-                    if (party) BtlUnit_SetStatus(party, i, 0, 0);
-                    BtlUnit_SetStatus(mario, i, 0, 0);
-                    break;
-            }
-        }
-        if ((u32)mario->attributeFlags & kVeiled) {
-            BattleUnit* p2 = BattleGetPartyPtr(wp);
-            EventEntry* e;
-            if (!p2) break;
-            e = evtEntry(BtlUnit_GetData(p2, UNIT_DATA_HIDE_EVENT), 10, 0);
-            e->unitId = p2->unitId;
-            p2->attackEventId = e->eventId;
-            break;
-        }
-        BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_UNIT_EVENTS);
+    case SEQ_END_WIN_CLEAR_STATUS:
+    mario = BattleGetMarioPtr(wp);
+    party = BattleGetPartyPtr(wp);
+    if (party && BtlUnit_CheckStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED)) {
+        party->flippedTurns = 0;
+        BtlUnit_OffStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED);
+        BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party))->poseTable = pose_table_nokotarou_stay;
     }
+    BattleConsumeReserveItem();
+    for (i = 0; i < STATUS_INVALID; i++) {
+        switch (i) {
+            case STATUS_FRIGHT:
+            case STATUS_GALE_FORCE:
+            case STATUS_INSTANT_KILL:
+                break;
+            default:
+                if (party) BtlUnit_SetStatus(party, i, 0, 0);
+                BtlUnit_SetStatus(mario, i, 0, 0);
+                break;
+        }
+    }
+    if ((u32)mario->attributeFlags & kVeiled) {
+        BattleUnit* p2 = BattleGetPartyPtr(wp);
+        EventEntry* e;
+        if (!p2) break;
+        e = evtEntry(BtlUnit_GetData(p2, UNIT_DATA_HIDE_EVENT), 10, 0);
+        e->unitId = p2->unitId;
+        p2->attackEventId = e->eventId;
+        break;
+    }
+    BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_UNIT_EVENTS);
 
     // fall through
     case SEQ_END_WIN_UNIT_EVENTS: {
@@ -358,51 +359,49 @@ void btlseqEnd(BattleWork* wp) {
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
         BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_INIT);
         break;
-    case SEQ_END_POINTS_INIT: {
-        s32 flag;
-        BattleFogForceStop();
-        work->levelUp = 0;
-        work->exp = BattleGetStockExp(wp);
-        if (wp->majinaiState == MAJINAI_EXP_UP) {
-            work->exp = work->exp * 2;
+    case SEQ_END_POINTS_INIT:
+    BattleFogForceStop();
+    work->levelUp = 0;
+    work->exp = BattleGetStockExp(wp);
+    if (wp->majinaiState == MAJINAI_EXP_UP) {
+        work->exp = work->exp * 2;
+    }
+    if (pouch->level >= LEVEL_MAX) {
+        work->exp = 0;
+    }
+    if (work->exp > 100) {
+        work->exp = 100;
+    }
+    work->expDisp = work->exp;
+    wp->dispFlags &= ~BATTLE_DISP_FLAG_STAR_POINTS;
+    if (work->exp > 0) {
+        _GetExpIcon_Init(work);
+    }
+    work->timer = 0x78;
+    btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
+    if (!(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
+        btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY);
+    } else {
+        btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY_AUDIENCE);
+    }
+    btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
+    BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_DELAY);
+    BattleAudienceSoundCheer(0x3C, 0x3C);
+    BattleAudienceSoundClap(-1, 0);
+    BattleAudienceSoundWhistle();
+    flag = 0;
+    {
+        BattleUnit* party = BattleGetPartyPtr(wp);
+        if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
+            flag = 1;
         }
-        if (pouch->level >= LEVEL_MAX) {
-            work->exp = 0;
-        }
-        if (work->exp > 100) {
-            work->exp = 100;
-        }
-        work->expDisp = work->exp;
-        wp->dispFlags &= ~BATTLE_DISP_FLAG_STAR_POINTS;
-        if (work->exp > 0) {
-            _GetExpIcon_Init(work);
-        }
-        work->timer = 0x78;
-        btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
-        if (!(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
-            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY);
-        } else {
-            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY_AUDIENCE);
-        }
-        btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
-        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_DELAY);
-        BattleAudienceSoundCheer(0x3C, 0x3C);
-        BattleAudienceSoundClap(-1, 0);
-        BattleAudienceSoundWhistle();
-        flag = 0;
-        {
-            BattleUnit* party = BattleGetPartyPtr(wp);
-            if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
-                flag = 1;
-            }
-        }
-        if (!flag) {
-            psndBGMOff(PSND_PAUSE);
-            psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN1");
-        } else {
-            psndBGMOff(PSND_PAUSE);
-            psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN2");
-        }
+    }
+    if (!flag) {
+        psndBGMOff(PSND_PAUSE);
+        psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN1");
+    } else {
+        psndBGMOff(PSND_PAUSE);
+        psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN2");
     }
 
     // fall through
@@ -780,11 +779,10 @@ void btlseqEnd(BattleWork* wp) {
 #endif
         break;
     }
-    case SEQ_END_FADE_OUT: {
-        fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
-        BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT_WAIT);
-        psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
-    }
+    case SEQ_END_FADE_OUT:
+    fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
+    BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT_WAIT);
+    psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
 
     // fall through
     case SEQ_END_FADE_OUT_WAIT:
@@ -897,6 +895,7 @@ void _MarioExpDisp(CameraId camId, void* param) {
     char buf[0x10];
     Vec pos;
     f32 width;
+    u32 len;
 
     pouchGetPtr();
     pos.x = 200.0f;
@@ -904,10 +903,8 @@ void _MarioExpDisp(CameraId camId, void* param) {
     pos.z = 0.0f;
     if (work) {
         sprintf(buf, "%2d", work->expDisp);
-        {
-            u32 len = strlen(buf);
-            width = 12.5f * len + 65.0f;
-        }
+        len = strlen(buf);
+        width = 12.5f * len + 65.0f;
 
         // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
         ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});

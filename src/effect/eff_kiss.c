@@ -160,6 +160,7 @@ void effKissMain(EffectEntry* effect) {
     f32 ang;
     f32 rad;
     f32 a;
+    f32 s;
 
     pos = (Vec){work->position.x, work->position.y, work->position.z};
     type = work->type;
@@ -228,11 +229,9 @@ void effKissMain(EffectEntry* effect) {
         break;
     case 4:
         work->position.x += 0.2f;
-        {
-            f32 s = sin(9.424778f * (f32)work->frame / 60.0f);
+        s = sin(9.424778f * (f32)work->frame / 60.0f);
 
-            work->position.y = 2.0f * __fabsf(s);
-        }
+        work->position.y = 2.0f * __fabsf(s);
         work->rotation = 12.0f * (f32)sin(9.424778f * (f32)work->frame / 60.0f);
         work->frame++;
         break;
@@ -289,6 +288,10 @@ void effKissDisp(CameraId cameraId, void* payload) {
     s32 alpha;
     s32 frame3;
     s32 type;
+    f32 scale2;
+    f32 len;
+    f32 w2;
+    f32 off2;
 
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
@@ -396,63 +399,57 @@ void effKissDisp(CameraId cameraId, void* payload) {
     default:
         return;
     }
-    {
-        f32 scale2;
-        f32 len;
-        f32 w2;
-        f32 off2;
-        scale2 = 1.15f;
-        for (i = 0; i < 2; i++) {
-            off2 = 0.0f;
-            q = effect->userdata;
-            switch (type) {
-            case 0:
-            case 1:
-            case 2:
+    scale2 = 1.15f;
+    for (i = 0; i < 2; i++) {
+        off2 = 0.0f;
+        q = effect->userdata;
+        switch (type) {
+        case 0:
+        case 1:
+        case 2:
+            effGetTexObj(66, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            if (i == 0) {
+                off2 = 1.5f;
+                GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, alpha / 2});
+            } else {
+                kiss_col[type].a = alpha;
+                GXSetChanMatColor(GX_COLOR0A0, kiss_col[type]);
+            }
+            break;
+        case 3:
+            if (i == 0) {
+                effGetTexObj(90, &texObj);
+                GXLoadTexObj(&texObj, GX_TEXMAP0);
+                GXSetChanMatColor(GX_COLOR0A0, (GXColor){color_rotation_data[frame3 + 0], color_rotation_data[frame3 + 1], color_rotation_data[frame3 + 2], alpha});
+            } else {
                 effGetTexObj(66, &texObj);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
-                if (i == 0) {
-                    off2 = 1.5f;
-                    GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, alpha / 2});
-                } else {
-                    kiss_col[type].a = alpha;
-                    GXSetChanMatColor(GX_COLOR0A0, kiss_col[type]);
-                }
-                break;
-            case 3:
-                if (i == 0) {
-                    effGetTexObj(90, &texObj);
-                    GXLoadTexObj(&texObj, GX_TEXMAP0);
-                    GXSetChanMatColor(GX_COLOR0A0, (GXColor){color_rotation_data[frame3 + 0], color_rotation_data[frame3 + 1], color_rotation_data[frame3 + 2], alpha});
-                } else {
-                    effGetTexObj(66, &texObj);
-                    GXLoadTexObj(&texObj, GX_TEXMAP0);
-                    GXSetChanMatColor(GX_COLOR0A0, (GXColor){60, 60, 60, alpha});
-                }
-                break;
+                GXSetChanMatColor(GX_COLOR0A0, (GXColor){60, 60, 60, alpha});
             }
-            PSMTXTrans(mT, off2, -off2, 0.0f);
-            PSMTXRotRad(mR, 'z', angN);
-            PSMTXConcat(mR, mT, mT);
-            PSMTXConcat(mBase, mT, mT);
-            PSMTXConcat(cam->view, mT, mT);
-            GXLoadPosMtxImm(mT, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            len = scale2 * q[1].position.y;
-            w2 = 1.0f;
-            if (type == 3 && i == 0) {
-                w2 = 2.0f;
-            }
-            GXPosition3f32(-w2 / 2.0f, len, 0.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(w2 / 2.0f, len, 0.0f);
-            GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(w2 / 2.0f, 0.0f, 0.0f);
-            GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(-w2 / 2.0f, 0.0f, 0.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            break;
         }
+        PSMTXTrans(mT, off2, -off2, 0.0f);
+        PSMTXRotRad(mR, 'z', angN);
+        PSMTXConcat(mR, mT, mT);
+        PSMTXConcat(mBase, mT, mT);
+        PSMTXConcat(cam->view, mT, mT);
+        GXLoadPosMtxImm(mT, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        len = scale2 * q[1].position.y;
+        w2 = 1.0f;
+        if (type == 3 && i == 0) {
+            w2 = 2.0f;
+        }
+        GXPosition3f32(-w2 / 2.0f, len, 0.0f);
+        GXTexCoord2f32(0.0f, 0.0f);
+        GXPosition3f32(w2 / 2.0f, len, 0.0f);
+        GXTexCoord2f32(1.0f, 0.0f);
+        GXPosition3f32(w2 / 2.0f, 0.0f, 0.0f);
+        GXTexCoord2f32(1.0f, 1.0f);
+        GXPosition3f32(-w2 / 2.0f, 0.0f, 0.0f);
+        GXTexCoord2f32(0.0f, 1.0f);
     }
 }
 

@@ -78,6 +78,7 @@ void effMarioBalloonDisp(CameraId cameraId, void* payload) {
     MarioBalloonWork* work = effect->userdata;
     Mtx mT, mR, mS, mTA, mN;
     GXTexObj texObj;
+    f32 s;
 
     GXSetNumChans(0);
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
@@ -100,10 +101,8 @@ void effMarioBalloonDisp(CameraId cameraId, void* payload) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     PSMTXTrans(mT, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(mR, 'y', 0.017453292f * (work->rotation - camGetPtr(cameraId)->viewYaw));
-    {
-        f32 s = 0.7f * work->scale;
-        PSMTXScale(mS, s, s, s);
-    }
+    s = 0.7f * work->scale;
+    PSMTXScale(mS, s, s, s);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mT);
     PSMTXConcat(camGetPtr(cameraId)->view, mT, mT);

@@ -633,6 +633,7 @@ void zakogun_ext_main2(void) {
     ZakoGun* zako;
     f32 x, y, z;
     Mtx m;
+    BattleUnit* tgt;
 
     if (unit == NULL) {
         return;
@@ -760,16 +761,14 @@ void zakogun_ext_main2(void) {
                 break;
             case 50:
 #if VERSION >= VERSION_US
-                {
-                    BattleUnit* tgt = BattleGetUnitPtr(wp, work->targetId);
-                    if (tgt != NULL) {
-                        BtlUnit_GetPos(tgt, &x, &y, &z);
-                        work->targetPos = (Vec){x, y, z};
-                    } else {
-                        x = work->targetPos.x;
-                        y = work->targetPos.y;
-                        z = work->targetPos.z;
-                    }
+                tgt = BattleGetUnitPtr(wp, work->targetId);
+                if (tgt != NULL) {
+                    BtlUnit_GetPos(tgt, &x, &y, &z);
+                    work->targetPos = (Vec){x, y, z};
+                } else {
+                    x = work->targetPos.x;
+                    y = work->targetPos.y;
+                    z = work->targetPos.z;
                 }
 #else
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
