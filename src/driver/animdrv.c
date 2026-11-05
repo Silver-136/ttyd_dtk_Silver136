@@ -324,7 +324,7 @@ Mtx g_modeling_mtx_stack[32];
 static AnimationWork* wp = &work;
 
 //.sbss
-// Real retail .sbss slot: nothing references it (the symbol map has an unnamed 4-byte gap here).
+// FAKE: unused 4-byte .sbss filler in no symbol map; it only fills the slot the original had here. Removing it changes the object.
 s32 anim_unused_sbss;
 //.sbss
 Mtx* g_modeling_mtx;

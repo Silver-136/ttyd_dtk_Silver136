@@ -72,6 +72,7 @@ const char* marioAnimeGroupData[4][3] = {
 Vec blurPos[8];
 
 //.sbss
+// FAKE: unused 4-byte .sbss filler in no symbol map; it only fills the slot the original had here. Removing it changes the object.
 s32 unk_804186EC;
 MarioWork* mp;
 

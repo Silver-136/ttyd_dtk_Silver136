@@ -184,7 +184,8 @@ const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv",
 const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};
 
 #if VERSION < VERSION_US
-/** Unused padding table in the Japanese release. */
+// FAKE: unused zero table (JP only) in no symbol map; it only fills the slot the original had here. Removing it
+// changes the object.
 #if VERSION >= VERSION_JP
 static const char* battlePartyMsgPad[6] = {0};
 #endif

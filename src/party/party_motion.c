@@ -34,6 +34,7 @@
 static BOOL partyChkMarioFollowY(MarioWork* mario);
 void partyChgMotSlitFloor(PartyEntry* party);
 
+// FAKE: unused 4-byte .sbss filler in no symbol map; it only fills the slot the original had here. Removing it changes the object.
 static s32 unk_804189f4;
 
 #if VERSION >= VERSION_JP

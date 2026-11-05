@@ -344,6 +344,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/animdrv.c | rpCurData | renderProc's per-draw pose-data read as an inline; its call-site temp gives the target wp/data register order | see comment |
 | Both | src/driver/animdrv.c | animGroupBaseAsync | (u32) cast (unsigned compare); plain model == 0 changes the object | u32 model local; fileAsyncf returning u32 |
 | Both | src/driver/animdrv.c | animStrippedPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
+| Both | src/driver/animdrv.c | (file scope) | anim_unused_sbss: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
 | Both | src/driver/arcdrv.c | arcOpen | info used through the pointer infop; passing &info directly changes the object | see comment |
 | Both | src/driver/camdrv.c | camMain | dead zero store (every field is set below); removing it changes the object | see comment |
 | Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment; tried 2026-11-01: inline partyIsBeingUsed(party) in !party || !used: materializes the bool, longer |
@@ -355,6 +356,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/fadedrv.c | disp_maku | depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object | see comment |
 | Both | src/driver/fadedrv.c | fadeStrippedPool | stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool | see comment |
 | Both | src/driver/hitdrv.c | hitCheckVecFilter | 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object | see comment |
+| Both | src/driver/hitdrv.c | (file scope) | unk_8041840C: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
 | Both | src/driver/icondrv.c | iconDispGxAlpha | iconId++ then iconId-- (no net change); without them the object changes | see comment |
 | Both | src/driver/itemdrv.c | itemMain | f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY); `hitDist = 20.0 + __fabs(-1.0)` changes the object | see comment |
 | Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
@@ -514,6 +516,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario.c | marioChgDamagePose | switch with a single case 0 for the slit test; the plain if changes the object | see comment |
 | Both | src/mario/mario.c | marioChkInScreen | redundant compare with FALSE; return valid changes the object | see comment |
 | Both | src/mario/mario.c | marioMakeDispDir | c30 and c20 hold 30.0f and 20.0f for the negated uses below; the literals -30.0f and -20.0f change the object | see comment |
+| Both | src/mario/mario.c | (file scope) | unk_804186EC: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
 | Both | src/mario/mario_balloon.c | marioBalloonMain | switch on !marioChkKey() (empty case 0, default turns the balloon off); the plain if changes the object | see comment |
 | Both | src/mario/mario_hit.c | marioChkGnd2 | no-op (s8) casts of the s8 stick fields; the plain fields change the object | u8 stick fields (15 units change) |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool2 | stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool | see comment |
@@ -544,6 +547,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_motion.c | party_motion_homing_fly | no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_behind_mario | hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_behind_mario_continue | hand-inlined copy of partyGetGndY(x, y, z); the call changes the object | see comment |
+| Both | src/party/party_motion.c | (file scope) | unk_804189f4: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
 | Both | src/party/party_move.c | partyRecordFootmark | call through a no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_move.c | partyUpdSpd2 | copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object | see comment |
 | Both | src/party/party_move.c | partyChgMoveMode | the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object | see comment |
@@ -591,3 +595,5 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/npcdrv.c | npcStrippedAnnouncePool | stand-in that nothing calls; it only places the banner's literals in this object's constant pool | see comment |
 | JP and later | src/driver/npcdrv.c | npcStrippedHitPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | npcStrippedKoopaPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
+| Both | src/event/evt_window.c | (file scope) | unk_80418b3c: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
+| JP | src/event/evt_msg.c | (file scope) | battlePartyMsgPad: unused zero table, in no symbol map | removing it changes the object |
