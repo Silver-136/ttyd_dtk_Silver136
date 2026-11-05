@@ -3732,6 +3732,7 @@ void puniModeUpdraft(PuniData *p) {
     Vec savev;
     f32 mag;
     s32 t;
+    Vec q;
     if (p->modeStep == 0) {
         {
             Vec v_ = {0.0f, 0.94f, 0.0f};
@@ -3806,37 +3807,35 @@ void puniModeUpdraft(PuniData *p) {
     save = p->pos;
     savev = p->vel;
     puniMoveAtari(p, save, d, 1, mag);
-    {
-        Vec q = p->pos;
-        q.x += (p->dispOfs.x);
-        q.y += 15.0f;
-        q.z += 3.0f;
-        ((PuniBalloonWork*)p->effect->userdata)->position.x = q.x;
-        ((PuniBalloonWork*)p->effect->userdata)->position.y = q.y;
-        ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
-        if ((p->hitMove != NULL) || (p->hitCheck != NULL)) {
-            s32 f = 0;
-            if ((p->hitMove != NULL) && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
-                f = 1;
-            }
-            if ((p->hitCheck != NULL) && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
-                f = 1;
-            }
-            if (f == 0) {
-                p->mode = PUNI_MODE_WONDER;
-                p->modeStep = 0;
-                p->dispOfs.x = 0.0f;
-            } else {
-                p->pos = save;
-                p->vel = savev;
-                PSVECAdd(&p->pos, &p->vel, &p->pos);
-            }
+    q = p->pos;
+    q.x += (p->dispOfs.x);
+    q.y += 15.0f;
+    q.z += 3.0f;
+    ((PuniBalloonWork*)p->effect->userdata)->position.x = q.x;
+    ((PuniBalloonWork*)p->effect->userdata)->position.y = q.y;
+    ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
+    if ((p->hitMove != NULL) || (p->hitCheck != NULL)) {
+        s32 f = 0;
+        if ((p->hitMove != NULL) && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
+            f = 1;
         }
-        if (p->pos.y >= 0.0f) {
+        if ((p->hitCheck != NULL) && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
+            f = 1;
+        }
+        if (f == 0) {
             p->mode = PUNI_MODE_WONDER;
             p->modeStep = 0;
             p->dispOfs.x = 0.0f;
+        } else {
+            p->pos = save;
+            p->vel = savev;
+            PSVECAdd(&p->pos, &p->vel, &p->pos);
         }
+    }
+    if (p->pos.y >= 0.0f) {
+        p->mode = PUNI_MODE_WONDER;
+        p->modeStep = 0;
+        p->dispOfs.x = 0.0f;
     }
 }
 
