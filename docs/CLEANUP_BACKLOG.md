@@ -207,20 +207,18 @@ pushed commit (cleanup_notes, round 22):
 - H: one inventory for the progress numbers
 
 ## 10. Comment accuracy review and header placement (2026-11-04)
-- Comment review against the code (brief cleanup_notes/rels_comment_brief.md): src/ and include/ done except
-  src/effect; rels/ rooms done for gor tik las mri muj tou2 usu gon rsh jin pik bom gra eki nok; still to read: src/effect,
-  rels hei dou aji kpa moo win tou yuu jon dmo dig end hom aaa tst (rooms).
-- Battle units: DONE. Codex round 23 read 186 of 386 files (2fa91c6cd); our agents read the other 200
-  (0edd64709, 57e80cc96; ~700 fixes). src/effect DONE (2275765b0).
-- Code oddities from all of these, unconfirmed: cleanup_notes/code_oddities_all.tsv (227 rows) plus
-  cleanup_notes/src_bug_candidates.md. Check each against the code before any BUG comment. Strong ones (two
-  readers or obvious): Pokey hammer-blow event tests pattern 15 (Super Hammer knock-on uses the Ultra Hammer
-  weapon, all sambo copies); Bowser lean roll compared with 0 (las unit_boss_koopa); Bill Blaster launches 3/6
-  keep scanning (several Bills per turn); mahorn/kamec clone arrays unbounded; Super Mahorn passes 4 args to a
-  5-arg helper; GOTO(98) without LABEL(98) in hammer_bros and gonbaba.
+- Comment review against the code (brief cleanup_notes/rels_comment_brief.md): DONE for src/, include/ and every
+  rels/ module (rooms, events, battle units; last rooms 3c0e439d8, aa556d4f0). Logs cleanup_notes/rels_fix_*.tsv,
+  unit_fix_*.tsv, src_fix_*.tsv.
+- Code oddities: DONE (e09e6f110). All ~300 checked against the code; verdicts cleanup_notes/oddity_groups/
+  verdict_*.tsv (bug 172 with BUG comments, harmless 99, intended 22, wrong 11, unsure 14). Left: the 14 unsure
+  rows; GSWF_TOU_RAWK_HAWK_OPENING_SEEN (GSWF 2399) is never set anywhere, so its name is unproven.
+- Brace blocks (Zephiles/NWPlayer123, 2026-11-04): about 445 block-local declarations hoisted where the bytes allow
+  (55c3dfe57..9664a3b09, cleanup_tools/brace_hoist.py, brace_rounds.py); 154 blocks the bytes need stay (authentic
+  C89 scoping). Left: ~420 blocks of forms the tool skips (name reused elsewhere in the function, multi-declarator
+  lines); brace indentation sites where demo and retail arms open braces differently (cleanup_notes/brace_indent_fix.tsv).
 - Header placement (Zephiles): scanner cleanup_tools/header_placement_scan.py. Done: one version numbering,
   HEAP_TYPE, shared types (cloud rooms, minigame driver, Monte tables, Glitz Pit ranking), per-version values in
-  owner headers. Left: battle-unit types and UNIT_WORK enums repeated across REL copies (after the unit comment
-  review), eff_balloon_n64's effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes
-  (kept, they change code), 9 placeholder names in headers (--detail unk), and a scan for raw numbers where a header
-  enum exists (by parameter type).
+  owner headers. Left: battle-unit types and UNIT_WORK enums repeated across REL copies, eff_balloon_n64's
+  effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
+  9 placeholder names in headers (--detail unk).
