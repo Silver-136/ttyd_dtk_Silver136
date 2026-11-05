@@ -866,6 +866,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     f32 angle;
     f32 rad;
     Vec a, b, c, d, e, f;
+    f32 yaw;
 
     if (mario->position.y > 20.0f + (*pose->mtx)[1][3]) {
         return 0;
@@ -892,10 +893,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->hammerFrames > 10) {
         cam = camGetPtr(CAMERA_3D);
-        {
-            f32 yaw = cam->viewYaw;
-            rad = reviseAngle((mario->displayDirection - 90.0f) + yaw);
-        }
+        yaw = cam->viewYaw;
+        rad = reviseAngle((mario->displayDirection - 90.0f) + yaw);
         angle = 35.0f * moa_sin((6.2831855f * rad) / 360.0f) + mario->position.x;
         dist = mario->position.z - 35.0f * moa_cos((6.2831855f * rad) / 360.0f);
         if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], angle, dist) < 35.0f) {
