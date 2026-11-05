@@ -65,7 +65,7 @@ static EVT_BEGIN(evt_dakuto)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
     ELSE
@@ -173,7 +173,7 @@ EVT_BEGIN(tou_13_init_evt)
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(LF(0), 0)
@@ -189,16 +189,16 @@ EVT_BEGIN(tou_13_init_evt)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("deguti"), 0, PTR(evt_dakuto), 0)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     ELSE
         CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_03_EAVESDROPPING)
-        SPAWN_EVENT(PTR(evt_nusumi))
+        SPAWN_EVENT(evt_nusumi)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_02_AIR_DUCT_1ST_TIME)
-        SPAWN_EVENT(PTR(evt_first))
+        SPAWN_EVENT(evt_first)
     END_IF
     RETURN
 EVT_END()

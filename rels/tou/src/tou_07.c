@@ -248,11 +248,11 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -274,11 +274,11 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_mario_mov_pos2, 35, -50, FLOAT(60.0f))
     CALL(evt_mario_set_dir_npc, STRING("ガンス"))
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -302,11 +302,11 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 90)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -330,11 +330,11 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_mario_mov_pos2, 40, -100, FLOAT(60.0f))
     CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -352,11 +352,11 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -140, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -367,11 +367,11 @@ static EVT_BEGIN(evt_champion)
     END_INLINE_EVENT
     WAIT_MS(1000)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -540,7 +540,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -557,7 +557,7 @@ EVT_BEGIN(evt_champion_re)
     END_INLINE_EVENT
     WAIT_MS(800)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -797,7 +797,7 @@ EVT_BEGIN(tou_07_init_evt)
     // Set up the doors, the bed and the paper-slit animation, and place the NPCs.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_hitobj_name_callback, STRING("a_bed"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -844,7 +844,7 @@ EVT_BEGIN(tou_07_init_evt)
 
     // Match-making is set up at the board and the match monitor starts.
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
-    CALL_CHILD(PTR(evt_tou_monitor_init))
+    CALL_CHILD(evt_tou_monitor_init)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW_STORY_PROGRESS)
@@ -861,17 +861,17 @@ EVT_BEGIN(tou_07_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
-            SPAWN_EVENT(PTR(evt_champion))
+            SPAWN_EVENT(evt_champion)
             RETURN
         END_IF
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-            SPAWN_EVENT(PTR(evt_tou_match_after_default))
+            SPAWN_EVENT(evt_tou_match_after_default)
             RETURN
         END_IF
         IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
-            SPAWN_EVENT(PTR(evt_champion_re))
+            SPAWN_EVENT(evt_champion_re)
         ELSE
-            SPAWN_EVENT(PTR(evt_tou_match_after_default))
+            SPAWN_EVENT(evt_tou_match_after_default)
         END_IF
         RETURN
     END_IF
@@ -880,7 +880,7 @@ EVT_BEGIN(tou_07_init_evt)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        SPAWN_EVENT(PTR(evt_sensyu))
+        SPAWN_EVENT(evt_sensyu)
         RETURN
     END_IF
 
@@ -909,8 +909,8 @@ EVT_BEGIN(tou_07_init_evt)
     IF_STR_EQUAL(LW(0), STRING("e_bero"))
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             SET_VALUE(LW(0), STRING("n_bero"))
-            CALL_CHILD(PTR(bero_case_switch_off))
-            SPAWN_EVENT(PTR(evt_gardman_spawn))
+            CALL_CHILD(bero_case_switch_off)
+            SPAWN_EVENT(evt_gardman_spawn)
         END_IF
     END_IF
 #endif

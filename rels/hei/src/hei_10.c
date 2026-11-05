@@ -703,7 +703,7 @@ EVT_END()
 EVT_BEGIN(hei_10_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
@@ -714,7 +714,7 @@ EVT_BEGIN(hei_10_init_evt)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_06_01_GOLD_FUZZY)
                 CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -15, 0)
                 CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
-                SPAWN_EVENT(PTR(evt_golden))
+                SPAWN_EVENT(evt_golden)
             END_IF
         END_IF
     END_IF

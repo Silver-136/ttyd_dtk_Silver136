@@ -1259,7 +1259,7 @@ EVT_BEGIN(sys_01_init_evt)
     WAIT_MS(3000)
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_WHITE, 1800, FADE_IN_WHITE, 1800)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 1800, FADE_IN_WHITE, 1800)
-    SPAWN_EVENT(PTR(evt_start))
+    SPAWN_EVENT(evt_start)
     RETURN
 EVT_END()
 

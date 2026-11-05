@@ -219,7 +219,7 @@ EVT_BEGIN(kusa_dokan)
     SET_VALUE(GSWF_HEI_01_BUSH_PIPE_REVEALED, 1)
     CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
     SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN
@@ -332,7 +332,7 @@ EVT_BEGIN(bridge_evt)
         CALL(evt_mobj_wait_animation_end, STRING("bg_switch"))
         CALL(evt_mobj_delete, STRING("bg_switch"))
     END_INLINE_EVENT
-    CALL_CHILD(PTR(bridge_evt_02))
+    CALL_CHILD(bridge_evt_02)
     CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
@@ -362,7 +362,7 @@ EVT_BEGIN(nokotaro_get)
     WAIT_MS(800)
     SET_VALUE(LW(8), STRING("ノコタロウ"))
     SET_VALUE(LW(9), PARTNER_KOOPS)
-    CALL_CHILD(PTR(all_party_lecture))
+    CALL_CHILD(all_party_lecture)
 #if VERSION >= VERSION_US
     CALL(evt_party_set_dir, 0, 90, 200)
 #endif
@@ -379,7 +379,7 @@ EVT_BEGIN(nokotaro_kanyu)
     CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno1"))
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     IF_INT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(nokotaro_get))
+        CALL_CHILD(nokotaro_get)
     ELSE
         CALL(evt_msg_print_add, 0, STRING("stg1_hei_10"))
         CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno2"))
@@ -387,7 +387,7 @@ EVT_BEGIN(nokotaro_kanyu)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg1_hei_11"))
         ELSE
-            CALL_CHILD(PTR(nokotaro_get))
+            CALL_CHILD(nokotaro_get)
         END_IF
     END_IF
     RETURN
@@ -468,7 +468,7 @@ EVT_BEGIN(nokotaro_nakama)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg1_hei_06_1"), 0, STRING("ノコタロウ"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL_CHILD(PTR(nokotaro_kanyu))
+    CALL_CHILD(nokotaro_kanyu)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
@@ -499,7 +499,7 @@ EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_stop_for_event)
     CALL(evt_msg_print, 0, STRING("stg1_hei_12"), 0, STRING("ノコタロウ"))
-    CALL_CHILD(PTR(nokotaro_kanyu))
+    CALL_CHILD(nokotaro_kanyu)
     CALL(evt_npc_start_for_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
         CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
@@ -512,7 +512,7 @@ EVT_END()
 
 /** Talk event of Koops: runs nokotarou_talk_2 as a separate event and returns. */
 static EVT_BEGIN(nokotarou_talk)
-    SPAWN_EVENT(PTR(nokotarou_talk_2))
+    SPAWN_EVENT(nokotarou_talk_2)
     RETURN
 EVT_END()
 
@@ -680,7 +680,7 @@ EVT_BEGIN(evt_nokorin)
     END_INLINE_EVENT
 
     // She spins her shell while the camera follows her.
-    CALL_CHILD(PTR(nokorin_pose))
+    CALL_CHILD(nokorin_pose)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ノコリン"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_NOKORIN_MOVE2"), LW(0), LW(1), LW(2), LW(3))
@@ -994,23 +994,23 @@ EVT_END()
 EVT_BEGIN(hei_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(PTR(bero_case_switch_off))
+    CALL_CHILD(bero_case_switch_off)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF_HEI_01_FIRE_FLOWER_BLOCK, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF_STARPIECE_32, 0)
     CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
     SET_VALUE(LW(0), PTR(kusa_data))
-    CALL_CHILD(PTR(evt_sub_kusa_access_entry))
+    CALL_CHILD(evt_sub_kusa_access_entry)
     IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
     ELSE
         CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
         CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
         SET_VALUE(LW(0), STRING("dokan"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
@@ -1019,12 +1019,12 @@ EVT_BEGIN(hei_01_init_evt)
         SET_VALUE(GW(0), 0)
         CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
     END_IF
-    SPAWN_EVENT(PTR(nokotaro_nakama))
-    SPAWN_EVENT(PTR(evt_nokorin))
+    SPAWN_EVENT(nokotaro_nakama)
+    SPAWN_EVENT(evt_nokorin)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
+    CALL_CHILD(evt_gazigazi_entry)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
-        SPAWN_EVENT(PTR(peach_mail))
+        SPAWN_EVENT(peach_mail)
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
@@ -1033,14 +1033,14 @@ EVT_BEGIN(hei_01_init_evt)
 #if VERSION == VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)
-            SPAWN_EVENT(PTR(christine_hei_01))
+            SPAWN_EVENT(christine_hei_01)
         END_IF
     END_IF
 #endif
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)
-            SPAWN_EVENT(PTR(christine_hei_01))
+            SPAWN_EVENT(christine_hei_01)
         END_IF
     END_IF
 #endif

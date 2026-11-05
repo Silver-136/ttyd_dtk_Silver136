@@ -491,9 +491,9 @@ EVT_BEGIN(evt_move_g)
     CALL(evt_npc_move_position, STRING("\203K\201[\203h\203}\203\223\202Q"), 530, -185, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("\203K\201[\203h\203}\203\223\202Q"), STRING("mario"))
     SET_VALUE(LW(0), 3)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     SET_VALUE(LW(0), 4)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
     ELSE
@@ -533,7 +533,7 @@ EVT_BEGIN(talk_gard1)
         CALL(evt_msg_print, 0, STRING("stg3_tou_24"), 0, 0)
         CASE_LESS(STG3_02_THE_GUARD_BACKS_OFF)
         CALL(evt_msg_print, 0, STRING("stg3_tou_37"), 0, 0)
-        CALL_CHILD(PTR(evt_move_g))
+        CALL_CHILD(evt_move_g)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_tou_37_01"), 0, 0)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
@@ -544,7 +544,7 @@ EVT_BEGIN(talk_gard1)
         ELSE
             IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_001"), 0, 0)
-                CALL_CHILD(PTR(evt_move_g))
+                CALL_CHILD(evt_move_g)
             ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_002"), 0, 0)
             END_IF
@@ -577,7 +577,7 @@ EVT_BEGIN(talk_gard2)
         CALL(evt_msg_print, 0, STRING("stg3_tou_24"), 0, 0)
         CASE_LESS(STG3_02_THE_GUARD_BACKS_OFF)
         CALL(evt_msg_print, 0, STRING("stg3_tou_37"), 0, 0)
-        CALL_CHILD(PTR(evt_move_g))
+        CALL_CHILD(evt_move_g)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_tou_37_01"), 0, 0)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
@@ -588,7 +588,7 @@ EVT_BEGIN(talk_gard2)
         ELSE
             IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_001"), 0, 0)
-                CALL_CHILD(PTR(evt_move_g))
+                CALL_CHILD(evt_move_g)
             ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_002"), 0, 0)
             END_IF
@@ -1590,14 +1590,14 @@ EVT_BEGIN(evt_tougi2)
     // The door opens and they step into the lobby.
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 2)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         IF_INT_EQUAL(LF(0), 1)
-            CALL_CHILD(PTR(n_2_door_open))
+            CALL_CHILD(n_2_door_open)
         ELSE
-            CALL_CHILD(PTR(n_1_door_open))
+            CALL_CHILD(n_1_door_open)
         END_IF
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -1615,14 +1615,14 @@ EVT_BEGIN(evt_tougi2)
     END_INLINE_EVENT
     WAIT_MS(700)
     SET_VALUE(LW(1), 2)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         IF_INT_EQUAL(LF(0), 1)
-            CALL_CHILD(PTR(n_2_door_close))
+            CALL_CHILD(n_2_door_close)
         ELSE
-            CALL_CHILD(PTR(n_1_door_close))
+            CALL_CHILD(n_1_door_close)
         END_IF
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -2241,7 +2241,7 @@ EVT_BEGIN(evt_momikucha)
         CALL(evt_npc_set_position, STRING("\203`\203\203\203\223\203s\203\207\203\223"), 0, 0, 0)
         CALL(evt_npc_change_interrupt, STRING("\203`\203\203\203\223\203s\203\207\203\223"), 1, PTR(move_champ))
     ELSE
-        SPAWN_EVENT(PTR(mario_momikucha_msg))
+        SPAWN_EVENT(mario_momikucha_msg)
     END_IF
     RETURN
 EVT_END()
@@ -2516,15 +2516,15 @@ EVT_BEGIN(tou_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
-        CALL_CHILD(PTR(bero_case_entry))
-        SPAWN_EVENT(PTR(evt_tougi2))
+        CALL_CHILD(bero_case_entry)
+        SPAWN_EVENT(evt_tougi2)
     ELSE
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     END_IF
 
     // NPCs and the Star Piece panel.
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL_CHILD(PTR(init_kinopio_f))
+    CALL_CHILD(init_kinopio_f)
 #if VERSION >= VERSION_US
     CALL(evt_npc_change_interrupt, STRING("キノピオ女"), 6, PTR(talk_kinopio_f))
 #else
@@ -2533,9 +2533,9 @@ EVT_BEGIN(tou_02_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -260, 0, -120, STRING("sita"), 125, GSWF_STARPIECE_56)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
         SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         SET_VALUE(LW(0), 4)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
@@ -2545,9 +2545,9 @@ EVT_BEGIN(tou_02_init_evt)
             SET_VALUE(LW(0), 4)
             CALL_CHILD(bero_case_switch_off)
 #else
-            CALL_CHILD(PTR(bero_case_switch_off))
+            CALL_CHILD(bero_case_switch_off)
             SET_VALUE(LW(0), 4)
-            CALL_CHILD(PTR(bero_case_switch_off))
+            CALL_CHILD(bero_case_switch_off)
 #endif
         END_IF
     END_IF
@@ -2578,7 +2578,7 @@ EVT_BEGIN(tou_02_init_evt)
         END_IF
 #endif
         CALL(evt_pouch_remove_item, ITEM_CHAMPS_BELT, LW(0))
-        SPAWN_EVENT(PTR(evt_after_peach))
+        SPAWN_EVENT(evt_after_peach)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
@@ -2618,7 +2618,7 @@ EVT_BEGIN(tou_02_init_evt)
     END_INLINE_EVENT
 
     // The fan crowd scene.
-    CALL_CHILD(PTR(evt_momikucha))
+    CALL_CHILD(evt_momikucha)
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), 0)

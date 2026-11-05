@@ -317,7 +317,7 @@ EVT_BEGIN(las_14_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
     IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
         CALL(evt_las_cloud_init)

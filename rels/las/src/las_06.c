@@ -161,7 +161,7 @@ EVT_BEGIN(las_06_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_06_ULTRA_SHROOM_BLOCK, 0)
     CALL(evt_npc_check, STRING("スーパーキラー大砲１"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -171,7 +171,7 @@ EVT_BEGIN(las_06_init_evt)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_link, STRING("スーパーキラー大砲３"), STRING("スーパーキラー大砲４"))
     END_IF
-    CALL_CHILD(PTR(rousoku_init))
+    CALL_CHILD(rousoku_init)
     RETURN
 EVT_END()
 

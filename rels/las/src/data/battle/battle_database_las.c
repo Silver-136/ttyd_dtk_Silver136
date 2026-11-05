@@ -3504,7 +3504,7 @@ EVT_END()
 
 /** Init event of battle stage stg_08_1: starts the torch flame event. */
 EVT_BEGIN(stg_08_1_init_event)
-    SPAWN_EVENT(PTR(stg_08_1_init_sub_event))
+    SPAWN_EVENT(stg_08_1_init_sub_event)
     RETURN
 EVT_END()
 
@@ -3631,7 +3631,7 @@ USER_FUNC(_gear_rotate) {
 
 /** Init event of battle stage stg_08_6: starts the six-torch flame event. */
 EVT_BEGIN(stg_08_6_init_event)
-    SPAWN_EVENT(PTR(stg_08_6_init_sub_event))
+    SPAWN_EVENT(stg_08_6_init_sub_event)
     RETURN
 EVT_END()
 

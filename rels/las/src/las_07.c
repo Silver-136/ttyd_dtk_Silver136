@@ -245,7 +245,7 @@ EVT_BEGIN(las_07_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam_road_reset)

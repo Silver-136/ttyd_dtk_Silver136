@@ -128,7 +128,7 @@ EVT_BEGIN(switch_check)
         CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY | MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 1)
         SET_VALUE(LW(0), STRING("box"))
-        CALL_CHILD(PTR(box_syutugen))
+        CALL_CHILD(box_syutugen)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CALL(evt_mario_key_onoff, 1)
         SET_VALUE(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 1)
@@ -144,7 +144,7 @@ static EVT_BEGIN(switch1_evt)
     IF_INT_LESS(LSW_LAS_13_SWITCH_1_COUNT, 255)
         ADD(LSW_LAS_13_SWITCH_1_COUNT, 1)
     END_IF
-    CALL_CHILD(PTR(switch_check))
+    CALL_CHILD(switch_check)
     RETURN
 EVT_END()
 
@@ -158,7 +158,7 @@ static EVT_BEGIN(switch2_evt)
             ADD(LSW_LAS_13_SWITCH_2_COUNT, 1)
         END_IF
     END_IF
-    CALL_CHILD(PTR(switch_check))
+    CALL_CHILD(switch_check)
     RETURN
 EVT_END()
 
@@ -183,7 +183,7 @@ EVT_BEGIN(las_13_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
         SET_VALUE(LSW_LAS_13_SWITCH_1_COUNT, 0)
         SET_VALUE(LSW_LAS_13_SWITCH_2_COUNT, 0)

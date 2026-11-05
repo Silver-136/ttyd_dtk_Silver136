@@ -144,11 +144,11 @@ EVT_BEGIN(muj_11_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
 
     // Only this story step starts the warning; the warning advances progress to the next step.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_31_FOUR_EYES)
-        SPAWN_EVENT(PTR(warning_event))
+        SPAWN_EVENT(warning_event)
     END_IF
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, 0, 60, -20, 0, 0)

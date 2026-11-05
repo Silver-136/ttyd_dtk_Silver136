@@ -2440,19 +2440,19 @@ BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
-    CALL_CHILD(PTR(_object_turn_event_core))
+    CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
-    CALL_CHILD(PTR(_object_turn_event_core))
+    CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
-    CALL_CHILD(PTR(_object_turn_event_core))
+    CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 #endif
@@ -2576,7 +2576,7 @@ EVT_END()
  */
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
-    CALL_CHILD(PTR(_nozzle_work_event_core))
+    CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 /**
@@ -2585,7 +2585,7 @@ EVT_END()
  */
 EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
-    CALL_CHILD(PTR(_nozzle_work_event_core))
+    CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 #endif
@@ -2701,21 +2701,21 @@ BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
-    CALL_CHILD(PTR(_object_turn_event_core))
+    CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
-    CALL_CHILD(PTR(_object_turn_event_core))
+    CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
-    CALL_CHILD(PTR(_object_turn_event_core))
+    CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
@@ -2736,7 +2736,7 @@ EVT_END()
 
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
-    CALL_CHILD(PTR(_nozzle_work_event_core))
+    CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 #endif
@@ -2748,7 +2748,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
-    CALL_CHILD(PTR(_nozzle_work_event_core))
+    CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 #endif
@@ -2850,13 +2850,13 @@ EVT_END()
 
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
-    CALL_CHILD(PTR(_nozzle_work_event_core))
+    CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 
 EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
-    CALL_CHILD(PTR(_nozzle_work_event_core))
+    CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 #endif

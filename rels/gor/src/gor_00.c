@@ -513,7 +513,7 @@ EVT_BEGIN(gor_00_mony_regl)
 #if VERSION >= VERSION_US
         WAIT_WHILE(GF(15))
 #endif
-        CALL_CHILD(PTR(mony_run_away))
+        CALL_CHILD(mony_run_away)
     END_SWITCH
     RETURN
 EVT_END()
@@ -592,7 +592,7 @@ EVT_END()
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
-        CALL_CHILD(PTR(mony_peton_talk))
+        CALL_CHILD(mony_peton_talk)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_087"), 0, STRING("me"))
@@ -628,7 +628,7 @@ EVT_BEGIN(gor_00_peton_regl)
 #if VERSION >= VERSION_US
         WAIT_WHILE(GF(15))
 #endif
-        CALL_CHILD(PTR(peton_run_away))
+        CALL_CHILD(peton_run_away)
     END_SWITCH
     RETURN
 EVT_END()
@@ -643,7 +643,7 @@ EVT_END()
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
-        CALL_CHILD(PTR(mony_peton_talk))
+        CALL_CHILD(mony_peton_talk)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_087_01"), 0, STRING("me"))
@@ -825,7 +825,7 @@ static EVT_BEGIN(marco_talk)
         // Bobbery is aboard: Flavio announces the voyage.
         CASE_EQUAL(STG4_37_TO_THE_PORT)
 #if VERSION >= VERSION_JP
-        SPAWN_EVENT(PTR(marco_party_move))
+        SPAWN_EVENT(marco_party_move)
 #endif
         IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
             CALL(evt_msg_print, 0, STRING("mac_4_091"), 0, STRING("me"))
@@ -852,7 +852,7 @@ static EVT_BEGIN(marco_talk)
         // Mario is ready: the music fades and the departure scene starts.
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         CALL(evt_msg_continue)
-        SPAWN_EVENT(PTR(shukko_event))
+        SPAWN_EVENT(shukko_event)
     END_SWITCH
     RETURN
 EVT_END()
@@ -926,10 +926,10 @@ EVT_BEGIN(garawaru_regl)
         END_LOOP
         CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL_CHILD(PTR(garawaru_urouro2))
+        CALL_CHILD(garawaru_urouro2)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_GREATER(STG4_END_OFF_TO_THE_KEYS)
-        CALL_CHILD(PTR(garawaru_urouro2))
+        CALL_CHILD(garawaru_urouro2)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1103,7 +1103,7 @@ EVT_END()
 EVT_BEGIN(odoodo_ani_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
-        CALL_CHILD(PTR(odoodo_ani_urouro))
+        CALL_CHILD(odoodo_ani_urouro)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1335,7 +1335,7 @@ EVT_BEGIN(suifubomb_a_regl)
         CALL(urouro_main_func, STRING("me"))
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_DEFAULT
-        CALL_CHILD(PTR(suifubomb_a_urouro2))
+        CALL_CHILD(suifubomb_a_urouro2)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1470,10 +1470,10 @@ EVT_BEGIN(suifubomb_b_regl)
         END_LOOP
         CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL_CHILD(PTR(suifubomb_b_urouro2))
+        CALL_CHILD(suifubomb_b_urouro2)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_GREATER(STG4_END_OFF_TO_THE_KEYS)
-        CALL_CHILD(PTR(suifubomb_b_urouro2))
+        CALL_CHILD(suifubomb_b_urouro2)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1581,7 +1581,7 @@ static EVT_BEGIN(korutesu_talk)
         CALL(evt_msg_print_add, 0, STRING("gor_00_027"))
         SET_VALUE(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
         SET_VALUE(GF(13), 1)
-        CALL_CHILD(PTR(gor_muj_ship_start))
+        CALL_CHILD(gor_muj_ship_start)
     ELSE
         CALL(evt_msg_print_add, 0, STRING("gor_00_026"))
     END_IF
@@ -1684,7 +1684,7 @@ EVT_END()
 static EVT_BEGIN(borodo2_talk)
     CALL(evt_msg_print, 0, STRING("irai_04_004"), 0, STRING("me"))
     SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
-    SPAWN_EVENT(PTR(borodo2_escape))
+    SPAWN_EVENT(borodo2_escape)
     RETURN
 EVT_END()
 
@@ -1694,7 +1694,7 @@ EVT_END()
  * from STG6_56_ROGUEPORT_STATION on he stands at (525, 15, -270) facing left.
  */
 EVT_BEGIN(mokorim_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
         CALL(evt_npc_set_position, STRING("me"), 525, 15, -270)
@@ -1925,7 +1925,7 @@ EVT_END()
 
 /** Init script of Kammy Koopa ("ババ") for the Chapter 4 Bowser interlude: does the shared NPC init and enables facing the movement direction. */
 static EVT_BEGIN(baba_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
@@ -1945,7 +1945,7 @@ EVT_END()
 
 /** Talk event of Luigi: runs the shared first-talk scene luigi_gor_first_talk. */
 static EVT_BEGIN(luigi_talk)
-    CALL_CHILD(PTR(luigi_gor_first_talk))
+    CALL_CHILD(luigi_gor_first_talk)
     RETURN
 EVT_END()
 
@@ -2516,7 +2516,7 @@ EVT_BEGIN(enter_gorotsuki_town)
     SET_VALUE(GF(5), 1)
 
     // The ship sails into the harbor with its wake and engine sound, and the wake fades out.
-    SPAWN_EVENT(PTR(ship_a_animation))
+    SPAWN_EVENT(ship_a_animation)
     WAIT_MS(3000)
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
@@ -2595,7 +2595,7 @@ EVT_BEGIN(enter_gorotsuki_town)
     CALL(evt_npc_set_position, STRING("船ダミー"), 0, GW(8), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-        CALL_CHILD(PTR(ship_pera))
+        CALL_CHILD(ship_pera)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -2725,7 +2725,7 @@ EVT_BEGIN(enter_gorotsuki_town)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), 0)
     CALL(evt_snd_bgm_scope, 0, 0)
-    SPAWN_EVENT(PTR(christine_osoware))
+    SPAWN_EVENT(christine_osoware)
     RETURN
 EVT_END()
 
@@ -2764,7 +2764,7 @@ EVT_BEGIN(christine_osoware)
     CALL(evt_npc_sound_data_set, STRING("水夫ボム兵Ｂ"), 0, 0, 0, 0, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
-    CALL_CHILD(PTR(christine_osoware_setup))
+    CALL_CHILD(christine_osoware_setup)
 
     // Goombella snaps at Lord Crump and his two grunts as they corner her.
     CALL(evt_mario_key_onoff, 0)
@@ -2843,7 +2843,7 @@ EVT_BEGIN(christine_osoware)
 #endif
     CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
     SET_VALUE(LW(0), 0)
-    SPAWN_EVENT(PTR(gundan1000tai_beforebattle))
+    SPAWN_EVENT(gundan1000tai_beforebattle)
     RETURN
 EVT_END()
 
@@ -3003,7 +3003,7 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     CALL(evt_npc_set_position, STRING("水夫ボム兵Ｂ"), -250, 15, -350)
     CALL(evt_npc_set_ry, STRING("水夫ボム兵Ｂ"), 90)
     SET_VALUE(LW(0), 0)
-    CALL_CHILD(PTR(gundan1000tai_afterbattle))
+    CALL_CHILD(gundan1000tai_afterbattle)
     RETURN
 EVT_END()
 
@@ -3032,10 +3032,10 @@ EVT_END()
  */
 EVT_BEGIN(gundan1000tai_kemuri)
     LOOP(0)
-        SPAWN_EVENT(PTR(_kemuri_sub))
+        SPAWN_EVENT(_kemuri_sub)
 #if VERSION < VERSION_US
-        SPAWN_EVENT(PTR(_kemuri_sub))
-        SPAWN_EVENT(PTR(_kemuri_sub))
+        SPAWN_EVENT(_kemuri_sub)
+        SPAWN_EVENT(_kemuri_sub)
 #endif
         CALL(evt_sub_random, 200, LW(0))
         ADD(LW(0), 200)
@@ -3485,8 +3485,8 @@ const char* shukko_npc_list[] = {
  * Mario and the partner are carried along by the movement.
  */
 EVT_BEGIN(shukko_event_move_ship)
-    SPAWN_EVENT(PTR(shukko_event_move_ship_se00))
-    SPAWN_EVENT(PTR(shukko_event_move_ship_se01))
+    SPAWN_EVENT(shukko_event_move_ship_se00)
+    SPAWN_EVENT(shukko_event_move_ship_se01)
     CALL(evt_mapobj_get_position, STRING("S_fune_c"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_WAVE1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_hit_bind_mapobj, STRING("A_fune_C"), STRING("S_fune_c"))
@@ -3596,7 +3596,7 @@ EVT_BEGIN(shukko_event)
     WAIT_MS(2000)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_STARTING1"), 0)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
-    SPAWN_EVENT(PTR(shukko_event_move_ship))
+    SPAWN_EVENT(shukko_event_move_ship)
     WAIT_MS(2000)
 
     // The crew members on deck turn instantly and cast no shadows while the ship moves.
@@ -4832,7 +4832,7 @@ EVT_BEGIN(gorotsuki_kikan)
     // Return control and start the Peach mail scene.
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
-    SPAWN_EVENT(PTR(peach_mail))
+    SPAWN_EVENT(peach_mail)
     RETURN
 EVT_END()
 
@@ -4929,7 +4929,7 @@ EVT_BEGIN(into_gor_ship)
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(mony_peton_event)
 #else
-        CALL_CHILD(PTR(mony_peton_depart))
+        CALL_CHILD(mony_peton_depart)
 #endif
     END_IF
 
@@ -5382,7 +5382,7 @@ EVT_BEGIN(gor_00_koopa_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 12)
-    CALL_CHILD(PTR(SAVE_EVT))
+    CALL_CHILD(SAVE_EVT)
     CALL(evt_mario_set_mode, 0)
     CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_BOWSER_A1, 0, FADE_STORY_BOWSER_A3, 0)
     CALL(evt_bero_mapchange, STRING("usu_00"), 0)
@@ -5562,7 +5562,7 @@ EVT_BEGIN(gor_muj_ship_init)
     SET_FLOAT_VALUE(GW(13), FLOAT(-25.0f))
     SET_FLOAT_VALUE(GW(14), FLOAT(0.0f))
     SET_VALUE(GW(15), 0)
-    SPAWN_EVENT(PTR(gor_muj_ship_sub))
+    SPAWN_EVENT(gor_muj_ship_sub)
     SET_RAW_VALUE(LW(0), GW(14))
     SET_FLOAT_VALUE(LW(1), FLOAT(1.5f))
     SPAWN_EVENT_GET_ID(PTR(gor_ship_puka), GW(10))
@@ -5812,7 +5812,7 @@ EVT_BEGIN(gor_muj_ship_start)
     CALL(evt_npc_set_position, STRING("船ダミー"), 0, GW(14), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-        CALL_CHILD(PTR(gor_muj_ship_pera))
+        CALL_CHILD(gor_muj_ship_pera)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -6342,7 +6342,7 @@ static EVT_BEGIN(epilogue_evt)
     SET_VALUE(GF(4), 0)
     SET_VALUE(GW(7), 180)
     SET_VALUE(GF(5), 1)
-    SPAWN_EVENT(PTR(ship_a_animation))
+    SPAWN_EVENT(ship_a_animation)
     WAIT_MS(500)
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
@@ -6425,7 +6425,7 @@ static EVT_BEGIN(epilogue_evt)
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
-        CALL_CHILD(PTR(ship_pera))
+        CALL_CHILD(ship_pera)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("S_fune_a"), LW(0), LW(1), LW(2))
@@ -6645,7 +6645,7 @@ EVT_BEGIN(return_gorotsuki_town)
     SET_VALUE(GF(5), 1)
 
     // A ship sails into the harbor with its wake and engine sound.
-    SPAWN_EVENT(PTR(ship_a_animation))
+    SPAWN_EVENT(ship_a_animation)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(3000)
     SET_VALUE(GF(10), 1)
@@ -6731,7 +6731,7 @@ EVT_BEGIN(return_gorotsuki_town)
     CALL(evt_npc_set_position, STRING("船ダミー"), 0, GW(8), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-        CALL_CHILD(PTR(ship_pera))
+        CALL_CHILD(ship_pera)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -6934,21 +6934,21 @@ EVT_BEGIN(gor_00_init_evt)
     CALL_CHILD(evt_bero_info_run)
     SET_VALUE(GF(15), 1)
 #else
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
 #endif
-    CALL_CHILD(PTR(luigi_npcEnt))
+    CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
         CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
         CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
     END_IF
     CALL(alpha_init_func)
-    CALL_CHILD(PTR(sanders_init))
-    CALL_CHILD(PTR(tentyou_init))
-    CALL_CHILD(PTR(tenin_init))
+    CALL_CHILD(sanders_init)
+    CALL_CHILD(tentyou_init)
+    CALL_CHILD(tenin_init)
     CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
-    CALL_CHILD(PTR(borodo2_init))
+    CALL_CHILD(borodo2_init)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_07_BOWSER_ACTION_STAGE)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), -275, 75, 100, 0, 0)
     END_IF
@@ -6960,7 +6960,7 @@ EVT_BEGIN(gor_00_init_evt)
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_gazigazi_entry)
 #else
-    CALL_CHILD(PTR(evt_gazigazi_entry))
+    CALL_CHILD(evt_gazigazi_entry)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
@@ -6980,10 +6980,10 @@ EVT_BEGIN(gor_00_init_evt)
     // Start the harbor background task, the Peach mail event and the Frankie and Francesca reaction when their
     // stage is reached.
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-        SPAWN_EVENT(PTR(tsumini))
+        SPAWN_EVENT(tsumini)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
-        SPAWN_EVENT(PTR(peach_mail))
+        SPAWN_EVENT(peach_mail)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_REMARK_DONE, 0)
@@ -6994,15 +6994,15 @@ EVT_BEGIN(gor_00_init_evt)
     // Start the story scene that belongs to the current stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_02_MARIOS_HOUSE)
-        CALL_CHILD(PTR(enter_gorotsuki_town_init))
-        SPAWN_EVENT(PTR(enter_gorotsuki_town))
+        CALL_CHILD(enter_gorotsuki_town_init)
+        SPAWN_EVENT(enter_gorotsuki_town)
         CASE_EQUAL(STG0_03_TO_ROGUEPORT)
-        CALL_CHILD(PTR(enter_gorotsuki_town_init))
+        CALL_CHILD(enter_gorotsuki_town_init)
         SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(PTR(christine_osoware))
+        SPAWN_EVENT(christine_osoware)
         CASE_EQUAL(STG0_04_GOOMBELLA_ASSAULTED)
-        CALL_CHILD(PTR(enter_gorotsuki_town_init))
-        CALL_CHILD(PTR(christine_osoware_setup))
+        CALL_CHILD(enter_gorotsuki_town_init)
+        CALL_CHILD(christine_osoware_setup)
 #if VERSION >= VERSION_US
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
@@ -7010,9 +7010,9 @@ EVT_BEGIN(gor_00_init_evt)
 #endif
         CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
         SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(PTR(gundan1000tai_beforebattle))
+        SPAWN_EVENT(gundan1000tai_beforebattle)
         CASE_EQUAL(STG0_05_1000_X_NAUTS_BEFORE)
-        CALL_CHILD(PTR(enter_gorotsuki_town_init))
+        CALL_CHILD(enter_gorotsuki_town_init)
 #if VERSION >= VERSION_US
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
@@ -7020,7 +7020,7 @@ EVT_BEGIN(gor_00_init_evt)
 #endif
         CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
         SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(PTR(gundan1000tai_afterbattle))
+        SPAWN_EVENT(gundan1000tai_afterbattle)
 
         // Chapter 4 Bowser interlude.
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
@@ -7031,7 +7031,7 @@ EVT_BEGIN(gor_00_init_evt)
         CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_CULL)
         CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
         CALL(evt_npc_set_ry, STRING("houki"), 90)
-        SPAWN_EVENT(PTR(gor_00_koopa_evt))
+        SPAWN_EVENT(gor_00_koopa_evt)
 
         // Between Chapters 3 and 4's departure, the Chapter 4 ship is shown at the pier.
         CASE_BETWEEN(STG3_34_RETURN_TO_ROGUEPORT, STG4_END_OFF_TO_THE_KEYS)
@@ -7043,11 +7043,11 @@ EVT_BEGIN(gor_00_init_evt)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("epilogue2"))
-            CALL_CHILD(PTR(epilogue_npc_entry2))
-            SPAWN_EVENT(PTR(epilogue_evt2))
+            CALL_CHILD(epilogue_npc_entry2)
+            SPAWN_EVENT(epilogue_evt2)
         ELSE
-            CALL_CHILD(PTR(epilogue_npc_entry))
-            SPAWN_EVENT(PTR(epilogue_evt))
+            CALL_CHILD(epilogue_npc_entry)
+            SPAWN_EVENT(epilogue_evt)
         END_IF
 
         // Chapter 5: Mario returns from Keelhaul Key.
@@ -7055,19 +7055,19 @@ EVT_BEGIN(gor_00_init_evt)
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(gor_muj_ship_init)
 #endif
-        SPAWN_EVENT(PTR(gorotsuki_kikan))
+        SPAWN_EVENT(gorotsuki_kikan)
 
         // After the credits: the return to Rogueport.
         CASE_EQUAL(STG9_01_END_CREDITS)
-        CALL_CHILD(PTR(return_gorotsuki_town_init))
-        SPAWN_EVENT(PTR(return_gorotsuki_town))
+        CALL_CHILD(return_gorotsuki_town_init)
+        SPAWN_EVENT(return_gorotsuki_town)
     END_SWITCH
 
     // Late in the game, handle a ship arriving at the dock.
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
-                CALL_CHILD(PTR(gor_muj_ship_init))
+                CALL_CHILD(gor_muj_ship_init)
                 IF_INT_EQUAL(GSWF_GOR_00_PLACE_BY_SHIP, 1)
                     SET_VALUE(GSWF_GOR_00_PLACE_BY_SHIP, 0)
                     CALL(evt_mario_set_pos, 190, 15, 225)
@@ -7076,7 +7076,7 @@ EVT_BEGIN(gor_00_init_evt)
                     IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
                         SET_VALUE(GSWF_MUJ_SAILING_TO_ROGUEPORT, 0)
                         SET_VALUE(GSWF_MUJ_ARRIVED_BY_SHIP_UNUSED, 0)
-                        SPAWN_EVENT(PTR(into_gor_ship))
+                        SPAWN_EVENT(into_gor_ship)
                     END_IF
                 END_IF
             END_IF

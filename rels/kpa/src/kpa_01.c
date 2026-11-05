@@ -291,7 +291,7 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("トゲノコＡ"), 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("トゲノコＢ"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    CALL_CHILD(PTR(kpa_01_door_open))
+    CALL_CHILD(kpa_01_door_open)
     CALL(evt_cam3d_evt_set, -470, 60, 269, -683, 65, 24, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, -430, 60, 234, -644, 65, -11, 2800, EASING_SINE_IN_OUT)
@@ -300,7 +300,7 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_LAUGH2_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_000"), 0, STRING("mario"))
-    CALL_CHILD(PTR(kpa_01_door_close))
+    CALL_CHILD(kpa_01_door_close)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     WAIT_MS(100)
@@ -350,7 +350,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
 
     // Kammy Koopa arrives out of breath; the door shuts behind her.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_021"), 0, STRING("ババ"))
-    SPAWN_EVENT(PTR(kpa_01_door_close))
+    SPAWN_EVENT(kpa_01_door_close)
     CALL(evt_npc_move_position, STRING("ババ"), -480, 0, 0, FLOAT(90.0f), 0)
     CALL(evt_mario_set_pos, 625, 30, 0)
     CALL(evt_mario_set_dir, 270, 0, 0)
@@ -860,7 +860,7 @@ EVT_BEGIN(kpa_01_pos_check)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL_CHILD(PTR(kpa_01_syuppatu_evt))
+    CALL_CHILD(kpa_01_syuppatu_evt)
     RETURN
 EVT_END()
 
@@ -920,14 +920,14 @@ EVT_END()
 
 /** Init for the third Spiny guard: standard NPC init, then gravity, floor collision and NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(togenoko_C_init_evt)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 EVT_BEGIN(hammer_AB_init_evt)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     END_IF
@@ -987,7 +987,7 @@ EVT_END()
 
 /** Init for the fifth Hammer Bro.: standard NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(hammer_E_init_evt)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
@@ -1000,7 +1000,7 @@ EVT_END()
 
 /** Init for Kammy Koopa: standard NPC init, NPC_STATUS_FACE_MOVE_DIR, and the grounded tribe model. */
 EVT_BEGIN(baba_init_evt)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_tribe, STRING("me"), STRING("カメックババ（地上）"))
     RETURN
@@ -1008,14 +1008,14 @@ EVT_END()
 
 /** Init for the Magikoopa: standard NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(kamek_init_evt)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 /** Init for the flying Bowser NPC: standard NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(hkoopa_init_evt)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()

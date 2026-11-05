@@ -209,17 +209,17 @@ EVT_BEGIN(muj_21_init_evt)
         CALL(fune_eff)
     END_INLINE_EVENT
     SET_FLOAT_VALUE(GW(10), FLOAT(1.0f))
-    SPAWN_EVENT(PTR(anm_kaji))
-    SPAWN_EVENT(PTR(anm_wakka))
-    SPAWN_EVENT(PTR(anm_entotsu))
-    SPAWN_EVENT(PTR(anm_neji))
-    SPAWN_EVENT(PTR(fune_yure))
+    SPAWN_EVENT(anm_kaji)
+    SPAWN_EVENT(anm_wakka)
+    SPAWN_EVENT(anm_entotsu)
+    SPAWN_EVENT(anm_neji)
+    SPAWN_EVENT(fune_yure)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_f_wa"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mario_kill_party, 0)
 #if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(epilogue_evt)
 #else
-    SPAWN_EVENT(PTR(epilogue_evt))
+    SPAWN_EVENT(epilogue_evt)
     CALL(evt_light_charalight_all_onoff, 1)
 #endif
     RETURN

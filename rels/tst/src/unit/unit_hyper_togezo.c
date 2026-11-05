@@ -437,7 +437,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -510,7 +510,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(wakeup_event))
+        CALL_CHILD(wakeup_event)
         RETURN
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -521,13 +521,13 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(guard_cancel_event))
+        CALL_CHILD(guard_cancel_event)
         GOTO(99)
     ELSE
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 0)
-            CALL_CHILD(PTR(normal_attack_event))
+            CALL_CHILD(normal_attack_event)
             GOTO(99)
         END_IF
         CALL(btlevtcmd_get_turn, LW(0))
@@ -538,13 +538,13 @@ static EVT_BEGIN(attack_event)
         END_IF
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL_CHILD(PTR(normal_attack_event))
+            CALL_CHILD(normal_attack_event)
             CASE_EQUAL(1)
-            CALL_CHILD(PTR(guard_event))
+            CALL_CHILD(guard_event)
             CASE_EQUAL(2)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 1)
             SET_VALUE(LW(9), PTR(&weapon_togezo_charge))
-            CALL_CHILD(PTR(charge_event))
+            CALL_CHILD(charge_event)
         END_SWITCH
     END_IF
     LABEL(99)

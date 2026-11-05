@@ -213,7 +213,7 @@ EVT_END()
  */
 EVT_BEGIN(minigame02_main)
     CALL(evt_mario_key_onoff, 0)
-    CALL_CHILD(PTR(yuu_01_kaijo_init))
+    CALL_CHILD(yuu_01_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 1)
     CALL(yuuminigame_set_dataadr, 0, LW(0))
     CALL(evt_mario_kill_party, 0)
@@ -260,7 +260,7 @@ EVT_BEGIN(minigame02_start_cam_cancel)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_mario_wait_move_end)
-    CALL_CHILD(PTR(yuu_01_kaijo_init2))
+    CALL_CHILD(yuu_01_kaijo_init2)
     RETURN
 EVT_END()
 
@@ -282,14 +282,14 @@ EVT_BEGIN(minigame02_start)
                 IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
-                    CALL_CHILD(PTR(minigame02_start_cam_cancel))
+                    CALL_CHILD(minigame02_start_cam_cancel)
                     BREAK_LOOP
                 END_IF
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CALL(yuuminigame2_opening_on_off, LW(0), 0)
-        CALL_CHILD(PTR(yuu_01_kaijo_init2))
+        CALL_CHILD(yuu_01_kaijo_init2)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
     END_IF
@@ -368,7 +368,7 @@ EVT_BEGIN(minigame02_end)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(yuu_01_kaijo_init2)
 #else
-    CALL_CHILD(PTR(yuu_01_kaijo_init2))
+    CALL_CHILD(yuu_01_kaijo_init2)
     CALL(yuu_01_cam_shift_reset)
 #endif
     WAIT_MS(500)
@@ -803,8 +803,8 @@ EVT_BEGIN(yuu_01_init_evt)
     CALL(yuuminigame_set_dataadr, 20, LW(15))
 
     // The game is set up and the audience appears.
-    SPAWN_EVENT(PTR(minigame02_main))
-    CALL_CHILD(PTR(evt_yuunpc_minigame2))
+    SPAWN_EVENT(minigame02_main)
+    CALL_CHILD(evt_yuunpc_minigame2)
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)

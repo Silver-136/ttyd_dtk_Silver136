@@ -541,7 +541,7 @@ static USER_FUNC(_get_mario_hammer_lv) {
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 static EVT_BEGIN(wait_event)
@@ -644,9 +644,9 @@ EVT_END()
 static EVT_BEGIN(attack_audience_event)
     CALL(evt_sub_random, 1, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(btlataudevtMarioJump))
+        CALL_CHILD(btlataudevtMarioJump)
     ELSE
-        CALL_CHILD(PTR(btlataudevtMarioHammer))
+        CALL_CHILD(btlataudevtMarioHammer)
     END_IF
     RETURN
 EVT_END()
@@ -866,7 +866,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 #endif

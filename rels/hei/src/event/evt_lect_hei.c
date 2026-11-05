@@ -708,7 +708,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
         CASE_EQUAL(2)
-        CALL_CHILD(PTR(nokotaro_party_lecture_init))
+        CALL_CHILD(nokotaro_party_lecture_init)
     END_SWITCH
 
     // Mario and the partner blink in and out while their lesson plays (for Koops the kick tutorial).
@@ -725,7 +725,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     SWITCH(LW(9))
         CASE_EQUAL(2)
-        CALL_CHILD(PTR(nokotaro_party_lecture))
+        CALL_CHILD(nokotaro_party_lecture)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)

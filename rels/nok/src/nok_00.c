@@ -1204,9 +1204,9 @@ EVT_BEGIN(nok_00_koopa_evt)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 6)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_memcard_save_wrapper))
+    CALL_CHILD(evt_memcard_save_wrapper)
 #else
-    CALL_CHILD(PTR(evt_memcard_save))
+    CALL_CHILD(evt_memcard_save)
 #endif
     CALL(evt_mario_set_mode, 0)
     CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_BOWSER_A1, 0, FADE_STORY_BOWSER_A3, 0)
@@ -1227,24 +1227,24 @@ EVT_END()
 EVT_BEGIN(nok_00_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_04_BOWSER_ACTION_STAGE)
         CALL(evt_mario_set_mode, 2)
-        CALL_CHILD(PTR(nok_00_koopa_npc_entry))
-        SPAWN_EVENT(PTR(nok_00_koopa_evt))
+        CALL_CHILD(nok_00_koopa_npc_entry)
+        SPAWN_EVENT(nok_00_koopa_evt)
     ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
-            SPAWN_EVENT(PTR(bero_case_entry))
-            SPAWN_EVENT(PTR(first_time_camera))
+            SPAWN_EVENT(bero_case_entry)
+            SPAWN_EVENT(first_time_camera)
         ELSE
-            CALL_CHILD(PTR(evt_bero_info_run))
+            CALL_CHILD(evt_bero_info_run)
         END_IF
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_00_PETAL_MEADOWS)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-            CALL_CHILD(PTR(kizayarou_init))
+            CALL_CHILD(kizayarou_init)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF_NOK_00_VISITED_UNUSED, 0)
@@ -1252,11 +1252,11 @@ EVT_BEGIN(nok_00_init_evt)
     END_IF
     CALL(evt_map_playanim, STRING("S_kawa"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&yado_data))
-    CALL_CHILD(PTR(evt_door_setup))
+    CALL_CHILD(evt_door_setup)
     SET_VALUE(LW(0), PTR(&mise_data))
-    CALL_CHILD(PTR(evt_door_setup))
+    CALL_CHILD(evt_door_setup)
     SET_VALUE(LW(0), PTR(&ie_data))
-    CALL_CHILD(PTR(evt_door_setup))
+    CALL_CHILD(evt_door_setup)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_25_04_BOWSER_ACTION_STAGE)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 155, 60, -60, 0, 0)
     END_IF
@@ -1279,7 +1279,7 @@ EVT_BEGIN(nok_00_init_evt)
         CALL(evt_eff, 0, STRING("butterfly"), LW(0), 375, 20, 250, 0, 0, 0, 0, 0, 0, 0, 0)
     END_LOOP
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
+    CALL_CHILD(evt_gazigazi_entry)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, 350, STRING("S_ground03"), 125, GSWF_STARPIECE_34)
     RETURN
 EVT_END()

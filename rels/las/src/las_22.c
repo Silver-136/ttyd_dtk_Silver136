@@ -402,7 +402,7 @@ static EVT_BEGIN(dai_evt)
     SET_VALUE(LW(0), STRING("S_move_dai"))
     SET_VALUE(LW(1), STRING("A_move_dai"))
     SET_VALUE(LW(2), 2200)
-    CALL_CHILD(PTR(move_dai))
+    CALL_CHILD(move_dai)
     RETURN
 EVT_END()
 
@@ -444,7 +444,7 @@ EVT_END()
 static EVT_BEGIN(unlock_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_10_LOCK)
     SET_VALUE(LW(0), STRING("w_bero"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     RETURN
 EVT_END()
 
@@ -475,18 +475,18 @@ EVT_BEGIN(las_22_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_npc_check_delete, STRING("スーパーマホーン"))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
-        SPAWN_EVENT(PTR(kaitendai_evt))
+        SPAWN_EVENT(kaitendai_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
-    SPAWN_EVENT(PTR(haguruma_evt))
+    SPAWN_EVENT(haguruma_evt)
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
@@ -501,7 +501,7 @@ EVT_BEGIN(las_22_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_10_LOCK)
         CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_22_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     END_IF
     RETURN
 EVT_END()

@@ -214,7 +214,7 @@ EVT_BEGIN(jail_alpha)
     IF_INT_EQUAL(GSWF_STARPIECE_46, 0)
         CALL(evt_map_blend_set_mobj_flag, 1, STRING("kururin1"), 2048)
     END_IF
-    SPAWN_EVENT(PTR(jail_alpha_mario_check))
+    SPAWN_EVENT(jail_alpha_mario_check)
     SET_VALUE(LW(10), 255)
     SET_VALUE(GW(2), 255)
     SET_VALUE(GW(3), 255)
@@ -309,7 +309,7 @@ EVT_BEGIN(elder_rescue)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族長老"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL_CHILD(PTR(mri_guide_goryu))
+    CALL_CHILD(mri_guide_goryu)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_puni_set_position, 1, 0, -1000, 0)
@@ -809,14 +809,14 @@ EVT_END()
 
 /** Called when the red key opens the red cell: runs red_jail_open and starts the elder's rescue scene. */
 static EVT_BEGIN(evt_unlock00)
-    CALL_CHILD(PTR(red_jail_open))
-    SPAWN_EVENT(PTR(elder_rescue))
+    CALL_CHILD(red_jail_open)
+    SPAWN_EVENT(elder_rescue)
     RETURN
 EVT_END()
 
 /** Unlocks the red cell when the map is re-entered after it was unlocked: just runs red_jail_open. */
 EVT_BEGIN(evt_unlock00_01)
-    SPAWN_EVENT(PTR(red_jail_open))
+    SPAWN_EVENT(red_jail_open)
     RETURN
 EVT_END()
 
@@ -872,7 +872,7 @@ EVT_BEGIN(blue_jail_open)
 #endif
     CALL(evt_mario_key_onoff, 1)
 #if VERSION < VERSION_US
-    SPAWN_EVENT(PTR(guide_sister))
+    SPAWN_EVENT(guide_sister)
     CALL(evt_exit_case_evt)
 #endif
     RETURN
@@ -898,7 +898,7 @@ static EVT_BEGIN(evt_unlock01)
 #else
     CALL(evt_pouch_remove_item, ITEM_BLUE_KEY, LW(0))
 #endif
-    SPAWN_EVENT(PTR(blue_jail_open))
+    SPAWN_EVENT(blue_jail_open)
     RETURN
 EVT_END()
 
@@ -990,7 +990,7 @@ EVT_BEGIN(bluejail_event)
     DELETE_EVENT(GW(0))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)
-    CALL_CHILD(PTR(bluejail_alpha))
+    CALL_CHILD(bluejail_alpha)
     CALL(evt_npc_set_position, STRING("ガイド妹"), -192, 0, -120)
     CALL(evt_npc_set_ry_lr, STRING("ガイド妹"), 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド妹"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1288,8 +1288,8 @@ EVT_BEGIN(guide_sister)
         CALL(evt_puni_flag_onoff, LW(10), 0, PUNI_FLAG_COLLIDE)
         ADD(LW(10), 1)
     END_LOOP
-    SPAWN_EVENT(PTR(mario_kirimomi_event))
-    SPAWN_EVENT(PTR(party_kirimomi_event))
+    SPAWN_EVENT(mario_kirimomi_event)
+    SPAWN_EVENT(party_kirimomi_event)
 
     // The reunion music starts.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_NOKO_SAIKAI1"))
@@ -1402,7 +1402,7 @@ EVT_BEGIN(guide_sister)
     END_INLINE_EVENT
     CALL(evt_npc_set_anim, LW(10), STRING("T_1"))
     WAIT_MS(2000)
-    SPAWN_EVENT(PTR(kinoko_small))
+    SPAWN_EVENT(kinoko_small)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e20_07"), 0, LW(10))
     WAIT_FRAMES(1)
     DELETE_EVENT(LW(9))
@@ -1506,7 +1506,7 @@ EVT_BEGIN(toraware_elder)
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
 #if VERSION >= VERSION_JP
-    CALL_CHILD(PTR(mri_guide_hagure_check))
+    CALL_CHILD(mri_guide_hagure_check)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)
         CALL(evt_puni_set_trap_index, 1, 0)
@@ -1631,7 +1631,7 @@ EVT_BEGIN(guide_sister_before)
     CALL(evt_party_set_dir, 0, 270, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(500)
-    CALL_CHILD(PTR(mri_guide_hagure_check))
+    CALL_CHILD(mri_guide_hagure_check)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_puni_set_position, 1, 240, 0, 0)
         CALL(evt_puni_move_position, 1, 240, 40, FLOAT(120.0f))
@@ -1682,14 +1682,14 @@ EVT_BEGIN(mri_03_init_evt)
     SET_VALUE(LW(7), 0)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(9), 0)
-    CALL_CHILD(PTR(mri_puni_init))
+    CALL_CHILD(mri_puni_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    SPAWN_EVENT(PTR(puni_disp_info))
-    SPAWN_EVENT(PTR(mri_countdown))
+    CALL_CHILD(evt_bero_info_run)
+    SPAWN_EVENT(puni_disp_info)
+    SPAWN_EVENT(mri_countdown)
     SET_VALUE(LW(0), PTR(ueki_access_data))
-    CALL_CHILD(PTR(evt_sub_kusa_access_entry))
+    CALL_CHILD(evt_sub_kusa_access_entry)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
@@ -1712,33 +1712,33 @@ EVT_BEGIN(mri_03_init_evt)
     CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_12_RIVAL_ARRIVAL, STG2_19_01_PUNIO_PETUNI_BEFORE)
-        SPAWN_EVENT(PTR(jail_init_00))
+        SPAWN_EVENT(jail_init_00)
     END_SWITCH
     CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_RED_KEY, 65, 10, -70, 0, PTR(evt_check00), PTR(evt_unlock00), GSWF_MRI_03_RED_JAIL_UNLOCKED)
     IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_UNLOCKED, 1)
         IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_OPENED, 1)
-            SPAWN_EVENT(PTR(evt_opendoor00))
+            SPAWN_EVENT(evt_opendoor00)
         ELSE
-            SPAWN_EVENT(PTR(evt_unlock00_01))
+            SPAWN_EVENT(evt_unlock00_01)
         END_IF
     END_IF
     CALL(evt_mobj_lock, STRING("mobj_lock01"), PTR(key_table01), -245, 10, -70, 0, PTR(evt_check01), PTR(evt_unlock01), GSWF_MRI_03_BLUE_JAIL_UNLOCKED)
     IF_INT_EQUAL(GSWF_MRI_03_BLUE_JAIL_UNLOCKED, 1)
         IF_INT_EQUAL(GSWF_MRI_03_BLUE_JAIL_OPENED, 1)
-            SPAWN_EVENT(PTR(evt_opendoor01))
+            SPAWN_EVENT(evt_opendoor01)
         ELSE
-            SPAWN_EVENT(PTR(evt_unlock01))
+            SPAWN_EVENT(evt_unlock01)
         END_IF
     END_IF
     SPAWN_EVENT_GET_ID(PTR(jail_alpha), GW(0))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_18_JABBLE)
-        SPAWN_EVENT(PTR(bluejail_event))
+        SPAWN_EVENT(bluejail_event)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
-        SPAWN_EVENT(PTR(toraware_elder))
+        SPAWN_EVENT(toraware_elder)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_19_INSIDE_THE_BLUE_CELL)
-        SPAWN_EVENT(PTR(guide_sister_before))
+        SPAWN_EVENT(guide_sister_before)
     END_IF
     RETURN
 EVT_END()

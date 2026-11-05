@@ -290,7 +290,7 @@ static EVT_BEGIN(damage_event)
 #endif
     CALL(chorogun_get_alive_num, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 500)
-        CALL_CHILD(PTR(escape_chorogun_event))
+        CALL_CHILD(escape_chorogun_event)
         GOTO(99)
     END_IF
     LABEL(99)

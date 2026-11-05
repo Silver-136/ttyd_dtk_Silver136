@@ -311,7 +311,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(btldefaultevt_Damage))
+        CALL_CHILD(btldefaultevt_Damage)
     ELSE
         CALL(btlevtcmd_GetDamage, LW(10), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -357,7 +357,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_OffPartsCounterAttribute, LW(10), 1, kCounterTopSpiky)
             CALL(btlevtcmd_AnimeSetPoseTable, LW(10), 1, PTR(pose_table))
             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-            CALL_CHILD(PTR(btldefaultevt_Damage))
+            CALL_CHILD(btldefaultevt_Damage)
         ELSE
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
 
@@ -406,7 +406,7 @@ static EVT_BEGIN(damage_event)
                 END_INLINE_EVENT
             END_IF
             LABEL(90)
-            CALL_CHILD(PTR(btldefaultevt_Damage))
+            CALL_CHILD(btldefaultevt_Damage)
         END_IF
     END_IF
     RETURN
@@ -534,7 +534,7 @@ static EVT_BEGIN(attack_event)
                 SUBTRACT(LW(2), 10)
                 CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
                 IF_INT_EQUAL(LW(3), -1)
-                    CALL_CHILD(PTR(friend_event))
+                    CALL_CHILD(friend_event)
                     GOTO(99)
                 END_IF
             ELSE
@@ -550,7 +550,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), 10)
                 CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
                 IF_INT_EQUAL(LW(3), -1)
-                    CALL_CHILD(PTR(friend_event))
+                    CALL_CHILD(friend_event)
                     GOTO(99)
                 END_IF
             ELSE
@@ -562,7 +562,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, 0)
-        CALL_CHILD(PTR(normal_attack_event))
+        CALL_CHILD(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_get_turn, LW(0))
@@ -574,14 +574,14 @@ static EVT_BEGIN(attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, 0)
-        CALL_CHILD(PTR(normal_attack_event))
+        CALL_CHILD(normal_attack_event)
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, 1)
-        CALL_CHILD(PTR(normal_attack_event))
+        CALL_CHILD(normal_attack_event)
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 1)
         SET_VALUE(LW(9), PTR(&weapon_jyugem_charge))
-        CALL_CHILD(PTR(charge_event))
+        CALL_CHILD(charge_event)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

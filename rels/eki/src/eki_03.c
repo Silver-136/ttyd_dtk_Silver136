@@ -160,7 +160,7 @@ static BeroEntry bero_data[] = {
 EVT_BEGIN(evt_poster)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     RETURN
 EVT_END()
 
@@ -204,7 +204,7 @@ static EVT_BEGIN(evt_chk)
         RETURN
     END_IF
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_hitobj_onoff, STRING("a_kabe"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
@@ -214,60 +214,60 @@ EVT_END()
 
 static EVT_BEGIN(evt_poster_1)
     SET_VALUE(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_2)
     SET_VALUE(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_3)
     SET_VALUE(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_4)
     SET_VALUE(GSWF_EKI_03_POSTER_4_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event for poster 5: sets GSWF_EKI_03_POSTER_5_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_5)
     SET_VALUE(GSWF_EKI_03_POSTER_5_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event for poster 6: sets GSWF_EKI_03_POSTER_6_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_6)
     SET_VALUE(GSWF_EKI_03_POSTER_6_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event for poster 7: sets GSWF_EKI_03_POSTER_7_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_7)
     SET_VALUE(GSWF_EKI_03_POSTER_7_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event for poster 8: sets GSWF_EKI_03_POSTER_8_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_8)
     SET_VALUE(GSWF_EKI_03_POSTER_8_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event for poster 9: sets GSWF_EKI_03_POSTER_9_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_9)
     SET_VALUE(GSWF_EKI_03_POSTER_9_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
@@ -279,7 +279,7 @@ EVT_END()
 EVT_BEGIN(evt_poster_10)
     SET_VALUE(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 1)
     CALL(evt_hitobj_onoff, STRING("a_kami_13"), 1, 0)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
@@ -294,7 +294,7 @@ EVT_BEGIN(evt_poster_11)
     CALL(evt_hitobj_onoff, STRING("a_kami_15"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_6"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_7"), 1, 0)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
@@ -312,7 +312,7 @@ EVT_BEGIN(evt_poster_12)
     CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     CALL_CHILD(evt_chk)
 #else
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
 #endif
     RETURN
 EVT_END()
@@ -320,21 +320,21 @@ EVT_END()
 /** Case event when poster 13 is blown off: sets GSWF_EKI_03_POSTER_13_BLOWN_AWAY and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_13)
     SET_VALUE(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event when poster 14 is blown off: sets GSWF_EKI_03_POSTER_14_BLOWN_AWAY and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_14)
     SET_VALUE(GSWF_EKI_03_POSTER_14_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
 /** Case event when poster 15 is blown off: sets GSWF_EKI_03_POSTER_15_BLOWN_AWAY and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_15)
     SET_VALUE(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 1)
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
@@ -349,7 +349,7 @@ EVT_BEGIN(eki_03_init_evt)
     // Doors, music and ambience; the music is dipped in volume.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_cam_road_reset)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI4"))
@@ -510,8 +510,8 @@ EVT_BEGIN(eki_03_init_evt)
     END_IF
     CALL(evt_hitobj_onoff, STRING("a_kabe"), 1, 0)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_off))
-    CALL_CHILD(PTR(evt_chk))
+    CALL_CHILD(bero_case_switch_off)
+    CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 

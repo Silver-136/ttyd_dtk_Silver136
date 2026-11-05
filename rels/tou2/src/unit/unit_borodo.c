@@ -403,7 +403,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -420,7 +420,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(escape_event))
+        CALL_CHILD(escape_event)
         RETURN
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -431,16 +431,16 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(_borodo_normal_attack))
+        CALL_CHILD(_borodo_normal_attack)
         RETURN
     END_IF
     SET_VALUE(LW(1), 225)
     SUBTRACT(LW(1), 1)
     CALL(evt_sub_random, LW(1), LW(0))
     IF_INT_LESS(LW(0), 25)
-        CALL_CHILD(PTR(_borodo_normal_attack))
+        CALL_CHILD(_borodo_normal_attack)
     ELSE
-        CALL_CHILD(PTR(_borodo_steal_attack))
+        CALL_CHILD(_borodo_steal_attack)
     END_IF
     RETURN
 EVT_END()

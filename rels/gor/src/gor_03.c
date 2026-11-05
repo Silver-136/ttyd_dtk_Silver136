@@ -1084,7 +1084,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL(evt_npc_get_position, STRING("マフィアボス"), LW(10), LW(11), LW(12))
         CALL(evt_npc_move_position, STRING("マフィアボス"), LW(0), -68, 0, FLOAT(60.0f), 0)
         WAIT_MS(500)
-        CALL_CHILD(PTR(maffiaboss_ticket_put))
+        CALL_CHILD(maffiaboss_ticket_put)
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
         CALL(evt_npc_move_position, STRING("マフィアボス"), LW(10), LW(12), 0, FLOAT(60.0f), 0)
 #if VERSION >= VERSION_US
@@ -1094,7 +1094,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
 #endif
     ELSE
         // Mario is on top of the desk or talked to him first: the ticket is handed over from where he stands.
-        CALL_CHILD(PTR(maffiaboss_ticket_put))
+        CALL_CHILD(maffiaboss_ticket_put)
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
     END_IF
 
@@ -1125,7 +1125,7 @@ EVT_BEGIN(maffiaboss_init)
         CALL(evt_npc_set_position, STRING("me"), -198, 155, -80)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 1)
             SET_VALUE(GF(15), 0)
-            SPAWN_EVENT(PTR(maffiaboss_ticket_check))
+            SPAWN_EVENT(maffiaboss_ticket_check)
         END_IF
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_64_03_F_F_ARRIVE)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_SHADOW | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION)
@@ -1483,7 +1483,7 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 1)
     SET_VALUE(GF(15), 0)
-    SPAWN_EVENT(PTR(maffiaboss_ticket_check))
+    SPAWN_EVENT(maffiaboss_ticket_check)
     SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1844,13 +1844,13 @@ EVT_BEGIN(maffiaboss_talk_common)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_60_RETURN_TO_KEELHAUL)
         CALL(evt_msg_print, 0, STRING("mac_5_011"), 0, STRING("マフィアボス"))
         CASE_EQUAL(STG5_61_FRANKLYS_HOUSE_STG_5)
-        CALL_CHILD(PTR(maffiaboss_teshita_irai))
+        CALL_CHILD(maffiaboss_teshita_irai)
         CASE_EQUAL(STG5_62_AN_ILL_DON_PIANTA)
         CALL(evt_msg_print, 0, STRING("mac_5_037"), 0, STRING("マフィアボス"))
         CASE_BETWEEN(STG5_63_KEELHAUL_ANYTIME, STG5_64_LOST_WEDDING_RING)
         CALL(evt_msg_print, 0, STRING("mac_5_037"), 0, STRING("マフィアボス"))
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
-        CALL_CHILD(PTR(maffiaboss_train_ticket))
+        CALL_CHILD(maffiaboss_train_ticket)
         CASE_LESS(STG2_41_FRANKLYS_HOUSE_STG_2)
         CALL(evt_msg_print, 0, STRING("gor_03_01_01"), 0, STRING("マフィアボス"))
         CASE_LESS(STG5_00_LOGBOOK)
@@ -1863,7 +1863,7 @@ EVT_END()
 /** Talk event of Don Pianta: runs maffiaboss_talk_common. */
 EVT_BEGIN(maffiaboss_talk)
     CALL(evt_party_stop, 0)
-    CALL_CHILD(PTR(maffiaboss_talk_common))
+    CALL_CHILD(maffiaboss_talk_common)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
@@ -1892,7 +1892,7 @@ EVT_BEGIN(maffiaboss_desk_talk)
             CALL(evt_set_dir_to_target, STRING("マフィアボス"), STRING("mario"))
         END_INLINE_EVENT
     END_IF
-    CALL_CHILD(PTR(maffiaboss_talk_common))
+    CALL_CHILD(maffiaboss_talk_common)
 #if VERSION >= VERSION_US
     WAIT_WHILE(GF(10))
 #endif
@@ -1990,11 +1990,11 @@ EVT_BEGIN(maffia1_talk)
         CASE_BETWEEN(STG2_46_BLIMP_TICKET, STG2_END_TO_GLITZVILLE)
         CALL(evt_msg_print, 0, STRING("mac_2_121"), 0, STRING("me"))
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
-        CALL_CHILD(PTR(maffiaboss_nekomu00))
+        CALL_CHILD(maffiaboss_nekomu00)
         CASE_EQUAL(STG5_62_AN_ILL_DON_PIANTA)
-        CALL_CHILD(PTR(maffiaboss_nekomu01))
+        CALL_CHILD(maffiaboss_nekomu01)
         CASE_BETWEEN(STG5_63_KEELHAUL_ANYTIME, STG5_64_LOST_WEDDING_RING)
-        CALL_CHILD(PTR(maffiaboss_nekomu02))
+        CALL_CHILD(maffiaboss_nekomu02)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
         CALL(evt_msg_print, 0, STRING("mac_5_042"), 0, STRING("me"))
         CASE_LESS(STG2_41_FRANKLYS_HOUSE_STG_2)
@@ -2051,11 +2051,11 @@ EVT_BEGIN(maffia2_talk)
         CASE_BETWEEN(STG2_46_BLIMP_TICKET, STG2_END_TO_GLITZVILLE)
         CALL(evt_msg_print, 0, STRING("mac_2_122"), 0, STRING("me"))
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
-        CALL_CHILD(PTR(maffiaboss_nekomu00))
+        CALL_CHILD(maffiaboss_nekomu00)
         CASE_EQUAL(STG5_62_AN_ILL_DON_PIANTA)
-        CALL_CHILD(PTR(maffiaboss_nekomu01))
+        CALL_CHILD(maffiaboss_nekomu01)
         CASE_BETWEEN(STG5_63_KEELHAUL_ANYTIME, STG5_64_LOST_WEDDING_RING)
-        CALL_CHILD(PTR(maffiaboss_nekomu02))
+        CALL_CHILD(maffiaboss_nekomu02)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
         CALL(evt_msg_print, 0, STRING("mac_5_043"), 0, STRING("me"))
         CASE_LESS(STG2_41_FRANKLYS_HOUSE_STG_2)
@@ -2259,7 +2259,7 @@ EVT_END()
 
 /** Talk event of Peeton: just runs peton_talk_common. */
 static EVT_BEGIN(peton_talk)
-    CALL_CHILD(PTR(peton_talk_common))
+    CALL_CHILD(peton_talk_common)
     RETURN
 EVT_END()
 
@@ -2288,7 +2288,7 @@ EVT_BEGIN(peton_desk_talk)
             CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("mario"))
         END_INLINE_EVENT
     END_IF
-    CALL_CHILD(PTR(peton_talk_common))
+    CALL_CHILD(peton_talk_common)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -2309,7 +2309,7 @@ EVT_END()
 
 /** Talk event of Lucky, the lottery Bob-omb: runs kuzi_bomb_talk. */
 static EVT_BEGIN(talk_gurume)
-    CALL_CHILD(PTR(kuzi_bomb_talk))
+    CALL_CHILD(kuzi_bomb_talk)
     RETURN
 EVT_END()
 
@@ -2328,7 +2328,7 @@ EVT_END()
 
 /** Talk event of Luigi: runs luigi_gor_first_talk. */
 static EVT_BEGIN(luigi_talk)
-    CALL_CHILD(PTR(luigi_gor_first_talk))
+    CALL_CHILD(luigi_gor_first_talk)
     RETURN
 EVT_END()
 
@@ -2427,7 +2427,7 @@ EVT_BEGIN(exchange_return_sub)
     CALL(evt_npc_get_position, STRING("バニーテレサ"), LW(6), LW(7), LW(10))
     CALL(evt_npc_get_dir, STRING("バニーテレサ"), LW(9))
     SET_VALUE(LW(0), 48)
-    CALL_CHILD(PTR(bteresa_n_fadeout))
+    CALL_CHILD(bteresa_n_fadeout)
     IF_INT_NOT_EQUAL(LW(11), 0)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
@@ -2438,7 +2438,7 @@ EVT_BEGIN(exchange_return_sub)
     CALL(evt_npc_set_position, STRING("バニーテレサ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("バニーテレサ"), 180)
     SET_VALUE(LW(0), 48)
-    CALL_CHILD(PTR(bteresa_n_fadein))
+    CALL_CHILD(bteresa_n_fadein)
     CALL(yuugijou_get_montemedal_keep, LW(1))
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
@@ -2454,15 +2454,15 @@ EVT_BEGIN(exchange_return_sub)
 #endif
     CALL(yuugijou_montemedal_return)
     SET_VALUE(LW(0), 48)
-    CALL_CHILD(PTR(bteresa_n_fadeout))
+    CALL_CHILD(bteresa_n_fadeout)
     CALL(evt_npc_set_position, STRING("バニーテレサ"), LW(6), LW(7), LW(10))
     CALL(evt_npc_set_ry, STRING("バニーテレサ"), LW(9))
     SET_VALUE(LW(0), 48)
     IF_INT_EQUAL(LW(11), 0)
-        CALL_CHILD(PTR(bteresa_n_fadein))
+        CALL_CHILD(bteresa_n_fadein)
     ELSE
         BEGIN_INLINE_EVENT
-            CALL_CHILD(PTR(bteresa_n_fadein))
+            CALL_CHILD(bteresa_n_fadein)
         END_INLINE_EVENT
     END_IF
     RETURN
@@ -2483,7 +2483,7 @@ EVT_BEGIN(exchange_keep_sub)
             CALL(evt_npc_get_position, STRING("バニーテレサ"), LW(6), LW(7), LW(10))
             CALL(evt_npc_get_dir, STRING("バニーテレサ"), LW(9))
             SET_VALUE(LW(0), 48)
-            CALL_CHILD(PTR(bteresa_n_fadeout))
+            CALL_CHILD(bteresa_n_fadeout)
             CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
             WAIT_FRAMES(1)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2492,7 +2492,7 @@ EVT_BEGIN(exchange_keep_sub)
             CALL(evt_npc_set_position, STRING("バニーテレサ"), LW(0), LW(1), LW(2))
             CALL(evt_npc_set_ry, STRING("バニーテレサ"), 180)
             SET_VALUE(LW(0), 48)
-            CALL_CHILD(PTR(bteresa_n_fadein))
+            CALL_CHILD(bteresa_n_fadein)
             CALL(yuugijou_get_montemedal, LW(1))
 #if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_91"), 0, 0, LW(1))
@@ -2512,11 +2512,11 @@ EVT_BEGIN(exchange_keep_sub)
 #endif
             CALL(yuugijou_montemedal_keep)
             SET_VALUE(LW(0), 48)
-            CALL_CHILD(PTR(bteresa_n_fadeout))
+            CALL_CHILD(bteresa_n_fadeout)
             CALL(evt_npc_set_position, STRING("バニーテレサ"), LW(6), LW(7), LW(10))
             CALL(evt_npc_set_ry, STRING("バニーテレサ"), LW(9))
             SET_VALUE(LW(0), 1)
-            CALL_CHILD(PTR(bteresa_n_fadein))
+            CALL_CHILD(bteresa_n_fadein)
         ELSE
             CALL(yuugijou_montemedal_keep)
         END_IF
@@ -2656,7 +2656,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     WAIT_MS(500)
 
     // The pipe rises and Mario walks over and jumps into it.
-    CALL_CHILD(PTR(gor_03_dokan_up_evt))
+    CALL_CHILD(gor_03_dokan_up_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mapobj_get_position, STRING("S_dokan_1"), LW(3), LW(4), LW(5))
     CALL(mario_walkpoint_enzan, LW(0), LW(2), LW(3), LW(5), FLOAT(40.0f), LW(0), LW(2))
@@ -2670,28 +2670,28 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     SWITCH(LW(15))
         CASE_EQUAL(0)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_00_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_EQUAL(1)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_03_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_EQUAL(2)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_02_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_01_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_SWITCH
 
     // The parlor music fades out as Mario goes down the pipe.
@@ -2702,7 +2702,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     SET_VALUE(LW(1), STRING("A_dokan_02"))
     CALL(evt_bero_id_filter, LW(1))
     CALL(evt_bero_get_info_num, LW(1))
-    CALL_CHILD(PTR(bero_case_exec_pipe))
+    CALL_CHILD(bero_case_exec_pipe)
     RETURN
 EVT_END()
 
@@ -2923,7 +2923,7 @@ EVT_BEGIN(bteresa_table_talk)
         CALL(yuugijou_get_montemedal_keep, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 0)
-            CALL_CHILD(PTR(exchange_return_sub))
+            CALL_CHILD(exchange_return_sub)
         ELSE
             CALL(yuugijou_montemedal_return)
         END_IF
@@ -3076,10 +3076,10 @@ EVT_BEGIN(bteresa_table_talk)
         CALL(evt_msg_continue)
         CALL_CHILD(bteresa_talk_sub_keihin)
 #else
-        CALL_CHILD(PTR(bteresa_talk_sub_keihin))
+        CALL_CHILD(bteresa_talk_sub_keihin)
 #endif
     ELSE
-        CALL_CHILD(PTR(bteresa_talk_sub_minigame))
+        CALL_CHILD(bteresa_talk_sub_minigame)
     END_IF
 #if VERSION <= VERSION_DEMO_JP
     END_LOOP
@@ -3240,7 +3240,7 @@ EVT_BEGIN(slot_set)
         CALL(yuugijou_get_montemedal_keep, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 2)
-            CALL_CHILD(PTR(exchange_return_sub))
+            CALL_CHILD(exchange_return_sub)
         ELSE
             CALL(yuugijou_montemedal_return)
         END_IF
@@ -3301,14 +3301,14 @@ EVT_END()
 /** Slot machine 1: talk event that plays slot_set for the machine number 0. */
 EVT_BEGIN(slot1_set)
     SET_VALUE(LW(8), 0)
-    CALL_CHILD(PTR(slot_set))
+    CALL_CHILD(slot_set)
     RETURN
 EVT_END()
 
 /** Slot machine 2: talk event that plays slot_set for the machine number 1. */
 EVT_BEGIN(slot2_set)
     SET_VALUE(LW(8), 1)
-    CALL_CHILD(PTR(slot_set))
+    CALL_CHILD(slot_set)
     RETURN
 EVT_END()
 
@@ -3442,7 +3442,7 @@ EVT_BEGIN(exchange_set)
         CALL(yuugijou_get_montemedal_keep, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 1)
-            CALL_CHILD(PTR(exchange_return_sub))
+            CALL_CHILD(exchange_return_sub)
             SET_VALUE(LW(0), 0)
         ELSE
             CALL(yuugijou_montemedal_return)
@@ -4180,7 +4180,7 @@ EVT_BEGIN(evt_door_01_0_close)
         CALL(evt_mario_key_onoff, 1)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-        SPAWN_EVENT(PTR(majorin_nusumigiki))
+        SPAWN_EVENT(majorin_nusumigiki)
     END_IF
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4431,7 +4431,7 @@ EVT_END()
 
 EVT_BEGIN(door_data_02_0_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
-    SPAWN_EVENT(PTR(door_data_02_0_open_sub))
+    SPAWN_EVENT(door_data_02_0_open_sub)
     SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
     CALL(yuugijou_set_yupflag, 0)
     CALL(teresa_badge_item_list_init)
@@ -4655,7 +4655,7 @@ EVT_BEGIN(evt_door_02_1_open)
             CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_RIGHT_ONLY)
             CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
             CALL(evt_mario_set_dir, 90, 0, 0)
-            CALL_CHILD(PTR(maffiaboss_train_ticket_init))
+            CALL_CHILD(maffiaboss_train_ticket_init)
         END_IF
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_f2_set00C"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("Ai02_tke"), 1, 0)
@@ -4796,7 +4796,7 @@ static DoorParam door_data_03 = {
 
 /** Case script of house 3's door: runs evt_door_open_roll, then ends the case event. */
 static EVT_BEGIN(evt_door_03_caseopen)
-    CALL_CHILD(PTR(evt_door_open_roll))
+    CALL_CHILD(evt_door_open_roll)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
@@ -4982,7 +4982,7 @@ static DoorParam door_data_04 = {
 };
 
 EVT_BEGIN(evt_door_04_caseclose)
-    CALL_CHILD(PTR(evt_door_close_roll))
+    CALL_CHILD(evt_door_close_roll)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
@@ -5215,7 +5215,7 @@ EVT_BEGIN(uraguchi_event)
     // He lets Mario through; the back door opens for good.
     CALL(evt_msg_print, 0, STRING("mac_2_043_01"), 0, STRING("店員"))
     SET_VALUE(LW(0), PTR(&door_data_01_1))
-    CALL_CHILD(PTR(evt_door_01_entry))
+    CALL_CHILD(evt_door_01_entry)
     SET_VALUE(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
     CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
@@ -5253,7 +5253,7 @@ EVT_BEGIN(uraguchi_check)
     IF_INT_NOT_EQUAL(GW(11), ITEM_DIZZY_DIAL)
         RETURN
     END_IF
-    CALL_CHILD(PTR(uraguchi_event))
+    CALL_CHILD(uraguchi_event)
     RETURN
 EVT_END()
 
@@ -5438,9 +5438,9 @@ EVT_BEGIN(yuureturn_rtn)
     CALL(evt_mario_key_onoff, 0)
     CALL(yuugijou_montemedal_disp_onoff, 1)
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
-    SPAWN_EVENT(PTR(evt_door_open_quick))
+    SPAWN_EVENT(evt_door_open_quick)
     SET_VALUE(LW(0), PTR(&door_data_02_0l))
-    SPAWN_EVENT(PTR(evt_door_open_quick))
+    SPAWN_EVENT(evt_door_open_quick)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1000)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -5449,7 +5449,7 @@ EVT_BEGIN(yuureturn_rtn)
     CALL(evt_mario_jump_pos, LW(3), 0, LW(5), 500, 0, 20)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_LANDING1"), LW(3), LW(4), LW(5), 0)
     WAIT_MS(500)
-    CALL_CHILD(PTR(gor_03_dokan_down_evt))
+    CALL_CHILD(gor_03_dokan_down_evt)
     WAIT_MS(500)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_17"), 0, STRING("バニーテレサ"))
@@ -6001,7 +6001,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             // For a jackpot or second prize Lucky sets off his explosion gag.
             IF_INT_LESS_OR_EQUAL(LW(0), 1)
                 SET_VALUE(GW(0), LW(0))
-                CALL_CHILD(PTR(kuzi_bomb_bomb))
+                CALL_CHILD(kuzi_bomb_bomb)
                 SET_VALUE(LW(0), GW(0))
             END_IF
             CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -6111,9 +6111,9 @@ EVT_END()
 EVT_BEGIN(kuzi_bomb_talk)
     CALL(evt_lottery, 0, LW(0), LW(1))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
-        CALL_CHILD(PTR(kuzi_bomb_talk_husei))
+        CALL_CHILD(kuzi_bomb_talk_husei)
     ELSE
-        CALL_CHILD(PTR(kuzi_bomb_talk_normal))
+        CALL_CHILD(kuzi_bomb_talk_normal)
     END_IF
     RETURN
 EVT_END()
@@ -6125,9 +6125,9 @@ EVT_BEGIN(kuzi_keiziban_entry)
 #endif
     CALL(evt_lottery, 1, LW(0), LW(1))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
-        CALL_CHILD(PTR(kuzi_keiziban_husei))
+        CALL_CHILD(kuzi_keiziban_husei)
     ELSE
-        CALL_CHILD(PTR(kuzi_keiziban_normal))
+        CALL_CHILD(kuzi_keiziban_normal)
     END_IF
 #if VERSION >= VERSION_JP
     CALL(unitwin_lottery_disp_onoff, 0)
@@ -6203,11 +6203,11 @@ EVT_BEGIN(monte_evt_door_close)
     CALL_CHILD(exchange_keep_sub)
     CALL(evt_party_run, 0)
 #else
-    CALL_CHILD(PTR(exchange_keep_sub))
+    CALL_CHILD(exchange_keep_sub)
 #endif
     CALL(evt_mario_key_onoff, 1)
     CALL(enzan_lw_load)
-    CALL_CHILD(PTR(evt_door_close))
+    CALL_CHILD(evt_door_close)
     RETURN
 EVT_END()
 
@@ -6250,7 +6250,7 @@ EVT_BEGIN(gor_03_init_evt)
     IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_mario_normalize)
     END_IF
-    CALL_CHILD(PTR(gor_03_dokan_init_evt))
+    CALL_CHILD(gor_03_dokan_init_evt)
 
     // The minigame pipe, the exits, the townsfolk and Luigi are set up.
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -6258,10 +6258,10 @@ EVT_BEGIN(gor_03_init_evt)
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
 #else
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
 #endif
     CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 4)
-    CALL_CHILD(PTR(luigi_npcEnt))
+    CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
 
     // Both wear rings from STG5_64_03_F_F_ARRIVE through STG5_66_BELDAM_FINDS_OUT.
@@ -6280,38 +6280,38 @@ EVT_BEGIN(gor_03_init_evt)
     // The canal water animates and the doors of the town's buildings are registered.
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&door_data_01_0))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         SET_VALUE(LW(0), PTR(&door_data_01_1))
-        CALL_CHILD(PTR(evt_door_entry))
+        CALL_CHILD(evt_door_entry)
     END_IF
     SET_VALUE(LW(0), PTR(&door_data_02_0l))
-    CALL_CHILD(PTR(monte_evt_door_entry))
+    CALL_CHILD(monte_evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
-    CALL_CHILD(PTR(monte_evt_door_entry))
+    CALL_CHILD(monte_evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_1))
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
     CALL_CHILD(evt_door_entry)
 #else
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
 #endif
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
-    CALL_CHILD(PTR(evt_door_03_entry))
+    CALL_CHILD(evt_door_03_entry)
     SET_VALUE(LW(0), PTR(&door_data_04))
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
 #else
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
 #endif
     SET_VALUE(LW(0), PTR(&door_data_04_roll))
-    CALL_CHILD(PTR(evt_door_04_entry))
+    CALL_CHILD(evt_door_04_entry)
 
     // The bombable wall, the shop, the Star Pieces, the spinning Star Piece panel and the Shine Sprite blocks.
-    SPAWN_EVENT(PTR(wall_bomb_init))
+    SPAWN_EVENT(wall_bomb_init)
     CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_ana"), 0, PTR(wall_bomb), 0)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 550, 0, 180, ITEM_TYPE_STILL, GSWF_STARPIECE_13, 0)
@@ -6348,7 +6348,7 @@ EVT_BEGIN(gor_03_init_evt)
 
     // The parlor machines, ranking board and Pianta Changer get their triggers.
     SPAWN_EVENT_GET_ID(PTR(desk_talk_check), GW(15))
-    CALL_CHILD(PTR(debug_event_mode))
+    CALL_CHILD(debug_event_mode)
     CALL(evt_goryuugijo_alloc, LW(0), 0)
     CALL(goryuugijo_set_dataadr, 0, LW(0))
     CALL(evt_goryuugijo_alloc, LW(0), 1)
@@ -6363,18 +6363,18 @@ EVT_BEGIN(gor_03_init_evt)
     // Returning from a minigame starts the return scene.
     IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
-        SPAWN_EVENT(PTR(yuureturn_rtn))
+        SPAWN_EVENT(yuureturn_rtn)
     END_IF
 
     // After chapter 3, when Mario returns to Rogueport, the message from Peach arrives.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        SPAWN_EVENT(PTR(peach_mail))
+        SPAWN_EVENT(peach_mail)
     END_IF
 
     // The shop clerk and casino staff bob about, and the mail event is started.
-    SPAWN_EVENT(PTR(tenin_fuwafuwa))
-    SPAWN_EVENT(PTR(casino_fuwafuwa))
-    SPAWN_EVENT(PTR(evt_sub_mail_event))
+    SPAWN_EVENT(tenin_fuwafuwa)
+    SPAWN_EVENT(casino_fuwafuwa)
+    SPAWN_EVENT(evt_sub_mail_event)
 
     // The lottery board trigger is registered.
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
@@ -6428,11 +6428,11 @@ EVT_BEGIN(gor_03_init_evt)
     END_SWITCH
 #endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
-        SPAWN_EVENT(PTR(maffiaboss_maffiaboss))
+        SPAWN_EVENT(maffiaboss_maffiaboss)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
-            SPAWN_EVENT(PTR(maffiaboss_airship_ticket))
+            SPAWN_EVENT(maffiaboss_airship_ticket)
         END_IF
     END_IF
 

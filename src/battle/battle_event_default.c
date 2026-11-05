@@ -148,7 +148,7 @@ EVT_BEGIN(btldefaultevt_Damage)
     // The Ultra Hammer's acrobatic hit (damage pattern 18) plays its own spin reaction.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER_ACROBAT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subset_ultra_hammer_acrobat_damage_event))
+        CALL_CHILD(subset_ultra_hammer_acrobat_damage_event)
         GOTO(10)
     END_IF
 
@@ -252,14 +252,14 @@ EVT_BEGIN(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_L, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
-        CALL_CHILD(PTR(subsetevt_binta_damage_left))
+        CALL_CHILD(subsetevt_binta_damage_left)
         CALL(btlevtcmd_WaitAttackEnd)
         RETURN
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
-        CALL_CHILD(PTR(subsetevt_binta_damage_right))
+        CALL_CHILD(subsetevt_binta_damage_right)
         CALL(btlevtcmd_WaitAttackEnd)
         RETURN
     END_IF
@@ -291,7 +291,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
         END_SIBLING_EVENT
-        CALL_CHILD(PTR(subsetevt_damage))
+        CALL_CHILD(subsetevt_damage)
         CASE_END
         CASE_EQUAL(DAMAGE_CODE_STATUS_ONLY)
         // A hit that only inflicted a status: the unit shows pose 35 for 45 frames if it has one.
@@ -319,7 +319,7 @@ EVT_BEGIN(btldefaultevt_Damage)
             BEGIN_SIBLING_EVENT
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
             END_SIBLING_EVENT
-            CALL_CHILD(PTR(subsetevt_damage))
+            CALL_CHILD(subsetevt_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_EXPLOSION)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_DAMAGE_EXPLOSION_EVENT)
@@ -332,7 +332,7 @@ EVT_BEGIN(btldefaultevt_Damage)
             BEGIN_SIBLING_EVENT
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
             END_SIBLING_EVENT
-            CALL_CHILD(PTR(subsetevt_damage))
+            CALL_CHILD(subsetevt_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
         // This unit is an attacker hurt by its target's counter (codes 43-55: spikes, fire, ice, electricity,
@@ -341,106 +341,106 @@ EVT_BEGIN(btldefaultevt_Damage)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_TOP_SPIKY_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_FRONT_SPIKY)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_FIERY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_FIERY_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_ICY)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_ICY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_ICY_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_ELECTRIC)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_ELECTRIC_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_ELECTRIC_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_EXPLOSIVE)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_EXPLOSIVE_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_EXPLOSIVE_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_POISON)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_POISON_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_POISON_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_ELECTRIFIED)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_ELECTRIFIED_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_ELECTRIFIED_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_PAYBACK)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_PAYBACK_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_PAYBACK_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_HOLD_FAST)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_HOLD_FAST_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_HOLD_FAST_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_SUPERGUARD_COUNTER)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_SUPERGUARD_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_SUPERGUARD_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_counter_damage))
+            CALL_CHILD(subsetevt_counter_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_PROTECTED)
-        CALL_CHILD(PTR(btldefaultevt_avoid_guard))
+        CALL_CHILD(btldefaultevt_avoid_guard)
         RETURN
         CASE_EQUAL(DAMAGE_CODE_BODYGUARD_MOVE)
-        CALL_CHILD(PTR(btldefaultevt_guard_move))
+        CALL_CHILD(btldefaultevt_guard_move)
         CASE_EQUAL(DAMAGE_CODE_FRIGHT)
-        CALL_CHILD(PTR(subsetevt_terror))
+        CALL_CHILD(subsetevt_terror)
         RETURN
         CASE_EQUAL(DAMAGE_CODE_GALE_FORCE)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_BLOW_DEAD_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_BLOW_DEAD_EVENT)
         ELSE
-            CALL_CHILD(PTR(subsetevt_blow_dead))
+            CALL_CHILD(subsetevt_blow_dead)
         END_IF
         RETURN
         CASE_DEFAULT
@@ -452,7 +452,7 @@ EVT_BEGIN(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         WAIT_FRAMES(30)
-        CALL_CHILD(PTR(subsetevt_dead))
+        CALL_CHILD(subsetevt_dead)
         RETURN
     ELSE
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_ZERO_HP, LW(1))
@@ -470,7 +470,7 @@ EVT_BEGIN(btldefaultevt_Damage)
     END_IF
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_GUARD_RETURN, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL_CHILD(PTR(btldefaultevt_guard_return))
+        CALL_CHILD(btldefaultevt_guard_return)
         RETURN
     END_IF
 
@@ -769,13 +769,13 @@ EVT_END()
 /** Mario's Defend command. */
 EVT_BEGIN(btldefaultevt_Defend)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
-    CALL_CHILD(PTR(_Defence_core))
+    CALL_CHILD(_Defence_core)
     RETURN
 EVT_END()
 /** The partner's Defend command. */
 EVT_BEGIN(btldefaultevt_DefendParty)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))
-    CALL_CHILD(PTR(_Defence_core))
+    CALL_CHILD(_Defence_core)
     RETURN
 EVT_END()
 #endif
@@ -955,7 +955,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_MAJINAI_END)
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-            CALL_CHILD(PTR(_event_MajinaiEnd))
+            CALL_CHILD(_event_MajinaiEnd)
         END_SIBLING_EVENT
     END_IF
     IF_INT_NOT_EQUAL(LW(15), 0)
@@ -1086,13 +1086,13 @@ EVT_END()
 
 EVT_BEGIN(btldefaultevt_Defend)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
-    CALL_CHILD(PTR(_Defence_core))
+    CALL_CHILD(_Defence_core)
     RETURN
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_DefendParty)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))
-    CALL_CHILD(PTR(_Defence_core))
+    CALL_CHILD(_Defence_core)
     RETURN
 EVT_END()
 #endif

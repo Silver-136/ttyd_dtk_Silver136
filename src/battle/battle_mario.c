@@ -3597,12 +3597,12 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
-    CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
+    CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
-    CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
+    CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 #endif
@@ -4173,7 +4173,7 @@ EVT_END()
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
-    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
 #endif
@@ -4181,7 +4181,7 @@ EVT_END()
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
-    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
 #endif
@@ -4189,7 +4189,7 @@ EVT_END()
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
-    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
 #endif
@@ -4725,12 +4725,12 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 #endif
@@ -4739,12 +4739,12 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 #endif
@@ -5596,7 +5596,7 @@ EVT_BEGIN(marioAttackEvent_FirstAttackKaitenHammer)
     ELSE
         SET_VALUE(LW(12), PTR(&marioDefaultWeapon_FirstAttackUltraHammer))
     END_IF
-    CALL_CHILD(PTR(marioAttackEvent_KaitenHammer))
+    CALL_CHILD(marioAttackEvent_KaitenHammer)
     RETURN
     RETURN
 EVT_END()
@@ -6777,7 +6777,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
-    CALL_CHILD(PTR(_NormalCharge_core))
+    CALL_CHILD(_NormalCharge_core)
     RETURN
 EVT_END()
 #endif
@@ -6786,7 +6786,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
-    CALL_CHILD(PTR(_NormalCharge_core))
+    CALL_CHILD(_NormalCharge_core)
     RETURN
 EVT_END()
 #endif
@@ -6827,13 +6827,13 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
-    CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
+    CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 
 EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
-    CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
+    CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 #endif
@@ -6841,7 +6841,7 @@ EVT_END()
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
-    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
 #endif
@@ -6849,7 +6849,7 @@ EVT_END()
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
-    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
 #endif
@@ -6857,19 +6857,19 @@ EVT_END()
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
-    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 
 EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 #endif
@@ -6878,13 +6878,13 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 
 EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
-    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 #endif
@@ -6893,7 +6893,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
-    CALL_CHILD(PTR(_NormalCharge_core))
+    CALL_CHILD(_NormalCharge_core)
     RETURN
 EVT_END()
 #endif
@@ -6902,7 +6902,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
-    CALL_CHILD(PTR(_NormalCharge_core))
+    CALL_CHILD(_NormalCharge_core)
     RETURN
 EVT_END()
 #endif
@@ -6910,14 +6910,14 @@ EVT_END()
 /** Super Charge badge move for Mario. */
 EVT_BEGIN(marioAttackEvent_SuperCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_SuperCharge))
-    CALL_CHILD(PTR(_SuperCharge_core))
+    CALL_CHILD(_SuperCharge_core)
     RETURN
 EVT_END()
 
 /** Super Charge P badge move for the partner. */
 EVT_BEGIN(marioAttackEvent_SuperChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_SuperChargeP))
-    CALL_CHILD(PTR(_SuperCharge_core))
+    CALL_CHILD(_SuperCharge_core)
     RETURN
 EVT_END()
 
@@ -6940,9 +6940,9 @@ EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
-    SPAWN_EVENT(PTR(evt_majinai_effect_se_btl))
+    SPAWN_EVENT(evt_majinai_effect_se_btl)
     CALL(_battle_majinai_effect, -3)
-    CALL_CHILD(PTR(marioAttackEvent_MajinaiJump))
+    CALL_CHILD(marioAttackEvent_MajinaiJump)
 #if VERSION >= VERSION_US
     CALL(btlevtcmd_AnnounceMessage, 2, 0, 0, STRING("btl_msg_mj_power_up"), 180)
 #else
@@ -6981,16 +6981,16 @@ EVT_BEGIN(marioAttackEvent_MajinaiDefenceUp)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
-    SPAWN_EVENT(PTR(evt_majinai_effect_se_btl))
+    SPAWN_EVENT(evt_majinai_effect_se_btl)
     CALL(_battle_majinai_effect, -3)
-    CALL_CHILD(PTR(marioAttackEvent_MajinaiJump))
+    CALL_CHILD(marioAttackEvent_MajinaiJump)
 #if VERSION >= VERSION_US
     CALL(btlevtcmd_AnnounceMessage, 2, 0, 0, STRING("btl_msg_mj_defence_up"), 180)
 #else
     CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("btl_msg_mj_defence_up"), 60)
 #endif
     WAIT_FRAMES(60)
-    CALL_CHILD(PTR(_MajinaiPoseReset))
+    CALL_CHILD(_MajinaiPoseReset)
     RETURN
 EVT_END()
 
@@ -7002,9 +7002,9 @@ EVT_BEGIN(marioAttackEvent_MajinaiExpUp)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
-    SPAWN_EVENT(PTR(evt_majinai_effect_se_btl))
+    SPAWN_EVENT(evt_majinai_effect_se_btl)
     CALL(_battle_majinai_effect, -3)
-    CALL_CHILD(PTR(marioAttackEvent_MajinaiJump))
+    CALL_CHILD(marioAttackEvent_MajinaiJump)
 #if VERSION >= VERSION_US
     CALL(btlevtcmd_AnnounceMessage, 2, 0, 0, STRING("btl_msg_mj_exp_up"), 180)
 #else

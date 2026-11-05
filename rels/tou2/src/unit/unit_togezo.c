@@ -405,7 +405,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -475,7 +475,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(wakeup_event))
+        CALL_CHILD(wakeup_event)
         RETURN
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -486,7 +486,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(guard_cancel_event))
+        CALL_CHILD(guard_cancel_event)
         GOTO(99)
     ELSE
         SET_VALUE(LW(0), 50)
@@ -494,10 +494,10 @@ static EVT_BEGIN(attack_event)
         SUBTRACT(LW(0), 1)
         CALL(evt_sub_random, LW(0), LW(1))
         IF_INT_LESS(LW(1), 50)
-            CALL_CHILD(PTR(normal_attack_event))
+            CALL_CHILD(normal_attack_event)
             GOTO(99)
         END_IF
-        CALL_CHILD(PTR(guard_event))
+        CALL_CHILD(guard_event)
         GOTO(99)
     END_IF
     LABEL(99)

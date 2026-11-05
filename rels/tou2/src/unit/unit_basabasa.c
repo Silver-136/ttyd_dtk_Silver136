@@ -321,7 +321,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 16, -18, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_START_FLYING, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(ceil_sky_event))
+        CALL_CHILD(ceil_sky_event)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     END_IF
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -334,7 +334,7 @@ EVT_END()
  * drops it from the ceiling (ceil_sky_event), puts it at Y = 10 and waits for the attack to end.
  */
 static EVT_BEGIN(dmg_first_attack_pos)
-    CALL_CHILD(PTR(ceil_sky_event))
+    CALL_CHILD(ceil_sky_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 10, LW(2))
     CALL(btlevtcmd_WaitAttackEnd)
     RETURN
@@ -344,7 +344,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -356,7 +356,7 @@ EVT_END()
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_REVIVAL, LW(0))
@@ -368,7 +368,7 @@ static EVT_BEGIN(damage_event_ceil)
     IF_INT_EQUAL(LW(12), 0)
         RETURN
     END_IF
-    CALL_CHILD(PTR(ceil_sky_event))
+    CALL_CHILD(ceil_sky_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     RETURN
 EVT_END()
@@ -378,11 +378,11 @@ EVT_END()
  * drops the Swooper from the ceiling (ceil_sky_event), then runs subsetevt_counter_damage with its damage code.
  */
 static EVT_BEGIN(counter_damage_event)
-    CALL_CHILD(PTR(ceil_sky_event))
+    CALL_CHILD(ceil_sky_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
-    CALL_CHILD(PTR(subsetevt_counter_damage))
+    CALL_CHILD(subsetevt_counter_damage)
     RETURN
 EVT_END()
 
@@ -394,8 +394,8 @@ EVT_END()
 static EVT_BEGIN(ceil_fall_ready_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL_CHILD(PTR(ceil_sky_event))
+    CALL_CHILD(btldefaultevt_Damage)
+    CALL_CHILD(ceil_sky_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     RETURN
 EVT_END()
@@ -424,7 +424,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         // BUG: skips the -30 drop below, but LABEL(99) still adds 30 to a hanging unit, so it ends 30 units above

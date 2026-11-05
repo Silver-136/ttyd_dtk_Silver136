@@ -163,16 +163,16 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_party_run, 0)
     CALL(evt_party_set_homing_dist, 0, FLOAT(50.0f))
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
-            CALL_CHILD(PTR(w_door_close))
+            CALL_CHILD(w_door_close)
             BREAK_LOOP
         ELSE
-            CALL_CHILD(PTR(w_door_close))
+            CALL_CHILD(w_door_close)
         END_IF
     END_LOOP
     WAIT_MS(500)
@@ -377,7 +377,7 @@ EVT_BEGIN(bonbaba_evt)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_entry)
 #else
-    CALL_CHILD(PTR(bero_case_entry))
+    CALL_CHILD(bero_case_entry)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)
@@ -571,9 +571,9 @@ EVT_BEGIN(las_26_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_yukamae"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
-        SPAWN_EVENT(PTR(bonbaba_evt))
+        SPAWN_EVENT(bonbaba_evt)
     ELSE
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG8_03_THE_PALACE_GARDEN)
@@ -591,7 +591,7 @@ EVT_BEGIN(las_26_init_evt)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-        SPAWN_EVENT(PTR(sekai_yami_evt))
+        SPAWN_EVENT(sekai_yami_evt)
     END_IF
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_26_ULTRA_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)

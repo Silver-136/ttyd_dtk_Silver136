@@ -217,7 +217,7 @@ EVT_BEGIN(iri_12_kino_talk)
             END_IF
         ELSE
             SET_VALUE(LW(0), 0)
-            CALL_CHILD(PTR(iri_12_kino_makkino_talk))
+            CALL_CHILD(iri_12_kino_makkino_talk)
         END_IF
     END_IF
     RETURN
@@ -229,7 +229,7 @@ EVT_END()
  */
 static EVT_BEGIN(iri_12_makkino_talk)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(iri_12_kino_makkino_talk))
+    CALL_CHILD(iri_12_kino_makkino_talk)
     RETURN
 EVT_END()
 
@@ -312,8 +312,8 @@ EVT_BEGIN(tik_06_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(iri_12_init))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(iri_12_init)
     CALL(evt_mobj_signboard, STRING("board"), -50, 0, 50, PTR(evt_kanban), LSWF_TIK_06_SIGNBOARD_UNUSED)
     CALL(evt_mobj_signboard, STRING("board2"), 50, 0, -250, PTR(evt_kanban2), LSWF_TIK_06_SIGNBOARD_UNUSED)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF_STARPIECE_26, 0)

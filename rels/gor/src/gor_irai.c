@@ -373,7 +373,7 @@ EVT_BEGIN(gor_irai_main)
             CALL(evt_party_set_dir, 1, 270, 200)
         END_INLINE_EVENT
 #endif
-        CALL_CHILD(PTR(gor_irai_lecture))
+        CALL_CHILD(gor_irai_lecture)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -464,7 +464,7 @@ EVT_BEGIN(gor_irai_tenshu_main)
 
     // The first time, the manager gives his lecture on how the Trouble Center works.
     IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
-        CALL_CHILD(PTR(gor_irai_lecture))
+        CALL_CHILD(gor_irai_lecture)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)

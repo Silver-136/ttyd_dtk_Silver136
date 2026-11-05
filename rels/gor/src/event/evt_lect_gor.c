@@ -761,9 +761,9 @@ EVT_BEGIN(all_party_lecture)
     // Goombella and Ms. Mowz get a special demonstration setup.
     SWITCH(LW(9))
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(christine_party_lecture_init))
+        CALL_CHILD(christine_party_lecture_init)
         CASE_EQUAL(7)
-        CALL_CHILD(PTR(chuchulina_party_lecture_init))
+        CALL_CHILD(chuchulina_party_lecture_init)
     END_SWITCH
 
     // Mario blinks out and in while the lecture stage is prepared.
@@ -782,9 +782,9 @@ EVT_BEGIN(all_party_lecture)
     // Goombella demonstrates her Tattle on a Goomba, or Ms. Mowz sniffs out a treasure box, on the stage.
     SWITCH(LW(9))
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(christine_party_lecture))
+        CALL_CHILD(christine_party_lecture)
         CASE_EQUAL(7)
-        CALL_CHILD(PTR(chuchulina_party_lecture))
+        CALL_CHILD(chuchulina_party_lecture)
     END_SWITCH
 
     // Mario and the partner flicker in turn as the stage ends.

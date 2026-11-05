@@ -41,7 +41,7 @@ EvtWord muj_03_init_evt[112];
 EVT_BEGIN(muj_03_event_01)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 0)
-            SPAWN_EVENT(PTR(nigeru_suifu01))
+            SPAWN_EVENT(nigeru_suifu01)
 
             // Mark the scene seen when it is spawned, before the sailors finish fleeing.
             SET_VALUE(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 1)
@@ -224,7 +224,7 @@ EVT_BEGIN(muj_03_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ5"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_badgeblk, STRING("mobj01"), -50, 9, 0, ITEM_COIN, 0, GSWF_MUJ_03_COIN_BLOCK, 0)
     CALL(evt_mobj_brick, STRING("mobj02"), -50, 94, 0, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF_MUJ_03_HIDDEN_TEN_COIN_BLOCK)
 #if VERSION >= VERSION_US
@@ -238,9 +238,9 @@ EVT_BEGIN(muj_03_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 275, 10, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_75, 0)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     SET_VALUE(LW(0), PTR(tree_tbl))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     SET_VALUE(LW(0), PTR(kusa_tbl))
-    CALL_CHILD(PTR(evt_sub_kusa_access_entry))
+    CALL_CHILD(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
 

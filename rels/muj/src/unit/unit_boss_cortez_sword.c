@@ -275,7 +275,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -389,13 +389,13 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
                 IF_INT_EQUAL(LW(9), -1)
                     RETURN
                 END_IF
-                CALL_CHILD(PTR(cortez_weapon_get_home_height))
+                CALL_CHILD(cortez_weapon_get_home_height)
 #endif
                 IF_INT_NOT_EQUAL(LW(1), LW(5))
                     CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
                     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
-                    CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
+                    CALL_CHILD(cortez_weapon_set_formation_attribute)
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                     RETURN
                 END_IF
@@ -431,10 +431,10 @@ EVT_BEGIN(cortez_weapon_phase_event)
                 END_SIBLING_EVENT
                 CALL(btlevtcmd_WaitEventEnd, LW(0))
                 CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(9))
-                CALL_CHILD(PTR(cortez_weapon_get_home_height))
+                CALL_CHILD(cortez_weapon_get_home_height)
                 CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
                 CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
-                CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
+                CALL_CHILD(cortez_weapon_set_formation_attribute)
 
                 // Recover to full HP and clear statuses when the down-turn countdown expires.
                 CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))

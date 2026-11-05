@@ -1239,8 +1239,8 @@ EVT_BEGIN(dmo_00_init_evt)
         CALL(demo_draw)
     END_INLINE_EVENT
 #if VERSION >= VERSION_US
-    SPAWN_EVENT(PTR(demo_evt))
-    SPAWN_EVENT(PTR(koushukei_dai))
+    SPAWN_EVENT(demo_evt)
+    SPAWN_EVENT(koushukei_dai)
 #else
     SPAWN_EVENT(demo_evt)
     SPAWN_EVENT(koushukei_dai)

@@ -492,7 +492,7 @@ EVT_BEGIN(gonbaba_evt)
     WAIT_MS(1000)
 
     // Hooktail's shadow passes over the field.
-    CALL_CHILD(PTR(evt_gonbaba_shadow))
+    CALL_CHILD(evt_gonbaba_shadow)
     CALL(evt_mario_get_pos, 0, LW(0), LW(2), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_LESS(LW(0), LW(3))
@@ -992,7 +992,7 @@ static EVT_BEGIN(dokan_evt)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(cam_shake2)
 #else
-    CALL_CHILD(PTR(cam_shake2))
+    CALL_CHILD(cam_shake2)
     WAIT_MS(1000)
 #endif
     SET_VALUE(GF(1), 1)
@@ -1012,7 +1012,7 @@ static EVT_BEGIN(dokan_evt)
 #endif
     CALL(evt_img_set_shadow, STRING("img"), 2)
     WAIT_FRAMES(1)
-    SPAWN_EVENT(PTR(evt_snd))
+    SPAWN_EVENT(evt_snd)
     BEGIN_INLINE_EVENT
         WAIT_MS(3200)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_SUCCESS1"))
@@ -1048,7 +1048,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 0, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_HEI1"), 2000)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
@@ -1119,7 +1119,7 @@ EVT_BEGIN(sun_stone_set_event)
         CALL(evt_mapobj_get_position, STRING("taiyounoisi"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_STONE_SET1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_00_sun"), 0, 0)
-        CALL_CHILD(PTR(switch_evt))
+        CALL_CHILD(switch_evt)
         CALL(evt_mario_key_onoff, 1)
     END_IF
     CALL(evt_exit_case_evt)
@@ -1173,7 +1173,7 @@ EVT_BEGIN(moon_stone_set_event)
         CALL(evt_mapobj_get_position, STRING("tukinoisi"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_STONE_SET1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_00_moon"), 0, 0)
-        CALL_CHILD(PTR(switch_evt))
+        CALL_CHILD(switch_evt)
         CALL(evt_mario_key_onoff, 1)
     END_IF
     CALL(evt_exit_case_evt)
@@ -1365,23 +1365,23 @@ EVT_BEGIN(hei_00_init_evt)
     // The Bowser interlude (Peach shall we dance) starts a Koopa scene.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_02_PEACH_SHALL_WE_DANCE)
         CALL(evt_mario_set_mode, 2)
-        SPAWN_EVENT(PTR(hei_00_koopa_evt))
+        SPAWN_EVENT(hei_00_koopa_evt)
     END_IF
 
     // Register the exits and the NPCs of the room.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(PTR(bero_case_switch_off))
+    CALL_CHILD(bero_case_switch_off)
     CALL(evt_npc_setup, PTR(npcEnt))
 
     // Story-dependent cutscenes: the opening and the Hooktail flyover.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_00_PETAL_MEADOWS)
-        SPAWN_EVENT(PTR(first_evt))
+        SPAWN_EVENT(first_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_00_01_THE_SHADOW_OF_HOOKTAIL)
-        SPAWN_EVENT(PTR(gonbaba_evt))
+        SPAWN_EVENT(gonbaba_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
@@ -1389,7 +1389,7 @@ EVT_BEGIN(hei_00_init_evt)
         CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, 0, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("dokan"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         SET_VALUE(GSWF_HEI_SUN_STONE_TAKEN, 1)
         SET_VALUE(GSWF_HEI_MOON_STONE_TAKEN, 1)
         SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
@@ -1421,7 +1421,7 @@ EVT_BEGIN(hei_00_init_evt)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_4"), 0, PTR(sun_stone_set_event), 0)
         ELSE
-            CALL_CHILD(PTR(setting_sun_stone))
+            CALL_CHILD(setting_sun_stone)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
@@ -1429,13 +1429,13 @@ EVT_BEGIN(hei_00_init_evt)
         IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_3"), 0, PTR(moon_stone_set_event), 0)
         ELSE
-            CALL_CHILD(PTR(setting_moon_stone))
+            CALL_CHILD(setting_moon_stone)
         END_IF
     END_IF
 
     // Trees, wheat animation, Mushroom block, save block and the Hooktail shadow NPC.
     SET_VALUE(LW(0), PTR(ki_data))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     CALL(evt_map_playanim, STRING("anm_mugi_1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 450, 60, 0, ITEM_MUSHROOM, 0, GSWF_HEI_00_MUSHROOM_BLOCK, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -455, 135, -75, 0, 0)
@@ -1450,15 +1450,15 @@ EVT_BEGIN(hei_00_init_evt)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)
         SET_VALUE(LW(0), STRING("dokan_2"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_2"), PTR(e3_bero))
         SET_VALUE(LW(0), STRING("dokan_2"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
-        CALL_CHILD(PTR(epilogue_npc_entry))
-        SPAWN_EVENT(PTR(epilogue_evt))
+        CALL_CHILD(epilogue_npc_entry)
+        SPAWN_EVENT(epilogue_evt)
     END_IF
     DEBUG_PUT_MSG(STRING("おわったよ"))
     RETURN

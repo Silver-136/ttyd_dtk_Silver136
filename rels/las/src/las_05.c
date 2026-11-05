@@ -1290,7 +1290,7 @@ static EVT_BEGIN(senkaron_event)
 
         // Mario is pushed around by the swarm with his partner in tow; if he stands idle near the room's
         // centre, he sinks, the partner calls out (stg8_las_05, stg8_las_06) and the game is over.
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         SET_VALUE(GF(0), 0)
         BEGIN_INLINE_EVENT
             SET_VALUE(LW(7), 0)
@@ -1494,7 +1494,7 @@ static EVT_BEGIN(senkaron_event)
         // Key 0x2E, which pops out and bounces.
         SET_VALUE(GSW_STORY_PROGRESS, STG8_01_1000_DRY_BONES)
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CALL(evt_npc_get_position, STRING("黒カロン"), LW(0), LW(1), LW(2))
         CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
         CALL(evt_sub_get_dir, LW(3), LW(5), LW(0), LW(2), LW(6))
@@ -1648,7 +1648,7 @@ USER_FUNC(party_hit) {
  * while the story is at the start of the Palace.
  */
 EVT_BEGIN(kurokaron_talk)
-    SPAWN_EVENT(PTR(senkaron_event))
+    SPAWN_EVENT(senkaron_event)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     END_IF
@@ -1717,7 +1717,7 @@ EVT_END()
 static EVT_BEGIN(unlock_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
     SET_VALUE(LW(0), STRING("e_bero_1"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     RETURN
 EVT_END()
 
@@ -1756,7 +1756,7 @@ EVT_BEGIN(las_05_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
@@ -1766,9 +1766,9 @@ EVT_BEGIN(las_05_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         CALL(evt_mobj_lock, STRING("lock"), 46, 590, 20, 0, -90, PTR(key_check_evt), PTR(unlock_evt), 0)
         SET_VALUE(LW(0), STRING("e_bero_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     END_IF
-    CALL_CHILD(PTR(shan_init))
+    CALL_CHILD(shan_init)
     RETURN
 EVT_END()
 

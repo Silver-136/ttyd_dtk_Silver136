@@ -192,7 +192,7 @@ static EVT_BEGIN(attack_event)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
     IF_INT_LESS(LW(1), 50)
-        CALL_CHILD(PTR(drain_attack_event))
+        CALL_CHILD(drain_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -202,7 +202,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(2), 10)
             CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
             IF_INT_EQUAL(LW(3), -1)
-                CALL_CHILD(PTR(friend_event))
+                CALL_CHILD(friend_event)
                 WAIT_MS(500)
                 GOTO(99)
             END_IF
@@ -220,7 +220,7 @@ static EVT_BEGIN(attack_event)
             SUBTRACT(LW(2), 10)
             CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
             IF_INT_EQUAL(LW(3), -1)
-                CALL_CHILD(PTR(friend_event))
+                CALL_CHILD(friend_event)
                 WAIT_MS(500)
                 GOTO(99)
             END_IF
@@ -471,7 +471,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -485,7 +485,7 @@ static EVT_BEGIN(counter_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
-    CALL_CHILD(PTR(subsetevt_counter_damage))
+    CALL_CHILD(subsetevt_counter_damage)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_REVIVAL, LW(0))
@@ -493,7 +493,7 @@ static EVT_BEGIN(counter_damage_event)
             RETURN
         END_IF
     END_IF
-    CALL_CHILD(PTR(return_event))
+    CALL_CHILD(return_event)
     RETURN
 EVT_END()
 
@@ -503,7 +503,7 @@ static EVT_BEGIN(return_event)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
     SET_VALUE(LW(8), 40)
-    CALL_CHILD(PTR(rabbit_move))
+    CALL_CHILD(rabbit_move)
     RETURN
 EVT_END()
 

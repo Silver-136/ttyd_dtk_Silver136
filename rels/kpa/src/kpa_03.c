@@ -90,9 +90,9 @@ static EVT_BEGIN(kpa_fall)
         WAIT_FRAMES(1)
     END_LOOP
     IF_INT_EQUAL(LF(0), 0)
-        CALL_CHILD(PTR(kpa_fall_sub))
+        CALL_CHILD(kpa_fall_sub)
     ELSE
-        CALL_CHILD(PTR(kpa_dead))
+        CALL_CHILD(kpa_dead)
     END_IF
     RETURN
 EVT_END()
@@ -166,18 +166,18 @@ static NpcSetupInfo npcEnt[] = {
 
 EVT_BEGIN(kpa_03_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL_CHILD(PTR(kpa_init))
+    CALL_CHILD(kpa_init)
     CALL(evt_mario_set_pos, -1400, 0, -5)
     SET_VALUE(LW(0), PTR(kpa_act_stg2_mobj))
-    CALL_CHILD(PTR(kpa_read_mobj))
+    CALL_CHILD(kpa_read_mobj)
     SET_VALUE(LW(0), PTR(kpa_act_stg2_item))
-    CALL_CHILD(PTR(kpa_read_item))
+    CALL_CHILD(kpa_read_item)
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
-    SPAWN_EVENT(PTR(kpa_fall))
+    SPAWN_EVENT(kpa_fall)
     CALL(kpa_status_init, 2, GSW_KPA_TRY_COUNT, GSW_KPA_TIME_LEFT)
     SET_VALUE(LSW_KPA_FIELD_BGM, 1)
-    SPAWN_EVENT(PTR(kpa_stage_start))
-    SPAWN_EVENT(PTR(kairyu_evt))
+    SPAWN_EVENT(kpa_stage_start)
+    SPAWN_EVENT(kairyu_evt)
     SPAWN_EVENT_GET_ID(PTR(kpa_time), GW(15))
     RETURN
 EVT_END()

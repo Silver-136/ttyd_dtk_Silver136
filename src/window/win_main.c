@@ -662,7 +662,7 @@ EVT_BEGIN(evt_item_use)
     CALL(evt_mario_adjust_dir)
 #if VERSION >= VERSION_JP
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL_CHILD(PTR(win_main_child_evt))
+    CALL_CHILD(win_main_child_evt)
 #endif
     IF_INT_EQUAL(LW(11), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -695,9 +695,9 @@ EVT_BEGIN(evt_item_use)
         CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_MARIO_USE1"), LW(0), LW(1), LW(2), 0)
         CALL(famicom_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(kime_pose))
+            CALL_CHILD(kime_pose)
         ELSE
-            CALL_CHILD(PTR(kime_pose_famicom))
+            CALL_CHILD(kime_pose_famicom)
         END_IF
         WAIT_MS(1000)
         CALL(evt_item_delete, STRING("menu_dummy"))
@@ -707,9 +707,9 @@ EVT_BEGIN(evt_item_use)
         WAIT_MS(1400)
         CALL(famicom_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(kime_pose2))
+            CALL_CHILD(kime_pose2)
         ELSE
-            CALL_CHILD(PTR(kime_pose_famicom))
+            CALL_CHILD(kime_pose_famicom)
         END_IF
         CALL(itemUseFunc)
         WAIT_MS(1500)
@@ -717,7 +717,7 @@ EVT_BEGIN(evt_item_use)
 #if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_set_breed_pose, 0, 1)
 #else
-        CALL_CHILD(PTR(win_main_child_evt))
+        CALL_CHILD(win_main_child_evt)
         CALL(evt_mario_set_normal_pose)
 #endif
         RETURN

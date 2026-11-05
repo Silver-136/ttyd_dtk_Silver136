@@ -160,14 +160,14 @@ EVT_BEGIN(las_27_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 520, 60, -150, 0, 0)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 5, 450, 60, -150, 0, 0)
     CALL_CHILD(shan_init)
 #else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, 450, 60, -150, 0, 0)
-    CALL_CHILD(PTR(shan_init))
+    CALL_CHILD(shan_init)
 #endif
     RETURN
 EVT_END()

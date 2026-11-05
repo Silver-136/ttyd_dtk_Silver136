@@ -293,7 +293,7 @@ EVT_BEGIN(floatblk_evt)
     END_IF
 
     // The block starts moving toward its other height and the camera shakes.
-    SPAWN_EVENT(PTR(floatblk_shake))
+    SPAWN_EVENT(floatblk_shake)
     WAIT_MS(500)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
 
@@ -406,9 +406,9 @@ EVT_BEGIN(floatblk_evt)
 
     // It reaches the end height; the move sound stops and the stop-sound event is started.
     CALL(evt_snd_sfxoff, LW(8))
-    SPAWN_EVENT(PTR(floatblk_stop_se))
+    SPAWN_EVENT(floatblk_stop_se)
     IF_INT_EQUAL(LF(1), 1)
-        SPAWN_EVENT(PTR(floatblk_shake))
+        SPAWN_EVENT(floatblk_shake)
         WAIT_MS(1000)
     END_IF
     RETURN
@@ -439,7 +439,7 @@ EVT_BEGIN(floatblk21_1_evt)
         SET_VALUE(LW(4), -130)
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 0)
     END_IF
-    CALL_CHILD(PTR(floatblk_evt))
+    CALL_CHILD(floatblk_evt)
     CALL(evt_mobj_get_y_position, STRING("21blk1"), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), -130)
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 0)
@@ -474,7 +474,7 @@ EVT_BEGIN(floatblk21_2_evt)
         SET_VALUE(LW(4), -130)
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 0)
     END_IF
-    CALL_CHILD(PTR(floatblk_evt))
+    CALL_CHILD(floatblk_evt)
     CALL(evt_mobj_get_y_position, STRING("21blk2"), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), -130)
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 0)
@@ -502,7 +502,7 @@ EVT_BEGIN(las_21_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
@@ -511,12 +511,12 @@ EVT_BEGIN(las_21_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(w_bero_mapchg))
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CALL(evt_npc_check_delete, STRING("ワンワン１"))
-        SPAWN_EVENT(PTR(hikari_evt))
+        SPAWN_EVENT(hikari_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)

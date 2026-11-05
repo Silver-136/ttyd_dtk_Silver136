@@ -660,7 +660,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAFF_EFFECT, 0)
-    CALL_CHILD(PTR(init_event2))
+    CALL_CHILD(init_event2)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -758,15 +758,15 @@ static EVT_BEGIN(damage_event)
         END_IF
     ELSE
         SET_VALUE(LW(0), UNIT_ID_SELF)
-        CALL_CHILD(PTR(bunsin_kill_event))
+        CALL_CHILD(bunsin_kill_event)
         RETURN
     END_IF
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            CALL_CHILD(PTR(kamec_subset_bunsin_all_kill))
+            CALL_CHILD(kamec_subset_bunsin_all_kill)
         END_IF
     END_IF
     RETURN
@@ -784,13 +784,13 @@ static EVT_BEGIN(kamec_subset_bunsin_all_kill)
             CALL(btlevtcmd_WaitAttackEnd)
             CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
             SET_VALUE(LW(0), LW(1))
-            SPAWN_EVENT(PTR(bunsin_kill_event))
+            SPAWN_EVENT(bunsin_kill_event)
             SET_VALUE(LW(0), LW(2))
-            SPAWN_EVENT(PTR(bunsin_kill_event))
+            SPAWN_EVENT(bunsin_kill_event)
             SET_VALUE(LW(0), LW(3))
-            SPAWN_EVENT(PTR(bunsin_kill_event))
+            SPAWN_EVENT(bunsin_kill_event)
             SET_VALUE(LW(0), LW(4))
-            SPAWN_EVENT(PTR(bunsin_kill_event))
+            SPAWN_EVENT(bunsin_kill_event)
             LOOP(0)
                 CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
                 IF_INT_EQUAL(LW(0), 0)
@@ -902,7 +902,7 @@ static EVT_BEGIN(avoid_miss_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), UNIT_ID_SELF)
-        CALL_CHILD(PTR(bunsin_kill_event))
+        CALL_CHILD(bunsin_kill_event)
     END_IF
     RETURN
 EVT_END()
@@ -918,7 +918,7 @@ static EVT_BEGIN(bunsin_kill_event)
         GOTO(10)
     END_IF
     CALL(btlevtcmd_SetUnitWork, LW(0), UNIT_WORK_FADING, 1)
-    CALL_CHILD(PTR(alpha_down_event))
+    CALL_CHILD(alpha_down_event)
     LABEL(10)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_KillUnit, LW(0), 0)
@@ -1003,7 +1003,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_kamec_attack_magic))
-        CALL_CHILD(PTR(attack_magic_event))
+        CALL_CHILD(attack_magic_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
@@ -1030,19 +1030,19 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(1), 20)
         IF_INT_LESS(LW(0), LW(1))
             SET_VALUE(LW(9), PTR(&weapon_kamec_attack_magic))
-            CALL_CHILD(PTR(attack_magic_event))
+            CALL_CHILD(attack_magic_event)
             GOTO(99)
         END_IF
         ADD(LW(1), 20)
         IF_INT_LESS(LW(0), LW(1))
             SET_VALUE(LW(9), PTR(&weapon_kamec_recover_magic))
-            CALL_CHILD(PTR(recover_magic_event))
+            CALL_CHILD(recover_magic_event)
             IF_INT_EQUAL(LW(0), 0)
                 GOTO(10)
             END_IF
             GOTO(99)
         ELSE
-            CALL_CHILD(PTR(bunsin_magic_event))
+            CALL_CHILD(bunsin_magic_event)
             GOTO(99)
         END_IF
     ELSE
@@ -1052,11 +1052,11 @@ static EVT_BEGIN(attack_event)
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL_CHILD(PTR(subsetevt_confuse_flustered))
+                CALL_CHILD(subsetevt_confuse_flustered)
                 GOTO(99)
             END_IF
             SET_VALUE(LW(9), PTR(&weapon_kamec_attack_magic))
-            CALL_CHILD(PTR(attack_magic_event))
+            CALL_CHILD(attack_magic_event)
             GOTO(99)
         ELSE
             LABEL(20)
@@ -1073,7 +1073,7 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(1), 50)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_attack_magic))
-                CALL_CHILD(PTR(attack_magic_event))
+                CALL_CHILD(attack_magic_event)
                 GOTO(99)
             END_IF
             ADD(LW(1), 0)
@@ -1081,7 +1081,7 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_kamec_dekadeka_magic))
 
                 // the Huge spell on an ally,
-                CALL_CHILD(PTR(dekadeka_magic_event))
+                CALL_CHILD(dekadeka_magic_event)
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
                 END_IF
@@ -1092,7 +1092,7 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_kamec_katikati_magic))
 
                 // the defense-boosting spell,
-                CALL_CHILD(PTR(katikati_magic_event))
+                CALL_CHILD(katikati_magic_event)
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
                 END_IF
@@ -1103,7 +1103,7 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_kamec_biribiri_magic))
 
                 // the Electric spell,
-                CALL_CHILD(PTR(biribiri_magic_event))
+                CALL_CHILD(biribiri_magic_event)
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
                 END_IF
@@ -1114,7 +1114,7 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_kamec_trans_magic))
 
                 // the Invisible spell,
-                CALL_CHILD(PTR(trans_magic_event))
+                CALL_CHILD(trans_magic_event)
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
                 END_IF
@@ -1125,14 +1125,14 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_kamec_recover_magic))
 
                 // and the healing spells, for one ally or for all.
-                CALL_CHILD(PTR(recover_magic_event))
+                CALL_CHILD(recover_magic_event)
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
                 END_IF
                 GOTO(99)
             ELSE
                 SET_VALUE(LW(9), PTR(&weapon_kamec_all_recover_magic))
-                CALL_CHILD(PTR(all_recover_magic_event))
+                CALL_CHILD(all_recover_magic_event)
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
                 END_IF
@@ -1420,12 +1420,12 @@ static EVT_BEGIN(magic_common_event1)
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
         IF_INT_NOT_EQUAL(LW(3), LW(13))
-            CALL_CHILD(PTR(ground_magic_common_event1))
+            CALL_CHILD(ground_magic_common_event1)
         ELSE
-            CALL_CHILD(PTR(ground_magic_common_event2))
+            CALL_CHILD(ground_magic_common_event2)
         END_IF
     ELSE
-        CALL_CHILD(PTR(sky_magic_common_event))
+        CALL_CHILD(sky_magic_common_event)
     END_IF
     RETURN
 EVT_END()
@@ -1437,9 +1437,9 @@ EVT_END()
 static EVT_BEGIN(magic_common_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(ground_magic_common_event2))
+        CALL_CHILD(ground_magic_common_event2)
     ELSE
-        CALL_CHILD(PTR(sky_magic_common_event))
+        CALL_CHILD(sky_magic_common_event)
     END_IF
     RETURN
 EVT_END()
@@ -1649,7 +1649,7 @@ static EVT_BEGIN(support_magic_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             SET_VALUE(LW(0), 1)
             RETURN
         END_IF
@@ -1678,7 +1678,7 @@ static EVT_BEGIN(support_magic_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(15), 0)
-    CALL_CHILD(PTR(magic_common_event1))
+    CALL_CHILD(magic_common_event1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -1693,28 +1693,28 @@ EVT_END()
 /** Casts the size-up spell (dekadeka = huge) on an ally: makes it Huge (size change strength 2) for three turns. */
 static EVT_BEGIN(dekadeka_magic_event)
     SET_VALUE(LW(15), 10)
-    CALL_CHILD(PTR(support_magic_event))
+    CALL_CHILD(support_magic_event)
     RETURN
 EVT_END()
 
 /** Casts the hardening spell (katikati = rock-hard) on an ally: raises its defence by 3 for three turns. */
 static EVT_BEGIN(katikati_magic_event)
     SET_VALUE(LW(15), 14)
-    CALL_CHILD(PTR(support_magic_event))
+    CALL_CHILD(support_magic_event)
     RETURN
 EVT_END()
 
 /** Casts the electric spell (biribiri = tingling) on an ally: it becomes Electrified for three turns. */
 static EVT_BEGIN(biribiri_magic_event)
     SET_VALUE(LW(15), 6)
-    CALL_CHILD(PTR(support_magic_event))
+    CALL_CHILD(support_magic_event)
     RETURN
 EVT_END()
 
 /** Casts the transparency spell on an ally: it becomes Invisible for three turns. */
 static EVT_BEGIN(trans_magic_event)
     SET_VALUE(LW(15), 18)
-    CALL_CHILD(PTR(support_magic_event))
+    CALL_CHILD(support_magic_event)
     RETURN
 EVT_END()
 
@@ -1726,7 +1726,7 @@ static EVT_BEGIN(recover_magic_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             SET_VALUE(LW(0), 1)
             RETURN
         END_IF
@@ -1745,7 +1745,7 @@ static EVT_BEGIN(recover_magic_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(15), 0)
-    CALL_CHILD(PTR(magic_common_event1))
+    CALL_CHILD(magic_common_event1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_RecoverHp, LW(3), LW(4), 8)
@@ -1774,7 +1774,7 @@ static EVT_BEGIN(all_recover_magic_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             SET_VALUE(LW(0), 1)
             RETURN
         END_IF
@@ -1802,7 +1802,7 @@ static EVT_BEGIN(all_recover_magic_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL_CHILD(PTR(magic_common_event2))
+    CALL_CHILD(magic_common_event2)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

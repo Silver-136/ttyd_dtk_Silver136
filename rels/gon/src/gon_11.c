@@ -277,11 +277,11 @@ EVT_BEGIN(gonbaba_event)
     // The door slams shut behind them and the camera shakes.
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(door01_close))
+            CALL_CHILD(door01_close)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -293,7 +293,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_party_move_pos2, 0, -490, 0, FLOAT(120.0f))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -450, 0, FLOAT(120.0f))
-    SPAWN_EVENT(PTR(bero_case_entry))
+    SPAWN_EVENT(bero_case_entry)
     WAIT_MS(1300)
 
     // A voice from the dark asks who dares approach; Mario jumps in surprise.
@@ -314,8 +314,8 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_npc_wait_anim, STRING("ゴンババ"), FLOAT(1.0f))
         CALL(evt_npc_set_anim, STRING("ゴンババ"), STRING("GNB_S_1"))
     END_INLINE_EVENT
-    SPAWN_EVENT(PTR(gonbaba_standup_shake))
-    SPAWN_EVENT(PTR(gonbaba_fog_change))
+    SPAWN_EVENT(gonbaba_standup_shake)
+    SPAWN_EVENT(gonbaba_fog_change)
     CALL(evt_cam3d_evt_set, -900, 31, 490, -205, 175, 20, 4500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         WAIT_MS(1800)
@@ -382,7 +382,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_party_set_pos, 0, -25, 10, 150)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
-    SPAWN_EVENT(PTR(gonbaba_down_shake))
+    SPAWN_EVENT(gonbaba_down_shake)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -658,7 +658,7 @@ EVT_BEGIN(gonbaba_event)
 #endif
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(1), STRING("stone"))
-    CALL_CHILD(PTR(evt_sub_starstone))
+    CALL_CHILD(evt_sub_starstone)
     RETURN
 EVT_END()
 
@@ -1126,7 +1126,7 @@ EVT_BEGIN(gon_11_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_16_HOOKTAIL)
         CASE_DEFAULT
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_16_HOOKTAIL)
@@ -1145,7 +1145,7 @@ EVT_BEGIN(gon_11_init_evt)
     ELSE
         CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_set_scale, STRING("ゴンババ"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
-        SPAWN_EVENT(PTR(gonbaba_event))
+        SPAWN_EVENT(gonbaba_event)
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_CULL)
     CALL(evt_light_charalight_all_onoff, 1)
@@ -1153,7 +1153,7 @@ EVT_BEGIN(gon_11_init_evt)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(iri_16_init)
 #else
-    CALL_CHILD(PTR(iri_16_init))
+    CALL_CHILD(iri_16_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
         CALL(evt_npc_delete, STRING("ノコタロウ父"))
         CALL(evt_npc_delete, STRING("ゴンババ"))

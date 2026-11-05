@@ -2644,9 +2644,9 @@ EVT_BEGIN(mobj_save_blk_sysevt)
     END_IF
     SET_VALUE(LW(0), 0)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_memcard_save_wrapper))
+    CALL_CHILD(evt_memcard_save_wrapper)
 #else
-    CALL_CHILD(PTR(evt_memcard_save))
+    CALL_CHILD(evt_memcard_save)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN

@@ -546,7 +546,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, 4)
-    CALL_CHILD(PTR(_body_param_set))
+    CALL_CHILD(_body_param_set)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CALL_DEPTH, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 5, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
@@ -592,7 +592,7 @@ static EVT_BEGIN(damage_event)
         CASE_DEFAULT
         SET_VALUE(LW(11), 1)
     END_SWITCH
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -615,14 +615,14 @@ static EVT_BEGIN(damage_event_bodylost)
                 WAIT_FRAMES(30)
             END_IF
         ELSE
-            CALL_CHILD(PTR(subsetevt_nodamage_motion))
+            CALL_CHILD(subsetevt_nodamage_motion)
         END_IF
     ELSE
         SET_VALUE(LW(12), LW(11))
         CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
         SUBTRACT(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
-        CALL_CHILD(PTR(_body_param_set))
+        CALL_CHILD(_body_param_set)
         SWITCH(LW(0))
             CASE_EQUAL(1)
             SET_VALUE(LW(11), 4)
@@ -654,7 +654,7 @@ static EVT_BEGIN(damage_event_bodylost)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(4)
-            CALL_CHILD(PTR(subset_dmg_sambo_fall))
+            CALL_CHILD(subset_dmg_sambo_fall)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
@@ -863,7 +863,7 @@ static EVT_BEGIN(damage_swallow_body)
                 WAIT_FRAMES(30)
             END_IF
         ELSE
-            CALL_CHILD(PTR(subsetevt_nodamage_motion))
+            CALL_CHILD(subsetevt_nodamage_motion)
         END_IF
     ELSE
         WAIT_FRAMES(3)
@@ -871,7 +871,7 @@ static EVT_BEGIN(damage_swallow_body)
         CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
         SUBTRACT(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
-        CALL_CHILD(PTR(_body_param_set))
+        CALL_CHILD(_body_param_set)
         SWITCH(LW(0))
             CASE_EQUAL(1)
             SET_VALUE(LW(11), 4)
@@ -904,7 +904,7 @@ static EVT_BEGIN(damage_swallow_body)
             CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kNotTargetable | kHidden))
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             WAIT_FRAMES(1)
-            CALL_CHILD(PTR(subset_dmg_sambo_fall))
+            CALL_CHILD(subset_dmg_sambo_fall)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
@@ -957,7 +957,7 @@ static EVT_BEGIN(attack_event)
                 CALL(btlevtcmd_CheckSpace, LW(3), LW(6), LW(7), LW(8), 40, 0, 0, 0)
                 IF_INT_EQUAL(LW(3), -1)
                     IF_INT_GREATER(LW(6), 0)
-                        CALL_CHILD(PTR(call_friend_event))
+                        CALL_CHILD(call_friend_event)
                         GOTO(99)
                     END_IF
                 END_IF
@@ -982,14 +982,14 @@ static EVT_BEGIN(attack_event)
                 CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_sambo_head_attack_2), LW(3), LW(4))
             END_SWITCH
             IF_INT_NOT_EQUAL(LW(3), -1)
-                CALL_CHILD(PTR(attack_head_2_event))
+                CALL_CHILD(attack_head_2_event)
                 RETURN
             END_IF
         END_IF
-        CALL_CHILD(PTR(attack_spike_event))
+        CALL_CHILD(attack_spike_event)
         RETURN
     END_IF
-    CALL_CHILD(PTR(attack_head_1_event))
+    CALL_CHILD(attack_head_1_event)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

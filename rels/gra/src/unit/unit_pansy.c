@@ -202,11 +202,11 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(0), LW(1))
     IF_INT_LESS(LW(1), 70)
         SET_VALUE(LW(9), PTR(&weapon_pansy_attack))
-        CALL_CHILD(PTR(song_event))
+        CALL_CHILD(song_event)
         GOTO(99)
     END_IF
     LABEL(10)
-    CALL_CHILD(PTR(escape_event))
+    CALL_CHILD(escape_event)
     GOTO(99)
     LABEL(99)
     RETURN
@@ -257,7 +257,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 

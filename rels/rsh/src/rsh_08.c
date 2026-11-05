@@ -119,7 +119,7 @@ EVT_BEGIN(rsh_08_a_init_evt)
         SET_VALUE(LW(0), PTR(bero_data_c_nidome))
     END_IF
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()

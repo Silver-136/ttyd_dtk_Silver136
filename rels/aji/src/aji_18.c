@@ -260,7 +260,7 @@ EVT_BEGIN(evt_machine)
                 SET_VALUE(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
                 CALL(evt_del_case_evt, 0, GW(10))
                 SET_VALUE(LW(0), STRING("e_bero"))
-                CALL_CHILD(PTR(bero_case_switch_on))
+                CALL_CHILD(bero_case_switch_on)
                 CALL(evt_cam3d_evt_set, -140, 90, 369, 150, 60, -98, 500, EASING_SINE_IN_OUT)
                 WAIT_MS(1200)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -355,7 +355,7 @@ EVT_BEGIN(aji_18_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
 
     // From the factory-door story point on, all three card-key slots count as filled; each slot shows green
     // when filled and red when empty.
@@ -410,7 +410,7 @@ EVT_BEGIN(aji_18_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), GW(10))
         SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
@@ -423,7 +423,7 @@ EVT_BEGIN(aji_18_init_evt)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
         SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
@@ -450,12 +450,12 @@ EVT_BEGIN(aji_18_init_evt)
 #else
             END_IF
 #endif
-            SPAWN_EVENT(PTR(evt_koopa_after))
+            SPAWN_EVENT(evt_koopa_after)
         END_IF
     END_SWITCH
 
     // Monitor for STG7_25_THE_LAST_MAIL before applying the emergency blend.
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
 

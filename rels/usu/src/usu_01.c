@@ -651,9 +651,9 @@ EVT_BEGIN(iri_20_out_house)
     // Set the door up for the exit: its glow and sound start and the door parts swing to their starting
     // position.
     IF_INT_EQUAL(LW(14), 0)
-        SPAWN_EVENT(PTR(door_light2))
+        SPAWN_EVENT(door_light2)
     END_IF
-    SPAWN_EVENT(PTR(door_up_se))
+    SPAWN_EVENT(door_up_se)
     CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(8), 0)
         BEGIN_INLINE_EVENT
@@ -673,7 +673,7 @@ EVT_BEGIN(iri_20_out_house)
     IF_INT_NOT_EQUAL(LW(9), 0)
         BEGIN_INLINE_EVENT
             WAIT_MS(400)
-            SPAWN_EVENT(PTR(house_close_se))
+            SPAWN_EVENT(house_close_se)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
@@ -696,9 +696,9 @@ EVT_BEGIN(iri_20_out_house)
 
     // A moment later the door opens: the glow, the opening sound and the door parts swinging open.
     IF_INT_EQUAL(LW(14), 0)
-        SPAWN_EVENT(PTR(door_light))
+        SPAWN_EVENT(door_light)
     END_IF
-    SPAWN_EVENT(PTR(door_open_se))
+    SPAWN_EVENT(door_open_se)
     CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
@@ -742,7 +742,7 @@ EVT_BEGIN(iri_20_out_house)
     CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            SPAWN_EVENT(PTR(door_close_se))
+            SPAWN_EVENT(door_close_se)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
@@ -802,7 +802,7 @@ EVT_BEGIN(iri_20_aunt_to_house)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_move_position, STRING("me"), -390, -20, 0, 60, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
-    SPAWN_EVENT(PTR(door_open_se))
+    SPAWN_EVENT(door_open_se)
     CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
@@ -828,7 +828,7 @@ EVT_BEGIN(iri_20_aunt_to_house)
     CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            SPAWN_EVENT(PTR(door_close_se))
+            SPAWN_EVENT(door_close_se)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
@@ -867,7 +867,7 @@ EVT_BEGIN(aunt_talk)
             SET_VALUE(LW(0), PTR(&door_1))
             SET_VALUE(LW(14), 0)
             SET_VALUE(LW(15), 0)
-            CALL_CHILD(PTR(iri_20_out_house))
+            CALL_CHILD(iri_20_out_house)
 
             // The town music fades out and music-box music takes over.
             CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
@@ -894,7 +894,7 @@ EVT_BEGIN(aunt_talk)
             CALL_CHILD(iri_20_aunt_to_house)
 #else
             CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 3000)
-            CALL_CHILD(PTR(iri_20_aunt_to_house))
+            CALL_CHILD(iri_20_aunt_to_house)
 #endif
             CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
             CALL(evt_snd_bgmon_f, PSND_CONTINUE | PSND_FADEIN, 0, 2000)
@@ -1013,7 +1013,7 @@ EVT_BEGIN(aunt_talk)
             // Before the Doopliss fight, first talk: she says she can't buy food for the children since her
             // husband turned into a pig (stg4_usu_62), and they pipe up.
             CALL(evt_msg_print, 0, STRING("stg4_usu_62"), 0, STRING("me"))
-            CALL_CHILD(PTR(childABC_talk_01))
+            CALL_CHILD(childABC_talk_01)
             WAIT_MS(1400)
 
             // She begs for spare food (stg4_usu_66) with a yes/no menu;
@@ -1123,14 +1123,14 @@ EVT_BEGIN(childA_talk)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_74"), 0, STRING("me"))
         ELSE
-            CALL_CHILD(PTR(childABC_talk_01))
+            CALL_CHILD(childABC_talk_01)
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL_CHILD(PTR(childABC_talk_02))
+        CALL_CHILD(childABC_talk_02)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL_CHILD(PTR(childABC_talk_03))
+        CALL_CHILD(childABC_talk_03)
         CASE_DEFAULT
-        CALL_CHILD(PTR(childABC_talk_04))
+        CALL_CHILD(childABC_talk_04)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1148,14 +1148,14 @@ EVT_BEGIN(childB_talk)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_75"), 0, STRING("me"))
         ELSE
-            CALL_CHILD(PTR(childABC_talk_01))
+            CALL_CHILD(childABC_talk_01)
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL_CHILD(PTR(childABC_talk_02))
+        CALL_CHILD(childABC_talk_02)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL_CHILD(PTR(childABC_talk_03))
+        CALL_CHILD(childABC_talk_03)
         CASE_DEFAULT
-        CALL_CHILD(PTR(childABC_talk_04))
+        CALL_CHILD(childABC_talk_04)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1173,14 +1173,14 @@ EVT_BEGIN(childC_talk)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_76"), 0, STRING("me"))
         ELSE
-            CALL_CHILD(PTR(childABC_talk_01))
+            CALL_CHILD(childABC_talk_01)
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL_CHILD(PTR(childABC_talk_02))
+        CALL_CHILD(childABC_talk_02)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL_CHILD(PTR(childABC_talk_03))
+        CALL_CHILD(childABC_talk_03)
         CASE_DEFAULT
-        CALL_CHILD(PTR(childABC_talk_04))
+        CALL_CHILD(childABC_talk_04)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1194,7 +1194,7 @@ EVT_BEGIN(gatekeeper_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_02_DINGE)
         SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_npc_set_position, STRING("門番"), 400, 0, -55)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_npc_set_position, STRING("門番"), 0, -2000, 0)
@@ -1248,7 +1248,7 @@ EVT_BEGIN(gatekeeper_talk)
         CALL(evt_msg_print_party, STRING("stg4_usu_45"))
         CALL(evt_party_run, 0)
         CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
-        SPAWN_EVENT(PTR(village_chief_change_pig_event))
+        SPAWN_EVENT(village_chief_change_pig_event)
         SET_VALUE(GSW_STORY_PROGRESS, STG4_01_00_GATEKEEPER_CONVERSATION)
         RETURN
         CASE_LESS(STG4_01_THE_MAYORS_A_PIG)
@@ -1350,7 +1350,7 @@ static EVT_BEGIN(musume_a_entry)
     CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ａ"), STRING("踊り子"))
     SET_VALUE(LW(0), STRING("３人娘Ａ"))
-    CALL_CHILD(PTR(musume_a_init))
+    CALL_CHILD(musume_a_init)
     RETURN
 EVT_END()
 
@@ -1359,7 +1359,7 @@ EVT_BEGIN(musume_a_pig_entry)
     CALL(evt_npc_entry, STRING("ブタ３人娘Ａ"), STRING("c_bubusan"))
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ａ"), STRING("ブタ"))
     SET_VALUE(LW(0), STRING("ブタ３人娘Ａ"))
-    CALL_CHILD(PTR(musume_a_init))
+    CALL_CHILD(musume_a_init)
     RETURN
 EVT_END()
 
@@ -1385,7 +1385,7 @@ static EVT_BEGIN(musume_b_entry)
     CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ｂ"), STRING("踊り子ピンク"))
     SET_VALUE(LW(0), STRING("３人娘Ｂ"))
-    CALL_CHILD(PTR(musume_b_init))
+    CALL_CHILD(musume_b_init)
     RETURN
 EVT_END()
 
@@ -1394,7 +1394,7 @@ EVT_BEGIN(musume_b_pig_entry)
     CALL(evt_npc_entry, STRING("ブタ３人娘Ｂ"), STRING("c_bubusan"))
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ｂ"), STRING("ブタ"))
     SET_VALUE(LW(0), STRING("ブタ３人娘Ｂ"))
-    CALL_CHILD(PTR(musume_b_init))
+    CALL_CHILD(musume_b_init)
     RETURN
 EVT_END()
 
@@ -1420,7 +1420,7 @@ static EVT_BEGIN(musume_c_entry)
     CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ｃ"), STRING("踊り子黄緑"))
     SET_VALUE(LW(0), STRING("３人娘Ｃ"))
-    CALL_CHILD(PTR(musume_c_init))
+    CALL_CHILD(musume_c_init)
     RETURN
 EVT_END()
 
@@ -1429,7 +1429,7 @@ EVT_BEGIN(musume_c_pig_entry)
     CALL(evt_npc_entry, STRING("ブタ３人娘Ｃ"), STRING("c_bubusan"))
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ｃ"), STRING("ブタ"))
     SET_VALUE(LW(0), STRING("ブタ３人娘Ｃ"))
-    CALL_CHILD(PTR(musume_c_init))
+    CALL_CHILD(musume_c_init)
     RETURN
 EVT_END()
 
@@ -1937,11 +1937,11 @@ EVT_BEGIN(usu01_crowFG_talk_event)
 #if VERSION >= VERSION_JP
                 CALL(mainwindow_opendisable)
 #endif
-                CALL_CHILD(PTR(cam_up))
+                CALL_CHILD(cam_up)
                 CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 CALL(evt_msg_print, 0, STRING("stg4_jin_153"), 0, STRING("カラスＦ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
 #if VERSION >= VERSION_JP
@@ -1973,7 +1973,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
 #if VERSION >= VERSION_JP
             CALL(mainwindow_opendisable)
 #endif
-            CALL_CHILD(PTR(cam_up))
+            CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
@@ -1987,7 +1987,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_138"), 0, STRING("カラスＧ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_139"), 0, STRING("カラスＦ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_140"), 0, STRING("カラスＧ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
 
                 // The first time, Vivian and Mario step aside and she proposes searching under Creepy Steeple
                 // for the villain's real name (stg4_usu_149_viv, 150_viv).
@@ -2023,15 +2023,15 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 // repeated in new versions after Franklys's house (142_1, 142_2) and after the ending (142_2_1, 142_2_2).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_141"), 0, STRING("カラスＦ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_142"), 0, STRING("カラスＧ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
                 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_142_1"), 0, STRING("カラスＦ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_142_2"), 0, STRING("カラスＧ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
                 CASE_DEFAULT
                 CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_1"), 0, STRING("カラスＦ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_2"), 0, STRING("カラスＧ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
             END_SWITCH
 
             // Controls come back; GW(0) keeps the crows quiet until usu01_check_vivian resets it.
@@ -2113,11 +2113,11 @@ EVT_BEGIN(usu01_crowHI_talk_event)
                 CALL(evt_mario_balloon_off)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
-                CALL_CHILD(PTR(cam_up))
+                CALL_CHILD(cam_up)
                 CALL(evt_npc_get_position, STRING("カラスＨ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 CALL(evt_msg_print, 0, STRING("stg4_jin_153"), 0, STRING("カラスＨ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
             END_IF
         END_IF
@@ -2145,7 +2145,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
 #if VERSION >= VERSION_JP
             CALL(mainwindow_opendisable)
 #endif
-            CALL_CHILD(PTR(cam_up))
+            CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＨ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
@@ -2172,7 +2172,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_1"), 0, STRING("カラスＨ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_2"), 0, STRING("カラスＩ"))
             END_SWITCH
-            CALL_CHILD(PTR(cam_down))
+            CALL_CHILD(cam_down)
 
             // Controls come back; GW(1) keeps the crows quiet until usu01_check_vivian resets it.
             CALL(evt_party_cont_onoff, 0, 1)
@@ -2252,11 +2252,11 @@ EVT_BEGIN(usu01_crowJ_talk_event)
                 CALL(evt_mario_balloon_off)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
-                CALL_CHILD(PTR(cam_up))
+                CALL_CHILD(cam_up)
                 CALL(evt_npc_get_position, STRING("カラスＪ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 CALL(evt_msg_print, 0, STRING("stg4_jin_153"), 0, STRING("カラスＪ"))
-                CALL_CHILD(PTR(cam_down))
+                CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
             END_IF
         END_IF
@@ -2284,7 +2284,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
 #if VERSION >= VERSION_JP
             CALL(mainwindow_opendisable)
 #endif
-            CALL_CHILD(PTR(cam_up))
+            CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＪ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
@@ -2306,7 +2306,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
             END_SWITCH
 
             // Camera returns, Mario's controls come back and the partner is released.
-            CALL_CHILD(PTR(cam_down))
+            CALL_CHILD(cam_down)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
 #if VERSION >= VERSION_JP
@@ -2545,20 +2545,20 @@ EVT_BEGIN(mise_kiza_msg)
         SET_VALUE(LW(1), STRING("stg4_usu_61_3"))
         SET_RAW_VALUE(LW(2), LSWF_USU_01_KIZAYAROU_BUBBLE_ON)
         SET_VALUE(LW(3), 700)
-        CALL_CHILD(PTR(loop_msg))
+        CALL_CHILD(loop_msg)
     END_SIBLING_EVENT
     SET_VALUE(LW(0), STRING("店の主人"))
     SET_VALUE(LW(1), STRING("stg4_usu_61_4"))
     SET_RAW_VALUE(LW(2), LSWF_USU_01_SHOPKEEPER_BUBBLE_ON)
     SET_VALUE(LW(3), 300)
-    CALL_CHILD(PTR(loop_msg))
+    CALL_CHILD(loop_msg)
     RETURN
 EVT_END()
 
 EVT_BEGIN(mawari_house_delay)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_01_THE_MAYORS_A_PIG)
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
-            SPAWN_EVENT(PTR(evt_monban_buta2))
+            SPAWN_EVENT(evt_monban_buta2)
         END_IF
     END_IF
     DELETE_EVENT(GW(3))
@@ -3133,7 +3133,7 @@ EVT_BEGIN(evt_monban_buta_main)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), STRING("e_bero"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_02_DINGE)
     RETURN
 EVT_END()
@@ -3149,7 +3149,7 @@ EVT_BEGIN(evt_monban_buta)
     END_IF
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
-    CALL_CHILD(PTR(evt_monban_buta_main))
+    CALL_CHILD(evt_monban_buta_main)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -3164,7 +3164,7 @@ EVT_BEGIN(evt_monban_buta2)
     END_IF
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
-    CALL_CHILD(PTR(evt_monban_buta_main))
+    CALL_CHILD(evt_monban_buta_main)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -3494,8 +3494,8 @@ static EVT_BEGIN(evt_majin2)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
-    CALL_CHILD(PTR(roll_majin_lecture_init))
-    CALL_CHILD(PTR(roll_majin_lecture))
+    CALL_CHILD(roll_majin_lecture_init)
+    CALL_CHILD(roll_majin_lecture)
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
@@ -3652,7 +3652,7 @@ static TreeAccess tree_tbl[] = {
 /** Registers tree_tbl with the shared tree-shaking script. */
 EVT_BEGIN(usu_01_tree_init)
     SET_VALUE(LW(0), PTR(tree_tbl))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     RETURN
 EVT_END()
 
@@ -3691,20 +3691,20 @@ EVT_BEGIN(usu_01_init_evt)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(evt_usu_kagemario_party_kill)
     CALL(evt_npc_setup, PTR(npcEnt))
 
     // The three young women appear as pigs before the Doopliss fight and as dancers until the Peach report.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_00_WELCOME_TO_STAGE_4, STG4_10_DOOPLISS_BATTLE)
-        CALL_CHILD(PTR(musume_a_pig_entry))
-        CALL_CHILD(PTR(musume_b_pig_entry))
-        CALL_CHILD(PTR(musume_c_pig_entry))
+        CALL_CHILD(musume_a_pig_entry)
+        CALL_CHILD(musume_b_pig_entry)
+        CALL_CHILD(musume_c_pig_entry)
         CASE_BETWEEN(STG4_10_DOOPLISS_BATTLE, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL_CHILD(PTR(musume_a_entry))
-        CALL_CHILD(PTR(musume_b_entry))
-        CALL_CHILD(PTR(musume_c_entry))
+        CALL_CHILD(musume_a_entry)
+        CALL_CHILD(musume_b_entry)
+        CALL_CHILD(musume_c_entry)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("usu_00_lock"), ITEM_SHOP_KEY, FLOAT(-263.5f), FLOAT(10.099609f), FLOAT(-432.0498f), 135, PTR(lock_item_check), PTR(unlock), GSWF_USU_01_STOREROOM_UNLOCKED)
@@ -3714,18 +3714,18 @@ EVT_BEGIN(usu_01_init_evt)
 
     // Register the doors of the three houses.
     SET_VALUE(LW(0), PTR(&door_1))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_2_1))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_3))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3_u"), 0, PTR(evt_ie2_door2_2), 0)
 
     // Gatekeeper-pig scenes, the shop sounds and the shop itself (from the storeroom unlock on).
-    SPAWN_EVENT(PTR(evt_monban_look))
+    SPAWN_EVENT(evt_monban_look)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_01_THE_MAYORS_A_PIG)
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
-            SPAWN_EVENT(PTR(evt_monban_buta))
+            SPAWN_EVENT(evt_monban_buta)
         END_IF
     END_IF
     SPAWN_EVENT_GET_ID(PTR(usu01_gusun), GW(4))
@@ -3746,10 +3746,10 @@ EVT_BEGIN(usu_01_init_evt)
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)
     SET_VALUE(GW(2), 0)
-    SPAWN_EVENT(PTR(usu01_check_vivian))
-    SPAWN_EVENT(PTR(usu01_crowFG_talk_event))
-    SPAWN_EVENT(PTR(usu01_crowHI_talk_event))
-    SPAWN_EVENT(PTR(usu01_crowJ_talk_event))
+    SPAWN_EVENT(usu01_check_vivian)
+    SPAWN_EVENT(usu01_crowFG_talk_event)
+    SPAWN_EVENT(usu01_crowHI_talk_event)
+    SPAWN_EVENT(usu01_crowJ_talk_event)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_02_03_OPENING_THE_GATE)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_mon"), 0, PTR(evt_mon_open), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
@@ -3769,10 +3769,10 @@ EVT_BEGIN(usu_01_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki3"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki4"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki5"), MAP_OBJ_FLAG_CLIP)
-    CALL_CHILD(PTR(usu_01_tree_init))
+    CALL_CHILD(usu_01_tree_init)
     SET_VALUE(LW(10), STRING("ki3"))
     SET_VALUE(LW(11), 450)
-    SPAWN_EVENT(PTR(tree_onoff))
+    SPAWN_EVENT(tree_onoff)
 
     // Place the items: a Star Piece, a Life Shroom, a Boo's Sheet,
     // a Jammin' Jelly and an Inn Coupon, plus the Defend Plus chest.
@@ -3798,7 +3798,7 @@ EVT_BEGIN(usu_01_init_evt)
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_TELL_THAT_PERSON), 1)
         CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF_USU_01_METEOR_MEAL, 0)
     END_IF
-    SPAWN_EVENT(PTR(evt_sub_mail_event))
+    SPAWN_EVENT(evt_sub_mail_event)
     RETURN
 EVT_END()
 

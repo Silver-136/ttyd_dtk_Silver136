@@ -1049,23 +1049,23 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 4)
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_1))
-            CALL_CHILD(PTR(btldefaultevt_Damage))
+            CALL_CHILD(btldefaultevt_Damage)
         ELSE
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_1_hone))
-            CALL_CHILD(PTR(btldefaultevt_Damage))
+            CALL_CHILD(btldefaultevt_Damage)
         END_IF
         RETURN
     END_IF
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(btldefaultevt_Damage))
+        CALL_CHILD(btldefaultevt_Damage)
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_HIT_THIS_TURN, 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, 2)
-        CALL_CHILD(PTR(btldefaultevt_Damage))
+        CALL_CHILD(btldefaultevt_Damage)
         CASE_EQUAL(4)
-        CALL_CHILD(PTR(mode2_honeduka_damage_event))
+        CALL_CHILD(mode2_honeduka_damage_event)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1249,10 +1249,10 @@ EVT_BEGIN(attack_event_mode1)
     SWITCH(LW(0))
         CASE_OR_EQUAL(0)
         CASE_OR_EQUAL(1)
-        CALL_CHILD(PTR(at1_normal_attack))
+        CALL_CHILD(at1_normal_attack)
         CASE_END
         CASE_EQUAL(2)
-        CALL_CHILD(PTR(at1_midaregiri_attack))
+        CALL_CHILD(at1_midaregiri_attack)
         CASE_DEFAULT
     END_SWITCH
     RETURN
@@ -1268,23 +1268,23 @@ EVT_END()
 EVT_BEGIN(attack_event_mode2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(at2_hone_rain_attack_event))
+        CALL_CHILD(at2_hone_rain_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
         CASE_OR_EQUAL(2)
         CASE_OR_EQUAL(3)
-        CALL_CHILD(PTR(at2_hone_charge_event))
+        CALL_CHILD(at2_hone_charge_event)
         RETURN
         CASE_END
     END_SWITCH
     CALL(btlevtcmd_DrawLots, LW(0), 2, 25, 75)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL_CHILD(PTR(at2_hone_charge_event))
+        CALL_CHILD(at2_hone_charge_event)
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(at2_head_bat_event))
+        CALL_CHILD(at2_head_bat_event)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1667,12 +1667,12 @@ EVT_BEGIN(attack_event_mode3)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_AUDIENCE_ATTACK_COUNT, LW(0))
                 ADD(LW(0), 1)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_AUDIENCE_ATTACK_COUNT, LW(0))
-                CALL_CHILD(PTR(attack_audience_event))
+                CALL_CHILD(attack_audience_event)
                 RETURN
             END_IF
         END_IF
     END_IF
-    CALL_CHILD(PTR(at3_kamitsuki_attack))
+    CALL_CHILD(at3_kamitsuki_attack)
     RETURN
 EVT_END()
 
@@ -2219,7 +2219,7 @@ EVT_END()
  * and the ribs are closed, it opens them (mode2_rib_open_event).
  */
 static EVT_BEGIN(cortez_damage_sub_event)
-    CALL_CHILD(PTR(cortez_reset_pose_table))
+    CALL_CHILD(cortez_reset_pose_table)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
@@ -2263,7 +2263,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
                     CASE_OR_EQUAL(3)
                     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
                     IF_INT_EQUAL(LW(0), 0)
-                        CALL_CHILD(PTR(mode2_rib_open_event))
+                        CALL_CHILD(mode2_rib_open_event)
                     END_IF
                     CASE_END
                 END_SWITCH
@@ -2660,7 +2660,7 @@ EVT_BEGIN(mode2_honeduka_damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(8))
-            CALL_CHILD(PTR(mode_change_event))
+            CALL_CHILD(mode_change_event)
         END_SIBLING_EVENT
     END_IF
     BEGIN_SIBLING_EVENT_GET_ID(LW(9))
@@ -2677,7 +2677,7 @@ EVT_BEGIN(mode2_honeduka_damage_event)
     END_IF
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL_CHILD(PTR(dead_event))
+        CALL_CHILD(dead_event)
         RETURN
     END_IF
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

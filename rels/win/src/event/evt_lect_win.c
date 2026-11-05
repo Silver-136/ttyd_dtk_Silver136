@@ -616,7 +616,7 @@ EVT_BEGIN(all_party_lecture)
     // Mario blinks out of view (the loop ends with MARIO_DISP_FLAG_HIDE set) and the partner's lesson runs (here only Flurrie has one: cloud_party_lecture).
     SWITCH(LW(9))
         CASE_EQUAL(5)
-        CALL_CHILD(PTR(cloud_party_lecture_init))
+        CALL_CHILD(cloud_party_lecture_init)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -631,7 +631,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     SWITCH(LW(9))
         CASE_EQUAL(5)
-        CALL_CHILD(PTR(cloud_party_lecture))
+        CALL_CHILD(cloud_party_lecture)
     END_SWITCH
 
     // Mario and the partner blink as the lecture ends.

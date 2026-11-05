@@ -429,7 +429,7 @@ EVT_BEGIN(mezame_init_evt)
     BEGIN_INLINE_EVENT
         CALL(cam_yure)
     END_INLINE_EVENT
-    SPAWN_EVENT(PTR(evt_mezame))
+    SPAWN_EVENT(evt_mezame)
     RETURN
 EVT_END()
 
@@ -448,9 +448,9 @@ EVT_BEGIN(gor_10_init_evt)
     END_IF
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
-        CALL_CHILD(PTR(tegami_init_evt))
+        CALL_CHILD(tegami_init_evt)
     ELSE
-        CALL_CHILD(PTR(mezame_init_evt))
+        CALL_CHILD(mezame_init_evt)
     END_IF
     RETURN
 EVT_END()

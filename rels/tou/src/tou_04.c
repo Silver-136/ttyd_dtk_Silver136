@@ -679,7 +679,7 @@ EVT_BEGIN(init_g_1)
             CALL(evt_bero_get_entername, LW(0))
             IF_STR_EQUAL(LW(0), STRING("s_bero_7"))
                 SET_VALUE(GSWF_TOU_04_CONFISCATED_EXIT_SEEN, 1)
-                SPAWN_EVENT(PTR(move_g_1_dokimasen))
+                SPAWN_EVENT(move_g_1_dokimasen)
             END_IF
         END_IF
     END_IF
@@ -702,7 +702,7 @@ EVT_BEGIN(move_g_1_dokimasu)
     CALL(evt_npc_move_position, STRING("me"), LW(10), LW(12), 0, FLOAT(80.0f), 1)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
     SET_VALUE(LW(0), STRING("s_bero_7"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
     RETURN
 EVT_END()
@@ -724,7 +724,7 @@ EVT_BEGIN(talk_g_1)
         CASE_BETWEEN(STG3_20_01_SUPER_HAMMER, STG3_20_03_THE_YELLOW_BLOCK)
         CALL(evt_msg_print, 0, STRING("stg3_tou_297_13"), 0, 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
-            CALL_CHILD(PTR(move_g_1_dokimasu))
+            CALL_CHILD(move_g_1_dokimasu)
         END_IF
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
         CALL(evt_msg_print, 0, STRING("stg3_tou_96_01"), 0, 0)
@@ -758,20 +758,20 @@ EVT_BEGIN(move_g_1)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
             SET_VALUE(LW(0), 0)
-            CALL_CHILD(PTR(move_g))
+            CALL_CHILD(move_g)
         END_IF
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_GREATER(LW(0), 10)
             SET_VALUE(LW(0), 0)
-            CALL_CHILD(PTR(move_g))
+            CALL_CHILD(move_g)
         END_IF
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 1)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_GREATER(LW(0), 10)
                 SET_VALUE(LW(0), 0)
-                CALL_CHILD(PTR(move_g))
+                CALL_CHILD(move_g)
             END_IF
         END_IF
     END_SWITCH
@@ -827,29 +827,29 @@ EVT_END()
 EVT_BEGIN(move_g_2)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         RETURN
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
             SET_VALUE(LW(0), 1)
-            CALL_CHILD(PTR(move_g))
+            CALL_CHILD(move_g)
             RETURN
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         RETURN
     END_IF
     RETURN
@@ -906,11 +906,11 @@ EVT_BEGIN(move_g_3)
         CASE_LESS(1)
         IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
             SET_VALUE(LW(0), 2)
-            CALL_CHILD(PTR(move_g))
+            CALL_CHILD(move_g)
         END_IF
         CASE_LESS(11)
         SET_VALUE(LW(0), 2)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         CASE_DEFAULT
     END_SWITCH
     RETURN
@@ -928,7 +928,7 @@ EVT_BEGIN(move_g_4_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -350, 0, -530)
 #if VERSION >= VERSION_JP
     SET_VALUE(LW(0), 5)
-    CALL_CHILD(PTR(bero_case_switch_off))
+    CALL_CHILD(bero_case_switch_off)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -983,7 +983,7 @@ EVT_BEGIN(init_g_4)
             CALL(evt_npc_set_ry, STRING("me"), 270)
 #endif
             IF_INT_EQUAL(LF(2), 1)
-                SPAWN_EVENT(PTR(move_g_4_dokimasen))
+                SPAWN_EVENT(move_g_4_dokimasen)
             END_IF
         END_IF
     END_IF
@@ -1022,7 +1022,7 @@ EVT_BEGIN(talk_g_4)
 #if VERSION >= VERSION_JP
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
             SET_VALUE(LW(0), 5)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
 #endif
         ELSE
             // On later visits he only tells Mario to go talk to Mr. Grubba.
@@ -1080,7 +1080,7 @@ EVT_BEGIN(talk_g_4)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
             SET_VALUE(LW(0), 5)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
         ELSE
             SWITCH(GSW_TROUBLE_ACCEPTED)
                 CASE_EQUAL(13)
@@ -1106,21 +1106,21 @@ EVT_END()
 EVT_BEGIN(move_g_4)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
         SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
         SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
         CASE_LESS(STG3_06_1ST_MATCH)
         SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         CASE_EQUAL(STG3_30_04_AIR_DUCT_EXIT)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("s_bero_5"))
@@ -1132,7 +1132,7 @@ EVT_BEGIN(move_g_4)
         END_IF
         CASE_BETWEEN(STG3_31_GRUBBAS_PLANS, STG3_33_06_BOWSER_TREASURE)
         SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1192,11 +1192,11 @@ EVT_BEGIN(move_g_6)
     SWITCH(LW(0))
         CASE_LESS(1)
         SET_VALUE(LW(0), 5)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
             SET_VALUE(LW(0), 5)
-            CALL_CHILD(PTR(move_g))
+            CALL_CHILD(move_g)
         END_IF
     END_SWITCH
     RETURN
@@ -1285,7 +1285,7 @@ EVT_END()
 EVT_BEGIN(move_g_9)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
         SET_VALUE(LW(0), 8)
-        CALL_CHILD(PTR(move_g))
+        CALL_CHILD(move_g)
     END_IF
     RETURN
 EVT_END()
@@ -1693,11 +1693,11 @@ EVT_BEGIN(evt_gans)
     CALL(evt_party_set_pos, 0, -350, 0, -600)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 5)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_5_door_open))
+        CALL_CHILD(_5_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1705,11 +1705,11 @@ EVT_BEGIN(evt_gans)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         SET_VALUE(LW(1), 5)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(_5_door_open))
+            CALL_CHILD(_5_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1725,11 +1725,11 @@ EVT_BEGIN(evt_gans)
     CALL(evt_npc_move_position, STRING("ガンス"), 320, -500, 0, FLOAT(90.0f), 1)
     CALL(evt_npc_move_position, STRING("ガンス"), 350, -530, 0, FLOAT(90.0f), 1)
     SET_VALUE(LW(1), 3)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_3_door_open))
+        CALL_CHILD(_3_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1746,11 +1746,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_party_set_pos, 0, -350, 0, -590)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 5)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_5_door_open))
+        CALL_CHILD(_5_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1758,11 +1758,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         SET_VALUE(LW(1), 5)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(_5_door_open))
+            CALL_CHILD(_5_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1794,11 +1794,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(600)
     SET_VALUE(LW(1), 7)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_7_door_open))
+        CALL_CHILD(_7_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1815,11 +1815,11 @@ EVT_BEGIN(evt_kinoshikowa2)
     CALL(evt_party_set_pos, 0, -350, 0, -590)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 5)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_5_door_open))
+        CALL_CHILD(_5_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1827,11 +1827,11 @@ EVT_BEGIN(evt_kinoshikowa2)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         SET_VALUE(LW(1), 5)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(_5_door_open))
+            CALL_CHILD(_5_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1849,11 +1849,11 @@ EVT_BEGIN(evt_kinoshikowa2)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -550, -333, 0, FLOAT(75.0f), 1)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -585, -290, 0, FLOAT(75.0f), 1)
     SET_VALUE(LW(1), 6)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_6_door_open))
+        CALL_CHILD(_6_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1872,11 +1872,11 @@ EVT_BEGIN(evt_kinoshikowa3)
     CALL(evt_party_set_dir, 0, 270, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_6_door_open))
+        CALL_CHILD(_6_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1884,11 +1884,11 @@ EVT_BEGIN(evt_kinoshikowa3)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         SET_VALUE(LW(1), 6)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(_6_door_open))
+            CALL_CHILD(_6_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1910,11 +1910,11 @@ EVT_BEGIN(evt_kinoshikowa3)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 340, -500, 0, FLOAT(75.0f), 1)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 340, -530, 0, FLOAT(75.0f), 1)
     SET_VALUE(LW(1), 3)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_3_door_open))
+        CALL_CHILD(_3_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1928,11 +1928,11 @@ static EVT_BEGIN(evt_gardman)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 7)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_7_door_open))
+        CALL_CHILD(_7_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1953,11 +1953,11 @@ static EVT_BEGIN(evt_gardman)
     WAIT_MS(500)
     CALL(evt_party_move_pos2, 0, -550, 300, FLOAT(60.0f))
     SET_VALUE(LW(1), 7)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_7_door_open))
+        CALL_CHILD(_7_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1970,11 +1970,11 @@ static EVT_BEGIN(evt_gardman)
     END_LOOP
     CALL(evt_msg_print, 0, STRING("stg3_tou_76"), 0, STRING("ガードマン１"))
     SET_VALUE(LW(1), 10)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n2_door_open))
+        CALL_CHILD(n2_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1997,11 +1997,11 @@ EVT_BEGIN(evt_gardman2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_6_door_open))
+        CALL_CHILD(_6_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2022,11 +2022,11 @@ EVT_BEGIN(evt_gardman2)
     WAIT_MS(500)
     CALL(evt_party_move_pos2, 0, -550, -300, FLOAT(60.0f))
     SET_VALUE(LW(1), 6)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_6_door_open))
+        CALL_CHILD(_6_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2039,11 +2039,11 @@ EVT_BEGIN(evt_gardman2)
     END_LOOP
     CALL(evt_msg_print, 0, STRING("stg3_tou_328"), 0, STRING("ガードマン３"))
     SET_VALUE(LW(1), 10)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n2_door_open))
+        CALL_CHILD(n2_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2062,11 +2062,11 @@ EVT_BEGIN(evt_gardman3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_6_door_open))
+        CALL_CHILD(_6_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2089,11 +2089,11 @@ EVT_BEGIN(evt_gardman3)
     CALL(evt_party_move_pos2, 0, -550, -270, FLOAT(60.0f))
     CALL(evt_party_set_dir_npc, 0, STRING("ガードマン３"))
     SET_VALUE(LW(1), 6)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_6_door_open))
+        CALL_CHILD(_6_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2148,11 +2148,11 @@ EVT_BEGIN(evt_gardman3)
 
     // At the far end the guard opens the door to tou_11 (the empty minor-league locker room).
     SET_VALUE(LW(1), 1)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_1_door_open))
+        CALL_CHILD(_1_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2172,11 +2172,11 @@ EVT_BEGIN(evt_gardman4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 3)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_3_door_open))
+        CALL_CHILD(_3_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2199,11 +2199,11 @@ EVT_BEGIN(evt_gardman4)
     WAIT_MS(500)
     CALL(evt_party_move_pos2, 0, 350, -510, FLOAT(60.0f))
     SET_VALUE(LW(1), 3)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(_3_door_open))
+        CALL_CHILD(_3_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2216,11 +2216,11 @@ EVT_BEGIN(evt_gardman4)
     END_LOOP
     CALL(evt_msg_print, 0, STRING("stg3_tou_454"), 0, STRING("ガードマン６"))
     SET_VALUE(LW(1), 10)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n2_door_open))
+        CALL_CHILD(n2_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -2338,7 +2338,7 @@ EVT_END()
 static EVT_BEGIN(evt_lock)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
     SET_VALUE(LW(0), STRING("s_bero_4"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_pouch_remove_item, ITEM_STORAGE_KEY_0x12, LW(0))
     RETURN
 EVT_END()
@@ -2487,9 +2487,9 @@ EVT_BEGIN(tou_04_init_evt)
     // Set up the doors, guards, the Last Stand badge on the floor and the two save blocks.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_cam_road_reset)
-    SPAWN_EVENT(PTR(evt_drop))
+    SPAWN_EVENT(evt_drop)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, ITEM_TYPE_STILL, GSWF_TOU_04_LAST_STAND, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save1"), -520, 60, -110, 0, 0)
@@ -2503,25 +2503,25 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_mario_set_pos, -350, 0, -580)
         CALL(evt_party_set_pos, 0, -350, 0, -600)
         SET_VALUE(LW(1), 1)
-        SPAWN_EVENT(PTR(evt_gans))
+        SPAWN_EVENT(evt_gans)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -390, 0, -510)
         CALL(evt_party_set_pos, 0, -390, 0, -510)
-        SPAWN_EVENT(PTR(evt_kinoshikowa))
+        SPAWN_EVENT(evt_kinoshikowa)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -390, 0, -510)
         CALL(evt_party_set_pos, 0, -390, 0, -510)
-        SPAWN_EVENT(PTR(evt_kinoshikowa2))
+        SPAWN_EVENT(evt_kinoshikowa2)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -625, 0, -300)
         CALL(evt_party_set_pos, 0, -630, 0, -300)
-        SPAWN_EVENT(PTR(evt_kinoshikowa3))
+        SPAWN_EVENT(evt_kinoshikowa3)
     END_IF
 
     // Choose the music and ambience for the story point: none during Grubba's plans, Grubba's theme while his
@@ -2584,13 +2584,13 @@ EVT_BEGIN(tou_04_init_evt)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, -625, 0, 300)
         CALL(evt_party_set_pos, 0, -640, 0, 300)
-        SPAWN_EVENT(PTR(evt_gardman))
+        SPAWN_EVENT(evt_gardman)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, -625, 0, -300)
         CALL(evt_party_set_pos, 0, -640, 0, -300)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
-        SPAWN_EVENT(PTR(evt_gardman2))
+        SPAWN_EVENT(evt_gardman2)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
         CALL(evt_mario_set_pos, -625, 0, -300)
@@ -2598,13 +2598,13 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_party_set_dir, 0, 270, 0)
-        SPAWN_EVENT(PTR(evt_gardman3))
+        SPAWN_EVENT(evt_gardman3)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, 350, 0, -580)
         CALL(evt_party_set_pos, 0, 350, 0, -600)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
-        SPAWN_EVENT(PTR(evt_gardman4))
+        SPAWN_EVENT(evt_gardman4)
     END_IF
 
     // Coming back from the toilets, Mario appears by the toilet door;
@@ -2613,14 +2613,14 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_mario_set_pos, 530, 0, 530)
         CALL(evt_party_set_pos, 0, 530, 0, 530)
         CALL(evt_cam_road_reset)
-        SPAWN_EVENT(PTR(evt_toile))
+        SPAWN_EVENT(evt_toile)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF_TOU_08_TOILET_WARP_PENDING, 1)
         CALL(evt_mario_set_pos, 530, 0, 530)
         CALL(evt_party_set_pos, 0, 530, 0, 530)
         CALL(evt_cam_road_reset)
-        SPAWN_EVENT(PTR(evt_toile2))
+        SPAWN_EVENT(evt_toile2)
         RETURN
     END_IF
 
@@ -2629,7 +2629,7 @@ EVT_BEGIN(tou_04_init_evt)
     SET_VALUE(LW(2), 0)
     LOOP(11)
         SET_VALUE(LW(0), LW(2))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         ADD(LW(2), 1)
     END_LOOP
     SWITCH(GSW_STORY_PROGRESS)
@@ -2638,55 +2638,55 @@ EVT_BEGIN(tou_04_init_evt)
 #endif
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         SET_VALUE(LW(0), 5)
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_DEFAULT
         CALL(evt_tou_get_ranking, LW(0))
         SWITCH(LW(0))
             CASE_LESS(1)
             SET_VALUE(LW(0), 3)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
             CASE_LESS(11)
             SET_VALUE(LW(0), 6)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
             CASE_DEFAULT
             SET_VALUE(LW(0), 7)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
         END_SWITCH
     END_SWITCH
 
     // Enable the side exits by default, then apply special access for the minor-league return,
     // the first Rawk Hawk match and Grubba's plans.
     SET_VALUE(LW(0), 0)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     SET_VALUE(LW(0), 8)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
         SET_VALUE(LW(0), STRING("s_bero_7"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
         SET_VALUE(LW(0), STRING("s_bero_7"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
             SET_VALUE(LW(0), 10)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
             SET_VALUE(LW(0), 0)
-            CALL_CHILD(PTR(bero_case_switch_off))
+            CALL_CHILD(bero_case_switch_off)
             SET_VALUE(LW(0), 8)
-            CALL_CHILD(PTR(bero_case_switch_off))
+            CALL_CHILD(bero_case_switch_off)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         SET_VALUE(LW(0), 10)
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         SET_VALUE(LW(0), 0)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         SET_VALUE(LW(0), 8)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
 #if VERSION < VERSION_US
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
@@ -2698,11 +2698,11 @@ EVT_BEGIN(tou_04_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(LW(0), 5)
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
         ELSE
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
                 SET_VALUE(LW(0), 5)
-                CALL_CHILD(PTR(bero_case_switch_on))
+                CALL_CHILD(bero_case_switch_on)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
 #if VERSION <= VERSION_DEMO_JP
@@ -2711,7 +2711,7 @@ EVT_BEGIN(tou_04_init_evt)
 #else
                 IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
                     SET_VALUE(LW(0), 5)
-                    CALL_CHILD(PTR(bero_case_switch_on))
+                    CALL_CHILD(bero_case_switch_on)
                 END_IF
 #endif
             END_IF
@@ -2738,17 +2738,17 @@ EVT_BEGIN(tou_04_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("s_bero_4"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     ELSE
         SET_VALUE(LW(0), STRING("s_bero_4"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
     IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
         IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 11)
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
-                    SPAWN_EVENT(PTR(evt_souko_talk))
+                    SPAWN_EVENT(evt_souko_talk)
                 END_IF
             END_IF
         END_IF
@@ -2756,14 +2756,14 @@ EVT_BEGIN(tou_04_init_evt)
 
     // Rawk Hawk's escape scene and the rank-10 return from the minor-league locker room play at their story points.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_05_MAJORS_4TH_PL)
-        SPAWN_EVENT(PTR(evt_bred_nigeru))
+        SPAWN_EVENT(evt_bred_nigeru)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("s_bero_7"))
             CALL(evt_tou_get_ranking, LW(1))
             IF_INT_EQUAL(LW(1), 10)
-                SPAWN_EVENT(PTR(out_from_tou_10_re))
+                SPAWN_EVENT(out_from_tou_10_re)
             END_IF
         END_IF
     END_IF

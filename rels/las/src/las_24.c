@@ -310,7 +310,7 @@ static EVT_BEGIN(dai_evt)
 #if VERSION >= VERSION_US
     CALL(las_24_adjust_for_framerate, LW(2), LW(2))
 #endif
-    CALL_CHILD(PTR(move_dai))
+    CALL_CHILD(move_dai)
     RETURN
 EVT_END()
 
@@ -333,11 +333,11 @@ EVT_BEGIN(las_24_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_24a"), MAP_OBJ_FLAG_CLIP)
-    SPAWN_EVENT(PTR(haguruma_evt))
+    SPAWN_EVENT(haguruma_evt)
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_12_LARGE_STONE_BLOCK)
         IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)

@@ -1783,7 +1783,7 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_ere_1"), MAP_ANIM_PLAY_ONCE, 0)
-    SPAWN_EVENT(PTR(evt_elv_rumble))
+    SPAWN_EVENT(evt_elv_rumble)
     CALL(evt_map_checkanim, STRING("anm_ere_1"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1901,7 +1901,7 @@ EVT_BEGIN(evt_elv_down)
     // On the first ride down Mario and the partner first see the Smorgs (which sets the encounter step);
     // while the story is at that step the danger music plays on arrival.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_39_SMORG_1ST_ENCOUNTER)
-        CALL_CHILD(PTR(evt_meet_moamoa))
+        CALL_CHILD(evt_meet_moamoa)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_39_SMORG_1ST_ENCOUNTER)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
@@ -1991,7 +1991,7 @@ EVT_BEGIN(evt_elv_up)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_ere_2"), MAP_ANIM_PLAY_ONCE, 0)
-    SPAWN_EVENT(PTR(evt_elv_rumble))
+    SPAWN_EVENT(evt_elv_rumble)
     CALL(evt_map_checkanim, STRING("anm_ere_2"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -2094,10 +2094,10 @@ EVT_BEGIN(evt_elv)
         CALL(evt_msg_print, 0, STRING("stg6_eki_07"), 0, 0)
     END_IF
     IF_INT_EQUAL(GF(0), 0)
-        CALL_CHILD(PTR(evt_elv_down))
+        CALL_CHILD(evt_elv_down)
         SET_VALUE(GF(0), 1)
     ELSE
-        CALL_CHILD(PTR(evt_elv_up))
+        CALL_CHILD(evt_elv_up)
         SET_VALUE(GF(0), 0)
     END_IF
     CALL(evt_party_run, 0)
@@ -2154,20 +2154,20 @@ EVT_BEGIN(eki_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 0)
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     ELSE
-        CALL_CHILD(PTR(bero_case_entry))
+        CALL_CHILD(bero_case_entry)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_37_ELEVATOR_KEY)
-        CALL_CHILD(PTR(evt_elv_init))
+        CALL_CHILD(evt_elv_init)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_suitti"), 0, PTR(evt_elv), 0)
     ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_suitti"), 0, PTR(evt_elv_nomsg), 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
-        CALL_CHILD(PTR(evt_moamoa_init))
+        CALL_CHILD(evt_moamoa_init)
     END_IF
     CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 130, -60, ITEM_TYPE_STILL_NO_TOUCH, GSWF_EKI_00_CLOSE_CALL_P, 0)
     IF_INT_EQUAL(GSWF_EKI_00_CLOSE_CALL_P, 0)
@@ -2176,7 +2176,7 @@ EVT_BEGIN(eki_00_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI2"))
     IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
-        SPAWN_EVENT(PTR(evt_bridge2))
+        SPAWN_EVENT(evt_bridge2)
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kan"), 0, PTR(evt_kanban), 0)
     RETURN

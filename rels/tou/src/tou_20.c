@@ -191,10 +191,10 @@ EVT_BEGIN(tou_20_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("start"))
         CALL(evt_cam3d_evt_set, -3020, 129, -6, -212, 722, 807, 0, EASING_SINE_IN_OUT)
-        SPAWN_EVENT(PTR(evt_anim))
+        SPAWN_EVENT(evt_anim)
     ELSE
         CALL(evt_cam3d_evt_set, -700, 866, 4657, -700, 38, -60, 0, EASING_SINE_IN_OUT)
-        SPAWN_EVENT(PTR(evt_anim2))
+        SPAWN_EVENT(evt_anim2)
     END_IF
     CALL(evt_bg_auto_scroll_onoff, 1)
     BEGIN_INLINE_EVENT

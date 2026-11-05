@@ -82,7 +82,7 @@ EVT_BEGIN(clouda_house_out)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_cam_y_off)
     CALL(evt_mario_set_pos, 277, 54, -450)
-    CALL_CHILD(PTR(bero_case_entry))
+    CALL_CHILD(bero_case_entry)
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()

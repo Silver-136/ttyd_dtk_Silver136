@@ -490,7 +490,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -508,7 +508,7 @@ static EVT_BEGIN(attack_event)
     // In a first strike the X-Naut PhD simply throws its fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(fire_bottle_event))
+        CALL_CHILD(fire_bottle_event)
         GOTO(99)
     END_IF
 
@@ -544,14 +544,14 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(1), LW(0))
 
         // Fire bottle: a flaming bottle at one target.
-        CALL_CHILD(PTR(fire_bottle_event))
+        CALL_CHILD(fire_bottle_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
 
         // Hunyahunya bottle thrown at one target.
-        CALL_CHILD(PTR(hunyahunya_bottle_event))
+        CALL_CHILD(hunyahunya_bottle_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
@@ -560,7 +560,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_EQUAL(LW(2), 0)
 
             // Yokeyoke potion: it makes itself Dodgy.
-            CALL_CHILD(PTR(yokeyoke_bottle_event))
+            CALL_CHILD(yokeyoke_bottle_event)
             GOTO(99)
         END_IF
     END_IF
@@ -568,21 +568,21 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(1), LW(0))
 
         // Minimini bottle: a shrinking bottle at the whole opposing side.
-        CALL_CHILD(PTR(minimini_bottle_event))
+        CALL_CHILD(minimini_bottle_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
 
         // It heals one ally.
-        CALL_CHILD(PTR(one_recover_event))
+        CALL_CHILD(one_recover_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 5)
     IF_INT_LESS(LW(1), LW(0))
 
         // It heals every ally.
-        CALL_CHILD(PTR(all_recover_event))
+        CALL_CHILD(all_recover_event)
         GOTO(99)
     END_IF
     GOTO(10)
@@ -600,7 +600,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(1), LW(0))
 
         // Fire bottle at one target.
-        CALL_CHILD(PTR(fire_bottle_event))
+        CALL_CHILD(fire_bottle_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 20)
@@ -610,7 +610,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_EQUAL(LW(2), 0)
 
             // A Dodgy potion handed to Lord Crump.
-            CALL_CHILD(PTR(yokeyoke_bottle_event_with_kanbu))
+            CALL_CHILD(yokeyoke_bottle_event_with_kanbu)
             GOTO(99)
         END_IF
     END_IF
@@ -621,7 +621,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_EQUAL(LW(2), 0)
 
             // An HP-regen potion handed to Lord Crump.
-            CALL_CHILD(PTR(ziwaziwa_bottle_event))
+            CALL_CHILD(ziwaziwa_bottle_event)
             GOTO(99)
         END_IF
     END_IF
@@ -887,13 +887,13 @@ static EVT_BEGIN(fire_bottle_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         GOTO(99)
     END_IF
-    CALL_CHILD(PTR(attack_common_event1))
-    CALL_CHILD(PTR(attack_common_event2))
+    CALL_CHILD(attack_common_event1)
+    CALL_CHILD(attack_common_event2)
     LABEL(99)
     RETURN
 EVT_END()
@@ -910,13 +910,13 @@ static EVT_BEGIN(hunyahunya_bottle_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         GOTO(99)
     END_IF
-    CALL_CHILD(PTR(attack_common_event1))
-    CALL_CHILD(PTR(attack_common_event2))
+    CALL_CHILD(attack_common_event1)
+    CALL_CHILD(attack_common_event2)
     LABEL(99)
     RETURN
 EVT_END()
@@ -1160,8 +1160,8 @@ EVT_END()
 static EVT_BEGIN(yokeyoke_bottle_event_with_kanbu)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
     CALL(kanbu_get_id, LW(3), LW(4))
-    CALL_CHILD(PTR(attack_common_event1))
-    CALL_CHILD(PTR(attack_common_event3))
+    CALL_CHILD(attack_common_event1)
+    CALL_CHILD(attack_common_event3)
     LABEL(99)
     RETURN
 EVT_END()
@@ -1170,8 +1170,8 @@ EVT_END()
 static EVT_BEGIN(ziwaziwa_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_ziwaziwa_bottle))
     CALL(kanbu_get_id, LW(3), LW(4))
-    CALL_CHILD(PTR(attack_common_event1))
-    CALL_CHILD(PTR(attack_common_event3))
+    CALL_CHILD(attack_common_event1)
+    CALL_CHILD(attack_common_event3)
     LABEL(99)
     RETURN
 EVT_END()

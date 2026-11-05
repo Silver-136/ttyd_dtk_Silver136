@@ -613,7 +613,7 @@ EVT_BEGIN(all_party_lecture)
     SWITCH(LW(9))
         CASE_EQUAL(3)
         // Bobbery gets his own demonstration set up first.
-        CALL_CHILD(PTR(sanders_party_lecture_init))
+        CALL_CHILD(sanders_party_lecture_init)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -628,7 +628,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     SWITCH(LW(9))
         CASE_EQUAL(3)
-        CALL_CHILD(PTR(sanders_party_lecture))
+        CALL_CHILD(sanders_party_lecture)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)

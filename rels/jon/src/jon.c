@@ -223,9 +223,9 @@ EVT_BEGIN(jon_init_evt)
         SET_VALUE(GSW_JON_DEEPEST_LEVEL, LW(0))
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kanban"), 0, PTR(evt_kanban), 0)
-    CALL_CHILD(PTR(idouya_setup))
-    CALL_CHILD(PTR(gyousyou_setup))
-    CALL_CHILD(PTR(enemy_setup))
+    CALL_CHILD(idouya_setup)
+    CALL_CHILD(gyousyou_setup)
+    CALL_CHILD(enemy_setup)
 
     // Choose the floor layout from the floor number: the boss floor, a rest-room floor, the floor before one,
     // or a plain floor.
@@ -238,13 +238,13 @@ EVT_BEGIN(jon_init_evt)
     SWITCH(LW(1))
         CASE_EQUAL(0)
         IF_INT_EQUAL(LW(2), 10)
-            CALL_CHILD(PTR(setup_boss))
+            CALL_CHILD(setup_boss)
         ELSE
-            CALL_CHILD(PTR(setup_return))
+            CALL_CHILD(setup_return)
             CALL(evt_mobj_floatswitch_blue, 0, STRING("sw"), -75, 60, 0, PTR(dokan_open2), 0)
         END_IF
         CASE_EQUAL(9)
-        CALL_CHILD(PTR(setup_prev_return))
+        CALL_CHILD(setup_prev_return)
         CALL(evt_npc_check, STRING("敵"), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 1)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
@@ -262,7 +262,7 @@ EVT_BEGIN(jon_init_evt)
         END_IF
 #endif
         CASE_DEFAULT
-        CALL_CHILD(PTR(setup_normal))
+        CALL_CHILD(setup_normal)
         CALL(evt_npc_check, STRING("敵"), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 1)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
@@ -283,7 +283,7 @@ EVT_BEGIN(jon_init_evt)
 
     // Trouble Center job 12 (the sailor) is set up here on every floor map; iri_12_init does something only while
     // that job is accepted.
-    CALL_CHILD(PTR(iri_12_init))
+    CALL_CHILD(iri_12_init)
     CALL(evt_sub_get_mapname, LW(0))
 
     // On floor 50 the graffiti wall of Trouble Center job 30 shows its before or after state and reacts to
@@ -1553,7 +1553,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_CULL | NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_pera_onoff, STRING("敵"), 0)
         CALL(evt_npc_set_ry, STRING("敵"), 0)
-        SPAWN_EVENT(PTR(zonbaba_first_event))
+        SPAWN_EVENT(zonbaba_first_event)
     END_IF
 
     // In the early demos the chosen spot becomes the enemy's home. Then arm its battle and set its flags.
@@ -1577,11 +1577,11 @@ EVT_BEGIN(enemy_setup)
         SET_VALUE(LW(0), GSW_PIT_FLOOR)
         ADD(LW(0), 1)
         IF_INT_NOT_EQUAL(LW(0), 100)
-            SPAWN_EVENT(PTR(dokan_open))
+            SPAWN_EVENT(dokan_open)
         ELSE
             SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
         END_IF
-        SPAWN_EVENT(PTR(iri_12_enemy_dead_event))
+        SPAWN_EVENT(iri_12_enemy_dead_event)
     END_INLINE_EVENT
     RETURN
 EVT_END()
@@ -1736,11 +1736,11 @@ EVT_BEGIN(talk_idouya)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         ADD(GSW_PIT_FLOOR, 2)
-        CALL_CHILD(PTR(get_map_name))
+        CALL_CHILD(get_map_name)
         SET_VALUE(LW(1), STRING("dokan_2"))
         CASE_EQUAL(1)
         ADD(GSW_PIT_FLOOR, 5)
-        CALL_CHILD(PTR(get_map_name))
+        CALL_CHILD(get_map_name)
         SET_VALUE(LW(1), STRING("dokan_2"))
         CASE_EQUAL(2)
         SET_VALUE(LW(0), STRING("tik_06"))
@@ -2140,7 +2140,7 @@ static EVT_BEGIN(evt_kanban2)
 EVT_END()
 
 EVT_BEGIN(floor_inc)
-    SPAWN_EVENT(PTR(iri_12_dokan_in))
+    SPAWN_EVENT(iri_12_dokan_in)
     ADD(GSW_PIT_FLOOR, 1)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -2199,7 +2199,7 @@ BeroEntry bero_boss[] = {
 EVT_BEGIN(setup_boss)
     SET_VALUE(LW(0), PTR(bero_boss))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     RETURN
 EVT_END()
 
@@ -2312,23 +2312,23 @@ BeroEntry bero_return3[] = {
 EVT_BEGIN(setup_return)
     SET_VALUE(LW(0), PTR(bero_return))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
     SWITCH(LW(0))
         CASE_LESS(50)
         CASE_BETWEEN(50, 70)
         SET_VALUE(LW(0), STRING("dokan_3"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_3"), PTR(bero_return2))
         SET_VALUE(LW(0), STRING("dokan_3"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_GREATER(70)
         SET_VALUE(LW(0), STRING("dokan_3"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_3"), PTR(bero_return3))
         SET_VALUE(LW(0), STRING("dokan_3"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_SWITCH
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
@@ -2476,29 +2476,29 @@ BeroEntry bero_prev_return4[] = {
 EVT_BEGIN(setup_prev_return)
     SET_VALUE(LW(0), PTR(bero_prev_return))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
     SWITCH(LW(0))
         CASE_LESS(49)
         CASE_BETWEEN(49, 69)
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_prev_return2))
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_BETWEEN(70, 98)
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_prev_return3))
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_DEFAULT
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_prev_return4))
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_SWITCH
     RETURN
 EVT_END()
@@ -2591,23 +2591,23 @@ BeroEntry bero_normal3[] = {
 EVT_BEGIN(setup_normal)
     SET_VALUE(LW(0), PTR(bero_normal))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
     SWITCH(LW(0))
         CASE_LESS(50)
         CASE_BETWEEN(50, 80)
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_normal2))
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         CASE_GREATER(80)
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_normal3))
         SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_SWITCH
     RETURN
 EVT_END()
@@ -2701,7 +2701,7 @@ EVT_BEGIN(iri_12_dokan_in)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
-                SPAWN_EVENT(PTR(iri_12_dokan_in_sub))
+                SPAWN_EVENT(iri_12_dokan_in_sub)
             END_IF
         END_IF
     END_IF
@@ -2781,7 +2781,7 @@ EVT_BEGIN(iri_12_makkino_return)
     CALL(evt_npc_move_position, STRING("マッキノ"), 72, 0, 0, 120, 4)
     CALL(evt_msg_print, 0, STRING("irai_12_011"), 0, STRING("マッキノ"))
     CALL(evt_npc_move_position, STRING("マッキノ"), 98, -123, 0, 120, 4)
-    CALL_CHILD(PTR(iri_12_makkino_return_dokan))
+    CALL_CHILD(iri_12_makkino_return_dokan)
     RETURN
 EVT_END()
 
@@ -2796,7 +2796,7 @@ EVT_BEGIN(iri_12_makkino_return_b100)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_move_position, STRING("マッキノ"), -76, -310, 0, 180, 4)
     CALL(evt_npc_move_position, STRING("マッキノ"), 98, -486, 0, 180, 4)
-    CALL_CHILD(PTR(iri_12_makkino_return_dokan))
+    CALL_CHILD(iri_12_makkino_return_dokan)
     RETURN
 EVT_END()
 
@@ -2812,7 +2812,7 @@ EVT_BEGIN(iri_12_makkino_return_zonbaba)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_move_position, STRING("マッキノ"), -76, -310, 0, 180, 4)
     CALL(evt_npc_move_position, STRING("マッキノ"), 98, -486, 0, 180, 4)
-    CALL_CHILD(PTR(iri_12_makkino_return_dokan))
+    CALL_CHILD(iri_12_makkino_return_dokan)
     RETURN
 EVT_END()
 
@@ -2858,7 +2858,7 @@ EVT_BEGIN(iri_12_enemy_dead_event)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 WAIT_MS(800)
-                SPAWN_EVENT(PTR(iri_12_makkino_move_dokan_side))
+                SPAWN_EVENT(iri_12_makkino_move_dokan_side)
             END_IF
         END_IF
     END_IF
@@ -2921,7 +2921,7 @@ static EVT_BEGIN(iri_12_makkino_talk)
             CALL(evt_msg_print, 0, STRING("irai_12_008"), PTR(iri_12_msgcb), STRING("マッキノ"))
             SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, 0)
-            SPAWN_EVENT(PTR(iri_12_makkino_move_dokan_side))
+            SPAWN_EVENT(iri_12_makkino_move_dokan_side)
         ELSE
             CALL(evt_msg_print, 0, STRING("irai_12_010"), 0, STRING("マッキノ"))
         END_IF
@@ -2951,7 +2951,7 @@ EVT_BEGIN(iri_12_makkino_fall)
     CALL(wait_landon)
     CALL(evt_npc_check, STRING("敵"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(iri_12_makkino_move_dokan_side))
+        CALL_CHILD(iri_12_makkino_move_dokan_side)
     ELSE
         CALL(evt_npc_move_position, STRING("マッキノ"), -55, 109, 0, 120, 4)
         CALL(evt_npc_check, STRING("敵"), LW(0))
@@ -2981,7 +2981,7 @@ EVT_BEGIN(iri_12_makkino_fall_return)
     CALL(wait_landon)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
-            SPAWN_EVENT(PTR(iri_12_makkino_return_b100))
+            SPAWN_EVENT(iri_12_makkino_return_b100)
             SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
         ELSE
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, PTR(iri_12_makkino_buruburu))
@@ -2989,7 +2989,7 @@ EVT_BEGIN(iri_12_makkino_fall_return)
             CALL(evt_mario_key_onoff, 1)
         END_IF
     ELSE
-        CALL_CHILD(PTR(iri_12_makkino_return))
+        CALL_CHILD(iri_12_makkino_return)
         SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
         CALL(evt_mario_key_onoff, 1)
     END_IF
@@ -3010,9 +3010,9 @@ EVT_BEGIN(iri_12_init_fall)
     ADD(LW(0), 1)
     MODULO(LW(0), 10)
     IF_INT_EQUAL(LW(0), 0)
-        SPAWN_EVENT(PTR(iri_12_makkino_fall_return))
+        SPAWN_EVENT(iri_12_makkino_fall_return)
     ELSE
-        SPAWN_EVENT(PTR(iri_12_makkino_fall))
+        SPAWN_EVENT(iri_12_makkino_fall)
     END_IF
     RETURN
 EVT_END()
@@ -3031,12 +3031,12 @@ static EVT_BEGIN(iri_12_init)
                 CALL(evt_npc_set_anim, STRING("マッキノ"), STRING("D_2"))
                 CALL(evt_npc_set_balloontype, STRING("マッキノ"), 0)
             ELSE
-                CALL_CHILD(PTR(iri_12_init_fall))
+                CALL_CHILD(iri_12_init_fall)
             END_IF
             CASE_DEFAULT
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
-                    CALL_CHILD(PTR(iri_12_init_fall))
+                    CALL_CHILD(iri_12_init_fall)
                 END_IF
             END_IF
         END_SWITCH
@@ -3242,8 +3242,8 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_npc_wait_anim, STRING("敵"), FLOAT(1.0f))
         CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
     END_INLINE_EVENT
-    SPAWN_EVENT(PTR(gonbaba_standup_shake))
-    SPAWN_EVENT(PTR(gonbaba_fog_change))
+    SPAWN_EVENT(gonbaba_standup_shake)
+    SPAWN_EVENT(gonbaba_fog_change)
 
     // The camera pulls back to show his size; the screen shakes.
     CALL(evt_cam3d_evt_set, -755, 24, 376, -84, 114, -22, 4500, EASING_SINE_IN_OUT)
@@ -3270,7 +3270,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_party_set_pos, 0, -25, 10, 150)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
-    SPAWN_EVENT(PTR(gonbaba_down_shake))
+    SPAWN_EVENT(gonbaba_down_shake)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -3383,7 +3383,7 @@ EVT_BEGIN(zonbaba_first_event)
                 DELETE_EVENT(LW(0))
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, 0)
                 CALL(evt_mario_key_onoff, 0)
-                SPAWN_EVENT(PTR(iri_12_makkino_return_zonbaba))
+                SPAWN_EVENT(iri_12_makkino_return_zonbaba)
                 SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF

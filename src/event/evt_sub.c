@@ -712,9 +712,9 @@ EVT_BEGIN(evt_sub_starstone)
     END_IF
     SET_VALUE(LF(10), 0)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_memcard_save_wrapper))
+    CALL_CHILD(evt_memcard_save_wrapper)
 #else
-    CALL_CHILD(PTR(evt_memcard_save))
+    CALL_CHILD(evt_memcard_save)
 #endif
 
     // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
@@ -870,7 +870,7 @@ EVT_BEGIN(mail_evt_nok_01)
     SET_VALUE(GSWF_MAIL_FRANKLY_SENT, 1)
     CALL(evt_pouch_receive_mail, 16)
     CALL(evt_pouch_receive_mail, 26)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -902,7 +902,7 @@ EVT_BEGIN(mail_evt_gor_03)
                 SET_VALUE(LF(0), 1)
             END_IF
             IF_INT_EQUAL(LF(0), 1)
-                CALL_CHILD(PTR(mail_evt))
+                CALL_CHILD(mail_evt)
                 SET_VALUE(LF(0), 0)
             END_IF
         END_IF
@@ -939,7 +939,7 @@ EVT_BEGIN(mail_evt_gor_02)
                 SET_VALUE(LF(0), 1)
             END_IF
             IF_INT_EQUAL(LF(0), 1)
-                CALL_CHILD(PTR(mail_evt))
+                CALL_CHILD(mail_evt)
                 SET_VALUE(LF(0), 0)
             END_IF
         END_IF
@@ -969,7 +969,7 @@ EVT_BEGIN(mail_evt_gor_01)
     END_LOOP
     SET_VALUE(GSWF_MAIL_PETUNI_SENT, 1)
     CALL(evt_pouch_receive_mail, 19)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1005,7 +1005,7 @@ EVT_BEGIN(mail_evt_gor_04)
                 SET_VALUE(LF(0), 1)
             END_IF
             IF_INT_EQUAL(LF(0), 1)
-                CALL_CHILD(PTR(mail_evt))
+                CALL_CHILD(mail_evt)
                 SET_VALUE(LF(0), 0)
             END_IF
         END_IF
@@ -1043,7 +1043,7 @@ EVT_BEGIN(mail_evt_rsh_03_a)
     END_LOOP
     SET_VALUE(GSWF_MAIL_PA_PATCH_SENT, 1)
     CALL(evt_pouch_receive_mail, 21)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1071,7 +1071,7 @@ EVT_BEGIN(mail_evt_hom_00)
     END_LOOP
     SET_VALUE(GSWF_MAIL_KING_K_SENT, 1)
     CALL(evt_pouch_receive_mail, 22)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1106,7 +1106,7 @@ EVT_BEGIN(mail_evt_gor_02_2)
     END_LOOP
     SET_VALUE(GSWF_MAIL_ZIP_TOAD_SENT, 1)
     CALL(evt_pouch_receive_mail, 23)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1136,7 +1136,7 @@ EVT_BEGIN(mail_evt_bom_01)
     END_LOOP
     SET_VALUE(GSWF_MAIL_RAWK_HAWK_SENT, 1)
     CALL(evt_pouch_receive_mail, 24)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1165,7 +1165,7 @@ EVT_BEGIN(mail_evt_tik_00)
     SET_VALUE(GSWF_MAIL_GHOST_T_SENT, 1)
     CALL(evt_pouch_receive_mail, 25)
     CALL(evt_pouch_receive_mail, 33)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1193,7 +1193,7 @@ EVT_BEGIN(mail_evt_win_01)
     END_LOOP
     SET_VALUE(GSWF_MAIL_RDM_ISSUE_1_SENT, 1)
     CALL(evt_pouch_receive_mail, 27)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1219,7 +1219,7 @@ EVT_BEGIN(mail_evt_tou_01)
     CALL(evt_pouch_receive_mail, 28)
     SET_VALUE(GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE, 1)
     CALL(evt_sub_save_playtime, GSW_SHOP_MRI_07_SALE_START_TIME)
-    CALL_CHILD(PTR(mail_evt))
+    CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
@@ -1363,7 +1363,7 @@ EvtWord evt_sub_mail_event[] = {
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nok_01"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_nok_01))
+        CALL_CHILD(mail_evt_nok_01)
 #else
         CALL_CHILD(mail_evt_nok_01)
 #endif
@@ -1371,7 +1371,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_03"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_gor_03))
+        CALL_CHILD(mail_evt_gor_03)
 #else
         CALL_CHILD(mail_evt_gor_03)
 #endif
@@ -1379,8 +1379,8 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_02"))
 #if VERSION >= VERSION_US
-        SPAWN_EVENT(PTR(mail_evt_gor_02))
-        CALL_CHILD(PTR(mail_evt_gor_02_2))
+        SPAWN_EVENT(mail_evt_gor_02)
+        CALL_CHILD(mail_evt_gor_02_2)
 #else
         SPAWN_EVENT(mail_evt_gor_02)
         CALL_CHILD(mail_evt_gor_02_2)
@@ -1389,8 +1389,8 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_01"))
 #if VERSION >= VERSION_US
-        SPAWN_EVENT(PTR(mail_evt_gor_01_2))
-        CALL_CHILD(PTR(mail_evt_gor_01))
+        SPAWN_EVENT(mail_evt_gor_01_2)
+        CALL_CHILD(mail_evt_gor_01)
 #else
         SPAWN_EVENT(mail_evt_gor_01_2)
         CALL_CHILD(mail_evt_gor_01)
@@ -1399,11 +1399,11 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_gor_04))
+        CALL_CHILD(mail_evt_gor_04)
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
-        CALL_CHILD(PTR(mail_evt_rsh_03_a))
+        CALL_CHILD(mail_evt_rsh_03_a)
 #else
         CALL_CHILD(mail_evt_gor_04)
 #endif
@@ -1411,7 +1411,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_rsh_03_a_2))
+        CALL_CHILD(mail_evt_rsh_03_a_2)
 #else
         CALL_CHILD(mail_evt_rsh_03_a_2)
         CALL_CHILD(mail_evt_rsh_03_a)
@@ -1420,7 +1420,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_hom_00))
+        CALL_CHILD(mail_evt_hom_00)
 #else
         CALL_CHILD(mail_evt_hom_00)
 #endif
@@ -1428,7 +1428,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("bom_01"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_bom_01))
+        CALL_CHILD(mail_evt_bom_01)
 #else
         CALL_CHILD(mail_evt_bom_01)
 #endif
@@ -1436,7 +1436,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tik_00"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_tik_00))
+        CALL_CHILD(mail_evt_tik_00)
 #else
         CALL_CHILD(mail_evt_tik_00)
 #endif
@@ -1444,7 +1444,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("win_01"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_win_01))
+        CALL_CHILD(mail_evt_win_01)
 #else
         CALL_CHILD(mail_evt_win_01)
 #endif
@@ -1452,7 +1452,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_01"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_tou_01))
+        CALL_CHILD(mail_evt_tou_01)
 #else
         CALL_CHILD(mail_evt_tou_01)
 #endif
@@ -1460,7 +1460,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("usu_01"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_usu_01))
+        CALL_CHILD(mail_evt_usu_01)
 #else
         CALL_CHILD(mail_evt_usu_01)
 #endif
@@ -1468,7 +1468,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(mail_evt_pik_00))
+        CALL_CHILD(mail_evt_pik_00)
 #else
         CALL_CHILD(mail_evt_pik_00)
 #endif

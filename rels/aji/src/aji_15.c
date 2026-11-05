@@ -401,7 +401,7 @@ EVT_END()
 EVT_BEGIN(aji_15_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("軍団ザコエリート"))
     END_IF
@@ -419,12 +419,12 @@ EVT_BEGIN(aji_15_init_evt)
     CALL_CHILD(peach_evt_syawa_init)
 #else
     CALL(evt_snd_set_rev_mode, 1)
-    CALL_CHILD(PTR(peach_evt_syawa_init))
+    CALL_CHILD(peach_evt_syawa_init)
 #endif
     IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
         SET_VALUE(GSWF_AJI_15_VISITED, 1)
     END_IF
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
 

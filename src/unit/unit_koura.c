@@ -213,7 +213,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 #endif
@@ -230,7 +230,7 @@ static EVT_BEGIN(phase_event)
 #else
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 0)
-            CALL_CHILD(PTR(koura_open))
+            CALL_CHILD(koura_open)
         END_IF
 #endif
     END_IF
@@ -241,7 +241,7 @@ static EVT_BEGIN(phase_event)
 #else
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 0)
-            CALL_CHILD(PTR(koura_close))
+            CALL_CHILD(koura_close)
         END_IF
 #endif
     END_IF
@@ -466,7 +466,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 #endif

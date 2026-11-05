@@ -103,7 +103,7 @@ static EVT_BEGIN(switch_evt)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY | MOBJ_FLAG_NO_DISP)
     CALL(evt_mobj_hit_onoff, STRING("box"), 1)
     SET_VALUE(LW(0), STRING("box"))
-    CALL_CHILD(PTR(box_syutugen))
+    CALL_CHILD(box_syutugen)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -157,7 +157,7 @@ EVT_BEGIN(las_12_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF_LAS_12_SWITCH_PRESSED)
     CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_12_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_12_SWITCH_PRESSED, 0)
@@ -165,7 +165,7 @@ EVT_BEGIN(las_12_init_evt)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
-    SPAWN_EVENT(PTR(kabenuke_check_evt))
+    SPAWN_EVENT(kabenuke_check_evt)
     RETURN
 EVT_END()
 

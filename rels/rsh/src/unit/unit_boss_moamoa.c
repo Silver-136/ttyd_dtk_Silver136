@@ -534,8 +534,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, LW(3), MOAMOA_LIMB_WORK_BODY, LW(4))
     SET_VALUE(LW(5), 6)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(5), -1)
-    CALL_CHILD(PTR(evt_moamoa))
-    SPAWN_EVENT(PTR(MOAMOA_SET_BODYSCALE))
+    CALL_CHILD(evt_moamoa)
+    SPAWN_EVENT(MOAMOA_SET_BODYSCALE)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -547,7 +547,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -835,9 +835,9 @@ static EVT_BEGIN(phase_event)
                             END_SWITCH
                             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_UNIT_WORK_MOUTH_FORM, LW(1))
                             IF_INT_NOT_EQUAL(LW(1), 1)
-                                CALL_CHILD(PTR(moamoa_tentacl_on))
+                                CALL_CHILD(moamoa_tentacl_on)
                             ELSE
-                                CALL_CHILD(PTR(moamoa_mouth_on))
+                                CALL_CHILD(moamoa_mouth_on)
                             END_IF
                             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
                             CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)

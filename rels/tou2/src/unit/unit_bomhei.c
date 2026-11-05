@@ -336,17 +336,17 @@ static EVT_BEGIN(damage_event)
             CASE_OR_EQUAL(DAMAGE_CODE_ELECTRIC)
             CASE_OR_EQUAL(DAMAGE_CODE_EXPLOSION)
             SET_VALUE(LW(15), 1)
-            CALL_CHILD(PTR(bomb_event))
+            CALL_CHILD(bomb_event)
             RETURN
             CASE_END
         END_SWITCH
     END_IF
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(change_spark_event))
+            CALL_CHILD(change_spark_event)
         END_IF
     END_IF
     RETURN
@@ -539,9 +539,9 @@ static EVT_BEGIN(damage_event_spark)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(15), 1)
-        CALL_CHILD(PTR(bomb_event))
+        CALL_CHILD(bomb_event)
     ELSE
-        CALL_CHILD(PTR(btldefaultevt_Damage))
+        CALL_CHILD(btldefaultevt_Damage)
     END_IF
     RETURN
 EVT_END()

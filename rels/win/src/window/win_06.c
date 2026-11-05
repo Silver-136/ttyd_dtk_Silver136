@@ -200,14 +200,14 @@ EVT_BEGIN(win_06_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_tree_mki"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kusa"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group22"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_oku_01H081"), MAP_OBJ_FLAG_CLIP)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_END_TO_STAGE_2)
-        CALL_CHILD(PTR(welcome_wonderforest_init))
-        SPAWN_EVENT(PTR(welcome_wonderforest))
+        CALL_CHILD(welcome_wonderforest_init)
+        SPAWN_EVENT(welcome_wonderforest)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 275, 60, -50, 0, 0)
     RETURN

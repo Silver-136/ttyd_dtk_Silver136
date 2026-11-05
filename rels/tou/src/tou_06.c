@@ -273,7 +273,7 @@ EVT_END()
 static EVT_BEGIN(evt_lock)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_15_UNLOCKING_THE_DOOR)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_pouch_remove_item, ITEM_STORAGE_KEY_0x13, LW(0))
     RETURN
 EVT_END()
@@ -384,7 +384,7 @@ EVT_BEGIN(evt_chuchu)
     // She walks out through the north door, which swings open and shut behind her.
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 0, -140, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -401,7 +401,7 @@ EVT_BEGIN(evt_chuchu)
     END_INLINE_EVENT
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -596,7 +596,7 @@ EVT_BEGIN(tou_06_init_evt)
     // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("ana"), 0, PTR(evt_ana), 0)
 
@@ -683,7 +683,7 @@ EVT_BEGIN(tou_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_15_UNLOCKING_THE_DOOR)
         CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x13, 95, 210, 50, -80, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_06_DOOR_UNLOCKED)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     END_IF
 
     // Shine Sprite block, the spinning floor panel to the Star Piece, and the HP Plus P and Charge P badges.
@@ -744,7 +744,7 @@ EVT_BEGIN(tou_06_init_evt)
 #if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
-        CALL_CHILD(PTR(iri_13_init))
+        CALL_CHILD(iri_13_init)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
 #endif
@@ -755,7 +755,7 @@ EVT_BEGIN(tou_06_init_evt)
         RETURN
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
-        SPAWN_EVENT(PTR(evt_chuchu))
+        SPAWN_EVENT(evt_chuchu)
     ELSE
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)

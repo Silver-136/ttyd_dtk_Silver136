@@ -46,7 +46,7 @@ static TreeAccess tree_tbl[] = {
 /** Registers the map's tree access table (tree_tbl) with evt_sub_tree_access_entry so the trees can be shaken. */
 static EVT_BEGIN(evt_tree)
     SET_VALUE(LW(0), PTR(tree_tbl))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     RETURN
 EVT_END()
 
@@ -185,19 +185,19 @@ EVT_END()
 EVT_BEGIN(bom_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_BOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM1"))
-    CALL_CHILD(PTR(evt_bom_snowfall))
-    CALL_CHILD(PTR(evt_tree))
+    CALL_CHILD(evt_bom_snowfall)
+    CALL_CHILD(evt_tree)
     CALL(evt_mobj_brick, STRING("mobj_badge_gat2"), 215, 65, -75, ITEM_DOUBLE_DIP_P, MOBJ_BRICK_HIDDEN_BADGE, 0, GSWF_BOM_00_DOUBLE_DIP_P_HIDDEN_BLOCK)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -300, 5, 0, STRING("S_gra02_dai"), 125, GSWF_STARPIECE_91)
     IF_INT_EQUAL(GSWF_BOM_FIRST_ARRIVAL_DONE, 0)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(STG6_71_01)
-            SPAWN_EVENT(PTR(first_evt2))
+            SPAWN_EVENT(first_evt2)
             CASE_DEFAULT
-            SPAWN_EVENT(PTR(first_evt))
+            SPAWN_EVENT(first_evt)
         END_SWITCH
     ELSE
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_71_01)

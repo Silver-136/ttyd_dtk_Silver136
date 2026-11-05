@@ -1257,7 +1257,7 @@ EVT_BEGIN(end_image_main_evt)
             CALL(evt_fade_entry, FADE_IN_BLACK, 0, 0, 0, 0)
             CALL(evt_fade_end_wait)
             SET_VALUE(GW(10), 0)
-            SPAWN_EVENT(PTR(end_return_title_evt))
+            SPAWN_EVENT(end_return_title_evt)
             RETURN
         END_IF
 #endif
@@ -1302,9 +1302,9 @@ EVT_BEGIN(end_return_title_evt)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_memcard_save_wrapper))
+    CALL_CHILD(evt_memcard_save_wrapper)
 #else
-    CALL_CHILD(PTR(evt_memcard_save))
+    CALL_CHILD(evt_memcard_save)
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
@@ -1337,7 +1337,7 @@ EVT_BEGIN(end_00_init_evt)
         END_INLINE_EVENT
     SPAWN_EVENT(end_credit_npc_parade)
 #else
-    SPAWN_EVENT(PTR(end_credit_npc_parade))
+    SPAWN_EVENT(end_credit_npc_parade)
 #endif
     BEGIN_INLINE_EVENT
         CALL(evt_end_staff_roll_msg_main)

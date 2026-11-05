@@ -315,10 +315,10 @@ static EVT_BEGIN(damage_event_nokotarou)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF
-    CALL_CHILD(PTR(_koura_rotate_stop))
+    CALL_CHILD(_koura_rotate_stop)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -510,15 +510,15 @@ EVT_END()
 static EVT_BEGIN(attack_event_nokotarou)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(wakeup_event))
+        CALL_CHILD(wakeup_event)
         RETURN
     END_IF
     CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL_CHILD(PTR(attack_event_nokotarou_koura))
+        CALL_CHILD(attack_event_nokotarou_koura)
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(attack_event_nokotarou_shubibin))
+        CALL_CHILD(attack_event_nokotarou_shubibin)
     END_SWITCH
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

@@ -67,7 +67,7 @@ EVT_END()
 EVT_BEGIN(erumosu_dead)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(GSWF_DOU_07_EMBER_DEFEATED, 1)
-    SPAWN_EVENT(PTR(enemy_event_dead_event))
+    SPAWN_EVENT(enemy_event_dead_event)
 #if VERSION >= VERSION_US
     WAIT_MS(1000)
     ADD(LW(1), 150)
@@ -282,7 +282,7 @@ EVT_BEGIN(peramajin_before)
 
     // The Ember fades in at (100, -6, -37) and the story advances to the Grotto key stage.
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR1"), 0)
-    CALL_CHILD(PTR(apper_elmos))
+    CALL_CHILD(apper_elmos)
     CALL(evt_mobj_exec_cancel, STRING("mobj_box00"))
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
     CALL(evt_party_run, 0)
@@ -343,9 +343,9 @@ EVT_BEGIN(peramajin_after)
     CALL_CHILD(ship_majin_lecture_init)
     CALL_CHILD(ship_majin_lecture)
 #else
-    CALL_CHILD(PTR(ship_majin_lecture_init))
+    CALL_CHILD(ship_majin_lecture_init)
     CALL(evt_party_run, 0)
-    CALL_CHILD(PTR(ship_majin_lecture))
+    CALL_CHILD(ship_majin_lecture)
     CALL(evt_party_stop, 0)
 #endif
 
@@ -406,7 +406,7 @@ EVT_BEGIN(dou_07_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_EQUAL(GSWF_DOU_07_EMBER_DEFEATED, 0)
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
@@ -418,7 +418,7 @@ EVT_BEGIN(dou_07_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_P_DOWN_D_UP, -75, -30, -15, ITEM_TYPE_STILL, GSWF_DOU_07_P_DOWN_D_UP, 0)
     IF_INT_EQUAL(GSWF_DOU_07_EMBER_APPEARED, 1)
         IF_INT_EQUAL(GSWF_DOU_07_EMBER_DEFEATED, 0)
-            SPAWN_EVENT(PTR(apper_elmos))
+            SPAWN_EVENT(apper_elmos)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF_DOU_07_EMBER_DEFEATED, 1)

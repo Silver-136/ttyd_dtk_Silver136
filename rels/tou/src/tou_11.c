@@ -156,11 +156,11 @@ EVT_BEGIN(evt_tojikome)
 
     // The guard opens the door and leads Mario and the partner into the room.
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -168,11 +168,11 @@ EVT_BEGIN(evt_tojikome)
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -210,11 +210,11 @@ EVT_BEGIN(evt_tojikome)
     // He leaves through the door, which shuts behind him.
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -100, 0, FLOAT(70.0f), 1)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -222,11 +222,11 @@ EVT_BEGIN(evt_tojikome)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -323,8 +323,8 @@ EVT_END()
 EVT_BEGIN(tou_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(evt_tou_locker_init))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(evt_tou_locker_init)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
@@ -335,7 +335,7 @@ EVT_BEGIN(tou_11_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_1"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
-    CALL_CHILD(PTR(bero_case_switch_off))
+    CALL_CHILD(bero_case_switch_off)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
@@ -345,7 +345,7 @@ EVT_BEGIN(tou_11_init_evt)
         SPAWN_EVENT(evt_tojikome_nidome)
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-        SPAWN_EVENT(PTR(evt_tojikome_nidome))
+        SPAWN_EVENT(evt_tojikome_nidome)
 #endif
         CALL(evt_mario_set_pos, 30, 0, -100)
         CALL(evt_party_set_pos, 0, 60, 0, -100)
@@ -359,7 +359,7 @@ EVT_BEGIN(tou_11_init_evt)
         SPAWN_EVENT(evt_tojikome_sandome)
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-        SPAWN_EVENT(PTR(evt_tojikome_sandome))
+        SPAWN_EVENT(evt_tojikome_sandome)
 #endif
         CALL(evt_mario_set_pos, 30, 0, -100)
         CALL(evt_party_set_pos, 0, 60, 0, -100)
@@ -371,7 +371,7 @@ EVT_BEGIN(tou_11_init_evt)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        SPAWN_EVENT(PTR(evt_tojikome))
+        SPAWN_EVENT(evt_tojikome)
         RETURN
     END_IF
     SWITCH(GSW_STORY_PROGRESS)

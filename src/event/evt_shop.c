@@ -162,7 +162,7 @@ static EVT_BEGIN(buy_evt)
     CALL(disp_off, LW(10))
     IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
         SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
-        CALL_CHILD(PTR(first_shopping_evt))
+        CALL_CHILD(first_shopping_evt)
         RETURN
     END_IF
 
@@ -339,7 +339,7 @@ EVT_BEGIN(shopper_talk_evt)
     // A first-time shopper hears the shopping explanation.
     IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
         SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
-        CALL_CHILD(PTR(first_shopping_evt))
+        CALL_CHILD(first_shopping_evt)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
@@ -486,13 +486,13 @@ EVT_BEGIN(shopper_talk_evt)
         CALL(get_msg, LW(10), 5, LW(14))
         CALL(evt_msg_print_add, 0, LW(14))
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(sell_evt))
+        CALL_CHILD(sell_evt)
         CASE_EQUAL(2)
-        CALL_CHILD(PTR(keep_evt))
+        CALL_CHILD(keep_evt)
         CASE_EQUAL(3)
-        CALL_CHILD(PTR(unkeep_evt))
+        CALL_CHILD(unkeep_evt)
         CASE_EQUAL(4)
-        CALL_CHILD(PTR(point_evt))
+        CALL_CHILD(point_evt)
         CASE_EQUAL(5)
         CALL(evt_msg_continue)
     END_SWITCH

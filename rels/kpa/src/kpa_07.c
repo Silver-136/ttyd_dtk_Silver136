@@ -252,7 +252,7 @@ EVT_BEGIN(kpa_07_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
-        SPAWN_EVENT(PTR(kpa_07_hipattack_eff))
+        SPAWN_EVENT(kpa_07_hipattack_eff)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
@@ -435,9 +435,9 @@ EVT_BEGIN(kpa_07_evt)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 18)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_memcard_save_wrapper))
+    CALL_CHILD(evt_memcard_save_wrapper)
 #else
-    CALL_CHILD(PTR(evt_memcard_save))
+    CALL_CHILD(evt_memcard_save)
 #endif
     CALL(evt_mario_set_mode, 0)
     CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_BOWSER_A1, 0, FADE_STORY_BOWSER_A3, 0)
@@ -458,7 +458,7 @@ EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_npc_set_ry, STRING("belt"), 80)
     CALL(evt_npc_set_position, STRING("belt"), 190, 52, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_03_BOWSER_ACTION_STAGE)
-        SPAWN_EVENT(PTR(kpa_07_evt))
+        SPAWN_EVENT(kpa_07_evt)
     END_IF
     RETURN
 EVT_END()

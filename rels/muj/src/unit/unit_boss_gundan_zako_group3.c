@@ -308,7 +308,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(zakogun_damage_pose)
     END_IF
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(zakogun_damage_pose_cancel)
     RETURN
 EVT_END()

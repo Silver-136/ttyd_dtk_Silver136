@@ -336,7 +336,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_MOVE1L"), STRING("SFX_BOSS_KANBU_MOVE1R"), 0, 6, 6)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, 0)
-    CALL_CHILD(PTR(zakogun_entry))
+    CALL_CHILD(zakogun_entry)
     CALL(zakogun_ext_init1)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -412,7 +412,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
 #else
     CALL_CHILD(btldefaultevt_Damage)
 #endif
@@ -650,7 +650,7 @@ static EVT_BEGIN(phase_event)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
-        CALL_CHILD(PTR(call_event))
+        CALL_CHILD(call_event)
     END_IF
     LABEL(99)
     RETURN
@@ -790,15 +790,15 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(0), 75)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_kanbu3_attack))
-                CALL_CHILD(PTR(normal_attack_event))
+                CALL_CHILD(normal_attack_event)
                 GOTO(99)
             END_IF
             ADD(LW(0), 0)
             IF_INT_LESS(LW(1), LW(0))
-                CALL_CHILD(PTR(guard_event))
+                CALL_CHILD(guard_event)
                 GOTO(99)
             END_IF
-            CALL_CHILD(PTR(call_event))
+            CALL_CHILD(call_event)
             IF_INT_EQUAL(LW(0), 1)
                 GOTO(99)
             ELSE
@@ -807,9 +807,9 @@ static EVT_BEGIN(attack_event)
         ELSE
             CALL(evt_sub_random, 99, LW(1))
             IF_INT_LESS(LW(1), 50)
-                CALL_CHILD(PTR(guard_cancel_event))
+                CALL_CHILD(guard_cancel_event)
             ELSE
-                CALL_CHILD(PTR(no_event))
+                CALL_CHILD(no_event)
             END_IF
         END_IF
     ELSE
@@ -821,10 +821,10 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_random, LW(0), LW(1))
         IF_INT_LESS(LW(1), 50)
             SET_VALUE(LW(9), PTR(&weapon_kanbu3_attack))
-            CALL_CHILD(PTR(normal_attack_event))
+            CALL_CHILD(normal_attack_event)
             GOTO(99)
         END_IF
-        CALL_CHILD(PTR(charge_event))
+        CALL_CHILD(charge_event)
         GOTO(99)
     END_IF
     LABEL(99)
@@ -984,7 +984,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION >= VERSION_US
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
 #else
             CALL_CHILD(subsetevt_confuse_flustered)
 #endif

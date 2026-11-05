@@ -347,10 +347,10 @@ EVT_BEGIN(seal_bigtree2)
     CALL(evt_msg_print_party, STRING("stg2_mri_e03_07"))
     WAIT_MS(300)
     SET_VALUE(LW(0), STRING("me"))
-    SPAWN_EVENT(PTR(mri_puni_jump_se))
+    SPAWN_EVENT(mri_puni_jump_se)
     CALL(evt_npc_jump_position_nohit, STRING("me"), 10, 155, -230, 200, 20)
     SET_VALUE(LW(0), STRING("me"))
-    SPAWN_EVENT(PTR(mri_puni_jump_se))
+    SPAWN_EVENT(mri_puni_jump_se)
     CALL(evt_npc_jump_position_nohit, STRING("me"), 10, 155, -230, 200, 20)
     CALL(evt_cam3d_evt_set, 5, 277, 176, 5, 200, -216, 500, EASING_SINE_IN_OUT)
     WAIT_MS(700)
@@ -371,10 +371,10 @@ EVT_BEGIN(seal_bigtree2)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), STRING("w_bero"))
-    CALL_CHILD(PTR(bero_case_switch_off))
+    CALL_CHILD(bero_case_switch_off)
     CALL(evt_bero_overwrite, STRING("w_bero"), PTR(bero_lostitem))
     SET_VALUE(LW(0), STRING("w_bero"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     RETURN
 EVT_END()
 
@@ -416,9 +416,9 @@ EVT_END()
 static EVT_BEGIN(guide_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_03_THE_GREAT_TREE)
-        SPAWN_EVENT(PTR(seal_bigtree))
+        SPAWN_EVENT(seal_bigtree)
         CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
-        SPAWN_EVENT(PTR(seal_bigtree2))
+        SPAWN_EVENT(seal_bigtree2)
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_JP
@@ -705,7 +705,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 static EVT_BEGIN(bero_01_doa_close)
     SET_VALUE(LW(10), STRING("S_doa"))
-    SPAWN_EVENT(PTR(evt_mri_door_naname_close))
+    SPAWN_EVENT(evt_mri_door_naname_close)
     RETURN
 EVT_END()
 
@@ -715,7 +715,7 @@ EVT_END()
  */
 static EVT_BEGIN(bero_01_doa_open)
     SET_VALUE(LW(10), STRING("S_doa"))
-    SPAWN_EVENT(PTR(evt_mri_door_naname_open))
+    SPAWN_EVENT(evt_mri_door_naname_open)
     RETURN
 EVT_END()
 
@@ -1203,7 +1203,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_mario_clear_party, 1)
     SET_VALUE(LW(0), STRING("ガイド"))
-    SPAWN_EVENT(PTR(mri_puni_jump_se))
+    SPAWN_EVENT(mri_puni_jump_se)
     CALL(evt_npc_jump_position_nohit, STRING("ガイド"), 54, 143, -202, 200, 20)
     CALL(evt_cam3d_evt_set, 187, 288, 213, 187, 205, -216, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_set_anim, STRING("ガイド"), STRING("W_1"))
@@ -1219,7 +1219,7 @@ EVT_BEGIN(open_bigtree)
     END_LOOP
     WAIT_MS(200)
     SET_VALUE(LW(0), STRING("ガイド"))
-    SPAWN_EVENT(PTR(mri_puni_jump_se))
+    SPAWN_EVENT(mri_puni_jump_se)
     CALL(evt_npc_jump_position_nohit, STRING("ガイド"), 191, 192, -184, 200, 20)
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -1255,11 +1255,11 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(1000)
     SET_VALUE(LW(10), STRING("S_doa"))
-    CALL_CHILD(PTR(evt_mri_door_naname_open_pure))
+    CALL_CHILD(evt_mri_door_naname_open_pure)
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
         SET_VALUE(LW(10), STRING("S_doa"))
-        SPAWN_EVENT(PTR(evt_mri_door_naname_close_pure))
+        SPAWN_EVENT(evt_mri_door_naname_close_pure)
     END_INLINE_EVENT
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -1276,7 +1276,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_10_SECRET_ENTRANCE_REVEALED)
     SET_VALUE(LW(0), STRING("ne_bero"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1299,7 +1299,7 @@ EVT_BEGIN(mario_see_you)
     CALL(evt_cam3d_evt_set, 180, 130, 567, 180, 44, 127, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_puni_wait_systemmode, 2)
-    CALL_CHILD(PTR(mario_see_you_init))
+    CALL_CHILD(mario_see_you_init)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1517,7 +1517,7 @@ EVT_END()
  */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_puni_wait_systemmode, 2)
-    SPAWN_EVENT(PTR(puni_set))
+    SPAWN_EVENT(puni_set)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1554,23 +1554,23 @@ static EVT_BEGIN(sekai_yami_evt)
     SET_VALUE(LSWF_MRI_00_DARKNESS_ON, 1)
     SET_VALUE(GW(0), -800)
     SET_VALUE(LW(0), STRING("ライバル"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(sekai_yami_npc), GW(1))
     SET_VALUE(LW(0), STRING("ガイド妹"))
     SPAWN_EVENT_GET_ID(PTR(sekai_yami_npc), GW(2))
     SET_VALUE(LW(0), STRING("プニ族長老"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     SET_VALUE(LW(0), 6)
-    SPAWN_EVENT(PTR(sekai_yami_puni))
+    SPAWN_EVENT(sekai_yami_puni)
     SET_VALUE(LW(0), 39)
-    SPAWN_EVENT(PTR(sekai_yami_puni))
+    SPAWN_EVENT(sekai_yami_puni)
     SET_VALUE(LW(0), 88)
-    SPAWN_EVENT(PTR(sekai_yami_puni))
+    SPAWN_EVENT(sekai_yami_puni)
     SET_VALUE(LW(0), 46)
-    SPAWN_EVENT(PTR(sekai_yami_puni))
+    SPAWN_EVENT(sekai_yami_puni)
     SET_VALUE(LW(0), 64)
-    SPAWN_EVENT(PTR(sekai_yami_puni))
+    SPAWN_EVENT(sekai_yami_puni)
 #if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
@@ -1624,7 +1624,7 @@ EVT_END()
  */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_puni_wait_systemmode, 2)
-    SPAWN_EVENT(PTR(puni_set))
+    SPAWN_EVENT(puni_set)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1826,11 +1826,11 @@ EVT_BEGIN(mri_00_init_evt)
     SET_VALUE(LW(9), 0)
 
     // Start the Puni system, the switches and the doors.
-    CALL_CHILD(PTR(mri_puni_init))
-    CALL_CHILD(PTR(evt_switch_init))
+    CALL_CHILD(mri_puni_init)
+    CALL_CHILD(evt_switch_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_cam_road_reset)
 
     // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
@@ -1857,7 +1857,7 @@ EVT_BEGIN(mri_00_init_evt)
 #else
         END_IF
 #endif
-        SPAWN_EVENT(PTR(mario_see_you))
+        SPAWN_EVENT(mario_see_you)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
@@ -1865,7 +1865,7 @@ EVT_BEGIN(mri_00_init_evt)
 #endif
             BEGIN_INLINE_EVENT
                 CALL(evt_puni_wait_systemmode, 2)
-                SPAWN_EVENT(PTR(mario_see_you_init))
+                SPAWN_EVENT(mario_see_you_init)
             END_INLINE_EVENT
         END_IF
 #if VERSION >= VERSION_JP
@@ -1882,12 +1882,12 @@ EVT_BEGIN(mri_00_init_evt)
     SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
 
     // The waterfall effects play on the tree.
-    SPAWN_EVENT(PTR(mri_waterfall_effect))
+    SPAWN_EVENT(mri_waterfall_effect)
     SET_VALUE(LW(0), 531)
     SET_VALUE(LW(1), 1)
     SET_VALUE(LW(2), 118)
     SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
-    SPAWN_EVENT(PTR(mri_waterfall_effect))
+    SPAWN_EVENT(mri_waterfall_effect)
     SET_VALUE(LF(0), 0)
 
     // Chapter 8 music: the witch theme or the voices theme, depending on which door Mario came through.
@@ -1927,9 +1927,9 @@ EVT_BEGIN(mri_00_init_evt)
             IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
 
                 // While Punio follows Mario, the three dancers (the travelling sisters) stand in the yard.
-                CALL_CHILD(PTR(odoriko_1_init))
-                CALL_CHILD(PTR(odoriko_2_init))
-                CALL_CHILD(PTR(odoriko_3_init))
+                CALL_CHILD(odoriko_1_init)
+                CALL_CHILD(odoriko_2_init)
+                CALL_CHILD(odoriko_3_init)
             END_IF
         END_IF
     END_IF
@@ -1937,14 +1937,14 @@ EVT_BEGIN(mri_00_init_evt)
 
         // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
         // capture waits for Flurrie's gust.
-        SPAWN_EVENT(PTR(first_bigtree))
+        SPAWN_EVENT(first_bigtree)
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_09_FLURRIE_JOINS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mri_cloud_init)
         CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
         SET_VALUE(LW(0), STRING("ne_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     ELSE
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
@@ -1955,10 +1955,10 @@ EVT_BEGIN(mri_00_init_evt)
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
 
             // In chapter 8 the dark-world scene or the voices scene runs, depending on the entrance.
-            SPAWN_EVENT(PTR(sekai_yami_evt))
+            SPAWN_EVENT(sekai_yami_evt)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            SPAWN_EVENT(PTR(minnnanokoe_evt))
+            SPAWN_EVENT(minnnanokoe_evt)
         END_IF
     END_IF
 #if VERSION >= VERSION_US

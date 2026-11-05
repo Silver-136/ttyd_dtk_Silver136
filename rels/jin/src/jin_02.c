@@ -179,7 +179,7 @@ EVT_BEGIN(evt_kaidan_temae)
                 END_LOOP
             END_INLINE_EVENT
         END_IF
-        CALL_CHILD(PTR(cam_shake))
+        CALL_CHILD(cam_shake)
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
             WAIT_MS(500)
             DELETE_EVENT(LW(3))
@@ -204,8 +204,8 @@ EVT_BEGIN(jin_02_init_evt)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(evt_usu_kagemario_party_kill)
     CALL(evt_mobj_switch_red, 0, STRING("mobj_switch1"), 485, 30, -10, PTR(evt_kaidan_temae), 0)
     RETURN
 EVT_END()

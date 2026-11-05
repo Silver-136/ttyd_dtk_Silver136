@@ -106,14 +106,14 @@ static EVT_BEGIN(switch_evt)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY | MOBJ_FLAG_NO_DISP)
     CALL(evt_mobj_hit_onoff, STRING("box"), 1)
     SET_VALUE(LW(0), STRING("box"))
-    CALL_CHILD(PTR(box_syutugen))
+    CALL_CHILD(box_syutugen)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(enemy1_dead_evt)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 0)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 1)
     END_IF
@@ -121,7 +121,7 @@ EVT_BEGIN(enemy1_dead_evt)
 EVT_END()
 
 EVT_BEGIN(enemy2_dead_evt)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 1)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 2)
     END_IF
@@ -129,7 +129,7 @@ EVT_BEGIN(enemy2_dead_evt)
 EVT_END()
 
 EVT_BEGIN(enemy3_dead_evt)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 2)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
     END_IF
@@ -142,7 +142,7 @@ EVT_END()
  * plays a success jingle and makes the blue floating switch appear in a puff of smoke.
  */
 EVT_BEGIN(enemy4_dead_evt)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
         SET_VALUE(GSWF_LAS_17_ENEMIES_IN_ORDER_UNUSED, 1)
@@ -203,7 +203,7 @@ EVT_BEGIN(las_17_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_LESS(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 0)
     END_IF

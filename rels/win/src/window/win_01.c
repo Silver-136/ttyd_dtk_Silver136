@@ -72,7 +72,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_dokan1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_04_SHES_LOST_HER_PRECIOUS)
-        SPAWN_EVENT(PTR(evt_dokan1_message))
+        SPAWN_EVENT(evt_dokan1_message)
     END_IF
     SET_VALUE(LW(0), 0)
     RETURN
@@ -392,18 +392,18 @@ static TreeAccess tree_access_data[] = {
 EVT_BEGIN(win_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     SET_VALUE(LW(0), PTR(tree_access_data))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_01_A_SIREN_ARGUMENT)
-        SPAWN_EVENT(PTR(guide_bigtree))
+        SPAWN_EVENT(guide_bigtree)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
-        SPAWN_EVENT(PTR(peach_mail))
+        SPAWN_EVENT(peach_mail)
     END_IF
-    SPAWN_EVENT(PTR(evt_sub_mail_event))
+    SPAWN_EVENT(evt_sub_mail_event)
     CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 165, 0, -58, ITEM_TYPE_STILL, GSWF_WIN_01_INN_COUPON, 0)
     RETURN
 EVT_END()

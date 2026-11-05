@@ -736,7 +736,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(2), 0)
@@ -759,7 +759,7 @@ static EVT_BEGIN(damage_event)
         END_IF
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
-            CALL_CHILD(PTR(to_floor))
+            CALL_CHILD(to_floor)
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
@@ -768,7 +768,7 @@ EVT_END()
 
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-    CALL_CHILD(PTR(to_floor))
+    CALL_CHILD(to_floor)
     RETURN
 EVT_END()
 
@@ -781,7 +781,7 @@ EVT_END()
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(to_floor))
+        CALL_CHILD(to_floor)
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
     WAIT_MS(200)
@@ -805,7 +805,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
-    CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
+    CALL_CHILD(subsetevt_dead_core_nospin_norotate)
     RETURN
 EVT_END()
 
@@ -985,17 +985,17 @@ static EVT_BEGIN(attack_event)
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_champion_drop_kick_attack))
-            CALL_CHILD(PTR(drop_kick_attack_event))
+            CALL_CHILD(drop_kick_attack_event)
             CASE_EQUAL(1)
             SET_VALUE(LW(9), PTR(&weapon_champion_screw_attack))
-            CALL_CHILD(PTR(screw_attack_event))
+            CALL_CHILD(screw_attack_event)
         END_SWITCH
         CASE_EQUAL(1)
 
         // Next he does the Flying Chop.
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 2)
         SET_VALUE(LW(9), PTR(&weapon_champion_flying_chop_attack))
-        CALL_CHILD(PTR(flying_chop_attack_event))
+        CALL_CHILD(flying_chop_attack_event)
         CASE_EQUAL(2)
 
         // Then he picks freely among the three.
@@ -1003,21 +1003,21 @@ static EVT_BEGIN(attack_event)
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_champion_drop_kick_attack))
-            CALL_CHILD(PTR(drop_kick_attack_event))
+            CALL_CHILD(drop_kick_attack_event)
             CASE_EQUAL(1)
             SET_VALUE(LW(9), PTR(&weapon_champion_screw_attack))
-            CALL_CHILD(PTR(screw_attack_event))
+            CALL_CHILD(screw_attack_event)
             CASE_EQUAL(2)
             SET_VALUE(LW(9), PTR(&weapon_champion_flying_chop_attack))
-            CALL_CHILD(PTR(flying_chop_attack_event))
+            CALL_CHILD(flying_chop_attack_event)
         END_SWITCH
         CASE_EQUAL(3)
 
         // At the ceiling phase he climbs to the ceiling and shakes it with the Roof Shake.
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 4)
-        CALL_CHILD(PTR(to_ceiling))
+        CALL_CHILD(to_ceiling)
         SET_VALUE(LW(9), PTR(&weapon_champion_roof_shake_attack))
-        CALL_CHILD(PTR(roof_shake_attack_event))
+        CALL_CHILD(roof_shake_attack_event)
         CASE_EQUAL(4)
 
         // In the last phase, on the floor, he picks among his ground moves
@@ -1037,17 +1037,17 @@ static EVT_BEGIN(attack_event)
             SWITCH(LW(0))
                 CASE_EQUAL(0)
                 SET_VALUE(LW(9), PTR(&weapon_champion_drop_kick_attack))
-                CALL_CHILD(PTR(drop_kick_attack_event))
+                CALL_CHILD(drop_kick_attack_event)
                 CASE_EQUAL(1)
                 SET_VALUE(LW(9), PTR(&weapon_champion_screw_attack))
-                CALL_CHILD(PTR(screw_attack_event))
+                CALL_CHILD(screw_attack_event)
                 CASE_EQUAL(2)
                 SET_VALUE(LW(9), PTR(&weapon_champion_flying_chop_attack))
-                CALL_CHILD(PTR(flying_chop_attack_event))
+                CALL_CHILD(flying_chop_attack_event)
                 CASE_EQUAL(3)
-                CALL_CHILD(PTR(to_ceiling))
+                CALL_CHILD(to_ceiling)
                 SET_VALUE(LW(9), PTR(&weapon_champion_roof_shake_attack))
-                CALL_CHILD(PTR(roof_shake_attack_event))
+                CALL_CHILD(roof_shake_attack_event)
             END_SWITCH
         ELSE
 
@@ -1056,13 +1056,13 @@ static EVT_BEGIN(attack_event)
             SWITCH(LW(0))
                 CASE_EQUAL(0)
                 SET_VALUE(LW(9), PTR(&weapon_champion_foot_stamp_attack))
-                CALL_CHILD(PTR(foot_stamp_attack_event))
+                CALL_CHILD(foot_stamp_attack_event)
                 CASE_EQUAL(1)
                 SET_VALUE(LW(9), PTR(&weapon_champion_healing))
-                CALL_CHILD(PTR(healing_event))
+                CALL_CHILD(healing_event)
                 CASE_EQUAL(2)
                 SET_VALUE(LW(9), PTR(&weapon_champion_roof_shake_attack))
-                CALL_CHILD(PTR(roof_shake_attack_event))
+                CALL_CHILD(roof_shake_attack_event)
             END_SWITCH
         END_IF
     END_SWITCH

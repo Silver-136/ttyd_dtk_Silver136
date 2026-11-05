@@ -551,7 +551,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -928,7 +928,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(wakka_attack_event))
+        CALL_CHILD(wakka_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -954,16 +954,16 @@ static EVT_BEGIN(attack_event)
         ADD(LW(1), 1)
     END_LOOP
     IF_INT_EQUAL(LW(0), 4)
-        CALL_CHILD(PTR(wawawa_attack_event))
+        CALL_CHILD(wawawa_attack_event)
     ELSE
         SET_VALUE(LW(0), 70)
         ADD(LW(0), 30)
         SUBTRACT(LW(0), 1)
         CALL(evt_sub_random, LW(0), LW(1))
         IF_INT_LESS(LW(1), 70)
-            CALL_CHILD(PTR(wakka_attack_event))
+            CALL_CHILD(wakka_attack_event)
         ELSE
-            CALL_CHILD(PTR(recovery_event))
+            CALL_CHILD(recovery_event)
         END_IF
     END_IF
     RETURN
@@ -1166,7 +1166,7 @@ static EVT_BEGIN(damage_check_event_sub)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL_CHILD(PTR(wakka_attack_common_event_no_hit))
+    CALL_CHILD(wakka_attack_common_event_no_hit)
     GOTO(98)
     LABEL(91)
     SET_VALUE(LW(13), 0)
@@ -1184,7 +1184,7 @@ static EVT_BEGIN(damage_check_event_sub)
         ADD(LW(13), 1)
         ADD(LW(14), 1)
     END_LOOP
-    CALL_CHILD(PTR(wakka_attack_common_event_hit))
+    CALL_CHILD(wakka_attack_common_event_hit)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     IF_INT_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1468,7 +1468,7 @@ EVT_END()
 static EVT_BEGIN(wawawa_attack_event_sub_no_last)
     SET_VALUE(LW(9), PTR(&weapon_wawawa_attack))
     SET_VALUE(LW(10), 0)
-    CALL_CHILD(PTR(damage_check_event_sub))
+    CALL_CHILD(damage_check_event_sub)
     RETURN
 EVT_END()
 
@@ -1489,7 +1489,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
         ADD(LW(14), 1)
     END_LOOP
     IF_INT_EQUAL(LW(0), 1)
-        CALL_CHILD(PTR(wakka_attack_common_event_hit))
+        CALL_CHILD(wakka_attack_common_event_hit)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_wawawa_attack))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_wawawa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), 0, -1000, 0)
@@ -1499,7 +1499,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
     ELSE
         SET_VALUE(LW(9), PTR(&weapon_wawawa_attack))
         SET_VALUE(LW(10), 1)
-        CALL_CHILD(PTR(damage_check_event_sub))
+        CALL_CHILD(damage_check_event_sub)
     END_IF
     RETURN
 EVT_END()

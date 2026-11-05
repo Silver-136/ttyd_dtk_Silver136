@@ -239,11 +239,11 @@ EVT_BEGIN(evt_takurami)
     CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -253,11 +253,11 @@ EVT_BEGIN(evt_takurami)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -290,11 +290,11 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(300)
     CALL(evt_npc_move_position, STRING("ガンス"), 0, -130, 0, FLOAT(100.0f), 1)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -305,11 +305,11 @@ EVT_BEGIN(evt_takurami)
     END_INLINE_EVENT
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_close_door_play_se))
+    SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -325,7 +325,7 @@ EVT_BEGIN(evt_takurami)
     // and control returns to Mario.
     SET_VALUE(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
     SET_VALUE(LW(0), 0)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -442,7 +442,7 @@ EVT_BEGIN(evt_hiki_open)
 #if VERSION <= VERSION_DEMO_JP
             CALL_CHILD(evt_takurami)
 #else
-            CALL_CHILD(PTR(evt_takurami))
+            CALL_CHILD(evt_takurami)
             CALL(evt_mario_key_onoff, 1)
 #endif
             CALL(evt_party_run, 0)
@@ -546,7 +546,7 @@ static EVT_BEGIN(talk_gans)
         // BUG: signing stores STG3_03_GRUBBA (already the value here; evt_sensyu2's signing stores STG3_04), so the
         // story stays at 03 and the room init keeps installing talk_gans until tou_04 sets STG3_05_MATCH.
         SET_VALUE(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
-        CALL_CHILD(PTR(evt_kinoshikowa))
+        CALL_CHILD(evt_kinoshikowa)
     END_IF
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -722,11 +722,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     WAIT_MS(300)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -180)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -734,11 +734,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -773,11 +773,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -120, 0, FLOAT(50.0f), 1)
     SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(PTR(n_door_open))
+        CALL_CHILD(n_door_open)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -896,11 +896,11 @@ static EVT_BEGIN(evt_sensyu)
         CALL(evt_npc_move_position, STRING("ガンス"), -10, -120, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING("ガンス"), 10, -120, 0, FLOAT(80.0f), 1)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_open_door_play_se))
+        SPAWN_EVENT(bero_open_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -976,7 +976,7 @@ EVT_BEGIN(evt_sensyu2)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("a"), 0, 4, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1500)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_04_GONZALES_IS_BORN)
-        CALL_CHILD(PTR(evt_kinoshikowa))
+        CALL_CHILD(evt_kinoshikowa)
     END_IF
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
@@ -1247,11 +1247,11 @@ EVT_BEGIN(evt_nozoki)
         // Jolene leaves through the door, and Grubba grumbles that good fighters are a dying breed.
         CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -120, 0, FLOAT(80.0f), 1)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_open_door_play_se))
+        SPAWN_EVENT(bero_open_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1262,11 +1262,11 @@ EVT_BEGIN(evt_nozoki)
         END_INLINE_EVENT
         WAIT_MS(500)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1317,11 +1317,11 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_npc_move_position, STRING("ガンス"), 115, -80, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING("ガンス"), 0, -120, 0, FLOAT(80.0f), 1)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_open_door_play_se))
+        SPAWN_EVENT(bero_open_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1332,11 +1332,11 @@ EVT_BEGIN(evt_nozoki)
         END_INLINE_EVENT
         WAIT_MS(500)
         SET_VALUE(LW(1), 0)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -1463,7 +1463,7 @@ EVT_BEGIN(tou_05_init_evt)
     // Set up the doors, the camera animation and the Star Piece on the floor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_map_playanim, STRING("anm_camera"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
 #if VERSION >= VERSION_JP
@@ -1560,17 +1560,17 @@ EVT_BEGIN(tou_05_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
         SET_VALUE(LW(0), 1)
         IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
-            SPAWN_EVENT(PTR(evt_sensyu))
+            SPAWN_EVENT(evt_sensyu)
         ELSE
             SET_VALUE(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
-            SPAWN_EVENT(PTR(evt_sensyu2))
+            SPAWN_EVENT(evt_sensyu2)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(PTR(evt_1st_leagu))
+        SPAWN_EVENT(evt_1st_leagu)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1629,7 +1629,7 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("fall"))
             IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
-                SPAWN_EVENT(PTR(evt_sensyu_reentry))
+                SPAWN_EVENT(evt_sensyu_reentry)
             END_IF
         END_IF
     END_IF

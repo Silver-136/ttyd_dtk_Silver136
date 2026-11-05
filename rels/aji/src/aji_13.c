@@ -899,7 +899,7 @@ EVT_BEGIN(shikake_init)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        SPAWN_EVENT(PTR(move_left_right))
+        SPAWN_EVENT(move_left_right)
     END_LOOP
     SET_INT_READ_ADDR(PTR(&up_down_tbl))
     LOOP(0)
@@ -908,7 +908,7 @@ EVT_BEGIN(shikake_init)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        SPAWN_EVENT(PTR(move_up_down))
+        SPAWN_EVENT(move_up_down)
     END_LOOP
     SET_INT_READ_ADDR(PTR(&r_tbl))
     LOOP(0)
@@ -917,7 +917,7 @@ EVT_BEGIN(shikake_init)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        SPAWN_EVENT(PTR(move_r))
+        SPAWN_EVENT(move_r)
     END_LOOP
     BEGIN_INLINE_EVENT
         CALL(mario_chk)
@@ -1020,13 +1020,13 @@ static EVT_BEGIN(evt_ramp)
         END_LOOP
     END_INLINE_EVENT
     SET_VALUE(LW(0), STRING("S_hari01"))
-    SPAWN_EVENT(PTR(evt_hari))
+    SPAWN_EVENT(evt_hari)
     SET_VALUE(LW(0), STRING("S_hari02"))
-    SPAWN_EVENT(PTR(evt_hari))
+    SPAWN_EVENT(evt_hari)
     SET_VALUE(LW(0), STRING("S_hari03"))
-    SPAWN_EVENT(PTR(evt_hari))
+    SPAWN_EVENT(evt_hari)
     SET_VALUE(LW(0), STRING("S_hari04"))
-    SPAWN_EVENT(PTR(evt_hari))
+    SPAWN_EVENT(evt_hari)
     RETURN
 EVT_END()
 
@@ -1047,7 +1047,7 @@ EVT_BEGIN(evt_bcv_sw)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("kon"), MAP_ANIM_PLAY_LOOP, 0)
-    SPAWN_EVENT(PTR(evt_ramp))
+    SPAWN_EVENT(evt_ramp)
     WAIT_MS(3000)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
@@ -1087,7 +1087,7 @@ static EVT_BEGIN(evt_door_msg)
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
         SET_VALUE(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -1109,8 +1109,8 @@ EVT_BEGIN(aji_13_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(shikake_init))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(shikake_init)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("A_hikou1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ami2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai5"), MAP_OBJ_FLAG_CLIP)
@@ -1128,7 +1128,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
         CALL(evt_map_playanim, STRING("kon"), MAP_ANIM_PLAY_LOOP, 0)
-        CALL_CHILD(PTR(evt_ramp))
+        CALL_CHILD(evt_ramp)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1148,7 +1148,7 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
         SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -1166,7 +1166,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
     END_IF
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     BEGIN_INLINE_EVENT
         CALL(bg_cam_chk)
     END_INLINE_EVENT

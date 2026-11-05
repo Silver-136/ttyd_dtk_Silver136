@@ -1339,7 +1339,7 @@ EVT_BEGIN(uranaisi_table_talk)
         CALL_CHILD(uranai_init)
 #else
         CALL(evt_win_coin_off, LW(12))
-        CALL_CHILD(PTR(uranai_init))
+        CALL_CHILD(uranai_init)
 #endif
         CALL(evt_msg_print, 0, STRING("uranaisi_12"), 0, STRING("me"))
         BEGIN_INLINE_EVENT
@@ -1347,7 +1347,7 @@ EVT_BEGIN(uranaisi_table_talk)
             WAIT_MS(240)
             CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
         END_INLINE_EVENT
-        CALL_CHILD(PTR(uranai_main))
+        CALL_CHILD(uranai_main)
         CALL(evt_npc_set_anim, STRING("me"), STRING("D_1"))
         WAIT_MS(170)
 
@@ -1355,18 +1355,18 @@ EVT_BEGIN(uranaisi_table_talk)
         // or where the Shine Sprites are.
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL_CHILD(PTR(uranaisi_next_evt))
+            CALL_CHILD(uranaisi_next_evt)
             CASE_EQUAL(1)
-            CALL_CHILD(PTR(uranaisi_starpiece_evt))
+            CALL_CHILD(uranaisi_starpiece_evt)
             CASE_EQUAL(2)
-            CALL_CHILD(PTR(uranaisi_supercoin_evt))
+            CALL_CHILD(uranaisi_supercoin_evt)
         END_SWITCH
 
         // The table is cleared; JP and later return to the reading menu, while the early demos restore Mario's controls.
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(uranai_exit)
 #else
-        CALL_CHILD(PTR(uranai_exit))
+        CALL_CHILD(uranai_exit)
     END_LOOP
 #endif
     LABEL(0)
@@ -1398,7 +1398,7 @@ EVT_END()
  * Not used in the US and JP demos, which use the shared NPC init.
  */
 EVT_BEGIN(starmaniac_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
         CALL(evt_npc_set_position, STRING("me"), 400, -20, 175)
     END_IF
@@ -1702,7 +1702,7 @@ EVT_END()
 
 /** Regular script for borodo3. Runs the shared wandering loop tik_villager_urouro. */
 EVT_BEGIN(borodo3_regl)
-    CALL_CHILD(PTR(tik_villager_urouro))
+    CALL_CHILD(tik_villager_urouro)
     RETURN
 EVT_END()
 
@@ -2067,9 +2067,9 @@ static const char* door_data_01_npc[] = {
  */
 static EVT_BEGIN(evt_wall_01)
     IF_INT_EQUAL(LW(6), 0)
-        SPAWN_EVENT(PTR(evt_wall_01_00))
-        SPAWN_EVENT(PTR(evt_wall_01_01))
-        SPAWN_EVENT(PTR(evt_wall_01_02))
+        SPAWN_EVENT(evt_wall_01_00)
+        SPAWN_EVENT(evt_wall_01_01)
+        SPAWN_EVENT(evt_wall_01_02)
     END_IF
     RETURN
 EVT_END()
@@ -2262,10 +2262,10 @@ EVT_END()
 /** Wall callback for the shop house: on its first call (LW(6) = 0), on entry and on exit, starts the four wall panels. */
 static EVT_BEGIN(evt_wall_02)
     IF_INT_EQUAL(LW(6), 0)
-        SPAWN_EVENT(PTR(evt_wall_02_00))
-        SPAWN_EVENT(PTR(evt_wall_02_01))
-        SPAWN_EVENT(PTR(evt_wall_02_02))
-        SPAWN_EVENT(PTR(evt_wall_02_03))
+        SPAWN_EVENT(evt_wall_02_00)
+        SPAWN_EVENT(evt_wall_02_01)
+        SPAWN_EVENT(evt_wall_02_02)
+        SPAWN_EVENT(evt_wall_02_03)
     END_IF
     RETURN
 EVT_END()
@@ -2438,10 +2438,10 @@ EVT_END()
 /** Wall callback for the third house: on its first call (LW(6) = 0), on entry and on exit, starts the four wall panels. */
 static EVT_BEGIN(evt_wall_03)
     IF_INT_EQUAL(LW(6), 0)
-        SPAWN_EVENT(PTR(evt_wall_03_00))
-        SPAWN_EVENT(PTR(evt_wall_03_01))
-        SPAWN_EVENT(PTR(evt_wall_03_02))
-        SPAWN_EVENT(PTR(evt_wall_03_03))
+        SPAWN_EVENT(evt_wall_03_00)
+        SPAWN_EVENT(evt_wall_03_01)
+        SPAWN_EVENT(evt_wall_03_02)
+        SPAWN_EVENT(evt_wall_03_03)
     END_IF
     RETURN
 EVT_END()
@@ -2636,7 +2636,7 @@ static EVT_BEGIN(evt_door_04_close)
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(kurihakase_event)
 #else
-        CALL_CHILD(PTR(kurihakase_event))
+        CALL_CHILD(kurihakase_event)
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
         CALL(evt_mario_key_onoff, 1)
@@ -2681,13 +2681,13 @@ EVT_BEGIN(evt_door_stg7_open)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-    SPAWN_EVENT(PTR(evt_door_open))
+    SPAWN_EVENT(evt_door_open)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_door_stg7_close)
     SET_VALUE(GSWF_TIK_00_STG7_DOOR_OPENED, 1)
-    SPAWN_EVENT(PTR(evt_door_close))
+    SPAWN_EVENT(evt_door_close)
     RETURN
 EVT_END()
 
@@ -2829,8 +2829,8 @@ EVT_BEGIN(tensou_init_event)
     CALL(evt_cam_road_reset)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(0), PTR(&door_data_04))
-    SPAWN_EVENT(PTR(evt_door_open_quick))
-    CALL_CHILD(PTR(tensou_return))
+    SPAWN_EVENT(evt_door_open_quick)
+    CALL_CHILD(tensou_return)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
         IF_INT_EQUAL(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 0)
@@ -3037,7 +3037,7 @@ EVT_BEGIN(tensou_sw_event)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-        SPAWN_EVENT(PTR(tensou_anim_event))
+        SPAWN_EVENT(tensou_anim_event)
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
         CALL(evt_exit_case_evt)
     ELSE
@@ -3045,7 +3045,7 @@ EVT_BEGIN(tensou_sw_event)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-            SPAWN_EVENT(PTR(tensou_anim_event))
+            SPAWN_EVENT(tensou_anim_event)
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
             CALL(evt_exit_case_evt)
         ELSE
@@ -3208,11 +3208,11 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -345, -25, 0, 60, 0)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -345, -5, 0, 60, 0)
     SET_VALUE(LW(0), PTR(&door_data_04))
-    SPAWN_EVENT(PTR(door_open_se))
+    SPAWN_EVENT(door_open_se)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        SPAWN_EVENT(PTR(evt_door_04_00))
+        SPAWN_EVENT(evt_door_04_00)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -3220,11 +3220,11 @@ static EVT_BEGIN(epilogue_evt)
     END_LOOP
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -345, -70, 0, 60, 0)
     SET_VALUE(LW(0), PTR(&door_data_04))
-    SPAWN_EVENT(PTR(door_close_se))
+    SPAWN_EVENT(door_close_se)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        SPAWN_EVENT(PTR(evt_door_04_00))
+        SPAWN_EVENT(evt_door_04_00)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -3276,21 +3276,21 @@ EVT_BEGIN(tik_00_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(johoya_data_alloc, STRING("jketi_code"))
     SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
     CALL(uranaisi_table_clear)
     SET_VALUE(LW(0), PTR(&door_data_01))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
-    CALL_CHILD(PTR(evt_door_entry))
+    CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_04))
-    CALL_CHILD(PTR(evt_door_04_entry))
-    SPAWN_EVENT(PTR(tensou_init_event))
+    CALL_CHILD(evt_door_04_entry)
+    SPAWN_EVENT(tensou_init_event)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sui"), 0, PTR(tensou_sw_event), 0)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     SET_VALUE(LW(0), STRING("ugo_yuka"))
@@ -3303,8 +3303,8 @@ EVT_BEGIN(tik_00_init_evt)
     SET_VALUE(LW(7), 0)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
-    SPAWN_EVENT(PTR(moving_floor))
-    SPAWN_EVENT(PTR(hashira_bomb))
+    SPAWN_EVENT(moving_floor)
+    SPAWN_EVENT(hashira_bomb)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 525, 209, -175, 0, GSWF_SHINE_05, 0)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -375, -60, 320, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_00_SOFT_STOMP_CHEST)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 95, -360, STRING("ie_3_naka"), 125, GSWF_STARPIECE_21)
@@ -3313,13 +3313,13 @@ EVT_BEGIN(tik_00_init_evt)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_20, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
-        CALL_CHILD(PTR(epilogue_npc_entry))
-        SPAWN_EVENT(PTR(epilogue_evt))
+        CALL_CHILD(epilogue_npc_entry)
+        SPAWN_EVENT(epilogue_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(evt_sub_mail_event)
 #else
-    SPAWN_EVENT(PTR(evt_sub_mail_event))
+    SPAWN_EVENT(evt_sub_mail_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_1"), MAP_OBJ_FLAG_CLIP)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_2"), MAP_OBJ_FLAG_CLIP)

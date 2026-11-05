@@ -837,7 +837,7 @@ EVT_BEGIN(mario_vs_witchtrio)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_07_MARIO_VS_SHADOW_SIRENS)
-    SPAWN_EVENT(PTR(witchtrio_lose))
+    SPAWN_EVENT(witchtrio_lose)
     RETURN
 EVT_END()
 
@@ -986,7 +986,7 @@ EVT_BEGIN(witchtrio_lose)
         CALL(evt_eff_softdelete, STRING("effmaririn"))
         CALL(evt_npc_get_position, STRING("マリリン"), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position_nohit, STRING("マリリン"), LW(0), LW(1), LW(2), 225, 30)
-        SPAWN_EVENT(PTR(witchtrio_mess_mari))
+        SPAWN_EVENT(witchtrio_mess_mari)
         CALL(evt_npc_set_ry, STRING("マリリン"), 270)
         CALL(evt_npc_get_position, STRING("マリリン"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SISTERS_ESCAPE1"), LW(0), LW(1), LW(2), 0)
@@ -1002,7 +1002,7 @@ EVT_BEGIN(witchtrio_lose)
         CALL(evt_eff_softdelete, STRING("effvivian"))
         CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position_nohit, STRING("ビビアン"), LW(0), LW(1), LW(2), 225, 30)
-        SPAWN_EVENT(PTR(witchtrio_mess_vivi))
+        SPAWN_EVENT(witchtrio_mess_vivi)
         WAIT_MS(500)
         CALL(evt_npc_set_ry, STRING("ビビアン"), 270)
         CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
@@ -1110,10 +1110,10 @@ EVT_END()
  * counts the kill in GSW_TROUBLE_WORK_FIRST and starts iri_28_enemy_all_dead when the count reaches 3.
  */
 EVT_BEGIN(iri_28_enemy_dead)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     ADD(GSW_TROUBLE_WORK(0), 1)
     IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 3)
-        SPAWN_EVENT(PTR(iri_28_enemy_all_dead))
+        SPAWN_EVENT(iri_28_enemy_all_dead)
     END_IF
     RETURN
 EVT_END()
@@ -1170,13 +1170,13 @@ EVT_END()
 EVT_BEGIN(win_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSWF_WIN_00_NECKLACE, 1)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-            CALL_CHILD(PTR(kizayarou_init))
+            CALL_CHILD(kizayarou_init)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_JP
@@ -1185,24 +1185,24 @@ EVT_BEGIN(win_00_init_evt)
     CALL(evt_npc_check_delete, STRING("ドクガッスン３_2"))
 #endif
     SET_VALUE(LW(0), PTR(tree_access_data))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_00_BOGGLY_WOODS)
-        SPAWN_EVENT(PTR(witchtrio_momeru))
+        SPAWN_EVENT(witchtrio_momeru)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_05_02_FLURRIE_REQUEST)
-        SPAWN_EVENT(PTR(witchtrio_picture))
+        SPAWN_EVENT(witchtrio_picture)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_06_THE_SKETCH)
-        SPAWN_EVENT(PTR(mario_vs_witchtrio))
+        SPAWN_EVENT(mario_vs_witchtrio)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_07_MARIO_VS_SHADOW_SIRENS)
-        SPAWN_EVENT(PTR(witchtrio_lose))
+        SPAWN_EVENT(witchtrio_lose)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_08_SHADOW_SIRENS_LOSE)
         CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
     END_IF
     CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, ITEM_TYPE_GROUND, GSWF_WIN_00_HONEY_SYRUP, 0)
-    CALL_CHILD(PTR(iri_28_init))
+    CALL_CHILD(iri_28_init)
     RETURN
 EVT_END()
 

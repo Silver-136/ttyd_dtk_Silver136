@@ -381,7 +381,7 @@ EVT_BEGIN(kpa_fall_sub)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL_CHILD(PTR(kpa_dead))
+    CALL_CHILD(kpa_dead)
     RETURN
 EVT_END()
 
@@ -547,7 +547,7 @@ EVT_BEGIN(kpa_stage_start)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA2_S_1"), STRING("KPA2_T_1"))
     CALL(evt_msg_print, 0, LW(0), 0, STRING("mario"))
     CALL(evt_fade_out, 1000)
-    SPAWN_EVENT(PTR(kpa_bgm_change))
+    SPAWN_EVENT(kpa_bgm_change)
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_map_blend_off, 0)
     CALL(evt_map_blend_off, 1)
@@ -632,7 +632,7 @@ EVT_BEGIN(kpa_time)
         END_IF
     END_LOOP
     CALL(kpa_pole_hitoff)
-    CALL_CHILD(PTR(kpa_dead))
+    CALL_CHILD(kpa_dead)
     RETURN
 EVT_END()
 

@@ -33,7 +33,7 @@ static TreeAccess tree_tbl[] = {
 /** Registers the map's tree access table (tree_tbl) with evt_sub_tree_access_entry so the trees can be shaken. */
 static EVT_BEGIN(evt_tree)
     SET_VALUE(LW(0), PTR(tree_tbl))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     RETURN
 EVT_END()
 
@@ -82,9 +82,9 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(bom_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(evt_bom_snowfall))
-    CALL_CHILD(PTR(evt_tree))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(evt_bom_snowfall)
+    CALL_CHILD(evt_tree)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_BOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM1"))
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 450, 5, 110, ITEM_TYPE_STILL, GSWF_STARPIECE_96, 0)

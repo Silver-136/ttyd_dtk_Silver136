@@ -291,7 +291,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -613,7 +613,7 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-    CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -907,7 +907,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
 #endif
@@ -1259,7 +1259,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
 #endif

@@ -485,7 +485,7 @@ EVT_BEGIN(luigi_gor_first_talk)
         SET_VALUE(LW(10), 1)
     END_IF
     SET_VALUE(GF(0), 0)
-    SPAWN_EVENT(PTR(mario_and_party_sleep))
+    SPAWN_EVENT(mario_and_party_sleep)
     CALL(evt_msg_print, 0, LW(1), 0, STRING("me"))
     SET_VALUE(GF(0), 1)
     WAIT_WHILE(GF(0))

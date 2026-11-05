@@ -656,11 +656,11 @@ static EVT_BEGIN(damage_event)
             CASE_END
         END_SWITCH
     END_IF
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
     LABEL(50)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_FIRE)
-    CALL_CHILD(PTR(dead_event))
+    CALL_CHILD(dead_event)
     RETURN
 EVT_END()
 
@@ -784,7 +784,7 @@ static EVT_BEGIN(dead_event)
     END_SWITCH
     LABEL(10)
     SET_VALUE(LW(10), UNIT_ID_SELF)
-    CALL_CHILD(PTR(subsetevt_dead_core))
+    CALL_CHILD(subsetevt_dead_core)
     RETURN
     LABEL(50)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT)

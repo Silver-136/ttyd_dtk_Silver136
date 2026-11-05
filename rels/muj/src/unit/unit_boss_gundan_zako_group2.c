@@ -308,7 +308,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(zakogun_damage_pose)
     END_IF
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(zakogun_damage_pose_cancel)
     RETURN
 EVT_END()
@@ -368,10 +368,10 @@ static EVT_BEGIN(attack_event)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
     IF_INT_LESS(LW(1), 50)
-        CALL_CHILD(PTR(fall_attack_event))
+        CALL_CHILD(fall_attack_event)
         GOTO(99)
     END_IF
-    CALL_CHILD(PTR(shake_attack_event))
+    CALL_CHILD(shake_attack_event)
     GOTO(99)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -392,7 +392,7 @@ EVT_BEGIN(fall_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         GOTO(99)
@@ -407,7 +407,7 @@ EVT_BEGIN(fall_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     BEGIN_SIBLING_EVENT
-        CALL_CHILD(PTR(hit_check_event))
+        CALL_CHILD(hit_check_event)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_MOVE_CAILING2"), 0)
     CALL(zakogun_attack2)
@@ -429,7 +429,7 @@ static EVT_BEGIN(shake_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         GOTO(99)
@@ -473,7 +473,7 @@ static EVT_BEGIN(shake_attack_event)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
         IF_INT_NOT_EQUAL(LW(3), -1)
-            CALL_CHILD(PTR(hit_check_event2))
+            CALL_CHILD(hit_check_event2)
         END_IF
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
@@ -493,7 +493,7 @@ static EVT_BEGIN(shake_attack_event)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL_CHILD(PTR(hit_check_event2))
+        CALL_CHILD(hit_check_event2)
     END_IF
     RETURN
 EVT_END()
@@ -942,7 +942,7 @@ static EVT_BEGIN(hit_check_event)
     LOOP(4)
         WAIT_FRAMES(20)
         SET_VALUE(LW(15), 0)
-        CALL_CHILD(PTR(hit_check_event_sub))
+        CALL_CHILD(hit_check_event_sub)
     END_LOOP
     LOOP(0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, LW(0))
@@ -952,14 +952,14 @@ static EVT_BEGIN(hit_check_event)
         WAIT_FRAMES(1)
     END_LOOP
     SET_VALUE(LW(15), 1)
-    CALL_CHILD(PTR(hit_check_event_sub))
+    CALL_CHILD(hit_check_event_sub)
     RETURN
 EVT_END()
 
 /** Hit check of group 2's shaking attack: one last hit (LW(15) = 1) on the current target through hit_check_event_sub. */
 EVT_BEGIN(hit_check_event2)
     SET_VALUE(LW(15), 1)
-    CALL_CHILD(PTR(hit_check_event_sub))
+    CALL_CHILD(hit_check_event_sub)
     RETURN
 EVT_END()
 

@@ -210,9 +210,9 @@ EVT_BEGIN(aji_08_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     SPAWN_EVENT_GET_ID(PTR(heya_tenura_onoff), LW(0))
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     BEGIN_INLINE_EVENT
         CALL(slit_chk)
     END_INLINE_EVENT

@@ -39,7 +39,7 @@ EvtWord win_05_init_evt[42];
 EVT_BEGIN(win_05_door_open)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
-    SPAWN_EVENT(PTR(evt_win_door_open))
+    SPAWN_EVENT(evt_win_door_open)
     RETURN
 EVT_END()
 
@@ -50,7 +50,7 @@ EVT_END()
 EVT_BEGIN(win_05_door_close)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
-    SPAWN_EVENT(PTR(evt_win_door_close))
+    SPAWN_EVENT(evt_win_door_close)
     RETURN
 EVT_END()
 
@@ -146,13 +146,13 @@ EVT_END()
 EVT_BEGIN(win_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -45, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_WIN_05_SUPER_APPEAL_P_CHEST)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 64, 0, 118, STRING("S_yukaA"), 125, GSWF_STARPIECE_44)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN2"))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
-        SPAWN_EVENT(PTR(cloud_toujou))
+        SPAWN_EVENT(cloud_toujou)
     END_IF
     RETURN
 EVT_END()

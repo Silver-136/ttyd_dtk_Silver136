@@ -338,7 +338,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -361,7 +361,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_event)
     SET_VALUE(LW(9), PTR(&weapon_batten_satellite_attack))
-    CALL_CHILD(PTR(batten_satellite_attack_attack_event))
+    CALL_CHILD(batten_satellite_attack_attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

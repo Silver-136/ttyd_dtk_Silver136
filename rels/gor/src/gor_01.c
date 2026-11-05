@@ -785,7 +785,7 @@ static EVT_BEGIN(buy_evt)
         CALL(evt_msg_continue)
         CALL_CHILD(zaiko_buy_evt)
 #else
-        CALL_CHILD(PTR(zaiko_buy_evt))
+        CALL_CHILD(zaiko_buy_evt)
 #endif
         CASE_EQUAL(2)
 #if VERSION <= VERSION_DEMO_JP
@@ -823,14 +823,14 @@ EVT_BEGIN(badgeshopper_talk_evt)
         CALL(evt_msg_continue)
         CALL_CHILD(buy_evt)
 #else
-        CALL_CHILD(PTR(buy_evt))
+        CALL_CHILD(buy_evt)
 #endif
         CASE_EQUAL(1)
 #if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL_CHILD(sell_evt)
 #else
-        CALL_CHILD(PTR(sell_evt))
+        CALL_CHILD(sell_evt)
 #endif
         CASE_EQUAL(2)
 #if VERSION <= VERSION_DEMO_JP
@@ -1178,13 +1178,13 @@ EVT_BEGIN(nancy_init)
         IF_INT_EQUAL(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 0)
             CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_set_position, STRING("me"), -500, 0, 75)
-            SPAWN_EVENT(PTR(nancy_init_check))
+            SPAWN_EVENT(nancy_init_check)
         ELSE
             CALL(evt_npc_set_ry, STRING("me"), 90)
             CALL(evt_npc_set_position, STRING("me"), -573, 0, 56)
         END_IF
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("w_bero"), 8388612)
     ELSE
         CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -1300,7 +1300,7 @@ EVT_BEGIN(nancy_talk)
             CALL(evt_msg_print, 0, STRING("gor_01_011"), 0, STRING("me"))
             WAIT_MS(500)
             SET_VALUE(GF(0), 1)
-            SPAWN_EVENT(PTR(nancy_door_anime))
+            SPAWN_EVENT(nancy_door_anime)
             WAIT_MS(500)
             CALL(evt_npc_move_position, STRING("me"), -370, -30, 0, FLOAT(80.0f), 0)
             WAIT_WHILE(GF(0))
@@ -1315,14 +1315,14 @@ EVT_BEGIN(nancy_talk)
 #if VERSION >= VERSION_US
             CALL_CHILD(bero_case_switch_on)
 #else
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
 #endif
             CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 8388612)
             SET_VALUE(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 1)
             CALL(evt_door_set_param, GW(6), 0, PTR(&door_data_01_npc))
         END_IF
     ELSE
-        CALL_CHILD(PTR(cooking_evt))
+        CALL_CHILD(cooking_evt)
     END_IF
     RETURN
 EVT_END()
@@ -1995,7 +1995,7 @@ EVT_END()
  * npcEnt does not use it (his regularEvent is NULL).
  */
 EVT_BEGIN(kuribo2_regl)
-    CALL_CHILD(PTR(gor_villager_urouro))
+    CALL_CHILD(gor_villager_urouro)
     RETURN
 EVT_END()
 
@@ -2030,7 +2030,7 @@ EVT_END()
 
 /** Regular event of the third Goomba villager: wanders with gor_villager_urouro. */
 EVT_BEGIN(kuribo3_regl)
-    CALL_CHILD(PTR(gor_villager_urouro))
+    CALL_CHILD(gor_villager_urouro)
     RETURN
 EVT_END()
 
@@ -2089,7 +2089,7 @@ EVT_BEGIN(chusan1_init)
         CALL(evt_npc_set_position, STRING("me"), -80, 0, 40)
         CALL(evt_npc_set_ry, STRING("me"), 270)
         SET_VALUE(GF(9), 1)
-        SPAWN_EVENT(PTR(chusan1_naguru))
+        SPAWN_EVENT(chusan1_naguru)
     END_IF
     RETURN
 EVT_END()
@@ -2101,7 +2101,7 @@ EVT_END()
 EVT_BEGIN(chusan1_regl)
     IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HIT_ME_PLEASE)
         DEBUG_PUT_MSG(STRING("マルチュロ：普段のうろうろ"))
-        CALL_CHILD(PTR(gor_villager_urouro))
+        CALL_CHILD(gor_villager_urouro)
     END_IF
     DEBUG_PUT_MSG(STRING("マルチュロ：依頼時は何もしない"))
     RETURN
@@ -2170,7 +2170,7 @@ EVT_BEGIN(chusan1_naguru)
     ELSE
         CALL(evt_msg_print, 0, STRING("irai_05_016"), 0, STRING("チューさん１"))
         SET_VALUE(GF(9), 1)
-        SPAWN_EVENT(PTR(chusan1_naguru))
+        SPAWN_EVENT(chusan1_naguru)
     END_IF
     CALL(chusan1_alwaysencont, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -2502,7 +2502,7 @@ EVT_END()
 
 /** Talk event of Luigi: runs the shared first-talk scene luigi_gor_first_talk. */
 static EVT_BEGIN(luigi_talk)
-    CALL_CHILD(PTR(luigi_gor_first_talk))
+    CALL_CHILD(luigi_gor_first_talk)
     RETURN
 EVT_END()
 
@@ -3054,7 +3054,7 @@ EVT_BEGIN(christine_nakama_before)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    SPAWN_EVENT(PTR(christine_nakama))
+    SPAWN_EVENT(christine_nakama)
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()
@@ -3518,7 +3518,7 @@ EVT_BEGIN(evt_close_02_01_f2)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
-    SPAWN_EVENT(PTR(evt_close_sub))
+    SPAWN_EVENT(evt_close_sub)
     RETURN
 EVT_END()
 
@@ -3701,7 +3701,7 @@ EVT_BEGIN(house03_f1_fade)
         CALL(house03_f1_fade_func, LW(0))
         CALL(evt_npc_set_color, STRING("水夫ボム兵"), LW(0), LW(0), LW(0), 255)
         CALL(evt_npc_set_color, STRING("チューさん２"), LW(0), LW(0), LW(0), 255)
-        CALL_CHILD(PTR(luigi_f1_fade_check))
+        CALL_CHILD(luigi_f1_fade_check)
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
@@ -3743,7 +3743,7 @@ EVT_BEGIN(house03_f2_fade)
         CALL(house03_f2_fade_func, LW(0))
         CALL(evt_npc_set_color, STRING("宿店員"), LW(0), LW(0), LW(0), 255)
         CALL(evt_npc_set_color, STRING("キノじい"), LW(0), LW(0), LW(0), 255)
-        CALL_CHILD(PTR(luigi_f2_fade_check))
+        CALL_CHILD(luigi_f2_fade_check)
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
@@ -4437,7 +4437,7 @@ EVT_END()
 
 EVT_BEGIN(christine_nakama)
     SET_VALUE(GF(10), 1)
-    SPAWN_EVENT(PTR(maffia_assault))
+    SPAWN_EVENT(maffia_assault)
     CALL(evt_mario_clear_party, 1)
     CALL(evt_cam3d_evt_set, 0, 134, 984, 0, 38, 442, 0, EASING_SINE_IN_OUT)
     CALL(evt_party_stop, 0)
@@ -4582,7 +4582,7 @@ EVT_BEGIN(christine_nakama)
         CALL(evt_npc_move_position, STRING("キノじい"), 93, -46, 0, FLOAT(120.0f), 0)
         CALL(evt_npc_set_ry, STRING("キノじい"), 90)
         WAIT_MS(500)
-        SPAWN_EVENT(PTR(bar_door_anime))
+        SPAWN_EVENT(bar_door_anime)
         CALL(evt_npc_move_position, STRING("キノじい"), 74, -25, 0, FLOAT(180.0f), 0)
         WAIT_MS(500)
         CALL(evt_npc_move_position, STRING("キノじい"), 105, -95, 0, FLOAT(180.0f), 0)
@@ -4626,7 +4626,7 @@ EVT_BEGIN(christine_nakama)
     WAIT_MS(800)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(9), 1)
-    CALL_CHILD(PTR(all_party_lecture))
+    CALL_CHILD(all_party_lecture)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR1"))
     CALL(evt_msg_print_party, STRING("mac_0_053"))
@@ -4635,7 +4635,7 @@ EVT_BEGIN(christine_nakama)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
-    SPAWN_EVENT(PTR(christine_nakama_after))
+    SPAWN_EVENT(christine_nakama_after)
     RETURN
 EVT_END()
 
@@ -4746,15 +4746,15 @@ EVT_BEGIN(maffia_assault)
     CALL(evt_npc_move_position, STRING("マフィア１"), 110, 15, 0, FLOAT(360.0f), 0)
     CALL(evt_npc_set_anim, STRING("盗賊団１"), STRING("D_1"))
     CALL(evt_npc_set_anim, STRING("盗賊団２"), STRING("D_1"))
-    SPAWN_EVENT(PTR(maffia_turn))
+    SPAWN_EVENT(maffia_turn)
     CALL(evt_npc_move_position, STRING("マフィア１"), 90, 15, 0, FLOAT(360.0f), 0)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("マフィア１"), 110, 15, 0, FLOAT(360.0f), 0)
-    SPAWN_EVENT(PTR(maffia_turn))
+    SPAWN_EVENT(maffia_turn)
     CALL(evt_npc_move_position, STRING("マフィア１"), 90, 15, 0, FLOAT(360.0f), 0)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("マフィア１"), 110, 15, 0, FLOAT(360.0f), 0)
-    SPAWN_EVENT(PTR(maffia_turn))
+    SPAWN_EVENT(maffia_turn)
     CALL(evt_npc_move_position, STRING("マフィア１"), 90, 15, 0, FLOAT(360.0f), 0)
     CALL(evt_npc_set_anim, STRING("マフィア１"), STRING("S_1"))
     CALL(evt_msg_print, 0, STRING("mac_0_054"), 0, STRING("盗賊団１"))
@@ -4939,7 +4939,7 @@ EVT_BEGIN(ultrahammer_check)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mobj_flag_onoff, 0, STRING("mobj_box00"), MOBJ_FLAG_GRAVITY)
-    SPAWN_EVENT(PTR(box_copy))
+    SPAWN_EVENT(box_copy)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TBOX_FALL1"), LW(0), LW(1), LW(2), LW(10))
     CALL(evt_npc_jump_position_nohit, STRING("ダミー"), 275, 0, 75, 500, FLOAT(100.0f))
@@ -5387,15 +5387,15 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(anim_tevcallback_mobj, STRING("mobj_box00"), 1)
     SET_VALUE(GW(0), 700)
     SET_VALUE(LW(0), STRING("キノじい"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     SET_VALUE(LW(0), STRING("ロテン１"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     SET_VALUE(LW(0), STRING("クリボー１"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     SET_VALUE(LW(0), STRING("チューさん１"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     SET_VALUE(LW(0), STRING("ボッタクール"))
-    SPAWN_EVENT(PTR(sekai_yami_npc))
+    SPAWN_EVENT(sekai_yami_npc)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 700, -850, 5000)
     LOOP(0)
@@ -5821,7 +5821,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
 #if VERSION >= VERSION_US
                     CALL_CHILD(all_party_lecture)
 #else
-                    CALL_CHILD(PTR(all_party_lecture))
+                    CALL_CHILD(all_party_lecture)
 #endif
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 
@@ -5883,11 +5883,11 @@ EVT_END()
  */
 static EVT_BEGIN(epilogue_evt_sub)
     SET_VALUE(LW(0), PTR(&door_data_03_f2))
-    SPAWN_EVENT(PTR(door_open_se))
+    SPAWN_EVENT(door_open_se)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        SPAWN_EVENT(PTR(evt_door_03_00_f2))
+        SPAWN_EVENT(evt_door_03_00_f2)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -5900,11 +5900,11 @@ static EVT_BEGIN(epilogue_evt_sub)
     END_INLINE_EVENT
     WAIT_MS(1100)
     SET_VALUE(LW(0), PTR(&door_data_03_f2))
-    SPAWN_EVENT(PTR(door_close_se))
+    SPAWN_EVENT(door_close_se)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        SPAWN_EVENT(PTR(evt_door_03_00_f2))
+        SPAWN_EVENT(evt_door_03_00_f2)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -5912,11 +5912,11 @@ static EVT_BEGIN(epilogue_evt_sub)
     END_LOOP
     WAIT_WHILE(GF(0))
     SET_VALUE(LW(0), PTR(&door_data_02_f2))
-    SPAWN_EVENT(PTR(door_open_se))
+    SPAWN_EVENT(door_open_se)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        SPAWN_EVENT(PTR(evt_door_02_00_f2))
+        SPAWN_EVENT(evt_door_02_00_f2)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -5925,11 +5925,11 @@ static EVT_BEGIN(epilogue_evt_sub)
     CALL(evt_npc_move_position, STRING("バッジ店長"), -114, -100, 0, 60, 0)
     CALL(evt_set_dir_to_target, STRING("バッジ店長"), STRING("クリスチーヌ"))
     SET_VALUE(LW(0), PTR(&door_data_02_f2))
-    SPAWN_EVENT(PTR(door_close_se))
+    SPAWN_EVENT(door_close_se)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        SPAWN_EVENT(PTR(evt_door_02_00_f2))
+        SPAWN_EVENT(evt_door_02_00_f2)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -7383,7 +7383,7 @@ EVT_BEGIN(cooking_evt)
                 SET_VALUE(LW(15), ITEM_HONEY_SYRUP)
 
                 // She tries out the new recipe in the cooking cutscene and announces the Honey Shroom.
-                CALL_CHILD(PTR(cooking_evt_sub))
+                CALL_CHILD(cooking_evt_sub)
                 CALL(evt_msg_print, 0, STRING("irai_18_005"), 0, STRING("ナンシー"))
                 SET_VALUE(LF(0), 0)
                 CALL(evt_pouch_get_haveitemcnt, LW(0))
@@ -7638,7 +7638,7 @@ EVT_BEGIN(cooking_evt)
 
     // The cooking cutscene plays.
     SET_VALUE(LW(13), LW(2))
-    CALL_CHILD(PTR(cooking_evt_sub))
+    CALL_CHILD(cooking_evt_sub)
     SET_VALUE(LW(2), LW(13))
     CALL(chk_cook_msg, LW(2), LW(3))
 

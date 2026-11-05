@@ -648,7 +648,7 @@ EVT_END()
  */
 EVT_BEGIN(minigame04_main)
     CALL(evt_mario_key_onoff, 0)
-    CALL_CHILD(PTR(yuu_03_kaijo_init))
+    CALL_CHILD(yuu_03_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 3)
     CALL(yuuminigame_set_dataadr, 0, LW(0))
     CALL(evt_mario_kill_party, 0)
@@ -695,7 +695,7 @@ EVT_BEGIN(minigame04_start_cam_cancel)
     WAIT_FRAMES(1)
     CALL(evt_mario_wait_move_end)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL_CHILD(PTR(yuu_03_kaijo_init2))
+    CALL_CHILD(yuu_03_kaijo_init2)
     RETURN
 EVT_END()
 
@@ -718,14 +718,14 @@ EVT_BEGIN(minigame04_start)
                 IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
-                    CALL_CHILD(PTR(minigame04_start_cam_cancel))
+                    CALL_CHILD(minigame04_start_cam_cancel)
                     BREAK_LOOP
                 END_IF
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CALL(yuuminigame4_opening_on_off, LW(0), 0)
-        CALL_CHILD(PTR(yuu_03_kaijo_init2))
+        CALL_CHILD(yuu_03_kaijo_init2)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
     END_IF
@@ -890,7 +890,7 @@ EVT_BEGIN(minigame04_end)
 #endif
     SET_VALUE(GF(0), 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL_CHILD(PTR(yuu_03_kaijo_init2))
+    CALL_CHILD(yuu_03_kaijo_init2)
     CALL(evt_cam_road_reset)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_slit_cancel)
@@ -910,8 +910,8 @@ EVT_BEGIN(yuu_03_init_evt)
     CALL(evt_map_playanim, STRING("tama"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("gurade"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kyaku"), MAP_ANIM_PLAY_LOOP, 0)
-    SPAWN_EVENT(PTR(minigame04_main))
-    CALL_CHILD(PTR(evt_yuunpc_minigame4))
+    SPAWN_EVENT(minigame04_main)
+    CALL_CHILD(evt_yuunpc_minigame4)
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)

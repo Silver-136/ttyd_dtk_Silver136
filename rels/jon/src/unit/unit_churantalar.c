@@ -507,7 +507,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_LOWER, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_YARN_ALPHA, 255)
     CALL(piders_yarn_init)
-    SPAWN_EVENT(PTR(yarn_event))
+    SPAWN_EVENT(yarn_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -574,7 +574,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -791,9 +791,9 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(14), 1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            CALL_CHILD(PTR(move_kuuchu_event))
+            CALL_CHILD(move_kuuchu_event)
         ELSE
-            CALL_CHILD(PTR(move_kuutei_event))
+            CALL_CHILD(move_kuutei_event)
         END_IF
         GOTO(99)
     END_IF
@@ -802,28 +802,28 @@ static EVT_BEGIN(unison_phase_event)
     MODULO(LW(15), 2)
     IF_INT_EQUAL(LW(15), 1)
         IF_INT_EQUAL(LW(13), 0)
-            CALL_CHILD(PTR(move_kuuchu_event))
+            CALL_CHILD(move_kuuchu_event)
             GOTO(99)
         ELSE
-            CALL_CHILD(PTR(move_kuutei_event))
+            CALL_CHILD(move_kuutei_event)
             GOTO(99)
         END_IF
     ELSE
         MODULO(LW(14), 2)
         IF_INT_EQUAL(LW(14), 1)
             IF_INT_EQUAL(LW(13), 0)
-                CALL_CHILD(PTR(move_kuuchu_event))
+                CALL_CHILD(move_kuuchu_event)
                 GOTO(99)
             ELSE
-                CALL_CHILD(PTR(move_kuutei_event))
+                CALL_CHILD(move_kuutei_event)
                 GOTO(99)
             END_IF
         ELSE
             IF_INT_EQUAL(LW(13), 0)
-                CALL_CHILD(PTR(move_kuutei_event))
+                CALL_CHILD(move_kuutei_event)
                 GOTO(99)
             ELSE
-                CALL_CHILD(PTR(move_kuuchu_event))
+                CALL_CHILD(move_kuuchu_event)
                 GOTO(99)
             END_IF
         END_IF
@@ -854,11 +854,11 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(0), LW(1))
     IF_INT_LESS(LW(1), 50)
         SET_VALUE(LW(9), PTR(&weapon_piders_attack))
-        CALL_CHILD(PTR(normal_attack_event))
+        CALL_CHILD(normal_attack_event)
         GOTO(99)
     END_IF
     SET_VALUE(LW(9), PTR(&weapon_piders_renzoku_attack))
-    CALL_CHILD(PTR(renzoku_attack_event))
+    CALL_CHILD(renzoku_attack_event)
     GOTO(99)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -1100,7 +1100,7 @@ static EVT_BEGIN(normal_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         GOTO(99)
@@ -1110,13 +1110,13 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     SET_VALUE(LW(7), 3)
-    CALL_CHILD(PTR(piders_attack_common_event1))
-    SPAWN_EVENT(PTR(piders_attack_common_event2))
+    CALL_CHILD(piders_attack_common_event1)
+    SPAWN_EVENT(piders_attack_common_event2)
     SET_VALUE(LW(8), 1)
     SET_VALUE(LW(5), 5)
-    CALL_CHILD(PTR(piders_attack_common_event3))
+    CALL_CHILD(piders_attack_common_event3)
     SET_VALUE(LW(10), 0)
-    CALL_CHILD(PTR(damage_check_event_sub))
+    CALL_CHILD(damage_check_event_sub)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(500)
     LABEL(99)
@@ -1257,7 +1257,7 @@ static EVT_BEGIN(renzoku_attack_event_sub)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(1), LW(4))
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 7)
-            CALL_CHILD(PTR(renzoku_attack_event_sub_last))
+            CALL_CHILD(renzoku_attack_event_sub_last)
             BREAK_LOOP
         END_IF
         ADD(LW(0), 1)
@@ -1266,7 +1266,7 @@ static EVT_BEGIN(renzoku_attack_event_sub)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(1), LW(10))
         IF_INT_EQUAL(LW(3), LW(8))
             IF_INT_EQUAL(LW(4), LW(10))
-                CALL_CHILD(PTR(renzoku_attack_event_sub_no_last))
+                CALL_CHILD(renzoku_attack_event_sub_no_last)
                 BREAK_LOOP
             END_IF
         END_IF
@@ -1282,7 +1282,7 @@ EVT_END()
 static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(10), 1)
-    CALL_CHILD(PTR(damage_check_event_sub))
+    CALL_CHILD(damage_check_event_sub)
     RETURN
 EVT_END()
 
@@ -1316,7 +1316,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_last)
     ELSE
         SET_VALUE(LW(8), 1)
         SET_VALUE(LW(10), 0)
-        CALL_CHILD(PTR(damage_check_event_sub))
+        CALL_CHILD(damage_check_event_sub)
     END_IF
     RETURN
 EVT_END()

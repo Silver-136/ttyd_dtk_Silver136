@@ -123,7 +123,7 @@ EVT_END()
 
 /** Enter event of the hole: spawns gra_06_ido_in_sub and returns 0. */
 EVT_BEGIN(gra_06_ido_in)
-    SPAWN_EVENT(PTR(gra_06_ido_in_sub))
+    SPAWN_EVENT(gra_06_ido_in_sub)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -450,7 +450,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_party_run, 0)
     SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 0)
     SET_VALUE(LW(0), STRING("n_bero"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     RETURN
 EVT_END()
 
@@ -466,23 +466,23 @@ EVT_BEGIN(gra_06_init_evt)
     IF_INT_EQUAL(GSWF_JIN_BOOS_THREW_MARIO_OUT, 1)
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
-        SPAWN_EVENT(PTR(bero_case_entry))
+        SPAWN_EVENT(bero_case_entry)
         SET_VALUE(LW(0), STRING("n_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
-        SPAWN_EVENT(PTR(teresa_oidasare_evt))
+        CALL_CHILD(bero_case_switch_off)
+        SPAWN_EVENT(teresa_oidasare_evt)
     ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
-            CALL_CHILD(PTR(bero_case_entry))
+            CALL_CHILD(bero_case_entry)
         ELSE
-            CALL_CHILD(PTR(evt_bero_info_run))
+            CALL_CHILD(evt_bero_info_run)
         END_IF
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -125, 60, 235, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, -270, 60, 270, 0, 0)
     CALL(evt_mobj_brick, STRING("mobj_hidden1"), 67, 90, -13, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_GRA_06_COIN_HIDDEN_BLOCK)
-    CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
+    CALL_CHILD(evt_usu_kagemario_party_kill)
     IF_INT_EQUAL(GSWF_GRA_06_GATE_OPENED, 0)
         CALL(evt_hitobj_onoff, STRING("A_Mon"), 1, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_saku01"), 0, PTR(gra_06_saku_open), 0)
@@ -497,7 +497,7 @@ EVT_BEGIN(gra_06_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_saku01"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
-        SPAWN_EVENT(PTR(first_gra06jin))
+        SPAWN_EVENT(first_gra06jin)
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))

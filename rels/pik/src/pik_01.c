@@ -336,7 +336,7 @@ EVT_BEGIN(evt_powan)
     // The story advances and the gate's exit is switched on.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_50_THE_SANCTUM_MANAGER)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
@@ -723,7 +723,7 @@ EVT_END()
  * or at (145, 0, 380) during the Bowser interlude.
  */
 EVT_BEGIN(konarikin_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         CALL(evt_npc_set_position, STRING("me"), -62, -5, -367)
         RETURN
@@ -759,7 +759,7 @@ EVT_END()
  * and moves to (-6, -5, 161) during the Bowser interlude.
  */
 EVT_BEGIN(narikin_papa_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
@@ -774,7 +774,7 @@ EVT_END()
  * and moves to (18, -5, 185) during the Bowser interlude.
  */
 EVT_BEGIN(narikin_mama_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
@@ -794,7 +794,7 @@ EVT_END()
 
 /** Init for the madam: standard NPC init, and she moves to (-395, 0, -72) during the Bowser interlude. */
 EVT_BEGIN(madam_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
             CALL(evt_npc_set_position, STRING("me"), -395, 0, -72)
@@ -814,7 +814,7 @@ EVT_END()
 
 /** Init for Kammy Koopa (ババ): standard NPC init, then NPC_STATUS_FACE_MOVE_DIR (she turns the way she moves). */
 static EVT_BEGIN(baba_init)
-    CALL_CHILD(PTR(npc_init_evt))
+    CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
@@ -1114,16 +1114,16 @@ EVT_BEGIN(koopa_door_evt)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_6"), STRING("KPA_T_6"))
     CALL(evt_msg_print, 0, STRING("kpa_stg7_013"), 0, STRING("mario"))
     SET_VALUE(LW(1), 1)
-    SPAWN_EVENT(PTR(bero_open_door_play_se))
+    SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
             BREAK_LOOP
         ELSE
-            CALL_CHILD(PTR(n_door_open))
+            CALL_CHILD(n_door_open)
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
@@ -1386,7 +1386,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(yami_view, -800)
     CALL(evt_cam3d_evt_set, 15, 134, 667, 15, 38, 126, 0, EASING_SINE_IN_OUT)
-    SPAWN_EVENT(PTR(sekai_yami_shake))
+    SPAWN_EVENT(sekai_yami_shake)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
     WAIT_MS(800)
@@ -1573,19 +1573,19 @@ EVT_BEGIN(pik_01_init_evt)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
-    CALL_CHILD(PTR(evt_switch_init))
+    CALL_CHILD(evt_switch_init)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
 
     // Register the exits and the Shine Sprite block.
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF_SHINE_38, 0)
     IF_INT_EQUAL(LF(0), 1)
         SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(bero_case_switch_off)
 #else
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("nw_bero"), 8388612)
 #endif
     END_IF
@@ -1622,10 +1622,10 @@ EVT_BEGIN(pik_01_init_evt)
     SET_INT_READ_ADDR(PTR(&name_tbl))
     LOOP(2)
         READ_INT(LW(9))
-        SPAWN_EVENT(PTR(evt_pik_yajirushi))
+        SPAWN_EVENT(evt_pik_yajirushi)
     END_LOOP
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
+    CALL_CHILD(evt_gazigazi_entry)
     CALL(evt_map_set_tevcallback, 1, PTR(test_tev))
     CALL(evt_map_set_tevcallback, 2, PTR(test_tev2))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("opuku"), MAP_OBJ_TEV_CALLBACK(2))
@@ -1657,21 +1657,21 @@ EVT_BEGIN(pik_01_init_evt)
     CALL(evt_npc_setup, PTR(npc_data))
     IF_INT_EQUAL(LF(1), 0)
         IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
-            CALL_CHILD(PTR(iri_27_npc_entry))
+            CALL_CHILD(iri_27_npc_entry)
         END_IF
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
             CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF_PIK_01_CHOCO_CAKE, 0)
         END_IF
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-        CALL_CHILD(PTR(resaresa_entry))
-        CALL_CHILD(PTR(sebaschan_entry))
+        CALL_CHILD(resaresa_entry)
+        CALL_CHILD(sebaschan_entry)
     END_IF
-    CALL_CHILD(PTR(takun4_init))
+    CALL_CHILD(takun4_init)
     CALL(evt_npc_change_interrupt, STRING("ターくん４"), 6, PTR(takun4_talk))
-    CALL_CHILD(PTR(takun5_init))
+    CALL_CHILD(takun5_init)
     CALL(evt_npc_change_interrupt, STRING("ターくん５"), 6, PTR(takun5_talk))
-    CALL_CHILD(PTR(takun6_init))
+    CALL_CHILD(takun6_init)
     CALL(evt_npc_change_interrupt, STRING("ターくん６"), 6, PTR(takun6_talk))
 
     // Lock or unlock the sanctum gate, with the case events that open it for Mario or Bowser.
@@ -1681,7 +1681,7 @@ EVT_BEGIN(pik_01_init_evt)
         CALL(evt_mobj_set_anim, STRING("lock"), STRING("Z_1"))
         CALL(set_r)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_harigami"), 0, PTR(evt_powan), 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("kami"), MAP_OBJ_FLAG_HIDDEN)
@@ -1694,7 +1694,7 @@ EVT_BEGIN(pik_01_init_evt)
         CALL(set_r)
         CALL(kpa_lock_hit_scale)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("polySurface743_q00096"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("MOBJ_lock"), 0, PTR(koopa_door_evt), 0)
     END_IF
@@ -1702,7 +1702,7 @@ EVT_BEGIN(pik_01_init_evt)
         CALL(evt_mario_kill_party, 0)
 
         // Start the Bowser interlude.
-        SPAWN_EVENT(PTR(pik_01_koopa_evt))
+        SPAWN_EVENT(pik_01_koopa_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
         CALL(evt_mario_set_pos, -227, 0, -227)
@@ -1713,12 +1713,12 @@ EVT_BEGIN(pik_01_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
-            CALL_CHILD(PTR(delete_npc_regl_evt))
-            SPAWN_EVENT(PTR(sekai_yami_evt))
+            CALL_CHILD(delete_npc_regl_evt)
+            SPAWN_EVENT(sekai_yami_evt)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            CALL_CHILD(PTR(delete_npc_regl_evt))
-            SPAWN_EVENT(PTR(minnnanokoe_evt))
+            CALL_CHILD(delete_npc_regl_evt)
+            SPAWN_EVENT(minnnanokoe_evt)
         END_IF
     END_IF
     RETURN

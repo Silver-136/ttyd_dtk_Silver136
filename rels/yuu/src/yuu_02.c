@@ -799,7 +799,7 @@ EVT_END()
  */
 EVT_BEGIN(minigame03_main)
     CALL(evt_mario_key_onoff, 0)
-    CALL_CHILD(PTR(yuu_02_kaijo_init))
+    CALL_CHILD(yuu_02_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 2)
     CALL(yuuminigame_set_dataadr, 0, LW(0))
     CALL(evt_mario_kill_party, 0)
@@ -845,7 +845,7 @@ EVT_BEGIN(minigame03_start_cam_cancel)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_mario_wait_move_end)
-    CALL_CHILD(PTR(yuu_02_kaijo_init2))
+    CALL_CHILD(yuu_02_kaijo_init2)
     RETURN
 EVT_END()
 
@@ -901,14 +901,14 @@ EVT_BEGIN(minigame03_start)
                 IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
-                    CALL_CHILD(PTR(minigame03_start_cam_cancel))
+                    CALL_CHILD(minigame03_start_cam_cancel)
                     BREAK_LOOP
                 END_IF
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CALL(yuuminigame3_opening_on_off, LW(0), 0)
-        CALL_CHILD(PTR(yuu_02_kaijo_init2))
+        CALL_CHILD(yuu_02_kaijo_init2)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
     END_IF
@@ -1004,7 +1004,7 @@ EVT_BEGIN(minigame03_end)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(yuu_02_kaijo_init2)
 #else
-    CALL_CHILD(PTR(yuu_02_kaijo_init2))
+    CALL_CHILD(yuu_02_kaijo_init2)
     CALL(yuu_02_cam_shift_reset)
 #endif
     WAIT_MS(500)

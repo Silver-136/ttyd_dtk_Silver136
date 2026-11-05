@@ -480,7 +480,7 @@ EVT_END()
 /** Enter event of the hole in the floor: starts jin_00_dai_in_sub and returns 0. */
 EVT_BEGIN(jin_00_dai_in)
     DEBUG_PUT_MSG(STRING("入る"))
-    SPAWN_EVENT(PTR(jin_00_dai_in_sub))
+    SPAWN_EVENT(jin_00_dai_in_sub)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -564,7 +564,7 @@ EVT_BEGIN(door_teresa_n)
         SET_VALUE(LW(6), 20)
         SET_VALUE(LW(7), 270)
     END_IF
-    CALL_CHILD(PTR(teresa_n_fadein))
+    CALL_CHILD(teresa_n_fadein)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
         CALL(evt_msg_print, 0, STRING("stg4_jin_49"), 0, STRING("奥扉テレサ"))
     ELSE
@@ -639,7 +639,7 @@ EVT_BEGIN(door_teresa_s)
         SET_VALUE(LW(6), 20)
         SET_VALUE(LW(7), 270)
     END_IF
-    CALL_CHILD(PTR(teresa_s_fadein))
+    CALL_CHILD(teresa_s_fadein)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
         CALL(evt_msg_print, 0, STRING("stg4_jin_50"), 0, STRING("手前扉テレサ"))
     ELSE
@@ -857,7 +857,7 @@ EVT_BEGIN(first_jin00)
     CALL(evt_cam3d_evt_set, -328, 365, 1120, -328, 128, -223, 5000, EASING_LINEAR)
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     END_INLINE_EVENT
     WAIT_MS(5000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
@@ -1008,7 +1008,7 @@ EVT_END()
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_09_05_LOCK)
     SET_VALUE(LW(0), STRING("n_bero_2"))
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     RETURN
 EVT_END()
 
@@ -1045,7 +1045,7 @@ EVT_END()
  * and at the "1000 Boos" step makes it invisible and intangible.
  */
 EVT_BEGIN(tyuou_teresa_init)
-    SPAWN_EVENT(PTR(npc_init_evt))
+    SPAWN_EVENT(npc_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
         CALL(evt_npc_set_position, STRING("me"), 70, 0, 0)
     END_IF
@@ -1190,7 +1190,7 @@ EVT_END()
  * moves it to (-60, 45, -238) and makes it transparent.
  */
 EVT_BEGIN(oku_teresa_init)
-    SPAWN_EVENT(PTR(npc_init_evt))
+    SPAWN_EVENT(npc_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_03_1000_BOOS)
         CALL(evt_npc_set_position, STRING("me"), -60, 45, -238)
         CALL(evt_npc_set_color, STRING("me"), 255, 255, 255, 0)
@@ -1204,7 +1204,7 @@ EVT_END()
  * moves it to (-60, 45, 238) and makes it transparent.
  */
 EVT_BEGIN(temae_teresa_init)
-    SPAWN_EVENT(PTR(npc_init_evt))
+    SPAWN_EVENT(npc_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_03_1000_BOOS)
         CALL(evt_npc_set_position, STRING("me"), -60, 45, 238)
         CALL(evt_npc_set_color, STRING("me"), 255, 255, 255, 0)
@@ -2384,13 +2384,13 @@ EVT_BEGIN(jin_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_STEEPLE_DEMO_INT)
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
-        SPAWN_EVENT(PTR(first_jin00))
+        SPAWN_EVENT(first_jin00)
     ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     END_IF
-    CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
+    CALL_CHILD(evt_usu_kagemario_party_kill)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_04_KEY)
         CALL(evt_item_entry, STRING("key00"), ITEM_STEEPLE_KEY_0x16, -555, 200, 190, ITEM_TYPE_GROUND, -1, PTR(evt_key))
@@ -2398,20 +2398,20 @@ EVT_BEGIN(jin_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_05_LOCK)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), 22, -435, 210, -245, 0, PTR(lock_item_check), PTR(evt_unlock), GSWF_JIN_00_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("n_bero_2"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     END_IF
     SET_VALUE(GW(0), -1)
     SET_VALUE(GW(1), -1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
-        SPAWN_EVENT(PTR(tyuou_teresa_kusukusu))
-        SPAWN_EVENT(PTR(tyuou_teresa_look_mario))
+        SPAWN_EVENT(tyuou_teresa_kusukusu)
+        SPAWN_EVENT(tyuou_teresa_look_mario)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_09_03_1000_BOOS)
         IF_INT_EQUAL(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 0)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
                 WAIT_MS(1000)
-                SPAWN_EVENT(PTR(senteresa_evt))
+                SPAWN_EVENT(senteresa_evt)
             END_INLINE_EVENT
         END_IF
     END_IF
@@ -2436,10 +2436,10 @@ EVT_BEGIN(jin_00_init_evt)
     CALL(evt_map_playanim, STRING("hikari"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(bero_stg4majo3nin))
         SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("e_bero_2"))

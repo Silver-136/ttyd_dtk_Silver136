@@ -76,7 +76,7 @@ EVT_BEGIN(evt_win_door_open)
     END_INLINE_EVENT
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 800)
-    CALL_CHILD(PTR(evt_win_door_open_pure))
+    CALL_CHILD(evt_win_door_open_pure)
     RETURN
 EVT_END()
 
@@ -126,7 +126,7 @@ EVT_BEGIN(evt_win_door_close)
     WAIT_MS(500)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 800)
-    CALL_CHILD(PTR(evt_win_door_close_pure))
+    CALL_CHILD(evt_win_door_close_pure)
     RETURN
 EVT_END()
 

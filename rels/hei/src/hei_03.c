@@ -70,14 +70,14 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(dead_evt1)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 1)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(dead_evt2)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 1)
-    CALL_CHILD(PTR(enemy_common_dead_event))
+    CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
 
@@ -224,12 +224,12 @@ static EVT_BEGIN(hashira_evt)
     IF_INT_EQUAL(LW(2), 0)
         IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
-            SPAWN_EVENT(PTR(hashira_evt_sub))
+            SPAWN_EVENT(hashira_evt_sub)
         END_IF
     ELSE
         IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
-            SPAWN_EVENT(PTR(hashira_evt_sub))
+            SPAWN_EVENT(hashira_evt_sub)
         END_IF
     END_IF
     LABEL(0)
@@ -272,7 +272,7 @@ EVT_END()
 EVT_BEGIN(hei_03_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI4"))
@@ -313,7 +313,7 @@ EVT_BEGIN(hei_03_init_evt)
                 WAIT_FRAMES(1)
                 GOTO(0)
             END_IF
-            CALL_CHILD(PTR(door_open))
+            CALL_CHILD(door_open)
         END_INLINE_EVENT
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_mon"), 0, PTR(mon_msg), GW(10))
     ELSE

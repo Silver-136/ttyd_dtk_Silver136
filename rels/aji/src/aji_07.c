@@ -329,7 +329,7 @@ EVT_BEGIN(tensou_init)
     CALL(evt_mario_set_pos, -115, 9, 0)
     CALL(evt_party_set_pos, 0, -90, 9, 0)
     CALL(evt_party_set_pos, 1, -100, 9, -10)
-    SPAWN_EVENT(PTR(evt_tensou2))
+    SPAWN_EVENT(evt_tensou2)
     RETURN
 EVT_END()
 
@@ -346,8 +346,8 @@ EVT_BEGIN(aji_07_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(tensou_init))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(tensou_init)
     CALL(evt_map_playanim, STRING("anm_PC"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_terop"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
@@ -388,7 +388,7 @@ EVT_BEGIN(aji_07_init_evt)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
     END_IF
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
 

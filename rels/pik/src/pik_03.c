@@ -51,7 +51,7 @@ EVT_BEGIN(bero_in)
         CALL(evt_mario_mov_pos2, 35, 610, FLOAT(120.0f))
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_cam_letter_box_disable, 0)
-        CALL_CHILD(PTR(bero_case_entry))
+        CALL_CHILD(bero_case_entry)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 10, 620, FLOAT(120.0f))
@@ -123,7 +123,7 @@ static EVT_BEGIN(evt_daiza)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-    CALL_CHILD(PTR(evt_sub_starstone))
+    CALL_CHILD(evt_sub_starstone)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -138,7 +138,7 @@ EVT_END()
 EVT_BEGIN(pik_03_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK3"))
     CALL(evt_snd_set_rev_mode, 2)

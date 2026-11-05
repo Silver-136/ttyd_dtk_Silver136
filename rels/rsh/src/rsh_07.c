@@ -191,7 +191,7 @@ EVT_BEGIN(rsh_07_init_evt)
         END_IF
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
-    CALL_CHILD(PTR(evt_access_entry))
+    CALL_CHILD(evt_access_entry)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 210, 60, -145, 0, 0)
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
@@ -232,8 +232,8 @@ EVT_END()
 EVT_BEGIN(rsh_07_a_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(rsh_07_init_evt))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(rsh_07_init_evt)
     RETURN
 EVT_END()
 
@@ -244,8 +244,8 @@ EVT_END()
 EVT_BEGIN(rsh_07_b_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(rsh_07_init_evt))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(rsh_07_init_evt)
     RETURN
 EVT_END()
 
@@ -266,10 +266,10 @@ static const char* window_tbl[] = {
 EVT_BEGIN(rsh_07_c_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(rsh_07_init_evt))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(rsh_07_init_evt)
     SET_VALUE(LW(0), PTR(&window_tbl))
-    CALL_CHILD(PTR(evt_rsh_window))
+    CALL_CHILD(evt_rsh_window)
     RETURN
 EVT_END()
 

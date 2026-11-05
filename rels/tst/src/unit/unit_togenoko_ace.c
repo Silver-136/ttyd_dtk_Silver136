@@ -519,7 +519,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -643,14 +643,14 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(9), PTR(&weapon_togenoko_normal_attack))
 
         // Forced attack: it just uses the normal attack.
-        CALL_CHILD(PTR(normal_attack_event))
+        CALL_CHILD(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
 
         // A flipped-over Dark Koopatrol counts down and gets back on its feet only at zero.
-        CALL_CHILD(PTR(wakeup_event))
+        CALL_CHILD(wakeup_event)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, LW(0))
@@ -662,7 +662,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_LESS(LW(1), 80)
 
             // While guarding, it usually drops the guard first.
-            CALL_CHILD(PTR(guard_cancel_event))
+            CALL_CHILD(guard_cancel_event)
             GOTO(99)
         END_IF
         GOTO(99)
@@ -679,11 +679,11 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_togenoko_normal_attack))
 
                 // If Charged, it picks the normal or the shell attack.
-                CALL_CHILD(PTR(normal_attack_event))
+                CALL_CHILD(normal_attack_event)
                 GOTO(99)
             END_IF
             SET_VALUE(LW(9), PTR(&weapon_togenoko_shell_attack))
-            CALL_CHILD(PTR(shell_attack_event))
+            CALL_CHILD(shell_attack_event)
             GOTO(99)
         END_IF
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -732,19 +732,19 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(11), 0)
 
                 // Disabled friend-call option (zero chance).
-                CALL_CHILD(PTR(friend_event))
+                CALL_CHILD(friend_event)
                 GOTO(99)
             END_IF
             CASE_END
             CASE_EQUAL(2)
             IF_INT_LESS(LW(11), 0)
-                CALL_CHILD(PTR(friend_event))
+                CALL_CHILD(friend_event)
                 GOTO(99)
             END_IF
             CASE_END
             CASE_EQUAL(3)
             IF_INT_LESS(LW(11), 0)
-                CALL_CHILD(PTR(friend_event))
+                CALL_CHILD(friend_event)
                 GOTO(99)
             END_IF
             CASE_END
@@ -762,22 +762,22 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(0), 50)
         IF_INT_LESS(LW(1), LW(0))
             SET_VALUE(LW(9), PTR(&weapon_togenoko_normal_attack))
-            CALL_CHILD(PTR(normal_attack_event))
+            CALL_CHILD(normal_attack_event)
             GOTO(99)
         END_IF
         ADD(LW(0), 35)
         IF_INT_LESS(LW(1), LW(0))
             SET_VALUE(LW(9), PTR(&weapon_togenoko_shell_attack))
-            CALL_CHILD(PTR(shell_attack_event))
+            CALL_CHILD(shell_attack_event)
             GOTO(99)
         END_IF
         ADD(LW(0), 15)
         IF_INT_LESS(LW(1), LW(0))
             SET_VALUE(LW(9), PTR(&weapon_togenoko_charge))
-            CALL_CHILD(PTR(charge_event))
+            CALL_CHILD(charge_event)
             GOTO(99)
         END_IF
-        CALL_CHILD(PTR(guard_event))
+        CALL_CHILD(guard_event)
         GOTO(99)
     END_IF
     LABEL(99)

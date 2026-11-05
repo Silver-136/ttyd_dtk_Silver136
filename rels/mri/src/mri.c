@@ -196,7 +196,7 @@ EVT_BEGIN(evt_mri_door_open)
         CALL(evt_bero_mario_go)
         CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MRI_DOOR_GO)
     END_INLINE_EVENT
-    CALL_CHILD(PTR(evt_mri_door_open_pure))
+    CALL_CHILD(evt_mri_door_open_pure)
     RETURN
 EVT_END()
 
@@ -255,7 +255,7 @@ EVT_BEGIN(evt_mri_door_close)
 #endif
         CALL(evt_bero_mario_go)
     END_INLINE_EVENT
-    CALL_CHILD(PTR(evt_mri_door_close_pure))
+    CALL_CHILD(evt_mri_door_close_pure)
     RETURN
 EVT_END()
 
@@ -284,7 +284,7 @@ EVT_BEGIN(evt_mri_door_naname_open)
         WAIT_MS(1000)
         CALL(evt_bero_mario_go)
     END_INLINE_EVENT
-    CALL_CHILD(PTR(evt_mri_door_naname_open_pure))
+    CALL_CHILD(evt_mri_door_naname_open_pure)
     RETURN
 EVT_END()
 
@@ -322,7 +322,7 @@ EVT_BEGIN(evt_mri_door_naname_close)
 #endif
         CALL(evt_bero_mario_go)
     END_INLINE_EVENT
-    CALL_CHILD(PTR(evt_mri_door_naname_close_pure))
+    CALL_CHILD(evt_mri_door_naname_close_pure)
     RETURN
 EVT_END()
 
@@ -688,7 +688,7 @@ EVT_BEGIN(mri_guide_hagure_check)
 EVT_END()
 
 EVT_BEGIN(mri_guide_goryu)
-    CALL_CHILD(PTR(mri_guide_hagure_check))
+    CALL_CHILD(mri_guide_hagure_check)
     IF_INT_EQUAL(LW(1), 0)
         RETURN
     END_IF

@@ -365,7 +365,7 @@ static EVT_BEGIN(damage_event)
         CALL(zakogun_damage_pose)
         CALL(zakogun_start_sukima, 0)
     END_IF
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(zakogun_damage_pose_cancel)
     CALL(zakogun_end_sukima)
     RETURN
@@ -447,7 +447,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         GOTO(99)
@@ -462,7 +462,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(zakogun_set_target_id, LW(3))
     BEGIN_SIBLING_EVENT
-        CALL_CHILD(PTR(hit_check_event))
+        CALL_CHILD(hit_check_event)
     END_SIBLING_EVENT
     CALL(zakogun_attack1)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

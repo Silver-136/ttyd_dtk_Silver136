@@ -203,7 +203,7 @@ static EVT_BEGIN(door_custom)
         CALL_CHILD(LW(12))
         CALL(evt_bero_mario_go)
         WAIT_MS(1500)
-        SPAWN_EVENT(PTR(bero_close_door_play_se))
+        SPAWN_EVENT(bero_close_door_play_se)
         SET_VALUE(LW(9), LW(12))
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
@@ -227,7 +227,7 @@ EVT_END()
  */
 static EVT_BEGIN(bero_in_event)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-        SPAWN_EVENT(PTR(door_custom))
+        SPAWN_EVENT(door_custom)
         CALL(evt_party_stop, 0)
         CALL(evt_party_stop, 1)
         BEGIN_INLINE_EVENT
@@ -575,7 +575,7 @@ EVT_BEGIN(senin_event)
     SET_FLOAT_VALUE(LW(1), FLOAT(1.5f))
 
     // The ship starts to bob.
-    SPAWN_EVENT(PTR(muj_ship_puka))
+    SPAWN_EVENT(muj_ship_puka)
     CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -680,7 +680,7 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
 
     // Cortez appears on the dock.
-    CALL_CHILD(PTR(korutesu_apper))
+    CALL_CHILD(korutesu_apper)
 
     // Cortez speaks after a millennium and the Embers appear.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
@@ -719,7 +719,7 @@ EVT_BEGIN(korutesu_appear_event)
     CALL(evt_cam3d_evt_set, -150, 300, 682, -150, 150, -175, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
-    CALL_CHILD(PTR(korutesu_apper))
+    CALL_CHILD(korutesu_apper)
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
     SET_VALUE(LW(0), 95)
@@ -794,8 +794,8 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
 #if VERSION >= VERSION_US
-        CALL_CHILD(PTR(senin_event))
-        SPAWN_EVENT(PTR(korutesu_appear_event))
+        CALL_CHILD(senin_event)
+        SPAWN_EVENT(korutesu_appear_event)
 #else
         SPAWN_EVENT(senin_event)
 #endif
@@ -830,7 +830,7 @@ EVT_BEGIN(muj_10_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
 #if VERSION >= VERSION_US
-            SPAWN_EVENT(PTR(dai3_shurai_after))
+            SPAWN_EVENT(dai3_shurai_after)
 #else
             SPAWN_EVENT(dai3_shurai_after)
 #endif
@@ -842,7 +842,7 @@ EVT_BEGIN(muj_10_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
 #else
 #if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_gazigazi_entry))
+    CALL_CHILD(evt_gazigazi_entry)
 #else
     CALL_CHILD(evt_gazigazi_entry)
 #endif

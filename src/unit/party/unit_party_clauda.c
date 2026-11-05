@@ -422,7 +422,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -1241,9 +1241,9 @@ static EVT_BEGIN(attack_audience_event)
     CALL(_check_aud_item_type, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(attack_bad_audience_event))
+        CALL_CHILD(attack_bad_audience_event)
         CASE_DEFAULT
-        CALL_CHILD(PTR(attack_good_audience_event))
+        CALL_CHILD(attack_good_audience_event)
     END_SWITCH
     RETURN
 EVT_END()

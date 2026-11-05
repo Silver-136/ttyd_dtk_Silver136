@@ -257,10 +257,10 @@ EVT_BEGIN(evt_memcard_check)
             // No card, or some other device in Slot A: offer to play without saving.
             CASE_EQUAL(CARD_RESULT_NOCARD)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
-            CALL_CHILD(PTR(evt_memcard_nosave))
+            CALL_CHILD(evt_memcard_nosave)
             CASE_EQUAL(CARD_RESULT_WRONGDEVICE)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
-            CALL_CHILD(PTR(evt_memcard_nosave))
+            CALL_CHILD(evt_memcard_nosave)
 
             // Corrupted card: offer to format it (asking twice), then to create a save file;
             // any refusal (and, in the early demos, any failure) offers to play without saving.
@@ -283,7 +283,7 @@ EVT_BEGIN(evt_memcard_check)
                     CALL(memcard_watch_chk, LW(0))
                     IF_INT_EQUAL(LW(0), 1)
                         CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                        CALL_CHILD(PTR(evt_memcard_nosave))
+                        CALL_CHILD(evt_memcard_nosave)
                         BREAK_SWITCH
                     END_IF
 #endif
@@ -306,7 +306,7 @@ EVT_BEGIN(evt_memcard_check)
                             CALL(memcard_watch_chk, LW(0))
                             IF_INT_EQUAL(LW(0), 1)
                                 CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                                CALL_CHILD(PTR(evt_memcard_nosave))
+                                CALL_CHILD(evt_memcard_nosave)
                                 BREAK_SWITCH
                             END_IF
 #endif
@@ -326,14 +326,14 @@ EVT_BEGIN(evt_memcard_check)
                                 SET_VALUE(GF(0), 1)
                             END_IF
                             ELSE
-                            CALL_CHILD(PTR(evt_memcard_nosave))
+                            CALL_CHILD(evt_memcard_nosave)
                         END_IF
                     END_IF
                     ELSE
-                    CALL_CHILD(PTR(evt_memcard_nosave))
+                    CALL_CHILD(evt_memcard_nosave)
                 END_IF
                 ELSE
-                CALL_CHILD(PTR(evt_memcard_nosave))
+                CALL_CHILD(evt_memcard_nosave)
             END_IF
             CASE_END
             // No save file on the card: offer to create one.
@@ -350,7 +350,7 @@ EVT_BEGIN(evt_memcard_check)
                 CALL(memcard_watch_chk, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                    CALL_CHILD(PTR(evt_memcard_nosave))
+                    CALL_CHILD(evt_memcard_nosave)
                     BREAK_SWITCH
                 END_IF
 #endif
@@ -370,7 +370,7 @@ EVT_BEGIN(evt_memcard_check)
                     SET_VALUE(GF(0), 1)
                 END_IF
                 ELSE
-                CALL_CHILD(PTR(evt_memcard_nosave))
+                CALL_CHILD(evt_memcard_nosave)
             END_IF
             CASE_OR_EQUAL(CARD_RESULT_NOENT)
             CASE_OR_EQUAL(CARD_RESULT_INSSPACE)
@@ -381,19 +381,19 @@ EVT_BEGIN(evt_memcard_check)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(memcard_ipl)
             ELSE
-                CALL_CHILD(PTR(evt_memcard_nosave))
+                CALL_CHILD(evt_memcard_nosave)
             END_IF
             CASE_END
 #if VERSION >= VERSION_JP
             CASE_EQUAL(CARD_RESULT_NOPERM)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata_2"))
-            CALL_CHILD(PTR(evt_memcard_nosave))
+            CALL_CHILD(evt_memcard_nosave)
 #endif
 
             // Damaged card: it cannot be used.
             CASE_DEFAULT
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
-            CALL_CHILD(PTR(evt_memcard_nosave))
+            CALL_CHILD(evt_memcard_nosave)
         END_SWITCH
 #if VERSION >= VERSION_JP
         CALL(memcard_watch_end, LW(0))

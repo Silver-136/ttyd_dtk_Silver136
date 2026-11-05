@@ -702,7 +702,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
         CASE_EQUAL(4)
-        CALL_CHILD(PTR(yoshi_party_lecture_init))
+        CALL_CHILD(yoshi_party_lecture_init)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -717,7 +717,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     SWITCH(LW(9))
         CASE_EQUAL(4)
-        CALL_CHILD(PTR(yoshi_party_lecture))
+        CALL_CHILD(yoshi_party_lecture)
     END_SWITCH
 
     // Mario and the partner blink out; the camera, music and paper image are restored.

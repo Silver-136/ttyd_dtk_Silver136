@@ -1287,7 +1287,7 @@ USER_FUNC(_wait_damage_event_end) {
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -1642,16 +1642,16 @@ static EVT_BEGIN(attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        CALL_CHILD(PTR(firebreath_attack_event))
+        CALL_CHILD(firebreath_attack_event)
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        CALL_CHILD(PTR(fumituke_attack_event))
+        CALL_CHILD(fumituke_attack_event)
         CASE_DEFAULT
         CALL(evt_sub_random, 99, LW(0))
         IF_INT_LESS(LW(0), 50)
-            CALL_CHILD(PTR(fumituke_attack_event))
+            CALL_CHILD(fumituke_attack_event)
         ELSE
-            CALL_CHILD(PTR(firebreath_attack_event))
+            CALL_CHILD(firebreath_attack_event)
         END_IF
     END_SWITCH
     RETURN

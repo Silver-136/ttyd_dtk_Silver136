@@ -256,11 +256,11 @@ EVT_END()
  * returns the user home and ends both units' turns.
  */
 EVT_BEGIN(ItemEvent_Recovery_Core)
-    CALL_CHILD(PTR(ItemEvent_Recovery_Core_Effect))
+    CALL_CHILD(ItemEvent_Recovery_Core_Effect)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_FRAMES(60)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, LW(10))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -305,7 +305,7 @@ EVT_BEGIN(ItemEvent_Recovery)
     IF_INT_EQUAL(LW(9), 0)
         CALL(btlevtcmd_GetConsumeItem, LW(9))
     END_IF
-    CALL_CHILD(PTR(ItemEvent_Recovery_Core))
+    CALL_CHILD(ItemEvent_Recovery_Core)
     RETURN
 EVT_END()
 
@@ -371,7 +371,7 @@ EVT_END()
  * missed or dodged targets play their dodge, the rest take the item's damage and status.
  */
 EVT_BEGIN(ItemEvent_Support_Sub_Effect)
-    CALL_CHILD(PTR(ItemEvent_GetTarget))
+    CALL_CHILD(ItemEvent_GetTarget)
     LABEL(10)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(90)
@@ -404,12 +404,12 @@ EVT_END()
  */
 EVT_BEGIN(ItemEvent_Support_NoEffect)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -420,9 +420,9 @@ EVT_END()
  */
 EVT_BEGIN(ItemEvent_Support_RefreshEffect)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_GetTarget))
+    CALL_CHILD(ItemEvent_GetTarget)
     LABEL(10)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(90)
@@ -450,7 +450,7 @@ EVT_BEGIN(ItemEvent_Support_RefreshEffect)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1041,7 +1041,7 @@ EVT_BEGIN(ItemEvent_Fire_Flower_Core)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1054,9 +1054,9 @@ EVT_BEGIN(ItemEvent_Fire_Flower)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Fire_Flower))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_Fire_Flower_Core))
+    CALL_CHILD(ItemEvent_Fire_Flower_Core)
     RETURN
 EVT_END()
 
@@ -1164,7 +1164,7 @@ EVT_BEGIN(ItemEvent_Kaminari_Core)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1190,7 +1190,7 @@ EVT_BEGIN(ItemEvent_Kaminari)
     CALL(btlevtcmd_CommandFlyItem, UNIT_ID_SELF, 40)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ACTION)
     CALL(btlevtcmd_ConsumeItem, UNIT_ID_SELF)
-    CALL_CHILD(PTR(ItemEvent_Kaminari_Core))
+    CALL_CHILD(ItemEvent_Kaminari_Core)
     RETURN
 EVT_END()
 
@@ -1198,7 +1198,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Kaminari_Dokkan)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
-    CALL_CHILD(PTR(ItemEvent_Kaminari))
+    CALL_CHILD(ItemEvent_Kaminari)
     RETURN
 EVT_END()
 #endif
@@ -1245,7 +1245,7 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Kaminari_Gorogoro)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
-    CALL_CHILD(PTR(ItemEvent_Kaminari))
+    CALL_CHILD(ItemEvent_Kaminari)
     RETURN
 EVT_END()
 #endif
@@ -1451,8 +1451,8 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
-    CALL_CHILD(PTR(ItemEvent_Kirakira_Otoshi_Core))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
+    CALL_CHILD(ItemEvent_Kirakira_Otoshi_Core)
     RETURN
 EVT_END()
 
@@ -1589,7 +1589,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1737,7 +1737,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1849,7 +1849,7 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1895,10 +1895,10 @@ BattleWeapon ItemWeaponData_Teresano_Fuku = {
 
 /** Volt Shroom's effect on its target (electrified for five turns), then the user returns home. */
 EVT_BEGIN(ItemEvent_Biribiri_Kinoko_Core)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1907,9 +1907,9 @@ EVT_END()
 EVT_BEGIN(ItemEvent_Biribiri_Kinoko)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Biribiri_Kinoko))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_Biribiri_Kinoko_Core))
+    CALL_CHILD(ItemEvent_Biribiri_Kinoko_Core)
     RETURN
 EVT_END()
 
@@ -1955,10 +1955,10 @@ BattleWeapon ItemWeaponData_Biribiri_Kinoko = {
 
 /** Repel Cape's effect on its target (dodgy for four turns), then the user returns home. */
 EVT_BEGIN(ItemEvent_Teki_Yokeeru_Core)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1967,9 +1967,9 @@ EVT_END()
 EVT_BEGIN(ItemEvent_Teki_Yokeeru)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Teki_Yokeeru))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_Teki_Yokeeru_Core))
+    CALL_CHILD(ItemEvent_Teki_Yokeeru_Core)
     RETURN
 EVT_END()
 
@@ -2016,7 +2016,7 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Madowaseno_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Madowaseno_Kona))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -2065,7 +2065,7 @@ BattleWeapon ItemWeaponData_Madowaseno_Kona = {
 EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Nemure_Yoikoyo))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_shake_h, 0, 1, 0, 10000, 0)
 #if VERSION >= VERSION_US
@@ -2084,10 +2084,10 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
 #endif
     WAIT_FRAMES(300)
     CALL(evt_btl_camera_noshake, 0)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2176,7 +2176,7 @@ EVT_BEGIN(ItemEvent_Stop_Watch_Core)
     GOTO(10)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2203,7 +2203,7 @@ EVT_BEGIN(ItemEvent_Stop_Watch)
     CALL(btlevtcmd_CommandFlyItem, UNIT_ID_SELF, 40)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ACTION)
     CALL(btlevtcmd_ConsumeItem, UNIT_ID_SELF)
-    CALL_CHILD(PTR(ItemEvent_Stop_Watch_Core))
+    CALL_CHILD(ItemEvent_Stop_Watch_Core)
     RETURN
 EVT_END()
 
@@ -2255,17 +2255,17 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
 EVT_BEGIN(ItemEvent_Guruguru_Memawashi)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Guruguru_Memawashi))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
     CALL(evt_snd_sfxon, STRING("SFX_ITEM_GURUGURU1"), 0)
     BEGIN_SIBLING_EVENT
         CALL(evt_env_blur_on, 0, 2000)
     END_SIBLING_EVENT
     CALL(_cam_rot)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2313,7 +2313,7 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Dekadeka_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Dekadeka_Drink))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -2362,7 +2362,7 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Katikati_Koura)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Katikati_Koura))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -2487,7 +2487,7 @@ EVT_BEGIN(ItemEvent_Suitooru)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(60)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2640,7 +2640,7 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Minimini_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Minimini_Kun))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -2689,7 +2689,7 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Funyafunya_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Funyafunya_Kun))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -2739,7 +2739,7 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Sukkiri_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Sukkiri_Drink))
-    CALL_CHILD(PTR(ItemEvent_Support_RefreshEffect))
+    CALL_CHILD(ItemEvent_Support_RefreshEffect)
     RETURN
 EVT_END()
 #endif
@@ -2800,10 +2800,10 @@ BattleWeapon ItemWeaponData_Sukkiri_Drink = {
 
 /** Slow Shroom's effect on its target (HP regained over several turns), then the user returns home. */
 EVT_BEGIN(ItemEvent_Jiwajiwa_Kinoko_Core)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2812,9 +2812,9 @@ EVT_END()
 EVT_BEGIN(ItemEvent_Jiwajiwa_Kinoko)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Jiwajiwa_Kinoko))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Kinoko_Core))
+    CALL_CHILD(ItemEvent_Jiwajiwa_Kinoko_Core)
     RETURN
 EVT_END()
 
@@ -2860,10 +2860,10 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko = {
 
 /** Gradual Syrup's effect on its target (FP regained over several turns), then the user returns home. */
 EVT_BEGIN(ItemEvent_Jiwajiwa_Syrup_Core)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+    CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2872,9 +2872,9 @@ EVT_END()
 EVT_BEGIN(ItemEvent_Jiwajiwa_Syrup)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Jiwajiwa_Syrup))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Syrup_Core))
+    CALL_CHILD(ItemEvent_Jiwajiwa_Syrup_Core)
     RETURN
 EVT_END()
 
@@ -3104,7 +3104,7 @@ BattleWeapon ItemWeaponData_Attiike_Shisshi = {
 EVT_BEGIN(ItemEvent_Naniga_Okorukana)
     // Mystery is announced, then the roulette spins and lands on an item.
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Naniga_Okorukana))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
     CALL(_naniga_okorukana_check, UNIT_ID_SELF, LW(13))
     SWITCH(LW(13))
@@ -3112,80 +3112,80 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
         // Mushroom, Ultra Shroom, Dried Shroom, Honey Syrup or Jammin' Jelly: it heals an automatic target.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kinoko))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
+        CALL_CHILD(ItemEvent_Automatic_Target)
         SET_VALUE(LW(9), ITEM_MUSHROOM)
-        CALL_CHILD(PTR(ItemEvent_Recovery_Core))
+        CALL_CHILD(ItemEvent_Recovery_Core)
         CASE_EQUAL(ITEM_ULTRA_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Ultra_Kinoko))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
+        CALL_CHILD(ItemEvent_Automatic_Target)
         SET_VALUE(LW(9), ITEM_ULTRA_SHROOM)
-        CALL_CHILD(PTR(ItemEvent_Recovery_Core))
+        CALL_CHILD(ItemEvent_Recovery_Core)
         CASE_EQUAL(ITEM_DRIED_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Sinabita_Kinoko))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
+        CALL_CHILD(ItemEvent_Automatic_Target)
         SET_VALUE(LW(9), ITEM_DRIED_SHROOM)
-        CALL_CHILD(PTR(ItemEvent_Recovery_Core))
+        CALL_CHILD(ItemEvent_Recovery_Core)
         CASE_EQUAL(ITEM_HONEY_SYRUP)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Honey_Syrup))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
+        CALL_CHILD(ItemEvent_Automatic_Target)
         SET_VALUE(LW(9), ITEM_HONEY_SYRUP)
-        CALL_CHILD(PTR(ItemEvent_Recovery_Core))
+        CALL_CHILD(ItemEvent_Recovery_Core)
         CASE_EQUAL(ITEM_JAMMIN_JELLY)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Royal_Jelly))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
+        CALL_CHILD(ItemEvent_Automatic_Target)
         SET_VALUE(LW(9), ITEM_JAMMIN_JELLY)
-        CALL_CHILD(PTR(ItemEvent_Recovery_Core))
+        CALL_CHILD(ItemEvent_Recovery_Core)
         CASE_EQUAL(ITEM_VOLT_SHROOM)
         // Volt Shroom, Repel Cape, Slow Shroom or Gradual Syrup: its effect on an automatic target.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Biribiri_Kinoko))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Biribiri_Kinoko_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Biribiri_Kinoko_Core)
         CASE_EQUAL(ITEM_REPEL_CAPE)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Teki_Yokeeru))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Teki_Yokeeru_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Teki_Yokeeru_Core)
         CASE_EQUAL(ITEM_SLOW_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Jiwajiwa_Kinoko))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Kinoko_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Jiwajiwa_Kinoko_Core)
         CASE_EQUAL(ITEM_GRADUAL_SYRUP)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Jiwajiwa_Syrup))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Syrup_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Jiwajiwa_Syrup_Core)
         CASE_EQUAL(ITEM_THUNDER_BOLT)
         // Thunder Bolt, Thunder Rage, Fire Flower, Shooting Star or Stopwatch: its attack on the enemies.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Kaminari_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Kaminari_Core)
         CASE_EQUAL(ITEM_THUNDER_RAGE)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Kaminari_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Kaminari_Core)
         CASE_EQUAL(ITEM_FIRE_FLOWER)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Fire_Flower))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Fire_Flower_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Fire_Flower_Core)
         CASE_EQUAL(ITEM_SHOOTING_STAR)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kirakira_Otoshi))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Kirakira_Otoshi_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Kirakira_Otoshi_Core)
         CASE_EQUAL(ITEM_STOPWATCH)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Stop_Watch))
         SET_VALUE(LW(8), LW(12))
-        CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        CALL_CHILD(PTR(ItemEvent_Stop_Watch_Core))
+        CALL_CHILD(ItemEvent_Automatic_Target)
+        CALL_CHILD(ItemEvent_Stop_Watch_Core)
         CASE_DEFAULT
         // Any other result: nothing happens.
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -3253,7 +3253,7 @@ s32 R_mystery_item_table[] = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Shikaeshino_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Shikaeshino_Kona))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -3300,7 +3300,7 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(ItemEvent_Kameno_Noroi)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kameno_Noroi))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -3383,7 +3383,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     IF_INT_EQUAL(LW(9), 0)
         CALL(btlevtcmd_GetConsumeItem, LW(9))
     END_IF
-    CALL_CHILD(PTR(ItemEvent_Recovery_Core_Effect))
+    CALL_CHILD(ItemEvent_Recovery_Core_Effect)
     SWITCH(LW(9))
         CASE_EQUAL(ITEM_LOVE_PUDDING)
         CALL(evt_sub_random, 100, LW(0))
@@ -3425,7 +3425,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
         CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, LW(10))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -4394,7 +4394,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(30)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -4553,14 +4553,14 @@ BattleWeapon ItemWeaponData_BomberEgg = {
 /** Poison Shroom: 80% of the time the target is poisoned; otherwise the target's HP is fully restored. */
 EVT_BEGIN(ItemEvent_Poison_Kinoko)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_PoisonKinoko))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(evt_sub_random, 100, LW(0))
     IF_INT_LESS(LW(0), 80)
-        CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
+        CALL_CHILD(ItemEvent_Support_Sub_Effect)
     ELSE
-        CALL_CHILD(PTR(ItemEvent_GetTarget))
+        CALL_CHILD(ItemEvent_GetTarget)
         CALL(evt_btl_camera_set_homing_unit, 0, LW(10), -1)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -4576,7 +4576,7 @@ EVT_BEGIN(ItemEvent_Poison_Kinoko)
     // the original script has one END_IF too many; the interpreter ignores it
     END_IF // unmatched: the IF above is already closed
     CALL(evt_audience_ap_recovery)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -4991,10 +4991,10 @@ USER_FUNC(_full_ap_recover) {
  */
 EVT_BEGIN(ItemEvent_LastDinner)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_PoisonKinoko))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_GetTarget))
+    CALL_CHILD(ItemEvent_GetTarget)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, LW(10), LW(5))
     CALL(btlevtcmd_GetStatusMg, LW(10), LW(6))
@@ -5038,7 +5038,7 @@ EVT_BEGIN(ItemEvent_LastDinner)
 #endif
     WAIT_MS(1750)
     CALL(evt_audience_ap_recovery)
-    CALL_CHILD(PTR(_return_home_event))
+    CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -5084,7 +5084,7 @@ BattleWeapon ItemWeaponData_LastDinner = {
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Kaminari_Dokkan)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
-    CALL_CHILD(PTR(ItemEvent_Kaminari))
+    CALL_CHILD(ItemEvent_Kaminari)
     RETURN
 EVT_END()
 #endif
@@ -5093,7 +5093,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Kaminari_Gorogoro)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
-    CALL_CHILD(PTR(ItemEvent_Kaminari))
+    CALL_CHILD(ItemEvent_Kaminari)
     RETURN
 EVT_END()
 #endif
@@ -5102,7 +5102,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Madowaseno_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Madowaseno_Kona))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -5111,7 +5111,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Dekadeka_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Dekadeka_Drink))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -5120,7 +5120,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Katikati_Koura)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Katikati_Koura))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -5129,7 +5129,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Minimini_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Minimini_Kun))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -5138,7 +5138,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Funyafunya_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Funyafunya_Kun))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -5147,7 +5147,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Sukkiri_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Sukkiri_Drink))
-    CALL_CHILD(PTR(ItemEvent_Support_RefreshEffect))
+    CALL_CHILD(ItemEvent_Support_RefreshEffect)
     RETURN
 EVT_END()
 #endif
@@ -5156,7 +5156,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Shikaeshino_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Shikaeshino_Kona))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif
@@ -5165,7 +5165,7 @@ EVT_END()
 #if VERSION >= VERSION_JP
 EVT_BEGIN(ItemEvent_Kameno_Noroi)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kameno_Noroi))
-    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    CALL_CHILD(ItemEvent_Support_NoEffect)
     RETURN
 EVT_END()
 #endif

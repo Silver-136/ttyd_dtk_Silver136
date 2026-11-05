@@ -283,7 +283,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 #endif
@@ -310,7 +310,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_2"))
             WAIT_FRAMES(36)
-            CALL_CHILD(PTR(explosion_event))
+            CALL_CHILD(explosion_event)
         ELSE
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
@@ -444,7 +444,7 @@ static BattleDataEntry data_table[] = {
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 #endif

@@ -344,7 +344,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -361,7 +361,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(normal_attack_event))
+        CALL_CHILD(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -398,25 +398,25 @@ static EVT_BEGIN(attack_event)
     SET_VALUE(LW(0), 25)
     IF_INT_LESS(LW(1), LW(0))
         IF_INT_EQUAL(LW(13), 1)
-            CALL_CHILD(PTR(trans_myself_event))
+            CALL_CHILD(trans_myself_event)
             GOTO(99)
         END_IF
     END_IF
     ADD(LW(0), 25)
     IF_INT_LESS(LW(1), LW(0))
         IF_INT_EQUAL(LW(14), 1)
-            CALL_CHILD(PTR(trans_event))
+            CALL_CHILD(trans_event)
             GOTO(99)
         END_IF
     END_IF
     ADD(LW(0), 15)
     IF_INT_LESS(LW(1), LW(0))
         IF_INT_EQUAL(LW(15), 1)
-            CALL_CHILD(PTR(move_event))
+            CALL_CHILD(move_event)
             GOTO(99)
         END_IF
     END_IF
-    CALL_CHILD(PTR(normal_attack_event))
+    CALL_CHILD(normal_attack_event)
     GOTO(99)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -693,7 +693,7 @@ static EVT_BEGIN(move_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+            CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
         // BUG: this script has no LABEL(99): evtSearchLabel returns the GOTO's own argument word, so 99 runs as
@@ -713,7 +713,7 @@ static EVT_BEGIN(move_event)
     IF_INT_EQUAL(LW(5), 1)
         CALL(btlevtcmd_GetUnitWork, LW(3), UNIT_WORK_RAISED, LW(6))
         IF_INT_EQUAL(LW(6), 0)
-            SPAWN_EVENT(PTR(move_event_sub))
+            SPAWN_EVENT(move_event_sub)
             ADD(LW(12), 20)
 #if VERSION >= VERSION_DEMO_EU
             ADD(LW(15), 1)

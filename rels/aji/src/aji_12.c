@@ -227,10 +227,10 @@ EVT_BEGIN(aji_12_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF_AJI_12_LIT_FLOOR_DONE, 0)
-        CALL_CHILD(PTR(hikaru_yuka_init))
+        CALL_CHILD(hikaru_yuka_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
         CALL(hikaru_off)
@@ -239,7 +239,7 @@ EVT_BEGIN(aji_12_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_badgeblk, STRING("mobj00"), 170, 60, 120, ITEM_HP_DRAIN_ITEM, 0, GSWF_AJI_12_HP_DRAIN_BLOCK, 0)
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
 

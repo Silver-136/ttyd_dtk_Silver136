@@ -351,13 +351,13 @@ EVT_END()
 
 EVT_BEGIN(evt_action_1)
     SET_VALUE(LF(0), 0)
-    CALL_CHILD(PTR(evt_action_1_2))
+    CALL_CHILD(evt_action_1_2)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_action_2)
     SET_VALUE(LF(0), 1)
-    CALL_CHILD(PTR(evt_action_1_2))
+    CALL_CHILD(evt_action_1_2)
     RETURN
 EVT_END()
 
@@ -420,23 +420,23 @@ EVT_BEGIN(evt_action)
         CALL(evt_npc_status_onoff, 1, LW(10), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_set_tribe, LW(10), LW(1))
         IF_BITS_SET(LW(2), 1)
-            SPAWN_EVENT(PTR(evt_action_1))
+            SPAWN_EVENT(evt_action_1)
             GOTO(0)
         END_IF
         IF_BITS_SET(LW(2), 2)
-            SPAWN_EVENT(PTR(evt_action_2))
+            SPAWN_EVENT(evt_action_2)
             GOTO(0)
         END_IF
         IF_BITS_SET(LW(2), 4)
-            SPAWN_EVENT(PTR(evt_action_jump))
+            SPAWN_EVENT(evt_action_jump)
             GOTO(0)
         END_IF
         IF_BITS_SET(LW(2), 8)
-            SPAWN_EVENT(PTR(evt_action_fall))
+            SPAWN_EVENT(evt_action_fall)
             GOTO(0)
         END_IF
         IF_BITS_SET(LW(2), 16)
-            SPAWN_EVENT(PTR(evt_action_walk))
+            SPAWN_EVENT(evt_action_walk)
             GOTO(0)
         END_IF
         IF_BITS_SET(LW(2), 32)
@@ -470,7 +470,7 @@ EVT_BEGIN(dig_00_init_evt)
     CALL(z, LW(0))
     CALL(evt_cam3d_evt_set, 0, 0, LW(0), 0, 0, 0, 0, EASING_SINE_IN_OUT)
     CALL(evt_cam_letter_box_disable, 1)
-    SPAWN_EVENT(PTR(evt_action))
+    SPAWN_EVENT(evt_action)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         SET_TYPE(0)

@@ -466,7 +466,7 @@ EVT_BEGIN(evt_boss2)
     DELETE_EVENT(LW(10))
     SET_VALUE(LW(0), 7)
     SET_VALUE(LW(1), STRING("dummy"))
-    CALL_CHILD(PTR(evt_sub_starstone))
+    CALL_CHILD(evt_sub_starstone)
     RETURN
 EVT_END()
 
@@ -516,21 +516,21 @@ EVT_BEGIN(aji_14_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("tuzuki"))
-        SPAWN_EVENT(PTR(evt_boss2))
+        SPAWN_EVENT(evt_boss2)
         RETURN
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_entry, STRING("ロボット２"), STRING("c_mb_robo_2b"))
         CALL(evt_npc_set_anim, STRING("ロボット２"), STRING("MGN_Q_1"))
         CALL(evt_npc_set_position, STRING("ロボット２"), 0, -1000, 0)
-        CALL_CHILD(PTR(evt_robot_waku))
-        SPAWN_EVENT(PTR(evt_boss))
+        CALL_CHILD(evt_robot_waku)
+        SPAWN_EVENT(evt_boss)
     END_IF
-    SPAWN_EVENT(PTR(evt_emergency))
+    SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
 

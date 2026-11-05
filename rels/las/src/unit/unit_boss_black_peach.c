@@ -1725,7 +1725,7 @@ EVT_BEGIN(peach_init_event)
     CALL(btlevtcmd_SetPartsBaseRotate, UNIT_ID_SELF, 7, 0, 315, 0)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 6, 15, 0, -50)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 7, 160, 0, 50)
-    SPAWN_EVENT(PTR(shadow_queen_1000))
+    SPAWN_EVENT(shadow_queen_1000)
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(LW(0), FLOAT(360.0f))
         LOOP(0)
@@ -1778,7 +1778,7 @@ EVT_END()
 EVT_BEGIN(peach_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1963,7 +1963,7 @@ EVT_BEGIN(peach_phase_event)
 #else
     IF_INT_LESS(LW(0), 112)
 #endif
-        CALL_CHILD(PTR(peach_change_evt))
+        CALL_CHILD(peach_change_evt)
         CALL(btlevtcmd_reset_turn)
     END_IF
     LABEL(99)
@@ -1976,7 +1976,7 @@ EVT_END()
  */
 EVT_BEGIN(peach_dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
-    CALL_CHILD(PTR(peach_change_evt))
+    CALL_CHILD(peach_change_evt)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_reset_turn)
     RETURN
@@ -1992,7 +1992,7 @@ EVT_BEGIN(peack_attack_black_thunder)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_thunder_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
 
@@ -2049,7 +2049,7 @@ EVT_END()
 EVT_BEGIN(peack_attack_black_energy)
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -2092,7 +2092,7 @@ EVT_BEGIN(peack_attack_dark_drag)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_dark_drag_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -2256,7 +2256,7 @@ EVT_BEGIN(peack_attack_drain)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_drain_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -2421,13 +2421,13 @@ EVT_BEGIN(peach_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        CALL_CHILD(PTR(peack_attack_black_thunder))
+        CALL_CHILD(peack_attack_black_thunder)
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        CALL_CHILD(PTR(peack_attack_black_energy))
+        CALL_CHILD(peack_attack_black_energy)
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-        CALL_CHILD(PTR(peack_attack_dark_drag))
+        CALL_CHILD(peack_attack_dark_drag)
         CASE_EQUAL(3)
         CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
@@ -2438,13 +2438,13 @@ EVT_BEGIN(peach_attack_event)
         END_IF
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL_CHILD(PTR(peack_attack_black_thunder))
+            CALL_CHILD(peack_attack_black_thunder)
             CASE_EQUAL(1)
-            CALL_CHILD(PTR(peack_attack_black_energy))
+            CALL_CHILD(peack_attack_black_energy)
             CASE_EQUAL(2)
-            CALL_CHILD(PTR(peack_attack_drain))
+            CALL_CHILD(peack_attack_drain)
             CASE_EQUAL(3)
-            CALL_CHILD(PTR(peack_attack_dark_drag))
+            CALL_CHILD(peack_attack_dark_drag)
         END_SWITCH
     END_SWITCH
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -2509,7 +2509,7 @@ EVT_BEGIN(queen_init_event)
     BEGIN_INLINE_EVENT
         CALL(peach_talk_synchro_shadow_head_evt)
     END_INLINE_EVENT
-    SPAWN_EVENT(PTR(shadow_queen_1000))
+    SPAWN_EVENT(shadow_queen_1000)
     CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, kNotTargetable)
     CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
     CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
@@ -2612,7 +2612,7 @@ EVT_BEGIN(queen_change_hand_small_evt)
             CALL_CHILD(queen_hand_1_dead_event)
 #else
             SET_VALUE(GF(1), 0)
-            CALL_CHILD(PTR(queen_hand_1_dead_event))
+            CALL_CHILD(queen_hand_1_dead_event)
 #endif
         END_IF
     END_INLINE_EVENT
@@ -2622,7 +2622,7 @@ EVT_BEGIN(queen_change_hand_small_evt)
             CALL_CHILD(queen_hand_2_dead_event)
 #else
             SET_VALUE(GF(1), 0)
-            CALL_CHILD(PTR(queen_hand_2_dead_event))
+            CALL_CHILD(queen_hand_2_dead_event)
 #endif
         END_IF
     END_INLINE_EVENT
@@ -2667,7 +2667,7 @@ EVT_BEGIN(queen_change_hand_big_evt)
             CALL_CHILD(queen_hand_small_dead_event)
 #else
             SET_VALUE(GF(1), 0)
-            CALL_CHILD(PTR(queen_hand_small_dead_event))
+            CALL_CHILD(queen_hand_small_dead_event)
 #endif
         END_IF
     END_INLINE_EVENT
@@ -2789,12 +2789,12 @@ EVT_BEGIN(queen_hp_drain_evt)
         IF_INT_NOT_EQUAL(GW(8), -1)
 
             // The big hand leaves the stage.
-            CALL_CHILD(PTR(queen_hand_1_dead_event))
+            CALL_CHILD(queen_hand_1_dead_event)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(9), -1)
-            CALL_CHILD(PTR(queen_hand_2_dead_event))
+            CALL_CHILD(queen_hand_2_dead_event)
         END_IF
     END_INLINE_EVENT
     IF_INT_EQUAL(GW(10), -1)
@@ -3033,7 +3033,7 @@ EVT_BEGIN(queen_phase_event)
             SET_VALUE(GW(18), 2)
 
             // Messages for the queen's first damage and her HP stages.
-            CALL_CHILD(PTR(queen_first_damage_evt))
+            CALL_CHILD(queen_first_damage_evt)
         END_IF
         CALL(btlevtcmd_GetMaxHp, GW(13), LW(0))
         CALL(btlevtcmd_GetHp, GW(13), LW(1))
@@ -3042,7 +3042,7 @@ EVT_BEGIN(queen_phase_event)
             CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 1)
                 CALL(btlevtcmd_SetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, 2)
-                CALL_CHILD(PTR(queen_4_hp_msg_evt))
+                CALL_CHILD(queen_4_hp_msg_evt)
             END_IF
         END_IF
         CALL(btlevtcmd_GetMaxHp, GW(13), LW(0))
@@ -3052,7 +3052,7 @@ EVT_BEGIN(queen_phase_event)
             CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_SetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, 1)
-                CALL_CHILD(PTR(queen_2_hp_msg_evt))
+                CALL_CHILD(queen_2_hp_msg_evt)
             END_IF
         END_IF
     END_IF
@@ -3065,19 +3065,19 @@ EVT_BEGIN(queen_phase_event)
                 SET_VALUE(GW(14), 1)
 
                 // With the counter above 200 and an audience present, she drains the audience's HP.
-                CALL_CHILD(PTR(queen_hp_drain_evt))
+                CALL_CHILD(queen_hp_drain_evt)
             ELSE
-                CALL_CHILD(PTR(queen_hp_drain_evt_miss))
+                CALL_CHILD(queen_hp_drain_evt_miss)
             END_IF
-            CALL_CHILD(PTR(queen_last_attack_message_evt))
+            CALL_CHILD(queen_last_attack_message_evt)
             BREAK_SWITCH
         END_IF
         IF_INT_GREATER(GW(12), 100)
-            CALL_CHILD(PTR(queen_next_attack_message_evt))
+            CALL_CHILD(queen_next_attack_message_evt)
             BREAK_SWITCH
         END_IF
         IF_INT_GREATER(GW(12), 0)
-            CALL_CHILD(PTR(queen_first_attack_message_evt))
+            CALL_CHILD(queen_first_attack_message_evt)
             BREAK_SWITCH
         END_IF
         CASE_EQUAL(1)
@@ -3085,26 +3085,26 @@ EVT_BEGIN(queen_phase_event)
         IF_INT_EQUAL(LW(0), 1)
 
             // Respawn missing big hands before the player phase.
-            CALL_CHILD(PTR(queen_hand_big_life_check_evt))
+            CALL_CHILD(queen_hand_big_life_check_evt)
         END_IF
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_sub_random, 100, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 50)
-                CALL_CHILD(PTR(queen_change_hand_small_evt))
+                CALL_CHILD(queen_change_hand_small_evt)
                 BREAK_SWITCH
             END_IF
         END_IF
         CASE_EQUAL(2)
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_EQUAL(LW(0), 1)
-            CALL_CHILD(PTR(queen_hand_small_life_check_evt))
+            CALL_CHILD(queen_hand_small_life_check_evt)
         END_IF
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_sub_random, 100, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 50)
-                CALL_CHILD(PTR(queen_change_hand_big_evt))
+                CALL_CHILD(queen_change_hand_big_evt)
                 BREAK_SWITCH
             END_IF
         END_IF
@@ -3128,7 +3128,7 @@ EVT_BEGIN(queen_attack_black_thunder)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_thunder_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
 
@@ -3190,7 +3190,7 @@ EVT_END()
 EVT_BEGIN(queen_attack_charge)
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_dark_charge_attack))
@@ -3245,7 +3245,7 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_wave_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -3258,7 +3258,7 @@ EVT_BEGIN(queen_attack_black_wave)
     IF_INT_NOT_EQUAL(GW(10), -1)
 
         // If the small hand is out, it is removed first.
-        CALL_CHILD(PTR(queen_hand_small_dead_event))
+        CALL_CHILD(queen_hand_small_dead_event)
 
         // The two big hands rise beside the queen.
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_1), 0)
@@ -3407,7 +3407,7 @@ EVT_END()
 EVT_BEGIN(queen_attack_black_energy)
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -3463,7 +3463,7 @@ EVT_BEGIN(queen_attack_bress1)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_sigh_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -3573,7 +3573,7 @@ EVT_BEGIN(queen_attack_bress2)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_temptation_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -3683,7 +3683,7 @@ EVT_BEGIN(queen_attack_bress3)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_poison_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -3792,10 +3792,10 @@ EVT_BEGIN(queen_attack_event)
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-            CALL_CHILD(PTR(queen_attack_black_thunder))
+            CALL_CHILD(queen_attack_black_thunder)
             CASE_EQUAL(1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-            CALL_CHILD(PTR(queen_attack_black_energy))
+            CALL_CHILD(queen_attack_black_energy)
             CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_JP
             CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
@@ -3804,13 +3804,13 @@ EVT_BEGIN(queen_attack_event)
 #endif
             SWITCH(LW(0))
                 CASE_EQUAL(0)
-                CALL_CHILD(PTR(queen_attack_black_thunder))
+                CALL_CHILD(queen_attack_black_thunder)
                 CASE_EQUAL(1)
-                CALL_CHILD(PTR(queen_attack_bress1))
+                CALL_CHILD(queen_attack_bress1)
                 CASE_EQUAL(2)
-                CALL_CHILD(PTR(queen_attack_bress2))
+                CALL_CHILD(queen_attack_bress2)
                 CASE_EQUAL(3)
-                CALL_CHILD(PTR(queen_attack_bress3))
+                CALL_CHILD(queen_attack_bress3)
             END_SWITCH
         END_SWITCH
         GOTO(99)
@@ -3819,13 +3819,13 @@ EVT_BEGIN(queen_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        CALL_CHILD(PTR(queen_attack_black_thunder))
+        CALL_CHILD(queen_attack_black_thunder)
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        CALL_CHILD(PTR(queen_attack_charge))
+        CALL_CHILD(queen_attack_charge)
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-        CALL_CHILD(PTR(queen_attack_black_wave))
+        CALL_CHILD(queen_attack_black_wave)
         CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
@@ -3844,18 +3844,18 @@ EVT_BEGIN(queen_attack_event)
         END_IF
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL_CHILD(PTR(queen_attack_black_thunder))
+            CALL_CHILD(queen_attack_black_thunder)
             CASE_EQUAL(1)
-            CALL_CHILD(PTR(queen_attack_black_energy))
+            CALL_CHILD(queen_attack_black_energy)
             CASE_EQUAL(2)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-            CALL_CHILD(PTR(queen_attack_charge))
+            CALL_CHILD(queen_attack_charge)
             CASE_EQUAL(3)
-            CALL_CHILD(PTR(queen_attack_bress1))
+            CALL_CHILD(queen_attack_bress1)
             CASE_EQUAL(4)
-            CALL_CHILD(PTR(queen_attack_bress2))
+            CALL_CHILD(queen_attack_bress2)
             CASE_EQUAL(5)
-            CALL_CHILD(PTR(queen_attack_bress3))
+            CALL_CHILD(queen_attack_bress3)
         END_SWITCH
     END_SWITCH
     LABEL(99)
@@ -3885,7 +3885,7 @@ EVT_BEGIN(queen_damage_event)
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
@@ -3899,7 +3899,7 @@ EVT_BEGIN(queen_dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
 
     // Her last words play as her HP runs out.
-    CALL_CHILD(PTR(queen_dead_hp_msg_evt))
+    CALL_CHILD(queen_dead_hp_msg_evt)
     CALL(evt_eff_softdelete, STRING("m_q"))
     SET_VALUE(GF(0), 0)
 
@@ -3966,19 +3966,19 @@ EVT_BEGIN(queen_dead_event)
         IF_INT_NOT_EQUAL(GW(8), -1)
 
             // The big hand is removed.
-            CALL_CHILD(PTR(queen_hand_1_dead_event))
+            CALL_CHILD(queen_hand_1_dead_event)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(9), -1)
-            CALL_CHILD(PTR(queen_hand_2_dead_event))
+            CALL_CHILD(queen_hand_2_dead_event)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(10), -1)
 
             // The small hand is removed.
-            CALL_CHILD(PTR(queen_hand_small_dead_event))
+            CALL_CHILD(queen_hand_small_dead_event)
         END_IF
     END_INLINE_EVENT
     LABEL(0)
@@ -4091,7 +4091,7 @@ EVT_BEGIN(queen_hand_1_press_attack)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_press_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -4214,7 +4214,7 @@ EVT_BEGIN(queen_hand_1_drain_attack)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_drain_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -4360,10 +4360,10 @@ EVT_BEGIN(queen_hand_1_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(10), STRING("m_h_1"))
-        CALL_CHILD(PTR(queen_hand_1_press_attack))
+        CALL_CHILD(queen_hand_1_press_attack)
         CASE_EQUAL(1)
         SET_VALUE(LW(10), STRING("m_h_1"))
-        CALL_CHILD(PTR(queen_hand_1_drain_attack))
+        CALL_CHILD(queen_hand_1_drain_attack)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -4378,7 +4378,7 @@ EVT_BEGIN(queen_hand_1_damage_event)
     ADD(GW(12), 1)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
@@ -4457,10 +4457,10 @@ EVT_BEGIN(queen_hand_2_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(10), STRING("m_h_2"))
-        CALL_CHILD(PTR(queen_hand_1_press_attack))
+        CALL_CHILD(queen_hand_1_press_attack)
         CASE_EQUAL(1)
         SET_VALUE(LW(10), STRING("m_h_2"))
-        CALL_CHILD(PTR(queen_hand_1_drain_attack))
+        CALL_CHILD(queen_hand_1_drain_attack)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -4475,7 +4475,7 @@ EVT_BEGIN(queen_hand_2_damage_event)
     ADD(GW(12), 1)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
@@ -4541,7 +4541,7 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_dark_drag_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -4679,7 +4679,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
 #if VERSION >= VERSION_US
         CALL_CHILD(subsetevt_confuse_flustered)
 #else
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+        CALL_CHILD(subsetevt_confuse_flustered)
 #endif
         RETURN
     END_IF
@@ -4798,9 +4798,9 @@ EVT_BEGIN(queen_hand_small_attack_event)
 #endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL_CHILD(PTR(queen_hand_small_1000hand_attack))
+        CALL_CHILD(queen_hand_small_1000hand_attack)
         CASE_EQUAL(1)
-        CALL_CHILD(PTR(queen_hand_small_drag_attack))
+        CALL_CHILD(queen_hand_small_drag_attack)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -4828,7 +4828,7 @@ EVT_BEGIN(queen_hand_small_damage_event)
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()

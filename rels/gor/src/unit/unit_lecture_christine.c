@@ -235,7 +235,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     RETURN
 EVT_END()
 
@@ -293,7 +293,7 @@ EVT_END()
  * then advances the lecture's work 1 from 3 to 4.
  */
 static EVT_BEGIN(attack_event)
-    CALL_CHILD(PTR(lecture_zutsuki_attack_event))
+    CALL_CHILD(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)

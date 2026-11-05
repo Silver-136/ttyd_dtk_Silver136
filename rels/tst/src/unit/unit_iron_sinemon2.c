@@ -243,7 +243,7 @@ static EVT_BEGIN(init_event1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, 0)
     CALL(get_id, LW(0), LW(1))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(1))
-    CALL_CHILD(PTR(init_event_sub))
+    CALL_CHILD(init_event_sub)
     RETURN
 EVT_END()
 
@@ -255,7 +255,7 @@ static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, 1)
     CALL(get_id, LW(0), LW(1))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
-    CALL_CHILD(PTR(init_event_sub))
+    CALL_CHILD(init_event_sub)
     RETURN
 EVT_END()
 
@@ -307,7 +307,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), -1)
         RETURN

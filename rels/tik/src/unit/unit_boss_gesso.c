@@ -417,7 +417,7 @@ static EVT_BEGIN(damage_event)
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 0)
     RETURN
 EVT_END()
@@ -602,7 +602,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
-    CALL_CHILD(PTR(gesso_ikasumi_attack))
+    CALL_CHILD(gesso_ikasumi_attack)
     RETURN
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

@@ -1601,7 +1601,7 @@ static EVT_BEGIN(evt_sharin)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        SPAWN_EVENT(PTR(evt_sharin_main))
+        SPAWN_EVENT(evt_sharin_main)
     END_LOOP
     RETURN
 EVT_END()
@@ -1672,7 +1672,7 @@ static EVT_BEGIN(evt_clank)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        SPAWN_EVENT(PTR(evt_clank_main))
+        SPAWN_EVENT(evt_clank_main)
     END_LOOP
     RETURN
 EVT_END()
@@ -2065,18 +2065,18 @@ EVT_END()
 static EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
-        SPAWN_EVENT(PTR(stop_1))
+        SPAWN_EVENT(stop_1)
     END_IF
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
-        SPAWN_EVENT(PTR(stop_2))
+        SPAWN_EVENT(stop_2)
     END_IF
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-            SPAWN_EVENT(PTR(stop_1))
+            SPAWN_EVENT(stop_1)
         ELSE
-            SPAWN_EVENT(PTR(stop_2))
+            SPAWN_EVENT(stop_2)
         END_IF
     END_IF
     RETURN
@@ -2119,8 +2119,8 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
-    SPAWN_EVENT(PTR(evt_sharin))
-    SPAWN_EVENT(PTR(evt_clank))
+    SPAWN_EVENT(evt_sharin)
+    SPAWN_EVENT(evt_clank)
     SET_VALUE(LF(0), 0)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hom_10"))
@@ -2136,10 +2136,10 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        SPAWN_EVENT(PTR(evt_bg))
+        SPAWN_EVENT(evt_bg)
     END_IF
-    SPAWN_EVENT(PTR(evt_hoshi))
-    SPAWN_EVENT(PTR(evt_ramp))
+    SPAWN_EVENT(evt_hoshi)
+    SPAWN_EVENT(evt_ramp)
     CALL(evt_map_set_tevcallback, 1, PTR(resha_tev))
     SET_INT_READ_ADDR(PTR(&pika_tbl))
     CALL(evt_sub_get_mapname, LW(0))
@@ -2163,7 +2163,7 @@ EVT_END()
  * hides the rear cars (train_7, train_8) and their couplings.
  */
 static EVT_BEGIN(hom_10_evt_resha_right)
-    CALL_CHILD(PTR(hom_10_evt_resha_sub))
+    CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_06_a"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
@@ -2176,7 +2176,7 @@ EVT_END()
 
 /** Train facing left: runs hom_10_evt_resha_sub and hides the front cars (train_1, train_6) and their couplings. */
 static EVT_BEGIN(hom_10_evt_resha_left)
-    CALL_CHILD(PTR(hom_10_evt_resha_sub))
+    CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -2199,8 +2199,8 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-        CALL_CHILD(PTR(hom_10_evt_resha_right))
-        CALL_CHILD(PTR(hom_10_evt_resha_start3))
+        CALL_CHILD(hom_10_evt_resha_right)
+        CALL_CHILD(hom_10_evt_resha_start3)
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
 #if VERSION >= VERSION_JP
@@ -2212,8 +2212,8 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     ELSE
-        CALL_CHILD(PTR(hom_10_evt_resha_left))
-        CALL_CHILD(PTR(hom_10_evt_resha_start4))
+        CALL_CHILD(hom_10_evt_resha_left)
+        CALL_CHILD(hom_10_evt_resha_start4)
         SET_VALUE(LW(0), 0)
         SET_VALUE(LW(1), 1000)
         CALL(evt_mapobj_trans, 1, STRING("train"), -1500, 0, 0)
@@ -2233,7 +2233,7 @@ EVT_BEGIN(evt_resha_init)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(hom_10_evt_resha_right)
 #else
-    CALL_CHILD(PTR(hom_10_evt_resha_right))
+    CALL_CHILD(hom_10_evt_resha_right)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
 #endif
     SET_VALUE(GW(0), FLOAT(-15.0f))
@@ -2308,7 +2308,7 @@ static EVT_BEGIN(evt_moamoa_init)
             WAIT_FRAMES(1)
             GOTO(0)
         END_IF
-        CALL_CHILD(PTR(evt_great_moamoa))
+        CALL_CHILD(evt_great_moamoa)
     END_INLINE_EVENT
     RETURN
 EVT_END()
@@ -2582,7 +2582,7 @@ EVT_END()
  * starts the train-exterior scene and the music and ambience for the story stage.
  */
 EVT_BEGIN(rsh_06_init_evt)
-    CALL_CHILD(PTR(evt_resha_init))
+    CALL_CHILD(evt_resha_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_02_A_CASE_OF_LOST_STEW, STG6_04_GRILLING_HEFF_T)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
@@ -2615,15 +2615,15 @@ EVT_BEGIN(rsh_06_a_init_evt)
     CALL(evt_mario_set_pos, -500, 250, 0)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(rsh_06_init_evt))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(rsh_06_init_evt)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
-        SPAWN_EVENT(PTR(moamoa_debug))
+        SPAWN_EVENT(moamoa_debug)
         RETURN
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_48_SMORG_MIASMA)
-        CALL_CHILD(PTR(evt_moamoa_init))
+        CALL_CHILD(evt_moamoa_init)
     END_IF
     RETURN
 EVT_END()
@@ -2633,7 +2633,7 @@ EVT_END()
  * train-exterior scene plus the music for the station the train has reached.
  */
 EVT_BEGIN(rsh_06_init_evt_nidome)
-    CALL_CHILD(PTR(evt_resha_init))
+    CALL_CHILD(evt_resha_init)
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -2659,8 +2659,8 @@ EVT_END()
 EVT_BEGIN(rsh_06_a_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL_CHILD(PTR(rsh_06_init_evt_nidome))
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(rsh_06_init_evt_nidome)
     RETURN
 EVT_END()
 

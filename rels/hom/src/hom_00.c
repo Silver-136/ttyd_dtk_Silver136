@@ -275,7 +275,7 @@ EVT_END()
 EVT_BEGIN(talk_ekiin1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_28_STATION_KEY_OBTAINED)
-        CALL_CHILD(PTR(evt_carry_up_bridge))
+        CALL_CHILD(evt_carry_up_bridge)
         CASE_LESS(STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_msg_print, 0, STRING("stg6_hom_11"), 0, 0)
         CASE_LESS(STG6_43_CONDUCTOR_APPEARS)
@@ -484,7 +484,7 @@ EVT_END()
  */
 static EVT_BEGIN(evt_lock)
     SET_VALUE(LW(0), 1)
-    CALL_CHILD(PTR(bero_case_switch_on))
+    CALL_CHILD(bero_case_switch_on)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_29_STATION_DOOR_UNLOCKED)
     RETURN
 EVT_END()
@@ -552,7 +552,7 @@ static EVT_BEGIN(evt_train)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
-    SPAWN_EVENT(PTR(hom_10_evt_resha_start))
+    SPAWN_EVENT(hom_10_evt_resha_start)
     WAIT_MS(4500)
     CALL(evt_cam3d_evt_set, 50, 125, 500, 50, 75, 0, 1500, EASING_SINE_OUT)
     WAIT_MS(1500)
@@ -649,13 +649,13 @@ EVT_BEGIN(evt_train_nidome)
             WAIT_MS(6000)
             CALL(evt_npc_set_ry, STRING("駅員2"), 90)
         END_INLINE_EVENT
-        SPAWN_EVENT(PTR(hom_10_evt_resha_start))
+        SPAWN_EVENT(hom_10_evt_resha_start)
     ELSE
         BEGIN_INLINE_EVENT
             WAIT_MS(6000)
             CALL(evt_npc_set_ry, STRING("駅員2"), 270)
         END_INLINE_EVENT
-        SPAWN_EVENT(PTR(hom_10_evt_resha_start2))
+        SPAWN_EVENT(hom_10_evt_resha_start2)
     END_IF
     WAIT_MS(10000)
 
@@ -816,7 +816,7 @@ EVT_BEGIN(evt_hom_touchaku_nidome)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_cam3d_evt_set, 406, 317, 596, -389, 137, -44, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL_CHILD(PTR(hom_10_evt_resha_stop))
+    CALL_CHILD(hom_10_evt_resha_stop)
     WAIT_MS(2500)
     LOOP(0)
         IF_INT_EQUAL(GW(0), 0)
@@ -860,12 +860,12 @@ EVT_BEGIN(hom_00_init_evt)
 
     // The train is placed on the correct side of the platform.
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-        CALL_CHILD(PTR(hom_10_evt_resha_right))
+        CALL_CHILD(hom_10_evt_resha_right)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
-        CALL_CHILD(PTR(hom_10_evt_resha_left))
+        CALL_CHILD(hom_10_evt_resha_left)
     END_IF
 
     // Late in the story the crossing barrier is shown in its open position.
@@ -904,32 +904,32 @@ EVT_BEGIN(hom_00_init_evt)
 
     // The drawbridge scene, the doors, and the arrival scenes of the first and second visits.
     IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
-        SPAWN_EVENT(PTR(evt_bridge_down))
+        SPAWN_EVENT(evt_bridge_down)
         RETURN
     END_IF
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_27_RIVERSIDE_STATION)
-        SPAWN_EVENT(PTR(evt_hom_touchaku))
+        SPAWN_EVENT(evt_hom_touchaku)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
-        SPAWN_EVENT(PTR(evt_hom_touchaku_nidome))
+        SPAWN_EVENT(evt_hom_touchaku_nidome)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)
         SET_VALUE(LW(0), STRING("n_bero_1"))
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("n_bero_1"), PTR(bero_data_nidome))
         SET_VALUE(LW(0), STRING("n_bero_1"))
-        CALL_CHILD(PTR(bero_case_switch_on))
+        CALL_CHILD(bero_case_switch_on)
     END_IF
 
     // The station door stays locked until the Station Key has been used.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_29_STATION_DOOR_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF_HOM_00_STATION_DOOR_LOCK)
         SET_VALUE(LW(0), 1)
-        CALL_CHILD(PTR(bero_case_switch_off))
+        CALL_CHILD(bero_case_switch_off)
     END_IF
 
     // From the drawbridge-down step on, the bridge is lowered; at that step, the train's boarding event is registered.
@@ -941,7 +941,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
-    SPAWN_EVENT(PTR(evt_sub_mail_event))
+    SPAWN_EVENT(evt_sub_mail_event)
 #if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
 #endif

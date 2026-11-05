@@ -96,7 +96,7 @@ EVT_BEGIN(tik_10_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
+    CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 0, 26, -110, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_TIK_10_MUSHROOM_CHEST)
     RETURN
 EVT_END()

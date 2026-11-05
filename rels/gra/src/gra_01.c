@@ -87,7 +87,7 @@ EVT_BEGIN(gra_01_after_ranpel2)
     CALL(evt_gra_vivian_pose_set, 3, STRING("PTR_R_1"))
     CALL(evt_gra_vivian_pose_set, 7, STRING("PTR_T_1"))
     SET_VALUE(GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN, 1)
-    CALL_CHILD(PTR(bero_case_entry))
+    CALL_CHILD(bero_case_entry)
     CALL(evt_party_set_homing_dist, 0, FLOAT(50.0f))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -116,7 +116,7 @@ EVT_BEGIN(gra_01_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(tree_tbl))
-    CALL_CHILD(PTR(evt_sub_tree_access_entry))
+    CALL_CHILD(evt_sub_tree_access_entry)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL(evt_mobj_badgeblk, STRING("blk00"), 0, 0, -100, ITEM_COIN, 0, GSWF_GRA_01_COIN_BLOCK, 0)
@@ -132,11 +132,11 @@ EVT_BEGIN(gra_01_init_evt)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
-        CALL_CHILD(PTR(evt_bero_info_run))
+        CALL_CHILD(evt_bero_info_run)
     ELSE
-        SPAWN_EVENT(PTR(gra_01_after_ranpel2))
+        SPAWN_EVENT(gra_01_after_ranpel2)
     END_IF
-    CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
+    CALL_CHILD(evt_usu_kagemario_party_kill)
     RETURN
 EVT_END()
 

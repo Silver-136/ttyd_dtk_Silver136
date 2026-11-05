@@ -72,9 +72,9 @@ static EVT_BEGIN(kpa_fall)
         WAIT_FRAMES(1)
     END_LOOP
     IF_INT_EQUAL(LF(0), 0)
-        CALL_CHILD(PTR(kpa_fall_sub))
+        CALL_CHILD(kpa_fall_sub)
     ELSE
-        CALL_CHILD(PTR(kpa_dead))
+        CALL_CHILD(kpa_dead)
     END_IF
     RETURN
 EVT_END()
@@ -116,17 +116,17 @@ static NpcSetupInfo npcEnt[] = {
  */
 EVT_BEGIN(kpa_02_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL_CHILD(PTR(kpa_init))
+    CALL_CHILD(kpa_init)
     CALL(evt_mario_set_pos, -1450, 0, -5)
     SET_VALUE(LW(0), PTR(kpa_act_stg1_mobj))
-    CALL_CHILD(PTR(kpa_read_mobj))
+    CALL_CHILD(kpa_read_mobj)
     SET_VALUE(LW(0), PTR(kpa_act_stg1_item))
-    CALL_CHILD(PTR(kpa_read_item))
-    SPAWN_EVENT(PTR(kpa_fall))
+    CALL_CHILD(kpa_read_item)
+    SPAWN_EVENT(kpa_fall)
     CALL(kpa_status_init, 1, GSW_KPA_TRY_COUNT, GSW_KPA_TIME_LEFT)
     SET_VALUE(LSW_KPA_FIELD_BGM, 0)
-    SPAWN_EVENT(PTR(kpa_stage_start))
-    SPAWN_EVENT(PTR(kpa_time))
+    SPAWN_EVENT(kpa_stage_start)
+    SPAWN_EVENT(kpa_time)
     RETURN
 EVT_END()
 

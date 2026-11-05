@@ -380,7 +380,7 @@ EVT_BEGIN(taimatu_evt)
         READ_INT2(LW(0), LW(1))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
     END_LOOP
-    SPAWN_EVENT(PTR(hikari_anim))
+    SPAWN_EVENT(hikari_anim)
     RETURN
 EVT_END()
 
@@ -403,7 +403,7 @@ s32 mugen_kairou_list[] = {
  * keeps its exit to las_09).
  */
 EVT_BEGIN(mugen_kairou_init)
-    CALL_CHILD(PTR(taimatu_evt))
+    CALL_CHILD(taimatu_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         CALL(mugen_kairou_get_list, GSW_LAS_08_CORRECT_DOOR_COUNT, LW(0))
         CALL(hi_onoff, LW(0), 1)
@@ -414,22 +414,22 @@ EVT_BEGIN(mugen_kairou_init)
             CASE_EQUAL(7)
             IF_INT_LESS(GSW_LAS_08_CORRECT_DOOR_COUNT, 6)
                 SET_VALUE(LW(0), STRING("e_bero_1"))
-                CALL_CHILD(PTR(bero_case_switch_off))
+                CALL_CHILD(bero_case_switch_off)
                 CALL(evt_bero_overwrite, STRING("e_bero_1"), PTR(e_bero_1_seikai))
                 SET_VALUE(LW(0), STRING("e_bero_1"))
-                CALL_CHILD(PTR(bero_case_switch_on))
+                CALL_CHILD(bero_case_switch_on)
             END_IF
             CASE_EQUAL(3)
             SET_VALUE(LW(0), STRING("e_bero_2"))
-            CALL_CHILD(PTR(bero_case_switch_off))
+            CALL_CHILD(bero_case_switch_off)
             CALL(evt_bero_overwrite, STRING("e_bero_2"), PTR(e_bero_2_seikai))
             SET_VALUE(LW(0), STRING("e_bero_2"))
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
             SET_VALUE(LW(0), STRING("e_bero_1"))
-            CALL_CHILD(PTR(bero_case_switch_off))
+            CALL_CHILD(bero_case_switch_off)
             CALL(evt_bero_overwrite, STRING("e_bero_1"), PTR(e_bero_1_matigai))
             SET_VALUE(LW(0), STRING("e_bero_1"))
-            CALL_CHILD(PTR(bero_case_switch_on))
+            CALL_CHILD(bero_case_switch_on)
         END_SWITCH
     ELSE
         CALL(hi_onoff, 4, 1)
@@ -448,8 +448,8 @@ EVT_BEGIN(las_08_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    SPAWN_EVENT(PTR(mugen_kairou_init))
+    CALL_CHILD(evt_bero_info_run)
+    SPAWN_EVENT(mugen_kairou_init)
     RETURN
 EVT_END()
 
