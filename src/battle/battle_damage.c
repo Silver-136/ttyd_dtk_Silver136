@@ -1544,7 +1544,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY) && !attacker->badgesEquipped.SpikeShield) {
         return 5;
     }
-    if (part->attributes & VERSION_PICK(0x10, 0x40)) {
+    if (part->attributes & VERSION_PICK(0x10, kIntangiblePart)) {
         return 4;
     }
     if (flags & DAMAGE_RESULT_NO_EVADE) {

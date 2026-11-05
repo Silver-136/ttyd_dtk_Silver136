@@ -38,8 +38,10 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kImportantPart = (1 << 1),               // 0x2
     kSemiImportantPart = (1 << 2),           // 0x4
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
-    kUnknown_0x10 = (1 << 4),                // 0x10
-    kUnknown_0x40 = (1 << 6),                // 0x40
+    // 0x10: read by no US code (JP and the early demos test this bit where US and later test kIntangiblePart).
+    // 0x40, US and later: every attack precheck gives PRECHECK_INTANGIBLE, and TARGET_PROP_ONLY_FRONTMOST neither
+    // filters this part nor lets it hide the parts behind it (battle_detect). JP and the early demos test bit 0x10.
+    kIntangiblePart = (1 << 6),
     // 0x80, US and later: the unit's UNIT_WORK_PART_DEFENSE slot is added to this part's defence (BattleCalculateDamage);
     // Hooktail's two body parts, whose damage event lowers the slot when Attack FX R hits. JP and the early demos test
     // bit 0x20 there instead, which their Hooktail parts carry.

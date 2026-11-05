@@ -227,4 +227,5 @@ pushed commit (cleanup_notes, round 22):
   (gon_03, las_05). The scanner's other "shared" pairs (Teresa jin_00/07, UranaiWork, ScreenWork, PowerGaugeWork)
   are different file-local structs with one name: kept. glu EdgePair untouched (assert __LINE__). Also left: eff_balloon_n64's
   effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
-  9 placeholder names in headers (--detail unk).
+  placeholder names in headers: done (part attribute 0x40 = kIntangiblePart; GLU_UNKNOWN is the real GLU name).
+  Next candidate: the imported "Names from LLCOOLT's tree" enum blocks (~180 names in 26 headers), many repeating our names.

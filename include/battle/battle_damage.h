@@ -142,7 +142,7 @@ typedef enum BattleCheckResult {
     PRECHECK_HIT = 1,
     PRECHECK_MISS = 2,                  // accuracy roll failed, or the part is a clone the weapon cannot touch
     PRECHECK_LUCKY = 3,                 // Pretty Lucky, Lucky Day, Close Call
-    PRECHECK_INTANGIBLE = 4,            // invisible, veiled, or a part with the per-version attribute bit
+    PRECHECK_INTANGIBLE = 4,            // invisible, veiled, or a kIntangiblePart part (JP: attribute bit 0x10)
     PRECHECK_PREEMPTIVE_SPIKY = 5,      // kCounterPreemptiveFrontSpiky stops the attack before contact
     PRECHECK_DODGY = 6,                 // STATUS_DODGY
     CHECK_COUNTER_PREEMPTIVE_SPIKY = 7,

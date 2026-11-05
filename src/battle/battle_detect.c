@@ -347,7 +347,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         tg4 = &t[i];
         part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg4->unitIdx), tg4->partIdx);
         do {
-            if ((d->propFlags & TARGET_PROP_ONLY_FRONTMOST) && !(part->attributes & VERSION_PICK(0x10, 0x40))) {
+            if ((d->propFlags & TARGET_PROP_ONLY_FRONTMOST) && !(part->attributes & VERSION_PICK(0x10, kIntangiblePart))) {
                 ok4 = TRUE;
                 for (j = 0; j < n; j++) {
                     s32 a;
@@ -364,7 +364,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                     }
                     if (a > b) {
                         BattleUnitPart* op = BattleGetUnitPartsPtr(o4->unitIdx, o4->partIdx);
-                        if (!(op->attributes & VERSION_PICK(0x10, 0x40)) && !(op->attributes & kShellTosslikeCannotTarget)) {
+                        if (!(op->attributes & VERSION_PICK(0x10, kIntangiblePart)) && !(op->attributes & kShellTosslikeCannotTarget)) {
                             u1 = BattleGetUnitPtr(wp, d->unitId);
                             u2 = BattleGetUnitPtr(wp, o4->unitIdx);
                             if (!(u1->tokenFlags & kConfusedAction) || u1 != u2) {
