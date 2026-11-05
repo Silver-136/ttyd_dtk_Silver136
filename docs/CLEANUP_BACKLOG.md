@@ -9,14 +9,14 @@ to the original games through every step; US retail is the priority for readabil
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | <!--n:fakes_rows-->645<!--/n--> (<!--n:fakes_rows_both-->602<!--/n--> both, <!--n:fakes_rows_us-->25<!--/n--> US, <!--n:fakes_rows_jp-->10<!--/n--> JP, <!--n:fakes_rows_demos-->7<!--/n--> demos, <!--n:fakes_rows_pal-->1<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
-| FAKE comment sites | <!--n:all_fake_comment_sites-->979<!--/n--> in <!--n:all_fake_comment_sites_files-->257<!--/n--> files (libs <!--n:libs_fake_comment_sites-->22<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
+| FAKES.md rows | <!--n:fakes_rows-->691<!--/n--> (<!--n:fakes_rows_both-->649<!--/n--> both, <!--n:fakes_rows_us-->25<!--/n--> US, <!--n:fakes_rows_jp-->10<!--/n--> JP, <!--n:fakes_rows_demos-->6<!--/n--> demos, <!--n:fakes_rows_pal-->1<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKE comment sites | <!--n:all_fake_comment_sites-->1,051<!--/n--> in <!--n:all_fake_comment_sites_files-->277<!--/n--> files (libs <!--n:libs_fake_comment_sites-->46<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
 | `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | <!--n:game_pragma_opt_star-->143<!--/n--> / <!--n:game_pragma_optimize-->4<!--/n--> / <!--n:game_pragma_dont_inline-->112<!--/n--> / <!--n:game_pragma_auto_inline-->2<!--/n--> (libs: `dont_inline` <!--n:libs_pragma_dont_inline-->6<!--/n-->, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | <!--n:game_section_placement-->18<!--/n--> (libs <!--n:libs_section_placement-->36<!--/n-->) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
 | `#pragma force_active` | <!--n:game_force_active-->13<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->10<!--/n-->) | 776 | the library pairs keep the `gap_*` objects |
 | `gap_*` padding objects | <!--n:game_gap_padding-->8<!--/n--> (libs <!--n:libs_gap_padding-->7<!--/n-->) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
 | `fd_*` math-static data | <!--n:game_fake_data_fd-->28<!--/n--> lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
-| inline asm | <!--n:game_inline_asm-->7<!--/n--> (libs <!--n:libs_inline_asm-->280<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
+| inline asm | <!--n:game_inline_asm-->7<!--/n--> (libs <!--n:libs_inline_asm-->281<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
 | raw pointer arithmetic | <!--n:game_raw_pointer_math-->27<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
 
 FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
@@ -153,7 +153,15 @@ latest naming batches.
   functions and 6 data tables made static where the original demo maps list them local (`demo_local_scan.py`,
   `demo_local_data_scan.py`; kept global: `mot_cloud`, `pressStartGX`, called from other files), 6,357 redundant
   `PTR()` inside `CALL_CHILD`/`SPAWN_EVENT`/`STRING`, all `*Stripped*` stand-ins probed (all needed) and marked.
-  The ~160 "try the plain form" proposals are being probed one by one (plain form kept, or the device marked FAKE).
+  The ~160 "try the plain form" proposals were probed one by one (52 plain forms kept, 108 devices marked FAKE),
+  the 564 `name`/`type`/`header` notes rechecked the same way (about 140 renames; 47 type/prototype changes kept,
+  24 marked; outcome `name_type_header_outcome.tsv`).
+- libs/ review (2026-11-05): read-only review of dvd, pad, si, vi, ai, os, gx, card and MusyX (about 50k lines;
+  findings `cleanup_notes/certification/libs_*.tsv`), applied and probed: existing header names for raw numbers,
+  new names where the code proves the meaning (GX_DIRTY_*, CARD_STATUS_*, OS_FONT_ENCODE_*), code-only BUG
+  comments, plain forms, marked devices; snd3d's SND3D_UNUSED blocks (uncompiled) removed. Open: MusyX enum
+  families (cFlags, midiDirtyFlags, mixerCtrl, DSP opcodes, macro opcodes), DI/SI/AI/EXI register names, the rest
+  of libs/ (MSL, TRK, runtime, smaller SDK folders).
 
 ## 7. Libraries (SDK, runtime, TRK, MusyX, THP), sorted by Codex round 16
 
