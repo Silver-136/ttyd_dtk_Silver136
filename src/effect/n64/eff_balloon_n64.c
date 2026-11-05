@@ -4,6 +4,9 @@
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
+// Only the vertex type, not eff_n64.h: this file calls tri1, effSetVtxDescN64 and effGetTexObjN64 without a
+// prototype, as the bytes need (with eff_n64.h's u16 tri1 the calls with i + 2 and i + 3 mask their arguments).
+#include "eff/eff_n64_vtx.h"
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
@@ -29,12 +32,6 @@ typedef struct EffBalloonN64Work {
     f32 offsetX;                   // 0xC4
     f32 offsetY;                   // 0xC8
 } EffBalloonN64Work;
-
-typedef struct effN64Vtx {
-    s16 x, y, z;   // 0x0
-    s16 s, t;      // 0x6
-    u8 r, g, b, a; // 0xA
-} effN64Vtx;
 
 
 /** Template vertices of the balloon, copied each frame before the 20 outline points are wobbled around it. */

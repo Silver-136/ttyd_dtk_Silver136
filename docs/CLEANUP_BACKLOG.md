@@ -225,8 +225,8 @@ pushed commit (cleanup_notes, round 22):
   the rsh battle swarm types renamed ExtMoamoa*, chorobon size padding gone (configs follow), Yoshi work slots shared
   (include/battle/unit/unit_party_yoshi.h; slots 4/5 are pitch: BtlUnit_snd_se arg 4), Senkaron in include/senkaron.h
   (gon_03, las_05). The scanner's other "shared" pairs (Teresa jin_00/07, UranaiWork, ScreenWork, PowerGaugeWork)
-  are different file-local structs with one name: kept. glu EdgePair untouched (assert __LINE__). Also left: eff_balloon_n64's
-  effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
+  are different file-local structs with one name: kept. glu EdgePair untouched (assert __LINE__). eff_balloon_n64 shares effN64Vtx through
+  include/eff/eff_n64_vtx.h (its tri1 calls stay unprototyped: the bytes need it). Also left: kpa/yuucounter icon prototypes (kept, they change code),
   placeholder names in headers: done (part attribute 0x40 = kIntangiblePart; GLU_UNKNOWN is the real GLU name).
   Imported "Names from LLCOOLT's tree" blocks: duplicates folded (f48c01840), the rest moved into their families or
   regrouped one family per enum in value order (tools fold_imported_names.py, regroup_imported_names.py).
