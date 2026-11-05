@@ -603,6 +603,7 @@ void mot_roll(void) {
     s32 z0;
     s32 z1;
     MarioWork* t;
+    void* p;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -611,10 +612,8 @@ void mot_roll(void) {
         mario->mot.word[3] = 0;
         mario->mot.word[4] = 0;
         mario->mot.word[5] = 0;
-        {
-            void* p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
-            marioGetPtr()->motStruct = p;
-        }
+        p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
+        marioGetPtr()->motStruct = p;
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
         t = marioGetPtr();
 #if VERSION >= VERSION_US

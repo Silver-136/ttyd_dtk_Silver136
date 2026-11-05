@@ -4750,18 +4750,19 @@ static const Vec puni_fall_dir;
  * if needed, then makes it lost (hagure). Written as an inline helper for puniModeMain.
  */
 static inline void puniModeCheckPos(PuniData* p) {
+    s32 r;
+
     switch (p->modeStep) {
-        case 0: {
-            s32 r = puniPositionCheck(p);
-            if (r != 0) {
-                p->recoverReason = r;
-                p->recoverFromPos = p->pos;
-                puniPositionRecover(p);
-                p->recoverToPos = p->pos;
-            }
-            p->modeStep = 1;
-            break;
+        case 0:
+        r = puniPositionCheck(p);
+        if (r != 0) {
+            p->recoverReason = r;
+            p->recoverFromPos = p->pos;
+            puniPositionRecover(p);
+            p->recoverToPos = p->pos;
         }
+        p->modeStep = 1;
+        break;
         case 1:
             p->mode = PUNI_MODE_HAGURE;
             p->modeStep = 0;

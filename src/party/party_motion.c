@@ -2082,23 +2082,21 @@ void party_motion_behind_mario(PartyEntry* party) {
     f32 x, z;
     Vec target;
     f32 t2;
+    f32 t;
 
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         party->trigFlags |= PARTY_TRIG_HALF_PUSH;
         if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET)) {
-            {
-                f32 t;
-                if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
-                    t = partyGetFollowDir(party);
-                    t += 180.0f;
-                    t = revise360(t);
-                } else {
-                    party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
-                    t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
-                }
-                party->homeDir = t;
+            if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
+                t = partyGetFollowDir(party);
+                t += 180.0f;
+                t = revise360(t);
+            } else {
+                party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
+                t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
             }
+            party->homeDir = t;
         }
         partyGetAppearPos4(party, &target);
         party->moveFrames = distABf(party->position.x, party->position.z, target.x, target.z);

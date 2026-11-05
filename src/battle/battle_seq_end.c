@@ -268,13 +268,12 @@ void btlseqEnd(BattleWork* wp) {
         nw->confettiEvtId = 0;
         break;
     }
-    case SEQ_END_POST_EVENT_START: {
-        FieldBattleData* fb = fbatGetPointer();
-        EventEntry* e = evtEntry(fb->postBattleEvent, 10, 0);
-        fb->postBattleEventId = e->eventId;
-        BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_WAIT);
-        return;
-    }
+    case SEQ_END_POST_EVENT_START:
+    fb = fbatGetPointer();
+    e = evtEntry(fb->postBattleEvent, 10, 0);
+    fb->postBattleEventId = e->eventId;
+    BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_WAIT);
+    return;
     case SEQ_END_POST_EVENT_WAIT:
     fb = fbatGetPointer();
     if (evtCheckID(fb->postBattleEventId)) break;

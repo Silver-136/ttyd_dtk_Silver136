@@ -997,6 +997,7 @@ static void ext_moamoa_main(void) {
     f32 r;
     f32 k;
     f32 r1;
+    f32 a3;
 
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->hammerFrames++;
@@ -1301,11 +1302,9 @@ static void ext_moamoa_main(void) {
                             f32 rad;
                             f32 k;
                             s = rand() / 32767.0f;
-                            {
-                                f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-                                a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
-                                rad = (6.2831855f * a3) / 360.0f;
-                            }
+                            a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+                            a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+                            rad = (6.2831855f * a3) / 360.0f;
                             x = (*pose->mtx)[0][3] + (15.0f * moa_sinx(rad));
                             y = (*pose->mtx)[1][3];
                             z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
