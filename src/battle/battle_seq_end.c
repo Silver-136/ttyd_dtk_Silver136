@@ -212,6 +212,7 @@ void btlseqEnd(BattleWork* wp) {
     NpcEntry* p;
     EventEntry* e;
     s32 sel;
+    PouchData* pp;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -341,29 +342,26 @@ void btlseqEnd(BattleWork* wp) {
     BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_UNIT_EVENTS);
 
     // fall through
-    case SEQ_END_WIN_UNIT_EVENTS: {
-        BattleUnit* mario;
-        PouchData* pp;
-        if (!BattleWaitAllActiveEvtEnd(wp)) break;
-        BattleAudienceSoundClap(-1, 0);
-        _ExecAllUnitBattleEndEvent();
-        BattleInformationSetDropMaterial(info);
-        pp = pouchGetPtr();
-        mario = BattleGetMarioPtr(wp);
-        if (pp->merleeNextCurseType == MAJINAI_EXP_UP) {
-            EventEntry* e;
-            wp->majinaiState = MAJINAI_EXP_UP;
-            BattleMajinaiDone();
-            BattleMajinaiEndCheck();
-            e = evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
-            e->unitId = mario->unitId;
-            mario->attackEventId = e->eventId;
-            BattleSetSeq(wp, SEQ_END, SEQ_END_EXP_UP_WAIT);
-            break;
-        }
-        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_INIT);
+    case SEQ_END_WIN_UNIT_EVENTS:
+    if (!BattleWaitAllActiveEvtEnd(wp)) break;
+    BattleAudienceSoundClap(-1, 0);
+    _ExecAllUnitBattleEndEvent();
+    BattleInformationSetDropMaterial(info);
+    pp = pouchGetPtr();
+    mario = BattleGetMarioPtr(wp);
+    if (pp->merleeNextCurseType == MAJINAI_EXP_UP) {
+        EventEntry* e;
+        wp->majinaiState = MAJINAI_EXP_UP;
+        BattleMajinaiDone();
+        BattleMajinaiEndCheck();
+        e = evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
+        e->unitId = mario->unitId;
+        mario->attackEventId = e->eventId;
+        BattleSetSeq(wp, SEQ_END, SEQ_END_EXP_UP_WAIT);
         break;
     }
+    BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_INIT);
+    break;
     case SEQ_END_EXP_UP_WAIT:
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
         BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_INIT);

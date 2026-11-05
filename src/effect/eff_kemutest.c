@@ -266,14 +266,13 @@ static void effKemuTestMain(EffectEntry* effect) {
             work->gravityAcc *= work->gravityMul;
             break;
         case 10:
-        case 14: {
-            f32 a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-            work->pos.x += work->gravity * (f32)sin(a);
-            work->pos.y += -work->gravity * (f32)cos(a);
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            break;
-        }
+        case 14:
+        a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+        work->pos.x += work->gravity * (f32)sin(a);
+        work->pos.y += -work->gravity * (f32)cos(a);
+        work->gravity += work->gravityAcc;
+        work->gravityAcc *= work->gravityMul;
+        break;
         case 4:
         case 9:
         case 17:

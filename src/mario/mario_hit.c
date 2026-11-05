@@ -1003,6 +1003,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
 #endif
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
+    s32 gz;
     mario->groundRot.x = 0.0f;
     mario->groundRot.y = 0.0f;
     mario->groundRot.z = 0.0f;
@@ -1093,12 +1094,10 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
         // (rz declared before rx so the loads colour f1/f0 as in the demo)
         rx = x;
         rz = z;
-        {
-            s32 gz = 0;
-            if (gz != 0) {
-                rx = 0.0f;
-                rz = 0.0f;
-            }
+        gz = 0;
+        if (gz != 0) {
+            rx = 0.0f;
+            rz = 0.0f;
         }
         ray = *(volatile LandonRay*)&zv0; // FAKE: same 24-byte template copy as marioLandonChk_old
         ray.pos.x = x0 + rx;

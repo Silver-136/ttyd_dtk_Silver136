@@ -4772,6 +4772,8 @@ static inline void puniModeCheckPos(PuniData* p) {
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00012d58, JP mri .text+0x12C94. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void puniModeMain(PuniData* p) {
+    f32 m;
+
     switch (p->mode) {
         case PUNI_MODE_IDLE:
             p->flags &= ~PUNI_FLAG_STRAY;
@@ -4792,11 +4794,9 @@ void puniModeMain(PuniData* p) {
             p->mode = PUNI_MODE_PARENT;
             p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
             PSVECSubtract(&p->parent->pos, &p->pos, &d);
-            {
-                f32 m = PSVECMag(&d);
-                p->parentDist = m;
-                p->prevParentDist = m;
-            }
+            m = PSVECMag(&d);
+            p->parentDist = m;
+            p->prevParentDist = m;
             p->timer = 0;
             p->modeStep = 0;
             p->anim = 1;
