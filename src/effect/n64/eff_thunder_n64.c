@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: lightning strike with a charge light or flare and a shock flash; type picks variant.
 
+#include "eff/n64/eff_thunder_n64.h"
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_akari_charge_n64.h"

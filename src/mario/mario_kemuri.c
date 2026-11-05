@@ -20,7 +20,7 @@
 
 extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
 
-void kemuri(void);
+static void kemuri(void);
 static void kemuri_mugi(void);
 void mario_kemuri_landon(void);
 
@@ -220,7 +220,7 @@ static void kemuri_mugi(void) {
  * and trailing dust every eight calls while Mario dashes (Bowser's interval depends on his size level).
  * For Bowser (characterId 2) the landing puff and the dash dust grow with his size level (kpaGetLevel).
  */
-void kemuri(void) {
+static void kemuri(void) {
     static f32 dir = 0;
     static s32 ct = 4;
     MarioWork* mario = marioGetPtr();

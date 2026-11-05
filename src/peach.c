@@ -21,7 +21,6 @@
 #include "mario/mario_kemuri.h"
 
 
-void peachChgPose(const char* name);
 
 /**
  * Plays Peach's footstep sounds while she walks or dashes:

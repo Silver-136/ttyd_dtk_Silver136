@@ -21,6 +21,7 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_camera.h"
 #include "battle/sac/sac_common.h"
+#include "battle/sac/sac_muki.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
@@ -95,7 +96,6 @@ static void main_point(s32 idx);
 static void main_cursor(void);
 
 
-EvtWord marioAttackEvent_Muki[];
 
 /**
  * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure

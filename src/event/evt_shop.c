@@ -55,9 +55,9 @@ static void help_disp(WinMgrEntry* entry);
 static void help_main(WinMgrEntry* entry);
 static void name_disp(WinMgrEntry* entry);
 
-USER_FUNC(disp_off);
-USER_FUNC(get_ptr);
-USER_FUNC(get_value);
+static USER_FUNC(disp_off);
+static USER_FUNC(get_ptr);
+static USER_FUNC(get_value);
 
 /**
  * Text colours of the shop windows: white for the item name, price, point count, list title and the list's

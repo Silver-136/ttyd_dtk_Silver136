@@ -16,7 +16,7 @@
 #include "poly_trig.h"
 #include "eff/eff_number.h"
 
-u32 strlen(const char* s);
+#include <string.h>
 
 typedef struct DamageStarWork {
     s32 type;       // 0x0

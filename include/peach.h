@@ -1,5 +1,6 @@
 // peach.c: Peach as the player character in the Peach interludes (peach_walk, peach_dash, peachSetSts* states).
 
+void peachChgPose(const char* name);
 void peach_dash(void);
 void peach_walk(void);
 void peachPreInit(void);
