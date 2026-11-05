@@ -298,7 +298,7 @@ void btlseqEnd(BattleWork* wp) {
         break;
     case SEQ_END_LOSE_FADE_WAIT:
         if (!fadeIsFinish()) break;
-        if (!((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_GAME_OVER)) {
+        if (!(wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_GAME_OVER)) {
             seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
             break;
         }
@@ -666,6 +666,8 @@ void btlseqEnd(BattleWork* wp) {
         ok = 1;
         mario = BattleGetMarioPtr(wp);
         party2 = BattleGetPartyPtr(wp);
+        // FAKE: (u32) casts on the s32 BattleUnit.statusFlags in these Danger/Peril tests (here and in the later
+        // branch); without them, or with the field typed u32 (battle_unit.c changes then), the object changes.
         if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party2) {
@@ -676,7 +678,7 @@ void btlseqEnd(BattleWork* wp) {
             }
         }
         if (ok) {
-            if ((u32)fd->battleFlags & NPC_BATTLE_STORY) {
+            if (fd->battleFlags & NPC_BATTLE_STORY) {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE3", EVT_NULLPTR, 0);
             } else {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE1", EVT_NULLPTR, 0);
@@ -738,7 +740,7 @@ void btlseqEnd(BattleWork* wp) {
             }
         }
         if (!ok) {
-            if ((u32)fd->battleFlags & NPC_BATTLE_STORY) {
+            if (fd->battleFlags & NPC_BATTLE_STORY) {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF1", EVT_NULLPTR, 0);
             } else {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF2", EVT_NULLPTR, 0);
@@ -792,7 +794,7 @@ void btlseqEnd(BattleWork* wp) {
         id = BattleTransPartyId(kind);
         fd = wp->fbatInfo->setup;
         mario = BattleGetMarioPtr(wp);
-        if ((u32)fd->battleFlags & NPC_BATTLE_NO_GAME_OVER) {
+        if (fd->battleFlags & NPC_BATTLE_NO_GAME_OVER) {
             if (mario->currentHp <= 0) mario->currentHp = 1;
         }
         BattleSetMarioParamToFieldBattle(wp);

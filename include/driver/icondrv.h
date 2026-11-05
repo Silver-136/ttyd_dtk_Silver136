@@ -3,7 +3,7 @@
 #pragma once
 
 /*
-icon.bin structure (as icondrv.c reads it, iconGetBinData / IconBinData):
+icon.bin structure (as icondrv.c reads it, iconGetBinData / IconBinaryEntry):
 u16 numEntries
 u16 entryOffset[numEntries], byte offsets from the file start
 per icon at its offset: u16 type (bit 0: animated), u16 width, u16 height, u16 numIcons,
@@ -16,13 +16,17 @@ then numIcons frames of {u16 tplId, u16 delay}
 
 #define numBinEntries 0x218
 
+typedef struct IconFrame {
+    u16 tplId; // 0x0, tpl index of this frame
+    u16 delay; // 0x2, frames until the next one
+} IconFrame;
+
 typedef struct IconBinaryEntry {
-    u16 type;       // 0x0, 1 if animated
-    u16 width;      // 0x2, overrides tpl size
-    u16 height;     // 0x4, overrides tpl size
-    u16 numIcons;   // 0x6, for simple anims like button press
-    u16 tplId;      // 0x8, first frame's tpl index (one {tplId, delay} pair per frame follows numIcons)
-    u16 frameDelay; // 0xA, first frame's delay: frames until the next one
+    u16 type;            // 0x0, 1 if animated
+    u16 width;           // 0x2, overrides tpl size
+    u16 height;          // 0x4, overrides tpl size
+    u16 numIcons;        // 0x6, for simple anims like button press
+    IconFrame frames[1]; // 0x8, numIcons frames follow in the file
 } IconBinaryEntry;
 
 typedef struct IconBinary {

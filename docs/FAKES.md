@@ -658,6 +658,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_badgeshop.c | evt_badgeShop_throw_get_kind_cnt | `long i` instead of int: register choice in the demos, no change in retail | int |
 | Both | src/event/evt_mario.c | evt_mario_mov_pos | marioSetForceMove called through a (s32, f32, f32) cast (frames first); mario_sbr.h declares the definition's (dir, time, speed), which the other three calls use | plain call in the definition's order: the frame count and direction load the other way round |
 | All demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in every demo: only the strings stay compiled there, so its numbers stay out of the pool | full body |
+| Both | src/battle/battle_seq_end.c | btlseqEnd | `(u32)` casts on the s32 `BattleUnit.statusFlags` in the Danger/Peril tests (8) | without the casts: changes the object; field typed u32: battle_unit.c changes |
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
 | Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy) | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |
 | Both | src/driver/npcdrv.c | npcStrippedAnnouncePool | stand-in that nothing calls; it only places the banner's literals in this object's constant pool | see comment |

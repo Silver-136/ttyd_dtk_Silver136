@@ -31,19 +31,6 @@ TEXPalette* icon_tpl;
 
 //.sdata
 
-typedef struct IconFrame {
-    u16 tplId; // 0x0
-    u16 delay; // 0x2
-} IconFrame;
-
-typedef struct IconBinData {
-    u16 type;            // 0x0
-    u16 width;           // 0x2
-    u16 height;          // 0x4
-    u16 numIcons;        // 0x6
-    IconFrame frames[1]; // 0x8
-} IconBinData;
-
 // A macro, not an inline function: as a function the code and stack frames change.
 #define ICON_ANIM_TPL_S(data, dst)               \
     if ((data)->numIcons > 1) {                  \
@@ -74,9 +61,9 @@ typedef struct IconBinData {
  * The US and later builds swap icons 0x49 and 0x67 for their variant in the current language.
  */
 #if VERSION >= VERSION_US
-static inline IconBinData* iconGetBinData(s32 iconId) {
+static inline IconBinaryEntry* iconGetBinData(s32 iconId) {
 #else
-static inline IconBinData* iconGetBinData(u16 iconId) {
+static inline IconBinaryEntry* iconGetBinData(u16 iconId) {
 #endif
 
     IconBinary* bin = icon_bin;
@@ -92,9 +79,9 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
             iconId = icon_067_lang_tbl[gp->language];
             break;
     }
-    return (IconBinData*)((u8*)bin + bin->offset[(u16)iconId]);
+    return (IconBinaryEntry*)((u8*)bin + bin->offset[(u16)iconId]);
 #else
-    return (IconBinData*)((u8*)bin + bin->offset[iconId]);
+    return (IconBinaryEntry*)((u8*)bin + bin->offset[iconId]);
 #endif
 }
 
@@ -210,7 +197,7 @@ void iconMain(void) {
     IconWork* wp;
     int i;
     IconEntry* entry;
-    IconBinData* data;
+    IconBinaryEntry* data;
 
     wp = iconGetWork();
     if (!icon_tpl_ok || !icon_bin_ok) {
@@ -280,7 +267,7 @@ void iconEntry(const char* name, u16 iconId) {
     IconWork* wp = iconGetWork();
     int i;
     IconEntry* entry = iconFindIn(wp, name); // result unused: the free-slot search below sets entry
-    IconBinData* data;
+    IconBinaryEntry* data;
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (!(entry->uflags & ICON_FLAG_ACTIVE)) { // looking for unused entry to allocate
@@ -329,7 +316,7 @@ void iconEntry2D(const char* name, s16 iconId) {
     IconWork* wp = iconGetWork();
     int i;
     IconEntry* entry = iconFindIn(wp, name); // result unused: the free-slot search below sets entry
-    IconBinData* data;
+    IconBinaryEntry* data;
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (!(entry->uflags & ICON_FLAG_ACTIVE)) { // looking for unused entry to allocate
@@ -377,7 +364,7 @@ void iconDelete(const char* name) {
 /** Switches the named icon to show iconId, restarting its animation. */
 void iconChange(const char* name, u16 iconId) {
     IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
-    IconBinData* data;
+    IconBinaryEntry* data;
 
     entry->iconId = iconId;
     data = iconGetBinData(entry->iconId);
@@ -423,7 +410,7 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     Mtx rotmtx;
     Mtx mtx;
     CameraEntry* camera;
-    IconBinData* data;
+    IconBinaryEntry* data;
     IconEntry* ep;
 
     camera = camGetCurPtr();
@@ -481,7 +468,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     IconEntry entry;
     Mtx m;
     CameraEntry* camera;
-    IconBinData* data;
+    IconBinaryEntry* data;
     IconEntry* ep;
 
 #if VERSION < VERSION_US
@@ -541,7 +528,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     IconEntry entry;
     Mtx m;
     CameraEntry* camera;
-    IconBinData* data;
+    IconBinaryEntry* data;
     IconEntry* ep;
 
 #if VERSION < VERSION_US
@@ -580,7 +567,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
 /** Fills texObj with icon iconId's current animation frame (a 1x1 dummy texture until icon.tpl and icon.bin have loaded). */
 void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
     static char dummy[] ATTRIBUTE_ALIGN(32) = "";
-    IconBinData* data;
+    IconBinaryEntry* data;
     u16 tplId;
 
     if (!icon_tpl_ok || !icon_bin_ok) {
@@ -602,7 +589,7 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
 
 /** Returns icon iconId's width and height from icon.bin, or the texture's size when icon.bin gives none. */
 void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
-    IconBinData* data;
+    IconBinaryEntry* data;
     TEXDescriptor* descriptor;
 
     data = iconGetBinData(iconId);
