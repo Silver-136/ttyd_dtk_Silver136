@@ -2191,6 +2191,7 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
     PuniData* q;
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
+    PuniData* ret;
 
     q = &Punidat[PUNI_ENEMY_FIRST];
     for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++) {
@@ -2203,15 +2204,12 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
         }
         q++;
     }
-    {
-    PuniData* ret;
-    if (minDist < 1000000.0f) {
-        ret = found;
-    } else {
-        ret = NULL;
-    }
-    return ret;
-    }
+if (minDist < 1000000.0f) {
+    ret = found;
+} else {
+    ret = NULL;
+}
+return ret;
 }
 
 /** Inline version of "nearest living Puni within 1000 units", used by puniSearch. */
