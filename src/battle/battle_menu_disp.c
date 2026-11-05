@@ -1280,6 +1280,8 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     f32 ang;
     f32 s;
     s32 sw;
+    f32 px;
+    f32 py;
 
     if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == UNIT_MARIO) {
         mainCursor = &wp->commandMenu.cursor[0];
@@ -1355,13 +1357,10 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
                 menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
                 GetRingCenter(&b[i]);
-                {
-                    f32 px = b[i].x;
-                    f32 py;
-                    b[i].x = intplGetValue(EASING_QUADRATIC_OUT, px, -60.0f, menu->iconTimer[i], FRAMES(12));
-                    py = b[i].y;
-                    b[i].y = intplGetValue(EASING_QUADRATIC_OUT, py, 55.0f, menu->iconTimer[i], FRAMES(12));
-                }
+                px = b[i].x;
+                b[i].x = intplGetValue(EASING_QUADRATIC_OUT, px, -60.0f, menu->iconTimer[i], FRAMES(12));
+                py = b[i].y;
+                b[i].y = intplGetValue(EASING_QUADRATIC_OUT, py, 55.0f, menu->iconTimer[i], FRAMES(12));
                 PSMTXTrans(a[i], 20.0f + b[i].x, b[i].y, b[i].z);
                 c[i] = intplGetValue(EASING_LINEAR, 0.0f, 360.0f, menu->iconTimer[i], FRAMES(12));
                 if (c[i] > 360.0f) {

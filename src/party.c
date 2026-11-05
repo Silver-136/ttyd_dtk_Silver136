@@ -2314,41 +2314,39 @@ void partyRideMain(PartyEntry* party) {
 
         case 111:
             shrink = (f32)(16 - ((PartyEntry*)party)->moveFrames);
-            {
-                s = (Vec){0.0f, 0.0f, 0.0f};
-                s.x = s.y = s.z = shrink / 16.0f;
-                party->scale = s;
-                if (--party->moveFrames > 0) {
-                    break;
-                }
-#if VERSION <= VERSION_DEMO_JP
-                (((PartyEntry*)party)->moveFrames) = 0;
-                party->moveDir = ((MarioWork*)mario)->moveDirection;
-                party->targetDir = ((MarioWork*)mario)->directionView;
-#else
-                ((PartyEntry*)party)->moveFrames = 0;
-#endif
-                party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
-#if VERSION >= VERSION_JP
-                party->displayDirection = ((MarioWork*)mario)->displayDirectionTarget;
-                party->moveDir = toMovedirSimple(party->displayDirection);
-                party->targetDir = party->moveDir;
-#endif
-                partyClearJumpPara(party);
-                partyChgPoseId(party, PARTY_POSE_STAND);
-                party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-                party->flags &= ~PARTY_RIDE_CLEAR_MASK;
-                party->dispOfs.y = 0.0f;
-                party->scale.x = 1.0f;
-                party->scale.y = party->scale.x;
-                party->scale.z = party->scale.x;
-#if VERSION >= VERSION_JP
-                party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-#endif
-                partyShadowOn(party);
-                partyChgRunMode(party, PARTY_RUN_WAIT);
+            s = (Vec){0.0f, 0.0f, 0.0f};
+            s.x = s.y = s.z = shrink / 16.0f;
+            party->scale = s;
+            if (--party->moveFrames > 0) {
                 break;
             }
+#if VERSION <= VERSION_DEMO_JP
+            (((PartyEntry*)party)->moveFrames) = 0;
+            party->moveDir = ((MarioWork*)mario)->moveDirection;
+            party->targetDir = ((MarioWork*)mario)->directionView;
+#else
+            ((PartyEntry*)party)->moveFrames = 0;
+#endif
+            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+#if VERSION >= VERSION_JP
+            party->displayDirection = ((MarioWork*)mario)->displayDirectionTarget;
+            party->moveDir = toMovedirSimple(party->displayDirection);
+            party->targetDir = party->moveDir;
+#endif
+            partyClearJumpPara(party);
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+            party->flags &= ~PARTY_RIDE_CLEAR_MASK;
+            party->dispOfs.y = 0.0f;
+            party->scale.x = 1.0f;
+            party->scale.y = party->scale.x;
+            party->scale.z = party->scale.x;
+#if VERSION >= VERSION_JP
+            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
+#endif
+            partyShadowOn(party);
+            partyChgRunMode(party, PARTY_RUN_WAIT);
+            break;
     }
 
     party->trailPos = party->position;

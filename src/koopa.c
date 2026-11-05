@@ -1006,12 +1006,10 @@ void kpaFireMain(void) {
             }
         }
     }
-    {
-        if (kpaFireAttackCheck() == 0) {
-            if (fireefp) {
-                effSoftDelete(fireefp);
-                fireefp = NULL;
-            }
+    if (kpaFireAttackCheck() == 0) {
+        if (fireefp) {
+            effSoftDelete(fireefp);
+            fireefp = NULL;
         }
     }
 }

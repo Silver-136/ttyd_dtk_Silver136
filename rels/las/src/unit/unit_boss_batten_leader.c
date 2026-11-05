@@ -2961,6 +2961,8 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnit* unit;
     s32 poseId;
     s32 idx;
+    s32 pose;
+    s32 sh;
 
     poseId = part->poseId;
     unit = part->owner;
@@ -3003,11 +3005,10 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
                 animPoseDrawShape(pose, sh);
             }
             break;
-        case 4: {
-                s32 pose = BtlUnit_GetPartsPtr(unit, 7)->poseId;
-                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
-                animPoseDrawShape(pose, sh);
-            }
+        case 4:
+            pose = BtlUnit_GetPartsPtr(unit, 7)->poseId;
+            sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
+            animPoseDrawShape(pose, sh);
             break;
     }
 }

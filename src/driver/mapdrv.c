@@ -3504,6 +3504,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
     LightEntry* lights[8];
     GXColor ambient;
     Vec pos;
+    f32 ang;
 
     count = 0;
     attnFn = GX_AF_NONE;
@@ -3579,11 +3580,9 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             GXInitLightPos(&lightObj, pos.x, pos.y, pos.z);
             GXInitLightDir(&lightObj, dir.x, dir.y, dir.z);
             // FAKE: spare block and temporary for the half spot angle; the expression written in the call changes the object
-            {
-                f32 ang = lights[i]->spotAngle;
-                ang *= 0.5f;
-                GXInitLightSpot(&lightObj, ang, GX_SP_SHARP);
-            }
+            ang = lights[i]->spotAngle;
+            ang *= 0.5f;
+            GXInitLightSpot(&lightObj, ang, GX_SP_SHARP);
             GXInitLightDistAttn(&lightObj, 1000.0f, 0.5f, GX_DA_OFF);
             GXInitLightColor(&lightObj, lights[i]->color);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);

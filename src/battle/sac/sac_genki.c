@@ -1514,16 +1514,15 @@ static USER_FUNC(star_stone_appear) {
  */
 USER_FUNC(recover_cmd_disable) {
     BattleWork* w = _battleWorkPointer;
+    BattleUnit* party;
     w->commandDisabled[0] = 0;
     w->commandDisabled[1] = 0;
     w->commandDisabled[2] = 0;
 #if VERSION >= VERSION_US
-    {
-        BattleUnit* party = BattleGetPartyPtr(w);
-        if (party != NULL) {
-            party->usCommandDisabled[0] = 0;
-            party->usCommandDisabled[1] = 0;
-        }
+    party = BattleGetPartyPtr(w);
+    if (party != NULL) {
+        party->usCommandDisabled[0] = 0;
+        party->usCommandDisabled[1] = 0;
     }
 #else
     w->commandDisabled[3] = 0;

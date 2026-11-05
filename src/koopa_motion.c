@@ -833,6 +833,7 @@ void kpaSwimMove(void) {
 void kpa_swim(void) {
     MarioWork* mario = marioGetPtr();
     f32 v;
+    f32 d;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -982,31 +983,30 @@ void kpa_swim(void) {
             camFollowYOn();
         }
         break;
-    case 0x1F: {
-        f32 d = (2.0f - mario->jumpVelocityY) * (f32)(kpaGetBodyStatus() == KPA_BODY_SUBMERGED);
-        if (d) {
-            d = 2.6f;
-        } else {
-            d = 0.21f;
-        }
-        mario->jumpVelocityY += d;
-        mario->jumpAccelerationY = 0.0f;
-        mario->jumpJerkY = 0.0f;
-        mario->jumpSnapY = 0.0f;
-        if (mario->jumpVelocityY >= 0.0f) {
-            mario->jumpVelocityY = -0.08f;
-            mario->jumpAccelerationY = -0.03f;
-            mario->jumpJerkY = 0.009f;
-            mario->jumpSnapY = 0.0f;
-            mario->currSubMotionId = 0x20;
-        }
-        if (kpaChkHitobjRide()) {
-            mario->kpaSpeed = 0.0f;
-            mario->baseSpeed = 0.0f;
-        }
-        kpa_swim_splash();
-        break;
+    case 0x1F:
+    d = (2.0f - mario->jumpVelocityY) * (f32)(kpaGetBodyStatus() == KPA_BODY_SUBMERGED);
+    if (d) {
+        d = 2.6f;
+    } else {
+        d = 0.21f;
     }
+    mario->jumpVelocityY += d;
+    mario->jumpAccelerationY = 0.0f;
+    mario->jumpJerkY = 0.0f;
+    mario->jumpSnapY = 0.0f;
+    if (mario->jumpVelocityY >= 0.0f) {
+        mario->jumpVelocityY = -0.08f;
+        mario->jumpAccelerationY = -0.03f;
+        mario->jumpJerkY = 0.009f;
+        mario->jumpSnapY = 0.0f;
+        mario->currSubMotionId = 0x20;
+    }
+    if (kpaChkHitobjRide()) {
+        mario->kpaSpeed = 0.0f;
+        mario->baseSpeed = 0.0f;
+    }
+    kpa_swim_splash();
+    break;
     case 0x20:
         if (kpaChkHitobjRide()) {
             mario->kpaSpeed = 0.0f;

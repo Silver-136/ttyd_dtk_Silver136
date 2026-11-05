@@ -4668,6 +4668,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     f32 x, z;
     f32 sp;
     f32 gy;
+    f32 t;
 
     {
         f32 t = partyGetFollowDir(party);
@@ -4686,11 +4687,9 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
     }
     if (marioKeyOffChk()) {
-        {
-            f32 t = partyGetFollowDir(party);
-            t += 180.0f;
-            party->homeDir = revise360(t);
-        }
+        t = partyGetFollowDir(party);
+        t += 180.0f;
+        party->homeDir = revise360(t);
     }
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;

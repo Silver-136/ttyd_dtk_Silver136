@@ -2941,6 +2941,8 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     BattleCursor* cursor;
     s16 list[24];
     BattleWeapon* weapon;
+    u8 cnt;
+    u8 i;
 
     if (unit->moveState == MOVE_STATE_QUICK_CHANGE) {
         unit->moveState = MOVE_STATE_NORMAL;
@@ -3027,24 +3029,20 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         return weapon->attackEvtScript;
     case CMD_ACT_OPERATION:
         _btlcmd_MakeOperationTable(wp);
-        {
-            u8 cnt;
-            u8 i;
-            _btlcmd_GetCursorPtr(cmd, 5, &cursor);
-            cnt = 0;
-            for (i = 0; i < cursor->count; i++) {
-                if (cmd->operation[i].enabled) {
-                    if (cmd->operation[i].type == CMD_OP_CHANGE_PARTY || cmd->operation[i].type == CMD_OP_DEFEND || cmd->operation[i].type == CMD_OP_ESCAPE) {
-                        list[cnt++] = i;
-                    }
+        _btlcmd_GetCursorPtr(cmd, 5, &cursor);
+        cnt = 0;
+        for (i = 0; i < cursor->count; i++) {
+            if (cmd->operation[i].enabled) {
+                if (cmd->operation[i].type == CMD_OP_CHANGE_PARTY || cmd->operation[i].type == CMD_OP_DEFEND || cmd->operation[i].type == CMD_OP_ESCAPE) {
+                    list[cnt++] = i;
                 }
             }
-            list[cnt] = -1;
-            if (cnt) {
-                cursor->absPos = list[irand(cnt)];
-            } else {
-                return subsetevt_confuse_flustered;
-            }
+        }
+        list[cnt] = -1;
+        if (cnt) {
+            cursor->absPos = list[irand(cnt)];
+        } else {
+            return subsetevt_confuse_flustered;
         }
         if (!cmd->operation[cursor->absPos].enabled) {
             return subsetevt_confuse_flustered;

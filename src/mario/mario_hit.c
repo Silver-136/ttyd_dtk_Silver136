@@ -2982,6 +2982,7 @@ BOOL marioSlitChkWallAround(void) {
     f32 s, c;
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
+    f32 k;
     pos = mario->position;
     pos.y += 11.0f;
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
@@ -2998,10 +2999,8 @@ BOOL marioSlitChkWallAround(void) {
     }
 
     // FAKE: spare temporary k; the plain `pos.y = mario->position.y + 5.0f;` changes the object
-    {
-        f32 k = 5.0f;
-        pos.y = mario->position.y + k;
-    }
+    k = 5.0f;
+    pos.y = mario->position.y + k;
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
         if (flags[i] != 1) {
             Vec dir;

@@ -203,6 +203,11 @@ void btlseqEnd(BattleWork* wp) {
     BattleUnit* mario;
     BattleUnit* party;
     s8 i;
+    s32 kind;
+    s32 id;
+    NpcBattleInfo* fd;
+    MarioWork* mw;
+    PartyEntry* pe;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -789,42 +794,35 @@ void btlseqEnd(BattleWork* wp) {
         if (!fadeIsFinish()) break;
         BattleSetSeq(wp, SEQ_END, SEQ_END_CLEANUP);
         break;
-    case SEQ_END_CLEANUP: {
-        BattleUnit* party = BattleGetPartyPtr(wp);
-        s32 kind;
-        s32 id;
-        NpcBattleInfo* fd;
-        BattleUnit* mario;
-        MarioWork* mw;
-        PartyEntry* pe;
-        if (party) {
-            kind = (s32)party->currentKind;
-        } else {
-            kind = 0;
-        }
-        id = BattleTransPartyId(kind);
-        fd = wp->fbatInfo->setup;
-        mario = BattleGetMarioPtr(wp);
-        if ((u32)fd->battleFlags & NPC_BATTLE_NO_GAME_OVER) {
-            if (mario->currentHp <= 0) mario->currentHp = 1;
-        }
-        BattleSetMarioParamToFieldBattle(wp);
-        BattleFree(wp->seqEndWork);
-        wp->seqEndWork = NULL;
-        BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_DONE);
-        mw = marioGetPtr();
-        mw->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
-        if (kind) {
-            marioPartyEntry((PartyId)id);
-        } else {
-            marioPartyKill();
-        }
-        pe = partyGetPtr(marioGetPartyId());
-        if (pe) pe->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-        BtlActRec_JudgeRuleKeep();
-        BattleAudienceSoundStop(AUD_SOUND_CLAP);
-        break;
+    case SEQ_END_CLEANUP:
+    party = BattleGetPartyPtr(wp);
+    if (party) {
+        kind = (s32)party->currentKind;
+    } else {
+        kind = 0;
     }
+    id = BattleTransPartyId(kind);
+    fd = wp->fbatInfo->setup;
+    mario = BattleGetMarioPtr(wp);
+    if ((u32)fd->battleFlags & NPC_BATTLE_NO_GAME_OVER) {
+        if (mario->currentHp <= 0) mario->currentHp = 1;
+    }
+    BattleSetMarioParamToFieldBattle(wp);
+    BattleFree(wp->seqEndWork);
+    wp->seqEndWork = NULL;
+    BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_DONE);
+    mw = marioGetPtr();
+    mw->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
+    if (kind) {
+        marioPartyEntry((PartyId)id);
+    } else {
+        marioPartyKill();
+    }
+    pe = partyGetPtr(marioGetPartyId());
+    if (pe) pe->flags2 &= ~PARTY_DISP_FLAG_HIDE;
+    BtlActRec_JudgeRuleKeep();
+    BattleAudienceSoundStop(AUD_SOUND_CLAP);
+    break;
     }
     btlseqEnd_DispMain(CAMERA_2D, wp);
 }

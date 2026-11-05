@@ -639,6 +639,9 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     u32 i;
     u8* size;
     u8** list;
+    u8* sz;
+    u8** dl;
+    u32 n;
 #else
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 #endif
@@ -803,14 +806,9 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         }
     } else {
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
 
-            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
+        for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
+            GXCallDisplayList(*dl, *sz << 5);
         }
     }
 }

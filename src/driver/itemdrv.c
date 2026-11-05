@@ -1901,36 +1901,34 @@ void itemseq_Bound(ItemEntry* entry) {
                         entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
                         break;
                     }
-                    {
-                    pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
-                    switch (itemId = entry->itemId) {
-                        case ITEM_COIN:
-                            psndSFXOn_3D("SFX_COIN_LEAPED1", &pos);
-                            break;
-                        case ITEM_PIANTA_TOKEN:
-                            psndSFXOn_3D("SFX_EVT_GAME_MONTE_LEAPED1", &pos);
-                            break;
-                        case ITEM_HEART:
-                            psndSFXOn_3D("SFX_HEART_LEAPED1", &pos);
-                            break;
-                        case ITEM_FLOWER:
-                            psndSFXOn_3D("SFX_FLOWER_LEAPED1", &pos);
-                            break;
-                        case ITEM_STAR_PIECE:
-                            psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
-                            break;
-                        case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-                            psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
-                            break;
-                        default:
-                            if (itemId >= BADGE_MIN && itemId < BADGE_MAX) {
-                                psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
-                            } else {
-                                psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
-                            }
-                            break;
-                    }
-                    }
+                pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
+                switch (itemId = entry->itemId) {
+                    case ITEM_COIN:
+                        psndSFXOn_3D("SFX_COIN_LEAPED1", &pos);
+                        break;
+                    case ITEM_PIANTA_TOKEN:
+                        psndSFXOn_3D("SFX_EVT_GAME_MONTE_LEAPED1", &pos);
+                        break;
+                    case ITEM_HEART:
+                        psndSFXOn_3D("SFX_HEART_LEAPED1", &pos);
+                        break;
+                    case ITEM_FLOWER:
+                        psndSFXOn_3D("SFX_FLOWER_LEAPED1", &pos);
+                        break;
+                    case ITEM_STAR_PIECE:
+                        psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
+                        break;
+                    case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+                        psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
+                        break;
+                    default:
+                        if (itemId >= BADGE_MIN && itemId < BADGE_MAX) {
+                            psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
+                        } else {
+                            psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
+                        }
+                        break;
+                }
                     isFloor = FALSE;
                     if (entry->flags & ITEM_FLAG_ELASTIC && entry->velocityY != 0.0f) {
                         bounce = TRUE;

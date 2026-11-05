@@ -446,6 +446,8 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
     Point3d target;
     Point3d up;
     Point3d camPos;
+    s16 x2;
+    s16 y2;
     va_list ap;
     s32 i = 0;
     s32 curX = 0;
@@ -534,18 +536,16 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
         GXLoadTexObj(&texObj, GX_TEXMAP0);
 
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        {
-            s16 x2 = (s16)curX + 24;
-            s16 y2 = (s16)curY + 24;
-            GXPosition3s16(curX, y2, 0);
-            GXTexCoord2s16(0, 0);
-            GXPosition3s16(x2, y2, 0);
-            GXTexCoord2s16(1, 0);
-            GXPosition3s16(x2, curY, 0);
-            GXTexCoord2s16(1, 1);
-            GXPosition3s16(curX, curY, 0);
-            GXTexCoord2s16(0, 1);
-        }
+        x2 = (s16)curX + 24;
+        y2 = (s16)curY + 24;
+        GXPosition3s16(curX, y2, 0);
+        GXTexCoord2s16(0, 0);
+        GXPosition3s16(x2, y2, 0);
+        GXTexCoord2s16(1, 0);
+        GXPosition3s16(x2, curY, 0);
+        GXTexCoord2s16(1, 1);
+        GXPosition3s16(curX, curY, 0);
+        GXTexCoord2s16(0, 1);
         GXEnd();
 
         curX += glyph->width;

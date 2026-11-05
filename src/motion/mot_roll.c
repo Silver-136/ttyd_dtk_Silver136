@@ -1369,6 +1369,8 @@ void mot_fall_roll(void) {
 static inline void marioRollCan(void) {
     MarioWork* mario = marioGetPtr();
     f32 v26;
+    f32 t1;
+    f32 t2;
     {
         f32 s;
         f32 c;
@@ -1403,12 +1405,10 @@ static inline void marioRollCan(void) {
                 v26 = rollRad(r);
                 s = rSin(v26);
                 c = rollCos(v26);
-                {
-                    f32 t1 = s * 5.0f;
-                    f32 t2 = 5.0f * c;
-                    mario->dispOfs.x = 6.0f + t1;
-                    mario->dispOfs.y = -4.0f + t2;
-                }
+                t1 = s * 5.0f;
+                t2 = 5.0f * c;
+                mario->dispOfs.x = 6.0f + t1;
+                mario->dispOfs.y = -4.0f + t2;
             } else {
                 sincosf(&s, &c, 90.0f);
                 dist = 100.0f;
