@@ -849,81 +849,81 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             switch (dsp_vptr->smp_info.compType) {
             case 0:
             case 4:
-            case 5: {
-              SNDADPCMinfo* adpcmInfo;
-              u8 i;
-              pb->addr.format = 0;
-              pb->adpcm.gain = 0;
-              adpcmInfo = dsp_vptr->smp_info.extraData;
-              pb->adpcm.yn2 = 0;
-              pb->adpcm.yn1 = 0;
-              pb->adpcm.pred_scale = adpcmInfo->initialPS;
-              for (i = 0; i < 8; i++) {
-                pb->adpcm.a[i][0] = adpcmInfo->coefTab[i][0];
-                pb->adpcm.a[i][1] = adpcmInfo->coefTab[i][1];
-              }
-              base = (u32)dsp_vptr->smp_info.addr * 2;
-              addr = base + 2;
-              dsp_vptr->playInfo.posHi = dsp_vptr->playInfo.posLo = 0;
-              if ((dsp_vptr->smp_info.compType == 4) || (dsp_vptr->smp_info.compType == 5)) {
-                pb->loopType = 1;
-              } else {
-                pb->adpcmLoop.loop_yn2 = adpcmInfo->loopY0;
-                pb->adpcmLoop.loop_yn1 = adpcmInfo->loopY1;
-                pb->adpcmLoop.loop_pred_scale = adpcmInfo->loopPS;
-                pb->loopType = 0;
-              }
-            } break;
-            case 1: {
-              DSPADPCMplusInfo* adpcmInfo;
-              u8 i;
-              pb->addr.format = 0;
-              pb->adpcm.gain = 0;
-              offset = (dsp_vptr->smp_info.offset + 0xD) / 14;
-              adpcmInfo = dsp_vptr->smp_info.extraData;
-              pb->adpcm.yn2 = adpcmInfo->blk[offset].Y0;
-              pb->adpcm.yn1 = adpcmInfo->blk[offset].Y1;
-              pb->adpcm.pred_scale = adpcmInfo->blk[offset].PS;
-              pb->adpcmLoop.loop_yn2 = adpcmInfo->loopY0;
-              pb->adpcmLoop.loop_yn1 = adpcmInfo->loopY1;
-              pb->adpcmLoop.loop_pred_scale = adpcmInfo->loopPS;
-              for (i = 0; i < 8; i++) {
-                pb->adpcm.a[i][0] = adpcmInfo->coefTab[i][0];
-                pb->adpcm.a[i][1] = adpcmInfo->coefTab[i][1];
-              }
-              base = (u32)dsp_vptr->smp_info.addr * 2;
-              addr = base + offset * 16 + 2;
-              dsp_vptr->playInfo.posHi = offset * 0xE;
-              dsp_vptr->playInfo.posLo = 0;
-            } break;
-            case 3: {
-              u8 i;
-              pb->addr.format = 0x19;
-              pb->adpcm.gain = 0x100;
-              for (i = 0; i < 8; i++) {
-                pb->adpcm.a[i][0] = 0;
-                pb->adpcm.a[i][1] = 0;
-              }
-              addr = (u32)dsp_vptr->smp_info.offset + (base = (u32)dsp_vptr->smp_info.addr);
-              dsp_vptr->playInfo.posHi = dsp_vptr->smp_info.offset;
-              dsp_vptr->playInfo.posLo = 0;
-            } break;
+                case 5: {
+                  SNDADPCMinfo* adpcmInfo;
+                  u8 i;
+                  pb->addr.format = 0;
+                  pb->adpcm.gain = 0;
+                  adpcmInfo = dsp_vptr->smp_info.extraData;
+                  pb->adpcm.yn2 = 0;
+                  pb->adpcm.yn1 = 0;
+                  pb->adpcm.pred_scale = adpcmInfo->initialPS;
+                  for (i = 0; i < 8; i++) {
+                    pb->adpcm.a[i][0] = adpcmInfo->coefTab[i][0];
+                    pb->adpcm.a[i][1] = adpcmInfo->coefTab[i][1];
+                  }
+                  base = (u32)dsp_vptr->smp_info.addr * 2;
+                  addr = base + 2;
+                  dsp_vptr->playInfo.posHi = dsp_vptr->playInfo.posLo = 0;
+                  if ((dsp_vptr->smp_info.compType == 4) || (dsp_vptr->smp_info.compType == 5)) {
+                    pb->loopType = 1;
+                  } else {
+                    pb->adpcmLoop.loop_yn2 = adpcmInfo->loopY0;
+                    pb->adpcmLoop.loop_yn1 = adpcmInfo->loopY1;
+                    pb->adpcmLoop.loop_pred_scale = adpcmInfo->loopPS;
+                    pb->loopType = 0;
+                  }
+                } break;
+                case 1: {
+                  DSPADPCMplusInfo* adpcmInfo;
+                  u8 i;
+                  pb->addr.format = 0;
+                  pb->adpcm.gain = 0;
+                  offset = (dsp_vptr->smp_info.offset + 0xD) / 14;
+                  adpcmInfo = dsp_vptr->smp_info.extraData;
+                  pb->adpcm.yn2 = adpcmInfo->blk[offset].Y0;
+                  pb->adpcm.yn1 = adpcmInfo->blk[offset].Y1;
+                  pb->adpcm.pred_scale = adpcmInfo->blk[offset].PS;
+                  pb->adpcmLoop.loop_yn2 = adpcmInfo->loopY0;
+                  pb->adpcmLoop.loop_yn1 = adpcmInfo->loopY1;
+                  pb->adpcmLoop.loop_pred_scale = adpcmInfo->loopPS;
+                  for (i = 0; i < 8; i++) {
+                    pb->adpcm.a[i][0] = adpcmInfo->coefTab[i][0];
+                    pb->adpcm.a[i][1] = adpcmInfo->coefTab[i][1];
+                  }
+                  base = (u32)dsp_vptr->smp_info.addr * 2;
+                  addr = base + offset * 16 + 2;
+                  dsp_vptr->playInfo.posHi = offset * 0xE;
+                  dsp_vptr->playInfo.posLo = 0;
+                } break;
+                case 3: {
+                  u8 i;
+                  pb->addr.format = 0x19;
+                  pb->adpcm.gain = 0x100;
+                  for (i = 0; i < 8; i++) {
+                    pb->adpcm.a[i][0] = 0;
+                    pb->adpcm.a[i][1] = 0;
+                  }
+                  addr = (u32)dsp_vptr->smp_info.offset + (base = (u32)dsp_vptr->smp_info.addr);
+                  dsp_vptr->playInfo.posHi = dsp_vptr->smp_info.offset;
+                  dsp_vptr->playInfo.posLo = 0;
+                } break;
             case 2:
-            case 6: {
-              u8 i;
-              pb->addr.format = 0xA;
-              pb->adpcm.gain = 0x800;
-              for (i = 0; i < 8; i++) {
-                pb->adpcm.a[i][0] = 0;
-                pb->adpcm.a[i][1] = 0;
-              }
-              addr = dsp_vptr->smp_info.offset + (base = (u32)dsp_vptr->smp_info.addr >> 1);
-              dsp_vptr->playInfo.posHi = dsp_vptr->smp_info.offset;
-              dsp_vptr->playInfo.posLo = 0;
-              if (dsp_vptr->smp_info.compType == 6) {
-                pb->loopType = 1;
-              }
-            } break;
+                case 6: {
+                  u8 i;
+                  pb->addr.format = 0xA;
+                  pb->adpcm.gain = 0x800;
+                  for (i = 0; i < 8; i++) {
+                    pb->adpcm.a[i][0] = 0;
+                    pb->adpcm.a[i][1] = 0;
+                  }
+                  addr = dsp_vptr->smp_info.offset + (base = (u32)dsp_vptr->smp_info.addr >> 1);
+                  dsp_vptr->playInfo.posHi = dsp_vptr->smp_info.offset;
+                  dsp_vptr->playInfo.posLo = 0;
+                  if (dsp_vptr->smp_info.compType == 6) {
+                    pb->loopType = 1;
+                  }
+                } break;
             default:
               MUSY_ASSERT(FALSE);
               break;
@@ -936,27 +936,27 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               switch (dsp_vptr->smp_info.compType) {
               case 0:
               case 1:
-              case 4: {
-                u32 bn;
-                u32 bo;
-                bn = dsp_vptr->smp_info.loop / 14;
-                bo = dsp_vptr->smp_info.loop - (bn * 0xE);
-                loopAddr = base + bn * 16 + 2 + bo;
-                endAddr = dsp_vptr->smp_info.loop + dsp_vptr->smp_info.loopLength - 1;
-                bn = endAddr / 14;
-                bo = endAddr - (bn * 0xE);
-                endAddr = base + bn * 16 + 2 + bo;
-              } break;
-              case 5: {
-                u32 bn;
-                u32 bo;
-                loopAddr = ((u32)dsp_vptr->vSampleInfo.loopBufferAddr * 2) + 2;
-                endAddr = dsp_vptr->smp_info.loop + dsp_vptr->smp_info.loopLength - 1;
-                bn = endAddr / 14;
-                bo = endAddr - (bn * 0xE);
-                endAddr = base + bn * 16 + 2 + bo;
-                dsp_vptr->vSampleInfo.inLoopBuffer = 0;
-              } break;
+                  case 4: {
+                    u32 bn;
+                    u32 bo;
+                    bn = dsp_vptr->smp_info.loop / 14;
+                    bo = dsp_vptr->smp_info.loop - (bn * 0xE);
+                    loopAddr = base + bn * 16 + 2 + bo;
+                    endAddr = dsp_vptr->smp_info.loop + dsp_vptr->smp_info.loopLength - 1;
+                    bn = endAddr / 14;
+                    bo = endAddr - (bn * 0xE);
+                    endAddr = base + bn * 16 + 2 + bo;
+                  } break;
+                  case 5: {
+                    u32 bn;
+                    u32 bo;
+                    loopAddr = ((u32)dsp_vptr->vSampleInfo.loopBufferAddr * 2) + 2;
+                    endAddr = dsp_vptr->smp_info.loop + dsp_vptr->smp_info.loopLength - 1;
+                    bn = endAddr / 14;
+                    bo = endAddr - (bn * 0xE);
+                    endAddr = base + bn * 16 + 2 + bo;
+                    dsp_vptr->vSampleInfo.inLoopBuffer = 0;
+                  } break;
               case 6:
                 loopAddr = (u32)dsp_vptr->vSampleInfo.loopBufferAddr >> 1;
                 endAddr = (dsp_vptr->smp_info.loop + dsp_vptr->smp_info.loopLength) + base - 1;
@@ -980,14 +980,14 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               case 0:
               case 1:
               case 4:
-              case 5: {
-                u32 bn;
-                u32 bo;
-                bn = (dsp_vptr->smp_info.length - 1) / 14;
-                bo = (dsp_vptr->smp_info.length - 1) - (bn * 0xE);
-                tmp_addr = base + bn * 16 + 2 + bo;
-                zeroAddr = (dspARAMZeroBuffer * 2) + 2;
-              } break;
+                  case 5: {
+                    u32 bn;
+                    u32 bo;
+                    bn = (dsp_vptr->smp_info.length - 1) / 14;
+                    bo = (dsp_vptr->smp_info.length - 1) - (bn * 0xE);
+                    tmp_addr = base + bn * 16 + 2 + bo;
+                    zeroAddr = (dspARAMZeroBuffer * 2) + 2;
+                  } break;
               case 3:
                 tmp_addr = base + dsp_vptr->smp_info.length - 1;
                 zeroAddr = dspARAMZeroBuffer;

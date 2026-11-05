@@ -1,5 +1,6 @@
 #pragma once
 
+#include <dolphin/types.h>
 #include "version.h"
 #include "evt/evt_cmd.h"
 #include "system.h" // EasingType for the movement curve arguments
@@ -19,7 +20,6 @@ typedef enum StatusWindowMode {
     STATUS_WINDOW_EVENT_ON = 1,
     STATUS_WINDOW_SYSTEM_ON = 2,
 } StatusWindowMode;
-#include <dolphin/types.h>
 
 USER_FUNC(btlevtcmd_WaitEventEnd);
 USER_FUNC(btlevtcmd_check_battleflag);
@@ -151,26 +151,6 @@ USER_FUNC(btlevtcmd_CheckToken);
 USER_FUNC(btlevtcmd_SetRegistStatus);
 USER_FUNC(btlevtcmd_CheckCommandUnit);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 USER_FUNC(btlevtcmd_ACRStart);
 USER_FUNC(btlevtcmd_ACRGetResult);
 USER_FUNC(btlevtcmd_SetEventWait);
@@ -283,7 +263,6 @@ USER_FUNC(btlevtcmd_SetEventCeilFall);
 #if VERSION >= VERSION_DEMO_EU
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 #endif
-
 
 #if VERSION <= VERSION_DEMO_JP
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);

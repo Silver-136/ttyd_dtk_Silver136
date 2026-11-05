@@ -1461,294 +1461,321 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
         case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
         case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
-        case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED: {
-            s32 h;
-            s32* tbl;
-            const char* title;
-            s32 titleX;
-            const char* desc;
-            s32 max;
-            u32 sl, st, sw, sh;
+            case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED: {
+                s32 h;
+                s32* tbl;
+                const char* title;
+                s32 titleX;
+                const char* desc;
+                s32 max;
+                u32 sl, st, sw, sh;
 
-            row = 0;
-            desc = NULL;
-            if (mode == UNITWIN_MODE_ITEM_SELL_UNUSED || mode == UNITWIN_MODE_ITEM_STORE_UNUSED) {
-                h = (8 - pouchGetHaveItemCnt() > 0 ? 8 - pouchGetHaveItemCnt() : 0) * 24;
-                max = MAX_HELD_ITEMS;
-                title = msgSearch("msg_window_title_1");
-                titleX = 30;
-            } else if (mode == UNITWIN_MODE_BADGE_SELL_UNUSED) {
-                h = (8 - pouchGetHaveBadgeCnt() > 0 ? 8 - pouchGetHaveBadgeCnt() : 0) * 24;
-                max = MAX_BADGES;
-                title = msgSearch("msg_window_title_2");
-                titleX = 40;
-            } else if (mode == UNITWIN_MODE_BADGE_CHARLIETON_UNUSED) {
-                h = 8 - wp->count;
-                h = (h > 0 ? h : 0) * 24;
-                max = ITEM_TYPE_MAX - 1;
-                title = msgSearch("msg_window_title_3");
-                titleX = 20;
-            } else if (mode == UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED) {
-                h = 8 - wp->count;
-                h = (h > 0 ? h : 0) * 24;
-                max = wp->count;
-                title = msgSearch("msg_window_title_3");
-                titleX = 20;
-            } else if (mode == UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED) {
-                h = 8 - wp->count;
-                h = (h > 0 ? h : 0) * 24;
-                max = ITEM_TYPE_MAX - 1;
-                title = msgSearch("msg_window_title_4");
-                titleX = 30;
-            } else {
-                h = 8 - wp->count;
-                h = (h > 0 ? h : 0) * 24;
-                max = BADGE_COUNT;
-                title = msgSearch("msg_window_title_2");
-                titleX = 40;
-            }
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(titleX + 51, 111.0f, title);
-            FontDrawEdgeOff();
-            if (wp->mode != UNITWIN_MODE_ITEM_STORE_UNUSED) {
-                Mtx mtx;
-                Mtx scale;
-                s32 icon;
-                PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
-                PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
-                PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                if (wp->mode == UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED) {
-                    icon = ICON_ITEM_STAR_PIECE;
-                } else if (wp->mode == UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED) {
-                    icon = ICON_ITEM_PIANTA_TOKEN;
+                row = 0;
+                desc = NULL;
+                if (mode == UNITWIN_MODE_ITEM_SELL_UNUSED || mode == UNITWIN_MODE_ITEM_STORE_UNUSED) {
+                    h = (8 - pouchGetHaveItemCnt() > 0 ? 8 - pouchGetHaveItemCnt() : 0) * 24;
+                    max = MAX_HELD_ITEMS;
+                    title = msgSearch("msg_window_title_1");
+                    titleX = 30;
+                } else if (mode == UNITWIN_MODE_BADGE_SELL_UNUSED) {
+                    h = (8 - pouchGetHaveBadgeCnt() > 0 ? 8 - pouchGetHaveBadgeCnt() : 0) * 24;
+                    max = MAX_BADGES;
+                    title = msgSearch("msg_window_title_2");
+                    titleX = 40;
+                } else if (mode == UNITWIN_MODE_BADGE_CHARLIETON_UNUSED) {
+                    h = 8 - wp->count;
+                    h = (h > 0 ? h : 0) * 24;
+                    max = ITEM_TYPE_MAX - 1;
+                    title = msgSearch("msg_window_title_3");
+                    titleX = 20;
+                } else if (mode == UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED) {
+                    h = 8 - wp->count;
+                    h = (h > 0 ? h : 0) * 24;
+                    max = wp->count;
+                    title = msgSearch("msg_window_title_3");
+                    titleX = 20;
+                } else if (mode == UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED) {
+                    h = 8 - wp->count;
+                    h = (h > 0 ? h : 0) * 24;
+                    max = ITEM_TYPE_MAX - 1;
+                    title = msgSearch("msg_window_title_4");
+                    titleX = 30;
                 } else {
-                    icon = ICON_ITEM_COIN;
+                    h = 8 - wp->count;
+                    h = (h > 0 ? h : 0) * 24;
+                    max = BADGE_COUNT;
+                    title = msgSearch("msg_window_title_2");
+                    titleX = 40;
                 }
-                iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, icon, 0.6f);
-            }
-            GXGetScissor(&sl, &st, &sw, &sh);
-            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
-            for (tbl = badge_bottakuru100_table, i = 0; i < max; i++) {
-                GXColor color = {0x00, 0x00, 0x00, 0xFF};
-                s32 id;
-                ItemData* item;
-                flag = 0;
-                switch (wp->mode) {
-                    case UNITWIN_MODE_ITEM_SELL_UNUSED:
-                    case UNITWIN_MODE_ITEM_STORE_UNUSED:
-                        id = pouchHaveItem(i);
-                        break;
-                    case UNITWIN_MODE_BADGE_SELL_UNUSED:
-                        id = pouchHaveBadge(i);
-                        break;
-                    case UNITWIN_MODE_BADGE_BUY_UNUSED:
-                        id = (s16)badgeShop_get(bdsw->bargain_table, i + BADGE_MIN);
-                        if (id - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
-                            id = i + BADGE_MIN;
-                        } else {
-                            id = 0;
-                        }
-                        break;
-                    case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
-                        if ((s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN) > 0) {
-                            id = i + BADGE_MIN;
-                        } else {
-                            id = 0;
-                        }
-                        break;
-                    case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
-                        if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
-                            id = i + 1;
-                        } else {
-                            id = 0;
-                        }
-                        break;
-                    case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
-                        id = tbl[i];
-                        break;
-                    case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
-                        if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
-                            id = i + 1;
-                        } else {
-                            id = 0;
-                        }
-                        break;
-                }
-                item = &itemDataTable[id];
-                if (id) {
-                    if (wp->mode == UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED && item->star_piece_price > pouchGetStarPiece()) {
-                        color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                        flag = ICON_FLAG_GRAY;
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(titleX + 51, 111.0f, title);
+                FontDrawEdgeOff();
+                if (wp->mode != UNITWIN_MODE_ITEM_STORE_UNUSED) {
+                    Mtx mtx;
+                    Mtx scale;
+                    s32 icon;
+                    PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
+                    PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
+                    PSMTXConcat(mtx, scale, mtx);
+                    iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                    if (wp->mode == UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED) {
+                        icon = ICON_ITEM_STAR_PIECE;
+                    } else if (wp->mode == UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED) {
+                        icon = ICON_ITEM_PIANTA_TOKEN;
+                    } else {
+                        icon = ICON_ITEM_COIN;
                     }
-                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, item->icon_id);
-                    FontDrawStart();
-                    FontDrawScale(0.8f);
-                    FontDrawColor(color);
-                    FontDrawString(36.0f, wp->scroll + (80 - row * 24) - 2.0f, item->id);
-                    if (wp->mode != UNITWIN_MODE_ITEM_STORE_UNUSED) {
-                        char buf[32];
-                        f32 sc;
-                        s32 xoff;
-                        switch (wp->mode) {
-                            case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
-                                sprintf(buf, "%2d", item->buy_price * 12 / 10);
-                                sc = 1.0f;
-                                xoff = 0;
-                                break;
-                            case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
-                                sprintf(buf, "%3d", item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10);
-                                sc = 1.0f;
-                                xoff = -14;
-                                break;
-                            case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
-                                sprintf(buf, "%4d", (item->buy_price * 2 + 2) / 3);
-                                sc = 0.8f;
-                                xoff = -20;
-                                break;
-                            case UNITWIN_MODE_BADGE_BUY_UNUSED:
-                                sprintf(buf, "%2d", item->buy_price);
-                                sc = 1.0f;
-                                xoff = 0;
-                                break;
-                            case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
-                                sprintf(buf, "%2d", item->star_piece_price);
-                                sc = 1.0f;
-                                xoff = 0;
-                                break;
-                            case UNITWIN_MODE_BADGE_SELL_UNUSED:
-                            default:
-                                sprintf(buf, "%2d", item->sell_price);
-                                xoff = 0;
-                                sc = 1.0f;
-                                break;
+                    iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, icon, 0.6f);
+                }
+                GXGetScissor(&sl, &st, &sw, &sh);
+                GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
+                for (tbl = badge_bottakuru100_table, i = 0; i < max; i++) {
+                    GXColor color = {0x00, 0x00, 0x00, 0xFF};
+                    s32 id;
+                    ItemData* item;
+                    flag = 0;
+                    switch (wp->mode) {
+                        case UNITWIN_MODE_ITEM_SELL_UNUSED:
+                        case UNITWIN_MODE_ITEM_STORE_UNUSED:
+                            id = pouchHaveItem(i);
+                            break;
+                        case UNITWIN_MODE_BADGE_SELL_UNUSED:
+                            id = pouchHaveBadge(i);
+                            break;
+                        case UNITWIN_MODE_BADGE_BUY_UNUSED:
+                            id = (s16)badgeShop_get(bdsw->bargain_table, i + BADGE_MIN);
+                            if (id - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
+                                id = i + BADGE_MIN;
+                            } else {
+                                id = 0;
+                            }
+                            break;
+                        case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
+                            if ((s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN) > 0) {
+                                id = i + BADGE_MIN;
+                            } else {
+                                id = 0;
+                            }
+                            break;
+                        case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
+                            if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
+                                id = i + 1;
+                            } else {
+                                id = 0;
+                            }
+                            break;
+                        case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
+                            id = tbl[i];
+                            break;
+                        case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
+                            if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
+                                id = i + 1;
+                            } else {
+                                id = 0;
+                            }
+                            break;
+                    }
+                    item = &itemDataTable[id];
+                    if (id) {
+                        if (wp->mode == UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED && item->star_piece_price > pouchGetStarPiece()) {
+                            color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                            flag = ICON_FLAG_GRAY;
                         }
+                        ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, item->icon_id);
                         FontDrawStart();
-                        FontDrawScale(sc);
+                        FontDrawScale(0.8f);
                         FontDrawColor(color);
-                        FontDrawString(xoff + 226, wp->scroll + (80 - row * 24), buf);
+                        FontDrawString(36.0f, wp->scroll + (80 - row * 24) - 2.0f, item->id);
+                        if (wp->mode != UNITWIN_MODE_ITEM_STORE_UNUSED) {
+                            char buf[32];
+                            f32 sc;
+                            s32 xoff;
+                            switch (wp->mode) {
+                                case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
+                                    sprintf(buf, "%2d", item->buy_price * 12 / 10);
+                                    sc = 1.0f;
+                                    xoff = 0;
+                                    break;
+                                case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
+                                    sprintf(buf, "%3d", item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10);
+                                    sc = 1.0f;
+                                    xoff = -14;
+                                    break;
+                                case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
+                                    sprintf(buf, "%4d", (item->buy_price * 2 + 2) / 3);
+                                    sc = 0.8f;
+                                    xoff = -20;
+                                    break;
+                                case UNITWIN_MODE_BADGE_BUY_UNUSED:
+                                    sprintf(buf, "%2d", item->buy_price);
+                                    sc = 1.0f;
+                                    xoff = 0;
+                                    break;
+                                case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
+                                    sprintf(buf, "%2d", item->star_piece_price);
+                                    sc = 1.0f;
+                                    xoff = 0;
+                                    break;
+                                case UNITWIN_MODE_BADGE_SELL_UNUSED:
+                                default:
+                                    sprintf(buf, "%2d", item->sell_price);
+                                    xoff = 0;
+                                    sc = 1.0f;
+                                    break;
+                            }
+                            FontDrawStart();
+                            FontDrawScale(sc);
+                            FontDrawColor(color);
+                            FontDrawString(xoff + 226, wp->scroll + (80 - row * 24), buf);
+                        }
+                        if (row == wp->cursor) {
+                            desc = item->description;
+                        }
+                        row++;
                     }
-                    if (row == wp->cursor) {
-                        desc = item->description;
-                    }
-                    row++;
                 }
-            }
-            GXSetScissor(sl, st, sw, sh);
-            if (desc) {
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
-                FontDrawStart();
-                FontDrawMessage(-220, -138, msgSearch(desc));
-            }
-            break;
-        }
-        case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
-        case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED: {
-            InformantWork* jdt = &_jdt;
-            InformantInfo* info;
-            u8* tbl;
-            const char* title;
-            s32 h;
-            s32 n;
-            u32 sl, st, sw, sh;
-
-            n = 8 - wp->count;
-            h = (n > 0 ? n : 0) * 24;
-            if (mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
-                title = msgSearch("msg_window_title_5");
-                tbl = jdt->readFlags.perfectRead;
-            } else {
-                title = msgSearch("msg_window_title_6");
-                tbl = jdt->readFlags.luigiRead;
-            }
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(71.0f, 111.0f, title);
-            FontDrawEdgeOff();
-            if (wp->mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
-                Mtx mtx;
-                Mtx scale;
-                PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
-                PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
-                PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
-            }
-            GXGetScissor(&sl, &st, &sw, &sh);
-            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
-            for (i = 0, info = jdt->info; i < wp->count; i++, info++) {
-                char buf[32];
-                GXColor color;
-                char c;
-                if (johoya_get(tbl, info->storyId)) {
-                    sprintf(buf, "");
-                    color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                } else {
-                    sprintf(buf, "%3d", info->cost);
-                    color = (GXColor){0x00, 0x00, 0x00, 0xFF};
-                }
-                FontDrawStart();
-                c = info->initEndPos[info->tagEndPos];
-                info->initEndPos[info->tagEndPos] = 0;
-                FontDrawColor(color);
-                FontDrawScale(0.8f);
-                FontDrawString(1.0f, wp->scroll + (80 - i * 24), info->initEndPos);
-                info->initEndPos[info->tagEndPos] = c;
-                if (wp->mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
+                GXSetScissor(sl, st, sw, sh);
+                if (desc) {
+                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
                     FontDrawStart();
-                    FontDrawColor(color);
-                    FontDrawString(221.0f, wp->scroll + (80 - i * 24), buf);
+                    FontDrawMessage(-220, -138, msgSearch(desc));
                 }
+                break;
             }
-            GXSetScissor(sl, st, sw, sh);
-            break;
-        }
+        case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
+            case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED: {
+                InformantWork* jdt = &_jdt;
+                InformantInfo* info;
+                u8* tbl;
+                const char* title;
+                s32 h;
+                s32 n;
+                u32 sl, st, sw, sh;
+
+                n = 8 - wp->count;
+                h = (n > 0 ? n : 0) * 24;
+                if (mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
+                    title = msgSearch("msg_window_title_5");
+                    tbl = jdt->readFlags.perfectRead;
+                } else {
+                    title = msgSearch("msg_window_title_6");
+                    tbl = jdt->readFlags.luigiRead;
+                }
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(71.0f, 111.0f, title);
+                FontDrawEdgeOff();
+                if (wp->mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
+                    Mtx mtx;
+                    Mtx scale;
+                    PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
+                    PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
+                    PSMTXConcat(mtx, scale, mtx);
+                    iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                    iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
+                }
+                GXGetScissor(&sl, &st, &sw, &sh);
+                GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
+                for (i = 0, info = jdt->info; i < wp->count; i++, info++) {
+                    char buf[32];
+                    GXColor color;
+                    char c;
+                    if (johoya_get(tbl, info->storyId)) {
+                        sprintf(buf, "");
+                        color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                    } else {
+                        sprintf(buf, "%3d", info->cost);
+                        color = (GXColor){0x00, 0x00, 0x00, 0xFF};
+                    }
+                    FontDrawStart();
+                    c = info->initEndPos[info->tagEndPos];
+                    info->initEndPos[info->tagEndPos] = 0;
+                    FontDrawColor(color);
+                    FontDrawScale(0.8f);
+                    FontDrawString(1.0f, wp->scroll + (80 - i * 24), info->initEndPos);
+                    info->initEndPos[info->tagEndPos] = c;
+                    if (wp->mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
+                        FontDrawStart();
+                        FontDrawColor(color);
+                        FontDrawString(221.0f, wp->scroll + (80 - i * 24), buf);
+                    }
+                }
+                GXSetScissor(sl, st, sw, sh);
+                break;
+            }
         case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
         case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
-        case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED: {
-            char msgName[64] = {0};
-            s32 lv;
-            s32 row = 0;
-            s32 h;
-            u32 sl, st, sw, sh;
-            GXColor color;
+            case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED: {
+                char msgName[64] = {0};
+                s32 lv;
+                s32 row = 0;
+                s32 h;
+                u32 sl, st, sw, sh;
+                GXColor color;
 
-            h = 8 - wp->count;
-            h = (h > 0 ? h : 0) * 24;
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(41.0f, 111.0f, msgSearch("msg_window_title_7"));
-            FontDrawEdgeOff();
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_8"));
-            FontDrawEdgeOff();
-            GXGetScissor(&sl, &st, &sw, &sh);
-            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
-            for (i = 0; party_id_table[i]; i++) {
-                const char* name;
-                s32 ty;
-                char buf[32];
-                char help[16];
-                char dir[16];
-                if (wp->mode == UNITWIN_MODE_PARTY_RANK_UP_UNUSED || wp->mode == UNITWIN_MODE_PARTY_RANK_UP2_UNUSED) {
-                    if (!partyChkJoin(party_id_table[i])) {
-                        continue;
-                    }
-                    if (evtGetValue(NULL, GSWF_GOR_UP_ARROW_USED) == 0) {
-                        if (pouch->partyData[party_id_table[i]].techLevel < 1) {
+                h = 8 - wp->count;
+                h = (h > 0 ? h : 0) * 24;
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(41.0f, 111.0f, msgSearch("msg_window_title_7"));
+                FontDrawEdgeOff();
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_8"));
+                FontDrawEdgeOff();
+                GXGetScissor(&sl, &st, &sw, &sh);
+                GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
+                for (i = 0; party_id_table[i]; i++) {
+                    const char* name;
+                    s32 ty;
+                    char buf[32];
+                    char help[16];
+                    char dir[16];
+                    if (wp->mode == UNITWIN_MODE_PARTY_RANK_UP_UNUSED || wp->mode == UNITWIN_MODE_PARTY_RANK_UP2_UNUSED) {
+                        if (!partyChkJoin(party_id_table[i])) {
+                            continue;
+                        }
+                        if (evtGetValue(NULL, GSWF_GOR_UP_ARROW_USED) == 0) {
+                            if (pouch->partyData[party_id_table[i]].techLevel < 1) {
+                                color = (GXColor){0x00, 0x00, 0x00, 0xFF};
+                                lv = 0;
+                                flag = 0;
+                            } else {
+                                color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                                lv = 1;
+                                flag = ICON_FLAG_GRAY;
+                            }
+                        } else {
+                            if (pouch->partyData[party_id_table[i]].techLevel < 2) {
+                                color = (GXColor){0x00, 0x00, 0x00, 0xFF};
+                                lv = 0;
+                                flag = 0;
+                            } else {
+                                color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                                lv = 2;
+                                flag = ICON_FLAG_GRAY;
+                            }
+                        }
+                    } else {
+                        if (!partyChkJoin(party_id_table[i])) {
+                            continue;
+                        }
+                        if (wp->skipEntry == party_id_table[i]) {
+                            continue;
+                        }
+                        if (pouch->partyData[party_id_table[i]].techLevel > 0) {
                             color = (GXColor){0x00, 0x00, 0x00, 0xFF};
                             lv = 0;
                             flag = 0;
@@ -1757,25 +1784,80 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                             lv = 1;
                             flag = ICON_FLAG_GRAY;
                         }
-                    } else {
-                        if (pouch->partyData[party_id_table[i]].techLevel < 2) {
-                            color = (GXColor){0x00, 0x00, 0x00, 0xFF};
-                            lv = 0;
-                            flag = 0;
+                    }
+                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, unitwin_party_icon(party_icon_table[i]));
+                    FontDrawStart();
+                    FontDrawColor(color);
+                    name = unitwin_party_name(i);
+                    ty = 80 - row * 24;
+                    FontDrawString(36.0f, wp->scroll + ty, name);
+                    sprintf(buf, "%d", pouch->partyData[party_id_table[i]].techLevel);
+                    FontDrawStart();
+                    FontDrawString(236.0f, wp->scroll + ty, buf);
+                    if (row == wp->cursor) {
+                        if (lv == 0) {
+                            sprintf(help, "help");
                         } else {
-                            color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                            lv = 2;
-                            flag = ICON_FLAG_GRAY;
+                            sprintf(help, "helperr");
+                        }
+                        if (wp->mode == UNITWIN_MODE_PARTY_RANK_UP_UNUSED || wp->mode == UNITWIN_MODE_PARTY_RANK_UP2_UNUSED) {
+                            sprintf(dir, "lankup");
+                        } else {
+                            sprintf(dir, "lankdown");
+                        }
+                        sprintf(msgName, "%s_%s_lank%d%s", help, dir, pouch->partyData[party_id_table[i]].techLevel + 1, party_labelname_table[i]);
+                    }
+                    row++;
+                }
+                GXSetScissor(sl, st, sw, sh);
+                if (*(s8*)msgName) {
+                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    FontDrawStart();
+                    FontDrawMessage(-220, -138, msgSearch(msgName));
+                }
+                break;
+            }
+            case UNITWIN_MODE_STAT_UP_UNUSED: {
+                char msgName[64] = {0};
+                s32 h;
+                u32 sl, st, sw, sh;
+
+                s32 j;
+                s32 flag;
+                s32 lv;
+                s32 bob;
+                s32 row = 0;
+                s32 v;
+                GXColor color;
+                s32 icon;
+
+                h = 8 - wp->count;
+                h = (h > 0 ? h : 0) * 24;
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
+                FontDrawEdgeOff();
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
+                FontDrawEdgeOff();
+                GXGetScissor(&sl, &st, &sw, &sh);
+                GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
+                for (i = 0; i < wp->count; i++) {
+                    char buf[32];
+                    char help[16];
+                    flag = 0;
+                    for (j = 0; j < wp->count; j++) {
+                        if (j != wp->cursor && *mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                            flag = 1;
                         }
                     }
-                } else {
-                    if (!partyChkJoin(party_id_table[i])) {
-                        continue;
-                    }
-                    if (wp->skipEntry == party_id_table[i]) {
-                        continue;
-                    }
-                    if (pouch->partyData[party_id_table[i]].techLevel > 0) {
+                    if (!flag) {
                         color = (GXColor){0x00, 0x00, 0x00, 0xFF};
                         lv = 0;
                         flag = 0;
@@ -1784,196 +1866,38 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                         lv = 1;
                         flag = ICON_FLAG_GRAY;
                     }
-                }
-                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, unitwin_party_icon(party_icon_table[i]));
-                FontDrawStart();
-                FontDrawColor(color);
-                name = unitwin_party_name(i);
-                ty = 80 - row * 24;
-                FontDrawString(36.0f, wp->scroll + ty, name);
-                sprintf(buf, "%d", pouch->partyData[party_id_table[i]].techLevel);
-                FontDrawStart();
-                FontDrawString(236.0f, wp->scroll + ty, buf);
-                if (row == wp->cursor) {
-                    if (lv == 0) {
-                        sprintf(help, "help");
+                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
+                    FontDrawStart();
+                    FontDrawColor(color);
+                    sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
+                    FontDrawString(36.0f, wp->scroll + (80 - row * 24), buf);
+                    bob = (gp->retraceCount & 0xF) > 7 ? 0 : 2;
+                    if (row == wp->cursor) {
+                        if (lv == 0) {
+                            sprintf(help, "help");
+                        } else {
+                            sprintf(help, "helperr");
+                        }
+                        sprintf(msgName, "%s_levelup%s", help, mario_status_labelname_table[i]);
+                        v = *mario_status_point_table[i] + mario_status_henka_table[i] * 2;
+                        if (v > 0) {
+                            icon = ICON_ARROW_UP;
+                        } else {
+                            icon = ICON_UNAVAILABLE;
+                            bob = 0;
+                        }
+                        ICONGX2(&(Vec){166.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
+                        ICONGX2(&(Vec){186.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
                     } else {
-                        sprintf(help, "helperr");
+                        v = *mario_status_point_table[i] - mario_status_henka_table[i];
+                        if (v > 0) {
+                            icon = ICON_ARROW_DOWN;
+                        } else {
+                            icon = ICON_UNAVAILABLE;
+                            bob = 0;
+                        }
+                        ICONGX2(&(Vec){176.0f, (wp->scroll + (56 - row * 24)) - bob, 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
                     }
-                    if (wp->mode == UNITWIN_MODE_PARTY_RANK_UP_UNUSED || wp->mode == UNITWIN_MODE_PARTY_RANK_UP2_UNUSED) {
-                        sprintf(dir, "lankup");
-                    } else {
-                        sprintf(dir, "lankdown");
-                    }
-                    sprintf(msgName, "%s_%s_lank%d%s", help, dir, pouch->partyData[party_id_table[i]].techLevel + 1, party_labelname_table[i]);
-                }
-                row++;
-            }
-            GXSetScissor(sl, st, sw, sh);
-            if (*(s8*)msgName) {
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
-                FontDrawStart();
-                FontDrawMessage(-220, -138, msgSearch(msgName));
-            }
-            break;
-        }
-        case UNITWIN_MODE_STAT_UP_UNUSED: {
-            char msgName[64] = {0};
-            s32 h;
-            u32 sl, st, sw, sh;
-
-            s32 j;
-            s32 flag;
-            s32 lv;
-            s32 bob;
-            s32 row = 0;
-            s32 v;
-            GXColor color;
-            s32 icon;
-
-            h = 8 - wp->count;
-            h = (h > 0 ? h : 0) * 24;
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
-            FontDrawEdgeOff();
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
-            FontDrawEdgeOff();
-            GXGetScissor(&sl, &st, &sw, &sh);
-            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
-            for (i = 0; i < wp->count; i++) {
-                char buf[32];
-                char help[16];
-                flag = 0;
-                for (j = 0; j < wp->count; j++) {
-                    if (j != wp->cursor && *mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
-                        flag = 1;
-                    }
-                }
-                if (!flag) {
-                    color = (GXColor){0x00, 0x00, 0x00, 0xFF};
-                    lv = 0;
-                    flag = 0;
-                } else {
-                    color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                    lv = 1;
-                    flag = ICON_FLAG_GRAY;
-                }
-                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
-                FontDrawStart();
-                FontDrawColor(color);
-                sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
-                FontDrawString(36.0f, wp->scroll + (80 - row * 24), buf);
-                bob = (gp->retraceCount & 0xF) > 7 ? 0 : 2;
-                if (row == wp->cursor) {
-                    if (lv == 0) {
-                        sprintf(help, "help");
-                    } else {
-                        sprintf(help, "helperr");
-                    }
-                    sprintf(msgName, "%s_levelup%s", help, mario_status_labelname_table[i]);
-                    v = *mario_status_point_table[i] + mario_status_henka_table[i] * 2;
-                    if (v > 0) {
-                        icon = ICON_ARROW_UP;
-                    } else {
-                        icon = ICON_UNAVAILABLE;
-                        bob = 0;
-                    }
-                    ICONGX2(&(Vec){166.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
-                    ICONGX2(&(Vec){186.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
-                } else {
-                    v = *mario_status_point_table[i] - mario_status_henka_table[i];
-                    if (v > 0) {
-                        icon = ICON_ARROW_DOWN;
-                    } else {
-                        icon = ICON_UNAVAILABLE;
-                        bob = 0;
-                    }
-                    ICONGX2(&(Vec){176.0f, (wp->scroll + (56 - row * 24)) - bob, 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
-                }
-                if (v > 0) {
-                    sprintf(buf, "%3d", v);
-                } else {
-                    sprintf(buf, "  ？", v);
-                }
-                FontDrawStart();
-                FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
-                row++;
-            }
-            GXSetScissor(sl, st, sw, sh);
-            if (*(s8*)msgName) {
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
-                FontDrawStart();
-                FontDrawMessage(-220, -138, msgSearch(msgName));
-            }
-            break;
-        }
-        case UNITWIN_MODE_STAT_UP2_UNUSED: {
-            char msgName[64] = {0};
-            s32 row = 0;
-            s32 h;
-            u32 sl, st, sw, sh;
-
-            s32 j;
-            s32 cnt;
-            s32 v;
-            GXColor color;
-
-            h = 8 - wp->count;
-            h = (h > 0 ? h : 0) * 24;
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
-            FontDrawEdgeOff();
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
-            FontDrawEdgeOff();
-            GXGetScissor(&sl, &st, &sw, &sh);
-            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
-            for (i = 0; i < wp->count; i++) {
-                char buf[32];
-                char help[16];
-                cnt = 0;
-                for (j = 0; j < wp->count; j++) {
-                    if (j != wp->cursor && *mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
-                        cnt++;
-                    }
-                }
-                if (cnt < 2) {
-                    color = (GXColor){0x00, 0x00, 0x00, 0xFF};
-                    lv = 0;
-                    j = 0;
-                } else {
-                    color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                    lv = 1;
-                    j = ICON_FLAG_GRAY;
-                }
-                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, j | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
-                FontDrawStart();
-                FontDrawColor(color);
-                sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
-                FontDrawString(36.0f, wp->scroll + (80 - row * 24), buf);
-                if (row == wp->cursor) {
-                    if (lv == 0) {
-                        sprintf(help, "help");
-                    } else {
-                        sprintf(help, "helperr");
-                    }
-                    sprintf(msgName, "%s_levelup%s", help, mario_status_labelname_table[i]);
-                    v = *mario_status_point_table[i] + mario_status_henka_table[i];
                     if (v > 0) {
                         sprintf(buf, "%3d", v);
                     } else {
@@ -1981,91 +1905,167 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     }
                     FontDrawStart();
                     FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
+                    row++;
                 }
-                row++;
-            }
-            GXSetScissor(sl, st, sw, sh);
-            if (*(s8*)msgName) {
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
-                FontDrawStart();
-                FontDrawMessage(-220, -138, msgSearch(msgName));
-            }
-            break;
-        }
-        case UNITWIN_MODE_STAT_DOWN_UNUSED: {
-            char msgName[64] = {0};
-            s32 row = 0;
-            s32 h;
-            u32 sl, st, sw, sh;
-
-            s32 v;
-            s32 flag;
-            GXColor color;
-            s32 lv;
-
-            h = 8 - wp->count;
-            h = (h > 0 ? h : 0) * 24;
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
-            FontDrawEdgeOff();
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
-            FontDrawStart();
-            FontDrawEdge();
-            FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
-            FontDrawEdgeOff();
-            GXGetScissor(&sl, &st, &sw, &sh);
-            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
-            for (i = 0; i < 3; i++) {
-                char buf[32];
-                char help[16];
-                if (i == wp->skipEntry) {
-                    continue;
-                }
-                if (*mario_status_point_table[i] - mario_status_henka_table[i] > 0) {
-                    color = (GXColor){0x00, 0x00, 0x00, 0xFF};
-                    lv = 0;
-                    flag = 0;
-                } else {
-                    color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                    lv = 1;
-                    flag = ICON_FLAG_GRAY;
-                }
-                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
-                FontDrawStart();
-                FontDrawColor(color);
-                sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
-                FontDrawString(36.0f, wp->scroll + (80 - row * 24), buf);
-                if (row == wp->cursor) {
-                    if (lv == 0) {
-                        sprintf(help, "help");
-                    } else {
-                        sprintf(help, "helperr");
-                    }
-                    sprintf(msgName, "%s_leveldown%s", help, mario_status_labelname_table[i]);
-                    v = *mario_status_point_table[i] - mario_status_henka_table[i];
-                    if (v > 0) {
-                        sprintf(buf, "%3d", v);
-                    } else {
-                        sprintf(buf, "  ？", v);
-                    }
+                GXSetScissor(sl, st, sw, sh);
+                if (*(s8*)msgName) {
+                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
                     FontDrawStart();
-                    FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
+                    FontDrawMessage(-220, -138, msgSearch(msgName));
                 }
-                row++;
+                break;
             }
-            GXSetScissor(sl, st, sw, sh);
-            if (*(s8*)msgName) {
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+            case UNITWIN_MODE_STAT_UP2_UNUSED: {
+                char msgName[64] = {0};
+                s32 row = 0;
+                s32 h;
+                u32 sl, st, sw, sh;
+
+                s32 j;
+                s32 cnt;
+                s32 v;
+                GXColor color;
+
+                h = 8 - wp->count;
+                h = (h > 0 ? h : 0) * 24;
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
                 FontDrawStart();
-                FontDrawMessage(-220, -138, msgSearch(msgName));
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
+                FontDrawEdgeOff();
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
+                FontDrawEdgeOff();
+                GXGetScissor(&sl, &st, &sw, &sh);
+                GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
+                for (i = 0; i < wp->count; i++) {
+                    char buf[32];
+                    char help[16];
+                    cnt = 0;
+                    for (j = 0; j < wp->count; j++) {
+                        if (j != wp->cursor && *mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                            cnt++;
+                        }
+                    }
+                    if (cnt < 2) {
+                        color = (GXColor){0x00, 0x00, 0x00, 0xFF};
+                        lv = 0;
+                        j = 0;
+                    } else {
+                        color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                        lv = 1;
+                        j = ICON_FLAG_GRAY;
+                    }
+                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, j | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
+                    FontDrawStart();
+                    FontDrawColor(color);
+                    sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
+                    FontDrawString(36.0f, wp->scroll + (80 - row * 24), buf);
+                    if (row == wp->cursor) {
+                        if (lv == 0) {
+                            sprintf(help, "help");
+                        } else {
+                            sprintf(help, "helperr");
+                        }
+                        sprintf(msgName, "%s_levelup%s", help, mario_status_labelname_table[i]);
+                        v = *mario_status_point_table[i] + mario_status_henka_table[i];
+                        if (v > 0) {
+                            sprintf(buf, "%3d", v);
+                        } else {
+                            sprintf(buf, "  ？", v);
+                        }
+                        FontDrawStart();
+                        FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
+                    }
+                    row++;
+                }
+                GXSetScissor(sl, st, sw, sh);
+                if (*(s8*)msgName) {
+                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    FontDrawStart();
+                    FontDrawMessage(-220, -138, msgSearch(msgName));
+                }
+                break;
             }
-            break;
-        }
+            case UNITWIN_MODE_STAT_DOWN_UNUSED: {
+                char msgName[64] = {0};
+                s32 row = 0;
+                s32 h;
+                u32 sl, st, sw, sh;
+
+                s32 v;
+                s32 flag;
+                GXColor color;
+                s32 lv;
+
+                h = 8 - wp->count;
+                h = (h > 0 ? h : 0) * 24;
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
+                FontDrawEdgeOff();
+                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                FontDrawStart();
+                FontDrawEdge();
+                FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
+                FontDrawEdgeOff();
+                GXGetScissor(&sl, &st, &sw, &sh);
+                GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
+                for (i = 0; i < 3; i++) {
+                    char buf[32];
+                    char help[16];
+                    if (i == wp->skipEntry) {
+                        continue;
+                    }
+                    if (*mario_status_point_table[i] - mario_status_henka_table[i] > 0) {
+                        color = (GXColor){0x00, 0x00, 0x00, 0xFF};
+                        lv = 0;
+                        flag = 0;
+                    } else {
+                        color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                        lv = 1;
+                        flag = ICON_FLAG_GRAY;
+                    }
+                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
+                    FontDrawStart();
+                    FontDrawColor(color);
+                    sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
+                    FontDrawString(36.0f, wp->scroll + (80 - row * 24), buf);
+                    if (row == wp->cursor) {
+                        if (lv == 0) {
+                            sprintf(help, "help");
+                        } else {
+                            sprintf(help, "helperr");
+                        }
+                        sprintf(msgName, "%s_leveldown%s", help, mario_status_labelname_table[i]);
+                        v = *mario_status_point_table[i] - mario_status_henka_table[i];
+                        if (v > 0) {
+                            sprintf(buf, "%3d", v);
+                        } else {
+                            sprintf(buf, "  ？", v);
+                        }
+                        FontDrawStart();
+                        FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
+                    }
+                    row++;
+                }
+                GXSetScissor(sl, st, sw, sh);
+                if (*(s8*)msgName) {
+                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    FontDrawStart();
+                    FontDrawMessage(-220, -138, msgSearch(msgName));
+                }
+                break;
+            }
     }
 
     if (wp->mode != UNITWIN_MODE_IDLE && wp->mode != UNITWIN_MODE_GOODS_EVENT) {

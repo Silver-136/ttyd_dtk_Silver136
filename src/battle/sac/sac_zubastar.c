@@ -850,16 +850,16 @@ USER_FUNC(zubastar_bomb) {
     }
     switch (w->phase) {
     case 0:
-    c = 0;
-    for (i = 0; i < w->count; i++) {
-        if (w->ptrs[i]->a != 10) {
-            break;
+        c = 0;
+        for (i = 0; i < w->count; i++) {
+            if (w->ptrs[i]->a != 10) {
+                break;
+            }
+            c++;
         }
-        c++;
-    }
-    if (c == w->count) {
-        return 2;
-    }
+        if (c == w->count) {
+            return 2;
+        }
     }
     sfx = "SFX_BTL_SAC_ZUBA_STAR3";
     for (k = 0; k < w->count; k++) {

@@ -796,26 +796,26 @@ static USER_FUNC(evt_yuuranking_main_func) {
                 break;
             case 5:
 
-            switch (wp->type) {
-                case 0:
-                case 3:
-                case 2:
-                    target = yuu_kesan(wp->type, wp->dispScore, wp->bonus, 0, wp->max);
-                    if (wp->monte < target) {
-                        wp->monte++;
-                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-                    } else if (wp->monte > target) {
-                        wp->monte--;
-                    } else if (wp->score > 0 && (wp->mul > 1 || wp->mul < 0)) {
-                        wp->timer = 48;
-                        wp->phase++;
-                    } else {
-                        wp->timer = 30;
-                        wp->phase = 9;
-                    }
-                    break;
-            }
-            break;
+                switch (wp->type) {
+                    case 0:
+                    case 3:
+                    case 2:
+                        target = yuu_kesan(wp->type, wp->dispScore, wp->bonus, 0, wp->max);
+                        if (wp->monte < target) {
+                            wp->monte++;
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
+                        } else if (wp->monte > target) {
+                            wp->monte--;
+                        } else if (wp->score > 0 && (wp->mul > 1 || wp->mul < 0)) {
+                            wp->timer = 48;
+                            wp->phase++;
+                        } else {
+                            wp->timer = 30;
+                            wp->phase = 9;
+                        }
+                        break;
+                }
+                break;
             case 6:
                 if (wp->timer != 0) {
                     wp->timer--;
@@ -833,24 +833,24 @@ static USER_FUNC(evt_yuuranking_main_func) {
                 break;
             case 8:
 
-            switch (wp->type) {
-                case 0:
-                case 3:
-                case 2:
-                case 1:
-                    target = yuu_kesan(wp->type, wp->dispScore, wp->bonus, wp->mul, wp->max);
-                    if (wp->monte < target) {
-                        wp->monte++;
-                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-                    } else if (wp->monte > target) {
-                        wp->monte--;
-                    } else {
-                        wp->timer = 30;
-                        wp->phase++;
-                    }
-                    break;
-            }
-            break;
+                switch (wp->type) {
+                    case 0:
+                    case 3:
+                    case 2:
+                    case 1:
+                        target = yuu_kesan(wp->type, wp->dispScore, wp->bonus, wp->mul, wp->max);
+                        if (wp->monte < target) {
+                            wp->monte++;
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
+                        } else if (wp->monte > target) {
+                            wp->monte--;
+                        } else {
+                            wp->timer = 30;
+                            wp->phase++;
+                        }
+                        break;
+                }
+                break;
             case 9:
                 wp->dispFlags &= ~4;
                 break;

@@ -1790,13 +1790,13 @@ USER_FUNC(evt_sub_area_check) {
     f32 dist;
     switch (mode) {
     case 0:
-    dist = distABf(cx, cy, px, py);
-    if (range < dist) {
-        result = 0;
-    } else {
-        result = 1;
-    }
-    break;
+        dist = distABf(cx, cy, px, py);
+        if (range < dist) {
+            result = 0;
+        } else {
+            result = 1;
+        }
+        break;
     case 1:
         result = 1;
         if (cx - range > px) {

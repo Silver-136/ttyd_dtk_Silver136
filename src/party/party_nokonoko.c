@@ -535,14 +535,14 @@ void nokonoko_use(PartyEntry* party) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_BACK1), &party->position);
         break;
     case 51:
-    lim = party->work.nokonoko.dashed != 0 ? 20.0f : 10.0f;
-    party->moveSpeed += 0.3f * (lim - party->moveSpeed);
-    if (party->moveSpeed >= lim) {
-        party->moveSpeed = lim;
-        if (party->moveDistance < 10.0f) {
-            party->useMotionId = 52;
+        lim = party->work.nokonoko.dashed != 0 ? 20.0f : 10.0f;
+        party->moveSpeed += 0.3f * (lim - party->moveSpeed);
+        if (party->moveSpeed >= lim) {
+            party->moveSpeed = lim;
+            if (party->moveDistance < 10.0f) {
+                party->useMotionId = 52;
+            }
         }
-    }
     case 52:
         if (ccwall(party, 1) != NULL) {
             partyGetMoveDirSpd(party, &dir, &spd);
@@ -1116,6 +1116,8 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     return NULL;
 }
 
+// FAKE: stand-in that nothing calls (in no symbol map); it only places these literals in this object's constant
+// pool. Removing it changes the object.
 void nokoStrippedPool(f32* p) {
     p[0] = 10.0f;
     p[1] = 30.0f;

@@ -199,23 +199,23 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
                 e->scale = 0.5f;
                 break;
             case 3:
-            e->speedY = 0.0f;
-            e->gravity = 0.1f;
-            e->pos.x = 0.0f;
-            e->pos.y = 200.0f;
-            e->pos.z = 0.0f;
-            e->vel.x = 0.0f;
-            e->vel.y = 0.0f;
-            e->vel.z = 0.0f;
-            e->scale = 1.0f;
-            {
-                Vec v = { 0.0f, 0.0f, 0.0f };
-                v.x = x;
-                v.y = y;
-                v.z = z;
-                e->sfx = psndSFXOn_3D(sfxName, &v);
-            }
-            break;
+                e->speedY = 0.0f;
+                e->gravity = 0.1f;
+                e->pos.x = 0.0f;
+                e->pos.y = 200.0f;
+                e->pos.z = 0.0f;
+                e->vel.x = 0.0f;
+                e->vel.y = 0.0f;
+                e->vel.z = 0.0f;
+                e->scale = 1.0f;
+                {
+                    Vec v = { 0.0f, 0.0f, 0.0f };
+                    v.x = x;
+                    v.y = y;
+                    v.z = z;
+                    e->sfx = psndSFXOn_3D(sfxName, &v);
+                }
+                break;
             case 4:
             case 5:
                 e->speedY = 0.0f;
@@ -409,13 +409,13 @@ void effFallMain(EffectEntry* effect) {
                         }
                         break;
                     case 1:
-                    s = (f32)sin((62.831856f * e->timer) / 60.0f);
-                    e->sway = ((60.0f - e->timer) * s) / 60.0f;
-                    e->timer++;
-                    if (e->timer > 60) {
-                        e->state++;
-                    }
-                    break;
+                        s = (f32)sin((62.831856f * e->timer) / 60.0f);
+                        e->sway = ((60.0f - e->timer) * s) / 60.0f;
+                        e->timer++;
+                        if (e->timer > 60) {
+                            e->state++;
+                        }
+                        break;
                     case 2:
                         e->timer++;
                         if (e->timer > 30) {
@@ -661,24 +661,24 @@ void effFallMain(EffectEntry* effect) {
                         // fall through: once the poses exist, state 0 sets up the first jump like states 2, 4 and 6
                     case 2:
                     case 4:
-                    case 6: {
-                        f32 targets[4][3] = {
-                            { 140.0f, 40.0f, -10.0f },
-                            { 0.0f, 40.0f, -40.0f },
-                            { -140.0f, 40.0f, -10.0f },
-                            { -400.0f, 40.0f, -40.0f }
-                        };
-                        e->vel.x = targets[e->state / 2][0];
-                        e->vel.y = targets[e->state / 2][1];
-                        e->vel.z = targets[e->state / 2][2];
-                        e->gravity = 0.4f;
-                        e->timer = distABf(e->vel.x, e->vel.z, e->pos.x, e->pos.z) / 5.0f;
-                        e->speedY = ((e->vel.y - e->pos.y) / e->timer) + (e->gravity * e->timer) / 2.0f;
-                        e->rotY = angleABf(e->pos.x, e->pos.z, e->vel.x, e->vel.z);
-                        e->rot2 = 0.0f;
-                        e->state++;
-                        break;
-                    }
+                        case 6: {
+                            f32 targets[4][3] = {
+                                { 140.0f, 40.0f, -10.0f },
+                                { 0.0f, 40.0f, -40.0f },
+                                { -140.0f, 40.0f, -10.0f },
+                                { -400.0f, 40.0f, -40.0f }
+                            };
+                            e->vel.x = targets[e->state / 2][0];
+                            e->vel.y = targets[e->state / 2][1];
+                            e->vel.z = targets[e->state / 2][2];
+                            e->gravity = 0.4f;
+                            e->timer = distABf(e->vel.x, e->vel.z, e->pos.x, e->pos.z) / 5.0f;
+                            e->speedY = ((e->vel.y - e->pos.y) / e->timer) + (e->gravity * e->timer) / 2.0f;
+                            e->rotY = angleABf(e->pos.x, e->pos.z, e->vel.x, e->vel.z);
+                            e->rot2 = 0.0f;
+                            e->state++;
+                            break;
+                        }
                     case 1:
                     case 3:
                     case 5:
@@ -919,28 +919,28 @@ void effFallDisp(CameraId cameraId, void* payload) {
                 }
                 break;
             case 4:
-            case 5: {
-                Vec v = { 0.0f, 0.0f, 0.0f };
-                v.x = (f32)cos(6.2831855f * angle / 360.0f);
-                v.z = (f32)sin(6.2831855f * angle / 360.0f);
-                axis = v;
-                PSMTXTrans(trans, e->pos.x, e->pos.y, e->pos.z);
-                PSMTXScale(scl, e->scale, e->scale, e->scale);
-                PSMTXConcat(trans, scl, trans);
-                PSMTXTrans(scl, 0.0f, (f32)(type == 4 ? 8 : 16), 0.0f);
-                PSMTXConcat(trans, scl, trans);
-                PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-e->rot2));
-                PSMTXConcat(trans, rot, trans);
-                PSMTXTrans(scl, 0.0f, (f32)-(type == 4 ? 8 : 16), 0.0f);
-                PSMTXConcat(trans, scl, trans);
-                PSMTXConcat(mtx, trans, trans);
-                if (e->pose0 != -1) {
-                    animPoseDrawMtx(e->pose0, trans, 1, 0.0f, 10.0f);
-                    animPoseDrawMtx(e->pose0, trans, 2, 0.0f, 10.0f);
-                    animPoseDrawMtx(e->pose0, trans, 3, 0.0f, 10.0f);
+                case 5: {
+                    Vec v = { 0.0f, 0.0f, 0.0f };
+                    v.x = (f32)cos(6.2831855f * angle / 360.0f);
+                    v.z = (f32)sin(6.2831855f * angle / 360.0f);
+                    axis = v;
+                    PSMTXTrans(trans, e->pos.x, e->pos.y, e->pos.z);
+                    PSMTXScale(scl, e->scale, e->scale, e->scale);
+                    PSMTXConcat(trans, scl, trans);
+                    PSMTXTrans(scl, 0.0f, (f32)(type == 4 ? 8 : 16), 0.0f);
+                    PSMTXConcat(trans, scl, trans);
+                    PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-e->rot2));
+                    PSMTXConcat(trans, rot, trans);
+                    PSMTXTrans(scl, 0.0f, (f32)-(type == 4 ? 8 : 16), 0.0f);
+                    PSMTXConcat(trans, scl, trans);
+                    PSMTXConcat(mtx, trans, trans);
+                    if (e->pose0 != -1) {
+                        animPoseDrawMtx(e->pose0, trans, 1, 0.0f, 10.0f);
+                        animPoseDrawMtx(e->pose0, trans, 2, 0.0f, 10.0f);
+                        animPoseDrawMtx(e->pose0, trans, 3, 0.0f, 10.0f);
+                    }
+                    break;
                 }
-                break;
-            }
             case 6:
                 if (e->pose0 == -1) {
                     break;

@@ -246,40 +246,40 @@ void effFireMain(EffectEntry* effect) {
     switch (type) {
         case 3:
         case 4:
-        case 8: {
-            f32 t, v;
-            s32 kf;
-            switch (type) {
-                case 3:
-                case 8:
-                    tbl = scale1;
-                    count = 13;
-                    break;
-                case 4:
-                    tbl = scale2;
-                    count = 4;
-                    break;
-            }
-            while (1) {
-                kf = work->keyFrame;
-                idx = work->keyIdx;
-                if (kf < tbl[idx].frame) {
-                    break;
+            case 8: {
+                f32 t, v;
+                s32 kf;
+                switch (type) {
+                    case 3:
+                    case 8:
+                        tbl = scale1;
+                        count = 13;
+                        break;
+                    case 4:
+                        tbl = scale2;
+                        count = 4;
+                        break;
                 }
-                work->keyIdx = idx + 1;
-                if (work->keyIdx >= count) {
-                    work->keyIdx = 0;
-                    work->keyFrame = 0;
+                while (1) {
+                    kf = work->keyFrame;
+                    idx = work->keyIdx;
+                    if (kf < tbl[idx].frame) {
+                        break;
+                    }
+                    work->keyIdx = idx + 1;
+                    if (work->keyIdx >= count) {
+                        work->keyIdx = 0;
+                        work->keyFrame = 0;
+                    }
                 }
+                t = (f32)(tbl[idx].frame - kf) / (f32)(tbl[idx].frame - tbl[idx - 1].frame);
+                v = (1.0f - t) * tbl[idx].value + t * tbl[idx - 1].value;
+                work->pulseScale = v;
+                work->pulseScale *= 1.4f;
+                work->pulseScale *= 1.2f;
+                work->keyFrame++;
+                break;
             }
-            t = (f32)(tbl[idx].frame - kf) / (f32)(tbl[idx].frame - tbl[idx - 1].frame);
-            v = (1.0f - t) * tbl[idx].value + t * tbl[idx - 1].value;
-            work->pulseScale = v;
-            work->pulseScale *= 1.4f;
-            work->pulseScale *= 1.2f;
-            work->keyFrame++;
-            break;
-        }
         case 5:
         case 6:
         case 7:

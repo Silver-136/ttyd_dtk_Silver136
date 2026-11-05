@@ -216,14 +216,14 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 }
                 break;
             case AC_STATE_RUN + 3:
-            // retail runs this empty loop over the signal sound slots 0..idx-2
-            j = cw->idx - 2;
-            if (j >= 0) {
-                for (k = 0; k <= j; k++) {
+                // retail runs this empty loop over the signal sound slots 0..idx-2
+                j = cw->idx - 2;
+                if (j >= 0) {
+                    for (k = 0; k <= j; k++) {
+                    }
                 }
-            }
-                work->actionCommands.acState = AC_STATE_RUN + 4;
-                break;
+                    work->actionCommands.acState = AC_STATE_RUN + 4;
+                    break;
             case AC_STATE_RUN + 5:
                 cw->endTimer = 60;
                 work->actionCommands.acState = AC_STATE_RUN + 6;
@@ -334,13 +334,13 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     switch (ac->acState) {
         case AC_STATE_INIT:
         case AC_STATE_WAIT_START:
-        case AC_STATE_START: {
-            Vec p = {0.0f, 0.0f, 0.0f};
-            p.x = -200.0f + x;
-            p.y = 70.0f + y;
-            iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
-            break;
-        }
+            case AC_STATE_START: {
+                Vec p = {0.0f, 0.0f, 0.0f};
+                p.x = -200.0f + x;
+                p.y = 70.0f + y;
+                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
+                break;
+            }
         case AC_STATE_RUN:
             if (gp->retraceCount & 8) {
                 Vec p = {0.0f, 0.0f, 0.0f};

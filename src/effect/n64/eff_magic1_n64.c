@@ -46,15 +46,15 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
     w->scale = 1.0f;
     switch (type) {
     case 0:
-    inv = 1.0f / (f32)life;
-    w->offset.x = 0.0f;
-    w->offset.y = 0.0f;
-    w->offset.z = 0.0f;
-    w->velocity.x = inv * (tx - x);
-    w->velocity.y = inv * (ty - y);
-    w->velocity.z = inv * (tz - z);
-    w->life = life;
-    break;
+        inv = 1.0f / (f32)life;
+        w->offset.x = 0.0f;
+        w->offset.y = 0.0f;
+        w->offset.z = 0.0f;
+        w->velocity.x = inv * (tx - x);
+        w->velocity.y = inv * (ty - y);
+        w->velocity.z = inv * (tz - z);
+        w->life = life;
+        break;
     default:
         w->offset.x = 29.0f;
         w->offset.y = 0.0f;

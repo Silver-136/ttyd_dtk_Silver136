@@ -1731,28 +1731,28 @@ static void senteresa_ext_main(void) {
                 break;
             case 21:
 
-            pose->texId = (gp->retraceCount + i * i) % 10 + 16;
-            t = pTeresa[i].bobPhase;
-            if (t >= 1.0f) {
-                pTeresa[i].seq = 22;
-                {
-                    Vec pos = {0.0f, 0.0f, 0.0f};
-                    pos.x = (*pose->mtx)[0][3];
-                    pos.y = (*pose->mtx)[1][3];
-                    pos.z = (*pose->mtx)[2][3];
-                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_TOGETHER1), &pos);
+                pose->texId = (gp->retraceCount + i * i) % 10 + 16;
+                t = pTeresa[i].bobPhase;
+                if (t >= 1.0f) {
+                    pTeresa[i].seq = 22;
+                    {
+                        Vec pos = {0.0f, 0.0f, 0.0f};
+                        pos.x = (*pose->mtx)[0][3];
+                        pos.y = (*pose->mtx)[1][3];
+                        pos.z = (*pose->mtx)[2][3];
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_TOGETHER1), &pos);
+                    }
+                    g_nNumEndProc[0]++;
+                } else {
+                    v.x = (1.0f - t) * pTeresa[i].from.x + t * pTeresa[i].to.x;
+                    v.y = (1.0f - t) * pTeresa[i].from.y + t * pTeresa[i].to.y;
+                    v.z = (1.0f - t) * pTeresa[i].from.z + t * pTeresa[i].to.z;
+                    (*pose->mtx)[0][3] = v.x;
+                    (*pose->mtx)[1][3] = 20.0f * (f32)sin(6.28f * pTeresa[i].bobPhase) + v.y;
+                    (*pose->mtx)[2][3] = v.z;
+                    pTeresa[i].bobPhase += 0.01f;
                 }
-                g_nNumEndProc[0]++;
-            } else {
-                v.x = (1.0f - t) * pTeresa[i].from.x + t * pTeresa[i].to.x;
-                v.y = (1.0f - t) * pTeresa[i].from.y + t * pTeresa[i].to.y;
-                v.z = (1.0f - t) * pTeresa[i].from.z + t * pTeresa[i].to.z;
-                (*pose->mtx)[0][3] = v.x;
-                (*pose->mtx)[1][3] = 20.0f * (f32)sin(6.28f * pTeresa[i].bobPhase) + v.y;
-                (*pose->mtx)[2][3] = v.z;
-                pTeresa[i].bobPhase += 0.01f;
-            }
-            break;
+                break;
             case 22:
                 pose->texId = (gp->retraceCount + i * i) % 10 + 16;
                 if ((pTeresa[i].wait & 7) == 0) {

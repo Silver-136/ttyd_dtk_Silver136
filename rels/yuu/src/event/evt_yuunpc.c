@@ -579,11 +579,11 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
         case YUUNPC_SP_YUUSP0:
         case YUUNPC_SP_YUUSP1:
         case YUUNPC_SP_YUUSP2:
-        animPoseSetLocalTime(npc->npc->poseId, (s32)(pose->frames * t));
-        rot = 3600.0f + (90.0f - ext->dir);
-        npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
-        npc->npc->position = npc->pos;
-        break;
+            animPoseSetLocalTime(npc->npc->poseId, (s32)(pose->frames * t));
+            rot = 3600.0f + (90.0f - ext->dir);
+            npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
+            npc->npc->position = npc->pos;
+            break;
         case 0:
             if (npc->poseId != yuunpc_wp->chusanPose) {
                 ext->texId = pose->start + (s32)(pose->count * t);
@@ -1351,43 +1351,43 @@ void ext_yuunpc_minigame4_init_sub(void) {
             switch (npc->flags & YUUNPC_SP_MASK) {
                 case YUUNPC_SP_YUUSP0:
 
-                npc->npc = npcNameToPtr("yuusp0");
-                npc->npc->position = npc->pos;
-                rot = 3600.0f + (90.0f - ext->dir);
-                npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
-                animPosePeraOff(npc->npc->poseId);
-                npc->state = 7;
-                npc->poses[0] = yuunpc_pose_check("c_luigi", "S_1");
-                npc->poses[1] = yuunpc_pose_check("c_luigi", "W_1");
-                npc->poses[2] = yuunpc_pose_check("c_luigi", "R_1");
-                npc->poses[3] = yuunpc_pose_check("c_luigi", "R_1");
-                break;
+                    npc->npc = npcNameToPtr("yuusp0");
+                    npc->npc->position = npc->pos;
+                    rot = 3600.0f + (90.0f - ext->dir);
+                    npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
+                    animPosePeraOff(npc->npc->poseId);
+                    npc->state = 7;
+                    npc->poses[0] = yuunpc_pose_check("c_luigi", "S_1");
+                    npc->poses[1] = yuunpc_pose_check("c_luigi", "W_1");
+                    npc->poses[2] = yuunpc_pose_check("c_luigi", "R_1");
+                    npc->poses[3] = yuunpc_pose_check("c_luigi", "R_1");
+                    break;
                 case YUUNPC_SP_YUUSP1:
 
-                npc->state = 6;
-                npc->npc = npcNameToPtr("yuusp1");
-                npc->npc->position = npc->pos;
-                rot = 3600.0f + (90.0f - ext->dir);
-                npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
-                animPosePeraOff(npc->npc->poseId);
-                npc->poses[0] = yuunpc_pose_check("c_nokorin", "S_1");
-                npc->poses[1] = yuunpc_pose_check("c_nokorin", "W_1");
-                npc->poses[2] = yuunpc_pose_check("c_nokorin", "R_1");
-                npc->poses[3] = yuunpc_pose_check("c_nokorin", "R_1");
-                break;
+                    npc->state = 6;
+                    npc->npc = npcNameToPtr("yuusp1");
+                    npc->npc->position = npc->pos;
+                    rot = 3600.0f + (90.0f - ext->dir);
+                    npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
+                    animPosePeraOff(npc->npc->poseId);
+                    npc->poses[0] = yuunpc_pose_check("c_nokorin", "S_1");
+                    npc->poses[1] = yuunpc_pose_check("c_nokorin", "W_1");
+                    npc->poses[2] = yuunpc_pose_check("c_nokorin", "R_1");
+                    npc->poses[3] = yuunpc_pose_check("c_nokorin", "R_1");
+                    break;
                 case YUUNPC_SP_YUUSP2:
 
-                npc->npc = npcNameToPtr("yuusp2");
-                npc->npc->position = npc->pos;
-                rot = 3600.0f + (90.0f - ext->dir);
-                npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
-                animPosePeraOff(npc->npc->poseId);
-                npc->state = -1;
-                npc->poses[0] = yuunpc_pose_check("c_joho_a", "S_1");
-                npc->poses[1] = yuunpc_pose_check("c_joho_a", "W_1");
-                npc->poses[2] = yuunpc_pose_check("c_joho_a", "R_1");
-                npc->poses[3] = yuunpc_pose_check("c_joho_a", "R_1");
-                break;
+                    npc->npc = npcNameToPtr("yuusp2");
+                    npc->npc->position = npc->pos;
+                    rot = 3600.0f + (90.0f - ext->dir);
+                    npc->npc->rotation.y = rot - (s32)(rot / 360.0f) * 360;
+                    animPosePeraOff(npc->npc->poseId);
+                    npc->state = -1;
+                    npc->poses[0] = yuunpc_pose_check("c_joho_a", "S_1");
+                    npc->poses[1] = yuunpc_pose_check("c_joho_a", "W_1");
+                    npc->poses[2] = yuunpc_pose_check("c_joho_a", "R_1");
+                    npc->poses[3] = yuunpc_pose_check("c_joho_a", "R_1");
+                    break;
                 case 0:
                     if (k < 0) {
                         type = irand(3);
@@ -1888,26 +1888,26 @@ void yuunpc_pose_minigame4_main(void) {
                     {
 #else
                     case 27:
-                    case 28: {
+                        case 28: {
 #endif
-                        if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
-                            f32 tt = 50.0f * kind;
-                            if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {
-                                d = 0.0f;
-                            } else if (npc->pos.z > 0.0f) {
+                            if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+                                f32 tt = 50.0f * kind;
+                                if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {
+                                    d = 0.0f;
+                                } else if (npc->pos.z > 0.0f) {
 #if VERSION <= VERSION_DEMO_JP
-                                d = -(100.0f + w) + npc->pos.z;
+                                    d = -(100.0f + w) + npc->pos.z;
 #else
-                                d = npc->pos.z - (150.0f - tt + w);
+                                    d = npc->pos.z - (150.0f - tt + w);
 #endif
+                                } else {
+                                    d = -(-150.0f + w) + npc->pos.z;
+                                }
                             } else {
-                                d = -(-150.0f + w) + npc->pos.z;
+                                d = 0.0f;
                             }
-                        } else {
-                            d = 0.0f;
-                        }
 #if VERSION <= VERSION_DEMO_JP
-                    } break;
+                        } break;
                     }
                     break;
                 }

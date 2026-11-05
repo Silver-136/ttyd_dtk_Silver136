@@ -413,24 +413,24 @@ void shadowDisp(CameraId cameraId, void* param) {
     } else if (cameraId == CAMERA_SHADOW) {
         switch (disp->renderMode) {
             case DISP_MODE_XLU_BEFORE_OPAQUE:
-            shadowCharShadowDisp_Collision(cameraId, param);
-            if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
-                cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment; removing it changes codegen
-                cam = camGetPtr(CAMERA_3D);
-                cfg->pos.x = cam->cameraAt.x;
-                cfg->pos.y = 1000.0f + cam->cameraAt.y;
-                cfg->pos.z = cam->cameraAt.z;
-                cfg->up.x = 0.0f;
-                cfg->up.y = 0.0f;
-                cfg->up.z = -1.0f;
-                cfg->target.x = cam->cameraAt.x;
-                cfg->target.y = cam->cameraAt.y;
-                cfg->target.z = cam->cameraAt.z;
-            }
-            shadowBegin(&cswp->base, FALSE);
-            shadowCharShadowDisp_Projection(cameraId, param);
-            projShadowEnd(cameraId, &cswp->base);
-            break;
+                shadowCharShadowDisp_Collision(cameraId, param);
+                if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
+                    cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment; removing it changes codegen
+                    cam = camGetPtr(CAMERA_3D);
+                    cfg->pos.x = cam->cameraAt.x;
+                    cfg->pos.y = 1000.0f + cam->cameraAt.y;
+                    cfg->pos.z = cam->cameraAt.z;
+                    cfg->up.x = 0.0f;
+                    cfg->up.y = 0.0f;
+                    cfg->up.z = -1.0f;
+                    cfg->target.x = cam->cameraAt.x;
+                    cfg->target.y = cam->cameraAt.y;
+                    cfg->target.z = cam->cameraAt.z;
+                }
+                shadowBegin(&cswp->base, FALSE);
+                shadowCharShadowDisp_Projection(cameraId, param);
+                projShadowEnd(cameraId, &cswp->base);
+                break;
             case DISP_MODE_OPAQUE:
                 shadowBegin(pswp, FALSE);
                 break;

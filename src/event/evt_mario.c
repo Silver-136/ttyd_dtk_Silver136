@@ -1500,46 +1500,46 @@ USER_FUNC(evt_mario_jump_pos) {
     frames = sysMsec2Frame(msec);
     switch (event->userdata[0]) {
         case 0:
-        mp->baseSpeed = distABf(mp->position.x, mp->position.z, x, z) / frames;
-        mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
-        if (!noDir) {
-            mp->moveDirection = mp->directionView;
-        }
-        dy = y - mp->position.y;
-        t = 0.5f * frames;
-        if (__fabsf(dy) < 1.0f) {
-            g = (h + h) / (t * t - t);
-            mp->jumpVelocityY = g * t;
-            mp->jumpAccelerationY = -g;
-            mp->jumpJerkY = 0.0f;
-            mp->jumpSnapY = 0.0f;
-        } else {
-            if (dy >= 0.0f) {
-                if (mp->characterId == CHARACTER_BOWSER) {
-                    dy += 18.5f;
-                } else {
-                    dy = 0.5f * mp->wPlayerCollisionBox.y + dy;
-                }
-            } else if (searchUnder2(&tmp, x, y, z)) {
-                dy = h;
-            } else {
-                dy = h;
+            mp->baseSpeed = distABf(mp->position.x, mp->position.z, x, z) / frames;
+            mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
+            if (!noDir) {
+                mp->moveDirection = mp->directionView;
             }
-            g = (dy + dy) / (t * t - t);
-            mp->jumpVelocityY = g * t;
-            mp->jumpAccelerationY = -g;
-            mp->jumpJerkY = 0.0f;
-            mp->jumpSnapY = 0.0f;
-        }
-        if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
-            marioChgMot(MARIO_MOTION_JUMP_3);
-        } else {
-            rollEvtJumpSetup();
-            mp->displayDirection = mp->directionView;
-            mp->displayDirectionTarget = mp->directionView;
-        }
-        event->userdata[2] = 0.5f + t;
-        event->userdata[0] = 1;
+            dy = y - mp->position.y;
+            t = 0.5f * frames;
+            if (__fabsf(dy) < 1.0f) {
+                g = (h + h) / (t * t - t);
+                mp->jumpVelocityY = g * t;
+                mp->jumpAccelerationY = -g;
+                mp->jumpJerkY = 0.0f;
+                mp->jumpSnapY = 0.0f;
+            } else {
+                if (dy >= 0.0f) {
+                    if (mp->characterId == CHARACTER_BOWSER) {
+                        dy += 18.5f;
+                    } else {
+                        dy = 0.5f * mp->wPlayerCollisionBox.y + dy;
+                    }
+                } else if (searchUnder2(&tmp, x, y, z)) {
+                    dy = h;
+                } else {
+                    dy = h;
+                }
+                g = (dy + dy) / (t * t - t);
+                mp->jumpVelocityY = g * t;
+                mp->jumpAccelerationY = -g;
+                mp->jumpJerkY = 0.0f;
+                mp->jumpSnapY = 0.0f;
+            }
+            if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
+                marioChgMot(MARIO_MOTION_JUMP_3);
+            } else {
+                rollEvtJumpSetup();
+                mp->displayDirection = mp->directionView;
+                mp->displayDirectionTarget = mp->directionView;
+            }
+            event->userdata[2] = 0.5f + t;
+            event->userdata[0] = 1;
         case 1:
             if (mp->flags & MARIO_FLAG_TUBE_MODE) {
                 setRollEvtFlag();
@@ -1843,26 +1843,26 @@ USER_FUNC(evt_koopa_hip_attack) {
     frames = sysMsec2Frame(evtGetValue(event, args[4]));
     switch (event->userdata[0]) {
         case 0:
-        camFollowYOff();
-        mp->baseSpeed = distABf(mp->position.x, mp->position.z, x, z) / frames;
-        mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
-        mp->moveDirection = mp->directionView;
-        dy = y - mp->position.y;
-        if (__fabsf(dy) < 1.0f) {
-            dy += h;
-        } else if (dy >= 0.0f) {
-            dy += 18.5f;
-        } else {
-            dy = h;
-        }
-        g = (dy + dy) / (frames * frames - frames);
-        mp->jumpVelocityY = g * frames;
-        mp->jumpAccelerationY = -g;
-        mp->jumpJerkY = 0.0f;
-        mp->jumpSnapY = 0.0f;
-        marioChgMot(MARIO_MOTION_JUMP_3);
-        event->userdata[2] = frames;
-        event->userdata[0] = 1;
+            camFollowYOff();
+            mp->baseSpeed = distABf(mp->position.x, mp->position.z, x, z) / frames;
+            mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
+            mp->moveDirection = mp->directionView;
+            dy = y - mp->position.y;
+            if (__fabsf(dy) < 1.0f) {
+                dy += h;
+            } else if (dy >= 0.0f) {
+                dy += 18.5f;
+            } else {
+                dy = h;
+            }
+            g = (dy + dy) / (frames * frames - frames);
+            mp->jumpVelocityY = g * frames;
+            mp->jumpAccelerationY = -g;
+            mp->jumpJerkY = 0.0f;
+            mp->jumpSnapY = 0.0f;
+            marioChgMot(MARIO_MOTION_JUMP_3);
+            event->userdata[2] = frames;
+            event->userdata[0] = 1;
         case 1:
             movePos(&mp->position.x, &mp->position.z, mp->baseSpeed, mp->directionView);
             mp->position.y += mp->jumpVelocityY;

@@ -24,7 +24,6 @@
 #include "eff/eff_fire.h"
 #include "battle/battle_damage.h"
 #include "battle/unit_work.h"
-static USER_FUNC(_get_mario_hammer_lv);
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
 #include "eff/eff_energy.h"
@@ -41,6 +40,8 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "battle/battle_database_common.h"
 #include "icon_ids.h"
 #include "battle/battle_message.h"
+
+static USER_FUNC(_get_mario_hammer_lv);
 
 USER_FUNC(_battle_majinai_effect);
 USER_FUNC(_majinai_powerup_check);

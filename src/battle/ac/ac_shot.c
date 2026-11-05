@@ -83,30 +83,30 @@ s32 battleAcMain_Shot(BattleWork* work) {
         loop = 0;
         switch (ac->acState) {
             case AC_STATE_INIT:
-            _ac_disp_init(work);
-            ac->result = AC_RESULT_RUNNING;
-            sw->minV = ac->params[SHOT_PARAM_MIN_VALUE];
-            sw->maxV = ac->params[SHOT_PARAM_MAX_VALUE];
-            sw->left = ac->params[SHOT_PARAM_LEFT];
-            sw->right = ac->params[SHOT_PARAM_RIGHT];
-            sw->speed0 = 100.0f * sw->minV / sw->maxV;
-            sw->speed = sw->speed0;
-            sw->pos = sw->left + (f32)irand((s32)(sw->right - sw->left));
-            sw->vel = 0.1f * ac->params[SHOT_PARAM_SPEED];
-            sw->idx = 0;
-            ac->setupParam = 30;
-            unit = BattleGetUnitPtr(work, ac->params[SHOT_PARAM_UNIT_ID]);
-            BtlUnit_GetPos(unit, &sw->unitPos.x, &sw->unitPos.y, &sw->unitPos.z);
-            sw->unitPos.y = sw->unitPos.y + 0.5 * (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit));
-            ac->outputParams[0] = 0;
-            ac->outputParams[3] = 0;
-            for (i = 0; i < 3; i++) {
-                sw->ang[i] = -1000.0f;
-                sw->spin[i] = 0.0f;
-            }
-            sw->sfxId = -1;
-            ac->acState = AC_STATE_WAIT_START;
-            break;
+                _ac_disp_init(work);
+                ac->result = AC_RESULT_RUNNING;
+                sw->minV = ac->params[SHOT_PARAM_MIN_VALUE];
+                sw->maxV = ac->params[SHOT_PARAM_MAX_VALUE];
+                sw->left = ac->params[SHOT_PARAM_LEFT];
+                sw->right = ac->params[SHOT_PARAM_RIGHT];
+                sw->speed0 = 100.0f * sw->minV / sw->maxV;
+                sw->speed = sw->speed0;
+                sw->pos = sw->left + (f32)irand((s32)(sw->right - sw->left));
+                sw->vel = 0.1f * ac->params[SHOT_PARAM_SPEED];
+                sw->idx = 0;
+                ac->setupParam = 30;
+                unit = BattleGetUnitPtr(work, ac->params[SHOT_PARAM_UNIT_ID]);
+                BtlUnit_GetPos(unit, &sw->unitPos.x, &sw->unitPos.y, &sw->unitPos.z);
+                sw->unitPos.y = sw->unitPos.y + 0.5 * (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit));
+                ac->outputParams[0] = 0;
+                ac->outputParams[3] = 0;
+                for (i = 0; i < 3; i++) {
+                    sw->ang[i] = -1000.0f;
+                    sw->spin[i] = 0.0f;
+                }
+                sw->sfxId = -1;
+                ac->acState = AC_STATE_WAIT_START;
+                break;
             case AC_STATE_WAIT_START:
             case AC_STATE_RUN + 3:
                 break;

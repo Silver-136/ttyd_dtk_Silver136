@@ -102,29 +102,29 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
         case 13:
         case 14:
         case 15:
-        case 16: {
-            f32 ang2, rad2, spd2;
-            ang2 = 240.0f + irand(60);
-            spd2 = (irand(50) + 10) / 10.0f;
-            spd2 *= 1.5f;
-            rad2 = 6.2831855f * ang2 / 360.0f;
-            work->delay = idx;
-            work->position.x = 0.0f;
-            work->position.y = 0.0f;
-            work->position.z = 0.0f;
-            work->velX = spd2 * polySinf(rad2);
-            work->velY = spd2 * polyCosf(rad2);
-            work->scale = 1.0f;
-            work->life = 30;
-            work->alpha = 255;
-            work->from[0] = col_tbl[type % 10][3].r;
-            work->from[1] = col_tbl[type % 10][3].g;
-            work->from[2] = col_tbl[type % 10][3].b;
-            work->to[0] = col_tbl[type % 10][0].r;
-            work->to[1] = col_tbl[type % 10][0].g;
-            work->to[2] = col_tbl[type % 10][0].b;
-            break;
-        }
+            case 16: {
+                f32 ang2, rad2, spd2;
+                ang2 = 240.0f + irand(60);
+                spd2 = (irand(50) + 10) / 10.0f;
+                spd2 *= 1.5f;
+                rad2 = 6.2831855f * ang2 / 360.0f;
+                work->delay = idx;
+                work->position.x = 0.0f;
+                work->position.y = 0.0f;
+                work->position.z = 0.0f;
+                work->velX = spd2 * polySinf(rad2);
+                work->velY = spd2 * polyCosf(rad2);
+                work->scale = 1.0f;
+                work->life = 30;
+                work->alpha = 255;
+                work->from[0] = col_tbl[type % 10][3].r;
+                work->from[1] = col_tbl[type % 10][3].g;
+                work->from[2] = col_tbl[type % 10][3].b;
+                work->to[0] = col_tbl[type % 10][0].r;
+                work->to[1] = col_tbl[type % 10][0].g;
+                work->to[2] = col_tbl[type % 10][0].b;
+                break;
+            }
         case 17:
             ang = 225.0f + irand(90);
             spd = (irand(50) + 10) / 10.0f;
@@ -451,24 +451,24 @@ void effGonbabaBreathDisp(CameraId cameraId, void* param) {
             case 14:
             case 15:
             case 16:
-            case 17: {
-                GXColor c;
-                c.r = work->from[0];
-                c.g = work->from[1];
-                c.b = work->from[2];
-                c.a = (work->alpha * alpha) / 255;
-                GXSetChanMatColor(GX_COLOR0A0, c);
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXPosition3f32((-quadSize / 2.0f), quadSize * 0.5f, 0.0f);
-                GXTexCoord2f32(0.0f, 0.0f);
-                GXPosition3f32(quadSize * 0.5f, quadSize * 0.5f, 0.0f);
-                GXTexCoord2f32(1.0f, 0.0f);
-                GXPosition3f32(quadSize * 0.5f, (-quadSize / 2.0f), 0.0f);
-                GXTexCoord2f32(1.0f, 1.0f);
-                GXPosition3f32((-quadSize / 2.0f), (-quadSize / 2.0f), 0.0f);
-                GXTexCoord2f32(0.0f, 1.0f);
-                break;
-            }
+                case 17: {
+                    GXColor c;
+                    c.r = work->from[0];
+                    c.g = work->from[1];
+                    c.b = work->from[2];
+                    c.a = (work->alpha * alpha) / 255;
+                    GXSetChanMatColor(GX_COLOR0A0, c);
+                    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                    GXPosition3f32((-quadSize / 2.0f), quadSize * 0.5f, 0.0f);
+                    GXTexCoord2f32(0.0f, 0.0f);
+                    GXPosition3f32(quadSize * 0.5f, quadSize * 0.5f, 0.0f);
+                    GXTexCoord2f32(1.0f, 0.0f);
+                    GXPosition3f32(quadSize * 0.5f, (-quadSize / 2.0f), 0.0f);
+                    GXTexCoord2f32(1.0f, 1.0f);
+                    GXPosition3f32((-quadSize / 2.0f), (-quadSize / 2.0f), 0.0f);
+                    GXTexCoord2f32(0.0f, 1.0f);
+                    break;
+                }
         }
     }
 }

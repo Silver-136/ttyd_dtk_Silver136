@@ -216,9 +216,9 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             case FADE_CURTAIN_ENTER:
             case FADE_PAGE_FLIP_FOUR:
 #endif
-            id = 1;
-            entry = &wp->entries[1];
-            break;
+                id = 1;
+                entry = &wp->entries[1];
+                break;
 #if VERSION <= VERSION_DEMO_JP
         case FADE_PIPE_UP_A1:
         case FADE_PIPE_UP_A2:
@@ -895,7 +895,7 @@ void fadeMain(void) {
                             case FADE_STORY_MARIO_A3:
                             case FADE_STORY_PEACH_A3:
                             case FADE_STORY_BOWSER_A3:
-                            psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY2"));
+                                psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY2"));
 #else
                             case 0x36: case 0x38: case 0x3A:
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY2 | PSND_SFX_KEEP));
@@ -904,7 +904,7 @@ void fadeMain(void) {
 #if VERSION <= VERSION_DEMO_JP
                             case FADE_PAGE_FLIP_A1:
                             case FADE_PAGE_FLIP_A1_OFFSCREEN:
-                            psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
+                                psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
 #else
                             case 0x32: case 0x35:
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF3_MAP_CHANGE1 | PSND_SFX_KEEP));
@@ -1021,20 +1021,20 @@ void fadeMain(void) {
                             case FADE_CURTAIN_SIDES_A1_3D:
                             case FADE_CURTAIN_SIDES_A1:
                             case FADE_CURTAIN_SIDES_A1_TOP:
-                            entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE1"));
-                                break;
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE1"));
+                                    break;
                             case FADE_CURTAIN_SIDES_A2_3D:
                             case FADE_CURTAIN_SIDES_A2:
                             case FADE_CURTAIN_SIDES_A2_TOP:
-                            entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE2"));
-                                break;
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE2"));
+                                    break;
                             case FADE_CURTAIN_CENTER_A1_3D:
                             case FADE_CURTAIN_CENTER_A1:
-                            entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_UP1"));
-                                break;
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_UP1"));
+                                    break;
                             case FADE_CURTAIN_CENTER_A2_3D:
                             case FADE_CURTAIN_CENTER_A2:
-                            entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
 #else
                             case 0x18: case 0x1B: case 0x3F:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE1 | PSND_SFX_KEEP));

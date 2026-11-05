@@ -529,9 +529,9 @@ USER_FUNC(evt_map_replace_mapobj) {
         break;
 #else
     case 1:
-    eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
-    ((EffFireWork*)eff->userdata)->useMapBlend = 1;
-    break;
+        eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
+        ((EffFireWork*)eff->userdata)->useMapBlend = 1;
+        break;
 #endif
     }
     return EVT_RETURN_DONE;

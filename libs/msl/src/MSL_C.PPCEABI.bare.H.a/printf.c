@@ -796,119 +796,119 @@ static char* float2str(long double num, char* buff, print_format format) {
 
     case 'e':
     case 'E':
-    e_format:
-        if (dec.sig.length > format.precision + 1) {
-            round_decimal(&dec, format.precision + 1);
-        }
-
-        n = dec.exp;
-        sign = '+';
-
-        if (n < 0) {
-            n = -n;
-            sign = '-';
-        }
-
-        for (digits = 0; n || digits < 2; ++digits) {
-            *--p = n % 10 + '0';
-            n /= 10;
-        }
-
-        *--p = sign;
-        *--p = format.conversion_char;
-
-        if (buff - p + format.precision > 509) {
-            return 0;
-        }
-
-        if (dec.sig.length < format.precision + 1) {
-            for (n = format.precision + 1 - dec.sig.length + 1; --n;) {
-                *--p = '0';
+        e_format:
+            if (dec.sig.length > format.precision + 1) {
+                round_decimal(&dec, format.precision + 1);
             }
-        }
 
-        for (n = dec.sig.length, q = (char*)dec.sig.text + dec.sig.length; --n;) {
-            *--p = *--q;
-        }
+            n = dec.exp;
+            sign = '+';
 
-        if (format.precision || format.alternate_form) {
-            *--p = '.';
-        }
+            if (n < 0) {
+                n = -n;
+                sign = '-';
+            }
 
-        *--p = *dec.sig.text;
+            for (digits = 0; n || digits < 2; ++digits) {
+                *--p = n % 10 + '0';
+                n /= 10;
+            }
 
-        if (dec.sign) {
-            *--p = '-';
-        } else if (format.sign_options == sign_always) {
-            *--p = '+';
-        } else if (format.sign_options == space_holder) {
-            *--p = ' ';
-        }
+            *--p = sign;
+            *--p = format.conversion_char;
 
-        break;
+            if (buff - p + format.precision > 509) {
+                return 0;
+            }
+
+            if (dec.sig.length < format.precision + 1) {
+                for (n = format.precision + 1 - dec.sig.length + 1; --n;) {
+                    *--p = '0';
+                }
+            }
+
+            for (n = dec.sig.length, q = (char*)dec.sig.text + dec.sig.length; --n;) {
+                *--p = *--q;
+            }
+
+            if (format.precision || format.alternate_form) {
+                *--p = '.';
+            }
+
+            *--p = *dec.sig.text;
+
+            if (dec.sign) {
+                *--p = '-';
+            } else if (format.sign_options == sign_always) {
+                *--p = '+';
+            } else if (format.sign_options == space_holder) {
+                *--p = ' ';
+            }
+
+            break;
 
     case 'f':
     case 'F':
-    f_format:
-        if ((frac_digits = -dec.exp + dec.sig.length - 1) < 0) {
-            frac_digits = 0;
-        }
-
-        if (frac_digits > format.precision) {
-            round_decimal(&dec, dec.sig.length - (frac_digits - format.precision));
-
+        f_format:
             if ((frac_digits = -dec.exp + dec.sig.length - 1) < 0) {
                 frac_digits = 0;
             }
-        }
 
-        if ((int_digits = dec.exp + 1) < 0) {
-            int_digits = 0;
-        }
+            if (frac_digits > format.precision) {
+                round_decimal(&dec, dec.sig.length - (frac_digits - format.precision));
 
-        if (int_digits + frac_digits > 509) {
-            return 0;
-        }
+                if ((frac_digits = -dec.exp + dec.sig.length - 1) < 0) {
+                    frac_digits = 0;
+                }
+            }
 
-        q = (char*)dec.sig.text + dec.sig.length;
+            if ((int_digits = dec.exp + 1) < 0) {
+                int_digits = 0;
+            }
 
-        for (digits = 0; digits < (format.precision - frac_digits); ++digits) {
-            *--p = '0';
-        }
+            if (int_digits + frac_digits > 509) {
+                return 0;
+            }
 
-        for (digits = 0; digits < frac_digits && digits < dec.sig.length; ++digits) {
-            *--p = *--q;
-        }
+            q = (char*)dec.sig.text + dec.sig.length;
 
-        for (; digits < frac_digits; ++digits) {
-            *--p = '0';
-        }
-
-        if (format.precision || format.alternate_form) {
-            *--p = '.';
-        }
-
-        if (int_digits) {
-            for (digits = 0; digits < int_digits - dec.sig.length; ++digits) {
+            for (digits = 0; digits < (format.precision - frac_digits); ++digits) {
                 *--p = '0';
             }
 
-            for (; digits < int_digits; ++digits) {
+            for (digits = 0; digits < frac_digits && digits < dec.sig.length; ++digits) {
                 *--p = *--q;
             }
-        } else {
-            *--p = '0';
-        }
 
-        if (dec.sign) {
-            *--p = '-';
-        } else if (format.sign_options == sign_always) {
-            *--p = '+';
-        } else if (format.sign_options == space_holder) {
-            *--p = ' ';
-        }
+            for (; digits < frac_digits; ++digits) {
+                *--p = '0';
+            }
 
-        break;
+            if (format.precision || format.alternate_form) {
+                *--p = '.';
+            }
+
+            if (int_digits) {
+                for (digits = 0; digits < int_digits - dec.sig.length; ++digits) {
+                    *--p = '0';
+                }
+
+                for (; digits < int_digits; ++digits) {
+                    *--p = *--q;
+                }
+            } else {
+                *--p = '0';
+            }
+
+            if (dec.sign) {
+                *--p = '-';
+            } else if (format.sign_options == sign_always) {
+                *--p = '+';
+            } else if (format.sign_options == space_holder) {
+                *--p = ' ';
+            }
+
+            break;
     }
 
     return p;
@@ -1126,15 +1126,15 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
 
         case 0xFF:
         default:
-        conversion_error:
-            num_chars = strlen(curr_format);
-            chars_written += num_chars;
+            conversion_error:
+                num_chars = strlen(curr_format);
+                chars_written += num_chars;
 
-            if (num_chars && !(*WriteProc)(WriteProcArg, curr_format, num_chars)) {
-                return -1;
-            }
+                if (num_chars && !(*WriteProc)(WriteProcArg, curr_format, num_chars)) {
+                    return -1;
+                }
 
-            return chars_written;
+                return chars_written;
         }
 
         field_width = num_chars;

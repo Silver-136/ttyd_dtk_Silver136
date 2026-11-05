@@ -513,17 +513,17 @@ void mot_plane(void) {
         break;
     case 70:
 #if VERSION >= VERSION_JP
-    set_damage_root_ypos(mp->position.y);
+        set_damage_root_ypos(mp->position.y);
 #endif
-    p = mp->position;
-    marioSetSplash(0, &p);
-    mp->multiTimer = 16;
-    mp->currSubMotionId = 71;
-    mp->jumpVelocityY = -2.0f;
-    mp->jumpAccelerationY = 0.0f;
-    mp->jumpJerkY = 0.0f;
-    mp->jumpSnapY = 0.0f;
-    camFollowYOff();
+        p = mp->position;
+        marioSetSplash(0, &p);
+        mp->multiTimer = 16;
+        mp->currSubMotionId = 71;
+        mp->jumpVelocityY = -2.0f;
+        mp->jumpAccelerationY = 0.0f;
+        mp->jumpJerkY = 0.0f;
+        mp->jumpSnapY = 0.0f;
+        camFollowYOff();
     case 71:
         marioMakeJumpPara();
         mp->position.y += mp->jumpVelocityY;

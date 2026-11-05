@@ -590,11 +590,11 @@ void yoshi_use(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
             psndSFXOn_3D((const char*)PSND_SFX_PARTY_YOSH_RIDE1, &party->position);
             case 11:
-            partyChgPose(party, "PYS_H_1");
-            marioChgMot(MARIO_MOTION_YOSHI);
+                partyChgPose(party, "PYS_H_1");
+                marioChgMot(MARIO_MOTION_YOSHI);
 #else
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_RIDE1), &party->position);
-            party->flags &= ~PARTY_FLAG_FORCE_FALL;
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_RIDE1), &party->position);
+                party->flags &= ~PARTY_FLAG_FORCE_FALL;
         case 11:
             marioChgMot(MARIO_MOTION_YOSHI);
             partyChgPose(party, "PYS_H_1");

@@ -1137,38 +1137,38 @@ static void ext_moamoa_main(void) {
 
             case MOAMOA_STATE_STOMPED_HOP2:
 
-            case MOAMOA_STATE_STOMPED_HOP3: {
-                    f32 tz;
-                    if (!(moa->flags & MOAMOA_FLAG_TO_TARGET)) {
-                        tx = mario->position.x;
-                        tz = mario->position.z;
-                    } else {
-                        tx = wp->target[i % 3].x;
-                        tz = wp->target[i % 3].z;
-                    }
-                    {
-                        f32 z;
-                        {
-                            f32 rad;
-                            f32 k;
-                            s = rand() / 32767.0f;
-                            a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-                            a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
-                            rad = (6.2831855f * a3) / 360.0f;
-                            ty = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
-                            y = (*pose->mtx)[1][3];
-                            z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
+                case MOAMOA_STATE_STOMPED_HOP3: {
+                        f32 tz;
+                        if (!(moa->flags & MOAMOA_FLAG_TO_TARGET)) {
+                            tx = mario->position.x;
+                            tz = mario->position.z;
+                        } else {
+                            tx = wp->target[i % 3].x;
+                            tz = wp->target[i % 3].z;
                         }
                         {
-                            f32 k;
-                            f32 r1 = rand() / 32767.0f;
-                            f32 r2 = rand() / 32767.0f;
-                            k = 1.0f - 1.0f;
-                            moamoa_jump(pose, moa, moa->state + 1, 1, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f);
+                            f32 z;
+                            {
+                                f32 rad;
+                                f32 k;
+                                s = rand() / 32767.0f;
+                                a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+                                a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+                                rad = (6.2831855f * a3) / 360.0f;
+                                ty = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
+                                y = (*pose->mtx)[1][3];
+                                z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
+                            }
+                            {
+                                f32 k;
+                                f32 r1 = rand() / 32767.0f;
+                                f32 r2 = rand() / 32767.0f;
+                                k = 1.0f - 1.0f;
+                                moamoa_jump(pose, moa, moa->state + 1, 1, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f);
+                            }
                         }
                     }
-                }
-                break;
+                    break;
 
             case MOAMOA_STATE_SHRINK:
                 if ((++moa->timer) < 30) {

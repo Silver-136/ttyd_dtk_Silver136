@@ -1053,11 +1053,16 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
         if (entry->mode == ITEM_MODE_GET)
             continue;
 #else
-        if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
-        if (entry->flags2 & ITEM_FLAG2_CARRIED) continue;
-        if (entry->flags2 & ITEM_FLAG2_SUNK) continue;
-        if (entry->mode == ITEM_MODE_GET) continue;
-        if (entry->flags2 & ITEM_FLAG2_NO_PARTNER) continue;
+        if (!(entry->flags & ITEM_FLAG_ACTIVE))
+            continue;
+        if (entry->flags2 & ITEM_FLAG2_CARRIED)
+            continue;
+        if (entry->flags2 & ITEM_FLAG2_SUNK)
+            continue;
+        if (entry->mode == ITEM_MODE_GET)
+            continue;
+        if (entry->flags2 & ITEM_FLAG2_NO_PARTNER)
+            continue;
 #endif
         {
             f32 iz, iy, ix;

@@ -623,61 +623,61 @@ void mot_roll(void) {
     }
     switch (mario->currSubMotionId) {
     case 0:
-    z0 = 0;
-    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-    marioAdjustMoveDir();
+        z0 = 0;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+        marioAdjustMoveDir();
 #if VERSION <= VERSION_DEMO_JP
-    mario->hammerDir = 0;
-#else
-    v31 = mario->displayDirection;
-    if (v31 < 90.0f || v31 > 270.0f) {
-        mario->hammerDir = 1;
-        mario->directionView = revise360(270.0f - mario->targetYaw);
-        mario->moveDirection = 270.0f;
-    } else {
         mario->hammerDir = 0;
-        mario->directionView = revise360(90.0f - mario->targetYaw);
-        mario->moveDirection = 90.0f;
-    }
+#else
+        v31 = mario->displayDirection;
+        if (v31 < 90.0f || v31 > 270.0f) {
+            mario->hammerDir = 1;
+            mario->directionView = revise360(270.0f - mario->targetYaw);
+            mario->moveDirection = 270.0f;
+        } else {
+            mario->hammerDir = 0;
+            mario->directionView = revise360(90.0f - mario->targetYaw);
+            mario->moveDirection = 90.0f;
+        }
 #endif
-    marioGetRubInit();
-    mario->flags |= MARIO_FLAG_TUBE_MODE;
-    mario->rollFlags = ROLL_STATE_ROLLING;
-    mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-    mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    marioPaperOn("p_roll");
-    marioChgPose("M_I_U");
-    marioChgPaper("PM_R_1A");
-    mario->multiTimer = 0x41;
-    m = marioGetPtr();
-    m->wPlayerCollisionBox.x = 14.8f;
-    m->wPlayerCollisionBox.y = 14.8f;
-    m->baseDashSpeed = rollData[0];
-    marioGetPtr()->motRoll->spdX = 0.0f;
-    marioGetPtr()->motRoll->spdZ = 0.0f;
-    m->rotOfs.x = -6.0f;
-    m->rotOfs.y = 6.0f;
-    m->dispOfs.x = 6.0f;
-    m->dispOfs.y = 0.0f;
-    m->scale.x = 1.0f;
-    m->scale.y = 1.0f;
-    m->scale.z = 1.0f;
-    m->tubeScaleY = 1.0f;
-    mario->airTimer = 0;
-    if (mario->forceMoveTimer == 0) {
-        mario->baseSpeed = 0.0f;
-    }
-    m = marioGetPtr();
-    m->camShiftTargetZ = 0.4f;
-    m->camShiftRate.z = 0.01f;
-    m->camZoom = 2.0f;
-    m->camZoomOfs = rollOfs;
-    marioGetPtr()->motRoll->squashTrigger = 0;
-    marioGetPtr()->motRoll->squashState = 0;
-    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
-    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
-    mario->currSubMotionId = 1;
-    break;
+        marioGetRubInit();
+        mario->flags |= MARIO_FLAG_TUBE_MODE;
+        mario->rollFlags = ROLL_STATE_ROLLING;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        marioPaperOn("p_roll");
+        marioChgPose("M_I_U");
+        marioChgPaper("PM_R_1A");
+        mario->multiTimer = 0x41;
+        m = marioGetPtr();
+        m->wPlayerCollisionBox.x = 14.8f;
+        m->wPlayerCollisionBox.y = 14.8f;
+        m->baseDashSpeed = rollData[0];
+        marioGetPtr()->motRoll->spdX = 0.0f;
+        marioGetPtr()->motRoll->spdZ = 0.0f;
+        m->rotOfs.x = -6.0f;
+        m->rotOfs.y = 6.0f;
+        m->dispOfs.x = 6.0f;
+        m->dispOfs.y = 0.0f;
+        m->scale.x = 1.0f;
+        m->scale.y = 1.0f;
+        m->scale.z = 1.0f;
+        m->tubeScaleY = 1.0f;
+        mario->airTimer = 0;
+        if (mario->forceMoveTimer == 0) {
+            mario->baseSpeed = 0.0f;
+        }
+        m = marioGetPtr();
+        m->camShiftTargetZ = 0.4f;
+        m->camShiftRate.z = 0.01f;
+        m->camZoom = 2.0f;
+        m->camZoomOfs = rollOfs;
+        marioGetPtr()->motRoll->squashTrigger = 0;
+        marioGetPtr()->motRoll->squashState = 0;
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
+        mario->currSubMotionId = 1;
+        break;
     case 1:
         if (mario->multiTimer == 0x36) {
             allPartyRideShip();

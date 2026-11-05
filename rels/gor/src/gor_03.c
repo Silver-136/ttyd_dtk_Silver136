@@ -7029,19 +7029,19 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             data->counter++;
             break;
         case 5:
-        n = 0;
-        for (m = 0; m < 3; m++) {
-            if (data->state[m] == 0) {
-                n++;
-            } else {
-                n += slot_rotate_sub(wp, data, m);
+            n = 0;
+            for (m = 0; m < 3; m++) {
+                if (data->state[m] == 0) {
+                    n++;
+                } else {
+                    n += slot_rotate_sub(wp, data, m);
+                }
             }
-        }
-        if (n == 3) {
-            data->counter = 0;
-            data->phase++;
-        }
-        break;
+            if (n == 3) {
+                data->counter = 0;
+                data->phase++;
+            }
+            break;
         case 6:
             for (i = 0; i < 3; i++) {
                 gara2[i] = slotgara[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];

@@ -821,39 +821,39 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case SELECT_TYPE_PARTY_RANK_UP:
         case SELECT_TYPE_PARTY_SWAP_RANK_UP:
-        sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
-        memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
-        sel->numItems = 0;
-        for (i = 0; party_id_table[i] != 0; i++) {
-            if (partyChkJoin(party_id_table[i])) {
-                sel->items[sel->numItems].id = i;
-                if (!evtGetValue(NULL, GSWF_GOR_UP_ARROW_USED)) {
-                    if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
-                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
+            sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
+            sel->numItems = 0;
+            for (i = 0; party_id_table[i] != 0; i++) {
+                if (partyChkJoin(party_id_table[i])) {
+                    sel->items[sel->numItems].id = i;
+                    if (!evtGetValue(NULL, GSWF_GOR_UP_ARROW_USED)) {
+                        if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
+                            sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
+                        }
+                    } else {
+                        if (pouch->partyData[party_id_table[i]].techLevel >= 2) {
+                            sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
+                        }
                     }
-                } else {
-                    if (pouch->partyData[party_id_table[i]].techLevel >= 2) {
-                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
-                    }
+                    sel->numItems++;
                 }
-                sel->numItems++;
             }
-        }
-        break;
+            break;
         case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
-        sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
-        memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
-        sel->numItems = 0;
-        for (i = 0; party_id_table[i] != 0; i++) {
-            if (partyChkJoin(party_id_table[i]) && party_id_table[i] != evtGetValue(NULL, GW(1))) {
-                sel->items[sel->numItems].id = i;
-                if (pouch->partyData[party_id_table[i]].techLevel == 0) {
-                    sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
+            sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
+            sel->numItems = 0;
+            for (i = 0; party_id_table[i] != 0; i++) {
+                if (partyChkJoin(party_id_table[i]) && party_id_table[i] != evtGetValue(NULL, GW(1))) {
+                    sel->items[sel->numItems].id = i;
+                    if (pouch->partyData[party_id_table[i]].techLevel == 0) {
+                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
+                    }
+                    sel->numItems++;
                 }
-                sel->numItems++;
             }
-        }
-        break;
+            break;
         case SELECT_TYPE_STAT_SWAP_UP:
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;

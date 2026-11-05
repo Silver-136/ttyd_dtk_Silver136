@@ -347,7 +347,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 case 1: obj->blendMode = 0; break;
                 case 2: obj->blendMode = 1; break;
                 case 3:
-                default: obj->blendMode = 2; break;
+                    default: obj->blendMode = 2; break;
             }
         }
         if (obj->flags & MAP_OBJ_FLAG_GROUP) {

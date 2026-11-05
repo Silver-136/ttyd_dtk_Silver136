@@ -230,7 +230,7 @@ typedef struct BattleWeapon {
     u8 stageEffectRates[0xC0 - 0xB4]; // 0xB4, btlevtcmd_WeaponAftereffect: [0..3] A1+A2 / A1 / A2 / none fall weights, [4] B destroy, [5] nozzle turn, [6] nozzle fire, [7] iron frame fall, [8] object fall (%), [9..11] unused
 } BattleWeapon;
 
-#include "driver/npcdrv.h" /* ItemDropData, PointDropData */
+#include "driver/npcdrv.h" /* PointDropData */
 
 extern PointDropData battle_flower_drop_param_default[];
 extern PointDropData battle_flower_drop_param_default2[];

@@ -236,23 +236,23 @@ void seq_battleMain(SequenceWork* work) {
             }
             work->state++;
         case 5:
-        if (battleSeqEndCheck()) {
-            work->counter = 0;
-            work->state++;
-            if (gp->debugBattle) {
-                work->state = 11;
+            if (battleSeqEndCheck()) {
+                work->counter = 0;
+                work->state++;
+                if (gp->debugBattle) {
+                    work->state = 11;
+                }
             }
-        }
-        marioGetPtr();
-        camGetPtr(CAMERA_3D);
-        pos.x = 0.0f;
-        pos.y = 0.0f;
-        pos.z = 400.0f;
-        if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
-            pos.z += 200.0f;
-        }
-        psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);
-        break;
+            marioGetPtr();
+            camGetPtr(CAMERA_3D);
+            pos.x = 0.0f;
+            pos.y = 0.0f;
+            pos.z = 400.0f;
+            if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
+                pos.z += 200.0f;
+            }
+            psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);
+            break;
         case 6:
             if (++work->counter > 30) {
                 if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT)) {
@@ -302,8 +302,8 @@ void seq_battleMain(SequenceWork* work) {
             }
             break;
             case 2:
-            battle_init();
-            work->state++;
+                battle_init();
+                work->state++;
         case 3: {
             Vec pos;
             if (battleSeqEndCheck()) {

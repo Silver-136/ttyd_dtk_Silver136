@@ -1974,28 +1974,28 @@ void ext_fan_main(void) {
                         break;
                     case 2:
 
-                    angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
-                    dir2 = cloudGetBreathDir();
-                    fan->state = 20;
+                        angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
+                        dir2 = cloudGetBreathDir();
+                        fan->state = 20;
 #if VERSION <= VERSION_DEMO_JP
-                    dir2 = (angle + dir2) / 2.0f;
+                        dir2 = (angle + dir2) / 2.0f;
 #else
-                    angle = (angle + dir2) / 2.0f;
+                        angle = (angle + dir2) / 2.0f;
 #endif
-                    fan->target = fan_zero;
-                    spd = randf(0.1f, 0.2f);
+                        fan->target = fan_zero;
+                        spd = randf(0.1f, 0.2f);
 #if VERSION <= VERSION_DEMO_JP
-                    angle = 6.2831855f * dir2 / 360.0f;
+                        angle = 6.2831855f * dir2 / 360.0f;
 #else
-                    angle = 6.2831855f * angle / 360.0f;
+                        angle = 6.2831855f * angle / 360.0f;
 #endif
-                    fan->param.x = spd * polySinf(angle);
-                    fan->param.y = randf(0.03f, 0.06f);
-                    fan->param.z = spd * -polyCosf(angle);
-                    fan->timer = 120;
-                    // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
-                    psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
-                    break;
+                        fan->param.x = spd * polySinf(angle);
+                        fan->param.y = randf(0.03f, 0.06f);
+                        fan->param.z = spd * -polyCosf(angle);
+                        fan->timer = 120;
+                        // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
+                        psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
+                        break;
                 }
             }
         }

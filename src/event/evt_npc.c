@@ -724,8 +724,8 @@ USER_FUNC(evt_npc_jump_position) {
                 default:
                     return EVT_RETURN_YIELD;
                 case 1:
-                end1:
-                    return EVT_RETURN_BLOCK;
+                    end1:
+                        return EVT_RETURN_BLOCK;
             }
         }
     }

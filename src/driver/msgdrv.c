@@ -667,11 +667,11 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     switch (data->window->type) {
                         case WINDOW_TYPE_SYSTEM:
                         case WINDOW_TYPE_TEC:
-                        case WINDOW_TYPE_MAJO: {
-                            GXColor gray2 = {0x6E, 0x6E, 0x6E, 0xFF};
-                            gray = gray2;
-                            break;
-                        }
+                            case WINDOW_TYPE_MAJO: {
+                                GXColor gray2 = {0x6E, 0x6E, 0x6E, 0xFF};
+                                gray = gray2;
+                                break;
+                            }
                     }
                     gray.a = a;
                     GXSetTevColor(GX_TEVREG0, gray);

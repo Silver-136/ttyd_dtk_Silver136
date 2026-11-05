@@ -605,9 +605,9 @@ void sndAuxCallbackChorus(u8 reason, SND_AUX_INFO* info, void* user) {
   case SND_AUX_REASON_PARAMETERUPDATE:
     break;
   default:
-  #line 957
-    MUSY_ASSERT(FALSE);
-    break;
+      #line 957
+        MUSY_ASSERT(FALSE);
+        break;
   }
 }
 

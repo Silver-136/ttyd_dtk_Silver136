@@ -267,12 +267,12 @@ static void effKemuTestMain(EffectEntry* effect) {
             break;
         case 10:
         case 14:
-        a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-        work->pos.x += work->gravity * (f32)sin(a);
-        work->pos.y += -work->gravity * (f32)cos(a);
-        work->gravity += work->gravityAcc;
-        work->gravityAcc *= work->gravityMul;
-        break;
+            a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+            work->pos.x += work->gravity * (f32)sin(a);
+            work->pos.y += -work->gravity * (f32)cos(a);
+            work->gravity += work->gravityAcc;
+            work->gravityAcc *= work->gravityMul;
+            break;
         case 4:
         case 9:
         case 17:
@@ -313,13 +313,13 @@ static void effKemuTestMain(EffectEntry* effect) {
             work->vel.z *= 0.9f;
             break;
         case 12:
-        a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-        work->pos.x += work->gravity * (f32)sin(a);
-        work->pos.y += -work->gravity * (f32)cos(a);
-        work->gravity += work->gravityAcc;
-        work->gravityAcc *= work->gravityMul;
-        work->scale += 0.05f;
-        break;
+            a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+            work->pos.x += work->gravity * (f32)sin(a);
+            work->pos.y += -work->gravity * (f32)cos(a);
+            work->gravity += work->gravityAcc;
+            work->gravityAcc *= work->gravityMul;
+            work->scale += 0.05f;
+            break;
         case 13:
             work->pos.x += work->vel.x;
             work->pos.y += work->vel.y;
@@ -335,30 +335,30 @@ static void effKemuTestMain(EffectEntry* effect) {
         case 6:
         case 11:
         case 16:
-        case 18: {
-            s32 r, g, b;
-            g = 0xff;
-            r = 0xff;
-            b = 0xff - work->frame * 60;
-            if (b < 0) {
-                g = (s32)(0.8f * (f32)b) + 0xff;
-                b = 0;
-                if (g < 0) {
-                    r = (s32)(0.4f * (f32)g) + 0xff;
-                    g = 0;
-                    if (r < 0) {
-                        r = 0;
+            case 18: {
+                s32 r, g, b;
+                g = 0xff;
+                r = 0xff;
+                b = 0xff - work->frame * 60;
+                if (b < 0) {
+                    g = (s32)(0.8f * (f32)b) + 0xff;
+                    b = 0;
+                    if (g < 0) {
+                        r = (s32)(0.4f * (f32)g) + 0xff;
+                        g = 0;
+                        if (r < 0) {
+                            r = 0;
+                        }
                     }
                 }
+                work->r = r;
+                work->g = g;
+                work->b = b;
+                if (type == 3 && i == 1 && work->frame == 0x1e) {
+                    play = 1;
+                }
+                break;
             }
-            work->r = r;
-            work->g = g;
-            work->b = b;
-            if (type == 3 && i == 1 && work->frame == 0x1e) {
-                play = 1;
-            }
-            break;
-        }
         case 7:
             work->r += (s32)((f32)(0xbd - work->r) / 10.0f);
             work->g += (s32)((f32)(0x10 - work->g) / 10.0f);
@@ -537,34 +537,34 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             break;
         case 2:
         case 16:
-        ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-        work->pos.x = 20.0f * (f32)sin(ang);
-        work->pos.y = 20.0f * (f32)cos(ang);
-        work->pos.z = 0.0f;
-        work->life = 0x20;
-        work->frame = 0;
-        work->delay = (i - 1) * 6;
-        work->r = 0xff;
-        work->g = 0xff;
-        work->b = 0xff;
-        work->scale = 1.0f;
-        break;
+            ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+            work->pos.x = 20.0f * (f32)sin(ang);
+            work->pos.y = 20.0f * (f32)cos(ang);
+            work->pos.z = 0.0f;
+            work->life = 0x20;
+            work->frame = 0;
+            work->delay = (i - 1) * 6;
+            work->r = 0xff;
+            work->g = 0xff;
+            work->b = 0xff;
+            work->scale = 1.0f;
+            break;
         case 3:
-        ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-        work->pos.x = 20.0f * (f32)sin(ang);
-        work->pos.y = 20.0f * (f32)cos(ang);
-        work->pos.z = 0.0f;
-        work->life = 0x20;
-        work->frame = 0;
-        work->delay = (i - 1) * 3;
-        work->gravity = 0.95f;
-        work->gravityAcc = -0.04f;
-        work->gravityMul = 0.94f;
-        work->r = 0xff;
-        work->g = 0xff;
-        work->b = 0xff;
-        work->scale = 1.0f;
-        break;
+            ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+            work->pos.x = 20.0f * (f32)sin(ang);
+            work->pos.y = 20.0f * (f32)cos(ang);
+            work->pos.z = 0.0f;
+            work->life = 0x20;
+            work->frame = 0;
+            work->delay = (i - 1) * 3;
+            work->gravity = 0.95f;
+            work->gravityAcc = -0.04f;
+            work->gravityMul = 0.94f;
+            work->r = 0xff;
+            work->g = 0xff;
+            work->b = 0xff;
+            work->scale = 1.0f;
+            break;
         case 4:
         case 5:
         case 9:

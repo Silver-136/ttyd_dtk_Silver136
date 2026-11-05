@@ -244,7 +244,7 @@ typedef struct MapObject {
     struct MapObject* next;                // 0xE8
     u16 screenRect[4];                     // 0xEC, projected bounds (0x3FF when off screen)
     void* displayList[8];                  // 0xF4, prebuilt display lists (makeDisplayList)
-    u32 displayListSize[8];                // 0x114, their sizes; flag 0x100 (use display list) only sticks when [0] is nonzero
+    u32 displayListSize[8];                // 0x114, their sizes; MAP_OBJ_FLAG_DISPLAY_LIST only sticks when [0] is nonzero
 } MapObject;
 
 typedef struct MapError {

@@ -365,27 +365,27 @@ void mot_dokan(void) {
         }
         break;
     case 103:
-    mario->returnPos = mario->position;
-    {
-        Vec v = {1.0f, 1.0f, 1.0f};
-        mario->scale = v;
-    }
-    marioOfsRotReset();
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
-    marioPaperOff();
-    marioChgMot(MARIO_MOTION_STAY);
-    mario->displayDirection = revise360(mario->displayDirection);
-    mario->displayDirectionTarget = mario->displayDirection;
-    mario->directionView = toMovedirSimple(mario->displayDirection);
-    mario->moveDirection = mario->directionView;
-    if (mario->dokanType == DOKAN_YOKO_IN) {
-        camFollowYOn();
-        mario->camTarget.y = mario->position.y;
-    }
-    mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
-    break;
+        mario->returnPos = mario->position;
+        {
+            Vec v = {1.0f, 1.0f, 1.0f};
+            mario->scale = v;
+        }
+        marioOfsRotReset();
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
+        marioPaperOff();
+        marioChgMot(MARIO_MOTION_STAY);
+        mario->displayDirection = revise360(mario->displayDirection);
+        mario->displayDirectionTarget = mario->displayDirection;
+        mario->directionView = toMovedirSimple(mario->displayDirection);
+        mario->moveDirection = mario->directionView;
+        if (mario->dokanType == DOKAN_YOKO_IN) {
+            camFollowYOn();
+            mario->camTarget.y = mario->position.y;
+        }
+        mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
+        break;
     }
 
     switch (mario->currSubMotionId) {
@@ -420,25 +420,25 @@ void mot_dokan(void) {
         }
         break;
     case 113:
-    mario->returnPos = mario->position;
-    {
-        Vec v = {1.0f, 1.0f, 1.0f};
-        mario->scale = v;
-    }
-    marioOfsRotReset();
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
-    marioPaperOff();
-    marioChgMot(MARIO_MOTION_STAY);
-    mario->displayDirection = revise360(mario->displayDirection);
-    mario->displayDirectionTarget = mario->displayDirection;
-    mario->directionView = toMovedirSimple(mario->displayDirection);
-    mario->moveDirection = mario->directionView;
-    if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
-        camFollowYOn();
-    }
-    mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
-    break;
+        mario->returnPos = mario->position;
+        {
+            Vec v = {1.0f, 1.0f, 1.0f};
+            mario->scale = v;
+        }
+        marioOfsRotReset();
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
+        marioPaperOff();
+        marioChgMot(MARIO_MOTION_STAY);
+        mario->displayDirection = revise360(mario->displayDirection);
+        mario->displayDirectionTarget = mario->displayDirection;
+        mario->directionView = toMovedirSimple(mario->displayDirection);
+        mario->moveDirection = mario->directionView;
+        if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
+            camFollowYOn();
+        }
+        mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
+        break;
     }
 }

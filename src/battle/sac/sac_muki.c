@@ -529,16 +529,16 @@ void main_point(s32 idx) {
 
     switch (o->kind) {
     case 1:
-    o->kind = 2;
-    o->timer = irand(30) + 30;
-    {
-        Vec p = {0.0f, 0.0f, 20.0f};
-        p.x = (f32)((idx % 3) * 48 - 48);
-        p.y = (f32)(125 - (idx / 3) * 48);
-        o->pos = p;
-    }
-    o->scale = (Vec){0.0f, 0.0f, 1.0f};
-    o->link = NULL;
+        o->kind = 2;
+        o->timer = irand(30) + 30;
+        {
+            Vec p = {0.0f, 0.0f, 20.0f};
+            p.x = (f32)((idx % 3) * 48 - 48);
+            p.y = (f32)(125 - (idx / 3) * 48);
+            o->pos = p;
+        }
+        o->scale = (Vec){0.0f, 0.0f, 1.0f};
+        o->link = NULL;
     case 2:
         o->timer--;
         if (o->timer <= 30) {
@@ -939,28 +939,28 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                 btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
                 break;
             case 1:
-            PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
-            PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
-            PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
-            c = 2.0f * o->rot.y;
-            a = mulf(c, 3.141592f) / 360.0f;
-            c = (f32)cos(a);
-            PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
-            col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, o->alpha};
-            col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, o->alpha};
-            btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
-            break;
+                PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
+                PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
+                PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
+                c = 2.0f * o->rot.y;
+                a = mulf(c, 3.141592f) / 360.0f;
+                c = (f32)cos(a);
+                PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
+                col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, o->alpha};
+                col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, o->alpha};
+                btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+                break;
             case 2:
-            PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
-            PSMTXScaleApply(m, m, o->scale.x, o->scale.y, o->scale.z);
-            PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
-            c = 2.0f * o->rot.y;
-            a = mulf(c, 3.141592f) / 360.0f;
-            c = (f32)cos(a);
-            PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
-            col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};
-            btlDispTexPlane2(m, BTL_TEX(0x31), col[0], 0);
-            break;
+                PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
+                PSMTXScaleApply(m, m, o->scale.x, o->scale.y, o->scale.z);
+                PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
+                c = 2.0f * o->rot.y;
+                a = mulf(c, 3.141592f) / 360.0f;
+                c = (f32)cos(a);
+                PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
+                col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};
+                btlDispTexPlane2(m, BTL_TEX(0x31), col[0], 0);
+                break;
             }
         }
     }

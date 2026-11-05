@@ -28,9 +28,9 @@ double __ieee754_atan2(double y, double x) {
     if ((iy | ly) == 0) {
         switch (m) {
             case 0:
-            case 1: return y;
-            case 2: return pi + tiny;
-            case 3: return -pi - tiny;
+                case 1: return y;
+                case 2: return pi + tiny;
+                case 3: return -pi - tiny;
         }
     }
     if ((ix | lx) == 0) return (hy < 0) ? -pi_o_2 - tiny : pi_o_2 + tiny;

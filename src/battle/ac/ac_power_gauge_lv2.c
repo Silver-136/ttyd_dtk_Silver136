@@ -309,13 +309,13 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_START:
         case AC_STATE_RUN + 2:
         case AC_STATE_RUN + 3:
-        case AC_STATE_RUN + 4: {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = px;
-            pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
-            break;
-        }
+            case AC_STATE_RUN + 4: {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = px;
+                pos.y = 70.0f + y;
+                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+                break;
+            }
         case AC_STATE_RUN:
             if (g->inZone) {
                 Vec pos = {0.0f, 0.0f, 0.0f};

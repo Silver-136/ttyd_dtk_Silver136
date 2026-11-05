@@ -214,21 +214,21 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_START:
         case AC_STATE_RUN + 2:
         case AC_STATE_RUN + 3:
-        case AC_STATE_RUN + 4: {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            x = -220.0f + x;
-            y = 70.0f + y;
-            pos.x = x;
-            pos.y = y;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 1.0f);
-            {
-                Vec pos2 = {0.0f, 0.0f, 0.0f};
-                pos2.x = 56.0f + x;
-                pos2.y = y;
-                iconDispGx(&pos2, ICON_FLAG_2D, ICON_TRIGGER_R, 1.0f);
+            case AC_STATE_RUN + 4: {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                x = -220.0f + x;
+                y = 70.0f + y;
+                pos.x = x;
+                pos.y = y;
+                iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 1.0f);
+                {
+                    Vec pos2 = {0.0f, 0.0f, 0.0f};
+                    pos2.x = 56.0f + x;
+                    pos2.y = y;
+                    iconDispGx(&pos2, ICON_FLAG_2D, ICON_TRIGGER_R, 1.0f);
+                }
+                break;
             }
-            break;
-        }
         case AC_STATE_RUN:
             if (tw->gauge >= (f32)work->actionCommands.params[2] && tw->gauge <= 100.0f) {
                 Vec pos = {0.0f, 0.0f, 0.0f};

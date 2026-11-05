@@ -401,16 +401,16 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_START:
         case AC_STATE_RUN + 2:
         case AC_STATE_RUN + 3:
-        case AC_STATE_RUN + 4: {
-                Vec p = {0.0f, 0.0f, 0.0f};
-                // FAKE: e0 and e1 are never used; removing them changes the object
-                Vec e0 = {0.0f, 0.0f, 0.0f};
-                Vec e1 = {0.0f, 0.0f, 0.0f};
-                p.x = 28.0f + (-225.0f + x);
-                p.y = 55.0f + y;
-                iconDispGx(&p, ICON_FLAG_2D, icon, 1.0f);
-                break;
-        }
+            case AC_STATE_RUN + 4: {
+                    Vec p = {0.0f, 0.0f, 0.0f};
+                    // FAKE: e0 and e1 are never used; removing them changes the object
+                    Vec e0 = {0.0f, 0.0f, 0.0f};
+                    Vec e1 = {0.0f, 0.0f, 0.0f};
+                    p.x = 28.0f + (-225.0f + x);
+                    p.y = 55.0f + y;
+                    iconDispGx(&p, ICON_FLAG_2D, icon, 1.0f);
+                    break;
+            }
         case AC_STATE_RUN:
             if (gw->hit) {
                 Vec p = {0.0f, 0.0f, 0.0f};

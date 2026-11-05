@@ -808,10 +808,10 @@ void VIConfigure(const GXRenderModeObj* rm) {
             break;
         }
     default:
-    panic:
-        OSPanic(__FILE__, 1979,
-                "VIConfigure(): Tried to change mode from (%d) to (%d), which is forbidden\n",
-                tvInBootrom, tvInGame);
+        panic:
+            OSPanic(__FILE__, 1979,
+                    "VIConfigure(): Tried to change mode from (%d) to (%d), which is forbidden\n",
+                    tvInBootrom, tvInGame);
     }
 
     if ((tvInGame == VI_NTSC) || (tvInGame == VI_MPAL)) {

@@ -607,53 +607,53 @@ void mot_ship(void) {
         break;
     }
     case 11:
-    movePos(&m->position.x, &m->position.z, m->baseSpeed, m->directionView);
-    m->position.y += m->jumpVelocityY;
-    marioMakeJumpPara();
-    f30 = m->jumpVelocityY;
-    mm = marioGetPtr();
-    mm->wPlayerCollisionBox.x = 20.0f;
-    land = marioChkLandon(&ly, f30);
-    mm->wPlayerCollisionBox.x = 40.0f;
-    if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
-        mm->hitobjStandOn = land;
-        mm->position.y = ly;
-        mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-        mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-        mm->airTimer = 0;
-        mm->jumpPeakAirTime = 0;
-        camFollowYOn();
-        ok = 1;
-    } else {
-        ok = 0;
-    }
-    if (ok) {
-        f30 = 0.0f;
-        m->jumpVelocityY = f30;
-        m->jumpAccelerationY = f30;
-        m->jumpJerkY = f30;
-        m->jumpSnapY = f30;
-        m->baseSpeed = f30;
-        marioGetPtr()->motShip->turnSpeed = f30;
-        m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        m->displayDirection = revise360(m->displayDirection);
-        m->displayDirectionTarget = m->displayDirection;
-        m->directionView = toMovedir(m->displayDirection);
-        m->moveDirection = m->directionView;
-        m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1_2), &m->position);
-        marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
-        marioGetPtr()->motShip->bobAngle = 0.0f;
-        marioGetPtr()->motShip->bobSpeed = 4.25f;
-        m->currSubMotionId = 50;
-        if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+        movePos(&m->position.x, &m->position.z, m->baseSpeed, m->directionView);
+        m->position.y += m->jumpVelocityY;
+        marioMakeJumpPara();
+        f30 = m->jumpVelocityY;
+        mm = marioGetPtr();
+        mm->wPlayerCollisionBox.x = 20.0f;
+        land = marioChkLandon(&ly, f30);
+        mm->wPlayerCollisionBox.x = 40.0f;
+        if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
+            mm->hitobjStandOn = land;
+            mm->position.y = ly;
+            mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+            mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
+            mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+            mm->airTimer = 0;
+            mm->jumpPeakAirTime = 0;
+            camFollowYOn();
+            ok = 1;
+        } else {
+            ok = 0;
         }
-    }
-    break;
+        if (ok) {
+            f30 = 0.0f;
+            m->jumpVelocityY = f30;
+            m->jumpAccelerationY = f30;
+            m->jumpJerkY = f30;
+            m->jumpSnapY = f30;
+            m->baseSpeed = f30;
+            marioGetPtr()->motShip->turnSpeed = f30;
+            m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+            m->displayDirection = revise360(m->displayDirection);
+            m->displayDirectionTarget = m->displayDirection;
+            m->directionView = toMovedir(m->displayDirection);
+            m->moveDirection = m->directionView;
+            m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1_2), &m->position);
+            marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
+            marioGetPtr()->motShip->bobAngle = 0.0f;
+            marioGetPtr()->motShip->bobSpeed = 4.25f;
+            m->currSubMotionId = 50;
+            if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
+                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+            }
+        }
+        break;
     case 30:
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
@@ -661,13 +661,13 @@ void mot_ship(void) {
         m->currSubMotionId = 31;
         /* fallthrough */
     case 31:
-    m->dispOfs.y += -0.4f;
-    if (m->dispOfs.y <= -18.0f) {
-        m->multiTimer = 4;
-        m->currSubMotionId = 32;
-    }
-    shipEff(1.6f);
-    break;
+        m->dispOfs.y += -0.4f;
+        if (m->dispOfs.y <= -18.0f) {
+            m->multiTimer = 4;
+            m->currSubMotionId = 32;
+        }
+        shipEff(1.6f);
+        break;
     case 32:
         if (--m->multiTimer > 0) {
             break;

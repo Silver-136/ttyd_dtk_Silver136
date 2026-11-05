@@ -4277,18 +4277,18 @@ USER_FUNC(_object_fall_attack) {
                                     break;
 
                                 case PRECHECK_LUCKY:
-                                BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
-                                if (p.y < 85.0f) {
-                                    p.y += 50.0f;
-                                } else {
-                                    p.y += -50.0f;
-                                }
-                                p.x -= 45.0f;
-                                eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
-                                ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
-                                unit2->damagePattern = 0;
-                                BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
-                                break;
+                                    BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
+                                    if (p.y < 85.0f) {
+                                        p.y += 50.0f;
+                                    } else {
+                                        p.y += -50.0f;
+                                    }
+                                    p.x -= 45.0f;
+                                    eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
+                                    ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
+                                    unit2->damagePattern = 0;
+                                    BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
+                                    break;
 
                                 case PRECHECK_DODGY:
                                     unit2->damagePattern = 0;

@@ -103,46 +103,46 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
         switch (type) {
         case 0:
         case 1:
-        case 2: {
-            Vec dir = {0.0f, 0.0f, 0.0f};
-            dir.x = dx;
-            dir.y = dy;
-            dir.z = dz;
-            axis = dir;
-            PSMTXRotAxisRad(mtx, &axis, 0.017453292f * (360.0f * (f32)i / (f32)(count - 1)));
-            w->velocity.x = dx + mtx[0][0] * px + mtx[0][1] * py + mtx[0][2] * pz;
-            w->velocity.y = dy + mtx[1][0] * px + mtx[1][1] * py + mtx[1][2] * pz;
-            w->velocity.z = dz + mtx[2][0] * px + mtx[2][1] * py + mtx[2][2] * pz;
-            break;
-        }
-        case 3: {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            f32 t;
-            v.x = (f32)sin(ang);
-            v.z = -(f32)cos(ang);
-            axis = v;
-            if (count == 1) {
-                t = 0.0f;
-            } else {
-                t = 100.0f * (f32)i / (f32)(count - 1) - 50.0f;
+            case 2: {
+                Vec dir = {0.0f, 0.0f, 0.0f};
+                dir.x = dx;
+                dir.y = dy;
+                dir.z = dz;
+                axis = dir;
+                PSMTXRotAxisRad(mtx, &axis, 0.017453292f * (360.0f * (f32)i / (f32)(count - 1)));
+                w->velocity.x = dx + mtx[0][0] * px + mtx[0][1] * py + mtx[0][2] * pz;
+                w->velocity.y = dy + mtx[1][0] * px + mtx[1][1] * py + mtx[1][2] * pz;
+                w->velocity.z = dz + mtx[2][0] * px + mtx[2][1] * py + mtx[2][2] * pz;
+                break;
             }
-            PSMTXRotAxisRad(mtx, &axis, 0.017453292f * t);
-            w->velocity.x = mtx[0][0] * dx + mtx[0][1] * dy + mtx[0][2] * dz;
-            w->velocity.y = mtx[1][0] * dx + mtx[1][1] * dy + mtx[1][2] * dz;
-            w->velocity.z = mtx[2][0] * dx + mtx[2][1] * dy + mtx[2][2] * dz;
-            break;
-        }
-        case 4: {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            v.x = (f32)sin(ang);
-            v.z = -(f32)cos(ang);
-            axis = v;
-            PSMTXRotAxisRad(mtx, &axis, 0.017453292f * (360.0f * (f32)i / (f32)(count - 1)));
-            w->velocity.x = mtx[0][0] * dx + mtx[0][1] * dy + mtx[0][2] * dz;
-            w->velocity.y = mtx[1][0] * dx + mtx[1][1] * dy + mtx[1][2] * dz;
-            w->velocity.z = mtx[2][0] * dx + mtx[2][1] * dy + mtx[2][2] * dz;
-            break;
-        }
+            case 3: {
+                Vec v = {0.0f, 0.0f, 0.0f};
+                f32 t;
+                v.x = (f32)sin(ang);
+                v.z = -(f32)cos(ang);
+                axis = v;
+                if (count == 1) {
+                    t = 0.0f;
+                } else {
+                    t = 100.0f * (f32)i / (f32)(count - 1) - 50.0f;
+                }
+                PSMTXRotAxisRad(mtx, &axis, 0.017453292f * t);
+                w->velocity.x = mtx[0][0] * dx + mtx[0][1] * dy + mtx[0][2] * dz;
+                w->velocity.y = mtx[1][0] * dx + mtx[1][1] * dy + mtx[1][2] * dz;
+                w->velocity.z = mtx[2][0] * dx + mtx[2][1] * dy + mtx[2][2] * dz;
+                break;
+            }
+            case 4: {
+                Vec v = {0.0f, 0.0f, 0.0f};
+                v.x = (f32)sin(ang);
+                v.z = -(f32)cos(ang);
+                axis = v;
+                PSMTXRotAxisRad(mtx, &axis, 0.017453292f * (360.0f * (f32)i / (f32)(count - 1)));
+                w->velocity.x = mtx[0][0] * dx + mtx[0][1] * dy + mtx[0][2] * dz;
+                w->velocity.y = mtx[1][0] * dx + mtx[1][1] * dy + mtx[1][2] * dz;
+                w->velocity.z = mtx[2][0] * dx + mtx[2][1] * dy + mtx[2][2] * dz;
+                break;
+            }
         }
         switch (type) {
         case 0:
