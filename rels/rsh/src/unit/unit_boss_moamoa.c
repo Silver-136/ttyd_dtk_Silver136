@@ -151,7 +151,7 @@ USER_FUNC(boss_moamoa_check_zenei_kouei) {
 
 /**
  * Script helper: forgets the Smorg main body's unit id in the swarm work area (wp->unitId = -1),
- * so the swarm draws itself falling away once the boss is dead.
+ * so ext_moamoa_main stops placing the swarm on the body and runs its swirl branch once the boss is dead.
  */
 USER_FUNC(evt_moamoa_mainUnitIdClear) {
     moamoa_mainUnitIdClear();
@@ -297,7 +297,7 @@ BattleUnitDefense moamoa2_defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Smorg (percent chance to take each status):
+ * Status vulnerability of the Smorg (percent multiplier on each status's chance; all 0):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
  * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -562,7 +562,7 @@ const char* MOAMOA_TAIJOU[] = {
 };
 
 static EVT_BEGIN(dead_event)
-    // Once the last attack has finished, Smorg's remaining tentacles (or its second-form arm) collapse
+    // Once the last attack has finished, Smorg's remaining tentacles (or, in the mouth form, its mouth) collapse
     // and vanish one by one.
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_UNIT_WORK_MOUTH_FORM, LW(0))
@@ -850,7 +850,10 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Attack event of the Smorg main body: runs the attack script chosen in LW(0). */
+/**
+ * Attack event of the Smorg main body: uses an item if the item-use check selects one; otherwise the body does
+ * nothing (its tentacles and mouth attack as their own units).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

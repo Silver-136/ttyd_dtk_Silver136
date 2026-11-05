@@ -488,7 +488,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns and runs back at the target, stepping with the run sounds.
+    // It faces the target and runs in place, stepping with the run sounds.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -639,7 +639,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns and runs back at the target, stepping with the run sounds.
+    // It faces the target and runs in place, stepping with the run sounds.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -712,7 +712,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     WAIT_FRAMES(20)
     GOTO(98)
 
-    // The grab lands: the damage is dealt, and unless Mario guarded well the Bandit tries to snatch an item.
+    // The grab lands: the damage is dealt, and unless the target guarded (Guard or Superguard) the Bandit tries to snatch an item.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_borodo_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))

@@ -351,7 +351,8 @@ static EVT_BEGIN(fmario_zoom)
 EVT_END()
 
 /**
- * Camera shot on the Goombella unit (x = 130): sets the battle camera to a fixed position
+ * Camera shot on the partner double's spot (x = 130; no script in this copy uses the four camera shots):
+ * sets the battle camera to a fixed position
  * and waits 37 frames for it to arrive.
  */
 static EVT_BEGIN(gparty_zoom)
@@ -903,8 +904,8 @@ static EVT_BEGIN(wait_event_fmario)
 EVT_END()
 
 /**
- * Script helper: clears POUCH_PARTY_FLAG_AWAY on Vivian's party data so she can rejoin
- * after the Doopliss fight; returns 1.
+ * Script helper: clears POUCH_PARTY_FLAG_AWAY on Vivian's party data so she is back in the party; returns 1.
+ * No script in this copy calls it (the jin copy's Doopliss fight does).
  */
 static USER_FUNC(vivian_comeback) {
     pouchGetPtr()->partyData[PARTNER_VIVIAN].flags &= ~POUCH_PARTY_FLAG_AWAY;

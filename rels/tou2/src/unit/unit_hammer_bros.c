@@ -747,7 +747,8 @@ EVT_END()
 
 /**
  * The Hammer Bro's all-target barrage (nagemakuri, "throwing spree", weapon_hammer_bros_nagemakuri_attack):
- * selects every enemy, stores their ids and parts in unit work 0 to 9 with hammer_bros_nagemakuri_set_target,
+ * picks five random targets (repeats allowed) with hammer_bros_nagemakuri_set_target and stores their ids and
+ * parts in unit work 0 to 9,
  * then throws four hammers, with a 250 ms pause before each subsequent 27-frame wind-up, each turning toward the next stored target
  * and resolved by nagemakuri_attack_event_sub, and waits 1.5 seconds.
  */

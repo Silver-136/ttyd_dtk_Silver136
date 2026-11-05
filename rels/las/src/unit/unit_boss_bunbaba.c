@@ -454,8 +454,8 @@ BattleWeapon weapon_bunbaba_mega_attack = {
 
 /**
  * Entry event of the Gloomtail fight: the camera moves in on Gloomtail while Mario
- * and the partner strike a startled pose, Gloomtail rises (GNB_F_3) and roars with a camera shake,
- * and Mario and the partner ready themselves before the battle starts.
+ * and the partner run in to their home positions, Gloomtail (held above the stage until then) is put back
+ * at his home position with GNB_F_3 and roars with a camera shake, and Gloomtail speaks before the battle starts.
  */
 static EVT_BEGIN(battle_entry_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -501,7 +501,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(6.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
 
-    // Mario flinches as Gloomtail rises up from the floor.
+    // Mario flinches as Gloomtail drops back from above the stage to his home position.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     WAIT_MS(33)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_F_3"))
@@ -516,7 +516,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_SURPRISED2_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
 
-        // Mario and his partner jump back in fright as Gloomtail roars and the camera shakes.
+        // Mario and his partner jump in place in fright as Gloomtail roars and the camera shakes.
         CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 25, MOVE_SOUND_FROM_TABLE)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -556,7 +556,7 @@ EVT_END()
 
 /**
  * Init event of Gloomtail: installs its wait, phase, attack, damage and confusion events and entry event,
- * and clears unit work 1 (the flag that its last line before death was spoken).
+ * and clears unit work 0 (attack stage) and 1 (the flag that its low-HP line at 20 % was spoken).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)

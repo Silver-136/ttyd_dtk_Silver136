@@ -162,7 +162,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * Status vulnerability of Bandit (the demos), as percentage multipliers for the attack's base status chance:
+ * Status vulnerability of Bandit (the early demos), as percentage multipliers for the attack's base status chance:
  * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 70, Stop 90, Dizzy 90, Confuse 90, Freeze 70, Tiny 90, Attack Down 90, Defense Down 90,
  * Allergic 90, Fright 95, Gale Force 80, Slow 90 and instant KO 95.
@@ -170,7 +170,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static StatusVulnerability regist = {70, 90, 90, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};
 #else
 /**
- * Status vulnerability of Bandit (the final versions), as percentage multipliers for the attack's base status chance:
+ * Status vulnerability of Bandit (JP and later), as percentage multipliers for the attack's base status chance:
  * 100 for Sleep, Poison, Confuse, Electric, Burn, Huge, Attack Up, Defense Up, Defense Down, Fast,
  * Dodgy and Invisible; otherwise Stop 90, Dizzy 70, Freeze 70, Tiny 95, Attack Down 95, Allergic 90,
  * Fright 95, Gale Force 80, Slow 90 and instant KO 95.
@@ -179,7 +179,7 @@ static StatusVulnerability regist = {100, 90, 70, 100, 100, 100, 100, 70, 100, 9
 #endif
 
 /**
- * Pose table of Bandit: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
+ * Pose table of Bandit: maps its battle pose types (stay, walk, hurt, talk and so on) to animation
  * names, 20 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -211,7 +211,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Pose table of Bandit while it holds a stolen item: maps its battle pose types (stay, walk, hurt, dead,
+ * Pose table of Bandit while it holds a stolen item: maps its battle pose types (stay, walk, hurt,
  * talk and so on) to animation names, 18 entries such as N_1, Y_1, K_1, I_1.
  */
 static PoseTableEntry pose_table_item_have[] = {
@@ -434,7 +434,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CASE_END
     END_SWITCH
 
-    // On a miss it hops back twice, thrown off balance.
+    // On a miss it hops on past the target twice, thrown off balance.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -489,8 +489,8 @@ EVT_END()
 
 /**
  * The Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
- * on a hit where Mario's action command result (LW(7)) was 3 or less,
- * _steal_item takes an item from Mario's pouch (LW(8) = the item, LW(9) = its icon),
+ * on a hit the target did not Guard or Superguard (guard result LW(7) 3 or less),
+ * _steal_item takes up to 5 coins (always coins in this version; LW(8) = the item, LW(9) = its icon),
  * which flies out of the target while btl_msg_steal_item_lost is announced and sets the unit flag 0x40000000,
  * and the Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
  * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
@@ -595,7 +595,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CASE_END
     END_SWITCH
 
-    // On a miss it hops back twice, thrown off balance.
+    // On a miss it hops on past the target twice, thrown off balance.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -616,7 +616,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         CALL(_steal_item, UNIT_ID_SELF, LW(3), LW(8), LW(9), LW(7))
         IF_INT_NOT_EQUAL(LW(8), 0)
-            // If Mario's action command was poor enough, the Bandit snatches an item; it flies out of the target in an arc.
+            // If the target did not guard and something was taken (coins), its icon flies out of the target in an arc.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_SUCCESS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             BEGIN_INLINE_EVENT
                 WAIT_FRAMES(20)
@@ -677,7 +677,7 @@ EVT_END()
 
 /**
  * The Bandit runs away with the stolen item: it turns around (SFX_ENM_BORODO_WAIT1, pose R_3), hops,
- * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes 300 units off the stage at speed 9,
+ * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes off the stage to x=300 at speed 9,
  * then removes itself from the battle (KillUnit), taking the item with it.
  */
 static EVT_BEGIN(escape_event)
@@ -721,7 +721,7 @@ EVT_END()
  * Script helper for the Bandit's steal.
  * args[0] is the Bandit, args[1] the victim; args[2]-args[4] receive the item id, its icon and the amount taken.
  * This earlier version always takes coins (up to 5, because its chance test is 100%),
- * so the item and badge branch below it is never reached. Prints debug messages in the JP release.
+ * so the item and badge branch below it is never reached. Prints debug messages in JP and later (only in that unreached branch).
  */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;

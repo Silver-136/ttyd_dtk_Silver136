@@ -996,7 +996,7 @@ static EVT_BEGIN(hit_check_event)
     RETURN
 EVT_END()
 
-/** Hit check event for group 2: runs hit_check_event_sub whenever the group is about to hit someone. */
+/** Hit check of group 2's shaking attack: one last hit (LW(15) = 1) on the current target through hit_check_event_sub. */
 EVT_BEGIN(hit_check_event2)
     SET_VALUE(LW(15), 1)
     CALL_CHILD(PTR(hit_check_event_sub))

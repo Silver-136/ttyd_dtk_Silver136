@@ -516,9 +516,9 @@ BattleWeapon weapon_zonbaba_recover = {
 
 /**
  * Entrance sequence of the Bonetail fight on floor 100:
- * the camera locks, Mario and his partner are placed off the left edge of the stage
- * and Bonetail is lifted out of view; Mario and the partner walk in,
- * then Bonetail drops into place ("dontyo" map animation, SFX_BOSS_GNB_APPEAR1) with a camera shake
+ * the camera locks, the "dontyo" map animation is replayed, Mario and his partner are placed off the left
+ * edge of the stage and Bonetail is lifted out of view; Mario and the partner run in,
+ * then Bonetail drops into place (SFX_BOSS_GNB_APPEAR1) with a camera shake
  * and both are startled.
  * Bonetail speaks tik_boss_12 and the partner answers with tik_boss_13 before the camera returns to normal.
  */
@@ -558,7 +558,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_MARIO, LW(6), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_PARTNER, LW(7), LW(4), LW(5))
 
-    // Mario and his partner walk in from the left and stop, looking up.
+    // Mario and his partner run in from the left and stop, looking up.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_PARTNER, FLOAT(6.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_PARTNER, LW(3), LW(4), LW(5), 0, MOVE_SOUND_FROM_TABLE, 0)
@@ -577,7 +577,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     WAIT_FRAMES(10)
 
-    // It lands with a crash and a camera shake; Mario and his partner jump back, startled.
+    // It lands with a crash and a camera shake; Mario and his partner jump in place, startled.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(5)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_O"))
@@ -652,7 +652,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Hit reaction of Bonetail: plays the head-hit pose (GNB_D_2) when the damaged part is part 1,
+ * Hit reaction of Bonetail: plays pose GNB_D_2 when the damaged part is part 1,
  * otherwise GNB_D_1. A miss (zero damage) plays a miss sound at the hit spot. Lasts one second.
  */
 EVT_BEGIN(zonbaba_damage_sub_event)
@@ -672,7 +672,7 @@ EVT_BEGIN(zonbaba_damage_sub_event)
 EVT_END()
 
 /**
- * Defeat script of Bonetail: it collapses onto its side (GNB_X_1),
+ * Defeat script of Bonetail: it takes its dizzy pose (GNB_X_1),
  * the camera pulls back and Bonetail says its last words (tik_boss_16).
  * It then topples over (GNB_D_3, GNB_H_1 to H_3) with a camera shake and the fall sounds,
  * the experience is paid out, and Bonetail is removed from the battle.

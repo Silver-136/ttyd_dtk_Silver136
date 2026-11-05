@@ -184,8 +184,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Data table of Beldam: event scripts and values the battle looks up by tag (damage reactions, dodge, first
- * strike and so on).
+ * Data table of Beldam: only her defeat handler (dead_event), looked up by the dead-event tag.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -734,9 +733,10 @@ EVT_BEGIN(majo_unison_phase_event)
 EVT_END()
 
 /**
- * Phase event of the Sirens' unison move: after the player phase it lets the Sirens' shared phase event run,
- * and when the ranking of their HP (unit work 4 and 5) has changed it sinks into her shadow,
- * comes up in the spot matching her new rank and lets the others know.
+ * Unison-phase script of Beldam, which nothing installs (init_event sets only phase_event): after the player
+ * phase it runs the Sirens' shared ranking script, and when her new rank (unit work 5) differs from her current
+ * place (unit work 4) she sinks into her shadow, comes up in the spot matching her new rank and the turn order is
+ * re-sorted.
  */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
@@ -1307,7 +1307,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Event script: keeps Beldam's shadow position following her feet:
+ * Event script: keeps the shadow position of the unit that spawned it (Beldam's and Marilyn's init scripts start it) following her feet:
  * stores her floor position in unit work[0..2] every frame while work[3] is 0, until the unit is gone.
  */
 EVT_BEGIN(majo3_shadow_tail_event)
@@ -1335,8 +1335,8 @@ EVT_BEGIN(majo3_shadow_tail_event)
 EVT_END()
 
 /**
- * Script helper: sorts three (HP, unit id) pairs held in LW(0..2) (HP) and LW(3..5) (id) by descending HP,
- * leaving the ordered unit ids in LW(0..2).
+ * Script helper: sorts three (HP, Siren tag) pairs held in LW(0..2) (HP) and LW(3..5) (tag: 1 the third Siren,
+ * 2 Marilyn, 3 Beldam, as majo_unison_phase_event sets them) by descending HP, leaving the ordered tags in LW(0..2).
  */
 static USER_FUNC(majo3_sort) {
     MajoSortEntry tbl[3];

@@ -125,8 +125,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**
- * Pose table of the test enemy hatty: maps its battle pose types (stay, walk, hurt, dead, talk and so on)
- * to animation names, 4 entries such as PTK_S_1, PTK_D_1.
+ * Pose table of the test enemy hatty: maps four battle pose types (28, 31, 39 and POSE_TYPE_ACTION)
+ * to animation names (PTK_S_1, or PTK_D_1 for type 39).
  */
 static PoseTableEntry pose_table[] = {
     {28, "PTK_S_1"},
@@ -262,7 +262,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Spawn setup for a unit that the the test enemy hatty script adds to the battle mid-fight:
+ * Spawn setup for a unit that the test enemy hatty script adds to the battle mid-fight:
  * unit kind unit_kohatty, parked far off screen until its script moves it.
  */
 static BattleUnitSetup entry_kohatty = {
@@ -277,7 +277,7 @@ static BattleUnitSetup entry_kohatty = {
 };
 
 /**
- * Spawns a kohatty (entry_kohatty) at the unit's position (LW(7), 10, LW(2)) with no fall acceleration,
+ * Spawns a kohatty (entry_kohatty) at (LW(7), 10, LW(2)): the hatty's x and the chosen spot's z, with no fall acceleration,
  * makes it hop to (LW(0), 10, LW(2)) and sets that as its home position. LW(3) receives the new unit's id.
  */
 static EVT_BEGIN(kohatty_spawn_event)

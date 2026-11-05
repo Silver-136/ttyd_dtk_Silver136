@@ -217,8 +217,8 @@ static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_AT
 
 /**
  * Status vulnerability of the R. Parabuzzy in its winged state (the demos),
- * as the percent chance a status takes hold: immune to Burn;
- * always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * as percent multipliers on each status's chance: immune to Burn;
+ * 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 75, Attack Down 75, Defense Down 75,
  * Allergic 75, Fright 60, Gale Force 65, Slow 75 and instant KO 95.
  */
@@ -227,8 +227,8 @@ static StatusVulnerability regist_pata = {60, 90, 75, 100, 75, 100, 0, 75, 100, 
 
 /**
  * Status vulnerability of the R. Parabuzzy in its winged state (the final versions),
- * as the percent chance a status takes hold: immune to Burn;
- * always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * as percent multipliers on each status's chance: immune to Burn;
+ * 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 75, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 75, Fright 60, Gale Force 30, Slow 75 and instant KO 95.
  */
@@ -349,8 +349,8 @@ EVT_END()
 
 /**
  * Called when the winged form is hit down: clears its flying state and winged part attribute,
- * switches to the ground tables and parts, changes its kind to the wingless version (kind 73) and lands,
- * then runs init_event; if it took more than one point of damage it also flips over (dmg_turn_event).
+ * switches to the ground tables and parts, changes its kind to the plain Spike Top (kind 73) and lands,
+ * then runs init_event; if it has taken more than one hit this turn (hit count) it also flips over (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -727,8 +727,8 @@ static BattleUnitDefenseAttr defence_attr_turn = {{DEFENSE_ATTR_NONE, DEFENSE_AT
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of the R. Parabuzzy (the demos), as the percent chance a status takes hold:
- * immune to Burn; always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of the R. Parabuzzy (the demos), as percent multipliers on each status's chance:
+ * immune to Burn; 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 75, Attack Down 75, Defense Down 75,
  * Allergic 75, Fright 60, Gale Force 65, Slow 75 and instant KO 95.
  */
@@ -737,8 +737,8 @@ static StatusVulnerability regist = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 1
 
 /**
  * Status vulnerability of the R. Parabuzzy (the final versions),
- * as the percent chance a status takes hold: immune to Burn;
- * always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * as percent multipliers on each status's chance: immune to Burn;
+ * 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 75, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 75, Fright 60, Gale Force 30, Slow 75 and instant KO 95.
  */
@@ -1178,7 +1178,7 @@ EVT_END()
  * Attack script on the ceiling for the spiked unit:
  * picks a target, slides along the ceiling over it,
  * drops with the fall and landing sounds and hits it (guard check and damage), waits a second,
- * then jumps back down, restores the ground form (init_event2) and walks home.
+ * then switches to the ground tables, hops twice, walks home and restores the ground form (init_event2).
  */
 // Hanging from the ceiling, the R. Parabuzzy checks, unless it is making a First Strike, whether to use a held item.
 static EVT_BEGIN(attack_event_ceil)
@@ -1280,7 +1280,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
 
-    // It sways while getting back on its feet, then goes back to its ground form.
+    // It goes back to its ground form.
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, 0)

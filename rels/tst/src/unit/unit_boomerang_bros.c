@@ -127,8 +127,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Boomerang Bro (the demos), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Boomerang Bro (the early demos), as percent of each status's normal chance:
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 80, Dizzy 80, Confuse 80, Freeze 80, Tiny 80, Attack Down 80, Defense Down 80,
  * Allergic 80, Fright 40, Gale Force 60, Slow 80 and instant KO 95.
  */
@@ -136,8 +136,8 @@ static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80,
 #else
 
 /**
- * Status vulnerability of Boomerang Bro (the final versions), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Boomerang Bro (the final versions), as percent of each status's normal chance:
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 80, Stop 80, Dizzy 70, Confuse 80, Freeze 70, Tiny 80, Attack Down 80, Defense Down 95,
  * Allergic 80, Fright 70, Gale Force 60, Slow 80 and instant KO 95.
  */
@@ -284,7 +284,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Chooses the Boomerang Bro's attack: in a battle with battle flag 2 set it always makes the normal throw;
+ * Chooses the Boomerang Bro's attack: on a first strike (BATTLE_FLAG_FIRST_ATTACK) it always makes the normal throw;
  * otherwise it runs a selected enemy-item script if one is returned, ending the turn.
  * If no item script is returned, with 3 HP or less it has a 30% chance of the double-throw renzoku_attack_event,
  * else the normal boomerang throw (normal_attack_event). Clears unit work 7 (action-command defence result already taken) first.
@@ -324,7 +324,7 @@ EVT_END()
  * Resolves a boomerang hit on the target in LW(3) and LW(4) with the weapon in LW(6):
  * runs the pre-damage check, and a hit applies the damage;
  * only the first resolved hit of a throw is allowed to apply the action-command defence (unit work 7 marks that
- * it has been used), with LW(7) = 1 for the last target of the pass.
+ * it has been used), with LW(7) = 1 for a last hit (a return-pass hit of the last boomerang).
  */
 static EVT_BEGIN(damage_check_sub)
     SET_VALUE(LW(0), 0)
@@ -369,7 +369,7 @@ static EVT_BEGIN(damage_check_sub)
     RETURN
 EVT_END()
 
-/** Boomerang hit on a target that is not the last one of the pass: resolves it with damage_check_sub (LW(7) = 0). */
+/** Boomerang hit that is not a last hit: resolves it with damage_check_sub (LW(7) = 0). */
 static EVT_BEGIN(damage_check_no_last)
     SET_VALUE(LW(7), 0)
     CALL_CHILD(damage_check_sub)
@@ -377,7 +377,7 @@ static EVT_BEGIN(damage_check_no_last)
 EVT_END()
 
 /**
- * Boomerang hit on the last target of the pass:
+ * Last hit on a target (return pass of the last boomerang, LW(14) = 1):
  * if the outbound pass already hit (LW(0) = 1), it applies CheckDamage directly,
  * taking ResultACDefence first only if unit work 7 is clear. If the outbound pass did not hit,
  * it resolves the hit with damage_check_sub (LW(7) = 1).

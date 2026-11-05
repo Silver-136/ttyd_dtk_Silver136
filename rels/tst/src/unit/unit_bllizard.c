@@ -309,7 +309,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Ice Puff's barrier blast: it drops the barrier, backs away,
+ * The Ice Puff's barrier blast: it drops the barrier, moves to x -40 at height 15,
  * then bursts a cloud of freezing air over all opposing targets (SFX_ENM_BLIZ_KUMO_CHARGE_ATTACK1, kumokumo
  * effect) and checks the damage for each in turn (usually with its freeze effect), then moves back home.
  */
@@ -330,7 +330,7 @@ static EVT_BEGIN(bllizard_event)
         GOTO(99)
     END_IF
 
-    // The camera pulls back and the blast is declared on all targets; the guard window opens.
+    // The camera pulls back and the blast is declared on all targets; it waits for any guard movement to end.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -340,7 +340,7 @@ static EVT_BEGIN(bllizard_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
 
-    // It drops its barrier and drifts back from its spot to gather the blast.
+    // It drops its barrier and moves to x -40, height 15, facing the first target.
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterIcy)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
@@ -456,8 +456,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Ice Puff: the attacker being hurt by its barrier (counter_event) and the First
- * Strike reaction (dmg_first_attack_pos).
+ * Event table of the Ice Puff: the event run when icy contact is avoided (counter_event, empty) and the
+ * First Strike reaction (dmg_first_attack_pos).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ICE_EVENT, counter_event},
@@ -517,8 +517,9 @@ static EVT_BEGIN(dmg_first_attack_pos)
 EVT_END()
 
 /**
- * Damage event of the Ice Puff: if the hit carries damage code 512 (and not 2048) it breaks the ice barrier
- * (counter attribute and barrier effect removed), then runs the default damage script.
+ * Damage event of the Ice Puff: if the hit leaves it at 0 HP (DAMAGE_RESULT_ZERO_HP, 0x200) and no revival
+ * follows (DAMAGE_RESULT_REVIVAL, 0x800, not set) it removes the ice barrier (counter attribute and barrier
+ * effect), then runs the default damage script.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -612,7 +613,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared; it waits for any guard movement to end.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)

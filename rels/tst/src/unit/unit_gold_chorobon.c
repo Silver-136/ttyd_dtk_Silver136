@@ -133,9 +133,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of Gold Fuzzy, as the percent chance a status takes hold:
+ * Status vulnerability of Gold Fuzzy, as a percent multiplier on each move's status chance:
  * immune to Sleep, Stop, Dizzy, Confuse, Freeze, Tiny, Attack Down, Defense Down, Allergic, Fright,
- * Gale Force, Slow and instant KO; always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up,
+ * Gale Force, Slow and instant KO; the normal chance (100) for Poison, Electric, Burn, Huge, Attack Up, Defense Up,
  * Fast, Dodgy and Invisible.
  */
 static StatusVulnerability regist = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
@@ -291,7 +291,7 @@ EVT_END()
 
 /**
  * Spawn setup for a unit that the Gold Fuzzy script adds to the battle mid-fight:
- * unit kind unit_chorobon_gundan, parked far off screen until its script moves it.
+ * unit kind unit_chorobon_gundan on the enemy side at (75, 0, 0).
  */
 BattleUnitSetup entry_chorogun = {
     &unit_chorobon_gundan, // unitKindParams
@@ -332,11 +332,12 @@ EVT_BEGIN(call_chorogun_event)
 EVT_END()
 
 /**
- * Run by the Fuzzy Horde's damage event after a lethal hit, as the Horde: waits 2 seconds;
+ * Run by the Fuzzy Horde's damage event, as the Horde, on the final hit of an attack once 500 or fewer Fuzzies
+ * are left: waits 2 seconds;
  * from JP on it stops if the Horde is gone or the Gold Fuzzy's unit work 1 is already set, and otherwise sets it
  * and pays out the Horde's coins and EXP (chorogun_dead_reward).
  * Then every swarm Fuzzy runs away (chorogun_escape_all) and a second later the Horde unit (the Gold Fuzzy's
- * unit work 2) is removed; the demos only set the flag at the end.
+ * unit work 2) is removed; the early demos only set the flag at the end.
  */
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)
@@ -489,7 +490,7 @@ EVT_END()
 /**
  * The Gold Fuzzy's attack (weapon_gold_chorobon_attack): it picks a target, hops up to it and jumps on it;
  * a miss makes it bounce off, a hit shakes the camera and deals the damage with the guard-timing check,
- * after which it bounces twice on the target and hops home with return_event.
+ * after which it bounces back off the target, hops twice in place and hops home with return_event.
  */
 static EVT_BEGIN(attack_event)
 
@@ -565,7 +566,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // On a miss it bounces off the target and lands in front of it.
+    // On a miss it bounces off the target and lands behind it (30 units against the way the target faces).
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -599,7 +600,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 40)
 
-    // It bounces twice on the target.
+    // It bounces back off the target to the ground in two shorter jumps, then hops twice in place (CBN_A_1).
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, -1)

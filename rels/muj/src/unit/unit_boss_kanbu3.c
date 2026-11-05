@@ -436,7 +436,7 @@ static EVT_BEGIN(damage_event)
                 GOTO(10)
             END_IF
 
-            // He waves his arms (C_2) while the group runs off.
+            // He waves his arms (C_2), then the group runs off.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
             WAIT_FRAMES(16)
@@ -532,7 +532,7 @@ static EVT_BEGIN(dead_event)
         CALL(check_exist_group, LW(0))
         IF_INT_NOT_EQUAL(LW(0), -1)
 
-            // Group 1 is called off (group 2 flees as the ceiling rises).
+            // Group 1 is called off (group 2, in the next case, flees as the ceiling rises).
             CALL(zakogun_escape1)
             CALL(btlevtcmd_KillUnit, LW(0), 0)
         END_IF
@@ -555,7 +555,7 @@ static EVT_BEGIN(dead_event)
         CASE_END
     END_SWITCH
 
-    // Lord Crump drops his guard and runs off to the right.
+    // Lord Crump runs off to the right.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -658,7 +658,8 @@ EVT_END()
 
 /**
  * Lord Crump calls his horde (call_event): if no horde unit is on the stage yet,
- * he plays the call-back sound and pose C_1 and brings in horde group 1, 2 or 3 according to unit work 0.
+ * he plays the call sound and pose (C_1; C_2 when calling group 2) and brings in horde group 1, 2 or 3 according to
+ * unit work 0; LW(0) returns 1 when he called, 0 when a group was already there.
  */
 EVT_BEGIN(call_event)
 
@@ -689,7 +690,7 @@ EVT_BEGIN(call_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 
-        // He beckons (C_1, C_2) and the X-Nauts answer his call.
+        // He beckons (C_1) and the X-Nauts answer his call.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
         WAIT_FRAMES(16)
@@ -728,7 +729,7 @@ EVT_BEGIN(call_event)
             SUBTRACT(LW(0), 80)
             SUBTRACT(LW(2), 20)
 
-            // Group 1, then group 2 (with the ceiling coming down), then group 3 (the crowd of 500) arrives.
+            // Group 1 arrives (group 2 comes with the ceiling coming down, group 3 is the crowd of 500).
             CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group1), 0)
             CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
@@ -1107,7 +1108,7 @@ USER_FUNC(check_exist_group) {
 
 /**
  * Script helper: writes the battle unit id of the unit of kind 0x77 to args[0],
- * or -1 if none exists (the name suggests a researcher unit).
+ * or -1 if none exists (UNIT_X_NAUT_PHD, the X-Naut PhD).
  */
 USER_FUNC(check_exist_kenkyu) {
     s32 i;

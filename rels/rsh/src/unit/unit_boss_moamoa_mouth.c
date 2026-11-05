@@ -125,7 +125,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Smorg Miasma (mouth) (percent chance to take each status):
+ * Status vulnerability of the Smorg Miasma (mouth) (percent multiplier on each status's chance; all 0):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
  * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -335,7 +335,10 @@ static EVT_BEGIN(evt_attack_other_arm)
     RETURN
 EVT_END()
 
-/** Animation names (A_2_1, A_2_2) the Smorg mouth plays, in order, for its attack. */
+/**
+ * Animation names the Smorg mouth plays for its attack, in three NULL-ended sections:
+ * A_2_1 and A_2_2, then A_2_3, then A_2_4.
+ */
 const char* mouth_Attack_front[] = {
     "A_2_1",
     "A_2_2",
@@ -376,7 +379,7 @@ static EVT_BEGIN(evt_attack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_moamoa_attack))
 
-    // The main body freezes its idle animation while the mouth strikes.
+    // The main body's limb-hit signal (unit work 0) is cleared and the body is set to its S_1_1 pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(6))
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
@@ -459,7 +462,7 @@ static EVT_BEGIN(evt_attack)
         ADD(LW(10), 1)
     END_LOOP
 
-    // The main body resumes idling and the mouth finishes its animation and returns.
+    // The main body's limb-hit signal is set again, the camera returns and the mouth finishes its animation.
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LW(15), 0)

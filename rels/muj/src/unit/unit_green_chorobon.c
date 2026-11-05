@@ -375,7 +375,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Green Fuzzy: counter_damage_event (36).
+ * Event table of the Green Fuzzy: counter_damage_event for the counter tags 25 to 36, nothing special
+ * (btldefaultevt_Dummy) for the first-strike position.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
@@ -577,8 +578,8 @@ static EVT_BEGIN(drain_attack_event)
         CASE_END
     END_SWITCH
 
-    // The leap misses or is blocked: it bounces off in two hops, lands in front of the target and waits a
-    // moment.
+    // The leap misses or is blocked: it bounces off in two hops, lands behind the target (30 units against the
+    // way the target faces) and waits a moment.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -595,7 +596,7 @@ static EVT_BEGIN(drain_attack_event)
     WAIT_MS(1000)
     GOTO(98)
 
-    // The leap lands. First it checks whether the target is protected by a shock counter.
+    // The leap lands. First it checks whether the target has a Hold Fast or electrified counter.
     LABEL(91)
     SET_VALUE(LF(0), 0)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), 256, LW(5))
@@ -606,7 +607,7 @@ static EVT_BEGIN(drain_attack_event)
         SET_VALUE(LF(0), 1)
     END_IF
 
-    // If the target shocks it, the Green Fuzzy takes the counter damage instead and the attack ends there.
+    // If so, the hit is resolved with the counter weapon (no damage of its own) and the attack ends there.
     IF_INT_EQUAL(LF(0), 1)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))

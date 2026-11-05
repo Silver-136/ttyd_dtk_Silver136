@@ -739,7 +739,7 @@ static EVT_BEGIN(fire_attack_event)
         CALL(eff_fire, UNIT_ID_SELF)
     END_SIBLING_EVENT
 
-    // The fireball arcs over to the target in two lobs.
+    // The fireball moves in three dives: to 70% of the way (60% in depth), back to 40%, then onto the target.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 0)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))

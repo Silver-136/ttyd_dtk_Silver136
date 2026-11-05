@@ -181,7 +181,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
-/** Pose table of Cortez Sabre once it is broken off: only the lying pose KRT_Z_1. */
+/**
+ * Pose table with only the lying pose KRT_Z_1; nothing references this copy (cortez_weapon_dead_event, shared from
+ * unit_boss_cortez_sword.c, sets the sword file's pose_table_break).
+ */
 static PoseTableEntry pose_table_break[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
@@ -192,8 +195,8 @@ static PoseTableEntry pose_table_break[] = {
 /**
  * Event table of Cortez Sabre: cortez_damage_sub_event, cortez_weapon_dead_event,
  * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
- * cortez_weapon_counter_damage_event (36),
- * avoid_thorn_event (38).
+ * cortez_weapon_counter_damage_event (36 and the other counter-damage tags),
+ * avoid_thorn_event (37 to 39).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},

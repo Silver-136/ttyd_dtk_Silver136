@@ -408,7 +408,7 @@ EVT_END()
 /**
  * Marilyn's unison-phase script, which nothing installs (init_event sets only phase_event):
  * after the player's phase it
- * runs the shared majo_unison_phase_event, and if her slot in the HP order (unit work 5) changed,
+ * runs the shared majo_unison_phase_event, and if her new place in the HP order (unit work 5) differs from her current one (unit work 4),
  * sinks into her shadow and re-emerges at the new home spot (x 55 / 105 / 155), then re-sorts the turn order.
  */
 static EVT_BEGIN(unison_phase_event)
@@ -525,7 +525,7 @@ EVT_END()
  * Marilyn's shadow-slip attack (weapon in LW(9)):
  * she sinks into her shadow, rises 30 units in front of a randomly chosen target,
  * claps her hands at it (one hit, guardable), then sinks again and returns home.
- * The US and PAL releases place her 5 units further forward in depth.
+ * US and later place her 5 units further forward in depth.
  */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

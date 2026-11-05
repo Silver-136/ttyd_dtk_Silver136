@@ -358,8 +358,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Data table of Doopliss in his own form: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss in his own form: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -693,7 +693,7 @@ EVT_END()
 /**
  * Dead event of Doopliss in any form: he returns to his own look,
  * the shared Siren states determine whether the camera moves to him and he speaks btl_majo3_13 (both states are 2),
- * btl_majo3_10 (GW(11) is 0 and GW(12) is 2), or waits for a state change and skips his line.
+ * waits for a state change and skips his line (GW(11) or GW(12) is 1), or otherwise speaks btl_majo3_10.
  * He then sets GW(13) to 2 and the slow death sequence runs.
  */
 static EVT_BEGIN(dead_event)
@@ -778,7 +778,7 @@ static EVT_BEGIN(dead_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL_CHILD(btl_vivian_zoom)
 
-            // If a Siren is already down, he cries out in despair.
+            // If both Sirens are already down, he cries out in despair.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_13"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             GOTO(90)
@@ -898,7 +898,7 @@ EVT_END()
 
 /**
  * Attack of Doopliss in his own form (ogg_attack_event):
- * he walks up to one target and hits it, which can dodge
+ * he steps forward, dives at one target and lands on it, which can dodge
  * or takes the damage with the action command defence check, then walks back.
  */
 static EVT_BEGIN(ogg_attack_event)
@@ -925,7 +925,7 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
 
-    // Doopliss walks up to the target.
+    // Doopliss steps 20 units forward.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
@@ -1006,7 +1006,7 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
 
-    // After the blow he staggers back.
+    // Having missed, he falls (D_2, O_1) and gets back up.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_2"))
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_1"))
@@ -1132,8 +1132,8 @@ static PoseTableEntry pose_table_fmario_stay[] = {
 };
 
 /**
- * Data table of Doopliss as Mario: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Mario: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 static BattleDataEntry data_table_fmario[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
@@ -1373,7 +1373,10 @@ static EVT_BEGIN(init_event_fmario)
     RETURN
 EVT_END()
 
-/** Dead event of Doopliss as Mario: he flies off (EM_K_1, EM_D_2) and the common dead_event runs. */
+/**
+ * Dead event of Doopliss as Mario: he walks home if displaced, plays EM_K_1 and then EM_D_2, and the common
+ * dead_event runs.
+ */
 static EVT_BEGIN(dead_event_fmario)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))
@@ -1861,7 +1864,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_A_1B"))
     WAIT_MS(500)
 
-    // He spins and swings it round at the target.
+    // He swings it down on the target (the same motion as the normal hammer; there is no spin).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_A_1C"))
     WAIT_MS(50)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_HAMMER_DON2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2009,8 +2012,8 @@ static StatusVulnerability regist_christine = {
 #endif
 
 /**
- * Data table of Doopliss as Goombella: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Goombella: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 static BattleDataEntry data_table_christine[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_christine},
@@ -2461,8 +2464,8 @@ static StatusVulnerability regist_nokotarou = {
 #endif
 
 /**
- * Data table of Doopliss as Koops: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Koops: event scripts the battle looks up by tag
+ * (the defeat event and the flipped-over reaction dmg_turn_event).
  */
 static BattleDataEntry data_table_nokotarou[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_nokotarou},
@@ -2491,8 +2494,8 @@ static BattleUnitKindPart parts_nokotarou[] = {
 };
 
 /**
- * Event run when a Doopliss partner form is knocked down:
- * sets status flag 1 and plays the knocked down pose (PNK_D_1) on the part in LW(11).
+ * Event run when Doopliss as Koops is flipped over: switches to the flipped defence and pose tables,
+ * sets the flipped status flag with a flip count of 2 and plays the knocked down pose (PNK_D_1) on part 1.
  */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -2511,8 +2514,8 @@ static EVT_BEGIN(dmg_turn_event)
 EVT_END()
 
 /**
- * Event run when a knocked-down partner form gets up again:
- * clears status flag 1 and returns to the stand pose (PNK_S_1).
+ * Event run on a flipped Koops form's turn: lowers the flip count; when it reaches 0 he gets up again
+ * (normal defence and pose tables, flipped flag cleared, stand pose PNK_S_1).
  */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -2697,8 +2700,9 @@ static EVT_BEGIN(_koura_rotate_stop)
 EVT_END()
 
 /**
- * Attack event of Doopliss as Koops: can use an item;
- * otherwise it picks the shell attack or the shell toss (shubibin) of Koops.
+ * Attack event of Doopliss as Koops: while flipped over he only tries to get up (wakeup_event);
+ * otherwise it draws the shell attack or the shell toss (shubibin) of Koops, 50/50 (80/20 in the early demos);
+ * each of those can use an item instead.
  */
 static EVT_BEGIN(attack_event_nokotarou)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
@@ -2809,7 +2813,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
 
-        // After the miss he bounces back with a hop.
+        // After the miss he runs back to his place.
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         GOTO(99)
     END_IF
@@ -2941,7 +2945,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     LABEL(80)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
 
-    // Guess: after passing the targets, the shell flies off toward the left edge of the stage.
+    // After passing the targets, the shell moves on to x -400, off the left edge of the stage.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -400, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2949,7 +2953,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     MULTIPLY(LW(0), -1)
 
-    // The shell comes back to him.
+    // The shell reappears at the mirrored x on the other side (400) and moves back to his place.
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
@@ -3053,8 +3057,8 @@ static StatusVulnerability regist_clauda = {
 #endif
 
 /**
- * Data table of Doopliss as Flurrie: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Flurrie: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 static BattleDataEntry data_table_clauda[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_clauda},
@@ -3200,7 +3204,7 @@ static EVT_BEGIN(attack_event_clauda)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 
-        // She slams down on it.
+        // On a miss she finishes the jump and lands in her fall pose (PWD_D_3).
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_2"))
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
@@ -3354,8 +3358,8 @@ static StatusVulnerability regist_yoshi = {
 #endif
 
 /**
- * Data table of Doopliss as Yoshi: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Yoshi: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 static BattleDataEntry data_table_yoshi[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_yoshi},
@@ -3695,8 +3699,8 @@ StatusVulnerability regist_vivian = {
 #endif
 
 /**
- * Data table of Doopliss as Vivian: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Vivian: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 BattleDataEntry data_table_vivian[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_vivian},
@@ -3846,7 +3850,8 @@ EVT_END()
 
 /**
  * Attack event of Doopliss as Vivian: uses an enemy item if one is queued;
- * otherwise plays Vivian's attack animations (PTR_A2_2 with its attack sound) and returns to the home position.
+ * otherwise sinks into the shadow, rises in front of one target and strikes it (weapon_vivian_kagenuke_attack,
+ * PTR_A2_2 with its attack sound) with the dodge or defence check, then returns home through the shadow.
  */
 EVT_BEGIN(attack_event_vivian)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -3972,8 +3977,8 @@ StatusVulnerability regist_sanders = {
 #endif
 
 /**
- * Data table of Doopliss as Bobbery: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Bobbery: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 BattleDataEntry data_table_sanders[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_sanders},
@@ -4242,8 +4247,8 @@ StatusVulnerability regist_chuchurina = {
 #endif
 
 /**
- * Data table of Doopliss as Ms. Mowz: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * Data table of Doopliss as Ms. Mowz: event scripts the battle looks up by tag
+ * (only the defeat event).
  */
 BattleDataEntry data_table_chuchurina[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_chuchurina},
@@ -4806,8 +4811,8 @@ USER_FUNC(mario_shadow_guard_check) {
 #endif
 
 /**
- * Script helper: clears flag 2 on Vivian's partner data so she can rejoin Mario's party
- * after the fight (the pouch's partyData[6] flags).
+ * Script helper: clears flag 2 on Vivian's partner data (the pouch's partyData[6] flags) and returns 1.
+ * Nothing in this file calls it.
  */
 static USER_FUNC(vivian_comeback) {
     pouchGetPtr()->partyData[6].flags &= ~2;

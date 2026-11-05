@@ -178,7 +178,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Rawk Hawk (percent chance to take each status):
+ * Status vulnerability of the Rawk Hawk (percent multiplier on each status's inflict chance):
  * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -729,7 +729,7 @@ EVT_END()
 
 /**
  * Damage event of Rawk Hawk: default damage reaction;
- * if he is hanging from the ceiling and a hit of damage code 23 to 27 did at least 1 damage,
+ * if he is hanging from the ceiling and either a hit of damage code 23 to 27 did at least 1 damage
  * or he is Tiny (STATUS_TINY), he is knocked down to the floor with to_floor (the wait event is stopped and
  * restarted around it).
  */
@@ -836,8 +836,8 @@ static EVT_BEGIN(phase_event)
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 1)
 
-            // In the first fight he stops, the camera pushes in and he taunts Mario with a flex
-            // and a blurred close-up.
+            // While GSWF_TOU_RAWK_HAWK_67_HP_TALK is clear (the rematch entry clears it) he stops, the camera
+            // pushes in and he flexes (S_2) in a blurred close-up; the two taunt lines play only in the first fight.
             IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_67_HP_TALK, 0)
                 SET_VALUE(GSWF_TOU_RAWK_HAWK_67_HP_TALK, 1)
                 CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
@@ -899,7 +899,7 @@ static EVT_BEGIN(phase_event)
                 END_IF
 
                 // He crouches and leaps up, landing with a shake of the camera,
-                // then grabs the iron frame above the ring and lowers it.
+                // then the iron frame above the ring is lowered (down_ceil).
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3B"))
                 WAIT_MS(200)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3C"))
@@ -1601,7 +1601,7 @@ USER_FUNC(check_ceil) {
 
 /**
  * Script helper (JP and later) for roof_shake_attack_event:
- * spawns a falling stage object with effFallEntry (args[1] type, args[2..4] position, args[5] width,
+ * spawns a falling-object effect with effFallEntry (args[1] type, args[2..4] position, args[5] width,
  * args[6] drop height, args[7] direction, args[8] count, args[9] duration) and stores the effect in args[0].
  */
 USER_FUNC(eff_fall_entry) {

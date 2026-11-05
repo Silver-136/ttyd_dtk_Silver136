@@ -177,8 +177,8 @@ static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of Fire Bro (the demos), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Fire Bro (the early demos), as a percent multiplier on each move's status chance:
+ * the normal chance (100) for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 80, Dizzy 80, Confuse 80, Freeze 80, Tiny 80, Attack Down 80, Defense Down 80,
  * Allergic 80, Fright 40, Gale Force 60, Slow 80 and instant KO 95.
  */
@@ -195,8 +195,8 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of Fire Bro (the final versions), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Fire Bro (JP and later), as a percent multiplier on each move's status chance:
+ * the normal chance (100) for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 80, Stop 80, Dizzy 70, Confuse 80, Freeze 70, Tiny 80, Attack Down 80, Defense Down 95,
  * Allergic 80, Fright 70, Gale Force 60, Slow 80 and instant KO 95.
  */
@@ -395,7 +395,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack script of the Fire Bro. When the battle flag 2 is set it just throws one fireball.
+ * Attack script of the Fire Bro. On a first strike (BATTLE_FLAG_FIRST_ATTACK) it just throws one fireball.
  * Otherwise, after the item-use check: at 3 HP or less it picks the double throw 30 percent of the time
  * and the all-target barrage (nagemakuri) otherwise;
  * with more HP it picks the single throw 70 percent and the double throw 30 percent.
@@ -701,7 +701,7 @@ EVT_BEGIN(fire_move_event)
     ELSE
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2))
 
-        // The bouncing carries on until the fireball leaves the stage.
+        // Or it bounces with jump speed 5 instead of 6, again at most five hops.
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 5, FLOAT(0.5996094f))
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
         CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(0), 0, LW(2), 0, -1)

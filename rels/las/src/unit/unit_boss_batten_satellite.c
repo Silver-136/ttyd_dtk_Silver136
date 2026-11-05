@@ -234,7 +234,8 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Data table of Grodus's satellite (Grodus X): event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * the battle looks up by tag: every counter and the Superguard counter run dmg_counter_event; the pre-dead tag
+ * runs dead_event.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, dmg_counter_event},
@@ -255,10 +256,11 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Event script: a satellite's reaction when it is hit:
- * flags the unit, plays the miss sound for damage code 43 (otherwise picks a pose type by the hit kind),
- * plays the damage pose type, runs the unit's data event 10 alongside
- * and turns the satellite to face the hit direction, and starts it falling with acceleration 1.
+ * Event script: a satellite's reaction to a counter (every counter tag and the Superguard tag point here):
+ * shows its HP, plays the miss sound and the top-spiky damage pose for damage code 43 (0x2B, top-spiky counter),
+ * the fire damage pose for codes 46, 49, 50 and 54, the plain damage pose otherwise, runs the unit's data event 10
+ * (damage pose) alongside, and with fall acceleration 1 is knocked 25 back and 25 up over 10 frames.
+ * Unless the hit knocked it out (without a revival), it then flies back home over 42 frames.
  */
 EVT_BEGIN(dmg_counter_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
@@ -346,8 +348,8 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Dead event of the Grodus satellite: does nothing here (an empty script);
- * the satellite is removed by Grodus's own dead event.
+ * Dead event of the Grodus satellite (pre-dead tag): does nothing (an empty script);
+ * when Grodus dies, his own dead event finishes off the satellites still out.
  */
 static EVT_BEGIN(dead_event)
     RETURN
@@ -388,7 +390,7 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
 
-    // Announce the attack; the camera swings to follow it.
+    // Announce the attack and pay its cost.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -544,7 +546,8 @@ static USER_FUNC(bts_wariai_enzan_0) {
  * Script helper: blends c = args[2] and d = args[3] with weight w = r1 * r2, returning a float in args[4].
  * args[5] and args[6] select interpolation modes, not elapsed frames; each interpolation uses step b - a
  * out of b, where a = args[0] - 1 and b = args[1]. Values at least 14 select a complemented interpolation.
- * The second such branch derives its mode from the adjusted first value minus 14, not the second value;
+ * The second such branch derives its mode from the first value (after its own adjustment, if any) minus 14,
+ * not the second value;
  * either branch returns c if its adjusted value is at least 14.
  */
 USER_FUNC(bts_wariai_enzan_1f_intpl_w) {

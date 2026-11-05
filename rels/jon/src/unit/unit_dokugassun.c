@@ -237,7 +237,7 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
  * Poison Puff's turn: after an item-use check,
  * if it has saved up toxins (counter attribute 0x200, poison status, on part 1) it breathes poison gas;
  * otherwise it picks between a normal attack and charging up the barrier at random (a 65 to 35 split, 70 to 30
- * in the demos).
+ * in the early demos).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -663,7 +663,7 @@ EVT_END()
 
 /**
  * Script helper: args[0] = unit.
- * Puffs three green vapour clouds (staggered start times 10, 20, 30) around the Poison Puff, scaled by its size.
+ * Puffs three green vapour clouds (lifetimes 10, 20, 30 frames) around the Poison Puff, scaled by its size.
  */
 static USER_FUNC(eff_poison_barrier) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));

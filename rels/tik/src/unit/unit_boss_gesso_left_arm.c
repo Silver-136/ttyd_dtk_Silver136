@@ -203,8 +203,8 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /**
- * Damage reaction of the Blooper's left tentacle (JP and later).
- * Plays the hit pose (38 or 39 depending on the damage pattern), runs the damage and,
+ * Counter-damage event (tags 24 to 36, see gesso_left_arm_data_table) of the Blooper's left tentacle (JP and later).
+ * Picks the hit pose type (38 surprised or 39 normal, by the damage pattern), runs the damage and,
  * if the tentacle was defeated, the death event; otherwise it returns to the wait pose.
  * Afterwards the body is told to wait again when its busy work value is nonpositive.
  */
@@ -246,7 +246,7 @@ EVT_BEGIN(gesso_left_arm_damage_event)
 EVT_END()
 #endif
 
-/** Phase script of the left tentacle; does nothing. */
+/** Empty phase script of the left tentacle; nothing references it (init_event installs no phase event). */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()

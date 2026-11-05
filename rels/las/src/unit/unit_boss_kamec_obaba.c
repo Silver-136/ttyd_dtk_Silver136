@@ -531,7 +531,7 @@ EVT_END()
 
 /**
  * Event run when Kammy Koopa is knocked off her broom:
- * she falls to the ground (D_2) and her broom (part 2) drops separately,
+ * she falls to the ground (D_2) while part 2 (pose H_1) is shown where she was and fades out after 80 frames,
  * then she stands on the ground (unit work 0 = 0) and can be hit normally.
  */
 static EVT_BEGIN(dmg_fall_event)
@@ -758,7 +758,7 @@ static EVT_BEGIN(attack_event)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(9), PTR(&weapon_kamec_obaba_dekadeka_magic))
 
-    // She looks for a support spell to cast on herself.
+    // She picks the target for Biribiri or Trans, favouring herself (magic_select_pri_obaba).
     CALL_CHILD(PTR(magic_select_pri_obaba))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_ELECTRIC, LW(0))
@@ -773,7 +773,7 @@ static EVT_BEGIN(attack_event)
     SET_VALUE(LW(13), LW(3))
     SET_VALUE(LW(14), LW(4))
 
-    // Or she looks for one to cast on Bowser.
+    // Then the target for Katikati or Dekadeka, favouring Bowser (magic_select_pri_koopa).
     CALL_CHILD(PTR(magic_select_pri_koopa))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEFENSE_UP, LW(0))
@@ -857,7 +857,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Casting animation, ground version, first half:
+ * Casting animation on the ground, sequence 1 (used when the target is not herself):
  * Kammy raises her wand through the A_1A to A_1E poses with the spell sparkles,
  * and an extra support effect is shown when the spell is not the attack magic.
  */
@@ -892,7 +892,7 @@ static EVT_BEGIN(ground_magic_common_event1)
     RETURN
 EVT_END()
 
-/** Casting animation, ground version, second half (A_2A to A_2C). */
+/** Casting animation on the ground, sequence 2 (A_1A, then A_2A to A_2C; used when she targets herself). */
 static EVT_BEGIN(ground_magic_common_event2)
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -966,8 +966,8 @@ static EVT_BEGIN(magic_common_event1)
 EVT_END()
 
 /**
- * Common casting script of Kammy Koopa for the second half of a spell:
- * runs the ground or air second half depending on whether she is flying.
+ * Common casting script of Kammy Koopa (no caller in this file):
+ * runs ground sequence 2 or the air animation depending on whether she is flying.
  */
 static EVT_BEGIN(magic_common_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, LW(0))
@@ -1228,7 +1228,7 @@ EVT_END()
 
 /**
  * Recover spell of Kammy Koopa: she heals the target by 8 HP with the recovery effect;
- * if the target is the unit in GW(8) (Bowser) the effect is shown on him.
+ * if the target is the unit in GW(8) (Bowser) the effect is placed higher (+100) and 30 to the left, otherwise 50 up.
  */
 static EVT_BEGIN(recover_magic_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))

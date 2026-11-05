@@ -1,4 +1,4 @@
-// unit_boss_kanbu1: Lord Crump (X-Naut leader), boss battle unit.
+// unit_boss_kanbu1: Lord Crump (X-Naut leader), boss battle unit of the prologue (UNIT_LORD_CRUMP_PROLOGUE).
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -221,7 +221,7 @@ EVT_END()
 
 /**
  * Phase event of Lord Crump: on turn 1 before the player's phase the camera swings to Mario,
- * who turns round while Goombella speaks (mac_0_b_t1_000) and raises his hand.
+ * who turns round; Goombella speaks (mac_0_b_t1_000), then Mario raises his hand and turns back.
  * After the player's phase it plays one-time comments:
  * when Crump is at half HP or less (mac_0_b_t1_003),
  * after Mario's first successful action command (001) and after his first failed one (002).
@@ -493,7 +493,7 @@ static PoseTableEntry pose_table_guard[] = {
  * picks a target, runs at it and does a belly flop.
  * He hops (SFX_BOSS_KANBU_JUMP1, poses A_1A and A_1B) over the target;
  * the pre-damage check decides between a dodge and a hit,
- * and on a hit he lands on it (A_1C, SFX_BOSS_KANBU_HIP_ATTACK1 and 2),
+ * and hit or miss he comes down flat (A_1C, SFX_BOSS_KANBU_HIP_ATTACK1 and 2),
  * bounces and gets up (D_1) before returning home.
  * Falls back to the flustered reaction when confused with nothing to hit.
  */
@@ -596,7 +596,7 @@ static EVT_BEGIN(normal_attack_event)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_HIP_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         END_SIBLING_EVENT
 
-        // He gets up (D_1) and dusts himself off.
+        // He lies dazed for a moment (D_1), then hops up.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_1"))
         WAIT_FRAMES(15)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

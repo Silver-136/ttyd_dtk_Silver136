@@ -217,7 +217,10 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 #if VERSION >= VERSION_JP
-/** Damage reaction of the Blooper's right tentacle (JP and later); the same as the left tentacle's damage event. */
+/**
+ * Counter-damage event (tags 24 to 36, see gesso_right_arm_data_table) of the Blooper's right tentacle (JP and
+ * later); the same as the left tentacle's gesso_left_arm_damage_event.
+ */
 EVT_BEGIN(gesso_right_arm_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -256,7 +259,7 @@ EVT_BEGIN(gesso_right_arm_damage_event)
 EVT_END()
 #endif
 
-/** Phase script of the right tentacle; does nothing. */
+/** Empty phase script of the right tentacle; nothing references it (init_event installs no phase event). */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
@@ -340,7 +343,7 @@ BattleWeapon weapon_gesso_right_arm_rear_attack = {
  * otherwise picks the front or rear weapon
  * at random (they prefer front or back targets) and samples a target. The first time it targets Mario (unit kind
  * 0xDE, tracked in the Blooper's unit work 5) the Blooper asks whether Mario thinks it would taste good, with a
- * yes/no answer (tik_02_gs_04). It then swings with GSO_A1_1 or GSO_A1_3 depending on the target's side of the
+ * yes/no answer (tik_02_gs_04_1 to _3, then _3_y or _3_n). It then swings with GSO_A1_1 or GSO_A1_3 depending on the target's side of the
  * stage (_check_zenei_kouei) and damage-checks the targets.
  */
 static EVT_BEGIN(attack_event)

@@ -532,7 +532,7 @@ EVT_END()
 /**
  * The Ice Puff's ramming attack: it picks a target (the one hit first on a first strike),
  * shrinks while rattling, rises and lunges into the target.
- * A hit deals damage with a small camera shake, a miss or block ends with the lunge;
+ * A hit deals damage with a small camera shake, a miss or dodge ends with the lunge;
  * either way it floats back up and home.
  */
 static EVT_BEGIN(normal_attack_event)

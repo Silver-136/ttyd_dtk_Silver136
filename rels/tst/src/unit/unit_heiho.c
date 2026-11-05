@@ -101,8 +101,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**
- * Pose table of the placeholder Shy Guy (heiho): maps its battle pose types (stay, walk, hurt, dead, talk
- * and so on) to animation names, 4 entries such as KUR_S_1, KUR_D_1.
+ * Pose table of the placeholder Shy Guy (heiho): maps four battle pose types (28, 31, 39 and
+ * POSE_TYPE_ACTION) to animation names (KUR_S_1, or KUR_D_1 for type 39).
  */
 static PoseTableEntry pose_table[] = {
     {28, "KUR_S_1"},

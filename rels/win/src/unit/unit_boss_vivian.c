@@ -375,7 +375,7 @@ EVT_END()
 /**
  * Battle intro (entry script): after 120 frames the camera moves onto each sister in turn:
  * Beldam says they will show what they can do (btl_majo3_00),
- * Marilyn grunts (btl_majo3_01) and Vivian answers "Yes, Sis!" (btl_majo3_02).
+ * Marilyn grunts (btl_majo3_01) and Vivian answers her (btl_majo3_02).
  */
 static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -408,7 +408,7 @@ EVT_END()
 
 /**
  * Vivian's defeat: she walks back to her home spot if displaced.
- * If Beldam is mid-defeat, or Beldam is defeated and Marilyn is mid-defeat, she waits and says nothing;
+ * If Beldam or Marilyn is mid-defeat (GW(11) or GW(12) = 1), she waits for it to finish and says nothing;
  * if both sisters are dead she screams (btl_majo3_13);
  * otherwise she apologizes (btl_majo3_10). Then GW(13) = 2 and the shared no-spin dead sequence runs.
  */

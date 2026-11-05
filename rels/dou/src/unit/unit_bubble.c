@@ -468,7 +468,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared; it waits for any bodyguard movement.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -557,7 +557,7 @@ static EVT_BEGIN(normal_attack_event)
     GOTO(98)
     LABEL(98)
 
-    // Retreat: it hops past the target and back to its home position.
+    // Retreat: it hops back away from the target in two arcs, then to its home position.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -648,7 +648,7 @@ static EVT_BEGIN(fire_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared; it waits for any bodyguard movement.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -657,7 +657,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 
-    // Wind-up: it puffs itself up (T_1) before spitting.
+    // Wind-up: it plays its T_1 (talk) pose for 30 frames before spitting.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("T_1"))
         WAIT_FRAMES(30)
@@ -674,7 +674,7 @@ static EVT_BEGIN(fire_attack_event)
         CALL(eff_fire, UNIT_ID_SELF)
     END_SIBLING_EVENT
 
-    // The fireball arcs over to the target in two lobs.
+    // The fireball arcs over to the target in three dives.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 0)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
@@ -806,7 +806,7 @@ static EVT_BEGIN(all_fire_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared on all targets; the camera pulls back and the guard window opens.
+    // The attack is declared on all targets; it waits for any bodyguard movement and the camera pulls back.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)

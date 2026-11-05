@@ -119,7 +119,7 @@ static USER_FUNC(_steal_item) {
         s32 r;
         s32 i;
 #if VERSION >= VERSION_DEMO_EU
-        s32 heldMax = GetHeldItemCount; // PAL: read as in the other Pider thieves, but this one only takes badges
+        s32 heldMax = GetHeldItemCount; // PAL: read as in the Bandit thieves (unit_borodo, unit_borodo_king), but this one only takes badges
 
         count = 0;
 #endif
@@ -331,7 +331,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Pose table of the Badge Bandit: battle pose types mapped to animation names. */
+/** Pose table of the Badge Bandit while it carries stolen loot: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -446,10 +446,10 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Badge Bandit's plain attack: it runs up behind the chosen target,
- * turns and dashes into it with SFX_ENM_BORODO_ATT1.
+ * The Badge Bandit's plain attack: it runs up to a spot 60 in front of the chosen target,
+ * faces it and dashes into it with SFX_ENM_BORODO_ATT1.
  * A hit deals damage and sends it spinning back in a flip;
- * if it is dodged or blocked it hops away twice instead. It then walks back home.
+ * if it is dodged or misses it hops on twice instead. It then walks back home.
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(_borodo_normal_attack)
@@ -472,7 +472,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
 
-    // Declare the attack, then run past the target to the far side of it.
+    // Declare the attack, then run to a spot 60 in front of the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
@@ -487,7 +487,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns around and stamps its feet, winding up the charge.
+    // It faces the target and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -548,7 +548,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the Badge Bandit hops away twice.
+    // Miss or dodge: the Badge Bandit hops on twice in the direction it faces.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -628,7 +628,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
 
-    // Declare the attack, then run past the target to the far side of it.
+    // Declare the attack, then run to a spot 60 in front of the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
@@ -643,7 +643,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns around and stamps its feet, winding up the charge.
+    // It faces the target and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -704,7 +704,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the Badge Bandit hops away twice.
+    // Miss or dodge: the Badge Bandit hops on twice in the direction it faces.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -755,7 +755,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_EQUAL(LW(8), 0)
         WAIT_FRAMES(20)
 
-        // Nothing was taken: it bows apologetically (B_1, R_4) and heads home.
+        // Nothing was taken: it bows (B_1, R_4) and heads home.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_INCLINE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_1"))
         WAIT_FRAMES(52)

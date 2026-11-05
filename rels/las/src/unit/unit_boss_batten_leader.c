@@ -656,8 +656,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Pose table of Grodus while dizzy and wobbling:
- * animation names for each pose type (idle, walk, hurt, attack and so on).
+ * Pose table of Grodus once his HP stage reaches 3 (25% HP or less, set by monster_before_phase_event):
+ * animation names for each pose type; idle and action use the wobbling X_1, talk T_3.
  */
 static PoseTableEntry pose_table_furafura[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -681,8 +681,8 @@ static PoseTableEntry pose_table_furafura[] = {
 };
 
 /**
- * Data table of Grodus: event scripts and values the battle looks up by tag (damage reactions, dodge, first
- * strike and so on).
+ * Data table of Grodus: event scripts the battle looks up by tag: damage_sub_event, and dead_event (under the literal
+ * tag 50 in the early demos, UNIT_DATA_DEAD_EVENT in JP and later).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
@@ -1402,14 +1402,14 @@ EVT_END()
 
 /**
  * Event script: when Grodus's body pose changes, chooses the matching lamp sequences.
- * For the casting poses A_1B and A_1C the head lamps use their blinking sequences and the power lamp its normal sequence;
+ * For the casting poses A_1B, A_1C and A_2 the head lamps use their blinking sequences and the power lamp its normal sequence;
  * other poses select their own normal, quick, random, lit, dark or blinking sequences; restarts the lamp events accordingly.
  */
 EVT_BEGIN(light_pose_change)
     CALL(enzan_lw_save2)
     CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(0))
 
-    // Casting poses A_1B and A_1C: the head lamps use blinking sequences and the power lamp its normal sequence.
+    // Casting poses A_1B, A_1C and A_2: the head lamps use blinking sequences and the power lamp its normal sequence.
     IF_STR_EQUAL(LW(0), STRING("A_1B"))
         CALL(enzan_lw_save)
         SET_VALUE(LW(5), PTR(&btl_shuryolight_pow_normal))
@@ -1810,8 +1810,8 @@ EVT_END()
 /**
  * Dead event of Sir Grodus: his satellites are killed, the status window is hidden,
  * he speaks his last line (stg8_las_69) and the slow death sequence runs.
- * In retail, a satellite whose own damage code already has 512 skips the extra death sequence;
- * the demo branch kills satellites directly.
+ * In JP and later, a satellite that is not already at zero HP (damage result 0x200) gets the death sequence
+ * (subsetevt_dead_core) and is hidden; the early demos kill the satellites directly (KillUnit).
  */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -1882,7 +1882,7 @@ EVT_END()
 
 /**
  * Spline path of five control points that Grodus's satellite 1 of 1 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn1_1[] = {
     {38.0f, 45.0f, 5.0f},
@@ -1894,7 +1894,7 @@ static Vec splineTableIn1_1[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 1 of 2 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn2_1[] = {
     {38.0f, 45.0f, 5.0f},
@@ -1906,7 +1906,7 @@ static Vec splineTableIn2_1[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 2 of 2 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn2_2[] = {
     {-38.0f, 45.0f, 5.0f},
@@ -1918,7 +1918,7 @@ static Vec splineTableIn2_2[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 1 of 3 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn3_1[] = {
     {0.0f, 83.0f, 5.0f},
@@ -1930,7 +1930,7 @@ static Vec splineTableIn3_1[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 2 of 3 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn3_2[] = {
     {38.0f, 7.0f, 5.0f},
@@ -1942,7 +1942,7 @@ static Vec splineTableIn3_2[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 3 of 3 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn3_3[] = {
     {-38.0f, 7.0f, 5.0f},
@@ -1954,7 +1954,7 @@ static Vec splineTableIn3_3[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 1 of 4 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn4_1[] = {
     {38.0f, 83.0f, 5.0f},
@@ -1966,7 +1966,7 @@ static Vec splineTableIn4_1[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 2 of 4 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn4_2[] = {
     {-38.0f, 83.0f, 5.0f},
@@ -1978,7 +1978,7 @@ static Vec splineTableIn4_2[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 3 of 4 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn4_3[] = {
     {38.0f, 7.0f, 5.0f},
@@ -1990,7 +1990,7 @@ static Vec splineTableIn4_3[] = {
 
 /**
  * Spline path of five control points that Grodus's satellite 4 of 4 follows
- * when it flies back into place.
+ * when it is pulled back in to Grodus (battenSatelliteToInside).
  */
 static Vec splineTableIn4_4[] = {
     {-38.0f, 7.0f, 5.0f},
@@ -3016,8 +3016,8 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
 #if VERSION >= VERSION_JP
 
 /**
- * Script helper: sets the HP gauge flag 1 on the unit args[0] (JP and later),
- * used when a part that shows the gauge is hit.
+ * Script helper: sets the HP gauge flag 1 (HP_GAUGE_FLAG_TIMED) on the unit args[0] (JP and later);
+ * damage_sub_event calls it on every final hit.
  */
 USER_FUNC(_hp_gauge_flag_on) {
     BattleWork* wp = _battleWorkPointer;

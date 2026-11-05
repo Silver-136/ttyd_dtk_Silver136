@@ -161,7 +161,7 @@ EVT_END()
 /**
  * Damage sub-event of the Bone Pile (honeduka):
  * after it is hit it runs its owner's (unit work 0, Cortez) bone-pile damage event,
- * mode2_honeduka_damage_event (data tag 70 on the US demo and earlier, 71 later;
+ * mode2_honeduka_damage_event (data tag 70 on the early demos, 71 later;
  * the tag number differs by version), then returns to waiting.
  */
 EVT_BEGIN(honeduka_damage_sub_event)

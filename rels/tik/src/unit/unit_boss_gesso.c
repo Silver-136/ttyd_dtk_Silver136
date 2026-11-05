@@ -130,7 +130,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Blooper (percent chance to take each status):
+ * Status vulnerability of the Blooper (percent multipliers on each status's chance):
  * immune to fright, gale force, dodgy, invisibility and instant kill.
  */
 static StatusVulnerability regist = {
@@ -164,7 +164,7 @@ BattleUnitDefense defence_ceil = {{2, 2, 2, 2, 2}};
 /** Element reactions of the Blooper (ceiling): no special reaction to any element. */
 BattleUnitDefenseAttr defence_attr_ceil = {0};
 
-/** Status vulnerability of the Blooper (ceiling) (percent chance to take each status): immune to sleep. */
+/** Status vulnerability of the Blooper (ceiling): all zero, immune to every status. */
 StatusVulnerability regist_ceil = {0};
 
 s32 R_defence_turn[] = {
@@ -406,7 +406,7 @@ BattleUnitSetup entry_gesso_right_arm_entry_data = {
 
 /**
  * Damage reaction of the Blooper body.
- * Marks the body as being hit in unit work 4 (1, or 3 for a special damage pattern),
+ * Marks the body as being hit in unit work 4 (1, or 3 when the hit kills it),
  * runs the default damage script and clears the mark.
  */
 static EVT_BEGIN(damage_event)
@@ -424,9 +424,10 @@ EVT_END()
 
 /**
  * Phase script of the Blooper.
- * Before the player's turn and after the enemy's turn it counts turns in work 3;
- * after two it wakes up (GSO_U_1 with the wake sounds),
- * switches to the normal pose table and changes its state in work 0 (1 to 2, then on).
+ * Counts turns in work 3: fallen (state 1 in work 0), after two player phases it wakes up (GSO_U_1 with the
+ * wake sounds), switches to the normal pose table and becomes state 2; in state 2, after two enemy phases it
+ * climbs back to the ceiling (state 0) and spawns both tentacles again.
+ * On US and later it does nothing while it cannot act.
  */
 // Count the fallen and standing phases separately before restoring the ceiling state and arms.
 static EVT_BEGIN(phase_event)
@@ -437,7 +438,7 @@ static EVT_BEGIN(phase_event)
     END_IF
 #endif
 
-    // Before Mario's turn, a sleeping Blooper counts turns; after two it wakes up.
+    // Before Mario's turn, a fallen Blooper (state 1) counts turns; after two it wakes up.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
@@ -582,8 +583,8 @@ EVT_END()
 
 /**
  * Attack script of the Blooper body.
- * If it is not yet awake it does nothing or runs the queued script;
- * once awake (state 2) it uses the ink attack gesso_ikasumi_attack.
+ * While fallen (state 1) it does nothing; otherwise it may use an item (btlevtcmd_EnemyItemUseCheck),
+ * and in state 2 it uses the ink attack gesso_ikasumi_attack (on the ceiling, state 0, it does nothing).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))

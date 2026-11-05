@@ -224,15 +224,15 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of the Atomic Boo (both demos), as the percent chance each status takes hold:
+ * Status vulnerability of the Atomic Boo (the early demos), as percent of each status's normal chance:
  * immune to Huge, Tiny, Attack Down and Fright; resists 12 statuses (down to 5% of the normal chance).
  */
 static StatusVulnerability regist = {40, 40, 40, 40, 40, 40, 100, 30, 0, 0, 100, 0, 100, 40, 40, 0, 10, 100, 40, 100, 100, 5};
 #else
 
 /**
- * Status vulnerability of the Atomic Boo (the retail releases), as the percent chance each status takes
- * hold: immune to Huge, Tiny, Attack Down and Fright; resists 10 statuses (down to 5% of the normal
+ * Status vulnerability of the Atomic Boo (the retail releases), as percent of each status's normal
+ * chance: immune to Huge, Tiny, Attack Down and Fright; resists 10 statuses (down to 5% of the normal
  * chance).
  */
 static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 30, 0, 0, 100, 0, 100, 80, 40, 0, 10, 100, 40, 100, 100, 5};
@@ -496,7 +496,7 @@ EVT_END()
 
 /**
  * The Atomic Boo covers its face ('kaokakusi'), one of its turn actions (30 in 70 while its face shows):
- * it backs off with a dive (pose type 40, SFX_BOSS_ATMTLSA_MOVE2), turns its back (A_1,
+ * it dives 60 toward the party (pose type 40, SFX_BOSS_ATMTLSA_MOVE2), turns its back (A_1,
  * SFX_BOSS_ATMTLSA_FACE_HIDE1), glides home while spinning back round, then sets unit work 0 to 1 and the
  * hands-over-face pose table.
  */
@@ -769,7 +769,7 @@ EVT_BEGIN(bikkuri_event)
     CALL(evt_snd_sfxoff, LW(15))
     WAIT_FRAMES(30)
 
-    // The Atomic Boo cries out and the Boos swoop in.
+    // The Atomic Boo cries out.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_SURPRISED2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
@@ -971,12 +971,12 @@ s32 atmic_teresa_id[] = {
     -1,
 };
 
-/** Unit id of the target of the Atomic Boo's current attack, which the small Boos fly around. */
+/** Unit id of the target of the Atomic Boo's current attack, which the breath's small Boos fly toward. */
 s32 target_unit_id[] = {
     -1,
 };
 
-/** Part id of the target of the Atomic Boo's current attack, which the small Boos fly around. */
+/** Part id of the target of the Atomic Boo's current attack, which the breath's small Boos fly toward. */
 s32 target_parts_id[] = {
     -1,
 };
@@ -988,8 +988,8 @@ s32 target_parts_id[] = {
 f32 atmic_teresa_scale = 1.0f;
 
 /**
- * Models and starting poses of the 30 small Atomic Boos (model c_teresa): idle (S_1) or attack (A_1, A_2)
- * animations, each at a different time offset so they move out of step.
+ * Sprite frames of the small Atomic Boos (model c_teresa), picked by each pose's texId: 0-7 cycle the S_1
+ * animation, 8-15 show A_1 and then A_2 frames (the split-up attack's animation).
  */
 ExtTexInfo teresa_ext_entry_data[] = {
     {"c_teresa", "S_1", 0.0f},
@@ -1464,7 +1464,7 @@ USER_FUNC(teresa_wait_bikkuri) {
 
 /**
  * Script helper: blocks until all eight split-up Boos have reached state 30,
- * then sends them back toward the big Boo (state 31) and resets atmic_teresa_scale to 1.0.
+ * then shrinks them away (state 31) and resets atmic_teresa_scale to 1.0.
  */
 USER_FUNC(teresa_wait_bikkuri2) {
     s32 i;

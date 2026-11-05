@@ -13,7 +13,7 @@
                                                  // 2 runs at1_midaregiri_attack
 #define CORTEZ_UNIT_WORK_HIT_THIS_TURN 7         // 1 once the rib (part 2) or the bone pile (part 4) was hit (init 1);
                                                  // phase_event clears it and, if it was 0, moves mode 2/3 back up to 1
-#define CORTEZ_UNIT_WORK_FORMATION 8             // weapon formation 0-2 rolled each turn; cortez_weapon_get_home_height
+#define CORTEZ_UNIT_WORK_FORMATION 8             // weapon formation 0-3 rolled each turn (evt_sub_random(3)); cortez_weapon_get_home_height
                                                  // picks each weapon's home height (20 or 60) from it
 #define CORTEZ_UNIT_WORK_AUDIENCE_ATTACK_COUNT 9 // times attack_audience_event ran; it runs only while this is 0, at
                                                  // half HP or less, when _cortez_check_drain_audience finds audience

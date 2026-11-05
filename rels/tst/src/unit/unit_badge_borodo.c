@@ -163,15 +163,15 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of the Badge Bandit (percent chance per status, 0 would be immune): every status
- * effect can land. Demo values (sleep 50%, dizzy 70%, freeze 50%).
+ * Status vulnerability of the Badge Bandit (percent of each status's normal chance, 0 would be immune): every
+ * status effect can land. Demo values (sleep 50%, dizzy 70%, freeze 50%).
  */
 static StatusVulnerability regist = {50, 70, 70, 100, 70, 100, 100, 50, 100, 70, 100, 70, 100, 70, 80, 75, 60, 100, 70, 100, 100, 60};
 #else
 
 /**
- * Status vulnerability of the Badge Bandit (percent chance per status, 0 would be immune): every status
- * effect can land. Released game values (sleep 80%, dizzy 50%, freeze 50%).
+ * Status vulnerability of the Badge Bandit (percent of each status's normal chance, 0 would be immune): every
+ * status effect can land. Released game values (sleep 80%, dizzy 50%, freeze 50%).
  */
 static StatusVulnerability regist = {80, 70, 50, 100, 80, 100, 100, 50, 100, 85, 100, 85, 100, 90, 80, 75, 60, 100, 70, 100, 100, 60};
 #endif
@@ -247,7 +247,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Init script of the Bandit: registers its wait, attack, damage and confusion handlers,
+ * Init script of the Badge Bandit: registers its wait, attack, damage and confusion handlers,
  * sets the running and walking sounds, and picks the pose table with the stolen-item bag
  * when the unit flag 0x40000000 (it carries a stolen item) is already set.
  */
@@ -286,7 +286,7 @@ EVT_END()
 
 /**
  * Chooses the Badge Bandit's action: if it carries a stolen item (unit flag 0x40000000) it runs away with it
- * (escape_event); otherwise it uses an item when the item check selects one, a confused Bandit makes a plain attack,
+ * (escape_event); otherwise it uses an item when the item check selects one, a confused Badge Bandit makes a plain attack,
  * and normally it makes the plain attack (_borodo_normal_attack) about 33% of the time
  * and the stealing attack (_borodo_steal_attack) otherwise.
  */
@@ -319,10 +319,10 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Bandit's plain attack: it runs up to the target (SFX_ENM_BORODO_MOVE1L/R),
+ * The Badge Bandit's plain attack: it runs up to the target (SFX_ENM_BORODO_MOVE1L/R),
  * bumps it (SFX_ENM_BORODO_ATT1) and either misses or applies the damage with the action-command defence;
  * afterwards it falls over or recovers and runs back home.
- * A special pre-damage result of 5 skips the miss handling.
+ * A pre-damage result of 5 (PRECHECK_PREEMPTIVE_SPIKY) makes it dash in, take the damage check and end there.
  */
 static EVT_BEGIN(_borodo_normal_attack)
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
@@ -343,7 +343,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
 
-    // Declare the attack, then run past the target to the far side of it.
+    // Declare the attack, then run to a spot 60 in front of the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
@@ -358,7 +358,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns around and stamps its feet, winding up the charge.
+    // It faces the target and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -423,7 +423,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the Badge Bandit hops away twice.
+    // Miss or dodge: the Badge Bandit hops on twice in the direction it faces.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -477,12 +477,12 @@ static EVT_BEGIN(_borodo_normal_attack)
 EVT_END()
 
 /**
- * The Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
- * on a hit where Mario's action command result (LW(7)) was 3 or less,
- * _steal_item takes an item from Mario's pouch (LW(8) = the item, LW(9) = its icon),
+ * The Badge Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
+ * on a hit where the target's action command result (LW(7)) was 3 or less,
+ * _steal_item takes coins or a badge from Mario's pouch (LW(8) = the item, LW(9) = its icon),
  * which flies out of the target while btl_msg_steal_item_lost is announced and sets the unit flag 0x40000000,
- * and the Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
- * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
+ * and the Badge Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
+ * If nothing was stolen it bows (SFX_ENM_BORODO_INCLINE1) and walks home.
  */
 static EVT_BEGIN(_borodo_steal_attack)
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
@@ -503,7 +503,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
 
-    // Declare the attack, then run past the target to the far side of it.
+    // Declare the attack, then run to a spot 60 in front of the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
@@ -518,7 +518,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns around and stamps its feet, winding up the charge.
+    // It faces the target and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -583,7 +583,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the Badge Bandit hops away twice.
+    // Miss or dodge: the Badge Bandit hops on twice in the direction it faces.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -633,7 +633,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_EQUAL(LW(8), 0)
         WAIT_FRAMES(20)
 
-        // Nothing was taken: it bows apologetically (B_1, R_4) and heads home.
+        // Nothing was taken: it bows (B_1, R_4) and heads home.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_INCLINE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_1"))
         WAIT_FRAMES(52)
@@ -666,7 +666,7 @@ static EVT_BEGIN(_borodo_steal_attack)
 EVT_END()
 
 /**
- * The Bandit runs away with the stolen item: it turns around (SFX_ENM_BORODO_WAIT1, pose R_3), hops,
+ * The Badge Bandit runs away with the stolen item: it turns around (SFX_ENM_BORODO_WAIT1, pose R_3), hops,
  * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes off the stage to X = 300 at speed 9,
  * then removes itself from the battle (KillUnit), taking the item with it.
  */
@@ -693,7 +693,7 @@ static EVT_BEGIN(escape_event)
 EVT_END()
 
 /**
- * Idle event of the Bandit: uses the plain pose table,
+ * Idle event of the Badge Bandit: uses the plain pose table,
  * or the one showing the stolen item bag if the unit flag 0x40000000 is set, and shows the matching idle pose.
  */
 static EVT_BEGIN(wait_event)

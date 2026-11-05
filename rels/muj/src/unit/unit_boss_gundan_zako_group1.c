@@ -58,7 +58,7 @@ typedef struct ZakoGunWork {
     u8 us_pad08[0xC];
 #endif
 
-    // US: 12 more bytes here
+    // US and later: 12 more bytes here
     s32 state;
     s32 timer;
     Vec pos;
@@ -413,9 +413,9 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Damage event for the horde in group 1 when Mario hits it with a spin hammer:
- * when damage was dealt, plays the hurt animation (zakogun_damage_pose), opens a gap in the formation (zakogun_start_sukima),
- * then restores the X-Nauts and closes the gap.
+ * Damage event for the horde in group 1 on a spinning-hammer or Ultra Hammer hit (data tag 18):
+ * when damage was dealt, plays the hurt animation (zakogun_damage_pose), shakes the X-Nauts in place (zakogun_start_sukima 1)
+ * for 80 frames, then restores the X-Nauts to formation.
  */
 EVT_BEGIN(damage_event_kaiten_hammer)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -669,7 +669,7 @@ void zakogun_ext_disp(CameraId camera, void* param) {
 }
 
 /**
- * Script helper: writes the battle unit id of the horde leader (the unit of kind 0x63, the X-Naut officer) to
+ * Script helper: writes the battle unit id of the horde leader (the unit of kind 0x63, Lord Crump of chapter 5) to
  * args[0], or -1 if there is none.
  */
 USER_FUNC(zakogun_get_kanbu_id_evtcmd) {

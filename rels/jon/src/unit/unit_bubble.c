@@ -386,7 +386,7 @@ EVT_END()
 /**
  * Splits the Lava Bubble: spawns a new Lava Bubble at its position (copying HP and size status with
  * bubble_copy_status),
- * plays SFX_ENM_BUBBLE_SPLIT1, spins the newcomer once and has it hop to the free spot in LW(0..2),
+ * plays SFX_ENM_BUBBLE_SPLIT1, spins the newcomer (29 steps of 40 degrees) and has it hop to the free spot in LW(0..2),
  * which becomes its home.
  */
 static EVT_BEGIN(friend_event)
@@ -448,7 +448,7 @@ EVT_END()
 /**
  * The Lava Bubble's contact attack: it floats up to the target (SFX_ENM_BUBBLE_MOVE1)
  * and bursts into flame in front of it, with several flame pulses (A_1B) and SFX_ENM_BUBBLE_FIRE1 sounds;
- * the damage is dealt on the first burst, followed by three more pulses. It then hops over and behind the target and floats back home.
+ * the damage is dealt on the first burst, followed by three more pulses. It then hops back away from the target and floats home.
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -556,7 +556,7 @@ static EVT_BEGIN(normal_attack_event)
     END_LOOP
     GOTO(98)
 
-    // It hops over and behind the target and floats back home.
+    // It hops back away from the target in two arcs and floats home.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -583,7 +583,7 @@ EVT_END()
 
 /**
  * Script helper: args[0] = unit.
- * Keeps a blue flame effect on part 2 of the Lava Bubble, growing to the unit's size over about 10 calls;
+ * Keeps an orange flame effect (fire type 5) on part 2 of the Lava Bubble, growing to the unit's size over about 10 calls;
  * blocks forever (the script ends it).
  */
 static USER_FUNC(eff_fire) {
@@ -774,7 +774,7 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
 EVT_END()
 
 /**
- * An attack that sets all of the party on fire:
+ * An attack on all targets with a row of flames (the weapon comes in LW(9); no caller sets it):
  * it moves to x -40, shakes in place for 20 rounds, then spawns ten flames (all_fire_attackEvent_sub).
  * It checks selected targets in turn, stopping at the first avoidance; on a hit it deals damage
  * (the defence action command result is taken once, for the first target). It then returns home.

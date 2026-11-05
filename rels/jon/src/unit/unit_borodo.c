@@ -55,7 +55,7 @@ static EvtWord wait_event[26];
  * args[2..4] = variables that receive the stolen item id, its icon and a coin count.
  * The coin test is irand(100) < 100, which always passes,
  * so the Bandit takes 5 coins (or whatever the pouch holds) and the item-stealing code below it never runs.
- * That is by design: Goombella's tattle says Bandits grab coins and only Big Bandits (40 here) steal items too.
+ * Goombella's tattle says Bandits grab coins; the Big Bandit and Badge Bandit copies test irand(100) < 40, so they can also steal items.
  * Taken coins are remembered in the unit's heldItem and stolenCoins so they can be won back.
  */
 static USER_FUNC(_steal_item) {
@@ -415,7 +415,7 @@ EVT_END()
  * Attack script of the Bandit.
  * If it already carries loot (unit flag 0x40000000) it runs escape_event and leaves the battle.
  * Otherwise it checks for an item use, always uses the plain attack while confused,
- * and else draws a random number to choose between the plain attack (about 25 in 224) and the steal attack.
+ * and else draws a random number to choose between the plain attack (a roll of 0-224 under 25, 25 in 225) and the steal attack.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
@@ -446,10 +446,10 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Bandit's plain attack: it runs past the chosen target,
- * turns around and dashes back into it with SFX_ENM_BORODO_ATT1.
+ * The Bandit's plain attack: it walks up to a point in front of the chosen target,
+ * stamps in place and dashes into it with SFX_ENM_BORODO_ATT1.
  * A hit deals damage and sends it spinning back in a flip;
- * if it is dodged or blocked it hops away twice instead. It then walks back home.
+ * if it misses or is dodged it hops away twice instead. It then walks back home.
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(_borodo_normal_attack)
@@ -471,7 +471,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
 
-    // Declare the attack, then run past the target to the far side of it.
+    // Declare the attack, then walk up to a point 60 units in front of the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
@@ -486,7 +486,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns around and stamps its feet, winding up the charge.
+    // It faces the target and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -626,7 +626,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
 
-    // Declare the attack, then run past the target to the far side of it.
+    // Declare the attack, then walk up to a point 60 units in front of the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
@@ -641,7 +641,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns around and stamps its feet, winding up the charge.
+    // It faces the target and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)

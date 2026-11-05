@@ -260,7 +260,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
 #if VERSION >= VERSION_JP
 
 /**
- * Reward script run when a Fuzzy from the horde is defeated (unit LW(10)):
+ * Reward script for the unit LW(10) when the horde is sent off (escape_chorogun_event):
  * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
  */
 EVT_BEGIN(chorogun_dead_reward)
@@ -287,7 +287,7 @@ EVT_END()
 /**
  * Init script of the Fuzzy Horde: installs the wait,
  * attack and damage handlers (confusion uses the default Confuse script),
- * clears unit work 0 (the horde's flee flag) and starts the wait event.
+ * clears unit work 0 (set once 50 or fewer Fuzzies are left) and starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -303,7 +303,7 @@ EVT_END()
  * Damage handler of the Fuzzy Horde: for each point of damage up to 50 Fuzzies leave the swarm (chorogun_escape)
  * while more than 50 remain; once 50 or fewer are left it sets unit work 0 to 1.
  * On the final hit of an attack, it runs escape_chorogun_event if 500 or fewer are alive;
- * the demos instead remove the unit on that final hit when unit work 0 is set.
+ * the early demos instead remove the unit on that final hit when unit work 0 is set.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))

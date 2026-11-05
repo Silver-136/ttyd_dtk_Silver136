@@ -583,7 +583,7 @@ USER_FUNC(eff_hokori) {
 /**
  * Defeat event of Magnus: sets work 6, creates the glow above him,
  * closes the status window and moves the camera in; Magnus speaks his last line (stg2_mri_e24_16).
- * Any rocket arm still alive on either side (from JP,
+ * Any rocket arm still alive on either side (in JP and later,
  * only if its last hit did not already KO it, damage flag 0x200) is killed with the shared dead core
  * and its trail
  * removed. Magnus then plays the death sound, hands out coins, experience and star points,
@@ -867,7 +867,7 @@ EVT_BEGIN(stamp_attack_event)
         CASE_END
     END_SWITCH
 
-    // The stomp misses; results 3, 6 or 2 start the target's avoid reaction.
+    // The stomp misses (intangible, or results 3, 6 or 2, which already started the target's avoid reaction).
     LABEL(90)
     GOTO(95)
 

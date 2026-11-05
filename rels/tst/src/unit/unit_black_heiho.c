@@ -101,8 +101,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**
- * Pose table of the placeholder black_heiho: maps its battle pose types (stay, walk, hurt, dead, talk and
- * so on) to animation names, 4 entries such as KUR_S_1, KUR_D_1.
+ * Pose table of the placeholder black_heiho: 4 entries mapping pose types normal (28), guarded hit (31),
+ * damage (39) and action to the Goomba animations KUR_S_1 and KUR_D_1.
  */
 static PoseTableEntry pose_table[] = {
     {28, "KUR_S_1"},

@@ -306,8 +306,8 @@ EVT_END()
 
 /**
  * Damage script of the Doopliss-controlled Koops:
- * if the hit carries damage code 1024 it sets GW(20)
- * so the fake Mario's phase script knows the partner was struck, stops any shell spin,
+ * if the hit defeats him (damage result DAMAGE_RESULT_DEATH) it sets GW(20) to 1
+ * so the fake Mario's scripts know the partner double is down, stops any shell spin,
  * then runs the default damage handling.
  */
 static EVT_BEGIN(damage_event_nokotarou)
@@ -324,11 +324,12 @@ EVT_END()
 
 /**
  * Defeat script of the Doopliss-controlled Koops.
- * He first walks back to his home position if he is away from it, then collapses.
+ * He first runs back to his home position if he is away from it, then collapses.
  * With GW(19) at 0 (the fake Mario is still standing) the camera frames him
- * and his farewell lines (stg4_jin_26_03_nok and stg4_jin_26_04) play;
- * with GW(19) at 1 or 2 he only plays the collapse pose, waiting for GW(19) to reach 2 first.
- * He is then removed from the battle and GW(20) is set to 2 so the fake Mario's phase script knows he is gone.
+ * for his line (stg4_jin_26_03_nok), then turns to the fake Mario, who answers (stg4_jin_26_04);
+ * with GW(19) at 1 (the fake Mario's defeat has been detected) he plays the collapse pose and waits for
+ * GW(19) to reach 2; at 2 (his defeat is complete) he only plays the collapse pose.
+ * He is then removed from the battle and GW(20) is set to 2 so the fake Mario's scripts know he is gone.
  */
 static EVT_BEGIN(dead_event_nokotarou)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

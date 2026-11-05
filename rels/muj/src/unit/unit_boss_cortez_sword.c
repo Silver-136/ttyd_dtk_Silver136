@@ -193,7 +193,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
-/** Guess: pose table for the fallen Cortez Sword, only the lying pose KRT_Z_1. */
+/** Pose table with only the lying pose KRT_Z_1; no script references it. */
 PoseTableEntry pose_table_otitabuki[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
@@ -214,9 +214,9 @@ static PoseTableEntry pose_table_break[] = {
 
 /**
  * Event table of Cortez Sword: cortez_damage_sub_event, cortez_weapon_dead_event,
- * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
- * cortez_weapon_counter_damage_event (36),
- * avoid_thorn_event (38).
+ * cortez_weapon_break_event (tag 70 in the early demos, 71 later), cortez_weapon_blow_dead_event,
+ * cortez_weapon_counter_damage_event (36 and the other counter-damage tags),
+ * avoid_thorn_event (37 to 39).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
@@ -767,9 +767,9 @@ static EVT_BEGIN(cortez_damage_sub_event)
 EVT_END()
 
 /**
- * Damage event of a sword hit during Cortez's counter phase:
- * flags the unit hit and, depending on the damage code, plays the knocked-back pose,
- * runs the sword's data event and lets it fall under gravity.
+ * Counter damage event of a weapon (tag 36 and the other counter-damage tags), run when the weapon is hurt by
+ * a Superguard or a counter: shows its HP and, depending on the damage code, plays the knocked-back pose,
+ * runs its damage-pose data event (tag 10), is knocked up and back, then jumps down to the floor below its home.
  */
 EVT_BEGIN(cortez_weapon_counter_damage_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
@@ -813,7 +813,7 @@ EVT_END()
 
 /**
  * Death event of a sword: it falls to the stage floor with a clatter, bounces once, sets its home there,
- * marks itself dead (unit work 1 = 2) and makes the body part untargetable.
+ * starts its two-turn down countdown (unit work 1 = 2) and makes the body part untargetable.
  */
 EVT_BEGIN(cortez_weapon_dead_event)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)

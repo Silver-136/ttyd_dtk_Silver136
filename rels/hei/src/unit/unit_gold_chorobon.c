@@ -312,7 +312,7 @@ BattleUnitSetup entry_chorogun = {
 
 /**
  * Battle script run when the Gold Fuzzy calls its friends:
- * it shows the wave animation, the camera pans in on it and it says stg1_hei_43, Mario is startled,
+ * it takes its standing pose (CBN_S_1), the camera pans in on it and it says stg1_hei_43, Mario is startled,
  * and chorogun_appear drops the 1000-Fuzzy horde into place.
  */
 EVT_BEGIN(call_chorogun_event)
@@ -339,9 +339,10 @@ EVT_BEGIN(call_chorogun_event)
 EVT_END()
 
 /**
- * Script for the Gold Fuzzy's end: after two seconds it releases the Fuzzy Horde (paying its reward in JP and later),
- * sends all the Fuzzies running off the stage and removes the horde unit;
- * marks the unit work so it only happens once (JP and later).
+ * Run by the Fuzzy Horde's damage event, as the horde, once 500 or fewer Fuzzies are left: after two seconds it
+ * pays the horde's reward (JP and later), sends all the Fuzzies running off the stage and removes the horde unit;
+ * the Gold Fuzzy's unit work 1 marks it done (JP and later set it first and return when it is already set or the
+ * horde unit is gone; the early demos set it at the end).
  */
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)
@@ -389,8 +390,8 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Damage event of the Gold Fuzzy: while the swarm is out (work 0)
- * and he takes a non-reviving lethal hit (512 without 2048),
+ * Damage event of the Gold Fuzzy: while the swarm is out (work 0) and not yet sent off (work 1; JP and later
+ * also need the horde unit to still exist), when he takes a non-reviving lethal hit (512 without 2048),
  * the swarm unit is removed with its reward (chorogun_dead_reward in JP and later) and the horde flees.
  * After the default damage handling, the first time his HP drops to 7
  * or less (but not 0) he spawns the Fuzzy swarm (entry_chorogun) and calls it in (call_chorogun_event);
@@ -561,7 +562,8 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss: it lands beside the target (which dodges for some kinds of miss) and waits.
+    // Miss: it lands behind the target (30 units against the way the target faces; the target dodges for some
+    // kinds of miss) and waits.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))

@@ -505,8 +505,8 @@ EVT_END()
 
 /**
  * Battle script: the Atomic Boo hides its face (a Boo habit):
- * it swoops down a little, turns its back to the party and hides,
- * which sets unit work 0 to 1 and switches to the face-hiding pose table.
+ * it swoops down a little toward the party, turns its back (A_1) and glides home while spinning back round,
+ * then sets unit work 0 to 1 and switches to the face-hiding pose table.
  */
 EVT_BEGIN(kaokakusi_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -621,8 +621,8 @@ EVT_BEGIN(press_event)
 EVT_END()
 
 /**
- * Attack script "surprise": the Atomic Boo hides its face, then lunges at the target from behind;
- * hits with the surprise weapon.
+ * Attack script "surprise": the Atomic Boo turns its back and backs off, then uncovers its face and lunges to
+ * x 0; hits with the surprise weapon.
  */
 EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -645,7 +645,7 @@ EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_surprise))
 
-    // It hides its face with a sound and floats toward the targets.
+    // It turns its back with a sound and backs off a little.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_FACE_HIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 180, 0)
@@ -729,8 +729,9 @@ EVT_BEGIN(surprise_event)
 EVT_END()
 
 /**
- * Attack script "bikkuri": eight small Boos pop out one after another around the target (teresa_appear_bikkuri),
- * the camera homes in on the target and the Boos rush it together; uses the bikkuri weapon.
+ * Attack script "bikkuri": eight small Boos pop out of the Atomic Boo one after another and circle the party's
+ * side of the stage (teresa_appear_bikkuri), the camera homes in on the target and the bikkuri weapon hits each
+ * target.
  */
 EVT_BEGIN(bikkuri_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -755,7 +756,7 @@ EVT_BEGIN(bikkuri_event)
     // The press weapon pays the cost here; both cost nothing, so it makes no difference.
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_press))
 
-    // Eight small Boos pop out one after another around the target while the Atomic Boo circles.
+    // Eight small Boos pop out of the Atomic Boo one after another and circle the party's side of the stage.
     CALL(teresa_appear_bikkuri)
     WAIT_FRAMES(75)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -805,7 +806,7 @@ EVT_BEGIN(bikkuri_event)
     LABEL(90)
     GOTO(97)
 
-    // Hit: the Boos rush the target together for the weapon damage.
+    // Hit: the weapon damage is applied.
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_atmic_teresa_bikkuri))
@@ -997,8 +998,8 @@ s32 target_parts_id[] = {
 f32 atmic_teresa_scale = 1.0f;
 
 /**
- * Sprite entries of the small Boos the Atomic Boo spawns during its attacks:
- * the Boo model with the animation and starting frame of each.
+ * Sprite frames of the small Boos, picked by each pose's texId: 0-7 cycle the S_1 animation,
+ * 8-15 show A_1 and then A_2 frames (the bikkuri animation).
  */
 ExtTexInfo teresa_ext_entry_data[] = {
     {"c_teresa", "S_1", 0.0f},
@@ -1055,7 +1056,7 @@ void teresa_ext_init(void) {
 
 /**
  * Per-frame update of the 30 small Boos: runs each Boo's state machine for the bikkuri attack (8 Boos appear at
- * staggered times and move toward the target) and the breath attack (all 30 stream out of the Atomic Boo),
+ * staggered times and circle at radius 90 around x -100) and the breath attack (all 30 stream out of the Atomic Boo),
  * with scaling and animation frames.
  */
 void teresa_ext_main(void) {
@@ -1439,7 +1440,7 @@ USER_FUNC(teresa_wait_bikkuri) {
 
 /**
  * Battle script helper: blocks until all eight small Boos have reached state 30,
- * then releases them (state 31) and resets the Atomic Boo's scale to 1.
+ * then shrinks them away (state 31) and resets the Atomic Boo's scale to 1.
  */
 USER_FUNC(teresa_wait_bikkuri2) {
     s32 i;
@@ -1493,7 +1494,7 @@ USER_FUNC(teresa_wait_breath) {
 
 /**
  * Battle script helper: blocks until all 30 small Boos have reached state 70,
- * then releases them (state 71) and resets the Atomic Boo's scale to 1.
+ * then shrinks them away (state 71) and resets the Atomic Boo's scale to 1.
  */
 USER_FUNC(teresa_wait_breath2) {
     s32 i;

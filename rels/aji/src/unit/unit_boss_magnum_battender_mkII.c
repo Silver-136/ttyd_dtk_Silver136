@@ -1010,7 +1010,7 @@ static USER_FUNC(eff_dead_delete) {
 
 /**
  * Battle init for Magnus von Grapple 2.0: registers its wait, entry, attack, damage and confusion events,
- * sets the part 3 pose MGN_L_1, starts the frame event (waku_event) and the arm physics (arm_init)
+ * sets the part 3 pose MGN_L_1, starts the frame event (waku_event), allocates the two arm trail records (arm_init)
  * and clears its unit work flags: 0 = arms detached, 1 = turns until the fists return,
  * 2 = arms have separated once, and 5 = the drill announcement has played.
  */
@@ -1096,7 +1096,7 @@ EVT_END()
 
 /**
  * Defeat sequence of Magnus von Grapple 2.0: sets the low-HP dialogue flag (unit work 6),
- * plays the explosion effect over the body, zooms the camera,
+ * starts the charge-up glow over the body (eff_dead), zooms the camera,
  * speaks stg7_aji_41_07, runs subsetevt_dead_core for surviving fists, and handles the boss's rewards and removal locally.
  */
 static EVT_BEGIN(dead_event)
@@ -1404,7 +1404,7 @@ EVT_BEGIN(drill_attack_event)
         WAIT_MS(500)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and the script waits for any guard movement to finish.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_drill_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1531,7 +1531,7 @@ EVT_BEGIN(boomerang_attack_event)
         RETURN
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and the script waits for any guard movement to finish.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_boomerang_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1678,7 +1678,7 @@ EVT_BEGIN(aud_attack_event)
         WAIT_MS(500)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and the script waits for any guard movement to finish.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_aud_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1755,7 +1755,7 @@ EVT_BEGIN(aud_attack_event)
 #endif
     CALL(evt_snd_sfxoff, LW(15))
 
-    // It sinks back down and the jets shut off.
+    // It jets back up off the screen and the pod jets shut off.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_7"))
@@ -2226,7 +2226,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
 /**
  * Battle init for a rocket punch fist of Magnus von Grapple 2.0 (unit work 0: 0 and 2 are the left fist,
  * 1 and 3 the right): registers its wait, attack, damage and confusion events, turns it sideways,
- * sets up the arm physics (arm_init2), starts arm_event and, for the freshly separated fists (work 0 or 1),
+ * creates its trail effect (arm_init2), starts arm_event and, for the freshly separated fists (work 0 or 1),
  * makes it fly out in an arc with SFX_BOSS_MBTN_PUNCH_FLY1 and settle at its hovering home position.
  */
 static EVT_BEGIN(init_event_r)

@@ -321,7 +321,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Hooktail (the demos), as the percent chance a status takes hold:
+ * Status vulnerability of Hooktail (the early demos), as percent multipliers on each status's chance:
  * immune to Stop, Poison, Freeze, Huge, Tiny, Attack Down, Defense Down, Fright, Gale Force, Slow, Dodgy,
  * Invisible and instant KO; always hit by Burn, Defense Up, Allergic and Fast;
  * otherwise Sleep 10, Dizzy 50, Confuse 50, Electric 10 and Attack Up 50.
@@ -330,7 +330,7 @@ static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 
 #else
 
 /**
- * Status vulnerability of Hooktail (the final versions), as the percent chance a status takes hold:
+ * Status vulnerability of Hooktail (JP and later), as percent multipliers on each status's chance:
  * immune to Stop, Poison, Freeze, Huge, Tiny, Attack Down, Defense Down, Fright, Gale Force, Slow, Dodgy,
  * Invisible and instant KO; always hit by Burn, Defense Up, Allergic and Fast;
  * otherwise Sleep 20, Dizzy 50, Confuse 50, Electric 10 and Attack Up 50.
@@ -339,8 +339,8 @@ static StatusVulnerability regist = {20, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 
 #endif
 
 /**
- * Pose table of Hooktail: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
- * animation names, 7 entries in the demos and 9 in retail, such as GNB_N_1, GNB_X_1, GNB_Z_1, GNB_S_3.
+ * Pose table of Hooktail: maps its battle pose types (sleep, confuse, stay, talk, hurt and so on) to
+ * animation names, 7 entries in the early demos and 9 in JP and later, such as GNB_N_1, GNB_X_1, GNB_Z_1, GNB_S_3.
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
@@ -447,7 +447,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(6.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 0, -1, 0)
 
-    // Mario stands ready and Hooktail rears up behind them.
+    // Mario stands ready and Hooktail drops into view (GNB_F_3).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     WAIT_FRAMES(2)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_F_3"))
@@ -506,7 +506,8 @@ EVT_END()
 /**
  * Script helper: args[0], args[1] are the x and y a spectator stands at;
  * args[2]-args[4] receive how far to run (dx, dy: a 500-unit vector pointing away from the stage centre,
- * direction limited to the left half) and a random speed between 4 and 8 for the audience fleeing Hooktail.
+ * direction clamped to 90-270 degrees, so dy is never negative) and a random speed of about 4 to 7.4
+ * (0.67 times 6 to 11) for the audience fleeing Hooktail.
  */
 USER_FUNC(_btlgon_get_escape_param) {
     EvtWord* args = event->args;
@@ -700,7 +701,8 @@ EVT_BEGIN(negotiation_event)
         WAIT_MS(1500)
     END_IF
 
-    // Wait until Mario is back at his home position, then the Shell Shield closes again.
+    // Wait until Mario is back at his home position (his positions are read only once, before the loop), then
+    // the Shell Shield follows him again.
     CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(1), EVT_NULLPTR, EVT_NULLPTR)
     LABEL(41)
@@ -1263,14 +1265,14 @@ EVT_END()
  * A hit with the Attack FX R sound (DAMAGE_RESULT_ATTACK_FX_R, the cricket chirp) counts up unit work 0 (to 20),
  * lowers unit work 1, the defense change of her GONBABA_DEFENSE_ATTR parts (down to -2), and switches
  * to the weak pose table.
- * A hit that does damage plays GNB_D_2 (part 1) or GNB_D_1, and the latter sends up to two spectators (counted
- * down in unit work 4) jumping off the stands and running away.
+ * A hit that does damage or carries that sound plays GNB_D_2 (part 1) or GNB_D_1, and the latter lets up to two
+ * swallowed spectators (counted down in unit work 4) drop out beside her and run away.
  * On the last hit with that sound she complains the first two times (stg1_gon_21, 22, unit work 2), or after the
  * surrender (unit work 3) once with stg1_gon_31_04.
  */
 EVT_BEGIN(gonbaba_damage_sub_event)
 
-    // A hit with the cricket chirp (Attack FX R) is recognised: Hooktail's weak spot.
+    // A hit with the cricket chirp (Attack FX R) is counted.
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, LW(0))
@@ -1311,7 +1313,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
                 SUBTRACT(LW(0), 350)
                 ADD(LW(1), 20)
 
-                // Spectators jump down from the stands and run away in fright.
+                // A swallowed spectator reappears beside her, jumps down and runs away in fright.
                 CALL(evt_audience_entry, LW(9), 0)
                 CALL(evt_audience_set_position, LW(9), LW(0), LW(1), LW(2))
                 CALL(evt_audience_flag_on, LW(9), 22)
@@ -1587,7 +1589,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Phase event: empty, it does nothing. */
+/** Empty phase event of Hooktail; nothing registers it. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
@@ -1625,7 +1627,7 @@ EVT_END()
 
 /**
  * Hooktail's stomp ("fumituke" = trampling): she picks a target, steps forward (GNB_W_2, SFX_BOSS_GNB_MOVE1 and
- * _leg_smoke_effect at each foot) and brings her claw down (GNB_A_3, SFX_BOSS_GNB_ARM_UP1 and ARM_DOWN1).
+ * _leg_smoke_effect at each foot) and brings a foot down (GNB_A_3, SFX_BOSS_GNB_ARM_UP1 and ARM_DOWN1).
  * The target dodges or takes the damage with its guard result; then she steps back (GNB_W_3) without having
  * moved her unit.
  */
@@ -1667,7 +1669,7 @@ static EVT_BEGIN(fumituke_attack_event)
     CALL(btlevtcmd_ftomsec, 1, LW(0))
     WAIT_MS(LW(0))
 
-    // She raises her claw and brings it down on the target.
+    // She raises a foot and brings it down on the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_A_3"))
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_ARM_UP1"), EVT_NULLPTR, 0, -320, 30, 30, EVT_NULLPTR)
@@ -1847,7 +1849,7 @@ EVT_BEGIN(firebreath_attack_event)
         GOTO(10)
     END_IF
 
-    // Hooktail lowers her head and the attack ends.
+    // After a pause of 84 frames the attack ends.
     WAIT_FRAMES(84)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

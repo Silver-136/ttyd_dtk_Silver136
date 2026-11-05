@@ -55,7 +55,7 @@ typedef struct ZakoGunWork {
     u8 us_pad08[0xC];
 #endif
 
-    // US: 12 more bytes here
+    // US and later: 12 more bytes here
     s32 state;
     s32 timer;
     Vec pos;
@@ -109,9 +109,9 @@ USER_FUNC(zakogun_kanbu_on_ball) {
 }
 
 /**
- * Script helper: starts formation 3 (the 500 X-Nauts in a ring):
- * selects it (work->flag = 2), assigns each member a jittered grid home position, pushing nearby positions away from the leader
- * and initialises its pose.
+ * Script helper: starts formation 3 (all 500 X-Nauts):
+ * selects it (work->flag = 2), assigns each member a jittered grid home position, pushing nearby positions away from the leader,
+ * initialises its pose, then swaps 250 random pairs of home positions.
  */
 USER_FUNC(zakogun_ext_init3) {
     s32 i;
@@ -502,8 +502,9 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Per-frame update of formation 3: moves the ring of 500 X-Nauts around the formation centre (radius, angle,
- * speed) and turns each one along the ring.
+ * Per-frame update of formation 3: moves each of the 500 X-Nauts through its state machine (marching in, following
+ * the unit, jumping into a ball of work->radius around the formation centre that turns by work->angle, scattering and
+ * walking home, dying, running away) and updates its pose matrix.
  */
 void zakogun_ext_main3(void) {
     s32 i;
@@ -723,7 +724,7 @@ void zakogun_ext_main3(void) {
 
 /**
  * Script helper, first step of group 3 attack: sets the formation centre at (0, 55, 0) with radius 25
- * and builds up the ring; blocks until it is formed.
+ * and builds up the ball; blocks until it is formed.
  */
 USER_FUNC(zakogun_attack3_1) {
     s32 i;
@@ -749,7 +750,8 @@ USER_FUNC(zakogun_attack3_1) {
 
 /**
  * Script helper, second step of group 3 attack (args[0] = sound id):
- * moves the ring toward the target with a sound, then rolls back and pauses before finishing.
+ * rolls the ball left to x = -200 (marking each target it passes in unit work 0), then rolls it back to about x = -30,
+ * stops the sound and pauses 20 frames before finishing.
  */
 USER_FUNC(zakogun_attack3_2) {
     BattleUnit* unit = zakogun_get_ptr();

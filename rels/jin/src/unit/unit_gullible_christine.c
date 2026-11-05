@@ -227,8 +227,8 @@ EVT_END()
 
 /**
  * Damage script of the Doopliss-controlled Goombella:
- * if the hit carries damage code 1024 it sets GW(20)
- * so the fake Mario's phase script knows the partner was struck, then runs the default damage handling.
+ * if the hit defeats her (damage result DAMAGE_RESULT_DEATH) it sets GW(20) to 1
+ * so the fake Mario's scripts know the partner double is down, then runs the default damage handling.
  */
 EVT_BEGIN(damage_event_christine)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
@@ -437,7 +437,7 @@ static EVT_BEGIN(attack_event_christine)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 
-        // Miss: she is knocked away or bounces off (the target dodges for some kinds of miss)
+        // Miss: the target plays its dodge for a lucky, dodgy or plain miss; she finishes the jump
         // and lands in two hops.
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)

@@ -100,7 +100,7 @@ static USER_FUNC(_mario_makkuro_set) {
 
 #if VERSION >= VERSION_US
 
-// US/PAL: set this turn's maximum move count to the remaining-move count.
+// US and later: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(boss_rampell_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);
@@ -308,7 +308,7 @@ static BattleWeapon weapon_rampell_attack = {
 
 /**
  * Camera move used in Doopliss' transformation:
- * puts the battle camera on a close view of the stage center (mode 3) for 37 frames.
+ * puts the battle camera on a close view of Doopliss's side of the stage (x 90, free camera mode) and waits 37 frames.
  */
 EVT_BEGIN(rampell_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -320,8 +320,8 @@ EVT_END()
 /**
  * Doopliss' transformation into Mario's double in the first battle:
  * the status window hides, the camera zooms in, Doopliss raises his arms and laughs (stg4_jin_08_02), flashes,
- * scans Mario and swaps places with a fake Mario unit with at least 10 HP;
- * he rises from the floor and speaks again (stg4_jin_08_03).
+ * vanishes in smoke and scans Mario; the same unit is then re-initialised as the fake Mario (init_event_fmario),
+ * raised to 10 HP if below, rises from the floor and speaks again (stg4_jin_08_03).
  */
 // Replace this unit with the Mario-copy setup, preserving HP unless it is below the 10 HP minimum.
 EVT_BEGIN(to_faker_mario)
@@ -977,7 +977,7 @@ static EVT_BEGIN(fmario_zoom)
 EVT_END()
 
 /**
- * Camera shot on the Goombella unit (x = 130): sets the battle camera to a fixed position
+ * Camera shot on the enemy side at x = 130 (not called in this file): sets the battle camera to a fixed position
  * and waits 37 frames for it to arrive.
  */
 static EVT_BEGIN(gparty_zoom)

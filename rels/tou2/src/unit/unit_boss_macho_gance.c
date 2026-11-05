@@ -152,8 +152,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Macho Grubba (percent chance to take each status):
- * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
+ * Status vulnerability of the Macho Grubba (percent multiplier on each status's inflict chance):
+ * immune to growing huge, fright, gale force and instant kill; reduced rates for many others (the early demos use
+ * other values).
  */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 40, 50, 60, 50, 60, 100, 40, 0, 60, 100, 60, 100, 60, 60, 0, 0, 100, 60, 100, 100, 0};
@@ -680,8 +681,8 @@ EVT_END()
 
 /**
  * Damage event of Macho Grubba: default damage reaction, then,
- * if he was hit in the middle of one of his pose moves (unit work 2 is 1, 2, 3, 4 or 6) a short pause is added,
- * and unit work 2 is cleared.
+ * if he was hit in the middle of one of his pose moves (unit work 2 is 1, 2, 3, 4 or 6) a short pause is added
+ * and the camera returns to the default view, and unit work 2 is cleared.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -908,7 +909,7 @@ static EVT_BEGIN(phase_event)
         END_IF
         CASE_EQUAL(2)
 
-        // Phase 2: at a quarter of his HP he becomes wobbly (his tired poses) and says his last line.
+        // Phase 2: at a quarter of his HP he becomes wobbly (his tired poses) and says stg3_tou_471_19.
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
         MULTIPLY(LW(0), 25)
         DIVIDE(LW(0), 100)
@@ -1256,8 +1257,8 @@ EVT_END()
 
 /**
  * Macho Grubba's hip drop (weapon_gance_attack: 4 damage to one target), his second action in phases 0 and 1:
- * he poses in a flare of light, runs at the chosen target,
- * jumps onto it and lands with a hip drop that hits once, bounces off, and walks back home.
+ * he poses in a flare of light, walks 250 units back from his home spot, runs back to it,
+ * jumps from there onto the target and lands with a hip drop that hits once, bounces off, and walks back home.
  */
 EVT_BEGIN(gance_attack_attack_event)
 
@@ -1314,7 +1315,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(x_flag_wait, 0, 0)
     WAIT_MS(500)
 
-    // Then he stomps back toward the party.
+    // Then he runs back to his home spot.
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     BEGIN_SIBLING_EVENT
@@ -1639,7 +1640,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     WAIT_MS(1000)
     CALL(evt_eff_delete, STRING("hikari"))
 
-    // He spins around once on the spot.
+    // He turns half around on the spot and ends facing the other way.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, LW(0), LW(1), LW(2))

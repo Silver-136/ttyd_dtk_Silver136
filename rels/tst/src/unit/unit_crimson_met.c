@@ -191,7 +191,7 @@ static PoseTableEntry pose_table_ceil[] = {
 
 /**
  * Pose table of Red Buzzy flipped onto its back: maps its battle pose types (stay, walk, hurt, dead, talk
- * and so on) to animation names, 15 entries in demos and 17 in retail, such as MET_N_2, MET_Y_2, MET_K_2, MET_X_2.
+ * and so on) to animation names, 15 entries in the early demos and 17 in JP and later, such as MET_N_2, MET_Y_2, MET_K_2, MET_X_2.
  */
 static PoseTableEntry pose_table_turn[] = {
     {1, "MET_N_2"},
@@ -349,8 +349,8 @@ static BattleUnitDefenseAttr defence_attr_turn = {{DEFENSE_ATTR_NONE, DEFENSE_AT
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Red Buzzy (the demos), as the percent chance a status takes hold:
- * immune to Burn; always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Red Buzzy (the early demos), as percent multipliers on each status's chance:
+ * immune to Burn; 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 75, Attack Down 75, Defense Down 75,
  * Allergic 75, Fright 60, Gale Force 65, Slow 75 and instant KO 95.
  */
@@ -358,8 +358,8 @@ static StatusVulnerability regist = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 1
 #else
 
 /**
- * Status vulnerability of Red Buzzy (the final versions), as the percent chance a status takes hold:
- * immune to Burn; always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Red Buzzy (JP and later), as percent multipliers on each status's chance:
+ * immune to Burn; 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 75, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 75, Fright 60, Gale Force 30, Slow 75 and instant KO 95.
  */
@@ -880,7 +880,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
 
-    // It sways while getting back on its feet, then goes back to its ground form.
+    // After the sway above it goes back to its ground form.
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_MET_ON_CEILING, 0)

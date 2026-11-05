@@ -55,7 +55,7 @@ extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
 
-// The early demos have no padding after these three (the release sizes are aligned up).
+// The demos (early and September) have no padding after these three (the release sizes are aligned up).
 typedef struct {
     BattleUnitDefense v;
 #if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
@@ -184,7 +184,7 @@ static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}};
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
 #endif
 
-/** Status vulnerability of the Fuzzy Horde: immune to the statuses listed in this table. */
+/** Status vulnerability of the Fuzzy Horde: every rate is 0, so it is immune to every status. */
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 #else
@@ -295,8 +295,8 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Damage event of the Fuzzy Horde: for each point of damage taken it either flags the horde as shrinking (unit
- * work 0 = 1, once at most 50 Fuzzies are alive) or makes a Fuzzy escape (chorogun_escape);
+ * Damage event of the Fuzzy Horde: for each point of damage taken it either sets unit work 0 to 1 (once at most
+ * 50 Fuzzies are alive) or sends up to 50 Fuzzies running off (chorogun_escape);
  * on the final hit of an attack (damage-result flag 256), if at most 500 Fuzzies remain,
  * the whole swarm flees (escape_chorogun_event). On that final hit the early demos instead remove the
  * unit when work 0 is set.
@@ -342,8 +342,8 @@ EVT_END()
  * Attack event of the Fuzzy Horde: uses an enemy item if one is selected;
  * otherwise the swarm flies at one target (weapon_chorobon_gundan_attack).
  * The pre-damage check decides between a miss or dodge and a connecting attack,
- * which swoops max(1, (alive count + 100) / 200) groups of Fuzzies onto the target in turn,
- * each checking damage, with the final-hit flag on the last group.
+ * which dives max(1, (alive count + 100) / 200) single Fuzzies (one random Fuzzy each) onto the target in turn,
+ * each checking damage, with the final-hit flag on the last dive.
  */
 static EVT_BEGIN(attack_event)
 
@@ -403,7 +403,7 @@ static EVT_BEGIN(attack_event)
     WAIT_MS(1000)
     GOTO(98)
 
-    // Hit: the Fuzzies dive onto the target in groups, each group bouncing off.
+    // Hit: Fuzzies dive onto the target one at a time, each bouncing off (or knocked back on a Superguard).
     LABEL(91)
     CALL(chorogun_get_alive_num, LW(15))
     ADD(LW(15), 100)
@@ -419,7 +419,7 @@ static EVT_BEGIN(attack_event)
         CALL(chorogun_dive_target, 30, LW(6))
         WAIT_FRAMES(30)
 
-        // Each group checks damage; the last group sets the final-hit flag.
+        // Each dive checks damage; the last dive sets the final-hit flag.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_gundan_attack))
         IF_INT_EQUAL(LW(14), LW(15))
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -482,7 +482,7 @@ ExtTexInfo chorogun_ext_entry_data[] = {
 
 /**
  * Battle-start script: creates the hidden "ext_chorobon" NPC
- * and registers the 1000-sprite Fuzzy swarm (init, per- frame update and draw callbacks).
+ * and registers the 1000-sprite Fuzzy swarm (init and per-frame update callbacks; the update queues the draw).
  */
 EVT_BEGIN(chorogun_entry)
     CALL(evt_npc_entry, STRING("ext_chorobon"), STRING("c_chorobon"))

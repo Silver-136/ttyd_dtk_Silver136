@@ -237,7 +237,7 @@ static BattleWeapon weapon_dokugassun_attack = {
 
 /**
  * Weapon of the Poison Puff (poisongas attack): targets every unit for 10 damage, ignores Defense,
- * may inflict Poison (50% base chance in demos, 70% in retail, for 10 turns); used by attack_event.
+ * may inflict Poison (50% base chance in the early demos, 70% in JP and later, for 10 turns); used by attack_event.
  */
 static BattleWeapon weapon_dokugassun_poisongas_attack = {
     NULL, 0, // name..icon
@@ -510,7 +510,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Init script of the Poison Puff: sets its wait, unison phase, attack, damage and confusion events,
- * clears its two unit work values (work 0 says which way its next hop goes),
+ * clears its two unit work values (work 0 is the lowered flag, which decides whether its next move rises or sinks),
  * starts the barrier_event loop and starts the wait event.
  */
 static EVT_BEGIN(init_event)
@@ -709,7 +709,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
 
-    // It floats back to its home position, small again, and settles down.
+    // It floats back to its home position and settles down.
     LABEL(98)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 40)

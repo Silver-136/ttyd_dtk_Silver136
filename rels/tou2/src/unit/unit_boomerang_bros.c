@@ -105,7 +105,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Element reactions of the Boomerang Bro: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Status vulnerability of the Boomerang Bro (percent chance to take each status): resists most statuses. */
+/** Status vulnerability of the Boomerang Bro (percent of each status's normal chance): resists most statuses. */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 70, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
 #else
@@ -268,7 +268,7 @@ EVT_END()
  * Attack event of the Boomerang Bro: clears unit work 7, uses an enemy item if one fits,
  * and otherwise throws boomerangs. A first strike always uses normal_attack_event.
  * With 3 HP or less it has a 30% chance of the two-throw renzoku_attack_event;
- * every other turn it uses normal_attack_event.
+ * otherwise it uses normal_attack_event.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 0)
@@ -501,7 +501,7 @@ EVT_BEGIN(boomerang_move_event)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 40, FLOAT(20.0f), EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
     CALL(evt_snd_sfxoff, LW(8))
 
-    // It disappears into the Boomerang Bro's hand and the thrown count goes up.
+    // It disappears into the Boomerang Bro's hand and the returned count (unit work 0) goes up.
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -658,7 +658,7 @@ EVT_END()
  * and a hit gets two damage checks 30 to 40 frames apart (the guard result is taken once, unit work 7).
  */
 EVT_BEGIN(normal_attack_event_confuse)
-    // The attack is announced and the guard timing is awaited, with the targets being those of its own side.
+    // The attack is announced and it waits for any guard movement to end, with the targets being those of its own side.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -732,7 +732,7 @@ EVT_BEGIN(normal_attack_event_confuse)
     LABEL(90)
     GOTO(97)
 
-    // A target that is hit takes the damage twice, a moment apart, from the boomerang's out and back passes.
+    // A target that is hit takes the damage twice, 30 to 40 frames apart (the boomerang is already back).
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, LW(8))
@@ -770,7 +770,7 @@ EVT_END()
  * Nothing in this unit runs it; renzoku_attack_event uses normal_attack_event_confuse instead.
  */
 EVT_BEGIN(renzoku_attack_event_confuse)
-    // The attack is announced and the guard timing is awaited, with the targets being those of its own side.
+    // The attack is announced and it waits for any guard movement to end, with the targets being those of its own side.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_renzoku_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -844,7 +844,7 @@ EVT_BEGIN(renzoku_attack_event_confuse)
     LABEL(90)
     GOTO(97)
 
-    // A target that is hit takes the damage four times, a moment apart, as the boomerang whips past.
+    // A target that is hit takes the damage four times, 30 to 40 frames apart (the boomerangs are already back).
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, LW(8))

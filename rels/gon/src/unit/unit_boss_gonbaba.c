@@ -734,7 +734,8 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, LW(4), PTR(&weapon_gonbaba_kamituki_attack), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
     WAIT_MS(500)
 
-    // If the bite defeats Mario, his damage event plays out here.
+    // If the bite leaves Mario with no HP, the event ends here unless he is revived; on a revival it waits for
+    // his damage event to finish.
     CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDamageCode, UNIT_ID_MARIO, DAMAGE_RESULT_REVIVAL, LW(0))
@@ -748,7 +749,7 @@ EVT_BEGIN(negotiation_event)
         WAIT_MS(1500)
     END_IF
 
-    // Mario walks back to his place.
+    // A loop waits for Mario to be back at his place (his positions are read only once, before the loop).
     CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(1), EVT_NULLPTR, EVT_NULLPTR)
     LABEL(41)
@@ -1295,7 +1296,7 @@ EVT_END()
 
 /**
  * Hooktail's damage sub-event (registered in her event table):
- * counts hits on her weak spot (damage code 0x1000000), switches her to the weak pose table,
+ * counts hits made with the Attack FX R sound (damage code 0x1000000), switches her to the weak pose table,
  * plays the matching hurt pose and, when the head is hit, sends spectators running from the stage.
  */
 EVT_BEGIN(gonbaba_damage_sub_event)
@@ -1392,7 +1393,8 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         RETURN
     END_IF
 
-    // After her plea (unit work 3 is 1) the cricket speeches are skipped.
+    // After her plea (unit work 3 is 1) the first two cricket speeches are skipped; she gives the third one
+    // (label 50) once.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(50)
@@ -1571,7 +1573,7 @@ EVT_END()
  * Init event of Hooktail.
  * Installs her wait, attack, damage and entry events (confusion uses the default confusion script),
  * registers the audience entries 13, 14, 32 to 35, 53 and 54 with flag 512,
- * sets the audience base flag (32768 in the US demo and earlier, 16384 otherwise),
+ * sets the audience base flag (32768 in the early demos, 16384 in JP and later),
  * sets her base scale and clears unit works 0 to 5.
  */
 static EVT_BEGIN(init_event)
@@ -1673,7 +1675,7 @@ static EVT_BEGIN(fumituke_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and the script waits for any bodyguard movement.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_gonbaba_fumituke_attack))
@@ -1802,7 +1804,7 @@ EVT_BEGIN(firebreath_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared on all targets and the guard window opens.
+    // The attack is declared on all targets and the script waits for any bodyguard movement.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_gonbaba_firebreath_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)

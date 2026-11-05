@@ -657,7 +657,8 @@ EVT_END()
 
 /**
  * Attack event of Bowser: can use an item; otherwise the first three turns go in order (fire breath, bite, hip
- * drop) and afterwards he draws lots among the hip drop, bite, critical bite and fire breath.
+ * drop) and afterwards he draws lots among the hip drop, bite, critical bite and fire breath (weights 20/20/0/40, early
+ * demos 20/30/0/30, so the critical bite is never drawn).
  * A reaction to first damaging Mario (first_mario_damage_event) follows.
  */
 static EVT_BEGIN(attack_event)
@@ -739,7 +740,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // Bowser walks up to the target.
+    // Bowser walks 40 units forward.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
@@ -949,7 +950,8 @@ EVT_END()
 
 /**
  * Critical bite attack of Bowser (weapon_koopa_critical_bite_attack):
- * a bite with a longer wind-up on one target, with the same dodge or defence check.
+ * the same bite on one target with the same dodge or defence check, but on a hit he holds the bite (KPA_A_4)
+ * for 1.5 seconds before the damage is dealt.
  */
 static EVT_BEGIN(critical_bite_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

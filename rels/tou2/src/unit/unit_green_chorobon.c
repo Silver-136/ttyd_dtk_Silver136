@@ -252,7 +252,7 @@ static BattleUnitSetup entry_chorobon = {
  * The Green Fuzzy calls a friend (it splits): it spins
  * and shakes on the spot with the split sound for about two seconds,
  * then hops to LW(7..9) while a new Fuzzy is spawned there from entry_chorobon,
- * given the same status as its parent (chorobon_copy_status),
+ * given its parent's HP and size change (chorobon_copy_status),
  * spun into place and hopped on to the free spot in LW(0..2), which becomes its home.
  */
 static EVT_BEGIN(friend_event)
@@ -398,7 +398,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Hop movement used by the Fuzzy: from the position in LW(0..2) it hops toward LW(5..7),
+ * Hop movement used by the Fuzzy: from its current position (read into LW(0..2)) it hops toward LW(5..7),
  * covering at most LW(8) units per hop and squashing and stretching on each landing with the hop sound,
  * then ends with a final squash and stretch. LW(6) is the target height.
  */
@@ -512,9 +512,9 @@ EVT_END()
 
 /**
  * The Green Fuzzy's drain attack: hops up to the target, jumps on it and clings on, shaking it.
- * If an electric counter protects the target it takes weapon_chorobon_drain_attack_biribiri_counterd instead
- * and the move ends.
- * Otherwise the target takes the weapon damage, and the Fuzzy swells by the HP drained and recovers that much,
+ * If a Hold Fast or electrified counter protects the target it takes weapon_chorobon_drain_attack_biribiri_counterd
+ * instead and the move ends.
+ * Otherwise the target takes the weapon damage, and the Fuzzy swells if it drained any HP and recovers that much,
  * with a recovery sparkle. After a miss it hops past and waits a second. It then hops home with return_event.
  */
 static EVT_BEGIN(drain_attack_event)
@@ -587,7 +587,7 @@ static EVT_BEGIN(drain_attack_event)
         CASE_END
     END_SWITCH
 
-    // The attack missed: the Fuzzy hops over the target, lands behind it and settles back to its idle pose.
+    // The attack missed: the Fuzzy hops over the target, lands behind it and holds its CBN_N_1 pose for a second.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -606,7 +606,7 @@ static EVT_BEGIN(drain_attack_event)
     LABEL(91)
     SET_VALUE(LF(0), 0)
 
-    // The attack connects: check for a counter (spikes or shock) before the bite.
+    // The attack connects: check for a Hold Fast or electrified counter before the bite.
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), CHECK_COUNTER_HOLD_FAST)
         SET_VALUE(LF(0), 1)
@@ -725,7 +725,7 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(7), 10)
         IF_INT_EQUAL(LW(9), PTR(&weapon_chorobon_drain_attack))
 
-            // The Fuzzy hops off and swells up, healing itself with the points it drained.
+            // Back on the ground it shrinks to its normal size and heals itself by the HP it drained.
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(1), LW(10))
             CALL(evt_eff, STRING(""), STRING("recovery"), 7, LW(5), LW(6), LW(7), LW(10), 0, 0, 0, 0, 0, 0, 0)
         ELSE

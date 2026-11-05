@@ -54,7 +54,8 @@ static EvtWord wait_event[26];
  * Script helper for the Big Bandit's steal attack: arg0 = thief unit, arg1 = victim unit;
  * arg2/arg3/arg4 receive the stolen item id, icon id and count.
  * With a 40% chance it takes up to 10 coins, otherwise it takes a random held item from Mario's pouch,
- * refreshing the victim's equipment if the stolen item is a badge.
+ * refreshing the victim's equipment if the stolen item is a badge
+ * (that badge branch is never reached: the roll covers held items only).
  */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
@@ -274,7 +275,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of the Big Bandit: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Status vulnerability of the Big Bandit (percent chance to take each status): resists most statuses. */
+/** Status vulnerability of the Big Bandit (percent multipliers on each status chance): resists most statuses. */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 60, 100, 80, 100, 80, 100, 80, 80, 85, 70, 100, 80, 100, 100, 95};
 #else
@@ -446,7 +447,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Big Bandit's plain attack: walks around behind the target, then runs at it for a shoulder charge,
+ * The Big Bandit's plain attack: walks around in front of the target, then runs at it for a shoulder charge,
  * stepping with the run sounds.
  * If the pre-check says a pre-emptive spike stops it (result 5) it still charges in and takes the damage check.
  * A miss makes it hop past and trot home; a hit knocks the Big Bandit tumbling head over heels away from the
@@ -477,7 +478,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
 
-    // The Bandit walks around to a spot behind the target.
+    // The Bandit walks around to a spot in front of the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 60)
@@ -489,7 +490,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns and runs back at the target, stepping with the run sounds.
+    // It faces the target and runs in place, stepping with the run sounds.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -629,7 +630,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
 
-    // The Bandit walks around to a spot behind the target.
+    // The Bandit walks around to a spot in front of the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 60)
@@ -641,7 +642,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It turns and runs back at the target, stepping with the run sounds.
+    // It faces the target and runs in place, stepping with the run sounds.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     LOOP(8)
@@ -714,7 +715,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     WAIT_FRAMES(20)
     GOTO(98)
 
-    // The grab lands: the damage is dealt, and unless Mario guarded well the Bandit tries to snatch an item.
+    // The grab lands: the damage is dealt, and unless the target guarded (Guard or Superguard) the Bandit tries to snatch an item.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_borodo_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))

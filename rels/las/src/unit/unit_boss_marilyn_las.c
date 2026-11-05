@@ -468,7 +468,7 @@ EVT_END()
 /**
  * Marilyn's turn: uses an enemy item if the item-use check selects one;
  * otherwise draws lots between the shadow-slip attack,
- * the lightning attack and a charge-up (weights 40/35/25 in the retail releases, 50/25/25 in the demos).
+ * the lightning attack and a charge-up (weights 40/35/25 in JP and later, 50/25/25 in the early demos).
  * The charge-up has weight 25 only while she has charged fewer than twice in a row (unit work 9 counts charges
  * and resets after either attack).
  */
@@ -515,7 +515,7 @@ EVT_END()
  * Marilyn's shadow-slip attack (weapon in LW(9)):
  * she sinks into her shadow, rises 30 units in front of a randomly chosen target,
  * claps her hands at it (one hit, guardable), then sinks again and returns home.
- * The US and PAL releases place her 5 units further forward in depth.
+ * US and later place her 5 units further forward in depth.
  */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

@@ -186,8 +186,8 @@ static PoseTableEntry pose_table[] = {
 /**
  * Event table of Cortez Rapier: cortez_damage_sub_event, cortez_weapon_dead_event,
  * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
- * cortez_weapon_counter_damage_event (36),
- * avoid_thorn_event (38).
+ * cortez_weapon_counter_damage_event (36 and the other counter-damage tags),
+ * avoid_thorn_event (37 to 39).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
@@ -225,8 +225,8 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init event of Cortez's rapier weapon: sets the unit flag 0x1000000, installs its wait, phase, unison phase,
  * attack, damage and (default) confusion events,
- * stores weapon number 3 in unit work 2 and clears unit work 1 (the flag that makes it sit out its attack),
- * and allows no movement.
+ * stores weapon number 3 in unit work 2 and clears unit work 1 (its down countdown; nonzero makes it sit out its
+ * attack), and gives it no actions per turn until Cortez's third form.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
@@ -263,7 +263,7 @@ static EVT_BEGIN(avoid_thorn_event)
     RETURN
 EVT_END()
 
-/** Phase event of the rapier: does nothing. */
+/** Empty phase event that nothing references; init_event installs cortez_weapon_phase_event instead. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()

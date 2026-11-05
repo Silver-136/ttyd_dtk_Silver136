@@ -704,7 +704,7 @@ EVT_END()
 
 /**
  * Defeat sequence of the fake Mario in the second battle:
- * he falls over with a thud, then gets back into a sitting pose after saying stg4_jin_26_05.
+ * he says stg4_jin_26_05, staggers (EM_K_1) and then falls over with a thud (EM_D_2).
  */
 EVT_BEGIN(dead_event_fmario_down)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_S_1"))
@@ -726,9 +726,9 @@ EVT_END()
  * Death event of the fake Mario in the second battle:
  * he returns to his home position, the first time Vivian returns to the party (vivian_comeback)
  * and her unit is spawned at (-140, 0, 5).
- * Depending on GW(20) (the current partner double's death state) the camera shows him or the double
- * and they speak stg4_jin_26_05 (a line per partner double);
- * then he falls over (dead_event_fmario_down) and GW(19) is set to 2.
+ * Depending on GW(20) (the current partner double's death state) the camera shows him or the enemy side while
+ * he says stg4_jin_26_05 and falls over (dead_event_fmario_down); while the double is still standing (GW(20) 0)
+ * it then answers with its own line (stg4_jin_26_05_kur, _nok, _win or _yos). Then GW(19) is set to 2.
  */
 static EVT_BEGIN(dead_event_fmario)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

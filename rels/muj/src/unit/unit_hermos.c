@@ -438,7 +438,8 @@ EVT_END()
 
 /**
  * Splitting event of the Ember, called by its fire-hit reaction:
- * spawning a bubble unit (entry_bubble) at its position with the same HP and size status.
+ * spawns a new Ember (entry_bubble) at its position with the same HP and size status and jumps it, spinning,
+ * to the free spot.
  */
 static EVT_BEGIN(friend_event)
     CALL(btlevtcmd_AnimeChangePose, LW(10), LW(11), STRING("S_1"))
@@ -726,7 +727,7 @@ static EVT_BEGIN(fire_attack_event)
     ADD_FLOAT(LW(0), LW(10))
     ADD_FLOAT(LW(2), LW(12))
 
-    // The fireball takes three arcing dives through intermediate points and then toward the target.
+    // The fireball takes two dives through intermediate points (70%, then back to 40% of the way) and a third onto the target.
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 5)
@@ -742,7 +743,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 30, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
 
-    // The fireball reaches the target and disappears.
+    // The fireball reaches the target and its shadow is switched off again.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))

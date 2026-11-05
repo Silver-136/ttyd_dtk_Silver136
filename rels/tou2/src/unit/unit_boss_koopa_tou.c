@@ -122,8 +122,8 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Bowser (percent chance to take each status):
- * immune to fright, gale force and instant kill; resists most other statuses.
+ * Status vulnerability of the Bowser (percent multiplier on each status's inflict chance):
+ * immune to fright, gale force and instant kill; reduced rates for many others (the early demos use other values).
  */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 60, 70, 50, 60, 50, 100, 40, 100, 75, 100, 75, 100, 60, 60, 0, 0, 100, 60, 100, 100, 0};
@@ -429,7 +429,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Bowser's defeat: if he is away from his home spot he walks back to it, waits for the attack to end,
+ * Bowser's defeat: if he is away from his home spot he runs back to it, waits for the attack to end,
  * zooms the camera and has him say the closing line (stg3_tou_403_06_03) with a satisfied voice
  * and the "KPA_D_2" collapse pose, then runs the common no-spin death.
  */
@@ -564,8 +564,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Bowser's Hip Drop: walks to the target, jumps up and slams down on it (camera shake on a hit).
- * If the action command result is 3 or less and the target is Mario or a partner,
+ * Bowser's Hip Drop: walks a short way forward, then jumps onto the target and slams down (camera shake on a hit).
+ * If the target did not Guard or Superguard (guard result 3 or less) and is Mario or a partner,
  * it also seals one of that character's commands:
  * the lost command's icon is tossed across the screen with _icon_jump_icon
  * and an announcement message is shown (the US and later versions pass the partner to party_cannot_use_command).
@@ -592,7 +592,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // Bowser stomps up to the target, then crouches and leaps into the air.
+    // Bowser stomps 40 units forward, then crouches and leaps into the air.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
@@ -657,7 +657,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(300)
 
-    // If Mario or his partner guards poorly, one of their commands is sealed: its icon is tossed across the screen
+    // If Mario or his partner did not Guard or Superguard, one of their commands is sealed: its icon is tossed across the screen
     // and an announcement tells which.
     CALL(btlevtcmd_GetResultACDefence, LW(7))
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
@@ -939,7 +939,8 @@ static EVT_BEGIN(fire_attack_event)
     SET_VALUE(LW(10), 0)
     LABEL(10)
 
-    // Each target is checked in turn: a miss can skip the damage without an avoid pose, while dodges duck out of the flames and connecting hits deal damage.
+    // Each target is checked in turn: intangible targets are skipped without an avoid pose, lucky, dodgy and missed
+    // results play an avoid reaction, and hits deal damage (the guard is checked for the first target only).
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)

@@ -522,7 +522,10 @@ BattleWeapon weapon_cortez_mode2_head_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of Cortez (mode2 charge): targets every unit; used by at2_hone_charge_event. */
+/**
+ * Weapon of Cortez (mode2 charge): no damage, a charge of 4; at2_hone_charge_event applies it to Cortez
+ * himself.
+ */
 BattleWeapon weapon_cortez_mode2_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -754,7 +757,7 @@ PoseTableEntry pose_table_mode_1[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
-/** Poses of Cortez's bone pile (part 4) in his first form, used when it is hit. */
+/** Poses of Cortez (part 1) in his first form, set by damage_event when the bone pile (part 4) is hit. */
 PoseTableEntry pose_table_mode_1_hone[] = {
     {POSE_TYPE_SLEEP, "KRT_N_1"},
     {POSE_TYPE_CONFUSE, "KRT_K_1"},
@@ -775,7 +778,7 @@ PoseTableEntry pose_table_mode_1_hone[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
-/** Guess: base poses of Cortez in his second form, before a stance is chosen. */
+/** Poses of Cortez in his second form (the same poses as the upper stance, ribs closed); no script here sets it. */
 PoseTableEntry pose_table_mode_2_normal[] = {
     {POSE_TYPE_NORMAL, "KRT_1S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_1"},
@@ -922,8 +925,8 @@ PoseTableEntry pose_table_honeduka[] = {
 
 /**
  * Event table of Cortez: cortez_damage_sub_event, dead_event,
- * mode2_honeduka_damage_event (tags 70, 71), cortez_ac_counter_damage_event,
- * avoid_thorn_event (37).
+ * mode2_honeduka_damage_event (tag 70 in the early demos, 71 later), cortez_ac_counter_damage_event,
+ * avoid_thorn_event (tags 39 and 37).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
@@ -1068,7 +1071,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Cortez's damage event for the counterattack (action command) phase:
+ * Data event (tag 36) for the counter damage Cortez takes from a Superguard:
  * in earlier forms it holds the damage pose for 500 ms and returns.
  * In the final form he recovers into his idle pose after a short recoil;
  * fatal damage without revival returns there, otherwise he dives back to his home position.
@@ -1100,7 +1103,7 @@ EVT_BEGIN(cortez_ac_counter_damage_event)
 EVT_END()
 
 /**
- * Data event (tags 37 and 39) run when an attacker is hurt by Cortez's top or front spikes:
+ * Data event (tags 37 and 39, the head-spike and spike counters) run when an attacker is hurt by Cortez's spikes:
  * on the bone pile (part 4) it shows the toge_flush spike flash at its hit position.
  * On any other part it plays the rib counter sound and the rib-snap pose for his stance (KRT_1C_3 to KRT_3C_3),
  * clears the rib-open count (unit work 11) and resets his pose table.
@@ -1610,7 +1613,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
 EVT_END()
 
 /**
- * One falling bone of the bone rain: uses a random flight duration, picks a random start above Cortez,
+ * One falling bone of the bone rain: uses a random flight duration, picks a random start around Cortez,
  * flies to a random spot around the target and spins as it falls, then lands and hides its part.
  */
 EVT_BEGIN(_bone_rain_event)
@@ -1836,8 +1839,8 @@ EVT_BEGIN(at3_kamitsuki_attack)
 EVT_END()
 
 /**
- * Cortez's normal sword stab (mode 1): raises the sword, then thrusts it twice with sword-stick sounds,
- * with a different pose for targets at the front guard than at the back (_check_zenei_kouei).
+ * Cortez's normal sword stab (mode 1): the front or rear weapon by the attack counter passed in LW(0)
+ * (0 front, else rear), raises the sword, then thrusts it with a sword-stick sound, with a different pose for targets at the front guard than at the back (_check_zenei_kouei).
  */
 EVT_BEGIN(at1_normal_attack)
     IF_INT_EQUAL(LW(0), 0)

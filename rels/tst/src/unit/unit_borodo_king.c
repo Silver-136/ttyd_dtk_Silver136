@@ -166,8 +166,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Big Bandit (the demos), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Big Bandit (the early demos), as percentage multipliers for the attack's base status chance:
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 80, Dizzy 80, Confuse 80, Freeze 60, Tiny 80, Attack Down 80, Defense Down 80,
  * Allergic 80, Fright 85, Gale Force 70, Slow 80 and instant KO 95.
  */
@@ -175,8 +175,8 @@ static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 60, 100, 80,
 #else
 
 /**
- * Status vulnerability of Big Bandit (the final versions), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Big Bandit (JP and later), as percentage multipliers for the attack's base status chance:
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 90, Stop 80, Dizzy 60, Confuse 90, Freeze 60, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 80, Fright 85, Gale Force 70, Slow 80 and instant KO 95.
  */
@@ -184,7 +184,7 @@ static StatusVulnerability regist = {90, 80, 60, 100, 90, 100, 100, 60, 100, 90,
 #endif
 
 /**
- * Pose table of Big Bandit: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
+ * Pose table of Big Bandit: maps its battle pose types (stay, walk, hurt, talk and so on) to
  * animation names, 20 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -217,7 +217,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Pose table of Big Bandit while it holds a stolen item: maps its battle pose types (stay, walk, hurt,
- * dead, talk and so on) to animation names, 18 entries such as N_1, Y_1, K_1, I_1.
+ * talk and so on) to animation names, 18 entries such as N_1, Y_1, K_1, I_1.
  */
 static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -439,7 +439,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CASE_END
     END_SWITCH
 
-    // On a miss it hops back twice, thrown off balance.
+    // On a miss it hops on past the target twice, thrown off balance.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -494,8 +494,8 @@ EVT_END()
 
 /**
  * The Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
- * on a hit where Mario's action command result (LW(7)) was 3 or less,
- * _steal_item takes an item from Mario's pouch (LW(8) = the item, LW(9) = its icon),
+ * on a hit the target did not Guard or Superguard (guard result LW(7) 3 or less),
+ * _steal_item takes coins or a held item (LW(8) = the item, LW(9) = its icon),
  * which flies out of the target while btl_msg_steal_item_lost is announced and sets the unit flag 0x40000000,
  * and the Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
  * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
@@ -600,7 +600,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CASE_END
     END_SWITCH
 
-    // On a miss it hops back twice, thrown off balance.
+    // On a miss it hops on past the target twice, thrown off balance.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -621,7 +621,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         CALL(_steal_item, UNIT_ID_SELF, LW(3), LW(8), LW(9), LW(7))
         IF_INT_NOT_EQUAL(LW(8), 0)
-            // If Mario's action command was poor enough, the Big Bandit snatches an item; it flies out of the target in an arc.
+            // If the target did not guard and something was taken, its icon flies out of the target in an arc.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_SUCCESS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             BEGIN_INLINE_EVENT
                 WAIT_FRAMES(20)

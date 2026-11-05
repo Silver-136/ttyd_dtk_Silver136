@@ -129,7 +129,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Smorg Miasma (percent chance to take each status):
+ * Status vulnerability of the Smorg Miasma (percent multiplier on each status's chance; all 0):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
  * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -427,7 +427,8 @@ static EVT_BEGIN(evt_attack)
         SET_VALUE(LF(0), 1)
     END_IF
 
-    // The main body freezes its idle animation, and the other two tentacles that are still alive swing along.
+    // The main body's limb-hit signal (unit work 0) is cleared and the body is set to its S_1_1 pose; the other
+    // two tentacles that are still alive move along.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(6))
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
@@ -531,7 +532,7 @@ static EVT_BEGIN(evt_attack)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_SWITCH
 
-    // The main body resumes idling and the tentacle finishes its animation.
+    // The main body's limb-hit signal is set again, the camera returns and the tentacle finishes its animation.
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LW(15), 0)

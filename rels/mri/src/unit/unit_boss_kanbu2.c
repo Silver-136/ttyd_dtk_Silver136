@@ -1,4 +1,4 @@
-// The Great Tree (mri) battle unit: Lord Crump (kanbu2) in the Magnus von Grapple fight: its parts, defence/status
+// The Great Tree (mri) battle unit: an unused Lord Crump (kanbu2, UNIT_UNUSED_CRUMP2): its parts, defence/status
 // tables, and attack events.
 // No formation or script of this REL uses it.
 
@@ -275,7 +275,7 @@ static PoseTableEntry pose_table_guard[] = {
  * picks a target, runs at it and does a belly flop.
  * He hops (SFX_BOSS_KANBU_JUMP1, poses A_1A and A_1B) over the target;
  * the pre-damage check decides between a dodge and a hit,
- * and on a hit he lands on it (A_1C, SFX_BOSS_KANBU_HIP_ATTACK1 and 2),
+ * and hit or miss he comes down flat (A_1C, SFX_BOSS_KANBU_HIP_ATTACK1 and 2),
  * bounces and gets up (D_1) before returning home.
  * Falls back to the flustered reaction when confused with nothing to hit.
  */
@@ -340,7 +340,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
 
-        // He misses: the target dodges for results 3, 6 and 2, and he comes down on the spot.
+        // He misses: the target plays an avoid pose on a lucky, dodgy or plain miss, and he comes down on the spot.
         LABEL(90)
         GOTO(98)
 

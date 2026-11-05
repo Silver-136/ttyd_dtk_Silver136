@@ -172,7 +172,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Element reactions of the Hammer Bro: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Status vulnerability of the Hammer Bro (percent chance to take each status): resists most statuses. */
+/** Status vulnerability of the Hammer Bro (percent multiplier on each status's inflict chance). */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
 #else
@@ -238,7 +238,7 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_hammer_bros", "c_burosu_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
-/** Weapon of the Hammer Bro's attack: 4 damage, jump-type contact attack. */
+/** Weapon of the Hammer Bro's attack (a thrown hammer): 4 damage, jump-type targeting, counters cannot hit it. */
 static BattleWeapon weapon_hammer_bros_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -275,7 +275,7 @@ static BattleWeapon weapon_hammer_bros_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of the Hammer Bro's rapid-fire attack: 2 damage, jump-type contact attack. */
+/** Weapon of the Hammer Bro's rapid-fire attack (thrown hammers): 2 damage, jump-type targeting, counters cannot hit it. */
 static BattleWeapon weapon_hammer_bros_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -312,7 +312,7 @@ static BattleWeapon weapon_hammer_bros_renzoku_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of the Hammer Bro's barrage attack: 2 damage, jump-type contact attack. */
+/** Weapon of the Hammer Bro's barrage attack (thrown hammers): 2 damage, jump-type targeting, counters cannot hit it. */
 static BattleWeapon weapon_hammer_bros_nagemakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -351,7 +351,7 @@ static BattleWeapon weapon_hammer_bros_nagemakuri_attack = {
 
 /**
  * Init script of the Hammer Bro.
- * Registers its wait, attack and damage scripts.
+ * Registers its wait, attack and damage scripts (attack_event also serves as its confusion event).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -540,7 +540,7 @@ EVT_END()
 
 /**
  * The hammer bouncing off after a hit: keeps the hammer part LW(15) spinning, shows the throw pose (BRO_A_1B),
- * bounces it from the target to the ground 50 units back towards the Hammer Bro and hides it again.
+ * bounces it from the target to the ground 50 units past the target (in the Hammer Bro's facing direction) and hides it again.
  */
 static EVT_BEGIN(hammer_bros_attack_common_event3)
     BEGIN_SIBLING_EVENT
