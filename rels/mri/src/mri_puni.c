@@ -2220,6 +2220,7 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
     PuniData* q;
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
+    PuniData* ret;
 
     q = &Punidat[1];
     for (i = 1; i < PUNI_SOLID_FIRST; i++) {
@@ -2232,15 +2233,12 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
         }
         q++;
     }
-    {
-    PuniData* ret;
-    if (minDist < 1000000.0f) {
-        ret = found;
-    } else {
-        ret = NULL;
-    }
-    return ret;
-    }
+if (minDist < 1000000.0f) {
+    ret = found;
+} else {
+    ret = NULL;
+}
+return ret;
 }
 
 /** Nearest living Jabbi to self at any distance under 1000 units, or NULL. */
