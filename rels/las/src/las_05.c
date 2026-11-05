@@ -49,16 +49,8 @@
 #include "driver/extdrv.h"
 #include <math.h>
 #include "driver/seqdrv.h"
+#include "senkaron.h"
 
-typedef struct Senkaron {
-    s8 state;
-    u16 area;
-    s32 timer;
-    f32 vx;
-    f32 vy;
-    f32 vz;
-    u32 flags;
-} Senkaron;
 typedef struct SenkaronWork {
     s32 attackStart;
     s32 escape;

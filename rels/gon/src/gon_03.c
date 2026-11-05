@@ -39,15 +39,8 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "senkaron.h"
 
-typedef struct Senkaron {
-    s8 state;
-    s32 timer;
-    f32 vx;
-    f32 vy;
-    f32 vz;
-    u32 flags;
-} Senkaron;
 Senkaron* senkaron;
 s32 senkaronAttackStartFlag;
 s32 senkaronEscapeFlag;

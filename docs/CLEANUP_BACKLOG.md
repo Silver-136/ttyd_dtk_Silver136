@@ -223,6 +223,8 @@ pushed commit (cleanup_notes, round 22):
   owner headers, unit work-slot names (0f45e78cd), unit types repeated across REL copies (a9f65232b,
   221646136, 73cf4945d). Then ZakoGunWork one struct in zakogun.h,
   the rsh battle swarm types renamed ExtMoamoa*, chorobon size padding gone (configs follow), Yoshi work slots shared
-  (include/battle/unit/unit_party_yoshi.h; slots 4/5 are pitch: BtlUnit_snd_se arg 4). Also left: eff_balloon_n64's
+  (include/battle/unit/unit_party_yoshi.h; slots 4/5 are pitch: BtlUnit_snd_se arg 4), Senkaron in include/senkaron.h
+  (gon_03, las_05). The scanner's other "shared" pairs (Teresa jin_00/07, UranaiWork, ScreenWork, PowerGaugeWork)
+  are different file-local structs with one name: kept. glu EdgePair untouched (assert __LINE__). Also left: eff_balloon_n64's
   effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
   9 placeholder names in headers (--detail unk).
