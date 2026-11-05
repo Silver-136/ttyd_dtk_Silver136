@@ -4377,9 +4377,8 @@ void puniModeEnter(PuniData* p) {
     Vec d;
     u32 t;
     switch (p->modeStep) {
-        case 0: {
-                p->startTime = gp->renderTime;
-            }
+        case 0:
+            p->startTime = gp->renderTime;
             p->timer = 200;
             if ((Punigp->flags & PUNI_WORK_FLAG_PIPE_DOWN) && !(Punigp->flags & PUNI_WORK_FLAG_NO_NEXT_MAP)) {
                 p->timer = 700;
