@@ -23,8 +23,6 @@ static inline int tolower(int c) {
 #define filePosition(i) (FstStart[i].entryOffsetOrParent)
 #define fileLength(i) (FstStart[i].entrySizeOrNext)
 
-BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen);
-
 // The functions are emitted in reverse source order: ARCClose comes first in the object.
 
 /**

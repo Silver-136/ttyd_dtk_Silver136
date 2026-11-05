@@ -788,6 +788,8 @@ static void msgDispKeyWait_render(s32 wXluStage) {
     wp->currDispMode = wXluStage;
 }
 
+// FAKE: private hankakuSearch prototypes (s32 from the US release, char before) while fontmgr.c defines it with
+// s8; a shared s8 prototype in fontmgr.h changes the object.
 #if VERSION >= VERSION_US
 u16 hankakuSearch(s32 c);
 #else

@@ -67,9 +67,6 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param);
 
 // local prototypes
-extern BattleWeapon marioDefaultWeapon_Jump;
-extern BattleWeapon marioWeapon_KururinJump;
-extern BattleWeapon marioDefaultWeapon_Hammer;
 void BattleDrawEnemyHP(CameraId camId, void* param);
 static s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon);
 

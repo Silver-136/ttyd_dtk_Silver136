@@ -34,7 +34,6 @@ static void __NoHangRetraceCallback(u32 count);
 static void __NoHangDoneRender(void);
 static void __DEMODiagnoseHang(void);
 static void DEMOSwapBuffers(void);
-void DEMOReInit(GXRenderModeObj* mode);
 
 /** Carves the two external frame buffers off the bottom of the arena, sized for the render mode. */
 static void __DEMOInitMem(void) {

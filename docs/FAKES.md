@@ -412,6 +412,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/msgdrv.c | msgDisp | no-op `(u32)` cast on w (a u16 value held in s32) | plain w: changes the object |
 | Both | src/driver/msgdrv.c | msgWindow_Main | d2 re-reads smart->address (data holds the same pointer); using data changes the object | see comment |
 | Both | src/driver/msgdrv.c | msgWindow_Delete | empty loop over data->charCount | removing it changes the object |
+| Both | src/driver/msgdrv.c | (file scope) hankakuSearch | private prototypes taking s32 (US and later) or char (JP, early demos); the definition in fontmgr.c takes s8 | `u16 hankakuSearch(s8 c);` in fontmgr.h: changes the object |
 | JP | src/driver/npcdrv.c | npcMain | discarded sqrtf call; removing it changes the object | see comment |
 | Both | src/driver/npcdrv.c | npcSetTalkPose | the first character is read through an s8 cast; name[0] changes the object | see comment |
 | Both | src/driver/npcdrv.c | npcSetStayPose | the first character is read through an s8 cast; name[0] changes the object | see comment |
@@ -486,6 +487,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_mario.c | evt_koopa_fire | s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_paper_pose_dokan | unreferenced static const char names[] holding the six DOKAN_* pose names with hand padding | see comment |
 | Both | src/event/evt_batstage.c | evt_batstage_light_set_player_on | unused zeroed array; removing it changes the object | see comment |
+| Both | src/event/evt_batstage.c | (file scope) BattleStage*Dark* | private prototypes of the six stage/audience darkness setters with an s32 mode; battle_stage.c defines them with u8 mode | the definitions' prototypes in battle_stage.h: changes the object |
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
 | Both | src/event/evt_bero.c | bero_get_position_normal | two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object | see comment |
 | Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
@@ -522,6 +524,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
+| Both | src/event/evt_party.c | (file scope) bomheiGetStatus | private prototype returning s32; party_bomhei.c returns u8 | `u8 bomheiGetStatus(void)` in party_bomhei.h: changes the object |
 | Both | src/event/evt_shop.c | evt_shop_setup | block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
 | Both | src/event/evt_sub.c | evt_sub_animgroup_async | redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object | see comment |
@@ -562,6 +565,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario_hit.c | (file) | `#pragma inline_max_size(1000)` for the rest of the file | removing it: changes the object |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | no-op self-assignment as the then-branch; without it the branch is laid out differently | see comment |
 | US, PAL, US demo 2, PAL demo | src/mario/mario_kemuri.c | party_kemuri | empty then-branch `if (party->moveSpeed < 2.0f) { } else if (...)` (twice, US-and-later branch) | `moveSpeed >= 2.0f && kemuriTimer++ > 6`: changes the object |
+| Both | src/mario/mario_kemuri.c | (file scope) effKemuri2Entry | private prototype with a leading s32 type (passed as 0) that the definition (x, y, z, dx, dz) does not take | the definition's prototype in eff_kemuri.h and the calls without the 0: changes the object |
 | Both | src/mario/mario_sbr.c | checkOneRevolution | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/mario/mario_sbr.c | marioGetRub | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/mario/mariost.c | gcDvdCheckThread | s32 -> f32 -> s32 round trip; the plain assignment changes the object | see comment |

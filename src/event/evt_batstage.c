@@ -5,6 +5,8 @@
 #include <dolphin/mtx.h>
 #include "battle/battle_stage.h"
 
+// FAKE: private prototypes with an s32 mode; battle_stage.c defines the six with u8 mode, and those prototypes
+// (in battle_stage.h) change the object.
 void BattleStageReturnAudDarkBase(s32 time, s32 mode);
 void BattleStageSetAudDarkBase(u8 dark, s32 time, s32 mode);
 void BattleStageSetAudDark(u8 dark, s32 time, s32 mode);

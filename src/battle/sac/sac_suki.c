@@ -37,6 +37,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_disp.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_stage.h"
 
 
 typedef struct SukiBtn {
@@ -68,8 +69,6 @@ typedef struct SukiWork {
     BattleWeapon weapon;    // 0x284
     u8 pad344[0x4C8 - 0x344];
 } SukiWork;
-
-void tou_gamen_screen_tev(MapTevCallbackInfo* p);
 
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);

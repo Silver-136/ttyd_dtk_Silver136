@@ -3,6 +3,7 @@
 #include <dolphin/gx.h>
 
 void DEMOInit(GXRenderModeObj* mode);
+void DEMOReInit(GXRenderModeObj* mode);
 void DEMOBeforeRender(void);
 void DEMODoneRender(void);
 GXRenderModeObj* DEMOGetRenderModeObj(void);

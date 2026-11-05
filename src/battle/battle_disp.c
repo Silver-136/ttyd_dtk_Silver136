@@ -325,7 +325,6 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
 static void btlUnitPartsBlurDisp(CameraId camId, void* payload);
 static void btlUnitItemDisp2(CameraId camId, void* payload);
 static void btlUnitStolenItemDisp(CameraId camId, void* param);
-void btlUnitPartsDisp(CameraId camId, void* part);
 
 /**
  * Battle per-frame display update for every unit:

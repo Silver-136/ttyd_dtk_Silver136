@@ -34,12 +34,6 @@
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
-extern USER_FUNC(evt_mario_dispflag_onoff);
-extern USER_FUNC(evt_mario_flag_onoff);
-extern USER_FUNC(evt_pouch_add_coin);
-extern USER_FUNC(evt_win_coin_off);
-extern USER_FUNC(evt_win_coin_on);
-
 // These values describe this shared inn event, not generic story progress.
 enum { INN_COMMEMORATIVE_STAY = 50, INN_STAY_COUNT_CAP = 100 };
 

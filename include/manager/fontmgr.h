@@ -111,3 +111,4 @@ void JUTFontSetup(u16 font);
 void FontDrawCodeMtx(Mtx mtx, u16 code);
 void FontDrawScaleVec(Vec scale);
 GXColor FontGetDrawColor(void);
+GXColor HSV2RGB(GXColor hsv);
