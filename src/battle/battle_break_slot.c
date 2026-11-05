@@ -295,7 +295,7 @@ void BattleBreakSlot_Init(void) {
 void BattleBreakSlot_Main(void) {
     static f32 updown;
     BattleWork* wp = _battleWorkPointer;
-    BattleDebugCtrl* dbg2 = &wp->debug;
+    BattleDebugCtrl* dbg = &wp->debug;
     BattleAudience* aud = BattleAudienceBaseGetPtr();
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
     BreakSlotReel* reel;
@@ -791,7 +791,7 @@ void BattleBreakSlot_Main(void) {
                         break;
                     }
 #endif
-                    if ((dbg2->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg2->slotItem) {
+                    if ((dbg->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg->slotItem) {
                         break;
                     }
                     rr->pos.y = 0.0f;
@@ -859,7 +859,7 @@ static void BattleBreakSlotDispReel(CameraId camId, void* param) {
     Mtx rz;
     Mtx m;
     s32 idx;
-    u16 next;
+    u16 texId;
     BreakSlotReel* reel;
     u16* tex;
     s32 i;
@@ -909,21 +909,21 @@ static void BattleBreakSlotDispReel(CameraId camId, void* param) {
         PSMTXConcat(negPivot, m, m);
         PSMTXConcat(scale, m, m);
         PSMTXConcat(trans, m, m);
-        next = tex[reel->item];
-        btlDispTexPlane2(m, next, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
+        texId = tex[reel->item];
+        btlDispTexPlane2(m, texId, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
         if (reel->state <= 10 && reel->state != 3 && reel->state != 4) {
             idx = reel->index + 1;
             if (idx >= reel->numCards) {
                 idx = 0;
             }
-            next = tex[reel->cards[idx]];
+            texId = tex[reel->cards[idx]];
             if (reel->state >= 1 && reel->state <= 4) {
                 PSMTXTrans(trans, 0.0f, -32.0f, 0.0f);
             } else {
                 PSMTXTrans(trans, 0.0f, -128.0f, 0.0f);
             }
             PSMTXConcat(trans, m, m);
-            btlDispTexPlane2(m, next, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
+            btlDispTexPlane2(m, texId, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
         }
     }
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
@@ -950,7 +950,7 @@ void BattleBreakSlot_End(void) {
 void BattleBreakSlot_PointInc(void) {
     BattleDebugCtrl* dbg = &_battleWorkPointer->debug;
     BreakSlotReel* reel;
-    BreakSlotReel* reel2;
+    BreakSlotReel* prevReel;
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
 
     if (pouchGetPtr()->starPowersObtained == 0) {
@@ -1011,10 +1011,10 @@ void BattleBreakSlot_PointInc(void) {
             break;
         case 2:
             do {
-                reel2 = BattleBreakSlotReelGetPtr(1);
+                prevReel = BattleBreakSlotReelGetPtr(1);
                 reel->index = irand(reel->numCards);
                 reel->item = reel->cards[reel->index];
-            } while (reel->item == reel2->item);
+            } while (reel->item == prevReel->item);
             break;
     }
 }

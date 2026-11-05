@@ -194,7 +194,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     pz = m->position.z;
     for (i = 0; i < 10; i++) {
         marioGetPtr()->kpaWork->rideHit[i] = NULL;
-        marioGetPtr()->kpaWork->rideDist[i] = 1000.0f;
+        marioGetPtr()->kpaWork->rideProbeX[i] = 1000.0f;
     }
     switch (kpaGetLevel()) {
     case 0:
@@ -278,7 +278,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
             }
         }
         marioGetPtr()->kpaWork->rideHit[i] = hit;
-        marioGetPtr()->kpaWork->rideDist[i] = ox;
+        marioGetPtr()->kpaWork->rideProbeX[i] = ox;
     }
     return best;
 }

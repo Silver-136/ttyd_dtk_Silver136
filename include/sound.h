@@ -243,7 +243,7 @@ void SoundMain(void);
 void SoundMainInt(void);
 void SoundSetFadeTime(u16 in, u16 out);
 BOOL SoundLoadDVD2(const char* path);
-BOOL SoundLoadDVD2PushGroup(u8* group_ids);
+BOOL SoundLoadDVD2PushGroup(u8* groupIds);
 void SoundLoadDVD2Free(void);
 BOOL SoundSLibLoadDVD(const char* path);
 BOOL SoundDropData(void);
@@ -251,7 +251,7 @@ void SoundSetOutputMode(SND_OUTPUTMODE mode);
 void SoundOpenCover(void);
 void SoundCloseCover(void);
 
-void SoundSongPlayCh(s32 id, u32 mask);
+void SoundSongPlayCh(s32 chan, u32 groupInfo);
 void SoundSongContinueCh(s32 chan);
 void SoundSongStopCh(s32 chan);
 void SoundSongFadeoutCh(s32 chan);

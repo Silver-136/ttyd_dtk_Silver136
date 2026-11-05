@@ -485,8 +485,8 @@ static inline void h2ClrPaper(MarioWork* mario) {
  */
 void mot_hammer2(void) {
     MarioWork* mario = marioGetPtr();
-    s32 b, a;
-    f32 c;
+    s32 rubCount, rubDir;
+    f32 rubMag;
     HitEntry* hit;
     f32 ang2, ang;
     f32 nz, ny, nx, len, hz, hy, hx;
@@ -555,7 +555,7 @@ void mot_hammer2(void) {
         mario->currSubMotionId = 10;
         mario->multiTimer = 30;
     case 10:
-        if (marioGetRub(PAD_BUTTON_B, &a, &b, &c) == 1) {
+        if (marioGetRub(PAD_BUTTON_B, &rubDir, &rubCount, &rubMag) == 1) {
             mario->mot.hammer2.flags &= ~HAMMER2_FLAG_AT_LEVEL;
             mario->hammerChargeTimer++;
             if (mario->hammerChargeTimer >= 20) {

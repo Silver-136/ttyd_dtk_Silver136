@@ -34,17 +34,17 @@
 typedef enum winTexMode {
 #if VERSION >= VERSION_DEMO_EU
     // PAL's texture file has one texture fewer before the tile
-    MODE_5 = 4,
-    MODE_6 = 5,
-    MODE_7 = 6,
-    MODE_8 = 7,
+    TEX_TILE = 4,
+    TEX_CURSOR_A = 5,
+    TEX_CURSOR_B = 6,
+    TEX_BOX_FIRST = 7,
 #else
-    MODE_5 = 5,
-    MODE_6 = 6,
-    MODE_7 = 7,
-    MODE_8 = 8,
+    TEX_TILE = 5,
+    TEX_CURSOR_A = 6,
+    TEX_CURSOR_B = 7,
+    TEX_BOX_FIRST = 8,
 #endif
-    MODE_11 = 11,
+    TEX_TITLE_BG = 11,
 } winTexMode;
 
 #if VERSION <= VERSION_DEMO_JP
@@ -668,13 +668,13 @@ static void e3Disp(CameraId cameraId, void* param) {
         }
 
         winTexInit(*wp->handle->data);
-        winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        winTexSet(TEX_TITLE_BG, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         pressStartGX(alpha, 0.0f, -110.0f);
     } else {
         winTexInit(*wp->handle->data);
         for (row = 0, py = -304; row < 40; row++, py += 16) {
             for (col = 0, px = 0; col < 32; col++, px += 16) {
-                winTexSet(MODE_5, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+                winTexSet(TEX_TILE, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
 #else
         // Title screen: background tiles, the four characters and the title textures
         mode = (s32)((f32)sin(e3BlinkTime()) * 459.0f);
@@ -729,13 +729,13 @@ static void e3Disp(CameraId cameraId, void* param) {
             if (i == wp->scenario) {
 #if VERSION == VERSION_DEMO_JP
                 // Shadow Box
-                winTexSet(i + (u32)MODE_8, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
+                winTexSet(i + (u32)TEX_BOX_FIRST, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
                           (Vec){0.35f, 0.35f, 0.35f}, (GXColor){0x00, 0x00, 0x00, 0x40});
                 // Content Box
-                winTexSet(i + MODE_8, (Vec){e3_tbl[i].x, e3_tbl[i].y, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
+                winTexSet(i + TEX_BOX_FIRST, (Vec){e3_tbl[i].x, e3_tbl[i].y, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             } else {
-                winTexSet(i + MODE_8, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
+                winTexSet(i + TEX_BOX_FIRST, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
 #else
                 // Shadow Box
                 winTexSet(i + (u32)E3_TEX_BOX, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
@@ -769,7 +769,7 @@ static void e3Disp(CameraId cameraId, void* param) {
         winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
 #else
-        winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        winTexSet(TEX_TITLE_BG, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         pressStartGX(alpha, 0.0f, -110.0f);
 #if VERSION >= VERSION_DEMO_EU
@@ -780,7 +780,7 @@ static void e3Disp(CameraId cameraId, void* param) {
         winTexInit(*wp->handle->data);
         for (col = 0, x = -304; col < 40; col++, x += 16) {
             for (row = 0, dy = 0; row < 32; row++, dy += 16) {
-                winTexSet(MODE_5, (Vec){ (f32)x, (f32)(240 - dy), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
+                winTexSet(TEX_TILE, (Vec){ (f32)x, (f32)(240 - dy), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         }
@@ -795,13 +795,13 @@ static void e3Disp(CameraId cameraId, void* param) {
             if (i == wp->scenario) {
                 // FAKE: the (u32) cast on the 8; plain i + 8 changes the object
                 // Shadow Box
-                winTexSet(i + (u32)MODE_8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
+                winTexSet(i + (u32)TEX_BOX_FIRST, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
                           (Vec){ 0.35f, 0.35f, 0.35f }, (GXColor){ 0x00, 0x00, 0x00, 0x40 });
                 // Content Box
-                winTexSet(i + MODE_8, (Vec){ e3_tbl[i].x, e3_tbl[i].y, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
+                winTexSet(i + TEX_BOX_FIRST, (Vec){ e3_tbl[i].x, e3_tbl[i].y, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             } else {
-                winTexSet(i + MODE_8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
+                winTexSet(i + TEX_BOX_FIRST, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
 #endif
                           (GXColor){ 0x80, 0x80, 0x80, 0xFF });
             }
@@ -840,12 +840,12 @@ static void e3Disp(CameraId cameraId, void* param) {
             // Top-Left
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #else
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
                       (Vec){ (110.0f + wp->curX) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
                       (Vec){ 1.0f, 1.0f, 1.0f },
@@ -854,12 +854,12 @@ static void e3Disp(CameraId cameraId, void* param) {
             // Top-Right
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #else
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-                      winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+                      winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
                       (Vec){ (wp->curX - 110.0f) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
                       (Vec){ -1.0f, 1.0f, 1.0f },
@@ -868,12 +868,12 @@ static void e3Disp(CameraId cameraId, void* param) {
             // Bottom-Left
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #else
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-                      winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+                      winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
                       (Vec){ (110.0f + wp->curX) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
                       (Vec){ 1.0f, -1.0f, 1.0f },
@@ -882,12 +882,12 @@ static void e3Disp(CameraId cameraId, void* param) {
             // Bottom-Right
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #else
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-                      winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+                      winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
                       (Vec){ (wp->curX - 110.0f) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
                       (Vec){ -1.0f, -1.0f, 1.0f },

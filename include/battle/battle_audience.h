@@ -249,6 +249,8 @@ typedef enum AudienceSoundSlot {
     AUD_SOUND_PAKKUN_EAT = 23,
 } AudienceSoundSlot;
 
+#define AUD_SOUND_FLAG_PLAYING (1 << 0) // BattleAudienceSound.flags
+
 typedef struct BattleAudienceSound {
     s32 flags;                     // 0x0, AUD_SOUND_FLAG_PLAYING
     s32 sfxId;                     // 0x4

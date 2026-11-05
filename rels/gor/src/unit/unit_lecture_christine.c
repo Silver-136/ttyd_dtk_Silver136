@@ -254,7 +254,7 @@ EVT_BEGIN(lecture_christine_ac_counter_damage_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PKR_D_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("PKR_D_1"))
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_015"), 0, -2)
+    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_015"), 0, -2)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_TransStageFloorPosition, LW(2), LW(3), LW(4))
@@ -458,9 +458,9 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
 
         // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
+        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
 #else
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, -6)
+        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_006"), 0, -6)
         WAIT_FRAMES(1)
 #endif
         LABEL(11)
@@ -487,9 +487,9 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
 
         // Superguard lesson: he asks for the B button instead, and waits for it.
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
+        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
 #else
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, -6)
+        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_014"), 0, -6)
         WAIT_FRAMES(1)
 #endif
         LABEL(12)

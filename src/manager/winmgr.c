@@ -996,7 +996,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             memset(sel->items, 0, (sel->numItems + 1) * sizeof(WinMgrSelectItem));
             for (i = 0; i < sel->numItems; i++) {
                 sel->items[i].id = i;
-                if (johoya_get(tbl, jdt->info[i].storyId)) {
+                if (johoya_get(tbl, jdt->info[i].msgIndex)) {
                     sel->items[i].flags |= SELECT_ITEM_GRAY;
                 }
             }
@@ -1188,26 +1188,26 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
             case SELECT_TYPE_INFORMANT_PERFECT:
-                sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-                sprintf(buf, "jperfect_title_%04d", jdt->info[id].storyId);
+                sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].msgIndex);
+                sprintf(buf, "jperfect_title_%04d", jdt->info[id].msgIndex);
                 jdt->curIndex = id;
                 name = msgSearch(buf);
                 evt->lwData[1] = (EvtWord)jdt->infoEnd;
                 evt->lwData[2] = (EvtWord)name;
                 evt->lwData[3] = strlen(name);
-                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[id].storyId)) {
+                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[id].msgIndex)) {
                     evt->lwData[4] = 0;
                 } else {
                     evt->lwData[4] = jdt->info[id].cost;
                 }
                 break;
             case SELECT_TYPE_INFORMANT_LUIGI:
-                sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
+                sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].msgIndex);
                 jdt->curIndex = id;
                 evt->lwData[1] = (EvtWord)jdt->infoEnd;
                 evt->lwData[2] = (EvtWord)jdt->info[id].initEndPos;
                 evt->lwData[3] = jdt->info[id].tagEndPos;
-                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[id].storyId)) {
+                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[id].msgIndex)) {
                     evt->lwData[4] = 0;
                 } else {
                     evt->lwData[4] = 1;

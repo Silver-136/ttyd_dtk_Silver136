@@ -646,7 +646,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
     Vec pos;
     GXColor color;
     s32 id;
-    s32 d1, d2, d3;
+    s32 offsetX, offsetY, spacing;
     f32 scale;
     u16 w, h;
 
@@ -678,22 +678,22 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                     } else if (!strcmp((char*)tag, "icon")) {
                         camGetCurPtr();
                         if (value[0] >= '0' && value[0] <= '9') {
-                            sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &d1, &d2, &d3);
+                            sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &offsetX, &offsetY, &spacing);
                         } else {
-                            sscanf((char*)value, "%s%f%d%d%d", name, &scale, &d1, &d2, &d3);
+                            sscanf((char*)value, "%s%f%d%d%d", name, &scale, &offsetX, &offsetY, &spacing);
                             id = msgIconStr2ID(name);
                             if (id < 0) {
                                 id = 0;
                             }
                         }
                         iconGetWidthHight(&w, &h, (u16)id);
-                        pos.x = d1 + (cx + 0.5f * w * scale);
-                        pos.y = d2 + (cy - h * scale);
+                        pos.x = offsetX + (cx + 0.5f * w * scale);
+                        pos.y = offsetY + (cy - h * scale);
                         pos.z = 0.0f;
                         iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
-                        cx += w * scale + d3;
+                        cx += w * scale + spacing;
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
@@ -731,7 +731,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
     char name[0x20];
     Vec pos;
     s32 id;
-    s32 d1, d2, d3;
+    s32 offsetX, offsetY, spacing;
     f32 scale;
     u16 w, h;
 
@@ -760,17 +760,17 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                     } else if (!strcmp((char*)tag, "icon")) {
                         camGetCurPtr();
                         if (value[0] >= '0' && value[0] <= '9') {
-                            sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &d1, &d2, &d3);
+                            sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &offsetX, &offsetY, &spacing);
                         } else {
-                            sscanf((char*)value, "%s%f%d%d%d", name, &scale, &d1, &d2, &d3);
+                            sscanf((char*)value, "%s%f%d%d%d", name, &scale, &offsetX, &offsetY, &spacing);
                             id = msgIconStr2ID(name);
                             if (id < 0) {
                                 id = 0;
                             }
                         }
                         iconGetWidthHight(&w, &h, (u16)id);
-                        pos.x = d1 + (cx + 0.5f * w * scale);
-                        pos.y = d2 + (cy - h * scale);
+                        pos.x = offsetX + (cx + 0.5f * w * scale);
+                        pos.y = offsetY + (cy - h * scale);
                         pos.z = 0.0f;
                         PSMTXMultVec(mtx, &pos, &pos);
                         // FAKE: no-op self-assignment before the icon draw; without it the scale load moves
@@ -778,7 +778,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
-                        cx += w * scale + d3;
+                        cx += w * scale + spacing;
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
@@ -832,7 +832,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
     s8 value[0x80];
     char name[0x20];
     s32 id;
-    s32 d1, d2, d3;
+    s32 offsetX, offsetY, spacing;
     f32 scale;
     u16 w, h;
 
@@ -856,16 +856,16 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                     if (!strcmp((char*)tag, "icon")) {
                         camGetCurPtr();
                         if (value[0] >= '0' && value[0] <= '9') {
-                            sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &d1, &d2, &d3);
+                            sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &offsetX, &offsetY, &spacing);
                         } else {
-                            sscanf((char*)value, "%s%f%d%d%d", name, &scale, &d1, &d2, &d3);
+                            sscanf((char*)value, "%s%f%d%d%d", name, &scale, &offsetX, &offsetY, &spacing);
                             id = msgIconStr2ID(name);
                             if (id < 0) {
                                 id = 0;
                             }
                         }
                         iconGetWidthHight(&w, &h, (u16)id);
-                        width += w * scale + d3;
+                        width += w * scale + spacing;
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;

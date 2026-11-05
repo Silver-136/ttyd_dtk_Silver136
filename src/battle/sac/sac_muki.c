@@ -37,7 +37,7 @@
 
 
 typedef struct MukiObj { // 0x38
-    s32 kind;          // 0x0
+    s32 state;          // 0x0
     s32 timer;         // 0x4
     s32 type;          // 0x8
     Vec pos;           // 0xc
@@ -49,7 +49,7 @@ typedef struct MukiObj { // 0x38
 } MukiObj;
 
 typedef struct Muki3D { // 0x24
-    s32 kind;          // 0x0
+    s32 state;          // 0x0
     s32 timer;         // 0x4
     Vec pos;           // 0x8
     Vec scale;         // 0x14
@@ -66,19 +66,19 @@ typedef struct MukiWork {
     f32 atkDisp;           // 0x18, shown attack value; eases toward atkBoost each frame, drives the red gauge fill and number
     f32 defBoost;          // 0x1c, defense gain 0..9 (type-1 object hits); wait_game_end returns it, set_weapon puts it in defChangeStrength
     f32 defDisp;           // 0x20, shown defense value; eases toward defBoost, drives the blue gauge fill and number
-    s32 t24;               // 0x24
-    s32 t28;               // 0x28
+    s32 atkBlinkTimer;               // 0x24
+    s32 defBlinkTimer;               // 0x28
     f32 gaugeX;            // 0x2c, x of the two gauges; slides from -400 to -120 in state 3, passed to btlGetScreenPoint
     f32 gaugeY;            // 0x30, y of the attack gauge (90); the defense gauge is drawn 30 below
-    s32 t34;               // 0x34
-    s32 kind38;            // 0x38
-    s32 t3c;               // 0x3c
+    s32 hazardTimer;               // 0x34
+    s32 cursorState;            // 0x38
+    s32 cursorTimer;               // 0x3c
     s32 idx;               // 0x40
     Vec cpos;              // 0x44
     Vec cfrom;             // 0x50
     Vec cto;               // 0x5c
     Vec cscale;            // 0x68
-    GXColor col74;         // 0x74
+    GXColor cursorColor;         // 0x74
     Muki3D o3d[9];         // 0x78
     MukiObj obj[9];        // 0x1bc
     SacStarStone star;     // 0x3b4
@@ -195,11 +195,11 @@ static void main_base(void) {
     f32 d;
     f32 step;
 
-    if (w->t24 > 0) {
-        w->t24--;
+    if (w->atkBlinkTimer > 0) {
+        w->atkBlinkTimer--;
     }
-    if (w->t28 > 0) {
-        w->t28--;
+    if (w->defBlinkTimer > 0) {
+        w->defBlinkTimer--;
     }
     switch (w->state) {
     case 1:
@@ -210,12 +210,12 @@ static void main_base(void) {
         w->gaugeY = 90.0f;
         w->timeLeft = 899;
         for (i = 0; i < 9; i++) {
-            w->o3d[i].kind = 1;
+            w->o3d[i].state = 1;
         }
     case 2:
         n = 0;
         for (i = 0; i < 9; i++) {
-            if (w->o3d[i].kind != 4) {
+            if (w->o3d[i].state != 4) {
                 break;
             }
             n++;
@@ -231,16 +231,16 @@ static void main_base(void) {
         if (w->timer >= 30) {
             w->state = 4;
             w->timer = 0;
-            w->kind38 = 1;
+            w->cursorState = 1;
             for (i = 0; i < 9; i++) {
-                w->o3d[i].kind = 5;
+                w->o3d[i].state = 5;
             }
         }
         break;
     case 4:
         if (w->flags & 1) {
-            w->t34++;
-            if (w->t34 == 30) {
+            w->hazardTimer++;
+            if (w->hazardTimer == 30) {
                 BtlUnit_SetAnim(part, "M_X_1");
             }
         }
@@ -248,11 +248,11 @@ static void main_base(void) {
         if (w->timeLeft <= 0) {
             w->state = 5;
             w->timer = 0;
-            w->kind38 = 7;
+            w->cursorState = 7;
             BtlUnit_SetAnim(part, "M_S_1");
             for (i = 0; i < 9; i++) {
-                w->o3d[i].kind = 6;
-                w->obj[i].kind = 9;
+                w->o3d[i].state = 6;
+                w->obj[i].state = 9;
             }
             n = (s32)(w->atkBoost + w->defBoost);
             if (n >= 1) {
@@ -274,7 +274,7 @@ static void main_base(void) {
     case 5:
         n = 0;
         for (i = 0; i < 9; i++) {
-            if (w->o3d[i].kind != 8) {
+            if (w->o3d[i].state != 8) {
                 break;
             }
             n++;
@@ -368,29 +368,29 @@ static void main_cursor(void) {
     f32 x, y, z;
     EffectEntry* eff;
 
-    switch (w->kind38) {
+    switch (w->cursorState) {
     case 1:
-        if (w->o3d[4].kind < 5) {
+        if (w->o3d[4].state < 5) {
             break;
         }
-        w->kind38 = 2;
+        w->cursorState = 2;
         w->cpos = w->o3d[4].pos;
         w->cpos.z += 5.0f;
         w->cscale = (Vec){0.5f, 0.5f, 1.0f};
         w->idx = 4;
-        w->col74 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+        w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     case 2:
-        w->col74 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-        if (w->t34 >= 120) {
+        w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+        if (w->hazardTimer >= 120) {
             BtlUnit_SetAnim(part, "M_I_Y");
             w->flags &= ~1;
-            w->t34 = 0;
+            w->hazardTimer = 0;
         }
         if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            w->kind38 = 5;
+            w->cursorState = 5;
             ob = w->o3d[w->idx].link;
             if (ob) {
-                ob->kind = 5;
+                ob->state = 5;
 #if VERSION <= VERSION_DEMO_JP
                 effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
 #else
@@ -404,7 +404,7 @@ static void main_cursor(void) {
                         w->atkBoost = 9.0f;
                     }
                     if ((s32)w->atkBoost > (s32)prev) {
-                        w->t24 = 60;
+                        w->atkBlinkTimer = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
                         sacMukiAudienceCall(num);
                     }
@@ -417,7 +417,7 @@ static void main_cursor(void) {
                         w->defBoost = 9.0f;
                     }
                     if ((s32)w->defBoost > (s32)prev) {
-                        w->t28 = 60;
+                        w->defBlinkTimer = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
                         sacMukiAudienceCall(num);
                     }
@@ -433,7 +433,7 @@ static void main_cursor(void) {
                     ((EffStampN64Work*)eff->userdata)->r2 = 0;
                     ((EffStampN64Work*)eff->userdata)->g2 = 10;
                     ((EffStampN64Work*)eff->userdata)->b2 = 0;
-                    w->t34 = 0;
+                    w->hazardTimer = 0;
                     w->flags |= 1;
                     psndSFXOn("SFX_BTL_SAC_BODY5");
                     if (num >= 1 && num <= 49) {
@@ -454,61 +454,61 @@ static void main_cursor(void) {
         }
         if (keyGetDirTrg(0) & DEMO_STICK_RIGHT) {
             if (w->idx % 3 != 2) {
-                w->kind38 = 3;
+                w->cursorState = 3;
                 w->idx++;
             }
         }
         if (keyGetDirTrg(0) & DEMO_STICK_LEFT) {
             if (w->idx % 3) {
-                w->kind38 = 3;
+                w->cursorState = 3;
                 w->idx--;
             }
         }
         if (keyGetDirTrg(0) & DEMO_STICK_UP) {
             if (w->idx / 3) {
-                w->kind38 = 3;
+                w->cursorState = 3;
                 w->idx -= 3;
             }
         }
         if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
             if (w->idx / 3 != 2) {
-                w->kind38 = 3;
+                w->cursorState = 3;
                 w->idx += 3;
             }
         }
         break;
     case 3:
-        w->kind38 = 4;
-        w->t3c = 0;
+        w->cursorState = 4;
+        w->cursorTimer = 0;
         w->cfrom = w->cpos;
         w->cto = w->o3d[w->idx].pos;
         psndSFXOn("SFX_BTL_SAC_BODY3");
     case 4:
-        w->t3c++;
-        w->col74 = (GXColor){0x0, 0x0, 0xFF, 0xFF};
+        w->cursorTimer++;
+        w->cursorColor = (GXColor){0x0, 0x0, 0xFF, 0xFF};
         if (!(w->flags & 1)) {
-            w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->t3c, 5);
-            w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->t3c, 5);
-            if (w->t3c >= 5) {
-                w->kind38 = 2;
+            w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 5);
+            w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 5);
+            if (w->cursorTimer >= 5) {
+                w->cursorState = 2;
             }
         } else {
-            w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->t3c, 25);
-            w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->t3c, 25);
-            if (w->t3c >= 25) {
-                w->kind38 = 2;
+            w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 25);
+            w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 25);
+            if (w->cursorTimer >= 25) {
+                w->cursorState = 2;
             }
         }
         break;
     case 5:
-        w->kind38 = 6;
-        w->t3c = 0;
+        w->cursorState = 6;
+        w->cursorTimer = 0;
     case 6:
-        w->t3c++;
-        w->col74 = (GXColor){0xFF, 0x0, 0x0, 0xFF};
-        if (w->t3c >= 1) {
-            w->kind38 = 2;
-            w->t3c = 0;
+        w->cursorTimer++;
+        w->cursorColor = (GXColor){0xFF, 0x0, 0x0, 0xFF};
+        if (w->cursorTimer >= 1) {
+            w->cursorState = 2;
+            w->cursorTimer = 0;
         }
         break;
     case 0:
@@ -527,9 +527,9 @@ static void main_point(s32 idx) {
     Muki3D* o = &w->o3d[idx];
     s32 i;
 
-    switch (o->kind) {
+    switch (o->state) {
     case 1:
-        o->kind = 2;
+        o->state = 2;
         o->timer = irand(30) + 30;
         {
             Vec p = {0.0f, 0.0f, 20.0f};
@@ -545,25 +545,25 @@ static void main_point(s32 idx) {
             o->scale.x = o->scale.y = intplGetValue(EASING_LINEAR, 0.0f, 0.5f, 30 - o->timer, 30);
         }
         if (o->timer <= 0) {
-            o->kind = 3;
+            o->state = 3;
             o->timer = 0;
         }
         break;
     case 3:
-        o->kind = 4;
+        o->state = 4;
         o->timer = 0;
         o->scale = (Vec){0.5f, 0.5f, 1.0f};
         break;
     case 5:
         if (o->link) {
-            if (o->link->kind == 0) {
+            if (o->link->state == 0) {
                 o->link = NULL;
             }
         } else if (irand(65) == 0) {
             for (i = 0; i < 9; i++) {
                 MukiObj* ob = &w->obj[i];
-                if (ob->kind == 0) {
-                    ob->kind = 1;
+                if (ob->state == 0) {
+                    ob->state = 1;
                     ob->pos = o->pos;
                     ob->pos.z = 0.0f;
                     o->link = ob;
@@ -573,7 +573,7 @@ static void main_point(s32 idx) {
         }
         break;
     case 6:
-        o->kind = 7;
+        o->state = 7;
         o->timer = irand(30) + 30;
         o->link = NULL;
     case 7:
@@ -582,7 +582,7 @@ static void main_point(s32 idx) {
             o->scale.x = o->scale.y = intplGetValue(EASING_LINEAR, 0.5f, 0.0f, 30 - o->timer, 30);
         }
         if (o->timer <= 0) {
-            o->kind = 8;
+            o->state = 8;
             o->timer = 0;
         }
         break;
@@ -601,13 +601,13 @@ static void main_icon(s32 idx) {
     MukiWork* w = get_ptr();
     MukiObj* o = &w->obj[idx];
 
-    switch (o->kind) {
+    switch (o->state) {
     case 0:
         o->pos = (Vec){0.0f, -1000.0f, 0.0f};
         o->alpha = 0xFF;
         break;
     case 1:
-        o->kind = 2;
+        o->state = 2;
         o->timer = 0;
         o->type = irand(3);
         o->rot.y = 0.0f;
@@ -617,11 +617,11 @@ static void main_icon(s32 idx) {
         o->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 180.0f, 1080.0f, o->timer, 30);
         o->alpha = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, o->timer, 30);
         if (o->timer >= 30) {
-            o->kind = 7;
+            o->state = 7;
         }
         break;
     case 3:
-        o->kind = 4;
+        o->state = 4;
         o->timer = 0;
         o->rot.y = 0.0f;
     case 4:
@@ -629,16 +629,16 @@ static void main_icon(s32 idx) {
         o->rot.y = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 900.0f, o->timer, 30);
         o->alpha = intplGetValue(EASING_LINEAR, 255.0f, 0.0f, o->timer, 30);
         if (o->timer >= 30) {
-            o->kind = 0;
+            o->state = 0;
         }
         break;
     case 5:
-        o->kind = 6;
+        o->state = 6;
     case 6:
-        o->kind = 0;
+        o->state = 0;
         break;
     case 7:
-        o->kind = 8;
+        o->state = 8;
         o->timer = 0;
         o->rot.y = 0.0f;
         break;
@@ -646,7 +646,7 @@ static void main_icon(s32 idx) {
         o->timer++;
         o->alpha = 0xFF;
         if (o->timer >= 90) {
-            o->kind = 3;
+            o->state = 3;
         }
         break;
     case 9:
@@ -811,7 +811,7 @@ static void disp_2D(CameraId cam, void* param) {
 
         // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
-        t = w->t24 % 12;
+        t = w->atkBlinkTimer % 12;
         if (t >= 0 && t <= 5) {
             PSMTXScale(m, 0.5f, 0.5f, 0.5f);
             PSMTXTransApply(m, m, x - 30.0f, y, 0.0f);
@@ -868,7 +868,7 @@ static void disp_2D(CameraId cam, void* param) {
 
         // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
-        t = w->t28 % 12;
+        t = w->defBlinkTimer % 12;
         if (t >= 0 && t <= 5) {
             PSMTXScale(m, 0.5f, 0.5f, 0.5f);
             PSMTXTransApply(m, m, x - 30.0f, y, 0.0f);
@@ -896,7 +896,7 @@ static void disp_3D(CameraId cam, void* param) {
     Mtx m;
     for (i = 0; i < 9; i++) {
         o = &w->o3d[i];
-        if (o->kind >= 2 && o->kind < 8) {
+        if (o->state >= 2 && o->state < 8) {
             for (j = 0; j < 4; j++) {
                 PSMTXScale(m, o->scale.x * (f32)c[j * 2], o->scale.y * (f32)c[j * 2 + 1], o->scale.z);
                 PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
@@ -905,12 +905,12 @@ static void disp_3D(CameraId cam, void* param) {
             }
         }
     }
-    if (w->kind38 >= 2 && w->kind38 < 7) {
+    if (w->cursorState >= 2 && w->cursorState < 7) {
         for (j = 0; j < 4; j++) {
             PSMTXScale(m, w->cscale.x * (f32)c[j * 2], w->cscale.y * (f32)c[j * 2 + 1], w->cscale.z);
             PSMTXTransApply(m, m, w->cpos.x, w->cpos.y, w->cpos.z);
             PSMTXTransApply(m, m, w->cscale.x * (f32)b[j * 2], w->cscale.y * (f32)b[j * 2 + 1], 0.0f);
-            btlDispTexPlane2(m, BTL_TEX(0x41), w->col74, 0);
+            btlDispTexPlane2(m, BTL_TEX(0x41), w->cursorColor, 0);
         }
     }
 }
@@ -924,7 +924,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
     GXColor col[4];
     for (i = 0; i < 9; i++) {
         o = &w->obj[i];
-        if (o->kind >= 1 && o->kind <= 9) {
+        if (o->state >= 1 && o->state <= 9) {
             f32 a;
             f32 c;
             switch (o->type) {

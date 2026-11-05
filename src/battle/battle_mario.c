@@ -7275,25 +7275,25 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     BattleUnitPart* part;
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
-    s32 n;
+    s32 frames;
     const char* anim;
     f32 rx, ry, rz;
     s32 id = evtGetValue(event, args[0]);
-    s32 pn;
+    s32 partNo;
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    pn = evtGetValue(event, args[1]);
-    part = BtlUnit_GetPartsPtr(unit, pn);
-    n = evtGetValue(event, args[2]);
+    partNo = evtGetValue(event, args[1]);
+    part = BtlUnit_GetPartsPtr(unit, partNo);
+    frames = evtGetValue(event, args[2]);
     anim = (const char*)evtGetValue(event, args[3]);
     if (isFirstCall) {
         BtlUnit_GetRotate(unit, &rx, &ry, &rz);
-        event->userdata[0] = n;
+        event->userdata[0] = frames;
         if (unit->faceDirection >= 0) {
             event->userdata[1] = 360.0f + (360.0f - reviseAngle(ry));
         } else {
             event->userdata[1] = 360.0f + reviseAngle(ry);
         }
-        event->userdata[2] = unit->faceDirection * event->userdata[1] / n;
+        event->userdata[2] = unit->faceDirection * event->userdata[1] / frames;
         event->userdata3 = 0;
     }
     BtlUnit_AddRotate(unit, 0, event->userdata[2], 0);

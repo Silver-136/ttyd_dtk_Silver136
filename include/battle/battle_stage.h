@@ -22,7 +22,7 @@ typedef struct BattleSpotEntry {
 typedef struct BattleSpotWork {
     s32 count; //0x0
     BattleSpotEntry* entries; //0x4
-    BOOL skipRender; //0x8
+    BOOL dispOn; //0x8
 } BattleSpotWork;
 
 typedef struct BattleStageData {
@@ -105,7 +105,7 @@ typedef struct StageDark {
     s8 baseMode;    // 0x1D
 } StageDark;
 
-typedef struct BattleWorkStage {
+typedef struct BattleStage {
     s32 reserved_00; //0x0, only set to 0
     StageLight lights[12]; //0x4
     StageDark stgDark; //0xAE4, stage darkening
@@ -119,8 +119,6 @@ typedef struct BattleWorkStage {
 } BattleStage;
 
 BattleStage* BattleStageGetPtr(void);
-
-
 
 void BattleStageInit(void);
 void BattleStageMain(void);

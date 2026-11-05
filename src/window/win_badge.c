@@ -140,7 +140,7 @@ s32 winBadgeMain(WindowWork* w) {
     s32 tab;
     s32 cnt;
     s32 pages;
-    s32 mode;
+    s32 itemId;
     s32 m;
 
     switch (w->badge.state) {
@@ -271,11 +271,11 @@ s32 winBadgeMain(WindowWork* w) {
         w->helpTgtX = -110.0f;
         w->helpTgtY = 110 - (w->badge.sel[tab] % 8) * 23;
         if (w->badge.tab == 0) {
-            mode = pouchHaveBadge(w->badge.sel[tab]);
+            itemId = pouchHaveBadge(w->badge.sel[tab]);
         } else {
-            mode = w->badge.list[w->badge.sel[tab]].id;
+            itemId = w->badge.list[w->badge.sel[tab]].id;
         }
-        winMsgEntry(w, mode, itemDataTable[mode].menu_description, 0);
+        winMsgEntry(w, itemId, itemDataTable[itemId].menu_description, 0);
         break;
     case 1000:
         if (!winSortWait(w)) {

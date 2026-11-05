@@ -29,8 +29,8 @@ typedef struct EffKemuri9N64Work {
 #if VERSION <= VERSION_DEMO_JP
     f32 anim;
 #else
-    s32 texU;        // 0x30
-    s32 texV;        // 0x34
+    s32 texFrame;        // 0x30
+    s32 texFrameNext;        // 0x34
     s32 frame;       // 0x38
     s32 frameMax;    // 0x3C
 #endif
@@ -82,7 +82,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
 #if VERSION <= VERSION_DEMO_JP
     work->anim = 0.0f;
 #else
-    work->texU = 0;
+    work->texFrame = 0;
 #endif
     work->type = type;
     work->position.x = x;
@@ -91,8 +91,8 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     work->radius = 10.0f;
     work->radiusEnd = radiusEnd;
 #if VERSION >= VERSION_JP
-    work->texU = 0;
-    work->texV = 0;
+    work->texFrame = 0;
+    work->texFrameNext = 0;
     work->frameMax = life;
     work->frame = 0;
     zero = 0.0f;
@@ -140,8 +140,8 @@ static void effKemuri9Main(EffectEntry* effect) {
         if (cur > 15) {
             cur = 15;
         }
-        work->texU = cur;
-        work->texV = next;
+        work->texFrame = cur;
+        work->texFrameNext = next;
     }
 #endif
     work->counter++;
@@ -196,8 +196,8 @@ static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     f32 h;
 
 #if VERSION >= VERSION_JP
-    u = work->texU;
-    v = work->texV;
+    u = work->texFrame;
+    v = work->texFrameNext;
 #endif
     type = work->type;
 #if VERSION <= VERSION_DEMO_JP

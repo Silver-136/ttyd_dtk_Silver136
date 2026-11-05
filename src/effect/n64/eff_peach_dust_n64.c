@@ -31,8 +31,8 @@ typedef struct EffPeachDustWork {
     f32 velZ;    // 0x18
     s32 lifetime; // 0x1C
     s32 frame;    // 0x20
-    f32 unk24;    // 0x24
-    s32 unk28;    // 0x28
+    f32 scale;     // 0x24
+    s32 tex;      // 0x28
     EffPeachDustParticle particles[100];
 } EffPeachDustWork;
 

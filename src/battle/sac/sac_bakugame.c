@@ -84,7 +84,7 @@ typedef struct BakuWork {
     s32 hstate;         // 0x1C0
     s32 htimer;         // 0x1C4
     s32 hsteps;         // 0x1C8
-    s8 hflag;           // 0x1CC
+    s8 hmirror;           // 0x1CC
     u8 pad1cd[3];       // 0x1CD
     Vec hpos;           // 0x1D0
     Vec hfrom;          // 0x1DC
@@ -530,7 +530,7 @@ state_end:
             Vec unusedv = {125.0f, 0.0f, -30.0f};
         }
         w->hstate = 2;
-        w->hflag = -1;
+        w->hmirror = -1;
         w->texIdx = 0x5A;
 #if VERSION <= VERSION_DEMO_JP
         w->hpos = (Vec){300.0f, 0.0f, 100.0f};
@@ -1156,7 +1156,7 @@ USER_FUNC(bakuGameHeihoReturn) {
         break;
     case 5:
         w->hstate = 10;
-        w->hflag = 1;
+        w->hmirror = 1;
         w->hfrom = w->hpos;
         {
             Vec v = {300.0f, 0.0f, 0.0f};
@@ -1453,7 +1453,7 @@ static void bakuGameDisp3D(CameraId cam, void* param) {
                 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
                 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
             };
-            o = (w->hflag == 1) ? 4 : 0;
+            o = (w->hmirror == 1) ? 4 : 0;
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             GXPosition3f32(-20.0f, 40.0f, 0.0f);
             GXTexCoord2f32(uv[o * 2], uv[o * 2 + 1]);

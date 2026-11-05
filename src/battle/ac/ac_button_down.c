@@ -40,9 +40,9 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
     s32 i;
     s32 j;
     s32 done;
-    s32 flag = 0;
+    s32 autoCommand = 0;
     if (ac->acUnit->badgesEquipped.AutoCommand) {
-        flag = 1;
+        autoCommand = 1;
     }
     do {
         allDone = 0;
@@ -164,7 +164,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     if (p->button[(u32)i]) {
                         if (p->pressed[(u32)i]) {
                             ac->outputParams[0]++;
-                        } else if (p->button[(u32)i] == BattlePadGetTrigger() || flag) {
+                        } else if (p->button[(u32)i] == BattlePadGetTrigger() || autoCommand) {
                             p->pressed[(u32)i] = 1;
                             ac->outputParams[0]++;
                             if ((work->actionCommands.params[1]) == 1) {

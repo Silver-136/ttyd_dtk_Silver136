@@ -52,8 +52,8 @@ static void selectWindow_Disp(CameraId camId, void* param);
 
 
 typedef struct MsgLookupEntry {
-    u32 startaddr; //0x0
-    u32 endaddr; //0x4
+    u32 tagOffset; //0x0
+    u32 textOffset; //0x4
 } MsgLookupEntry;
 
 typedef struct MsgIcon {
@@ -313,10 +313,10 @@ void msgLoad(const char* filename, s32 index) {
 #endif
         lookup = entry->lookup->address;
         for (i = 0; i < entry->count; i++, lookup++) {
-            lookup->startaddr = ofs;
+            lookup->tagOffset = ofs;
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
-            lookup->endaddr = ofs;
+            lookup->textOffset = ofs;
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
         }
@@ -1766,9 +1766,9 @@ const char* msgSearch(const char* tag) {
                 if (index >= entry->count) {
                     break;
                 }
-                result = strcmp(tag, msgEntryText(entry) + lookup[index].startaddr);
+                result = strcmp(tag, msgEntryText(entry) + lookup[index].tagOffset);
                 if (!result) {
-                    return msgEntryText(entry) + lookup[index].endaddr;
+                    return msgEntryText(entry) + lookup[index].textOffset;
                 }
                 if (result < 0) {
                     high = index - 1;

@@ -57,7 +57,7 @@ typedef enum BattleDamageCode {
     DAMAGE_CODE_MISS = 0x28,
     DAMAGE_CODE_PROTECTED = 0x29, // target whose attack a bodyguard took
     DAMAGE_CODE_SUPERGUARDED = 0x2A,
-    DAMAGE_CODE_COUNTER_TOP_SPIKY = 0x2B, // BattleCheckCounter kinds; CounterWork.msg = DAMAGE_RESULT_FINAL_HIT | the code (the attacker's damage result)
+    DAMAGE_CODE_COUNTER_TOP_SPIKY = 0x2B, // BattleCheckCounter kinds; CounterWork.result = DAMAGE_RESULT_FINAL_HIT | the code (the attacker's damage result)
     DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY = 0x2C,
     DAMAGE_CODE_COUNTER_FRONT_SPIKY = 0x2D,
     DAMAGE_CODE_COUNTER_FIERY = 0x2E,
@@ -113,7 +113,7 @@ typedef struct CounterWork {
     s32 holdFast;       // 0x18, Hold Fast status: half the damage goes back, with an explosion
     s32 returnPostage;  // 0x1C, Return Postage badge: half the damage goes back
     s32 type;           // 0x20
-    u32 msg;            // 0x24
+    u32 result;            // 0x24
     s32 count;          // 0x28, damage dealt back to the attacker
     u32 hitEvent;       // 0x2C, hit event run on the target (BattleRunHitEvent)
 } CounterWork;
@@ -162,7 +162,7 @@ typedef enum BattleCheckResult {
 } BattleCheckResult;
 
 void BattleAttackDeclareAll(struct BattleWork* wp);
-void BattleDamageDirect(s32 unitId, struct BattleUnit* target, struct BattleWorkUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
+void BattleDamageDirect(s32 unitId, struct BattleUnit* target, struct BattleWorkUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 canWake);
 s32 BattlePreCheckDamage(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);
 s32 BattleSetStatusDamageFromWeapon(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);
 

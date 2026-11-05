@@ -169,18 +169,18 @@ void psndExit(void);
 
 BOOL psndPushGroup(void);
 
-BOOL psndBGMOn(u32 r3, char* bgm_name);
+BOOL psndBGMOn(u32 flags, char* bgm_name);
 void psndStopAllFadeOut(void);
-BOOL psndENVOff(u32 r3);
+BOOL psndENVOff(u32 flags);
 void psndSFXAllOff(void);
 
 #include "sfx_name_word.h"
 
 s32 psndSFXOn(const char* name);
 s32 psndSFXOn_3D(const char* name, Vec* position);
-s32 psndSFXOnEx_3D(const char* name, Vec* position, u8 vol, u8 pan, u16 pitch, u16 dist);
+s32 psndSFXOnEx_3D(const char* name, Vec* position, u8 vol, u8 pan, u16 delayMs, u16 dist);
 
-BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch);
+BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force);
 BOOL psndBGMStartCheck(s32 id);
 
 // psndSetFlag/psndClearFlag/psndGetFlag (PaperSoundWork.flags)
@@ -235,15 +235,15 @@ void psndSFX_dist(s32 id, u16 dist);
 u8 psndSFX_get_vol(s32 id);
 void psndSetReverb(s32 mode);
 s32 psndBGMChk(s32 id);
-BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5);
+BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused);
 BOOL psndENV_LPF(s32 id, u16 freq);
 u32 psndBGMChkSilent(s32 id);
-BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6);
+BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused);
 
 #if VERSION <= VERSION_DEMO_JP
 BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
 #else
-BOOL psndBGMOn_f(u32 r3, const char* bgm_name, u32 fadetime, s32 r6);
+BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused);
 #endif
 
 BOOL psndENVOn(u32 flags, const char* name);
@@ -251,5 +251,5 @@ BOOL psndENVOn(u32 flags, const char* name);
 #if VERSION <= VERSION_DEMO_JP
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
 #else
-BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
+BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 unused);
 #endif

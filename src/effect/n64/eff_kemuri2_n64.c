@@ -163,7 +163,7 @@ static void main_dl(s32 type) {
 
 /**
  * Draws each puff as a camera-facing sprite via main_dl,
- * picking the cell (wf * cell units) from the type's sprite sheet (176, 224 or 256 texels wide).
+ * picking the cell (cellIndex * cell units) from the type's sprite sheet (176, 224 or 256 texels wide).
  */
 static void effKemuri2Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -171,10 +171,10 @@ static void effKemuri2Disp(CameraId cameraId, void* param) {
     EffKemuri2N64Work* work = effect->userdata;
     s32 cell;
     s32 i;
-    s32 wf = work->frame;
+    s32 cellIndex = work->frame;
     s32 type = work->type;
     s32 lastFrame = 0;
-    s32 frame;
+    s32 cellOffset;
 
     f32 texW;
     f32 sx;
@@ -188,7 +188,7 @@ static void effKemuri2Disp(CameraId cameraId, void* param) {
     GXColor c1;
     GXColor c2;
 
-    if ((work->kind == 0 && wf == 6) || (work->kind == 1 && wf == 7)) {
+    if ((work->kind == 0 && cellIndex == 6) || (work->kind == 1 && cellIndex == 7)) {
         lastFrame = 1;
     }
     c1 = (GXColor){0xE6, 0xDE, 0xDE, 0x6E};
@@ -214,22 +214,22 @@ static void effKemuri2Disp(CameraId cameraId, void* param) {
     if (type == 0) {
         cell = 24;
     }
-    frame = wf * cell;
+    cellOffset = cellIndex * cell;
     sx = (f32)cell / texW;
     sy = (f32)cell / texH;
     PSMTXScale(scaleMtx, sx, sy, 1.0f);
     ty = 0.0f / texH;
-    PSMTXTrans(trans, (f32)frame / texW, ty, 0.0f);
+    PSMTXTrans(trans, (f32)cellOffset / texW, ty, 0.0f);
     PSMTXConcat(trans, scaleMtx, trans);
     GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
     if (lastFrame) {
         PSMTXScale(scaleMtx, sx, 0.0f, 1.0f);
-        PSMTXTrans(trans, (f32)(frame + cell) / texW, ty, 0.0f);
+        PSMTXTrans(trans, (f32)(cellOffset + cell) / texW, ty, 0.0f);
         PSMTXConcat(trans, scaleMtx, trans);
         GXLoadTexMtxImm(trans, GX_TEXMTX1, GX_MTX2x4);
     } else {
         PSMTXScale(scaleMtx, sx, sy, 1.0f);
-        PSMTXTrans(trans, (f32)(frame + cell) / texW, ty, 0.0f);
+        PSMTXTrans(trans, (f32)(cellOffset + cell) / texW, ty, 0.0f);
         PSMTXConcat(trans, scaleMtx, trans);
         GXLoadTexMtxImm(trans, GX_TEXMTX1, GX_MTX2x4);
     }

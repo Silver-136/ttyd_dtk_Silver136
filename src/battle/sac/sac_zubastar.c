@@ -31,9 +31,9 @@
 
 
 typedef struct ZSObj {
-    /* 0x00 */ s32 a;
-    /* 0x04 */ s32 n;
-    /* 0x08 */ Vec* v;
+    /* 0x00 */ s32 state;
+    /* 0x04 */ s32 vertexCount;
+    /* 0x08 */ Vec* verts;
     /* 0x0C */ Vec pos;
     /* 0x18 */ Vec center;
     /* 0x24 */ Vec start;
@@ -46,8 +46,8 @@ typedef struct ZSObj {
 } ZSObj;
 
 typedef struct ZSCursor {
-    /* 0x00 */ s32 timer;
-    /* 0x04 */ s32 phaseTimer;
+    /* 0x00 */ s32 state;
+    /* 0x04 */ s32 timer;
     /* 0x08 */ Vec pos;
     /* 0x14 */ Vec trail[4];
 } ZSCursor;
@@ -246,14 +246,14 @@ static void zubastar_create_takaku(s32 n, Vec* pts) {
     s32 i;
     w->ptrs[w->count] = BattleAlloc(sizeof(ZSObj));
     t = w->ptrs[w->count];
-    t->v = BattleAlloc(n * sizeof(Vec));
-    t->a = 0;
-    t->n = n;
+    t->verts = BattleAlloc(n * sizeof(Vec));
+    t->state = 0;
+    t->vertexCount = n;
     t->pos = (Vec){0.0f, 0.0f, 0.0f};
     t->fallFrame = 0;
     t->fallDuration = 1;
     for (i = 0; i < n; i++) {
-        t->v[i] = pts[i];
+        t->verts[i] = pts[i];
     }
     w->count++;
 }
@@ -281,12 +281,12 @@ static void zubastar_bunkatu(Vec* p0, Vec* p1) {
         for (j = 0; j < 2; j++) {
             flags[j] = 0;
         }
-        for (j = 0; j < t->n; j++) {
+        for (j = 0; j < t->vertexCount; j++) {
             if (nhit == 2) {
                 break;
             }
-            if (zubastar_get_kouten(p0->x, p0->y, p1->x, p1->y, t->v[j].x, t->v[j].y,
-                                    t->v[(j + 1) % t->n].x, t->v[(j + 1) % t->n].y, &ox, &oy)) {
+            if (zubastar_get_kouten(p0->x, p0->y, p1->x, p1->y, t->verts[j].x, t->verts[j].y,
+                                    t->verts[(j + 1) % t->vertexCount].x, t->verts[(j + 1) % t->vertexCount].y, &ox, &oy)) {
                 for (k = 0; k < nhit; k++) {
                     if (flags[k] == 1) {
                         if ((s32)ox == (s32)hit[k].x && (s32)oy == (s32)hit[k].y) {
@@ -307,43 +307,43 @@ static void zubastar_bunkatu(Vec* p0, Vec* p1) {
         if (nhit == 2) {
             ZSObj* a = BattleAlloc(sizeof(ZSObj));
             ZSObj* b = BattleAlloc(sizeof(ZSObj));
-            for (j = 0; j < t->n; j++) {
+            for (j = 0; j < t->vertexCount; j++) {
                 if (j == idx[0]) {
-                    a->n = (t->n - idx[1]) + 2 + j;
-                    b->n = idx[1] - idx[0] + 2;
+                    a->vertexCount = (t->vertexCount - idx[1]) + 2 + j;
+                    b->vertexCount = idx[1] - idx[0] + 2;
                 }
             }
-            a->v = BattleAlloc(a->n * sizeof(Vec));
-            b->v = BattleAlloc(b->n * sizeof(Vec));
+            a->verts = BattleAlloc(a->vertexCount * sizeof(Vec));
+            b->verts = BattleAlloc(b->vertexCount * sizeof(Vec));
             k = 0;
             for (j = 0; j <= idx[0]; j++) {
-                a->v[k++] = t->v[j];
+                a->verts[k++] = t->verts[j];
             }
-            a->v[k] = hit[0];
+            a->verts[k] = hit[0];
             k++;
-            a->v[k] = hit[1];
+            a->verts[k] = hit[1];
             k++;
-            for (j = idx[1] + 1; j < t->n; j++) {
-                a->v[k++] = t->v[j];
+            for (j = idx[1] + 1; j < t->vertexCount; j++) {
+                a->verts[k++] = t->verts[j];
             }
-            for (j = 0; j < t->n; j++) {
+            for (j = 0; j < t->vertexCount; j++) {
                 if (j == idx[0]) {
-                    b->v[0] = hit[0];
-                    for (k = 1; k <= b->n - 2; k++) {
-                        b->v[k] = t->v[j + k];
+                    b->verts[0] = hit[0];
+                    for (k = 1; k <= b->vertexCount - 2; k++) {
+                        b->verts[k] = t->verts[j + k];
                     }
-                    b->v[b->n - 1] = hit[1];
+                    b->verts[b->vertexCount - 1] = hit[1];
                 }
             }
-            a->a = 0;
+            a->state = 0;
             a->pos = (Vec){0.0f, 0.0f, 0.0f};
             a->fallFrame = irand(0x80);
             a->fallDuration = irand(5) + 1;
-            b->a = 0;
+            b->state = 0;
             b->pos = (Vec){0.0f, 0.0f, 0.0f};
             b->fallFrame = irand(0x80);
             b->fallDuration = irand(5) + 1;
-            BattleFree(w->ptrs[i]->v);
+            BattleFree(w->ptrs[i]->verts);
             BattleFree(w->ptrs[i]);
             w->ptrs[i] = a;
             w->ptrs[w->count] = b;
@@ -428,7 +428,7 @@ USER_FUNC(zubastar_main) {
     switch (w->phase) {
     case 0:
         w->phase = 5;
-        w->cursor.timer = 5;
+        w->cursor.state = 5;
         break;
     case 5:
         w->phase = 6;
@@ -440,7 +440,7 @@ USER_FUNC(zubastar_main) {
             w->gaugeState = 16;
         }
     case 6:
-        if (w->cursor.timer == 10 && w->gaugeState == 10) {
+        if (w->cursor.state == 10 && w->gaugeState == 10) {
             w->phase = 10;
         }
         break;
@@ -493,9 +493,9 @@ USER_FUNC(zubastar_main) {
             BattleAudienceSoundWhistleKind(3);
         }
         w->phase = 21;
-        w->cursor.timer = 15;
+        w->cursor.state = 15;
     case 21:
-        if (w->cursor.timer == 20) {
+        if (w->cursor.state == 20) {
             w->phase = 25;
             w->phaseCount = 0;
         }
@@ -513,7 +513,7 @@ USER_FUNC(zubastar_main) {
         s32 bi;
         f32 mt, mb, f;
         w->phase = 26;
-        w->cursor.timer = 25;
+        w->cursor.state = 25;
         if (irand(2) == 0) {
             w->lstart = (Vec){0.0f, 240.0f, 0.0f};
             w->lend = (Vec){0.0f, -240.0f, 0.0f};
@@ -594,7 +594,7 @@ USER_FUNC(zubastar_main) {
         zubastar_bunkatu(&a, &b);
     }
     case 26:
-        if (w->cursor.timer == 30) {
+        if (w->cursor.state == 30) {
             w->phaseCount++;
             if (w->phaseCount >= 3) {
                 w->phase = 33;
@@ -605,9 +605,9 @@ USER_FUNC(zubastar_main) {
         break;
     case 30:
         w->phase = 31;
-        w->cursor.timer = 15;
+        w->cursor.state = 15;
     case 31:
-        if (w->cursor.timer == 20) {
+        if (w->cursor.state == 20) {
             w->phase = 35;
         }
         break;
@@ -620,12 +620,12 @@ USER_FUNC(zubastar_main) {
         break;
     case 35:
         w->phase = 36;
-        w->cursor.timer = 25;
+        w->cursor.state = 25;
         w->lstart = (Vec){-96.0f, 240.0f, 0.0f};
         w->lend = (Vec){-96.0f, -240.0f, 0.0f};
         break;
     case 36:
-        if (w->cursor.timer == 30) {
+        if (w->cursor.state == 30) {
             w->phase = 38;
             w->phaseCount = 60;
             btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 5.0f, 60, 0);
@@ -644,38 +644,38 @@ USER_FUNC(zubastar_main) {
         return 2;
     }
 
-    switch (w->cursor.timer) {
+    switch (w->cursor.state) {
     case 0:
         break;
     case 5:
-        w->cursor.timer = 6;
-        w->cursor.phaseTimer = 0;
+        w->cursor.state = 6;
+        w->cursor.timer = 0;
     case 6:
-        w->cursor.phaseTimer++;
+        w->cursor.timer++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.phaseTimer, 15);
+        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.timer, 15);
         w->cursor.pos.z = 0.0f;
-        if (w->cursor.phaseTimer >= 15) {
-            w->cursor.timer = 10;
+        if (w->cursor.timer >= 15) {
+            w->cursor.state = 10;
         }
         break;
     case 10:
         w->cursor.pos = (Vec){0.0f, 300.0f, 0.0f};
         break;
     case 15:
-        w->cursor.timer = 16;
-        w->cursor.phaseTimer = 0;
+        w->cursor.state = 16;
+        w->cursor.timer = 0;
     case 16:
-        w->cursor.phaseTimer++;
+        w->cursor.timer++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.phaseTimer, 15);
+        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.timer, 15);
         w->cursor.pos.z = 0.0f;
-        if (w->cursor.phaseTimer >= 15) {
-            w->cursor.timer = 20;
+        if (w->cursor.timer >= 15) {
+            w->cursor.state = 20;
         }
         break;
     case 25:
-        w->cursor.timer = 26;
+        w->cursor.state = 26;
         w->ltimer = 0;
         for (i = 0; i < 16; i++) {
             ZSLine* l = &w->lines[i];
@@ -698,8 +698,8 @@ USER_FUNC(zubastar_main) {
         l->x1 = w->cursor.pos.x;
         l->y1 = w->cursor.pos.y;
         if (w->ltimer >= 15) {
-            w->cursor.timer = 27;
-            w->cursor.phaseTimer = 0;
+            w->cursor.state = 27;
+            w->cursor.timer = 0;
 #if VERSION <= VERSION_DEMO_JP
             // The early demos flash the screen from here.
             fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -710,13 +710,13 @@ USER_FUNC(zubastar_main) {
         }
         break;
     case 27:
-        w->cursor.phaseTimer++;
-        if (w->cursor.phaseTimer >= 5) {
-            w->cursor.timer = 28;
+        w->cursor.timer++;
+        if (w->cursor.timer >= 5) {
+            w->cursor.state = 28;
         }
         break;
     case 28:
-        w->cursor.timer = 30;
+        w->cursor.state = 30;
 #if VERSION <= VERSION_DEMO_JP
         fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
@@ -852,7 +852,7 @@ USER_FUNC(zubastar_bomb) {
     case 0:
         c = 0;
         for (i = 0; i < w->count; i++) {
-            if (w->ptrs[i]->a != 10) {
+            if (w->ptrs[i]->state != 10) {
                 break;
             }
             c++;
@@ -864,7 +864,7 @@ USER_FUNC(zubastar_bomb) {
     sfx = "SFX_BTL_SAC_ZUBA_STAR3";
     for (k = 0; k < w->count; k++) {
         ZSObj* t = w->ptrs[k];
-        switch (t->a) {
+        switch (t->state) {
         case 0: {
             s32 steps = irand(30) + 30;
             f32 sx, sy, sz;
@@ -875,20 +875,20 @@ USER_FUNC(zubastar_bomb) {
             sz = 0.0f;
             t->start = (Vec){0.0f, 0.0f, 0.0f};
             t->end = (Vec){0.0f, -1000.0f, 200.0f};
-            for (j = 0; j < t->n; j++) {
-                sx += t->v[j].x;
-                sy += t->v[j].y;
-                sz += t->v[j].z;
+            for (j = 0; j < t->vertexCount; j++) {
+                sx += t->verts[j].x;
+                sy += t->verts[j].y;
+                sz += t->verts[j].z;
             }
-            t->center.x = sx / t->n;
-            t->center.y = sy / t->n;
-            t->center.z = sz / t->n;
+            t->center.x = sx / t->vertexCount;
+            t->center.y = sy / t->vertexCount;
+            t->center.z = sz / t->vertexCount;
             t->end.x += 600.0f * (t->center.x - 104.0f) / 200.0f;
             t->rot = 0.0f;
             t->rotSpeed = 70.0f * rand() / 32767.0f - 35.0f;
             t->vy = (2.0f * (t->end.y - t->start.y) - steps * (-1.25f * steps)) / (2.0f * steps);
             t->fallFrame = 0;
-            t->a = 5;
+            t->state = 5;
             psndSFXOn(sfx);
             break;
         }
@@ -900,7 +900,7 @@ USER_FUNC(zubastar_bomb) {
             t->vy += -1.25f;
             t->fallFrame++;
             if (t->fallFrame > t->fallDuration) {
-                t->a = 10;
+                t->state = 10;
             }
             break;
         case 10:
@@ -925,9 +925,9 @@ USER_FUNC(zubastar_end) {
     effDelete(w->star.eff);
     for (i = 0; i < 200; i++) {
         if (w->ptrs[i] != NULL) {
-            if (w->ptrs[i]->v != NULL) {
-                BattleFree(w->ptrs[i]->v);
-                w->ptrs[i]->v = NULL;
+            if (w->ptrs[i]->verts != NULL) {
+                BattleFree(w->ptrs[i]->verts);
+                w->ptrs[i]->verts = NULL;
             }
             BattleFree(w->ptrs[i]);
             w->ptrs[i] = NULL;
@@ -990,11 +990,11 @@ static void zubastar_disp_bomb(CameraId cam, void* param) {
         PSMTXConcat(tp, m, m);
         PSMTXConcat(camera->view, m, m);
         GXLoadPosMtxImm(m, GX_PNMTX0);
-        GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, t->n);
-        for (j = 0; j < t->n; j++) {
-            f32 u = (t->v[j].x + 96.0f) / 400.0f;
-            f32 v = (240.0f - t->v[j].y) / 480.0f;
-            GXPosition3f32(t->v[j].x, t->v[j].y, 0.0f);
+        GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, t->vertexCount);
+        for (j = 0; j < t->vertexCount; j++) {
+            f32 u = (t->verts[j].x + 96.0f) / 400.0f;
+            f32 v = (240.0f - t->verts[j].y) / 480.0f;
+            GXPosition3f32(t->verts[j].x, t->verts[j].y, 0.0f);
             GXTexCoord2f32(u, v);
         }
     }
@@ -1063,7 +1063,7 @@ static void zubastar_disp2D(CameraId cam, void* param) {
         }
     }
     iconDispGx(&cur->pos, ICON_FLAG_2D, ICON_SAC_GENKI1, 1.0f);
-    if (cur->timer >= 25 && cur->timer < 30) {
+    if (cur->state >= 25 && cur->state < 30) {
         for (i = 0; i < 4; i++) {
             Mtx m;
             PSMTXTrans(m, cur->trail[i].x, cur->trail[i].y - 20.0f, 0.0f);

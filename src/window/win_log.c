@@ -41,15 +41,15 @@ typedef struct TubuDt {
     s16 y;
     u8 big;
     u8 type;
-    u16 id;
+    u16 progress;
     const char* map;
 } TubuDt;
 
 typedef struct MonosiriWork {
     s32 state;          // 0x0
     s32 id;             // 0x4
-    FileEntry* file1;   // 0x8
-    FileEntry* file2;   // 0xC
+    FileEntry* winTpl;   // 0x8
+    FileEntry* monoDat;   // 0xC
     f32 curX;           // 0x10
     f32 curY;           // 0x14
     f32 x;              // 0x18
@@ -767,13 +767,13 @@ s32 winLogMain(WindowWork* w) {
 #if VERSION <= VERSION_DEMO_JP
         for (k = 0; k < 0x5D; k++) {
             t = &tubuDt[k];
-            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->id)
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->progress)
                 break;
             {
 #else
         for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
             t = &tubuDt[k];
-            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->id || tubuCheck(t->type)) {
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->progress || tubuCheck(t->type)) {
 #endif
                 if (t->big) {
                     f32 d = distABf(bx + t->x, by + t->y, x, y);
@@ -1355,11 +1355,11 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
 #if VERSION <= VERSION_DEMO_JP
-            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->id)
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->progress)
                 break;
             {
 #else
-            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->id || tubuCheck(t->type)) {
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->progress || tubuCheck(t->type)) {
 #endif
                 if (w->log.mapSel == i) {
                     // FAKE: the texture id goes through a spare temporary tex in a comma expression; ((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA changes the object
@@ -1609,8 +1609,8 @@ void monosiriMain(MonosiriWork* m) {
                 break;
             if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
             break;
-            m->file1 = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
-            m->file2 = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
+            m->winTpl = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+            m->monoDat = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
             m->state++;
             m->alpha = 0;
             m->pose1 = -1;
@@ -1634,15 +1634,15 @@ void monosiriMain(MonosiriWork* m) {
 #else
         if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == 0U) break;
 #endif
-        m->file1 = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+        m->winTpl = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #if VERSION >= VERSION_US
-        m->file2 = fileAllocf(FILE_TYPE_RAW, "%s/w/%s/mono.dat", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
+        m->monoDat = fileAllocf(FILE_TYPE_RAW, "%s/w/%s/mono.dat", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-        m->file2 = fileAllocf(FILE_TYPE_RAW, "%s/w/jp/mono.dat", getMarioStDvdRoot());
+        m->monoDat = fileAllocf(FILE_TYPE_RAW, "%s/w/jp/mono.dat", getMarioStDvdRoot());
 #endif
         m->state++;
 #endif
-        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
+        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->winTpl->data, &tex, 0x37);
         m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_PERMANENT);
         break;
     case 1:
@@ -1697,16 +1697,16 @@ BOOL monosiriCloseWait(MonosiriWork* m) {
 /** Frees a Tattle card: its files, models, portrait buffer and the work itself. */
 void monosiriExit(MonosiriWork* m) {
     if (m) {
-        if (m->file1) {
-            fileFree(m->file1);
+        if (m->winTpl) {
+            fileFree(m->winTpl);
 #if VERSION >= VERSION_JP
-            m->file1 = NULL;
+            m->winTpl = NULL;
 #endif
         }
-        if (m->file2) {
-            fileFree(m->file2);
+        if (m->monoDat) {
+            fileFree(m->monoDat);
 #if VERSION >= VERSION_JP
-            m->file2 = NULL;
+            m->monoDat = NULL;
 #endif
         }
         if (m->pose1 != -1) {
@@ -1740,7 +1740,7 @@ typedef struct MonoDat {
     f32 scale;
 } MonoDat;
 
-/* header of the monosiri position file (file2): entry table pointer, then its size in bytes */
+/* header of the monosiri position file (monoDat): entry table pointer, then its size in bytes */
 typedef struct MonoDatFile {
     MonoDat* entries; // 0x0
     u32 size;         // 0x4
@@ -1795,7 +1795,7 @@ static void capture(CameraId camera, void* param) {
     GXGetViewportv(vp);
     GXGetProjectionv(proj);
     GXGetScissor(&sx, &sy, &sw, &sh);
-    TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
+    TEXGetGXTexObjFromPalette(*(TEXPalette**)m->winTpl->data, &tex, 0x37);
     tw = GXGetTexObjWidth(&tex);
     th = GXGetTexObjHeight(&tex);
     GXSetViewport(0.0f, 0.0f, tw, th, 0.0f, 1.0f);
@@ -1808,8 +1808,8 @@ static void capture(CameraId camera, void* param) {
         dist = ((608.0f * (max.y - cy)) / 480.0f) / (f32)tan(0.21816615760326385);
     }
     C_MTXLookAt(view, &(Vec){cx, cy, dist}, &(Vec){0.0f, 1.0f, 0.0f}, &(Vec){cx, cy, 0.0f});
-    n = ((MonoDatFile*)m->file2->data)->size / sizeof(MonoDat);
-    e = ((MonoDatFile*)m->file2->data)->entries;
+    n = ((MonoDatFile*)m->monoDat->data)->size / sizeof(MonoDat);
+    e = ((MonoDatFile*)m->monoDat->data)->entries;
     for (i = 0; i < n; i++, e++) {
         if (e->id == m->id) break;
     }
@@ -1919,13 +1919,13 @@ static void monosiri_disp(CameraId camera, void* param) {
 #else
     x = m->curX;
     y = m->curY;
-    if (m->file1) {
+    if (m->winTpl) {
 #endif
-        winHalfBookGX(*(TEXPalette**)m->file1->data, 0, x, y);
-        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
+        winHalfBookGX(*(TEXPalette**)m->winTpl->data, 0, x, y);
+        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->winTpl->data, &tex, 0x37);
         tw = GXGetTexObjWidth(&tex);
         th = GXGetTexObjHeight(&tex);
-        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
+        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->winTpl->data, &tex, 0x37);
         GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
         GXLoadTexObj(&tex, GX_TEXMAP0);
         GXInitTexObj(&tex, m->smart->address, tw, th, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);

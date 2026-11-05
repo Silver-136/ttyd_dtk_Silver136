@@ -606,7 +606,7 @@ static EVT_BEGIN(battle_entry_event)
 
     // Bonetail roars its challenge and the partner answers before the fight starts.
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_12"), 0, -2)
+    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("tik_boss_12"), 0, -2)
     WAIT_MS(300)
     CALL(evt_msg_print_battle_party, STRING("tik_boss_13"))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
@@ -700,7 +700,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_X_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_X_1"))
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_16"), 0, -2)
+    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("tik_boss_16"), 0, -2)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -38, 33, 1005, -38, 92, 13, 60, 0)
@@ -780,7 +780,7 @@ static EVT_BEGIN(phase_event)
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 2)
-            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_15"), 0, -2)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("tik_boss_15"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         END_IF
     END_SWITCH
@@ -1159,7 +1159,7 @@ EVT_BEGIN(recover_event)
         // BUG: GetUnitWork (reading into the constant 1), apparently meant as SetUnitWork: the slot stays 0, so
         // tik_boss_14 is printed on every recover
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, 1)
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_14"), 0, -2)
+        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("tik_boss_14"), 0, -2)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVERS_LEFT, LW(0))

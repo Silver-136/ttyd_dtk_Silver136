@@ -196,10 +196,10 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     BattleAudienceMember* m;
     f32 a;
     f32 b;
-    f32 scale;
-    f32 speed;
-    f32 r;
-    s32 th;
+    f32 periodScale;
+    f32 stepScale;
+    f32 crowdRatio;
+    s32 threshold;
     s32 rnd;
     s32 n;
     base = BattleAudienceBaseGetPtr();
@@ -210,31 +210,31 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     } else {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
     }
-    r = (base->targetAudienceCount + base->addedAudienceCount) / base->audienceDeltaMultiplier;
-    if (r >= 0.75f) {
-        speed = 1.0f;
-        scale = speed;
-    } else if (r >= 0.5f) {
-        speed = 0.5f;
-        scale = 2.0f;
-    } else if (r >= 0.25f) {
-        speed = 0.25f;
-        scale = 4.0f;
+    crowdRatio = (base->targetAudienceCount + base->addedAudienceCount) / base->audienceDeltaMultiplier;
+    if (crowdRatio >= 0.75f) {
+        stepScale = 1.0f;
+        periodScale = stepScale;
+    } else if (crowdRatio >= 0.5f) {
+        stepScale = 0.5f;
+        periodScale = 2.0f;
+    } else if (crowdRatio >= 0.25f) {
+        stepScale = 0.25f;
+        periodScale = 4.0f;
     } else {
-        // BUG: scale is not set on this path, so the timer limits below compare against an uninitialized
-        // value (the size steps are 0 because speed is 0, but when the timer resets depends on it)
-        speed = 0.0f;
+        // BUG: periodScale is not set on this path, so the timer limits below compare against an uninitialized
+        // value (the size steps are 0 because stepScale is 0, but when the timer resets depends on it)
+        stepScale = 0.0f;
     }
-    if (r >= 1.75f) {
+    if (crowdRatio >= 1.75f) {
         a = 10.0f;
         b = 4.0f;
-    } else if (r >= 1.5f) {
+    } else if (crowdRatio >= 1.5f) {
         a = 5.0f;
         b = 2.0f;
-    } else if (r >= 1.25f) {
+    } else if (crowdRatio >= 1.25f) {
         a = 2.0f;
         b = 1.0f;
-    } else if (r >= 1.0f) {
+    } else if (crowdRatio >= 1.0f) {
         a = 1.0f;
         b = 0.0f;
     } else {
@@ -244,17 +244,17 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     case AUDIENCE_DULL_BONES:
         if (m->timer > 180) {
             if (m->timer <= 188) {
-                m->baseScale.y += 0.005f * speed;
-            } else if ((f32)m->timer <= 8.0f * scale + 188.0f) {
-                m->baseScale.y -= 0.005f * speed;
-            } else if ((f32)m->timer <= 16.0f * scale + 188.0f) {
-                m->baseScale.y += 0.005f * speed;
-            } else if ((f32)m->timer <= 24.0f * scale + 188.0f) {
-                m->baseScale.y -= 0.005f * speed;
-            } else if ((f32)m->timer <= 32.0f * scale + 188.0f) {
-                m->baseScale.y += 0.005f * speed;
-            } else if ((f32)m->timer <= 40.0f * scale + 188.0f) {
-                m->baseScale.y -= 0.005f * speed;
+                m->baseScale.y += 0.005f * stepScale;
+            } else if ((f32)m->timer <= 8.0f * periodScale + 188.0f) {
+                m->baseScale.y -= 0.005f * stepScale;
+            } else if ((f32)m->timer <= 16.0f * periodScale + 188.0f) {
+                m->baseScale.y += 0.005f * stepScale;
+            } else if ((f32)m->timer <= 24.0f * periodScale + 188.0f) {
+                m->baseScale.y -= 0.005f * stepScale;
+            } else if ((f32)m->timer <= 32.0f * periodScale + 188.0f) {
+                m->baseScale.y += 0.005f * stepScale;
+            } else if ((f32)m->timer <= 40.0f * periodScale + 188.0f) {
+                m->baseScale.y -= 0.005f * stepScale;
             } else {
                 m->baseScale.y = 1.0f;
                 m->timer = 0;
@@ -263,52 +263,52 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
         m->timer++;
         break;
     case AUDIENCE_CRAZY_DAYZEE:
-        if ((f32)m->timer >= 36.0f * scale) {
+        if ((f32)m->timer >= 36.0f * periodScale) {
             m->baseScale.y = 1.0f;
             m->timer = 0;
         }
-        if ((f32)m->timer <= 17.0f * scale) {
-            m->baseScale.y += 0.00175f * speed;
+        if ((f32)m->timer <= 17.0f * periodScale) {
+            m->baseScale.y += 0.00175f * stepScale;
         } else {
-            m->baseScale.y -= 0.00175f * speed;
+            m->baseScale.y -= 0.00175f * stepScale;
         }
         m->timer++;
         break;
     case AUDIENCE_PUNI:
-        if ((f32)m->timer >= 22.0f * scale) {
+        if ((f32)m->timer >= 22.0f * periodScale) {
             m->baseScale.y = 1.0f;
             m->timer = 0;
         }
-        if ((f32)m->timer <= 10.0f * scale) {
-            m->baseScale.y += 0.00375f * speed;
+        if ((f32)m->timer <= 10.0f * periodScale) {
+            m->baseScale.y += 0.00375f * stepScale;
         } else {
-            m->baseScale.y -= 0.00375f * speed;
+            m->baseScale.y -= 0.00375f * stepScale;
         }
         m->timer++;
         break;
     case AUDIENCE_BULKY_BOBOMB:
-        if ((f32)m->timer >= 64.0f * scale) {
+        if ((f32)m->timer >= 64.0f * periodScale) {
             m->baseScale.y = 1.0f;
             m->timer = 0;
         }
-        if ((f32)m->timer <= 31.0f * scale) {
-            m->baseScale.y += 0.00125f * speed;
+        if ((f32)m->timer <= 31.0f * periodScale) {
+            m->baseScale.y += 0.00125f * stepScale;
         } else {
-            m->baseScale.y -= 0.00125f * speed;
+            m->baseScale.y -= 0.00125f * stepScale;
         }
         m->timer++;
         break;
     case AUDIENCE_BOO:
         break;
     default:
-        if ((f32)m->timer >= 32.0f * scale) {
+        if ((f32)m->timer >= 32.0f * periodScale) {
             m->baseScale.y = 1.0f;
             m->timer = 0;
         }
-        if ((f32)m->timer <= 15.0f * scale) {
-            m->baseScale.y += 0.0025f * speed;
+        if ((f32)m->timer <= 15.0f * periodScale) {
+            m->baseScale.y += 0.0025f * stepScale;
         } else {
-            m->baseScale.y -= 0.0025f * speed;
+            m->baseScale.y -= 0.0025f * stepScale;
         }
         m->timer++;
         break;
@@ -327,22 +327,22 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
             if (rnd < 10) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_HURIMUKI);
             } else {
-                th = 20;
-                if (rnd < th) {
+                threshold = 20;
+                if (rnd < threshold) {
                     BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
                 } else {
-                    th = (s32)(th + (f32)(10.0f * a));
-                    if (rnd < th) {
+                    threshold = (s32)(threshold + (f32)(10.0f * a));
+                    if (rnd < threshold) {
                         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
                     } else if (BattleBreakSlot_GetBreakTurn() >= 1 || base->excited == 1) {
-                        if (rnd < th + 300) {
+                        if (rnd < threshold + 300) {
                             if (m->type != AUDIENCE_PIRANHA_PLANT) {
                                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
                             }
                         }
                     } else {
-                        th += (s32)(10.0f * b);
-                        if (rnd < th) {
+                        threshold += (s32)(10.0f * b);
+                        if (rnd < threshold) {
                             n = BattleAudience_GetAudienceNoFromOffset(index, 0, 1);
                             if (n != -1) {
                                 BattleAudienceGetPtr(n);

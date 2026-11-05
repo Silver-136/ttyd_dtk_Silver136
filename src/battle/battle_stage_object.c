@@ -3896,7 +3896,7 @@ typedef struct FallObjectEntry {
     s32 unitId; //0x8
     s32 partId; //0xC
     s16 delay; //0x10
-    s16 field_0x12; //0x12
+    s16 reserved_12; //0x12
     u8 noAc; //0x14
     u8 forceHit; //0x15, set on earlier entries for the same unit once a hit is scheduled; damage then skips the evasion rolls
     u8 pad_16[0x1C - 0x16]; //0x16, never accessed
@@ -4132,7 +4132,7 @@ USER_FUNC(_object_fall_attack) {
             }
 
             e3->sfxId = -1;
-            e3->field_0x12 = 0;
+            e3->reserved_12 = 0;
             switch (e3->type) {
                 case STAGE_FALL_BASIN:
                     e3->effect = effFallEntry(4, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);

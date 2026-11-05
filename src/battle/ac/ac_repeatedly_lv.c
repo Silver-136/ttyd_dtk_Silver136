@@ -23,7 +23,7 @@ typedef struct RepeatedlyLvWork {
     s16 level;   // 0x18, gauge levels reached (gauge / levelStep, +1 when full); output in outputParams[2]
     s16 pressGain; // 0x1A, params[3]; each counted press adds 0.4 * pressGain to the gauge
     s16 pressCount; // 0x1C, counted presses; odd/even picks maskB/maskA for the alternating commands (params[0] 11-15)
-    s16 s1e;     // 0x1E, initial timeLeft (params[1]); never read
+    s16 timeStart;     // 0x1E, initial timeLeft (params[1]); never read
     s16 timeLeft; // 0x20, frames left (params[1]), counted down; cleared when the maxMask button is let go; the command ends at 0
     s16 unheldFrames; // 0x22, frames the maxMask button is not held before the start; at 150 the command ends with level 0 (result: success)
     u8 gaugeWidth; // 0x24, params[2]; the width argument of BattleAcDrawGauge (third int, see the float-first prototype)
@@ -96,7 +96,7 @@ static void _init_param(BattleWork* work) {
             break;
     }
     p->unheldFrames = 0;
-    p->s1e = p->timeLeft = ac->params[1];
+    p->timeStart = p->timeLeft = ac->params[1];
     p->level = 0;
     p->gauge = 0.0f;
     p->pressCount = 0;

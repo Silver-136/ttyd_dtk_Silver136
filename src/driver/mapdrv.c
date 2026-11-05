@@ -3238,7 +3238,7 @@ void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
         color.b = color.b * wp->entries[0].blend2.b / 255;
         color.a = color.a * wp->entries[0].blend2.a / 255;
     }
-    if ((wp->entries[0].flags & MAP_ENTRY_COLOR_UNUSED) && !(flags & MAP_OBJ_FLAG_NO_MAP_BLEND)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_COLOR) && !(flags & MAP_OBJ_FLAG_NO_MAP_BLEND)) {
         color.r = color.r * wp->entries[0].color.r / 255;
         color.g = color.g * wp->entries[0].color.g / 255;
         color.b = color.b * wp->entries[0].color.b / 255;

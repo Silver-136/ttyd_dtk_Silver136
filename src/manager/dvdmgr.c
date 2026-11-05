@@ -79,7 +79,7 @@ void DVDMgrMain(void) {
     u8 array[DVDEntryCount];
     u8* table;
     DVDEntry* entry;
-    BOOL valid;
+    BOOL didRead;
     s32 result;
     s32 count;
     s32 size;
@@ -99,9 +99,9 @@ void DVDMgrMain(void) {
     qqsort(array, count, sizeof(u8), compare);
 
     for (table = array, i = 0; i < count; table++, i++) {
-        valid = FALSE;
+        didRead = FALSE;
         entry = &dvdq[*table];
-        if (!(entry->status & DVDMGR_UNK_ERROR2) && entry->status & DVDMGR_READING) {
+        if (!(entry->status & DVDMGR_READ_FAILED) && entry->status & DVDMGR_READING) {
             size = entry->bytesLeft;
             if (entry->priority) {
                 if (size > DVD_PRIORITY_CHUNK_BYTES) {
@@ -117,8 +117,8 @@ void DVDMgrMain(void) {
                     entry->callback(result, &entry->info);
                 }
             } else if (result < 0) {
-                entry->status |= DVDMGR_UNK_ERROR1;
-                entry->status |= DVDMGR_UNK_ERROR2;
+                entry->status |= DVDMGR_READ_ERROR;
+                entry->status |= DVDMGR_READ_FAILED;
             } else {
                 entry->bytesLeft -= size;
                 entry->position += size;
@@ -130,7 +130,7 @@ void DVDMgrMain(void) {
                         entry->callback(result, &entry->info);
                     }
                 }
-                valid = TRUE;
+                didRead = TRUE;
             }
         }
 
@@ -142,7 +142,7 @@ void DVDMgrMain(void) {
             memset(entry, 0, sizeof(DVDEntry));
         }
 
-        if (valid) {
+        if (didRead) {
             break;
         }
     }
@@ -184,7 +184,7 @@ DVDEntry* DVDMgrOpen(const char* path, u8 priority, u16 unknown) {
     if (!DVDOpen(entry->name, &entry->info)) {
 #if VERSION <= VERSION_DEMO_JP
         entry->status |= DVDMGR_OPEN_FAILED;
-        entry->status |= DVDMGR_UNK_ERROR2;
+        entry->status |= DVDMGR_READ_FAILED;
         entry->status &= ~DVDMGR_INUSE;
 #endif
         memset(entry, 0, sizeof(DVDEntry));

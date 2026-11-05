@@ -16,7 +16,7 @@
 // First argument of evt_msg_print / _add / _insert / _add_insert (_evt_msg_print)
 typedef enum MsgPrintFlags {
     MSG_PRINT_DIRECT_TEXT = (1 << 0), // the argument is the text itself, not a message key (window tag "DIRECT")
-    MSG_PRINT_NO_SPEAKER = (1 << 1),  // no field speaker: the name argument is a battle unit id, whose talk position takes the tail
+    MSG_PRINT_BATTLE_UNIT = (1 << 1),  // the name argument is a battle unit id (not a field speaker); its talk position takes the tail
 } MsgPrintFlags;
 
 // EventEntry.printWindowFlags: tail settings for the next message window (evt_msg_toge / evt_msg_togelr)

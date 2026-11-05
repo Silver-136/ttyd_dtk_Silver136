@@ -1,4 +1,4 @@
-// Paper Mario 64 effect: a bobbing counter sprite whose digit steps toward the count given as `lifetime` (one step
+// Paper Mario 64 effect: a bobbing counter sprite whose digit steps toward the count given as `targetCount` (one step
 // every 8 frames); a step down would drop a type-10 copy that falls away and fades, but the count starts at 0 and
 // the target is fixed at entry, so it only counts up. Type 1 shows no digit.
 
@@ -17,14 +17,14 @@ typedef struct PturnElem {
     s32 active; // 0x4
     Vec pos;    // 0x8
     Vec vel;    // 0x14
-    f32 y20;    // 0x20
+    f32 bobY;    // 0x20
     s32 alpha;  // 0x24
     s32 age;    // 0x28
     s32 frame;  // 0x2C
     f32 scale;  // 0x30
     f32 scale2; // 0x34
-    s32 n1;     // 0x38
-    s32 n2;     // 0x3C
+    s32 shownCount;     // 0x38
+    s32 targetCount;     // 0x3C
     f32 rot;    // 0x40
     s32 delay;  // 0x44
 } PturnElem;
@@ -75,12 +75,12 @@ static void pturn_num_dispp(CameraId cameraId, EffectEntry* effect);
 /**
  * A bobbing badge (N64 texture 0x92) with a one- or two-digit count (texture 0x53) above (x, y, z);
  * the effect table labels it 行動不能 ("unable to act").
- * Type 0 steps its displayed count toward lifetime, type 1 shows the badge without digits,
+ * Type 0 steps its displayed count toward targetCount, type 1 shows the badge without digits,
  * and type 10 is the short-lived badge that type 0 throws off when the count falls.
  * Reached only through evt_eff64 "pturn_n64"; no script in the tree spawns it.
  * Guess: the immobilised-status icon with its turns left.
  */
-EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
+EffectEntry* effPturnN64Entry(s32 type, s32 targetCount, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     PturnElem* work;
 
@@ -94,11 +94,11 @@ EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     work->type = type;
     work->scale2 = 1.0f;
     if (type == 1) {
-        work->n1 = 1;
-        work->n2 = 0;
+        work->shownCount = 1;
+        work->targetCount = 0;
     } else {
-        work->n1 = 0;
-        work->n2 = lifetime;
+        work->shownCount = 0;
+        work->targetCount = targetCount;
     }
     work->pos.x = x;
     work->pos.y = y;
@@ -120,7 +120,7 @@ EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     work[1].pos.z = 0.0f;
     work[1].pos.y = 0.0f;
     work[1].pos.x = 0.0f;
-    work[1].y20 = 0.0f;
+    work[1].bobY = 0.0f;
     work[1].vel.z = 0.0f;
     work[1].vel.y = 0.0f;
     work[1].vel.x = 0.0f;
@@ -139,9 +139,9 @@ static void effPturnMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
-    s32 n2;
+    s32 targetCount;
     s32 frame;
-    s32 n1;
+    s32 shownCount;
     s32 alpha;
     s32 life;
     s32 type;
@@ -172,28 +172,28 @@ static void effPturnMain(EffectEntry* effect) {
     type = work->type;
     life = work->age;
     frame = work->frame;
-    n2 = work->n2;
-    n1 = work->n1;
+    targetCount = work->targetCount;
+    shownCount = work->shownCount;
     scl = work->scale2;
     if (type == 0) {
         if (work->delay > 0) {
             work->delay--;
-        } else if (n2 != n1) {
-            if (n2 < 0) {
-                n2 = 0;
+        } else if (targetCount != shownCount) {
+            if (targetCount < 0) {
+                targetCount = 0;
             }
-            if (n2 > n1) {
+            if (targetCount > shownCount) {
                 alpha = 60;
                 if (type == 0) {
                     alpha = 100;
                 }
                 work->age = alpha;
                 work->frame = 1;
-                work->n1++;
+                work->shownCount++;
                 work[1].age = 0;
-            } else if (n2 < n1) {
-                effPturnN64Entry(10, 0, work->pos.x, work->pos.y + work[1].y20, work->pos.z);
-                work->n1--;
+            } else if (targetCount < shownCount) {
+                effPturnN64Entry(10, 0, work->pos.x, work->pos.y + work[1].bobY, work->pos.z);
+                work->shownCount--;
             }
             work->delay = 8;
         }
@@ -215,7 +215,7 @@ static void effPturnMain(EffectEntry* effect) {
         } else {
             y = 0.0f;
         }
-        work->y20 = y;
+        work->bobY = y;
         work->pos.x = work->pos.x + work->vel.x;
         work->pos.y = work->pos.y + work->vel.y;
         work->pos.z = work->pos.z + work->vel.z;
@@ -224,7 +224,7 @@ static void effPturnMain(EffectEntry* effect) {
             work->vel.x = -2.0f;
         }
         if (life < 20) {
-            work->y20 *= b;
+            work->bobY *= b;
             work->vel.y += -0.5f;
             work->rot += 10.0f;
         }
@@ -260,7 +260,7 @@ static void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
     Mtx rot;
     Mtx tmp;
     s32 i;
-    s32 n1;
+    s32 shownCount;
     s32 type;
 
     camera = camGetPtr(cameraId);
@@ -269,11 +269,11 @@ static void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(mtx, rot, tmp);
     PSMTXConcat(camera->view, tmp, tmp);
-    n1 = p->n1;
+    shownCount = p->shownCount;
     type = p->type;
     p++;
     for (i = 1; i < effect->count; i++, p++) {
-        if (n1 > 0 || type == 10) {
+        if (shownCount > 0 || type == 10) {
             effGetTexObjN64(0x92, &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             PSMTXTrans(mtx, p->pos.x, p->pos.y, p->pos.z);
@@ -281,7 +281,7 @@ static void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
             PSMTXRotRad(rot, 'z', 0.017453292f * p->rot);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(mtx, rot, mtx);
-            PSMTXTrans(scale, 0.0f, p->y20, 0.0f);
+            PSMTXTrans(scale, 0.0f, p->bobY, 0.0f);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(tmp, mtx, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
@@ -339,7 +339,7 @@ static void pturn_num_dispp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(mtx, rot, tmp);
     PSMTXConcat(camera->view, tmp, tmp);
-    n = p->n1;
+    n = p->shownCount;
     off0 = 352 - n * 32;
     off1 = 352 - (n % 10) * 32;
     off2 = 352 - (n / 10) * 32;
@@ -350,7 +350,7 @@ static void pturn_num_dispp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'z', 0.017453292f * p->rot);
         PSMTXConcat(mtx, scale, mtx);
         PSMTXConcat(mtx, rot, mtx);
-        PSMTXTrans(scale, 0.0f, p->y20, 0.0f);
+        PSMTXTrans(scale, 0.0f, p->bobY, 0.0f);
         PSMTXConcat(mtx, scale, mtx);
         PSMTXConcat(tmp, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);

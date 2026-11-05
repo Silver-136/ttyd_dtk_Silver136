@@ -460,7 +460,7 @@ static void effKumokumoMain(EffectEntry* effect) {
  * Points GX at the given vertex, normal, color and texcoord arrays
  * and calls the four display lists of one cloud model.
  */
-static inline void kkDraw(void* vtx, void* tex0, void* tex1, void* norm, void* clr, void** dl, u8* sz) {
+static inline void drawModel(void* vtx, void* tex0, void* tex1, void* norm, void* clr, void** dl, u8* sz) {
     u32 i;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -566,10 +566,10 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
     switch (type) {
     case 0:
     case 1:
-        kkDraw(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+        drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
         break;
     case 2:
-        kkDraw(batten_vertex_tbl, batten_texcoord0_tbl, batten_texcoord1_tbl, batten_normal_tbl, batten_color0_tbl, batten_dl_0_tbl, batten_dl_0_size_tbl);
+        drawModel(batten_vertex_tbl, batten_texcoord0_tbl, batten_texcoord1_tbl, batten_normal_tbl, batten_color0_tbl, batten_dl_0_tbl, batten_dl_0_size_tbl);
         break;
     case 3:
         for (j = 0; j < 5; j++) {
@@ -577,12 +577,12 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
             PSMTXConcat(mtx2, rot, rot);
             GXLoadPosMtxImm(rot, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
-            kkDraw(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+            drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
         }
         break;
     case 4:
     default:
-        kkDraw(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+        drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
         break;
     }
     GXSetNumChans(1);

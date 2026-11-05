@@ -253,7 +253,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
 
             // Goombella speaks and Mario raises his hand; the camera swings back.
-            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_000"), 0, LW(3))
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t1_000"), 0, LW(3))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_HAND_UP1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_2"))
@@ -289,7 +289,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
 
                 // Lord Crump is at half HP or less: Goombella comments.
-                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_003"), 0, LW(3))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t1_003"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                 RETURN
             END_IF
@@ -303,7 +303,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
 
                 // Mario's first successful action command: Goombella comments.
-                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_001"), 0, LW(3))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t1_001"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
         END_IF
@@ -316,7 +316,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
 
                 // Mario's first failed action command: Goombella comments.
-                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_002"), 0, LW(3))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t1_002"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
         END_IF
@@ -420,10 +420,10 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
     CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_004"), 0, LW(3))
+    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t1_004"), 0, LW(3))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_005"), 0, LW(3))
+    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t1_005"), 0, LW(3))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     BEGIN_SIBLING_EVENT_GET_ID(LW(5))
         CALL(evt_sub_intpl_init, EASING_LINEAR, 180, 0, 15)

@@ -77,8 +77,8 @@ typedef struct KpaWork {
     s32 pad_74;                   // 0x074, never accessed (slot after rideHit[10])
     f32 headDist[10];             // 0x078, 1000.0f when clear
     s32 pad_A0;                   // 0x0A0, never accessed (slot after headDist[10])
-    f32 rideDist[10];             // 0x0A4, 1000.0f when clear
-    s32 pad_CC;                   // 0x0CC, never accessed (slot after rideDist[10])
+    f32 rideProbeX[10];           // 0x0A4, x offset of the probe that found the ride surface, 1000.0f when clear; never read
+    s32 pad_CC;                   // 0x0CC, never accessed (slot after rideProbeX[10])
     s32 walkRate;                 // 0x0D0, _rateTbl[level] (init 1)
     s32 pad_D4;                   // 0x0D4, never accessed
     s32 fireRate;                 // 0x0D8, 12 at level 0 else 8 (init 1)

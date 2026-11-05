@@ -1704,7 +1704,7 @@
 #define GSW_JON_DEEPEST_LEVEL GSW(33)
 // shown by tik_06's sign (evt_kanban2) as Star Pieces found out of 100; itemseq_GetItem (itemdrv) adds 1
 // per item get of type 8
-#define GSW_TIK_STAR_PIECES_FOUND_COUNT GSW(34)
+#define GSW_STAR_PIECES_FOUND_COUNT GSW(34)
 // high byte of the Power Bounce record (see GSW(32)), raised by marioAttackEvent_RenzokuJump (battle_mario); tik_06's
 // sign prints it
 #define GSW_MAIN_POWER_BOUNCE_RECORD_HI GSW(35)

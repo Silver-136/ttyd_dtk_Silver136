@@ -47,7 +47,7 @@ static void effFlameDisp(CameraId cameraId, void* param);
  * Copies one s16 vertex from src to dst and transforms its position by matrix m,
  * going through float with the fast-cast routines.
  */
-static inline void xf(Mtx m, effN64Vtx* dst, effN64Vtx* src) {
+static inline void transformVtx(Mtx m, effN64Vtx* dst, effN64Vtx* src) {
     Vec v;
     memcpy(dst, src, sizeof(effN64Vtx));
     OSInitFastCast();
@@ -407,22 +407,22 @@ static void effFlameDisp(CameraId cameraId, void* param) {
     }
     switch (type) {
     case 0:
-        xf(mtx, &work[0]->vtx[2], &stg_flame_v[2]);
-        xf(mtx, &work[0]->vtx[3], &stg_flame_v[3]);
-        xf(mtx, &work[0]->vtx[6], &stg_flame_v[6]);
-        xf(mtx, &work[0]->vtx[7], &stg_flame_v[7]);
+        transformVtx(mtx, &work[0]->vtx[2], &stg_flame_v[2]);
+        transformVtx(mtx, &work[0]->vtx[3], &stg_flame_v[3]);
+        transformVtx(mtx, &work[0]->vtx[6], &stg_flame_v[6]);
+        transformVtx(mtx, &work[0]->vtx[7], &stg_flame_v[7]);
         break;
     case 1:
-        xf(mtx, &work[0]->vtx[2], &stg_flame_3_v[2]);
-        xf(mtx, &work[0]->vtx[3], &stg_flame_3_v[3]);
-        xf(mtx, &work[0]->vtx[6], &stg_flame_3_v[6]);
-        xf(mtx, &work[0]->vtx[7], &stg_flame_3_v[7]);
+        transformVtx(mtx, &work[0]->vtx[2], &stg_flame_3_v[2]);
+        transformVtx(mtx, &work[0]->vtx[3], &stg_flame_3_v[3]);
+        transformVtx(mtx, &work[0]->vtx[6], &stg_flame_3_v[6]);
+        transformVtx(mtx, &work[0]->vtx[7], &stg_flame_3_v[7]);
         break;
     default:
-        xf(mtx, &work[0]->vtx[2], &stg_flame_2_v[2]);
-        xf(mtx, &work[0]->vtx[3], &stg_flame_2_v[3]);
-        xf(mtx, &work[0]->vtx[6], &stg_flame_2_v[6]);
-        xf(mtx, &work[0]->vtx[7], &stg_flame_2_v[7]);
+        transformVtx(mtx, &work[0]->vtx[2], &stg_flame_2_v[2]);
+        transformVtx(mtx, &work[0]->vtx[3], &stg_flame_2_v[3]);
+        transformVtx(mtx, &work[0]->vtx[6], &stg_flame_2_v[6]);
+        transformVtx(mtx, &work[0]->vtx[7], &stg_flame_2_v[7]);
         break;
     }
     PSMTXTrans(trn, work[0]->position.x, work[0]->position.y, work[0]->position.z);
@@ -440,22 +440,22 @@ static void effFlameDisp(CameraId cameraId, void* param) {
     }
     switch (type) {
     case 0:
-        xf(mtx, &work[0]->vtx[0], &stg_flame_v[0]);
-        xf(mtx, &work[0]->vtx[1], &stg_flame_v[1]);
-        xf(mtx, &work[0]->vtx[4], &stg_flame_v[4]);
-        xf(mtx, &work[0]->vtx[5], &stg_flame_v[5]);
+        transformVtx(mtx, &work[0]->vtx[0], &stg_flame_v[0]);
+        transformVtx(mtx, &work[0]->vtx[1], &stg_flame_v[1]);
+        transformVtx(mtx, &work[0]->vtx[4], &stg_flame_v[4]);
+        transformVtx(mtx, &work[0]->vtx[5], &stg_flame_v[5]);
         break;
     case 1:
-        xf(mtx, &work[0]->vtx[0], &stg_flame_3_v[0]);
-        xf(mtx, &work[0]->vtx[1], &stg_flame_3_v[1]);
-        xf(mtx, &work[0]->vtx[4], &stg_flame_3_v[4]);
-        xf(mtx, &work[0]->vtx[5], &stg_flame_3_v[5]);
+        transformVtx(mtx, &work[0]->vtx[0], &stg_flame_3_v[0]);
+        transformVtx(mtx, &work[0]->vtx[1], &stg_flame_3_v[1]);
+        transformVtx(mtx, &work[0]->vtx[4], &stg_flame_3_v[4]);
+        transformVtx(mtx, &work[0]->vtx[5], &stg_flame_3_v[5]);
         break;
     default:
-        xf(mtx, &work[0]->vtx[0], &stg_flame_2_v[0]);
-        xf(mtx, &work[0]->vtx[1], &stg_flame_2_v[1]);
-        xf(mtx, &work[0]->vtx[4], &stg_flame_2_v[4]);
-        xf(mtx, &work[0]->vtx[5], &stg_flame_2_v[5]);
+        transformVtx(mtx, &work[0]->vtx[0], &stg_flame_2_v[0]);
+        transformVtx(mtx, &work[0]->vtx[1], &stg_flame_2_v[1]);
+        transformVtx(mtx, &work[0]->vtx[4], &stg_flame_2_v[4]);
+        transformVtx(mtx, &work[0]->vtx[5], &stg_flame_2_v[5]);
         break;
     }
     GXInvalidateVtxCache();

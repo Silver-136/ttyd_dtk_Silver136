@@ -286,7 +286,7 @@ EVT_BEGIN(evt_gameover)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-void seq_gameOverInit(SequenceWork* work) {
+void seq_gameOverInit(SequenceWork* seq) {
     winReInit();
     psndStopAllFadeOut();
     psndSetReverb(0);
@@ -298,7 +298,7 @@ void seq_gameOverInit(SequenceWork* work) {
 }
 
 /** Leaves the game over sequence: fades out all sound and restarts events. */
-void seq_gameOverExit(SequenceWork* work) {
+void seq_gameOverExit(SequenceWork* seq) {
     psndStopAllFadeOut();
     marioStSystemLevel(0);
 }
@@ -308,20 +308,20 @@ void seq_gameOverExit(SequenceWork* work) {
  * seq_gameOverMain is defined last: functions are emitted in reverse order (-inline deferred),
  * so it comes first in the object.
  */
-void seq_gameOverMain(SequenceWork* work) {
+void seq_gameOverMain(SequenceWork* seq) {
     CameraEntry* camera;
     MarioWork* mario;
 
-    switch (work->state) {
+    switch (seq->state) {
         case 0:
-            if (work->mapName == NULL) {
+            if (seq->mapName == NULL) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(FADE_OUT_IRIS, 1000, color);
                 gp->areaFadeOutType = FADE_OUT_BLACK;
                 gp->areaFadeOutDuration = 300;
             }
             mapPreLoad("sys_00");
-            work->state++;
+            seq->state++;
             break;
         case 1:
             if (!fadeIsFinish()) {
@@ -350,7 +350,7 @@ void seq_gameOverMain(SequenceWork* work) {
             npcClearDeadInfo();
             countDownEnd();
             nameEntReInit();
-            work->state++;
+            seq->state++;
             break;
         case 2:
             if (!mapPreLoad("sys_00")) {
@@ -369,12 +369,12 @@ void seq_gameOverMain(SequenceWork* work) {
             mario->camTarget = mario->position;
             camRoadReset();
             camShiftReset();
-            work->state++;
+            seq->state++;
             break;
         case 3: {
             GXColor color = {0, 0, 0, 255};
             fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 200, color);
-            work->state++;
+            seq->state++;
             break;
         }
         case 4:
@@ -396,7 +396,7 @@ void seq_gameOverMain(SequenceWork* work) {
             }
 #endif
             wp->evt = evtEntryType(evt_gameover, 0, 0, 0);
-            work->state++;
+            seq->state++;
             break;
         case 5:
             if (evtCheckID(wp->evt->eventId)) {
@@ -411,7 +411,7 @@ void seq_gameOverMain(SequenceWork* work) {
 #if VERSION >= VERSION_JP
             psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);
 #endif
-            work->state++;
+            seq->state++;
             break;
         case 6:
             if (!fadeIsFinish()) {

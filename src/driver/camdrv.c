@@ -22,8 +22,8 @@ static void camLetterBox(void);
 
 // 12.5 degrees (half of the 25-degree fovY) in radians, passed to tan(): the second value is 12.5 degrees rounded
 // to float, the first is two float steps below it
-#define DEG_TO_RAD_12_5__1 0.21816612780094147
-#define DEG_TO_RAD_12_5__2 0.21816615760326385
+#define HALF_FOVY_RAD 0.21816612780094147
+#define HALF_FOVY_RAD_F 0.21816615760326385
 
 //.bss
 CameraEntry* camPtrTbl[CAMERA_MAX];
@@ -72,21 +72,21 @@ void camInit(void) {
     camPtrTbl[5] = camEntryPersp(camEffMain, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.2f, 0.3f, "3deff_A");
 
     camPtrTbl[6] = camEntryPersp(cam3dImgMain, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 1.0f, "3dimg");
-    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    tanHalfFov = (f32)tan(HALF_FOVY_RAD);
     camPtrTbl[6]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[7] = camEntryPersp(camEffMain, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.2f, 0.3f, "3deff_B");
 
     camPtrTbl[8] = camEntryPersp(NULL, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.1f, 0.2f, "2d");
-    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    tanHalfFov = (f32)tan(HALF_FOVY_RAD);
     camPtrTbl[8]->cameraPos = makeVecByValue(0.0f, 0.0f, 240.0f / tanHalfFov);
 
     camPtrTbl[9] = camEntryPersp(NULL, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 0.1f, "fade");
-    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    tanHalfFov = (f32)tan(HALF_FOVY_RAD);
     camPtrTbl[9]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[10] = camEntryPersp(NULL, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 0.1f, "fade2");
-    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    tanHalfFov = (f32)tan(HALF_FOVY_RAD);
     camPtrTbl[10]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[11] =
@@ -629,7 +629,7 @@ static void cam3dMain(CameraEntry* camera) {
             } else {
                 f32 h, w;
 
-                h = camera->viewDistance * (f32)tan(DEG_TO_RAD_12_5__2);
+                h = camera->viewDistance * (f32)tan(HALF_FOVY_RAD_F);
                 w = 608.0f * h / 480.0f;
                 MTXOrtho(camera->projection, h, -h, -w, w, camera->near, camera->far);
             }
@@ -646,7 +646,7 @@ static void cam3dMain(CameraEntry* camera) {
                 } else {
                     f32 h, w;
 
-                    h = camera->viewDistance * (f32)tan(DEG_TO_RAD_12_5__2);
+                    h = camera->viewDistance * (f32)tan(HALF_FOVY_RAD_F);
                     w = 608.0f * h / 480.0f;
                     MTXOrtho(camera->projection, h, -h, -w, w, camera->near, camera->far);
                 }

@@ -548,7 +548,7 @@ void qqsort(void* base, u32 n, u32 size, QSortCompare compare) {
 }
 
 /** Returns the DEMO pad library's status for controller i. */
-static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
+static inline DEMOPadStatus* getDemoPadStatus(u32 i) {
     return DemoPad + i;
 }
 
@@ -578,7 +578,7 @@ void makeKey(void) {
 
     DEMOPadRead();
     for (i = 0; i < 4; i++) {
-        dirs = GET_DEMO_PAD_STATUS(i)->dirs;
+        dirs = getDemoPadStatus(i)->dirs;
         gp->dirsNew[i] = dirs & (dirs ^ gp->dirs[i]);
         gp->dirsRepeat[i] = gp->dirsNew[i];
         if (dirs && dirs == gp->dirs[i]) {
@@ -593,7 +593,7 @@ void makeKey(void) {
     }
 
     for (i = 0; i < 4; i++) {
-        button = GET_DEMO_PAD_STATUS(i)->pst.button;
+        button = getDemoPadStatus(i)->pst.button;
         gp->buttonNew[i] = button & (button ^ gp->button[i]);
         gp->buttonRepeat[i] = gp->buttonNew[i];
         if (button && button == gp->button[i]) {
@@ -605,16 +605,16 @@ void makeKey(void) {
             gp->buttonRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
         }
         gp->button[i] = button;
-        gp->buttonUp[i] = GET_DEMO_PAD_STATUS(i)->buttonUp;
+        gp->buttonUp[i] = getDemoPadStatus(i)->buttonUp;
     }
 
     for (i = 0; i < 4; i++) {
-        gp->stickX[i] = GET_DEMO_PAD_STATUS(i)->pst.stickX;
-        gp->stickY[i] = GET_DEMO_PAD_STATUS(i)->pst.stickY;
-        gp->substickX[i] = GET_DEMO_PAD_STATUS(i)->pst.substickX;
-        gp->substickY[i] = GET_DEMO_PAD_STATUS(i)->pst.substickY;
-        gp->triggerLeft[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerLeft;
-        gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
+        gp->stickX[i] = getDemoPadStatus(i)->pst.stickX;
+        gp->stickY[i] = getDemoPadStatus(i)->pst.stickY;
+        gp->substickX[i] = getDemoPadStatus(i)->pst.substickX;
+        gp->substickY[i] = getDemoPadStatus(i)->pst.substickY;
+        gp->triggerLeft[i] = getDemoPadStatus(i)->pst.triggerLeft;
+        gp->triggerRight[i] = getDemoPadStatus(i)->pst.triggerRight;
     }
 #if VERSION >= VERSION_US
     for (i = 0; i < 4; i++) {
@@ -993,7 +993,7 @@ void mtxGetRotationElement(Mtx src, Mtx dst, s8 firstAxis, s8 secondAxis) {
  * Returns the decompressed size, 0 when the header is not LZ77.
  */
 s32 LZ77Decode(u8* inputBuffer, u8* outputBuffer) {
-    u8* output;
+    u8* outputStart;
     s8 flag;
     s8 bitsLeft;
     s32 bytesWritten;
@@ -1005,7 +1005,7 @@ s32 LZ77Decode(u8* inputBuffer, u8* outputBuffer) {
     u8* lookback;
     int i;
 
-    output = outputBuffer;
+    outputStart = outputBuffer;
     bitsLeft = 0;
     if (*inputBuffer != 0x10) {
         return 0;
@@ -1015,7 +1015,7 @@ s32 LZ77Decode(u8* inputBuffer, u8* outputBuffer) {
     expectedSize += (inputBuffer[3] << 16) & 0xFF0000;
     input = inputBuffer + 4;
     while (1) {
-        bytesWritten = outputBuffer - output;
+        bytesWritten = outputBuffer - outputStart;
         if (expectedSize == bytesWritten) {
             break;
         }

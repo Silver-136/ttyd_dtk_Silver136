@@ -3018,7 +3018,7 @@ void party_motion_upstairs(PartyEntry* party) {
 #endif
 
 /** TRUE when hit is water (attribute 0x200). */
-static inline BOOL partyChkHitAttr200(HitEntry* hit) {
+static inline BOOL partyChkWaterHazard(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
@@ -3091,7 +3091,7 @@ void party_motion_damage(PartyEntry* party) {
                 party->position.y += 200.0f;
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
-            if (party->hitobjStandOn && !partyChkHitAttr200(party->hitobjStandOn)) {
+            if (party->hitobjStandOn && !partyChkWaterHazard(party->hitobjStandOn)) {
                 party->motionStep = 12;
                 party->moveFrames = 30;
             }
@@ -3812,7 +3812,7 @@ static void party_force_reset_outofscreen(PartyEntry* party) {
             hit = partyHitCheck(party, &start, &dir, &hitPos, &nrm, &dist);
             if (hit) {
 #if VERSION >= VERSION_JP
-                if (!partyChkHitAttr200(hit)) {
+                if (!partyChkWaterHazard(hit)) {
                     y = hitPos.y;
                 }
 #else
@@ -3832,7 +3832,7 @@ static void party_force_reset_outofscreen(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
                     if (hit) {
 #else
-                    if (hit && !partyChkHitAttr200(hit)) {
+                    if (hit && !partyChkWaterHazard(hit)) {
 #endif
                         y = hitPos.y;
                     }

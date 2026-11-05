@@ -12,7 +12,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-typedef struct effExpBomData {
+typedef struct EffExpBomN64Work {
     s16 age;        // 0x0, frames shown
     s16 lifeLeft;   // 0x2, counts down from lifetime; <0 = done
     s16 lifetime;   // 0x4, rand 16..21
@@ -24,7 +24,7 @@ typedef struct effExpBomData {
     f32 velX;       // 0x20, from bom_dir/bom_spd
     f32 velY;       // 0x24
     u8 field_0x28[0x2C - 0x28]; // 0x28
-} effExpBomData;
+} EffExpBomN64Work;
 
 static f32 bom_dir[10] = {
     10.0f, 40.0f, 80.0f, 170.0f, 140.0f,
@@ -62,14 +62,14 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     f32 rad, spd;
     f32* direction;
     f32* speed;
-    effExpBomData* data;
+    EffExpBomN64Work* data;
     s16 random;
     int i;
 
     effect = effEntry();
     effect->type = "ExpBomN64";
     effect->count = 10;
-    data = __memAlloc(HEAP_EFFECT, sizeof(effExpBomData) * 10);
+    data = __memAlloc(HEAP_EFFECT, sizeof(EffExpBomN64Work) * 10);
     effect->userdata = data;
     effect->callback = effExpBomMain;
     for (i = 0, direction = bom_dir, speed = bom_spd; i < effect->count; direction++, speed++, i++, data++) {
@@ -105,7 +105,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
  * and deletes the effect when no fragment is left alive.
  */
 static void effExpBomMain(EffectEntry* effect) {
-    effExpBomData* data;
+    EffExpBomN64Work* data;
     int i;
     BOOL disp;
     Vec position;
@@ -157,7 +157,7 @@ static void effExpBomDisp(CameraId camId, void* param) {
     EffectEntry* effect = param;
     f32* scl;
     f32* ry;
-    effExpBomData* data;
+    EffExpBomN64Work* data;
     int n;
     int i;
     int tex;

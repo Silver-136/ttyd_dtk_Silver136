@@ -40,7 +40,7 @@ typedef struct {
         NpcDeadInfo deadInfo[64]; //0x19B4
         BadgeShopWork badgeShop; //0x1EB4
         PiantaParlorWork parlor; //0x1FD8
-        InformantUnknown informant; //0x2110
+        InformantReadFlags informant; //0x2110
 #if VERSION >= VERSION_US
         u8 pad_225B[0x2260 - 0x225B]; //0x225B
     } data;

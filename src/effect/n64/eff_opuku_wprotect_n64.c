@@ -34,12 +34,12 @@ typedef struct EffOpukuWprotectN64Work {
     f32 scale;    // 0x2C
     f32 wave;     // 0x30
     f32 scroll;   // 0x34
-    f32 a[4];     // 0x38
-    f32 b[4];     // 0x48
-    f32 c[4];     // 0x58
-    f32 d[4];     // 0x68
-    f32 e[4];     // 0x78
-    s32 g[4];     // 0x88
+    f32 x[4];     // 0x38
+    f32 y[4];     // 0x48
+    f32 velX[4];     // 0x58
+    f32 velY[4];     // 0x68
+    f32 size[4];     // 0x78
+    s32 spawnDelay[4];     // 0x88
 } EffOpukuWprotectN64Work;
 
 static void effOpukuWprotectMain(EffectEntry* effect);
@@ -78,10 +78,10 @@ EffectEntry* effOpukuWprotectN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     work->colorB = 255;
     work->wave = 0.0f;
     work->scroll = 0.0f;
-    work->g[0] = -1;
-    work->g[1] = -5;
-    work->g[2] = -9;
-    work->g[3] = -13;
+    work->spawnDelay[0] = -1;
+    work->spawnDelay[1] = -5;
+    work->spawnDelay[2] = -9;
+    work->spawnDelay[3] = -13;
     return effect;
 }
 
@@ -160,21 +160,21 @@ static void effOpukuWprotectMain(EffectEntry* effect) {
         work->scroll = 0.0f;
     }
     for (i = 0; i < 4; i++) {
-        work->g[i]++;
-        if (work->g[i] >= 0) {
-            if (work->g[i] == 0) {
-                work->a[i] = 0.0f;
-                work->b[i] = 240.0f;
-                work->c[i] = 0.2f * (f32)(rand() % 11 - 5);
-                work->d[i] = (f32)(rand() % 11 + 2);
-                work->e[i] = (f32)(rand() % 11 + 1);
+        work->spawnDelay[i]++;
+        if (work->spawnDelay[i] >= 0) {
+            if (work->spawnDelay[i] == 0) {
+                work->x[i] = 0.0f;
+                work->y[i] = 240.0f;
+                work->velX[i] = 0.2f * (f32)(rand() % 11 - 5);
+                work->velY[i] = (f32)(rand() % 11 + 2);
+                work->size[i] = (f32)(rand() % 11 + 1);
             }
-            work->a[i] += work->c[i];
-            work->b[i] += work->d[i];
-            work->c[i] *= 0.97f;
-            work->d[i] += 0.1f * (10.0f - work->d[i]);
-            if (work->b[i] > 480.0f) {
-                work->g[i] = -(rand() % 11) - 1;
+            work->x[i] += work->velX[i];
+            work->y[i] += work->velY[i];
+            work->velX[i] *= 0.97f;
+            work->velY[i] += 0.1f * (10.0f - work->velY[i]);
+            if (work->y[i] > 480.0f) {
+                work->spawnDelay[i] = -(rand() % 11) - 1;
             }
         }
     }
@@ -306,11 +306,11 @@ static void effOpukuWprotectDisp(CameraId cameraId, void* param) {
     GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
     GXSetCullMode(GX_CULL_NONE);
     for (i = 0; i < 4; i++) {
-        if (work->g[i] >= 0) {
+        if (work->spawnDelay[i] >= 0) {
             PSMTXScale(scale, 0.1f, 0.1f, 0.1f);
-            PSMTXTrans(mtx2, work->a[i], work->b[i], 0.0f);
+            PSMTXTrans(mtx2, work->x[i], work->y[i], 0.0f);
             PSMTXConcat(scale, mtx2, mtx2);
-            PSMTXScale(scale, work->e[i], work->e[i], work->e[i]);
+            PSMTXScale(scale, work->size[i], work->size[i], work->size[i]);
             PSMTXConcat(mtx2, scale, mtx2);
             PSMTXConcat(mtx, mtx2, mtx2);
             GXLoadPosMtxImm(mtx2, GX_PNMTX0);

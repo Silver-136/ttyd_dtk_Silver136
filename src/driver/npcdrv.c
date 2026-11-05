@@ -756,8 +756,8 @@ void npcMain(void) {
                 entry->statusFlags &= ~NPC_STATUS_UPDATE;
             }
 
-            if (entry->wFbatHitCheckRelated) {
-                entry->wFbatHitCheckRelated--;
+            if (entry->hitCooldown) {
+                entry->hitCooldown--;
             }
 
             if (entry->statusFlags & NPC_STATUS_UPDATE) {
@@ -968,7 +968,7 @@ void npcMain(void) {
                             int trig;
                             Vec dv;
 #if VERSION >= VERSION_US
-                            f32 sd;
+                            f32 searchDist;
 #endif
                             dx = m->position.x - entry->position.x;
                             dz = m->position.z - entry->position.z;
@@ -976,12 +976,12 @@ void npcMain(void) {
 #if VERSION >= VERSION_US
                             // US and later: subtract a kpaGetLevel()-indexed offset from the search distance for 2D NPCs.
                             dist = sqrtf(dx * dx + dz * dz);
-                            sd = dist;
+                            searchDist = dist;
                             if (entry->flags & NPC_FLAG_2D) {
                                 f32 kpaRange[4] = {0.0f, 0.0f, 30.0f, 100.0f};
-                                sd = dist - kpaRange[kpaGetLevel()];
-                                if (sd < 0.0f) {
-                                    sd = 0.0f;
+                                searchDist = dist - kpaRange[kpaGetLevel()];
+                                if (searchDist < 0.0f) {
+                                    searchDist = 0.0f;
                                 }
                             }
 #else
@@ -1025,19 +1025,19 @@ void npcMain(void) {
                             } else {
                                 f32 angleToMario;
 #if VERSION >= VERSION_US
-                                if (sd > 0.25f * entry->searchRange) {
-                                    if (sd > entry->searchRange) {
+                                if (searchDist > 0.25f * entry->searchRange) {
+                                    if (searchDist > entry->searchRange) {
 #else
                                 dist = sqrtf(dist);
                                 if (dist > 0.25f * entry->searchRange) {
                                     if (dist > entry->searchRange) {
 #endif
                                         trig = 0;
-                                        goto done14;
+                                        goto search_done;
                                     } else if ((angleToMario = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, angleToMario))) >
                                                0.5f * entry->searchAngle) {
                                         trig = 0;
-                                        goto done14;
+                                        goto search_done;
                                     }
                                 }
                                 if (dy > entry->territoryLoiter.y) {
@@ -1062,7 +1062,7 @@ void npcMain(void) {
                                     }
                                 }
                             }
-                            done14:
+                            search_done:
                             if (trig) {
                                 entry->interruptFlags |= NPC_INTERRUPT_FIND;
                             }
@@ -1101,7 +1101,7 @@ void npcMain(void) {
                         }
                         prio *= -1.0f;
                         if (!(entry->flags & NPC_FLAG_NO_DRAW) &&
-                            (!(entry->wFbatHitCheckRelated & 2) || (entry->statusFlags & NPC_STATUS_STOPPED))) {
+                            (!(entry->hitCooldown & 2) || (entry->statusFlags & NPC_STATUS_STOPPED))) {
                             if (entry->color.a != 0xFF) {
                                 dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp_xlu, entry);
                             } else {
@@ -1510,12 +1510,12 @@ static void npcMoveG(NpcEntry* npc) {
             npc->statusFlags |= NPC_STATUS_AIRBORNE;
             npc->position.y += dy;
         } else {
-            f64 ad = __fabs(dy);
-            f32 hh = 0.8f * npc->height;
-            dist = hh + (f32)ad;
+            f64 fallDistance = __fabs(dy);
+            f32 probeHeight = 0.8f * npc->height;
+            dist = probeHeight + (f32)fallDistance;
             // US and later: also probe the floor at both side edges of the NPC
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
+                                              npc->position.x, npc->position.y + probeHeight, npc->position.z, 0.0f,
 #if VERSION >= VERSION_US
                                               -1.0f, 0.0f)) != NULL) {
 #else
@@ -1529,13 +1529,13 @@ static void npcMoveG(NpcEntry* npc) {
                 npc->jumpTicks = 0;
 #if VERSION >= VERSION_US
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x + 0.5f * npc->width, npc->position.y + hh,
+                                              npc->position.x + 0.5f * npc->width, npc->position.y + probeHeight,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x - 0.5f * npc->width, npc->position.y + hh,
+                                              npc->position.x - 0.5f * npc->width, npc->position.y + probeHeight,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
@@ -2486,7 +2486,7 @@ void fbatBattleMode(void) {
                     if (cur->flags & NPC_FLAG_AUTO_MOVE_ANIM) {
                         cur->moveAnimState = 0;
                     }
-                    cur->wFbatHitCheckRelated = 90;
+                    cur->hitCooldown = 90;
 #if VERSION >= VERSION_JP
                     cur->interruptFlags &= ~NPC_INTERRUPT_NO_FIND;
 #endif
@@ -2579,7 +2579,7 @@ NpcEntry* fbatHitCheckAll(void) {
 
 typedef struct FbatHitResult {
     u32 kind;   // 0x0
-    s32 evtId;  // 0x4
+    s32 attackMode;  // 0x4
     f32 dist;   // 0x8
     u32 bits; // 0xC
 } FbatHitResult;
@@ -2623,7 +2623,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;
     if (vivianGetStatus()) return FALSE;
     if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE || (*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
-    if ((*(u16*)&((NpcEntry*)npc)->wFbatHitCheckRelated)) return FALSE;
+    if ((*(u16*)&((NpcEntry*)npc)->hitCooldown)) return FALSE;
     return TRUE;
 }
 
@@ -2675,8 +2675,8 @@ static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) 
  * touch/jump checks keep the closest hit, while the other checks stop at their first matching NPC.
  */
 void* fbatHitCheck(u32 flags, void* result) {
-    u32 f1000a;
-    u32 f20;
+    u32 enemyOnly;
+    u32 checkJump;
     u32 noJump;
     u32 soft;
     NpcEntry* hit = NULL;
@@ -2710,13 +2710,13 @@ void* fbatHitCheck(u32 flags, void* result) {
         npc = wp->entries;
         if (!noJump || mario->mutekiTimer <= 0) {
             if (fbat_canHit(npc)) {
-                f1000a = flags & FBAT_CHECK_ENEMY;
-                f20 = flags & FBAT_CHECK_JUMP;
+                enemyOnly = flags & FBAT_CHECK_ENEMY;
+                checkJump = flags & FBAT_CHECK_JUMP;
                 for (i = 0; i < total; i++, npc++) {
                     f32 dx, dz;
                     if (npc == NULL) continue;
                     if (!(npc->flags & NPC_FLAG_READY)) continue;
-                    if (f1000a) {
+                    if (enemyOnly) {
                         if (!(npc->flags & NPC_FLAG_ENEMY)) continue;
                     } else {
                         if (npc->flags & NPC_FLAG_ENEMY) continue;
@@ -2752,10 +2752,10 @@ void* fbatHitCheck(u32 flags, void* result) {
                             if (!soft) {
                                 fbatSetAttackAnnounce(FBAT_HIT_ENEMY_FIRST);
                             }
-                            res.evtId = (*(s32*)&((NpcEntry*)npc)->attackMode);
+                            res.attackMode = (*(s32*)&((NpcEntry*)npc)->attackMode);
                         }
                     }
-                    if (!f20) continue;
+                    if (!checkJump) continue;
                     if ((mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) &&
                         !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         hit = npc;

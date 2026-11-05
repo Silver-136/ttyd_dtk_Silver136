@@ -622,7 +622,7 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     Vec p;
     Vec scr;
     GXTexObj texObj;
-    Mtx trans, scaleMtx, rot, mb0, m80;
+    Mtx trans, scaleMtx, rot, modelMtx, passMtx;
 
     work = effect->userdata;
     camera = camGetPtr(cameraId);
@@ -647,8 +647,8 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXScale(scaleMtx, work->scale * work->scaleX, work->scale * work->scaleY, work->scale);
-    PSMTXConcat(trans, rot, mb0);
-    PSMTXConcat(mb0, scaleMtx, mb0);
+    PSMTXConcat(trans, rot, modelMtx);
+    PSMTXConcat(modelMtx, scaleMtx, modelMtx);
 #if VERSION <= VERSION_DEMO_JP
     GXSetNumTevStages(2);
 #else
@@ -707,8 +707,8 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(trans, scaleMtx, scaleMtx);
                 break;
         }
-        PSMTXConcat(mb0, scaleMtx, m80);
-        PSMTXConcat(camera->view, m80, scaleMtx);
+        PSMTXConcat(modelMtx, scaleMtx, passMtx);
+        PSMTXConcat(camera->view, passMtx, scaleMtx);
         GXLoadPosMtxImm(scaleMtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 12);
@@ -733,7 +733,7 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
             t.y = 40.0f;
             p = t;
         }
-        PSMTXMultVec(m80, &p, &p);
+        PSMTXMultVec(passMtx, &p, &p);
         getScreenPoint(&p, &scr);
         if (scr.x < work->scrMinX) {
             work->scrMinX = scr.x;
@@ -753,7 +753,7 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
             t.y = 40.0f;
             p = t;
         }
-        PSMTXMultVec(m80, &p, &p);
+        PSMTXMultVec(passMtx, &p, &p);
         getScreenPoint(&p, &scr);
         if (scr.x < work->scrMinX) {
             work->scrMinX = scr.x;
@@ -772,7 +772,7 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
             t.x = w * 0.5f;
             p = t;
         }
-        PSMTXMultVec(m80, &p, &p);
+        PSMTXMultVec(passMtx, &p, &p);
         getScreenPoint(&p, &scr);
         if (scr.x < work->scrMinX) {
             work->scrMinX = scr.x;
@@ -791,7 +791,7 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
             t.x = -w / 2.0f;
             p = t;
         }
-        PSMTXMultVec(m80, &p, &p);
+        PSMTXMultVec(passMtx, &p, &p);
         getScreenPoint(&p, &scr);
         if (scr.x < work->scrMinX) {
             work->scrMinX = scr.x;

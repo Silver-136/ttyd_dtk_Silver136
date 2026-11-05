@@ -412,13 +412,13 @@ eff_set* effGetSetN64(const char* name) {
     return NULL;
 }
 
-/** Returns a repeatable pseudo-random value in 0..rand taken from a fixed 128-entry table at index (mod 128). */
-u32 effTblRandN64(u32 rand, s32 index) {
+/** Returns a repeatable pseudo-random value in 0..max taken from a fixed 128-entry table at index (mod 128). */
+u32 effTblRandN64(u32 max, s32 index) {
     s32 val = _rand_table[index % 128];
     if (val < 0) {
         val = -val;
     }
-    return val % (s32)(rand + 1);
+    return val % (s32)(max + 1);
 }
 
 /**

@@ -125,7 +125,7 @@ static void effFreezeMain(EffectEntry* effect) {
             ((EffGlassN64Work*)glass->userdata)->texV = 0.1f * (f32)(rand() % 10);
             ((EffGlassN64Work*)glass->userdata)->texVSpeed = 0.01f * (f32)(rand() % 30) + 0.1f;
             ((EffGlassN64Work*)glass->userdata)->rotZ = rand() % 360;
-            ((EffGlassN64Work*)glass->userdata)->rotY = rand() % 20;
+            ((EffGlassN64Work*)glass->userdata)->rotZSpeed = rand() % 20;
             ((EffGlassN64Work*)glass->userdata)->vx = rand() % 10 - 5;
             ((EffGlassN64Work*)glass->userdata)->vy = rand() % 10 - 5;
             ((EffGlassN64Work*)glass->userdata)->vz = 0.0f;

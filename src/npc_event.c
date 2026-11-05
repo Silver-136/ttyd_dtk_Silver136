@@ -108,8 +108,8 @@ USER_FUNC(_2d_dead_jump) {
     f32 tz = evtGetFloat(event, args[3]);
     f32 t = (f32)evtGetValue(event, args[4]) / 1000.0f;
     f32 spd = evtGetFloat(event, args[5]);
-    f32 vy = evtGetFloat(event, args[6]);
-    f32 gy = (f32)evtGetValue(event, args[7]);
+    f32 jumpHeight = evtGetFloat(event, args[6]);
+    f32 endY = (f32)evtGetValue(event, args[7]);
     f32 h;
     NpcEntry* npc;
     Vec d;
@@ -117,7 +117,7 @@ USER_FUNC(_2d_dead_jump) {
     f32 s;
     f32 dy;
     npc = evtNpcNameToPtr(event, id);
-    h = vy;
+    h = jumpHeight;
     npc->statusFlags |= NPC_STATUS_UPDATE;
     npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     if (isFirstCall) {
@@ -149,14 +149,14 @@ USER_FUNC(_2d_dead_jump) {
         npc->jumpVelY = 0.0f;
         npc->jumpYScale = 1.0f;
         dy = npc->jumpTargetPos.y - npc->jumpStartPos.y;
-        if (vy) {
+        if (jumpHeight) {
             f32 g, half, apex;
             if (dy > 0.0f) {
                 h += dy;
             }
             npc->jumpVelY = 0.0f;
             if (t == 0.0f) {
-                npc->jumpVelY = vy;
+                npc->jumpVelY = jumpHeight;
             } else {
                 g = -980.0f * npc->jumpGravity;
                 half = 0.5f * t;
@@ -177,7 +177,7 @@ USER_FUNC(_2d_dead_jump) {
     npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * s);
     c = (f32)cos(6.2831855f * npc->moveDir / 360.0f);
     npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -c);
-    if (npc->position.y >= gy) {
+    if (npc->position.y >= endY) {
         return EVT_RETURN_BLOCK;
     }
     npc->moveSpeed = 0.0f;
@@ -557,6 +557,10 @@ EvtWord kuriboo2D_init_event[22];
 EvtWord kuriboo2D_move_event[72];
 EvtWord kuriboo2D_find_event[70];
 EvtWord zako2D_init_event[27];
+
+// What zakoEntryDokan and zakoEntryFall store in unitWork[0] and zako2D_move_event reads back to pick the entrance.
+#define ZAKO_ENTRY_DOKAN 1
+#define ZAKO_ENTRY_FALL 2
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord zako2D_move_event[];
@@ -4550,20 +4554,20 @@ USER_FUNC(cliffCheck) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 dirv;
     f32 hx, hy, hz, dist, nx, ny, nz;
-    HitEntry* h1;
-    HitEntry* h2;
+    HitEntry* floorBelow;
+    HitEntry* floorAhead;
     if (90.0f == npcTransRytoFaceDir(npc)) {
         dirv = 1.0f;
     } else {
         dirv = -1.0f;
     }
     dist = 5.0f;
-    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f);
+    floorBelow = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f);
     dist = 5.0f;
-    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, dirv, -1.0f, 0.0f);
-    if (h1 && h2) {
+    floorAhead = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, dirv, -1.0f, 0.0f);
+    if (floorBelow && floorAhead) {
         evtSetValue(event, args[0], 0);
-    } else if (h1 && !h2) {
+    } else if (floorBelow && !floorAhead) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 2);
@@ -4580,12 +4584,12 @@ USER_FUNC(upperCheck) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 hx, hy, hz, dist, nx, ny, nz;
-    HitEntry* h1;
-    HitEntry* h2;
+    HitEntry* ceilingLeft;
+    HitEntry* ceilingRight;
     dist = 5.0f;
-    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x - 15.0f, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
-    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, 15.0f + npc->position.x, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
-    if (h1 || h2) {
+    ceilingLeft = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x - 15.0f, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
+    ceilingRight = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, 15.0f + npc->position.x, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
+    if (ceilingLeft || ceilingRight) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
@@ -4986,7 +4990,7 @@ USER_FUNC(zakoEntryDokan) {
                 zako->position = pos;
             }
             zako->rotation = (Vec){0.0f, 0.0f, 0.0f};
-            zako->unitWork[0] = (void*)1;
+            zako->unitWork[0] = (void*)ZAKO_ENTRY_DOKAN;
             if (zako->moveEvent) {
                 EventEntry* e;
                 if (zako->regularEvtId) {
@@ -5064,7 +5068,7 @@ USER_FUNC(zakoEntryFall) {
                 zako->position = pos;
             }
             zako->rotation = (Vec){0.0f, 0.0f, 0.0f};
-            zako->unitWork[0] = (void*)2;
+            zako->unitWork[0] = (void*)ZAKO_ENTRY_FALL;
             if (zako->moveEvent) {
                 EventEntry* e;
                 if (zako->regularEvtId) {
@@ -5248,7 +5252,7 @@ EVT_BEGIN(zako2D_move_event)
     GOTO(0)
     LABEL(1)
     CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
+    IF_INT_EQUAL(LW(0), ZAKO_ENTRY_DOKAN)
         CALL(evt_npc_set_unitwork, STRING("me"), 0, 0)
         CALL(evt_npc_set_anim, STRING("me"), STRING("Z_1"))
         CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
@@ -5276,7 +5280,7 @@ EVT_BEGIN(zako2D_move_event)
         CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 500, FLOAT(100.0f), FLOAT(30.0f), 1)
     END_IF
     CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
+    IF_INT_EQUAL(LW(0), ZAKO_ENTRY_FALL)
         CALL(evt_npc_set_unitwork, STRING("me"), 0, 0)
         CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_GRAVITY)

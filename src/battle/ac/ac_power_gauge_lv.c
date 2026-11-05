@@ -10,13 +10,13 @@
 #include <string.h>
 #include "icon_ids.h"
 
-typedef struct PowerGaugeWork {
+typedef struct PowerGaugeLvWork {
     s32 counter;   // 0x0
     f32 gauge;     // 0x4
     s32 field_0x8; // 0x8
     s32 limit;     // 0xC
     s32 timer;     // 0x10
-} PowerGaugeWork;
+} PowerGaugeLvWork;
 
 
 
@@ -28,7 +28,7 @@ typedef struct PowerGaugeWork {
  */
 s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    PowerGaugeWork* tw = (PowerGaugeWork*)ac->work;
+    PowerGaugeLvWork* tw = (PowerGaugeLvWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
 
     switch (work->actionCommands.acState) {
@@ -193,10 +193,10 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
-    PowerGaugeWork* tw;
+    PowerGaugeLvWork* tw;
     f32 ratio;
     camGetPtr(CAMERA_2D);
-    tw = (PowerGaugeWork*)ac->work;
+    tw = (PowerGaugeLvWork*)ac->work;
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;

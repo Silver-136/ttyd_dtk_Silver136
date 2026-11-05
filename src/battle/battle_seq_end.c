@@ -199,7 +199,7 @@ void btlseqEnd(BattleWork* wp) {
     BattleSeqEndWork* work = (BattleSeqEndWork*)wp->seqEndWork;
     FieldBattleInfo* info = wp->fbatInfo;
     PouchData* pouch = pouchGetPtr();
-    s32 flag;
+    s32 partnerKo;
     BattleUnit* mario;
     BattleUnit* party;
     s8 i;
@@ -392,12 +392,12 @@ void btlseqEnd(BattleWork* wp) {
         BattleAudienceSoundCheer(0x3C, 0x3C);
         BattleAudienceSoundClap(-1, 0);
         BattleAudienceSoundWhistle();
-        flag = 0;
+        partnerKo = 0;
         party = BattleGetPartyPtr(wp);
         if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
-            flag = 1;
+            partnerKo = 1;
         }
-        if (!flag) {
+        if (!partnerKo) {
             psndBGMOff(PSND_PAUSE);
             psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN1");
         } else {
@@ -1651,7 +1651,7 @@ USER_FUNC(_lvup_spot_on) {
     s32 n;
     BattleSpotEntry* e;
 
-    spot->skipRender = 1;
+    spot->dispOn = 1;
     n = evtGetValue(event, args[0]);
     e = spot->entries + n;
     switch (n) {

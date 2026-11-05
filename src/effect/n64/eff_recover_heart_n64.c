@@ -251,9 +251,9 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
     Mtx mtx;
     Mtx scale;
     Mtx rot;
-    Mtx m90;
-    Mtx m60;
-    Mtx m30;
+    Mtx billboardMtx;
+    Mtx scaledMtx;
+    Mtx rotatedMtx;
     GXTexObj texObj;
 
     camera = camGetPtr(cameraId);
@@ -261,7 +261,7 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
     flag = work->flag;
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
-    PSMTXConcat(mtx, rot, m90);
+    PSMTXConcat(mtx, rot, billboardMtx);
     type = work->type;
     count = work->count;
     work = work + 1;
@@ -308,12 +308,12 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
         PSMTXTrans(mtx, work->position.x + work->offX, work->position.y, work->position.z);
         PSMTXScale(scale, work->scaleW, work->scaleH, 1.0f);
         PSMTXConcat(mtx, scale, mtx);
-        PSMTXConcat(m90, mtx, m60);
+        PSMTXConcat(billboardMtx, mtx, scaledMtx);
         PSMTXRotRad(rot, 'z', 0.017453292f * work->rotZ);
-        PSMTXConcat(m60, rot, m30);
+        PSMTXConcat(scaledMtx, rot, rotatedMtx);
         if (i == 1 && type != 2) {
             effSetVtxDescN64(size32x32_tex32x32_heart_vtx);
-            PSMTXConcat(camera->view, m30, mtx);
+            PSMTXConcat(camera->view, rotatedMtx, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
@@ -336,7 +336,7 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
                 } else {
                     effSetVtxDescN64(size24x24_tex32x32_flower_vtx);
                 }
-                PSMTXConcat(camera->view, m60, mtx);
+                PSMTXConcat(camera->view, scaledMtx, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
                 GXSetCurrentMtx(GX_PNMTX0);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
@@ -355,7 +355,7 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
                 } else {
                     effSetVtxDescN64(size16x24_tex32x32_r_flower_vtx);
                 }
-                PSMTXConcat(camera->view, m60, mtx);
+                PSMTXConcat(camera->view, scaledMtx, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
                 GXSetCurrentMtx(GX_PNMTX0);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
@@ -373,7 +373,7 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
                 tri2(0, 1, 2, 0, 0, 2, 3, 0);
             }
         } else {
-            PSMTXConcat(camera->view, m30, mtx);
+            PSMTXConcat(camera->view, rotatedMtx, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             effSetVtxDescN64(size16x16_tex32x32_heart_vtx);

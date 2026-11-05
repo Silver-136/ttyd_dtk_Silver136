@@ -73,7 +73,7 @@ static void effMajinaiMain(EffectEntry* effect) {
         if (work->poseId != -1) {
             animPoseRelease(work->poseId);
         }
-        mapGetWork()->entries[0].flags &= ~8;
+        mapGetWork()->entries[0].flags &= ~MAP_ENTRY_COLOR;
         effDelete(effect);
         return;
     }
@@ -94,7 +94,7 @@ static void effMajinaiMain(EffectEntry* effect) {
                 color = 64;
             }
             map->entries[0].color = (GXColor){ color, color, color, 0xFF };
-            map->entries[0].flags |= 8;
+            map->entries[0].flags |= MAP_ENTRY_COLOR;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
 #if VERSION >= VERSION_DEMO_EU
@@ -134,7 +134,7 @@ static void effMajinaiMain(EffectEntry* effect) {
                 color = 255;
             }
             map->entries[0].color = (GXColor){ color, color, color, 0xFF };
-            map->entries[0].flags |= 8;
+            map->entries[0].flags |= MAP_ENTRY_COLOR;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
 #if VERSION >= VERSION_DEMO_EU
@@ -156,7 +156,7 @@ static void effMajinaiMain(EffectEntry* effect) {
                 if (work->poseId != -1) {
                     animPoseRelease(work->poseId);
                 }
-                mapGetWork()->entries[0].flags &= ~8;
+                mapGetWork()->entries[0].flags &= ~MAP_ENTRY_COLOR;
                 effDelete(effect);
                 return;
             }

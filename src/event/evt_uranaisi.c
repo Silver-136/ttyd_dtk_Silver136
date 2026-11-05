@@ -454,7 +454,7 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;
     char label[64];
     char tag[64];
-    s32 storyId;
+    s32 msgIndex;
     s32 mbbpos;
     s32 tagNum;
     BOOL tagdone;
@@ -475,9 +475,9 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type) {
         wp->next = -1;
     }
     infoId = 0;
-    storyId = 0;
+    msgIndex = 0;
     while (1) {
-        sprintf(label, "%s_%04d", prefix, storyId);
+        sprintf(label, "%s_%04d", prefix, msgIndex);
         msg = (const s8*)msgSearch(label);
         if (msg[0] != '<') {
             break;
@@ -498,7 +498,7 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type) {
                 if (type & 1) {
                     if (labelId == wp->next) {
                         wp->info[infoId].labelId = (s16)labelId;
-                        wp->info[infoId].idx = (s16)storyId;
+                        wp->info[infoId].idx = (s16)msgIndex;
                         goto inc;
                     }
                 } else if (labelId <= maxLabel && labelId >= wp->next) {
@@ -511,7 +511,7 @@ inc:
                 }
             }
         }
-        storyId++;
+        msgIndex++;
     }
     return infoId;
 }
@@ -532,7 +532,7 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     char tag[64];
     s32 mbbpos;
     s32 maxLabel;
-    s32 storyId;
+    s32 msgIndex;
     s32 tagNum;
     BOOL tagdone;
     s32 infoId;
@@ -548,10 +548,10 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     count = 0;
-    storyId = 0;
+    msgIndex = 0;
     infoId = 0;
     while (1) {
-        sprintf(label, "%s_%04d", prefix, storyId);
+        sprintf(label, "%s_%04d", prefix, msgIndex);
         msg = (const s8*)msgSearch(label);
         if (msg[0] != '<') {
             break;
@@ -576,14 +576,14 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
                 if (flagId != -1 && evtGetValue(NULL, flagId) == 0) {
                     if (type & 1) {
                         wp->info[infoId].labelId = (s16)labelId;
-                        wp->info[infoId].idx = (s16)storyId;
+                        wp->info[infoId].idx = (s16)msgIndex;
                     }
                     infoId++;
                     count++;
                 }
             }
         }
-        storyId++;
+        msgIndex++;
     }
     return count;
 }
@@ -604,7 +604,7 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
     char tag[64];
     s32 mbbpos;
     s32 maxLabel;
-    s32 storyId;
+    s32 msgIndex;
     s32 tagNum;
     BOOL tagdone;
     s32 infoId;
@@ -620,10 +620,10 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
     maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     count = 0;
-    storyId = 0;
+    msgIndex = 0;
     infoId = 0;
     while (1) {
-        sprintf(label, "%s_%04d", prefix, storyId);
+        sprintf(label, "%s_%04d", prefix, msgIndex);
         msg = (const s8*)msgSearch(label);
         if (msg[0] != '<') {
             break;
@@ -648,14 +648,14 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
                 if (flagId != -1 && evtGetValue(NULL, flagId) == 0) {
                     if (type & 1) {
                         wp->info[infoId].labelId = (s16)labelId;
-                        wp->info[infoId].idx = (s16)storyId;
+                        wp->info[infoId].idx = (s16)msgIndex;
                     }
                     infoId++;
                     count++;
                 }
             }
         }
-        storyId++;
+        msgIndex++;
     }
     return count;
 }

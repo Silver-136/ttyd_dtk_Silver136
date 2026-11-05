@@ -149,8 +149,8 @@ void countDownMain(void) {
  * Hidden while flag 4 is set.
  */
 static void countDownDisp(CameraId cameraId, void* param) {
-    GXColor white2;
-    GXColor white3;
+    GXColor digitColor;
+    GXColor colonColor;
     CountdownWork* work = wp;
     s32 remaining;
     u16 flags;
@@ -158,8 +158,8 @@ static void countDownDisp(CameraId cameraId, void* param) {
     Mtx scale;
     Mtx base;
     GXColor shadow;
-    white3 = sWhite;
-    white2 = sWhite;
+    colonColor = sWhite;
+    digitColor = sWhite;
     flags = work->flags;
     remaining = work->limit - OSTicksToMilliseconds(work->elapsed);
     if ((flags & COUNTDOWN_FLAG_HIDDEN) == 0) {
@@ -183,11 +183,11 @@ static void countDownDisp(CameraId cameraId, void* param) {
         for (i = 0; i < 3; i++) {
             PSMTXTrans(mtx, i * 30 - 50, 8.0f, 0.0f);
             PSMTXConcat(base, mtx, mtx);
-            iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
+            iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), digitColor);
         }
         PSMTXTrans(mtx, 28.0f, 10.0f, 0.0f);
         PSMTXConcat(base, mtx, mtx);
-        iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_COLON, white3);
+        iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_COLON, colonColor);
         digits[0] = msec / 100;
         digits[1] = (msec % 100) / 10;
         for (i = 0; i < 2; i++) {
@@ -195,7 +195,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
             PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(base, mtx, mtx);
-            iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
+            iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), digitColor);
         }
     }
 }

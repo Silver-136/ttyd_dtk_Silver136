@@ -267,8 +267,8 @@ void jabaraSwingWalk(void);
  */
 void mot_jabara(void) {
     MarioWork* mario = marioGetPtr();
-    Vec v74;
-    Vec v68;
+    Vec headSearchPos;
+    Vec probePos;
     s32 rubCount;
     s32 rubDir;
     f32 rubMag;
@@ -278,7 +278,7 @@ void mot_jabara(void) {
     f32 headDist;
     s32 headHit;
     f32 headRange;
-    f32 rr;
+    f32 probeDist;
     f32 spd;
     void* land;
     BOOL hit;
@@ -399,9 +399,9 @@ void mot_jabara(void) {
             camFollowYOff();
         }
         found = FALSE;
-        v74 = mario->position;
+        headSearchPos = mario->position;
         headDist = 25.0f;
-        if (marioSearchHead(&v74, &headDist, 200.0f)) {
+        if (marioSearchHead(&headSearchPos, &headDist, 200.0f)) {
             if (!(mario->buttonHold & PAD_BUTTON_A)) {
                 marioGetPtr()->motJabara->headBlockTimer++;
                 if (marioGetPtr()->motJabara->headBlockTimer > sysMsec2Frame(5000)) {
@@ -739,15 +739,15 @@ void mot_jabara(void) {
             return;
         } else {
             animStep(mario);
-            v68 = mario->position;
+            probePos = mario->position;
             headRange = 10.0f + mario->wPlayerCollisionBox.y;
-            rr = 1.0f;
-            v68.x = v68.x + rr * (f32)sin(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
-            v68.z = v68.z - rr * (f32)cos(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
-            mario->hitobjHead = marioSearchHead_jabara(&v68, &headRange, &headHit, 0.0f);
+            probeDist = 1.0f;
+            probePos.x = probePos.x + probeDist * (f32)sin(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
+            probePos.z = probePos.z - probeDist * (f32)cos(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
+            mario->hitobjHead = marioSearchHead_jabara(&probePos, &headRange, &headHit, 0.0f);
             if (mario->hitobjHead == NULL) {
                 headRange = 5.0f + mario->wPlayerCollisionBox.y;
-                mario->hitobjHead = marioSearchHead(&v68, &headRange, 0.0f);
+                mario->hitobjHead = marioSearchHead(&probePos, &headRange, 0.0f);
             }
             if (mario->controlStickSensitivity) {
                 marioChgPose("M_W_6");

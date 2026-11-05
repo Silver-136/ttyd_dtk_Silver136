@@ -297,7 +297,7 @@ typedef struct NpcEntry {
     u32 fbatHitKind;                // 0x318, kind from fbatHitCheck when this NPC triggered the battle
     u16 koopaEncounterType;         // 0x31C, NpcKoopaEncount
     u16 hazardFlags;                // 0x31E, NpcKoopaEncount bits the NPC is immune to
-    u16 wFbatHitCheckRelated;       // 0x320
+    u16 hitCooldown;       // 0x320
     u8 pad_322[2];                  // 0x322
     struct NpcEntry* prev;          // 0x324
     struct NpcEntry* next;          // 0x328
@@ -442,7 +442,7 @@ typedef struct FieldBattleData {
     s32 evtId;                   // 0xC
     s32 hitKind;                 // 0x10, FbatHitKind
     s32 firstAttackParam;        // 0x14, BattleFirstAttack of an enemy first strike (0x10 from tou_03 _firstattack_setting)
-    u8 pad_18[0x1C - 0x18];      // 0x18, never accessed
+    u8 pad_18[0x1C - 0x18];      // 0x18, receives FbatHitResult.dist when fbatHitCheck copies the 16-byte result over hitKind; not read
     u32 firstAttackFlags;        // 0x1C, bit 0: seq_battle starts with FIRST_ATTACK_NONE; tou_03 _firstattack_setting clears it
     FieldBattleInfo info;        // 0x20
     void* postBattleEvent;       // 0x3C, evt run after a won battle (battle_seq_end)

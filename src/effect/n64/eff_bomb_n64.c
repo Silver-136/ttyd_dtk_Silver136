@@ -173,8 +173,8 @@ static void effBombDisp(CameraId cameraId, void* payload) {
     Mtx rot;
     Mtx base;
     GXTexObj texObj;
-    u32 a;
-    u32 b;
+    u32 alpha;
+    u32 blue;
     s32 frame;
 
     camera = camGetPtr(cameraId);
@@ -209,22 +209,22 @@ static void effBombDisp(CameraId cameraId, void* payload) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
     if (frame == 1) {
-        a = 0xC0;
+        alpha = 0xC0;
     } else if (frame == 2) {
-        a = 0xFF;
+        alpha = 0xFF;
     } else {
-        a = work->alpha2;
+        alpha = work->alpha2;
     }
     if (frame > 2) {
         s32 t = 0x7F;
         if (frame < 8) {
             t = frame << 4;
         }
-        b = t + 0x80;
+        blue = t + 0x80;
     } else {
-        b = 0xFF;
+        blue = 0xFF;
     }
-    GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, b, a});
+    GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, blue, alpha});
     PSMTXScale(scale, work->scale, work->scale, work->scale);
     PSMTXRotRad(rot, 'z', 0.017453292f * work->rot);
     PSMTXConcat(rot, scale, scale);

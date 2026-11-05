@@ -83,30 +83,30 @@ typedef struct GenkiWork {
     s32 state;        // 0x04
     s32 pad8;
     s32 mode;         // 0x0C
-    s32 score0;       // 0x10
-    s32 score1;       // 0x14
-    s32 score2;       // 0x18
-    f32 disp0;        // 0x1C
-    f32 disp1;        // 0x20
-    f32 disp2;        // 0x24
-    s32 blink0;       // 0x28
-    s32 blink1;       // 0x2C
-    s32 blink2;       // 0x30
-    EffectEntry* rec0; // 0x34
-    EffectEntry* rec1; // 0x38
-    EffectEntry* rec2; // 0x3C
+    s32 marioHp;       // 0x10
+    s32 partyHp;       // 0x14
+    s32 fp;       // 0x18
+    f32 marioHpDisp;        // 0x1C
+    f32 partyHpDisp;        // 0x20
+    f32 fpDisp;        // 0x24
+    s32 marioHpBlink;       // 0x28
+    s32 partyHpBlink;       // 0x2C
+    s32 fpBlink;       // 0x30
+    EffectEntry* marioHpEff; // 0x34
+    EffectEntry* partyHpEff; // 0x38
+    EffectEntry* fpEff; // 0x3C
     s32 timeLeft;     // 0x40
     s32 marioState;   // 0x44
     s32 marioTimer;   // 0x48
     s32 objTimer;     // 0x4C
-    s32 partyArg;     // 0x50
+    s32 partyUnitId;     // 0x50
     s32 marioCnt;     // 0x54
     s32 weaponNum;    // 0x58
     s32* table;       // 0x5C
     s32 tableIdx;     // 0x60
     s32 targetState;  // 0x64
-    s32 targetAngle;  // 0x68
-    f32 targetRad;    // 0x6C
+    s32 reticleSpin;  // 0x68
+    f32 aimAngle;    // 0x6C
     f32 targetSpeed;  // 0x70
     Vec targetPos;    // 0x74
     GenkiRing ring[7]; // 0x80
@@ -155,11 +155,11 @@ USER_FUNC(main_genki) {
     if (isFirstCall) {
         args = event->args;
         memset(w, 0, sizeof(GenkiWork));
-        w->partyArg = evtGetValue(event, args[0]);
+        w->partyUnitId = evtGetValue(event, args[0]);
         w->mode = evtGetValue(event, args[1]);
         w->timeLeft = 900;
-        w->score0 = w->score1 = w->score2 = 0;
-        w->disp0 = w->disp1 = w->disp2 = 0.0f;
+        w->marioHp = w->partyHp = w->fp = 0;
+        w->marioHpDisp = w->partyHpDisp = w->fpDisp = 0.0f;
         if (w->mode == 0) {
             w->weaponNum = 3;
         } else {
@@ -170,9 +170,9 @@ USER_FUNC(main_genki) {
         } else {
             w->table = BattleAlloc(200);
         }
-        w->rec0 = effRecoveryEntry(2, 0, 0.0f, -1000.0f, 0.0f);
-        w->rec1 = effRecoveryEntry(2, 0, 0.0f, -1000.0f, 0.0f);
-        w->rec2 = effRecoveryEntry(3, 0, 0.0f, -1000.0f, 0.0f);
+        w->marioHpEff = effRecoveryEntry(2, 0, 0.0f, -1000.0f, 0.0f);
+        w->partyHpEff = effRecoveryEntry(2, 0, 0.0f, -1000.0f, 0.0f);
+        w->fpEff = effRecoveryEntry(3, 0, 0.0f, -1000.0f, 0.0f);
         for (i = 0; i < 7; i++) {
             w->weapon[i].eff = effStarStoneEntry(i, 0.0f, -1000.0f, 0.0f, 1.0f);
             for (j = 0; j < 3; j++) {
@@ -209,38 +209,38 @@ static void main_base(void) {
     s32 a;
     s32 n;
 
-    if (w->disp0 > w->score0) {
-        w->disp0 -= 1.0f;
-        w->blink0 = 60;
+    if (w->marioHpDisp > w->marioHp) {
+        w->marioHpDisp -= 1.0f;
+        w->marioHpBlink = 60;
     }
-    if (w->disp0 < w->score0) {
-        w->disp0 += 1.0f;
-        w->blink0 = 60;
+    if (w->marioHpDisp < w->marioHp) {
+        w->marioHpDisp += 1.0f;
+        w->marioHpBlink = 60;
     }
-    if (w->disp1 > w->score1) {
-        w->disp1 -= 1.0f;
-        w->blink1 = 60;
+    if (w->partyHpDisp > w->partyHp) {
+        w->partyHpDisp -= 1.0f;
+        w->partyHpBlink = 60;
     }
-    if (w->disp1 < w->score1) {
-        w->disp1 += 1.0f;
-        w->blink1 = 60;
+    if (w->partyHpDisp < w->partyHp) {
+        w->partyHpDisp += 1.0f;
+        w->partyHpBlink = 60;
     }
-    if (w->disp2 > w->score2) {
-        w->disp2 -= 1.0f;
-        w->blink2 = 60;
+    if (w->fpDisp > w->fp) {
+        w->fpDisp -= 1.0f;
+        w->fpBlink = 60;
     }
-    if (w->disp2 < w->score2) {
-        w->disp2 += 1.0f;
-        w->blink2 = 60;
+    if (w->fpDisp < w->fp) {
+        w->fpDisp += 1.0f;
+        w->fpBlink = 60;
     }
-    if (w->blink0 > 0) {
-        w->blink0--;
+    if (w->marioHpBlink > 0) {
+        w->marioHpBlink--;
     }
-    if (w->blink1 > 0) {
-        w->blink1--;
+    if (w->partyHpBlink > 0) {
+        w->partyHpBlink--;
     }
-    if (w->blink2 > 0) {
-        w->blink2--;
+    if (w->fpBlink > 0) {
+        w->fpBlink--;
     }
 
     switch (w->state) {
@@ -414,7 +414,7 @@ static void main_mario(void) {
 
 /**
  * Swings the aim reticle between 0 and 60 degrees and back, 1.25 degrees a frame;
- * main_weapon launches stars in that direction. targetAngle only spins the reticle texture.
+ * main_weapon launches stars in that direction. reticleSpin only spins the reticle texture.
  */
 static void main_target(void) {
     GenkiWork* w = get_ptr();
@@ -422,30 +422,30 @@ static void main_target(void) {
     case 0:
         break;
     case 1:
-        w->targetAngle = 0;
-        w->targetRad = 30.0f;
+        w->reticleSpin = 0;
+        w->aimAngle = 30.0f;
         w->targetSpeed = 1.25f;
         w->targetState = 2;
     case 2:
-        w->targetAngle++;
-        if (w->targetAngle >= 360) {
-            w->targetAngle = w->targetAngle - 360.0f;
+        w->reticleSpin++;
+        if (w->reticleSpin >= 360) {
+            w->reticleSpin = w->reticleSpin - 360.0f;
         }
-        w->targetRad += w->targetSpeed;
-        if (w->targetRad >= 60.0f) {
-            w->targetRad = 60.0f;
+        w->aimAngle += w->targetSpeed;
+        if (w->aimAngle >= 60.0f) {
+            w->aimAngle = 60.0f;
             w->targetSpeed = -1.25f;
             w->targetState = 3;
         }
         break;
     case 3:
-        w->targetAngle++;
-        if (w->targetAngle >= 360) {
-            w->targetAngle = w->targetAngle - 360.0f;
+        w->reticleSpin++;
+        if (w->reticleSpin >= 360) {
+            w->reticleSpin = w->reticleSpin - 360.0f;
         }
-        w->targetRad += w->targetSpeed;
-        if (w->targetRad <= 0.0f) {
-            w->targetRad = 0.0f;
+        w->aimAngle += w->targetSpeed;
+        if (w->aimAngle <= 0.0f) {
+            w->aimAngle = 0.0f;
             w->targetSpeed = 1.25f;
             w->targetState = 2;
         }
@@ -470,7 +470,7 @@ static void main_weapon(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiWeapon* wp = &w->weapon[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
-    f32 ang = 3.141592f * (2.0f * w->targetRad) / 360.0f;
+    f32 ang = 3.141592f * (2.0f * w->aimAngle) / 360.0f;
     s32 audience = BattleAudience_GetAudienceNum();
     f32 x, y, z;
     s32 i;
@@ -503,7 +503,7 @@ static void main_weapon(s32 idx) {
             if (r->timer <= 0) {
                 r->timer = 30;
                 r->pos = w->targetPos;
-                r->scale = 2.0f * w->targetAngle;
+                r->scale = 2.0f * w->reticleSpin;
                 break;
             }
         }
@@ -565,44 +565,44 @@ static void main_weapon(s32 idx) {
         switch (o->kind) {
         case 0:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
-            w->score0 += 1;
-            if (w->score0 >= 99) {
-                w->score0 = 99;
+            w->marioHp += 1;
+            if (w->marioHp >= 99) {
+                w->marioHp = 99;
             }
             break;
         case 1:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
-            w->score0 += 3;
-            if (w->score0 >= 99) {
-                w->score0 = 99;
+            w->marioHp += 3;
+            if (w->marioHp >= 99) {
+                w->marioHp = 99;
             }
             break;
         case 2:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
-            w->score1 += 1;
-            if (w->score1 >= 99) {
-                w->score1 = 99;
+            w->partyHp += 1;
+            if (w->partyHp >= 99) {
+                w->partyHp = 99;
             }
             break;
         case 3:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
-            w->score1 += 3;
-            if (w->score1 >= 99) {
-                w->score1 = 99;
+            w->partyHp += 3;
+            if (w->partyHp >= 99) {
+                w->partyHp = 99;
             }
             break;
         case 4:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT4), &wp->pos);
-            w->score2 += 1;
-            if (w->score2 >= 99) {
-                w->score2 = 99;
+            w->fp += 1;
+            if (w->fp >= 99) {
+                w->fp = 99;
             }
             break;
         case 5:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT6), &wp->pos);
-            w->score2 += 3;
-            if (w->score2 >= 99) {
-                w->score2 = 99;
+            w->fp += 3;
+            if (w->fp >= 99) {
+                w->fp = 99;
             }
             break;
         case 6:
@@ -701,7 +701,7 @@ static void main_object(s32 idx) {
         } else if (irand(w->mode == 0 ? 7 : 14) == 0) {
             o->kind = 6;
         } else {
-            if (w->partyArg != -1) {
+            if (w->partyUnitId != -1) {
                 o->kind = kinds[irand(3)];
             } else {
                 o->kind = kinds[irand(2)];
@@ -720,10 +720,10 @@ static void main_object(s32 idx) {
                 }
             }
         }
-        if (w->partyArg == -1 && o->kind == 2) {
+        if (w->partyUnitId == -1 && o->kind == 2) {
             o->kind = 0;
         }
-        if (w->partyArg == -1 && o->kind == 3) {
+        if (w->partyUnitId == -1 && o->kind == 3) {
             o->kind = 1;
         }
         w->tableIdx++;
@@ -1001,9 +1001,9 @@ USER_FUNC(end_genki) {
             }
         }
     }
-    effDelete(w->rec0);
-    effDelete(w->rec1);
-    effDelete(w->rec2);
+    effDelete(w->marioHpEff);
+    effDelete(w->partyHpEff);
+    effDelete(w->fpEff);
     BattleFree(w->table);
     return 2;
 }
@@ -1041,72 +1041,72 @@ static void disp_3D(CameraId cam, void* param) {
     w = get_ptr();
     mario = BattleGetMarioPtr(_battleWorkPointer);
     party = BattleGetPartyPtr(_battleWorkPointer);
-    ang = 3.141592f * w->targetRad / 180.0f;
+    ang = 3.141592f * w->aimAngle / 180.0f;
 
     if (w->state) {
         BtlUnit_GetHomePos(mario, &mx, &my, &mz);
         my += 60.0f;
-        rec = w->rec0->userdata;
+        rec = w->marioHpEff->userdata;
         rec->position.x = mx;
         rec->position.y = my - 10.0f;
         rec->position.z = 5.0f + mz;
-        if (w->disp0 >= 10.0f) {
+        if (w->marioHpDisp >= 10.0f) {
             p = (Vec){6.0f + mx, my, 8.0f + mz};
         } else {
             p = (Vec){mx, my, 8.0f + mz};
         }
         PSMTXTrans(m, p.x, p.y, p.z);
-        if (genki_blink(w->blink0)) {
-            iconNumberDispGx3D(m, w->disp0, 0, (GXColor){255, 255, 255, 255});
+        if (genki_blink(w->marioHpBlink)) {
+            iconNumberDispGx3D(m, w->marioHpDisp, 0, (GXColor){255, 255, 255, 255});
         }
-        if (w->partyArg != -1) {
+        if (w->partyUnitId != -1) {
             BtlUnit_GetHomePos(party, &px, &py, &pz);
             py += 60.0f;
-            rec = w->rec1->userdata;
+            rec = w->partyHpEff->userdata;
             rec->position.x = px;
             rec->position.y = py - 10.0f;
             rec->position.z = 5.0f + pz;
-            if (w->disp1 >= 10.0f) {
+            if (w->partyHpDisp >= 10.0f) {
                 p1 = (Vec){6.0f + px, py, 8.0f + pz};
             } else {
                 p1 = (Vec){px, py, 8.0f + pz};
             }
             PSMTXTrans(m, p1.x, p1.y, p1.z);
-            if (genki_blink(w->blink1)) {
-                iconNumberDispGx3D(m, w->disp1, 0, (GXColor){255, 255, 255, 255});
+            if (genki_blink(w->partyHpBlink)) {
+                iconNumberDispGx3D(m, w->partyHpDisp, 0, (GXColor){255, 255, 255, 255});
             }
             BtlUnit_GetHomePos(mario, &mx, &my, &mz);
             BtlUnit_GetHomePos(party, &px, &py, &pz);
             mx = 0.5f * (mx + px);
             my += 90.0f;
-            rec = w->rec2->userdata;
+            rec = w->fpEff->userdata;
             rec->position.x = mx;
             rec->position.y = my - 10.0f;
             rec->position.z = 5.0f + mz;
-            if (w->disp2 >= 10.0f) {
+            if (w->fpDisp >= 10.0f) {
                 p = (Vec){6.0f + mx, my, 8.0f + mz};
             } else {
                 p = (Vec){mx, my, 8.0f + mz};
             }
             PSMTXTrans(m, p.x, p.y, p.z);
-            if (genki_blink(w->blink2)) {
-                iconNumberDispGx3D(m, w->disp2, 0, (GXColor){255, 255, 255, 255});
+            if (genki_blink(w->fpBlink)) {
+                iconNumberDispGx3D(m, w->fpDisp, 0, (GXColor){255, 255, 255, 255});
             }
         } else {
             BtlUnit_GetHomePos(mario, &mx, &my, &mz);
             my += 90.0f;
-            rec = w->rec2->userdata;
+            rec = w->fpEff->userdata;
             rec->position.x = mx;
             rec->position.y = my - 10.0f;
             rec->position.z = 5.0f + mz;
-            if (w->disp2 >= 10.0f) {
+            if (w->fpDisp >= 10.0f) {
                 p = (Vec){6.0f + mx, my, 8.0f + mz};
             } else {
                 p = (Vec){mx, my, 8.0f + mz};
             }
             PSMTXTrans(m, p.x, p.y, p.z);
-            if (genki_blink(w->blink2)) {
-                iconNumberDispGx3D(m, w->disp2, 0, (GXColor){255, 255, 255, 255});
+            if (genki_blink(w->fpBlink)) {
+                iconNumberDispGx3D(m, w->fpDisp, 0, (GXColor){255, 255, 255, 255});
             }
         }
     }
@@ -1212,9 +1212,9 @@ static void disp_3D(CameraId cam, void* param) {
         mx += 10.0f;
         my += 30.0f;
         mz += 10.0f;
-        btlDispTex4(BTL_TEX(0x41), (Vec){mx, my, mz}, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, 6.0f * w->targetAngle},
+        btlDispTex4(BTL_TEX(0x41), (Vec){mx, my, mz}, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, 6.0f * w->reticleSpin},
                     (GXColor){255, 255, 255, 255});
-        btlDispTex4(BTL_TEX(0x42), (Vec){mx, my, mz}, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, 6.0f * -(f32)w->targetAngle},
+        btlDispTex4(BTL_TEX(0x42), (Vec){mx, my, mz}, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, 6.0f * -(f32)w->reticleSpin},
                     (GXColor){255, 255, 255, 255});
     }
 }
@@ -1475,9 +1475,9 @@ static USER_FUNC(wait_game_end) {
 USER_FUNC(get_score) {
     GenkiWork* w = get_ptr();
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], w->score0);
-    evtSetValue(event, args[1], w->score1);
-    evtSetValue(event, args[2], w->score2);
+    evtSetValue(event, args[0], w->marioHp);
+    evtSetValue(event, args[1], w->partyHp);
+    evtSetValue(event, args[2], w->fp);
     return 2;
 }
 

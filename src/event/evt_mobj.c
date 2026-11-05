@@ -72,12 +72,12 @@ static s32 mobj_lock(MapObjectEntry* mobj);
  * Resolves a map object name for the script commands below;
  * "me" means the object whose event is running (event->thisMapObj).
  */
-static inline MapObjectEntry* MOBJ_PTR(EventEntry* event, const char* name) {
+static inline MapObjectEntry* mobjPtrOrSelf(EventEntry* event, const char* name) {
     return strcmp(name, "me") ? mobjNameToPtr(name) : event->thisMapObj;
 }
 
-/** Same lookup as MOBJ_PTR with the test written the other way round; evt_mobj_set_scale needs this form. */
-static inline MapObjectEntry* MOBJ_PTR2(EventEntry* event, const char* name) {
+/** Same lookup as mobjPtrOrSelf with the test written the other way round; evt_mobj_set_scale needs this form. */
+static inline MapObjectEntry* mobjPtrOrSelf2(EventEntry* event, const char* name) {
     return !strcmp(name, "me") ? event->thisMapObj : mobjNameToPtr(name);
 }
 
@@ -194,7 +194,7 @@ USER_FUNC(evt_mobj_get_kindname) {
 USER_FUNC(evt_mobj_set_scale) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
-    MapObjectEntry* mobj = MOBJ_PTR2(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf2(event, name);
     f32 x = evtGetFloat(event, args[1]);
     f32 y = evtGetFloat(event, args[2]);
     f32 z = evtGetFloat(event, args[3]);
@@ -210,7 +210,7 @@ USER_FUNC(evt_mobj_set_scale) {
 /** Reads the position of the map object args[0] ("me" allowed) into the float variables args[1..3]. */
 USER_FUNC(evt_mobj_get_position) {
     EvtWord* args = event->args;
-    MapObjectEntry* mobj = MOBJ_PTR(event, (const char*)evtGetValue(event, args[0]));
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, (const char*)evtGetValue(event, args[0]));
     evtSetFloat(event, args[1], mobj->position.x);
     evtSetFloat(event, args[2], mobj->position.y);
     evtSetFloat(event, args[3], mobj->position.z);
@@ -221,7 +221,7 @@ USER_FUNC(evt_mobj_get_position) {
 USER_FUNC(evt_mobj_get_x_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     evtSetFloat(event, args[1], mobj->position.x);
     return EVT_RETURN_DONE;
 }
@@ -230,7 +230,7 @@ USER_FUNC(evt_mobj_get_x_position) {
 USER_FUNC(evt_mobj_get_y_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     evtSetFloat(event, args[1], mobj->position.y);
     return EVT_RETURN_DONE;
 }
@@ -239,7 +239,7 @@ USER_FUNC(evt_mobj_get_y_position) {
 USER_FUNC(evt_mobj_get_z_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     evtSetFloat(event, args[1], mobj->position.z);
     return EVT_RETURN_DONE;
 }
@@ -251,7 +251,7 @@ USER_FUNC(evt_mobj_set_position) {
     f32 x = evtGetFloat(event, args[1]);
     f32 y = evtGetFloat(event, args[2]);
     f32 z = evtGetFloat(event, args[3]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     Vec pos = {0.0f, 0.0f, 0.0f};
     pos.x = x;
     pos.y = y;
@@ -264,7 +264,7 @@ USER_FUNC(evt_mobj_set_position) {
 /** Sets only the X position of the map object args[0] ("me" allowed) to args[1]. */
 USER_FUNC(evt_mobj_set_x_position) {
     EvtWord* args = event->args;
-    MapObjectEntry* mobj = MOBJ_PTR(event, (const char*)evtGetValue(event, args[0]));
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, (const char*)evtGetValue(event, args[0]));
     Vec pos = mobj->position;
     pos.x = evtGetFloat(event, args[1]);
     mobj->position = pos;
@@ -275,7 +275,7 @@ USER_FUNC(evt_mobj_set_x_position) {
 /** Sets only the Y position of the map object args[0] ("me" allowed) to args[1]. */
 USER_FUNC(evt_mobj_set_y_position) {
     EvtWord* args = event->args;
-    MapObjectEntry* mobj = MOBJ_PTR(event, (const char*)evtGetValue(event, args[0]));
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, (const char*)evtGetValue(event, args[0]));
     Vec pos = mobj->position;
     pos.y = evtGetFloat(event, args[1]);
     mobj->position = pos;
@@ -286,7 +286,7 @@ USER_FUNC(evt_mobj_set_y_position) {
 /** Sets only the Z position of the map object args[0] ("me" allowed) to args[1]. */
 USER_FUNC(evt_mobj_set_z_position) {
     EvtWord* args = event->args;
-    MapObjectEntry* mobj = MOBJ_PTR(event, (const char*)evtGetValue(event, args[0]));
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, (const char*)evtGetValue(event, args[0]));
     Vec pos = mobj->position;
     pos.z = evtGetFloat(event, args[1]);
     mobj->position = pos;
@@ -299,7 +299,7 @@ USER_FUNC(evt_mobj_set_z_position) {
  * lock and treasure-chest main functions read and clear.
  */
 USER_FUNC(evt_mobj_exec_cancel) {
-    MapObjectEntry* mobj = MOBJ_PTR(event, (const char*)evtGetValue(event, event->args[0]));
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, (const char*)evtGetValue(event, event->args[0]));
     mobj->flags |= MOBJ_FLAG_EXEC_CANCEL;
     return EVT_RETURN_DONE;
 }
@@ -313,7 +313,7 @@ USER_FUNC(evt_mobj_set_gravity_bound) {
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 a = evtGetFloat(event, args[1]);
     f32 b = evtGetFloat(event, args[2]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     mobj->gravity = a;
     mobj->bounce = b;
     return EVT_RETURN_DONE;
@@ -324,7 +324,7 @@ USER_FUNC(evt_mobj_set_anim) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     const char* anim = (const char*)evtGetValue(event, args[1]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     animPoseSetAnim(mobj->poseId, anim, 1);
     return EVT_RETURN_DONE;
 }
@@ -332,7 +332,7 @@ USER_FUNC(evt_mobj_set_anim) {
 /** Blocks the script until the current animation of the map object args[0] has played through once. */
 USER_FUNC(evt_mobj_wait_animation_end) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     if (animPoseGetLoopTimes(mobj->poseId) > 1.0f) {
         return EVT_RETURN_DONE;
     }
@@ -344,7 +344,7 @@ USER_FUNC(evt_mobj_set_camid) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     u8 cam = evtGetValue(event, args[1]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     mobj->camId = cam;
     return EVT_RETURN_DONE;
 }
@@ -354,7 +354,7 @@ USER_FUNC(evt_mobj_hitevt_onoff) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 on = evtGetValue(event, args[1]);
-    MapObjectEntry* mobj = MOBJ_PTR(event, name);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
     if (on) {
         mobj->flags &= ~MOBJ_FLAG_HITEVT_OFF;
     } else {
@@ -1120,6 +1120,7 @@ static s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
 }
 
 #if !MOBJ_EXTRA_OBJS
+/** Not called: it only places the model-name strings that stripped code referenced. */
 void evt_mobj_rideswitch(void) {
     mobjNameToPtr("MOBJ_RideSwitchB");
     mobjNameToPtr("MOBJ_RideSwitchA");
@@ -1680,7 +1681,7 @@ static inline s32 switchAnimIdx(s32 poseId) {
  */
 static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
     const s8* cur;
-    s32 anim;
+    s32 animIndex;
     BOOL a;
     switch (mobj->state) {
     case 0:
@@ -1692,33 +1693,33 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
             if (blkHitCheck(mobjNameToPtr(mobj->linkedName))) {
                 if (evtCheckID(mobj->eventId)) {
                     if (isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
-                        anim = 0;
+                        animIndex = 0;
                     } else {
-                        anim = 3;
+                        animIndex = 3;
                     }
                 } else {
                     mobj->typeDataU[1] |= 0x80000000;
-                    anim = 0;
+                    animIndex = 0;
                 }
             } else if (evtCheckID(mobj->eventId)) {
                 cur = (const s8*)animPoseGetCurrentAnim(mobj->poseId);
                 if (cur[0] == 'A' && cur[2] >= '1' && cur[2] <= '2') {
-                    anim = 0;
+                    animIndex = 0;
                 } else if (cur[0] == 'A' && cur[2] == '3') {
                     mobj->typeDataU[1] |= 0x40000000;
-                    anim = 0;
+                    animIndex = 0;
                 } else if (cur[0] == 'A' && cur[2] >= '4' && cur[2] <= '5') {
-                    anim = 3;
+                    animIndex = 3;
                 } else {
-                    anim = 3;
+                    animIndex = 3;
                 }
             } else {
                 mobj->typeDataU[1] |= 0x80000000;
-                anim = 3;
+                animIndex = 3;
             }
         } else {
             a = isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId));
-            anim = a ? 3 : 0;
+            animIndex = a ? 3 : 0;
             mobj->typeDataU[1] |= 0x80000000;
         }
         mobjRunEvent(mobj, (s32*)mobj->event);
@@ -1728,10 +1729,10 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_SWITCH1), &mobj->position);
         switch (mobj->hitFlag) {
         case MOBJ_FLAG_HIT_HEAD:
-            animPoseSetAnim(mobj->poseId, _switch_anim[anim + 1], 1);
+            animPoseSetAnim(mobj->poseId, _switch_anim[animIndex + 1], 1);
             break;
         default:
-            animPoseSetAnim(mobj->poseId, _switch_anim[anim], 1);
+            animPoseSetAnim(mobj->poseId, _switch_anim[animIndex], 1);
             break;
         }
         mobj->flags &= ~MOBJ_FLAG_HIT;
@@ -2413,6 +2414,7 @@ USER_FUNC(evt_mobj_arrow) {
     return EVT_RETURN_DONE;
 }
 #else
+/** Not called: it only places the model-name string that stripped code referenced. */
 void mobj_sign(void) {
     mobjNameToPtr("MOBJ_Arrow");
 }
@@ -2455,7 +2457,7 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     MarioWork* mario;
     PouchPartyData* party;
     s32 i;
-    s32 kind;
+    s32 coins;
     switch (mobj->state) {
     case -1:
         mobj->effect = effCoinFukidashiEntry(mobj->position.x, 25.0f + mobj->position.y, mobj->position.z - 10.0f, 0, mobj->typeData[1], 0);
@@ -2477,9 +2479,9 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         }
         mobj->state++;
     case 2:
-        // FAKE: the coin count goes through kind (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object
-        kind = pouchGetCoin();
-        if (kind < mobj->typeData[1]) {
+        // FAKE: the coin count goes through coins (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object
+        coins = pouchGetCoin();
+        if (coins < mobj->typeData[1]) {
             mobj->state = 10;
             break;
         }
@@ -2517,7 +2519,7 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_SHINE1), &mobj->position);
         }
         if (mobj->timer == 100) {
-            kind = mobj->typeData[1];
+            coins = mobj->typeData[1];
             mario = marioGetPtr();
             pouch = pouchGetPtr();
             party = pouch->partyData;
@@ -2530,7 +2532,7 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
                     party->currentHP = party->maximumHP;
                 }
             }
-            pouchAddCoin(-kind);
+            pouchAddCoin(-coins);
         }
         mobj->timer--;
         if (mobj->timer <= 0) {
@@ -4203,6 +4205,7 @@ USER_FUNC(evt_mobj_koopa_ojama_blk) {
 }
 
 #if !MOBJ_EXTRA_OBJS
+/** Not called: it only places the model-name strings that stripped code referenced. */
 void mobj_koopa_stone_blk(void) {
     mobjNameToPtr("MOBJ_BombRock");
     mobjNameToPtr("OFF_d_bom");

@@ -282,7 +282,7 @@ static void effConfettiMain(EffectEntry* effect) {
  */
 static void effConfettiDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
-    s32 anm;
+    s32 frame;
     s32 type;
     EffConfettiN64Work* w;
     s32 i;
@@ -299,7 +299,7 @@ static void effConfettiDisp(CameraId cameraId, void* param) {
 
     camera = camGetPtr(cameraId);
     w = effect->userdata;
-    anm = w->frame;
+    frame = w->frame;
     type = w->type;
     count = w->count;
     alpha = w->alpha;
@@ -331,7 +331,7 @@ static void effConfettiDisp(CameraId cameraId, void* param) {
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){col[0], col[1], col[2], alpha});
         GXSetTevColor(GX_TEVREG1, (GXColor){0x3C, 0x3C, 0x3C, 0});
-        off = ((i + anm_seq[(anm >> 1) % 6]) & 0xF) << 6;
+        off = ((i + anm_seq[(frame >> 1) % 6]) & 0xF) << 6;
         PSMTXScale(scale, 0.0625f, 0.00390625f, 0.0f);
         PSMTXTrans(tmp, 0.0f, (f32)off, 0.0f);
         PSMTXConcat(scale, tmp, scale);

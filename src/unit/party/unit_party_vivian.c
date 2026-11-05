@@ -244,7 +244,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     BattleUnitPart* part;
-    s32 id, partNo, flag;
+    s32 id, partNo, clearShadowFlag;
     f32 px, py, pz;
     s32 pose;
 
@@ -253,7 +253,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
     px = evtGetFloat(event, args[2]);
     py = evtGetFloat(event, args[3]);
     pz = evtGetFloat(event, args[4]);
-    flag = evtGetValue(event, args[5]);
+    clearShadowFlag = evtGetValue(event, args[5]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     part = BattleGetUnitPartsPtr(id, partNo);
     pose = part->poseId;
@@ -316,7 +316,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
             if (event->userdata[1] > 15) {
                 part->shadowScale = 1.0f;
                 animPoseSetEffect(pose, NULL, 1);
-                if (flag != 0) {
+                if (clearShadowFlag != 0) {
                     unit->flags &= ~BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER;
                 }
                 return EVT_RETURN_DONE;
@@ -1382,13 +1382,13 @@ USER_FUNC(battle_evt_majo_disp_off) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     BattleUnitPart* part;
-    s32 id, partNo, flag, flag2;
+    s32 id, partNo, setShadowFlag, hidePart;
     s32 pose;
 
     id = BattleTransID(event, evtGetValue(event, args[0]));
     partNo = evtGetValue(event, args[1]);
-    flag = evtGetValue(event, args[2]);
-    flag2 = evtGetValue(event, args[3]);
+    setShadowFlag = evtGetValue(event, args[2]);
+    hidePart = evtGetValue(event, args[3]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     part = BattleGetUnitPartsPtr(id, partNo);
     pose = part->poseId;
@@ -1400,7 +1400,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
     switch (event->userdata[0]) {
         case 0:
             part->shadowScale = intplGetValue(EASING_LINEAR, 1.0f, 2.0f, event->userdata[1], 30);
-            if (flag != 0) {
+            if (setShadowFlag != 0) {
                 unit->flags |= BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER;
             }
             event->userdata[1]++;
@@ -1430,7 +1430,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
                 event->userdata[0]++;
                 event->userdata[1] = 0;
                 psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_2", &unit->position);
-                if (flag2 != 0) {
+                if (hidePart != 0) {
                     part->attributes |= kHidden;
                 }
             }
@@ -1553,33 +1553,33 @@ USER_FUNC(_get_vivian_attack_position) {
     BattleUnit* self;
     BattleUnit* target;
     s32 targetId, x, y, z;
-    s32 i1, i2, i3;
-    s32 ix, iy;
+    s32 xArg, yArg, zArg;
+    s32 offsetX, offsetZ;
     f32 floor;
     f32 sx, sy, sz;
 
     targetId = evtGetValue(event, args[0]);
-    i1 = args[1];
-    x = evtGetValue(event, i1);
-    i2 = args[2];
-    y = evtGetValue(event, i2);
-    i3 = args[3];
-    z = evtGetValue(event, i3);
+    xArg = args[1];
+    x = evtGetValue(event, xArg);
+    yArg = args[2];
+    y = evtGetValue(event, yArg);
+    zArg = args[3];
+    z = evtGetValue(event, zArg);
     self = BattleGetUnitPtr(wp, BattleTransID(event, UNIT_ID_SELF));
     target = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     BtlUnit_GetScale(target, &sx, &sy, &sz);
-    ix = (s32)((f32)target->faceDirection * (target->kindParams->vivianOffsetX * sx));
-    iy = (s32)(target->kindParams->vivianOffsetZ * sz);
-    x += -30.0f * self->sizeMultiplier * (f32)self->faceDirection + ix;
-    z = z + iy;
+    offsetX = (s32)((f32)target->faceDirection * (target->kindParams->vivianOffsetX * sx));
+    offsetZ = (s32)(target->kindParams->vivianOffsetZ * sz);
+    x += -30.0f * self->sizeMultiplier * (f32)self->faceDirection + offsetX;
+    z = z + offsetZ;
     y -= 20.0f * self->sizeMultiplier;
     floor = BattleGetFloorHeight(wp, x, y, z);
     if (floor > y) {
         y = (s32)floor;
     }
-    evtSetValue(event, i1, x);
-    evtSetValue(event, i2, y);
-    evtSetValue(event, i3, z);
+    evtSetValue(event, xArg, x);
+    evtSetValue(event, yArg, y);
+    evtSetValue(event, zArg, z);
     return EVT_RETURN_DONE;
 }
 #endif

@@ -27,7 +27,7 @@ typedef struct EffIndirectWork {
     s32 timer;         // 0x28, counts down while fading out
     s32 counter;    // 0x2C
     f32 speed;    // 0x30
-    smartEntry* work;  // 0x34
+    smartEntry* texBuffer;  // 0x34
 } EffIndirectWork;
 
 /**
@@ -52,7 +52,7 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work->position.z = z;
     work->scale = 0.0f;
     work->alpha = 255;
-    work->work = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_PERMANENT);
+    work->texBuffer = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_PERMANENT);
     work->rotX = 0.0f;
     work->rotY = 0.0f;
     work->rotZ = 0.0f;
@@ -80,7 +80,7 @@ static void effIndirectMain(EffectEntry* effect) {
                 work->timer--;
             }
             if (work->timer < 0) {
-                smartFree(work->work);
+                smartFree(work->texBuffer);
                 effDelete(effect);
                 return;
             }
@@ -128,7 +128,7 @@ static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     type = work->type;
     alpha = work->alpha;
 #if VERSION <= VERSION_DEMO_JP
-    indTex = work->work->address;
+    indTex = work->texBuffer->address;
 #endif
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);

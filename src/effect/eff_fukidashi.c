@@ -145,14 +145,14 @@ static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin)
  * Places the bubble above its speaker (Mario, a partner, or an NPC; otherwise at the base point),
  * tilted by the bubble angle plus 20 degrees per slot.
  */
-static void calc_pos(EffFukidashiWork* work, s32 flag) {
+static void calc_pos(EffFukidashiWork* work, s32 stepScale) {
     CameraEntry* camera;
     Vec axis;
     Mtx rot;
 
     camera = camGetPtr(CAMERA_3D);
     axis = (Vec){ (f32)sin(MTXDegToRad(camera->viewYaw)), 0.0f, -(f32)cos(MTXDegToRad(camera->viewYaw)) };
-    PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-((work->angle - 20.0f) + (f32)(flag * 20))));
+    PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-((work->angle - 20.0f) + (f32)(stepScale * 20))));
     if (((EvtWord)(work->npc)) == FUKIDASHI_MARIO) {
         MarioWork* mario = marioGetPtr();
         fukidashiSetPos(work, rot, &mario->position);
@@ -174,7 +174,7 @@ static void calc_pos(EffFukidashiWork* work, s32 flag) {
         work->position.y = rot[1][1] * (16.0f + work->size) + work->base.y;
         work->position.z = rot[2][1] * (16.0f + work->size) + work->base.z;
     }
-    work->zRot = (work->angle - 20.0f) + (f32)(flag * 20);
+    work->zRot = (work->angle - 20.0f) + (f32)(stepScale * 20);
     work->scale = 0.5f * (work->size / 12.0f) + 0.5f;
 }
 

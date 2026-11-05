@@ -133,7 +133,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
     NpcTribeInfo* tribe;
     NpcEntry* npc;
     int k;
-    int isMarker;
+    int skipDefeated;
     NpcAiInfo* ai;
     AreaData* area;
     s32 btl;
@@ -173,9 +173,9 @@ void setupDataBase(const char* areaName, const char* mapName) {
     }
 
     k = 0;
-    isMarker = 0;
+    skipDefeated = 0;
     if (attr->flags & 1) {
-        isMarker = 1;
+        skipDefeated = 1;
     }
     if (ptr) {
         parseInit(ptr, size);
@@ -195,7 +195,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
             parseTagGet1("<homing_angle>", PARSE_FLOAT, &homingAngle);
             parseTagGet1("<btl_setup_no>", PARSE_STRING, btlSetup);
             parsePopNext();
-            if (!isMarker || !(dead->mask & (1 << (u8)k))) {
+            if (!skipDefeated || !(dead->mask & (1 << (u8)k))) {
                 tribe = npcGetTribe(tribeName);
                 npcEntry(npcName, tribe->modelName);
                 npc = npcNameToPtr(npcName);

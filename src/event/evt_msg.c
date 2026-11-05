@@ -56,7 +56,7 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
         win = windowGetPointer(event->printWindowId);
         MSG_WIN_DATA(win)->tag = msg;
         MSG_WIN_DATA(win)->event = event;
-        if (!(flags & MSG_PRINT_NO_SPEAKER)) {
+        if (!(flags & MSG_PRINT_BATTLE_UNIT)) {
             if (event->wNpcEventType == NPC_EVENT_TALK) {
                 npc = event->ownerNPC;
             }
@@ -279,7 +279,7 @@ USER_FUNC(evt_msg_print_battle_party) {
     }
     strcpy(partyLabel, msg);
     strcat(partyLabel, battlePartyMsgStr[(s32)unit->currentKind - TYPE_PARTNER_MIN]);
-    return _evt_msg_print(event, isFirstCall, MSG_PRINT_NO_SPEAKER, partyLabel, 0, UNIT_ID_PARTNER);
+    return _evt_msg_print(event, isFirstCall, MSG_PRINT_BATTLE_UNIT, partyLabel, 0, UNIT_ID_PARTNER);
 }
 
 /**

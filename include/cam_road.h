@@ -110,7 +110,7 @@ typedef struct CamRoadWork {
 } CamRoadWork;
 
 CamRoadWork* camRoadGetWorkPtr(void);
-void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
+void camRoadMain(CameraParams* out, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 zB, f32 shiftWeight);
 
 f32 camRoadGetCurrentShiftXRate(void);
 void camRoadReset(void);

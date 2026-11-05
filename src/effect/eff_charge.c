@@ -37,7 +37,7 @@ static void effChargeDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffChargeWork* work = effect->userdata;
     s32 i;
-    s32 s0 = work->r0, s1 = work->g0, s2 = work->b0;
+    s32 r = work->r0, g = work->g0, b = work->b0;
     Mtx pmtx;
     Mtx rot;
     Mtx smtx;
@@ -77,7 +77,7 @@ static void effChargeDisp(CameraId cameraId, void* param) {
     for (i = 1; i < effect->count; i++, work++) {
         f32 ps = work->scale;
         if (ps) {
-            GXSetTevColor(GX_TEVREG0, (GXColor){ s0, s1, s2, work->alpha });
+            GXSetTevColor(GX_TEVREG0, (GXColor){ r, g, b, work->alpha });
             PSMTXTrans(pmtx, work->position.x, work->position.y, work->position.z);
             PSMTXScale(smtx, ps, ps, ps);
             PSMTXConcat(pmtx, smtx, pmtx);

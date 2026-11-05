@@ -24,7 +24,7 @@ typedef struct GT2Work {
     s32 button;      // 0x14
     f32 targets[8];  // 0x18
     s8 state[8];     // 0x38
-    s8 flag[8];      // 0x40
+    s8 earlyPress[8];      // 0x40
     u32 sfx[8];      // 0x48
     u16 width;       // 0x68
     s8 autoSuccess;  // 0x6A, result of the confused auto-play (1 = success)
@@ -84,7 +84,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                 gw->targets[i] = (f32) ((100 / work->actionCommands.params[2]) * (i + 1));
                 gw->targets[i] -= 4.0f;
                 gw->state[i] = 0;
-                gw->flag[i] = 0;
+                gw->earlyPress[i] = 0;
                 gw->sfx[i] = -1;
             }
 
@@ -182,7 +182,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                     if ((!gw->state[i4]) && (!found)) {
                         f64 d = __fabs(gw->cursor - gw->targets[i4]);
                         if (d <= 6.0) {
-                            if ((!doAuto) && gw->flag[i4]) {
+                            if ((!doAuto) && gw->earlyPress[i4]) {
                                 gw->state[i4] = -1;
                                 psndSFXOn(sfxNg);
 #if VERSION >= VERSION_JP
@@ -197,7 +197,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
 #endif
                             }
                         } else if (d < __fabs(gw->targets[1] - gw->targets[0])) {
-                            gw->flag[i4] = 1;
+                            gw->earlyPress[i4] = 1;
                             if (i4 == (work->actionCommands.params[2] - 1)) {
                                 gw->state[i4] = -1;
                                 psndSFXOn(sfxNg);

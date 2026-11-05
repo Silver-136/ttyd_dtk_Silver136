@@ -2461,20 +2461,20 @@ USER_FUNC(_get_itemsteal_param) {
     BattleWork* wp;
     EvtWord* args = event->args;
     BattleUnit* unit;
-    s32 id, out1, out2, rate, resist;
+    s32 id, outRate, outResist, rate, resist;
 
     id = evtGetValue(event, args[0]);
-    out1 = args[1];
+    outRate = args[1];
     wp = _battleWorkPointer;
-    out2 = args[2];
+    outResist = args[2];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     rate = 80 - (wp->actionCommands.acDifficulty - 3) * 20;
     if (rate <= 5) {
         rate = 5;
     }
     resist = 100 - unit->kindParams->itemStealParam;
-    evtSetValue(event, out1, rate);
-    evtSetValue(event, out2, resist);
+    evtSetValue(event, outRate, rate);
+    evtSetValue(event, outResist, resist);
     return EVT_RETURN_DONE;
 }
 
@@ -2488,7 +2488,7 @@ USER_FUNC(_get_itemsteal_param) {
 USER_FUNC(_chuchu_item_steal) {
     ItemDropData* table;
     BattleWork* wp;
-    s32 flag;
+    s32 acResult;
     s32 out;
     BattleUnit* unit;
     s32 id;
@@ -2499,7 +2499,7 @@ USER_FUNC(_chuchu_item_steal) {
     wp = _battleWorkPointer;
     id = evtGetValue(event, args[0]);
     out = args[1];
-    flag = evtGetValue(event, args[2]);
+    acResult = evtGetValue(event, args[2]);
     unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
     item = unit->heldItem;
     if (item == ITEM_NULL) {
@@ -2539,7 +2539,7 @@ USER_FUNC(_chuchu_item_steal) {
             item = ITEM_COIN;
         }
     }
-    if (!(flag & AC_RESULT_SUCCESS)) {
+    if (!(acResult & AC_RESULT_SUCCESS)) {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }

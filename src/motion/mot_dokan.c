@@ -17,10 +17,10 @@
 /**
  * Brings the partners back out with Mario when he comes out of a pipe:
  * re-enters any partner that was sent away (partyEntryPos / partyEntry2Pos) at his position,
- * puts both in run mode 10 facing away from him, and zero-scales them so they grow in when flag is 0.
+ * puts both in run mode 10 facing away from him, and zero-scales them so they grow in when keepScale is 0.
  * Skipped in background mode. From JP on, two partners fan out at +/-120 degrees instead of both turning 180.
  */
-static void _partyEntry(s32 flag) {
+static void _partyEntry(s32 keepScale) {
     MarioWork* mario;
     s32 i;
     s32 count;
@@ -63,7 +63,7 @@ static void _partyEntry(s32 flag) {
             mario->currPartySlotId[i] = id;
             party = partyGetPtr(id);
             partyChgRunMode(party, PARTY_RUN_PIPE);
-            if (flag == 0) {
+            if (keepScale == 0) {
                 Vec zero = {0.0f, 0.0f, 0.0f};
                 party->scale = zero;
             }
@@ -85,7 +85,7 @@ static void _partyEntry(s32 flag) {
         } else {
             party = partyGetPtr(mario->currPartySlotId[i]);
             partyChgRunMode(party, PARTY_RUN_PIPE);
-            if (flag == 0) {
+            if (keepScale == 0) {
                 Vec zero = {0.0f, 0.0f, 0.0f};
                 party->scale = zero;
             }

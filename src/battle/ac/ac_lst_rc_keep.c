@@ -14,8 +14,8 @@
 typedef struct LstRcWork {
     s32 timer;    // 0x0
     s32 count;    // 0x4, steps elapsed (0..5)
-    s16 held0;    // 0x8, control stick left: frames held (state 1000), then frames since release (1001)
-    s16 held1;    // 0xA, C-stick right: frames held (state 1000), then frames since release (1001)
+    s16 stickLeftFrames;    // 0x8, control stick left: frames held (state 1000), then frames since release (1001)
+    s16 substickRightFrames;    // 0xA, C-stick right: frames held (state 1000), then frames since release (1001)
     s32 endTimer; // 0xC
 } LstRcWork;
 
@@ -68,8 +68,8 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
             case AC_STATE_START:
                 lw->timer = 120;
                 ac->acState = AC_STATE_RUN;
-                lw->held0 = 0;
-                lw->held1 = 0;
+                lw->stickLeftFrames = 0;
+                lw->substickRightFrames = 0;
             case AC_STATE_RUN:
                 if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                     if (ac->setupFlags & AC_SETUP_FLAG_RETRIES) {
@@ -88,30 +88,30 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     }
                     return 0;
                 }
-                if (lw->held0 == 0) {
+                if (lw->stickLeftFrames == 0) {
                     if (BattlePadCheckTrigger(BATTLE_PAD_STICK_LEFT)) {
-                        lw->held0 = 1;
+                        lw->stickLeftFrames = 1;
                     }
                 } else {
-                    lw->held0++;
+                    lw->stickLeftFrames++;
                     if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) == 0) {
-                        lw->held0 = 0;
+                        lw->stickLeftFrames = 0;
                     }
                 }
-                if (lw->held1 == 0) {
+                if (lw->substickRightFrames == 0) {
                     if (BattlePadCheckTrigger(BATTLE_PAD_SUBSTICK_RIGHT)) {
-                        lw->held1 = 1;
+                        lw->substickRightFrames = 1;
                     }
                 } else {
-                    lw->held1++;
+                    lw->substickRightFrames++;
                     if (BattlePadCheckNow(BATTLE_PAD_SUBSTICK_RIGHT) == 0) {
-                        lw->held1 = 0;
+                        lw->substickRightFrames = 0;
                     }
                 }
-                if ((lw->held0 != 0 && lw->held1 != 0) || ac->countdown > 0 || autoCmd) {
+                if ((lw->stickLeftFrames != 0 && lw->substickRightFrames != 0) || ac->countdown > 0 || autoCmd) {
                     ac->acState = AC_STATE_RUN + 1;
                     lw->timer = ac->params[0];
-                    lw->held1 = lw->held0 = lw->count = 0;
+                    lw->substickRightFrames = lw->stickLeftFrames = lw->count = 0;
                     break;
                 }
                 lw->timer--;
@@ -129,18 +129,18 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     ac->acState = AC_STATE_RUN + 3;
                 }
                 lw->timer--;
-                if (lw->held0 > 0) {
-                    lw->held0++;
+                if (lw->stickLeftFrames > 0) {
+                    lw->stickLeftFrames++;
                 } else if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) == 0) {
-                    lw->held0 = 1;
+                    lw->stickLeftFrames = 1;
                 }
-                if (lw->held1 > 0) {
-                    lw->held1++;
+                if (lw->substickRightFrames > 0) {
+                    lw->substickRightFrames++;
                 } else if (BattlePadCheckNow(BATTLE_PAD_SUBSTICK_RIGHT) == 0) {
-                    lw->held1 = 1;
+                    lw->substickRightFrames = 1;
                 }
                 if (!autoCmd) {
-                    if (lw->held0 > 5 || lw->held1 > 5) {
+                    if (lw->stickLeftFrames > 5 || lw->substickRightFrames > 5) {
                         ac->result &= ~AC_RESULT_RUNNING;
                         loop = 1;
                         ac->acState = AC_STATE_RUN + 3;
@@ -159,7 +159,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     lw->timer = ac->params[lw->count];
                     break;
                 }
-                if (!(lw->held0 != 0 && lw->held1 != 0) && !autoCmd) {
+                if (!(lw->stickLeftFrames != 0 && lw->substickRightFrames != 0) && !autoCmd) {
                     break;
                 }
                 ok = 0;

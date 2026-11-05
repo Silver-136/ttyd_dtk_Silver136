@@ -50,9 +50,9 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
     work->g = 0;
     work->b8 = 0;
     for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->a = a;
-        p->b = b;
-        amp = irand((s32)p->a);
+        p->spawnRadius = a;
+        p->spawnHeight = b;
+        amp = irand((s32)p->spawnRadius);
         ang = 6.2831855f * irand(360) / 360.0f;
         p->position.x = amp * (f32)sin(ang);
         p->position.y = 0.0f;
@@ -65,13 +65,13 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
         p->rotSpeed = 5 - irand(10);
         p->rot = 0.0f;
         p->delay = irand(30);
-        p->decay = 0.2f;
+        p->gravity = 0.2f;
         p->vy = 0.0f;
         if (type == 1) {
             f32 t = 6.2831855f * irand(360) / 360.0f;
-            p->position.x = p->a * (f32)sin(t);
-            p->position.y = p->b;
-            p->position.z = p->a * (f32)cos(t);
+            p->position.x = p->spawnRadius * (f32)sin(t);
+            p->position.y = p->spawnHeight;
+            p->position.z = p->spawnRadius * (f32)cos(t);
         }
     }
     return effect;
@@ -118,7 +118,7 @@ static void effMist2Main(EffectEntry* effect) {
             work->alpha = work->life * 8;
         }
         if (work->alpha <= 0.0f) {
-            amp = irand((s32)work->a);
+            amp = irand((s32)work->spawnRadius);
             ang = 6.2831855f * irand(360) / 360.0f;
             work->position.x = amp * (f32)sin(ang);
             work->position.y = 0.0f;
@@ -131,14 +131,14 @@ static void effMist2Main(EffectEntry* effect) {
             work->rotSpeed = 5 - irand(10);
             work->rot = 0.0f;
             work->delay = irand(30);
-            work->decay = 0.2f;
+            work->gravity = 0.2f;
             work->vy = 0.0f;
         } else {
             work->rot += work->rotSpeed;
             work->scale += (work->scaleTarget - work->scale) / 10.0f;
             if (type == 1) {
                 work->position.y += work->vy;
-                work->vy -= work->decay;
+                work->vy -= work->gravity;
                 if (work->position.y < 0.0f) {
                     work->position.y = 0.0f;
                 }

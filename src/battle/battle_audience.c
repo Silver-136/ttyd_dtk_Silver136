@@ -57,8 +57,6 @@ typedef struct {
 const AudDeltaArr R_audience_delta_multiplier = {{8.0f,11.0f,14.0f,17.0f,20.0f,23.0f,26.0f,29.0f,32.0f,35.0f,38.0f,41.0f,44.0f,47.0f,50.0f,53.0f,56.0f,59.0f,62.0f,65.0f,68.0f,71.0f,74.0f,77.0f,80.0f,83.0f,86.0f,89.0f,92.0f,95.0f,98.0f,101.0f,104.0f,107.0f,110.0f,113.0f,116.0f,119.0f,122.0f,125.0f,128.0f,131.0f,134.0f,137.0f,140.0f,143.0f,146.0f,149.0f,152.0f,155.0f,158.0f,161.0f,164.0f,167.0f,170.0f,173.0f,176.0f,179.0f,182.0f,185.0f,188.0f,191.0f,194.0f,197.0f,200.0f}};
 const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
 
-#define AUD_SOUND_FLAG_PLAYING (1 << 0) // BattleAudienceSound.flags
-
 // A macro, not an inline function: as a function the registers in the callers change.
 #define AUD_SOUND_START(sound, dur, fade)                                                           \
     if ((sound)->sfxId != -1) {                                                                     \
@@ -1354,7 +1352,7 @@ static void BattleAudienceSettingAudience(void) {
     s32 weights[12];
     s32 counts[13];
     AudWArr w;
-    BattleDebugCtrl* bflags = &_battleWorkPointer->debug;
+    BattleDebugCtrl* debug = &_battleWorkPointer->debug;
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     NpcBattleRandom* rec = &_battleWorkPointer->fbatInfo->setup->random;
     PouchData* pouch = pouchGetPtr();
@@ -1376,8 +1374,8 @@ static void BattleAudienceSettingAudience(void) {
     if (i < 65) lim = i;
     audience->audienceDeltaMultiplier = delta.v[lim];
 
-    if (bflags->flags & BATTLE_DEBUG_AUDIENCE_NUM) {
-        audience->targetAudienceCount = (f32)bflags->audienceNum;
+    if (debug->flags & BATTLE_DEBUG_AUDIENCE_NUM) {
+        audience->targetAudienceCount = (f32)debug->audienceNum;
         if (audience->targetAudienceCount > (f32)audience->maxAudience) {
             audience->targetAudienceCount = (f32)audience->maxAudience;
         }
@@ -1463,8 +1461,8 @@ static void BattleAudienceSettingAudience(void) {
                 weights[id] = 0;
             }
         }
-        if (bflags->audienceKind != 0) {
-            switch (bflags->audienceKind) {
+        if (debug->audienceKind != 0) {
+            switch (debug->audienceKind) {
             case 1: id = AUDIENCE_TOAD; break;
             case 2: id = AUDIENCE_GOOMBA; break;
             case 3: id = AUDIENCE_KOOPA; break;
@@ -1537,7 +1535,7 @@ static void BattleAudienceSettingAudience(void) {
         i++;
         i %= 12;
     }
-    if (hasKind == 1 && used != 0 && (irand(20) == 0 || (bflags->flags & BATTLE_DEBUG_FORCE_LUIGI))) {
+    if (hasKind == 1 && used != 0 && (irand(20) == 0 || (debug->flags & BATTLE_DEBUG_FORCE_LUIGI))) {
         for (i = 0; i < 12; i++) perm[i] = i;
         for (i = 0; i < 24; i++) {
             s32 a = irand(12);
@@ -1612,7 +1610,7 @@ static void BattleAudienceGuestTPLRead(s32 id, AudienceMemberType member, const 
 static void BattleAudienceCtrlProcess(void) {
     s32 chance;
     BattleWork* wp = _battleWorkPointer;
-    BattleDebugCtrl* bflags = &wp->debug;
+    BattleDebugCtrl* debug = &wp->debug;
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     BattleAudienceMember* member;
     s32 i, j, index;
@@ -1679,7 +1677,7 @@ static void BattleAudienceCtrlProcess(void) {
         }
     }
 
-    if (bflags->flags & BATTLE_DEBUG_ITEM_THROW) {
+    if (debug->flags & BATTLE_DEBUG_ITEM_THROW) {
         audience->itemThrowMax = 10000;
     }
     if (wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
@@ -1689,7 +1687,7 @@ static void BattleAudienceCtrlProcess(void) {
             case 1: chance = 6000; break;
             case 2: chance = 30000; break;
             }
-            if (bflags->flags & BATTLE_DEBUG_ITEM_THROW) {
+            if (debug->flags & BATTLE_DEBUG_ITEM_THROW) {
                 chance = 60;
             }
             if (irand(chance) == 0) {

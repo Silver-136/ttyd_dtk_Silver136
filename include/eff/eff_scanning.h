@@ -16,4 +16,4 @@ typedef struct effScanningData {
     s32 alpha; //0x20
 } effScanningData;
 
-EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5);
+EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z);

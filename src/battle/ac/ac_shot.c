@@ -356,7 +356,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         MTXTrans(m1, px - 88.0f * (1.0f - disp->gaugeRatio), 33.0f + y, 0.0f);
         MTXScale(m2, disp->gaugeRatio, 1.0f, 1.0f);
         MTXConcat(m1, m2, m3);
-        iconDispGxCol(m3, ICON_FLAG_2D, ICON_08D, (GXColor){disp->color.r, disp->color.g, disp->color.b, disp->color.a});
+        iconDispGxCol(m3, ICON_FLAG_2D, ICON_AC_GAUGE_FILL, (GXColor){disp->color.r, disp->color.g, disp->color.b, disp->color.a});
     }
 }
 

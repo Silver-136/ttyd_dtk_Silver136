@@ -107,7 +107,7 @@ static s32 _CalcRollDir(void) {
 }
 
 // Ends the command: clears AC_RESULT_RUNNING (AC_RESULT_SUCCESS stays as it is) and moves to the end state 1002
-static inline void stickRotateFail(BattleWork* work) {
+static inline void stickRotateEnd(BattleWork* work) {
     work->actionCommands.result &= ~AC_RESULT_RUNNING;
     work->actionCommands.acState = AC_STATE_RUN + 2;
 }
@@ -233,7 +233,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 if (sw->dir == 0) {
                     sw->roll = 0;
                     if ((work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) && sw->prevDir != 0) {
-                        stickRotateFail(work);
+                        stickRotateEnd(work);
                         restart = TRUE;
                         break;
                     }
@@ -253,7 +253,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             sw->expectDir = sw->dir;
                             sw->nextDir = t;
                         } else if ((s8)sw->roll != (s8)r) {
-                            stickRotateFail(work);
+                            stickRotateEnd(work);
                             restart = TRUE;
                             break;
                         }
@@ -267,13 +267,13 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                 if (sw->steps > 1) {
                                     s8 st = sw->stepFrames;
                                     if (st > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_STEP_FRAMES]) {
-                                        stickRotateFail(work);
+                                        stickRotateEnd(work);
                                         restart = TRUE;
                                         break;
                                     } else if (st < work->actionCommands.params[STICK_ROTATE_PARAM_FAST_STEP_FRAMES]) {
                                         sw->fastSteps++;
                                         if (sw->fastSteps > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_FAST_STEPS]) {
-                                            stickRotateFail(work);
+                                            stickRotateEnd(work);
                                             restart = TRUE;
                                             break;
                                         }
@@ -281,12 +281,12 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                 }
                                 sw->stepFrames = 0;
                                 if (sw->roll != 0 && (s8)sw->roll != (s8)r) {
-                                    stickRotateFail(work);
+                                    stickRotateEnd(work);
                                     restart = TRUE;
                                     break;
                                 }
                                 if (sw->dir != sw->expectDir) {
-                                    stickRotateFail(work);
+                                    stickRotateEnd(work);
                                     restart = TRUE;
                                     break;
                                 } else {
@@ -302,7 +302,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                     sw->nextDir = t;
                                     if (sw->steps >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] * 8) {
                                         ac->result |= AC_RESULT_SUCCESS;
-                                        stickRotateFail(work);
+                                        stickRotateEnd(work);
                                         restart = TRUE;
                                         break;
                                     }
@@ -313,7 +313,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                         sw->roll = 0;
                         // retail tests GUIDED a second time (always true here)
                         if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
-                            stickRotateFail(work);
+                            stickRotateEnd(work);
                             restart = TRUE;
                             break;
                         }

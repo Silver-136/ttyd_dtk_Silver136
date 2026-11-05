@@ -62,6 +62,12 @@
 #include <string.h>
 #include <demo/DEMOPad.h>
 
+// Reset code stored with OSResetSystem and read back by OSGetResetCode after the restart:
+// bit 0 progressive video mode, bit 1 no video mode was set (the early demos store 0 for that); the language follows from bit 2 (US and PAL).
+#define RESET_CODE_INTERLACED 0
+#define RESET_CODE_PROGRESSIVE 1
+#define RESET_CODE_NO_VIDEO_MODE 2
+
 //.bss
 GlobalWork marioSt;
 OSThread DvdCheckThread;
@@ -323,11 +329,11 @@ void marioStInit(void) {
     if (!OSIsRestart()
 ) {
 #else
-    if (!OSIsRestart() || (OSGetResetCode() & OS_RESET_SHUTDOWN)) {
+    if (!OSIsRestart() || (OSGetResetCode() & RESET_CODE_NO_VIDEO_MODE)) {
 #endif
         DEMOInit(&GXNtsc480IntDfMarioSt);
     } else {
-        switch (OSGetResetCode() & OS_RESET_HOTRESET) {
+        switch (OSGetResetCode() & RESET_CODE_PROGRESSIVE) {
             case 0:
                 DEMOInit(&GXNtsc480IntDfMarioSt);
                 break;
@@ -888,7 +894,7 @@ void gcRumbleCheck(void) {
     static OSTime off_time[4] = {0, 0, 0, 0};
     OSTime now;
     OSTime diff;
-    BOOL array[4] = {0};
+    BOOL stopRequest[4] = {0};
     int i;
 
     now = OSGetTime();
@@ -928,15 +934,15 @@ void gcRumbleCheck(void) {
                 gp->rumbleForcedOff[i] = FALSE;
                 gp->rumbleStart[i] = FALSE;
             }
-            array[i] = TRUE;
+            stopRequest[i] = TRUE;
         }
         if (gp->dvdError) {
-            array[i] = TRUE;
+            stopRequest[i] = TRUE;
         }
         if (gp->systemLevelFlags != 0) {
-            array[i] = TRUE;
+            stopRequest[i] = TRUE;
         }
-        if (array[i]) {
+        if (stopRequest[i]) {
             gp->rumbleHardStop[i] = TRUE;
         } else {
             gp->rumbleHardStop[i] = FALSE;
@@ -992,15 +998,15 @@ void gcResetCheck(void) {
         if (gp->resetType != RESET_TYPE_MENU) {
             if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
 #if VERSION <= VERSION_DEMO_JP
-                code = OS_RESET_RESTART;
+                code = RESET_CODE_INTERLACED;
 #else
-                code = OS_RESET_SHUTDOWN;
+                code = RESET_CODE_NO_VIDEO_MODE;
 #endif
             } else {
                 if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
-                    code = OS_RESET_RESTART;
+                    code = RESET_CODE_INTERLACED;
                 } else {
-                    code = OS_RESET_HOTRESET;
+                    code = RESET_CODE_PROGRESSIVE;
                 }
             }
 #if VERSION >= VERSION_US

@@ -256,7 +256,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     PGLv2Work* g = (PGLv2Work*)ac->work;
     f32 ratio;
     s32 full;
-    s32 tmp[4];
+    s32 levelBounds[4];
     s32 cnt;
     s32 i;
     u16 pressedIcon;
@@ -293,15 +293,15 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     cnt = 0;
     for (i = 0; i < 4; i++) {
-        tmp[i] = 100;
+        levelBounds[i] = 100;
     }
     for (i = 0; i < 4; i++, cnt++) {
-        tmp[i] = ac->gaugeParams[i];
-        if (i != 0 && !(tmp[i] - tmp[i - 1] > 0)) {
+        levelBounds[i] = ac->gaugeParams[i];
+        if (i != 0 && !(levelBounds[i] - levelBounds[i - 1] > 0)) {
             break;
         }
     }
-    BattleAcDrawGauge((s32)x, (s32)y, ac->disp.gaugeRatio, 0xB2, cnt, tmp[0], tmp[1], tmp[2], full);
+    BattleAcDrawGauge((s32)x, (s32)y, ac->disp.gaugeRatio, 0xB2, cnt, levelBounds[0], levelBounds[1], levelBounds[2], full);
     pressedIcon = BattleACGetButtonIcon(g->button, 1);
     icon = BattleACGetButtonIcon(g->button, 0);
     switch (ac->acState) {

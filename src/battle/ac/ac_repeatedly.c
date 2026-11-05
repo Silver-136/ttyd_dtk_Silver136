@@ -29,7 +29,7 @@ typedef struct RepeatWork {
     s16 power;        // 0x24
     s16 graceStart;   // 0x26, initial grace, never read
     s16 grace;        // 0x28
-    u8 iconParam;     // 0x2A, gauge width: the third int argument of BattleAcDrawGauge (x, y, width, ...)
+    u8 gaugeWidth;     // 0x2A, gauge width: the third int argument of BattleAcDrawGauge (x, y, width, ...)
     s8 done;          // 0x2B
     u8 resetFlag;     // 0x2C
     u8 pad_2D[3];     // 0x2D, never accessed
@@ -110,7 +110,7 @@ static void _init_param(BattleWork* work) {
     r->count = 0;
     r->power = work->actionCommands.params[5];
     r->decay = 0.01f * work->actionCommands.params[6];
-    r->iconParam = 0xB2;
+    r->gaugeWidth = 0xB2;
     if (work->actionCommands.countdown > 0) {
         work->actionCommands.countdown--;
         r->done = 1;
@@ -468,7 +468,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (r->done == -1) {
         flags |= 2;
     }
-    BattleAcDrawGauge((s32)x, (s32)y, d->gaugeRatio, r->iconParam, 2, (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
+    BattleAcDrawGauge((s32)x, (s32)y, d->gaugeRatio, r->gaugeWidth, 2, (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + (176.0f * r->pos) / 100.0f;

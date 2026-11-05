@@ -16,8 +16,8 @@ typedef struct IconDispTableEntry IconDispTableEntry;
 struct IconDispTableEntry {
     s32 id;
     BOOL (*callback)(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry); //0x4
-    s32 something;
-    s32 something2;
+    s32 texId;
+    s32 initialFlags;
 };
 
 static BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
@@ -313,12 +313,12 @@ static BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, Battle
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
-    entry->icon = disp->something;
+    entry->icon = disp->texId;
     entry->scale = (Vec){1.0f,1.0f,1.0f};
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     entry->rot = (Vec){0.0f,0.0f,0.0f};
     entry->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    entry->flags = disp->something2;
+    entry->flags = disp->initialFlags;
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     return TRUE;
 }
@@ -340,14 +340,14 @@ static BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWork
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
-    entry->icon = disp->something;
+    entry->icon = disp->texId;
     entry->scale = (Vec){1.0f,1.0f,1.0f};
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     v = (Vec){0.0f,0.0f,0.0f};
     v.z = unit->statusIconWork.dizzyAngle;
     entry->rot = v;
     entry->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    entry->flags = disp->something2;
+    entry->flags = disp->initialFlags;
     entry->trans = (Vec){0.0f,4.0f,0.0f};
     return TRUE;
 }
@@ -366,12 +366,12 @@ static BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkS
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
-    entry->icon = disp->something;
+    entry->icon = disp->texId;
     entry->scale = (Vec){1.0f,1.0f,1.0f};
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     entry->rot = (Vec){0.0f,0.0f,0.0f};
     entry->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    entry->flags = disp->something2;
+    entry->flags = disp->initialFlags;
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     unit->statusIconWork.allergyBlinkTimer++;
     if (unit->statusIconWork.allergyBlinkTimer & 0x10) {
@@ -418,11 +418,11 @@ static BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWork
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
-    entry->icon = disp->something;
+    entry->icon = disp->texId;
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     entry->rot = (Vec){0.0f,0.0f,0.0f};
     entry->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    entry->flags = disp->something2;
+    entry->flags = disp->initialFlags;
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     return TRUE;
 }
@@ -461,7 +461,7 @@ static BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, Battle
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
-    entry->icon = disp->something;
+    entry->icon = disp->texId;
     entry->scale = (Vec){1.0f,1.0f,1.0f};
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     entry->rot = (Vec){0.0f,0.0f,0.0f};
@@ -470,7 +470,7 @@ static BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, Battle
     col.g = intplGetValue(EASING_SINE_IN_OUT, c0.g, c1.g, t, 360);
     col.b = intplGetValue(EASING_SINE_IN_OUT, c0.b, c1.b, t, 360);
     entry->color = col;
-    entry->flags = disp->something2;
+    entry->flags = disp->initialFlags;
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     return TRUE;
 }

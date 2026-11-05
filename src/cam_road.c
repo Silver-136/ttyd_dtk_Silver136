@@ -812,7 +812,7 @@ static inline void camRoadSgn2(f32 s, f32 t, f32* p1, f32* p2) {
  * limiting how far the point may move from prev along the curve's two axes. g is stored as the sideways shift.
  * Without a curve it keeps the previous one, or passes the inputs through.
  */
-static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
+static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 zB, f32 shiftWeight) {
     f32 ax, az; // FAKE: named dA.x/dA.z copies declared first (numbered low, below l2) -> see camRoadSgn2
     f32 nx;
     f32 ny;
@@ -869,12 +869,12 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
     curve = wp->map->curves;
     best = -100000000.0f;
     hitCurve = NULL;
-    posA.x = a;
-    posA.y = b;
-    posA.z = c;
-    posB.x = d;
-    posB.y = e;
-    posB.z = f;
+    posA.x = xA;
+    posA.y = yA;
+    posA.z = zA;
+    posB.x = xB;
+    posB.y = yB;
+    posB.z = zB;
     for (i = 0; i < wp->map->curveNum; i++, curve++) {
         grp = &wp->map->groups[curve->grpOfs];
         n = curve->grpNum;
@@ -882,7 +882,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
             continue;
         }
         if (n == 0) {
-            if (curve->height > e) {
+            if (curve->height > yB) {
                 continue;
             }
             if (curve->height > best) {
@@ -923,21 +923,21 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
     if (curve == NULL) {
         curve = prev->on ? prev->cam : NULL;
         if (curve == NULL) {
-            wp->out[0] = a;
-            wp->out[1] = b;
-            wp->out[2] = c;
-            wp->out[3] = d;
-            wp->out[4] = e;
-            wp->out[5] = f;
+            wp->out[0] = xA;
+            wp->out[1] = yA;
+            wp->out[2] = zA;
+            wp->out[3] = xB;
+            wp->out[4] = yB;
+            wp->out[5] = zB;
             return;
         }
-        x = a;
+        x = xA;
         if (wp->state == CAM_ROAD_FORMAT_101 && curve != NULL && curve->fixYOn != 0) {
             y = curve->f_24;
         } else {
-            y = b;
+            y = yA;
         }
-        z = c;
+        z = zA;
         nx = -prev->dir.x;
         ny = -prev->dir.y;
         nz = -prev->dir.z;
@@ -960,7 +960,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
         if (wp->state == CAM_ROAD_FORMAT_101 && curve->fixYOn != 0) {
             y = curve->f_24;
         } else {
-            y = b;
+            y = yA;
         }
         nx = -hit.dir.z;
         len2 = nx * nx + hit.dir.x * hit.dir.x;
@@ -994,7 +994,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
     if (curve != NULL) {
         fov = 3.141592f * (wp->map->projection->x / 2.0f / 180.0f);
         zoom = 1.0f;
-        if (g && hitCurve != NULL && prev->on) {
+        if (shiftWeight && hitCurve != NULL && prev->on) {
             cs = camRoadCos(fov);
             sn = (f32)sin(fov);
             mnz = -nz;
@@ -1036,7 +1036,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
 
             cs2 = (f32)cos(fov);
             sn = (f32)sin(fov);
-            w = 0.01f * (g * (zoom * (640.0f * (dist * sn / cs2) / 480.0f)));
+            w = 0.01f * (shiftWeight * (zoom * (640.0f * (dist * sn / cs2) / 480.0f)));
             found2 = 0;
             flags = 0;
             p2 = posA;
@@ -1135,12 +1135,12 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
     out->on = 1;
     out->f_04 = hitCurve != NULL;
     out->hitFlags = flags;
-    out->in[0] = a;
-    out->in[1] = b;
-    out->in[2] = c;
-    out->in[3] = d;
-    out->in[4] = e;
-    out->in[5] = f;
+    out->in[0] = xA;
+    out->in[1] = yA;
+    out->in[2] = zA;
+    out->in[3] = xB;
+    out->in[4] = yB;
+    out->in[5] = zB;
     out->cam = curve;
     out->pos.x = x;
     out->pos.y = y;
@@ -1153,7 +1153,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32
     out->rot = rot;
     out->segment = f4c;
     out->time = gp->renderFieldTime;
-    out->f_58 = g;
+    out->f_58 = shiftWeight;
     out->shiftXRate = curve->shiftXRate;
 }
 
@@ -1367,15 +1367,15 @@ static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, Cam
  * Called by the camera driver, door transitions (evt_bero), camera scripts (evt_cam), map changes (seq_mapchange)
  * and some rooms (hei_00, pik_00).
  */
-void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
+void camRoadMain(CameraParams* out, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 zB, f32 shiftWeight) {
     u32 flags;
-    wp->in[0] = a;
-    wp->in[1] = b;
-    wp->in[2] = c;
-    wp->in[3] = d;
-    wp->in[4] = e;
-    wp->in[5] = f;
-    calcCamRoad(&wp->next, &wp->prev, a / 10.0f, b / 10.0f, c / 10.0f, d / 10.0f, e / 10.0f, f / 10.0f, g);
+    wp->in[0] = xA;
+    wp->in[1] = yA;
+    wp->in[2] = zA;
+    wp->in[3] = xB;
+    wp->in[4] = yB;
+    wp->in[5] = zB;
+    calcCamRoad(&wp->next, &wp->prev, xA / 10.0f, yA / 10.0f, zA / 10.0f, xB / 10.0f, yB / 10.0f, zB / 10.0f, shiftWeight);
     if (wp->hokanOn) {
         flags = compareCamRoad(&wp->prev, &wp->next, &wp->hokanSpeed);
         if (flags) {

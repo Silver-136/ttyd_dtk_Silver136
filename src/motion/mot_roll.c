@@ -85,7 +85,7 @@ static inline s32 angOut(f32 center, f32 half, f32 x) {
 }
 
 // FAKE: k025/rabs/rollRad/rollCos/rSin are invented one-line inline helpers. Their result temps get
-// later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, makeVec c
+// later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, stickAngOut c
 // in f31) and marioRollCan (v26 in f26, fabs/sin/cos volatiles). Behaviour-identical to the expressions they wrap.
 static inline f32 k025(void) { return 0.025f; }
 /** sin of a (radians) as a float. */
@@ -98,7 +98,7 @@ static inline f32 rollRad(f32 d) { return 3.1415927f * d / 180.0f; }
 static inline f32 rollCos(f32 a) { return (f32)cos(a); }
 /** 1 if the control stick points outside +/-half degrees of Mario's move direction (angOut with the stick angle). */
 // Returns 1 when the stick direction lies outside moveDirection +/- half degrees (angOut with both angles read here).
-static inline s32 makeVec(f32 half) {
+static inline s32 stickAngOut(f32 half) {
     s32 w = 0;
     s32 r = w;
     MarioWork* mario = marioGetPtr();
@@ -1121,7 +1121,7 @@ void mot_roll(void) {
         }
     } else {  // the speed clamp runs only on this path
         if ((mario->mot.roll.flags & ROLL_FLAG_SLOPE_DAMP_UNUSED) && mario->groundRot.z == 0.0f) {
-            if (makeVec(135.0f) == 1) {
+            if (stickAngOut(135.0f) == 1) {
                 v29 = 0.2f * -v29 + v29;
                 v28 = 0.2f * -v28 + v28;
                 if (__fabsf(v29) < 1.0f) {

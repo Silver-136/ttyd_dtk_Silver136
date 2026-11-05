@@ -35,7 +35,7 @@ typedef struct EffKemuri8N64Work {
     u8 a;           // 0x47
     s32 texFrameNext; // 0x48
     s32 limit;      // 0x4C
-    BOOL flag;      // 0x50
+    BOOL colorFade;      // 0x50
     s32 counter;    // 0x54
     s32 camId;      // 0x58
 } EffKemuri8N64Work;
@@ -63,14 +63,14 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffKemuri8N64Work* work;
     s32 i;
     s32 count;
-    BOOL flag;
+    BOOL colorFade;
     f32 radius;
     f32 rad;
 
     effect = effEntry();
-    flag = FALSE;
+    colorFade = FALSE;
     if (type >= 3) {
-        flag = TRUE;
+        colorFade = TRUE;
         type -= 3;
     }
     switch (type) {
@@ -119,8 +119,8 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->position.z = 0.0f;
         work->sinAngle = sin(rad);
         work->cosAngle = cos(rad);
-        work->flag = flag;
-        if (flag == 0) {
+        work->colorFade = colorFade;
+        if (colorFade == 0) {
             work->r = 0xEE;
             work->g = 0xDE;
             work->b = 0xD7;
@@ -268,7 +268,7 @@ static void effKemuri8Disp(CameraId cameraId, void* param) {
                 PSMTXConcat(mtxB, mtx, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
             } else {
-                if (work->flag) {
+                if (work->colorFade) {
                     s32 red;
                     s32 green;
                     s32 blue;

@@ -904,13 +904,13 @@ USER_FUNC(unitwin_window_select_func) {
             case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
                 statusWinForceOff();
                 j = wp->cursor;
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].msgIndex);
                 jdt->curIndex = j;
                 event->lwData[0] = 1;
                 event->lwData[1] = (EvtWord)jdt->infoEnd;
                 event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
                 event->lwData[3] = jdt->info[j].tagEndPos;
-                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].storyId)) {
+                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].msgIndex)) {
                     event->lwData[4] = 0;
                 } else {
                     event->lwData[4] = jdt->info[j].cost;
@@ -921,13 +921,13 @@ USER_FUNC(unitwin_window_select_func) {
                 statusWinForceOff();
                 psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
                 j = wp->cursor;
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].msgIndex);
                 jdt->curIndex = j;
                 event->lwData[0] = 1;
                 event->lwData[1] = (EvtWord)jdt->infoEnd;
                 event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
                 event->lwData[3] = jdt->info[j].tagEndPos;
-                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[j].storyId)) {
+                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[j].msgIndex)) {
                     event->lwData[4] = 0;
                 } else {
                     event->lwData[4] = 1;
@@ -1688,7 +1688,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     char buf[32];
                     GXColor color;
                     char c;
-                    if (johoya_get(tbl, info->storyId)) {
+                    if (johoya_get(tbl, info->msgIndex)) {
                         sprintf(buf, "");
                         color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
                     } else {

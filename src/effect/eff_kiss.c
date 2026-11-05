@@ -81,7 +81,7 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     s32 i;
     s32 n;
     f32 rad;
-    f32 deg;
+    f32 angle2pi;
 
     effect = effEntry();
     n = 2;
@@ -102,7 +102,7 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     work->scaleX = 1.0f;
     work->life = (type != 4) ? 0x28 : 0x3C;
     work->frame = 0;
-    deg = 6.2831855f * angle;
+    angle2pi = 6.2831855f * angle;
     work->alpha = 0xFF;
     work->angle = angle;
     work->rotation = 0.0f;
@@ -119,7 +119,7 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
         case 3:
             p->scaleY = 1.0f;
             p->scaleX = 1.0f;
-            rad = deg / 360.0f;
+            rad = angle2pi / 360.0f;
             p->vx = 3.0f * (f32)sin(rad);
             p->vy = 3.0f * (f32)cos(rad);
             break;
@@ -127,7 +127,7 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
         case 2:
             p->scaleY = 0.0f;
             p->scaleX = 0.0f;
-            rad = deg / 360.0f;
+            rad = angle2pi / 360.0f;
             p->vx = 3.0f * (f32)sin(rad);
             p->vy = 3.0f * (f32)cos(rad);
             break;

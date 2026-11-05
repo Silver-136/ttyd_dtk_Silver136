@@ -9,7 +9,7 @@ void marioShipChgFall(void);
 BOOL marioChkSwirlPower(void);
 void marioForceShipAnime(void);
 void marioReInit_ship(void);
-void marioSetSwirlPower(s32 msec, f32 a, f32 b);
+void marioSetSwirlPower(s32 msec, f32 speed, f32 angle);
 // marioShipChanging: Boat Mode phase.
 enum {
     SHIP_STATUS_NONE = 0,

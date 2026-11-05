@@ -41,7 +41,7 @@
 
 typedef struct SukiBtn {
     s32 state;  // 0x0
-    s32 unk4;   // 0x4
+    s32 pad4;   // 0x4, never accessed
     s32 button; // 0x8
     Vec pos;    // 0xC
 } SukiBtn;
@@ -64,7 +64,7 @@ typedef struct SukiWork {
     SukiBtn btn[7];     // 0xDC
     SukiBtn btn2[7];    // 0x184
     SacStarStone star;  // 0x22C
-    s32 effMode;        // 0x280
+    s32 effCamera;        // 0x280
     BattleWeapon weapon;    // 0x284
     u8 pad344[0x4C8 - 0x344];
 } SukiWork;
@@ -344,7 +344,7 @@ static void main_star(void) {
         w->star.to.z += -1.0f;
         w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
         w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-        w->effMode = CAMERA_3D;
+        w->effCamera = CAMERA_3D;
     case 2:
         w->star.timer++;
         if (w->star.timer <= 100) {
@@ -412,14 +412,14 @@ static void main_star(void) {
         }
         break;
     case 8:
-        w->effMode = CAMERA_3D;
+        w->effCamera = CAMERA_3D;
         break;
     case 9:
         w->star.timer++;
         w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 20);
         w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 20);
         w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 20);
-        w->effMode = CAMERA_3D_EFFECTB;
+        w->effCamera = CAMERA_3D_EFFECTB;
         if (w->star.timer >= 20) {
             w->star.state = 8;
             w->star.timer = 0;
@@ -438,7 +438,7 @@ static void main_star(void) {
         e->rot.y = w->star.rot.y;
         e->rot.z = w->star.rot.z;
         e->scale = 1.5f * w->star.scale.x;
-        e->cam = w->effMode;
+        e->cam = w->effCamera;
     }
 }
 

@@ -55,7 +55,7 @@ EVT_BEGIN(sound_evt)
     RETURN
 EVT_END()
 
-static inline void planeSetSpd(f32 targetZ, f32 rate, f32 zoom) {
+static inline void planeSetCamZoom(f32 targetZ, f32 rate, f32 zoom) {
     MarioWork* mario = marioGetPtr();
     mario->camShiftTargetZ = targetZ;
     mario->camShiftRate.z = rate;
@@ -246,7 +246,7 @@ void mot_plane(void) {
     }
     switch (mp->currSubMotionId) {
     case 0:
-        planeSetSpd(0.4f, 0.01f, 2.0f);
+        planeSetCamZoom(0.4f, 0.01f, 2.0f);
         marioPreJump();
         marioChgPose("M_J_1B");
         mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -578,8 +578,8 @@ static void flyMain(void) {
     f32 t;
     f32 a;
     f32 v;
-    BOOL flag;
-    s32 n;
+    BOOL yawInLeftHalf;
+    s32 stallFrames;
     f32 speedSin;
     MarioWork* m;
 
@@ -632,12 +632,12 @@ static void flyMain(void) {
             mp->motPlane->yaw += 0.1f * (210.0f - mp->motPlane->yaw);
         }
     }
-    flag = FALSE;
+    yawInLeftHalf = FALSE;
     t = mp->motPlane->yaw;
     if (t >= 90.0f && t <= 270.0f) {
-        flag = TRUE;
+        yawInLeftHalf = TRUE;
     }
-    mp->displayDirection = revise360(flag ? -t - 90.0f : 270.0f - t);
+    mp->displayDirection = revise360(yawInLeftHalf ? -t - 90.0f : 270.0f - t);
     if (mp->wStickDir1 != 0) {
         if (mp->baseSpeed) {
             a = __fabsf((f32)mp->wStickDir1);
@@ -807,10 +807,10 @@ static void flyMain(void) {
     mp->position.y += (mp->baseSpeed * c2) * ((c2 >= 0.0f) ? planeData[31] : planeData[32]);
     mp->position.x += s2 * (mp->baseSpeed * s);
     if (mp->baseSpeed <= planeData[16]) {
-        n = sysMsec2Frame(1000.0f * planeData[17]);
+        stallFrames = sysMsec2Frame(1000.0f * planeData[17]);
         if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
             if ((f32)mp->wStickDir1 < 0.0f) {
-                if (++mp->motPlane->stallTimer >= n) {
+                if (++mp->motPlane->stallTimer >= stallFrames) {
                     mp->mot.plane.groundY = mp->position.y;
                     mp->currSubMotionId = 60;
                     return;
@@ -818,7 +818,7 @@ static void flyMain(void) {
             }
         } else {
             if ((f32)mp->wStickDir1 > 0.0f) {
-                if (++mp->motPlane->stallTimer >= n) {
+                if (++mp->motPlane->stallTimer >= stallFrames) {
                     mp->mot.plane.groundY = mp->position.y;
                     mp->currSubMotionId = 60;
                     return;

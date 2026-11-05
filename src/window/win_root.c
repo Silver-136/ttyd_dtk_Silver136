@@ -1108,7 +1108,7 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
  * an animated page-turn prompt (more pages or the end).
  * a == 1 is the Journal's Tattle Log book, 32 shorter, with eight entry slots in two columns.
  */
-void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
+void winBookGX(WindowWork* w, s32 type, f32 x, f32 y) {
     f32 off;
     s32 i;
 
@@ -1131,7 +1131,7 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
-    if (a == 0) {
+    if (type == 0) {
         off = 0.0f;
     } else {
         off = 32.0f;
@@ -1152,13 +1152,13 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
     winRootTexQuad(w, 0x2F, (48.0f + (184.0f + (16.0f + x))), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
     winRootTexQuad(w, 0x2B, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f - 256.0f + off, 16.0f, 16.0f);
 
-    if (a == 1) {
+    if (type == 1) {
         for (i = 0; i < 8; i++) {
             winRootTexQuad(w, 0x34, (16.0f + x) + (i % 2) * 216, y - 32.0f - (i / 2) * 48, 192.0f, 32.0f);
         }
     }
 
-    if (a == 0) {
+    if (type == 0) {
         s32 pose;
         AnimData* anim;
         f32 lx;
@@ -1322,7 +1322,7 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
  * Pages of 7x4 cells scroll vertically; found badges (GSWF_BADGE_FOUND_BASE) and cooked recipes show their icon,
  * the rest a blank mark. Adds page-up/down arrows and the "msg_menu_sort_narabikae" sort hint.
  */
-void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
+void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
     f32 scroll;
     s32 ofs;
     s32 j;
@@ -1338,7 +1338,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
     s32 page;
     s32 num;
 
-    if (a == 0) {
+    if (type == 0) {
         scroll = w->log.badge.scroll;
         num = w->log.badge.num;
         page = w->log.badge.idx;
@@ -1368,7 +1368,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetScissor(304.0f + x, 240.0f - y, 400, 228);
 
-    ofs = a * 13;
+    ofs = type * 13;
     for (p = 0; p < (num + 27) / 28; p++) {
         py = p * 232;
         // BUG: j is read before any loop sets it: uninitialized on the first page, afterwards whatever
@@ -1377,54 +1377,54 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
             continue;
         }
 
-        // ofs is a * 13 (0 or 13 in the two normal modes), so ofs != 1 always holds and page 3 always takes this branch.
+        // ofs is type * 13 (0 or 13 in the two normal modes), so ofs != 1 always holds and page 3 always takes this branch.
         if ((ofs != 0 && p == 2) || (ofs != 1 && p == 3)) {
-            winRootTexQuad(w, (a * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
-            winRootTexQuad(w, (a * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
-            winRootTexQuad(w, (a * 13 + 0x7E), 8.0f + x, y - 56.0f + scroll - p * 232, 48.0f, 8.0f);
-            winRootTexQuad(w, (a * 13 + 0x85), 56.0f + x, y + scroll - p * 232, 8.0f, 8.0f);
-            winRootTexQuad(w, (a * 13 + 0x84), 56.0f + x, y - 8.0f + scroll - p * 232, 8.0f, 48.0f);
-            winRootTexQuad(w, (a * 13 + 0x81), 56.0f + x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
+            winRootTexQuad(w, (type * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
+            winRootTexQuad(w, (type * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
+            winRootTexQuad(w, (type * 13 + 0x7E), 8.0f + x, y - 56.0f + scroll - p * 232, 48.0f, 8.0f);
+            winRootTexQuad(w, (type * 13 + 0x85), 56.0f + x, y + scroll - p * 232, 8.0f, 8.0f);
+            winRootTexQuad(w, (type * 13 + 0x84), 56.0f + x, y - 8.0f + scroll - p * 232, 8.0f, 48.0f);
+            winRootTexQuad(w, (type * 13 + 0x81), 56.0f + x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
             break;
         }
         for (i = 0; i < 7; i++) {
             for (j = 0; j < 4; j++) {
-                winRootTexQuad(w, (a * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
+                winRootTexQuad(w, (type * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
             }
         }
         for (i = 0; i < 7; i++) {
             if (i == 0) {
-                id = (a * 13 + 0x7D);
+                id = (type * 13 + 0x7D);
             } else if (i & 1) {
-                id = (a * 13 + 0x7F);
+                id = (type * 13 + 0x7F);
             } else {
-                id = (a * 13 + 0x86);
+                id = (type * 13 + 0x86);
             }
             winRootTexQuad(w, id, x + i * 56, y - 224.0f + scroll - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
-                id = (a * 13 + 0x7E);
+                id = (type * 13 + 0x7E);
             } else {
-                id = (a * 13 + 0x80);
+                id = (type * 13 + 0x80);
             }
             winRootTexQuad(w, id, 8.0f + (x + i * 56), y - 224.0f + scroll - py, 48.0f, 8.0f);
         }
         for (i = 0; i < 4; i++) {
             if (i == 0) {
-                id = (a * 13 + 0x85);
+                id = (type * 13 + 0x85);
             } else if (i & 1) {
-                id = (a * 13 + 0x83);
+                id = (type * 13 + 0x83);
             } else {
-                id = (a * 13 + 0x87);
+                id = (type * 13 + 0x87);
             }
             winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56) - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
-                id = (a * 13 + 0x84);
+                id = (type * 13 + 0x84);
             } else {
-                id = (a * 13 + 0x82);
+                id = (type * 13 + 0x82);
             }
             winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56 - 8.0f) - py, 8.0f, 48.0f);
         }
-        winRootTexQuad(w, (a * 13 + 0x81), 392.0f + x, y - 224.0f + scroll - py, 8.0f, 8.0f);
+        winRootTexQuad(w, (type * 13 + 0x81), 392.0f + x, y - 224.0f + scroll - py, 8.0f, 8.0f);
     }
 
     npages = (num + 27) / 28;

@@ -1752,6 +1752,7 @@ static void btlseqTurn(BattleWork* wp) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     n = 0;
+                    // rate and count swap roles here compared with the Happy Heart case above (retail local reuse): rate is the badge counter, count the chance
                     for (rate = unit->badgesEquipped.HappyFlower; rate > 0; rate--) {
                         // integer division: currentFp / maxFp is 0 below full FP, so the chance is 33 %, at full FP 30 %
                         count = 33 - ((unit->currentFp / unit->maxFp) * 3);

@@ -318,9 +318,9 @@ USER_FUNC(evt_item_get_important_item) {
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, event->args[0]));
     MarioWork* mario = marioGetPtr();
     f32 mx, my, mz;
-    f32 tb;
+    f32 speedY;
     f32 spd;
-    f32 ta;
+    f32 framesLeft;
     f32 rad, s, c;
     mx = mario->position.x;
     my = mario->position.y + mario->wPlayerCollisionBox.y;
@@ -329,26 +329,26 @@ USER_FUNC(evt_item_get_important_item) {
     if (isFirstCall) {
         f32 dist = distABf(mx, mz, item->position.x, item->position.z);
         f32 dy = my - item->position.y;
-        ta = dist / spd;
-        tb = dy / ta + (ta * 0.1f) / 2.0f;
+        framesLeft = dist / spd;
+        speedY = dy / framesLeft + (framesLeft * 0.1f) / 2.0f;
         // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
-        event->userdata[0] = *(s32*)&ta;
-        event->userdata[1] = *(s32*)&tb;
+        event->userdata[0] = *(s32*)&framesLeft;
+        event->userdata[1] = *(s32*)&speedY;
         event->userdata[2] = *(s32*)&spd;
         event->userdata3 = 0;
     }
-    ta = event->userdataf[0];
-    tb = event->userdataf[1];
+    framesLeft = event->userdataf[0];
+    speedY = event->userdataf[1];
     spd = event->userdataf[2];
     rad = 6.2831855f * angleABf(item->position.x, item->position.z, mx, mz) / 360.0f;
     s = polySinf(rad);
     item->position.x = spd * s + item->position.x;
     c = polyCosf(rad);
     item->position.z = item->position.z - spd * c;
-    item->position.y += tb;
-    tb = tb - 0.1f;
-    ta = ta - 1.0f;
-    if (ta < 0.0f) {
+    item->position.y += speedY;
+    speedY = speedY - 0.1f;
+    framesLeft = framesLeft - 1.0f;
+    if (framesLeft < 0.0f) {
         item->position.x = mx;
         item->position.y = my;
         item->position.z = mz;
@@ -356,7 +356,7 @@ USER_FUNC(evt_item_get_important_item) {
     }
 
     // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
-    event->userdata[0] = *(s32*)&ta;
-    event->userdata[1] = *(s32*)&tb;
+    event->userdata[0] = *(s32*)&framesLeft;
+    event->userdata[1] = *(s32*)&speedY;
     return EVT_RETURN_BLOCK;
 }

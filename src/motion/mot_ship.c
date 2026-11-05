@@ -43,13 +43,13 @@ typedef struct MotShipWork {
     f32 bobAngle;                 // 0x08: bob phase in degrees, dispOfs.y = 3 sin(bobAngle) - 13
     f32 bobSpeed;                 // 0x0C: 4.25 degrees per frame
     f32 wakeScale;                // 0x10: wake effect scale, eased to 0.3 / 0.6
-    f32 dispX;                    // 0x14: drift velocity x (shipMove)
-    f32 dispY;                    // 0x18: drift velocity z (shipMove)
+    f32 velX;                    // 0x14: drift velocity x (shipMove)
+    f32 velZ;                    // 0x18: drift velocity z (shipMove)
     f32 turnSpeed;                // 0x1C: added to displayDirection every frame
     f32 turnAccel;                // 0x20
     struct EffectEntry* wakeEff;  // 0x24: effFunemizuEntry
-    f32 swirlY;                   // 0x28: whirlpool push direction in degrees (marioSetSwirlPower)
-    f32 swirlX;                   // 0x2C: whirlpool push distance per frame (movePos in shipMove)
+    f32 swirlAngle;                   // 0x28: whirlpool push direction in degrees (marioSetSwirlPower)
+    f32 swirlSpeed;                   // 0x2C: whirlpool push distance per frame (movePos in shipMove)
     s32 swirlTime;                // 0x30: frames of whirlpool push left
     u8 field_0x34[0x38 - 0x34];   // 0x34, never accessed
     s32 sfxId;                    // 0x38: engine loop, -1 when off
@@ -127,12 +127,12 @@ static inline s32 harborKind(HitEntry* hit) {
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tx, ty, tz, 0.0f, -1.0f, 0.0f); \
     if (hit != NULL && harborKind(hit) != 0) {                                                      \
         hitObjGetPos(hitGetName(hit), &POS);                                                        \
-        ix = (s32)((100.0f * POS.x + 0.5f) / 100.0f);                                               \
-        iy = (s32)((100.0f * POS.y + 0.5f) / 100.0f);                                               \
-        iz = (s32)((100.0f * POS.z + 0.5f) / 100.0f);                                               \
-        out->x = ix;                                                                                \
-        out->y = iy;                                                                                \
-        out->z = iz;                                                                                \
+        roundedX = (s32)((100.0f * POS.x + 0.5f) / 100.0f);                                         \
+        roundedY = (s32)((100.0f * POS.y + 0.5f) / 100.0f);                                         \
+        roundedZ = (s32)((100.0f * POS.z + 0.5f) / 100.0f);                                         \
+        out->x = roundedX;                                                                          \
+        out->y = roundedY;                                                                          \
+        out->z = roundedZ;                                                                          \
         return TRUE;                                                                                \
     }
 
@@ -185,8 +185,8 @@ void marioSetSwirlPower(s32 msec, f32 speed, f32 angle) {
     marioGetPtr();
     frames = sysMsec2Frame(msec);
     marioGetPtr()->motShip->swirlTime = frames;
-    marioGetPtr()->motShip->swirlX = speed;
-    marioGetPtr()->motShip->swirlY = angle;
+    marioGetPtr()->motShip->swirlSpeed = speed;
+    marioGetPtr()->motShip->swirlAngle = angle;
 }
 
 /** TRUE while a push set by marioSetSwirlPower is still running. */
@@ -198,8 +198,8 @@ BOOL marioChkSwirlPower(void) {
 /** Stops the boat's drift (both drift velocity components to 0); used by dou_10's script. */
 void marioShipForceStop(void) {
     marioGetPtr();
-    marioGetPtr()->motShip->dispX = 0.0f;
-    marioGetPtr()->motShip->dispY = 0.0f;
+    marioGetPtr()->motShip->velX = 0.0f;
+    marioGetPtr()->motShip->velZ = 0.0f;
 }
 
 /**
@@ -208,8 +208,8 @@ void marioShipForceStop(void) {
  */
 void marioShipSetDispDir(void) {
     marioGetPtr();
-    marioGetPtr()->motShip->dispX = 0.0f;
-    marioGetPtr()->motShip->dispY = 0.0f;
+    marioGetPtr()->motShip->velX = 0.0f;
+    marioGetPtr()->motShip->velZ = 0.0f;
 }
 
 /** TRUE when hit is a boat panel (any of the dock attributes 0x3C000); mario_motion.c uses it to offer Boat Mode. */
@@ -259,8 +259,8 @@ void marioReInit_ship(void) {
     marioGetPtr()->motShip->sfxId = -1;
     marioGetPtr()->motShip->flags = 0;
     marioGetPtr()->motShip->baseY = 0.0f;
-    marioGetPtr()->motShip->dispX = 0.0f;
-    marioGetPtr()->motShip->dispY = 0.0f;
+    marioGetPtr()->motShip->velX = 0.0f;
+    marioGetPtr()->motShip->velZ = 0.0f;
     marioGetPtr()->motShip->turnSpeed = 0.0f;
     marioGetPtr()->motShip->turnAccel = 0.0f;
     marioGetPtr()->motShip->bobAngle = 0.0f;
@@ -1039,42 +1039,42 @@ static void shipMove(void) {
     dx = 0.0f;
     if (marioGetPtr()->motShip->swirlTime != 0) {
         marioGetPtr()->motShip->swirlTime--;
-        movePos(&dx, &dz, marioGetPtr()->motShip->swirlX, marioGetPtr()->motShip->swirlY);
-        marioGetPtr()->motShip->dispX += dx;
-        marioGetPtr()->motShip->dispY += dz;
+        movePos(&dx, &dz, marioGetPtr()->motShip->swirlSpeed, marioGetPtr()->motShip->swirlAngle);
+        marioGetPtr()->motShip->velX += dx;
+        marioGetPtr()->motShip->velZ += dz;
 #if VERSION <= VERSION_DEMO_JP
         swirlMax = shipData[4];
-        if (marioGetPtr()->motShip->dispX > swirlMax) {
+        if (marioGetPtr()->motShip->velX > swirlMax) {
             swirlMax = shipData[4];
-            marioGetPtr()->motShip->dispX = swirlMax;
+            marioGetPtr()->motShip->velX = swirlMax;
 #else
         max = shipData[4];
-        if (marioGetPtr()->motShip->dispX > max) {
+        if (marioGetPtr()->motShip->velX > max) {
             max = shipData[4];
-            marioGetPtr()->motShip->dispX = max;
+            marioGetPtr()->motShip->velX = max;
 #endif
         }
-        if (marioGetPtr()->motShip->dispX < (-shipData[4])) {
-            marioGetPtr()->motShip->dispX = -shipData[4];
+        if (marioGetPtr()->motShip->velX < (-shipData[4])) {
+            marioGetPtr()->motShip->velX = -shipData[4];
         }
 #if VERSION <= VERSION_DEMO_JP
         swirlMax = shipData[4];
-        if (marioGetPtr()->motShip->dispY > swirlMax) {
+        if (marioGetPtr()->motShip->velZ > swirlMax) {
             swirlMax = shipData[4];
-            marioGetPtr()->motShip->dispY = swirlMax;
+            marioGetPtr()->motShip->velZ = swirlMax;
 #else
         max = shipData[4];
-        if (marioGetPtr()->motShip->dispY > max) {
+        if (marioGetPtr()->motShip->velZ > max) {
             max = shipData[4];
-            marioGetPtr()->motShip->dispY = max;
+            marioGetPtr()->motShip->velZ = max;
 #endif
         }
-        if (marioGetPtr()->motShip->dispY < (-shipData[4])) {
-            marioGetPtr()->motShip->dispY = -shipData[4];
+        if (marioGetPtr()->motShip->velZ < (-shipData[4])) {
+            marioGetPtr()->motShip->velZ = -shipData[4];
         }
     }
-    vx = marioGetPtr()->motShip->dispX;
-    vz = marioGetPtr()->motShip->dispY;
+    vx = marioGetPtr()->motShip->velX;
+    vz = marioGetPtr()->motShip->velZ;
     rateIdx = 3;
     if (m->controlStickSensitivity) {
         tx = spd * (f32)sin(3.1415927f * m->controlStickAngle / 180.0f);
@@ -1129,8 +1129,8 @@ static void shipMove(void) {
             vz = 0.0f;
         }
     }
-    marioGetPtr()->motShip->dispX = vx;
-    marioGetPtr()->motShip->dispY = vz;
+    marioGetPtr()->motShip->velX = vx;
+    marioGetPtr()->motShip->velZ = vz;
     len = distABf(0.0f, 0.0f, vx, vz);
     if (spd) {
         if (len >= shipData[4]) {
@@ -1138,12 +1138,12 @@ static void shipMove(void) {
         }
     } else if (len < shipData[5]) {
         len = 0.0f;
-        marioGetPtr()->motShip->dispX = 0.0f;
-        marioGetPtr()->motShip->dispY = 0.0f;
+        marioGetPtr()->motShip->velX = 0.0f;
+        marioGetPtr()->motShip->velZ = 0.0f;
     }
     m->baseSpeed = len;
     if (len) {
-        m->directionView = angleABf(0.0f, 0.0f, marioGetPtr()->motShip->dispX, marioGetPtr()->motShip->dispY);
+        m->directionView = angleABf(0.0f, 0.0f, marioGetPtr()->motShip->velX, marioGetPtr()->motShip->velZ);
     }
     if (len >= 1.0f) {
         MarioWork* mm = marioGetPtr();
@@ -1180,7 +1180,7 @@ void shipStrippedPool(f32* p) {
  * stores its rounded position in *out.
  */
 static BOOL checkHarbor(Vec* out) {
-    f32 ix, iy, iz;
+    f32 roundedX, roundedY, roundedZ;
     f32 tx, ty, tz, sn, cs, hx, hy, hz, dist, nx, ny, nz;
     Vec p1, p2, p3;
     HitEntry* hit;

@@ -2635,12 +2635,12 @@ USER_FUNC(evt_npc_kamek_move_position) {
     EvtWord* args = event->args;
 
     const char* npcName = (const char*)evtGetValue(event, *args++);
-    f32 temp1;
-    f32 temp2;
+    f32 sinCurr;
+    f32 sinPrev;
     f32 delta;
     f32 targetX = evtGetFloat(event, *args++);
     f32 targetZ = evtGetFloat(event, *args++);
-    f32 moveOffset = evtGetFloat(event, *args++);
+    f32 arcHeight = evtGetFloat(event, *args++);
     f32 moveTime = (f32)evtGetValue(event, *args++) / 1000.0f;
     f32 moveSpeed = evtGetFloat(event, *args++);
     s32 moveFlags = *args++;
@@ -2734,9 +2734,9 @@ USER_FUNC(evt_npc_kamek_move_position) {
     npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -temp);
     delta = dist1 - dist2;
 
-    temp2 = (f32)sin(3.1415927f * (2.0f * ((delta) / dist1)));
-    temp1 = (f32)sin(3.1415927f * (2.0f * (((npc->moveSpeed * npc->moveDt) + delta) / dist1)));
-    npc->moveOffset.y += (moveOffset * temp1) - (moveOffset * temp2);
+    sinPrev = (f32)sin(3.1415927f * (2.0f * ((delta) / dist1)));
+    sinCurr = (f32)sin(3.1415927f * (2.0f * (((npc->moveSpeed * npc->moveDt) + delta) / dist1)));
+    npc->moveOffset.y += (arcHeight * sinCurr) - (arcHeight * sinPrev);
 
     if ((moveFlags & 8) == 0) {
         _kamek_houki_kemuri(npc, npc->moveAnimState);

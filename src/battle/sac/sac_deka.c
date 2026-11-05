@@ -793,7 +793,7 @@ static void main_enemy_sub(BattleUnit* unit, s32* n) {
     f32 y;
     s32 i;
     BattleUnitPart* part;
-    s32 i2;
+    s32 partId;
 
     unit->rotationOffset = unit->offsetCenter;
     w->enemyVel[*n].y -= 1.25f;
@@ -822,8 +822,8 @@ static void main_enemy_sub(BattleUnit* unit, s32* n) {
                     unit->rotation.z = 0.0f;
                     w->enemyRot[*n] = 0.0f;
                     w->enemyVel[*n].y += 0.5f * m->vel[0][i].y;
-                    i2 = BtlUnit_GetBodyPartsId(unit);
-                    part = BtlUnit_GetPartsPtr(unit, i2);
+                    partId = BtlUnit_GetBodyPartsId(unit);
+                    part = BtlUnit_GetPartsPtr(unit, partId);
                     if (part->attributes & kImmuneToDamageAndStatus) {
                         continue;
                     }

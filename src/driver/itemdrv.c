@@ -1388,7 +1388,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 }
             }
             if (type == 8) {
-                evtSetValue(NULL, GSW_TIK_STAR_PIECES_FOUND_COUNT, evtGetValue(NULL, GSW_TIK_STAR_PIECES_FOUND_COUNT) + 1);
+                evtSetValue(NULL, GSW_STAR_PIECES_FOUND_COUNT, evtGetValue(NULL, GSW_STAR_PIECES_FOUND_COUNT) + 1);
             }
             entry->flags &= ~ITEM_FLAG_GET_BGM_ENDED;
             itemGetSound(entry);
@@ -2024,7 +2024,7 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     HitEntry* hit;
     f32 a, b;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
-    f32 sin, cos;
+    f32 dirSin, dirCos;
     f32 dot, ox, oz;
     f32 h; // FAKE: 15.0f in a local set before each hitDist store, so the y argument stays pos.y + h (a literal would be put on the left)
 
@@ -2033,11 +2033,11 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     if (dx == 0.0f && dz == 0.0f) {
         return NULL;
     }
-    sincosf(&sin, &cos, angleABf(0.0f, 0.0f, dx, dz));
+    sincosf(&dirSin, &dirCos, angleABf(0.0f, 0.0f, dx, dz));
     h = 15.0f;
     hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-        entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
+        entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos);
     if (hit) {
         dot = dx * hitNX + dz * hitNZ;
         ox = 0.5f * (dx - dot * hitNX);
@@ -2052,7 +2052,7 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     h = 15.0f;
     hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-        entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
+        entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos);
     if (hit) {
         dot = dx * hitNX + dz * hitNZ;
         ox = 0.5f * (dx - dot * hitNX);

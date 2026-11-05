@@ -75,14 +75,14 @@ static u8 geso_shibuki_dl_0_size_tbl[] = { 1, 1, 1, 1, 1};
 /**
  * Spawns the splash at (x, y, z) with `size`.
  * Types: 0 falls in water, 1 jumps out of water, 2 falls into lava/fire (also starts a smoke effect),
- * 3 Blooper (gesso) entrance, 4 its background variant. Allocates 1+n1+n2 records.
+ * 3 Blooper (gesso) entrance, 4 its background variant. Allocates 1+coneCount+dropCount records.
  */
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffSplashWork* work;
     s32 i;
-    s32 n1;
-    s32 n2;
+    s32 coneCount;
+    s32 dropCount;
     f32 ang;
     f32 r;
     f32 s;
@@ -91,31 +91,31 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     f32 dz;
 
     effect = effEntry();
-    n1 = 0;
-    n2 = 0;
+    coneCount = 0;
+    dropCount = 0;
     switch (type) {
     case 0:
     case 1:
-        n1 = 2;
-        n2 = 10;
+        coneCount = 2;
+        dropCount = 10;
         break;
     case 2:
-        n1 = 1;
-        n2 = 10;
+        coneCount = 1;
+        dropCount = 10;
         break;
     case 3:
         size *= 0.5f;
-        n1 = 6;
-        n2 = 0;
+        coneCount = 6;
+        dropCount = 0;
         effWaterDamageN64Entry(2, 60, x, y, z, 1.0f);
         break;
     case 4:
-        n1 = 2;
-        n2 = 10;
+        coneCount = 2;
+        dropCount = 10;
         break;
     }
     effect->type = "splash";
-    effect->count = n1 + n2 + 1;
+    effect->count = coneCount + dropCount + 1;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffSplashWork));
     effect->userdata = work;
     effect->callback = effSplashMain;
@@ -129,7 +129,7 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     work->timer = 0;
     work->hasColor = 0;
     work++;
-    for (i = 1; i < n1 + 1; i++, work++) {
+    for (i = 1; i < coneCount + 1; i++, work++) {
         work->position.z = 0.0f;
         work->position.y = 0.0f;
         work->position.x = 0.0f;
@@ -193,7 +193,7 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
             break;
         }
     }
-    for (i = n1 + 1; i < effect->count; i++, work++) {
+    for (i = coneCount + 1; i < effect->count; i++, work++) {
         ang = (f32)irand(360);
         r = (f32)irand(5);
         ang = 6.2831855f * ang / 360.0f;
@@ -406,7 +406,7 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     s32 type;
     s32 n;
     CameraEntry* cam;
-    f32 a, b, c;
+    f32 topRadius, bottomRadius, height;
     f32 r0, g0, b0, r1, g1, b1;
     f32 ang, sn, cs;
     f32 w;
@@ -495,28 +495,28 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
         switch (type) {
         case 0:
         case 2:
-            a = 23.0f;
-            b = 15.0f;
-            c = -37.0f;
+            topRadius = 23.0f;
+            bottomRadius = 15.0f;
+            height = -37.0f;
             break;
         case 1:
             if (i == 1) {
-                a = 1.8f;
-                b = 6.0f;
-                c = -85.0f;
+                topRadius = 1.8f;
+                bottomRadius = 6.0f;
+                height = -85.0f;
             } else {
-                a = b = 11.6f;
-                c = -21.0f;
+                topRadius = bottomRadius = 11.6f;
+                height = -21.0f;
             }
             break;
         case 4:
             if (i == 1) {
-                a = b = 10.0f;
-                c = -20.0f;
+                topRadius = bottomRadius = 10.0f;
+                height = -20.0f;
             } else {
-                a = 15.0f;
-                b = 12.0f;
-                c = -10.0f;
+                topRadius = 15.0f;
+                bottomRadius = 12.0f;
+                height = -10.0f;
             }
             break;
         }
@@ -549,12 +549,12 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
                 cs = (f32)cos(ang);
                 sn = (f32)sin(ang);
                 kb = k & 1;
-                GXPosition3f32(a * sn, 0.0f, a * cs);
+                GXPosition3f32(topRadius * sn, 0.0f, topRadius * cs);
                 GXColor4u8((u8)(255.0f * r0), (u8)(255.0f * g0), (u8)(255.0f * b0), 255);
                 GXTexCoord2f32((f32)kb, 0.1f);
                 cs = (f32)cos(ang);
                 sn = (f32)sin(ang);
-                GXPosition3f32(b * sn, c, b * cs);
+                GXPosition3f32(bottomRadius * sn, height, bottomRadius * cs);
                 GXColor4u8((u8)(255.0f * r1), (u8)(255.0f * g1), (u8)(255.0f * b1), 255);
 #if VERSION <= VERSION_DEMO_JP
                 GXTexCoord2f32((f32)(k & 1), 2.1f);

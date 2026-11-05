@@ -62,7 +62,7 @@ void marioBalloonOff(void) {
  * a map object whose hint is 1 or a case-event hit flagged for the balloon with the "front + A" condition.
  * Hits with attribute 0x800000 never count.
  */
-static inline BOOL chkBalloonStand(HitEntry* hit) {
+static inline BOOL chkBalloonFrontA(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
     s32 attr;
@@ -89,7 +89,7 @@ static inline BOOL chkBalloonStand(HitEntry* hit) {
  * TRUE when the hit directly in front of Mario is a hinted map object or a balloon case event triggered by A
  * while facing or pushing it. Hits Mario passes through (marioChkBero) never count.
  */
-static inline BOOL chkBalloonJump(HitEntry* hit) {
+static inline BOOL chkBalloonFront(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
 
@@ -122,7 +122,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
  * TRUE when the floor Mario stands on is a hinted map object or a balloon case event triggered by A
  * while pushing or standing on it. Attribute 0x800000 hits and pass-through hits (marioChkBero) never count.
  */
-static inline BOOL chkBalloonPush(HitEntry* hit) {
+static inline BOOL chkBalloonStandOn(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
     s32 attr;
@@ -203,15 +203,15 @@ void marioBalloonMain(void) {
             return;
     }
 
-    if (chkBalloonStand(mario->hitobjFrontA)) {
+    if (chkBalloonFrontA(mario->hitobjFrontA)) {
         type = 0;
         show = TRUE;
     }
-    if (chkBalloonJump(mario->hitobjFront)) {
+    if (chkBalloonFront(mario->hitobjFront)) {
         type = 0;
         show = TRUE;
     }
-    if (chkBalloonPush(mario->hitobjStandOn)) {
+    if (chkBalloonStandOn(mario->hitobjStandOn)) {
         type = 0;
         show = TRUE;
     }

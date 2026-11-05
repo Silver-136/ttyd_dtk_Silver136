@@ -17,8 +17,8 @@ typedef enum DVDFlags {
 #if VERSION <= VERSION_DEMO_JP
     DVDMGR_OPEN_FAILED = (1 << 4), // dvdMgrOpen: DVDOpen failed (the entry is cleared right after)
 #endif
-    DVDMGR_UNK_ERROR1 = (1 << 5),
-    DVDMGR_UNK_ERROR2 = (1 << 7),
+    DVDMGR_READ_ERROR = (1 << 5),
+    DVDMGR_READ_FAILED = (1 << 7),
     DVDMGR_INUSE = (1 << 15)
 } DVDFlags;
 

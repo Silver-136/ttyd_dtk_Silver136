@@ -87,7 +87,7 @@ EffectEntry* effGlassN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
     work->vx = rand() % 11 - 5;
     work->vy = rand() % 11 - 5;
     work->vz = rand() % 11 - 5;
-    work->rotY = rand() % 41 - 20;
+    work->rotZSpeed = rand() % 41 - 20;
     work->gravity = -0.1f;
     return effect;
 }
@@ -128,7 +128,7 @@ static void effGlassMain(EffectEntry* effect) {
     work->position.x += work->vx;
     work->position.y += work->vy;
     work->position.z += work->vz;
-    work->rotZ += work->rotY;
+    work->rotZ += work->rotZSpeed;
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effGlassDisp, effect);
 }
 

@@ -4968,7 +4968,7 @@ USER_FUNC(btlevtcmd_FallPartsPosition) {
 USER_FUNC(btlevtcmd_DivePartsPosition) {
     EvtWord* args = event->args;
     s32 id, pno, frames, height, mode, type, kind;
-    BattleUnitPart* unit;
+    BattleUnitPart* part;
     s32 floor;
     f32 tx, ty, tz;
     f32 x, y, z;
@@ -4986,65 +4986,65 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
     type = evtGetValue(event, args[8]);
     kind = evtGetValue(event, args[9]);
     floor = 0;
-    unit = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, id), pno);
+    part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, id), pno);
     if (mode >= 100) {
         floor = 1;
         mode -= 100;
     }
     if (isFirstCall) {
         event->blocked = 1;
-        unit->moveTotalFrames = frames;
-        BtlUnit_GetPartsPos(unit, &x, &y, &z);
-        BtlUnit_SetPartsMoveStartPos(unit, x, y, z);
-        BtlUnit_SetPartsMoveCurrentPos(unit, x, y, z);
-        BtlUnit_SetPartsMoveTargetPos(unit, tx, ty, tz);
+        part->moveTotalFrames = frames;
+        BtlUnit_GetPartsPos(part, &x, &y, &z);
+        BtlUnit_SetPartsMoveStartPos(part, x, y, z);
+        BtlUnit_SetPartsMoveCurrentPos(part, x, y, z);
+        BtlUnit_SetPartsMoveTargetPos(part, tx, ty, tz);
         {
             f32 dx = x - tx, dy = y - ty, dz = z - tz;
-            unit->moveDistance = sqrtf(dx * dx + dy * dy + dz * dz);
+            part->moveDistance = sqrtf(dx * dx + dy * dy + dz * dz);
         }
-        if (unit->moveTotalFrames == 0) {
-            unit->moveTotalFrames = unit->moveDistance / unit->moveSpeedXZ;
+        if (part->moveTotalFrames == 0) {
+            part->moveTotalFrames = part->moveDistance / part->moveSpeedXZ;
         } else {
-            unit->moveSpeedXZ = unit->moveDistance / unit->moveTotalFrames;
+            part->moveSpeedXZ = part->moveDistance / part->moveTotalFrames;
         }
-        if (unit->moveTotalFrames == 0) {
+        if (part->moveTotalFrames == 0) {
             return EVT_RETURN_DONE;
         }
-        unit->moveFrame = 0.0f;
-        unit->moveAngle = 0.0f;
+        part->moveFrame = 0.0f;
+        part->moveAngle = 0.0f;
         if (tx - x > 0.0f) {
-            unit->moveDirection = 1;
+            part->moveDirection = 1;
         } else if (tx - x < 0.0f) {
-            unit->moveDirection = -1;
+            part->moveDirection = -1;
         }
-        BtlUnit_LoadSeMode(3, kind, &unit->moveSndTable, &unit->moveSnd);
+        BtlUnit_LoadSeMode(3, kind, &part->moveSndTable, &part->moveSnd);
     }
-    unit->moveCurrentPos.x = intpl_sub(mode, unit->moveStartPos.x, unit->moveTargetPos.x, (s32)unit->moveFrame, unit->moveTotalFrames);
-    unit->moveCurrentPos.y = intpl_sub(mode, unit->moveStartPos.y, unit->moveTargetPos.y, (s32)unit->moveFrame, unit->moveTotalFrames);
-    unit->moveCurrentPos.z = intpl_sub(mode, unit->moveStartPos.z, unit->moveTargetPos.z, (s32)unit->moveFrame, unit->moveTotalFrames);
+    part->moveCurrentPos.x = intpl_sub(mode, part->moveStartPos.x, part->moveTargetPos.x, (s32)part->moveFrame, part->moveTotalFrames);
+    part->moveCurrentPos.y = intpl_sub(mode, part->moveStartPos.y, part->moveTargetPos.y, (s32)part->moveFrame, part->moveTotalFrames);
+    part->moveCurrentPos.z = intpl_sub(mode, part->moveStartPos.z, part->moveTargetPos.z, (s32)part->moveFrame, part->moveTotalFrames);
     if (floor) {
-        f32 fy = BattleGetFloorHeight(_battleWorkPointer, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
-        if (unit->moveCurrentPos.y < fy) {
-            unit->moveFrame = (f32)unit->moveTotalFrames;
-            BtlUnit_SetPartsMoveTargetPos(unit, unit->moveCurrentPos.x, fy, unit->moveCurrentPos.z);
+        f32 fy = BattleGetFloorHeight(_battleWorkPointer, part->moveCurrentPos.x, part->moveCurrentPos.y, part->moveCurrentPos.z);
+        if (part->moveCurrentPos.y < fy) {
+            part->moveFrame = (f32)part->moveTotalFrames;
+            BtlUnit_SetPartsMoveTargetPos(part, part->moveCurrentPos.x, fy, part->moveCurrentPos.z);
         }
     }
-    unit->moveFrame += 1.0f;
-    if (unit->moveFrame > unit->moveTotalFrames) {
-        BtlUnit_SetPartsPos(unit, unit->moveTargetPos.x, unit->moveTargetPos.y, unit->moveTargetPos.z);
-        _PartsMoveSoundControlEnd(unit);
+    part->moveFrame += 1.0f;
+    if (part->moveFrame > part->moveTotalFrames) {
+        BtlUnit_SetPartsPos(part, part->moveTargetPos.x, part->moveTargetPos.y, part->moveTargetPos.z);
+        _PartsMoveSoundControlEnd(part);
         return EVT_RETURN_DONE;
     }
     if (type == 0) {
-        f32 dx = unit->moveTargetPos.x - unit->moveCurrentPos.x, dy = unit->moveTargetPos.y - unit->moveCurrentPos.y, dz = unit->moveTargetPos.z - unit->moveCurrentPos.z;
+        f32 dx = part->moveTargetPos.x - part->moveCurrentPos.x, dy = part->moveTargetPos.y - part->moveCurrentPos.y, dz = part->moveTargetPos.z - part->moveCurrentPos.z;
         f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (d == 0.0f) {
             d = 1.0f;
         }
-        if (unit->moveDistance == 0.0f) {
-            unit->moveDistance = 1.0f;
+        if (part->moveDistance == 0.0f) {
+            part->moveDistance = 1.0f;
         }
-        h = sinfd(180.0f * (1.0f - d / unit->moveDistance));
+        h = sinfd(180.0f * (1.0f - d / part->moveDistance));
         if (height == 0) {
             h = 0.0f;
         }
@@ -5054,17 +5054,17 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         if (height > 0) {
             h = h * (f32)height;
         }
-        BtlUnit_SetPartsPos(unit, unit->moveCurrentPos.x, unit->moveCurrentPos.y + h, unit->moveCurrentPos.z);
+        BtlUnit_SetPartsPos(part, part->moveCurrentPos.x, part->moveCurrentPos.y + h, part->moveCurrentPos.z);
     } else {
-        f32 dx = unit->moveTargetPos.x - unit->moveCurrentPos.x, dy = unit->moveTargetPos.y - unit->moveCurrentPos.y, dz = unit->moveTargetPos.z - unit->moveCurrentPos.z;
+        f32 dx = part->moveTargetPos.x - part->moveCurrentPos.x, dy = part->moveTargetPos.y - part->moveCurrentPos.y, dz = part->moveTargetPos.z - part->moveCurrentPos.z;
         s32 neg;
         f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
-        if (unit->moveTargetPos.x - unit->moveStartPos.x > 0.0f) {
+        if (part->moveTargetPos.x - part->moveStartPos.x > 0.0f) {
             neg = 1;
-        } else if (unit->moveTargetPos.x - unit->moveStartPos.x < 0.0f) {
+        } else if (part->moveTargetPos.x - part->moveStartPos.x < 0.0f) {
             neg = 0;
         } else {
-            if (unit->moveTargetPos.y - unit->moveStartPos.y < 0.0f) {
+            if (part->moveTargetPos.y - part->moveStartPos.y < 0.0f) {
                 neg = 0;
             } else {
                 neg = 1;
@@ -5073,14 +5073,14 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         if (d == 0.0f) {
             d = 1.0f;
         }
-        if (unit->moveDistance == 0.0f) {
-            unit->moveDistance = 1.0f;
+        if (part->moveDistance == 0.0f) {
+            part->moveDistance = 1.0f;
         }
-        h = sinfd(180.0f * (1.0f - d / unit->moveDistance));
+        h = sinfd(180.0f * (1.0f - d / part->moveDistance));
         if (neg) {
-            a = 360.0f * atan2f_safety(unit->moveTargetPos.x - unit->moveStartPos.x, unit->moveTargetPos.y - unit->moveStartPos.y) / 6.2831855f;
+            a = 360.0f * atan2f_safety(part->moveTargetPos.x - part->moveStartPos.x, part->moveTargetPos.y - part->moveStartPos.y) / 6.2831855f;
         } else {
-            a = 180.0f + 360.0f * atan2f_safety(unit->moveTargetPos.x - unit->moveStartPos.x, unit->moveTargetPos.y - unit->moveStartPos.y) / 6.2831855f;
+            a = 180.0f + 360.0f * atan2f_safety(part->moveTargetPos.x - part->moveStartPos.x, part->moveTargetPos.y - part->moveStartPos.y) / 6.2831855f;
         }
         sx = h * sinfd(a);
         sz = h * cosfd(180.0f + a);
@@ -5091,9 +5091,9 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
             sx = sx * (f32)height;
             sz = sz * (f32)height;
         }
-        BtlUnit_SetPartsPos(unit, unit->moveCurrentPos.x + sz, unit->moveCurrentPos.y + sx, unit->moveCurrentPos.z);
+        BtlUnit_SetPartsPos(part, part->moveCurrentPos.x + sz, part->moveCurrentPos.y + sx, part->moveCurrentPos.z);
     }
-    _PartsMoveSoundControl(unit);
+    _PartsMoveSoundControl(part);
     return EVT_RETURN_BLOCK;
 }
 
@@ -6658,20 +6658,20 @@ USER_FUNC(btlevtcmd_SetMoveSoundDataWork) {
     s32 id;
     const char* name0;
     const char* name1;
-    s32 c, d, e;
-    s16 f, g;
+    s32 delay, period0, period1;
+    s16 a, b;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     name0 = (const char*)evtGetValue(event, args[1]);
     name1 = (const char*)evtGetValue(event, args[2]);
-    c = evtGetValue(event, args[3]);
-    d = evtGetValue(event, args[4]);
-    e = evtGetValue(event, args[5]);
-    f = evtGetValue(event, args[6]);
-    g = evtGetValue(event, args[7]);
-    BtlUnit_SetSeMode(&unit->moveSnd, name0, name1, c, d, e, f, g);
+    delay = evtGetValue(event, args[3]);
+    period0 = evtGetValue(event, args[4]);
+    period1 = evtGetValue(event, args[5]);
+    a = evtGetValue(event, args[6]);
+    b = evtGetValue(event, args[7]);
+    BtlUnit_SetSeMode(&unit->moveSnd, name0, name1, delay, period0, period1, a, b);
     return EVT_RETURN_DONE;
 }
 
@@ -6685,22 +6685,22 @@ USER_FUNC(btlevtcmd_SetRunSound) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
-    EvtWord a, b;
-    s32 c, d, e;
+    EvtWord name0, name1;
+    s32 delay, period0, period1;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    a = evtGetValue(event, args[1]);
-    b = evtGetValue(event, args[2]);
-    c = evtGetValue(event, args[3]);
-    d = evtGetValue(event, args[4]);
-    e = evtGetValue(event, args[5]);
-    unit->moveSndTable.entry[0].name0 = (const char*)a;
-    unit->moveSndTable.entry[0].name1 = (const char*)b;
-    unit->moveSndTable.entry[0].delay = c;
-    unit->moveSndTable.entry[0].period0 = d;
-    unit->moveSndTable.entry[0].period1 = e;
+    name0 = evtGetValue(event, args[1]);
+    name1 = evtGetValue(event, args[2]);
+    delay = evtGetValue(event, args[3]);
+    period0 = evtGetValue(event, args[4]);
+    period1 = evtGetValue(event, args[5]);
+    unit->moveSndTable.entry[0].name0 = (const char*)name0;
+    unit->moveSndTable.entry[0].name1 = (const char*)name1;
+    unit->moveSndTable.entry[0].delay = delay;
+    unit->moveSndTable.entry[0].period0 = period0;
+    unit->moveSndTable.entry[0].period1 = period1;
     return EVT_RETURN_DONE;
 }
 
@@ -6709,23 +6709,23 @@ USER_FUNC(btlevtcmd_SetPartsRunSound) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
     s32 id, pno;
-    EvtWord a, b;
-    s32 c, d, e;
+    EvtWord name0, name1;
+    s32 delay, period0, period1;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     pno = evtGetValue(event, args[1]);
     part = BattleGetUnitPartsPtr(id, pno);
-    a = evtGetValue(event, args[2]);
-    b = evtGetValue(event, args[3]);
-    c = evtGetValue(event, args[4]);
-    d = evtGetValue(event, args[5]);
-    e = evtGetValue(event, args[6]);
-    part->moveSndTable.entry[0].name0 = (const char*)a;
-    part->moveSndTable.entry[0].name1 = (const char*)b;
-    part->moveSndTable.entry[0].delay = c;
-    part->moveSndTable.entry[0].period0 = d;
-    part->moveSndTable.entry[0].period1 = e;
+    name0 = evtGetValue(event, args[2]);
+    name1 = evtGetValue(event, args[3]);
+    delay = evtGetValue(event, args[4]);
+    period0 = evtGetValue(event, args[5]);
+    period1 = evtGetValue(event, args[6]);
+    part->moveSndTable.entry[0].name0 = (const char*)name0;
+    part->moveSndTable.entry[0].name1 = (const char*)name1;
+    part->moveSndTable.entry[0].delay = delay;
+    part->moveSndTable.entry[0].period0 = period0;
+    part->moveSndTable.entry[0].period1 = period1;
     return EVT_RETURN_DONE;
 }
 
@@ -6735,22 +6735,22 @@ USER_FUNC(btlevtcmd_SetWalkSound) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
-    EvtWord a, b;
-    s32 c, d, e;
+    EvtWord name0, name1;
+    s32 delay, period0, period1;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    a = evtGetValue(event, args[1]);
-    b = evtGetValue(event, args[2]);
-    c = evtGetValue(event, args[3]);
-    d = evtGetValue(event, args[4]);
-    e = evtGetValue(event, args[5]);
-    unit->moveSndTable.entry[1].name0 = (const char*)a;
-    unit->moveSndTable.entry[1].name1 = (const char*)b;
-    unit->moveSndTable.entry[1].delay = c;
-    unit->moveSndTable.entry[1].period0 = d;
-    unit->moveSndTable.entry[1].period1 = e;
+    name0 = evtGetValue(event, args[1]);
+    name1 = evtGetValue(event, args[2]);
+    delay = evtGetValue(event, args[3]);
+    period0 = evtGetValue(event, args[4]);
+    period1 = evtGetValue(event, args[5]);
+    unit->moveSndTable.entry[1].name0 = (const char*)name0;
+    unit->moveSndTable.entry[1].name1 = (const char*)name1;
+    unit->moveSndTable.entry[1].delay = delay;
+    unit->moveSndTable.entry[1].period0 = period0;
+    unit->moveSndTable.entry[1].period1 = period1;
     return EVT_RETURN_DONE;
 }
 
@@ -6759,23 +6759,23 @@ USER_FUNC(btlevtcmd_SetPartsWalkSound) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
     s32 id, pno;
-    EvtWord a, b;
-    s32 c, d, e;
+    EvtWord name0, name1;
+    s32 delay, period0, period1;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     pno = evtGetValue(event, args[1]);
     part = BattleGetUnitPartsPtr(id, pno);
-    a = evtGetValue(event, args[2]);
-    b = evtGetValue(event, args[3]);
-    c = evtGetValue(event, args[4]);
-    d = evtGetValue(event, args[5]);
-    e = evtGetValue(event, args[6]);
-    part->moveSndTable.entry[1].name0 = (const char*)a;
-    part->moveSndTable.entry[1].name1 = (const char*)b;
-    part->moveSndTable.entry[1].delay = c;
-    part->moveSndTable.entry[1].period0 = d;
-    part->moveSndTable.entry[1].period1 = e;
+    name0 = evtGetValue(event, args[2]);
+    name1 = evtGetValue(event, args[3]);
+    delay = evtGetValue(event, args[4]);
+    period0 = evtGetValue(event, args[5]);
+    period1 = evtGetValue(event, args[6]);
+    part->moveSndTable.entry[1].name0 = (const char*)name0;
+    part->moveSndTable.entry[1].name1 = (const char*)name1;
+    part->moveSndTable.entry[1].delay = delay;
+    part->moveSndTable.entry[1].period0 = period0;
+    part->moveSndTable.entry[1].period1 = period1;
     return EVT_RETURN_DONE;
 }
 
@@ -6785,22 +6785,22 @@ USER_FUNC(btlevtcmd_SetDiveSound) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
-    EvtWord a, b;
-    s32 c, d, e;
+    EvtWord name0, name1;
+    s32 delay, period0, period1;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    a = evtGetValue(event, args[1]);
-    b = evtGetValue(event, args[2]);
-    c = evtGetValue(event, args[3]);
-    d = evtGetValue(event, args[4]);
-    e = evtGetValue(event, args[5]);
-    unit->moveSndTable.entry[2].name0 = (const char*)a;
-    unit->moveSndTable.entry[2].name1 = (const char*)b;
-    unit->moveSndTable.entry[2].delay = c;
-    unit->moveSndTable.entry[2].period0 = d;
-    unit->moveSndTable.entry[2].period1 = e;
+    name0 = evtGetValue(event, args[1]);
+    name1 = evtGetValue(event, args[2]);
+    delay = evtGetValue(event, args[3]);
+    period0 = evtGetValue(event, args[4]);
+    period1 = evtGetValue(event, args[5]);
+    unit->moveSndTable.entry[2].name0 = (const char*)name0;
+    unit->moveSndTable.entry[2].name1 = (const char*)name1;
+    unit->moveSndTable.entry[2].delay = delay;
+    unit->moveSndTable.entry[2].period0 = period0;
+    unit->moveSndTable.entry[2].period1 = period1;
     return EVT_RETURN_DONE;
 }
 
@@ -6809,23 +6809,23 @@ USER_FUNC(btlevtcmd_SetPartsDiveSound) {
     EvtWord* args = event->args;
     BattleUnitPart* part;
     s32 id, pno;
-    EvtWord a, b;
-    s32 c, d, e;
+    EvtWord name0, name1;
+    s32 delay, period0, period1;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     pno = evtGetValue(event, args[1]);
     part = BattleGetUnitPartsPtr(id, pno);
-    a = evtGetValue(event, args[2]);
-    b = evtGetValue(event, args[3]);
-    c = evtGetValue(event, args[4]);
-    d = evtGetValue(event, args[5]);
-    e = evtGetValue(event, args[6]);
-    part->moveSndTable.entry[2].name0 = (const char*)a;
-    part->moveSndTable.entry[2].name1 = (const char*)b;
-    part->moveSndTable.entry[2].delay = c;
-    part->moveSndTable.entry[2].period0 = d;
-    part->moveSndTable.entry[2].period1 = e;
+    name0 = evtGetValue(event, args[2]);
+    name1 = evtGetValue(event, args[3]);
+    delay = evtGetValue(event, args[4]);
+    period0 = evtGetValue(event, args[5]);
+    period1 = evtGetValue(event, args[6]);
+    part->moveSndTable.entry[2].name0 = (const char*)name0;
+    part->moveSndTable.entry[2].name1 = (const char*)name1;
+    part->moveSndTable.entry[2].delay = delay;
+    part->moveSndTable.entry[2].period0 = period0;
+    part->moveSndTable.entry[2].period1 = period1;
     return EVT_RETURN_DONE;
 }
 

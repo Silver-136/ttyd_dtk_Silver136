@@ -620,7 +620,7 @@ static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(Fi
     smartEntry* smart;
     DVDEntry* entry;
     FileEntry *newentry, *temp;
-    u32 size, test;
+    u32 size, alignedSize;
 
     for (search = afp->firstused; search; search = search->next) {
         if (search->state && !strcmp(search->filename, filename)) {
@@ -697,17 +697,17 @@ static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(Fi
             return NULL;
         }
         size = DVDMgrGetLength(entry);
-        test = size + ((size & 31) ? 32 - (size & 31) : 0);
-        if (!test) {
+        alignedSize = size + ((size & 31) ? 32 - (size & 31) : 0);
+        if (!alignedSize) {
             DVDMgrClose(entry);
             return NULL;
         }
-        if (test & 31) {
-            test += 32 - (test & 31);
+        if (alignedSize & 31) {
+            alignedSize += 32 - (alignedSize & 31);
         }
-        smart = smartAlloc(test, SMART_GROUP_PERMANENT);
+        smart = smartAlloc(alignedSize, SMART_GROUP_PERMANENT);
         smart->file = newentry;
-        DVDMgrRead(entry, smart->address, test, 0);
+        DVDMgrRead(entry, smart->address, alignedSize, 0);
         DVDMgrClose(entry);
         newentry->data = &smart->address;
         newentry->state = FILE_STATE_LOADED;
@@ -793,7 +793,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
     smartEntry* smart;
     DVDEntry* entry;
     void* handle;
-    u32 size, test;
+    u32 size, alignedSize;
 
     for (search = afp->firstused; search; search = search->next) {
         if (search->state && !strcmp(search->filename, filename)) {
@@ -878,16 +878,16 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
             return -1;
         }
         size = DVDMgrGetLength(entry);
-        test = size + ((size & 31) ? 32 - (size & 31) : 0);
-        if (!test) {
+        alignedSize = size + ((size & 31) ? 32 - (size & 31) : 0);
+        if (!alignedSize) {
             DVDMgrClose(entry);
             return 0;
         }
         DVDMgrClose(entry);
-        if (test & 31) {
-            test += 32 - (test & 31);
+        if (alignedSize & 31) {
+            alignedSize += 32 - (alignedSize & 31);
         }
-        smart = smartAlloc(test, SMART_GROUP_PERMANENT);
+        smart = smartAlloc(alignedSize, SMART_GROUP_PERMANENT);
         smart->file = newentry;
         newentry->data = &smart->address;
         newentry->state = FILE_STATE_PRELOADED;
@@ -908,7 +908,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
             afp->lastused = newentry;
         }
         newentry->entry = DVDMgrOpen(filename, 2, 0);
-        DVDMgrReadAsync(newentry->entry, smart->address, test, 0, dvdReadDoneCallBack);
+        DVDMgrReadAsync(newentry->entry, smart->address, alignedSize, 0, dvdReadDoneCallBack);
         return 0;
     }
 }

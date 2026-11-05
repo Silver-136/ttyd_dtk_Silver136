@@ -105,7 +105,7 @@ USER_FUNC(johoya_keti_newjoho_check) {
     s32 i;
 
     for (i = 0; i < wp->count; i++) {
-        if (johoya_get(table, wp->info[i].storyId) == 0) {
+        if (johoya_get(table, wp->info[i].msgIndex) == 0) {
             count++;
         }
     }
@@ -131,13 +131,13 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
     s32 i;
 
     for (i = 0; i < wp->count; i++) {
-        if (johoya_get(table, wp->info[i].storyId) == 0) {
+        if (johoya_get(table, wp->info[i].msgIndex) == 0) {
             if (target == n) {
 #if VERSION <= VERSION_DEMO_JP
-                sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
+                sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].msgIndex);
 #else
-                sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
-                sprintf(tmp, "jketi_title_%04d", wp->info[i].storyId);
+                sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].msgIndex);
+                sprintf(tmp, "jketi_title_%04d", wp->info[i].msgIndex);
                 msg = msgSearch(tmp);
 #endif
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
@@ -169,7 +169,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
  */
 USER_FUNC(johoya_keti_newjoho_setreadflag) {
     s32 cur = _jdt.curIndex;
-    johoya_set(_jdt.readFlags.ketiRead, _jdt.info[cur].storyId, 1);
+    johoya_set(_jdt.readFlags.ketiRead, _jdt.info[cur].msgIndex, 1);
     _jdt.info[cur].flags |= INFORMANT_FLAG_HEARD;
     return EVT_RETURN_DONE;
 }
@@ -183,7 +183,7 @@ USER_FUNC(johoya_keti_oldspeak_check) {
     s32 i;
 
     for (i = 0; i < wp->count; i++) {
-        if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & INFORMANT_FLAG_HEARD) == 0) {
+        if (johoya_get(table, wp->info[i].msgIndex) != 0 && (wp->info[i].flags & INFORMANT_FLAG_HEARD) == 0) {
             count++;
         }
     }
@@ -205,9 +205,9 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
     s32 i;
 
     for (i = 0; i < wp->count; i++) {
-        if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & INFORMANT_FLAG_HEARD) == 0) {
+        if (johoya_get(table, wp->info[i].msgIndex) != 0 && (wp->info[i].flags & INFORMANT_FLAG_HEARD) == 0) {
             if (target == n) {
-                sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
+                sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].msgIndex);
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
                 evtSetValue(event, args[2], (EvtWord)wp->info[i].initEndPos);
                 evtSetValue(event, args[3], wp->info[i].tagEndPos);
@@ -238,7 +238,7 @@ USER_FUNC(johoya_keti_oldspeak_setreadflag) {
  * (johoyaperfect_00/01).
  */
 USER_FUNC(johoya_perfect_newjoho_setreadflag) {
-    johoya_set(_jdt.readFlags.perfectRead, _jdt.info[_jdt.curIndex].storyId, 1);
+    johoya_set(_jdt.readFlags.perfectRead, _jdt.info[_jdt.curIndex].msgIndex, 1);
     return EVT_RETURN_DONE;
 }
 
@@ -247,7 +247,7 @@ USER_FUNC(johoya_perfect_newjoho_setreadflag) {
  * Called by luigi_gor_first_talk (gor.c) after Mario picks one of Luigi's adventure stories (gor_luigi_talk).
  */
 USER_FUNC(johoya_luigi_newjoho_setreadflag) {
-    johoya_set(_jdt.readFlags.luigiRead, _jdt.info[_jdt.curIndex].storyId, 1);
+    johoya_set(_jdt.readFlags.luigiRead, _jdt.info[_jdt.curIndex].msgIndex, 1);
     return EVT_RETURN_DONE;
 }
 
@@ -257,7 +257,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
     char tag[64];
     s32 mbbpos;
     s32 maxLabel;
-    s32 storyId;
+    s32 msgIndex;
     s32 tagNum;
     BOOL tagdone;
     s32 infoId;
@@ -271,10 +271,10 @@ s32 johoya_data_make(const char* prefix, s32 type) {
     maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     count = 0;
-    storyId = 0;
+    msgIndex = 0;
     infoId = 0;
     while (1) {
-        sprintf(label, "%s_%04d", prefix, storyId);
+        sprintf(label, "%s_%04d", prefix, msgIndex);
         msg = (const s8*)msgSearch(label);
         if (msg[0] != '<') {
             break;
@@ -339,20 +339,20 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                     wp->info[infoId].initEndPos = (char*)initEndPos;
                     wp->info[infoId].tagEndPos = tagEndPos;
                     wp->info[infoId].cost = 5;
-                    wp->info[infoId].storyId = (s16)storyId;
+                    wp->info[infoId].msgIndex = (s16)msgIndex;
                 }
                 infoId++;
                 count++;
             }
         }
-        storyId++;
+        msgIndex++;
     }
     return count;
 }
 
 /** Clears the three rumour read-flag tables. Runs at boot (mariost.c) and on a new game (stg0_00_init in event.c). */
 void johoya_init(void) {
-    InformantUnknown* readFlags = &_jdt.readFlags;
+    InformantReadFlags* readFlags = &_jdt.readFlags;
 
     memset(&readFlags->ketiRead, 0, sizeof(readFlags->ketiRead));
     memset(&readFlags->perfectRead, 0, sizeof(readFlags->perfectRead));

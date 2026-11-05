@@ -32,7 +32,7 @@ typedef struct GaugeWork {
     s32 inRange;   // 0x10
     s8 passed;     // 0x14
     s8 phase;      // 0x15
-    s8 hold;       // 0x16
+    s8 pressMode;       // 0x16
     u8 pad17;      // 0x17
     u32 button;   // 0x18
     s32 timer;    // 0x1C
@@ -84,19 +84,19 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             cw->sfxId = -1;
             switch (work->actionCommands.params[GAUGE_PARAM_TYPE]) {
                 case 0:
-                    cw->hold = 1;
+                    cw->pressMode = 1;
                     cw->button = PAD_TRIGGER_R;
                     cw->phase = 1;
                     work->actionCommands.outputParams[0] = 1;
                     break;
                 case 2:
-                    cw->hold = 0;
+                    cw->pressMode = 0;
                     cw->button = BATTLE_PAD_STICK_LEFT;
                     cw->phase = 0;
                     break;
                 case 1:
                 default:
-                    cw->hold = 1;
+                    cw->pressMode = 1;
                     cw->button = PAD_BUTTON_A;
                     cw->phase = 1;
                     work->actionCommands.outputParams[0] = 1;
@@ -127,7 +127,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                 work->actionCommands.acState = AC_STATE_RUN + 2;
                 break;
             }
-            if (cw->hold) {
+            if (cw->pressMode) {
                 work->actionCommands.acState = AC_STATE_RUN + 1;
             } else {
                 work->actionCommands.acState = AC_STATE_RUN;
@@ -137,7 +137,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             cw->frame++;
             switch (cw->phase) {
                 case 0:
-                    if (!cw->hold && BattlePadCheckNow(cw->button)) {
+                    if (!cw->pressMode && BattlePadCheckNow(cw->button)) {
                         cw->phase = 1;
                         work->actionCommands.acState = AC_STATE_RUN + 1;
                         cw->frame = 0;
@@ -145,7 +145,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     }
                     break;
                 case 1:
-                    if (cw->hold) {
+                    if (cw->pressMode) {
                         if (cw->button == BattlePadGetNow() && BattlePadCheckTrigger(cw->button)) {
                             cw->phase = 2;
                         }
@@ -491,7 +491,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
         case AC_STATE_RUN:
         case AC_STATE_RUN + 1:
-            if (cw->hold) {
+            if (cw->pressMode) {
                 if (cw->inRange) {
                     if (pressed2) {
                         Vec pos = {0.0f, 0.0f, 0.0f};

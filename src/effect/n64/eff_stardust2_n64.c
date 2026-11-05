@@ -20,7 +20,7 @@ typedef struct EffStardust2N64Work {
     f32 scale;    // 0x1c
     s32 frame;    // 0x20
     s32 life;     // 0x24
-    s32 color;    // 0x28
+    s32 variant;   // 0x28
     s32 camera;   // 0x2c
 } EffStardust2N64Work;
 
@@ -215,7 +215,7 @@ static void effStardust2Main(EffectEntry* effect) {
         switch (type) {
         case 0:
         case 1:
-            w->color = (frame + i) & 7;
+            w->variant = (frame + i) & 7;
             w->velocity.z += -0.02f;
 #if VERSION <= VERSION_DEMO_JP
             if (frame - 1 < 14) {
@@ -247,7 +247,7 @@ static void effStardust2Main(EffectEntry* effect) {
             break;
         case 10:
         case 30:
-            w->color = (frame + i) & 7;
+            w->variant = (frame + i) & 7;
             w->velocity.x *= 0.96f;
             w->velocity.y *= 0.96f;
             w->velocity.y += w->velocity.z;
@@ -256,7 +256,7 @@ static void effStardust2Main(EffectEntry* effect) {
             w->scale += 0.1f * (0.1f - w->scale);
             break;
         case 3:
-            w->color = (frame + i + i) & 7;
+            w->variant = (frame + i + i) & 7;
 #if VERSION <= VERSION_DEMO_JP
             if (frame - 1 < 14) {
                 w->scale = 0.01f * (f32)scale_data[frame - 1];
@@ -273,13 +273,13 @@ static void effStardust2Main(EffectEntry* effect) {
         case 4:
         case 5:
         default:
-            w->color = (frame + i + i) & 7;
+            w->variant = (frame + i + i) & 7;
             if (w->life < 0) {
                 done++;
             }
             w->life--;
             if (w->life > 30 || w->life < 0) {
-                w->color = -1;
+                w->variant = -1;
                 break;
             }
             w->frame++;
@@ -393,7 +393,7 @@ static void effStardust2Disp(CameraId cameraId, void* param) {
         break;
     }
     for (i = 0; i < effect->count - 1; i++, w++) {
-        variant = w->color;
+        variant = w->variant;
         if (variant < 0) {
             continue;
         }

@@ -12,8 +12,8 @@ typedef struct EffMist2Work {
     f32 pad10;     // 0x10
     f32 scaleTarget; // 0x14
     f32 scale;     // 0x18
-    f32 a;         // 0x1C
-    f32 b;         // 0x20
+    f32 spawnRadius;         // 0x1C
+    f32 spawnHeight;         // 0x20
     f32 rot;       // 0x24
     f32 rotSpeed;  // 0x28
     f32 alpha;     // 0x2C
@@ -22,7 +22,7 @@ typedef struct EffMist2Work {
     u8 r, g, b8;   // 0x38
     u8 pad;
     s32 delay;     // 0x3C
-    f32 decay;     // 0x40
+    f32 gravity;     // 0x40
     f32 vy;        // 0x44
 } EffMist2Work;
 

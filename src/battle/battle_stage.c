@@ -749,13 +749,13 @@ static void batSpotInit(void) {
 #pragma dont_inline on
 /**
  * Per-frame from BattleStageMain: queues batSpotDisp on the 3D image camera
- * while skipRender is nonzero (despite the name, nonzero means draw). The loop over the cones is empty.
+ * while dispOn is nonzero. The loop over the cones is empty.
  */
 static void batSpotMain(void) {
     s32 count = wp->count;
 
     while (count-- > 0) {}
-    if (wp->skipRender > 0) {
+    if (wp->dispOn > 0) {
         dispEntry(CAMERA_3D_IMAGE, -1000.0f, DISP_MODE_OPAQUE, batSpotDisp, NULL);
     }
 }
@@ -954,8 +954,8 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     Mtx m1;
     Mtx m2;
     u8* tex;
-    s32 i, j, l, n, b, w, s, k, idx, o;
-    u8 c;
+    s32 i, j, l, n, tileRow, runWidth, runStart, rowInTile, tileCol, colInTile;
+    u8 runValue;
     f32 lim;
     f32 x, y;
     CameraEntry* camera;
@@ -967,23 +967,23 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
         tex = screen_wp->tex;
         for (i = 0; i < 64; i++) {
             for (j = 0; j < 64; j++) {
-                b = i / 4;
-                k = i % 4;
-                idx = j / 8;
-                o = j % 8;
-                tex[((idx << 5) + (b << 8)) + (o + k * 8)] = (i & 1) ? 0xFF : 0;
+                tileRow = i / 4;
+                rowInTile = i % 4;
+                tileCol = j / 8;
+                colInTile = j % 8;
+                tex[((tileCol << 5) + (tileRow << 8)) + (colInTile + rowInTile * 8)] = (i & 1) ? 0xFF : 0;
             }
             n = rand() % 100 + 100;
             for (l = 0; l < n; l++) {
-                w = rand() % 4 + 2;
-                s = rand() % (65 - w);
-                c = rand() % 256;
-                for (j = s; j < s + w; j++) {
-                    b = i / 4;
-                    k = i % 4;
-                    idx = j / 8;
-                    o = j % 8;
-                    tex[((idx << 5) + (b << 8)) + (o + k * 8)] = c;
+                runWidth = rand() % 4 + 2;
+                runStart = rand() % (65 - runWidth);
+                runValue = rand() % 256;
+                for (j = runStart; j < runStart + runWidth; j++) {
+                    tileRow = i / 4;
+                    rowInTile = i % 4;
+                    tileCol = j / 8;
+                    colInTile = j % 8;
+                    tex[((tileCol << 5) + (tileRow << 8)) + (colInTile + rowInTile * 8)] = runValue;
                 }
             }
         }

@@ -629,7 +629,7 @@ static s32 hitCalcVtxPosition(HitEntry* hit) {
  * on a hit closer than the best so far it stores the distance,
  * hit point and normal (flipped to face the ray) in query. Single-sided triangles only count from the front.
  */
-inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector) {
+inline BOOL checkTriVecDown(HitCheckQuery* query, HitVector* vector) {
     Vec toV0;
     Vec toV1;
     Vec toV2;
@@ -689,10 +689,10 @@ inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector) {
 }
 
 /**
- * Like tempfunc, for a straight-up ray (ceilings):
+ * Like checkTriVecDown, for a straight-up ray (ceilings):
  * stores the distance, hit point and facing normal in query on a closer hit.
  */
-inline BOOL tempfunc2(HitCheckQuery* query, HitVector* vector) {
+inline BOOL checkTriVecUp(HitCheckQuery* query, HitVector* vector) {
     Vec toV0;
     Vec toV1;
     Vec toV2;
@@ -753,7 +753,7 @@ inline BOOL tempfunc2(HitCheckQuery* query, HitVector* vector) {
  * on a hit within range and closer than the best so far stores the distance,
  * hit point and facing normal in query.
  */
-inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
+inline BOOL checkTriVecDir(HitCheckQuery* query, HitVector* vector) {
     Vec toV0;
     Vec toV1;
     Vec toV2;
@@ -900,7 +900,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                 vector = hit->vectors;
                 for (k = 0; k < hit->vectorCount; k++, vector++) {
                     if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
-                        if (tempfunc(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                        if (checkTriVecDown(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
                             minDist = query->targetDistance;
                             hitIdx = j;
                             mapIdx = i;
@@ -964,7 +964,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                 vector3 = hit3->vectors;
                 for (k = 0; k < hit3->vectorCount; k++, vector3++) {
                     if (query->singleSided == 0 || !(PSVECDotProduct(&vector3->normal, &query->targetDir) >= 0.0f)) {
-                        if (tempfunc3(query, vector3) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                        if (checkTriVecDir(query, vector3) && (minDist < 0.0f || minDist > query->targetDistance)) {
                             minDist = query->targetDistance;
                             hitIdx = j;
                             mapIdx = i;
@@ -1019,7 +1019,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                         vector = entry->vectors;
                         for (i = 0; i < entry->vectorCount; i++, vector++) {
                             if (query->singleSided == 0 || !(vector->normal.y <= 0.0f)) {
-                                if (tempfunc(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                                if (checkTriVecDown(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
                                     minDist = query->targetDistance;
                                     closest = entry;
                                     distance = minDist;
@@ -1044,7 +1044,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                         vector = entry->vectors;
                         for (i = 0; i < entry->vectorCount; i++, vector++) {
                             if (query->singleSided == 0 || !(vector->normal.y >= 0.0f)) {
-                                if (tempfunc2(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                                if (checkTriVecUp(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
                                     minDist = query->targetDistance;
                                     closest = entry;
                                     distance = minDist;
@@ -1073,7 +1073,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                     vector = entry->vectors;
                     for (i = 0; i < entry->vectorCount; i++, vector++) {
                         if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
-                            if (tempfunc3(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                            if (checkTriVecDir(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
                                 minDist = query->targetDistance;
                                 closest = entry;
                                 distance = minDist;
@@ -1265,7 +1265,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     HitVector* vector;
     f32 minDist;
     s32 objectId;
-    s32 fl;
+    s32 found;
     f32 dist;
     f32 minVecDist;
     f32 radius;
@@ -1313,7 +1313,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     PSVECSubtract(&bestEntry->centerWorld, &center, &query->targetDir);
     PSVECNormalize(&query->targetDir, &query->targetDir);
     minVecDist = -1.0f;
-    fl = -1;
+    found = -1;
     query->targetPos = center;
     query->targetDistance = distance;
     if (bestEntry->joint->drawMode->cullMode == MAP_CULL_BACK) {
@@ -1324,16 +1324,16 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     vector = bestEntry->vectors;
     for (i = 0; i < bestEntry->vectorCount; i++, vector++) {
         if ((query->singleSided == 0) || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
-            if (tempfunc3(query, vector) && ((minVecDist < 0.0f) || (minVecDist > query->targetDistance))) {
+            if (checkTriVecDir(query, vector) && ((minVecDist < 0.0f) || (minVecDist > query->targetDistance))) {
                 minVecDist = query->targetDistance;
-                fl = 1;
+                found = 1;
             }
         }
     }
     if (minVecDist > distance) {
         return NULL;
     }
-    if (fl < 0) {
+    if (found < 0) {
         return NULL;
     }
     return &map->hitEntries[objectId];

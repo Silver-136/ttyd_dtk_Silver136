@@ -315,7 +315,7 @@ void cardCopy2Main(s32 slot) {
     memcpy(fbatGetPointer()->deadInfo, save->data.deadInfo, sizeof(NpcDeadInfo) * 64);
     memcpy(bdsw, &save->data.badgeShop, sizeof(BadgeShopWork));
     memcpy(yuwp, &save->data.parlor, sizeof(PiantaParlorWork));
-    memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantUnknown));
+    memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantReadFlags));
     gp->resetType = 0;
     gp->resetButtonDown = 0;
 #if VERSION >= VERSION_US

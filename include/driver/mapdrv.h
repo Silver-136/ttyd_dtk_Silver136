@@ -368,7 +368,7 @@ typedef enum MapEntryFlags {
     MAP_ENTRY_FOG = (1 << 0),           // 0x1, mapFogOn; set from the map's fog table
     MAP_ENTRY_BLEND = (1 << 1),         // 0x2, mapSetBlend
     MAP_ENTRY_BLEND2 = (1 << 2),        // 0x4, mapSetBlend2
-    MAP_ENTRY_COLOR_UNUSED = (1 << 3),  // 0x8, multiply by entries[0].color; effMajinaiMain sets/clears it (legacy _UNUSED name)
+    MAP_ENTRY_COLOR = (1 << 3),         // 0x8, multiply by entries[0].color; effMajinaiMain sets/clears it
     MAP_ENTRY_VER_1_02 = (1 << 15),     // 0x8000, map file version "ver1.02"
 } MapEntryFlags;
 
