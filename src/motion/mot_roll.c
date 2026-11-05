@@ -1118,11 +1118,9 @@ void mot_roll(void) {
                 v28 = 6.4f * b + v28;
             }
         }
-        {
-            f32 l = rollData[3];
-            if (__fabsf(v29) < l) {
-                v29 = 0.0f;
-            }
+        l = rollData[3];
+        if (__fabsf(v29) < l) {
+            v29 = 0.0f;
         }
         l = rollData[3];
         if (__fabsf(v28) < l) {

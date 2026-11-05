@@ -537,20 +537,19 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             }
             break;
         case 2:
-        case 16: {
-            f32 ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-            work->pos.x = 20.0f * (f32)sin(ang);
-            work->pos.y = 20.0f * (f32)cos(ang);
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = (i - 1) * 6;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            break;
-        }
+        case 16:
+        ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+        work->pos.x = 20.0f * (f32)sin(ang);
+        work->pos.y = 20.0f * (f32)cos(ang);
+        work->pos.z = 0.0f;
+        work->life = 0x20;
+        work->frame = 0;
+        work->delay = (i - 1) * 6;
+        work->r = 0xff;
+        work->g = 0xff;
+        work->b = 0xff;
+        work->scale = 1.0f;
+        break;
         case 3:
         ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
         work->pos.x = 20.0f * (f32)sin(ang);

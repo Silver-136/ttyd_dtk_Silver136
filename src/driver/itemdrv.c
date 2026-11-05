@@ -478,6 +478,7 @@ void itemMain(void) {
     f32 newY;
     f32 y;
     s32 dx, dy;
+    f64 d;
 
     mario = marioGetPtr();
     entry = itemHitCheck(mario->position.x, mario->position.y, mario->position.z, mario->wPlayerCollisionBox.x * 0.5f + 12.0f);
@@ -548,10 +549,8 @@ void itemMain(void) {
                         f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
                         // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
                         // `hitDist = 20.0 + __fabs(-1.0)` changes the object
-                        {
-                            f64 d = __fabs(-1.0);
-                            hitDist = 20.0 + d;
-                        }
+                        d = __fabs(-1.0);
+                        hitDist = 20.0 + d;
                         hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
 #if VERSION <= VERSION_DEMO_JP
                         hit = hit ? hit : NULL;

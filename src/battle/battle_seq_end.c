@@ -211,6 +211,7 @@ void btlseqEnd(BattleWork* wp) {
     FieldBattleData* fb;
     NpcEntry* p;
     EventEntry* e;
+    s32 sel;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -544,69 +545,67 @@ void btlseqEnd(BattleWork* wp) {
         BattleStatusWindowEventOn();
         BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_SELECT);
         break;
-    case SEQ_END_LEVEL_UP_SELECT: {
-        s32 sel = work->selected;
-        EventEntry* e;
-        if (work->evtId) {
-            if (evtCheckID(work->evtId)) break;
-            work->evtId = 0;
-        }
-        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_RIGHT)) {
-            if (work->selected < work->objCount - 1) {
-                work->selected = work->selected + 1;
-            }
-        }
-        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_LEFT)) {
-            if (work->selected > 0) {
-                work->selected = work->selected - 1;
-            }
-        }
-        if (work->selected != sel) {
-            e = NULL;
-            switch (work->selected) {
-            case 0:
-                e = evtEntry(_move_to_heart_event, 10, 0);
-                break;
-            case 1:
-                e = evtEntry(_move_to_flower_event, 10, 0);
-                break;
-            case 2:
-                e = evtEntry(_move_to_badge_point_event, 10, 0);
-                break;
-            }
-#if VERSION >= VERSION_US
-            work->flags &= ~SEQEND_DISP_LVUP_HELP;
-#endif
-            if (e) {
-                work->evtId = e->eventId;
-                break;
-            }
-        }
-        if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
-            s32 ok = 0;
-            switch (work->selected) {
-            case 0:
-                if (pouch->baseMaxHP < 200) ok = 1;
-                break;
-            case 1:
-                if (pouch->baseMaxFP < 200) ok = 1;
-                break;
-            case 2:
-                if (pouch->maximumBP < 99) ok = 1;
-                break;
-            }
-            if (ok) {
-                work->cursor = 0;
-                work->unk28 = 0;
-                work->cursorCount = 2;
-                work->flags &= ~SEQEND_DISP_LVUP_HELP;
-                BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_JUMP_WAIT);
-                e = evtEntry(_jump_event, 10, 0);
-                work->evtId = e->eventId;
-            }
-        }
-        break;
+    case SEQ_END_LEVEL_UP_SELECT:
+    sel = work->selected;
+    if (work->evtId) {
+        if (evtCheckID(work->evtId)) break;
+        work->evtId = 0;
     }
+    if (BattlePadCheckTrigger(BATTLE_PAD_STICK_RIGHT)) {
+        if (work->selected < work->objCount - 1) {
+            work->selected = work->selected + 1;
+        }
+    }
+    if (BattlePadCheckTrigger(BATTLE_PAD_STICK_LEFT)) {
+        if (work->selected > 0) {
+            work->selected = work->selected - 1;
+        }
+    }
+    if (work->selected != sel) {
+        e = NULL;
+        switch (work->selected) {
+        case 0:
+            e = evtEntry(_move_to_heart_event, 10, 0);
+            break;
+        case 1:
+            e = evtEntry(_move_to_flower_event, 10, 0);
+            break;
+        case 2:
+            e = evtEntry(_move_to_badge_point_event, 10, 0);
+            break;
+        }
+#if VERSION >= VERSION_US
+        work->flags &= ~SEQEND_DISP_LVUP_HELP;
+#endif
+        if (e) {
+            work->evtId = e->eventId;
+            break;
+        }
+    }
+    if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
+        s32 ok = 0;
+        switch (work->selected) {
+        case 0:
+            if (pouch->baseMaxHP < 200) ok = 1;
+            break;
+        case 1:
+            if (pouch->baseMaxFP < 200) ok = 1;
+            break;
+        case 2:
+            if (pouch->maximumBP < 99) ok = 1;
+            break;
+        }
+        if (ok) {
+            work->cursor = 0;
+            work->unk28 = 0;
+            work->cursorCount = 2;
+            work->flags &= ~SEQEND_DISP_LVUP_HELP;
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_JUMP_WAIT);
+            e = evtEntry(_jump_event, 10, 0);
+            work->evtId = e->eventId;
+        }
+    }
+    break;
 
     // Yes/No confirmation of the level-up choice (_LvupParamConfirmDisp); no step moves here
     case SEQ_END_LEVEL_UP_CONFIRM_UNUSED:

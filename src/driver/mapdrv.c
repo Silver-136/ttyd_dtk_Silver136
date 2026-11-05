@@ -793,17 +793,16 @@ static inline void mapLoadAnim_(BOOL group) {
     u32 k;
     MapEntryAnimData* a;
     int i;
+    MapEntry* e2;
     w = &mapWork[activeGroup];
-    {
-        MapEntry* e2 = &w->entries[group];
-        for (k = 0; k < e2->header.file.chunkCount; k++) {
-            if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
-                animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
-                goto found;
-            }
+    e2 = &w->entries[group];
+    for (k = 0; k < e2->header.file.chunkCount; k++) {
+        if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
+            animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
+            goto found;
         }
-        animTbl = NULL;
     }
+    animTbl = NULL;
 found:
     if (animTbl != NULL) {
         w->entries[group].numAnims = animTbl[0];

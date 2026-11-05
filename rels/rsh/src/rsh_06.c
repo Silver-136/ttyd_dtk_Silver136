@@ -996,6 +996,7 @@ static void ext_moamoa_main(void) {
     f32 d;
     f32 r;
     f32 k;
+    f32 r1;
 
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->hammerFrames++;
@@ -1342,11 +1343,8 @@ static void ext_moamoa_main(void) {
                     f32 r1 = rand() / 32767.0f;
                     spd = (r1 * mmI(6.0f - 5.0f)) + 5.0f;
                 }
-                {
-                    f32 k;
-                    f32 r1 = rand() / 32767.0f;
-                    s = (r1 * mmI(0.3f - 0.2f)) + 0.2f;
-                }
+                r1 = rand() / 32767.0f;
+                s = (r1 * mmI(0.3f - 0.2f)) + 0.2f;
                 if (!sndFlag) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = (*pose->mtx)[0][3];

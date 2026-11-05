@@ -879,6 +879,7 @@ static void ext_moamoa_main(void) {
     Vec v;
     f32 k;
     f32 a3;
+    f32 r1;
 
     mario = marioGetPtr();
     party = partyGetPtr(0);
@@ -1269,11 +1270,8 @@ static void ext_moamoa_main(void) {
                     f32 r1 = rand() / 32767.0f;
                     spd = (r1 * (k = 6.0f - 5.0f)) + 5.0f;
                 }
-                {
-                    f32 k;
-                    f32 r1 = rand() / 32767.0f;
-                    s = (r1 * (k = 0.3f - 0.2f)) + 0.2f;
-                }
+                r1 = rand() / 32767.0f;
+                s = (r1 * (k = 0.3f - 0.2f)) + 0.2f;
                 if (!sfx) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = (*pose->mtx)[0][3];

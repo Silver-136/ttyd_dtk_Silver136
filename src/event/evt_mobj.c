@@ -1051,14 +1051,16 @@ s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     AnimationPoseData* data;
     f32 mag;
     Vec size;
+    Vec d1;
+    Vec d2;
+    Vec d3;
+    Vec d4;
 #if !MOBJ_EXTRA_OBJS
     // FAKE: four unused Vec literals read the uninitialized x/y/z; removing the block changes the object
-    {
-        Vec d1 = (Vec){x, y, z};
-        Vec d2 = (Vec){x, y, z};
-        Vec d3 = (Vec){x, y, z};
-        Vec d4 = (Vec){x, y, z};
-    }
+    d1 = (Vec){x, y, z};
+    d2 = (Vec){x, y, z};
+    d3 = (Vec){x, y, z};
+    d4 = (Vec){x, y, z};
 #endif
     switch (mobj->state) {
     case 0:

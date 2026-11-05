@@ -2392,10 +2392,8 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             } else {
                 name = msgSearch(part->partName);
             }
-            {
-                f32 nameWidth = FontGetMessageWidth(name);
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
-            }
+            nameWidth = FontGetMessageWidth(name);
+            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
             FontDrawStart();
             FontDrawString(-232.0f, 83.0f, name);
         }

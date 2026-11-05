@@ -1487,6 +1487,7 @@ s32 partyGoodbyeInit(PartyEntry* party) {
 s32 partyGoodbyeMain(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     f32 tx, ty, tz, px, py, pz;
+    f32 t;
 
     switch (party->motionStep) {
         case 0:
@@ -1530,24 +1531,22 @@ s32 partyGoodbyeMain(PartyEntry* party) {
             partyChgPoseId(party, PARTY_POSE_JUMP);
             party->motionStep = 11;
             break;
-        case 11: {
-                f32 t;
-                party->velY -= party->gravity;
-                party->position.y += party->velY;
-                movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
-                party->displayDirection = revise360(50.0f + party->displayDirection);
-                t = party->moveFrames;
-                if (t > 10.0f) {
-                    t = 10.0f;
-                }
-                party->scale.x = t / 10.0f;
-                party->scale.y = party->scale.x;
-                party->scale.z = party->scale.x;
-                if (--party->moveFrames < 0) {
-                    party->motionStep = 12;
-                }
-                break;
-        }
+        case 11:
+            party->velY -= party->gravity;
+            party->position.y += party->velY;
+            movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
+            party->displayDirection = revise360(50.0f + party->displayDirection);
+            t = party->moveFrames;
+            if (t > 10.0f) {
+                t = 10.0f;
+            }
+            party->scale.x = t / 10.0f;
+            party->scale.y = party->scale.x;
+            party->scale.z = party->scale.x;
+            if (--party->moveFrames < 0) {
+                party->motionStep = 12;
+            }
+            break;
         case 12:
             partyChgPoseId(party, PARTY_POSE_STAND);
             party->velY = 0.0f;

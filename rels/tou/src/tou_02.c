@@ -1890,21 +1890,19 @@ void ext_fan_main(void) {
     }
 
 #if VERSION >= VERSION_JP
-    {
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-            if (fan->state == 0) {
-                s32 j;
-                Fan* other;
+    for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
+        if (fan->state == 0) {
+            s32 j;
+            Fan* other;
 
-                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-                        PSVECSubtract(&fan->pos, &other->pos, &dir);
-                        dir.y = 0.0f;
-                        PSVECNormalize(&dir, &dir);
-                        PSVECScale(&dir, &dir, 5.0f);
-                        PSVECAdd(&fan->vel, &dir, &fan->vel);
-                        PSVECSubtract(&other->vel, &dir, &other->vel);
-                    }
+            for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
+                    PSVECSubtract(&fan->pos, &other->pos, &dir);
+                    dir.y = 0.0f;
+                    PSVECNormalize(&dir, &dir);
+                    PSVECScale(&dir, &dir, 5.0f);
+                    PSVECAdd(&fan->vel, &dir, &fan->vel);
+                    PSVECSubtract(&other->vel, &dir, &other->vel);
                 }
             }
         }

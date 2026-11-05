@@ -157,6 +157,7 @@ void mot_hammer(void) {
     HitEntry* hit;
     s32 n;
     MarioWork* m;
+    s32 lv;
 
     if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -257,15 +258,13 @@ void mot_hammer(void) {
     mario->poseTime = n;
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)n);
     if (done) {
-        {
-            s32 lv = pouchGetPtr()->hammerLevel;
-            if (lv == 1) {
-                evtEntry(lv1quake_evt, 0, 0);
-            } else if (lv == 2) {
-                evtEntry(lv2quake_evt, 0, 0);
-            } else if (lv == 3) {
-                evtEntry(lv3quake_evt, 0, 0);
-            }
+        lv = pouchGetPtr()->hammerLevel;
+        if (lv == 1) {
+            evtEntry(lv1quake_evt, 0, 0);
+        } else if (lv == 2) {
+            evtEntry(lv2quake_evt, 0, 0);
+        } else if (lv == 3) {
+            evtEntry(lv3quake_evt, 0, 0);
         }
         mario->currSubMotionId = 1;
         mario->hitobjHammer = mario->hitobjHammerNew;
