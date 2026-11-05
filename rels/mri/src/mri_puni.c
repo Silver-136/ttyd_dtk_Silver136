@@ -3440,6 +3440,7 @@ void puniModeWind(PuniData* p) {
     f32 nz, ny, nx;
     f32 dist;
     Vec d;
+    Vec start;
 
     switch (p->modeStep) {
         case 0:
@@ -3510,27 +3511,25 @@ void puniModeWind(PuniData* p) {
             PSVECScale(&d, &p->vel, p->radius.x);
             p->modeStep = 4;
             // fallthrough
-        case 4: {
-            Vec start;
+        case 4:
 
-            PSVECAdd(&p->pos, &p->vel, &p->pos);
-            start = p->pos;
-            dist = 2.0f;
-            d = (Vec){0.0f, -1.0f, 0.0f};
-            start.y += 0.2f;
-            if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start.x, start.y, start.z, d.x, d.y, d.z) == NULL) {
-                p->vel = (Vec){0.0f, 0.0f, 0.0f};
-                p->mode = PUNI_MODE_FALL;
-                p->anim = 0;
-                p->rotOffsetY = 0.0f;
-                p->spin = 0.0f;
-                p->dispOfs.y = 0.0f;
-                p->modeStep = 0;
-            } else {
-                p->modeStep = 10;
-            }
-            break;
+        PSVECAdd(&p->pos, &p->vel, &p->pos);
+        start = p->pos;
+        dist = 2.0f;
+        d = (Vec){0.0f, -1.0f, 0.0f};
+        start.y += 0.2f;
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start.x, start.y, start.z, d.x, d.y, d.z) == NULL) {
+            p->vel = (Vec){0.0f, 0.0f, 0.0f};
+            p->mode = PUNI_MODE_FALL;
+            p->anim = 0;
+            p->rotOffsetY = 0.0f;
+            p->spin = 0.0f;
+            p->dispOfs.y = 0.0f;
+            p->modeStep = 0;
+        } else {
+            p->modeStep = 10;
         }
+        break;
         case 10:
             puniModeWind_kaiten(p);
             if (!(p->breathPower > 0.0f)) {

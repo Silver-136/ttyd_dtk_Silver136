@@ -1140,15 +1140,13 @@ static void ext_moamoa_main(void) {
                     z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                     { f32 hopSpeed; f32 k; f32 r1 = rand() / 32767.0f; hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-                        {
-                            f32 g2 = randf(0.4f, 0.4f);
-                            x2 = x;
-                            y2 = dist;
-                            z2 = z;
-                            s2 = hopSpeed;
-                            g3 = g2;
-                            moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3);
-                        }
+                        g2 = randf(0.4f, 0.4f);
+                        x2 = x;
+                        y2 = dist;
+                        z2 = z;
+                        s2 = hopSpeed;
+                        g3 = g2;
+                        moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3);
                     }
                 }
                 break;
