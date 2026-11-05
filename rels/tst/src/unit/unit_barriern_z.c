@@ -22,7 +22,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "tst.h"
-#include "unit/unit_barriern.h"
+#include "battle/unit/satellite_spline.h"
 #include "system.h"
 #include "driver/mapdrv.h"
 #include "battle/battle_damage.h"

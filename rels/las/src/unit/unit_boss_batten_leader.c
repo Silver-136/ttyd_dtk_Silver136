@@ -32,6 +32,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
+#include "battle/unit/satellite_spline.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SATELLITE_COUNT 0   // satellites out after the last sub_call_satellite (its LW(0) count); player_before_phase_event passes it to battenSatelliteToInside
@@ -44,7 +45,7 @@
 #define UNIT_WORK_ROD_LIGHT_PATTERN 7 // which rod light light_rod_anim_rtn plays: 8 btl_shuryolight_rod_normal (init, every attack), 9 btl_shuryolight_rod_off (hit on a non-body part)
 #define UNIT_WORK_SHIELD_EFFECT 8     // EffectEntry* of the effSyuryouEntry glow while all four satellites are out (check_satellite creates it; deletes it and sets 0 when one is lost)
 #define UNIT_WORK_SATELLITE 9         // first of four satellite unit ids (slots 9-12, -1 = empty): sub_call_satellite fills them, player_before_phase_event packs them, check_satellite clears dead ones
-#define UNIT_WORK_SATELLITE_SPLINE 13 // first of four BattenSpline* move works (slots 13-16, one per satellite slot; 0 when the move ends); see the BUG note in battenSatelliteTo_Init
+#define UNIT_WORK_SATELLITE_SPLINE 13 // first of four SatelliteSpline* move works (slots 13-16, one per satellite slot; 0 when the move ends); see the BUG note in battenSatelliteTo_Init
 
 Vec nowv;
 f32 maer;
@@ -53,13 +54,6 @@ s32 xlw2[16];
 char xmemo[20];
 EventEntry* xevt;
 void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
-typedef struct BattenSpline {
-    s32 n;
-    Vec* table;
-    f32 ts[5];
-    Vec tbl[5];
-    s32 count;
-} BattenSpline;
 
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btl_hitoffsetx);
@@ -3045,11 +3039,11 @@ USER_FUNC(_hp_gauge_flag_on) {
  * and returns TRUE (FALSE if that satellite slot is empty).
  */
 u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
-    BattenSpline* sp;
+    SatelliteSpline* sp;
 
     // BUG: allocates before the empty-slot test, so an empty slot returns without freeing sp (it stays in the
     // battle heap).
-    sp = BTL_ALLOC(sizeof(BattenSpline));
+    sp = BTL_ALLOC(sizeof(SatelliteSpline));
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
@@ -3057,10 +3051,10 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     // BUG: n goes up to 3, so the fourth satellite's spline is stored in work[16], one past the 16 work slots
     // (it lands on currentTarget)
     unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
-    sp->n = 5;
-    sp->table = table;
-    sp->count = 0;
-    spline_maketable(5, sp->table, sp->ts, sp->tbl);
+    sp->numPoints = 5;
+    sp->points = table;
+    sp->frame = 0;
+    spline_maketable(5, sp->points, sp->knots, sp->curvature);
     BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[1] = (EvtWord)table;
     return TRUE;
 }
@@ -3071,7 +3065,7 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
  * Returns TRUE while it is still moving.
  */
 u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
-    BattenSpline* sp;
+    SatelliteSpline* sp;
     BattleUnit* sat;
     Vec upos;
     Vec pos;
@@ -3079,18 +3073,18 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
-    sp = (BattenSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
+    sp = (SatelliteSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
     if (sp == NULL) {
         return FALSE;
     }
-    if (sp->count >= 60) {
+    if (sp->frame >= 60) {
         if (sp != NULL) {
             BTL_FREE(sp);
             unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = 0;
         }
         return FALSE;
     }
-    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), sp->n, sp->table, sp->ts, sp->tbl);
+    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->frame, 60), sp->numPoints, sp->points, sp->knots, sp->curvature);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
     if (sat == NULL) {
         return FALSE;
@@ -3098,7 +3092,7 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     BtlUnit_GetPos(unit, &upos.x, &upos.y, &upos.z);
     BtlUnit_SetPos(sat, upos.x + pos.x * unit->faceDirection, 5.0f + (upos.y + pos.y), upos.z + pos.z);
     BtlUnit_SetHomePos(sat, upos.x + pos.x * unit->faceDirection, 5.0f + (upos.y + pos.y), upos.z + pos.z);
-    sp->count++;
+    sp->frame++;
     return TRUE;
 }
 

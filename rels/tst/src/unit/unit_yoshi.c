@@ -32,23 +32,6 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
 #include "unit/party/unit_party_yoshi.h"
-typedef struct YoshiGundanPart {
-    f32 x, y, z;
-    f32 vx, vy, vz;
-    u8 reserved_18[0xC]; // 0x18, never accessed
-    u8 frameCount;
-    u8 frame;
-    s32 delay;
-    s32 state;
-} YoshiGundanPart;
-
-// The swarm's work: 256 running Yoshis.
-typedef struct YoshiGundanWork {
-    s32 state;
-    YoshiGundanPart parts[256];
-    s32 reserved_3004; // 0x3004, never accessed
-    f32 meanX; // sum of the parts' x, then the mean (/ 256)
-} YoshiGundanWork;
 
 // FAKE: _btlYoshiDisp calls btlDispTexPlane through this float-first prototype so the float arguments are evaluated
 // first; same registers as (id, color, 0, x, y, z, sX, sY), behaviour-identical.

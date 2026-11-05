@@ -25,17 +25,11 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_barriern_z.h"
+#include "battle/unit/satellite_spline.h"
 
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 
-typedef struct BarriernSpline {
-    s32 n;
-    Vec* table;
-    f32 ts[5];
-    Vec tbl[5];
-    s32 count;
-} BarriernSpline;
 static s32 zanzou_count[5];
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type);
 static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 type);
@@ -1556,17 +1550,17 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
-    BarriernSpline* sp;
+    SatelliteSpline* sp;
 
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
-    sp = BTL_ALLOC(sizeof(BarriernSpline));
+    sp = BTL_ALLOC(sizeof(SatelliteSpline));
     unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
-    sp->n = 5;
-    sp->table = table;
-    sp->count = 0;
-    spline_maketable(5, sp->table, sp->ts, sp->tbl);
+    sp->numPoints = 5;
+    sp->points = table;
+    sp->frame = 0;
+    spline_maketable(5, sp->points, sp->knots, sp->curvature);
     BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
     return TRUE;
 }
@@ -1577,7 +1571,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
  * Returns TRUE while the satellite is still moving.
  */
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
-    BarriernSpline* sp;
+    SatelliteSpline* sp;
     BattleUnit* sat;
     Vec upos;
     Vec pos;
@@ -1585,18 +1579,18 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
-    sp = (BarriernSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
+    sp = (SatelliteSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
     if (sp == NULL) {
         return FALSE;
     }
-    if (sp->count >= 60) {
+    if (sp->frame >= 60) {
         if (sp != NULL) {
             BTL_FREE(sp);
             unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = 0;
         }
         return FALSE;
     }
-    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), sp->n, sp->table, sp->ts, sp->tbl);
+    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->frame, 60), sp->numPoints, sp->points, sp->knots, sp->curvature);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
     if (sat == NULL) {
         return FALSE;
@@ -1604,7 +1598,7 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
     BtlUnit_GetPos(unit, &upos.x, &upos.y, &upos.z);
     BtlUnit_SetPos(sat, upos.x + pos.x * unit->faceDirection, upos.y + pos.y, upos.z + pos.z);
     BtlUnit_SetHomePos(sat, upos.x + pos.x * unit->faceDirection, upos.y + pos.y, upos.z + pos.z);
-    sp->count++;
+    sp->frame++;
     return TRUE;
 }
 

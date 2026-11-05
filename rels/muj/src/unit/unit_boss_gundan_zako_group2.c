@@ -33,23 +33,6 @@
 #define UNIT_WORK_ALL_LANDED 0 // 1 once all 25 members have landed (zakogun_ext_main2); hit_check_event waits for it before the final hit; the attacks clear it
 #define UNIT_WORK_HIT_LANDED 1 // fall attack: 1 once a hit landed; the final hit then skips the avoid check
 
-typedef struct ZakoGun {
-    s8 field_0x0;
-    s8 state;
-    s32 timer;
-    s32 timerMax;
-    Vec pos;
-    Vec home;
-    s32 poseBase;
-    s32 poseNum;
-    s32 poseDiv;
-    s32 poseCount;
-    Vec start;
-    Vec target;
-    Vec vel;
-    u8 field_0x58[0x64 - 0x58];
-    Vec rot;
-} ZakoGun;
 
 #if VERSION >= VERSION_US
 #define ZAKOGUNWORK_PAD 0x54

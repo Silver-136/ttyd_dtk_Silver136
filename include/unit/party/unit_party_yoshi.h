@@ -7,6 +7,26 @@
 #include "dolphin/types.h"
 #include "battle/battle_unit.h"
 
+// One running Yoshi of the Stampede move
+typedef struct YoshiGundanPart {
+    f32 x, y, z;
+    f32 vx, vy, vz;
+    u8 pad18[0xC]; // 0x18, never accessed
+    u8 frameCount;
+    u8 frame;
+    u8 pad26[2];
+    s32 delay;
+    s32 state;
+} YoshiGundanPart;
+
+// The swarm's work: 256 running Yoshis.
+typedef struct YoshiGundanWork {
+    s32 state;
+    YoshiGundanPart parts[256];
+    s32 pad3004; // 0x3004, never accessed
+    f32 meanX;   // sum of the parts' x, then the mean (/ 256)
+} YoshiGundanWork;
+
 USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param);
 USER_FUNC(btl_yoshi_yoroyoro_jump_move);
 USER_FUNC(yoshi_original_color_anim_set);

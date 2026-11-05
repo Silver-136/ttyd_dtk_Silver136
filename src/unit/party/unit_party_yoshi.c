@@ -33,32 +33,12 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
 
-typedef struct YoshiGundanPart YoshiGundanPart;
-
 #if VERSION >= VERSION_JP
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
 
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
-
-struct YoshiGundanPart {
-    f32 x, y, z;
-    f32 vx, vy, vz;
-    u8 pad18[0xC];
-    u8 frameCount;
-    u8 frame;
-    u8 pad26[2];
-    s32 delay;
-    s32 state;
-};
-
-typedef struct YoshiGundanWork {
-    s32 state;
-    YoshiGundanPart parts[256];
-    s32 pad3004;
-    f32 meanX; // sum of the parts' x, then the mean (/ 256)
-} YoshiGundanWork;
 
 #if VERSION <= VERSION_DEMO_JP
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);

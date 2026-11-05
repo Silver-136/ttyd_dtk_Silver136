@@ -15,7 +15,7 @@
 #include "driver/dispdrv.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_sub.h"
-#include "unit/unit_wanawana.h"
+#include "battle/unit/unit_wanawana.h"
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_map.h"
 #include "driver/mapdrv.h"

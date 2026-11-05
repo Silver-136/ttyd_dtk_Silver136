@@ -49,12 +49,6 @@ static EffectEntry* eff_charge;
 #include "unit/unit_boss_magnum_battender.h"
 static ArmWork* work[2];
 double atan(double x);
-typedef struct BattenEffWork {
-    s32 type;
-    Vec pos;
-    u8 field_0x10[0x28 - 0x10];
-    Mtx mtx;
-} BattenEffWork;
 
 static USER_FUNC(arm_check);
 static USER_FUNC(arm_end);

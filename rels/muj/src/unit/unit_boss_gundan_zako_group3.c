@@ -31,23 +31,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_REACHED_TARGET 0 // 1 once the group's x reaches the current target (zakogun_attack3_2); hit_check_event waits for it, checks damage and clears it
 
-typedef struct ZakoGun {
-    s8 field_0x0;
-    s8 state;
-    s32 timer;
-    s32 timerMax;
-    Vec pos;
-    Vec home;
-    s32 poseBase;
-    s32 poseNum;
-    s32 poseDiv;
-    s32 poseCount;
-    Vec start;
-    Vec target;
-    Vec vel;
-    Vec ofs;
-    Vec rot;
-} ZakoGun;
 typedef struct ZakoGunWork {
     s32 flag;
     s32 targetId;

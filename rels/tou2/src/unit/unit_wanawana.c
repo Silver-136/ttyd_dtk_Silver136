@@ -19,15 +19,8 @@
 #include "driver/dispdrv.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_sub.h"
+#include "battle/unit/unit_wanawana.h"
 
-typedef struct WanaWork {
-    s32 ready;
-    s32 poseId;
-    Mtx mtx;
-    GXTexObj obj;
-    BattleUnitPart* part;
-    smartEntry* tex;
-} WanaWork;
 static f32 tanf(f32 x);
 
 USER_FUNC(replace_evt);

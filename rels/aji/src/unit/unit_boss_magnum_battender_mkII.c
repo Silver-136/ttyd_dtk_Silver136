@@ -54,12 +54,6 @@
 
 #include "unit/unit_boss_magnum_battender.h"
 double atan(double x);
-typedef struct BattenEffWork {
-    s32 type;
-    Vec pos;
-    u8 field_0x10[0x28 - 0x10];
-    Mtx mtx;
-} BattenEffWork;
 typedef struct TargetWork {
     s32 state;
     s32 count;

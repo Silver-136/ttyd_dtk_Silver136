@@ -34,23 +34,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_HIT_CUE 0 // nonzero once the first member is 10 frames from landing on the target (zakogun_ext_main1 adds 1); hit_check_event waits for it, then checks damage
 
-typedef struct ZakoGun {
-    s8 field_0x0;
-    s8 state;
-    s32 timer;
-    s32 timerMax;
-    Vec pos;
-    Vec home;
-    s32 poseBase;
-    s32 poseNum;
-    s32 poseDiv;
-    s32 poseCount;
-    Vec start;
-    Vec target;
-    Vec vel;
-    Vec ofs;
-    Vec rot;
-} ZakoGun;
 typedef struct ZakoGunWork {
     s32 flag;
     s32 targetId;

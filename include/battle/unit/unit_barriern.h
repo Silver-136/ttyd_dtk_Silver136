@@ -8,7 +8,7 @@
 #define UNIT_WORK_SHOTS_DONE 2        // shots of the wawawa attack that have finished; the attack waits until it reaches 3
 #define UNIT_WORK_BARRIER_EFFECT 3    // barrier EffectEntry (effSyuryouEntry) while a satellite is alive; deleted when none is left (SFX_ENM_BARRI_BARRIER_BREAK1)
 #define UNIT_WORK_SATELLITE 4         // first of the satellite unit ids (slots 4..5), -1 = none
-#define UNIT_WORK_SATELLITE_SPLINE 10 // first of the per-satellite BarriernSpline pointers (slot 10 + n) of a move in progress; freed after 60 frames
+#define UNIT_WORK_SATELLITE_SPLINE 10 // first of the per-satellite SatelliteSpline pointers (slot 10 + n) of a move in progress; freed after 60 frames
 
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack

@@ -8,7 +8,7 @@
 #define UNIT_WORK_RINGS_DONE 2        // rings of wawawa_attack_event that have finished: reset to 0, wawawa_attack_event_sub adds 1, the attack waits until it reaches 5
 #define UNIT_WORK_BARRIER_EFFECT 3    // effSyuryouEntry barrier effect shown while any satellite lives (EffectEntry*, 0 none); _check_satellite creates, moves and deletes it
 #define UNIT_WORK_SATELLITE 4         // first of four slots (4-7): unit id of satellite n (entry_barriern_satellite), -1 none (slots 4-7)
-#define UNIT_WORK_SATELLITE_SPLINE 10 // first of four slots (10-13): BarriernSpline* moving satellite n in or out (barriernSatelliteTo_Init allocates; _Main frees it after 60 frames) (slots 10-13)
+#define UNIT_WORK_SATELLITE_SPLINE 10 // first of four slots (10-13): SatelliteSpline* moving satellite n in or out (barriernSatelliteTo_Init allocates; _Main frees it after 60 frames) (slots 10-13)
 
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1, first of five slots (0-4): target unit of each ring (wakka_attack_event uses slot 0 only) (slots 0-4)
