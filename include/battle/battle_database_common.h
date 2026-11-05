@@ -7,6 +7,8 @@
 /* BattleWeapon.targetClassFlags: which units an attack may target */
 #define TARGET_CLASS_NO_MARIO_OR_SHELL       0x1 // not Mario or the shell shield
 #define TARGET_CLASS_NO_PARTNER              0x2 // not a partner
+#define TARGET_CLASS_UNUSED_4                0x4 // set in weapon data, read by no code (name from LLCOOLT's tree)
+#define TARGET_CLASS_UNUSED_8                0x8 // set in weapon data, read by no code (name from LLCOOLT's tree)
 #define TARGET_CLASS_NO_ENEMY                0x10 // not an enemy (UNIT_GOOMBA..UNIT_UNUSED_FLAVIO)
 #define TARGET_CLASS_NO_TREE_OR_SWITCH       0x20 // not UNIT_UNUSED_TREE or UNIT_UNUSED_SWITCH
 #define TARGET_CLASS_NO_SYSTEM_UNIT          0x40 // not UNIT_UNUSED_TESTNPC..UNIT_PROLOGUE_GOOMBELLA
@@ -53,6 +55,7 @@
 #define TARGET_WEIGHT_LOW_HP        0x400 // prefer low HP
 #define TARGET_WEIGHT_HIGH_HP       0x800 // prefer high HP
 #define TARGET_WEIGHT_IN_PERIL      0x1000 // prefer targets in Peril
+#define TARGET_WEIGHT_UNUSED_2000   0x2000 // set in weapon data, read by no code (name from LLCOOLT's tree)
 #define TARGET_WEIGHT_RANDOM        0x80000000 // pick at random by weight (else the heaviest)
 
 // BattleWeapon.counterResistFlags: counters the weapon ignores (BattleCheckCounter)
@@ -83,11 +86,13 @@ typedef enum BattleWeaponSpecialFlags {
     SPECIAL_PIERCE_DEFENSE = 0x40,
     SPECIAL_FREEZE_CRUSH = 0x80, // meant to break frozen targets; its rand(100) < 0 test never passes
     SPECIAL_IGNORE_VULNERABILITY = 0x100, // status chance ignores the target's resistance (unless it is 0)
+    SPECIAL_UNUSED_200 = 0x200, // set in weapon data, read by no code (name from LLCOOLT's tree)
     SPECIAL_IGNITABLE = 0x400, // fire element when the attacker is burning
     SPECIAL_ATTACK_FX = 0x800, // plays the Attack FX badge sounds
     SPECIAL_FLIP_SHELLED = 0x1000,
     SPECIAL_FLIP_BOMB_FLIPPABLE = 0x2000,
     SPECIAL_GROUND_WINGED = 0x4000,
+    SPECIAL_FORCE_RESULT_10000 = 0x8000, // a final hit always adds result bit 0x10000 (BattleCheckDamage)
     SPECIAL_CONFUSED_ACTION = 0x10000, // can be picked as a confused unit's action
     SPECIAL_UNGUARDABLE = 0x20000,
     SPECIAL_CONTACTS_CLONES = 0x40000, // hits clone parts (PartsAttribute 0x4000) instead of passing through
@@ -348,11 +353,3 @@ extern ItemDropData battle_item_yami_togekuri[];
 extern ItemDropData battle_item_yamitogedaruma[];
 extern ItemDropData battle_item_zonbaba[];
 
-// Names from LLCOOLT's tree.
-enum {
-    SPECIAL_FORCE_RESULT_10000 = 32768,
-    TARGET_CLASS_UNUSED_4 = 4,
-    SPECIAL_UNUSED_200 = 512,
-    TARGET_CLASS_UNUSED_8 = 8,
-    TARGET_WEIGHT_UNUSED_2000 = 8192,
-};

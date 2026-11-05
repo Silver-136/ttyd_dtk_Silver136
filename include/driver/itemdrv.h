@@ -7,8 +7,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 
-// ItemEntry.flags, named from itemdrv (itemMain, itemHitCheck, itemseq_*, the get sequence). 0x80 (tested, never
-// set) has only LLCOOLT's name ITEM_FLAG_ELASTIC at the end of this file.
+// ItemEntry.flags, named from itemdrv (itemMain, itemHitCheck, itemseq_*, the get sequence).
 typedef enum ItemEntry_Flags {
     ITEM_FLAG_ACTIVE = (1 << 0),
     ITEM_FLAG_NO_TOUCH_GET = (1 << 1),        // 0x2, itemHitCheck ignores it (no pickup by touch)
@@ -17,6 +16,7 @@ typedef enum ItemEntry_Flags {
     ITEM_FLAG_CUSTOM_BOUND = (1 << 4),        // 0x10, itemseq_Bound keeps the caller's bounce parameters
     ITEM_FLAG_COLLECT_GSWF = (1 << 5),        // 0x20, collectFlag is a GSWF, set when the item is collected
     ITEM_FLAG_COLLECT_LSWF = (1 << 6),        // 0x40, collectFlag is an LSWF, set when the item is collected
+    ITEM_FLAG_ELASTIC_UNUSED = (1 << 7),      // 0x80, tested by the bounce code; nothing sets it (name from LLCOOLT's tree)
     ITEM_FLAG_LOST_BADGE_TO_SHOP = (1 << 8),  // 0x100, a badge that vanishes goes back to the shop (pouchArriveBadge)
     ITEM_FLAG_BOUND_NEXT = (1 << 9),          // 0x200, first bounce uses evt_item_set_bound_next_dir/_speed
     ITEM_FLAG_REPLACEABLE = (1 << 10),        // 0x400, may be deleted when all entries are in use
@@ -27,10 +27,10 @@ typedef enum ItemEntry_Flags {
     ITEM_FLAG_NO_GET_BGM = (1 << 15),         // 0x8000, no get fanfare
 } ItemEntry_Flags;
 
-// ItemEntry.flags2. 0x2 (tested in evt_item_get_item, never set) has only LLCOOLT's name ITEM_STATUS_END_WAIT at
-// the end of this file.
+// ItemEntry.flags2 (itemStatusOn / itemStatus, evt_item_status_on).
 typedef enum ItemEntry_Flags2 {
     ITEM_FLAG2_IN_POUCH = (1 << 0),             // 0x1, the item went into the pouch
+    ITEM_FLAG2_END_WAIT_UNUSED = (1 << 1),      // 0x2, tested in evt_item_get_item; nothing sets it (LLCOOLT's name)
     ITEM_FLAG2_NO_PICKUP_RISING = (1 << 2),     // 0x4, not collectible while rising
     ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND = (1 << 3), // 0x8, not collectible before the first bounce
     ITEM_FLAG2_SKIP_BOUND_INIT = (1 << 4),      // 0x10, one-shot: the next bounce keeps its state
@@ -160,10 +160,3 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 void itemStatusOn(ItemEntry* entry, u32 flags);
 void itemCoinDrop(Vec* position);
 
-// Names from LLCOOLT's tree.
-enum {
-    ITEM_FLAG_ELASTIC = 128,
-    ITEM_STATUS_CUSTOM_LAUNCH = 16,
-    ITEM_STATUS_END_WAIT = 2,
-    ITEM_STATUS_LAUNCH = 4,
-};

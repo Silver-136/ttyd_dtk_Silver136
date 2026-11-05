@@ -526,5 +526,5 @@ struct MapAnimJoint;
 void mapCalcAnimMatrix(Mtx out, Mtx in, MapEntryAnimData* anim, struct MapAnimJoint* joint);
 
 // Names from LLCOOLT's tree.
-#define MAPOBJ_GROUP 1
 #define MAPOBJ_SINGLE 0
+#define MAPOBJ_GROUP 1

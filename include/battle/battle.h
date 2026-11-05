@@ -458,8 +458,11 @@ BOOL BattlePartyAnimeLoad(s32 partyId);
 // Names from LLCOOLT's tree.
 enum {
     BATTLE_DISP_FLAG_COMMAND_MENU = 1,
-    LECTURE_FLAG_CONTINUE_WINDOW = 1,
     BATTLE_DISP_FLAG_STAR_POINTS = 2,
+};
+
+enum {
+    LECTURE_FLAG_CONTINUE_WINDOW = 1,
 };
 #define BATTLE_STAGE_OBJECT_MAX 32
 #define BATTLE_UNIT_MAX 64

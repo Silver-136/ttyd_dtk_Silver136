@@ -155,7 +155,7 @@ USER_FUNC(evt_item_get_item) {
     if (!(item->flags & ITEM_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
-    if (itemStatus(item, ITEM_STATUS_END_WAIT)) {
+    if (itemStatus(item, ITEM_FLAG2_END_WAIT_UNUSED)) {
         return EVT_RETURN_DONE;
     }
     return itemStatus(item, ITEM_FLAG2_RELEASED) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -170,7 +170,7 @@ USER_FUNC(evt_item_get_item_end_wait) {
     if (!(item->flags & ITEM_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
-    if (itemStatus(item, ITEM_STATUS_END_WAIT)) {
+    if (itemStatus(item, ITEM_FLAG2_END_WAIT_UNUSED)) {
         return EVT_RETURN_DONE;
     }
     return itemStatus(item, ITEM_FLAG2_RELEASED) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

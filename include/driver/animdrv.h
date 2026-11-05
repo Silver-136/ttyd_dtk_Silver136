@@ -451,6 +451,6 @@ void animPoseVivianMain(s32 poseId, Vec* pos);
 void animPoseSetDispCallBack(s32 poseId, AnimPoseDispCallback callback, void* userData);
 
 // Names from LLCOOLT's tree.
+#define ANIM_MATERIAL_FLAG_PROJ_TEXTURE 0x400
 #define ANIM_MATERIAL_FLAG_NO_BLEND 0x800
 #define ANIM_MATERIAL_FLAG_NO_BLEND2 0x1000
-#define ANIM_MATERIAL_FLAG_PROJ_TEXTURE 0x400

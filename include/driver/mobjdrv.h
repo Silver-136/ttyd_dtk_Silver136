@@ -29,6 +29,7 @@ typedef enum MapObjectFlags {
     MOBJ_FLAG_GRAVITY = (1 << 6),              // 0x40, falls and bounces off the floor
     MOBJ_FLAG_NO_CULL = (1 << 7),              // 0x80, drawn without the view frustum check
     MOBJ_FLAG_HIT_EVERY_FRAME = (1 << 8),      // 0x100, MOBJ_FLAG_HIT is cleared again every frame
+    MOBJ_FLAG_BUSY = (1 << 9),                 // 0x200, the pause menu does not open (mobjCheckExec); LLCOOLT's name
     MOBJ_FLAG_PAPER_TEX = (1 << 10),           // 0x400, drawn with its paper texture (mobjDisp*)
     MOBJ_FLAG_HIDDEN = (1 << 11),              // 0x800, hidden block (no shadow) until it is hit
     MOBJ_FLAG_EXEC_CANCEL = (1 << 12),         // 0x1000, evt_mobj_exec_cancel
@@ -126,8 +127,3 @@ int mobjCheckKururingFloorItem(MapObjectEntry* entry);
 #endif
 
 struct EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode);
-
-// Names from LLCOOLT's tree.
-enum {
-    MOBJ_FLAG_BUSY = 512,
-};

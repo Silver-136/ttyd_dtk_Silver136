@@ -33,7 +33,6 @@ typedef struct IconBinary {
 
 // flags (JP and later): 1 = in use, 0x10 = 2D, 0x1000 = animated, 0x2000 = icon data not loaded yet (IconFlags)
 
-
 // IconEntry.flags (iconFlagOn/iconFlagOff)
 typedef enum IconFlags {
     ICON_FLAG_ACTIVE = (1 << 0),             // 0x1, slot in use
@@ -119,5 +118,3 @@ void iconSetScale(const char* name, f32 scale);
 void iconSetAlpha(const char* name, u8 alpha);
 s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color);
 s32 iconNumberDispGx3D(Mtx mtx, s32 number, BOOL small, GXColor color);
-
-// Names from LLCOOLT's tree.

@@ -2652,7 +2652,7 @@ EVT_BEGIN(usu_00_touch_ichikorori_ball)
         CALL(evt_item_set_gravity, STRING("ichikorori_ball"), FLOAT(1.0f))
         CALL(evt_item_set_bound_rate, STRING("ichikorori_ball"), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING("ichikorori_ball"), FLOAT(500.0f))
-        CALL(evt_item_status_on, STRING("ichikorori_ball"), ITEM_STATUS_CUSTOM_LAUNCH)
+        CALL(evt_item_status_on, STRING("ichikorori_ball"), ITEM_FLAG2_SKIP_BOUND_INIT)
         CALL(evt_exit_case_evt)
     END_IF
     RETURN

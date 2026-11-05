@@ -2429,7 +2429,7 @@ static EVT_BEGIN(evt_poster_8)
         CALL(evt_item_set_gravity, STRING("key"), FLOAT((1.0f)))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
-        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_CUSTOM_LAUNCH)
+        CALL(evt_item_status_on, STRING("key"), ITEM_FLAG2_SKIP_BOUND_INIT)
     END_IF
     RETURN
 EVT_END()

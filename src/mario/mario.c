@@ -1779,7 +1779,7 @@ void marioChgEvtPose(const char* name) {
         animName = mp->animName;
         if (!animName || strcmp(animName, name)) {
             wp->animName = name;
-            wp->dispFlags &= ~0x20000000;
+            wp->dispFlags &= ~MARIO_DISP_FLAG_POSE_UNUSED;
             wp->dispFlags |= MARIO_DISP_FLAG_EVT_POSE;
             wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
         }
@@ -1832,14 +1832,14 @@ void marioChgPose(const char* name) {
             if (!(wp->flags & MARIO_FLAG_IS_8_BIT)) {
                 wp->animName = name;
                 wp->poseTime = 0;
-                wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | 0x20000000);
+                wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_POSE_UNUSED);
                 wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
             } else {
                 dot = toDotMarioPose(name);
                 if (dot) {
                     wp->animName = dot;
                     wp->poseTime = 0;
-                    wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | 0x20000000);
+                    wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_POSE_UNUSED);
                     wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
                 }
             }
@@ -1857,7 +1857,7 @@ void marioChgPoseTime(const char* name, s16 frames) {
         if (!animName || strcmp(animName, name)) {
             wp->animName = name;
             wp->poseTime = frames;
-            wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | 0x20000000);
+            wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_POSE_UNUSED);
             wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
         }
     }
@@ -2141,7 +2141,7 @@ void marioRearAnime(void) {
     const char* name;
     f32 diff;
 
-    if (!(wp->dispFlags & (MARIO_DISP_FLAG_PAPER | 0x20000000 | MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_NO_REAR_POSE)) &&
+    if (!(wp->dispFlags & (MARIO_DISP_FLAG_PAPER | MARIO_DISP_FLAG_POSE_UNUSED | MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_NO_REAR_POSE)) &&
         !(wp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
         diff = revise360(wp->moveDirection - wp->targetYaw);
         if (diff >= 290.0f || diff <= 70.0f) {

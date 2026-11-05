@@ -83,5 +83,8 @@ USER_FUNC(unkeep_pouchcheck_func);
 // Names from LLCOOLT's tree.
 enum {
     SHOP_ITEM_FLAG_SOLD_OUT = 1,
+};
+
+enum {
     SHOP_FLAG_TALKING = 16384,
 };

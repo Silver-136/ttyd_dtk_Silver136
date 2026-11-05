@@ -59,8 +59,9 @@ typedef enum PuniFlags {
     PUNI_FLAG_HIT_WALL_UNUSED = (1 << 22),     // 0x400000, the last move hit something; no code tests this bit
 } PuniFlags;
 
-// PuniData.flags2. 0x1 is not named.
+// PuniData.flags2.
 typedef enum PuniFlags2 {
+    PUNI_FLAG2_HEALED = (1 << 0),            // 0x1, set when its HP rises, cleared 30 frames later (LLCOOLT's name)
     PUNI_FLAG2_DIZZY_ICON = (1 << 1),        // 0x2
     PUNI_FLAG2_CROSSING_LEDGE = (1 << 2),    // 0x4
     PUNI_FLAG2_ON_SLOPE = (1 << 3),          // 0x8
@@ -300,9 +301,15 @@ USER_FUNC(puni_disp_info_sub);
 // Names from LLCOOLT's tree.
 enum {
     PUNI_MODE_IDLE = 0,
-    PUNI_FLAG2_HEALED = 1,
     PUNI_MODE_JOIN = 1,
-    PUNI_TARGET_FLAG_ON = 1,
+    PUNI_MODE_PARENT = 2,
+    PUNI_MODE_SEARCH = 3,
+    PUNI_MODE_MASS = 4,
+    PUNI_MODE_AWAYJUMP = 5,
+    PUNI_MODE_AWAY = 6,
+    PUNI_MODE_ATTACK = 7,
+    PUNI_MODE_ESCAPE = 8,
+    PUNI_MODE_DAMAGE = 9,
     PUNI_MODE_PIYORI = 10,
     PUNI_MODE_RECOVER = 11,
     PUNI_MODE_DEAD = 12,
@@ -313,8 +320,6 @@ enum {
     PUNI_MODE_FALL = 17,
     PUNI_MODE_PREUPDRAFT = 18,
     PUNI_MODE_UPDRAFT = 19,
-    PUNI_MODE_PARENT = 2,
-    PUNI_TARGET_FLAG_MASS = 2,
     PUNI_MODE_WONDER = 20,
     PUNI_MODE_FUNBARI = 21,
     PUNI_MODE_WATER = 22,
@@ -325,15 +330,13 @@ enum {
     PUNI_MODE_POINT = 27,
     PUNI_MODE_DOKAN = 28,
     PUNI_MODE_FUNC = 29,
-    PUNI_MODE_SEARCH = 3,
     PUNI_MODE_INERT = 30,
-    PUNI_MODE_MASS = 4,
+};
+
+enum {
+    PUNI_TARGET_FLAG_ON = 1,
+    PUNI_TARGET_FLAG_MASS = 2,
     PUNI_TARGET_FLAG_AWAY = 4,
-    PUNI_MODE_AWAYJUMP = 5,
-    PUNI_MODE_AWAY = 6,
-    PUNI_MODE_ATTACK = 7,
-    PUNI_MODE_ESCAPE = 8,
-    PUNI_MODE_DAMAGE = 9,
 };
 #define PUNI_ALLY_LAST 102
 #define PUNI_ENEMY_END 210

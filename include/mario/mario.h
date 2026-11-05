@@ -338,7 +338,6 @@ typedef struct MarioStayWork {     // early demos: inside the motion work at 0x1
 // MarioWork.dispFlags, named from the setters (marioPaperOn/Off, the balloon and camera functions, peach/battle pose
 // code, the JP demo's marioDispLeftOnlyOn/RightOnlyOn, marioBlurOn, marioSetDirEvent, evt_mario_shadow_onoff) and
 // the drawing code. MARIO_DISP_FLAG_CAM_STILL_UNUSED (0x20) is named but has no observed reader;
-// 0x20000000 (only blocks the rear pose) remains unnamed.
 typedef enum MarioDispFlags {
     MARIO_DISP_FLAG_HIDE = (1 << 0),              // 0x1, not drawn
     MARIO_DISP_FLAG_POSE_LOCK = (1 << 1),         // 0x2, pose and paper changes ignored
@@ -362,6 +361,8 @@ typedef enum MarioDispFlags {
     MARIO_DISP_FLAG_EVT_BALLOON = (1 << 26),      // 0x4000000, balloon set by evt_mario_balloon_*
     MARIO_DISP_FLAG_BLUR = (1 << 27),             // 0x8000000, marioBlurOn
     MARIO_DISP_FLAG_EVT_POSE = (1 << 28),         // 0x10000000, event pose from the e_mario group (marioAnimeId)
+    MARIO_DISP_FLAG_POSE_UNUSED = (1 << 29),      // 0x20000000, cleared by the pose changes and would block the rear
+                                                  // pose; nothing sets it (name from LLCOOLT's tree)
     MARIO_DISP_FLAG_PAPER = (1 << 30),            // 0x40000000, marioPaperOn
     MARIO_DISP_FLAG_REAR_POSE = (1 << 31),        // 0x80000000, a_mario_r (rear) pose group
 } MarioDispFlags;
@@ -698,9 +699,5 @@ void marioDisp(CameraId camId, void* param);
 #define MARIO_STAY(mp) ((mp)->stay)
 #else
 #define MARIO_STAY(mp) ((mp)->mot.stay)
-// Names from LLCOOLT's tree.
-enum {
-    MARIO_DISP_FLAG_POSE_UNUSED = 536870912,
-};
 
 #endif

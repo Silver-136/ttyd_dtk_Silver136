@@ -134,12 +134,7 @@ BattleStageObject* BattleSearchObjectPtr(const char* name);
 
 void BattleStageObjectMain(void);
 
-
-
-
-
 USER_FUNC(_set_mobj_shake_init);
-
 
 void BattleStageObjectInit(void);
 
@@ -171,7 +166,3 @@ void BattleStage_NozzleWorkCheck(s32 type);
 void BattleStage_WallCloseCheck(void);
 BOOL BattleFogEndCheck(void);
 s32 BattleStage_ObjectFallCheck(void);
-
-// Names from LLCOOLT's tree.
-enum {
-};

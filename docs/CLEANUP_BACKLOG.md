@@ -228,4 +228,5 @@ pushed commit (cleanup_notes, round 22):
   are different file-local structs with one name: kept. glu EdgePair untouched (assert __LINE__). Also left: eff_balloon_n64's
   effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
   placeholder names in headers: done (part attribute 0x40 = kIntangiblePart; GLU_UNKNOWN is the real GLU name).
-  Next candidate: the imported "Names from LLCOOLT's tree" enum blocks (~180 names in 26 headers), many repeating our names.
+  Imported "Names from LLCOOLT's tree" blocks: duplicates folded (f48c01840), the rest moved into their families or
+  regrouped one family per enum in value order (tools fold_imported_names.py, regroup_imported_names.py).

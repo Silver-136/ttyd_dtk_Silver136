@@ -1928,7 +1928,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         break;
                 }
                     isFloor = FALSE;
-                    if (entry->flags & ITEM_FLAG_ELASTIC && entry->velocityY != 0.0f) {
+                    if (entry->flags & ITEM_FLAG_ELASTIC_UNUSED && entry->velocityY != 0.0f) {
                         bounce = TRUE;
                     } else if (hitGetAttr(hit) & HIT_ATTR_MOBJ && entry->velocityY != 0.0f) {
                         mobj = mobjHitObjPtrToPtr(hit);

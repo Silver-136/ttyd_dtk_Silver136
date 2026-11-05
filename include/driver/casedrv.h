@@ -74,5 +74,3 @@ void caseMain(void);
 CaseEntry* caseCheckHitObj(void* obj); // Takes HitEntry
 
 CaseEntry* caseCheckHitObj2(void* obj);
-
-// Names from LLCOOLT's tree.

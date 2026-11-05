@@ -107,5 +107,5 @@ struct MayaAnim* effMayaAnimAlloc(struct MayaAnimData* data);
 void effPlayMayaAnim(struct MayaAnim* anim);
 
 // Names from LLCOOLT's tree.
-#define MAYA_ANIM_FLAG_ENDED 0x2
 #define MAYA_ANIM_FLAG_PLAYING 0x1
+#define MAYA_ANIM_FLAG_ENDED 0x2

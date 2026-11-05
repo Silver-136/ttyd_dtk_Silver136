@@ -253,7 +253,3 @@ BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
 #else
 BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
 #endif
-
-// Names from LLCOOLT's tree.
-enum {
-};

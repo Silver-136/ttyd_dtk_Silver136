@@ -1504,8 +1504,8 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_item_set_gravity, STRING("key"), FLOAT(1.0f))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(1.0f))
         CALL(evt_item_set_bound_limit, STRING("key"), 0)
-        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_LAUNCH)
-        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_CUSTOM_LAUNCH)
+        CALL(evt_item_status_on, STRING("key"), ITEM_FLAG2_NO_PICKUP_RISING)
+        CALL(evt_item_status_on, STRING("key"), ITEM_FLAG2_SKIP_BOUND_INIT)
         CALL(evt_npc_set_position, STRING("黒カロン"), 0, -1000, 0)
     END_IF
     RETURN
