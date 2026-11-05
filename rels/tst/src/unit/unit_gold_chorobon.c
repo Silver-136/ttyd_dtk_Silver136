@@ -1,6 +1,6 @@
 // Battle unit Gold Fuzzy (`gold_chorobon`): tst.rel's copy of rels/hei/src/unit/unit_gold_chorobon.c.
 #include "version.h"
-#include "unit/chorogun_tst.h"
+#include "unit/unit_chorobon_gundan.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -12,7 +12,6 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
-#include "unit/chorogun_tst.h"
 #include "battle/battle_sub.h"
 #include "evt/evt_msg.h"
 #include "tst.h"

@@ -27,16 +27,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-typedef struct Chorogun {
-    u8 flags;
-    u8 state;
-    u8 pad_2[2];
-    Vec vel;
-    f32 speed;
-    Vec pos;
-    s32 timer;
-    Vec target;
-} Chorogun;
 Chorogun* chorogun;
 s32 chorogun_targetId;
 

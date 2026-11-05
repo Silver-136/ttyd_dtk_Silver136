@@ -29,17 +29,6 @@
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_atmic_teresa.h"
 
-typedef struct AtmTeresa {
-    u8 state;
-    u8 flag;
-    s32 anim;
-    s32 wait;
-    s32 timer;
-    Vec vel;
-    Vec start;
-    Vec target;
-    u8 mode;
-} AtmTeresa;
 AtmTeresa* teresa;
 s32 teresa_count;
 
@@ -1043,8 +1032,8 @@ void teresa_ext_init(void) {
         (*pose->mtx)[2][3] = 0.0f;
         pose->dir = 90.0f;
         teresa[i].state = 0;
-        teresa[i].flag = 0;
-        teresa[i].anim = 0;
+        teresa[i].animType = 0;
+        teresa[i].animFrame = 0;
         {
             Vec zero = {0.0f, 0.0f, 0.0f};
             teresa[i].vel = zero;
@@ -1109,23 +1098,23 @@ void teresa_ext_main(void) {
 
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
         t = &teresa[i];
-        switch (t->flag) {
+        switch (t->animType) {
             case 1:
-                t->anim++;
-                if (t->anim <= 30) {
+                t->animFrame++;
+                if (t->animFrame <= 30) {
                     pose->texId = 8;
-                } else if (t->anim < 44) {
-                    pose->texId = (t->anim - 30) / 2 + 9;
+                } else if (t->animFrame < 44) {
+                    pose->texId = (t->animFrame - 30) / 2 + 9;
                 } else {
                     pose->texId = 15;
                 }
                 break;
             default:
-                t->anim++;
-                if (t->anim >= 24) {
-                    t->anim -= 24;
+                t->animFrame++;
+                if (t->animFrame >= 24) {
+                    t->animFrame -= 24;
                 }
-                pose->texId = t->anim / 3;
+                pose->texId = t->animFrame / 3;
                 break;
         }
         if (t->wait >= 1) {
@@ -1238,8 +1227,8 @@ void teresa_ext_main(void) {
                     for (j = 0; j < 8; j++) {
                         AtmTeresa* p = &teresa[j];
                         p->state = 20;
-                        p->flag = 1;
-                        p->anim = 0;
+                        p->animType = 1;
+                        p->animFrame = 0;
                         p->vel.x = 0.0f;
                         p->vel.y = 0.0f;
                         p->vel.z = 0.0f;
@@ -1247,10 +1236,10 @@ void teresa_ext_main(void) {
                 }
                 break;
             case 20:
-                if (t->anim >= 180) {
+                if (t->animFrame >= 180) {
                     t->state = 23;
-                    t->flag = 0;
-                    t->anim = 0;
+                    t->animType = 0;
+                    t->animFrame = 0;
                     t->timer = 60;
                     t->wait = waits[i];
                     pose->dir = 90.0f;
@@ -1318,7 +1307,7 @@ void teresa_ext_main(void) {
                 t->wait = i * 3;
                 t->timer = 0;
                 t->state = 53;
-                t->mode = modes[irand(7)];
+                t->intplMode = modes[irand(7)];
                 break;
             case 53:
                 atmic_teresa_scale -= 0.015f;
@@ -1330,9 +1319,9 @@ void teresa_ext_main(void) {
                     (*pose->mtx)[0][0] = 1.0f;
                 }
                 (*pose->mtx)[1][1] = (*pose->mtx)[0][0];
-                (*pose->mtx)[0][3] = intplGetValue(t->mode, t->start.x, t->target.x, t->timer, 30);
-                (*pose->mtx)[1][3] = intplGetValue(t->mode, t->start.y, t->target.y, t->timer, 30);
-                (*pose->mtx)[2][3] = intplGetValue(t->mode, t->start.z, t->target.z, t->timer, 30);
+                (*pose->mtx)[0][3] = intplGetValue(t->intplMode, t->start.x, t->target.x, t->timer, 30);
+                (*pose->mtx)[1][3] = intplGetValue(t->intplMode, t->start.y, t->target.y, t->timer, 30);
+                (*pose->mtx)[2][3] = intplGetValue(t->intplMode, t->start.z, t->target.z, t->timer, 30);
                 if (t->timer >= 30) {
                     t->state = 60;
                 }

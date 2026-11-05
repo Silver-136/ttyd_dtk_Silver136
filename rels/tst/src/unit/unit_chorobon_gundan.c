@@ -19,7 +19,7 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 #include "manager/evtmgr_cmd.h"
-#include "unit/chorogun_tst.h"
+#include "unit/unit_chorobon_gundan.h"
 #include "battle/battle_sub.h"
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"

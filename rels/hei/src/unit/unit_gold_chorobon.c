@@ -20,9 +20,6 @@
 #include "battle/unit/unit_gold_chorobon.h"
 
 USER_FUNC(get_gold_chorobon_id);
-extern EvtWord chorogun_entry[];
-extern BattleUnitKind unit_chorobon_gundan;
-extern EvtWord chorogun_dead_reward[];
 
 BattleUnitKind unit_gold_chorobon;
 static BattleUnitDefense defence;

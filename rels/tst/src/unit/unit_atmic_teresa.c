@@ -21,7 +21,6 @@
 #include "driver/extdrv.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_sub.h"
-#include "unit/unit_atmic_teresa.h"
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_sub.h"
