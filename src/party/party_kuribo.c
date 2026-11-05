@@ -8,6 +8,7 @@
 #include "pmario_sound.h"
 #include <string.h>
 #include "driver/hitdrv.h"
+#include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/mobjdrv.h"
 #include "party/party_move.h"
@@ -247,7 +248,6 @@ EVT_BEGIN(kurio_msg_evt)
     CALL(post_kurio_use)
     RETURN
 EVT_END()
-s32 fbatNpcTalkCheck(void);
 
 
 /**
@@ -330,7 +330,7 @@ void kuribo_use(PartyEntry* party) {
     case 10:
         evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
         marioStSystemLevel(1);
-        evt->lwData[0] = fbatNpcTalkCheck();
+        evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
         party->useMotionId = 15;
         break;
     case 20:

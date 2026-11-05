@@ -69,6 +69,8 @@ const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hiko
 /** Stops the plane's looping flight sound if it is playing. */
 static inline void planeSfxOff(void) {
     MarioWork* mario = marioGetPtr();
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if (mario->motStruct != NULL && (u32)mario->motPlane->sfxId != 0xFFFFFFFF) {
         psndSFXOff(mario->motPlane->sfxId);
         mario->motPlane->sfxId = -1;
@@ -590,6 +592,8 @@ static void flyMain(void) {
             mp->currSubMotionId = 14;
         }
         m = marioGetPtr();
+        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if ((u32)m->motPlane->sfxId == 0xFFFFFFFF) {
             m->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &m->position);
         }

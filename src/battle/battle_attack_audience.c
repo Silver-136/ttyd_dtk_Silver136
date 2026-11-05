@@ -30,7 +30,6 @@
 #include "libc_decls.h"
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
-extern void psndSFX_pit(s32 id, s32 pitch);
 
 /**
  * Script helper: finds the audience member currently holding an item to throw and returns its index (args[0])

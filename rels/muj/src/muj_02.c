@@ -40,7 +40,6 @@
 #include "mario/mariost.h"
 #include "evt/evt_npc.h"
 #include "driver/hitdrv.h"
-void FontDrawString(f32 x, f32 y, const char* str);
 #endif
 
 

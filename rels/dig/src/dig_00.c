@@ -31,7 +31,6 @@
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
 
-void FontDrawString(f32 x, f32 y, const char* str);
 typedef struct DigAnim {
     const char* name;
     u32 mask;

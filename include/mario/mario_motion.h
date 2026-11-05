@@ -31,3 +31,5 @@ void marioSetJumpPara(void);
 s32 L_marioChkRub(void);
 void marioChgMot2(MarioMotion id);
 s32 marioRollChgChk(void);
+BOOL marioChkTalkable(void);
+void marioChgMotJump2(void);

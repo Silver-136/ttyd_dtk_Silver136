@@ -262,7 +262,7 @@ u32 SoundSongCheck(s32 chan);
 
 s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan);
 void SoundEfxStop(s32 chan);
-void SoundEfxSetPitch(s32 chan, u16 pitch);
+void SoundEfxSetPitch(s32 chan, s16 pitch);
 void SoundEfxSetVolume(s32 chan, u8 vol);
 u8 SoundEfxGetVolume(s32 chan);
 void SoundEfxSetAux1(s32 chan, u8 reverb);

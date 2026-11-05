@@ -105,3 +105,4 @@ s32 kpaCamFollow(void);
 s32 kpaFireAttackCheck(void);
 s32 kpaHipAttackCheck(void);
 f32 kpaSetJumpPara(void);
+s32 kpaJumpChk(void);

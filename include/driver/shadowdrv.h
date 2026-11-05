@@ -123,3 +123,7 @@ GXColor shadowGetProjShadowColor(void);
 GXTexObj* shadowGetProjShadowTexObj(void);
 GXTexObj* shadowGetRamp16TexObj(void);
 GXTexObj* shadowGetRamp8TexObj(void);
+f32 (*shadowGetCharShadowProjTexMtx(void))[4];
+f32 (*shadowGetDepthShadowDepthMtx(void))[4];
+f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
+f32 (*shadowGetProjShadowProjTexMtx(void))[4];

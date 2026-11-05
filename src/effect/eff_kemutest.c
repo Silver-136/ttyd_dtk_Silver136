@@ -22,7 +22,7 @@ typedef struct KemuTestWork {
     s32 type;       // 0x0
     Vec pos;        // 0x4
     Vec vel;        // 0x10
-    s32 camera;     // 0x1C
+    CameraId camera; // 0x1C
     s32 idx0;       // 0x20
     s32 idx1;       // 0x24
     s32 frame;      // 0x28
@@ -92,7 +92,7 @@ void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
 }
 
 /** Chooses which camera draws the effect. */
-void effKemuTestDrawCam(EffectEntry* effect, s32 camera) {
+void effKemuTestDrawCam(EffectEntry* effect, CameraId camera) {
     ((KemuTestWork*)effect->userdata)->camera = camera;
 }
 
@@ -238,7 +238,7 @@ static void effKemuTestMain(EffectEntry* effect) {
     s32 done = 0;
     s32 i;
     s32 play = 0;
-    s32 camera;
+    CameraId camera;
     f32 a;
 
     tmp.x = work->pos.x;

@@ -13,7 +13,6 @@
 #include "evt/evt_map.h"
 #include "driver/mapdrv.h"
 
-void tou_gamen_screen_tev(MapTevCallbackInfo* p);
 extern BattleUnitKind unit_jyugem;
 
 BattleStageObjectData tou_btlobject_data[14];

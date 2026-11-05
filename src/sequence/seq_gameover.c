@@ -391,6 +391,8 @@ void seq_gameOverMain(SequenceWork* seq) {
             marioEntry();
 #if VERSION >= VERSION_JP
             psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
+            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }

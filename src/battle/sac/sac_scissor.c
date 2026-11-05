@@ -33,8 +33,8 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_disp.h"
 #include "battle/battle_sub.h"
+#include "manager/fontmgr.h"
 
-double __fabs(double);
 /** Absolute value through the __fabs intrinsic; scissor_intersection uses it to pick each segment's major axis. */
 // FAKE: my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object
 static inline double my_fabsf(float x) { return __fabs(x); }
@@ -867,8 +867,6 @@ static s32 scissor_timer_main(void) {
     }
     return 0;
 }
-
-GXColor HSV2RGB(GXColor hsv);
 
 /**
  * The player's drawing: moves the star with the Control Stick, records a point every 6 frames,

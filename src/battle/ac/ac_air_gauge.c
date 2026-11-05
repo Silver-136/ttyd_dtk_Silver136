@@ -16,8 +16,8 @@ typedef struct AirGaugeWork {
     s32 frame;      // 0x0, frames since input started
     f32 gauge;      // 0x4, 0..100, drained by _GetGaugeDecValue
     u32 presses;    // 0x8, A presses (1 = success when auto)
-    s32 holdFrames; // 0xC, frames A held since the last press
-    s32 showPressed; // 0x10, A icon drawn pressed (set by _GetGaugeDecValue, AirPw.flag)
+    u32 holdFrames; // 0xC, frames A held since the last press
+    s32 showPressed; // 0x10, A icon drawn pressed (set by _GetGaugeDecValue)
     s32 endWait;    // 0x14, frames before the result
 } AirGaugeWork;
 
@@ -57,14 +57,6 @@ GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0
 GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_6[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 #endif
-
-typedef struct AirPw {
-    s32 frame;
-    f32 gauge;
-    s32 hit;
-    u32 hold;
-    s32 flag;
-} AirPw;
 
 static void actionCommandDisp(f32 x, f32 y);
 static f32 _GetGaugeDecValue(void);
@@ -241,7 +233,7 @@ static f32 _GetGaugeDecValue(void) {
 
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    AirPw* pw = (AirPw*)ac->work;
+    AirGaugeWork* pw = (AirGaugeWork*)ac->work;
     GaugeKey* t;
     f32 base;
 
@@ -290,18 +282,18 @@ static f32 _GetGaugeDecValue(void) {
 #endif
         break;
     }
-    while (pw->hold > t->frame) {
+    while (pw->holdFrames > t->frame) {
         t++;
         if (t->frame < 0) {
             break;
         }
     }
     if (t->frame <= 0) {
-        pw->flag = 1;
+        pw->showPressed = 1;
         return base;
     }
-    pw->flag = t->flag;
-    base -= intplGetValue(EASING_LINEAR, t[-1].value, t->value, pw->hold - t[-1].frame, t->frame - t[-1].frame);
+    pw->showPressed = t->flag;
+    base -= intplGetValue(EASING_LINEAR, t[-1].value, t->value, pw->holdFrames - t[-1].frame, t->frame - t[-1].frame);
     return base;
 }
 
@@ -357,11 +349,11 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
-    AirPw* pw;
+    AirGaugeWork* pw;
     f32 ratio;
 
     camGetPtr(CAMERA_2D);
-    pw = (AirPw*)ac->work;
+    pw = (AirGaugeWork*)ac->work;
     ratio = pw->gauge / 100.0f;
     if (disp->gaugeRatio <= ratio) {
         disp->gaugeRatio += 0.01f;
@@ -375,7 +367,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
     BattleAcDrawGauge((s32)x, (s32)y, disp->gaugeRatio, 0xB2, ac->params[2], ac->params[3], ac->params[4], ac->params[5], 0);
-    if (pw->flag) {
+    if (pw->showPressed) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 58.0f + y;

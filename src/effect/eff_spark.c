@@ -68,7 +68,7 @@ static u8 a_data2[12] = { 0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
  * `type` 0 or 1 picks the sequence length (24 or 12 frames);
  * the five sparks start with staggered sequence counters. The battle status code shows it for electrified units.
  */
-EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
+EffectEntry* effSparkEntry(s32 type, s32 unused1, f32 x, f32 y, f32 z, f32 unused2) {
     EffectEntry* effect;
     EffSparkWork* work;
     s32 i;

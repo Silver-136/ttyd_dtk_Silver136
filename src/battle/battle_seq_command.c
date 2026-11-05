@@ -54,7 +54,6 @@
 
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
-void FontDrawString(f32 x, f32 y, const char* msg);
 unsigned long strlen(const char* s);
 static BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
@@ -68,9 +67,6 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param);
 
 // local prototypes
-extern BattleWeapon marioDefaultWeapon_Jump;
-extern BattleWeapon marioWeapon_KururinJump;
-extern BattleWeapon marioDefaultWeapon_Hammer;
 void BattleDrawEnemyHP(CameraId camId, void* param);
 static s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon);
 
@@ -1461,6 +1457,8 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case CMD_STATE_PARTY_SETUP:
         case CMD_STATE_PARTY_REOPEN:
+            // FAKE: calls through a cast to pass TRUE/FALSE to the one-parameter setup (it ignores them); an unused
+            // second parameter on the definition and plain calls change the object.
             if (state == 24) {
                 ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, TRUE);
             } else {

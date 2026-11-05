@@ -17,17 +17,18 @@
 #include "party.h"
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
+#include "libc_decls.h"
 
 /** Message-script setup hook called at startup; empty in every release. */
 void evt_msg_init(void) {
     // empty in every version
 }
 
+// FAKE: private const char* prototype; the definition takes char* (it passes msg to msgAnalize, which takes char*
+// in every version after the early demos), so a header prototype rejects the const char* arguments here without casts.
 void msgWindow_Add(const char* msg, s32 id);
 
 extern float __fabsf(float);
-
-s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
 // A message window's MsgWinData lives in its userdata block. Kept as a macro: an inline function changes the object.
 #define MSG_WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
@@ -51,7 +52,9 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
             m = msg;
             msg = "DIRECT";
         }
-        event->printWindowId = msgWindow_Entry(m, callback, (s16)event->msgPriority);
+        // FAKE: the priority goes in sign-extended from s16 through an s32 parameter; a call through msgdrv.h's
+        // u16 prototype changes the object.
+        event->printWindowId = ((s32 (*)(const char*, s32, s32))msgWindow_Entry)(m, callback, (s16)event->msgPriority);
         event->msgPriority = 0;
         win = windowGetPointer(event->printWindowId);
         MSG_WIN_DATA(win)->tag = msg;
@@ -214,8 +217,6 @@ const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 #if VERSION >= VERSION_DEMO_EU
 static const char* msgArticlePad[7] = {0};
 #endif
-
-char* strstr(const char* s, const char* sub);
 
 // clang-format on
 #endif

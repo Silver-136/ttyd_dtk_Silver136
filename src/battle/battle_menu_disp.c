@@ -19,9 +19,6 @@
 #include "battle/battle_item_data.h"
 #include "libc_decls.h"
 
-void FontDrawString(f32 x, f32 y, const char* msg);
-double sin(double);
-
 void DrawMultiItemWin(void);
 void DrawChangePartyWin(void);
 void DrawOperationWin(void);
@@ -53,7 +50,10 @@ static void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #define FRAMES_STEP(jp, n, x) ((jp) * (x))
 #endif
 
+// FAKE: private const char* prototype; the definition (fontmgr.c) takes const s8* (game code builds with
+// -char unsigned), so the header prototype rejects this const char* argument without a cast.
 void FontDrawStringCenterMtx(Mtx mtx, const char* msg);
+
 /**
  * Angles in degrees of the command icons around the battle menu's ring, one row each for 3, 4 and 5 commands
  * (indexed by the icon's slot); used to place and turn the icons when the ring spins.

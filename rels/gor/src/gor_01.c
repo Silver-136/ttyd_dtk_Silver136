@@ -79,7 +79,6 @@ typedef struct ShopSel {
 #endif
     s32 sel;
 } ShopSel;
-NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
 s32* iri_09_item_tbl;
 static s32 item_tbl[21];
 
@@ -3572,7 +3571,9 @@ USER_FUNC(house03_f2_fade_func) {
  */
 USER_FUNC(chk_marco_fuki) {
     EvtWord* args = event->args;
-    NpcEntry* npc = fbatNpcTalkCheck(marioGetPtr());
+    // FAKE: passes marioGetPtr() to fbatNpcTalkCheck, which takes no arguments, through a cast; the plain
+    // fbatNpcTalkCheck() call drops the marioGetPtr call and changes the object.
+    NpcEntry* npc = ((NpcEntry* (*)(MarioWork*))fbatNpcTalkCheck)(marioGetPtr());
 
     if (npc != NULL && strcmp(npc->description, "\203}\203\213\203R") == 0) {
         evtSetValue(event, args[0], 1);

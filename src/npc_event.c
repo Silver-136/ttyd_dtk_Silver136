@@ -28,9 +28,7 @@
 #include "dolphin/mtx.h"
 #include "evt/evt_item.h"
 #include "driver/itemdrv.h"
-
-double __fabs(double);
-
+#include "npc_event.h"
 
 // The C functions are defined in the reverse of their order in the object: the compiler defers inlining and
 // emits functions in reverse definition order.
@@ -257,334 +255,33 @@ USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
 
-EvtWord enemy_common_dead_event[156];
-EvtWord enemy_event_dead_event_sub[36];
-EvtWord enemy_common_blow_event[13];
-EvtWord enemy_2d_common_dead_event[415];
 EvtWord _2d_dead_rotate_event[];
 
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord testenemynpc_move_event[];
-#else
-EvtWord testenemynpc_move_event[13];
-#endif
-
-EvtWord npc_urouro_move_event[21];
-EvtWord npc_urouro_return_event[37];
-EvtWord kuriboo_move_event[39];
-EvtWord kuriboo_find_event[54];
-EvtWord kuriboo_lost_event[31];
-EvtWord kuriboo_return_event[37];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord patakuri_move_event[];
-#else
-EvtWord patakuri_move_event[148];
-#endif
-
-EvtWord patakuri_find_event[90];
-EvtWord patakuri_lost_event[31];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord patakuri_return_event[];
-#else
-EvtWord patakuri_return_event[170];
-#endif
-
 EvtWord nokonoko_shell_return_event[50];
-EvtWord nokonoko_init_event[28];
-EvtWord nokonoko_move_event[58];
-EvtWord nokonoko_find_event[172];
-EvtWord nokonoko_lost_event[46];
-EvtWord nokonoko_return_event[55];
 EvtWord togenoko_shell_return_event[50];
-EvtWord togenoko_init_event[28];
-EvtWord togenoko_move_event[58];
-EvtWord togenoko_find_event[172];
-EvtWord togenoko_lost_event[46];
-EvtWord togenoko_return_event[55];
-EvtWord patapata_move_event[123];
-EvtWord patapata_find_event[131];
-EvtWord patapata_lost_event[44];
-EvtWord patapata_return_event[135];
 EvtWord met_init_event_common[21];
 EvtWord met_set_anim_wait_event[48];
 EvtWord met_set_anim_walk_event[48];
-EvtWord met_init_event[19];
-EvtWord met_init_event_ceil[14];
-EvtWord togemet_init_event[19];
-EvtWord togemet_init_event_ceil[14];
-EvtWord met_move_event[54];
-EvtWord met_find_event[269];
-EvtWord met_lost_event[43];
-EvtWord met_return_event[51];
 
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord patamet_move_event[];
-#else
-EvtWord patamet_move_event[151];
-#endif
-
-EvtWord patamet_find_event[108];
-EvtWord patamet_lost_event[34];
-EvtWord patamet_return_event[143];
-
-#if VERSION >= VERSION_US
-EvtWord chorobon_move_event[71];
-#else
-EvtWord chorobon_move_event[69];
-#endif
-
-EvtWord chorobon_find_event[63];
-EvtWord chorobon_lost_event[14];
-EvtWord chorobon_return_event[43];
-EvtWord pansy_move_event[42];
-EvtWord pansy_find_event[46];
-EvtWord pansy_lost_event[35];
-EvtWord pansy_return_event[45];
-EvtWord twinkling_pansy_move_event[42];
-EvtWord twinkling_pansy_find_event[54];
-EvtWord twinkling_pansy_lost_event[35];
-EvtWord twinkling_pansy_return_event[45];
-EvtWord karon_init_event[36];
-EvtWord karon_move_event[57];
-EvtWord karon_find_event[150];
-EvtWord karon_lost_event[18];
-EvtWord karon_return_event[37];
-EvtWord karon_blow_event[19];
-EvtWord honenoko2_init_event[18];
-EvtWord honenoko2_move_event[49];
-EvtWord honenoko2_find_event[58];
-EvtWord honenoko2_lost_event[36];
-EvtWord honenoko2_return_event[46];
-EvtWord killer_init_event[19];
 EvtWord killer_move_event[79];
-EvtWord killer_dead_event[156];
-EvtWord killer_cannon_init_event[13];
-EvtWord killer_cannon_move_event[157];
-EvtWord sambo_move_event[22];
-EvtWord sambo_find_event[33];
-EvtWord sambo_lost_event[22];
-EvtWord sambo_return_event[30];
-EvtWord sinnosuke_init_event[26];
-EvtWord sinnosuke_move_event[21];
-EvtWord sinnosuke_find_event[146];
-EvtWord sinnosuke_lost_event[36];
-EvtWord sinnosuke_return_event[94];
-EvtWord sinemon_init_event[26];
-EvtWord sinemon_move_event[26];
-EvtWord sinemon_find_event[146];
-EvtWord sinemon_lost_event[36];
-EvtWord sinemon_return_event[94];
-EvtWord togedaruma_move_event[49];
-EvtWord togedaruma_find_event[61];
-EvtWord togedaruma_lost_event[38];
-EvtWord togedaruma_return_event[44];
-EvtWord barriern_init_event[37];
 
-#if VERSION >= VERSION_US
-EvtWord barriern_move_event[90];
-EvtWord barriern2_move_event[90];
-#else
-EvtWord barriern_move_event[89];
-EvtWord barriern2_move_event[70];
-#endif
-
-EvtWord barriern_dead_event[17];
 EvtWord barriern_find_event[];
 EvtWord barriern_lost_event[];
 EvtWord barriern_return_event[];
 EvtWord barriern_blow_event[];
-EvtWord piders_move_event[111];
-EvtWord piders_find_event[206];
-EvtWord piders_blow_event[13];
 EvtWord pakkun_attack_event[74];
-EvtWord pakkun_init_event[34];
 
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord pakkun_move_event[];
-extern EvtWord pakkun_find_event[];
-extern EvtWord pakkun_return_event[];
-#else
-EvtWord pakkun_move_event[17];
-EvtWord pakkun_find_event[106];
-EvtWord pakkun_return_event[81];
-#endif
-
-EvtWord dokugassun_init_event[14];
-EvtWord dokugassun_move_event[153];
-EvtWord dokugassun_find_event[69];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord dokugassun_lost_event[];
-#else
-EvtWord dokugassun_lost_event[27];
-#endif
-
-EvtWord dokugassun_return_event[158];
-EvtWord basabasa_init_event[17];
-
-#if VERSION >= VERSION_US
-EvtWord basabasa_move_event[72];
-#else
-EvtWord basabasa_move_event[67];
-#endif
-
-EvtWord basabasa_find_event[69];
-EvtWord basabasa_lost_event[31];
-EvtWord basabasa_return_event[44];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord basabasa2_move_event[];
-#else
-EvtWord basabasa2_move_event[148];
-#endif
-
-EvtWord basabasa2_find_event[60];
-EvtWord basabasa2_lost_event[31];
-EvtWord basabasa2_return_event[140];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord teresa_move_event[];
-#else
-EvtWord teresa_move_event[165];
-#endif
-
-EvtWord teresa_find_event[60];
-EvtWord teresa_lost_event[31];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord teresa_return_event[];
-extern EvtWord bubble_move_event[];
-#else
-EvtWord teresa_return_event[104];
-EvtWord bubble_move_event[159];
-#endif
-
-EvtWord bubble_find_event[63];
-EvtWord bubble_lost_event[34];
-EvtWord bubble_return_event[151];
-EvtWord hbom_move_event[41];
-EvtWord hbom_find_event[54];
-EvtWord hbom_lost_event[31];
-EvtWord hbom_return_event[37];
-EvtWord zakowiz_init_event[38];
-EvtWord zakowiz_move_event[70];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord zakowiz_find_event[];
-#else
-EvtWord zakowiz_find_event[159];
-#endif
-
-EvtWord zakowiz_lost_event[18];
-EvtWord zakowiz_return_event[37];
-EvtWord zakowiz_blow_event[19];
-EvtWord hannya_move_event[37];
-EvtWord hannya_find_event[86];
-EvtWord hannya_lost_event[23];
-EvtWord hannya_return_event[29];
-EvtWord mahoon_init_event[120];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord mahoon_move_event[];
-#else
-EvtWord mahoon_move_event[259];
-#endif
-
-EvtWord mahoon_dead_event[24];
-EvtWord mahoon_find_event[177];
-EvtWord mahoon_lost_event[142];
-EvtWord mahoon_return_event[251];
-EvtWord kamec_init_event[54];
-
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord kamec_move_event[];
-#else
-EvtWord kamec_move_event[177];
-#endif
-
-EvtWord kamec_find_event[150];
-EvtWord kamec_lost_event[31];
-EvtWord kamec_return_event[150];
-EvtWord kamec_blow_event[19];
-EvtWord kamec2_init_event[54];
-EvtWord kamec2_move_event[58];
-EvtWord kamec2_find_event[153];
-EvtWord kamec2_lost_event[31];
-EvtWord kamec2_return_event[37];
-EvtWord kamec2_blow_event[19];
-EvtWord hbross_init_event[36];
-EvtWord hbross_move_event[57];
-EvtWord hbross_find_event[141];
-EvtWord hbross_lost_event[18];
-EvtWord hbross_return_event[37];
-EvtWord hbross_blow_event[19];
-EvtWord enemy_event_dead_event[10];
 EvtWord enemy_slave_common_dead_event[8];
 EvtWord enemy_common_flag_init_event[12];
-EvtWord testenemynpc_init_event[4];
-EvtWord npc_urouro_init_event[12];
-EvtWord kuriboo_init_event[4];
-EvtWord patakuri_init_event[12];
-EvtWord patapata_init_event[12];
-EvtWord patamet_init_event[12];
-EvtWord chorobon_init_event[12];
-EvtWord pansy_init_event[4];
-EvtWord twinkling_pansy_init_event[4];
-EvtWord karon_dead_event[9];
-EvtWord sambo_init_event[12];
-EvtWord togedaruma_init_event[4];
-EvtWord piders_init_event[9];
-EvtWord basabasa_dead_event[4];
-EvtWord basabasa2_init_event[12];
-EvtWord basabasa2_dead_event[4];
-EvtWord teresa_init_event[12];
-EvtWord teresa_dead_event[4];
-EvtWord bubble_init_event[12];
-EvtWord hbom_init_event[4];
-EvtWord zakowiz_dead_event[9];
-EvtWord hannya_init_event[9];
-EvtWord kamec_dead_event[9];
-EvtWord kamec2_dead_event[9];
-EvtWord hbross_dead_event[9];
-EvtWord zakoM2D_dead_event[9];
-EvtWord wanwan_init_event[64];
 EvtWord wanwan_init_event_sub[64];
-EvtWord wanwan_move_event[151];
-EvtWord wanwan_find_event[90];
-EvtWord kuriboo2D_init_event[22];
-EvtWord kuriboo2D_move_event[72];
-EvtWord kuriboo2D_find_event[70];
-EvtWord zako2D_init_event[27];
 
 // What zakoEntryDokan and zakoEntryFall store in unitWork[0] and zako2D_move_event reads back to pick the entrance.
 #define ZAKO_ENTRY_DOKAN 1
 #define ZAKO_ENTRY_FALL 2
 
-#if VERSION <= VERSION_DEMO_JP
-extern EvtWord zako2D_move_event[];
-#else
-EvtWord zako2D_move_event[244];
-#endif
-
-EvtWord zako2D_find_event[74];
-EvtWord dokan2D_init_event[19];
-EvtWord dokan2D_regl_event[48];
-EvtWord fall2D_init_event[19];
-EvtWord fall2D_regl_event[34];
-EvtWord zakoM2D_init_event[37];
-EvtWord zakoM2D_move_event[95];
-
 #if VERSION >= VERSION_JP
 EvtWord zakoM2D_find_event[179];
-EvtWord zakoM2D_find_start_event[88];
-#else
-extern EvtWord zakoM2D_find_start_event[];
 #endif
-
-EvtWord gesso2D_init_event[34];
-EvtWord gesso2D_move_event[262];
 
 /**
  * Dead event of most field enemies, run when the enemy is beaten in battle or killed on the field:

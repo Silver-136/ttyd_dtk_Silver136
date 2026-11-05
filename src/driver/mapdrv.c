@@ -424,10 +424,6 @@ static MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
     return mapEntrySub(joint, NULL, mtx, TRUE, index);
 }
 
-f32 (*shadowGetCharShadowProjTexMtx(void))[4];
-f32 (*shadowGetDepthShadowDepthMtx(void))[4];
-f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
-f32 (*shadowGetProjShadowProjTexMtx(void))[4];
 static void mapResetPaperCraftAmbColor(void);
 
 /**

@@ -35,7 +35,6 @@
 #include "battle/unit_work.h"
 
 
-void psndSFX_pit(s32 id, s32 pitch);
 
 
 typedef struct DekaTiming {

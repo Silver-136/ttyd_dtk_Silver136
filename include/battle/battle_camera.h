@@ -121,3 +121,7 @@ void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z);
 void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type);
 void btl_camera_shake_w(s32 pri, f32 a, f32 b, s32 frames, s32 type);
 void btl_camera_set_moveto(s32 pri, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, s32 frames, s32 type);
+void btl_camera_nomove_x_onoff(s32 pri, s32 on);
+void btl_camera_nomove_y_onoff(s32 pri, s32 on);
+void btl_camera_nomove_z_onoff(s32 pri, s32 on);
+void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ);

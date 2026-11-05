@@ -24,6 +24,8 @@
 // Macro, not inline: as static inline evtGetParty(args) the object changes.
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 
+// FAKE: private s32 return; party_bomhei.c defines bomheiGetStatus returning u8, and that prototype changes the
+// object.
 extern s32 bomheiGetStatus(void);
 
 /**

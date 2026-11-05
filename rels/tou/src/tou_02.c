@@ -86,7 +86,6 @@ static f32 randf(f32 min, f32 max);
 
 
 s32 check_hammer(Fan* fan);
-void psndSFX_vol(s32 id, u8 vol);
 static void pose_main(void);
 
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);

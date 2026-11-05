@@ -224,6 +224,8 @@ extern PaperSoundBGM psbgm[2];
 BOOL psndBGMOff(u32 flags);
 s32 psndGetFlag(void);
 void psndSFX_pos(s32 id, Vec* position);
+void psndSFX_vol(s32 id, u8 vol);
+void psndSFX_pit(s32 id, s16 pitch);
 s32 psndBGMPlayTime(s32 id);
 void psndBGMScope(s32 id, s32 scope);
 void psndBGM_rate(s32 id, u16 rate);

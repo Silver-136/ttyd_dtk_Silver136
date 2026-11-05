@@ -25,8 +25,6 @@
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_mahorn_custom.h"
 
-double __fabs(double x);
-
 /** Absolute value of a double. */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 

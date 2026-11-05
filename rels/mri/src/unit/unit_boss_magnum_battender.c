@@ -47,8 +47,8 @@
 
 static EffectEntry* eff_charge;
 #include "unit/unit_boss_magnum_battender.h"
+#include "libc_decls.h"
 static ArmWork* work[2];
-double atan(double x);
 
 static USER_FUNC(arm_check);
 static USER_FUNC(arm_end);

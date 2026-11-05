@@ -13,7 +13,6 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_pad.h"
 
-void psndSFX_pit(s32 id, s32 pitch);
 
 // local prototypes
 static s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask);

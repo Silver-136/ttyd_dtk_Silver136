@@ -54,7 +54,6 @@ typedef struct IraiWork {
     u8 pad_6B4[0x416C - 0x6B4]; // 0x6B4, never accessed (irai_init_func allocates and clears the whole 0x416C bytes)
 #endif
 } IraiWork;
-void FontDrawString(const char* message, f32 x, f32 y);
 void irai_window_disp(CameraId camera, void* param);
 
 USER_FUNC(irai_cancel_func);
@@ -887,7 +886,7 @@ USER_FUNC(irai_end_func) {
     v = (y);                                                                            \
     w_ = FontGetMessageWidth(msg);                                                      \
     FontDrawScaleVec((Vec){w_ > (maxW) ? 0.85f * ((maxW) / w_) : 0.85f, 0.85f, 0.85f}); \
-    FontDrawString(msg, x, v);                                                          \
+    FontDrawString(x, v, msg);                                                          \
 }
 
 /**
@@ -952,8 +951,9 @@ void irai_window_disp(CameraId camera, void* param) {
     msg2 = msgSearch("irai_name2_win");
     iraiDrawCentered(msg2, -280.0f, 127.0f, 135.0f, 115.0f, scale, trans, nameW);
 #else
-    FontDrawString(msg, -270.0f, 152.0f);
-    FontDrawString(msgSearch("irai_name2_win"), -270.0f, 127.0f);
+    FontDrawString(-270.0f, 152.0f, msg);
+    msg = msgSearch("irai_name2_win");
+    FontDrawString(-270.0f, 127.0f, msg);
 #endif
     FontDrawEdgeOff();
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -129.0f, 170.0f, 410.0f, 340.0f, 12.0f);
@@ -974,11 +974,11 @@ void irai_window_disp(CameraId camera, void* param) {
     negX = -77.0f;
     msg = msgSearch("irai_client_win");
     FontDrawEdge();
-    FontDrawString(msg, negX, 180.0f);
+    FontDrawString(negX, 180.0f, msg);
     FontDrawEdgeOff();
     msg = msgSearch("irai_contents_win");
     FontDrawEdge();
-    FontDrawString(msg, 115.0f, 180.0f);
+    FontDrawString(115.0f, 180.0f, msg);
 #endif
     FontDrawEdgeOff();
     GXGetScissor(&left, &top, &width, &height);
@@ -1000,8 +1000,8 @@ void irai_window_disp(CameraId camera, void* param) {
         iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
         iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
 #else
-        FontDrawString(wp->client[no], -119.0f, iraiAddI(wp->scroll, 140 - i * 30));
-        FontDrawString(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30));
+        FontDrawString(-119.0f, iraiAddI(wp->scroll, 140 - i * 30), wp->client[no]);
+        FontDrawString(51.0f, wp->scroll + (140 - i * 30), wp->contents[no]);
 #endif
     }
     GXSetScissor(left, top, width, height);

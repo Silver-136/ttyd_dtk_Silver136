@@ -5381,7 +5381,6 @@ USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
     return EVT_RETURN_DONE;
 }
 
-extern void psndSFX_pit(s32 id, s32 pitch);
 
 #if VERSION >= VERSION_US
 // US and later: per-language width table [language][0] * [language][type + 1]
@@ -6952,6 +6951,8 @@ const char* _mario_attack_voice_table[10] = {
 
 /** Stops the looping movement sound in the work, if one is playing. */
 static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work) {
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if ((u32)work->sfxId != 0xFFFFFFFF) {
         psndSFXOff(work->sfxId);
         work->sfxId = -1;

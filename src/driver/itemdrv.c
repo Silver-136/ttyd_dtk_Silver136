@@ -69,7 +69,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
     return v;
 }
 
-s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
 static void winNameDisp(WinMgrEntry* win);
 static void winNameDisp2(WinMgrEntry* win);

@@ -22,11 +22,11 @@ effN64Vtx size150x20_tex32x32[] = {
     {150, 10, 0, 0, 1024, 255, 255, 255, 255},
 };
 
-/* Three effN64Vtx records (0x2A bytes) written as halfwords: the last two halfwords of each record hold its r,g and b,a bytes. effRadiationDisp casts it to effN64Vtx*. */
-s16 size300x40_tex32x32[] = {
-    0, 0, 0, 16, 0, -1, -1,
-    300, 20, 0, 0, 1024, -5121, -2816,
-    300, -20, 0, 1024, 1024, -5121, -2816,
+/** Three vertices: the centre (opaque white) and two 300 units out at y +-20 (alpha 0), drawn for each ray of the other types. */
+effN64Vtx size300x40_tex32x32[] = {
+    {0, 0, 0, 16, 0, 255, 255, 255, 255},
+    {300, 20, 0, 0, 1024, 235, 255, 245, 0},
+    {300, -20, 0, 1024, 1024, 235, 255, 245, 0},
 };
 
 /**
@@ -420,7 +420,7 @@ static void effRadiationDisp(CameraId cameraId, void* param) {
             vtx = size150x20_tex32x32;
             break;
         default:
-            vtx = (effN64Vtx*)size300x40_tex32x32;
+            vtx = size300x40_tex32x32;
             break;
         }
         effSetVtxDescN64(vtx);

@@ -401,7 +401,6 @@ static EVT_BEGIN(nice_event)
     RETURN
 EVT_END()
 static void zubastar_disp2D(CameraId cam, void* param);
-void psndSFX_pit(s32 id, s32 pitch);
 
 /**
  * Runs the Supernova minigame until it ends: each round the player mashes A to fill the gauge to 100 within 300

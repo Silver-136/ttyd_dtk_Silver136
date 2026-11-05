@@ -42,7 +42,6 @@
 #include "evt/evt_save_flags.h"
 
 
-void FontDrawString(f32 x, f32 y, const char* str);
 
 //.sbss
 static ShopWork* _wp;

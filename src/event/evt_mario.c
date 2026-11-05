@@ -32,12 +32,6 @@
 #include "mot/mot_plane.h"
 #include "eff/eff_kemuri.h"
 
-#if VERSION <= VERSION_DEMO_JP
-void marioSetForceMove(f32 dir, s32 frames, f32 spd);
-#else
-void marioSetForceMove(s32 frames, f32 dir, f32 spd);
-#endif
-
 // Generator: one USER_FUNC per field (see the uses below).
 #define HITOBJ(n, field)                       \
     USER_FUNC(evt_mario_get_name_hitobj_##n) { \
@@ -1056,11 +1050,9 @@ USER_FUNC(evt_mario_mov_pos) {
         } else {
             spd = distABf(mp->position.x, mp->position.z, x, z) / event->userdata[0];
         }
-#if VERSION <= VERSION_DEMO_JP
-        ((void (*)(s32, f32, f32))marioSetForceMove)(event->userdata[0], mp->directionView, spd); // FAKE: argument order of the retail private prototype, needed for register use
-#else
-        marioSetForceMove(event->userdata[0], mp->directionView, spd);
-#endif
+        // FAKE: called through a (frames, dir, speed) cast so the frame count is loaded before the direction; the
+        // plain call in the definition's order (dir, time, speed) loads them the other way round.
+        ((void (*)(s32, f32, f32))marioSetForceMove)(event->userdata[0], mp->directionView, spd);
     }
     if (--event->userdata[0] < 0) {
         return EVT_RETURN_YIELD;
@@ -1086,11 +1078,7 @@ USER_FUNC(evt_mario_mov_pos2) {
             spd *= 0.4f;
         }
         spd /= (f32)gp->framerate;
-#if VERSION <= VERSION_DEMO_JP
         marioSetForceMove(mp->directionView, 1.0f / spd + dist / spd, spd);
-#else
-        marioSetForceMove(1.0f / spd + dist / spd, mp->directionView, spd);
-#endif
     }
     if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         return EVT_RETURN_BLOCK;
@@ -1198,11 +1186,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             n = (f32)gp->framerate * (dist / spd);
             spd = spd / (f32)gp->framerate;
-#if VERSION <= VERSION_DEMO_JP
             marioSetForceMove(mp->directionView, n, spd);
-#else
-            marioSetForceMove(n, mp->directionView, spd);
-#endif
             event->userdata[0] = 2;
             break;
         case 2:
@@ -1369,11 +1353,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             }
             n = (f32)gp->framerate * (dist / spd);
             spd = spd / (f32)gp->framerate;
-#if VERSION <= VERSION_DEMO_JP
             marioSetForceMove(mp->directionView, n, spd);
-#else
-            marioSetForceMove(n, mp->directionView, spd);
-#endif
             event->userdata[0] = 2;
             break;
         case 2:

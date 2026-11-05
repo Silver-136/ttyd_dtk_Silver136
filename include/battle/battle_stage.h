@@ -144,3 +144,5 @@ void BattleStageOffLightInCommand(s32 a, s32 b);
 #include "evt/evt_cmd.h"
 
 USER_FUNC(tou_gamen_screen_tev_init);
+struct MapTevCallbackInfo;
+void tou_gamen_screen_tev(struct MapTevCallbackInfo* p);

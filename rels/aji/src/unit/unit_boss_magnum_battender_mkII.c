@@ -53,14 +53,12 @@
 #define ROCKET_PUNCH_WORK_WAIT 1
 
 #include "unit/unit_boss_magnum_battender.h"
-double atan(double x);
 typedef struct TargetWork {
     s32 state;
     s32 count;
     EffectEntry* eff;
 } TargetWork;
 extern EvtWord aud_hit_event[];
-void psndSFX_vol(s32 id, u8 vol);
 EffectEntry* eff_tor;
 s32 torCount;
 EffectEntry* eff_jet[2];

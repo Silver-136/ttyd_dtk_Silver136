@@ -2,6 +2,7 @@
 // the failure counterpart of eff_rothammer_success_n64.c.
 
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_rothammer_fail_n64.h"
 #include "driver/camdrv.h"
 #include "driver/effdrv.h"
 #include "driver/dispdrv.h"
@@ -38,7 +39,7 @@ static void effRotHammerFailDisp(CameraId cameraId, void* payload);
  * Spawns one smoke puff at (x, y, z) that plays its 7-frame animation over `time` frames.
  * Reached only through evt_eff64 "rothammer_fail_n64"; no script callers found.
  */
-EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
+EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 unused) {
     EffectEntry* effect;
     EffRotHammerFailN64Work* child;
     f32 zero;

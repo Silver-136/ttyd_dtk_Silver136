@@ -41,7 +41,6 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "driver/npcdrv.h"
-GXColor HSV2RGB(GXColor hsv);
 extern EvtWord testnpc_move_event[];
 
 #if VERSION >= VERSION_JP

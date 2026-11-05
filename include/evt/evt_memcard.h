@@ -8,6 +8,7 @@
 #include "evt/evt_cmd.h"
 
 extern EvtWord evt_memcard_save[];
+extern EvtWord evt_memcard_nosave[];
 
 extern EvtWord evt_memcard_check[];
 extern EvtWord evt_memcard_copy[];

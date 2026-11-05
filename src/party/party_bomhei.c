@@ -83,6 +83,8 @@ static inline BOOL isBombRock(HitEntry* hit) {
 
 // Stops Bobbery's two looping sounds.
 static inline void bomheiCleanSfx(PartyEntry* p) {
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if ((u32)p->work.bomhei.sfxId != 0xFFFFFFFFU) {
         psndSFXOff(p->work.bomhei.sfxId);
         p->work.bomhei.sfxId = -1;
@@ -96,6 +98,8 @@ static inline void bomheiCleanSfx(PartyEntry* p) {
 /** Stops the sounds of a bomb use; the early demos keep a third id at 0x17C. */
 static inline void bomheiCleanUseSfx(PartyEntry* p) {
 #if VERSION <= VERSION_DEMO_JP
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if ((u32)p->work.bomhei.throwSfxId != 0xFFFFFFFFU) {
         psndSFXOff(p->work.bomhei.throwSfxId);
         p->work.bomhei.throwSfxId = -1;
@@ -639,6 +643,8 @@ static void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE1, &party->playerPtr->position);
 #else
             // the first fuse sound only starts while the second one (FUSE2) is not playing
+            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
             if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
                 party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
             }
@@ -660,6 +666,8 @@ static void bomhei_use_main(PartyEntry* party) {
             psndSFXOff(party->work.bomhei.sfxId);
             party->work.bomhei.sfxId = -1;
         }
+        // FAKE: called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the
+        // caller's copy, same values); mot_damage.h's prototype with &party->position changes the object.
         marioSetSplash(0, party->position);
         BOMHEI_WORK(party)->flags |= 8;
         BOMHEI_WORK(party)->timer = (s16)(sysMsec2Frame(500) + 30);

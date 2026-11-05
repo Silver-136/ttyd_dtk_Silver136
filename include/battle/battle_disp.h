@@ -4,6 +4,7 @@
 
 #include <dolphin/mtx.h>
 #include "battle/battle_unit.h"
+#include "driver/camdrv.h"
 
 struct BattleWorkUnitPart;
 
@@ -31,3 +32,4 @@ void btlDispPoseAnime(BattleUnitPart* part);
 void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 void btlGetScreenPoint(Vec* in, Vec* out);
 void btlDispChangePeraAnime(struct BattleWorkUnitPart* part, const char* name);
+void btlUnitPartsDisp(CameraId camId, void* param);

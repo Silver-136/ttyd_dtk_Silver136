@@ -34,6 +34,8 @@ typedef struct SequenceWork {
     u32 pad_1C; //0x1C, never accessed
 } SequenceWork;
 
+extern SequenceCallback seq_data[][3]; // Init, Main and Exit per SequenceType (sequence/seqdef.c)
+
 void seqInit_MARIOSTORY(void);
 void seqMain(void);
 void seqSetSeq(SequenceType seq, const char* map, const char* bero);

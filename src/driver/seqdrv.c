@@ -5,8 +5,6 @@
 #include "system.h"
 #include <string.h> //memset prototype
 
-extern SequenceCallback seq_data[8][3];
-
 //.sdata
 SequenceType now_seq = SEQ_UNDEFINED;
 SequenceType next_seq = SEQ_UNDEFINED;

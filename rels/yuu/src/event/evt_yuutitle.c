@@ -24,7 +24,6 @@ typedef struct YuuTitleWork {
     const char* msg;
 } YuuTitleWork;
 static YuuTitleWork* _wp;
-void FontDrawString(f32 x, f32 y, const char* str);
 
 USER_FUNC(evt_yuutitle_main_func);
 

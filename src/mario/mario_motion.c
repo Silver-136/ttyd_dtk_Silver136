@@ -75,8 +75,9 @@ static void mot_partyUse(void);
 static void mot_dummy(void);
 
 
+// FAKE: private by-value Vec prototype; mot_slit.c defines marioCreviceWallChk(const Vec* p), and the call through
+// that prototype with &mario->position changes the object (the by-value call passes a pointer to a copy).
 BOOL marioCreviceWallChk(Vec pos);
-void* fbatNpcTalkCheck(void);
 
 /**
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs

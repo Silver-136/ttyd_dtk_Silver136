@@ -53,8 +53,6 @@ void partyWalkChkGnd(PartyEntry* party);
 
 // The evt_snd script functions belong to this file (see evt_snd.c).
 
-void psndSFX_vol(s32 id, u8 vol);
-void psndSFX_pit(s32 id, s16 pit);
 
 USER_FUNC(evt_snd_bgmon) {
     EvtWord* args = event->args;

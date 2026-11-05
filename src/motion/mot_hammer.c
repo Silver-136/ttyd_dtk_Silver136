@@ -25,6 +25,7 @@
 #include "mot/mot_hammer.h"
 
 #if VERSION >= VERSION_JP
+// FAKE: cos declared with a float parameter; the library's double prototype (libc_decls.h) changes the object
 double cos(float);
 #endif
 

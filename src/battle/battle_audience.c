@@ -69,8 +69,6 @@ const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
         (sound)->volumeMultiplier = 100;                                                           \
     }
 
-void psndSFX_vol(s32 id, s32 vol);
-void psndSFX_pit(s32 id, s32 pitch);
 
 // local prototypes
 static void BattleAudienceSettingAudience(void);
@@ -4482,7 +4480,9 @@ void BattleAudienceSoundHandBeat(void) {
         } else {
             vol = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
         }
-        psndSFX_vol(sound->sfxId, vol);
+        // FAKE: vol goes in untruncated through an s32 view of psndSFX_vol; the plain call through the u8
+        // prototype masks it to a byte first and changes the object.
+        ((void (*)(s32, s32))psndSFX_vol)(sound->sfxId, vol);
         sound->currentBaseSfxVolume = vol;
         sound->baseSfxVolume = vol;
         sound->volumeMultiplier = 100;

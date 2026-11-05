@@ -78,7 +78,7 @@ typedef struct NpcSetupBattleInfo {
     s32 swFlag;                 // 0xC
     NpcBattleSelect* altSelect; // 0x10, used when swFlag is set
     NpcBattleSelect* select;    // 0x14
-    s32 battleFlags;            // 0x18, NpcBattleFlags, -> NpcBattleInfo.battleFlags
+    u32 battleFlags;            // 0x18, NpcBattleFlags, -> NpcBattleInfo.battleFlags
     s32 randomMode;             // 0x1C, -> NpcBattleInfo.randomMode; 0 rolls randomValues from randomRanges
     s8 randomRanges[16][2];     // 0x20, {min, max} per NpcBattleInfo.randomValues byte
     const char* bgmName;        // 0x40, -> NpcBattleInfo.bgmName, played by seq_battle
@@ -92,7 +92,7 @@ typedef struct NpcBattleRandom {
 
 typedef struct NpcBattleInfo {
     struct BattleStageData* stageData; // 0x0
-    s32 battleFlags;                   // 0x4, NpcBattleFlags
+    u32 battleFlags;                   // 0x4, NpcBattleFlags
     ItemType fixedItem;                // 0x8
     ItemType itemDropped;              // 0xC
     s32 heartsDropped;                 // 0x10
@@ -475,6 +475,7 @@ void npcDeleteGroup(NpcEntry* entry);
 void npcMain(void);
 NpcEntry* npcNameToPtr(const char* name);
 NpcEntry* npcNameToPtr_NoAssert(const char* name);
+NpcEntry* fbatNpcTalkCheck(void);
 void npcSetLink(NpcEntry* npc, NpcEntry* other);
 void npcSetBtlSetupWork(NpcEntry* npc, s32 index, s32 value);
 s32 npcGetBtlSetupWork(NpcEntry* npc, s32 index);

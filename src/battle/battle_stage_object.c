@@ -42,7 +42,6 @@
 
 
 
-void FontDrawString(f32 x, f32 y, const char* str);
 
 // local prototypes
 static void BattleObjectConfig(void);

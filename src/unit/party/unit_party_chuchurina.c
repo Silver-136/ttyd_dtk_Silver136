@@ -30,6 +30,7 @@
 #include "mario/mario_pouch.h"
 #include "battle/battle_damage.h"
 #include "icon_ids.h"
+#include "battle/battle_disp.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_PART1_RUNNING 0 // MadowaseAttack: 1 while the body (part 1) still runs its route; the attack waits until slots 0-3 are all 0
@@ -38,8 +39,6 @@
 #define UNIT_WORK_PART4_RUNNING 3 // MadowaseAttack: 1 while part 4 still runs its route
 #define UNIT_WORK_SPIN_EVENT_ID 4 // NormalAttack: id of the sibling event that spins her back after a slap (0 = none); deleted before the next slap
 #define UNIT_WORK_MAX_SLAPS 5     // NormalAttack: number of slaps (2, 3, 4 by party tech level); the attack ends when the slap count reaches it
-
-void btlUnitPartsDisp(CameraId camId, void* parts);
 
 PoseTableEntry pose_table_chuchurina_stay[24];
 static BattleDataEntry data_table[8];
