@@ -651,7 +651,7 @@ static void stateBusy(DVDCommandBlock* block) {
         if (block->length == 0) {
             finished = executing;
             executing = &DummyCommandBlock;
-            finished->state = 0;
+            finished->state = DVD_STATE_END;
 
             if (finished->callback != 0) {
                 (*finished->callback)(0, finished);

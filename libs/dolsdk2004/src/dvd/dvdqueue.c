@@ -124,6 +124,7 @@ int __DVDIsBlockInWaitingQueue(DVDCommandBlock* block) {
     return 0;
 }
 
+// BUG: only 16 names (commands 0..15); DVD_COMMAND_UNK_16 (queued by DVDStopMotorAsync) indexes past the end in DVDDumpWaitingQueue.
 static char* CommandNames[16] = {
     "",
     "READ",

@@ -298,7 +298,7 @@ int PADReset(u32 mask) {
     BOOL enabled;
     u32 disableBits;
 
-    ASSERTMSGLINE(0x381, !(mask & 0x0FFFFFFF), "PADReset(): invalid mask");
+    ASSERTMSGLINE(897, !(mask & 0x0FFFFFFF), "PADReset(): invalid mask");
 
     enabled = OSDisableInterrupts();
     mask |= PendingBits;
@@ -388,7 +388,7 @@ u32 PADRead(PADStatus* status) {
     u32 data[2];
     u32 chanBit;
     u32 sr;
-    int chanShift;
+    int chanShift; // FAKE: computed but never read; removing it changes the object
     u32 motor;
 
     enabled = OSDisableInterrupts();
@@ -491,7 +491,7 @@ void PADControlAllMotors(const u32* commandArray) {
         chanBit = PAD_CHAN0_BIT >> chan;
         if ((EnabledBits & chanBit) && !(SIGetType(chan) & SI_GC_NOMOTOR)) {
             command = *commandArray;
-            ASSERTMSGLINE(0x4B5, !(command & 0xFFFFFFFC), "PADControlAllMotors(): invalid command");
+            ASSERTMSGLINE(1205, !(command & 0xFFFFFFFC), "PADControlAllMotors(): invalid command");
             if (Spec < PAD_SPEC_2 && command == PAD_MOTOR_STOP_HARD)
                 command = PAD_MOTOR_STOP;
             if (__gUnknown800030E3 & 0x20)

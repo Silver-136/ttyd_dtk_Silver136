@@ -48,6 +48,8 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
 | Both | libs/dolsdk2004/src/os/OSAudioSystem.c | __OSInitAudioSystem | no-effect statement `reg16 != 0x81800;` that fixes register allocation on retail ("fake but fixes reg alloc") | see comment |
 | Both | libs/dolsdk2004/src/gx/GXTev.c | GXSetTevSwapModeTable | spare temporary `int index = table * 2` for the tevKsel index (release build only) | `&__GXData->tevKsel[table * 2]` (both versions change) |
+| Both | libs/dolsdk2004/src/pad/Pad.c | PADRead | `chanShift` computed in the loop and never read | see comment |
+| Both | libs/dolsdk2004/src/vi/vi.c | VIGetNextField, VIInit | `value = (u16)value` (no-op cast) under `#if !DEBUG` | see comment |
 | Both | libs/musyx/src/musyx/runtime/HARDWARE.C | itdOffTab (data) | `static volatile const` table, read by SetupITD | plain `static const` (both versions change) |
 | Both | src/driver/casedrv.c | caseEntry | no-op 64-bit mask on the returned index | plain `return i;` (swaps the loop registers, both versions) |
 | Both | src/driver/effdrv.c | effMayaKeyInterp (inline, used by effCalcMayaAnimMatrix) | channel fields still read through byte offsets; unnecessary register qualifiers removed, typed MayaHermitChannel indexing changes both objects | fresh US/JP ordinary-local and typed-channel probes |

@@ -238,6 +238,7 @@ static BOOL HitCache(DVDBuffer* curr, DVDBuffer* prev) {
 	u32 blockNumOfCurrStart = (curr->offset >> 15);
 	u32 cacheBlockSize = AudioBufferOn() ? 5 : 15;
 
+	// BUG: an OR of a lower and an upper bound; this is true for almost every value (a range test would need &&).
 	if ((blockNumOfCurrStart > blockNumOfPrevEnd - 2) || (blockNumOfCurrStart < blockNumOfPrevEnd + cacheBlockSize + 3)) {
 		return TRUE;
 	}
@@ -425,6 +426,7 @@ BOOL DVDLowAudioBufferConfig(BOOL enable, u32 size, DVDLowCallback callback) {
 #ifdef DEBUG
     bufSize = size & 0xF;
     trigger = (size >> 4) & 0xF;
+    // BUG: bufSize was masked to 4 bits above, so this assert can never fail.
     ASSERTLINE(1242, bufSize < 16);
     ASSERTLINE(1243, trigger <= 2);
 #endif

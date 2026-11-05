@@ -80,9 +80,6 @@ s32 SIResetSteering(s32 chan) {
     SISteeringControl* sc;
     s32 ret;
 
-#ifndef DEBUG
-    u32 padding;
-#endif
 
     sc = &__SISteering[chan];
     ret = SIResetSteeringAsync(chan, __SISteeringSyncCallback);

@@ -509,13 +509,13 @@ void VIInit(void) {
     value = __VIRegs[24];
     value &= ~0x8000;
 #if !DEBUG
-    value = (u16)value;
+    value = (u16)value; // FAKE: no-op cast; removing it changes the object
 #endif
     __VIRegs[24] = value;
     value = __VIRegs[26];
     value = value & ~0x8000;
 #if !DEBUG
-    value = (u16)value;
+    value = (u16)value; // FAKE: no-op cast; removing it changes the object
 #endif
     __VIRegs[26] = value;
     PreCB = NULL;
@@ -1032,9 +1032,6 @@ static u32 getCurrentFieldEvenOdd(void) {
 u32 VIGetNextField(void) {
     s32 nextField;
     BOOL enabled;
-#if !DEBUG
-    u8 unused[4];
-#endif
 
     enabled = OSDisableInterrupts();
     nextField = getCurrentFieldEvenOdd() ^ 1;
@@ -1079,6 +1076,7 @@ u32 VIGetTvFormat(void) {
         format = CurrTvMode;
         break;
     default:
+        // BUG: unreachable by design; in a build without asserts format is returned uninitialised here.
         ASSERTLINE(2527, FALSE);
     }
     

@@ -618,6 +618,7 @@ s32 DVDGetTransferredSize(DVDFileInfo* fileinfo) {
         bytes = (s32)(cb->transferredSize + (cb->currTransferSize - __DIRegs[6]));
         break;
     default:
+        // BUG: unreachable by design; in a build without asserts bytes is returned uninitialised here.
         ASSERTMSG1LINE(1391, FALSE, "DVDGetTransferredSize(): Illegal state (%d)", cb->state);
         break;
     }

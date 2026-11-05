@@ -47,6 +47,7 @@ void SISetSamplingRate(u32 msec) {
     BOOL progressive;
     BOOL enabled;
 
+    // Assert text "out of rage" is verbatim.
     ASSERTMSGLINE(377, 0 <= msec && msec <= 11, "SISetSamplingRate(): out of rage (0 <= msec <= 11)");
     if (msec > 11) {
         msec = 11;

@@ -39,6 +39,7 @@ int DVDCompareDiskID(const DVDDiskID* id1, const DVDDiskID* id2) {
     version1 = id1->gameVersion;
     version2 = id2->gameVersion;
 
+    // BUG: game1/game2 are pointers, so sizeof is the pointer size (4), not the length of the game name field; correct only because both are 4.
     length = strnlen(game1, sizeof(game1));
     ASSERTMSGLINE(78, length == 0 || length == 4, "DVDCompareDiskID(): Specified game name for id1 is neither NULL nor 4 character long\n");
     ASSERTMSGLINE(79, company1, "DVDCompareDiskID(): Specified company name for id1 is NULL\n");

@@ -33,6 +33,7 @@ static u8 ErrorCode2Num(u32 errorCode) {
 
 	for (i = 0; i < 18; i++) {
 		if (errorCode == ErrorTable[i]) {
+            // BUG: the loop is bounded by i < 18, so this assert can never fail.
             ASSERTLINE(73, i < DIDNT_MATCH);
 			return i;
 		}

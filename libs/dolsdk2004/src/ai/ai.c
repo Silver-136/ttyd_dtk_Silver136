@@ -130,6 +130,7 @@ void AISetStreamPlayState(u32 state) {
 
     if (state != AIGetStreamPlayState()) {
         if (AIGetStreamSampleRate() == AI_SAMPLERATE_32KHZ && state == AI_STREAM_START) {
+            // BUG: the two channels are loaded crosswise (left from right, right from left) and restored by name below, so they swap volumes.
             vol_left = AIGetStreamVolRight();
             vol_right = AIGetStreamVolLeft();
             AISetStreamVolRight(0);
