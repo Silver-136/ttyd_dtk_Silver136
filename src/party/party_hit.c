@@ -988,21 +988,19 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     py = pos->y;
     pz = pos->z;
     best = *dist;
-    {
-        lx = px + oz;
-        lz = pz + ox;
-        ly = py;
-        t = (Vec){lx, ly, lz};
-        ty = t.y;
-        d0 = best;
-        // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
-        if ((t.z && t.z) && t.z) {
-        }
-        probeHeight = 10.0f;
-        hit = hitCheckFilter(NULL, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0, t.x, probeHeight + ty, t.z, zero, one, zero);
-        if (hit && (best >= d0)) {
-            best = d0;
-        }
+    lx = px + oz;
+    lz = pz + ox;
+    ly = py;
+    t = (Vec){lx, ly, lz};
+    ty = t.y;
+    d0 = best;
+    // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
+    if ((t.z && t.z) && t.z) {
+    }
+    probeHeight = 10.0f;
+    hit = hitCheckFilter(NULL, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0, t.x, probeHeight + ty, t.z, zero, one, zero);
+    if (hit && (best >= d0)) {
+        best = d0;
     }
     if (!hit) {
         lx = px - oz;
@@ -1125,6 +1123,7 @@ BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos) {
     Vec n;
     HitEntry* hit1;
     HitEntry* hit2;
+    Vec d;
 
     sincosf(&sn, &cs, toMovedirSimple(270.0f));
     ox = 0.5f * (sn * r);
@@ -1132,49 +1131,43 @@ BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos) {
     ang1 = 0.0f;
     ang2 = ang1;
     sincosf(&sn, &cs, toMovedirSimple(180.0f));
-    {
-        Vec d;
-        p = pos;
-        p.y += 10.0f;
-        d = (Vec){sn, 0.0f, cs};
-        hit1 = partyHitNrm(party, &p, &d, &n);
+    p = pos;
+    p.y += 10.0f;
+    d = (Vec){sn, 0.0f, cs};
+    hit1 = partyHitNrm(party, &p, &d, &n);
+    if (hit1) {
+        ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
+    }
+    if (!hit1) {
+        hit1 = partyHitNrm(party, &(Vec){pos.x + ox, party_addf(pos.y, 10.0f), pos.z + oz}, &d, &n);
         if (hit1) {
             ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
-        if (!hit1) {
-            hit1 = partyHitNrm(party, &(Vec){pos.x + ox, party_addf(pos.y, 10.0f), pos.z + oz}, &d, &n);
-            if (hit1) {
-                ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
-            }
-        }
-        if (!hit1) {
-            hit1 = partyHitNrm(party, &(Vec){pos.x - ox, party_addf(pos.y, 10.0f), pos.z - oz}, &d, &n);
-            if (hit1) {
-                ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
-            }
+    }
+    if (!hit1) {
+        hit1 = partyHitNrm(party, &(Vec){pos.x - ox, party_addf(pos.y, 10.0f), pos.z - oz}, &d, &n);
+        if (hit1) {
+            ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
     }
     sincosf(&sn, &cs, toMovedirSimple(0.0f));
-    {
-        Vec d;
-        p = pos;
-        p.y += 10.0f;
-        d = (Vec){sn, 0.0f, cs};
-        hit2 = partyHitNrm(party, &p, &d, &n);
+    p = pos;
+    p.y += 10.0f;
+    d = (Vec){sn, 0.0f, cs};
+    hit2 = partyHitNrm(party, &p, &d, &n);
+    if (hit2) {
+        ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
+    }
+    if (!hit2) {
+        hit2 = partyHitNrm(party, &(Vec){pos.x + ox, party_addf(pos.y, 10.0f), pos.z + oz}, &d, &n);
         if (hit2) {
             ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
-        if (!hit2) {
-            hit2 = partyHitNrm(party, &(Vec){pos.x + ox, party_addf(pos.y, 10.0f), pos.z + oz}, &d, &n);
-            if (hit2) {
-                ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
-            }
-        }
-        if (!hit2) {
-            hit2 = partyHitNrm(party, &(Vec){pos.x - ox, party_addf(pos.y, 10.0f), pos.z - oz}, &d, &n);
-            if (hit2) {
-                ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
-            }
+    }
+    if (!hit2) {
+        hit2 = partyHitNrm(party, &(Vec){pos.x - ox, party_addf(pos.y, 10.0f), pos.z - oz}, &d, &n);
+        if (hit2) {
+            ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
     }
     if (hit1 && hit2 && __fabsf(180.0f - 0.5f * (ang1 + ang2)) <= 10.0f) {

@@ -892,6 +892,7 @@ void effFireSmokeDisp(CameraId cameraId, void* payload) {
     f32 sx, sy;
     u32 idx;
     f32 w = 1.0f;
+    f32 s;
 
     camera = camGetPtr(cameraId);
     idx = work->age * 2;
@@ -914,10 +915,8 @@ void effFireSmokeDisp(CameraId cameraId, void* payload) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
-    {
-        f32 s = 8.0f * work->scale;
-        PSMTXScale(scaleMtx, s * sx, s * sy, s);
-    }
+    s = 8.0f * work->scale;
+    PSMTXScale(scaleMtx, s * sx, s * sy, s);
     PSMTXConcat(trans, rot, m);
     PSMTXConcat(m, scaleMtx, m);
     PSMTXRotRad(rot, 'z', MTXDegToRad(work->rotation));

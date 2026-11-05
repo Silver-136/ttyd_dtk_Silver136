@@ -674,6 +674,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
     s32 i, counter, k, qn;
     s32 queue[14];
     s32 list[200];
+    u32 n;
 
     audience = BattleAudienceBaseGetPtr();
     pe = audience;
@@ -959,23 +960,22 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
         case 12:
             if (pe->phaseListCount == 1) {
                 switch (pe->phaseList[0]) {
-                    case 0: {
-                        u32 n = 0;
-                        for (i = 0; i <= 59; i++) {
+                    case 0:
+                    n = 0;
+                    for (i = 0; i <= 59; i++) {
 #if VERSION <= VERSION_DEMO_JP
-                            member = BattleAudienceGetPtr(i);
-                            if ((u8)BattleAudience_GetSysCtrl(i) && member->type == AUDIENCE_TOAD && check_exe_phase_evt_status(member)) {
+                        member = BattleAudienceGetPtr(i);
+                        if ((u8)BattleAudience_GetSysCtrl(i) && member->type == AUDIENCE_TOAD && check_exe_phase_evt_status(member)) {
 #else
-                            if (check_exe_phase_evt_status(i, AUDIENCE_TOAD)) {
+                        if (check_exe_phase_evt_status(i, AUDIENCE_TOAD)) {
 #endif
-                                list[n] = i;
-                                n++;
-                            }
+                            list[n] = i;
+                            n++;
                         }
-                        BattleAudienceItemOn(list[irand(n)], ITEM_NULL, 1);
-                        pe->phaseListCount = 0;
-                        break;
                     }
+                    BattleAudienceItemOn(list[irand(n)], ITEM_NULL, 1);
+                    pe->phaseListCount = 0;
+                    break;
                     case 1:
                         for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1360,6 +1360,8 @@ void BattleAudienceSettingAudience(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     NpcBattleRandom* rec = &_battleWorkPointer->fbatInfo->setup->random;
     PouchData* pouch = pouchGetPtr();
+    s32 cnt;
+    s32 q;
 
     delta = R_audience_delta_multiplier;
     switch (pouch->rank) {
@@ -1399,17 +1401,15 @@ void BattleAudienceSettingAudience(void) {
     }
 
     switch (rec->mode) {
-    case 2: {
-        s32 q;
-        for (q = 0; q < 12; q++) {
-            if (q == AUDIENCE_XNAUT || q == AUDIENCE_PUNI) {
-                weights[q] = 1;
-            } else {
-                weights[q] = 0;
-            }
+    case 2:
+    for (q = 0; q < 12; q++) {
+        if (q == AUDIENCE_XNAUT || q == AUDIENCE_PUNI) {
+            weights[q] = 1;
+        } else {
+            weights[q] = 0;
         }
-        hasKind = 0;
-        }
+    }
+    hasKind = 0;
         break;
     case 5:
         for (i = 0; i < 12; i++) {
@@ -1567,27 +1567,25 @@ void BattleAudienceSettingAudience(void) {
             }
         }
         break;
-    default: {
-        s32 cnt;
-        for (kind = 0, cnt = 0; kind <= 12; kind++) {
-            for (j = 0; j < counts[kind]; j++) {
-                list[cnt++] = kind;
-            }
+    default:
+    for (kind = 0, cnt = 0; kind <= 12; kind++) {
+        for (j = 0; j < counts[kind]; j++) {
+            list[cnt++] = kind;
         }
-        for (i = 0; i < 150; i++) {
-            s32 a = irand(cnt);
-            s32 b = irand(cnt);
-            s32 t = list[a];
-            list[a] = list[b];
-            list[b] = t;
-        }
-        for (i = 0; i < cnt; i++) {
-            s32 idx = BattleAudience_NoUsedFCHaitiRand();
-            if (idx == -1) break;
-            BattleAudience_Entry(idx, (u8)list[i], 0);
-        }
-        break;
     }
+    for (i = 0; i < 150; i++) {
+        s32 a = irand(cnt);
+        s32 b = irand(cnt);
+        s32 t = list[a];
+        list[a] = list[b];
+        list[b] = t;
+    }
+    for (i = 0; i < cnt; i++) {
+        s32 idx = BattleAudience_NoUsedFCHaitiRand();
+        if (idx == -1) break;
+        BattleAudience_Entry(idx, (u8)list[i], 0);
+    }
+    break;
     }
     memcpy(audience->typeWeights, weights, sizeof(audience->typeWeights));
 }
@@ -1877,6 +1875,9 @@ void BattleAudienceItemCtrlProcess(void) {
     u8* aud;
     BattleAudienceKind* kd;
     s32 j;
+    f32 t;
+    BattleUnitPart* pp;
+    Vec v;
 
     i = 0;
     it = BattleAudienceItemGetPtr(0);
@@ -1891,132 +1892,122 @@ void BattleAudienceItemCtrlProcess(void) {
             goto kill;
         }
         switch (it->state) {
-        case 0: {
-            it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
-            if (it->itemType == ITEM_NULL) {
-                // FAKE: s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object
-                s32* tbl = (s32*)kd->itemTable;
-                s32 cnt = 0;
-                s32 sum;
-                s32 acc;
-                s32 r;
-                j = 0;
-                sum = 0;
-                for (;;) {
-                    if (tbl[j * 2] == 0) {
-                        break;
-                    }
-                    sum += tbl[j * 2 + 1];
-                    cnt++;
-                    j++;
+        case 0:
+        it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
+        if (it->itemType == ITEM_NULL) {
+            // FAKE: s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object
+            s32* tbl = (s32*)kd->itemTable;
+            s32 cnt = 0;
+            s32 sum;
+            s32 acc;
+            s32 r;
+            j = 0;
+            sum = 0;
+            for (;;) {
+                if (tbl[j * 2] == 0) {
+                    break;
                 }
-                if (cnt == 0) {
-                    goto done;
-                }
-                r = irand(sum);
-                j = 0;
-                acc = 0;
-                for (;; j++) {
-                    if (r >= acc && r < acc + tbl[j * 2 + 1]) {
-                        break;
-                    }
-                    acc += tbl[j * 2 + 1];
-                }
-                it->itemType = tbl[j * 2];
+                sum += tbl[j * 2 + 1];
+                cnt++;
+                j++;
             }
-            it->timer = i + 180;
-            it->scale = 1.0f;
-            it->rotZ = 0.0f;
-            {
-                Vec v;
-                v = (Vec){0.0f, 0.0f, 0.0f};
-                v.x = ((BattleAudienceMember*)aud)->position.x + kd->itemOffsetX;
-                v.y = (((BattleAudienceMember*)aud)->position.y + kd->itemOffsetY) - 10.0f;
-                v.z = 1.0f + ((BattleAudienceMember*)aud)->position.z;
-                it->position = v;
+            if (cnt == 0) {
+                goto done;
             }
-            it->state++;
+            r = irand(sum);
+            j = 0;
+            acc = 0;
+            for (;; j++) {
+                if (r >= acc && r < acc + tbl[j * 2 + 1]) {
+                    break;
+                }
+                acc += tbl[j * 2 + 1];
+            }
+            it->itemType = tbl[j * 2];
         }
+        it->timer = i + 180;
+        it->scale = 1.0f;
+        it->rotZ = 0.0f;
+        v = (Vec){0.0f, 0.0f, 0.0f};
+        v.x = ((BattleAudienceMember*)aud)->position.x + kd->itemOffsetX;
+        v.y = (((BattleAudienceMember*)aud)->position.y + kd->itemOffsetY) - 10.0f;
+        v.z = 1.0f + ((BattleAudienceMember*)aud)->position.z;
+        it->position = v;
+        it->state++;
 
         /* fallthrough */
-        case 1: {
-            if (it->timer <= 0) {
-                BattleUnit* t;
-                f32 dx, n;
-                for (j = 0; j < AUDIENCE_ITEM_MAX; j++) {
-                    if (j != i && (BattleAudienceItemGetPtr(j)->flags & AUDIENCE_ITEM_FLAG_ACTIVE) &&
-                        BattleAudienceItemGetPtr(j)->state == 1) {
-                        it->mode = 2;
-                        break;
-                    }
-                }
-                if (j == 100) {
-                    it->mode = 1;
-                }
-                t = BattleAudienceDetectTargetPlayer();
-                if (t == NULL) {
-                    goto done;
-                }
-                it->target = t;
-                {
-                    BattleUnitPart* pp = BtlUnit_GetPartsPtr(t, BtlUnit_GetBodyPartsId(t));
-                    BtlUnit_GetHitPos(t, pp, &hv.x, &hv.y, &hv.z);
-                }
-                dx = hv.x - it->position.x;
-                n = 30.0f + (f32)__fabs(dx) / 15.0f;
-                it->velocity.x = dx / n;
-                it->accel.x = 0.0f;
-                it->velocity.y = 7.0f;
-                it->accel.y = 2.0f * ((hv.y - it->position.y) - it->velocity.y * n) / (n * n);
-                it->velocity.z = (hv.z - it->position.z) / n;
-                it->accel.z = 0.0f;
-                it->timer = (s32)n;
-                it->state++;
-            } else {
-                s32 k = 180 - it->timer;
-                f32 ox;
-                if (k >= 5) {
-                    k = 5;
-                }
-                {
-                    Vec v = {0.0f, 0.0f, 0.0f};
-                    v.x = ((BattleAudienceMember*)aud)->drawPosX + kd->itemOffsetX;
-                    ox = intplGetValue(EASING_LINEAR, -10.0f, 0.0f, k, 5);
-                    // FAKE: spare temporary; `v.y = (drawPosY + itemOffsetY) + ox` changes the object
-                    {
-                        f32 t = ((BattleAudienceMember*)aud)->drawPosY + kd->itemOffsetY;
-                        v.y = t + ox;
-                    }
-                    v.z = 1.0f + ((BattleAudienceMember*)aud)->drawPosZ;
-                    it->position = v;
+        case 1:
+        if (it->timer <= 0) {
+            BattleUnit* t;
+            f32 dx, n;
+            for (j = 0; j < AUDIENCE_ITEM_MAX; j++) {
+                if (j != i && (BattleAudienceItemGetPtr(j)->flags & AUDIENCE_ITEM_FLAG_ACTIVE) &&
+                    BattleAudienceItemGetPtr(j)->state == 1) {
+                    it->mode = 2;
+                    break;
                 }
             }
-            break;
+            if (j == 100) {
+                it->mode = 1;
+            }
+            t = BattleAudienceDetectTargetPlayer();
+            if (t == NULL) {
+                goto done;
+            }
+            it->target = t;
+            pp = BtlUnit_GetPartsPtr(t, BtlUnit_GetBodyPartsId(t));
+            BtlUnit_GetHitPos(t, pp, &hv.x, &hv.y, &hv.z);
+            dx = hv.x - it->position.x;
+            n = 30.0f + (f32)__fabs(dx) / 15.0f;
+            it->velocity.x = dx / n;
+            it->accel.x = 0.0f;
+            it->velocity.y = 7.0f;
+            it->accel.y = 2.0f * ((hv.y - it->position.y) - it->velocity.y * n) / (n * n);
+            it->velocity.z = (hv.z - it->position.z) / n;
+            it->accel.z = 0.0f;
+            it->timer = (s32)n;
+            it->state++;
+        } else {
+            s32 k = 180 - it->timer;
+            f32 ox;
+            if (k >= 5) {
+                k = 5;
+            }
+            {
+                Vec v = {0.0f, 0.0f, 0.0f};
+                v.x = ((BattleAudienceMember*)aud)->drawPosX + kd->itemOffsetX;
+                ox = intplGetValue(EASING_LINEAR, -10.0f, 0.0f, k, 5);
+                // FAKE: spare temporary; `v.y = (drawPosY + itemOffsetY) + ox` changes the object
+                t = ((BattleAudienceMember*)aud)->drawPosY + kd->itemOffsetY;
+                v.y = t + ox;
+                v.z = 1.0f + ((BattleAudienceMember*)aud)->drawPosZ;
+                it->position = v;
+            }
         }
-        case 2: {
-            if (!(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
-                it->mode = 0;
-            }
-            if (it->timer == 20) {
-                BattleAudience_ChangeStatus(it->audienceId, AUDIENCE_STATUS_WAIT);
-            }
-            if (it->timer == 0) {
-                it->state++;
-            }
-            if (it->timer > 0) {
-                it->position.x += it->velocity.x;
-                it->position.y += it->velocity.y;
-                it->position.z += it->velocity.z;
-                it->velocity.x += it->accel.x;
-                it->velocity.y += it->accel.y;
-                it->velocity.z += it->accel.z;
-                if (it->itemType == ITEM_AUDIENCE_HAMMER) {
-                    it->rotZ += 18.0f;
-                }
-                it->timer--;
-            }
-            break;
+        break;
+        case 2:
+        if (!(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
+            it->mode = 0;
         }
+        if (it->timer == 20) {
+            BattleAudience_ChangeStatus(it->audienceId, AUDIENCE_STATUS_WAIT);
+        }
+        if (it->timer == 0) {
+            it->state++;
+        }
+        if (it->timer > 0) {
+            it->position.x += it->velocity.x;
+            it->position.y += it->velocity.y;
+            it->position.z += it->velocity.z;
+            it->velocity.x += it->accel.x;
+            it->velocity.y += it->accel.y;
+            it->velocity.z += it->accel.z;
+            if (it->itemType == ITEM_AUDIENCE_HAMMER) {
+                it->rotZ += 18.0f;
+            }
+            it->timer--;
+        }
+        break;
         case 3: {
             s8 a, b;
             if (!(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
@@ -2112,39 +2103,36 @@ void BattleAudienceItemCtrlProcess(void) {
             }
             break;
         }
-        case 5: {
-            it->position.x += it->velocity.x;
-            it->position.y += it->velocity.y;
-            it->position.z += it->velocity.z;
-            it->velocity.x += it->accel.x;
-            it->velocity.y += it->accel.y;
-            it->velocity.z += it->accel.z;
-            if (it->position.y <= 0.0f) {
-                it->timer = 60;
-                it->state = 6;
-                it->position.y = 0.0f;
-            }
-            break;
+        case 5:
+        it->position.x += it->velocity.x;
+        it->position.y += it->velocity.y;
+        it->position.z += it->velocity.z;
+        it->velocity.x += it->accel.x;
+        it->velocity.y += it->accel.y;
+        it->velocity.z += it->accel.z;
+        if (it->position.y <= 0.0f) {
+            it->timer = 60;
+            it->state = 6;
+            it->position.y = 0.0f;
         }
-        case 6: {
-            if (it->timer <= 0) {
-                goto done;
-            }
-            if (it->timer < 30) {
-                if ((it->timer & 3) <= 1) {
-                    it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
-                } else {
-                    it->flags &= ~AUDIENCE_ITEM_FLAG_VISIBLE;
-                }
-            }
-            it->timer--;
-            break;
+        break;
+        case 6:
+        if (it->timer <= 0) {
+            goto done;
         }
-        case 7: {
-            it->timer--;
-            if (it->timer > 0) {
-                break;
+        if (it->timer < 30) {
+            if ((it->timer & 3) <= 1) {
+                it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
+            } else {
+                it->flags &= ~AUDIENCE_ITEM_FLAG_VISIBLE;
             }
+        }
+        it->timer--;
+        break;
+        case 7:
+        it->timer--;
+        if (it->timer > 0) {
+            break;
         }
         done:
             BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_L);

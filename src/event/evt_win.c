@@ -1529,9 +1529,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 } else {
                     icon = ICON_ITEM_COIN;
                 }
-                {
-                    iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, icon, 0.6f);
-                }
+                iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, icon, 0.6f);
             }
             GXGetScissor(&sl, &st, &sw, &sh);
             GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
@@ -1587,9 +1585,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                         color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
                         flag = ICON_FLAG_GRAY;
                     }
-                    {
-                        ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, item->icon_id);
-                    }
+                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, item->icon_id);
                     FontDrawStart();
                     FontDrawScale(0.8f);
                     FontDrawColor(color);
@@ -1683,9 +1679,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                {
-                    iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
-                }
+                iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
             }
             GXGetScissor(&sl, &st, &sw, &sh);
             GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
@@ -1872,9 +1866,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     lv = 1;
                     flag = ICON_FLAG_GRAY;
                 }
-                {
-                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
-                }
+                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
                 FontDrawStart();
                 FontDrawColor(color);
                 sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
@@ -1894,12 +1886,8 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                         icon = ICON_UNAVAILABLE;
                         bob = 0;
                     }
-                    {
-                        ICONGX2(&(Vec){166.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
-                    }
-                    {
-                        ICONGX2(&(Vec){186.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
-                    }
+                    ICONGX2(&(Vec){166.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
+                    ICONGX2(&(Vec){186.0f, bob + (wp->scroll + (56 - row * 24)), 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
                 } else {
                     v = *mario_status_point_table[i] - mario_status_henka_table[i];
                     if (v > 0) {
@@ -1908,9 +1896,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                         icon = ICON_UNAVAILABLE;
                         bob = 0;
                     }
-                    {
-                        ICONGX2(&(Vec){176.0f, (wp->scroll + (56 - row * 24)) - bob, 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
-                    }
+                    ICONGX2(&(Vec){176.0f, (wp->scroll + (56 - row * 24)) - bob, 0.0f}, flag | ICON_FLAG_2D, 0.5f, icon);
                 }
                 if (v > 0) {
                     sprintf(buf, "%3d", v);
@@ -1975,9 +1961,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     lv = 1;
                     j = ICON_FLAG_GRAY;
                 }
-                {
-                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, j | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
-                }
+                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, j | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
                 FontDrawStart();
                 FontDrawColor(color);
                 sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);
@@ -2051,9 +2035,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     lv = 1;
                     flag = ICON_FLAG_GRAY;
                 }
-                {
-                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
-                }
+                ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, mario_status_icon_table[i]);
                 FontDrawStart();
                 FontDrawColor(color);
                 sprintf(buf, "%s%3d", mario_status_name_table[i], *mario_status_point_table[i]);

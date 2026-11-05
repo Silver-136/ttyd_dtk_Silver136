@@ -4444,6 +4444,7 @@ USER_FUNC(chain_main) {
     NpcEntry* prev;
     f32 len, sag, cx, cy, cz, dx, dy, dz, t;
     s32 i;
+    f32 dist;
     dx = me->position.x - end->position.x;
     dy = me->position.y - end->position.y;
     dz = me->position.z - end->position.z;
@@ -4460,10 +4461,8 @@ USER_FUNC(chain_main) {
     dx = me->position.x - cx;
     dy = me->position.y - cy;
     dz = me->position.z - cz;
-    {
-        f32 dist = (f32)sqrt(dx * dx + dy * dy + dz * dz);
-        t = 1.0f - len / dist;
-    }
+    dist = (f32)sqrt(dx * dx + dy * dy + dz * dz);
+    t = 1.0f - len / dist;
     cy = dy * t + cy;
     cx = dx * t + cx;
     cz = dz * t + cz;

@@ -633,6 +633,7 @@ void marioFBattlePrepare(void) {
  */
 void marioFBattlePost(void) {
     MarioWork* wp = mp;
+    PartyEntry* party;
 
     wp->flags &= ~MARIO_FLAG_PRE_BATTLE_PHYSICS;
 #if VERSION >= VERSION_JP
@@ -648,13 +649,11 @@ void marioFBattlePost(void) {
     if (wp->currMotionId == MARIO_MOTION_HAMMER) {
 #else
 #if VERSION >= VERSION_US
-    {
-        PartyEntry* party = partyGetPtr(marioGetPartyId());
-        if (party) {
-            Vec pos;
-            partyGetAppearPos(party, &pos);
-            party->position = pos;
-        }
+    party = partyGetPtr(marioGetPartyId());
+    if (party) {
+        Vec pos;
+        partyGetAppearPos(party, &pos);
+        party->position = pos;
     }
 #endif
     partyCtrlOn();

@@ -293,6 +293,7 @@ void nokonoko_use(PartyEntry* party) {
     f32 qz;
     f32 dz;
     MarioWork* mario = party->playerPtr;
+    f32 lim;
 
     if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && marioKeyOffChk()) {
         marioGetScreenPos(party->position, &sx, &sy, &sz);
@@ -533,14 +534,13 @@ void nokonoko_use(PartyEntry* party) {
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_BACK1), &party->position);
         break;
-    case 51: {
-        f32 lim = party->work.nokonoko.dashed != 0 ? 20.0f : 10.0f;
-        party->moveSpeed += 0.3f * (lim - party->moveSpeed);
-        if (party->moveSpeed >= lim) {
-            party->moveSpeed = lim;
-            if (party->moveDistance < 10.0f) {
-                party->useMotionId = 52;
-            }
+    case 51:
+    lim = party->work.nokonoko.dashed != 0 ? 20.0f : 10.0f;
+    party->moveSpeed += 0.3f * (lim - party->moveSpeed);
+    if (party->moveSpeed >= lim) {
+        party->moveSpeed = lim;
+        if (party->moveDistance < 10.0f) {
+            party->useMotionId = 52;
         }
     }
     case 52:

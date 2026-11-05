@@ -2296,6 +2296,9 @@ USER_FUNC(evt_npc_wait_msec) {
 
     s32 duration;
     OSTime lifetime = event->lifetime;
+    s32 now;
+    u64 elapsed;
+    s32 ms;
     npc->statusFlags |= NPC_STATUS_UPDATE;
 
     if (isFirstCall) {
@@ -2309,12 +2312,10 @@ USER_FUNC(evt_npc_wait_msec) {
         return EVT_RETURN_DONE;
     }
 
-    {
-        s32 now = lifetime;
-        u64 elapsed = now - event->userdata[2];
-        s32 ms = OSTicksToMilliseconds(elapsed);
-        return duration <= ms;
-    }
+    now = lifetime;
+    elapsed = now - event->userdata[2];
+    ms = OSTicksToMilliseconds(elapsed);
+    return duration <= ms;
 }
 
 /** Sets the speech balloon type of NPC args[0] to args[1]. */
@@ -2648,6 +2649,7 @@ USER_FUNC(evt_npc_kamek_move_position) {
     f32 dist1, dist2;
     f32 step;
     s32 sfxFlag;
+    f32 temp;
 
     npc->statusFlags |= NPC_STATUS_UPDATE;
     if (moveFlags & 0x2) {
@@ -2724,20 +2726,15 @@ USER_FUNC(evt_npc_kamek_move_position) {
         }
     }
 
-    {
-        f32 temp;
-        temp = (f32)sin(((6.2831855f * npc->moveDir) / 360.0f));
-        npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
-        temp = (f32)cos(((6.2831855f * npc->moveDir) / 360.0f));
-        npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -temp);
-    }
-    {
-        delta = dist1 - dist2;
+    temp = (f32)sin(((6.2831855f * npc->moveDir) / 360.0f));
+    npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
+    temp = (f32)cos(((6.2831855f * npc->moveDir) / 360.0f));
+    npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -temp);
+    delta = dist1 - dist2;
 
-        temp2 = (f32)sin(3.1415927f * (2.0f * ((delta) / dist1)));
-        temp1 = (f32)sin(3.1415927f * (2.0f * (((npc->moveSpeed * npc->moveDt) + delta) / dist1)));
-        npc->moveOffset.y += (moveOffset * temp1) - (moveOffset * temp2);
-    }
+    temp2 = (f32)sin(3.1415927f * (2.0f * ((delta) / dist1)));
+    temp1 = (f32)sin(3.1415927f * (2.0f * (((npc->moveSpeed * npc->moveDt) + delta) / dist1)));
+    npc->moveOffset.y += (moveOffset * temp1) - (moveOffset * temp2);
 
     if ((moveFlags & 8) == 0) {
         _kamek_houki_kemuri(npc, npc->moveAnimState);

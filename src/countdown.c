@@ -157,6 +157,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
     Mtx mtx;
     Mtx scale;
     Mtx base;
+    GXColor shadow;
     white3 = sWhite;
     white2 = sWhite;
     flags = work->flags;
@@ -173,10 +174,8 @@ static void countDownDisp(CameraId cameraId, void* param) {
         PSMTXTrans(base, work->x + work->offX, work->y + work->offY, 0.0f);
         PSMTXScale(scale, 2.5f, 1.0f, 1.0f);
         PSMTXConcat(base, scale, mtx);
-        {
-            GXColor shadow = sShadow;
-            iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_BG, shadow);
-        }
+        shadow = sShadow;
+        iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_BG, shadow);
         digits[0] = sec / 100;
         sec %= 100;
         digits[1] = sec / 10;

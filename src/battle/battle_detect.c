@@ -35,6 +35,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     BattleWorkTarget* o4;
     s32 np2;
     BattleUnit* u2;
+    s8* idx;
 
     if (d->classFlags & TARGET_CLASS_NONE) {
         d->numTargets = -1;
@@ -391,36 +392,34 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     }
 
     d->numTargets = n;
-    {
-        s8* idx = d->targetIndices;
+    idx = d->targetIndices;
 
-        t = d->targets;
-        n = d->numTargets;
-        for (i = 0; i < n; i++) {
-            idx[i] = i;
-        }
-        if (d->direction > 0) {
-            for (i = 0; i < n - 1; i++) {
-                for (j = i + 1; j < n; j++) {
-                    BattleWorkTarget* ta = &t[idx[i]];
-                    BattleWorkTarget* tb = &t[idx[j]];
-                    if (ta->posX + ta->score * 10 > tb->posX + tb->score * 10) {
-                        s8 a = idx[i];
-                        idx[i] = idx[j];
-                        idx[j] = a;
-                    }
+    t = d->targets;
+    n = d->numTargets;
+    for (i = 0; i < n; i++) {
+        idx[i] = i;
+    }
+    if (d->direction > 0) {
+        for (i = 0; i < n - 1; i++) {
+            for (j = i + 1; j < n; j++) {
+                BattleWorkTarget* ta = &t[idx[i]];
+                BattleWorkTarget* tb = &t[idx[j]];
+                if (ta->posX + ta->score * 10 > tb->posX + tb->score * 10) {
+                    s8 a = idx[i];
+                    idx[i] = idx[j];
+                    idx[j] = a;
                 }
             }
-        } else {
-            for (i = 0; i < n - 1; i++) {
-                for (j = i + 1; j < n; j++) {
-                    BattleWorkTarget* ta = &t[idx[i]];
-                    BattleWorkTarget* tb = &t[idx[j]];
-                    if (ta->posX + ta->score * 10 <= tb->posX + tb->score * 10) {
-                        s8 a = idx[i];
-                        idx[i] = idx[j];
-                        idx[j] = a;
-                    }
+        }
+    } else {
+        for (i = 0; i < n - 1; i++) {
+            for (j = i + 1; j < n; j++) {
+                BattleWorkTarget* ta = &t[idx[i]];
+                BattleWorkTarget* tb = &t[idx[j]];
+                if (ta->posX + ta->score * 10 <= tb->posX + tb->score * 10) {
+                    s8 a = idx[i];
+                    idx[i] = idx[j];
+                    idx[j] = a;
                 }
             }
         }

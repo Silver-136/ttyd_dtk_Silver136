@@ -1868,6 +1868,7 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
     s32 unitLevel = unit->level;
     FieldBattleInfo* fbat = wp->fbatInfo;
     f32 scale;
+    f32 t;
 
     if (level > unitLevel) {
         return 0;
@@ -1889,10 +1890,8 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
             scale = 1.5f;
             break;
     }
-    {
-        f32 t = scale * (f32)(unitLevel - level);
-        return (s32)(t / 2.0f) + unit->kindParams->bonusExp;
-    }
+    t = scale * (f32)(unitLevel - level);
+    return (s32)(t / 2.0f) + unit->kindParams->bonusExp;
 }
 
 /** Coins the enemy drops: its kind's base coins plus one per bonus roll that succeeds at bonusCoinRate percent. */

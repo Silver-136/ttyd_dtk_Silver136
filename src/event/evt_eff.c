@@ -932,23 +932,21 @@ USER_FUNC(evt_eff_fukidashi) {
     NpcEntry* npc;
     PartyEntry* party;
     f32 h;
+    f32 yy;
+    f32 ww;
 
     switch (mode) {
         case FUKIDASHI_AT_MARIO:
             h = marioGetPtr()->wPlayerCollisionBox.y;
-            {
-                f32 yy = 2.0f * h / 3.0f;
-                f32 ww = h / 3.0f;
-                entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_MARIO, 0.0f, yy, 0.0f, ww, angle, duration);
-            }
+            yy = 2.0f * h / 3.0f;
+            ww = h / 3.0f;
+            entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_MARIO, 0.0f, yy, 0.0f, ww, angle, duration);
             break;
         case FUKIDASHI_AT_NPC:
             npc = !strcmp(npcName, "me") ? event->ownerNPC : npcNameToPtr(npcName);
-            {
-                f32 yy = 2.0f * npc->height / 3.0f;
-                f32 ww = npc->height / 3.0f;
-                entry = effFukidashiEntry(type, number, npc, 0.0f, yy, 0.0f, ww, angle, duration);
-            }
+            yy = 2.0f * npc->height / 3.0f;
+            ww = npc->height / 3.0f;
+            entry = effFukidashiEntry(type, number, npc, 0.0f, yy, 0.0f, ww, angle, duration);
             break;
         case FUKIDASHI_AT_POS:
             entry = effFukidashiEntry(type, number, NULL, x, y, z, w, angle, duration);
@@ -979,11 +977,9 @@ USER_FUNC(evt_eff_fukidashi) {
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
                 h = party->height;
-                {
-                    f32 yy = 2.0f * h / 3.0f;
-                    f32 ww = h / 3.0f;
-                    entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_EXTRA_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
-                }
+                yy = 2.0f * h / 3.0f;
+                ww = h / 3.0f;
+                entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_EXTRA_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
             }
             break;
     }

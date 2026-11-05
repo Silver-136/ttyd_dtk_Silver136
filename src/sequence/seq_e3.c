@@ -285,6 +285,7 @@ void seq_e3Main(SequenceWork* seq) {
     s32 idx;
     s32 foundIdx;
     EventData* found;
+    MarioWork* mario;
 
     camera = camGetPtr(CAMERA_3D);
     camera->cameraAt = (Vec){ 0.0f, 0.0f, 0.0f };
@@ -496,11 +497,9 @@ void seq_e3Main(SequenceWork* seq) {
 
             marioPartyKill();
 
-            {
-                MarioWork* mario = marioGetPtr();
-                mario->prevPartyMemberId[0] = 0;
-                mario->prevPartyMemberId[1] = 0;
-            }
+            mario = marioGetPtr();
+            mario->prevPartyMemberId[0] = 0;
+            mario->prevPartyMemberId[1] = 0;
 
             if (found[foundIdx].partners[0]) {
                 marioPartyEntry(found[foundIdx].partners[0]);
@@ -577,12 +576,10 @@ void seq_e3Main(SequenceWork* seq) {
         } break;
     }
 
-    {
-        wp->dstX = e3_tbl[wp->scenario].x;
-        wp->dstY = e3_tbl[wp->scenario].y;
-        wp->curX += (wp->dstX - wp->curX) / 4;
-        wp->curY += (wp->dstY - wp->curY) / 4;
-    }
+    wp->dstX = e3_tbl[wp->scenario].x;
+    wp->dstY = e3_tbl[wp->scenario].y;
+    wp->curX += (wp->dstX - wp->curX) / 4;
+    wp->curY += (wp->dstY - wp->curY) / 4;
 #endif
 #else
         } break;

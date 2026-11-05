@@ -727,6 +727,9 @@ void npcMain(void) {
     f32 dist;
     Vec dv;
     Vec dv2;
+    FirstStrikeInfo* firstStrike;
+    s32 marioFindable;
+    f32 speedScale;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;
 #if VERSION >= VERSION_JP
@@ -783,72 +786,67 @@ void npcMain(void) {
                     entry->statusFlags &= ~NPC_STATUS_WAS_IN_WATER;
                 }
                 entry->statusFlags &= ~NPC_STATUS_IN_WATER;
-                {
-                    f32 speedScale;
-                    if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
-                        entry->statusFlags |= NPC_STATUS_IN_WATER;
-                        if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
-                            psndSFXOn_3D(kpaSfx, &entry->position);
+                if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
+                    entry->statusFlags |= NPC_STATUS_IN_WATER;
+                    if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
+                        psndSFXOn_3D(kpaSfx, &entry->position);
+                    }
+                }
+                if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
+                    entry->maxFallSpeed = 100.0f;
+                    speedScale = 0.5f;
+                } else {
+                    speedScale = 1.0f;
+                }
+                if (entry->statusFlags & NPC_STATUS_IN_WATER) {
+                    entry->hazardFlags |= KPA_ENCOUNT_STOMP;
+                }
+                if (entry->statusFlags & NPC_STATUS_UPDATE) {
+                    if (entry->moveDt > 0.0f) {
+                        f32 mx = entry->moveOffset.x;
+                        f32 mz = entry->moveOffset.z;
+                        if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
+                            mx *= 0.5f;
+                            mz *= 0.5f;
                         }
-                    }
-                    if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
-                        entry->maxFallSpeed = 100.0f;
-                        speedScale = 0.5f;
-                    } else {
-                        speedScale = 1.0f;
-                    }
-                    if (entry->statusFlags & NPC_STATUS_IN_WATER) {
-                        entry->hazardFlags |= KPA_ENCOUNT_STOMP;
-                    }
-                    if (entry->statusFlags & NPC_STATUS_UPDATE) {
-                        if (entry->moveDt > 0.0f) {
-                            f32 mx = entry->moveOffset.x;
-                            f32 mz = entry->moveOffset.z;
-                            if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
-                                mx *= 0.5f;
-                                mz *= 0.5f;
-                            }
-                            if (entry->flags & NPC_FLAG_2D) {
-                                mz = 0.0f;
-                            }
-                            if (entry->flags & NPC_FLAG_NO_WALL_COLLISION) {
-                                entry->position.x += mx;
-                                entry->position.z += mz;
-                            } else {
+                        if (entry->flags & NPC_FLAG_2D) {
+                            mz = 0.0f;
+                        }
+                        if (entry->flags & NPC_FLAG_NO_WALL_COLLISION) {
+                            entry->position.x += mx;
+                            entry->position.z += mz;
+                        } else {
 #if VERSION >= VERSION_US
-                                npcMoveSide(entry, mx, mz);
+                            npcMoveSide(entry, mx, mz);
 #else
-                                entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
-                                                                        &entry->moveDir, mx, mz);
+                            entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
+                                                                    &entry->moveDir, mx, mz);
 #endif
+                        }
+                        entry->moveOffset.x = 0.0f;
+                        entry->moveOffset.z = 0.0f;
+                        npcMoveG(entry);
+                    }
+                    if (!(entry->flags & NPC_FLAG_ENEMY) && !(entry->flags & NPC_FLAG_NO_HIT) && !(entry->flags & NPC_FLAG_NO_PUSH_MARIO_UNUSED)) {
+                        npcCheckHitMarioSide(entry);
+                    }
+                    PSVECSubtract(&entry->position, &entry->prevPosition, &dv);
+                    if (entry->flags & NPC_FLAG_AUTO_MOVE_ANIM && entry->moveDt > 0.0f) {
+                        f32 spd = sqrtf(dv.x * dv.x + dv.z * dv.z) / entry->moveDt;
+                        if (spd < 0.1f) {
+                            if (entry->moveAnimState != 1) {
+                                animPoseSetAnim(entry->poseId, entry->tribe->stayAnim, TRUE);
+                                entry->moveAnimState = 1;
                             }
-                            entry->moveOffset.x = 0.0f;
-                            entry->moveOffset.z = 0.0f;
-                            npcMoveG(entry);
-                        }
-                        if (!(entry->flags & NPC_FLAG_ENEMY) && !(entry->flags & NPC_FLAG_NO_HIT) && !(entry->flags & NPC_FLAG_NO_PUSH_MARIO_UNUSED)) {
-                            npcCheckHitMarioSide(entry);
-                        }
-                        {
-                            PSVECSubtract(&entry->position, &entry->prevPosition, &dv);
-                            if (entry->flags & NPC_FLAG_AUTO_MOVE_ANIM && entry->moveDt > 0.0f) {
-                                f32 spd = sqrtf(dv.x * dv.x + dv.z * dv.z) / entry->moveDt;
-                                if (spd < 0.1f) {
-                                    if (entry->moveAnimState != 1) {
-                                        animPoseSetAnim(entry->poseId, entry->tribe->stayAnim, TRUE);
-                                        entry->moveAnimState = 1;
-                                    }
-                                } else if (spd < entry->tribe->runStartSpeed * speedScale) {
-                                    if (entry->moveAnimState != 2) {
-                                        animPoseSetAnim(entry->poseId, entry->tribe->walkAnimation, TRUE);
-                                        entry->moveAnimState = 2;
-                                    }
-                                } else {
-                                    if (entry->moveAnimState != 3) {
-                                        animPoseSetAnim(entry->poseId, entry->tribe->runAnimation, TRUE);
-                                        entry->moveAnimState = 3;
-                                    }
-                                }
+                        } else if (spd < entry->tribe->runStartSpeed * speedScale) {
+                            if (entry->moveAnimState != 2) {
+                                animPoseSetAnim(entry->poseId, entry->tribe->walkAnimation, TRUE);
+                                entry->moveAnimState = 2;
+                            }
+                        } else {
+                            if (entry->moveAnimState != 3) {
+                                animPoseSetAnim(entry->poseId, entry->tribe->runAnimation, TRUE);
+                                entry->moveAnimState = 3;
                             }
                         }
                     }
@@ -913,51 +911,48 @@ void npcMain(void) {
                                 }
                             }
                             trig = 0;
-                            {
-                                s32 marioFindable;
-                                do {
-                                    m = marioGetPtr();
-                                    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (gp->mapEventId != 0) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (seqGetSeq() != SEQ_GAME) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->currMotionId == MARIO_MOTION_SHIP) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
-                                        marioFindable = 0;
-                                    } else {
-                                        marioFindable = 1;
-                                    }
-                                } while (0);
-                                if (!marioFindable) {
-                                    trig = 1;
+                            do {
+                                m = marioGetPtr();
+                                if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (gp->mapEventId != 0) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (seqGetSeq() != SEQ_GAME) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (m->currMotionId == MARIO_MOTION_SHIP) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
+                                    marioFindable = 0;
                                 } else {
-                                    dist = sqrtf(dx * dx + dz * dz);
-                                    if (dist > 0.25f * entry->homingRange) {
-                                        if (dy > entry->territoryLoiter.y) {
-                                            trig = 1;
-                                        } else if (-dy > entry->territoryHoming.y) {
-                                            trig = 1;
-                                        } else if (dist > entry->homingRange) {
-                                            trig = 1;
-                                        } else if ((dist = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, dist))) >
-                                                   0.5f * entry->homingAngle) {
-                                            trig = 1;
-                                        }
+                                    marioFindable = 1;
+                                }
+                            } while (0);
+                            if (!marioFindable) {
+                                trig = 1;
+                            } else {
+                                dist = sqrtf(dx * dx + dz * dz);
+                                if (dist > 0.25f * entry->homingRange) {
+                                    if (dy > entry->territoryLoiter.y) {
+                                        trig = 1;
+                                    } else if (-dy > entry->territoryHoming.y) {
+                                        trig = 1;
+                                    } else if (dist > entry->homingRange) {
+                                        trig = 1;
+                                    } else if ((dist = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, dist))) >
+                                               0.5f * entry->homingAngle) {
+                                        trig = 1;
                                     }
                                 }
                             }
@@ -996,77 +991,72 @@ void npcMain(void) {
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
-                            {
-                                s32 marioFindable;
-                                do {
-                                    m = marioGetPtr();
-                                    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (gp->mapEventId != 0) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (seqGetSeq() != SEQ_GAME) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->currMotionId == MARIO_MOTION_SHIP) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
-                                        marioFindable = 0;
-                                    } else {
-                                        marioFindable = 1;
-                                    }
-                                } while (0);
-                                if (!marioFindable) {
-                                    trig = 0;
+                            do {
+                                m = marioGetPtr();
+                                if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (gp->mapEventId != 0) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (seqGetSeq() != SEQ_GAME) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (m->currMotionId == MARIO_MOTION_SHIP) {
+                                    marioFindable = 0;
+                                    break;
+                                }
+                                if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
+                                    marioFindable = 0;
                                 } else {
-                                    f32 angleToMario;
+                                    marioFindable = 1;
+                                }
+                            } while (0);
+                            if (!marioFindable) {
+                                trig = 0;
+                            } else {
+                                f32 angleToMario;
 #if VERSION >= VERSION_US
-                                    if (sd > 0.25f * entry->searchRange) {
-                                        if (sd > entry->searchRange) {
+                                if (sd > 0.25f * entry->searchRange) {
+                                    if (sd > entry->searchRange) {
 #else
-                                    dist = sqrtf(dist);
-                                    if (dist > 0.25f * entry->searchRange) {
-                                        if (dist > entry->searchRange) {
+                                dist = sqrtf(dist);
+                                if (dist > 0.25f * entry->searchRange) {
+                                    if (dist > entry->searchRange) {
 #endif
-                                            trig = 0;
-                                            goto done14;
-                                        } else if ((angleToMario = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, angleToMario))) >
-                                                   0.5f * entry->searchAngle) {
-                                            trig = 0;
-                                            goto done14;
-                                        }
+                                        trig = 0;
+                                        goto done14;
+                                    } else if ((angleToMario = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, angleToMario))) >
+                                               0.5f * entry->searchAngle) {
+                                        trig = 0;
+                                        goto done14;
                                     }
-                                    {
-                                        if (dy > entry->territoryLoiter.y) {
+                                }
+                                if (dy > entry->territoryLoiter.y) {
+                                    trig = 0;
+                                } else if (-dy > entry->territoryHoming.y) {
+                                    trig = 0;
+                                } else if (st == NPC_EVENT_RETURN) {
+                                    if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
+                                        f32 tz = entry->territoryBase.z - entry->position.z;
+                                        f32 tx = entry->territoryBase.x - entry->position.x;
+                                        f32 d = sqrtf(tx * tx + tz * tz);
+                                        if (d > 0.75 * entry->territoryHoming.x) {
                                             trig = 0;
-                                        } else if (-dy > entry->territoryHoming.y) {
+                                        }
+                                    } else {
+                                        if (entry->position.x < entry->territoryBase.x - 0.75f * entry->territoryHoming.x ||
+                                            entry->position.x > entry->territoryBase.x + 0.75f * entry->territoryHoming.x ||
+                                            entry->position.z < entry->territoryBase.z - 0.75f * entry->territoryHoming.z ||
+                                            entry->position.z > entry->territoryBase.z + 0.75f * entry->territoryHoming.z) {
                                             trig = 0;
-                                        } else if (st == NPC_EVENT_RETURN) {
-                                            if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
-                                                f32 tz = entry->territoryBase.z - entry->position.z;
-                                                f32 tx = entry->territoryBase.x - entry->position.x;
-                                                f32 d = sqrtf(tx * tx + tz * tz);
-                                                if (d > 0.75 * entry->territoryHoming.x) {
-                                                    trig = 0;
-                                                }
-                                            } else {
-                                                if (entry->position.x < entry->territoryBase.x - 0.75f * entry->territoryHoming.x ||
-                                                    entry->position.x > entry->territoryBase.x + 0.75f * entry->territoryHoming.x ||
-                                                    entry->position.z < entry->territoryBase.z - 0.75f * entry->territoryHoming.z ||
-                                                    entry->position.z > entry->territoryBase.z + 0.75f * entry->territoryHoming.z) {
-                                                    trig = 0;
-                                                }
-                                            }
                                         }
                                     }
                                 }
@@ -1189,74 +1179,72 @@ void npcMain(void) {
     }
 
     fbat = gp->fbatData;
-    {
-        FirstStrikeInfo* firstStrike = &fbat->firstStrike;
-        if (firstStrike->enabled) {
-            switch (firstStrike->type) {
-                case FIRST_STRIKE_MARIO:
+    firstStrike = &fbat->firstStrike;
+    if (firstStrike->enabled) {
+        switch (firstStrike->type) {
+            case FIRST_STRIKE_MARIO:
 #if VERSION <= VERSION_DEMO_JP
-                    (firstStrike->timer)++;
-                    if (firstStrike->timer < 30) {
-                        firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
-                    } else if (firstStrike->timer < 150) {
-                        firstStrike->x = 0.0f;
-                    } else if (firstStrike->timer < 180) {
-                        firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
-#else
-                    firstStrike->timer++;
-                    if (firstStrike->timer < 20) {
-                        firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 20);
-                    } else if (firstStrike->timer < 80) {
-                        firstStrike->x = 0.0f;
-                    } else if (firstStrike->timer < 100) {
-                        firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
-#endif
-                    } else {
-                        firstStrike->hitKind = 0;
-                        break;
-                    }
-                    firstStrike->y = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-                    dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
-                    break;
-                case FIRST_STRIKE_ENEMY:
-                    (firstStrike->timer)++;
-#else
-                    dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
-                    break;
-                case FIRST_STRIKE_ENEMY:
-                    firstStrike->timer++;
-#endif
-                    if (firstStrike->timer > 60) {
-                        firstStrike->hitKind = 0;
-                        break;
-                    }
+                (firstStrike->timer)++;
+                if (firstStrike->timer < 30) {
+                    firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
+                } else if (firstStrike->timer < 150) {
                     firstStrike->x = 0.0f;
-                    firstStrike->y = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-                    dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+                } else if (firstStrike->timer < 180) {
+                    firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
 #else
-                    dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+                firstStrike->timer++;
+                if (firstStrike->timer < 20) {
+                    firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 20);
+                } else if (firstStrike->timer < 80) {
+                    firstStrike->x = 0.0f;
+                } else if (firstStrike->timer < 100) {
+                    firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
 #endif
+                } else {
+                    firstStrike->hitKind = 0;
                     break;
-            }
+                }
+                firstStrike->y = 0.0f;
+#if VERSION <= VERSION_DEMO_JP
+                dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+                break;
+            case FIRST_STRIKE_ENEMY:
+                (firstStrike->timer)++;
+#else
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+                break;
+            case FIRST_STRIKE_ENEMY:
+                firstStrike->timer++;
+#endif
+                if (firstStrike->timer > 60) {
+                    firstStrike->hitKind = 0;
+                    break;
+                }
+                firstStrike->x = 0.0f;
+                firstStrike->y = 0.0f;
+#if VERSION <= VERSION_DEMO_JP
+                dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+#else
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+#endif
+                break;
         }
-        switch (fbat->mode) {
-            case FBAT_MODE_FIELD:
-                npcKoopaModeMain();
-                break;
-            case FBAT_MODE_TALK:
-            case FBAT_MODE_REACTION_TALK:
-                fbatTalkMode();
-                break;
-            case FBAT_MODE_BATTLE:
-                fbatBattleMode();
-                break;
-            case 6:
-                break;
-        }
-        fbat->sandersBombTrigger = 0;
     }
+    switch (fbat->mode) {
+        case FBAT_MODE_FIELD:
+            npcKoopaModeMain();
+            break;
+        case FBAT_MODE_TALK:
+        case FBAT_MODE_REACTION_TALK:
+            fbatTalkMode();
+            break;
+        case FBAT_MODE_BATTLE:
+            fbatBattleMode();
+            break;
+        case 6:
+            break;
+    }
+    fbat->sandersBombTrigger = 0;
 }
 
 #if VERSION >= VERSION_US
@@ -2701,6 +2689,7 @@ void* fbatHitCheck(u32 flags, void* result) {
     FbatHitResult res;
     MarioWork* mario;
     NpcWork* wp = npcGetWorkPtrInline();
+    SinTbl tbl;
 
     mario = marioGetPtr();
     res.kind = 0;
@@ -2852,13 +2841,11 @@ void* fbatHitCheck(u32 flags, void* result) {
                 if (v > 20) v = 10;
                 f = v;
                 m = marioGetPtr();
-                {
-                    SinTbl tbl = sSinTbl;
-                    if (f < 0.0f) f = 0.0f;
-                    if (f >= 11.0f) f = 10.0f;
-                    sincosf(&s1, &c1, angle);
-                    sincosf(&s2, &c2, tbl.v[(s32)f]);
-                }
+                tbl = sSinTbl;
+                if (f < 0.0f) f = 0.0f;
+                if (f >= 11.0f) f = 10.0f;
+                sincosf(&s1, &c1, angle);
+                sincosf(&s2, &c2, tbl.v[(s32)f]);
                 x = m->position.x + s2 * (s1 * r);
                 z = m->position.z + s2 * (c1 * r);
                 y = m->position.y + r * c2;

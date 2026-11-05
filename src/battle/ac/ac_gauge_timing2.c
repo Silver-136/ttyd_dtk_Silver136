@@ -142,24 +142,20 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
             gw->frame2++;
             gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
-            {
-                sfxNames[0] = "SFX_AC_COMMAND_NG1";
-                for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
-                    if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
-                        gw->state[i3] = -1;
-                        psndSFXOn(sfxNames[0]);
-                    }
+            sfxNames[0] = "SFX_AC_COMMAND_NG1";
+            for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
+                if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
+                    gw->state[i3] = -1;
+                    psndSFXOn(sfxNames[0]);
                 }
             }
             gw->hit = 0;
-            {
-                sfxNames[1] = "SFX_AC_PONE1";
-                for (i = 0; i < work->actionCommands.params[2]; i++) {
-                    if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
-                        gw->hit = 1;
-                        if (gw->sfx[i] == (-1)) {
-                            gw->sfx[i] = psndSFXOn(sfxNames[1]);
-                        }
+            sfxNames[1] = "SFX_AC_PONE1";
+            for (i = 0; i < work->actionCommands.params[2]; i++) {
+                if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
+                    gw->hit = 1;
+                    if (gw->sfx[i] == (-1)) {
+                        gw->sfx[i] = psndSFXOn(sfxNames[1]);
                     }
                 }
             }
@@ -333,6 +329,11 @@ static void actionCommandDisp(f32 x, f32 y) {
     Vec pos;
     Vec d0;
     Vec d1;
+    Mtx m3;
+    Mtx m1;
+    Mtx m2;
+    s32 num;
+    f32 y4;
 
     camGetPtr(CAMERA_2D);
     gw = (GT2Work*)ac->work;
@@ -429,34 +430,27 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 
     y1 = 25.0f + y;
-    {
-        f32 y4 = y1 - 25.0f;
-        for (i = 0; i < ac->params[2]; i++) {
-            switch (gw->state[i]) {
-                case 1:
-                    id = BTL_TEX(0x3E);
-                    break;
-                case -1:
-                    id = BTL_TEX(0x3F);
-                    break;
-                default:
-                    id = BTL_TEX(0x45);
-                    break;
-            }
-            if ((u16)id != BTL_TEX(0x45)) {
-                btlDispTexPlane(-288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
-            }
+    y4 = y1 - 25.0f;
+    for (i = 0; i < ac->params[2]; i++) {
+        switch (gw->state[i]) {
+            case 1:
+                id = BTL_TEX(0x3E);
+                break;
+            case -1:
+                id = BTL_TEX(0x3F);
+                break;
+            default:
+                id = BTL_TEX(0x45);
+                break;
+        }
+        if ((u16)id != BTL_TEX(0x45)) {
+            btlDispTexPlane(-288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
         }
     }
 
-    {
-        Mtx m3;
-        Mtx m1;
-        Mtx m2;
-        s32 num = ac->outputParams[0] + ac->params[3];
-        PSMTXTrans(m1, -200.0f + x + ((f32)gw->width) - 60.0f, y1, 0.0f);
-        PSMTXScale(m2, 1.0f, 1.0f, 1.0f);
-        PSMTXConcat(m1, m2, m3);
-        iconNumberDispGx(m3, num, FALSE, (GXColor){255, 255, 255, 255});
-    }
+    num = ac->outputParams[0] + ac->params[3];
+    PSMTXTrans(m1, -200.0f + x + ((f32)gw->width) - 60.0f, y1, 0.0f);
+    PSMTXScale(m2, 1.0f, 1.0f, 1.0f);
+    PSMTXConcat(m1, m2, m3);
+    iconNumberDispGx(m3, num, FALSE, (GXColor){255, 255, 255, 255});
 }

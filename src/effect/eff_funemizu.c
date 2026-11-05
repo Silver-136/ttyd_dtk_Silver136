@@ -345,6 +345,10 @@ static inline void funemizuCallDL(u32 *p_u) {
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
+    s32 r;
+    s32 g;
+    s32 b;
+
 #else
 void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
@@ -379,30 +383,26 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
         // FAKE: unprototyped call: the SDK u16 parameters would add two narrowings (FAKES.md)
         ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
         if (type == 0) {
-            {
-                s32 r = funemizu_color0_tbl[0];
-                s32 g = funemizu_color0_tbl[1];
-                s32 b = funemizu_color0_tbl[2];
-                r += (argb[1] - r) / 16;
-                g += (argb[2] - g) / 16;
-                b += (argb[3] - b) / 16;
-                funemizu_color0_tbl[0] = r;
-                funemizu_color0_tbl[1] = g;
-                funemizu_color0_tbl[2] = b;
-            }
+            r = funemizu_color0_tbl[0];
+            g = funemizu_color0_tbl[1];
+            b = funemizu_color0_tbl[2];
+            r += (argb[1] - r) / 16;
+            g += (argb[2] - g) / 16;
+            b += (argb[3] - b) / 16;
+            funemizu_color0_tbl[0] = r;
+            funemizu_color0_tbl[1] = g;
+            funemizu_color0_tbl[2] = b;
             DCFlushRange(funemizu_color0_tbl, 4);
         } else {
-            {
-                s32 r = gor_fune_color0_tbl[0];
-                s32 g = gor_fune_color0_tbl[1];
-                s32 b = gor_fune_color0_tbl[2];
-                r += (argb[1] - r) / 16;
-                g += (argb[2] - g) / 16;
-                b += (argb[3] - b) / 16;
-                gor_fune_color0_tbl[0] = r;
-                gor_fune_color0_tbl[1] = g;
-                gor_fune_color0_tbl[2] = b;
-            }
+            r = gor_fune_color0_tbl[0];
+            g = gor_fune_color0_tbl[1];
+            b = gor_fune_color0_tbl[2];
+            r += (argb[1] - r) / 16;
+            g += (argb[2] - g) / 16;
+            b += (argb[3] - b) / 16;
+            gor_fune_color0_tbl[0] = r;
+            gor_fune_color0_tbl[1] = g;
+            gor_fune_color0_tbl[2] = b;
             DCFlushRange(gor_fune_color0_tbl, 4);
         }
     }

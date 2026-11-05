@@ -604,6 +604,7 @@ void effRecoveryDisp(CameraId cameraId, void* param) {
     Mtx rotMtx;
     Mtx scaleMtx;
     Mtx base;
+    u32 k;
 
     cam = camGetPtr(cameraId);
     type = work->type;
@@ -679,10 +680,8 @@ void effRecoveryDisp(CameraId cameraId, void* param) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     for (i = 1; i < effect->count; i++, p++) {
 #if VERSION <= VERSION_DEMO_JP
-        {
-            u32 k = (i + gp->retraceCount) % 12;
-            color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], p->alpha };
-        }
+        k = (i + gp->retraceCount) % 12;
+        color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], p->alpha };
 #else
         c = &color_rotation_data[((i + gp->retraceCount) % 12) * 3];
         color = (GXColor){ c[0], c[1], c[2], p->alpha };
@@ -874,6 +873,7 @@ void effRecoveryDisp4(CameraId cameraId, void* param) {
     f32 v;
     f32 u;
     f32 off;
+    u32 k;
 
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
@@ -904,10 +904,8 @@ void effRecoveryDisp4(CameraId cameraId, void* param) {
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha * work->alpha / 255 });
             } else {
 #if VERSION <= VERSION_DEMO_JP
-                {
-                    u32 k = (i + gp->retraceCount) % 12;
-                    color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], alpha * work->alpha / 255 };
-                }
+                k = (i + gp->retraceCount) % 12;
+                color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], alpha * work->alpha / 255 };
 #else
                 c = &color_rotation_data[((i + gp->retraceCount) % 12) * 3];
                 color = (GXColor){ c[0], c[1], c[2], alpha * work->alpha / 255 };

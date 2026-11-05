@@ -997,6 +997,9 @@ static void disp_proc(CameraId cameraId, void* param) {
     Mtx scale;
     Mtx mtx;
     char buf[0x100];
+    f32 sy;
+    f32 sh;
+    f32 nw;
 
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         dt = fighterDt;
@@ -1033,11 +1036,9 @@ static void disp_proc(CameraId cameraId, void* param) {
 #endif
     sx = 304.0f + x;
     sw = winW;
-    {
-        f32 sy = 145.0f;
-        f32 sh = 220.0f;
-        GXSetScissor(sx, (u16)sy, sw, (u16)sh);
-    }
+    sy = 145.0f;
+    sh = 220.0f;
+    GXSetScissor(sx, (u16)sy, sw, (u16)sh);
     rank = 0;
     yoff = 0;
     for (i = 0; i < rank_wp->count; i++) {
@@ -1073,20 +1074,17 @@ static void disp_proc(CameraId cameraId, void* param) {
                 FontDrawColor(color);
             }
 #if VERSION >= VERSION_US
-            {
-                f32 nw;
-                name = msgSearch(dt[rank_wp->entries[i].id].name);
-                nw = FontGetMessageWidth(name);
+            name = msgSearch(dt[rank_wp->entries[i].id].name);
+            nw = FontGetMessageWidth(name);
 
-                tx = 40.0f + tx;
-                PSMTXTrans(mtx, tx, y, 0.0f);
+            tx = 40.0f + tx;
+            PSMTXTrans(mtx, tx, y, 0.0f);
+            PSMTXConcat(mtx, scale, mtx);
+            if (nw > 220.0f) {
+                PSMTXScale(scale, 220.0f / nw, 1.0f, 1.0f);
                 PSMTXConcat(mtx, scale, mtx);
-                if (nw > 220.0f) {
-                    PSMTXScale(scale, 220.0f / nw, 1.0f, 1.0f);
-                    PSMTXConcat(mtx, scale, mtx);
-                }
-                FontDrawMessageMtx(mtx, name);
             }
+            FontDrawMessageMtx(mtx, name);
 #else
             tx = 40.0f + tx;
             PSMTXTrans(mtx, tx, y, 0.0f);
@@ -1097,11 +1095,9 @@ static void disp_proc(CameraId cameraId, void* param) {
             yoff += 20;
         }
     }
-    {
-        f32 sy = 137.0f;
-        f32 sh = 228.0f;
-        GXSetScissor(sx, (u16)sy, sw, (u16)sh);
-    }
+    sy = 137.0f;
+    sh = 228.0f;
+    GXSetScissor(sx, (u16)sy, sw, (u16)sh);
     {
         f32 yy = 95.0f + dwp->scroll;
         Vec pos = {0.0f, 0.0f, 0.0f};
@@ -2804,9 +2800,7 @@ void monitor_tev(MapTevCallbackInfo* info) {
         GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_TEXC, GX_CC_CPREV, GX_CC_A0, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        {
-            GXSetTevColor(GX_TEVREG0, tou_mkcolor(gans_wp->alpha));
-        }
+        GXSetTevColor(GX_TEVREG0, tou_mkcolor(gans_wp->alpha));
         info->tevStage = 2;
         info->texCoord = 2;
         info->texMap = 2;

@@ -895,6 +895,7 @@ static void disp_2D(CameraId cam, void* param) {
     f32 x;
     DekaTiming* t;
     s32 i;
+    s32 id;
 
     left = w->gaugePos.x - 0.5f * w->gaugeW - 8.0f;
     right = 8.0f + (w->gaugePos.x + 0.5f * w->gaugeW);
@@ -951,15 +952,12 @@ static void disp_2D(CameraId cam, void* param) {
                     PSMTXScale(sc, 0.75f, 0.75f, 0.75f);
                     PSMTXTrans(tr, x, w->offsetY + (w->gaugePos.y - 18.0f + t->off.y), w->gaugePos.z + t->off.z);
                     PSMTXConcat(tr, sc, m);
-                    {
-                        s32 id;
-                        if (w->cursor >= t->pos - 7.0f) {
-                            id = ICON_AC_ON;
-                        } else {
-                            id = ICON_AC_OFF;
-                        }
-                        iconDispGxCol(m, ICON_FLAG_2D, id, col);
+                    if (w->cursor >= t->pos - 7.0f) {
+                        id = ICON_AC_ON;
+                    } else {
+                        id = ICON_AC_OFF;
                     }
+                    iconDispGxCol(m, ICON_FLAG_2D, id, col);
                 } else {
                     PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
                     PSMTXTrans(tr, x, w->offsetY + (w->gaugePos.y + t->off.y), w->gaugePos.z + t->off.z);
@@ -1002,6 +1000,7 @@ void yuka_capture(CameraId cam, void* param) {
     Vec c;
     DekaWork* w = get_ptr();
     CameraEntry* camera = camGetPtr(cam);
+    f32 t;
 
     memcpy(&save, camGetPtr(cam), sizeof(CameraEntry));
     c.x = (w->min.x + w->max.x) / 2.0f;
@@ -1010,10 +1009,8 @@ void yuka_capture(CameraId cam, void* param) {
     camera->cameraUp = (Vec){0.0f, 0.0f, -1.0f};
     camera->cameraPos = c;
     camera->cameraAt = camera->cameraPos;
-    {
-        f32 t = tan(0.21816616f);
-        camera->cameraPos.y += (f32)w->h0 / 2 / t;
-    }
+    t = tan(0.21816616f);
+    camera->cameraPos.y += (f32)w->h0 / 2 / t;
     C_MTXLookAt(camera->view, &camera->cameraPos, &camera->cameraUp, &camera->cameraAt);
     C_MTXPerspective(camera->projection, 25.0f, (f32)w->w0 / (f32)w->h0, 1.0f, 32767.0f);
     camera->projType = GX_PERSPECTIVE;

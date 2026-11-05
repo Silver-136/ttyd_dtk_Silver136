@@ -279,6 +279,13 @@ void mot_jabara(void) {
     f32 rr;
     f32 spd;
     void* land;
+    BOOL hit;
+    f32 moveX;
+    s32 st;
+    BOOL changed;
+    f32 step;
+    MarioWork* mp;
+    BOOL found;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -389,30 +396,26 @@ void mot_jabara(void) {
         if (mario->position.y == mario->basePos.y) {
             camFollowYOff();
         }
-        {
-            BOOL found = FALSE;
-            v74 = mario->position;
-            headDist = 25.0f;
-            if (marioSearchHead(&v74, &headDist, 200.0f)) {
-                if (!(mario->buttonHold & PAD_BUTTON_A)) {
-                    marioGetPtr()->motJabara->headBlockTimer++;
-                    if (marioGetPtr()->motJabara->headBlockTimer > sysMsec2Frame(5000)) {
-                        found = TRUE;
-                    }
-                }
-                if (!found) {
-                    break;
+        found = FALSE;
+        v74 = mario->position;
+        headDist = 25.0f;
+        if (marioSearchHead(&v74, &headDist, 200.0f)) {
+            if (!(mario->buttonHold & PAD_BUTTON_A)) {
+                marioGetPtr()->motJabara->headBlockTimer++;
+                if (marioGetPtr()->motJabara->headBlockTimer > sysMsec2Frame(5000)) {
+                    found = TRUE;
                 }
             }
-            if (!found && (mario->buttonHold & PAD_BUTTON_A) && !(mario->buttonUp & PAD_BUTTON_A)) {
+            if (!found) {
                 break;
             }
         }
-        {
-            MarioWork* mp = marioGetPtr();
-            mp->camShiftTargetZ = 0.0f;
-            mp->camShiftRate.z = 0.01f;
+        if (!found && (mario->buttonHold & PAD_BUTTON_A) && !(mario->buttonUp & PAD_BUTTON_A)) {
+            break;
         }
+        mp = marioGetPtr();
+        mp->camShiftTargetZ = 0.0f;
+        mp->camShiftRate.z = 0.01f;
         camFollowYOff();
         marioChgPose("M_J_5A");
         marioChgPaper("PM_J_1C");
@@ -584,79 +587,76 @@ void mot_jabara(void) {
         mario->currSubMotionId = 0x32;
         mario->mot.jabara.animFrame = 0;
         marioGetPtr()->motJabara->swingDrift = 0.0f;
-    case 0x32: {
-        BOOL changed;
-        f32 step;
-        ANIM_STEP();
-        changed = FALSE;
-        if (mario->mot.jabara.animFrame >= 0x23 && mario->mot.jabara.animFrame <= 0x62) {
-            step = (180.0f == mario->displayDirectionTarget) ? 0.6f : -0.6f;
-            if (step != marioGetPtr()->motJabara->wobbleDir) {
-                marioGetPtr()->motJabara->wobbleCount++;
-                changed = TRUE;
-            }
-            marioGetPtr()->motJabara->wobbleDir = step;
-        } else {
-            step = (180.0f == mario->displayDirectionTarget) ? -0.6f : 0.6f;
-            if (step != marioGetPtr()->motJabara->wobbleDir) {
-                marioGetPtr()->motJabara->wobbleCount++;
-                changed = TRUE;
-            }
-            marioGetPtr()->motJabara->wobbleDir = step;
+    case 0x32:
+    ANIM_STEP();
+    changed = FALSE;
+    if (mario->mot.jabara.animFrame >= 0x23 && mario->mot.jabara.animFrame <= 0x62) {
+        step = (180.0f == mario->displayDirectionTarget) ? 0.6f : -0.6f;
+        if (step != marioGetPtr()->motJabara->wobbleDir) {
+            marioGetPtr()->motJabara->wobbleCount++;
+            changed = TRUE;
         }
-        if (changed) {
-            if (marioGetPtr()->motJabara->wobbleCount == 1) {
-                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS4), &mario->position);
-            } else if (marioGetPtr()->motJabara->wobbleCount == 2) {
-                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS5), &mario->position);
-            } else if (marioGetPtr()->motJabara->wobbleCount == 3) {
-                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS6), &mario->position);
-            }
+        marioGetPtr()->motJabara->wobbleDir = step;
+    } else {
+        step = (180.0f == mario->displayDirectionTarget) ? -0.6f : 0.6f;
+        if (step != marioGetPtr()->motJabara->wobbleDir) {
+            marioGetPtr()->motJabara->wobbleCount++;
+            changed = TRUE;
         }
-        mario->dispOfs.x += step * (f32)cos(3.1415927f * mario->targetYaw / 180.0f);
-        mario->dispOfs.z += step * (f32)sin(3.1415927f * mario->targetYaw / 180.0f);
-        step = -1.0f * (f32)sin(1.5707963705062866);
-        {
-            HitEntry* land = marioChkLandon2(&hitY, step, mario->dispOfs.y);
-            if (land == NULL) {
-                mario->position.y += step;
-#if VERSION >= VERSION_JP
-                if ((f32)mario->screenY > 480.0f) {
-                    camFollowYOn();
-                }
-#endif
-                if (++mario->mot.jabara.animFrame > 0x78) {
-                    mario->mot.jabara.animFrame = 0;
-                }
-                if (mario->buttonTrg & PAD_BUTTON_B) {
-#if VERSION >= VERSION_JP
-                    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-                    mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-                    marioPaperOff();
-                    marioGetPtr();
-#endif
-                    allPartyRideOff();
-#if VERSION <= VERSION_DEMO_JP
-                    if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
-                        marioPaperOff();
-                    }
-                    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-                    marioGetPtr();
-#endif
-                    jabTail(TRUE);
-                    return;
-                }
-            } else {
-                mario->hitobjStandOn = land;
-                mario->hitobjJumpFrom = NULL;
-                mario->position.y = hitY;
-                mario->currSubMotionId = 0x34;
-                mario->mot.jabara.animFrame = 0;
-                mario->multiTimer = 0x14;
-            }
-        }
-        break;
+        marioGetPtr()->motJabara->wobbleDir = step;
     }
+    if (changed) {
+        if (marioGetPtr()->motJabara->wobbleCount == 1) {
+            psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS4), &mario->position);
+        } else if (marioGetPtr()->motJabara->wobbleCount == 2) {
+            psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS5), &mario->position);
+        } else if (marioGetPtr()->motJabara->wobbleCount == 3) {
+            psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS6), &mario->position);
+        }
+    }
+    mario->dispOfs.x += step * (f32)cos(3.1415927f * mario->targetYaw / 180.0f);
+    mario->dispOfs.z += step * (f32)sin(3.1415927f * mario->targetYaw / 180.0f);
+    step = -1.0f * (f32)sin(1.5707963705062866);
+    {
+        HitEntry* land = marioChkLandon2(&hitY, step, mario->dispOfs.y);
+        if (land == NULL) {
+            mario->position.y += step;
+#if VERSION >= VERSION_JP
+            if ((f32)mario->screenY > 480.0f) {
+                camFollowYOn();
+            }
+#endif
+            if (++mario->mot.jabara.animFrame > 0x78) {
+                mario->mot.jabara.animFrame = 0;
+            }
+            if (mario->buttonTrg & PAD_BUTTON_B) {
+#if VERSION >= VERSION_JP
+                mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+                mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
+                marioPaperOff();
+                marioGetPtr();
+#endif
+                allPartyRideOff();
+#if VERSION <= VERSION_DEMO_JP
+                if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
+                    marioPaperOff();
+                }
+                mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+                marioGetPtr();
+#endif
+                jabTail(TRUE);
+                return;
+            }
+        } else {
+            mario->hitobjStandOn = land;
+            mario->hitobjJumpFrom = NULL;
+            mario->position.y = hitY;
+            mario->currSubMotionId = 0x34;
+            mario->mot.jabara.animFrame = 0;
+            mario->multiTimer = 0x14;
+        }
+    }
+    break;
     case 0x34:
         ANIM_STEP();
         if (--mario->multiTimer <= 0) {
@@ -686,30 +686,19 @@ void mot_jabara(void) {
         mario->baseSpeed = 0.0f;
         return;
     }
-    {
-        s32 st = mario->currSubMotionId;
-        if (st >= 0x3c && st < 0x46) {
-            return;
+    st = mario->currSubMotionId;
+    if (st >= 0x3c && st < 0x46) {
+        return;
+    }
+    switch (st) {
+    case 0x46:
+        if (mario->multiTimer-- <= 0) {
+            marioChgPose("M_S_4");
+            mario->currSubMotionId = 0x47;
         }
-        switch (st) {
-        case 0x46:
-            if (mario->multiTimer-- <= 0) {
-                marioChgPose("M_S_4");
-                mario->currSubMotionId = 0x47;
-            }
-        case 0x47:
-            if (mario->mot.jabara.state == 5 || mario->mot.jabara.state == 0xf) {
-                if (mario->wStickDir1 != 0 || mario->wStickDir2 != 0) {
-                    mario->currSubMotionId = 0x50;
-                    mario->rot.x = 0.0f;
-                    mario->rotOfs.x = 0.0f;
-                    mario->mot.jabara.state = 0;
-                    mario->mot.jabara.rotSpeed = 0.0f;
-                    mario->position.y = (f32)mario->mot.jabara.floorY - mario->wPlayerCollisionBox.y - 3.5f;
-                    mario->rotOfs.y = 9.0f + mario->wPlayerCollisionBox.y;
-                }
-            }
-            if (mario->mot.jabara.state == 0 || mario->mot.jabara.state == 0xa) {
+    case 0x47:
+        if (mario->mot.jabara.state == 5 || mario->mot.jabara.state == 0xf) {
+            if (mario->wStickDir1 != 0 || mario->wStickDir2 != 0) {
                 mario->currSubMotionId = 0x50;
                 mario->rot.x = 0.0f;
                 mario->rotOfs.x = 0.0f;
@@ -718,88 +707,95 @@ void mot_jabara(void) {
                 mario->position.y = (f32)mario->mot.jabara.floorY - mario->wPlayerCollisionBox.y - 3.5f;
                 mario->rotOfs.y = 9.0f + mario->wPlayerCollisionBox.y;
             }
-            break;
-        case 0x50:
-            if (mario->buttonTrg & PAD_BUTTON_A) {
-                mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-                mario->baseSpeed = 0.0f;
-                mario->rot.x = 0.0f;
-                mario->currSubMotionId = 0x5a;
-            } else if (mario->buttonTrg & PAD_BUTTON_B) {
+        }
+        if (mario->mot.jabara.state == 0 || mario->mot.jabara.state == 0xa) {
+            mario->currSubMotionId = 0x50;
+            mario->rot.x = 0.0f;
+            mario->rotOfs.x = 0.0f;
+            mario->mot.jabara.state = 0;
+            mario->mot.jabara.rotSpeed = 0.0f;
+            mario->position.y = (f32)mario->mot.jabara.floorY - mario->wPlayerCollisionBox.y - 3.5f;
+            mario->rotOfs.y = 9.0f + mario->wPlayerCollisionBox.y;
+        }
+        break;
+    case 0x50:
+        if (mario->buttonTrg & PAD_BUTTON_A) {
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+            mario->baseSpeed = 0.0f;
+            mario->rot.x = 0.0f;
+            mario->currSubMotionId = 0x5a;
+        } else if (mario->buttonTrg & PAD_BUTTON_B) {
 #if VERSION <= VERSION_DEMO_JP
-                allPartyRideOff();
+            allPartyRideOff();
 #endif
-                mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-                marioGetPtr();
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+            marioGetPtr();
 #if VERSION >= VERSION_JP
-                allPartyRideOff();
+            allPartyRideOff();
 #endif
-                jabTail(TRUE);
-                return;
-            } else {
-                ANIM_STEP();
-                v68 = mario->position;
-                headRange = 10.0f + mario->wPlayerCollisionBox.y;
-                rr = 1.0f;
-                v68.x = v68.x + rr * (f32)sin(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
-                v68.z = v68.z - rr * (f32)cos(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
-                mario->hitobjHead = marioSearchHead_jabara(&v68, &headRange, &headHit, 0.0f);
-                if (mario->hitobjHead == NULL) {
-                    headRange = 5.0f + mario->wPlayerCollisionBox.y;
-                    mario->hitobjHead = marioSearchHead(&v68, &headRange, 0.0f);
+            jabTail(TRUE);
+            return;
+        } else {
+            ANIM_STEP();
+            v68 = mario->position;
+            headRange = 10.0f + mario->wPlayerCollisionBox.y;
+            rr = 1.0f;
+            v68.x = v68.x + rr * (f32)sin(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
+            v68.z = v68.z - rr * (f32)cos(3.1415927f * (mario->controlStickAngle + mario->targetYaw) / 180.0f);
+            mario->hitobjHead = marioSearchHead_jabara(&v68, &headRange, &headHit, 0.0f);
+            if (mario->hitobjHead == NULL) {
+                headRange = 5.0f + mario->wPlayerCollisionBox.y;
+                mario->hitobjHead = marioSearchHead(&v68, &headRange, 0.0f);
+            }
+            if (mario->controlStickSensitivity) {
+                marioChgPose("M_W_6");
+                jabaraSwingWalk();
+                hit = FALSE;
+                moveX = 1.0f;
+                if (mario->hitobjHead != NULL && (hitGetAttr(mario->hitobjHead) & HIT_ATTR_JABARA)) {
+                    hit = TRUE;
                 }
-                if (mario->controlStickSensitivity) {
-                    marioChgPose("M_W_6");
-                    jabaraSwingWalk();
-                    {
-                        BOOL hit = FALSE;
-                        f32 moveX = 1.0f;
-                        if (mario->hitobjHead != NULL && (hitGetAttr(mario->hitobjHead) & HIT_ATTR_JABARA)) {
-                            hit = TRUE;
-                        }
-                        if (hit) {
-                            if (jabaraHitFront(mario->controlStickAngle) == NULL) {
-                                moveX = moveX * (f32)sin(3.1415927f * mario->controlStickAngle / 180.0f);
-                                mario->position.x += moveX;
-                                if (moveX > 0.0f) {
-                                    if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
-                                        mario->mot.jabara.animFrame++;
-                                        if (mario->mot.jabara.animFrame > 0x20) {
-                                            mario->mot.jabara.animFrame = 0;
-                                        }
-                                    } else {
-                                        mario->mot.jabara.animFrame--;
-                                        if (mario->mot.jabara.animFrame < 0) {
-                                            mario->mot.jabara.animFrame = 0x20;
-                                        }
-                                    }
-                                } else {
-                                    if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
-                                        mario->mot.jabara.animFrame--;
-                                        if (mario->mot.jabara.animFrame < 0) {
-                                            mario->mot.jabara.animFrame = 0x20;
-                                        }
-                                    } else {
-                                        mario->mot.jabara.animFrame++;
-                                        if (mario->mot.jabara.animFrame > 0x20) {
-                                            mario->mot.jabara.animFrame = 0;
-                                        }
-                                    }
+                if (hit) {
+                    if (jabaraHitFront(mario->controlStickAngle) == NULL) {
+                        moveX = moveX * (f32)sin(3.1415927f * mario->controlStickAngle / 180.0f);
+                        mario->position.x += moveX;
+                        if (moveX > 0.0f) {
+                            if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
+                                mario->mot.jabara.animFrame++;
+                                if (mario->mot.jabara.animFrame > 0x20) {
+                                    mario->mot.jabara.animFrame = 0;
                                 }
-                                if (mario->mot.jabara.animFrame == 0) {
-                                    psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_MOVE1), &mario->position);
+                            } else {
+                                mario->mot.jabara.animFrame--;
+                                if (mario->mot.jabara.animFrame < 0) {
+                                    mario->mot.jabara.animFrame = 0x20;
                                 }
-                                if (mario->mot.jabara.animFrame == 0x10) {
-                                    psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_MOVE1), &mario->position);
+                            }
+                        } else {
+                            if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
+                                mario->mot.jabara.animFrame--;
+                                if (mario->mot.jabara.animFrame < 0) {
+                                    mario->mot.jabara.animFrame = 0x20;
+                                }
+                            } else {
+                                mario->mot.jabara.animFrame++;
+                                if (mario->mot.jabara.animFrame > 0x20) {
+                                    mario->mot.jabara.animFrame = 0;
                                 }
                             }
                         }
+                        if (mario->mot.jabara.animFrame == 0) {
+                            psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_MOVE1), &mario->position);
+                        }
+                        if (mario->mot.jabara.animFrame == 0x10) {
+                            psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_MOVE1), &mario->position);
+                        }
                     }
-                    marioUpdateCamCollision(mario->position);
                 }
+                marioUpdateCamCollision(mario->position);
             }
-            break;
         }
+        break;
     }
     switch (mario->currSubMotionId) {
     case 0x5a:

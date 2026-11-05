@@ -453,6 +453,7 @@ static inline void slitClearFlags(MarioWork* m) {
  */
 void marioSlitForceCancel(void) {
     MarioWork* m = marioGetPtr();
+    MarioWork* p;
     if (m->flags & MARIO_FLAG_PAPER_MODE) {
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         if (m->directionView >= 180.0f) {
@@ -476,11 +477,9 @@ void marioSlitForceCancel(void) {
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
-        {
-            MarioWork* p = marioGetPtr();
-            p->camShiftTargetZ = 0.0f;
-            p->camShiftRate.z = 0.004f;
-        }
+        p = marioGetPtr();
+        p->camShiftTargetZ = 0.0f;
+        p->camShiftRate.z = 0.004f;
         allPartyForceSlitOff();
     }
 }
@@ -685,18 +684,18 @@ static inline void slitSpeedDown(MarioWork* m) {
 static inline f32 slitWalkSpeed(void) {
     MarioWork* mario = marioGetPtr();
     f32 spd = mario->baseWalkSpeed;
+    int a;
+    int b;
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
         if (mario->mot.slit.timer != 0) {
             return spd;
         }
-        {
-            int a = mario->wStickDir1;
-            int b = mario->wStickDir2;
-            if (a * a + b * b <= (55 * 55)) {
-                spd *= 0.5f;
-            }
-
+        a = mario->wStickDir1;
+        b = mario->wStickDir2;
+        if (a * a + b * b <= (55 * 55)) {
+            spd *= 0.5f;
         }
+
     } else if (mario->flags & MARIO_FLAG_BG_MODE) {
         spd *= 0.5f;
     }
@@ -758,6 +757,7 @@ void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
     s32 st;
+    MarioWork* p;
     if (!m->controlStickSensitivity) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }
@@ -1160,12 +1160,10 @@ void mot_slit(void) {
         m->slitTimer = sysMsec2Frame(500);
         m->baseSpeed = 0.0f;
         m->slitState = SLIT_STATE_CRACK_2;
-        {
-            MarioWork* p = marioGetPtr();
-            p->slitPosSet = 1;
-            // copy
-            p->slitPos = p->position;
-        }
+        p = marioGetPtr();
+        p->slitPosSet = 1;
+        // copy
+        p->slitPos = p->position;
     case SLIT_STATE_CRACK_2:
 #if VERSION <= VERSION_DEMO_JP
         m->slitTimer = 20;

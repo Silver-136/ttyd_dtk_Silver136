@@ -391,6 +391,14 @@ void mot_ship(void) {
     Vec p2;
     Vec p1;
     Vec pos;
+    f32 c;
+    f32 d;
+    EventEntry* e;
+    s32 ok;
+    HitEntry* land;
+    f32 ly;
+    MarioWork* mm;
+    f32 dd;
 
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -462,12 +470,10 @@ void mot_ship(void) {
             f30 = 15.0f;
             m->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
             marioGetPtr()->motShip->turnAccel = f30;
-            {
-                EventEntry* e = evtEntry(sound_evt, 0, 0);
-                e->lwData[0] = FLOAT(m->position.x);
-                e->lwData[1] = FLOAT(m->position.y);
-                e->lwData[2] = FLOAT(m->position.z);
-            }
+            e = evtEntry(sound_evt, 0, 0);
+            e->lwData[0] = FLOAT(m->position.x);
+            e->lwData[1] = FLOAT(m->position.y);
+            e->lwData[2] = FLOAT(m->position.z);
         }
         if (m->jumpVelocityY > 0.0f) {
             m->position.y += m->jumpVelocityY;
@@ -589,88 +595,77 @@ void mot_ship(void) {
         m->directionView = angleABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, marioGetPtr()->motShip->harborPos.z);
         m->moveDirection = m->directionView;
         marioGetPtr()->motShip->baseY = marioGetPtr()->motShip->harborPos.y;
-        {
-            f32 dd = marioGetPtr()->motShip->harborPos.y - m->position.y;
-            m->jumpVelocityY = 0.0f;
-            m->jumpAccelerationY = (dd + dd) / 306.0f;
-        }
+        dd = marioGetPtr()->motShip->harborPos.y - m->position.y;
+        m->jumpVelocityY = 0.0f;
+        m->jumpAccelerationY = (dd + dd) / 306.0f;
         m->jumpJerkY = 0.0f;
         m->jumpSnapY = 0.0f;
         m->multiTimer = 36;
         m->currSubMotionId = 11;
         break;
     }
-    case 11: {
-        s32 ok;
-        HitEntry* land;
-        f32 ly;
-        MarioWork* mm;
-        movePos(&m->position.x, &m->position.z, m->baseSpeed, m->directionView);
-        m->position.y += m->jumpVelocityY;
-        marioMakeJumpPara();
-        f30 = m->jumpVelocityY;
-        mm = marioGetPtr();
-        mm->wPlayerCollisionBox.x = 20.0f;
-        land = marioChkLandon(&ly, f30);
-        mm->wPlayerCollisionBox.x = 40.0f;
-        {
-            f32 d;
-            if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
-                mm->hitobjStandOn = land;
-                mm->position.y = ly;
-                mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-                mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-                mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-                mm->airTimer = 0;
-                mm->jumpPeakAirTime = 0;
-                camFollowYOn();
-                ok = 1;
-            } else {
-                ok = 0;
-            }
-        }
-        if (ok) {
-            f30 = 0.0f;
-            m->jumpVelocityY = f30;
-            m->jumpAccelerationY = f30;
-            m->jumpJerkY = f30;
-            m->jumpSnapY = f30;
-            m->baseSpeed = f30;
-            marioGetPtr()->motShip->turnSpeed = f30;
-            m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-            m->displayDirection = revise360(m->displayDirection);
-            m->displayDirectionTarget = m->displayDirection;
-            m->directionView = toMovedir(m->displayDirection);
-            m->moveDirection = m->directionView;
-            m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1_2), &m->position);
-            marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
-            marioGetPtr()->motShip->bobAngle = 0.0f;
-            marioGetPtr()->motShip->bobSpeed = 4.25f;
-            m->currSubMotionId = 50;
-            if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-            }
-        }
-        break;
+    case 11:
+    movePos(&m->position.x, &m->position.z, m->baseSpeed, m->directionView);
+    m->position.y += m->jumpVelocityY;
+    marioMakeJumpPara();
+    f30 = m->jumpVelocityY;
+    mm = marioGetPtr();
+    mm->wPlayerCollisionBox.x = 20.0f;
+    land = marioChkLandon(&ly, f30);
+    mm->wPlayerCollisionBox.x = 40.0f;
+    if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
+        mm->hitobjStandOn = land;
+        mm->position.y = ly;
+        mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
+        mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+        mm->airTimer = 0;
+        mm->jumpPeakAirTime = 0;
+        camFollowYOn();
+        ok = 1;
+    } else {
+        ok = 0;
     }
+    if (ok) {
+        f30 = 0.0f;
+        m->jumpVelocityY = f30;
+        m->jumpAccelerationY = f30;
+        m->jumpJerkY = f30;
+        m->jumpSnapY = f30;
+        m->baseSpeed = f30;
+        marioGetPtr()->motShip->turnSpeed = f30;
+        m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        m->displayDirection = revise360(m->displayDirection);
+        m->displayDirectionTarget = m->displayDirection;
+        m->directionView = toMovedir(m->displayDirection);
+        m->moveDirection = m->directionView;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1_2), &m->position);
+        marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
+        marioGetPtr()->motShip->bobAngle = 0.0f;
+        marioGetPtr()->motShip->bobSpeed = 4.25f;
+        m->currSubMotionId = 50;
+        if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+        }
+    }
+    break;
     case 30:
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         }
         m->currSubMotionId = 31;
         /* fallthrough */
-    case 31: {
-        m->dispOfs.y += -0.4f;
-        if (m->dispOfs.y <= -18.0f) {
-            m->multiTimer = 4;
-            m->currSubMotionId = 32;
-        }
-        shipEff(1.6f);
-        break;
+    case 31:
+    m->dispOfs.y += -0.4f;
+    if (m->dispOfs.y <= -18.0f) {
+        m->multiTimer = 4;
+        m->currSubMotionId = 32;
     }
+    shipEff(1.6f);
+    break;
     case 32:
         if (--m->multiTimer > 0) {
             break;
@@ -735,12 +730,10 @@ void mot_ship(void) {
         marioAdjustMoveDir();
         m->currSubMotionId = 0x2b;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP3), &m->position);
-        {
-            EventEntry* e = evtEntry(sound_evt2, 0, 0);
-            e->lwData[0] = FLOAT(m->position.x);
-            e->lwData[1] = FLOAT(m->position.y);
-            e->lwData[2] = FLOAT(m->position.z);
-        }
+        e = evtEntry(sound_evt2, 0, 0);
+        e->lwData[0] = FLOAT(m->position.x);
+        e->lwData[1] = FLOAT(m->position.y);
+        e->lwData[2] = FLOAT(m->position.z);
         break;
     case 43:
         m->dispOfs.y += m->mot.ship.dispStepY;
@@ -921,21 +914,18 @@ void mot_ship(void) {
             mm->wPlayerCollisionBox.x = 20.0f;
             land = marioChkLandon(&ly, f30);
             mm->wPlayerCollisionBox.x = 40.0f;
-            {
-                f32 d;
-                if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
-                    mm->hitobjStandOn = land;
-                    mm->position.y = ly;
-                    mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-                    mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-                    mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-                    mm->airTimer = 0;
-                    mm->jumpPeakAirTime = 0;
-                    camFollowYOn();
-                    ok = 1;
-                } else {
-                    ok = 0;
-                }
+            if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
+                mm->hitobjStandOn = land;
+                mm->position.y = ly;
+                mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+                mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
+                mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+                mm->airTimer = 0;
+                mm->jumpPeakAirTime = 0;
+                camFollowYOn();
+                ok = 1;
+            } else {
+                ok = 0;
             }
             if (!ok) {
                 m->position.y += m->jumpVelocityY;
@@ -947,10 +937,8 @@ void mot_ship(void) {
             if (m->position.y <= 260.0f && m->position.y >= 50.0f) {
                 if (0.0f != (f32)(s32)(10.0f * m->groundSlope + 0.5f) / 10.0f) {
                     m->position.y = 2.0f * (f32)sin(3.1415927f * m->groundSlope / 180.0f) + m->position.y;
-                    {
-                        f32 c = (f32)cos(3.1415927f * m->groundSlope / 180.0f);
-                        m->position.z = 2.0f * -c + m->position.z;
-                    }
+                    c = (f32)cos(3.1415927f * m->groundSlope / 180.0f);
+                    m->position.z = 2.0f * -c + m->position.z;
                 }
             }
         }

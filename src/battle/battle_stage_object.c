@@ -3956,6 +3956,7 @@ USER_FUNC(_object_fall_attack) {
     Vec p;
     s32 unitId;
     s32 partId;
+    EffectEntry* eff;
     if (isFirstCall) {
         w = BattleAlloc(sizeof(FallObjectWork));
         event->userdatap[0] = w;
@@ -4273,21 +4274,19 @@ USER_FUNC(_object_fall_attack) {
                                 case PRECHECK_INTANGIBLE:
                                     break;
 
-                                case PRECHECK_LUCKY: {
-                                    EffectEntry* eff;
-                                    BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
-                                    if (p.y < 85.0f) {
-                                        p.y += 50.0f;
-                                    } else {
-                                        p.y += -50.0f;
-                                    }
-                                    p.x -= 45.0f;
-                                    eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
-                                    ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
-                                    unit2->damagePattern = 0;
-                                    BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
-                                    break;
+                                case PRECHECK_LUCKY:
+                                BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
+                                if (p.y < 85.0f) {
+                                    p.y += 50.0f;
+                                } else {
+                                    p.y += -50.0f;
                                 }
+                                p.x -= 45.0f;
+                                eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
+                                ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
+                                unit2->damagePattern = 0;
+                                BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
+                                break;
 
                                 case PRECHECK_DODGY:
                                     unit2->damagePattern = 0;

@@ -229,16 +229,18 @@ void mot_plane(void) {
     BOOL done;
     EventEntry* evt;
     f32 y, b, c;
+    Vec p;
+    HitEntry* hit;
+    MarioWork* m;
+    MarioWork* m2;
 
     mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->motStruct = __memAlloc(HEAP_DEFAULT, sizeof(MotPlaneWork));
         memset(mp->motStruct, 0, sizeof(MotPlaneWork));
-        {
-            MarioWork* m2 = marioGetPtr();
-            m2->motPlane->sfxId = -1;
-        }
+        m2 = marioGetPtr();
+        m2->motPlane->sfxId = -1;
         mp->currSubMotionId = 0;
     }
     switch (mp->currSubMotionId) {
@@ -338,11 +340,9 @@ void mot_plane(void) {
         mp->currSubMotionId = 12;
         mp->baseSpeed = 1.0f;
         mp->motPlane->diveSpeed = 2.0f;
-        {
-            MarioWork* m = marioGetPtr();
-            m->camShiftTargetZ = 0.0f;
-            m->camShiftRate.z = 0.004f;
-        }
+        m = marioGetPtr();
+        m->camShiftTargetZ = 0.0f;
+        m->camShiftRate.z = 0.004f;
         mp->camShiftTargetX = 70.0f * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? -1.0f : 1.0f);
         mp->camShiftTargetY = -70.0f;
         break;
@@ -483,16 +483,13 @@ void mot_plane(void) {
         if (mp->jumpVelocityY <= -20.0f) {
             mp->jumpVelocityY = -20.0f;
         }
-        {
-            HitEntry* hit;
-            mp->hitobjStandOn = NULL;
-            hit = marioSearchGround(&y, &b, &c, mp->jumpVelocityY, mp->jumpVelocityY);
-            if (hit != NULL) {
-                mp->position.y = y;
-                mp->hitobjStandOn = hit;
-            } else {
-                mp->position.y += mp->jumpVelocityY;
-            }
+        mp->hitobjStandOn = NULL;
+        hit = marioSearchGround(&y, &b, &c, mp->jumpVelocityY, mp->jumpVelocityY);
+        if (hit != NULL) {
+            mp->position.y = y;
+            mp->hitobjStandOn = hit;
+        } else {
+            mp->position.y += mp->jumpVelocityY;
         }
         if (mp->hitobjStandOn != NULL) {
             camFollowYOn();
@@ -514,21 +511,19 @@ void mot_plane(void) {
         marioChkWallAround(&mp->position, 0, 0.0f, 0.0f, mp->wPlayerCollisionBox.z, mp->wPlayerCollisionBox.y);
 #endif
         break;
-    case 70: {
-        Vec p;
+    case 70:
 #if VERSION >= VERSION_JP
-        set_damage_root_ypos(mp->position.y);
+    set_damage_root_ypos(mp->position.y);
 #endif
-        p = mp->position;
-        marioSetSplash(0, &p);
-        mp->multiTimer = 16;
-        mp->currSubMotionId = 71;
-        mp->jumpVelocityY = -2.0f;
-        mp->jumpAccelerationY = 0.0f;
-        mp->jumpJerkY = 0.0f;
-        mp->jumpSnapY = 0.0f;
-        camFollowYOff();
-    }
+    p = mp->position;
+    marioSetSplash(0, &p);
+    mp->multiTimer = 16;
+    mp->currSubMotionId = 71;
+    mp->jumpVelocityY = -2.0f;
+    mp->jumpAccelerationY = 0.0f;
+    mp->jumpJerkY = 0.0f;
+    mp->jumpSnapY = 0.0f;
+    camFollowYOff();
     case 71:
         marioMakeJumpPara();
         mp->position.y += mp->jumpVelocityY;
@@ -583,6 +578,8 @@ static void flyMain(void) {
     f32 v;
     BOOL flag;
     s32 n;
+    f32 speedSin;
+    MarioWork* m;
 
     mp = marioGetPtr();
     switch (mp->currSubMotionId) {
@@ -590,11 +587,9 @@ static void flyMain(void) {
         if (mp->mot.plane.startY >= mp->position.y) {
             mp->currSubMotionId = 14;
         }
-        {
-            MarioWork* m = marioGetPtr();
-            if ((u32)m->motPlane->sfxId == 0xFFFFFFFF) {
-                m->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &m->position);
-            }
+        m = marioGetPtr();
+        if ((u32)m->motPlane->sfxId == 0xFFFFFFFF) {
+            m->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &m->position);
         }
     case 14:
         if (mp->dispOfs.y > planeData[38]) {
@@ -766,10 +761,8 @@ static void flyMain(void) {
         mp->baseSpeed += mp->motPlane->diveSpeed;
         a = (mp->motPlane->pitch > 0.0f) ? 0.0f : __fabsf(mp->motPlane->pitch);
         t = (f32)sin(PI * (planeData[12] * a) / 180.0f);
-        {
-            f32 speedSin = (f32)sin(PI * (mp->baseSpeed * planeData[11]) / 180.0f);
-            a = planeData[13] * (speedSin * t);
-        }
+        speedSin = (f32)sin(PI * (mp->baseSpeed * planeData[11]) / 180.0f);
+        a = planeData[13] * (speedSin * t);
         mp->motPlane->pitchSpeed = mp->motPlane->pitchSpeed + a;
         if (mp->wStickDir1 != 0) {
             if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {

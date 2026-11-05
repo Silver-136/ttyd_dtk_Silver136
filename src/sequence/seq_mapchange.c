@@ -153,6 +153,10 @@ void seq_mapChangeMain(SequenceWork* work) {
     u32 fres;
 #endif
     BOOL fok;
+    LangTbl lang;
+    MarioWork* mario;
+    PartyEntry* party;
+    PartyEntry* extraParty;
     switch (work->state) {
     case 0:
         if (strcmp(_next_map, "sys_01") == 0) {
@@ -322,61 +326,66 @@ void seq_mapChangeMain(SequenceWork* work) {
             work->state++;
         }
         break;
-    case 7: {
-        MarioWork* mario;
-        PartyEntry* party;
-        PartyEntry* extraParty;
+    case 7:
 #if VERSION <= VERSION_DEMO_JP
-        if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
-            {
-                LangTbl lang = lang_tbl;
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-            }
+    if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
+        lang = lang_tbl;
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #else
-        if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "end", 3) &&
-            strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {
-            {
-                LangTbl lang = lang_tbl;
+    if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "end", 3) &&
+        strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {
+        lang = lang_tbl;
 #if VERSION >= VERSION_US
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #else
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #endif
-            }
 #if VERSION >= VERSION_US
-            animGroupBaseAsync("p_roll", 0, 0);
-            animGroupBaseAsync("p_slit", 0, 0);
+        animGroupBaseAsync("p_roll", 0, 0);
+        animGroupBaseAsync("p_slit", 0, 0);
 #endif
 #endif
-            animGroupBaseAsync("p_jyabara", 0, 0);
-            animGroupBaseAsync("p_kaiten_h", 0, 0);
-            animGroupBaseAsync("p_b_st", 0, 0);
-            animGroupBaseAsync("OFF_d_maku_up_down", 0, 0);
-            effNiceAsync(0);
-            fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
-            fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
-            fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
-        }
-        if (gp->flags & GW_FLAG_SAVE_LOADED) {
-            mario = marioGetPtr();
-            party = partyGetPtr(marioGetPartyId());
-            extraParty = partyGetPtr(marioGetExtraPartyId());
-            switch (swByteGet(GSW_ID(GSW_SAVE_RESUME_POINT))) {
-            case 0:
-                mario->position = gp->savePlayerPos;
-                evt_cam_road_reset(0, 0);
-                if (party) {
-                    party->position = gp->savePlayerPos;
-                    party->position.x += 30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
-                    party->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
-                }
+        animGroupBaseAsync("p_jyabara", 0, 0);
+        animGroupBaseAsync("p_kaiten_h", 0, 0);
+        animGroupBaseAsync("p_b_st", 0, 0);
+        animGroupBaseAsync("OFF_d_maku_up_down", 0, 0);
+        effNiceAsync(0);
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
+    }
+    if (gp->flags & GW_FLAG_SAVE_LOADED) {
+        mario = marioGetPtr();
+        party = partyGetPtr(marioGetPartyId());
+        extraParty = partyGetPtr(marioGetExtraPartyId());
+        switch (swByteGet(GSW_ID(GSW_SAVE_RESUME_POINT))) {
+        case 0:
+            mario->position = gp->savePlayerPos;
+            evt_cam_road_reset(0, 0);
+            if (party) {
+                party->position = gp->savePlayerPos;
+                party->position.x += 30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
+                party->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
+            }
+            if (extraParty) {
+                extraParty->position = gp->savePlayerPos;
+                extraParty->position.x += -30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
+                extraParty->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
+            }
+#if VERSION <= VERSION_DEMO_JP
+            if (!strcmp(gp->currentMapName, "dou_05") && party) {
+                party->position = mario->position;
+                party->position.x -= 30.0f;
                 if (extraParty) {
-                    extraParty->position = gp->savePlayerPos;
-                    extraParty->position.x += -30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
-                    extraParty->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
+                    extraParty->position = party->position;
+                    extraParty->position.x -= 30.0f;
                 }
-#if VERSION <= VERSION_DEMO_JP
-                if (!strcmp(gp->currentMapName, "dou_05") && party) {
+            }
+#else
+            if (!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "gor_01") ||
+                !strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "tik_07")) {
+                mario->position.x -= 5.0f;
+                if (party) {
                     party->position = mario->position;
                     party->position.x -= 30.0f;
                     if (extraParty) {
@@ -384,36 +393,23 @@ void seq_mapChangeMain(SequenceWork* work) {
                         extraParty->position.x -= 30.0f;
                     }
                 }
-#else
-                if (!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "gor_01") ||
-                    !strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "tik_07")) {
-                    mario->position.x -= 5.0f;
-                    if (party) {
-                        party->position = mario->position;
-                        party->position.x -= 30.0f;
-                        if (extraParty) {
-                            extraParty->position = party->position;
-                            extraParty->position.x -= 30.0f;
-                        }
-                    }
-                }
-                marioSetBottomlessRespawnPos(mario->position.x, 10.0f + mario->position.y, mario->position.z);
-#endif
-                marioKeyOff();
-                evtEntryType(key_off, 0, 0, 0);
-                break;
-            default:
-                fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 0});
-                break;
             }
-            statusWinForceUpdate();
-            gp->flags &= ~GW_FLAG_SAVE_LOADED;
-            marioStSystemLevel(0);
+            marioSetBottomlessRespawnPos(mario->position.x, 10.0f + mario->position.y, mario->position.z);
+#endif
+            marioKeyOff();
+            evtEntryType(key_off, 0, 0, 0);
+            break;
+        default:
+            fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 0});
+            break;
         }
-        marioEntry();
-        seqSetSeq(SEQ_GAME, NULL, NULL);
-        break;
+        statusWinForceUpdate();
+        gp->flags &= ~GW_FLAG_SAVE_LOADED;
+        marioStSystemLevel(0);
     }
+    marioEntry();
+    seqSetSeq(SEQ_GAME, NULL, NULL);
+    break;
     }
 }
 
