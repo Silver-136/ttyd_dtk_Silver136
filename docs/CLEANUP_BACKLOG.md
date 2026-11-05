@@ -219,6 +219,6 @@ pushed commit (cleanup_notes, round 22):
   lines); brace indentation sites where demo and retail arms open braces differently (cleanup_notes/brace_indent_fix.tsv).
 - Header placement (Zephiles): scanner cleanup_tools/header_placement_scan.py. Done: one version numbering,
   HEAP_TYPE, shared types (cloud rooms, minigame driver, Monte tables, Glitz Pit ranking), per-version values in
-  owner headers. Left: battle-unit types and UNIT_WORK enums repeated across REL copies, eff_balloon_n64's
+  owner headers, unit work-slot names (0f45e78cd). Left: battle-unit types repeated across REL copies, eff_balloon_n64's
   effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes (kept, they change code),
   9 placeholder names in headers (--detail unk).
