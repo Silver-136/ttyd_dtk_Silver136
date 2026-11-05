@@ -131,7 +131,7 @@ BattleUnitKind unit_mahorn = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
+    kFloating,
     &regist,
     5,
     parts,
@@ -162,11 +162,11 @@ static StatusVulnerability regist = {10, 50, 90, 100, 40, 100, 100, 50, 100, 85,
  * table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
-    {2, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW, 0, pose_table},
-    {3, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW, 0, pose_table},
-    {4, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW, 0, pose_table},
-    {5, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW, 0, pose_table},
+    {1, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {3, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {4, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {5, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
 };
 
 /**
@@ -196,9 +196,9 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_JP
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
@@ -241,7 +241,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -367,9 +367,9 @@ BattleWeapon weapon_mahorn_confuse_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_JP
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
@@ -520,11 +520,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "MAH_K_1"},
     {POSE_TYPE_POISON, "MAH_X_1"},
     {POSE_TYPE_DIZZY, "MAH_X_1"},
-    {BTL_POSE_NORMAL, "MAH_S_1"},
+    {POSE_TYPE_NORMAL, "MAH_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MAH_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MAH_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "MAH_A_1"},
-    {BTL_POSE_DAMAGE, "MAH_D_1"},
+    {POSE_TYPE_DAMAGE, "MAH_D_1"},
     {POSE_TYPE_WALK, "MAH_W_1"},
     {POSE_TYPE_RUN, "MAH_R_1"},
     {POSE_TYPE_DANGER, "MAH_X_1"},
@@ -601,11 +601,11 @@ static EVT_BEGIN(alpha_down_event)
         CALL(btlevtcmd_SetAlpha, LW(0), 5, LW(1))
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(btlevtcmd_OnPartsAttribute, LW(0), 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(0), 2, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(0), 3, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(0), 4, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(0), 5, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, LW(0), 1, kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, LW(0), 2, kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, LW(0), 3, kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, LW(0), 4, kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, LW(0), 5, kNoShadow)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
     CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
@@ -620,11 +620,11 @@ static EVT_BEGIN(alpha_up_event)
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
-    CALL(btlevtcmd_OffPartsAttribute, LW(0), 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OffPartsAttribute, LW(0), 2, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OffPartsAttribute, LW(0), 3, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OffPartsAttribute, LW(0), 4, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OffPartsAttribute, LW(0), 5, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, LW(0), 1, kNoShadow)
+    CALL(btlevtcmd_OffPartsAttribute, LW(0), 2, kNoShadow)
+    CALL(btlevtcmd_OffPartsAttribute, LW(0), 3, kNoShadow)
+    CALL(btlevtcmd_OffPartsAttribute, LW(0), 4, kNoShadow)
+    CALL(btlevtcmd_OffPartsAttribute, LW(0), 5, kNoShadow)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
     CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)

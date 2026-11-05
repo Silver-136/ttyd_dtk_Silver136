@@ -2027,9 +2027,9 @@ void btlseqMove(BattleWork* wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
 #if VERSION <= VERSION_DEMO_JP
-                        unit->tokenFlags &= TOKEN_FLAG_PERSISTENT;
+                        unit->tokenFlags &= kTokenPersistent_UNUSED;
 #else
-                        unit->tokenFlags &= 0x80002000;
+                        unit->tokenFlags &= kTokenPersistent_UNUSED | kHasRallyWinkStatus;
 #endif
                         unit->totalHpDamageTaken = 0;
                         unit->hpDamageTaken = 0;

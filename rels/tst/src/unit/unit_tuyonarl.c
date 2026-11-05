@@ -101,9 +101,9 @@ static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100
  * maps the normal, damage and action poses and pose 31 to KUR_S_1 or KUR_D_1.
  */
 static PoseTableEntry pose_table[] = {
-    {BTL_POSE_NORMAL, "KUR_S_1"},
+    {POSE_TYPE_NORMAL, "KUR_S_1"},
     {31, "KUR_S_1"},
-    {BTL_POSE_DAMAGE, "KUR_D_1"},
+    {POSE_TYPE_DAMAGE, "KUR_D_1"},
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
@@ -114,7 +114,7 @@ static BattleDataEntry data_table[] = {
 
 /** Body part of the placeholder unit `tuyonarl`: a single part using the c_kuribo model. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_tuyonarl", "c_kuribo", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
+    {1, "btl_un_tuyonarl", "c_kuribo", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 /**

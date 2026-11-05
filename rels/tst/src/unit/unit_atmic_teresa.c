@@ -141,7 +141,7 @@ BattleUnitKind unit_atmic_teresa = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
+    kFloating,
     &regist,
     1,
     parts,
@@ -166,11 +166,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "K_1"},
     {POSE_TYPE_POISON, "X_1"},
     {POSE_TYPE_DIZZY, "X_1"},
-    {BTL_POSE_NORMAL, "S_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
-    {BTL_POSE_DAMAGE, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
     {POSE_TYPE_DANGER, "X_1"},
@@ -187,11 +187,11 @@ PoseTableEntry pose_table_kaokakusi[] = {
     {POSE_TYPE_CONFUSE, "A_1"},
     {POSE_TYPE_POISON, "A_1"},
     {POSE_TYPE_DIZZY, "A_1"},
-    {BTL_POSE_NORMAL, "A_1"},
+    {POSE_TYPE_NORMAL, "A_1"},
     {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "A_1"},
-    {BTL_POSE_DAMAGE, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
     {POSE_TYPE_RUN, "A_1"},
     {POSE_TYPE_WALK, "A_1"},
     {POSE_TYPE_DANGER, "A_1"},
@@ -213,7 +213,7 @@ static BattleDataEntry data_table[] = {
  * attributes and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_atmic_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 10.0f, 80.0f, 0.0f, 0.0f, 110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table},
+    {1, "btl_un_atmic_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 10.0f, 80.0f, 0.0f, 0.0f, 110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 #if VERSION <= VERSION_DEMO_JP
@@ -256,7 +256,7 @@ BattleWeapon weapon_atmic_teresa_press = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -300,9 +300,9 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_JP
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
@@ -350,9 +350,9 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_JP
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
@@ -396,7 +396,7 @@ BattleWeapon weapon_atmic_teresa_breath = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

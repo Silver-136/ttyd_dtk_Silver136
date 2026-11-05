@@ -242,7 +242,7 @@ static BattleWeapon weapon_wakka_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -279,7 +279,7 @@ static BattleWeapon weapon_wawawa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -782,7 +782,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
             BtlUnit_SetPartsPos(part, x, y, i * ofs + z);
             BtlUnit_SetPartsScale(part, start[j], start[j], 1.0f);
             part->color.a = alphaEnd;
-            part->attributes &= ~PART_ATTR_HIDDEN;
+            part->attributes &= ~kHidden;
         }
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
@@ -801,7 +801,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         BtlUnit_SetPartsScale(part, 1.0f, 1.0f, 1.0f);
         part->color.a = 255;
         for (i = 2; i <= 6; i++) {
-            BtlUnit_GetPartsPtr(unit, i)->attributes |= PART_ATTR_HIDDEN;
+            BtlUnit_GetPartsPtr(unit, i)->attributes |= kHidden;
         }
         return EVT_RETURN_DONE;
     }
@@ -902,7 +902,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
             BtlUnit_SetPartsRotate(part, 0.0f, 0.0f, 0.0f);
             part->color.a = alphaStart;
             BtlUnit_SetAnim(part, "Z_2");
-            part->attributes &= ~PART_ATTR_HIDDEN;
+            part->attributes &= ~kHidden;
         }
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
@@ -921,7 +921,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
         BtlUnit_SetPartsScale(part, 1.0f, 1.0f, 1.0f);
         part->color.a = 255;
         for (i = 2; i <= 6; i++) {
-            BtlUnit_GetPartsPtr(unit, i)->attributes |= PART_ATTR_HIDDEN;
+            BtlUnit_GetPartsPtr(unit, i)->attributes |= kHidden;
         }
         return EVT_RETURN_DONE;
     }
@@ -1096,7 +1096,7 @@ EVT_END()
 /**
  * The part of the Yux's ring attack when the shot misses:
  * the attacking part (LW(15)) takes the Z_3 pose
- * and is launched at the target (its PART_ATTR_HIDDEN cleared while it flies),
+ * and is launched at the target (its kHidden cleared while it flies),
  * the Yux plays A_5 and results 3, 6 or 2 start the target's avoid reaction;
  * afterwards UNIT_WORK_WAWAWA_ATTACK selects the single- or combined-ring flight and scale timing.
  * The code name wakka is Japanese for "ring".
@@ -1115,9 +1115,9 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
     CALL(btlevtcmd_GetPos, LW(12), LW(6), LW(7), LW(8))
     ADD(LW(8), 1)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN, LW(0))
+    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), kHidden, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     END_IF
 
     // The Yux plays its A_5 pose, and a watcher starts avoidance for results 3, 6 or 2 as soon as the ring flies past it.
@@ -1215,9 +1215,9 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
     CALL(btlevtcmd_GetPos, LW(12), LW(6), LW(7), LW(8))
     ADD(LW(8), 1)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN, LW(0))
+    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), kHidden, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_5"))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
@@ -1670,7 +1670,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), 0, -1000, 0)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     ELSE
         SET_VALUE(LW(9), PTR(&weapon_wawawa_attack))
         SET_VALUE(LW(10), 1)

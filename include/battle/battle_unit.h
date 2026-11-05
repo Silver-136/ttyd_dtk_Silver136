@@ -29,8 +29,10 @@ typedef enum BattleUnitToken_Flags {
     kKnockedAway = (1 << 5),        // 0x20, knocked flying by the Spin/Ultra Hammer knock-away
     kKnockedAwayWaiting = (1 << 6), // 0x40, waiting off the stage edge until Mario lets it come back
     kKnockedAwayReturned = (1 << 7), // 0x80, back at home before the finishing hit
+    kTokenTested_UNUSED = (1 << 8), // 0x100, tested once (battle_mario, an empty IF); nothing sets it
     kCurrentlyActing = (1 << 12),   // 0x1000
-    kHasRallyWinkStatus = (1 << 13) // 0x2000
+    kHasRallyWinkStatus = (1 << 13), // 0x2000
+    kTokenPersistent_UNUSED = (1 << 31) // 0x80000000, kept when battle_seq clears the tokens; nothing sets it
 } BattleUnitToken_Flags;
 
 typedef enum PartsAttribute_Flags {          // 32-bit size
@@ -107,6 +109,8 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kVeiled = (1 << 4),                  // 0x10, hidden in Vivian's Veil: attacks miss
     kShellShielded = (1 << 5),           // 0x20, under Koops's Shell Shield (TARGET_PROP_NO_SHELL_SHIELDED)
     kUnitNeverTargetable = (1 << 6),     // 0x40, skipped by target sampling (battle_detect)
+    kUnitNoFinalHitResult_UNUSED = (1 << 8), // 0x100, a final hit on it does not add result bit 0x10000 (unless
+                                         // SPECIAL_FORCE_RESULT_10000); nothing sets it
     kNoGravityBob = (1 << 12),           // 0x1000, no zero-gravity bob (like kFloating)
     kActsInZeroGravity = (1 << 13),      // 0x2000, not stopped by the zero-gravity cannot-act event
     kUnitNoHammerKnockback = (1 << 14),  // 0x4000, Super/Ultra Hammer knock-away damage patterns are dropped
@@ -1268,41 +1272,14 @@ BOOL BtlUnit_CheckWeaponCost(BattleUnit* unit, struct BattleWeapon* weapon);
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, struct BattleWeapon* weapon);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, struct BattleWeapon* weapon);
 
+// SEQ_PHASE steps (BattleSetSeq(wp, SEQ_PHASE, ...)); phase events compare the phase they get with them.
 // Names from LLCOOLT's tree.
-enum {
-    PART_ATTR_MAIN = 1,
-    PART_ATTR_HIDDEN = 16777216,
-    UNIT_FLAG_MOVE_COLOR_CHANGING = 2,
-    PART_ATTR_HAMMERLIKE_CANNOT_TARGET = 2097152,
-    TOKEN_FLAG_PERSISTENT = 2147483648,
-    TOKEN_FLAG_UNUSED_8 = 256,
-    UNIT_ATTR_NO_LAST_HIT_RESULT = 256,
-    PART_ATTR_WORLD_POSITION = 268435456,
-    BTL_POSE_NORMAL = 28,
-    PART_ATTR_NO_TRANSLUCENT_POSE = 32768,
-    PART_ATTR_NO_SHADOW = 33554432,
-    BTL_POSE_DAMAGE = 39,
-    UNIT_ATTR_FLOATING = 4,
-    PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET = 4194304,
-    BTL_POSE_STAY = 43,
-    PART_ATTR_UNTATTLEABLE = 524288,
-#if VERSION <= VERSION_DEMO_JP
-    BTL_POSE_TALK = 63,
-#else
-    BTL_POSE_TALK = 65,
-#endif
-    PART_ATTR_NOT_TARGETABLE = 65536,
-#if VERSION <= VERSION_DEMO_JP
-    BTL_POSE_STAY_DEFAULT = 67,
-#else
-    BTL_POSE_STAY_DEFAULT = 69,
-#endif
-    BATTLE_PHASE_INIT = 67108864,
-    BATTLE_PHASE_BEFORE_PLAYER = 67108865,
-    BATTLE_PHASE_PLAYER = 67108866,
-    BATTLE_PHASE_AFTER_PLAYER = 67108867,
-    BATTLE_PHASE_ENEMY = 67108868,
-    BATTLE_PHASE_AFTER_ENEMY = 67108869,
-    BATTLE_PHASE_END = 67108870,
-    PART_ATTR_GUARD_COVER = 8,
-};
+typedef enum BattlePhase {
+    BATTLE_PHASE_INIT = 0x4000000,
+    BATTLE_PHASE_BEFORE_PLAYER = 0x4000001,
+    BATTLE_PHASE_PLAYER = 0x4000002,
+    BATTLE_PHASE_AFTER_PLAYER = 0x4000003,
+    BATTLE_PHASE_ENEMY = 0x4000004,
+    BATTLE_PHASE_AFTER_ENEMY = 0x4000005,
+    BATTLE_PHASE_END = 0x4000006,
+} BattlePhase;

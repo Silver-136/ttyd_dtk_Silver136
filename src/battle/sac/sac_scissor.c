@@ -1211,7 +1211,7 @@ void scissor_disp_control(CameraId camera, void* param) {
             continue;
         if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))
             continue;
-        if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & PART_ATTR_NOT_TARGETABLE)
+        if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & kNotTargetable)
             continue;
         if (unit->attributeFlags & kCeiling) {
             sign = -1.0f;

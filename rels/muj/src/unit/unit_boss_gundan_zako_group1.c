@@ -598,7 +598,7 @@ void zakogun_ext_init(void) {
     wire = BattleSearchObjectPtr("if_wire");
     wire->position = (Vec){0.0f, 250.0f, 0.0f};
     body->position = wire->position;
-    *flags |= STAGE_OBJ_FLAG_IRON_FRAME_GONE | STAGE_OBJ_FLAG_NO_IRON_FRAME_FALL;
+    *flags |= STAGE_FLAG_NO_IRON_FRAME | STAGE_FLAG_KEEP_IRON_FRAME_UNUSED;
 }
 
 /** Main callback of the horde extended draw: runs the update for the current formation (group 1, 2 or 3). */

@@ -131,7 +131,7 @@ static StatusVulnerability regist = {100, 110, 100, 100, 100, 100, 100, 100, 100
 
 /** Body part of the Spiky Goomba: a single part using the c_kuribo model. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togekuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, kCounterTopSpiky, pose_table},
+    {1, "btl_un_togekuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 /** Attack data of the Spiky Goomba's headbonk: 2 damage. */
@@ -157,7 +157,7 @@ static BattleWeapon weapon_togekuri_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -182,11 +182,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "TGK_K_1"},
     {POSE_TYPE_POISON, "TGK_I_1"},
     {POSE_TYPE_DIZZY, "TGK_I_1"},
-    {BTL_POSE_NORMAL, "TGK_S_1"},
+    {POSE_TYPE_NORMAL, "TGK_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "TGK_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGK_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "TGK_S_1"},
-    {BTL_POSE_DAMAGE, "TGK_D_1"},
+    {POSE_TYPE_DAMAGE, "TGK_D_1"},
     {POSE_TYPE_ATTACK, "TGK_A_1"},
     {POSE_TYPE_RUN_HOME, "TGK_R_2"},
     {POSE_TYPE_RUN, "TGK_R_1"},
@@ -349,7 +349,7 @@ static EVT_BEGIN(attack_event)
 
     // The Spiky Goomba runs up beside the target.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(170)
@@ -456,7 +456,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_togekuri_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togekuri_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(6))
         DIVIDE(LW(6), 10)

@@ -1228,7 +1228,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_npc_battle_start, STRING("クッパ"))
     CALL(evt_npc_wait_battle_end)
 #if VERSION <= VERSION_DEMO_JP
-    CALL(evt_snd_bgmoff, PSND_FADE_OUT)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #endif
     CALL(evt_eff_delete, STRING("baria"))
     CALL(evt_party_stop, 0)

@@ -128,10 +128,10 @@ PoseTableEntry pose_table_yoshi_stay[] = {
     {5, "PYS_X_1"},
     {1, "PYS_N_1"},
     {27, "PYS_D_3"},
-    {BTL_POSE_NORMAL, "PYS_S_1"},
+    {POSE_TYPE_NORMAL, "PYS_S_1"},
     {37, "PYS_G_2"},
     {31, "PYS_G_1"},
-    {BTL_POSE_DAMAGE, "PYS_D_1"},
+    {POSE_TYPE_DAMAGE, "PYS_D_1"},
     {POSE_TYPE_WALK, "PYS_W_1"},
     {POSE_TYPE_RUN, "PYS_R_1"},
     {POSE_TYPE_PERIL, "PYS_D_2"},
@@ -150,25 +150,25 @@ PoseTableEntry pose_table_yoshi_stay[] = {
 
 /** Egg poses of the first colour (green, CHU_C_1): the same frame for every state. */
 PoseTableEntry pose_table_egg_g[] = {
-    {BTL_POSE_NORMAL, "CHU_C_1"},
+    {POSE_TYPE_NORMAL, "CHU_C_1"},
     {31, "CHU_C_1"},
-    {BTL_POSE_DAMAGE, "CHU_C_1"},
+    {POSE_TYPE_DAMAGE, "CHU_C_1"},
     {POSE_TYPE_ACTION, "CHU_C_1"},
 };
 
 /** Egg poses of the second colour (yellow, CHU_C_2): the same frame for every state. */
 PoseTableEntry pose_table_egg_y[] = {
-    {BTL_POSE_NORMAL, "CHU_C_2"},
+    {POSE_TYPE_NORMAL, "CHU_C_2"},
     {31, "CHU_C_2"},
-    {BTL_POSE_DAMAGE, "CHU_C_2"},
+    {POSE_TYPE_DAMAGE, "CHU_C_2"},
     {POSE_TYPE_ACTION, "CHU_C_2"},
 };
 
 /** Egg poses of the third colour (pink, CHU_C_3): the same frame for every state. */
 PoseTableEntry pose_table_egg_p[] = {
-    {BTL_POSE_NORMAL, "CHU_C_3"},
+    {POSE_TYPE_NORMAL, "CHU_C_3"},
     {31, "CHU_C_3"},
-    {BTL_POSE_DAMAGE, "CHU_C_3"},
+    {POSE_TYPE_DAMAGE, "CHU_C_3"},
     {POSE_TYPE_ACTION, "CHU_C_3"},
 };
 
@@ -192,13 +192,13 @@ static BattleDataEntry data_table[] = {
  * Yoshi's parts: part 1 is his body (the Yoshi model) and parts 2 to 7 are the six eggs that Mini-Egg throws.
  */
 BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
-    {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table_yoshi_stay},
-    {2, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_egg_g},
-    {3, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_egg_g},
-    {4, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_egg_g},
-    {5, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_egg_g},
-    {6, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_egg_g},
-    {7, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_egg_g},
+    {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay},
+    {2, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
+    {3, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
+    {4, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
+    {5, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
+    {6, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
+    {7, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
 };
 
 /**
@@ -360,7 +360,7 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hip_drop", // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -412,7 +412,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -463,7 +463,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -698,7 +698,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_taigun_yoshi", // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1578,7 +1578,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_SetPartsDispOffset, UNIT_ID_SELF, LW(12), 0, 0, 0)
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(12), 0, 0, 0)
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, LW(12), 0, 0, 0)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_EGG1"), 0)
     SET_VALUE(LW(15), 0)
     BEGIN_SIBLING_EVENT
@@ -1685,7 +1685,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     LABEL(30)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EGG_KIND, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
@@ -1781,7 +1781,7 @@ EVT_BEGIN(_egg_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), LW(6))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(12), FLOAT(5.0f))
     CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(12), FLOAT(0.099609375f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -1797,7 +1797,7 @@ EVT_BEGIN(_egg_attack_event)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_EGG3"), 0)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, 25, 0, 0, -1)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_EGG2"), 0)
     CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(0.5996094f), 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_PRECHECK, LW(6))
@@ -1935,13 +1935,13 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_Y_1"))
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         BEGIN_SIBLING_EVENT
             WAIT_MS(166)
-            CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+            CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
         END_SIBLING_EVENT
     END_SWITCH
 
@@ -2685,7 +2685,7 @@ EVT_BEGIN(yoshi_appeal_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
     WAIT_FRAMES(40)
     CALL(btlevtcmd_AudienceAppeal, UNIT_ID_SELF)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -2697,7 +2697,7 @@ static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_Y_1"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     RETURN
 EVT_END()
 
@@ -2732,7 +2732,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(12), FLOAT(7.5f))
     CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(12), FLOAT(0.099609375f))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_EGG_KIND, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
@@ -2753,10 +2753,10 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(8))
     BEGIN_SIBLING_EVENT
         WAIT_MS(1000)
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     WAIT_FRAMES(7)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     ADD(LW(1), 28)
     BEGIN_SIBLING_EVENT
@@ -2769,7 +2769,7 @@ static EVT_BEGIN(attack_audience_event)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_EGG3"), 0)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, 25, 0, 0, -1)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), kHidden | kNoShadow)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_EGG2"), 0)
     CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(0.5996094f), 0, 0, 0, 0, 0, 0, 0)
     CALL(_attack_aud, LW(3), 0)

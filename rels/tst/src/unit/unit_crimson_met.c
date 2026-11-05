@@ -150,11 +150,11 @@ static PoseTableEntry pose_table[] = {
     {5, "MET_K_1"},
     {4, "MET_X_1"},
     {3, "MET_X_1"},
-    {BTL_POSE_NORMAL, "MET_S_1"},
+    {POSE_TYPE_NORMAL, "MET_S_1"},
     {29, "MET_Q_1"},
     {30, "MET_Q_1"},
     {31, "MET_A_1"},
-    {BTL_POSE_DAMAGE, "MET_D_1"},
+    {POSE_TYPE_DAMAGE, "MET_D_1"},
     {50, "MET_A_1"},
     {POSE_TYPE_WALK, "MET_W_1"},
     {POSE_TYPE_RUN, "MET_R_1"},
@@ -175,11 +175,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {5, "SMT_K_1"},
     {4, "SMT_X_1"},
     {3, "SMT_X_1"},
-    {BTL_POSE_NORMAL, "SMT_S_1"},
+    {POSE_TYPE_NORMAL, "SMT_S_1"},
     {29, "SMT_Q_1"},
     {30, "SMT_Q_1"},
     {31, "SMT_A_1"},
-    {BTL_POSE_DAMAGE, "SMT_D_1"},
+    {POSE_TYPE_DAMAGE, "SMT_D_1"},
     {50, "SMT_A_1"},
     {POSE_TYPE_WALK, "SMT_W_1"},
     {POSE_TYPE_RUN, "SMT_R_1"},
@@ -200,11 +200,11 @@ static PoseTableEntry pose_table_turn[] = {
     {5, "MET_K_2"},
     {4, "MET_X_2"},
     {3, "MET_X_2"},
-    {BTL_POSE_NORMAL, "MET_S_2"},
+    {POSE_TYPE_NORMAL, "MET_S_2"},
     {29, "MET_Q_2"},
     {30, "MET_Q_2"},
     {31, "MET_A_1"},
-    {BTL_POSE_DAMAGE, "MET_D_3"},
+    {POSE_TYPE_DAMAGE, "MET_D_3"},
 #if VERSION >= VERSION_JP
     {50, "MET_A_1"},
     {POSE_TYPE_WALK, "MET_W_1"},
@@ -269,7 +269,7 @@ static BattleWeapon weapon_met_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
 #else
@@ -310,7 +310,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
 #if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
 #else
@@ -371,7 +371,7 @@ static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 90, 1
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_crimson_met", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
+    {1, "btl_un_crimson_met", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 /**
@@ -405,8 +405,8 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     ELSE
         CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
         CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_ceil))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -454,7 +454,7 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
     CALL(btlevtcmd_OnStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
     CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_INSIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(4)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
@@ -703,8 +703,8 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_MET_ON_CEILING, 0)
@@ -737,8 +737,8 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 15, LW(2), 15, -1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_turn))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_MET_ON_CEILING, 0)
@@ -877,8 +877,8 @@ static EVT_BEGIN(attack_event_ceil)
     END_LOOP
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
 
     // After the sway above it goes back to its ground form.
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))

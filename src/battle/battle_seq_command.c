@@ -1114,7 +1114,7 @@ s32 _btlcmd_MakePartyTable(BattleWork* wp) {
         } else if (party->currentHP <= 0) {
             cmd->party[num].enabled = 0;
         }
-        if (party->flags & UNIT_FLAG_MOVE_COLOR_CHANGING) {
+        if (party->flags & POUCH_PARTY_FLAG_AWAY) {
             cmd->party[num].enabled = 0;
         }
         num++;

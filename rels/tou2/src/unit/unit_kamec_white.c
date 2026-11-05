@@ -692,7 +692,7 @@ static EVT_BEGIN(init_event2)
 EVT_END()
 
 /**
- * Fades unit LW(0) (part 1) out from alpha 254 to 0 over 30 frames, then hides its shadow (PART_ATTR_NO_SHADOW).
+ * Fades unit LW(0) (part 1) out from alpha 254 to 0 over 30 frames, then hides its shadow (kNoShadow).
  * The clone spell runs it on the caster before the clones are placed, and bunsin_kill_event on a clone being
  * removed.
  */

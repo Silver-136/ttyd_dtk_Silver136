@@ -190,7 +190,7 @@ BattleUnitKind unit_teresa = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
+    kFloating,
     &regist,
     1,
     parts,
@@ -219,7 +219,7 @@ static StatusVulnerability regist = {50, 50, 105, 0, 50, 100, 100, 50, 100, 90, 
 
 /** Body part of the Boo: a single part using the c_teresa model. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
+    {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 /** Attack data of the Boo's attack: 3 damage. */
@@ -245,7 +245,7 @@ static BattleWeapon weapon_teresa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -384,11 +384,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "K_1"},
     {POSE_TYPE_POISON, "X_1"},
     {POSE_TYPE_DIZZY, "X_1"},
-    {BTL_POSE_NORMAL, "S_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "A_2"},
-    {BTL_POSE_DAMAGE, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
     {POSE_TYPE_WALK, "W_1"},
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_DANGER, "X_1"},
@@ -822,7 +822,7 @@ static EVT_BEGIN(move_event_sub)
     END_IF
     WAIT_FRAMES(LW(0))
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_RAISED, 1)
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
     BEGIN_SIBLING_EVENT
         LOOP(60)
             CALL(btlevtcmd_AddRotate, LW(3), 0, LW(1), 0)

@@ -1546,7 +1546,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
 #if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_RunDataEventChild, LW(10), 61)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_NEUTRAL)
-        CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
         CALL(btlevtcmd_OnAttribute, LW(3), kShellShielded | kUnitNeverTargetable)
         CALL(_check_mario_move_count, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)

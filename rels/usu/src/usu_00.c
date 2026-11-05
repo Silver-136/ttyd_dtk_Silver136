@@ -1634,7 +1634,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     SET_VALUE(LW(9), PARTY_MEMBER_VIVIAN)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(all_party_lecture)
-    CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
 #else
     CALL_CHILD(PTR(all_party_lecture))
 #endif

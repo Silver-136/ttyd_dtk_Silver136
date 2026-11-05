@@ -183,7 +183,7 @@ static BattleWeapon weapon_patamet_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
 #if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
 #else
@@ -246,11 +246,11 @@ static PoseTableEntry pose_table_pata[] = {
     {5, "PTM_K_1"},
     {4, "PTM_X_1"},
     {3, "PTM_X_1"},
-    {BTL_POSE_NORMAL, "PTM_S_1"},
+    {POSE_TYPE_NORMAL, "PTM_S_1"},
     {29, "PTM_Q_1"},
     {30, "PTM_Q_1"},
     {31, "PTM_S_1"},
-    {BTL_POSE_DAMAGE, "PTM_D_1"},
+    {POSE_TYPE_DAMAGE, "PTM_D_1"},
     {50, "PTM_A_1"},
     {POSE_TYPE_RUN, "PTM_R_1"},
     {POSE_TYPE_WALK, "PTM_W_1"},
@@ -278,7 +278,7 @@ static BattleDataEntry data_table_pata[] = {
  * box. Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts_pata[] = {
-    {1, "btl_un_crimson_patatogemet", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | kIsWinged | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, kCounterTopSpiky, pose_table_pata},
+    {1, "btl_un_crimson_patatogemet", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, kCounterTopSpiky, pose_table_pata},
 };
 
 /**
@@ -355,15 +355,15 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, LW(10), UNIT_ATTR_FLOATING)
+    CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
     CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 0)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
@@ -375,11 +375,11 @@ static EVT_BEGIN(dmg_fall_event_pata)
     CALL(btlevtcmd_GetHpDamageCount, LW(10), LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         CALL_CHILD(init_event)
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
         RETURN
     ELSE
         CALL_CHILD(init_event)
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
         CALL_CHILD(dmg_turn_event)
     END_IF
     RETURN
@@ -528,11 +528,11 @@ static PoseTableEntry pose_table[] = {
     {5, "TMT_K_1"},
     {4, "TMT_X_1"},
     {3, "TMT_X_1"},
-    {BTL_POSE_NORMAL, "TMT_S_1"},
+    {POSE_TYPE_NORMAL, "TMT_S_1"},
     {29, "TMT_Q_1"},
     {30, "TMT_Q_1"},
     {31, "TMT_A_1"},
-    {BTL_POSE_DAMAGE, "TMT_D_1"},
+    {POSE_TYPE_DAMAGE, "TMT_D_1"},
     {50, "TMT_A_1"},
     {POSE_TYPE_WALK, "TMT_W_1"},
     {POSE_TYPE_RUN, "TMT_R_1"},
@@ -553,11 +553,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {5, "STM_K_1"},
     {4, "STM_X_1"},
     {3, "STM_X_1"},
-    {BTL_POSE_NORMAL, "STM_S_1"},
+    {POSE_TYPE_NORMAL, "STM_S_1"},
     {29, "STM_Q_1"},
     {30, "STM_Q_1"},
     {31, "STM_A_1"},
-    {BTL_POSE_DAMAGE, "STM_D_1"},
+    {POSE_TYPE_DAMAGE, "STM_D_1"},
     {50, "STM_A_1"},
     {POSE_TYPE_WALK, "STM_W_1"},
     {POSE_TYPE_RUN, "STM_R_1"},
@@ -577,11 +577,11 @@ static PoseTableEntry pose_table_turn[] = {
     {5, "TMT_S_3"},
     {4, "TMT_S_3"},
     {3, "TMT_S_3"},
-    {BTL_POSE_NORMAL, "TMT_S_3"},
+    {POSE_TYPE_NORMAL, "TMT_S_3"},
     {29, "TMT_Q_2"},
     {30, "TMT_Q_2"},
     {31, "TMT_A_1"},
-    {BTL_POSE_DAMAGE, "TMT_S_3"},
+    {POSE_TYPE_DAMAGE, "TMT_S_3"},
 #if VERSION >= VERSION_JP
     {POSE_TYPE_WALK, "TMT_W_1"},
     {POSE_TYPE_RUN, "TMT_R_1"},
@@ -646,7 +646,7 @@ static BattleWeapon weapon_met_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
 #else
@@ -687,7 +687,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
 #if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
 #else
@@ -752,7 +752,7 @@ static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 90, 1
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_crimson_togemet", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, kCounterTopSpiky, pose_table},
+    {1, "btl_un_crimson_togemet", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 /**
@@ -785,8 +785,8 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     ELSE
         CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
         CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_ceil))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -859,7 +859,7 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
     CALL(btlevtcmd_OnStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
     CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_INSIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(4)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
@@ -1113,8 +1113,8 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, 0)
@@ -1148,8 +1148,8 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 20, LW(2), 15, -1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEMET_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_turn))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, 0)
@@ -1279,8 +1279,8 @@ static EVT_BEGIN(attack_event_ceil)
     LABEL(98)
     WAIT_FRAMES(60)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
 
     // It goes back to its ground form.
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))

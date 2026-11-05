@@ -128,10 +128,10 @@ static StatusVulnerability regist = {0, 95, 50, 0, 50, 100, 100, 90, 100, 100, 1
  * its hit box, defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
-    {2, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {3, "btl_un_honenoko", "c_nagehone_g", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {4, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
+    {1, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_honenoko", "c_nagehone_g", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 /** Attack data of the Dull Bones's bone throw: hits one opposing unit for 2 damage. */
@@ -157,7 +157,7 @@ static BattleWeapon weapon_honenoko_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -198,11 +198,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_POISON, "KRN_X_1"},
     {POSE_TYPE_DIZZY, "KRN_X_1"},
     {POSE_TYPE_KO, "KRN_Z_2"},
-    {BTL_POSE_NORMAL, "KRN_S_1"},
+    {POSE_TYPE_NORMAL, "KRN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRN_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRN_S_1"},
-    {BTL_POSE_DAMAGE, "KRN_D_1"},
+    {POSE_TYPE_DAMAGE, "KRN_D_1"},
     {POSE_TYPE_ATTACK, "KRN_A_1"},
     {POSE_TYPE_RUN, "KRN_R_1"},
     {POSE_TYPE_WALK, "KRN_W_1"},
@@ -518,8 +518,8 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_BONE_THROW1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("KRN_H_1"))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
@@ -614,8 +614,8 @@ static EVT_BEGIN(normal_attack_event)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     WAIT_FRAMES(10)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -659,7 +659,7 @@ static EVT_BEGIN(call_friend_event)
             CASE_DEFAULT
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRN_H_2"))
         END_SWITCH
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden | kNoShadow)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(4), LW(5), LW(6))
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(4), 15)
         ADD(LW(5), 14)
@@ -685,7 +685,7 @@ static EVT_BEGIN(call_friend_event)
         SWITCH(LW(10))
             CASE_EQUAL(0)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRN_C_5"))
-            CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+            CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kHidden | kNoShadow)
             CASE_EQUAL(1)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRN_C_4"))
             CASE_EQUAL(2)
@@ -697,7 +697,7 @@ static EVT_BEGIN(call_friend_event)
             CASE_DEFAULT
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRN_Z_2"))
         END_SWITCH
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden | kNoShadow)
         ADD(LW(10), 1)
     END_LOOP
 
@@ -713,7 +713,7 @@ static EVT_BEGIN(call_friend_event)
     // A new bony unit is spawned on the heap and given this unit's size-change status.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kHidden | kNoShadow)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(honenoko_copy_status, UNIT_ID_SELF, LW(3))

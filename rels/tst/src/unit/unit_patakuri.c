@@ -106,7 +106,7 @@ BattleUnitKind unit_patakuri = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING | kUnitLeader,
+    kFloating | kUnitLeader,
     &regist_patakuri,
     1,
     parts_patakuri,
@@ -159,7 +159,7 @@ static BattleWeapon weapon_patakuri_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -175,7 +175,7 @@ static BattleWeapon weapon_patakuri_attack = {
 
 /** Body part of the Paragoomba while it still has its wings: a single part using the c_kuribo model. */
 static BattleUnitKindPart parts_patakuri[] = {
-    {1, "btl_un_patakuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | kIsWinged | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table_patakuri},
+    {1, "btl_un_patakuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
 };
 
 /**
@@ -189,11 +189,11 @@ static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_CONFUSE, "PTK_K_1"},
     {POSE_TYPE_POISON, "PTK_I_1"},
     {POSE_TYPE_DIZZY, "PTK_I_1"},
-    {BTL_POSE_NORMAL, "PTK_S_1"},
+    {POSE_TYPE_NORMAL, "PTK_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "PTK_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PTK_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "PTK_S_1"},
-    {BTL_POSE_DAMAGE, "PTK_D_1"},
+    {POSE_TYPE_DAMAGE, "PTK_D_1"},
     {POSE_TYPE_ATTACK, "PTK_A_1"},
     {POSE_TYPE_RUN, "PTK_R_1"},
     {POSE_TYPE_RUN_HOME, "PTK_R_2"},
@@ -246,7 +246,7 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, LW(10), UNIT_ATTR_FLOATING)
+    CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
     CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     WAIT_MS(1000)
@@ -255,7 +255,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 0)
@@ -269,7 +269,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ChangeKind, LW(10), UNIT_GOOMBA)
     CALL_CHILD(init_event)
     WAIT_FRAMES(1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     RETURN
 EVT_END()
 
@@ -433,11 +433,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "KUR_K_1"},
     {POSE_TYPE_POISON, "KUR_I_1"},
     {POSE_TYPE_DIZZY, "KUR_I_1"},
-    {BTL_POSE_NORMAL, "KUR_S_1"},
+    {POSE_TYPE_NORMAL, "KUR_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KUR_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KUR_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KUR_S_1"},
-    {BTL_POSE_DAMAGE, "KUR_D_1"},
+    {POSE_TYPE_DAMAGE, "KUR_D_1"},
     {POSE_TYPE_ATTACK, "KUR_A_1"},
     {POSE_TYPE_ATTACK_2, "KUR_A_2"},
     {POSE_TYPE_RUN, "KUR_R_1"},
@@ -494,7 +494,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },
@@ -523,7 +523,7 @@ static BattleWeapon weapon_kuriboo_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -617,7 +617,7 @@ static EVT_BEGIN(attack_event)
 
     // The Goomba runs up to the target and crouches.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(170)

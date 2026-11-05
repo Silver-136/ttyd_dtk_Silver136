@@ -7,7 +7,7 @@
 #include <string.h>
 
 /**
- * Registers a case event with casedrv: conditionId is what triggers it (with CASE_COND_FLAG_BALLOON when flag is
+ * Registers a case event with casedrv: conditionId is what triggers it (with CASE_SETUP_SHOW_HINT when flag is
  * set), hitObjName and swFlag pick the hit object, evtCode runs with lwData copied in (or zeroed).
  * Returns the case id.
  */
@@ -18,7 +18,7 @@ static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName,
     CaseSetup* ptr = &setup;
 
     if (flag) {
-        conditionId |= CASE_COND_FLAG_BALLOON;
+        conditionId |= CASE_SETUP_SHOW_HINT;
     }
     ptr->conditionId = conditionId;
     ptr->hitObjName = hitObjName;
@@ -42,7 +42,7 @@ static inline s32 _evtCaseEntry(EventEntry* event, s32 conditionId, BOOL flag,
     CaseSetup* ptr = &setup;
 
     if (flag) {
-        conditionId |= CASE_COND_FLAG_BALLOON;
+        conditionId |= CASE_SETUP_SHOW_HINT;
     }
     ptr->conditionId = conditionId;
     ptr->hitObjName = hitObjName;

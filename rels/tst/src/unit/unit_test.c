@@ -46,11 +46,11 @@ static BattleUnitDefense defence_turn = {{0, 0, 0, 0, 0}};
  * animations.
  */
 static PoseTableEntry pose_table[] = {
-    {BTL_POSE_NORMAL, "NKT_S_1"},
+    {POSE_TYPE_NORMAL, "NKT_S_1"},
     {29, "NKT_Q_1A"},
     {30, "NKT_Q_1B"},
     {31, "NKT_S_1"},
-    {BTL_POSE_DAMAGE, "NKT_D_1"},
+    {POSE_TYPE_DAMAGE, "NKT_D_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
     {POSE_TYPE_ACTION, "NKT_W_1"},
 };
@@ -60,11 +60,11 @@ static PoseTableEntry pose_table[] = {
  * maps each battle pose (waiting, hurt, running...) to one of its NKT_* animations.
  */
 static PoseTableEntry pose_table_turn[] = {
-    {BTL_POSE_NORMAL, "NKT_B_1"},
+    {POSE_TYPE_NORMAL, "NKT_B_1"},
     {29, "NKT_Q_1A"},
     {30, "NKT_Q_1B"},
     {31, "NKT_S_1"},
-    {BTL_POSE_DAMAGE, "NKT_B_1"},
+    {POSE_TYPE_DAMAGE, "NKT_B_1"},
     {POSE_TYPE_ACTION, "NKT_B_1"},
 };
 
@@ -76,7 +76,7 @@ static BattleDataEntry data_table[] = {
 
 /** Body part of the test unit `test`: a single part using the nokonoko model. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_test", "nokonoko", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | kIsShelled, 0, pose_table},
+    {1, "btl_un_test", "nokonoko", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
 };
 
 /** Status vulnerability of the test unit `test`: every status lands at the normal rate. */

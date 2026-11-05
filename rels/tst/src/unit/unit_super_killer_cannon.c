@@ -159,9 +159,9 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 90, 100, 80, 100, 
  * barrel raised, when it fires into the air.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
-    {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE, 0, pose_table},
-    {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE, 0, pose_table},
+    {1, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
+    {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
 };
 
 /**
@@ -222,10 +222,10 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_AddHomePos, UNIT_ID_SELF, 20, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("KTA_Z_3"))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KTA_Z_2"))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kNoShadow)
     RETURN
 EVT_END()
 
@@ -362,9 +362,9 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
         SET_VALUE(LW(13), 30)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, 0)
         LOOP(0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -389,9 +389,9 @@ static EVT_BEGIN(attack_event)
                         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(11))
                         WAIT_FRAMES(1)
                     END_LOOP
-                    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HIDDEN)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+                    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHidden)
+                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
                     GOTO(99)
                 END_IF
             END_IF
@@ -409,9 +409,9 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
         SET_VALUE(LW(13), 30)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, 0)
         LOOP(0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -436,9 +436,9 @@ static EVT_BEGIN(attack_event)
                         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(11))
                         WAIT_FRAMES(1)
                     END_LOOP
-                    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HIDDEN)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+                    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHidden)
+                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
                     GOTO(99)
                 END_IF
             END_IF
@@ -456,9 +456,9 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
         SET_VALUE(LW(13), 30)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, 0)
         LOOP(0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -492,9 +492,9 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(11))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHidden)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         GOTO(99)
     END_IF
 
@@ -643,8 +643,8 @@ static EVT_BEGIN(friend_event_sky)
     IF_INT_EQUAL(LW(12), 1)
         CALL(btlevtcmd_OnOffStatus, LW(3), STATUS_CHARGE, 1, 1, 1)
     END_IF
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kHammerlikeCannotTarget)
     RETURN
 EVT_END()
 

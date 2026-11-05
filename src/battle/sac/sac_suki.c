@@ -542,7 +542,7 @@ static void disp_2D(CameraId cam, void* param) {
                 pos.x = w->btn2[i].pos.x;
                 pos.y = 60.0f + ((80.0f + w->btn2[i].pos.y) + w->offsetY);
                 pos.z = w->btn2[i].pos.z;
-                iconDispGx(&pos, ICON_DISP_2D, icon, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
             }
         }
         if (w->btn[i].state == 2) {
@@ -606,7 +606,7 @@ static void disp_2D(CameraId cam, void* param) {
                 pos.x = w->btn[i].pos.x;
                 pos.y = 60.0f + (w->btn[i].pos.y + w->offsetY);
                 pos.z = w->btn[i].pos.z;
-                iconDispGx(&pos, ICON_DISP_2D, icon, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
             }
         }
 #else

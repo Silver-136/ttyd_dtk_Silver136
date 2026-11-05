@@ -175,11 +175,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "CYU_K_1"},
     {POSE_TYPE_POISON, "CYU_X_1"},
     {POSE_TYPE_DIZZY, "CYU_X_1"},
-    {BTL_POSE_NORMAL, "CYU_S_1"},
+    {POSE_TYPE_NORMAL, "CYU_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "CYU_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CYU_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "CYU_S_1"},
-    {BTL_POSE_DAMAGE, "CYU_D_1"},
+    {POSE_TYPE_DAMAGE, "CYU_D_1"},
     {POSE_TYPE_ATTACK, "CYU_A_1"},
     {POSE_TYPE_RUN, "CYU_R_1"},
     {POSE_TYPE_WALK, "CYU_W_1"},
@@ -200,11 +200,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_CONFUSE, "CYU_K_2"},
     {POSE_TYPE_POISON, "CYU_X_2"},
     {POSE_TYPE_DIZZY, "CYU_X_2"},
-    {BTL_POSE_NORMAL, "CYU_S_2"},
+    {POSE_TYPE_NORMAL, "CYU_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "CYU_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CYU_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "CYU_S_2"},
-    {BTL_POSE_DAMAGE, "CYU_D_2"},
+    {POSE_TYPE_DAMAGE, "CYU_D_2"},
     {POSE_TYPE_ATTACK, "CYU_A_1"},
     {POSE_TYPE_RUN, "CYU_S_1"},
     {POSE_TYPE_WALK, "CYU_S_1"},
@@ -240,7 +240,7 @@ static BattleDataEntry data_table[] = {
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_basabasa_chururu", "c_cyuru", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table_ceil},
+    {1, "btl_un_basabasa_chururu", "c_cyuru", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
 #if VERSION <= VERSION_DEMO_JP
@@ -286,7 +286,7 @@ static BattleWeapon weapon_basabasa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     0, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -330,7 +330,7 @@ static EVT_BEGIN(ceil_sky_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, UNIT_ATTR_FLOATING)
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kFloating)
     CALL(btlevtcmd_SetPossessionItemOffset, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))

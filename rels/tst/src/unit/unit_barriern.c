@@ -161,7 +161,7 @@ BattleUnitKind unit_barriern = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
+    kFloating,
     &regist,
     11,
     parts,
@@ -183,17 +183,17 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 12.0f, 0.0f, 0.0f, 22.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table},
-    {2, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {3, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {4, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {5, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {6, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {7, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {8, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {9, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {10, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {11, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
+    {1, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 12.0f, 0.0f, 0.0f, 22.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {2, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {5, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {6, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {7, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {8, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {9, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {10, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {11, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 #if VERSION <= VERSION_DEMO_JP
@@ -235,7 +235,7 @@ static BattleWeapon weapon_wakka_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -272,7 +272,7 @@ static BattleWeapon weapon_wawawa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -309,11 +309,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "K_1"},
     {POSE_TYPE_POISON, "X_1"},
     {POSE_TYPE_DIZZY, "X_1"},
-    {BTL_POSE_NORMAL, "S_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
-    {BTL_POSE_DAMAGE, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
@@ -772,7 +772,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
             BtlUnit_SetPartsPos(part, x, y, i * ofs + z);
             BtlUnit_SetPartsScale(part, start[j], start[j], 1.0f);
             part->color.a = alphaEnd;
-            part->attributes &= ~PART_ATTR_HIDDEN;
+            part->attributes &= ~kHidden;
         }
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
@@ -791,7 +791,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         BtlUnit_SetPartsScale(part, 0.8f, 0.8f, 1.0f);
         part->color.a = 255;
         for (i = 2; i <= 6; i++) {
-            BtlUnit_GetPartsPtr(unit, i)->attributes |= PART_ATTR_HIDDEN;
+            BtlUnit_GetPartsPtr(unit, i)->attributes |= kHidden;
         }
         return EVT_RETURN_DONE;
     }
@@ -892,7 +892,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
             BtlUnit_SetPartsRotate(part, 0.0f, 0.0f, 0.0f);
             part->color.a = alphaStart;
             BtlUnit_SetAnim(part, "Z_2");
-            part->attributes &= ~PART_ATTR_HIDDEN;
+            part->attributes &= ~kHidden;
         }
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
@@ -911,7 +911,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
         BtlUnit_SetPartsScale(part, 0.8f, 0.8f, 1.0f);
         part->color.a = 255;
         for (i = 2; i <= 6; i++) {
-            BtlUnit_GetPartsPtr(unit, i)->attributes |= PART_ATTR_HIDDEN;
+            BtlUnit_GetPartsPtr(unit, i)->attributes |= kHidden;
         }
         return EVT_RETURN_DONE;
     }
@@ -1105,9 +1105,9 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
     CALL(btlevtcmd_GetPos, LW(12), LW(6), LW(7), LW(8))
     ADD(LW(8), 1)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN, LW(0))
+    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), kHidden, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     END_IF
 
     // The ring is launched and results 3, 6 or 2 start the target's avoid reaction.
@@ -1205,9 +1205,9 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
     CALL(btlevtcmd_GetPos, LW(12), LW(6), LW(7), LW(8))
     ADD(LW(8), 1)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN, LW(0))
+    CALL(btlevtcmd_CheckPartsAttribute, UNIT_ID_SELF, LW(15), kHidden, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_5"))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
@@ -1660,7 +1660,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), 0, -1000, 0)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     ELSE
         SET_VALUE(LW(9), PTR(&weapon_wawawa_attack))
         SET_VALUE(LW(10), 1)

@@ -133,9 +133,9 @@ static StatusVulnerability regist = {150, 150, 150, 150, 150, 150, 150, 150, 150
 
 /** Pose table of the rider on Pennington (part 1): maps each battle pose to its KNP_* animations. */
 static PoseTableEntry pose_table_kinopio[] = {
-    {BTL_POSE_NORMAL, "KNP_S_1"},
+    {POSE_TYPE_NORMAL, "KNP_S_1"},
     {31, "KNP_S_1"},
-    {BTL_POSE_DAMAGE, "KNP_O_1"},
+    {POSE_TYPE_DAMAGE, "KNP_O_1"},
     {POSE_TYPE_RUN, "KNP_R_1"},
     {POSE_TYPE_ACTION, "KNP_S_1"},
 };
@@ -144,9 +144,9 @@ static PoseTableEntry pose_table_kinopio[] = {
  * Pose table of the body Pennington rides on (parts 2 and 3): maps each battle pose to its GAZ_* animations.
  */
 static PoseTableEntry pose_table_gazigazi[] = {
-    {BTL_POSE_NORMAL, "GAZ_S_1"},
+    {POSE_TYPE_NORMAL, "GAZ_S_1"},
     {31, "GAZ_A_1"},
-    {BTL_POSE_DAMAGE, "GAZ_A_1"},
+    {POSE_TYPE_DAMAGE, "GAZ_A_1"},
     {POSE_TYPE_ACTION, "GAZ_S_1"},
 };
 
@@ -161,9 +161,9 @@ static BattleDataEntry data_table[] = {
  * and the two-piece body he sits on (parts 2 and 3, model c_gazigazi).
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_powan", "c_kinopio", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table_kinopio},
-    {2, "btl_un_powan", "c_gazigazi", 0.0f, 10.0f, 6.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW, 0, pose_table_gazigazi},
-    {3, "btl_un_powan", "c_gazigazi", 0.0f, 10.0f, 6.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table_gazigazi},
+    {1, "btl_un_powan", "c_kinopio", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_kinopio},
+    {2, "btl_un_powan", "c_gazigazi", 0.0f, 10.0f, 6.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table_gazigazi},
+    {3, "btl_un_powan", "c_gazigazi", 0.0f, 10.0f, 6.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_gazigazi},
 };
 
 /**
@@ -237,7 +237,7 @@ static BattleWeapon weapon_powan_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -290,7 +290,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("GAZ_A_1"))
     WAIT_FRAMES(12)
@@ -315,12 +315,12 @@ EVT_END()
  * rider returns home.
  */
 static EVT_BEGIN(hit_event)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 10)
     ADD(LW(2), 6)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KNP_O_1"))
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -342,8 +342,8 @@ static EVT_BEGIN(hit_event)
     MULTIPLY(LW(5), -1)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
     WAIT_FRAMES(30)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

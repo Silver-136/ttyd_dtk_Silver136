@@ -629,7 +629,7 @@ skip:
         return 0;
     }
     if (flags & DAMAGE_RESULT_FINAL_HIT) {
-        if ((weapon->special & SPECIAL_FORCE_RESULT_10000) || !(target->attributeFlags & UNIT_ATTR_NO_LAST_HIT_RESULT)) {
+        if ((weapon->special & SPECIAL_FORCE_RESULT_10000) || !(target->attributeFlags & kUnitNoFinalHitResult_UNUSED)) {
             *result |= 0x10000;
         }
     }

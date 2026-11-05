@@ -499,7 +499,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
 #if VERSION <= VERSION_DEMO_JP
         RETURN
     END_IF
-    CALL(evt_snd_bgmoff, PSND_FADE_OUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(snd_on)
 #else
@@ -585,7 +585,7 @@ EVT_BEGIN(evt_50)
     CALL(msg_no, 9, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
 #if VERSION <= VERSION_DEMO_JP
-    CALL(evt_snd_bgmoff, PSND_FADE_OUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
 #endif
     CALL(get_bed, LW(0), LW(1), LW(2))

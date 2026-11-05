@@ -690,7 +690,7 @@ EVT_END()
 
 /**
  * Fades the unit whose id is in LW(0) out over 30 frames (alpha 254 down to 0),
- * then hides its body part's shadow (0x2000000, PART_ATTR_NO_SHADOW); LW(0) = -1 does nothing.
+ * then hides its body part's shadow (0x2000000, kNoShadow); LW(0) = -1 does nothing.
  * bunsin_magic_event uses it on the Magikoopa before it splits.
  */
 static EVT_BEGIN(alpha_down_event)
@@ -715,7 +715,7 @@ EVT_END()
 
 /**
  * Fades the unit whose id is in LW(0) back in over 30 frames (alpha 0 up to 255),
- * first clearing the 0x2000000 part attribute (PART_ATTR_NO_SHADOW) that alpha_down_event set;
+ * first clearing the 0x2000000 part attribute (kNoShadow) that alpha_down_event set;
  * LW(0) = -1 does nothing.
  */
 static EVT_BEGIN(alpha_up_event)

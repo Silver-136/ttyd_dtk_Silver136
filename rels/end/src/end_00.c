@@ -1909,7 +1909,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                 state++;
             } else {
                 // the last entry stays up, with BGM_EVT_PEACH1 (BGM id 0xCD), until A is pressed
-                psndBGMOn(PSND_FADE_OUT, (char*)0xCD);
+                psndBGMOn(PSND_FADEOUT, (char*)0xCD);
 #else
             } else {
                 i = 0;

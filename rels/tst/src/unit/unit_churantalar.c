@@ -143,7 +143,7 @@ BattleUnitKind unit_churantalar = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
+    kFloating,
     &regist,
     5,
     parts,
@@ -191,11 +191,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "PAI_K_1"},
     {POSE_TYPE_POISON, "PAI_X_1"},
     {POSE_TYPE_DIZZY, "PAI_X_1"},
-    {BTL_POSE_NORMAL, "PAI_S_1"},
+    {POSE_TYPE_NORMAL, "PAI_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "PAI_D_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PAI_D_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "PAI_S_1"},
-    {BTL_POSE_DAMAGE, "PAI_D_1"},
+    {POSE_TYPE_DAMAGE, "PAI_D_1"},
     {POSE_TYPE_ATTACK, "PAI_A_1"},
     {POSE_TYPE_WALK, "PAI_W_1"},
     {POSE_TYPE_RUN, "PAI_W_1"},
@@ -222,11 +222,11 @@ static BattleDataEntry data_table[] = {
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table},
-    {2, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 5.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {3, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {4, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
-    {5, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
+    {1, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {2, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 5.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {5, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 /**
@@ -436,7 +436,7 @@ static BattleWeapon weapon_piders_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -473,7 +473,7 @@ static BattleWeapon weapon_piders_renzoku_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -623,9 +623,9 @@ static EVT_BEGIN(dead_event)
     IF_INT_GREATER(LW(0), 0)
         GOTO(20)
     END_IF
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NOT_TARGETABLE)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNotTargetable)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
@@ -644,7 +644,7 @@ EVT_END()
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_DAMAGE)
     BEGIN_SIBLING_EVENT
         LABEL(0)
         CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 20, 0)
@@ -660,8 +660,8 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_StoreCoin, LW(0))
     CALL(btlevtcmd_GetExp, LW(10), LW(0))
     CALL(btlevtcmd_StoreExp, LW(0))
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NOT_TARGETABLE)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNotTargetable)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
@@ -717,8 +717,8 @@ EVT_END()
 /**
  * Moves the Arantula down to its low perch ("kuutei", height 10):
  * plays SFX_ENM_PAIDA_MOVE2 (MOVE1 the first time, while unit work 3 is set), sways, dives to the spot,
- * makes it the home position, clears PART_ATTR_HAMMERLIKE_CANNOT_TARGET and
- * PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET on its body so hammers and shell attacks reach it, and sets unit work 0
+ * makes it the home position, clears kHammerlikeCannotTarget and
+ * kShellTosslikeCannotTarget on its body so hammers and shell attacks reach it, and sets unit work 0
  * to 1.
  */
 static EVT_BEGIN(move_kuutei_event)
@@ -744,7 +744,7 @@ static EVT_BEGIN(move_kuutei_event)
     SET_VALUE(LW(1), 10)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -10, EASING_QUADRATIC_OUT, 0, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 1)
     RETURN
 EVT_END()
@@ -752,7 +752,7 @@ EVT_END()
 /**
  * Moves the Arantula up into the air ("kuuchu" = midair, height 70):
  * plays SFX_ENM_PAIDA_MOVE2, sways, dives up, makes it the home position, sets
- * PART_ATTR_HAMMERLIKE_CANNOT_TARGET and PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET on its body so hammers and shell
+ * kHammerlikeCannotTarget and kShellTosslikeCannotTarget on its body so hammers and shell
  * attacks cannot reach it, and sets unit work 0 to 0.
  */
 static EVT_BEGIN(move_kuuchu_event)
@@ -767,7 +767,7 @@ static EVT_BEGIN(move_kuuchu_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 10, EASING_QUADRATIC_OUT, 0, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 0)
     RETURN
 EVT_END()
@@ -906,12 +906,12 @@ static EVT_BEGIN(damage_check_event_sub)
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, LW(7))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kNoShadow)
     GOTO(99)
     LABEL(91)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kNoShadow)
     IF_INT_EQUAL(LW(10), 1)
         SET_VALUE(LW(0), UNIT_WORK_TARGET1_ID)
         SET_VALUE(LW(1), UNIT_WORK_TARGET1_PART)
@@ -953,7 +953,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_A_1"))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
 #if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1015,7 +1015,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_A_1"))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
 #if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(LW(0), 1)
@@ -1063,7 +1063,7 @@ static EVT_BEGIN(piders_attack_common_event2)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_S_1"))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     RETURN
 EVT_END()
 
@@ -1091,8 +1091,8 @@ static EVT_BEGIN(piders_attack_common_event3)
         CASE_END
     END_SWITCH
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(7), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), kHidden)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), kNoShadow)
     CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, LW(7), FLOAT(2.0f), FLOAT(2.0f), FLOAT(2.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(7), LW(0), LW(1), LW(2), 0, -1)
@@ -1247,7 +1247,7 @@ static EVT_BEGIN(renzoku_attack_event)
 
     // The Arantula swings back to its idle pose and the camera resets.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_S_1"))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
     LABEL(99)
@@ -1316,8 +1316,8 @@ static EVT_BEGIN(renzoku_attack_event_sub_last)
         ADD(LW(1), 1)
     END_LOOP
     IF_INT_EQUAL(LW(2), 1)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kHidden)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kNoShadow)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(0))
     ELSE

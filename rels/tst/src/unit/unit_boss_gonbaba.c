@@ -129,7 +129,7 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -171,7 +171,7 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -340,10 +340,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_STOP, "GNB_Z_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
 #endif
-    {BTL_POSE_NORMAL, "GNB_S_3"},
+    {POSE_TYPE_NORMAL, "GNB_S_3"},
     {POSE_TYPE_TALK, "GNB_T_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
-    {BTL_POSE_DAMAGE, "GNB_D_1"},
+    {POSE_TYPE_DAMAGE, "GNB_D_1"},
     {POSE_TYPE_ACTION, "GNB_S_3"},
 };
 
@@ -359,10 +359,10 @@ static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_STOP, "GNB_N_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
 #endif
-    {BTL_POSE_NORMAL, "GNB_S_4"},
+    {POSE_TYPE_NORMAL, "GNB_S_4"},
     {POSE_TYPE_TALK, "GNB_T_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_4"},
-    {BTL_POSE_DAMAGE, "GNB_V_1"},
+    {POSE_TYPE_DAMAGE, "GNB_V_1"},
     {POSE_TYPE_ACTION, "GNB_S_4"},
 };
 
@@ -382,8 +382,8 @@ static BattleDataEntry data_table[] = {
  */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | GONBABA_DEFENSE_ATTR, 0, pose_table},
-    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | GONBABA_DEFENSE_ATTR | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET | PART_ATTR_HIDDEN, 0, pose_table},
-    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN, 0, pose_table},
+    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | GONBABA_DEFENSE_ATTR | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
+    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden, 0, pose_table},
 };
 
 /**
@@ -433,7 +433,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_PARTNER, FLOAT(6.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_PARTNER, LW(3), LW(4), LW(5), 0, -1, 0)
         CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), BTL_POSE_STAY)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(6.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 0, -1, 0)
@@ -474,7 +474,7 @@ static EVT_BEGIN(battle_entry_event)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), POSE_TYPE_NEUTRAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 60, 0)
 
@@ -657,7 +657,7 @@ EVT_BEGIN(negotiation_event)
     IF_INT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_C_4"))
     ELSE
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, BTL_POSE_STAY)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_NEUTRAL)
     END_IF
     WAIT_MS(700)
 
@@ -846,7 +846,7 @@ EVT_BEGIN(negotiation_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("GNB_P_1"))
         CALL(btlevtcmd_ftomsec, 14, LW(0))
         WAIT_MS(LW(0))
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         CALL(btlevtcmd_ftomsec, 56, LW(0))
         WAIT_MS(LW(0))
     END_INLINE_EVENT
@@ -996,7 +996,7 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, -115, 50, 200, -115, -30, -670, 20, 0)
     WAIT_FRAMES(25)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_S_5"))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
 
     // Goombella or Koops is appalled.

@@ -5567,7 +5567,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     LABEL(98)
     CALL(btlevtcmd_CheckToken, LW(3), kKnockedAwayReturned, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, TOKEN_FLAG_UNUSED_8, LW(0))
+        CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kTokenTested_UNUSED, LW(0))
         IF_INT_EQUAL(LW(0), 0)
         END_IF
         WAIT_FRAMES(1)

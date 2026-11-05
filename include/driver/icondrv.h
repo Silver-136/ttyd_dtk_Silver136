@@ -121,4 +121,3 @@ s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color);
 s32 iconNumberDispGx3D(Mtx mtx, s32 number, BOOL small, GXColor color);
 
 // Names from LLCOOLT's tree.
-#define ICON_DISP_2D 4

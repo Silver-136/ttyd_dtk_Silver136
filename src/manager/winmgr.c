@@ -1922,7 +1922,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
         w = (ent->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){ent->x + w, ent->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_FLAG_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
 #else
         switch (sel->type) {
             case SELECT_TYPE_INFORMANT_PERFECT:

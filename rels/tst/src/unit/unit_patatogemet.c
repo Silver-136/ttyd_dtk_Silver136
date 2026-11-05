@@ -139,7 +139,7 @@ BattleUnitKind unit_patatogemet = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
+    kFloating,
 #if VERSION >= VERSION_US
     &regist_pata,
 #else

@@ -174,6 +174,4 @@ s32 BattleStage_ObjectFallCheck(void);
 
 // Names from LLCOOLT's tree.
 enum {
-    STAGE_OBJ_FLAG_IRON_FRAME_GONE = 32,
-    STAGE_OBJ_FLAG_NO_IRON_FRAME_FALL = 64,
 };

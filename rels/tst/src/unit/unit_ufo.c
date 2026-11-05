@@ -102,18 +102,18 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
 /** Pose table of the UFO itself (part 1): maps the battle poses to its CAT_* animations. */
 static PoseTableEntry pose_table[] = {
-    {BTL_POSE_NORMAL, "CAT_S_1"},
+    {POSE_TYPE_NORMAL, "CAT_S_1"},
     {31, "CAT_S_1"},
-    {BTL_POSE_DAMAGE, "CAT_K_1"},
+    {POSE_TYPE_DAMAGE, "CAT_K_1"},
     {POSE_TYPE_WALK, "CAT_W_1"},
     {POSE_TYPE_ACTION, "CAT_S_1"},
 };
 
 /** Pose table of the coin the UFO carries (part 2): every pose shows BRT_O_1. */
 static PoseTableEntry pose_table_2[] = {
-    {BTL_POSE_NORMAL, "BRT_O_1"},
+    {POSE_TYPE_NORMAL, "BRT_O_1"},
     {31, "BRT_O_1"},
-    {BTL_POSE_DAMAGE, "BRT_O_1"},
+    {POSE_TYPE_DAMAGE, "BRT_O_1"},
     {POSE_TYPE_ACTION, "BRT_O_1"},
 };
 
@@ -127,8 +127,8 @@ static BattleDataEntry data_table[] = {
  * and the coin it carries as a dropped item (part 2, model coin).
  */
 static BattleUnitKindPart parts[] = {
-    {1, "bll_un_ufo", "ufo", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 65.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table},
-    {2, "おとしもの", "coin", 0.0f, -15.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET, 0, pose_table_2},
+    {1, "bll_un_ufo", "ufo", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 65.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {2, "おとしもの", "coin", 0.0f, -15.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kShellTosslikeCannotTarget, 0, pose_table_2},
 };
 
 /**

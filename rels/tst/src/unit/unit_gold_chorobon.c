@@ -144,11 +144,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "CBN_K_1"},
     {POSE_TYPE_POISON, "CBN_X_1"},
     {POSE_TYPE_DIZZY, "CBN_X_1"},
-    {BTL_POSE_NORMAL, "CBN_S_1"},
+    {POSE_TYPE_NORMAL, "CBN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CBN_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "CBN_S_1"},
-    {BTL_POSE_DAMAGE, "CBN_D_1"},
+    {POSE_TYPE_DAMAGE, "CBN_D_1"},
     {POSE_TYPE_ATTACK, "CBN_A_1"},
     {POSE_TYPE_RUN, "CBN_R_1"},
     {POSE_TYPE_WALK, "CBN_W_1"},
@@ -185,7 +185,7 @@ static BattleDataEntry data_table[] = {
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gold_chorobon", "c_chorobon_k", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
+    {1, "btl_un_gold_chorobon", "c_chorobon_k", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 /** Attack data of Gold Fuzzy's attack: base damage 1, 100% accuracy. */
@@ -211,7 +211,7 @@ BattleWeapon weapon_gold_chorobon_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

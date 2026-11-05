@@ -169,7 +169,7 @@ static BattleDataEntry data_table[] = {
 
 /** Body part of the L. Tentacle (model c_gesso3): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gesso_left_arm", "c_gesso3", 0.0f, 0.0f, 0.0f, 270.0f, 20.0f, 0.0f, 270.0f, 20.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_UNTATTLEABLE, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_UNTATTLEABLE | PART_ATTR_NO_SHADOW), 0, pose_table},
+    {1, "btl_un_gesso_left_arm", "c_gesso3", 0.0f, 0.0f, 0.0f, 270.0f, 20.0f, 0.0f, 270.0f, 20.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(kMainPart | kGuardTargetPart | kUntattleable, kMainPart | kGuardTargetPart | kUntattleable | kNoShadow), 0, pose_table},
 };
 
 /** Init script of the Blooper's left tentacle. Registers its damage, wait and attack scripts and starts it waiting. */

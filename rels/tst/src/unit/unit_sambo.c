@@ -141,7 +141,7 @@ static BattleWeapon weapon_sambo_head_attack_4 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -178,7 +178,7 @@ static BattleWeapon weapon_sambo_head_attack_3 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -215,7 +215,7 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -256,7 +256,7 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     0, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -293,7 +293,7 @@ static BattleWeapon weapon_sambo_spike_attack_4 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -330,7 +330,7 @@ static BattleWeapon weapon_sambo_spike_attack_3 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -367,7 +367,7 @@ static BattleWeapon weapon_sambo_spike_attack_2 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -389,11 +389,11 @@ static PoseTableEntry pose_table_body4[] = {
     {POSE_TYPE_CONFUSE, "SNB_K_1"},
     {POSE_TYPE_POISON, "SNB_X_1"},
     {POSE_TYPE_DIZZY, "SNB_X_1"},
-    {BTL_POSE_NORMAL, "SNB_S_1"},
+    {POSE_TYPE_NORMAL, "SNB_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SNB_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_1"},
-    {BTL_POSE_DAMAGE, "SNB_D_1"},
+    {POSE_TYPE_DAMAGE, "SNB_D_1"},
     {POSE_TYPE_AVOID_SPIKY_SIDE, "SNB_W_1"},
     {POSE_TYPE_RUN, "SNB_W_1"},
     {POSE_TYPE_WALK, "SNB_W_1"},
@@ -411,11 +411,11 @@ static PoseTableEntry pose_table_body3[] = {
     {POSE_TYPE_CONFUSE, "SNB_K_2"},
     {POSE_TYPE_POISON, "SNB_X_2"},
     {POSE_TYPE_DIZZY, "SNB_X_2"},
-    {BTL_POSE_NORMAL, "SNB_S_2"},
+    {POSE_TYPE_NORMAL, "SNB_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SNB_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_2"},
-    {BTL_POSE_DAMAGE, "SNB_D_2"},
+    {POSE_TYPE_DAMAGE, "SNB_D_2"},
     {POSE_TYPE_AVOID_SPIKY_SIDE, "SNB_W_2"},
     {POSE_TYPE_ATTACK, "SNB_A_1A"},
     {POSE_TYPE_ATTACK_2, "SNB_A_1B"},
@@ -435,11 +435,11 @@ static PoseTableEntry pose_table_body2[] = {
     {POSE_TYPE_CONFUSE, "SNB_K_3"},
     {POSE_TYPE_POISON, "SNB_X_3"},
     {POSE_TYPE_DIZZY, "SNB_X_3"},
-    {BTL_POSE_NORMAL, "SNB_S_3"},
+    {POSE_TYPE_NORMAL, "SNB_S_3"},
     {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_3"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SNB_Q_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_3"},
-    {BTL_POSE_DAMAGE, "SNB_D_3"},
+    {POSE_TYPE_DAMAGE, "SNB_D_3"},
     {POSE_TYPE_AVOID_SPIKY_SIDE, "SNB_W_3"},
     {POSE_TYPE_ATTACK, "SNB_A_2A"},
     {POSE_TYPE_ATTACK_2, "SNB_A_2B"},
@@ -459,11 +459,11 @@ static PoseTableEntry pose_table_body1[] = {
     {POSE_TYPE_CONFUSE, "SNB_K_4"},
     {POSE_TYPE_POISON, "SNB_X_4"},
     {POSE_TYPE_DIZZY, "SNB_X_4"},
-    {BTL_POSE_NORMAL, "SNB_S_4"},
+    {POSE_TYPE_NORMAL, "SNB_S_4"},
     {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_4"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SNB_Q_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_4"},
-    {BTL_POSE_DAMAGE, "SNB_D_4"},
+    {POSE_TYPE_DAMAGE, "SNB_D_4"},
     {POSE_TYPE_AVOID_SPIKY_SIDE, "SNB_W_4"},
     {POSE_TYPE_ATTACK, "SNB_A_3A"},
     {POSE_TYPE_ATTACK_2, "SNB_A_3B"},
@@ -477,8 +477,8 @@ static PoseTableEntry pose_table_body1[] = {
 
 /** Pose table of the loose segment the Pokey throws or sheds (part 5). */
 static PoseTableEntry pose_table_parts[] = {
-    {BTL_POSE_NORMAL, "SNB_B_1"},
-    {BTL_POSE_DAMAGE, "SNB_B_1"},
+    {POSE_TYPE_NORMAL, "SNB_B_1"},
+    {POSE_TYPE_DAMAGE, "SNB_B_1"},
     {POSE_TYPE_ACTION, "SNB_B_1"},
 };
 
@@ -515,7 +515,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body4, // poseTable
     },
@@ -531,7 +531,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW, // attributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body3, // poseTable
     },
@@ -547,7 +547,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW, // attributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body2, // poseTable
     },
@@ -563,7 +563,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW, // attributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body1, // poseTable
     },
@@ -579,7 +579,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, // attributes
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
         0, // counterAttributes
         pose_table_parts, // poseTable
     },
@@ -707,10 +707,10 @@ static EVT_BEGIN(damage_event_bodylost)
             CALL(btlevtcmd_SetCutBaseOffset, UNIT_ID_SELF, 0, 40, 0)
             CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 10, 52, 0)
         END_SWITCH
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), kMainPart | kGuardTargetPart)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), kNotTargetable | kHidden | kNoShadow)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kMainPart | kGuardTargetPart)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kNotTargetable | kHidden)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(4)
@@ -718,7 +718,7 @@ static EVT_BEGIN(damage_event_bodylost)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
         CALL(btlevtcmd_SetPartsFallAccel, LW(10), 5, FLOAT(0.39941406f))
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), 25)
@@ -727,12 +727,12 @@ static EVT_BEGIN(damage_event_bodylost)
         CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), 16)
         CALL(btlevtcmd_JumpPartsPosition, LW(10), 5, LW(0), LW(1), LW(2), 12, -1)
         LOOP(40)
-            CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, kHidden)
             WAIT_FRAMES(1)
-            CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+            CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, kHidden)
     END_IF
     RETURN
 EVT_END()
@@ -838,10 +838,10 @@ static EVT_BEGIN(damage_event_bodylost_blow)
             CALL(btlevtcmd_SetCutBaseOffset, UNIT_ID_SELF, 0, 40, 0)
             CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 10, 52, 0)
         END_SWITCH
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), kMainPart | kGuardTargetPart)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), kNotTargetable | kHidden | kNoShadow)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kMainPart | kGuardTargetPart)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kNotTargetable | kHidden)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(4)
@@ -851,7 +851,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
         // BUG: this event (tag 18) runs only for patterns 14 and 16, so the test for 15 is never true and a
         // Super Hammer hit also sends the segment with marioWeapon_UltraHammerInvolved.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, LW(0))
@@ -897,7 +897,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         CALL(btlevtcmd_GetPos, LW(10), EVT_NULLPTR, LW(1), EVT_NULLPTR)
         CALL(btlevtcmd_JumpPartsSetting, LW(10), 5, 0, FLOAT(5.0f), FLOAT(0.009765625f))
         CALL(btlevtcmd_JumpPartsPosition, LW(10), 5, LW(0), LW(1), LW(2), 0, -1)
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, kHidden)
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER, LW(5))
         IF_INT_NOT_EQUAL(LW(5), 0)
 
@@ -965,10 +965,10 @@ static EVT_BEGIN(damage_swallow_body)
         END_SWITCH
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(3)
-            CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-            CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-            CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-            CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN)
+            CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), kMainPart | kGuardTargetPart)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), kNotTargetable | kHidden | kNoShadow)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kMainPart | kGuardTargetPart)
+            CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kNotTargetable | kHidden)
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             WAIT_FRAMES(1)
             CALL_CHILD(subset_dmg_sambo_fall)
@@ -976,12 +976,12 @@ static EVT_BEGIN(damage_swallow_body)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 25)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 5, 0, EASING_LINEAR, 0, -1)
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, kHidden)
         WAIT_FRAMES(20)
     END_IF
     RETURN
@@ -1148,7 +1148,7 @@ static EVT_BEGIN(attack_head_2_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -1250,7 +1250,7 @@ static EVT_BEGIN(attack_head_2_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_head_attack_2), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 90)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_NEUTRAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     SET_VALUE(LW(14), -90)
@@ -1449,7 +1449,7 @@ static EVT_BEGIN(attack_head_1_event)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 10)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 4, BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 4, POSE_TYPE_NEUTRAL)
 
     // It hops back to its place.
     LABEL(98)
@@ -1557,10 +1557,10 @@ static EVT_BEGIN(attack_spike_event)
         CALL(btlevtcmd_SetCutBaseOffset, UNIT_ID_SELF, 0, 10, 0)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 10, 16, 0)
     END_SWITCH
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(6), PART_ATTR_MAIN | PART_ATTR_GUARD_COVER)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(6), PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), kMainPart | kGuardTargetPart)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kNotTargetable | kHidden | kNoShadow)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(6), kMainPart | kGuardTargetPart)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(6), kNotTargetable | kHidden)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(5))
 
     // The loose segment pops up and flies toward the target.
@@ -1577,7 +1577,7 @@ static EVT_BEGIN(attack_spike_event)
         SUBTRACT(LW(9), LW(11))
         ADD(LW(1), LW(9))
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 5, PART_ATTR_HIDDEN)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 5, kHidden)
         CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 5, FLOAT(0.5996094f))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("SNB_B_1"))
         CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 30, -1)
@@ -1635,7 +1635,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 5, FLOAT(0.099609375f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 0, -1)
     CALL(evt_snd_sfxoff, LW(14))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, kHidden)
     GOTO(99)
 
     // A hit: the target takes the damage and the segment bounces away across the floor and vanishes.
@@ -1657,7 +1657,7 @@ static EVT_BEGIN(attack_spike_event)
     END_SWITCH
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_NEUTRAL)
 
     // Superguard: the segment flies back and hits the Pokey itself.
     IF_INT_EQUAL(LW(5), CHECK_DAMAGE_SUPERGUARDED)
@@ -1680,7 +1680,7 @@ static EVT_BEGIN(attack_spike_event)
             CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, 5, FLOAT(1.5f))
             CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
             CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 0, 20, EASING_LINEAR, 0, -1)
-            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, PART_ATTR_HIDDEN)
+            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, kHidden)
         END_INLINE_EVENT
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
@@ -1698,7 +1698,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, 5, FLOAT(1.5f))
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 20)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 0, 20, EASING_LINEAR, 0, -1)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, PART_ATTR_HIDDEN)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, kHidden)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 

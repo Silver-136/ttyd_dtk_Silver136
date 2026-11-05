@@ -512,7 +512,7 @@ USER_FUNC(down_ceil) {
         work->end = (Vec){0.0f, 130.0f, 0.0f};
         work->timer2 = 120;
         work->steps = 120;
-        *ceil &= ~STAGE_OBJ_FLAG_IRON_FRAME_GONE;
+        *ceil &= ~STAGE_FLAG_NO_IRON_FRAME;
         work->sfx = work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
     body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer2, work->steps);
@@ -535,7 +535,7 @@ USER_FUNC(up_ceil) {
         work->end = (Vec){0.0f, 250.0f, 0.0f};
         work->timer2 = 120;
         work->steps = 120;
-        *ceil |= STAGE_OBJ_FLAG_IRON_FRAME_GONE;
+        *ceil |= STAGE_FLAG_NO_IRON_FRAME;
         work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
     body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer2, work->steps);

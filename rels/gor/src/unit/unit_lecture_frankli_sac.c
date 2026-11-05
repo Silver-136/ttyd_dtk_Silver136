@@ -395,7 +395,7 @@ EVT_BEGIN(stop_wait_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_PARTNER)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
 #if VERSION <= VERSION_DEMO_JP
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), POSE_TYPE_NEUTRAL)
 #else
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_PARTNER, LW(0))
 #endif

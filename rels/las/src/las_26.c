@@ -247,7 +247,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_npc_battle_start, STRING("ボンババ"))
     CALL(evt_npc_wait_battle_end)
 #if VERSION <= VERSION_DEMO_JP
-    CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_archi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 0, 25, 845, 0, 100, 150, 0, EASING_SINE_IN_OUT)

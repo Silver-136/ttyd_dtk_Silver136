@@ -137,11 +137,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "TGD_K_1"},
     {POSE_TYPE_POISON, "TGD_X_1"},
     {POSE_TYPE_DIZZY, "TGD_X_1"},
-    {BTL_POSE_NORMAL, "TGD_S_4"},
+    {POSE_TYPE_NORMAL, "TGD_S_4"},
     {POSE_TYPE_DAMAGE_FIRE, "TGD_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGD_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "TGD_S_2"},
-    {BTL_POSE_DAMAGE, "TGD_D_1"},
+    {POSE_TYPE_DAMAGE, "TGD_D_1"},
     {POSE_TYPE_ATTACK, "TGD_A_1"},
     {POSE_TYPE_WALK, "TGD_S_4"},
     {POSE_TYPE_RUN, "TGD_S_4"},
@@ -162,11 +162,11 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_CONFUSE, "TGD_K_2"},
     {POSE_TYPE_POISON, "TGD_X_2"},
     {POSE_TYPE_DIZZY, "TGD_X_2"},
-    {BTL_POSE_NORMAL, "TGD_S_5"},
+    {POSE_TYPE_NORMAL, "TGD_S_5"},
     {POSE_TYPE_DAMAGE_FIRE, "TGD_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGD_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TGD_S_3"},
-    {BTL_POSE_DAMAGE, "TGD_D_2"},
+    {POSE_TYPE_DAMAGE, "TGD_D_2"},
     {POSE_TYPE_DANGER, "TGD_X_2"},
     {POSE_TYPE_PERIL, "TGD_X_2"},
     {POSE_TYPE_TALK, "TGD_S_5"},
@@ -188,7 +188,7 @@ static BattleDataEntry data_table[] = {
 
 /** Body part of the Bristle: a single part using the c_togedaruma model. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togedaruma", "c_togedaruma", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
+    {1, "btl_un_togedaruma", "c_togedaruma", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
 /** Attack data of the Bristle's spiked slide: 1 damage. */
@@ -214,7 +214,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

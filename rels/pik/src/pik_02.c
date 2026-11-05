@@ -1263,9 +1263,9 @@ EVT_BEGIN(pik_02_init_evt)
 #if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_set_rev_mode, 2)
     ELSE
-        CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_EVT_KUPPA1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_envoff, PSND_FADE_OUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
 #endif
         CALL(evt_snd_set_rev_mode, 2)
     END_IF

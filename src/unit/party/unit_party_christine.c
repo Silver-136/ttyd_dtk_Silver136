@@ -139,7 +139,7 @@ PoseTableEntry pose_table_dictionary_page[] = {
     {POSE_TYPE_NORMAL, "ZYO_Z_1"},
     {31, "ZYO_Z_1"},
     {POSE_TYPE_DAMAGE, "ZYO_Z_1"},
-    {BTL_POSE_STAY_DEFAULT, "ZYO_Z_1"},
+    {POSE_TYPE_ACTION, "ZYO_Z_1"},
 };
 #endif
 

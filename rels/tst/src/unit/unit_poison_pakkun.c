@@ -151,7 +151,7 @@ static StatusVulnerability regist = {105, 80, 50, 0, 95, 100, 100, 70, 100, 90, 
 
 /** Body part of the Putrid Piranha: a single part using the c_pakflwr_p model. */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_poison_pakkun", "c_pakflwr_p", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, kCounterTopSpiky, pose_table},
+    {1, "btl_un_poison_pakkun", "c_pakflwr_p", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 /** Attack data of the Putrid Piranha's bite: 3 damage. */
@@ -177,7 +177,7 @@ BattleWeapon weapon_poison_pakkun_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -222,9 +222,9 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_JP
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..dizzyTime
@@ -328,7 +328,7 @@ static EVT_BEGIN(breath_event)
     END_IF
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
 
     // It resurfaces at x = -40, facing its targets.
@@ -346,7 +346,7 @@ static EVT_BEGIN(breath_event)
         CALL(shadow_scale_return, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
@@ -455,11 +455,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_CONFUSE, "PKF_K_1"},
     {POSE_TYPE_POISON, "PKF_X_1"},
     {POSE_TYPE_DIZZY, "PKF_X_1"},
-    {BTL_POSE_NORMAL, "PKF_S_1"},
+    {POSE_TYPE_NORMAL, "PKF_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PKF_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKF_S_2"},
-    {BTL_POSE_DAMAGE, "PKF_D_1"},
+    {POSE_TYPE_DAMAGE, "PKF_D_1"},
     {POSE_TYPE_ATTACK, "PKF_A_1B"},
     {POSE_TYPE_WALK, "PKF_S_1"},
     {POSE_TYPE_RUN, "PKF_S_1"},
@@ -480,11 +480,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_CONFUSE, "PKF_K_2"},
     {POSE_TYPE_POISON, "PKF_X_2"},
     {POSE_TYPE_DIZZY, "PKF_X_2"},
-    {BTL_POSE_NORMAL, "PKF_S_3"},
+    {POSE_TYPE_NORMAL, "PKF_S_3"},
     {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PKF_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKF_S_4"},
-    {BTL_POSE_DAMAGE, "PKF_D_2"},
+    {POSE_TYPE_DAMAGE, "PKF_D_2"},
     {POSE_TYPE_ATTACK, "PKF_A_5"},
     {POSE_TYPE_WALK, "PKF_S_3"},
     {POSE_TYPE_RUN, "PKF_S_3"},
@@ -606,7 +606,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_4"))
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
@@ -616,7 +616,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
         CALL(shadow_scale_return, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
@@ -625,8 +625,8 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 16, 32, 0)
 #endif
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
@@ -659,7 +659,7 @@ static EVT_BEGIN(return_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_2"))
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     IF_INT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -671,7 +671,7 @@ static EVT_BEGIN(return_event)
             CALL(shadow_scale_return, UNIT_ID_SELF)
         END_SIBLING_EVENT
         CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
@@ -680,8 +680,8 @@ static EVT_BEGIN(return_event)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 16, 32, 0)
 #endif
         CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
         WAIT_MS(500)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
@@ -696,7 +696,7 @@ static EVT_BEGIN(return_event)
             CALL(shadow_scale_return, UNIT_ID_SELF)
         END_SIBLING_EVENT
         CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_3"))
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -80, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -50, 0)
@@ -705,8 +705,8 @@ static EVT_BEGIN(return_event)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 16, -32, 0)
 #endif
         CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
         WAIT_MS(500)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_3"))
@@ -762,7 +762,7 @@ static EVT_BEGIN(normal_attack_event)
     END_IF
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 45)
 
@@ -781,7 +781,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(shadow_scale_return, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
     WAIT_MS(150)
 
@@ -901,15 +901,15 @@ static USER_FUNC(shadow_scale_memory) {
 }
 
 /**
- * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
+ * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_FLAG_NO_IRON_FRAME) and 1
  * while the ceiling still exists, so the plant knows whether it can hang from it.
  */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_JP
-    if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
 #else
-    if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
+    if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
 #endif
         evtSetValue(event, args[0], 0);
     } else {

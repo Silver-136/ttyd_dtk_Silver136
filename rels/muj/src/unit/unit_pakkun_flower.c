@@ -641,7 +641,7 @@ static USER_FUNC(shadow_scale_memory) {
 
 /**
  * Script helper: writes 0 to args[0] if the stage ceiling frame is unavailable
- * (STAGE_OBJ_FLAG_IRON_FRAME_GONE), otherwise 1;
+ * (STAGE_FLAG_NO_IRON_FRAME), otherwise 1;
  * the plant uses it to decide whether it can hang from the ceiling.
  */
 static USER_FUNC(pakkun_ceil_exist) {

@@ -350,9 +350,7 @@ extern ItemDropData battle_item_zonbaba[];
 
 // Names from LLCOOLT's tree.
 enum {
-    SPECIAL_SHATTERS_FREEZE = 128,
     SPECIAL_FORCE_RESULT_10000 = 32768,
-    SPECIAL_CHARGE_BUFFABLE = 4,
     TARGET_CLASS_UNUSED_4 = 4,
     SPECIAL_UNUSED_200 = 512,
     TARGET_CLASS_UNUSED_8 = 8,

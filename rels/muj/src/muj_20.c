@@ -2396,7 +2396,7 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_OPENING1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_OPENING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
 #endif
         CALL(evt_cam3d_evt_set, 0, 367, 2093, 0, 343, -115, 0, EASING_SINE_IN_OUT)

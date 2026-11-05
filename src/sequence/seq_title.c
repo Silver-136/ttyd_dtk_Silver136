@@ -88,12 +88,12 @@ void seq_titleInit(SequenceWork* work) {
     }
     if (seqGetPrevSeq() != SEQ_LOAD) {
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-            psndBGMOn(PSND_FADE_OUT, "BGM_DIGEST1");
+            psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }
         } else {
-            psndBGMOn(PSND_FADE_OUT, "BGM_TITLE1");
+            psndBGMOn(PSND_FADEOUT, "BGM_TITLE1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }

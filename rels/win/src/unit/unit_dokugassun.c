@@ -515,8 +515,8 @@ EVT_END()
  * Before the player's phase, if the Puff can act and its barrier is down, with a 25% chance it changes height:
  * from high (unit work 0 = 0) it dives to height 10,
  * where hammers and shell tosses can reach it (unit work 0 = 1);
- * from low it rises to height 40 and turns PART_ATTR_HAMMERLIKE_CANNOT_TARGET
- * and PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET back on. The new height becomes its home.
+ * from low it rises to height 40 and turns kHammerlikeCannotTarget
+ * and kShellTosslikeCannotTarget back on. The new height becomes its home.
  */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)

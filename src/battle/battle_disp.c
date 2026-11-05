@@ -65,7 +65,7 @@ const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
     int i;
 
     if (!table) return NULL;
-    for (i = 0; i < BTL_POSE_NORMAL; i++, table++) { // searches at most 28 entries
+    for (i = 0; i < POSE_TYPE_NORMAL; i++, table++) { // searches at most 28 entries
         if (table->poseType == type || table->poseType == POSE_TYPE_NORMAL) {
             return table->poseName;
         }

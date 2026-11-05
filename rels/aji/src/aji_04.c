@@ -781,7 +781,7 @@ EVT_BEGIN(kuizu_sekizou)
 #if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_28"), 0, 0)
                 CALL_CHILD(offscreen_to_normal)
-                CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG7_DUN2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_28"), PTR(kuti_callback), 0)
