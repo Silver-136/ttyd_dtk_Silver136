@@ -40,16 +40,10 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "moamoa.h"
 
-typedef struct MoamoaPoseDef {
-    char model[16];
-    char anim[8];
-    s16 loop;
-    f32 frames;         // last sampled frame, used as the playback duration
-    s32 start;
-    s32 count;
-} MoamoaPoseDef;
-typedef struct Moamoa {
+// The cab-window Smorg sprites: smaller records than the field swarm's Moamoa/MoamoaWork in moamoa.h.
+typedef struct MoamoaSprite {
     u16 flags;
     s16 state;
     s16 timer;
@@ -57,18 +51,18 @@ typedef struct Moamoa {
     f32 angle;
     s16 pose;
     u64 startTime;
-} Moamoa;
-typedef struct MoamoaWork {
+} MoamoaSprite;
+typedef struct MoamoaSpriteWork {
     s32 field_0x0;
     s32 count;
-    Moamoa* moa;
+    MoamoaSprite* moa;
     s32 numDefs;
     MoamoaPoseDef defs[32];
-} MoamoaWork;
-static MoamoaWork* wp;
+} MoamoaSpriteWork;
+static MoamoaSpriteWork* wp;
 static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
-static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
+static void moamoa_pose_change(MoamoaSprite* moa, const char* model, const char* anim);
 static void moamoa_pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 
@@ -247,7 +241,7 @@ static void moamoa_pose_main(void) {
     u64 now;
     s32 i;
     ExtdrvPose* pose;
-    Moamoa* moa;
+    MoamoaSprite* moa;
     MoamoaPoseDef* def;
 
     pose = extGetPosePtr();
@@ -273,7 +267,7 @@ static void moamoa_pose_main(void) {
  * Switches one Smorg sprite to the named model/animation pair from the table (the b model is forced when flag 2
  * is set) and restarts its animation clock; does nothing if it is already playing it.
  */
-static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
+static void moamoa_pose_change(MoamoaSprite* moa, const char* model, const char* anim) {
     MoamoaPoseDef* def = wp->defs;
     s32 i;
 
@@ -307,14 +301,14 @@ static f32 randf(f32 min, f32 max) {
 void moamoa_init(void) {
     s32 i;
     ExtdrvPose* pose;
-    Moamoa* moa;
+    MoamoaSprite* moa;
     f32 x, y, z;
 
-    wp = _mapAlloc(sizeof(MoamoaWork));
-    memset(wp, 0, sizeof(MoamoaWork));
+    wp = _mapAlloc(sizeof(MoamoaSpriteWork));
+    memset(wp, 0, sizeof(MoamoaSpriteWork));
     wp->count = extGetPoseNum();
-    wp->moa = _mapAlloc(wp->count * sizeof(Moamoa));
-    memset(wp->moa, 0, wp->count * sizeof(Moamoa));
+    wp->moa = _mapAlloc(wp->count * sizeof(MoamoaSprite));
+    memset(wp->moa, 0, wp->count * sizeof(MoamoaSprite));
     moamoa_pose_init();
     pose = extGetPosePtr();
     moa = wp->moa;
@@ -416,7 +410,7 @@ static void ext_disp(CameraId camera, void* param) {
 void moamoa_main(void) {
     s32 i;
     ExtdrvPose* pose;
-    Moamoa* moa;
+    MoamoaSprite* moa;
     f32 r;
 
     pose = extGetPosePtr();
@@ -478,7 +472,7 @@ void moamoa_dispent(void) {
 // Set one emergence target without resetting its timer or animation pose.
 USER_FUNC(evt_moamoa_set_one) {
     EvtWord* args = event->args;
-    Moamoa* moa;
+    MoamoaSprite* moa;
     s32 idx = evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
     f32 y = evtGetFloat(event, args[2]);
@@ -503,7 +497,7 @@ USER_FUNC(evt_moamoa_set_one) {
 USER_FUNC(evt_moamoa_set_seq_all) {
     s32 seq = evtGetValue(event, event->args[0]);
     s32 i;
-    Moamoa* moa;
+    MoamoaSprite* moa;
 
     extGetPosePtr();
     moa = wp->moa;

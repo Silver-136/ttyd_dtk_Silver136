@@ -285,12 +285,6 @@ void effInit(void) {
     effInit64();
 }
 
-#if VERSION >= VERSION_US
-#define EFF_NTEX 118
-#else
-#define EFF_NTEX 146
-#endif
-
 /**
  * Loads effect.tpl, the shared effect textures:
  * from the startup archive if it is there, otherwise asynchronously from the disc (the jp or us folder by

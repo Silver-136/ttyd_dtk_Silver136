@@ -25,12 +25,6 @@
 #define vivian_init_801809C0 vivian_init
 #endif
 
-#if VERSION >= VERSION_US
-#define VIVIAN_FOLLOW_DIST 30.0f
-#else
-#define VIVIAN_FOLLOW_DIST 22.0f
-#endif
-
 s32 vivian_cancel_req;
 
 #if VERSION >= VERSION_JP

@@ -10,6 +10,13 @@
 #define HELD_ITEM_COUNT_BASE 10
 #define GetHeldItemCount (pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE)
 #define MAX_STORED_ITEMS 32
+
+// Mario's level cap: the early demos stop at 98.
+#if VERSION <= VERSION_DEMO_JP
+#define LEVEL_MAX 98
+#else
+#define LEVEL_MAX 99
+#endif
 #define MAX_BADGES 200
 
 // 4-byte wide, using u16 casting for mario_pouch

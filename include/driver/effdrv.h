@@ -8,6 +8,13 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_maya_data.h"
 
+// Number of images in effect.tpl (effGetTexObj): higher ids index the second texture file (wp->handle) from 0.
+#if VERSION >= VERSION_US
+#define EFF_NTEX 118
+#else
+#define EFF_NTEX 146
+#endif
+
 // Effect texture id in each version's effect texture file: in US and later the ids of the textures that use it are 0x1C lower
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 

@@ -2,8 +2,16 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
+
+// US and later: evt_msg's message text buffer is twice as large
+#if VERSION >= VERSION_US
+#define MSG_BUF_SIZE 0xA00
+#else
+#define MSG_BUF_SIZE 0x500
+#endif
 
 // First argument of evt_msg_print / _add / _insert / _add_insert (_evt_msg_print)
 typedef enum MsgPrintFlags {

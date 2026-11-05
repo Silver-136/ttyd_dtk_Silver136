@@ -10871,13 +10871,6 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
     }
 }
 
-/** Number of environment names; also the terminating id in psenvlist. */
-#if VERSION <= VERSION_DEMO_JP
-#define PSENV_COUNT 0x75
-#else
-#define PSENV_COUNT 0x76
-#endif
-
 #if VERSION <= VERSION_DEMO_JP
 
 /** Volume of environment sound e under its channel's fade; the early demos write it through a pointer. */

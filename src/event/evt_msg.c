@@ -18,13 +18,6 @@
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 
-// US and later: the message buffer is twice as large
-#if VERSION >= VERSION_US
-#define MSG_BUF_SIZE 0xA00
-#else
-#define MSG_BUF_SIZE 0x500
-#endif
-
 /** Message-script setup hook called at startup; empty in every release. */
 void evt_msg_init(void) {
     // empty in every version

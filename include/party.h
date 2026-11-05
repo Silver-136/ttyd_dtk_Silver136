@@ -7,6 +7,20 @@
 #include "mario/mario.h"
 #include <dolphin/types.h>
 
+// A partner is in a pinch (peril poses) at this HP or below
+#if VERSION <= VERSION_DEMO_JP
+#define PARTY_PINCH_HP 1
+#else
+#define PARTY_PINCH_HP 5
+#endif
+
+// Furthest Vivian's trailPos may lag behind her (party_vivian)
+#if VERSION >= VERSION_US
+#define VIVIAN_FOLLOW_DIST 30.0f
+#else
+#define VIVIAN_FOLLOW_DIST 22.0f
+#endif
+
 #pragma enumsalwaysint off
 typedef enum PartyMember {
     PARTY_MEMBER_NONE,      // 0

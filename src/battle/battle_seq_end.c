@@ -69,13 +69,6 @@ typedef enum SeqEndDispFlags {
     SEQEND_DISP_LVUP_HELP = (1 << 5),           // 0x20, level-up help message (_lvup_disp_flag_onoff)
 } SeqEndDispFlags;
 
-// Mario's level cap: the early demos stop at 98.
-#if VERSION <= VERSION_DEMO_JP
-#define LEVEL_MAX 98
-#else
-#define LEVEL_MAX 99
-#endif
-
 void _GetExpIcon_Init(BattleSeqEndWork* work);
 
 void _GetExpIcon_Main(BattleWork* wp);

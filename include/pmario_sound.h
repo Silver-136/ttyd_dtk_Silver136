@@ -5,13 +5,20 @@
 #include "version.h"
 #include <dolphin/mtx.h>
 
+// Number of sound environment names (psenv); also the terminating id in psenvlist.
+#if VERSION <= VERSION_DEMO_JP
+#define PSENV_COUNT 0x75
+#else
+#define PSENV_COUNT 0x76
+#endif
+
 /* typedef union SoundData {
     const char* name;
     s32 value;
 } SoundData; */
 
 typedef struct SoundEnvList {
-    u16 id;          // 0x0, psenvlistname index; 0x76 ends the list
+    u16 id;          // 0x0, psenvlistname index; PSENV_COUNT ends the list
     u16 sfxId;       // 0x2, ORed with 0x4/0x5/0x6000000 and passed to __psndSFXOn as the name
     u8 volume;       // 0x4
     u8 reserved_05;  // 0x5, copied into PaperSoundEnv+0x7 by psndENVOn_f_d, never read (0 in every entry)

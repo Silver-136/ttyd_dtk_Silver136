@@ -46,7 +46,8 @@ typedef struct KpaGameWork {
 KpaGameWork* kwp;
 void FontDrawString(f32 x, f32 y, const char* message);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
-// IconFlags.ICON_FLAG_2D (icondrv.h clashes with the prototype above)
+// IconFlags.ICON_FLAG_2D. icondrv.h cannot be included: its iconDispGx takes the scale last, and with it the calls
+// below compile differently (the original evaluates the scale first), so the prototype above stays.
 #if VERSION <= VERSION_DEMO_JP
 #define KPA_ICON_2D 0x4
 #else

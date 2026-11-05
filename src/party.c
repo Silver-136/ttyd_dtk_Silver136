@@ -113,13 +113,6 @@ void partyPaperLightOff(PartyEntry* party) {
     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 }
 
-// a partner is in a pinch at this HP or below
-#if VERSION <= VERSION_DEMO_JP
-#define PARTY_PINCH_HP 1
-#else
-#define PARTY_PINCH_HP 5
-#endif
-
 /**
  * TRUE when one of the seven partners is in a pinch:
  * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in JP and later), which switches her to the tired pose set.
