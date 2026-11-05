@@ -2896,6 +2896,8 @@ void puniModeMass(PuniData* p) {
  * then goes to the away mode.
  */
 void puniModeAwayjump(PuniData* p) {
+    u32 t;
+
     switch (p->modeStep) {
         case 0:
             p->startTime = gp->renderTime;
@@ -2912,25 +2914,24 @@ void puniModeAwayjump(PuniData* p) {
             } else {
                 psndSFXOn_3D("SFX_STG2_PUNI_JUMP1", &p->pos);
             }
-        case 1: {
-            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
-            if ((s32)t > 100 && p->modeVar1 == 0) {
-                p->modeVar1 = 1;
-                p->anim = 8;
-                p->animTime = 0;
-            }
-            if ((s32)t < 200) {
-                f32 f = (f32)(s32)t / 200.0f;
-                p->pos.y = f * (p->modeF1 * f + p->modeF2) + p->modeF0;
-            } else {
-                p->pos.y = p->modeF0;
-                p->mode = PUNI_MODE_AWAY;
-                p->anim = 2;
-                p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
-                p->modeStep = 0;
-            }
-            break;
+        case 1:
+        t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
+        if ((s32)t > 100 && p->modeVar1 == 0) {
+            p->modeVar1 = 1;
+            p->anim = 8;
+            p->animTime = 0;
         }
+        if ((s32)t < 200) {
+            f32 f = (f32)(s32)t / 200.0f;
+            p->pos.y = f * (p->modeF1 * f + p->modeF2) + p->modeF0;
+        } else {
+            p->pos.y = p->modeF0;
+            p->mode = PUNI_MODE_AWAY;
+            p->anim = 2;
+            p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
+            p->modeStep = 0;
+        }
+        break;
     }
 }
 

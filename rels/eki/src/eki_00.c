@@ -861,6 +861,8 @@ static void ext_moamoa_main(void) {
     f32 s2;
     f32 g2;
     f32 g3;
+    f32 k1;
+    f32 k2;
     hit = 0;
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->hammerFrames++;
@@ -1011,13 +1013,9 @@ static void ext_moamoa_main(void) {
                         y = (*pose->mtx)[1][3];
                         z = (*pose->mtx)[2][3] - (5.0f * polyCosf(r));
                     }
-                    {
-                        f32 k1;
-                        f32 k2;
-                        f32 r1 = rand() / 32767.0f;
-                        f32 r2 = rand() / 32767.0f;
-                        moamoa_jump(pose, moa, moa->state, 1, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
-                    }
+                    r1 = rand() / 32767.0f;
+                    r2 = rand() / 32767.0f;
+                    moamoa_jump(pose, moa, moa->state, 1, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
                 }
                 moa->flags &= ~MOAMOA_FLAG_TO_TARGET;
                 break;
