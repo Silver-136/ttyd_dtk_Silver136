@@ -3578,7 +3578,7 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 }
 
 static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
-void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
+static void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 /**
  * Refund badge payout when the unit uses an item:
@@ -6882,7 +6882,7 @@ static void _PartsMoveSoundControl(BattleUnitPart* part) {
  * Plays the movement sounds while a unit or part moves: a single sound loops and follows it;
  * two sounds alternate as footsteps on their own timers.
  */
-void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z) {
+static void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z) {
     Vec pos;
     Vec cur;
     Vec tmp = {0.0f, 0.0f, 0.0f};

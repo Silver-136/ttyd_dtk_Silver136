@@ -20,7 +20,7 @@
  * ...) and orders the rest in d->targetIndices by x along the attack direction.
  * numTargets is -1 for weapons with TARGET_CLASS_NONE.
  */
-void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
+static void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     BattleUnitKindPart* kp;
     BattleWorkTarget* tg4;
     s32 k;

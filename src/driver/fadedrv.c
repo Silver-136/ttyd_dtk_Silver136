@@ -34,8 +34,8 @@ static FadeWork* wp;
 
 //local prototypes
 static void disp_texture(CameraId camId, void* param);
-void disp_maku(CameraId camId, void* param);
-void disp_tec(CameraId camId, void* param);
+static void disp_maku(CameraId camId, void* param);
+static void disp_tec(CameraId camId, void* param);
 static void disp_dummy_black(CameraId camId, void* param);
 
 /**
@@ -1472,7 +1472,7 @@ static inline f32 fadeMadd(f32 a, f32 b, f32 c) { return a * b + c; }
  * scaled to the screen and offset by fadeSetAnimOfsPos or placed at the virtual world position,
  * with the depth set up by z or zFill.
  */
-void disp_maku(CameraId camId, void* param) {
+static void disp_maku(CameraId camId, void* param) {
     FadeEntry* entry = param;
     CameraEntry* camera;
     f32 scale, depth, sx, mag;
@@ -1577,7 +1577,7 @@ static inline GXColor fadeTecAlpha(f32 a) {
  * Draws the tec or soft-focus overlay as a full-screen texture on the 2D camera,
  * fading the tec overlay in or out by 0.04 per frame when asked to.
  */
-void disp_tec(CameraId camId, void* param) {
+static void disp_tec(CameraId camId, void* param) {
     CameraEntry* camera;
     GXTexObj obj;
 

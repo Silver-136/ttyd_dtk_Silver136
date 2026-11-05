@@ -38,7 +38,7 @@ Vec cloud_at;
 #include "mario/mario_motion.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 void _cloud_use(PartyEntry* party);
-void getHitBreatheout2(PartyEntry* party, f32 angle);
+static void getHitBreatheout2(PartyEntry* party, f32 angle);
 
 // Flurrie's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define CLOUD_WORK(p) ((PartyCloud*)(p)->useStruct)
@@ -784,7 +784,7 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsX, ofsZ;
 #else
-void getHitBreatheout2(PartyEntry* party, f32 angle) {
+static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 dirSin, dirCos, ys, yc;
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsZ, ofsX;

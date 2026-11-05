@@ -175,7 +175,7 @@ void npcRecoveryFiledNpc(void) {
     }
 }
 
-void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
+static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
     f32 rotationAngle;
     f32 scaleSign;
     CameraEntry* camera;
@@ -685,7 +685,7 @@ void fbatTalkMode(void);
 void fbatBattleMode(void);
 s32 kpaJumpChk(void);
 
-void npcMoveG(NpcEntry* npc);
+static void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 void npcKoopaModeMain(void);
@@ -1461,7 +1461,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
  * With NPC_FLAG_FLOOR_COLLISION it lands on the floor found below (US and later also probe both side edges)
  * and sets NPC_STATUS_AIRBORNE while off the floor; otherwise it just moves, no lower than -1000.
  */
-void npcMoveG(NpcEntry* npc) {
+static void npcMoveG(NpcEntry* npc) {
     f32 dy;
     f32 vel;
     f32 t;

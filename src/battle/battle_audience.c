@@ -75,7 +75,7 @@ void psndSFX_vol(s32 id, s32 vol);
 void psndSFX_pit(s32 id, s32 pitch);
 
 // local prototypes
-void BattleAudienceSettingAudience(void);
+static void BattleAudienceSettingAudience(void);
 static void BattleAudienceGuestTPLRead(s32 index, AudienceMemberType member, const char* tplName);
 static void BattleAudienceCtrlProcess(void);
 static void BattleAudienceSetThrowItemMax(void);
@@ -83,12 +83,12 @@ static void BattleAudienceItemCtrlProcess(void);
 static void BattleAudienceApSrcCtrlProcess(void);
 static BOOL BattleAudienceApSrcEntry(void);
 static void BattleAudienceWinCtrlProcess(void);
-void BattleAudienceAnimProcess(void);
+static void BattleAudienceAnimProcess(void);
 static void BattleAudienceDispAudience(CameraId camId, void* param);
 static void BattleAudienceDispItem(CameraId camId, void* param);
 static void BattleAudienceDispApSrc(CameraId camId, void* param);
 static void BattleAudienceDispWin(CameraId camId, void* param);
-void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status);
+static void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status);
 s32 BattleAudience_NoUsedHaitiRand(void);
 s32 BattleAudience_NoUsedFCHaitiRand(void);
 static s32 BattleAudience_GetPPAudienceNum_R(void);
@@ -99,7 +99,7 @@ static BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id);
 #if VERSION <= VERSION_DEMO_JP
 static void BattleAudienceNumToTargetSub(void);
 #else
-s32 BattleAudienceNumToTargetSub(void);
+static s32 BattleAudienceNumToTargetSub(void);
 #endif
 
 static void BattleAudienceAddTargetNumSub(f32 value);
@@ -1337,7 +1337,7 @@ void BattleAudience_End(void) {
  * one in twenty battles swaps a member for the rare kind 12 (Luigi).
  * Battle mode 2 seats only Punies on the left and X-Nauts on the right. Debug flags can force the count or kind.
  */
-void BattleAudienceSettingAudience(void) {
+static void BattleAudienceSettingAudience(void) {
     s32 hasKind = 0;
     s32 target;
     s32 sum;
@@ -2413,7 +2413,7 @@ static void BattleAudienceGXInit(void) {
  * Script ops: -2 show texture n for m frames, -3 restart, -4 label, -5 jump to a label,
  * -6 and -7 loop start and end (nested up to 3 deep), -8 wait, -1 end.
  */
-void BattleAudienceAnimProcess(void) {
+static void BattleAudienceAnimProcess(void) {
     BattleAudienceMember* m;
     s32 i;
     s32* pc;
@@ -2844,7 +2844,7 @@ BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
     return TRUE;
 }
 
-void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
+static void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     BattleAudienceMember* m;
     BattleStage* stage;
     s32 row;
@@ -3688,7 +3688,7 @@ static void BattleAudienceNumToTargetSub(void) {
         }
     }
 #else
-s32 BattleAudienceNumToTargetSub(void) {
+static s32 BattleAudienceNumToTargetSub(void) {
     s32 i, count;
 
     BattleAudienceBaseGetPtr();

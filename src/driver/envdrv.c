@@ -83,9 +83,9 @@ TEXPalette* env_tpl = NULL;
 s32 tpl_ok = 0;
 
 //local prototypes
-void envDisp_DepthOfField(void);
-void envDisp_Blur(void);
-void envDisp_FF(void);
+static void envDisp_DepthOfField(void);
+static void envDisp_Blur(void);
+static void envDisp_FF(void);
 
 
 /**
@@ -149,7 +149,7 @@ void envTexSetup(void) {
  * when enabled, copies the frame (flag 1) and the depth buffer (flag
  * 2) to half-size textures for the depth of field and radial effects.
  */
-void envCapture(CameraId camId, void* param) {
+static void envCapture(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 width, height, halfWidth, halfHeight;
     u32 size;
@@ -184,7 +184,7 @@ void envCapture(CameraId camId, void* param) {
  * 3D-camera draw callback after the scene: copies the finished frame to the half-size blur texture
  * while the motion blur (flag 4) is on, and decides when the blur stops capturing new frames.
  */
-void envCapture2(CameraId camId, void* param) {
+static void envCapture2(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 halfWidth, halfHeight;
 
@@ -367,7 +367,7 @@ static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 // pointer under opt_propagation off gives addi r0 + mr), and loop 2's zero inits become the target's li/mr copies.
 // i2 is an `int` array: an s32 (long) element is not scalarized (the int-typed loop compares count as a different
 // type), so it would stay in memory. The `(s32)` cast in `(s32)i2[0] == 3` stops CSE with the `3 == i2[0]` below.
-void envDisp_DepthOfField(void) {
+static void envDisp_DepthOfField(void) {
     GXTevColorArg cin;
     s32 first2[1];
     s32 coord2[1];
@@ -536,7 +536,7 @@ void envDisp_DepthOfField(void) {
  * Draws the motion blur: the captured earlier frame over the screen at a constant alpha, or,
  * when envBlurOn gave a duration, fading out over it (type 1 from fully opaque, otherwise from 248 to 128).
  */
-void envDisp_Blur(void) {
+static void envDisp_Blur(void) {
     EnvironmentWork* wp = envGetWork();
     EnvBlurWork* blur = &wp->blur;
     CameraEntry* cam;
@@ -824,7 +824,7 @@ void envGlareFilterZ(f32 zscale) {
  * Draws a ring of 1000 jittered lines from the screen centre outwards, textured with the captured frame,
  * which gives a radial streak over the picture; enabled by flag 0x10000000.
  */
-void envDisp_FF(void) {
+static void envDisp_FF(void) {
     EnvironmentWork* wp = envGetWork();
     f32 r;
     f32 angle;
@@ -879,7 +879,7 @@ double acos(double);
  * Builds and loads the texture matrix for environment TEV type type (reflection maps from the surface normals as
  * seen by the camera, scrolled or spun by the env work's angles).
  */
-void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxType) {
+static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxType) {
     static f32 a = 0.0f;
     EnvironmentWork* wp = envGetWork();
     Mtx m0, m2, m1, m3, m4, m5, m6, m7;

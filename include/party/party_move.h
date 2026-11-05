@@ -35,7 +35,6 @@ void party_move_mode_beside_mario(PartyEntry* party);
 void party_move_mode_stay(PartyEntry* party);
 void party_move_mode_walk(PartyEntry* party);
 
-void walkMain(PartyEntry* party);
 void partyPlaySfxPartyLanding1(PartyEntry* party);
 void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyChgStayPose(PartyEntry* party);

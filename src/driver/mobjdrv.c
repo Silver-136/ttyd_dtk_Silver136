@@ -375,7 +375,7 @@ static void mobjDispXLU(CameraId camId, void* param) {
  * Draw callback for a map object, called once per render pass (opaque, alpha-tested, translucent);
  * draws its pose with its paper texture if it has one.
  */
-void mobjDisp(CameraId camId, void* param) {
+static void mobjDisp(CameraId camId, void* param) {
     MapObjectEntry* entry = param;
     DispEntry* disp;
 

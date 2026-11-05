@@ -80,12 +80,12 @@ static void memcard_read(void* addr, s32 length, s32 offset);
 static void memcard_set_stat(void);
 static void memcard_get_stat(void);
 static void memcard_get_serial(void);
-void memcard_open(void);
+static void memcard_open(void);
 static void memcard_close(void);
 
 static void write_main(void);
 static void write_header_main(void);
-void read_main(void);
+static void read_main(void);
 static void read_all_main(void);
 static void create_main(void);
 static void format_main(void);
@@ -699,7 +699,7 @@ static void write_header_main(void) {
  * and loads the newer valid one into the file image, or marks the slot corrupt (flag 2) if neither is valid.
  * No starter in this file sets its op (3).
  */
-void read_main(void) {
+static void read_main(void) {
     s32 saveType; //invalid = -1, main = 0, backup = 1
 
     if (wp->result) {
@@ -1449,7 +1449,7 @@ static void memcard_get_serial(void) {
  * Finds mariost_save_file in the directory; a file of the wrong layout gives NOFILE.
  * With no file it reports why one cannot be made (INSSPACE, NOENT) or NOFILE when there is room.
  */
-void memcard_open(void) {
+static void memcard_open(void) {
     CARDStat stat;
     u64 serialNo;
     s32 byteNotUsed;

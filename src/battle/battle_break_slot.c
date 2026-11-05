@@ -38,7 +38,7 @@ typedef struct {
 } SlotCards5;
 
 static void BattleBreakSlotDispReel(CameraId camId, void* param);
-void item_appear_force(BreakSlotReel* reel, s32 item);
+static void item_appear_force(BreakSlotReel* reel, s32 item);
 
 /** Card textures (small and big reels) by card number; the early demos' battle texture ids. */
 #if VERSION <= VERSION_DEMO_JP
@@ -1099,7 +1099,7 @@ void BattleBreakSlot_HideReel(void) {
 }
 
 /** Makes the reel land on card item next by moving its index to just before that card (forced cards: debug, lecture, slot flags). */
-void item_appear_force(BreakSlotReel* reel, s32 item) {
+static void item_appear_force(BreakSlotReel* reel, s32 item) {
     s32 i;
 
     for (i = 0; i < reel->numCards; i++) {

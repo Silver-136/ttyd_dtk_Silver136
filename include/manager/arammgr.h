@@ -42,7 +42,6 @@ typedef struct ARAMWork {
 } ARAMWork;
 
 void aramMgrInit(void);
-void aramMgrGarbage(void);
 ARAMEntry* aramMgrToAramAsync(void* src, u32 size);
 ARAMEntry* aramMgrToAram(void* src, u32 size);
 void aramMgrToMram(ARAMEntry* entry, void* dest);

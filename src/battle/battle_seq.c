@@ -86,7 +86,7 @@ EVT_END()
 #endif
 
 static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
-void btlseqInit(BattleWork* wp);
+static void btlseqInit(BattleWork* wp);
 static void btlseqFirstAct(BattleWork* wp);
 static void btlseqTurn(BattleWork* wp);
 
@@ -302,7 +302,7 @@ static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
  * p_jyabara and p_kaiten_h animation effects and the Nice effect to load,
  * then turns the status window on and moves on to SEQ_FIRST_ACT.
  */
-void btlseqInit(BattleWork* wp) {
+static void btlseqInit(BattleWork* wp) {
     MarioWork* mario;
     PartyEntry* party;
 

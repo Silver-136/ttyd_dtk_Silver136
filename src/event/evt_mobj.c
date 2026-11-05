@@ -51,6 +51,8 @@
 #include "driver/npcdrv.h"
 #include "koopa_motion.h"
 #include "eff/eff_mobj_broken.h"
+static s32 mobj_brickblk(MapObjectEntry* mobj);
+static s32 mobj_signboard(MapObjectEntry* mobj);
 static s32 mobj_lock(MapObjectEntry* mobj);
 
 
@@ -2313,7 +2315,7 @@ USER_FUNC(evt_mobj_itembox) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_signboard(MapObjectEntry* mobj) {
 #else
-s32 mobj_signboard(MapObjectEntry* mobj) {
+static s32 mobj_signboard(MapObjectEntry* mobj) {
 #endif
     switch (mobj->state) {
     case 0:
@@ -2738,7 +2740,7 @@ USER_FUNC(evt_mobj_save_blk) {
 #if VERSION >= VERSION_US
 /** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
 // US and later: plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit.
-s32 mobj_blk(MapObjectEntry* mobj) {
+static s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -3170,7 +3172,7 @@ USER_FUNC(evt_mobj_powerupblk) {
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_brickblk(MapObjectEntry* mobj) {
 #else
-s32 mobj_brickblk(MapObjectEntry* mobj) {
+static s32 mobj_brickblk(MapObjectEntry* mobj) {
 #endif
     char oname[16] = "o_";
     char iname[16] = "i_";

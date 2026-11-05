@@ -21,9 +21,9 @@ struct IconDispTableEntry {
 };
 
 static BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
-BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
-BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
-BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
+static BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
+static BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
+static BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 static BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 
 IconDispTableEntry _disp_table[0x17] = {
@@ -328,7 +328,7 @@ static BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, Battle
  * Builds the Dizzy icon, spinning it 4 degrees per frame about its centre and raised 4 units;
  * resets the spin and returns FALSE when the unit is not Dizzy.
  */
-BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
+static BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     int type = disp->id;
     s8 turns, strength;
     Vec v;
@@ -356,7 +356,7 @@ BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
  * Builds the Allergic icon, which blinks: it is hidden for 16 frames out of every 32.
  * Returns FALSE (and resets the blink timer) when the unit is not Allergic.
  */
-BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
+static BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     int type = disp->id;
     s8 turns, strength;
     if (!BtlUnit_CheckStatus(unit, type)) {
@@ -385,7 +385,7 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
  * Builds the Electrified icon, which flickers: full size for 4-9 frames, then shrunk to 0.8 for 30-129 frames,
  * at random lengths. Returns FALSE and resets the flicker when the unit is not Electrified.
  */
-BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
+static BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s8 turns, strength;
     if (!BtlUnit_CheckStatus(unit, disp->id)) {

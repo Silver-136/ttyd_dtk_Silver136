@@ -282,7 +282,7 @@ static void fileGarbageDataAdrClear(FileEntry* entry) {
  * Relocates a freshly loaded or moved file: adds the data address to every offset field its type stores,
  * unless the fields are already absolute. The textures' image and palette headers are fixed up here too.
  */
-void fileGarbageDataAdrSet(void* data, s32 type) {
+static void fileGarbageDataAdrSet(void* data, s32 type) {
     u16 i;
     u32 off;
     u32 off2;
@@ -753,7 +753,7 @@ void fileFree(FileEntry* handle) {
  * relocates the data and runs the file's callback,
  * or on a canceled read (-3) marks the entry released with type 11.
  */
-void dvdReadDoneCallBack(s32 error, DVDFileInfo* info) {
+static void dvdReadDoneCallBack(s32 error, DVDFileInfo* info) {
     DVDEntry* entry;
     FileEntry* f;
 

@@ -18,6 +18,23 @@
 #include "statuswindow.h"
 #include "party.h"
 #include "evt/evt_save_flags.h"
+static void stg7_03_white_1(void);
+static void stg3_52_init(void);
+static void stg3_35_init(void);
+static void stg3_32_init(void);
+static void stg3_30_init(void);
+static void stg3_20_13_init(void);
+static void stg3_20_init_1(void);
+static void stg3_20_init_2(void);
+static void stg3_20_12_init(void);
+static void stg3_20_06_init(void);
+static void stg3_20_init_4(void);
+static void stg3_20_init_6(void);
+static void stg3_20_init_7(void);
+static void stg3_12_init__4(void);
+static void stg2_end_init(void);
+static void stg2_23_01_init(void);
+static void stg1_03_init(void);
 static void stg8_15_init(void);
 static void stg8_14_init(void);
 static void stg8_13_init(void);
@@ -849,7 +866,7 @@ static void stg1_01a_init(void) {
 }
 
 /** Story point STG1_03 "Petalburg Gatekeeper" (nok_01): delivers mail 0x10 and 0x1A; sets GSWF_MAIL_FRANKLY_SENT. */
-void stg1_03_init(void) {
+static void stg1_03_init(void) {
     swSet(GSWF_ID(GSWF_MAIL_FRANKLY_SENT));
     pouchReceiveMail(0x10);
     pouchReceiveMail(0x1A);
@@ -1195,7 +1212,7 @@ static void stg2_23_init(void) {
  * Story point STG2_23_01 "X-Naut Battle" (mri_15): sets GSWF_MRI_COUNTDOWN_START_PENDING;
  * clears GSWF_MRI_14_CRUMP_REENTRY_PENDING.
  */
-void stg2_23_01_init(void) {
+static void stg2_23_01_init(void) {
     swClear(GSWF_ID(GSWF_MRI_14_CRUMP_REENTRY_PENDING));
     swSet(GSWF_ID(GSWF_MRI_COUNTDOWN_START_PENDING));
 }
@@ -1241,7 +1258,7 @@ static void stg2_47_init(void) {
 }
 
 /** Story point STG2_END "To Glitzville" (gor_04): delivers mail 0x11; sets GSWF_MAIL_KOOPLEY_SENT. */
-void stg2_end_init(void) {
+static void stg2_end_init(void) {
     swSet(GSWF_ID(GSWF_MAIL_KOOPLEY_SENT));
     pouchReceiveMail(0x11);
 }
@@ -1347,7 +1364,7 @@ static void stg3_10_init__5(void) {
  * saves the current play time into the 8 GSW_TOU_EGG_RECEIVED_TIME bytes (the egg's hatch timer),
  * and delivers mail 0x1C (GSWF_MAIL_RDM_ISSUE_2_SENT).
  */
-void stg3_12_init__4(void) {
+static void stg3_12_init__4(void) {
     u8 timeBytes[8];
     int i;
 
@@ -1491,7 +1508,7 @@ static void stg3_20_02_init(void) {
  * stores 7 in GSW_GLITZ_PIT_LAST_OPPONENT, and sets GSWF_TOU_RANK_7_MAIL_DONE,
  * GSWF_TOU_08_JUMP_STORY_CONFISCATED and GSWF_TOU_04_CONFISCATED_EXIT_SEEN, and delivers and opens mail 9.
  */
-void stg3_20_init_7(void) {
+static void stg3_20_init_7(void) {
     int i;
 
     for (i = 0; i < 13; i++) {
@@ -1510,7 +1527,7 @@ void stg3_20_init_7(void) {
  * marks the 14 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 6),
  * stores 6 in GSW_GLITZ_PIT_LAST_OPPONENT, and sets GSWF_TOU_RANK_6_CAKE_DONE and clears GSWF_TOU_08_JUMP_STORY_CONFISCATED.
  */
-void stg3_20_init_6(void) {
+static void stg3_20_init_6(void) {
     int i;
 
     for (i = 0; i < 14; i++) {
@@ -1541,7 +1558,7 @@ static void stg3_20_init_5(void) {
  * marks the 16 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 4),
  * stores 4 in GSW_GLITZ_PIT_LAST_OPPONENT, and sets GSWF_TOU_RANK_4_MAIL_DONE and GSWF_TOU_08_JUMP_STORY_MAJORS_4TH.
  */
-void stg3_20_init_4(void) {
+static void stg3_20_init_4(void) {
     int i;
 
     for (i = 0; i < 16; i++) {
@@ -1556,7 +1573,7 @@ void stg3_20_init_4(void) {
  * Story point STG3_20_06 "Rawk Hawk's Warning" (tou_04): delivers mail 10; marks mail 10 read;
  * clears GSWF_TOU_08_JUMP_STORY_MAJORS_4TH.
  */
-void stg3_20_06_init(void) {
+static void stg3_20_06_init(void) {
     swClear(GSWF_ID(GSWF_TOU_08_JUMP_STORY_MAJORS_4TH));
     pouchReceiveMail(10);
     pouchOpenMail(10);
@@ -1583,7 +1600,7 @@ static void stg3_20_09_init(void) {
  * Story point STG3_20_12 "Jolene's Secret" (tou_05):
  * takes Storage Key 0x12 and marks the eight tou_06 blocks A-H as broken.
  */
-void stg3_20_12_init(void) {
+static void stg3_20_12_init(void) {
     pouchRemoveItem(ITEM_STORAGE_KEY_0x12);
     swSet(GSWF_ID(GSWF_TOU_06_BIG_BLOCK_A_BROKEN));
     swSet(GSWF_ID(GSWF_TOU_06_BIG_BLOCK_B_BROKEN));
@@ -1618,7 +1635,7 @@ static void stg3_20_init_3(void) {
  * stores 2 in GSW_GLITZ_PIT_LAST_OPPONENT, and sets GSWF_TOU_RANK2_SCENE,
  * GSWF_TOU_POISON_CAKE_DELIVERED and GSWF_TOU_POISON_CAKE_RECOVERED.
  */
-void stg3_20_init_2(void) {
+static void stg3_20_init_2(void) {
     int i;
 
     for (i = 0; i < 18; i++) {
@@ -1636,7 +1653,7 @@ void stg3_20_init_2(void) {
  * stores 1 in GSW_GLITZ_PIT_LAST_OPPONENT, and sets GSWF_TOU_RANK_1_MAIL_DONE,
  * GSWF_TOU_08_GUARD_ESCORT_UNUSED and GSWF_TOU_08_JUMP_STORY_MAJORS_1ST, and delivers and opens mail 14.
  */
-void stg3_20_init_1(void) {
+static void stg3_20_init_1(void) {
     int i;
 
     for (i = 0; i < 19; i++) {
@@ -1651,7 +1668,7 @@ void stg3_20_init_1(void) {
 }
 
 /** Story point STG3_20_14 "Lobby Poster" (tou_02): clears GSWF_TOU_08_JUMP_STORY_MAJORS_1ST. */
-void stg3_20_13_init(void) {
+static void stg3_20_13_init(void) {
     swClear(GSWF_ID(GSWF_TOU_08_JUMP_STORY_MAJORS_1ST));
 }
 
@@ -1688,7 +1705,7 @@ static void stg3_21_init(void) {
  * marks all 20 Glitz Pit fighters beaten and Mario the champion, clears the match bookings,
  * sets GSWF_GLITZ_PIT_MATCH_JUST_ENDED and marks the champion and Rawk Hawk battle scenes as seen.
  */
-void stg3_30_init(void) {
+static void stg3_30_init(void) {
     int i;
 
     for (i = 0; i < 20; i++) {
@@ -1725,7 +1742,7 @@ static void stg3_31_init(void) {
 }
 
 /** Story point STG3_32 "Boss Battle" (tou_03): sets GSWF_TOU_05_DUCT_GRATE_FELL. */
-void stg3_32_init(void) {
+static void stg3_32_init(void) {
     swSet(GSWF_ID(GSWF_TOU_05_DUCT_GRATE_FELL));
 }
 
@@ -1774,7 +1791,7 @@ static void stg3_34_init(void) {
 }
 
 /** Story point STG3_35 "A Mail from Peach" (gor_03): sets GSWF_TOU_LEFT_AFTER_CHAPTER. */
-void stg3_35_init(void) {
+static void stg3_35_init(void) {
     swSet(GSWF_ID(GSWF_TOU_LEFT_AFTER_CHAPTER));
 }
 
@@ -1788,7 +1805,7 @@ static void stg3_50_init(void) {
  * Story point STG3_52 "Darkly" (gor_02): delivers mail 0x12;
  * sets GSWF_TIK_08_PIPE_REJECTED and GSWF_MAIL_KOOPIE_KOO_SENT.
  */
-void stg3_52_init(void) {
+static void stg3_52_init(void) {
     swSet(GSWF_ID(GSWF_TIK_08_PIPE_REJECTED));
     swSet(GSWF_ID(GSWF_MAIL_KOOPIE_KOO_SENT));
     pouchReceiveMail(0x12);
@@ -2309,7 +2326,7 @@ static void stg7_03_white_0(void) {
 }
 
 /** Story point STG7_03 "Where's White?(Keelhaul)" (muj_01): sets GSWF_NOK_GENERAL_WHITE_HINT_HEARD. */
-void stg7_03_white_1(void) {
+static void stg7_03_white_1(void) {
     swSet(GSWF_ID(GSWF_NOK_GENERAL_WHITE_HINT_HEARD));
 }
 

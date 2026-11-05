@@ -14,6 +14,7 @@
 #include "memory.h"
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+static void effMajinaiMain(EffectEntry* effect);
 static void effMajinaiDisp(CameraId cameraId, EffectEntry* effect);
 
 /**
@@ -51,7 +52,7 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
 #if VERSION <= VERSION_DEMO_JP
 static void effMajinaiMain(EffectEntry* effect) {
 #else
-void effMajinaiMain(EffectEntry* effect) {
+static void effMajinaiMain(EffectEntry* effect) {
 #endif
 
     EffMajinaiWork* work = effect->userdata;

@@ -553,7 +553,7 @@ static inline void effMayaSetGQR(void) {
  * interpolates its 22 channels between the surrounding keys
  * and builds its transform matrix (translate, rotate, scale about pivots) and its alpha, clamped to 0..1.
  */
-void effCalcMayaAnimMatrix(MayaAnim* anim, MayaPoly* list, f32* mtx, f32* alpha) {
+static void effCalcMayaAnimMatrix(MayaAnim* anim, MayaPoly* list, f32* mtx, f32* alpha) {
     f32 buf[22];
     Mtx trans;
     Mtx scale;

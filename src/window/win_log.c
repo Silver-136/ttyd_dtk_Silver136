@@ -1167,7 +1167,7 @@ void winLogMain2(WindowWork* w) {
     w->log.recipe.iconY += (w->log.recipe.iconTy - w->log.recipe.iconY) / FPS_EASE(6.0f);
 }
 
-void mapGX(WindowWork* w, f32 x, f32 y);
+static void mapGX(WindowWork* w, f32 x, f32 y);
 static void monoshiriGX(WindowWork* w, f32 x, f32 y);
 
 
@@ -1319,7 +1319,7 @@ static inline double fabs(double x) { return __fabs(x); }
 #if VERSION <= VERSION_DEMO_JP
 static void mapGX(WindowWork* w, f32 x, f32 y) {
 #else
-void mapGX(WindowWork* w, f32 x, f32 y) {
+static void mapGX(WindowWork* w, f32 x, f32 y) {
 #endif
     static f32 pos_tbl[7][2] = {
         {165.0f, 68.0f}, {0.0f, 75.0f}, {97.0f, 150.0f}, {-139.0f, -33.0f},

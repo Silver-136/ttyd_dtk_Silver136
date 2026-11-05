@@ -320,7 +320,7 @@ static void _btlcmd_MakeActClassTable(BattleWork* wp) {
  * 3 the Double/Triple Dip menu, 4 Specials, 5 Tactics (one each for Mario and the partner),
  * 6 the partner's moves, 7 and 8 two more weapon lists, 10 the partner list. Other types leave *out unchanged.
  */
-void _btlcmd_GetCursorPtr(BattleCommand* cmd, u32 type, BattleCursor** out) {
+static void _btlcmd_GetCursorPtr(BattleCommand* cmd, u32 type, BattleCursor** out) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, _battleWorkPointer->activeUnitId);
 
     switch (type) {
@@ -1182,9 +1182,9 @@ void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp);
 s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp);
-void _commandRestoreRec(void);
+static void _commandRestoreRec(void);
 static s32 _check_present_item(void);
-void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
+static void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
 
 /**
  * Per-frame command input for Mario's or the partner's turn, called from btlseqAct:
@@ -2516,7 +2516,7 @@ static s32 _check_weapon_type_attack(BattleWeapon* weapon);
  * which with Quick Change keeps the turn); the Y position swap;
  * the audience attack (X) and audience item scripts; and the tutorial end. A cancelled Double Dip just waits.
  */
-void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
+static void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     BattleWork* wp = _battleWorkPointer;
     u32 type = cmd->actType;
     BattleCursor* cursor;
@@ -3123,7 +3123,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
  * with BattleMenuKeyOKInACT letting input through, until it is back at the recorded state.
  * Guess: this rebuilds the menu where the player was after the audience interruption.
  */
-void _commandRestoreRec(void) {
+static void _commandRestoreRec(void) {
     BattleWork* wp = _battleWorkPointer;
 
     if (!wp->commandMenu.attackAudience) {

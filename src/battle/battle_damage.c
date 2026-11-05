@@ -397,7 +397,7 @@ static u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
     return result;
 }
 
-s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* result, u32 flags) {
+static s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* result, u32 flags) {
     u32 defaultResult;
     BattleWork* wp = _battleWorkPointer;
     s32 damage;

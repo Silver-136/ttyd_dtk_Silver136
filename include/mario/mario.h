@@ -688,7 +688,6 @@ void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z);
 BOOL marioChkInScreen(s32 x, s32 y);
 f32 marioGetScale(void);
 void marioPreDisp(void);
-void marioDisp(CameraId camId, void* param);
 
 #if VERSION >= VERSION_US
 #define MARIO_STAY(mp) ((mp)->stay)

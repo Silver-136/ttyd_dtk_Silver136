@@ -44,8 +44,8 @@ const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 // A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 static void msgWindow_Disp(CameraId camId, void* param);
-void msgWindow_Main(WindowEntry* window);
-void msgWindow_Clear_Main(WindowEntry* window);
+static void msgWindow_Main(WindowEntry* window);
+static void msgWindow_Clear_Main(WindowEntry* window);
 static void msgWindow_Delete(WindowEntry* window);
 static void selectWindow_Main(WindowEntry* window);
 static void selectWindow_Disp(CameraId camId, void* param);
@@ -369,7 +369,7 @@ static inline void msgVoiceSE(smartEntry* smart) {
  * drives the speaker's talk animation and stops at key waits, selections and the end;
  * returns the print state to the window.
  */
-s32 msgMain(smartEntry* smart) {
+static s32 msgMain(smartEntry* smart) {
     MsgWinData* data = smart->address;
     MsgChar* entry;
     s32 i;
@@ -533,7 +533,7 @@ s32 msgMain(smartEntry* smart) {
  * the characters revealed so far on the current page, with colour, shaking, waves, ruby text,
  * inline icons and the key-wait star, faded by alpha.
  */
-BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
+static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     s32 al;
     s32 hide;
     s32 w;
@@ -2049,7 +2049,7 @@ static inline void msgWinNextPage(WindowEntry* window) {
  * then runs the window states (fade in, printing, key wait with A or B to continue and Z to page back;
  * while paging back A goes forward one page and B jumps to the last; fade out and close), playing the page sounds, and queues msgWindow_Disp.
  */
-void msgWindow_Main(WindowEntry* window) {
+static void msgWindow_Main(WindowEntry* window) {
     smartEntry* smart = window->userdata;
     MsgWinData* data = smart->address;
     s32 se;
@@ -2244,7 +2244,7 @@ void msgWindow_Main(WindowEntry* window) {
  * fades in while printing, stops at key waits and <o> stops without reading any button (msgWindow_Continue resumes
  * it), and fades out at the end of the text; queues msgWindow_Disp.
  */
-void msgWindow_Clear_Main(WindowEntry* window) {
+static void msgWindow_Clear_Main(WindowEntry* window) {
     MsgWinData* data = WIN_DATA(window);
 
     switch (window->state) {

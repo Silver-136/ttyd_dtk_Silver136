@@ -22,6 +22,8 @@
 #include "driver/hitdrv.h"
 #include <string.h>
 #include "driver/dispdrv.h"
+static void makeDisplayList(BOOL group);
+static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index);
 
 
 #define TWO_PI 6.28318530717958647692528676655900576839433879875021f
@@ -255,7 +257,7 @@ static void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
 #if VERSION <= VERSION_DEMO_JP
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #else
-MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
+static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #endif
 
     MapWork* wp = &mapWork[activeGroup];
@@ -437,7 +439,7 @@ static void mapResetPaperCraftAmbColor(void);
 #if VERSION <= VERSION_DEMO_JP
 static void makeDisplayList(BOOL group) {
 #else
-void makeDisplayList(BOOL group) {
+static void makeDisplayList(BOOL group) {
 #endif
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
     MapEntry* e;
@@ -2266,7 +2268,7 @@ static void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
  * dispdrv callback for objects with flag 0x20000000:
  * draws the object untextured and stores the screen rectangle the GPU reports in obj->screenRect.
  */
-void mapDispMapObj_bbox(CameraId cam, void* payload) {
+static void mapDispMapObj_bbox(CameraId cam, void* payload) {
     MapObject* obj = payload;
     sysWaitDrawSync();
     GXClearBoundingBox();

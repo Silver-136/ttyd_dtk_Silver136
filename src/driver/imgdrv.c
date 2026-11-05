@@ -415,7 +415,7 @@ static void imgCapture_Prim(ImageEntry* entry, s32 id) {
  * Draw callback queued on every camera at the end of the frame:
  * refreshes the captures of all images of the current mode that are drawn on that camera.
  */
-void imgCapture(CameraId camId, void* param) {
+static void imgCapture(CameraId camId, void* param) {
     s32 type = gp->inBattle != 0;
     int i, count;
     ImageEntry* entry;

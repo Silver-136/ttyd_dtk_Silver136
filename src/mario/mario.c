@@ -42,6 +42,7 @@
 #include "mario/mario_kemuri.h"
 #include <dolphin/pad.h>
 #include "driver/mapdrv.h"
+static void marioDisp(CameraId camId, void* param);
 static void marioDispBlur(CameraId camId, void* param);
 static void marioMoveMain(void);
 static void marioCtrlOff2Main(void);
@@ -2444,7 +2445,7 @@ static void marioDispBlur(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_JP
 static void marioDisp(CameraId camId, void* param) {
 #else
-void marioDisp(CameraId camId, void* param) {
+static void marioDisp(CameraId camId, void* param) {
 #endif
     MarioWork* wp = mp;
     Mtx mtx;

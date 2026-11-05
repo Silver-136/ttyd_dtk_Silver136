@@ -60,13 +60,13 @@ typedef struct MarioMotTblEntry {
 
 static void mot_talk(void);
 static void mot_getItem(void);
-void mot_kaze(void);
+static void mot_kaze(void);
 
 #if VERSION <= VERSION_DEMO_JP
 static void mot_bottomless(void);
 static void mot_cloud_post(void);
 #else
-void mot_bottomless(void);
+static void mot_bottomless(void);
 #endif
 
 static void mot_forceReset(void);
@@ -1229,7 +1229,7 @@ static inline BOOL marioChkBackAngle(f32 a) {
  * Resembles Paper Mario 64's spin (action_update_spin: Z, the sprite turning, ending at 0 or 180 degrees), but this one
  * stays in place: no movement, sound, effect or attack. Same code in all versions.
  */
-void mot_kaze(void) {
+static void mot_kaze(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -1314,7 +1314,7 @@ static void mot_dummy(void) {
  * Mario drops from above the screen, glides back to where he entered (returnPos; fixed spots on win_01,
  * win_03 and tik_01 when unset), lands with a thud, loses 1 HP and stands.
  */
-void mot_bottomless(void) {
+static void mot_bottomless(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
     f32 y;

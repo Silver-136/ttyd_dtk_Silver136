@@ -38,7 +38,7 @@ BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, BATTLE_PHASE_PLAYER }
 BOOL BattleMain(void);
 static void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
 static void BattlePartyInfoWorkInit(BattleWork* wp);
-void BattleCheckUnitBroken(BattleWork* wp);
+static void BattleCheckUnitBroken(BattleWork* wp);
 
 /**
  * Per-frame battle entry called by the battle game sequence;
@@ -915,7 +915,7 @@ f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z) {
     return stage->audienceSizeY;
 }
 
-void BattleCheckUnitBroken(BattleWork* wp) {
+static void BattleCheckUnitBroken(BattleWork* wp) {
     s32 i;
 
     for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {

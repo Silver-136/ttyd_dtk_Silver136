@@ -40,7 +40,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
  * Mario ("mario"), or with flags bit 1 a battle unit. evt_msg_toge/togelr settings then override the tail.
  * Blocks until the window closes.
  */
-s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {
+static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {
     NpcEntry* npc = NULL;
     WindowEntry* win;
     const char* m;

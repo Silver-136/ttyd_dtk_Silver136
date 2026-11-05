@@ -42,7 +42,7 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
                            const char* name);
 CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 top, f32 bottom, f32 left, f32 right,
                            f32 near, f32 far, f32 nearZ, f32 farZ, const char* name);
-void cam3dMain(CameraEntry* camera);
+static void cam3dMain(CameraEntry* camera);
 static void cam3dImgMain(CameraEntry* camera);
 static void camEffMain(CameraEntry* camera);
 inline Vec makeVecByValue(f32 x, f32 y, f32 z);
@@ -281,7 +281,7 @@ void camMain(void) {
     }
 }
 
-void camEvalNearFar(CameraEntry* camera) {
+static void camEvalNearFar(CameraEntry* camera) {
     MapWork* map;
     f32 m22;
     f32 m23;
@@ -444,7 +444,7 @@ void camSetCurNo(CameraId cameraId) {
     currentCamNo = cameraId;
 }
 
-void cam3dMain(CameraEntry* camera) {
+static void cam3dMain(CameraEntry* camera) {
     CameraParams work;
     CameraParams work2;
 

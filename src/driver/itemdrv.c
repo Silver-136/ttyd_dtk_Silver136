@@ -77,7 +77,7 @@ static void winHelpDisp(WinMgrEntry* win);
 static void winFullDisp(WinMgrEntry* win);
 
 static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
-void itemseq_GetItem(ItemEntry* entry);
+static void itemseq_GetItem(ItemEntry* entry);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 //.bss
@@ -116,7 +116,7 @@ inline void itemCheckBadge(ItemEntry* entry) {
 }
 #endif
 
-void itemseq_Bound(ItemEntry* entry);
+static void itemseq_Bound(ItemEntry* entry);
 
 /**
  * Puts the item into the pouch; FALSE if the pouch is full.
@@ -1235,7 +1235,7 @@ static void winFullDisp(WinMgrEntry* win) {
  */
 static void itemseq_GetItem(ItemEntry* entry) {
 #else
-void itemseq_GetItem(ItemEntry* entry) {
+static void itemseq_GetItem(ItemEntry* entry) {
 #endif
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
@@ -1667,7 +1667,7 @@ static s32 _move_dir_1090;
 #if VERSION <= VERSION_DEMO_JP
 static void itemseq_Bound(ItemEntry* entry) {
 #else
-void itemseq_Bound(ItemEntry* entry) {
+static void itemseq_Bound(ItemEntry* entry) {
 #endif
     static s32 _move_dir;
     MarioWork* mario;

@@ -42,7 +42,7 @@ static inline char* _ssGetStr(void) {
 
 // local prototypes
 static void SoundEfxMain(void);
-void SoundDVDMain(void);
+static void SoundDVDMain(void);
 
 static void SoundSSMainInt(void);
 static void SoundSSMain(void);
@@ -1373,7 +1373,7 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) {
  * Per-frame DVD audio update: runs fade-outs (stopping or pausing at silence, remembering the sample position)
  * and fade-ins.
  */
-void SoundDVDMain(void) {
+static void SoundDVDMain(void) {
     u32 i;
 
     // FAKE: u32 counter with a signed compare; a plain int counter changes the object
@@ -1422,7 +1422,7 @@ void SoundDVDMain(void) {
 static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo);
 static void cache_flush(u32 pointerToARQRequest);
 static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
-void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
+static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
 
 /** Disables interrupts for stream bookkeeping; nests. */
 inline void SoundIntOff(void) {
@@ -1743,7 +1743,7 @@ s16 dtbl[16] = {0x0001, 0x0007, 0x0018, 0x003B, 0x0053, 0x006F, 0x00EC, 0x022B,
  * Decodes count samples of the game's 4-bit DPCM stream format from src into out, with run-length scale changes,
  * keeping the decoder state in entry; returns the new source pointer.
  */
-u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 count, u8* src) {
+static u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 count, u8* src) {
     s8 delta;
     u32 b;
     u32 scale;
@@ -2159,7 +2159,7 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
 #if VERSION <= VERSION_DEMO_JP
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #else
-void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
+static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #endif
     SoundStream* stream;
     u8* dst;

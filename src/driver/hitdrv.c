@@ -14,7 +14,7 @@
 
 // forward declarations: these functions are defined further down
 static BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
-s32 hitCalcVtxPosition(HitEntry* hit);
+static s32 hitCalcVtxPosition(HitEntry* hit);
 static void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 
 s32 unk_8041840C;
@@ -503,7 +503,7 @@ static inline f32 hitDequant(s16* base, s32 idx) {
  * Transforms all of hit's map triangles to world space and stores each with its edges and normal;
  * returns the stored triangle count; packed display-list triangles with a zero normal are omitted.
  */
-s32 hitCalcVtxPosition(HitEntry* hit) {
+static s32 hitCalcVtxPosition(HitEntry* hit) {
     s32 i;
     Vec a;
     MapWork* wp;
@@ -1469,7 +1469,7 @@ s32 hitGetAttr(HitEntry* hit) {
  * back at its point.
  * They are the hazard water: mot_damage sinks Mario in it and has the Gazigazi bite him (evt_gazigazi).
  */
-void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion) {
+static void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion) {
     hit->attributes |= HIT_ATTR_DAMAGE_RETURN;
     hit->damage = damage;
     if (hit->child != NULL) {

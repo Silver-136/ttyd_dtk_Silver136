@@ -17,6 +17,7 @@
 #include "mario/mariost.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+static s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff);
 
 #if VERSION >= VERSION_US
 #define PSND_FPS gp->framerate
@@ -9012,7 +9013,7 @@ BOOL _psndPushGroup_trg = 0;
 // defined below; psndMain calls them first
 static void psndBGMMain(void);
 static void psndENVMain(void);
-void psndSFXMain(void);
+static void psndSFXMain(void);
 
 // Angle of the vector (x2 - x1, y2 - y1) in degrees: 0 toward -y, 90 toward +x, 180 toward +y, 270 toward -x. The
 // ratio of the smaller to the larger component, times 45, is corrected by angleABTBL.
@@ -9085,7 +9086,7 @@ static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
 /** calc3D, returns the packed 3D sound info word (vol, pan, span, unused) */
 // Volume, pan and surround pan of a 3D sound as heard by the listener, packed in bytes 0, 1 and 2 of the returned word
 // (byte 3 unused). With dist != 0 the volume falls from full at 200 units to 0 at 200 + dist * 100 units.
-u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
+static u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     static u8 PAN[4];
     Vec v = *pos;
     f32 d;
@@ -10252,7 +10253,7 @@ static inline s32 sfxvol(PaperSoundEffect* s) {
  * listener by calc3D), keeps 3D effects' volume, pan and surround up to date as they or the listener move,
  * runs the global fade and per-effect fade-outs, and frees effects that ended.
  */
-void psndSFXMain(void) {
+static void psndSFXMain(void) {
     SoundEffectEntry* e;
     u32 j;
     unsigned int none;
@@ -10506,7 +10507,7 @@ sgfound:
 #if VERSION <= VERSION_DEMO_JP
 static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
 #else
-s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
+static s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
 #endif
     s32 sid;
     s32 k;

@@ -15,7 +15,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-void effFunemizuMain(EffectEntry* effect);
+static void effFunemizuMain(EffectEntry* effect);
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect);
 static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -234,7 +234,7 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
 #if VERSION <= VERSION_DEMO_JP
 static void effFunemizuMain(EffectEntry* effect) {
 #else
-void effFunemizuMain(EffectEntry* effect) {
+static void effFunemizuMain(EffectEntry* effect) {
 #endif
 
     EffFunemizuWork* work = effect->userdata;

@@ -73,8 +73,8 @@ s16 journal_icon_tbl[6] = { ICON_MENU_JOURNAL, 0x239, 0x239, 0x239, 0x23A, 0x23B
 //.sbss
 static StatusWindowWork* wp;
 
-void statusWinDisp(CameraId camId, void* param);
-BOOL valueCheck(void);
+static void statusWinDisp(CameraId camId, void* param);
+static BOOL valueCheck(void);
 static void valueUpdate(void);
 
 /**
@@ -319,7 +319,7 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
 #if VERSION <= VERSION_DEMO_JP
 static void statusWinDisp(CameraId camId, void* param) {
 #else
-void statusWinDisp(CameraId camId, void* param) {
+static void statusWinDisp(CameraId camId, void* param) {
 #endif
 
     alwaysDtEntry* e;
@@ -543,7 +543,7 @@ static void statusGetValue(StatusValue* values) {
  * Returns TRUE when any shown value differs from what the HUD last displayed, and marks Mario's HP,
  * FP, partner HP or coin changes for a blink.
  */
-BOOL valueCheck(void) {
+static BOOL valueCheck(void) {
     StatusValue v;
     BOOL changed = FALSE;
 

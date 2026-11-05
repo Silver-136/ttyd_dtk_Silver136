@@ -7,5 +7,3 @@
 #include <dolphin/types.h>
 
 EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f32 y, f32 z);
-void effCoinFukidashiMain(EffectEntry* effect);
-void effCoinFukidashiDisp(CameraId cameraId, EffectEntry* effect);

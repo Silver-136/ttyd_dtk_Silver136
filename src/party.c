@@ -3039,14 +3039,14 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
 }
 
 BOOL vivianDisplayTailCheck(PartyEntry* party);
-void partyDisp(CameraId cam, void* param);
+static void partyDisp(CameraId cam, void* param);
 
 /**
  * Turns the partner to face left (180) or right (0) of the screen as she moves,
  * with Paper Mario's overshooting flip: eases past the target by about 40 degrees and back.
  * Leaves her alone in the paper slit; when her direction is locked it only eases toward the current target.
  */
-void partyMakeDispDir(PartyEntry* party) {
+static void partyMakeDispDir(PartyEntry* party) {
     f32 diff;
     f32 tgt;
     f32 cur;
@@ -3237,7 +3237,7 @@ static void partyPreDisp(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
 static void partyDisp(CameraId cam, void* param) {
 #else
-void partyDisp(CameraId cam, void* param) {
+static void partyDisp(CameraId cam, void* param) {
 #endif
     PartyEntry* party = param;
     Mtx m;

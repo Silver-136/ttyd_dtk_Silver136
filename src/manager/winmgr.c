@@ -69,7 +69,7 @@ static void select_disp3_mario(WinMgrEntry* entry);
 static void select_disp3_mario(WinMgrEntry* entry);
 #endif
 
-void winMgrSeq(WinMgrEntry* entry);
+static void winMgrSeq(WinMgrEntry* entry);
 s32 select_comp_type(const void* a, const void* b);
 s32 select_comp_starpiece(const void* a, const void* b);
 
@@ -390,7 +390,7 @@ void winMgrMain(void) {
     }
 }
 
-void winMgrSeq(WinMgrEntry* entry) {
+static void winMgrSeq(WinMgrEntry* entry) {
     entry->flags |= WINMGR_FLAG_ANIMATING;
     switch (entry->description->type) {
         case 0:

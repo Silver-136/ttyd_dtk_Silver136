@@ -53,7 +53,7 @@ TitleWork* wp2 = &work2;
 
 // local prototypes
 void titleInit(SequenceWork* work);
-void titleMain(SequenceWork* work);
+static void titleMain(SequenceWork* work);
 void disp1(CameraId cameraId, void* param);
 void disp2(CameraId cameraId, void* param);
 static void titleLoadDemo(void);
@@ -189,7 +189,7 @@ static void titleMain(SequenceWork* work) {
         case 0:
             if (psndBGMStartCheck(0) != 0U) {
 #else
-void titleMain(SequenceWork* work) {
+static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
             if (psndBGMStartCheck(0) != 0U

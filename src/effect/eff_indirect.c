@@ -12,6 +12,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+static void effIndirectDisp(CameraId cameraId, EffectEntry* effect);
+static void effIndirectMain(EffectEntry* effect);
 
 typedef struct EffIndirectWork {
     s32 type;          // 0x0
@@ -61,7 +63,7 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 }
 
 /** Fades the distortion near the end of its life (or on soft delete) and frees the capture buffer when finished. */
-void effIndirectMain(EffectEntry* effect) {
+static void effIndirectMain(EffectEntry* effect) {
     EffIndirectWork* work = effect->userdata;
     Vec position;
 
@@ -104,7 +106,7 @@ void effIndirectMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_JP
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
+static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
 
     EffIndirectWork* work = effect->userdata;

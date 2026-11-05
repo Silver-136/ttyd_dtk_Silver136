@@ -44,7 +44,7 @@ static f32 upstairs_dy;
 static s32 touch_wall_ct;
 #endif
 
-BOOL party_slit(PartyEntry* party);
+static BOOL party_slit(PartyEntry* party);
 static BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
@@ -3240,7 +3240,7 @@ void partySlitReset(PartyEntry* party) {
  * and turns back when Mario leaves Paper Mode and no slit wall is in the way.
  * Returns FALSE on the frame the turn completes, so the motion skips it.
  */
-BOOL party_slit(PartyEntry* party) {
+static BOOL party_slit(PartyEntry* party) {
     BOOL ret = TRUE;
     MarioWork* mario;
     f32 a;

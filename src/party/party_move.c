@@ -30,6 +30,7 @@
 #include "mario/mario_hit.h"
 #include "mario/mariost.h"
 #include "party/party_vivian.h"
+static void walkMain(PartyEntry* party);
 
 static s32 partyMoveMain(PartyEntry* party, s32 hosei);
 static void flyMain(PartyEntry* party);
@@ -1945,7 +1946,7 @@ static inline void party_move_mode_behind_mario_continue(PartyEntry* party) {
 }
 
 /** Runs the current move mode for a walking partner. */
-void walkMain(PartyEntry* party) {
+static void walkMain(PartyEntry* party) {
     switch (party->moveMode) {
         case PARTY_MOVE_MODE_STAY:
             party_move_mode_stay(party);

@@ -24,6 +24,8 @@
 #include "libc_decls.h"
 #include "sdk/texPalette.h"
 #include "sdk/DEMOInit.h"
+static void renderProc(s32 shapeId, s32 unused);
+static void materialProc(s32 shapeId, s32 xluStage);
 
 #define TESTHEAP_SIZE (u32)(1.5 * 1024 * 1024)
 
@@ -330,7 +332,7 @@ s32 g_modeling_mtx_lv;
 // local declarations
 void animPoseRefresh(void);
 static void animPaperPoseDisp(CameraId camId, void* param);
-void animPaperPoseDispSub(s32 unused, AnimationPose* pose);
+static void animPaperPoseDispSub(s32 unused, AnimationPose* pose);
 static void evalProc(s32 parentId, s32 groupId);
 
 /** Returns the animation driver's work (files, textures, pose pool, scratch buffers). */
@@ -2451,7 +2453,7 @@ static inline void animSetCullMode(s32 cullMode) {
 #if VERSION <= VERSION_DEMO_JP
 static void materialProc(s32 shapeId, s32 xluStage) {
 #else
-void materialProc(s32 shapeId, s32 xluStage) {
+static void materialProc(s32 shapeId, s32 xluStage) {
 #endif
     AnimationPoseData *cd;
     int i;
@@ -2565,7 +2567,7 @@ static inline AnimationPoseData* rpCurData(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void renderProc(s32 shapeId, s32 unused) {
 #else
-void renderProc(s32 shapeId, s32 unused) {
+static void renderProc(s32 shapeId, s32 unused) {
 #endif
     AnimationPoseData* cd;
     s32 texIndex;
@@ -3375,7 +3377,7 @@ static void animPaperPoseDisp(CameraId camId, void* param) {
  * so the overlay can be drawn with the character's image;
  * with rectangle caching on, the rectangle is only remeasured after an animation change.
  */
-void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
+static void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     AnimationPose* pose;
     AnimData* d;
     Mtx m, save;

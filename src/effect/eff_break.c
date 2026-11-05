@@ -9,6 +9,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/n64/eff_stardust_n64.h"
+static void effBreakDisp(CameraId cameraId, EffectEntry* effect);
+static void effBreakMain(EffectEntry* effect);
 
 typedef struct EffBreakWork {
     s32 type;      // 0x0
@@ -133,7 +135,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
  * wait, hold for the duration, slide off along ty_data2)
  * and deletes the effect when every letter is done.
  */
-void effBreakMain(EffectEntry* effect) {
+static void effBreakMain(EffectEntry* effect) {
     EffBreakWork* work = effect->userdata;
     Vec position;
     Vec tmp = { 0.0f, 0.0f, 0.0f };
@@ -211,7 +213,7 @@ void effBreakMain(EffectEntry* effect) {
 }
 
 /** Draws the letter sprites with the active language's textures, offset by each letter's offsetY. */
-void effBreakDisp(CameraId cameraId, EffectEntry* effect) {
+static void effBreakDisp(CameraId cameraId, EffectEntry* effect) {
     EffBreakWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     f32 scale = work->scale;

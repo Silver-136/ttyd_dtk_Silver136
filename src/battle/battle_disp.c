@@ -126,7 +126,7 @@ void btlDispGXInit2D(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
-void BattleStockExpDisp(void);
+static void BattleStockExpDisp(void);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
 static void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
 static void floatOffsetControl(BattleUnitPart* part);
@@ -322,8 +322,8 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     return STATUS_INVALID;
 }
 
-void btlUnitPartsBlurDisp(CameraId camId, void* payload);
-void btlUnitItemDisp2(CameraId camId, void* payload);
+static void btlUnitPartsBlurDisp(CameraId camId, void* payload);
+static void btlUnitItemDisp2(CameraId camId, void* payload);
 static void btlUnitStolenItemDisp(CameraId camId, void* param);
 void btlUnitPartsDisp(CameraId camId, void* part);
 
@@ -932,7 +932,7 @@ static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
 }
 #pragma pop
 
-void btlUnitItemDisp2(CameraId camId, void* payload) {
+static void btlUnitItemDisp2(CameraId camId, void* payload) {
     BattleUnit* unit = payload;
     BattleWork* wp = _battleWorkPointer;
     s32 kind = unit->currentKind;
@@ -997,7 +997,7 @@ static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, 
  * Draws the part's afterimage trail: each history entry is redrawn with the base colour faded between the two
  * blur colours along the trail.
  */
-void btlUnitPartsBlurDisp(CameraId camId, void* payload) {
+static void btlUnitPartsBlurDisp(CameraId camId, void* payload) {
     BattleUnitPart* part = payload;
     BattleWorkUnitPartBlur* blur;
     BattleWorkUnitPartBlurEntry* entry;
@@ -1379,7 +1379,7 @@ static void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scal
  * so far this battle (one per frame after a 4-frame delay) and queues the counter draw
  * while BATTLE_DISP_FLAG_STAR_POINTS is on.
  */
-void BattleStockExpDisp(void) {
+static void BattleStockExpDisp(void) {
     BattleWork* wp = _battleWorkPointer;
 
     if (wp->stockExp > wp->stockExpDisp) {

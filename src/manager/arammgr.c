@@ -51,7 +51,7 @@ static void aramCallbackGarbage(u32 request) {
  * waits for transfers in flight, unlinks entries already copied back to main RAM (flag 0x20),
  * then slides the live ones down through a 32 KB main-RAM bounce buffer.
  */
-void aramMgrGarbage(void) {
+static void aramMgrGarbage(void) {
     ARAMEntry* head;
     ARAMEntry* entry;
     ARAMEntry* prev;

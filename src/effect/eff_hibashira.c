@@ -10,6 +10,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effHibashiraDisp(CameraId cameraId, EffectEntry* effect);
+static void effHibashiraMain(EffectEntry* effect);
 
 typedef struct EffHibashiraWork {
     s32 type;     // 0x0
@@ -95,7 +97,7 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
  * Starts each pillar's flame animation after its delay (4 frames apart), fades each pillar out from its sixth
  * frame, and fades the whole effect over 16 frames on soft delete or at the end of the duration.
  */
-void effHibashiraMain(EffectEntry* effect) {
+static void effHibashiraMain(EffectEntry* effect) {
     s32 k;
     EffHibashiraWork* work = effect->userdata;
     EffHibashiraWork* pillar;
@@ -184,7 +186,7 @@ void effHibashiraMain(EffectEntry* effect) {
 }
 
 /** Draws each pillar's animation pose at its offset, faded by the effect's alpha. */
-void effHibashiraDisp(CameraId cameraId, EffectEntry* effect) {
+static void effHibashiraDisp(CameraId cameraId, EffectEntry* effect) {
     EffHibashiraWork* work = effect->userdata;
     s32 i, alpha;
     Mtx mtx;

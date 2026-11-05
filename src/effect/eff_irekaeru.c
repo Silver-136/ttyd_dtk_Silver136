@@ -10,6 +10,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effIrekaeruDisp(CameraId cameraId, EffectEntry* effect);
+static void effIrekaeruMain(EffectEntry* effect);
 
 #if VERSION >= VERSION_US
 /**
@@ -54,7 +56,7 @@ EffectEntry* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Loads the pose, fades it in, plays it, then fades out and deletes it; a soft delete deletes it immediately. */
-void effIrekaeruMain(EffectEntry* effect) {
+static void effIrekaeruMain(EffectEntry* effect) {
     EffIrekaeruWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -119,7 +121,7 @@ void effIrekaeruMain(EffectEntry* effect) {
 }
 
 /** Draws the EFF_Irekae pose billboarded to the camera with the current alpha. */
-void effIrekaeruDisp(CameraId cameraId, EffectEntry* effect) {
+static void effIrekaeruDisp(CameraId cameraId, EffectEntry* effect) {
     EffIrekaeruWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

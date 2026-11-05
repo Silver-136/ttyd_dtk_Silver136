@@ -8,6 +8,8 @@
 #include <dolphin/mtx.h>
 #include "version.h"
 #include "driver/effdrv.h"
+static void effEnergyDisp(CameraId cameraId, EffectEntry* effect);
+static void effEnergyMain(EffectEntry* effect);
 
 typedef struct EffEnergyWork {
     s32 type;        // 0x0, index into color_tbl
@@ -69,7 +71,7 @@ EffectEntry* effEnergyEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 siz
 }
 
 /** Spins and grows the orb, pulses its brightness between limits, and fades it over 16 frames on soft delete. */
-void effEnergyMain(EffectEntry* effect) {
+static void effEnergyMain(EffectEntry* effect) {
     EffEnergyWork* work = effect->userdata;
     Vec position;
 
@@ -106,7 +108,7 @@ void effEnergyMain(EffectEntry* effect) {
 }
 
 /** Draws the orb as a camera-facing sprite rotated around Z, with colours chosen by type. */
-void effEnergyDisp(CameraId cameraId, EffectEntry* effect) {
+static void effEnergyDisp(CameraId cameraId, EffectEntry* effect) {
     EffEnergyWork* work = effect->userdata;
     CameraEntry* camera;
     s32 type;

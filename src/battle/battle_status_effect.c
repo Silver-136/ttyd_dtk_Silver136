@@ -130,7 +130,7 @@ s8 _st_pri_data[] = {
 #endif
 
 //local prototypes
-void BSE_Sleep(BattleUnit* unit);
+static void BSE_Sleep(BattleUnit* unit);
 static void BSE_SleepDelete(BattleUnit* unit);
 static void BSE_Biribiri(BattleUnit* unit);
 static void BSE_BiribiriDelete(BattleUnit* unit);
@@ -138,7 +138,7 @@ static void BSE_Fire(BattleUnit* unit);
 static void BSE_FireDelete(BattleUnit* unit);
 static void BSE_Freeze(BattleUnit* unit);
 static void BSE_FreezeDelete(BattleUnit* unit);
-void BSE_Kagegakure(BattleUnit* unit);
+static void BSE_Kagegakure(BattleUnit* unit);
 static void BSE_KagegakureDelete(BattleUnit* unit);
 
 /**
@@ -178,7 +178,7 @@ EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
  * half the width across and 0.95 of the height up, scaled by the unit's size (at body height for ceiling units).
  * Deletes it once the unit wakes.
  */
-void BSE_Sleep(BattleUnit* unit) {
+static void BSE_Sleep(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
     f32 dx, dy;
@@ -341,7 +341,7 @@ static void BSE_FreezeDelete(BattleUnit* unit) {
 }
 
 
-void BSE_Kagegakure(BattleUnit* unit) {
+static void BSE_Kagegakure(BattleUnit* unit) {
     char name[0x10];
     f32 x, y, z;
     BOOL on = FALSE;

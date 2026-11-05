@@ -30,27 +30,7 @@ typedef struct EventStage {
 
 void stg0_00_init(void);
 
-void stg1_03_init(void);
-
-void stg2_23_01_init(void);
-void stg2_end_init(void);
-
-void stg3_12_init__4(void);
 void stg3_12_2_init(void);
-void stg3_20_init_7(void);
-void stg3_20_init_6(void);
-void stg3_20_init_4(void);
-void stg3_20_06_init(void);
-void stg3_20_12_init(void);
-void stg3_20_init_2(void);
-void stg3_20_init_1(void);
-void stg3_20_13_init(void);
-void stg3_30_init(void);
-void stg3_32_init(void);
-void stg3_35_init(void);
-void stg3_52_init(void);
-
-void stg7_03_white_1(void);
 
 void stg9_02_init(void);
 
