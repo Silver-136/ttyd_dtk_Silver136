@@ -1872,6 +1872,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
             v.x = pos->x + x;
             v.y = pos->y + hh;
             v.z = pos->z + z;
+            // FAKE: v and dir are copied into p and d before the call; passing &v, &dir changes the object
             p = v;
             d = dir;
             hit = marioHitCheck2(&p, &d, &outPos, &outNrm, &dist);

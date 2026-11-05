@@ -129,7 +129,7 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
             PSVECAdd(&npc->pos, &normal, &npc->pos);
             PSVECSubtract(&npc->pos, &prevPos, &step);
             dist = PSVECMag(&step);
-            if ((f32)dist > 0.0f) {
+            if (dist > 0.0f) {
                 PSVECNormalize(&step, &step);
                 rayOrigin = prevPos;
                 npc->hit1 = hitCheckFilter(

@@ -334,6 +334,7 @@ static inline void shipLerpTurn(f32 t, f32 k) {
  */
 static inline void shipEff(f32 s) {
     MarioWork* mario = marioGetPtr();
+    // FAKE: zz (0.0f) added to position.y and the c temporary choosing 0.3f/0.6f; dropping both changes the object
     f32 zz = 0.0f;
     if (!s) {
         s32 c;

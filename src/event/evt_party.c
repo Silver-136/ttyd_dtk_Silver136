@@ -21,6 +21,7 @@
 #include "mario/mario_hit.h"
 #include "party/party_hit.h"
 
+// Macro, not inline: as static inline evtGetParty(args) the object changes.
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 
 extern s32 bomheiGetStatus(void);

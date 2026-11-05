@@ -5473,7 +5473,6 @@ static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     s32 score;
     s32 next = 0;
-    s32 off;
     s32 i;
     switch (mobj->state) {
     case 0:
@@ -5501,9 +5500,9 @@ static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
         if (next == 0) {
             break;
         }
-        for (i = 0, off = 0; i < npcGetWorkPtr()->total; off += sizeof(NpcEntry), i++) {
-            NpcEntry* npc = (NpcEntry*)((char*)npcGetWorkPtr()->entries + off);
-            u32 flags = (u32)npc->flags;
+        for (i = 0; i < npcGetWorkPtr()->total; i++) {
+            NpcEntry* npc = &npcGetWorkPtr()->entries[i];
+            u32 flags = npc->flags;
             if ((flags & NPC_FLAG_IN_USE) && !(npc->statusFlags & NPC_STATUS_DEAD) && (flags & NPC_FLAG_2D) && (flags & NPC_FLAG_ENEMY)) {
                 npcGroupDead(npc, KPA_ENCOUNT_GOAL_POLE);
             }

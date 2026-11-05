@@ -2306,6 +2306,7 @@ static inline BOOL mapClipTest(Vec* v) {
     return FALSE;
 }
 
+// Macro, not inline: mapClipTest(&v) at the eight sites changes the object; mapClipTest is unused.
 #define MAP_CLIP_IN(v) ((v).z > -1.0f && (v).z < 0.0f && (v).x >= -1.0f && (v).x <= 1.0f && (v).y >= -1.0f && (v).y <= 1.0f)
 
 /**

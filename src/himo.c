@@ -37,6 +37,7 @@ static void vivihimoDisp(CameraId camId, HimoWork* w);
  */
 void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB) {
     HimoWork w;
+    // FAKE: pw is a second name for &w; w.field access changes the object
     HimoWork* pw = &w;
     f32 m0, m2, len, wob;
     Vec* pt;

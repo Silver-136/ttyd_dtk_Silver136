@@ -770,6 +770,7 @@ void pouchSortItem(s32 mode) {
     s32 n, i, j;
     BOOL swap;
     s16 t2, t1;
+    // FAKE: one-element array used as a scalar pointer; a plain PouchData* changes the object in JP and the early demos
     PouchData* pp[1];
 #if VERSION >= VERSION_DEMO_EU
     char keyA[0x80];

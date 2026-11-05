@@ -76,6 +76,7 @@ static void effOpukuWcurtainMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
+    s32 frame;
 
     tmp.x = work->position.x;
     tmp.y = work->position.y;
@@ -93,12 +94,12 @@ static void effOpukuWcurtainMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    i = work->frame;
+    frame = work->frame;
     if (work->lifetime < 16) {
         work->alpha = work->lifetime << 4;
     }
-    if (i < 16) {
-        work->alpha = (i << 4) + 15;
+    if (frame < 16) {
+        work->alpha = (frame << 4) + 15;
     }
     for (i = 0; i < 12; i++) {
         work->offset[i] += work->speed[i];

@@ -94,6 +94,7 @@ static void effOpukuWprotectMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
+    s32 frame;
     s32 type;
     f32 t;
     f32 s1;
@@ -132,22 +133,22 @@ static void effOpukuWprotectMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    i = work->frame;
+    frame = work->frame;
     if (type == 0) {
         if (work->lifetime < 16) {
             work->alpha2 = work->alpha = work->lifetime << 4;
         }
-        if (i < 16) {
-            work->alpha2 = work->alpha = (i << 4) + 15;
+        if (frame < 16) {
+            work->alpha2 = work->alpha = (frame << 4) + 15;
         }
     } else {
-        if (i < 4) {
-            work->alpha2 = work->alpha = (i << 6) + 63;
+        if (frame < 4) {
+            work->alpha2 = work->alpha = (frame << 6) + 63;
         }
     }
-    u = (f32)sin(6.2831855f * (f32)(i + i * 6) / 360.0f);
+    u = (f32)sin(6.2831855f * (f32)(frame + frame * 6) / 360.0f);
     work->colorG = (u8)(s32)(127.0f + 32.0f * u);
-    t = 0.01f * (f32)i;
+    t = 0.01f * (f32)frame;
     a1 = 6.2831855f * t / 360.0f;
     s1 = (f32)sin(a1);
     s6 = (f32)sin(6.2831855f * (6.0f * t) / 360.0f);

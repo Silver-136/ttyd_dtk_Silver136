@@ -177,7 +177,7 @@ BOOL marioChkJabara(void) {
     }
     if (!(mario->buttonHold & PAD_BUTTON_A)) {
         if (!(mario->buttonHold & PAD_BUTTON_B)) {
-            if (strcmp(mario->animName, "M_I_Y") == 0 && (u16)mario->currMotionId == MARIO_MOTION_STAY) {
+            if (strcmp(mario->animName, "M_I_Y") == 0 && mario->currMotionId == MARIO_MOTION_STAY) {
                 marioChgPose("M_S_1");
                 marioVoiceGlareOff();
             }
@@ -186,12 +186,12 @@ BOOL marioChkJabara(void) {
         return FALSE;
     }
 #if VERSION >= VERSION_US
-    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER) &&
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & MARIO_DISP_FLAG_PAPER) &&
         mario->controlStickSensitivity) {
 #else
     mario->wMotionTimer++;
-    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && (u16)mario->currMotionId == MARIO_MOTION_STAY &&
-        !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
+    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && mario->currMotionId == MARIO_MOTION_STAY &&
+        !(mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
 #endif
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
@@ -199,7 +199,7 @@ BOOL marioChkJabara(void) {
 #if VERSION < VERSION_US
     if (mario->wMotionTimer >= 0x32) {
         mario->wMotionTimer = 0x32;
-        if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
+        if (mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
             marioChgPose("M_I_Y");
             marioVoiceGlareOn();
         }

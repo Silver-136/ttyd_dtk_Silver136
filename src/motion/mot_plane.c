@@ -336,6 +336,7 @@ void mot_plane(void) {
         }
         mp->wPlayerCollisionBox.x = 20.0f;
         mp->wPlayerCollisionBox.y = 12.333333f;
+        // FAKE: dead store overwritten below (baseSpeed = 1.0f); removing it changes the object
         mp->baseSpeed = __fabsf(0.02f * mp->wStickDir1);
         mp->currSubMotionId = 12;
         mp->baseSpeed = 1.0f;

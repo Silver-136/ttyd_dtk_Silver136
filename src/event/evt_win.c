@@ -1224,6 +1224,7 @@ static inline s32 unitwin_party_icon(s32 icon) {
     return icon;
 }
 
+// FAKE: function-pointer cast of iconDispGx (Vec*, u16, f32, u16); plain iconDispGx calls change the object
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
 
 static inline const char* unitwin_party_name(s32 i) {

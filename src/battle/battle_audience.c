@@ -3376,6 +3376,7 @@ s32 BattleAudience_NoUsedFCHaitiRandFull(void) {
  */
 s32 BattleAudience_NoUsedFCHaitiRand(void) {
 #endif
+    // FAKE: unused audience pointer; a bare BattleAudienceBaseGetPtr() call (rank set after it) changes the object
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     s32 rank = pouchGetPtr()->rank;
     s32* haiti;
@@ -3419,6 +3420,7 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
  * so a small crowd sits together near the stage.
  */
 s32 BattleAudience_NoUsedFCHaitiRandCenter(void) {
+    // FAKE: unused audience pointer; a bare BattleAudienceBaseGetPtr() call (rank set after it) changes the object
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     s32 rank = pouchGetPtr()->rank;
     s32* haiti;
