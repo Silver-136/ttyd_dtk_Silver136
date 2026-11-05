@@ -42,8 +42,6 @@ static LogoWork* wp = &work;
 static s32 logoTexTbl[6][2] = {{24, 25}, {24, 25}, {26, 27}, {28, 29}, {30, 31}, {32, 33}};
 #endif
 
-#define OSIsRestart() ((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)
-
 //local prototypes
 static void logoDisp(CameraId camId, void* param);
 static void dummy_draw(CameraId camId, void* param);

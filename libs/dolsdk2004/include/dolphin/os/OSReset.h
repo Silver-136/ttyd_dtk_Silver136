@@ -11,6 +11,10 @@ extern "C" {
 #define OS_RESET_HOTRESET 1
 #define OS_RESET_SHUTDOWN 2
 
+#define OS_RESETCODE_RESTART 0x80000000
+
+#define OSIsRestart() ((OSGetResetCode() & OS_RESETCODE_RESTART) ? TRUE : FALSE)
+
 typedef struct OSResetFunctionInfo OSResetFunctionInfo;
 typedef struct OSResetFunctionQueue {
     OSResetFunctionInfo* head;

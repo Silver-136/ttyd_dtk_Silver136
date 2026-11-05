@@ -62,8 +62,6 @@
 #include <string.h>
 #include <demo/DEMOPad.h>
 
-#define OSIsRestart() ((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)
-
 //.bss
 GlobalWork marioSt;
 OSThread DvdCheckThread;
