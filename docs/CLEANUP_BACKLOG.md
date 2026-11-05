@@ -73,7 +73,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Battle unit / part work slots (suggested by jdaster64): named in every unit script (file-local UNIT_WORK_* /
   PARTS_WORK_*), with shared names in include/battle/unit_work.h (C-read slots, the sisters' line, Barriern
   satellites, Bobbery's bomb, Mario, the lecture units, Vivian's Veil) and family headers
-  rels/rsh|tik|muj|las/include/unit_boss_*.h. 46 numeric slot arguments left (cleanup_tools/work_slots_left.py),
+  rels/rsh|tik|muj|las/include/unit_boss_*.h; units built in several RELs (60) share include/battle/unit/<unit>.h
+  (0f45e78cd, cleanup_tools/unit_work_headers.py). 46 numeric slot arguments left (cleanup_tools/work_slots_left.py),
   all write-only (no reader to name them from).
 - Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (about 60) are all writes; write-only or
   unused fields keep offset names unless their meaning is clear (then `_UNUSED`).
