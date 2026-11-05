@@ -655,6 +655,8 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
 | US, PAL, US demo 2, PAL demo | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
+| Both | src/event/evt_msg.c | _evt_msg_print (msgWindow_Entry) | call through a cast to an `(const char*, s32, s32)` function type, passing `(s16)event->msgPriority` | plain call with msgdrv.h's u16 priority prototype: changes the object |
+| Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |
 | Both | src/effect/eff_recovery.c | effRecoveryEntry | pp walks the records and `work = pp` each pass | stepping work itself: changes the object |
 | Both | src/himo.c | vivihimo | `pw` is a second name for `&w` | w.field and &w: changes the object |
 | Both | src/motion/mot_dokan.c | mot_dokan | dead store `rotSpeed = 0.0f` right before `= 30.0f` | removing it: changes the object |

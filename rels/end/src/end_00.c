@@ -116,7 +116,6 @@ extern CreditNpc R_credits_npc_info[152];
 #endif
 
 static inline f32 tanf(f32 x) { return tan(x); }
-s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

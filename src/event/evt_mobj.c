@@ -1913,7 +1913,6 @@ EVT_BEGIN(evt_lock_sound)
     RETURN
 EVT_END()
 
-extern s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 
 static s32 mobj_lock(MapObjectEntry* mobj) {
 #if VERSION >= VERSION_US
