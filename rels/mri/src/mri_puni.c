@@ -3291,36 +3291,35 @@ void puniModeRecover(PuniData* p) {
             p->modeStep = 1;
             break;
         }
-        case 1: {
-            if (p->hp * 100 / p->maxHp >= 80) {
-                p->mode = PUNI_MODE_IDLE;
-                p->anim = 0;
-                p->modeStep = 0;
-            } else if (p->breathPower > 10.0f) {
-                p->prevMode = p->mode;
-                p->target = Punigp->marioPuni;
-                p->mode = PUNI_MODE_WIND;
-                p->modeStep = 0;
-            } else {
-                if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
-                    if (p->flags & PUNI_FLAG_PUNI) {
-                        p->target = searchBattleTeki_inl(p);
-                    } else {
-                        p->target = searchBattleMikata_inl(p);
-                    }
-                }
-                if (p->target != NULL) {
-                    Vec d;
-                    PSVECSubtract(&p->target->pos, &p->pos, &d);
-                    if (PSVECMag(&d) < 80.0f) {
-                        p->mode = PUNI_MODE_ESCAPE;
-                        p->anim = 2;
-                        p->modeStep = 0;
-                    }
+        case 1:
+        if (p->hp * 100 / p->maxHp >= 80) {
+            p->mode = PUNI_MODE_IDLE;
+            p->anim = 0;
+            p->modeStep = 0;
+        } else if (p->breathPower > 10.0f) {
+            p->prevMode = p->mode;
+            p->target = Punigp->marioPuni;
+            p->mode = PUNI_MODE_WIND;
+            p->modeStep = 0;
+        } else {
+            if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
+                if (p->flags & PUNI_FLAG_PUNI) {
+                    p->target = searchBattleTeki_inl(p);
+                } else {
+                    p->target = searchBattleMikata_inl(p);
                 }
             }
-            break;
+            if (p->target != NULL) {
+                Vec d;
+                PSVECSubtract(&p->target->pos, &p->pos, &d);
+                if (PSVECMag(&d) < 80.0f) {
+                    p->mode = PUNI_MODE_ESCAPE;
+                    p->anim = 2;
+                    p->modeStep = 0;
+                }
+            }
         }
+        break;
     }
 }
 
