@@ -3275,22 +3275,23 @@ void puniModeEscape(PuniData* p) {
  * an opponent coming within 80 units sends it back to escape mode and the wind takes it to wind mode.
  */
 void puniModeRecover(PuniData* p) {
+    int r;
+
     switch (p->modeStep) {
-        case 0: {
-            int r = puniPositionCheck(p);
-            if (r != 0) {
-                p->recoverReason = r;
-                p->recoverFromPos = p->pos;
-                puniPositionRecover(p);
-                p->recoverToPos = p->pos;
-            }
-            {
-                Vec puni_recover_vel = {0.0f, 0.0f, 0.0f};
-                p->vel = puni_recover_vel;
-            }
-            p->modeStep = 1;
-            break;
+        case 0:
+        r = puniPositionCheck(p);
+        if (r != 0) {
+            p->recoverReason = r;
+            p->recoverFromPos = p->pos;
+            puniPositionRecover(p);
+            p->recoverToPos = p->pos;
         }
+        {
+            Vec puni_recover_vel = {0.0f, 0.0f, 0.0f};
+            p->vel = puni_recover_vel;
+        }
+        p->modeStep = 1;
+        break;
         case 1:
         if (p->hp * 100 / p->maxHp >= 80) {
             p->mode = PUNI_MODE_IDLE;
