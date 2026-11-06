@@ -1286,7 +1286,7 @@ static void stg3_07_init__9(void) {
     int i;
 
     for (i = 0; i < 1; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swClear(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
@@ -1306,7 +1306,7 @@ static void stg3_07_init__8(void) {
     int i;
 
     for (i = 0; i < 2; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swClear(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
@@ -1322,7 +1322,7 @@ static void stg3_07_init__7(void) {
     int i;
 
     for (i = 0; i < 3; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_17_KING_K_TALK_DONE));
@@ -1337,7 +1337,7 @@ static void stg3_07_init__6(void) {
     int i;
 
     for (i = 0; i < 4; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_16_KING_K_TALK_DONE));
@@ -1352,7 +1352,7 @@ static void stg3_10_init__5(void) {
     int i;
 
     for (i = 0; i < 5; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_15_KING_K_TALK_DONE));
@@ -1370,7 +1370,7 @@ static void stg3_12_init__4(void) {
     int i;
 
     for (i = 0; i < 6; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_14_KING_K_TALK_DONE));
@@ -1392,7 +1392,7 @@ static void stg3_12_init__3(void) {
     int i;
 
     for (i = 0; i < 7; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_13_KING_K_TALK_DONE));
@@ -1407,7 +1407,7 @@ static void stg3_12_init__2(void) {
     int i;
 
     for (i = 0; i < 8; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED));
@@ -1422,7 +1422,7 @@ static void stg3_12_init__1(void) {
     int i;
 
     for (i = 0; i < 9; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_GLITZ_PIT_SIR_SWOOP_JOINED));
@@ -1451,7 +1451,7 @@ static void stg3_20_init_10(void) {
     int i;
 
     for (i = 0; i < 10; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_TOU_RANK10_SCENE);
@@ -1469,7 +1469,7 @@ static void stg3_20_init_9(void) {
     int i;
 
     for (i = 0; i < 11; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_TOU_RANK9_SCENE);
@@ -1484,7 +1484,7 @@ static void stg3_20_init_8(void) {
     int i;
 
     for (i = 0; i < 12; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_8_MAIL_DONE));
@@ -1513,7 +1513,7 @@ static void stg3_20_init_7(void) {
     int i;
 
     for (i = 0; i < 13; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_7_MAIL_DONE));
@@ -1532,7 +1532,7 @@ static void stg3_20_init_6(void) {
     int i;
 
     for (i = 0; i < 14; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_6_CAKE_DONE));
@@ -1548,7 +1548,7 @@ static void stg3_20_init_5(void) {
     int i;
 
     for (i = 0; i < 15; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE));
@@ -1563,7 +1563,7 @@ static void stg3_20_init_4(void) {
     int i;
 
     for (i = 0; i < 16; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_4_MAIL_DONE));
@@ -1622,7 +1622,7 @@ static void stg3_20_init_3(void) {
     int i;
 
     for (i = 0; i < 17; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_GLITZ_PIT_DESTRUCTORS_JOINED));
@@ -1640,7 +1640,7 @@ static void stg3_20_init_2(void) {
     int i;
 
     for (i = 0; i < 18; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_TOU_RANK2_SCENE);
@@ -1658,7 +1658,7 @@ static void stg3_20_init_1(void) {
     int i;
 
     for (i = 0; i < 19; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_ID(GSWF_TOU_RANK_1_MAIL_DONE));
@@ -1710,7 +1710,7 @@ static void stg3_30_init(void) {
     int i;
 
     for (i = 0; i < 20; i++) {
-        swSet(0x9B4 - i);
+        swSet(GSWF_TOU_FIGHTER_BELOW_BASE + 19 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_TOU_CHAMPION_SCENE);

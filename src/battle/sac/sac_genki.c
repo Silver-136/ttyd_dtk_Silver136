@@ -54,10 +54,21 @@ typedef struct GenkiWeapon {
     EffectEntry* effs[3]; // 0x48
 } GenkiWeapon;
 
+// GenkiObject.kind: what a falling object restores when caught (large: 3 instead of 1); the hazard dizzies Mario
+typedef enum GenkiObjectKind {
+    GENKI_MARIO_HEART = 0,
+    GENKI_MARIO_HEART_LARGE = 1,
+    GENKI_PARTNER_HEART = 2,
+    GENKI_PARTNER_HEART_LARGE = 3,
+    GENKI_FLOWER = 4,
+    GENKI_FLOWER_LARGE = 5,
+    GENKI_HAZARD = 6,
+} GenkiObjectKind;
+
 typedef struct GenkiObject {
     s32 state;  // 0x00
     s32 timer;  // 0x04
-    s32 kind;   // 0x08
+    s32 kind;   // 0x08, GenkiObjectKind
     Vec pos;    // 0x0C
     u8 pad[0x2C - 0x18];
 } GenkiObject;
@@ -538,12 +549,12 @@ static void main_weapon(s32 idx) {
         {
             f32 thr;
             switch (o->kind) {
-            case 6:
+            case GENKI_HAZARD:
                 thr = 344.0f;
                 break;
-            case 0:
-            case 2:
-            case 4:
+            case GENKI_MARIO_HEART:
+            case GENKI_PARTNER_HEART:
+            case GENKI_FLOWER:
                 thr = 576.0f;
                 break;
             default:
@@ -563,60 +574,60 @@ static void main_weapon(s32 idx) {
         effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);
 #endif
         switch (o->kind) {
-        case 0:
+        case GENKI_MARIO_HEART:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
             w->marioHp += 1;
             if (w->marioHp >= 99) {
                 w->marioHp = 99;
             }
             break;
-        case 1:
+        case GENKI_MARIO_HEART_LARGE:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
             w->marioHp += 3;
             if (w->marioHp >= 99) {
                 w->marioHp = 99;
             }
             break;
-        case 2:
+        case GENKI_PARTNER_HEART:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
             w->partyHp += 1;
             if (w->partyHp >= 99) {
                 w->partyHp = 99;
             }
             break;
-        case 3:
+        case GENKI_PARTNER_HEART_LARGE:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
             w->partyHp += 3;
             if (w->partyHp >= 99) {
                 w->partyHp = 99;
             }
             break;
-        case 4:
+        case GENKI_FLOWER:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT4), &wp->pos);
             w->fp += 1;
             if (w->fp >= 99) {
                 w->fp = 99;
             }
             break;
-        case 5:
+        case GENKI_FLOWER_LARGE:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT6), &wp->pos);
             w->fp += 3;
             if (w->fp >= 99) {
                 w->fp = 99;
             }
             break;
-        case 6:
+        case GENKI_HAZARD:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT7), &wp->pos);
             w->marioState = 3;
             break;
         }
         switch (o->kind) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
+        case GENKI_MARIO_HEART:
+        case GENKI_MARIO_HEART_LARGE:
+        case GENKI_PARTNER_HEART:
+        case GENKI_PARTNER_HEART_LARGE:
+        case GENKI_FLOWER:
+        case GENKI_FLOWER_LARGE:
             if (audience >= 1 && audience <= 49) {
                 BattleAudienceSoundCallKind(1);
             }
@@ -632,7 +643,7 @@ static void main_weapon(s32 idx) {
                 BattleAudienceSoundHandBeat();
             }
             break;
-        case 6:
+        case GENKI_HAZARD:
             if (audience >= 1 && audience <= 49) {
                 BattleAudienceSoundBooingKind(1);
             }
@@ -680,7 +691,7 @@ static void main_object(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiObject* o = &w->object[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
-    s32 kinds[3] = {0, 4, 2};
+    s32 kinds[3] = {GENKI_MARIO_HEART, GENKI_FLOWER, GENKI_PARTNER_HEART};
     f32 x, y, z;
     GenkiStar* s;
     s32 n;
@@ -699,7 +710,7 @@ static void main_object(s32 idx) {
         if (w->tableIdx < n) {
             o->kind = w->table[w->tableIdx];
         } else if (irand(w->mode == 0 ? 7 : 14) == 0) {
-            o->kind = 6;
+            o->kind = GENKI_HAZARD;
         } else {
             if (w->partyUnitId != -1) {
                 o->kind = kinds[irand(3)];
@@ -708,23 +719,23 @@ static void main_object(s32 idx) {
             }
             if (irand(5) == 0 && w->mode == 1) {
                 switch (o->kind) {
-                case 0:
-                    o->kind = 1;
+                case GENKI_MARIO_HEART:
+                    o->kind = GENKI_MARIO_HEART_LARGE;
                     break;
-                case 2:
-                    o->kind = 3;
+                case GENKI_PARTNER_HEART:
+                    o->kind = GENKI_PARTNER_HEART_LARGE;
                     break;
-                case 4:
-                    o->kind = 5;
+                case GENKI_FLOWER:
+                    o->kind = GENKI_FLOWER_LARGE;
                     break;
                 }
             }
         }
-        if (w->partyUnitId == -1 && o->kind == 2) {
-            o->kind = 0;
+        if (w->partyUnitId == -1 && o->kind == GENKI_PARTNER_HEART) {
+            o->kind = GENKI_MARIO_HEART;
         }
-        if (w->partyUnitId == -1 && o->kind == 3) {
-            o->kind = 1;
+        if (w->partyUnitId == -1 && o->kind == GENKI_PARTNER_HEART_LARGE) {
+            o->kind = GENKI_MARIO_HEART_LARGE;
         }
         w->tableIdx++;
         if (w->mode == 0) {
@@ -1117,18 +1128,18 @@ static void disp_3D(CameraId cam, void* param) {
             flags = 0;
             s = 1.25f;
             switch (o->kind) {
-            case 0:
-            case 1:
+            case GENKI_MARIO_HEART:
+            case GENKI_MARIO_HEART_LARGE:
                 icon = ICON_STATUS_MARIO;
-                if (o->kind == 1) {
+                if (o->kind == GENKI_MARIO_HEART_LARGE) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
                         flags |= ICON_FLAG_GRAY;
                     }
                 }
                 break;
-            case 2:
-            case 3:
+            case GENKI_PARTNER_HEART:
+            case GENKI_PARTNER_HEART_LARGE:
                 switch (party->currentKind) {
                 case UNIT_GOOMBELLA:
                     icon = ICON_STATUS_GOOMBELLA;
@@ -1177,24 +1188,24 @@ static void disp_3D(CameraId cam, void* param) {
                     icon = 0;
                     break;
                 }
-                if (o->kind == 3) {
+                if (o->kind == GENKI_PARTNER_HEART_LARGE) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
                         flags |= ICON_FLAG_GRAY;
                     }
                 }
                 break;
-            case 4:
-            case 5:
+            case GENKI_FLOWER:
+            case GENKI_FLOWER_LARGE:
                 icon = ICON_STATUS_FP;
-                if (o->kind == 5) {
+                if (o->kind == GENKI_FLOWER_LARGE) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
                         flags |= ICON_FLAG_GRAY;
                     }
                 }
                 break;
-            case 6:
+            case GENKI_HAZARD:
                 icon = ICON_SAC_GENKI_HAZARD;
                 break;
             }

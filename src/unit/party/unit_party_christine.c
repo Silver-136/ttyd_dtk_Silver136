@@ -30,8 +30,17 @@
 #include "icon_ids.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_DICTIONARY_STATE 0 // _dictionary state: 0 idle, 1 open (monosiriInit), 2/3 shown, 4 close requested, 5 closing, 6 closed (the event resets it to 0)
+#define UNIT_WORK_DICTIONARY_STATE 0 // _dictionary state (DICTIONARY_*; the event resets it to DICTIONARY_IDLE)
 #define UNIT_WORK_DICTIONARY_WORK 1  // pointer to the monosiriInit work that _dictionary keeps between frames
+
+// UNIT_WORK_DICTIONARY_STATE: the Tattle card steps _dictionary runs one per frame
+#define DICTIONARY_IDLE 0    // nothing
+#define DICTIONARY_OPEN 1    // the script asks for the card: monosiriInit
+#define DICTIONARY_OPENED 2  // first frame drawn
+#define DICTIONARY_SHOWN 3   // on screen; the script prints the tattle
+#define DICTIONARY_CLOSE 4   // the script asks to close it: monosiriClose
+#define DICTIONARY_CLOSING 5 // until monosiriCloseWait, then monosiriExit
+#define DICTIONARY_CLOSED 6  // christine_dictionary_event sees it and resets to idle
 #define UNIT_WORK_JUMP_FRAMES_LEFT 2 // frames left in the jump (counted down by a sibling loop); the stylish AC window starts when more than 15 are left
 #define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success changes it by 24 per frame for 15 frames (-24 when FACE_DIR_TOWARD_UNIT gives >= 0, else +24)
 
@@ -242,7 +251,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 6, 12, 16)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 9, 3)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), STRING("SFX_PARTY_BATTLE_LANDING1"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, DICTIONARY_IDLE)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -723,11 +732,11 @@ EVT_BEGIN(christine_dictionary_event)
     LABEL(0)
     CALL(_dictionary, LW(3), LW(4))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 6)
+    IF_INT_NOT_EQUAL(LW(0), DICTIONARY_CLOSED)
         WAIT_FRAMES(1)
         GOTO(0)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, DICTIONARY_IDLE)
     RETURN
 EVT_END()
 
@@ -814,15 +823,15 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
     END_IF
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PKR_2A_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("PKR_2A_5"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, DICTIONARY_IDLE)
     SPAWN_EVENT(christine_dictionary_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, DICTIONARY_OPEN)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_off_posoffset_manual, 0)
     LABEL(10)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 3)
+    IF_INT_NOT_EQUAL(LW(0), DICTIONARY_SHOWN)
         WAIT_FRAMES(1)
         GOTO(10)
     END_IF
@@ -831,10 +840,10 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
     CALL(_monosiri_flag_on, LW(3))
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("PKR_S_1"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 4)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, DICTIONARY_CLOSE)
     LABEL(20)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
+    IF_INT_NOT_EQUAL(LW(0), DICTIONARY_IDLE)
         WAIT_FRAMES(1)
         GOTO(20)
     END_IF
@@ -1659,33 +1668,33 @@ USER_FUNC(_dictionary) {
     state = unit->work[UNIT_WORK_DICTIONARY_STATE];
     work = (void*)unit->work[UNIT_WORK_DICTIONARY_WORK];
     switch (state) {
-        case 0:
+        case DICTIONARY_IDLE:
             break;
-        case 1:
+        case DICTIONARY_OPEN:
             work = monosiriInit(BattleGetUnitPtr(wp, targetId)->currentKind, -50.0f, 50.0f);
-            state = 2;
+            state = DICTIONARY_OPENED;
             break;
-        case 2:
+        case DICTIONARY_OPENED:
             monosiriMain(work);
-            state = 3;
+            state = DICTIONARY_SHOWN;
             break;
-        case 3:
+        case DICTIONARY_SHOWN:
             monosiriMain(work);
             break;
-        case 4:
+        case DICTIONARY_CLOSE:
             monosiriClose(work);
             monosiriMain(work);
-            state = 5;
+            state = DICTIONARY_CLOSING;
             break;
-        case 5:
+        case DICTIONARY_CLOSING:
             if (monosiriCloseWait(work)) {
                 monosiriExit(work);
-                state = 6;
+                state = DICTIONARY_CLOSED;
             } else {
                 monosiriMain(work);
             }
             break;
-        case 6:
+        case DICTIONARY_CLOSED:
             break;
     }
     unit->work[UNIT_WORK_DICTIONARY_STATE] = state;
