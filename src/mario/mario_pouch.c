@@ -226,7 +226,8 @@ s32 pouchGetEmptyKeepItemCnt(void) {
 /** we have obtained an item, update the appropriate data */
 // Puts type at the front of list t1 if it has an empty slot: the entries above the last empty slot move down
 // one place (t2, if given, moves in step and gets 0 at the front). Returns 1, or 0 when the list is full.
-static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type) {
+// Original name and place from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL addHead(s16* t1, s16* t2, s32 size, ItemType type) {
     s32 j;
     for (size--; size >= 0; size--) {
         if (t1[size] == 0) {
@@ -356,7 +357,7 @@ BOOL pouchGetItem(ItemType type) {
     if (!ok) {
         return 0;
     }
-    return pouchAdd(itemLists[0], itemLists[1], size, type);
+    return addHead(itemLists[0], itemLists[1], size, type);
 }
 
 
