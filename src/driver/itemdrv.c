@@ -763,6 +763,8 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
         }
         if (entry) {
 #else
+        // BUG: with every slot in use, only the first slot is checked for a replaceable coin (and below, flower and
+        // heart), so a replaceable item in any other slot is never freed; US and later search every slot.
         entry = wp->entries;
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
 #endif

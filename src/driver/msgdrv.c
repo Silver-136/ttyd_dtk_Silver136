@@ -1203,6 +1203,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
 #else
                 }
+
+                // BUG: set outside the posY != 999 test, so the "keep y" value 999 becomes a scroll of -999; US and
+                // later set it only inside the test.
                 savedScroll = -posY;
 #endif
             } else if (strcmp(tag, "scale") == 0) {

@@ -2242,6 +2242,7 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
                 itemFlagOn(item, ITEM_FLAG_LOST_BADGE_TO_SHOP);
             }
 #else
+            // BUG: itemEntry returns NULL when no item slot is free, and itemFlagOn dereferences it; US and later check.
             itemFlagOn(itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
                                  npc->position.z),
                        ITEM_FLAG_LOST_BADGE_TO_SHOP);
@@ -3685,6 +3686,7 @@ void npcGetBackItemEntry(NpcEntry* npc) {
                 itemFlagOn(item, ITEM_FLAG_LOST_BADGE_TO_SHOP);
             }
 #else
+            // BUG: itemEntry returns NULL when no item slot is free, and itemFlagOn dereferences it; US and later check.
             itemFlagOn(itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
                                  npc->position.y, npc->position.z),
                        ITEM_FLAG_LOST_BADGE_TO_SHOP);

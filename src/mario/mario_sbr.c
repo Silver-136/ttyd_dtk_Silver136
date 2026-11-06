@@ -228,6 +228,8 @@ void marioAdjustMoveDir(void) {
 #if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(180.0f);
 #else
+        // BUG: both cases use the 90-degree move direction although they face 180 (here) and 0 (below); US and
+        // later use 180 and 0.
         mario->moveDirection = toMovedir(90.0f);
 #endif
 

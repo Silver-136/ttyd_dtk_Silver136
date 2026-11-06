@@ -342,6 +342,8 @@ s32 winRootMain(WindowWork* w) {
 #if VERSION >= VERSION_US
         if (w->menu[0].state == 100) {
 #else
+        // BUG: tests the menu slot at the tab index, but menu[0] is always the current tab's entry; US and later
+        // test menu[0].
         if (w->menu[w->tabSel].state == 100) {
 #endif
             w->active = 10;

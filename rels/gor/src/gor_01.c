@@ -6423,6 +6423,8 @@ CookRecipe R_cookbook_recipe_table[] = {
 #if VERSION >= VERSION_US
     {"じわじわキノコ", "ローヤルゼリー", "ローヤルキノコＳ"}, // ITEM_SLOW_SHROOM + ITEM_JAMMIN_JELLY -> ITEM_JELLY_SUPER
 #else
+    // BUG: Slow Shroom + Jammin' Jelly gives Maple Super, while the rows around it give each syrup's own dish;
+    // US and later give Jelly Super.
     {"じわじわキノコ", "ローヤルゼリー", "メイプルキノコＳ"}, // ITEM_SLOW_SHROOM + ITEM_JAMMIN_JELLY -> ITEM_MAPLE_SUPER
 #endif
     {"じわじわシロップ", "キノコ", "キノコホイルやき"}, // ITEM_GRADUAL_SYRUP + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST

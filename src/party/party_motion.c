@@ -2707,6 +2707,8 @@ void party_motion_jump(PartyEntry* party) {
                     lim = 1.4f * dist2;
                 }
 #else
+                // BUG: the signed height difference makes the limit negative for a target below the partner, so dist
+                // is clamped to a negative distance; US and later use its absolute value.
                 if (50.0f > 1.4f * (y - party->position.y)) {
                     lim = 1.4f * (y - party->position.y);
                 }

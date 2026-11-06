@@ -50,6 +50,8 @@ void countDownSaveReStart(void) {
         }
         if ((u32)rem <= work->restart) {
 #else
+        // BUG: past the limit, limit - ms is negative and the unsigned compare sees a huge value, so the timer is not
+        // set back; US and later clamp the remainder at 0 first.
         if ((u32)(work->limit - ms) <= work->restart) {
 #endif
             work->elapsed = (s64)ticks * (u32)(work->limit - work->restart);

@@ -733,6 +733,8 @@ void zakogun_ext_main2(void) {
                     z = work->targetPos.z;
                 }
 #else
+                // BUG: no check that the target unit still exists (BattleGetUnitPtr returns NULL for a removed unit);
+                // US and later fall back to its last stored position.
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
 #endif
                 zako->rot.y = 0.0f;
