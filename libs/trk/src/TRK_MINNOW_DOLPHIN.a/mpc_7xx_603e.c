@@ -69,7 +69,7 @@ asm void TRKSaveExtended1Block(void) {
     mfspr r30, 922
     mfspr r31, 923
     stmw r20, 0x2fc(r2)
-    b L_8025CD60
+    b done
     // not reached: the branch above skips this block
     mfspr r16, 928
     mfspr r17, 935
@@ -88,7 +88,7 @@ asm void TRKSaveExtended1Block(void) {
     mfspr r30, 1015
     mfspr r31, 1023
     stmw r16, 0x2b8(r2)
-L_8025CD60:
+done:
     mfspr r19, 1013
     mfspr r20, 953
     mfspr r21, 954
@@ -130,12 +130,12 @@ asm void TRKRestoreExtended1Block(void) {
     stb r0, 0x0(r5)
     stb r0, 0x1(r5)
     cmpwi r3, 0x0
-    beq L_8025CE04
+    beq skip
     lwz r24, 0x1e8(r2)
     lwz r25, 0x1ec(r2)
     mtspr 284, r24
     mtspr 285, r25
-L_8025CE04:
+skip:
     lmw r20, 0x2fc(r2)
     mtspr 912, r20
     mtspr 913, r21
@@ -148,14 +148,14 @@ L_8025CE04:
     mtspr 920, r28
     mtspr 922, r30
     mtspr 923, r31
-    b L_8025CE50
+    b skip2
     lmw r26, 0x2e0(r2)
     mtspr 944, r26
     mtspr 951, r27
     mtspr 1014, r29
     mtspr 1015, r30
     mtspr 1023, r31
-L_8025CE50:
+skip2:
     lmw r19, 0x284(r2)
     mtspr 1013, r19
     mtspr 953, r20
@@ -170,13 +170,13 @@ L_8025CE50:
     mtspr 1022, r29
     mtspr 1019, r30
     mtspr 1017, r31
-    b L_8025CEBC
+    b done
     // not reached: the branch above skips this block
     cmpwi r6, 0x0
-    beq L_8025CE9C
+    beq skip3
     lwz r26, 0x278(r2)
     mtspr 22, r26
-L_8025CE9C:
+skip3:
     lmw r25, 0x240(r2)
     mtspr 976, r25
     mtspr 977, r26
@@ -185,7 +185,7 @@ L_8025CE9C:
     mtspr 980, r29
     mtspr 981, r30
     mtspr 982, r31
-L_8025CEBC:
+done:
     lmw r16, 0x1a8(r2)
     mtsr 0, r16
     mtsr 1, r17

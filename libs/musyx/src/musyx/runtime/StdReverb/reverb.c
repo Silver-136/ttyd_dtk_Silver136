@@ -172,7 +172,7 @@ static asm void DoCrossTalk(s32* a, s32* b, f32 start, f32 end) {
   lfd f8, 0x20(r1)
   fsubs f7, f7, f0
   fsubs f8, f8, f0
-L_00000710:
+loop:
   ps_merge00 f9, f5, f6
   lwzu r6, 0x8(r3)
   ps_merge00 f10, f7, f8
@@ -211,7 +211,7 @@ L_00000710:
   fsubs f7, f7, f0
   stfiwx f14, r11, r4
   fsubs f8, f8, f0
-  bdnz L_00000710
+  bdnz loop
   ps_merge00 f9, f5, f6
   addi r3, r3, 0x8
   ps_merge00 f10, f7, f8
@@ -331,9 +331,9 @@ static asm void U_HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
   fsubs f12, f12, f5
   li r31, 0x9f
   mtctr r31
-L_00000954:
+loop:
   fmr f13, f12
-  beq cr7, L_00000984
+  beq cr7, skip2
   lwz r30, 0x1ac(r28)
   lwz r29, 0x1b8(r28)
   add r31, r22, r30
@@ -341,11 +341,11 @@ L_00000954:
   lfs f13, -0x4(r29)
   cmpw r29, r31
   stfs f12, -0x4(r29)
-  bne+ L_00000980
+  bne+ skip
   mr r29, r30
-L_00000980:
+skip:
   stw r29, 0x1b8(r30)
-L_00000984:
+skip2:
   fmadds f8, f22, f16, f13
   lwzu r29, 0x4(r3)
   fmadds f9, f23, f17, f13
@@ -363,34 +363,34 @@ L_00000984:
   cmpw cr5, r19, r24
   fadds f14, f14, f17
   cmpw cr6, r18, r24
-  bne+ L_000009D0
+  bne+ skip3
   li r21, 0x0
-L_000009D0:
+skip3:
   fmadds f8, f24, f18, f13
-  bne+ cr1, L_000009DC
+  bne+ cr1, skip4
   li r20, 0x0
-L_000009DC:
+skip4:
   stfsx f8, r6, r17
   addi r17, r17, 0x4
-  bne+ cr5, L_000009EC
+  bne+ cr5, skip5
   li r19, 0x0
-L_000009EC:
+skip5:
   lfsx f18, r6, r16
   addi r16, r16, 0x4
   cmpw r17, r23
-  bne+ cr6, L_00000A00
+  bne+ cr6, skip6
   li r18, 0x0
-L_00000A00:
+skip6:
   fadds f14, f14, f18
   cmpw cr1, r16, r23
   lwz r26, 0xc(r27)
   fmadds f9, f2, f19, f14
-  bne+ L_00000A18
+  bne+ skip7
   li r17, 0x0
-L_00000A18:
-  bne+ cr1, L_00000A20
+skip7:
+  bne+ cr1, skip8
   li r16, 0x0
-L_00000A20:
+skip8:
   xoris r29, r29, 0x8000
   stfsx f9, r26, r12
   fnmsubs f14, f2, f9, f19
@@ -401,16 +401,16 @@ L_00000A20:
   lwz r26, 0x20(r27)
   cmpw cr6, r11, r15
   fmadds f8, f2, f20, f14
-  bne+ cr5, L_00000A50
+  bne+ cr5, skip9
   li r12, 0x0
-L_00000A50:
+skip9:
   stw r29, 0x5c(r1)
   stfsx f8, r26, r10
   fnmsubs f14, f2, f8, f20
   addi r10, r10, 0x4
-  bne+ cr6, L_00000A68
+  bne+ cr6, skip10
   li r11, 0x0
-L_00000A68:
+skip10:
   lfsx f20, r26, r9
   cmpw r10, r14
   fmuls f14, f14, f6
@@ -418,15 +418,15 @@ L_00000A68:
   cmpw cr1, r9, r14
   lfd f10, 0x58(r1)
   fmadds f14, f15, f25, f14
-  bne+ L_00000A8C
+  bne+ skip11
   li r10, 0x0
-L_00000A8C:
+skip11:
   lwz r26, 0x34(r27)
   fmadds f9, f2, f21, f14
   fmr f25, f14
-  bne+ cr1, L_00000AA0
+  bne+ cr1, skip12
   li r9, 0x0
-L_00000AA0:
+skip12:
   stfsx f9, r26, r8
   fnmsubs f14, f2, f9, f21
   lwz r31, 0x30(r27)
@@ -438,18 +438,18 @@ L_00000AA0:
   cmpw cr5, r8, r31
   cmpw cr6, r7, r31
   fctiwz f14, f14
-  bne+ cr5, L_00000AD4
+  bne+ cr5, skip13
   li r8, 0x0
-L_00000AD4:
-  bne+ cr6, L_00000ADC
+skip13:
+  bne+ cr6, skip14
   li r7, 0x0
-L_00000ADC:
+skip14:
   li r31, -0x4
   fsubs f12, f10, f5
   stfiwx f14, r3, r31
-  bdnz L_00000954
+  bdnz loop
   fmr f13, f12
-  beq cr7, L_00000B1C
+  beq cr7, skip16
   lwz r30, 0x1ac(r28)
   lwz r29, 0x1b8(r28)
   add r31, r22, r30
@@ -457,11 +457,11 @@ L_00000ADC:
   lfs f13, -0x4(r29)
   cmpw r29, r31
   stfs f12, -0x4(r29)
-  bne+ L_00000B18
+  bne+ skip15
   mr r29, r30
-L_00000B18:
+skip15:
   stw r29, 0x1b8(r30)
-L_00000B1C:
+skip16:
   fmadds f8, f22, f16, f13
   fmadds f9, f23, f17, f13
   stfsx f8, r4, r21
@@ -478,34 +478,34 @@ L_00000B1C:
   cmpw cr5, r19, r24
   fadds f14, f14, f17
   cmpw cr6, r18, r24
-  bne+ L_00000B64
+  bne+ skip17
   li r21, 0x0
-L_00000B64:
+skip17:
   fmadds f8, f24, f18, f13
-  bne+ cr1, L_00000B70
+  bne+ cr1, skip18
   li r20, 0x0
-L_00000B70:
+skip18:
   stfsx f8, r6, r17
   addi r17, r17, 0x4
-  bne+ cr5, L_00000B80
+  bne+ cr5, skip19
   li r19, 0x0
-L_00000B80:
+skip19:
   lfsx f18, r6, r16
   addi r16, r16, 0x4
   cmpw r17, r23
-  bne+ cr6, L_00000B94
+  bne+ cr6, skip20
   li r18, 0x0
-L_00000B94:
+skip20:
   fadds f14, f14, f18
   cmpw cr1, r16, r23
   lwz r26, 0xc(r27)
   fmadds f9, f2, f19, f14
-  bne+ L_00000BAC
+  bne+ skip21
   li r17, 0x0
-L_00000BAC:
-  bne+ cr1, L_00000BB4
+skip21:
+  bne+ cr1, skip22
   li r16, 0x0
-L_00000BB4:
+skip22:
   stfsx f9, r26, r12
   fnmsubs f14, f2, f9, f19
   addi r12, r12, 0x4
@@ -515,32 +515,32 @@ L_00000BB4:
   lwz r26, 0x20(r27)
   cmpw cr6, r11, r15
   fmadds f8, f2, f20, f14
-  bne+ cr5, L_00000BE0
+  bne+ cr5, skip23
   li r12, 0x0
-L_00000BE0:
+skip23:
   stfsx f8, r26, r10
   fnmsubs f14, f2, f8, f20
   addi r10, r10, 0x4
-  bne+ cr6, L_00000BF4
+  bne+ cr6, skip24
   li r11, 0x0
-L_00000BF4:
+skip24:
   lfsx f20, r26, r9
   cmpw r10, r14
   fmuls f14, f14, f6
   addi r9, r9, 0x4
   cmpw cr1, r9, r14
   fmadds f14, f15, f25, f14
-  bne+ L_00000C14
+  bne+ skip25
   li r10, 0x0
-L_00000C14:
+skip25:
   lwz r26, 0x34(r27)
   lwz r5, 0x50(r1)
   lwz r4, 0x54(r1)
   fmadds f9, f2, f21, f14
   fmr f25, f14
-  bne+ cr1, L_00000C30
+  bne+ cr1, skip26
   li r9, 0x0
-L_00000C30:
+skip26:
   stfsx f9, r26, r8
   fnmsubs f14, f2, f9, f21
   lwz r29, 0x30(r27)
@@ -552,12 +552,12 @@ L_00000C30:
   cmpw cr5, r8, r29
   cmpw cr6, r7, r29
   fctiwz f14, f14
-  bne+ cr5, L_00000C64
+  bne+ cr5, skip27
   li r8, 0x0
-L_00000C64:
-  bne+ cr6, L_00000C6C
+skip27:
+  bne+ cr6, done
   li r7, 0x0
-L_00000C6C:
+done:
   slwi r30, r5, 1
   add r30, r30, r5
   mulli r31, r30, 0x14

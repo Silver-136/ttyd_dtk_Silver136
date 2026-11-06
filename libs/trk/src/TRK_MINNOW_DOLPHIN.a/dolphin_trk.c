@@ -73,13 +73,13 @@ asm void InitMetroTRK(void) {
     mr r3, r5
     bl InitMetroTRKCommTable
     cmpwi r3, 0x1
-    bne L_8025D010
+    bne done
     // BUG: r3 is 1 here (the compared result), not gTRKCPUState, so this loads from address 0x85
     lwz r4, 0x84(r3)
     mtlr r4
     opword 0xB8030000
     blr
-L_8025D010:
+done:
     b TRK_main
     blr
 }
@@ -119,13 +119,13 @@ asm void InitMetroTRK_BBA(void) {
     li r3, 0x2
     bl InitMetroTRKCommTable
     cmpwi r3, 0x1
-    bne L_8025D0A4
+    bne done
     // BUG: as in InitMetroTRK, r3 is 1 here
     lwz r4, 0x84(r3)
     mtlr r4
     opword 0xB8030000
     blr
-L_8025D0A4:
+done:
     b TRK_main
     blr
 }
@@ -143,14 +143,14 @@ asm void TRK__write_aram(register void* src, register u32 dst, register u32* n) 
     cmplwi r31, 0x4000
     mr r30, r3
     mr r23, r5
-    blt L_8025D280
+    blt done
     lwz r4, 0x0(r23)
     lis r0, 0x800
     add r3, r31, r4
     cmplw r3, r0
-    ble L_8025D0F4
-    b L_8025D280
-L_8025D0F4:
+    ble skip
+    b done
+skip:
     clrlwi r0, r31, 27
     clrrwi r27, r31, 5
     add r26, r4, r0
@@ -160,11 +160,11 @@ L_8025D0F4:
     cmplwi r26, 0x0
     addi r3, r26, 0x1f
     srwi r3, r3, 5
-    ble L_8025D184
+    ble loop3
     srwi. r0, r3, 3
     mtctr r0
-    beq L_8025D174
-L_8025D128:
+    beq skip2
+loop:
     dcbf r24, r30
     addi r24, r24, 0x20
     dcbf r24, r30
@@ -181,24 +181,24 @@ L_8025D128:
     addi r24, r24, 0x20
     dcbf r24, r30
     addi r24, r24, 0x20
-    bdnz L_8025D128
+    bdnz loop
     andi. r3, r3, 0x7
-    beq L_8025D184
-L_8025D174:
+    beq loop3
+skip2:
     mtctr r3
-L_8025D178:
+loop2:
     dcbf r24, r30
     addi r24, r24, 0x20
-    bdnz L_8025D178
-L_8025D184:
+    bdnz loop2
+loop3:
     bl ARGetDMAStatus
     cmplwi r3, 0x0
-    bne L_8025D184
+    bne loop3
     bl __ARGetInterruptStatus
     clrlwi. r24, r31, 27
     mr r29, r3
     lis r25, 0x800
-    beq L_8025D1E8
+    beq skip3
     addi r28, r1, 0x20
     mr r25, r27
     dcbi r0, r28
@@ -208,23 +208,23 @@ L_8025D184:
     li r3, 0x1
     li r6, 0x20
     bl ARStartDMA
-L_8025D1C8:
+loop4:
     bl __ARGetInterruptStatus
     clrlwi. r0, r3, 16
-    beq L_8025D1C8
+    beq loop4
     mr r3, r30
     mr r5, r24
     addi r4, r1, 0x20
     bl TRK_memcpy
     dcbf r0, r30
-L_8025D1E8:
+skip3:
     lwz r0, 0x0(r23)
     add r31, r31, r0
     clrlwi. r24, r31, 27
-    beq L_8025D24C
+    beq skip5
     clrrwi r23, r31, 5
     cmplw r23, r25
-    beq L_8025D230
+    beq skip4
     addi r28, r1, 0x20
     dcbi r0, r28
     bl __ARClearInterrupt
@@ -233,11 +233,11 @@ L_8025D1E8:
     li r3, 0x1
     li r6, 0x20
     bl ARStartDMA
-L_8025D224:
+loop5:
     bl __ARGetInterruptStatus
     clrlwi. r0, r3, 16
-    beq L_8025D224
-L_8025D230:
+    beq loop5
+skip4:
     add r25, r30, r31
     addi r4, r1, 0x20
     mr r3, r25
@@ -245,7 +245,7 @@ L_8025D230:
     add r4, r4, r24
     bl TRK_memcpy
     dcbf r0, r25
-L_8025D24C:
+skip5:
     sync
     bl __ARClearInterrupt
     mr r4, r30
@@ -254,13 +254,13 @@ L_8025D24C:
     li r3, 0x0
     bl ARStartDMA
     clrlwi. r0, r29, 16
-    bne L_8025D280
-L_8025D270:
+    bne done
+loop6:
     bl __ARGetInterruptStatus
     clrlwi. r0, r3, 16
-    beq L_8025D270
+    beq loop6
     bl __ARClearInterrupt
-L_8025D280:
+done:
     lwz r10, 0x0(r1)
     lmw r23, -0x24(r10)
     lwz r0, 0x4(r10)

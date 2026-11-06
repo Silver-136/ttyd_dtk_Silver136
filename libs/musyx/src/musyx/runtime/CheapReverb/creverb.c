@@ -155,7 +155,7 @@ static asm void HandleReverb(long* sptr, struct _SND_REVSTD_WORK* rv) {
   stw r30, 0x50(r1)
   li r5, 0
   
-lbl_803B56C8:
+loop:
   slwi r31, r5, 3
   add r31, r31, r4
   lfs f19, 0xf4(r31)
@@ -203,17 +203,17 @@ lbl_803B56C8:
   li r31, 0x9f // SND_AUX_BLOCKSIZE - 1
   mtctr r31
 
-lbl_803B5780:
+loop2:
   fmr f13, f12
-  beq cr7, lbl_803B57A0
+  beq cr7, skip
   lfs f13, 0(r28)
   addi r28, r28, 4
   cmpw r28, r22
   stfs f12, -4(r28)
-  bne+ lbl_803B57A0
+  bne+ skip
   mr r28, r27
   
-lbl_803B57A0:
+skip:
 
   fmadds f8, f19, f15, f13
   lwzu r29, 4(r3)
@@ -232,40 +232,40 @@ lbl_803B57A0:
   cmpw cr5, r19, r25
   fadds f14, f14, f16
   cmpw cr6, r18, r25
-  bne+ lbl_803B57EC
+  bne+ skip2
   li r21, 0
 
-lbl_803B57EC:
+skip2:
   xoris r29, r29, 0x8000
   fmadds f9, f2, f17, f14
-  bne+ cr1, lbl_803B57FC
+  bne+ cr1, skip3
   li r20, 0
 
-lbl_803B57FC:
+skip3:
   stw r29, 0x54(r1)
-  bne+ cr5, lbl_803B5808
+  bne+ cr5, skip4
   li r19, 0
 
-lbl_803B5808:
+skip4:
   stfsx f9, r17, r12
   fnmsubs f14, f2, f9, f17
   addi r12, r12, 4
-  bne+ cr6, lbl_803B581C
+  bne+ cr6, skip5
   li r18, 0
 
-lbl_803B581C:
+skip5:
   lfsx f17, r17, r11
   cmpw cr5, r12, r24
   addi r11, r11, 4
   cmpw cr6, r11, r24
-  bne+ cr5, lbl_803B5834
+  bne+ cr5, skip6
   li r12, 0
 
-lbl_803B5834:
-  bne+ cr6, lbl_803B583C
+skip6:
+  bne+ cr6, skip7
   li r11, 0
 
-lbl_803B583C:
+skip7:
   fmuls f14, f14, f6
   lfd f10, 0x50(r1)
   fmadds f14, f11, f7, f14
@@ -281,28 +281,28 @@ lbl_803B583C:
   cmpw cr5, r10, r23
   cmpw cr6, r9, r23
   fctiwz f14, f14
-  bne+ cr5, lbl_803B5880
+  bne+ cr5, skip8
   li r10, 0
 
-lbl_803B5880:
-  bne+ cr6, lbl_803B5888
+skip8:
+  bne+ cr6, skip9
   li r9, 0
 
-lbl_803B5888:
+skip9:
   li r31, -4
   fsubs f12, f10, f5
   stfiwx f14, r3, r31
-  bdnz lbl_803B5780
+  bdnz loop2
   fmr f13, f12
-  beq cr7, lbl_803B58B8
+  beq cr7, skip10
   lfs f13, 0(r28)
   addi r28, r28, 4
   cmpw r28, r22
   stfs f12, -4(r28)
-  bne+ lbl_803B58B8
+  bne+ skip10
   mr r28, r27
 
-lbl_803B58B8:
+skip10:
   fmadds f8, f19, f15, f13
   fmadds f9, f20, f16, f13
   stfsx f8, r7, r21
@@ -319,38 +319,38 @@ lbl_803B58B8:
   cmpw cr5, r19, r25
   fadds f14, f14, f16
   cmpw cr6, r18, r25
-  bne+ lbl_803B5900
+  bne+ skip11
   li r21, 0
 
-lbl_803B5900:
+skip11:
   fmadds f9, f2, f17, f14
-  bne+ cr1, lbl_803B590C
+  bne+ cr1, skip12
   li r20, 0
 
-lbl_803B590C:
-  bne+ cr5, lbl_803B5914
+skip12:
+  bne+ cr5, skip13
   li r19, 0
 
-lbl_803B5914:
+skip13:
   stfsx f9, r17, r12
   fnmsubs f14, f2, f9, f17
   addi r12, r12, 4
-  bne+ cr6, lbl_803B5928
+  bne+ cr6, skip14
   li r18, 0
 
-lbl_803B5928:
+skip14:
   lfsx f17, r17, r11
   cmpw cr5, r12, r24
   addi r11, r11, 4
   cmpw cr6, r11, r24
-  bne+ cr5, lbl_803B5940
+  bne+ cr5, skip15
   li r12, 0
 
-lbl_803B5940:
-  bne+ cr6, lbl_803B5948
+skip15:
+  bne+ cr6, skip16
   li r11, 0
 
-lbl_803B5948:
+skip16:
 
   fmuls f14, f14, f6
   fmadds f14, f11, f7, f14
@@ -371,14 +371,14 @@ lbl_803B5948:
   cmpw cr6, r9, r23
   
   fctiwz f14, f14
-  bne+ cr5, lbl_803B5994
+  bne+ cr5, skip17
   li r10, 0
 
-lbl_803B5994:
-  bne+ cr6, lbl_803B599C
+skip17:
+  bne+ cr6, done
   li r9, 0
 
-lbl_803B599C:
+done:
   addi r30, r4, 0
   add r30, r30, r31
   stfiwx f14, r0, r3
@@ -401,7 +401,7 @@ lbl_803B599C:
   stfs f18, 0x24(r30)
   stfs f7, 0x10c(r31)
   stw r28, 0x130(r31)
-  bne lbl_803B56C8
+  bne loop
   lfd f14, 0x58(r1)
   lfd f15, 0x60(r1)
   lfd f16, 0x68(r1)

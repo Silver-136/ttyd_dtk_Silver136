@@ -102,7 +102,7 @@ asm void PSMTX44MultVecArray(const register Mtx44 m, const register Vec* srcBase
     psq_l f3, 0x18(m), 0, 0
     ps_sum0 f13, f13, f13, f13
     psq_l f5, 0x28(m), 0, 0
-L_00000468:
+loop:
     ps_madd f10, f1, f9, f10
     ps_madd f11, f3, f9, f11
     ps_madd f12, f5, f9, f12
@@ -124,7 +124,7 @@ L_00000468:
     ps_madd f13, f7, f9, f13
     ps_mul f12, f4, f8
     ps_sum0 f13, f13, f13, f13
-    bdnz L_00000468
+    bdnz loop
     ps_madd f10, f1, f9, f10
     ps_madd f11, f3, f9, f11
     ps_madd f12, f5, f9, f12
@@ -218,7 +218,7 @@ asm void PSMTX44MultVecArraySR(const register Mtx44 m, const register Vec* srcBa
     psq_l f3, 0x18(m), 1, 0
     subi dstBase, dstBase, 0x4
     psq_l f5, 0x28(m), 1, 0
-L_00000890:
+loop:
     ps_madd f11, f1, f7, f8
     psq_lu f6, 0x4(srcBase), 0, 0
     ps_madd f12, f3, f7, f9
@@ -233,7 +233,7 @@ L_00000890:
     ps_mul f8, f0, f6
     ps_mul f9, f2, f6
     ps_mul f10, f4, f6
-    bdnz L_00000890
+    bdnz loop
     ps_madd f11, f1, f7, f8
     ps_madd f12, f3, f7, f9
     ps_madd f13, f5, f7, f10

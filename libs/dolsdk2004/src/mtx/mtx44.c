@@ -709,13 +709,13 @@ void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 sinA, reg
         ori axis, axis, 0x20
         frsp cosA, cosA
         cmplwi axis, 'x'
-        beq L_00001AB4
+        beq skip
         cmplwi axis, 'y'
-        beq L_00001AE8
+        beq skip2
         cmplwi axis, 'z'
-        beq L_00001B20
-        b L_00001B54
-    L_00001AB4:
+        beq skip3
+        b done
+    skip:
         psq_st c_one, 0x0(m), 1, 0
         psq_st c_zero, 0x4(m), 0, 0
         ps_neg ftmp0, sinA
@@ -728,8 +728,8 @@ void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 sinA, reg
         psq_st ftmp1, 0x24(m), 0, 0
         psq_st ftmp0, 0x14(m), 0, 0
         psq_st c_one, 0x3c(m), 1, 0
-        b L_00001B54
-    L_00001AE8:
+        b done
+    skip2:
         ps_merge00 ftmp1, cosA, c_zero
         psq_st c_zero, 0x30(m), 0, 0
         ps_neg ftmp0, sinA
@@ -743,8 +743,8 @@ void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 sinA, reg
         psq_st ftmp4, 0x20(m), 0, 0
         psq_st ftmp1, 0x28(m), 0, 0
         psq_st ftmp3, 0x38(m), 0, 0
-        b L_00001B54
-    L_00001B20:
+        b done
+    skip3:
         psq_st c_zero, 0x8(m), 0, 0
         ps_neg ftmp0, sinA
         psq_st c_zero, 0x18(m), 0, 0
@@ -758,7 +758,7 @@ void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 sinA, reg
         psq_st ftmp2, 0x28(m), 0, 0
         psq_st ftmp3, 0x38(m), 0, 0
         psq_st ftmp4, 0x0(m), 0, 0
-    L_00001B54:    
+    done:    
     }
 }
 

@@ -84,7 +84,7 @@ asm void PSMTXMultVecArray(const register Mtx m, const register Vec* srcBase, re
     ps_mul f9, f4, f6
     ps_madds1 f8, f1, f6, f8
     ps_madd f10, f5, f7, f9
-L_000003C4:
+loop:
     psq_lu f6, 0x4(srcBase), 0, 0
     ps_madds0 f12, f2, f7, f8
     psq_lu f7, 0x8(srcBase), 1, 0
@@ -95,7 +95,7 @@ L_000003C4:
     ps_madds1 f8, f1, f6, f8
     psq_stu f13, 0x8(dstBase), 1, 0
     ps_madd f10, f5, f7, f9
-    bdnz L_000003C4
+    bdnz loop
     ps_madds0 f12, f2, f7, f8
     ps_sum0 f13, f10, f9, f10
     psq_stu f12, 0x4(dstBase), 0, 0
@@ -184,7 +184,7 @@ asm void PSMTXMultVecArraySR(const register Mtx m, const register Vec* srcBase, 
     ps_mul f9, f3, f6
     ps_madds1 f8, f1, f6, f8
     ps_madd f10, f4, f7, f9
-L_000007D0:
+loop:
     psq_lu f6, 0x4(srcBase), 0, 0
     ps_madds0 f12, f2, f7, f8
     psq_lu f7, 0x8(srcBase), 1, 0
@@ -195,7 +195,7 @@ L_000007D0:
     ps_madds1 f8, f1, f6, f8
     psq_stu f13, 0x8(dstBase), 1, 0
     ps_madd f10, f4, f7, f9
-    bdnz L_000007D0
+    bdnz loop
     ps_madds0 f12, f2, f7, f8
     ps_sum0 f13, f10, f9, f9
     psq_stu f12, 0x4(dstBase), 0, 0

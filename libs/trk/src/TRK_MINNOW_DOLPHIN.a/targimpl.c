@@ -181,9 +181,9 @@ asm void TRK_ppc_memcpy(register void* dest, register const void* src, register 
     nofralloc
     mfmsr r8
     li r10, 0x0
-L_8025B07C:
+loop:
     cmpw r10, r5
-    beq L_8025B0A4
+    beq done
     mtmsr r7
     sync
     lbzx r9, r10, r4
@@ -191,8 +191,8 @@ L_8025B07C:
     sync
     stbx r9, r10, r3
     addi r10, r10, 0x1
-    b L_8025B07C
-L_8025B0A4:
+    b loop
+done:
     mtmsr r8
     sync
     blr
@@ -217,7 +217,7 @@ asm void TRKInterruptHandler(void) {
     ori r2, r2, TRK_saved_exceptionID@l
     sth r3, 0x0(r2)
     cmpwi r3, 0x500
-    bne L_8025B178
+    bne done
     lis r2, gTRKCPUState@h
     ori r2, r2, gTRKCPUState@l
     mfspr r3, 8
@@ -232,18 +232,18 @@ asm void TRKInterruptHandler(void) {
     lwz r2, 0xa0(r2) // gTRKState.inputPendingPtr
     lbz r2, 0x0(r2)
     cmpwi r2, 0x0
-    beq L_8025B15C
+    beq skip
     lis r2, gTRKExceptionStatus@h
     ori r2, r2, gTRKExceptionStatus@l
     lbz r2, 0xc(r2) // gTRKExceptionStatus.inTRK
     cmpwi r2, 0x1
-    beq L_8025B15C
+    beq skip
     lis r2, gTRKState@h
     ori r2, r2, gTRKState@l
     li r3, 0x1
     stb r3, 0x9c(r2) // gTRKState.inputActivated
-    b L_8025B178
-L_8025B15C:
+    b done
+skip:
     lis r2, gTRKSaveState@h
     ori r2, r2, gTRKSaveState@l
     lwz r3, 0x88(r2)
@@ -251,7 +251,7 @@ L_8025B15C:
     lwz r3, 0xc(r2)
     lwz r2, 0x8(r2)
     rfi
-L_8025B178:
+done:
     lis r2, TRK_saved_exceptionID@h
     ori r2, r2, TRK_saved_exceptionID@l
     lhz r3, 0x0(r2)
@@ -314,31 +314,31 @@ asm void TRKExceptionHandler(void) {
     stw r3, 0x0(r2)
     lhz r3, 0x8(r2) // gTRKExceptionStatus.exceptionInfo.exceptionID
     cmpwi r3, 0x200
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x300
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x400
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x600
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x700
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x800
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x1000
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x1100
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x1200
-    beq L_8025B2B0
+    beq skip
     cmpwi r3, 0x1300
-    beq L_8025B2B0
-    b L_8025B2BC
-L_8025B2B0:
+    beq skip
+    b done
+skip:
     mfspr r3, 26
     addi r3, r3, 0x4
     mtspr 26, r3
-L_8025B2BC:
+done:
     lis r2, gTRKExceptionStatus@h
     ori r2, r2, gTRKExceptionStatus@l
     li r3, 0x1
@@ -377,13 +377,13 @@ asm void TRKSwapAndGo(void) {
     lwz r2, 0xa0(r2) // gTRKState.inputPendingPtr
     lbz r2, 0x0(r2)
     cmpwi r2, 0x0
-    beq L_8025B35C
+    beq done
     lis r2, gTRKState@h
     ori r2, r2, gTRKState@l
     li r3, 0x1
     stb r3, 0x9c(r2) // gTRKState.inputActivated
     b TRKInterruptHandlerEnableInterrupts
-L_8025B35C:
+done:
     lis r2, gTRKExceptionStatus@h
     ori r2, r2, gTRKExceptionStatus@l
     li r3, 0x0

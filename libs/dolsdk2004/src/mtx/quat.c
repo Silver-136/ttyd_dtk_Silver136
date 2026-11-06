@@ -243,15 +243,15 @@ void PSQUATInverse(const register Quaternion* src, register Quaternion* inv) {
         ps_add c_two, c_one, c_one
         ps_sum0 mag, mag, mag, mag
         fcmpu cr0, mag, c_zero
-        beq L_00000948
+        beq skip
         fres norminv, mag
         ps_neg nmag, mag
         ps_nmsub nwork0, mag, norminv, c_two
         ps_mul norminv, norminv, nwork0
-        b L_0000094C
-    L_00000948:
+        b done
+    skip:
         fmr norminv, c_one
-    L_0000094C:
+    done:
         ps_neg nninv, norminv
         ps_muls1 iww, norminv, szw
         ps_muls0 sxy, sxy, nninv

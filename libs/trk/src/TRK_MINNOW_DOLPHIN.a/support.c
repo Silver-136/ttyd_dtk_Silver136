@@ -168,7 +168,7 @@ asm DSError HandleOpenFileSupportRequest(const char* path, u8 requestArg, u32* f
     li r5, 0x40
     bl TRKAppendBuffer_ui8
     mr. r31, r3
-    bne L_8025AA50
+    bne skip
     mr r3, r27
     bl strlen
     mr r5, r3
@@ -177,9 +177,9 @@ asm DSError HandleOpenFileSupportRequest(const char* path, u8 requestArg, u32* f
     addi r5, r5, 0x1
     bl TRKAppendBuffer_ui8
     mr r31, r3
-L_8025AA50:
+skip:
     cmpwi r31, 0x0
-    bne L_8025AAA4
+    bne done
     li r0, 0x0
     addi r4, r1, 0x10
     stw r0, 0x0(r29)
@@ -189,18 +189,18 @@ L_8025AA50:
     lwz r3, 0x8(r1)
     bl TRKRequestSend
     mr. r31, r3
-    bne L_8025AA8C
+    bne skip2
     lwz r3, 0x10(r1)
     bl TRKGetBuffer
     mr r30, r3
-L_8025AA8C:
+skip2:
     lwz r0, 0x20(r30)
     stw r0, 0x0(r29)
     lwz r0, 0x18(r30)
     stw r0, 0x0(r28)
     lwz r3, 0x10(r1)
     bl TRKReleaseBuffer
-L_8025AAA4:
+done:
     lwz r3, 0xc(r1)
     bl TRKReleaseBuffer
     mr r3, r31
@@ -229,8 +229,8 @@ asm DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 ret
     li r30, 0x0
     li r24, 0x1
     stw r0, 0x0(r22)
-    b L_8025AC60
-L_8025AB00:
+    b skip9
+loop:
     addi r4, r31, 0x0
     li r3, 0x1
     crclr 6
@@ -238,26 +238,26 @@ L_8025AB00:
     mr r3, r21
     bl TRKMessageSend
     mr. r30, r3
-    bne L_8025AC5C
+    bne skip8
     cmpwi r23, 0x0
-    beq L_8025AB2C
+    beq loop2
     li r28, 0x0
-L_8025AB2C:
+loop2:
     bl TRKTestForPacket
     stw r3, 0x0(r22)
     lwz r3, 0x0(r22)
     cmpwi r3, -0x1
-    bne L_8025AB5C
+    bne skip
     cmpwi r23, 0x0
-    beq L_8025AB2C
+    beq loop2
     lis r4, 0x4c5
     addi r28, r28, 0x1
     subi r0, r4, 0x4c14
     cmplw r28, r0
-    blt L_8025AB2C
-L_8025AB5C:
+    blt loop2
+skip:
     cmpwi r3, -0x1
-    beq L_8025ABBC
+    beq skip2
     li r24, 0x0
     bl TRKGetBuffer
     li r4, 0x0
@@ -274,74 +274,74 @@ L_8025AB5C:
     crclr 6
     bl MWTRACE
     cmplwi r26, 0x80
-    bge L_8025ABBC
+    bge skip2
     lwz r3, 0x0(r22)
     bl TRKProcessInput
     li r0, -0x1
     stw r0, 0x0(r22)
-    b L_8025AB2C
-L_8025ABBC:
+    b loop2
+skip2:
     lwz r0, 0x0(r22)
     cmpwi r0, -0x1
-    beq L_8025AC5C
+    beq skip8
     lwz r0, 0x8(r29)
     cmplwi r0, 0x40
-    bge L_8025ABD8
+    bge skip3
     li r24, 0x1
-L_8025ABD8:
+skip3:
     cmpwi r30, 0x0
-    bne L_8025AC00
+    bne skip4
     cmpwi r24, 0x0
-    bne L_8025AC00
+    bne skip4
     lbz r25, 0x18(r29)
     addi r4, r31, 0x40
     li r3, 0x1
     mr r5, r25
     crclr 6
     bl MWTRACE
-L_8025AC00:
+skip4:
     cmpwi r30, 0x0
-    bne L_8025AC3C
+    bne skip6
     cmpwi r24, 0x0
-    bne L_8025AC3C
+    bne skip6
     cmpwi r26, 0x80
     mr r5, r26
-    bne L_8025AC24
+    bne skip5
     cmpwi r25, 0x0
-    beq L_8025AC3C
-L_8025AC24:
+    beq skip6
+skip5:
     mr r6, r25
     addi r4, r31, 0x54
     li r3, 0x8
     crclr 6
     bl MWTRACE
     li r24, 0x1
-L_8025AC3C:
+skip6:
     cmpwi r30, 0x0
-    bne L_8025AC4C
+    bne skip7
     cmpwi r24, 0x0
-    beq L_8025AC5C
-L_8025AC4C:
+    beq skip8
+skip7:
     lwz r3, 0x0(r22)
     bl TRKReleaseBuffer
     li r0, -0x1
     stw r0, 0x0(r22)
-L_8025AC5C:
+skip8:
     subi r27, r27, 0x1
-L_8025AC60:
+skip9:
     cmpwi r27, 0x0
-    beq L_8025AC7C
+    beq skip10
     lwz r0, 0x0(r22)
     cmpwi r0, -0x1
-    bne L_8025AC7C
+    bne skip10
     cmpwi r30, 0x0
-    beq L_8025AB00
-L_8025AC7C:
+    beq loop
+skip10:
     lwz r0, 0x0(r22)
     cmpwi r0, -0x1
-    bne L_8025AC8C
+    bne done
     li r30, 0x800
-L_8025AC8C:
+done:
     mr r3, r30
     lmw r21, 0x14(r1)
     lwz r0, 0x44(r1)
@@ -362,21 +362,21 @@ asm DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, u32* io_
     mr r26, r6
     mr r27, r7
     mr r28, r8
-    beq L_8025ACDC
+    beq skip
     lwz r0, 0x0(r25)
     cmplwi r0, 0x0
-    bne L_8025ACE4
-L_8025ACDC:
+    bne skip2
+skip:
     li r3, 0x2
-    b L_8025AEB0
-L_8025ACE4:
+    b done
+skip2:
     li r0, 0x0
     li r29, 0x0
     stw r0, 0x0(r26)
     li r30, 0x0
     li r21, 0x0
-    b L_8025AE80
-L_8025ACFC:
+    b skip13
+loop:
     addi r3, r1, 0x14
     li r4, 0x0
     li r5, 0x40
@@ -385,21 +385,21 @@ L_8025ACFC:
     li r3, 0x800
     subf r0, r30, r0
     cmplwi r0, 0x800
-    bgt L_8025AD24
+    bgt skip3
     mr r3, r0
-L_8025AD24:
+skip3:
     cmpwi r28, 0x0
     mr r31, r3
     li r0, 0xd0
-    beq L_8025AD38
+    beq skip4
     li r0, 0xd1
-L_8025AD38:
+skip4:
     cmpwi r28, 0x0
     stb r0, 0x18(r1)
     li r0, 0x40
-    bne L_8025AD4C
+    bne skip5
     addi r0, r31, 0x40
-L_8025AD4C:
+skip5:
     stw r0, 0x14(r1)
     addi r3, r1, 0xc
     addi r4, r1, 0x8
@@ -412,26 +412,26 @@ L_8025AD4C:
     bl TRKAppendBuffer_ui8
     cmpwi r28, 0x0
     mr r21, r3
-    bne L_8025AD9C
+    bne skip6
     cmpwi r21, 0x0
-    bne L_8025AD9C
+    bne skip6
     lwz r3, 0x8(r1)
     mr r5, r31
     add r4, r24, r30
     bl TRKAppendBuffer_ui8
     mr r21, r3
-L_8025AD9C:
+skip6:
     cmpwi r21, 0x0
-    bne L_8025AE74
+    bne skip12
     cmpwi r27, 0x0
-    beq L_8025AE68
+    beq skip11
     cmpwi r28, 0x0
     li r0, 0x0
-    beq L_8025ADC4
+    beq skip7
     cmplwi r23, 0x0
-    bne L_8025ADC4
+    bne skip7
     li r0, 0x1
-L_8025ADC4:
+skip7:
     cmpwi r28, 0x0
     lwz r3, 0x8(r1)
     addi r4, r1, 0x10
@@ -441,20 +441,20 @@ L_8025ADC4:
     srwi r7, r0, 5
     bl TRKRequestSend
     mr. r21, r3
-    bne L_8025ADF8
+    bne skip8
     lwz r3, 0x10(r1)
     bl TRKGetBuffer
     mr r22, r3
-L_8025ADF8:
+skip8:
     lwz r0, 0x20(r22)
     cmpwi r28, 0x0
     lhz r19, 0x24(r22)
     clrlwi r20, r0, 24
-    beq L_8025AE48
+    beq skip9
     cmpwi r21, 0x0
-    bne L_8025AE48
+    bne skip9
     cmplw r19, r31
-    bgt L_8025AE48
+    bgt skip9
     mr r3, r22
     li r4, 0x40
     bl TRKSetBufferPosition
@@ -464,41 +464,41 @@ L_8025ADF8:
     bl TRKReadBuffer_ui8
     mr r21, r3
     cmpwi r21, 0x302
-    bne L_8025AE48
+    bne skip9
     li r21, 0x0
-L_8025AE48:
+skip9:
     cmplw r19, r31
-    beq L_8025AE58
+    beq skip10
     mr r31, r19
     li r29, 0x1
-L_8025AE58:
+skip10:
     stw r20, 0x0(r26)
     lwz r3, 0x10(r1)
     bl TRKReleaseBuffer
-    b L_8025AE74
-L_8025AE68:
+    b skip12
+skip11:
     lwz r3, 0x8(r1)
     bl TRKMessageSend
     mr r21, r3
-L_8025AE74:
+skip12:
     lwz r3, 0xc(r1)
     bl TRKReleaseBuffer
     add r30, r30, r31
-L_8025AE80:
+skip13:
     cmpwi r29, 0x0
-    bne L_8025AEA8
+    bne skip14
     lwz r0, 0x0(r25)
     cmplw r30, r0
-    bge L_8025AEA8
+    bge skip14
     cmpwi r21, 0x0
-    bne L_8025AEA8
+    bne skip14
     lwz r0, 0x0(r26)
     cmpwi r0, 0x0
-    beq L_8025ACFC
-L_8025AEA8:
+    beq loop
+skip14:
     stw r30, 0x0(r25)
     mr r3, r21
-L_8025AEB0:
+done:
     lmw r19, 0x5c(r1)
     lwz r0, 0x94(r1)
     mtspr 8, r0
