@@ -87,20 +87,20 @@ asm void __cvt_fp2unsigned(void) {
     lfd f4, 0x10(r4)
     fcmpu cr0, f1, f0
     fcmpu cr6, f1, f3
-    blt L_8025E904
+    blt done
     subi r3, r3, 0x1
-    bge cr6, L_8025E904
+    bge cr6, done
     fcmpu cr7, f1, f4
     fmr f2, f1
-    blt cr7, L_8025E8F0
+    blt cr7, skip
     fsub f2, f1, f4
-L_8025E8F0:
+skip:
     fctiwz f2, f2
     stfd f2, 0x8(r1)
     lwz r3, 0xc(r1)
-    blt cr7, L_8025E904
+    blt cr7, done
     addis r3, r3, 0x8000
-L_8025E904:
+done:
     addi r1, r1, 0x10
     blr
 }
@@ -275,18 +275,18 @@ asm void __div2u(void) {
     cmpwi r3, 0x0
     cntlzw r0, r3
     cntlzw r9, r4
-    bne L_8025EA50
+    bne skip
     addi r0, r9, 0x20
-L_8025EA50:
+skip:
     cmpwi r5, 0x0
     cntlzw r9, r5
     cntlzw r10, r6
-    bne L_8025EA64
+    bne skip2
     addi r9, r10, 0x20
-L_8025EA64:
+skip2:
     cmpw r0, r9
     subfic r10, r0, 0x40
-    bgt L_8025EB1C
+    bgt done
     addi r9, r9, 0x1
     subfic r9, r9, 0x40
     add r0, r0, r9
@@ -294,49 +294,49 @@ L_8025EA64:
     mtctr r9
     cmpwi r9, 0x20
     subi r7, r9, 0x20
-    blt L_8025EA9C
+    blt skip3
     srw r8, r3, r7
     li r7, 0x0
-    b L_8025EAB0
-L_8025EA9C:
+    b skip4
+skip3:
     srw r8, r4, r9
     subfic r7, r9, 0x20
     slw r7, r3, r7
     or r8, r8, r7
     srw r7, r3, r9
-L_8025EAB0:
+skip4:
     cmpwi r0, 0x20
     subic r9, r0, 0x20
-    blt L_8025EAC8
+    blt skip5
     slw r3, r4, r9
     li r4, 0x0
-    b L_8025EADC
-L_8025EAC8:
+    b skip6
+skip5:
     slw r3, r3, r0
     subfic r9, r0, 0x20
     srw r9, r4, r9
     or r3, r3, r9
     slw r4, r4, r0
-L_8025EADC:
+skip6:
     li r10, -0x1
     addic r7, r7, 0x0
-L_8025EAE4:
+loop:
     adde r4, r4, r4
     adde r3, r3, r3
     adde r8, r8, r8
     adde r7, r7, r7
     subfc r0, r6, r8
     subfe. r9, r5, r7
-    blt L_8025EB0C
+    blt skip7
     mr r8, r0
     mr r7, r9
     addic r0, r10, 0x1
-L_8025EB0C:
-    bdnz L_8025EAE4
+skip7:
+    bdnz loop
     adde r4, r4, r4
     adde r3, r3, r3
     blr
-L_8025EB1C:
+done:
     li r4, 0x0
     li r3, 0x0
     blr
@@ -347,32 +347,32 @@ asm void __div2i(void) {
     nofralloc
     stwu r1, -0x10(r1)
     clrrwi. r9, r3, 31
-    beq L_8025EB3C
+    beq skip
     subfic r4, r4, 0x0
     subfze r3, r3
-L_8025EB3C:
+skip:
     stw r9, 0x8(r1)
     clrrwi. r10, r5, 31
-    beq L_8025EB50
+    beq skip2
     subfic r6, r6, 0x0
     subfze r5, r5
-L_8025EB50:
+skip2:
     stw r10, 0xc(r1)
     cmpwi r3, 0x0
     cntlzw r0, r3
     cntlzw r9, r4
-    bne L_8025EB68
+    bne skip3
     addi r0, r9, 0x20
-L_8025EB68:
+skip3:
     cmpwi r5, 0x0
     cntlzw r9, r5
     cntlzw r10, r6
-    bne L_8025EB7C
+    bne skip4
     addi r9, r10, 0x20
-L_8025EB7C:
+skip4:
     cmpw r0, r9
     subfic r10, r0, 0x40
-    bgt L_8025EC50
+    bgt skip10
     addi r9, r9, 0x1
     subfic r9, r9, 0x40
     add r0, r0, r9
@@ -380,59 +380,59 @@ L_8025EB7C:
     mtctr r9
     cmpwi r9, 0x20
     subi r7, r9, 0x20
-    blt L_8025EBB4
+    blt skip5
     srw r8, r3, r7
     li r7, 0x0
-    b L_8025EBC8
-L_8025EBB4:
+    b skip6
+skip5:
     srw r8, r4, r9
     subfic r7, r9, 0x20
     slw r7, r3, r7
     or r8, r8, r7
     srw r7, r3, r9
-L_8025EBC8:
+skip6:
     cmpwi r0, 0x20
     subic r9, r0, 0x20
-    blt L_8025EBE0
+    blt skip7
     slw r3, r4, r9
     li r4, 0x0
-    b L_8025EBF4
-L_8025EBE0:
+    b skip8
+skip7:
     slw r3, r3, r0
     subfic r9, r0, 0x20
     srw r9, r4, r9
     or r3, r3, r9
     slw r4, r4, r0
-L_8025EBF4:
+skip8:
     li r10, -0x1
     addic r7, r7, 0x0
-L_8025EBFC:
+loop:
     adde r4, r4, r4
     adde r3, r3, r3
     adde r8, r8, r8
     adde r7, r7, r7
     subfc r0, r6, r8
     subfe. r9, r5, r7
-    blt L_8025EC24
+    blt skip9
     mr r8, r0
     mr r7, r9
     addic r0, r10, 0x1
-L_8025EC24:
-    bdnz L_8025EBFC
+skip9:
+    bdnz loop
     adde r4, r4, r4
     adde r3, r3, r3
     lwz r9, 0x8(r1)
     lwz r10, 0xc(r1)
     xor. r7, r9, r10
-    beq L_8025EC58
+    beq done
     cmpwi r9, 0x0
     subfic r4, r4, 0x0
     subfze r3, r3
-    b L_8025EC58
-L_8025EC50:
+    b done
+skip10:
     li r4, 0x0
     li r3, 0x0
-L_8025EC58:
+done:
     addi r1, r1, 0x10
     blr
 }
@@ -443,15 +443,15 @@ asm void __mod2u(void) {
     cmpwi r3, 0x0
     cntlzw r0, r3
     cntlzw r9, r4
-    bne L_8025EC74
+    bne skip
     addi r0, r9, 0x20
-L_8025EC74:
+skip:
     cmpwi r5, 0x0
     cntlzw r9, r5
     cntlzw r10, r6
-    bne L_8025EC88
+    bne skip2
     addi r9, r10, 0x20
-L_8025EC88:
+skip2:
     cmpw r0, r9
     subfic r10, r0, 0x40
     bgtlr
@@ -462,45 +462,45 @@ L_8025EC88:
     mtctr r9
     cmpwi r9, 0x20
     subi r7, r9, 0x20
-    blt L_8025ECC0
+    blt skip3
     srw r8, r3, r7
     li r7, 0x0
-    b L_8025ECD4
-L_8025ECC0:
+    b skip4
+skip3:
     srw r8, r4, r9
     subfic r7, r9, 0x20
     slw r7, r3, r7
     or r8, r8, r7
     srw r7, r3, r9
-L_8025ECD4:
+skip4:
     cmpwi r0, 0x20
     subic r9, r0, 0x20
-    blt L_8025ECEC
+    blt skip5
     slw r3, r4, r9
     li r4, 0x0
-    b L_8025ED00
-L_8025ECEC:
+    b skip6
+skip5:
     slw r3, r3, r0
     subfic r9, r0, 0x20
     srw r9, r4, r9
     or r3, r3, r9
     slw r4, r4, r0
-L_8025ED00:
+skip6:
     li r10, -0x1
     addic r7, r7, 0x0
-L_8025ED08:
+loop:
     adde r4, r4, r4
     adde r3, r3, r3
     adde r8, r8, r8
     adde r7, r7, r7
     subfc r0, r6, r8
     subfe. r9, r5, r7
-    blt L_8025ED30
+    blt done
     mr r8, r0
     mr r7, r9
     addic r0, r10, 0x1
-L_8025ED30:
-    bdnz L_8025ED08
+done:
+    bdnz loop
     mr r4, r8
     mr r3, r7
     blr
@@ -511,30 +511,30 @@ L_8025ED30:
 asm void __mod2i(void) {
     nofralloc
     cmpwi cr7, r3, 0x0
-    bge cr7, L_8025ED54
+    bge cr7, skip
     subfic r4, r4, 0x0
     subfze r3, r3
-L_8025ED54:
+skip:
     cmpwi r5, 0x0
-    bge L_8025ED64
+    bge skip2
     subfic r6, r6, 0x0
     subfze r5, r5
-L_8025ED64:
+skip2:
     cmpwi r3, 0x0
     cntlzw r0, r3
     cntlzw r9, r4
-    bne L_8025ED78
+    bne skip3
     addi r0, r9, 0x20
-L_8025ED78:
+skip3:
     cmpwi r5, 0x0
     cntlzw r9, r5
     cntlzw r10, r6
-    bne L_8025ED8C
+    bne skip4
     addi r9, r10, 0x20
-L_8025ED8C:
+skip4:
     cmpw r0, r9
     subfic r10, r0, 0x40
-    bgt L_8025EE40
+    bgt done
     addi r9, r9, 0x1
     subfic r9, r9, 0x40
     add r0, r0, r9
@@ -542,48 +542,48 @@ L_8025ED8C:
     mtctr r9
     cmpwi r9, 0x20
     subi r7, r9, 0x20
-    blt L_8025EDC4
+    blt skip5
     srw r8, r3, r7
     li r7, 0x0
-    b L_8025EDD8
-L_8025EDC4:
+    b skip6
+skip5:
     srw r8, r4, r9
     subfic r7, r9, 0x20
     slw r7, r3, r7
     or r8, r8, r7
     srw r7, r3, r9
-L_8025EDD8:
+skip6:
     cmpwi r0, 0x20
     subic r9, r0, 0x20
-    blt L_8025EDF0
+    blt skip7
     slw r3, r4, r9
     li r4, 0x0
-    b L_8025EE04
-L_8025EDF0:
+    b skip8
+skip7:
     slw r3, r3, r0
     subfic r9, r0, 0x20
     srw r9, r4, r9
     or r3, r3, r9
     slw r4, r4, r0
-L_8025EE04:
+skip8:
     li r10, -0x1
     addic r7, r7, 0x0
-L_8025EE0C:
+loop:
     adde r4, r4, r4
     adde r3, r3, r3
     adde r8, r8, r8
     adde r7, r7, r7
     subfc r0, r6, r8
     subfe. r9, r5, r7
-    blt L_8025EE34
+    blt skip9
     mr r8, r0
     mr r7, r9
     addic r0, r10, 0x1
-L_8025EE34:
-    bdnz L_8025EE0C
+skip9:
+    bdnz loop
     mr r4, r8
     mr r3, r7
-L_8025EE40:
+done:
     bgelr cr7
     subfic r4, r4, 0x0
     subfze r3, r3
@@ -627,9 +627,9 @@ asm void __shr2i(void) {
     slw r10, r3, r8
     or r4, r4, r10
     sraw r10, r3, r9
-    ble L_8025EEB8
+    ble done
     or r4, r4, r10
-L_8025EEB8:
+done:
     sraw r3, r3, r5
     blr
 }
@@ -639,13 +639,13 @@ asm void __cvt_sll_flt(void) {
     nofralloc
     stwu r1, -0x10(r1)
     clrrwi. r5, r3, 31
-    beq L_8025EED4
+    beq skip
     subfic r4, r4, 0x0
     subfze r3, r3
-L_8025EED4:
+skip:
     or. r7, r3, r4
     li r6, 0x0
-    beq L_8025EF5C
+    beq done
     cntlzw r7, r3
     cntlzw r8, r4
     extlwi r9, r7, 5, 26
@@ -664,22 +664,22 @@ L_8025EED4:
     clrlwi r7, r4, 21
     cmpwi r7, 0x400
     addi r6, r6, 0x43e
-    blt L_8025EF44
-    bgt L_8025EF38
+    blt skip3
+    bgt skip2
     rlwinm. r7, r4, 0, 20, 20
-    beq L_8025EF44
-L_8025EF38:
+    beq skip3
+skip2:
     addic r4, r4, 0x800
     addze r3, r3
     addze r6, r6
-L_8025EF44:
+skip3:
     rotrwi r4, r4, 11
     rlwimi r4, r3, 21, 0, 10
     extrwi r3, r3, 20, 1
     slwi r6, r6, 20
     or r3, r6, r3
     or r3, r5, r3
-L_8025EF5C:
+done:
     stw r3, 0x8(r1)
     stw r4, 0xc(r1)
     lfd f1, 0x8(r1)
@@ -694,7 +694,7 @@ asm void __cvt_ull_flt(void) {
     stwu r1, -0x10(r1)
     or. r7, r3, r4
     li r6, 0x0
-    beq L_8025EFFC
+    beq done
     cntlzw r7, r3
     cntlzw r8, r4
     extlwi r9, r7, 5, 26
@@ -713,21 +713,21 @@ asm void __cvt_ull_flt(void) {
     clrlwi r7, r4, 21
     cmpwi r7, 0x400
     addi r6, r6, 0x43e
-    blt L_8025EFE8
-    bgt L_8025EFDC
+    blt skip2
+    bgt skip
     rlwinm. r7, r4, 0, 20, 20
-    beq L_8025EFE8
-L_8025EFDC:
+    beq skip2
+skip:
     addic r4, r4, 0x800
     addze r3, r3
     addze r6, r6
-L_8025EFE8:
+skip2:
     rotrwi r4, r4, 11
     rlwimi r4, r3, 21, 0, 10
     extrwi r3, r3, 20, 1
     slwi r6, r6, 20
     or r3, r6, r3
-L_8025EFFC:
+done:
     stw r3, 0x8(r1)
     stw r4, 0xc(r1)
     lfd f1, 0x8(r1)
@@ -745,17 +745,17 @@ asm void __cvt_dbl_usll(void) {
     lwz r4, 0xc(r1)
     extrwi r5, r3, 11, 1
     cmplwi r5, 0x3ff
-    bge L_8025F03C
+    bge skip
     li r3, 0x0
     li r4, 0x0
-    b L_8025F0D8
-L_8025F03C:
+    b done
+skip:
     mr r6, r3
     clrlwi r3, r3, 12
     oris r3, r3, 0x10
     subi r5, r5, 0x433
     cmpwi r5, 0x0
-    bge L_8025F07C
+    bge skip2
     neg r5, r5
     subfic r8, r5, 0x20
     subic r9, r5, 0x20
@@ -765,21 +765,21 @@ L_8025F03C:
     srw r10, r3, r9
     or r4, r4, r10
     srw r3, r3, r5
-    b L_8025F0C8
-L_8025F07C:
+    b skip5
+skip2:
     cmpwi r5, 0xa
-    ble+ L_8025F0A8
+    ble+ skip4
     clrrwi. r6, r6, 31
-    beq L_8025F098
+    beq skip3
     lis r3, 0x8000
     li r4, 0x0
-    b L_8025F0D8
-L_8025F098:
+    b done
+skip3:
     lis r3, 0x7fff
     ori r3, r3, 0xffff
     li r4, -0x1
-    b L_8025F0D8
-L_8025F0A8:
+    b done
+skip4:
     subfic r8, r5, 0x20
     subic r9, r5, 0x20
     slw r3, r3, r5
@@ -788,12 +788,12 @@ L_8025F0A8:
     slw r10, r4, r9
     or r3, r3, r10
     slw r4, r4, r5
-L_8025F0C8:
+skip5:
     clrrwi. r6, r6, 31
-    beq L_8025F0D8
+    beq done
     subfic r4, r4, 0x0
     subfze r3, r3
-L_8025F0D8:
+done:
     addi r1, r1, 0x10
     blr
 }

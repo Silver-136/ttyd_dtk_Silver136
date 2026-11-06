@@ -151,7 +151,7 @@ f32 PSVECMag(const register Vec* v) {
         ps_madd sqmag, vzz, vzz, vxy
         ps_sum0 sqmag, sqmag, vxy, vxy
         fcmpu cr0, sqmag, c_zero
-        beq L_000005F0
+        beq done
         frsqrte rmag, sqmag
     }
 
@@ -163,7 +163,7 @@ f32 PSVECMag(const register Vec* v) {
         fnmsubs nwork0, nwork0, sqmag, c_three
         fmuls rmag, nwork0, nwork1
         fmuls sqmag, sqmag, rmag
-    L_000005F0:
+    done:
     }
 
     return sqmag;
@@ -325,7 +325,7 @@ f32 PSVECDistance(const register Vec* a, const register Vec* b) {
         fsubs c_zero, c_half, c_half
         ps_sum0 sqdist, sqdist, dyz, dyz
         fcmpu cr0, c_zero, sqdist
-        beq L_00000CBC
+        beq done
     }
 
     c_three = 3.0f;
@@ -337,7 +337,7 @@ f32 PSVECDistance(const register Vec* a, const register Vec* b) {
         fnmsubs nwork0, nwork0, sqdist, c_three
         fmuls rdist, nwork0, nwork1
         fmuls sqdist, sqdist, rdist
-    L_00000CBC:
+    done:
     }
 
     return sqdist;

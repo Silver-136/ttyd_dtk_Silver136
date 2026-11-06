@@ -174,7 +174,7 @@ static asm void do_src1(_SND_CHORUS_SRCINFO* src) {
   
   li r9, 0xa0
   mtctr r9
-lbl_803B6D5C:
+loop:
   rlwinm r10, r4, 7, 0x15, 0x1b
 
   addc r4, r4, r6
@@ -185,7 +185,7 @@ lbl_803B6D5C:
 
   lfs f5, 0(r10)
 
-  beq lbl_803B6DA4
+  beq skip
 
   lfs f6, 4(r10)
 
@@ -207,12 +207,12 @@ lbl_803B6D5C:
 
   stfiwx f10, r26, r30
 
-  bdnz lbl_803B6D5C
+  bdnz loop
   
-  b lbl_803B6E10
+  b done
 
 
-lbl_803B6DA4:
+skip:
   addi r5, r5, 1
 
   lfs f6, 4(r10)
@@ -237,15 +237,15 @@ lbl_803B6DA4:
   
   fmr f3, f4
   
-  bne+ lbl_803B6DDC
+  bne+ skip2
   mr r5, r7
   
-lbl_803B6DDC:
+skip2:
   fmadds f10, f4, f8, f10
 
   slwi r9, r5, 2
 
-  bdz lbl_803B6E08
+  bdz skip3
 
   lwzx r10, r9, r31
   
@@ -261,15 +261,15 @@ lbl_803B6DDC:
   
   fsubs f4, f4, f9
   
-  b lbl_803B6D5C
+  b loop
 
 
-lbl_803B6E08:
+skip3:
   fctiwz f10, f10
   stfiwx f10, r26, r30
 
 
-lbl_803B6E10:
+done:
   lwz r9, 8(r3)
   
   fctiwz f1, f1
@@ -367,7 +367,7 @@ static asm void do_src2(register _SND_CHORUS_SRCINFO* src) {
 
   li r9, 0xa0;
   mtctr r9;
-lbl_803B6EF4:
+loop:
   rlwinm r10, posLoV, 7, 0x15, 0x1b;
 
   addc posLoV, posLoV, pitchLoV;
@@ -380,7 +380,7 @@ lbl_803B6EF4:
 
   lfs f5, 0(r10);
 
-  beq lbl_803B6F70;
+  beq skip2;
 
   lfs f6, 4(r10);
 
@@ -404,15 +404,15 @@ lbl_803B6EF4:
 
   fmr f3, f4;
 
-  bne + lbl_803B6F44;
+  bne + skip;
   mr posHiV, targetV;
 
-lbl_803B6F44:
+skip:
   fmadds f10, f4, f8, f10;
 
   slwi r9, posHiV, 2;
 
-  bdz lbl_803B6FF4;
+  bdz done;
 
   lwzx r10, r9, smpBasePtr;
 
@@ -428,18 +428,18 @@ lbl_803B6F44:
 
   fsubs f4, f4, f9;
 
-  b lbl_803B6EF4;
+  b loop;
 
-lbl_803B6F70:
+skip2:
 
   cmpw posHiV, triggerV;
 
   lfs f6, 4(r10);
 
-  bne + lbl_803B6F80;
+  bne + skip3;
   mr posHiV, targetV;
 
-lbl_803B6F80:
+skip3:
 
   slwi r11, posHiV, 2;
   addi posHiV, posHiV, 1;
@@ -471,16 +471,16 @@ lbl_803B6F80:
 
   fsubs f3, f3, f9;
 
-  bne + lbl_803B6FC8;
+  bne + skip4;
   mr posHiV, targetV;
 
-lbl_803B6FC8:
+skip4:
 
   fmadds f10, f4, f8, f10;
 
   slwi r9, posHiV, 2;
 
-  bdz lbl_803B6FF4;
+  bdz done;
 
   lwzx r10, r9, smpBasePtr;
 
@@ -494,9 +494,9 @@ lbl_803B6FC8:
   lfd f4, 8(sp);
   fsubs f4, f4, f9;
 
-  b lbl_803B6EF4;
+  b loop;
 
-lbl_803B6FF4:
+done:
 
   fctiwz f10, f10;
   stfiwx f10, r26, destPtr;

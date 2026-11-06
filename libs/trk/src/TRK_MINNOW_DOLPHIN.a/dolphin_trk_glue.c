@@ -68,14 +68,14 @@ asm void TRKLoadContext(void* ctx, u32 val) {
     lwz r2, 0x8(r3)
     lhz r5, 0x1a2(r3)
     rlwinm. r6, r5, 0, 30, 30
-    beq L_8025D63C
+    beq skip
     rlwinm r5, r5, 0, 31, 29
     sth r5, 0x1a2(r3)
     lmw r5, 0x14(r3)
-    b L_8025D640
-L_8025D63C:
+    b done
+skip:
     lmw r13, 0x34(r3)
-L_8025D640:
+done:
     mr r31, r3
     mr r3, r4
     lwz r4, 0x80(r31)
