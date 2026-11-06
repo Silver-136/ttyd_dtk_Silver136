@@ -9,8 +9,8 @@ to the original games through every step; US retail is the priority for readabil
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | <!--n:fakes_rows-->697<!--/n--> (<!--n:fakes_rows_both-->655<!--/n--> both, <!--n:fakes_rows_us-->25<!--/n--> US, <!--n:fakes_rows_jp-->10<!--/n--> JP, <!--n:fakes_rows_demos-->6<!--/n--> demos, <!--n:fakes_rows_pal-->1<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
-| FAKE comment sites | <!--n:all_fake_comment_sites-->1,060<!--/n--> in <!--n:all_fake_comment_sites_files-->282<!--/n--> files (libs <!--n:libs_fake_comment_sites-->55<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
+| FAKES.md rows | <!--n:fakes_rows-->706<!--/n--> (<!--n:fakes_rows_both-->664<!--/n--> both, <!--n:fakes_rows_us-->25<!--/n--> US, <!--n:fakes_rows_jp-->10<!--/n--> JP, <!--n:fakes_rows_demos-->6<!--/n--> demos, <!--n:fakes_rows_pal-->1<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKE comment sites | <!--n:all_fake_comment_sites-->1,084<!--/n--> in <!--n:all_fake_comment_sites_files-->288<!--/n--> files (libs <!--n:libs_fake_comment_sites-->55<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
 | `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | <!--n:game_pragma_opt_star-->143<!--/n--> / <!--n:game_pragma_optimize-->4<!--/n--> / <!--n:game_pragma_dont_inline-->112<!--/n--> / <!--n:game_pragma_auto_inline-->2<!--/n--> (libs: `dont_inline` <!--n:libs_pragma_dont_inline-->6<!--/n-->, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | <!--n:game_section_placement-->18<!--/n--> (libs <!--n:libs_section_placement-->36<!--/n-->) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
 | `#pragma force_active` | <!--n:game_force_active-->13<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->10<!--/n-->) | 776 | the library pairs keep the `gap_*` objects |
@@ -159,9 +159,11 @@ latest naming batches.
 - libs/ review (2026-11-05): read-only review of dvd, pad, si, vi, ai, os, gx, card and MusyX (about 50k lines;
   findings `cleanup_notes/certification/libs_*.tsv`), applied and probed: existing header names for raw numbers,
   new names where the code proves the meaning (GX_DIRTY_*, CARD_STATUS_*, OS_FONT_ENCODE_*), code-only BUG
-  comments, plain forms, marked devices; snd3d's SND3D_UNUSED blocks (uncompiled) removed. Open: MusyX enum
-  families (cFlags, midiDirtyFlags, mixerCtrl, DSP opcodes, macro opcodes), DI/SI/AI/EXI register names, TRK error
-  codes and DSP mail words (names the code does not prove yet), about 190 address-named asm labels. The rest of
+  comments, plain forms, marked devices; snd3d's SND3D_UNUSED blocks (uncompiled) removed. Done the same evening: MusyX
+  SYNTH_CFLAG_*, SYNTH_DIRTY_*, MIXER_CTRL_*, DSP_CHANGED_*, SAMPLE_COMP_TYPE, MACRO_OP_* (from the handlers), TRK
+  DSErrorCode/DSReplyError, 207 address-named asm labels renamed by role (generic loop/done/skip names). Open:
+  DI/SI/AI/EXI/PI register names (no names in our headers; need evidence), DSP mail words, TRK codes nothing
+  returns (0x704-0x706). Game section placements (18) retested: all needed, all commented. The rest of
   libs/ (MSL, TRK, runtime, smaller SDK folders) was read the same day: shared MSL/TRK private headers, names,
   BUG comments (libs_review_{msl,trk,sdk1,sdk2}.tsv).
 
