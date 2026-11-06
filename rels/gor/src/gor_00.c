@@ -3414,7 +3414,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_06_1000_X_NAUTS_AFTER)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("gor_01"), STRING("s_bero"))
     RETURN
 EVT_END()

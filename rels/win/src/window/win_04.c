@@ -173,7 +173,7 @@ EVT_END()
  * sets the next map change to an iris wipe (500 ms out, 500 ms in); returns LW(0) = 0.
  */
 static EVT_BEGIN(out_w_bero)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -1515,7 +1515,7 @@ static EVT_BEGIN(cloud_toujou)
     WAIT_MS(1000)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 300, 80, 40)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_00_03"), 0, 0)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("win_05"), STRING(""))
     RETURN
 EVT_END()

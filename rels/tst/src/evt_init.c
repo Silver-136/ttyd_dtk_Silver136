@@ -158,7 +158,7 @@ EvtWord tst_npc_env_evt[] = {
 EVT_BEGIN(tst_npc_init_evt)
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 1, PTR(testnpc_move_event))
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 8, PTR(tst_npc_talk_evt))
-    CALL(evt_npc_reaction_flag_onoff, 1, STRING("NPC_01"), 2)
+    CALL(evt_npc_reaction_flag_onoff, 1, STRING("NPC_01"), NPC_REACTION_HAMMER)
     CALL(evt_npc_flag_onoff, 1, STRING("NPC_01"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SPAWN_EVENT(tst_npc_env_evt)

@@ -761,7 +761,7 @@ EVT_END()
  * Returns 0 in LW(0).
  */
 static EVT_BEGIN(out_w_bero)
-    CALL(evt_fade_set_mapchange_type, 1, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()

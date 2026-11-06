@@ -647,7 +647,7 @@ EVT_BEGIN(evt_pikary_arrival)
     WAIT_MS(300)
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_49_00_TRAIN_ARRIVAL)
-    CALL(evt_fade_set_mapchange_type, 1, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("pik_00"), STRING("resha"))
     RETURN
 EVT_END()

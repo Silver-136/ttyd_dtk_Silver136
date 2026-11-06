@@ -670,7 +670,7 @@ EVT_BEGIN(witchtrio_picture)
     WAIT_MS(1200)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_06_THE_SKETCH)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("win_03"), STRING("n_bero"))
     RETURN
 EVT_END()

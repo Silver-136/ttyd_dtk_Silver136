@@ -2044,7 +2044,7 @@ EVT_BEGIN(fake_fade)
     WAIT_MS(1200)
     CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, FADE_IN_IRIS, 500)
     RETURN
 EVT_END()
 
@@ -2234,7 +2234,7 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, FADE_IN_IRIS, 500)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_15_THE_PEDESTAL)
     CALL(evt_bero_mapchange, STRING("gor_02"), 0)
     RETURN

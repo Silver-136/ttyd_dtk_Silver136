@@ -2668,7 +2668,7 @@ static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) 
  * flags pick the checks: 0x20 jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
  * 0x200 Bobbery's bomb; 0x10 also checks body contact (and no checks while invincible),
  * 0x1 tests only the current hammer frame instead of the whole swing (the shell and bomb checks need it),
- * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
+ * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags (NpcReactionFlags) allow that hit,
  * without setting the banner.
  * Returns the selected NPC hit and writes the FbatHitResult (kind first) to the second argument if given;
  * touch/jump checks keep the closest hit, while the other checks stop at their first matching NPC.
@@ -2720,7 +2720,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     } else {
                         if (npc->flags & NPC_FLAG_ENEMY) continue;
                     }
-                    if (soft && !(npc->reactionFlags & 1)) continue;
+                    if (soft && !(npc->reactionFlags & NPC_REACTION_TOUCH)) continue;
                     if (npc->flags & NPC_FLAG_NO_HIT) continue;
                     if (npc->statusFlags & NPC_STATUS_DEAD) continue;
                     if (npc->flags & NPC_FLAG_2D) continue;
@@ -2826,7 +2826,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                         if (npc->flags & NPC_FLAG_ENEMY)
                             continue;
                     }
-                    if (soft && !(npc->reactionFlags & 2))
+                    if (soft && !(npc->reactionFlags & NPC_REACTION_HAMMER))
                         continue;
                     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
                         continue;
@@ -2861,7 +2861,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     } else {
                         if (npc->flags & NPC_FLAG_ENEMY) continue;
                     }
-                    if (soft && !((*(u32*)&npc->reactionFlags) & 2)) continue;
+                    if (soft && !((*(u32*)&npc->reactionFlags) & NPC_REACTION_HAMMER)) continue;
                     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;
                     if (npc->flags & NPC_FLAG_NO_HIT) continue;
                     if (npc->flags & NPC_FLAG_2D) continue;
@@ -2880,7 +2880,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, NPC_REACTION_HAMMER)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r, angle)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
@@ -2925,7 +2925,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                         if (npc->flags & NPC_FLAG_ENEMY)
                             continue;
                     }
-                    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & 2))
+                    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & NPC_REACTION_HAMMER))
                         continue;
                     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
                         continue;
@@ -2957,7 +2957,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 y = 15.0f + m->position.y;
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, NPC_REACTION_HAMMER)
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 12.0f)) continue;
                     if (dist >= res.dist) continue;
 #endif
@@ -2979,7 +2979,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle2 = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, NPC_REACTION_HAMMER)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r2, angle2)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
@@ -3023,7 +3023,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             z = party->position.z;
             npc = wp->entries;
             for (i = 0; i < total; i++, npc++) {
-                CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 4)
+                CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, NPC_REACTION_SHELL)
                 if (!_npcHitCheckSphere(npc, &dist, x, y, z, r)) continue;
                 if (dist >= res.dist) continue;
                 res.dist = dist;
@@ -3048,7 +3048,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             npc = wp->entries;
             flags &= FBAT_CHECK_ENEMY;
             for (i = 0; i < total; i++, npc++) {
-                CONTINUE_IF_NPC_NOT_HITTABLE(flags, 8)
+                CONTINUE_IF_NPC_NOT_HITTABLE(flags, NPC_REACTION_BOMB)
                 if (!_npcHitCheckSphere(npc, &dist, party->position.x, 0.5f * party->height + party->position.y,
                                         party->position.z, 30.0f)) continue;
                 if (dist >= res.dist) continue;

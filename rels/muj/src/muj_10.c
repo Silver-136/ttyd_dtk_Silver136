@@ -658,7 +658,7 @@ EVT_BEGIN(senin_event)
 
     // The story advances and the crew boards the ship at muj_00.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_41_01_ALL_ABOARD)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
@@ -694,7 +694,7 @@ EVT_BEGIN(senin_event)
 
     // The story advances and the crew boards the ship at muj_00.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_41_01_ALL_ABOARD)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
 #endif
 #endif

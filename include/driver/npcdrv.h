@@ -356,8 +356,17 @@ typedef enum FbatCheckFlags {
     FBAT_CHECK_SHELL = (1 << 8),        // 0x100
     FBAT_CHECK_BOMB = (1 << 9),         // 0x200
     FBAT_CHECK_ENEMY = (1 << 12),       // 0x1000, field enemies (otherwise other NPCs)
-    FBAT_CHECK_REACTION = (1 << 13),    // 0x2000, only NPCs with reactionFlags bit 0; no first-strike announce
+    FBAT_CHECK_REACTION = (1 << 13),    // 0x2000, only NPCs whose NpcReactionFlags allow that hit; no first-strike announce
 } FbatCheckFlags;
+
+// NpcEntry.reactionFlags (NpcSetupInfo.reactionFlags, evt_npc_reaction_flag_onoff): the hits a friendly NPC reacts
+// to; fbatHitCheck tests them only with FBAT_CHECK_REACTION
+typedef enum NpcReactionFlags {
+    NPC_REACTION_TOUCH = (1 << 0),  // 0x1, body contact and jumps (FBAT_CHECK_TOUCH / FBAT_CHECK_JUMP)
+    NPC_REACTION_HAMMER = (1 << 1), // 0x2, hammer and spin hammer
+    NPC_REACTION_SHELL = (1 << 2),  // 0x4, the partner's shell
+    NPC_REACTION_BOMB = (1 << 3),   // 0x8, the partner's bomb
+} NpcReactionFlags;
 
 // FirstStrikeInfo.type
 enum {

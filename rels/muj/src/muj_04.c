@@ -478,7 +478,7 @@ EVT_BEGIN(sanders_funto)
 
     // The story advances and Mario crosses to muj_03.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("muj_03"), STRING("e_bero"))
     RETURN
 EVT_END()

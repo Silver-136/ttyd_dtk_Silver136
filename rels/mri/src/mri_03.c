@@ -1034,7 +1034,7 @@ EVT_BEGIN(bluejail_event)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e19_04"), 0, STRING("プニ族"))
     WAIT_MS(1500)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_19_INSIDE_THE_BLUE_CELL)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_IRIS, 500, FADE_IN_IRIS, 500)
     CALL(evt_bero_mapchange, STRING("mri_08"), STRING("e_bero"))
     RETURN
 EVT_END()

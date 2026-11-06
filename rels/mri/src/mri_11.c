@@ -472,7 +472,7 @@ static EVT_BEGIN(puni_lose)
     CALL(evt_snd_sfxoff, GW(0))
     CALL(evt_puni_force_se_off)
     SET_VALUE(GSWF_MRI_11_JABBI_BATTLE_LOST, 1)
-    CALL(evt_fade_set_mapchange_type, 0, 4, 500, -1, -1)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_SPOT, 500, -1, -1)
     CALL(evt_bero_mapchange, STRING("mri_06"), STRING("w_bero02"))
     RETURN
 EVT_END()
