@@ -5734,7 +5734,7 @@ USER_FUNC(funechange_func) {
     return EVT_RETURN_DONE;
 }
 
-/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(4)). */
+/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(PARTNER_YOSHI)). */
 static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));

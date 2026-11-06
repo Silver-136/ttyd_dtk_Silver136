@@ -1027,7 +1027,7 @@ USER_FUNC(famicom_check) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(PARTNER_YOSHI)) for the 8-bit item pose. */
 #if VERSION == VERSION_DEMO_US
 static USER_FUNC(party_color) {
 #else

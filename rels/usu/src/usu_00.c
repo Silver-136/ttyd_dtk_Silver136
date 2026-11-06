@@ -256,7 +256,7 @@ EvtWord usu_00_init_evt[658];
 #endif
 
 /**
- * Script helper: writes the color index of Mario's Yoshi partner (pouchGetPartyColor(4)) to args[0],
+ * Script helper: writes the color index of Mario's Yoshi partner (pouchGetPartyColor(PARTNER_YOSHI)) to args[0],
  * so the stand-in Yoshi NPC wears the same color.
  */
 static USER_FUNC(getYoshiColor) {
@@ -2943,7 +2943,7 @@ USER_FUNC(bakuhatu_kemuri) {
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
 
-    effKemuTestDrawCam(effKemuTestEntry(8, x, y, 0.0f, 2.5f), 8);
+    effKemuTestDrawCam(effKemuTestEntry(8, x, y, 0.0f, 2.5f), CAMERA_2D);
     return EVT_RETURN_DONE;
 }
 
