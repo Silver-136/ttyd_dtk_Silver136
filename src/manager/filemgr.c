@@ -158,7 +158,7 @@ static void fileGarbageDataAdrClear(FileEntry* entry) {
                             img = tpl->descriptorArray[i].textureHeader;
                             img->data -= (AddrWord)tpl;
                         }
-                        *(AddrWord*)((u8*)tpl->descriptorArray + off) -= (AddrWord)tpl;
+                        *(AddrWord*)((u8*)tpl->descriptorArray + off) -= (AddrWord)tpl; // FAKE: byte-offset store (ADDR_WORD(tpl->descriptorArray[i].textureHeader) changes the object)
                     }
                     pal = tpl->descriptorArray[i].CLUTHeader;
                     if (pal) {
@@ -167,7 +167,7 @@ static void fileGarbageDataAdrClear(FileEntry* entry) {
                             pal = tpl->descriptorArray[i].CLUTHeader;
                             pal->data -= (AddrWord)tpl;
                         }
-                        *(AddrWord*)((u8*)tpl->descriptorArray + off + offsetof(TEXDescriptor, CLUTHeader)) -= (AddrWord)tpl;
+                        *(AddrWord*)((u8*)tpl->descriptorArray + off + offsetof(TEXDescriptor, CLUTHeader)) -= (AddrWord)tpl; // FAKE: byte-offset store (ADDR_WORD(tpl->descriptorArray[i].CLUTHeader) changes the object)
                     }
                 }
                 ADDR_WORD(tpl->descriptorArray) -= (AddrWord)tpl;
