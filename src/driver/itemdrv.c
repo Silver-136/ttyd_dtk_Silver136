@@ -1401,9 +1401,9 @@ static void itemseq_GetItem(ItemEntry* entry) {
             }
             if (entry->itemId == ITEM_WEDDING_RING) {
 #if VERSION <= VERSION_DEMO_JP
-                iconChange(entry->name, ICON_114);
+                iconChange(entry->name, ICON_WEDDING_RING_LARGE);
 #else
-                iconChange(entry->name, ICON_114);
+                iconChange(entry->name, ICON_WEDDING_RING_LARGE);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags |= ICON_FLAG_ITEM_NO_MAP_BLEND;
@@ -1467,11 +1467,11 @@ static void itemseq_GetItem(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
             iconFlagOff(entry->name, 0x40);
             if (entry->itemId == ITEM_WEDDING_RING) {
-                iconChange(entry->name, ICON_115);
+                iconChange(entry->name, ICON_WEDDING_RING_SMALL);
 #else
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
-                iconChange(entry->name, ICON_115);
+                iconChange(entry->name, ICON_WEDDING_RING_SMALL);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags &= ~ICON_FLAG_ITEM_NO_MAP_BLEND;

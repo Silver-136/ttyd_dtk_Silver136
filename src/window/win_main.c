@@ -1610,7 +1610,7 @@ void winIconGrayInit(void) {
 
 /**
  * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
- * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
+ * One icon id is remapped to its neighbour (ICON_WEDDING_RING_SMALL to ICON_WEDDING_RING_LARGE).
  */
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
@@ -1619,8 +1619,8 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXTexObj obj;
     f32 sy;
 
-    if (iconId == ICON_115) {
-        iconId = ICON_114;
+    if (iconId == ICON_WEDDING_RING_SMALL) {
+        iconId = ICON_WEDDING_RING_LARGE;
     }
     iconGetTexObj(&obj, iconId);
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);

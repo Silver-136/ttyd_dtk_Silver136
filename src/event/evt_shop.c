@@ -766,7 +766,7 @@ EVT_BEGIN(point_evt)
 };
 
 // US and later: point window icon per language (first object of evt_shop .sdata)
-u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
+u16 point_disp_icons[] = {ICON_JAPANESE_TEXT_POINTS, ICON_TEXT_POINTS, ICON_TEXT_PUNKTE, ICON_TEXT_POINTS, ICON_TEXT_PUNTOS, ICON_TEXT_PUNTI};
 #else
     CALL(get_shop_point, LW(0))
     CALL(get_msg, LW(10), 25, LW(14))
@@ -864,11 +864,11 @@ static void point_disp(WinMgrEntry* entry) {
     if (gp->language == LANGUAGE_JP) {
         PSMTXScale(s, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
-        iconDispGx2(m, ICON_FLAG_2D, ICON_1F1);
+        iconDispGx2(m, ICON_FLAG_2D, ICON_JAPANESE_TEXT_POINTS);
     } else {
         PSMTXScale(s, 0.8f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
-        iconDispGx2(m, ICON_FLAG_2D, ICON_20A);
+        iconDispGx2(m, ICON_FLAG_2D, ICON_TEXT_POINTS);
     }
 #endif
 

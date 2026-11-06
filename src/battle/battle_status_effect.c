@@ -351,7 +351,7 @@ static void BSE_Kagegakure(BattleUnit* unit) {
     if (on) {
         if (unit->kageIcon == NULL) {
             sprintf(name, "_biK_%02x", unit->unitId);
-            iconEntry(name, ICON_099);
+            iconEntry(name, ICON_MARIO_UNDER_GROUND_VEIL);
             unit->kageIcon = iconNameToPtr(name);
         }
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);

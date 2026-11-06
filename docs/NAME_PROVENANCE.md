@@ -23,6 +23,16 @@ kJumplikeCannotTarget, kCeiling, kChargeExpended ...); our comments say what the
 code contradicts a name, the code wins: part bit 0x80 (WeakToAttackFxR there) is read by US BattlePreCheckDamage as
 "add unit work slot 1 to the part's defence", so it is kPartUnitWorkDefense here.
 
+## Credits for icon names
+
+The descriptive icon names in include/icon_ids.h that do not come from our code or the item table (373: the 337
+former `ICON_xxx` placeholders and the 36 US-only language variants of text icons) are Zephiles' IconType
+enum from his TTYD Practice Codes, checked by him on the retail versions and given to this project for use
+(2026-11-05). Two spellings were corrected (`ICOn_` -> `ICON_`, `HANMER` -> `HAMMER`) and the colour-text
+names follow one order (`ICON_TEXT_GREEN_*`, `ICON_TEXT_BLUE_*`). They name what an icon shows, not an
+original symbol. Where our code-derived names and his name the same icon, ours stay; his ids matched ours
+everywhere, and nine US ids we had marked as inferred take his values.
+
 ## Invented function and data names
 
 | Kind | Unit | Name | Replaced placeholder (JP) | JP address | US |

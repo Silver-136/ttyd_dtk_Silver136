@@ -282,11 +282,11 @@ void unitwin_point_disp(WinMgrEntry* entry) {
         if (gp->language == LANGUAGE_JP) {
             PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
             PSMTXConcat(trans, scale, trans);
-            iconDispGx2(trans, ICON_FLAG_2D, VERSION_PICK(0x1F1, 0x226));
+            iconDispGx2(trans, ICON_FLAG_2D, ICON_JAPANESE_TEXT_POINTS);
         } else {
             PSMTXScale(scale, 0.8f, 1.1f, 1.1f);
             PSMTXConcat(trans, scale, trans);
-            iconDispGx2(trans, ICON_FLAG_2D, VERSION_PICK(0x20A, 0x227));
+            iconDispGx2(trans, ICON_FLAG_2D, ICON_TEXT_POINTS);
         }
         PSMTXTrans(trans, 124.0f + entry->x, entry->y - 38.0f, 0.0f);
         {
@@ -1379,7 +1379,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         PSMTXTrans(mtx, -210.0f, -166.0f, 0.0f);
         PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(mtx, scale, mtx);
-        iconDispGx2(mtx, ICON_FLAG_2D, VERSION_PICK(0x1F1, 0x226));
+        iconDispGx2(mtx, ICON_FLAG_2D, ICON_JAPANESE_TEXT_POINTS);
         PSMTXTrans(mtx, -126.0f, -168.0f, 0.0f);
         iconNumberDispGx(mtx, wp->coinDisp, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         if (!(gp->retraceCount & 3)) {

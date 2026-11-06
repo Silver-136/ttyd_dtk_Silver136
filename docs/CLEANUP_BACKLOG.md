@@ -84,8 +84,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
   from what our code does; other people's or other projects' names are not used (2026-10-26). Inherited struct
   field names are credited in NAME_PROVENANCE.md.
-- Icon ids: every icon the game code uses has a name; unused placeholders stay ICON_xxx. The US-only per-language
-  icon tables (statuswindow, kpa, evt_shop) still list raw US ids for the non-English variants.
+- Icon ids: done (2026-11-05). Every icon id has a name: ours from the code and item table, the rest (373, incl.
+  the US-only language variants the statuswindow / kpa / evt_shop tables use) from Zephiles' IconType enum
+  (credited in NAME_PROVENANCE.md; cleanup_tools/icon_names_zephiles.py).
 - Saved-game flags and variables: story progress (StoryProgress, 407 game labels), Trouble Center, Star Pieces
   and Shine Sprites (game strings), and every other GSWF/GSW the scripts use (805 names in
   include/evt/evt_save_flags.h, 2026-10-26, from the scripts and room text; tool cleanup_tools/save_flags.py).
