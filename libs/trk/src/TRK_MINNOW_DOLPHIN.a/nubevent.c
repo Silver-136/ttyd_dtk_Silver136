@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef int BOOL;
 typedef int DSError;
 
@@ -59,7 +61,7 @@ DSError TRKPostEvent(TRKEvent* event) {
     TRKAcquireMutex(&gTRKEventQueue);
 
     if (gTRKEventQueue.count == 2) {
-        ret = 0x100;
+        ret = DSERR_EVENT_QUEUE_FULL;
     } else {
         nextEventID = (gTRKEventQueue.next + gTRKEventQueue.count) % 2;
         TRK_memcpy(&gTRKEventQueue.events[nextEventID], event, sizeof(TRKEvent));

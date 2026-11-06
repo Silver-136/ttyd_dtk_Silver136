@@ -39,4 +39,32 @@ enum TRKEventType {
     TRK_EVENT_SUPPORT     /* TRKPostInterruptEvent: the support-request instruction 0x0FE00000 */
 };
 
+
+/* DSError values: what the TRK functions return. Each is named by where the code returns it. */
+enum DSErrorCode {
+    DSERR_EVENT_QUEUE_FULL = 0x100,   /* TRKPostEvent: both event slots are taken */
+    DSERR_NO_FREE_BUFFER = 0x300,     /* TRKGetFreeBuffer: all three message buffers are in use */
+    DSERR_BUFFER_OVERFLOW = 0x301,    /* TRKSetBufferPosition/TRKAppendBuffer: past the end of the buffer */
+    DSERR_BUFFER_UNDERFLOW = 0x302,   /* TRKReadBuffer: more bytes asked than the message holds */
+    DSERR_UNKNOWN_COMMAND = 0x500,    /* TRKDispatchMessage: no case for the command id */
+    DSERR_INVALID_MEMORY = 0x700,     /* TRKValidMemory32 / TRKTargetReadInstruction: range not readable or writable */
+    DSERR_INVALID_REGISTER = 0x701,   /* TRKTargetAccess* : last register number out of range */
+    DSERR_EXCEPTION = 0x702,          /* TRKTargetAccess*: an exception was detected during the access */
+    DSERR_UNSUPPORTED = 0x703        /* step-over requests, unknown register kind */
+    /* 0x704-0x706 are only mapped in the handlers (replies 0x21, 0x22, 0x20); nothing here returns them */
+};
+
+/* Reply error byte of the DSMSG_ReplyACK message (TRKSendReply); the handlers map a DSError to it.
+   Other values used: 1 (TRKDoStop default), 3 (any other error), 0x20-0x22 (for 0x706, 0x704, 0x705). */
+enum DSReplyError {
+    DSREPLY_OK = 0,
+    DSREPLY_PACKET_SIZE = 2,         /* DSERR_BUFFER_UNDERFLOW */
+    DSREPLY_INVALID_PARAMETER = 0x11, /* TRKDoStep: zero count or pc outside the range */
+    DSREPLY_UNSUPPORTED = 0x12,      /* DSERR_UNSUPPORTED; unknown option bit or step kind */
+    DSREPLY_INVALID_MEMORY = 0x13,   /* DSERR_INVALID_MEMORY */
+    DSREPLY_INVALID_REGISTER = 0x14, /* DSERR_INVALID_REGISTER; first register after the last */
+    DSREPLY_EXCEPTION = 0x15,        /* DSERR_EXCEPTION */
+    DSREPLY_NOT_STOPPED = 0x16       /* TRKDoContinue/TRKDoStep: the target is running */
+};
+
 #endif
