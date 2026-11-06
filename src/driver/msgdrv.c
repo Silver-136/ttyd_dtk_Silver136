@@ -128,7 +128,7 @@ const char* language_dir[7] = {"msg/JP", "msg/US", "msg/DE", "msg/FR", "msg/SP",
 const char* language_dir[2] = {"msg", "emsg"};
 #endif
 
-//local prototypes
+// local prototypes
 #if VERSION <= VERSION_DEMO_JP
 s32 msgWindowOpen_SE_Data[] = {
     0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,

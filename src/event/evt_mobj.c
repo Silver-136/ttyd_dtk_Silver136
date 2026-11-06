@@ -130,7 +130,6 @@ EVT_END()
 #endif
 
 
-
 // ---- entry, delete and property functions ----
 
 #if VERSION <= VERSION_DEMO_JP
@@ -3739,58 +3738,58 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         break;
     case 10:
-    animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
-    mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
+        animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
+        mobj->flags |= MOBJ_FLAG_PAPER_TEX;
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
 
-    // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
-    joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
-    mp = marioGetPtr();
-    if (kururing_in_box(mobj->position.x, mobj->position.z, mp->position.x, mp->position.z, 30.0f)) {
-        mp->position.y = *joint;
-    }
-    member = partyGetPtr(marioGetPartyId());
-#if VERSION >= VERSION_US
-    if (member && !(member->flags & PARTY_FLAG_IS_BEING_USED)) {
-#else
-    if (member) {
-#endif
-        if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
-            member->position.y = *joint;
+        // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
+        joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
+        mp = marioGetPtr();
+        if (kururing_in_box(mobj->position.x, mobj->position.z, mp->position.x, mp->position.z, 30.0f)) {
+            mp->position.y = *joint;
         }
-    }
-    member = partyGetPtr(marioGetExtraPartyId());
+        member = partyGetPtr(marioGetPartyId());
 #if VERSION >= VERSION_US
-    if (member && !(member->flags & PARTY_FLAG_IS_BEING_USED)) {
+        if (member && !(member->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
-    if (member) {
+        if (member) {
 #endif
-        if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
-            member->position.y = *joint;
-        }
-    }
-    wp = npcGetWorkPtr();
-    npc = wp->entries;
-    for (i = 0; i < wp->total; i++, npc++) {
-        if (npc->flags & NPC_FLAG_IN_USE) {
-            if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
-                npc->position.y = *joint;
+            if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
+                member->position.y = *joint;
             }
         }
-    }
-    item = itemNearDistCheck(mobj->position.x, mobj->position.y, mobj->position.z, 42.420002f);
-    if (item) {
-        item->position.y = *joint;
-    }
-    if (animPoseGetLoopTimes(mobj->poseId) < 2.0f) {
-        break;
-    }
-    animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
-    mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
-    animPoseSetAnim(mobj->poseId, "S_1", 1);
-    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_CLOSE1), &mobj->position);
-    mobj->timer = 20;
-    mobj->state++;
+        member = partyGetPtr(marioGetExtraPartyId());
+#if VERSION >= VERSION_US
+        if (member && !(member->flags & PARTY_FLAG_IS_BEING_USED)) {
+#else
+        if (member) {
+#endif
+            if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
+                member->position.y = *joint;
+            }
+        }
+        wp = npcGetWorkPtr();
+        npc = wp->entries;
+        for (i = 0; i < wp->total; i++, npc++) {
+            if (npc->flags & NPC_FLAG_IN_USE) {
+                if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
+                    npc->position.y = *joint;
+                }
+            }
+        }
+        item = itemNearDistCheck(mobj->position.x, mobj->position.y, mobj->position.z, 42.420002f);
+        if (item) {
+            item->position.y = *joint;
+        }
+        if (animPoseGetLoopTimes(mobj->poseId) < 2.0f) {
+            break;
+        }
+        animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
+        mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
+        animPoseSetAnim(mobj->poseId, "S_1", 1);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_CLOSE1), &mobj->position);
+        mobj->timer = 20;
+        mobj->state++;
     case 11:
         mobj->timer--;
         if (mobj->timer == 0) {

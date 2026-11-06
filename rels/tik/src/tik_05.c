@@ -93,7 +93,6 @@ BrokenWork broken_work;
 s32 select;
 
 
-
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 static USER_FUNC(cam_kaiten_get_para);

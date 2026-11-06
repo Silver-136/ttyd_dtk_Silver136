@@ -41,8 +41,6 @@
 #include "eff/eff_nozle.h"
 
 
-
-
 // local prototypes
 static void BattleObjectConfig(void);
 static void _mobj_shake_main(BattleStageObject* obj);

@@ -8,7 +8,7 @@
 #include "driver/icondrv.h"
 #include "icon_ids.h"
 
-//local prototypes
+// local prototypes
 static void _accrobat_timing_icon_disp(CameraId camId, void* param);
 
 /**

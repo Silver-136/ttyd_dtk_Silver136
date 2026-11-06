@@ -980,7 +980,6 @@ static u8 _getRegistStatus(BattleUnit* unit, s32 type) {
 }
 
 
-
 // Statement macro: sets the six colour fields of the effect's EffStampN64Work; written out, each use would repeat six casts.
 #define STAMP_COL(e, r0, g0, b0, r1, g1, b1)      \
     ((EffStampN64Work*)(e)->userdata)->r = (r0);  \

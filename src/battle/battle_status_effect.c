@@ -99,7 +99,7 @@ StChgMsgData _st_chg_msg_data[] = {
 };
 
 //.sdata
-//Status Type Priority Data
+// Status Type Priority Data
 #if VERSION >= VERSION_JP
 s8 _st_pri_data[] = {
     STATUS_CHARGE, //charge is elevated
@@ -130,7 +130,7 @@ s8 _st_pri_data[] = {
 };
 #endif
 
-//local prototypes
+// local prototypes
 static void BSE_Sleep(BattleUnit* unit);
 static void BSE_SleepDelete(BattleUnit* unit);
 static void BSE_Biribiri(BattleUnit* unit);

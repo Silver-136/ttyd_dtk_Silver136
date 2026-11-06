@@ -19,7 +19,6 @@ typedef struct PowerGaugeLvWork {
 } PowerGaugeLvWork;
 
 
-
 /**
  * Per-frame driver of action command 16, which no battle script in the tree sets up.
  * A gauge fills over 100 frames; holding exactly L and R together stops it,

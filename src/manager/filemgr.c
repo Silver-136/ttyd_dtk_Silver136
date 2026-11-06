@@ -30,7 +30,7 @@ FileManagerWork fileWork;
 //.sdata
 FileManagerWork* afp = &fileWork;
 
-//local prototypes
+// local prototypes
 static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));
 s32 fileAsync(const char* filename, s32 type, FileCallback callback);
 

@@ -9657,7 +9657,6 @@ BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
 BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, 750, unused);
 #endif
-
 }
 
 /** Returns a free stream channel for a new BGM, stopping streams that are fading out if none is free. */

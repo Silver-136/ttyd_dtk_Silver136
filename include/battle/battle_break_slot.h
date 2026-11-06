@@ -43,8 +43,6 @@ void BattleBreakSlot_Main(void);
 void BattleBreakSlot_End(void);
 
 
-
-
 void BattleBreakSlot_DecBreakTurn(void);
 BreakSlotWork* BattleBreakSlotGetPtr(void);
 

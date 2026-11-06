@@ -35,8 +35,6 @@
 #include "battle/unit_work.h"
 
 
-
-
 typedef struct DekaTiming {
     s32 state;  // 0x0
     s32 unk4;   // 0x4

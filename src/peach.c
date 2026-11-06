@@ -21,7 +21,6 @@
 #include "mario/mario_kemuri.h"
 
 
-
 /**
  * Plays Peach's footstep sounds while she walks or dashes:
  * one sound every period frames and the other on the frames in between that are multiples of halfPeriod.

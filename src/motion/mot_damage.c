@@ -27,7 +27,6 @@
 #include "mario/mario_hit.h"
 
 
-
 /**
  * Small horizontal camera shake (about 0.01 for 50 ms) when Mario lands back
  * after a damage return (marioDmgRetQuakeOn).

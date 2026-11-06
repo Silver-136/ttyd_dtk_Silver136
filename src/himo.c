@@ -9,7 +9,6 @@
 #include "himo.h"
 
 
-
 typedef struct HimoWork {
     /* 0x00 */ Vec p0;
     /* 0x0C */ Vec p1;

@@ -16,7 +16,7 @@
 
 extern void* DemoCurrentBuffer, * DemoFrameBuffer1, * DemoFrameBuffer2;
 
-//local prototypes
+// local prototypes
 void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar);
 
 /**

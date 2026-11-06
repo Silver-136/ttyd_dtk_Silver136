@@ -627,5 +627,3 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-
-

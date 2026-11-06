@@ -64,7 +64,7 @@ BinaryFontHeader* pfh; //pointer to font header
 #endif
 
 
-//local prototypes
+// local prototypes
 void JUTFont_DrawStart(GXColor color);
 static void _JUTFont_DrawPos(u16 code, s16 x, s16 y);
 u16 JUTFont_CodeToGlyph(u32 code);

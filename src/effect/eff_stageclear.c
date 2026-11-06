@@ -462,4 +462,3 @@ s32 effStageClearEndChk(EffectEntry* effect) {
     return ((StageClearWork*)effect->userdata)->done != 0;
 }
 
-

@@ -17,7 +17,6 @@
 #include "sfx_name_word.h"
 
 
-
 typedef enum UrouroState {
     UROURO_STATE_CHOOSE_WALK = 0,
     UROURO_STATE_WALK = 1,

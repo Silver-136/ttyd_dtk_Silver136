@@ -23,7 +23,6 @@
 #include "battle/battle_damage.h"
 
 
-
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);
 static USER_FUNC(shadow_scale_small);

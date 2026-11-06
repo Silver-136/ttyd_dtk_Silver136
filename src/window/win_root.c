@@ -1105,8 +1105,6 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 }
 
 
-
-
 /**
  * Draws an open two-page book at (x, y).
  * a == 0 is a Super Luigi book read from the Items page:

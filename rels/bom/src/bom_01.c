@@ -992,7 +992,6 @@ void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
  * and 127 makes it sink and sway while falling (with an occasional falling sound).
  */
 static void ext_main(void) {
-
     s32 i;
     BomWork* wp = lp->address;
     ExtdrvPose* pose = extGetPosePtr();
@@ -2510,7 +2509,6 @@ s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
     effRippleN64SetRxRz(effNameToPtr("ripple"), rx, rz);
     return EVT_RETURN_DONE;
 }
-
 
 
 #pragma opt_propagation off

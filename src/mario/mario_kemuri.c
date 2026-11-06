@@ -298,7 +298,6 @@ static void kemuri(void) {
  * JP and the early demos also puff over water, in pipe mode and at any system level.
  */
 void party_kemuri(PartyEntry* party) {
-
 #if VERSION >= VERSION_US
     if (marioStGetSystemLevel() == 0) {
         if (party->runMode != PARTY_RUN_PIPE) {

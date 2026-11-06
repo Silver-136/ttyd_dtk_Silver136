@@ -34,7 +34,6 @@
 #include "driver/mapdrv.h"
 
 
-
 BattleWeapon* chri_waza[4] = {
     &partyWeapon_ChristineNormalAttack,
     &partyWeapon_ChristineMonosiri,

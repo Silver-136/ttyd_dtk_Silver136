@@ -944,7 +944,6 @@ void partyFlyAdjustY(PartyEntry* party) {
 #endif
 
 
-
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);
 

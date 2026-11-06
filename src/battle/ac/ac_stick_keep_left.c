@@ -20,7 +20,6 @@ typedef struct SklWork {
 } SklWork;
 
 
-
 // BattleActions.params of this command
 enum {
     STICK_KEEP_PARAM_LIGHTS = 0,    // lights to hold through

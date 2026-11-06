@@ -27,7 +27,6 @@
 #include "battle/battle_damage.h"
 
 
-
 static USER_FUNC(_anime_load);
 static USER_FUNC(_anime_load_wait);
 USER_FUNC(_backfire);

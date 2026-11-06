@@ -183,7 +183,6 @@ f32 fd_end_00___local_PIO2_367;
 f32 fd_end_00_one_364;
 
 
-
 /**
  * REL prolog of the ending module (every other version keeps it in end_00.c):
  * runs the static constructors, registers the init event of end_00 and, in the US and later versions,

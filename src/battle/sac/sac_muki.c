@@ -34,8 +34,6 @@
 #include "battle/battle_sub.h"
 
 
-
-
 typedef struct MukiObj { // 0x38
     s32 state;          // 0x0
     s32 timer;         // 0x4
@@ -94,7 +92,6 @@ static void main_base(void);
 static void main_icon(s32 idx);
 static void main_point(s32 idx);
 static void main_cursor(void);
-
 
 
 /**

@@ -957,21 +957,21 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             if (audience->phaseListCount == 1) {
                 switch (audience->phaseList[0]) {
                     case 0:
-                    n = 0;
-                    for (i = 0; i <= 59; i++) {
+                        n = 0;
+                        for (i = 0; i <= 59; i++) {
 #if VERSION <= VERSION_DEMO_JP
-                        member = BattleAudienceGetPtr(i);
-                        if ((u8)BattleAudience_GetSysCtrl(i) && member->type == AUDIENCE_TOAD && check_exe_phase_evt_status(member)) {
+                            member = BattleAudienceGetPtr(i);
+                            if ((u8)BattleAudience_GetSysCtrl(i) && member->type == AUDIENCE_TOAD && check_exe_phase_evt_status(member)) {
 #else
-                        if (check_exe_phase_evt_status(i, AUDIENCE_TOAD)) {
+                            if (check_exe_phase_evt_status(i, AUDIENCE_TOAD)) {
 #endif
-                            list[n] = i;
-                            n++;
+                                list[n] = i;
+                                n++;
+                            }
                         }
-                    }
-                    BattleAudienceItemOn(list[irand(n)], ITEM_NULL, 1);
-                    audience->phaseListCount = 0;
-                    break;
+                        BattleAudienceItemOn(list[irand(n)], ITEM_NULL, 1);
+                        audience->phaseListCount = 0;
+                        break;
                     case 1:
                         for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
 #if VERSION <= VERSION_DEMO_JP

@@ -291,7 +291,7 @@ GXRenderModeObj GXNtsc480ProgMarioStPal = {
 };
 #endif
 
-//local prototypes
+// local prototypes
 static void viPostCallback(u32 retraceCount);
 static void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);

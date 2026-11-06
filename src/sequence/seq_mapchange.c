@@ -58,7 +58,6 @@ u8 rel_bss[0xF10];
 void _load(const char* prevMapName, const char* newMapName, const char* beroName);
 
 
-
 static const char mc_tou[4];
 static const char mc_tou2[5];
 static const char mc_tou_03[7];

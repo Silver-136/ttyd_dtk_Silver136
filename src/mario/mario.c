@@ -82,7 +82,7 @@ Vec R_last_position;
 
 s32 blurPosId;
 
-//local prototypes
+// local prototypes
 static const char* toRearPose(const char* name);
 static const char* toFrontPose(const char* name);
 

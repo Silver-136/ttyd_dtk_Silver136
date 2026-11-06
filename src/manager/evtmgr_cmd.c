@@ -10,7 +10,7 @@
 #include <string.h>
 #include "libc_decls.h"
 
-//local prototypes
+// local prototypes
 static inline f32 check_float(s32 val);
 static inline s32 change_float(f32 val);
 

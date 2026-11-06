@@ -24,7 +24,6 @@
 #endif
 
 
-
 //.sbss
 u32 msg_ep; // cleared by kuribo_init; nothing reads it
 

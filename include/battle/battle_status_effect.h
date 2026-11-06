@@ -7,7 +7,7 @@
 struct BattleWork;
 struct BattleUnit;
 
-//battle_status_effect
+// battle_status_effect
 // Status effect ids (the unit status APIs take them as s8).
 typedef enum StatusEffectType {
     STATUS_ALLERGIC, //0x0

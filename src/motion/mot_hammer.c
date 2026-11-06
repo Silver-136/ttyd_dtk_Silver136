@@ -42,7 +42,6 @@ enum {
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz);
 
 
-
 /**
  * Hammer hit sounds of the Attack FX badges: pairs of badge (R, B, G, Y, P) and the sound it swaps in;
  * with several equipped, each swing moves on to the next one worn.
@@ -421,8 +420,6 @@ s32 marioChkHammer2(void) {
     mario->hammerDir = rubDir;
     return 1;
 }
-
-
 
 
 /** Moves the camera in for a spin hammer charge level: z shift and zoom, with a 40-unit upward zoom offset. */

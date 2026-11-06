@@ -153,7 +153,7 @@ IconDispTableEntry _disp_table[0x17] = {
 #endif
 };
 
-//local prototypes
+// local prototypes
 void BattleStatusIconDisp(CameraId camId, void* param);
 
 /** Clears the unit's status icon work; called from BtlUnit_Entry. */

@@ -57,7 +57,6 @@ static EvtWord wait_event[6];
  * and resets the new unit's HP gauge to match.
  */
 static USER_FUNC(bubble_copy_status) {
-
     // Copy capped current HP and size-change state, then synchronize the new HP gauge.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

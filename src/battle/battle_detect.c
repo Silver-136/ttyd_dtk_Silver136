@@ -12,7 +12,6 @@
 #include "mario/mario_pouch.h"
 
 
-
 /**
  * Builds d->targets: one entry per targetable part of every living unit, with its cursor position,
  * sort score and front/back side, then drops every entry the weapon's class

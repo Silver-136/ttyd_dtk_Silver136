@@ -12,7 +12,6 @@
 #include "battle/battle_disp.h"
 
 
-
 // Local setup parameter slots, named from their exact consumers below.
 typedef enum MonosiriTargetParam {
     MONOSIRI_TARGET_PARAM_UNIT_ID = 0,

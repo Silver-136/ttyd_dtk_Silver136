@@ -467,7 +467,6 @@ static BOOL _filter(HitCheckQuery* query, HitEntry* hit) {
 #pragma pop
 
 
-
 /**
  * Places each new shadow for this frame: casts a ray 150 units down from the owner
  * and builds a matrix laid on the ground it hits, tilted to the floor normal;

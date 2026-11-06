@@ -297,4 +297,3 @@ static void effOpukuJetwrainDisp(CameraId cameraId, void* param) {
     GXSetProjectionv(proj);
 }
 
-

@@ -24,7 +24,7 @@ typedef struct BinaryFontBlock {
     u32 size; //0x4, full size of this block
 } BinaryFontBlock;
 
-//BFN = Binary FoNt
+// BFN = Binary FoNt
 typedef struct BinaryFontHeader {
     u32 magic; //0x0, "FONT"
     u32 version; //0x4, "bfn1"
@@ -33,7 +33,7 @@ typedef struct BinaryFontHeader {
     u8 align[16]; //0x10-0x1F
 } BinaryFontHeader;
 
-//INF1 section
+// INF1 section
 typedef struct BinaryFontInfo {
     u32 magic; //0x0, "INF1"
     u32 size; //0x4, full size of this block
@@ -46,7 +46,7 @@ typedef struct BinaryFontInfo {
     u8 align[12]; //0x14-0x1F
 } BinaryFontInfo;
 
-//GLY1 section
+// GLY1 section
 typedef struct BinaryFontGlyph {
     u32 magic; //0x0, "GLY1"
     u32 size; //0x4, full size of this block

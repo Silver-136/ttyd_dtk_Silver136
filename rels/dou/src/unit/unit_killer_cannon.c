@@ -39,7 +39,6 @@ static EvtWord wait_event[6];
  * Bill args[1] it has just spawned; HP is not copied.
  */
 static USER_FUNC(killer_copy_status) {
-
     // Transfer only the size-change duration and strength to the spawned projectile.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

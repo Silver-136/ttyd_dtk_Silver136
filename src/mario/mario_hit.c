@@ -2032,33 +2032,33 @@ HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d) {
     off = -23.7f;
     *h = -1.0f;
     top = base + d;
-dir = (Vec){0.0f, 1.0f, 0.0f};
-for (; i < 8; i++, off += 5.8f) {
-    dist = top;
-    v.x = pos->x + off * (f32)sin((3.1415927f * mario->targetYaw) / 180.0f);
-    v.z = pos->z - off * (f32)cos((3.1415927f * mario->targetYaw) / 180.0f);
-    v.y = 0.5f + pos->y;
-    hit = marioHitCheck2(&v, &dir, &outPos, &outNrm, &dist);
-    if (hit) {
-        if (hitGetAttr(hit) & HIT_ATTR_JABARA) {
-            if (pos->y + base >= outPos.y) {
-                pos->y = outPos.y;
-                *h = 0.0f;
-                *side = (v.z - pos->z < 0.0f) ? -1 : 1;
-                return hit;
+    dir = (Vec){0.0f, 1.0f, 0.0f};
+    for (; i < 8; i++, off += 5.8f) {
+        dist = top;
+        v.x = pos->x + off * (f32)sin((3.1415927f * mario->targetYaw) / 180.0f);
+        v.z = pos->z - off * (f32)cos((3.1415927f * mario->targetYaw) / 180.0f);
+        v.y = 0.5f + pos->y;
+        hit = marioHitCheck2(&v, &dir, &outPos, &outNrm, &dist);
+        if (hit) {
+            if (hitGetAttr(hit) & HIT_ATTR_JABARA) {
+                if (pos->y + base >= outPos.y) {
+                    pos->y = outPos.y;
+                    *h = 0.0f;
+                    *side = (v.z - pos->z < 0.0f) ? -1 : 1;
+                    return hit;
+                }
+                *h = outPos.y - pos->y - base;
+            } else if (i == 3) {
+                if (pos->y + base >= outPos.y) {
+                    pos->y = outPos.y;
+                    *h = 0.0f;
+                    *side = 0;
+                    return hit;
+                }
+                *h = outPos.y - pos->y - base;
             }
-            *h = outPos.y - pos->y - base;
-        } else if (i == 3) {
-            if (pos->y + base >= outPos.y) {
-                pos->y = outPos.y;
-                *h = 0.0f;
-                *side = 0;
-                return hit;
-            }
-            *h = outPos.y - pos->y - base;
         }
     }
-}
     return NULL;
 }
 

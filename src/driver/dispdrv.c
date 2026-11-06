@@ -40,7 +40,7 @@ s32 entry_n;
 DispEntry** pSortWork;
 DispEntry* pDispWork;
 
-//local prototypes
+// local prototypes
 static s32 _sort(const void* sortA, const void* sortB);
 
 /** Allocates the display list of 1024 draw requests and its sort table at boot. */

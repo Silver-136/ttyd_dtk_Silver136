@@ -17,7 +17,7 @@ static inline OffscreenWork* offscreenGetWorkGp(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
 
-//local prototypes
+// local prototypes
 
 /** Allocates the 10-entry offscreen tables for the field and for battle; called once at boot. */
 void offscreenInit(void) {
@@ -56,7 +56,7 @@ s32 offscreenEntry(const char* name) {
         }
     }
 
-    //find new slot
+    // find new slot
     for (i = 0, entry = wp->entries; i < count; i++, entry++) {
         if (!(entry->flags & OFFSCREEN_FLAG_ACTIVE)) break;
     }

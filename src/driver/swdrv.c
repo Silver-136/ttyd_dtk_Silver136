@@ -27,7 +27,7 @@ void swReInit(void) {
 }
 
 /** Global Saved Work Flags -------------------------------------- */
-//Global Saved Work Flags --------------------------------------
+// Global Saved Work Flags --------------------------------------
 void swSet(s32 index) { //set specific bit
     gp->gSWF[index / 32] |= (1 << (index % 32));
 }
@@ -43,7 +43,7 @@ void swClear(s32 index) { //clear specific bit
 }
 
 /** Global Saved Work -------------------------------------------- */
-//Global Saved Work --------------------------------------------
+// Global Saved Work --------------------------------------------
 void swByteSet(s32 index, s32 value) {
     if (index == 0) {
         gp->gSW0 = value;
@@ -62,7 +62,7 @@ s32 swByteGet(s32 index) {
 }
 
 /** Local Saved Work Flags --------------------------------------- */
-//Local Saved Work Flags ---------------------------------------
+// Local Saved Work Flags ---------------------------------------
 void _swSet(s32 index) { //set specific bit
     gp->lSWF[index / 32] |= (1 << (index % 32));
 }
@@ -78,7 +78,7 @@ void _swClear(s32 index) { //clear specific bit
 }
 
 /** Local Saved Work --------------------------------------------- */
-//Local Saved Work ---------------------------------------------
+// Local Saved Work ---------------------------------------------
 void _swByteSet(s32 index, u8 value) {
     gp->lSW[index] = value;
 }

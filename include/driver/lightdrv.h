@@ -59,9 +59,6 @@ s32 lightGetEntryNum(void);
 s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntryFlags flags);
 
 
-
-
-
 s32 lightCheckCharaLight(void);
 LightEntry* lightGetAmbient(void);
 LightEntry* lightGetCharaAmbient(void);

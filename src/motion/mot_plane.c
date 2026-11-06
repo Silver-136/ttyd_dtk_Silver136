@@ -170,7 +170,6 @@ BOOL mario_plane_cancel(void) {
     }
     return FALSE;
 #endif
-
 }
 
 /**
@@ -553,7 +552,6 @@ void mot_plane(void) {
     marioUpdateCamCollision(mp->position);
     mp->moveDist = mp->baseSpeed;
 }
-
 
 
 #define PI 3.1415927f

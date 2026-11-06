@@ -5,7 +5,7 @@
 #include <dolphin/types.h>
 #include "battle/battle.h"
 
-//most of these strings are tag names for text lookup
+// most of these strings are tag names for text lookup
 typedef struct TattleEntry {
     const char* enemyTag; //0x0, enemy name
     const char* tattleBtlTag; //0x4, Goombella Tattle description

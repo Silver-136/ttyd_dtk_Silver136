@@ -13,7 +13,6 @@
 #include "battle/battle_disp.h"
 
 
-
 // Local setup parameter slots, named from their exact consumers below.
 typedef enum ShotTargetParam {
     SHOT_TARGET_PARAM_UNIT_ID = 0,
@@ -37,7 +36,6 @@ typedef struct ShotTargetWork {
     f32 ampY;     // 0x34
     s32 sfxId;    // 0x38
 } ShotTargetWork;
-
 
 
 static void _ac_disp_init(BattleWork* work);

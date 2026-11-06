@@ -22,7 +22,7 @@ static ImageWork work;
 //.sdata
 static ImageWork* wp = &work;
 
-//local prototypes
+// local prototypes
 
 
 static void imgShadowDisp(CameraId camId, void* param);
@@ -456,14 +456,14 @@ s32 imgEntry(const char* name, s32 type) {
     int i, count;
     ImageEntry* entry;
 
-    //check if already created
+    // check if already created
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
         if (entry->flags & IMAGE_FLAG_IN_USE && entry->type == type) {
             if (!strcmp(entry->name, name)) break;
         }
     }
 
-    //find new slot
+    // find new slot
     for (i = 0, entry = wp->entries; i < count; i++, entry++) {
         if (!(entry->flags & IMAGE_FLAG_IN_USE)) break;
     }

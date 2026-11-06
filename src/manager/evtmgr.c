@@ -185,7 +185,7 @@ EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags) {
     EventEntry* entry;
     int i, id;
 
-    //search until we find one not-in-use
+    // search until we find one not-in-use
     entry = wp->entries;
     for (i = 0, id = 0; i < wp->count; i++, id++, entry++) {
         if (!(entry->flags & EVENT_ACTIVE)) {
@@ -248,7 +248,7 @@ EventEntry* evtEntryType(void* evtCode, u8 priority, u8 flags, u8 type) {
     EventEntry* entry;
     int i, id;
 
-    //search until we find one not-in-use
+    // search until we find one not-in-use
     entry = wp->entries;
     for (i = 0, id = 0; i < wp->count; i++, id++, entry++) {
         if (!(entry->flags & EVENT_ACTIVE)) {
@@ -309,7 +309,7 @@ EventEntry* evtChildEntry(EventEntry* parent, void* evtCode, u8 flags) {
     EventEntry* entry;
     int i, id;
 
-    //search until we find one not-in-use
+    // search until we find one not-in-use
     entry = wp->entries;
     for (i = 0, id = 0; i < wp->count; i++, id++, entry++) {
         if (!(entry->flags & EVENT_ACTIVE)) {
@@ -384,7 +384,7 @@ EventEntry* evtBrotherEntry(EventEntry* brother, void* evtCode, u8 flags) {
     EventEntry* entry;
     int i, id;
 
-    //search until we find one not-in-use
+    // search until we find one not-in-use
     entry = wp->entries;
     for (i = 0, id = 0; i < wp->count; i++, id++, entry++) {
         if (!(entry->flags & EVENT_ACTIVE)) {

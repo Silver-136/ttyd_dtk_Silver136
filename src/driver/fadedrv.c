@@ -32,7 +32,7 @@ const f32 float_0_8041f774 = 0.0f;
 
 static FadeWork* wp;
 
-//local prototypes
+// local prototypes
 static void disp_texture(CameraId camId, void* param);
 static void disp_maku(CameraId camId, void* param);
 static void disp_tec(CameraId camId, void* param);
@@ -1740,5 +1740,4 @@ TEXPalette* fadeGetTpl(void) {
 void fadeSetNarrowFast(void) {
     wp->entries[1].flags |= FADE_FLAG_NARROW_FAST;
 }
-
 

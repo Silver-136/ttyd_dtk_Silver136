@@ -93,13 +93,6 @@ USER_FUNC(_get_binta_hit_position);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 
-
-
-
-
-
-
-
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     100, // sleep

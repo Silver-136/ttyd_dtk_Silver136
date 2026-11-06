@@ -1232,7 +1232,6 @@ static void disp_3D_alpha(CameraId cam, void* param) {
 }
 
 
-
 /**
  * Shared body of Sweet Treat and Sweet Feast; LW(15) is the mode (0 or 1).
  * Pays the Star Power, plays the star intro, moves Mario left, runs the shooting game, then restores Mario's HP,

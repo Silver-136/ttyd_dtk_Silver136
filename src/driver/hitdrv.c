@@ -184,7 +184,6 @@ HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx) {
 }
 
 
-
 typedef struct HitAnimJointList {
     s32 count;
     void* joints[1];

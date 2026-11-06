@@ -2423,7 +2423,7 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
         if (bindId < 0 || bindId >= bindCount) {
             bindId = 0;
 
-            //"Error: animSetMaterial_ChangeTexture: テクスチャがありません frameExt=%d\n"
+            // "Error: animSetMaterial_ChangeTexture: テクスチャがありません frameExt=%d\n"
             printf("Error: animSetMaterial_ChangeTexture: "
                    "テクスチャがありません "
                    "frameExt=%d\n",

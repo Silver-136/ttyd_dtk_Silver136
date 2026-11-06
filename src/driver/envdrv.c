@@ -82,7 +82,7 @@ TEXPalette* env_tpl = NULL;
 /** Set once env.tpl has finished loading and is unpacked; cleared by envInit. */
 s32 tpl_ok = 0;
 
-//local prototypes
+// local prototypes
 static void envDisp_DepthOfField(void);
 static void envDisp_Blur(void);
 static void envDisp_FF(void);

@@ -2204,12 +2204,12 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
         }
         q++;
     }
-if (minDist < 1000000.0f) {
-    ret = found;
-} else {
-    ret = NULL;
-}
-return ret;
+    if (minDist < 1000000.0f) {
+        ret = found;
+    } else {
+        ret = NULL;
+    }
+    return ret;
 }
 
 /** Inline version of "nearest living Puni within 1000 units", used by puniSearch. */
@@ -2231,12 +2231,12 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
         }
         q++;
     }
-if (minDist < 1000000.0f) {
-    ret = found;
-} else {
-    ret = NULL;
-}
-return ret;
+    if (minDist < 1000000.0f) {
+        ret = found;
+    } else {
+        ret = NULL;
+    }
+    return ret;
 }
 
 /** Nearest living Jabbi to self at any distance under 1000 units, or NULL. */

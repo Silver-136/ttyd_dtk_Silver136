@@ -20,7 +20,7 @@
 //.bss
 static BackgroundWork work[2];
 
-//local prototypes
+// local prototypes
 static void bgDisp(CameraId camId, void* param);
 
 /** the field or the battle background work (inlined everywhere; no symbol of its own) */

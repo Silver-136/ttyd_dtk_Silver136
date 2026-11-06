@@ -24,8 +24,6 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit);
 void btlDispMain(void);
 
 
-
-
 void btlDispEntAnime(BattleUnit* unit);
 void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose);
 void btlDispPoseAnime(BattleUnitPart* part);

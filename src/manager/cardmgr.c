@@ -63,7 +63,7 @@ static CardWork* wp;
 //.sdata
 const char* version = VERSION_PICK("009", "010");
 
-//local prototypes
+// local prototypes
 static void check_sum(CardSaveSlot* save);
 static void make_header(void);
 static void make_data(void);

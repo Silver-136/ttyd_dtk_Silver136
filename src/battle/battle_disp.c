@@ -29,8 +29,6 @@
 #include "battle/unit_work.h"
 
 
-
-
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
@@ -48,7 +46,7 @@ s32 _status_pose_table[] = {
     -1
 };
 
-//local prototypes
+// local prototypes
 static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor color, f32 rotation);
 static void btlUnitItemDisp(CameraId camId, BattleUnit* unit);
 static void _pose_def(BattleUnitPart* part);
@@ -1435,5 +1433,4 @@ static void _btlStockExpDisp(CameraId camId, void* param) {
         }
     }
 }
-
 

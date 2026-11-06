@@ -796,4 +796,3 @@ static __declspec(section ".rodata") const u32 gap_04_802FDD34_rodata[1] = {0};
 __declspec(section ".data") u8 gap_05_803AC064_data[28] = {0};
 #endif
 
-

@@ -17,7 +17,6 @@
 #include "evt/evt_msg.h"
 
 
-
 //.bss
 PiantaParlorWork yuugijouwork;
 

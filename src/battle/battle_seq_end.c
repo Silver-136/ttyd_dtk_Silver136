@@ -58,7 +58,6 @@
 #include "battle/battle_seq.h"
 
 
-
 // BattleSeqEndWork.flags: the result-screen displays btlseqEnd_DispMain adds (0x1 is only ever cleared)
 typedef enum SeqEndDispFlags {
     SEQEND_DISP_EXP_ICON = (1 << 1),            // 0x2, star point icons
@@ -139,8 +138,6 @@ EVT_BEGIN(_rank_up_event)
     RETURN
 EVT_END()
 #endif
-
-
 
 
 static RankUpData* _get_rank_data(s32 level) {
@@ -1954,7 +1951,6 @@ USER_FUNC(_lvup_select_object_init) {
  * Used to place the level-up numbers.
  */
 static s32 _keta_get(s32 n) {
-
     s32 k = 0;
 
     if (n < 0) {

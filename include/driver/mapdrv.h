@@ -334,7 +334,6 @@ typedef struct MapFileLight {
 #define MAP_LIGHT_LFLAGS_MAGIC 0x12D60D8 // 19751128: the light record carries lflags
 
 
-
 typedef struct MapFileLightTable {
     s32 count;              // 0x0
     MapFileLight* lights[]; // 0x4
@@ -354,7 +353,6 @@ typedef struct MapTexTable {
     s32 count;      // 0x0
     char* names[];  // 0x4
 } MapTexTable;
-
 
 
 // "material_name_table" chunk

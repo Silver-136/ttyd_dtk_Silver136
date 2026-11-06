@@ -69,7 +69,6 @@ s16 journal_icon_tbl[6] = { ICON_MENU_JOURNAL, ICON_TEXT_BLUE_JOURNAL, ICON_TEXT
 #endif
 
 
-
 //.sbss
 static StatusWindowWork* wp;
 

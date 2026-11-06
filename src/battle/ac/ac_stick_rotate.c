@@ -40,7 +40,6 @@ typedef struct StickRotateWork {
 } StickRotateWork;
 
 
-
 static void actionCommandDisp(f32 x, f32 y);
 static void actionCommandDisp2(f32 x, f32 y);
 

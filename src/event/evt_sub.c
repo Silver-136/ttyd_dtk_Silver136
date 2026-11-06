@@ -60,7 +60,6 @@
 #include <dolphin/os.h>
 
 
-
 s32 stop;
 
 typedef struct SplineWork {

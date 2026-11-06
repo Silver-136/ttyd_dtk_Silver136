@@ -902,12 +902,12 @@ static void stg1_09_init(void) {
 
 /** Story point STG1_09_02 "Lock" (gon_01): empty; this point needs no setup beyond the earlier ones. */
 static void stg1_09_02_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG1_10 "Father's Letter" (gon_03): empty; this point needs no setup beyond the earlier ones. */
 static void stg1_10_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG1_12_02 "Lock" (gon_04): gives the Castle Key (item 0x0D). */
@@ -1034,7 +1034,7 @@ static void stg2_00_init(void) {
 
 /** Story point STG2_03_03 "Flurrie Intro" (win_03): empty; this point needs no setup beyond the earlier ones. */
 static void stg2_03_03_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG2_09 "Flurrie Joins" (win_04): gives the Necklace. */
@@ -1814,12 +1814,12 @@ static void stg3_52_init(void) {
 
 /** Story point STG3_END "To Stage 4" (tik_07): empty; this point needs no setup beyond the earlier ones. */
 static void stg3_end_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG4_00 "Welcome to Stage 4" (sys_01): empty; this point needs no setup beyond the earlier ones. */
 static void stage4_00_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG4_04 "Storage Room Unlocked" (usu_01): gives the Shop Key. */
@@ -1981,7 +1981,7 @@ static void stg5_18_init_02(void) {
 
 /** Story point STG5_19 "Gems and Jingles" (muj_05): empty; this point needs no setup beyond the earlier ones. */
 static void stg5_19_init00(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG5_19 "The Skull Rock" (muj_05): gives the Skull Gem. */
@@ -2001,7 +2001,7 @@ static void stg5_19_init02(void) {
 
 /** Story point STG5_19_01 "Entering the Grotto" (dou_00): empty; this point needs no setup beyond the earlier ones. */
 static void stg5_19_01_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG5_21 "Grotto Key" (dou_04): sets GSWF_DOU_05_BIG_DOOR_SWITCH_PRESSED. */
@@ -2293,7 +2293,7 @@ static void stg6_71_01_init(void) {
 
 /** Story point STG6_72 "A Way to the Moon" (gor_02): empty; this point needs no setup beyond the earlier ones. */
 static void stg6_72_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /**
@@ -2461,7 +2461,7 @@ static void stg7_51_init(void) {
 
 /** Story point STG7_52 "The Pedestal" (tik_05): empty; this point needs no setup beyond the earlier ones. */
 static void stg7_52_init(void) {
-    //stubbed
+    // stubbed
 }
 
 /** Story point STG8_01_02 "Lock" (las_05): gives the Palace Key (item 0x2E). */

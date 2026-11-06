@@ -41,7 +41,6 @@
 #include "pik.h"
 
 
-
 static USER_FUNC(get_starstone_pos);
 USER_FUNC(get_starstone_seq);
 USER_FUNC(hoshi);

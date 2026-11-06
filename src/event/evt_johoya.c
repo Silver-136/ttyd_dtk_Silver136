@@ -63,7 +63,7 @@ const char* evtNoLabel[] = {
     "STG9_01", "STG9_02", "STG9_END"
 };
 
-//local prototypes
+// local prototypes
 s32 johoya_data_make(const char* prefix, s32 type);
 
 USER_FUNC(johoya_data_alloc) {
@@ -298,11 +298,11 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                     tagdata += 2;
                 }
             } else {
-                switch(tagdata[0]) {
+                switch (tagdata[0]) {
                     case '>': //done reading the tag
                         tagdone = TRUE;
 
-                        //fallthrough
+                        // fallthrough
 
                     // fallthrough
                     case ',': //found new tag data

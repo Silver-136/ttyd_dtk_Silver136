@@ -7,7 +7,7 @@
 #include <string.h>
 #include "manager/dvdmgr.h"
 
-//HEAP_MALLOC block is a series of these nodes
+// HEAP_MALLOC block is a series of these nodes
 typedef struct MapAllocEntry MapAllocEntry;
 struct MapAllocEntry {
     MapAllocEntry* next; //0x0
@@ -83,7 +83,7 @@ u32 count;
 #define SMART_HEAP_SIZE ((u8*)heapEnd[HEAP_SMART] - (u8*)heapStart[HEAP_SMART] - 32)
 #endif
 
-//local prototypes
+// local prototypes
 void smartGarbage(void);
 
 /**

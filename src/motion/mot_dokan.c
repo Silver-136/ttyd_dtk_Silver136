@@ -13,7 +13,6 @@
 #include "mot/mot_dokan.h"
 
 
-
 /**
  * Brings the partners back out with Mario when he comes out of a pipe:
  * re-enters any partner that was sent away (partyEntryPos / partyEntry2Pos) at his position,

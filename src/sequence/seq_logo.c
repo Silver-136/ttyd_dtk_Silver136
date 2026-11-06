@@ -42,7 +42,7 @@ static LogoWork* wp = &work;
 static s32 logoTexTbl[6][2] = {{24, 25}, {24, 25}, {26, 27}, {28, 29}, {30, 31}, {32, 33}};
 #endif
 
-//local prototypes
+// local prototypes
 static void logoDisp(CameraId camId, void* param);
 static void dummy_draw(CameraId camId, void* param);
 static void progDisp(CameraId camId, void* param);
@@ -159,7 +159,6 @@ void seq_logoInit(SequenceWork* work) {
     }
 }
 #endif
-
 
 
 #if VERSION <= VERSION_DEMO_JP

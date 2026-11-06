@@ -34,7 +34,7 @@ s32 _enemy_can_use_item_table[] = {
     ITEM_HOT_DOG, ITEM_CAKE, 0,
 };
 
-//local prototypes
+// local prototypes
 
 /** Clears all 64 unit slots in the battle work at battle start. Always returns TRUE. */
 BOOL BtlUnit_Init(void) {
@@ -455,11 +455,11 @@ void BtlUnit_GetHitPos(BattleUnit* unit, BattleUnitPart* part, f32* x, f32* y, f
     s32 direction = _battleWorkPointer->alliances[unit->alliance].attackDirection;
     BtlUnit_GetPartsWorldPos(part, x, y, z);
 
-    //add hit base offset
+    // add hit base offset
     *x = ((f32)direction * (part->hitBaseOffset.x * unit->sizeMultiplier)) + *x;
     *y = (y_multiply * (part->hitBaseOffset.y * unit->sizeMultiplier)) + *y;
     *z = (part->hitBaseOffset.z * unit->sizeMultiplier) + *z;
-    //add hit offset
+    // add hit offset
     *x = ((f32)direction * (part->hitOffset.x * unit->sizeMultiplier)) + *x;
     *y = (y_multiply * (part->hitOffset.y * unit->sizeMultiplier)) + *y;
     *z = (part->hitOffset.z * unit->sizeMultiplier) + *z;

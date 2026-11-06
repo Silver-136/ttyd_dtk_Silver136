@@ -235,7 +235,7 @@ s32 bero_id_filter(EvtWord id) {
 }
 
 /** const char** mapName, const char** beroName */
-//const char** mapName, const char** beroName
+// const char** mapName, const char** beroName
 USER_FUNC(evt_bero_mapchange) {
     EvtWord* args = event->args;
     const char *map, *bero;
@@ -249,14 +249,14 @@ USER_FUNC(evt_bero_mapchange) {
 }
 
 /** s32 retIndex */
-//s32 retIndex
+// s32 retIndex
 USER_FUNC(evt_bero_get_entername) {
     evtSetValue(event, *event->args, (EvtWord)&gp->beroEnterName);
     return EVT_RETURN_DONE;
 }
 
 /** BOOL* on/off, s32* mask */
-//BOOL* on/off, s32* mask
+// BOOL* on/off, s32* mask
 USER_FUNC(evt_bero_exec_onoff) {
     EvtWord* args = event->args;
     BOOL onoff;
@@ -273,7 +273,7 @@ USER_FUNC(evt_bero_exec_onoff) {
 }
 
 /** s32 retIndex */
-//s32 retIndex
+// s32 retIndex
 USER_FUNC(evt_bero_exec_get) {
     evtSetValue(event, *event->args, BeroEXEC);
     return EVT_RETURN_DONE;
@@ -285,7 +285,7 @@ USER_FUNC(evt_bero_exec_wait) {
 }
 
 /** f32 retX, f32 retY, f32 retZ */
-//f32 retX, f32 retY, f32 retZ
+// f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_start_position) {
     EvtWord* args = event->args;
 
@@ -296,7 +296,7 @@ USER_FUNC(evt_bero_get_start_position) {
 }
 
 /** f32 retX, f32 retY, f32 retZ */
-//f32 retX, f32 retY, f32 retZ
+// f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_end_position) {
     EvtWord* args = event->args;
 
@@ -307,7 +307,7 @@ USER_FUNC(evt_bero_get_end_position) {
 }
 
 /** s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4 */
-//s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4
+// s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4
 USER_FUNC(evt_bero_get_info_anime) {
     BeroEntry* bero;
     EvtWord* args = event->args;

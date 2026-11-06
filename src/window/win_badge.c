@@ -19,7 +19,6 @@
 #include "driver/mapdrv.h"
 
 
-
 /** Builds the "Equipped" tab's list from the pouch: one entry (slot index, badge id, equipped) per equipped badge. */
 void winMakeEquipList(WindowWork* w) {
     s32 n = 0;
