@@ -1002,7 +1002,7 @@ USER_FUNC(itemUseFunc) {
 }
 
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(itemUseFunc2) {
 #else
 USER_FUNC(itemUseFunc2) {
@@ -1012,7 +1012,7 @@ USER_FUNC(itemUseFunc2) {
 }
 
 /** Sets args[0] to 1 if Mario is in his 8-bit form (WINDOW_FLAG_8BIT), else 0; picks the partner pose script. */
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(famicom_check) {
 #else
 USER_FUNC(famicom_check) {
@@ -1028,7 +1028,7 @@ USER_FUNC(famicom_check) {
 }
 
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(PARTNER_YOSHI)) for the 8-bit item pose. */
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(party_color) {
 #else
 USER_FUNC(party_color) {
@@ -1051,7 +1051,7 @@ USER_FUNC(all_party_slit_off) {
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(cam_r) {
 #else
 USER_FUNC(cam_r) {
@@ -1343,7 +1343,7 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
     vsprintf(buf, fmt, args);
     FontDrawColor(color);
     FontDrawScaleVec(scale);
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
     ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
 #else
     FontDrawStringVecPitch(&pos, buf, pitch);

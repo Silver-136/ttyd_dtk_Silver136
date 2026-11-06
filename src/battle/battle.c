@@ -194,7 +194,7 @@ extern BattleUnitSetup entryunit_party[7];
  * field takes priority) and its drop table.
  */
 BOOL Btl_UnitSetup(BattleWork* wp) {
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     BattleUnit* party;
     BattleUnit* mario;
     int i;
@@ -250,7 +250,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     }
 
     enemyData = groupSetup->enemyData;
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     // every demo: the enemies carry no held or stolen items
     heldItem = ITEM_NULL;
 #endif

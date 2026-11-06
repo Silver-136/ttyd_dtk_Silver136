@@ -5,11 +5,11 @@
 // VERSION_<id> macro for the version being built; game code tests the ordered value VERSION instead. Only this
 // header and libs/ read the VERSION_<id> macros. The order follows the code's history:
 //
-//   VERSION_DEMO_US   June 2004 US demo (G8ME01_DEMO): pre-final JP code with English text and kiosk changes
+//   VERSION_DEMO_US_1 June 2004 US demo (G8ME01_DEMO): pre-final JP code with English text and kiosk changes
 //   VERSION_DEMO_JP   Japanese store demo (G8MJ01_DEMO): the same pre-final code, a little later
 //   VERSION_JP        Japanese release (G8MJ01)
 //   VERSION_US        US release (G8ME01)
-//   VERSION_DEMO_US2  September 2004 US demo (G8ME01_DEMO2), built from the US release code
+//   VERSION_DEMO_US_2 September 2004 US demo (G8ME01_DEMO2), built from the US release code
 //   VERSION_DEMO_EU   September 2004 European demo (G8MP01_DEMO), built from the PAL code before its last fixes
 //   VERSION_EU        European release (G8MP01), built from the US code
 //
@@ -19,28 +19,28 @@
 //   the releases and later demos   VERSION >= VERSION_JP
 //   US, the September demos, PAL   VERSION >= VERSION_US
 //   PAL and the PAL demo           VERSION >= VERSION_DEMO_EU
-//   US and the September US demo   VERSION == VERSION_US || VERSION == VERSION_DEMO_US2
+//   US and the September US demo   VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2
 // In comments, "the demo" / "the early demos" mean the June US demo and the JP store demo; the September demos are
 // always named as such.
 // Not every set is a range: write `==` / `!=` tests for those. Every file that tests VERSION includes this header
 // itself: an undefined VERSION would silently compare as 0.
 
-#define VERSION_DEMO_US 0
+#define VERSION_DEMO_US_1 0
 #define VERSION_DEMO_JP 1
 #define VERSION_JP 2
 #define VERSION_US 3
-#define VERSION_DEMO_US2 4
+#define VERSION_DEMO_US_2 4
 #define VERSION_DEMO_EU 5
 #define VERSION_EU 6
 
 #if defined(VERSION_G8MP01_DEMO)
 #define VERSION VERSION_DEMO_EU
 #elif defined(VERSION_G8ME01_DEMO2)
-#define VERSION VERSION_DEMO_US2
+#define VERSION VERSION_DEMO_US_2
 #elif defined(VERSION_G8MJ01_DEMO)
 #define VERSION VERSION_DEMO_JP
 #elif defined(VERSION_G8ME01_DEMO)
-#define VERSION VERSION_DEMO_US
+#define VERSION VERSION_DEMO_US_1
 #elif defined(VERSION_G8MP01)
 #define VERSION VERSION_EU
 #elif defined(VERSION_G8ME01)

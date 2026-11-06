@@ -268,7 +268,7 @@ static void titleMain(SequenceWork* work) {
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 titleLoadDemo();
-#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
                 wp2->counter = 0;
 #endif
                 wp2->frame = 0;

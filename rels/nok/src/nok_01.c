@@ -83,7 +83,7 @@ EvtWord boss_noko_talk[352];
 
 EvtWord nokorin_init[30];
 
-#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
 EvtWord nokorin_talk[281];
 #else
 EvtWord nokorin_talk[267];
@@ -733,7 +733,7 @@ EVT_BEGIN(nokorin_talk)
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
     END_IF
     CASE_DEFAULT
-#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2) // PAL has the JP line
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2) // PAL has the JP line
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)

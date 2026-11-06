@@ -114,7 +114,7 @@ const char e3_anim_str10[] = "PWD_A_7";
 #endif
 
 // Forward Declarations
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
 static void e3Disp(CameraId cameraId, void* param);
 static void e3DispOffscreen(CameraId cameraId, void* param);
 static void e3DispShadow(f32 x, f32 y, f32 z);
@@ -220,7 +220,7 @@ void seq_e3Init(SequenceWork* seq) {
     wp->nextScreen = 0;
     wp->scenario = 0;
     wp->poseRotY = 270.0f;
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
     // the June US demo starts the timeout when a scenario is picked
     OSCancelAlarm(&wp->alarm);
     wp->initTime = 0;
@@ -527,7 +527,7 @@ void seq_e3Main(SequenceWork* seq) {
                 pouchGetPtr()->partyData[i].currentHP = 20;
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }
-#if VERSION >= VERSION_DEMO_US2
+#if VERSION >= VERSION_DEMO_US_2
             // the September demos and PAL: the first scenario starts without items or badges
             if (wp->scenario != 0) {
 #endif
@@ -537,20 +537,20 @@ void seq_e3Main(SequenceWork* seq) {
                     pouchGetItem(ITEM_FIRE_FLOWER);
                     pouchGetItem(ITEM_POW_BLOCK);
                 }
-#if VERSION >= VERSION_DEMO_US2
+#if VERSION >= VERSION_DEMO_US_2
             }
 #endif
 
             pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
-#if VERSION >= VERSION_DEMO_US2
+#if VERSION >= VERSION_DEMO_US_2
             if (wp->scenario != 0) {
 #endif
                 pouchGetItem(ITEM_POWER_BOUNCE);
                 pouchGetItem(ITEM_POWER_SMASH);
                 pouchEquipBadgeID(ITEM_POWER_BOUNCE);
                 pouchEquipBadgeID(ITEM_POWER_SMASH);
-#if VERSION >= VERSION_DEMO_US2
+#if VERSION >= VERSION_DEMO_US_2
             }
 #endif
             pouchReviseMarioParam();
@@ -589,7 +589,7 @@ void seq_e3Main(SequenceWork* seq) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, e3Disp, seq);
 }
 
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
 // Texture ids in the US demo's e3.tpl.
 typedef enum E3Texture {
     E3_TEX_BOX = 1,
@@ -899,7 +899,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 }
 
 // FAKE: stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (every version but the June US demo); removing it changes the object
-#if VERSION != VERSION_DEMO_US
+#if VERSION != VERSION_DEMO_US_1
 f32 forceSdata(void) {
     return 30.0f;
 }

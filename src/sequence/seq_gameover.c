@@ -134,7 +134,7 @@ EVT_BEGIN(fall_gameover)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     WAIT_MS(2000) // the September demos hold the full word twice as long
 #elif VERSION >= VERSION_US
     WAIT_MS(1000)
@@ -187,7 +187,7 @@ EVT_BEGIN(fall_gameover_es)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     WAIT_MS(2000)
 #else
     WAIT_MS(1000)
@@ -419,7 +419,7 @@ void seq_gameOverMain(SequenceWork* seq) {
             if (!fadeIsFinish()) {
                 break;
             }
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
             // every demo resets the game here instead of returning to the title
             gp->resetType = RESET_TYPE_SOFT;
 #else

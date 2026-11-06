@@ -3273,7 +3273,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
         CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
         IF_INT_GREATER_OR_EQUAL(LW(0), 10)
             SET_VALUE(LW(0), 9)
         END_IF

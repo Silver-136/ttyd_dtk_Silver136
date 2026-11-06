@@ -59,7 +59,7 @@ static s32 logoAsyncFirst(void);
  * ask nothing: they pick 60 Hz or progressive scan themselves when they can, and then wait 2 s for the TV.
  */
 void seq_logoInit(SequenceWork* work) {
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     s32 i;
 #endif
     memset(wp, 0, sizeof(LogoWork));
@@ -67,11 +67,11 @@ void seq_logoInit(SequenceWork* work) {
     wp->page = -1;
 #endif
     wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     wp->progressive = FALSE;
 #endif
     if (!OSIsRestart() || OSGetResetCode() & RESET_CODE_NO_VIDEO_MODE) {
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
         // A PAL TV is switched to 60 Hz (EURGB60), an NTSC TV on a component cable to progressive scan unless B
         // is held. On a PAL TV sRMObjHReso_prog is the EURGB60 mode (the September US demo's marioStInit copied
         // the PAL modes into the NTSC ones).
@@ -127,7 +127,7 @@ void seq_logoInit(SequenceWork* work) {
         }
 #endif
     }
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     else {
 #else
 #if VERSION < VERSION_US
@@ -264,7 +264,7 @@ void seq_logoMain(SequenceWork* work) {
             if (!wp->progressive) {
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
                 time = gp->renderTime;
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
                 work->state = 8; // the September demos skip the story screen
 #else
                 work->state++;
@@ -561,7 +561,7 @@ static void logoDisp(CameraId camId, void* param) {
         } else {
             rmode = &sRMObjHReso_prog;
         }
-#elif VERSION == VERSION_DEMO_US2
+#elif VERSION == VERSION_DEMO_US_2
         // on a PAL TV the NTSC modes hold the PAL ones (marioStInit), _prog the EURGB60 one
         if (VIGetTvFormat() != VI_NTSC) {
             if (OSGetEuRgb60Mode() != 1) {
@@ -854,7 +854,7 @@ static void dummy_draw(CameraId camId, void* param) {
     f32 scale;
     u16 height;
 
-#if VERSION == VERSION_DEMO_US2
+#if VERSION == VERSION_DEMO_US_2
     // as in logoDisp: on a PAL TV the NTSC modes hold the PAL and EURGB60 ones
     if (VIGetTvFormat() != VI_NTSC) {
         if (OSGetEuRgb60Mode() != 1) {

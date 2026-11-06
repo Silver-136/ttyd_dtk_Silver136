@@ -33,7 +33,7 @@ static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[5];
 EvtWord honenoko_oidasare_evt[466];
 
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
 extern EvtWord gon_01_GATEEVENT_evt[];
 #else
 EvtWord gon_01_GATEEVENT_evt[151];
@@ -385,7 +385,7 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
     CALL(evt_mario_mov_pos2, -300, 0, FLOAT(120.0f))
     CALL(evt_party_stop, 0)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     // every demo: one partner line from the demo message file
     CALL(evt_msg_print_party, STRING("E3_stg1_gon_00"))
 #else

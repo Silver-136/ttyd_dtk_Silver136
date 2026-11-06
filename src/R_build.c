@@ -8,7 +8,7 @@ const char R_build_time[] = "15:37:03";
 #elif VERSION == VERSION_DEMO_EU
 const char R_build_date[] = "Sep 23 2004";
 const char R_build_time[] = "13:32:41";
-#elif VERSION == VERSION_DEMO_US2
+#elif VERSION == VERSION_DEMO_US_2
 const char R_build_date[] = "Sep 18 2004";
 const char R_build_time[] = "17:37:16";
 #elif VERSION == VERSION_US

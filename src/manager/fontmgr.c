@@ -129,7 +129,7 @@ void fontmgrInit(void) {
  * demo, and index 0 in JP and the JP demo. Does nothing once a font is loaded.
  */
 void fontmgrTexSetup(void) {
-#if VERSION == VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_US_1
     JUTFontSetup(1);
 #elif VERSION >= VERSION_US
     JUTFontSetup(gp->language);

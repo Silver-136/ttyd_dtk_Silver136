@@ -565,7 +565,7 @@ static inline DEMOPadStatus* getDemoPadStatus(u32 i) {
  * and, in the releases, applies rumble changes to the motors when rumble is enabled.
  */
 void makeKey(void) {
-#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     // the demos keep button/dirs in 32-bit locals
     s32 delay;
     u32 button;

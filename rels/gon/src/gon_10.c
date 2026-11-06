@@ -17,7 +17,7 @@
 
 
 static EvtWord door02_close[22];
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
 static EvtWord door02_open[10];
 #else
 static EvtWord door02_open[22];
@@ -48,7 +48,7 @@ EVT_END()
  * setting (evt_cam_letter_box_disable 0) and goes to the game-over sequence.
  */
 static EVT_BEGIN(door02_open)
-#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
 #else
