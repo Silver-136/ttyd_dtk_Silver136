@@ -165,7 +165,7 @@ static inline void itemGetEnd(ItemEntry* entry) {
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
 }
 
-void itemGetSound(ItemEntry* entry);
+void itemPlaySound(ItemEntry* entry);
 
 /** Allocates the 32-entry field and battle item tables; called once at boot. */
 void itemInit(void) {
@@ -1258,7 +1258,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             if (entry->flags & ITEM_FLAG_QUICK_GET) {
                 if (itemGetPouch(entry)) {
                     entry->timer = 0;
-                    itemGetSound(entry);
+                    itemPlaySound(entry);
                     itemDelete(entry->name);
                 } else {
                     itemModeChange(entry, ITEM_MODE_FALL_NO_PICKUP);
@@ -1389,7 +1389,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 evtSetValue(NULL, GSW_STAR_PIECES_FOUND_COUNT, evtGetValue(NULL, GSW_STAR_PIECES_FOUND_COUNT) + 1);
             }
             entry->flags &= ~ITEM_FLAG_GET_BGM_ENDED;
-            itemGetSound(entry);
+            itemPlaySound(entry);
             entry->winId[0] = winMgrEntry(&itemdrv_window_desc[0]);
             winMgrOpen(entry->winId[0]);
             winMgrSetParam(entry->winId[0], entry);
@@ -1975,18 +1975,12 @@ static void itemseq_Bound(ItemEntry* entry) {
     entry->flags2 &= ~ITEM_FLAG2_SKIP_BOUND_INIT;
 }
 
-/** Moves an item to (x, y, z). */
-void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z) {
-    entry->position.x = x;
-    entry->position.y = y;
-    entry->position.z = z;
-}
-
 /**
  * Plays the pickup sound for coins, Pianta tokens, hearts and flowers, with sparkles for coins and tokens;
  * other items play no pickup sound here.
  */
-void itemGetSound(ItemEntry* entry) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void itemPlaySound(ItemEntry* entry) {
     Vec pos;
 
     pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
@@ -2008,6 +2002,13 @@ void itemGetSound(ItemEntry* entry) {
         case ITEM_STAR_PIECE:
             break;
     }
+}
+
+/** Moves an item to (x, y, z). */
+void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z) {
+    entry->position.x = x;
+    entry->position.y = y;
+    entry->position.z = z;
 }
 
 /**

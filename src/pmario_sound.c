@@ -9016,6 +9016,28 @@ static void psndBGMMain(void);
 static void psndENVMain(void);
 static void psndSFXMain(void);
 
+/** Returns a free stream channel for a new BGM, stopping streams that are fading out if none is free. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 searchEmptySSCh(void) {
+    u32 ch;
+    for (ch = 0; ch < 3; ch++) {
+        if (!SoundSSCheck(ch)) {
+            return ch;
+        }
+    }
+    for (ch = 0; ch < 3; ch++) {
+        if (SoundSSCheck(ch) & SOUND_STREAM_FLAG_FADEOUT) {
+            SoundSSStopCh(ch);
+        }
+    }
+    for (ch = 0; ch < 3; ch++) {
+        if (!SoundSSCheck(ch)) {
+            return ch;
+        }
+    }
+    return -1;
+}
+
 // Angle of the vector (x2 - x1, y2 - y1) in degrees: 0 toward -y, 90 toward +x, 180 toward +y, 270 toward -x. The
 // ratio of the smaller to the larger component, times 45, is corrected by angleABTBL.
 static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
@@ -9222,6 +9244,25 @@ s32 searchPSSFXList(const char* name) {
         i = 0;
     }
     return i;
+}
+
+/** Returns the index of environment name in psenvlistname (or the numeric id it encodes); 0 when not found. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 searchPSENVList(const char* name) {
+    const char** names = psenvlistname;
+    s32 id;
+    if (SFX_NAME_IS_ID(name)) {
+        return SFX_NAME_ID(name);
+    }
+    for (id = 0; id < PSENV_COUNT; id++, names++) {
+        if (strcmp(*names, name) == 0) {
+            break;
+        }
+    }
+    if (id >= PSENV_COUNT) {
+        id = 0;
+    }
+    return id;
 }
 
 /**
@@ -9659,27 +9700,6 @@ BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
 #endif
 }
 
-/** Returns a free stream channel for a new BGM, stopping streams that are fading out if none is free. */
-static inline s32 psndSSFindCh(void) {
-    u32 ch;
-    for (ch = 0; ch < 3; ch++) {
-        if (!SoundSSCheck(ch)) {
-            return ch;
-        }
-    }
-    for (ch = 0; ch < 3; ch++) {
-        if (SoundSSCheck(ch) & SOUND_STREAM_FLAG_FADEOUT) {
-            SoundSSStopCh(ch);
-        }
-    }
-    for (ch = 0; ch < 3; ch++) {
-        if (!SoundSSCheck(ch)) {
-            return ch;
-        }
-    }
-    return -1;
-}
-
 /** Returns a free song channel, or -1. */
 static inline s32 psndSongFindCh(void) {
     u32 ch;
@@ -10054,7 +10074,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     }
     bgm->startTime = gp->renderTime;
     if (entry->flags & PSND_BGM_STREAM) {
-        bgm->streamId = psndSSFindCh();
+        bgm->streamId = searchEmptySSCh();
 
         // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
         // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
@@ -10799,6 +10819,20 @@ u8 psndSFX_get_vol(s32 id) {
     return sfx->volume;
 }
 
+/** Returns a free environment sound entry, or NULL when all 16 are in use. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+PaperSoundEnv* searchEmptyPSENV(void) {
+    PaperSoundEnv* p = psenv;
+    s32 j;
+    for (j = 0; j < 16; j++) {
+        if (p->id == 0) {
+            return &psenv[j];
+        }
+        p++;
+    }
+    return NULL;
+}
+
 /** Stops every environment sound entry belonging to environment id, switching off their effects. */
 static void psndENV_stop(u32 id) {
     s32 i;
@@ -11298,36 +11332,6 @@ BOOL psndENVOn(u32 flags, const char* name) {
     return psndENVOn_f_d(flags, name, 1000, 0);
 }
 
-/** Returns the index of environment name in the name table (or the numeric id it encodes); 0 when not found. */
-static inline s32 psndENVSearch(const char** names, const char* name) {
-    s32 id;
-    if (SFX_NAME_IS_ID(name)) {
-        return SFX_NAME_ID(name);
-    }
-    for (id = 0; id < PSENV_COUNT; id++, names++) {
-        if (strcmp(*names, name) == 0) {
-            break;
-        }
-    }
-    if (id >= PSENV_COUNT) {
-        id = 0;
-    }
-    return id;
-}
-
-/** Returns a free environment sound entry, or NULL when all 16 are in use. */
-static inline PaperSoundEnv* psndENVGetFree(void) {
-    PaperSoundEnv* p = psenv;
-    s32 j;
-    for (j = 0; j < 16; j++) {
-        if (p->id == 0) {
-            return &psenv[j];
-        }
-        p++;
-    }
-    return NULL;
-}
-
 /**
  * Starts the environment (ambient sounds of a map such as wind or waves) called name on channel flags & 0xF:
  * keeps it if already running, otherwise stops the old one
@@ -11355,7 +11359,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
     s32 idx;
 #endif
     list = psenvlist;
-    id = psndENVSearch(psenvlistname, name);
+    id = searchPSENVList(name);
     idx = flags & 0xF;
     fade = &psnd.fade[idx];
     if (psnd.flags & PSND_FLAG_ENV_OFF) {
@@ -11417,7 +11421,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
             continue;
         }
 #endif
-        e = psndENVGetFree();
+        e = searchEmptyPSENV();
         if (e == NULL) {
             continue;
         }

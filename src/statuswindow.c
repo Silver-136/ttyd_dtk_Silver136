@@ -246,6 +246,14 @@ void statusWinMain(void) {
     }
 }
 
+/** Draws number value at (x, y) in white; small picks the small digits. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void numberDisp(f32 x, f32 y, s32 value, BOOL small) {
+    Mtx m;
+    MTXTrans(m, x, y, 0.0f);
+    iconNumberDispGx(m, value, small, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+}
+
 // FAKE: iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which
 // evaluates the arguments in the retail order; the plain call changes the object.
 #define iconDispGxScaleFirst ((void (*)(f32, Vec*, s16, u16))iconDispGx)
@@ -305,12 +313,6 @@ static void gaugeDisp(s32 sp, f32 x, f32 y) {
     }
 }
 
-static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
-    Mtx m;
-    MTXTrans(m, x, y, 0.0f);
-    iconNumberDispGx(m, value, small, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-}
-
 /**
  * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
@@ -359,16 +361,16 @@ static void statusWinDisp(CameraId camId, void* param) {
     }
 
     if (!(wp->blink & STATUS_BLINK_MARIO_HP) || blinkOn) {
-        numDisp(120.0f + x - 6.0f - 10.0f, 2.0f + (y - 38.0f), wp->cur.hp, 0);
+        numberDisp(120.0f + x - 6.0f - 10.0f, 2.0f + (y - 38.0f), wp->cur.hp, 0);
     }
-    numDisp(186.0f + x - 6.0f - 10.0f, 3.0f + (y - 38.0f), wp->cur.maxHp, 1);
+    numberDisp(186.0f + x - 6.0f - 10.0f, 3.0f + (y - 38.0f), wp->cur.maxHp, 1);
     if (!(wp->blink & STATUS_BLINK_FP) || blinkOn) {
-        numDisp(292.0f + x - 6.0f, 2.0f + (y - 38.0f), wp->cur.fp, 0);
+        numberDisp(292.0f + x - 6.0f, 2.0f + (y - 38.0f), wp->cur.fp, 0);
     }
-    numDisp(358.0f + x - 6.0f, 3.0f + (y - 38.0f), wp->cur.maxFp, 1);
-    numDisp(462.0f + x, 2.0f + (y - 38.0f), wp->cur.starPoints, 0);
+    numberDisp(358.0f + x - 6.0f, 3.0f + (y - 38.0f), wp->cur.maxFp, 1);
+    numberDisp(462.0f + x, 2.0f + (y - 38.0f), wp->cur.starPoints, 0);
     if (!(wp->blink & STATUS_BLINK_COINS) || blinkOn) {
-        numDisp(572.0f + x, 2.0f + (y - 38.0f), wp->cur.coins, 0);
+        numberDisp(572.0f + x, 2.0f + (y - 38.0f), wp->cur.coins, 0);
     }
     if (!(wp->blink & STATUS_BLINK_STAR_POWER) || blinkOn) {
         gaugeDisp(wp->cur.ap, 260.0f + x, 4.0f + (y - 87.0f));
@@ -413,9 +415,9 @@ static void statusWinDisp(CameraId camId, void* param) {
             iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
         if (!(wp->blink & STATUS_BLINK_PARTY_HP) || blinkOn) {
-            numDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
+            numberDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
         }
-        numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
+        numberDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
     }
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     // no demo draws the menu hints
