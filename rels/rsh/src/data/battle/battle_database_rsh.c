@@ -29,13 +29,13 @@ EvtWord bgset_rsh_bg_event[30];
  * Scenery props of the Excess Express battle stage (stg_06_0): rocks and scenery hills with their positions.
  */
 BattleStageObjectData rsh_btlobject_data[] = {
-    {"r_mae", 2, 1, {170.0f, 0.0f, -50.0f}, 0, 60, {0}},
-    {"r_oku", 2, 1, {170.0f, -1000.0f, -50.0f}, 10, 50, {0}},
-    {"l_mae", 2, 1, {-170.0f, 0.0f, -50.0f}, 20, 40, {0}},
-    {"l_oku", 2, 1, {-170.0f, -1000.0f, -50.0f}, 30, 30, {0}},
-    {"iwayama_1", 2, 2, {0}, 0, 60, {0}},
-    {"iwayama_2", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
+    {"r_mae", 2, STAGE_LAYER_A2, {170.0f, 0.0f, -50.0f}, 0, 60, {0}},
+    {"r_oku", 2, STAGE_LAYER_A2, {170.0f, -1000.0f, -50.0f}, 10, 50, {0}},
+    {"l_mae", 2, STAGE_LAYER_A2, {-170.0f, 0.0f, -50.0f}, 20, 40, {0}},
+    {"l_oku", 2, STAGE_LAYER_A2, {-170.0f, -1000.0f, -50.0f}, 30, 30, {0}},
+    {"iwayama_1", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"iwayama_2", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /**

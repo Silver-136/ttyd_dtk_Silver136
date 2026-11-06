@@ -194,31 +194,31 @@ void BattleStageObjectInit(void) {
             obj->id = id;
             obj->battleUnitIdx = -1;
             switch (obj->data->layer) {
-                case 0:
+                case STAGE_LAYER_A1:
                     countA1++;
                     break;
-                case 1:
+                case STAGE_LAYER_A2:
                     countA2++;
                     break;
-                case 2:
+                case STAGE_LAYER_B:
                     countB++;
                     break;
-                case 3:
+                case STAGE_LAYER_C:
                     countC++;
                     break;
-                case 6:
+                case STAGE_LAYER_IRON_FRAME:
                     hasIronFrame = TRUE;
                     break;
             }
             switch (obj->data->layer) {
-                case 0:
-                case 1:
-                case 6:
-                case 7:
+                case STAGE_LAYER_A1:
+                case STAGE_LAYER_A2:
+                case STAGE_LAYER_IRON_FRAME:
+                case STAGE_LAYER_SPOTLIGHT:
                     obj->position = data->position;
                     break;
-                case 2:
-                case 3:
+                case STAGE_LAYER_B:
+                case STAGE_LAYER_C:
                     obj->position = data->position;
                     break;
             }
@@ -402,7 +402,7 @@ void BattleStageObjectMain(void) {
             changed = TRUE;
         }
         switch (obj->data->layer) {
-            case 2:
+            case STAGE_LAYER_B:
                 if (sw->bgRotation.x != sw->bgRotationPrev.x ||
                     sw->bgRotation.y != sw->bgRotationPrev.y ||
                     sw->bgRotation.z != sw->bgRotationPrev.z) {
@@ -412,12 +412,12 @@ void BattleStageObjectMain(void) {
                 break;
         }
         switch (obj->data->layer) {
-            case 0:
-            case 1:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
+            case STAGE_LAYER_A1:
+            case STAGE_LAYER_A2:
+            case STAGE_LAYER_NOZZLE:
+            case STAGE_LAYER_WALL:
+            case STAGE_LAYER_IRON_FRAME:
+            case STAGE_LAYER_SPOTLIGHT:
                 if (changed) {
                     mapObjTranslate(obj->data->name,
                         obj->positionOffset2.x + (obj->position.x + obj->positionOffset.x),
@@ -426,7 +426,7 @@ void BattleStageObjectMain(void) {
                     mapObjRotate(obj->data->name, obj->rotation.x, obj->rotation.y, obj->rotation.z);
                 }
                 break;
-            case 2:
+            case STAGE_LAYER_B:
                 if (changed) {
                     mapObjTranslate(obj->data->name,
                         obj->positionOffset2.x + (obj->position.x + obj->positionOffset.x),
@@ -437,7 +437,7 @@ void BattleStageObjectMain(void) {
                     mapObjTranslate(obj->data->name, 0.0f, obj->positionOffset.y, 0.0f);
                 }
                 break;
-            case 3:
+            case STAGE_LAYER_C:
                 if (changed) {
                     mapObjTranslate(obj->data->name,
                         obj->positionOffset2.x + (obj->position.x + obj->positionOffset.x),
@@ -2423,15 +2423,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
 
 /** The three stage nozzles (left, centre, right) at the front of the stage, placed from Mario's rank 1 up. */
 BattleStageObjectData _object_nozzle_data[] = {
-    {"nozzle_l", 3, 4, {-120.0f, 0.0f, 90.0f}, 0, 0},
-    {"nozzle_c", 3, 4, {0.0f, 0.0f, 90.0f}, 0, 0},
-    {"nozzle_r", 3, 4, {120.0f, 0.0f, 90.0f}, 0, 0},
+    {"nozzle_l", 3, STAGE_LAYER_NOZZLE, {-120.0f, 0.0f, 90.0f}, 0, 0},
+    {"nozzle_c", 3, STAGE_LAYER_NOZZLE, {0.0f, 0.0f, 90.0f}, 0, 0},
+    {"nozzle_r", 3, STAGE_LAYER_NOZZLE, {120.0f, 0.0f, 90.0f}, 0, 0},
 };
 
 #if VERSION <= VERSION_DEMO_JP
-BattleStageObjectData _object_wall_data = {"escape_wall", 4, 5, {-175.0f, 0.0f, 0.0f}, 0, 0};
+BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
 BattleStageObjectData _object_spot_light_data[] = {
-    {"spotlight", 6, 7, {0.0f, 240.0f, 0.0f}, 0, 0},
+    {"spotlight", 6, STAGE_LAYER_SPOTLIGHT, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };
 BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
@@ -2683,11 +2683,11 @@ EVT_END()
 
 /** The escape wall at the left edge of the stage, which closes in battles that cannot be fled. */
 #if VERSION >= VERSION_JP
-BattleStageObjectData _object_wall_data = {"escape_wall", 4, 5, {-175.0f, 0.0f, 0.0f}, 0, 0};
+BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
 
 /** The overhead spotlight; the entry with no name ends the list. */
 BattleStageObjectData _object_spot_light_data[] = {
-    {"spotlight", 6, 7, {0.0f, 240.0f, 0.0f}, 0, 0},
+    {"spotlight", 6, STAGE_LAYER_SPOTLIGHT, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };
 
@@ -2772,8 +2772,8 @@ USER_FUNC(_set_mobj_rotate_x) {
     layer = evtGetValue(event, *args++);
     if (isFirstCall) {
         switch (layer) {
-            case 0:
-            case 1:
+            case STAGE_LAYER_A1:
+            case STAGE_LAYER_A2:
                 for (j = 0; j < BATTLE_STAGE_OBJECT_MAX; j++) {
                     obj = &wp->stageObjects[j];
                     if (obj->id > 0 && obj->data->layer == layer) {
@@ -2782,7 +2782,7 @@ USER_FUNC(_set_mobj_rotate_x) {
                     }
                 }
                 break;
-            case 2:
+            case STAGE_LAYER_B:
                 event->userWork[1] = 0;
                 event->userWork[2] = 60;
                 event->userWork[3] = 0;
@@ -2790,8 +2790,8 @@ USER_FUNC(_set_mobj_rotate_x) {
         }
     }
     switch (layer) {
-        case 0:
-        case 1:
+        case STAGE_LAYER_A1:
+        case STAGE_LAYER_A2:
             fall1 = "SFX_BTL_STAGE_SET_FALL1";
             fall3 = "SFX_BTL_STAGE_SET_FALL3";
             for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
@@ -2818,7 +2818,7 @@ USER_FUNC(_set_mobj_rotate_x) {
                 }
             }
             break;
-        case 2:
+        case STAGE_LAYER_B:
             if (event->userWork[1]) {
                 event->userWork[1]--;
                 busy = TRUE;
@@ -2866,22 +2866,22 @@ USER_FUNC(_mobj_set_alpha) {
     u8 alpha = evtGetValue(event, args[1]);
 
     switch (layer) {
-        case 0:
+        case STAGE_LAYER_A1:
             if (mapGetMapObj("A1")) {
                 mapGrpSetColor("A1", (GXColor){255, 255, 255, alpha});
             }
             break;
-        case 1:
+        case STAGE_LAYER_A2:
             if (mapGetMapObj("A2")) {
                 mapGrpSetColor("A2", (GXColor){255, 255, 255, alpha});
             }
             break;
-        case 2:
+        case STAGE_LAYER_B:
             if (mapGetMapObj("B")) {
                 mapGrpSetColor("B", (GXColor){255, 255, 255, alpha});
             }
             break;
-        case 3:
+        case STAGE_LAYER_C:
             if (mapGetMapObj("C")) {
                 mapGrpSetColor("C", (GXColor){255, 255, 255, alpha});
             }
@@ -2916,13 +2916,13 @@ USER_FUNC(_mobj_destroy) {
         }
     }
     switch (layer) {
-        case 0:
+        case STAGE_LAYER_A1:
             wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
             break;
-        case 1:
+        case STAGE_LAYER_A2:
             wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
             break;
-        case 2:
+        case STAGE_LAYER_B:
             wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
             break;
     }
@@ -2987,17 +2987,17 @@ USER_FUNC(_bgset_kemuri_effect) {
             y = obj->position.y;
             z = obj->position.z;
             switch (layer) {
-                case 0:
+                case STAGE_LAYER_A1:
                     z += 30.0f;
                     effKemuri1N64Entry(3, x, y, z, 0.0f);
                     psndSFXOn_3D(sfxA1, &obj->position);
                     break;
-                case 1:
+                case STAGE_LAYER_A2:
                     z += 15.0f;
                     effKemuri1N64Entry(0, x, y, z, 0.0f);
                     psndSFXOn_3D(sfxA2, &obj->position);
                     break;
-                case 2:
+                case STAGE_LAYER_B:
                     z += 30.0f;
                     effKemuri1N64Entry(3, x, y, z, 0.0f);
                     effKemuri1N64Entry(4, x, y, z, 0.0f);
@@ -3061,8 +3061,8 @@ USER_FUNC(_set_mobj_shake) {
         }
     }
     switch (layer) {
-        case 0:
-        case 1:
+        case STAGE_LAYER_A1:
+        case STAGE_LAYER_A2:
             for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id > 0 && obj->data->layer == layer) {
@@ -3070,7 +3070,7 @@ USER_FUNC(_set_mobj_shake) {
                 }
             }
             break;
-        case 2:
+        case STAGE_LAYER_B:
             break;
     }
     return EVT_RETURN_BLOCK;

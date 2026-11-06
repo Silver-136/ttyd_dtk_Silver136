@@ -80,16 +80,16 @@ NpcTerritoryInfo btl_gon_setup_no_tbl[22];
  * the last entries being the background layers.
  */
 BattleStageObjectData gon_btlobject_data[] = {
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
-    {"haikei_B_a", 2, 2, {0}, 0, 60, {0}},
-    {"haikei_C_a", 2, 3, {0}, 0, 60, {0}},
-    {"haikei_B_b", 2, 2, {0}, 0, 60, {0}},
-    {"haikei_C_b", 2, 3, {0}, 0, 60, {0}},
-    {"haikei_B_c", 2, 2, {0}, 0, 60, {0}},
-    {"haikei_C_c", 2, 3, {0}, 0, 60, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"haikei_B_a", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"haikei_C_a", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"haikei_B_b", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"haikei_C_b", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"haikei_B_c", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"haikei_C_c", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /**

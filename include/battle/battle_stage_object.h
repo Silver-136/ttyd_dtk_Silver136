@@ -7,10 +7,22 @@
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
 
+// BattleStageObjectData.layer: which part of the stage the object belongs to
+typedef enum BattleStageLayer {
+    STAGE_LAYER_A1 = 0,         // map group A1
+    STAGE_LAYER_A2 = 1,         // map group A2
+    STAGE_LAYER_B = 2,          // map group B (turns with the background rotation)
+    STAGE_LAYER_C = 3,          // map group C
+    STAGE_LAYER_NOZZLE = 4,     // the three nozzles (_object_nozzle_data)
+    STAGE_LAYER_WALL = 5,       // the escape wall (_object_wall_data)
+    STAGE_LAYER_IRON_FRAME = 6, // the iron frame (if_body / if_wire)
+    STAGE_LAYER_SPOTLIGHT = 7,  // the spotlights
+} BattleStageLayer;
+
 typedef struct BattleStageObjectData {
     char* name; //0x0
     u16 spawnSpecialUnitType; //0x4
-    u16 layer; //0x6
+    u16 layer; //0x6, BattleStageLayer
     Vec position; //0x8
     u8 numFramesToStartFalling; //0x14
     u8 numFramesToFall; //0x15

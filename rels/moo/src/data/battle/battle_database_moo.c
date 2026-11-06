@@ -87,11 +87,11 @@ EvtWord bgset_moo_space_event[35];
 
 /** Scenery pieces of the Moon battle stage; moo_btlstage_data points into this array. */
 BattleStageObjectData moo_btlobject_data[] = {
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"space", 2, 3, {0}, 0, 60, {0}},
-    {"star_01", 2, 3, {0}, 0, 60, {0}},
-    {"star_02", 2, 3, {0}, 0, 60, {0}},
-    {"star_03", 2, 3, {0}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"space", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"star_01", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"star_02", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"star_03", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /** The battle stage used for fights on the Moon: its backdrop folder and scenery pieces. */

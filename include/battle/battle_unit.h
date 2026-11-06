@@ -40,7 +40,8 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kImportantPart = (1 << 1),               // 0x2
     kSemiImportantPart = (1 << 2),           // 0x4
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
-    // 0x10: read by no US code (JP and the early demos test this bit where US and later test kIntangiblePart).
+    // 0x10: US and later: TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS skips the part (battle_detect); JP and the early demos
+    // test this bit where US and later test kIntangiblePart.
     // 0x40, US and later: every attack precheck gives PRECHECK_INTANGIBLE, and TARGET_PROP_ONLY_FRONTMOST neither
     // filters this part nor lets it hide the parts behind it (battle_detect). JP and the early demos test bit 0x10.
     kIntangiblePart = (1 << 6),

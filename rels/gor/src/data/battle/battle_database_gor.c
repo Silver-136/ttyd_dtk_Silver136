@@ -37,12 +37,12 @@ NpcTerritoryInfo btl_gor_setup_no_tbl[7];
  * entries being the background layers.
  */
 BattleStageObjectData gor_btlobject_data[] = {
-    {"A1", 2, 0, {33.0f, 0.0f, -48.0f}, 0, 60, {0}},
-    {"A2", 2, 1, {0.0f, 0.0f, 71.0f}, 0, 60, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
+    {"A1", 2, STAGE_LAYER_A1, {33.0f, 0.0f, -48.0f}, 0, 60, {0}},
+    {"A2", 2, STAGE_LAYER_A2, {0.0f, 0.0f, 71.0f}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /**

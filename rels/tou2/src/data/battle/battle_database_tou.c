@@ -100,20 +100,20 @@ EvtWord bgset_tou_screen_evt[22];
  * entries 6-13 for the title-match arena, the same objects plus the if_wire and if_body objects.
  */
 BattleStageObjectData tou_btlobject_data[] = {
-    {"gamen", 2, 0, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},
-    {"etc", 2, 0, {0.0f, 0.0f, -54.0f}, 10, 50, {0}},
-    {"side__L", 2, 0, {-137.0f, 0.0f, -40.0f}, 20, 40, {0}},
-    {"side__R", 2, 0, {137.0f, 0.0f, -40.0f}, 30, 30, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
-    {"gamen", 2, 0, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},
-    {"etc", 2, 0, {0.0f, 0.0f, -54.0f}, 10, 50, {0}},
-    {"side__L", 2, 0, {-137.0f, 0.0f, -40.0f}, 20, 40, {0}},
-    {"side__R", 2, 0, {137.0f, 0.0f, -40.0f}, 30, 30, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
-    {"if_wire", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0}},
-    {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0}},
+    {"gamen", 2, STAGE_LAYER_A1, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},
+    {"etc", 2, STAGE_LAYER_A1, {0.0f, 0.0f, -54.0f}, 10, 50, {0}},
+    {"side__L", 2, STAGE_LAYER_A1, {-137.0f, 0.0f, -40.0f}, 20, 40, {0}},
+    {"side__R", 2, STAGE_LAYER_A1, {137.0f, 0.0f, -40.0f}, 30, 30, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"gamen", 2, STAGE_LAYER_A1, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},
+    {"etc", 2, STAGE_LAYER_A1, {0.0f, 0.0f, -54.0f}, 10, 50, {0}},
+    {"side__L", 2, STAGE_LAYER_A1, {-137.0f, 0.0f, -40.0f}, 20, 40, {0}},
+    {"side__R", 2, STAGE_LAYER_A1, {137.0f, 0.0f, -40.0f}, 30, 30, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"if_wire", 5, STAGE_LAYER_IRON_FRAME, {0.0f, 130.0f, 0.0f}, 0, 0, {0}},
+    {"if_body", 5, STAGE_LAYER_IRON_FRAME, {0.0f, 130.0f, 0.0f}, 0, 0, {0}},
 };
 
 /**

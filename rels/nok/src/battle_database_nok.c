@@ -21,16 +21,16 @@ NpcTerritoryInfo btl_nok_setup_no_tbl[2];
 
 /** Scenery props of the Petalburg battle stage (stg_04_0): rocks and grass tufts with their positions. */
 BattleStageObjectData nok_btlobject_data[] = {
-    {"ki_1", 2, 0, {-100.0f, 0.0f, -30.0f}, 0, 60, {0}},
-    {"isi_A", 2, 0, {150.0f, 0.0f, -30.0f}, 10, 50, {0}},
-    {"isi_B", 2, 0, {50.0f, 0.0f, -34.0f}, 20, 40, {0}},
-    {"isigaki", 2, 1, {2.0f, 0.0f, -23.0f}, 0, 60, {0}},
-    {"kusa_1", 2, 1, {-184.0f, 0.0f, 37.0f}, 10, 50, {0}},
-    {"kusa_2", 2, 1, {180.0f, 0.0f, 60.0f}, 20, 40, {0}},
-    {"kusa_3", 2, 1, {70.0f, 0.0f, 65.0f}, 30, 30, {0}},
-    {"kusa_4", 2, 1, {-87.0f, 0.0f, 56.0f}, 0, 60, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
+    {"ki_1", 2, STAGE_LAYER_A1, {-100.0f, 0.0f, -30.0f}, 0, 60, {0}},
+    {"isi_A", 2, STAGE_LAYER_A1, {150.0f, 0.0f, -30.0f}, 10, 50, {0}},
+    {"isi_B", 2, STAGE_LAYER_A1, {50.0f, 0.0f, -34.0f}, 20, 40, {0}},
+    {"isigaki", 2, STAGE_LAYER_A2, {2.0f, 0.0f, -23.0f}, 0, 60, {0}},
+    {"kusa_1", 2, STAGE_LAYER_A2, {-184.0f, 0.0f, 37.0f}, 10, 50, {0}},
+    {"kusa_2", 2, STAGE_LAYER_A2, {180.0f, 0.0f, 60.0f}, 20, 40, {0}},
+    {"kusa_3", 2, STAGE_LAYER_A2, {70.0f, 0.0f, 65.0f}, 30, 30, {0}},
+    {"kusa_4", 2, STAGE_LAYER_A2, {-87.0f, 0.0f, 56.0f}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /** The Petalburg battle stage (bti_01 backdrop, stg_04_0 scenery) used by the epilogue stage-play fight. */

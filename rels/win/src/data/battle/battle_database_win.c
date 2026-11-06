@@ -83,11 +83,11 @@ NpcTerritoryInfo btl_win_setup_no_tbl[9];
  * (S_kusa) props, and the B and C background sets.
  */
 BattleStageObjectData win_btlobject_data[] = {
-    {"A1", 2, 0, {92.0f, 0.0f, -46.0f}, 0, 60, {0}},
-    {"S_hana", 2, 1, {2.0f, 0.0f, -46.0f}, 0, 60, {0}},
-    {"S_kusa", 2, 1, {2.0f, 0.0f, 64.0f}, 0, 60, {0}},
-    {"B", 2, 2, {0}, 0, 60, {0}},
-    {"C", 2, 3, {0}, 0, 60, {0}},
+    {"A1", 2, STAGE_LAYER_A1, {92.0f, 0.0f, -46.0f}, 0, 60, {0}},
+    {"S_hana", 2, STAGE_LAYER_A2, {2.0f, 0.0f, -46.0f}, 0, 60, {0}},
+    {"S_kusa", 2, STAGE_LAYER_A2, {2.0f, 0.0f, 64.0f}, 0, 60, {0}},
+    {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /**

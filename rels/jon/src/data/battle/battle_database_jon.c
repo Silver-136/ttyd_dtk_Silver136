@@ -377,14 +377,14 @@ NpcTerritoryInfo btl_jon_setup_no_tbl[53];
  * pair of them.
  */
 BattleStageObjectData jon_btlobject_data[] = {
-    {"B_0", 2, 2, {0}, 0, 60, {0}},
-    {"jon_0", 2, 3, {0}, 0, 60, {0}},
-    {"B_1", 2, 2, {0}, 0, 60, {0}},
-    {"jon_1", 2, 3, {0}, 0, 60, {0}},
-    {"B_2", 2, 2, {0}, 0, 60, {0}},
-    {"jon_2", 2, 3, {0}, 0, 60, {0}},
-    {"B_6", 2, 2, {0}, 0, 60, {0}},
-    {"jon_6", 2, 3, {0}, 0, 60, {0}},
+    {"B_0", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"jon_0", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"B_1", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"jon_1", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"B_2", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"jon_2", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
+    {"B_6", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
+    {"jon_6", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
 };
 
 /**
