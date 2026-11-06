@@ -34,6 +34,7 @@ void __DSPHandler(__OSInterrupt intr, OSContext* context) {
         ;
 
     mail = DSPReadMailFromDSP();
+
     // a cancelled task that yields (0xDCD10002) is handled as finished (0xDCD10003)
     if ((__DSP_curr_task->flags & DSP_TASK_FLAG_CANCEL) && mail == 0xDCD10002)
         mail = 0xDCD10003;
@@ -281,6 +282,7 @@ void __DSP_boot_task(DSPTaskInfo* task) {
     __DSP_debug_printf("__DSP_boot_task()  : IRAM MMEM ADDR: 0x%08X\n", (u32)task->iram_mmem_addr);
     __DSP_debug_printf("__DSP_boot_task()  : IRAM DSP ADDR : 0x%08X\n", task->iram_addr);
     __DSP_debug_printf("__DSP_boot_task()  : IRAM LENGTH   : 0x%08X\n", task->iram_length);
+
     // the label says DRAM MMEM ADDR, but the value printed is dram_length
     __DSP_debug_printf("__DSP_boot_task()  : DRAM MMEM ADDR: 0x%08X\n", task->dram_length);
     __DSP_debug_printf("__DSP_boot_task()  : Start Vector  : 0x%08X\n", task->dsp_init_vector);

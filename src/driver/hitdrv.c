@@ -577,6 +577,7 @@ static s32 hitCalcVtxPosition(HitEntry* hit) {
                     s32 o1;
                     s32 o2;
                     u16 i1;
+
                     // FAKE: register storage class on gqr; a plain u32 local changes the object
                     register u32 gqr;
                     HitVector* v2;
@@ -871,6 +872,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
         return NULL;
     }
     minDist = -1.0f;
+
     // FAKE: 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object
 #if VERSION <= VERSION_DEMO_JP
     hitIdx = -1;

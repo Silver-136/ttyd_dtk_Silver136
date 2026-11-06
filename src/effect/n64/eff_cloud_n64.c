@@ -287,6 +287,7 @@ static void effCloudDisp(CameraId cameraId, void* param) {
     effSetVtxDescN64(vtx);
     uo = (frame & 0x3F) << 5;
     first = -1;
+
     // FAKE: zero is added to z when the vertices are written; (s16)z changes the object
     zero = 0.0f;
     count = 0;
@@ -339,6 +340,7 @@ static void effCloudDisp(CameraId cameraId, void* param) {
                 sn = (f32)sin(6.2831855f * (f32)((frame - work->age[idx] * 80) * 4) / 360.0f);
                 w = (f32)k + (3.0f * sn + 16.0f);
                 w *= scale;
+
                 // FAKE: both branches assign the same value; a single assignment changes the object
                 if (type == 0) {
                     u = (s32)(24.0f * work->len[idx]) + uo;

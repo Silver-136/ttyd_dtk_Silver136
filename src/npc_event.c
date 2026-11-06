@@ -129,6 +129,7 @@ USER_FUNC(_2d_dead_jump) {
         npc->jumpTargetPos.z = tz;
         npc->jumpStartPos = npc->position;
         PSVECSubtract(&npc->jumpTargetPos, &npc->jumpStartPos, &d);
+
         // FAKE: an if/else that only self-assigns d.y; the then-branch statement and the else block are both needed
         // (an empty else gives the same code, the plain if or no statement do not)
         if (d.x * d.x + d.z * d.z > 0.0f) {
@@ -2557,6 +2558,7 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
     b.x = npc->position.x;
     b.y = 30.0f + npc->position.y;
     b.z = npc->position.z;
+
     // FAKE: spare copies p, q of a, b; drawing from a and b directly changes the object
     p = a;
     q = b;

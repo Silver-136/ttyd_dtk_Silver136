@@ -701,6 +701,7 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 #endif
                     PSMTXTrans(m2, -w, 12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->rot, c->rot, c->rot);
+
                     // FAKE: (u32) cast selects the unsigned int-to-float conversion; w changes the object
                     PSMTXTransApply(m2, m2, (u32)w, -12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->scale, c->scale, c->scale);
@@ -821,12 +822,14 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s16 savedScroll;
 
     MsgWinData* data;
+
     /* FAKE: nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy
        of i. fp/fx both hold flags & MSG_CHAR_DYNAMIC and ys/yx both hold y for the second ruby loop; a dead guard at the loop top
        redefines fp and ys (never runs), and fx/yx are re-copied from fp/ys before time is cleared. Same values; the fx copy
        merges only in the second colouring round and the y pair fixes the preheader order, which gives the target
        register order (FAKES.md) */
     s32 nn[1];
+
     /* FAKE: zz, z3 and z4 are write-only scratch; the kR init reads them back as 0 + 1 + 2 - 3 = 0. Their three constant
        loads only exist before register allocation and fill scheduler slots, so the loop-2 counter init lands after the
        rubyW truncation (FAKES.md) */
@@ -869,6 +872,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
     f32 fv;
     s32 posX;
+
     // FAKE: int, not s32 (same width/sign; changes colouring)
     int posY;
     s32 waitTime;
@@ -879,6 +883,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 iconAdvance;
     f32 iconScale;
     s32 animX;
+
     // FAKE: int, not s32 (same width/sign; changes colouring)
     int animY;
     s32 animFlip;
@@ -1328,6 +1333,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "select") == 0) {
                 window->type = WINDOW_TYPE_SELECT;
                 data->flags |= MSG_WIN_FLAG_SELECT;
+
                 // BUG: five %hd for four pointers; a fifth number in the tag would be written through a stray argument
                 sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
                 flags |= MSG_CHAR_SEL_ROW(0);
@@ -1396,6 +1402,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
                 {
                     entry->value = iconId;
+
                     // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
                     ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
                     entry->glyph = MSG_GLYPH_ICON;
@@ -1464,6 +1471,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->scale = scale.x;
 #else
                     glyph = kanjiSearch(0x94B5);
+
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     iw = scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
                     entry->glyph = glyph;
@@ -1502,6 +1510,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 animPoseSetMaterialFlagOn(entry->value, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
 #endif
                 animPoseSetMaterialFlagOff(entry->value, MAP_OBJ_FLAG_COLOR);
+
                 /* FAKE: one-trip loop (j is dead here); it enables the backend array-to-register pass that removes the zz/z3/z4 stores */
                 for (j = 0; j < 1; j++) {
                     animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);
@@ -1556,6 +1565,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 half = ((s32)strlen(tag + i)) / 2;
                 total = 0;
                 j = i;
+
                 // FAKE: (u32) index casts here and in the second loop stop the IR optimizer from strength-reducing tag[j]/tag[i]; the backend
                 // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
                 for (k = 0; k < half; k++) {
@@ -1873,6 +1883,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     window->state = MSG_WIN_STATE_OPEN;
     window->type = -1;
     window->flags |= WINDOW_FLAG_BUSY;
+
     // BUG: the copy gets strlen(msg) bytes, so strcpy writes the terminator one byte past the requested size
     copy = __memAlloc(HEAP_DEFAULT, strlen(msg));
     strcpy(copy, msg);
@@ -1905,6 +1916,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     switch (window->type) {
     case WINDOW_TYPE_CLEAR:
         window->main = msgWindow_Clear_Main;
+
         // fall through
     case WINDOW_TYPE_NORMAL:
     case WINDOW_TYPE_PLATE:
@@ -1952,6 +1964,7 @@ static void msgWindow_Delete(WindowEntry* window) {
 
     if (window->userdata) {
         data = window->userdata->address;
+
         // FAKE: empty loop over charCount; removing it changes the object
         for (i = 0; i < data->charCount; i++) {
         }
@@ -2092,6 +2105,7 @@ static void msgWindow_Main(WindowEntry* window) {
         }
         window->timestamp = gp->renderTime;
         window->state = MSG_WIN_STATE_FADE_IN;
+
         // fall through
     case MSG_WIN_STATE_FADE_IN:
         window->flags |= WINDOW_FLAG_BUSY;
@@ -2112,6 +2126,7 @@ static void msgWindow_Main(WindowEntry* window) {
         }
         window->timestamp = gp->renderTime;
         window->state = MSG_WIN_STATE_FADE_OUT;
+
         // fall through
     case MSG_WIN_STATE_FADE_OUT:
         if (window->alpha == 0) {
@@ -2169,6 +2184,7 @@ static void msgWindow_Main(WindowEntry* window) {
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             data->page = data->pageCount - 1;
+
             // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
                 window->state = MSG_WIN_STATE_REVIEW_UP;
@@ -2232,6 +2248,7 @@ static void msgWindow_Main(WindowEntry* window) {
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             window->state = MSG_WIN_STATE_REVIEW_UP;
             window->timestamp = gp->renderTime;
+
             // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2257,6 +2274,7 @@ static void msgWindow_Clear_Main(WindowEntry* window) {
         window->timestamp = gp->renderTime;
         data->openTime = gp->renderTime;
         data->lastUpdateTime = gp->renderTime;
+
         // fall through
     case MSG_WIN_STATE_PRINT:
     case MSG_WIN_STATE_FADE_IN:

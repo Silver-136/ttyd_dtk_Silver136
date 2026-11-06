@@ -1448,6 +1448,7 @@ EVT_BEGIN(peach_evt_tyogo)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("S_syata2"), LW(0), LW(1), LW(2))
+
         // BUG: passes the map object name "S_syata2" as the sound name (S_syata1 plays SFX_PEACH_MACHINE_OPEN1),
         // so no sound effect of that name is found for this hatch.
         CALL(evt_snd_sfxon_3d, STRING("S_syata2"), LW(0), LW(1), LW(2), 0)
@@ -1461,6 +1462,7 @@ EVT_BEGIN(peach_evt_tyogo)
         END_IF
         WAIT_MS(500)
         CALL(evt_mapobj_get_position, STRING("S_syata2"), LW(0), LW(1), LW(2))
+
         // BUG: passes the map object name "S_syata2" as the sound name (S_syata1 plays SFX_PEACH_MACHINE_OPEN1),
         // so no sound effect of that name is found for this hatch.
         CALL(evt_snd_sfxon_3d, STRING("S_syata2"), LW(0), LW(1), LW(2), 0)

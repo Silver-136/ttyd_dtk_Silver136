@@ -294,6 +294,7 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
                 s32 k, n2 = 0, n1 = 0;
                 for (i = 0; i < obj->joints->partCount; i++) {
                     u8 t = obj->joints->parts[i].material->blendMode;
+
                     // FAKE: the empty `if (!obj) { }` and `if (1) { }` blocks keep the target block layout of the blend-mode count
                     if (t == 2) {
                         n2++;
@@ -741,6 +742,7 @@ static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
     u8* data = (u8*)wp->entries[group].dat;
     u32 sizeCheck;
     MapHeader* header = &wp->entries[group].header;
+
     // FAKE: header is the address of a member and never NULL; removing the test changes the object
     if (header != NULL) {
         memset(header, 0, sizeof(MapHeader));
@@ -953,6 +955,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             Vec mn;
             Vec mx;
             mapGetBoundingBox(&mn, &mx);
+
 // Macro, not inline: as a static inline (mapSetBBoxCorner(dst, x, y, z)) the object changes.
 #define SET_BBOX_CORNER(idx, X, Y, Z)     \
     {                                     \
@@ -1082,6 +1085,7 @@ BOOL mapPreLoad(const char* map) {
 #if VERSION >= VERSION_JP
 void mapLoad(const char* map) {
     MapWork* wp;
+
     // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
     MapWork* wp2;
 
@@ -1336,6 +1340,7 @@ void bmapLoad(const char* map, const char* map2) {
         }
         e->dispListSize = 0;
         e->dispListBuf = NULL;
+
         // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
         entry->datAram = NULL;
         MAPENT_TPLARAM(entry) = NULL;
@@ -2020,6 +2025,7 @@ static void _mapDispMapObj(CameraId cam, MapObject* obj) {
 
         scale = 0.01f * n;
         GXGetProjectionv(proj);
+
         // FAKE: d is set to 1.0f and used as a factor; (camera->far + camera->near) * (1.0f + scale) changes the object
         d = 1.0f;
         d = (d * (camera->far + camera->near)) * (d + scale);
@@ -2088,6 +2094,7 @@ static void _mapDispMapObj(CameraId cam, MapObject* obj) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
     }
     mapSetObjFog(obj);
+
     // a group member is not drawn when it is disabled, hidden (and not offscreen) or fully transparent
     if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
         if (obj->flags & MAP_OBJ_FLAG_DISABLED) {
@@ -2338,6 +2345,7 @@ void mapDisp(void) {
             if ((obj->flags & MAP_OBJ_FLAG_CLIP) && !mapClipOffFlag) {
                 joint = obj->joints;
                 clipped = FALSE;
+
                 // the eight bounding-box corners, unrolled: the first one inside the view skips to `vis`
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMax.y;
@@ -2366,6 +2374,7 @@ void mapDisp(void) {
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMin.z;
+
                 // BUG: this corner is transformed by mtx twice
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTXMultVec(mtx, &v, &v);
@@ -3168,6 +3177,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
     if (flags & MAP_OBJ_TEV_CALLBACK_MASK) {
         MapTevCallbackInfo info;
         MapTevCallback callback;
+
         // FAKE: ip is a second name for &info; callback(&info) changes the object
         MapTevCallbackInfo* ip = &info;
 
@@ -3178,6 +3188,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         info.texMap = map;
         info.texCoord = coord;
         info.indStage = 0;
+
         // FAKE: entries[0].tevCallbacks read through a byte offset from mapWork[activeGroup]; mapWork[activeGroup].entries[0].tevCallbacks[...] changes the object
         callback = ((MapTevCallback*)((u8*)&mapWork[activeGroup] + offsetof(MapEntry, tevCallbacks)))[(u32)(flags & MAP_OBJ_TEV_CALLBACK_MASK) >> 24];
         if (callback) {
@@ -3559,6 +3570,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             MTXMultVecSR(camGetCurPtr()->view, &dir, &dir);
             GXInitLightPos(&lightObj, pos.x, pos.y, pos.z);
             GXInitLightDir(&lightObj, dir.x, dir.y, dir.z);
+
             // FAKE: spare block and temporary for the half spot angle; the expression written in the call changes the object
             ang = lights[i]->spotAngle;
             ang *= 0.5f;

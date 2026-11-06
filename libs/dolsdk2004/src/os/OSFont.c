@@ -295,6 +295,7 @@ static void Decode(u8* s, u8* d) {
         if (code & 0x80000000) {
             d[q++] = s[dataOffset++];
         }
+
         // Linked chunk
         else {
             // Read offset from link table

@@ -119,6 +119,7 @@ USER_FUNC(btlevtcmd_BtlIconEntry) {
     y = (f32)evtGetValue(event, args[2]);
     z = (f32)evtGetValue(event, args[3]);
     index = args[4];
+
     // BtlIcon_Entry returns NULL when all 16 icon slots are in use; icon is used below without a check.
     icon = BtlIcon_Entry(iconId, x, y, z);
     evtSetValue(event, index, icon->index);
@@ -142,6 +143,7 @@ USER_FUNC(btlevtcmd_BtlIconEntryItemId) {
     y = (f32)evtGetValue(event, args[2]);
     z = (f32)evtGetValue(event, args[3]);
     index = args[4];
+
     // BtlIcon_Entry returns NULL when all 16 icon slots are in use; icon is used below without a check.
     icon = BtlIcon_Entry(itemDataTable[itemId].icon_id, x, y, z);
     evtSetValue(event, index, icon->index);

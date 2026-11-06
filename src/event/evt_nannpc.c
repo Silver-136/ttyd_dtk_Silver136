@@ -124,6 +124,7 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
             C_VECReflect(&rayDir, &normal, &reflected);
             PSVECScale(&reflected, &npc->move, mag);
             clear = 0;
+
             // FAKE: dot holds the dot product for one use; the call inside the PSVECScale argument changes the object
             dot = PSVECDotProduct(&rayDir, &normal);
             PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
@@ -413,6 +414,7 @@ USER_FUNC(evt_nannpc_init) {
     w->tbl = _mapAlloc(0x14);
     memset(w->tbl, 0, 0x14);
     w->subfunc0 = NULL;
+
     // FAKE: stored through the global nanNPCWork instead of w (same pointer); w->subfunc1 changes the object
     nanNPCWork->subfunc1 = nannpc_ext_main_sub;
     w->subfunc2 = NULL;
@@ -492,6 +494,7 @@ USER_FUNC(evt_nannpc_entry) {
     NanNPCWork* w;
     args = event->args;
     pose = extGetPosePtr();
+
     // FAKE: the value goes through a long long cast; plain name = evtGetValue(...) changes the object
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;

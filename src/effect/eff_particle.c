@@ -221,6 +221,7 @@ EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32
     work->count = count;
     work->items = (ParticleItem*)((u8*)work + effect->count * sizeof(ParticleWork));
     work->speed = 4.0f;
+
     // FAKE: w2 re-reads effect->userdata (the same pointer as work); using work for the free list changes the object
     w2 = effect->userdata;
     for (i = 1; i < w2->count + 2; i++) {
@@ -285,6 +286,7 @@ static void effParticleMain(EffectEntry* effect) {
     }
     work->frame++;
     EmitterEmit(effect, &work->emit);
+
     // FAKE: w re-reads effect->userdata (the same pointer as work); using work in the update loop changes the object
     w = effect->userdata;
     prev = &w->items[w->count];
@@ -345,6 +347,7 @@ static void effParticleDisp(CameraId cameraId, void* payload) {
     hy = 8.0f;
     for (idx = work->items[work->count].next; idx != work->count + 1; idx = p->next) {
         p = &work->items[idx];
+
         // BUG: life is Gaussian (mean 125, deviation 25) with no upper clamp, so a life of 256 or more reads past the
         // 32 colours (needs about 5 deviations).
         col = hibana_col[p->life >> 3];

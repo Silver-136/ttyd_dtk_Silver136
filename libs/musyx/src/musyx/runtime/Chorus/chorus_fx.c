@@ -309,6 +309,7 @@ static asm void do_src2(register _SND_CHORUS_SRCINFO* src) {
 #define smpBasePtr r31
 
   nofralloc;
+
   /* Save stack state to stack */
   stwu r1, -0x40(sp);
   stmw r26, 0x28(sp);
@@ -326,6 +327,7 @@ static asm void do_src2(register _SND_CHORUS_SRCINFO* src) {
   lwz destPtr, src->dest;
 
   lwz oldPtr, src->old;
+
   /* Store upper portion of int->float conversion constant */
   lis r10, 0x4330;
   stw r10, 0x08(sp);
@@ -359,6 +361,7 @@ static asm void do_src2(register _SND_CHORUS_SRCINFO* src) {
   lfd f4, 0x20(sp);
   fsubs f3, f3, f9;
   fsubs f4, f4, f9;
+
   /* Some offset? */
   li r26, -4;
 

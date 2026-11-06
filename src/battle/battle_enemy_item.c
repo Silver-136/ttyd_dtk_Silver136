@@ -103,6 +103,7 @@ static void* _check_hp_recover_item(BattleUnit* self) {
     wp = _battleWorkPointer;
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
+
     // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
@@ -131,6 +132,7 @@ static void* _check_fp_recover_item(BattleUnit* self) {
     wp = _battleWorkPointer;
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
+
     // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
@@ -164,6 +166,7 @@ static void* _check_attack_item(BattleUnit* self) {
     wp = _battleWorkPointer;
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
+
     // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
@@ -202,6 +205,7 @@ static void* _check_status_attack_item(BattleUnit* self) {
     wp = _battleWorkPointer;
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
+
     // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
@@ -262,6 +266,7 @@ static void* _check_status_support_item(BattleUnit* self) {
     wp = _battleWorkPointer;
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
+
     // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
@@ -320,6 +325,7 @@ static void* _check_status_recover_item(BattleUnit* self) {
     wp = _battleWorkPointer;
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
+
     // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,

@@ -269,6 +269,7 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
                     c = rval;
                     if (format.argument_options == wchar_argument) {
                         mbtowc((unsigned short*)arg_ptr, &c, 1);
+
                         // BUG: each wide character is stored as two bytes, but the destination advances by
                         // one byte (the %s/%[ branch below advances by two).
                         arg_ptr++;
@@ -311,6 +312,7 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
                 c = ReadProc(ReadProcArg, 0, __GetAChar);
             }
             ReadProc(ReadProcArg, c, __UngetAChar);
+
             // fall through: after the leading whitespace, %s reads like %[ with its non-whitespace set
         case '[':
             if (arg_ptr) {
@@ -503,6 +505,7 @@ static const char* parse_format(const char* format_string, scan_format* format) 
             for (i = sizeof(f.char_set), p = f.char_set; i; --i) {
                 *p++ = 0xFF;
             }
+
             // every character but whitespace: 0xC1 clears '\t'..'\r' (0x09-0x0D), 0xFE clears ' ' (0x20)
             f.char_set[1] = 0xC1;
             f.char_set[4] = 0xFE;

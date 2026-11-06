@@ -221,6 +221,7 @@ static int ttyWaiting(int timeout, volatile int* flag) {
     u32 tickDist;
 
     tickStart = OSGetTick();
+
     // BUG: timeout is turned into ticks but compared below with the elapsed time in seconds
     timeout = OSSecondsToTicks(timeout);
     while(*flag == 0) {

@@ -752,6 +752,7 @@ EVT_END()
 // Report contact with this NPC only while player input/control and the system level permit it.
 USER_FUNC(toron_check) {
     NpcEntry* hit = fbatHitCheckAll();
+
     // トロン
     NpcEntry* npc = npcNameToPtr("トロン");
     BOOL busy = FALSE;

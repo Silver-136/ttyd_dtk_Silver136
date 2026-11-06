@@ -142,6 +142,7 @@ void mot_dokan(void) {
             mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mario->displayDirection = mario->displayDirectionTarget;
             mario->currSubMotionId = 20;
+
             // FAKE: dead store (overwritten on the next line); removing it changes the object
             mario->mot.dokan.rotSpeed = 0.0f;
             mario->mot.dokan.rotSpeed = 30.0f;

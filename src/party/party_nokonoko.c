@@ -166,6 +166,7 @@ void nokonoko_use_cancel(void) {
     if (nokonokoGetStatus(party) != NOKONOKO_STATUS_NONE) {
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
             marioGetPtr();
+
             // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
             if ((u32)nokoSe != 0xFFFFFFFFU) {
                 psndSFXOff(nokoSe);
@@ -200,6 +201,7 @@ void nokonoko_use_post(PartyEntry* party) {
         party->work.nokonoko.heldItem = NULL;
     }
     marioGetPtr();
+
     // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
     if ((u32)nokoSe != 0xFFFFFFFFU) {
         psndSFXOff(nokoSe);
@@ -220,6 +222,7 @@ void nokonoko_use_post(PartyEntry* party) {
 /** Stops the looping shell-spin sound (nokoSe) if one is playing. */
 static inline void noko_se_off(void) {
     marioGetPtr();
+
     // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
     if ((u32)nokoSe != 0xFFFFFFFFU) {
         psndSFXOff(nokoSe);
@@ -772,6 +775,7 @@ void nokonoko_use(PartyEntry* party) {
         break;
     case 100:
         ccwall(party, 1);
+
         // FAKE: dy holds the x difference and dx the y difference here; swapping them changes the object
         dy = party->position.x - mario->position.x;
         dx = party->position.y - mario->position.y;
@@ -997,6 +1001,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     yofs = 10.0f;
     x = party->position.x;
     z = party->position.z;
+
     // FAKE: assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object
     y0 = party->position.y + (w = party->height);
     k = 30.0f;
@@ -1079,6 +1084,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
             party->hitobjAction = hit;
         }
         party->hitobjFront = hit;
+
         // This overwrites the corrected x with the raw hit x; z keeps its corrected value.
         party->position.x = hx;
         return hit;
@@ -1088,6 +1094,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     z = w * (f32)cos(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.z;
     x = w * (f32)sin(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.x;
     y = party->position.y + yofs;
+
     // FAKE: the same assignment twice; dropping one changes the object
     dist = 0.4f * party->width + party->moveSpeed;
     dist = 0.4f * party->width + party->moveSpeed;
@@ -1110,6 +1117,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
             party->hitobjAction = hit;
         }
         party->hitobjFront = hit;
+
         // This overwrites the corrected x with the raw hit x; z keeps its corrected value.
         party->position.x = hx;
         return hit;
@@ -1156,6 +1164,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     u32 flags;
     MarioWork* player = marioGetPtr();
     w = player->wPlayerCollisionBox.x;
+
     // FAKE: comma makes the first rad an early-coloured temp (same value); removing it changes the object
     rad = (0, (3.1415927f * revise360(toMovedir(player->displayDirectionTarget) - 180.0f)) / 180.0f);
     x = w * (f32)sin(rad) + pos.x;
@@ -1165,6 +1174,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[3].y = y;
     z = w * -c + pos.z;
     p[3].z = z;
+
     // FAKE: y + height held in the otherwise dead c; removing it changes the object
     c = y + height;
     dist = 0.1f + height;
@@ -1294,6 +1304,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     MarioWork* player = marioGetPtr();
 
     w = player->wPlayerCollisionBox.x;
+
     // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = nokoSin(rad);
@@ -1375,6 +1386,7 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     MarioWork* player = marioGetPtr();
 
     w = player->wPlayerCollisionBox.x;
+
     // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = (f32)sin(rad);

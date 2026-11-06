@@ -948,6 +948,7 @@ USER_FUNC(tou_07_icon_off) {
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_07_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
+
     // ベルト
     NpcEntry* npc = npcNameToPtr("ベルト");
 

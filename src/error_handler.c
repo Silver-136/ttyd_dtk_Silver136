@@ -54,6 +54,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     AddrWord stack; // stack frame address: back chain at +0, saved LR at +4
     s16 px2, py2, x2, y2;
     s32 tx, ty;
+
     // stack vars
     char print_buffer2[0x400];
     char print_buffer[0x1000];

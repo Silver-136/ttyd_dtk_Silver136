@@ -1714,8 +1714,10 @@ void macSampleEndNotify(SYNTH_VOICE* sv) {
   if (sv->macState != MAC_STATE_YIELDED) {
     return;
   }
+
   /* clang-format off */
   MUSY_ASSERT(sv->addr!=NULL);
+
   /* clang-format on */
 
   if (!ExecuteTrap(sv, 1) && (sv->cFlags & SYNTH_CFLAG_WAIT_SAMPLE_END)) {
@@ -1808,8 +1810,10 @@ void macMakeActive(SYNTH_VOICE* sv) {
   if (sv->macState == MAC_STATE_RUNNABLE) {
     return;
   }
+
   /* clang-format off */
   MUSY_ASSERT(sv->addr!=NULL);
+
   /* clang-format on */
   UnYieldMacro(sv, 0);
   if (sv->nextMacActive = macActiveMacroRoot) {
@@ -1827,6 +1831,7 @@ void macMakeInactive(SYNTH_VOICE* svoice, MAC_STATE newState) {
 
   /* clang-format off */
   MUSY_ASSERT(svoice->addr!=NULL);
+
   /* clang-format on */
   if (svoice->macState == MAC_STATE_RUNNABLE) {
     if (svoice->prevMacActive == NULL) {

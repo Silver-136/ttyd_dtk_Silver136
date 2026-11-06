@@ -349,6 +349,7 @@ BOOL SoundLoadDVD2(const char* path) {
         } else {
             length = OSRoundUp32B(length);
             pointer = __memAlloc(HEAP_DEFAULT, length);
+
             // BUG: here and for the .proj and .sdir files, DVDMgrClose runs only after a good read: an empty file,
             // a failed allocation or a failed read leaves the entry open.
             if (pointer == NULL) {
@@ -1772,6 +1773,7 @@ static u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, 
         } else {
             src++;
             entry->srcPos++;
+
             // FAKE: no-op (s32) cast; without it the object changes
             if ((s32)(b & 0xF) == 8) {
                 entry->runCount = ((b >> 4) & 0xF) + 4;

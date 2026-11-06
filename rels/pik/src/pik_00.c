@@ -1524,6 +1524,7 @@ static EVT_BEGIN(talk_mama)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
+
         // With no request pending, her talk follows the story.
         CALL(evt_msg_print, 0, STRING("stg6_pik_02"), 0, 0)
         CASE_LESS(STG7_02_MAYOR_BOB)
@@ -2339,6 +2340,7 @@ USER_FUNC(pik_00_statuswin_force_off) {
  */
 static USER_FUNC(zoom) {
     EvtWord* args = event->args;
+
     // ナリキンパパ
     NpcEntry* npc = npcNameToPtr("ナリキンパパ");
     MarioWork* mario = marioGetPtr();

@@ -266,6 +266,7 @@ static void effVaporDisp(CameraId cameraId, void* param) {
     PSMTXConcat(viewMtx, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
+
     // FAKE: row indexed as (seq_data + type * 30)[n]; seq_data[type * 30 + n] changes the object
     f = 5.0f * (seq_data + type * 30)[n];
     f *= 0.00390625f;

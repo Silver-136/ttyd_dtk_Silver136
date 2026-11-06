@@ -28,14 +28,17 @@ static void callUserCallback() {
     return;
   }
   salLogicActive = 1;
+
   // OSEnableInterrupts();
   userCallback();
+
   // OSDisableInterrupts();
   salLogicActive = 0;
 }
 
 void salCallback() {
   salAIBufferIndex = (salAIBufferIndex + 1) % 4;
+
   // AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * DMA_BUFFER_LEN),
   //           DMA_BUFFER_LEN);
   salLastTick = 0; // OSGetTick();
@@ -62,12 +65,14 @@ void dspResumeCallback() {
 bool salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {
   if ((salAIBufferBase = salMalloc(DMA_BUFFER_LEN * 4)) != NULL) {
     memset(salAIBufferBase, 0, DMA_BUFFER_LEN * 4);
+
     // DCFlushRange(salAIBufferBase, DMA_BUFFER_LEN * 4);
     salAIBufferIndex = TRUE;
     salLogicIsWaiting = FALSE;
     salDspIsDone = TRUE;
     salLogicActive = FALSE;
     userCallback = callback;
+
     // AIRegisterDMACallback(salCallback);
     // AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * 0x280), 0x280);
     synthInfo.numSamples = 0x20;

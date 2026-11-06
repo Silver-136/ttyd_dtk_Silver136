@@ -311,6 +311,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                         }
                     } else if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                         sw->roll = 0;
+
                         // retail tests GUIDED a second time (always true here)
                         if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                             stickRotateEnd(work);
@@ -361,6 +362,7 @@ s32 battleAcResult_StickRotate(BattleWork* work) {
 void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     BattleACDispParams* disp = &((BattleActions*)&((BattleWork*)param)->actionCommands)->disp;
     void (*fn)(f32, f32);
+
 // FAKE: `work` is a macro for the cast parameter, not a local: a `BattleWork* work = param;` local (before or after
 // disp) changes the object in both versions. #undef at the end of the function.
 // FAKE: the no-op (BattleActions*) cast on the acFlags test below, as on disp above.

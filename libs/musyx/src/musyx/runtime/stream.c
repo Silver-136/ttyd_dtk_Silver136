@@ -238,6 +238,7 @@ void streamHandle() {
               if (!(si->flags & SND_STREAM_MANUALARAMUPD)) {
                 if (len > si->size - si->last) {
                   hwFlushStream(si->buffer, off, si->bytes - off, si->hwStreamHandle, NULL, 0);
+
                   // rounds cpos down to whole blocks (the other flushes round up)
                   hwFlushStream(si->buffer, 0, (cpos / SND_STREAM_ADPCM_BLKSIZE) * SND_STREAM_ADPCM_BLKBYTES, si->hwStreamHandle, NULL, 0);
                 } else if (cpos == 0) {

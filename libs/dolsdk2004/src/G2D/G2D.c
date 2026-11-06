@@ -247,6 +247,7 @@ static inline void FillSection(G2DLayer* layer, s8* aSortBuffer, s32* nScanLine,
 
 void G2DDrawLayer(G2DLayer* layer, s8* aSortBuffer) {
     s16* pAddr;
+
     // aCount0..2 are assigned below but never read
     s16 aCount0;
     s16 aCount1;

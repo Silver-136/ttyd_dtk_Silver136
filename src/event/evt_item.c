@@ -296,6 +296,7 @@ USER_FUNC(evt_item_move_3d_position) {
         event->userdataf[2] = item->position.y;
         event->userdata3f = item->position.z;
     }
+
     // FAKE: no-op (s32) casts of the u32 elapsed; an s32 elapsed with plain arguments changes the object
     if ((s32)(elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0])) < ms) {
         item->position.x = intplGetValue(mode, event->userdataf[1], x, (s32)elapsed, ms);
@@ -331,6 +332,7 @@ USER_FUNC(evt_item_get_important_item) {
         f32 dy = my - item->position.y;
         framesLeft = dist / spd;
         speedY = dy / framesLeft + (framesLeft * 0.1f) / 2.0f;
+
         // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
         event->userdata[0] = *(s32*)&framesLeft;
         event->userdata[1] = *(s32*)&speedY;

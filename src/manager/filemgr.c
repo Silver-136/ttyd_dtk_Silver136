@@ -355,6 +355,7 @@ static void fileGarbageDataAdrSet(void* data, s32 type) {
             }
             if ((void*)tpl->descriptorArray < tpl) {
                 ADDR_WORD(tpl->descriptorArray) += (AddrWord)tpl;
+
                 // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
                 for (i = 0; (u16)i < tpl->numDescriptors; i++) {
                     // FAKE: byte-offset descriptor access as in fileGarbageDataAdrClear; typed indexing changes the object

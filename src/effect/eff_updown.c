@@ -99,6 +99,7 @@ static void effUpdownMain(EffectEntry* effect) {
             f32 arg = (s32)(work->frame - 15);
             f32 sv;
             work->scaleX = 1.0f;
+
             // FAKE: compound assignment inside the call; sin(arg * 0.25f) changes the object
             sv = (f32)sin(arg *= 0.25f);
             work->scaleY = 1.0f - 0.1f * sv;
@@ -108,6 +109,7 @@ static void effUpdownMain(EffectEntry* effect) {
     mode = 1;
     {
         Vec position = { 0.0f, 0.0f, 0.0f };
+
         // FAKE: spare pointer to position; writing position directly changes the object
         Vec* p = &position;
 

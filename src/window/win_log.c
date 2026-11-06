@@ -1318,6 +1318,7 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
     };
     GXColor c2;
     GXColor c0;
+
     // FAKE: c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object
     GXColor white = (c2 = (c0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}));
     s32 tex;
@@ -1831,6 +1832,7 @@ static void capture(CameraId camera, void* param) {
         cnt = smartAlloc(g_moamoa_chain_num * 4, SMART_GROUP_TEMP)->address;
         idx = smartAlloc(2000, SMART_GROUP_TEMP)->address;
         memset(cnt, 0, g_moamoa_chain_num * 4);
+
         // FAKE: reversed loop compare; i < 500 changes the object
         for (i = 0; 500 > i; i++) {
             idx[i] = cnt[i % g_moamoa_chain_num]++;

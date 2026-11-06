@@ -161,6 +161,7 @@ static void effMist2Disp(CameraId cameraId, void* param) {
     s32 i;
     s32 alpha;
     u8 r, g, b;
+
     // FAKE: constant locals w, k, h; the literals change the object
     f32 w = 16.0f;
     f32 k = 255.0f;

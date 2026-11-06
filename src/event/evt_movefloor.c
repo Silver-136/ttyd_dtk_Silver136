@@ -593,6 +593,7 @@ USER_FUNC(evt_moving_floor_delete) {
     s32 id = evtGetValue(event, event->args[0]);
     EventEntry* e = evtGetPtrID(id);
     MovingFloor* w = (MovingFloor*)e->lwData[9];
+
     // BUG: w is dereferenced here before the NULL check below.
     if (w->seHalt == 0 && w->seId) {
         psndSFXOff(w->seId);

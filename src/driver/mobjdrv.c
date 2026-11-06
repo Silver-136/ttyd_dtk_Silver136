@@ -474,6 +474,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     PSVECScale(&entry->translation, &entry->translation, 0.5f);
     PSVECScale(&entry->translation, &entry->translation, 10.0f);
     entry->translation.y = 0.0f;
+
     // FAKE: (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object
     entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs(max.x - min.x)));
     entry->scale2.y = 10.0f * (entry->scale.y * (f32)__fabs(max.y));

@@ -69,6 +69,7 @@ EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
         break;
     default:
         work->variant = 10;
+
         // BUG: Uses the raw lifetime even when work->lifetime was defaulted above.
         work->scaleVel = -(scale - 0.1f) / (f32)lifetime;
         break;

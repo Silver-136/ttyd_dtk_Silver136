@@ -311,6 +311,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
+
     // BUG: no btlevtcmd_SetRegistStatus with the grounded table `regist` (referenced nowhere), so the unit keeps
     // the winged form's status vulnerability (regist_patakuri) after the change.
     CALL(btlevtcmd_ChangeKind, LW(10), 153)

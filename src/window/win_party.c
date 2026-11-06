@@ -114,6 +114,7 @@ void winPartyInit(WindowWork* wp) {
                 !(pouch->partyData[j].flags & POUCH_PARTY_FLAG_AWAY)) {
                 if (wp->flags & WINDOW_FLAG_8BIT) {
                     poseName = winPartyDt[i].poseName2;
+
                     // Initialization uses the Yoshi-color animation for every partner; display selects each partner again.
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
@@ -378,6 +379,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
     GXColor white2;
     GXColor black2;
+
     // FAKE: one-element colour array used as a scalar; a plain GXColor red changes the object
     GXColor red[1];
     GXColor white;
@@ -660,6 +662,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     winFontSetEdge((Vec){costX = bx - 20.0f, fy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, VERSION_PICK("ＦＰ", msgSearch("btl_cost_disp_FP")));
     for (i = 0; i < wp->party.wazaCount; i++) {
         char buf[0x40];
+
         // FAKE: assignment inside the argument; assigning iy first changes the object in the early demos
         winFontSetLabel((Vec){10.0f + x, iy = (wy - ((f32)(i * 26))) - 30.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, winPartyDt[wp->party.dtIdx].waza[i]->name);
         sprintf(buf, "%d", winPartyDt[wp->party.dtIdx].waza[i]->baseFpCost);

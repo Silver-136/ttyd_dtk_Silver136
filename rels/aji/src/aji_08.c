@@ -272,6 +272,7 @@ USER_FUNC(slit_chk) {
         if ((mario->position.x < -200.0f || mario->position.x > 300.0f) && mario->position.y < 169.0f &&
             mario->position.y > 160.0f) {
             camCtrlOff(CAMERA_3D);
+
             // Suspend the room/ceiling visibility event whose ID was inherited in LW0.
             evtStopID(event->lwData[0]);
             return EVT_RETURN_DONE;

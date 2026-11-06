@@ -881,6 +881,7 @@ EVT_BEGIN(talk_kino5)
         // Before Gonzales debuts the son is a fan of Prince Mush.
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
         CASE_LESS(STG3_32_BOSS_BATTLE)
+
         // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
         CALL(evt_tou_get_ranking, LW(0))
         SWITCH(LW(0))
@@ -1968,6 +1969,7 @@ void ext_fan_main(void) {
                         angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
                         fan->timer = dist / fan->param.y;
                         fan->param.x = dy / fan->timer + fan->param.z * fan->timer / 2.0f;
+
                         // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
                         break;
@@ -1992,6 +1994,7 @@ void ext_fan_main(void) {
                         fan->param.y = randf(0.03f, 0.06f);
                         fan->param.z = spd * -polyCosf(angle);
                         fan->timer = 120;
+
                         // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
                         break;

@@ -1059,6 +1059,7 @@ void mot_slit(void) {
             if (m->hitobjStandOn != NULL && m->currMotionId == MARIO_MOTION_SLIT) {
                 if (hitGetAttr(m->hitobjPush) & HIT_ATTR_SLIT) {
                     HitCheckQuery q;
+
                     // FAKE: qp is a second name for &q; using &q changes the object
                     HitCheckQuery* qp;
                     f32 sn, cs;
@@ -1163,6 +1164,7 @@ void mot_slit(void) {
         m->slitState = SLIT_STATE_CRACK_2;
         p = marioGetPtr();
         p->slitPosSet = 1;
+
         // copy
         p->slitPos = p->position;
     case SLIT_STATE_CRACK_2:

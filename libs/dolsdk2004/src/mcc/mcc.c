@@ -72,6 +72,7 @@ static void callbackEventStream(MCC_CHANNEL chID, u32 event, u32 value) {
     if (event == MCC_EVENT_CONNECT) {
         gChannelInfo[chID].isStreamConnection = TRUE;
     }
+
     // BUG: a disconnect also sets isStreamConnection to TRUE, like a connect
     if (event == MCC_EVENT_DISCONNECT) {
         gChannelInfo[chID].isStreamConnection = TRUE;
@@ -369,6 +370,7 @@ static void ClearChannelInfo(int i) {
     gChannelInfo[i].eventMask = 0;
     gChannelInfo[i].callbackEvent = NULL;
     gChannelInfo[i].isStreamDone = FALSE;
+
     // isStreamConnection is not cleared here
 }
 

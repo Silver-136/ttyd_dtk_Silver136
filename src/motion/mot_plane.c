@@ -69,6 +69,7 @@ const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hiko
 /** Stops the plane's looping flight sound if it is playing. */
 static inline void planeSfxOff(void) {
     MarioWork* mario = marioGetPtr();
+
     // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
     // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if (mario->motStruct != NULL && (u32)mario->motPlane->sfxId != 0xFFFFFFFF) {
@@ -258,6 +259,7 @@ void mot_plane(void) {
         mp->mot.plane.turnSpeed = 0.0f;
         mp->mot.plane.startY = mp->position.y;
         mp->mot.plane.groundY = 0.0f;
+
         // bit 4 of the take-off panel is HIT_ATTR_PLANE_PANEL_R -> MOT_PLANE_FLAG_RIGHT
         mp->motPlane->flags = (hitGetAttr(mp->hitobjJumpFrom) >> 4) & 1;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE_JUMP1), &mp->position);
@@ -339,6 +341,7 @@ void mot_plane(void) {
         }
         mp->wPlayerCollisionBox.x = 20.0f;
         mp->wPlayerCollisionBox.y = 12.333333f;
+
         // FAKE: dead store overwritten below (baseSpeed = 1.0f); removing it changes the object
         mp->baseSpeed = __fabsf(0.02f * mp->wStickDir1);
         mp->currSubMotionId = 12;
@@ -592,6 +595,7 @@ static void flyMain(void) {
             mp->currSubMotionId = 14;
         }
         m = marioGetPtr();
+
         // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
         // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if ((u32)m->motPlane->sfxId == 0xFFFFFFFF) {

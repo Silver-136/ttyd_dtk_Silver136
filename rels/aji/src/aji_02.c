@@ -475,6 +475,7 @@ USER_FUNC(all_flag_off) {
 USER_FUNC(hikaru_on_func) {
     char name[64];
     s32 idx = evtGetValue(event, GW(10));
+
     // root_data holds {panel list, panel count} for each route
     u8* panels = root_data[idx].panels;
     s32 count = root_data[idx].count;

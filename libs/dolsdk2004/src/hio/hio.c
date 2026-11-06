@@ -334,6 +334,7 @@ BOOL HIOReadAsync(u32 addr, void* buffer, s32 size, HIOCallback callback) {
     }
 
     ASSERTLINE(504, (addr % 4) == 0);
+
     // BUG: the callback is stored before the lock; when the lock or select fails it stays set
     RxCallback = callback;
 

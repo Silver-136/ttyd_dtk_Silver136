@@ -622,6 +622,7 @@ USER_FUNC(evt_unitwin_select_func) {
     }
     wp->flags &= ~UNITWIN_FLAG_SELECTED;
     btn = keyGetButtonTrg(0);
+
     // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
     if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         btn = 0;
@@ -642,6 +643,7 @@ USER_FUNC(evt_unitwin_select_func) {
                     break;
                 }
             }
+
             // BUG: itemFlags[i] is read before the bounds test; no match with goodsMax == 6 reads itemFlags[6], past the six-element array.
             if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) && i < wp->goodsMax) {
                 if (wp->selected != i) {
@@ -1806,6 +1808,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
@@ -1905,6 +1908,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
@@ -1983,6 +1987,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
@@ -2058,6 +2063,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
@@ -2124,6 +2130,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
         line1 = text;
         lines = 1;
+
         // FAKE: characters read through an s8 cast; line1[k] changes the object
         for (k = 0; ((s8*)line1)[k]; k++) {
             if (((s8*)line1)[k] == '\n') {

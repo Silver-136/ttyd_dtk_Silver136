@@ -486,6 +486,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->rx = 0.0f;
     work->rz = 0.0f;
     work++;
+
     // FAKE: count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object
     for (i = 1; i < (count = effect->count); i++, work++) {
         switch (type) {
@@ -592,6 +593,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 f32 d;
                 d = bom_dir[i - 1];
                 spd = 2.0f * bom_spd[i - 1];
+
                 // FAKE: d copied through ang; `ang = 6.2831855f * (90.0f + d) / 360.0f` changes the object
                 ang = d;
                 ang = 6.2831855f * (90.0f + ang) / 360.0f;

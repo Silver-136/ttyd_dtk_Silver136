@@ -52,6 +52,7 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
         return NULL;
     }
     len = dx * dx + dy * dy + dz * dz;
+
     // FAKE: zero kept in a local for the comparisons; comparing with 0.0f literals changes the object
     zr = 0.0f;
     if (len == zr) {

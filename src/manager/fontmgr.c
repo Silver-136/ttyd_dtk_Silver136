@@ -472,6 +472,7 @@ static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
+
     // FAKE: no-op (s16) casts on iy; the plain argument changes the object
     _JUTFont_DrawPos(code, ix - 2, (s16)iy);
     _JUTFont_DrawPos(code, ix + 2, (s16)iy);
@@ -481,6 +482,7 @@ static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
 static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
+
     // FAKE: no-op (s16) casts on ix; the plain argument changes the object
     _JUTFont_DrawPos(code, (s16)ix, iy - 2);
     _JUTFont_DrawPos(code, (s16)ix, iy + 2);
@@ -529,6 +531,7 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
                     break;
                 case '<':
                     msg = msgGetCommand((char*)(msg + 1), (char*)tag, (char*)value);
+
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
@@ -694,6 +697,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + spacing;
+
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
@@ -773,12 +777,14 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         pos.y = offsetY + (cy - h * scale);
                         pos.z = 0.0f;
                         PSMTXMultVec(mtx, &pos, &pos);
+
                         // FAKE: no-op self-assignment before the icon draw; without it the scale load moves
                         scale = scale;
                         iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + spacing;
+
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
@@ -866,6 +872,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                         }
                         iconGetWidthHight(&w, &h, (u16)id);
                         width += w * scale + spacing;
+
                     // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;

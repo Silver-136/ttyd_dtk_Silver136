@@ -957,6 +957,7 @@ USER_FUNC(itemUseFunc) {
                 break;
             }
             effRecoveryEntry(1, item->fp_restored, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z);
+
             // falls through: unlike the other effect cases, the count jumps straight to 999
         case 130:
             cnt = 999;

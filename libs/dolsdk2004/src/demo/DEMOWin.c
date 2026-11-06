@@ -116,11 +116,13 @@ void DEMOWinSetWindowColor(DEMOWindow* handle, u32 item, u8 r, u8 g, u8 b, u8 a)
         handle->bkgnd.g = 31;
         handle->bkgnd.b = 33;
         handle->bkgnd.a = 255;
+
         // caption: dark red
         handle->cap.r = 85;
         handle->cap.g = 31;
         handle->cap.b = 31;
         handle->cap.a = 255;
+
         // border: dark red
         handle->border.r = 69;
         handle->border.g = 37;
@@ -901,6 +903,7 @@ static void __DEMOWinList_refresh_list(DEMOWindow* w) {
     s32 j;
 
     l = w->parent;
+
     // BUG: divides by zero for a list with no items
     l->curr_pos = (l->curr_pos % l->num_items);
     if (l->curr_pos > (l->display_pos + l->num_display_items - 1)) {

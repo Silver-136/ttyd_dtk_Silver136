@@ -265,6 +265,7 @@ void shadowInit(void) {
     cswp->numEntries = 0;
     cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
     memset(cswp->entries, 0, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
+
     // FAKE: wp is a spare copy of cswp; cswp->base.texBuffer changes the object
     wp = cswp;
     bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
@@ -354,6 +355,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
     Vec pos;
 
     GXInvalidateTexAll();
+
     // FAKE: byte-offset view of shadowConfig[wp->configIdx]; the indexed form changes the object
     size = ShadowSizeTbl[((ShadowConfig*)((u8*)shadowConfig + wp->configIdx * sizeof(ShadowConfig)))->sizeIdx];
     if (depth) {
@@ -363,6 +365,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
     GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
     GXSetViewport(0.0f, 0.0f, size, size, 0.0f, 1.0f);
     GXSetScissor(1, 1, size - 2, size - 2);
+
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     cfg = (0, &shadowConfig[wp->configIdx]);
     proj = wp->proj;
@@ -493,6 +496,7 @@ static void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
             query.targetPos.y += 1.0f;
             query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
             query.targetDistance = 150.0f;
+
             // FAKE: q is a second name for &query for the hitPos reads below; reading through query changes the object
             q = &query;
             if (!hitCheckVecFilter(&query, _filter)) {
@@ -598,6 +602,7 @@ static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
         fh = 0.2f * h;
         fw = 0.2f * w;
         GXBegin(GX_QUADS, GX_VTXFMT0, 16);
+
         // FAKE: cx (0.0f) doubles as the y coordinate of every vertex; 0.0f for y changes the object
         cx = 0.0f;
         cz = 0.0f;

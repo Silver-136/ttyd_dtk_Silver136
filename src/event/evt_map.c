@@ -35,6 +35,7 @@ USER_FUNC(evt_mapobj_trans) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
+
     // Both branches call mapObjTranslate: unlike the other evt_mapobj functions, type 1 (group) has no call of its own.
     if (type == 0) {
         mapObjTranslate(name, x, y, z);
@@ -55,6 +56,7 @@ USER_FUNC(evt_mapobj_rotate) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
+
     // Both branches call mapObjRotate: type 1 (group) has no call of its own.
     if (type == 0) {
         mapObjRotate(name, x, y, z);
@@ -72,6 +74,7 @@ USER_FUNC(evt_mapobj_scale) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
+
     // Both branches call mapObjScale: type 1 (group) has no call of its own.
     if (type == 0) {
         mapObjScale(name, x, y, z);

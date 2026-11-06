@@ -136,6 +136,7 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     }
     work->alpha = 0;
     work->position.x = x;
+
     // FAKE: p is set between the position stores; setting it right before the loop changes the object
     p = work + 1;
     work->position.y = y;
@@ -372,6 +373,7 @@ static void effPokopiPchargeDisp(CameraId cameraId, void* param) {
             case 4:
             case 5:
                 effSetVtxDescN64(size10x10_tex32x32_2_vtx);
+
                 // BUG: changes the effect's type inside the per-streak loop, so only the first streak of types 3-5
                 // uses this vertex table; the later ones take cases 0-2 and the first table.
                 type -= 3;

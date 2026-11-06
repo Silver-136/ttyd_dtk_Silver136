@@ -852,6 +852,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
+
         // BUG: this event (tag 18) runs only for patterns 14 and 16, so the test for 15 is never true and a
         // Super Hammer hit also sends the segment with marioWeapon_UltraHammerInvolved.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, LW(0))

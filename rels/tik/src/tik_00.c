@@ -798,6 +798,7 @@ void uranai_cap(CameraId cameraId, void* param) {
     GXGetScissor(&sx, &sy, &sw, &sh);
     GXSetViewport(0.0f, 0.0f, w, h, 0.0f, 1.0f);
     GXSetScissor(1, 1, w - 2, h - 2);
+
     // The width/height quotient is computed with integer division before conversion to the aspect ratio.
     C_MTXPerspective(projMtx, 25.0f, w / h, 1.0f, 1000.0f);
     GXSetProjection(projMtx, GX_PERSPECTIVE);

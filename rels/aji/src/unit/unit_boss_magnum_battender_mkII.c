@@ -905,6 +905,7 @@ USER_FUNC(aud_fire_no_hit) {
             mem->flags |= 4;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
+
             // This miss path also starts aud_hit_event; only its first six arguments are set here.
             evt->lwData[1] = FLOAT(-275.0f);
             evt->lwData[2] = (s32)(1024.0f * (hy - 20.0f)) - EVTDAT_FLOAT_BASE;

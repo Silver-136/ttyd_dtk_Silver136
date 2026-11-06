@@ -398,6 +398,7 @@ static void btlseqFirstAct(BattleWork* wp) {
     s32 flag;
     int k;
     FieldBattleInfo* fb = wp->fbatInfo;
+
     // FAKE: u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object
     u8* info;
     s32* id;
@@ -428,6 +429,7 @@ static void btlseqFirstAct(BattleWork* wp) {
                         }
                     }
                     BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
+
                     // FAKE: inner switch with one case and a goto past the outer switch; if (type == 0) { ... break; } changes the object
                     goto done_fa;
             }
@@ -718,6 +720,7 @@ USER_FUNC(_set_effect_luck) {
             BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(wp), unit, part, pw, DAMAGE_RESULT_FINAL_HIT);
             BtlUnit_GetPos(unit, &x, py, pz);
             psndSFXOn(SFX_NAME_WORD("SFX_SYSTEM_LUCKY1"));
+
             // FAKE: block-local EffectEntry* temporary; assigning effNiceEntry(...)->userdata directly changes the object
             e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
             effect = e->userdata;
@@ -1747,6 +1750,7 @@ static void btlseqTurn(BattleWork* wp) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     n = 0;
+
                     // rate and count swap roles here compared with the Happy Heart case above (retail local reuse): rate is the badge counter, count the chance
                     for (rate = unit->badgesEquipped.HappyFlower; rate > 0; rate--) {
                         // integer division: currentFp / maxFp is 0 below full FP, so the chance is 33 %, at full FP 30 %
@@ -1876,6 +1880,7 @@ static void _rule_disp(CameraId cameraId, void* param) {
     f32 x;
     f32 y;
     u16 lines;
+
     // FAKE: s32 width holding the u16 result, halved as (u16)width / 2 (twin _get_item_announce_disp shape)
     s32 width;
 
@@ -2536,6 +2541,7 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
     f32 x1, y1, z1;
     f32 x2, y2, z2;
     s32 tmp;
+
     // FAKE: wp copied into a void* and cast back at every use; using wp directly changes the object
     void* w;
 

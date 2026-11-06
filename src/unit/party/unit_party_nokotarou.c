@@ -1576,6 +1576,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_off_posoffset_manual, 0)
+
         // BUG: returns without the _color_lv_set restore of Mario's moveColorLv (saved in LW(14), set to 255
         // above); that restore after LABEL(99) is reached only through the no-target GOTO, with LW(14) unset.
         RETURN

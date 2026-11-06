@@ -792,6 +792,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         // The knocked-off segment flies along the row of enemies, hitting each one behind the Pokey in turn.
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
+
         // BUG: this event (tag 18) runs only for patterns 14 and 16, so the test for 15 is never true and a
         // Super Hammer hit also sends the segment with marioWeapon_UltraHammerInvolved.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, LW(0))
@@ -1009,6 +1010,7 @@ static EVT_BEGIN(attack_head_2_event)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(5))
     SWITCH(LW(10))
         CASE_EQUAL(4)
+
         // The Pokey chooses a target using the weapon that matches its height (4, 3 or 2 segments).
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_sambo_head_attack_4))
@@ -1116,6 +1118,7 @@ static EVT_BEGIN(attack_head_2_event)
     END_IF
     SWITCH(LW(10))
         CASE_EQUAL(4)
+
         // Find out how the target reacts to the slam.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_head_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(3)
@@ -1505,6 +1508,7 @@ static EVT_BEGIN(attack_spike_event)
     WAIT_FRAMES(5)
     SWITCH(LW(10))
         CASE_EQUAL(3)
+
         // Find out how the target reacts to the ball.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_spike_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(2)

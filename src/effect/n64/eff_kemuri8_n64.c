@@ -113,6 +113,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->vAccelStep = 0.0f;
         work->vAccelStep2 = 0.0f;
         rad = 6.2831855f * (f32)(((i - 1) * 360) / (count - 1)) / 360.0f;
+
         // FAKE: one-use inline inline_fn computes radius * -sin; writing it out changes the object
         work->position.x = inline_fn(radius, (f32)sin(rad));
         work->position.y = radius * -(f32)cos(rad);

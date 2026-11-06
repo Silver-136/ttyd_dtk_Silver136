@@ -292,6 +292,7 @@ static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     x = args[3];
     y = args[4];
     z = args[5];
+
     // Skip num * (num - 1) / 2 entries to reach this satellite-count group.
     p = VecData;
     for (i = 0; i < num; i++) {

@@ -467,6 +467,7 @@ void smartReInit(void) {
 void smartAutoFree(s32 allocType) {
     smartEntry* entry;
     smartEntry* next;
+
     // FAKE: u16 copy of allocType for the compare; comparing allocType directly changes the object
     u16 type = allocType;
 
@@ -479,6 +480,7 @@ void smartAutoFree(s32 allocType) {
     if (allocType == 3) {
         for (entry = wp->allocHead; entry; entry = next) {
             next = entry->next;
+
             // FAKE: no-op (s32) cast; the plain compare changes the object
             if ((s32)entry->type == SMART_GROUP_TEMP_KEEP) {
                 smartFree(entry);
@@ -634,6 +636,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
                     break;
             }
             smartGarbage();
+
             // BUG: no NULL check: when no block is left in use allocTail is NULL and is read through here (the
             // bytesLeft path above is not retried).
             prevEntry = wp->allocTail;

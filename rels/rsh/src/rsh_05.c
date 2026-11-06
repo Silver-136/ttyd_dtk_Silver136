@@ -1169,6 +1169,7 @@ static void ext_moamoa_main(void) {
                     a2 = 2.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f);
                     r2 = rand() / 32767.0f;
                     b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
+
                     // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                     x2 = x;
                     y2 = y;
@@ -1513,6 +1514,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
             speed = dist / t;
         }
         vy = dy / t + gravity * t / 2.0f;
+
         // The floats are stored as their bit patterns through the word view.
         event->userdata[0] = *(s32*)&t;
         event->userdata[1] = *(s32*)&vy;

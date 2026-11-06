@@ -470,6 +470,7 @@ void mot_damageToge(void) {
         d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
         mario->multiTimer = (s16)(d / 8);
         mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
+
         // BUG: no zero check (the knock-back motion above has one from JP on): with the return spot under 8 units
         // away multiTimer is 0 and camStepY divides by zero.
         mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;

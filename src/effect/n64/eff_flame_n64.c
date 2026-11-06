@@ -309,6 +309,7 @@ static void effFlameDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 alpha;
     s32 type;
+
     // FAKE: one-element pointer array; a plain EffFlameN64Work* work changes the object
     EffFlameN64Work* work[1];
     CameraEntry* camera;

@@ -335,6 +335,7 @@ static inline void shipLerpTurn(f32 t, f32 k) {
  */
 static inline void shipEff(f32 s) {
     MarioWork* mario = marioGetPtr();
+
     // FAKE: zz (0.0f) added to position.y and the c temporary choosing 0.3f/0.6f; dropping both changes the object
     f32 zz = 0.0f;
     if (!s) {
@@ -438,6 +439,7 @@ void mot_ship(void) {
         marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
 #endif
         shipDecideDir(m, &p1, &p2);
+
         /* fallthrough */
     case 1:
         marioMakeJumpPara();
@@ -555,6 +557,7 @@ void mot_ship(void) {
         m->displayDirection = revise360(m->displayDirection);
         m->wPlayerCollisionBox.x = 40.0f;
         m->wPlayerCollisionBox.y = 40.0f;
+
         // FAKE: motStruct derived back from &field (same pointer) so ms is a later-numbered codegen value (target r28)
         ms = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos - offsetof(MotShipWork, harborPos));
         hit = m->hitobjJumpFrom;
@@ -661,6 +664,7 @@ void mot_ship(void) {
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         }
         m->currSubMotionId = 31;
+
         /* fallthrough */
     case 31:
         m->dispOfs.y += -0.4f;
@@ -675,6 +679,7 @@ void mot_ship(void) {
             break;
         }
         m->currSubMotionId = 40;
+
         /* fallthrough */
     case 40: {
         f32 tt, qq;
@@ -698,6 +703,7 @@ void mot_ship(void) {
         ms2 = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos.z - offsetof(MotShipWork, harborPos.z)); // FAKE: same derive trick as case 10
         m->directionView = angleABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, ms2->harborPos.z);
         m->moveDirection = m->directionView;
+
         // 1, or 2 when MARIO_TRIG_FLAG_DISP_DIR_LEFT (bit 9) is set
         r29 = ((m->trigFlags >> 9) & 1) + 1;
         marioGetPtr()->motShip->flags = r29;
@@ -1003,6 +1009,7 @@ static void shipMove(void) {
     MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_JP
     f32 len;
+
     // FAKE: 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object
     unsigned long long rateIdx;
 #endif
@@ -1032,6 +1039,7 @@ static void shipMove(void) {
 #endif
     s32 snd;
     spd = m->controlStickSensitivity;
+
     // FAKE: dx is cleared twice; dropping the repeat changes the object
     dx = 0.0f;
     dx = 0.0f;
@@ -1145,6 +1153,7 @@ static void shipMove(void) {
     }
     if (len >= 1.0f) {
         MarioWork* mm = marioGetPtr();
+
         // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
         // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if (marioGetPtr()->motStruct != NULL && (u32)marioGetPtr()->motShip->sfxId == 0xFFFFFFFFU) {

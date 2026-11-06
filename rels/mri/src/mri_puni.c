@@ -3472,6 +3472,7 @@ void puniModeWind(PuniData* p) {
             }
             p->anim = 5;
             p->modeStep = 1;
+
             // fallthrough
         case 1:
             PSVECScale(&p->moveStart, &d, p->modeF0);
@@ -3506,6 +3507,7 @@ void puniModeWind(PuniData* p) {
             PSVECNormalize(&p->pushDir, &d);
             PSVECScale(&d, &p->vel, p->radius.x);
             p->modeStep = 4;
+
             // fallthrough
         case 4:
 
@@ -4710,6 +4712,7 @@ void puni_puni_init(void) {
         (*pose->mtx)[1][3] = -1000.0f;
         (*pose->mtx)[2][3] = 0.0f;
         pose->offsetY = 0.0f;
+
         // This field aliases a billboard pose; its flags are not NpcEntry flags.
         p->npc = (NpcEntry*)pose;
         pose++;
@@ -5612,6 +5615,7 @@ void puni_puni_main(void) {
                         break;
                     case PUNI_MODE_WONDER:
                         p->flags |= PUNI_FLAG_STRAY;
+
                         // FAKE: same (u32) round trip as PUNI_MODE_DEAD.
                         puniModeWonderSfx(p, (const char*)(u32) "SFX_STG2_SOAPBALL_BREAK1");
                         break;
@@ -5927,6 +5931,7 @@ static inline void puniMapDataSetI(s32 w, s32 h, u8* src, f32 x, f32 z) {
         Punimap->inRange = 0;
         Punimap->size = h * (w * 4);
         Punimap->data = _mapAlloc(Punimap->size);
+
         // copies src onto itself (Punimap->src is src), a no-op; puniMapFindbuff fills Punimap->data from src
         // before it reads it
         memcpy(Punimap->src, src, Punimap->size);
@@ -6614,6 +6619,7 @@ USER_FUNC(evt_puni_exit) {
     s32 j;
 
     evtGetValue(event, args[1]);
+
     // FAKE: the exit direction is read into i, so the first loop's counter is a second web of i (register colouring)
     i = evtGetValue(event, args[2]);
     map = (const char*)evtGetValue(event, args[3]);
@@ -6682,6 +6688,7 @@ USER_FUNC(evt_puni_exit) {
             } else {
                 puniHagurePos(p);
                 pos = p->pos;
+
                 // FAKE: slot offsets computed by the caller into named locals o1/o2 (puni_exit_swset takes the offset)
                 o1 = (p->index - 1) * 7;
                 puni_exit_swset(o1, (u8)Punigp->floor, &pos);
@@ -6705,6 +6712,7 @@ USER_FUNC(evt_puni_exit) {
     if (map != NULL && strcmp(map, "mri_00") == 0) {
         for (j = 1; j <= PUNI_ALLY_LAST; j++) {
             Vec zero = {0.0f, 0.0f, 0.0f};
+
             // FAKE: the dead mode variable reused for this loop's slot offset (register colouring)
             mode = (j - 1) * 7;
             puni_exit_swset(mode, 0, &zero);
@@ -7157,6 +7165,7 @@ USER_FUNC(evt_puni_set_lsw_index) {
     pos.x = evtGetValue(event, args[3]);
     pos.y = evtGetValue(event, args[4]);
     pos.z = evtGetValue(event, args[5]);
+
     // FAKE: slot offset computed in the caller (named local) and passed with idx 0; same slot, numbers off below the inlined extract temps (register colouring)
     off = base + idx * PUNI_LSW_SLOT_SIZE;
     puniswSetindex(off, 0, &val, &pos);

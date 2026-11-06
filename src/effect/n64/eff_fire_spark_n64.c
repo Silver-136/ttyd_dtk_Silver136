@@ -56,6 +56,7 @@ EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
                                   f32 scale, f32 speedY, f32 speedZ) {
     EffectEntry* effect;
     EffFireSparkN64Work* work;
+
     // FAKE: spare temporary for 0.5f; step * 0.5f changes the object
     f32 h = 0.5f;
     f32 step;

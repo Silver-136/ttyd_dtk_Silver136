@@ -414,6 +414,7 @@ void battleAcDelete_SignalTiming(BattleWork* work) {
  */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &_battleWorkPointer->actionCommands;
+
     // FAKE: work recovered from ac (container-of through offsetof) so its web is a codegen temp numbered above the
     // rodata base; then work takes r31 and the base r30, as in the target
     BattleWork* work = (BattleWork*)((u8*)ac - offsetof(BattleWork, actionCommands));
@@ -489,6 +490,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
         fx = -200.0f + x;
         num = w->hits + work->actionCommands.params[SIGNAL_PARAM_EXTRA];
+
         // Both arms of the SHOW_BUTTONS test are the same (retail code): the counter's position does not depend on it.
         PSMTXTrans(mTrans, fx + (f32)((work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + work->actionCommands.params[SIGNAL_PARAM_LEAD] * 32 : count * 0x30 - 26 + work->actionCommands.params[SIGNAL_PARAM_LEAD] * 32), yb, 0.0f);
         if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {

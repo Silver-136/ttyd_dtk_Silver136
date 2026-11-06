@@ -210,6 +210,7 @@ USER_FUNC(evt_lottery) {
 
     evtSetValue(event, args[1], lot->flags);
     evtSetValue(event, args[2], lot->todayNum);
+
     // The calendar dates computed below (today, the purchase day and the four match days) are never used.
     OSTicksToCalendarTime(now, &e);
     if (lot->flags & LOTTERY_FLAG_TICKET) {
@@ -295,6 +296,7 @@ USER_FUNC(evt_lottery_todaynum) {
  */
 USER_FUNC(evt_lottery_error_check) {
     OSCalendarTime a, b;
+
     // FAKE: g is a spare copy of gp; &gp->lotteryInfo changes the object
     GlobalWork* g = gp;
     EvtWord* args = event->args;

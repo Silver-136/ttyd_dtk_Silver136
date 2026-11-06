@@ -767,6 +767,7 @@ static HitEntry* hitEstimate(s32* out) {
     Vec dir4Copy;
     f32 h;
     s32 i;
+
     // FAKE: 5.0f held in k5 for four products; the literal changes the object
     f32 k5 = 5.0f;
 #if VERSION <= VERSION_DEMO_JP

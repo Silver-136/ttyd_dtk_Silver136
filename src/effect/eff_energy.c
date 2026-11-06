@@ -94,6 +94,7 @@ static void effEnergyMain(EffectEntry* effect) {
     }
     work->rotZ += work->rotSpeed;
     work->scale += work->scaleSpeed;
+
     // pulse brightness up and down
     work->brightness += work->brightSpeed;
     if (work->brightness > 255) {

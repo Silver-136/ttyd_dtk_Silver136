@@ -431,6 +431,7 @@ static s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, Battl
         return 0;
     }
     damage = weapon->hpDamageWork[0];
+
     // This tests fn again here (fn == NULL returned above)
     if (fn) {
         damage = fn(attacker, weapon, target, part);
@@ -1630,6 +1631,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     CounterWork cw;
     Vec hit;
     Vec hit2;
+
     // FAKE: cwp is a second name for &cw; passing &cw directly changes the object
     CounterWork* cwp;
     Vec pos;

@@ -76,6 +76,7 @@ s32 caseEntry(CaseSetup* setup) {
     entry->priority = setup->priority;
     entry->evtId = 0;
     memcpy(entry->lwData, setup->lwData, sizeof(entry->lwData));
+
     // FAKE: no-op 64-bit mask; a plain `return i;` swaps the loop registers in both versions
     return i & 0xFFFFFFFFFFFFFFFFu;
 }

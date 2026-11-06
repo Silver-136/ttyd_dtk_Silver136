@@ -68,8 +68,10 @@ static void inpResetGlobalMIDIDirtyFlags() {
 
 static u32 inpResetGlobalMIDIDirtyFlag(u8 chan, u8 midiSet, u32 flag) {
   u32 ret;
+
   // clang-format off
   MUSY_ASSERT(midiSet!=SYNTH_FX_MIDISET);
+
   // clang-format on
 
   if ((ret = (flag & inpGlobalMIDIDirtyFlags[midiSet][chan]) != 0) != 0) {
@@ -81,6 +83,7 @@ static u32 inpResetGlobalMIDIDirtyFlag(u8 chan, u8 midiSet, u32 flag) {
 void inpSetGlobalMIDIDirtyFlag(u8 chan, u8 midiSet, s32 flag) {
   // clang-format off
   MUSY_ASSERT(midiSet!=SYNTH_FX_MIDISET);
+
   // clang-format on
   inpGlobalMIDIDirtyFlags[midiSet][chan] |= flag;
 }
@@ -602,6 +605,7 @@ static u16 _GetInputValue(struct SYNTH_VOICE* svoice, struct CTRL_DEST* inp,
     apply_scale:
       tmp = (tmp * (inp->source[i].scale >> 1)) >> 15;
       tmp = CLAMP_INV(tmp, -0x2000, 0x1FFF);
+
       // sign is never initialised and only ever set TRUE: a list whose first source has combine 1-3
       // reads it unset.
       switch (inp->source[i].combine & 15) {

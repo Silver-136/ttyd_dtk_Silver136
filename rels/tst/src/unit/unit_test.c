@@ -302,6 +302,7 @@ static EVT_BEGIN(attack_event)
         WAIT_MS(500)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, -1)
+
         // BUG: returns before LABEL(99), so after a miss btlevtcmd_StartWaitEvent is not called as on the
         // other paths.
         RETURN

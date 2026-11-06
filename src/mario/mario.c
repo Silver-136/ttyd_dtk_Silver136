@@ -1018,6 +1018,7 @@ void marioReInit(void) {
     dispDirTarget = wp->displayDirectionTarget;
     dirView = wp->directionView;
     moveDir = wp->moveDirection;
+
     // FAKE: spare copy t of paperPoseId; testing poseId directly changes the object
     t = wp->paperPoseId;
     poseId = t;
@@ -1228,6 +1229,7 @@ void marioMain(void) {
             pos.x = wp->position.x;
             pos.y = 30.0f + wp->position.y;
             pos.z = wp->position.z;
+
             // FAKE: spare copy drop of pos; passing &pos changes the object
             drop = pos;
             itemCoinDrop(&drop);
@@ -1668,6 +1670,7 @@ static void marioMoveMain(void) {
     }
     vx += wp->floorMove.x;
     vz2 += wp->floorMove.z;
+
     // FAKE: vy is a zero temporary (added to position.y, compared with dist); the literal changes the object
     vy = 0.0f;
     wp->position.y += vy + wp->floorMove.y;
@@ -1985,6 +1988,7 @@ static void marioMakeDispDir(void) {
     f32 diff;
     f32 tgt;
     f32 step;
+
     // FAKE: c30 and c20 hold 30.0f and 20.0f for the negated uses below; the literals -30.0f and -20.0f change the object
     f32 c30 = 30.0f;
     f32 c20 = 20.0f;

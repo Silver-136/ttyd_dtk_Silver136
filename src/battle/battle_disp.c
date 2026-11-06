@@ -493,6 +493,7 @@ next:
             if (part->animFlags & PART_ANIM_CHANGED) {
                 xlu = 0;
                 part->animFlags &= ~PART_ANIM_CHANGED;
+
                 // BUG: `&=` clears the restart bit and tests the bits left, so any other set bit restarts the animation
                 if (part->animFlags &= ~PART_ANIM_RESTART) {
                     animPoseSetAnim(part->poseId, poseName, TRUE);
@@ -644,6 +645,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     Mtx pRy2;
     Mtx pRz2;
     Mtx pM;
+
     // FAKE: uPos is written by PSMTXTrans and never read; removing it and the call changes the object
     Mtx uPos;
     Mtx uDisp;
@@ -683,6 +685,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     zscale = 1.0f;
     unit = part->owner;
     if (part->poseId < 0) return;
+
     // FAKE: dead int guard (COLOURING W). part becomes a multi-def named local (not folded back into the param), so it
     // numbers above unit, and gz adds wp's missing neighbour; the arm is deleted after colouring and leaves no code.
     gz = 0;
@@ -877,6 +880,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     if (color->r == 0xFF && color->g == 0xFF && color->b == 0xFF) {
         if (BtlUnit_CheckStatus(unit, STATUS_POISON)) {
             color->r = color->r * 160 / 255;
+
             // BUG: scales the already reduced r (160), so b becomes 100, not 160.
             color->b = color->r * 160 / 255;
         }
@@ -927,6 +931,7 @@ static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
         pos.x += unit->heldItemOffset.x;
         pos.y += unit->heldItemOffset.y;
         pos.z += unit->heldItemOffset.z;
+
         // FAKE: float-first cast of iconDispGx; the plain call changes the object
         ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
     }
@@ -959,6 +964,7 @@ static void btlUnitStolenItemDisp(CameraId camId, void* param) {
 
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.y += 5.0f + unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit);
+
     // FAKE: float-first cast of iconDispGx; the plain call changes the object
     ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
 }

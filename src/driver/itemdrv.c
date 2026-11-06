@@ -549,6 +549,7 @@ void itemMain(void) {
                 } else {
                     f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                     f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
+
                     // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
                     // `hitDist = 20.0 + __fabs(-1.0)` changes the object
                     d = __fabs(-1.0);
@@ -990,6 +991,7 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             continue;
         }
+
         // FAKE: the empty do-while adds a block before the continue; without it the flag tests are scheduled differently
         if (entry->flags & ITEM_FLAG_NO_TOUCH_GET) {
             do {

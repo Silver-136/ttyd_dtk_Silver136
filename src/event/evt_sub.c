@@ -1657,6 +1657,7 @@ USER_FUNC(evt_sub_spline_get_value_manual) {
     SplineWork* w = (SplineWork*)event->lwData[15];
     f32 t = evtGetValue(event, args[0]);
     Vec v;
+
     // FAKE: no-op self-assignment; without it t's conversion is scheduled differently
     t = t;
     t = t / (w->manual ? (f32)w->msec : (f32)w->steps);
@@ -2120,6 +2121,7 @@ USER_FUNC(evt_sub_get_coin) {
         winMgrCloseAutoDelete(event->userdata3);
         work[1] = 0;
         event->userdata[0] = 101;
+
         // BUG: returns DONE instead of BLOCK, so case 101 never runs and the 8-byte work block is never _mapFree'd.
         return EVT_RETURN_DONE;
     case 101:
@@ -2160,6 +2162,7 @@ USER_FUNC(stone_bg) {
     ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
     item = itemNameToPtr(name);
     ((EffStarStoneWork*)item->effect->userdata)->cam = CAMERA_3D_EFFECTA;
+
     // The name is Shift-JIS "にせマリオ", the NPC evt_sub_starstone uses when LW(0) is -1
     if (npcNameToPtr_NoAssert("にせマリオ") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < STG4_15_DOOPLISS_BATTLE_2) {
         npcNameToPtr_NoAssert("にせマリオ")->cameraId = CAMERA_3D_EFFECTA;
@@ -2224,6 +2227,7 @@ USER_FUNC(evt_sub_scale_by_fps) {
  */
 USER_FUNC(evt_sub_check_intersect) {
     EvtWord* args = event->args;
+
     // Segment P1-P2 (args 0-3) against segment Q1-Q2 (args 4-7); args[8] = 1 when they intersect
     f32 p1x, p1y, p2x, p2y, q1x, q1y, q2x, q2y;
     f32 t1, t2;

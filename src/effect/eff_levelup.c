@@ -85,6 +85,7 @@ EVT_END()
 #if VERSION < VERSION_US
 static inline s32 getX(s32 i) {
     s32 arr[2][5] = { { 0, 64, 188, 260, 136 }, { 0, 88, 210, 256, 134 } };
+
     // FAKE: (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object
     return arr[(gp->language ? 0 : 1) == 0][i] - arr[(gp->language ? 0 : 1) == 0][4];
 }
@@ -239,6 +240,7 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     GXColor color;
     f32 dx;
     f32 dy;
+
     // FAKE: 0.5f held in a local for the quad half-widths; width * 0.5f changes the object
     f32 halfScale = 0.5f;
 #if VERSION >= VERSION_US

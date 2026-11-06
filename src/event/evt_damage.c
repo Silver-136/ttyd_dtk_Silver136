@@ -93,6 +93,7 @@ USER_FUNC(camdir) {
         }
     }
     event->lwData[3] = FLOAT(-yaw);
+
     // Encode the scale sign directly as an event float (+1.0 or -1.0), using 1024 units per 1.0.
     event->lwData[4] = ((yaw > 90.0f && yaw < 270.0f) ? -dir : dir) * 1024 - EVTDAT_FLOAT_BASE;
     return EVT_RETURN_DONE;

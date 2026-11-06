@@ -4697,6 +4697,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
         CALL(queen_hand_small_1000hand_1_evt)
     END_INLINE_EVENT
     WAIT_MS(400)
+
     // BUG: the hit check uses weapon_peach_dark_drag_attack, while the damage below uses
     // weapon_peach_black_1000hand_attack (sampled and paid for above).
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))

@@ -397,6 +397,7 @@ HitEntry* kpaGetHitobjHead2(void) {
 #if VERSION >= VERSION_US
     s32 i;
     HitEntry* hit;
+
     // FAKE: ret is a spare copy of hit; returning hit changes the object
     HitEntry* ret;
     for (i = 0; i < KPA_HIT_SLOTS; i++) {
@@ -442,6 +443,7 @@ HitEntry* kpaChkHitobjRide(void) {
                                     r = w->rideHit[8];
                                     if (!r) {
                                         r = w->rideHit[9];
+
                                         // FAKE: dead test (both branches return r); dropping it changes the object
                                         if (r) {
                                             return r;

@@ -688,6 +688,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
         case 5:
             for (counter = 0, i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
+
                 // FAKE: comma expression; `--member->statusTimer <= 0` changes the object
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_BULKY_BOBOMB &&
                         member->status == AUDIENCE_STATUS_IGNITE && (member->statusTimer--, member->statusTimer <= 0)) {
@@ -950,6 +951,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             }
             audience->checkPhaseReactionState = 12;
             audience->phaseSub = 0;
+
             /* fallthrough */
         case 12:
             if (audience->phaseListCount == 1) {
@@ -1239,6 +1241,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
         case 15:
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
+
                 // FAKE: comma expression; `--member->statusDelay <= 0` changes the object
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->status == AUDIENCE_STATUS_SLEEP &&
                         (member->statusDelay--, member->statusDelay <= 0)) {
@@ -1972,6 +1975,7 @@ static void BattleAudienceItemCtrlProcess(void) {
                     Vec v = {0.0f, 0.0f, 0.0f};
                     v.x = member->drawPosX + kd->itemOffsetX;
                     ox = intplGetValue(EASING_LINEAR, -10.0f, 0.0f, k, 5);
+
                     // FAKE: spare temporary; `v.y = (drawPosY + itemOffsetY) + ox` changes the object
                     t = member->drawPosY + kd->itemOffsetY;
                     v.y = t + ox;
@@ -2215,6 +2219,7 @@ static void BattleAudienceApSrcCtrlProcess(void) {
             s->targetPos.y += 25.0f;
             s->timer = 0;
             s->duration = 30;
+
             /* fallthrough */
         case 5:
             s->timer++;
@@ -2582,6 +2587,7 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
         oy = m->rotationOffset.y * m->scale.y;
         oz = m->rotationOffset.z * m->scale.z;
         PSMTXScale(scl, m->scale.x, m->scale.y, m->scale.z);
+
         // FAKE: block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object
         {
             f32 k = 0.017453289f;
@@ -4230,6 +4236,7 @@ void BattleAudienceSoundClap(s32 duration, s32 fade) {
         strcpy(name, "SFX_AUDIENCE_CLAPPING4");
         sound->kind = 4;
     }
+
     // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
     sound->sfxId = BattleAudienceSound1(name, right, left);
     AUD_SOUND_START(sound, duration + fade, fade);
@@ -4271,6 +4278,7 @@ void BattleAudienceSoundNoiseAlways(void) {
             strcpy(name, "SFX_AUDIENCE_NOISY4");
             sound->kind = 4;
         }
+
         // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
         sound->sfxId = BattleAudienceSound1(name, right, left);
         if (sound->sfxId != -1) {
@@ -4364,6 +4372,7 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
         strcpy(name, "SFX_AUDIENCE_CHEER_ALLY4");
         sound->kind = 4;
     }
+
     // BUG: kind 0 (BattleAudienceSoundCheer with no member taking part) never writes name, so an uninitialised
     // buffer is played.
     if (lowPitch == 1) {
@@ -4480,6 +4489,7 @@ void BattleAudienceSoundHandBeat(void) {
         } else {
             vol = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
         }
+
         // FAKE: vol goes in untruncated through an s32 view of psndSFX_vol; the plain call through the u8
         // prototype masks it to a byte first and changes the object.
         ((void (*)(s32, s32))psndSFX_vol)(sound->sfxId, vol);
@@ -4576,6 +4586,7 @@ void BattleAudienceSoundZZZ(s32 index) {
     BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_ZZZ);
 
     BattleAudienceSoundStop(AUD_SOUND_ZZZ);
+
     // BUG: the returned id is not stored in sound->sfxId, so AUD_SOUND_START tests and fetches the volume of the
     // slot's previous id.
     BattleAudienceSound2("SFX_AUDIENCE_ZZZ1", index);

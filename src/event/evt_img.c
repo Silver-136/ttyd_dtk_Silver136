@@ -165,6 +165,7 @@ USER_FUNC(evt_img_set_virtual_point) {
     pos.x = x;
     pos.y = y;
     pos.z = z;
+
     // FAKE: spare copy of pos; passing &pos changes the object
     tmp = pos;
     imgSetVirtualPoint(img, &tmp);

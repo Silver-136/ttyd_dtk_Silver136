@@ -482,6 +482,7 @@ void demo_window(CameraId cameraId, void* param) {
     h = GXGetTexObjHeight(&obj);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+
     // FAKE: alpha multiplied by 255 and divided back; using winAlpha directly changes the object.
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, wp->winAlpha * 255 / 255});
     GXSetNumTexGens(1);

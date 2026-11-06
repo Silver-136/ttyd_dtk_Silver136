@@ -750,6 +750,7 @@ static void ext_moamoa_init(void) {
         moa->jitter = v;
     }
     evalOn();
+
     // Warm up synchronously: 600 simulation updates, not 600 rendered frames.
     for (i = 0; i < 600; i++) {
         ext_moamoa_main();
@@ -1248,6 +1249,7 @@ static void ext_moamoa_main(void) {
                         a2 = 2.0f * ((r1 * mmI(1.0f - 1.0f)) + 1.0f);
                         r2 = rand() / 32767.0f;
                         b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
+
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         x2 = x;
                         y2 = y;

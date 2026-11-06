@@ -920,6 +920,7 @@ static void nameEntDisp(CameraId cameraId, void* param) {
         FontDrawEdge();
         FontDrawString(-(f32)FontGetMessageWidth(ok) / 2.0f, 110.0f, ok);
         FontDrawString(-(f32)FontGetMessageWidth(wp->name) / 2.0f, 70.0f, wp->name);
+
         // Both choices are placed with the width of the no string.
         FontDrawString(-(f32)FontGetMessageWidth(no) / 2.0f, -20.0f, yes);
         FontDrawString(-(f32)FontGetMessageWidth(no) / 2.0f, -60.0f, no);
@@ -1095,6 +1096,7 @@ static inline void nameWinQuad(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&obj, GX_TEXMAP2);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
+
     // FAKE: second pair of |w|/|h| locals for the TEXMTX1 scale; reusing aw/ah changes the object
     ah2 = __fabs(h);
     aw2 = __fabs(w);

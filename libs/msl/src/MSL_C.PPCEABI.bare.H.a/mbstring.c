@@ -87,6 +87,7 @@ static inline int __mbtowc_noconv(wchar_t* pwc, const char* s, size_t n) {
         return -1;
 
     source = (char*)s;
+
     // the cases fall through, adding six payload bits per byte
     switch (number_of_bytes) {
     case 3:

@@ -194,6 +194,7 @@ USER_FUNC(btlevtcmd_DrawLots) {
     s32 *alloc;
     s32 i, count, max;
     s32 ceiling;
+
     // FAKE: nv[0]/nv[1] are the pick index and the running sum in a two-element array; two scalars change the object
     s32 nv[2];
 
@@ -839,6 +840,7 @@ USER_FUNC(btlevtcmd_GetHpGaugeOffset) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, btlId));
     x = unit->hpGaugeOffset[0];
     y = unit->hpGaugeOffset[1];
+
     // These tests compare the s16 offset values, not the output indices; neither can equal EVT_NULLPTR.
     if (x != EVT_NULLPTR) {
         evtSetValue(event, indexX, x);
@@ -880,6 +882,7 @@ USER_FUNC(btlevtcmd_GetRGB) {
     part = BattleGetUnitPartsPtr(id, partId);
     indexR = args[2];
     indexG = args[3];
+
     // FAKE: args is reused to hold the blue index; indexB = args[4] changes the object
     args = (EvtWord*)args[4];
     evtSetValue(event, indexR, part->color.r);
@@ -1826,6 +1829,7 @@ USER_FUNC(btlevtcmd_SetOverTurnCount) {
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
     value = evtGetValue(event, args[1]);
+
     // FAKE: block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->flippedTurns = value changes the object
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     unit->flippedTurns = value;
@@ -2478,6 +2482,7 @@ USER_FUNC(btlevtcmd_ChangeFaceDirection) {
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
     value = evtGetValue(event, args[1]);
+
     // FAKE: block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->faceDirection = value changes the object
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     unit->faceDirection = value;
@@ -2718,6 +2723,7 @@ USER_FUNC(btlevtcmd_OnToken) {
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
+
     // FAKE: block-scoped enum copy of args[1]; unit->tokenFlags |= args[1] changes the object
     m = (BattleUnitToken_Flags)args[1];
     unit->tokenFlags |= m;
@@ -2734,6 +2740,7 @@ USER_FUNC(btlevtcmd_OffToken) {
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
+
     // FAKE: block-scoped enum mask copy; direct args[1] changes the object
     m = (BattleUnitToken_Flags)args[1];
     unit->tokenFlags &= ~m;
@@ -2751,6 +2758,7 @@ USER_FUNC(btlevtcmd_CheckToken) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     index = args[2];
+
     // FAKE: block-scoped enum copy of args[1]; testing unit->tokenFlags & args[1] changes the object
     m = (BattleUnitToken_Flags)args[1];
     if (unit->tokenFlags & m) {
@@ -2863,6 +2871,7 @@ USER_FUNC(btlevtcmd_GetBackItem) {
                 break;
             }
         }
+
         // BUG: no check for a full list: with all 8 slots used, i is 8 and the write lands past recoveredItems.
         info->recoveredItems[i] = item;
         unit->heldItem = ITEM_NULL;
@@ -3710,6 +3719,7 @@ USER_FUNC(btlevtcmd_GetConsumeItem) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleCommand* cmd = &wp->commandMenu;
+
     // FAKE: the post-increment of args is unused; args[0] changes the object
     evtSetValue(event, *args++, cmd->weapon[cmd->cursor[11].absPos].itemId);
     return EVT_RETURN_DONE;
@@ -3938,6 +3948,7 @@ USER_FUNC(btlevtcmd_PreCheckDamage) {
     part = BtlUnit_GetPartsPtr(target, pno);
     weapon = (BattleWeapon*)evtGetValue(event, args[3]);
     flags = args[4];
+
     // FAKE: args is reused to hold the result index; out = args[5] changes the object
     args = (EvtWord*)args[5];
     res = BattlePreCheckDamage(attacker, target, part, weapon, flags);
@@ -4089,6 +4100,7 @@ USER_FUNC(btlevtcmd_CheckDamage) {
     part = BtlUnit_GetPartsPtr(target, pno);
     weapon = (BattleWeapon*)evtGetValue(event, args[3]);
     flags = args[4];
+
     // FAKE: args is reused to hold the result index; a separate out local changes the object
     args = (EvtWord*)args[5];
     res = BattleCheckDamage(attacker, target, part, weapon, flags);
@@ -4626,6 +4638,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         if (unit->moveFrames == 0) {
             y = unit->moveTargetPos.y;
             BtlUnit_SetPos(unit, x, y, z);
+
             // Both operands read the same field, not successive jump heights.
             unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
             unit->fallAccel = 1.8f;
@@ -4636,6 +4649,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         if (!BtlUnit_GetACPossibility(unit)) {
             return EVT_RETURN_DONE;
         }
+
         // Both operands again read the same jumpBaseY field.
         unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
         unit->fallAccel = 1.8f;
@@ -4694,6 +4708,7 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
     oz = args[5];
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
+
     // Y and Z share a scratch local; only X is used from this call.
     BtlUnit_GetPos(unit, &x, &y, &y);
     id2 = BattleTransID(event, id2);
@@ -4713,6 +4728,7 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
         cid = BattleTransID(event, cid);
         u2 = BattleGetUnitPtr(wp, cid);
         p2 = BtlUnit_GetPartsPtr(u2, cpno);
+
         // Y and Z share a scratch local; only X is used from this call.
         BtlUnit_GetHitPos(u2, p2, &tx, &y, &y);
         if (__fabs(x - hx) > __fabs(x - tx)) {
@@ -5283,6 +5299,7 @@ USER_FUNC(btlevtcmd_GetResultPrizeLv) {
     s32 id, value, index;
 
     id = evtGetValue(event, args[0]);
+
     // Both ids mean "no unit" here, not the system unit.
     if (id != -1 && id != UNIT_ID_SYSTEM) {
         unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
@@ -5321,6 +5338,7 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
     u8* ac;
     weapon = (BattleWeapon*)evtGetValue(event, args[0]);
     result = evtGetValue(event, args[1]);
+
     // FAKE: ac[0] / ac[1] are marioAcSuccess / marioAcFailed through one pointer; the field names change the object
     ac = &wp->marioAcSuccess;
     if (result != -1) {
@@ -7066,6 +7084,7 @@ USER_FUNC(btlevtcmd_PadCheckTrigger) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
     s32 mask = args[1];
+
     // FAKE: args is reused to hold the result index; a separate index local changes the object
     args = (EvtWord*)args[2];
     if (BattlePadMultiCheckTrigger(chan, mask)) {
@@ -7081,6 +7100,7 @@ USER_FUNC(btlevtcmd_PadCheckNow) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
     s32 mask = args[1];
+
     // FAKE: args is reused to hold the result index; a separate index local changes the object
     args = (EvtWord*)args[2];
     if (BattlePadMultiCheckNow(chan, mask)) {

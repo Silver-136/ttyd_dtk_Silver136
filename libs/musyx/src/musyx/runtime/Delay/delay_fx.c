@@ -85,6 +85,7 @@ bool sndAuxCallbackUpdateSettingsDelay(SND_AUX_DELAY* delay) {
   MUSY_ASSERT(delay->left!=NULL);
   MUSY_ASSERT(delay->right!=NULL);
   MUSY_ASSERT(delay->sur!=NULL);
+
   /* clang-format on */
   left = delay->left;
   right = delay->right;

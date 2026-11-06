@@ -312,6 +312,7 @@ void PERFEventStart(u8 id) {
             PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[0] = PPCMfpmc3();
             PERFFrames[PERFCurrFrame].samples[sample].instructions[0] = PPCMfpmc1();
             GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x2000);
+
             // fallthrough
         case PERF_CPU_EVENT:
             PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[2] = PPCMfpmc3();
@@ -358,6 +359,7 @@ void PERFEventEnd(u8 id) {
         break;
     case PERF_CPU_GP_EVENT:
         GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x1000);
+
         // fall through
     case PERF_CPU_EVENT:
         PERFFrames[PERFCurrFrame].samples[sample].cpuTimeStampEnd = PPCMfpmc4();
@@ -398,6 +400,7 @@ static void PERFTimerCallback(OSAlarm* alarm, OSContext* context) {
     if (PERFCurrSample != 0) {
         if (CurrToken < 0xFFFF) {
             sample = (u8)(u16)CurrToken;
+
             // CurrToken is read again here, as in the original
             if ((u8)((CurrToken >> 8) & 0xF) != (s32)magic) {
                 PERFEndAutoSample();

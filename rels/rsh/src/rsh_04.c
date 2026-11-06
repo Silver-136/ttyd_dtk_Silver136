@@ -691,6 +691,7 @@ static EVT_BEGIN(talk_syashou)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
+
         // His first greeting.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_06"), 0, 0)
         WAIT_MS(300)
@@ -740,6 +741,7 @@ static EVT_BEGIN(talk_syashou)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_113"))
         END_IF
         CASE_LESS(STG6_15_GHOST_REQUEST)
+
         // A reminder to find the missing blanket.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_115"), 0, 0)
         CASE_LESS(STG6_16_THE_BAGGAGE_CAR)
@@ -749,6 +751,7 @@ static EVT_BEGIN(talk_syashou)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_129"), 0, 0)
         CASE_LESS(STG6_19_GIVE_BLANKET)
+
         // The Blanket exchange: he takes the Blanket and gives a Mushroom.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_142"), 0, 0)
 #if VERSION <= VERSION_DEMO_JP
@@ -1100,6 +1103,7 @@ s32 item_tbl3[] = {
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
+
         // Early on, Little Narikin's lines follow the story.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_17"), 0, 0)
         CASE_LESS(STG6_07_SYLVIA)
@@ -1123,6 +1127,7 @@ static EVT_BEGIN(talk_konari)
         END_IF
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
+
         // With the Autograph, Mario can hand it over.
         CALL(evt_pouch_check_item, ITEM_AUTOGRAPH, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -1181,6 +1186,7 @@ static EVT_BEGIN(talk_konari)
             END_IF
         END_IF
         CASE_LESS(STG6_19_GIVE_BLANKET)
+
         // Later lines follow the story stage.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_102"), 0, 0)
         CASE_LESS(STG6_20_END_OF_DAY_1)

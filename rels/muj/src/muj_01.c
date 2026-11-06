@@ -208,9 +208,11 @@ EVT_END()
 static EVT_BEGIN(garawaru_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
+
         // Early on, the rough sailor muses about the mysterious eastern end of the island.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_1"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_18_BOBBERY_RESCUE_2)
+
         // While Bobbery is being rescued, he comments on the admiral's plight.
         CALL(evt_msg_print, 0, STRING("stg5_muj_32_02"), 0, STRING("me"))
         CASE_EQUAL(STG5_18_01_BOBBERY_JOINS)
@@ -349,6 +351,7 @@ static EVT_BEGIN(marco_talk)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
+
         // Flavio asks what Mario has found.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_0"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_13_BOBBERY_THE_BRIDGE)
@@ -360,6 +363,7 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
         END_IF
         CASE_EQUAL(STG5_15_RUNAWAY_SAILORS)
+
         // Mario asks Flavio for Chuckola Cola to help the admiral.
         CALL(evt_msg_print, 0, STRING("stg5_muj_31_01"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))

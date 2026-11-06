@@ -121,6 +121,7 @@ u32 ARInit(u32* stack_index_addr, u32 num_entries) {
     refresh = __DSPRegs[DSP_ARAM_REFRESH] & 0xFF;
 
     ASSERTMSGLINE(590, (refresh <= 196.0f), "ARInit(): ILLEGAL SDRAM REFRESH VALUE\n");
+
     // writes the refresh value it just read back unchanged
     __DSPRegs[DSP_ARAM_REFRESH] = (u16)((__DSPRegs[DSP_ARAM_REFRESH] & ~0xFF) | (refresh & 0xFF));
 

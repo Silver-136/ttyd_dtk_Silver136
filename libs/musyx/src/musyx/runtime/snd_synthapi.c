@@ -188,6 +188,7 @@ SND_VOICEID sndFXStartParaInfo(SND_FXID fid, u8 vol, u8 pan, u8 studio,
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
   pPtr = paraInfo->paraArray;
+
   // BUG: pPtr never advances, so only the first parameter is tested for the 0x8000 key entry
   for (i = 0; i < paraInfo->numPara; ++i) {
     if (pPtr->ctrl == 0x8000) {
@@ -597,6 +598,7 @@ void sndUpdateAuxParameter(unsigned char studio, unsigned short* para, unsigned 
   } else {
 
     MUSY_ASSERT_MSG(synthAuxBCallback[studio] != NULL, "No FX is defined for AuxB.");
+
     // BUG: the same with synthAuxBUser
     synthAuxBCallback[studio](SND_AUX_REASON_PARAMETERUPDATE, &info, synthAuxBUser);
   }

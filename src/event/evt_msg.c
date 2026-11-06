@@ -52,6 +52,7 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
             m = msg;
             msg = "DIRECT";
         }
+
         // FAKE: the priority goes in sign-extended from s16 through an s32 parameter; a call through msgdrv.h's
         // u16 prototype changes the object.
         event->printWindowId = ((s32 (*)(const char*, s32, s32))msgWindow_Entry)(m, callback, (s16)event->msgPriority);
@@ -937,6 +938,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
                 } else {
                     strcat(msg_plural_buf, "oggtti");
                 }
+
                 // BUG: <OGGETTO> is 9 characters but only 7 are skipped, so "O>" stays in the text; the plural above
                 // is spelled "oggtti".
                 strcat(msg_plural_buf, marker + 7);

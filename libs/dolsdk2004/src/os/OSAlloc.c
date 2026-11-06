@@ -450,6 +450,7 @@ void OSDestroyHeap(int heap) {
     hd->free = hd->allocated = 0;
 #ifdef ENABLE_HEAPDESC
     hd->paddingBytes = hd->headerBytes = hd->payloadBytes = 0;
+
     // BUG: this reset sits inside ENABLE_HEAPDESC, so release builds keep __OSCurrHeap set to the
     // destroyed heap.
     if (__OSCurrHeap == heap) {

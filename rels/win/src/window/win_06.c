@@ -322,6 +322,7 @@ static USER_FUNC(cam_kaiten_init) {
     ckp1 = _mapAlloc(sizeof(KaitenParam));
     memset(ckp1, 0, sizeof(KaitenParam));
     ckpw = _mapAlloc(sizeof(KaitenParam));
+
     // Clears the end parameters again; all working fields are copied from ckp0 below.
     memset(ckp1, 0, sizeof(KaitenParam));
     ckp0->pos.x = evtGetFloat(event, args[0]);

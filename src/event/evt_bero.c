@@ -654,6 +654,7 @@ USER_FUNC(bero_get_position_normal) {
         f32 rad;
         hz = hy = hx = 0.0f;
         dist = 1000000.0f;
+
         // FAKE: two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object
         deg = 0.125f;
         deg = (angle * 360.0f) * deg;
@@ -663,6 +664,7 @@ USER_FUNC(bero_get_position_normal) {
         rad = (6.2831855f * deg) / 360.0f;
         tmp.x = start.x - (30.0f * (f32)sin(rad));
         tmp.y = start.y;
+
         // FAKE: block-scoped temporary for cos(rad); the direct expression changes the object
         c0 = (f32) cos(rad);
         tmp.z = start.z - (30.0f * (-c0));
@@ -675,6 +677,7 @@ USER_FUNC(bero_get_position_normal) {
         }
         tmp2 = tmp;
         tmp2.x += (30.0f + len) * (f32)sin(rad);
+
         // FAKE: recomputes rad; `cos(rad)` changes the object
         tmp2.z += (30.0f + len) * (-((f32) cos((6.2831855f * deg) / 360.0f)));
         start = tmp;
@@ -1186,6 +1189,7 @@ USER_FUNC(evt_bero_move_mario_speed) {
     dy = -(speed * c);
     dist = speed * frames;
     ox = s * dist;
+
     // FAKE: spare temporary for BeroSX; using BeroSX directly changes the object
     sx = BeroSX;
     marioGetPtr()->position.x = sx + ox;

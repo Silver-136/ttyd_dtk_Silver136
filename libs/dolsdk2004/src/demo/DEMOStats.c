@@ -279,6 +279,7 @@ void DEMOPrintStats(void) {
         }
     } else {
         rmode = DEMOGetRenderModeObj();
+
         // no default: an unknown display mode leaves text_x, text_y, text_yinc, wd and ht unset
         switch (DemoStatDisp) {
             case DEMO_STAT_TL:

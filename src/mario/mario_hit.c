@@ -1370,6 +1370,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     nox = -ox;
     zero = 0.0f;
     mone = -1.0f;
+
     // FAKE: dead re-definition (i is 0) gives zero/mone two reaching defs in IRO pass 0, so they stay named vregs instead of being constant-propagated
     i = 0;
     if (i != 0) {
@@ -1874,6 +1875,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
             v.x = pos->x + x;
             v.y = pos->y + hh;
             v.z = pos->z + z;
+
             // FAKE: v and dir are copied into p and d before the call; passing &v, &dir changes the object
             p = v;
             d = dir;
@@ -1986,6 +1988,7 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
             Vec v = {0.0f, 0.0f, 0.0f};
             Vec dir = {0.0f, 1.0f, 0.0f};
             v.x = pos->x + x;
+
             // FAKE: spare pointer to dir; passing &dir directly changes the object
             pdir = &dir;
             v.y = 1.0f + pos->y;
@@ -3078,6 +3081,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 mario->hitobjWall = hit;
             }
             movePos(&mario->position.x, &mario->position.z, dx, dz);
+
             // FAKE: dead store to the local pos before the return; removing it changes the object
             pos = mario->position;
             return;

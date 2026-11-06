@@ -219,6 +219,7 @@ USER_FUNC(tou_champion_belt) {
     group = animPoseGetGroupIdx(npc->poseId, "locator8");
     angle = reviseAngle(camGetRy() - pose->rotationY);
     eff = event->userdatap[0];
+
     // FAKE: the work is read through a pointer to the userdata slot, so userdata is reloaded at every store (a plain EffStarStoneWork* local: 86.67%, a cast per access: 99.26%)
     work = (EffStarStoneWork**)&eff->userdata;
     (*work)->position.x = positions[group].x;
@@ -1179,6 +1180,7 @@ static void rankingInit(void) {
     RankEntry* entry;
 
     memset(rank_wp, 0, sizeof(RankWork));
+
     // We need to handle the excluded entries if we're doing rematches
     temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
     count = 21;

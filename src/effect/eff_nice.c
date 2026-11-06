@@ -139,6 +139,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     int i;
 
     effect = effEntry();
+
     // slot 5 of the animation tables is NULL: use type 0 instead
     if (type == 5) {
         type = 0;

@@ -1056,6 +1056,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 10)
             ADD(LW(1), 10)
             ADD(LW(1), 10)
+
             // BUG: unlike the roll above there is no SUBTRACT(LW(1), 1): evt_sub_random gives 0..LW(1), so the
             // final ELSE spell also runs on a roll equal to the weight total.
             CALL(evt_sub_random, LW(1), LW(0))

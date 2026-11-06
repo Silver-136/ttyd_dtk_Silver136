@@ -42,6 +42,7 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
             yn += header->lCoef[decInfo.predictor][0] * yn1;
             yn += (sample << decInfo.scale) << 11;
             yn <<= 5;
+
             // VERSION_G8MP01: PAL retail and the PAL demo (configure.py defines it for both)
 #ifdef VERSION_G8MP01
             yn += 0x8000;

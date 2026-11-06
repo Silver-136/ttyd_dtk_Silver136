@@ -263,6 +263,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_AnimeChangePoseDirect, LW(10), LW(11), STRING("NKT_D_1"))
+
     // BUG: no btlevtcmd_SetRegistStatus with the grounded table `regist` (referenced nowhere), so the unit keeps
     // the winged form's status vulnerability (regist_patapata) after the change.
     CALL(btlevtcmd_ChangeKind, LW(10), UNIT_KOOPA_TROOPA)

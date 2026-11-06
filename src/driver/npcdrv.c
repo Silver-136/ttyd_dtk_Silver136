@@ -873,6 +873,7 @@ void npcMain(void) {
                                 f32 tz = entry->territoryBase.z - entry->position.z;
                                 f32 tx = entry->territoryBase.x - entry->position.x;
                                 f32 d = sqrtf(tx * tx + tz * tz);
+
                                 // Both arms read territoryHoming.x (the circle always uses the homing radius); the square check below reads territoryLoiter
                                 // outside the find event
                                 if (d > (st == NPC_EVENT_FIND ? entry->territoryHoming.x : entry->territoryHoming.x)) {
@@ -988,6 +989,7 @@ void npcMain(void) {
                             }
 #else
                             dist = dx * dx + dz * dz;
+
                             // FAKE: discarded sqrtf call; removing it changes the object
                             sqrtf(dist);
 #endif
@@ -1443,6 +1445,7 @@ static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 #endif
     mario->position.x += dx;
     mario->position.z += dz;
+
     // FAKE: the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object
     dz = mario->wPlayerCollisionBox.y;
 #if VERSION <= VERSION_DEMO_JP
@@ -1511,6 +1514,7 @@ static void npcMoveG(NpcEntry* npc) {
             f64 fallDistance = __fabs(dy);
             f32 probeHeight = 0.8f * npc->height;
             dist = probeHeight + (f32)fallDistance;
+
             // US and later: also probe the floor at both side edges of the NPC
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x, npc->position.y + probeHeight, npc->position.z, 0.0f,
@@ -1674,6 +1678,7 @@ NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
             dz = z - entry->position.z;
             dy = y - entry->position.y;
             dist = sqrtf(dx * dx + dz * dz);
+
             // FAKE: the 3D distance is computed and discarded; removing it changes the object
             sqrtf(dx * dx + dy * dy + dz * dz);
             if (dist < range) {
@@ -2424,6 +2429,7 @@ void fbatBattleMode(void) {
 #endif
                 info4 = &data->info;
                 res = BattleInformationGetResult(info4);
+
                 // FAKE: the stolen check as a loop with break over a byte offset (int counter): MWCC unrolls it
                 // into the if/else chain with every offset folded into cur, and the 8 loads share one vreg
                 // (an indexed `stolenItems[k]` loop is strength-reduced and leaves an addi base)
@@ -2790,6 +2796,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 if (mario->currMotionId != MARIO_MOTION_HAMMER)
                     break;
                 reach = 1.5f * mario->wPlayerCollisionBox.x;
+
                 // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
                 swingAngle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
 #else
@@ -3128,6 +3135,7 @@ static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f3
         }
         sincosf(&s1, &c1, angle);
         sincosf(&s2, &c2, tbl.v[(s32)f]);
+
         // FAKE: x goes through the spare float tmpi2; assigning x directly changes the object
         tmpi2 = mario->position.x + s2 * (s1 * r);
         x = tmpi2;

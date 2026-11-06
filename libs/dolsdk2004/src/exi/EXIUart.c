@@ -29,6 +29,7 @@ static BOOL ProbeBarnacle(s32 chan, u32 dev, u32* revision) {
             err = FALSE;
             err |= !EXIImm(chan, &cmd, sizeof(cmd), EXI_WRITE, NULL);
             err |= !EXISync(chan);
+
             // sizeof(revision) is the size of the pointer, 4, which equals the u32 read
             err |= !EXIImm(chan, revision, sizeof(revision), EXI_READ, NULL);
             err |= !EXISync(chan);

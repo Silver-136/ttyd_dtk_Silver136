@@ -711,10 +711,12 @@ static void _st_chg_msg_disp(void) {
     width = FontGetMessageWidthLine((const char*)st->text, &lines);
     lines++;
     col0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+
     // FAKE: y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object
     y = 0.0f;
     x = y - (width / 2);
     y = -120.0f;
+
     // FAKE: called through a cast prototype with the color's address (no caller copy); passing col0 by value changes the object
     ((WakuColByRefFunc)windowDispGX_Waku_col)(0, &col0, x - 20.0f, ((lines - 1) * 29) + -117.0f, (f32)(width + 40), (f32)(lines * 29 + 1), 10.0f);
     FontDrawStart();

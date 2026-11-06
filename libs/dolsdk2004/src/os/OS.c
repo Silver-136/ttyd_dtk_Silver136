@@ -445,6 +445,7 @@ static void OSExceptionInit(void) {
         __sync();
         ICInvalidateRange(destAddr, handlerSize);
     }
+
     // initialize pointer to exception table
     OSExceptionTable = (void*)OSPhysicalToCached(OS_EXCEPTIONTABLE_ADDR);
     

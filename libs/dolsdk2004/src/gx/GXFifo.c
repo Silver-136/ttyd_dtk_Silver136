@@ -604,6 +604,7 @@ void GXRestoreWriteGatherPipe(void) {
 #endif
 
     enabled = OSDisableInterrupts();
+
     // 31 zero bytes into the write-gather pipe before it is restored
     for (i = 0; i < 31; i++) {
         GXWGFifo.u8 = 0;

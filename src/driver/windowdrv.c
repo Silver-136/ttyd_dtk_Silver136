@@ -1384,6 +1384,7 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXSetTevColor(GX_TEVREG0, color);
 
         top = height / 2.0f;
+
         // FAKE: negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object
         left = -width;
         left = (f32)(left / 2.0f);

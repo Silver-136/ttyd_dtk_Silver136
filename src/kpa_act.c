@@ -85,6 +85,7 @@ USER_FUNC(kpa_score_disp_init) {
     e->uwBase = event->uwBase;
     e->ufBase = event->ufBase;
     ksdp = _mapAlloc(KPA_SCORE_SLOT_COUNT * sizeof(KpaScore));
+
     // FAKE: (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object
     for (i = 0; (s32)i < KPA_SCORE_SLOT_COUNT; i++) {
         ksdp[i].str[0] = 0;
@@ -134,6 +135,7 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
             d[3] = t / 10;
             d[4] = t % 10;
             p = ksdp[i].str;
+
             // FAKE: str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object
             str = ksdp[i].str;
             n = 0;

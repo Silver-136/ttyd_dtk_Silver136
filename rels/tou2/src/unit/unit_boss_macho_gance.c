@@ -1494,6 +1494,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     // Sample the targets; if LW(3) is -1, a confused Grubba is flustered and the action ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
+
     // BUG: no ChoiceSamplingEnemy sets LW(3) before this test (it is still 0 from attack_event),
     // so the no-target exit is never taken.
     IF_INT_EQUAL(LW(3), -1)

@@ -160,6 +160,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     type = work->type;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         w = work;
+
         // FAKE: the counter done is reused as the loop index; a loop over i changes the object
         for (done = 0; done < effect->count; done++, w++) {
             if (w->poseId != -1) {
@@ -201,6 +202,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     }
     if (done >= effect->count - 1) {
         w2 = effect->userdata;
+
         // FAKE: type is reused as the loop index; a loop over i changes the object
         for (type = 0; type < effect->count; type++, w2++) {
             if (w2->poseId != -1) {

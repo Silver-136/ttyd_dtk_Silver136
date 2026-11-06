@@ -155,6 +155,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 static USER_FUNC(evt_chuchu_back_loop) {
     EvtWord* args = event->args;
+
     // チュチュリーナ
     NpcEntry* npc = evtNpcNameToPtr(event, "チュチュリーナ");
     s32 total = evtGetValue(event, args[0]);

@@ -116,6 +116,7 @@ void battleCameraMain(void) {
     case BTL_CAM_MODE_CURSOR_UP:
         battleCameraMoveTo(1, 1, 0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\251\201\133\202\273\202\351\202\252\202\244\202\246\202\311");
+
         // falls through
     case BTL_CAM_MODE_FREE:
         if (wp->cameraWork.moveToTimer > 0) {
@@ -257,6 +258,7 @@ void battleCameraMain(void) {
         zz -= 1.5f * w;
         yy = 0.5f * (pos.y + hit.y);
         ofs = -zz / 10.0f;
+
         // BUG: atX is set only when yy is above 50 or below 0; for 0..50 it is read uninitialized below (the clamp
         // has no `atX = yy` before it)
         if (yy > 50.0f) {
@@ -634,6 +636,7 @@ void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 a
         *dAtY = (atY - cam->cameraAt.y) / 15.0f;
         cam->cameraPos.x += *dX;
         cam->cameraPos.y += *dY;
+
         // BUG: only this speed level adds *dZ here; *dZ still holds the caller's value (0 on the frame's first call,
         // the previous step on the shake calls), and the zoom switch below adds the new step again
         cam->cameraPos.z += *dZ;

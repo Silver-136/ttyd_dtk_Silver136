@@ -115,6 +115,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     f32 rad;
     effMugiKemuriData* data;
     s32 i;
+
     // FAKE: unused zero vector; deleting it changes the object
     Vec unused = {0.0f, 0.0f, 0.0f};
 

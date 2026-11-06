@@ -50,6 +50,7 @@ void _prolog(void) {
     relSetEvtAddr("tst_moj_03", tst_moj_03_init_evt);
     relSetEvtAddr("tst_off_01", tst_off_01_init_evt);
     relSetEvtAddr("tst_npc", tst_npc_init_evt);
+
     // tst_nakayama in the Japanese store demo (G8MJ01_DEMO): a reference to an event that does not exist.
     //
     // What the original did: this call is the same in every version that has tst.rel, but the Japanese demo's

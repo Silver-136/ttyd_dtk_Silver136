@@ -754,6 +754,7 @@ void mot_roll(void) {
     case 0x15:
         if (--mario->multiTimer > 0) {
             v31 = revise360(mario->directionView - mario->targetYaw);
+
             // BUG: in both branches the parenthesis closes after the comparison, so the snap tests t - n < 1
             // instead of |t - n| < 1 (case 0x14 sets displayDirection to 0, below t, so both tests agree here).
             if (v31 < 180.0f) {
@@ -995,6 +996,7 @@ void mot_roll(void) {
         nx = nz * (f32)sin(v26);
         nz = nz * -(f32)cos(v26);
         v31 = angleABf(0.0f, 0.0f, nx, nz);
+
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
         if (angOut(tcA, 135.0f, v31) == 1) {
@@ -1064,6 +1066,7 @@ void mot_roll(void) {
             }
         }
         v31 = angleABf(0.0f, 0.0f, nx, nz);
+
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
         if (angOut(tcA, 135.0f, v31) == 1) {
@@ -1267,6 +1270,7 @@ void mot_roll(void) {
     }
     rd = rollData[4];
     mv = toMovedir(mario->displayDirection);
+
     // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
     tcA = ((MarioWork*)mario)->directionView;
     flip = angOut(tcA, 90.0f, mv);
@@ -1314,6 +1318,7 @@ void roll_upstairs_on(void) {
     marioClearJumpPara();
     mario->multiTimer = 3;
     mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)(s32)mario->multiTimer;
+
     // BUG: overwrites the step-height velocity just computed, so roll_upstairs always climbs 3 x 4 = 12 units.
     mario->jumpVelocityY = 4.0f;
     mario->jumpAccelerationY = -0.42f;

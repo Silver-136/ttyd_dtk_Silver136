@@ -1494,6 +1494,7 @@ USER_FUNC(evt_shop_main_func) {
     hit = mario->hitobjStandOn;
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
+
     // FAKE: the masks do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
     if ((!marioChkCtrl() & 0x7ffffff) || (!marioChkKey() & 0x7ffffff)) {
         trg = 0;

@@ -727,6 +727,7 @@ static void e3Disp(CameraId cameraId, void* param) {
                 // Shadow Box
                 winTexSet(i + (u32)TEX_BOX_FIRST, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
                           (Vec){0.35f, 0.35f, 0.35f}, (GXColor){0x00, 0x00, 0x00, 0x40});
+
                 // Content Box
                 winTexSet(i + TEX_BOX_FIRST, (Vec){e3_tbl[i].x, e3_tbl[i].y, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -736,6 +737,7 @@ static void e3Disp(CameraId cameraId, void* param) {
                 // Shadow Box
                 winTexSet(i + (u32)E3_TEX_BOX, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
                           (Vec){0.35f, 0.35f, 0.35f}, (GXColor){0x00, 0x00, 0x00, 0x40});
+
                 // Content Box
                 winTexSet(i + E3_TEX_BOX, (Vec){e3_tbl[i].x, e3_tbl[i].y, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -793,6 +795,7 @@ static void e3Disp(CameraId cameraId, void* param) {
                 // Shadow Box
                 winTexSet(i + (u32)TEX_BOX_FIRST, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
                           (Vec){ 0.35f, 0.35f, 0.35f }, (GXColor){ 0x00, 0x00, 0x00, 0x40 });
+
                 // Content Box
                 winTexSet(i + TEX_BOX_FIRST, (Vec){ e3_tbl[i].x, e3_tbl[i].y, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });

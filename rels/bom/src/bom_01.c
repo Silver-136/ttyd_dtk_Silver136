@@ -484,6 +484,7 @@ void disp_sight(CameraId camera, void* param) {
     winTexInit(*sight_wp->tpl->data);
     for (i = 0; i < 4; i++) {
         on = (gp->retraceCount % 20 > 6 && i == sight_wp->dir) ? 1 : 0;
+
         // FAKE: pointer-typed ?: = id = on ? 6 : 7 without the branchless int select (same value)
         id = (s32)(on ? (char*)6 : (char*)7);
         if (sight_wp->dir == 4) {
@@ -976,6 +977,7 @@ void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     pose->dir = angleABf(x, z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
     if (i % 20 == 0 && !(wp->flags & 1)) {
         Vec pos = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
+
         // FAKE: SFX_NAME_WORD (integer round trip) makes the front end hoist the literal address (same pointer value)
         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG7_BOMB_TOGETHER2"), &pos);
     }
@@ -1046,6 +1048,7 @@ static void ext_main(void) {
             case 3:
                 angle = ( 6.2831855f * rand() ) / 32767.0f;
                 dist = ( 70.0f * rand() ) / 32767.0f;
+
                 // z stays 0.1f (+196) and speed 3.0f: both rand() results are unused, as in the game
                 rand();
                 z = 0.1f;
@@ -1087,6 +1090,7 @@ static void ext_main(void) {
                     PSMTXConcat(m1, m3, *pose->mtx);
                     if (irand(100) == 0) {
                         Vec p = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
+
                         // FAKE: SFX_NAME_WORD (integer round trip), see jump()
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG7_BOMB_FALL1"), &p);
                     }

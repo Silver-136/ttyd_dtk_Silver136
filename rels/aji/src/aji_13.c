@@ -524,6 +524,7 @@ static USER_FUNC(mario_chk) {
         HitEntry* hit = hitNameToPtr((const char*)name_tbl[i]);
         if (hit != NULL && hit->mapObj != NULL) {
             Vec pos = (Vec){hit->mapObj->transformMtx[0][3], hit->mapObj->transformMtx[1][3], hit->mapObj->transformMtx[2][3]};
+
             // Cache this frame's translation delta before replacing the previous position.
             PSVECSubtract(&pos, &work[i].pos, &work[i].delta);
             work[i].pos = pos;
@@ -556,6 +557,7 @@ static USER_FUNC(mario_chk) {
             mario->floorMove.x *= 60.0f / gp->framerate; // PAL: the push per frame is scaled to the frame rate
 #endif
         }
+
         // BUG: tests hitobjUnder (only ever cleared, never set) but passes hitobjStandOn, so this test is always
         // false and the partner never gets the belt push here.
         if (party != NULL && party->hitobjUnder != NULL && hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_bel"))) {

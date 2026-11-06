@@ -669,6 +669,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         f32 dot;
         f32 mx, mz;
         f32 nz;
+
         // FAKE: nn copies bestNrm and nz copies nn.z for the wall slide; using bestNrm directly changes the object (early demos the same)
         nn = bestNrm;
         mx = sn * dist;
@@ -683,6 +684,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     hit = NULL;
 #endif
     sincosf(&sn2, &cs2, ang + 45.0f);
+
     // FAKE: dead first store (the loop sets bestD at the top of each pass); removing it changes the object (early demos the same)
     bestD = rd;
     qpos = *pos;
@@ -945,6 +947,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     Vec t;
     f32 s;
     f32 c;
+
     // FAKE: volatile probe coordinates (plain f32 locals change the object in both versions)
     volatile f32 px;
     volatile f32 py;
@@ -954,6 +957,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     f32 ny0;
     f32 nx0;
     f32 probeHeight;
+
     // FAKE: t.y read into a reused local right after each t store, so the load numbers below the 10.0f
     // (the add is written probeHeight + ty, as in the target operand order)
     f32 ty;
@@ -998,6 +1002,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     t = (Vec){lx, ly, lz};
     ty = t.y;
     d0 = best;
+
     // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
     if ((t.z && t.z) && t.z) {
     }
@@ -1012,6 +1017,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
         lz = pz - ox;
         t = (Vec){lx, ly, lz};
         ty = t.y;
+
         // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
         if ((t.z && t.z) && t.z) { }
         d1 = best;
@@ -1025,6 +1031,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
             lz = pz + oz;
             t = (Vec){lx, ly, lz};
             ty = t.y;
+
             // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
             if ((t.z && t.z) && t.z) { }
             d2 = best;
@@ -1038,6 +1045,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
                 lz = pz - oz;
                 t = (Vec){lx, ly, lz};
                 ty = t.y;
+
                 // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
                 if ((t.z && t.z) && t.z) { }
                 d3 = best;

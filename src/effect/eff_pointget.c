@@ -208,6 +208,7 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     s32 pass;
 #if VERSION >= VERSION_US
     s32 j;
+
     // FAKE: the digit table is read with one flat index over the rows' three words
     // (language * 3 + slot) through row 0's tbl[], as the target computes it; the natural
     // texid_tbl[gp->language].tbl[slot] shares the row address with .count and differs.

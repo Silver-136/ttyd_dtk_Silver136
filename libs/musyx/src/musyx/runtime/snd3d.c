@@ -644,6 +644,7 @@ void s3dHandle() {
       EmitterShutdown(em);
       continue;
     }
+
     // BUG: only this call sets vol, xPan, yPan, zPan, pitch and occl; an emitter with neither bit
     // (not continuous, no start pending) that still has a voice reads them unset further down.
     if ((em->flags & 0x20001) != 0) {

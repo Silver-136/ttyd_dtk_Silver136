@@ -675,6 +675,7 @@ void zakogun_ext_main2(void) {
                     zako->pos.y = zako->target.y;
                     zako->state = 40;
                     work->count++;
+
                     // The final damage check waits until every falling member has landed.
                     if (work->count == 25) {
                         unit->work[UNIT_WORK_ALL_LANDED] = 1;

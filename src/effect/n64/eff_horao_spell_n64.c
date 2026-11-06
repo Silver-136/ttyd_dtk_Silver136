@@ -262,6 +262,7 @@ static void effHoraoSpellDisp(CameraId cameraId, void* payload) {
             PSMTXMultVec(mtx2, &v2, &v2);
             OSInitFastCast();
             OSf32tos16(&v2.x, &q->x);
+
             // FAKE: p[1] is q; writing y and z through q changes the object
             OSf32tos16(&v2.y, &p[1].y);
             OSf32tos16(&v2.z, &p[1].z);

@@ -39,6 +39,7 @@ static void _ac_help_disp(CameraId cameraId, void* param);
 /** Per-frame battle hook: queues the hint box draw when a hint is set and shown, except during a First Strike. */
 void BattleAcHelpMain(void) {
     BattleWork* wp = _battleWorkPointer;
+
     // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
     s32* type = &wp->acHelpDispType;
     if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
@@ -58,6 +59,7 @@ static void _ac_help_disp(CameraId cameraId, void* param) {
     u8 alpha;
     f32 x;
     f32 y;
+
     // FAKE: spare pointer to acHelpMsg; msgSearch(wp->acHelpMsg) changes the object
     const char **help = &wp->acHelpMsg;
     alpha = 0xFF;
@@ -72,6 +74,7 @@ static void _ac_help_disp(CameraId cameraId, void* param) {
     width = FontGetMessageWidthLine(msgs[1], &lines);
     lines++;
     y = 0.0f;
+
     // FAKE: x assigned inside the argument list; computing x first changes the object
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, alpha}, (x = y - (width / 2)) - 20.0f, (-145.0f) + ((lines - 1) * 29), width + 40, (lines * 29) + 1, 10.0f);
     y = -148.0f;

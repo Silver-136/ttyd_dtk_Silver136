@@ -1443,6 +1443,7 @@ static USER_FUNC(star_stone_appear) {
 USER_FUNC(get_ride_pos) {
     DekaWork* w = get_ptr();
     EvtWord* args = event->args;
+
     // FAKE: 64.0f held in k for the three scale products; the literal changes the object
     f32 k = 64.0f;
     if (evtGetValue(event, *args++) == 0) {

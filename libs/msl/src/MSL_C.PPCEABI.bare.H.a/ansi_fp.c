@@ -81,6 +81,7 @@ static inline int __count_trailing_zero(double x) {
     unsigned long* l = (unsigned long*)&x;
     if (l[1] != 0)
         return __count_trailing_zerol(l[1]);
+
     // 0x00100000 is the implicit mantissa bit: the count stops there when the stored mantissa bits are all zero
     return (int)(sizeof(unsigned long) * CHAR_BIT + __count_trailing_zerol(l[0] | 0x00100000));
 }

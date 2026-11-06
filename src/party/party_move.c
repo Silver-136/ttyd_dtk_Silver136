@@ -705,6 +705,7 @@ void partyRecordFootmark(PartyEntry* party) {
         } else {
             if (party->footmarkMode == 1) {
                 party->footmarkMode = 0;
+
                 // FAKE: call through a no-op function-pointer cast; the plain call changes the object
                 ((void (*)(void))partyClearFootmark2)();
             }
@@ -975,6 +976,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     }
     a = (1.0f == party->playerPtr->playerGravity) ? 1.65f : 2.0f;
     b = (1.0f == party->playerPtr->playerGravity) ? 0.8f : 0.0f;
+
     // BUG: the upper bound compares spd with spd + b (not a + b): always true when b > 0, always false when b == 0,
     // so the walk/run band has no top and the spd >= a branch only runs at other gravities.
     if (a - b < spd && spd < spd + b) {
@@ -2466,6 +2468,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
         if (hitCheckVecFilter(&query, NULL)) {
             continue;
         }
+
         // BUG: moves out itself and a rejected spot does not undo it, so later passes start from the last tried
         // spot, not from Mario or the other member.
         movePos(&out->x, &out->z, radius, ang);
@@ -2549,6 +2552,7 @@ BOOL partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out) {
             pos.z = c * r + mobj->z;
             dir = (Vec){0.0f, -1.0f, 0.0f};
             floor = partyHitCheck(party, &pos, &dir, &hitPos, &hitNrm, &dist);
+
             // a spot with no floor within 150 units below is accepted too, not only one over dry floor
             if (!floor || !(hitGetAttr(floor) & HIT_ATTR_WATER_HAZARD)) {
                 break;

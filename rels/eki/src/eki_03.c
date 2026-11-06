@@ -580,6 +580,7 @@ static void sun_tev(MapTevCallbackInfo* info) {
 static USER_FUNC(test_glare) {
     MapObject* sun = mapGetMapObj("sun");
     u16* rect;
+
     // FAKE: discarded getter call; removing it changes the object.
     marioGetPtr();
     if (isFirstCall) {

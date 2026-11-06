@@ -158,6 +158,7 @@ static void effNanigaMain(EffectEntry* effect) {
     case 0:
         work->state++;
         work->timer = 30;
+
         // fall through
     case 1:
         if (work->timer == 30) {

@@ -401,6 +401,7 @@ EVT_END()
 static EVT_BEGIN(damage_fire_explosion_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+
     // BUG: LW(0) is the unit's x coordinate from GetPos, so this waits that many frames
     // (a negative x would not count down to 0).
     WAIT_FRAMES(LW(0))

@@ -335,6 +335,7 @@ static EVT_BEGIN(dmg_fall_event_pata)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 10, -1)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
+
     // BUG: changes the fallen Red Parabuzzy to the plain Buzzy Beetle kind (72), not to the Red Buzzy kind
     // that unit_crimson_met uses (172).
     CALL(btlevtcmd_ChangeKind, LW(10), UNIT_BUZZY_BEETLE)

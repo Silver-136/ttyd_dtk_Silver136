@@ -313,6 +313,7 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
         m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
+
         // BUG: tests the type of item slot 0, which belongs to whichever member took it, not to this member.
         if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
@@ -549,6 +550,7 @@ static void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
         m->itemId = -1;
         item->flags = 0;
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
+
         // BUG: tests the type of item slot 0, not this member's item (item), so the shrink depends on another slot.
         if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
@@ -578,6 +580,7 @@ static void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
         m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
+
         // BUG: tests the type of item slot 0, not this member's item (m->itemId), so the shrink depends on another slot.
         if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);

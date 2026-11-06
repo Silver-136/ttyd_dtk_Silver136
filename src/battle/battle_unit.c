@@ -454,6 +454,7 @@ void BtlUnit_GetHitPos(BattleUnit* unit, BattleUnitPart* part, f32* x, f32* y, f
     f32 y_multiply = 1.0f;
     s32 direction = _battleWorkPointer->alliances[unit->alliance].attackDirection;
     BtlUnit_GetPartsWorldPos(part, x, y, z);
+
     //add hit base offset
     *x = ((f32)direction * (part->hitBaseOffset.x * unit->sizeMultiplier)) + *x;
     *y = (y_multiply * (part->hitBaseOffset.y * unit->sizeMultiplier)) + *y;
@@ -1887,6 +1888,7 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
             scale = 1.5f;
             break;
     }
+
     // FAKE: the product is parked in t before the halving; the single return expression changes the object
     t = scale * (f32)(unitLevel - level);
     return (s32)(t / 2.0f) + unit->kindParams->bonusExp;
@@ -2314,6 +2316,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
 s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch) {
     Vec pos;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+
     // FAKE: called through a prototype with s32 pitch (the definition takes s16); the plain call changes the object
     return ((s32 (*)(BattleUnit*, const char*, s32, s32, Vec*))BtlUnit_snd_se_pos)(unit, sfxName, volume, pitch, &pos);
 }

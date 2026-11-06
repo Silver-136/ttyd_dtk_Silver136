@@ -218,6 +218,7 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         q->x = 100.0f * (f32)cos(r);
         q->y = 0.0f;
         q->z = 100.0f * (f32)sin(r);
+
         // FAKE: (u32)(i * 128) * 4 is i * 512 for i in 0..15; the plain i * 512 changes the object
         q->s = (u32)(i * 128) * 4;
         q->t = 1024;
@@ -243,6 +244,7 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         ang = 10.0f * work->radius[i];
         s = 6.2831855f * work->ang[i] / 360.0f;
         r = (f32)sin(s);
+
         // FAKE: cos(s) through a temp (same call order: sin, then cos, then PSMTXTrans)
         cosVal = (f32)cos(s);
         PSMTXTrans(tex, ang * r, 0, ang * cosVal);
@@ -260,6 +262,7 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         }
         PSMTXTrans(mtx, 10.0f * work->px[i + 1], 10.0f * work->py[i + 1], 10.0f * work->pz[i + 1]);
         PSMTXRotRad(rot, 'z', 0.017453292f * work->rot[i + 1]);
+
         // FAKE: alias of the work->sc array (address only, no load) used for the second scale argument
         scales = work->sc;
         PSMTXConcat(mtx, rot, mtx);

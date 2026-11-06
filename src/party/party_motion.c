@@ -80,6 +80,7 @@ USER_FUNC(evt_snd_bgmon_f_d) {
     s32 flags = args[0];
     const char* bgm_name = (const char*)args[1];
     s32 fadetime = evtGetValue(event, args[2]);
+
     // The fourth argument is evaluated but not used; the third is passed for both fade times.
     evtGetValue(event, args[3]);
     psndBGMOn_f_d(flags, bgm_name, fadetime, fadetime, 0);
@@ -1188,6 +1189,7 @@ found:
         partyGetReadId2(id, &t);
         if (!(party->flags & PARTY_FLAG_DISABLE_FLOORS)) {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
+
             // FAKE: hand-expanded copy of partyBehindGround; the call changes the object
             hit = partySearchGround(party, 10.0f, 0.0f);
             if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
@@ -1228,6 +1230,7 @@ found:
             if (gy > party->position.y) {
                 dir = partyToMovedir(party, party->displayDirectionTarget);
                 sincosf(&s4, &c4, dir);
+
                 // On this upward-step path x/z are replaced by sin/cos*40 without a world-position origin.
                 // FAKE: spare temporary for 40.0f; the plain constant changes the object
                 k = 40.0f;
@@ -1545,6 +1548,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     do {
         fm = partyGetFootmarkPtr(id);
         t = fm->pos;
+
         // dir is not set yet on the first pass: the demo reads it uninitialized here.
         attr = partyGetFrontAttr(party, dir);
         if (!(attr & HIT_ATTR_SPIKES)) {
@@ -2112,6 +2116,7 @@ void party_motion_behind_mario(PartyEntry* party) {
     z = target.z;
     ty = target.y;
     ang = angleABf(party->position.x, party->position.z, x, z);
+
     // FAKE: hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object
     {
         f32 py = ty;
@@ -2147,6 +2152,7 @@ void party_motion_behind_mario(PartyEntry* party) {
             z = party->position.z;
             movePos(&x, &z, dist, ang);
             angleABf(party->position.x, party->position.z, x, z);
+
             // FAKE: hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object
             {
                 f32 py = ty;
@@ -2175,6 +2181,7 @@ void party_motion_behind_mario(PartyEntry* party) {
             z = party->position.z;
             movePos(&x, &z, dist, ang);
             angleABf(party->position.x, party->position.z, x, z);
+
             // FAKE: hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object
             {
                 f32 py = ty;
@@ -2292,6 +2299,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     }
     movePos(&x, &z, sp, party->homeDir);
     angleABf(party->position.x, party->position.z, x, z);
+
     // FAKE: hand-inlined copy of partyGetGndY(x, y, z); the call changes the object
     {
         f32 py = y;
@@ -2623,6 +2631,7 @@ static inline void partyJumpCalc(PartyEntry* party, MarioWork* mario, f32 d) {
     }
     t = 0.5f * party->moveFrames;
     dy = partyJumpHeight(party->moveTarget.y - party->position.y);
+
     // FAKE: dead guard (gz is 0) keeps the moveDistance value d live across the jump-height block;
     // removing it changes the object.
     gz = 0;
@@ -3245,6 +3254,7 @@ static BOOL party_slit(PartyEntry* party) {
     f32 a;
 
     mario = party->playerPtr;
+
     // US and later: a partner not yet in slit mode joins in while Mario is in Paper Mode
     if (party->slitOn != 1) {
 #if VERSION >= VERSION_US
@@ -3444,6 +3454,7 @@ static BOOL party_roll(PartyEntry* party) {
                 if (party->targetDir < 180.0f) {
                     x = 0.1f * (90.0f - party->displayDirection);
                     x += party->displayDirection;
+
                     // BUG: the comparison is inside __fabsf, so this tests 90.0f - x < 1.0f (true for any x above 89)
                     if (__fabsf(90.0f - x < 1.0f)) {
                         x = 90.0f;
@@ -3453,6 +3464,7 @@ static BOOL party_roll(PartyEntry* party) {
                 } else {
                     x = 0.1f * (270.0f - party->displayDirection);
                     x += party->displayDirection;
+
                     // BUG: the comparison is inside __fabsf, so this tests 270.0f - x < 1.0f (true for any x above 269)
                     if (__fabsf(270.0f - x < 1.0f)) {
                         x = 270.0f;

@@ -132,6 +132,7 @@ USER_FUNC(waku) {
                 npcNameToPtr("枠")->position = positions[idx];
             } else {
                 Vec hidden = {0.0f, -1000.0f, 0.0f};
+
                 // 腕
                 npcNameToPtr("枠")->position = hidden;
             }
@@ -156,6 +157,7 @@ USER_FUNC(waku) {
                 npcNameToPtr("枠２")->position = positions[idx];
             } else {
                 Vec hidden = {0.0f, -1000.0f, 0.0f};
+
                 // 腕2
                 npcNameToPtr("枠２")->position = hidden;
             }

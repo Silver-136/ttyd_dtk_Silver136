@@ -193,6 +193,7 @@ void marioBalloonMain(void) {
         return;
     }
     show = FALSE;
+
     // FAKE: switch on !marioChkKey() (empty case 0, default turns the balloon off); the plain if changes the object
     switch (!marioChkKey()) {
         case 0:

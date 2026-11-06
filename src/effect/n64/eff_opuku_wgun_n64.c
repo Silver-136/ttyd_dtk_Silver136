@@ -199,6 +199,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     GXTexObj texObj;
     Vec v;
     f32 scl;
+
     // FAKE: zero is added to z in both vertices; 20.0f * work->z[i] changes the object
     f32 zero = 0.0f;
     f32 rad;
@@ -252,6 +253,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         p->x = 20.0f * (work->x[i] + dx);
         p->y = 20.0f * (work->y[i] + dy);
         p->z = 20.0f * (work->z[i] + zero);
+
         // FAKE: (u32)(i * 64) * 5 == i * 320 (the old k IV) for i in 0..11; the unsigned multiply is strength-reduced by the back-end loop pass, so no li k = 0 competes with the work IV copy in the block after smartAlloc (target order li r28 / mr r30)
         p->s = (u32)(i * 64) * 5;
         p->t = 0;
@@ -332,6 +334,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         effGetTexObjN64(0x8E, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
     }
+
     // FAKE: j >= 0 always holds here; the loop without the test changes the object
     for (j = 0, n = 0; j < i - 1; j++) {
         if (j >= 0) {

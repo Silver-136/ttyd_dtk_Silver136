@@ -87,6 +87,7 @@ void seq_logoInit(SequenceWork* work) {
             VIWaitForRetrace();
             VIWaitForRetrace();
             gp->flags |= GW_FLAG_PROGRESSIVE;
+
             // give the TV 2 s to settle on the new mode
             for (i = 0; i < 120; i++) {
                 VIWaitForRetrace();
@@ -421,6 +422,7 @@ void seq_logoMain(SequenceWork* work) {
             if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
                 wp->skipStory = TRUE;
             }
+
             // FAKE: unsigned compare of the BOOL result with 0U; `!psndPushGroup()` compiles cmpwi and changes the object
             if ((u32)psndPushGroup() == 0U) {
                 DVDMgrSetupCallback(NULL);
@@ -473,6 +475,7 @@ void seq_logoMain(SequenceWork* work) {
             VISetBlack(FALSE);
             VIWaitForRetrace();
             ret = logoAsyncFirst();
+
             // FAKE: unsigned compare with 0U; `ret == 0` changes the object (JP)
             if (ret == 0U) {
                 ok = 0;
@@ -540,6 +543,7 @@ void seq_logoMain(SequenceWork* work) {
 static void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;
+
     // stack variables
     Mtx44 ortho;
     Mtx position;

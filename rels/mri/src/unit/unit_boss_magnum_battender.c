@@ -995,6 +995,7 @@ static EVT_BEGIN(shake_attack_event)
         CALL(btlevtcmd_CheckStatus, UNIT_ID_MARIO, STATUS_INVISIBLE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
+
             // BUG: resets UNIT_ID_SELF's pose instead of Mario's, so on a miss Mario keeps his M_I_O flinch pose.
             CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
         END_IF

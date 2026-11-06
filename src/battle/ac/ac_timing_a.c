@@ -98,6 +98,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
 #endif
         case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+
             // no break: in JP and later case 100 sets iconX to 30.0f, so the icon does not slide in
         case AC_STATE_START:
 #if VERSION >= VERSION_JP
@@ -235,6 +236,7 @@ s32 battleAcMain_TimingA(BattleWork* work) {
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
             work->actionCommands.acState = AC_STATE_WAIT_START;
+
             // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
             ((TimingAWork*)work->actionCommands.work)->flags &= ~AC_TIMING_A_ICON_PRESSED;
             work->actionCommands.outputParams[0] = 0;

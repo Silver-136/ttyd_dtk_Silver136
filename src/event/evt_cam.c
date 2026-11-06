@@ -67,6 +67,7 @@ USER_FUNC(evt_cam_shake) {
 
     id = evtGetValue(event, args[0]);
     x = evtGetFloat(event, args[1]);
+
     // FAKE: camId is a spare copy of id for two camGetPtr calls; using id changes the object
     camId = id;
     y = evtGetFloat(event, args[2]);
@@ -171,6 +172,7 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     curve = evtGetValue(event, args[5]);
     camera = camGetPtr(CAMERA_3D);
     at = (Vec){x, y, z};
+
     // FAKE: unused zero Vec expression; removing it changes the object
     (Vec){0.0f, 0.0f, 0.0f};
     PSVECSubtract(&at, &camera->cameraPos, &pos);

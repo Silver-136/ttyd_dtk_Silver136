@@ -880,6 +880,7 @@ static void senkaron_ext_main(void) {
     mario = marioGetPtr();
     scale = mario->wPlayerCollisionBox.x / 2;
     marioPushedFlag = 0;
+
     // The hammer counter repeats every 15 updates; the crowd-repulsion test uses update 10.
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         if (++marioHammerFrame == 15) {

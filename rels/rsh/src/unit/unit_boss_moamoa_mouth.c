@@ -360,6 +360,7 @@ static EVT_BEGIN(evt_attack)
     // Choose the targets for the mouth's attack; a confused mouth is flustered when there are none.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_moamoa_attack))
+
     // BUG: no ChoiceSamplingEnemy sets LW(3)/LW(4) here, so this test never fires and the camera and
     // AttackDeclare below get the unset LW(3)/LW(4); only GetSelectEnemy later loads the real target.
     IF_INT_EQUAL(LW(3), -1)

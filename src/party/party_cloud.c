@@ -400,6 +400,7 @@ void cloud_use(PartyEntry* party) {
         return;
     }
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+
     // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
     // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
@@ -561,6 +562,7 @@ void _cloud_use(PartyEntry* party) {
         }
         CLOUD_WORK(party)->breathDist += 2.0f;
         cl = CLOUD_WORK(party);
+
         // FAKE: re-reads the player pointer mario already holds; dropping the reload changes the object
         mario = party->playerPtr;
         if (cl->breathDist >= cl->breathDistMax) {

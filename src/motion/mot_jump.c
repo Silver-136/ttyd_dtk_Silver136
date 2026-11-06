@@ -290,6 +290,7 @@ void mot_jumpNpc(void) {
                 {
                     Vec v;
                     Vec t = {0.0f, 0.0f, 0.0f};
+
                     // FAKE: one Vec holds the front distance (x) and the sin/cos pair (z, y); an f32 out with the s, c locals (as in mot_jumpSw) changes the object
                     Vec out;
                     t.x = mobj->position.x;

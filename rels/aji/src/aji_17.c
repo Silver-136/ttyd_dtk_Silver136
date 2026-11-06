@@ -356,6 +356,7 @@ void noiseDisp(CameraId cameraId, void* param) {
     GXTexCoord2s16(1, 1);
     GXPosition3s16(gp->fbWidth / 2, -gp->efbHeight / 2, 0);
     GXTexCoord2s16(1, 0);
+
     // BUG: -gp->fbWidth without the / 2 of the other corners, so this corner sits half a screen further left and
     // the quad is a trapezoid (the noise texture is skewed across its lower left).
     GXPosition3s16(-gp->fbWidth, -gp->efbHeight / 2, 0);
@@ -1568,6 +1569,7 @@ EVT_BEGIN(peach_evt_dance)
                 CALL_CHILD(dance_btn_clear)
                 SWITCH(LW(2))
                     CASE_EQUAL(1)
+
                     // The right button makes the couple step, turn or reverse and scores a point.
                     SPAWN_EVENT(peach_dance_action_step)
                     CASE_EQUAL(2)
@@ -3637,6 +3639,7 @@ s32 set_local_rotate(EventEntry* event, BOOL isFirstCall) {
 
     dance_dt.rot = evtGetFloat(event, event->args[0]);
     r = dance_dt.rot;
+
     // Adjust by at most one revolution rather than applying a full modulo.
     if (r > 6.2831855f) {
         dance_dt.rot = r - 6.2831855f;

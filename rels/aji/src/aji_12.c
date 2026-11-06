@@ -375,6 +375,7 @@ static USER_FUNC(mario_chk) {
     hitGrpAttrOff(name, HIT_ATTR_SPIKES);
 #endif
     event->userdata[1]++;
+
     // The strict threshold advances after 21 or 61 calls, depending on whether the start was entered.
     if (event->userdata[1] > (event->userdata[2] == 0 ? 20 : 60)) {
         event->userdata[1] = 0;

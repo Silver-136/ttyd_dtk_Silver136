@@ -779,6 +779,7 @@ static void effThunderDisp(CameraId cameraId, void* payload) {
         GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, 255});
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+
         // BUG: four stages are set up below but only two enabled, so stages 2-3 (the A1 subtract and the vertex
         // alpha multiply, set up with TEVREG1 and the channel above) never run.
         GXSetNumTevStages(2);
@@ -1004,6 +1005,7 @@ static void effThunderDisp(CameraId cameraId, void* payload) {
             tri2(460, 461, 462, 0, 460, 462, 463, 0);
             tri2(464, 465, 466, 0, 464, 466, 467, 0);
             tri2(468, 469, 470, 0, 468, 470, 471, 0);
+
             // The second triangle uses vertex 446, not 472 as in the neighbouring quads (446 is an earlier, in-range vertex).
             tri2(472, 473, 474, 0, 446, 474, 475, 0);
             break;

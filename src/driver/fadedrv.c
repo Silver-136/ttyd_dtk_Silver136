@@ -1385,6 +1385,7 @@ static f32 z(void) {
     CameraEntry* camera;
     Vec pos;
     f32 base;
+
     // FAKE: `one` (1.0f) is only a factor in the returned depth; dropping the product changes the object
     f32 one = 1.0f;
     f32 pz;
@@ -1525,6 +1526,7 @@ static void disp_maku(CameraId camId, void* param) {
         camera = camGetPtr(CAMERA_3D);
         mag = 3.141592f;
         depth = camera->fovY;
+
         // FAKE: depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object
         depth = (depth *= 0.5f) / 180.0f;
         depth = tan(mag * depth);

@@ -95,6 +95,7 @@ static void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
 
     cx = cam->cameraAt.x;
     cy = (cam->cameraAt.y + cam->cameraPos.y) / 2.0f;
+
     // BUG: averages cameraAt.z with viewDistance (a length, not a coordinate) where y averages cameraAt and
     // cameraPos, so the box centre z shifts with the camera distance instead of lying between target and eye.
     cz = (cam->cameraAt.z + cam->viewDistance) / 2.0f;
@@ -299,6 +300,7 @@ static void effSnowfallDisp(CameraId cameraId, void* param) {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, alpha});
     }
     GXSetCullMode(GX_CULL_NONE);
+
     // FAKE: discarded compound literal with no effect; removing it changes the object
     (void)(GXColor){0, 0, 0, alpha};
     effSetVtxDescN64(eff_snowfall_v);

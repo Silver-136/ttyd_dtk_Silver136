@@ -2504,6 +2504,7 @@ USER_FUNC(_chuchu_item_steal) {
     if (item == ITEM_NULL) {
         s32 total, r;
         u32 pick;
+
         // the result of this roll is not used
         if (unit->dropTable != NULL) {
             irand(100);

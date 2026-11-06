@@ -188,6 +188,7 @@ static void effBombDisp(CameraId cameraId, void* payload) {
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
     GXSetCurrentMtx(GX_PNMTX0);
+
     // FAKE: constant temporaries deg, half, one (and left = -one / 2.0f); literals change the object
     deg = 0.017453292f;
     scale = 30.0f * scale;

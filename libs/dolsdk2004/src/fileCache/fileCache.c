@@ -33,6 +33,7 @@ static u8 AllocCacheNode(DSCacheNodePtr* cacheNode, char* name) {
     }
 
     (*cacheNode)->Name = OSAlloc(Strlen(name) + 1);
+
     // BUG: on failure the node allocated above is neither freed nor cleared from *cacheNode
     if (!(*cacheNode)->Name) {
         return FALSE;
@@ -102,6 +103,7 @@ void DSInitCache(DSCachePtr cache) {
     DSCacheNode cacheNode;
 
     cache->PurgeFlag = DS_AUTO_PURGE;
+
     // cacheNode is not initialised: DSInitList only uses the two addresses to get the offset of Link
     DSInitList(&cache->CacheNodeList, (Ptr)&cacheNode, &cacheNode.Link);
 }

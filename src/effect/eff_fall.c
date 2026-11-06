@@ -145,6 +145,7 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     effect->userdata = w;
     effect->callback = effFallMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
+
     // FAKE: comma temps are coloured in assignment order (ia r30 above sfxName r29)
     ia = (0, (s32)width);
     sfxName = (0, "SFX_BTL_STAGE_FALL_WATER1");
@@ -362,6 +363,7 @@ static void effFallMain(EffectEntry* effect) {
                             a = angle / 360.0f;
                         }
                         e->pos.x += 0.5f * (f32)sin(a);
+
                         // FAKE: block temporary for the cosine; plain `e->pos.z += 0.5f * -(f32)cos(a);` changes the object
                         c = (f32)cos(a);
                         e->pos.z += 0.5f * -c;
@@ -446,6 +448,7 @@ static void effFallMain(EffectEntry* effect) {
                 }
                 {
                     EffFallVtx* v = e->vtx->address;
+
                     // BUG: reuses the outer loop counter i; harmless only because a type 2 effect has one element
                     for (i = 0; i < 32; i++, v++) {
                         v->x += e->sway * ((v->y * v->y) / 600.0f);
@@ -536,6 +539,7 @@ static void effFallMain(EffectEntry* effect) {
                             a = angle / 360.0f;
                         }
                         e->pos.x += 2.0f * (f32)sin(a);
+
                         // FAKE: block temporary for the cosine; plain `e->pos.z += 2.0f * -(f32)cos(a);` changes the object
                         c = (f32)cos(a);
                         e->pos.z += 2.0f * -c;
@@ -1157,6 +1161,7 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
         GXCallDisplayList(shibuki_dl_1_2, 0x20);
         GXCallDisplayList(shibuki_dl_1_3, 0x20);
         PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
+
         // FAKE: constant parked in s first; target loads scale before 0.8f (natural `s = w->scale * 0.8f` swaps the loads)
         s = 0.8f;
         s = w->scale * s;

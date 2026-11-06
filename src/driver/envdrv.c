@@ -156,6 +156,7 @@ static void envCapture(CameraId camId, void* param) {
 
     width = gp->fbWidth;
     height = gp->efbHeight;
+
     // FAKE: the & 0xFFFF masks (no-ops on the u16 values) shape the halving; (u32)width / 2 changes the object
     halfWidth = (u16)(((u32)width & 0xFFFF) / 2);
     halfHeight = (u16)(((u32)height & 0xFFFF) / 2);
@@ -405,6 +406,7 @@ static void envDisp_DepthOfField(void) {
     if (wp->flags & ENV_FLAG_DOF_UNUSED) {
         /* FAKE: cam is a one-element array so it becomes an @ temp numbered between mg and tbl2 */
         cam[0] = camGetPtr(CAMERA_2D);
+
         // FAKE: dead guard (gz is 0) gives cam a second def, so it stays a named web instead of the call-result temp
         gz = 0;
         if (gz) cam[0] = (CameraEntry*)wp;
@@ -424,6 +426,7 @@ static void envDisp_DepthOfField(void) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
         /* FAKE: a one-trip loop. The back end unlinks it, which enables its array-to-register pass, so first2
            (kept in memory by the front end, see below) is promoted late and numbered as a codegen temp. */
         for (k = 0; k < 1; k++) {
@@ -475,6 +478,7 @@ static void envDisp_DepthOfField(void) {
                the read is then deleted and the second pass scalarizes it, so its @ temp is created after the
                CSE temps and numbers below them. */
             hz = *(s16*)i2;
+
             /* FAKE: mg holds the int to float magic 0x43300000. The back end value-numbers the hoisted loop 2 lis
                into mg, so the constant gets mg @ temp number. i2 is initialised last so it does not overlap the
                tbl2 address temp. */
@@ -489,6 +493,7 @@ static void envDisp_DepthOfField(void) {
                 GXSetTevColorOp((GXTevStageID)stage2[0], GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)((s32)i2[0] == 3));
                 GXSetTevAlphaOp((GXTevStageID)stage2[0], GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i2[0]));
                 cin = GX_CC_CPREV;
+
                 /* FAKE: first2 is an s32 array stored through an int pointer: the type mismatch keeps it in memory
                    through the front end (see the one-trip loop above) */
                 if (*(int*)first2 = (i2[0] == 0)) {
@@ -635,6 +640,7 @@ static void envGlare(EnvironmentGlare* glare) {
     EnvironmentGlareFilter* glareFilter;
     u32 texH;
     u32 texW;
+
     // FAKE: glareIter/glareCur walk the coords as EnvironmentGlare pointers stepped by one EnvironmentGlareTexCoord; one coord pointer over glare->coords changes the object
     EnvironmentGlare* glareIter;
     EnvironmentGlare* glareCur;
@@ -680,6 +686,7 @@ static void envGlare(EnvironmentGlare* glare) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     glareCount = glare->count;
     doneCount = 0;
+
     // FAKE: texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call
     // changes the object
     texW = glare->kcolorSel0;

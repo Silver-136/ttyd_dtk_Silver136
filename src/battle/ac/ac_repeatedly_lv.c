@@ -184,6 +184,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                 ac->result |= AC_RESULT_SUCCESS;
                 r = irand(100);
                 p->level = 0;
+
                 // BUG: irand(100) is never negative, so this loop never runs and a confused auto-play always gives level 0
                 while (r < 0) {
                     r -= p->levelStep;
@@ -510,6 +511,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;
         s32 number = (s32)ac->outputParams[2] + ac->params[7];
+
         // FAKE: spare temporary w for the 108.0f offset; the plain constant changes the object
         w = 108.0f;
         PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f);

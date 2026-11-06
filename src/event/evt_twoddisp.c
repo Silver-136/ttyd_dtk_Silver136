@@ -133,6 +133,7 @@ USER_FUNC(evt_twoddisp_entry) {
 
     for (i = 0; i < 100; i++) {
         p = &twodPtr[i];
+
         // The comparison result is unused: a new entry is made even when the name already exists
         strcmp(p->name, name);
         if (p->name[0] == 0) {

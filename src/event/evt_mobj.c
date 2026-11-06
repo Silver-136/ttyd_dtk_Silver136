@@ -370,6 +370,7 @@ USER_FUNC(evt_mobj_hit_onoff) {
     s32 on = evtGetValue(event, args[1]);
     MapObjectEntry* mobj = mobjNameToPtr(name);
     s32 i;
+
     // The original tests the address of the name array, which is never NULL, so
     // both hit groups are switched even when a slot is unused.
     if (on) {
@@ -500,6 +501,7 @@ USER_FUNC(evt_mobj_floatswitch_blue) {
     z = evtGetFloat(event, args[4]);
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
+
     // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
     inBattle = gp->inBattle;
     inBattle = inBattle != 0;
@@ -543,6 +545,7 @@ USER_FUNC(evt_mobj_tornadoswitch_blue) {
     z = evtGetFloat(event, args[4]);
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
+
     // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
     inBattle = gp->inBattle;
     inBattle = inBattle != 0;
@@ -666,6 +669,7 @@ USER_FUNC(evt_mobj_floatswitch_red) {
     z = evtGetFloat(event, args[4]);
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
+
     // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
     inBattle = gp->inBattle;
     inBattle = inBattle != 0;
@@ -1181,6 +1185,7 @@ static s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
                 } else {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2), &mobj->position);
                 }
+
                 // BUG: irand(4) returns 0..3, so case 4 (the fifth voice) never plays.
                 switch (irand(4)) {
                 case 0:
@@ -1282,6 +1287,7 @@ static s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
                 } else {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2), &mobj->position);
                 }
+
                 // BUG: irand(4) returns 0..3, so case 4 (the fifth voice) never plays.
                 switch (irand(4)) {
                 case 0:
@@ -2343,6 +2349,7 @@ USER_FUNC(evt_mobj_signboard) {
     y = evtGetFloat(event, args[2]);
     z = evtGetFloat(event, args[3]);
     val = evtGetValue(event, args[4]);
+
     // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
     inBattle = gp->inBattle;
     inBattle = inBattle != 0;
@@ -3482,6 +3489,7 @@ static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
         break;
     case 1:
         c3 = animPoseGetMaterialEvtColor(mobj->poseId);
+
         // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
         if (((0, c3)).a >= 4) {
             c3.a -= 4;
@@ -3593,6 +3601,7 @@ static void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     cam->cameraPos = mobj->position;
     t = tan(0.21816615760326385);
     cam->cameraPos.y += (f32)(u32)height / 2.0f / t;
+
     // The aspect is an integer division (width / height) converted to float afterwards.
     C_MTXPerspective(cam->projection, 25.0f, (f32)(width / height), 1.0f, 32767.0f);
     cam->projType = GX_PERSPECTIVE;
@@ -3733,6 +3742,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
     mobj->flags |= MOBJ_FLAG_PAPER_TEX;
     dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
+
     // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
     joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
     mp = marioGetPtr();
@@ -4533,6 +4543,7 @@ USER_FUNC(evt_mobj_koopa_hidden_blk) {
     item = evtGetValue(event, args[4]);
     val = evtGetValue(event, args[6]);
     flagVar = args[7];
+
     // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
     inBattle = gp->inBattle;
     inBattle = inBattle != 0;

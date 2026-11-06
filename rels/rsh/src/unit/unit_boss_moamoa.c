@@ -1311,6 +1311,7 @@ USER_FUNC(moamoa_on) {
         strcpy(wp->groups[wp->numGroups].pose, pose);
         wp->groups[wp->numGroups].start = start;
         wp->groups[wp->numGroups].num = j - start + 1;
+
         // BUG: the preceding particle loop left elem one past the allocated array.
         if (elem->type >= 2 && elem->type != 10) {
             wp->groups[wp->numGroups].speed = 12.0f;

@@ -354,6 +354,7 @@ static void effDogabonAttackDisp(CameraId cameraId, void* param) {
             PSMTXTrans(trans, work->x[i], work->y[i], work->z[i]);
             PSMTXConcat(rot, trans, trans);
             PSMTXRotRad(rot, 'y', 0.017453292f * -work->rotY[i]);
+
             // BUG: rot is not used here; trans is multiplied by itself
             PSMTXConcat(trans, trans, trans);
             PSMTXRotRad(rot, 'z', 0.017453292f * work->rotZ[i]);

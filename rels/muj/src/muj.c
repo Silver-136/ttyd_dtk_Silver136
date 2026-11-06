@@ -292,6 +292,7 @@ USER_FUNC(muj_npc_buruburu) {
             break;
     }
     event->userdataf[0] = offset;
+
     // A zero duration keeps shaking indefinitely and does not restore the saved position.
     if (duration == 0) {
         return EVT_RETURN_BLOCK;

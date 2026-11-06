@@ -988,6 +988,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, MOVE_SOUND_KEEP, 1)
         CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+
         // BUG: returns with the action command started above (StartAC) still running: no btlevtcmd_StopAC here.
         RETURN
     END_IF

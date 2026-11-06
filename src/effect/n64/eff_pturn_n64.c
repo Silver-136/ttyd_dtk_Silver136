@@ -207,6 +207,7 @@ static void effPturnMain(EffectEntry* effect) {
         f32 y;
         work->scale = (age >= 9 || type == 10) ? 1.0f : scale_dat[age];
         work->scale = work->scale * scl;
+
         // FAKE: spare flag local for the condition; testing it directly changes the object
         f2 = (type == 0 || type == 1);
         if (f2) {

@@ -1050,6 +1050,7 @@ USER_FUNC(evt_mario_mov_pos) {
         } else {
             spd = distABf(mp->position.x, mp->position.z, x, z) / event->userdata[0];
         }
+
         // FAKE: called through a (frames, dir, speed) cast so the frame count is loaded before the direction; the
         // plain call in the definition's order (dir, time, speed) loads them the other way round.
         ((void (*)(s32, f32, f32))marioSetForceMove)(event->userdata[0], mp->directionView, spd);
@@ -1893,6 +1894,7 @@ USER_FUNC(evt_koopa_fire) {
     MarioWork* mp = marioGetPtr();
     if (isFirstCall) {
         event->userdata[0] = 0;
+
         // FAKE: s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object
         event->userdata[2] = (f32)sysMsec2Frame(evtGetValue(event, args[0]));
         kpaAttackStart();

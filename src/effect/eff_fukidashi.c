@@ -653,6 +653,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
                 effGetTexObj(10, &texObj);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
+
                 // BUG: this pass == 0 test also covers the icon quad, so the back pass (pass 1) draws nothing and the
                 // darker back-pass colour in the inner else is never used.
                 if (pass == 0) {

@@ -1486,6 +1486,7 @@ USER_FUNC(temae_kesu) {
     mapGrpFlagOff("S11_kabe", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOff("S112_kabe", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOff("S113_kabe", MAP_OBJ_FLAG_HIDDEN);
+
     // Hide walls in the camera's octant and its neighbours.
     idx = (157.5f + cam->viewYaw) / 45.0f;
     idx %= 8;

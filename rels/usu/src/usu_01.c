@@ -1097,6 +1097,7 @@ EVT_BEGIN(aunt_talk)
             CALL(evt_msg_print, 0, STRING("stg4_usu_73_01"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
+
         // After the Doopliss fight she gives story text: thanks for restoring the village
         // (stg4_usu_77), then comments by progress.
         CALL(evt_msg_print, 0, STRING("stg4_usu_77"), 0, STRING("me"))
@@ -2019,6 +2020,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                     CALL(evt_party_run, 0)
                 END_IF
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
+
                 // Later the crows gossip about Peach being kidnapped again (stg4_usu_141 and 142),
                 // repeated in new versions after Franklys's house (142_1, 142_2) and after the ending (142_2_1, 142_2_2).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_141"), 0, STRING("カラスＦ"))

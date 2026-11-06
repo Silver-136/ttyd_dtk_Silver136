@@ -46,6 +46,7 @@ static void effRippleDisp(CameraId cameraId, void* payload) {
     GXTexObj texObj;
 
     camera = camGetPtr(cameraId);
+
     // FAKE: type is read through a cast of userdata before work is set; reading work->type changes the object
     type = ((EffRippleN64Work*)effect->userdata)->type;
     work = effect->userdata;

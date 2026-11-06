@@ -181,6 +181,7 @@ static void main_dl(EffectEntry* effect, Mtx base) {
                     break;
                 default:
                     ang -= 50.0f;
+
                     // 1.2048193f = 1 / 0.83f: the velocity before this frame's decay in effMagic1Main
                     ox -= 2.0f * (1.2048193f * w->velocity.x);
                     break;

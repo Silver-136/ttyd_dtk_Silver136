@@ -281,6 +281,7 @@ void BattleStageObjectInit(void) {
             break;
         }
     }
+
     // With no free slot, obj still points to the last slot; there is no full-table check here.
     obj->data = data;
     obj->id = id;
@@ -2767,6 +2768,7 @@ USER_FUNC(_set_mobj_rotate_x) {
 
     EvtWord* args = event->args;
     busy = FALSE;
+
     // FAKE: wp is assigned inside the expression; the two plain statements change the object
     sw = (&(wp = _battleWorkPointer)->stageObjectWork);
     layer = evtGetValue(event, *args++);
@@ -3132,6 +3134,7 @@ static void _Nozzle_Change_Check(u8 index, u8* rate) {
         if (sw->nozzleTurnEvtId[index] == 0) {
             sw->nozzleNextDir[index] = dir;
             evt = evtEntry(_nozzle_turn_event, 10, 0);
+
             // evt->eventId is read before the NULL test below (evtEntry never returns NULL; a full pool gives the one-past entry).
             sw->nozzleTurnEvtId[index] = evt->eventId;
             if (evt) {
@@ -3267,6 +3270,7 @@ static void _disp_escape_wall_message(CameraId camera, void* param) {
     const char* msg = msgSearch("btl_msg_escape_wall_close2");
     s32 width = FontGetMessageWidth(msg);
     f32 x;
+
     // FAKE: spare temporary for 0.0f; writing 0.0f in place changes the object
     f32 zero = 0.0f;
 
@@ -3808,6 +3812,7 @@ static void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* s
     _rate_mix(&d[0x0], &d[0x1], &s[0x0], &s[0x1]); // sleep
     _rate_mix(&d[0x2], &d[0x3], &s[0x2], &s[0x3]); // stop
     _rate_mix(&d[0x4], &d[0x5], &s[0x4], &s[0x5]); // dizzy
+
     // BUG: adds the source's poisonStrength (s[0x8]) to poisonTime instead of its poisonTime (s[0x7]);
     // poisonStrength itself is not combined
     _rate_mix(&d[0x6], &d[0x7], &s[0x6], &s[0x8]); // poison
@@ -4061,6 +4066,7 @@ USER_FUNC(_object_fall_attack) {
                         if (e->unitId == o2->unitId) {
                             o2->delay = delay;
                             delay += irand(22) + 20;
+
                             // BUG: o2 is an earlier entry whose pre-check already ran, and forceHit is read only by
                             // that pre-check, so setting it here changes nothing.
                             if (o2->noAc) {

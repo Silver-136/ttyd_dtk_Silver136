@@ -84,6 +84,7 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
         radP = 6.2831855f * pitch / 360.0f;
         sinA = sin(radP);
         rad = 6.2831855f * (yaw + (f32)((i & 2) * (i / 2) * 4)) / 360.0f;
+
         // FAKE: block-local temporary for cos(rad); the plain expression changes the object
         c = cos(rad);
         work->velocity.x = c * sinA;

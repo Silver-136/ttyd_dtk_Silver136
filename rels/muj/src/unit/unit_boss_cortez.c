@@ -1423,6 +1423,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
+
         // He winds up for the bone rain (KRT_3A_1, 3A_2 or 3A_3, depending on his stance) for about 1.7
         // seconds.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3A_1"))
@@ -2294,6 +2295,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+
         // First form defeated: he moves on to the second form and its attacks.
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, 1)
         CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_mode2))
@@ -2364,6 +2366,7 @@ static EVT_BEGIN(dead_event)
         CASE_OR_EQUAL(1)
         CASE_OR_EQUAL(2)
         CASE_OR_EQUAL(3)
+
         // Second form defeated: he switches to the final form's attacks and his bones crash to the floor.
         CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_mode3))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_BONE_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2964,6 +2967,7 @@ USER_FUNC(_cortez_check_drain_audience) {
         work->audienceId[i] = -1;
         work->eff[i] = NULL;
         work->seq[i] = 0;
+
         // Select the ten right-hand seats from each of ten twenty-seat rows.
         seat = 10 + (i / 10) * 20 + i % 10;
         if ((u8)BattleAudience_GetExist(seat)) {

@@ -2133,6 +2133,7 @@ static void draw(CameraId camera, void* param) {
     winTexInit(*(TEXPalette**)wp->tpl->data);
 #if VERSION <= VERSION_DEMO_JP
     winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
+
     // the demo blinks PRESS START under the logo once the ship has arrived (GF(0))
     if (evtGetValue(NULL, GF(0))) {
         f32 s = (f32)sin((f32)gp->retraceCount / 15.0f);

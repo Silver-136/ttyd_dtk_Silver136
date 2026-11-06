@@ -82,6 +82,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     count = texid_tbl[gp->language].count + 1;
 #else
     effect = effEntry();
+
     // JP and the early demos read the language here (both languages use 7 entries)
     count = 7;
     if (gp->language != LANGUAGE_JP) {

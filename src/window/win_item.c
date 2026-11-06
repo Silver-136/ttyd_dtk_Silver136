@@ -655,6 +655,7 @@ s32 winItemMain(WindowWork* w) {
                     list[k++] = &winPartyDt[i];
                 }
             }
+
             // BUG (early demos): only hp_restored is applied here; the FP and Star Power amounts are added from JP on.
             if (w->item.useTarget < 1) {
                 pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
@@ -822,6 +823,7 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
     }
     GXSetScissor(0, 0x6D, 0x260, 0xC0);
     p = w;
+
     // FAKE: p is the work stepped one s16 at a time, so p->item.skip[0] reads skip[i] with 0x2E8 kept in the load displacement (w->item.skip[i]: r25/r26 swap; an s16* walk: base precomputed with addi)
     for (i = 0; i < cnt; p = (WindowWork*)((s16*)p + 1), ++i) {
         col = i % 2;

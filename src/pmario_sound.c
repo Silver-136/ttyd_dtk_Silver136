@@ -9110,6 +9110,7 @@ static u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
         v = wp->position;
     }
     pd = psnd.direction;
+
     // FAKE: v.z read through a (Vec*) cast of &v; plain v.z changes the object
     ang = angleABf(wp->position.x, wp->position.z, v.x, ((Vec*)&v)->z);
     if (__fabsf(ang - pd) >= 180.0f) {
@@ -9139,6 +9140,7 @@ static u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     dy = v.y - wp->position.y;
     dz = v.z - wp->position.z;
     d = dx * dx + dy * dy + dz * dz;
+
     // d = sqrtf(d): the steps of the math.h sqrtf, written out
     if (d > 0.0f) {
         f64 guess = __frsqrte(d);
@@ -9521,11 +9523,13 @@ static void psndBGMMain(void) {
         if (bgm->listId == -1) {
             continue;
         }
+
         // BUG: checks the stream table for every BGM, also for songs, whose streamId is a song channel: an
         // unrelated stream with that index is unmuted.
         if (SoundSSCheck(bgm->streamId) & SOUND_STREAM_FLAG_MUTE) {
             SoundSSMuteOff(bgm->streamId);
         }
+
         // FAKE: repeated listId test (listId != -1 is known here); dropping it changes the object
         if (bgm->listId == -1) {
             alive = 0;
@@ -9566,6 +9570,7 @@ static void psndBGMMain(void) {
             b = (u8)((f0->dipTime * 0x7F) / f0->dipTimeMax);
         }
         a = (u8)(a * b / 127);
+
         // FAKE: tmpp2 and psbgm[i & 0xF] are the same entry, read both ways; reading every field through tmpp2
         // changes the object
         tmpp2 = &psbgm[i & 0xF];
@@ -9591,6 +9596,7 @@ static void psndBGMMain(void) {
                         SoundSSFadeoutCh(bgm->streamId);
                     } else {
                         SoundSetFadeTime(0, 100);
+
                         // BUG: calls the fade-in, not SoundSongFadeoutCh: the song is never stopped and keeps its
                         // last (faded) volume after listId is cleared.
                         SoundSongFadeinCh(bgm->streamId);
@@ -9754,6 +9760,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     s32 id;
     u32 ft;
     u32 fl;
+
     // FAKE: fo/ft/fl are copies of the parameters; flags is reused to hold the volume and fadetime to hold the
     // PSND_RESTART test; the never-true gz block after the early return gives ft and fo a second definition; fade2
     // repeats fade, and the name is looked up through psndBGMSearchP. Using the parameters directly changes the object.
@@ -9767,6 +9774,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
 #if VERSION <= VERSION_DEMO_JP
     i = psndBGMSearch(bgm_name);
     idx = flags & 0xF;
+
     // FAKE: the BGM id lives in the bgm_name parameter once the name is looked up (the demo reuses its
     // register: a separate id local coalesces with i and colours r28, not r27)
     bgm_name = (char*)i;
@@ -10048,6 +10056,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     bgm->startTime = gp->renderTime;
     if (entry->flags & PSND_BGM_STREAM) {
         bgm->streamId = psndSSFindCh();
+
         // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
         // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if ((u32)bgm->streamId == 0xFFFFFFFF) {
@@ -10263,6 +10272,7 @@ static void psndSFXMain(void) {
     unsigned int none;
     s32 cnt;
     s32 fade = 0;
+
     // FAKE: one-element array used as a scalar channel; a plain s32 ch changes the object
     s32 ch[1];
     s32 tvol;
@@ -10765,6 +10775,7 @@ s32 psndSFXChk(s32 id) {
     }
     key = (uid >> 8) & 0xFFFF;
     sfx = &pssfx[uid & 0xFF];
+
     // FAKE: no-op mask of the u16 serial; key != sfx->serial changes the object
     if (key != (sfx->serial & 0xFFFFu)) {
         return -1;
@@ -10930,9 +10941,11 @@ static inline void psndENVApply(PaperSoundEnv* e) {
     s32 id;
 
     psndENVVolume(e, &psnd, &vol);
+
     // FAKE: the first read of e->sfx goes through an s32 pointer (same value): a plain read is shared with the second
     // read below, the target loads it twice
     id = *(s32*)&e->sfx;
+
     // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
     // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if ((u32)id != 0xFFFFFFFF) {

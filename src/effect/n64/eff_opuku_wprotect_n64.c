@@ -272,6 +272,7 @@ static void effOpukuWprotectDisp(CameraId cameraId, void* param) {
             fx = (f32)sin((f32)(s32)(r + effTblRandN64(1000, (s32)(10.0f * y + x + 100.0f * z))));
             fy = (f32)sin((f32)(s32)(r + effTblRandN64(1000, (s32)(10.0f * x + 100.0f * y + z))));
             fz = (f32)sin((f32)(s32)(r + effTblRandN64(1000, (s32)(100.0f * x + y + 10.0f * z))));
+
             // FAKE: (f32) casts on f32 products; without them the object changes
             x = x + (f32)(20.0f * fx);
             y = y + (f32)(20.0f * fy);

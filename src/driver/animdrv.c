@@ -513,6 +513,7 @@ found:
  */
 s32 animPoseEntry(const char *animName, s32 type) {
     static s32 _dummy = -1;
+
     // FAKE: counters and found-slot temps are one-element s32 arrays (IRO scalarizes them into @ window temps, giving the
     // target's `li c,0; mr off,c` loop starts and @ numbering). pc is the pose-loop counter, copied into poseId on a hit
     // (poseId then numbers below pose), and reused as both texture loops' counter (its second web gets a late @ label).
@@ -594,6 +595,7 @@ poseFound:
             count = wp->totalTextures;
             for (pc[0] = 0; pc[0] < count; pc[0]++) {
                 tex[0] = &wp->textures[pc[0]];
+
                 // FAKE: the BOOL active is read through a u32 view; the plain field changes the object
                 if (*((u32*)(&tex[0]->active))) {
                     if (tex[0]->handle) {
@@ -610,6 +612,7 @@ poseFound:
 
             for (pc[0] = 0; pc[0] < wp->totalTextures; pc[0]++) {
                 tt[0] = &wp->textures[pc[0]];
+
                 // FAKE: the BOOL active is read through a u32 view; the plain field changes the object
                 if (!(*((u32*)(&tt[0]->active)))) {
                     tex[0] = tt[0];
@@ -725,6 +728,7 @@ BOOL animEffectAsync(const char* animName, u32 group) {
     }
     model = fileAsyncf(FILE_TYPE_ANIM, NULL, "%s/%s", "a", animName);
     anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(animName));
+
     // FAKE: (u32) casts on the zero tests (unsigned compares); plain model == 0 / anim == 0 change the object
     if (model == -1) {
         ret = TRUE;
@@ -2054,6 +2058,7 @@ static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTex
     f32 transT;
     f32 rotate;
     u32 mipmap;
+
     // FAKE: texCount/texIdRemap/pTexEntries copied into locals (kept as separate webs by the dead guard before loop 2); the incoming
     // param nodes then neighbour the other params and m but not the counter, which with the counter as a one-element array
     // (IRO @ temp, numbered above m) makes the counter colour last (r23) and the 7 params r24..r30 in order, as in the target
@@ -2064,6 +2069,7 @@ static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTex
         s32 tex2;
         AnimPoseTexEntry *entry;
         s32 id;
+
         // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
         id = texIdRemap[(u32) ((texCount - i[0]) - 1)];
 #else
@@ -2277,6 +2283,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         s32 j[1];
         s32 k;
         k = 0;
+
         // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
         gz = 0;
         if (gz != 0) {
@@ -2415,6 +2422,7 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
         bindId = texEntry[dataId].bindId + texAnim[dataId].texBindIdx;
         if (bindId < 0 || bindId >= bindCount) {
             bindId = 0;
+
             //"Error: animSetMaterial_ChangeTexture: テクスチャがありません frameExt=%d\n"
             printf("Error: animSetMaterial_ChangeTexture: "
                    "テクスチャがありません "
@@ -3181,6 +3189,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
             apdEval(pose, matrix, rotY, scale);
         }
         paper = &wp->poses[pose->paperId];
+
         // FAKE: (animPoseGetBaseData) bypasses the macro so the real inline is used; its return temp keeps the paper wp load out of the early simplify pushes (wp r3 / files r4 / poses r5)
         pd = (animPoseGetBaseData)(paper);
         if (((xluMode != 2) || (!(pd->flags & ANIM_DATA_STAGE_ALPHA_TEST_ALT))) && (!(pd->flags & (1 << xluMode)))) {

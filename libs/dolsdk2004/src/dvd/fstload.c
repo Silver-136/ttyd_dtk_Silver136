@@ -20,6 +20,7 @@ static void cb(s32 result, DVDCommandBlock* block) {
         case 1:
             status = 2;
             DVDReadAbsAsyncForBS(block, bb2->FSTAddress, (bb2->FSTLength + 0x1F) & 0xFFFFFFE0, bb2->FSTPosition, cb);
+
             // falls through to return
         default:
             return;

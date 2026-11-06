@@ -172,6 +172,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
             case AC_STATE_RUN + 3:
                 cw->endTimer = 60;
                 ac->acState = AC_STATE_RUN + 4;
+
                 // FAKE: sfxId compared as u32 with 0xFFFFFFFF; the plain cw->sfxId != -1 changes the object
                 if ((u32)cw->sfxId != 0xFFFFFFFF) {
                     psndSFXOff(cw->sfxId);

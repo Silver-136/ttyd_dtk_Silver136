@@ -262,6 +262,7 @@ void BattleBreakSlot_Init(void) {
     s32 i;
 
     memset(wp, 0, sizeof(BreakSlotWork));
+
     // FAKE: i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     wp->phase = 0;
@@ -401,6 +402,7 @@ void BattleBreakSlot_Main(void) {
                     if (reel->state == 8) {
                         reel->state = 9;
                         reel->spinAccel = -1.0f * (0.2f + 0.15f * rand() / 32767.0f);
+
                         // the random deceleration is overwritten at once: every reel slows by 1.0 per frame
                         reel->spinAccel = -1.0f;
                         break;

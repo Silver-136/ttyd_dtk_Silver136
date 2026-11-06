@@ -292,6 +292,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
         work->timer = 180;
         break;
     }
+
     // FAKE: pp walks the records and work is set from it each pass; stepping work itself changes the object
     pp = work + 1;
     for (i = 1, delay = 8; i < effect->count; delay += 8, i++, pp++) {

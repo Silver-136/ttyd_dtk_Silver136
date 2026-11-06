@@ -711,6 +711,7 @@ void printCount(CameraId camera, void* param) {
             // %3d回
             sprintf(buf, "%3d回", n);
             FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
+
             // かい
             n = evtGetValue(NULL, GW(0));
             sprintf(buf, "かい", n);
@@ -743,6 +744,7 @@ void printCount(CameraId camera, void* param) {
     sprintf(buf, "%3d回", n);
     FontDrawStart();
     FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
+
     // かい
     n = evtGetValue(NULL, GW(0));
     sprintf(buf, "かい", n);

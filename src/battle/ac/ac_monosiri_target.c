@@ -90,6 +90,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             cw->frame = 0;
             cw->sfxId = psndSFXOn("SFX_AC_CURSOR_MOVE1");
             work->actionCommands.acState = AC_STATE_RUN;
+
         // fall through
         case AC_STATE_RUN:
             cw->frame++;

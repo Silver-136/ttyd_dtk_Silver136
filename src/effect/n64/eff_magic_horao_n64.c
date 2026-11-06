@@ -185,6 +185,7 @@ static void effMagicHoraoDisp(CameraId cameraId, void* payload) {
     PSMTXConcat(camera->view, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
+
     // FAKE: ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object
     GXSetTevColor(GX_TEVREG0, (GXColor){(ang = 6.2831855f * (f32)(frame * 30) / 360.0f, 225.0f + 25.0f * (f32)sin(ang)), 225.0f + 25.0f * (f32)sin(ang), 0xFF, alpha});
     GXSetNumChans(0);

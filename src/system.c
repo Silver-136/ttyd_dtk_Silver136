@@ -349,6 +349,7 @@ static void fsort(void** base, u32 n) {
                 t = mask & n;
                 half = step >> 1;
                 mask &= mask << ((half == 0) ? 1 : half);
+
                 // FAKE: two complementary ifs; if (t != 0) ... else ... changes the object
                 if (t != 0)
                     k -= step;

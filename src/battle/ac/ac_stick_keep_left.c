@@ -108,6 +108,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
             case AC_STATE_START:
                 cw->timer = 120;
                 work->actionCommands.acState = AC_STATE_RUN;
+
                 // fallthrough
             case AC_STATE_RUN:
                 if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {

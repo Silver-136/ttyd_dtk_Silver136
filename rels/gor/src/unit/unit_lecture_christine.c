@@ -521,6 +521,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
+
         // The pressed buttons are recorded for the lecture.
         CALL(_config_key_record, PAD_BUTTON_A)
         CASE_EQUAL(7)

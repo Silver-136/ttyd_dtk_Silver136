@@ -124,6 +124,7 @@ static void _btlcmd_MakeActClassTable(BattleWork* wp) {
     cmd = &wp->commandMenu;
     pouch = pouchGetPtr();
     info = wp->fbatInfo->setup;
+
     // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return;
@@ -431,6 +432,7 @@ static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     cmd = &wp->commandMenu;
     pouch = pouchGetPtr();
+
     // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return 0;
@@ -799,6 +801,7 @@ static void _btlcmd_MakeOperationTable(BattleWork* wp) {
     info = wp->fbatInfo->setup;
     cmd = &wp->commandMenu;
     pouch = pouchGetPtr();
+
     // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return;
@@ -952,6 +955,7 @@ static void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
 
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     cmd = &wp->commandMenu;
+
     // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return;
@@ -1080,6 +1084,7 @@ static s32 _btlcmd_MakePartyTable(BattleWork* wp) {
     num = 0;
     selected = 0;
     pouch = pouchGetPtr();
+
     // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return 0;
@@ -1139,6 +1144,7 @@ static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     _btlcmd_MakeSelectWeaponTable(wp, type);
     weapon = wp->commandMenu.weapon[index].weapon;
+
     // FAKE: (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object
     BattleSamplingEnemy(targets, weapon, wp->activeUnitId, BtlUnit_GetEnemyBelong(unit), weapon->targetClassFlags,
         weapon->targetPropertyFlags, (s32)wp->alliances[unit->alliance].attackDirection);
@@ -1213,6 +1219,7 @@ s32 BattleCommandInput(BattleWork* work) {
     wp = (BattleWork*)(void*)work;
     unit = BattleGetUnitPtr(work, work->activeUnitId);
     cmd = &wp->commandMenu;
+
     // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return 1;
@@ -1996,15 +2003,18 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     sprintf(buf, msgSearch("btl_msg_multi_item_cancel_check"));
 #if VERSION >= VERSION_DEMO_EU
     len = (f32)FontGetMessageWidth(buf);
+
     // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
     ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 0.5f * (f32)len), 30.0f, 65.0f + (f32)len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #else
     len = strlen(buf);
+
     // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
     ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * (f32)len), 30.0f, 12.5f * (f32)len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
     FontDrawStart();
+
     // FAKE: 0.0f held in x so the expression is 0.0f - w (a subtraction, not a negation)
     x = 0.0f;
     FontDrawString(x - w, 27.0f, buf);
@@ -3186,6 +3196,7 @@ USER_FUNC(_get_msg) {
     switch (wp->commandMenu.disableReason) {
         case CMD_DISABLE_NO_FP:
             msg = "btl_msg_cmderror_no_fp";
+
             // FAKE: empty if that only reads event->args (twice); without it case 1 is scheduled differently
             if (!event->args && !event->args) {}
             break;

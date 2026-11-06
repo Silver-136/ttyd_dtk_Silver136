@@ -175,6 +175,7 @@ USER_FUNC(iri_22_make_item_tbl) {
     s32 i;
 
     bought = evtGetValue(NULL, GSW_TROUBLE_WORK(0));
+
     // Up to three unsubmitted ingredients, followed by the remaining -1 terminator.
     for (i = 0; i < 4; i++) {
         iri_22_item_tbl[i] = -1;

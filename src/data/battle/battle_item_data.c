@@ -3109,6 +3109,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
     CALL(_naniga_okorukana_check, UNIT_ID_SELF, LW(13))
     SWITCH(LW(13))
         CASE_EQUAL(ITEM_MUSHROOM)
+
         // Mushroom, Ultra Shroom, Dried Shroom, Honey Syrup or Jammin' Jelly: it heals an automatic target.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kinoko))
         SET_VALUE(LW(8), LW(12))
@@ -3140,6 +3141,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
         SET_VALUE(LW(9), ITEM_JAMMIN_JELLY)
         CALL_CHILD(ItemEvent_Recovery_Core)
         CASE_EQUAL(ITEM_VOLT_SHROOM)
+
         // Volt Shroom, Repel Cape, Slow Shroom or Gradual Syrup: its effect on an automatic target.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Biribiri_Kinoko))
         SET_VALUE(LW(8), LW(12))
@@ -3161,6 +3163,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
         CALL_CHILD(ItemEvent_Automatic_Target)
         CALL_CHILD(ItemEvent_Jiwajiwa_Syrup_Core)
         CASE_EQUAL(ITEM_THUNDER_BOLT)
+
         // Thunder Bolt, Thunder Rage, Fire Flower, Shooting Star or Stopwatch: its attack on the enemies.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
         SET_VALUE(LW(8), LW(12))
@@ -4657,6 +4660,7 @@ USER_FUNC(_sampling_random_target) {
     outUnit = args[1];
     outPart = args[2];
     belong = evtGetValue(event, args[3]);
+
     // FAKE: pointer alias of the local targets; using targets directly changes the object
     t = &targets;
     BattleSamplingEnemy(t, weapon, BattleTransID(event, UNIT_ID_SELF), belong, weapon->targetClassFlags,
@@ -4924,6 +4928,7 @@ USER_FUNC(_nancy_mirage) {
         event->userdata[0] = 60;
         event->userdata[1] = animPoseEntry("c_cook", 1);
         event->userdata[2] = 0;
+
         // x/y/z go into three s32 words from userdata3 on (over wInterpRelatedTime), converted to integers
         ((s32*)&event->userdata3)[0] = x;
         ((s32*)&event->userdata3)[1] = y;

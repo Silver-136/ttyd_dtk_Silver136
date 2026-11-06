@@ -981,6 +981,7 @@ static SEQ_EVENT* GenerateNextTrackEvent(u8 trackId) {
 
         ev->type = 3;
         ev->time = track->addr->time;
+
         // loop marker (pattern 0xFFFE): the halfword at `transpose` is the index of the entry to loop back to
         track->addr = &track->base[*((u16*)&track->addr->transpose)];
         return ev;

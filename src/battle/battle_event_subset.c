@@ -139,6 +139,7 @@ EVT_BEGIN(subsetevt_dead)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_MARIO)
+
         // Mario: his Life Shroom revival (data-table event 51) when one saves him, else his KO event 49.
         CALL(btlevtcmd_ClearAllStatus, LW(10))
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
@@ -148,6 +149,7 @@ EVT_BEGIN(subsetevt_dead)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
         END_IF
         CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
+
         // A partner saved by a Life Shroom runs its own revival event if it has one, else the one below.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)

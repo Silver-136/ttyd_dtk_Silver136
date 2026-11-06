@@ -600,6 +600,7 @@ static void ext_moamoa_init(void) {
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = wp->target[0].x + dist * moa_sin(rad);
         (*pose->mtx)[1][3] = 0.0f;
+
         // BUG: the z calculation overwrites the initial x translation; z remains zero from
         // PSMTXIdentity, so the ground probe below uses the overwritten x and zero z.
         (*pose->mtx)[0][3] = wp->target[0].z - dist * moa_cos(rad);
@@ -1071,6 +1072,7 @@ static void ext_moamoa_main(void) {
                         f32 k;
                         f32 r1 = rand() / 32767.0f;
                         hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
+
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         g2 = randf(0.4f, 0.4f);
                         x2 = x;
@@ -1100,6 +1102,7 @@ static void ext_moamoa_main(void) {
                     a2 = 2.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f);
                     r2 = rand() / 32767.0f;
                     b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
+
                     // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                     x2 = x;
                     y2 = y;

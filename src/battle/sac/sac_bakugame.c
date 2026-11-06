@@ -286,6 +286,7 @@ USER_FUNC(bakuGameDecideWeapon) {
     if (v != -1) {
         if (w->gauge >= 100.0f) {
             q[2] = 127;
+
             // FAKE: q is re-pointed at the same address (&w->weapon.sleepChance == q already); removing the second assignment changes the object
             q = &w->weapon.sleepChance;
         } else {
@@ -340,6 +341,7 @@ USER_FUNC(bakuGameMain) {
     s32 n;
     BattleUnit* u;
     BattleAudienceMember* m;
+
     // FAKE: constant locals v200, v100, frames; the literals change the object
     f32 v200 = -200.0f;
     f32 v100 = -100.0f;

@@ -330,6 +330,7 @@ s32 CARDCheckAsync(s32 chan, CARDCallback callback) {
 
 s32 CARDCheckEx(s32 chan, s32* xferBytes) {
     s32 result = CARDCheckExAsync(chan, xferBytes, __CARDSyncCallback);
+
     // BUG: tests the pointer, so with xferBytes NULL a write that CARDCheckExAsync started is not waited for
     if (result < 0 || xferBytes == 0) {
         return result;

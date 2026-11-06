@@ -1825,6 +1825,7 @@ EVT_END()
 static EVT_BEGIN(kurihakase_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_10_01_FRANKLYS_TUTORIAL)
+
         // Frankly's line for the story stage: after the tutorial, the Prologue.
         CALL(evt_msg_print, 0, STRING("mac_0_085"), 0, STRING("me"))
         CASE_LESS(STG1_00_PETAL_MEADOWS)
@@ -1832,6 +1833,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG1_18_PEACH_CAUGHT)
         CALL(evt_msg_print, 0, STRING("gor_02_014"), 0, STRING("me"))
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG1_30_ZESS_T)
+
         // Chapter 1: after the Petal Meadows trip.
         CALL(evt_msg_print, 0, STRING("mac_1_000"), 0, STRING("me"))
         CASE_LESS(STG2_00_BOGGLY_WOODS)
@@ -1839,6 +1841,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG2_25_01_PEACH_CRUMP_X_NAUTS)
         CALL(evt_msg_print, 0, STRING("gor_02_016"), 0, STRING("me"))
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG2_40_THOUSAND_YEAR_DOOR)
+
         // Chapter 2.
         CALL(evt_msg_print, 0, STRING("mac_2_000"), 0, STRING("me"))
         CASE_LESS(STG3_00_WELCOME_TO_GLITZVILLE)
@@ -1846,6 +1849,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_msg_print, 0, STRING("gor_02_018"), 0, STRING("me"))
         CASE_BETWEEN(STG3_33_PEACH_THE_SECRET_WEAPON, STG3_50_THOUSAND_YEAR_DOOR)
+
         // Chapter 3.
         CALL(evt_msg_print, 0, STRING("mac_3_000"), 0, STRING("me"))
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
@@ -1870,6 +1874,7 @@ static EVT_BEGIN(kurihakase_talk)
             END_IF
         END_IF
         CASE_BETWEEN(STG4_15_02_BACK_TO_NORMAL, STG4_30_THOUSAND_YEAR_DOOR)
+
         // Chapter 4, before the Bobbery story steps.
         CALL(evt_msg_print, 0, STRING("mac_4_000"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
@@ -1882,6 +1887,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_EQUAL(STG4_34_BOBBERY_DECLINES)
         CALL(evt_msg_print, 0, STRING("mac_4_060"), 0, STRING("me"))
         CASE_BETWEEN(STG5_44_PEACH_TECS_REQUEST_2, STG5_60_RETURN_TO_KEELHAUL)
+
         // Chapter 5.
         CALL(evt_msg_print, 0, STRING("mac_5_000"), 0, STRING("me"))
         CASE_LESS(STG5_59_ROGUEPORT_DOCK)
@@ -1891,9 +1897,11 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG6_55_PEACH_GRODUS_X_NAUT)
         CALL(evt_msg_print, 0, STRING("gor_02_025"), 0, STRING("me"))
         CASE_BETWEEN(STG6_55_PEACH_GRODUS_X_NAUT, STG6_70_THOUSAND_YEAR_DOOR)
+
         // Chapter 6.
         CALL(evt_msg_print, 0, STRING("mac_6_000"), 0, STRING("me"))
         CASE_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
+
         // Frankly's lines now depend on how much time has passed since the stored timestamp.
         CALL(evt_sub_load_progresstime, GSW_GOR_FRANKLY_STG6_START_TIME, LW(0))
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
@@ -1944,9 +1952,11 @@ static EVT_BEGIN(kurihakase_talk)
         END_IF
 #endif
         CASE_LESS(STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+
         // Frankly's late-story line.
         CALL(evt_msg_print, 0, STRING("gor_02_028"), 0, STRING("me"))
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
+
         // In the epilogue, Frankly reacts to Mario's poses on their first talk.
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("gor_02_029"), 0, STRING("me"))
@@ -2084,6 +2094,7 @@ EVT_BEGIN(oyabun_talk)
         SET_VALUE(GSWF_GOR_ISHNAIL_PASSWORD_TOLD, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_END_TO_GLITZVILLE)
+
         // After the hint: one line per story stage.
         CALL(evt_msg_print, 0, STRING("gor_02_002"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
@@ -2533,6 +2544,7 @@ EVT_END()
 static EVT_BEGIN(sanders_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_33_MEET_BOBBERY)
+
         // Before Mario meets Bobbery: Sanders brushes him off and opens the door.
         CALL(evt_msg_print, 0, STRING("mac_4_049_01"), 0, STRING("me"))
         CALL_CHILD(sanders_open_door)
@@ -2565,9 +2577,11 @@ static EVT_BEGIN(sanders_talk)
             SET_VALUE(GSW_STORY_PROGRESS, STG4_34_BOBBERY_DECLINES)
         END_IF
         CASE_EQUAL(STG4_34_BOBBERY_DECLINES)
+
         // He refuses again before the letter step.
         CALL(evt_msg_print, 0, STRING("mac_4_057"), 0, STRING("me"))
         CASE_EQUAL(STG4_35_ADVICE_FROM_PODLEY)
+
         // At the letter step: Mario, the partner and Sanders line up and Mario hands over the old letter.
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_msg_print, 0, STRING("mac_4_077"), 0, STRING("me"))
@@ -2813,6 +2827,7 @@ EVT_BEGIN(kuribo4_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
+
         // Otherwise: a line per story stage.
         CALL(evt_msg_print, 0, STRING("gor_02_030_00"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)

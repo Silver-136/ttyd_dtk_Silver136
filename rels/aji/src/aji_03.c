@@ -1253,6 +1253,7 @@ USER_FUNC(item_chk) {
         item = itemNameToPtr(name);
         if (item != NULL) {
             f32 dist = distABf(item->position.x, item->position.z, x, z);
+
             // Choose the nearest item strictly within 20 units in XZ; equal distances keep the earlier index.
             if (dist < minDist) {
                 minDist = dist;

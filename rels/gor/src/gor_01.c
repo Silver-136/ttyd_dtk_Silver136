@@ -2194,6 +2194,7 @@ EVT_BEGIN(chusan1_talk)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_05_001"), 0, STRING("me"))
+
             // BUG: the flag is set to 0, not 1, so the ELSE line (irai_05_002) never prints.
             SET_VALUE(GSWF_TROUBLE_WORK(0), 0)
         ELSE
@@ -3567,6 +3568,7 @@ USER_FUNC(house03_f2_fade_func) {
  */
 USER_FUNC(chk_marco_fuki) {
     EvtWord* args = event->args;
+
     // FAKE: passes marioGetPtr() to fbatNpcTalkCheck, which takes no arguments, through a cast; the plain
     // fbatNpcTalkCheck() call drops the marioGetPtr call and changes the object.
     NpcEntry* npc = ((NpcEntry* (*)(MarioWork*))fbatNpcTalkCheck)(marioGetPtr());
@@ -7011,6 +7013,7 @@ static USER_FUNC(cook_chk) {
     }
     parsePop();
     fileFree(file);
+
     // FAKE: volatile casts, see the retail cook_chk.
     evtSetValue(event, (volatile u32)args[1], itemNameToID(result));
     evtSetValue(event, (volatile u32)args[2], itemNameToID(result2));
@@ -7038,6 +7041,7 @@ static USER_FUNC(cook_chk2) {
 
     if (item1 == 163 || item2 == 163) {
         item2 = naniga_okorukana_cook();
+
         // FAKE: volatile cast, see the retail cook_chk.
         evtSetValue(event, (volatile u32)args[2], item2);
         return EVT_RETURN_DONE;
@@ -7070,6 +7074,7 @@ static USER_FUNC(cook_chk2) {
     }
     parsePop();
     fileFree(file);
+
     // FAKE: volatile cast, see the retail cook_chk.
     evtSetValue(event, (volatile u32)args[2], itemNameToID(out));
     return EVT_RETURN_DONE;

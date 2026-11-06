@@ -1032,6 +1032,7 @@ static EVT_BEGIN(shell_attack_event)
     // The attack misses or is dodged.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 100)
+
     // BUG: LW(5) held this unit's Y, but PreCheckDamage overwrote it with the result code (2..6 here), so the
     // move goes to that height.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 0)

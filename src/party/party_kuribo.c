@@ -336,6 +336,7 @@ void kuribo_use(PartyEntry* party) {
     case 20:
         party->moveFrames = 5;
         party->useMotionId = 21;
+
         // fall through
     case 21:
         if (--party->moveFrames > 0) {

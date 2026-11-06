@@ -391,6 +391,7 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
                     break;
                 }
                 hex_exp = hex_exp * 10 + (c - '0');
+
                 // BUG: tests exp_value (the decimal exponent, still 0 here) instead of hex_exp, so a binary
                 // exponent overflow is never reported.
                 if (exp_value > 0x7fff) {
@@ -462,6 +463,7 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
             r.u >>= 1;
         }
         hex_exp += (hex_dig_count - 1) * 4;
+
         // r.s is the top 16 bits of the double: keep the 4 mantissa bits, store the biased exponent above them
         r.s &= 0xf;
         r.s |= (hex_exp + 0x3ff) << 4;

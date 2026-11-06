@@ -135,6 +135,7 @@ void GDSetSpecularDirHA(GXLightID light, f32 nx, f32 ny, f32 nz, f32 hx, f32 hy,
     f32 px;
     f32 py;
     f32 pz;
+
     // a position far along -n: the light is in effect at infinity
     px = 1000000000000000000.0f * -nx;
     py = 1000000000000000000.0f * -ny;
@@ -170,6 +171,7 @@ void GDSetSpecularDir(GXLightID light, f32 nx, f32 ny, f32 nz) {
     hx = hx * mag;
     hy = hy * mag;
     hz = hz * mag;
+
     // a position far along -n: the light is in effect at infinity
     px = 1000000000000000000.0f * -nx;
     py = 1000000000000000000.0f * -ny;

@@ -87,6 +87,7 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
         if (type == 10) {
             elem->angle = 1.0471976f + 6.2831855f * (f32)(i - 1) / 6.0f;
             elem->velocity.x = 5.0f * (f32)sin(elem->angle);
+
             // FAKE: spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object
             cv = (f32)cos(elem->angle);
             elem->velocity.y = 5.0f * -cv;
@@ -236,6 +237,7 @@ static void effItemGetDisp(CameraId cameraId, void* payload) {
     PSMTXScale(m16c, scale, scale, scale);
     PSMTXConcat(m19c, m13c, m19c);
     PSMTXConcat(m19c, m16c, m7c);
+
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     cs = (0, (f32)cos(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
     s = (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f);

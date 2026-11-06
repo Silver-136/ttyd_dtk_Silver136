@@ -808,6 +808,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 
     if (elapsed < duration) {
         t = (f32)elapsed / (f32)duration;
+
         // FAKE: no-op (s32) casts on the s32 elapsed; the plain arguments change the object
         npc->position.x = intplGetValue(EASING_LINEAR, npc->jumpStartPos.x, targetX, (s32)elapsed, duration);
         npc->position.z = intplGetValue(EASING_LINEAR, npc->jumpStartPos.z, targetZ, (s32)elapsed, duration);
@@ -1091,6 +1092,7 @@ USER_FUNC(evt_npc_homing_target) {
 
     finished = FALSE;
     PSVECSubtract(&npc->jumpTargetPos, &npc->position, &diff);
+
     // FAKE: discarded sqrtf call; removing it changes the object
     sqrtf((diff.x * diff.x) + (diff.z * diff.z));
 

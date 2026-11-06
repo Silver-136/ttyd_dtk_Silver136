@@ -139,6 +139,7 @@ static USER_FUNC(evt_cloud_main) {
                 uh = wp->h;
                 w = uw;
                 h = uh;
+
                 // FAKE: (u32)/(s32) casts on the half sizes; (f32)(uw >> 1) changes the object
                 x = (s32)(pos.x - (f32)(s32)((u32)uw >> 1));
                 y = (s32)(pos.y - (f32)(s32)(uh >> 1));

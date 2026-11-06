@@ -386,6 +386,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             iconId = ICON_AC_OFF;
         }
         pos = (Vec){0.0f, 0.0f, 0.0f};
+
         // FAKE: d0 and d1 are never read; removing them changes the object
         d0 = (Vec){0.0f, 0.0f, 0.0f};
         d1 = (Vec){0.0f, 0.0f, 0.0f};
@@ -403,6 +404,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_RUN + 3:
             case AC_STATE_RUN + 4: {
                     Vec p = {0.0f, 0.0f, 0.0f};
+
                     // FAKE: e0 and e1 are never used; removing them changes the object
                     Vec e0 = {0.0f, 0.0f, 0.0f};
                     Vec e1 = {0.0f, 0.0f, 0.0f};
@@ -414,6 +416,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_RUN:
             if (gw->hit) {
                 Vec p = {0.0f, 0.0f, 0.0f};
+
                 // FAKE: e0 and e1 are never used; removing them changes the object
                 Vec e0 = {0.0f, 0.0f, 0.0f};
                 Vec e1 = {0.0f, 0.0f, 0.0f};

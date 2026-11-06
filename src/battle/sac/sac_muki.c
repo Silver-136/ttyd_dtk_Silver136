@@ -773,6 +773,7 @@ static void disp_2D(CameraId cam, void* param) {
         p.x = x;
         p.y = y;
         p.z = 0.0f;
+
         // FAKE: p is copied into s and s is projected; projecting p in place changes the object
         s = p;
         btlGetScreenPoint(&s, &s);
@@ -830,6 +831,7 @@ static void disp_2D(CameraId cam, void* param) {
         p.x = x;
         p.y = y;
         p.z = 0.0f;
+
         // FAKE: p is copied into s and s is projected; projecting p in place changes the object
         s = p;
         btlGetScreenPoint(&s, &s);
@@ -848,6 +850,7 @@ static void disp_2D(CameraId cam, void* param) {
         frac = w->defDisp - (f32)(s32)w->defDisp;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+
         // BUG: d still holds the attack gauge's difference (atkBoost - atkDisp); the defense gauge never computes its own.
         if (d != 0.0f) {
             r = 0xB4;

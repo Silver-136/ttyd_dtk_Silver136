@@ -1106,6 +1106,7 @@ static s32 scissor_damage_sub2(Vec pt) {
         ScissorTri* t = &w->tris[i];
         for (j = 0; j < 3; j++) {
             s32 k = (j + 1) % 3;
+
             // FAKE: y[j] is read through q = &x[j] (index = the x-to-y distance in floats); plain t->y[j] / t->x[j] changes the object
             q = &t->x[j];
             y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)];

@@ -233,6 +233,7 @@ void badgeShop_bottakuruGeneration(void) {
     k = 0;
     for (i = 0; i < BADGE_MAX - 1; i++) {
         count = badgeShop_get(bdsw->bottakuru_table, (s16)(i + 1));
+
         // FAKE: dead int-guarded re-definition (COLOURING M): count keeps a second def, so it stays a named web and takes the target r21
         j = 0;
         if (j != 0) {

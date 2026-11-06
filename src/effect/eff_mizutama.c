@@ -56,6 +56,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffMizutamaWork) * effect->count);
     effect->userdata = work;
     effect->callback = effMizutamaMain;
+
     // FAKE: split computation; `radius = (type + 1) * 10;` changes the object
     radius = type + 1;
     radius *= 10;

@@ -984,6 +984,7 @@ EVT_BEGIN(talk_sakaba)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_tou_05"), 0, 0)
         CASE_EQUAL(STG3_20_00_MAJORS_8TH_PLACE)
+
         // At 8th place in the majors: the keeper hands over a package a fan left for Gonzales,
         // the Super Hammer.
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
@@ -1058,6 +1059,7 @@ EVT_BEGIN(talk_sakaba)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_01_SUPER_HAMMER)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
         CASE_EQUAL(STG3_20_01_SUPER_HAMMER)
+
         // Later: the fan gift, General White during chapter 7, and comeback talk after chapter 3.
         CALL(evt_msg_print, 0, STRING("stg3_tou_297_09"), 0, 0)
         CASE_BETWEEN(STG7_02_MAYOR_BOB, STG7_02_MAYOR_BOB)

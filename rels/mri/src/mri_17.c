@@ -847,6 +847,7 @@ EVT_BEGIN(mri_17_init_evt)
     CALL(evt_map_playanim, STRING("awa_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("sui_hikari"), MAP_ANIM_PLAY_LOOP, 0)
+
     // BUG: mri_countdown is already spawned above, so two copies watch the timer (only the first can start it).
     SPAWN_EVENT(mri_countdown)
     SET_VALUE(LW(0), PTR(ueki_access_data))

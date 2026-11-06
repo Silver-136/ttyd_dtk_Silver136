@@ -122,6 +122,7 @@ s32 camRoadSetup(const char* name) {
     memset(wp, 0, sizeof(CamRoadWork));
     wp->hokanOn = 0;
     wp->prev.on = 0;
+
     // FAKE: the same store twice; a single wp->prev.on = 0 changes the object
     wp->prev.on = 0;
     wp->tuning[0] = 0.005f;
@@ -290,6 +291,7 @@ static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     e1 = crVecSub(A, B);
     e3 = crVecSub(B, C);
     n = crVecCross(e2, e1);
+
     // FAKE: nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object
     nz = n;
     if (nz.x == 0.0f && nz.y == 0.0f && nz.z == 0.0f) {
@@ -324,6 +326,7 @@ static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
         }
     }
     t = -nd / crVecDot(n, dir);
+
     // FAKE: spare temporary h2 in its own block; hit = crVecAdd(P, crVecScale(dir, t)) changes the object
     {
         Vec h2 = crVecAdd(P, crVecScale(dir, t));
@@ -666,6 +669,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             // s is assigned only when dx or dz is nonzero; a segment with dx = dz = 0 leaves it unset (or from the previous pass).
             if (__fabs(dx) > __fabs(dz)) {
                 s = (qx - lx0) / dx;
+
                 // FAKE: ok is assigned and never read; removing the assignment changes the object
                 ok = (s < -0.0000001 || s > 1.0000001);
             } else if (dz != 0.0) {
@@ -897,6 +901,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
             strip = &wp->map->strips[grp->stripOfs];
             for (k = 0; k < m; k++, strip++) {
                 cnt = strip->num;
+
                 // FAKE: decrement as its own statement; cnt = strip->num - 1 changes the object
                 cnt = cnt - 1;
                 idx = &wp->map->stripIdx[strip->idxOfs];
@@ -1052,6 +1057,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
             if (collisionCurve(0, curve, p2, &hit3)) {
                 found2 = 1;
                 p2.x = hit3.pos.x;
+
                 // FAKE: volatile flags load + p2.y store order the lwz between the p2.x and p2.y stores (target 16c8)
                 flags = *(volatile u32*)&hit3.flags;
                 *(volatile f32*)&p2.y = y;
@@ -1278,8 +1284,10 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
 /** Blend curve for interpolation (hokan): eases t from 0 to 1 along a cosine shape, clamped to 1. */
 static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
     f32 c1, c0, c2, r;
+
     // FAKE: cos called through a double (*)(f32) cast; (f32)cos(a) changes the object
     c0 = (f32)((double (*)(f32))cos)(a);
+
     // FAKE: cos called through a double (*)(f32) cast; (f32)cos(b) changes the object
     c1 = (f32)((double (*)(f32))cos)(b);
     c2 = (f32)cos(3.141592f * t * k + o);
@@ -1445,6 +1453,7 @@ void camRoadReset(void) {
     memset(wp, 0, sizeof(CamRoadWork));
     wp->hokanOn = 0;
     wp->prev.on = 0;
+
     // FAKE: the same store twice; a single wp->prev.on = 0 changes the object
     wp->prev.on = 0;
     wp->tuning[0] = 0.005f;

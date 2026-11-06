@@ -2903,6 +2903,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 400)
     WAIT_MS(500)
+
     // BUG: LW(15) holds the face direction from CalculateFaceDirection (+1/-1), not an event id: no event
     // is meant here, and with +1 the event with id 1 is deleted if it is running.
     DELETE_EVENT(LW(15))

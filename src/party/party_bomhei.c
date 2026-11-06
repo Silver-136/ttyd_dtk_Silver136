@@ -506,6 +506,7 @@ static void bomhei_use_main(PartyEntry* party) {
         party->targetDir = angleABf(party->position.x, party->position.z, x, z);
         party->moveDir = party->targetDir;
         party->velY = 7.5f;
+
         // FAKE: the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object
         tmp = 0.8333333f;
         party->accelY = -tmp;
@@ -558,9 +559,11 @@ static void bomhei_use_main(PartyEntry* party) {
         party->targetDir = angleABf(party->position.x, party->position.z, x, z);
         party->moveDir = party->targetDir;
         party->velY = 3.5555556f;
+
         // FAKE: the acceleration is negated from a spare temporary; party->accelY = -0.35555556f changes the object
         tmp = 0.35555556f;
         party->accelY = -tmp;
+
         // FAKE: 10.5f is converted to the frame count (10) at run time through tmp; party->moveFrames = 10 changes the object
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
@@ -576,6 +579,7 @@ static void bomhei_use_main(PartyEntry* party) {
         }
         party->velY = 0.0f;
         party->accelY = -0.33333334f;
+
         // FAKE: 10.5f is converted to the frame count (10) at run time through tmp; party->moveFrames = 10 changes the object
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
@@ -662,6 +666,7 @@ static void bomhei_use_main(PartyEntry* party) {
             psndSFXOff(party->work.bomhei.sfxId);
             party->work.bomhei.sfxId = -1;
         }
+
         // FAKE: called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the
         // caller's copy, same values); mot_damage.h's prototype with &party->position changes the object.
         marioSetSplash(0, party->position);

@@ -905,6 +905,7 @@ static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     }
 #endif
     ret += bonus;
+
     // Positive values below 0x100 multiply; 0x100 and above encode an additive bonus.
     if (mul > 0) {
         if (mul < 0x100) {

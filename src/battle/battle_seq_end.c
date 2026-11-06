@@ -666,6 +666,7 @@ void btlseqEnd(BattleWork* wp) {
         ok = 1;
         mario = BattleGetMarioPtr(wp);
         party2 = BattleGetPartyPtr(wp);
+
         // FAKE: (u32) casts on the s32 BattleUnit.statusFlags in these Danger/Peril tests (here and in the later
         // branch); without them, or with the field typed u32 (battle_unit.c changes then), the object changes.
         if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
@@ -905,6 +906,7 @@ static void _MarioExpDisp(CameraId camId, void* param) {
 
 static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     Vec pos;
+
     // FAKE: 0.0f held in zero so the expression is 0.0f - w, not a negation
     f32 zero = 0.0f;
     u32 len;
@@ -916,6 +918,7 @@ static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_lvup_ok"));
     len = strlen(buf);
+
     // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
     ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * len), 30.0f, 12.5f * len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
@@ -945,6 +948,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     f32 zero = 0.0f;
 
     pouch = pouchGetPtr();
+
     // Requires selected in 0..2; other values leave msg unset.
     switch (work->selected) {
         case 0:
@@ -1469,6 +1473,7 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     const char* msg;
     u16 lines;
     s32 width;
+
     // FAKE: 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object
     f32 y;
     f32 zero = 0.0f;
@@ -1577,6 +1582,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
 USER_FUNC(_set_confetti_control_evtid) {
     EvtWord* args = event->args;
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
+
     // FAKE: empty triple NULL test of seqEndWork; removing it changes the object
     if (!_battleWorkPointer->seqEndWork && !_battleWorkPointer->seqEndWork && !_battleWorkPointer->seqEndWork) {
     }

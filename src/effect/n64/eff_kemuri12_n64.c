@@ -127,6 +127,7 @@ static void effKemuri12Disp(CameraId cameraId, void* param) {
     work = effect->userdata;
     idx = (s32)work->progress;
     alpha = 256.0f * (work->progress - (f32)idx);
+
     // FAKE: integer-cast load makes type an unnamed temp (numbered above the camera copy, coloured first)
     type = (u16)(u32)work->type;
     last = idx == 7;
@@ -189,6 +190,7 @@ static void effKemuri12Disp(CameraId cameraId, void* param) {
     default:
         // FAKE: self-assignment of work->position.z; removing it changes the object
         work->position.z = work->position.z;
+
         // FAKE: float self-assign keeps the camera web live through the switch pre-RA (gives it degree >= K); emits no code
         camera->near = camera->near;
         vtx = size32x32_tex32x32_yougan_vtx;

@@ -178,6 +178,7 @@ static void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                     break;
                 }
             }
+
             // FAKE: classFlags reloaded into flags (same value); dropping the reload changes the object
             flags = d->classFlags;
             if (flags & TARGET_CLASS_ONLY_SELF) {
@@ -635,6 +636,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
 void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit** target) {
     BattleUnit* found;
     BattleUnit* other;
+
     // FAKE: tmp holds the getter result across the swap; assigning it directly changes the object
     BattleUnit* tmp;
     s32 i;

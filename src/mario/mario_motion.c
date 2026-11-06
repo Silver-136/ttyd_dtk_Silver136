@@ -1330,6 +1330,7 @@ static void mot_bottomless(void) {
         mario->baseSpeed = 0.0f;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
+
         // x, y and z are set below only on win_03, win_01 and tik_01, then used on every map.
         if (mario->returnPos.y < -2000.0f) {
             if (!strcmp(gp->currentMapName, "win_03")) {

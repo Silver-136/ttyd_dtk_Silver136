@@ -301,6 +301,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                 switch(tagdata[0]) {
                     case '>': //done reading the tag
                         tagdone = TRUE;
+
                         //fallthrough
 
                     // fallthrough

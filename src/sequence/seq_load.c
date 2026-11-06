@@ -955,6 +955,7 @@ static void loadDraw(CameraId camera, void* param) {
     u64 sec;
 #if VERSION >= VERSION_US
     WinDt* win1[1]; // FAKE: one-element array, so IRO turns win1 into an @ temp: the address of win_dt is computed into
+
     // win1 itself and loop 1 walks a copy of it (the addi r30 / mr r24,r30 direction of the target)
     s32 i;
 #else
@@ -1183,6 +1184,7 @@ static void loadDraw(CameraId camera, void* param) {
             FontDrawString(60.0f + win1->x + (w - y), win1->y, buf);
             PSMTXTrans(m, 58.0f + win1->x, win1->y - 20.0f, 0.0f);
             iconDispGxCol(m, 4, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
+
             // FAKE: y read through a byte offset so the loop-invariant &win1->y becomes a hoisted @ temp (target pop order)
             for (k = 0; k < 7; k++) {
                 if (stars & (1 << (k + 1))) {

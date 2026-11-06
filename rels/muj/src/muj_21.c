@@ -258,6 +258,7 @@ static USER_FUNC(fune_eff) {
     ((EffFunemizuWork*)eff2->userdata)->position.z = 70.7f + pos.z;
     ((EffFunemizuWork*)eff2->userdata)->size = 1.0f;
     ((EffFunemizuWork*)eff2->userdata)->yaw = 305.0f;
+
     // Splash timing follows the global retrace clock, not time since this event started.
     if (gp->retraceCount % 15 == 0) {
         effWaterDamageN64Entry(5, 30, 106.1f + pos.x, pos.y - 50.0f, 106.1f + pos.z, 2.0f);

@@ -88,6 +88,7 @@ USER_FUNC(evt_batstage_light_set_player_on) {
     Vec upv[3] = {{0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f}};
     u8 col[3][3] = {{120, 120, 120}, {120, 120, 120}, {120, 120, 120}};
     u8 en[3] = {0, 0, 0};
+
     // FAKE: unused zeroed array; removing it changes the object
     u8 en2[4] = {0, 0, 0, 0};
 

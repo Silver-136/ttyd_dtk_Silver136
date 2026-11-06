@@ -194,6 +194,7 @@ int EXISync(s32 chan) {
             enabled = OSDisableInterrupts();
             if (exi->state & STATE_SELECTED) {
                 CompleteTransfer(chan);
+
                 // success unless this is a 4-byte immediate read that returned the ID of a USB adapter, IS viewer or
                 // Ether viewer (with CPR bits 0x70 clear) on a console with DI config 0xFF that is not a TDEV and has no
                 // device code 0x8200

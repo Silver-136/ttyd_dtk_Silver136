@@ -135,6 +135,7 @@ static void effSnowmanMain(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
+
     // FAKE: zero held in a local for the compares and stores; 0.0f literals change the object
     zero = 0.0f;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {

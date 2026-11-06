@@ -137,6 +137,7 @@ void winMarioInit(WindowWork* w) {
  */
 void winMarioInit2(WindowWork* w) {
     w->marioSel = 0;
+
     // FAKE: each target field is assigned twice in one chain; the single assignment changes the object
     w->helpTgtX = w->helpTgtX = linkDt[w->marioSel].x;
     w->helpTgtY = w->helpTgtY = linkDt[w->marioSel].y;
@@ -469,6 +470,7 @@ static void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
 void winMarioDisp(s32 camId, void* param, s32 idx) {
 #if VERSION >= VERSION_US
     f32 rowC;
+
     // FAKE: q1/q2 hold copies of row0/row1 for the dead guards after the specialCount block (register order, no code)
     f32 q1[1];
     f32 q2[1];
@@ -669,6 +671,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winTexInit(*w->res->data);
     col4 = 190.0f + (x - 270.0f);
     winTexSet(0x10, (Vec){col4, row0, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+
     // FAKE: copies read only by the dead guards below; they keep two coalesced FPR nodes live across rowC (register order)
     q1[0] = row0;
     q2[0] = row1;

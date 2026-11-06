@@ -1472,6 +1472,7 @@ EVT_END()
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
+
     // Keep the variable references so the updated phases can be written back each frame.
     s32 varX = args[1];
     s32 stepX = evtGetValue(event, varX);

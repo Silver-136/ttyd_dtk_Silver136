@@ -523,6 +523,7 @@ USER_FUNC(zubastar_main) {
         top[0] = bot[0] = -96.0f;
         i = 0;
         n = 1;
+
         // BUG: reads 17 entries of lines[16]; the extra entry overlaps capture, whose value is never 5
         for (; i < 17; i++) {
             ZSLine* l = &w->lines[i];
@@ -1027,6 +1028,7 @@ static void zubastar_disp2D(CameraId cam, void* param) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = w->gaugePos.x - 200.0f;
         pos.y = 60.0f + w->gaugePos.y;
+
         // FAKE: calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object
         ((void (*)(Vec*, s16, s32, f32))iconDispGx)(&pos, ICON_FLAG_2D, icon, 1.0f);
         BattleAcDrawGauge(w->gaugePos.x, w->gaugePos.y, 0.01f * w->gauge, 0xb1, 4, 0x1a, 0x34, 0x4e, 0);

@@ -923,6 +923,7 @@ USER_FUNC(chorogun_escape) {
             }
         }
     }
+
     // BUG: j starts at 1, not i + 1, so this leaves the nearest first and the rest in descending order; with
     // more than 50 candidates the 50 that escape are not the 50 nearest.
     for (i = 0; i < n - 1; i++) {

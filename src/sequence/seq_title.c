@@ -82,6 +82,7 @@ void seq_titleInit(SequenceWork* work) {
     if (seqGetPrevSeq() != SEQ_LOAD) {
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
+
             // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
             // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
@@ -156,6 +157,7 @@ void titleInit(SequenceWork* work) {
                 SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
             }
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
+
             // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
             // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {

@@ -189,6 +189,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_COUNTER_EVENT)
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_LUCKY)
+
         // Lucky (code 38): the unit's own lucky event, else the lucky jingle.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_LUCKY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
@@ -198,6 +199,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_DODGY)
+
         // Dodgy (code 39): the unit's own dodgy event 44, else a miss sound and the paper-dodge animation.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_DODGY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
@@ -240,6 +242,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_MISS)
+
         // Miss (code 40): the unit's data-table miss event 46.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_MISS_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
@@ -268,6 +271,7 @@ EVT_BEGIN(btldefaultevt_Damage)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(DAMAGE_CODE_FIRST_ATTACK_POS)
+
         // The battle opened with Mario's or the partner's First Strike on this unit: data-table event 48.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_FIRST_ATTACK_POS_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
@@ -279,6 +283,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CASE_OR_EQUAL(DAMAGE_CODE_ELECTRIC)
         CASE_OR_EQUAL(DAMAGE_CODE_ICE)
         CASE_OR_EQUAL(DAMAGE_CODE_NORMAL)
+
         // Normal, ice, electric and no-damage hits: the HP gauge shows and the hurt reaction plays
         // (hurt pose 38 for damage pattern 1).
         CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
@@ -294,6 +299,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL_CHILD(subsetevt_damage)
         CASE_END
         CASE_EQUAL(DAMAGE_CODE_STATUS_ONLY)
+
         // A hit that only inflicted a status: the unit shows pose 35 for 45 frames if it has one.
         CALL(btlevtcmd_CheckDefinePosetype, LW(10), LW(11), POSE_TYPE_DAMAGE_STATUS, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -307,6 +313,7 @@ EVT_BEGIN(btldefaultevt_Damage)
             WAIT_FRAMES(45)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_FIRE)
+
         // Fire and explosion hits: the unit's data-table events 11 and 12,
         // else the normal hurt reaction with pose 29.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT)
@@ -335,6 +342,7 @@ EVT_BEGIN(btldefaultevt_Damage)
             CALL_CHILD(subsetevt_damage)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
+
         // This unit is an attacker hurt by its target's counter (codes 43-55: spikes, fire, ice, electricity,
         // explosions, poison, Payback, Hold Fast): data-table events 24-36, else the standard counter reaction.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_TOP_SPIKY_EVENT)

@@ -842,6 +842,7 @@ static void main_star0(s32 idx) {
         if (s->timer >= 60) {
             s->state = 4;
             s->timer = 0;
+
             // BUG: the leftward speed set here is always overwritten by the statement after the if.
             if (irand(2) == 0) {
                 s->vel.x = -2.0f - 0.05f * idx;
@@ -940,6 +941,7 @@ static void main_star1(void) {
         if (w->star[0].timer >= 60) {
             w->star[0].state = 4;
             w->star[0].timer = 0;
+
             // BUG: the leftward speed set here is always overwritten by the statement after the if.
             if (irand(2) == 0) {
                 w->star[0].vel.x = -2.0f;

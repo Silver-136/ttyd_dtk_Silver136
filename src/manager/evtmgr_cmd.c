@@ -1210,6 +1210,7 @@ s32 evt_readf_n(EventEntry* entry) { // 73
 
     index = args[0];
     offset = evtGetValue(entry, args[1]);
+
     // BUG: reads the table word through readAddr (as an integer) and converts it, where the other readf
     // commands read it through readfAddr as a float
     evtSetFloat(entry, index, entry->readAddr[offset]); // every version reads the entry as an integer (readAddr, not readfAddr) and converts it
@@ -2360,6 +2361,7 @@ EvtWord evtGetValue(EventEntry* entry, EvtWord index) {
         index += EVTDAT_UF_BASE;
         mask = (1 << (index % 32));
         data = entry->ufBase[index / 32];
+
         // FAKE: result stored back into index; return (mask & data) != 0 changes the object
         index = (mask & data);
         return !(index == 0);

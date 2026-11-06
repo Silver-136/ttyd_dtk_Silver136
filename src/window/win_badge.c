@@ -431,6 +431,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     for (i = 0; i < cnt; i++) {
 #else
     p0 = w;
+
     // FAKE: p0 is a WindowWork* stepped one WinBadgeEnt at a time, so list[0] reads w->badge.list[i] with the 0x404 kept in the load displacement (w->badge.list[i] or a WinBadgeEnt* walk changes the induction order and the base register)
     for (i = 0, rowOff = 0; i < cnt; p0 = (WindowWork*)((WinBadgeEnt*)p0 + 1), rowOff += 23, i++) {
 #endif

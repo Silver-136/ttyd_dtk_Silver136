@@ -576,6 +576,7 @@ static USER_FUNC(evt_tou_get_next_match) {
         }
     }
     GET_RANK(rank, i);
+
     // A kept condition selects the fighter above; otherwise select below when available.
     if (rank > 0) {
         if (flag) {
@@ -2963,6 +2964,7 @@ USER_FUNC(tou_champion_belt) {
     idx = animPoseGetGroupIdx(npc->poseId, "locator8");
     angle = reviseAngle(camGetRy() - pose->rotationY);
     eff = event->userdatap[0];
+
     // FAKE: the work is read through a pointer to the userdata slot, so userdata is reloaded at every store (as in
     // tou2's copy of this function; a plain EffStarStoneWork* local or a cast per access changes the code)
     work = (EffStarStoneWork**)&eff->userdata;

@@ -819,6 +819,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     bx = (10.0f + (x - 250.0f)) - 10.0f;
     by = 40.0f + y;
     windowDispGX_Waku_col(0, waku, bx, by, 500.0f, 80.0f, 20.0f);
+
     // FAKE: the != 0 test is redundant; wp->msgItem > 0 alone changes the object
     if (wp->msgItem != 0 && wp->msgItem > 0) {
         winTexInit((TEXPalette*)*wp->res->data);
@@ -1003,6 +1004,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h - 16, nk - 16 - 8, 8);
 #else
         winRootTexQuad(wp, 0xF, x + (w - 90), y - h, 16, 8);
+
         // FAKE: 74.0f and 66.0f held in locals (JP and the early demos); the literals change the object
         winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h, w74, 8);
         winRootTexQuad(wp, 0xA, x + (w - 90) + 8, y - h - 8, 8, 8);
@@ -1375,6 +1377,7 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
     ofs = type * 13;
     for (p = 0; p < (num + 27) / 28; p++) {
         py = p * 232;
+
         // BUG: j is read before any loop sets it: uninitialized on the first page, afterwards whatever
         // the tile loop below left (4).
         if (scroll + (y - j * 56) - py > 400.0f || scroll + (y - j * 56) - py < -400.0f) {
@@ -2601,6 +2604,7 @@ static void winSortGX(WindowWork* wp) {
     f32 x = wp->sortPosX;
     f32 y = wp->sortPosY;
     s32 i;
+
     // FAKE: constant locals w and w2 for the sort window sizes; the literals change the object
     f32 w = 128.0f;
     f32 w2 = 136.0f;
@@ -2823,6 +2827,7 @@ static void winMailDisp(WindowWork* wp) {
                 id = wp->item.mail[i].id;
                 kind = wp->item.mail[i].kind;
                 mail = mailGetPtr(id);
+
                 // FAKE: GXColor black lives in its own bare block; declaring it in the loop body changes the object
                 {
                     GXColor black = { 0x00, 0x00, 0x00, 0xFF };
@@ -2838,6 +2843,7 @@ static void winMailDisp(WindowWork* wp) {
                     winTexInit((TEXPalette*)*wp->res->data);
                     winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
                     white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
+
                     // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
                     winTexSet((u32)(pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                     winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);

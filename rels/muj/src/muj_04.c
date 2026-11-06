@@ -646,6 +646,7 @@ USER_FUNC(mario_moveride_check) {
         }
     }
     event->lwData[0] = 0;
+
     // Compare the stable table name pointer to detect a newly occupied bridge segment.
     if (name != NULL && event->lwData[1] != (EvtWord)name) {
         event->lwData[0] = (EvtWord)anim;

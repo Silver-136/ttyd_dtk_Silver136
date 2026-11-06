@@ -426,6 +426,7 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     PSMTXConcat(camera->view, mtx, mtx);
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, alpha};
     entry.uflags = flags;
+
     // FAKE: iconId++ then iconId-- (no net change); without them the object changes
     iconId++;
     iconId--;
@@ -482,6 +483,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     }
     entry.uflags = flags;
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+
     // FAKE: empty if on icon_bin_ok (tested twice); removing it changes the object in both versions
     if (icon_bin_ok && icon_bin_ok) {
     }
@@ -542,6 +544,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     }
     entry.uflags = flags;
     entry.color = color;
+
     // FAKE: empty if on icon_bin_ok (tested twice); removing it changes the object in both versions
     if (icon_bin_ok && icon_bin_ok) {
     }

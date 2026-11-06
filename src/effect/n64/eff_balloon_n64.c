@@ -230,6 +230,7 @@ static void effBalloonDisp(CameraId cameraId, void* payload) {
         OSs16tof32(&vtx[i + 2].z, &v2.z);
         PSMTXMultVec(mtx, &v2, &v2);
         OSInitFastCast();
+
         // FAKE: element pointer cast instead of &vtx[i + 2].x; the plain form changes the object
         OSf32tos16(&v2.x, (s16*)&vtx[i + 2]);
         OSf32tos16(&v2.y, &vtx[i + 2].y);

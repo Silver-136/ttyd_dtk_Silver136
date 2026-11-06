@@ -140,6 +140,7 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     work->cb = 1.0f;
     work->camera = CAMERA_3D;
     work->scale = 1.0f;
+
     // FAKE: i set before the loop setup; for (i = 1; ...) changes the object
     i = 1;
     randA = (s32)(a * 1000.0f);
@@ -189,6 +190,7 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
         case 4:
         default:
             angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
+
             // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
             p->ay = -(0.05f + (f32)(rand() % 50 / 1000));
             angle = 6.2831855f * angle / 360.0f;
@@ -278,6 +280,7 @@ static void effStardustMain(EffectEntry* effect) {
         default:
             work->vx *= 0.9f;
             work->vy += work->ay;
+
             // FAKE: vx/vy copies of work->vx/vy added to the position; adding the fields directly changes the object
             vx = work->vx;
             vy = work->vy;

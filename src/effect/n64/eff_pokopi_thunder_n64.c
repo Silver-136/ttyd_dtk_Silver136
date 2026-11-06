@@ -104,6 +104,7 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
+
     // FAKE: spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object
     nv = 0.0f;
     work->scale = scale;
@@ -156,6 +157,7 @@ static void effPokopiThunderMain(EffectEntry* effect) {
         return;
     }
     frame = work->frame;
+
     // FAKE: inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object
     if (type == 2) {
         if (frame >= 40) {
@@ -197,6 +199,7 @@ static void effPokopiThunderDisp(CameraId cameraId, void* param) {
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
+
     // FAKE: zero is added to every z value; plain z changes the object
     zero = 0.0f;
     frame = work->frame;
@@ -265,6 +268,7 @@ static void effPokopiThunderDisp(CameraId cameraId, void* param) {
         f32 w, dx, dy, a, s, c, off;
         w = (f32)data[i];
         dx = 0.09090909f * (work->end.x - work->start.x);
+
         // FAKE: pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object
         dy = 0.09090909f * pt_dy(work, work);
         a = 6.2831855f * (f32)((work->seed + (i - frame) * 10) % 120 - 60) / 360.0f;
