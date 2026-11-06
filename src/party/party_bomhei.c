@@ -91,19 +91,6 @@ static inline void bomheiCleanSfx(PartyEntry* p) {
     }
 }
 
-/** Stops the sounds of a bomb use; the early demos keep a third id at 0x17C. */
-static inline void bomheiCleanUseSfx(PartyEntry* p) {
-#if VERSION <= VERSION_DEMO_JP
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if ((u32)p->work.bomhei.throwSfxId != 0xFFFFFFFFU) {
-        psndSFXOff(p->work.bomhei.throwSfxId);
-        p->work.bomhei.throwSfxId = -1;
-    }
-#endif
-    bomheiCleanSfx(p);
-}
-
 static inline void bomheiCleanFlags(PartyEntry* p) {
     p->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     p->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -118,6 +105,28 @@ static inline void bomheiFree(PartyEntry* p) {
     }
 }
 
+/** Marks Bobbery's three sound ids as not playing (-1). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void init_se_work(PartyEntry* party) {
+    party->work.bomhei.throwSfxId = -1;
+    party->work.bomhei.sfxId = -1;
+    party->work.bomhei.sfxId2 = -1;
+}
+
+/** Stops the sounds of a bomb use; the early demos keep a third id at 0x17C. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void se_all_off(PartyEntry* p) {
+#if VERSION <= VERSION_DEMO_JP
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
+    if ((u32)p->work.bomhei.throwSfxId != 0xFFFFFFFFU) {
+        psndSFXOff(p->work.bomhei.throwSfxId);
+        p->work.bomhei.throwSfxId = -1;
+    }
+#endif
+    bomheiCleanSfx(p);
+}
+
 /**
  * Party table bye handler: plays the goodbye sequence when Bobbery leaves the party,
  * dropping Mario's carry flag and stopping the bomb sounds on the first frame,
@@ -128,7 +137,7 @@ void bomhei_bye(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
         party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-        bomheiCleanUseSfx(party);
+        se_all_off(party);
     }
     if (partyGoodbyeMain(party)) {
         partyChgRunMode(party, PARTY_RUN_DELETE);
@@ -141,9 +150,7 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
     party->height = 28.0f;
     party->width = 28.0f;
     party->work.bomhei.state = 100;
-    party->work.bomhei.throwSfxId = -1;
-    party->work.bomhei.sfxId = -1;
-    party->work.bomhei.sfxId2 = -1;
+    init_se_work(party);
 }
 
 /**
@@ -188,7 +195,7 @@ void bomhei_exit(PartyEntry* party) {
 /** Party table exit handler (early demos): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
 void bomhei_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
-    bomheiCleanUseSfx(party);
+    se_all_off(party);
     bomheiFree(party);
 }
 #endif
@@ -232,7 +239,7 @@ void bomhei_use_cancel2(void) {
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
-        bomheiCleanUseSfx(p);
+        se_all_off(p);
         bomheiFree(p);
     }
 }
@@ -278,7 +285,7 @@ void bomhei_use_post(PartyEntry* party) {
         mario->flags &= ~(MARIO_FLAG_ACTIVE << 13);
         marioChgPose("M_S_1");
     }
-    bomheiCleanUseSfx(party);
+    se_all_off(party);
     bomheiFree(party);
 }
 #endif

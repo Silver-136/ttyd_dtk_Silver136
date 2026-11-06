@@ -95,6 +95,14 @@ USER_FUNC(kpa_score_disp_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Adds coins to Bowser's coin count; when it rolls over, also adds the rollover bonus to his score. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void _kpaAddCoin(s32 coins) {
+    if (pouchAddKpaCoin(coins)) {
+        pouchAddKpaScore(KPA_COIN_ROLLOVER_BONUS);
+    }
+}
+
 /**
  * Adds Super Bowser coins: every 100 coins also gives 1000 points, and each pickup scores 500 per coin,
  * capped at
@@ -102,9 +110,7 @@ USER_FUNC(kpa_score_disp_init) {
  */
 void kpaAddCoin(s32 coins) {
     s32 score;
-    if (pouchAddKpaCoin(coins)) {
-        pouchAddKpaScore(KPA_COIN_ROLLOVER_BONUS);
-    }
+    _kpaAddCoin(coins);
     score = coins * KPA_SCORE_PER_COIN;
     if (score > KPA_SCORE_PICKUP_CAP) {
         score = KPA_SCORE_PICKUP_CAP;
@@ -161,9 +167,7 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
  */
 void kpaAddCoinPos(s32 coins, Vec* pos) {
     s32 score;
-    if (pouchAddKpaCoin(coins)) {
-        pouchAddKpaScore(KPA_COIN_ROLLOVER_BONUS);
-    }
+    _kpaAddCoin(coins);
     score = coins * KPA_SCORE_PER_COIN;
     if (score > KPA_SCORE_PICKUP_CAP) {
         score = KPA_SCORE_PICKUP_CAP;
@@ -172,12 +176,19 @@ void kpaAddCoinPos(s32 coins, Vec* pos) {
     kpaSetScoreStr(score, pos);
 }
 
-/** Adds score points (capped at 10000 per call) to the Super Bowser total. */
-void kpaAddScore(s32 score) {
+/** Adds score points, capped at 10000 per call, to the Super Bowser total and returns the points added. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 _kpaAddScore(s32 score) {
     if (score > KPA_SCORE_PICKUP_CAP) {
         score = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(score);
+    return score;
+}
+
+/** Adds score points (capped at 10000 per call) to the Super Bowser total. */
+void kpaAddScore(s32 score) {
+    _kpaAddScore(score);
 }
 
 /**

@@ -33,6 +33,7 @@ static void kpa3DMain(void);
 static void kpaFireAttack(void);
 static void kpaFireMain(void);
 static void kpaFall(void);
+void fire_se_init(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 // FAKE: unsized f32 array view of mario_motion.c's MarioJumpData marioJumpData; reading marioJumpData.jump through
 // the struct type changes the object.
@@ -118,25 +119,6 @@ static void kpaFireEntry(Vec pos) {
     MarioWork* mp = marioGetPtr();
     kpaFireEntry2(pos);
 }
-
-/** Starts the looping fire breath sound plus a roar at Bowser's position, unless the loop is already playing. */
-static inline void kpaFireSEOn(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->kpaWork->fireSfxId == 0xFFFFFFFFU) {
-        mario->kpaWork->fireSfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_FIRE_BREATH1), &mario->position);
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_KOOPA_FIRE1), &mario->position);
-    }
-}
-
-/** Stops the looping fire breath sound if it is playing. */
-static inline void kpaFireSEOff(void) {
-    MarioWork* mp = marioGetPtr();
-    if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
-        psndSFXOff(mp->kpaWork->fireSfxId);
-        mp->kpaWork->fireSfxId = -1;
-    }
-}
-
 
 /** Returns the active fire breath effect, or NULL. koopa_hit reads it to test the flame against objects. */
 EffectEntry* getKoopaFireEfp(void) {
@@ -281,7 +263,6 @@ s32 kpaCamFollow(void) {
  * and sets the stage flags for the side-scrolling (kpa_02 to kpa_06) and seaside (kpa_03) stages.
  */
 void kpaPreInit(void) {
-    s32* sfxIdPtr;
     MarioWork* mario = marioGetPtr();
     if (mario->kpaWork == NULL) {
         mario->kpaWork = (KpaWork*)__memAlloc(HEAP_DEFAULT, sizeof(KpaWork));
@@ -291,8 +272,7 @@ void kpaPreInit(void) {
     mario->kpaWork->walkRate = 1;
     mario->kpaWork->fireCount = 0;
     mario->kpaWork->fireRate = 1;
-    sfxIdPtr = &marioGetPtr()->kpaWork->fireSfxId; // FAKE: address temp; direct store differs
-    *sfxIdPtr = -1;
+    fire_se_init();
     mario = marioGetPtr();
     if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
         strcmp(gp->currentMapName, "kpa_04") == 0 || strcmp(gp->currentMapName, "kpa_05") == 0 ||
@@ -706,6 +686,34 @@ void kpaStrippedFallPool(f32* f) {
     f[7] = -0.01f;
 }
 
+/** Starts the looping fire breath sound plus a roar at Bowser's position, unless the loop is already playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void fire_se_on(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->kpaWork->fireSfxId == 0xFFFFFFFFU) {
+        mario->kpaWork->fireSfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_FIRE_BREATH1), &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_KOOPA_FIRE1), &mario->position);
+    }
+}
+
+/** Stops the looping fire breath sound if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void fire_se_off(void) {
+    MarioWork* mp = marioGetPtr();
+    if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
+        psndSFXOff(mp->kpaWork->fireSfxId);
+        mp->kpaWork->fireSfxId = -1;
+    }
+}
+
+/** Marks the fire breath loop as not playing (fireSfxId -1). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// It keeps `inline`: kpaPreInit calls it before this definition, and as a plain function it stays out of line there.
+inline void fire_se_init(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->kpaWork->fireSfxId = -1;
+}
+
 /**
  * TRUE while Bowser's fire breath is coming out (attack states 20-23 or 40-43) and the player is active.
  * Used for flame hits and to block other actions.
@@ -775,7 +783,7 @@ static void kpaFireAttack(void) {
         kpaChgPose("KPA_A_1B", "KPA2_A_1B");
         mario->kpaWork->attackTimer = 8;
         mario->kpaWork->attackState = KPA_ATTACK_FIRE_START;
-        kpaFireSEOn();
+        fire_se_on();
         break;
     case KPA_ATTACK_FIRE_START:
         kpaFireEntry(mario->position);
@@ -800,7 +808,7 @@ static void kpaFireAttack(void) {
         kpaChgPose("KPA_A_1D", "KPA2_A_1D");
         mario->kpaWork->attackState = KPA_ATTACK_FINISH;
         mario->kpaWork->attackTimer = 6;
-        kpaFireSEOff();
+        fire_se_off();
         break;
     case KPA_ATTACK_FINISH:
         if (--mario->kpaWork->attackTimer > 0) {
@@ -832,7 +840,7 @@ static void kpaFireAttack(void) {
         kpaChgPose("KPA_A_1B", "KPA2_A_1B");
         mario->kpaWork->attackTimer = 8;
         mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_FIRE_START;
-        kpaFireSEOn();
+        fire_se_on();
         break;
     case KPA_ATTACK_SCRIPTED_FIRE_START:
         kpaFireEntry(mario->position);
@@ -857,7 +865,7 @@ static void kpaFireAttack(void) {
         kpaChgPose("KPA_A_1D", "KPA2_A_1D");
         mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_FINISH;
         mario->kpaWork->attackTimer = 6;
-        kpaFireSEOff();
+        fire_se_off();
         break;
     case KPA_ATTACK_SCRIPTED_FINISH:
         if (--mario->kpaWork->attackTimer > 0) {
@@ -886,7 +894,7 @@ static void kpaFireAttack(void) {
 void kpaCancelAttackMode(void) {
     KpaWork* w = marioGetPtr()->kpaWork;
     w->attackState = KPA_ATTACK_NONE;
-    kpaFireSEOff();
+    fire_se_off();
 }
 
 /** TRUE while any fire attack state is active. */
@@ -900,7 +908,7 @@ void kpaFireDelete(void) {
     if (fireefp) {
         effSoftDelete(fireefp);
         fireefp = NULL;
-        kpaFireSEOff();
+        fire_se_off();
     }
 }
 

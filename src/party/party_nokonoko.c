@@ -80,6 +80,33 @@ s32 nokonokoGetStatus(PartyEntry* party) {
     return status;
 }
 
+/** Marks the shell-spin sound as not playing (nokoSe -1). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void se_init(void) {
+    nokoSe = -1;
+}
+
+/** Starts the looping shell-spin sound (SFX_PARTY_PNK_HOLD1) at the shell unless it is already playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void se_hold(PartyEntry* party) {
+    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe == -1 changes the object
+    if ((u32)nokoSe == 0xFFFFFFFFU) {
+        nokoSe = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_HOLD1), &party->position);
+    }
+}
+
+/** Stops the looping shell-spin sound (nokoSe) if one is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void se_off(void) {
+    marioGetPtr();
+
+    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
+    if ((u32)nokoSe != 0xFFFFFFFFU) {
+        psndSFXOff(nokoSe);
+        nokoSe = -1;
+    }
+}
+
 /**
  * TRUE while Koops is mid Shell Toss carrying an item his shell picked up;
  * marioChkKey and itemdrv check it so Mario cannot act or collect items until the shell is back.
@@ -118,7 +145,7 @@ void nokonoko_init(PartyEntry* party) {
     party->moveKind = 0;
     party->height = 37.0f;
     party->width = 24.0f;
-    nokoSe = -1;
+    se_init();
 }
 
 /**
@@ -165,13 +192,7 @@ void nokonoko_use_cancel(void) {
     party = partyGetPtr(marioGetPartyId());
     if (nokonokoGetStatus(party) != NOKONOKO_STATUS_NONE) {
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-            marioGetPtr();
-
-            // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
-            if ((u32)nokoSe != 0xFFFFFFFFU) {
-                psndSFXOff(nokoSe);
-                nokoSe = -1;
-            }
+            se_off();
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
             party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
             party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
@@ -200,13 +221,7 @@ void nokonoko_use_post(PartyEntry* party) {
         itemNokoForceGet(party->work.nokonoko.heldItem);
         party->work.nokonoko.heldItem = NULL;
     }
-    marioGetPtr();
-
-    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
-    if ((u32)nokoSe != 0xFFFFFFFFU) {
-        psndSFXOff(nokoSe);
-        nokoSe = -1;
-    }
+    se_off();
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
@@ -217,17 +232,6 @@ void nokonoko_use_post(PartyEntry* party) {
     party->work.nokonoko.shellSpinBits = 0;
     party->work.nokonoko.word17C = 0;
     party->work.nokonoko.word180 = 0;
-}
-
-/** Stops the looping shell-spin sound (nokoSe) if one is playing. */
-static inline void noko_se_off(void) {
-    marioGetPtr();
-
-    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
-    if ((u32)nokoSe != 0xFFFFFFFFU) {
-        psndSFXOff(nokoSe);
-        nokoSe = -1;
-    }
 }
 
 /**
@@ -455,9 +459,7 @@ void nokonoko_use(PartyEntry* party) {
                     party->moveFrames = 5;
                     party->useMotionId = 21;
                     party->work.nokonoko.dashed = 1;
-                    if ((u32)nokoSe == 0xFFFFFFFFU) {
-                        nokoSe = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_HOLD1), &party->position);
-                    }
+                    se_hold(party);
                 } else {
                     party->useMotionId = 50;
                 }
@@ -469,9 +471,7 @@ void nokonoko_use(PartyEntry* party) {
             party->moveFrames = 5;
             party->useMotionId = 20;
             party->work.nokonoko.dashed = 1;
-            if ((u32)nokoSe == 0xFFFFFFFFU) {
-                nokoSe = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_HOLD1), &party->position);
-            }
+            se_hold(party);
         }
     case 20:
         noko_spin(party);
@@ -483,11 +483,11 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 50;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
             noko_star(party, 1);
-            noko_se_off();
+            se_off();
             break;
         }
 #if VERSION <= VERSION_DEMO_JP
-        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); noko_star(party, 1); noko_se_off(); break;)
+        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); noko_star(party, 1); se_off(); break;)
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
 #else
@@ -499,7 +499,7 @@ void nokonoko_use(PartyEntry* party) {
                 party->useMotionId = 50;
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
                 noko_star(party, 1);
-                noko_se_off();
+                se_off();
                 break;
             }
         }
@@ -508,14 +508,14 @@ void nokonoko_use(PartyEntry* party) {
 #endif
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
                 nokonoko_finish(party);
-                noko_se_off();
+                se_off();
                 break;
             }
             if (mario->buttonHold & PAD_BUTTON_X) {
                 break;
             }
             party->useMotionId = party->work.nokonoko.dashed != 0 ? 80 : 50;
-            noko_se_off();
+            se_off();
             break;
         }
         if (party->work.nokonoko.shellFlags & 1) {
@@ -523,7 +523,7 @@ void nokonoko_use(PartyEntry* party) {
         } else {
             party->useMotionId = 50;
         }
-        noko_se_off();
+        se_off();
         break;
     case 21:
         noko_spin(party);
