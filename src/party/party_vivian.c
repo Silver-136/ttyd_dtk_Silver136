@@ -237,6 +237,18 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
 
 #endif
 
+/** Starts the floor ripple under Mario (kept in rippleEffect) and the sinking sound, as he and Vivian sink into the shadow. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void vivianRippleOn(PartyEntry* party) {
+    EffectEntry* rip;
+    rip = effRippleEntry(1, party->playerPtr->position.x, 1.5f + party->playerPtr->position.y, party->playerPtr->position.z);
+    party->work.vivian.rippleEffect = rip;
+    if (party->camId != CAMERA_3D) {
+        effRippleSetCamId(rip, party->camId);
+    }
+    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_2), &party->position);
+}
+
 /**
  * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
  * keeping it within VIVIAN_FOLLOW_DIST (30 units in US and later, 22 in the early demos and JP);
@@ -366,11 +378,9 @@ void vivian_use(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
     f32 gx, gy, gz;
     void* hit;
-    void* rip;
     MarioWork* p;
 #else
     Vec s;
-    EffectEntry* rip;
     f32 d;
 #endif
     MarioWork* m = party->playerPtr;
@@ -479,12 +489,7 @@ void vivian_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-        rip = effRippleEntry(1, party->playerPtr->position.x, 1.5f + party->playerPtr->position.y, party->playerPtr->position.z);
-        party->work.vivian.rippleEffect = rip;
-        if (party->camId != CAMERA_3D) {
-            effRippleSetCamId(rip, party->camId);
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_2), &party->position);
+        vivianRippleOn(party);
         partyVivianTailStop(party);
         party->useMotionId = 5;
     case 5:

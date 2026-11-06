@@ -92,7 +92,7 @@ typedef struct KpaWork {
     s32 attackTimer;              // 0x140
     s32 fireHold;                 // 0x144, evt_koopa_fire keeps the flame going while set
     s32 pad_148;                  // 0x148, never accessed
-    s32 fireSfxId;                // 0x14C, kpaFireSEOn/Off, -1 when off
+    s32 fireSfxId;                // 0x14C, fire_se_on/off, -1 when off
     s32 swimSplashTimer;          // 0x150, kpa_swim_splash
 } KpaWork;                  // size 0x154
 f32 kpaSetFallPara(void);

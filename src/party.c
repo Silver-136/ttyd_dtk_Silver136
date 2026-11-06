@@ -2881,6 +2881,12 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     return 0;
 }
 
+/** TRUE when hit is deep water (HIT_ATTR_WATER_HAZARD, attribute bit 9). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL chkWater(HitEntry* hit) {
+    return (hitGetAttr(hit) >> 9) & 1;
+}
+
 /**
  * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
  * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
@@ -2996,8 +3002,7 @@ static void party_damage_return(PartyEntry* party) {
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
 
-            // bit 9 of the attributes is HIT_ATTR_WATER_HAZARD
-            if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
+            if (party->hitobjStandOn && !chkWater(party->hitobjStandOn)) {
 #if VERSION >= VERSION_JP
                 partyChgPoseId(party, 9);
 #endif

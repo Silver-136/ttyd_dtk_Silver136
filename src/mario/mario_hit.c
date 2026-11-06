@@ -90,6 +90,20 @@ static inline f32 marioHitNrmAnglePtr(Vec* nrm) {
     return angleABf(0.0f, 0.0f, sqrtf(nrm->x * nrm->x + nrm->z * nrm->z), -nrm->y);
 }
 
+/** Mario's collision height, or the riding partner's height (partyGetHeight) while he is on Yoshi. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+f32 marioGetHeight(void) {
+    MarioWork* mario = marioGetPtr();
+    f32 ph = mario->wPlayerCollisionBox.y;
+    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+        PartyEntry* p = partyGetPtr(marioGetPartyId());
+        if (p) {
+            ph = partyGetHeight(p);
+        }
+    }
+    return ph;
+}
+
 /**
  * Eases Mario's collision width (wPlayerCollisionBox.z) by 1 per frame toward its target:
  * the full box width (18 in tube mode) normally, 6 while he is paper-thin.
@@ -1636,19 +1650,6 @@ BOOL chk_special_mobj(HitEntry* hit) {
     return FALSE;
 }
 
-/** Mario's collision height, or the riding partner's height (partyGetHeight) while he is on Yoshi. */
-static inline f32 marioGetHeightInl(void) {
-    MarioWork* mario = marioGetPtr();
-    f32 ph = mario->wPlayerCollisionBox.y;
-    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
-        PartyEntry* p = partyGetPtr(marioGetPartyId());
-        if (p) {
-            ph = partyGetHeight(p);
-        }
-    }
-    return ph;
-}
-
 // FAKE: stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool
 #if VERSION >= VERSION_JP
 void marioHitStrippedPool2(f32* f) {
@@ -1715,7 +1716,7 @@ f32 marioChkOverhead(void) {
                 marioClearJumpPara();
             }
         }
-        pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
+        pos.y = (s32)(10.0f * (pos.y - marioGetHeight()) + 0.5f) / 10.0f - 1.0f;
         if (!(mario->flags & MARIO_FLAG_IS_FALLING) && pos.y < mario->lastGroundPos.y) {
             pos.y = mario->lastGroundPos.y;
 #if VERSION <= VERSION_DEMO_JP
@@ -2463,7 +2464,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         }
 #endif
     } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
-        heights[0] = 0.75f * marioGetHeightInl();
+        heights[0] = 0.75f * marioGetHeight();
         heights[1] = 11.0f;
     } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         heights[0] = VERSION_PICK(27.75f, 26.640001f);

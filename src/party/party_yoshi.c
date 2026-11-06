@@ -147,6 +147,15 @@ void sweatMain(PartyEntry* party) {
     }
 }
 
+/** Stops Yoshi's looping flutter sound (yoshiPsndSFXId) if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void flyingSeOff(PartyEntry* party) {
+    if (party->yoshiPsndSFXId != -1) {
+        psndSFXOff(party->yoshiPsndSFXId);
+        party->yoshiPsndSFXId = -1;
+    }
+}
+
 /**
  * Ride state from Yoshi's use motion: 0 not riding (or the partner is not Yoshi), 1 riding on the ground,
  * 2 flutter jump, 3 jump-stand bounce, 4 falling (after a flutter or a jump-stand bounce),
@@ -883,10 +892,7 @@ void yoshi_use(PartyEntry* party) {
                 if (party->hitobjStandOn) {
                     mario->hitobjJumpFrom = NULL;
 #if VERSION >= VERSION_JP
-                    if (party->yoshiPsndSFXId != -1) {
-                        psndSFXOff(party->yoshiPsndSFXId);
-                        party->yoshiPsndSFXId = -1;
-                    }
+                    flyingSeOff(party);
 #endif
                     party->useMotionId = 10;
                     partyChgPose(party, "PYS_S_2");
@@ -1324,10 +1330,7 @@ static void searchGround(PartyEntry* party) {
     }
     if (hit) {
         attr = hitGetAttr(hit);
-        if (party->yoshiPsndSFXId != -1) {
-            psndSFXOff(party->yoshiPsndSFXId);
-            party->yoshiPsndSFXId = -1;
-        }
+        flyingSeOff(party);
         if (attr & HIT_ATTR_WATER_HAZARD) {
 #if VERSION >= VERSION_JP
             if (!chgMotion(party, 70)) {
@@ -1412,10 +1415,7 @@ static void searchGround(PartyEntry* party) {
 #else
             party->position.y = groundY;
 #endif
-            if (party->yoshiPsndSFXId != -1) {
-                psndSFXOff(party->yoshiPsndSFXId);
-                party->yoshiPsndSFXId = -1;
-            }
+            flyingSeOff(party);
         } else {
 #if VERSION <= VERSION_DEMO_JP
             party->position.y = ground.y;
@@ -1443,10 +1443,7 @@ static void searchGround2(PartyEntry* party) {
     if (hit == NULL) {
         return;
     }
-    if (party->yoshiPsndSFXId != -1) {
-        psndSFXOff(party->yoshiPsndSFXId);
-        party->yoshiPsndSFXId = -1;
-    }
+    flyingSeOff(party);
 #else
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         hit = partySearchGround(party, 11.0f, 0.0f);

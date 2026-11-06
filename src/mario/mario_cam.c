@@ -96,31 +96,37 @@ void marioPreCamera(void) {
 #endif
 
 /**
+ * While the stick is held, flags whether the camera did not move along x since the last frame
+ * (MARIO_DISP_FLAG_CAM_STILL_UNUSED), then remembers its x position.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void marioCamStopChk(void) {
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
+    MarioWork* mario = marioGetPtr();
+    if (mario->controlStickSensitivity) {
+        if (camera->cameraPos.x == mario->prevCamPosX) {
+            mario->dispFlags |= MARIO_DISP_FLAG_CAM_STILL_UNUSED;
+        } else {
+            mario->dispFlags &= ~MARIO_DISP_FLAG_CAM_STILL_UNUSED;
+        }
+    }
+    mario->prevCamPosX = camera->cameraPos.x;
+}
+
+/**
  * Per-frame camera update from Mario's main loop (also Bowser's and Peach's):
  * moves the follow target (except in a pipe), runs the level zoom and the zoom-off request,
  * then clears the camera collision flag for the next frame.
  */
 void marioCamMain(void) {
     MarioWork* mario = marioGetPtr();
-    CameraEntry* camera;
-    MarioWork* mario2;
 
     if (mario->currMotionId != MARIO_MOTION_DOKAN) {
         marioUpdateCam();
     }
     marioCamZoomUpLevelMain();
     marioCamZoomOff();
-
-    camera = camGetPtr(CAMERA_3D);
-    mario2 = marioGetPtr();
-    if (mario2->controlStickSensitivity) {
-        if (camera->cameraPos.x == mario2->prevCamPosX) {
-            mario2->dispFlags |= MARIO_DISP_FLAG_CAM_STILL_UNUSED;
-        } else {
-            mario2->dispFlags &= ~MARIO_DISP_FLAG_CAM_STILL_UNUSED;
-        }
-    }
-    mario2->prevCamPosX = camera->cameraPos.x;
+    marioCamStopChk();
     mario->dispFlags &= ~MARIO_DISP_FLAG_CAM_COLLISION;
 }
 

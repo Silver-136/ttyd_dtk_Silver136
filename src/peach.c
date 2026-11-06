@@ -22,34 +22,6 @@
 
 
 /**
- * Plays Peach's footstep sounds while she walks or dashes:
- * one sound every period frames and the other on the frames in between that are multiples of halfPeriod.
- * The sounds differ when she wears the X-Naut disguise and when she is invisible with no height.
- */
-static inline void peachStepSe(s32 period, s32 halfPeriod) {
-    MarioWork* mario = marioGetPtr();
-    s32 sfx, halfSfx;
-    if (!(mario->peachFlags & PEACH_FLAG_GUNDAN)) {
-        if ((mario->peachFlags & PEACH_FLAG_INVISIBLE) && mario->scale.y == 0.0f) {
-            sfx = PSND_SFX_PEACH_BAREFOOT_MOVE1R;
-            halfSfx = PSND_SFX_PEACH_BAREFOOT_MOVE1L;
-        } else {
-            sfx = PSND_SFX_PEACH_MOVE1R;
-            halfSfx = PSND_SFX_PEACH_MOVE1L;
-        }
-    } else {
-        sfx = PSND_SFX_PEACH_3RD_P_MOVE1R;
-        halfSfx = PSND_SFX_PEACH_3RD_P_MOVE1L;
-    }
-    if (mario->multiTimer % period == 0) {
-        psndSFXOn_3D(SFX_NAME_WORD(sfx), &mario->position);
-    } else if (mario->multiTimer % halfPeriod == 0) {
-        psndSFXOn_3D(SFX_NAME_WORD(halfSfx), &mario->position);
-    }
-    mario->multiTimer++;
-}
-
-/**
  * Condition 0 of evt_peach_set_condition: drops the X-Naut disguise if she wears it (her mood stays);
  * otherwise clears Peach's mood, back to her ordinary poses.
  */
@@ -364,6 +336,35 @@ void peach_stay(void) {
 }
 
 /**
+ * Plays Peach's footstep sounds while she walks or dashes:
+ * one sound every period frames and the other on the frames in between that are multiples of halfPeriod.
+ * The sounds differ when she wears the X-Naut disguise and when she is invisible with no height.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void peach_dash_se(s32 period, s32 halfPeriod) {
+    MarioWork* mario = marioGetPtr();
+    s32 sfx, halfSfx;
+    if (!(mario->peachFlags & PEACH_FLAG_GUNDAN)) {
+        if ((mario->peachFlags & PEACH_FLAG_INVISIBLE) && mario->scale.y == 0.0f) {
+            sfx = PSND_SFX_PEACH_BAREFOOT_MOVE1R;
+            halfSfx = PSND_SFX_PEACH_BAREFOOT_MOVE1L;
+        } else {
+            sfx = PSND_SFX_PEACH_MOVE1R;
+            halfSfx = PSND_SFX_PEACH_MOVE1L;
+        }
+    } else {
+        sfx = PSND_SFX_PEACH_3RD_P_MOVE1R;
+        halfSfx = PSND_SFX_PEACH_3RD_P_MOVE1L;
+    }
+    if (mario->multiTimer % period == 0) {
+        psndSFXOn_3D(SFX_NAME_WORD(sfx), &mario->position);
+    } else if (mario->multiTimer % halfPeriod == 0) {
+        psndSFXOn_3D(SFX_NAME_WORD(halfSfx), &mario->position);
+    }
+    mario->multiTimer++;
+}
+
+/**
  * Peach's walking motion (from mot_walk): walks at Mario's walk speed,
  * switches to dashing when the stick is pushed far, to standing when it is released,
  * with footsteps every 20 frames.
@@ -387,7 +388,7 @@ void peach_walk(void) {
         marioChgMot(MARIO_MOTION_DASH);
     } else {
         mario->directionView = mario->controlStickAngle;
-        peachStepSe(40, 20);
+        peach_dash_se(40, 20);
         if (!mario->controlStickSensitivity) {
             marioChgMot(MARIO_MOTION_STAY);
         }
@@ -414,12 +415,12 @@ void peach_dash(void) {
         mario->baseSpeed = marioGetDashSpd();
     }
     if (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) {
-        peachStepSe(20, 10);
+        peach_dash_se(20, 10);
     } else if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 <= STICK_DASH_MIN_SQ) {
         marioChgMot(MARIO_MOTION_WALK);
     } else {
         mario->directionView = mario->controlStickAngle;
-        peachStepSe(20, 10);
+        peach_dash_se(20, 10);
         if (!mario->controlStickSensitivity) {
             marioChgMot(MARIO_MOTION_STAY);
         }
