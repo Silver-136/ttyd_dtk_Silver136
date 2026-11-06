@@ -234,7 +234,7 @@ typedef struct MarioMotRoll {      // mot_roll.c
 typedef struct MarioMotHip {       // mot_hip.c
     f32 angle;                     // 0x00
 #if VERSION < VERSION_US
-    s32 sfxId[2];                  // 0x04, before US (US and later use soundId[3], soundId[4])
+    s32 sfxId[2];                  // 0x04, before US (US and later use MarioWork.hipSfxId)
 #endif
 } MarioMotHip;
 
