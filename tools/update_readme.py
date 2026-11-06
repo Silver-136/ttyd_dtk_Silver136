@@ -82,7 +82,7 @@ def main():
     pure_c = tc.get("asm_fns", 1) == 0  # L 2026-10-21: asm stand-ins removed; every figure is C
     if pure_c:
         head = (
-            "**Progress** (every unit is built from C and both builds are byte-identical to the original game):\n\n"
+            "**Progress** (every unit is built from C and every build is byte-identical to the original game):\n\n"
             "| Measure | Value |\n|---|---|\n"
             f"| **Code matched by C** (by code size) | **{tc['true_code']:.2f}%** |\n"
             f"| **Functions matched by C** | **{tc['true_fns']} / {tc['total_fns']}** ({100.0 * tc['true_fns'] / tc['total_fns']:.1f}%) |\n"

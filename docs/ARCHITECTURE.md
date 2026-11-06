@@ -57,7 +57,7 @@ Most game logic is written as scripts: arrays of 32-bit words that a small inter
 ## Reading the code
 
 - **Finding a function.** `config/<version>/symbols.txt` lists every symbol with its address, and `config/<version>/splits.txt` says which source file owns each address range; REL symbols are under `config/<version>/<rel>/`.
-- **Section markers.** A comment such as `//.sbss` or `//.data` before a group of variables says which section they go to in the original object. Definitions are ordered to reproduce the original layout, so a variable can sit far from the code that uses it; do not move one without building both versions.
+- **Section markers.** A comment such as `//.sbss` or `//.data` before a group of variables says which section they go to in the original object. Definitions are ordered to reproduce the original layout, so a variable can sit far from the code that uses it; do not move one without building every version.
 - **Version blocks.** `#if VERSION >= VERSION_US` (`include/version.h`) selects US-only code; everything else is shared with JP.
 - **Fakes and bugs.** A `// FAKE:` comment marks C written in an unnatural way to reproduce the original bytes ([FAKES.md](FAKES.md)); a `// BUG:` comment marks a bug of the original game that the code keeps ([KNOWN_GAME_BUGS.md](KNOWN_GAME_BUGS.md)).
 
