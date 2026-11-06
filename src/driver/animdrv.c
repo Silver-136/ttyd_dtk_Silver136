@@ -3009,7 +3009,7 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
     if (!wp->inBattle && pose->type == 1) {
         return;
     }
-    if (!(xluMode == 2 && (data->flags & 1)) && !(data->flags & (1 << xluMode))) {
+    if (!(xluMode == 2 && (data->flags & ANIM_DATA_STAGE_ALPHA_TEST_ALT)) && !(data->flags & (1 << xluMode))) {
         return;
     }
     mode = xluMode;
@@ -3183,7 +3183,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
         paper = &wp->poses[pose->paperId];
         // FAKE: (animPoseGetBaseData) bypasses the macro so the real inline is used; its return temp keeps the paper wp load out of the early simplify pushes (wp r3 / files r4 / poses r5)
         pd = (animPoseGetBaseData)(paper);
-        if (((xluMode != 2) || (!(pd->flags & 1))) && (!(pd->flags & (1 << xluMode)))) {
+        if (((xluMode != 2) || (!(pd->flags & ANIM_DATA_STAGE_ALPHA_TEST_ALT))) && (!(pd->flags & (1 << xluMode)))) {
             return;
         }
         if (paper->typeFlags & ANIM_POSE_TYPE_PAPER) {
@@ -3247,7 +3247,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
         }
     } else {
         pd = *((AnimationPoseData**)wp->files[pose->fileId].handle->data);
-        if (((xluMode != 2) || (!(pd->flags & 1))) && (!(pd->flags & (1 << xluMode)))) {
+        if (((xluMode != 2) || (!(pd->flags & ANIM_DATA_STAGE_ALPHA_TEST_ALT))) && (!(pd->flags & (1 << xluMode)))) {
             return;
         }
     }
@@ -3740,7 +3740,7 @@ AnimTableEntry* animPoseGetCurrentAnim(s32 poseId) {
     return &data->anims[animPoseGetAnimPosePtr(poseId)->animId];
 }
 
-/** Tells whether pose poseId's animation file has translucent parts (file flag 8). */
+/** Tells whether pose poseId's animation file has translucent parts (ANIM_DATA_STAGE_XLU). */
 BOOL animPoseTestXLU(s32 poseId) {
     return (animPoseGetAnimBaseDataPtr(poseId)->flags >> 3) & 1;
 }
