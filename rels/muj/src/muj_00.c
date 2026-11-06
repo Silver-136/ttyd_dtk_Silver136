@@ -1306,7 +1306,7 @@ EVT_BEGIN(koburon_init)
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
     CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
 #if VERSION <= VERSION_DEMO_JP
-    SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
 #else
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
@@ -1329,7 +1329,7 @@ EVT_BEGIN(koburon_regp)
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(1))
     IF_INT_GREATER(LW(1), 100)
 #if VERSION <= VERSION_DEMO_JP
-        IF_INT_EQUAL(LSWF(1), 1)
+        IF_INT_EQUAL(LSWF_MUJ_00_WHACKA_OUT, 1)
 #else
         IF_INT_EQUAL(LSWF_MUJ_00_WHACKA_OUT, 1)
             CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
@@ -1354,7 +1354,7 @@ EVT_BEGIN(koburon_regp)
             CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
 #if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), -29999996, LW(5), 0)
-            SET_VALUE(LSWF(1), 1)
+            SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 1)
 #else
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), 35, LW(5), 0)
             SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 1)

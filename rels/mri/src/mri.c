@@ -660,7 +660,7 @@ EVT_END()
 
 EVT_BEGIN(mri_guide_hagure_check)
 #if VERSION <= VERSION_DEMO_JP
-    CALL(evt_puni_get_lsw_index, LSW(0), 0, LW(0), LW(1), LW(2), LW(3))
+    CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
 #else
     CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
     CALL(evt_puni_get_trap_index, 1, LW(4))
@@ -693,7 +693,7 @@ EVT_BEGIN(mri_guide_goryu)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_JP
-    CALL(evt_puni_set_lsw_index, LSW(0), 0, 0, 0, 0, 0)
+    CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)
 #else
     CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)
     CALL(evt_puni_set_trap_index, 1, 0)

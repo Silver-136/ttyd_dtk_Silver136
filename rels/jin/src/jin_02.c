@@ -137,7 +137,7 @@ EVT_END()
 
 /**
  * Red-switch script that moves the endless staircase one stage on in the other direction:
- * same reaction as in jin_01 but the stage counter LSW(1) is raised by 1.
+ * same reaction as in jin_01 but the stage counter LSW_JIN_STAIRCASE_POS is raised by 1.
  */
 // The front switch increments the staircase position unless its current value is 1.
 EVT_BEGIN(evt_kaidan_temae)

@@ -292,7 +292,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Map-init helper for the floating block blk_0 and its switch (sw_0):
- * while the local flag LSWF(4) is clear,
+ * while the local flag LSWF_GON_05_FLOAT_BLOCK_0_MOVED is clear,
  * it lifts the block 525 units above its resting height.
  */
 // Block 0 starts 525 units above its placed position when its area flag is clear.
@@ -316,7 +316,7 @@ EVT_END()
 /**
  * Handler of the sw_0 switch for the floating block blk_0:
  * the camera shakes (with controller rumble in JP and the June demos only) while the block rises
- * or falls 525 units (the direction follows LSWF(4), which is toggled), with block-float sounds;
+ * or falls 525 units (the direction follows LSWF_GON_05_FLOAT_BLOCK_0_MOVED, which is toggled), with block-float sounds;
  * if the descending block's head-contact check matches,
  * it reverses and the switch is cancelled. Ends with a landing sound and the final shake when descending.
  */
@@ -558,7 +558,7 @@ EVT_END()
 
 /**
  * Map-init helper for the floating block blk_1:
- * moves it 489 units up if its saved state LSWF(5) says it was raised.
+ * moves it 489 units up if its saved state LSWF_GON_05_FLOAT_BLOCK_1_MOVED says it was raised.
  */
 // Block 1 starts 489 units above its placed position when its area flag is set.
 EVT_BEGIN(init_1)
@@ -580,7 +580,7 @@ EVT_END()
 
 /**
  * Runs when Mario hits the floating-block switch sw_1:
- * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF(5).
+ * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF_GON_05_FLOAT_BLOCK_1_MOVED.
  * A descending head-contact match reverses the block and cancels the switch press.
  */
 EVT_BEGIN(main_1)

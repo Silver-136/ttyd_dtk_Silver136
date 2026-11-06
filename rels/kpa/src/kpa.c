@@ -289,7 +289,7 @@ USER_FUNC(kpa_add_coin) {
 
 /**
  * Bowser's death sequence, shared by all stages:
- * runs once (LSWF(3)), locks controls, plays the defeated pose,
+ * runs once (LSWF_KPA_STAGE_ENDED), locks controls, plays the defeated pose,
  * and has Bowser pop up and fall off the bottom of the screen.
  * It then bumps the try counter (max 99) and returns to the current stage with "kpa_replay" (stage 1: kpa_02, 2:
  * kpa_03, 3: kpa_05). Called on a timeout, a pit fall or lethal damage.
@@ -420,11 +420,11 @@ USER_FUNC(kpa_set_scale) {
 /**
  * Background music controller for the side-scrolling stages, spawned by kpa_stage_start (kpa_04 and kpa_06 spawn it
  * from their init).
- * Every frame it picks a track from the stage (LSW(1) = 0..2) and the time left:
+ * Every frame it picks a track from the stage (LSW_KPA_FIELD_BGM = 0..2) and the time left:
  * the normal theme, a faster "UP1" variant when 30 s or less remain (or "UP2", always the first stage's theme, when
  * the script started with 30 s or less left).
  * It switches to the invincibility music (BGM_STGK_FIELD2) while Bowser is invincible,
- * the defeat jingle when LSWF(4) is set and the goal jingle when LSWF(5) is set, then stops.
+ * the defeat jingle when LSWF_KPA_BOWSER_DEAD is set and the goal jingle when LSWF_KPA_GOAL_WALK_STARTED is set, then stops.
  * Changes wait 300 ms.
  */
 EVT_BEGIN(kpa_bgm_change)
@@ -506,7 +506,7 @@ EVT_END()
  * fades out the sound, shrinks Bowser, frames him with the camera,
  * shows the cross and infinity 2D icons ("batu", "mugen") and prints the try message from kpa_get_msg.
  * Then it fades the screen out, starts the music controller, restores Bowser's size,
- * fades in, gives back control and sets LSWF(2) (intro done), which also starts kpa_time.
+ * fades in, gives back control and sets LSWF_KPA_TIMER_STARTED (intro done), which also starts kpa_time.
  */
 EVT_BEGIN(kpa_stage_start)
     CALL(evt_cam_letter_box_disable, 1)

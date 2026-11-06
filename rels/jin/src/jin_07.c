@@ -129,7 +129,7 @@ EVT_END()
  * Script run on entering jin_07 after the parrot room:
  * the partner comments (stg4_jin_46 and 47; Vivian's lines say they overheard Doopliss's name)
  * and the camera goes
- * back to normal. It runs once after the parrot's first special talk in jin_08 (oumu_juyo_talk sets LSWF(1)).
+ * back to normal. It runs once after the parrot's first special talk in jin_08 (oumu_juyo_talk sets LSWF_JIN_PARROT_SCENE_PENDING).
  */
 EVT_BEGIN(jin_07_juyo_oumu_vivian)
     IF_INT_NOT_EQUAL(LSWF_JIN_PARROT_SCENE_PENDING, 0)

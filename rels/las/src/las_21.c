@@ -416,11 +416,11 @@ EVT_END()
 
 /**
  * Event script: switch handler for floating block 21blk1:
- * toggles it between Y -130 and Y -580 using floatblk_evt and remembers the position in LSWF(8).
+ * toggles it between Y -130 and Y -580 using floatblk_evt and remembers the position in LSWF_LAS_21_BLK1_LOWERED.
  */
 EVT_BEGIN(floatblk21_1_evt)
 #if VERSION <= VERSION_DEMO_JP
-    IF_INT_EQUAL(LSWF(8), 0)
+    IF_INT_EQUAL(LSWF_LAS_21_BLK1_LOWERED, 0)
 #else
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK1_LOWERED, 0)
@@ -451,11 +451,11 @@ EVT_END()
 
 /**
  * Event script: switch handler for floating block 21blk2:
- * toggles it between Y -130 and Y -580 and remembers the position in LSWF(9).
+ * toggles it between Y -130 and Y -580 and remembers the position in LSWF_LAS_21_BLK2_LOWERED.
  */
 EVT_BEGIN(floatblk21_2_evt)
 #if VERSION <= VERSION_DEMO_JP
-    IF_INT_EQUAL(LSWF(9), 0)
+    IF_INT_EQUAL(LSWF_LAS_21_BLK2_LOWERED, 0)
 #else
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK2_LOWERED, 0)

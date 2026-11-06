@@ -268,7 +268,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Map-init helper for the first floating block (mobj_fltbl01) and its switch:
- * while LSWF(6) is clear (the raised state) it moves the block 225 units up so it starts where it was left.
+ * while LSWF_GON_04_FLOAT_BLOCK_1_MOVED is clear (the raised state) it moves the block 225 units up so it starts where it was left.
  * The IF_INT_EQUAL(1, 0) arm, which reads the flag the other way round, never runs.
  */
 // A clear area flag places block 1 225 units above its base; a set flag leaves it at the base.
@@ -291,8 +291,8 @@ EVT_END()
 
 /**
  * Runs when Mario hits the floating-block switch for mobj_fltbl01:
- * flips the block between its high position (LSWF(6) clear) and its low one 225 units below, with the
- * floating-block sound and a camera shake, and flips LSWF(6). A sinking block that comes down on Mario's head
+ * flips the block between its high position (LSWF_GON_04_FLOAT_BLOCK_1_MOVED clear) and its low one 225 units below, with the
+ * floating-block sound and a camera shake, and flips LSWF_GON_04_FLOAT_BLOCK_1_MOVED. A sinking block that comes down on Mario's head
  * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
@@ -304,7 +304,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
     // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
-        // Decide the direction from the saved state (only the ELSE arm below can run): with LSWF(6) clear the
+        // Decide the direction from the saved state (only the ELSE arm below can run): with LSWF_GON_04_FLOAT_BLOCK_1_MOVED clear the
         // block is high and sinks 225 units, with it set the block is low and rises.
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
@@ -532,7 +532,7 @@ EVT_END()
 
 /**
  * Map-init helper for the second floating block (mobj_fltbl02):
- * moves it 200 units up if its saved state LSWF(7) says it was raised.
+ * moves it 200 units up if its saved state LSWF_GON_04_FLOAT_BLOCK_2_MOVED says it was raised.
  */
 // A set area flag places block 2 200 units above its base; a clear flag leaves it at the base.
 EVT_BEGIN(evt_gon_04flowblock_updown2_init)
@@ -556,7 +556,7 @@ EVT_END()
 /**
  * Runs when Mario hits the floating-block switch for mobj_fltbl02:
  * flips that block between its low and high position (200 units apart) with the floating-block sound
- * and camera shake, and flips the state flag LSWF(7).
+ * and camera shake, and flips the state flag LSWF_GON_04_FLOAT_BLOCK_2_MOVED.
  */
 EVT_BEGIN(evt_gon_04flowblock_updown2)
 #if VERSION >= VERSION_JP

@@ -381,7 +381,7 @@ EVT_BEGIN(puni_return)
         DEBUG_PUT_MSG(STRING("同じエリアにいます"))
         ELSE
         READ_INT2(LW(12), LW(13))
-                        CALL(evt_puni_set_lsw_index, LSW(0), LW(11), 0, 0, 0, 0)
+                        CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), 0, 0, 0, 0)
                         CALL(evt_puni_init_puni, LW(10), 1, LW(12), 0, LW(13), 0)
 #else
         CALL(evt_puni_get_trap_index, LW(10), LW(5))
@@ -2281,7 +2281,7 @@ USER_FUNC(akari_charge_entry) {
 
 /**
  * Message callback for the "kpa_stg3_012" line:
- * at callback type 3, when the current page index is 1 it sets local flag LSWF(2). Used in Bowser's visit.
+ * at callback type 3, when the current page index is 1 it sets local flag LSWF_MRI_01_KOOPA_MSG_CUE. Used in Bowser's visit.
  */
 void mri_stg3_012_cb(s32 type, void* param) {
     u16* work = *(u16**)param;

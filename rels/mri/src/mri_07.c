@@ -210,7 +210,7 @@ EVT_BEGIN(puniinfo_init)
 EVT_END()
 
 /**
- * Talk script of the Puni information seller: cycles through three lines of tips (counter LSW(714));
+ * Talk script of the Puni information seller: cycles through three lines of tips (counter LSW_MRI_07_PUNI_INFO_TALK_INDEX);
  * the set of lines changes after the boss fight and again at the end of the story.
  */
 EVT_BEGIN(puniinfo_talk)

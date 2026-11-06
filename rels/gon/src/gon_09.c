@@ -125,7 +125,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Map-init helper for the floating block blk_0 and its switch (sw_0):
- * if the local flag LSWF(1) is clear,
+ * if the local flag LSWF_GON_09_FLOAT_BLOCK_MOVED is clear,
  * it lifts the block 200 units above its resting height.
  */
 // With this configuration, a clear moved flag places the block 200 units above its base position.
@@ -149,7 +149,7 @@ EVT_END()
 /**
  * Handler of the sw_0 switch for the floating block blk_0:
  * the camera shakes (with controller rumble in JP and the June demos only) while the block rises
- * or falls 200 units (the direction follows LSWF(1), which is toggled), with block-float sounds;
+ * or falls 200 units (the direction follows LSWF_GON_09_FLOAT_BLOCK_MOVED, which is toggled), with block-float sounds;
  * if the descending block's head-contact check matches,
  * it reverses and the switch is cancelled.
  */

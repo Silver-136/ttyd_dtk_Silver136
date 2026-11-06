@@ -412,7 +412,7 @@ EVT_BEGIN(hosi_onoff)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 2. Toggles the star (LSWF(1)) and then checks the puzzle. */
+/** Event script: red switch for star 2. Toggles the star (LSWF_LAS_20_STAR_02_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_02_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_02a"))
     SET_VALUE(LW(1), STRING("S_hosi_02b"))
@@ -422,7 +422,7 @@ EVT_BEGIN(hosi_02_sw_evt)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 3. Toggles the star (LSWF(2)) and then checks the puzzle. */
+/** Event script: red switch for star 3. Toggles the star (LSWF_LAS_20_STAR_03_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_03_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_03a"))
     SET_VALUE(LW(1), STRING("S_hosi_03b"))
@@ -432,7 +432,7 @@ EVT_BEGIN(hosi_03_sw_evt)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 4. Toggles the star (LSWF(3)) and then checks the puzzle. */
+/** Event script: red switch for star 4. Toggles the star (LSWF_LAS_20_STAR_04_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_04_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_04a"))
     SET_VALUE(LW(1), STRING("S_hosi_04b"))
@@ -442,7 +442,7 @@ EVT_BEGIN(hosi_04_sw_evt)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 5. Toggles the star (LSWF(4)) and then checks the puzzle. */
+/** Event script: red switch for star 5. Toggles the star (LSWF_LAS_20_STAR_05_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_05_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_05a"))
     SET_VALUE(LW(1), STRING("S_hosi_05b"))
@@ -452,7 +452,7 @@ EVT_BEGIN(hosi_05_sw_evt)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 6. Toggles the star (LSWF(5)) and then checks the puzzle. */
+/** Event script: red switch for star 6. Toggles the star (LSWF_LAS_20_STAR_06_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_06_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_06a"))
     SET_VALUE(LW(1), STRING("S_hosi_06b"))
@@ -462,7 +462,7 @@ EVT_BEGIN(hosi_06_sw_evt)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 7. Toggles the star (LSWF(6)) and then checks the puzzle. */
+/** Event script: red switch for star 7. Toggles the star (LSWF_LAS_20_STAR_07_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_07_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_07a"))
     SET_VALUE(LW(1), STRING("S_hosi_07b"))
@@ -472,7 +472,7 @@ EVT_BEGIN(hosi_07_sw_evt)
     RETURN
 EVT_END()
 
-/** Event script: red switch for star 8. Toggles the star (LSWF(7)) and then checks the puzzle. */
+/** Event script: red switch for star 8. Toggles the star (LSWF_LAS_20_STAR_08_LIT) and then checks the puzzle. */
 EVT_BEGIN(hosi_08_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_08a"))
     SET_VALUE(LW(1), STRING("S_hosi_08b"))

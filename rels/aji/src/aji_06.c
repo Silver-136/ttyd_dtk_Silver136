@@ -186,7 +186,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Exit event of the room's door: freezes Mario and, at STG5_44_PEACH_TECS_REQUEST_2,
- * prints peach_aji_226 (TEC has locked the door until the potion is done; LSWF(11) is raised while the text
+ * prints peach_aji_226 (TEC has locked the door until the potion is done; LSWF_AJI_06_PEACH_MSG_OPEN is raised while the text
  * is open) and returns LW(0) = 1, which makes bero_case_init_check cancel the exit; otherwise LW(0) = 0.
  */
 static EVT_BEGIN(bero_peach_evt)
@@ -343,7 +343,7 @@ s32 kusuri_id[] = {
 
 /**
  * Peach's potion pick: builds the list of potions she still holds (red, blue, orange, green,
- * from the local flags LSWF(1) to 4) and shows the item menu.
+ * from the local flags LSWF_AJI_06_RED_POTION_HELD to 4) and shows the item menu.
  * Returns in LW(0) the potion number (1 to 4) she chose, or 0 if the menu was cancelled or she has no potion.
  */
 EVT_BEGIN(peach_evt_kusuri_select)
@@ -383,9 +383,9 @@ EVT_BEGIN(peach_evt_kusuri_select)
 EVT_END()
 
 /**
- * Takes the potion LW(0) out of a slot: sets the matching "have it" flag (LSWF(1) to 4),
+ * Takes the potion LW(0) out of a slot: sets the matching "have it" flag (LSWF_AJI_06_RED_POTION_HELD to 4),
  * removes the potion item object (kusuri_aka, kusuri_ao, kusuri_ki or kusuri_mid) and,
- * if the start had already been armed (LSWF(5)), cancels it and silences the siren.
+ * if the start had already been armed (LSWF_AJI_06_MIX_START_OFFERED), cancels it and silences the siren.
  */
 EVT_BEGIN(peach_evt_pick_kusuri)
     SWITCH(LW(0))
@@ -450,8 +450,8 @@ EVT_END()
 /**
  * Pours potion number LW(1) through the stream object LW(0) (S_mizu1 to 4): plays the map animation "mizu"
  * with SFX_PEACH_MACHINE_MEDICINE1 and scales the stream up, holds it and scales it down over that time.
- * If a press was accepted in the timing window (LSWF(7)), the beaker contents S_naka also rise by an eighth
- * (GW(10)) and the potion's colour is blended in (kusuri_color_set); LSWF(7) is cleared at the end.
+ * If a press was accepted in the timing window (LSWF_AJI_06_DISPENSE_PRESSED), the beaker contents S_naka also rise by an eighth
+ * (GW(10)) and the potion's colour is blended in (kusuri_color_set); LSWF_AJI_06_DISPENSE_PRESSED is cleared at the end.
  */
 EVT_BEGIN(peach_evt_kusuri_dasu)
     SET_VALUE(LW(5), LW(0))
@@ -521,11 +521,11 @@ EVT_END()
 
 /**
  * Case script of the first mixing slot (A_sui2).
- * While the machine is idle (LSWF(6) = 0): shows the potion menu
+ * While the machine is idle (LSWF_AJI_06_MIXING_RUNNING = 0): shows the potion menu
  * and puts the chosen potion in the slot (at x = -110)
  * or takes the current one out again (peach_evt_pick_kusuri), then checks whether all slots are full.
- * While the machine is running (LSWF(6) = 1): pours the slot's potion (peach_evt_kusuri_dasu).
- * The pour counts only when the beaker is at this slot (GW(12) = 0) and the press window is open (LSWF(8));
+ * While the machine is running (LSWF_AJI_06_MIXING_RUNNING = 1): pours the slot's potion (peach_evt_kusuri_dasu).
+ * The pour counts only when the beaker is at this slot (GW(12) = 0) and the press window is open (LSWF_AJI_06_DISPENSE_WINDOW_OPEN);
  * it is then checked against step GW(11)
  * of kusuri_tyogo_list (peach_evt_seikai_check): right adds 1 to the score GW(13) and flashes the slot's lamps,
  * wrong subtracts 1.
@@ -822,7 +822,7 @@ EVT_END()
 
 /**
  * Case script of the machine's stop switch (A_sui6):
- * in the last step (GW(11) = 8) while the machine is heating (LSWF(8)) it sets LSWF(7),
+ * in the last step (GW(11) = 8) while the machine is heating (LSWF_AJI_06_DISPENSE_WINDOW_OPEN) it sets LSWF_AJI_06_DISPENSE_PRESSED,
  * which ends the wait for the stop-switch press.
  */
 EVT_BEGIN(peach_evt_stop_renji)
@@ -918,7 +918,7 @@ EVT_END()
 
 /**
  * After Peach has grown or shrunk from a wrong potion,
- * scales her back to normal size over time (peach_set_scale), starting from big or small depending on LSW(5).
+ * scales her back to normal size over time (peach_set_scale), starting from big or small depending on LSW_AJI_06_WRONG_POTION_EFFECT.
  */
 EVT_BEGIN(peach_evt_sugata_modoru)
     WAIT_MS(15000)
@@ -953,7 +953,7 @@ EVT_END()
 
 /**
  * Case script on the machine's cup A_bika1.
- * If the mix was wrong (LSWF(9) = 0) she randomly grows huge or shrinks tiny, comments (peach_aji_234 to 236),
+ * If the mix was wrong (LSWF_AJI_06_MIX_CORRECT = 0) she randomly grows huge or shrinks tiny, comments (peach_aji_234 to 236),
  * returns to her size and the machine resets so she can try again.
  * If it was right she turns invisible (SFX_PEACH_TOUMEI1, peach_evt_toumei_onoff, evt_peach_set_condition 2),
  * the scene plays (peach_aji_237 to 242) and the story becomes STG5_45_PEACH_POTION_PUZZLE.
@@ -1576,7 +1576,7 @@ EVT_BEGIN(peach_evt_kusuri_mid)
     RETURN
 EVT_END()
 
-/** Waits until no memo text is being shown (LSWF(11) = 0), so that machine messages do not collide with a memo. */
+/** Waits until no memo text is being shown (LSWF_AJI_06_PEACH_MSG_OPEN = 0), so that machine messages do not collide with a memo. */
 EVT_BEGIN(peach_evt_wait_memo)
     LOOP(0)
         IF_INT_EQUAL(LSWF_AJI_06_PEACH_MSG_OPEN, 0)
@@ -1590,7 +1590,7 @@ EVT_BEGIN(peach_evt_wait_memo)
     RETURN
 EVT_END()
 
-/** Peach reads recipe memo 1 (peach_aji_225_1); LSWF(11) is set while the text is up. */
+/** Peach reads recipe memo 1 (peach_aji_225_1); LSWF_AJI_06_PEACH_MSG_OPEN is set while the text is up. */
 EVT_BEGIN(peach_evt_memo1)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)

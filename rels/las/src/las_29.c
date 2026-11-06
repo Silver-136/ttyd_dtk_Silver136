@@ -604,7 +604,7 @@ USER_FUNC(all_hikari_change_kuro) {
 
 /**
  * Map TEV callback used while the hall flashes:
- * draws the object in a flat colour, white when LSWF(10) is set and black otherwise, instead of its texture.
+ * draws the object in a flat colour, white when LSWF_LAS_29_MAP_LIT_WHITE is set and black otherwise, instead of its texture.
  */
 void map_color_tev(MapTevCallbackInfo* info) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);

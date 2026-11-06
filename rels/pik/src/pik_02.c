@@ -342,7 +342,7 @@ EVT_END()
 
 /**
  * Talk script for Pennington in the sanctum: stg6_pik_19 before the real Garnet Star,
- * then stg6_pik_22 and stg6_pik_23 alternately (LSWF(0)) up to STG6_54_WELCOME_BACK,
+ * then stg6_pik_22 and stg6_pik_23 alternately (LSWF_PIK_02_PENNINGTON_TALK_TOGGLE) up to STG6_54_WELCOME_BACK,
  * stg7_pik_clear_09_1 until the end of chapter 8 and stg7_pik_clear_09_1_1 afterwards.
  */
 static EVT_BEGIN(talk_powan)

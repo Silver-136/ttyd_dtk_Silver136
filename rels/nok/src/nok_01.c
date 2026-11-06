@@ -1658,9 +1658,9 @@ EVT_END()
 
 /**
  * Script of bush 4 (S_kamehapa_04, from kusa_data):
- * when it is the bush the map init chose at random for this visit (LSW(1) = 0)
+ * when it is the bush the map init chose at random for this visit (LSW_NOK_01_LEAF_BUSH = 0)
  * and its leaf is not already out (evt_item_delete_check),
- * a Turtley Leaf launches out of it at (-407, 70, -160) and sets LSWF(4) when picked up.
+ * a Turtley Leaf launches out of it at (-407, 70, -160) and sets LSWF_NOK_01_TURTLEY_LEAF when picked up.
  * In the two June 2004 demos (US and JP demo) it appears at z = -148 instead.
  */
 static EVT_BEGIN(evt_kusa_4)
@@ -1670,7 +1670,7 @@ static EVT_BEGIN(evt_kusa_4)
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #endif
@@ -1679,7 +1679,7 @@ static EVT_BEGIN(evt_kusa_4)
 EVT_END()
 
 /**
- * Script of bush 5 (S_kamehapa_05): launches the Turtley Leaf at (-452, 70, -160) when LSW(1) is 1;
+ * Script of bush 5 (S_kamehapa_05): launches the Turtley Leaf at (-452, 70, -160) when LSW_NOK_01_LEAF_BUSH is 1;
  * otherwise as evt_kusa_4.
  */
 static EVT_BEGIN(evt_kusa_5)
@@ -1689,7 +1689,7 @@ static EVT_BEGIN(evt_kusa_5)
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #endif
@@ -1698,7 +1698,7 @@ static EVT_BEGIN(evt_kusa_5)
 EVT_END()
 
 /**
- * Script of bush 6 (S_kamehapa_06): launches the Turtley Leaf at (-362, 70, -160) when LSW(1) is 2;
+ * Script of bush 6 (S_kamehapa_06): launches the Turtley Leaf at (-362, 70, -160) when LSW_NOK_01_LEAF_BUSH is 2;
  * otherwise as evt_kusa_4.
  */
 static EVT_BEGIN(evt_kusa_6)
@@ -1708,7 +1708,7 @@ static EVT_BEGIN(evt_kusa_6)
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #endif

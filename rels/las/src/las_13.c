@@ -138,7 +138,7 @@ EVT_END()
 
 /**
  * Event script: the first switch of las_13 was hit.
- * Counts the hit in LSW(1) (up to 255) and re-checks the puzzle with switch_check.
+ * Counts the hit in LSW_LAS_13_SWITCH_1_COUNT (up to 255) and re-checks the puzzle with switch_check.
  */
 static EVT_BEGIN(switch1_evt)
     IF_INT_LESS(LSW_LAS_13_SWITCH_1_COUNT, 255)
@@ -150,7 +150,7 @@ EVT_END()
 
 /**
  * Event script: the second switch of las_13 was hit.
- * Counts the hit in LSW(2) (up to 255) only while LSW(1) is 0, and re-checks the puzzle with switch_check.
+ * Counts the hit in LSW_LAS_13_SWITCH_2_COUNT (up to 255) only while LSW_LAS_13_SWITCH_1_COUNT is 0, and re-checks the puzzle with switch_check.
  */
 static EVT_BEGIN(switch2_evt)
     IF_INT_EQUAL(LSW_LAS_13_SWITCH_1_COUNT, 0)

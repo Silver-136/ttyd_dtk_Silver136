@@ -1231,7 +1231,7 @@ static USER_FUNC(make_name) {
 #endif
 
 /**
- * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF(1),
+ * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF_KPA_01_MSG_CUE,
  * which lets the Hammer Bro turn toward Bowser.
  */
 void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
@@ -1246,7 +1246,7 @@ void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
     }
 }
 
-/** Message callback for kpa_stg1_014_2: sets LSWF(1) on page 2, which plays the item jingle in douzou_3_touch_evt. */
+/** Message callback for kpa_stg1_014_2: sets LSWF_KPA_01_MSG_CUE on page 2, which plays the item jingle in douzou_3_touch_evt. */
 void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
@@ -1260,7 +1260,7 @@ void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
 }
 
 /**
- * Message callback for kpa_stg1_036: sets LSWF(1) on page 2,
+ * Message callback for kpa_stg1_036: sets LSWF_KPA_01_MSG_CUE on page 2,
  * which a waiting inline event of the departure cutscene reacts to.
  */
 void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
@@ -1276,7 +1276,7 @@ void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
 }
 
 /**
- * Message callback for kpa_stg1_034: sets LSWF(1) once the text entry index exceeds 117,
+ * Message callback for kpa_stg1_034: sets LSWF_KPA_01_MSG_CUE once the text entry index exceeds 117,
  * the cue for Kammy's next animation.
  */
 void kpa_stg1_034_cb(s32 type, smartEntry* smart) {

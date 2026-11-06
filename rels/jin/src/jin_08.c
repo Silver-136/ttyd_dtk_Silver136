@@ -213,7 +213,7 @@ EVT_BEGIN(oumu_init)
 EVT_END()
 
 /**
- * Talk script of the parrot: repeats stg4_jin_40..42 one after the other (using LSW(2))
+ * Talk script of the parrot: repeats stg4_jin_40..42 one after the other (using LSW_JIN_08_PARROT_TALK_COUNT)
  * before the Ruby Star is recovered, then different lines for after the Ruby Star and after the final battle.
  */
 EVT_BEGIN(oumu_talk)
@@ -243,7 +243,7 @@ EVT_END()
 /**
  * Special talk with the parrot, triggered by approaching while Vivian hides Mario after she has joined (before the Peach
  * report step): it speaks (stg4_jin_43 the first time, stg4_jin_44 afterwards)
- * and LSWF(1) is set for the jin_07 follow-up.
+ * and LSWF_JIN_PARROT_SCENE_PENDING is set for the jin_07 follow-up.
  */
 EVT_BEGIN(oumu_juyo_talk)
     CALL(evt_mario_key_onoff, 0)

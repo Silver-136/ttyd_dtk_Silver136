@@ -150,7 +150,7 @@ EVT_END()
 /**
  * Red-switch script that moves the endless staircase one stage on:
  * Mario and his partner react in confusion (exclamation mark and random turning the first time),
- * the camera shakes and the stage counter LSW(1) is lowered by 1.
+ * the camera shakes and the stage counter LSW_JIN_STAIRCASE_POS is lowered by 1.
  */
 // The rear switch decrements the staircase position when the current value is at most 1.
 EVT_BEGIN(evt_kaidan_oku)
@@ -208,7 +208,7 @@ EVT_END()
 
 /**
  * Reward script for the golden tree: if no item named item_ki01 is present,
- * drops a Golden Leaf from it (flag LSWF(2)) when Mario hits the tree.
+ * drops a Golden Leaf from it (flag LSWF_JIN_01_GOLDEN_LEAF_TREE) when Mario hits the tree.
  */
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))

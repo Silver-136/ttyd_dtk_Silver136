@@ -245,7 +245,7 @@ EVT_END()
 
 /**
  * Creepy Steeple jin_03 map init: starts the steeple music and reverb, the shadow-Mario tint and the exits,
- * hides two of the three staircase sections according to the stair stage LSW(1) (set by the switches in jin_01
+ * hides two of the three staircase sections according to the stair stage LSW_JIN_STAIRCASE_POS (set by the switches in jin_01
  * and jin_02) and adds the spinning floor tile that hides a Star Piece.
  */
 // Position 0 keeps the middle stairs, 1 keeps the front stairs, and other values keep the rear stairs.

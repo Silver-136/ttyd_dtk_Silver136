@@ -91,7 +91,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   and Shine Sprites (game strings), and every other GSWF/GSW the scripts use (805 names in
   include/evt/evt_save_flags.h, 2026-10-26, from the scripts and room text; tool cleanup_tools/save_flags.py).
   Area-local values (LSWF/LSW): 84 names in the area headers rels/<area>/include/<area>.h (tool
-  cleanup_tools/area_flags.py). C code that uses saved values by index (`swSet(0x994)`) cannot use the names;
+  cleanup_tools/area_flags.py); every script use and comment outside the test map uses them (2026-11-06,
+  cleanup_tools/area_flag_uses.py). The tst test rooms keep numbers: each room numbers its map objects' state
+  flags from 0, so one number means a different object per room. C code that uses saved values by index (`swSet(0x994)`) cannot use the names;
   each such line ends with the name as a comment (save_flags.py cnotes).
 - Names with an address suffix: 5 unreferenced .sbss words with no name evidence (the JP demo map names the
   neighbouring objects only), the JP-only party init copies, jumptable_80374848, and the shadowdrv debug strings

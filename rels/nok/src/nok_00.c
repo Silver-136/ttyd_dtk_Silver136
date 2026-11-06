@@ -110,7 +110,7 @@ EvtWord nok_00_init_evt[205];
 
 /**
  * Message callback for Kammy's line kpa_stg2_013 in the Petalburg cutscene.
- * Once the message entry index exceeds 49 it sets the local flag LSWF(2),
+ * Once the message entry index exceeds 49 it sets the local flag LSWF_NOK_00_KOOPA_MSG_CUE,
  * which releases the parallel thread waiting to switch Kammy's animation.
  */
 void nok_stg2_013_cb(s32 type, void** work) {
@@ -470,7 +470,7 @@ EVT_END()
  * Talk script of the Show-off Koopa, a French-accented flirt.
  * If Goombella (party id 1) is with Mario, the first talk has him woo her (stg1_nok_10),
  * she turns him down rudely (stg1_nok_11), he retreats (stg1_nok_12) and she asks Mario to leave (stg1_nok_13),
- * setting LSWF(1); later talks play stg1_nok_14 and her reply stg1_nok_15.
+ * setting LSWF_NOK_00_KIZAYAROU_TALKED; later talks play stg1_nok_14 and her reply stg1_nok_15.
  * With any other partner he asks Mario where his Goomba companion is (stg1_nok_16).
  */
 static EVT_BEGIN(kizayarou_talk)
