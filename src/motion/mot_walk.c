@@ -48,7 +48,7 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2R), &mario->position);
             return;
         }
-        if (hitAttr & 0x400000) {
+        if (hitAttr & HIT_ATTR_METAL) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE6R), &mario->position);
             return;
         }
@@ -76,7 +76,7 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2L), &mario->position);
             return;
         }
-        if (hitAttr & 0x400000) {
+        if (hitAttr & HIT_ATTR_METAL) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE6L), &mario->position);
             return;
         }

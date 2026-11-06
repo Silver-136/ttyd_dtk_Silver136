@@ -794,7 +794,7 @@ void marioLandOn(void) {
             sfx = PSND_SFX_MARIO_LANDING4;
         } else if (attr & HIT_ATTR_GRASS) {
             sfx = PSND_SFX_MARIO_LANDING5;
-        } else if (attr & 0x400000) {
+        } else if (attr & HIT_ATTR_METAL) {
             sfx = PSND_SFX_MARIO_LANDING6;
         } else {
             sfx = PSND_SFX_MARIO_LANDING1;

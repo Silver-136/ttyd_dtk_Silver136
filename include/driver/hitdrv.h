@@ -39,8 +39,8 @@ typedef struct HitDamageReturn {
 // HitEntry.attributes: collision attributes from the map's hit joints (names from the joints that carry them and
 // from the code that tests them: marioChkToge, the walk-sound and hazard checks). DAMAGE_RETURN, MOBJ and BERO are
 // set at run time. Not named: 0x2 (two joints in the retail maps, read by no code), 0x8, 0x40 and bits 24-29 (no
-// retail map sets them; 0x8 is only tested inside the 0x38 plane-panel mask), 0x400000 (footstep sound 6, on the
-// aji, eki, most tou and yuu_00 maps). Map evidence: cleanup_tools/map_dat_scan.py (2026-11-06).
+// retail map sets them; 0x8 is only tested inside the 0x38 plane-panel mask). Map evidence:
+// cleanup_tools/map_dat_scan.py (2026-11-06); METAL confirmed by ear in the game (user).
 typedef enum HitAttributes {
     HIT_ATTR_SHELL_THROUGH = (1 << 0),     // 0x1, Koops' shell passes through
     HIT_ATTR_NPC_ONLY = (1 << 2),          // 0x4, only NPCs collide (hitCheckAttr(4) probes skip it)
@@ -61,6 +61,8 @@ typedef enum HitAttributes {
     HIT_ATTR_ROLL_THROUGH = (1 << 19),     // 0x80000, rolled-up (paper roll) Mario passes
     HIT_ATTR_SNOW = (1 << 20),             // 0x100000, footstep material
     HIT_ATTR_WOOD = (1 << 21),             // 0x200000, footstep material
+    HIT_ATTR_METAL = (1 << 22),            // 0x400000, footstep and landing material: footstep/landing sound 6
+                                           // (all of aji; eki_02 gears, eki_00 elevator; tou stairs, box, lockers)
     HIT_ATTR_BERO = (1 << 23),             // 0x800000, an exit (set by the bero/door scripts)
     HIT_ATTR_DAMAGE_RETURN = (1 << 30),    // 0x40000000, hitDamageReturnSet
     HIT_ATTR_MOBJ = (1 << 31),             // 0x80000000, a map object's hit cube
