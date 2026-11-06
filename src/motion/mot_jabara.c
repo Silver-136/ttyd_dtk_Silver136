@@ -58,6 +58,14 @@ static inline void jabaraSetSpd(f32 shiftZ, f32 shiftRate, f32 zoom) {
     mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
+/** Eases the camera's forward shift back to 0 (rate 0.01) when the Spring Jump is released or ends. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomOff(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->camShiftTargetZ = 0.0f;
+    mario->camShiftRate.z = 0.01f;
+}
+
 /**
  * Puts Mario back to normal after the Spring Jump:
  * restores the facing saved at take-off, clears the offsets and rotation,
@@ -286,7 +294,6 @@ void mot_jabara(void) {
     s32 st;
     BOOL changed;
     f32 step;
-    MarioWork* mp;
     BOOL found;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -415,9 +422,7 @@ void mot_jabara(void) {
         if (!found && (mario->buttonHold & PAD_BUTTON_A) && !(mario->buttonUp & PAD_BUTTON_A)) {
             break;
         }
-        mp = marioGetPtr();
-        mp->camShiftTargetZ = 0.0f;
-        mp->camShiftRate.z = 0.01f;
+        zoomOff();
         camFollowYOff();
         marioChgPose("M_J_5A");
         marioChgPaper("PM_J_1C");
@@ -846,15 +851,12 @@ BOOL jabaraNoHitChk(void) {
  */
 void mot_jabara_post(void) {
     MarioWork* mario = marioGetPtr();
-    MarioWork* m2;
 #if VERSION <= VERSION_DEMO_JP
     allPartyRideOff();
 #else
     mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
 #endif
-    m2 = marioGetPtr();
-    m2->camShiftTargetZ = 0.0f;
-    m2->camShiftRate.z = 0.01f;
+    zoomOff();
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }

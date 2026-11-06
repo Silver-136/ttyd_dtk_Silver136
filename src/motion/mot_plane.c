@@ -55,6 +55,25 @@ EVT_BEGIN(sound_evt)
     RETURN
 EVT_END()
 
+/** Marks the plane's looping flight sound as not playing (sfxId -1) when the motion starts. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void init_se(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->motPlane->sfxId = -1;
+}
+
+/** Starts the plane's looping flight sound (SFX_MARIO_AIRPLANE2) at Mario unless it is already playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void flying_se_on(void) {
+    MarioWork* mario = marioGetPtr();
+
+    // FAKE: unsigned compare with -1 (0xFFFFFFFF) on a signed sound id; the plain signed `== -1` compiles cmpwi
+    // instead of cmplwi and changes the object.
+    if ((u32)mario->motPlane->sfxId == 0xFFFFFFFF) {
+        mario->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &mario->position);
+    }
+}
+
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static void zoomUp(f32 targetZ, f32 rate, f32 zoom) {
     MarioWork* mario = marioGetPtr();
@@ -62,6 +81,14 @@ static void zoomUp(f32 targetZ, f32 rate, f32 zoom) {
     mario->camShiftRate.z = rate;
     mario->camZoom = zoom;
     mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
+}
+
+/** Eases the camera's forward shift back to 0 (rate 0.004) once the plane is gliding. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomOff(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->camShiftTargetZ = 0.0f;
+    mario->camShiftRate.z = 0.004f;
 }
 
 /** Paper airplane animation for each of Mario's colours (marioGetColor). */
@@ -72,8 +99,8 @@ const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hiko
 void flying_se_off(void) {
     MarioWork* mario = marioGetPtr();
 
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
+    // FAKE: unsigned compare with -1 (0xFFFFFFFF) on a signed sound id; the plain signed `!= -1` compiles cmpwi
+    // instead of cmplwi and changes the object.
     if (mario->motStruct != NULL && (u32)mario->motPlane->sfxId != 0xFFFFFFFF) {
         psndSFXOff(mario->motPlane->sfxId);
         mario->motPlane->sfxId = -1;
@@ -236,16 +263,13 @@ void mot_plane(void) {
     f32 y, b, c;
     Vec p;
     HitEntry* hit;
-    MarioWork* m;
-    MarioWork* m2;
 
     mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->motStruct = __memAlloc(HEAP_DEFAULT, sizeof(MotPlaneWork));
         memset(mp->motStruct, 0, sizeof(MotPlaneWork));
-        m2 = marioGetPtr();
-        m2->motPlane->sfxId = -1;
+        init_se();
         mp->currSubMotionId = 0;
     }
     switch (mp->currSubMotionId) {
@@ -348,9 +372,7 @@ void mot_plane(void) {
         mp->currSubMotionId = 12;
         mp->baseSpeed = 1.0f;
         mp->motPlane->diveSpeed = 2.0f;
-        m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.004f;
+        zoomOff();
         mp->camShiftTargetX = 70.0f * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? -1.0f : 1.0f);
         mp->camShiftTargetY = -70.0f;
         break;
@@ -586,7 +608,6 @@ static void flyMain(void) {
     BOOL yawInLeftHalf;
     s32 stallFrames;
     f32 speedSin;
-    MarioWork* m;
 
     mp = marioGetPtr();
     switch (mp->currSubMotionId) {
@@ -594,13 +615,7 @@ static void flyMain(void) {
         if (mp->mot.plane.startY >= mp->position.y) {
             mp->currSubMotionId = 14;
         }
-        m = marioGetPtr();
-
-        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-        if ((u32)m->motPlane->sfxId == 0xFFFFFFFF) {
-            m->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &m->position);
-        }
+        flying_se_on();
     case 14:
         if (mp->dispOfs.y > planeData[38]) {
             mp->dispOfs.y -= 2.0f;

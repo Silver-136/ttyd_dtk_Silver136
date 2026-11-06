@@ -36,8 +36,6 @@ typedef struct MotRollWork {
 f32 roll_grx;
 f32 roll_grz;
 s32 roll_flyout_flag2;
-// FAKE: placed in .rodata; without it the object changes
-static __declspec(section ".rodata") Vec rollOfs = {0.0f, 40.0f, 0.0f};
 
 /**
  * Tuning values of Mario's paper tube rolling: top speed, slowing, the slope push (180 or 140
@@ -202,6 +200,83 @@ void roll_upstairs(void);
 static inline void marioRollCan(void);
 
 #pragma inline_max_total_size(200000)
+
+/** Marks the rolling sound as not playing (sfxId -1) when the roll work is set up. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void roll_se_init(void) {
+    MarioWork* mario = marioGetPtr();
+#if VERSION >= VERSION_US
+    if (marioGetPtr()->motStruct) {
+        marioGetPtr()->motRoll->sfxId = -1;
+    }
+#else
+    mario->mot.roll.sfxId = -1;
+#endif
+}
+
+/** Starts the looping rolling sound (SFX_MARIO_ROLL_MOVE1) at Mario unless it is already playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void move_se_on(void) {
+    MarioWork* m = marioGetPtr();
+#if VERSION <= VERSION_DEMO_JP
+    if ((u32)m->mot.roll.sfxId == (u32)-1) {
+        m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_MOVE1, &m->position);
+#elif VERSION >= VERSION_US
+    if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {
+        marioGetPtr()->motRoll->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
+#else
+    if ((u32)m->mot.roll.sfxId == (u32)-1) {
+        m->mot.roll.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
+#endif
+        m->mot.roll.flags |= ROLL_FLAG_SFX_UNUSED;
+    }
+}
+
+/** Stops the looping rolling sound if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void move_se_off(void) {
+    MarioWork* m = marioGetPtr();
+#if VERSION >= VERSION_US
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and in move_se_on; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
+    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
+        psndSFXOff(marioGetPtr()->motRoll->sfxId);
+        marioGetPtr()->motRoll->sfxId = -1;
+#else
+    if (m->mot.roll.sfxId != -1U) {
+        psndSFXOff(m->mot.roll.sfxId);
+        m->mot.roll.sfxId = -1;
+#endif
+    }
+}
+
+/** The tube jump sound (SFX_MARIO_ROLL_JUMP1) at Mario. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void roll_jump_se(void) {
+#if VERSION <= VERSION_DEMO_JP
+    psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_JUMP1, &marioGetPtr()->position);
+#else
+    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
+#endif
+}
+
+/** Moves the camera in while Mario rolls up: z shift 0.4 at rate 0.01, zoom 2, with a 40-unit upward zoom offset. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomUp(void) {
+    MarioWork* m = marioGetPtr();
+    m->camShiftTargetZ = 0.4f;
+    m->camShiftRate.z = 0.01f;
+    m->camZoom = 2.0f;
+    m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
+}
+
+/** Eases the camera's forward shift back to 0 (rate 0.004). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomOff(void) {
+    MarioWork* m = marioGetPtr();
+    m->camShiftTargetZ = 0.0f;
+    m->camShiftRate.z = 0.004f;
+}
 
 /** Locks Tube Mode on (roll flag 0x200) so Mario cannot unroll; only while in the roll motion. */
 void marioRollFixOn(void) {
@@ -375,27 +450,10 @@ s32 marioRollCancel(void) {
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
 
-#if VERSION <= VERSION_DEMO_JP
-    MarioWork* m;
-#else
-    MarioWork* m = marioGetPtr();
-#if VERSION >= VERSION_US
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
-        psndSFXOff(marioGetPtr()->motRoll->sfxId);
-        marioGetPtr()->motRoll->sfxId = -1;
-#else
-    if (m->mot.roll.sfxId != -1U) {
-        psndSFXOff(m->mot.roll.sfxId);
-        m->mot.roll.sfxId = -1;
+#if VERSION >= VERSION_JP
+    move_se_off();
 #endif
-    }
-#endif
-
-    m = marioGetPtr();
-    m->camShiftTargetZ = 0.0f;
-    m->camShiftRate.z = 0.004f;
+    zoomOff();
     {
         f32 d = revise360(mario->directionView - mario->targetYaw);
         if (d >= 180.0f) {
@@ -436,26 +494,10 @@ void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
     f32 d;
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
-#if VERSION <= VERSION_DEMO_JP
-        MarioWork* m;
-#else
-        MarioWork* m = marioGetPtr();
-#if VERSION >= VERSION_US
-        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-        if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
-            psndSFXOff(marioGetPtr()->motRoll->sfxId);
-            marioGetPtr()->motRoll->sfxId = -1;
-#else
-        if (m->mot.roll.sfxId != -1U) {
-            psndSFXOff(m->mot.roll.sfxId);
-            m->mot.roll.sfxId = -1;
+#if VERSION >= VERSION_JP
+        move_se_off();
 #endif
-        }
-#endif
-        m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.004f;
+        zoomOff();
         d = revise360(mario->directionView - mario->targetYaw);
         if (d >= 180.0f) {
             mario->displayDirection = 0.0f;
@@ -516,18 +558,10 @@ void marioReInit_roll(void) {
     MarioWork* mario = marioGetPtr();
     f32 z0;
     f32 z1;
-    MarioWork* t;
     p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
-    t = marioGetPtr();
-#if VERSION >= VERSION_US
-    if (marioGetPtr()->motStruct) {
-        marioGetPtr()->motRoll->sfxId = -1;
-    }
-#else
-    t->mot.roll.sfxId = -1;
-#endif
+    roll_se_init();
     mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     mario->currMotionId = MARIO_MOTION_ROLL;
     mario->flags |= MARIO_FLAG_TUBE_MODE;
@@ -603,7 +637,6 @@ void mot_roll(void) {
     MarioWork* m;
     s32 z0;
     s32 z1;
-    MarioWork* t;
     void* p;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -616,14 +649,7 @@ void mot_roll(void) {
         p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
         marioGetPtr()->motStruct = p;
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
-        t = marioGetPtr();
-#if VERSION >= VERSION_US
-        if (marioGetPtr()->motStruct) {
-            marioGetPtr()->motRoll->sfxId = -1;
-        }
-#else
-        t->mot.roll.sfxId = -1;
-#endif
+        roll_se_init();
         mario->currSubMotionId = 0;
     }
     switch (mario->currSubMotionId) {
@@ -672,11 +698,7 @@ void mot_roll(void) {
         if (mario->forceMoveTimer == 0) {
             mario->baseSpeed = 0.0f;
         }
-        m = marioGetPtr();
-        m->camShiftTargetZ = 0.4f;
-        m->camShiftRate.z = 0.01f;
-        m->camZoom = 2.0f;
-        m->camZoomOfs = rollOfs;
+        zoomUp();
         marioGetPtr()->motRoll->squashTrigger = 0;
         marioGetPtr()->motRoll->squashState = 0;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
@@ -722,28 +744,10 @@ void mot_roll(void) {
         mario->multiTimer = 0x41;
         mario->currSubMotionId = 0x15;
         mario->displayDirection = 0.0f;
-        {
-            MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_JP
-#if VERSION >= VERSION_US
-            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-            if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
-                psndSFXOff(marioGetPtr()->motRoll->sfxId);
-                marioGetPtr()->motRoll->sfxId = -1;
-#else
-            if (m->mot.roll.sfxId != -1U) {
-                psndSFXOff(m->mot.roll.sfxId);
-                m->mot.roll.sfxId = -1;
+        move_se_off();
 #endif
-            }
-        }
-        {
-            MarioWork* m = marioGetPtr();
-#endif
-            m->camShiftTargetZ = 0.0f;
-            m->camShiftRate.z = 0.004f;
-        }
+        zoomOff();
         marioChgPaper("PM_R_1C");
         marioPaperLightOff();
 #if VERSION <= VERSION_DEMO_JP
@@ -932,10 +936,8 @@ void mot_roll(void) {
                 m->jumpSnapY = -0.02f;
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
-#if VERSION <= VERSION_DEMO_JP
-                psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_JUMP1, &marioGetPtr()->position);
-#else
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
+                roll_jump_se();
+#if VERSION >= VERSION_JP
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
                 mario->hitobjStandOn = NULL;
                 mario->fallStartPos = mario->position;
@@ -1234,39 +1236,9 @@ void mot_roll(void) {
         }
     }
     if (mario->baseSpeed) {
-        MarioWork* m = marioGetPtr();
-#if VERSION <= VERSION_DEMO_JP
-        if ((u32)m->mot.roll.sfxId == (u32)-1) {
-            m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_MOVE1, &m->position);
-#else
-#if VERSION >= VERSION_US
-        if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {
-            marioGetPtr()->motRoll->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
-#else
-        if ((u32)m->mot.roll.sfxId == (u32)-1) {
-            m->mot.roll.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
-#endif
-#endif
-            m->mot.roll.flags |= ROLL_FLAG_SFX_UNUSED;
-        }
+        move_se_on();
     } else {
-        MarioWork* m = marioGetPtr();
-#if VERSION <= VERSION_DEMO_JP
-        if ((u32)m->mot.roll.sfxId != (u32)-1U) {
-            psndSFXOff(m->mot.roll.sfxId);
-            m->mot.roll.sfxId = -1;
-#else
-#if VERSION >= VERSION_US
-        if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
-            psndSFXOff(marioGetPtr()->motRoll->sfxId);
-            marioGetPtr()->motRoll->sfxId = -1;
-#else
-        if (m->mot.roll.sfxId != -1U) {
-            psndSFXOff(m->mot.roll.sfxId);
-            m->mot.roll.sfxId = -1;
-#endif
-#endif
-        }
+        move_se_off();
     }
     rd = rollData[4];
     mv = toMovedir(mario->displayDirection);
@@ -1299,9 +1271,7 @@ void mot_roll(void) {
     }
 #endif
     if (mario->baseSpeed) {
-        MarioWork* m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.004f;
+        zoomOff();
     }
     marioRollCan();
 }

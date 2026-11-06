@@ -161,6 +161,41 @@ BOOL marioSlitKeyDisable(void) {
     return TRUE;
 }
 
+/** Eases the camera's forward shift back to 0 (rate 0.004). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomOff(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->camShiftTargetZ = 0.0f;
+    mario->camShiftRate.z = 0.004f;
+}
+
+/**
+ * Walking speed in Paper Mode or background mode:
+ * in Paper Mode half the walk speed when the stick is only tilted a little and mario->mot.slit.timer is 0;
+ * in background mode always half.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static f32 _getWalkSpd(void) {
+    MarioWork* mario = marioGetPtr();
+    f32 spd = mario->baseWalkSpeed;
+    int a;
+    int b;
+    if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+        if (mario->mot.slit.timer != 0) {
+            return spd;
+        }
+        a = mario->wStickDir1;
+        b = mario->wStickDir2;
+        if (a * a + b * b <= (55 * 55)) {
+            spd *= 0.5f;
+        }
+
+    } else if (mario->flags & MARIO_FLAG_BG_MODE) {
+        spd *= 0.5f;
+    }
+    return spd;
+}
+
 #if VERSION >= VERSION_JP
 /**
  * TRUE when Mario must stay in Paper Mode: R is held, walls are too close around him,
@@ -296,6 +331,14 @@ BOOL marioCreviceWallChk(const Vec* p) {
 void marioClearSlitFloor(void) {
     MarioWork* mario = marioGetPtr();
     mario->slitPosSet = 0;
+}
+
+/** Saves Mario's position as the Paper Mode floor position (mario->slitPos) the partners follow. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void marioSetSlitFloorPos(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->slitPosSet = 1;
+    mario->slitPos = mario->position;
 }
 
 /**
@@ -452,7 +495,6 @@ static inline void slitClearFlags(MarioWork* m) {
  */
 void marioSlitForceCancel(void) {
     MarioWork* m = marioGetPtr();
-    MarioWork* p;
     if (m->flags & MARIO_FLAG_PAPER_MODE) {
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         if (m->directionView >= 180.0f) {
@@ -476,9 +518,7 @@ void marioSlitForceCancel(void) {
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
-        p = marioGetPtr();
-        p->camShiftTargetZ = 0.0f;
-        p->camShiftRate.z = 0.004f;
+        zoomOff();
         allPartyForceSlitOff();
     }
 }
@@ -675,32 +715,6 @@ static inline void slitSpeedDown(MarioWork* m) {
     m->mot.slit.flags |= 1;
 }
 
-/**
- * Walking speed in Paper Mode or background mode:
- * in Paper Mode half the walk speed when the stick is only tilted a little and mario->mot.slit.timer is 0;
- * in background mode always half.
- */
-static inline f32 slitWalkSpeed(void) {
-    MarioWork* mario = marioGetPtr();
-    f32 spd = mario->baseWalkSpeed;
-    int a;
-    int b;
-    if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-        if (mario->mot.slit.timer != 0) {
-            return spd;
-        }
-        a = mario->wStickDir1;
-        b = mario->wStickDir2;
-        if (a * a + b * b <= (55 * 55)) {
-            spd *= 0.5f;
-        }
-
-    } else if (mario->flags & MARIO_FLAG_BG_MODE) {
-        spd *= 0.5f;
-    }
-    return spd;
-}
-
 static inline void slitSetDisplayDir(MarioWork* m) {
     m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 }
@@ -713,12 +727,6 @@ static inline void slitSetSide(MarioWork* m) {
         m->mot.slit.side = 2;
         m->displayDirection = 280.0f;
     }
-}
-
-static inline void slitCamFix(void) {
-    MarioWork* p = marioGetPtr();
-    p->camShiftTargetZ = 0.0f;
-    p->camShiftRate.z = 0.004f;
 }
 
 #if VERSION >= VERSION_US
@@ -756,7 +764,6 @@ void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
     s32 st;
-    MarioWork* p;
     if (!m->controlStickSensitivity) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }
@@ -843,7 +850,7 @@ void mot_slit(void) {
         m->mot.slit.count = 0;
     case SLIT_STATE_READY:
         if (m->position.y != m->mot.slit.lastY) {
-            slitCamFix();
+            zoomOff();
         }
         m->mot.slit.lastY = m->position.y;
         if (m->forceMoveTimer != 0) {
@@ -887,12 +894,12 @@ void mot_slit(void) {
             marioChgPose("M_W_1");
         }
         if (!(m->mot.slit.flags & 1)) {
-            slitCamFix();
+            zoomOff();
         } else {
             m->mot.slit.flags &= ~1;
-            slitCamFix();
+            zoomOff();
         }
-        m->baseSpeed = slitWalkSpeed();
+        m->baseSpeed = _getWalkSpd();
         m->directionView = m->controlStickAngle;
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
             marioChgPose("M_W_1");
@@ -962,7 +969,7 @@ void mot_slit(void) {
         }
         if (marioChkKey()) {
             m->directionView = m->controlStickAngle;
-            m->baseSpeed = slitWalkSpeed();
+            m->baseSpeed = _getWalkSpd();
         }
         d = revise360(m->controlStickAngle - m->targetYaw);
         if (d >= 315.0f || d <= 45.0f || (d >= 135.0f && d <= 225.0f)) {
@@ -987,7 +994,7 @@ void mot_slit(void) {
                     m->mot.slit.timer = 6;
                     m->slitState = SLIT_STATE_MOVE_PM_S_2;
                     m->mot.slit.side = 2;
-                    m->baseSpeed = slitWalkSpeed();
+                    m->baseSpeed = _getWalkSpd();
 #if VERSION >= VERSION_JP
                     m->displayDirection = 260.0f;
                     SLITSTOP2(m)
@@ -999,7 +1006,7 @@ void mot_slit(void) {
                     m->mot.slit.timer = 6;
                     m->slitState = SLIT_STATE_MOVE_PM_S_2;
                     m->mot.slit.side = 1;
-                    m->baseSpeed = slitWalkSpeed();
+                    m->baseSpeed = _getWalkSpd();
 #if VERSION >= VERSION_JP
                     m->displayDirection = 280.0f;
                     SLITSTOP2(m)
@@ -1127,7 +1134,7 @@ void mot_slit(void) {
     switch (m->slitState) {
     case SLIT_STATE_GAP_ENTER:
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        slitCamFix();
+        zoomOff();
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         if (0.0f == m->mot.slit.pushDir) {
             marioChgPaper("PM_S_1F");
@@ -1155,17 +1162,13 @@ void mot_slit(void) {
     switch (m->slitState) {
     case SLIT_STATE_CRACK_1:
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        slitCamFix();
+        zoomOff();
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         marioChgPaper("PM_S_1H");
         m->slitTimer = sysMsec2Frame(500);
         m->baseSpeed = 0.0f;
         m->slitState = SLIT_STATE_CRACK_2;
-        p = marioGetPtr();
-        p->slitPosSet = 1;
-
-        // copy
-        p->slitPos = p->position;
+        marioSetSlitFloorPos();
     case SLIT_STATE_CRACK_2:
 #if VERSION <= VERSION_DEMO_JP
         m->slitTimer = 20;
@@ -1313,7 +1316,7 @@ void mot_slit(void) {
         allPartySlitOff();
 #endif
 #endif
-        slitCamFix();
+        zoomOff();
         marioChgMotSub(MARIO_MOTION_STAY, 0);
         break;
     case SLIT_STATE_SCRIPT_END_1:
@@ -1373,7 +1376,7 @@ void mot_slit(void) {
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         allPartySlitOff();
-        slitCamFix();
+        zoomOff();
         marioChgMot(MARIO_MOTION_STAY);
         break;
     case SLIT_STATE_LECTURE_END_1:
@@ -1426,7 +1429,7 @@ void mot_slit(void) {
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         allPartySlitOff();
-        slitCamFix();
+        zoomOff();
         marioChgMot(MARIO_MOTION_STAY);
         break;
     }

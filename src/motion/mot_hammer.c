@@ -70,6 +70,76 @@ EVT_BEGIN(lv3quake_evt)
     RETURN
 EVT_END()
 
+/** The swing sound for Mario's hammer level (SFX_MARIO_HAMMER_FURU1-3), at Mario. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void hammer_swing_se(void) {
+    MarioWork* m = marioGetPtr();
+    s32 snd = PSND_SFX_MARIO_HAMMER_FURU1;
+    switch (pouchGetHammerLv()) {
+    case 1:
+        snd = PSND_SFX_MARIO_HAMMER_FURU1;
+        break;
+    case 2:
+        snd = PSND_SFX_MARIO_HAMMER_FURU2;
+        break;
+    case 3:
+        snd = PSND_SFX_MARIO_HAMMER_FURU3;
+        break;
+    }
+    psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
+}
+
+/**
+ * The impact sounds at Mario: the hit sound for the hammer level (SFX_MARIO_HAMMER_DON1-3), then the wooden
+ * impact sound or, with Attack FX badges worn, the next worn badge's sound (se_data, m->hammerSfxIdx).
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void hammer_hit_se(void) {
+    MarioWork* m = marioGetPtr();
+    s32 i;
+    s32 snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
+    switch (pouchGetHammerLv()) {
+    case 1:
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
+        break;
+    case 2:
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
+        break;
+    case 3:
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
+        break;
+    }
+#if VERSION <= VERSION_DEMO_JP
+    for (i = 0; i < 5; i++) {
+#else
+    // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
+    for (i = 0; (u32)i < 10; i++) {
+#endif
+        if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
+            snd = se_data[m->hammerSfxIdx + 1];
+            m->hammerSfxIdx += 2;
+            if (m->hammerSfxIdx >= 10) {
+                m->hammerSfxIdx -= 10;
+            }
+            break;
+        } else {
+            m->hammerSfxIdx += 2;
+            if (m->hammerSfxIdx >= 10) {
+                m->hammerSfxIdx -= 10;
+            }
+        }
+    }
+    psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
+}
+
+/** Eases the camera's forward shift back to 0 (rate 0.01) when the spin hammer is released or ends. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomOff(void) {
+    MarioWork* m = marioGetPtr();
+    m->camShiftTargetZ = 0.0f;
+    m->camShiftRate.z = 0.01f;
+}
+
 static inline BOOL chkRevDir(f32 angle) {
     BOOL ret = FALSE;
     if (angle >= 90.0f && angle <= 270.0f) {
@@ -137,6 +207,19 @@ s32 marioGetHammerLevel(void) {
     return pouchGetPtr()->hammerLevel;
 }
 
+/** Starts the impact camera shake for Mario's hammer level (lv1quake_evt to lv3quake_evt). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void quakeOn(void) {
+    s32 lv = pouchGetPtr()->hammerLevel;
+    if (lv == 1) {
+        evtEntry(lv1quake_evt, 0, 0);
+    } else if (lv == 2) {
+        evtEntry(lv2quake_evt, 0, 0);
+    } else if (lv == 3) {
+        evtEntry(lv3quake_evt, 0, 0);
+    }
+}
+
 
 /**
  * Normal hammer swing (B button): picks the swing pose for the hammer level,
@@ -147,17 +230,13 @@ s32 marioGetHammerLevel(void) {
  */
 void mot_hammer(void) {
     MarioWork* mario = marioGetPtr();
-    s32 snd;
     s32 kind;
     f32 px, pz;
-    s32 done;
-    s32 i;
+    s32 n;
     f32 py, ez;
     s32 efType;
     HitEntry* hit;
-    s32 n;
-    MarioWork* m;
-    s32 lv;
+    s32 done;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -210,20 +289,7 @@ void mot_hammer(void) {
         } else {
             mario->flags &= ~MARIO_FLAG_HAMMER_HIT_WALL;
         }
-        m = marioGetPtr();
-        snd = PSND_SFX_MARIO_HAMMER_FURU1;
-        switch (pouchGetHammerLv()) {
-        case 1:
-            snd = PSND_SFX_MARIO_HAMMER_FURU1;
-            break;
-        case 2:
-            snd = PSND_SFX_MARIO_HAMMER_FURU2;
-            break;
-        case 3:
-            snd = PSND_SFX_MARIO_HAMMER_FURU3;
-            break;
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
+        hammer_swing_se();
 #if VERSION >= VERSION_JP
         mario->mot.hammer.hitKind = kind;
 #endif
@@ -256,14 +322,7 @@ void mot_hammer(void) {
     mario->poseTime = n;
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)n);
     if (done) {
-        lv = pouchGetPtr()->hammerLevel;
-        if (lv == 1) {
-            evtEntry(lv1quake_evt, 0, 0);
-        } else if (lv == 2) {
-            evtEntry(lv2quake_evt, 0, 0);
-        } else if (lv == 3) {
-            evtEntry(lv3quake_evt, 0, 0);
-        }
+        quakeOn();
         mario->currSubMotionId = 1;
         mario->hitobjHammer = mario->hitobjHammerNew;
 #if VERSION >= VERSION_JP
@@ -325,40 +384,7 @@ void mot_hammer(void) {
             effKemuTestEntry(efType, px, py + ez, pz, 1.0f);
         }
 #endif
-        m = marioGetPtr();
-        snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
-        switch (pouchGetHammerLv()) {
-        case 1:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
-            break;
-        case 2:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
-            break;
-        case 3:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
-            break;
-        }
-#if VERSION <= VERSION_DEMO_JP
-        for (i = 0; i < 5; i++) {
-#else
-        // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
-        for (i = 0; (u32)i < 10; i++) {
-#endif
-            if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
-                snd = se_data[m->hammerSfxIdx + 1];
-                m->hammerSfxIdx += 2;
-                if (m->hammerSfxIdx >= 10) {
-                    m->hammerSfxIdx -= 10;
-                }
-                break;
-            } else {
-                m->hammerSfxIdx += 2;
-                if (m->hammerSfxIdx >= 10) {
-                    m->hammerSfxIdx -= 10;
-                }
-            }
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
+        hammer_hit_se();
     }
     if (++mario->multiTimer > 20) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
@@ -489,7 +515,6 @@ void mot_hammer2(void) {
     f32 ang2, ang;
     f32 nz, ny, nx, len, hz, hy, hx;
     f32 co, s;
-    MarioWork* m;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -603,9 +628,7 @@ void mot_hammer2(void) {
                 psndSFXOff(mario->mot.hammer2.sfxId);
                 mario->mot.hammer2.sfxId = -1;
             }
-            m = marioGetPtr();
-            m->camShiftTargetZ = 0.0f;
-            m->camShiftRate.z = 0.01f;
+            zoomOff();
             switch (pouchGetHammerLv()) {
             case 1:
                 marioChgPose("M_H_3B");
@@ -723,13 +746,10 @@ f32 marioGetAngleKaitenHammer(void) {
  */
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
-    MarioWork* m;
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
-    m = marioGetPtr();
-    m->camShiftTargetZ = 0.0f;
-    m->camShiftRate.z = 0.01f;
+    zoomOff();
     marioPaperOff();
 #if VERSION <= VERSION_DEMO_JP
     marioPaperLightOn();

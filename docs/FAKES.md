@@ -605,9 +605,9 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_plane.c | mot_plane | dead store `baseSpeed = __fabsf(0.02f * wStickDir1)` overwritten two lines later | removing it: changes the object |
 | Both | src/motion/mot_plane.c | planeRoll2 | second copy of the planeRoll1 easing (inline expression instead of the target temporary) | planeRoll1 at its two call sites: changes the object |
-| Both | src/motion/mot_plane.c | planeSfxOff, flyMain | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/motion/mot_plane.c | flying_se_off, flying_se_on | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
-| Both | src/motion/mot_roll.c | mot_roll_post, marioRollForceCancel, mot_roll | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/motion/mot_roll.c | move_se_on, move_se_off | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/motion/mot_ship.c | shipStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
 | Both | src/motion/mot_ship.c | shipEff | zero local zz added to position.y; int c choosing 0.3f/0.6f | without zz and c: changes the object |
