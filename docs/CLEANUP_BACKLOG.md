@@ -26,8 +26,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 ## 2. Types and declarations
 
 - Raw numbers with no name yet: certification `magic` notes, outcome per note in `cleanup_notes/magic_notes_outcome.tsv`
-  (431: 56 applied 2026-11-01, 95 settled earlier, 25 kept on purpose, 255 still need a new name with evidence: precheck
-  results, AC states, audience slots and animations, pose-look types, bero kinds, fade types in scripts).
+  (431, all rechecked against the code 2026-11-05: 189 named, 136 settled or already named, 45 kept as numbers on
+  purpose, 13 partly named; left: 32 with no evidence in the code (write-only values, nothing reads them) and 16
+  small ones a name would barely help: element counts, a few one-site flags).
 
 - Calls through function-pointer casts: 37 (icon drawing 10, window frame 5, party slit-floor motion 4, marioChgMot 2,
   sound pitch 2, cos 2, party menu setup 2, puni map data getters 3, single sites). Each needs a prototype that the
