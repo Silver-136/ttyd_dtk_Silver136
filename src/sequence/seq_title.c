@@ -49,7 +49,7 @@ void titleExit(SequenceWork* work);
 static void titleMain(SequenceWork* work);
 static void disp1(CameraId cameraId, void* param);
 static void disp2(CameraId cameraId, void* param);
-static void titleLoadDemo(void);
+void demoAsync(void);
 
 /** Stub of the debug battle selector's message file hook: always NULL, so a debug battle loads gon_11's messages. */
 const char* DbgBtlSel_GetMsgDataPtr(void) {
@@ -261,12 +261,12 @@ static void titleMain(SequenceWork* work) {
             wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -300.0f, -170.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
             wp2->counter++;
             if (wp2->counter > VERSION_PICK(60, gp->framerate)) {
-                titleLoadDemo();
+                demoAsync();
 #else
             wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -300.0f, -170.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
-                titleLoadDemo();
+                demoAsync();
 #if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
                 wp2->counter = 0;
 #endif
@@ -601,7 +601,8 @@ static void pressStartGX(s32 alpha, f32 x, f32 y) {
  * Prefetches demo.tpl and the animations used by the dmo_00 opening demo (Peach, the treasure chest,
  * a Goomba and the other characters of the opening) once the logo has landed, so the idle demo starts quickly.
  */
-static void titleLoadDemo(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void demoAsync(void) {
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/demo.tpl", getMarioStDvdRoot());
     animGroupBaseAsync("c_peach", 0, 0);
     animGroupBaseAsync("c_nazo", 0, 0);

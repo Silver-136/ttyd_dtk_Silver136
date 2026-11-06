@@ -694,20 +694,7 @@ void mapSetPlayRate(const char* name, f32 rate) {
     }
 }
 
-/**
- * Pointer to the map.dat chunk with the given name (information, texture_table, light_table, ...) via the file's
- * chunk table, or NULL.
- */
-static inline void* mapSearchChunk(MapHeader* header, const char* name) {
-    u32 k;
-
-    for (k = 0; k < header->file.chunkCount; k++) {
-        if (!strcmp(&header->strings[header->chunks[k].string], name)) {
-            return (u8*)header->data + header->chunks[k].offset;
-        }
-    }
-    return NULL;
-}
+void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
 
 /**
  * Turns the file-relative pointers listed in the map.dat relocation table into real addresses by adding the data
@@ -883,12 +870,12 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     GXInvalidateVtxCache();
     mapLoadHeader_(wp, group);
     header = &wp->entries[group].header;
-    info = (MapFileInfo*)mapSearchChunk(header, "information");
-    wo->entries[group].textureTable = mapSearchChunk(header, "texture_table");
-    wo->entries[group].lightTable = mapSearchChunk(header, "light_table");
-    wo->entries[group].fogTable = mapSearchChunk(header, "fog_table");
-    wo->entries[group].materialNameTable = mapSearchChunk(header, "material_name_table");
-    wo->entries[group].vcdTable = mapSearchChunk(header, "vcd_table");
+    info = (MapFileInfo*)HSD_ArchiveGetPublicAddress(header, "information");
+    wo->entries[group].textureTable = HSD_ArchiveGetPublicAddress(header, "texture_table");
+    wo->entries[group].lightTable = HSD_ArchiveGetPublicAddress(header, "light_table");
+    wo->entries[group].fogTable = HSD_ArchiveGetPublicAddress(header, "fog_table");
+    wo->entries[group].materialNameTable = HSD_ArchiveGetPublicAddress(header, "material_name_table");
+    wo->entries[group].vcdTable = HSD_ArchiveGetPublicAddress(header, "vcd_table");
     {
         MapFileJoint* mapJoint = mapSearchDmdJoint(info->joint, info->mapName);
         MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
@@ -4339,6 +4326,22 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
     out->x = pts[lo].x + u * ((pts[lo + 1].x - pts[lo].x) / h - h * (2.0f * tbl[lo].x + tbl[lo + 1].x) + u * (3.0f * tbl[lo].x + u * (tbl[lo + 1].x - tbl[lo].x) / h));
     out->y = pts[lo].y + u * ((pts[lo + 1].y - pts[lo].y) / h - h * (2.0f * tbl[lo].y + tbl[lo + 1].y) + u * (3.0f * tbl[lo].y + u * (tbl[lo + 1].y - tbl[lo].y) / h));
     out->z = pts[lo].z + u * ((pts[lo + 1].z - pts[lo].z) / h - h * (2.0f * tbl[lo].z + tbl[lo + 1].z) + u * (3.0f * tbl[lo].z + u * (tbl[lo + 1].z - tbl[lo].z) / h));
+}
+
+/**
+ * Pointer to the map.dat chunk with the given name (information, texture_table, light_table, ...) via the file's
+ * chunk table, or NULL.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name) {
+    u32 k;
+
+    for (k = 0; k < header->file.chunkCount; k++) {
+        if (!strcmp(&header->strings[header->chunks[k].string], name)) {
+            return (u8*)header->data + header->chunks[k].offset;
+        }
+    }
+    return NULL;
 }
 
 /**
