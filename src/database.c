@@ -58,10 +58,17 @@ void setupDataLoad(const char* mapName) {
     }
 }
 
+// MapAttrEntry.flags: how setupDataBase keeps the defeated-enemy records (every map in the table has 7 or 5)
+enum {
+    MAP_ATTR_KEEP_DEFEATED = (1 << 0), // 0x1, defeated enemies stay gone; a new area clears the records
+    MAP_ATTR_KEEP_AREA = (1 << 1),     // 0x2, the records stay for the whole area (overrides 0x4)
+    MAP_ATTR_KEEP_RECENT = (1 << 2),   // 0x4, back in the same area: only the two newest maps' records stay
+};
+
 typedef struct MapAttrEntry {
     const char* name;
     s32 area;
-    u32 flags;
+    u32 flags; // MAP_ATTR_*
 } MapAttrEntry;
 
 extern MapAttrEntry _map_attr_data[];
@@ -161,20 +168,20 @@ void setupDataBase(const char* areaName, const char* mapName) {
         fbat->deadInfo[0] = tmp;
     }
 
-    if (attr->flags & 1) {
+    if (attr->flags & MAP_ATTR_KEEP_DEFEATED) {
         a = findMapAttr(mapName);
         b = findMapAttr(dead1->mapName);
         if (a->area != b->area) {
             memset(dead, 0, sizeof(fbat->deadInfo));
             strcpy(dead->mapName, mapName);
-        } else if (!(attr->flags & 2) && (attr->flags & 4)) {
+        } else if (!(attr->flags & MAP_ATTR_KEEP_AREA) && (attr->flags & MAP_ATTR_KEEP_RECENT)) {
             memset(&fbat->deadInfo[2], 0, sizeof(fbat->deadInfo) - 2 * sizeof(NpcDeadInfo));
         }
     }
 
     k = 0;
     skipDefeated = 0;
-    if (attr->flags & 1) {
+    if (attr->flags & MAP_ATTR_KEEP_DEFEATED) {
         skipDefeated = 1;
     }
     if (ptr) {
@@ -265,7 +272,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
 }
 
 /**
- * Field-enemy attributes of each map (area group number and reset flags), ending with a NULL-named entry:
+ * Field-enemy attributes of each map (area group number and MAP_ATTR_* flags), ending with a NULL-named entry:
  * setupDataBase looks the map up here to decide when the defeated-enemy records are cleared.
  */
 MapAttrEntry _map_attr_data[] = {
