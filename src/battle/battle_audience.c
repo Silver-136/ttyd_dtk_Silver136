@@ -283,7 +283,7 @@ BattleAudience* BattleAudienceBaseGetPtr(void) {
     return &_battleWorkPointer->audience;
 }
 
-/** Returns audience member id, one of the 200 seats (column id % 20, row id / 20). */
+/** Returns audience member id, one of the 200 seats (column id % AUDIENCE_SEAT_COLUMNS, row id / AUDIENCE_SEAT_COLUMNS). */
 BattleAudienceMember* BattleAudienceGetPtr(s32 id) {
     return &BattleAudienceBaseGetPtr()->members[id];
 }
@@ -1554,7 +1554,7 @@ static void BattleAudienceSettingAudience(void) {
     switch (rec->mode) {
     case 2:
         while ((n = BattleAudience_NoUsedHaitiRand()) != -1) {
-            if (n % 20 <= 9) {
+            if (n % AUDIENCE_SEAT_COLUMNS <= 9) {
                 BattleAudience_Entry(n, AUDIENCE_PUNI, AUDIENCE_STATUS_WAIT);
             } else {
                 BattleAudience_Entry(n, AUDIENCE_XNAUT, AUDIENCE_STATUS_WAIT);
@@ -1738,7 +1738,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) return FALSE;
     if (audience_kind[member->type].itemTable->type == 0) return FALSE;
     if (itemId >= ITEM_MIN && itemId < ITEM_MAX && swGet(GSWF_ID(GSWF_ITEM_TUTORIAL_SEEN)) == 0) return FALSE;
-    st = index % 20;
+    st = index % AUDIENCE_SEAT_COLUMNS;
     if (st < 4 || st > 15) return FALSE;
     if (!(u8)BattleAudience_GetExist(index)) return FALSE;
 #endif
@@ -2812,7 +2812,7 @@ BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
             return FALSE;
         }
         m->flags = AUDIENCE_MEMBER_FLAG_USED | AUDIENCE_MEMBER_FLAG_DISP;
-        t = (index % 20) * 25 + rand() * 10 / 0x7fff;
+        t = (index % AUDIENCE_SEAT_COLUMNS) * 25 + rand() * 10 / 0x7fff;
         x = t - 0xeb;
         m->position.x = x;
         m->homePosition.x = x;
@@ -2828,7 +2828,7 @@ BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
             return FALSE;
         }
         m->flags = AUDIENCE_MEMBER_FLAG_USED | AUDIENCE_MEMBER_FLAG_DISP | AUDIENCE_MEMBER_FLAG_WIDE;
-        x = 12.5f + (f32)((index % 20) * 25 - 230) + (f32)(rand() * 10 / 0x7fff) - 5.0f;
+        x = 12.5f + (f32)((index % AUDIENCE_SEAT_COLUMNS) * 25 - 230) + (f32)(rand() * 10 / 0x7fff) - 5.0f;
         m->position.x = x;
         m->homePosition.x = x;
         BattleAudience_Entry_Sub(index, type, status);
@@ -2859,11 +2859,11 @@ static void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     m->colorG = 0;
     m->colorR = 0;
     m->colorA = 255;
-    row = index / 20;
+    row = index / AUDIENCE_SEAT_COLUMNS;
     y = stage->audienceSizeY;
     m->position.y = y;
     m->homePosition.y = y;
-    z = 0.1f * (f32)(index % 20) + (f32)(row * 30 + 0x73);
+    z = 0.1f * (f32)(index % AUDIENCE_SEAT_COLUMNS) + (f32)(row * 30 + 0x73);
     m->position.z = z;
     m->homePosition.z = z;
     if (m->type == AUDIENCE_PIRANHA_PLANT) {
@@ -3283,12 +3283,12 @@ s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row) {
 
     BattleAudienceBaseGetPtr();
     BattleAudienceGetPtr(index);
-    if (index % 20 + column < 0 || index % 20 + column >= 20) {
+    if (index % AUDIENCE_SEAT_COLUMNS + column < 0 || index % AUDIENCE_SEAT_COLUMNS + column >= AUDIENCE_SEAT_COLUMNS) {
         return -1;
     }
 
-    audienceNo = column + (index - (row * 20));
-    if (audienceNo < 0 || audienceNo >= 200) {
+    audienceNo = column + (index - (row * AUDIENCE_SEAT_COLUMNS));
+    if (audienceNo < 0 || audienceNo >= AUDIENCE_MEMBER_MAX) {
         return -1;
     }
     return audienceNo;

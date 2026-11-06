@@ -758,7 +758,7 @@ USER_FUNC(unitwin_window_select_func) {
             break;
         case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
             wp->count = 0;
-            for (k = 0; k < 0x152; k++) {
+            for (k = 0; k < ITEM_TYPE_MAX - 1; k++) {
                 if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
                     wp->count++;
                 }
@@ -772,7 +772,7 @@ USER_FUNC(unitwin_window_select_func) {
             break;
         case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
             wp->count = 0;
-            for (k = 0; k < 0x152; k++) {
+            for (k = 0; k < ITEM_TYPE_MAX - 1; k++) {
                 if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
                     wp->count++;
                 }
@@ -955,7 +955,7 @@ USER_FUNC(unitwin_window_select_func) {
                 return EVT_RETURN_YIELD;
             case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
                 statusWinForceOff();
-                for (i = 0; i < 0x152; i++) {
+                for (i = 0; i < ITEM_TYPE_MAX - 1; i++) {
                     if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
                         if (n == wp->cursor) {
                             break;
@@ -987,7 +987,7 @@ USER_FUNC(unitwin_window_select_func) {
                 return EVT_RETURN_YIELD;
             case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
                 statusWinForceOff();
-                for (i = 0; i < 0x152; i++) {
+                for (i = 0; i < ITEM_TYPE_MAX - 1; i++) {
                     if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
                         if (n == wp->cursor) {
                             break;

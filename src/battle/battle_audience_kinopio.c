@@ -3,7 +3,6 @@
 
 #include "version.h"
 #include "battle/battle_audience.h"
-#include "battle/battle_audience.h"
 #include "battle/battle.h"
 #include "pmario_sound.h"
 #include "system.h"
@@ -1508,8 +1507,8 @@ static void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     case 9:
         if (m->position.y <= -100.0f) {
             k = m->statusTimer;
-            pz = 0.1f * (f32)(k % 20) + (f32)(k / 20 * 30 + 115);
-            m->homePosition.x = m->position.x = (f32)((rand() * 10 / 32767) + (k % 20 * 25 - 235));
+            pz = 0.1f * (f32)(k % AUDIENCE_SEAT_COLUMNS) + (f32)(k / AUDIENCE_SEAT_COLUMNS * 30 + 115);
+            m->homePosition.x = m->position.x = (f32)((rand() * 10 / 32767) + (k % AUDIENCE_SEAT_COLUMNS * 25 - 235));
             m->homePosition.y = stage->audienceSizeY;
             m->homePosition.z = m->position.z = pz;
             m->step++;

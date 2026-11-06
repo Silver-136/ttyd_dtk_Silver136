@@ -196,7 +196,8 @@ enum {
     PRESENT_ITEM_DAMAGE = 1,
 };
 
-#define AUDIENCE_MEMBER_MAX 200
+#define AUDIENCE_MEMBER_MAX 200 // seats: member index = row * AUDIENCE_SEAT_COLUMNS + column, row 0 at the front
+#define AUDIENCE_SEAT_COLUMNS 20
 
 // BattleAudience_SetAnim ids: index into BattleAudienceMember.animTable (battle_audience_kind_data). Kinds fill only
 // the rows they use.
@@ -504,4 +505,3 @@ BOOL BattleAudience_GetEscapeChangeOK(s32 index);
 
 // Names from LLCOOLT's tree.
 #define AUDIENCE_ITEM_MAX 100
-#define AUDIENCE_MEMBER_MAX 200
