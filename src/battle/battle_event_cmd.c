@@ -236,7 +236,7 @@ USER_FUNC(btlevtcmd_SpawnUnit) {
     setup = (BattleUnitSetup*)evtGetValue(event, args[1]);
     unit = BtlUnit_Spawn(setup, args[2]);
     if (!unit) {
-        evtSetValue(event, index, -1);
+        evtSetValue(event, index, UNIT_ID_NONE);
         return EVT_RETURN_DONE;
     }
     evtSetValue(event, index, unit->unitId);
@@ -1325,7 +1325,7 @@ USER_FUNC(btlevtcmd_SetBaseScale) {
     btlId = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1350,7 +1350,7 @@ USER_FUNC(btlevtcmd_SetPartsBaseScale) {
     id = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, id);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     partId = evtGetValue(event, args[1]);
@@ -1375,7 +1375,7 @@ USER_FUNC(btlevtcmd_GetScale) {
     btlId = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1408,7 +1408,7 @@ USER_FUNC(btlevtcmd_SetScale) {
     btlId = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1432,7 +1432,7 @@ USER_FUNC(btlevtcmd_AddScale) {
     btlId = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1454,7 +1454,7 @@ USER_FUNC(btlevtcmd_SetPartsScale) {
     id = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, id);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     partId = evtGetValue(event, args[1]);
@@ -1477,7 +1477,7 @@ USER_FUNC(btlevtcmd_AddPartsScale) {
     id = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, id);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     partId = evtGetValue(event, args[1]);
@@ -1499,7 +1499,7 @@ USER_FUNC(btlevtcmd_GetHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1517,7 +1517,7 @@ USER_FUNC(btlevtcmd_GetFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1536,7 +1536,7 @@ USER_FUNC(btlevtcmd_GetMaxHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1553,7 +1553,7 @@ USER_FUNC(btlevtcmd_GetMaxFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1575,7 +1575,7 @@ USER_FUNC(btlevtcmd_SetHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1597,7 +1597,7 @@ USER_FUNC(btlevtcmd_SetFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1615,7 +1615,7 @@ USER_FUNC(btlevtcmd_SetMaxFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1672,7 +1672,7 @@ USER_FUNC(btlevtcmd_SetMaxMoveCount) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1692,7 +1692,7 @@ USER_FUNC(btlevtcmd_GetDamagePartsId) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1709,7 +1709,7 @@ USER_FUNC(btlevtcmd_GetHpDamage) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1726,7 +1726,7 @@ USER_FUNC(btlevtcmd_GetFpDamage) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1743,7 +1743,7 @@ USER_FUNC(btlevtcmd_GetHpDamageCount) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1763,7 +1763,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1791,7 +1791,7 @@ USER_FUNC(btlevtcmd_RecoverFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {
+    if (id == UNIT_ID_NONE) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -2134,7 +2134,7 @@ USER_FUNC(btlevtcmd_CheckSpace) {
             }
         }
     }
-    evtSetValue(event, index, -1);
+    evtSetValue(event, index, UNIT_ID_NONE);
     return EVT_RETURN_DONE;
 }
 
@@ -2209,7 +2209,7 @@ USER_FUNC(btlevtcmd_GetPartnerId) {
     if (partner) {
         evtSetValue(event, index, partner->unitId);
     } else {
-        evtSetValue(event, index, -1);
+        evtSetValue(event, index, UNIT_ID_NONE);
     }
     return EVT_RETURN_DONE;
 }
@@ -2233,7 +2233,7 @@ USER_FUNC(btlevtcmd_GetMarioId) {
         }
     }
     if (i >= 64) {
-        evtSetValue(event, index, -1);
+        evtSetValue(event, index, UNIT_ID_NONE);
     } else {
         evtSetValue(event, index, unit->unitId);
     }
@@ -2262,7 +2262,7 @@ USER_FUNC(btlevtcmd_GetPartyId) {
         }
     }
     if (i >= 64) {
-        evtSetValue(event, index, -1);
+        evtSetValue(event, index, UNIT_ID_NONE);
     } else {
         evtSetValue(event, index, unit->unitId);
     }
@@ -2301,7 +2301,7 @@ USER_FUNC(btlevtcmd_GetUnitId) {
     if (unit) {
         evtSetValue(event, index, id);
     } else {
-        evtSetValue(event, index, -1);
+        evtSetValue(event, index, UNIT_ID_NONE);
     }
     return EVT_RETURN_DONE;
 }
@@ -3655,7 +3655,7 @@ USER_FUNC(btlevtcmd_GetSelectEnemy) {
     BattleWorkTarget* t;
 
     if (wp->weaponTargets.numTargets <= 0) {
-        evtSetValue(event, unitIndex, -1);
+        evtSetValue(event, unitIndex, UNIT_ID_NONE);
         evtSetValue(event, partIndex, -1);
         return EVT_RETURN_DONE;
     }
@@ -3683,7 +3683,7 @@ USER_FUNC(btlevtcmd_GetSelectNextEnemy) {
         evtSetValue(event, unitIndex, t->unitIdx);
         evtSetValue(event, partIndex, t->partIdx);
     } else {
-        evtSetValue(event, unitIndex, -1);
+        evtSetValue(event, unitIndex, UNIT_ID_NONE);
         evtSetValue(event, partIndex, 0);
     }
     return EVT_RETURN_DONE;
@@ -6561,7 +6561,7 @@ USER_FUNC(btlevtcmd_GetGuardKouraId) {
     if (koura) {
         evtSetValue(event, index, *koura);
     } else {
-        evtSetValue(event, index, -1);
+        evtSetValue(event, index, UNIT_ID_NONE);
     }
     return EVT_RETURN_DONE;
 }

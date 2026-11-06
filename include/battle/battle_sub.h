@@ -5,13 +5,14 @@
 #include "battle/battle.h"
 #include "manager/evtmgr.h"
 
-// Special unit ids that BattleTransID resolves; event scripts pass them where a unit id is expected (-1 stays -1).
+// Special unit ids that BattleTransID resolves; event scripts pass them where a unit id is expected.
 enum {
     UNIT_ID_LECTURE = -6, // BattleWork.lectureUnitId
     UNIT_ID_SYSTEM = -5,  // the system unit
-    UNIT_ID_PARTNER = -4, // the current partner (-1 when there is none)
+    UNIT_ID_PARTNER = -4, // the current partner (UNIT_ID_NONE when there is none)
     UNIT_ID_MARIO = -3,
     UNIT_ID_SELF = -2,    // the unit the script runs for (EventEntry.unitId)
+    UNIT_ID_NONE = -1,    // no unit: BattleTransID passes it through and returns it for an absent unit
 };
 
 void btlsubResetMoveColorLvAll(BattleWork* work);

@@ -148,9 +148,9 @@ s32 BattleTransID(EventEntry* evt, s32 type) {
                 if (unit) {
                     return unit->unitId;
                 }
-                return -1;
-            case -1:
-                return -1;
+                return UNIT_ID_NONE;
+            case UNIT_ID_NONE:
+                return UNIT_ID_NONE;
             case UNIT_ID_SYSTEM:
                 unit = BattleGetSystemPtr(work);
                 return unit->unitId;
