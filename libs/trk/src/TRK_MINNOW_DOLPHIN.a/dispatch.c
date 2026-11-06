@@ -32,7 +32,7 @@ DSError TRKInitializeDispatcher(void) {
 }
 
 DSError TRKDispatchMessage(TRKBuffer* buffer) {
-    DSError error = 0x500;
+    DSError error = DSERR_UNKNOWN_COMMAND;
 
     TRKSetBufferPosition(buffer, 0);
     MWTRACE(1, "Dispatch command 0x%08x\n", buffer->data[4]);

@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef int BOOL;
 typedef int DSError;
 typedef unsigned long size_t;
@@ -49,7 +51,7 @@ void* TRKGetBuffer(int idx);
 
 DSError TRKGetFreeBuffer(int* msgID, TRKBuffer** outMsg) {
     TRKBuffer* buf;
-    DSError error = 0x300;
+    DSError error = DSERR_NO_FREE_BUFFER;
     int i;
 
     *outMsg = 0;
@@ -71,7 +73,7 @@ DSError TRKGetFreeBuffer(int* msgID, TRKBuffer** outMsg) {
         TRKReleaseMutex(buf);
     }
 
-    if (error == 0x300)
+    if (error == DSERR_NO_FREE_BUFFER)
         usr_puts_serial("ERROR : No buffer available\n");
 
     return error;
@@ -109,7 +111,7 @@ DSError TRKSetBufferPosition(TRKBuffer* msg, u32 pos) {
     DSError error = 0;
 
     if (pos > TRKMSGBUF_SIZE) {
-        error = 0x301;
+        error = DSERR_BUFFER_OVERFLOW;
     } else {
         msg->position = pos;
         if (pos > msg->length)
@@ -129,7 +131,7 @@ DSError TRKAppendBuffer(TRKBuffer* msg, const void* data, size_t length) {
     bytesLeft = TRKMSGBUF_SIZE - msg->position;
 
     if (bytesLeft < length) {
-        error = 0x301;
+        error = DSERR_BUFFER_OVERFLOW;
         length = bytesLeft;
     }
 
@@ -154,7 +156,7 @@ DSError TRKReadBuffer(TRKBuffer* msg, void* data, size_t length) {
     bytesLeft = msg->length - msg->position;
 
     if (length > bytesLeft) {
-        error = 0x302;
+        error = DSERR_BUFFER_UNDERFLOW;
         length = bytesLeft;
     }
 
@@ -210,7 +212,7 @@ DSError TRKAppendBuffer1_ui64(TRKBuffer* buffer, const u64 data) {
 
 static inline DSError TRKAppendBuffer1_ui8(TRKBuffer* buffer, const u8 data) {
     if (buffer->position >= TRKMSGBUF_SIZE)
-        return 0x301;
+        return DSERR_BUFFER_OVERFLOW;
 
     buffer->data[buffer->position++] = data;
     buffer->length++;

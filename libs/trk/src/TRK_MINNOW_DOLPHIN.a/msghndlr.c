@@ -152,7 +152,7 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
     MWTRACE(1, "ReadMemory (0x%02x) : 0x%08x 0x%08x 0x%08x\n", buffer->data[4], msg_start, msg_length, msg_options);
 
     if (msg_options & 2) {
-        TRKSendReply(0x12);
+        TRKSendReply(DSREPLY_UNSUPPORTED);
         return 0;
     }
 
@@ -181,11 +181,11 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
 
     if (error != 0) {
         switch (error) {
-        case 0x702:
-            replyError = 0x15;
+        case DSERR_EXCEPTION:
+            replyError = DSREPLY_EXCEPTION;
             break;
-        case 0x700:
-            replyError = 0x13;
+        case DSERR_INVALID_MEMORY:
+            replyError = DSREPLY_INVALID_MEMORY;
             break;
         case 0x704:
             replyError = 0x21;
@@ -196,8 +196,8 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
         case 0x706:
             replyError = 0x20;
             break;
-        case 0x701:
-        case 0x703:
+        case DSERR_INVALID_REGISTER:
+        case DSERR_UNSUPPORTED:
         default:
             replyError = 3;
             break;
@@ -227,7 +227,7 @@ DSError TRKDoWriteMemory(TRKBuffer* buffer) {
     MWTRACE(1, "WriteMemory (0x%02x) : 0x%08x 0x%08x 0x%08x\n", buffer->data[4], msg_start, msg_length, msg_options);
 
     if (msg_options & 2) {
-        TRKSendReply(0x12);
+        TRKSendReply(DSREPLY_UNSUPPORTED);
         return 0;
     }
 
@@ -254,11 +254,11 @@ DSError TRKDoWriteMemory(TRKBuffer* buffer) {
 
     if (error != 0) {
         switch (error) {
-        case 0x702:
-            replyError = 0x15;
+        case DSERR_EXCEPTION:
+            replyError = DSREPLY_EXCEPTION;
             break;
-        case 0x700:
-            replyError = 0x13;
+        case DSERR_INVALID_MEMORY:
+            replyError = DSREPLY_INVALID_MEMORY;
             break;
         case 0x704:
             replyError = 0x21;
@@ -269,8 +269,8 @@ DSError TRKDoWriteMemory(TRKBuffer* buffer) {
         case 0x706:
             replyError = 0x20;
             break;
-        case 0x701:
-        case 0x703:
+        case DSERR_INVALID_REGISTER:
+        case DSERR_UNSUPPORTED:
         default:
             replyError = 3;
             break;
@@ -295,7 +295,7 @@ DSError TRKDoReadRegisters(TRKBuffer* buffer) {
     msg_lastRegister = *(u16*)(buffer->data + 0x10);
 
     if (msg_firstRegister > msg_lastRegister) {
-        TRKSendReply(0x14);
+        TRKSendReply(DSREPLY_INVALID_REGISTER);
         return 0;
     }
 
@@ -328,14 +328,14 @@ DSError TRKDoReadRegisters(TRKBuffer* buffer) {
 
     if (error != 0) {
         switch (error) {
-        case 0x703:
-            replyError = 0x12;
+        case DSERR_UNSUPPORTED:
+            replyError = DSREPLY_UNSUPPORTED;
             break;
-        case 0x701:
-            replyError = 0x14;
+        case DSERR_INVALID_REGISTER:
+            replyError = DSREPLY_INVALID_REGISTER;
             break;
-        case 0x702:
-            replyError = 0x15;
+        case DSERR_EXCEPTION:
+            replyError = DSREPLY_EXCEPTION;
             break;
         case 0x704:
             replyError = 0x21;
@@ -374,7 +374,7 @@ DSError TRKDoWriteRegisters(TRKBuffer* buffer) {
     TRKSetBufferPosition(buffer, 0);
 
     if (msg_firstRegister > msg_lastRegister) {
-        TRKSendReply(0x14);
+        TRKSendReply(DSREPLY_INVALID_REGISTER);
         return 0;
     }
 
@@ -394,7 +394,7 @@ DSError TRKDoWriteRegisters(TRKBuffer* buffer) {
         error = TRKTargetAccessExtended2(msg_firstRegister, msg_lastRegister, buffer, &registerDataLength, 0);
         break;
     default:
-        error = 0x703;
+        error = DSERR_UNSUPPORTED;
         break;
     }
 
@@ -410,17 +410,17 @@ DSError TRKDoWriteRegisters(TRKBuffer* buffer) {
 
     if (error != 0) {
         switch (error) {
-        case 0x703:
-            replyError = 0x12;
+        case DSERR_UNSUPPORTED:
+            replyError = DSREPLY_UNSUPPORTED;
             break;
-        case 0x701:
-            replyError = 0x14;
+        case DSERR_INVALID_REGISTER:
+            replyError = DSREPLY_INVALID_REGISTER;
             break;
-        case 0x302:
-            replyError = 0x2;
+        case DSERR_BUFFER_UNDERFLOW:
+            replyError = DSREPLY_PACKET_SIZE;
             break;
-        case 0x702:
-            replyError = 0x15;
+        case DSERR_EXCEPTION:
+            replyError = DSREPLY_EXCEPTION;
             break;
         case 0x704:
             replyError = 0x21;
@@ -446,7 +446,7 @@ DSError TRKDoWriteRegisters(TRKBuffer* buffer) {
 /* Not reached: TRKDispatchMessage has no case for it. */
 DSError TRKDoFlushCache(TRKBuffer* buffer) {
     MWTRACE(8, "DoFlushCache unimplemented!!!\n");
-    TRKSendReply(0x12);
+    TRKSendReply(DSREPLY_UNSUPPORTED);
     return 0;
 }
 
@@ -454,7 +454,7 @@ DSError TRKDoContinue(TRKBuffer* buffer) {
     MWTRACE(1, "DoContinue\n");
 
     if (!TRKTargetStopped()) {
-        TRKSendReply(0x16);
+        TRKSendReply(DSREPLY_NOT_STOPPED);
         return 0;
     }
 
@@ -482,22 +482,22 @@ DSError TRKDoStep(TRKBuffer* buffer) {
         count = buffer->data[0xC];
         if (count >= 1)
             break;
-        TRKSendReply(0x11);
+        TRKSendReply(DSREPLY_INVALID_PARAMETER);
         return 0;
     case 1:
     case 0x11:
         pc = TRKTargetGetPC();
         if (pc >= rangeStart && pc <= rangeEnd)
             break;
-        TRKSendReply(0x11);
+        TRKSendReply(DSREPLY_INVALID_PARAMETER);
         return 0;
     default:
-        TRKSendReply(0x12);
+        TRKSendReply(DSREPLY_UNSUPPORTED);
         return 0;
     }
 
     if (!TRKTargetStopped()) {
-        TRKSendReply(0x16);
+        TRKSendReply(DSREPLY_NOT_STOPPED);
         return 0;
     }
 
