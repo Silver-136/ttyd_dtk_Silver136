@@ -150,7 +150,7 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
 /** Clears the ten ceiling-hit slots (headHit/headDist). */
 static inline void kpa_headClear(void) {
     s32 i;
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < KPA_HIT_SLOTS; i++) {
         marioGetPtr()->kpaWork->headHit[i] = NULL;
         marioGetPtr()->kpaWork->headDist[i] = 1000.0f;
     }
@@ -192,7 +192,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     px = m->position.x;
     py = m->position.y;
     pz = m->position.z;
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < KPA_HIT_SLOTS; i++) {
         marioGetPtr()->kpaWork->rideHit[i] = NULL;
         marioGetPtr()->kpaWork->rideProbeX[i] = 1000.0f;
     }
@@ -399,7 +399,7 @@ HitEntry* kpaGetHitobjHead2(void) {
     HitEntry* hit;
     // FAKE: ret is a spare copy of hit; returning hit changes the object
     HitEntry* ret;
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < KPA_HIT_SLOTS; i++) {
         hit = marioGetPtr()->kpaWork->headHit[i];
         ret = hit;
         if (hit) {

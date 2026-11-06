@@ -491,7 +491,7 @@ static void loadMain(SequenceWork* seq) {
             break;
         case 0x20:
             if (nameEntPrepare()) {
-                nameEntOn(0);
+                nameEntOn(NAMEENT_FILE);
                 fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
                 wp->state++;
             }

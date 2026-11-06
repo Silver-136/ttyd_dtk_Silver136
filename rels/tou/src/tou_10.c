@@ -3,6 +3,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
+#include "nameent.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_cam.h"
@@ -1224,7 +1225,7 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     WAIT_FRAMES(1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
-    CALL(evt_win_nameent_on, 1)
+    CALL(evt_win_nameent_on, NAMEENT_YOSHI)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

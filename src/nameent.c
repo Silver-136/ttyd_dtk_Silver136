@@ -204,7 +204,7 @@ void nameEntOn(s32 type) {
 #if VERSION >= VERSION_US
     if (gp->language == LANGUAGE_JP) {
         switch (type) {
-            case 2:
+            case NAMEENT_DOOPLISS:
                 hiragana_tbl[9] = "　";
                 katakana_tbl[9] = "　";
                 break;
@@ -215,7 +215,7 @@ void nameEntOn(s32 type) {
         }
     } else {
         switch (type) {
-            case 2:
+            case NAMEENT_DOOPLISS:
                 latin_tbl[47] = " ";
                 break;
             default:
@@ -225,7 +225,7 @@ void nameEntOn(s32 type) {
     }
 #else
     switch (type) {
-        case 2:
+        case NAMEENT_DOOPLISS:
             hiragana_tbl[9] = "　";
             katakana_tbl[9] = "　";
             break;
@@ -395,11 +395,11 @@ static s32 nameMain(void) {
                                             break;
                                         }
                                     }
-                                    if (k < n || wp->type != 0) {
+                                    if (k < n || wp->type != NAMEENT_FILE) {
                                         wp->confirmSel = 1;
                                         wp->state = 100;
                                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                                        if (wp->type == 1 && k >= n) {
+                                        if (wp->type == NAMEENT_YOSHI && k >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name) / 2;
 #if VERSION >= VERSION_DEMO_EU
@@ -420,11 +420,11 @@ static s32 nameMain(void) {
                                             break;
                                         }
                                     }
-                                    if (m < n || wp->type != 0) {
+                                    if (m < n || wp->type != NAMEENT_FILE) {
                                         wp->confirmSel = 1;
                                         wp->state = 100;
                                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                                        if (wp->type == 1 && m >= n) {
+                                        if (wp->type == NAMEENT_YOSHI && m >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name);
 #if VERSION >= VERSION_DEMO_EU
@@ -444,11 +444,11 @@ static s32 nameMain(void) {
                                         break;
                                     }
                                 }
-                                if (k < n || wp->type != 0) {
+                                if (k < n || wp->type != NAMEENT_FILE) {
                                     wp->confirmSel = 1;
                                     wp->state = 100;
                                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                                    if (wp->type == 1 && k >= n) {
+                                    if (wp->type == NAMEENT_YOSHI && k >= n) {
                                         strcpy(wp->name, msgSearch("name_party3"));
                                         wp->nameLen = strlen(wp->name) / 2;
                                     }
@@ -501,7 +501,7 @@ static s32 nameMain(void) {
                         wp->nameLen--;
                         ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
                         psndSFXOn((const char*)PSND_SFX_FILE_MOJI_DELETE1);
-                    } else if (wp->nameLen == 0 && wp->type == 0) {
+                    } else if (wp->nameLen == 0 && wp->type == NAMEENT_FILE) {
                         psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
                         wp->state = 101;
                         wp->flags |= NAMEENT_FLAG_CANCELLED;
@@ -577,11 +577,11 @@ static s32 nameMain(void) {
                                 break;
                             }
                         }
-                        if (j < len || wp->type != 0) {
+                        if (j < len || wp->type != NAMEENT_FILE) {
                             wp->confirmSel = 1;
                             wp->state = 100;
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
-                            if (wp->type == 1 && j >= len) {
+                            if (wp->type == NAMEENT_YOSHI && j >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name) / 2;
 #if VERSION >= VERSION_DEMO_EU
@@ -602,11 +602,11 @@ static s32 nameMain(void) {
                                 break;
                             }
                         }
-                        if (m < len || wp->type != 0) {
+                        if (m < len || wp->type != NAMEENT_FILE) {
                             wp->confirmSel = 1;
                             wp->state = 100;
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
-                            if (wp->type == 1 && m >= len) {
+                            if (wp->type == NAMEENT_YOSHI && m >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name);
 #if VERSION >= VERSION_DEMO_EU
@@ -626,11 +626,11 @@ static s32 nameMain(void) {
                             break;
                         }
                     }
-                    if (j < len || wp->type != 0) {
+                    if (j < len || wp->type != NAMEENT_FILE) {
                         wp->confirmSel = 1;
                         wp->state = 100;
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
-                        if (wp->type == 1 && j >= len) {
+                        if (wp->type == NAMEENT_YOSHI && j >= len) {
                             strcpy(wp->name, msgSearch("name_party3"));
                             wp->nameLen = strlen(wp->name) / 2;
                         }
@@ -641,7 +641,7 @@ static s32 nameMain(void) {
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 #if VERSION >= VERSION_US
                     if (gp->language == LANGUAGE_JP) {
-                        if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "　", 2)) {
+                        if (wp->nameLen == 0 && wp->type == NAMEENT_FILE && !strncmp(wp->name, "　", 2)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             wp->state = 101;
                             wp->flags |= 2;
@@ -654,7 +654,7 @@ static s32 nameMain(void) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                         }
                     } else {
-                        if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, " ", 1)) {
+                        if (wp->nameLen == 0 && wp->type == NAMEENT_FILE && !strncmp(wp->name, " ", 1)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             wp->state = 101;
                             wp->flags |= 2;
@@ -668,7 +668,7 @@ static s32 nameMain(void) {
                         }
                     }
 #else
-                    if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "　", 2)) {
+                    if (wp->nameLen == 0 && wp->type == NAMEENT_FILE && !strncmp(wp->name, "　", 2)) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                         wp->state = 101;
                         wp->flags |= NAMEENT_FLAG_CANCELLED;
@@ -914,7 +914,7 @@ static void nameEntDisp(CameraId cameraId, void* param) {
         ok = msgSearch("msg_nameent_ok");
         yes = msgSearch("msg_nameent_yes");
         no = msgSearch("msg_nameent_no");
-        if (wp->type == 4) {
+        if (wp->type == NAMEENT_PASSWORD) {
             ok = msgSearch("msg_nameent_ok_01");
         }
         nameWinGX(-180.0f, 130.0f, 360.0f, 100.0f, *wp->tplFile->data, 1);

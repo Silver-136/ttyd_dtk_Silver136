@@ -857,7 +857,7 @@ void mobjMain(void) {
                 }
             } else {
                 if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HEAD) {
-                    for (k = 0; k < 10; k++) {
+                    for (k = 0; k < KPA_HIT_SLOTS; k++) {
                         if (kpaGetHitobjHead(k) == hitPtr) {
                             entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HEAD;
                             hit = 1;
@@ -866,7 +866,7 @@ void mobjMain(void) {
                     }
                 }
                 if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HIP) {
-                    for (k = 0; k < 10 && hit == 0; k++) {
+                    for (k = 0; k < KPA_HIT_SLOTS && hit == 0; k++) {
                         if (kpaGetHitobjRide(k) == hitPtr && kpaHipAttackCheck()) {
                             entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HIP;
                             hit = 1;

@@ -5,12 +5,21 @@
 #include "manager/filemgr.h"
 #include <dolphin/types.h>
 
+// nameEntOn type: what is being named, which selects the prompt (msg_tbl) and the rules
+typedef enum NameEntryType {
+    NAMEENT_FILE = 0,       // the save file name (seq_load)
+    NAMEENT_YOSHI = 1,      // Yoshi's name (tou_10); blank gives his default name
+    NAMEENT_DOOPLISS = 2,   // guessing Doopliss's name before the Letter P is back (gra_00): n/N/p blanked
+    NAMEENT_DOOPLISS_P = 3, // the same guess afterwards
+    NAMEENT_PASSWORD = 4,   // the X-Naut Fortress password (aji_01)
+} NameEntryType;
+
 typedef struct NameEntryWork {
     u16 flags; //0x0, bit0 = nameEntWait called (permits input), bit1 = cancelled
     u8 pad_2[2]; //0x2
     s32 loadState; //0x4, tpl load step (0 idle, 1 load, 3 free)
     s32 state; //0x8, input state; 100 = confirm, 101 = finished (confirmed or cancelled)
-    s32 type; //0xC, nameEntOn type; 1 = partner (default name "name_party3")
+    s32 type; //0xC, NameEntryType
     s32 cursorX; //0x10, character grid column
     s32 cursorY; //0x14, character grid row
     s32 nameLen; //0x18, characters entered (u16 SJIS units)

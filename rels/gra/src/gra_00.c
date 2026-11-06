@@ -3,6 +3,7 @@
 
 #include "version.h"
 #include "evt/evt_window.h"
+#include "nameent.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -489,11 +490,11 @@ EVT_BEGIN(evt_machibuse)
     // scene.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_13_04_THE_LETTER_P)
-        SET_VALUE(LW(0), 2)
+        SET_VALUE(LW(0), NAMEENT_DOOPLISS)
         CALL_CHILD(evt_nameent)
         WAIT_MS(300)
         CASE_DEFAULT
-        SET_VALUE(LW(0), 3)
+        SET_VALUE(LW(0), NAMEENT_DOOPLISS_P)
         CALL_CHILD(evt_nameent)
         WAIT_MS(300)
 #if VERSION >= VERSION_US
