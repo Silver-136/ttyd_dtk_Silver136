@@ -1434,252 +1434,252 @@ static void macHandleActive(SYNTH_VOICE* svoice) {
     ++svoice->curAddr;
     ex = 0;
     switch (cstep.para[0] & 0x7f) {
-    case 0x0:
+    case MACRO_OP_END_OF_MACRO:
       ex = mcmdEndOfMacro(svoice);
       break;
-    case 0x1:
+    case MACRO_OP_STOP:
       ex = mcmdStop(svoice);
       break;
-    case 0x2:
+    case MACRO_OP_IF_KEY:
       mcmdIfKey(svoice, &cstep);
       break;
-    case 0x3:
+    case MACRO_OP_IF_VELOCITY:
       mcmdIfVelocity(svoice, &cstep);
       break;
-    case 0x4:
+    case MACRO_OP_WAIT:
       ex = mcmdWait(svoice, &cstep);
       break;
-    case 0x5:
+    case MACRO_OP_LOOP:
       mcmdLoop(svoice, &cstep);
       break;
-    case 0x6:
+    case MACRO_OP_GOTO:
       ex = mcmdGoto(svoice, &cstep);
       break;
-    case 0x7:
+    case MACRO_OP_WAIT_MS:
       ex = mcmdWaitMs(svoice, &cstep);
       break;
-    case 0x8:
+    case MACRO_OP_PLAY_MACRO:
       mcmdPlayMacro(svoice, &cstep);
       break;
-    case 0x9:
+    case MACRO_OP_SEND_KEY_OFF:
       mcmdSendKeyOff(svoice, &cstep);
       break;
-    case 0xa:
+    case MACRO_OP_IF_MODULATION:
       mcmdIfModulation(svoice, &cstep);
       break;
-    case 0xb:
+    case MACRO_OP_SET_PIANO_PANNING:
       mcmdSetPianoPanning(svoice, &cstep);
       break;
-    case 0xc:
+    case MACRO_OP_SET_ADSR:
       mcmdSetADSR(svoice, &cstep);
       break;
-    case 0xd:
+    case MACRO_OP_SCALE_VOLUME:
       mcmdScaleVolume(svoice, &cstep);
       break;
-    case 0xe:
+    case MACRO_OP_SET_PANNING:
       mcmdSetPanning(svoice, &cstep);
       break;
-    case 0xf:
+    case MACRO_OP_ENVELOPE:
       mcmdEnvelope(svoice, &cstep);
       break;
-    case 0x10:
+    case MACRO_OP_START_SAMPLE:
       mcmdStartSample(svoice, &cstep);
       break;
-    case 0x11:
+    case MACRO_OP_STOP_SAMPLE:
       mcmdStopSample(svoice);
       break;
-    case 0x12:
+    case MACRO_OP_KEY_OFF:
       mcmdKeyOff(svoice);
       break;
-    case 0x13:
+    case MACRO_OP_IF_RANDOM:
       mcmdIfRandom(svoice, &cstep);
       break;
-    case 0x14:
+    case MACRO_OP_FADE_IN:
       mcmdFadeIn(svoice, &cstep);
       break;
-    case 0x15:
+    case MACRO_OP_SET_SURROUND_PANNING:
       mcmdSetSurroundPanning(svoice, &cstep);
       break;
-    case 0x16:
+    case MACRO_OP_SET_ADSR_FROM_CTRL:
       mcmdSetADSRFromCtrl(svoice, &cstep);
       break;
-    case 0x17:
+    case MACRO_OP_RANDOM_KEY:
       mcmdRandomKey(svoice, &cstep);
       break;
-    case 0x18:
+    case MACRO_OP_ADD_KEY:
       ex = mcmdAddKey(svoice, &cstep);
       break;
-    case 0x19:
+    case MACRO_OP_SET_KEY:
       ex = mcmdSetKey(svoice, &cstep);
       break;
-    case 0x1a:
+    case MACRO_OP_LAST_KEY:
       ex = mcmdLastKey(svoice, &cstep);
       break;
-    case 0x1b:
+    case MACRO_OP_PORTAMENTO:
       mcmdPortamento(svoice, &cstep);
       break;
-    case 0x1c:
+    case MACRO_OP_VIBRATO:
       mcmdVibrato(svoice, &cstep);
       break;
-    case 0x1d:
+    case MACRO_OP_PITCH_SWEEP_1:
       ex = mcmdPitchSweep(svoice, &cstep, 0);
       break;
-    case 0x1e:
+    case MACRO_OP_PITCH_SWEEP_2:
       ex = mcmdPitchSweep(svoice, &cstep, 1);
       break;
-    case 0x1f:
+    case MACRO_OP_SET_PITCH:
       mcmdSetPitch(svoice, &cstep);
       break;
-    case 0x20:
+    case MACRO_OP_SET_PITCH_ADSR:
       mcmdSetPitchADSR(svoice, &cstep);
       break;
-    case 0x21:
+    case MACRO_OP_SCALE_VOLUME_DLS:
       mcmdScaleVolumeDLS(svoice, &cstep);
       break;
-    case 0x22:
+    case MACRO_OP_SET_MOD2_VIBRATO:
       mcmdSetMod2Vibrato(svoice, &cstep);
       break;
-    case 0x23:
+    case MACRO_OP_SETUP_TREMOLO:
       mcmdSetupTremolo(svoice, &cstep);
       break;
-    case 0x24:
+    case MACRO_OP_RETURN:
       mcmdReturn(svoice);
       break;
-    case 0x25:
+    case MACRO_OP_GOSUB:
       ex = mcmdGosub(svoice, &cstep);
       break;
-    case 0x28:
+    case MACRO_OP_TRAP_EVENT:
       mcmdTrapEvent(svoice, &cstep);
       break;
-    case 0x29:
+    case MACRO_OP_UNTRAP_EVENT:
       mcmdUntrapEvent(svoice, &cstep);
       break;
-    case 0x2a:
+    case MACRO_OP_SEND_MESSAGE:
       mcmdSendMessage(svoice, &cstep);
       break;
-    case 0x2b:
+    case MACRO_OP_GET_MESSAGE:
       mcmdGetMessage(svoice, &cstep);
       break;
-    case 0x2c:
+    case MACRO_OP_GET_VID:
       mcmdGetVID(svoice, &cstep);
       break;
-    case 0x30:
+    case MACRO_OP_ADD_AGE_COUNTER:
       mcmdAddAgeCounter(svoice, &cstep);
       break;
-    case 0x31:
+    case MACRO_OP_SET_AGE_COUNTER:
       mcmdSetAgeCounter(svoice, &cstep);
       break;
-    case 0x32:
+    case MACRO_OP_SEND_FLAG:
       mcmdSendFlag(&cstep);
       break;
-    case 0x33:
+    case MACRO_OP_SET_PITCH_WHEEL_RANGE:
       mcmdSetPitchWheelRange(svoice, &cstep);
       break;
-    case 0x34:
+    case MACRO_OP_SCALE_REVERB:
       mcmdScaleReverb(svoice, &cstep);
       break;
-    case 0x35:
+    case MACRO_OP_SET_PITCHBEND_AFTER_KEY_OFF:
       mcmdSetPitchbendAfterKeyOff(svoice);
       break;
-    case 0x36:
+    case MACRO_OP_SET_PRIORITY:
       mcmdSetPriority(svoice, &cstep);
       break;
-    case 0x37:
+    case MACRO_OP_ADD_PRIORITY:
       mcmdAddPriority(svoice, &cstep);
       break;
-    case 0x38:
+    case MACRO_OP_SET_AGE_COUNTER_SPEED:
       mcmdSetAgeCounterSpeed(svoice, &cstep);
       break;
-    case 0x39:
+    case MACRO_OP_SET_AGE_COUNTER_BY_VOLUME:
       mcmdSetAgeCounterByVolume(svoice, &cstep);
       break;
-    case 0x40:
+    case MACRO_OP_VOLUME_SELECT:
       mcmdVolumeSelect(svoice, &cstep);
       break;
-    case 0x41:
+    case MACRO_OP_PANNING_SELECT:
       mcmdPanningSelect(svoice, &cstep);
       break;
-    case 0x42:
+    case MACRO_OP_PITCH_WHEEL_SELECT:
       mcmdPitchWheelSelect(svoice, &cstep);
       break;
-    case 0x43:
+    case MACRO_OP_MOD_WHEEL_SELECT:
       mcmdModWheelSelect(svoice, &cstep);
       break;
-    case 0x44:
+    case MACRO_OP_PEDAL_SELECT:
       mcmdPedalSelect(svoice, &cstep);
       break;
-    case 0x45:
+    case MACRO_OP_PORTAMENTO_SELECT:
       mcmdPortamentoSelect(svoice, &cstep);
       break;
-    case 0x46:
+    case MACRO_OP_REVERB_SELECT:
       mcmdReverbSelect(svoice, &cstep);
       break;
-    case 0x47:
+    case MACRO_OP_SURROUND_PANNING_SELECT:
       mcmdSurroundPanningSelect(svoice, &cstep);
       break;
-    case 0x48:
+    case MACRO_OP_DOPPLER_SELECT:
       mcmdDopplerSelect(svoice, &cstep);
       break;
-    case 0x49:
+    case MACRO_OP_TREMOLO_SELECT:
       mcmdTremoloSelect(svoice, &cstep);
       break;
-    case 0x4a:
+    case MACRO_OP_PRE_AUX_A_SELECT:
       mcmdPreAuxASelect(svoice, &cstep);
       break;
-    case 0x4b:
+    case MACRO_OP_PRE_AUX_B_SELECT:
       mcmdPreAuxBSelect(svoice, &cstep);
       break;
-    case 0x4c:
+    case MACRO_OP_POST_AUX_B_SELECT:
       mcmdPostAuxBSelect(svoice, &cstep);
       break;
-    case 0x4d:
+    case MACRO_OP_AUX_AFX_SELECT:
       mcmdAuxAFXSelect(svoice, &cstep);
       break;
-    case 0x4e:
+    case MACRO_OP_AUX_BFX_SELECT:
       mcmdAuxBFXSelect(svoice, &cstep);
       break;
-    case 0x50:
+    case MACRO_OP_SETUP_LFO:
       mcmdSetupLFO(svoice, &cstep);
       break;
-    case 0x58:
+    case MACRO_OP_MODE_SELECT:
       mcmdModeSelect(svoice, &cstep);
       break;
-    case 0x59:
+    case MACRO_OP_SET_KEY_GROUP:
       mcmdSetKeyGroup(svoice, &cstep);
       break;
-    case 0x5a:
+    case MACRO_OP_SRC_MODE_SELECT:
       mcmdSRCModeSelect(svoice, &cstep);
       break;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
-    case 0x5e:
+    case MACRO_OP_FILTER_SWITCH_SELECT:
       mcmdFilterSwitchSelect(svoice, &cstep);
       break;
-    case 0x5f:
+    case MACRO_OP_FILTER_PARAMETER_SELECT:
       mcmdFilterParameterSelect(svoice, &cstep);
       break;
 #endif
-    case 0x60:
+    case MACRO_OP_VAR_ADD:
       mcmdVarCalculation(svoice, &cstep, 0);
       break;
-    case 0x61:
+    case MACRO_OP_VAR_SUB:
       mcmdVarCalculation(svoice, &cstep, 1);
       break;
-    case 0x62:
+    case MACRO_OP_VAR_MUL:
       mcmdVarCalculation(svoice, &cstep, 2);
       break;
-    case 0x63:
+    case MACRO_OP_VAR_DIV:
       mcmdVarCalculation(svoice, &cstep, 3);
       break;
-    case 0x64:
+    case MACRO_OP_VAR_ADD_ALT:
       mcmdVarCalculation(svoice, &cstep, 4);
       break;
-    case 0x65:
+    case MACRO_OP_SET_VAR_IMMEDIATE:
       mcmdSetVarImmediate(svoice, &cstep);
       break;
-    case 0x70:
+    case MACRO_OP_IF_VAR_EQUAL:
       mcmdIfVarCompare(svoice, &cstep, 0);
       break;
-    case 0x71:
+    case MACRO_OP_IF_VAR_LESS:
       mcmdIfVarCompare(svoice, &cstep, 1);
       break;
     }
