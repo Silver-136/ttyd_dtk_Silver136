@@ -1002,27 +1002,27 @@ typedef struct BattleUnit {
     s32 superguardedCount;                       // 0x27C (US 0x280), hits this unit resolved as attacker this turn (BattleCheckDamage counts every one, superguarded or not); weapon special 0x20 subtracts it from damage
     s32 totalDamageDealt;                        // 0x280, damage this unit dealt as attacker
     s32 initEventId;                             // 0x284
-    void* waitEventCode;                         // 0x288
+    EvtWord* waitEventCode;                         // 0x288
     s32 waitEventId;                             // 0x28C
-    void* unisonPhaseEventCode;                  // 0x290
-    void* phaseEventCode;                        // 0x294
+    EvtWord* unisonPhaseEventCode;                  // 0x290
+    EvtWord* phaseEventCode;                        // 0x294
     s32 phaseEventId;                            // 0x298
-    void* attackEventCode;                       // 0x29C, btlevtcmd_SetEventAttack / BtlUnit_GetData(unit, 2/3)
-    void* confusionEventCode;                    // 0x2A0, btlevtcmd_SetEventConfusion
+    EvtWord* attackEventCode;                       // 0x29C, btlevtcmd_SetEventAttack / BtlUnit_GetData(unit, 2/3)
+    EvtWord* confusionEventCode;                    // 0x2A0, btlevtcmd_SetEventConfusion
     s32 attackEventId;                           // 0x2A4
     s32 attackEventFlags;                        // 0x2A8, ActEventFlags (0 by SetEventAttack)
-    void* damageEventCode;                       // 0x2AC
+    EvtWord* damageEventCode;                       // 0x2AC
     s32 damageEventId;                           // 0x2B0
-    void* entryEventCode;                        // 0x2B4 (US 0x2B8), btlevtcmd_SetEventEntry
+    EvtWord* entryEventCode;                        // 0x2B4 (US 0x2B8), btlevtcmd_SetEventEntry
     s32 entryEventId;                                // 0x2B8 (US 0x2BC)
-    void* ceilFallEventCode;                     // 0x2BC (US 0x2C0), btlevtcmd_SetEventCeilFall, run by the stage ceiling fall
+    EvtWord* ceilFallEventCode;                     // 0x2BC (US 0x2C0), btlevtcmd_SetEventCeilFall, run by the stage ceiling fall
     s32 ceilFallEventId;                                // 0x2C0 (US 0x2C4)
-    void* actEndEvent;                           // 0x2C4 (US 0x2C8), run when the unit's action ends (battle_seq)
+    EvtWord* actEndEvent;                           // 0x2C4 (US 0x2C8), run when the unit's action ends (battle_seq)
     s32 actEndEventId;                                   // 0x2C8 (US 0x2CC)
 #if VERSION >= VERSION_DEMO_EU
     s32 slideReturnEventId; // PAL and the PAL demo (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
 #endif
-    void* hitEventCode;                          // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
+    EvtWord* hitEventCode;                          // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
     s32 talkPartId;                                  // 0x2D0 (US 0x2D4)
     const char* talkPose;                        // 0x2D4 (US 0x2D8), POSE_TYPE_TALK (btlevtcmd talk anim)
     const char* stayPose;                        // 0x2D8 (US 0x2DC), POSE_TYPE_NEUTRAL
@@ -1099,7 +1099,7 @@ typedef struct BattleUnitKind {
     StatusVulnerability* statusVulnerability; // 0xB0
     s8 numParts;                              // 0xB4
     BattleUnitKindPart* parts;               // 0xB8
-    void* initEventCode;                      // 0xBC
+    EvtWord* initEventCode;                      // 0xBC
     BattleDataEntry* dataTable;               // 0xC0
 } BattleUnitKind;
 

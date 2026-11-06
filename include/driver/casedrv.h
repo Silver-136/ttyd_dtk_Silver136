@@ -3,6 +3,7 @@
 #pragma once
 
 #include <dolphin/types.h>
+#include "evt/evt_word.h"
 
 // CaseEntry.conditionId: what triggers the case event (caseMain); hit object names compare with Mario's hit
 // objects. CaseSetup.conditionId may add CASE_SETUP_SHOW_HINT.
@@ -47,7 +48,7 @@ typedef struct CaseSetup {
     void* activeFunc; //0xC
     s32 lwData[16]; //0x10
     u8 pad_50[0x54 - 0x50]; //0x50, never accessed
-    void* evtCode; //0x54
+    EvtWord* evtCode; //0x54
     s32 priority; //0x58
 } CaseSetup;
 
@@ -61,7 +62,7 @@ typedef struct CaseEntry {
     void* activeFunc; //0x50
     s32 lwData[16]; //0x54
     s32 evtId; //0x94
-    void* evtCode; //0x98
+    EvtWord* evtCode; //0x98
     s32 priority; //0x9C
 } CaseEntry;
 

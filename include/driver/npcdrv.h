@@ -234,14 +234,14 @@ typedef struct NpcEntry {
     GXColor color;                  // 0x114
     s32 initEvtId;                  // 0x118
     s32 regularEvtId;               // 0x11C
-    void* initEvent;                // 0x120, verified
-    void* moveEvent;                // 0x124, verified
-    void* talkEvt;                  // 0x128
-    void* deadEvent;                // 0x12C, verified
-    void* findEvent;                // 0x130, verified
-    void* lostEvent;                // 0x134, verified
-    void* returnEvent;              // 0x138, verified
-    void* blowEvent;                // 0x13C, verified
+    EvtWord* initEvent;                // 0x120, verified
+    EvtWord* moveEvent;                // 0x124, verified
+    EvtWord* talkEvt;                  // 0x128
+    EvtWord* deadEvent;                // 0x12C, verified
+    EvtWord* findEvent;                // 0x130, verified
+    EvtWord* lostEvent;                // 0x134, verified
+    EvtWord* returnEvent;              // 0x138, verified
+    EvtWord* blowEvent;                // 0x13C, verified
     u32 interruptFlags;             // 0x140, NpcInterruptFlags
     f32 direction;                  // 0x144, angle we're facing at, verified
     f32 savedDirection;             // 0x148, saved during field battle
@@ -454,7 +454,7 @@ typedef struct FieldBattleData {
     u8 pad_18[0x1C - 0x18];      // 0x18, receives FbatHitResult.dist when fbatHitCheck copies the 16-byte result over hitKind; not read
     u32 firstAttackFlags;        // 0x1C, bit 0: seq_battle starts with FIRST_ATTACK_NONE; tou_03 _firstattack_setting clears it
     FieldBattleInfo info;        // 0x20
-    void* postBattleEvent;       // 0x3C, evt run after a won battle (battle_seq_end)
+    EvtWord* postBattleEvent;       // 0x3C, evt run after a won battle (battle_seq_end)
     s32 postBattleEventId;       // 0x40
     s32 postBattleMode;          // 0x44, nonzero: battle_seq_end skips to sequence 3 / 0x3000001
     u32 merleeEvtId;             // 0x48, _evt_majinai_coin_up_effect id

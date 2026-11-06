@@ -16,14 +16,14 @@ typedef struct NpcSetupInfo {
     const char* name; //0x0
     s32 flags; //0x4
     s32 reactionFlags; //0x8
-    void* initEvent; //0xC
-    void* regularEvent; //0x10
-    void* talkEvent; //0x14
-    void* deadEvent; //0x18
-    void* findEvent; //0x1C
-    void* lostEvent; //0x20
-    void* returnEvent; //0x24
-    void* blowEvent; //0x28
+    EvtWord* initEvent; //0xC
+    EvtWord* regularEvent; //0x10
+    EvtWord* talkEvent; //0x14
+    EvtWord* deadEvent; //0x18
+    EvtWord* findEvent; //0x1C
+    EvtWord* lostEvent; //0x20
+    EvtWord* returnEvent; //0x24
+    EvtWord* blowEvent; //0x28
     NpcTerritoryType territoryType; //0x2C
     Vec territoryBase; //0x30
     Vec territoryLoiter; //0x3C

@@ -18,8 +18,8 @@ typedef struct ShopItem {
 
 typedef struct ShopperData {
     const char* name; //0x0
-    void* fook_evt; //0x4
-    void* buy_evt; //0x8
+    EvtWord* fook_evt; //0x4
+    EvtWord* buy_evt; //0x8
     const char* msgs[1]; //0xC
 } ShopperData;
 

@@ -32,14 +32,14 @@ typedef struct BattleStageData {
     BattleStageObjectData* objects; //0xC
     BattleWeapon bgAWeapon; //0x10, background A1 falling (A2 has no weapon: _get_bgset_attack_data)
     BattleWeapon bgBWeapon; //0xD0, background B falling
-    void* initEvt; //0x190
-    void* destroyBgA1Evt; //0x194
-    void* destroyBgA2Evt; //0x198
-    void* destroyBgBEvt; //0x19C
-    void* bgA1Evt; //0x1A0
-    void* bgA2Evt; //0x1A4
-    void* bgBEvt; //0x1A8
-    void* bgCEvt; //0x1AC
+    EvtWord* initEvt; //0x190
+    EvtWord* destroyBgA1Evt; //0x194
+    EvtWord* destroyBgA2Evt; //0x198
+    EvtWord* destroyBgBEvt; //0x19C
+    EvtWord* bgA1Evt; //0x1A0
+    EvtWord* bgA2Evt; //0x1A4
+    EvtWord* bgBEvt; //0x1A8
+    EvtWord* bgCEvt; //0x1AC
     s8 reserved_1B0; //0x1B0, 0 in all 58 data tables, never read
     s8 disableBgA1Destroy; //0x1B1
     s8 disableBgA2Destroy; //0x1B2

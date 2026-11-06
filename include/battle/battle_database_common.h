@@ -3,6 +3,7 @@
 #pragma once
 
 #include <dolphin/types.h>
+#include "evt/evt_word.h"
 
 /* BattleWeapon.targetClassFlags: which units an attack may target */
 #define TARGET_CLASS_NO_MARIO_OR_SHELL       0x1 // not Mario or the shell shield
@@ -226,7 +227,7 @@ typedef struct BattleWeapon {
     s8 fpRegenTime;                   // 0xAC
     s8 fpRegenStrength;               // 0xAD
     u8 pad_AE[0xB0 - 0xAE];           // 0xAE, always 0, never accessed
-    void* attackEvtScript;           // 0xB0
+    EvtWord* attackEvtScript;           // 0xB0
     u8 stageEffectRates[0xC0 - 0xB4]; // 0xB4, btlevtcmd_WeaponAftereffect: [0..3] A1+A2 / A1 / A2 / none fall weights, [4] B destroy, [5] nozzle turn, [6] nozzle fire, [7] iron frame fall, [8] object fall (%), [9..11] unused
 } BattleWeapon;
 
