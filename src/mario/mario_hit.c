@@ -127,7 +127,7 @@ void marioHitCheckWidth(void) {
 /**
  * Ray filter (TRUE = test this hit): tests hits that have none of query->user0's attribute bits
  * or any of user1's.
- * marioHitCheckAttr2Inl passes 0x4 / 0x800000, so only 0x4 surfaces without 0x800000 are skipped.
+ * marioHitCheckVec2 passes 0x4 / 0x800000, so only 0x4 surfaces without 0x800000 are skipped.
  */
 static BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
     BOOL ret = FALSE;
@@ -302,7 +302,9 @@ HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, 
 }
 
 /** marioHitCheckVecInl with chkFilterAttr2: skips 0x4 surfaces that lack 0x800000. */
-static inline HitEntry* marioHitCheckAttr2Inl(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
+inline HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;
     f32 rf;
@@ -351,7 +353,7 @@ static inline HitEntry* marioHitCheckAttr2Inl(Vec* pos, Vec* dir, Vec* outPos, V
 
 /**
  * The ceiling ray of marioSearchHead and marioSearchHead_jabara:
- * while Mario is not falling (or in the Spring Jump's state 1) it uses marioHitCheckAttr2Inl,
+ * while Mario is not falling (or in the Spring Jump's state 1) it uses marioHitCheckVec2,
  * which tests every surface except 0x4 ones without 0x800000; unlike the normal filter (chkfilterVec)
  * it does not skip the hidden ? / badge / 10-coin blocks, so his head finds them on the way up.
  * Otherwise it uses the normal filters.
@@ -362,12 +364,12 @@ static HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f3
     f32 d = *dist;
     if (mario->currMotionId != MARIO_MOTION_JABARA) {
         if (!(mario->flags & MARIO_FLAG_IS_FALLING)) {
-            hit = marioHitCheckAttr2Inl(pos, dir, outPos, outNrm, &d);
+            hit = marioHitCheckVec2(pos, dir, outPos, outNrm, &d);
         } else {
             hit = marioHitCheckVecInl(pos, dir, outPos, outNrm, &d);
         }
     } else if (marioGetJabaraState() == JABARA_STATE_RISING) {
-        hit = marioHitCheckAttr2Inl(pos, dir, outPos, outNrm, &d);
+        hit = marioHitCheckVec2(pos, dir, outPos, outNrm, &d);
     } else {
         hit = marioHitCheckVecInl(pos, dir, outPos, outNrm, &d);
     }
@@ -1617,7 +1619,8 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
  * TRUE if the ceiling hit is a Super Block (MOBJ_PowerUpBlock), Save Block or Heart Block (free or paid):
  * bumping one stops Mario's air movement in marioChkOverhead.
  */
-static inline BOOL marioChkHeadBlock(HitEntry* hit) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL chk_special_mobj(HitEntry* hit) {
     MapObjectEntry* mobj;
     if (!hit) {
         return FALSE;
@@ -1701,7 +1704,7 @@ f32 marioChkOverhead(void) {
     }
     mario->position.x = pos.x;
     if (mario->hitobjHead) {
-        if (marioChkHeadBlock(mario->hitobjHead)) {
+        if (chk_special_mobj(mario->hitobjHead)) {
             mario->baseSpeed = 0.0f;
             mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         }

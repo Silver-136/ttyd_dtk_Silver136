@@ -228,7 +228,8 @@ s32 marioGetoffYoshi(void) {
 
 /** Clears Mario's and the extra partner's display offsets (the bob added while riding). */
 // Descriptive name (inline helper; not in the symbol maps).
-static inline void resetOfs(PartyEntry* party) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void reset_all_ofs(PartyEntry* party) {
     PartyEntry* extra;
 
     MarioWork* player = party->playerPtr;
@@ -287,7 +288,7 @@ void marioYoshiForceCancel(void) {
     if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
         return;
     }
-    resetOfs(party);
+    reset_all_ofs(party);
     marioChgPose("M_S_1");
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
@@ -722,7 +723,7 @@ void yoshi_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 100:
-            resetOfs(party);
+            reset_all_ofs(party);
             marioChgSmallJumpMotion();
             mario->baseSpeed = 0.0f;
             partyChgPose(party, "PYS_H_2");
@@ -1139,7 +1140,7 @@ void yoshi_use(PartyEntry* party) {
         }
         partyChgRunMode(party, PARTY_RUN_MOVE);
         party->moveMode = PARTY_MOVE_MODE_STAY;
-        resetOfs(party);
+        reset_all_ofs(party);
         return;
     }
 #if VERSION >= VERSION_JP
@@ -1339,7 +1340,7 @@ static void searchGround(PartyEntry* party) {
             fall(party);
             party->position.y += party->gravity;
             set_damage_root_ypos(mario->position.y - 8.0f);
-            resetOfs(party);
+            reset_all_ofs(party);
             party->flags |= PARTY_FLAG_FORCE_FALL;
             if (party->gravity <= -6.0f) {
                 party->gravity = -6.0f;

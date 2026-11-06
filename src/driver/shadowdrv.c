@@ -1133,7 +1133,9 @@ ShadowConfig* shadowGetProjShadowConfig(void) {
  * Builds the texture matrices that map world positions into a shadow texture (and, for depth shadows, into the
  * depth ramp) from the shadow light's view and projection.
  */
-static inline void shadowCalcTexMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
+inline void GetTexProjMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
 #if VERSION <= VERSION_DEMO_JP
     u32 is16;
 #endif
@@ -1221,7 +1223,7 @@ static void projShadowEnd(CameraId cameraId, void* param) {
         GXInitTexObj(&wp->texObj, wp->texBuffer->address, size, size, GX_TF_IA4, GX_CLAMP, GX_CLAMP, GX_FALSE);
     }
     GXInitTexObjLOD(&wp->texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    shadowCalcTexMtx(wp, wp->texMtx, NULL);
+    GetTexProjMtx(wp, wp->texMtx, NULL);
     wp->flags |= SHADOW_WORK_READY;
 }
 
@@ -1263,7 +1265,7 @@ static void depthShadowEnd(CameraId cameraId, void* param) {
     GXPixModeSync();
     GXInitTexObj(&wp->texObj, wp->texBuffer->address, size, size, texFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    shadowCalcTexMtx(wp, wp->texMtx, wp->depthMtx);
+    GetTexProjMtx(wp, wp->texMtx, wp->depthMtx);
     wp->flags |= SHADOW_WORK_READY;
 }
 

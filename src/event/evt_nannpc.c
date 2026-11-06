@@ -27,7 +27,8 @@ char makestring[16];
  * The early demos turn the name into a string in a helper (same code, other register order).
  * Early demos only: in the other versions the helper's "%06x" literal would move ahead in the string pool even unused.
  */
-static inline char* nanNPCEntryName(char* name) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+char* nanNPCMakeString(char* name) {
     if (!((EvtWord)name & 0x80000000)) {
         sprintf(makestring, "%06x", name);
         name = makestring;
@@ -42,7 +43,7 @@ static inline NanNPC* nanNPCSearch2(char* name) {
     NanNPCWork* w = nanNPCWork;
     for (i = 0; i < w->num; i++) {
         p = &w->npc[i];
-        name = nanNPCEntryName(name);
+        name = nanNPCMakeString(name);
         if (!strcmp((char*)p->name, name)) {
             return p;
         }
@@ -501,7 +502,7 @@ USER_FUNC(evt_nannpc_entry) {
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC*)((u8*)w->npc + off);
 #if VERSION <= VERSION_DEMO_JP
-        str = nanNPCEntryName((char*)name);
+        str = nanNPCMakeString((char*)name);
 #else
         str = (char*)name;
         if (!((EvtWord)str & 0x80000000)) {

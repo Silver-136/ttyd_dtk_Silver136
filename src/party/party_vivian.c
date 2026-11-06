@@ -277,8 +277,10 @@ void vivian_move(PartyEntry* party) {
 
 /** early demos: Vivian always hides 13 behind Mario, with no ground search outside the hidden state */
 
-// The early demos' vivianFollow/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
-static inline void vivianFollow(PartyEntry* party) {
+// The early demos' set_vivian_pos/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
+inline void set_vivian_pos(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
     MarioWork* mario = party->playerPtr;
     f32 ofs;
@@ -395,7 +397,7 @@ void vivian_use(PartyEntry* party) {
 #if VERSION >= VERSION_JP
         party->work.vivian.followOfs = -13.0f;
 #endif
-        vivianFollow(party);
+        set_vivian_pos(party);
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         party->displayDirection = m->displayDirection;
         party->displayDirectionTarget = m->displayDirectionTarget;
@@ -405,7 +407,7 @@ void vivian_use(PartyEntry* party) {
         party->moveFrames = 6;
         partyChgPose(party, "PTR_A2_1");
     case 1:
-        vivianFollow(party);
+        set_vivian_pos(party);
         party->position.x += (party->moveTarget.x - party->position.x) / party->moveFrames;
         party->position.y += (party->moveTarget.y - party->position.y) / party->moveFrames;
         party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
@@ -452,7 +454,7 @@ void vivian_use(PartyEntry* party) {
             party->dispOfs.y += 0.4f;
             m->dispOfs.y += 0.4f;
 #else
-        vivianFollow(party);
+        set_vivian_pos(party);
         if (30 - party->moveFrames <= 24) {
             party->dispOfs.y += 0.4f;
             m->dispOfs2.y += 0.4f;
@@ -487,7 +489,7 @@ void vivian_use(PartyEntry* party) {
         party->useMotionId = 5;
     case 5:
 #if VERSION >= VERSION_JP
-        vivianFollow(party);
+        set_vivian_pos(party);
 #endif
         party->work.vivian.shadowSize -= 1.0f;
         if (party->work.vivian.shadowSize <= 10.0f) {
@@ -513,7 +515,7 @@ void vivian_use(PartyEntry* party) {
             party->position.y = gx;
         }
 #else
-        vivianFollow(party);
+        set_vivian_pos(party);
 #endif
         partyUpdateKeyData(party);
         if (vivian_cancel_req) {
@@ -573,7 +575,7 @@ void vivian_use(PartyEntry* party) {
         party->useMotionId = 21;
     case 21:
 #if VERSION >= VERSION_JP
-        vivianFollow(party);
+        set_vivian_pos(party);
 #endif
         party->work.vivian.shadowSize += 1.0f;
         if (party->work.vivian.shadowSize >= 20.0f) {
@@ -590,7 +592,7 @@ void vivian_use(PartyEntry* party) {
         break;
     case 23:
 #if VERSION >= VERSION_JP
-        vivianFollow(party);
+        set_vivian_pos(party);
 #endif
         animPoseSetLocalTime(party->paperAnimGroup, 24.0f);
         party->poseTime = 24;
@@ -599,7 +601,7 @@ void vivian_use(PartyEntry* party) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW2), &party->position);
     case 24:
 #if VERSION >= VERSION_JP
-        vivianFollow(party);
+        set_vivian_pos(party);
 #endif
         animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
         party->dispOfs.y -= 0.4f;
@@ -624,7 +626,7 @@ void vivian_use(PartyEntry* party) {
         if (m->dispOfs.y <= 2.7f) {
             m->dispOfs.y = 2.7f;
 #else
-        vivianFollow(party);
+        set_vivian_pos(party);
         animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
         animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
         m->dispOfs2.y -= 0.4f;
@@ -650,7 +652,7 @@ void vivian_use(PartyEntry* party) {
         if (m->dispOfs.y <= 2.7f) {
             m->dispOfs.y = 2.7f;
 #else
-        vivianFollow(party);
+        set_vivian_pos(party);
         animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
         animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
         m->dispOfs2.y -= 0.4f;

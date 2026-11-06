@@ -55,7 +55,8 @@ EVT_BEGIN(sound_evt)
     RETURN
 EVT_END()
 
-static inline void planeSetCamZoom(f32 targetZ, f32 rate, f32 zoom) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void zoomUp(f32 targetZ, f32 rate, f32 zoom) {
     MarioWork* mario = marioGetPtr();
     mario->camShiftTargetZ = targetZ;
     mario->camShiftRate.z = rate;
@@ -67,7 +68,8 @@ static inline void planeSetCamZoom(f32 targetZ, f32 rate, f32 zoom) {
 const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
 
 /** Stops the plane's looping flight sound if it is playing. */
-static inline void planeSfxOff(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void flying_se_off(void) {
     MarioWork* mario = marioGetPtr();
 
     // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
@@ -248,7 +250,7 @@ void mot_plane(void) {
     }
     switch (mp->currSubMotionId) {
     case 0:
-        planeSetCamZoom(0.4f, 0.01f, 2.0f);
+        zoomUp(0.4f, 0.01f, 2.0f);
         marioPreJump();
         marioChgPose("M_J_1B");
         mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -386,7 +388,7 @@ void mot_plane(void) {
         mp->camShiftTargetX = 0.0f;
         marioClearJumpPara();
         mp->baseSpeed = 0.0f;
-        planeSfxOff();
+        flying_se_off();
         planeReset();
         allPartyRideOff2();
         if (mp->currSubMotionId == 20) {
@@ -398,7 +400,7 @@ void mot_plane(void) {
     switch (mp->currSubMotionId) {
     case 40:
         camFollowYOff();
-        planeSfxOff();
+        flying_se_off();
         mp->multiTimer = sysMsec2Frame(520);
         mp->currSubMotionId = 41;
         break;
@@ -448,7 +450,7 @@ void mot_plane(void) {
             break;
         }
     case 53:
-        planeSfxOff();
+        flying_se_off();
         planeReset();
         mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mp->baseSpeed = 0.0f;
@@ -541,7 +543,7 @@ void mot_plane(void) {
         mp->camShiftTargetY = 0.0f;
         mp->camShiftTargetX = 0.0f;
         marioClearJumpPara();
-        planeSfxOff();
+        flying_se_off();
         mp->baseSpeed = 0.0f;
         planeReset();
         allPartyRideOff2();
@@ -861,7 +863,7 @@ static void flyMain(void) {
 void mot_plane_post(void) {
     MarioWork* mario = marioGetPtr();
     camFollowYOn();
-    planeSfxOff();
+    flying_se_off();
     planeReset();
     mario->camShiftTargetX = 0.0f;
     mario->camShiftTargetY = 0.0f;

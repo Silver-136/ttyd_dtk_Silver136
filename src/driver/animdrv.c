@@ -914,7 +914,7 @@ void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset) {
     }
 }
 
-void animPoseFileRelease(s32 fileId);
+void animGroupRelease(s32 fileId);
 
 /** Creates a paper overlay pose owned by one pose (not shared), returning its id or -2. */
 inline s32 animEffectPoseEntry(const char* animName, s32 group) {
@@ -950,7 +950,7 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL paperGroup) {
         paper = &wp->poses[pose->paperId];
         paper->references--;
         if (paper->references < 0) {
-            animPoseFileRelease(paper->fileId);
+            animGroupRelease(paper->fileId);
             paper->flags = 0;
         }
     }
@@ -3292,7 +3292,8 @@ void animSetPaperTexObj(GXTexObj* obj1, GXTexObj* obj2, GXTexObj* obj3, void* da
  * Drops a reference to animation file fileId; the last user frees it
  * and its texture file (when nobody else uses that).
  */
-inline void animPoseFileRelease(s32 fileId) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline void animGroupRelease(s32 fileId) {
     AnimationPoseFile* file = &wp->files[fileId];
     AnimationTextureFile* tex;
 
@@ -3325,7 +3326,7 @@ void animPoseRelease(s32 poseId) {
         if (pose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
             smartFree(pose->worldMatrices);
         }
-        animPoseFileRelease(pose->fileId);
+        animGroupRelease(pose->fileId);
         pose->flags = 0;
     }
 }
@@ -3336,7 +3337,7 @@ void animPaperPoseRelease(s32 poseId) {
 
     pose->references--;
     if (pose->references < 0) {
-        animPoseFileRelease(pose->fileId);
+        animGroupRelease(pose->fileId);
         pose->flags = 0;
     }
 }
@@ -3528,7 +3529,8 @@ static void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
 }
 
 /** Returns the id of the first used pose of type type loaded from animation file name, or -1. */
-inline s32 animPoseSearchName(const char* name, s32 type) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline s32 animPoseGetId(const char* name, s32 type) {
     AnimationPose* pose;
     s32 i;
 
@@ -3568,7 +3570,7 @@ void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame,
     f32 hw, hh;
     s32 i;
 
-    i = animPoseSearchName(group, gp->inBattle != 0);
+    i = animPoseGetId(group, gp->inBattle != 0);
     if (i < 0) {
         return;
     }

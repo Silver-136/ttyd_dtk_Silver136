@@ -89,11 +89,12 @@ GXColor hibana_col[32] = {
     {0xFF, 0xFF, 0xFF, 0xFF}
 };
 
-/** Random seed of the particle generator, advanced by pt_frand for every random draw in this file. */
+/** Random seed of the particle generator, advanced by rndf for every random draw in this file. */
 s32 seed = 1;
 
 /** Pseudo-random f32 in [0, 1) from a linear congruential generator on the global seed. */
-static inline f32 pt_frand(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+f32 rndf(void) {
     seed = seed * 0x5EEDF715 + 0x1B0CB173;
     return (f32)(u32)seed * 2.3283064e-10f;
 }
@@ -102,7 +103,8 @@ static void effParticleDisp(CameraId cameraId, void* payload);
 static void effParticleMain(EffectEntry* effect);
 
 /** Gaussian-distributed random number (polar Box-Muller), caching the second value for the next call. */
-static inline f32 pt_gauss(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+f32 BoxMuller(void) {
     static f32 y2;
     static s32 use_last;
     f32 x1, x2, w, y1;
@@ -112,8 +114,8 @@ static inline f32 pt_gauss(void) {
         use_last = 0;
     } else {
         do {
-            x1 = 2.0f * pt_frand() - 1.0f;
-            x2 = 2.0f * pt_frand() - 1.0f;
+            x1 = 2.0f * rndf() - 1.0f;
+            x2 = 2.0f * rndf() - 1.0f;
             w = x1 * x1 + x2 * x2;
         } while (w > 1.0f);
         w = (-2.0f * (f32)log(w)) / w;
@@ -137,11 +139,11 @@ static void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* 
     f32 w;
     f32 r;
 
-    p->life = (s32)(emitter->lifeStd * pt_gauss() + emitter->lifeMean);
+    p->life = (s32)(emitter->lifeStd * BoxMuller() + emitter->lifeMean);
     do {
-        r = 2.0f * pt_frand();
+        r = 2.0f * rndf();
         p->vel.x = r - 1.0f;
-        r = 2.0f * pt_frand();
+        r = 2.0f * rndf();
         p->vel.z = r - 1.0f;
         w = p->vel.x * p->vel.x + p->vel.z * p->vel.z;
     } while (w > 1.0f);

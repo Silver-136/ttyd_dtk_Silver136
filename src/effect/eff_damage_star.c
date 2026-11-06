@@ -404,7 +404,8 @@ static void effDamageStarMain(EffectEntry* effect) {
 }
 
 // One textured square of half-size h, u = horizontal texture repeat.
-static inline void damageStarQuad(f32 h, f32 u) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void polyRectangle(f32 h, f32 u) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-h, h, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
@@ -511,10 +512,10 @@ static void effDamageStarDisp(CameraId cameraId, void* payload) {
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetCullMode(GX_CULL_BACK);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        damageStarQuad(8.0f, 2.0f);
+        polyRectangle(8.0f, 2.0f);
         GXSetCullMode(GX_CULL_FRONT);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_DIVIDE_2, GX_TRUE, GX_TEVPREV);
-        damageStarQuad(8.0f, 2.0f);
+        polyRectangle(8.0f, 2.0f);
     }
     work = effect->userdata;
     PSMTXRotRad(numRot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
@@ -549,9 +550,9 @@ static void effDamageStarDisp(CameraId cameraId, void* payload) {
     if (type == 1) {
         effGetTexObj(39, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP3);
-        damageStarQuad(2.0f, 2.0f);
+        polyRectangle(2.0f, 2.0f);
     } else {
-        damageStarQuad(2.0f, 2.0f);
+        polyRectangle(2.0f, 2.0f);
     }
     PSMTXConcat(cam->view, numMtx, finalMtx);
     GXLoadPosMtxImm(finalMtx, GX_PNMTX0);
@@ -566,9 +567,9 @@ static void effDamageStarDisp(CameraId cameraId, void* payload) {
         effGetTexObj(19, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP2);
         GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-        damageStarQuad(2.0f, 1.0f);
+        polyRectangle(2.0f, 1.0f);
     } else {
-        damageStarQuad(2.0f, 2.0f);
+        polyRectangle(2.0f, 2.0f);
     }
     mtxGetRotationElement(numMtx, invMtx, 'y', 'x');
     PSMTXInverse(invMtx, invMtx);

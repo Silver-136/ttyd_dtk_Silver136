@@ -3630,7 +3630,8 @@ static void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
 }
 
 /** True when (px, pz) lies inside the square of half-width r around (x, z). */
-static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL mobj_kf_ride_check(f32 x, f32 z, f32 px, f32 pz, f32 r) {
     if (x - r <= px && px <= x + r && z - r <= pz && pz <= z + r) {
         return TRUE;
     }
@@ -3685,11 +3686,11 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             mobj->flags &= ~MOBJ_FLAG_HIT;
             break;
         }
-        if (kururing_in_box(mobj->position.x, mobj->position.z, mario->position.x, mario->position.z, 30.0f)) {
+        if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, mario->position.x, mario->position.z, 30.0f)) {
             mode = 1;
         }
         if (party) {
-            if (kururing_in_box(mobj->position.x, mobj->position.z, party->position.x, party->position.z, 30.0f)) {
+            if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, party->position.x, party->position.z, 30.0f)) {
                 mode = 1;
             }
         }
@@ -3748,7 +3749,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
         joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
         mp = marioGetPtr();
-        if (kururing_in_box(mobj->position.x, mobj->position.z, mp->position.x, mp->position.z, 30.0f)) {
+        if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, mp->position.x, mp->position.z, 30.0f)) {
             mp->position.y = *joint;
         }
         member = partyGetPtr(marioGetPartyId());
@@ -3757,7 +3758,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
 #else
         if (member) {
 #endif
-            if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
+            if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
                 member->position.y = *joint;
             }
         }
@@ -3767,7 +3768,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
 #else
         if (member) {
 #endif
-            if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
+            if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
                 member->position.y = *joint;
             }
         }
@@ -3775,7 +3776,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         npc = wp->entries;
         for (i = 0; i < wp->total; i++, npc++) {
             if (npc->flags & NPC_FLAG_IN_USE) {
-                if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
+                if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
                     npc->position.y = *joint;
                 }
             }

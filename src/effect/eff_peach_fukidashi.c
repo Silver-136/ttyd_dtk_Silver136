@@ -29,7 +29,8 @@ typedef struct EffPeachFukidashiWork {
 } EffPeachFukidashiWork;
 
 /** place the bubble next to the speaker's head, rotated around the camera's view axis */
-static inline void _setPosition(EffPeachFukidashiWork* work, f32 offset) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void calc_pos(EffPeachFukidashiWork* work, f32 offset) {
     CameraEntry* camera;
     Vec axis;
     Vec base;
@@ -74,7 +75,7 @@ EffectEntry* effPeachFukidashiEntry(s32 type, NpcEntry* npc, s32 duration, f32 x
     work->angle = angle;
     work->timer = duration;
     work->npc = npc;
-    _setPosition(work, 16.0f);
+    calc_pos(work, 16.0f);
     return effect;
 }
 
@@ -107,7 +108,7 @@ static void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     camGetPtr(cameraId);
 
     // bubble
-    _setPosition(work, 16.0f);
+    calc_pos(work, 16.0f);
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rot, mtx2);
@@ -118,7 +119,7 @@ static void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     iconDispGx2(out, 0, ICON_FUKIDASHI);
 
     // icon inside the bubble
-    _setPosition(work, 40.0f);
+    calc_pos(work, 40.0f);
     PSMTXTrans(mtx, work->position.x,
                7.25f + ((work->position.y - 14.0f) + __fabsf(1.5f * work->angle / 90.0f)),
                work->position.z);

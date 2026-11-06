@@ -1834,7 +1834,8 @@ void* fbatHitCheck(u32 flags, void* result);
 static void npcKoopaModeEncountCheck(void);
 
 /** Yaw of the 3D camera in degrees (0-360), from its look direction. */
-static inline f32 fbat_camAngle(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static f32 camGetRy(void) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 dx = camera->cameraAt.x - camera->cameraPos.x;
     f32 dz = camera->cameraAt.z - camera->cameraPos.z;
@@ -1942,11 +1943,11 @@ void fbatEncountCheck(void) {
         npc->direction = angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z);
         rel = reviseAngle(-npc->direction);
         rel += -90.0f;
-        ang = reviseAngle(fbat_camAngle() - rel);
+        ang = reviseAngle(camGetRy() - rel);
         if (((ang > 90.0f) && (ang <= 270.0f)) || ((ang < (-90.0f)) && (ang >= (-270.0f)))) {
-            pose->peraTargetRotY = reviseAngle(180.0f + fbat_camAngle());
+            pose->peraTargetRotY = reviseAngle(180.0f + camGetRy());
         } else {
-            pose->peraTargetRotY = fbat_camAngle();
+            pose->peraTargetRotY = camGetRy();
         }
         while ((pose->peraTargetRotY - pose->rotationY) > 180.0f) {
             pose->rotationY += 360.0f;

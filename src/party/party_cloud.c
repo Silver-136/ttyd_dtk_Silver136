@@ -71,7 +71,8 @@ static inline void cloudSweep(PartyEntry* party, s32 i) {
 }
 
 // Flurrie's move target: beside Mario (3.3 units to his left or right of the facing direction), 10 units up
-static inline void cloudCalcPos(PartyEntry* party) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void set_cloud_hold_pos(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 dir;
 
@@ -411,7 +412,7 @@ void cloud_use(PartyEntry* party) {
         effSoftDelete(party->work.cloud.breathEffect);
         party->work.cloud.breathEffect = NULL;
     }
-    cloudCalcPos(party);
+    set_cloud_hold_pos(party);
     party->position = party->moveTarget;
     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     party->flags &= ~PARTY_FLAG_IS_EVT_USE;
@@ -479,7 +480,7 @@ void _cloud_use(PartyEntry* party) {
         party->moveFrames = 4;
         party->useMotionId = CLOUD_USE_APPROACH;
     case CLOUD_USE_APPROACH:
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->displayDirection = mario->displayDirection;
         party->displayDirectionTarget = mario->displayDirectionTarget;
         party->position.x += (party->moveTarget.x - party->position.x) / (f32)party->moveFrames;
@@ -490,7 +491,7 @@ void _cloud_use(PartyEntry* party) {
         }
         party->useMotionId = CLOUD_USE_BREATH_INIT;
     case CLOUD_USE_BREATH_INIT:
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->position = party->moveTarget;
         if (party->work.cloud.breathEffect == NULL) {
             party->work.cloud.breathEffect = effKumokumoN64Entry(0, 0, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f, 0.0f);
@@ -526,7 +527,7 @@ void _cloud_use(PartyEntry* party) {
         }
 #endif
     case CLOUD_USE_BREATH_START:
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->position = party->moveTarget;
         if (--party->moveFrames > 0) {
             break;
@@ -538,7 +539,7 @@ void _cloud_use(PartyEntry* party) {
         marioChgPose("M_A_2B");
         party->useMotionId = CLOUD_USE_BREATHING;
     case CLOUD_USE_BREATHING:
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->position = party->moveTarget;
         partyUpdateKeyData(party);
         mario->displayDirection = CLOUD_WORK(party)->breathDir;
@@ -614,7 +615,7 @@ void _cloud_use(PartyEntry* party) {
         }
         break;
     case CLOUD_USE_BREATH_FINISH:
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->position = party->moveTarget;
         partyUpdateKeyData(party);
         if (party->buttonTrg & PAD_BUTTON_X) {
@@ -630,7 +631,7 @@ void _cloud_use(PartyEntry* party) {
         party->useMotionId = CLOUD_USE_CLEANUP;
     case CLOUD_USE_CLEANUP:
 #if VERSION <= VERSION_DEMO_JP
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->position = party->moveTarget;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -648,7 +649,7 @@ void _cloud_use(PartyEntry* party) {
             effSoftDelete(party->work.cloud.breathEffect);
             party->work.cloud.breathEffect = NULL;
         }
-        cloudCalcPos(party);
+        set_cloud_hold_pos(party);
         party->position = party->moveTarget;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         if (mario->currMotionId == MARIO_MOTION_CLOUD) {

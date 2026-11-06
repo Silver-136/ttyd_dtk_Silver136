@@ -229,6 +229,7 @@ static void calcCurrentCamState(CameraParams* out) {
 }
 
 /** Vector a - b by value. */
+// subV..inV keep `inline`: as plain functions with by-value Vec arguments -inline auto leaves them out of line.
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 inline Vec subV(Vec a, Vec b) {
     Vec r;
