@@ -24,6 +24,7 @@ double __kernel_cos(double x, double y) {
         if (ix > 0x3fe90000) {
             qx = 0.28125;
         } else {
+            // qx = x/4 with the low word cleared (exponent minus 2)
             __HI(qx) = ix - 0x00200000;
             __LO(qx) = 0;
         }

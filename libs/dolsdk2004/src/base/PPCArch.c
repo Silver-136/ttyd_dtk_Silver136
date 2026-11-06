@@ -84,6 +84,7 @@ asm void PPCSync() {
 
 asm void PPCEieio() {
     nofralloc
+    // interrupts off (clear MSR_EE), address broadcast on (HID0_ABE 0x8), eieio, then both restored
     mfmsr r5
     rlwinm r6, r5, 0, 17, 15
     mtmsr r6

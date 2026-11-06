@@ -422,7 +422,7 @@ void PERFDumpScreen(void) {
         GXSetChanMatColor(GX_COLOR0A0, DrawFrameColor);
         GXSetLineWidth(0xCU, GX_TO_ZERO);
 
-        // different draw shape? Consider other forms of this draw macro that may work. If anything will work.
+        // frame outline: four lines through FramePts
         GXBegin(GX_LINES, GX_VTXFMT0, 8);
         GXPosition3f32(FramePts[0], FramePts[1], -1.0f);
         GXPosition3f32(FramePts[2], FramePts[3], -1.0f);
@@ -579,7 +579,7 @@ void PERFDumpScreen(void) {
                         GXSetChanMatColor(GX_COLOR0A0, PERFEvents[id].color);
                         GXSetLineWidth(32, GX_TO_ZERO);
                         GXBegin(GX_LINES, GX_VTXFMT0, 2);
-                        !samples[s].cpuTimeStampStart; // needed to match
+                        !samples[s].cpuTimeStampStart; // FAKE: dead expression statement (unit not built, kept as found)
                         GXPosition3f32(COORD(samples[s].cpuTimeStampStart), (f32) ((id + 1) * 7), -1.0f);
                         GXPosition3f32(COORD(samples[s].cpuTimeStampEnd), (f32) ((id + 1) * 7), -1.0f);
                         GXEnd();

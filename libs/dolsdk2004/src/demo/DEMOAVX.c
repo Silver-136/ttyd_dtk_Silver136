@@ -26,6 +26,7 @@ static void __DEMOAVX_isr(void) {
         (*__AVX_save_isr)();
 
         frame_address = 0x80000000 | AIGetDMAStartAddr();
+        // never fails: frame_address has 0x80000000 (cached address) set above
         ASSERTMSGLINE(83, frame_address, "AVX: frame address is NULL!\n");
 
         DCInvalidateRange((void*)frame_address, 640);
@@ -33,6 +34,7 @@ static void __DEMOAVX_isr(void) {
         DCFlushRange((void*)&__AVX_buffer[__AVX_curr_frame * 320], 640);
 
         __AVX_curr_frame = (__AVX_curr_frame + 1) % __AVX_num_frames;
+        // wraps at 10, not at __AVX_num_frames (DEMOAVXAttach takes any frame count)
         __AVX_num_filled = (__AVX_num_filled + 1) % 10;
         if (__AVX_curr_frame > 4) {
             flag = TRUE;
@@ -110,6 +112,7 @@ void DEMOAVXAttach(void* buffer, u32 num_frames) {
         __AVX_buffer[i] = 0;
     }
 
+    // BUG: flushes num_frames * 320 bytes, but the buffer holds num_frames * 320 u16 values (640 bytes a frame)
     DCFlushRange(__AVX_buffer, num_frames * 320);
 
     old = OSDisableInterrupts();

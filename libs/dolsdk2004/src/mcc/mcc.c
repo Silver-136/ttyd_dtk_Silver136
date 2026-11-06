@@ -57,10 +57,11 @@ static void MCCTxCallback(void);
 static void MCCRxCallback(void);
 static int mccInitializeCheck(u8 timeout);
 
+/* Empty: the debug messages passed to it stay in the object, nothing is printed. */
 static void mccDebugPrint(char* str) {}
 
 static void callbackEventStream(MCC_CHANNEL chID, u32 event, u32 value) {
-    value; // needed to bump registers. what?
+    value; // FAKE: dead expression statement (unit not built, kept as found)
 
     if (event == MCC_EVENT_READ) {
         gChannelInfo[chID].isStreamDone = TRUE;
@@ -71,6 +72,7 @@ static void callbackEventStream(MCC_CHANNEL chID, u32 event, u32 value) {
     if (event == MCC_EVENT_CONNECT) {
         gChannelInfo[chID].isStreamConnection = TRUE;
     }
+    // BUG: a disconnect also sets isStreamConnection to TRUE, like a connect
     if (event == MCC_EVENT_DISCONNECT) {
         gChannelInfo[chID].isStreamConnection = TRUE;
     }
@@ -245,7 +247,7 @@ static int InitializeCodeClear(void) {
     memset(m_szInitCode, 0, 0x20);
     DCFlushRange(m_szInitCode, 0x20);
     HIOWrite(0x600, m_szInitCode, 0x20);
-}
+} // BUG: declared int, returns no value (same for InitializeCodeSet)
 
 static int InitializeCodeSet(void) {
     strcpy(m_szInitCode, "HUDSON/USB2EXI/INITCODE/TARGET");
@@ -304,7 +306,7 @@ static int LoadChannelInfo(MCC_ChannelInfo* info) {
     volatile int result = 0;
     u8 count;
 #ifndef DEBUG
-    int unused; // this is fake, but i cant seem to find whats messing with the stack.
+    int unused; // FAKE: pads the stack frame to the original size
 #endif
 
     if (!gIsChannelinfoDirty) {
@@ -367,7 +369,7 @@ static void ClearChannelInfo(int i) {
     gChannelInfo[i].eventMask = 0;
     gChannelInfo[i].callbackEvent = NULL;
     gChannelInfo[i].isStreamDone = FALSE;
-    //! isStreamConnection isnt cleared. Intentional?
+    // isStreamConnection is not cleared here
 }
 
 static void MakeMemoryMap(u8* map) {
@@ -417,7 +419,7 @@ static u8 SearchFreeBlocks(MCC_MODE mode, u8* index) {
     fIndex = 0;
     fSize = (mode == 0) ? 0x10 : 0;
 
-    //! @bug I think this will read OOB of the map array by 1.
+    // BUG: at iMap == 16 map[16] is read (one past the 16-entry map) before the iMap == 16 test
     for (iMap = 0; iMap <= 16; iMap++) {
         if (map[iMap] || iMap == 16) {
             if (fCount != 0) {
@@ -819,7 +821,7 @@ u8 MCCGetFreeBlocks(MCC_MODE mode) {
 }
 
 u8 MCCGetLastError(void) {
-    mccDebugPrint("MCCGetFreeBlocks\n"); //! wrong print?
+    mccDebugPrint("MCCGetFreeBlocks\n"); // the message names MCCGetFreeBlocks
     return gLastError;
 }
 
@@ -933,7 +935,7 @@ u32 MCCSetChannelEventMask(MCC_CHANNEL chID, u32 event) {
         gLastError = 0x12;
     } else {
         oldMask = gChannelInfo[chID].eventMask;
-        gChannelInfo[chID].eventMask = (u16)event;
+        gChannelInfo[chID].eventMask = (u16)event; // event bits above 0xFFFF are dropped
     }
 
     return oldMask;
@@ -943,7 +945,7 @@ int MCCOpen(MCC_CHANNEL chID, u8 blockSize, MCC_CBEvent callbackEvent) {
     u8 connectSide;
     u8 blockIndex;
 #ifndef DEBUG
-    int unused2[2];
+    int unused2[2]; // FAKE: pads the stack frame to the original size
 #endif
     u8 freeBlocks;
 #ifndef DEBUG

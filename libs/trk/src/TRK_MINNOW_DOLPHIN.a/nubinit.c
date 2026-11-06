@@ -9,7 +9,7 @@ DSError TRKInitializeDispatcher(void);
 void InitializeProgramEndTrap(void);
 DSError TRKInitializeSerialHandler(void);
 DSError TRKInitializeTarget(void);
-DSError TRKInitializeIntDrivenUART(unsigned int param_0, unsigned int param_1, unsigned int param_2, void* param_3);
+DSError TRKInitializeIntDrivenUART(unsigned int param_0, unsigned int param_1, unsigned int param_2, void* inputPendingPtrRef);
 void TRKTargetSetInputPendingPtr(void* ptr);
 DSError TRKTerminateSerialHandler(void);
 void TRK_board_display(char* str);
@@ -22,8 +22,10 @@ BOOL TRKInitializeEndian(void) {
     unsigned char bendian[4];
     BOOL result = 0;
 
+    // FAKE: redundant store (set again below); removing it changes the object
     gTRKBigEndian = 1;
 
+    // read the four bytes back as one word to tell the byte order
     bendian[0] = 0x12;
     bendian[1] = 0x34;
     bendian[2] = 0x56;
@@ -68,6 +70,7 @@ DSError TRKInitializeNub(void) {
         result = TRKInitializeTarget();
 
     if (result == 0) {
+        // TRKInitializeIntDrivenUART ignores the first three arguments
         resultTemp = TRKInitializeIntDrivenUART(0xE100, 1, 0, &gTRKInputPendingPtr);
         TRKTargetSetInputPendingPtr(gTRKInputPendingPtr);
         if (resultTemp != 0)

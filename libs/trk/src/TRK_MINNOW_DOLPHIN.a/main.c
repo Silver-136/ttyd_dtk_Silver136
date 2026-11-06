@@ -67,6 +67,7 @@ int ddh_cc_read(u8* dest, int size) {
 
     MWTRACE(1, "Expected packet size : 0x%08x (%ld)\n", size, size);
 
+    // waits with no timeout; readResult is reset on each pass, so only the last read's error is reported
     while (CBGetBytesAvailableForRead(&gRecvCB) < size) {
         readResult = 0;
         poll = EXI2_Poll();

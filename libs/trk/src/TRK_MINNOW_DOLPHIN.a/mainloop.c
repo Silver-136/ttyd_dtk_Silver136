@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef int BOOL;
 typedef int DSError;
 
@@ -30,20 +32,20 @@ void TRKNubMainLoop(void) {
             isNewInput = 0;
 
             switch (event.eventType) {
-            case 0:
+            case TRK_EVENT_NULL:
                 break;
-            case 2:
+            case TRK_EVENT_REQUEST:
                 msg = TRKGetBuffer(event.msgBufID);
                 TRKDispatchMessage(msg);
                 break;
-            case 1:
+            case TRK_EVENT_SHUTDOWN:
                 isShutdownRequested = 1;
                 break;
-            case 3:
-            case 4:
+            case TRK_EVENT_BREAKPOINT:
+            case TRK_EVENT_EXCEPTION:
                 TRKTargetInterrupt(&event);
                 break;
-            case 5:
+            case TRK_EVENT_SUPPORT:
                 TRKTargetSupportRequest();
                 break;
             }
@@ -52,6 +54,7 @@ void TRKNubMainLoop(void) {
             continue;
         }
 
+        // gTRKInputPendingPtr points at the comm driver's input-pending byte (set in TRKInitializeNub)
         if ((isNewInput == 0) || (*(unsigned char*)gTRKInputPendingPtr != '\0')) {
             isNewInput = 1;
             TRKGetInput();

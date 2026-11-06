@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef int DSError;
 
 typedef struct TRKBuffer {
@@ -36,46 +38,46 @@ DSError TRKDispatchMessage(TRKBuffer* buffer) {
     MWTRACE(1, "Dispatch command 0x%08x\n", buffer->data[4]);
 
     switch (buffer->data[4]) {
-    case 0x01:
+    case DSMSG_Connect:
         error = TRKDoConnect(buffer);
         break;
-    case 0x02:
+    case DSMSG_Disconnect:
         error = TRKDoDisconnect(buffer);
         break;
-    case 0x03:
+    case DSMSG_Reset:
         error = TRKDoReset(buffer);
         break;
-    case 0x07:
+    case DSMSG_Override:
         error = TRKDoOverride(buffer);
         break;
-    case 0x04:
+    case DSMSG_Versions:
         error = TRKDoVersions(buffer);
         break;
-    case 0x05:
+    case DSMSG_SupportMask:
         error = TRKDoSupportMask(buffer);
         break;
-    case 0x10:
+    case DSMSG_ReadMemory:
         error = TRKDoReadMemory(buffer);
         break;
-    case 0x11:
+    case DSMSG_WriteMemory:
         error = TRKDoWriteMemory(buffer);
         break;
-    case 0x12:
+    case DSMSG_ReadRegisters:
         error = TRKDoReadRegisters(buffer);
         break;
-    case 0x13:
+    case DSMSG_WriteRegisters:
         error = TRKDoWriteRegisters(buffer);
         break;
-    case 0x18:
+    case DSMSG_Continue:
         error = TRKDoContinue(buffer);
         break;
-    case 0x19:
+    case DSMSG_Step:
         error = TRKDoStep(buffer);
         break;
-    case 0x1A:
+    case DSMSG_Stop:
         error = TRKDoStop(buffer);
         break;
-    case 0x17:
+    case DSMSG_SetOption:
         error = TRKDoSetOption(buffer);
         break;
     }

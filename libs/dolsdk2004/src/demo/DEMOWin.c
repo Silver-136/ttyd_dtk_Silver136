@@ -11,7 +11,7 @@ DEMOWindow* __last_node;
 DEMOWindow* __curr_node;
 GXRenderModeObj* __rmp;
 
-s32 fontShift = 0;
+s32 fontShift = 0; // never set in this file (DEMOPuts.c keeps its own static fontShift)
 
 // functions
 static void __DEMOWin_add_node(DEMOWindow* handle);
@@ -111,17 +111,17 @@ void DEMOWinSetWindowColor(DEMOWindow* handle, u32 item, u8 r, u8 g, u8 b, u8 a)
         handle->bkgnd.a = a;
         return;
     case DEMOWIN_ITEM_DEFAULT: // default window colors
-        // RGB 26, 31, 33; Cinder (grey)
+        // background: dark grey
         handle->bkgnd.r = 26;
         handle->bkgnd.g = 31;
         handle->bkgnd.b = 33;
         handle->bkgnd.a = 255;
-        // RGB 85, 31, 31; Burnt Crimson (red)
+        // caption: dark red
         handle->cap.r = 85;
         handle->cap.g = 31;
         handle->cap.b = 31;
         handle->cap.a = 255;
-        // RGB 69, 37, 37; Bulgarian Rose (red)
+        // border: dark red
         handle->border.r = 69;
         handle->border.g = 37;
         handle->border.b = 37;
@@ -357,9 +357,9 @@ void DEMOWinRefresh(void) {
 
             GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
 
-            // macro?
+            // border: a lighter and a darker shade of the border colour (a do-while(0) block, as for the cursor)
+            // BUG: 1.3 * a channel above 196 does not fit in the u8
             do {
-                // would initialize on init, but DWARF order for 2nd macro suggests they didnt init on same declare.
                 u8 r1;
                 u8 g1;
                 u8 b1;
@@ -434,7 +434,8 @@ void DEMOWinRefresh(void) {
                 GXSetNumTevStages(1);
                 GXSetLineWidth(6, GX_TO_ZERO);
                 
-                // macro?
+                // cursor bar: a lighter shade of the background
+                // BUG: 1.9 * a channel above 134 does not fit in the u8
                 do {
                     u8 r;
                     u8 g;
@@ -469,7 +470,7 @@ void DEMOWinRefresh(void) {
 static void __DEMOWin_add_node(DEMOWindow* handle) {
     ASSERTMSGLINE(1032, handle, "__add_node(): you're adding a NULL node!\n");
 
-    // WHY. why it backwards. who writes like this?
+    // appends handle at the tail of the window list (the first window also becomes head and current)
     if (NULL == __last_node) {
         __curr_node = handle;
         __last_node = handle;
@@ -711,6 +712,7 @@ u32 DEMOWinMenuChild(DEMOWinMenu* menu, int child_flag) {
             menu->display_pos = menu->curr_pos;
         }
 
+        // display_pos <= curr_pos after the clamp above, so the first branch is never taken
         if (menu->display_pos > menu->curr_pos) {
             handle->cursor_line = (menu->display_pos - menu->curr_pos);
         } else {
@@ -899,6 +901,7 @@ static void __DEMOWinList_refresh_list(DEMOWindow* w) {
     s32 j;
 
     l = w->parent;
+    // BUG: divides by zero for a list with no items
     l->curr_pos = (l->curr_pos % l->num_items);
     if (l->curr_pos > (l->display_pos + l->num_display_items - 1)) {
         l->display_pos = (l->curr_pos - l->num_display_items + 1);

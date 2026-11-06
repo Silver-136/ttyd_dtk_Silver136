@@ -1,8 +1,9 @@
+#include "ctype_map.h"
+
 #define EOF -1
 
-extern unsigned char __upper_map[];
-
-/** toupper() via the __upper_map table; EOF passes through. */
+/** toupper() via the __upper_map table; EOF passes through. Declared inline: as a plain function the object
+    changes. */
 inline int toupper(int c) {
     return (c == EOF) ? EOF : (int)__upper_map[(unsigned char)c];
 }

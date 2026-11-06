@@ -29,6 +29,7 @@ static BOOL ProbeBarnacle(s32 chan, u32 dev, u32* revision) {
             err = FALSE;
             err |= !EXIImm(chan, &cmd, sizeof(cmd), EXI_WRITE, NULL);
             err |= !EXISync(chan);
+            // sizeof(revision) is the size of the pointer, 4, which equals the u32 read
             err |= !EXIImm(chan, revision, sizeof(revision), EXI_READ, NULL);
             err |= !EXISync(chan);
             err |= !EXIDeselect(chan);
@@ -97,7 +98,7 @@ int InitializeUART(void) {
         return 0;
     }
 
-    if ((OSGetConsoleType() & 0x10000000) == 0) {
+    if ((OSGetConsoleType() & OS_CONSOLE_DEVELOPMENT) == 0) {
         Enabled = 0;
         return 2;
     }
@@ -147,9 +148,10 @@ int WriteUARTN(void *buf, u32 len) {
         ptr = (char*)buf;
     }
 
+    // turns each '\n' into '\r' in the caller's buffer itself
     while ((u32)ptr - (u32)buf < len) {
-        if (*(s8*)ptr == 0xA) {
-            *ptr = 0xD;
+        if (*(s8*)ptr == '\n') {
+            *ptr = '\r';
         }
         ptr++;
     }
@@ -180,7 +182,7 @@ int WriteUARTN(void *buf, u32 len) {
                 xLen = len < 4 ? (long)len : 4;
                 
                 EXIImm(Chan, buf, xLen, EXI_WRITE, 0);
-                (char*)buf += xLen;
+                (char*)buf += xLen; // cast as an lvalue (MWCC extension) steps the parameter
                 len -= xLen;
                 qLen -= xLen;
                 EXISync(Chan);

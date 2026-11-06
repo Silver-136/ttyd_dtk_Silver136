@@ -57,6 +57,7 @@ L_8025B054:
     blr
 }
 
+/* Forward byte copy only (the runtime memcpy in __mem.c also copies backward for overlaps). */
 __declspec(section ".init") void* TRK_memcpy(void* dst, const void* src, unsigned int n) {
     const unsigned char* s = (const unsigned char*)src - 1;
     unsigned char* d = (unsigned char*)dst - 1;

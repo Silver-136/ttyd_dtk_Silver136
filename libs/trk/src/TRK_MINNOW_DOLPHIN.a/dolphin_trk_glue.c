@@ -101,8 +101,6 @@ L_8025D640:
     b TRKInterruptHandler
 }
 
-
-
 void TRKEXICallBack(int interrupt, void* ctx) {
     OSEnableScheduler();
     TRKLoadContext(ctx, 0x500);
@@ -163,8 +161,9 @@ int InitMetroTRKCommTable(int hwId) {
     return result;
 }
 
-int TRKInitializeIntDrivenUART(u32 param_0, u32 param_1, u32 param_2, void* param_3) {
-    gDBCommTable.initialize_func(param_3, TRKEXICallBack);
+/* The first three arguments are not used. */
+int TRKInitializeIntDrivenUART(u32 param_0, u32 param_1, u32 param_2, void* inputPendingPtrRef) {
+    gDBCommTable.initialize_func(inputPendingPtrRef, TRKEXICallBack);
     gDBCommTable.open_func();
     return 0;
 }
@@ -212,4 +211,5 @@ void InitializeProgramEndTrap(void) {
     DCFlushRange(ppcHaltPtr + 4, sizeof(EndofProgramInstruction));
 }
 
+/* Empty: called from the TRK interrupt code, nothing to do here. */
 void TRKUARTInterruptHandler(void) {}

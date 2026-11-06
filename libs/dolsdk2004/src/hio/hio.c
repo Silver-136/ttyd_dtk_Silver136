@@ -29,6 +29,7 @@ static void ExtHandler(s32 chan, OSContext *context) {
     Chan = -1;
     HIO_DEV = 0;
 
+    // HIO_DEV is 0 here, so the else branch is never taken
     if (chan < 2 && HIO_DEV == 0) {
         EXISetExiCallback(chan, NULL);
     } else if (chan == 0 && HIO_DEV == 2) {
@@ -120,7 +121,7 @@ BOOL HIOInit(s32 chan, HIOCallback callback) {
     if (CheckConsoleType() == 0) {
         Chan = -1;
         HIO_DEV = 0;
-        OSReport("%s\n", __HIODigest1, __HIODigest2);
+        OSReport("%s\n", __HIODigest1, __HIODigest2); // one %s: __HIODigest2 is not printed
         return 0;
     }
 
@@ -333,6 +334,7 @@ BOOL HIOReadAsync(u32 addr, void* buffer, s32 size, HIOCallback callback) {
     }
 
     ASSERTLINE(504, (addr % 4) == 0);
+    // BUG: the callback is stored before the lock; when the lock or select fails it stays set
     RxCallback = callback;
 
     if (EXILock(Chan, HIO_DEV, 0) == 0) {

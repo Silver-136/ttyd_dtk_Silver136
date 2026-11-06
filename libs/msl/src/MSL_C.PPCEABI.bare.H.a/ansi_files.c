@@ -4,8 +4,6 @@
 #define _STATIC_FILES 4
 
 enum { must_exist };
-enum { read_mode = 1, write_mode = 2 };
-enum { unbuffered, line_buffered, full_buffered };
 
 int __read_console(__file_handle handle, unsigned char* buffer, size_t* count, void* ref_con);
 int __write_console(__file_handle handle, unsigned char* buffer, size_t* count, void* ref_con);
@@ -15,10 +13,11 @@ unsigned char stdin_buff[console_buff_size];
 unsigned char stdout_buff[console_buff_size];
 unsigned char stderr_buff[console_buff_size];
 
+/* stdin, stdout and stderr; the fourth entry stays zero-filled and ends the next_file_struct list. */
 FILE __files[_STATIC_FILES] = {
-    {0, {must_exist, read_mode, line_buffered, __console_file, __unoriented, 0}, {__neutral, 0, 0, 0}, 0, 0, 0, {0, 0}, {0, 0}, 0, stdin_buff, console_buff_size, stdin_buff, 0, 0, 0, 0, NULL, __read_console, __write_console, __close_console, NULL, &__files[1]},
-    {1, {must_exist, write_mode, line_buffered, __console_file, __unoriented, 0}, {__neutral, 0, 0, 0}, 0, 0, 0, {0, 0}, {0, 0}, 0, stdout_buff, console_buff_size, stdout_buff, 0, 0, 0, 0, NULL, __read_console, __write_console, __close_console, NULL, &__files[2]},
-    {2, {must_exist, write_mode, unbuffered, __console_file, __unoriented, 0}, {__neutral, 0, 0, 0}, 0, 0, 0, {0, 0}, {0, 0}, 0, stderr_buff, console_buff_size, stderr_buff, 0, 0, 0, 0, NULL, __read_console, __write_console, __close_console, NULL, &__files[3]},
+    {0, {must_exist, __read, _IOLBF, __console_file, __unoriented, 0}, {__neutral, 0, 0, 0}, 0, 0, 0, {0, 0}, {0, 0}, 0, stdin_buff, console_buff_size, stdin_buff, 0, 0, 0, 0, NULL, __read_console, __write_console, __close_console, NULL, &__files[1]},
+    {1, {must_exist, __write, _IOLBF, __console_file, __unoriented, 0}, {__neutral, 0, 0, 0}, 0, 0, 0, {0, 0}, {0, 0}, 0, stdout_buff, console_buff_size, stdout_buff, 0, 0, 0, 0, NULL, __read_console, __write_console, __close_console, NULL, &__files[2]},
+    {2, {must_exist, __write, _IONBF, __console_file, __unoriented, 0}, {__neutral, 0, 0, 0}, 0, 0, 0, {0, 0}, {0, 0}, 0, stderr_buff, console_buff_size, stderr_buff, 0, 0, 0, 0, NULL, __read_console, __write_console, __close_console, NULL, &__files[3]},
 };
 
 int __flush_all(void) {

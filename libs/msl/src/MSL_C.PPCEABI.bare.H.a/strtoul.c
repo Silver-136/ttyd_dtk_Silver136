@@ -2,27 +2,13 @@
 #define ULONG_MAX 0xFFFFFFFFUL
 #define ULLONG_MAX 0xFFFFFFFFFFFFFFFFULL
 
-extern unsigned char __ctype_map[];
-extern unsigned char __upper_map[];
-
-#define __control_char 0x01
-#define __motion_char 0x02
-#define __space_char 0x04
-#define __punctuation 0x08
-#define __digit 0x10
-#define __hex_digit 0x20
-#define __lower_case 0x40
-#define __upper_case 0x80
-
-#define __letter (__lower_case | __upper_case)
-#define __whitespace (__motion_char | __space_char)
+#include "ctype_map.h"
+#include "strtoul.h"
 
 #define isalpha(c) ((int)(__ctype_map[(unsigned char)(c)] & __letter))
 #define isdigit(c) ((int)(__ctype_map[(unsigned char)(c)] & __digit))
 #define isspace(c) ((int)(__ctype_map[(unsigned char)(c)] & __whitespace))
 #define toupper(c) ((c == EOF) ? EOF : ((int)__upper_map[(unsigned char)(c)]))
-
-enum __ReadProcActions { __GetAChar, __UngetAChar, __TestForError };
 
 enum scan_states {
     start = 0x01,
@@ -50,6 +36,7 @@ unsigned long long __strtoull(int base, int max_width, int (*ReadProc)(void*, in
 
     *negative = *overflow = 0;
 
+    // BUG: on an invalid base or width, c is never assigned, but the loop test and the final unfetch(c) read it
     if (base < 0 || base == 1 || base > 36 || max_width < 1)
         scan_state = failure;
     else
@@ -159,6 +146,7 @@ unsigned long long __strtoull(int base, int max_width, int (*ReadProc)(void*, in
     return value;
 }
 
+/* A twin of __strtoull for unsigned long values. */
 unsigned long __strtoul(int base, int max_width, int (*ReadProc)(void*, int, int), void* ReadProcArg,
                         int* chars_scanned, int* negative, int* overflow) {
     int scan_state = start;
@@ -170,6 +158,7 @@ unsigned long __strtoul(int base, int max_width, int (*ReadProc)(void*, int, int
 
     *negative = *overflow = 0;
 
+    // BUG: as in __strtoull, c is read unassigned on an invalid base or width
     if (base < 0 || base == 1 || base > 36 || max_width < 1)
         scan_state = failure;
     else

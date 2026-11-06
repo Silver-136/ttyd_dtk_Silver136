@@ -70,6 +70,7 @@ asm void TRKSaveExtended1Block(void) {
     mfspr r31, 923
     stmw r20, 0x2fc(r2)
     b L_8025CD60
+    // not reached: the branch above skips this block
     mfspr r16, 928
     mfspr r17, 935
     mfspr r18, 936
@@ -103,6 +104,7 @@ L_8025CD60:
     mfspr r31, 1017
     stmw r19, 0x284(r2)
     blr
+    // not reached: after the blr
     mfspr r25, 976
     mfspr r26, 977
     mfspr r27, 978
@@ -169,6 +171,7 @@ L_8025CE50:
     mtspr 1019, r30
     mtspr 1017, r31
     b L_8025CEBC
+    // not reached: the branch above skips this block
     cmpwi r6, 0x0
     beq L_8025CE9C
     lwz r26, 0x278(r2)

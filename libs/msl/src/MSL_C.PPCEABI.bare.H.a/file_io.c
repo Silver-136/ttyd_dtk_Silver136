@@ -3,14 +3,6 @@
 int __flush_all(void);
 long ftell(FILE* file);
 
-enum { __read = 1, __write = 2 };
-
-#define set_error(file)          \
-    do {                         \
-        (file)->state.error = 1; \
-        (file)->buffer_len = 0;  \
-    } while (0)
-
 int fflush(FILE* file) {
     fpos_t position;
 

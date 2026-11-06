@@ -1,3 +1,5 @@
+/* Entry points inside __save_fpr, __restore_fpr, __save_gpr and __restore_gpr below: _savefpr_N saves fN..f31,
+   _restfpr_N restores them, and likewise for the general registers. */
 void _savefpr_14(void);
 void _savefpr_15(void);
 void _savefpr_16(void);
@@ -73,6 +75,7 @@ void _restgpr_31(void);
 
 static const double __constants[] = {0.0, 4294967296.0, 2147483648.0};
 
+/* double to unsigned int */
 asm void __cvt_fp2unsigned(void) {
     nofralloc
     stwu r1, -0x10(r1)
@@ -266,6 +269,7 @@ entry _restgpr_31
     blr
 }
 
+/* 64-bit unsigned divide */
 asm void __div2u(void) {
     nofralloc
     cmpwi r3, 0x0
@@ -338,6 +342,7 @@ L_8025EB1C:
     blr
 }
 
+/* 64-bit signed divide */
 asm void __div2i(void) {
     nofralloc
     stwu r1, -0x10(r1)
@@ -432,6 +437,7 @@ L_8025EC58:
     blr
 }
 
+/* 64-bit unsigned remainder */
 asm void __mod2u(void) {
     nofralloc
     cmpwi r3, 0x0
@@ -501,6 +507,7 @@ L_8025ED30:
     blr
 }
 
+/* 64-bit signed remainder */
 asm void __mod2i(void) {
     nofralloc
     cmpwi cr7, r3, 0x0
@@ -583,6 +590,7 @@ L_8025EE40:
     blr
 }
 
+/* 64-bit shift left */
 asm void __shl2i(void) {
     nofralloc
     subfic r8, r5, 0x20
@@ -596,6 +604,7 @@ asm void __shl2i(void) {
     blr
 }
 
+/* 64-bit logical shift right */
 asm void __shr2u(void) {
     nofralloc
     subfic r8, r5, 0x20
@@ -609,6 +618,7 @@ asm void __shr2u(void) {
     blr
 }
 
+/* 64-bit arithmetic shift right */
 asm void __shr2i(void) {
     nofralloc
     subfic r8, r5, 0x20
@@ -624,6 +634,7 @@ L_8025EEB8:
     blr
 }
 
+/* signed long long to float */
 asm void __cvt_sll_flt(void) {
     nofralloc
     stwu r1, -0x10(r1)
@@ -677,6 +688,7 @@ L_8025EF5C:
     blr
 }
 
+/* unsigned long long to float */
 asm void __cvt_ull_flt(void) {
     nofralloc
     stwu r1, -0x10(r1)
@@ -724,6 +736,7 @@ L_8025EFFC:
     blr
 }
 
+/* double to unsigned long long */
 asm void __cvt_dbl_usll(void) {
     nofralloc
     stwu r1, -0x10(r1)

@@ -17,6 +17,7 @@ void GDFlushCurrToMem(void) {
     DCFlushRange(__GDCurrentDL->start, __GDCurrentDL->length);
 }
 
+/* Pads the display list with zero bytes up to the next 32-byte boundary. */
 void GDPadCurr32(void) {
     u32 n;
 

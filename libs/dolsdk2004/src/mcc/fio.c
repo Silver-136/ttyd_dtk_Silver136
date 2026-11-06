@@ -416,6 +416,7 @@ exit:
     return -1;
 }
 
+/* BUG: va_end is called only on the early-exit path (before va_start), never after vsprintf. */
 int FIOFprintf(int handle, const char* format, ...) {
     char* str;
     int length;
@@ -1175,7 +1176,7 @@ static int fioPacketResultRead(void* buffer, u32 dataSize) {
         MCCSetChannelEventMask(gChID, oldMaskWrite);
     }
 
-    // scope for variable?
+    // block for the local reply struct
     {
         struct FIO_Coder {
             /* 0x00 */ u32 result;
@@ -1229,6 +1230,7 @@ loop:;
             goto loop;
         }
 
+        // BUG: retries without limit while MCCStreamOpen fails
         if (MCCStreamOpen(nChID, nChannelBlocks) == 0) {
             fioErrorReport("fioPacketResultWrite.MCCStreamOpen.NG");
             goto loop;

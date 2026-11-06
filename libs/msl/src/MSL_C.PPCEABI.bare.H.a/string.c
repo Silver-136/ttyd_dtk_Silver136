@@ -1,5 +1,8 @@
 typedef unsigned long size_t;
 
+/* Zero-byte test for the word loops of strcmp and strcpy: (w + K2) & K1, i.e. (w - 0x01010101) & 0x80808080, is
+   nonzero when a byte of w may be zero (bytes of 0x81 and above also set it), and the loop then falls back to
+   byte steps. The casts used as lvalues, such as ++((int*)(left)), are an MWCC extension. */
 #define K1 0x80808080
 #define K2 0xfefefeff
 

@@ -157,7 +157,7 @@ void C_MTX44MultVecSR(const Mtx44 m, const Vec* src, Vec* dst) {
     dst->z = vTmp.z;
 }
 
-asm void PSMTX44MultVecSR(const register Mtx m, const register Vec* src, register Vec* dst) {
+asm void PSMTX44MultVecSR(const register Mtx44 m, const register Vec* src, register Vec* dst) {
     nofralloc
     psq_l f0, 0x0(m), 0, 0
     psq_l f6, 0x0(src), 0, 0

@@ -27,6 +27,7 @@ double __ieee754_asin(double x) {
             return x * pio2_hi + x * pio2_lo;
         return NAN;
     } else if (ix < 0x3fe00000) {
+        // when |x| < 2**-27, huge + x > one always holds and returns x, so t is never read unset
         if (ix < 0x3e400000) {
             if (huge + x > one) return x;
         } else

@@ -7,6 +7,7 @@ void MWInitializeCriticalSection(unsigned int* section);
 void MWEnterCriticalSection(unsigned int* section);
 void MWExitCriticalSection(unsigned int* section);
 
+/* Ring buffer: mBytesToRead = bytes stored, mBytesToWrite = free space. */
 typedef struct CircleBuffer {
     u8* read_ptr;
     u8* write_ptr;

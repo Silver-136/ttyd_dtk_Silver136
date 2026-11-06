@@ -74,6 +74,7 @@ asm void InitMetroTRK(void) {
     bl InitMetroTRKCommTable
     cmpwi r3, 0x1
     bne L_8025D010
+    // BUG: r3 is 1 here (the compared result), not gTRKCPUState, so this loads from address 0x85
     lwz r4, 0x84(r3)
     mtlr r4
     opword 0xB8030000
@@ -83,6 +84,8 @@ L_8025D010:
     blr
 }
 
+/* Differs from InitMetroTRK: sets MSR bit 0x8000 (EE) instead of clearing it, and passes 2 to
+   InitMetroTRKCommTable instead of r5. */
 #pragma weak InitMetroTRK_BBA
 asm void InitMetroTRK_BBA(void) {
     nofralloc
@@ -117,6 +120,7 @@ asm void InitMetroTRK_BBA(void) {
     bl InitMetroTRKCommTable
     cmpwi r3, 0x1
     bne L_8025D0A4
+    // BUG: as in InitMetroTRK, r3 is 1 here
     lwz r4, 0x84(r3)
     mtlr r4
     opword 0xB8030000
@@ -271,6 +275,7 @@ void EnableMetroTRKInterrupts(void) {
 
 u32 TRKTargetTranslate(u32 addr) {
     if (addr >= lc_base) {
+        // 0x4000 = the 16 KB locked cache at lc_base, mapped when DBAT3 is valid
         if ((addr < lc_base + 0x4000) && ((gTRKCPUState.DBAT3U & 3) != 0))
             return addr;
     }
@@ -292,6 +297,9 @@ void __TRK_copy_vectors(void) {
     u32 mask;
     u32* maskPtr;
 
+    // the word at 0x44 is a mask: bit i set = copy the vector at TRK_ISR_OFFSETS[i] (4, the 0x500 external
+    // interrupt, is never copied); lc_base is always 0xE0000000 (TRKInitializeTarget), so the first branch is
+    // never taken
     if (lc_base <= 0x44 && lc_base + 0x4000 > 0x44 && (gTRKCPUState.DBAT3U & 3))
         maskPtr = (u32*)0x44;
     else
@@ -318,6 +326,7 @@ void TRK__read_aram(register void* dst, register u32 src, register u32* n) {
     register u32 i;
     u16 status;
 
+    // BUG: an out-of-range request returns without an error and leaves *n unchanged
     if (src < 0x4000 || src + *n > 0x8000000)
         return;
 
@@ -325,6 +334,7 @@ void TRK__read_aram(register void* dst, register u32 src, register u32* n) {
     length = *n + (src & 31);
     length = (length + 31) & ~31;
 
+    // dcbi has no C form
     for (i = 0; i < length; i += 32) {
         asm { dcbi i, dst }
     }

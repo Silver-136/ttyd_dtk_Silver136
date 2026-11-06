@@ -55,6 +55,7 @@ void __ARQServiceQueueLo(void) {
             ARStartDMA(__ARQRequestPendingLo->type, __ARQRequestPendingLo->dest, __ARQRequestPendingLo->source, __ARQChunkSize);
         }
 
+        // after the last chunk (length <= chunk size) the unsigned length wraps below zero; the request is done then
         __ARQRequestPendingLo->length -= __ARQChunkSize;
         __ARQRequestPendingLo->source += __ARQChunkSize;
         __ARQRequestPendingLo->dest += __ARQChunkSize;
@@ -101,7 +102,7 @@ void ARQInit(void) {
         OSRegisterVersion(__ARQVersion);
 
         __ARQRequestQueueHi = __ARQRequestQueueLo = NULL;
-        __ARQChunkSize = 0x1000;
+        __ARQChunkSize = 0x1000; // default DMA chunk size
         ARRegisterDMACallback(__ARQInterruptServiceRoutine);
         __ARQRequestPendingHi = NULL;
         __ARQRequestPendingLo = NULL;
@@ -165,6 +166,7 @@ void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 
     OSRestoreInterrupts(level);
 }
 
+/* Removes the request from the queues; a request already pending (being transferred) is not touched. */
 void ARQRemoveRequest(ARQRequest* request) {
     ARQRequest* thisRequest;
     BOOL level;

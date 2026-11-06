@@ -133,8 +133,8 @@ DSPTaskInfo* DSPAddTask(DSPTaskInfo* task) {
     old = OSDisableInterrupts();
 
     __DSP_insert_task(task);
-    task->state = 0;
-    task->flags = 1;
+    task->state = DSP_TASK_STATE_INIT;
+    task->flags = DSP_TASK_FLAG_ATTACHED;
 
     OSRestoreInterrupts(old);
     if (task == __DSP_first_task)
@@ -149,17 +149,17 @@ DSPTaskInfo* DSPCancelTask(DSPTaskInfo* task) {
 
     old = OSDisableInterrupts();
 
-    task->flags |= 2;
+    task->flags |= DSP_TASK_FLAG_CANCEL;
 
     OSRestoreInterrupts(old);
     return task;
 }
 
 DSPTaskInfo* DSPAssertTask(DSPTaskInfo* task) {
-    s32 old;
+    BOOL old;
 
     ASSERTMSGLINE(623, __DSP_init_flag == 1, "DSPAssertTask(): DSP driver not initialized!\n");
-    ASSERTMSGLINE(624, task->flags & 1, "DSPAssertTask(): Specified task not in active task list!\n");
+    ASSERTMSGLINE(624, task->flags & DSP_TASK_FLAG_ATTACHED, "DSPAssertTask(): Specified task not in active task list!\n");
 
     old = OSDisableInterrupts();
 
@@ -173,7 +173,7 @@ DSPTaskInfo* DSPAssertTask(DSPTaskInfo* task) {
     if (task->priority < __DSP_curr_task->priority) {
         __DSP_rude_task = task;
         __DSP_rude_task_pending = 1;
-        if (__DSP_curr_task->state == 1) {
+        if (__DSP_curr_task->state == DSP_TASK_STATE_RUN) {
             DSPAssertInt();
         }
         OSRestoreInterrupts(old);

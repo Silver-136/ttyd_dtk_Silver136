@@ -147,6 +147,7 @@ int TTYPrintf(const char* format, ...) {
         maxDataSize = 8179;
         formatLength = strlen(format);
         if (formatLength > maxDataSize) {
+            // BUG: cuts the caller's format string itself by writing a NUL into it
             eof = (void*)((-1 + maxDataSize + (u32)format));
             *(eof) = 0;
         }
@@ -159,6 +160,7 @@ int TTYPrintf(const char* format, ...) {
             err = -1;
         }
     
+        // returns without va_end
         if (err < 0) {
             return 0;
         }
@@ -190,7 +192,7 @@ int TTYPrintf(const char* format, ...) {
             ttyFlush(gPrintfID, TRUE);
         }
     
-        va_end(format);
+        va_end(format); // BUG: ends format, not argptr
         return 1;
     }
 
@@ -219,6 +221,7 @@ static int ttyWaiting(int timeout, volatile int* flag) {
     u32 tickDist;
 
     tickStart = OSGetTick();
+    // BUG: timeout is turned into ticks but compared below with the elapsed time in seconds
     timeout = OSSecondsToTicks(timeout);
     while(*flag == 0) {
         tickDist = OSGetTick() - tickStart;

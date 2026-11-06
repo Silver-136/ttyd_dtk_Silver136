@@ -1,3 +1,7 @@
+/* Word copies behind memcpy/memmove (mem.c) for forward and reverse direction, with an aligned or an unaligned
+   source. The destination is first aligned with byte copies; an unaligned source is then read a word at a time
+   and each destination word is merged from two source words by shifts. cps/cpd/lps/lpd reuse the src and dst
+   parameters through casts used as lvalues (an MWCC extension). */
 #define cps ((unsigned char*)src)
 #define cpd ((unsigned char*)dst)
 #define lps ((unsigned long*)src)

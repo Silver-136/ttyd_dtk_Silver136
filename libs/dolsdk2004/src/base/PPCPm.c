@@ -17,6 +17,7 @@ void PMEnd(void) {
     PPCMtmmcr1(0);
 }
 
+/* The four PM* readers read a performance counter and discard the value. */
 void PMCycles(void) {
     PPCMfpmc1();
 }

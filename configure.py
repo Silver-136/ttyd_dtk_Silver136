@@ -285,6 +285,7 @@ cflags_static = with_game_msl([
 # TRK flags
 cflags_trk = [
     *cflags_base,
+    "-i libs/trk/include",
     "-use_lmw_stmw on",
     "-str reuse,readonly",
     "-common off",

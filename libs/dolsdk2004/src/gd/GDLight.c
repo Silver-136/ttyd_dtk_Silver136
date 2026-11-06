@@ -135,6 +135,7 @@ void GDSetSpecularDirHA(GXLightID light, f32 nx, f32 ny, f32 nz, f32 hx, f32 hy,
     f32 px;
     f32 py;
     f32 pz;
+    // a position far along -n: the light is in effect at infinity
     px = 1000000000000000000.0f * -nx;
     py = 1000000000000000000.0f * -ny;
     pz = 1000000000000000000.0f * -nz;
@@ -159,7 +160,7 @@ void GDSetSpecularDir(GXLightID light, f32 nx, f32 ny, f32 nz) {
 
     hx = -nx;
     hy = -ny;
-    hz = 1.0f + -nz;
+    hz = 1.0f + -nz; // (-n) + (0, 0, 1): the half-angle direction before normalising
 
     mag = hx * hx + hy * hy + hz * hz;
     if (mag != 0.0f) {
@@ -169,6 +170,7 @@ void GDSetSpecularDir(GXLightID light, f32 nx, f32 ny, f32 nz) {
     hx = hx * mag;
     hy = hy * mag;
     hz = hz * mag;
+    // a position far along -n: the light is in effect at infinity
     px = 1000000000000000000.0f * -nx;
     py = 1000000000000000000.0f * -ny;
     pz = 1000000000000000000.0f * -nz;

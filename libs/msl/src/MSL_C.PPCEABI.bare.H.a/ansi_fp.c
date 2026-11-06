@@ -1,4 +1,5 @@
-#define SIGDIGLEN 36
+#include "ansi_fp.h"
+
 #define DBL_MANT_DIG 53
 #define CHAR_BIT 8
 #define EOF -1
@@ -7,26 +8,8 @@ typedef int BOOL;
 #define TRUE 1
 #define FALSE 0
 
-typedef struct decimal {
-    char sign;
-    char unused;
-    short exp;
-    struct {
-        unsigned char length;
-        unsigned char text[SIGDIGLEN];
-        unsigned char unused;
-    } sig;
-} decimal;
-
-typedef struct decform {
-    char style;
-    char unused;
-    short digits;
-} decform;
-
-extern unsigned char __ctype_map[];
-extern unsigned char __lower_map[];
-static inline int isdigit(int c) { return (int)(__ctype_map[(unsigned char)c] & 0x10); }
+#include "ctype_map.h"
+static inline int isdigit(int c) { return (int)(__ctype_map[(unsigned char)c] & __digit); }
 static inline int tolower(int c) { return (c == EOF) ? EOF : (int)__lower_map[c]; }
 
 extern float __float_huge[];
@@ -98,6 +81,7 @@ static inline int __count_trailing_zero(double x) {
     unsigned long* l = (unsigned long*)&x;
     if (l[1] != 0)
         return __count_trailing_zerol(l[1]);
+    // 0x00100000 is the implicit mantissa bit: the count stops there when the stored mantissa bits are all zero
     return (int)(sizeof(unsigned long) * CHAR_BIT + __count_trailing_zerol(l[0] | 0x00100000));
 }
 
@@ -252,6 +236,8 @@ static inline void __str2dec(decimal* d, const char* s, short exp) {
     d->sig.length = (unsigned char)i;
 
     if (*s != 0) {
+        // BUG: *s is a digit character ('0'..'9'), but these two tests compare it with the value 5, so the first
+        // never returns and the second always rounds up; the tie test below compares with '0' correctly.
         if (*s < 5)
             return;
         if (*s > 5)
@@ -340,6 +326,7 @@ void __two_exp(decimal* result, long exp) {
     {
         decimal x2, temp;
 
+        // half of exp, rounded toward zero: adding the sign bit makes the shift round negative odd values up
         __two_exp(&x2, ((long)((0x80000000UL & exp) >> 31) + exp) >> 1);
         __timesdec(result, &x2, &x2);
 
@@ -600,6 +587,7 @@ double __dec2num(const decimal* d) {
         double result;
         unsigned long long* ll = (unsigned long long*)&result;
 
+        // a NaN: all exponent bits set; the digits after the first are packed into the mantissa as hex nibbles
         *ll = 0x7FF0000000000000ULL;
         if (d->sign)
             *ll |= 0x8000000000000000ULL;
@@ -692,7 +680,7 @@ double __dec2num(const decimal* d) {
 
         if (isinf(first_guess)) {
             decimal max;
-            __str2dec(&max, "179769313486231580793729011405303420", 308);
+            __str2dec(&max, "179769313486231580793729011405303420", 308); // DBL_MAX
             if (__less_dec(&max, &dec))
                 goto done;
             first_guess = DBL_MAX;

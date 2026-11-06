@@ -3,20 +3,6 @@
 extern int errno;
 #define EFPOS 40
 
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-
-enum { __read = 1, __write = 2, __read_write = 3 };
-
-#define files_access 2
-
-#define set_error(file)          \
-    do {                         \
-        (file)->state.error = 1; \
-        (file)->buffer_len = 0;  \
-    } while (0)
-
 long _ftell(FILE* file) {
     int charsInUndoBuffer = 0;
     unsigned long position;

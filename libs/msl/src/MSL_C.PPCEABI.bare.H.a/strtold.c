@@ -1,52 +1,23 @@
 #define EOF -1
-#define SIGDIGLEN 36
+#include "ansi_fp.h"
+#include "lconv.h"
+
 #define MAX_SIG_DIG 20
 
-typedef struct decimal {
-    char sign;
-    char unused;
-    short exp;
-    struct {
-        unsigned char length;
-        unsigned char text[SIGDIGLEN];
-        unsigned char unused;
-    } sig;
-} decimal;
-
-struct lconv_ {
-    char* decimal_point;
-    char pad[0x30];
-};
-extern struct lconv_ __lconv;
-
-extern unsigned char __ctype_map[];
-extern unsigned char __upper_map[];
 extern float __float_huge[];
 extern float __float_nan[];
 extern double __double_huge[];
 extern double __extended_min[];
 extern double __extended_max[];
-extern double __dec2num(const decimal*);
 
-#define __control_char 0x01
-#define __motion_char 0x02
-#define __space_char 0x04
-#define __punctuation 0x08
-#define __digit 0x10
-#define __hex_digit 0x20
-#define __lower_case 0x40
-#define __upper_case 0x80
-
-#define __letter (__lower_case | __upper_case)
-#define __whitespace (__motion_char | __space_char)
+#include "ctype_map.h"
+#include "strtoul.h"
 
 #define isalpha(c) ((int)(__ctype_map[(unsigned char)(c)] & __letter))
 #define isdigit(c) ((int)(__ctype_map[(unsigned char)(c)] & __digit))
 #define isspace(c) ((int)(__ctype_map[(unsigned char)(c)] & __whitespace))
 #define isxdigit(c) ((int)(__ctype_map[(unsigned char)(c)] & __hex_digit))
 #define toupper(c) ((c == EOF) ? EOF : ((int)__upper_map[(unsigned char)(c)]))
-
-enum __ReadProcActions { __GetAChar, __UngetAChar, __TestForError };
 
 enum scan_states {
     start = 0x0001,
@@ -141,6 +112,7 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
             }
             break;
         case inf_state: {
+            // the 'I' is already read: match "NF" or "NFINITY" (case-insensitive)
             int i = 1;
             char model[] = "INFINITY";
             while (i < 8 && model[i] == toupper(c)) {
@@ -156,6 +128,7 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
             break;
         }
         case nan_state: {
+            // the 'N' is already read: match "AN", optionally followed by "(", up to 32 letters or digits and ")"
             int i = 1, j = 0;
             char model[] = "NAN(";
             while (i < 4 && model[i] == toupper(c)) {
@@ -402,6 +375,9 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
                     break;
                 }
                 if (c == '0') {
+                    // BUG: 0x80 is not one of the hex_scan_states and no case handles it; the next pass fetches
+                    // nothing and changes no state, so an exponent with a leading zero ("0x1p0") never ends
+                    // the loop.
                     hex_scan_state = 0x80;
                     hex_exp_digits++;
                     c = fetch();
@@ -415,6 +391,8 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
                     break;
                 }
                 hex_exp = hex_exp * 10 + (c - '0');
+                // BUG: tests exp_value (the decimal exponent, still 0 here) instead of hex_exp, so a binary
+                // exponent overflow is never reported.
                 if (exp_value > 0x7fff) {
                     *overflow = 1;
                 }
@@ -484,6 +462,7 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
             r.u >>= 1;
         }
         hex_exp += (hex_dig_count - 1) * 4;
+        // r.s is the top 16 bits of the double: keep the 4 mantissa bits, store the biased exponent above them
         r.s &= 0xf;
         r.s |= (hex_exp + 0x3ff) << 4;
         *chars_scanned = spaces + sign_detected + hex_digits + 1 + hex_exp_digits;

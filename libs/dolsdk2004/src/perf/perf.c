@@ -358,6 +358,7 @@ void PERFEventEnd(u8 id) {
         break;
     case PERF_CPU_GP_EVENT:
         GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x1000);
+        // fall through
     case PERF_CPU_EVENT:
         PERFFrames[PERFCurrFrame].samples[sample].cpuTimeStampEnd = PPCMfpmc4();
         PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[3] = PPCMfpmc3();

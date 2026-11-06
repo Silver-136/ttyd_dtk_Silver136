@@ -18,9 +18,10 @@ void DSInsertHTableObj(DSHashTable* hTable, Ptr obj) {
 }
 
 void DSHTableToList(DSHashTable* hTable, DSList* list) {
-    DSLink* link = NULL;
+    DSLink* link = NULL; // not used
     u16 i = 0;
 
+    // reads table[0] even for a table of size 0
     list->Offset = hTable->table[i].Offset;
     for (i = 0; i < hTable->tableSize; i++) {
         DSAttachList(list, &hTable->table[i]);

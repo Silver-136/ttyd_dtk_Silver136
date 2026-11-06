@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef int BOOL;
 typedef int DSError;
 typedef unsigned long size_t;
@@ -61,7 +63,7 @@ static inline void TRKSendReply(u8 replyError) {
     CommandReply reply;
 
     memset(&reply, 0, sizeof(CommandReply));
-    reply.commandID = 0x80;
+    reply.commandID = DSMSG_ReplyACK;
     reply.length = sizeof(CommandReply);
     reply.replyError = replyError;
     TRKWriteUARTN(&reply, sizeof(CommandReply));
@@ -107,7 +109,7 @@ DSError TRKDoDisconnect(TRKBuffer* buffer) {
 
     IsTRKConnected = 0;
     TRKSendReply(0);
-    TRKConstructEvent(&event, 1);
+    TRKConstructEvent(&event, TRK_EVENT_SHUTDOWN);
     TRKPostEvent(&event);
     return 0;
 }
@@ -124,6 +126,7 @@ DSError TRKDoOverride(TRKBuffer* buffer) {
     return 0;
 }
 
+/* TRKDoVersions and TRKDoSupportMask send no reply and return 0. */
 DSError TRKDoVersions(TRKBuffer* buffer) {
     return 0;
 }
@@ -153,6 +156,7 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
         return 0;
     }
 
+    // BUG: length (up to 0xFFFF) is not checked against the 0x820-byte tempBuf
     length = msg_length;
 
     if (msg_options & 0x40)
@@ -166,7 +170,7 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
         memset(&reply, 0, sizeof(CommandReply));
         reply.replyError = error;
         reply.length = length + sizeof(CommandReply);
-        reply.commandID = 0x80;
+        reply.commandID = DSMSG_ReplyACK;
         TRKAppendBuffer(buffer, &reply, sizeof(CommandReply));
 
         if (msg_options & 0x40)
@@ -243,7 +247,7 @@ DSError TRKDoWriteMemory(TRKBuffer* buffer) {
     if (error == 0) {
         memset(&reply, 0, sizeof(CommandReply));
         reply.length = sizeof(CommandReply);
-        reply.commandID = 0x80;
+        reply.commandID = DSMSG_ReplyACK;
         reply.replyError = error;
         error = TRKAppendBuffer(buffer, &reply, sizeof(CommandReply));
     }
@@ -295,7 +299,7 @@ DSError TRKDoReadRegisters(TRKBuffer* buffer) {
         return 0;
     }
 
-    reply.commandID = 0x80;
+    reply.commandID = DSMSG_ReplyACK;
     reply.length = 0x468;
 
     TRKResetBuffer(buffer, 0);
@@ -399,7 +403,7 @@ DSError TRKDoWriteRegisters(TRKBuffer* buffer) {
     if (error == 0) {
         memset(&reply, 0, sizeof(CommandReply));
         reply.length = sizeof(CommandReply);
-        reply.commandID = 0x80;
+        reply.commandID = DSMSG_ReplyACK;
         reply.replyError = error;
         error = TRKAppendBuffer(buffer, &reply, sizeof(CommandReply));
     }
@@ -439,6 +443,7 @@ DSError TRKDoWriteRegisters(TRKBuffer* buffer) {
     return TRKSendACK(buffer);
 }
 
+/* Not reached: TRKDispatchMessage has no case for it. */
 DSError TRKDoFlushCache(TRKBuffer* buffer) {
     MWTRACE(8, "DoFlushCache unimplemented!!!\n");
     TRKSendReply(0x12);

@@ -8,6 +8,17 @@ extern "C" {
 #endif
 
 typedef void (*DSPCallback)(void* task);
+
+// DSPTaskInfo.state
+#define DSP_TASK_STATE_INIT  0 // added, not started yet
+#define DSP_TASK_STATE_RUN   1 // running (after its init or resume callback)
+#define DSP_TASK_STATE_YIELD 2 // switched out for another task
+#define DSP_TASK_STATE_DONE  3 // finished and removed from the list
+
+// DSPTaskInfo.flags
+#define DSP_TASK_FLAG_CLEARALL 0
+#define DSP_TASK_FLAG_ATTACHED 1 // in the active task list (DSPAddTask)
+#define DSP_TASK_FLAG_CANCEL   2 // DSPCancelTask: end it at its next yield
 typedef struct STRUCT_DSP_TASK DSPTaskInfo;
 
 typedef struct STRUCT_DSP_TASK {                                   

@@ -1,7 +1,6 @@
 #include <stdarg.h>
-
-
-extern unsigned char __ctype_map[];
+#include "ctype_map.h"
+#include "strtoul.h"
 
 enum argument_options {
     normal_argument,
@@ -36,12 +35,9 @@ typedef struct {
     int eos;
 } __InStr;
 
-extern unsigned long __strtoul(int, int, int (*)(void*, int, int), void*, int*, int*, int*);
-extern unsigned long long __strtoull(int, int, int (*)(void*, int, int), void*, int*, int*, int*);
-extern long double __strtold(int, int (*)(void*, int, int), void*, int*, int*);
 extern int mbtowc(unsigned short*, const char*, unsigned long);
 
-#define sc_isspace(c) (__ctype_map[(unsigned char)(c)] & 6)
+#define sc_isspace(c) (__ctype_map[(unsigned char)(c)] & __whitespace)
 #define tst_char_map(map, ch) (map[(unsigned char)(ch) >> 3] & (1 << ((ch) & 7)))
 
 int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg);
@@ -63,7 +59,7 @@ int __StringRead(void* arg, int ch, int behavior) {
     __InStr* s = (__InStr*)arg;
     char c;
     switch (behavior) {
-    case 0:
+    case __GetAChar:
         c = *s->str;
         if (c == 0) {
             s->eos = 1;
@@ -71,14 +67,14 @@ int __StringRead(void* arg, int ch, int behavior) {
         }
         s->str++;
         return (unsigned char)c;
-    case 1:
+    case __UngetAChar:
         if (s->eos == 0) {
             s->str--;
         } else {
             s->eos = 0;
         }
         return ch;
-    case 2:
+    case __TestForError:
         return s->eos;
     }
     return 0;
@@ -112,15 +108,15 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
     while ((format_char = (signed char)*format_ptr) != 0) {
         if (sc_isspace(format_char)) {
             while (sc_isspace(*++format_ptr)) {}
-            while (sc_isspace(c = ReadProc(ReadProcArg, 0, 0))) {
+            while (sc_isspace(c = ReadProc(ReadProcArg, 0, __GetAChar))) {
                 chars_read++;
             }
-            ReadProc(ReadProcArg, c, 1);
+            ReadProc(ReadProcArg, c, __UngetAChar);
             continue;
         }
         if (format_char != '%') {
-            if ((unsigned char)format_char != (c = ReadProc(ReadProcArg, 0, 0))) {
-                ReadProc(ReadProcArg, c, 1);
+            if ((unsigned char)format_char != (c = ReadProc(ReadProcArg, 0, __GetAChar))) {
+                ReadProc(ReadProcArg, c, __UngetAChar);
                 goto exit;
             }
             chars_read++;
@@ -136,7 +132,7 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
             arg_ptr = 0;
         }
 
-        if (format.conversion_char != 'n' && ReadProc(ReadProcArg, 0, 2)) {
+        if (format.conversion_char != 'n' && ReadProc(ReadProcArg, 0, __TestForError)) {
             goto exit;
         }
 
@@ -269,10 +265,12 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
             }
             if (arg_ptr) {
                 num_chars = 0;
-                while (format.field_width-- && (rval = ReadProc(ReadProcArg, 0, 0)) != -1) {
+                while (format.field_width-- && (rval = ReadProc(ReadProcArg, 0, __GetAChar)) != -1) {
                     c = rval;
                     if (format.argument_options == wchar_argument) {
                         mbtowc((unsigned short*)arg_ptr, &c, 1);
+                        // BUG: each wide character is stored as two bytes, but the destination advances by
+                        // one byte (the %s/%[ branch below advances by two).
                         arg_ptr++;
                     } else {
                         *arg_ptr++ = c;
@@ -286,7 +284,7 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
                 items_assigned++;
             } else {
                 num_chars = 0;
-                while (format.field_width-- && (c = ReadProc(ReadProcArg, 0, 0)) != -1) {
+                while (format.field_width-- && (c = ReadProc(ReadProcArg, 0, __GetAChar)) != -1) {
                     num_chars++;
                 }
                 if (!num_chars) {
@@ -296,27 +294,28 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
             conversions++;
             break;
         case '%':
-            while (sc_isspace(c = ReadProc(ReadProcArg, 0, 0))) {
+            while (sc_isspace(c = ReadProc(ReadProcArg, 0, __GetAChar))) {
                 chars_read++;
             }
             if (c != '%') {
-                ReadProc(ReadProcArg, c, 1);
+                ReadProc(ReadProcArg, c, __UngetAChar);
                 goto exit;
             }
             chars_read++;
             break;
 
         case 's':
-            c = ReadProc(ReadProcArg, 0, 0);
+            c = ReadProc(ReadProcArg, 0, __GetAChar);
             while (sc_isspace((int)c)) {
                 chars_read++;
-                c = ReadProc(ReadProcArg, 0, 0);
+                c = ReadProc(ReadProcArg, 0, __GetAChar);
             }
-            ReadProc(ReadProcArg, c, 1);
+            ReadProc(ReadProcArg, c, __UngetAChar);
+            // fall through: after the leading whitespace, %s reads like %[ with its non-whitespace set
         case '[':
             if (arg_ptr) {
                 num_chars = 0;
-                while (format.field_width-- && (c = ReadProc(ReadProcArg, 0, 0)) != -1
+                while (format.field_width-- && (c = ReadProc(ReadProcArg, 0, __GetAChar)) != -1
                        && tst_char_map(format.char_set, c)) {
                     if (format.argument_options == wchar_argument) {
                         mbtowc((unsigned short*)arg_ptr, &c, 1);
@@ -327,7 +326,7 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
                     num_chars++;
                 }
                 if (!num_chars) {
-                    ReadProc(ReadProcArg, c, 1);
+                    ReadProc(ReadProcArg, c, __UngetAChar);
                     goto exit;
                 }
                 chars_read += num_chars;
@@ -339,18 +338,18 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
                 items_assigned++;
             } else {
                 num_chars = 0;
-                while (format.field_width-- && (c = ReadProc(ReadProcArg, 0, 0)) != -1
+                while (format.field_width-- && (c = ReadProc(ReadProcArg, 0, __GetAChar)) != -1
                        && tst_char_map(format.char_set, c)) {
                     num_chars++;
                 }
                 if (!num_chars) {
-                    ReadProc(ReadProcArg, c, 1);
+                    ReadProc(ReadProcArg, c, __UngetAChar);
                     break;
                 }
                 chars_read += num_chars;
             }
             if (format.field_width >= 0) {
-                ReadProc(ReadProcArg, c, 1);
+                ReadProc(ReadProcArg, c, __UngetAChar);
             }
             conversions++;
             break;
@@ -384,7 +383,7 @@ int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char
     }
 
 exit:
-    if (ReadProc(ReadProcArg, 0, 2) && conversions == 0) {
+    if (ReadProc(ReadProcArg, 0, __TestForError) && conversions == 0) {
         return -1;
     }
     return items_assigned;
@@ -409,12 +408,12 @@ static const char* parse_format(const char* format_string, scan_format* format) 
         c = *++s;
     }
 
-    if (__ctype_map[(unsigned char)c] & 0x10) {
+    if (__ctype_map[(unsigned char)c] & __digit) {
         f.field_width = 0;
         do {
             f.field_width = (f.field_width * 10) + (c - '0');
             c = *++s;
-        } while (__ctype_map[(unsigned char)c] & 0x10);
+        } while (__ctype_map[(unsigned char)c] & __digit);
 
         if (f.field_width == 0) {
             f.conversion_char = bad_conversion;
@@ -504,6 +503,7 @@ static const char* parse_format(const char* format_string, scan_format* format) 
             for (i = sizeof(f.char_set), p = f.char_set; i; --i) {
                 *p++ = 0xFF;
             }
+            // every character but whitespace: 0xC1 clears '\t'..'\r' (0x09-0x0D), 0xFE clears ' ' (0x20)
             f.char_set[1] = 0xC1;
             f.char_set[4] = 0xFE;
         }

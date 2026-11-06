@@ -54,6 +54,15 @@ static const mem_size fix_pool_sizes[] = {4, 12, 20, 36, 52, 68};
 
 #define max_fix_pool_size 68
 
+/* Pool layout, as the free path below reads it (only free() and its helpers are in this source):
+   - A Block holds variable-size SubBlocks; the last word of a Block points to its first free SubBlock.
+   - A SubBlock's size_ is a multiple of 8; flag 0x2 set = in use, flag 0x4 set = the previous SubBlock is in
+     use. A free SubBlock repeats its size in its last word, so the next one can find its start. bp_ is the owning
+     Block with bit 0 set.
+   - Requests up to max_fix_pool_size come from fixed pools (one per fix_pool_sizes entry): a FixSubBlock has a
+     one-word header (its FixBlock), whose bit 0 is clear. classify() reads that header word just before the client
+     pointer: 1 = variable pool (8-byte header), 0 = fixed pool (4-byte header). */
+
 #define Block_size(ths) ((ths)->size_ & ~7)
 #define Block_start(ths) (*(SubBlock**)((char*)(ths) + Block_size((ths)) - sizeof(mem_size)))
 

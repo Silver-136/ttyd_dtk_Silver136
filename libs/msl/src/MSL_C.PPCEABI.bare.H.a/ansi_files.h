@@ -10,6 +10,19 @@ typedef unsigned long fpos_t;
 
 typedef unsigned long __file_handle;
 
+/* __file_modes.io_mode bits */
+enum __io_modes { __read = 1, __write = 2, __read_write = 3, __append = 4 };
+
+/* __file_modes.buffer_mode */
+#define _IONBF 0
+#define _IOLBF 1
+#define _IOFBF 2
+
+/* fseek origins */
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+
 typedef struct {
     unsigned int open_mode : 2;
     unsigned int io_mode : 3;
@@ -93,6 +106,15 @@ void free(void* ptr);
 void __begin_critical_region(int region);
 void __end_critical_region(int region);
 
+/* critical-region ids of the stream and file-list code (both 2; printf.c names it stdout_access) */
 #define __stdio_access 2
+#define files_access 2
+
+/* Marks a stream as failed and drops its buffered data. */
+#define set_error(file)          \
+    do {                         \
+        (file)->state.error = 1; \
+        (file)->buffer_len = 0;  \
+    } while (0)
 
 #endif

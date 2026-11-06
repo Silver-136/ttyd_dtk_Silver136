@@ -113,6 +113,7 @@ u32 AMPush(char* path) {
     u32 ret_val;
     BOOL old;
 
+    // BUG: handle is opened only to read the length and never closed; __AMPushBuffered opens the file again
     if (!DVDOpen(path, &handle)) {
         OSReport("AMPushBuffered(): Unable to open file '%s'\n", path);
         OSPanic(__FILE__, 343, "AM: FATAL ERROR\n");

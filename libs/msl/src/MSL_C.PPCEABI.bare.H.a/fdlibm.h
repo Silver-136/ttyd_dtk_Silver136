@@ -1,6 +1,10 @@
 #ifndef _FDLIBM_H
 #define _FDLIBM_H
 
+/* Shared by the fdlibm-derived math files (e_*.c kernels behind the w_*.c wrappers, k_*.c helpers, s_*.c).
+   __HI/__LO access the high and low 32-bit words of a double; the long constants in those files are the
+   polynomial coefficients and split constants of the fdlibm algorithms. */
+
 #define __HI(x) *(int*)&x
 #define __LO(x) *(1 + (int*)&x)
 #define __HIp(x) *(int*)x

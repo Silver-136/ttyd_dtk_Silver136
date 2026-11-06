@@ -66,6 +66,12 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | libs/musyx/src/musyx/runtime/snd3d.c | clip3FFF, SetFXParameters (inlines) | `static const f32 s3d_f16383[1]`, `s3d_f127[1]`, `s3d_f64[1]`, `s3d_f8192[1]` used as scalars | plain float literals (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/stream.c | sndStreamFrq | `#pragma push` / `#pragma inline_depth(3)` / `#pragma pop` around the function | without the pragmas (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/synthmacros.c | mcmdSetPitchADSR | `MIN(sl, 0x3ffull)`: 64-bit literal in a u32 index | `0x3ff` (changes the object) |
+| Both | libs/trk/src/TRK_MINNOW_DOLPHIN.a/notify.c | TRKDoNotifyStopped | nested `if (err == 0)` repeating the outer test | see comment |
+| Both | libs/trk/src/TRK_MINNOW_DOLPHIN.a/nubinit.c | TRKInitializeEndian | first gTRKBigEndian = 1 store, set again below | see comment |
+| Both | libs/dolsdk2004/src/dsp/dsp_task.c | __DSPHandler; t0, t1, t2 (data) | unused `u8 unused[4]` pads the stack frame; unused statics `t0, t1, t2` fill .sbss | see comment |
+| Both | libs/dolsdk2004/src/support/List.c | DSAttachList | dead expression statement `linkPrev;` (the unit is not built: no probe possible) | see comment |
+| Both | libs/dolsdk2004/src/mcc/mcc.c | callbackEventStream | dead expression statement `value;` (the unit is not built: no probe possible) | see comment |
+| Both | libs/dolsdk2004/src/perf/perfdraw.c | PERFDumpScreen | dead expression statement `!samples[s].cpuTimeStampStart;` (the unit is not built: no probe possible) | see comment |
 | Both | rels/bom/src/bom_01.c | disp_sight | pointer-typed ?: = id = on ? 6 : 7 without the branchless int select (same value) | int/unsigned/char/short/long long arms, enum-like and propagated arms, if/else, inline helpers, a named k (spill worker, tiny TUs re_work/spill/bom/tern) |
 | Both | rels/bom/src/bom_01.c | ext_main | SFX_NAME_WORD (integer round trip) on the literal, see jump() | plain literals, a named `se` local, `(const char*)(u32)` (spill worker) |
 | Both | rels/hei/src/hei_10.c | chb_sin, chb_cos | `a = a;` self-assignments in the quadrant branches (register choice) | the shared polySinf/polyCosf (only float registers differ); removing them |

@@ -1,6 +1,8 @@
 #include <dolphin.h>
 #include <demo.h>
 
+/* 64x96 I4 font texture (DEMOLoadFont): 96 glyphs of 8x8 texels for the characters 0x20..0x7F, 8 per row,
+   as DEMOPuts indexes them. */
 u32 DEMOFontBitmap[768] ATTRIBUTE_ALIGN(32) = {
     0x00000000,
     0x00000000,

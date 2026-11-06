@@ -346,13 +346,13 @@ asm void PSMTX44Transpose(const register Mtx44 src, register Mtx44 xPose) {
     blr
 }
 
-#define SWAP(a, b) \
-    {              \
-        f32 tmp;   \
-        tmp = a;   \
-        a = b;     \
-        b = tmp;   \
-    }
+static inline void SwapF32(f32* a, f32* b) {
+    f32 tmp;
+
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
 
 u32 C_MTX44Inverse(const Mtx44 src, Mtx44 inv) {
     Mtx44 gjm;
@@ -388,8 +388,8 @@ u32 C_MTX44Inverse(const Mtx44 src, Mtx44 inv) {
 
         if (swp != i) {
             for (k = 0; k < 4; k++) {
-                SWAP(gjm[i][k], gjm[swp][k]);
-                SWAP(inv[i][k], inv[swp][k]);
+                SwapF32(&gjm[i][k], &gjm[swp][k]);
+                SwapF32(&inv[i][k], &inv[swp][k]);
             }
         }
 
@@ -460,7 +460,7 @@ void PSMTX44Trans(register Mtx44 m, register f32 xT, register f32 yT, register f
 
 void C_MTX44TransApply(const Mtx44 src, Mtx44 dst, f32 xT, f32 yT, f32 zT) {
     ASSERTMSGLINE(899, src, "MTX44TransApply(): NULL Mtx44Ptr 'src' ");
-    ASSERTMSGLINE(900, dst, "MTX44TransApply(): NULL Mtx44Ptr 'src' "); //! wrong assert string
+    ASSERTMSGLINE(900, dst, "MTX44TransApply(): NULL Mtx44Ptr 'src' "); // the text names src, the test is on dst
 
     if (src != dst) {
         dst[0][0] = src[0][0];

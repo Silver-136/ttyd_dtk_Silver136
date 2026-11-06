@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef int DSError;
 
 typedef struct TRKBuffer TRKBuffer;
@@ -46,6 +48,7 @@ int TRKTestForPacket(void) {
     if (TRKPollUART() <= 0)
         return -1;
 
+    // BUG: the result is not tested: with no free buffer b is NULL and is used anyway
     id = TRKGetFreeBuffer(&bufIdx, &b);
     MWTRACE(4, "TestForPacket : FreeBuffer is  %ld\n", id);
     TRKSetBufferPosition(b, 0);
@@ -58,6 +61,7 @@ int TRKTestForPacket(void) {
             MWTRACE(1, "Reading payload %ld bytes\n", bytes);
 
             if (TRKReadUARTN(payload, hdr.size - sizeof(hdr)) == 0) {
+                // BUG: appends hdr.size bytes, but only hdr.size - sizeof(hdr) payload bytes were read
                 TRKAppendBuffer_ui8(b, payload, hdr.size);
             } else {
                 MWTRACE(8, "TestForPacket : Invalid size of packet hdr.size\n");
@@ -91,7 +95,7 @@ void TRKGetInput(void) {
 void TRKProcessInput(int bufferIdx) {
     TRKEvent event;
 
-    TRKConstructEvent(&event, 2);
+    TRKConstructEvent(&event, TRK_EVENT_REQUEST);
     gTRKFramingState.msgBufID = -1;
     event.msgBufID = bufferIdx;
     TRKPostEvent(&event);

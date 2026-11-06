@@ -9,6 +9,13 @@ extern "C" {
 #define ARAM_DIR_MRAM_TO_ARAM 0x00
 #define ARAM_DIR_ARAM_TO_MRAM 0x01
 
+// ARClear flags
+#define AR_CLEAR_INTERNAL_ALL  0x00 // the whole internal ARAM
+#define AR_CLEAR_INTERNAL_USER 0x01 // internal ARAM above AR_BASE_ADDRESS
+#define AR_CLEAR_EXPANSION     0x02 // the expansion ARAM
+
+#define AR_BASE_ADDRESS 0x4000 // first ARAM address the allocator hands out (ARGetBaseAddress)
+
 #define ARStartDMARead(mmem, aram, len) \
     ARStartDMA(ARAM_DIR_ARAM_TO_MRAM, mmem, aram, len)
 #define ARStartDMAWrite(mmem, aram, len) \

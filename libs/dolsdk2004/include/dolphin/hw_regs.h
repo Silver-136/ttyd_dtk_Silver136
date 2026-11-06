@@ -96,6 +96,10 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define DSP_MAILBOX_OUT_LO (3)
 #define DSP_CONTROL_STATUS (5)
 
+// DSP_CONTROL_STATUS bits (ar.c)
+#define DSP_CSR_ARAM_INT      (0x20)  // ARAM DMA interrupt; written back to acknowledge it
+#define DSP_CSR_ARAM_DMA_BUSY (0x200) // ARAM DMA in progress
+
 #define DSP_ARAM_SIZE        (9)
 #define DSP_ARAM_MODE        (11)
 #define DSP_ARAM_REFRESH     (13)

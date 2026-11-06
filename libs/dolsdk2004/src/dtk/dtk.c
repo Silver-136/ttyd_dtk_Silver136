@@ -331,7 +331,7 @@ int DTKFlushTracks(DTKFlushCallback callback) {
 }
 
 void DTKSetSampleRate(u32 samplerate) {
-    // obsolete
+    // obsolete: does nothing
 }
 
 void DTKSetInterruptFrequency(u32 samples) {

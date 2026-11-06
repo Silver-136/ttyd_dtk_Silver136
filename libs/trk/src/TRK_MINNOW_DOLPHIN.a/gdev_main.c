@@ -72,10 +72,12 @@ int gdev_cc_read(u8* dest, int size) {
 
     requiredSize = size;
 
+    // waits with no timeout; readResult is reset on each pass, so only the last read's error is reported
     while (CBGetBytesAvailableForRead(&gRecvCB) < requiredSize) {
         readResult = 0;
         poll = DBQueryData();
         if (poll != 0) {
+            // BUG: reads requiredSize bytes but queues poll bytes (the DDH driver in main.c reads poll bytes)
             readResult = DBRead(buff, requiredSize);
             if (readResult == 0)
                 CircleBufferWriteBytes(&gRecvCB, buff, poll);

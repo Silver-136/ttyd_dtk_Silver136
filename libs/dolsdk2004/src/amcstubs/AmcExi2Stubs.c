@@ -1,6 +1,8 @@
 #include <dolphin.h>
 #include <dolphin/amc/AmcExi2Comm.h>
 
+/* Empty EXI2 functions and AMC_IsStub() == 1, linked in place of the AMC debugger hardware code. */
+
 void EXI2_Init(volatile unsigned char **inputPendingPtrRef, EXICallback monitorCallback) {}
 
 void EXI2_EnableInterrupts(void) {}

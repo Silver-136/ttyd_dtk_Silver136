@@ -57,7 +57,7 @@ void DEMOSetupScrnSpc(s32 width, s32 height, f32 depth) {
     f32 top;
 
     if (DEMOGetRenderModeObj()->field_rendering && !VIGetNextField()) {
-        top = -0.667f;
+        top = -0.667f; // odd field: offset so the field's lines line up
     } else {
         top = 0.0f;
     }
@@ -96,7 +96,8 @@ void DEMOPuts(s16 x, s16 y, s16 z, char* string) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 1);
 
-    // calc len
+    // collect a run of printable characters and draw it when a newline (next line) or any other character
+    // (end) stops the run
     len = 0;
     while (1) {
         c = *(str++);
@@ -125,7 +126,7 @@ void DEMOPuts(s16 x, s16 y, s16 z, char* string) {
         }
 
         string = str;
-        if (c == 0xA) {
+        if (c == '\n') {
             y += 0x8;
         } else {
             break;
@@ -152,7 +153,7 @@ OSFontHeader* DEMOInitROMFont(void) {
         FontData = OSAlloc(OS_FONT_SIZE_ANSI);
         break;
     default:
-        FontData = OSAlloc(0x141020);
+        FontData = OSAlloc(OS_FONT_SIZE_ANSI + OS_FONT_SIZE_SJIS); // room for either encoding
         break;
     }
 
@@ -314,7 +315,7 @@ int DEMORFPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
 
     va_start(vlist, fmt);
     vsprintf(buf, fmt, vlist);
-    return DEMORFPuts(x, y, z, buf);
+    return DEMORFPuts(x, y, z, buf); // no va_end (DEMOPrintf has one)
 }
 
 char* DEMODumpROMFont(char* string) {
@@ -334,7 +335,7 @@ char* DEMODumpROMFont(char* string) {
         temp = (u8*)FontData + OS_FONT_SIZE_ANSI - OS_FONT_ROM_SIZE_ANSI;
         break;
     default:
-        temp = (u8*)FontData + 0xF4020;
+        temp = (u8*)FontData + (OS_FONT_SIZE_ANSI + OS_FONT_SIZE_SJIS - OS_FONT_ROM_SIZE_SJIS);
         break;
     }
 
@@ -369,6 +370,8 @@ int DEMOGetRFTextWidth(char* string) {
 
             width = 0;
         }
+
+        // the '\n' itself also goes through OSGetFontWidth, so its advance counts toward the next line
 
         string = OSGetFontWidth(string, &cx);
         width = FontSpace + ((FontSize * cx) / FontData->cellWidth) + width;

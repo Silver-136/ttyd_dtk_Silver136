@@ -163,6 +163,7 @@ DSError TRKReadBuffer(TRKBuffer* msg, void* data, size_t length) {
     return error;
 }
 
+/* Messages are big endian: on a little-endian host (gTRKBigEndian clear) these helpers swap the bytes. */
 DSError TRKAppendBuffer1_ui32(TRKBuffer* buffer, const u32 data) {
     u8* bigEndianData;
     u8* byteData;

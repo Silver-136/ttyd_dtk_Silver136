@@ -6,6 +6,9 @@ typedef struct __va_list_struct {
     char* reg_save_area;
 } _va_list[1];
 
+/* Returns the address of the next variable argument. type 3 = a floating-point argument (taken from the FPR
+   save area, which starts after the 8 GPR slots of 4 bytes: fpr_offset 32), 2 = an 8-byte integer (an aligned
+   GPR pair), 0 = an argument passed by address (the slot holds a pointer to it); other values take one GPR. */
 void* __va_arg(_va_list v_list, int type) {
     char* addr;
     char* reg = &(v_list->gpr);

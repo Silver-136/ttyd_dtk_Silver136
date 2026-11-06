@@ -1,6 +1,6 @@
 #include "fdlibm.h"
 
-static const double one = 1.0, Zero[] = {0.0, -0.0};
+static const double one = 1.0, Zero[] = {0.0, -0.0}; // Zero[sign of x]: a zero result keeps the sign of x
 
 double __ieee754_fmod(double x, double y) {
     int n, hx, hy, hz, ix, iy, sx, i;

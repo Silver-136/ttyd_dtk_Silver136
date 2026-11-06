@@ -76,7 +76,7 @@ void DSAttachList(DSListPtr baseList, DSListPtr attachList) {
         }
         baseList->Head = attachList->Head;
         baseList->Tail = attachList->Tail;
-        linkPrev;  // needed to match
+        linkPrev; // FAKE: dead expression statement (unit not built, kept as found)
     }
 }
 

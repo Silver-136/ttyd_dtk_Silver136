@@ -12,7 +12,7 @@ Lg5 = 1.818357216161805012e-01,
 Lg6 = 1.531383769920937332e-01,
 Lg7 = 1.479819860511658591e-01;
 
-static double zero = 0.0;
+static double zero = 0.0; // not const, so the divisions by it below are not folded: -inf for 0, NaN for x < 0
 
 double __ieee754_log(double x) {
     double hfsq, f, s, z, R, w, t1, t2, dk;

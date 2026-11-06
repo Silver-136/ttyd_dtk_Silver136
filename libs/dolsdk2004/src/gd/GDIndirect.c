@@ -35,6 +35,7 @@ void GDSetIndTexMtx(GXIndTexMtxID mtx_id, const f32 offset[2][3], s8 scale_exp) 
         break;
     default:
         ASSERTMSGLINE(111, 0, "GDSetIndTexMtx: Invalid matrix id");
+        // BUG: in a release build id_offset stays unset for an invalid id
         break;
     }
 
@@ -202,6 +203,7 @@ void GDSetTevIndBumpST(GXTevStageID tev_stage, GXIndTexStageID ind_stage, GXIndT
         break;
     default:
         ASSERTMSGLINE(332, 0, "GDSetTevIndBumpST: Invalid matrix selection");
+        // BUG: in a release build sm and tm stay unset for an invalid selection
         break;
     }
 

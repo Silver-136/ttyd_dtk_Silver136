@@ -10,7 +10,7 @@ static u32 DemoStatIndx;
 static u32 DemoStatMaxIndx;
 static u32 DemoStatClocks;
 static u32 DemoStatDisp;
-static u32 DemoStatStrLen;
+static u32 DemoStatStrLen; // set in DEMOSetStats, never read
 static u32 topPixIn;
 static u32 topPixOut;
 static u32 botPixIn;
@@ -160,7 +160,7 @@ static void DEMOWriteStats(u8 update) {
         case DEMO_STAT_MYR:
             break;
         default:
-            OSPanic(__FILE__, 295, "DEMOSetStats: Unknown demo stat type\n");
+            OSPanic(__FILE__, 295, "DEMOSetStats: Unknown demo stat type\n"); // the text names DEMOSetStats
     }
 }
 
@@ -279,6 +279,7 @@ void DEMOPrintStats(void) {
         }
     } else {
         rmode = DEMOGetRenderModeObj();
+        // no default: an unknown display mode leaves text_x, text_y, text_yinc, wd and ht unset
         switch (DemoStatDisp) {
             case DEMO_STAT_TL:
                 text_x = 0x10;
@@ -343,6 +344,7 @@ void DEMOPrintStats(void) {
                     DEMOPrintf(text_x, text_y, 0, "%s: %8.2f\n", DemoStat[i].text, rate);
                     break;
                 case DEMO_STAT_TBP:
+                    // BUG: divides by topPixIn - botPixIn; the same rate in the first output branch above divides by their sum
                     rate = (tcReq << 5) / (f32) (topPixIn - botPixIn);
                     DEMOPrintf(text_x, text_y, 0, "%s: %8.3f\n", DemoStat[i].text, rate);
                     break;

@@ -1,3 +1,5 @@
+#include "trk.h"
+
 #pragma defer_codegen off
 typedef int BOOL;
 typedef int DSError;
@@ -14,15 +16,8 @@ typedef struct TRKBuffer {
     u8 data[0x880];
 } TRKBuffer;
 
-typedef enum MessageCommandID {
-    DSMSG_ReplyACK = 0x80,
-    DSMSG_WriteFile = 0xD0,
-    DSMSG_ReadFile = 0xD1,
-    DSMSG_OpenFile = 0xD2,
-    DSMSG_CloseFile = 0xD3,
-    DSMSG_PositionFile = 0xD4
-} MessageCommandID;
-
+/* A file support request (0x40 bytes): r8 = the file handle (as a byte, the open request's argument), rC = the
+   file position (as a halfword, the byte count of a read or write). */
 typedef struct CommandReply {
     u32 length;
     u8 commandID;
@@ -35,7 +30,7 @@ typedef struct CommandReply {
         u16 h;
         u32 w;
     } rC;
-    u8 r10;
+    u8 whence;
     u8 pad11[0x2F];
 } CommandReply;
 
@@ -53,7 +48,7 @@ DSError TRKReadBuffer_ui8(TRKBuffer* buffer, u8* data, int count);
 void OutputData(void* data, int length);
 void TRKProcessInput(int bufferIdx);
 
-DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 p1, u32 p2, int p3);
+DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 retryCount, int useTimeout);
 
 static const char sRequestSendStrings[] = "Calling MessageSend\n\0\0\0\0"
                                           "msg_command : 0x%02x hdr->cmdID 0x%02x\n\0"
@@ -73,7 +68,7 @@ DSError HandlePositionFileSupportRequest(u32 file_handle, u32* position, u8 when
     reply.length = sizeof(CommandReply);
     reply.r8.w = file_handle;
     reply.rC.w = *position;
-    reply.r10 = whence;
+    reply.whence = whence;
 
     error = TRKGetFreeBuffer(&bufferId, &buffer);
 
@@ -136,7 +131,9 @@ DSError HandleCloseFileSupportRequest(int file_handle, u32* ioResult) {
     return error;
 }
 
-asm DSError HandleOpenFileSupportRequest(const char* path, u8 replyError, u32* param_3, u32* ioResult) {
+/* Sends an open request for path (requestArg goes in the byte at reply offset 8) and returns the reply's file
+   handle in *fileHandle and its I/O result in *ioResult. */
+asm DSError HandleOpenFileSupportRequest(const char* path, u8 requestArg, u32* fileHandle, u32* ioResult) {
     nofralloc
     stwu r1, -0x70(r1)
     mfspr r0, 8
@@ -214,7 +211,9 @@ L_8025AAA4:
     blr
 }
 
-asm DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 p1, u32 p2, int p3) {
+/* Sends msgBuf and waits for the reply, trying retryCount + 1 times; unused (r5) is never read; with useTimeout
+   zero the wait for a packet has no limit. */
+asm DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 retryCount, int useTimeout) {
     nofralloc
     stwu r1, -0x40(r1)
     mfspr r0, 8

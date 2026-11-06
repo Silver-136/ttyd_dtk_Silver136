@@ -1,21 +1,5 @@
 #include "ansi_files.h"
 
-#define _IONBF 0
-#define _IOLBF 1
-#define _IOFBF 2
-
-#define SEEK_END 2
-
-enum { __read = 1, __write = 2, __append = 4 };
-
-#define files_access 2
-
-#define set_error(file)          \
-    do {                         \
-        (file)->state.error = 1; \
-        (file)->buffer_len = 0;  \
-    } while (0)
-
 int fwide(FILE* stream, int orientation);
 void __stdio_atexit(void);
 int fseek(FILE* file, long offset, int file_mode);

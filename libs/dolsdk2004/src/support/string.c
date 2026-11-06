@@ -1,5 +1,6 @@
 #include <charPipeline/structures/dolphinString.h>
 
+/* Writes str1 followed by str2 to dst (the destination is the last argument); dst's size is not checked. */
 u8 Strcat(char* str1, char* str2, char* dst) {
     char* srcCursor = str1;
     char* dstCursor = dst;;
@@ -31,6 +32,8 @@ u8 Strcat(char* str1, char* str2, char* dst) {
     return 1;
 }
 
+/* BUG: the loop tests the next source character after each copy, so the terminating NUL is never copied (and an
+   empty source still copies its NUL plus whatever follows it up to the next NUL). */
 void Strcpy(char* dst, char* src) {
     do {
         *dst = *src;
@@ -39,6 +42,8 @@ void Strcpy(char* dst, char* src) {
     } while ((s8)*src != 0);
 }
 
+/* Returns 1 when str1 sorts first, -1 when str2 does (the opposite sign of strcmp).
+   BUG: returns 0 as soon as either string ends, so a string compares equal to any longer string it starts. */
 s8 Strcmp(char* str1, char* str2) {
     char* cursor1 = str1;
     char* cursor2 = str2;

@@ -7,6 +7,8 @@ __declspec(section ".init") void* memset(void* dst, int val, size_t n) {
     return dst;
 }
 
+/* dst serves as a byte and a word pointer by casts used as lvalues (an MWCC extension): it is stepped one byte
+   back first so each store can pre-increment. */
 __declspec(section ".init") void __fill_mem(void* dst, int val, size_t n) {
     unsigned long v = (unsigned char)val;
     unsigned long i;
@@ -63,6 +65,7 @@ __declspec(section ".init") void __fill_mem(void* dst, int val, size_t n) {
     }
 }
 
+/* Copies forward when src is at or above dst, else backward, so overlapping ranges are safe. */
 __declspec(section ".init") void* memcpy(void* dst, const void* src, size_t n) {
     const unsigned char* s;
     unsigned char* d;

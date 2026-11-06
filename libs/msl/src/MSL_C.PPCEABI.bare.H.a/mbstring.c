@@ -16,6 +16,7 @@ static int unicode_to_UTF8(char* s, wchar_t wchar) {
 
     wide_char = wchar;
 
+    // one byte below 0x80, two below 0x800, else three; the cases below fall through
     if (wide_char < 0x80)
         number_of_bytes = 1;
     else if (wide_char < 0x800)
@@ -50,6 +51,8 @@ size_t wcstombs(char* s, const wchar_t* pwcs, size_t n) {
 
     source = (wchar_t*)pwcs;
 
+    // BUG: the loop runs while chars_written <= n, so when n bytes are already written the terminating '\0'
+    // goes to s[n], one byte past the limit.
     while (chars_written <= n) {
         if (!*source) {
             *(s + chars_written) = '\0';
@@ -84,6 +87,7 @@ static inline int __mbtowc_noconv(wchar_t* pwc, const char* s, size_t n) {
         return -1;
 
     source = (char*)s;
+    // the cases fall through, adding six payload bits per byte
     switch (number_of_bytes) {
     case 3:
         result_chr |= (*source++ & 0x0F);
@@ -117,6 +121,8 @@ int mbtowc(wchar_t* pwc, const char* s, size_t n) {
     return __mbtowc_noconv(pwc, s, n);
 }
 
+/* Length of the UTF-8 sequence at s: 0 for a NUL byte, 1..3 for a complete sequence, -2 when the n bytes end
+   inside a sequence, -1 when it is invalid. __mbtowc_noconv only tests for a negative result. */
 static int is_utf8_complete(const char* s, size_t n) {
     if (n == 0)
         return -1;

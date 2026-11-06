@@ -111,7 +111,7 @@ void PSVECNormalize(const register Vec* src, register Vec* unit) {
 f32 C_VECSquareMag(const Vec* v) {
     f32 sqmag;
 
-    ASSERTMSGLINE(405, v, "VECMag():  NULL VecPtr 'v' ");
+    ASSERTMSGLINE(405, v, "VECMag():  NULL VecPtr 'v' "); // the text names VECMag
 
     sqmag = v->z * v->z + ((v->x * v->x) + (v->y * v->y));
     return sqmag;

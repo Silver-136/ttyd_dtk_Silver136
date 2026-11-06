@@ -1,3 +1,5 @@
+#include "trk.h"
+
 typedef unsigned long size_t;
 typedef int BOOL;
 
@@ -33,13 +35,13 @@ int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, voi
 int __read_console(unsigned long handle, unsigned char* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0)
         return DS_IOError;
-    return __access_file(0, buffer, count, ref_con, 0xD1);
+    return __access_file(0, buffer, count, ref_con, DSMSG_ReadFile);
 }
 
 int __TRK_write_console(unsigned long handle, unsigned char* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0)
         return DS_IOError;
-    return __access_file(1, buffer, count, ref_con, 0xD0);
+    return __access_file(1, buffer, count, ref_con, DSMSG_WriteFile);
 }
 
 int __close_console(unsigned long handle) {
@@ -48,7 +50,7 @@ int __close_console(unsigned long handle) {
     if (GetTRKConnected() == 0)
         return DS_IOError;
 
-    ioResult = TRKCloseFile(0xD3, handle);
+    ioResult = TRKCloseFile(DSMSG_CloseFile, handle);
 
     switch ((unsigned char)ioResult) {
     case DS_IONoError:

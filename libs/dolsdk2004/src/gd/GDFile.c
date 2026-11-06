@@ -46,8 +46,7 @@ s32 GDReadDLFile(const char* fName, u32* numDLs, u32* numPLs, GDGList** DLDescAr
     *numDLs = hdr->numDLs;
     *numPLs = hdr->numPLs;
 
-    // Loaded pointers are relative to disc start, remap
-    // them to be relative to RAM start
+    // Loaded pointers are offsets from the start of the file; add the buffer address to make them pointers
     *DLDescArray = (GDGList*)((u32)hdr->DLDescArray + (u32)hdr);
     *PLDescArray = (GDGList*)((u32)hdr->PLDescArray + (u32)hdr);
 

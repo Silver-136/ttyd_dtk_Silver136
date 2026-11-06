@@ -8,7 +8,7 @@ BOOL DBVerbose;
 DBInterface* __DBInterface;
 
 void DBInit(void) {
-    __DBInterface = OSPhysicalToCached(0x40);
+    __DBInterface = OSPhysicalToCached(0x40); // debugger interface block in low memory
     __DBInterface->ExceptionDestination = (void *)OSCachedToPhysical(__DBExceptionDestination);
     DBVerbose = TRUE;
 }
@@ -23,7 +23,7 @@ void __DBExceptionDestinationAux(void) {
     u32* contextAddr;
     OSContext* context;
 
-    contextAddr = (void*)0xC0;
+    contextAddr = (void*)0xC0; // low-memory word holding the physical address of the current context
     context = OSPhysicalToCached(*contextAddr);
     OSReport("DBExceptionDestination\n");
     OSDumpContext(context);
@@ -33,7 +33,7 @@ void __DBExceptionDestinationAux(void) {
 asm void __DBExceptionDestination(void) {
     nofralloc
     mfmsr r3
-    ori r3, r3, 0x30
+    ori r3, r3, MSR_IR | MSR_DR
     mtmsr r3
     b __DBExceptionDestinationAux
 }
