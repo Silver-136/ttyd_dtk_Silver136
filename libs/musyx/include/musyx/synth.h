@@ -104,6 +104,21 @@ typedef struct SYNTHMasterFader {
   u8 type;            // offset 0x2D, size 0x1
 } SYNTHMasterFader;
 
+// SYNTHMasterFader.type: which sndVolume group selector reaches the fader (synthVolume).
+typedef enum {
+  SYNTH_FADER_MUSIC = 0,      // SND_MUSIC_VOLGROUPS; sequence groups (seqVolDef)
+  SYNTH_FADER_FX = 1,         // SND_FX_VOLGROUPS
+  SYNTH_FADER_USER_MUSIC = 2, // SND_USERMUSIC_VOLGROUPS
+  SYNTH_FADER_USER_FX = 3,    // SND_USERFX_VOLGROUPS; FX groups named by sndFXStart callers
+  SYNTH_FADER_NONE = 4,       // slot not in use (synthInit default)
+} SYNTH_FADER_TYPE;
+
+// synthMasterFader[] slots with a fixed use.
+#define SYNTH_VGROUP_MUSIC_MASTER 21 // sndMasterVolume music; scales every non-FX voice
+#define SYNTH_VGROUP_FX_MASTER 22    // sndMasterVolume FX; scales every FX voice
+#define SYNTH_VGROUP_SEQ_BASE 23     // 8 sequence groups 23..30 (defVGroup = seqId + 23)
+#define SYNTH_VGROUP_FX 31           // default group of an FX entry
+
 typedef struct CTRL_SOURCE {
   u8 midiCtrl;
   u8 combine;
@@ -263,6 +278,73 @@ typedef struct SYNTH_VOICE {
   s32 mesgQueue[4];    // offset 0x3F0, size 0x10
   u16 curOutputVolume; // offset 0x400, size 0x2
 } SYNTH_VOICE;
+
+// SYNTH_VOICE.cFlags bits (u64), named from what the synth code does with each bit.
+#define SYNTH_CFLAG_START_BREAK 0x1   // macStart: hw voice still active; macHandleActive breaks it
+#define SYNTH_CFLAG_START_PENDING 0x2 // macStart sets; macHandleActive clears after the setup
+#define SYNTH_CFLAG_WAIT_KEY_OFF 0x4  // mcmdWait: a key-off resumes the macro
+#define SYNTH_CFLAG_KEY_OFF 0x8       // macSetExternalKeyoff: key-off received
+#define SYNTH_CFLAG_KEY_ON 0x10       // EventHandler started the hw voice; hw key-off clears it
+#define SYNTH_CFLAG_START_SAMPLE 0x20 // mcmdStartSample sets; EventHandler calls hwStart
+#define SYNTH_CFLAG_SELECT_FILTER_SWITCH 0x40 // mcmdFilterSwitchSelect: first source set
+#define SYNTH_CFLAG_KEY_OFF_PENDING 0x80      // mcmdKeyOff sets; EventHandler sends hwKeyOff
+#define SYNTH_CFLAG_ADSR_SET 0x100            // macro set the ADSR: mcmdStartSample keeps it
+#define SYNTH_CFLAG_PORTAMENTO 0x400          // portamento on (macro or portamento controller)
+#define SYNTH_CFLAG_SELECT_FILTER_PARAM 0x800 // mcmdFilterParameterSelect: first source set
+#define SYNTH_CFLAG_PORTAMENTO_CTRL_SEEN 0x1000 // controller read; synthInitPortamento skips glide
+#define SYNTH_CFLAG_VIBRATO 0x2000              // mcmdVibrato with a period
+#define SYNTH_CFLAG_VIBRATO_MOD_WHEEL 0x4000    // vibrato depth scaled by the modulation input
+#define SYNTH_CFLAG_VOL_ENVELOPE 0x8000         // DoEnvelopeCalculation: volume envelope running
+#define SYNTH_CFLAG_PITCH_BEND_AFTER_KEY_OFF 0x10000 // pitch bend still read after the key-off
+#define SYNTH_CFLAG_LEGATO 0x20000          // do_voice_portamento: voice reused for a new key
+#define SYNTH_CFLAG_WAIT_SAMPLE_END 0x40000 // mcmdWait: the sample end resumes the macro
+// mcmd*Select: the first control source replaces the input's sources, later ones combine.
+#define SYNTH_CFLAG_SELECT_VOLUME 0x80000
+#define SYNTH_CFLAG_SELECT_PANNING 0x100000
+#define SYNTH_CFLAG_SELECT_PITCH_BEND 0x200000
+#define SYNTH_CFLAG_SELECT_MODULATION 0x400000
+#define SYNTH_CFLAG_SELECT_REVERB 0x800000
+#define SYNTH_CFLAG_SELECT_PORTAMENTO 0x1000000
+#define SYNTH_CFLAG_SELECT_PEDAL 0x2000000
+#define SYNTH_CFLAG_SELECT_SURROUND_PANNING 0x4000000
+#define SYNTH_CFLAG_SELECT_DOPPLER 0x8000000
+#define SYNTH_CFLAG_SELECT_TREMOLO 0x10000000
+#define SYNTH_CFLAG_SELECT_PRE_AUXA 0x20000000
+#define SYNTH_CFLAG_SELECT_PRE_AUXB 0x40000000
+#define SYNTH_CFLAG_SELECT_POST_AUXB 0x80000000
+#define SYNTH_CFLAG_SELECT_AUXA_0 0x100000000ULL // mcmdAuxAFXSelect, one bit per effect input
+#define SYNTH_CFLAG_SELECT_AUXA_1 0x200000000ULL
+#define SYNTH_CFLAG_SELECT_AUXA_2 0x400000000ULL
+#define SYNTH_CFLAG_SELECT_AUXA_3 0x800000000ULL
+#define SYNTH_CFLAG_SELECT_AUXB_0 0x1000000000ULL // mcmdAuxBFXSelect, one bit per effect input
+#define SYNTH_CFLAG_SELECT_AUXB_1 0x2000000000ULL
+#define SYNTH_CFLAG_SELECT_AUXB_2 0x4000000000ULL
+#define SYNTH_CFLAG_SELECT_AUXB_3 0x8000000000ULL
+#define SYNTH_CFLAG_PEDAL_HELD 0x10000000000ULL      // macSetPedalState: sustain pedal down
+#define SYNTH_CFLAG_PITCH_ADSR 0x20000000000ULL      // mcmdSetPitchADSR: pitch envelope running
+#define SYNTH_CFLAG_KEY_OFF_HELD 0x40000000000ULL    // key-off held back until the pedal is up
+#define SYNTH_CFLAG_SRC_SET 0x80000000000ULL         // mcmdSRCModeSelect: StartSample keeps it
+#define SYNTH_CFLAG_VOLUME_CHANGED 0x100000000000ULL // volume update for the next zero-offset job
+#define SYNTH_CFLAG_PAN_CHANGED 0x200000000000ULL    // panning update for the next zero-offset job
+
+// SYNTH_VOICE.midiDirtyFlags bits: input changed since its inpGet* call last read it.
+#define SYNTH_DIRTY_VOLUME 0x1
+#define SYNTH_DIRTY_PANNING 0x2
+#define SYNTH_DIRTY_SURROUND_PANNING 0x4
+#define SYNTH_DIRTY_PITCH_BEND 0x8
+#define SYNTH_DIRTY_DOPPLER 0x10
+#define SYNTH_DIRTY_MODULATION 0x20
+#define SYNTH_DIRTY_PEDAL 0x40
+#define SYNTH_DIRTY_PORTAMENTO 0x80 // set by mcmdPortamentoSelect; no inpGet* reads it
+#define SYNTH_DIRTY_PRE_AUXA 0x100
+#define SYNTH_DIRTY_REVERB 0x200
+#define SYNTH_DIRTY_PRE_AUXB 0x400
+#define SYNTH_DIRTY_POST_AUXB 0x800
+#define SYNTH_DIRTY_TREMOLO 0x1000
+#define SYNTH_DIRTY_FILTER_SWITCH 0x2000 // MusyX 2.0.1 and later
+#define SYNTH_DIRTY_FILTER_PARAM 0x4000  // MusyX 2.0.1 and later
+#define SYNTH_DIRTY_ALL 0x7fff           // every input (MusyX 2.0.1 and later)
+#define SYNTH_DIRTY_ALL_NO_FILTER 0x1fff // every input before the filter inputs (before 2.0.1)
 
 typedef struct synthITDInfo {
   // total size: 0x2

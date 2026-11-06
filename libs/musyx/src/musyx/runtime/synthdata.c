@@ -460,7 +460,7 @@ bool dataInsertFX(u16 gid, struct FX_TAB* fx, u16 fxNum) {
 #endif
 
       for (i = 0; i < fxNum; ++i, ++fx) {
-        fx->vGroup = 31;
+        fx->vGroup = SYNTH_VGROUP_FX;
       }
 
       dataFXGroupNum++;

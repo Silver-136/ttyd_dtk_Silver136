@@ -362,7 +362,7 @@ u32 seqStartPlay(PAGE* norm, PAGE* drum, MIDISETUP* midiSetup, u32* song, SND_PL
   nseq->groupID = sgid;
   BuildTransTab(nseq->normTrans, nseq->normtab);
   BuildTransTab(nseq->drumTrans, nseq->drumtab);
-  nseq->defVGroup = seqId + 23;
+  nseq->defVGroup = seqId + SYNTH_VGROUP_SEQ_BASE;
   for (i = 0; i < 64; i++) {
     nseq->trackVolGroup[i] = nseq->defVGroup;
   }
@@ -398,7 +398,7 @@ u32 seqStartPlay(PAGE* norm, PAGE* drum, MIDISETUP* midiSetup, u32* song, SND_PL
     if (para->flags & SND_PLAYPARA_SEQVOLDEF) {
       for (i = 0; i < para->numSeqVolDef; i++) {
         nseq->trackVolGroup[para->seqVolDef[i].track] = para->seqVolDef[i].volGroup;
-        synthSetMusicVolumeType(para->seqVolDef[i].volGroup, 0);
+        synthSetMusicVolumeType(para->seqVolDef[i].volGroup, SYNTH_FADER_MUSIC);
       }
     }
 

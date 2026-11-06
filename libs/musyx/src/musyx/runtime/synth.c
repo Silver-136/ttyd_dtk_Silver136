@@ -55,7 +55,8 @@ u32 synthGetTicksPerSecond(SYNTH_VOICE* svoice) {
 static u32 apply_portamento(SYNTH_VOICE* svoice, u32 ccents, u32 deltaTime) {
   u32 old_portCurPitch;
 
-  if ((svoice->cFlags & 0x400) != 0 && (int)((svoice->portDuration - svoice->portTime) >> 8) > 0) {
+  if ((svoice->cFlags & SYNTH_CFLAG_PORTAMENTO) != 0 &&
+      (int)((svoice->portDuration - svoice->portTime) >> 8) > 0) {
 
     old_portCurPitch = svoice->portCurPitch;
     svoice->portCurPitch += (int)deltaTime * ((int)(ccents - svoice->portCurPitch) >> 8) /
@@ -73,12 +74,12 @@ static u32 apply_portamento(SYNTH_VOICE* svoice, u32 ccents, u32 deltaTime) {
 }
 
 void synthInitPortamento(SYNTH_VOICE* svoice) {
-  if (svoice->cFlags & 0x20000) {
+  if (svoice->cFlags & SYNTH_CFLAG_LEGATO) {
     return;
   }
 
   if (svoice->portType == 1) {
-    if (!(svoice->cFlags & 0x1000)) {
+    if (!(svoice->cFlags & SYNTH_CFLAG_PORTAMENTO_CTRL_SEEN)) {
       svoice->portTime = 0;
     } else {
       svoice->portTime = svoice->portDuration;
@@ -107,11 +108,15 @@ static u32 do_voice_portamento(u8 key, u8 midi, u8 midiSet, u32 isMaster, u32* r
         sv->block == 0 &&
 #endif
         sv->id != SND_ID_ERROR && sv->midi == midi && sv->midiSet == midiSet) {
-      if ((sv->cFlags & 2) != 0) {
+      if ((sv->cFlags & SYNTH_CFLAG_START_PENDING) != 0) {
         legatoVoiceIsStarting = TRUE;
       }
-      if ((sv->cFlags & 0x10) != 0 && (sv->cFlags & 0x10000000008) != 0x8 && hwIsActive(i)) {
-        if (vid == SND_ID_ERROR && (sv->cFlags & 0x20002) == 0x20002) {
+      if ((sv->cFlags & SYNTH_CFLAG_KEY_ON) != 0 &&
+          (sv->cFlags & (SYNTH_CFLAG_KEY_OFF | SYNTH_CFLAG_PEDAL_HELD)) != SYNTH_CFLAG_KEY_OFF &&
+          hwIsActive(i)) {
+        if (vid == SND_ID_ERROR &&
+            (sv->cFlags & (SYNTH_CFLAG_START_PENDING | SYNTH_CFLAG_LEGATO)) ==
+                (SYNTH_CFLAG_START_PENDING | SYNTH_CFLAG_LEGATO)) {
           *rejected = TRUE;
           return SND_ID_ERROR;
         }
@@ -122,7 +127,7 @@ static u32 do_voice_portamento(u8 key, u8 midi, u8 midiSet, u32 isMaster, u32* r
         sv->orgNote = key;
         sv->curDetune = 0;
         sv->portTime = 0;
-        sv->cFlags |= 0x20000;
+        sv->cFlags |= SYNTH_CFLAG_LEGATO;
         vidRemoveVoiceReferences(&synthVoice[i]);
         if (vid == SND_ID_ERROR) {
           sv->child = SND_ID_ERROR;
@@ -432,9 +437,9 @@ static void UpdateTimeMIDICtrl(SYNTH_VOICE* sv) {
 
   sv->timeUsedByInput = 0;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
-  sv->midiDirtyFlags = 0x7fff;
+  sv->midiDirtyFlags = SYNTH_DIRTY_ALL;
 #else
-  sv->midiDirtyFlags = 0x1fff;
+  sv->midiDirtyFlags = SYNTH_DIRTY_ALL_NO_FILTER;
 #endif
 }
 
@@ -473,15 +478,15 @@ static void LowPrecisionHandler(u32 i) {
       if (sv->lfoUsedByInput[j]) {
         sv->lfoUsedByInput[j] = 0;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
-        sv->midiDirtyFlags |= 0x7fff;
+        sv->midiDirtyFlags |= SYNTH_DIRTY_ALL;
 #else
-        sv->midiDirtyFlags |= 0x1fff;
+        sv->midiDirtyFlags |= SYNTH_DIRTY_ALL_NO_FILTER;
 #endif
       }
     }
   }
 
-  if ((sv->cFlags & 0x2000) != 0) {
+  if ((sv->cFlags & SYNTH_CFLAG_VIBRATO) != 0) {
     sv->vibCurTime += lowDeltaTime;
     sv->vibCurOffset = sndSin((sv->vibCurTime % sv->vibPeriod * 16) / (sv->vibPeriod / 256));
   }
@@ -521,20 +526,20 @@ static void LowPrecisionHandler(u32 i) {
       sv->panning[j] = CLAMP_INV((s32)sv->panning[j], 0, 0x7f0000u);
     }
 
-    sv->cFlags |= 0x200000000000;
+    sv->cFlags |= SYNTH_CFLAG_PAN_CHANGED;
   }
 
-  if ((sv->cFlags & 0x20000000000) != 0 &&
+  if ((sv->cFlags & SYNTH_CFLAG_PITCH_ADSR) != 0 &&
       adsrHandleLowPrecision(&sv->pitchADSR, &adsr_start, &adsr_delta)) {
-    sv->cFlags &= ~0x20000000000;
+    sv->cFlags &= ~SYNTH_CFLAG_PITCH_ADSR;
   }
 
   ccents = sv->curNote * 65536 + (sv->curDetune * 65536) / 100;
   if ((sv->cFlags &
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(1, 5, 4)
-       0x10030
+       (SYNTH_CFLAG_KEY_ON | SYNTH_CFLAG_START_SAMPLE | SYNTH_CFLAG_PITCH_BEND_AFTER_KEY_OFF)
 #else
-       0x10010
+       (SYNTH_CFLAG_KEY_ON | SYNTH_CFLAG_PITCH_BEND_AFTER_KEY_OFF)
 #endif
        ) != 0) {
     if (sv->midi != 0xff) {
@@ -555,7 +560,7 @@ static void LowPrecisionHandler(u32 i) {
     }
   }
 
-  if ((sv->cFlags & 0x2000) != 0) {
+  if ((sv->cFlags & SYNTH_CFLAG_VIBRATO) != 0) {
     Modulation = inpGetModulation(sv);
     vrange = sv->vibKeyRange * 256 + (sv->vibCentRange * 256) / 100;
     if (sv->vibModAddScale != 0) {
@@ -567,7 +572,7 @@ static void LowPrecisionHandler(u32 i) {
       vrange += (sv->vibModAddScale * ((Modulation >> 7) & 0x1ff)) >> 7;
 #endif
     }
-    if ((sv->cFlags & 0x4000) != 0) {
+    if ((sv->cFlags & SYNTH_CFLAG_VIBRATO_MOD_WHEEL) != 0) {
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 3)
       voff = (sv->vibCurOffset * (Modulation >> 7)) >> 7;
 #elif MUSY_VERSION >= MUSY_VERSION_CHECK(1, 5, 4)
@@ -583,22 +588,24 @@ static void LowPrecisionHandler(u32 i) {
 
   if (sv->midi != 0xff) {
     portamento = inpGetMidiCtrl(SND_MIDICTRL_PORTAMENTO, sv->midi, sv->midiSet);
-    if (portamento != sv->portLastCtrlState || (sv->cFlags & 0x21000) == 0x20000) {
+    if (portamento != sv->portLastCtrlState ||
+        (sv->cFlags & (SYNTH_CFLAG_PORTAMENTO_CTRL_SEEN | SYNTH_CFLAG_LEGATO)) ==
+            SYNTH_CFLAG_LEGATO) {
       if (portamento <= 0x1f80) {
-        sv->cFlags &= ~0x400;
+        sv->cFlags &= ~SYNTH_CFLAG_PORTAMENTO;
       } else {
-        if ((sv->cFlags & 0x400) == 0) {
+        if ((sv->cFlags & SYNTH_CFLAG_PORTAMENTO) == 0) {
           synthInitPortamento(sv);
         }
-        sv->cFlags |= 0x400;
+        sv->cFlags |= SYNTH_CFLAG_PORTAMENTO;
       }
-      sv->cFlags |= 0x1000;
+      sv->cFlags |= SYNTH_CFLAG_PORTAMENTO_CTRL_SEEN;
       sv->portLastCtrlState = portamento;
     }
   }
 
   ccents = apply_portamento(sv, ccents, lowDeltaTime);
-  if ((sv->cFlags & 0x20000000000) != 0) {
+  if ((sv->cFlags & SYNTH_CFLAG_PITCH_ADSR) != 0) {
     ccents += sv->pitchADSRRange * (sv->pitchADSR.currentVolume >> 16) >> 7;
   }
 
@@ -645,27 +652,27 @@ static void ZeroOffsetHandler(u32 i) {
   lowDeltaTime = synthRealTime - sv->lastZeroCallTime;
   sv->lastZeroCallTime = synthRealTime;
 
-  if ((sv->cFlags & 0x8000) != 0) {
+  if ((sv->cFlags & SYNTH_CFLAG_VOL_ENVELOPE) != 0) {
     sv->envCurrent += sv->envDelta * (lowDeltaTime >> 8);
     if (sv->envDelta < 0) {
       if ((s32)sv->envTarget >= (s32)sv->envCurrent) {
         sv->envCurrent = sv->envTarget;
-        sv->cFlags &= ~0x8000;
+        sv->cFlags &= ~SYNTH_CFLAG_VOL_ENVELOPE;
       }
     } else if ((s32)sv->envTarget <= (s32)sv->envCurrent) {
       sv->envCurrent = sv->envTarget;
-      sv->cFlags &= ~0x8000;
+      sv->cFlags &= ~SYNTH_CFLAG_VOL_ENVELOPE;
     }
     sv->volume = sv->envCurrent;
     volUpdate = TRUE;
   } else {
-    volUpdate = (sv->cFlags & 0x100000000000) != 0;
+    volUpdate = (sv->cFlags & SYNTH_CFLAG_VOLUME_CHANGED) != 0;
   }
 
-  sv->cFlags &= ~0x100000000000;
+  sv->cFlags &= ~SYNTH_CFLAG_VOLUME_CHANGED;
 
   f = synthMasterFader[sv->vGroup].pauseVol * synthMasterFader[sv->vGroup].volume *
-      synthMasterFader[sv->fxFlag ? 22 : 21].volume;
+      synthMasterFader[sv->fxFlag ? SYNTH_VGROUP_FX_MASTER : SYNTH_VGROUP_MUSIC_MASTER].volume;
 
   if (sv->track != 0xff) {
     vol = f * (f32)synthTrackVolume[sv->track] * (1.f / 127.f);
@@ -699,8 +706,9 @@ static void ZeroOffsetHandler(u32 i) {
   }
 
   if ((synthFlags & 1) == 0) {
-    if ((sv->cFlags & 0x200000000000) != 0 || (sv->midiDirtyFlags & 0x6) != 0) {
-      sv->cFlags &= ~0x200000000000;
+    if ((sv->cFlags & SYNTH_CFLAG_PAN_CHANGED) != 0 ||
+        (sv->midiDirtyFlags & (SYNTH_DIRTY_PANNING | SYNTH_DIRTY_SURROUND_PANNING)) != 0) {
+      sv->cFlags &= ~SYNTH_CFLAG_PAN_CHANGED;
       pan = sv->panning[0] + (inpGetPanning(sv) - 8192) * 0x200;
       sv->lastPan = CLAMP_INV(pan, 0, 0x7f0000);
 
@@ -719,11 +727,13 @@ static void ZeroOffsetHandler(u32 i) {
   } else {
     sv->lastPan = 0x400000;
     sv->lastSPan = 0;
-    volUpdate |= (sv->cFlags & 0x200000000000) != 0;
-    sv->cFlags &= ~0x200000000000;
+    volUpdate |= (sv->cFlags & SYNTH_CFLAG_PAN_CHANGED) != 0;
+    sv->cFlags &= ~SYNTH_CFLAG_PAN_CHANGED;
   }
 
-  if (volUpdate || (sv->midiDirtyFlags & 0xf01) != 0) {
+  if (volUpdate || (sv->midiDirtyFlags & (SYNTH_DIRTY_VOLUME | SYNTH_DIRTY_PRE_AUXA |
+                                          SYNTH_DIRTY_REVERB | SYNTH_DIRTY_PRE_AUXB |
+                                          SYNTH_DIRTY_POST_AUXB)) != 0) {
     preVol = voiceVol;
     postVol = voiceVol * vol * (f32)inpGetVolume(sv) * (1.f / 16383.f);
     auxa = ((f32)sv->revVolOffset * (1.f / 127.f)) +
@@ -736,7 +746,7 @@ static void ZeroOffsetHandler(u32 i) {
     hwSetVolume(i, sv->volTable, postVol, sv->lastPan, sv->lastSPan, auxa, auxb);
   }
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
-  if (sv->midiDirtyFlags & 0x6000) {
+  if (sv->midiDirtyFlags & (SYNTH_DIRTY_FILTER_SWITCH | SYNTH_DIRTY_FILTER_PARAM)) {
     if (inpGetFilterSwitch(sv) > 0x1FFF) {
       para = inpGetFilterParameter(sv);
       frq = sv->lpfLowerFrqBoundary + (u32)((1.f - ((1.f / 16383.f) * para)) *
@@ -771,17 +781,18 @@ static void EventHandler(u32 i) {
 
   macSetPedalState(sv, inpGetPedal(sv) > 0x1f80);
 
-  if ((sv->cFlags & 0x20) != 0) {
-    sv->cFlags &= ~0x20;
-    sv->cFlags |= 0x10;
+  if ((sv->cFlags & SYNTH_CFLAG_START_SAMPLE) != 0) {
+    sv->cFlags &= ~SYNTH_CFLAG_START_SAMPLE;
+    sv->cFlags |= SYNTH_CFLAG_KEY_ON;
     hwStart(i, sv->studio);
   }
 
-  if ((sv->cFlags & 0x10000000090) == 0x90) {
-    sv->cFlags &= ~0x90;
+  if ((sv->cFlags & (SYNTH_CFLAG_KEY_ON | SYNTH_CFLAG_KEY_OFF_PENDING | SYNTH_CFLAG_PEDAL_HELD)) ==
+      (SYNTH_CFLAG_KEY_ON | SYNTH_CFLAG_KEY_OFF_PENDING)) {
+    sv->cFlags &= ~(SYNTH_CFLAG_KEY_ON | SYNTH_CFLAG_KEY_OFF_PENDING);
     hwKeyOff(i);
-    if ((sv->cFlags & 0x20000000000) != 0 && adsrRelease(&sv->pitchADSR)) {
-      sv->cFlags &= ~0x20000000000;
+    if ((sv->cFlags & SYNTH_CFLAG_PITCH_ADSR) != 0 && adsrRelease(&sv->pitchADSR)) {
+      sv->cFlags &= ~SYNTH_CFLAG_PITCH_ADSR;
     }
   }
 
@@ -1059,7 +1070,7 @@ bool synthFXSetCtrl(u32 vid, u8 ctrl, u8 value) {
   while (vid != SND_ID_ERROR) {
     i = vid & 0xff;
     if (vid == synthVoice[i].id) {
-      if ((synthVoice[i].cFlags & 0x2) != 0) {
+      if ((synthVoice[i].cFlags & SYNTH_CFLAG_START_PENDING) != 0) {
         inpSetMidiCtrl(ctrl, i, synthVoice[i].setup.midiSet, value);
       } else {
         inpSetMidiCtrl(ctrl, i, synthVoice[i].midiSet, value);
@@ -1085,7 +1096,7 @@ bool synthFXSetCtrl14(u32 vid, u8 ctrl, u16 value) {
   while (vid != SND_ID_ERROR) {
     i = vid & 0xff;
     if (vid == synthVoice[i].id) {
-      if ((synthVoice[i].cFlags & 0x2) != 0) {
+      if ((synthVoice[i].cFlags & SYNTH_CFLAG_START_PENDING) != 0) {
         inpSetMidiCtrl14(ctrl, i, synthVoice[i].setup.midiSet, value);
       } else {
         inpSetMidiCtrl14(ctrl, i, synthVoice[i].midiSet, value);
@@ -1119,7 +1130,7 @@ static bool synthFXVolume(u32 vid, u8 vol) {
   while (vid != SND_ID_ERROR) {
     i = vid & 0xff;
     if (vid == synthVoice[i].id) {
-      if ((synthVoice[i].cFlags & 0x2) != 0) {
+      if ((synthVoice[i].cFlags & SYNTH_CFLAG_START_PENDING) != 0) {
         inpSetMidiCtrl(SND_MIDICTRL_VOLUME, i, synthVoice[i].setup.midiSet, vol);
       } else {
         inpSetMidiCtrl(SND_MIDICTRL_VOLUME, i, synthVoice[i].midiSet, vol);
@@ -1165,7 +1176,7 @@ u16 synthGetVolume(u32 vid) {
   vid = vidGetInternalId(vid);
   if (vid != SND_ID_ERROR) {
     i = vid & 0xff;
-    if (vid == synthVoice[i].id && (synthVoice[i].cFlags & 0x2) == 0) {
+    if (vid == synthVoice[i].id && (synthVoice[i].cFlags & SYNTH_CFLAG_START_PENDING) == 0) {
       return synthVoice[i].curOutputVolume;
     }
   }
@@ -1202,7 +1213,7 @@ void synthVolume(u8 volume, u16 time, u8 vGroup, u8 seqMode, u32 seqId) {
   switch (vGroup) {
   case SND_ALL_VOLGROUPS:
     for (smf = synthMasterFader, i = 0; i < 32; ++i, ++smf) {
-      if (smf->type == 0 || smf->type == 1) {
+      if (smf->type == SYNTH_FADER_MUSIC || smf->type == SYNTH_FADER_FX) {
         SetupFader(smf, volume, ltime, seqMode, SND_ID_ERROR);
         synthMasterFaderActiveFlags |= 1 << i;
       }
@@ -1211,7 +1222,7 @@ void synthVolume(u8 volume, u16 time, u8 vGroup, u8 seqMode, u32 seqId) {
 
   case SND_USERALL_VOLGROUPS:
     for (smf = synthMasterFader, i = 0; i < 32; ++i, ++smf) {
-      if (smf->type == 2 || smf->type == 3) {
+      if (smf->type == SYNTH_FADER_USER_MUSIC || smf->type == SYNTH_FADER_USER_FX) {
         SetupFader(smf, volume, ltime, seqMode, SND_ID_ERROR);
         synthMasterFaderActiveFlags |= 1 << i;
       }
@@ -1219,19 +1230,19 @@ void synthVolume(u8 volume, u16 time, u8 vGroup, u8 seqMode, u32 seqId) {
     return;
 
   case SND_USERMUSIC_VOLGROUPS:
-    type = 2;
+    type = SYNTH_FADER_USER_MUSIC;
     goto setup_type;
 
   case SND_USERFX_VOLGROUPS:
-    type = 3;
+    type = SYNTH_FADER_USER_FX;
     goto setup_type;
 
   case SND_MUSIC_VOLGROUPS:
-    type = 0;
+    type = SYNTH_FADER_MUSIC;
     goto setup_type;
 
   case SND_FX_VOLGROUPS:
-    type = 1;
+    type = SYNTH_FADER_FX;
     goto setup_type;
 
   setup_type:
@@ -1252,7 +1263,8 @@ void synthVolume(u8 volume, u16 time, u8 vGroup, u8 seqMode, u32 seqId) {
 }
 
 bool synthIsFadeOutActive(u8 vGroup) {
-  if (synthMasterFader[vGroup].type != 4 && (synthMasterFaderActiveFlags & (1 << vGroup)) != 0 &&
+  if (synthMasterFader[vGroup].type != SYNTH_FADER_NONE &&
+      (synthMasterFaderActiveFlags & (1 << vGroup)) != 0 &&
       synthMasterFader[vGroup].start > synthMasterFader[vGroup].target) {
     return TRUE;
   }
@@ -1274,7 +1286,8 @@ void synthPauseVolume(u8 volume, u16 time, u8 vGroup) {
   switch (vGroup) {
   case SND_ALL_VOLGROUPS:
     for (smf = synthMasterFader, i = 0; i < 32; ++i, ++smf) {
-      if (synthMasterFader[i].type == 0 || synthMasterFader[i].type == 1) {
+      if (synthMasterFader[i].type == SYNTH_FADER_MUSIC ||
+          synthMasterFader[i].type == SYNTH_FADER_FX) {
         smf->pauseStart = smf->pauseVol;
         smf->pauseTarget = (f32)volume * (1.f / 127.f);
         smf->pauseTime = 1.f;
@@ -1290,7 +1303,8 @@ void synthPauseVolume(u8 volume, u16 time, u8 vGroup) {
 
   case SND_USERALL_VOLGROUPS:
     for (smf = synthMasterFader, i = 0; i < 32; ++i, ++smf) {
-      if (synthMasterFader[i].type == 2 || synthMasterFader[i].type == 3) {
+      if (synthMasterFader[i].type == SYNTH_FADER_USER_MUSIC ||
+          synthMasterFader[i].type == SYNTH_FADER_USER_FX) {
         smf->pauseStart = smf->pauseVol;
         smf->pauseTarget = (f32)volume * (1.f / 127.f);
         smf->pauseTime = 1.f;
@@ -1305,19 +1319,19 @@ void synthPauseVolume(u8 volume, u16 time, u8 vGroup) {
     return;
 
   case SND_USERMUSIC_VOLGROUPS:
-    type = 2;
+    type = SYNTH_FADER_USER_MUSIC;
     goto setup_type;
 
   case SND_USERFX_VOLGROUPS:
-    type = 3;
+    type = SYNTH_FADER_USER_FX;
     goto setup_type;
 
   case SND_MUSIC_VOLGROUPS:
-    type = 0;
+    type = SYNTH_FADER_MUSIC;
     goto setup_type;
 
   case SND_FX_VOLGROUPS:
-    type = 1;
+    type = SYNTH_FADER_FX;
     goto setup_type;
 
   setup_type:
@@ -1426,7 +1440,7 @@ void synthInit(u32 mixFrq, u32 numVoices) {
     synthVoice[i].sweepNum[0] = 0;
     synthVoice[i].sweepNum[1] = 0;
     synthVoice[i].block = 0;
-    synthVoice[i].vGroup = 23;
+    synthVoice[i].vGroup = SYNTH_VGROUP_SEQ_BASE;
     synthVoice[i].keyGroup = 0;
     synthVoice[i].itdMode = 1;
     synthVoice[i].lfo[0].period = 0;
@@ -1449,19 +1463,19 @@ void synthInit(u32 mixFrq, u32 numVoices) {
   for (i = 0; i < 32; ++i) {
     synthMasterFader[i].volume = 0.f;
     synthMasterFader[i].pauseVol = 1.f;
-    synthMasterFader[i].type = 4;
+    synthMasterFader[i].type = SYNTH_FADER_NONE;
   }
 
   synthMasterFaderActiveFlags = 0;
   synthMasterFaderPauseActiveFlags = 0;
-  synthMasterFader[31].type = 1;
+  synthMasterFader[SYNTH_VGROUP_FX].type = SYNTH_FADER_FX;
 
   for (i = 0; i < 8; ++i) {
-    synthMasterFader[i + 23].type = 0;
+    synthMasterFader[i + SYNTH_VGROUP_SEQ_BASE].type = SYNTH_FADER_MUSIC;
   }
 
-  synthMasterFader[21].volume = 1.f;
-  synthMasterFader[22].volume = 1.f;
+  synthMasterFader[SYNTH_VGROUP_MUSIC_MASTER].volume = 1.f;
+  synthMasterFader[SYNTH_VGROUP_FX_MASTER].volume = 1.f;
   inpInit(0);
 
   for (i = 0; i < 8; ++i) {

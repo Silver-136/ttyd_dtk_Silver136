@@ -147,6 +147,23 @@ typedef struct _PB {
   u16 streamLoopCnt;
 } _PB;
 
+// _PB.mixerCtrl bits, set in salBuildCommandList (HandleDepopVoice maps one bit per depop channel).
+#define MIXER_CTRL_L 0x1            // main left
+#define MIXER_CTRL_R 0x2            // main right
+#define MIXER_CTRL_S 0x4            // main surround
+#define MIXER_CTRL_RAMP 0x8         // main volume ramp (L/R or S delta)
+#define MIXER_CTRL_AUXA_L 0x10
+#define MIXER_CTRL_AUXA_R 0x20
+#define MIXER_CTRL_AUXA_RAMP 0x40   // aux A L/R volume ramp
+#define MIXER_CTRL_AUXA_S 0x80
+#define MIXER_CTRL_AUXA_S_RAMP 0x100
+#define MIXER_CTRL_AUXB_L 0x200
+#define MIXER_CTRL_AUXB_R 0x400
+#define MIXER_CTRL_AUXB_RAMP 0x800  // aux B L/R volume ramp
+#define MIXER_CTRL_AUXB_S 0x1000
+#define MIXER_CTRL_AUXB_S_RAMP 0x2000
+#define MIXER_CTRL_DPL2 0x4000      // studio type other than SND_STUDIO_TYPE_STD
+
 typedef struct VSampleInfo {
   // total size: 0xC
   void* loopBufferAddr; // offset 0x0, size 0x4

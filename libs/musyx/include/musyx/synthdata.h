@@ -19,6 +19,17 @@ typedef struct SAMPLE_INFO {
   u8 compType;     // offset 0x1C, size 0x1
 } SAMPLE_INFO;
 
+// SAMPLE_INFO.compType: sample format, named from the DSP setup in salBuildCommandList.
+typedef enum {
+  SAMPLE_COMP_ADPCM = 0,         // DSP ADPCM
+  SAMPLE_COMP_ADPCM_PLUS = 1,    // ADPCM with per-block start predictors (DSPADPCMplusInfo)
+  SAMPLE_COMP_PCM16 = 2,         // 16-bit PCM (also SND_STREAM_DEFAULT streams)
+  SAMPLE_COMP_PCM8 = 3,          // 8-bit PCM
+  SAMPLE_COMP_ADPCM_STREAM = 4,  // ADPCM stream (SND_STREAM_ADPCM)
+  SAMPLE_COMP_ADPCM_VIRTUAL = 5, // ADPCM virtual sample (loop buffer from the callback)
+  SAMPLE_COMP_PCM16_VIRTUAL = 6, // 16-bit PCM virtual sample
+} SAMPLE_COMP_TYPE;
+
 typedef struct GROUP_DATA {
   // total size: 0x28
   u32 nextOff;   // offset 0x0, size 0x4

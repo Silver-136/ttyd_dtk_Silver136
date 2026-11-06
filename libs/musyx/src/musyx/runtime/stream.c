@@ -78,11 +78,11 @@ void streamHandle() {
 
       switch (si->type) {
       case 0:
-        newsmp.compType = 2;
+        newsmp.compType = SAMPLE_COMP_PCM16;
         break;
       case 1:
         newsmp.extraData = &si->adpcmInfo;
-        newsmp.compType = 4;
+        newsmp.compType = SAMPLE_COMP_ADPCM_STREAM;
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 0)
         hwSetStreamLoopPS(si->voice, si->lastPSFromBuffer);

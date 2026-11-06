@@ -136,7 +136,7 @@ void hwInitSamplePlayback(u32 v, u16 smpID, void* newsmp, u32 set_defadsr, u32 p
   unsigned long bf;
   bf = 0;
   for (i = 0; i <= salTimeOffset; ++i) {
-    bf |= dspVoice[v].changed[i] & 0x20;
+    bf |= dspVoice[v].changed[i] & DSP_CHANGED_BREAK;
     dspVoice[v].changed[i] = 0;
   }
 
@@ -173,7 +173,7 @@ void hwBreak(s32 vid) {
     dspVoice[vid].startupBreak = 1;
   }
 
-  dspVoice[vid].changed[salTimeOffset] |= 0x20;
+  dspVoice[vid].changed[salTimeOffset] |= DSP_CHANGED_BREAK;
 }
 
 void hwSetADSR(u32 v, void* _adsr, u8 mode) {
@@ -217,7 +217,7 @@ void hwSetADSR(u32 v, void* _adsr, u8 mode) {
     dspVoice[v].adsr.data.dls.rTime = adsr->data.dls.rtime;
   }
 
-  dspVoice[v].changed[0] |= 0x10;
+  dspVoice[v].changed[0] |= DSP_CHANGED_ADSR;
 }
 
 void hwSetVirtualSampleLoopBuffer(u32 voice, void* addr, u32 len) {
@@ -242,7 +242,7 @@ void hwStart(u32 v, u8 studio) {
   salActivateVoice(&dspVoice[v], studio);
 }
 
-void hwKeyOff(u32 v) { dspVoice[v].changed[salTimeOffset] |= 0x40; }
+void hwKeyOff(u32 v) { dspVoice[v].changed[salTimeOffset] |= DSP_CHANGED_KEY_OFF; }
 
 void hwSetPitch(u32 v, u16 speed) {
   DSPvoice* dsp_vptr = &dspVoice[v];
@@ -257,7 +257,7 @@ void hwSetPitch(u32 v, u16 speed) {
   }
 
   dsp_vptr->pitch[salTimeOffset] = speed * 16;
-  dsp_vptr->changed[salTimeOffset] |= 8;
+  dsp_vptr->changed[salTimeOffset] |= DSP_CHANGED_PITCH;
   dsp_vptr->lastUpdate.pitch = salTimeOffset;
 }
 
@@ -265,14 +265,14 @@ void hwSetSRCType(u32 v, u8 salSRCType) {
   static u16 dspSRCType[3] = {0, 1, 2}; // identity map
   struct DSPvoice* dsp_vptr = &dspVoice[v];
   dsp_vptr->srcTypeSelect = dspSRCType[salSRCType];
-  dsp_vptr->changed[0] |= 0x100;
+  dsp_vptr->changed[0] |= DSP_CHANGED_SRC_TYPE;
 }
 
 void hwSetPolyPhaseFilter(u32 v, u8 salCoefSel) {
   static u16 dspCoefSel[3] = {0, 1, 2}; // identity map
   DSPvoice* dsp_vptr = &dspVoice[v];
   dsp_vptr->srcCoefSelect = dspCoefSel[salCoefSel];
-  dsp_vptr->changed[0] |= 0x80;
+  dsp_vptr->changed[0] |= DSP_CHANGED_COEF_SELECT;
 }
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 3)
@@ -299,15 +299,15 @@ void hwSetFilter(u32 v, u8 mode, u16 coefA, u16 coefB) {
       dsp_vptr->filter.on = 1;
       dsp_vptr->filter.coefA = coefA;
       dsp_vptr->filter.coefB = coefB;
-      dsp_vptr->changed[0] |= 0xC00;
+      dsp_vptr->changed[0] |= (DSP_CHANGED_FILTER_ON | DSP_CHANGED_FILTER_COEF);
     }
   } else if (mode == 1) {
     dsp_vptr->filter.coefA = coefA;
     dsp_vptr->filter.coefB = coefB;
-    dsp_vptr->changed[0] |= 0x800;
+    dsp_vptr->changed[0] |= DSP_CHANGED_FILTER_COEF;
   } else {
     dsp_vptr->filter.on = 0;
-    dsp_vptr->changed[0] |= 0x400;
+    dsp_vptr->changed[0] |= DSP_CHANGED_FILTER_ON;
   }
 }
 #endif
@@ -315,17 +315,17 @@ void hwSetFilter(u32 v, u8 mode, u16 coefA, u16 coefB) {
 static void SetupITD(DSPvoice* dsp_vptr, u8 pan) {
   dsp_vptr->itdShiftL = itdOffTab[pan];
   dsp_vptr->itdShiftR = 32 - itdOffTab[pan];
-  dsp_vptr->changed[0] |= 0x200;
+  dsp_vptr->changed[0] |= DSP_CHANGED_ITD;
 }
 
 void hwSetITDMode(u32 v, u8 mode) {
   if (!mode) {
-    dspVoice[v].flags |= 0x80000000;
+    dspVoice[v].flags |= DSP_VOICE_FLAG_ITD;
     dspVoice[v].itdShiftL = 16;
     dspVoice[v].itdShiftR = 16;
     return;
   }
-  dspVoice[v].flags &= ~0x80000000;
+  dspVoice[v].flags &= ~DSP_VOICE_FLAG_ITD;
 }
 
 
@@ -347,7 +347,7 @@ void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, floa
     auxb = 1.f;
   }
 
-  salCalcVolume(table, &vi, vol, pan, span, auxa, auxb, (dsp_vptr->flags & 0x80000000) != 0,
+  salCalcVolume(table, &vi, vol, pan, span, auxa, auxb, (dsp_vptr->flags & DSP_VOICE_FLAG_ITD) != 0,
                 dspStudio[dsp_vptr->studio].type == SND_STUDIO_TYPE_DPL2);
 
   il = 32767.f * vi.volL;
@@ -359,7 +359,7 @@ void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, floa
     dsp_vptr->volL = il;
     dsp_vptr->volR = ir;
     dsp_vptr->volS = is;
-    dsp_vptr->changed[0] |= 1;
+    dsp_vptr->changed[0] |= DSP_CHANGED_VOL;
     dsp_vptr->lastUpdate.vol = 0;
   }
 
@@ -372,7 +372,7 @@ void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, floa
     dsp_vptr->volLa = il;
     dsp_vptr->volRa = ir;
     dsp_vptr->volSa = is;
-    dsp_vptr->changed[0] |= 2;
+    dsp_vptr->changed[0] |= DSP_CHANGED_VOL_AUXA;
     dsp_vptr->lastUpdate.volA = 0;
   }
 
@@ -385,11 +385,11 @@ void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, floa
     dsp_vptr->volLb = il;
     dsp_vptr->volRb = ir;
     dsp_vptr->volSb = is;
-    dsp_vptr->changed[0] |= 4;
+    dsp_vptr->changed[0] |= DSP_CHANGED_VOL_AUXB;
     dsp_vptr->lastUpdate.volB = 0;
   }
 
-  if (dsp_vptr->flags & 0x80000000) {
+  if (dsp_vptr->flags & DSP_VOICE_FLAG_ITD) {
     SetupITD(dsp_vptr, (pan >> 16));
   }
 }
@@ -433,23 +433,23 @@ u32 hwGetPos(u32 v) {
 
   // pos stays unset for a compType without a case here
   switch (dspVoice[v].smp_info.compType) {
-  case 0:
-  case 1:
-  case 4:
-  case 5:
+  case SAMPLE_COMP_ADPCM:
+  case SAMPLE_COMP_ADPCM_PLUS:
+  case SAMPLE_COMP_ADPCM_STREAM:
+  case SAMPLE_COMP_ADPCM_VIRTUAL:
     pos = ((dspVoice[v].currentAddr - (u32)dspVoice[v].smp_info.addr * 2) / 16) * 14;
     off = dspVoice[v].currentAddr & 0xf;
     if (off >= 2) {
       pos += off - 2;
     }
     break;
-  case 3:
+  case SAMPLE_COMP_PCM8:
     pos = dspVoice[v].currentAddr - (u32)dspVoice[v].smp_info.addr;
     break;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
-  case 6:
+  case SAMPLE_COMP_PCM16_VIRTUAL:
 #endif
-  case 2:
+  case SAMPLE_COMP_PCM16:
     pos = dspVoice[v].currentAddr - ((u32)dspVoice[v].smp_info.addr / 2);
     break;
   }
@@ -496,16 +496,16 @@ void hwExitSampleMem() { aramExit(); }
 
 static u32 convert_length(u32 len, u8 type) {
   switch (type) {
-  case 0:
-  case 1:
-  case 4:
-  case 5:
+  case SAMPLE_COMP_ADPCM:
+  case SAMPLE_COMP_ADPCM_PLUS:
+  case SAMPLE_COMP_ADPCM_STREAM:
+  case SAMPLE_COMP_ADPCM_VIRTUAL:
     len = (((u32)((len + 13) / 14))) * 8;
     break;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
-  case 6:
+  case SAMPLE_COMP_PCM16_VIRTUAL:
 #endif
-  case 2:
+  case SAMPLE_COMP_PCM16:
     len *= 2;
     break;
   }

@@ -77,6 +77,23 @@ typedef struct DSPvoice {
   u32 flags;
 } DSPvoice;
 
+// DSPvoice.changed[] bits: what the next salBuildCommandList must send to the DSP.
+#define DSP_CHANGED_VOL 0x1          // hwSetVolume: main L/R/S volume
+#define DSP_CHANGED_VOL_AUXA 0x2     // hwSetVolume: aux A volume
+#define DSP_CHANGED_VOL_AUXB 0x4     // hwSetVolume: aux B volume
+#define DSP_CHANGED_PITCH 0x8        // hwSetPitch
+#define DSP_CHANGED_ADSR 0x10        // hwSetADSR
+#define DSP_CHANGED_BREAK 0x20       // hwBreak / salActivateVoice: stop the voice
+#define DSP_CHANGED_KEY_OFF 0x40     // hwKeyOff: ADSR release
+#define DSP_CHANGED_COEF_SELECT 0x80 // hwSetPolyPhaseFilter
+#define DSP_CHANGED_SRC_TYPE 0x100   // hwSetSRCType
+#define DSP_CHANGED_ITD 0x200        // SetupITD: ITD shifts
+#define DSP_CHANGED_FILTER_ON 0x400  // hwSetFilter: low-pass filter switched
+#define DSP_CHANGED_FILTER_COEF 0x800 // hwSetFilter: low-pass coefficients
+
+// DSPvoice.flags bits.
+#define DSP_VOICE_FLAG_ITD 0x80000000 // hwSetITDMode(v, 0): ITD on (SetupITD, itd buffer)
+
 typedef struct DSPhostDPop {
   // total size: 0x24
   s32 l;  // offset 0x0, size 0x4

@@ -345,7 +345,7 @@ static s32 voiceAllocateFind(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag) 
           continue;
 
         if (!type_alloc || fxFlag == synthVoice[i].fxFlag) {
-          if ((synthVoice[i].cFlags & 2))
+          if ((synthVoice[i].cFlags & SYNTH_CFLAG_START_PENDING))
             continue;
           if (voice != -1) {
             if (synthVoice[i].age < synthVoice[voice].age)
@@ -397,7 +397,7 @@ static s32 voiceAllocateFind(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag) 
           continue;
 
         if (!type_alloc || fxFlag == synthVoice[i].fxFlag) {
-          if ((synthVoice[i].cFlags & 2))
+          if ((synthVoice[i].cFlags & SYNTH_CFLAG_START_PENDING))
             continue;
           if (voice != -1) {
             if (synthVoice[voice].age > synthVoice[i].age)
@@ -576,7 +576,7 @@ void voiceKill(u32 vi) {
   SYNTH_VOICE* sv = &synthVoice[vi];
   if (sv->addr != NULL) {
     vidRemoveVoiceReferences(sv);
-    sv->cFlags &= ~3;
+    sv->cFlags &= ~(SYNTH_CFLAG_START_BREAK | SYNTH_CFLAG_START_PENDING);
     sv->age = 0;
     voiceFree(sv);
   }

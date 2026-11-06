@@ -311,7 +311,7 @@ void inpSetMidiCtrl(u8 ctrl, u8 channel, u8 set, u8 value) {
     if (changed) {
       for (i = 0; i < synthInfo.voiceNum; ++i) {
         if (set == synthVoice[i].midiSet && channel == synthVoice[i].midi) {
-          synthVoice[i].midiDirtyFlags = 0x7fff;
+          synthVoice[i].midiDirtyFlags = SYNTH_DIRTY_ALL;
           synthKeyStateUpdate(&synthVoice[i]);
         }
       }
@@ -320,7 +320,7 @@ void inpSetMidiCtrl(u8 ctrl, u8 channel, u8 set, u8 value) {
 #else
     for (i = 0; i < synthInfo.voiceNum; ++i) {
       if (set == synthVoice[i].midiSet && channel == synthVoice[i].midi) {
-        synthVoice[i].midiDirtyFlags = 0x1fff;
+        synthVoice[i].midiDirtyFlags = SYNTH_DIRTY_ALL_NO_FILTER;
         synthKeyStateUpdate(&synthVoice[i]);
       }
     }
@@ -367,7 +367,7 @@ void inpSetMidiCtrl(u8 ctrl, u8 channel, u8 set, u8 value) {
     if (changed) {
       for (i = 0; i < synthInfo.voiceNum; ++i) {
         if (set == synthVoice[i].midiSet && channel == synthVoice[i].midi) {
-          synthVoice[i].midiDirtyFlags = 0x7fff;
+          synthVoice[i].midiDirtyFlags = SYNTH_DIRTY_ALL;
           synthKeyStateUpdate(&synthVoice[i]);
         }
       }
@@ -375,7 +375,7 @@ void inpSetMidiCtrl(u8 ctrl, u8 channel, u8 set, u8 value) {
 #else
     for (i = 0; i < synthInfo.voiceNum; ++i) {
       if (set == synthVoice[i].midiSet && channel == synthVoice[i].midi) {
-        synthVoice[i].midiDirtyFlags = 0x1fff;
+        synthVoice[i].midiDirtyFlags = SYNTH_DIRTY_ALL_NO_FILTER;
         synthKeyStateUpdate(&synthVoice[i]);
       }
     }
@@ -727,47 +727,61 @@ static u16 GetGlobalInputValue(CTRL_DEST* inp, u32 dirtyMask, u8 midi, u8 midiSe
   return _GetInputValue(NULL, inp, midi, midiSet);
 }
 
-u16 inpGetVolume(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpVolume, 0x1); }
+u16 inpGetVolume(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpVolume, SYNTH_DIRTY_VOLUME);
+}
 
-u16 inpGetPanning(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpPanning, 0x2); }
+u16 inpGetPanning(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpPanning, SYNTH_DIRTY_PANNING);
+}
 
 u16 inpGetSurPanning(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpSurroundPanning, 0x4);
+  return GetInputValue(svoice, &svoice->inpSurroundPanning, SYNTH_DIRTY_SURROUND_PANNING);
 }
 
 u16 inpGetPitchBend(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpPitchBend, 0x8);
+  return GetInputValue(svoice, &svoice->inpPitchBend, SYNTH_DIRTY_PITCH_BEND);
 }
 
-u16 inpGetDoppler(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpDoppler, 0x10); }
+u16 inpGetDoppler(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpDoppler, SYNTH_DIRTY_DOPPLER);
+}
 
 u16 inpGetModulation(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpModulation, 0x20);
+  return GetInputValue(svoice, &svoice->inpModulation, SYNTH_DIRTY_MODULATION);
 }
 
-u16 inpGetPedal(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpPedal, 0x40); }
+u16 inpGetPedal(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpPedal, SYNTH_DIRTY_PEDAL);
+}
 
-u16 inpGetPreAuxA(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpPreAuxA, 0x100); }
+u16 inpGetPreAuxA(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpPreAuxA, SYNTH_DIRTY_PRE_AUXA);
+}
 
-u16 inpGetReverb(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpReverb, 0x200); }
+u16 inpGetReverb(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpReverb, SYNTH_DIRTY_REVERB);
+}
 
-u16 inpGetPreAuxB(SYNTH_VOICE* svoice) { return GetInputValue(svoice, &svoice->inpPreAuxB, 0x400); }
+u16 inpGetPreAuxB(SYNTH_VOICE* svoice) {
+  return GetInputValue(svoice, &svoice->inpPreAuxB, SYNTH_DIRTY_PRE_AUXB);
+}
 
 u16 inpGetPostAuxB(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpPostAuxB, 0x800);
+  return GetInputValue(svoice, &svoice->inpPostAuxB, SYNTH_DIRTY_POST_AUXB);
 }
 
 u16 inpGetTremolo(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpTremolo, 0x1000);
+  return GetInputValue(svoice, &svoice->inpTremolo, SYNTH_DIRTY_TREMOLO);
 }
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
 u16 inpGetFilterSwitch(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpFilterSwitch, 0x2000);
+  return GetInputValue(svoice, &svoice->inpFilterSwitch, SYNTH_DIRTY_FILTER_SWITCH);
 }
 
 u16 inpGetFilterParameter(SYNTH_VOICE* svoice) {
-  return GetInputValue(svoice, &svoice->inpFilterParameter, 0x4000);
+  return GetInputValue(svoice, &svoice->inpFilterParameter, SYNTH_DIRTY_FILTER_PARAM);
 }
 #endif
 
@@ -845,9 +859,9 @@ void inpInit(SYNTH_VOICE* svoice) {
 #endif
 
 #if MUSY_VERSION <= MUSY_VERSION_CHECK(2, 0, 0)
-    svoice->midiDirtyFlags = 0x1fff;
+    svoice->midiDirtyFlags = SYNTH_DIRTY_ALL_NO_FILTER;
 #else
-    svoice->midiDirtyFlags = 0x7fff;
+    svoice->midiDirtyFlags = SYNTH_DIRTY_ALL;
 #endif
     svoice->lfoUsedByInput[0] = 0;
     svoice->lfoUsedByInput[1] = 0;

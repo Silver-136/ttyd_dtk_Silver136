@@ -405,9 +405,9 @@ bool sndFXAssignVolGroup2FXId(SND_FXID fid, u8 vGroup) {
 
 
       fx->vGroup = vGroup;
-      synthSetMusicVolumeType(vGroup, 3);
+      synthSetMusicVolumeType(vGroup, SYNTH_FADER_USER_FX);
     } else {
-      fx->vGroup = 0x1f;
+      fx->vGroup = SYNTH_VGROUP_FX;
     }
     ret = 1;
   } else {
@@ -454,10 +454,10 @@ void sndMasterVolume(u8 volume, u16 time, u8 music, u8 fx) {
   MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
   hwDisableIrq();
   if (music != 0)
-    synthVolume(volume, time, 0x15, 0, -1);
+    synthVolume(volume, time, SYNTH_VGROUP_MUSIC_MASTER, 0, -1);
 
   if (fx != 0)
-    synthVolume(volume, time, 0x16, 0, -1);
+    synthVolume(volume, time, SYNTH_VGROUP_FX_MASTER, 0, -1);
   hwEnableIrq();
 }
 
@@ -503,7 +503,7 @@ void sndOutputMode(SND_OUTPUTMODE output) {
   }
 
   for (i = 0; i < synthInfo.voiceNum; ++i) {
-    synthVoice[i].cFlags |= 0x0000200000000000;
+    synthVoice[i].cFlags |= SYNTH_CFLAG_PAN_CHANGED;
   }
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(1, 5, 4)
   streamOutputModeChanged();
