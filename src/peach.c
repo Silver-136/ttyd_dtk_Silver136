@@ -175,7 +175,7 @@ void peachChgPose(const char* name) {
     if (mario->animName == NULL || strcmp(mario->animName, name) != 0) {
         mario->animName = name;
         mario->poseTime = 0;
-        mario->dispFlags &= ~0x30000000;
+        mario->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_POSE_UNUSED);
         mario->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
     }
 }

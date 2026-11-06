@@ -1975,7 +1975,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), LW(3))
 #if VERSION <= VERSION_DEMO_JP
-        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 #else
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -2037,7 +2037,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 20)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 235, -1, 0)
-        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
 #else
         CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(7))

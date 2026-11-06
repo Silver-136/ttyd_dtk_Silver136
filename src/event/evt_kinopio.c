@@ -393,7 +393,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_flag_onoff, 1, 768)
+    CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
 #else
     CALL(evt_snd_sfxon_3d, PSND_SFX_VOICE_MARIO_FLD_JUMP2 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
@@ -461,7 +461,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_mario_set_party_pos, 1, LW(12), LW(0), LW(1), LW(2))
     END_IF
 #if VERSION <= VERSION_DEMO_JP
-    CALL(evt_mario_flag_onoff, 0, 768)
+    CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
 #else
     CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
 #endif

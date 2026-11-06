@@ -381,7 +381,7 @@ s32 chkground(void) {
             marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
         }
-        if (attr & (HIT_ATTR_SPIKES | 0x400)) {
+        if (attr & (HIT_ATTR_SPIKES | HIT_ATTR_DAMAGE_LIQUID)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return 1;
