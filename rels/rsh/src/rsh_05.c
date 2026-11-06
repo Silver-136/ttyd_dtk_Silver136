@@ -839,6 +839,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+// FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 
 /**

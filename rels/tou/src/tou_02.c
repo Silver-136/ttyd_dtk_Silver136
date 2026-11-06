@@ -2143,6 +2143,7 @@ void ext_fan_main(void) {
     psndSFX_vol(fan_wp->sfxId, fan_wp->vol * fan_wp->count / fan_wp->num);
 }
 
+// FAKE: placed in .rodata; without it the object changes
 static __declspec(section ".rodata") Vec fan_zero = {0.0f, 0.0f, 0.0f};
 #pragma opt_propagation reset
 

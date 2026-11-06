@@ -36,6 +36,7 @@ typedef struct MotRollWork {
 f32 roll_grx;
 f32 roll_grz;
 s32 roll_flyout_flag2;
+// FAKE: placed in .rodata; without it the object changes
 static __declspec(section ".rodata") Vec rollOfs = {0.0f, 40.0f, 0.0f};
 
 /**

@@ -153,6 +153,7 @@ static LoadWork work;
 static LoadWork* wp = &work;
 
 #if VERSION >= VERSION_US
+// FAKE: placed in .sdata2; without it the object changes
 __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
 #endif
 

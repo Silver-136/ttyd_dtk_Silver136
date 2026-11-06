@@ -221,6 +221,7 @@ EVT_BEGIN(twoddisp_main_event)
     RETURN
 EVT_END()
 
+// FAKE: placed in .sdata2 (both colors); without it the object changes
 __declspec(section ".sdata2") const GXColor twod_text_fog_color;
 __declspec(section ".sdata2") const GXColor twod_icon_fog_color;
 
