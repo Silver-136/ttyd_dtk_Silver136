@@ -74,6 +74,16 @@ BOOL marioChkHipBump(void) {
     return ret;
 }
 
+/** Starts the landing camera shake: quake_evt, or the half-strength quake_bgmode_evt in background mode. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void quakeOn(void) {
+#if VERSION <= VERSION_DEMO_JP
+    evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
+#else
+    evtEntryType(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0, 0);
+#endif
+}
+
 // The hip-drop sounds. The US and later code looks MarioWork up again inside these helpers (its build has the extra
 // marioGetPtr calls) and starts each sound only when it is not already playing.
 static inline void hip_snd_reset(MarioWork* mario) {
@@ -287,11 +297,10 @@ void mot_hip(void) {
             }
 #if VERSION <= VERSION_DEMO_JP
             psndSFXOn_3D((char*)PSND_SFX_MARIO_HIO_DROP2, &mario->position);
-            evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);
-            evtEntryType(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0, 0);
 #endif
+            quakeOn();
         } else {
             mario->position.y += fall;
         }

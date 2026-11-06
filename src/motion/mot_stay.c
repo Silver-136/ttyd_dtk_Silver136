@@ -23,12 +23,64 @@
 
 #include "mario/mario_sbr.h"
 
-/** TRUE when Mario is at 5 HP or less, which switches his idle to the tired pose (M_S_3) and breathing sounds. */
-static inline BOOL lowHP(void) {
-    BOOL r = pouchGetHP() <= MARIO_DANGER_HP;
-    return r;
+/** Stops the idle sound (mario->soundId[0]) and the charge-up voice (soundId[1]) if they are playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void stopVoice(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->soundId[0] != (u32)-1) {
+        psndSFXOff(mario->soundId[0]);
+        mario->soundId[0] = -1;
+    }
+    mario = marioGetPtr();
+    if (mario->soundId[1] != (u32)-1) {
+        psndSFXOff(mario->soundId[1]);
+        mario->soundId[1] = -1;
+    }
 }
 
+/** Mario's yawn (SFX_VOICE_MARIO_YAWN1) in mario->soundId[0] as he gets sleepy in the idle animation. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void yawnVoice(void) {
+    MarioWork* m = marioGetPtr();
+    m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_YAWN1), &m->position);
+}
+
+/** Mario's snore (SFX_VOICE_MARIO_SLEEP1) in mario->soundId[0] while he naps. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void snoreVoice(void) {
+    MarioWork* m = marioGetPtr();
+    m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_SLEEP1), &m->position);
+}
+
+/**
+ * Mario's tired breathing in the low-HP pose (M_S_3): counts mario->idleTimer and plays SFX_VOICE_MARIO_RELIEF1
+ * and RELIEF2 at two points of each breath (US and later time them from the frame rate).
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void weakVoice(void) {
+    MarioWork* m = marioGetPtr();
+    m->idleTimer = m->idleTimer + 1;
+#if VERSION >= VERSION_US
+    if (m->idleTimer >= gp->framerate * 4) {
+        m->idleTimer = 0;
+        m->poseTime = 0;
+    }
+    if (m->idleTimer == 0) {
+        m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
+    }
+    if (m->idleTimer == gp->framerate * 2) {
+#else
+    if (m->idleTimer > 240) {
+        m->idleTimer = 0;
+    }
+    if (m->idleTimer == 15) {
+        m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
+    }
+    if (m->idleTimer == 135) {
+#endif
+        m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
+    }
+}
 
 /**
  * Starts Mario's charge-up voice (sound 0xDC) in mario->soundId[1] if it is not already playing;
@@ -63,6 +115,13 @@ BOOL marioChkDeepSleep(void) {
     return result;
 }
 
+/** TRUE when Mario is at 5 HP or less, which switches his idle to the tired pose (M_S_3) and breathing sounds. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL chkWeak(void) {
+    BOOL r = pouchGetHP() <= MARIO_DANGER_HP;
+    return r;
+}
+
 /**
  * Standing motion: idle pose (tired at low HP, with breathing sounds), turning into Paper Mode,
  * starting the spin hammer, Spring Jump, jumps, items and partner actions,
@@ -72,7 +131,6 @@ BOOL marioChkDeepSleep(void) {
  */
 void mot_stay(void) {
     MarioWork* mario;
-    MarioWork* m;
     BOOL newMot;
     s32 frames;
     BOOL held;
@@ -136,7 +194,7 @@ void mot_stay(void) {
             if (pouchGetHP() == 0) {
                 marioChgPose("M_I_S");
                 psndSFXOn_3D((char*)PSND_SFX_MARIO_FURAFURA1, &mario->position);
-            } else if (lowHP() && marioChkKey()) {
+            } else if (chkWeak() && marioChkKey()) {
                 mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
                 marioChgPose("M_S_3");
                 mario->idleTimer = 0;
@@ -164,7 +222,7 @@ void mot_stay(void) {
                 if (pouchGetHP() == 0) {
                     marioChgPose("M_I_S");
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FURAFURA1), &mario->position);
-                } else if (lowHP() && marioChkKey()) {
+                } else if (chkWeak() && marioChkKey()) {
                     mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
                     marioChgPose("M_S_3");
                     mario->idleTimer = 0;
@@ -200,7 +258,7 @@ void mot_stay(void) {
     }
     frames = sysMsec2Frame(1000);
     if (++mario->idleKeyTimer > frames && !(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && marioChkKey()) {
-        if (lowHP()) {
+        if (chkWeak()) {
             if (strcmp(mario->animName, "M_S_3") != 0) {
                 mario->idleTimer = 0;
             }
@@ -214,28 +272,7 @@ void mot_stay(void) {
         }
     }
     if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
-        m = marioGetPtr();
-        m->idleTimer = m->idleTimer + 1;
-#if VERSION >= VERSION_US
-        if (m->idleTimer >= gp->framerate * 4) {
-            m->idleTimer = 0;
-            m->poseTime = 0;
-        }
-        if (m->idleTimer == 0) {
-            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
-        }
-        if (m->idleTimer == gp->framerate * 2) {
-#else
-        if (m->idleTimer > 240) {
-            m->idleTimer = 0;
-        }
-        if (m->idleTimer == 15) {
-            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
-        }
-        if (m->idleTimer == 135) {
-#endif
-            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
-        }
+        weakVoice();
     }
     if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
         if (mario->controlStickSensitivity > 0.0f) {
@@ -307,7 +344,7 @@ void mot_stay(void) {
         }
         return;
     }
-    if (lowHP()) {
+    if (chkWeak()) {
         return;
     }
     switch ((s32)mario->currSubMotionId) {
@@ -319,8 +356,7 @@ void mot_stay(void) {
         case 1:
             marioChgEvtPose("M_I_5");
             marioAdjustMoveDir();
-            m = marioGetPtr();
-            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_YAWN1), &m->position);
+            yawnVoice();
             mario->multiTimer = 0x32;
             mario->currSubMotionId = 2;
         case 2:
@@ -339,8 +375,7 @@ void mot_stay(void) {
                 mario->multiTimer = 0;
                 mario->currSubMotionId = 4;
                 MARIO_STAY(mario).deepSleepTimer = 0;
-                m = marioGetPtr();
-                m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_SLEEP1), &m->position);
+                snoreVoice();
             }
             break;
         case 4:
@@ -353,10 +388,9 @@ void mot_stay(void) {
             if ((s32)++mario->multiTimer >= 140) {
 #endif
                 mario->multiTimer = 0;
-                m = marioGetPtr();
-                m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_SLEEP1), &m->position);
+                snoreVoice();
             }
-            if ((mario->flags & MARIO_FLAG_KEY_OFF) || lowHP()) {
+            if ((mario->flags & MARIO_FLAG_KEY_OFF) || chkWeak()) {
                 marioChgPose("M_S_1");
                 mario->currSubMotionId = 0;
             }
@@ -392,16 +426,7 @@ void mot_stay_post(void) {
 #if VERSION >= VERSION_JP
     MarioMotion id = marioGetPtr()->currMotionId;
     if (id != MARIO_MOTION_HAMMER_2 && id != MARIO_MOTION_JABARA) {
-        mario = marioGetPtr();
-        if (mario->soundId[0] != (u32)-1) {
-            psndSFXOff(mario->soundId[0]);
-            mario->soundId[0] = -1;
-        }
-        mario = marioGetPtr();
-        if (mario->soundId[1] != (u32)-1) {
-            psndSFXOff(mario->soundId[1]);
-            mario->soundId[1] = -1;
-        }
+        stopVoice();
     } else {
         mario = marioGetPtr();
         if (mario->soundId[0] != (u32)-1) {
@@ -411,15 +436,6 @@ void mot_stay_post(void) {
     }
 }
 #else
-    mario = marioGetPtr();
-    if (mario->soundId[0] != (u32)-1) {
-        psndSFXOff(mario->soundId[0]);
-        mario->soundId[0] = -1;
-    }
-    mario = marioGetPtr();
-    if (mario->soundId[1] != (u32)-1) {
-        psndSFXOff(mario->soundId[1]);
-        mario->soundId[1] = -1;
-    }
+    stopVoice();
 }
 #endif

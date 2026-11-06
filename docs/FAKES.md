@@ -611,7 +611,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/motion/mot_ship.c | shipStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
 | Both | src/motion/mot_ship.c | shipEff | zero local zz added to position.y; int c choosing 0.3f/0.6f | without zz and c: changes the object |
-| Both | src/motion/mot_ship.c | mot_ship_post, mot_ship, shipMove | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/motion/mot_ship.c | move_se_on, move_se_off, shipMove | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/party/party_bomhei.c | bomhei_use_main | the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object; repeated `useMotionId = 50` in the else branch | see comment |
 | Both | src/party/party_bomhei.c | bomheiCleanSfx, bomheiCleanUseSfx, bomhei_use_main | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/party/party_bomhei.c | bomhei_use_main (marioSetSplash) | call with no prototype in scope, Vec passed by value to the Vec* parameter | mot_damage.h and `&party->position`: changes the object |

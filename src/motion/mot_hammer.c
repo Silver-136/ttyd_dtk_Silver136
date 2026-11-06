@@ -209,7 +209,7 @@ s32 marioGetHammerLevel(void) {
 
 /** Starts the impact camera shake for Mario's hammer level (lv1quake_evt to lv3quake_evt). */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-void quakeOn(void) {
+static void quakeOn(void) {
     s32 lv = pouchGetPtr()->hammerLevel;
     if (lv == 1) {
         evtEntry(lv1quake_evt, 0, 0);

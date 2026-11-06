@@ -152,6 +152,32 @@ s32 marioShipGetDir(void) {
     return 0;
 }
 
+/** Starts the boat's looping engine sound (SFX_MARIO_SHIP1) at Mario unless it is already playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void move_se_on(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 snd;
+
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here, in move_se_off and in shipMove; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
+    if (marioGetPtr()->motStruct != NULL && (u32)marioGetPtr()->motShip->sfxId == 0xFFFFFFFFU) {
+        snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), &mario->position);
+        marioGetPtr()->motShip->sfxId = snd;
+    }
+}
+
+/** Stops the boat's looping engine sound if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void move_se_off(void) {
+    marioGetPtr();
+    if (marioGetPtr()->motStruct != NULL) {
+        if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
+            psndSFXOff(marioGetPtr()->motShip->sfxId);
+            marioGetPtr()->motShip->sfxId = -1;
+        }
+    }
+}
+
 /**
  * Boat transition phase: 2 while settling onto the water (sub-motion 10),
  * 1 while folding into or out of the boat (0-12, 30-48), 3 while sailing (50, 52),
@@ -289,15 +315,7 @@ void mot_ship_post(void) {
     mario->wPlayerCollisionBox.x = 20.0f;
     mario->wPlayerCollisionBox.y = 37.0f;
 #endif
-    marioGetPtr();
-    if (marioGetPtr()->motStruct != NULL) {
-        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-        if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
-            psndSFXOff(marioGetPtr()->motShip->sfxId);
-            marioGetPtr()->motShip->sfxId = -1;
-        }
-    }
+    move_se_off();
 #if VERSION <= VERSION_DEMO_JP
     {
         Vec zero = {0.0f, 0.0f, 0.0f};
@@ -685,15 +703,7 @@ void mot_ship(void) {
         f32 tt, qq;
         s32 n;
         MotShipWork* ms2;
-        marioGetPtr();
-        if (marioGetPtr()->motStruct != NULL) {
-            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-            if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
-                psndSFXOff(marioGetPtr()->motShip->sfxId);
-                marioGetPtr()->motShip->sfxId = -1;
-            }
-        }
+        move_se_off();
         camFollowYOff();
         m->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
         marioGetPtr()->motShip->baseY = marioGetPtr()->motShip->harborPos.y;
@@ -1037,7 +1047,6 @@ static void shipMove(void) {
 #else
     f32 fr;
 #endif
-    s32 snd;
     spd = m->controlStickSensitivity;
 
     // FAKE: dx is cleared twice; dropping the repeat changes the object
@@ -1152,22 +1161,12 @@ static void shipMove(void) {
         m->directionView = angleABf(0.0f, 0.0f, marioGetPtr()->motShip->velX, marioGetPtr()->motShip->velZ);
     }
     if (len >= 1.0f) {
-        MarioWork* mm = marioGetPtr();
-
-        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-        if (marioGetPtr()->motStruct != NULL && (u32)marioGetPtr()->motShip->sfxId == 0xFFFFFFFFU) {
-            snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), &mm->position);
-            marioGetPtr()->motShip->sfxId = snd;
-        }
+        move_se_on();
     } else if (len <= 0.2f) {
-        marioGetPtr();
-        if (marioGetPtr()->motStruct != NULL && (u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
-            psndSFXOff(marioGetPtr()->motShip->sfxId);
-            marioGetPtr()->motShip->sfxId = -1;
-        }
+        move_se_off();
 #if VERSION >= VERSION_JP
     }
+    // FAKE: unsigned compare with -1 on a signed sound id (see move_se_on)
     if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
         psndSFX_pos(marioGetPtr()->motShip->sfxId, &m->position);
 #endif
