@@ -10,8 +10,15 @@
 typedef struct WinMgrDesc WinMgrDesc;
 typedef struct WinMgrEntry WinMgrEntry;
 
+// WinMgrDesc.type: how winMgrSeq opens and closes the window (8 frames each way)
+typedef enum WinMgrSeqType {
+    WINMGR_SEQ_SPIN = 0, // rotates in from 30 degrees while scaling up; closes the same way back
+    WINMGR_SEQ_FADE = 1, // scales up while fading in; closes fading out at full size
+    WINMGR_SEQ_POP = 2,  // shows and hides at once
+} WinMgrSeqType;
+
 struct WinMgrDesc {
-    s32 type; //0x0
+    s32 type; //0x0, WinMgrSeqType
     s32 dispType; //0x4
     s32 camId; //0x8, CameraId
     s32 x; //0xC, entry->x

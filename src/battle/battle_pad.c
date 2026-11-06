@@ -108,26 +108,26 @@ void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
         pad->buttonsHistory[0] |= BATTLE_PAD_SUBSTICK_RIGHT;
     }
 
-    pad->buttonsPressedHistory[0] |= pad->buttonsHistory[0] & ~pad->buttonsHistory[1] & 0xFFFF0000;
+    pad->buttonsPressedHistory[0] |= pad->buttonsHistory[0] & ~pad->buttonsHistory[1] & BATTLE_PAD_STICK_BITS;
 
     if (!pad->buttonsHistory[0]) {
         pad->buttonsHeldHistory[0] = 0;
         pad->holdRepeatState = 0;
         pad->holdRepeatFrameCounter = 0;
     } else if (pad->buttonsHistory[0] != pad->buttonsHistory[1]) {
-        pad->buttonsHeldHistory[0] |= pad->buttonsHistory[0] & 0xFFFF0000;
-        pad->buttonsHeldHistory[0] &= (pad->buttonsPressedHistory[0] & 0xFFFF0000) | 0xFFFF;
+        pad->buttonsHeldHistory[0] |= pad->buttonsHistory[0] & BATTLE_PAD_STICK_BITS;
+        pad->buttonsHeldHistory[0] &= (pad->buttonsPressedHistory[0] & BATTLE_PAD_STICK_BITS) | 0xFFFF;
         pad->holdRepeatState = 1;
         pad->holdRepeatFrameCounter = 0;
     } else {
         pad->holdRepeatFrameCounter++;
         if (pad->holdRepeatFrameCounter >= (pad->holdRepeatState == 1 ? 16 : 8)) {
-            pad->buttonsHeldHistory[0] |= pad->buttonsHistory[0] & 0xFFFF0000;
+            pad->buttonsHeldHistory[0] |= pad->buttonsHistory[0] & BATTLE_PAD_STICK_BITS;
             pad->holdRepeatState = 2;
             pad->holdRepeatFrameCounter = 0;
         }
     }
-    pad->buttonsReleasedHistory[0] |= pad->buttonsHistory[1] & (pad->buttonsHistory[1] ^ pad->buttonsHistory[0]) & 0xFFFF0000;
+    pad->buttonsReleasedHistory[0] |= pad->buttonsHistory[1] & (pad->buttonsHistory[1] ^ pad->buttonsHistory[0]) & BATTLE_PAD_STICK_BITS;
 }
 
 /** Buttons newly pressed this frame on controller 1, with the stick-direction bits. */

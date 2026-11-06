@@ -324,9 +324,11 @@ typedef struct MapFileLight {
     f32 spotAngle;      // 0x30
     f32 attenAngle;     // 0x34
     s32 attenType;      // 0x38
-    s32 lflags;         // 0x3C
+    s32 lflags;         // 0x3C, read only when magic is MAP_LIGHT_LFLAGS_MAGIC
     s32 magic;          // 0x40
 } MapFileLight;
+
+#define MAP_LIGHT_LFLAGS_MAGIC 0x12D60D8 // 19751128: the light record carries lflags
 
 
 

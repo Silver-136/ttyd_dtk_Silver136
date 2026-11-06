@@ -14,6 +14,7 @@
 #define BATTLE_PAD_SUBSTICK_DOWN   (1 << 21)
 #define BATTLE_PAD_SUBSTICK_LEFT   (1 << 22)
 #define BATTLE_PAD_SUBSTICK_RIGHT  (1 << 23)
+#define BATTLE_PAD_STICK_BITS      0xFFFF0000 // the half above the PAD_BUTTON_* bits: the stick directions
 
 typedef struct BattleWorkPad {
     PADStatus padData[2]; //0x0, current, last

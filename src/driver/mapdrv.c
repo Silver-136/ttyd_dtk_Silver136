@@ -923,7 +923,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             } else if (!strcmp(light->type, "spotLight")) {
                 type = 3;
             }
-            if (light->magic == 0x12D60D8) {
+            if (light->magic == MAP_LIGHT_LFLAGS_MAGIC) {
                 lflags = light->lflags;
             }
             lcolor = light->color;

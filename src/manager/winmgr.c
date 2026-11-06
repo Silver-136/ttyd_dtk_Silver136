@@ -393,7 +393,7 @@ void winMgrMain(void) {
 static void winMgrSeq(WinMgrEntry* entry) {
     entry->flags |= WINMGR_FLAG_ANIMATING;
     switch (entry->description->type) {
-        case 0:
+        case WINMGR_SEQ_SPIN:
             switch (entry->state) {
                 case 0:
                     entry->flags &= ~WINMGR_FLAG_ANIMATING;
@@ -423,7 +423,7 @@ static void winMgrSeq(WinMgrEntry* entry) {
                     break;
             }
             break;
-        case 1:
+        case WINMGR_SEQ_FADE:
             switch (entry->state) {
                 case 0:
                     entry->flags &= ~WINMGR_FLAG_ANIMATING;
@@ -453,7 +453,7 @@ static void winMgrSeq(WinMgrEntry* entry) {
                     break;
             }
             break;
-        case 2:
+        case WINMGR_SEQ_POP:
             switch (entry->state) {
                 case 0:
                     entry->flags &= ~WINMGR_FLAG_ANIMATING;
