@@ -208,3 +208,12 @@ Download the latest release from [encounter/objdiff](https://github.com/encounte
 Select an object from the left sidebar to begin diffing. Changes to the project will rebuild automatically: changes to source files, headers, `configure.py`, `splits.txt` or `symbols.txt`.
 
 ![](assets/objdiff.png)
+
+License
+=======
+
+This project is open for anyone to use. The code is under the [MIT License](LICENSE): you may use, copy, change and share it for any purpose, including mods, tools, other projects and commercial work, without asking. Keep the licence text and copyright notice with copies of the code.
+
+The libraries in `libs/` and the tessellator in `rels/tst/` come from other sources and keep their own terms; [docs/THIRD_PARTY.md](docs/THIRD_PARTY.md) lists each one.
+
+The repository contains no game data. Building it needs your own copy of the game, and the game itself remains Nintendo's.
