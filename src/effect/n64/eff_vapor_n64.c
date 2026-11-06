@@ -63,7 +63,9 @@ static effN64Vtx size64x64_tex32x32_vtx[] = {
     {-32, 64, 2, 0, 4096, 120, 120, 0, 255},
 };
 
+// FAKE: unused zero object, read by nothing; removing it changes the object.
 static const GXColor kColor1;
+// FAKE: unused zero object, read by nothing; removing it changes the object.
 static const GXColor kColor2;
 
 static void effVaporMain(EffectEntry* effect);

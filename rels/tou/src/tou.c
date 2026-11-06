@@ -122,6 +122,7 @@ static void printRanking(void);
 static RuleData ruleDt_2bu[10];
 static RuleData ruleDt_1bu[14];
 static RuleData ruleDt_re[14];
+// FAKE: unused zero object, read by nothing; removing it changes the object.
 static s32 tou_bss_1C;
 static RankWork rank_work;
 static DispWork disp_work;

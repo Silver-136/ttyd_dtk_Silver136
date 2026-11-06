@@ -8999,6 +8999,7 @@ PaperSoundBGM psbgm[2];
 PaperSoundEffect pssfx[40];
 PaperSoundEnv psenv[16];
 PaperSoundWork psnd;
+// FAKE: unused zero object, read by nothing; removing it changes the object.
 u8 _buf[0x80];
 
 //.sdata

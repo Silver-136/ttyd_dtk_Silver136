@@ -215,6 +215,7 @@ const char* msg_fr_article_tbl[3] = {"un ", "une ", "les "};
 const char* msg_es_article_cap_tbl[6] = {"Un ", "Una ", "", "", "Unos ", "Unas "};
 const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 #if VERSION >= VERSION_DEMO_EU
+// FAKE: unused zero object, read by nothing; removing it changes the object.
 static const char* msgArticlePad[7] = {0};
 #endif
 
