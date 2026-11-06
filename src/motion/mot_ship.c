@@ -360,16 +360,16 @@ static inline void shipDecideDir(MarioWork* m, Vec* pp1, Vec* pp2) {
     f32 ff;
     HitEntry* hit;
     s32 attr;
-    hit = (HitEntry*)m->hitobjJumpFrom;
+    hit = m->hitobjJumpFrom;
     m2 = marioGetPtr();
     attr = hitGetAttr(hit);
     r = 0;
     if (attr & HIT_ATTR_SHIP_PANEL1) {
-        hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp1);
+        hitObjGetPos(hitGetName(m2->hitobjJumpFrom), pp1);
         ff = revise360(angleABf(m2->position.x, m2->position.z, pp1->x, pp1->z) - m2->targetYaw);
         r = (ff >= 180.0f) ? 2 : 1;
     } else if (attr & HIT_ATTR_SHIP_PANEL2) {
-        hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp2);
+        hitObjGetPos(hitGetName(m2->hitobjJumpFrom), pp2);
         ff = revise360(angleABf(m2->position.x, m2->position.z, pp2->x, pp2->z) - m2->targetYaw);
         r = (ff >= 180.0f) ? 2 : 1;
     } else if (attr & HIT_ATTR_SHIP_PANEL3) {
@@ -557,13 +557,13 @@ void mot_ship(void) {
         m->wPlayerCollisionBox.y = 40.0f;
         // FAKE: motStruct derived back from &field (same pointer) so ms is a later-numbered codegen value (target r28)
         ms = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos - offsetof(MotShipWork, harborPos));
-        hit = (HitEntry*)m->hitobjJumpFrom;
+        hit = m->hitobjJumpFrom;
         mm = marioGetPtr();
         hitObjGetPos(hitGetName(hit), &pos);
         fx = (s32)((100.0f * pos.x + 0.5f) / 100.0f);
         fz = (s32)((100.0f * pos.z + 0.5f) / 100.0f);
         ms->harborPos.y = mm->position.y - 15.0f;
-        r27 = harborKind((HitEntry*)mm->hitobjJumpFrom);
+        r27 = harborKind(mm->hitobjJumpFrom);
         if (r27 == 1) {
             ms->harborPos.x = fx;
             ms->harborPos.z = fz - 50.0f - 30.30303f;

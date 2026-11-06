@@ -226,7 +226,7 @@ void mot_damage(void) {
             break;
         }
         if (mario->damageHit != NULL) {
-            Vec* p = hitGetDamageReturnPos((HitEntry*)mario->damageHit);
+            Vec* p = hitGetDamageReturnPos(mario->damageHit);
             Vec t = {0.0f, 0.0f, 0.0f};
             t.x = p->x;
             t.y = p->y;
@@ -315,7 +315,7 @@ void mot_damage(void) {
             spd = -10.0f;
         }
         if (mario->damageHit != NULL) {
-            Vec* p = hitGetDamageReturnPos((HitEntry*)mario->damageHit);
+            Vec* p = hitGetDamageReturnPos(mario->damageHit);
             baseY = p->y;
         } else {
             baseY = mario->position.y;
@@ -456,7 +456,7 @@ void mot_damageToge(void) {
             break;
         }
         if (mario->damageHit != NULL) {
-            Vec* p = hitGetDamageReturnPos((HitEntry*)mario->damageHit);
+            Vec* p = hitGetDamageReturnPos(mario->damageHit);
             Vec t = {0.0f, 0.0f, 0.0f};
             t.x = p->x;
             t.y = p->y;

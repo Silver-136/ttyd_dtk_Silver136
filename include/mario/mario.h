@@ -506,36 +506,22 @@ typedef struct MarioWork {
     f32 wallPushDist;              // 0x1C8, largest push distance into the front wall
     f32 wallPushDir;               // 0x1CC, direction of that push
     s32 wallPushHold;              // 0x1D0, frames the push is held (14)
-#if VERSION <= VERSION_DEMO_JP
-    struct NpcEntry* touchNpc;          // 0x1D4
-    struct HitEntry* hitobjFrontA;      // 0x1D8, wall in front found on an A press
-    struct HitEntry* hitobjFront;       // 0x1DC
-    struct HitEntry* hitobjStandOn;     // 0x1E0
-    struct HitEntry* hitobjJumpFrom;    // 0x1E4
-    struct HitEntry* hitobjPush;        // 0x1E8
-    struct HitEntry* hitobjWall;        // 0x1EC, wall touched this frame (before push threshold)
-    struct HitEntry* hitobjHead;        // 0x1F0
-    struct HitEntry* hitobjUnder;       // 0x1F4
-    struct HitEntry* hitobjHammer;      // 0x1F8, hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
-    struct HitEntry* hitobjHammerNew;   // 0x1FC, found by this swing frame (copied to hitobjHammer)
-    struct HitEntry* damageHit;         // 0x200
-    struct HitEntry* prevHitobjStandOn; // 0x204, hitobjStandOn of the previous frame (marioMain end)
-#else
-    void* touchNpc;                // 0x1D4, NpcEntry* (marioGetTouchNpcPtr)
-    struct NpcEntry* targetNpc;    // 0x1D8, NPC in range for interaction (npcdrv)
-    void* hitobjFrontA;             // 0x1DC, wall in front found on an A press
-    void* hitobjFront;              // 0x1E0
-    void* hitobjStandOn;           // 0x1E4, 0x1E8 US HitEntry
-    void* hitobjJumpFrom;          // 0x1E8, 0x1EC US HitEntry
-    void* hitobjPush;              // 0x1EC JP, 0x1F0 US HitEntry
-    void* hitobjWall;               // 0x1F0, wall touched this frame (before push threshold)
-    void* hitobjHead;              // 0x1F4
-    void* hitobjUnder;              // 0x1F8
-    void* hitobjHammer;             // 0x1FC, HitEntry hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
-    void* hitobjHammerNew;          // 0x200, HitEntry found by this swing frame (copied to hitobjHammer)
-    void* damageHit;               // 0x204, HitEntry
-    void* prevHitobjStandOn;       // 0x208, hitobjStandOn of the previous frame (marioMain end)
+    struct NpcEntry* touchNpc;          // 0x1D4, NPC Mario is touching (marioGetTouchNpcPtr)
+#if VERSION >= VERSION_JP
+    struct NpcEntry* targetNpc;         // 0x1D8, NPC in range for interaction (npcdrv)
 #endif
+    struct HitEntry* hitobjFrontA;      // 0x1DC (0x1D8 early demos), wall in front found on an A press
+    struct HitEntry* hitobjFront;       // 0x1E0
+    struct HitEntry* hitobjStandOn;     // 0x1E4
+    struct HitEntry* hitobjJumpFrom;    // 0x1E8
+    struct HitEntry* hitobjPush;        // 0x1EC
+    struct HitEntry* hitobjWall;        // 0x1F0, wall touched this frame (before push threshold)
+    struct HitEntry* hitobjHead;        // 0x1F4
+    struct HitEntry* hitobjUnder;       // 0x1F8
+    struct HitEntry* hitobjHammer;      // 0x1FC, hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
+    struct HitEntry* hitobjHammerNew;   // 0x200, found by this swing frame (copied to hitobjHammer)
+    struct HitEntry* damageHit;         // 0x204
+    struct HitEntry* prevHitobjStandOn; // 0x208, hitobjStandOn of the previous frame (marioMain end)
     struct HitEntry* hitobjFrontWall; // 0x20C, front wall found by searchFrontWall
     f32 frontWallDist;             // 0x210, distance to the front wall (1000 = none)
     f32 groundSlope;               // 0x214, floor slope angle (degrees)
@@ -566,14 +552,9 @@ typedef struct MarioWork {
     void* balloonNpc;              // 0x264, NpcEntry*
     s32 slitPosSet;                // 0x268, mot_slit: slitPos is valid
     Vec slitPos;                   // 0x26C, mot_slit saved position
-#if VERSION <= VERSION_DEMO_JP
-    s32 soundId[3];
-#else
-#if VERSION >= VERSION_US
-    s32 soundId[5];                // 0x278, US: 5 sounds (+8 from here)
-#else
     s32 soundId[3];                // 0x278
-#endif
+#if VERSION >= VERSION_US
+    s32 hipSfxId[2];               // 0x284 US (+8 from here): mot_hip's drop sound and voice; JP keeps them in the hip motion work
 #endif
     u32 enableKeyMask;             // 0x284 JP, 0x290 US: evt_mario_set_enable_key; 0 = all buttons
     union {                        // 0x288 JP, 0x294 US: per-motion work (motstruct design)

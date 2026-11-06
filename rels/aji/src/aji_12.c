@@ -309,7 +309,7 @@ static USER_FUNC(mario_chk) {
             hit = mario->hitobjJumpFrom;
         }
     } else {
-        hit = (HitEntry*)mario->hitobjUnder;
+        hit = mario->hitobjUnder;
     }
     if (hit == NULL) {
 #endif

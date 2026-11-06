@@ -22,10 +22,10 @@
 
 
 // Ids of the two hip-drop sounds (the drop sound and Mario's voice): US and later keep them in
-// MarioWork.soundId[3..4], JP and the early demos in the hip motion work.
+// MarioWork.hipSfxId, JP and the early demos in the hip motion work.
 #if VERSION >= VERSION_US
-#define HIP_SFX_DROP (mario->soundId[3])
-#define HIP_SFX_VOICE (mario->soundId[4])
+#define HIP_SFX_DROP (mario->hipSfxId[0])
+#define HIP_SFX_VOICE (mario->hipSfxId[1])
 #else
 #define HIP_SFX_DROP (mario->mot.hip.sfxId[0])
 #define HIP_SFX_VOICE (mario->mot.hip.sfxId[1])

@@ -339,7 +339,7 @@ static USER_FUNC(ride_chk) {
             hit = mario->hitobjJumpFrom;
         }
     } else {
-        hit = (HitEntry*)mario->hitobjUnder;
+        hit = mario->hitobjUnder;
     }
 #endif
     // Contact resets the counter to 30; this call decrements it before testing visibility.

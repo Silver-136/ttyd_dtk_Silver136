@@ -892,8 +892,8 @@ void marioSoundInit(void) {
     wp->soundId[1] = -1;
     wp->soundId[2] = -1;
 #if VERSION >= VERSION_US
-    wp->soundId[3] = -1;
-    wp->soundId[4] = -1;
+    wp->hipSfxId[0] = -1;
+    wp->hipSfxId[1] = -1;
 #endif
 }
 
