@@ -316,12 +316,7 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
  * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void statusWinDisp(CameraId camId, void* param) {
-#else
-static void statusWinDisp(CameraId camId, void* param) {
-#endif
-
     alwaysDtEntry* e;
     s32 i;
     s32 blinkOn;
@@ -479,11 +474,7 @@ static void statusWinDisp(CameraId camId, void* param) {
  * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
  * from Mario's and the partner's battle units in battle.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void statusGetValue(StatusValue* values) {
-#else
-static void statusGetValue(StatusValue* values) {
-#endif
     BattleWork* bw;
     BattleUnit* mario;
     BattleUnit* party;
@@ -620,11 +611,7 @@ static inline s32 calcStep(s32 target, s32 cur) {
  * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
  * with the coin counting sound every 8th frame (6th in the early demos).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void valueUpdate(void) {
-#else
-static void valueUpdate(void) {
-#endif
     static s32 count;
     StatusValue v;
     s32 d;

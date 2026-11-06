@@ -575,12 +575,7 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
  * each of the three rings waits for its start delay (0, 30, 15 frames), then runs the 25-step scroll table,
  * waits 15 frames and repeats. The early demos also grow the scale through scale_tbl; JP and later hold it at 3.5.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effUltraHammerMain(EffectEntry* effect) {
-#else
-static void effUltraHammerMain(EffectEntry* effect) {
-#endif
-
     EffUltraHammerData* data;
     Vec position;
     int i;

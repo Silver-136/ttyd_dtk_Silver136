@@ -231,12 +231,7 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
  * above 0.1, spawns a spray burst every 10 frames. Spray (type 1): moves and fades its pieces and deletes the
  * effect once every piece has fallen below y 0.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effFunemizuMain(EffectEntry* effect) {
-#else
-static void effFunemizuMain(EffectEntry* effect) {
-#endif
-
     EffFunemizuWork* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
@@ -541,11 +536,7 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the spray (shibuki) pieces as quads turned by the spray's yaw relative to the camera. */
-#if VERSION <= VERSION_DEMO_JP
 static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
-#endif
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;
     Mtx rot;

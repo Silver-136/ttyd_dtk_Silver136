@@ -818,11 +818,7 @@ static s32 nameMain(void) {
  * the side buttons, the caret, the prompt window for this type and, while confirming,
  * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void nameEntDisp(CameraId cameraId, void* param) {
-#else
-static void nameEntDisp(CameraId cameraId, void* param) {
-#endif
     GXColor white2;
     GXColor white;
     GXColor whiteInit = {0xFF, 0xFF, 0xFF, 0xFF};

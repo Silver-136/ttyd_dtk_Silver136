@@ -103,12 +103,7 @@ static void effIndirectMain(EffectEntry* effect) {
  * Copies the frame buffer into a texture and redraws it over the point, projected from the quad's position and
  * masked by the type's texture. No indirect TEV stage is set up (the early demos only load an indirect matrix).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
-#endif
-
     EffIndirectWork* work = effect->userdata;
     CameraEntry* camera;
     s32 type;

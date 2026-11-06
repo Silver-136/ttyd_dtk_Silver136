@@ -656,11 +656,7 @@ u32 marioStGetSystemLevel(void) {
  * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
  * JP and later cancel a pending reset (RESET_TYPE_NONE) while the drive reports a fatal status.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void viPostCallback(u32 retraceCount) {
-#else
-static void viPostCallback(u32 retraceCount) {
-#endif
     OSTime time;
     u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
 

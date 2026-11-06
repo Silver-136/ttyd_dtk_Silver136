@@ -72,12 +72,7 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
  * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
  * From JP on, while the system level is nonzero it is frozen: drawn but not moved or aged.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effMagic1Main(EffectEntry* effect) {
-#else
-static void effMagic1Main(EffectEntry* effect) {
-#endif
-
     EffMagic1N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

@@ -443,12 +443,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
  * then the halves separate and tilt.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effStarStoneMain(EffectEntry* effect) {
-#else
-static void effStarStoneMain(EffectEntry* effect) {
-#endif
-
     EffStarStoneWork* w = effect->userdata;
     Vec pos;
     Vec tmp = { 0.0f, 0.0f, 0.0f };

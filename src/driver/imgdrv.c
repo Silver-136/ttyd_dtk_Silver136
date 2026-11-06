@@ -95,12 +95,7 @@ static void zFill(void) {
  * textures, advances the animation, and draws the pose as a flat screen-space quad sized to the capture,
  * scaled by distance when it has a virtual point. JP and later flag the entry when no capture is ready.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void imgDisp(CameraId camId, void* param) {
-#else
-static void imgDisp(CameraId camId, void* param) {
-#endif
-
     ImageEntry* entry = param;
     ImageShadow* sh;
     GXTexObj* texs[3];
@@ -334,12 +329,7 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
  * own buffer once when it keeps the capture) or copies its rectangle straight from the frame buffer.
  * The early demos read the offscreen texture's address into a local first; the copy is the same.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void imgCapture_Prim(ImageEntry* entry, s32 id) {
-#else
-static void imgCapture_Prim(ImageEntry* entry, s32 id) {
-#endif
-
     ImageShadow* sh = &entry->shadows[id];
 #if VERSION <= VERSION_DEMO_JP
     void* src;
@@ -634,11 +624,7 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) {
  * Draw callback on the shadow camera: draws the image's pose with its captured textures into the shadow pass
  * so it casts a projected or depth shadow, and counts the shadow draw for shadowdrv.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void imgShadowDisp(CameraId camId, void* param) {
-#else
-static void imgShadowDisp(CameraId camId, void* param) {
-#endif
     ImageShadow* sh;
     ImageEntry* entry = param;
     GXTexObj* objs[3];

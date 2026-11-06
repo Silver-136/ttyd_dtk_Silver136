@@ -927,11 +927,7 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
  * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
  * the prompt message and the wobbling cursor (hidden while a card script runs).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void loadDraw(CameraId camera, void* param) {
-#else
-static void loadDraw(CameraId camera, void* param) {
-#endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXColor white = {255, 255, 255, 255};
     GXColor gray = {160, 160, 160, 255};
@@ -1440,11 +1436,7 @@ EVT_END()
 #if VERSION < VERSION_US
 #pragma defer_codegen off
 #endif
-#if VERSION <= VERSION_DEMO_JP
 static void continueGame(void) {
-#else
-static void continueGame(void) {
-#endif
     cardCopy2Main(wp->slot);
     gp->saveSlot = wp->slot;
     gp->lastSlot = wp->slot;

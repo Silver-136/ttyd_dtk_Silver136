@@ -771,11 +771,7 @@ void kpa_powdown(void) {
  * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40
  * and turns it into a walking speed (JP and later cap it at 2; the early demos cap it at 1 and also move him here).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void kpaSwimMove(void) {
-#else
-static void kpaSwimMove(void) {
-#endif
     MarioWork* mario = marioGetPtr();
     f32 spd = mario->kpaSpeed;
     f32 stick = mario->wStickDir1;

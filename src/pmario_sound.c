@@ -10974,11 +10974,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
  * start again when they end, except in the early demos, which play them once).
  * Also runs the environment fades and low-pass filter.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void psndENVMain(void) {
-#else
-static void psndENVMain(void) {
-#endif
     s32 i;
     PaperSoundEnv* e;
     s32 lim = 100;

@@ -452,11 +452,7 @@ static void disp1(CameraId cameraId, void* param) {
  * and later) and the pulsing "press start" prompt.
  * Later versions show the build date and time while Z is held in debug mode.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void disp2(CameraId cameraId, void* param) {
-#else
-static void disp2(CameraId cameraId, void* param) {
-#endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;
     f32 proj[GX_PROJECTION_SZ];

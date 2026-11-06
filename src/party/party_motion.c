@@ -3534,11 +3534,7 @@ static f32 partyHomingOff(PartyEntry* party) {
  * Probes from at most 40 above the partner in the early demos, or touch_wall_ct in JP and later,
  * staying under any ceiling found in front.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
-#else
-static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
-#endif
     f32 s2, c2;
     HitCheckQuery q2;
     HitCheckQuery q;
@@ -3717,11 +3713,7 @@ static inline void partyDownDirY(HitCheckQuery* q) {
  * more than 650 px down) back toward Mario step by step onto the floor until it is on screen, and clears the footmarks.
  * A partner right under Mario but far down the screen is put at its appear position instead.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void party_force_reset_outofscreen(PartyEntry* party) {
-#else
-static void party_force_reset_outofscreen(PartyEntry* party) {
-#endif
     MarioWork* m2;
     s32 i;
     s32 margin;

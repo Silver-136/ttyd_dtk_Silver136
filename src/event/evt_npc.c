@@ -2582,11 +2582,7 @@ USER_FUNC(evt_npc_calc_score) {
  * or 16 frames depending on the animation state (3 or 2), sized by the NPC's scale.
  * On kpa_01 the smoke is drawn on camera 7 (not in the June demos).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
-#else
-static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
-#endif
     static u8 cnt;
     f32 x, dirX;
     u8 mask;

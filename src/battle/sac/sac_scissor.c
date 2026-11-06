@@ -962,12 +962,7 @@ static s32 scissor_control(EventEntry* evt, BOOL first) {
  * untargetable and immune ones and some defense attributes) and hits each with Art Attack.
  * args[0] gets the rating level for the popup when every enemy was hit, else -1; the crowd cheers louder.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 scissor_damage(EventEntry* evt, BOOL first) {
-#else
-static s32 scissor_damage(EventEntry* evt, BOOL first) {
-#endif
-
     BattleWork* wp;
     BattleUnit* mario;
     BattleUnit* unit;
@@ -1146,11 +1141,7 @@ static void scissor_capture(CameraId camera, void* param) {
 }
 
 /** Draws the player's line in shifting rainbow colours. The early demos also outline each enemy's cut box in red. */
-#if VERSION <= VERSION_DEMO_JP
 static void scissor_disp_control(CameraId camera, void* param) {
-#else
-static void scissor_disp_control(CameraId camera, void* param) {
-#endif
     ScissorWork* w = GetScissorPtr();
     f32* pts = (f32*)w->points;
     s32 i;

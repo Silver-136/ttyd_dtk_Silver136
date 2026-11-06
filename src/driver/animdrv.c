@@ -2453,11 +2453,7 @@ static inline void animSetCullMode(s32 cullMode) {
  * the matrices (JP and later), lighting, cull mode, alpha test and blending, the tint colours and textures,
  * including substituted paper textures.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void materialProc(s32 shapeId, s32 xluStage) {
-#else
-static void materialProc(s32 shapeId, s32 xluStage) {
-#endif
     AnimationPoseData *cd;
     int i;
     s32 drawCount;
@@ -2567,11 +2563,7 @@ static inline AnimationPoseData* rpCurData(void) {
  * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
  * and the file's colours and texture coordinates, then sends its polygons.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void renderProc(s32 shapeId, s32 unused) {
-#else
-static void renderProc(s32 shapeId, s32 unused) {
-#endif
     AnimationPoseData* cd;
     s32 texIndex;
     int i;
@@ -2835,11 +2827,7 @@ static void renderProc(s32 shapeId, s32 unused) {
  * pushes its node matrix, sets up its material and draws its shape.
  * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
-#else
-static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
-#endif
     AnimPoseGroup* group;
     AnimPoseGroup* parent;
     AnimPoseNode* node;

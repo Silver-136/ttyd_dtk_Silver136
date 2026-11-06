@@ -42,32 +42,19 @@ s32 select_comp_bteresa(const void* a, const void* b);
 
 static void select_main(WinMgrEntry* entry);
 
-#if VERSION <= VERSION_DEMO_JP
 static void select_disp(WinMgrEntry* entry);
 static void select_disp_party(WinMgrEntry* entry);
-#else
-static void select_disp(WinMgrEntry* entry);
-static void select_disp_party(WinMgrEntry* entry);
-#endif
 
 static void select_disp_mario(WinMgrEntry* entry);
 
-#if VERSION <= VERSION_DEMO_JP
 static void select_disp_luigi(WinMgrEntry* entry);
-#else
-static void select_disp_luigi(WinMgrEntry* entry);
-#endif
 
 static void select_disp2(WinMgrEntry* entry);
 static void select_main3(WinMgrEntry* entry);
 static void select_disp3(WinMgrEntry* entry);
 static void select_disp3_party(WinMgrEntry* entry);
 
-#if VERSION <= VERSION_DEMO_JP
 static void select_disp3_mario(WinMgrEntry* entry);
-#else
-static void select_disp3_mario(WinMgrEntry* entry);
-#endif
 
 static void winMgrSeq(WinMgrEntry* entry);
 s32 select_comp_type(const void* a, const void* b);
@@ -1129,11 +1116,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 break;
             case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
                 evt->lwData[2] = party_id_table[id];
-#if VERSION <= VERSION_DEMO_JP
                 name = select_party_name(id);
-#else
-                name = select_party_name(id);
-#endif
                 evt->lwData[4] = (EvtWord)name;
                 break;
             case SELECT_TYPE_STAT_SWAP_UP:

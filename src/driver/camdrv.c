@@ -675,12 +675,7 @@ static void cam3dImgMain(CameraEntry* camera) {
  * copies the main 3D camera's position, target and up vector so effects draw from the same viewpoint.
  * JP and later also rebuild the projection each frame.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void camEffMain(CameraEntry* camera) {
-#else
-static void camEffMain(CameraEntry* camera) {
-#endif
-
     CameraEntry* camera3D = camGetPtr(CAMERA_3D);
 
     camera->cameraPos = camera3D->cameraPos;

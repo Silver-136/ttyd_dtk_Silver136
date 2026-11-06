@@ -2397,11 +2397,7 @@ static inline void sfwVecSetNested(Vec* d, Vec v) {
  * On Riverside Station's eki_04, in marioChkSts state 0x10 on a slope of 45 degrees or more,
  * pos just moves with no wall check.
  */
-#if VERSION <= VERSION_DEMO_JP
 static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
-#else
-static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
-#endif
     Vec p;
     Vec dir;
     Vec hp;

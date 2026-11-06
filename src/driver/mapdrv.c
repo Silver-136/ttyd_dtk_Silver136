@@ -254,12 +254,7 @@ static void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
  * group and shadow flags, centre, and the bounding-box cull flag
  * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
  */
-#if VERSION <= VERSION_DEMO_JP
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
-#else
-static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
-#endif
-
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
     s32 i;
@@ -432,11 +427,7 @@ static void mapResetPaperCraftAmbColor(void);
  * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
  * while a character shadow projection is on.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void makeDisplayList(BOOL group) {
-#else
-static void makeDisplayList(BOOL group) {
-#endif
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
     MapEntry* e;
     MapWork* wp = mapGetWork();

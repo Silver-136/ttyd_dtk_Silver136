@@ -179,12 +179,7 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
  * it pops in, then falls (type 5 from the start), type 4 also circling the Y axis 12 degrees per frame;
  * the effect ends when every sparkle is done. Each sparkle cycles through 8 shapes; drawn on the work's camera.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effStardust2Main(EffectEntry* effect) {
-#else
-static void effStardust2Main(EffectEntry* effect) {
-#endif
-
     EffStardust2N64Work* w = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

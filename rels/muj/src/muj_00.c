@@ -4301,11 +4301,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
         SET_VALUE(LW(0), 1)
-#if VERSION >= VERSION_US
         SPAWN_EVENT(dai3_beat_back)
-#else
-        SPAWN_EVENT(dai3_beat_back)
-#endif
         CASE_EQUAL(STG5_49_BOWSER_TWILIGHT_TOWN_2)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
@@ -4330,11 +4326,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
-#if VERSION >= VERSION_US
         SPAWN_EVENT(leave_island)
-#else
-        SPAWN_EVENT(leave_island)
-#endif
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
@@ -4344,23 +4336,13 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
-#if VERSION >= VERSION_US
         CALL_CHILD(muj_gor_ship)
-#else
-        CALL_CHILD(muj_gor_ship)
-#endif
         IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
             SET_VALUE(GSWF_GOR_SAILING_TO_KEELHAUL, 0)
             SET_VALUE(GSWF_MUJ_ARRIVED_BY_SHIP_UNUSED, 1)
-#if VERSION >= VERSION_US
             SPAWN_EVENT(into_muj_ship)
         END_IF
         SPAWN_EVENT(mony_peton_boarding)
-#else
-            SPAWN_EVENT(into_muj_ship)
-        END_IF
-        SPAWN_EVENT(mony_peton_boarding)
-#endif
     END_SWITCH
     CALL(evt_hitobj_onoff, STRING("A_b_bero01"), 1, 0)
     RETURN

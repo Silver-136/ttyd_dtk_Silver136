@@ -6255,11 +6255,7 @@ EVT_BEGIN(gor_03_init_evt)
     // The minigame pipe, the exits, the townsfolk and Luigi are set up.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
-#else
-    CALL_CHILD(evt_bero_info_run)
-#endif
     CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 4)
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -6290,23 +6286,13 @@ EVT_BEGIN(gor_03_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
     CALL_CHILD(monte_evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_1))
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
     CALL_CHILD(evt_door_entry)
-#else
-    CALL_CHILD(evt_door_entry)
-    SET_VALUE(LW(0), PTR(&door_data_03))
-    CALL_CHILD(evt_door_entry)
-#endif
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
     CALL_CHILD(evt_door_03_entry)
     SET_VALUE(LW(0), PTR(&door_data_04))
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
-#else
-    CALL_CHILD(evt_door_entry)
-#endif
     SET_VALUE(LW(0), PTR(&door_data_04_roll))
     CALL_CHILD(evt_door_04_entry)
 

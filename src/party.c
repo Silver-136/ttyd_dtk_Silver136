@@ -1086,11 +1086,7 @@ s32 partyDokanMain(PartyEntry* party);
  * her move, ability, appear, goodbye, pipe, ride and damage handlers, or frees her in mode 14.
  * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void driveParty(PartyEntry* party) {
-#else
-static void driveParty(PartyEntry* party) {
-#endif
     MarioWork* mario;
     f32 x, y, z;
 
@@ -1943,11 +1939,7 @@ void allPartyRideJabara(void) {
  * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
  * above him in plane mode, in front of the boat in boat mode (not in the early demos), otherwise 20 above him.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void getRidePos(PartyEntry* party, Vec* pos) {
-#else
-static void getRidePos(PartyEntry* party, Vec* pos) {
-#endif
     MarioWork* mario = party->playerPtr;
     PartyEntry* ride;
     f32 angle;
@@ -2891,11 +2883,7 @@ s32 partyRideYoshiMain(PartyEntry* party) {
  * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
  * waits for Mario's return fall, then drops her in from above next to him and resumes following.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void party_damage_return(PartyEntry* party) {
-#else
-static void party_damage_return(PartyEntry* party) {
-#endif
     MarioWork* mario = party->playerPtr;
     f32 x, y, z;
     f32 mx, my, mz;
@@ -3139,11 +3127,7 @@ static void partyMakeDispDir(PartyEntry* party) {
  * advances her model and queues her draw at her screen depth (flickering while invincible after damage),
  * then draws her shadow, following Vivian's shadow tail when she is out or used.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void partyPreDisp(PartyEntry* party) {
-#else
-static void partyPreDisp(PartyEntry* party) {
-#endif
     Vec screen;
     f32 z;
     f32 size;
@@ -3236,11 +3220,7 @@ static void partyPreDisp(PartyEntry* party) {
  * rotations; offsets; a small per-member height fix for paper animations outside the early demos) and draws the model,
  * slowed to 0.75 in shallow water.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void partyDisp(CameraId cam, void* param) {
-#else
-static void partyDisp(CameraId cam, void* param) {
-#endif
     PartyEntry* party = param;
     Mtx m;
     Mtx t;

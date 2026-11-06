@@ -1262,11 +1262,7 @@ static inline const char* unitwin_party_name(s32 i) {
  * the partner lists (5-7) and the HP/FP/BP lists (8-10),
  * with the finger cursor and the help text of the highlighted row.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
-#else
-static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
-#endif
     PouchData* pouch = pouchGetPtr();
     UnitWinWork* wp = (UnitWinWork*)param;
     s32 mode;

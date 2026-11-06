@@ -106,12 +106,7 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
 }
 
 /** Per frame: advances the display's state machine and deletes the effect when finished. */
-#if VERSION <= VERSION_DEMO_JP
 static void effPointGetMain(EffectEntry* effect) {
-#else
-static void effPointGetMain(EffectEntry* effect) {
-#endif
-
     EffPointGetWork* work = effect->userdata;
     Vec position;
     Vec tmp = { 0.0f, 0.0f, 0.0f };

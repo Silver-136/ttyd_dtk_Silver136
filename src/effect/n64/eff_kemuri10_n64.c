@@ -158,12 +158,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
  * The alpha rises and the velocity decays for the first 10 frames, then (after one frame with neither) both drop off quickly;
  * the scale grows by 5% per frame and the texture offset scrolls.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effKemuri10Main(EffectEntry* effect) {
-#else
-static void effKemuri10Main(EffectEntry* effect) {
-#endif
-
     EffKemuri10N64Work* work;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

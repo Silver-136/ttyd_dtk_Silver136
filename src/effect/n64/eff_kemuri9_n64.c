@@ -112,12 +112,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
 }
 
 /** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
-#if VERSION <= VERSION_DEMO_JP
 static void effKemuri9Main(EffectEntry* effect) {
-#else
-static void effKemuri9Main(EffectEntry* effect) {
-#endif
-
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;
     s32 ir;

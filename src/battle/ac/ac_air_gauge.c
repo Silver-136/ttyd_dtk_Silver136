@@ -225,12 +225,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
  * Also sets the flag that shows the A icon as pressed (the key's flag; 1 while A is not held or past the last key).
  * The early demos use a steeper, shorter lift curve and lower drain rates.
  */
-#if VERSION <= VERSION_DEMO_JP
 static f32 _GetGaugeDecValue(void) {
-#else
-static f32 _GetGaugeDecValue(void) {
-#endif
-
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     AirGaugeWork* pw = (AirGaugeWork*)ac->work;

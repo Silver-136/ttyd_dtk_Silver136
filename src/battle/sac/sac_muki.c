@@ -353,12 +353,7 @@ static inline void sacMukiAudienceCall(s32 num) {
  * a blue arrow to the defense gauge (0.25 in JP and the early demos, 0.2 in US and later, up to level 9),
  * a poison mushroom makes Mario dizzy and the crowd boo.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void main_cursor(void) {
-#else
-static void main_cursor(void) {
-#endif
-
     MukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));

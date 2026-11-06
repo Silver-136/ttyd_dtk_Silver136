@@ -1511,11 +1511,7 @@ static void searchHead(PartyEntry* party) {
  * Wall check while riding: moves Yoshi by spd in direction dir up to a wall, records the front,
  * push and A-button hit objects for Mario, takes spike damage from walls, then pushes Yoshi out of nearby walls.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
-#else
-static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
-#endif
     MarioWork* mario = marioGetPtr();
     HitEntry* hit;
     Vec pos;

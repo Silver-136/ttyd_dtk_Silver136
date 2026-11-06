@@ -341,12 +341,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
  * Per frame: after 10 frames sends the small icons out into a ring, swirls them and pulls them back into the
  * centre; when all are back, plays the shine sound and stardust (not for types 7/8) and deletes the effect.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effRecoveryMain(EffectEntry* effect) {
-#else
-static void effRecoveryMain(EffectEntry* effect) {
-#endif
-
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
     s32 i;

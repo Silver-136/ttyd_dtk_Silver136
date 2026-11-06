@@ -187,11 +187,7 @@ EVT_BEGIN(e3_pose_evt)
 EVT_END()
 #endif
 
-#if VERSION >= VERSION_US
 static void alarm_handler(OSAlarm* alarm, OSContext* context) {
-#else
-static void alarm_handler(OSAlarm* alarm, OSContext* context) {
-#endif
     gp->flags |= GW_FLAG_E3_TIMEOUT;
 }
 

@@ -896,15 +896,7 @@ static void dummy_draw(CameraId camId, void* param) {
  * September US demo switch first and show it after.
  * param is unused.
  */
-#if VERSION < VERSION_US
-#if VERSION <= VERSION_DEMO_JP
 static void progDisp(CameraId camId, void* param) {
-#else
-static void progDisp(CameraId camId, void* param) {
-#endif
-#else
-static void progDisp(CameraId camId, void* param) {
-#endif
     static OSTime time;
     const char* msg;
     f32 width;

@@ -1311,11 +1311,7 @@ EVT_BEGIN(nancy_talk)
             CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION >= VERSION_US
             CALL_CHILD(bero_case_switch_on)
-#else
-            CALL_CHILD(bero_case_switch_on)
-#endif
             CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 8388612)
             SET_VALUE(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 1)
             CALL(evt_door_set_param, GW(6), 0, PTR(&door_data_01_npc))
@@ -5819,11 +5815,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     // Ms. Mowz joins the party and the partner lecture plays.
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
                     SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
-#if VERSION >= VERSION_US
                     CALL_CHILD(all_party_lecture)
-#else
-                    CALL_CHILD(all_party_lecture)
-#endif
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 
                     // The request is marked solved and the Trouble Center completion message appears.

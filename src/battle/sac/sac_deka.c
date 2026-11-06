@@ -1256,11 +1256,7 @@ EVT_END()
  * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
  * JP and later skip it once the buffers are freed.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void yuka_disp(CameraId cam, void* param) {
-#else
-static void yuka_disp(CameraId cam, void* param) {
-#endif
     DekaWork* w;
     CameraEntry* camera;
     YukaMesh* m;

@@ -1311,11 +1311,7 @@ static inline double fabs(double x) { return __fabs(x); }
  * the route dots revealed so far (the hovered place blinks), the current chapter's goal icon,
  * Mario's marker at his location, the frame, and bobbing arrows on the sides that can still scroll.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void mapGX(WindowWork* w, f32 x, f32 y) {
-#else
-static void mapGX(WindowWork* w, f32 x, f32 y) {
-#endif
     static f32 pos_tbl[7][2] = {
         {165.0f, 68.0f}, {0.0f, 75.0f}, {97.0f, 150.0f}, {-139.0f, -33.0f},
         {41.0f, -163.0f}, {211.0f, -91.0f}, {-209.0f, 159.0f},
@@ -1452,11 +1448,7 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
  * 16 entries in two columns with their log numbers (unknown enemies as "???",
  * from JP on, Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
-#else
-static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
-#endif
     GXColor k1;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor k2;
@@ -1881,11 +1873,7 @@ static void capture(CameraId camera, void* param) {
  * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the early demos),
  * and where it is found.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void monosiri_disp(CameraId camera, void* param) {
-#else
-static void monosiri_disp(CameraId camera, void* param) {
-#endif
     MonosiriWork* m = param;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
     char buf[256];

@@ -1362,39 +1362,21 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nok_01"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_nok_01)
-#else
-        CALL_CHILD(mail_evt_nok_01)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_03"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_gor_03)
-#else
-        CALL_CHILD(mail_evt_gor_03)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_02"))
-#if VERSION >= VERSION_US
         SPAWN_EVENT(mail_evt_gor_02)
         CALL_CHILD(mail_evt_gor_02_2)
-#else
-        SPAWN_EVENT(mail_evt_gor_02)
-        CALL_CHILD(mail_evt_gor_02_2)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_01"))
-#if VERSION >= VERSION_US
         SPAWN_EVENT(mail_evt_gor_01_2)
         CALL_CHILD(mail_evt_gor_01)
-#else
-        SPAWN_EVENT(mail_evt_gor_01_2)
-        CALL_CHILD(mail_evt_gor_01)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
@@ -1419,59 +1401,31 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_hom_00)
-#else
-        CALL_CHILD(mail_evt_hom_00)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("bom_01"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_bom_01)
-#else
-        CALL_CHILD(mail_evt_bom_01)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tik_00"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_tik_00)
-#else
-        CALL_CHILD(mail_evt_tik_00)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("win_01"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_win_01)
-#else
-        CALL_CHILD(mail_evt_win_01)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_01"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_tou_01)
-#else
-        CALL_CHILD(mail_evt_tou_01)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("usu_01"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_usu_01)
-#else
-        CALL_CHILD(mail_evt_usu_01)
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
-#if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_pik_00)
-#else
-        CALL_CHILD(mail_evt_pik_00)
-#endif
         RETURN
     END_IF
     RETURN

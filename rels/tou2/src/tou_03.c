@@ -5340,11 +5340,7 @@ static EVT_BEGIN(evt_boss)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_sub_starstone)
-#else
-    CALL_CHILD(evt_sub_starstone)
-#endif
 #endif
     RETURN
 EVT_END()
@@ -5844,19 +5840,11 @@ EVT_BEGIN(tou_03_init_evt)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
         SET_VALUE(LW(0), PTR(bero_data))
         CALL(evt_bero_get_info)
-#if VERSION >= VERSION_US
         CALL_CHILD(bero_case_entry)
-#else
-        CALL_CHILD(bero_case_entry)
-#endif
         CASE_DEFAULT
         SET_VALUE(LW(0), PTR(bero_data))
         CALL(evt_bero_get_info)
-#if VERSION >= VERSION_US
         CALL_CHILD(evt_bero_info_run)
-#else
-        CALL_CHILD(evt_bero_info_run)
-#endif
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
@@ -5867,11 +5855,7 @@ EVT_BEGIN(tou_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero_1"))
-#if VERSION >= VERSION_US
         CALL_CHILD(bero_case_switch_off)
-#else
-        CALL_CHILD(bero_case_switch_off)
-#endif
         SPAWN_EVENT(evt_boss)
     END_SWITCH
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)

@@ -325,12 +325,7 @@ void kpaMain(void) {
  * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
  * then the shared player effects, balloon and camera.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void kpa2DMain(void) {
-#else
-static void kpa2DMain(void) {
-#endif
-
     MarioWork* mp = marioGetPtr();
     Vec diff;
     Vec saved;
@@ -920,11 +915,7 @@ void kpaStrippedPool(f32* f, s32 i) {
  * JP and later skip the test at level 0 and for puffs smaller than 7 units; the early demos test them all.
  * Deletes the effect when the attack ends.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void kpaFireMain(void) {
-#else
-static void kpaFireMain(void) {
-#endif
     MarioWork* mario = marioGetPtr();
     Mtx mb0;
     Mtx m80;

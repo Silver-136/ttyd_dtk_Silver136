@@ -6957,11 +6957,7 @@ EVT_BEGIN(gor_00_init_evt)
     CALL(evt_map_playanim, STRING("hiki_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_d_kaiten"))
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_gazigazi_entry)
-#else
-    CALL_CHILD(evt_gazigazi_entry)
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_a"), 1, 0)

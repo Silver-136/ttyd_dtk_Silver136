@@ -2157,11 +2157,7 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
  * sample rate, channel count, loop points and sizes,
  * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
-#else
-static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
-#endif
     SoundStream* stream;
     u8* dst;
     u8* src;

@@ -1068,11 +1068,7 @@ void partyMoveNoHosei(PartyEntry* party) {
  * then a jump or the ground search and falling. Returns 0 on the ground, 1 jumping, 2 falling, 3 just landed.
  * hosei 1 adds the corrections of partyGetMoveDirSpd.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
-#else
-static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
-#endif
     Vec pos;
     Vec pos2;
     f32 spd;

@@ -411,11 +411,7 @@ static EVT_BEGIN(damage_event)
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-#if VERSION >= VERSION_US
     CALL_CHILD(btldefaultevt_Damage)
-#else
-    CALL_CHILD(btldefaultevt_Damage)
-#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     IF_INT_EQUAL(LW(0), 0)
 
@@ -983,11 +979,7 @@ static EVT_BEGIN(normal_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION >= VERSION_US
             CALL_CHILD(subsetevt_confuse_flustered)
-#else
-            CALL_CHILD(subsetevt_confuse_flustered)
-#endif
             RETURN
         END_IF
         GOTO(99)

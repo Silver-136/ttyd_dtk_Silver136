@@ -737,12 +737,7 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
  * The blue pair then sparkles, sets both flags and deletes itself; the red pair resets for another try.
  * The early demos do not stop on timeout first.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_timerswitch(MapObjectEntry* mobj) {
-#else
-static s32 mobj_timerswitch(MapObjectEntry* mobj) {
-#endif
-
     MapObjectEntry* other = mobjNameToPtr(mobj->linkedName);
     switch (mobj->state) {
     case 0:
@@ -1375,11 +1370,7 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
  * It then runs the event, sets the flag variable
  * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
-#else
-static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
-#endif
     char oname[16] = "o_";
     char iname[16] = "i_";
     EventEntry ev1;
@@ -2312,11 +2303,7 @@ USER_FUNC(evt_mobj_itembox) {
  * Main function of the signboards: reading one runs its event and waits for it to finish.
  * JP and later lock Mario's controls while it runs; the early demos' sign scripts do that themselves.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_signboard(MapObjectEntry* mobj) {
-#else
-static s32 mobj_signboard(MapObjectEntry* mobj) {
-#endif
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -3064,11 +3051,7 @@ USER_FUNC(evt_mobj_badgeblk) {
  * In Pirate's Grotto (dou_02, dou_05/dou_10 when hit by a partner) it also stops Mario
  * while the Shine is collected; the early demos have no such maps.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_powerupblk(MapObjectEntry* mobj) {
-#else
-static s32 mobj_powerupblk(MapObjectEntry* mobj) {
-#endif
     switch (mobj->state) {
     case 0:
         if (!(mobj->flags & MOBJ_FLAG_HIT)) {
@@ -3176,11 +3159,7 @@ USER_FUNC(evt_mobj_powerupblk) {
  * sets the flag variable and breaks apart with the "P_box_y" paper-peel animation drawn through an offscreen
  * capture, then deletes itself.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_brickblk(MapObjectEntry* mobj) {
-#else
-static s32 mobj_brickblk(MapObjectEntry* mobj) {
-#endif
     char oname[16] = "o_";
     char iname[16] = "i_";
     EventEntry ev1;
@@ -3271,11 +3250,7 @@ static s32 mobj_brickblk(MapObjectEntry* mobj) {
  * the first hit sets the flag variable and gives a coin (or runs the event instead)
  * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_10countblk(MapObjectEntry* mobj) {
-#else
-static s32 mobj_10countblk(MapObjectEntry* mobj) {
-#endif
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -3475,11 +3450,7 @@ USER_FUNC(evt_mobj_brick) {
  * Main function of the breakable floor panels: a spin jump onto one (Super Boots) runs the event,
  * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
-#else
-static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
-#endif
     MarioWork* mario = marioGetPtr();
     GXColor c3;
     GXColor c2;
@@ -4929,11 +4900,7 @@ USER_FUNC(evt_mobj_koopa_sango) {
  * Fire breath (anything at level 3) breaks the base:
  * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
  */
-#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
-#else
-static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
-#endif
     Mtx mtx;
     Mtx rot;
     char buf[0x20];

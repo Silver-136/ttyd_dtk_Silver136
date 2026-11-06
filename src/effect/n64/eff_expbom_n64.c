@@ -148,12 +148,7 @@ static void effExpBomMain(EffectEntry* effect) {
  * Draws each live fragment as a camera-facing sprite stepping through the explosion textures 0-6 (blending each
  * with its successor); the sprite scale and Z rotation come from bom_scale and bom_ry.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effExpBomDisp(CameraId camId, void* param) {
-#else
-static void effExpBomDisp(CameraId camId, void* param) {
-#endif
-
     EffectEntry* effect = param;
     f32* scl;
     f32* ry;

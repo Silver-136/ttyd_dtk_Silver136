@@ -2313,11 +2313,7 @@ static void msgWindow_Clear_Main(WindowEntry* window) {
  * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
  * sign plate, system box, ...) and the text with msgDisp.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void msgWindow_Disp(CameraId camId, void* param) {
-#else
-static void msgWindow_Disp(CameraId camId, void* param) {
-#endif
     CameraEntry* camera = camGetCurPtr();
     BOOL ret = FALSE;
     WindowEntry* window = param;

@@ -494,11 +494,7 @@ static void battle_init(void) {
  * and resumes the field BGM and ambience unless heading to game over (or, in later versions,
  * resumes the time-bomb music in the Great Tree).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void battle_exit(void) {
-#else
-static void battle_exit(void) {
-#endif
     LightEntry* light;
     Mtx mtx;
 

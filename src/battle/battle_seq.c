@@ -735,12 +735,7 @@ USER_FUNC(_set_effect_luck) {
  * A step with nothing to do skips its wait step.
  * In US and later two of the countdowns are per unit (usCommandDisabled).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void btlseqTurn(BattleWork* wp) {
-#else
-static void btlseqTurn(BattleWork* wp) {
-#endif
-
     Vec pos;
     f32 hpX;
     f32 hpY;
@@ -1926,11 +1921,7 @@ static void btlseqPhase(BattleWork* wp) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_JP
 static void btlseqMove(BattleWork* wp) {
-#else
-static void btlseqMove(BattleWork* wp) {
-#endif
     int j;
     BattleUnit* unit;
     PouchData* pouch;
@@ -2162,11 +2153,7 @@ static void btlseqMove(BattleWork* wp) {
  * TRUE when no unit in this phase's move queue can still act (done for the turn or KO'd).
  * Outside the early demos a unit also needs movesRemaining above 0.
  */
-#if VERSION <= VERSION_DEMO_JP
 static BOOL BattlePhaseEndCheck(void) {
-#else
-static BOOL BattlePhaseEndCheck(void) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     int i;
@@ -2198,11 +2185,7 @@ static BOOL BattlePhaseEndCheck(void) {
  * afterwards updates moves left, Charge, Double/Triple Dip progress,
  * the audience reaction and the unit's act-end event, and returns to btlseqMove.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void btlseqAct(BattleWork* wp) {
-#else
-static void btlseqAct(BattleWork* wp) {
-#endif
     BattleUnit* unit;
     EventEntry* evt;
     BOOL decrement;
@@ -2501,11 +2484,7 @@ static void btlseqTurnFirstProcess(BattleWork* wp) {
  * units done for the turn; outside the early demos Slowed units are still queued),
  * resets their protect target and pose sounds, then sorts the queue and builds the phase event order.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void btlseqPhaseFirstProcess(BattleWork* wp) {
-#else
-static void btlseqPhaseFirstProcess(BattleWork* wp) {
-#endif
     BattleUnit* unit;
     BattleUnitPart* part;
     s32 count;

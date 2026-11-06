@@ -999,11 +999,7 @@ BOOL marioChkShipMoveMode(void) {
  * drifts and slows with water friction (shipData constants), adds any whirlpool push,
  * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void shipMove(void) {
-#else
-static void shipMove(void) {
-#endif
     MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_JP
     f32 len;

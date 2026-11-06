@@ -161,12 +161,7 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
  * It also ends 300 units below Mario (in battle, below y = -300; the early demos only check Mario).
  * CAMERA_3D, layer 2.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effSstarMain(EffectEntry* effect) {
-#else
-static void effSstarMain(EffectEntry* effect) {
-#endif
-
     EffSstarN64Work* w = effect->userdata;
     MarioWork* mario = marioGetPtr();
     Vec pos;

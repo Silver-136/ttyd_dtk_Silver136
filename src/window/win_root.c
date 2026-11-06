@@ -2807,11 +2807,7 @@ void winZClear(void) {
  * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
  * its picture (flags 0x1000) and scroll arrows.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void winMailDisp(WindowWork* wp) {
-#else
-static void winMailDisp(WindowWork* wp) {
-#endif
     s32 i;
     s32 id;
     s32 kind;

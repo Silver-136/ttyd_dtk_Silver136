@@ -472,12 +472,7 @@ static void main_target(void) {
  * hearts add 1 to Mario's HP total (big ones 3), partner icons to the partner's HP, flowers to FP,
  * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void main_weapon(s32 idx) {
-#else
-static void main_weapon(s32 idx) {
-#endif
-
     GenkiWork* w = get_ptr();
     GenkiWeapon* wp = &w->weapon[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);

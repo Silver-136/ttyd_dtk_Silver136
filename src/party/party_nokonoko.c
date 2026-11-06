@@ -965,11 +965,7 @@ void nokotaro_hold_cancel(PartyEntry* party) {
  * Returns the wall hit, or NULL.
  * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
  */
-#if VERSION <= VERSION_DEMO_JP
 static HitEntry* ccwall(PartyEntry* party, s32 mode) {
-#else
-static HitEntry* ccwall(PartyEntry* party, s32 mode) {
-#endif
     f32 s;
     f32 c;
     f32 dist;

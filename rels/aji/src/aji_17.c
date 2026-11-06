@@ -3351,11 +3351,7 @@ EVT_BEGIN(aji_17_init_evt)
             SPAWN_EVENT(evt_last2)
             SET_VALUE(LW(0), PTR(bero_entry_data))
             CALL(evt_bero_get_info)
-#if VERSION == VERSION_JP
             CALL_CHILD(bero_case_entry)
-#else
-            CALL_CHILD(bero_case_entry)
-#endif
             RETURN
         END_IF
     END_IF
@@ -3369,11 +3365,7 @@ EVT_BEGIN(aji_17_init_evt)
         CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
         CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
         CASE_DEFAULT
-#if VERSION == VERSION_JP
         CALL_CHILD(evt_bero_info_run)
-#else
-        CALL_CHILD(evt_bero_info_run)
-#endif
     END_SWITCH
 
     // As Mario, the fortress music and ambience play; as Peach, her partner is removed.

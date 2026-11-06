@@ -49,12 +49,7 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
  * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map while Mario's poses
  * skip the map colour, wait for the loop, restore while fading out) and deletes the effect when the fade ends.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effMajinaiMain(EffectEntry* effect) {
-#else
-static void effMajinaiMain(EffectEntry* effect) {
-#endif
-
     EffMajinaiWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;

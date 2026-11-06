@@ -3131,11 +3131,7 @@ EVT_END()
 EVT_BEGIN(tik_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
-#else
-    CALL_CHILD(evt_bero_info_run)
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK2"), 3000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
@@ -3169,11 +3165,7 @@ EVT_BEGIN(tik_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_12_02_PAPER_MAGE_1)
         SET_VALUE(LW(0), STRING("n_bero"))
-#if VERSION >= VERSION_US
         CALL_CHILD(bero_case_switch_off)
-#else
-        CALL_CHILD(bero_case_switch_off)
-#endif
         CALL_CHILD(large_door_stg0_init)
         CASE_LESS(STG7_52_THE_PEDESTAL)
         SET_VALUE(LW(0), STRING("n_bero"))

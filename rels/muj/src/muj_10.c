@@ -829,11 +829,7 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-#if VERSION >= VERSION_US
             SPAWN_EVENT(dai3_shurai_after)
-#else
-            SPAWN_EVENT(dai3_shurai_after)
-#endif
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
@@ -841,11 +837,7 @@ EVT_BEGIN(muj_10_init_evt)
     CALL_CHILD(evt_gazigazi_entry)
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
 #else
-#if VERSION >= VERSION_US
     CALL_CHILD(evt_gazigazi_entry)
-#else
-    CALL_CHILD(evt_gazigazi_entry)
-#endif
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
         CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, -260, 135, -145, 0, 0)

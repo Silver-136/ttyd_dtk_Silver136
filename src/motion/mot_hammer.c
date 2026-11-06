@@ -755,11 +755,7 @@ void mot_ham2_post(void) {
  * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
  * 7 something just above Mario's head height) that picks the swing pose, effect and length.
  */
-#if VERSION <= VERSION_DEMO_JP
 static HitEntry* hitEstimate(s32* out) {
-#else
-static HitEntry* hitEstimate(s32* out) {
-#endif
     MarioWork* mario;
     HitCheckQuery q;
     Vec pos;

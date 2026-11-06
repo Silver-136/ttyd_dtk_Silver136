@@ -463,11 +463,7 @@ static inline void bomheiSetHoldPos(PartyEntry* party) {
  * then check_front picks the hit; 60: the blast (Sanders effect at the partner attack level, camera shake,
  * field enemy hit); 70-71: flies off the top of the screen; 80-82: 0.8 s later drops back near Mario; 100: done.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void bomhei_use_main(PartyEntry* party) {
-#else
-static void bomhei_use_main(PartyEntry* party) {
-#endif
     MarioWork* mario = party->playerPtr;
     f32 x, z;
     f32 tmp;

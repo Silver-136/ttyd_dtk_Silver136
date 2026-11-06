@@ -358,12 +358,7 @@ static void effFukidashiMain(EffectEntry* effect) {
  * Draws the bubble (textured quad with a shadow) and its content: the "!"/"?" mark, the swirl (type 2, the moja
  * model display lists lit by a GX light), the coin and number, the dots, the scribble or the bouncing icon.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
-#endif
-
     CameraEntry* camera;
     s32 alphaA;
     s32 alphaB;

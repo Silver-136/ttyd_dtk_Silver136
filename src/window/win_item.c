@@ -680,11 +680,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.useTarget = w->party.count;
             }
             if (old != w->item.useTarget) {
-#if VERSION <= VERSION_DEMO_JP
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#else
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
             }
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->item.useTarget;
@@ -693,11 +689,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.useTarget = 0;
             }
             if (old != w->item.useTarget) {
-#if VERSION <= VERSION_DEMO_JP
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#else
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
             }
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.useItem = 0;
@@ -916,11 +908,7 @@ static const char* hpfp_name_table[7][2] = {
  * winMgr draw callback for the item target window: Mario with his HP and FP, then each partner with HP;
  * the chosen target blinks while the item takes effect and the others gray out. Also draws the hand cursor.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void itemUseDisp(WinMgrEntry* entry) {
-#else
-static void itemUseDisp(WinMgrEntry* entry) {
-#endif
     WindowWork* w = winGetPtr();
     GXColor black = {0, 0, 0, 255};
     GXColor white2;

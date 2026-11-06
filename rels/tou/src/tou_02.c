@@ -2540,15 +2540,9 @@ EVT_BEGIN(tou_02_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
             SET_VALUE(LW(0), 3)
-#if VERSION >= VERSION_US
             CALL_CHILD(bero_case_switch_off)
             SET_VALUE(LW(0), 4)
             CALL_CHILD(bero_case_switch_off)
-#else
-            CALL_CHILD(bero_case_switch_off)
-            SET_VALUE(LW(0), 4)
-            CALL_CHILD(bero_case_switch_off)
-#endif
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)

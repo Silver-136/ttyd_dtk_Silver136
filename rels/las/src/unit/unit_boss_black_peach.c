@@ -4676,11 +4676,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_1000hand_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION >= VERSION_US
         CALL_CHILD(subsetevt_confuse_flustered)
-#else
-        CALL_CHILD(subsetevt_confuse_flustered)
-#endif
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

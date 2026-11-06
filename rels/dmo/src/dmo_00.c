@@ -1238,13 +1238,8 @@ EVT_BEGIN(dmo_00_init_evt)
         SET_TYPE(0)
         CALL(demo_draw)
     END_INLINE_EVENT
-#if VERSION >= VERSION_US
     SPAWN_EVENT(demo_evt)
     SPAWN_EVENT(koushukei_dai)
-#else
-    SPAWN_EVENT(demo_evt)
-    SPAWN_EVENT(koushukei_dai)
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
     END_INLINE_EVENT

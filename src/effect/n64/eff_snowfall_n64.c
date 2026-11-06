@@ -184,12 +184,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
  * the life only counts down from below 100, fading alpha over the last 10 frames.
  * US and later draw on layer 10 (on CAMERA_3D_EFFECTB in battle), JP on layer 10, the early demos on layer 2.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effSnowfallMain(EffectEntry* effect) {
-#else
-static void effSnowfallMain(EffectEntry* effect) {
-#endif
-
     s32 i, life, count, h;
     f32 hf;
     Vec position;

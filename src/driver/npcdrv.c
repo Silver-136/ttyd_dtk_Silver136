@@ -1379,11 +1379,7 @@ void npcSetStayPose(char* name) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_JP
 static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
-#else
-static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
-#endif
     MarioWork* mario;
     Vec marioPos;
     f32 dist;

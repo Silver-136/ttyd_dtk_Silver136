@@ -606,12 +606,7 @@ static void effFireDisp2(CameraId cameraId, void* payload) {
  * Draws the flame of types 5-7 as two layered strips coloured from col_tbl (the second smaller and in front)
  * and records the flame's screen bounding box (scrMinX..scrMaxY, bboxValid). The sparks are separate effects.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
-#endif
-
     CameraEntry* camera;
     GXColor* col;
     EffFireWork* work;

@@ -261,12 +261,7 @@ static void effWaterDamageMain(EffectEntry* effect) {
  * with a refraction layer: the early demos copy the screen each frame and sample it shifted by the droplet's position,
  * JP and later use the small built-in water_damage_tex instead.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
-#endif
-
     EffWaterDamageN64Work* work;
     CameraEntry* cam;
 #if VERSION >= VERSION_JP

@@ -498,12 +498,7 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
  * down and deletes the effect at the end; JP and later draw type 3 in layer 8 and the rest in layer 2
  * (the early demos draw every type in layer 2).
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effNozleMain(EffectEntry* effect) {
-#else
-static void effNozleMain(EffectEntry* effect) {
-#endif
-
     EffNozleWork* work = effect->userdata;
     EffNozleWork* p;
     Vec position;
@@ -595,11 +590,7 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 }
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
-#if VERSION <= VERSION_DEMO_JP
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
-#endif
     // FAKE: a separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5); one reused pair changes the object
     void** dl5;
     u8* sz5;
