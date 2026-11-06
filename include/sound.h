@@ -184,6 +184,12 @@ enum {
     SOUND_COVER_RELOADING = 2,  // closed again; waiting for the streams to reload
 };
 
+// Sizes of the tables SoundInit allocates
+#define SOUND_SONG_MAX 4    // SoundSong
+#define SOUND_EFFECT_MAX 40 // SoundEffect channels
+#define SOUND_DVD_MAX 2     // SoundDVD
+#define SOUND_STREAM_MAX 3  // SoundStream
+
 typedef struct SoundWork {
     void* poolData[8];         // 0x0
     void* projData[8];         // 0x20
@@ -196,11 +202,11 @@ typedef struct SoundWork {
     u32 slibId;                // 0xE4
     s32 nextGroupId;           // 0xE8, next SND_GROUPID pushed by SoundLoadDVD2
     SoundGroup* groups;        // 0xEC
-    SoundSong* songs;          // 0xF0
-    SoundEffect* effects;      // 0xF4
-    SoundDVD* dvds;            // 0xF8
+    SoundSong* songs;          // 0xF0, SOUND_SONG_MAX entries (SoundInit)
+    SoundEffect* effects;      // 0xF4, SOUND_EFFECT_MAX
+    SoundDVD* dvds;            // 0xF8, SOUND_DVD_MAX
     s32 dvdChannel;            // 0xFC, set to -1 whenever a DVD stream stops; never read
-    SoundStream* streams;      // 0x100
+    SoundStream* streams;      // 0x100, SOUND_STREAM_MAX
     s32 streamChannel;         // 0x104, channel of the last started SoundSS stream, -1 after stop
     SoundTemp aux[2];          // 0x108, aux A/B (reverb HI, chorus) callback setup
     SND_LISTENER listener;     // 0x128

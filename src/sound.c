@@ -157,26 +157,26 @@ void SoundInit(void) {
 
     // FAKE: spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object
     // force register
-    tempsong = (sound.songs = sndMalloc(sizeof(SoundSong) * 4));
+    tempsong = (sound.songs = sndMalloc(sizeof(SoundSong) * SOUND_SONG_MAX));
     songs = tempsong;
     if (songs == NULL) {
         while (1)
             ;
     }
 
-    for (i = 0; i < 4; i++, songs++) {
+    for (i = 0; i < SOUND_SONG_MAX; i++, songs++) {
         songs->seqId = -1;
         songs->group = NULL;
     }
 
-    effects = sndMalloc(sizeof(SoundEffect) * 40);
+    effects = sndMalloc(sizeof(SoundEffect) * SOUND_EFFECT_MAX);
     sound.effects = effects;
     if (effects == NULL) {
         while (1)
             ;
     }
 
-    for (i = 0; i < 40; i++, effects++) {
+    for (i = 0; i < SOUND_EFFECT_MAX; i++, effects++) {
         effects->flags = 0;
         effects->voiceId = -1;
         effects->priority = 0;
@@ -185,18 +185,18 @@ void SoundInit(void) {
     }
 
     // FAKE: spare temporary tempdvd; dvds = sndMalloc(...); sound.dvds = dvds changes the object
-    tempdvd = (sound.dvds = sndMalloc(sizeof(SoundDVD) * 2));
+    tempdvd = (sound.dvds = sndMalloc(sizeof(SoundDVD) * SOUND_DVD_MAX));
     dvds = tempdvd;
     if (dvds == NULL) {
         while (1)
             ;
     }
 
-    for (i = 0; i < 2; i++, dvds++) {
+    for (i = 0; i < SOUND_DVD_MAX; i++, dvds++) {
         dvds->flags = 0;
     }
 
-    streams = sndMalloc(sizeof(SoundStream) * 3);
+    streams = sndMalloc(sizeof(SoundStream) * SOUND_STREAM_MAX);
     sound.streams = streams;
     if (streams == NULL) {
         while (1)
@@ -204,7 +204,7 @@ void SoundInit(void) {
     }
 
     temp = streams;
-    for (i = 0; i < 3; i++, temp++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++, temp++) {
         temp->flags = 0;
 
         ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
@@ -273,7 +273,7 @@ void SoundMain(void) {
     int i;
     SoundSong* song;
 
-    for (i = 0, song = sound.songs; i < 4; i++, song++) {
+    for (i = 0, song = sound.songs; i < SOUND_SONG_MAX; i++, song++) {
         if (song->group && song->seqId != -1 && sndSeqGetValid(song->seqId) != TRUE) {
             song->group->flags |= SOUND_GROUP_SONG_ENDED_UNUSED;
             sndSeqStop(song->seqId);
@@ -608,14 +608,14 @@ BOOL SoundSLibLoadDVD(const char* path) {
 static inline void _ssDropStop(void) {
     u32 i;
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < SOUND_SONG_MAX; i++) {
         SoundSong* song = &sound.songs[i];
         if (sndSeqGetValid(song->seqId)) {
             sndSeqStop(song->seqId);
             song->seqId = (SND_SEQID)-1;
         }
     }
-    for (i = 0; i < 40; i++) {
+    for (i = 0; i < SOUND_EFFECT_MAX; i++) {
         SoundEffect* effect = &sound.effects[i];
         if (effect->flags) {
             sndFXKeyOff(effect->voiceId);
@@ -626,7 +626,7 @@ static inline void _ssDropStop(void) {
         }
     }
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < SOUND_DVD_MAX; i++) {
         SoundDVD* dvd = &sound.dvds[i];
         if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
             AISetStreamPlayState(0);
@@ -637,7 +637,7 @@ static inline void _ssDropStop(void) {
         }
     }
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
         SoundStream* stream;
         if (sound.streams[i].flags) {
             stream = &sound.streams[i];
@@ -692,14 +692,14 @@ BOOL SoundDropData(void) {
     group = sound.groups;
     _ssDropStop();
     sndSilence();
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < SOUND_SONG_MAX; i++) {
         SoundSong* song = &sound.songs[i];
         if (sndSeqGetValid(song->seqId)) {
             sndSeqStop(song->seqId);
             song->seqId = (SND_SEQID)(-1);
         }
     }
-    for (i = 0; i < 40; i++) {
+    for (i = 0; i < SOUND_EFFECT_MAX; i++) {
         // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
         SoundEffect* effect = (0, &sound.effects[i]);
         if (effect->flags) {
@@ -711,7 +711,7 @@ BOOL SoundDropData(void) {
         }
     }
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < SOUND_DVD_MAX; i++) {
         // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
         SoundDVD* dvd = (0, &sound.dvds[i]);
         if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
@@ -723,7 +723,7 @@ BOOL SoundDropData(void) {
         }
     }
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
         SoundStream* stream;
         if (sound.streams[i].flags) {
             stream = &sound.streams[i];
@@ -843,7 +843,7 @@ void SoundCloseCover(void) {
 
     if (sndIsInstalled() && sound.coverState == SOUND_COVER_OPEN) {
         close = FALSE;
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < SOUND_STREAM_MAX; i++) {
             stream = &sound.streams[i];
             if (stream->flags & SOUND_STREAM_FLAG_STARTED && !(stream->flags & SOUND_STREAM_FLAG_ARAM) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
                 if (stream->flags & SOUND_STREAM_FLAG_READ_L) {
@@ -992,7 +992,7 @@ static s32 SoundEfxStopAll(u8 maxPriority) {
     s32 chan;
     SoundEffect* sfx = sound.effects;
 
-    for (chan = 0; chan < 40; chan++, sfx++) {
+    for (chan = 0; chan < SOUND_EFFECT_MAX; chan++, sfx++) {
         if (sfx->priority <= maxPriority) {
             SoundEfxMuteCh(chan);
             return chan;
@@ -1032,14 +1032,14 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
     s32 chan;
 
     sfx = sound.effects;
-    for (chan = 0; chan < 40; chan++, sfx++) {
+    for (chan = 0; chan < SOUND_EFFECT_MAX; chan++, sfx++) {
         if (!sfx->flags) {
             break;
         }
     }
     if (chan >= 40u) {
         sfx = sound.effects;
-        for (chan = 0; chan < 40; chan++, sfx++) {
+        for (chan = 0; chan < SOUND_EFFECT_MAX; chan++, sfx++) {
             if (sfx->priority <= priority) {
                 SoundEfxMuteCh(chan);
                 break;
@@ -1303,7 +1303,7 @@ static void SoundEfxMain(void) {
     sndUpdateListener(&sound.listener, &sound.pos, dir, &sound.heading, &sound.up, (u8)sound.listenerVol, NULL);
 
     effect = sound.effects;
-    for (i = 0; i < 40; i++, effect++) {
+    for (i = 0; i < SOUND_EFFECT_MAX; i++, effect++) {
         if (effect->flags) {
             if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
                 effect->dir.x = effect->pos.x - effect->prevPos.x;
@@ -1317,7 +1317,7 @@ static void SoundEfxMain(void) {
         }
     }
 
-    for (effect = sound.effects, i = 0; i < 40; i++, effect++) {
+    for (effect = sound.effects, i = 0; i < SOUND_EFFECT_MAX; i++, effect++) {
         if (effect->flags) {
             if (!(effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED)) {
                 SoundEfxCheckCh(i);
@@ -1377,7 +1377,7 @@ static void SoundDVDMain(void) {
     u32 i;
 
     // FAKE: u32 counter with a signed compare; a plain int counter changes the object
-    for (i = 0; (int)i < 2; i++) {
+    for (i = 0; (int)i < SOUND_DVD_MAX; i++) {
         SoundDVD* dvd = &sound.dvds[i];
         if (!(dvd->flags & SOUND_DVD_FLAG_MUTE)) {
             if (dvd->flags & SOUND_DVD_FLAG_FADEMUTE) {
@@ -1551,12 +1551,12 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #endif
     int ch;
 #if VERSION <= VERSION_DEMO_JP
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
         stream = &sound.streams[i];
 #else
     SoundIntOff();
     stream = sound.streams;
-    for (i = 0; i < 3; i++, stream++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++, stream++) {
 #endif
         if (stream->flags) {
             entry = NULL;
@@ -1617,7 +1617,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
             }
         }
     }
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
 #if VERSION <= VERSION_DEMO_JP
         stream = &sound.streams[i];
 #else
@@ -1720,7 +1720,7 @@ static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo) {
     int i;
 
     stream = sound.streams;
-    for (i = 0; i < 3; stream++, i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; stream++, i++) {
         if (stream->flags && &stream->entries[0].dvd->info == fileInfo) {
             if (result >= 0) {
                 stream->entries[0].offset += stream->entries[0].requestLength;
@@ -2174,7 +2174,7 @@ static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
     int j;
 
     if (result >= 0) {
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < SOUND_STREAM_MAX; i++) {
             stream = &sound.streams[i];
             if (stream->flags && &stream->entries[0].dvd->info == fileInfo) {
                 break;
@@ -2480,7 +2480,7 @@ static void SoundSSMain(void) {
     SoundStream* stream;
 
     // FAKE: u32 counter with a signed compare; a plain int counter changes the object
-    for (i = 0; (int)i < 3; i++) {
+    for (i = 0; (int)i < SOUND_STREAM_MAX; i++) {
         stream = &sound.streams[i];
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
             if (stream->flags & SOUND_STREAM_FLAG_END) {
@@ -2533,7 +2533,7 @@ static void SoundSSMainInt(void) {
     int i;
     SoundStream* stream;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
         stream = &sound.streams[i];
 #if VERSION >= VERSION_US
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
