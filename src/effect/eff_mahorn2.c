@@ -180,12 +180,7 @@ static void effMahorn2Main(EffectEntry *effect) {
 }
 
 /** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
-#if VERSION <= VERSION_DEMO_JP
 static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect) {
-#else
-static void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
-#endif
-
     effMahorn2Data *data = effect->userdata;
     Mtx mtx;
     Mtx rot;

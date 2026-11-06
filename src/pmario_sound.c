@@ -10509,11 +10509,7 @@ sgfound:
     psnd.sfxDelay = 0;
 }
 
-#if VERSION <= VERSION_DEMO_JP
 static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
-#else
-static s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
-#endif
     s32 sid;
     s32 k;
     PaperSoundEffect *s;

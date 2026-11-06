@@ -1285,13 +1285,8 @@ static void inertia(PartyEntry* party) {
     mario->mot.yoshi.velZ = vz;
 }
 
-#if VERSION <= VERSION_DEMO_JP
-
-/** The early demos search 11 up into locals and has the older landing and step code. */
+/** The early demos search 11 up into locals and have the older landing and step code. */
 static void searchGround(PartyEntry* party) {
-#else
-static void searchGround(PartyEntry* party) {
-#endif
     HitEntry* hit;
     MarioWork* mario;
     s32 attr;
@@ -1428,13 +1423,8 @@ static void searchGround(PartyEntry* party) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_JP
-
-/** The early demos search into locals, always record the hit object, and stops the flutter sound on landing. */
+/** The early demos search into locals, always record the hit object and stop the flutter sound on landing. */
 static void searchGround2(PartyEntry* party) {
-#else
-static void searchGround2(PartyEntry* party) {
-#endif
     HitEntry* hit = NULL;
     MarioWork* mario = party->playerPtr;
     s32 attr;

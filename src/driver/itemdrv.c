@@ -1228,17 +1228,12 @@ static void winFullDisp(WinMgrEntry* win) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_JP
-
 /**
- * The June demos' item-get sequence: no later sub-states 2 (control off) and 8 (motion abort),
- * so later 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
+ * The item-get sequence. The June demos have no sub-states 2 (control off) and 8 (motion abort),
+ * so later 3-7 and 9 are their 2-7; no badge flag bookkeeping, no item renaming after a swap,
  * and the icon flags are 0x40/0x100 where later versions have 0x100/0x200.
  */
 static void itemseq_GetItem(ItemEntry* entry) {
-#else
-static void itemseq_GetItem(ItemEntry* entry) {
-#endif
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
     s32 type, bgm;
