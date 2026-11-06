@@ -560,6 +560,7 @@ static f32 randf(f32 min, f32 max) {
     return r * (max - min) + min;
 }
 #pragma opt_lifetimes off
+// FAKE: placed in .rodata (this and the next two Vecs); without it the object changes
 __declspec(section ".rodata") static Vec ext_moamoa_t0 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t1 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t2 = {0.0f, 0.0f, 10.0f};
@@ -812,6 +813,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 }
 #pragma opt_lifetimes reset
 #pragma opt_lifetimes off
+// FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 
 /**

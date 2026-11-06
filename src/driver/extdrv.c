@@ -479,6 +479,7 @@ static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
 #if VERSION <= VERSION_DEMO_JP
 static f32 shadow_vtx[16] = {
 #else
+// FAKE: placed in .sdata; without it the object changes
 __declspec(section ".sdata") static f32 shadow_vtx[16] = {
 #endif
 

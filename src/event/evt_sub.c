@@ -1484,6 +1484,7 @@ EVT_END()
 #pragma force_active on
 
 #if VERSION < VERSION_US
+// FAKE: placed in .data; without it the object changes
 __declspec(section ".data") s32 evt_sub_mail_event_end[] = {
     1,
 };
