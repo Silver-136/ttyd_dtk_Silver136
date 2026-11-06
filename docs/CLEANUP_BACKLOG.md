@@ -115,7 +115,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 ## 4. Structure and layout of the source
 
 - Version blocks: 2,155 `#if`/`#ifdef VERSION_*` blocks (1,889 at adoption; more now because duplicated US/JP copies were
-  split into small per-difference blocks, which removed about 20,000 duplicated lines).
+  split into small per-difference blocks, which removed about 20,000 duplicated lines). Blocks whose arms were the
+  same text (150, mostly function headers left by the demo-map static pass; found from two Zephiles spotted) are
+  collapsed (2026-11-05, cleanup_tools/same_arm_scan.py; rerun it after any bulk edit of version blocks).
 - Private copies of one struct: done for the star stone block (SacStarStone in sac_common.h: bakugame, muki, suki;
   deka has its own variant), Maya animation, audience sound/member, ChuchuParty, EnvironmentWork views,
   LectButtonDisp, BoobooName. Kept apart on purpose: the per-map crowd works in hei_10 / rsh_00 / tou_03 (same
