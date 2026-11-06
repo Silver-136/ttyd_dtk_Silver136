@@ -28,11 +28,7 @@
 #include "koopa_hit.h"
 #include "mot/mot_hip.h"
 
-/* static map-file joint data for the mobj cube models (same layout as a loaded map file) */
-typedef struct CubeDrawMode {
-    MapJointDrawMode mode;
-    u32 field_0x10;
-} CubeDrawMode;
+/* static map-file joint data for the mobj cube models (MapFileJoint / MapJointDrawMode, as in a loaded map file) */
 typedef struct CubeMesh {
     u8 reserved_00;       // 0x0
     u8 padding[2];        // 0x1
@@ -42,19 +38,15 @@ typedef struct CubeMesh {
     void* vcdTable;       // 0xC, cubeDDT
     u32* lists[15];       // 0x10, display lists in cubeDN
 } CubeMesh;
-typedef struct CubeJoint {
-    MapFileJoint joint;
-    MapFileJointPart part;
-} CubeJoint;
 
 /** Draw mode of the built-in collision cube (hit attribute HIT_ATTR_MOBJ set), shared by the cube, head and front hit joints. */
 #if VERSION >= VERSION_JP
-CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
+MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
 #endif
 
 /** Draw mode of the second part of a two-part object's collision (the MOBJ~ part). */
 #if VERSION >= VERSION_JP
-CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
+MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
 #endif
 
 // cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
@@ -267,48 +259,48 @@ u32 cubeDN[1230] = {
 CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
 
 #if VERSION <= VERSION_DEMO_JP
-CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
+MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
 #endif
 
 /** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
-CubeJoint cubeDJ = {
-    {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
-     {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ.mode, 1},
-    {NULL, (MapFileMesh*)&cubeDP},
+MapFileJoint cubeDJ = {
+    NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
+    {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ, 1,
+    {{NULL, (MapFileMesh*)&cubeDP}},
 };
 
 /** Mesh of the head-hit collision: only the cube's bottom face, struck from below. */
 CubeMesh headDP = {0, {0}, 0, 1, 0, cubeDDT, {&cubeDN[410]}};
 
 /** Joint of the head-hit collision (type 1), a flat square at the object's base, copied in by mobjHitEntry. */
-CubeJoint headDJ = {
-    {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
-     {-0.5f, 0.0f, -0.5f}, {0.5f, 0.0f, 0.5f}, {0}, &cubeMSJ.mode, 1},
-    {NULL, (MapFileMesh*)&headDP},
+MapFileJoint headDJ = {
+    NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
+    {-0.5f, 0.0f, -0.5f}, {0.5f, 0.0f, 0.5f}, {0}, &cubeMSJ, 1,
+    {{NULL, (MapFileMesh*)&headDP}},
 };
 
 /** Mesh of the front hit part: only the cube's front face. */
 CubeMesh frontDP = {0, {0}, 0, 1, 0, cubeDDT, {&cubeDN[1025]}};
 
 /** Joint of a two-part object's front hit part (type 2), copied in by mobjHitEntry. */
-CubeJoint frontDJ = {
-    {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
-     {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ.mode, 1},
-    {NULL, (MapFileMesh*)&frontDP},
+MapFileJoint frontDJ = {
+    NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
+    {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ, 1,
+    {{NULL, (MapFileMesh*)&frontDP}},
 };
 
 #if VERSION <= VERSION_DEMO_JP
-CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
+MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
 #endif
 
 /** Mesh of a two-part object's second hit part: the five faces other than the front one. */
 CubeMesh front2DP = {0, {0}, 0, 5, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820]}};
 
 /** Joint of a two-part object's second hit part (type 2), copied in by mobjHitEntry. */
-CubeJoint front2DJ = {
-    {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
-     {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &front2MSJ.mode, 1},
-    {NULL, (MapFileMesh*)&front2DP},
+MapFileJoint front2DJ = {
+    NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
+    {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &front2MSJ, 1,
+    {{NULL, (MapFileMesh*)&front2DP}},
 };
 
 #define MAX_MOBJ_WORK 3
@@ -505,7 +497,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
                 MTXConcat(trans, xrot, trans);
                 MTXConcat(trans, scale, mtx);
             }
-            memcpy(entry->hitObj[0].jointData + 8, &cubeDJ, sizeof(CubeJoint));
+            memcpy(entry->hitObj[0].jointData + 8, &cubeDJ, sizeof(MapFileJoint));
             strcpy(entry->hitObj[0].name, "MOBJ_");
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
@@ -528,7 +520,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
                 MTXConcat(trans, xrot, trans);
                 MTXConcat(trans, scale, mtx);
             }
-            memcpy(entry->hitObj[0].jointData + 8, &headDJ, sizeof(CubeJoint));
+            memcpy(entry->hitObj[0].jointData + 8, &headDJ, sizeof(MapFileJoint));
             strcpy(entry->hitObj[0].name, "MOBJ_");
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
@@ -551,7 +543,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
                 MTXConcat(trans, xrot, trans);
                 MTXConcat(trans, scale, mtx);
             }
-            memcpy(entry->hitObj[0].jointData + 8, &frontDJ, sizeof(CubeJoint));
+            memcpy(entry->hitObj[0].jointData + 8, &frontDJ, sizeof(MapFileJoint));
             strcpy(entry->hitObj[0].name, "MOBJ_");
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
@@ -559,7 +551,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
 #if VERSION >= VERSION_JP
             entry->hitObj[0].hitObject->mobj = entry;
 #endif
-            memcpy(entry->hitObj[1].jointData + 8, &front2DJ, sizeof(CubeJoint));
+            memcpy(entry->hitObj[1].jointData + 8, &front2DJ, sizeof(MapFileJoint));
             strcpy(entry->hitObj[1].name, "MOBJ~");
             strcat(entry->hitObj[1].name, entry->name);
             *(char**)(entry->hitObj[1].jointData + 8) = entry->hitObj[1].name;

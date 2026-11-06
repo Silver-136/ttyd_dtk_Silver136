@@ -135,7 +135,7 @@ typedef struct MapJointDrawMode {
     u8 pad_03;               // 0x3, never accessed
     u32 lightMask;           // 0x4, bit i = map light i applies (with DRAW_MODE_MAP_LIGHTS)
     s32 hitAttributes;       // 0x8, copied to HitEntry.attributes
-    u8 pad_0C[0x10 - 0xC];   // 0xC, never accessed
+    u8 pad_0C[0x14 - 0xC];   // 0xC, never accessed (the retail map files space the records 0x14 apart)
 } MapJointDrawMode;
 
 typedef struct MapFileJoint {
@@ -153,7 +153,7 @@ typedef struct MapFileJoint {
     u8 pad_54[0x58 - 0x54];  // 0x54, never accessed
     MapJointDrawMode* drawMode;  // 0x58
     s32 partCount;               // 0x5C
-    MapFileJointPart parts[];    // 0x60+
+    MapFileJointPart parts[1];   // 0x60, partCount entries; a joint with none still takes this one (0x68 in the files)
 } MapFileJoint;
 
 typedef struct MapFileHeader {
