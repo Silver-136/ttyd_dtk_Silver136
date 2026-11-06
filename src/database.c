@@ -99,7 +99,8 @@ BOOL setupDataCheck(void) {
 }
 
 /** Looks up name in _map_attr_data; returns the NULL-named terminator entry when the map is not listed. */
-static inline MapAttrEntry* findMapAttr(const char* name) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+MapAttrEntry* mapGetAttrDataAdr(const char* name) {
     MapAttrEntry* p = _map_attr_data;
     for (;;) {
         if (!p->name || !strcmp(p->name, name)) {
@@ -148,7 +149,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
     fbat = fbatGetPointer();
     dead = fbat->deadInfo;
     dead1 = &fbat->deadInfo[1];
-    attr = findMapAttr(mapName);
+    attr = mapGetAttrDataAdr(mapName);
 
     for (i = 0; i < 64; i++) {
         if (strcmp(fbat->deadInfo[i].mapName, "") == 0) {
@@ -169,8 +170,8 @@ void setupDataBase(const char* areaName, const char* mapName) {
     }
 
     if (attr->flags & MAP_ATTR_KEEP_DEFEATED) {
-        a = findMapAttr(mapName);
-        b = findMapAttr(dead1->mapName);
+        a = mapGetAttrDataAdr(mapName);
+        b = mapGetAttrDataAdr(dead1->mapName);
         if (a->area != b->area) {
             memset(dead, 0, sizeof(fbat->deadInfo));
             strcpy(dead->mapName, mapName);
@@ -411,7 +412,7 @@ MapAttrEntry _map_attr_data[] = {
     { "bom_03", 11, 5 },
     { "bom_04", 11, 5 },
 
-    // BUG: findMapAttr finds the earlier area-10 entries for these eki_00..eki_06 names.
+    // BUG: mapGetAttrDataAdr finds the earlier area-10 entries for these eki_00..eki_06 names.
     { "eki_00", 12, 7 },
     { "eki_01", 12, 7 },
     { "eki_02", 12, 7 },

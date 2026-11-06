@@ -229,7 +229,8 @@ static void calcCurrentCamState(CameraParams* out) {
 }
 
 /** Vector a - b by value. */
-static inline Vec crVecSub(Vec a, Vec b) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline Vec subV(Vec a, Vec b) {
     Vec r;
     r.x = a.x - b.x;
     r.y = a.y - b.y;
@@ -238,7 +239,8 @@ static inline Vec crVecSub(Vec a, Vec b) {
 }
 
 /** Vector a + b by value. */
-static inline Vec crVecAdd(Vec a, Vec b) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline Vec addV(Vec a, Vec b) {
     Vec r;
     r.x = a.x + b.x;
     r.y = a.y + b.y;
@@ -247,7 +249,8 @@ static inline Vec crVecAdd(Vec a, Vec b) {
 }
 
 /** Vector a scaled by s, by value. */
-static inline Vec crVecScale(Vec a, f32 s) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline Vec mulV(Vec a, f32 s) {
     Vec r;
     r.x = a.x * s;
     r.y = a.y * s;
@@ -256,7 +259,8 @@ static inline Vec crVecScale(Vec a, f32 s) {
 }
 
 /** Cross product a x b by value. */
-static inline Vec crVecCross(Vec a, Vec b) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline Vec outV(Vec a, Vec b) {
     Vec r;
     r.x = a.y * b.z - a.z * b.y;
     r.y = a.z * b.x - a.x * b.z;
@@ -265,7 +269,8 @@ static inline Vec crVecCross(Vec a, Vec b) {
 }
 
 /** Dot product of a and b. */
-static inline f32 crVecDot(Vec a, Vec b) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+inline f32 inV(Vec a, Vec b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 /** Unused: TRUE when all three components of a are zero (kept: the 0.0f it contains may shape the constant pool). */
@@ -287,49 +292,49 @@ static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     Vec hit;
     Vec e2, e1, e3, n;
     f32 nd, t;
-    e2 = crVecSub(C, A);
-    e1 = crVecSub(A, B);
-    e3 = crVecSub(B, C);
-    n = crVecCross(e2, e1);
+    e2 = subV(C, A);
+    e1 = subV(A, B);
+    e3 = subV(B, C);
+    n = outV(e2, e1);
 
     // FAKE: nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object
     nz = n;
     if (nz.x == 0.0f && nz.y == 0.0f && nz.z == 0.0f) {
         return 0;
     }
-    nd = crVecDot(n, crVecSub(P, A));
+    nd = inV(n, subV(P, A));
     if (nd > 0.0f) {
-        if (crVecDot(n, dir) >= 0.0) {
+        if (inV(n, dir) >= 0.0) {
             return 0;
         }
-        if (crVecDot(crVecSub(P, A), crVecCross(e2, dir)) > 0.0) {
+        if (inV(subV(P, A), outV(e2, dir)) > 0.0) {
             return 0;
         }
-        if (crVecDot(crVecSub(P, B), crVecCross(e1, dir)) > 0.0) {
+        if (inV(subV(P, B), outV(e1, dir)) > 0.0) {
             return 0;
         }
-        if (crVecDot(crVecSub(P, C), crVecCross(e3, dir)) > 0.0) {
+        if (inV(subV(P, C), outV(e3, dir)) > 0.0) {
             return 0;
         }
     } else {
-        if (crVecDot(n, dir) <= 0.0) {
+        if (inV(n, dir) <= 0.0) {
             return 0;
         }
-        if (crVecDot(crVecSub(P, A), crVecCross(e2, dir)) < 0.0) {
+        if (inV(subV(P, A), outV(e2, dir)) < 0.0) {
             return 0;
         }
-        if (crVecDot(crVecSub(P, B), crVecCross(e1, dir)) < 0.0) {
+        if (inV(subV(P, B), outV(e1, dir)) < 0.0) {
             return 0;
         }
-        if (crVecDot(crVecSub(P, C), crVecCross(e3, dir)) < 0.0) {
+        if (inV(subV(P, C), outV(e3, dir)) < 0.0) {
             return 0;
         }
     }
-    t = -nd / crVecDot(n, dir);
+    t = -nd / inV(n, dir);
 
-    // FAKE: spare temporary h2 in its own block; hit = crVecAdd(P, crVecScale(dir, t)) changes the object
+    // FAKE: spare temporary h2 in its own block; hit = addV(P, mulV(dir, t)) changes the object
     {
-        Vec h2 = crVecAdd(P, crVecScale(dir, t));
+        Vec h2 = addV(P, mulV(dir, t));
         hit = h2;
     }
     if (hit.y < *dist) {

@@ -1652,7 +1652,8 @@ USER_FUNC(evt_mobj_float_blk) {
 }
 
 /** Returns the index in _switch_anim of the switch block's current animation (0 when not found). */
-static inline s32 switchAnimIdx(s32 poseId) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 _mobj_get_switch_anim_index(s32 poseId) {
     const char** p;
     const s8* cur;
     s32 idx;
@@ -1684,7 +1685,7 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
         if (!(mobj->flags & MOBJ_FLAG_HIT)) {
             break;
         }
-        mobj->typeData[1] = (mobj->typeData[1] & 0x40000000) | switchAnimIdx(mobj->poseId);
+        mobj->typeData[1] = (mobj->typeData[1] & 0x40000000) | _mobj_get_switch_anim_index(mobj->poseId);
         if (mobj->linkedName[0]) {
             if (blkHitCheck(mobjNameToPtr(mobj->linkedName))) {
                 if (evtCheckID(mobj->eventId)) {
@@ -2134,7 +2135,8 @@ EVT_BEGIN(evt_box_sound3)
     RETURN
 EVT_END()
 
-static inline void mobj_itemb(MapObjectEntry* mobj) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void itemboxChgHitSize(MapObjectEntry* mobj) {
     AnimationPoseData* data = animPoseGetAnimBaseDataPtr(mobj->poseId);
     Vec a, b;
     a = (Vec){data->bboxMin.x, data->bboxMin.y, data->bboxMin.z};
@@ -2215,7 +2217,7 @@ static s32 mobj_itembox(MapObjectEntry* mobj) {
             break;
         }
         mobj->flags &= ~MOBJ_FLAG_SHOW_HINT;
-        mobj_itemb(mobj);
+        itemboxChgHitSize(mobj);
         marioKeyOn();
         partyKeyOn();
         marioStSystemLevel(0);
@@ -2293,7 +2295,7 @@ USER_FUNC(evt_mobj_itembox) {
     mobj->state = 0;
     mobjCalcMtx(mobj);
     if (evtGetValue(event, flagVar)) {
-        mobj_itemb(mobj);
+        itemboxChgHitSize(mobj);
         mobj->state = 99;
     }
     dist = 5.0f + (f32)__fabs(mobj->velocity.y);
@@ -2419,7 +2421,8 @@ extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 num
 /** case 3 heal sequence; case 4 spells the same steps out inline (only this split reproduces the target registers) */
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED (case 3).
 // FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there changes the object
-static inline void recoveryHeal(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void mobj_recovery_blk_recover(void) {
     PouchData* pouch;
     PouchPartyData* party;
     MarioWork* mario;
@@ -2499,7 +2502,7 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_SHINE1), &mobj->position);
         }
         if (mobj->timer == 100) {
-            recoveryHeal();
+            mobj_recovery_blk_recover();
             pouchAddCoin(0);
         }
         mobj->timer--;

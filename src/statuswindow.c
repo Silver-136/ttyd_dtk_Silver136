@@ -592,7 +592,8 @@ static BOOL valueCheck(void) {
  * Step for the counting-number animation: a tenth of the remaining difference, at least 1 toward the target,
  * 0 when equal.
  */
-static inline s32 calcStep(s32 target, s32 cur) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 a_b(s32 target, s32 cur) {
     s32 d = target - cur;
     if (d) {
         d /= 10;
@@ -624,7 +625,7 @@ static void valueUpdate(void) {
     if (!statusWinCheck()) {
         return;
     }
-    d = calcStep(v.coins, wp->cur.coins);
+    d = a_b(v.coins, wp->cur.coins);
 #if VERSION <= VERSION_DEMO_JP
     if (d && !(count % 6)) {
 #else
@@ -632,18 +633,18 @@ static void valueUpdate(void) {
 #endif
         psndSFXOn("SFX_COUNT_COIN1");
     }
-    wp->cur.hp += calcStep(v.hp, wp->cur.hp);
-    wp->cur.maxHp += calcStep(v.maxHp, wp->cur.maxHp);
-    wp->cur.fp += calcStep(v.fp, wp->cur.fp);
-    wp->cur.maxFp += calcStep(v.maxFp, wp->cur.maxFp);
-    wp->cur.ap += calcStep(v.ap, wp->cur.ap);
-    wp->cur.maxAp += calcStep(v.maxAp, wp->cur.maxAp);
-    wp->cur.starPoints += calcStep(v.starPoints, wp->cur.starPoints);
-    wp->cur.coins += calcStep(v.coins, wp->cur.coins);
+    wp->cur.hp += a_b(v.hp, wp->cur.hp);
+    wp->cur.maxHp += a_b(v.maxHp, wp->cur.maxHp);
+    wp->cur.fp += a_b(v.fp, wp->cur.fp);
+    wp->cur.maxFp += a_b(v.maxFp, wp->cur.maxFp);
+    wp->cur.ap += a_b(v.ap, wp->cur.ap);
+    wp->cur.maxAp += a_b(v.maxAp, wp->cur.maxAp);
+    wp->cur.starPoints += a_b(v.starPoints, wp->cur.starPoints);
+    wp->cur.coins += a_b(v.coins, wp->cur.coins);
     wp->cur.party = v.party;
     if (wp->cur.party) {
-        wp->cur.partyHp += calcStep(v.partyHp, wp->cur.partyHp);
-        wp->cur.partyMaxHp += calcStep(v.partyMaxHp, wp->cur.partyMaxHp);
+        wp->cur.partyHp += a_b(v.partyHp, wp->cur.partyHp);
+        wp->cur.partyMaxHp += a_b(v.partyMaxHp, wp->cur.partyMaxHp);
     }
     if (wp->cur.starPoints > 99) {
         wp->cur.starPoints = 99;

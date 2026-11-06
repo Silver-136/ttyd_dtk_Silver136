@@ -182,10 +182,11 @@ void seq_loadExit(SequenceWork* seq) {
 }
 
 #if VERSION >= VERSION_US
-static inline BOOL loadStart(void);
+BOOL dvdOpen(void);
 #else
 /** Starts loading the file menu's texture file (name.tpl, from the jp folder before US); TRUE once it is loaded. */
-static inline BOOL loadStart(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL dvdOpen(void) {
 #if VERSION <= VERSION_DEMO_JP
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/name.tpl", getMarioStDvdRoot());
@@ -206,7 +207,7 @@ static inline BOOL loadStart(void) {
 void seq_loadMain(SequenceWork* seq) {
     switch (seq->state) {
         case 0:
-            if (loadStart()) {
+            if (dvdOpen()) {
                 seq->state++;
             }
             break;
@@ -279,7 +280,8 @@ void seq_loadMain(SequenceWork* seq) {
 
 #if VERSION >= VERSION_US
 /** Starts loading the file menu's texture file (name.tpl, per language in US and later); TRUE once it is loaded. */
-static inline BOOL loadStart(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL dvdOpen(void) {
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
@@ -896,7 +898,8 @@ static void loadMain(SequenceWork* seq) {
 }
 
 /** Draws the texture id from name.tpl stretched over the rectangle (x0, y0)-(x1, y1). */
-static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void chip(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     GXTexObj obj;
     Mtx m;
     f64 w;
@@ -1001,9 +1004,9 @@ static void loadDraw(CameraId camera, void* param) {
     GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
 #endif
     GXSetCurrentMtx(GX_PNMTX0);
-    loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
-    loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
-    loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
+    chip(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
+    chip(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
+    chip(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
 
 #if VERSION >= VERSION_US
     win1[0] = win_dt;

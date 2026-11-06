@@ -919,7 +919,8 @@ void winMsgEntry(WindowWork* wp, s32 item, const char* msg, const char* name) {
 }
 
 /** Draws win.tpl texture id stretched over a w x h quad with its top-left at (x, y); the caller sets up GX first. */
-static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void chip(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx m;
     double aw;
@@ -977,44 +978,44 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     if (type == 0) {
-        winRootTexQuad(wp, 0xB, x, y, 8, 8);
-        winRootTexQuad(wp, 0x9, x + 8, y, w - 8 - 8, 8);
-        winRootTexQuad(wp, 0xD, x + w - 8, y, 8, 8);
-        winRootTexQuad(wp, 0xA, x, y - 8, 8, h - 8 - 8);
-        winRootTexQuad(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
-        winRootTexQuad(wp, 0xC, x, y - (h - 8), 8, 8);
-        winRootTexQuad(wp, 0x8, x + 8, y - (h - 8), w - 8 - 8, 8);
-        winRootTexQuad(wp, 0xE, x + w - 8, y - (h - 8), 8, 8);
+        chip(wp, 0xB, x, y, 8, 8);
+        chip(wp, 0x9, x + 8, y, w - 8 - 8, 8);
+        chip(wp, 0xD, x + w - 8, y, 8, 8);
+        chip(wp, 0xA, x, y - 8, 8, h - 8 - 8);
+        chip(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
+        chip(wp, 0xC, x, y - (h - 8), 8, 8);
+        chip(wp, 0x8, x + 8, y - (h - 8), w - 8 - 8, 8);
+        chip(wp, 0xE, x + w - 8, y - (h - 8), 8, 8);
     } else {
 #if VERSION >= VERSION_US
         // US and later: the tab under the frame is sized to the "remaining" label
         f32 nk = 0.5f * FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) + 60.0f;
 #endif
-        winRootTexQuad(wp, 0xB, x, y, 8, 8);
-        winRootTexQuad(wp, 0x9, x + 8, y, w - 8 - 8, 8);
-        winRootTexQuad(wp, 0xD, x + w - 8, y, 8, 8);
-        winRootTexQuad(wp, 0xA, x, y - 8, 8, h - 8 - 8);
-        winRootTexQuad(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
-        winRootTexQuad(wp, 0xC, x, y - (h - 8), 8, 8);
-        winRootTexQuad(wp, 0x8, x + 8, y - (h - 8), w - 8, 8);
+        chip(wp, 0xB, x, y, 8, 8);
+        chip(wp, 0x9, x + 8, y, w - 8 - 8, 8);
+        chip(wp, 0xD, x + w - 8, y, 8, 8);
+        chip(wp, 0xA, x, y - 8, 8, h - 8 - 8);
+        chip(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
+        chip(wp, 0xC, x, y - (h - 8), 8, 8);
+        chip(wp, 0x8, x + 8, y - (h - 8), w - 8, 8);
 #if VERSION >= VERSION_US
-        winRootTexQuad(wp, 0xF, x + (w - nk), y - h, 16, 8);
-        winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h, nk - 16, 8);
-        winRootTexQuad(wp, 0xA, x + (w - nk) + 8, y - h - 8, 8, 8);
-        winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h - 8, nk - 16, 8);
-        winRootTexQuad(wp, 0xC, x + (w - nk) + 8, y - h - 16, 8, 8);
-        winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h - 16, nk - 16 - 8, 8);
+        chip(wp, 0xF, x + (w - nk), y - h, 16, 8);
+        chip(wp, 0x8, x + (w - nk) + 16, y - h, nk - 16, 8);
+        chip(wp, 0xA, x + (w - nk) + 8, y - h - 8, 8, 8);
+        chip(wp, 0x8, x + (w - nk) + 16, y - h - 8, nk - 16, 8);
+        chip(wp, 0xC, x + (w - nk) + 8, y - h - 16, 8, 8);
+        chip(wp, 0x8, x + (w - nk) + 16, y - h - 16, nk - 16 - 8, 8);
 #else
-        winRootTexQuad(wp, 0xF, x + (w - 90), y - h, 16, 8);
+        chip(wp, 0xF, x + (w - 90), y - h, 16, 8);
 
         // FAKE: 74.0f and 66.0f held in locals (JP and the early demos); the literals change the object
-        winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h, w74, 8);
-        winRootTexQuad(wp, 0xA, x + (w - 90) + 8, y - h - 8, 8, 8);
-        winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h - 8, w74, 8);
-        winRootTexQuad(wp, 0xC, x + (w - 90) + 8, y - h - 16, 8, 8);
-        winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h - 16, w66, 8);
+        chip(wp, 0x8, x + (w - 90) + 16, y - h, w74, 8);
+        chip(wp, 0xA, x + (w - 90) + 8, y - h - 8, 8, 8);
+        chip(wp, 0x8, x + (w - 90) + 16, y - h - 8, w74, 8);
+        chip(wp, 0xC, x + (w - 90) + 8, y - h - 16, 8, 8);
+        chip(wp, 0x8, x + (w - 90) + 16, y - h - 16, w66, 8);
 #endif
-        winRootTexQuad(wp, 0xE, x + w - 8, y - h - 16, 8, 8);
+        chip(wp, 0xE, x + w - 8, y - h - 16, 8, 8);
     }
 }
 
@@ -1143,24 +1144,24 @@ void winBookGX(WindowWork* w, s32 type, f32 x, f32 y) {
         off = 32.0f;
     }
 
-    winRootTexQuad(w, 0x33, 8.0f + x, y - 8.0f, 432.0f, 256.0f - off);
-    winRootTexQuad(w, 0x28, x, y, 16.0f, 8.0f);
-    winRootTexQuad(w, 0x2C, (16.0f + x), y, 184.0f, 8.0f);
-    winRootTexQuad(w, 0x26, (184.0f + (16.0f + x)), y, 48.0f, 16.0f);
-    winRootTexQuad(w, 0x2D, (48.0f + (184.0f + (16.0f + x))), y, 184.0f, 8.0f);
-    winRootTexQuad(w, 0x2A, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y, 16.0f, 8.0f);
-    winRootTexQuad(w, 0x30, x, y - 8.0f, 8.0f, 256.0f - off);
-    winRootTexQuad(w, 0x32, 8.0f + (184.0f + (16.0f + x)), y - 16.0f, 16.0f, 248.0f - off);
-    winRootTexQuad(w, 0x31, 8.0f + (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f, 8.0f, 256.0f - off);
-    winRootTexQuad(w, 0x29, x, y - 8.0f - 256.0f + off, 16.0f, 16.0f);
-    winRootTexQuad(w, 0x2E, (16.0f + x), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
-    winRootTexQuad(w, 0x27, (184.0f + (16.0f + x)), y - 8.0f - 256.0f + off, 48.0f, 24.0f);
-    winRootTexQuad(w, 0x2F, (48.0f + (184.0f + (16.0f + x))), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
-    winRootTexQuad(w, 0x2B, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f - 256.0f + off, 16.0f, 16.0f);
+    chip(w, 0x33, 8.0f + x, y - 8.0f, 432.0f, 256.0f - off);
+    chip(w, 0x28, x, y, 16.0f, 8.0f);
+    chip(w, 0x2C, (16.0f + x), y, 184.0f, 8.0f);
+    chip(w, 0x26, (184.0f + (16.0f + x)), y, 48.0f, 16.0f);
+    chip(w, 0x2D, (48.0f + (184.0f + (16.0f + x))), y, 184.0f, 8.0f);
+    chip(w, 0x2A, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y, 16.0f, 8.0f);
+    chip(w, 0x30, x, y - 8.0f, 8.0f, 256.0f - off);
+    chip(w, 0x32, 8.0f + (184.0f + (16.0f + x)), y - 16.0f, 16.0f, 248.0f - off);
+    chip(w, 0x31, 8.0f + (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f, 8.0f, 256.0f - off);
+    chip(w, 0x29, x, y - 8.0f - 256.0f + off, 16.0f, 16.0f);
+    chip(w, 0x2E, (16.0f + x), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
+    chip(w, 0x27, (184.0f + (16.0f + x)), y - 8.0f - 256.0f + off, 48.0f, 24.0f);
+    chip(w, 0x2F, (48.0f + (184.0f + (16.0f + x))), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
+    chip(w, 0x2B, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f - 256.0f + off, 16.0f, 16.0f);
 
     if (type == 1) {
         for (i = 0; i < 8; i++) {
-            winRootTexQuad(w, 0x34, (16.0f + x) + (i % 2) * 216, y - 32.0f - (i / 2) * 48, 192.0f, 32.0f);
+            chip(w, 0x34, (16.0f + x) + (i % 2) * 216, y - 32.0f - (i / 2) * 48, 192.0f, 32.0f);
         }
     }
 
@@ -1191,7 +1192,8 @@ void winBookGX(WindowWork* w, s32 type, f32 x, f32 y) {
 }
 
 /** Draws texture id of the given TPL stretched over a w x h quad at (x, y), for winHalfBookGX. */
-static inline void winHalfBookQuad(TEXPalette* tpl, s32 id, f32 x, f32 y, f32 w, f32 h) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void chip2(TEXPalette* tpl, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx m;
     f64 aw;
@@ -1259,22 +1261,22 @@ void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y) {
             GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
         }
-        winHalfBookQuad(tpl, 0x33, x + 8.0f, y - 8.0f, 320.0f, 248.0f);
-        winHalfBookQuad(tpl, 0x28, x, y, 16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x35, x + 16.0f, y, 248.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x26, x + 16.0f + 248.0f, y, 48.0f, 16.0f);
-        winHalfBookQuad(tpl, 0x3B, x + 16.0f + 248.0f + 48.0f, y, 24.0f, 16.0f);
-        winHalfBookQuad(tpl, 0x30, x, y - 8.0f, 8.0f, 248.0f);
-        winHalfBookQuad(tpl, 0x32, x + 16.0f + 248.0f + 8.0f, y - 16.0f, 16.0f, 240.0f);
-        winHalfBookQuad(tpl, 0x36, x + 16.0f, y - 200.0f, 248.0f, 40.0f);
-        winHalfBookQuad(tpl, 0x3A, x, y - 256.0f, 16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x38, x + 32.0f, y - 256.0f, -16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x38, x + 32.0f, y - 256.0f, 240.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x39, x + 272.0f, y - 256.0f, 16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x38, x + 288.0f, y - 256.0f, 16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x38, x + 320.0f, y - 256.0f, -16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x38, x + 320.0f, y - 256.0f, 16.0f, 8.0f);
-        winHalfBookQuad(tpl, 0x3C, x + 328.0f, y - 16.0f, 8.0f, 240.0f);
+        chip2(tpl, 0x33, x + 8.0f, y - 8.0f, 320.0f, 248.0f);
+        chip2(tpl, 0x28, x, y, 16.0f, 8.0f);
+        chip2(tpl, 0x35, x + 16.0f, y, 248.0f, 8.0f);
+        chip2(tpl, 0x26, x + 16.0f + 248.0f, y, 48.0f, 16.0f);
+        chip2(tpl, 0x3B, x + 16.0f + 248.0f + 48.0f, y, 24.0f, 16.0f);
+        chip2(tpl, 0x30, x, y - 8.0f, 8.0f, 248.0f);
+        chip2(tpl, 0x32, x + 16.0f + 248.0f + 8.0f, y - 16.0f, 16.0f, 240.0f);
+        chip2(tpl, 0x36, x + 16.0f, y - 200.0f, 248.0f, 40.0f);
+        chip2(tpl, 0x3A, x, y - 256.0f, 16.0f, 8.0f);
+        chip2(tpl, 0x38, x + 32.0f, y - 256.0f, -16.0f, 8.0f);
+        chip2(tpl, 0x38, x + 32.0f, y - 256.0f, 240.0f, 8.0f);
+        chip2(tpl, 0x39, x + 272.0f, y - 256.0f, 16.0f, 8.0f);
+        chip2(tpl, 0x38, x + 288.0f, y - 256.0f, 16.0f, 8.0f);
+        chip2(tpl, 0x38, x + 320.0f, y - 256.0f, -16.0f, 8.0f);
+        chip2(tpl, 0x38, x + 320.0f, y - 256.0f, 16.0f, 8.0f);
+        chip2(tpl, 0x3C, x + 328.0f, y - 16.0f, 8.0f, 240.0f);
     }
 }
 
@@ -1301,25 +1303,25 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    winRootTexQuad(wp, 0x4D, x, y, 32, 24);
-    winRootTexQuad(wp, 0x63, x + 32, y, 344, 24);
-    winRootTexQuad(wp, 0x64, x + 200, y, 16, 24);
-    winRootTexQuad(wp, 0x55, x + 32, y - 24, 344, 8);
-    winRootTexQuad(wp, 0x4E, x + 32 + 72 + 40 + 48 + 16 + 112 + 40 + 16, y, 40, 24);
-    winRootTexQuad(wp, 0x51, x, y - 24, 16, 248);
-    winRootTexQuad(wp, 0x55, x + 16, y - 24, 16, 248);
-    winRootTexQuad(wp, 0x55, x + 16 + 16 + 72 + 8 + 248 + 16, y - 24, 16, 248);
-    winRootTexQuad(wp, 0x51, x + 16 + 16 + 72 + 8 + 248 + 16 + 16, y - 24, 16, 248);
-    winRootTexQuad(wp, 0x52, x + 16 + 16 + 72 + 8 + 248 + 16 + 16 + 16, y - 24, 8, 248);
-    winRootTexQuad(wp, 0x5C, x + 32, y - 32, 344, 240);
-    winRootTexQuad(wp, 0x55, x + 32, y - 248, 344, 24);
-    winRootTexQuad(wp, 0x4F, x, y - 272, 32, 32);
-    winRootTexQuad(wp, 0x53, x + 32, y - 272, 344, 32);
-    winRootTexQuad(wp, 0x50, x + 32 + 344, y - 272, 40, 32);
-    winRootTexQuad(wp, 0x54, x + 16, y - 24 - 8, 8, -8);
-    winRootTexQuad(wp, 0x54, x + 384 + 8, y - 24 - 8, -8, -8);
-    winRootTexQuad(wp, 0x54, x + 16, y - 264, 8, 8);
-    winRootTexQuad(wp, 0x54, x + 384 + 8, y - 264, -8, 8);
+    chip(wp, 0x4D, x, y, 32, 24);
+    chip(wp, 0x63, x + 32, y, 344, 24);
+    chip(wp, 0x64, x + 200, y, 16, 24);
+    chip(wp, 0x55, x + 32, y - 24, 344, 8);
+    chip(wp, 0x4E, x + 32 + 72 + 40 + 48 + 16 + 112 + 40 + 16, y, 40, 24);
+    chip(wp, 0x51, x, y - 24, 16, 248);
+    chip(wp, 0x55, x + 16, y - 24, 16, 248);
+    chip(wp, 0x55, x + 16 + 16 + 72 + 8 + 248 + 16, y - 24, 16, 248);
+    chip(wp, 0x51, x + 16 + 16 + 72 + 8 + 248 + 16 + 16, y - 24, 16, 248);
+    chip(wp, 0x52, x + 16 + 16 + 72 + 8 + 248 + 16 + 16 + 16, y - 24, 8, 248);
+    chip(wp, 0x5C, x + 32, y - 32, 344, 240);
+    chip(wp, 0x55, x + 32, y - 248, 344, 24);
+    chip(wp, 0x4F, x, y - 272, 32, 32);
+    chip(wp, 0x53, x + 32, y - 272, 344, 32);
+    chip(wp, 0x50, x + 32 + 344, y - 272, 40, 32);
+    chip(wp, 0x54, x + 16, y - 24 - 8, 8, -8);
+    chip(wp, 0x54, x + 384 + 8, y - 24 - 8, -8, -8);
+    chip(wp, 0x54, x + 16, y - 264, 8, 8);
+    chip(wp, 0x54, x + 384 + 8, y - 264, -8, 8);
     GXSetScissor(x + 304 + 32, 240 - y + 32 + 1, 344, 200);
 }
 
@@ -1386,17 +1388,17 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
 
         // ofs is type * 13 (0 or 13 in the two normal modes), so ofs != 1 always holds and page 3 always takes this branch.
         if ((ofs != 0 && p == 2) || (ofs != 1 && p == 3)) {
-            winRootTexQuad(w, (type * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
-            winRootTexQuad(w, (type * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
-            winRootTexQuad(w, (type * 13 + 0x7E), 8.0f + x, y - 56.0f + scroll - p * 232, 48.0f, 8.0f);
-            winRootTexQuad(w, (type * 13 + 0x85), 56.0f + x, y + scroll - p * 232, 8.0f, 8.0f);
-            winRootTexQuad(w, (type * 13 + 0x84), 56.0f + x, y - 8.0f + scroll - p * 232, 8.0f, 48.0f);
-            winRootTexQuad(w, (type * 13 + 0x81), 56.0f + x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
+            chip(w, (type * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
+            chip(w, (type * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
+            chip(w, (type * 13 + 0x7E), 8.0f + x, y - 56.0f + scroll - p * 232, 48.0f, 8.0f);
+            chip(w, (type * 13 + 0x85), 56.0f + x, y + scroll - p * 232, 8.0f, 8.0f);
+            chip(w, (type * 13 + 0x84), 56.0f + x, y - 8.0f + scroll - p * 232, 8.0f, 48.0f);
+            chip(w, (type * 13 + 0x81), 56.0f + x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
             break;
         }
         for (i = 0; i < 7; i++) {
             for (j = 0; j < 4; j++) {
-                winRootTexQuad(w, (type * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
+                chip(w, (type * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
             }
         }
         for (i = 0; i < 7; i++) {
@@ -1407,13 +1409,13 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
             } else {
                 id = (type * 13 + 0x86);
             }
-            winRootTexQuad(w, id, x + i * 56, y - 224.0f + scroll - py, 8.0f, 8.0f);
+            chip(w, id, x + i * 56, y - 224.0f + scroll - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
                 id = (type * 13 + 0x7E);
             } else {
                 id = (type * 13 + 0x80);
             }
-            winRootTexQuad(w, id, 8.0f + (x + i * 56), y - 224.0f + scroll - py, 48.0f, 8.0f);
+            chip(w, id, 8.0f + (x + i * 56), y - 224.0f + scroll - py, 48.0f, 8.0f);
         }
         for (i = 0; i < 4; i++) {
             if (i == 0) {
@@ -1423,15 +1425,15 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
             } else {
                 id = (type * 13 + 0x87);
             }
-            winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56) - py, 8.0f, 8.0f);
+            chip(w, id, 392.0f + x, scroll + (y - i * 56) - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
                 id = (type * 13 + 0x84);
             } else {
                 id = (type * 13 + 0x82);
             }
-            winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56 - 8.0f) - py, 8.0f, 48.0f);
+            chip(w, id, 392.0f + x, scroll + (y - i * 56 - 8.0f) - py, 8.0f, 48.0f);
         }
-        winRootTexQuad(w, (type * 13 + 0x81), 392.0f + x, y - 224.0f + scroll - py, 8.0f, 8.0f);
+        chip(w, (type * 13 + 0x81), 392.0f + x, y - 224.0f + scroll - py, 8.0f, 8.0f);
     }
 
     npages = (num + 27) / 28;
@@ -2261,7 +2263,8 @@ static void sort_7_1_func(WindowWork* wp) {
  * Returns the place-sort rank of a tattle entry's location tag ("menu_monosiri_<area>"):
  * its index in tbl, or 0 if unknown. JP and later move the Excess Express (rsh) after the hom and eki maps.
  */
-static inline u32 getMonosiriPlace(const char* place) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+u32 placeNo(const char* place) {
     static char* tbl[] = {
         "nara", "gor", "tik", "shiga", "hei", "nok", "stn", "gon", "win", "hou", "mri", "tou", "usu",
 #if VERSION <= VERSION_DEMO_JP
@@ -2300,12 +2303,12 @@ WinSortData sort_8[] = {
 WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
 #endif
 
-/** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
+/** qqsort compare for the Tattle Log by where the enemy is found (placeNo of its locationTag). */
 static s32 compare_func2(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
-    s32 ia = getMonosiriPlace(ta->locationTag);
-    s32 ib = getMonosiriPlace(tb->locationTag);
+    s32 ia = placeNo(ta->locationTag);
+    s32 ib = placeNo(tb->locationTag);
 
     if (ia > ib) {
         return 1;
@@ -2319,8 +2322,8 @@ static s32 compare_func2(const void* a, const void* b) {
 static s32 compare_func2_r(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
-    s32 ia = getMonosiriPlace(ta->locationTag);
-    s32 ib = getMonosiriPlace(tb->locationTag);
+    s32 ia = placeNo(ta->locationTag);
+    s32 ib = placeNo(tb->locationTag);
 
     if (ia < ib) {
         return 1;

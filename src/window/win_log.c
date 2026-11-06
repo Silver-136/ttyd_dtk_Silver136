@@ -176,7 +176,8 @@ s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RU
  * Adds a Journal entry button (0 map, 1 Crystal Stars, 2 badge log, 3 recipe log,
  * 4 Tattle log) with its help text, and re-spaces all buttons 45 units apart around the centre.
  */
-static inline void winLogAddMenu(WindowWork* w, s32 id) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void logEntry(WindowWork* w, s32 id) {
     static const char* msg_help[] = {
         "msg_menu_kiroku_map",
         "msg_menu_kiroku_stone",
@@ -339,11 +340,11 @@ void winLogInit(WindowWork* w) {
     w->log.state = 0;
     w->log.cursor = 0;
     w->log.count = 0;
-    winLogAddMenu(w, 0);
-    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1);
-    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4);
-    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2);
-    if (swGet(GSWF_ID(GSWF_GOR_ZESS_T_DISH_RECEIVED))) winLogAddMenu(w, 3);
+    logEntry(w, 0);
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_16_FRANKLYS_HOUSE) logEntry(w, 1);
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS) logEntry(w, 4);
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL) logEntry(w, 2);
+    if (swGet(GSWF_ID(GSWF_GOR_ZESS_T_DISH_RECEIVED))) logEntry(w, 3);
     w->log.stoneNum = 0;
     for (i = 0; i < 7; i++) {
         if (pouchCheckItem(stone_tbl[i])) {

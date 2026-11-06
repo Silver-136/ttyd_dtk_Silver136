@@ -424,7 +424,8 @@ static void romFontMake(void) {
 
 
 /** Looks a character code up in the glyph cache; falls back to the first glyph when the code was not baked. */
-static inline RomFontChar* romFontFindChar(u16 code) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+RomFontChar* searchRomFont(u16 code) {
     RomFontWork* w = wp;
     RomFontChar* table = w->glyphs;
     RomFontChar* cur = w->glyphs;
@@ -508,16 +509,16 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
             } else if (c == 0x00) {
                 break;
             } else {
-                glyph = romFontFindChar(c & 0xFFFF);
+                glyph = searchRomFont(c & 0xFFFF);
                 i += 1;
             }
         } else
 #endif
         if (c >= 0x20 && c < 0x80) { // ASCII
-            glyph = romFontFindChar(c & 0xFFFF);
+            glyph = searchRomFont(c & 0xFFFF);
             i += 1;
         } else if ((c >= 0x80 && c < 0xA0) || c >= 0xE0) { // SJIS lead byte
-            glyph = romFontFindChar(c16);
+            glyph = searchRomFont(c16);
             i += 2;
         } else if (c == 0x00) { // NUL -> done
             break;
@@ -592,16 +593,16 @@ s32 romFontGetWidth(const char* message) {
                 width = 0;
                 i += 1;
             } else {
-                glyph = romFontFindChar(c & 0xFFFF);
+                glyph = searchRomFont(c & 0xFFFF);
                 i += 1;
             }
         } else
 #endif
         if (c >= 0x20 && c < 0x80) {
-            glyph = romFontFindChar(c & 0xFFFF);
+            glyph = searchRomFont(c & 0xFFFF);
             i += 1;
         } else if ((c >= 0x80 && c < 0xA0) || c >= 0xE0) {
-            glyph = romFontFindChar(c16);
+            glyph = searchRomFont(c16);
             i += 2;
         } else if (c == 0x00) {
             if (max < width) {

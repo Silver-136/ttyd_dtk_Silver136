@@ -188,7 +188,8 @@ void mapInit(void) {
 }
 
 /** Index of the texture called name in the map's texture_table chunk, or -1. */
-static inline s32 mapSearchTexName(MapTexTable* table, char* name) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 mapGetTextureIdx(MapTexTable* table, char* name) {
     s32 i;
 
     for (i = 0; i < table->count; i++) {
@@ -216,7 +217,7 @@ static void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
         mat = obj->joints->parts[i].material;
         for (j = 0; j < mat->samplerCount; j++) {
             sampler = mat->samplers[j];
-            k = mapSearchTexName(table, sampler->tex->name);
+            k = mapGetTextureIdx(table, sampler->tex->name);
             idx = k;
             if (k == -1) {
                 idx = 0;
@@ -1956,7 +1957,7 @@ void mapMain(void) {
 
 static void mapSetTextureMatrix(MapMaterial* mat);
 
-static inline void mapSetObjFog(MapObject* obj);
+void mapSetMaterialFogMapObj(MapObject* obj);
 
 /**
  * TRUE when the object must go in the translucent pass:
@@ -2093,7 +2094,7 @@ static void _mapDispMapObj(CameraId cam, MapObject* obj) {
     if (cull != culling[obj->joints->drawMode->cullMode]) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
     }
-    mapSetObjFog(obj);
+    mapSetMaterialFogMapObj(obj);
 
     // a group member is not drawn when it is disabled, hidden (and not offscreen) or fully transparent
     if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
@@ -3265,7 +3266,8 @@ void mapSetMaterialFog(void) {
 }
 
 /** As mapSetMaterialFog for a map object, which can opt out of the fog with flag 0x80000. */
-static inline void mapSetObjFog(MapObject* obj) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void mapSetMaterialFogMapObj(MapObject* obj) {
     CameraEntry* camera = camGetCurPtr();
     MapWork* wp = mapGetWork();
 
@@ -3440,7 +3442,7 @@ static void mapSetMaterial(MapObject* obj, void* material) {
     for (i = mat->samplerCount - 1; i >= 0; i--) {
         sampler = mat->samplers[i];
         wp = mapGetWork();
-        k = mapSearchTexName(wp->entries[obj->groupIndex].textureTable, sampler->tex->name);
+        k = mapGetTextureIdx(wp->entries[obj->groupIndex].textureTable, sampler->tex->name);
         desc = TEXGet(wp->entries[obj->groupIndex].tpl, k);
         if (desc->textureHeader->minLOD == desc->textureHeader->maxLOD) {
             mip = GX_FALSE;

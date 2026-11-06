@@ -34,7 +34,8 @@ void marioBalloonOn(s32 type) {
  * Like marioBalloonOn, but anchors the balloon effect to the NPC Mario can talk to and remembers it in
  * mario->balloonNpc.
  */
-static inline void marioBalloonOnNpc(s32 type, NpcEntry* npc) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void marioBalloonOn_npc(s32 type, NpcEntry* npc) {
     MarioWork* mario = marioGetPtr();
 
     if (!(mario->dispFlags & MARIO_DISP_FLAG_BALLOON)) {
@@ -240,7 +241,7 @@ void marioBalloonMain(void) {
 
     if (show) {
         if (type == 1) {
-            marioBalloonOnNpc(type, npc);
+            marioBalloonOn_npc(type, npc);
         } else {
             marioBalloonOn(type);
             if (npc != NULL) {

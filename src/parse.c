@@ -26,7 +26,8 @@ void parseInit(void* ptr, u32 size) {
  */
 // Copies the tag that starts at p[i] into buf without its whitespace, up to and including the closing '>'
 // (at most 127 characters), and terminates it.
-static inline void parseCopyTag(char* buf, s8* p, s32 i, s32 end) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void getTag(char* buf, s8* p, s32 i, s32 end) {
     s32 n;
     s32 j;
     for (j = i, n = 0; j < end; j++) {
@@ -77,7 +78,7 @@ BOOL parsePush(const char* tag) {
                 }
             } else {
                 if (state == 0 && depth == 0) {
-                    parseCopyTag(buf, p, i, end);
+                    getTag(buf, p, i, end);
                     if (strcmp(buf, tag) == 0) {
                         for (; i < end; i++) {
                             if (p[i] == '>') {

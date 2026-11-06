@@ -294,7 +294,8 @@ const char* nameEntGetName(void) {
 }
 
 /** Loads the language's name.tpl into tplFile once the async read has finished; FALSE while it is still loading. */
-static inline BOOL nameEntLoad(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL fileOpen(void) {
 #if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
@@ -308,6 +309,15 @@ static inline BOOL nameEntLoad(void) {
     return FALSE;
 }
 
+/** Frees name.tpl (tplFile) if it is loaded. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void fileClose(void) {
+    if (wp->tplFile) {
+        fileFree(wp->tplFile);
+    }
+    wp->tplFile = NULL;
+}
+
 /**
  * Per frame: loads the textures, runs nameMain while the screen is open, or frees them after nameEntOff,
  * and queues nameEntDisp in the 3D camera layer while anything is shown.
@@ -317,17 +327,14 @@ void nameEntMain(void) {
         case 0:
             break;
         case 1:
-            if (nameEntLoad()) {
+            if (fileOpen()) {
                 wp->loadState++;
             }
         case 2:
             nameMain();
             break;
         case 3:
-            if (wp->tplFile) {
-                fileFree(wp->tplFile);
-            }
-            wp->tplFile = NULL;
+            fileClose();
             wp->loadState = 0;
             break;
     }
@@ -935,7 +942,8 @@ static void nameEntDisp(CameraId cameraId, void* param) {
 }
 
 /** Draws one textured quad from name.tpl texture id at (x, y), w x h, with the texture scaled to fit. */
-static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void chip(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx i;
     double aw;
@@ -985,9 +993,9 @@ static void nameBG(void) {
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
-    nameTexQuad(0x22, -304.0f, 240.0f, 32.0f, 480.0f);
-    nameTexQuad(0x21, -272.0f, 240.0f, 544.0f, 480.0f);
-    nameTexQuad(0x23, 272.0f, 240.0f, 32.0f, 480.0f);
+    chip(0x22, -304.0f, 240.0f, 32.0f, 480.0f);
+    chip(0x21, -272.0f, 240.0f, 544.0f, 480.0f);
+    chip(0x23, 272.0f, 240.0f, 32.0f, 480.0f);
 }
 
 /**
@@ -1013,14 +1021,14 @@ static void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    nameTexQuad(0x2F, x, y, 8, 8);
-    nameTexQuad(0x2D, x + 8, y, w - 8 - 8, 8);
-    nameTexQuad(0x31, x + w - 8, y, 8, 8);
-    nameTexQuad(0x2E, x, y - 8, 8, h - 8 - 8);
-    nameTexQuad(0x2C, x + 8, y - 8, w - 8, h - 8 - 8);
-    nameTexQuad(0x30, x, y - (h - 8), 8, 8);
-    nameTexQuad(0x2C, x + 8, y - (h - 8), w - 8 - 8, 8);
-    nameTexQuad(0x32, x + w - 8, y - (h - 8), 8, 8);
+    chip(0x2F, x, y, 8, 8);
+    chip(0x2D, x + 8, y, w - 8 - 8, 8);
+    chip(0x31, x + w - 8, y, 8, 8);
+    chip(0x2E, x, y - 8, 8, h - 8 - 8);
+    chip(0x2C, x + 8, y - 8, w - 8, h - 8 - 8);
+    chip(0x30, x, y - (h - 8), 8, 8);
+    chip(0x2C, x + 8, y - (h - 8), w - 8 - 8, 8);
+    chip(0x32, x + w - 8, y - (h - 8), 8, 8);
 }
 
 void nameMaskGX(f32 t) {
@@ -1072,7 +1080,8 @@ void nameMaskGX(f32 t) {
 }
 
 /** Draws one window piece: texture a scaled to w x h modulated by textures b and c. */
-static inline void nameWinQuad(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 y, f32 w, f32 h) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void chip2(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx i;
     double aw2;
@@ -1154,8 +1163,8 @@ void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    nameWinQuad(tpl, type + 4, type + 5, type, x, y, w - 16, h - 16);
-    nameWinQuad(tpl, type + 4, type + 7, type + 2, x + w - 16, y, 16, h - 16);
-    nameWinQuad(tpl, type + 4, type + 6, type + 1, x, y - h + 16, w - 16, 16);
-    nameWinQuad(tpl, type + 4, type + 8, type + 3, x + w - 16, y - h + 16, 16, 16);
+    chip2(tpl, type + 4, type + 5, type, x, y, w - 16, h - 16);
+    chip2(tpl, type + 4, type + 7, type + 2, x + w - 16, y, 16, h - 16);
+    chip2(tpl, type + 4, type + 6, type + 1, x, y - h + 16, w - 16, 16);
+    chip2(tpl, type + 4, type + 8, type + 3, x + w - 16, y - h + 16, 16, 16);
 }
