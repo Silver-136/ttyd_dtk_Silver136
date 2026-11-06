@@ -1148,7 +1148,7 @@ static void disp_3D(CameraId cam, void* param) {
                     icon = ICON_STATUS_FLURRIE;
                     break;
                 case UNIT_YOSHI:
-                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                    switch (pouchGetPartyColor(PARTY_YOSHI)) {
                     case 1:
                         icon = ICON_STATUS_YOSHI_1;
                         break;

@@ -5,6 +5,7 @@
 
 #include "version.h"
 #include "mario/mario.h"
+#include "party_member.h"
 #include <dolphin/types.h>
 
 // A partner is in a pinch (peril poses) at this HP or below
@@ -21,31 +22,6 @@
 #define VIVIAN_FOLLOW_DIST 22.0f
 #endif
 
-#pragma enumsalwaysint off
-typedef enum PartyMember {
-    PARTY_MEMBER_NONE,      // 0
-    PARTY_MEMBER_GOOMBELLA, // 1
-    PARTY_MEMBER_KOOPS,     // 2
-    PARTY_MEMBER_BOBBERY,   // 3
-    PARTY_MEMBER_YOSHI,     // 4
-    PARTY_MEMBER_FLURRIE,   // 5
-    PARTY_MEMBER_VIVIAN,    // 6
-    PARTY_MEMBER_MS_MOWZ,   // 7
-#define MAIN_PARTY_MEMBER_MAX (PARTY_MEMBER_MS_MOWZ + 1)
-    PARTY_MEMBER_EGG,                // 8
-    PARTY_MEMBER_FLAVIO,             // 9
-    PARTY_MEMBER_PUNIO,              // 10
-    PARTY_MEMBER_FRANKLY,            // 11
-    PARTY_MEMBER_CRAW,               // 12
-    PARTY_MEMBER_GOOMBELLA_FOLLOWER, // 13
-    PARTY_MEMBER_KOOPS_FOLLOWER,     // 14
-    PARTY_MEMBER_BOBBERY_FOLLOWER,   // 15
-    PARTY_MEMBER_YOSHI_FOLLOWER,     // 16
-    PARTY_MEMBER_FLURRIE_FOLLOWER,   // 17
-    PARTY_MEMBER_VIVIAN_FOLLOWER,    // 18
-    PARTY_MEMBER_MS_MOWZ_FOLLOWER    // 19
-} PartyMember;
-#pragma enumsalwaysint on
 
 // PartyEntry.motionId / partyChgMot, dispatched by the party move-mode handlers.
 typedef enum PartyMotion {

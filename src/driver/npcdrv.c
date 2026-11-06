@@ -3014,7 +3014,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             if (b) {
                 s32 st;
                 if (party == NULL) break;
-                if (party->memberKind != PARTY_MEMBER_KOOPS) break;
+                if (party->memberKind != PARTY_KOOPS) break;
                 if (!(party->flags & PARTY_FLAG_IS_BEING_USED)) break;
                 st = nokonokoGetStatus(party);
                 if (st < NOKONOKO_STATUS_SHELL_OUT || st > NOKONOKO_STATUS_HELD_SHOT_BACK) break;
@@ -3046,7 +3046,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             if (!fbat_canHit(npc)) break;
             if (!(flags & FBAT_CHECK_CURRENT)) break;
             if (party == NULL) break;
-            if (party->memberKind != PARTY_MEMBER_BOBBERY) break;
+            if (party->memberKind != PARTY_BOBBERY) break;
             if (!(*(u8*)&((FieldBattleData*)gp->fbatData)->sandersBombTrigger)) break;
             npc = wp->entries;
             flags &= FBAT_CHECK_ENEMY;

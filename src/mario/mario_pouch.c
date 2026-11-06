@@ -107,7 +107,7 @@ void pouchInit(void) {
     mpp->hammerLevel = 0;
     for (i = 0; i < PARTNER_COUNT; i++) {
         PouchPartyData* party = &mpp->partyData[i];
-        if (i != PARTNER_NONE) {
+        if (i != PARTY_NONE) {
             party->flags = 0;
             party->baseMaxHP = 10;
             party->maximumHP = party->baseMaxHP;
@@ -1133,8 +1133,8 @@ void pouchSetMaxHP(s16 points) {
     mpp->baseMaxHP = mpp->maximumHP;
 }
 
-/** A partner's current HP (partyData is indexed by PartyId). */
-s32 pouchGetPartyHP(PartyId partnerId) {
+/** A partner's current HP (partyData is indexed by s32). */
+s32 pouchGetPartyHP(s32 partnerId) {
     return mpp->partyData[partnerId].currentHP;
 }
 
@@ -1255,7 +1255,7 @@ s32 pouchGetHammerLv(void) {
  * Partner's attack level (number of rank-ups); the party menu shows attackLevel + 2 moves
  * and battle uses it to pick move power.
  */
-s32 pouchGetPartyAttackLv(PartyId partyId) {
+s32 pouchGetPartyAttackLv(s32 partyId) {
     // FAKE: &mpp->partyData[partyId] is formed by hand (same address) so the scaled index gets the field offset before the base is added (addi + lhax), as in the target
     return ((PouchPartyData*)((u8*)mpp + partyId * sizeof(PouchPartyData)))->attackLevel;
 }
@@ -1373,7 +1373,7 @@ void pouchRevisePartyParam(void) {
     count = pouchEquipCheckBadge(ITEM_HP_PLUS_P);
 
     for (i = 0; i < PARTNER_COUNT; i++) {
-        if (i != PARTNER_NONE) {
+        if (i != PARTY_NONE) {
             party = &mpp->partyData[i];
             party->baseMaxHP = _party_max_hp_table[i][party->HPLevel];
             party->maximumHP = (s16)(party->baseMaxHP + (count * 5));
@@ -1590,7 +1590,7 @@ s32 pouchCheckMail(s32 mailId) {
  * Partner colour from the top three bits of its flags;
  * Yoshi's colour picks his sprite pose table and his window and battle colours.
  */
-s32 pouchGetPartyColor(PartyId partnerId) {
+s32 pouchGetPartyColor(s32 partnerId) {
     return mpp->partyData[partnerId].flags >> 13;
 }
 
@@ -1598,7 +1598,7 @@ s32 pouchGetPartyColor(PartyId partnerId) {
  * Stores a partner's colour in the top three bits of its flags;
  * only Yoshi uses it (set when the egg hatches, tou_10 in Glitzville, and by party.c).
  */
-void pouchSetPartyColor(PartyId partnerId, s32 color) {
+void pouchSetPartyColor(s32 partnerId, s32 color) {
     mpp->partyData[partnerId].flags = (mpp->partyData[partnerId].flags & 0x1FFF) | (u16)(color << 13);
 }
 

@@ -183,7 +183,7 @@ WinMgrDesc unitwin_desc[3] = {
  * Yoshi, Vivian, Bobbery, Ms. Mowz, ended by 0), their icons and name labels, and the HP, FP and BP rows
  * (icon, label, name and the amount a level-up adds: 5, 5 and 3).
  */
-static s32 party_id_table[8] = {PARTY_MEMBER_GOOMBELLA, PARTY_MEMBER_KOOPS, PARTY_MEMBER_FLURRIE, PARTY_MEMBER_YOSHI, PARTY_MEMBER_VIVIAN, PARTY_MEMBER_BOBBERY, PARTY_MEMBER_MS_MOWZ, PARTY_MEMBER_NONE};
+static s32 party_id_table[8] = {PARTY_GOOMBELLA, PARTY_KOOPS, PARTY_FLURRIE, PARTY_YOSHI, PARTY_VIVIAN, PARTY_BOBBERY, PARTY_MS_MOWZ, PARTY_NONE};
 static s32 party_icon_table[7] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PARTY_FLURRIE, ICON_PARTY_YOSHI, ICON_PARTY_VIVIAN, ICON_PARTY_BOBBERY, ICON_PARTY_MS_MOWZ};
 static const char* party_labelname_table[7] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
 static s32 mario_status_icon_table[3] = {ICON_HP, ICON_FP, ICON_BP};
@@ -305,7 +305,7 @@ void unitwin_point_disp(WinMgrEntry* entry) {
 #else
 static s32 iconid_conv(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+        switch (pouchGetPartyColor(PARTY_YOSHI)) {
             case 0:
                 icon = ICON_PARTY_YOSHI;
                 break;
@@ -1196,7 +1196,7 @@ USER_FUNC(evt_unitwin_main_func) {
 
 static inline s32 unitwin_party_icon(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+        switch (pouchGetPartyColor(PARTY_YOSHI)) {
             case 0:
                 icon = ICON_PARTY_YOSHI;
                 break;

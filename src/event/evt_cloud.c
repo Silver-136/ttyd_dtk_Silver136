@@ -79,7 +79,7 @@ static USER_FUNC(evt_cloud_main) {
         return EVT_RETURN_BLOCK;
     }
 #if VERSION <= VERSION_DEMO_JP
-    if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+    if (party->currentMemberId != PARTY_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
 #endif

@@ -225,7 +225,7 @@ void winMain(void) {
                             break;
                         }
 #endif
-                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) {
+                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTY_GOOMBELLA))) {
                             wp->menuSel = 1;
                         } else if (wp->buttonTrg & PAD_BUTTON_UP) {
                             wp->menuSel = 2;
@@ -541,20 +541,20 @@ EVT_BEGIN(kime_pose)
 #endif
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(PARTNER_NONE)
-        CASE_EQUAL(PARTNER_GOOMBELLA)
+        CASE_EQUAL(PARTY_NONE)
+        CASE_EQUAL(PARTY_GOOMBELLA)
         CALL(evt_party_set_pose, 0, STRING("PKR_I_1"))
-        CASE_EQUAL(PARTNER_KOOPS)
+        CASE_EQUAL(PARTY_KOOPS)
         CALL(evt_party_set_pose, 0, STRING("PNK_I_1"))
-        CASE_EQUAL(PARTNER_BOBBERY)
+        CASE_EQUAL(PARTY_BOBBERY)
         CALL(evt_party_set_pose, 0, STRING("I_1"))
-        CASE_EQUAL(PARTNER_YOSHI)
+        CASE_EQUAL(PARTY_YOSHI)
         CALL(evt_party_set_pose, 0, STRING("PYS_I_1"))
-        CASE_EQUAL(PARTNER_FLURRIE)
+        CASE_EQUAL(PARTY_FLURRIE)
         CALL(evt_party_set_pose, 0, STRING("PWD_I_1"))
-        CASE_EQUAL(PARTNER_VIVIAN)
+        CASE_EQUAL(PARTY_VIVIAN)
         CALL(evt_party_set_pose, 0, STRING("PTR_I_1"))
-        CASE_EQUAL(PARTNER_MSMOWZ)
+        CASE_EQUAL(PARTY_MS_MOWZ)
         CALL(evt_party_set_pose, 0, STRING("PCH_I_1"))
     END_SWITCH
     RETURN
@@ -569,20 +569,20 @@ EVT_BEGIN(kime_pose2)
 #endif
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(PARTNER_NONE)
-        CASE_EQUAL(PARTNER_GOOMBELLA)
+        CASE_EQUAL(PARTY_NONE)
+        CASE_EQUAL(PARTY_GOOMBELLA)
         CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
-        CASE_EQUAL(PARTNER_KOOPS)
+        CASE_EQUAL(PARTY_KOOPS)
         CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
-        CASE_EQUAL(PARTNER_BOBBERY)
+        CASE_EQUAL(PARTY_BOBBERY)
         CALL(evt_party_set_pose, 0, STRING("Y_1"))
-        CASE_EQUAL(PARTNER_YOSHI)
+        CASE_EQUAL(PARTY_YOSHI)
         CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
-        CASE_EQUAL(PARTNER_FLURRIE)
+        CASE_EQUAL(PARTY_FLURRIE)
         CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
-        CASE_EQUAL(PARTNER_VIVIAN)
+        CASE_EQUAL(PARTY_VIVIAN)
         CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
-        CASE_EQUAL(PARTNER_MSMOWZ)
+        CASE_EQUAL(PARTY_MS_MOWZ)
         CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
     END_SWITCH
     RETURN
@@ -612,14 +612,14 @@ EVT_BEGIN(kime_pose_famicom)
 #endif
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(PARTNER_NONE)
-        CASE_EQUAL(PARTNER_GOOMBELLA)
+        CASE_EQUAL(PARTY_NONE)
+        CASE_EQUAL(PARTY_GOOMBELLA)
         CALL(evt_party_set_pose, 0, STRING("R_2"))
-        CASE_EQUAL(PARTNER_KOOPS)
+        CASE_EQUAL(PARTY_KOOPS)
         CALL(evt_party_set_pose, 0, STRING("R_3"))
-        CASE_EQUAL(PARTNER_BOBBERY)
+        CASE_EQUAL(PARTY_BOBBERY)
         CALL(evt_party_set_pose, 0, STRING("R_13"))
-        CASE_EQUAL(PARTNER_YOSHI)
+        CASE_EQUAL(PARTY_YOSHI)
         CALL(party_color, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -637,11 +637,11 @@ EVT_BEGIN(kime_pose_famicom)
             CASE_EQUAL(6)
             CALL(evt_party_set_pose, 0, STRING("R_11"))
         END_SWITCH
-        CASE_EQUAL(PARTNER_FLURRIE)
+        CASE_EQUAL(PARTY_FLURRIE)
         CALL(evt_party_set_pose, 0, STRING("R_4"))
-        CASE_EQUAL(PARTNER_VIVIAN)
+        CASE_EQUAL(PARTY_VIVIAN)
         CALL(evt_party_set_pose, 0, STRING("R_12"))
-        CASE_EQUAL(PARTNER_MSMOWZ)
+        CASE_EQUAL(PARTY_MS_MOWZ)
         CALL(evt_party_set_pose, 0, STRING("R_15"))
     END_SWITCH
     RETURN
@@ -1028,7 +1028,7 @@ USER_FUNC(famicom_check) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(PARTNER_YOSHI)) for the 8-bit item pose. */
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(PARTY_YOSHI)) for the 8-bit item pose. */
 #if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(party_color) {
 #else
@@ -1036,7 +1036,7 @@ USER_FUNC(party_color) {
 #endif
     EvtWord* args = event->args;
 
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }
 

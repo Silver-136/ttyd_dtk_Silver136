@@ -572,7 +572,7 @@ static USER_FUNC(yoshi_exist) {
     PouchData* pouch = pouchGetPtr();
     s32 exist = 0;
 
-    if (pouch->partyData[PARTNER_YOSHI].flags & 1) {
+    if (pouch->partyData[PARTY_YOSHI].flags & 1) {
         exist = 1;
     }
     evtSetValue(event, args[0], exist);

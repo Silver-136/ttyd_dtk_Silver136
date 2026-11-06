@@ -114,8 +114,8 @@ static USER_FUNC(evt_kagemario_change) {
  * so no partner is called back afterwards.
  */
 static USER_FUNC(test) {
-    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_PARTY] = PARTY_MEMBER_NONE;
-    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_FOLLOWER] = PARTY_MEMBER_NONE;
+    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_PARTY] = PARTY_NONE;
+    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_FOLLOWER] = PARTY_NONE;
     return EVT_RETURN_DONE;
 }
 

@@ -112,8 +112,8 @@ static USER_FUNC(evt_kagemario_change) {
 
 /** Script helper: forgets Mario's previous partner slots (both set to 0). */
 static USER_FUNC(test) {
-    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_PARTY] = PARTY_MEMBER_NONE;
-    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_FOLLOWER] = PARTY_MEMBER_NONE;
+    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_PARTY] = PARTY_NONE;
+    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_FOLLOWER] = PARTY_NONE;
     return EVT_RETURN_DONE;
 }
 

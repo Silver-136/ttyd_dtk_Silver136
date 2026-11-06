@@ -256,12 +256,12 @@ EvtWord usu_00_init_evt[658];
 #endif
 
 /**
- * Script helper: writes the color index of Mario's Yoshi partner (pouchGetPartyColor(PARTNER_YOSHI)) to args[0],
+ * Script helper: writes the color index of Mario's Yoshi partner (pouchGetPartyColor(PARTY_YOSHI)) to args[0],
  * so the stand-in Yoshi NPC wears the same color.
  */
 static USER_FUNC(getYoshiColor) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }
 
@@ -1631,7 +1631,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_cam3d_evt_set_npc_rel, STRING("ビビアン"), 0, 50, 290, 0, 45, 14, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     SET_VALUE(LW(8), STRING("ビビアン"))
-    SET_VALUE(LW(9), PARTY_MEMBER_VIVIAN)
+    SET_VALUE(LW(9), PARTY_VIVIAN)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(all_party_lecture)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))

@@ -1035,7 +1035,7 @@ static u16 _battleGetPartyIcon(s32 kind) {
         entry = &_checkPartyTable[i + 1];
         if (entry->kind == kind) {
             if (entry->kind == UNIT_YOSHI) {
-                switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                switch (pouchGetPartyColor(PARTY_YOSHI)) {
                     case 1:
                         return ICON_PARTY_YOSHI_1;
                     case 2:

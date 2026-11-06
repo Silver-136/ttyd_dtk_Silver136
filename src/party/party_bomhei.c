@@ -136,7 +136,7 @@ void bomhei_bye(PartyEntry* party) {
 }
 
 void bomhei_init_800BFBB0(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_BOBBERY;
+    party->memberKind = PARTY_BOBBERY;
     party->moveKind = 0;
     party->height = 28.0f;
     party->width = 28.0f;
@@ -156,7 +156,7 @@ u8 bomheiGetStatus(void) {
     PartyEntry* party = partyGetPtr(partyId);
     u8 status = 2;
 
-    if (party == NULL || (party->currentMemberId == PARTY_MEMBER_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
+    if (party == NULL || (party->currentMemberId == PARTY_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         status = 0;
         return status;
     } else if (party->useMotionId == 60) {
@@ -170,7 +170,7 @@ void bomhei_exit(PartyEntry* party) {
     PartyEntry* p;
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
     p = partyGetPtr(marioGetPartyId());
-    if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (p != NULL && p->currentMemberId == PARTY_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         if (p->runMode != PARTY_RUN_FORCE_WALK) {
             partyChgRunMode(p, PARTY_RUN_MOVE);
@@ -201,7 +201,7 @@ void bomhei_exit(PartyEntry* party) {
  */
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
-    if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (p != NULL && p->currentMemberId == PARTY_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
 #if VERSION >= VERSION_JP
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
 #endif
@@ -224,7 +224,7 @@ void bomhei_use_cancel(void) {
  */
 void bomhei_use_cancel2(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
-    if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED) && (p->playerPtr->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
+    if (p != NULL && p->currentMemberId == PARTY_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED) && (p->playerPtr->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         marioChgPose("M_S_1");
         if (p->runMode != PARTY_RUN_FORCE_WALK) {
@@ -752,9 +752,9 @@ static void bomhei_use_main(PartyEntry* party) {
         }
 #if VERSION <= VERSION_DEMO_JP
         psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_BOMB1, &party->position);
-        eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
+        eff = effSandarsEntry(pouchGetPartyAttackLv((s32)3), party->position.x,
 #else
-        eff = effSandarsEntry(pouchGetPartyAttackLv(PARTNER_BOBBERY), party->position.x,
+        eff = effSandarsEntry(pouchGetPartyAttackLv(PARTY_BOBBERY), party->position.x,
 #endif
                               party->position.y + party->height, party->position.z, 0.0f);
         ((EffSandarsWork*)eff->userdata)->camId = party->camId;
@@ -872,7 +872,7 @@ s32 mario_bomhei_keychk(void) {
     if (p == NULL) {
         return 1;
     }
-    if (p->currentMemberId != PARTY_MEMBER_BOBBERY) {
+    if (p->currentMemberId != PARTY_BOBBERY) {
         return 1;
     }
     if ((p->flags & PARTY_FLAG_IS_BEING_USED) == 0) {
@@ -902,7 +902,7 @@ s32 mario_bomhei_keychk2(void) {
     if (p == NULL) {
         return 1;
     }
-    if (p->currentMemberId != PARTY_MEMBER_BOBBERY) {
+    if (p->currentMemberId != PARTY_BOBBERY) {
         return 1;
     }
     if ((p->flags & PARTY_FLAG_IS_BEING_USED) == 0) {

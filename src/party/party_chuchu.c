@@ -425,7 +425,7 @@ BOOL chuchu_searchObject(void) {
 
 /** Party table init handler: Ms. Mowz is member kind 7, 20 units tall and 24 wide. */
 void chuchu_init(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_MS_MOWZ;
+    party->memberKind = PARTY_MS_MOWZ;
     party->moveKind = 0;
     party->height = 20.0f;
     party->width = 24.0f;

@@ -82,8 +82,8 @@ s32 marioUseParty(void) {
         return 0;
     }
 
-    // 4 = PARTY_MEMBER_YOSHI: the char-sized enum constant changes the s8 compare
-    if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
+    // 4 = PARTY_YOSHI: the char-sized enum constant changes the s8 compare
+    if (party->currentMemberId == PARTY_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }
     if (party->currentMemberId == 4 && yoshiGetStatus()) {
@@ -130,11 +130,11 @@ s32 marioUsePartyMain(void) {
  * higher ids are followers (partyEntry2) in slot 1.
  * Used on save load, after battles and in the E3 sequence; returns the party slot or -1.
  */
-s32 marioPartyEntry(PartyId id) {
+s32 marioPartyEntry(s32 id) {
     MarioWork* mario = marioGetPtr();
     s32 ret;
 
-    if (id < MAIN_PARTY_MEMBER_MAX) {
+    if (id < PARTNER_COUNT) {
         if (!partyChkJoin(id)) {
             return -1;
         }
@@ -164,11 +164,11 @@ s32 marioPartyEntry(PartyId id) {
  * or a follower into slot 1.
  * The partner menu (win_main) uses it after marioPartyGoodbye when switching partners. Returns the slot or -1.
  */
-s32 marioPartyHello(PartyId id) {
+s32 marioPartyHello(s32 id) {
     s32 ret = -1;
     MarioWork* mario = marioGetPtr();
 
-    if (id < MAIN_PARTY_MEMBER_MAX) {
+    if (id < PARTNER_COUNT) {
         if (!partyChkJoin(id)) {
             return -1;
         }
@@ -249,7 +249,7 @@ s32 marioUseParty(void) {
         return 0;
     }
 
-    // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
+    // 1 = PARTY_GOOMBELLA, 4 = PARTY_YOSHI: the char-sized enum constants change the s8 compares
     if (party->currentMemberId == 1 && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }
@@ -271,7 +271,7 @@ s32 marioUseParty(void) {
 #endif
 
 /**
- * The PartyMember kind of the partner out with Mario (PARTY_MEMBER_GOOMBELLA, ...), or 0 when none.
+ * The PartyMember kind of the partner out with Mario (PARTY_GOOMBELLA, ...), or 0 when none.
  * Used by the pause menu, item menu and status window.
  */
 s32 marioGetParty(void) {
@@ -343,7 +343,7 @@ s32 marioGetExtraPartyId(void) {
  * event.c's story-stage setup calls it for each partner's join point (Goombella, Koops, Flurrie, Yoshi, Vivian,
  * Bobbery, Ms. Mowz).
  */
-void partyJoin(PartyId partnerId) {
+void partyJoin(s32 partnerId) {
     if (partnerId < PARTNER_COUNT) {
         pouchGetPtr()->partyData[partnerId].flags |= POUCH_PARTY_FLAG_JOINED; // obtained
     }
@@ -354,14 +354,14 @@ void partyJoin(PartyId partnerId) {
  * event.c's chapter 4 stage setup clears Goombella, Koops, Flurrie and Yoshi while Doopliss has them,
  * and partyJoin restores them a few stages later.
  */
-void partyLeft(PartyId partnerId) {
+void partyLeft(s32 partnerId) {
     if (partnerId < PARTNER_COUNT) {
         pouchGetPtr()->partyData[partnerId].flags &= ~POUCH_PARTY_FLAG_JOINED;
     }
 }
 
 /** TRUE when the partner has been recruited (pouch partyData flag 1); FALSE for ids 8 and up (followers). */
-BOOL partyChkJoin(PartyId partnerId) {
+BOOL partyChkJoin(s32 partnerId) {
     BOOL ret = FALSE;
     if (partnerId < PARTNER_COUNT) {
         u32 joined = pouchGetPtr()->partyData[partnerId].flags & POUCH_PARTY_FLAG_JOINED;
@@ -374,7 +374,7 @@ BOOL partyChkJoin(PartyId partnerId) {
  * The partner's current HP from the pouch (0 for invalid ids);
  * party.c compares it with PARTY_PINCH_HP for the low-HP (peril) animations.
  */
-s32 partyGetHp(PartyId partnerId) {
+s32 partyGetHp(s32 partnerId) {
     s32 ret = 0;
     if (partnerId < PARTNER_COUNT) {
         ret = pouchGetPtr()->partyData[partnerId].currentHP;
@@ -387,7 +387,7 @@ s32 partyGetHp(PartyId partnerId) {
  * gor_02, which unitwin_setpartylank applies to HP, attack and tech levels together).
  * The partner battle units read it to pick their moves; 0 for invalid ids.
  */
-s32 partyGetTechLv(PartyId partnerId) {
+s32 partyGetTechLv(s32 partnerId) {
     s32 ret = 0;
     if (partnerId < PARTNER_COUNT) {
         ret = pouchGetPtr()->partyData[partnerId].techLevel;

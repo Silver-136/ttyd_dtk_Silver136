@@ -752,11 +752,11 @@ USER_FUNC(evt_party_get_status) {
     s32 dst = args[1];
     s32 st;
     switch (id) {
-    case PARTY_MEMBER_VIVIAN:
+    case PARTY_VIVIAN:
         st = vivianGetStatus();
         evtSetValue(event, dst, st);
         break;
-    case PARTY_MEMBER_BOBBERY:
+    case PARTY_BOBBERY:
         evtSetValue(event, dst, bomheiGetStatus());
         break;
     }
@@ -962,7 +962,7 @@ USER_FUNC(evt_party_nokotaro_kick) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
+        if (p->currentMemberId != PARTY_KOOPS) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -992,7 +992,7 @@ USER_FUNC(evt_party_nokotaro_kick_hold) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
+        if (p->currentMemberId != PARTY_KOOPS) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -1023,7 +1023,7 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
+        if (p->currentMemberId != PARTY_KOOPS) {
             return EVT_RETURN_DONE;
         }
         if (nokonokoGetStatus(p) == NOKONOKO_STATUS_NONE) {
@@ -1064,7 +1064,7 @@ USER_FUNC(evt_party_nokotaro_get_status) {
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
+    if (p->currentMemberId != PARTY_KOOPS) {
         return EVT_RETURN_DONE;
     }
     dst = args[1];
@@ -1084,7 +1084,7 @@ USER_FUNC(evt_party_cloud_breathout) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != PARTY_MEMBER_FLURRIE) {
+        if (p->currentMemberId != PARTY_FLURRIE) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -1114,7 +1114,7 @@ USER_FUNC(evt_party_cloud_lock_animations_on_off) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != PARTY_MEMBER_FLURRIE) {
+        if (p->currentMemberId != PARTY_FLURRIE) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {

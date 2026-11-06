@@ -557,51 +557,51 @@ s32 BattleTransPartyId(BattleUnitType kind) {
         case UNIT_GOOMBELLA_CHAPTER4:
         case UNIT_DOOPLISS_CHAPTER8_GOOMBELLA:
         case UNIT_GOOMBELLA:
-            return PARTNER_GOOMBELLA;
+            return PARTY_GOOMBELLA;
         case UNIT_KOOPS_CHAPTER4:
         case UNIT_DOOPLISS_CHAPTER8_KOOPS:
         case UNIT_KOOPS:
-            return PARTNER_KOOPS;
+            return PARTY_KOOPS;
         case UNIT_YOSHI_CHAPTER4:
         case UNIT_DOOPLISS_CHAPTER8_YOSHI:
         case UNIT_YOSHI:
-            return PARTNER_YOSHI;
+            return PARTY_YOSHI;
         case UNIT_FLURRIE_CHAPTER4:
         case UNIT_DOOPLISS_CHAPTER8_FLURRIE:
         case UNIT_FLURRIE:
-            return PARTNER_FLURRIE;
+            return PARTY_FLURRIE;
         case UNIT_DOOPLISS_CHAPTER8_VIVIAN:
         case UNIT_VIVIAN:
-            return PARTNER_VIVIAN;
+            return PARTY_VIVIAN;
         case UNIT_DOOPLISS_CHAPTER8_BOBBERY:
         case UNIT_BOBBERY:
-            return PARTNER_BOBBERY;
+            return PARTY_BOBBERY;
         case UNIT_DOOPLISS_CHAPTER8_MS_MOWZ:
         case UNIT_MS_MOWZ:
-            return PARTNER_MSMOWZ;
+            return PARTY_MS_MOWZ;
         case UNIT_NULL:
-            return PARTNER_NONE;
+            return PARTY_NONE;
         default:
-            return PARTNER_NONE;
+            return PARTY_NONE;
     }
 }
 
 /** Converts a pouch party id back to the partner's battle unit kind (0xE0-0xE6). */
 BattleUnitType BattleTransPartyIdToUnitKind(s32 partyId) {
     switch (partyId) {
-        case PARTNER_GOOMBELLA:
+        case PARTY_GOOMBELLA:
             return UNIT_GOOMBELLA;
-        case PARTNER_KOOPS:
+        case PARTY_KOOPS:
             return UNIT_KOOPS;
-        case PARTNER_YOSHI:
+        case PARTY_YOSHI:
             return UNIT_YOSHI;
-        case PARTNER_FLURRIE:
+        case PARTY_FLURRIE:
             return UNIT_FLURRIE;
-        case PARTNER_VIVIAN:
+        case PARTY_VIVIAN:
             return UNIT_VIVIAN;
-        case PARTNER_BOBBERY:
+        case PARTY_BOBBERY:
             return UNIT_BOBBERY;
-        case PARTNER_MSMOWZ:
+        case PARTY_MS_MOWZ:
             return UNIT_MS_MOWZ;
         default:
             return UNIT_NULL;

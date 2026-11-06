@@ -228,7 +228,7 @@ void caseMain(void) {
                 break;
             case CASE_BOBBERY:
                 party = partyGetPtr(marioGetPartyId());
-                if (party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                if (party != NULL && party->currentMemberId == PARTY_BOBBERY) {
                     HitEntry* ph = party->hitobjAction;
                     if (ph != NULL && !strcmp(hitGetName(ph), entry->hitObjName)) {
                         entry->flags |= CASE_FLAG_TRIGGERED;

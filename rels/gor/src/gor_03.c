@@ -3613,7 +3613,7 @@ EVT_END()
 
 /**
  * Talk event of the Toad woman B: one line per chapter (gor_03_072 to 079);
- * when evt_mario_get_party returns 5 (PARTY_MEMBER_FLURRIE, whom she gushes over) the "_01" variant
+ * when evt_mario_get_party returns 5 (PARTY_FLURRIE, whom she gushes over) the "_01" variant
  * of the line is used instead (JP and later for the first range).
  */
 static EVT_BEGIN(kinopiko_b_talk)
@@ -3621,7 +3621,7 @@ static EVT_BEGIN(kinopiko_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
 #if VERSION >= VERSION_JP
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_072_01"), 0, STRING("me"))
         ELSE
 #endif
@@ -3630,43 +3630,43 @@ static EVT_BEGIN(kinopiko_b_talk)
         END_IF
 #endif
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_073_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_073"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_074_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_074"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG5_43_X_NAUTS_RETREAT)
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_075_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_075"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG6_54_WELCOME_BACK)
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_076_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_076"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_077_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_077"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_078_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_078"), 0, STRING("me"))
         END_IF
         CASE_DEFAULT
-        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+        IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_079_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_079"), 0, STRING("me"))

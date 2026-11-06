@@ -361,7 +361,7 @@ EVT_BEGIN(nokotaro_get)
     CALL(evt_cam3d_evt_set, 400, 85, 255, 400, 40, -10, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     SET_VALUE(LW(8), STRING("ノコタロウ"))
-    SET_VALUE(LW(9), PARTNER_KOOPS)
+    SET_VALUE(LW(9), PARTY_KOOPS)
     CALL_CHILD(all_party_lecture)
 #if VERSION >= VERSION_US
     CALL(evt_party_set_dir, 0, 90, 200)

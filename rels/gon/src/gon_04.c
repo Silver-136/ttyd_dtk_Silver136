@@ -887,7 +887,7 @@ EVT_BEGIN(evt_kaidan_pera)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_party_use_check, LW(0))
-    IF_INT_EQUAL(LW(0), PARTNER_KOOPS)
+    IF_INT_EQUAL(LW(0), PARTY_KOOPS)
         CONVERT_MS_TO_FRAME(LW(0), 1500)
         LOOP(LW(0))
             WAIT_FRAMES(1)

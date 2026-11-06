@@ -824,7 +824,7 @@ void mobjMain(void) {
                         entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
                         hit = 1;
                         goto hitDone;
-                    } else if (party->hitobjAction != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                    } else if (party->hitobjAction != NULL && party->currentMemberId == PARTY_BOBBERY) {
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
                             entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
@@ -833,7 +833,7 @@ void mobjMain(void) {
                         }
                     }
                 }
-                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && party->currentMemberId == PARTY_BOBBERY) {
                     if (party->hitobjAction == hitPtr) {
                         entry->hitFlag = MOBJ_FLAG_HIT_BOBBERY;
                         hit = 1;

@@ -836,7 +836,7 @@ static void stg0_05_init(void) {
 
 /** Story point STG0_08 "Stolen Coins" (gor_02): Goombella joins the party. */
 static void stg0_08_init(void) {
-    partyJoin(PARTNER_GOOMBELLA);
+    partyJoin(PARTY_GOOMBELLA);
 }
 
 /** Story point STG0_11 "3 Goomba Goons" (tik_01): sets GSWF_GOR_02_TUTORIAL_PIPE_TAKEN. */
@@ -889,7 +889,7 @@ static void stg1_06_01_init(void) {
  * sets GSWF_HEI_01_KOOPS_JOIN_REQUEST_SEEN and GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN.
  */
 static void stg1_08_init(void) {
-    partyJoin(PARTNER_KOOPS);
+    partyJoin(PARTY_KOOPS);
     swSet(GSWF_ID(GSWF_HEI_01_KOOPS_JOIN_REQUEST_SEEN));
     swSet(GSWF_ID(GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN));
 }
@@ -1048,7 +1048,7 @@ static void stg2_09_init(void) {
  */
 static void stg2_10_init(void) {
     pouchRemoveItem(ITEM_NECKLACE);
-    partyJoin(PARTNER_FLURRIE);
+    partyJoin(PARTY_FLURRIE);
     swSet(GSWF_ID(GSWF_MAIL_RDM_ISSUE_1_SENT));
     pouchReceiveMail(0x1B);
 }
@@ -1437,7 +1437,7 @@ static void stg3_12_init__1(void) {
 static void stg3_12_2_init(void) {
     yoshiSetColor();
     pouchSetYoshiName(msgSearch("name_party3"));
-    partyJoin(PARTNER_YOSHI);
+    partyJoin(PARTY_YOSHI);
     swSet(GSWF_ID(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN));
 }
 
@@ -1860,10 +1860,10 @@ static void stage4_10_init(void) {
 
 /** Story point STG4_11 "Superbombbomb Lost" (usu_00): Goombella, Koops, Flurrie and Yoshi leave the party. */
 static void stg4_11_init(void) {
-    partyLeft(PARTNER_GOOMBELLA);
-    partyLeft(PARTNER_KOOPS);
-    partyLeft(PARTNER_FLURRIE);
-    partyLeft(PARTNER_YOSHI);
+    partyLeft(PARTY_GOOMBELLA);
+    partyLeft(PARTY_KOOPS);
+    partyLeft(PARTY_FLURRIE);
+    partyLeft(PARTY_YOSHI);
 }
 
 /** Story point STG4_13 "Vivian Joins" (usu_00): gives the Superbombomb. */
@@ -1874,7 +1874,7 @@ static void stg4_13_init(void) {
 /** Story point STG4_13_02 "Waiting Doopliss 2" (gra_00): Vivian joins the party; takes the Superbombomb. */
 static void stg4_13_02_init(void) {
     pouchRemoveItem(ITEM_SUPERBOMBOMB);
-    partyJoin(PARTNER_VIVIAN);
+    partyJoin(PARTY_VIVIAN);
 }
 
 /** Story point STG4_13_03 "Breaking the Floor" (jin_11): sets GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN. */
@@ -1903,10 +1903,10 @@ static void stg4_15_init(void) {
  * unlocks star power 4; gives the Ruby Star.
  */
 static void stg4_15_03_init(void) {
-    partyJoin(PARTNER_GOOMBELLA);
-    partyJoin(PARTNER_KOOPS);
-    partyJoin(PARTNER_FLURRIE);
-    partyJoin(PARTNER_YOSHI);
+    partyJoin(PARTY_GOOMBELLA);
+    partyJoin(PARTY_KOOPS);
+    partyJoin(PARTY_FLURRIE);
+    partyJoin(PARTY_YOSHI);
     pouchGetItem(ITEM_RUBY_STAR);
     pouchGetStarStone(4);
 }
@@ -1976,7 +1976,7 @@ static void stg5_18_init(void) {
 /** Story point STG5_18_02 "Flavio's Favor 2" (muj_01): Bobbery joins the party; takes the Chuckola Cola. */
 static void stg5_18_init_02(void) {
     pouchRemoveItem(ITEM_CHUCKOLA_COLA);
-    partyJoin(PARTNER_BOBBERY);
+    partyJoin(PARTY_BOBBERY);
 }
 
 /** Story point STG5_19 "Gems and Jingles" (muj_05): empty; this point needs no setup beyond the earlier ones. */
@@ -2570,7 +2570,7 @@ static void stg8_15_init(void) {
 // Descriptive name (not in the symbol maps).
 void stg9_02_init(void) {
     swSet(GSWF_TROUBLE_16_SOLVED);
-    partyJoin(PARTNER_MSMOWZ);
+    partyJoin(PARTY_MS_MOWZ);
 }
 
 /**

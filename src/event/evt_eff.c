@@ -963,7 +963,7 @@ USER_FUNC(evt_eff_fukidashi) {
                 {
                     f32 yy = 2.0f * party->height / 3.0f;
                     f32 ww;
-                    if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
+                    if (party->currentMemberId == PARTY_FLURRIE) {
                         yy = 30.0f;
                     }
                     ww = party->height / 3.0f;

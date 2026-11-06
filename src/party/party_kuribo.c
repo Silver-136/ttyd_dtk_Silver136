@@ -33,7 +33,7 @@ u32 msg_ep; // cleared by kuribo_init; nothing reads it
  */
 BOOL christineGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (!party || party->currentMemberId != PARTY_MEMBER_GOOMBELLA || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (!party || party->currentMemberId != PARTY_GOOMBELLA || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return FALSE;
     }
     return TRUE;
@@ -226,7 +226,7 @@ USER_FUNC(post_kurio_use) {
 }
 
 void kuribo_init_800C23B4(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_GOOMBELLA;
+    party->memberKind = PARTY_GOOMBELLA;
     party->moveKind = 0;
     party->height = 24.0f;
     party->width = 26.0f;

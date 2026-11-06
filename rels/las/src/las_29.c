@@ -848,7 +848,7 @@ USER_FUNC(make_koe_label) {
     EvtWord* args = event->args;
     s32 n = evtGetValue(event, args[0]);
 
-    if (n == 18 && !partyChkJoin(PARTNER_MSMOWZ)) {
+    if (n == 18 && !partyChkJoin(PARTY_MS_MOWZ)) {
         n = 1;
         evtSetValue(event, args[0], 1);
     }

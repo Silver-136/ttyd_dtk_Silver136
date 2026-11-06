@@ -344,7 +344,7 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
     s32 b;
 
     party->footstepTimer++;
-    if (party->currentMemberId == PARTY_MEMBER_FLAVIO) {
+    if (party->currentMemberId == PARTY_FLAVIO) {
         if (arg == 0) {
             a = 20;
             b = 40;
@@ -358,12 +358,12 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
         } else if (party->footstepTimer == a) {
             psndSFXOn_3D((const char*)PSND_SFX_STG5_MARCO_MOVE1L, &party->position);
         }
-    } else if (party->currentMemberId == PARTY_MEMBER_EGG) {
+    } else if (party->currentMemberId == PARTY_EGG) {
         if (party->footstepTimer >= 15) {
             party->footstepTimer = 0;
             psndSFXOn_3D((const char*)PSND_SFX_PARTY_YOSH_EGG1, &party->position);
         }
-    } else if (party->currentMemberId == PARTY_MEMBER_PUNIO) {
+    } else if (party->currentMemberId == PARTY_PUNIO) {
         if (arg == 0) {
             a = 5;
             b = 10;
@@ -451,13 +451,13 @@ void party_motion_stay(PartyEntry* party) {
                 f32 sd;
                 if (party->moveKind == 0) {
                     sd = 18.0f;
-                } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
+                } else if (party->currentMemberId == PARTY_FLURRIE) {
                     if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
                         sd = 8.0f;
                     } else {
                         sd = 30.0f;
                     }
-                } else if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+                } else if (party->currentMemberId == PARTY_VIVIAN) {
                     if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
                         sd = 8.0f;
                     } else {
@@ -475,13 +475,13 @@ void party_motion_stay(PartyEntry* party) {
             f32 sd;
             if (party->moveKind == 0) {
                 sd = 18.0f;
-            } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
+            } else if (party->currentMemberId == PARTY_FLURRIE) {
                 if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
                     sd = 8.0f;
                 } else {
                     sd = 30.0f;
                 }
-            } else if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+            } else if (party->currentMemberId == PARTY_VIVIAN) {
                 if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
                     sd = 8.0f;
                 } else {
@@ -528,8 +528,8 @@ void party_motion_stay(PartyEntry* party) {
                         partyClearFootmark2();
                     }
 
-                // 4 = PARTY_MEMBER_YOSHI: the char-sized enum constant changes the s8 compare
-                } else if (other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) {
+                // 4 = PARTY_YOSHI: the char-sized enum constant changes the s8 compare
+                } else if (other->currentMemberId == PARTY_BOBBERY && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
@@ -570,7 +570,7 @@ void party_motion_stay(PartyEntry* party) {
     }
     partyWalkChkGnd(party);
     party_force_reset_outofscreen(party);
-    if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
+    if (party->currentMemberId == PARTY_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
         chuchu_searchObject()) {
         switch (party->useMotionId) {
         case 1:
@@ -632,7 +632,7 @@ void party_motion_wait(PartyEntry* party) {
         partyFlyAdjustY(party);
     } else {
         partyWalkChkGnd(party);
-        if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() &&
+        if (party->currentMemberId == PARTY_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() &&
             marioChkDeepSleep() != 1 && chuchu_searchObject()) {
             switch (party->useMotionId) {
                 case 1:
@@ -3513,13 +3513,13 @@ static f32 partyStayDist(PartyEntry* party) {
     f32 d;
     if (party->moveKind == 0) {
         d = 18.0f;
-    } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
+    } else if (party->currentMemberId == PARTY_FLURRIE) {
         if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
             d = 8.0f;
         } else {
             d = 30.0f;
         }
-    } else if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+    } else if (party->currentMemberId == PARTY_VIVIAN) {
         if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
             d = 8.0f;
         } else {
@@ -3781,7 +3781,7 @@ static void party_force_reset_outofscreen(PartyEntry* party) {
     pos = party->position;
     if (party->moveKind == 0) {
         speed = party->width;
-    } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
+    } else if (party->currentMemberId == PARTY_FLURRIE) {
         speed = 10.0f;
         margin = 70;
     } else {
@@ -5048,7 +5048,7 @@ void party_motion_stay(PartyEntry* party) {
     if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (marioChkDeepSleep() == 1 || (party->flags & PARTY_FLAG_SLEEP_ON)) {
             partyChgPoseId(party, PARTY_POSE_SLEEP);
-        } else if (party->currentMemberId != PARTY_MEMBER_MS_MOWZ) {
+        } else if (party->currentMemberId != PARTY_MS_MOWZ) {
             partyChgPoseId(party, PARTY_POSE_STAND);
         } else if (!chuchu_searchObject()) {
             partyChgPoseId(party, PARTY_POSE_STAND);
@@ -5084,7 +5084,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyClearFootmark2();
                     }
 
-                    // 3 = PARTY_MEMBER_BOBBERY, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
+                    // 3 = PARTY_BOBBERY, 4 = PARTY_YOSHI: the char-sized enum constants change the s8 compares
                 } else if (other->currentMemberId == 3 && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
@@ -5125,7 +5125,7 @@ void party_motion_stay(PartyEntry* party) {
     }
     partyStayChkGnd(party);
     party_force_reset_outofscreen(party);
-    if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 && party->currentMemberId == PARTY_MEMBER_MS_MOWZ &&
+    if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 && party->currentMemberId == PARTY_MS_MOWZ &&
         chuchu_searchObject()) {
         switch (party->useMotionId) {
             case 1:

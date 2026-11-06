@@ -161,7 +161,7 @@ s32 yoshiGetStatus(void) {
 #endif
     u8 motion;
 
-    if (party == NULL || party->currentMemberId != PARTY_MEMBER_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party == NULL || party->currentMemberId != PARTY_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return YOSHI_STATUS_INACTIVE;
     }
     motion = party->useMotionId;
@@ -345,7 +345,7 @@ void yoshi_exit(PartyEntry* party) {
 void yoshi_jumpStand(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
-    if (party == NULL || party->currentMemberId != PARTY_MEMBER_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party == NULL || party->currentMemberId != PARTY_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return;
     }
     if (!(party->useMotionId >= 60 && party->useMotionId <= 66)) {
@@ -403,7 +403,7 @@ void yoshiAnimeCtrl(PartyEntry* party) {
 
 /** Yoshi's init handler (party_data): sets his member kind and size (26 tall; 28 wide in the early demos, 20 in JP and later). */
 void yoshi_init(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_YOSHI;
+    party->memberKind = PARTY_YOSHI;
     party->moveKind = 0;
     party->height = 26.0f;
 #if VERSION <= VERSION_DEMO_JP

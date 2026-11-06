@@ -3259,7 +3259,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
     CALL(evt_npc_get_position, STRING("クリスチーヌ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_dir, STRING("クリスチーヌ"), LW(3))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 0, -1000, 0)
-    CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_GOOMBELLA_FOLLOWER, LW(0), LW(1), LW(2))
+    CALL(evt_mario_set_party_pos, 1, PARTY_GOOMBELLA_FOLLOWER, LW(0), LW(1), LW(2))
     CALL(evt_party_set_dir, 1, LW(3), -1)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
@@ -5734,10 +5734,10 @@ USER_FUNC(funechange_func) {
     return EVT_RETURN_DONE;
 }
 
-/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(PARTNER_YOSHI)). */
+/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(PARTY_YOSHI)). */
 static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }
 
@@ -6076,7 +6076,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 
     // Ms. Mowz joins the line-up only if she became a partner.
-    CALL(evt_mario_chk_join_party, LW(0), PARTY_MEMBER_MS_MOWZ)
+    CALL(evt_mario_chk_join_party, LW(0), PARTY_MS_MOWZ)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu"))
         CALL(evt_npc_set_tribe, STRING("チュチュリーナ"), STRING("チュチュリーナ"))
@@ -6628,7 +6628,7 @@ EVT_BEGIN(return_gorotsuki_town)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_mario_kill_party, 0)
-    CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
+    CALL(evt_mario_set_party, 0, PARTY_GOOMBELLA)
     CALL(evt_cam3d_evt_set, 0, 700, 1420, 0, -10, 0, 0, EASING_SINE_IN_OUT)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
     SET_VALUE(GF(0), 0)

@@ -2824,14 +2824,14 @@ USER_FUNC(onoff) {
 /** Script helper: args[0] receives Yoshi's color (0-6) from the pouch. */
 static USER_FUNC(getYoshiColor) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: args[0] receives 1 if Yoshi is currently in the party, else 0. */
 USER_FUNC(chk) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], partyChkJoin(PARTNER_YOSHI) != 0);
+    evtSetValue(event, args[0], partyChkJoin(PARTY_YOSHI) != 0);
     return EVT_RETURN_DONE;
 }
 

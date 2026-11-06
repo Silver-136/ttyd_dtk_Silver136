@@ -186,7 +186,7 @@ s32 winRootMain(WindowWork* w) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1 | PSND_SFX_BYPASS_MUTE));
         w->tabNum = 0;
         WIN_ROOT_ADD_TAB(0);
-        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) {
+        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTY_GOOMBELLA)) {
             WIN_ROOT_ADD_TAB(1);
         }
         WIN_ROOT_ADD_TAB(2);

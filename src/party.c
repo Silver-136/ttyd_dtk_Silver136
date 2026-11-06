@@ -83,7 +83,7 @@ BOOL partyPaperOn(PartyEntry* party, const char* animGroup) {
     flag = (!strcmp(animGroup, "p_roll") || !strcmp(animGroup, "p_plane") ||
             !strcmp(animGroup, "p_dokan_x") || !strcmp(animGroup, "p_dokan_y")) ? FALSE : TRUE;
     if (!strcmp(animGroup, "p_slit")) {
-        flag = party->currentMemberId == PARTY_MEMBER_FLURRIE;
+        flag = party->currentMemberId == PARTY_FLURRIE;
     }
     animPoseSetPaperAnimGroup(party->paperAnimGroup, animGroup, flag);
     return TRUE;
@@ -120,7 +120,7 @@ void partyPaperLightOff(PartyEntry* party) {
 static inline BOOL partyIsPinch(PartyEntry* party) {
     BOOL pinch = FALSE;
 
-    if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX) {
+    if (party->currentMemberId < PARTNER_COUNT) {
         if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
             pinch = TRUE;
         }
@@ -141,7 +141,7 @@ static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index
         return party->animName;
     }
     pinch = FALSE;
-    if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX) {
+    if (party->currentMemberId < PARTNER_COUNT) {
         if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
             pinch = TRUE;
         }
@@ -157,10 +157,10 @@ static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index
     }
     if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
         pose = partyPoseTbl[party->currentMemberId][poseIdx];
-    } else if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
+    } else if (party->currentMemberId != PARTY_YOSHI) {
         pose = partyDotPoseTbl[party->currentMemberId][poseIdx];
     } else {
-        pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTNER_YOSHI)][poseIdx];
+        pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTY_YOSHI)][poseIdx];
     }
     curPose = party->animName;
     if (curPose && !strcmp(curPose, pose)) {
@@ -197,10 +197,10 @@ const char* partyChgPoseId(PartyEntry* party, s32 index) {
     }
     if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
         pose = partyPoseTbl[party->currentMemberId][poseIdx];
-    } else if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
+    } else if (party->currentMemberId != PARTY_YOSHI) {
         pose = partyDotPoseTbl[party->currentMemberId][poseIdx];
     } else {
-        pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTNER_YOSHI)][poseIdx];
+        pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTY_YOSHI)][poseIdx];
     }
     curPose = party->animName;
     if (curPose && !strcmp(curPose, pose)) {
@@ -343,7 +343,7 @@ s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z) {
     index = PARTY_POSE_STAND;
     if (!(party->flags2 & PARTY_DISP_FLAG_POSE_LOCK)) {
         lowHp = FALSE;
-        if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX && partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
+        if (party->currentMemberId < PARTNER_COUNT && partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
             lowHp = TRUE;
         }
         if (lowHp == TRUE) {
@@ -351,10 +351,10 @@ s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z) {
         }
         if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
             pose = partyPoseTbl[party->currentMemberId][index];
-        } else if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
+        } else if (party->currentMemberId != PARTY_YOSHI) {
             pose = partyDotPoseTbl[party->currentMemberId][index];
         } else {
-            pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTNER_YOSHI)][index];
+            pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTY_YOSHI)][index];
         }
         if (party->animName == NULL || strcmp(party->animName, pose)) {
             party->animName = pose;
@@ -462,13 +462,13 @@ s32 yoshiSetColor(void) {
     } else {
         color = 6;
     }
-    pouchSetPartyColor(PARTNER_YOSHI, color);
+    pouchSetPartyColor(PARTY_YOSHI, color);
     return color;
 }
 
 /** The partner's height for collision and riding; Yoshi counts 18.5 more while Mario rides him. */
 f32 partyGetHeight(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId == PARTY_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 18.5f + party->height;
     }
     return party->height;
@@ -497,14 +497,14 @@ static inline s32 partyGetFreeSlot(s32 start) {
 static void partyPoseEntry(PartyEntry* party) {
     char* animName;
 
-    if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
+    if (party->currentMemberId != PARTY_YOSHI) {
         if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
             animName = party_dp->name;
         } else {
             animName = "d_mario";
         }
     } else {
-        animName = yoshigroup[pouchGetPartyColor(PARTNER_YOSHI)];
+        animName = yoshigroup[pouchGetPartyColor(PARTY_YOSHI)];
         if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
             animName = "d_mario";
         }
@@ -808,7 +808,7 @@ void partyReInit(void) {
         if (dotted) {
             partyPoseEntry(party);
         }
-        if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == PARTY_RUN_USE) {
+        if (party->currentMemberId == PARTY_YOSHI && party->runMode == PARTY_RUN_USE) {
             return;
         }
         if (!(marioGetPtr()->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
@@ -824,7 +824,7 @@ void partyReInit(void) {
             party->motionStep = 0;
             party->flags |= PARTY_FLAG_CONTINUE_FOLLOW_MARKER;
         }
-        if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ) {
+        if (party->currentMemberId == PARTY_MS_MOWZ) {
             chuchu_reinit(party);
         }
 #if VERSION >= VERSION_JP
@@ -1460,11 +1460,11 @@ s32 partyGoodbyeInit(PartyEntry* party) {
         party_dp->init_func(party);
     }
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-        if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+        if (party->currentMemberId == PARTY_VIVIAN) {
             vivianUnhold(party);
             party->motionStep = 0;
         }
-        if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
+        if (party->currentMemberId == PARTY_YOSHI) {
             marioGetoffYoshi();
             party->motionStep = 0;
         }
@@ -1490,12 +1490,12 @@ s32 partyGoodbyeMain(PartyEntry* party) {
         case 0:
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->use_func(party);
-            if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+            if (party->currentMemberId == PARTY_VIVIAN) {
                 if (vivianGetStatus() == VIVIAN_STATUS_INACTIVE) {
                     party->motionStep = 10;
                     party->runMode = PARTY_RUN_GOODBYE;
                 }
-            } else if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
+            } else if (party->currentMemberId == PARTY_YOSHI) {
                 if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
                     party->motionStep = 10;
                     party->runMode = PARTY_RUN_GOODBYE;
@@ -3176,7 +3176,7 @@ static void partyPreDisp(PartyEntry* party) {
     }
     mode = 2;
     size = 13.333333f;
-    if (party->currentMemberId != PARTY_MEMBER_VIVIAN) {
+    if (party->currentMemberId != PARTY_VIVIAN) {
         party->trailPos = party->position;
     } else {
         if (party->runMode == 4 || (party->runMode == PARTY_RUN_GOODBYE && !(party->flags & PARTY_FLAG_IS_BEING_USED))) {
@@ -3190,7 +3190,7 @@ static void partyPreDisp(PartyEntry* party) {
         }
     }
 #if VERSION <= VERSION_DEMO_JP
-    if (party->currentMemberId == PARTY_MEMBER_VIVIAN && !(party->work.vivian.tailFlags & 1)) {
+    if (party->currentMemberId == PARTY_VIVIAN && !(party->work.vivian.tailFlags & 1)) {
 #else
     if (vivianDisplayTailCheck(party)) {
 #endif
@@ -3274,21 +3274,21 @@ static void partyDisp(CameraId cam, void* param) {
     yoff = 0.0f;
 #if VERSION >= VERSION_JP
     if (party->paperAnimName) {
-        if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
+        if (party->currentMemberId == PARTY_YOSHI) {
             yoff = 1.0f;
-        } else if (party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+        } else if (party->currentMemberId == PARTY_BOBBERY) {
             yoff = 2.0f;
-        } else if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ) {
+        } else if (party->currentMemberId == PARTY_MS_MOWZ) {
             yoff = 2.0f;
-        } else if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA) {
+        } else if (party->currentMemberId == PARTY_GOOMBELLA) {
             yoff = 2.0f;
-        } else if (party->currentMemberId == PARTY_MEMBER_FRANKLY) {
+        } else if (party->currentMemberId == PARTY_FRANKLY) {
             yoff = 3.0f;
-        } else if (party->currentMemberId == PARTY_MEMBER_EGG) {
+        } else if (party->currentMemberId == PARTY_EGG) {
             yoff = 3.5f;
-        } else if (party->currentMemberId == PARTY_MEMBER_PUNIO) {
+        } else if (party->currentMemberId == PARTY_PUNIO) {
             yoff = 4.0f;
-        } else if (party->currentMemberId == PARTY_MEMBER_FLAVIO) {
+        } else if (party->currentMemberId == PARTY_FLAVIO) {
             yoff = -1.0f;
         }
     }
@@ -3367,14 +3367,14 @@ void partyShadowOff(PartyEntry* party) {
 static inline void partyPoseEntryF(PartyEntry* party) {
     char* animName;
 
-    if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
+    if (party->currentMemberId != PARTY_YOSHI) {
         if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
             animName = party_dp->name;
         } else {
             animName = "d_mario";
         }
     } else {
-        animName = yoshigroup[pouchGetPartyColor(PARTNER_YOSHI)];
+        animName = yoshigroup[pouchGetPartyColor(PARTY_YOSHI)];
         if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
             animName = "d_mario";
         }

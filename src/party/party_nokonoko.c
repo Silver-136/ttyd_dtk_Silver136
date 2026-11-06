@@ -54,7 +54,7 @@ s32 nokonokoGetStatus(PartyEntry* party) {
     if (party == NULL) {
         return NOKONOKO_STATUS_NONE;
     }
-    if (party->currentMemberId != PARTY_MEMBER_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId != PARTY_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return NOKONOKO_STATUS_NONE;
     }
     status = NOKONOKO_STATUS_OTHER;
@@ -89,7 +89,7 @@ BOOL nokonoko_holdItem(void) {
     if (party == NULL) {
         return FALSE;
     }
-    if (party->currentMemberId != PARTY_MEMBER_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId != PARTY_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return FALSE;
     }
     return party->work.nokonoko.heldItem != NULL;
@@ -114,7 +114,7 @@ void nokonoko_bye(PartyEntry* party) {
  * and clears the stored shell-spin sound handle.
  */
 void nokonoko_init(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_KOOPS;
+    party->memberKind = PARTY_KOOPS;
     party->moveKind = 0;
     party->height = 37.0f;
     party->width = 24.0f;
@@ -941,7 +941,7 @@ void nokonoko_use(PartyEntry* party) {
  * or to run mode 0 when the toss was started by an event; run mode 9 keeps its current mode.
  */
 void nokonoko_finish(PartyEntry* party) {
-    if (party != NULL && party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party != NULL && party->currentMemberId == PARTY_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         nokonoko_use_post(party);
         if (party->runMode != PARTY_RUN_FORCE_WALK) {
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {

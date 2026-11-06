@@ -360,7 +360,7 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
-    if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+    if (party->currentMemberId != PARTY_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
     hit0 = cloudGetHitBreathout(0);

@@ -459,7 +459,7 @@ EVT_BEGIN(ranperu_lastbattle)
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mario_hello_party, 0, PARTY_MEMBER_VIVIAN)
+        CALL(evt_mario_hello_party, 0, PARTY_VIVIAN)
     END_IF
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -1079,12 +1079,12 @@ EVT_END()
 /** Script helper: returns the colour index of the player's Yoshi in args[0]. */
 static USER_FUNC(getYoshiColor) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: sets a flag in Vivian's party data so she is treated as having left the party. */
 USER_FUNC(vivian_away) {
-    pouchGetPtr()->partyData[PARTNER_VIVIAN].flags |= 2;
+    pouchGetPtr()->partyData[PARTY_VIVIAN].flags |= 2;
     return EVT_RETURN_DONE;
 }

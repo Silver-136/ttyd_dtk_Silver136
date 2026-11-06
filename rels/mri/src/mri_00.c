@@ -334,7 +334,7 @@ EVT_END()
 
 /**
  * Second cutscene at the sealed tree entrance: Punio tells Mario about a hidden secret entrance and Flurrie,
- * hops twice, then the NPC is removed and Punio joins as Mario's follower (party slot 1, PARTY_MEMBER_PUNIO)
+ * hops twice, then the NPC is removed and Punio joins as Mario's follower (party slot 1, PARTY_PUNIO)
  * at his spot; the west exit gets the lost-item exit.
  * Sets the story to STG2_03_02_SEALED_ENTRANCE_2.
  */
@@ -1836,8 +1836,8 @@ EVT_BEGIN(mri_00_init_evt)
     // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
         CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
-            CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
+        IF_INT_EQUAL(LW(15), PARTY_NONE)
+            CALL(evt_mario_set_party, 0, PARTY_GOOMBELLA)
             CALL(evt_party_run, 0)
 #if VERSION <= VERSION_DEMO_JP
         CALL(evt_pouch_mario_recovery)

@@ -111,7 +111,7 @@ void cloudResetAt(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
 
-    if (party != NULL && party->currentMemberId == PARTY_MEMBER_FLURRIE) {
+    if (party != NULL && party->currentMemberId == PARTY_FLURRIE) {
         cloud_at.x = camGetPtr(CAMERA_3D)->cameraAt.x;
         cloud_at.y = camGetPtr(CAMERA_3D)->cameraAt.y;
         cloud_at.z = camGetPtr(CAMERA_3D)->cameraAt.z;
@@ -137,7 +137,7 @@ u8 cloudGetStatus(void) {
     PartyEntry* party = partyGetPtr(partyId);
     u8 status = 2;
 
-    if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
+    if (party == NULL || (party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         status = 0;
         return status;
     } else if (party->useMotionId == CLOUD_USE_BREATH_INIT && party->useMotionId < CLOUD_USE_CLEANUP) {
@@ -197,7 +197,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
 
     // FAKE: val holds 10.0f and then 100.0f; the literals change the object
     val = 10.0f;
-    if (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 &&
+    if (party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 &&
         party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabs(party->position.y - pos->y - 18.0f) <= val) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         reach = cloud->breathDist;
@@ -232,7 +232,7 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
         return NULL;
     }
 
-    if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
+    if (party->currentMemberId != PARTY_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
         party->useMotionId < CLOUD_USE_BREATH_INIT) {
         return NULL;
     }
@@ -268,7 +268,7 @@ f32 cloudGetBreathDist(void) {
         return breathDist;
     }
 
-    if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
+    if (party->currentMemberId != PARTY_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
         party->useMotionId < CLOUD_USE_BREATH_INIT) {
         breathDist = 0.0f;
     } else {
@@ -367,7 +367,7 @@ void cloud_move(PartyEntry* party) {
  * sets her collision size (38 tall, 36 wide in the early demos, 24 in JP and later) and clears her gust state.
  */
 void cloud_init(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_FLURRIE;
+    party->memberKind = PARTY_FLURRIE;
     party->moveKind = 1;
     party->height = 38.0f;
 #if VERSION <= VERSION_DEMO_JP
@@ -744,7 +744,7 @@ f32 cloudGetBreathPower(Vec pos, f32 width) {
     // FAKE: val holds 10.0f and then 100.0f; the literals change the object
     val = 10.0f;
     if (
-        party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId >= MARIO_MOTION_FALL && ((__fabs(party->position.y - pos.y - 18.0f)) <= val)) {
+        party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId >= MARIO_MOTION_FALL && ((__fabs(party->position.y - pos.y - 18.0f)) <= val)) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         breathDist = cloud->breathDist;
         if (-((0.5f * width) - distABf(party->position.x, party->position.z, pos.x, pos.z)) <= breathDist) {
@@ -898,7 +898,7 @@ u8 cloudGetStatus() {
     PartyEntry* party = partyGetPtr(partyId);
     u8 status = 2;
 
-    if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
+    if (party == NULL || (party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         status = 0;
         return status;
     } else if (party->useMotionId == 10 && party->useMotionId < 20) {
@@ -917,7 +917,7 @@ void cloudResetAt() {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
 
-    if (party == NULL || party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+    if (party == NULL || party->currentMemberId != PARTY_FLURRIE) {
         return;
     } else {
         cloud_at.x = camGetPtr(CAMERA_3D)->cameraAt.x;
@@ -939,7 +939,7 @@ void cloudGetAt(Vec* position) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
 
-    if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
+    if (party == NULL || (party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         return;
     }
 

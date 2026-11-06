@@ -908,7 +908,7 @@ EVT_END()
  * No script in this copy calls it (the jin copy's Doopliss fight does).
  */
 static USER_FUNC(vivian_comeback) {
-    pouchGetPtr()->partyData[PARTNER_VIVIAN].flags &= ~POUCH_PARTY_FLAG_AWAY;
+    pouchGetPtr()->partyData[PARTY_VIVIAN].flags &= ~POUCH_PARTY_FLAG_AWAY;
     return EVT_RETURN_YIELD;
 }
 

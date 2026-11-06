@@ -847,7 +847,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
-    if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+    if (party->currentMemberId != PARTY_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
 #else

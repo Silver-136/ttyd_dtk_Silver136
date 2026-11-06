@@ -91,7 +91,7 @@ u32 weaponGetPowerOverlapHammer1(BattleUnit* unit1, BattleWeapon* weapon, Battle
  */
 u32 weaponGetPowerFromPartyAttackLv(BattleUnit* unit1, BattleWeapon* weapon, BattleUnit* unit2, BattleUnitPart* part) {
     BattleWork* wp = _battleWorkPointer;
-    PartyId partyId;
+    s32 partyId;
     s32 acSuccess;
     s32 slot;
 
@@ -111,7 +111,7 @@ u32 weaponGetPowerFromPartyAttackLv(BattleUnit* unit1, BattleWeapon* weapon, Bat
  */
 u32 weaponGetPowerFromGulliblePartyAttackLv(BattleUnit* unit1, BattleWeapon* weapon, BattleUnit* unit2,
                                             BattleUnitPart* part) {
-    PartyId partyId;
+    s32 partyId;
     s32 partyAttackLv;
 
     partyId = BattleTransPartyId(unit1->currentKind);

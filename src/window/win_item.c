@@ -1025,7 +1025,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
 #endif
 #endif
             } else {
-                name = list[i - 1]->partyId != PARTNER_YOSHI ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
+                name = list[i - 1]->partyId != PARTY_YOSHI ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {
                     continue;
                 }

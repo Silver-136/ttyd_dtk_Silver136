@@ -2120,7 +2120,7 @@ USER_FUNC(yoshi_original_color_anim_set) {
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
-    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+    switch (pouchGetPartyColor(PARTY_YOSHI)) {
     case 1:
         name = "c_babyyoshi2";
         break;

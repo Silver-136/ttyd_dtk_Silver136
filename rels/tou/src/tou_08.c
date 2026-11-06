@@ -1401,6 +1401,6 @@ EVT_END()
 
 static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }

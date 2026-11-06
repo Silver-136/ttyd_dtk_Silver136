@@ -72,14 +72,14 @@ void mot_vivian(void) {
 
 /** Early-demo copy: hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 static inline void partyVivianTailStop(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+    if (party->currentMemberId == PARTY_VIVIAN) {
         party->work.vivian.tailFlags |= 1; // the early demos keep the tail flags in the Vivian work
     }
 }
 
 /** Early-demo copy: shows Vivian's shadow tail again. */
 static inline void partyVivianTailStart(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+    if (party->currentMemberId == PARTY_VIVIAN) {
         party->work.vivian.tailFlags &= ~1;
 #else
         mario->hitobjFront = NULL;
@@ -130,7 +130,7 @@ void mot_vivian_post(void) {
 #if VERSION <= VERSION_DEMO_JP
         camFollowYOn();
 #endif
-    } else if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party && party->currentMemberId == PARTY_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         // FAKE: the store is reached by a goto past the return; writing it here changes the object
         goto cancel;
     }
@@ -168,7 +168,7 @@ s32 vivianGetStatus(void) {
     if (party == NULL) {
         return VIVIAN_STATUS_INACTIVE;
     }
-    if (party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId != PARTY_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return VIVIAN_STATUS_INACTIVE;
     }
     st = party->useMotionId;
@@ -189,7 +189,7 @@ s32 vivianGetStatus(void) {
  * if Vivian is in the hidden state it starts the rise-out sequence.
  */
 void vivianUnhold(PartyEntry* party) {
-    if (party == NULL || party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party == NULL || party->currentMemberId != PARTY_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return;
     }
     if (party->useMotionId == 10) {
@@ -201,14 +201,14 @@ void vivianUnhold(PartyEntry* party) {
 
 /** hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 void partyVivianTailStop(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+    if (party->currentMemberId == PARTY_VIVIAN) {
         party->tailFlags |= 1;
     }
 }
 
 /** shows Vivian's shadow tail again. */
 void partyVivianTailStart(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+    if (party->currentMemberId == PARTY_VIVIAN) {
         party->tailFlags &= ~1;
     }
 }
@@ -220,7 +220,7 @@ void partyVivianTailStart(PartyEntry* party) {
  */
 // Descriptive name (not in the symbol maps).
 BOOL vivianDisplayTailCheck(PartyEntry* party) {
-    if (party->currentMemberId != PARTY_MEMBER_VIVIAN) {
+    if (party->currentMemberId != PARTY_VIVIAN) {
         return FALSE;
     }
     if ((party->tailFlags & 1)) {
@@ -248,7 +248,7 @@ void vivianShadow(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
     {
 #else
-    if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+    if (party && party->currentMemberId == PARTY_VIVIAN) {
 #endif
 
         dx = 0.1f * (party->position.x - party->trailPos.x);

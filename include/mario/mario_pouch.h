@@ -4,6 +4,7 @@
 
 #include "version.h"
 #include <dolphin/types.h>
+#include "party_member.h"
 
 #define MAX_KEY_ITEMS 121
 #define MAX_HELD_ITEMS 20
@@ -386,17 +387,6 @@ typedef enum MajinaiType {
     MAJINAI_COIN_UP = 4,     // coin bonus after the battle
 } MajinaiType;
 
-typedef enum MarioPartner {
-    PARTNER_NONE,
-    PARTNER_GOOMBELLA,
-    PARTNER_KOOPS,
-    PARTNER_BOBBERY,
-    PARTNER_YOSHI,
-    PARTNER_FLURRIE,
-    PARTNER_VIVIAN,
-    PARTNER_MSMOWZ,
-    PARTNER_COUNT
-} PartyId;
 
 typedef struct PouchPartyData {
     u16 flags;       // 0x0
@@ -486,7 +476,7 @@ s32 pouchGetHP(void);
 s32 pouchGetMaxHP(void);
 void pouchSetHP(s32 points);
 void pouchSetMaxHP(s16 points);
-s32 pouchGetPartyHP(PartyId partnerId);
+s32 pouchGetPartyHP(s32 partnerId);
 void pouchSetPartyHP(s32 partnerId, s32 points);
 s32 pouchGetFP(void);
 s32 pouchGetMaxFP(void);
@@ -500,7 +490,7 @@ f32 pouchGetAudienceNum(void);
 void pouchSetAudienceNum(f32 num);
 s32 pouchGetJumpLv(void);
 s32 pouchGetHammerLv(void);
-s32 pouchGetPartyAttackLv(PartyId partyId);
+s32 pouchGetPartyAttackLv(s32 partyId);
 BOOL pouchAddKeepItem(s32 id);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -529,8 +519,8 @@ s32 pouchReceiveMailCount(void);
 void pouchReceiveMail(s32 mailId);
 void pouchOpenMail(s32 mailId);
 s32 pouchCheckMail(s32 mailId);
-s32 pouchGetPartyColor(PartyId partnerId);
-void pouchSetPartyColor(PartyId partnerId, s32 color);
+s32 pouchGetPartyColor(s32 partnerId);
+void pouchSetPartyColor(s32 partnerId, s32 color);
 void pouchSetYoshiName(const char* name);
 char* pouchGetYoshiName(void);
 

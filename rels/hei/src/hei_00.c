@@ -463,9 +463,9 @@ EVT_BEGIN(gonbaba_evt)
         GOTO(1)
     END_IF
     CALL(evt_mario_get_party, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), PARTY_MEMBER_GOOMBELLA)
+    IF_INT_NOT_EQUAL(LW(0), PARTY_GOOMBELLA)
         CALL(evt_mario_goodbye_party, 0)
-        CALL(evt_mario_hello_party, 0, PARTY_MEMBER_GOOMBELLA)
+        CALL(evt_mario_hello_party, 0, PARTY_GOOMBELLA)
     END_IF
 
     // Mario freezes and Hooktail's roar echoes from off-screen; Mario and his partner react.

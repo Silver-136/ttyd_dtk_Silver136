@@ -119,7 +119,7 @@ static inline HitEntry* partyHitCheckInl(PartyEntry* party, Vec* pos, Vec* dir, 
     query.targetDistance = *dist;
     if (yoshiGetStatus()) {
         hit = hitCheckVecFilter(&query, chkfilterYoshi);
-    } else if (party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party->currentMemberId == PARTY_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = hitCheckVecFilter(&query, chkfilterNokotaro);
     } else {
         hit = hitCheckVecFilter(&query, chkfilter);
@@ -246,7 +246,7 @@ static inline HitEntry* partyHitCheckGnd(PartyEntry* party, Vec* pos, Vec* dir, 
     query.targetDistance = dist;
     if (yoshiGetStatus()) {
         hit = hitCheckVecFilter(&query, chkfilterYoshi);
-    } else if (party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party->currentMemberId == PARTY_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = hitCheckVecFilter(&query, chkfilterNokotaro);
     } else {
         hit = hitCheckVecFilter(&query, chkfilter);
@@ -757,7 +757,7 @@ static inline HitEntry* partyHitCheckDistNrm(PartyEntry* party, Vec* pos, Vec* d
     query.targetDistance = *dist;
     if (yoshiGetStatus()) {
         hit = hitCheckVecFilter(&query, chkfilterYoshi);
-    } else if (party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party->currentMemberId == PARTY_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = hitCheckVecFilter(&query, chkfilterNokotaro);
     } else {
         hit = hitCheckVecFilter(&query, chkfilter);
@@ -787,7 +787,7 @@ static inline HitEntry* partyHitCheckNrm(PartyEntry* party, Vec* pos, Vec* dir, 
     query.targetDistance = dist;
     if (yoshiGetStatus()) {
         hit = hitCheckVecFilter(&query, chkfilterYoshi);
-    } else if (party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party->currentMemberId == PARTY_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = hitCheckVecFilter(&query, chkfilterNokotaro);
     } else {
         hit = hitCheckVecFilter(&query, chkfilter);
@@ -829,7 +829,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             partyWallSlide(pos, nrm, dist, sn, cs);
             return hit;
         }
-        if (party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        if (party->currentMemberId == PARTY_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
             dy = 0.5f * partyGetHeight(party);
             p.y = pos->y + dy;
             hit = partyHitCheckNrm(party, &p, &dir, &nrm, d);
@@ -902,7 +902,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             return hit;
         }
         dy = 11.0f;
-        if (party->currentMemberId == PARTY_MEMBER_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        if (party->currentMemberId == PARTY_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
             dy = 1.0f;
         }
         p = party->position;
@@ -1096,7 +1096,7 @@ static inline HitEntry* partyHitNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* 
     query.targetDistance = 20.0f;
     if (yoshiGetStatus()) {
         hit = hitCheckVecFilter(&query, chkfilterYoshi);
-    } else if (party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party->currentMemberId == PARTY_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = hitCheckVecFilter(&query, chkfilterNokotaro);
     } else {
         hit = hitCheckVecFilter(&query, chkfilter);

@@ -5,19 +5,19 @@
 #include <dolphin/types.h>
 #include "mario/mario_pouch.h"
 
-void partyJoin(PartyId partnerId);
+void partyJoin(s32 partnerId);
 
 
 s32 marioGetPartyId(void);
 s32 marioGetExtraPartyId(void);
-s32 partyGetTechLv(PartyId partnerId);
-s32 partyGetHp(PartyId partnerId);
-BOOL partyChkJoin(PartyId partnerId);
-void partyLeft(PartyId partnerId);
+s32 partyGetTechLv(s32 partnerId);
+s32 partyGetHp(s32 partnerId);
+BOOL partyChkJoin(s32 partnerId);
+void partyLeft(s32 partnerId);
 s32 marioGetParty(void);
 void marioPartyKill(void);
 BOOL marioPartyGoodbye(void);
-s32 marioPartyHello(PartyId id);
-s32 marioPartyEntry(PartyId id);
+s32 marioPartyHello(s32 id);
+s32 marioPartyEntry(s32 id);
 s32 marioUsePartyMain(void);
 s32 marioUseParty(void);

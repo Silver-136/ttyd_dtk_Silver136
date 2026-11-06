@@ -83,13 +83,13 @@ BattleWeapon* chu_waza[4] = {
  * The Party screen's setup and drawing read it; Yoshi's name icon is switched to match his colour.
  */
 WindowPartyDt winPartyDt[7] = {
-    {PARTY_MEMBER_GOOMBELLA, ICON_PARTY_GOOMBELLA, "name_party0", "msg_menu_party_kuri", "EFF_m_kuriko", "W_1", "d_mario", "R_2", chri_waza},
-    {PARTY_MEMBER_KOOPS, ICON_PARTY_KOOPS, "name_party1", "msg_menu_party_noko", "EFF_m_noko", "W_1", "d_mario", "R_3", noko_waza},
-    {PARTY_MEMBER_FLURRIE, ICON_PARTY_FLURRIE, "name_party4", "msg_menu_party_cloud", "EFF_m_cloud", "W_1", "d_mario", "R_4", cloud_waza},
-    {PARTY_MEMBER_YOSHI, ICON_PARTY_YOSHI, "name_party3", "msg_menu_party_yoshi", "EFF_m_yoshi", "W_1", "d_mario", "R_5", yoshi_waza},
-    {PARTY_MEMBER_VIVIAN, ICON_PARTY_VIVIAN, "name_party5", "msg_menu_party_vivi", "c_vivian", "PTR_S_1", "d_mario", "R_12", vivi_waza},
-    {PARTY_MEMBER_BOBBERY, ICON_PARTY_BOBBERY, "name_party2", "msg_menu_party_bom", "EFF_m_bomb", "W_1", "d_mario", "R_13", sand_waza},
-    {PARTY_MEMBER_MS_MOWZ, ICON_PARTY_MS_MOWZ, "name_party6", "msg_menu_party_chu", "EFF_m_chu", "W_1", "d_mario", "R_14", chu_waza},
+    {PARTY_GOOMBELLA, ICON_PARTY_GOOMBELLA, "name_party0", "msg_menu_party_kuri", "EFF_m_kuriko", "W_1", "d_mario", "R_2", chri_waza},
+    {PARTY_KOOPS, ICON_PARTY_KOOPS, "name_party1", "msg_menu_party_noko", "EFF_m_noko", "W_1", "d_mario", "R_3", noko_waza},
+    {PARTY_FLURRIE, ICON_PARTY_FLURRIE, "name_party4", "msg_menu_party_cloud", "EFF_m_cloud", "W_1", "d_mario", "R_4", cloud_waza},
+    {PARTY_YOSHI, ICON_PARTY_YOSHI, "name_party3", "msg_menu_party_yoshi", "EFF_m_yoshi", "W_1", "d_mario", "R_5", yoshi_waza},
+    {PARTY_VIVIAN, ICON_PARTY_VIVIAN, "name_party5", "msg_menu_party_vivi", "c_vivian", "PTR_S_1", "d_mario", "R_12", vivi_waza},
+    {PARTY_BOBBERY, ICON_PARTY_BOBBERY, "name_party2", "msg_menu_party_bom", "EFF_m_bomb", "W_1", "d_mario", "R_13", sand_waza},
+    {PARTY_MS_MOWZ, ICON_PARTY_MS_MOWZ, "name_party6", "msg_menu_party_chu", "EFF_m_chu", "W_1", "d_mario", "R_14", chu_waza},
 };
 
 /**
@@ -115,7 +115,7 @@ void winPartyInit(WindowWork* wp) {
                     poseName = winPartyDt[i].poseName2;
 
                     // Initialization uses the Yoshi-color animation for every partner; display selects each partner again.
-                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                    switch (pouchGetPartyColor(PARTY_YOSHI)) {
                         case 0:
                             animName = "R_5";
                             break;
@@ -139,8 +139,8 @@ void winPartyInit(WindowWork* wp) {
                             animName = "R_11";
                             break;
                     }
-                } else if (j == PARTNER_YOSHI) {
-                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                } else if (j == PARTY_YOSHI) {
+                    switch (pouchGetPartyColor(PARTY_YOSHI)) {
                         case 0:
                             poseName = "EFF_m_yoshi";
                             break;
@@ -200,7 +200,7 @@ void winPartyInit(WindowWork* wp) {
     wp->party.angle = wp->party.angleTarget = 360.0f / wp->party.count * wp->party.cursor;
     wp->party.mode = 0;
     wp->party.wazaCount = pouchGetPartyAttackLv(winPartyDt[wp->party.dtIdx].partyId) + 2;
-    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+    switch (pouchGetPartyColor(PARTY_YOSHI)) {
         case 0:
             winPartyDt[3].iconId = ICON_PARTY_YOSHI;
             break;
@@ -525,8 +525,8 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             }
             if (wp->flags & WINDOW_FLAG_8BIT) {
                 animName = winPartyDt[j].animName2;
-                if (winPartyDt[j].partyId == PARTNER_YOSHI) {
-                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                if (winPartyDt[j].partyId == PARTY_YOSHI) {
+                    switch (pouchGetPartyColor(PARTY_YOSHI)) {
                         case 0:
                             animName = "R_5";
                             break;
@@ -571,8 +571,8 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             }
             if (wp->flags & WINDOW_FLAG_8BIT) {
                 animName = winPartyDt[j].animName2;
-                if (winPartyDt[j].partyId == PARTNER_YOSHI) {
-                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                if (winPartyDt[j].partyId == PARTY_YOSHI) {
+                    switch (pouchGetPartyColor(PARTY_YOSHI)) {
                         case 0:
                             animName = "Z_5";
                             break;
@@ -604,7 +604,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             animPoseSetLocalTime(pose, 0.0f);
         }
         animPoseMain(pose);
-        if (wp->party.partyIds[i] == PARTNER_VIVIAN) {
+        if (wp->party.partyIds[i] == PARTY_VIVIAN) {
             vp = (Vec){(x - 140.0f) + v.x, 20.0f + (y + v.y), v.z};
             animPoseVivianMain(pose, &vp);
         }
@@ -618,7 +618,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
         for (i = 0; i < 7; i++) {
             id = winPartyDt[i].partyId;
             if (wp->party.partyIds[wp->party.cursor] == id) {
-                if (id != PARTNER_YOSHI) {
+                if (id != PARTY_YOSHI) {
                     name = msgSearch(winPartyDt[i].name);
                 } else {
                     name = pouchGetYoshiName();

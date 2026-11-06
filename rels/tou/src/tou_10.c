@@ -162,7 +162,7 @@ USER_FUNC(tou_10_mario_free_wait) {
 /** Script helper: args[0] receives Yoshi's color (0-6) from the pouch. */
 static USER_FUNC(getYoshiColor) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
     return EVT_RETURN_DONE;
 }
 
@@ -184,19 +184,19 @@ USER_FUNC(setYoshiColor) {
     // The elapsed whole-minute count repeats every 20 minutes across the seven color intervals.
     minutes %= 20;
     if (minutes <= 5) {
-        pouchSetPartyColor(PARTNER_YOSHI, 0);
+        pouchSetPartyColor(PARTY_YOSHI, 0);
     } else if (minutes <= 8) {
-        pouchSetPartyColor(PARTNER_YOSHI, 1);
+        pouchSetPartyColor(PARTY_YOSHI, 1);
     } else if (minutes <= 11) {
-        pouchSetPartyColor(PARTNER_YOSHI, 2);
+        pouchSetPartyColor(PARTY_YOSHI, 2);
     } else if (minutes <= 14) {
-        pouchSetPartyColor(PARTNER_YOSHI, 3);
+        pouchSetPartyColor(PARTY_YOSHI, 3);
     } else if (minutes <= 17) {
-        pouchSetPartyColor(PARTNER_YOSHI, 4);
+        pouchSetPartyColor(PARTY_YOSHI, 4);
     } else if (minutes <= 18) {
-        pouchSetPartyColor(PARTNER_YOSHI, 5);
+        pouchSetPartyColor(PARTY_YOSHI, 5);
     } else {
-        pouchSetPartyColor(PARTNER_YOSHI, 6);
+        pouchSetPartyColor(PARTY_YOSHI, 6);
     }
     return EVT_RETURN_DONE;
 }

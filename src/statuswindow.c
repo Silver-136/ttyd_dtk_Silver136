@@ -376,8 +376,8 @@ static void statusWinDisp(CameraId camId, void* param) {
 
     if (wp->cur.party) {
         partysDt[1].iconId = party_icon[wp->cur.party];
-        if (wp->cur.party == PARTNER_YOSHI) {
-            switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+        if (wp->cur.party == PARTY_YOSHI) {
+            switch (pouchGetPartyColor(PARTY_YOSHI)) {
                 case 0:
                     partysDt[1].iconId = ICON_STATUS_YOSHI;
                     break;
@@ -427,7 +427,7 @@ static void statusWinDisp(CameraId camId, void* param) {
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
         iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_DPAD, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) {
+        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTY_GOOMBELLA)) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);

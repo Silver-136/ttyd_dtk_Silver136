@@ -1635,21 +1635,21 @@ EVT_BEGIN(evt_tougi2)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_get_party, LW(0))
         SWITCH(LW(0))
-            CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+            CASE_EQUAL(PARTY_GOOMBELLA)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_kur"))
-            CASE_EQUAL(PARTY_MEMBER_KOOPS)
+            CASE_EQUAL(PARTY_KOOPS)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_nok"))
-            CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+            CASE_EQUAL(PARTY_FLURRIE)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_win"))
         END_SWITCH
     ELSE
         CALL(evt_mario_get_party, LW(0))
         SWITCH(LW(0))
-            CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+            CASE_EQUAL(PARTY_GOOMBELLA)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_kur"))
-            CASE_EQUAL(PARTY_MEMBER_KOOPS)
+            CASE_EQUAL(PARTY_KOOPS)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_nok"))
-            CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+            CASE_EQUAL(PARTY_FLURRIE)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_win"))
         END_SWITCH
     END_IF
@@ -2359,7 +2359,7 @@ s32 check_hammer(Fan* fan) {
         return 1;
     }
     party = partyGetPtr(0);
-    if (party != NULL && party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party != NULL && party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         angle = 6.2831855f * cloudGetBreathDir() / 360.0f;
         dist = cloudGetBreathDist();
         pos.x = party->position.x + dist * polySinf(angle);

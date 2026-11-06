@@ -48,7 +48,7 @@ static void _partyEntry(s32 keepScale) {
             x = mario->position.x;
             y = mario->position.y;
             z = mario->position.z;
-            if (prev == PARTY_MEMBER_NONE) {
+            if (prev == PARTY_NONE) {
                 continue;
             }
             if (i == 0) {

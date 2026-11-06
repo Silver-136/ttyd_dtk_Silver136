@@ -2046,7 +2046,7 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sw
 
 /**
  * Script helper: args[0] is Yoshi.
- * When the player picked a non-default Yoshi colour (pouchGetPartyColor(PARTNER_YOSHI) is 1-6),
+ * When the player picked a non-default Yoshi colour (pouchGetPartyColor(PARTY_YOSHI) is 1-6),
  * swaps his body to the matching c_babyyoshiN model, loading it asynchronously and blocking until it is ready;
  * nothing happens for the default colour.
  */
@@ -2060,7 +2060,7 @@ USER_FUNC(yoshi_original_color_anim_set) {
     id = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
-    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+    switch (pouchGetPartyColor(PARTY_YOSHI)) {
         case 1:
             name = "c_babyyoshi2";
             break;

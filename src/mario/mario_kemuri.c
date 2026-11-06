@@ -302,7 +302,7 @@ void party_kemuri(PartyEntry* party) {
     if (marioStGetSystemLevel() == 0) {
         if (party->runMode != PARTY_RUN_PIPE) {
             if (party->moveKind != 1) {
-                if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_MEMBER_YOSHI) {
+                if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_YOSHI) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             // FAKE: empty then-branch; the plain >= test with && changes the object
@@ -339,7 +339,7 @@ void party_kemuri(PartyEntry* party) {
                 }
 #else
     if (party->moveKind != 1) {
-        if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_MEMBER_YOSHI) {
+        if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_YOSHI) {
             if (party->hitobjStandOn != NULL) {
                 if (party->moveSpeed < 2.0f) {
                     party->kemuriTimer = 7;

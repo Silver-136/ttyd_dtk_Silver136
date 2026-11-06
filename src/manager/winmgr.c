@@ -72,8 +72,8 @@ static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.
 #endif
 
 static u16 party_id_table[] = {
-    PARTNER_GOOMBELLA, PARTNER_KOOPS, PARTNER_FLURRIE, PARTNER_YOSHI,
-    PARTNER_VIVIAN, PARTNER_BOBBERY, PARTNER_MSMOWZ, PARTNER_NONE
+    PARTY_GOOMBELLA, PARTY_KOOPS, PARTY_FLURRIE, PARTY_YOSHI,
+    PARTY_VIVIAN, PARTY_BOBBERY, PARTY_MS_MOWZ, PARTY_NONE
 };
 static u16 party_icon_table[] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PARTY_FLURRIE, ICON_PARTY_YOSHI, ICON_PARTY_VIVIAN, ICON_PARTY_BOBBERY, ICON_PARTY_MS_MOWZ};
 static const char* party_labelname_table[] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
@@ -1560,7 +1560,7 @@ static void select_disp(WinMgrEntry* entry) {
 static inline s32 select_party_icon(u16 id) {
     s32 icon = party_icon_table[id];
     if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+        switch (pouchGetPartyColor(PARTY_YOSHI)) {
             case 0:
                 icon = ICON_PARTY_YOSHI;
                 break;
@@ -2119,7 +2119,7 @@ static const char name_party6[] = "name_party6";
 /** Swaps Yoshi's portrait icon for the one in the colour he hatched with; other icons pass through. */
 static s32 iconid_conv(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+        switch (pouchGetPartyColor(PARTY_YOSHI)) {
             case 0:
                 icon = ICON_PARTY_YOSHI;
                 break;

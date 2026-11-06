@@ -1056,7 +1056,7 @@ EVT_BEGIN(nancy_init_check)
     // After the early demos, if Flurrie is current, wait until partner use ends before Mario resumes his normal pose.
 #if VERSION >= VERSION_JP
     CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
+    IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
         LOOP(0)
             CALL(evt_mario_party_use_check, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -4441,8 +4441,8 @@ EVT_BEGIN(christine_nakama)
     CALL(evt_cam3d_evt_set, 0, 134, 984, 0, 38, 442, 0, EASING_SINE_IN_OUT)
     CALL(evt_party_stop, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_pouch_party_join, PARTY_MEMBER_GOOMBELLA)
-        CALL(evt_mario_set_party_pos, 0, PARTY_MEMBER_GOOMBELLA, 25, 0, 625)
+        CALL(evt_pouch_party_join, PARTY_GOOMBELLA)
+        CALL(evt_mario_set_party_pos, 0, PARTY_GOOMBELLA, 25, 0, 625)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_party_move_pos2, 0, 25, 500, FLOAT(150.0f))
         WAIT_FRAMES(1)
@@ -5816,7 +5816,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
 
                     // Ms. Mowz joins the party and the partner lecture plays.
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
-                    SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
+                    SET_VALUE(LW(9), PARTY_MS_MOWZ)
                     CALL_CHILD(all_party_lecture)
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 

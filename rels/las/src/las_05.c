@@ -532,7 +532,7 @@ s32 party_hit_check(f32 x, f32 z, f32* dir) {
     dx = __fabsf(x - party->position.x);
     dz = __fabsf(z - party->position.z);
     switch (party->currentMemberId) {
-        case PARTY_MEMBER_KOOPS:
+        case PARTY_KOOPS:
             // NokonokoStatus 2-5 (shell out, held, coming back); the call has no prototype here
             switch (nokonokoGetStatus()) {
                 case 2:
@@ -1635,7 +1635,7 @@ USER_FUNC(party_hit) {
     f32 dir;
 
     if (party_hit_check(npc->position.x, npc->position.z, &dir) &&
-        (party->currentMemberId == PARTY_MEMBER_KOOPS || party->currentMemberId == PARTY_MEMBER_BOBBERY)) {
+        (party->currentMemberId == PARTY_KOOPS || party->currentMemberId == PARTY_BOBBERY)) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
