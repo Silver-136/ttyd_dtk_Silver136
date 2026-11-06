@@ -7,14 +7,25 @@
 
 #define LIGHT_ENTRY_COUNT 32
 
+// lightEntry type: the map file's light kind ("ambientLight", "pointLight", "directionalLight", "spotLight")
+typedef enum LightType {
+    LIGHT_TYPE_AMBIENT = 0,
+    LIGHT_TYPE_POINT = 1,
+    LIGHT_TYPE_DIRECTIONAL = 2,
+    LIGHT_TYPE_SPOT = 3,
+} LightType;
+
+// lightEntry flags (a map light's lflags): 0x2 = the light also lights characters (LIGHT_CHARA)
+#define LIGHT_LFLAG_CHARA 0x2
+
 #pragma enumsalwaysint off
 typedef enum LightEntryFlags {
     LIGHT_ENABLED = 1 << 0,
     LIGHT_NO_DIST_ATTEN = 1 << 6,
     LIGHT_CHARA = 1 << 7,
     LIGHT_POINT = 1 << 12,
-    LIGHT_SPOT = 1 << 13,
-    LIGHT_DIRECTIONAL = 1 << 14,
+    LIGHT_DIRECTIONAL = 1 << 13, // mapdrv's light setup places it far away along its direction
+    LIGHT_SPOT = 1 << 14,        // mapdrv's light setup gives it a GX spot cone (spotAngle)
     LIGHT_AMBIENT = 1 << 15
 } LightEntryFlags;
 #pragma enumsalwaysint on

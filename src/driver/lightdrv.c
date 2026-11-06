@@ -171,20 +171,20 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const G
     entry->attenDistCoef.z = decay_tbl[attenType].z;
     entry->flags |= LIGHT_ENABLED;
     switch (type) {
-        case 0:
+        case LIGHT_TYPE_AMBIENT:
             entry->flags |= LIGHT_AMBIENT;
             break;
-        case 1:
+        case LIGHT_TYPE_POINT:
             entry->flags |= LIGHT_POINT;
             break;
-        case 2:
-            entry->flags |= LIGHT_SPOT;
-            break;
-        case 3:
+        case LIGHT_TYPE_DIRECTIONAL:
             entry->flags |= LIGHT_DIRECTIONAL;
             break;
+        case LIGHT_TYPE_SPOT:
+            entry->flags |= LIGHT_SPOT;
+            break;
     }
-    if (flags & 2) {
+    if (flags & LIGHT_LFLAG_CHARA) {
         entry->flags |= LIGHT_CHARA;
     }
     return n;

@@ -65,7 +65,7 @@ typedef struct CamRoadMap {
 } CamRoadMap;
 typedef struct CamRoadState {
     s32 on;                // 0x00
-    s32 f_04;              // 0x04
+    s32 onCollCurve;       // 0x04, a collision curve was hit (calcCamRoad)
     s32 hitFlags;              // 0x08
     f32 in[6];             // 0x0c
     CamRoadCurve* cam;       // 0x24

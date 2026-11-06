@@ -1133,7 +1133,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
         wp->tuning[5] = 1.0f;
     }
     out->on = 1;
-    out->f_04 = hitCurve != NULL;
+    out->onCollCurve = hitCurve != NULL;
     out->hitFlags = flags;
     out->in[0] = xA;
     out->in[1] = yA;
@@ -1175,7 +1175,7 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     if (!b->on) {
         return 0;
     }
-    if (a->cam == b->cam && !(a->f_04 == 1 && b->f_04 == 0) && !(a->f_04 == 0 && b->hitFlags == 1)) {
+    if (a->cam == b->cam && !(a->onCollCurve == 1 && b->onCollCurve == 0) && !(a->onCollCurve == 0 && b->hitFlags == 1)) {
         d = (s32)a->segment - (s32)b->segment;
         if (__abs(d) <= 1) {
             return 0;
@@ -1192,10 +1192,10 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     if (a->cam != b->cam) {
         flags |= 1;
     }
-    if (a->f_04 == 1 && b->f_04 == 0) {
+    if (a->onCollCurve == 1 && b->onCollCurve == 0) {
         flags |= 2;
     }
-    if (a->f_04 == 0 && b->hitFlags == 1) {
+    if (a->onCollCurve == 0 && b->hitFlags == 1) {
         flags |= 4;
     }
     if (!(__fabs(a->segment - b->segment) <= 1.0)) {

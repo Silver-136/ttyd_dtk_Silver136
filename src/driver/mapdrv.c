@@ -902,17 +902,17 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             MapFileLight* light = wp->entries[group].lightTable->lights[i];
             Vec pos;
             GXColor lcolor;
-            s32 type = 1;
+            s32 type = LIGHT_TYPE_POINT;
             s32 lflags = 0;
             PSVECScale(&light->position, &pos, 10.0f);
             if (!strcmp(light->type, "ambientLight")) {
-                type = 0;
+                type = LIGHT_TYPE_AMBIENT;
             } else if (!strcmp(light->type, "pointLight")) {
-                type = 1;
+                type = LIGHT_TYPE_POINT;
             } else if (!strcmp(light->type, "directionalLight")) {
-                type = 2;
+                type = LIGHT_TYPE_DIRECTIONAL;
             } else if (!strcmp(light->type, "spotLight")) {
-                type = 3;
+                type = LIGHT_TYPE_SPOT;
             }
             if (light->magic == MAP_LIGHT_LFLAGS_MAGIC) {
                 lflags = light->lflags;
@@ -3372,7 +3372,7 @@ static void mapSetMaterial(MapObject* obj, void* material) {
             GXInitLightAttn(&lightObj, lights[i]->attenAngle, 0.0f, 0.0f, lights[i]->attenDistCoef.x, lights[i]->attenDistCoef.y, lights[i]->attenDistCoef.z);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
             attnFn = GX_AF_SPOT;
-        } else if (light->flags & LIGHT_SPOT) {
+        } else if (light->flags & LIGHT_DIRECTIONAL) {
             MTXRotRad(rotX, 'x', MTXDegToRad(light->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
             MTXRotRad(rotZ, 'z', MTXDegToRad(lights[i]->rotation.z));
@@ -3386,7 +3386,7 @@ static void mapSetMaterial(MapObject* obj, void* material) {
             GXInitLightColor(&lightObj, lights[i]->color);
             GXInitLightAttn(&lightObj, lights[i]->attenAngle, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
-        } else if (light->flags & LIGHT_DIRECTIONAL) {
+        } else if (light->flags & LIGHT_SPOT) {
             MTXMultVec(camGetCurPtr()->view, &light->position, &pos);
             MTXRotRad(rotX, 'x', MTXDegToRad(lights[i]->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
@@ -3535,7 +3535,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
                 attnFn = GX_AF_SPOT;
             }
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
-        } else if (light->flags & LIGHT_SPOT) {
+        } else if (light->flags & LIGHT_DIRECTIONAL) {
             MTXRotRad(rotX, 'x', MTXDegToRad(light->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
             MTXRotRad(rotZ, 'z', MTXDegToRad(lights[i]->rotation.z));
@@ -3548,7 +3548,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             GXInitLightPos(&lightObj, pos.x, pos.y, pos.z);
             GXInitLightColor(&lightObj, lights[i]->color);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
-        } else if (light->flags & LIGHT_DIRECTIONAL) {
+        } else if (light->flags & LIGHT_SPOT) {
             MTXMultVec(camGetCurPtr()->view, &light->position, &pos);
             MTXRotRad(rotX, 'x', MTXDegToRad(lights[i]->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
