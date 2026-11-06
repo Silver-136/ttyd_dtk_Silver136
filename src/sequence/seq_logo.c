@@ -49,7 +49,7 @@ static void progDisp(CameraId camId, void* param);
 
 
 #if VERSION < VERSION_US
-static s32 logoAsyncFirst(void);
+BOOL arcPreLoad(void);
 #endif
 
 #if VERSION >= VERSION_JP
@@ -132,7 +132,7 @@ void seq_logoInit(SequenceWork* work) {
     else {
 #else
 #if VERSION < VERSION_US
-    logoAsyncFirst();
+    arcPreLoad();
 #endif
     if (!OSIsRestart() || OSGetResetCode() & RESET_CODE_NO_VIDEO_MODE) {
         VIConfigure(&sRMObjHReso);
@@ -176,7 +176,7 @@ void seq_logoInit(SequenceWork* work) {
     wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
     wp->progressive = FALSE;
     work->state = 0;
-    logoAsyncFirst();
+    arcPreLoad();
 #endif
     VIConfigure(&sRMObjHReso);
     VIFlush();
@@ -217,20 +217,10 @@ void seq_logoExit(SequenceWork* work) {
  */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
-#if VERSION <= VERSION_DEMO_JP
-    u32 size;
-    u8* decode;
-    FileEntry* first;
-    FileEntry* ret;
-    int ok;
-#else
 #if VERSION < VERSION_US
     u32 size;
     u8* decode;
     FileEntry* first;
-    s32 ret;
-    int ok;
-#endif
 #endif
 
     switch (work->state) {
@@ -440,31 +430,6 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#if VERSION <= VERSION_DEMO_JP
-        case 10:
-            VISetBlack(FALSE);
-            VIWaitForRetrace();
-            ret = (FileEntry*)logoAsyncFirst();
-            if (ret == NULL) {
-                ok = 0;
-            } else if ((s32)ret == -1) {
-                ok = 1;
-            } else {
-                ok = 1;
-            }
-            if (!ok) {
-                break;
-            }
-            first = fileAllocf(FILE_TYPE_RAW, "%s/b/first", getMarioStDvdRoot());
-            if (first) {
-                decode = *first->data;
-                size = *(u32*)decode;
-                size = ((size << 16) & 0xFF0000) | (size & 0xFF00) | ((size >> 16) & 0xFF);
-                LZ77Decode(*first->data, decode = __memAlloc(HEAP_DEFAULT, size));
-                arcEntry(0, decode, size);
-                fileFree(first);
-            }
-#else
 #if VERSION >= VERSION_US
         case 18:
             VISetBlack(FALSE);
@@ -473,17 +438,7 @@ void seq_logoMain(SequenceWork* work) {
         case 10:
             VISetBlack(FALSE);
             VIWaitForRetrace();
-            ret = logoAsyncFirst();
-
-            // FAKE: unsigned compare with 0U; `ret == 0` changes the object (JP)
-            if (ret == 0U) {
-                ok = 0;
-            } else if (ret == -1) {
-                ok = 1;
-            } else {
-                ok = 1;
-            }
-            if (!ok) {
+            if (!arcPreLoad()) {
                 break;
             }
             first = fileAllocf(FILE_TYPE_RAW, "%s/b/first", getMarioStDvdRoot());
@@ -495,7 +450,6 @@ void seq_logoMain(SequenceWork* work) {
                 arcEntry(0, decode, size);
                 fileFree(first);
             }
-#endif
 #endif
             if (!(gp->flags & GW_FLAG_E3)) {
                 if (!wp->skipStory) { //play story demo
@@ -836,16 +790,6 @@ static void logoDisp(CameraId camId, void* param) {
 }
 
 
-#if VERSION < VERSION_US
-
-/**
- * JP and the early demos read the first data file asynchronously; JP and the US demo start it in seq_logoInit,
- * so it loads while the logos show, the JP demo only after the logos.
- */
-static s32 logoAsyncFirst(void) {
-    return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
-}
-#endif
 
 /**
  * Background draw callback queued for the frame the video mode switches:
@@ -891,6 +835,37 @@ static void dummy_draw(CameraId camId, void* param) {
     GXSetScissor(0, 0, 608, 480);
     GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
 }
+
+#if VERSION < VERSION_US
+/**
+ * JP and the early demos read the first data archive asynchronously; JP and the US demo start it in seq_logoInit,
+ * so it loads while the logos show, the JP demo only after the logos. TRUE once it is loaded.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL arcPreLoad(void) {
+#if VERSION <= VERSION_DEMO_JP
+    FileEntry* ret = (FileEntry*)fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
+    if (ret == NULL) {
+        return FALSE;
+    } else if ((s32)ret == -1) {
+        return TRUE;
+    } else {
+        return TRUE;
+    }
+#else
+    s32 ret = fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
+
+    // FAKE: unsigned compare with 0U; `ret == 0` changes the object (JP)
+    if (ret == 0U) {
+        return FALSE;
+    } else if (ret == -1) {
+        return TRUE;
+    } else {
+        return TRUE;
+    }
+#endif
+}
+#endif
 
 /**
  * Video-mode prompt: left/right toggles, A confirms, and 10 s idle picks the current choice.

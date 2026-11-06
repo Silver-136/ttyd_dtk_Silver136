@@ -136,14 +136,8 @@ void winOpenDisable(void) {
     }
 }
 
-typedef struct {
-#if VERSION >= VERSION_US
-    const char* s[6];
-#else
-    const char* s[2];
-#endif
-} WinLangTbl;
-static const WinLangTbl winLangTbl;
+BOOL winDvdOpenAsync(void);
+void winDvdClose(void);
 
 /**
  * Per-frame pause menu driver.
@@ -314,28 +308,11 @@ void winMain(void) {
                 }
                 break;
 
-            case WIN_MENU_LOAD: {
-                WinLangTbl lang = winLangTbl;
-                BOOL ok;
-
-#if VERSION <= VERSION_DEMO_JP
-                if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
-                    ok = FALSE;
-                } else {
-                    wp->res = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-#else
-                if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
-                    ok = FALSE;
-                } else {
-                    wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-#endif
-                    ok = TRUE;
-                }
-                if (ok) {
+            case WIN_MENU_LOAD:
+                if (winDvdOpenAsync()) {
                     wp->menuState++;
                 }
                 break;
-            }
 
             case WIN_MENU_ROOT:
                 if (marioGetPtr()->characterId == CHARACTER_MARIO) {
@@ -384,10 +361,7 @@ void winMain(void) {
                 } else {
                     npcStartForEvent();
                 }
-                if (wp->res) {
-                    fileFree(wp->res);
-                }
-                wp->res = NULL;
+                winDvdClose();
                 wp->flags = 0;
                 wp->menuState = WIN_MENU_IDLE;
                 break;
@@ -521,15 +495,38 @@ static void winDispKoopa(CameraId camId, void* param) {
 }
 
 /**
- * Language folders of the menu graphics (win.tpl), indexed by the game language;
- * the menu loads its textures from them.
+ * Starts loading the menu graphics (win.tpl) from the game language's folder; TRUE once loaded into wp->res.
  */
-static const WinLangTbl winLangTbl = {{
-    "jp", "us",
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL winDvdOpenAsync(void) {
+    const char* lang[] = {
+        "jp", "us",
 #if VERSION >= VERSION_US
-    "ge", "fr", "sp", "it"
+        "ge", "fr", "sp", "it"
 #endif
-}};
+    };
+#if VERSION <= VERSION_DEMO_JP
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) {
+        return FALSE;
+    }
+    wp->res = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+#else
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) {
+        return FALSE;
+    }
+    wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+#endif
+    return TRUE;
+}
+
+/** Frees the menu graphics (win.tpl), if loaded. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void winDvdClose(void) {
+    if (wp->res) {
+        fileFree(wp->res);
+    }
+    wp->res = NULL;
+}
 
 
 EVT_BEGIN(kime_pose)
@@ -1078,14 +1075,6 @@ BOOL winGhostDiaryChk(void) {
         return TRUE;
     }
     return seqGetSeq() == SEQ_GAME_OVER;
-}
-
-const char* winMainStrippedTpl(void) {
-#if VERSION <= VERSION_DEMO_JP
-    return WIN_DIR "%s/win.tpl";
-#else
-    return "%s/w/%s/win.tpl";
-#endif
 }
 
 /** Prepares the font renderer for the winFontSet* calls that follow. */

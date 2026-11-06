@@ -198,8 +198,26 @@ void bero_clear_Offset(void) {
     BeroOZ = 0.0f;
 }
 
-/** Finds hit object `name` in the entrance table; *index (optional) is its position, or that of the end marker. */
-static inline void bero_search_name(BeroEntry** table, const char* name, s32* index) {
+void bero_name_search(BeroEntry** table, const char* name, s32* index);
+
+/**
+ * Turns an entrance reference into its table index:
+ * values 0-15 are already indices, anything else is taken as a hit object name and looked up in BeroINFOARR.
+ */
+s32 bero_id_filter(EvtWord id) {
+    BeroEntry** table = BeroINFOARR;
+    s32 newId = id;
+
+    if (id < 0 || id >= 16) {
+        const char* name = (const char*)id;
+        bero_name_search(table, name, &newId);
+    }
+    return newId;
+}
+
+/** Finds hit object `name` in entrance table `table`; *index (optional) is its position, or that of the end marker. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void bero_name_search(BeroEntry** table, const char* name, s32* index) {
     BeroEntry** entry;
     const char* hitName;
 
@@ -219,19 +237,24 @@ static inline void bero_search_name(BeroEntry** table, const char* name, s32* in
     }
 }
 
-/**
- * Turns an entrance reference into its table index:
- * values 0-15 are already indices, anything else is taken as a hit object name and looked up in BeroINFOARR.
- */
-s32 bero_id_filter(EvtWord id) {
-    BeroEntry** table = BeroINFOARR;
-    s32 newId = id;
-
-    if (id < 0 || id >= 16) {
-        const char* name = (const char*)id;
-        bero_search_name(table, name, &newId);
+/** The entrance's enter script, or default_entevt. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+EvtWord* bero_get_entevt(BeroEntry* bero) {
+    EvtWord* evt = bero->enterEvent;
+    if (!evt) {
+        evt = default_entevt;
     }
-    return newId;
+    return evt;
+}
+
+/** The entrance's exit script, or default_outevt. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+EvtWord* bero_get_outevt(BeroEntry* bero) {
+    EvtWord* evt = bero->exitEvent;
+    if (!evt) {
+        evt = default_outevt;
+    }
+    return evt;
 }
 
 /** const char** mapName, const char** beroName */
@@ -486,7 +509,6 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
 USER_FUNC(evt_bero_get_into_info) {
     s32 i;
     BeroEntry* bero;
-    EvtWord* evt;
 
     for (i = 0;; i++) {
         bero = BeroINFOARR[i];
@@ -507,11 +529,7 @@ USER_FUNC(evt_bero_get_into_info) {
         event->lwData[4] = bero->type;
         event->lwData[5] = bero_get_kind(bero, 0);
         event->lwData[6] = (EvtWord)&bero->centerPosition;
-        evt = bero->enterEvent;
-        if (!evt) {
-            evt = default_entevt;
-        }
-        event->lwData[7] = (EvtWord)evt;
+        event->lwData[7] = (EvtWord)bero_get_entevt(bero);
         event->lwData[8] = 0xFFFF0000;
         return EVT_RETURN_DONE;
     } else {
@@ -521,11 +539,7 @@ USER_FUNC(evt_bero_get_into_info) {
         event->lwData[4] = bero->type;
         event->lwData[5] = bero_get_kind(bero, 0);
         event->lwData[6] = (EvtWord)&bero->centerPosition;
-        evt = bero->enterEvent;
-        if (!evt) {
-            evt = default_entevt;
-        }
-        event->lwData[7] = (EvtWord)evt;
+        event->lwData[7] = (EvtWord)bero_get_entevt(bero);
         event->lwData[8] = 0xFFFF0000;
         return EVT_RETURN_DONE;
     }
@@ -571,17 +585,12 @@ USER_FUNC(evt_bero_get_info_num) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     BeroEntry* bero = BeroINFOARR[id];
-    EvtWord* evt;
 
     event->lwData[3] = (EvtWord)bero->hitName;
     event->lwData[4] = bero->type;
     event->lwData[5] = bero_get_kind(bero, 1);
     event->lwData[6] = (EvtWord)&bero->centerPosition;
-    evt = bero->enterEvent;
-    if (!evt) {
-        evt = default_entevt;
-    }
-    event->lwData[7] = (EvtWord)evt;
+    event->lwData[7] = (EvtWord)bero_get_entevt(bero);
     event->lwData[8] = 0xFFFF0000;
     event->lwData[9] = BeroSW[id];
     event->lwData[10] = bero->caseType;
@@ -604,11 +613,7 @@ USER_FUNC(evt_bero_get_info_num) {
                 break;
         }
     }
-    evt = bero->exitEvent;
-    if (!evt) {
-        evt = default_outevt;
-    }
-    event->lwData[11] = (EvtWord)evt;
+    event->lwData[11] = (EvtWord)bero_get_outevt(bero);
     event->lwData[12] = 0xFFFF0000;
     event->lwData[13] = (EvtWord)bero->nextMapName;
     event->lwData[14] = (EvtWord)bero->nextBeroName;
@@ -1086,7 +1091,7 @@ USER_FUNC(evt_bero_switch_on) {
     s32 newId = id;
     if (id < 0 || id >= 16) {
         const char* name = (const char*)id;
-        bero_search_name(table, name, &newId);
+        bero_name_search(table, name, &newId);
     }
     if (BeroSW[newId] == 1) {
         event->lwData[0] = 1;
@@ -1106,7 +1111,7 @@ USER_FUNC(evt_bero_switch_off) {
     s32 newId = id;
     if (id < 0 || id >= 16) {
         const char* name = (const char*)id;
-        bero_search_name(table, name, &newId);
+        bero_name_search(table, name, &newId);
     }
     if (BeroSW[newId] != 1) {
         event->lwData[0] = 1;
@@ -1126,7 +1131,7 @@ USER_FUNC(evt_bero_get_number) {
     s32 newId = id;
     if (id < 0 || id >= 16) {
         const char* name = (const char*)id;
-        bero_search_name(table, name, &newId);
+        bero_name_search(table, name, &newId);
     }
     event->lwData[1] = newId;
     return EVT_RETURN_DONE;
@@ -1227,7 +1232,7 @@ USER_FUNC(evt_bero_overwrite) {
     s32 newId = id;
     if (id < 0 || id >= 16) {
         const char* name = (const char*)id;
-        bero_search_name(table, name, &newId);
+        bero_name_search(table, name, &newId);
     }
     BeroINFOARR[newId] = (BeroEntry*)evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;

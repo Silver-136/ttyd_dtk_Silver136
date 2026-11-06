@@ -569,13 +569,19 @@ USER_FUNC(moving_floor_set_se) {
     return EVT_RETURN_DONE;
 }
 
-/** Stops the floor's movement sound if one is playing and sounds are not halted. */
-USER_FUNC(moving_floor_stop_se) {
-    MovingFloor* w = movingFloorArg(event);
+/** Stops floor w's movement sound if one is playing and sounds are not halted. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void moving_floor_stop_se_sub(MovingFloor* w) {
     if (w->seHalt == 0 && w->seId) {
         psndSFXOff(w->seId);
         w->seId = 0;
     }
+}
+
+/** Stops the floor's movement sound if one is playing and sounds are not halted. */
+USER_FUNC(moving_floor_stop_se) {
+    MovingFloor* w = movingFloorArg(event);
+    moving_floor_stop_se_sub(w);
     return EVT_RETURN_DONE;
 }
 
@@ -596,10 +602,7 @@ USER_FUNC(evt_moving_floor_delete) {
     MovingFloor* w = (MovingFloor*)e->lwData[9];
 
     // BUG: w is dereferenced here before the NULL check below.
-    if (w->seHalt == 0 && w->seId) {
-        psndSFXOff(w->seId);
-        w->seId = 0;
-    }
+    moving_floor_stop_se_sub(w);
     if (w != NULL) {
         _mapFree(w);
         e->lwData[9] = 0;

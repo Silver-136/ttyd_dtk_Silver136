@@ -173,12 +173,11 @@ void seq_loadInit(SequenceWork* seq) {
     memset(wp, 0, sizeof(LoadWork));
 }
 
+void dvdClose(void);
+
 /** Leaves the file select sequence; frees the menu texture file (name.tpl). */
 void seq_loadExit(SequenceWork* seq) {
-    if (wp->file != NULL) {
-        fileFree(wp->file);
-    }
-    wp->file = NULL;
+    dvdClose();
 }
 
 #if VERSION >= VERSION_US
@@ -290,6 +289,15 @@ BOOL dvdOpen(void) {
     return FALSE;
 }
 #endif
+
+/** Frees the file menu's texture file (name.tpl), if loaded. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void dvdClose(void) {
+    if (wp->file != NULL) {
+        fileFree(wp->file);
+    }
+    wp->file = NULL;
+}
 
 /** Later versions: the same menu with no return value. */
 #if VERSION <= VERSION_DEMO_JP

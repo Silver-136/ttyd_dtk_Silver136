@@ -45,6 +45,12 @@ typedef enum UrouroFlags {
     UROURO_FLAG_TURN_AROUND_UNUSED = (1 << 16), // 0x10000, turn round 2-4 times while waiting; every script passes 0
 } UrouroFlags;
 
+/** Rounds frame count t down to a multiple of 20. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+s32 urouro_jikan_hosei(s32 t) {
+    return t - t % 20;
+}
+
 /**
  * Sets up NPC args[0] to wander around centre (args[1], args[2]) within radius args[3] at speed args[4];
  * args[5] is the flag word (0x10000: look around a few times while idle). The state lives in LW(10).
@@ -101,7 +107,7 @@ USER_FUNC(urouro_main_func) {
     switch (work->state) {
     case UROURO_STATE_CHOOSE_WALK:
         work->timer = work->walkTime / 2 + irand(work->walkTime / 2 + 1);
-        work->timer = work->timer - work->timer % 20;
+        work->timer = urouro_jikan_hosei(work->timer);
         work->count = 0;
         npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
         npc->moveDir = npc->direction;

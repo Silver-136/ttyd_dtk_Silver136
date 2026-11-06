@@ -45,6 +45,7 @@ TitleWork* wp2 = &work2;
 
 // local prototypes
 void titleInit(SequenceWork* work);
+void titleExit(SequenceWork* work);
 static void titleMain(SequenceWork* work);
 static void disp1(CameraId cameraId, void* param);
 static void disp2(CameraId cameraId, void* param);
@@ -55,8 +56,7 @@ const char* DbgBtlSel_GetMsgDataPtr(void) {
     return NULL;
 }
 
-#if VERSION >= VERSION_JP
-/** Later versions: titleInit does the setup, then the same flags are cleared. */
+/** Sets up the title screen (titleInit), then clears the entrance, save-block and E3 flags. */
 void seq_titleInit(SequenceWork* work) {
     titleInit(work);
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
@@ -64,10 +64,32 @@ void seq_titleInit(SequenceWork* work) {
     gp->flags &= ~GW_FLAG_NO_SAVE_BLOCK;
     gp->flags &= ~GW_FLAG_E3;
 }
+
+/** Leaves the title sequence; all the work is in titleExit. */
+void seq_titleExit(SequenceWork* work) {
+    titleExit(work);
+}
+
+/** Per-frame title sequence; all the work is in titleMain. */
+void seq_titleMain(SequenceWork* work) {
+    titleMain(work);
+}
+
+// Descriptive name (not in the symbol maps).
+#if VERSION >= VERSION_JP
+s32 getDebugMode(void) {
+    return wp2->debug;
+}
 #endif
 
+/**
+ * Title setup (called by seq_titleInit): loads mariost.tpl, parks the logo off screen,
+ * stops leftover sound (later versions: BGM fades over 3 s after a map change), and starts the title BGM,
+ * or the digest theme after a game over, held paused until the curtain opens.
+ */
+// In the early demos every call is inlined and the linker strips it (the JP demo's link map lists it as UNUSED).
+void titleInit(SequenceWork* work) {
 #if VERSION <= VERSION_DEMO_JP
-void seq_titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
     wp2->topPosX = 0.0f;
@@ -96,39 +118,7 @@ void seq_titleInit(SequenceWork* work) {
     }
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
-    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
-    gp->flags &= ~0x40;
-    gp->flags &= ~GW_FLAG_NO_SAVE_BLOCK;
-    gp->flags &= ~GW_FLAG_E3;
-}
-#endif
-
-/** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
-void seq_titleExit(SequenceWork* work) {
-    fileFree(wp2->texture);
-    if (seqGetNextSeq() != SEQ_LOAD) {
-        psndStopAllFadeOut();
-    }
-}
-
-/** Per-frame title sequence; all the work is in titleMain. */
-void seq_titleMain(SequenceWork* work) {
-    titleMain(work);
-}
-
-// Descriptive name (not in the symbol maps).
-#if VERSION >= VERSION_JP
-s32 getDebugMode(void) {
-    return wp2->debug;
-}
-
-/**
- * Later versions' title setup (called by seq_titleInit):
- * loads mariost.tpl, parks the logo off screen,
- * stops leftover field sound (BGM fades over 3 s after a map change), and starts the title BGM,
- * or the digest theme after a game over, held paused until the curtain opens.
- */
-void titleInit(SequenceWork* work) {
+#else
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     wp2->topPosX = 0.0f;
@@ -171,9 +161,17 @@ void titleInit(SequenceWork* work) {
     }
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
-}
 #endif
+}
 
+/** Frees mariost.tpl and fades out all sound unless going on to the file select (called by seq_titleExit). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void titleExit(SequenceWork* work) {
+    fileFree(wp2->texture);
+    if (seqGetNextSeq() != SEQ_LOAD) {
+        psndStopAllFadeOut();
+    }
+}
 
 /**
  * Title screen state machine: waits for the BGM (and curtain animations), opens the curtain,
