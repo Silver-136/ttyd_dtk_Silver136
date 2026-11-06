@@ -640,9 +640,9 @@ static USER_FUNC(stone_bg) {
     EffectEntry* eff;
 
     eff = effNameToPtr("sub_bg");
-    ((ItemGetWork*)eff->userdata)->camera = 5;
+    ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
     eff = effNameToPtr("nise");
-    ((EffStarStoneWork*)eff->userdata)->cam = 5;
+    ((EffStarStoneWork*)eff->userdata)->cam = CAMERA_3D_EFFECTA;
     marioSetCamId(CAMERA_3D_EFFECTA);
     return EVT_RETURN_DONE;
 }
@@ -651,7 +651,7 @@ static USER_FUNC(stone_bg) {
 USER_FUNC(reset_stone_cam) {
     EffectEntry* eff = effNameToPtr("nise");
 
-    ((EffStarStoneWork*)eff->userdata)->cam = 4;
+    ((EffStarStoneWork*)eff->userdata)->cam = CAMERA_3D;
     return EVT_RETURN_DONE;
 }
 

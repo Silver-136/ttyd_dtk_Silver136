@@ -1003,7 +1003,7 @@ USER_FUNC(tiz_stone) {
     }
     eff = effNameToPtr("tiz_stone");
     if (eff != NULL) {
-        ((EffStarStoneWork*)eff->userdata)->cam = 7;
+        ((EffStarStoneWork*)eff->userdata)->cam = CAMERA_3D_EFFECTB;
         ((EffStarStoneWork*)eff->userdata)->a = 255.0f * t;
         ((EffStarStoneWork*)eff->userdata)->rot.y = 5.0f * (360.0f * t);
     }
@@ -1386,7 +1386,7 @@ USER_FUNC(map_disp_onoff) {
 USER_FUNC(crystal_bgmode) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
-    ((EffCrystalN64Work*)eff->userdata)->camera = 5;
+    ((EffCrystalN64Work*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
     return EVT_RETURN_DONE;
 }
 
@@ -1402,10 +1402,10 @@ USER_FUNC(map_bgmode) {
     const char* name2 = (const char*)evtGetValue(event, args[1]);
     EffectEntry* eff = effNameToPtr(name1);
 
-    ((ItemGetWork*)eff->userdata)->camera = 5;
+    ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
     ((ItemGetWork*)eff->userdata)->size = 4.3f;
     eff = effNameToPtr(name2);
-    ((EffTreasureMapWork*)eff->userdata)->cameraId = 5;
+    ((EffTreasureMapWork*)eff->userdata)->cameraId = CAMERA_3D_EFFECTA;
     marioSetCamId(CAMERA_3D_EFFECTA);
     return EVT_RETURN_DONE;
 }
@@ -1418,9 +1418,9 @@ USER_FUNC(map_bgmode_end) {
     EffectEntry* eff;
 
     eff = effNameToPtr(name1);
-    ((ItemGetWork*)eff->userdata)->camera = 4;
+    ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D;
     eff = effNameToPtr(name2);
-    ((EffTreasureMapWork*)eff->userdata)->cameraId = 4;
+    ((EffTreasureMapWork*)eff->userdata)->cameraId = CAMERA_3D;
     marioSetCamId(CAMERA_3D);
     return EVT_RETURN_DONE;
 }

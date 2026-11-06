@@ -745,11 +745,11 @@ USER_FUNC(uranai_init_func) {
     for (i = 0; i < 9; i++) {
         sprintf(name, "card_omote_%d", i + 1);
         if (mapGetMapObj(name) != NULL) {
-            mapGetMapObj(name)->cameraId = 5;
+            mapGetMapObj(name)->cameraId = CAMERA_3D_EFFECTA;
         }
         sprintf(name, "card_ura_%d", i + 1);
         if (mapGetMapObj(name) != NULL) {
-            mapGetMapObj(name)->cameraId = 5;
+            mapGetMapObj(name)->cameraId = CAMERA_3D_EFFECTA;
         }
     }
     uranai_wp->capEvent = evtEntry(evt_uranai_cap, 0, 0);

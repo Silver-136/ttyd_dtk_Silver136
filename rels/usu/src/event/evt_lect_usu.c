@@ -535,7 +535,7 @@ static USER_FUNC(lect_npc_balloon_on_off) {
 
     if (evtGetValue(event, args[1])) {
         eff = effMarioBalloonEntry(1, npc);
-        ((MarioBalloonWork*)eff->userdata)->camera = 7;
+        ((MarioBalloonWork*)eff->userdata)->camera = CAMERA_3D_EFFECTB;
     } else {
         effDelete(eff);
     }

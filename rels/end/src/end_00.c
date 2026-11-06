@@ -1979,7 +1979,7 @@ USER_FUNC(evt_end_staff_roll_init) {
         end_wp->alpha = 0;
         end_wp->pos = 0;
         psndSetFlag(PSND_FLAG_NO_SFX);
-        gp->language = 1;
+        gp->language = LANGUAGE_US;
         JUTFont_Free();
         JUTFontSetup(1);
         msgLoad("global", 1);
@@ -1990,7 +1990,7 @@ USER_FUNC(evt_end_staff_roll_init) {
         end_wp->pos = 0;
         psndSetFlag(PSND_FLAG_NO_SFX);
 #if VERSION < VERSION_US
-        gp->language = 1;
+        gp->language = LANGUAGE_US;
         JUTFont_Free();
         JUTFontSetup(1);
 #endif

@@ -406,7 +406,7 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
             DCFlushRange(gor_fune_color0_tbl, 4);
         }
     }
-    if (work->cam != 4) {
+    if (work->cam != CAMERA_3D) {
         gor_fune_color0_tbl[0] = 0x00;
         gor_fune_color0_tbl[1] = 0x00;
         gor_fune_color0_tbl[2] = 0xFF;
