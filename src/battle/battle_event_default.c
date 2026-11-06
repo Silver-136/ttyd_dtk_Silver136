@@ -1194,10 +1194,10 @@ USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
     BattleUnit* unit;
 
     unit = BattleGetMarioPtr(wp);
-    unit->moveColorLv = 0xFF;
+    unit->moveColorLv = MOVE_COLOR_LV_FULL;
     unit = BattleGetPartyPtr(wp);
     if (unit) {
-        unit->moveColorLv = 0xFF;
+        unit->moveColorLv = MOVE_COLOR_LV_FULL;
     }
     return EVT_RETURN_DONE;
 }

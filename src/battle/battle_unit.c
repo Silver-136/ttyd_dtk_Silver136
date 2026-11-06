@@ -206,7 +206,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     body = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
     unit->talkPose = BtlUnit_GetPoseNameFromType(body, POSE_TYPE_TALK);
     unit->stayPose = BtlUnit_GetPoseNameFromType(body, POSE_TYPE_NEUTRAL);
-    unit->moveColorLv = 0xFF;
+    unit->moveColorLv = MOVE_COLOR_LV_FULL;
     unit->moveColorLvDisp = 0xFF;
     btlDispEntAnime(unit);
     unit->countersetWeapon = NULL;

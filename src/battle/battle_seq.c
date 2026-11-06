@@ -2380,7 +2380,7 @@ static void btlseqAct(BattleWork* wp) {
 #endif
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
                                 !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {
-                                unit->moveColorLv = 0x60;
+                                unit->moveColorLv = MOVE_COLOR_LV_DONE;
                             }
                         }
                     }
@@ -2499,7 +2499,7 @@ static void btlseqPhaseFirstProcess(BattleWork* wp) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
-            unit->moveColorLv = 0xFF;
+            unit->moveColorLv = MOVE_COLOR_LV_FULL;
 #if VERSION <= VERSION_DEMO_JP
             if (unit->moveState == MOVE_STATE_DONE) {
 #else

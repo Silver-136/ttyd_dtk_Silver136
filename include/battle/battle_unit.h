@@ -865,6 +865,10 @@ typedef enum BattleMoveState {
     MOVE_STATE_DONE = 10,               // no moves left this turn
 } BattleMoveState;
 
+// BattleUnit.moveColorLv: battle_disp scales the unit's colour by it (moveColorLvDisp eases toward it)
+#define MOVE_COLOR_LV_FULL 0xFF // normal colour
+#define MOVE_COLOR_LV_DONE 0x60 // a player-side unit with no moves left this phase, shaded dark
+
 typedef struct BattleUnit {
     s32 unitId;                                  // 0x0
     BattleUnitType initialKind;                  // 0x4
@@ -1029,7 +1033,7 @@ typedef struct BattleUnit {
     ItemType heldItem;                           // 0x304, 4 bytes
     ItemDropData* dropTable;                     // 0x308
     u8 stolenCoins;                              // 0x30C, coins a Bandit (borodo) stole; dropped back as its held coin item
-    u8 moveColorLv;                             // 0x30D
+    u8 moveColorLv;                             // 0x30D, MOVE_COLOR_LV_*: the unit's colour scale (x/255)
     u8 moveColorLvDisp;                          // 0x30E, current move colour level, ramps toward moveColorLv
     u8 pad_30F;                                  // 0x30F, never accessed
     struct BattleWeapon* countersetWeapon;       // 0x310

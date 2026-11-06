@@ -268,6 +268,9 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_AnimeChangePoseDirect, LW(10), LW(11), STRING("NKT_D_1"))
     // BUG: nothing installs the grounded `regist` table (no btlevtcmd_SetRegistStatus; `regist` is never
     // referenced), so the unit keeps regist_patapata after it falls.
+    // BUG: the unit is marked as changed and takes the KP Koopa parts (and their name), but unlike every other
+    // winged enemy's fall event there is no btlevtcmd_ChangeKind (UNIT_KP_KOOPA here), so currentKind stays
+    // UNIT_KP_PARATROOPA and a Tattle on the grounded unit still shows the KP Paratroopa entry.
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)

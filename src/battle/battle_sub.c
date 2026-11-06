@@ -167,7 +167,7 @@ s32 BattleTransID(EventEntry* evt, s32 type) {
  * Called by the event command btlevtcmd_reset_move_color_lv_all (battle_event_cmd.c) and at the end of battle (battle_seq_end.c).
  */
 void btlsubResetMoveColorLvAll(BattleWork* work) {
-    // FAKE: spare copies w and w2 of work and c of 0xFF; the plain loop changes the object
+    // FAKE: spare copies w and w2 of work and c of MOVE_COLOR_LV_FULL; the plain loop changes the object
     BattleWork* w = work;
     BattleUnit* unit;
     int i;
@@ -177,7 +177,7 @@ void btlsubResetMoveColorLvAll(BattleWork* work) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         w2 = w;
         unit = BattleGetUnitPtr(w2, i);
-        c = 0xFF;
+        c = MOVE_COLOR_LV_FULL;
         if (unit) {
             unit->moveColorLv = c;
         }

@@ -1726,7 +1726,7 @@ USER_FUNC(_set_hustle) {
 #if VERSION <= VERSION_DEMO_JP
             unit->activeTurns = 0;
 #endif
-            unit->moveColorLv = 0xFF;
+            unit->moveColorLv = MOVE_COLOR_LV_FULL;
 #if VERSION >= VERSION_JP
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
