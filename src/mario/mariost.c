@@ -614,7 +614,7 @@ void marioStSystemLevel(s32 level) {
         case 0:
             _mariostSystemLevel = level;
             gp->systemLevelFlags &= ~SYSTEM_LEVEL_STOP_ALL;
-            evtStartAll(0xEF);
+            evtStartAll(EVENT_TYPE_DEFAULT);
             break;
         case 1:
             _mariostSystemLevel = level;
@@ -637,7 +637,7 @@ void marioStSystemLevel(s32 level) {
         case 4:
             _mariostSystemLevel = level;
             gp->systemLevelFlags |= SYSTEM_LEVEL_STOP_ALL;
-            evtStopAll(0xEF);
+            evtStopAll(EVENT_TYPE_DEFAULT);
             break;
     }
 }

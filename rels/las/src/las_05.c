@@ -533,11 +533,12 @@ s32 party_hit_check(f32 x, f32 z, f32* dir) {
     dz = __fabsf(z - party->position.z);
     switch (party->currentMemberId) {
         case PARTY_MEMBER_KOOPS:
+            // NokonokoStatus 2-5 (shell out, held, coming back); the call has no prototype here
             switch (nokonokoGetStatus()) {
                 case 2:
-                case PARTY_MEMBER_BOBBERY:
+                case 3:
                 case 4:
-                case PARTY_MEMBER_FLURRIE:
+                case 5:
                     active = 1;
                     break;
             }

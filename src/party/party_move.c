@@ -137,7 +137,7 @@ static void getTargetPos(s32 id, Vec* pos) {
     PartyEntry* other = anotherPartyGetPtr(id != 0);
 
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario2->position, &other->position) >= 150.0f) {
             far = TRUE;
         }
@@ -166,7 +166,7 @@ static void getTargetPos(s32 id, Vec* pos) {
 
 /**
  * Where trail id is chasing: the other party member (anotherPartyGetPtr) when it exists,
- * Koops's nokonokoGetStatus is not 3 and it is within 150 units of Mario, else Mario.
+ * Koops's nokonokoGetStatus is not NOKONOKO_STATUS_SHELL_HELD and it is within 150 units of Mario, else Mario.
  */
 #if VERSION >= VERSION_JP
 void L_getTargetPos(s32 id, Vec* pos) {
@@ -181,7 +181,7 @@ void L_getTargetPos(s32 id, Vec* pos) {
     other = anotherPartyGetPtr(id != 0);
 
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario2->position, &other->position) >= 150.0f) {
             far = TRUE;
         }
@@ -202,7 +202,7 @@ void L_getTargetPos(s32 id, Vec* pos) {
 
 /**
  * Direction in degrees from (x, z) to the other slot (slot 1 for id 0, slot 0 otherwise),
- * or Mario if that entry is absent, Koops's nokonokoGetStatus is 3, or it is at least 150 units from Mario.
+ * or Mario if that entry is absent, Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD, or it is at least 150 units from Mario.
  */
 f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     MarioWork* mario = marioGetPtr();
@@ -211,7 +211,7 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     Vec pos;
 
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
             far = TRUE;
         }
@@ -225,7 +225,7 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
 
 /**
  * Horizontal distance from (x, z) to Mario for trail 0, or the slot 0 partner for trail 1;
- * falls back to Mario when that partner is absent, Koops's nokonokoGetStatus is 3, or it is at least 150 units away.
+ * falls back to Mario when that partner is absent, Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD, or it is at least 150 units away.
  */
 f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
     MarioWork* mario = marioGetPtr();
@@ -237,13 +237,13 @@ f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
         return distABf(x, z, mario->position.x, mario->position.z);
     }
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #else
 
 /**
  * Demo: direction in degrees from (x, z) to what trail id chases: Mario for trail 0;
- * for trail 1 the partner in slot 0, or Mario while Koops's nokonokoGetStatus is 3.
+ * for trail 1 the partner in slot 0, or Mario while Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD.
  */
 f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     MarioWork* mario;
@@ -258,7 +258,7 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     far = FALSE;
     other = anotherPartyGetPtr(id != 0);
     if (other) {
-        if (nokonokoGetStatus(other) == 3) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
 #endif
             far = TRUE;
         }
@@ -270,7 +270,7 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
 
 /**
 * Demo: horizontal distance from (x, z) to what trail id chases (Mario, or the slot 0 partner for trail 1;
-* Mario while Koops's nokonokoGetStatus is 3).
+* Mario while Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD).
 */
 f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
     MarioWork* mario;
@@ -285,7 +285,7 @@ f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
     far = FALSE;
     other = anotherPartyGetPtr(id != 0);
     if (other) {
-        if (nokonokoGetStatus(other) == 3) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
 #else
     if (other && !far) {
         getTargetPos(id, &pos);
@@ -305,7 +305,7 @@ f32 partyGetTargetDist3D(s32 id, Vec* p) {
         return PSVECDistance(&marioGetPtr()->position, p);
     }
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
             far = TRUE;
@@ -328,7 +328,7 @@ f32 partyGetTargetDist3D(s32 id, Vec* p) {
     far = FALSE;
     other = anotherPartyGetPtr(id != 0);
     if (other) {
-        if (nokonokoGetStatus(other) == 3) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
 #else
     if (other && !far) {
         getTargetPos(id, &pos);
@@ -348,7 +348,7 @@ f32 partyGetTargetDistY(s32 id, f32 y) {
         return __fabsf(mario->position.y - y);
     }
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
             far = TRUE;
@@ -401,9 +401,9 @@ f32 partyGetTargetMovespd(s32 id) {
     other = anotherPartyGetPtr(id != 0);
     if (other) {
 #if VERSION <= VERSION_DEMO_JP
-        if (nokonokoGetStatus(other) == 3) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
 #else
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
             far = TRUE;
@@ -429,7 +429,7 @@ f32 partyGetTargetMovespd(s32 id) {
  * The speed the entry walks at to keep up.
  * Without PARTY_FLAG_IS_PARTNER, or while following close (doors),
  * it is Mario's walk speed (baseSpeed, else baseDashSpeed);
- * otherwise the active partner's moveSpeed unless Koops's nokonokoGetStatus is 3
+ * otherwise the active partner's moveSpeed unless Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD
  * (JP and later also fall back to Mario when that partner is at least 150 units away).
  */
 f32 partyGetTargetMovespd2(PartyEntry* party) {
@@ -453,9 +453,9 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
     other = partyGetPtr(marioGetPartyId());
     if (other) {
 #if VERSION <= VERSION_DEMO_JP
-        if (nokonokoGetStatus(other) == 3) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
 #else
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
             far = TRUE;
@@ -572,7 +572,7 @@ void partyClearFootmark2(void) {
     Footmark* fm;
 
     if (other) {
-        if (nokonokoGetStatus(other) == 3 ||
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
             pos = mario->position;
         } else {
@@ -654,7 +654,7 @@ static inline BOOL partyChkOtherFlag(PartyEntry* other) {
 /**
  * Lays this frame's footmark for Koops's walk (party_nokonoko.c).
  * The slot 0 entry tracks Mario; the other tracks the active partner,
- * or Mario while Koops's nokonokoGetStatus is 3 (JP and later also fall back at a distance of 150 or more);
+ * or Mario while Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD (JP and later also fall back at a distance of 150 or more);
  * switching between the two restarts the trail (footmarkMode).
  */
 void partyRecordFootmark(PartyEntry* party) {
@@ -684,11 +684,11 @@ void partyRecordFootmark(PartyEntry* party) {
         other = partyGetPtr(marioGetPartyId());
 #if VERSION <= VERSION_DEMO_JP
         if (other) {
-            if (nokonokoGetStatus(other) == 3) {
+            if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
                 far = TRUE;
             }
 #else
-        if (other && (nokonokoGetStatus(other) == 3 ||
+        if (other && (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
                       PSVECDistance(&mario->position, &other->position) >= 150.0f)) {
             far = TRUE;
 #endif
@@ -1346,11 +1346,11 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
             p = anotherPartyGetPtr(1);
 #if VERSION <= VERSION_DEMO_JP
             if (p) {
-                if (nokonokoGetStatus(p) == 3) {
+                if (nokonokoGetStatus(p) == NOKONOKO_STATUS_SHELL_HELD) {
                     far = TRUE;
                 }
 #else
-            if (p && (nokonokoGetStatus(p) == 3 ||
+            if (p && (nokonokoGetStatus(p) == NOKONOKO_STATUS_SHELL_HELD ||
                       PSVECDistance(&mario->position, &p->position) >= 150.0f)) {
                 far = TRUE;
 #endif
@@ -1599,9 +1599,9 @@ void partyWalkMain(PartyEntry* party) {
         other = anotherPartyGetPtr(party->currentSlotId);
         if (other) {
 #if VERSION <= VERSION_DEMO_JP
-            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == 3) {
+            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
 #else
-            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == 3 ||
+            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
                 PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
                 flags = partyChkMarioJumpFlag();

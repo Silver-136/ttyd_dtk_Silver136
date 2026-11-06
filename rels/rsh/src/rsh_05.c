@@ -796,7 +796,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
             return 3;
         }
     }
-    if (nokonokoGetStatus(partyGetPtr(0)) == 2) {
+    if (nokonokoGetStatus(partyGetPtr(0)) == NOKONOKO_STATUS_SHELL_OUT) {
         f32 (*mtx)[4] = *pose->mtx;
         c = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
         if (PSVECDistance(&partyGetPtr(0)->position, &c) < 30.0f) {

@@ -1260,7 +1260,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1291,7 +1291,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1322,7 +1322,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1353,7 +1353,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1388,7 +1388,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1419,7 +1419,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1450,7 +1450,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1579,7 +1579,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1610,7 +1610,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1641,7 +1641,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1672,7 +1672,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1707,7 +1707,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1738,7 +1738,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1769,7 +1769,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1898,7 +1898,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1929,7 +1929,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1960,7 +1960,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1991,7 +1991,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2026,7 +2026,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2057,7 +2057,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2088,7 +2088,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2217,7 +2217,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2248,7 +2248,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2279,7 +2279,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2310,7 +2310,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2345,7 +2345,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2376,7 +2376,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2407,7 +2407,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance

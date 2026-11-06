@@ -565,7 +565,7 @@ void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall) {
 #if VERSION >= VERSION_JP
     EventEntry* e;
 
-    e = evtEntryType(yuu_02_icon_monte_entry_evt, 0, 0, 0xEF);
+    e = evtEntryType(yuu_02_icon_monte_entry_evt, 0, 0, EVENT_TYPE_DEFAULT);
     e->lwData[0] = event->lwData[0];
 #endif
     data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);

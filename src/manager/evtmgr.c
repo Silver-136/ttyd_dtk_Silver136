@@ -172,7 +172,7 @@ static void evtEntryRunCheck(EventEntry* entry) {
             evtStopAll(0x10);
             break;
         case 4:
-            evtStopAll(0xEF);
+            evtStopAll(EVENT_TYPE_DEFAULT);
             break;
         case 0:
             break;
@@ -208,7 +208,7 @@ EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags) {
     entry->unitId = -1;
     entry->loopDepth = -1;
     entry->switchDepth = -1;
-    entry->type = 0xEF;
+    entry->type = EVENT_TYPE_DEFAULT;
     entry->name = NULL;
     entry->timescale = evtSpd;
     entry->commandsLeft = 0.0f;
@@ -652,7 +652,7 @@ void evtStart(EventEntry* entry, u32 type) {
     }
 }
 
-/** Pauses the event with this id (and its children and brothers) for type mask 0xEF (every bit but 0x10). */
+/** Pauses the event with this id (and its children and brothers) for type mask EVENT_TYPE_DEFAULT (every bit but 0x10). */
 void evtStopID(s32 eventId) {
     EventWork* wp = evtGetWork();
     EventEntry* entry = wp->entries;
@@ -660,12 +660,12 @@ void evtStopID(s32 eventId) {
 
     for (i = 0; i < wp->count; i++, entry++) {
         if ((entry->flags & EVENT_ACTIVE) && (entry->eventId == eventId)) {
-            evtStop(entry, 0xEF);
+            evtStop(entry, EVENT_TYPE_DEFAULT);
         }
     }
 }
 
-/** Resumes the event with this id (and its children and brothers) for type mask 0xEF (every bit but 0x10). */
+/** Resumes the event with this id (and its children and brothers) for type mask EVENT_TYPE_DEFAULT (every bit but 0x10). */
 void evtStartID(s32 eventId) {
     EventWork* wp = evtGetWork();
     EventEntry* entry = wp->entries;
@@ -673,7 +673,7 @@ void evtStartID(s32 eventId) {
 
     for (i = 0; i < wp->count; i++, entry++) {
         if ((entry->flags & EVENT_ACTIVE) && (entry->eventId == eventId)) {
-            evtStart(entry, 0xEF);
+            evtStart(entry, EVENT_TYPE_DEFAULT);
         }
     }
 }

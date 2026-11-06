@@ -521,7 +521,7 @@ void party_motion_stay(PartyEntry* party) {
         } else {
             other = anotherPartyGetPtr(party->currentSlotId);
             if (other) {
-                if (nokonokoGetStatus(other) == 3 || PSVECDistance(&mario->position, &other->position) >= 150.0f) {
+                if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD || PSVECDistance(&mario->position, &other->position) >= 150.0f) {
                     if (partyGetTargetDist(id, party->position.x, party->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                         partyClearFootmark2();
@@ -1043,7 +1043,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         partySetTargetSpd(party, spd);
     } else if ((other = partyGetPtr(marioGetPartyId()))) {
         v = other->position;
-        if (nokonokoGetStatus(other) == 3 || PSVECDistance(&mario->position, &other->position) >= 150.0f) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD || PSVECDistance(&mario->position, &other->position) >= 150.0f) {
             d3 = PSVECDistance(&mario->position, &party->position);
             if (d3 < VERSION_PICK(35.0f, 45.0f)) {
                 spd = 1.0f;
@@ -5073,7 +5073,7 @@ void party_motion_stay(PartyEntry* party) {
         } else {
             other = anotherPartyGetPtr(party->currentSlotId);
             if (other) {
-                if (nokonokoGetStatus(other) == 3) {
+                if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
                     if (partyGetTargetDist(id, party->position.x, party->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                         partyClearFootmark2();

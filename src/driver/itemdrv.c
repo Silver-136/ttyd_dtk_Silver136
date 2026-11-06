@@ -1356,31 +1356,31 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 switch (bgm) {
                     case 0:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(0x3800);
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_STARPIECE1");
                         break;
                     case 1:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(0x3800);
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_KEYITEM1");
                         break;
                     case 2:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(0x3800);
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_BADGE1");
                         break;
                     case 3:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(0x3800);
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_IMPORTANT_ITEM1");
                         break;
                     default:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(0x3800);
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
                         break;
@@ -1427,7 +1427,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
                 if (psndBGMChk(1)) {
                     entry->flags |= ITEM_FLAG_GET_BGM_ENDED;
-                    psndBGMOff(0x201);
+                    psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
                     if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                         psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                     }
@@ -1444,7 +1444,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 winMgrCloseAutoDelete(entry->winId[1]);
             }
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
-                psndBGMOff(0x201);
+                psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
                 if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                     psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 }

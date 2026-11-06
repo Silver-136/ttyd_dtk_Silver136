@@ -973,7 +973,7 @@ USER_FUNC(evt_party_nokotaro_kick) {
         p->flags |= PARTY_FLAG_IS_BEING_USED;
         partyChgRunMode(p, PARTY_RUN_USE);
     }
-    if (nokonokoGetStatus(p) == 0) {
+    if (nokonokoGetStatus(p) == NOKONOKO_STATUS_NONE) {
         p->flags &= ~PARTY_FLAG_IS_EVT_USE;
         return EVT_RETURN_DONE;
     }
@@ -1003,11 +1003,11 @@ USER_FUNC(evt_party_nokotaro_kick_hold) {
         p->flags |= PARTY_FLAG_IS_BEING_USED;
         partyChgRunMode(p, PARTY_RUN_USE);
     }
-    if (nokonokoGetStatus(p) == 0) {
+    if (nokonokoGetStatus(p) == NOKONOKO_STATUS_NONE) {
         p->flags &= ~PARTY_FLAG_IS_EVT_USE;
         return EVT_RETURN_DONE;
     }
-    return nokonokoGetStatus(p) == 3 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return nokonokoGetStatus(p) == NOKONOKO_STATUS_SHELL_HELD ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /**
@@ -1026,14 +1026,14 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
         if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
             return EVT_RETURN_DONE;
         }
-        if (nokonokoGetStatus(p) == 0) {
+        if (nokonokoGetStatus(p) == NOKONOKO_STATUS_NONE) {
             return EVT_RETURN_DONE;
         }
         event->userdata[0] = 0;
     }
     switch (event->userdata[0]) {
     case 0:
-        if (nokonokoGetStatus(p) != 3) {
+        if (nokonokoGetStatus(p) != NOKONOKO_STATUS_SHELL_HELD) {
             ret = EVT_RETURN_BLOCK;
             break;
         }
@@ -1041,7 +1041,7 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
         event->userdata[0] = 1;
         break;
     case 1:
-        if (nokonokoGetStatus(p) != 0) {
+        if (nokonokoGetStatus(p) != NOKONOKO_STATUS_NONE) {
             ret = EVT_RETURN_BLOCK;
             break;
         }
@@ -1053,7 +1053,7 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
 }
 
 /**
- * Writes Koops's shell ability state (nokonokoGetStatus: 0 idle, 3 shell held) to args[1];
+ * Writes Koops's shell ability state (NokonokoStatus) to args[1];
  * untouched for other partners.
  */
 USER_FUNC(evt_party_nokotaro_get_status) {

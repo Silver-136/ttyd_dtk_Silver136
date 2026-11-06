@@ -52,30 +52,30 @@ s32 nokonokoGetStatus(PartyEntry* party) {
     u32 m;
     s32 status;
     if (party == NULL) {
-        return 0;
+        return NOKONOKO_STATUS_NONE;
     }
     if (party->currentMemberId != PARTY_MEMBER_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        return 0;
+        return NOKONOKO_STATUS_NONE;
     }
-    status = 7;
+    status = NOKONOKO_STATUS_OTHER;
     m = party->useMotionId;
     if (m <= 2) {
-        return 1;
+        return NOKONOKO_STATUS_PULL_IN;
     }
     if (m >= 10 && m <= 13) {
-        return 2;
+        return NOKONOKO_STATUS_SHELL_OUT;
     }
     if (m >= 20 && m <= 21) {
-        return 3;
+        return NOKONOKO_STATUS_SHELL_HELD;
     }
     if (m >= 50 && m <= 71) {
-        return 4;
+        return NOKONOKO_STATUS_SHELL_BACK;
     }
     if (m >= 80 && m <= 100) {
-        return 5;
+        return NOKONOKO_STATUS_HELD_SHOT_BACK;
     }
     if (m >= 110 && m <= 114) {
-        status = 6;
+        status = NOKONOKO_STATUS_FROM_ABOVE;
     }
     return status;
 }
@@ -163,7 +163,7 @@ void nokonoko_use_cancel(void) {
     PartyEntry* party;
     marioGetPtr();
     party = partyGetPtr(marioGetPartyId());
-    if (nokonokoGetStatus(party) != 0) {
+    if (nokonokoGetStatus(party) != NOKONOKO_STATUS_NONE) {
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
             marioGetPtr();
             // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object

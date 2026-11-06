@@ -3014,7 +3014,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 if (party->memberKind != PARTY_MEMBER_KOOPS) break;
                 if (!(party->flags & PARTY_FLAG_IS_BEING_USED)) break;
                 st = nokonokoGetStatus(party);
-                if (st < 2 || st > 5) break;
+                if (st < NOKONOKO_STATUS_SHELL_OUT || st > NOKONOKO_STATUS_HELD_SHOT_BACK) break;
             }
             if (!b) break;
             r = 0.5f * party->width;

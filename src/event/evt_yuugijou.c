@@ -521,7 +521,7 @@ USER_FUNC(yuuminigame_window_end) {
 
 /** Starts minigame_end as a separate event so the quit warp runs after the pause window. */
 USER_FUNC(yuuminigame_end) {
-    evtEntryType(minigame_end, 0, 0, 0xEF);
+    evtEntryType(minigame_end, 0, 0, EVENT_TYPE_DEFAULT);
     return EVT_RETURN_DONE;
 }
 

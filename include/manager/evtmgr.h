@@ -161,6 +161,11 @@ typedef enum EventEntry_Flags {
     EVENT_START_IMMEDIATE = (1 << 5), // run at once when entered while the manager is running events
 } EventEntry_Flags;
 
+// EventEntry.type is a mask: evtStop/evtStart act on an event whose type shares a bit with theirs
+// (marioStSystemLevel stops 1, 2, 0x10 or 0xEF by level). evtEntry gives every event this default;
+// evtEntryType sets one (type 0: no level stops the event).
+#define EVENT_TYPE_DEFAULT 0xEF // every bit but 0x10
+
 // EventEntry.wNpcEventType: which of its owner NPC's events the entry runs
 typedef enum NpcEventType {
     NPC_EVENT_INIT = 0,
