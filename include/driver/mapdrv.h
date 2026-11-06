@@ -26,11 +26,12 @@ typedef struct MapVtxArray {
 typedef struct MapVcdTable {
     MapVtxArray* positions;    // 0x0
     MapVtxArray* normals;      // 0x4
-    u8 pad_08[0xC - 0x8];      // 0x8
+    s32 colorCount;            // 0x8, number of colour arrays in colors (1 in retail maps, 0 when none); never read
     MapVtxArray* colors[2];    // 0xC
     s32 texCount;              // 0x14
     MapVtxArray* texCoords[8]; // 0x18
     u8 pad_38[0x44 - 0x38];    // 0x38
+    // ver1.00 map files end the table here (0x44): no fraction words, their vertices are not packed
     s32 posFrac;               // 0x44, fraction bits of the packed s16 positions (GX vtx fmt / GQR5 in hitdrv)
     s32 texFrac[8];            // 0x48, fraction bits of the packed s16 tex coords
 } MapVcdTable;
@@ -176,6 +177,7 @@ typedef struct MapFileInfo {
     MapFileJoint* joint; // 0x4
     const char* mapName; // 0x8
     const char* hitName; // 0xC
+    const char* exportDate; // 0x10, ver1.02 only: when the map was exported ("yy/mm/dd hh:mm:ss"); never read
 } MapFileInfo;
 
 typedef struct MapHeader {
@@ -287,6 +289,7 @@ typedef struct MapAnimHeader {
     MapAnimAlphaDataList* alphaAnims;      // 0x14
     MapAnimLightDataList* lightAnims;      // 0x18
     MapAnimLightData2List* lightColorAnims; // 0x1C
+    u8 pad_20[0x28 - 0x20];              // 0x20, never accessed (the map files' animation headers are 0x28)
 } MapAnimHeader;
 
 // MapEntryAnimData.flags (map animations)
