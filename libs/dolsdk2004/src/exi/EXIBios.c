@@ -1,7 +1,6 @@
 #include <dolphin.h>
 
-#define REG_MAX 5
-#define REG(chan, idx) (__EXIRegs[((chan) * REG_MAX) + (idx)])
+#define REG(chan, idx) (__EXIRegs[((chan) * EXI_CHAN_REGS) + (idx)])
 
 #define STATE_IDLE     0
 #define STATE_DMA      1
@@ -79,7 +78,7 @@ static void CompleteTransfer(s32 chan) {
         if (exi->state & STATE_IMM) {
             if ((len = exi->immLen) != 0) {
                 buf = exi->immBuf;
-                data = __EXIRegs[(chan * 5) + 4];
+                data = REG(chan, EXI_DATA);
                 for(i = 0; i < len; i++) {
                     *buf++ = data >> ((3 - i) * 8);
                 }
@@ -119,12 +118,12 @@ int EXIImm(s32 chan, void* buf, s32 len, u32 type, EXICallback callback) {
         for(i = 0; i < len; i++) {
             data |= ((u8*)buf)[i] << ((3 - i) * 8);
         }
-        __EXIRegs[(chan * 5) + 4] = data;
+        REG(chan, EXI_DATA) = data;
     }
 
     exi->immBuf = buf;
     exi->immLen = (type != EXI_WRITE) ? len : 0; 
-    __EXIRegs[(chan * 5) + 3] = (type << 2) | 1 | ((len - 1) << 4);
+    REG(chan, EXI_CR) = (type << 2) | 1 | ((len - 1) << 4);
     OSRestoreInterrupts(enabled);
     return 1;
 }
@@ -172,9 +171,9 @@ int EXIDma(s32 chan, void* buf, s32 len, u32 type, EXICallback callback) {
     }
 
     exi->state |= STATE_DMA;
-    __EXIRegs[(chan * 5) + 1] = (u32)buf & EXI_0LENGTH_EXILENGTH_MASK;
-    __EXIRegs[(chan * 5) + 2] = len;
-    __EXIRegs[(chan * 5) + 3] = (type * 4) | 3;
+    REG(chan, EXI_MAR) = (u32)buf & EXI_0LENGTH_EXILENGTH_MASK;
+    REG(chan, EXI_LENGTH) = len;
+    REG(chan, EXI_CR) = (type * 4) | 3;
 
     OSRestoreInterrupts(enabled);
     return 1;
@@ -190,7 +189,7 @@ int EXISync(s32 chan) {
     ASSERTLINE(565, 0 <= chan && chan < MAX_CHAN);
 
     while ((exi->state & STATE_SELECTED)) {
-        if (!(__EXIRegs[(chan * 5) + 3] & 1)) {
+        if (!(REG(chan, EXI_CR) & 1)) {
             enabled = OSDisableInterrupts();
             if (exi->state & STATE_SELECTED) {
                 CompleteTransfer(chan);
@@ -198,7 +197,7 @@ int EXISync(s32 chan) {
                 // success unless this is a 4-byte immediate read that returned the ID of a USB adapter, IS viewer or
                 // Ether viewer (with CPR bits 0x70 clear) on a console with DI config 0xFF that is not a TDEV and has no
                 // device code 0x8200
-                if (__OSGetDIConfig() != 0xFF || (OSGetConsoleType() & OS_CONSOLE_MASK) == OS_CONSOLE_TDEV || exi->immLen != 4 || (__EXIRegs[chan * 5] & 0x70) || (__EXIRegs[(chan * 5) + 4] != EXI_USB_ADAPTER && __EXIRegs[(chan * 5) + 4] != EXI_IS_VIEWER && __EXIRegs[(chan * 5) + 4] != EXI_ETHER_VIEWER) || __OSDeviceCode == 0x8200) {
+                if (__OSGetDIConfig() != 0xFF || (OSGetConsoleType() & OS_CONSOLE_MASK) == OS_CONSOLE_TDEV || exi->immLen != 4 || (REG(chan, EXI_CSR) & 0x70) || (REG(chan, EXI_DATA) != EXI_USB_ADAPTER && REG(chan, EXI_DATA) != EXI_IS_VIEWER && REG(chan, EXI_DATA) != EXI_ETHER_VIEWER) || __OSDeviceCode == 0x8200) {
                     rc = 1;
                 }
             }
@@ -217,7 +216,7 @@ u32 EXIClearInterrupts(s32 chan, int exi, int tc, int ext) {
 
     ASSERTLINE(614, 0 <= chan && chan < MAX_CHAN);
 
-    cpr = prev = __EXIRegs[(chan * 5)];
+    cpr = prev = REG(chan, EXI_CSR);
     prev &= 0x7F5;
 
     if (exi != 0) {
@@ -232,7 +231,7 @@ u32 EXIClearInterrupts(s32 chan, int exi, int tc, int ext) {
         prev |= 0x800;
     }
 
-    __EXIRegs[(chan * 5)] = prev;
+    REG(chan, EXI_CSR) = prev;
     return cpr;
 }
 
@@ -279,7 +278,7 @@ static int __EXIProbe(s32 chan) {
 
     rc = 1;
     enabled = OSDisableInterrupts();
-    cpr = __EXIRegs[(chan * 5)];
+    cpr = REG(chan, EXI_CSR);
 
     if (!(exi->state & STATE_ATTACHED)) {
         if (cpr & 0x800) {
@@ -421,10 +420,10 @@ int EXISelectSD(s32 chan, u32 dev, u32 freq) {
     }
 
     exi->state |= STATE_SELECTED;
-    cpr = __EXIRegs[(chan * 5)];
+    cpr = REG(chan, EXI_CSR);
     cpr &= 0x405;
     cpr |= freq * 0x10;
-    __EXIRegs[(chan * 5)] = cpr;
+    REG(chan, EXI_CSR) = cpr;
 
     if (exi->state & STATE_ATTACHED) {
         switch (chan) {
@@ -460,10 +459,10 @@ int EXISelect(s32 chan, u32 dev, u32 freq) {
     }
 
     exi->state |= STATE_SELECTED;
-    cpr = __EXIRegs[(chan * 5)];
+    cpr = REG(chan, EXI_CSR);
     cpr &= 0x405;
     cpr |= (((1 << dev) << 7) | (freq * 0x10));
-    __EXIRegs[(chan * 5)] = cpr;
+    REG(chan, EXI_CSR) = cpr;
 
     if (exi->state & STATE_ATTACHED) {
         switch (chan) {
@@ -495,8 +494,8 @@ int EXIDeselect(s32 chan) {
     }
 
     exi->state &= ~STATE_SELECTED;
-    cpr = __EXIRegs[(chan * 5)];
-    __EXIRegs[(chan * 5)] = cpr & 0x405;
+    cpr = REG(chan, EXI_CSR);
+    REG(chan, EXI_CSR) = cpr & 0x405;
 
     if (exi->state & STATE_ATTACHED) {
         switch (chan) {
@@ -599,13 +598,13 @@ static void EXTIntrruptHandler(__OSInterrupt interrupt, OSContext* context) {
 void EXIInit() {
     u32 id;
 
-    while (((REG(0, 3) & 1) == 1) || ((REG(1, 3) & 1) == 1) || ((REG(2, 3) & 1) == 1)) {}
+    while (((REG(0, EXI_CR) & 1) == 1) || ((REG(1, EXI_CR) & 1) == 1) || ((REG(2, EXI_CR) & 1) == 1)) {}
 
     __OSMaskInterrupts(OS_INTERRUPTMASK_EXI);
-    __EXIRegs[0] = 0;
-    __EXIRegs[5] = 0;
-    __EXIRegs[10] = 0;
-    __EXIRegs[0] = 0x2000;
+    __EXIRegs[EXI0_CSR] = 0;
+    __EXIRegs[EXI1_CSR] = 0;
+    __EXIRegs[EXI2_CSR] = 0;
+    __EXIRegs[EXI0_CSR] = 0x2000;
     __OSSetInterruptHandler(__OS_INTERRUPT_EXI_0_EXI,  EXIIntrruptHandler);
     __OSSetInterruptHandler(__OS_INTERRUPT_EXI_0_TC, TCIntrruptHandler);
     __OSSetInterruptHandler(__OS_INTERRUPT_EXI_0_EXT, EXTIntrruptHandler);

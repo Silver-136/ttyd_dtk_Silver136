@@ -237,7 +237,7 @@ u32 OSGetResetCode(void) {
     if (__OSRebootParams.valid) {
         resetCode = OS_RESETCODE_RESTART | __OSRebootParams.restartCode;
     } else {
-        resetCode = (__PIRegs[9] & 0xFFFFFFF8) / 8;
+        resetCode = (__PIRegs[PI_RESET_CODE] & 0xFFFFFFF8) / 8;
     }
 
     return resetCode;

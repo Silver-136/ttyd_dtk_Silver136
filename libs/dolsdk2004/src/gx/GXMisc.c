@@ -90,9 +90,9 @@ void __GXAbort(void) {
         __GXAbortWaitPECopyDone();
     }
 
-    __PIRegs[0x18 / 4] = 1;
+    __PIRegs[PI_FIFO_RESET] = 1;
     __GXAbortWait(200);
-    __PIRegs[0x18 / 4] = 0;
+    __PIRegs[PI_FIFO_RESET] = 0;
     __GXAbortWait(20);
 }
 

@@ -38,7 +38,7 @@ u32 OSGetConsoleSimulatedMemSize(void) {
 
 static BOOL OnReset(BOOL final) {
     if (final != FALSE) {
-        __MEMRegs[8] = 0xFF;
+        __MEMRegs[MI_PROT_TYPE] = 0xFF;
         __OSMaskInterrupts(OS_INTERRUPTMASK_MEM_RESET);
     }
     return TRUE;
@@ -50,8 +50,8 @@ static void MEMIntrruptHandler(__OSInterrupt interrupt, OSContext* context) {
     u32 addr;
     u32 cause;
 
-    cause = __MEMRegs[15];
-    addr = (((u32)__MEMRegs[18] & 0x3ff) << 16) | __MEMRegs[17];
+    cause = __MEMRegs[MI_IRQFLAG];
+    addr = (((u32)__MEMRegs[MI_PROT_ADDR_HI] & 0x3ff) << 16) | __MEMRegs[MI_PROT_ADDR_LO];
     __MEMRegs[16] = 0;
 
     if (__OSErrorTable[__OS_EXCEPTION_MEMORY_PROTECTION]) {
@@ -87,13 +87,13 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
 
     __OSMaskInterrupts(OS_INTERRUPTMASK(__OS_INTERRUPT_MEM_0 + chan));
 
-    __MEMRegs[0 + 2 * chan] = (u16)(start >> 10);
-    __MEMRegs[1 + 2 * chan] = (u16)(end >> 10);
+    __MEMRegs[MI_REGION0_FIRST + 2 * chan] = (u16)(start >> 10);
+    __MEMRegs[MI_REGION0_LAST + 2 * chan] = (u16)(end >> 10);
 
-    reg = __MEMRegs[8];
+    reg = __MEMRegs[MI_PROT_TYPE];
     reg &= ~(OS_PROTECT_CONTROL_RDWR << 2 * chan);
     reg |= control << 2 * chan;
-    __MEMRegs[8] = reg;
+    __MEMRegs[MI_PROT_TYPE] = reg;
 
     if (control != OS_PROTECT_CONTROL_RDWR) {
         __OSUnmaskInterrupts(OS_INTERRUPTMASK(__OS_INTERRUPT_MEM_0 + chan));
@@ -205,7 +205,7 @@ void __OSInitMemoryProtection(void) {
     enabled = OSDisableInterrupts();
 
     __MEMRegs[16] = 0;
-    __MEMRegs[8] = 0xFF;
+    __MEMRegs[MI_PROT_TYPE] = 0xFF;
 
     __OSMaskInterrupts(OS_INTERRUPTMASK_MEM_0 | OS_INTERRUPTMASK_MEM_1 | OS_INTERRUPTMASK_MEM_2 |
                        OS_INTERRUPTMASK_MEM_3);

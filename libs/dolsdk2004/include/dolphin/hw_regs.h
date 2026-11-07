@@ -117,4 +117,110 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 
 #define DSP_DMA_START_FLAG (0x8000) // set to start DSP
 
+// Register and bit names below follow the public hardware documentation: YAGCD ("Yet Another GameCube
+// Documentation", chapter 5) for the mnemonics and Dolphin's open-source emulator (Source/Core/Core/HW/) where
+// YAGCD gives none. Indices are byte offset / 4 for the u32 arrays and byte offset / 2 for __MEMRegs.
+// Sources and tables: cleanup_notes/hw_register_names.md.
+
+// indices for __PIRegs[i] (processor interface, 0xCC003000)
+#define PI_INTSR         (0)  // interrupt cause (YAGCD INTSR)
+#define PI_INTMR         (1)  // interrupt mask (YAGCD INTMR)
+#define PI_FIFO_BASE     (3)  // CPU FIFO base (Dolphin)
+#define PI_FIFO_END      (4)  // CPU FIFO end (Dolphin)
+#define PI_FIFO_WPTR     (5)  // CPU FIFO write pointer (Dolphin)
+#define PI_FIFO_RESET    (6)  // FIFO reset (Dolphin; used by GXAbortFrame)
+#define PI_ERROR_CAUSE   (7)  // error cause (Dolphin; OSReport prints it as PIESR)
+#define PI_ERROR_ADDRESS (8)  // error address (Dolphin; OSReport prints it as PIEAR)
+#define PI_RESET_CODE    (9)  // reset control and code (Dolphin; YAGCD "reset")
+#define PI_FLIPPER_REV   (11) // console type / Flipper revision (Dolphin; YAGCD "console type")
+
+// PI_INTSR / PI_INTMR bits (YAGCD names, Dolphin INT_CAUSE_* values)
+#define PI_INT_ERROR (0x1)     // GP runtime error
+#define PI_INT_RSW   (0x2)     // reset switch pressed
+#define PI_INT_DEBUG (0x1000)  // debugger (development hardware)
+#define PI_INTSR_RSWST (0x10000) // reset switch state: clear while the button is down (not maskable)
+
+// indices for __MEMRegs[i] (memory interface, 0xCC004000; Dolphin MI_* names)
+#define MI_REGION0_FIRST (0)  // protected region 0 start page (address >> 10); region n at + 2 * n
+#define MI_REGION0_LAST  (1)  // protected region 0 end page
+#define MI_PROT_TYPE     (8)  // protection type, 2 bits per region
+#define MI_IRQMASK       (14) // interrupt mask
+#define MI_IRQFLAG       (15) // interrupt cause
+#define MI_PROT_ADDR_LO  (17) // address that failed protection, low half
+#define MI_PROT_ADDR_HI  (18) // address that failed protection, high half
+
+// indices for __DIRegs[i] (DVD interface, 0xCC006000; YAGCD names)
+#define DI_SR      (0) // status
+#define DI_CVR     (1) // cover status
+#define DI_CMDBUF0 (2) // command buffer 0 (command)
+#define DI_CMDBUF1 (3) // command buffer 1 (offset)
+#define DI_CMDBUF2 (4) // command buffer 2 (length)
+#define DI_MAR     (5) // DMA memory address
+#define DI_LENGTH  (6) // DMA transfer length (counts down)
+#define DI_CR      (7) // control
+#define DI_IMMBUF  (8) // immediate data buffer
+#define DI_CFG     (9) // configuration (latched at reset)
+
+// DI_SR bits
+#define DI_SR_BRKINT     (0x40) // break complete interrupt
+#define DI_SR_BRKINTMASK (0x20)
+#define DI_SR_TCINT      (0x10) // transfer complete interrupt
+#define DI_SR_TCINTMASK  (0x08)
+#define DI_SR_DEINT      (0x04) // device error interrupt
+#define DI_SR_DEINTMASK  (0x02)
+#define DI_SR_BRK        (0x01) // break request
+
+// DI_CVR bits
+#define DI_CVR_CVRINT     (0x4) // cover interrupt
+#define DI_CVR_CVRINTMASK (0x2)
+#define DI_CVR_CVR        (0x1) // cover open
+
+// DI_CR bits
+#define DI_CR_RW     (0x4) // 1 = write
+#define DI_CR_DMA    (0x2) // 1 = DMA, 0 = immediate
+#define DI_CR_TSTART (0x1) // start transfer / transfer pending
+
+// indices for __SIRegs[i] (serial interface, 0xCC006400; YAGCD names). SI_COMCSR_IDX (13) and SI_STATUS_IDX (14)
+// are in dolphin/si.h.
+#define SI_CHAN_REGS   (3)    // registers per channel: channel n at n * SI_CHAN_REGS
+#define SI_OUTBUF_IDX  (0)    // SICnOUTBUF: command
+#define SI_INBUFH_IDX  (1)    // SICnINBUFH: response, high word
+#define SI_INBUFL_IDX  (2)    // SICnINBUFL: response, low word
+#define SI_POLL_IDX    (12)   // SIPOLL
+#define SI_EXILK_IDX   (15)   // SIEXILK: EXI clock lock
+#define SI_IOBUF_IDX   (0x20) // SI I/O buffer (0x80 bytes)
+
+// indices for __EXIRegs[i] (external interface, 0xCC006800; YAGCD names). Five registers per channel.
+#define EXI_CHAN_REGS (5)
+#define EXI_CSR    (0) // parameter / status
+#define EXI_MAR    (1) // DMA start address
+#define EXI_LENGTH (2) // DMA transfer length
+#define EXI_CR     (3) // control
+#define EXI_DATA   (4) // immediate data
+#define EXI0_CSR (0 * EXI_CHAN_REGS + EXI_CSR)
+#define EXI0_CR  (0 * EXI_CHAN_REGS + EXI_CR)
+#define EXI1_CSR (1 * EXI_CHAN_REGS + EXI_CSR)
+#define EXI2_CSR (2 * EXI_CHAN_REGS + EXI_CSR)
+#define EXI2_CR   (2 * EXI_CHAN_REGS + EXI_CR)
+#define EXI2_DATA (2 * EXI_CHAN_REGS + EXI_DATA)
+
+// EXI_CR bits
+#define EXI_CR_DMA    (0x2) // 1 = DMA, 0 = immediate
+#define EXI_CR_TSTART (0x1) // start transfer / transfer pending
+
+// indices for __AIRegs[i] (audio streaming interface, 0xCC006C00; YAGCD names)
+#define AI_CR   (0) // control
+#define AI_VR   (1) // volume (left bits 0-7, right bits 8-15)
+#define AI_SCNT (2) // sample counter
+#define AI_IT   (3) // interrupt timing
+
+// AI_CR bits
+#define AI_CR_PSTAT    (0x01) // 1 = play
+#define AI_CR_AFR      (0x02) // stream frequency, 1 = 48 kHz (Dolphin AISFR: YAGCD has the rates inverted)
+#define AI_CR_AIINTMSK (0x04)
+#define AI_CR_AIINT    (0x08) // interrupt status; write 1 to clear
+#define AI_CR_AIINTVLD (0x10)
+#define AI_CR_SCRESET  (0x20) // reset sample counter
+#define AI_CR_DSPSR    (0x40) // DSP sample rate, 1 = 32 kHz (Dolphin AIDFR)
+
 #endif

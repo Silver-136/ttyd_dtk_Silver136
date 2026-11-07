@@ -75,12 +75,12 @@ static u32 CompleteTransfer(void) {
         input = Si.input;
         rLen = Si.inputBytes / sizeof(u32);
         for (i = 0; i < rLen; i++) {
-            *((u32*)input)++ = __SIRegs[i+0x20];
+            *((u32*)input)++ = __SIRegs[i + SI_IOBUF_IDX];
         }
         
         rLen = Si.inputBytes & 3;
         if (rLen != 0) {
-            temp = __SIRegs[i + 32];
+            temp = __SIRegs[i + SI_IOBUF_IDX];
             for (i = 0; i < rLen; i++) {
                 *(input++) = temp >> ((3 - i) * 8);
             }
@@ -336,7 +336,7 @@ static int __SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u3
 
     rLen = ROUND(outputBytes, 4) / 4;
     for (i = 0; i < rLen; i++) {
-        __SIRegs[i + 0x20] = ((u32*)output)[i];
+        __SIRegs[i + SI_IOBUF_IDX] = ((u32*)output)[i];
     }
     
     comcsr.val = __SIRegs[SI_COMCSR_IDX];
@@ -387,12 +387,12 @@ u32 SIGetStatus(s32 chan) {
 
 void SISetCommand(s32 chan, u32 command) {
     ASSERTMSGLINE(752, (chan >= 0) && (chan < 4), "SISetCommand(): invalid channel.");
-    __SIRegs[chan* 3] = command;
+    __SIRegs[chan * SI_CHAN_REGS + SI_OUTBUF_IDX] = command;
 }
 
 u32 SIGetCommand(s32 chan) {
     ASSERTMSGLINE(770, (chan >= 0) && (chan < 4), "SIGetCommand(): invalid channel.");
-    return __SIRegs[chan* 3];
+    return __SIRegs[chan * SI_CHAN_REGS + SI_OUTBUF_IDX];
 }
 
 void SITransferCommands(void) {
@@ -413,7 +413,7 @@ u32 SISetXY(u32 x, u32 y) {
     Si.poll &= 0xFC0000FF;
     Si.poll |= poll;
     poll = Si.poll;
-    __SIRegs[0x30 / 4] = poll;
+    __SIRegs[SI_POLL_IDX] = poll;
     OSRestoreInterrupts(enabled);
     return poll;
 }
@@ -438,7 +438,7 @@ u32 SIEnablePolling(u32 poll) {
     Si.poll |= poll;
     poll = Si.poll;
     SITransferCommands();
-    __SIRegs[0x30 / 4] = poll;
+    __SIRegs[SI_POLL_IDX] = poll;
     OSRestoreInterrupts(enabled);
     return poll;
 }
@@ -456,7 +456,7 @@ u32 SIDisablePolling(u32 poll) {
     poll &= 0xF0;
     ASSERTLINE(921, poll);
     poll = Si.poll & ~poll;
-    __SIRegs[0x30 / 4] = poll;
+    __SIRegs[SI_POLL_IDX] = poll;
     Si.poll = poll;
     OSRestoreInterrupts(enabled);
     return poll;
@@ -467,8 +467,8 @@ static BOOL SIGetResponseRaw(s32 chan) {
 
     sr = SIGetStatus(chan);
     if (sr & SI_ERROR_RDST) {
-        InputBuffer[chan][0] = __SIRegs[1 + chan * 3];
-        InputBuffer[chan][1] = __SIRegs[2 + chan * 3];
+        InputBuffer[chan][0] = __SIRegs[SI_INBUFH_IDX + chan * SI_CHAN_REGS];
+        InputBuffer[chan][1] = __SIRegs[SI_INBUFL_IDX + chan * SI_CHAN_REGS];
         InputBufferValid[chan] = TRUE;
         return TRUE;
     }

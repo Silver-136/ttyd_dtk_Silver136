@@ -17,27 +17,27 @@ u8 SendCount = 0x80;
 static void DBGEXIInit(void)
 {
     __OSMaskInterrupts(0x18000);
-    __EXIRegs[10] = 0;
+    __EXIRegs[EXI2_CSR] = 0;
 }
 
 static BOOL DBGEXISelect(u32 v)
 {
-    u32 regs = __EXIRegs[10];
+    u32 regs = __EXIRegs[EXI2_CSR];
     regs &= 0x405;
     regs |= 0x80 | (v << 4);
-    __EXIRegs[10] = regs;
+    __EXIRegs[EXI2_CSR] = regs;
     return TRUE;
 }
 
 static BOOL DBGEXIDeselect(void)
 {
-    __EXIRegs[10] &= 0x405;
+    __EXIRegs[EXI2_CSR] &= 0x405;
     return TRUE;
 }
 
 static BOOL DBGEXISync(void)
 {
-    while (__EXIRegs[13] & 1)
+    while (__EXIRegs[EXI2_CR] & 1)
         ;
     return TRUE;
 }
@@ -54,15 +54,15 @@ static BOOL DBGEXIImm(void* data, s32 byte_size, u32 write)
             u8* nextWordPtr = (u8*)data + i;
             writeVal |= *nextWordPtr << ((3 - i) << 3);
         }
-        __EXIRegs[14] = writeVal;
+        __EXIRegs[EXI2_DATA] = writeVal;
     }
 
-    __EXIRegs[13] = 1 | (write << 2) | ((byte_size - 1U) << 4);
+    __EXIRegs[EXI2_CR] = 1 | (write << 2) | ((byte_size - 1U) << 4);
 
     DBGEXISync();
     if (!write) {
         u8* dataPtr = (u8*)data;
-        readVal     = __EXIRegs[14];
+        readVal     = __EXIRegs[EXI2_DATA];
         for (i = 0; i < byte_size; ++i) {
             *dataPtr++ = readVal >> ((3 - i) << 3);
         }
@@ -198,7 +198,7 @@ static void MWCallback(s32 interrupt, OSContext* context)
 
 static void DBGHandler(__OSInterrupt interrupt, OSContext* context)
 {
-    __PIRegs[0] = 0x1000;
+    __PIRegs[PI_INTSR] = 0x1000;
     if (DBGCallback) {
         (*DBGCallback)(interrupt, context);
     }

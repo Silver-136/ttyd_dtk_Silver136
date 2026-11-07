@@ -103,8 +103,8 @@ void DVDInit(void) {
         __OSSetInterruptHandler(__OS_INTERRUPT_PI_DI, __DVDInterruptHandler);
         __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_DI);
         OSInitThreadQueue(&__DVDThreadQueue);
-        __DIRegs[0] = 0x2A;
-        __DIRegs[1] = 0;
+        __DIRegs[DI_SR] = 0x2A;
+        __DIRegs[DI_CVR] = 0;
 
         if (bootInfo->magic == 0xE5207C22) {
             OSReport("load fst\n");
@@ -273,7 +273,7 @@ static void cbForStateGettingError(u32 intType) {
 
     ASSERTLINE(956, intType == DVD_INTTYPE_TC);
 
-	error = __DIRegs[8];
+	error = __DIRegs[DI_IMMBUF];
 	status = error & 0xff000000;
 
 	errorCategory = CategorizeError(error);
@@ -356,7 +356,7 @@ static void cbForUnrecoveredErrorRetry(u32 intType) {
             return;
         }
 
-        stateError(__DIRegs[8]);
+        stateError(__DIRegs[DI_IMMBUF]);
     }
 }
 
@@ -565,7 +565,7 @@ static void stateMotorStopped() {
 
 static void cbForStateMotorStopped(u32 intType) {
     ASSERTLINE(1483, intType == DVD_INTTYPE_CVR);
-    __DIRegs[1] = 0;
+    __DIRegs[DI_CVR] = 0;
     executing->state = DVD_STATE_COVER_CLOSED;
     stateCoverClosed();
 }
@@ -642,7 +642,7 @@ static void stateBusy(DVDCommandBlock* block) {
 
     switch(block->command) {
     case DVD_COMMAND_READID:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         block->currTransferSize = sizeof(DVDDiskID);
         DVDLowReadDiskID(block->addr, cbForStateBusy);
         return;
@@ -659,13 +659,13 @@ static void stateBusy(DVDCommandBlock* block) {
 
             stateReady();
         } else {
-            __DIRegs[1] = __DIRegs[1];
+            __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
             block->currTransferSize = (block->length - block->transferredSize > 0x80000) ? 0x80000 : (block->length - block->transferredSize);
             DVDLowRead((char*)block->addr + block->transferredSize, block->currTransferSize, block->offset + block->transferredSize, cbForStateBusy);
         }
         return;
     case DVD_COMMAND_SEEK:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowSeek(block->offset, cbForStateBusy);
         return;
     case DVD_COMMAND_CHANGE_DISK:
@@ -675,7 +675,7 @@ static void stateBusy(DVDCommandBlock* block) {
         DVDLowStopMotor(cbForStateBusy);
         return;
     case DVD_COMMAND_INITSTREAM:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         if (AutoFinishing != 0) {
             executing->currTransferSize = 0;
             DVDLowRequestAudioStatus(0, cbForStateBusy);
@@ -685,41 +685,41 @@ static void stateBusy(DVDCommandBlock* block) {
         DVDLowAudioStream(0, block->length, block->offset, cbForStateBusy);
         return;
     case DVD_COMMAND_CANCELSTREAM:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowAudioStream(0x10000, 0U, 0U, cbForStateBusy);
         return;
     case DVD_COMMAND_STOP_STREAM_AT_END:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         AutoFinishing = 1;
         DVDLowAudioStream(0, 0U, 0U, cbForStateBusy);
         return;
     case DVD_COMMAND_REQUEST_AUDIO_ERROR:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowRequestAudioStatus(0, cbForStateBusy);
         return;
     case DVD_COMMAND_REQUEST_PLAY_ADDR:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowRequestAudioStatus(0x10000, cbForStateBusy);
         return;
     case DVD_COMMAND_REQUEST_START_ADDR:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowRequestAudioStatus(0x20000, cbForStateBusy);
         return;
     case DVD_COMMAND_REQUEST_LENGTH:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowRequestAudioStatus(0x30000, cbForStateBusy);
         return;
     case DVD_COMMAND_AUDIO_BUFFER_CONFIG:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowAudioBufferConfig(block->offset, block->length, cbForStateBusy);
         return;
     case DVD_COMMAND_INQUIRY:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         block->currTransferSize = sizeof(DVDDriveInfo);
         DVDLowInquiry(block->addr, cbForStateBusy);
         return;
     case DVD_COMMAND_UNK_16:
-        __DIRegs[1] = __DIRegs[1];
+        __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
         DVDLowStopMotor(cbForStateBusy);
         return;
     default:
@@ -806,7 +806,7 @@ static void cbForStateBusy(u32 intType) {
     ASSERTLINE(1877, (intType & DVD_INTTYPE_CVR) == 0);
 
     if (IsDmaCommand(CurrCommand)) {
-        executing->transferredSize += executing->currTransferSize - __DIRegs[6];
+        executing->transferredSize += executing->currTransferSize - __DIRegs[DI_LENGTH];
     }
 
     if (intType & 8) {
@@ -866,9 +866,9 @@ static void cbForStateBusy(u32 intType) {
             return;
         } else if (IsImmCommandWithResult(CurrCommand)) {
             if (CurrCommand == DVD_COMMAND_REQUEST_START_ADDR || CurrCommand == DVD_COMMAND_REQUEST_PLAY_ADDR) {
-                result = __DIRegs[8] * 4;
+                result = __DIRegs[DI_IMMBUF] * 4;
             } else {
-                result = __DIRegs[8];
+                result = __DIRegs[DI_IMMBUF];
             }
 
             finished = executing;
@@ -882,7 +882,7 @@ static void cbForStateBusy(u32 intType) {
             return;
         } else if (CurrCommand == DVD_COMMAND_INITSTREAM) {
             if (executing->currTransferSize == 0) {
-                if (__DIRegs[8] & 1) {
+                if (__DIRegs[DI_IMMBUF] & 1) {
                     finished = executing;
                     executing = &DummyCommandBlock;
                     finished->state = DVD_STATE_IGNORED;
@@ -1484,8 +1484,8 @@ static void cbForInquirySync(s32 result, DVDCommandBlock* block) {
 
 void DVDReset(void) {
     DVDLowReset();
-    __DIRegs[0] = 0x2A;
-    __DIRegs[1] = __DIRegs[1];
+    __DIRegs[DI_SR] = 0x2A;
+    __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
     ResetRequired = 0;
     ResumeFromHere = 0;
 }
@@ -1797,7 +1797,7 @@ BOOL DVDCheckDisk(void) {
 		break;
 	case DVD_STATE_END:
 	case DVD_STATE_PAUSING:
-		coverReg = __DIRegs[1];
+		coverReg = __DIRegs[DI_CVR];
 		if (((coverReg >> 2) & 1) || (coverReg & 1)) {
 			retVal = FALSE;
 		} else if (ResumeFromHere != 0) {

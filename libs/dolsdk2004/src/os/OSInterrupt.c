@@ -146,14 +146,14 @@ void __OSInterruptInit(void) {
     *(OSInterruptMask*)OSPhysicalToCached(0x00C4) = 0;
     *(OSInterruptMask*)OSPhysicalToCached(0x00C8) = 0;
 
-    __PIRegs[1] = 0xf0;
+    __PIRegs[PI_INTMR] = 0xf0;
 
     __OSMaskInterrupts(OS_INTERRUPTMASK_MEM | OS_INTERRUPTMASK_DSP | OS_INTERRUPTMASK_AI |
                         OS_INTERRUPTMASK_EXI | OS_INTERRUPTMASK_PI);
 
     __OSSetExceptionHandler(__OS_EXCEPTION_EXTERNAL_INTERRUPT, ExternalInterruptHandler);
     #if DEBUG
-        __PIRegs[0] = 1;
+        __PIRegs[PI_INTSR] = 1;
         __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_ERROR);
     #endif
 }
@@ -178,7 +178,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
             reg |= 0x8;
         if (!(current & OS_INTERRUPTMASK_MEM_ADDRESS))
             reg |= 0x10;
-        __MEMRegs[0x0000000e] = (u16)reg;
+        __MEMRegs[MI_IRQMASK] = (u16)reg;
         mask &= ~OS_INTERRUPTMASK_MEM;
         break;
     case __OS_INTERRUPT_DSP_AI:
@@ -196,17 +196,17 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
         mask &= ~OS_INTERRUPTMASK_DSP;
         break;
     case __OS_INTERRUPT_AI_AI:
-        reg = __AIRegs[0];
+        reg = __AIRegs[AI_CR];
         reg &= ~0x2C;
         if (!(current & OS_INTERRUPTMASK_AI_AI))
             reg |= 0x4;
-        __AIRegs[0] = reg;
+        __AIRegs[AI_CR] = reg;
         mask &= ~OS_INTERRUPTMASK_AI;
         break;
     case __OS_INTERRUPT_EXI_0_EXI:
     case __OS_INTERRUPT_EXI_0_TC:
     case __OS_INTERRUPT_EXI_0_EXT:
-        reg = __EXIRegs[0];
+        reg = __EXIRegs[EXI0_CSR];
         reg &= ~0x2C0F;
         if (!(current & OS_INTERRUPTMASK_EXI_0_EXI))
             reg |= 0x1;
@@ -214,13 +214,13 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
             reg |= 0x4;
         if (!(current & OS_INTERRUPTMASK_EXI_0_EXT))
             reg |= 0x400;
-        __EXIRegs[0] = reg;
+        __EXIRegs[EXI0_CSR] = reg;
         mask &= ~OS_INTERRUPTMASK_EXI_0;
         break;
     case __OS_INTERRUPT_EXI_1_EXI:
     case __OS_INTERRUPT_EXI_1_TC:
     case __OS_INTERRUPT_EXI_1_EXT:
-        reg = __EXIRegs[5];
+        reg = __EXIRegs[EXI1_CSR];
         reg &= ~0xC0F;
 
         if (!(current & OS_INTERRUPTMASK_EXI_1_EXI))
@@ -229,19 +229,19 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
             reg |= 0x4;
         if (!(current & OS_INTERRUPTMASK_EXI_1_EXT))
             reg |= 0x400;
-        __EXIRegs[5] = reg;
+        __EXIRegs[EXI1_CSR] = reg;
         mask &= ~OS_INTERRUPTMASK_EXI_1;
         break;
     case __OS_INTERRUPT_EXI_2_EXI:
     case __OS_INTERRUPT_EXI_2_TC:
-        reg = __EXIRegs[10];
+        reg = __EXIRegs[EXI2_CSR];
         reg &= ~0xF;
         if (!(current & OS_INTERRUPTMASK_EXI_2_EXI))
             reg |= 0x1;
         if (!(current & OS_INTERRUPTMASK_EXI_2_TC))
             reg |= 0x4;
 
-        __EXIRegs[10] = reg;
+        __EXIRegs[EXI2_CSR] = reg;
         mask &= ~OS_INTERRUPTMASK_EXI_2;
         break;
     case __OS_INTERRUPT_PI_CP:
@@ -286,7 +286,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
         if (!(current & OS_INTERRUPTMASK_PI_HSP)) {
             reg |= 0x2000;
         }
-        __PIRegs[1] = reg;
+        __PIRegs[PI_INTMR] = reg;
         mask &= ~OS_INTERRUPTMASK_PI;
         break;
     default:
@@ -364,10 +364,10 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     __OSInterrupt interrupt;
     __OSInterruptHandler handler;
 
-    intsr = __PIRegs[0];
+    intsr = __PIRegs[PI_INTSR];
     intsr &= ~0x00010000;
 
-    if (intsr == 0 || (intsr & __PIRegs[1]) == 0) {
+    if (intsr == 0 || (intsr & __PIRegs[PI_INTMR]) == 0) {
     #if DEBUG
         __OSSpuriousInterrupts++;
     #endif
@@ -377,7 +377,7 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     cause = 0;
 
     if (intsr & 0x00000080) {
-        reg = __MEMRegs[15];
+        reg = __MEMRegs[MI_IRQFLAG];
         if (reg & 0x1)
             cause |= OS_INTERRUPTMASK_MEM_0;
         if (reg & 0x2)
@@ -401,27 +401,27 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     }
 
     if (intsr & 0x00000020) {
-        reg = __AIRegs[0];
+        reg = __AIRegs[AI_CR];
         if (reg & 0x8)
             cause |= OS_INTERRUPTMASK_AI_AI;
     }
 
     if (intsr & 0x00000010) {
-        reg = __EXIRegs[0];
+        reg = __EXIRegs[EXI0_CSR];
         if (reg & 0x2)
             cause |= OS_INTERRUPTMASK_EXI_0_EXI;
         if (reg & 0x8)
             cause |= OS_INTERRUPTMASK_EXI_0_TC;
         if (reg & 0x800)
             cause |= OS_INTERRUPTMASK_EXI_0_EXT;
-        reg = __EXIRegs[5];
+        reg = __EXIRegs[EXI1_CSR];
         if (reg & 0x2)
             cause |= OS_INTERRUPTMASK_EXI_1_EXI;
         if (reg & 0x8)
             cause |= OS_INTERRUPTMASK_EXI_1_TC;
         if (reg & 0x800)
             cause |= OS_INTERRUPTMASK_EXI_1_EXT;
-        reg = __EXIRegs[10];
+        reg = __EXIRegs[EXI2_CSR];
         if (reg & 0x2)
             cause |= OS_INTERRUPTMASK_EXI_2_EXI;
         if (reg & 0x8)
@@ -453,10 +453,10 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     if (cause & OS_INTERRUPTMASK_PI_ERROR) {
         OSReport("PI ERROR\n");
         OSDumpContext(context);
-        OSReport("\nPIESR = 0x%08x                  PIEAR  = 0x%08x\n", __PIRegs[7], __PIRegs[8]);
-        __PIRegs[0] = 1;
-        OSReport("PI Error = %s\n", __OSPIErrors[__PIRegs[7]]);
-        OSReport("Offending address = 0x%x (from PIEAR)\n", __PIRegs[8]);
+        OSReport("\nPIESR = 0x%08x                  PIEAR  = 0x%08x\n", __PIRegs[PI_ERROR_CAUSE], __PIRegs[PI_ERROR_ADDRESS]);
+        __PIRegs[PI_INTSR] = 1;
+        OSReport("PI Error = %s\n", __OSPIErrors[__PIRegs[PI_ERROR_CAUSE]]);
+        OSReport("Offending address = 0x%x (from PIEAR)\n", __PIRegs[PI_ERROR_ADDRESS]);
     }
     #endif
 

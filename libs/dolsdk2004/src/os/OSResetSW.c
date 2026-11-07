@@ -9,17 +9,17 @@ static BOOL LastState;
 static OSTime HoldUp;
 static OSTime HoldDown;
 
-// __PIRegs[0] bit 0x10000 is clear while the reset button is down; writing 2 clears the reset-switch
+// __PIRegs[PI_INTSR] bit 0x10000 is clear while the reset button is down; writing 2 clears the reset-switch
 // interrupt (cause bit 0x2). The press must last 100 us before the callback runs.
 void __OSResetSWInterruptHandler(s16 exception, OSContext* context) {
     OSResetCallback callback;
 
     HoldDown = __OSGetSystemTime();
     while (__OSGetSystemTime() - HoldDown < OSMicrosecondsToTicks(100) &&
-           !(__PIRegs[0] & 0x00010000)) {
+           !(__PIRegs[PI_INTSR] & 0x00010000)) {
         ;
     }
-    if (!(__PIRegs[0] & 0x00010000)) {
+    if (!(__PIRegs[PI_INTSR] & 0x00010000)) {
         LastState = Down = TRUE;
         __OSMaskInterrupts(OS_INTERRUPTMASK_PI_RSW);
         if (ResetCallback) {
@@ -28,7 +28,7 @@ void __OSResetSWInterruptHandler(s16 exception, OSContext* context) {
             callback();
         }
     }
-    __PIRegs[0] = 2;
+    __PIRegs[PI_INTSR] = 2;
 }
 
 OSResetCallback OSSetResetCallback(OSResetCallback callback) {
@@ -40,7 +40,7 @@ OSResetCallback OSSetResetCallback(OSResetCallback callback) {
     ResetCallback = callback;
 
     if (callback) {
-        __PIRegs[0] = 2;
+        __PIRegs[PI_INTSR] = 2;
         __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_RSW);
     } else {
         __OSMaskInterrupts(OS_INTERRUPTMASK_PI_RSW);
@@ -63,7 +63,7 @@ BOOL OSGetResetButtonState(void) {
     ASSERTLINE(159, HoldUp == 0 || HoldUp < now);
     ASSERTLINE(160, HoldDown == 0 || HoldDown < now);
 
-    reg = __PIRegs[0];
+    reg = __PIRegs[PI_INTSR];
     if (!(reg & 0x00010000)) {
         if (!Down) {
             Down = TRUE;

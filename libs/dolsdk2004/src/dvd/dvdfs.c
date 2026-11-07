@@ -615,7 +615,7 @@ s32 DVDGetTransferredSize(DVDFileInfo* fileinfo) {
         bytes = 0;
         break;
     case DVD_STATE_BUSY:
-        bytes = (s32)(cb->transferredSize + (cb->currTransferSize - __DIRegs[6]));
+        bytes = (s32)(cb->transferredSize + (cb->currTransferSize - __DIRegs[DI_LENGTH]));
         break;
     default:
         // BUG: unreachable by design; in a build without asserts bytes is returned uninitialised here.

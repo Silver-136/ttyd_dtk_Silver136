@@ -210,7 +210,7 @@ void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsi
                 __DSPRegs[DSP_DMA_START_LO]);
         OSReport("ARAM DMA Address = 0x%04x%04x\n", __DSPRegs[DSP_ARAM_DMA_MM_HI],
                 __DSPRegs[DSP_ARAM_DMA_MM_LO]);
-        OSReport("DI DMA Address =   0x%08x\n", __DIRegs[5]);
+        OSReport("DI DMA Address =   0x%08x\n", __DIRegs[DI_MAR]);
         break;
     }
 

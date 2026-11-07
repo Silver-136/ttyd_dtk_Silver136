@@ -622,7 +622,7 @@ void __OSPSInit(void) {
 #endif
 
 u32 __OSGetDIConfig(void) {
-    return (__DIRegs[9] & 0xFF);
+    return (__DIRegs[DI_CFG] & 0xFF);
 }
 
 void OSRegisterVersion(const char* id) {

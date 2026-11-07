@@ -77,7 +77,7 @@ static void StartDol(const OSExecParams* params, void* entry) {
     OSExecParams* paramsWork = OSAllocFromArenaLo(sizeof(OSExecParams), 1);
 
     __OSSetExecParams(params, paramsWork);
-    __PIRegs[9] = 7;
+    __PIRegs[PI_RESET_CODE] = 7;
 
     OSDisableInterrupts();
     Run(entry);
