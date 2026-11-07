@@ -1224,7 +1224,7 @@ USER_FUNC(win_item_move_3d_position) {
     s32 mode = evtGetValue(event, args[5]);
     f32 yOffset = evtGetFloat(event, args[6]);
     ItemEntry* item = itemNameToPtr(name);
-    s32 elapsed;
+    int elapsed;
 
     if (isFirstCall) {
         if (item == NULL) {
@@ -1237,11 +1237,9 @@ USER_FUNC(win_item_move_3d_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
     if (elapsed < frames) {
-        // FAKE: elapsed is copied into isFirstCall; using elapsed directly changes the object.
-        isFirstCall = elapsed;
-        item->position.x = intplGetValue(mode, event->userdataf[1], x, isFirstCall, frames);
-        item->position.y = yOffset + intplGetValue(mode, event->userdataf[2], y, isFirstCall, frames);
-        item->position.z = intplGetValue(mode, event->userdata3f, z, isFirstCall, frames);
+        item->position.x = intplGetValue(mode, event->userdataf[1], x, elapsed, frames);
+        item->position.y = yOffset + intplGetValue(mode, event->userdataf[2], y, elapsed, frames);
+        item->position.z = intplGetValue(mode, event->userdata3f, z, elapsed, frames);
         return EVT_RETURN_BLOCK;
     }
     item->position.x = x;

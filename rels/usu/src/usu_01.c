@@ -2682,9 +2682,9 @@ USER_FUNC(check_tabemono) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     BOOL food = FALSE;
+    ItemData* item = &itemDataTable[id];
 
-    // FAKE: the u16 view of the u16 field is a no-op; the plain field read schedules the table load differently
-    if (*(u16*)&itemDataTable[id].usable_locations & 4) {
+    if (item->usable_locations & ITEM_USABLE_MENU) {
         food = TRUE;
     }
     evtSetValue(event, args[1], food);
