@@ -287,15 +287,14 @@ BOOL addHead(ItemType type) {
 }
 
 /** Whether type's list (pouchGetMaxAndList) has an empty slot; 0 for other ids. */
-// Original name and size from the JP demo's link map (UNUSED there, 0xfc bytes): nothing calls it, so the
-// linker strips it and the body cannot be checked beyond its size (this one compiles to it). Body from
-// NWPlayer123's reconstruction.
+// Original name and size from the JP demo's link map (UNUSED there, 0xfc bytes): only pouchGetItemCheck
+// calls it, and nothing calls that, so the linker strips both. Body from NWPlayer123's reconstruction; with it
+// both compile to their map sizes (a counting loop also gives 0xfc but makes pouchGetItemCheck 0x15c).
 BOOL addHeadCheck(ItemType type) {
     s16* t1;
     s16* t2;
     s32 size;
     s32 i;
-    s32 count;
 
     size = 0;
     t1 = NULL;
@@ -303,16 +302,12 @@ BOOL addHeadCheck(ItemType type) {
     if (!pouchGetMaxAndList(type, &size, &t1, &t2)) {
         return 0;
     }
-    count = 0;
-    for (i = 0; i < size; i++) {
+    for (i = size - 1; i >= 0; i--) {
         if (t1[i] == 0) {
-            count++;
+            return 1;
         }
     }
-    if (count == 0) {
-        return 0;
-    }
-    return 1;
+    return 0;
 }
 
 /** Puts type in the first empty slot of its list (worn-badge entry 0); 0 when full or not a pouch item. */
@@ -429,6 +424,31 @@ BOOL pouchGetItem(ItemType type) {
     return addHead(type);
 }
 
+
+/** Whether pouchGetItem would accept type: counter items always, list items when their list has room. */
+// Original name, place and size from the JP demo's link map (UNUSED there, 0x158 bytes): nothing calls it, so
+// the linker strips it; this body (NWPlayer123's) compiles to that size.
+BOOL pouchGetItemCheck(ItemType type) {
+    if (type == ITEM_COIN) {
+        return 1;
+    }
+    if (type == ITEM_PIANTA_TOKEN) {
+        return 1;
+    }
+    if (type == ITEM_HEART) {
+        return 1;
+    }
+    if (type == ITEM_FLOWER) {
+        return 1;
+    }
+    if (type == ITEM_STAR_PIECE) {
+        return 1;
+    }
+    if (type == ITEM_SHINE_SPRITE) {
+        return 1;
+    }
+    return addHeadCheck(type);
+}
 
 /** How many copies of an item, key item or badge Mario carries (stored items do not count); 0 for other ids. */
 s32 pouchCheckItem(u32 itemId) {
