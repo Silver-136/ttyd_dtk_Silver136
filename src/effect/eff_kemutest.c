@@ -96,8 +96,6 @@ void effKemuTestDrawCam(EffectEntry* effect, CameraId camera) {
     ((KemuTestWork*)effect->userdata)->camera = camera;
 }
 
-// FAKE: opt_loop_invariants off for effKemuTestDisp only
-#pragma opt_loop_invariants off
 /** Draws the smoke pieces (texture 0x28) with three TEV stages; billboarded unless type 11. */
 static void effKemuTestDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -226,8 +224,6 @@ static void effKemuTestDisp(CameraId cameraId, void* param) {
         }
     }
 }
-
-#pragma opt_loop_invariants reset
 
 /** Advances each smoke piece (delay, gravity, spread, texture frame) per type and deletes the effect when all end. */
 static void effKemuTestMain(EffectEntry* effect) {

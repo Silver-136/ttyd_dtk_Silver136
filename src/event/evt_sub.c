@@ -2031,6 +2031,7 @@ static void coingetDisp(WinMgrEntry* entry) {
     }
 }
 
+// kept: without it evt_sub_get_coin changes; -opt nolifetimes for the whole file changes other functions
 #pragma opt_lifetimes off
 /**
  * The "got coins" scene: shows a coin icon in front of Mario with the item-get pose and jingle

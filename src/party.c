@@ -952,6 +952,8 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 #pragma dont_inline reset
 
 #if VERSION >= VERSION_JP
+// kept: the target calls partyForceChgRunMode from party_force_ride_yoshi and allPartyForceRideOn; a function this
+// small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 #endif
 /**

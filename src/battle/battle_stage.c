@@ -260,6 +260,8 @@ void BattleStageDisp(void) {
     dispEntry(CAMERA_3D, 6000.0f, DISP_MODE_XLU, BattleStageDispLight, NULL);
 }
 
+// kept: the target calls DarkByPoint (a local function in the JP demo map) from DarkBySquare; a function this small
+// is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /** Emits one vertex of a darkening quad: the position, coloured black at the given alpha. */
 static void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
@@ -268,6 +270,8 @@ static void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
 }
 #pragma dont_inline reset
 
+// kept: the target calls DarkBySquare (a local function in the JP demo map) from BattleStageDispDark; a function this
+// small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /** Draws one black quad of the given alpha at depth z with corners (x0, y0) and (x1, y1). */
 static void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
@@ -559,6 +563,8 @@ void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode
 }
 #pragma opt_propagation reset
 
+// kept: the target calls BattleStageLightSetTarget from BattleStageLightSetTargetByUnit; a function this small is
+// auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 // propagation optimisation off for BattleStageLightSetTarget: the original register allocation and scheduling need it
 #pragma opt_propagation off
@@ -625,6 +631,8 @@ void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
 }
 #pragma opt_propagation reset
 
+// kept: the target calls BattleStageSetDark (a local function in the JP demo map) from the Set/Return Aud/Stg dark
+// functions; a function this small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Starts a fade of a darkness layer's current alpha to v over time frames with interpolation curve mode;
@@ -642,6 +650,9 @@ static void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode) {
 }
 #pragma dont_inline reset
 
+// kept: the target calls BattleStageSetDarkBase (a local function in the JP demo map) from BattleStageSetAudDarkBase
+// and BattleStageSetStgDarkBase; a function this small is auto-inlined otherwise, and -inline noauto for the file
+// changes other functions
 #pragma dont_inline on
 /**
  * Starts a fade of a darkness layer's base alpha (the level the Return functions go back to) to v over time
@@ -697,6 +708,8 @@ void BattleStageReturnAudDarkBase(s32 time, u8 mode) {
     BattleStageSetDark(d, d->base, time, mode);
 }
 
+// kept: the target calls getSpline from BattleStageMain; a function this small is auto-inlined otherwise, and -inline
+// noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Evaluates a piecewise cubic at frame x: picks the last segment i whose start frame t[i] is at or before x
@@ -722,6 +735,8 @@ BattleSpotWork* BatSpotGetPtr(void) {
     return wp;
 }
 
+// kept: the target calls batSpotInit (a local function in the JP demo map) from BattleStageInit; a function this
+// small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Allocates the five spotlight cones from the battle heap at battle start
@@ -746,6 +761,8 @@ static void batSpotInit(void) {
 }
 #pragma dont_inline reset
 
+// kept: the target calls batSpotMain (a local function in the JP demo map) from BattleStageMain; a function this
+// small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Per-frame from BattleStageMain: queues batSpotDisp on the 3D image camera
@@ -763,6 +780,8 @@ static void batSpotMain(void) {
 
 #if VERSION >= VERSION_US
 // US and later: frees the spot entries at battle end
+// kept: the target calls batSpotEnd from BattleStageEnd; a function this small is auto-inlined otherwise, and -inline
+// noauto for the file changes other functions
 #pragma dont_inline on
 /** Frees the spotlight cone array at battle end (BattleStageEnd). */
 void batSpotEnd(void) {
@@ -824,6 +843,8 @@ static void batSpotDisp(CameraId camId, void* param) {
     }
 }
 
+// kept: the target calls drawCone (a local function in the JP demo map) from batSpotDisp; a function this small is
+// auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Draws one spotlight cone: apex at the origin with alpha color.a,
@@ -866,6 +887,8 @@ static void drawCone(CameraId camId, BattleSpotEntry* e) {
 }
 #pragma dont_inline reset
 
+// kept: the target calls batSpotEntry (a local function in the JP demo map) from batSpotInit; a function this small
+// is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Claims the first unused cone (flag 1), resets it to the origin, unit scale and clear colour, and returns it.
@@ -892,6 +915,8 @@ static BattleSpotEntry* batSpotEntry(void) {
 }
 #pragma dont_inline reset
 
+// kept: the target calls randf (a local function in the JP demo map) from tou_gamen_screen_tev; a function this small
+// is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /** Returns a random float between min and max, from rand() / 32767. */
 static f32 randf(f32 min, f32 max) {

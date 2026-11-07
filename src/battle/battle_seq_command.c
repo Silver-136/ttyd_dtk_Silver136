@@ -934,6 +934,7 @@ static void _btlcmd_MakeOperationTable(BattleWork* wp) {
 }
 
 
+// kept: without it _btlcmd_MakeMultiItemTable changes; -opt noprop for the whole file changes other functions
 #pragma opt_propagation off
 
 /**

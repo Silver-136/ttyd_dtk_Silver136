@@ -1955,6 +1955,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     return id;
 }
 
+// kept: without it msgWindow_Delete changes; -O4,s for the whole file changes other functions
 #pragma optimize_for_size on
 /** Window delete callback: frees the message window's parsed text. */
 static void msgWindow_Delete(WindowEntry* window) {
@@ -2059,6 +2060,7 @@ static inline void msgWinNextPage(WindowEntry* window) {
     }
 }
 
+// kept: without it msgWindow_Main changes; -opt nocse for the whole file changes other functions
 #pragma opt_common_subs off
 /**
  * Per-frame window update for speech windows: times the speaker's talk animation,
