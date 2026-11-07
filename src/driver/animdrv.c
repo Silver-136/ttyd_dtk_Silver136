@@ -1165,6 +1165,7 @@ void animPoseMain(s32 poseId) {
     s64 ms;
     AnimNodeDelta* delta;
     u8* node;
+    AnimationPose* paper;
 
     poses = wp->poses;
     pose = &poses[poseId];
@@ -1180,7 +1181,7 @@ void animPoseMain(s32 poseId) {
         grpA = (u8*)pose->vtxArrayPos;
         grpB = (u8*)pose->vtxArrayNrm;
     }
-    if (pose->paperId != -1 && !(((AnimationPose*)((u8*)poses + pose->paperId * sizeof(AnimationPose)))->typeFlags & ANIM_POSE_TYPE_PAPER)) { // FAKE: the paper pose found by byte offset (base + id * size) so the typeFlags offset folds into the index (mulli/addi/lwzx), as in the target
+    if (pose->paperId != -1 && !((paper = &poses[pose->paperId])->typeFlags & ANIM_POSE_TYPE_PAPER)) {
         animPoseMain(pose->paperId);
     }
     if (anim == NULL) {
