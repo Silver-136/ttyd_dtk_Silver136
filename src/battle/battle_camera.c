@@ -69,7 +69,7 @@ void battleCameraMain(void) {
     BattleUnit* unit2;
     BattleUnitPart* part;
     BattleUnit* party;
-    BattleUnitPart* part2;
+    BattleUnitPart* part2 = NULL;
     BattleUnit* unit;
     f32 w, zz, y, ofs, t, d, yy, atX, atY, atZ;
     s16 moveLv, zoomLv;
@@ -79,7 +79,6 @@ void battleCameraMain(void) {
     s16 moveLv3;
     BattleAudienceMember* m;
 
-    part2 = 0; // FAKE: dead store, moves part2's variable record first so its case-8 web is a split temp (target r27)
     unit = BattleGetMarioPtr(wp); // FAKE: real zero-code first web of unit (the self-assign below emits nothing), so the case-8 unit web is a split temp (target r26)
     unit->position.x = unit->position.x;
     dX = 0.0f;

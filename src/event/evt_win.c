@@ -1269,10 +1269,9 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
     s32 mode;
     s32 row;
     s32 i;
-    s32 flag;
+    s32 flag = 0;
     s32 lv;
 
-    flag = 0; // FAKE: dead store, moves flag's variable record before i so the case 5-7 flag web is a split temp coloured before i's (target r21)
     if (wp->flags & UNITWIN_FLAG_SELECTED) {
         const char* name = itemDataTable[wp->goods[wp->goodsIdx]].id;
         const char* desc = itemDataTable[wp->goods[wp->goodsIdx]].description;
