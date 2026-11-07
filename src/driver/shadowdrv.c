@@ -1182,6 +1182,29 @@ inline void GetTexProjMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
     }
 }
 
+/**
+ * Returns the labels of the six depth shadow display modes; no version calls it (JP demo map: UNUSED, 0xc). The
+ * map names its table DispModeMsg$893, a function-local static; the early demos keep the table in .data, the later
+ * versions only its strings.
+ */
+const char** shadowGetConfig_DispMode(void) {
+    static const char* DispModeMsg[6] = {
+        "result scene (8bit depth)",
+        "actual depth from the light (8bit depth)",
+        "projected shadow depth map (8bit depth)",
+        "result scene (16bit depth)",
+        "actual depth from the light (16bit depth)",
+        "projected shadow depth map (16bit depth)",
+    };
+
+    return DispModeMsg;
+}
+
+/** Returns the number of depth shadow display modes; no version calls it (JP demo map: UNUSED, 0x8). */
+s32 shadowGetConfig_DispModeNum(void) {
+    return 6;
+}
+
 /** Puts back the current camera's view matrix saved by shadowBegin. */
 static inline void shadowRestoreView(void) {
     PSMTXCopy(tmp_view, camGetCurPtr()->view);
@@ -1268,22 +1291,3 @@ static void depthShadowEnd(CameraId cameraId, void* param) {
     GetTexProjMtx(wp, wp->texMtx, wp->depthMtx);
     wp->flags |= SHADOW_WORK_READY;
 }
-
-// Strings no code reads: labels for the 8-bit and 16-bit depth shadow images (the early demos list them in the
-// unused DispModeMsg table)
-const char str_802C1AFC[] = "result scene (8bit depth)";
-const char str_802C1B18[] = "actual depth from the light (8bit depth)";
-const char str_802C1B44[] = "projected shadow depth map (8bit depth)";
-const char str_802C1B6C[] = "result scene (16bit depth)";
-const char str_802C1B88[] = "actual depth from the light (16bit depth)";
-const char str_802C1BB4[] = "projected shadow depth map (16bit depth)";
-#if VERSION <= VERSION_DEMO_JP
-static const char* DispModeMsg[6] = {
-    str_802C1AFC,
-    str_802C1B18,
-    str_802C1B44,
-    str_802C1B6C,
-    str_802C1B88,
-    str_802C1BB4,
-};
-#endif
