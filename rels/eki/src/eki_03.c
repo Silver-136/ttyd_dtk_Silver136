@@ -581,7 +581,7 @@ static USER_FUNC(test_glare) {
     MapObject* sun = mapGetMapObj("sun");
     u16* rect;
 
-    // FAKE: discarded getter call; removing it changes the object.
+    // the result is not used (the call is in the retail code)
     marioGetPtr();
     if (isFirstCall) {
         sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;

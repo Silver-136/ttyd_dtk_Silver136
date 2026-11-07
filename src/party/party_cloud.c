@@ -564,7 +564,7 @@ void _cloud_use(PartyEntry* party) {
         CLOUD_WORK(party)->breathDist += 2.0f;
         cl = CLOUD_WORK(party);
 
-        // FAKE: re-reads the player pointer mario already holds; dropping the reload changes the object
+        // re-reads the player pointer mario already holds (the reload is in the retail code)
         mario = party->playerPtr;
         if (cl->breathDist >= cl->breathDistMax) {
             cl->breathDist = cl->breathDistMax;

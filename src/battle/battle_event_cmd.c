@@ -3720,7 +3720,6 @@ USER_FUNC(btlevtcmd_GetConsumeItem) {
     EvtWord* args = event->args;
     BattleCommand* cmd = &wp->commandMenu;
 
-    // FAKE: the post-increment of args is unused; args[0] changes the object
     evtSetValue(event, *args++, cmd->weapon[cmd->cursor[11].absPos].itemId);
     return EVT_RETURN_DONE;
 }

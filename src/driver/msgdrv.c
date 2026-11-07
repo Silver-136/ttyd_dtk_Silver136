@@ -2087,7 +2087,7 @@ static void msgWindow_Main(WindowEntry* window) {
         }
         data->talkTimer--;
         if (data->talkTimer == 0) {
-            // FAKE: d2 re-reads smart->address (data holds the same pointer); using data changes the object
+            // d2 re-reads smart->address (data holds the same pointer; the reload is in the retail code)
             MsgWinData* d2 = smart->address;
             if (d2->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(d2->unitId);

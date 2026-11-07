@@ -1678,7 +1678,7 @@ NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
             dy = y - entry->position.y;
             dist = sqrtf(dx * dx + dz * dz);
 
-            // FAKE: the 3D distance is computed and discarded; removing it changes the object
+            // the 3D distance is computed and discarded (the retail code computes it)
             sqrtf(dx * dx + dy * dy + dz * dz);
             if (dist < range) {
                 found = entry;

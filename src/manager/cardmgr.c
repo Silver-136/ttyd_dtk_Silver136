@@ -111,7 +111,7 @@ CardData* cardGetFilePtr(void) {
 void cardBufReset(void) {
     s32 timeout;
 
-    // FAKE: extra volatile status read; removing it changes the object
+    // the status is read twice (both reads are in the retail code)
     wp->flags;
     if (wp->flags & CARD_FLAG_BUSY) {
         CARDCancel(&wp->info);

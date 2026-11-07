@@ -234,7 +234,7 @@ EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32
     work->items = (ParticleItem*)((u8*)work + effect->count * sizeof(ParticleWork));
     work->speed = 4.0f;
 
-    // FAKE: w2 re-reads effect->userdata (the same pointer as work); using work for the free list changes the object
+    // w2 re-reads effect->userdata (the same pointer as work; the reload is in the retail code)
     w2 = effect->userdata;
     for (i = 1; i < w2->count + 2; i++) {
         w2->items[i - 1].next = i;
@@ -299,7 +299,7 @@ static void effParticleMain(EffectEntry* effect) {
     work->frame++;
     EmitterEmit(effect, &work->emit);
 
-    // FAKE: w re-reads effect->userdata (the same pointer as work); using work in the update loop changes the object
+    // w re-reads effect->userdata (the same pointer as work; the reload is in the retail code)
     w = effect->userdata;
     prev = &w->items[w->count];
     idx = prev->next;

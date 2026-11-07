@@ -321,7 +321,7 @@ inline void set_vivian_pos(PartyEntry* party) {
         mario->hitobjStandOn = hit;
         mario->position.y = groundY;
         if (mario->floorMove.y < 0.0f) {
-            // FAKE: dead store (groundY is not read afterwards); removing it changes the object (the early demos stay the same)
+            // groundY is not read afterwards (the add and the store are in the retail code)
             groundY += 0.2f;
         }
     }
@@ -554,7 +554,7 @@ void vivian_use(PartyEntry* party) {
     }
     s = party->trailPos;
 #endif
-    // FAKE: stores NULL into an already NULL rippleEffect; dropping the store changes the object
+    // stores NULL into an already NULL rippleEffect (the store is in the retail code)
     if (party->work.vivian.rippleEffect == NULL) {
         party->work.vivian.rippleEffect = NULL;
     } else if (party->work.vivian.rippleEffect->flags == 0) {
