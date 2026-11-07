@@ -4025,7 +4025,8 @@ void BattleAudienceJoyEnding(void) {
 }
 
 #pragma push
-// loop invariants optimisation off for BattleAudienceJoy_Sub, BattleAudienceDetectPakkunEatTargetSub2, BattleAudienceDetectPakkunEatTargetSub and 66 more: the original register allocation and scheduling need it
+// kept: loop-invariant code motion off for BattleAudienceJoy_Sub (until the pop); without it the function changes,
+// and -opt noloop for the whole file changes other functions
 #pragma opt_loop_invariants off
 /**
  * Makes every waiting member react (BattleAudienceJoy):
