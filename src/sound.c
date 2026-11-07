@@ -155,18 +155,17 @@ void SoundInit(void) {
 
     sound.groups = NULL;
 
-    // FAKE: spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object
-    // force register
-    tempsong = (sound.songs = sndMalloc(sizeof(SoundSong) * SOUND_SONG_MAX));
-    songs = tempsong;
+    songs = sndMalloc(sizeof(SoundSong) * SOUND_SONG_MAX);
+    sound.songs = songs;
     if (songs == NULL) {
         while (1)
             ;
     }
 
-    for (i = 0; i < SOUND_SONG_MAX; i++, songs++) {
-        songs->seqId = -1;
-        songs->group = NULL;
+    tempsong = songs;
+    for (i = 0; i < SOUND_SONG_MAX; i++, tempsong++) {
+        tempsong->seqId = -1;
+        tempsong->group = NULL;
     }
 
     effects = sndMalloc(sizeof(SoundEffect) * SOUND_EFFECT_MAX);
@@ -184,16 +183,16 @@ void SoundInit(void) {
         effects->pan = 0x40;
     }
 
-    // FAKE: spare temporary tempdvd; dvds = sndMalloc(...); sound.dvds = dvds changes the object
-    tempdvd = (sound.dvds = sndMalloc(sizeof(SoundDVD) * SOUND_DVD_MAX));
-    dvds = tempdvd;
+    dvds = sndMalloc(sizeof(SoundDVD) * SOUND_DVD_MAX);
+    sound.dvds = dvds;
     if (dvds == NULL) {
         while (1)
             ;
     }
 
-    for (i = 0; i < SOUND_DVD_MAX; i++, dvds++) {
-        dvds->flags = 0;
+    tempdvd = dvds;
+    for (i = 0; i < SOUND_DVD_MAX; i++, tempdvd++) {
+        tempdvd->flags = 0;
     }
 
     streams = sndMalloc(sizeof(SoundStream) * SOUND_STREAM_MAX);

@@ -142,7 +142,7 @@ void mot_dokan(void) {
             mario->displayDirection = mario->displayDirectionTarget;
             mario->currSubMotionId = 20;
 
-            // FAKE: dead store (overwritten on the next line); removing it changes the object
+            // overwritten on the next line; the retail code stores both values
             mario->mot.dokan.rotSpeed = 0.0f;
             mario->mot.dokan.rotSpeed = 30.0f;
             {

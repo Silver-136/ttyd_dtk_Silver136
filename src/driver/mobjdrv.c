@@ -1260,7 +1260,6 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     int entryCount;
     Vec pos;
     Vec dist;
-    Vec _pos;
     Vec unusedVec;
     MapObjectEntry* entry;
     MapObjectWork* wp = mobjGetWork();
@@ -1273,14 +1272,16 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     entry = wp->entries;
     ret = NULL;
 #if VERSION >= VERSION_JP
-    // FAKE: unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object
+    // FAKE: unusedVec is never read (its zero template and stores are in the target); removing it changes the object
     unusedVec = (Vec){ 0.0f, 0.0f, 0.0f };
 #endif
-    _pos = (Vec){ 0.0f, 0.0f, 0.0f };
-    _pos.x = x;
-    _pos.y = y;
-    _pos.z = z;
-    pos = _pos;
+    {
+        Vec _pos = {0.0f, 0.0f, 0.0f};
+        _pos.x = x;
+        _pos.y = y;
+        _pos.z = z;
+        pos = _pos;
+    }
 
     for (i = 0; i < entryCount; i++, entry++) {
         if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {

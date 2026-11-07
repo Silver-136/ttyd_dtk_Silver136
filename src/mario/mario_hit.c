@@ -3086,7 +3086,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
             }
             movePos(&mario->position.x, &mario->position.z, dx, dz);
 
-            // FAKE: dead store to the local pos before the return; removing it changes the object
+            // pos is not read again; the retail code still copies the position before the return
             pos = mario->position;
             return;
         }

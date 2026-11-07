@@ -115,7 +115,7 @@ static inline void kpaFireEntry2(Vec pos) {
 
 /** Spawns the fire breath at pos (see kpaFireEntry2). */
 static void kpaFireEntry(Vec pos) {
-    // FAKE: unused marioGetPtr() call; removing it changes the object
+    // the result of this marioGetPtr() call is never used (the call is in the retail code)
     MarioWork* mp = marioGetPtr();
     kpaFireEntry2(pos);
 }

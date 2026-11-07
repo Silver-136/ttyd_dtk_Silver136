@@ -1225,13 +1225,14 @@ void marioMain(void) {
         wp->coinDropTimer--;
         if (wp->coinDropTimer % 30 == 0 && wp->coinDropTimer > 0) {
             Vec drop;
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = wp->position.x;
-            pos.y = 30.0f + wp->position.y;
-            pos.z = wp->position.z;
 
-            // FAKE: spare copy drop of pos; passing &pos changes the object
-            drop = pos;
+            {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = wp->position.x;
+                pos.y = 30.0f + wp->position.y;
+                pos.z = wp->position.z;
+                drop = pos;
+            }
             itemCoinDrop(&drop);
         }
     }

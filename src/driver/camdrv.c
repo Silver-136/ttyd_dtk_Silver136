@@ -213,7 +213,6 @@ void camMain(void) {
     f32 savedProj[GX_PROJECTION_SZ], viewport[GX_VIEWPORT_SZ], proj[GX_PROJECTION_SZ];
     Vec projPt;
     Vec screen;
-    Vec focus;
     CameraEntry* cam3d;
     f32 weight, zoom, hExtent, vExtent, scale;
     int cameraId;
@@ -233,14 +232,13 @@ void camMain(void) {
             weight = marioGetPtr()->camZoomWeight;
 
             // zoom focus: Mario's position plus the camera zoom offset
-            // FAKE: dead zero store (every field is set below); removing it changes the object
-            focus = (Vec){ 0.0f, 0.0f, 0.0f };
-            focus.x = marioGetPtr()->position.x + marioGetPtr()->camZoomOfs.x;
-            focus.y = marioGetPtr()->position.y + marioGetPtr()->camZoomOfs.y;
-            focus.z = marioGetPtr()->position.z + marioGetPtr()->camZoomOfs.z;
-
-            // FAKE: projPt is a copy of focus used once by GXProject; projecting focus directly changes the object
-            projPt = focus;
+            {
+                Vec focus = {0.0f, 0.0f, 0.0f};
+                focus.x = marioGetPtr()->position.x + marioGetPtr()->camZoomOfs.x;
+                focus.y = marioGetPtr()->position.y + marioGetPtr()->camZoomOfs.y;
+                focus.z = marioGetPtr()->position.z + marioGetPtr()->camZoomOfs.z;
+                projPt = focus;
+            }
 
             zoom = marioGetPtr()->camZoom;
 

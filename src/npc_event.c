@@ -2550,18 +2550,19 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec p;
     Vec q;
-    Vec a = {0.0f, 0.0f, 0.0f};
-    Vec b = {0.0f, 0.0f, 0.0f};
-    a.x = npc->territoryBase.x;
-    a.y = 30.0f + npc->territoryBase.y;
-    a.z = npc->territoryBase.z;
-    b.x = npc->position.x;
-    b.y = 30.0f + npc->position.y;
-    b.z = npc->position.z;
 
-    // FAKE: spare copies p, q of a, b; drawing from a and b directly changes the object
-    p = a;
-    q = b;
+    {
+        Vec a = {0.0f, 0.0f, 0.0f};
+        Vec b = {0.0f, 0.0f, 0.0f};
+        a.x = npc->territoryBase.x;
+        a.y = 30.0f + npc->territoryBase.y;
+        a.z = npc->territoryBase.z;
+        b.x = npc->position.x;
+        b.y = 30.0f + npc->position.y;
+        b.z = npc->position.z;
+        p = a;
+        q = b;
+    }
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
