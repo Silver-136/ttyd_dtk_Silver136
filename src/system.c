@@ -874,7 +874,11 @@ f32 getV60FPS(f32 perFrame, s64 startTick, s64 endTick) {
     return ((60.0f * perFrame) * (f32)endMs) / 1000.0f;
 }
 
-/** Converts seconds to frames at 60 frames per second; no version calls it (JP demo map: UNUSED, 0x8). */
+/**
+ * Converts seconds to frames at 60 frames per second; no version calls it (JP demo map: UNUSED, 0x8).
+ * The stripped converters (sysSec2Frame* and sysFrame2Sec/Msec*) are written at 60 frames per second as in the
+ * JP demo; whether US and later switched them to gp->framerate, like the kept ones, is unknown.
+ */
 s32 sysSec2Frame(s32 sec) {
     return sec * 60;
 }
