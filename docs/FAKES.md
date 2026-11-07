@@ -362,7 +362,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_status_effect.c | BattleStatusChangeAnnouceMain_Unit | no-op cast of the msg array to StChgMsg*; &_battleWorkPointer->announce.stChg.msg[i] changes the object | see comment |
 | Both | src/battle/battle_status_effect.c | _st_chg_msg_disp | y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object; also called through a cast prototype taking the color's address (WakuColByRefFunc), passing the color by value changes the object | see comment |
 | Both | src/battle/battle_sub.c | btlsubResetMoveColorLvAll | spare copies w and w2 of work and c of 0xFF; the plain loop changes the object | see comment |
-| Both | src/battle/battle_unit.c | BtlUnit_ControlPoseSoundMain | spare temporary assigned inside the multiplication; vol = dv * 0.7 changes the object | see comment |
 | Both | src/battle/battle_unit.c | BtlUnit_snd_se | called through a prototype with s32 pitch (BtlUnit_snd_se_pos takes s16) | the plain call changes the object |
 | Both | src/battle/sac/sac_deka.c | main_base | spare temporary t2; assigning t directly changes the object | see comment |
 | Both | src/battle/sac/sac_deka.c | yuka_disp | volatile FIFO pointer and component read order z, y, x (YUKA_POSITION macro) | plain stores, or an inline function, change the object |

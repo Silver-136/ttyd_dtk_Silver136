@@ -2238,7 +2238,6 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
     f32 time;
     s32 id;
     u8 vol;
-    f64 dv;
 
     if (!part) {
         return;
@@ -2294,9 +2293,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                 psndSFX_vol(id, vol);
                 state->count++;
                 if (part->owner->attackPhase != BattleGetSeq(wp, SEQ_PHASE)) {
-                    f64 k; // FAKE: spare temporary assigned inside the multiplication; vol = dv * 0.7 changes the object
-                    dv = (f64)(u32)vol;
-                    vol = dv * (k = 0.7);
+                    vol *= 0.7;
                     psndSFX_vol(id, vol);
                 }
             } else {
