@@ -750,15 +750,14 @@ void sndStreamMixParameterVolume(u32 stid, u8 vol, u8 auxa, u8 auxb) {
 }
 #endif
 
-#pragma push
-#pragma inline_depth(3) // FAKE: limits the inlining of the recursive call; without the pragma the object changes
 void sndStreamFrq(u32 stid, u32 frq) {
   u32 i;
   u16 pitch;
 
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
-  if ((i = GetPrivateIndex(stid)) != -1) {
+  i = GetPrivateIndex(stid);
+  if (i != -1) {
     streamInfo[i].frq = frq;
     if (streamInfo[i].state == 2) {
       pitch = (4096.f * frq) / synthInfo.mixFrq;
@@ -774,7 +773,6 @@ void sndStreamFrq(u32 stid, u32 frq) {
 
   hwEnableIrq();
 }
-#pragma pop
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
 void sndStreamLPFParameter(u32 stid, u32 enable, u32 frq) {
