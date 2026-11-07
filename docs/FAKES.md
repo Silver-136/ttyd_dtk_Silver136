@@ -455,7 +455,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_pokopi_pcharge_n64.c | effPokopiPchargeN64Entry | p is set between the position stores; setting it right before the loop changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderMain | inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object | see comment |
-| Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object; zero added to every z (`zero + ...`, `work->z[i] + zero`) | see comment |
+| Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_pturn_n64.c | effPturnMain | spare flag local for the condition; testing it directly changes the object | see comment |
 | Both | src/effect/n64/eff_radiation_n64.c | effRadiationMain | comma expression for the decrement test; --p->delay <= 0 changes the object | see comment |
 | Both | src/effect/n64/eff_rappa_n64.c | effRappaN64Entry | block-local temporary for cos(rad); the plain expression changes the object | see comment |

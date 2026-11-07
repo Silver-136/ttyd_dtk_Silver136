@@ -200,7 +200,7 @@ static void effPokopiThunderDisp(CameraId cameraId, void* param) {
     camera = camGetPtr(cameraId);
     work = effect->userdata;
 
-    // FAKE: zero is added to every z value; plain z changes the object
+    // zero is added to every z value; the adds are in the retail code
     zero = 0.0f;
     frame = work->frame;
     alpha = work->alpha;
