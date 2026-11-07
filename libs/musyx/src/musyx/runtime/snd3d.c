@@ -185,27 +185,21 @@ typedef struct START_GROUP {
   unsigned short numRunning; // offset 0xC, size 0x2
 } START_GROUP;
 
-// FAKE: one-element arrays used as scalars; plain literals change the object (constant order)
-static const f32 s3d_f16383[1] = {16383.0f};
-static const f32 s3d_f127[1] = {127.0f};
-static const f32 s3d_f64[1] = {64.0f};
-static const f32 s3d_f8192[1] = {8192.0f};
-
-static inline u8 clip127(u8 v) {
+static u8 clip127(u8 v) {
   if (v > 0x7f) {
     return 0x7f;
   }
   return v;
 }
 
-static inline u16 clip3FFF(f32 v) {
-  if (v > s3d_f16383[0]) {
+static u16 clip3FFF(f32 v) {
+  if (v > 16383.f) {
     return 0x3fff;
   }
   return (u16)v;
 }
 
-static inline void SetFXParameters(SND_EMITTER* const em, f32 vol, f32 xPan, f32 yPan, f32 zPan,
+static void SetFXParameters(SND_EMITTER* const em, f32 vol, f32 xPan, f32 yPan, f32 zPan,
                             f32 doppler, f32 occl) {
   SND_VOICEID vid;
   u8 i;
@@ -213,18 +207,18 @@ static inline void SetFXParameters(SND_EMITTER* const em, f32 vol, f32 xPan, f32
 
   vid = em->vid;
   if ((em->flags & 0x100000) != 0) {
-    synthFXSetCtrl(vid, SND_MIDICTRL_VOLUME, clip127(s3d_f127[0] * (em->fade * vol)));
+    synthFXSetCtrl(vid, SND_MIDICTRL_VOLUME, clip127((em->fade * vol) * 127.f));
   } else {
-    synthFXSetCtrl(vid, SND_MIDICTRL_VOLUME, clip127(s3d_f127[0] * vol));
+    synthFXSetCtrl(vid, SND_MIDICTRL_VOLUME, clip127(vol * 127.f));
   }
 
-  synthFXSetCtrl(vid, SND_MIDICTRL_PANNING, clip127(s3d_f64[0] * (1.f + xPan)));
-  synthFXSetCtrl(vid, SND_MIDICTRL_SPANNING, clip127(s3d_f64[0] * (1.f - zPan)));
-  synthFXSetCtrl14(vid, SND_MIDICTRL_DOPPLER, clip3FFF(s3d_f8192[0] * doppler));
+  synthFXSetCtrl(vid, SND_MIDICTRL_PANNING, clip127((1.f + xPan) * 64.f));
+  synthFXSetCtrl(vid, SND_MIDICTRL_SPANNING, clip127((1.f - zPan) * 64.f));
+  synthFXSetCtrl14(vid, SND_MIDICTRL_DOPPLER, clip3FFF(doppler * 8192.f));
 
   if ((em->flags & 0x180) != 0) {
     if (occl != 0.f) {
-      synthFXSetCtrl14(vid, 0x1f, clip3FFF(s3d_f16383[0] * occl));
+      synthFXSetCtrl14(vid, 0x1f, clip3FFF(occl * 16383.f));
       synthFXSetCtrl(vid, 0x4f, 0x7f);
     } else {
       synthFXSetCtrl(vid, 0x4f, 0);
@@ -275,7 +269,7 @@ bool sndUpdateEmitter(SND_EMITTER* em, SND_FVECTOR* pos, SND_FVECTOR* dir, u8 ma
 
     *(SND_FVECTOR*)((u8*)em + 0x10) = *pos;
     *(SND_FVECTOR*)((u8*)em + 0x1c) = *dir;
-    *(f32*)((u8*)em + 0x2c) = maxVol / s3d_f127[0];
+    *(f32*)((u8*)em + 0x2c) = maxVol / 127.f;
     if (*(f32*)((u8*)em + 0x30) > *(f32*)((u8*)em + 0x2c)) {
       *(f32*)((u8*)em + 0x30) = *(f32*)((u8*)em + 0x2c);
     }
@@ -380,7 +374,7 @@ bool sndUpdateListener(SND_LISTENER* li, SND_FVECTOR* pos, SND_FVECTOR* dir, SND
     li->up = *up;
 
     MakeListenerMatrix(li);
-    li->vol = vol / s3d_f127[0];
+    li->vol = vol / 127.f;
     hwEnableIrq();
     return TRUE;
   }
