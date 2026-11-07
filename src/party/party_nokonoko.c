@@ -1093,7 +1093,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     x = w * (f32)sin(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.x;
     y = party->position.y + yofs;
 
-    // FAKE: the same assignment twice; dropping one changes the object
+    // the same assignment twice (both are in the retail code)
     dist = 0.4f * party->width + party->moveSpeed;
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);

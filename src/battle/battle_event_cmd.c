@@ -4579,7 +4579,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                     unit->moveTotalFrames *= 1.12;
                 }
 
-                // FAKE: the same field is stored twice; one store changes the object
+                // stored twice (both stores are in the retail code)
                 unit->jumpBaseY = 0.0f;
                 unit->jumpBaseY = 0.0f;
                 sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
@@ -4595,7 +4595,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                     unit->moveTotalFrames *= 1.25;
                 }
 
-                // FAKE: the same field is stored twice; one store changes the object
+                // stored twice (both stores are in the retail code)
                 unit->jumpBaseY = 0.0f;
                 unit->jumpBaseY = 0.0f;
                 sn = sin(6.28318531f * unit->jumpAngle / 360.0f);

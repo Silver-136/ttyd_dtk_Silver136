@@ -126,7 +126,7 @@ s32 camRoadSetup(const char* name) {
     wp->hokanOn = 0;
     wp->prev.on = 0;
 
-    // FAKE: the same store twice; a single wp->prev.on = 0 changes the object
+    // stored twice (both stores are in the retail code)
     wp->prev.on = 0;
     wp->tuning[0] = 0.005f;
     wp->tuning[1] = 0.0f;
@@ -910,9 +910,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
             strip = &wp->map->strips[grp->stripOfs];
             for (k = 0; k < m; k++, strip++) {
                 cnt = strip->num;
-
-                // FAKE: decrement as its own statement; cnt = strip->num - 1 changes the object
-                cnt = cnt - 1;
+                cnt--;
                 idx = &wp->map->stripIdx[strip->idxOfs];
                 idxp = idx + 1;
                 for (l = 1; cnt > l; idxp++, l++) {
@@ -1463,7 +1461,7 @@ void camRoadReset(void) {
     wp->hokanOn = 0;
     wp->prev.on = 0;
 
-    // FAKE: the same store twice; a single wp->prev.on = 0 changes the object
+    // stored twice (both stores are in the retail code)
     wp->prev.on = 0;
     wp->tuning[0] = 0.005f;
     wp->tuning[1] = 0.0f;

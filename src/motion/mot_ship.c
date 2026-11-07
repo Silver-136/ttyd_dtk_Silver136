@@ -1049,7 +1049,7 @@ static void shipMove(void) {
 #endif
     spd = m->controlStickSensitivity;
 
-    // FAKE: dx is cleared twice; dropping the repeat changes the object
+    // dx is cleared twice (both stores are in the retail code)
     dx = 0.0f;
     dx = 0.0f;
     if (marioGetPtr()->motShip->swirlTime != 0) {

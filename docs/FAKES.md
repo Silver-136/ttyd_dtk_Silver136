@@ -261,11 +261,9 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_itemget.c | effItemGetDisp | comma expression(s) `(0, (f32)cos(6.2831855f * camGetPtr(cameraId)->...` keep the value as a separate temp | the plain expression; `cs` declared first; `cs` and `s` in a block (register allocation differs) |
 | Both | src/event/evt_mobj.c | mobj_breaking_floor | comma expression(s) `(0, c3)` keep the value as a separate temp | the plain expression; inverted test; block-scoped `c3` (stack frame 16 bytes smaller) |
 | Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression; `sound.effects + i`; pointers declared first or last in the function (register allocation differs) |
-| Both | src/cam_road.c | camRoadSetup | the same store twice; a single wp->prev.on = 0 changes the object | see comment |
 | Both | src/cam_road.c | collisionTri_simple | nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object | see comment |
 | Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
 | Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
-| Both | src/cam_road.c | camRoadReset | the same store twice; a single wp->prev.on = 0 changes the object | see comment |
 | Both | src/cam_road.c | collisionCurve | unread `ok` (out-of-range test of s) | removing the assignment: changes the object |
 | Both | src/error_handler.c | systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaFireEntry2 | never used; pads .sbss to the 8 bytes of the original section; removing it changes the object | see comment |
@@ -313,7 +311,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_GetConsumeItem | the post-increment of args is unused; args[0] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PreCheckDamage | args is reused to hold the result index; out = args[5] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckDamage | args is reused to hold the result index; a separate out local changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_MarioJumpPosition | the same field is stored twice; one store changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_AudienceDeclareACResult | ac[0] / ac[1] are marioAcSuccess / marioAcFailed through one pointer; the field names change the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckTrigger | args is reused to hold the result index; a separate index local changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckNow | args is reused to hold the result index; a separate index local changes the object | see comment |
@@ -635,7 +632,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_log.c | winLogDisp | wk is reloaded before each position store; one load changes the object | see comment |
 | Both | src/window/win_log.c | mapGX | c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object | see comment |
 | Both | src/window/win_log.c | capture | reversed loop compare; i < 500 changes the object | see comment |
-| Both | src/window/win_mario.c | winMarioInit2 | each target field is assigned twice in one chain; the single assignment changes the object | see comment |
 | JP | src/window/win_mario.c | winZenkakuStr | (s8) cast on a digit character; without it the object changes | see comment |
 | JP | src/window/win_mario.c | winZenkakuStrPad | (s8) cast on a digit character; without it the object changes | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |

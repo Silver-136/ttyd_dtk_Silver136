@@ -138,7 +138,7 @@ void winMarioInit(WindowWork* w) {
 void winMarioInit2(WindowWork* w) {
     w->marioSel = 0;
 
-    // FAKE: each target field is assigned twice in one chain; the single assignment changes the object
+    // each target field is stored twice (both stores are in the retail code)
     w->helpTgtX = w->helpTgtX = linkDt[w->marioSel].x;
     w->helpTgtY = w->helpTgtY = linkDt[w->marioSel].y;
     switch (w->marioSel) {
