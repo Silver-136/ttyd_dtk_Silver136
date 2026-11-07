@@ -341,7 +341,9 @@ void peach_stay(void) {
  * The sounds differ when she wears the X-Naut disguise and when she is invisible with no height.
  */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-void peach_dash_se(s32 period, s32 halfPeriod) {
+// Narrow parameters: stand-alone this compiles to the map's 0xd8 bytes (s32 gives 0xd0); s16, u16, s8 and u8 all
+// give 0xd8, so the exact type is not proven.
+void peach_dash_se(s16 period, s16 halfPeriod) {
     MarioWork* mario = marioGetPtr();
     s32 sfx, halfSfx;
     if (!(mario->peachFlags & PEACH_FLAG_GUNDAN)) {

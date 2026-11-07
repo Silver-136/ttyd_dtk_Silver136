@@ -240,21 +240,19 @@ void bero_name_search(BeroEntry** table, const char* name, s32* index) {
 /** The entrance's enter script, or default_entevt. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 EvtWord* bero_get_entevt(BeroEntry* bero) {
-    EvtWord* evt = bero->enterEvent;
-    if (!evt) {
-        evt = default_entevt;
+    if (bero->enterEvent == NULL) {
+        return default_entevt;
     }
-    return evt;
+    return bero->enterEvent;
 }
 
 /** The entrance's exit script, or default_outevt. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 EvtWord* bero_get_outevt(BeroEntry* bero) {
-    EvtWord* evt = bero->exitEvent;
-    if (!evt) {
-        evt = default_outevt;
+    if (bero->exitEvent == NULL) {
+        return default_outevt;
     }
-    return evt;
+    return bero->exitEvent;
 }
 
 /** const char** mapName, const char** beroName */
