@@ -251,11 +251,23 @@ BOOL pouchGetMaxAndList(ItemType type, s32* maximum, s16** table1, s16** table2)
 }
 
 /** we have obtained an item, update the appropriate data */
-// Puts type at the front of list t1 if it has an empty slot: the entries above the last empty slot move down
-// one place (t2, if given, moves in step and gets 0 at the front). Returns 1, or 0 when the list is full.
+// Puts type at the front of its list (pouchGetMaxAndList) if that has an empty slot: the entries above the last
+// empty slot move down one place (the worn-badge list, if any, moves in step and gets 0 at the front).
+// Returns 1, or 0 when the list is full or type is not a pouch item.
 // Original name and place from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-BOOL addHead(s16* t1, s16* t2, s32 size, ItemType type) {
+// Stand-alone it compiles to the map's 0x298 bytes.
+BOOL addHead(ItemType type) {
+    s16* t1;
+    s16* t2;
+    s32 size;
     s32 j;
+
+    size = 0;
+    t1 = NULL;
+    t2 = NULL;
+    if (!pouchGetMaxAndList(type, &size, &t1, &t2)) {
+        return 0;
+    }
     for (size--; size >= 0; size--) {
         if (t1[size] == 0) {
             for (j = size; j > 0; j--) {
@@ -283,8 +295,7 @@ BOOL addHead(s16* t1, s16* t2, s32 size, ItemType type) {
  * and both join a list. Returns FALSE when the list is full or the id is not a pouch item.
  */
 BOOL pouchGetItem(ItemType type) {
-    s16* itemLists[2];
-    s32 size;
+    s32 party;
 
     if (type == ITEM_COIN) {
         if (mpp->coins < 999) {
@@ -304,13 +315,13 @@ BOOL pouchGetItem(ItemType type) {
         return 1;
     }
     if (type == ITEM_HEART) {
-        size = marioGetParty();
+        party = marioGetParty();
         if (mpp->currentHP < mpp->maximumHP) {
             mpp->currentHP++;
         }
-        if (size != 0) {
-            if (mpp->partyData[size].currentHP < mpp->partyData[size].maximumHP) {
-                mpp->partyData[size].currentHP++;
+        if (party != 0) {
+            if (mpp->partyData[party].currentHP < mpp->partyData[party].maximumHP) {
+                mpp->partyData[party].currentHP++;
             }
         }
         return 1;
@@ -318,9 +329,6 @@ BOOL pouchGetItem(ItemType type) {
     if (type == ITEM_FLOWER) {
         if (mpp->currentFP < mpp->maximumFP) {
             mpp->currentFP++;
-
-            // FAKE: dead store (function returns right after); steers register allocation
-            itemLists[1] = NULL;
         }
         return 1;
     }
@@ -361,13 +369,7 @@ BOOL pouchGetItem(ItemType type) {
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
         swSet(type - BADGE_MIN + GSWF_BADGE_FOUND_BASE);
     }
-    size = 0;
-    itemLists[0] = NULL;
-    itemLists[1] = NULL;
-    if (!pouchGetMaxAndList(type, &size, &itemLists[0], &itemLists[1])) {
-        return 0;
-    }
-    return addHead(itemLists[0], itemLists[1], size, type);
+    return addHead(type);
 }
 
 
