@@ -57,7 +57,6 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     effect->userdata = work;
     effect->callback = effMizutamaMain;
 
-    // FAKE: split computation; `radius = (type + 1) * 10;` changes the object
     radius = type + 1;
     radius *= 10;
     work->type = type;

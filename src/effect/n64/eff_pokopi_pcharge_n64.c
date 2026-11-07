@@ -137,7 +137,6 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     work->alpha = 0;
     work->position.x = x;
 
-    // FAKE: p is set between the position stores; setting it right before the loop changes the object
     p = work + 1;
     work->position.y = y;
     work->position.z = z;

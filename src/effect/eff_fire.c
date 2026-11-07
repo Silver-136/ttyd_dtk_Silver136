@@ -376,8 +376,6 @@ static void effFireDisp(CameraId cameraId, void* payload) {
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     s = 20.0f * work->scale;
-
-    // FAKE: two-step scale; s = 20.0f * work->scale * 0.03125f changes the object
     s *= 0.03125f;
     PSMTXScale(scaleMtx, s * work->scaleX, s * work->scaleY, s);
     PSMTXConcat(trans, rot, mtx);

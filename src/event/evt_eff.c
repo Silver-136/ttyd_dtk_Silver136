@@ -26,6 +26,7 @@
 #include "eff/n64/eff_kemuri8_n64.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "eff/n64/eff_bomb_n64.h"
+#include "eff/n64/eff_booboo_n64.h"
 #include "eff/n64/eff_kemuri9_n64.h"
 #include "eff/n64/eff_kemuri10_n64.h"
 #include "eff/n64/eff_rappa_n64.h"
@@ -165,10 +166,6 @@
 #include "eff/n64/eff_rothammer_fail_n64.h"
 
 #include "party.h"
-
-// FAKE: private six-argument prototype; eff_booboo_n64.c defines effBoobooN64Entry(void), and the evt_eff call
-// passes the set's int and float arguments to it (a call without them would drop their loads).
-extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
 /**
  * Spawns an effect by effect-set name args[1] ("kemuri", "recovery", ...) and names it args[0]

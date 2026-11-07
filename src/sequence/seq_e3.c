@@ -472,7 +472,6 @@ void seq_e3Main(SequenceWork* seq) {
 
             found = eventStgDtPtr(stageId)->data;
             {
-                // FAKE: a second loop counter; reusing the function's i changes the object
                 s32 j;
                 for (j = 0; j <= foundIdx; j++) {
                     if (found[j].initEvent) {

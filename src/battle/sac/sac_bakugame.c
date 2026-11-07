@@ -286,7 +286,7 @@ USER_FUNC(bakuGameDecideWeapon) {
         if (w->gauge >= 100.0f) {
             q[2] = 127;
 
-            // FAKE: q is re-pointed at the same address (&w->weapon.sleepChance == q already); removing the second assignment changes the object
+            // q is re-pointed at the same address (&w->weapon.sleepChance == q already; the address add is in the retail code)
             q = &w->weapon.sleepChance;
         } else {
             q[2] = 100;

@@ -173,7 +173,6 @@ static void effKemuri10Main(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
 
-    // FAKE: the timer goes through a temporary for the decrement; `work->timer--;` changes the object
     timer = work->timer;
 #if VERSION >= VERSION_JP
     camera = work->camera;

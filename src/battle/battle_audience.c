@@ -1976,7 +1976,6 @@ static void BattleAudienceItemCtrlProcess(void) {
                     v.x = member->drawPosX + kd->itemOffsetX;
                     ox = intplGetValue(EASING_LINEAR, -10.0f, 0.0f, k, 5);
 
-                    // FAKE: spare temporary; `v.y = (drawPosY + itemOffsetY) + ox` changes the object
                     t = member->drawPosY + kd->itemOffsetY;
                     v.y = t + ox;
                     v.z = 1.0f + member->drawPosZ;
@@ -2588,12 +2587,11 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
         oz = m->rotationOffset.z * m->scale.z;
         PSMTXScale(scl, m->scale.x, m->scale.y, m->scale.z);
 
-        // FAKE: block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object
         {
-            f32 k = 0.017453289f;
-            a0 = m->rotation.x * k;
-            a1 = m->rotation.y * k;
-            a2 = m->rotation.z * k;
+            f32 degToRad = 0.017453289f;
+            a0 = m->rotation.x * degToRad;
+            a1 = m->rotation.y * degToRad;
+            a2 = m->rotation.z * degToRad;
         }
         sx = sin(a0);
         cx = cos(a0);

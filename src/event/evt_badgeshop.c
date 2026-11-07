@@ -672,7 +672,7 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     EvtWord* args = event->args;
     s16 badge;
     s32 count;
-    long i; // FAKE: `long` (same size): the int form allocates registers differently in the early demos
+    s32 i;
 
     for (count = 0, i = 0; i < BADGE_COUNT; i++) {
 #if VERSION <= VERSION_DEMO_JP

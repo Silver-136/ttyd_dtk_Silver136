@@ -2477,7 +2477,6 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         }
         mobj->state++;
     case 2:
-        // FAKE: the coin count goes through coins (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object
         coins = pouchGetCoin();
         if (coins < mobj->typeData[1]) {
             mobj->state = 10;

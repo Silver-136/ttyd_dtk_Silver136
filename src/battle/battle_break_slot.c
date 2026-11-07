@@ -263,7 +263,6 @@ void BattleBreakSlot_Init(void) {
 
     memset(wp, 0, sizeof(BreakSlotWork));
 
-    // FAKE: i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     wp->phase = 0;
     reel = BattleBreakSlotReelGetPtr(0);
@@ -630,7 +629,6 @@ void BattleBreakSlot_Main(void) {
             break;
     }
 
-    // FAKE: i is set before the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     rr = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, rr++) {
@@ -866,7 +864,6 @@ static void BattleBreakSlotDispReel(CameraId camId, void* param) {
     u16* tex;
     s32 i;
 
-    // FAKE: i is set before the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     reel = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, reel++) {
@@ -887,7 +884,6 @@ static void BattleBreakSlotDispReel(CameraId camId, void* param) {
         }
     }
 
-    // FAKE: i is set before the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     reel = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, reel++) {

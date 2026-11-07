@@ -126,7 +126,6 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
             PSVECScale(&reflected, &npc->move, mag);
             clear = 0;
 
-            // FAKE: dot holds the dot product for one use; the call inside the PSVECScale argument changes the object
             dot = PSVECDotProduct(&rayDir, &normal);
             PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
             PSVECAdd(&npc->pos, &normal, &npc->pos);
@@ -416,7 +415,7 @@ USER_FUNC(evt_nannpc_init) {
     memset(w->tbl, 0, 0x14);
     w->subfunc0 = NULL;
 
-    // FAKE: stored through the global nanNPCWork instead of w (same pointer); w->subfunc1 changes the object
+    // stored through the global nanNPCWork instead of w (same pointer; the global's load is in the retail code)
     nanNPCWork->subfunc1 = nannpc_ext_main_sub;
     w->subfunc2 = NULL;
     if (!initf) {

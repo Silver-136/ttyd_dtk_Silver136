@@ -24,8 +24,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/envdrv.c | envSetWater (envWaterObj) | `info->mapObj` read through an inline | written out at the call (both versions change) |
 | Both | src/party/party_move.c | partyGetAppearPos3 (partyAppearNrmAngle) | partyNrmToAngle called through a by-value Vec inline | written out at the call (both versions change) |
 | Both | src/mario/mario_hit.c | sfwVecSetNested (sfwVecSet) | a Vec store `*d = v` through an inline | written out at the call (both versions change) |
-| Both | src/effect/eff_mugi.c | effMugiKemuriEntry (mugiKemuriAngle) | `6.2831855f * reviseAngle(data->rot.y)` through an inline | written out at the call (both versions change) |
-| Both | src/event/evt_party.c | evt_party_set_dir (partyStepSize) | `(a - b) * (c / (f32)n)` through an inline | written out at the call (both versions change) |
 | Both | src/battle/ac/ac_stick_rotate.c | battleAcDisp_StickRotate | `work` is a function-local macro for `((BattleWork*)param)` instead of a local | a `BattleWork* work = param;` local, before or after disp (both versions change) |
 | Both | rels/tik/src/tik_05.c | tiz_broken | US: `tb_sqrtf(dx * dx + dy * dy)` expanded by hand into function-scope locals `sq`/`guess` (same instructions; with the inline its @ temp colours f0 instead of f6). JP: `inv` copy temp before `nx = inv` (plain `nx = dx / len` changes regalloc, +4 B) | US: tb_sqrtf body variants, a guess-as-parameter inline helper, block-scoped sum locals, other holder variables, pragma changes |
 | US | rels/yuu/src/event/evt_yuuranking.c | yuuDrawRight (US inline, used by evt_yuuranking_disp_func) | US: same as the gor twin: x offset plus work pointer, `wp->x` added inside so it is read after the width test (same value) | see comment |
@@ -42,7 +40,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario_pouch.c | pouchGetPartyAttackLv | the partyData[partyId] address is formed by hand from mpp and sizeof(PouchPartyData) (same address), so the field offset is added to the scaled index before the base (addi + lhax) | `mpp->partyData[partyId].attackLevel` (add + lha 10) |
 | Both | libs/dolsdk2004/src/gx/GXGeometry.c | GXGetCullMode | `// fake match?` in the non-default branch: decodes genMode with `((hwMode >> 0xD) & 0x2) | (((int)hwMode >> 0xE) & 0x2) >> 1` instead of the readable switch | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
-| Both | libs/dolsdk2004/src/gx/GXTev.c | GXSetTevSwapModeTable | spare temporary `int index = table * 2` for the tevKsel index (release build only) | `&__GXData->tevKsel[table * 2]` (both versions change) |
 | Both | libs/dolsdk2004/src/vi/vi.c | VIGetNextField, VIInit | `value = (u16)value` (no-op cast) under `#if !DEBUG` | see comment |
 | Both | libs/musyx/src/musyx/runtime/HARDWARE.C | itdOffTab (data) | `static volatile const` table, read by SetupITD | plain `static const` (both versions change) |
 | Both | src/driver/effdrv.c | effMayaKeyInterp (inline, used by effCalcMayaAnimMatrix) | channel fields still read through byte offsets; unnecessary register qualifiers removed, typed MayaHermitChannel indexing changes both objects | fresh US/JP ordinary-local and typed-channel probes |
@@ -84,7 +81,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/ac/ac_timing_a.c | battleAcDisp_TimingA | register-held index; also read uninitialized on the else path below. Literal 4 / slot = 4 at decl both differ | literal 4; `int slot = 4` at declaration |
 | Both | src/battle/battle_ac_help.c | _ac_help_disp | register-promoted array; one msg pointer differs | see comment |
 | Both | src/battle/battle_camera.c | battleCameraMain | real zero-code first web of unit (the self-assign below emits nothing), so the case-8 unit web is a split temp (target r26); comma makes this unit2 web a compiler temp coloured early (target r28); zero-code use; makes this discarded result part2's first web; case-11 part held in party (role swap); party held in part (role swap) | see comment |
-| Both | src/battle/battle_disp.c | btlDispMain | double temp for the fabs result (register order of the diff/fabs webs) | direct `if (__fabs(pos.x - tpos.x) > 10.0)`: 726/741; `__fabs(tpos.x - pos.x)`: 728; f32 dx block temp: 732 (V) |
 | Both | src/battle/battle_disp.c | btlUnitPartsDisp | dead int guard (COLOURING W). part becomes a multi-def named local (not folded back into the param), so it numbers above unit, and gz adds wp's missing neighbour; the arm is deleted after colouring and leaves no code.; `Mtx uPos` written by PSMTXTrans, never read | whole body in a static inline with (unit, part, wp) params (always_inline: stack layout changes, 263 rows); part copy without the guard (folded, 58) |
 | Both | src/battle/battle_menu_disp.c | DrawSubMenuCommonProcess | no-op (s32) cast on the min, so n is a copy of a compiler temp (target `mr r6,r3`) | `n = 6; if (unk8 < 6) n = unk8;` / uncast ternaries / `nn` copy / inline min: 447-453/461 (n computed straight into r6) (V) |
 | Both | src/battle/battle_menu_disp.c | DrawMainMenu | zeroed temporary c added to the icon step (`a = c + FRAMES_STEP(...)`) | `a = FRAMES_STEP(...)`: changes the object |
@@ -99,7 +95,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_stage_object.c | _object_fall_attack | comma expr makes the literal an early @ temp (same pointer); integer cast (SFX_NAME_WORD) makes the literal a hoisted @ temp (same pointer); no-op self-assign (no code) raises w spill cost | zero-instruction forms; declsearch over decl orders |
 | Both | src/battle/battle_status_effect.c | BattleStatusChangeInfoSetAnnouce | no-op `(s8)e[i].type` cast on the s8 field before `_get_pri` (load/extend order as in the target) | `_get_pri(e[i].type)` |
 | Both | src/battle/battle_unit.c | BtlUnit_SetParamToPouch | partner HP stored by byte offset (`(u8*)pouch + id * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)`) so the field offset folds into the index (addi/sthx) | `pouch->partyData[id].currentHP` (add/sth) |
-| Both | src/battle/sac/sac_bakugame.c | bakuGameDecideWeapon | q is re-pointed at the same address (&w->weapon.sleepChance == q already); removing the second assignment changes the object | see comment |
 | Both | src/battle/sac/sac_bakugame.c | bakuGameMain | constant locals v200/v100/frames | the literals change the object |
 | Both | src/cam_road.c | calcCamRoad | cos through an inline so the first-block cs is an inline @ temp (numbered above the hoisted +-1 constants, f15 as in the target); sgn1/sgn2 as if/else locals of an inline: inline locals get their @ labels at definition time, so the sgn webs are numbered above l2 (crMul) and below cs; with ax/az numbered low this gives the target l2 f14 / sgn1 f15 / sgn2 f28 (+4 more FAKE comment(s)) | see comment |
 | Both | src/cam_road.c | camRoadStrippedReport | stand-in for the dead-stripped camRoadDraw (JP demo map, UNUSED 0x8b8): it only keeps that function's two debug strings (@2397/@2398) at the end of .rodata; body unknown (too large to reconstruct) | strings via crCheck casts: not emitted; file-end const char arrays: placed before the function pools (V) |
@@ -136,7 +131,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_booboo_n64.c | effBoobooDisp | register-promoted array (anim id + time*30); separate scalars differ | see comment |
 | Both | src/effect/n64/eff_kameki_tornade_n64.c | effKamekiTornadeDisp | (u32)(i * 128) * 4 == i * 512 for i in 0..15; the unsigned multiply leaves this IV to the back-end loop pass, so its init copies the i*360 IV (target mr r20,r27); cos(s) through a temp (same call order: sin, then cos, then PSMTXTrans); alias of the work->sc array (address only, no load) used for the second scale argument | see comment |
 | Both | src/effect/n64/eff_kemuri12_n64.c | effKemuri12Disp | integer-cast load makes type an unnamed temp (numbered above the camera copy, coloured first); float self-assign keeps the camera web live through the switch pre-RA (gives it degree >= K); emits no code | decl order alone, the u16 self-assign (folded by the front end), the type cast without the self-assign |
-| Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5N64Entry | early float conversion temp; (f32)ang / implicit int at use both differ | see comment |
 | Both | src/effect/n64/eff_opuku_wgun_n64.c | effOpukuWgunDisp | (u32)(i * 64) * 5 == i * 320 (the old k IV) for i in 0..11; the unsigned multiply is strength-reduced by the back-end loop pass, so no li k = 0 competes with the work IV copy in the block after smartAlloc (target order li r28 / ...; zero added to z (`20.0f * (work->z[i] + zero)`) | see comment |
 | Both | src/event/evt_badgeshop.c | badgeShop_bottakuruGeneration | dead int-guarded re-definition (COLOURING M): count keeps a second def, so it stays a named web and takes the target r21 | s32 count + guard (extsh + mr), guard bodies count = 0/i/j/k/count++ with s16 (extra extsh), lifetime-split roles for count/j/m (72 combos), inline helpers (spill worker) |
 | Both | src/event/evt_bero.c | evt_bero_get_info_num | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | single pointer-walk inline: get_info_num 100% but get_into_info 99.18 (P); index loop: get_info_num 99.42 (U) |
@@ -206,7 +200,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sound.c | SoundEfxSetPan | pan stored by byte offset (`off = chan * sizeof(SoundEffect)`, `+ offsetof(SoundEffect, pan)`), sfx then formed from the same offset | `sfx = &sound.effects[chan]; sfx->pan = pan` (75.4%) |
 | Both | src/sound.c | SoundEfxSetSrndPan | surround pan stored by byte offset (`off = chan * sizeof(SoundEffect)`, `+ offsetof(SoundEffect, span)`), sfx then formed from the same offset | `sfx = &sound.effects[chan]; sfx->span = span` (88.3%) |
 | Both | src/battle/battle_camera.c | evt_btl_camera_set_homing_unitparts | u holds the priority word first and is compared as `(EvtWord)u` (one register in the target) | separate `s32 pri` local, declared first, last, or set in a comma expression (all mismatch, longer code) |
-| Both | src/battle/battle_seq_command.c | BattleCommandInput | `wp = (BattleWork*)(void*)work` keeps wp its own copy (r24 as in the target); `(EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana` gives the target's signed cmpw; dead `cmd == NULL` guard (cmd = &wp->commandMenu) | `wp = work`, `&work[0]`, `work + 0` (r22, 51 lines differ); plain pointer compare (cmplw) |
+| Both | src/battle/battle_seq_command.c | BattleCommandInput | `wp = (BattleWork*)(void*)work` keeps wp its own copy (r24 as in the target); `(EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana` gives the target's signed cmpw | `wp = work`, `&work[0]`, `work + 0` (r22, 51 lines differ); plain pointer compare (cmplw) |
 | Both | rels/end/src/end_00.c | (data: `fd_end_00_*` dtrigf constants) | the unit's dtrigf constants are hand-made globals: in the original they follow the unit's own data instead of leading it, so the unit is built without msl_rel.pch (PCH_EXCLUDE in configure.py) | msl_rel.pch: constants placed first, end.rel 4 bytes short (R) |
 | Both | src/battle/battle_seq_command.c | _get_msg | empty `if (!event->args && !event->args) {}` in case 1 | removing it changes the object in both versions (dead_probe.py) |
 | JP and later | src/event/evt_sub.c | coin_fmt | `#pragma force_active` keeps evt_npc's orphan "%f%f%f" (from the dead-stripped evt_npc_set_position_xls) at the start of evt_sub's .rodata; JP and later only | see comment |
@@ -250,23 +244,14 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_ac_help.c | BattleAcHelpMain | spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_CheckReactionPerPhase | comma expression; `--member->statusTimer <= 0` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
-| Both | src/battle/battle_audience.c | BattleAudienceDispAudience | block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispApSrc | star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment; tried 2026-11-01: switch with one case: cmpwi + beq, target is cmplwi + blt + bgt |
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceSoundHandBeat (psndSFX_vol) | call through a cast to an `(s32, s32)` function type so the s32 vol goes in untruncated | plain call through pmario_sound.h's u8 prototype: clrlwi on the argument, changes the object |
-| Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
-| Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
-| Both | src/battle/battle_detect.c | BattleGetFirstAttackUnit | tmp holds the getter result across the swap; assigning it directly changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlDispAnimeSpeed | unused constant local kept by a per-function opt_dead_assignments off; without them the object changes | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_SetOverTurnCount | block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->flippedTurns = value changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_ChangeFaceDirection | block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->faceDirection = value changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_OnToken | block-scoped enum copy of args[1]; unit->mTokenFlags /= args[1] changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_OffToken | block-scoped enum copy of args[1] (redundant outer scope removed); unit->mTokenFlags &= ~args[1] changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckToken | block-scoped enum copy of args[1]; testing unit->mTokenFlags & args[1] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PreCheckDamage | args is reused to hold the result index; out = args[5] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckDamage | args is reused to hold the result index; a separate out local changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_AudienceDeclareACResult | ac[0] / ac[1] are marioAcSuccess / marioAcFailed through one pointer; the field names change the object | see comment |
@@ -277,16 +262,12 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object; battle_mario_nullstr itself is a 4-byte static array (STRING("") at both uses changes the object) | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
 | Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object; one-case inner `switch (type)` left by `goto done_fa` | see comment |
-| Both | src/battle/battle_seq.c | btlseqTurn | string held in sfxName before the call; passing the literal directly changes the object | see comment |
-| Both | src/battle/battle_seq.c | btlseqAct | block-local unit shadowing the function's; using the function's unit changes the object | see comment |
 | Both | src/battle/battle_seq.c | battleSortPhaseMoveTable | wp copied into a void* and cast back at every use; using wp directly changes the object | see comment |
 | Both | src/battle/battle_seq.c | BattleWaitAllActiveEvtEnd_NoBgSetEndWait | wp copied into a void* and cast back at its use; using wp directly changes the object | see comment |
-| Both | src/battle/battle_seq.c | BattleCheckAllPinchStatus | repeated `alert = FALSE` in the else branch (already FALSE) | deleting the store: changes the object |
-| Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object; dead `cmd == NULL` guard (cmd = &wp->commandMenu) | see comment |
+| Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | BattleCommandDisplay_WeaponMultiItemCancelCheckDisp | called through a cast that puts the float arguments first; the plain call changes the object ; x = 0.0f held in a local so the expression is 0.0f - w (a subtraction, not a negation) | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
-| Both | src/battle/battle_seq_command.c | _btlcmd_MakeActClassTable, _btlcmd_MakeOperationTable, _btlcmd_MakeMultiItemTable, _btlcmd_MakePartyTable | dead `cmd == NULL` guard (cmd = &wp->commandMenu is never NULL) | removing the tests: changes the object (the compare is emitted) |
 | Both | src/battle/battle_seq_command.c | BattleCommandInput (BattleCommandDisplay_ChangePartySelectMenuSetup) | two calls through a cast to a (BattleWork*, s32) function type passing TRUE/FALSE to the one-parameter setup | unused s32 parameter on the definition and plain calls: changes the object |
 | Both | src/battle/battle_seq_end.c | _MarioExpDisp | windowDispGX_Waku_col called through a float-first cast; the plain call changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
@@ -318,14 +299,11 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/sac/sac_deka.c | main_base | spare temporary t2; assigning t directly changes the object | see comment |
 | Both | src/battle/sac/sac_deka.c | yuka_disp | volatile FIFO pointer and component read order z, y, x (YUKA_POSITION macro) | plain stores, or an inline function, change the object |
 | Both | src/battle/sac/sac_deka.c | get_ride_pos | 64.0f held in local k for three products | literal 64.0f: changes the object |
-| Both | src/battle/sac/sac_genki.c | object_entry | pointer to the state field; plain w->object[i].state changes the object | see comment |
 | Both | src/battle/sac/sac_muki.c | addf | addf() for x + 32.0f in disp_2D; the plain sum changes the object | see comment |
 | Both | src/battle/sac/sac_muki.c | mulf | mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object | see comment |
 | Both | src/battle/sac/sac_muki.c | disp_2D | frac *= 80.0f inside the argument; plain frac * 80.0f changes the object; Vec p copied into s before btlGetScreenPoint(&s, &s) (twice) | see comment |
 | Both | src/battle/sac/sac_scissor.c | my_fabsf | my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object | see comment |
-| Both | src/battle/sac/sac_suki.c | _disp_2D | each case builds the icon id in the s32 temporary t; assigning icon directly changes the object | see comment |
 | Both | src/battle/sac/sac_zubastar.c | zubastar_disp2D | calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object | see comment |
-| Both | src/data/battle/battle_item_data.c | _sampling_random_target | pointer alias of the local targets; using targets directly changes the object | see comment |
 | Both | src/driver/animdrv.c | animPose_AllocBuffer | macro twin of the animPoseGetBaseData inline above, used by every caller below; calling the inline instead changes the object | see comment |
 | Both | src/driver/animdrv.c | animEffectAsync | (u32) casts on the zero tests (unsigned compares); plain model == 0 / anim == 0 change the object | u32 model, anim locals; fileAsyncf returning u32 |
 | Both | src/driver/animdrv.c | animPoseSetEffect | the paper pose's file entry found by byte offset (files + fileId * 16); animPoseGetBaseData(animPoseGetAnimPosePtr(pose->paperId)) changes the object | see comment |
@@ -358,10 +336,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_funemizu.c | effFunemizuMain | spare temporary f; `a = work->size; b = a - 1.0f;` changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuDisp | funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuShibukiDisp | `nw = -w` with mixed `nw / 2` and `w * 0.5f` quad corners | `-w * 0.5f` corners: changes the object |
-| Both | src/effect/eff_hibashira.c | effHibashiraEntry | block-scoped temporary; `pillar->scale = (f32)sin(...) + 0.5f` changes the object | see comment |
-| Both | src/effect/eff_ibuki.c | effIbukiEntry | spare temporary a; `p->vx2 = irand(10) + 10;` changes the object | see comment |
 | Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | u32 i with the plain compare |
-| Both | src/effect/eff_itemget.c | effItemGetEntry | spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
 | JP | src/driver/msgdrv.c | msgDisp | hy holds the x position and hx the y position; swapping the names changes the object | see comment |
@@ -370,12 +345,10 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/driver/npcdrv.c | _fbatFirstAttackAnnouceDisp | the products go through the mulf() inline; plain multiplications change the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
-| Both | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them the object changes | see comment |
+| JP | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; the other versions need neither); without them the object changes | see comment |
 | JP | src/effect/eff_levelup.c | getX | (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object | see comment |
 | Both | src/effect/eff_levelup.c | effLevelupDisp | 0.5f held in `halfScale`; work array and texid_tbl walked by byte offsets (ofs/tofs) | `width * 0.5f`: changes the object |
-| Both | src/effect/eff_mahojin.c | effMahojinMain | work re-loaded from effect->userdata (it already holds it); without it the object changes | see comment |
-| Both | src/effect/eff_miss_star.c | effMissStarEntry | endless loop with a break; `while (index > 5) { index -= 5; }` changes the object | see comment |
-| Both | src/effect/eff_mizutama.c | effMizutamaEntry | split computation; `radius = (type + 1) * 10;` changes the object | see comment |
+| Both | src/effect/eff_mizutama.c | effMizutamaEntry | parameter z reused as the half-width; the local dist (as in the circle branch) changes the object | see comment |
 | Both | src/effect/eff_mobj_broken.c | effMObjBrokenMain | the counter done is reused as the loop index; a loop over i changes the object | see comment |
 | Both | src/effect/eff_mugi.c | effMugiKemuri2Entry | discarded `__fabs(x * 0.005)` (it only creates the 0.005 constant); deleting it changes the object | see comment |
 | Both | src/effect/eff_nice.c | effNiceEntry | size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object | see comment |
@@ -387,10 +360,8 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_cloud_n64.c | effCloudDisp | zero is added to z when the vertices are written; (s16)z changes the object | see comment |
 | Both | src/effect/n64/eff_flame_n64.c | effFlameDisp | one-element pointer array; a plain EffFlameN64Work* work changes the object | see comment |
 | Both | src/effect/n64/eff_horao_spell_n64.c | effHoraoSpellDisp | p[1] is q; writing y and z through q changes the object | see comment |
-| Both | src/effect/n64/eff_kemuri10_n64.c | effKemuri10Main | the timer goes through a temporary for the decrement; `work->timer--;` changes the object | see comment |
 | Both | src/effect/n64/eff_kemuri10_n64.c | effKemuri10N64Entry | zr holds 0.0f for the zero tests and stores | 0.0f literals: changes the object |
 | Both | src/effect/n64/eff_kemuri1_n64.c | effKemuri1Disp | colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object | see comment |
-| Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5Main | sin result in a block-scoped temporary; writing it into the assignment changes the object | see comment |
 | Both | src/effect/n64/eff_kemuri8_n64.c | effKemuri8N64Entry | one-use inline inline_fn computes radius * -sin; writing it out changes the object | see comment |
 | Both | src/effect/n64/eff_kumokumo_chip_n64.c | effKumokumoChipN64Entry | square root expanded by hand (__frsqrte plus three Newton steps) instead of sqrtf | sqrtf (changes the object) |
 | Both | src/effect/n64/eff_magic3_n64.c | effMagic3N64Entry | nx * nx + ny * ny + nz * nz with ny * ny written as 1.0f and nz * nz as nz (exact for ny = -1, nz = 0); the plain sum changes the object | see comment |
@@ -401,63 +372,48 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_opuku_wprotect_n64.c | effOpukuWprotectDisp | (f32) casts on f32 products; without them the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustN64Entry | (s32) cast on the char; without it the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustDisp | k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object | see comment |
-| Both | src/effect/n64/eff_pokopi_pcharge_n64.c | effPokopiPchargeN64Entry | p is set between the position stores; setting it right before the loop changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderMain | inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_pturn_n64.c | effPturnMain | spare flag local for the condition; testing it directly changes the object | see comment |
 | Both | src/effect/n64/eff_radiation_n64.c | effRadiationMain | comma expression for the decrement test; --p->delay <= 0 changes the object | see comment |
-| Both | src/effect/n64/eff_rappa_n64.c | effRappaN64Entry | block-local temporary for cos(rad); the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_recover_heart_n64.c | effRecoverHeartDisp | tex first holds the type test, then the texture id; testing the condition directly changes the object | see comment |
 | Both | src/effect/n64/eff_ripple_n64.c | effRippleDisp | type is read through a cast of userdata before work is set; reading work->type changes the object | see comment |
 | Both | src/effect/n64/eff_ripple_n64.c | (file) | `#pragma defer_codegen off` for the whole file | removing it: changes the object (a configure.py flag form not tried) |
 | Both | src/effect/n64/eff_rothammer_fail_n64.c | effRotHammerFailN64Entry | child = work + 1 through a pointer step and back; the plain assignment changes the object; zero held in a local for the 0.0f stores and sin(zero)/cos(zero) | see comment |
 | Both | src/effect/n64/eff_small_star_n64.c | effSmallStarN64Entry | zero kept in a local for the comparisons; comparing with 0.0f literals changes the object | see comment |
-| Both | src/effect/n64/eff_small_star_n64.c | alphaf | alpha scaling through an inline helper; (s32)(w->alpha * 0.6f) written out changes the object | see comment |
-| Both | src/effect/n64/eff_snowfall_n64.c | effSnowfallMain | the height goes through a float local (converted at run time); h = 166 changes the object | see comment |
 | Both | src/effect/n64/eff_snowfall_n64.c | effSnowfallDisp | discarded compound literal with no effect; removing it changes the object | see comment |
 | Both | src/effect/n64/eff_sstar_n64.c | effSstarDisp | vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object | see comment |
 | Both | src/effect/n64/eff_stardust2_n64.c | effStardust2Main | (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object | see comment |
-| Both | src/effect/n64/eff_stardust_n64.c | effStardustN64Entry | i set before the loop setup; for (i = 1; ...) changes the object | see comment |
-| Both | src/effect/n64/eff_stardust_n64.c | effStardustMain | vx/vy copies of the velocity added to the position in one case | adding work->vx / work->vy directly: changes the object |
 | Both | src/effect/n64/eff_sweat_n64.c | sin | sin/cos declared with float parameters; the library's double prototypes change the object | see comment |
-| Both | src/effect/n64/eff_thunder_n64.c | effThunderN64Entry | second test of type instead of else; else changes the object | see comment |
 | Both | src/effect/n64/eff_timestamp_n64.c | effTimestampMain | comma expression; --work->delay[i] == 0 changes the object | see comment |
-| Both | src/effect/n64/eff_vapor_n64.c | effVaporDisp | rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object; `sub >= 4` nested inside `sub <= 4` (means sub == 4) | see comment |
+| Both | src/effect/n64/eff_vapor_n64.c | effVaporDisp | rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object | see comment |
 | Both | src/effect/n64/eff_whirlwind_n64.c | effWhirlwindN64Entry | spare temporary for 0.25f; the plain literal changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | marioChgMot(s32) (mario_motion, mario_sbr change) |
-| Both | src/event/evt_mario.c | evt_koopa_fire | s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_paper_pose_dokan | unreferenced static const char names[] holding the six DOKAN_* pose names with hand padding | see comment |
 | Both | src/event/evt_batstage.c | (file scope) BattleStage*Dark* | private prototypes of the six stage/audience darkness setters with an s32 mode; battle_stage.c defines them with u8 mode | the definitions' prototypes in battle_stage.h: changes the object |
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
 | Both | src/event/evt_bero.c | bero_get_position_normal | two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object | see comment |
 | Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
-| Both | src/event/evt_case.c | _caseEntry | spare pointer to setup; using setup directly changes the object | see comment |
-| Both | src/event/evt_case.c | _evtCaseEntry | spare pointer to setup; using setup directly changes the object | see comment |
 | Both | src/event/evt_door.c | door_position_sub | self-assignment through t; removing it changes the object | see comment |
 | Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
 | Both | src/event/evt_lottery.c | evt_lottery | bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object | see comment |
 | Both | src/event/evt_lottery.c | evt_lottery_error_check | g is a spare copy of gp; &gp->mLotteryInfo changes the object | see comment |
-| Both | src/event/evt_lottery.c | (file scope) | lotteryUnused: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
 | Both | src/event/evt_mobj.c | evt_mobj_floatswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_tornadoswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_floatswitch_red | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_signboard | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | recoveryHeal | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
-| Both | src/event/evt_mobj.c | mobj_recovery_blk | the coin count goes through kind (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_koopa_ojama_blk_evt | unused Vec local; removing the block changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_koopa_hidden_blk | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Early demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
-| Both | src/event/evt_nannpc.c | nanNPCHitMove | `dot` holds PSVECDotProduct for one use | the call inside the PSVECScale argument: changes the object |
-| Both | src/event/evt_nannpc.c | evt_nannpc_init | subfunc1 stored through the global nanNPCWork while its neighbours go through w | `w->subfunc1 = ...`: changes the object |
 | Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
 | Both | src/event/evt_party.c | (file scope) bomheiGetStatus | private prototype returning s32; party_bomhei.c returns u8 | `u8 bomheiGetStatus(void)` in party_bomhei.h: changes the object |
-| Both | src/event/evt_shop.c | evt_shop_setup | block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
 | Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
@@ -516,9 +472,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
-| Both | src/sequence/seq_battle.c | loadTpl | unreferenced word in neither symbol map; removing it changes the object | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
-| Both | src/sequence/seq_e3.c | seq_e3Main | a second loop counter; reusing the function's i changes the object | see comment |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
@@ -532,8 +486,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | PAL | rels/tst/src/unit/unit_powan.c | powan_rider_follow | worldPositions read as `*(Vec**)` instead of `(Vec*)...->address` (register choice) | natural form with the typed smartEntry address |
 | Demos | rels/mri/src/mri_puni.c | puni_puni_main | `(const char*)(u32)` round trip on one sound name, so its address is hoisted into a saved register before the loop | plain literal: one register less, stack frame 16 bytes smaller |
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
-| Both | src/battle/battle_unit.c | BtlUnit_GetExp | temporary t for `scale * (unitLevel - level)` before the return | one return expression: changes the object |
-| Both | src/event/evt_badgeshop.c | evt_badgeShop_throw_get_kind_cnt | `long i` instead of int: register choice in the demos, no change in retail | int |
 | Both | src/event/evt_mario.c | evt_mario_mov_pos | marioSetForceMove called through a (s32, f32, f32) cast (frames first); mario_sbr.h declares the definition's (dir, time, speed), which the other three calls use | plain call in the definition's order: the frame count and direction load the other way round |
 | All demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in every demo: only the strings stay compiled there, so its numbers stay out of the pool | full body |
 | Both | src/battle/battle_seq_end.c | btlseqEnd | `(u32)` casts on the s32 `BattleUnit.statusFlags` in the Danger/Peril tests (8) | without the casts: changes the object; field typed u32: battle_unit.c changes |
@@ -543,17 +495,12 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | JP and later | src/driver/npcdrv.c | npcStrippedHitPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | npcStrippedKoopaPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | (file scope) FontDrawStringShake | private `const char*` prototype; the definition takes `const s8*` (-char unsigned) | the definition's prototype: build errors at the const char* calls without casts (not built) |
-| Both | src/event/evt_window.c | (file scope) | unk_80418b3c: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
-| JP | src/event/evt_msg.c | (file scope) | battlePartyMsgPad: unused zero table, in no symbol map | removing it changes the object |
-| Both | src/battle/battle_damage.c | BattleCheckDamage | `cwp` is a second name for `&cw` | `&cw` at both calls: changes the object |
 | Both | src/battle/battle_enemy_item.c | _check_hp_recover_item, _check_fp_recover_item, _check_attack_item, _check_status_attack_item, _check_status_support_item, _check_status_recover_item | `(s32)(s8)` no-op casts on the s8 attackDirection passed to BattleSamplingEnemy | the plain field at all six: changes the object |
 | Both | src/effect/eff_batten.c | effBattenDisp | constant temporaries w/half/neg/pos for the quad corners | literal corners (-16.0f/16.0f): changes the object |
 | Both | src/effect/eff_bomb.c | effBombDisp | constant temporaries deg/half/one and left = -one / 2.0f | literals: changes the object |
-| Both | src/effect/eff_fire.c | effFireDisp | two-step scale `s = 20.0f * work->scale; s *= 0.03125f;` | one expression: changes the object |
 | Both | src/effect/eff_minigame.c | effMiniGameMain | `(u32)work->delay < 20` unsigned compare on the s32 delay (three sites) | plain signed compare: changes the object |
 | Both | src/effect/eff_mist2.c | effMist2Disp | constant locals w = 16.0f, k = 255.0f, h = 8.0f | literals: changes the object |
-| Both | src/effect/eff_nozle.c | effNozleMain | `< 21U` unsigned compares on the s32 timer and life | `< 21`: changes the object |
-| Both | src/effect/eff_nozle.c | effNozleDisp | separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5) | one reused pair: changes the object |
+| Both | src/effect/eff_nozle.c | effNozleMain | `< 21U` unsigned compare on the s32 life (also tested signed: < 1000, < 16, < 0) | `< 21`: changes the object |
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
 | US, PAL, US demo 2, PAL demo | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
@@ -565,4 +512,3 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sequence/seq_mapchange.c | seq_mapChangeMain | LangTbl struct wrapper (lang_tbl) copied into a local `lang` | local `const char* lang[]` initialiser: changes the object |
 | Both | src/window/win_party.c | winPartyDisp | `GXColor red[1]` used as a scalar | plain `GXColor red`: changes the object |
 | Demos | src/window/win_party.c | winPartyDisp | iy assigned inside the winIconSet/winFontSetLabel arguments | separate statements: changes the early demos only (retail the same) |
-| Both | src/event/evt_eff.c | evt_eff (effBoobooN64Entry) | private six-argument prototype; the definition takes no arguments | not tried: a call without them drops the argument loads |

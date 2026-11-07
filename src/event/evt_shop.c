@@ -1157,7 +1157,6 @@ USER_FUNC(evt_shop_setup) {
         }
     }
 
-    // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object
     {
         NpcEntry* npc = npcNameToPtr(shopper->name);
         npc->talkEvt = shopper_talk_evt;
