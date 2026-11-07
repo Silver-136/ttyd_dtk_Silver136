@@ -1778,6 +1778,9 @@ void fan_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 static Vec fan_zero;
 
@@ -2316,6 +2319,9 @@ void ext_fan_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, fan_disp, NULL);
 }
 
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 /**
  * Checks whether a fan is knocked away while Mario's Y is at most zero: returns 1 during hammer motion after

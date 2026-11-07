@@ -1044,6 +1044,7 @@ s32 hitcheck(YuuNpc* npc) {
     return 0;
 }
 
+// Kept: JP and later call fallcheck (the early demos inline it); under -inline auto nothing else keeps it out of line.
 #if VERSION >= VERSION_JP
 #pragma dont_inline on
 #endif

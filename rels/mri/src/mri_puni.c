@@ -1228,6 +1228,7 @@ void puniswGetindex(s32 base, s32 idx, s32* val, Vec* pos) {
     pos->z = z;
 }
 
+// Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
 #pragma push
 #pragma opt_dead_assignments off
 /**
@@ -2932,6 +2933,9 @@ void puniModeAwayjump(PuniData* p) {
 
 /** The zero vector, used when an away target has no position. */
 static const Vec puni_away_zero0 = {0.0f, 0.0f, 0.0f};
+
+// Kept: the target calls puniModeAway_sub (REL map: called from puniModeAway); under -inline auto nothing else
+// keeps a short function out of line.
 #pragma dont_inline on
 /**
  * Moves a fleeing Puni along its velocity with wall collision.
@@ -6595,6 +6599,8 @@ static inline void puni_exit_swset(s32 off, s32 val, Vec* pos) {
     _swByteSet(off + 5, z & 0xFF);
     _swByteSet(off + 6, (z & 0xFF00) >> 8);
 }
+
+// Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
 #pragma push
 #pragma opt_dead_assignments off
 static const Vec puni_fall_dir;
@@ -7153,6 +7159,7 @@ USER_FUNC(evt_puni_get_lsw_index) {
     return EVT_RETURN_DONE;
 }
 
+// Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
 #pragma push
 #pragma opt_dead_assignments off
 static const Vec puni_fall_dir;

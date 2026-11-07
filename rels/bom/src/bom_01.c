@@ -905,6 +905,9 @@ EVT_BEGIN(evt_bom_01_karakara)
     RETURN
 EVT_END()
 
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
@@ -983,6 +986,9 @@ void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     }
 }
 
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
@@ -2511,6 +2517,9 @@ s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
 }
 
 
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 

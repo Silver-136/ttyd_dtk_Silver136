@@ -261,6 +261,8 @@ static ExtTexInfo ext_moamoa_data[] = {
 };
 
 
+// Kept: the REL maps and the target show this Smorg helper called, not inlined (eki_00, rsh_00, rsh_05 and rsh_06
+// alike); under -inline auto nothing else keeps a short static function out of line.
 #pragma dont_inline on
 
 /**
@@ -559,6 +561,10 @@ static f32 randf(f32 min, f32 max) {
 
     return r * (max - min) + min;
 }
+
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_lifetimes off
 // FAKE: placed in .rodata (this and the next two Vecs); without it the object changes
 __declspec(section ".rodata") static Vec ext_moamoa_t0 = {0.0f, 0.0f, 10.0f};
@@ -667,6 +673,9 @@ static void ext_shadow_disp(CameraId camera, void* param) {
         offscreenAddBoundingBox(offscreenNameToId("offscreen"), left, top, right, bottom);
     }
 }
+
+// Kept: the REL maps and the target show this Smorg helper called, not inlined (eki_00, rsh_00, rsh_05 and rsh_06
+// alike); under -inline auto nothing else keeps a short static function out of line.
 #pragma dont_inline on
 
 /**
@@ -707,6 +716,10 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
 #pragma dont_inline reset
+
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_lifetimes off
 
 /**
@@ -812,8 +825,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
     return 0;
 }
-#pragma opt_lifetimes reset
-#pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 

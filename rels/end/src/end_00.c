@@ -2021,6 +2021,7 @@ USER_FUNC(evt_end_staff_roll_init) {
     return 2;
 }
 
+// Kept: the target calls end_staff_roll_exit; under -inline auto nothing else keeps a short function out of line.
 #pragma dont_inline on
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a14, JP end .text+0x950. See docs/NAME_PROVENANCE.md.
 /**

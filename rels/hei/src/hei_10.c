@@ -342,6 +342,7 @@ static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 
     chb_jump(pose, chb, next, x, y, z, 2.0f * (rs * (smax - smin) + smin), rg * (gmax - gmin) + gmin);
 }
 
+// Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
 #pragma push
 #pragma opt_dead_assignments off
 /**
@@ -504,6 +505,9 @@ static inline s32 npc_jump_get_time(EventEntry* event, EvtWord* args) {
     return evtGetValue(event, args[6]);
 }
 
+// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
+// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
+// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 /**
  * Script helper: makes an NPC hop to a point.
