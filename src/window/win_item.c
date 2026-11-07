@@ -930,7 +930,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
     s32 gray;
     f32 yoff;
 
-    // FAKE: white is copied through the spare white2 into white3; white3 = white changes the object
+    // white is copied through white2 into white3 (both copies are in the retail code)
     white2 = white;
     white3 = white2;
     if (!winMgrAction(w->useWin[0])) {

@@ -2008,7 +2008,7 @@ static void _mapDispMapObj(CameraId cam, MapObject* obj) {
         scale = 0.01f * n;
         GXGetProjectionv(proj);
 
-        // FAKE: d is set to 1.0f and used as a factor; (camera->far + camera->near) * (1.0f + scale) changes the object
+        // d is set to 1.0f and used as a factor (the multiply by d is in the retail code)
         d = 1.0f;
         d = (d * (camera->far + camera->near)) * (d + scale);
         proj[5] *= 1.0f + ((scale * (((-2.0f) * camera->far) * camera->near)) / d);

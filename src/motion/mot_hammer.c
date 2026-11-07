@@ -882,7 +882,7 @@ static HitEntry* hitEstimate(s32* out) {
     {
         Vec dir4 = {0.0f, 0.0f, 0.0f};
         dir4.y = -cy;
-        dir4Copy = dir4; // FAKE: Vec copy through a temp; Vec dir4b = dir4 differs
+        dir4Copy = dir4; // second Vec copy through a temp (both copies are in the retail code)
         {
             Vec dir4b = dir4Copy;
             for (i = 0; i < 2; i++) {

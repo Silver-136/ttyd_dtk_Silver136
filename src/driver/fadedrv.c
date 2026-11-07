@@ -1386,7 +1386,7 @@ static f32 z(void) {
     Vec pos;
     f32 base;
 
-    // FAKE: `one` (1.0f) is only a factor in the returned depth; dropping the product changes the object
+    // `one` (1.0f) is only a factor in the returned depth (the multiply is in the retail code)
     f32 one = 1.0f;
     f32 pz;
 

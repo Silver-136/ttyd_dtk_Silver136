@@ -670,7 +670,8 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         f32 mx, mz;
         f32 nz;
 
-        // FAKE: nn copies bestNrm and nz copies nn.z for the wall slide; using bestNrm directly changes the object (early demos the same)
+        // nn copies bestNrm for the wall slide (the copy is in the retail code).
+        // FAKE: nz copies nn.z; using nn.z directly changes the object (early demos the same)
         nn = bestNrm;
         mx = sn * dist;
         mz = cs * dist;

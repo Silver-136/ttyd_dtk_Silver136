@@ -1362,7 +1362,7 @@ static void select_disp(WinMgrEntry* entry) {
     Mtx mtx;
     Mtx scale;
 
-    // FAKE: white copied through a spare tmp; iconcol = white changes the object
+    // white is copied through tmp into iconcol (both copies are in the retail code)
     tmp = white;
     iconcol = tmp;
 
@@ -1620,7 +1620,7 @@ static void select_disp_party(WinMgrEntry* entry) {
     u16 w;
     f32 ofs;
 
-    // FAKE: white copied through a spare tmp; iconcol = white changes the object
+    // white is copied through tmp into iconcol (both copies are in the retail code)
     tmp = white;
     iconcol = tmp;
 
@@ -1735,7 +1735,7 @@ static void select_disp_mario(WinMgrEntry* entry) {
     u16 w;
     f32 ofs;
 
-    // FAKE: white copied through a spare tmp; iconcol = white changes the object
+    // white is copied through tmp into iconcol (both copies are in the retail code)
     tmp = white;
     iconcol = tmp;
 

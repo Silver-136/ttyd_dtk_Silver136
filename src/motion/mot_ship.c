@@ -352,9 +352,10 @@ static inline void shipLerpTurn(f32 t, f32 k) {
 static inline void shipEff(f32 s) {
     MarioWork* mario = marioGetPtr();
 
-    // FAKE: zz (0.0f) added to position.y and the c temporary choosing 0.3f/0.6f; dropping both changes the object
+    // zz (0.0f) is added to position.y below (the add is in the retail code)
     f32 zz = 0.0f;
     if (!s) {
+        // FAKE: the c temporary choosing 0.3f/0.6f; s = (... > 180.0f) ? 0.6f : 0.3f changes the object
         s32 c;
         marioGetPtr();
         c = (marioGetPtr()->motShip->bobAngle > 180.0f) ? 0 : 1;

@@ -1990,7 +1990,7 @@ static void marioMakeDispDir(void) {
     f32 tgt;
     f32 step;
 
-    // FAKE: c30 and c20 hold 30.0f and 20.0f for the negated uses below; the literals -30.0f and -20.0f change the object
+    // c30 and c20 hold 30.0f and 20.0f for the negated uses below (the negations are in the retail code)
     f32 c30 = 30.0f;
     f32 c20 = 20.0f;
 
