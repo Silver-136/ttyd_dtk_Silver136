@@ -50,9 +50,6 @@ static const char bti04[7];
 #endif
 
 s32 debug_battle_flag;
-// FAKE: unreferenced word in neither symbol map; removing it changes the object
-s32 seq_battle_unk_8041874c;
-
 
 /** Requests an async load of a TPL under the disc root; true once the file is resident (seq_battleMain polls it). */
 static inline BOOL loadTpl(const char* path) {

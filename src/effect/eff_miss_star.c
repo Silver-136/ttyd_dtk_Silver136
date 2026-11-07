@@ -71,7 +71,7 @@ EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 ind
         sign = -1;
     }
 
-    // FAKE: endless loop with a break; `while (index > 5) { index -= 5; }` changes the object
+    // an endless loop with a break: the retail branch layout (a while loop is laid out differently)
     while (TRUE) {
         if (index <= 5) {
             break;

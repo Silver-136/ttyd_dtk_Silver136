@@ -23,7 +23,7 @@ typedef struct EffNozleWork {
     f32 v1;         // 0x24
     f32 scale;      // 0x28
     s32 life;       // 0x2C
-    s32 timer;      // 0x30
+    u32 timer;      // 0x30 (u32: its only compare is unsigned)
     s32 alpha;      // 0x34
     s32 flag;       // 0x38
     f32 rotX;       // 0x3C
@@ -518,8 +518,7 @@ static void effNozleMain(EffectEntry* effect) {
     switch (type) {
         case 0:
         case 2:
-            // FAKE: unsigned compare on a signed counter (guards scale_dt[21]); < 21 changes the object
-            if (work->timer < 21U) {
+            if (work->timer < 21) {
                 work->sx = scale_dt[work->timer][0] / 100.0f;
                 work->sy = scale_dt[work->timer][1] / 100.0f;
             }

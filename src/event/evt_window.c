@@ -44,8 +44,6 @@ typedef struct OneMsgWin {
 s32 coinwin_se_wait;
 #endif
 
-// FAKE: unused 4-byte .sbss filler in no symbol map; it only fills the slot the original had here. Removing it changes the object.
-s32 unk_80418b3c;
 static void coin_disp(WinMgrEntry* entry);
 static void oneMessageDisp(WinMgrEntry* entry);
 

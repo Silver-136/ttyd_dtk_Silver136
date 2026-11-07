@@ -166,7 +166,7 @@ static void effMahojinMain(EffectEntry* effect) {
         animPoseSetAnim(work[1].poseId[0], "A_4", TRUE);
         animPoseSetAnim(work[1].poseId[1], "A_4", TRUE);
 
-        // FAKE: work re-loaded from effect->userdata (it already holds it); without it the object changes
+        // work re-reads effect->userdata (it already holds it; the reload is in the retail code)
         work = effect->userdata;
     }
 

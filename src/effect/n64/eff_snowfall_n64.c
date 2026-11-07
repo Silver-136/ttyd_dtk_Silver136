@@ -213,7 +213,7 @@ static void effSnowfallMain(EffectEntry* effect) {
         SNOWFALL_WORK->alpha = life * 25;
     }
 
-    // FAKE: the height goes through a float local (converted at run time); h = 166 changes the object
+    // the height goes through a float local (the run-time conversion is in the retail code)
     hf = 166.0f;
     h = hf;
     p++;

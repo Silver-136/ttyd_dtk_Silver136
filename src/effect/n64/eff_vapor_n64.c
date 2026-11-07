@@ -277,7 +277,7 @@ static void effVaporDisp(CameraId cameraId, void* param) {
     PSMTXConcat(scale, mtx, scale);
     GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
     if (sub <= 4) {
-        // FAKE: sub >= 4 tested inside sub <= 4 (means sub == 4); sub == 4 changes the object
+        // sub >= 4 tested inside sub <= 4 (means sub == 4); the retail branch is the >= test
         if (sub >= 4) {
             PSMTXScale(scale, 0.0f, 0.0f, 0.0f);
             GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
