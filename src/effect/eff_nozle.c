@@ -591,7 +591,7 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
-    // FAKE: a separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5); one reused pair changes the object
+    // a separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5)
     void** dl5;
     u8* sz5;
     u8* sz3;

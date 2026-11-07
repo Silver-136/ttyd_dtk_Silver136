@@ -141,7 +141,6 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     work->camera = CAMERA_3D;
     work->scale = 1.0f;
 
-    // FAKE: i set before the loop setup; for (i = 1; ...) changes the object
     i = 1;
     randA = (s32)(a * 1000.0f);
     randB = (s32)(radius * 1000.0f);

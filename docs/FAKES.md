@@ -273,8 +273,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment; tried 2026-11-01: switch with one case: cmpwi + beq, target is cmplwi + blt + bgt |
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceSoundHandBeat (psndSFX_vol) | call through a cast to an `(s32, s32)` function type so the s32 vol goes in untruncated | plain call through pmario_sound.h's u8 prototype: clrlwi on the argument, changes the object |
-| Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
-| Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_detect.c | BattleGetFirstAttackUnit | tmp holds the getter result across the swap; assigning it directly changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
@@ -299,7 +297,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_seq.c | btlseqAct | block-local unit shadowing the function's; using the function's unit changes the object | see comment |
 | Both | src/battle/battle_seq.c | battleSortPhaseMoveTable | wp copied into a void* and cast back at every use; using wp directly changes the object | see comment |
 | Both | src/battle/battle_seq.c | BattleWaitAllActiveEvtEnd_NoBgSetEndWait | wp copied into a void* and cast back at its use; using wp directly changes the object | see comment |
-| Both | src/battle/battle_seq.c | BattleCheckAllPinchStatus | repeated `alert = FALSE` in the else branch (already FALSE) | deleting the store: changes the object |
 | Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | BattleCommandDisplay_WeaponMultiItemCancelCheckDisp | called through a cast that puts the float arguments first; the plain call changes the object ; x = 0.0f held in a local so the expression is 0.0f - w (a subtraction, not a negation) | see comment |
@@ -432,7 +429,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_opuku_wprotect_n64.c | effOpukuWprotectDisp | (f32) casts on f32 products; without them the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustN64Entry | (s32) cast on the char; without it the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustDisp | k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object | see comment |
-| Both | src/effect/n64/eff_pokopi_pcharge_n64.c | effPokopiPchargeN64Entry | p is set between the position stores; setting it right before the loop changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderMain | inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
@@ -448,7 +444,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_snowfall_n64.c | effSnowfallDisp | discarded compound literal with no effect; removing it changes the object | see comment |
 | Both | src/effect/n64/eff_sstar_n64.c | effSstarDisp | vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object | see comment |
 | Both | src/effect/n64/eff_stardust2_n64.c | effStardust2Main | (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object | see comment |
-| Both | src/effect/n64/eff_stardust_n64.c | effStardustN64Entry | i set before the loop setup; for (i = 1; ...) changes the object | see comment |
 | Both | src/effect/n64/eff_stardust_n64.c | effStardustMain | vx/vy copies of the velocity added to the position in one case | adding work->vx / work->vy directly: changes the object |
 | Both | src/effect/n64/eff_sweat_n64.c | sin | sin/cos declared with float parameters; the library's double prototypes change the object | see comment |
 | Both | src/effect/n64/eff_timestamp_n64.c | effTimestampMain | comma expression; --work->delay[i] == 0 changes the object | see comment |
@@ -581,7 +576,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Demos | rels/mri/src/mri_puni.c | puni_puni_main | `(const char*)(u32)` round trip on one sound name, so its address is hoisted into a saved register before the loop | plain literal: one register less, stack frame 16 bytes smaller |
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
 | Both | src/battle/battle_unit.c | BtlUnit_GetExp | temporary t for `scale * (unitLevel - level)` before the return | one return expression: changes the object |
-| Both | src/event/evt_badgeshop.c | evt_badgeShop_throw_get_kind_cnt | `long i` instead of int: register choice in the demos, no change in retail | int |
 | Both | src/event/evt_mario.c | evt_mario_mov_pos | marioSetForceMove called through a (s32, f32, f32) cast (frames first); mario_sbr.h declares the definition's (dir, time, speed), which the other three calls use | plain call in the definition's order: the frame count and direction load the other way round |
 | All demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in every demo: only the strings stay compiled there, so its numbers stay out of the pool | full body |
 | Both | src/battle/battle_seq_end.c | btlseqEnd | `(u32)` casts on the s32 `BattleUnit.statusFlags` in the Danger/Peril tests (8) | without the casts: changes the object; field typed u32: battle_unit.c changes |
@@ -598,7 +592,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_minigame.c | effMiniGameMain | `(u32)work->delay < 20` unsigned compare on the s32 delay (three sites) | plain signed compare: changes the object |
 | Both | src/effect/eff_mist2.c | effMist2Disp | constant locals w = 16.0f, k = 255.0f, h = 8.0f | literals: changes the object |
 | Both | src/effect/eff_nozle.c | effNozleMain | `< 21U` unsigned compare on the s32 life (also tested signed: < 1000, < 16, < 0) | `< 21`: changes the object |
-| Both | src/effect/eff_nozle.c | effNozleDisp | separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5) | one reused pair: changes the object |
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
 | US, PAL, US demo 2, PAL demo | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
