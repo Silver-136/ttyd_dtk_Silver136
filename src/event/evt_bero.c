@@ -669,7 +669,6 @@ USER_FUNC(bero_get_position_normal) {
         tmp.x = start.x - (30.0f * (f32)sin(rad));
         tmp.y = start.y;
 
-        // FAKE: block-scoped temporary for cos(rad); the direct expression changes the object
         c0 = (f32) cos(rad);
         tmp.z = start.z - (30.0f * (-c0));
 

@@ -126,7 +126,6 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
             PSVECScale(&reflected, &npc->move, mag);
             clear = 0;
 
-            // FAKE: dot holds the dot product for one use; the call inside the PSVECScale argument changes the object
             dot = PSVECDotProduct(&rayDir, &normal);
             PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
             PSVECAdd(&npc->pos, &normal, &npc->pos);

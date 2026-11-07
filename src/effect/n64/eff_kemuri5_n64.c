@@ -81,7 +81,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->baseScaleY = 0.03f * (f32)(rand() % 11) + 1.7f;
         work->angle = (f32)(rand() % 61);
         work->timer = 30;
-        angF = ang; // FAKE: early float conversion temp; (f32)ang / implicit int at use both differ
+        angF = ang;
         work->velY = 0.5f;
         work->accelY = -0.02f;
         work->accelY2 = 0.00005f;
@@ -118,7 +118,6 @@ static void effKemuri5Main(EffectEntry* effect) {
         anyActive = 1;
         work->angle = reviseAngle(12.0f + work->angle);
 
-        // FAKE: sin result in a block-scoped temporary; writing it into the assignment changes the object
         sv = (f32)sin(6.2831855f * work->angle / 360.0f);
         work->scale.x = 0.1f * sv + work->baseScaleX;
         work->scale.y = 0.1f * (f32)cos(6.2831855f * work->angle / 360.0f) + work->baseScaleY;

@@ -636,7 +636,6 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit*
     BattleUnit* found;
     BattleUnit* other;
 
-    // FAKE: tmp holds the getter result across the swap; assigning it directly changes the object
     BattleUnit* tmp;
     s32 i;
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {

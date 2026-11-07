@@ -106,7 +106,6 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
         p->x2 = 0.0f;
         p->y2 = 0.0f;
         if (irand(1000) < 500) {
-            // FAKE: spare temporary a; `p->vx2 = irand(10) + 10;` changes the object
             a = irand(10) + 10;
             p->vx2 = a;
             p->vy2 = 0.0f;

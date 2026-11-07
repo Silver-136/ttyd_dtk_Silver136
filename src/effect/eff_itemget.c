@@ -88,7 +88,6 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
             elem->angle = 1.0471976f + 6.2831855f * (f32)(i - 1) / 6.0f;
             elem->velocity.x = 5.0f * (f32)sin(elem->angle);
 
-            // FAKE: spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object
             cv = (f32)cos(elem->angle);
             elem->velocity.y = 5.0f * -cv;
             elem->velocity.z = 0.0f;

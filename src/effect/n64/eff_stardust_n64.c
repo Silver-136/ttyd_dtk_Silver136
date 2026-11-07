@@ -280,7 +280,6 @@ static void effStardustMain(EffectEntry* effect) {
             work->vx *= 0.9f;
             work->vy += work->ay;
 
-            // FAKE: vx/vy copies of work->vx/vy added to the position; adding the fields directly changes the object
             vx = work->vx;
             vy = work->vy;
             if (work->lifetime < 0) {

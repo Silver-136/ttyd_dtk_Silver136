@@ -381,7 +381,6 @@ void btlDispMain(void) {
 #endif
                 switch (unit->work[SHELL_SHIELD_WORK_FOLLOW]) {
                     case 2:
-                        // FAKE: double temp for the fabs result (register order of the diff/fabs webs)
                         a = __fabs(pos.x - tpos.x);
                         if (a > 10.0) {
                             if (tpos.x > pos.x) {

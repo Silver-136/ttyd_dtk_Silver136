@@ -42,7 +42,6 @@ typedef struct effMugiKemuriData {
 static void effMugiKemuriMain(EffectEntry* effect);
 static void effMugiKemuriDisp(CameraId camId, void* param);
 
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
 inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
     return 6.2831855f * reviseAngle(data->rot.y);
 }

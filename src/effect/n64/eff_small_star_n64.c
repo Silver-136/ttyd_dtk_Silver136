@@ -183,7 +183,6 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
 #pragma opt_lifetimes off
 
 /** Multiplies an integer alpha value by a float factor. */
-// FAKE: alpha scaling through an inline helper; (s32)(w->alpha * 0.6f) written out changes the object
 inline f32 alphaf(f32 m, s32 x) {
     return x * m;
 }

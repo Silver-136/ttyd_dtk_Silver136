@@ -258,7 +258,6 @@ USER_FUNC(evt_party_get_pos) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
 inline float partyStepSize(f32 a, f32 b, f32 c, s32 n) {
     return (a - b) * (c / (f32)n);
 }

@@ -720,7 +720,6 @@ USER_FUNC(_set_effect_luck) {
             BtlUnit_GetPos(unit, &x, py, pz);
             psndSFXOn(SFX_NAME_WORD("SFX_SYSTEM_LUCKY1"));
 
-            // FAKE: block-local EffectEntry* temporary; assigning effNiceEntry(...)->userdata directly changes the object
             e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
             effect = e->userdata;
             effect->overallScale = 0.75f;
@@ -881,7 +880,6 @@ static void btlseqTurn(BattleWork* wp) {
             }
 
             if (sfx) {
-                // FAKE: string held in sfxName before the call; passing the literal directly changes the object
                 sfxName = "SFX_REST_CONDITION1";
                 psndSFXOn(sfxName);
             }
@@ -1063,7 +1061,6 @@ static void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000020: {
-                // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
                 BattleUnit *unit;
                 sfxName = "SFX_CONDITION_BREAK_ICE1";
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
@@ -2196,7 +2193,6 @@ static void btlseqAct(BattleWork* wp) {
 
     switch (BattleGetSeq(wp, SEQ_ACT)) {
         case 0x6000000: {
-                // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
                 BattleUnit* unit;
                 BOOL cantMove;
 
