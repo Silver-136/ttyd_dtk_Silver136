@@ -2223,10 +2223,6 @@ void BtlUnit_PoseSoundInit(BattleUnitPart* part) {
     part->poseSound.prevTime = 0.0f;
 }
 
-#pragma push
-// propagation optimisation off for BtlUnit_ControlPoseSoundMain, BtlUnit_snd_se, BtlUnit_snd_se_pos and 4 more: the original register allocation and scheduling need it
-#pragma opt_propagation off
-
 /**
  * Plays the sound effects tied to a part's current animation:
  * each frame, entries in the part's pose sound table whose time (in seconds of the animation) was just passed
@@ -2311,7 +2307,6 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
         }
     }
 }
-#pragma pop
 
 /** Plays a sound effect at the unit's position (BtlUnit_snd_se_pos). */
 s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch) {

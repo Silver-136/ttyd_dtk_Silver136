@@ -402,7 +402,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_party.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_pad.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_seq.c", extra_cflags=["-O4,s", "-inline noauto"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_seq_command.c", extra_cflags=["-O4,s"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_seq_command.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_sub.c", extra_cflags=["-O4,s"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_unit.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_unit_event.c", extra_cflags=["-O4,s", "-inline off"]),

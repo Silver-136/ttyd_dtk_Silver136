@@ -366,8 +366,6 @@ static void _btlcmd_GetCursorPtr(BattleCommand* cmd, u32 type, BattleCursor** ou
     }
 }
 
-#pragma dont_inline on
-
 /** Icon of the jump moves in the weapon list: normal, Super or Ultra Boots by the pouch jumpLevel. */
 static s32 _getJumpIconId(void) {
     switch (pouchGetPtr()->jumpLevel) {
@@ -379,9 +377,6 @@ static s32 _getJumpIconId(void) {
             return ICON_ITEM_BOOTS;
     }
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /** Icon of the hammer moves in the weapon list: normal, Super or Ultra Hammer by the pouch hammerLevel. */
 static s32 _getHammerIconId(void) {
@@ -394,7 +389,6 @@ static s32 _getHammerIconId(void) {
             return ICON_ITEM_HAMMER;
     }
 }
-#pragma dont_inline reset
 
 /**
  * Fills cmd->weapon with the list for menu type `type` and returns its length:
@@ -1019,8 +1013,6 @@ static void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
 }
 #pragma opt_propagation reset
 
-#pragma dont_inline on
-
 /**
  * Menu icon of a partner kind from _checkPartyTable; Yoshi's follows the colour he hatched with.
  * 0 for a kind that is not a partner.
@@ -1058,7 +1050,6 @@ static u16 _battleGetPartyIcon(s32 kind) {
     }
     return 0;
 }
-#pragma dont_inline reset
 
 /**
  * Fills the Change Partner list with each partner whose pouch entry carries POUCH_PARTY_FLAG_JOINED,
@@ -1130,7 +1121,6 @@ static s32 _btlcmd_MakePartyTable(BattleWork* wp) {
     return num;
 }
 
-#pragma dont_inline on
 static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
@@ -1171,7 +1161,6 @@ static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     }
     return 0;
 }
-#pragma dont_inline reset
 
 void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a);
 s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type);
@@ -1541,16 +1530,11 @@ void BattleCommandDisplay(BattleWork* wp) {
     }
 }
 
-#pragma dont_inline on
-
 /** Puts a menu cursor back on the first entry. */
 static void _cursor_init(BattleCursor* cursor) {
     cursor->absPos = 0;
     cursor->relPos = 0;
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /**
  * Opens the action menu: rebuilds its entries, starts the menu display (a = 1 when coming back from a submenu)
@@ -1578,7 +1562,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
         _cursor_init(&cmd->cursor[11]);
     }
 }
-#pragma dont_inline reset
 
 /**
  * Per-frame input for the action menu: moves the cursor,
@@ -1774,14 +1757,10 @@ void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_ActSelect_Disp(wp);
 }
 
-#pragma dont_inline on
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp) {
     BattleMenuDisp_ActSelect_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_ACT;
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /** Opens the weapon list of menu type `type`: builds it, starts its display (a is passed on) and shows all enemy HP. */
 void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a) {
@@ -1793,7 +1772,6 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a)
     BattleMenuDisp_WeaponSelect_Init(wp, cursor, cmd->weapon, a);
     cmd->flags |= (CMD_MENU_WEAPON_SELECT | CMD_MENU_ENEMY_HP);
 }
-#pragma dont_inline reset
 
 void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp);
 
@@ -1905,14 +1883,10 @@ void BattleCommandDisplay_WeaponSelectMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_WeaponSelect_Disp(param);
 }
 
-#pragma dont_inline on
 void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp) {
     BattleMenuDisp_WeaponSelect_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_WEAPON_SELECT;
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /**
  * Resets the Yes/No cursor of the prompt shown when B is pressed in the item list in the middle of a Double
@@ -1923,7 +1897,6 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckSetup(BattleWork* wp) {
     wp->commandMenu.cursor[13].relPos = 0;
     wp->commandMenu.cursor[13].count = 2;
 }
-#pragma dont_inline reset
 
 /**
  * Per-frame input for that prompt: Yes gives up the remaining items
@@ -2031,15 +2004,12 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
 }
 
-#pragma dont_inline on
-
 /** Opens the Tactics menu: builds its entries, starts its display (a is passed on) and shows all enemy HP. */
 void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a) {
     _btlcmd_MakeOperationTable(wp);
     BattleMenuDisp_Operation_Init(wp, a);
     wp->commandMenu.flags |= (CMD_MENU_OPERATION | CMD_MENU_ENEMY_HP);
 }
-#pragma dont_inline reset
 
 void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp);
 
@@ -2143,14 +2113,10 @@ void BattleCommandDisplay_OperationMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_Operation_Disp(param);
 }
 
-#pragma dont_inline on
 void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp) {
     BattleMenuDisp_Operation_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_OPERATION;
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /** Opens the Double/Triple Dip menu: builds its entries and starts its display (a is passed on). */
 void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a) {
@@ -2158,7 +2124,6 @@ void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a) {
     BattleMenuDisp_MultiItem_Init(wp, a);
     wp->commandMenu.flags |= CMD_MENU_MULTI_ITEM;
 }
-#pragma dont_inline reset
 
 void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp);
 
@@ -2241,12 +2206,10 @@ void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_MultiItem_Disp(param);
 }
 
-#pragma dont_inline on
 void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp) {
     BattleMenuDisp_MultiItem_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_MULTI_ITEM;
 }
-#pragma dont_inline reset
 
 /** Opens the Change Partner list display and shows all enemy HP. */
 void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
@@ -2328,21 +2291,17 @@ void BattleCommandDisplay_ChangePartySelectMenuDisp(CameraId camId, void* param)
     BattleMenuDisp_ChangePartySelect_Disp(param);
 }
 
-#pragma dont_inline on
 void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp) {
     BattleMenuDisp_ChangePartySelect_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_CHANGE_PARTY;
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp) {
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
 
     wp->commandMenu.flags |= CMD_MENU_TARGET_SELECT;
     BtlUnit_SetAnimType(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), POSE_TYPE_WALK);
 }
-#pragma dont_inline reset
 
 /**
  * Draws target selection: the hand cursor on the current target with its name boxed at the top left,
@@ -2457,8 +2416,6 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
     btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
 }
 
-#pragma dont_inline on
-
 /** Ends target selection: resets the battle camera and clears the target-select and show-all-enemy-HP flags. */
 void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;
@@ -2469,16 +2426,13 @@ void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
     cmd->flags &= ~CMD_MENU_TARGET_SELECT;
     cmd->flags &= ~CMD_MENU_ENEMY_HP;
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp) {
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     BattleGetPartnerPtr(wp, unit);
     wp->commandMenu.flags |= CMD_MENU_PROTECT_PARTNER;
     wp->commandMenu.flags &= ~CMD_MENU_ENEMY_HP;
 }
-#pragma dont_inline reset
 
 /** Draws the hand cursor and name box over the partner for the protect-partner choice. */
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param) {
@@ -2505,13 +2459,9 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
     FontDrawString(3.0f + icon.x - w, 77.0f + icon.y, msgSearch(unit->kindParams->name));
 }
 
-#pragma dont_inline on
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp) {
     wp->commandMenu.flags &= ~CMD_MENU_PROTECT_PARTNER;
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /**
  * Hides every command menu except the Double Dip menu at once;
@@ -2520,7 +2470,6 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp) {
 void BattleCommandDisplay_AllEnd(BattleWork* wp) {
     wp->commandMenu.flags &= ~(CMD_MENU_ACT | CMD_MENU_WEAPON_SELECT | CMD_MENU_OPERATION | CMD_MENU_CHANGE_PARTY | CMD_MENU_TARGET_SELECT | CMD_MENU_PROTECT_PARTNER);
 }
-#pragma dont_inline reset
 
 static s32 _check_weapon_type_attack(BattleWeapon* weapon);
 
@@ -2898,8 +2847,6 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
     }
 }
 
-#pragma dont_inline on
-
 /**
  * Draws one HP bar at screen position pos: the frame texture, then the fill by barRatio,
  * with a black trail for recent damage while it drains (mode 1).
@@ -2932,7 +2879,6 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
         break;
     }
 }
-#pragma dont_inline reset
 
 /**
  * Picks the random action of a Confused Mario or partner
@@ -3127,8 +3073,6 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     }
 }
 
-#pragma dont_inline on
-
 /**
  * Records the current menu state in cmd->recCommand;
  * while an audience action is pending, clears it
@@ -3150,9 +3094,6 @@ static void _commandRestoreRec(void) {
         wp->commandMenu.attackAudience = 0;
     }
 }
-#pragma dont_inline reset
-
-#pragma dont_inline on
 
 /**
  * X during command input: unless in zero gravity or Mario is veiled,
@@ -3181,13 +3122,15 @@ static BOOL BattleCommandAttackAudienceCheck(void) {
     }
     return FALSE;
 }
-#pragma dont_inline reset
 
 /**
  * Script helper for _btl_cmd_error_msg_event: sets args[0] to the message id explaining why the picked command
  * is greyed out, by cmd->disableReason (no FP, no Star Power, no jump or hammer target, can't run,
  * or can't pick it now).
  */
+// FAKE: auto_inline on for _get_msg alone in this -inline noauto file: as an auto-inline candidate it gets the
+// front end's simple optimizer pass, which gives the target's string base register; without it r5/r6 swap
+#pragma auto_inline on
 USER_FUNC(_get_msg) {
     s32 index = event->args[0];
     BattleWork* wp = _battleWorkPointer;
@@ -3219,6 +3162,7 @@ USER_FUNC(_get_msg) {
     evtSetValue(event, index, (EvtWord)msg);
     return EVT_RETURN_DONE;
 }
+#pragma auto_inline reset
 
 /**
  * TRUE if the weapon is offensive: it deals HP damage or inflicts a harmful status (sleep, stop, dizzy, poison,
