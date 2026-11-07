@@ -403,7 +403,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/driver/npcdrv.c | _fbatFirstAttackAnnouceDisp | the products go through the mulf() inline; plain multiplications change the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
-| Both | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them the object changes | see comment |
+| JP | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; the other versions need neither); without them the object changes | see comment |
 | JP | src/effect/eff_levelup.c | getX | (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object | see comment |
 | Both | src/effect/eff_levelup.c | effLevelupDisp | 0.5f held in `halfScale`; work array and texid_tbl walked by byte offsets (ofs/tofs) | `width * 0.5f`: changes the object |
 | Both | src/effect/eff_mizutama.c | effMizutamaEntry | parameter z reused as the half-width; the local dist (as in the circle branch) changes the object | see comment |
@@ -591,7 +591,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | JP and later | src/driver/npcdrv.c | npcStrippedHitPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | npcStrippedKoopaPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | (file scope) FontDrawStringShake | private `const char*` prototype; the definition takes `const s8*` (-char unsigned) | the definition's prototype: build errors at the const char* calls without casts (not built) |
-| JP | src/event/evt_msg.c | (file scope) | battlePartyMsgPad: unused zero table, in no symbol map | removing it changes the object |
 | Both | src/battle/battle_damage.c | BattleCheckDamage | `cwp` is a second name for `&cw` | `&cw` at both calls: changes the object |
 | Both | src/battle/battle_enemy_item.c | _check_hp_recover_item, _check_fp_recover_item, _check_attack_item, _check_status_attack_item, _check_status_support_item, _check_status_recover_item | `(s32)(s8)` no-op casts on the s8 attackDirection passed to BattleSamplingEnemy | the plain field at all six: changes the object |
 | Both | src/effect/eff_batten.c | effBattenDisp | constant temporaries w/half/neg/pos for the quad corners | literal corners (-16.0f/16.0f): changes the object |

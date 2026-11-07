@@ -788,11 +788,10 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
-// FAKE: zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP and the early demos); without them
-// the object changes
+#if VERSION == VERSION_JP
+// FAKE: zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; JP only); without them the
+// object changes
 static __declspec(section ".rodata") const u32 gap_04_802FDD34_rodata[1] = {0};
-
-#if VERSION < VERSION_US
 __declspec(section ".data") u8 gap_05_803AC064_data[28] = {0};
 #endif
 
