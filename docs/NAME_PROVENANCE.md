@@ -38,6 +38,16 @@ demos) are Zephiles' names: the JP demo's map has one `DrawMenuPinchMark` (0x2c8
 the September demos on, `DrawMenuPinchMark` (0x58) only calls the two halves in an order that keeps the front mark
 on top. The stem is the original name; the Mario/Party parts follow `BattleGetMarioPtr`/`BattleGetPartyPtr`.
 
+## Credits for hardware register names
+
+The register index and bit names for the PI, MI, DI, SI, EXI and AI register arrays in
+`libs/dolsdk2004/include/dolphin/hw_regs.h` (`PI_INTSR`, `MI_PROT_TYPE`, `DI_SR`, `DI_SR_TCINT`, `SI_POLL_IDX`,
+`EXI0_CSR`, `EXI_CSR_EXTINT`, `AI_CR`, ...) come from public hardware documentation: the mnemonics of YAGCD
+("Yet Another GameCube Documentation", chapter 5, gc-forever.com/yagcd) and, where YAGCD gives none, the register
+and field names of the Dolphin emulator's hardware code (github.com/dolphin-emu/dolphin, Source/Core/Core/HW/).
+The definitions are our own; they are not original SDK names. Sources and tables:
+`cleanup_notes/hw_register_names.md` (outside the repo).
+
 ## Invented function and data names
 
 | Kind | Unit | Name | Replaced placeholder (JP) | JP address | US |
