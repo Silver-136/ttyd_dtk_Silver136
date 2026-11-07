@@ -989,7 +989,7 @@ void npcMain(void) {
 #else
                             dist = dx * dx + dz * dz;
 
-                            // FAKE: discarded sqrtf call; removing it changes the object
+                            // The square root is computed and discarded (its compare with 0 is in the retail code).
                             sqrtf(dist);
 #endif
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);

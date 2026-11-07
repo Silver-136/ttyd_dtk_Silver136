@@ -905,7 +905,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 
     if (w->mario.mode) {
 
-        // FAKE: the star power cost (s8 baseSpCost, never negative) is read unsigned (lbz with no extsb), as by the old u8 view of the move table
+        // The star power cost (s8 baseSpCost, never negative) is read unsigned (the retail code has lbz with no extsb).
 #if VERSION <= VERSION_DEMO_JP
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
         winFontInit();

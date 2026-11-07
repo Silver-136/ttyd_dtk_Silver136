@@ -679,7 +679,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             if (__fabs(dx) > __fabs(dz)) {
                 s = (qx - lx0) / dx;
 
-                // FAKE: ok is assigned and never read; removing the assignment changes the object
+                // ok is assigned and never read (the range test is in the retail code).
                 ok = (s < -0.0000001 || s > 1.0000001);
             } else if (dz != 0.0) {
                 s = (qz - lz0) / dz;

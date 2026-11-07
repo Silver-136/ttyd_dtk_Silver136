@@ -183,7 +183,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/unit/party/unit_party_yoshi.c | yoshi_original_color_anim_set | empty test of the uninitialised part pointer; removing it changes codegen | see comment |
 | JP | src/window/win_mario.c | winMarioDisp | dead store; makes y the first float referenced, so its later web (the mode label x) is split before x's (register order) | without the dead store 4 rows (f19/f20 swap); `y = y;` also works; statement swaps of x/y loads change load order |
 | US | src/window/win_mario.c | winMarioDisp | every float live range in its own named variable; one-element copies q1/q2 of row0/row1 are kept live across rowC by two dead int guards (gz is 0, no code) | see comment |
-| Both | src/window/win_mario.c | winMarioDisp | the star power cost is read as `(u8)superActionTable[i]->baseSpCost` (lbz without extsb, as the old local u8 view of BattleWeapon read it); the cost is never negative | plain `->baseSpCost` (s8: US gains an extsb, JP an extsb. in place of cmpwi) |
 | Both | src/party.c | partyHelloMain, partyRideMain | no-op `(PartyEntry*)party` cast on the moveFrames shrink-timer accesses (was raw `*(s32*)((u8*)party + 0x24)`); the plain field reschedules the int->float conversion | `party->moveFrames`, `*&party->moveFrames`, `(&party->moveFrames)[0]`, `*(s32*)&party->moveFrames`, `*(&party->moveFrames + 0)`, stores-only as field: all reschedule |
 | Both | src/motion/mot_roll.c | mot_roll | no-op `(MarioWork*)mario` cast on the directionView/groundRot.x/.z accesses (10 sites, were raw `MF(0x1a0/0x218/0x220)`); the plain field reorders a const load (lis/lfs) | `mario->field` per line, `*&field`, `(&field)[0]`, `(*mario).field`, inlining into angOut: all reorder |
 | Both | src/battle/ac/ac_stick_rotate.c | battleAcDisp_StickRotate | no-op `(BattleActions*)&...->actionCommands` casts before `->disp` / `->acFlags` remain; actionCommandDisp/actionCommandDisp2 now use the existing typed ac->work alias and the unused AC_WORK macro is removed | casts-only natural fields with work macro retained, and real-work-local forms: different in both versions |
@@ -237,7 +236,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/cam_road.c | collisionTri_simple | nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object | see comment |
 | Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
 | Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
-| Both | src/cam_road.c | collisionCurve | unread `ok` (out-of-range test of s) | removing the assignment: changes the object |
 | Both | src/error_handler.c | systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedPool | stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion constant into the pool; removing it changes the object | see comment |
@@ -378,7 +376,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
 | JP | src/driver/msgdrv.c | msgDisp | hy holds the x position and hx the y position; swapping the names changes the object | see comment |
 | Both | src/driver/msgdrv.c | (file scope) hankakuSearch | private prototypes taking s32 (US and later) or char (JP, early demos); the definition in fontmgr.c takes s8 | `u16 hankakuSearch(s8 c);` in fontmgr.h: changes the object |
-| JP | src/driver/npcdrv.c | npcMain | discarded sqrtf call; removing it changes the object | see comment |
 | Both | src/driver/npcdrv.c | npcCheckHitMarioSide | the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object | see comment |
 | US | src/driver/npcdrv.c | _fbatFirstAttackAnnouceDisp | the products go through the mulf() inline; plain multiplications change the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
@@ -517,7 +514,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_cloud.c | cloudGetBreathPower | val local holding 10.0f then 100.0f (both version copies) | literals: changes the object |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_hit.c | partyChkFrontStep | mx/mz temporaries for the offsets of p | building pos directly: changes the object |
-| Both | src/party/party_hit.c | partySearchWallFront | nz copy of nn.z in the wall slide; US-and-later dead `hit = NULL` before the +45 probe loop; dead first `bestD = rd` before the +45 loop | bestNrm directly: changes the object (early demos the same) |
+| Both | src/party/party_hit.c | partySearchWallFront | nz copy of nn.z in the wall slide | bestNrm directly: changes the object (early demos the same) |
 | Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_fly | no-op function-pointer cast; the plain call changes the object | see comment |
