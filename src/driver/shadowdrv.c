@@ -356,8 +356,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
 
     GXInvalidateTexAll();
 
-    // FAKE: byte-offset view of shadowConfig[wp->configIdx]; the indexed form changes the object
-    size = ShadowSizeTbl[((ShadowConfig*)((u8*)shadowConfig + wp->configIdx * sizeof(ShadowConfig)))->sizeIdx];
+    size = ShadowSizeTbl[(cfg = &shadowConfig[wp->configIdx])->sizeIdx];
     if (depth) {
         GXSetColorUpdate(GX_FALSE);
     }
@@ -377,8 +376,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
         C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
     }
 
-    // FAKE: byte-offset view of shadowConfig[wp->configIdx]; the indexed form changes the object
-    GXSetProjection(wp->proj, ((ShadowConfig*)((u8*)shadowConfig + wp->configIdx * sizeof(ShadowConfig)))->projType);
+    GXSetProjection(wp->proj, (cfg = &shadowConfig[wp->configIdx])->projType);
     PSMTXCopy(camGetCurPtr()->view, tmp_view);
     PSMTXCopy(wp->view, camGetCurPtr()->view);
 }
@@ -1001,13 +999,12 @@ void shadowSetCamId(s32 id, s32 camId) {
 }
 
 void shadowSetCollision(s32 id, BOOL enable) {
-    // FAKE: byte-offset view of cswp->entries[id].flags; the indexed form changes the object
-    s32 off = id * sizeof(ShadowEntry);
-    ShadowEntry* e = cswp->entries;
+    ShadowEntry* e = &cswp->entries[id];
+
     if (enable) {
-        ((u16*)((u8*)e + off))[0] |= SHADOW_ENTRY_GROUND;
+        e->flags |= SHADOW_ENTRY_GROUND;
     } else {
-        ((u16*)((u8*)e + off))[0] &= ~SHADOW_ENTRY_GROUND;
+        e->flags &= ~SHADOW_ENTRY_GROUND;
     }
 }
 

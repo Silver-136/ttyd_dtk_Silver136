@@ -3161,6 +3161,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         MapTevCallback callback;
 
         MapTevCallbackInfo* ip = &info;
+        MapWork* mw;
 
         info.mapObj = current_mp;
         info.mtx = mtx;
@@ -3170,8 +3171,8 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         info.texCoord = coord;
         info.indStage = 0;
 
-        // FAKE: entries[0].tevCallbacks read through a byte offset from mapWork[activeGroup]; mapWork[activeGroup].entries[0].tevCallbacks[...] changes the object
-        callback = ((MapTevCallback*)((u8*)&mapWork[activeGroup] + offsetof(MapEntry, tevCallbacks)))[(u32)(flags & MAP_OBJ_TEV_CALLBACK_MASK) >> 24];
+        mw = &mapWork[activeGroup];
+        callback = mw->entries[0].tevCallbacks[(u32)(flags & MAP_OBJ_TEV_CALLBACK_MASK) >> 24];
         if (callback) {
             callback(ip);
         }

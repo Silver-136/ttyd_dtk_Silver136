@@ -1139,8 +1139,9 @@ void SoundEfxSetVolume(s32 chan, u8 vol) {
 
 /** Returns the volume last set for the effect on chan. */
 u8 SoundEfxGetVolume(s32 chan) {
-    s32 off = chan * sizeof(SoundEffect);
-    return *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, vol)); // FAKE: byte-offset load from the chan * sizeof offset (sound.effects[chan].vol schedules differently)
+    SoundEffect* sfx = &sound.effects[chan];
+
+    return sfx->vol;
 }
 
 /** Sets the reverb send of the effect on chan. */
@@ -1163,10 +1164,12 @@ void SoundEfxSetAux1(s32 chan, u8 reverb) {
 void SoundEfxSetPan(s32 chan, u8 pan) {
     SoundEffect* sfx;
     SND_VOICEID vid;
-    s32 off = chan * sizeof(SoundEffect);
+    SoundEffect* e;
 
-    *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, pan)) = pan; // FAKE: byte-offset store, then sfx from the same offset (sfx = &sound.effects[chan]; sfx->pan = pan does not match)
-    sfx = (SoundEffect*)((u8*)sound.effects + off);
+    // FAKE: the store goes through its own pointer e to the entry, then sfx is formed again; one pointer (sfx = &sound.effects[chan]; sfx->pan = pan) changes the object
+    e = &sound.effects[chan];
+    e->pan = pan;
+    sfx = &sound.effects[chan];
     if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
     } else {
@@ -1185,10 +1188,12 @@ void SoundEfxSetSrndPan(s32 chan, u8 span) {
     SoundEffect* sfx;
     SND_VOICEID vid;
     s32 doppler;
-    s32 off = chan * sizeof(SoundEffect);
+    SoundEffect* e;
 
-    *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, span)) = span; // FAKE: byte-offset store, then sfx from the same offset (sfx = &sound.effects[chan]; sfx->span = span does not match)
-    sfx = (SoundEffect*)((u8*)sound.effects + off);
+    // FAKE: the store goes through its own pointer e to the entry, then sfx is formed again; one pointer (sfx = &sound.effects[chan]; sfx->span = span) changes the object
+    e = &sound.effects[chan];
+    e->span = span;
+    sfx = &sound.effects[chan];
     vid = (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) ? sndFXCheck(sndEmitterVoiceID(&sfx->emitter))
                               : sndFXCheck(sfx->voiceId);
     if (vid != -1) {

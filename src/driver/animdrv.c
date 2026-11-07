@@ -909,7 +909,7 @@ void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset) {
     pose->paperAnimIdx = idx;
     pose->localTimeInit = animTimeGetTime(pose->type);
     id = pose->paperId;
-    if (id != -1 && !(*(u32*)((u8*)wp->poses + id * sizeof(AnimationPose) + offsetof(AnimationPose, typeFlags)) & ANIM_POSE_TYPE_PAPER)) { // FAKE: byte-offset load so the typeFlags offset folds into the index (mulli/addi/lwzx), as in the target
+    if (id != -1 && !(animPoseGetAnimPosePtr(id)->typeFlags & ANIM_POSE_TYPE_PAPER)) {
         animPoseMain(pose->paperId);
     }
 }
@@ -940,10 +940,10 @@ inline s32 animEffectPoseEntry(const char* animName, s32 group) {
 void animPoseSetEffect(s32 poseId, const char* animName, BOOL paperGroup) {
     AnimationPose* paper;
     AnimationPose* pose = animPoseGetAnimPosePtr(poseId);
+    AnimationPoseFile* file;
 
     if (pose->paperId != -1) {
-        // FAKE: the paper pose's file entry found by byte offset (files + fileId * 16); animPoseGetBaseData(animPoseGetAnimPosePtr(pose->paperId)) changes the object
-        if (animName && !strcmp((*(AnimationPoseData**)(((AnimationPoseFile*)((u8*)wp->files + animPoseGetAnimPosePtr(pose->paperId)->fileId * 16))->handle->data))->fileName, animName) &&
+        if (animName && !strcmp((*(AnimationPoseData**)((file = &wp->files[animPoseGetAnimPosePtr(pose->paperId)->fileId])->handle->data))->fileName, animName) &&
             (s32)((pose->flags >> 1) & 1) == paperGroup) {
             return;
         }
