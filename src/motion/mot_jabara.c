@@ -475,7 +475,6 @@ void mot_jabara(void) {
 #endif
             marioPaperOff();
             {
-                // FAKE: spare copy of hitobjStandOn in its own block; passing the field directly changes the object
                 void* standOn = mario->hitobjStandOn;
                 jabaraLand(mario->lastGroundPos.y, standOn);
             }

@@ -2018,7 +2018,7 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
     f32 dirSin, dirCos;
     f32 dot, ox, oz;
-    f32 h; // FAKE: 15.0f in a local set before each hitDist store, so the y argument stays pos.y + h (a literal would be put on the left)
+    f32 h;
 
     *outX = entry->position.x;
     *outZ = entry->position.z;

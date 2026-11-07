@@ -2119,7 +2119,7 @@ s32 partyRideChk(PartyEntry* party) {
  */
 void partyRideMain(PartyEntry* party) {
     Vec pos;
-    f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
+    f32 shrink;
     Vec s;
     f32 dy0;
     MarioWork* mario = party->playerPtr;

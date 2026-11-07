@@ -2544,7 +2544,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
                         }
                     }
                 }
-                { // FAKE: a separate pose2 local for the third ChangeTexture call; reusing pose changes the object
+                {
                 AnimationPose *pose2;
                 pose2 = wp->curPose;
                 if (pose2->flags & ANIM_POSE_FLAG_CHANGE_TEXTURE) {
@@ -2727,7 +2727,7 @@ static void renderProc(s32 shapeId, s32 unused) {
                     }
                 }
 
-                { // FAKE: a separate pose2 local for the third ChangeTexture call; reusing pose changes the object
+                {
                 AnimationPose* pose2;
                 pose2 = wp->curPose;
                 if (pose2->flags & ANIM_POSE_FLAG_CHANGE_TEXTURE) {

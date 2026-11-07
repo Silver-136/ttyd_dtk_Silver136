@@ -3160,7 +3160,6 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         MapTevCallbackInfo info;
         MapTevCallback callback;
 
-        // FAKE: ip is a second name for &info; callback(&info) changes the object
         MapTevCallbackInfo* ip = &info;
 
         info.mapObj = current_mp;
@@ -3554,7 +3553,6 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             GXInitLightPos(&lightObj, pos.x, pos.y, pos.z);
             GXInitLightDir(&lightObj, dir.x, dir.y, dir.z);
 
-            // FAKE: spare block and temporary for the half spot angle; the expression written in the call changes the object
             ang = lights[i]->spotAngle;
             ang *= 0.5f;
             GXInitLightSpot(&lightObj, ang, GX_SP_SHARP);

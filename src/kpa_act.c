@@ -141,7 +141,6 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
             d[4] = t % 10;
             p = ksdp[i].str;
 
-            // FAKE: str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object
             str = ksdp[i].str;
             n = 0;
             for (j = 0; j < 5; j++) {

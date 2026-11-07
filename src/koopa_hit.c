@@ -398,7 +398,6 @@ HitEntry* kpaGetHitobjHead2(void) {
     s32 i;
     HitEntry* hit;
 
-    // FAKE: ret is a spare copy of hit; returning hit changes the object
     HitEntry* ret;
     for (i = 0; i < KPA_HIT_SLOTS; i++) {
         hit = marioGetPtr()->kpaWork->headHit[i];

@@ -683,7 +683,6 @@ static void bomhei_use_main(PartyEntry* party) {
             party->accelY = 0.0f;
         }
     case 42:
-        // FAKE: the speed step goes through a spare temporary; adding the expression directly changes the object
         tmp = 0.1f * (-1.0f - party->moveSpeed);
         party->moveSpeed += tmp;
         if (party->moveSpeed <= 0.0f) {

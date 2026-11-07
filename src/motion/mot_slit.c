@@ -1066,7 +1066,6 @@ void mot_slit(void) {
                 if (hitGetAttr(m->hitobjPush) & HIT_ATTR_SLIT) {
                     HitCheckQuery q;
 
-                    // FAKE: qp is a second name for &q; using &q changes the object
                     HitCheckQuery* qp;
                     f32 sn, cs;
                     d = revise360(m->controlStickAngle - m->targetYaw);

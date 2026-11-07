@@ -496,7 +496,6 @@ static void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
             query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
             query.targetDistance = 150.0f;
 
-            // FAKE: q is a second name for &query for the hitPos reads below; reading through query changes the object
             q = &query;
             if (!hitCheckVecFilter(&query, _filter)) {
                 continue;

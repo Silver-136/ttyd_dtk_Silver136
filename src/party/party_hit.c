@@ -541,7 +541,6 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
     oz = party->position.z;
     {
         // p is built first and copied into pos (the copy is in the retail code).
-        // FAKE: the mx/mz temporaries; writing the products into p.x/p.z changes the object
         Vec p = {0.0f, 0.0f, 0.0f};
         Vec dir = {0.0f, -1.0f, 0.0f};
         f32 mx;
@@ -672,7 +671,6 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         f32 nz;
 
         // nn copies bestNrm for the wall slide (the copy is in the retail code).
-        // FAKE: nz copies nn.z; using nn.z directly changes the object (early demos the same)
         nn = bestNrm;
         mx = sn * dist;
         mz = cs * dist;
