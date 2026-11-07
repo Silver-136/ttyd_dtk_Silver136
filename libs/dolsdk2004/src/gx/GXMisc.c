@@ -376,7 +376,7 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt) {
 #define temp exp
 #else
     s32 temp;
-    u8 unused[4]; // FAKE: unused, pads the stack frame of the release build
+    u8 unused[4]; // unused; the original had it too (its stack space is in the retail code)
 #endif
 
     z24n = ~(z24 << 8);

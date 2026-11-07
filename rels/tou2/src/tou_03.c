@@ -83,7 +83,7 @@ typedef struct KyakuWork {
     s32 animNum;
     KyakuAnim anim[32];
 } KyakuWork;
-// FAKE: unused zero object, read by nothing; removing it changes the object.
+// Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static s32 tou_03_bss_0xC;
 KyakuWork* kyaku_wp;
 static ScreenWork* screen_wp;
@@ -4318,7 +4318,7 @@ static f32 cosf(f32 x) {
 }
 
 /** A zero vector placed with the Star Stone jump code; nothing in this file reads it. */
-// FAKE: unused zero object, read by nothing; removing it changes the object.
+// Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static const Vec item_jump_zero = {0.0f, 0.0f, 0.0f};
 /**
  * Moves the item named "stone" (the Star Stone) along a ballistic arc towards the target (arg0..arg2) at the

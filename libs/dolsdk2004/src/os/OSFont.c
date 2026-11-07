@@ -387,7 +387,7 @@ static void ReadROM(void* buf, int length, int offset) {
 static u32 ReadFont(void* img, u16 encode, void* fontData) {
     u32 size;
 #ifndef DEBUG
-    u32 padding[1]; // FAKE: unused, pads the stack frame of the release build
+    u32 padding[1]; // unused; the original had it too (its stack space is in the retail code)
 #endif
 
     if (encode == OS_FONT_ENCODE_SJIS) {

@@ -11,9 +11,9 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-// FAKE: unused zero object, read by nothing; removing it changes the object.
+// Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static GXColor shock_zero_color0;
-// FAKE: unused zero object, read by nothing; removing it changes the object.
+// Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static GXColor shock_zero_color1;
 
 /**

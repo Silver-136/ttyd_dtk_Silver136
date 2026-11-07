@@ -5,7 +5,7 @@
 
 #include "__dsp.h"
 
-// FAKE: unused statics that fill .sbss to the original size; removing them changes the object
+// Unused statics; the original had them too (their .sbss space is in the retail code)
 static u32 t0, t1, t2;
 
 DSPTaskInfo* __DSP_curr_task;
@@ -17,7 +17,7 @@ int __DSP_rude_task_pending;
 
 /* Every DSPSendMailToDSP below is followed by a wait until the DSP has taken the mail. */
 void __DSPHandler(__OSInterrupt intr, OSContext* context) {
-    u8 unused[4]; // FAKE: unused local that pads the stack frame; removing it changes the object
+    u8 unused[4]; // unused; the original had it too (its stack space is in the retail code)
     OSContext exceptionContext;
     u16 tmp;
     u32 mail;

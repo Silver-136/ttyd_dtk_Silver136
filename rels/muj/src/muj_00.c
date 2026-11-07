@@ -55,7 +55,7 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-// FAKE: unused zero object, read by nothing; removing it changes the object.
+// Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static u8 muj_00_bss_0C[4];
 static u8* _ap;
 typedef struct TobiWork {

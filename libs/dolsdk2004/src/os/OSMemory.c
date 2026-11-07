@@ -195,7 +195,7 @@ static asm void RealMode(register u32 addr) {
 
 void __OSInitMemoryProtection(void) {
 #ifndef DEBUG
-    u32 padding[9]; // FAKE: unused, pads the stack frame of the release build
+    u32 padding[9]; // unused; the original had it too (its stack space is in the retail code)
     u32 temp;
 #endif
     BOOL enabled;

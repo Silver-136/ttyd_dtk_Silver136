@@ -51,15 +51,10 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/effdrv.c | effMayaKeyInterp (inline, used by effCalcMayaAnimMatrix) | channel fields still read through byte offsets; unnecessary register qualifiers removed, typed MayaHermitChannel indexing changes both objects | fresh US/JP ordinary-local and typed-channel probes |
 | Both | libs/dolsdk2004/src/pad/Padclamp.c | ClampRegion (data) | wrapper struct `{ PADClampRegion r; u8 pad[2]; }` pads the object to the original 12-byte symbol size (uses go through `.r`); the plain 10-byte SDK type matches US but not JP (Codex round 16) | see comment |
 | Both | libs/musyx/src/musyx/runtime/s_data.c | sndSeqPlayEx | local `GSROOT* r` stepped one GSTACK per iteration (`/* fake: ... */`) to reproduce the register use of seqPlaySong(.., 0, ..) inlined; the plain indexed loop and the natural wrapper both change the code (Codex round 16) | see comment |
-| Both | libs/dolsdk2004/src/os/OSFont.c | ReadFont | unused `u32 padding[1]` (release build only) pads the stack frame | see comment |
-| Both | libs/dolsdk2004/src/os/OSMemory.c | __OSInitMemoryProtection | unused `u32 padding[9]` (release build only) pads the stack frame | see comment |
-| Both | libs/dolsdk2004/src/os/OSRtc.c | OSSetSoundMode, OSSetVideoMode, OSSetLanguage, __OSSetBootMode | unused `int unused` local pads the stack frame | see comment |
-| Both | libs/dolsdk2004/src/os/OSRtc.c | OSSetProgressiveMode, OSSetEuRgb60Mode, OSSetGbsMode | unused `u32 padding[1]` (release build only) pads the stack frame | see comment |
-| Both | libs/dolsdk2004/src/gx/GXMisc.c | GXCompressZ16 | unused `u8 unused[4]` (release build only) pads the stack frame; release also keeps `temp` apart from `exp` (DEBUG aliases them) | see comment |
+| Both | libs/dolsdk2004/src/gx/GXMisc.c | GXCompressZ16 | release keeps `temp` apart from `exp` (DEBUG aliases them) | see comment |
 | Both | libs/musyx/src/musyx/runtime/snd3d.c | clip3FFF, SetFXParameters (inlines) | `static const f32 s3d_f16383[1]`, `s3d_f127[1]`, `s3d_f64[1]`, `s3d_f8192[1]` used as scalars | plain float literals (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/stream.c | sndStreamFrq | `#pragma push` / `#pragma inline_depth(3)` / `#pragma pop` around the function | without the pragmas (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/synthmacros.c | mcmdSetPitchADSR | `MIN(sl, 0x3ffull)`: 64-bit literal in a u32 index | `0x3ff` (changes the object) |
-| Both | libs/dolsdk2004/src/dsp/dsp_task.c | __DSPHandler; t0, t1, t2 (data) | unused `u8 unused[4]` pads the stack frame; unused statics `t0, t1, t2` fill .sbss | see comment |
 | Both | libs/dolsdk2004/src/support/List.c | DSAttachList | dead expression statement `linkPrev;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | callbackEventStream | dead expression statement `value;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/perf/perfdraw.c | PERFDumpScreen | dead expression statement `!samples[s].cpuTimeStampStart;` (the unit is not built: no probe possible) | see comment |
@@ -82,7 +77,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | rels/tik/src/tik_00.c | (USER_FUNC near line 502) | (decomp-permuter): the dead condition moves the ssf load ahead of event->args; casts, temps and u32 index variants do not reproduce it | see comment |
 | Both | rels/tik/src/tik_05.c | tiz_broken_draw | copy temp; plain nx = dx / len changes regalloc (+4 B) | see comment |
 | Both | rels/tou/src/tou.c | tou_champion_belt | the work is read through a pointer to the userdata slot (EffStarStoneWork**, as in tou2), so userdata is reloaded at every store | typed `EffStarStoneWork*` local, direct `eff->userdata` cast: object differs (A2) |
-| Both | rels/tou/src/tou.c | (file scope) | tou_bss_1C: unused zero object, read by nothing | removing it changes the object |
 | Both | rels/tou/src/tou_02.c | ext_fan_main | hand-inlined randf(135.0f, 225.0f) (same rand() call, r*90+135), 6.28 first so its pool address is created before 90/135 as in the target; integer cast (SFX_NAME_WORD) makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy) | see comment |
 | Both | rels/win/src/window/win_04.c | ss_ch_check | (decomp-permuter): reorders the args[1] load | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_SetPartsWork | byte-stride `*(EvtWord*)((u8*)part->work + index * sizeof(EvtWord)) = value`: the index is scaled and added before the field offset, as in the target (replaces the old raw `p + 0x130` form) | `part->work[index] = value` (91.7%) |
@@ -272,7 +266,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object | see comment |
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
-| Both | src/pmario_sound.c | (file scope) | _buf: unused zero object, read by nothing | removing it changes the object |
 | Both | src/battle/battle_ac_help.c | BattleAcHelpMain | spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_CheckReactionPerPhase | comma expression; `--member->statusTimer <= 0` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
@@ -466,8 +459,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_thunder_n64.c | effThunderN64Entry | second test of type instead of else; else changes the object | see comment |
 | Both | src/effect/n64/eff_timestamp_n64.c | effTimestampMain | comma expression; --work->delay[i] == 0 changes the object | see comment |
 | Both | src/effect/n64/eff_vapor_n64.c | effVaporDisp | rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object; `sub >= 4` nested inside `sub <= 4` (means sub == 4) | see comment |
-| Both | src/effect/n64/eff_vapor_n64.c | (file scope) | kColor1: unused zero object, read by nothing | removing it changes the object |
-| Both | src/effect/n64/eff_vapor_n64.c | (file scope) | kColor2: unused zero object, read by nothing | removing it changes the object |
 | Both | src/effect/n64/eff_whirlwind_n64.c | effWhirlwindN64Entry | spare temporary for 0.25f; the plain literal changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | marioChgMot(s32) (mario_motion, mario_sbr change) |
 | Both | src/event/evt_mario.c | evt_koopa_fire | s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object | see comment |
@@ -626,8 +617,8 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
 | US, PAL, US demo 2, PAL demo | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
 | Both | src/event/evt_msg.c | _evt_msg_print (msgWindow_Entry) | call through a cast to an `(const char*, s32, s32)` function type, passing `(s16)event->msgPriority` | plain call with msgdrv.h's u16 priority prototype: changes the object |
-| Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |
 | PAL and PAL demo | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
+| Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |
 | Both | src/effect/eff_recovery.c | effRecoveryEntry | pp walks the records and `work = pp` each pass | stepping work itself: changes the object |
 | Both | src/himo.c | vivihimo | `pw` is a second name for `&w` | w.field and &w: changes the object |
 | Both | src/motion/mot_slit.c | mot_slit | `qp` is a second name for `&q` (push test queries) | `&q` / `q.` directly: changes the object (early demos the same) |
@@ -639,8 +630,3 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_eff.c | evt_eff (effBoobooN64Entry) | private six-argument prototype; the definition takes no arguments | not tried: a call without them drops the argument loads |
 | Both | src/party/party_chuchu.c | (file scope) partyWalkInit | private prototype with a second s32 mode (calls pass 1); the definition takes the party only | header prototype and one-argument calls: changes the object |
 | Both | src/mario/mario_motion.c | marioRollChgChk (marioCreviceWallChk) | private prototype taking the Vec by value; mot_slit.c defines it with const Vec* | the definition's prototype and `&mario->position`: changes the object |
-| Both | rels/muj/src/muj_00.c | (file scope) | muj_00_bss_0C: unused zero object, read by nothing | removing it changes the object |
-| Both | rels/tou2/src/tou_03.c | (file scope) | tou_03_bss_0xC: unused zero object, read by nothing | removing it changes the object |
-| Both | rels/tou2/src/tou_03.c | (file scope) | item_jump_zero: unused zero object, read by nothing | removing it changes the object |
-| Both | src/effect/n64/eff_shock_n64.c | (file scope) | shock_zero_color0: unused zero object, read by nothing | removing it changes the object |
-| Both | src/effect/n64/eff_shock_n64.c | (file scope) | shock_zero_color1: unused zero object, read by nothing | removing it changes the object |
