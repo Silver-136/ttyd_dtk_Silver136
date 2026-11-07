@@ -28,14 +28,14 @@ void __OSInitAudioSystem(void) {
     DCFlushRange(__DSPWorkBuffer, sizeof(DSPInitCode));
 
     __DSPRegs[DSP_ARAM_SIZE] = 0x43;
-    ASSERTMSGLINE(113, !(__DSPRegs[DSP_CONTROL_STATUS] & 0x200), "__OSInitAudioSystem(): ARAM DMA already in progress");
-    ASSERTMSGLINE(117, !(__DSPRegs[DSP_CONTROL_STATUS] & 0x400), "__OSInitAudioSystem(): DSP DMA already in progress");
-    ASSERTMSGLINE(121, (__DSPRegs[DSP_CONTROL_STATUS] & 0x004), "__OSInitAudioSystem(): DSP already working");
+    ASSERTMSGLINE(113, !(__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_ARAM_DMA_BUSY), "__OSInitAudioSystem(): ARAM DMA already in progress");
+    ASSERTMSGLINE(117, !(__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_INIT_CODE), "__OSInitAudioSystem(): DSP DMA already in progress");
+    ASSERTMSGLINE(121, (__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_HALT), "__OSInitAudioSystem(): DSP already working");
     
-    __DSPRegs[DSP_CONTROL_STATUS] = 0x8AC;
-    __DSPRegs[DSP_CONTROL_STATUS] |= 1;
+    __DSPRegs[DSP_CONTROL_STATUS] = (DSP_CSR_INIT | DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);
+    __DSPRegs[DSP_CONTROL_STATUS] |= DSP_CSR_RESET;
 
-    while (__DSPRegs[DSP_CONTROL_STATUS] & 1);
+    while (__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_RESET);
     __DSPRegs[DSP_MAILBOX_IN_HI] = 0;
 
     while (((__DSPRegs[DSP_MAILBOX_OUT_HI] << 16) | __DSPRegs[DSP_MAILBOX_OUT_LO]) & 0x80000000);
@@ -45,7 +45,7 @@ void __OSInitAudioSystem(void) {
     *(u32*)&__DSPRegs[DSP_ARAM_DMA_SIZE_HI] = 0x20;
 
     reg16 = __DSPRegs[DSP_CONTROL_STATUS];
-    while (!(reg16 & 0x20))
+    while (!(reg16 & DSP_CSR_ARAM_INT))
         reg16 = __DSPRegs[DSP_CONTROL_STATUS];
 
     __DSPRegs[DSP_CONTROL_STATUS] = reg16;
@@ -58,15 +58,15 @@ void __OSInitAudioSystem(void) {
     *(u32*)&__DSPRegs[DSP_ARAM_DMA_SIZE_HI] = 0x20;
 
     reg16 = __DSPRegs[DSP_CONTROL_STATUS];
-    while (!(reg16 & 0x20)) {
+    while (!(reg16 & DSP_CSR_ARAM_INT)) {
         reg16 = __DSPRegs[DSP_CONTROL_STATUS];
     }
     __DSPRegs[DSP_CONTROL_STATUS] = reg16;
 
-    __DSPRegs[DSP_CONTROL_STATUS] &= ~0x800;
-    while ((__DSPRegs[DSP_CONTROL_STATUS]) & 0x400);
+    __DSPRegs[DSP_CONTROL_STATUS] &= ~DSP_CSR_INIT;
+    while ((__DSPRegs[DSP_CONTROL_STATUS]) & DSP_CSR_INIT_CODE);
     
-    __DSPRegs[DSP_CONTROL_STATUS] &= ~4;
+    __DSPRegs[DSP_CONTROL_STATUS] &= ~DSP_CSR_HALT;
     errFlag = 0;
 
     reg16 = __DSPRegs[DSP_MAILBOX_OUT_HI];
@@ -82,10 +82,10 @@ void __OSInitAudioSystem(void) {
 
     // FAKE: dead comparison, no effect; without it the register allocation differs from the game code
     reg16 != 0x81800;
-    __DSPRegs[DSP_CONTROL_STATUS] |= 4;
-    __DSPRegs[DSP_CONTROL_STATUS] = 0x8AC;
-    __DSPRegs[DSP_CONTROL_STATUS] |= 1;
-    while (__DSPRegs[DSP_CONTROL_STATUS] & 1);
+    __DSPRegs[DSP_CONTROL_STATUS] |= DSP_CSR_HALT;
+    __DSPRegs[DSP_CONTROL_STATUS] = (DSP_CSR_INIT | DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);
+    __DSPRegs[DSP_CONTROL_STATUS] |= DSP_CSR_RESET;
+    while (__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_RESET);
 
     // Restore the saved work buffer.
     memcpy(__DSPWorkBuffer, (void*)((u32)OSGetArenaHi() - 0x80), sizeof(DSPInitCode));
@@ -101,12 +101,12 @@ void __OSStopAudioSystem(void) {
             reg16 = (load);        \
         }
 
-    __DSPRegs[DSP_CONTROL_STATUS] = 0x804;
+    __DSPRegs[DSP_CONTROL_STATUS] = DSP_CSR_INIT | DSP_CSR_HALT;
     reg16 = __DSPRegs[DSP_DMA_CONTROL_LEN];
     __DSPRegs[DSP_DMA_CONTROL_LEN] = reg16 & ~DSP_DMA_START_FLAG;
-    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], 0x400);
-    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], 0x200);
-    __DSPRegs[DSP_CONTROL_STATUS] = 0x8ac;
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], DSP_CSR_INIT_CODE);
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], DSP_CSR_ARAM_DMA_BUSY);
+    __DSPRegs[DSP_CONTROL_STATUS] = (DSP_CSR_INIT | DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);
     __DSPRegs[DSP_MAILBOX_IN_HI] = 0;
 
     while (((__DSPRegs[DSP_MAILBOX_OUT_HI] << 16) | __DSPRegs[DSP_MAILBOX_OUT_LO]) & 0x80000000);
@@ -115,8 +115,8 @@ void __OSStopAudioSystem(void) {
     while ((s32)(OSGetTick() - start_tick) < 0x2c);
 
     reg16 = __DSPRegs[DSP_CONTROL_STATUS];
-    __DSPRegs[DSP_CONTROL_STATUS] = reg16 | 1;
-    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], 0x001);
+    __DSPRegs[DSP_CONTROL_STATUS] = reg16 | DSP_CSR_RESET;
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], DSP_CSR_RESET);
 
     #undef waitUntil
 }

@@ -181,7 +181,7 @@ static void __ARHandler(__OSInterrupt exception, OSContext* context) {
     u16 tmp;
 
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0x88) | DSP_CSR_ARAM_INT; // acknowledge the ARAM interrupt
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_AID_INT)) | DSP_CSR_ARAM_INT; // acknowledge the ARAM interrupt
     __DSPRegs[DSP_CONTROL_STATUS] = (tmp);
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
@@ -196,7 +196,7 @@ void __ARClearInterrupt(void) {
     u16 tmp;
 
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0x88) | DSP_CSR_ARAM_INT; // acknowledge the ARAM interrupt
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_AID_INT)) | DSP_CSR_ARAM_INT; // acknowledge the ARAM interrupt
     __DSPRegs[DSP_CONTROL_STATUS] = (tmp);
 }
 

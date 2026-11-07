@@ -207,7 +207,7 @@ static void Read(void* address, u32 length, u32 offset, DVDLowCallback callback)
 	LastCommandWasRead = TRUE;
 	LastReadIssued = __OSGetSystemTime();
 
-	__DIRegs[DI_CMDBUF0] = 0xa8000000;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_READ;
 	__DIRegs[DI_CMDBUF1] = offset / 4;
 	__DIRegs[DI_CMDBUF2] = length;
 	__DIRegs[DI_MAR] = (u32)address;
@@ -334,7 +334,7 @@ BOOL DVDLowSeek(u32 offset, DVDLowCallback callback) {
 
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = 0xab000000;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_SEEK;
 	__DIRegs[DI_CMDBUF1] = offset / 4;
 	__DIRegs[DI_CR] = DI_CR_TSTART;
 	SetTimeoutAlarm(OSSecondsToTicks(10));
@@ -354,7 +354,7 @@ BOOL DVDLowReadDiskID(DVDDiskID* diskID, DVDLowCallback callback) {
 
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = 0xa8000040;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_READ | 0x40; // low byte 0x40: read the disc ID (Dolphin: Read sub-command "Read DiscID")
 	__DIRegs[DI_CMDBUF1] = 0;
 	__DIRegs[DI_CMDBUF2] = sizeof(DVDDiskID);
 	__DIRegs[DI_MAR] = (u32)diskID;
@@ -367,7 +367,7 @@ BOOL DVDLowReadDiskID(DVDDiskID* diskID, DVDLowCallback callback) {
 BOOL DVDLowStopMotor(DVDLowCallback callback) {
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = 0xe3000000;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_STOP_MOTOR;
 	__DIRegs[DI_CR] = DI_CR_TSTART;
 	SetTimeoutAlarm(OSSecondsToTicks(10));
 	return TRUE;
@@ -376,7 +376,7 @@ BOOL DVDLowStopMotor(DVDLowCallback callback) {
 BOOL DVDLowRequestError(DVDLowCallback callback) {
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = 0xe0000000;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_REQUEST_ERROR;
 	__DIRegs[DI_CR] = DI_CR_TSTART;
 	SetTimeoutAlarm(OSSecondsToTicks(10));
 	return TRUE;
@@ -385,7 +385,7 @@ BOOL DVDLowRequestError(DVDLowCallback callback) {
 BOOL DVDLowInquiry(DVDDriveInfo* info, DVDLowCallback callback) {
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = 0x12000000;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_INQUIRY;
 	__DIRegs[DI_CMDBUF2] = sizeof(DVDDriveInfo);
 	__DIRegs[DI_MAR] = (u32)info;
 	__DIRegs[DI_LENGTH] = sizeof(DVDDriveInfo);
@@ -397,7 +397,7 @@ BOOL DVDLowInquiry(DVDDriveInfo* info, DVDLowCallback callback) {
 BOOL DVDLowAudioStream(u32 subcmd, u32 length, u32 offset, DVDLowCallback callback) {
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = subcmd | 0xe1000000;
+	__DIRegs[DI_CMDBUF0] = subcmd | DI_CMD_AUDIO_STREAM;
 	__DIRegs[DI_CMDBUF1] = offset >> 2;
 	__DIRegs[DI_CMDBUF2] = length;
 	__DIRegs[DI_CR] = DI_CR_TSTART;
@@ -408,7 +408,7 @@ BOOL DVDLowAudioStream(u32 subcmd, u32 length, u32 offset, DVDLowCallback callba
 BOOL DVDLowRequestAudioStatus(u32 subcmd, DVDLowCallback callback) {
 	Callback = callback;
 	StopAtNextInt = FALSE;
-	__DIRegs[DI_CMDBUF0] = subcmd | 0xe2000000;
+	__DIRegs[DI_CMDBUF0] = subcmd | DI_CMD_REQUEST_AUDIO_STATUS;
 	__DIRegs[DI_CR] = DI_CR_TSTART;
 	SetTimeoutAlarm(OSSecondsToTicks(10));
 	return TRUE;
@@ -432,7 +432,7 @@ BOOL DVDLowAudioBufferConfig(BOOL enable, u32 size, DVDLowCallback callback) {
     ASSERTLINE(1243, trigger <= 2);
 #endif
 
-	__DIRegs[DI_CMDBUF0] = 0xe4000000 | (enable != 0 ? 0x10000 : 0) | size;
+	__DIRegs[DI_CMDBUF0] = DI_CMD_AUDIO_BUFFER_CONFIG | (enable != 0 ? 0x10000 : 0) | size;
 	__DIRegs[DI_CR] = DI_CR_TSTART;
 	SetTimeoutAlarm(OSSecondsToTicks(10));
 	return TRUE;

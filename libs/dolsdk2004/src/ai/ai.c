@@ -301,7 +301,7 @@ static void __AIDHandler(__OSInterrupt interrupt, OSContext* context) {
     u16 tmp;
 
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0xA0) | 8;
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT)) | DSP_CSR_AID_INT;
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
