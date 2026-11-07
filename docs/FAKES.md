@@ -72,7 +72,6 @@ review took this list from 705 rows to under 480.
 | Both | libs/dolsdk2004/src/gx/GXMisc.c | GXCompressZ16 | release keeps `temp` apart from `exp` (DEBUG aliases them) | see comment |
 | Both | libs/musyx/src/musyx/runtime/snd3d.c | clip3FFF, SetFXParameters (inlines) | `static const f32 s3d_f16383[1]`, `s3d_f127[1]`, `s3d_f64[1]`, `s3d_f8192[1]` used as scalars | plain float literals (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/stream.c | sndStreamFrq | `#pragma push` / `#pragma inline_depth(3)` / `#pragma pop` around the function | without the pragmas (changes the object) |
-| Both | libs/musyx/src/musyx/runtime/synthmacros.c | mcmdSetPitchADSR | `MIN(sl, 0x3ffull)`: 64-bit literal in a u32 index | `0x3ff` (changes the object) |
 | Both | libs/dolsdk2004/src/support/List.c | DSAttachList | dead expression statement `linkPrev;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | callbackEventStream | dead expression statement `value;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/perf/perfdraw.c | PERFDumpScreen | dead expression statement `!samples[s].cpuTimeStampStart;` (the unit is not built: no probe possible) | see comment |
