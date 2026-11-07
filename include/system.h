@@ -73,6 +73,7 @@ f32 sysFrame2MsecFloat(f32 frame);
 void mtxGetRotationElement(Mtx src, Mtx dst, s8 firstAxis, s8 secondAxis);
 s32 LZ77Decode(u8* input, u8* output);
 void* memcpy_as4(void* dest, const void* src, u32 count);
+s32 memcmp_as4(const void* a, const void* b, u32 count);
 
 inline Vec initializeVec(Vec* input);
 

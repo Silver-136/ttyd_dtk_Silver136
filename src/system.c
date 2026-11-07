@@ -1147,6 +1147,44 @@ void* memcpy_as4(void* dest, const void* src, u32 count) {
     return dest;
 }
 #endif
+
+// Original name and size from the JP demo's link map (UNUSED there, 0x34 after memset_as4): nothing calls it, so
+// the linker strips it. Body from Super Paper Mario's memcmp_as4 (spm-decomp, CC0; same size), written like the
+// kept memcpy_as4.
+#ifdef __MWERKS__
+/** Compares count / 4 words of a and b: 0 when all are equal, else 1. */
+asm s32 memcmp_as4(const void* a, const void* b, u32 count) {
+    nofralloc
+    addi    r3, r3, -4
+    srwi    r5, r5, 2
+    addi    r4, r4, -4
+    mtctr   r5
+    @0:
+    lwzu    r11, 4(r3)
+    lwzu    r12, 4(r4)
+    cmplw   r11, r12
+    bne     @1
+    bdnz    @0
+    li      r3, 0
+    blr
+    @1:
+    li      r3, 1
+    blr
+}
+#else
+/** Compares count / 4 words of a and b: 0 when all are equal, else 1. */
+s32 memcmp_as4(const void* a, const void* b, u32 count) {
+    const u32* p = (const u32*)a;
+    const u32* q = (const u32*)b;
+    u32 n = count >> 2;
+    while (n--) {
+        if (*p++ != *q++) {
+            return 1;
+        }
+    }
+    return 0;
+}
+#endif
 // clang-format on
 
 
