@@ -199,8 +199,7 @@ never copied in). What the raw counts above mean for the libraries:
   original debug records show no extra locals, so a fake buffer would not be a fix either.
 - **Padclamp:** the original type is ten one-byte fields (10-byte symbol). The plain type matches US; JP loses two
   bytes, so the wrapper stays (FAKES.md) until the JP object extent is understood.
-- **sndSeqPlayEx:** the plain indexed loop and the natural `seqPlaySong(.., 0, ..)` wrapper both change the code; the
-  row stays.
+- **sndSeqPlayEx:** done 2026-11-07: a separate `static inline _seqPlaySong` copy (AxioDL's 2.0.2-2.0.3 form).
 - **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's three
   pairs (getTiming, latch0/latch1) stay: a whole-unit flag changes other helpers.
 - **Sources no build uses:** Codex round 22 G recounted 101 library sources that none of the five builds then compiled.

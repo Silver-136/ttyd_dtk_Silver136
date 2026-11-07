@@ -68,7 +68,6 @@ review took this list from 705 rows to under 480.
 | Both | libs/musyx/src/musyx/runtime/HARDWARE.C | itdOffTab (data) | `static volatile const` table, read by SetupITD | plain `static const` (both versions change) |
 | Both | src/driver/effdrv.c | effMayaKeyInterp (inline, used by effCalcMayaAnimMatrix) | channel fields still read through byte offsets; unnecessary register qualifiers removed, typed MayaHermitChannel indexing changes both objects | fresh US/JP ordinary-local and typed-channel probes |
 | Both | libs/dolsdk2004/src/pad/Padclamp.c | ClampRegion (data) | wrapper struct `{ PADClampRegion r; u8 pad[2]; }` pads the object to the original 12-byte symbol size (uses go through `.r`); the plain 10-byte SDK type matches US but not JP (Codex round 16) | see comment |
-| Both | libs/musyx/src/musyx/runtime/s_data.c | sndSeqPlayEx | local `GSROOT* r` stepped one GSTACK per iteration (`/* fake: ... */`) to reproduce the register use of seqPlaySong(.., 0, ..) inlined; the plain indexed loop and the natural wrapper both change the code (Codex round 16) | see comment |
 | Both | libs/dolsdk2004/src/gx/GXMisc.c | GXCompressZ16 | release keeps `temp` apart from `exp` (DEBUG aliases them) | see comment |
 | Both | libs/dolsdk2004/src/support/List.c | DSAttachList | dead expression statement `linkPrev;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | callbackEventStream | dead expression statement `value;` (the unit is not built: no probe possible) | see comment |

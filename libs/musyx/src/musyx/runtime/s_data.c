@@ -353,46 +353,60 @@ u32 seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_cal
   return seqId;
 }
 
-u32 sndSeqPlayEx(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 studio) {
+// The GC release library of MusyX 2.0.2 and later inlines seqPlaySong into sndSeqPlayEx
+static inline u32 _seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_call,
+                               u8 studio) {
   int i;
-  u32 seqId;
   GROUP_DATA* g;
-  MIDISETUP* midiSetup;
-  PAGE* drum;
   PAGE* norm;
+  PAGE* drum;
+  MIDISETUP* midiSetup;
   GSROOT* root;
+  u32 seqId;
   void* prj;
+  MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
+
   for (root = gsRoot; root != NULL; root = root->next) {
-    /* FAKE: r steps one GSTACK per i; reproduces the register use of seqPlaySong(.., 0, ..) inlined */
-    GSROOT* r;
-    for (i = 0, r = root; i < root->sp; r = (GSROOT*)((u8*)r + sizeof(GSTACK)), ++i) {
-      if (r->stack[0].gAddr->id != sgid) {
-        continue;
-      }
-      if (root->stack[i].gAddr->type == 0) {
-        g = root->stack[i].gAddr;
-        prj = root->stack[i].prjAddr;
-        norm = (PAGE*)((size_t)prj + g->data.song.normpageOff);
-        drum = (PAGE*)((size_t)prj + g->data.song.drumpageOff);
-        midiSetup = (MIDISETUP*)((size_t)prj + g->data.song.midiSetupOff);
-        while (midiSetup->songId != 0xFFFF) {
-          if (midiSetup->songId == sid) {
+    for (i = 0; i < root->sp; ++i) {
+    if (root->stack[i].gAddr->id != sgid) {
+      continue;
+    }
+
+    if (root->stack[i].gAddr->type == 0) {
+      g = root->stack[i].gAddr;
+      prj = root->stack[i].prjAddr;
+      norm = (PAGE*)((size_t)prj + g->data.song.normpageOff);
+      drum = (PAGE*)((size_t)prj + g->data.song.drumpageOff);
+      midiSetup = (MIDISETUP*)((size_t)prj + g->data.song.midiSetupOff);
+      while (midiSetup->songId != 0xFFFF) {
+        if (midiSetup->songId == sid) {
+          if (irq_call != 0) {
+            seqId = seqStartPlay(norm, drum, midiSetup, arrfile, para, studio, sgid);
+          } else {
             hwDisableIrq();
             seqId = seqStartPlay(norm, drum, midiSetup, arrfile, para, studio, sgid);
             hwEnableIrq();
-            goto done;
           }
-          ++midiSetup;
+          return seqId;
         }
-        seqId = 0xffffffff;
-        goto done;
-      } else {
-        seqId = 0xffffffff;
-        goto done;
+
+        ++midiSetup;
       }
+
+      MUSY_DEBUG("Song ID=%d is not in group ID=%d.", sid, sgid);
+      return 0xffffffff;
+    } else {
+      MUSY_DEBUG("Group ID=%d is no songgroup.", sgid);
+      return 0xffffffff;
     }
   }
+  }
+
+  MUSY_DEBUG("Group ID=%d is not on soundstack.", sgid);
   seqId = 0xffffffff;
-done:
   return seqId;
+}
+
+u32 sndSeqPlayEx(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 studio) {
+  return _seqPlaySong(sgid, sid, arrfile, para, 0, studio);
 }
