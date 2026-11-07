@@ -75,7 +75,6 @@ static void _ac_help_disp(CameraId cameraId, void* param) {
     lines++;
     y = 0.0f;
 
-    // FAKE: x assigned inside the argument list; computing x first changes the object
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, alpha}, (x = y - (width / 2)) - 20.0f, (-145.0f) + ((lines - 1) * 29), width + 40, (lines * 29) + 1, 10.0f);
     y = -148.0f;
     FontDrawStart_alpha(alpha);

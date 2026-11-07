@@ -1000,7 +1000,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     x = party->position.x;
     z = party->position.z;
 
-    // FAKE: assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object
+    // FAKE: spare copy k of 30.0f; dist = w + 30.0f changes the object
     y0 = party->position.y + (w = party->height);
     k = 30.0f;
     dist = w + k;

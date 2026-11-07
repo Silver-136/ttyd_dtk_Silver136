@@ -538,7 +538,6 @@ static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
     f32 w, h, fw, fh;
     f32 cx, cz;
 
-    // FAKE: assignment inside the index; `wp = cswp;` as its own statement changes the object
     cfg = &shadowConfig[(wp = cswp)->base.configIdx];
     entry = wp->entries;
     view = camGetCurPtr()->view;

@@ -1003,7 +1003,6 @@ void marioReInit(void) {
     }
     dotFlag = wp->flags & MARIO_FLAG_IS_8_BIT;
 #else
-    // FAKE: assignment inside the expression; wp = mp; on its own line changes the object
     dotFlag = (wp = mp)->flags & MARIO_FLAG_IS_8_BIT;
 #endif
     camId = marioGetCamId();

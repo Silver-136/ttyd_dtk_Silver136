@@ -1527,7 +1527,6 @@ static void disp_maku(CameraId camId, void* param) {
         mag = 3.141592f;
         depth = camera->fovY;
 
-        // FAKE: depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object
         depth = (depth *= 0.5f) / 180.0f;
         depth = tan(mag * depth);
         depth = 24.0f / depth;

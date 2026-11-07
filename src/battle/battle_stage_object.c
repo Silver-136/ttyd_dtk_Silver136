@@ -2767,7 +2767,6 @@ USER_FUNC(_set_mobj_rotate_x) {
     EvtWord* args = event->args;
     busy = FALSE;
 
-    // FAKE: wp is assigned inside the expression; the two plain statements change the object
     sw = (&(wp = _battleWorkPointer)->stageObjectWork);
     layer = evtGetValue(event, *args++);
     if (isFirstCall) {

@@ -802,7 +802,6 @@ static void disp_2D(CameraId cam, void* param) {
             a = 0xFF;
         }
 
-        // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->atkBlinkTimer % 12;
         if (t >= 0 && t <= 5) {
@@ -861,7 +860,6 @@ static void disp_2D(CameraId cam, void* param) {
             a = 0xFF;
         }
 
-        // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->defBlinkTimer % 12;
         if (t >= 0 && t <= 5) {

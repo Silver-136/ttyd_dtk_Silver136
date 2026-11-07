@@ -539,7 +539,6 @@ void qqsort(void* base, u32 n, u32 size, QSortCompare compare) {
         if (p != NULL) {
             slot = idx;
             if (p != dst) {
-                // FAKE: assignment inside the argument; cur = dst; memcpy(buf, cur, size) changes the object
                 memcpy(buf, cur = dst, size);
                 do {
                     memcpy(cur, *slot, size);
