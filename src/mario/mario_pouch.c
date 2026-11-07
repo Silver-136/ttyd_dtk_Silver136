@@ -223,6 +223,33 @@ s32 pouchGetEmptyKeepItemCnt(void) {
     return count;
 }
 
+/**
+ * The list an item, key item or badge id belongs to: *table1 (Mario's items, key items or badges), *table2 (the
+ * worn-badge list for badges, else NULL) and *maximum (its slot count); FALSE for other ids.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+BOOL pouchGetMaxAndList(ItemType type, s32* maximum, s16** table1, s16** table2) {
+    if (type >= ITEM_MIN && type < ITEM_MAX) {
+        *table1 = mpp->heldItems;
+        *table2 = NULL;
+        *maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
+        return TRUE;
+    }
+    if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
+        *table1 = mpp->keyItems;
+        *table2 = NULL;
+        *maximum = MAX_KEY_ITEMS;
+        return TRUE;
+    }
+    if (type >= BADGE_MIN && type < BADGE_MAX) {
+        *table1 = mpp->badges;
+        *table2 = mpp->equippedBadges;
+        *maximum = MAX_BADGES;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /** we have obtained an item, update the appropriate data */
 // Puts type at the front of list t1 if it has an empty slot: the entries above the last empty slot move down
 // one place (t2, if given, moves in step and gets 0 at the front). Returns 1, or 0 when the list is full.
@@ -256,9 +283,9 @@ BOOL addHead(s16* t1, s16* t2, s32 size, ItemType type) {
  * and both join a list. Returns FALSE when the list is full or the id is not a pouch item.
  */
 BOOL pouchGetItem(ItemType type) {
-    s16 *itemLists[2];
+    s16* itemLists[2];
     s32 size;
-    BOOL ok;
+
     if (type == ITEM_COIN) {
         if (mpp->coins < 999) {
             mpp->coins++;
@@ -337,24 +364,7 @@ BOOL pouchGetItem(ItemType type) {
     size = 0;
     itemLists[0] = NULL;
     itemLists[1] = NULL;
-    if (type >= ITEM_MIN && type < ITEM_MAX) {
-        itemLists[0] = mpp->heldItems;
-        size = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
-        ok = 1;
-    } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
-        itemLists[1] = NULL;
-        size = MAX_KEY_ITEMS;
-        ok = 1;
-        itemLists[0] = mpp->keyItems;
-    } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-        size = MAX_BADGES;
-        ok = 1;
-        itemLists[0] = mpp->badges;
-        itemLists[1] = mpp->equippedBadges;
-    } else {
-        ok = 0;
-    }
-    if (!ok) {
+    if (!pouchGetMaxAndList(type, &size, &itemLists[0], &itemLists[1])) {
         return 0;
     }
     return addHead(itemLists[0], itemLists[1], size, type);
@@ -417,31 +427,13 @@ static inline void pouchShift(s16 *table1, s16 *table2, int i, s32 maximum) {
 BOOL pouchRemoveItem(ItemType type) {
     s16 *table1;
     s16 *table2;
-    BOOL valid;
     s32 maximum;
     int i;
+
     maximum = 0;
     table1 = NULL;
     table2 = NULL;
-    if (type >= ITEM_MIN && type < ITEM_MAX) {
-        table1 = mpp->heldItems;
-        table2 = NULL;
-        maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
-        valid = 1;
-    } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
-        table1 = mpp->keyItems;
-        table2 = NULL;
-        maximum = MAX_KEY_ITEMS;
-        valid = 1;
-    } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-        table1 = mpp->badges;
-        table2 = mpp->equippedBadges;
-        maximum = MAX_BADGES;
-        valid = 1;
-    } else {
-        valid = 0;
-    }
-    if (!valid) {
+    if (!pouchGetMaxAndList(type, &maximum, &table1, &table2)) {
         return 0;
     }
     for (i = 0; i < maximum; i++) {
@@ -483,32 +475,13 @@ static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) 
  */
 BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     s16* table1, * table2, * p;
-    BOOL valid;
     s32 maximum;
     int i;
 
     maximum = 0;
     table1 = NULL;
     table2 = NULL;
-    if (type >= ITEM_MIN && type < ITEM_MAX) {
-        table1 = mpp->heldItems;
-        table2 = NULL;
-        maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
-        valid = TRUE;
-    } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
-        table1 = mpp->keyItems;
-        table2 = NULL;
-        maximum = MAX_KEY_ITEMS;
-        valid = TRUE;
-    } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-        table1 = mpp->badges;
-        table2 = mpp->equippedBadges;
-        maximum = MAX_BADGES;
-        valid = TRUE;
-    } else {
-        valid = FALSE;
-    }
-    if (!valid) {
+    if (!pouchGetMaxAndList(type, &maximum, &table1, &table2)) {
         return FALSE;
     }
     p = &table1[index];
