@@ -495,8 +495,8 @@ void winRootDisp(s32 camId, WindowWork* wp) {
                 continue;
             }
 
-            // FAKE: hand-written unsigned range test for the closing states 10 and 11;
-            // state == 10 || state == 11 changes the object
+            // hand-written unsigned range test for the closing states 10 and 11 (the subtract and the cmplwi are in the
+            // retail code)
             if (i > 0 && (u32)(state - 10) <= 1) {
                 continue;
             }

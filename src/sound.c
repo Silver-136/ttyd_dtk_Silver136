@@ -1380,7 +1380,7 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) {
         right = (((f32)pan * dvd->vol) / 63.0f);
     }
 
-    // FAKE: sign-bit test for pan >= 64; the plain comparison changes the object
+    // sign-bit test for pan >= 64 (the subtract and the shift are in the retail code)
     if (!((u32)(pan - 64) >> 31)) {
         left = (((f32)(127 - pan) * dvd->vol) / 63.0f);
     }

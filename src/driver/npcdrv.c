@@ -1316,7 +1316,7 @@ void npcSetTalkPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;
 
-    // FAKE: the first character is read through an s8 cast; name[0] changes the object
+    // the first character is read as s8 (the extsb is in the retail code)
     if (*(s8*)name == 0) {
         return;
     }
@@ -1353,7 +1353,7 @@ void npcSetStayPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;
 
-    // FAKE: the first character is read through an s8 cast; name[0] changes the object
+    // the first character is read as s8 (the extsb is in the retail code)
     if (*(s8*)name == 0) {
         return;
     }

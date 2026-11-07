@@ -854,7 +854,7 @@ static void* gcDvdCheckThread(void* param) {
 #if VERSION <= VERSION_DEMO_JP
                 width = 0.8f * romFontGetWidth(message);
 #else
-                // FAKE: s32 -> f32 -> s32 round trip; the plain assignment changes the object
+                // s32 -> f32 -> s32 round trip (both conversions are in the retail code)
                 width = (f32)romFontGetWidth(message);
 #endif
                 MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);

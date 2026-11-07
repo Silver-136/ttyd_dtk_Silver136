@@ -597,7 +597,7 @@ BOOL marioChkCtrl(void) {
 
 #if VERSION >= VERSION_JP
 BOOL N_marioChkUseParty(void) {
-    // FAKE: (u16) cast on the u32 buttonNew (all tested bits are in the low half); the plain test changes the object
+    // buttonNew is truncated to u16 before the test (all tested bits are in the low half; the clrlwi is in the retail code)
     if ((u16)gp->buttonNew[0] & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP | PAD_BUTTON_START)) {
         return TRUE;
     }

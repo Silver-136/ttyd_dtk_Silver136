@@ -149,8 +149,8 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
 #if VERSION <= VERSION_DEMO_JP
     if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
 #else
-    // FAKE: types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the
-    // object
+    // types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2 (the subtract and the cmplwi are in the
+    // retail code)
     if (type == 7) {
         type = 3;
     } else if (type == 8) {

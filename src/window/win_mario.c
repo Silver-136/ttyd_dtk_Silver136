@@ -349,7 +349,7 @@ const char* winZenkakuStr(s32 n) {
     }
     sprintf(buf, "%d", n);
     for (i = 0; i < strlen(buf); i++) {
-        // FAKE: (s8) cast on a digit character; without it the object changes
+        // the digit character is sign-extended before the index (the extsb is in the retail code)
         strcat(tmp2, tbl[(s8)buf[i] - '0']);
     }
 #endif
@@ -391,7 +391,7 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
         if ((u32)i < (u32)(digits - strlen(buf))) {
             strcat(winZenkakuStrPad_tmp, "０");
         } else {
-            // FAKE: (s8) cast on a digit character; without it the object changes
+            // the digit character is sign-extended before the index (the extsb is in the retail code)
             strcat(winZenkakuStrPad_tmp, tbl[(s8)buf[i - (digits - strlen(buf))] - '0']);
         }
     }

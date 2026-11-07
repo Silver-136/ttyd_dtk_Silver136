@@ -702,7 +702,7 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     PSMTXTrans(m2, -w, 12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->rot, c->rot, c->rot);
 
-                    // FAKE: (u32) cast selects the unsigned int-to-float conversion; w changes the object
+                    // w is converted as unsigned (the unsigned int-to-float sequence is in the retail code)
                     PSMTXTransApply(m2, m2, (u32)w, -12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->scale, c->scale, c->scale);
                     PSMTXTransApply(m2, m2, hx, hy, 0.0f);
