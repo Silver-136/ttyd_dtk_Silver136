@@ -42,25 +42,24 @@ static f32 angleABTBL[] = { 1.0f,       1.273187f,  1.27303f,   1.272768f,  1.27
 const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
 
-#if VERSION < VERSION_DEMO_EU
-const char* systemStrippedPool0(void) {
-    return "assertion \"%s\" failed.\n \"%s\"\n";
-}
-#endif
-
 /** Returns the root directory for the game's disc file paths: "." (the disc root). */
 const char* getMarioStDvdRoot(void) {
     return ".";
 }
 
-#if VERSION >= VERSION_DEMO_EU
-/** The PAL demo and PAL keep the assertion helpers that the other versions strip. */
+/**
+ * Assertion failure: halts with OSPanic. Only the PAL demo and PAL keep it; the JP demo map lists it UNUSED
+ * (0x28), and the other versions strip it too.
+ */
 BOOL __assert(const char* filename, int line, const char* assertion) {
     OSPanic(filename, line, assertion);
     return TRUE;
 }
 
-/** PAL demo and PAL only: assertion failure with a printf-style message; formats it and halts with OSPanic. */
+/**
+ * Assertion failure with a printf-style message; formats it and halts with OSPanic. Kept only in the PAL demo
+ * and PAL; the JP demo map lists it UNUSED (0xdc). Its format string stays in every version's pool.
+ */
 BOOL __assert2(const char* filename, int line, const char* assertion, const char* message, ...) {
     char buf[1024];
     va_list args;
@@ -70,7 +69,19 @@ BOOL __assert2(const char* filename, int line, const char* assertion, const char
     OSPanic(filename, line, "assertion \"%s\" failed.\n \"%s\"\n", assertion, buf);
     return TRUE;
 }
-#endif
+
+/**
+ * Rounds to the nearest integer, halves away from zero; no version calls it (JP demo map: UNUSED, 0x54). The body
+ * is angleABf's rounding: it compiles to the map size (the float-constant and plain x - 0.5 forms do not) and adds
+ * no pool constants, as the map's numbering shows.
+ */
+s32 roundi(f32 x) {
+    if (x >= 0.0f) {
+        return (s32)(0.5 + x);
+    } else {
+        return -(s32)(0.5 - x);
+    }
+}
 
 /** Wraps an angle in degrees into [0, 360); NaN becomes 0. */
 f32 reviseAngle(f32 angle) {
@@ -717,6 +728,16 @@ s8 keyGetSubStickY(u32 chan) {
     return gp->substickY[chan];
 }
 
+/** Returns the analog L trigger on controller chan; no version calls it (JP demo map: UNUSED, 0x10). */
+u8 keyGetTriggerL(u32 chan) {
+    return gp->triggerLeft[chan];
+}
+
+/** Returns the analog R trigger on controller chan; no version calls it (JP demo map: UNUSED, 0x10). */
+u8 keyGetTriggerR(u32 chan) {
+    return gp->triggerRight[chan];
+}
+
 /** Starts rumble on controller chan (applied by makeKey). */
 void padRumbleOn(u32 chan) {
     gp->rumbleStatus[chan] = PAD_MOTOR_RUMBLE;
@@ -758,6 +779,16 @@ void movePos(float* ret_sin, float* ret_cos, f32 dist, f32 degree) {
     result2 = (f32)cos(radian);
     *ret_sin = (dist * result1) + *ret_sin;
     *ret_cos = -((dist * result2) - *ret_cos);
+}
+
+/**
+ * FAKE stand-in for the dead-stripped movePos2 (0xc8) and movePos3 (0xd0) of the JP demo map, which sat here:
+ * their double constants 1.5, 2.5 and 1.7 (map @1111, @1112, @1117) stay in .rodata. Their bodies are not known.
+ */
+void systemStrippedPool1b(f64* d) {
+    d[0] = 1.5;
+    d[1] = 2.5;
+    d[2] = 1.7;
 }
 
 /** Returns a random integer in [0, scalar), or 0 when scalar is 0. */
@@ -843,6 +874,21 @@ f32 getV60FPS(f32 perFrame, s64 startTick, s64 endTick) {
     return ((60.0f * perFrame) * (f32)endMs) / 1000.0f;
 }
 
+/** Converts seconds to frames at 60 frames per second; no version calls it (JP demo map: UNUSED, 0x8). */
+s32 sysSec2Frame(s32 sec) {
+    return sec * 60;
+}
+
+/** Converts seconds to frames as a float at 60 frames per second; no version calls it (JP demo map: UNUSED, 0xc). */
+f32 sysSec2FrameFloat(f32 sec) {
+    return sec * 60.0f;
+}
+
+/** Converts frames to whole seconds at 60 frames per second; no version calls it (JP demo map: UNUSED, 0x20). */
+s32 sysFrame2Sec(s32 frame) {
+    return frame / 60;
+}
+
 /** Converts frames to seconds at 60 frames per second. */
 f32 sysFrame2SecFloat(f32 frame) {
     return frame / 60.0f;
@@ -869,9 +915,28 @@ f32 sysMsec2FrameFloat(f32 msec) {
 #endif
 }
 
-#if VERSION >= VERSION_DEMO_EU
-/** PAL demo and PAL only: printf-style debug line with file and line through OSReport. */
-void sysDebugReport(const char* filename, int line, const char* format, ...) {
+/**
+ * Converts frames to milliseconds at 60 frames per second, the inverse of sysMsec2Frame; no version calls it
+ * (JP demo map: UNUSED, 0x24).
+ */
+s32 sysFrame2Msec(s32 frame) {
+    return (frame * 1000) / 60;
+}
+
+/**
+ * Converts frames to milliseconds as a float at 60 frames per second; no version calls it (JP demo map: UNUSED,
+ * 0x14). Its 1000.0f is the first float constant of the pool after the GX colour.
+ */
+f32 sysFrame2MsecFloat(f32 frame) {
+    return (frame * 1000.0f) / 60.0f;
+}
+
+/**
+ * Prints a printf-style debug line with file and line through OSReport. Only the PAL demo and PAL keep it (their
+ * RELs call it); the JP demo map lists it UNUSED (0xc8) under this name (formerly called sysDebugReport here),
+ * and its format string stays in every version's pool.
+ */
+void sysOSReport(const char* filename, int line, const char* format, ...) {
     char buf[2048];
     va_list args;
 
@@ -879,7 +944,6 @@ void sysDebugReport(const char* filename, int line, const char* format, ...) {
     vsprintf(buf, format, args);
     OSReport("[%8s:% 4d] %s", filename, line, buf);
 }
-#endif
 
 /**
  * Extracts the pure rotation of src into dst: normalises the two named axes (firstAxis, secondAxis: 'x', 'y' or
@@ -1081,34 +1145,15 @@ void* memcpy_as4(void* dest, const void* src, u32 count) {
 #endif
 // clang-format on
 
-// The original file had debug functions that the linker dead-stripped; their constants
-// stayed in the literal pools. These stand-ins recreate the pool contents in order.
-#if VERSION >= VERSION_US
-/**
- * FAKE stand-in: US and later pool the int-to-float constant between the strings and the doubles; functions
- * are emitted in reverse order, so the doubles come first in the source. Removing it changes the object.
- */
-void systemStrippedPool1b(f32* f, f64* d) {
-    d[0] = 1.5;
-    d[1] = 2.5;
-    d[2] = 1.7;
-    f[2] = 1000.0f;
-}
 
 /**
- * FAKE stand-in (see above): keeps the int-to-float conversion constant of the stripped debug code in its pool
- * place.
+ * FAKE stand-in for constants of functions the linker dead-stripped (JP demo map: intplStringData and
+ * intplStringToEnum UNUSED, mtxGetScaleElement UNUSED 0x75c): the interpolation mode names, which stay in .rodata,
+ * then 1.0f and the sqrtf constants. The original table has a 4-byte entry (map @491) between BOUND and SIN_ACCEL
+ * that the pool does not show, and JP and later lack ACCEL, DECEL and BOUND, so the table cannot be rebuilt yet.
+ * Functions are emitted in reverse source order, so this last function's constants come first.
  */
-f32 systemStrippedPool2(s32 x) {
-    return (f32)x;
-}
-#endif
-
-/**
- * FAKE stand-in (see above): recreates the stripped debug code's constants (the interpolation mode names LINEAR,
- * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.
- */
-void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
+void systemStrippedPool1(const char** str, f32* f, f32 x) {
     f[0] = 1.0f;
     str[0] = "LINEAR";
 #if VERSION <= VERSION_DEMO_JP
@@ -1124,12 +1169,6 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     str[10] = "BOUND";
     str[11] = "SIN_ACCEL";
     str[12] = "SIN_DECEL";
-    f[1] = sqrtf(x);
-    str[10] = "[%8s:% 4d] %s";
-    d[0] = 1.5;
-    d[1] = 2.5;
-    d[2] = 1.7;
-    f[2] = 1000.0f;
 #else
     str[1] = "DOUBLE_ACCEL";
     str[2] = "TRIPLE_ACCEL";
@@ -1140,14 +1179,6 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     str[7] = "BURURUN_DECEL";
     str[8] = "SIN_ACCEL";
     str[9] = "SIN_DECEL";
+#endif
     f[1] = sqrtf(x);
-    str[10] = "[%8s:% 4d] %s";
-#if VERSION < VERSION_US
-    d[0] = 1.5;
-    d[1] = 2.5;
-    d[2] = 1.7;
-    f[2] = 1000.0f;
-#endif
-#endif
 }
-

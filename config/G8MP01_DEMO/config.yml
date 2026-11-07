@@ -362,7 +362,7 @@ force_active:
 - CurAudioBuffer
 - LastAudioBuffer
 - SoundBufferIndex
-- sysDebugReport
+- sysOSReport
 - __assert2
 - __assert
 - npcGetReactionOfLivingBody

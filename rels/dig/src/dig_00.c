@@ -117,7 +117,7 @@ void movie_draw(CameraId camera, void* param) {
         height = gp->efbHeight;
 #if VERSION >= VERSION_DEMO_EU
         if (THPSimpleDecode(0) == 1) {
-            sysDebugReport("dig_00.c", 130, "THP Video Decode \x8E\xB8\x94\x73\n");
+            sysOSReport("dig_00.c", 130, "THP Video Decode \x8E\xB8\x94\x73\n");
         } else {
 #else
         if (THPSimpleDecode(0) != 1) {

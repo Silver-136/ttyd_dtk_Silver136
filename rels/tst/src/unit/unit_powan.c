@@ -547,7 +547,7 @@ static USER_FUNC(powan_rider_follow) {
     }
     BtlUnit_SetPartsPos(part, x, y, z);
 #if VERSION >= VERSION_JP // the demos do not print the position
-    sysDebugReport("unit_powan.c", 275, "x:%f y:%f z:%f\n", x, y, z);
+    sysOSReport("unit_powan.c", 275, "x:%f y:%f z:%f\n", x, y, z);
 #endif
     return EVT_RETURN_DONE;
 }

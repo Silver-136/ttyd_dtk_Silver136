@@ -352,9 +352,8 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/system.c | reviseAngle | spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object | see comment |
 | Both | src/system.c | fsort | two complementary ifs; if (t != 0) ... else ... changes the object | see comment |
 | Both | src/system.c | qqsort | assignment inside the argument; cur = dst; memcpy(buf, cur, size) changes the object | see comment |
-| Both | src/system.c | systemStrippedPool1 | stand-in that recreates the stripped debug code's constants (interpolation mode names, report format, numbers) in pool order | see comment |
-| US and later | src/system.c | systemStrippedPool1b | stand-in: US and later pool the int-to-float constant between the strings and the doubles | see comment |
-| Both | src/system.c | systemStrippedPool2 | stand-in that keeps the int-to-float conversion constant in its pool place | see comment |
+| Both | src/system.c | systemStrippedPool1 | stand-in for the stripped intplStringData/intplStringToEnum and mtxGetScaleElement: the interpolation mode names, 1.0f and the sqrtf constants in pool order (table entry @491 unknown; JP and later lack three names) | see comment |
+| Both | src/system.c | systemStrippedPool1b | stand-in for the stripped movePos2/movePos3: their doubles 1.5, 2.5, 1.7 (bodies unknown) | see comment |
 | Both | src/battle/ac/ac_gauge_timing2.c | actionCommandDisp | d0 and d1 are never read; removing them changes the object | see comment |
 | Both | src/battle/ac/ac_lst_rc_keep.c | battleAcMain_LstRcKeep | byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over ac_lstrckeep_iconname[i] changes the object | see comment |
 | Both | src/battle/ac/ac_repeatedly_lv.c | actionCommandDisp | spare temporary w for the 108.0f offset; the plain constant changes the object | see comment |

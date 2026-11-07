@@ -6,10 +6,9 @@
 
 const char* getMarioStDvdRoot(void);
 
-#if VERSION >= VERSION_DEMO_EU
-void sysDebugReport(const char* filename, int line, const char* format, ...);
-#endif
+void sysOSReport(const char* filename, int line, const char* format, ...);
 
+s32 roundi(f32 x);
 f32 reviseAngle(f32 angle);
 f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
 f32 compAngle(f32 angle1, f32 angle2);
@@ -50,6 +49,8 @@ s8 keyGetStickX(u32 chan);
 s8 keyGetStickY(u32 chan);
 s8 keyGetSubStickX(u32 chan);
 s8 keyGetSubStickY(u32 chan);
+u8 keyGetTriggerL(u32 chan);
+u8 keyGetTriggerR(u32 chan);
 void padRumbleOff(u32 chan);
 void padRumbleOn(u32 chan);
 void padRumbleHardOff(u32 chan);
@@ -61,9 +62,14 @@ u16 sysGetToken(void);
 void sysWaitDrawSync(void);
 void sysDummyDraw(Mtx mtx);
 f32 getV60FPS(f32 perFrame, s64 startTick, s64 endTick);
+s32 sysSec2Frame(s32 sec);
+f32 sysSec2FrameFloat(f32 sec);
+s32 sysFrame2Sec(s32 frame);
 f32 sysFrame2SecFloat(f32 frame);
 s32 sysMsec2Frame(s32 msec);
 f32 sysMsec2FrameFloat(f32 msec);
+s32 sysFrame2Msec(s32 frame);
+f32 sysFrame2MsecFloat(f32 frame);
 void mtxGetRotationElement(Mtx src, Mtx dst, s8 firstAxis, s8 secondAxis);
 s32 LZ77Decode(u8* input, u8* output);
 void* memcpy_as4(void* dest, const void* src, u32 count);

@@ -785,7 +785,7 @@ static USER_FUNC(_steal_item) {
 
         r -= held;
 #if VERSION >= VERSION_JP
-        sysDebugReport("unit_borodo_main.c", 673, "%d個目のバッジを盗みます\n", r + 1);
+        sysOSReport("unit_borodo_main.c", 673, "%d個目のバッジを盗みます\n", r + 1);
 #endif
         for (j = 0; j < AUDIENCE_MEMBER_MAX; j++) {
             if (pouch->badges[j] != 0) {
@@ -799,7 +799,7 @@ static USER_FUNC(_steal_item) {
         s32 k;
 
 #if VERSION >= VERSION_JP
-        sysDebugReport("unit_borodo_main.c", 686, "%d個目のアイテムを盗みます\n", r + 1);
+        sysOSReport("unit_borodo_main.c", 686, "%d個目のアイテムを盗みます\n", r + 1);
 #endif
         for (k = 0; k < MAX_HELD_ITEMS; k++) {
             if (pouch->heldItems[k] != 0) {
@@ -812,7 +812,7 @@ static USER_FUNC(_steal_item) {
     }
     if (item != 0) {
 #if VERSION >= VERSION_JP
-        sysDebugReport("unit_borodo_main.c", 701, "%sを盗みました\n", msgSearch(itemDataTable[item].name));
+        sysOSReport("unit_borodo_main.c", 701, "%sを盗みました\n", msgSearch(itemDataTable[item].name));
 #endif
         if (!pouchRemoveItem(item)) {
 #if VERSION >= VERSION_JP
