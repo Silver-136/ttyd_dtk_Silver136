@@ -27,11 +27,16 @@ code contradicts a name, the code wins: part bit 0x80 (WeakToAttackFxR there) is
 
 The descriptive icon names in include/icon_ids.h that do not come from our code or the item table (373: the 337
 former `ICON_xxx` placeholders and the 36 US-only language variants of text icons) are Zephiles' IconType
-enum from his TTYD Practice Codes, checked by him on the retail versions and given to this project for use
+enum from the TTYD Practice Codes, checked by Zephiles on the retail versions and given to this project for use
 (2026-11-05). Two spellings were corrected (`ICOn_` -> `ICON_`, `HANMER` -> `HAMMER`) and the colour-text
 names follow one order (`ICON_TEXT_GREEN_*`, `ICON_TEXT_BLUE_*`). They name what an icon shows, not an
-original symbol. Where our code-derived names and his name the same icon, ours stay; his ids matched ours
-everywhere, and nine US ids we had marked as inferred take his values.
+original symbol. Where our code-derived names and Zephiles' name the same icon, ours stay; the ids matched ours
+everywhere, and nine US ids we had marked as inferred take those values.
+
+`DrawMenuMarioPinchMark` and `DrawMenuPartyPinchMark` (battle_menu_disp.c, US and later, also both September 2004
+demos) are Zephiles' names: the JP demo's map has one `DrawMenuPinchMark` (0x2c8) that draws both marks; from
+the September demos on, `DrawMenuPinchMark` (0x58) only calls the two halves in an order that keeps the front mark
+on top. The stem is the original name; the Mario/Party parts follow `BattleGetMarioPtr`/`BattleGetPartyPtr`.
 
 ## Invented function and data names
 

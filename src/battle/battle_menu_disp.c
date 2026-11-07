@@ -825,7 +825,7 @@ u16 peril_icon_tbl[6] = {11, 12, 13, 14, 15, 16};
  * or the PERIL mark flashing yellow/red every 25 frames at 1 HP, using the texture for the current language,
  * 1.5x larger outside Japanese.
  */
-// Descriptive name (not in the symbol maps).
+// Descriptive name by Zephiles (not in the symbol maps): the demo's DrawMenuPinchMark, split for Mario and the partner.
 void DrawMenuMarioPinchMark(void) {
     Mtx m;
     Mtx out;
@@ -939,7 +939,7 @@ static void DrawMenuPinchMark(void) {
  * Draws the partner's DANGER or PERIL mark, the same as DrawMenuMarioPinchMark,
  * slightly further back than Mario's.
  */
-// Descriptive name (not in the symbol maps).
+// Descriptive name by Zephiles (not in the symbol maps): the demo's DrawMenuPinchMark, split for Mario and the partner.
 void DrawMenuPartyPinchMark(void) {
     Mtx m;
     Mtx out;
