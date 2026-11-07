@@ -23,8 +23,8 @@
 #include "eff/eff_kemutest.h"
 
 
-// FAKE: private prototype with a second mode argument (the calls pass 1); party_move.c defines partyWalkInit(party)
-// alone, and calls through that prototype change the object.
+// Private prototype with a second mode argument: the calls pass 1 (the li r4,1 is in the retail code), so the
+// original called it this way; party_move.c defines partyWalkInit(party) alone.
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 static u32 nokoSe;

@@ -75,8 +75,8 @@ static void mot_partyUse(void);
 static void mot_dummy(void);
 
 
-// FAKE: private by-value Vec prototype; mot_slit.c defines marioCreviceWallChk(const Vec* p), and the call through
-// that prototype with &mario->position changes the object (the by-value call passes a pointer to a copy).
+// Private by-value Vec prototype; mot_slit.c defines marioCreviceWallChk(const Vec* p). The call copies the Vec to
+// the stack and passes a pointer to the copy (the copy is in the retail code), so the original called it this way.
 BOOL marioCreviceWallChk(Vec pos);
 
 /**

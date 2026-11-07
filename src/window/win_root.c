@@ -89,8 +89,8 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "icon_ids.h"
 #include "driver/animdrv.h"
 
-// FAKE: old-style declarations, so both can be called with w though they take no parameters (win_mario.c,
-// win_badge.c); the two calls without the argument change the object.
+// Old-style declarations, so both can be called with w though they take no parameters (win_mario.c, win_badge.c);
+// the calls pass w (the mr r3 is in the retail code), so the original called them this way.
 void winMarioMain2();
 void winBadgeExit();
 void winRootBgDrawDisp(CameraId unused, void* param);

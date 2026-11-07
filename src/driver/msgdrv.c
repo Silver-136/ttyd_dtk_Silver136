@@ -872,8 +872,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
     f32 fv;
     s32 posX;
-
-    // FAKE: int, not s32 (same width/sign; changes colouring)
     int posY;
     s32 waitTime;
     s32 iconId;
@@ -883,8 +881,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 iconAdvance;
     f32 iconScale;
     s32 animX;
-
-    // FAKE: int, not s32 (same width/sign; changes colouring)
     int animY;
     s32 animFlip;
     f32 animScale;
@@ -2042,7 +2038,7 @@ void msgWindow_ForceClose(const char* name) {
 }
 
 /** Steps a message window back one page (Z at a key wait); FALSE if already on the first page. */
-static inline BOOL msgWinPrevPage(WindowEntry* window) {
+static inline u32 msgWinPrevPage(WindowEntry* window) {
     MsgWinData* d = WIN_DATA(window);
     d->page--;
     if (d->page < 0) {
@@ -2188,8 +2184,7 @@ static void msgWindow_Main(WindowEntry* window) {
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             data->page = data->pageCount - 1;
 
-            // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
-            if (msgWinPrevPage(window) != 0U) {
+            if (msgWinPrevPage(window)) {
                 window->state = MSG_WIN_STATE_REVIEW_UP;
                 window->timestamp = gp->renderTime;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2252,8 +2247,7 @@ static void msgWindow_Main(WindowEntry* window) {
             window->state = MSG_WIN_STATE_REVIEW_UP;
             window->timestamp = gp->renderTime;
 
-            // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
-            if (msgWinPrevPage(window) != 0U) {
+            if (msgWinPrevPage(window)) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
             }
         }

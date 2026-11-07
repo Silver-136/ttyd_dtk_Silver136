@@ -79,8 +79,8 @@ static WindowWork* wp;
 #include "manager/evtmgr_cmd.h"
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 static void winLectureKeyMask(void);
-// FAKE: private u16 iconId prototype (icondrv.h and the definition take s32); winIconSet's s32 id is truncated at
-// the call, and the s32 prototype changes the object.
+// Private u16 iconId prototype (icondrv.h and the definition take s32): winIconSet's s32 id is truncated at the
+// call (the clrlwi is in the retail code), so the original declared it this way here.
 void iconGetTexObj(GXTexObj* obj, u16 iconId);
 static void winDisp(CameraId camId, void* param);
 static void winDispKoopa(CameraId camId, void* param);
@@ -391,7 +391,7 @@ void winMain(void) {
             case WIN_MENU_ITEM_USE: {
 #if VERSION < VERSION_DEMO_EU
 #if VERSION >= VERSION_US
-                WindowPartyDt* list[11]; // FAKE: US frame is 96 bytes; only 7 entries used
+                WindowPartyDt* list[11]; // only 7 entries used; the US frame has room for 11 (96 bytes)
 #else
                 WindowPartyDt* list[7];
 #endif

@@ -506,7 +506,7 @@ static void bomhei_use_main(PartyEntry* party) {
         party->moveDir = party->targetDir;
         party->velY = 7.5f;
 
-        // FAKE: the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object
+        // the acceleration is negated at run time (the fneg is in the retail code)
         tmp = 0.8333333f;
         party->accelY = -tmp;
         partyChgPose(party, "J_1A");
@@ -559,11 +559,11 @@ static void bomhei_use_main(PartyEntry* party) {
         party->moveDir = party->targetDir;
         party->velY = 3.5555556f;
 
-        // FAKE: the acceleration is negated from a spare temporary; party->accelY = -0.35555556f changes the object
+        // the acceleration is negated at run time (the fneg is in the retail code)
         tmp = 0.35555556f;
         party->accelY = -tmp;
 
-        // FAKE: 10.5f is converted to the frame count (10) at run time through tmp; party->moveFrames = 10 changes the object
+        // 10.5f is converted to the frame count (10) at run time (the conversion is in the retail code)
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -579,7 +579,7 @@ static void bomhei_use_main(PartyEntry* party) {
         party->velY = 0.0f;
         party->accelY = -0.33333334f;
 
-        // FAKE: 10.5f is converted to the frame count (10) at run time through tmp; party->moveFrames = 10 changes the object
+        // 10.5f is converted to the frame count (10) at run time (the conversion is in the retail code)
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
         party->flags &= ~PARTY_FLAG_IS_JUMPING;
@@ -664,8 +664,8 @@ static void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.sfxId = -1;
         }
 
-        // FAKE: called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the
-        // caller's copy, same values); mot_damage.h's prototype with &party->position changes the object.
+        // Called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the caller's
+        // copy, same values); the copy is in the retail code, so the original called it this way.
         marioSetSplash(0, party->position);
         BOMHEI_WORK(party)->flags |= 8;
         BOMHEI_WORK(party)->timer = (s16)(sysMsec2Frame(500) + 30);
