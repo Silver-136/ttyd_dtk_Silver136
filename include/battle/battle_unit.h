@@ -625,7 +625,7 @@ typedef struct BecSndWork {
     s16 period1;       // 0x10
     s16 timer;         // 0x12
     s16 count;         // 0x14
-    s32 sfxId;         // 0x18
+    u32 sfxId;         // 0x18 (u32: its -1 tests are unsigned compares in the retail code)
 } BecSndWork;
 
 // one movement sound set (BtlUnit_LoadSeMode)

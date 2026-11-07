@@ -502,8 +502,7 @@ static void btlseqFirstAct(BattleWork* wp) {
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000002);
 
         case 0x2000002:
-            // FAKE: (u32) compare with 0xFFFFFFFFU; the plain `wp->curtainSfxId != -1` changes the object
-            if (fadeIsFinish() && (u32)wp->curtainSfxId != 0xFFFFFFFFU) {
+            if (fadeIsFinish() && wp->curtainSfxId != -1) {
                 psndSFXOff(wp->curtainSfxId);
                 wp->curtainSfxId = -1;
             }

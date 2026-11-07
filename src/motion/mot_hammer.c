@@ -623,8 +623,7 @@ void mot_hammer2(void) {
         }
     case 11:
         if (!(mario->buttonHold & PAD_BUTTON_B)) {
-            // FAKE: u32 cast against 0xFFFFFFFFU; the plain s32 compare with -1 changes the object
-            if ((u32)mario->mot.hammer2.sfxId != 0xFFFFFFFFU) {
+            if (mario->mot.hammer2.sfxId != -1) {
                 psndSFXOff(mario->mot.hammer2.sfxId);
                 mario->mot.hammer2.sfxId = -1;
             }

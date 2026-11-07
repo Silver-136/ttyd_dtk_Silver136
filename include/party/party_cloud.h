@@ -24,7 +24,7 @@ typedef struct PartyCloud {
     struct HitEntry* hitDown;      // 0x24, -45 degree ray (_cloud_use case 12); cloudGetHitBreathout(1)
     struct HitEntry* hitSweep[2];  // 0x28, side rays; cloudGetHitBreathout(2), (3)
     s32 autoTimer;                 // 0x30, frames left when used by an event (flags & 0x80000000)
-    s32 sfxId;                     // 0x34, breath sfx 0x930, -1 = none
+    u32 sfxId;                     // 0x34, breath sfx 0x930, -1 = none (unsigned: the tests compile cmplwi)
     s16 breathLevel;               // 0x38, 0..2 cycles: ray height 8 / 20 / 40
     u8 pad3A[0x48 - 0x3A];         // 0x3A
 } PartyCloud; // size 0x48

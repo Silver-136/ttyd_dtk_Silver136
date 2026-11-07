@@ -10076,9 +10076,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     if (entry->flags & PSND_BGM_STREAM) {
         bgm->streamId = searchEmptySSCh();
 
-        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-        if ((u32)bgm->streamId == 0xFFFFFFFF) {
+        if (bgm->streamId == -1) {
             goto fail;
         }
         SoundSSPlayCh(bgm->streamId, entry->path);
@@ -10092,7 +10090,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
     } else {
         bgm->streamId = psndSongFindCh();
-        if ((u32)bgm->streamId == 0xFFFFFFFF) {
+        if (bgm->streamId == -1) {
             goto fail;
         }
         SoundSongPlayCh(bgm->streamId, entry->flags & PSND_BGM_SONG_MASK);
@@ -10971,17 +10969,12 @@ static inline void psndENVApply(PaperSoundEnv* e) {
     PaperSoundEffect* sfx;
     u8 vol;
     u16 lpf;
-    s32 id;
+    u32 id;
 
     psndENVVolume(e, &psnd, &vol);
 
-    // FAKE: the first read of e->sfx goes through an s32 pointer (same value): a plain read is shared with the second
-    // read below, the target loads it twice
-    id = *(s32*)&e->sfx;
-
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if ((u32)id != 0xFFFFFFFF) {
+    id = e->sfx;
+    if (id != -1) {
         sfx = &pssfx[id & 0xFF];
         if (sfx->listId != 0xFFFFFFFF) {
             sfx->volume = vol;
@@ -10993,7 +10986,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
     if (psnd.envId[1] == e->id)
         lpf = psnd.envLpf[1];
     id = e->sfx;
-    if ((u32)id != 0xFFFFFFFF) {
+    if (id != -1) {
         sfx = &pssfx[id & 0xFF];
         if (sfx->listId != 0xFFFFFFFF) {
             SoundEffectEntry* entry = &pssfxlist[sfx->listId & 0x1FFF];

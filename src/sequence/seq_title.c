@@ -104,14 +104,12 @@ void titleInit(SequenceWork* work) {
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
 
-            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-            if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+            if (psbgm[0].streamId != -1) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }
         } else {
             psndBGMOn(PSND_FADEOUT, "BGM_TITLE1");
-            if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+            if (psbgm[0].streamId != -1) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }
         }
@@ -147,14 +145,12 @@ void titleInit(SequenceWork* work) {
             }
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
 
-            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-            if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+            if (psbgm[0].streamId != -1) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
         } else {
             psndBGMOn(PSND_FADEOUT, "BGM_TITLE1");
-            if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+            if (psbgm[0].streamId != -1) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
         }
@@ -221,9 +217,7 @@ static void titleMain(SequenceWork* work) {
         case 1:
             wp2->timer--;
             if (wp2->timer == 0) {
-                // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-                // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-                if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+                if (psbgm[0].streamId != -1) {
                     sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
                 }
             }
@@ -249,7 +243,7 @@ static void titleMain(SequenceWork* work) {
             wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, TITLE_TOP_Y, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->timer--;
             if (wp2->timer == 0) {
-                if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+                if (psbgm[0].streamId != -1) {
                     sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
                 }
                 if (seqGetPrevSeq() == SEQ_GAME_OVER) {

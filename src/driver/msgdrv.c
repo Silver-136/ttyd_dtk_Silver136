@@ -1968,7 +1968,7 @@ static void msgWindow_Delete(WindowEntry* window) {
     if (window->userdata) {
         data = window->userdata->address;
 
-        // FAKE: empty loop over charCount; removing it changes the object
+        // Empty loop over charCount; the loop is in the retail code
         for (i = 0; i < data->charCount; i++) {
         }
         smartFree(window->userdata);

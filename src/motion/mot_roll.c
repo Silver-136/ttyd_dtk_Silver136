@@ -28,7 +28,7 @@ typedef struct MotRollWork {
     s32 squashState;    // 0x0C: y-scale squash state machine (1.4 / back to 1.0)
     s32 squashTimer;     // 0x10, never accessed
 #if VERSION >= VERSION_US
-    s32 sfxId;          // 0x14: US and later only, rolling sound (PSND_SFX_MARIO_ROLL_MOVE1), -1 when off
+    u32 sfxId;          // 0x14: US and later only, rolling sound (PSND_SFX_MARIO_ROLL_MOVE1), -1 when off
 #endif
 } MotRollWork;          // size 0x14 before US, 0x18 US and later
 
@@ -219,13 +219,13 @@ void roll_se_init(void) {
 static void move_se_on(void) {
     MarioWork* m = marioGetPtr();
 #if VERSION <= VERSION_DEMO_JP
-    if ((u32)m->mot.roll.sfxId == (u32)-1) {
+    if (m->mot.roll.sfxId == -1) {
         m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_MOVE1, &m->position);
 #elif VERSION >= VERSION_US
-    if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {
+    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId == -1) {
         marioGetPtr()->motRoll->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
 #else
-    if ((u32)m->mot.roll.sfxId == (u32)-1) {
+    if (m->mot.roll.sfxId == -1) {
         m->mot.roll.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
 #endif
         m->mot.roll.flags |= ROLL_FLAG_SFX_UNUSED;
@@ -237,13 +237,11 @@ static void move_se_on(void) {
 static void move_se_off(void) {
     MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_US
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and in move_se_on; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
+    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1) {
         psndSFXOff(marioGetPtr()->motRoll->sfxId);
         marioGetPtr()->motRoll->sfxId = -1;
 #else
-    if (m->mot.roll.sfxId != -1U) {
+    if (m->mot.roll.sfxId != -1) {
         psndSFXOff(m->mot.roll.sfxId);
         m->mot.roll.sfxId = -1;
 #endif

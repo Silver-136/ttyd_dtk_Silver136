@@ -50,7 +50,7 @@ typedef struct MotShipWork {
     f32 swirlSpeed;                   // 0x2C: whirlpool push distance per frame (movePos in shipMove)
     s32 swirlTime;                // 0x30: frames of whirlpool push left
     u8 field_0x34[0x38 - 0x34];   // 0x34, never accessed
-    s32 sfxId;                    // 0x38: engine loop, -1 when off
+    u32 sfxId;                    // 0x38: engine loop, -1 when off (u32: its -1 tests are unsigned compares in the retail code)
     Vec harborPos;                // 0x3C: docking target (checkHarbor)
 } MotShipWork;                    // size 0x48
 
@@ -158,9 +158,7 @@ static void move_se_on(void) {
     MarioWork* mario = marioGetPtr();
     s32 snd;
 
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here, in move_se_off and in shipMove; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if (marioGetPtr()->motStruct != NULL && (u32)marioGetPtr()->motShip->sfxId == 0xFFFFFFFFU) {
+    if (marioGetPtr()->motStruct != NULL && marioGetPtr()->motShip->sfxId == -1) {
         snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), &mario->position);
         marioGetPtr()->motShip->sfxId = snd;
     }
@@ -171,7 +169,7 @@ static void move_se_on(void) {
 static void move_se_off(void) {
     marioGetPtr();
     if (marioGetPtr()->motStruct != NULL) {
-        if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
+        if (marioGetPtr()->motShip->sfxId != -1) {
             psndSFXOff(marioGetPtr()->motShip->sfxId);
             marioGetPtr()->motShip->sfxId = -1;
         }
@@ -1166,8 +1164,7 @@ static void shipMove(void) {
         move_se_off();
 #if VERSION >= VERSION_JP
     }
-    // FAKE: unsigned compare with -1 on a signed sound id (see move_se_on)
-    if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
+    if (marioGetPtr()->motShip->sfxId != -1) {
         psndSFX_pos(marioGetPtr()->motShip->sfxId, &m->position);
 #endif
     }

@@ -70,7 +70,7 @@ typedef struct PaperSoundFade {
 
 typedef struct PaperSoundBGM {
     u32 listId;             // 0x0, index into psbgmlist, 0xFFFFFFFF = idle
-    s32 streamId;           // 0x4, sound stream/song channel
+    u32 streamId;           // 0x4, sound stream/song channel (u32: its -1 tests are unsigned compares in the retail code)
     u32 flags;              // 0x8, copy of the psndBGMOn word (only PSND_QUICK is read back)
     u8 pad_0C;              // 0xC, never accessed
     u8 group;               // 0xD, SoundBGMEntry params byte 2; a new BGM in the same nonzero group keeps playing

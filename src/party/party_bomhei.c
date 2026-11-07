@@ -79,13 +79,11 @@ static inline BOOL isBombRock(HitEntry* hit) {
 
 // Stops Bobbery's two looping sounds.
 static inline void bomheiCleanSfx(PartyEntry* p) {
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if ((u32)p->work.bomhei.sfxId != 0xFFFFFFFFU) {
+    if (p->work.bomhei.sfxId != -1) {
         psndSFXOff(p->work.bomhei.sfxId);
         p->work.bomhei.sfxId = -1;
     }
-    if ((u32)p->work.bomhei.sfxId2 != 0xFFFFFFFFU) {
+    if (p->work.bomhei.sfxId2 != -1) {
         psndSFXOff(p->work.bomhei.sfxId2);
         p->work.bomhei.sfxId2 = -1;
     }
@@ -117,9 +115,7 @@ void init_se_work(PartyEntry* party) {
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void se_all_off(PartyEntry* p) {
 #if VERSION <= VERSION_DEMO_JP
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if ((u32)p->work.bomhei.throwSfxId != 0xFFFFFFFFU) {
+    if (p->work.bomhei.throwSfxId != -1) {
         psndSFXOff(p->work.bomhei.throwSfxId);
         p->work.bomhei.throwSfxId = -1;
     }
@@ -646,9 +642,7 @@ static void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE1, &party->playerPtr->position);
 #else
             // the first fuse sound only starts while the second one (FUSE2) is not playing
-            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-            if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
+            if (party->work.bomhei.sfxId2 == -1) {
                 party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
             }
 #endif
@@ -665,7 +659,7 @@ static void bomhei_use_main(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 40:
-        if ((u32)party->work.bomhei.sfxId != 0xFFFFFFFFU) {
+        if (party->work.bomhei.sfxId != -1) {
             psndSFXOff(party->work.bomhei.sfxId);
             party->work.bomhei.sfxId = -1;
         }
@@ -700,14 +694,14 @@ static void bomhei_use_main(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 50:
-        if ((u32)party->work.bomhei.sfxId != 0xFFFFFFFFU) {
+        if (party->work.bomhei.sfxId != -1) {
             psndSFXOff(party->work.bomhei.sfxId);
             party->work.bomhei.sfxId = -1;
         }
 #if VERSION <= VERSION_DEMO_JP
         party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE2, &party->playerPtr->position);
 #else
-        if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
+        if (party->work.bomhei.sfxId2 == -1) {
             party->work.bomhei.sfxId2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2), &party->playerPtr->position);
         }
 #endif
@@ -727,7 +721,7 @@ static void bomhei_use_main(PartyEntry* party) {
             bomheiChkHitAttr(party);
             break;
         }
-        if ((u32)party->work.bomhei.sfxId2 != 0xFFFFFFFFU) {
+        if (party->work.bomhei.sfxId2 != -1) {
             psndSFXOff(party->work.bomhei.sfxId2);
             party->work.bomhei.sfxId2 = -1;
         }
