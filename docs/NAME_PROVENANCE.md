@@ -48,6 +48,15 @@ and field names of the Dolphin emulator's hardware code (github.com/dolphin-emu/
 The definitions are our own; they are not original SDK names. Sources and tables:
 `cleanup_notes/hw_register_names.md` (outside the repo).
 
+## Credits for restored function bodies
+
+Functions the JP demo's linker maps list as UNUSED (stripped) carry their original names; where nothing in the game
+calls them, only their size can be checked, and each says so in a comment. Bodies from others: `addHeadCheck`,
+`addTail` and `pouchGetItemCheck` in `src/mario/mario_pouch.c` are NWPlayer123's reconstructions (the
+early-return `addHeadCheck` is confirmed by `pouchGetItemCheck`'s size); `memcmp_as4` in `src/system.c` follows
+Super Paper Mario's (spm-decomp, CC0). The analysis of the remaining matching tricks used mweppc
+(github.com/doldecomp/mweppc, CC0), a decompilation of the Metrowerks compiler.
+
 ## Invented function and data names
 
 | Kind | Unit | Name | Replaced placeholder (JP) | JP address | US |

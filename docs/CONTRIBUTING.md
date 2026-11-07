@@ -58,7 +58,7 @@ Sometimes the natural C does not produce the original instructions, and a small 
 2. it is marked at the site with a `// FAKE:` comment that says what the trick does;
 3. it has a row in [FAKES.md](FAKES.md) (version, file, function, what the trick is, the natural forms that were tried).
 
-Replacing a fake with natural C that still matches is always welcome; then delete its comment and its row. [FAKES.md](FAKES.md) explains why such tricks change the compiler's output.
+Replacing a fake with natural C that still matches is always welcome; then delete its comment and its row. [FAKES.md](FAKES.md) explains why such tricks change the compiler's output, and its section "What is not a fake" lists the forms that look odd but are not tricks (statements whose instructions are in the retail code, unused storage the retail code reserves, natural temporaries, and so on). Before marking something a fake, check the original object: if the instructions are there, the line is authentic.
 
 ## Adding a version difference
 

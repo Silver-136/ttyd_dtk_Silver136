@@ -8,6 +8,32 @@ This list is built from the FAKE comments in src/, rels/ and libs/. The Version 
 
 Why a no-op cast or a spare temp can change the output: MWCC builds an expression tree for every statement, and the code generator works from that tree, not from the C semantics. A redundant cast such as `((PartyEntry*)party)->moveFrames`, where `party` already has that type, or a value parked in an extra local, is an extra node. Folding it away comes late, so earlier passes still see it. That changes three things. First, scheduling and CSE: a byte-offset access `*(T*)((u8*)p + K)` is an indirect load, a field access is a member load, and the passes treat them differently, so the order of loads or of an address add can move. Second, register colouring: each named local or inline temporary gets its own virtual register and number, and the allocator colours in number order, so the same value through a temp can land in another register. Third, inline cost: with `-inline auto,deferred`, whether a callee is inlined depends on the caller's estimated size, which counts tree nodes; removing a cast can bring a caller under the limit and pull a whole callee in (see npcdrv fbatHitCheck). The no-op cast fakes added in the structs cleanup (party.c, mot_roll.c, ac_stick_rotate.c, npcdrv.c) all replaced raw byte offsets. They keep the original tree shape but name the field, so the struct layout is the single source of truth while the bytes stay identical. Some former cast fakes became plain `int` or `u32` declarations instead (2026-11-07, from the compiler decompilation doldecomp/mweppc): `s32` is `long`, and `int` is a distinct type of the same size, so an implicit int <-> long conversion builds the same tree node as a no-op `(s32)` cast; where a local is declared `int` (or `u32`) next to `s32` code, that is the reason.
 
+## What is not a fake
+
+Some code looks odd but is not a trick, because the original game's code shows it was in the original source too
+(decided 2026-11-07, after the review below). Such lines keep at most a short plain note and have no row here:
+
+- **Statements whose instructions are in the retail code**: a test, reload, store, call, conversion, negation,
+  zero add or struct copy that compiles to instructions found in the original function. Deleting it would change
+  the game, so it was written. Check the original object before calling anything "no-op".
+- **Unused storage the retail code reserves**: an unused initialised local whose stack slot and initializer
+  template are in the original, an unused file-scope object whose space is in the original data, an unused local
+  or `unused[N]` array that the older SDK compiler (GC 1.2.5n) gives stack space. Its purpose and name are unknown;
+  file-scope names are marked as invented. Objects that exist only as alignment padding stay fakes.
+- **Natural temporaries and helpers** (DEBT_DEFINITION.md section 3): a named local, a second pointer or a helper
+  function that a programmer would plausibly write. They are debt only when they read as artificial (a copy that
+  only feeds another copy, a variable with no sensible meaning).
+- **Ordinary C idioms**: an assignment inside an expression or argument (`f(x, cur = dst)`), compound assignment
+  (`x *= k`, `n--`), a switch with a single case where a plain `if` compiles differently, `int` or `u32`
+  declarations next to `s32` code (`s32` is `long`; `int` is a different type of the same size, and the implicit
+  conversion is what the original compiler saw), and a named pointer to an array element instead of a byte offset.
+
+Most of these were found with [mweppc](https://github.com/doldecomp/mweppc), a public-domain decompilation of the
+Metrowerks compiler the game was built with (GC 2.6), which shows why a given source form produces given code. The
+review took this list from 705 rows to under 480.
+
+## Rows
+
 | Version | File | Function | Fake | Natural shape tried |
 | --- | --- | --- | --- | --- |
 | US | rels/gor/src/event/evt_yuuranking.c | yuuDrawRight (US inline, used by evt_yuuranking_disp_func) | US: the right-aligned text helper takes an x offset plus the work pointer and adds `wp->x` itself, so `wp->x` is read after the width test as in the target (same value) | see comment |
