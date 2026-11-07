@@ -4433,8 +4433,12 @@ void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a) {
     *a = obj->color.a;
 }
 
-// FAKE: stand-in for a function the linker dead-stripped; it only keeps the constants that function
-// left behind in .rodata/.sdata2, in their original order. Nothing calls it.
+// FAKE: stand-in for functions the linker dead-stripped; it only keeps the constants they left behind in
+// .rodata/.sdata2, in their original order. Nothing calls it. The JP demo map lists the likely owners UNUSED:
+// mapGetConvertDate (0x26c, with a function-static date$2457, 0x20 .bss) for the map.dat path and ".", "information",
+// the two version names, the no-date text and "not converted" (map @2508-@2514), mapGetAnmDt (0xa8) for
+// "animation_table" (@2530, which the loader also reads) and mapGetCurve (0x120) for "curve_table" (@2724). Their
+// bodies are not known; the owner of the floats is not identified.
 static void mapStrippedPool(const char** str, f32* val) {
     str[0] = ".";
     val[0] = 3.0f;

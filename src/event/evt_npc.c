@@ -85,8 +85,9 @@ USER_FUNC(evt_npc_slave_entry) {
     return EVT_RETURN_DONE;
 }
 
-/** NpcEntry* npc */
-// NpcEntry* npc
+// FAKE: stand-in for evt_npc_set_position_xls (0xb4), which the JP demo map lists UNUSED after
+// evt_npc_set_position; it only keeps its "%f%f%f" (map @2521) at the end of .rodata. The later versions keep that
+// string at the start of evt_sub's .rodata instead (coin_fmt there).
 #if VERSION <= VERSION_DEMO_JP
 static void npc_report_pos(NpcEntry* npc) {
     OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);

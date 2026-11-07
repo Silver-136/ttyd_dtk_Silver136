@@ -239,6 +239,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | rels/end/src/end_00.c | (data: `fd_end_00_*` dtrigf constants) | the unit's dtrigf constants are hand-made globals: in the original they follow the unit's own data instead of leading it, so the unit is built without msl_rel.pch (PCH_EXCLUDE in configure.py) | msl_rel.pch: constants placed first, end.rel 4 bytes short (R) |
 | Both | src/battle/battle_seq_command.c | _get_msg | empty `if (!event->args && !event->args) {}` in case 1 | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/driver/mapdrv.c | _mapEnt | empty `if (!obj) { }` and `if (1) { }` blocks in the blend-mode count loop | removing it changes the object in both versions (dead_probe.py) |
+| JP and later | src/event/evt_sub.c | coin_fmt | `#pragma force_active` keeps evt_npc's orphan "%f%f%f" (from the dead-stripped evt_npc_set_position_xls) at the start of evt_sub's .rodata; JP and later only | see comment |
 | Both | src/event/evt_sub.c | evt_sub_spline_get_value_manual | `t = t;` self-assignment | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/event/evt_telop.c | telop | `scale = scale;` as the then-branch | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/manager/fontmgr.c | FontDrawMessageMtx | `scale = scale;` before iconDispGxAlpha | removing it changes the object in both versions (dead_probe.py) |
@@ -411,7 +412,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | entries[0].tevCallbacks read through a byte offset from mapWork[activeGroup]; mapWork[activeGroup].entries[0].tevCallbacks[...] changes the object; `ip` is a second name for `&info` (callback(ip)) | see comment |
 | Both | src/driver/mapdrv.c | mapSetMaterialLight | spare block and temporary for the half spot angle; the expression written in the call changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapSearchDmdJoint | no-op (s32) cast; name[0] != '/' changes the object | see comment |
-| Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for a function the linker dead-stripped; it only keeps the constants that function left behind in .rodata/.sdata2, in their original order. Nothing calls it. | see comment |
+| Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for the dead-stripped mapGetConvertDate, mapGetAnmDt and mapGetCurve (JP demo map, UNUSED); it only keeps their constants in .rodata/.sdata2, in their original order. Bodies unknown. | see comment |
 | Both | src/driver/shadowdrv.c | shadowInit | the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object; `wp` is a spare copy of cswp for one store | see comment |
 | Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
 | Both | src/driver/shadowdrv.c | shadowCharShadowDisp_Collision | q is a second name for &query for the hitPos reads below; reading through query changes the object | see comment |
@@ -517,7 +518,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam3d_evt_set_at | unused zero Vec expression; removing it changes the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam3d_evt_set_rel | unused zero Vec expressions; removing them changes the object | see comment |
-| Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for a dead-stripped debug print; it only keeps its format string and 100.0f | see comment |
+| Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
 | Both | src/event/evt_case.c | _caseEntry | spare pointer to setup; using setup directly changes the object | see comment |
 | Both | src/event/evt_case.c | _evtCaseEntry | spare pointer to setup; using setup directly changes the object | see comment |
 | Both | src/event/evt_damage.c | evt_gazigazi_move_position | no-op (s32) casts of elapsed; dropping them changes the object | see comment |
@@ -540,6 +541,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Both | src/event/evt_nannpc.c | evt_nannpc_jump_position | el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object | see comment |
+| Early demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
 | Both | src/event/evt_npc.c | evt_npc_homing_target | discarded sqrtf call (retail code computes it and drops the result) | see comment |
 | Both | src/event/evt_nannpc.c | nanNPCHitMove | `dot` holds PSVECDotProduct for one use | the call inside the PSVECScale argument: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_init | subfunc1 stored through the global nanNPCWork while its neighbours go through w | `w->subfunc1 = ...`: changes the object |

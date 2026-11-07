@@ -343,7 +343,9 @@ USER_FUNC(evt_cam3d_evt_set_rel_dir) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: stand-in for a debug print the linker stripped; only its format string and 100.0f survive
+// FAKE: stand-in for evt_cam3d_evt_set_xls (0x148) and evt_cam3d_evt_set_rel_xls (0x1ac), which the JP demo map
+// lists UNUSED here; it keeps their format string (map @689) and 100.0f. They probably parse a text row with sscanf,
+// but how they use the %d and %s fields is not known (plausible bodies miss the map sizes).
 static void evt_cam_debug_print(f32 a) {
     OSReport("%f%f%f%f%f%f%d%s", a / 100.0f);
 }
