@@ -307,7 +307,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Early demos | src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
 | Early demos | src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
 | Early demos | src/sound.c | SoundSongStrippedName | stand-in for a dead-stripped song loader, probably SoundSongLoadPlayCh (JP demo map, UNUSED 0x258): it only keeps ".song" (@3563); body unknown | see comment |
-| Both | src/statuswindow.c | statusWinMain | (x ? FALSE : TRUE) for !x; the plain negation changes the object | see comment |
 | Both | src/statuswindow.c | gaugeDisp | iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which evaluates the arguments in the retail order; the plain call changes the object. | see comment |
 | Both | src/statuswindow.c | statusWinEase | unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the object changes without it. | see comment |
 | Both | src/system.c | reviseAngle | spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object | see comment |
@@ -485,7 +484,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/manager/winmgr.c | select_disp | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
 | Both | src/manager/winmgr.c | select_disp_party | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
 | Both | src/manager/winmgr.c | select_disp_mario | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
-| Both | src/manager/winmgr.c | select_disp_luigi | `ent` is a second name for entry; f32 zero added to every row y | entry directly, no zero (tried together): changes the object |
+| Both | src/manager/winmgr.c | select_disp_luigi | `ent` is a second name for entry | entry directly, no zero (tried together): changes the object |
 | Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
 | Both | src/event/evt_win.c | ICONGX2 (evt_win list displays) | iconDispGx called through a (Vec*, u16, f32, u16) function-pointer cast macro (9 uses) | plain iconDispGx(pos, flags, id, scale): changes the object |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object; assignment `(wp = mp)` inside the dotFlag expression | see comment |
@@ -517,7 +516,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_cloud.c | (file) | `#define _MATH_H_` keeps math.h out | removing it: changes the object |
 | Both | src/party/party_cloud.c | cloudGetBreathPower | val local holding 10.0f then 100.0f (both version copies) | literals: changes the object |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
-| Both | src/party/party_hit.c | partyChkFrontStep | Vec p plus mx/mz temporaries copied into pos | building pos directly: changes the object |
+| Both | src/party/party_hit.c | partyChkFrontStep | mx/mz temporaries for the offsets of p | building pos directly: changes the object |
 | Both | src/party/party_hit.c | partySearchWallFront | nz copy of nn.z in the wall slide; US-and-later dead `hit = NULL` before the +45 probe loop; dead first `bestD = rd` before the +45 loop | bestNrm directly: changes the object (early demos the same) |
 | Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |

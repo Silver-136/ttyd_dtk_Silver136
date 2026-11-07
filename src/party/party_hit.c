@@ -540,7 +540,8 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
     ox = party->position.x;
     oz = party->position.z;
     {
-        // FAKE: p (and mx/mz) built first and copied into pos; building pos directly changes the object
+        // p is built first and copied into pos (the copy is in the retail code).
+        // FAKE: the mx/mz temporaries; writing the products into p.x/p.z changes the object
         Vec p = {0.0f, 0.0f, 0.0f};
         Vec dir = {0.0f, -1.0f, 0.0f};
         f32 mx;

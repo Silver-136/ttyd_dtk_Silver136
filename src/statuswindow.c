@@ -145,7 +145,7 @@ void statusWinMain(void) {
     switch (seqGetSeq()) {
         case SEQ_GAME:
         case SEQ_MAP_CHANGE:
-            // FAKE: (x ? FALSE : TRUE) for !x; the plain negation changes the object
+            // (x ? FALSE : TRUE) for !x: the materialised booleans (cntlzw/srwi) are in the retail code
             if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE) || !(mario->flags & MARIO_FLAG_ACTIVE)) {
                 if (statusWinCheck()) {
                     statusWinClose();

@@ -1845,7 +1845,8 @@ static void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
-    // FAKE: ent is a second name for entry and zero (0.0f) is added to each row y; using entry and dropping zero changes the object
+    // zero (0.0f) is added to each row y (the adds are in the retail code).
+    // FAKE: ent is a second name for entry; using entry changes the object
     WinMgrEntry* ent = entry;
     WinMgrSelect* sel = ent->param;
     u32 left, top, wd, ht;
