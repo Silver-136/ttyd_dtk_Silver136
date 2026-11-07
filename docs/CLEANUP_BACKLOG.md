@@ -16,7 +16,7 @@ to the original games through every step; US retail is the priority for readabil
 | `#pragma force_active` | <!--n:game_force_active-->13<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->10<!--/n-->) | 776 | the library pairs keep the `gap_*` objects |
 | `gap_*` padding objects | <!--n:game_gap_padding-->8<!--/n--> (libs <!--n:libs_gap_padding-->7<!--/n-->) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
 | `fd_*` math-static data | <!--n:game_fake_data_fd-->28<!--/n--> lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
-| inline asm | <!--n:game_inline_asm-->9<!--/n--> (libs <!--n:libs_inline_asm-->281<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
+| inline asm | <!--n:game_inline_asm-->9<!--/n--> (libs <!--n:libs_inline_asm-->281<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly (the five TRK functions with C in other decompilations are C now) |
 | raw pointer arithmetic | <!--n:game_raw_pointer_math-->20<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
 
 FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
@@ -183,8 +183,9 @@ never copied in). What the raw counts above mean for the libraries:
   70 assembly functions are assembly in the original sources too. The hardware/ABI routines (PPCArch, OS cache /
   context / exception / interrupt / time / startup, AI stack switch, DB, TRK MSR/cache, GX paired-single and FIFO
   helpers, OSFastCast) are real assembly by what they do; their exact original spelling is not proven.
-- **Candidates for C (open):** TRK `support.c` HandleOpenFileSupportRequest, TRKRequestSend, TRKSuppAccessFile
-  (ordinary protocol and file-request code). Needs the TRK version and API settled first; no form passed yet.
+- **TRK assembly turned into C (2026-11-07):** `support.c` HandleOpenFileSupportRequest, TRKRequestSend,
+  TRKSuppAccessFile, `dolphin_trk.c` TRK__write_aram and `mem_TRK.c` TRK_fill_mem, after the matched GC 2.6 C of
+  pikmin2 and ac-decomp (CC0); TRK is built with `-enum int` (as in those projects; every TRK object stays identical).
 - **Unclear, keep:** THPDec IDCT/decoder blocks, AXFX reverb/chorus, MusyX CheapReverb/Chorus/StdReverb and
   snd_service math kernels (optimized paired-single code; the original form is not established).
 - **MusyX placeholder names:** the 67 `lbl_XXXXXXXX` occurrences are 31 branch labels inside the CheapReverb (20) and

@@ -67,4 +67,18 @@ enum DSReplyError {
     DSREPLY_NOT_STOPPED = 0x16       /* TRKDoContinue/TRKDoStep: the target is running */
 };
 
+/* I/O result of a file support request (the reply word at data + 0x10), as the MSL console hooks return it. */
+typedef enum DSIOResult {
+    DS_IONoError,
+    DS_IOError,
+    DS_IOEOF
+} DSIOResult;
+
+/* File handles of the console streams (the file_handle of a file support request). */
+typedef enum DSFileHandle {
+    DS_Stdin,
+    DS_Stdout,
+    DS_Stderr
+} DSFileHandle;
+
 #endif

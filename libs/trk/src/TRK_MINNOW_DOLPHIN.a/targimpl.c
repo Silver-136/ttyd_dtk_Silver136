@@ -113,10 +113,10 @@ DSError TRKReadBuffer1_ui64(TRKBuffer* buffer, u64* data);
 void TRKConstructEvent(TRKEvent* event, int eventType);
 DSError TRKPostEvent(TRKEvent* event);
 DSError TRKDoNotifyStopped(int cmd);
-DSError HandleOpenFileSupportRequest(const char* path, u8 requestArg, u32* fileHandle, u32* ioResult);
-DSError HandleCloseFileSupportRequest(int file_handle, u32* ioResult);
-DSError HandlePositionFileSupportRequest(u32 file_handle, u32* position, u8 whence, u32* ioResult);
-DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, u32* io_result, BOOL need_reply, BOOL read);
+DSError HandleOpenFileSupportRequest(const char* path, u8 requestArg, u32* fileHandle, DSIOResult* ioResult);
+DSError HandleCloseFileSupportRequest(int file_handle, DSIOResult* ioResult);
+DSError HandlePositionFileSupportRequest(u32 file_handle, u32* position, u8 whence, DSIOResult* ioResult);
+DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* io_result, BOOL need_reply, BOOL read);
 void TRKSaveExtended1Block(void);
 void TRKRestoreExtended1Block(void);
 void TRKUARTInterruptHandler(void);
@@ -926,7 +926,7 @@ u32 TRKTargetGetPC(void) {
 DSError TRKTargetSupportRequest(void) {
     DSError error;
     size_t* length;
-    int io_result;
+    DSIOResult io_result;
     u32 spec;
     int cmd;
     TRKEvent event;
@@ -942,29 +942,29 @@ DSError TRKTargetSupportRequest(void) {
 
     if (cmd == DSMSG_OpenFile) {
         error = HandleOpenFileSupportRequest((char*)gTRKCPUState.Default.GPR[4], gTRKCPUState.Default.GPR[5],
-                                             (u32*)gTRKCPUState.Default.GPR[6], (u32*)&io_result);
-        if (io_result == 0 && error != 0)
-            io_result = 1;
+                                             (u32*)gTRKCPUState.Default.GPR[6], &io_result);
+        if (io_result == DS_IONoError && error != 0)
+            io_result = DS_IOError;
         gTRKCPUState.Default.GPR[3] = io_result;
     } else if (cmd == DSMSG_CloseFile) {
-        error = HandleCloseFileSupportRequest(gTRKCPUState.Default.GPR[4], (u32*)&io_result);
-        if (io_result == 0 && error != 0)
-            io_result = 1;
+        error = HandleCloseFileSupportRequest(gTRKCPUState.Default.GPR[4], &io_result);
+        if (io_result == DS_IONoError && error != 0)
+            io_result = DS_IOError;
         gTRKCPUState.Default.GPR[3] = io_result;
     } else if (cmd == DSMSG_PositionFile) {
         spec = *((u32*)gTRKCPUState.Default.GPR[5]);
         error = HandlePositionFileSupportRequest(gTRKCPUState.Default.GPR[4], &spec, gTRKCPUState.Default.GPR[6],
-                                                 (u32*)&io_result);
-        if (io_result == 0 && error != 0)
-            io_result = 1;
+                                                 &io_result);
+        if (io_result == DS_IONoError && error != 0)
+            io_result = DS_IOError;
         gTRKCPUState.Default.GPR[3] = io_result;
         *((u32*)gTRKCPUState.Default.GPR[5]) = spec;
     } else {
         length = (size_t*)gTRKCPUState.Default.GPR[5];
-        error = TRKSuppAccessFile(gTRKCPUState.Default.GPR[4], (u8*)gTRKCPUState.Default.GPR[6], length, (u32*)&io_result, 1,
+        error = TRKSuppAccessFile(gTRKCPUState.Default.GPR[4], (u8*)gTRKCPUState.Default.GPR[6], length, &io_result, 1,
                                   cmd == DSMSG_ReadFile);
-        if (io_result == 0 && error != 0)
-            io_result = 1;
+        if (io_result == DS_IONoError && error != 0)
+            io_result = DS_IOError;
         gTRKCPUState.Default.GPR[3] = io_result;
         if (cmd == DSMSG_ReadFile)
             TRK_flush_cache(gTRKCPUState.Default.GPR[6], *length);

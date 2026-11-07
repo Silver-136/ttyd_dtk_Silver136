@@ -8,8 +8,6 @@ unsigned char GetUseSerialIO(void);
 unsigned char TRKAccessFile(unsigned int cmd, unsigned int file_handle, size_t* length, unsigned char* buffer);
 unsigned char TRKCloseFile(unsigned int cmd, unsigned int file_handle);
 
-enum { DS_IONoError, DS_IOError, DS_IOEOF };
-
 int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con,
                                 unsigned int cmd) {
     size_t countTemp;
@@ -35,13 +33,13 @@ int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, voi
 int __read_console(unsigned long handle, unsigned char* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0)
         return DS_IOError;
-    return __access_file(0, buffer, count, ref_con, DSMSG_ReadFile);
+    return __access_file(DS_Stdin, buffer, count, ref_con, DSMSG_ReadFile);
 }
 
 int __TRK_write_console(unsigned long handle, unsigned char* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0)
         return DS_IOError;
-    return __access_file(1, buffer, count, ref_con, DSMSG_WriteFile);
+    return __access_file(DS_Stdout, buffer, count, ref_con, DSMSG_WriteFile);
 }
 
 int __close_console(unsigned long handle) {
