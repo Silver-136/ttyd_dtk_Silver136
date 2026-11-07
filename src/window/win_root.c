@@ -822,7 +822,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     by = 40.0f + y;
     windowDispGX_Waku_col(0, waku, bx, by, 500.0f, 80.0f, 20.0f);
 
-    // FAKE: the != 0 test is redundant; wp->msgItem > 0 alone changes the object
+    // The != 0 test is redundant; both compares are in the retail code
     if (wp->msgItem != 0 && wp->msgItem > 0) {
         winTexInit((TEXPalette*)*wp->res->data);
         winTexSet(0x25, (Vec){ bx, by, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);

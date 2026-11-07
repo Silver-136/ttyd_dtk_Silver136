@@ -205,7 +205,7 @@ typedef struct MarioMotHammer2 {   // mot_hammer.c mot_hammer2 / mot_ham2_post (
     f32 animTime;                  // 0x10
     s16 flags;                     // 0x14, MarioMotHammer2Flags
     u8 pad16[2];                   // 0x16
-    s32 sfxId;                     // 0x18
+    u32 sfxId;                     // 0x18 (u32: its -1 tests are unsigned compares in the retail code)
 } MarioMotHammer2;
 
 // MarioMotHammer2.flags (mot_hammer2: the spin hammer charge)
@@ -228,7 +228,7 @@ typedef enum MarioMotHammer2Flags {
 typedef struct MarioMotRoll {      // mot_roll.c
     u8 pad00[4];                   // 0x00
     s32 flags;                     // 0x04, ROLL_FLAG_*
-    s32 sfxId;                     // 0x08, only JP uses it (US and later use MotRollWork.sfxId)
+    u32 sfxId;                     // 0x08, only JP uses it (US and later use MotRollWork.sfxId)
 } MarioMotRoll;
 
 typedef struct MarioMotHip {       // mot_hip.c

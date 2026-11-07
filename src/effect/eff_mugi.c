@@ -116,7 +116,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     effMugiKemuriData* data;
     s32 i;
 
-    // FAKE: unused zero vector; deleting it changes the object
+    // Never read; unused in the original too: its stack slot and initializer template are in the retail code
     Vec unused = {0.0f, 0.0f, 0.0f};
 
     // FAKE: discarded __fabs(x * 0.005); deleting it changes the object

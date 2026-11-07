@@ -402,9 +402,7 @@ void cloud_use(PartyEntry* party) {
     }
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
 
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+    if (CLOUD_WORK(party) != NULL && CLOUD_WORK(party)->sfxId != -1) {
         psndSFXOff(CLOUD_WORK(party)->sfxId);
         CLOUD_WORK(party)->sfxId = -1;
     }
@@ -520,9 +518,7 @@ void _cloud_use(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
         CLOUD_WORK(party)->sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_CLAUD_WIND1, &mario->position);
 #else
-        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-        if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId == 0xFFFFFFFF) {
+        if (CLOUD_WORK(party) != NULL && CLOUD_WORK(party)->sfxId == -1) {
             CLOUD_WORK(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);
         }
 #endif
@@ -593,7 +589,7 @@ void _cloud_use(PartyEntry* party) {
             break;
         }
 #if VERSION <= VERSION_DEMO_JP
-        if ((u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+        if (CLOUD_WORK(party)->sfxId != -1) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
             CLOUD_WORK(party)->sfxId = -1;
         }
@@ -608,7 +604,7 @@ void _cloud_use(PartyEntry* party) {
             party->useMotionId = CLOUD_USE_CLEANUP;
 #if VERSION >= VERSION_JP
         }
-        if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+        if (CLOUD_WORK(party) != NULL && CLOUD_WORK(party)->sfxId != -1) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
             CLOUD_WORK(party)->sfxId = -1;
 #endif
@@ -641,7 +637,7 @@ void _cloud_use(PartyEntry* party) {
         party->trigFlags |= PARTY_TRIG_HALF_PUSH;
 #else
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+        if (CLOUD_WORK(party) != NULL && CLOUD_WORK(party)->sfxId != -1) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
             CLOUD_WORK(party)->sfxId = -1;
         }
@@ -698,9 +694,7 @@ void _cloud_use(PartyEntry* party) {
 void cloud_exit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 #if VERSION >= VERSION_JP
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+    if (CLOUD_WORK(party) != NULL && CLOUD_WORK(party)->sfxId != -1) {
         psndSFXOff(CLOUD_WORK(party)->sfxId);
         CLOUD_WORK(party)->sfxId = -1;
     }
@@ -711,7 +705,7 @@ void cloud_exit(PartyEntry* party) {
     }
     if (party->useStruct != NULL) {
 #if VERSION <= VERSION_DEMO_JP
-        if ((u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+        if (CLOUD_WORK(party)->sfxId != -1) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
             CLOUD_WORK(party)->sfxId = -1;
         }

@@ -34,7 +34,7 @@ typedef struct ShotTargetWork {
     s16 periodY;  // 0x30
     s16 cntY;     // 0x32
     f32 ampY;     // 0x34
-    s32 sfxId;    // 0x38
+    u32 sfxId;    // 0x38 (u32: its -1 tests are unsigned compares in the retail code)
 } ShotTargetWork;
 
 
@@ -171,8 +171,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                 cw->endTimer = 60;
                 ac->acState = AC_STATE_RUN + 4;
 
-                // FAKE: sfxId compared as u32 with 0xFFFFFFFF; the plain cw->sfxId != -1 changes the object
-                if ((u32)cw->sfxId != 0xFFFFFFFF) {
+                if (cw->sfxId != -1) {
                     psndSFXOff(cw->sfxId);
                 }
                 break;

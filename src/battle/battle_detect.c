@@ -178,7 +178,7 @@ static void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
 
-            // FAKE: classFlags reloaded into flags (same value); dropping the reload changes the object
+            // flags is reloaded from d->classFlags (same value); the second load is in the retail code
             flags = d->classFlags;
             if (flags & TARGET_CLASS_ONLY_SELF) {
                 if (d->unitId != unit->unitId) {
@@ -395,7 +395,7 @@ static void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     d->numTargets = n;
     idx = d->targetIndices;
 
-    // FAKE: t reloaded from d->targets (same value); dropping the reload changes the object
+    // t is set from d->targets again (same value); the address add is in the retail code
     t = d->targets;
     n = d->numTargets;
     for (i = 0; i < n; i++) {

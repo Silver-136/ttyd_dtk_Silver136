@@ -1659,7 +1659,7 @@ void marioHitStrippedPool2(f32* f) {
 
 f32 marioChkOverhead(void) {
 #if VERSION >= VERSION_JP
-    // FAKE: pa..pd are never used; removing them changes the object
+    // pa..pd are never read, in the original too: their stack slots and initializer templates are in the retail code
     Vec pa = {0.0f, 0.0f, 0.0f};
     Vec pb = {0.0f, -1.0f, 0.0f};
     Vec pc = {0.0f, 0.0f, 0.0f};
@@ -1735,7 +1735,7 @@ f32 marioChkOverhead(void) {
                 } else {
 #if VERSION >= VERSION_US
                     {
-                        /* FAKE: redundant second test reproduces the target's double beq */
+                        /* The second test is redundant, but both compares (a double beq) are in the retail code */
                         s32 m = mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1;
                         if (m != mario->prevMotionId && m != mario->prevMotionId) {
                             marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);

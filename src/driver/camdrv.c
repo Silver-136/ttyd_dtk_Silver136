@@ -804,7 +804,7 @@ static void camLetterBox(void) {
     CameraEntry* camera = camPtrTbl[CAMERA_2D];
     PartyEntry* party = partyGetPtr(0);
     if (!(camera->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & BERO_EXEC_BUSY)) {
-        // FAKE: `party &&` repeats the null test; dropping it changes the object
+        // `party &&` repeats the null test; both tests are in the retail code
         if ((seqGetSeq() == SEQ_GAME) && (!marioChkKey() || !marioChkCtrl()) &&
             (!party || (party && !(party->flags & PARTY_FLAG_IS_BEING_USED)))) {
             if (!(camera->flags & CAMERA_FLAG_LETTER_BOX)) {

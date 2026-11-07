@@ -30,9 +30,7 @@ void seq_gameOverExit(SequenceWork* work) {
 
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_snd_bgm_unpause) {
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
+    if (psbgm[0].streamId != -1) {
         sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
     }
     return EVT_RETURN_DONE;

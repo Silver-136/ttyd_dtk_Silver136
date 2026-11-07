@@ -6911,7 +6911,7 @@ static void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnit
     pos = tmp;
     if ((EvtWord)work->name0 || (EvtWord)work->name1) {
         if ((EvtWord)work->name0 && !(EvtWord)work->name1) {
-            if (work->sfxId == 0xFFFFFFFF) {
+            if (work->sfxId == -1) {
                 work->sfxId = BtlUnit_snd_se_pos(unit, work->name0, EVTDAT_POINTER_MAX, 0, &pos);
             }
             if (part) {
@@ -6968,9 +6968,7 @@ const char* _mario_attack_voice_table[10] = {
 
 /** Stops the looping movement sound in the work, if one is playing. */
 static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work) {
-    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
-    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
-    if ((u32)work->sfxId != 0xFFFFFFFF) {
+    if (work->sfxId != -1) {
         psndSFXOff(work->sfxId);
         work->sfxId = -1;
     }

@@ -67,9 +67,7 @@ void init_se(void) {
 void flying_se_on(void) {
     MarioWork* mario = marioGetPtr();
 
-    // FAKE: unsigned compare with -1 (0xFFFFFFFF) on a signed sound id; the plain signed `== -1` compiles cmpwi
-    // instead of cmplwi and changes the object.
-    if ((u32)mario->motPlane->sfxId == 0xFFFFFFFF) {
+    if (mario->motPlane->sfxId == -1) {
         mario->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &mario->position);
     }
 }
@@ -99,9 +97,7 @@ const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hiko
 void flying_se_off(void) {
     MarioWork* mario = marioGetPtr();
 
-    // FAKE: unsigned compare with -1 (0xFFFFFFFF) on a signed sound id; the plain signed `!= -1` compiles cmpwi
-    // instead of cmplwi and changes the object.
-    if (mario->motStruct != NULL && (u32)mario->motPlane->sfxId != 0xFFFFFFFF) {
+    if (mario->motStruct != NULL && mario->motPlane->sfxId != -1) {
         psndSFXOff(mario->motPlane->sfxId);
         mario->motPlane->sfxId = -1;
     }

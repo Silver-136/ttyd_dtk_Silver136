@@ -378,7 +378,7 @@ struct BattleWork {
 #endif
     s32 luckEventId;                    // 0x1904C
     s32 reserveItems[4];                // 0x19050
-    s32 curtainSfxId;                    // 0x19060
+    u32 curtainSfxId;                    // 0x19060 (u32: its -1 tests are unsigned compares in the retail code)
     u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_AudienceDeclareACResult)
     u8 pad_19065[0x19068 - 0x19065];    // 0x19065, never accessed
     BattleDebugCtrl debug;              // 0x19068 (US 0x19078), debug overrides read by the audience and break slot
