@@ -28,17 +28,18 @@ typedef struct CamRoadHit {
     u32 flags;             // 0x28
 } CamRoadHit;
 double acos(double);
+
+// FAKE: unk_vec0-2 stand in for local Vec initializers of a dead-stripped function; nothing reads them. In the JP
+// demo map they are the anonymous @443-@445 at the start of .rodata, just below collisionTri_simple's {0, -1, 0}
+// initializer (@525), so they are probably the Vec initializers of a stripped function above it in the source:
+// camRoadDraw (0x8b8), setGXPerspView (0x14c), setGXTri, setGXLine or gx_init (all UNUSED there). {0, 1, 0} reads
+// like a look-at up vector; the owner and its body are not known.
 static const Vec unk_vec0 = {0.0f, 1.0f, 0.0f};
 static const Vec unk_vec1 = {90.0f, 110.0f, 13.0f};
 static const Vec unk_vec2 = {-110.0f, -70.0f, -190.0f};
 static CamRoadWork work;
 static CamRoadWork* wp = &work;
 
-// FAKE: stand-in for a debug function the linker stripped; its two strings are the last literals in the
-// target .rodata pool (codegen runs bottom-up, so it sits before the first function). The JP demo map
-// (MarioSt.MAP) names the original: the strings are @2397/@2398, numbered between calcCurrentCamState and
-// camRoadSetup, where the map lists the stripped camRoadDraw (0x8b8 bytes, UNUSED in the demo as well), so
-// no build contains its code.
 /**
  * Loads the map's camera road file (from the map archive, else from the disc onto the map heap),
  * turns its offsets into pointers, resets the road state and the sideways shift,
@@ -101,8 +102,10 @@ s32 camRoadSetup(const char* name) {
 }
 #endif
 
-// FAKE: stand-in for a stripped debug report; nothing calls it. It only places its two strings in the pool (the
-// demo pools them ahead of camRoadSetup's, so it follows camRoadSetup). Removing it changes the object.
+// FAKE: stand-in for the dead-stripped camRoadDraw (JP demo map: UNUSED, 0x8b8, between calcCurrentCamState and
+// the setGX* helpers); nothing calls it. It only places that function's two debug strings (map @2397/@2398, numbered
+// right after its stripped .sdata2 floats @2395/@2396) in the pool, ahead of camRoadSetup's. Removing it changes
+// the object. camRoadDraw's body is not known (too large to reconstruct from its constants).
 static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
     OSReport("%scam = %d\n", p, a);
     OSReport("%scurve = %d\n", p, b);

@@ -915,11 +915,13 @@ static HitEntry* hitEstimate(s32* out) {
 }
 
 /**
- * Early demos: not_fullswing_mobj, a list of map object kinds that nothing reads.
+ * Early demos: not_fullswing_mobj, a list of map object kinds that no kept code reads (a static in the JP demo
+ * map). Its reader was probably chkmobj (UNUSED there, 0x78, after hitEstimate2): a loop over this table with
+ * strcmp fits the size class (forms tried compile to 0x68-0x88), but its exact body is not known.
  * Then the names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break.
  */
 #if VERSION <= VERSION_DEMO_JP
-const char* not_fullswing_mobj[] = {
+static const char* not_fullswing_mobj[] = {
     "MOBJ_RedJumpStand",
     "MOBJ_RedJumpStand2",
     "MOBJ_BlueJumpStand",
@@ -961,4 +963,27 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
     sincosf(s, co, ang);
     *len = 2.0f * mario->wPlayerCollisionBox.x;
     return hitCheckFilter(NULL, hx, hy, hz, len, nx, ny, nz, mario->position.x, 0.5f * mario->wPlayerCollisionBox.y + mario->position.y, mario->position.z, *s, 0.0f, *co);
+}
+
+/**
+ * 1 if the map object kind name is a hammer block that Mario's current hammer level can break (chkBlock's test
+ * as a function). The JP demo map lists it UNUSED (0x10c) as the last function of mot_hammer.o; nothing calls it,
+ * so the link strips it. This form compiles to the map size there.
+ */
+s32 breakableMobj(const char* name) {
+    s32 ok = 0;
+    if (strcmp(name, isS1_str) == 0 || strcmp(name, isB1_str) == 0) {
+        if (pouchGetPtr()->hammerLevel >= 1) {
+            ok = 1;
+        }
+    } else if (strcmp(name, isS2_str) == 0 || strcmp(name, isB2_str) == 0) {
+        if (pouchGetPtr()->hammerLevel >= 2) {
+            ok = 1;
+        }
+    } else if (strcmp(name, isS3_str) == 0 || strcmp(name, isB3_str) == 0) {
+        if (pouchGetPtr()->hammerLevel >= 3) {
+            ok = 1;
+        }
+    }
+    return ok;
 }

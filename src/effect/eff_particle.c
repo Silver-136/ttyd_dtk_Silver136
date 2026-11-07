@@ -92,6 +92,14 @@ GXColor hibana_col[32] = {
 /** Random seed of the particle generator, advanced by rndf for every random draw in this file. */
 s32 seed = 1;
 
+/** Pseudo-random integer: the next value of rndf's linear congruential generator. */
+// Original name from the JP demo's link map (UNUSED there, 0x20, just before rndf): nothing calls it, so the linker
+// strips it. The one-step form of rndf's update compiles to that size; whether it returned s32 or u32 is not known.
+s32 rndi(void) {
+    seed = seed * 0x5EEDF715 + 0x1B0CB173;
+    return seed;
+}
+
 /** Pseudo-random f32 in [0, 1) from a linear congruential generator on the global seed. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 f32 rndf(void) {
@@ -128,7 +136,9 @@ f32 BoxMuller(void) {
 }
 
 // FAKE: stand-in for a function the linker stripped; nothing calls it. Its signed int-to-float constant is the
-// last item in .rodata. Removing it changes the object.
+// last item in .rodata (JP demo map @715, the highest number in the object). The other UNUSED functions there are
+// ParticleInit (0x50), EmitterInit (0x70), EmitterUpdate (0x10c) and ParticleUpdate (0xe8); which of them converts an
+// int is not known (rndf, BoxMuller and rndi have no such conversion). Removing it changes the object.
 void particleStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

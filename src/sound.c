@@ -906,6 +906,16 @@ void SoundSongPlayCh(s32 chan, u32 groupInfo) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_JP
+// FAKE: stand-in for a dead-stripped song loader; nothing calls it. It only places ".song" (JP demo map @3563) in the
+// pool. Its number lies between SoundEfxMain's constants and SoundSLibLoadDVD's strings, and the map lists
+// SoundSongLoadPlay (0x2c) and SoundSongLoadPlayCh (0x258) UNUSED here, after SoundSongPlayCh: loading a song file
+// fits SoundSongLoadPlayCh. Body not known.
+const char* SoundSongStrippedName(void) {
+    return ".song";
+}
+#endif
+
 /** Resumes a paused song on chan at its volume. */
 void SoundSongContinueCh(s32 chan) {
     SoundSong* song = &sound.songs[chan];
@@ -1336,6 +1346,15 @@ static void SoundEfxMain(void) {
     }
 }
 #pragma opt_strength_reduction reset
+
+#if VERSION <= VERSION_DEMO_JP
+// FAKE: stand-in for the dead-stripped DVD stream starters; nothing calls it. It only places their ".adp" (JP demo
+// map @3067) in the pool. The map lists _dvdcallback, SoundDVDPlay (0x204) and SoundDVDPlayCh (0x1f8) UNUSED at this
+// place (after SoundEfxMain); the extension of the disc's ADP stream files fits them. Bodies not known.
+const char* SoundDVDStrippedName(void) {
+    return ".adp";
+}
+#endif
 
 /** Stops the DVD audio stream (the disc's streamed music) on chan and closes its file. */
 static void SoundDVDStopCh(s32 chan) {
@@ -2074,17 +2093,15 @@ static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
-f64 SoundDemoStrippedRate(const char* ext, f64 t) {
-    f64 adp = t * 3.5;
-    f64 song = t * 4.0;
-    if (strcmp(ext, ".adp") == 0) {
-        return adp;
-    }
-    if (strcmp(ext, ".song") == 0) {
-        return song;
-    }
-    return t;
+// FAKE: stand-in for a dead-stripped stream or DVD function; nothing calls it. It only places the doubles 3.5 and
+// 4.0 (JP demo map @3005/@3006, after the stripped .sdata2 float @3004) in the pool. Their numbers lie between
+// SoundSSPlayChEx's constants and ".adp", so the owner is one of the UNUSED functions between SoundDVDPlayCh and
+// SoundSSPlayCh (the SoundDVD* setters and fades, the _ssDVDReadAsync_* readers, ssDecodePCM/ADPCM, SoundSSPlay);
+// which one is not known. Removing it changes the object.
+f64 SoundDemoStrippedRate(f64 t) {
+    f64 a = t * 3.5;
+    f64 b = t * 4.0;
+    return a + b;
 }
 #endif
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram);
