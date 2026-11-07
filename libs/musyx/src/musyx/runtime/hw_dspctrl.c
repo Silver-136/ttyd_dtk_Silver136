@@ -214,7 +214,7 @@ void salActivateStudio(u8 studio, u32 isMaster, SND_STUDIO_TYPE type) {
   dspStudio[studio].auxAHandler = dspStudio[studio].auxBHandler = NULL;
 }
 
-u16 compressorTable[3360] = {
+u16 compressorTable[3360] ATTRIBUTE_ALIGN(32) = {
     32673, 32579, 32486, 32392, 32299, 32206, 32114, 32022, 31930, 31838, 31746, 31655,
     31564, 31473, 31383, 31293, 31203, 31113, 31024, 30934, 30846, 30757, 30669, 30580,
     30492, 30405, 30317, 30230, 30143, 30057, 29970, 29884, 29798, 29713, 29627, 29542,

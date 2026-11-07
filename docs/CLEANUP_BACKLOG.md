@@ -193,7 +193,8 @@ never copied in). What the raw counts above mean for the libraries:
   sites are extern declarations), runtime `__mem.c` memcpy/memset in .init, the destructor-chain pointer in .dtors,
   TRK's .init routines.
 - **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (vi 20 bytes, hw_dspctrl 2 x 4,
-  snd_service 16, synth_dbtab 24, snd3d 7, US OSError 12) and the force_active pairs around them.
+  snd3d 7, US OSError 12) and the force_active pairs around them. The synth_dbtab (24) and snd_service (16) gaps
+  are gone (2026-11-07): compressorTable is 32-byte aligned as in AxioDL's 2.0.2-2.0.3 source.
 - **MCC is not built** (no configure entry): its 17 `int unused[N]` frame pads (FAKES.md) are not active debt. The
   original debug records show no extra locals, so a fake buffer would not be a fix either.
 - **Padclamp:** the original type is ten one-byte fields (10-byte symbol). The plain type matches US; JP loses two

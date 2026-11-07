@@ -275,6 +275,3 @@ u32 sndConvert2Ms(u32 time) { return time / 256; }
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#pragma force_active on
-__declspec(section ".data") u32 gap_05_803BB350_data[4] = {0, 0, 0, 0};
-#pragma force_active reset
