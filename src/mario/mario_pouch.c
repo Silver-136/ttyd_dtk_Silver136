@@ -286,6 +286,63 @@ BOOL addHead(ItemType type) {
     return 0;
 }
 
+/** Whether type's list (pouchGetMaxAndList) has an empty slot; 0 for other ids. */
+// Original name and size from the JP demo's link map (UNUSED there, 0xfc bytes): nothing calls it, so the
+// linker strips it and the body cannot be checked beyond its size (this one compiles to it). Body from
+// NWPlayer123's reconstruction.
+BOOL addHeadCheck(ItemType type) {
+    s16* t1;
+    s16* t2;
+    s32 size;
+    s32 i;
+    s32 count;
+
+    size = 0;
+    t1 = NULL;
+    t2 = NULL;
+    if (!pouchGetMaxAndList(type, &size, &t1, &t2)) {
+        return 0;
+    }
+    count = 0;
+    for (i = 0; i < size; i++) {
+        if (t1[i] == 0) {
+            count++;
+        }
+    }
+    if (count == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+/** Puts type in the first empty slot of its list (worn-badge entry 0); 0 when full or not a pouch item. */
+// Original name and size from the JP demo's link map (UNUSED there, 0x138 bytes): nothing calls it, so the
+// linker strips it and the body cannot be checked beyond its size (this one compiles to it). Body from
+// NWPlayer123's reconstruction.
+BOOL addTail(ItemType type) {
+    s16* t1;
+    s16* t2;
+    s32 size;
+    s32 i;
+
+    size = 0;
+    t1 = NULL;
+    t2 = NULL;
+    if (!pouchGetMaxAndList(type, &size, &t1, &t2)) {
+        return 0;
+    }
+    for (i = 0; i < size; i++) {
+        if (t1[i] == 0) {
+            t1[i] = type;
+            if (t2) {
+                t2[i] = 0;
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
+
 /**
  * Gives Mario an item (pickups, scripts, battle audience gifts).
  * Coins (max 999), Pianta tokens (max 99999; the early demos cap at 0x7FFFFFFF),
