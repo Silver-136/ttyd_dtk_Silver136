@@ -321,7 +321,7 @@ USER_FUNC(bakuGameBombEntry) {
  * args[2] stop level (-1, or 2/3/4 for gauge under 33/66/above). US and later halve the throw-back rate.
  */
 USER_FUNC(bakuGameMain) {
-    // FAKE: unused initialised array; removing it changes the object
+    // Never read; unused in the original too: its stack slot and initializer template are in the retail code
     s32 unused[8] = {0, 1, 2, 3, 4, 5, 6, 7};
     BakuWork* w = GetBakuGamePtr();
     EvtWord* args;
@@ -526,7 +526,7 @@ state_end:
             break;
         }
         {
-            // FAKE: unused initialised Vec; removing it changes the object
+            // Never read; unused in the original too: its stack slot and initializer template are in the retail code
             Vec unusedv = {125.0f, 0.0f, -30.0f};
         }
         w->hstate = 2;

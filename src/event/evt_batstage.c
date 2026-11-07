@@ -89,7 +89,7 @@ USER_FUNC(evt_batstage_light_set_player_on) {
     u8 col[3][3] = {{120, 120, 120}, {120, 120, 120}, {120, 120, 120}};
     u8 en[3] = {0, 0, 0};
 
-    // FAKE: unused zeroed array; removing it changes the object
+    // Never read; unused in the original too: its stack slot and initializer template are in the retail code
     u8 en2[4] = {0, 0, 0, 0};
 
     switch (sel) {

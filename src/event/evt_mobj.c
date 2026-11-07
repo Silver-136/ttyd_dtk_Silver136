@@ -1056,7 +1056,8 @@ static s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     Vec d3;
     Vec d4;
 #if !MOBJ_EXTRA_OBJS
-    // FAKE: four unused Vec literals read the uninitialized x/y/z; removing the block changes the object
+    // Four Vec literals never read (they read the uninitialized x/y/z), in the original too: their stack slots
+    // and initializer templates are in the retail code
     d1 = (Vec){x, y, z};
     d2 = (Vec){x, y, z};
     d3 = (Vec){x, y, z};

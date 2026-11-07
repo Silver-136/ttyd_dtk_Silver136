@@ -580,7 +580,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
  */
 static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
 #if VERSION >= VERSION_JP
-    // FAKE: unused zero Vec local; without it the object changes
+    // Never read; unused in the original too: its stack slot and initializer template are in the retail code
     Vec unused = {0.0f, 0.0f, 0.0f};
 #endif
     f32 mx = sn * d;

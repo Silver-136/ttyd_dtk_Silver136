@@ -1272,7 +1272,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     entry = wp->entries;
     ret = NULL;
 #if VERSION >= VERSION_JP
-    // FAKE: unusedVec is never read (its zero template and stores are in the target); removing it changes the object
+    // unusedVec is never read, in the original too: its stack slot, zero template and stores are in the retail code
     unusedVec = (Vec){ 0.0f, 0.0f, 0.0f };
 #endif
     {
