@@ -440,6 +440,8 @@ void badgeShop_bargainGeneration(void) {
     }
 }
 
+// kept: the target calls badgeShop_set from badgeShop_bargainGeneration; a function this small is auto-inlined
+// otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Writes a 2-bit stock count (clamped to 0-3) for item id into a shop table and returns the stored count.
@@ -632,6 +634,7 @@ USER_FUNC(evt_badgeShop_starmaniac_dec) {
     return EVT_RETURN_DONE;
 }
 
+// kept: without it evt_badgeShop_bottakuru_dec changes; -opt nocse for the whole file changes other functions
 #pragma opt_common_subs off
 USER_FUNC(evt_badgeShop_bottakuru_dec) {
     s32 value;

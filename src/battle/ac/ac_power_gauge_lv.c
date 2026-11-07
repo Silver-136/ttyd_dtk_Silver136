@@ -140,6 +140,7 @@ s32 battleAcResult_PowerGaugeLv(BattleWork* work) {
 
 static void actionCommandDisp(f32 x, f32 y);
 
+// kept: without it battleAcDisp_PowerGaugeLv changes; -opt noprop for the whole file changes other functions
 #pragma opt_propagation off
 /**
  * Display callback: slides the gauge in from the left over 20 frames,

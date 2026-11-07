@@ -297,7 +297,6 @@ VITiming* __VISetExtraTiming(VITiming* t) {
     return old;
 }
 
-#pragma dont_inline on
 static VITiming* getTiming(VITVMode mode) {
     switch (mode) {
     case VI_TVMODE_NTSC_INT:        return &timing[0];
@@ -322,7 +321,6 @@ static VITiming* getTiming(VITVMode mode) {
         return NULL;
     }
 }
-#pragma dont_inline reset
 
 void __VIInit(VITVMode mode) {
     VITiming* tm;
@@ -1256,6 +1254,8 @@ void __VISetLatchMode(u32 mode) {
     __VIRegs[VI_DISP_CONFIG] = reg;
 }
 
+// kept: the JP demo map lists __VIGetLatchPosition at 0x40 bytes, so it called both latch readers (0x74 each) out of
+// line; all three are dead-stripped from the game, the pairs only shape the object
 #pragma dont_inline on
 int __VIGetLatch0Position(s16* px, s16* py) {
     u32 hcount;

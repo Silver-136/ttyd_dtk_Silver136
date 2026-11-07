@@ -341,7 +341,8 @@ void mot_hip(void) {
 }
 
 #if VERSION >= VERSION_JP
-// FAKE: dont_inline keeps chkground a call while mot_hip_post still inlines
+// kept: from JP on the target calls chkground from mot_hip (the early demos inline it at every call: UNUSED in the
+// JP demo map); -inline noauto for the file changes mot_hip in other places
 #pragma dont_inline on
 #endif
 

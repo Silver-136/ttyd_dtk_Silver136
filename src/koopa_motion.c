@@ -765,7 +765,8 @@ void kpa_powdown(void) {
     }
 }
 
-// FAKE: dont_inline keeps kpaSwimMove a real call; removing it changes the object
+// kept: the target calls kpaSwimMove (a local function in the JP demo map) from kpa_swim; a function this small is
+// auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40

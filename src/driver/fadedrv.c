@@ -1374,6 +1374,8 @@ static void disp_texture(CameraId camId, void* param) {
     GXSetProjectionv(proj);
 }
 
+// kept: the target calls z (a local function in the JP demo map) from disp_maku; a function this small is auto-
+// inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Depth scale for the curtain animation drawn at a world position:

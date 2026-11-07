@@ -1294,6 +1294,8 @@ void roll_upstairs_on(void) {
     mario->jumpSnapY = -0.01f;
 }
 
+// kept: the target calls roll_upstairs from mot_roll; a function this small is auto-inlined otherwise, and -inline
+// noauto for the file changes other functions
 #pragma dont_inline on
 /** Advances the rolling step climb started by roll_upstairs_on, clearing the step flags when it ends. */
 void roll_upstairs(void) {

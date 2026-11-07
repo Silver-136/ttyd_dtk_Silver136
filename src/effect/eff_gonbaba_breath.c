@@ -59,6 +59,7 @@ u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};
 static void effGonbabaBreathMain(EffectEntry* effect);
 static void effGonbabaBreathDisp(CameraId cameraId, void* param);
 
+// kept: without it init_breath changes; -opt noprop for the whole file changes other functions
 #pragma opt_propagation off
 /** Initialises one breath particle for the given type: delay by index, start offset, velocity and lifetime. */
 static void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {

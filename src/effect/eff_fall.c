@@ -255,6 +255,9 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     }
     return effect;
 }
+
+// kept: without it effFallMain changes; -opt noprop,nolifetimes for the whole file changes other functions
+// (propagation and lifetimes off together, as in the rels' extdrv functions)
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 

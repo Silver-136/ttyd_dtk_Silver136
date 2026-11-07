@@ -3526,9 +3526,6 @@ static s32 BattleAudience_GetPPAudienceNum_L(void) {
     return BattleAudience_GetPPAudienceNum_RL_Sub(0);
 }
 
-#pragma push
-// FAKE: loop invariants optimisation off for BattleAudience_GetPPAudienceNum_RL_Sub only; with it on the object changes
-#pragma opt_loop_invariants off
 /**
  * Counts the members in one half of the stands (offset 0 = left ten columns, 10 = right) that are present
  * and taking part: not asleep, in a shell or leaving (BattleAudience_GetPPAudienceNum_Sub).
@@ -3548,7 +3545,6 @@ static s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset) {
     }
     return count;
 }
-#pragma pop
 
 /** TRUE when member id exists and takes part: not asleep (13), hiding in its shell (17) or leaving (12). */
 static BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {
@@ -4029,7 +4025,8 @@ void BattleAudienceJoyEnding(void) {
 }
 
 #pragma push
-// loop invariants optimisation off for BattleAudienceJoy_Sub, BattleAudienceDetectPakkunEatTargetSub2, BattleAudienceDetectPakkunEatTargetSub and 66 more: the original register allocation and scheduling need it
+// kept: loop-invariant code motion off for BattleAudienceJoy_Sub (until the pop); without it the function changes,
+// and -opt noloop for the whole file changes other functions
 #pragma opt_loop_invariants off
 /**
  * Makes every waiting member react (BattleAudienceJoy):

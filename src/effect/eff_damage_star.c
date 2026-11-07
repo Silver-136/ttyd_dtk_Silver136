@@ -276,6 +276,8 @@ MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
 static void effDamageStarMain(EffectEntry* effect);
 static void effDamageStarDisp(CameraId cameraId, void* payload);
 
+// kept: without it effDamageStarEntry changes; -opt noprop,nolifetimes for the whole file changes other functions
+// (propagation and lifetimes off together, as in the rels' extdrv functions)
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 /**

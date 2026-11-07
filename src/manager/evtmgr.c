@@ -31,6 +31,8 @@ EventWork* evtGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
 
+// kept: the target calls make_pri_table (a local function in the JP demo map) from evtmgrMain; a function this small
+// is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Builds this frame's run order for evtmgrMain:

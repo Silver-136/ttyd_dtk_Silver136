@@ -363,6 +363,8 @@ static inline f32 dofDiv(f32 a, f32 b) { return a / b; }
 /** Opaque white, the TEV colour of the depth-of-field pass (envDisp_DepthOfField). */
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 
+// kept: without it envDisp_DepthOfField changes; -opt noprop,nolifetimes for the whole file changes other functions
+// (propagation and lifetimes off together, as in the rels' extdrv functions)
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 // FAKE: tbl, tbl2, coord2 and stage2 are one-element local arrays. The front end scalarizes them into @ temps,
@@ -828,6 +830,8 @@ void envGlareFilterZ(f32 zscale) {
     f->flags |= ENV_GLARE_FILTER_Z;
 }
 
+// kept: without it envDisp_FF changes; -opt noprop,nolifetimes for the whole file changes other functions
+// (propagation and lifetimes off together, as in the rels' extdrv functions)
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 /**

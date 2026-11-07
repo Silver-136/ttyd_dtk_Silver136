@@ -924,7 +924,8 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     }
 }
 
-// FAKE: dont_inline around partyChgRunMode (JP and later); removing the pair changes the object
+// kept: from JP on the target calls partyChgRunMode from its 17 callers in this file; a function this small is
+// auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 #else
         }
@@ -952,6 +953,8 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 #pragma dont_inline reset
 
 #if VERSION >= VERSION_JP
+// kept: the target calls partyForceChgRunMode from party_force_ride_yoshi and allPartyForceRideOn; a function this
+// small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 #endif
 /**
@@ -1988,7 +1991,8 @@ static void getRidePos(PartyEntry* party, Vec* pos) {
     }
 }
 
-// FAKE: dont_inline around this function; removing the pair changes the object (early demos the same)
+// kept: the target calls allPartyForceRideOn from partyHelloMain (early demos the same); a function this small is
+// auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 /**
  * Puts both partners straight into the riding-along state (run mode 11, step 11) without shadow (and hidden
