@@ -1173,7 +1173,7 @@ void yoshiFlyMove(PartyEntry* party) {
     f32 spd;
     f32 max;
 
-    // FAKE: one (1.0f) multiplies the dash speed; the plain expression changes the object
+    // one (1.0f) multiplies the dash speed; the multiply is in the retail code
     f32 one = 1.0f;
 
     inertia(party);
@@ -1228,7 +1228,7 @@ static void inertia(PartyEntry* party) {
     f32 lim = 16.0f;
     f32 acc = 0.01f;
 
-    // FAKE: zero is subtracted from vz twice; dropping it changes the object
+    // zero is subtracted from vz twice; both subtractions are in the retail code
     f32 zero = 0.0f;
     s32 dir;
 

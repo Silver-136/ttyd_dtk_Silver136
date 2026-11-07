@@ -387,7 +387,8 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
         pos = (Vec){0.0f, 0.0f, 0.0f};
 
-        // FAKE: d0 and d1 are never read; removing them changes the object
+        // d0 and d1 are never read, in the original too: their stack slots and initializer templates are in the
+        // retail code
         d0 = (Vec){0.0f, 0.0f, 0.0f};
         d1 = (Vec){0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + ((f32)gw->width) * target / 100.0f;
@@ -405,7 +406,8 @@ static void actionCommandDisp(f32 x, f32 y) {
             case AC_STATE_RUN + 4: {
                     Vec p = {0.0f, 0.0f, 0.0f};
 
-                    // FAKE: e0 and e1 are never used; removing them changes the object
+                    // Never read; unused in the original too: their stack slots and initializer templates are in
+                    // the retail code
                     Vec e0 = {0.0f, 0.0f, 0.0f};
                     Vec e1 = {0.0f, 0.0f, 0.0f};
                     p.x = 28.0f + (-225.0f + x);
@@ -417,7 +419,8 @@ static void actionCommandDisp(f32 x, f32 y) {
             if (gw->hit) {
                 Vec p = {0.0f, 0.0f, 0.0f};
 
-                // FAKE: e0 and e1 are never used; removing them changes the object
+                // Never read; unused in the original too: their stack slots and initializer templates are in the
+                // retail code
                 Vec e0 = {0.0f, 0.0f, 0.0f};
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);

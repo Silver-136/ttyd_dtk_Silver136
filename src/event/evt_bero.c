@@ -633,7 +633,6 @@ USER_FUNC(bero_get_position_normal) {
     const char* name = (const char*)event->lwData[3];
     s32 angle = event->lwData[5];
     Vec start;
-    f32 *hxPtr;
     Vec end;
     f32 c0;
     start.x = pos[0];
@@ -674,10 +673,9 @@ USER_FUNC(bero_get_position_normal) {
         c0 = (f32) cos(rad);
         tmp.z = start.z - (30.0f * (-c0));
 
-        // FAKE: repeated store of dist and a spare pointer to hx; dropping both changes the object
+        // dist is stored again before the second probe; the store is in the retail code
         dist = 1000000.0f;
-        hxPtr = &hx;
-        if (hitCheckFilter(NULL, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
             tmp.y = hy;
         }
         tmp2 = tmp;

@@ -172,9 +172,10 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     curve = evtGetValue(event, args[5]);
     camera = camGetPtr(CAMERA_3D);
     at = (Vec){x, y, z};
-
-    // FAKE: unused zero Vec expression; removing it changes the object
-    (Vec){0.0f, 0.0f, 0.0f};
+    {
+        // Never read; unused in the original too: its initializer template is in the retail code
+        Vec unused = {0.0f, 0.0f, 0.0f};
+    }
     PSVECSubtract(&at, &camera->cameraPos, &pos);
     PSVECScale(&pos, &pos, (f32)percent / 100.0f);
     PSVECAdd(&pos, &camera->cameraPos, &pos);
@@ -239,10 +240,10 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
     mario = marioGetPtr();
     {
         Vec pos, at;
+        // Never read; unused in the original too: their initializer templates are in the retail code
+        Vec unused0 = {0.0f, 0.0f, 0.0f};
+        Vec unused1 = {0.0f, 0.0f, 0.0f};
 
-        // FAKE: unused zero Vec expressions; removing them changes the object
-        (Vec){0.0f, 0.0f, 0.0f};
-        (Vec){0.0f, 0.0f, 0.0f};
         ax = mario->position.x + ax;
         ay = mario->position.y + ay;
         az = mario->position.z + az;

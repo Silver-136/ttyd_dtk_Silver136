@@ -1735,7 +1735,7 @@ f32 marioChkOverhead(void) {
                 } else {
 #if VERSION >= VERSION_US
                     {
-                        /* FAKE: redundant second test reproduces the target's double beq */
+                        /* The second test is redundant, but both compares (a double beq) are in the retail code */
                         s32 m = mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1;
                         if (m != mario->prevMotionId && m != mario->prevMotionId) {
                             marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);

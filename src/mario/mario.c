@@ -1969,7 +1969,7 @@ BOOL marioChkInScreen(s32 x, s32 y) {
         valid = TRUE;
     }
 
-    // FAKE: redundant compare with FALSE; return valid changes the object
+    // The compare with FALSE is in the retail code (the result is normalised to 0 or 1)
     return valid != FALSE;
 }
 

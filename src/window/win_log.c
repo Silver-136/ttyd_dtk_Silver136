@@ -1207,7 +1207,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 #if VERSION >= VERSION_JP
             winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
 #endif
-            // FAKE: wk is reloaded before each position store; one load changes the object
+            // wk is reloaded before each position store; the three loads are in the retail code
             wk = w->log.eff[i]->userdata;
             wk->position.x = v.x + (x + w->log.stoneWinX);
             wk = w->log.eff[i]->userdata;

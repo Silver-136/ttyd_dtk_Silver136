@@ -657,7 +657,7 @@ static void bomhei_use_main(PartyEntry* party) {
             if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
                 party->work.bomhei.state = 40;
             } else {
-                // FAKE: repeated store (useMotionId is already 50); dropping the else store changes the object
+                // Repeated store (useMotionId is already 50); both stores are in the retail code
                 party->useMotionId = 50;
             }
         }

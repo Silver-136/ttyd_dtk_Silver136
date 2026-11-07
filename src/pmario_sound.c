@@ -9571,7 +9571,7 @@ static void psndBGMMain(void) {
             SoundSSMuteOff(bgm->streamId);
         }
 
-        // FAKE: repeated listId test (listId != -1 is known here); dropping it changes the object
+        // Repeated listId test (listId != -1 is known here); the test is in the retail code
         if (bgm->listId == -1) {
             alive = 0;
         } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
