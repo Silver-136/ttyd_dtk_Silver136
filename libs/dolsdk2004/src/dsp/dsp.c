@@ -50,7 +50,7 @@ void DSPAssertInt(void) {
 
     old = OSDisableInterrupts();
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0xA8) | 2;
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT)) | DSP_CSR_ASSERT_INT;
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     OSRestoreInterrupts(old);
 }
@@ -71,11 +71,11 @@ void DSPInit(void) {
     __OSUnmaskInterrupts(OS_INTERRUPTMASK_DSP_DSP);
 
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0xA8) | 0x800;
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT)) | DSP_CSR_INIT;
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
 
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    __DSPRegs[DSP_CONTROL_STATUS] = tmp = tmp & ~0xAC;
+    __DSPRegs[DSP_CONTROL_STATUS] = tmp = tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);
 
     __DSP_first_task = __DSP_last_task = __DSP_curr_task = __DSP_tmp_task = NULL;
     __DSP_init_flag = 1;
@@ -93,7 +93,7 @@ void DSPReset(void) {
 
     old = OSDisableInterrupts();
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0xA8) | 0x800 | 1;
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT)) | DSP_CSR_INIT | DSP_CSR_RESET;
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     __DSP_init_flag = 0;
     OSRestoreInterrupts(old);
@@ -105,7 +105,7 @@ void DSPHalt(void) {
 
     old = OSDisableInterrupts();
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0xA8) | 4;
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT)) | DSP_CSR_HALT;
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     OSRestoreInterrupts(old);
 }
@@ -116,13 +116,13 @@ void DSPUnhalt(void) {
 
     old = OSDisableInterrupts();
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0xAC);
+    tmp = (tmp & ~(DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT));
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     OSRestoreInterrupts(old);
 }
 
 u32 DSPGetDMAStatus(void) {
-    return (__DSPRegs[DSP_CONTROL_STATUS] & (1 << 9));
+    return (__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_ARAM_DMA_BUSY);
 }
 
 DSPTaskInfo* DSPAddTask(DSPTaskInfo* task) {

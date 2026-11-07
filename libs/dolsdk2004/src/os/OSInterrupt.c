@@ -169,15 +169,15 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
     case __OS_INTERRUPT_MEM_ADDRESS:
         reg = 0;
         if (!(current & OS_INTERRUPTMASK_MEM_0))
-            reg |= 0x1;
+            reg |= MI_IRQ_REG0;
         if (!(current & OS_INTERRUPTMASK_MEM_1))
-            reg |= 0x2;
+            reg |= MI_IRQ_REG1;
         if (!(current & OS_INTERRUPTMASK_MEM_2))
-            reg |= 0x4;
+            reg |= MI_IRQ_REG2;
         if (!(current & OS_INTERRUPTMASK_MEM_3))
-            reg |= 0x8;
+            reg |= MI_IRQ_REG3;
         if (!(current & OS_INTERRUPTMASK_MEM_ADDRESS))
-            reg |= 0x10;
+            reg |= MI_IRQ_ALL_REGS;
         __MEMRegs[MI_IRQMASK] = (u16)reg;
         mask &= ~OS_INTERRUPTMASK_MEM;
         break;
@@ -185,13 +185,13 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
     case __OS_INTERRUPT_DSP_ARAM:
     case __OS_INTERRUPT_DSP_DSP:
         reg = __DSPRegs[DSP_CONTROL_STATUS];
-        reg &= ~0x1F8;
+        reg &= ~(DSP_CSR_AID_INT | DSP_CSR_AID_INT_MASK | DSP_CSR_ARAM_INT | DSP_CSR_ARAM_INT_MASK | DSP_CSR_DSP_INT | DSP_CSR_DSP_INT_MASK);
         if (!(current & OS_INTERRUPTMASK_DSP_AI))
-            reg |= 0x10;
+            reg |= DSP_CSR_AID_INT_MASK;
         if (!(current & OS_INTERRUPTMASK_DSP_ARAM))
-            reg |= 0x40;
+            reg |= DSP_CSR_ARAM_INT_MASK;
         if (!(current & OS_INTERRUPTMASK_DSP_DSP))
-            reg |= 0x100;
+            reg |= DSP_CSR_DSP_INT_MASK;
         __DSPRegs[DSP_CONTROL_STATUS] = (u16)reg;
         mask &= ~OS_INTERRUPTMASK_DSP;
         break;
@@ -378,25 +378,25 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
 
     if (intsr & PI_INT_MEM) {
         reg = __MEMRegs[MI_IRQFLAG];
-        if (reg & 0x1)
+        if (reg & MI_IRQ_REG0)
             cause |= OS_INTERRUPTMASK_MEM_0;
-        if (reg & 0x2)
+        if (reg & MI_IRQ_REG1)
             cause |= OS_INTERRUPTMASK_MEM_1;
-        if (reg & 0x4)
+        if (reg & MI_IRQ_REG2)
             cause |= OS_INTERRUPTMASK_MEM_2;
-        if (reg & 0x8)
+        if (reg & MI_IRQ_REG3)
             cause |= OS_INTERRUPTMASK_MEM_3;
-        if (reg & 0x10)
+        if (reg & MI_IRQ_ALL_REGS)
             cause |= OS_INTERRUPTMASK_MEM_ADDRESS;
     }
 
     if (intsr & PI_INT_DSP) {
         reg = __DSPRegs[DSP_CONTROL_STATUS];
-        if (reg & 0x8)
+        if (reg & DSP_CSR_AID_INT)
             cause |= OS_INTERRUPTMASK_DSP_AI;
-        if (reg & 0x20)
+        if (reg & DSP_CSR_ARAM_INT)
             cause |= OS_INTERRUPTMASK_DSP_ARAM;
-        if (reg & 0x80)
+        if (reg & DSP_CSR_DSP_INT)
             cause |= OS_INTERRUPTMASK_DSP_DSP;
     }
 

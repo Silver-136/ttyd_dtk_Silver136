@@ -96,9 +96,21 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define DSP_MAILBOX_OUT_LO (3)
 #define DSP_CONTROL_STATUS (5)
 
-// DSP_CONTROL_STATUS bits (ar.c)
+// DSP_CONTROL_STATUS (DSP control register) bits. Names after Dolphin's UDSPControl (Source/Core/Core/HW/DSP.h):
+// DSPReset, DSPAssertInt, DSPHalt, AID, AID_mask, ARAM, ARAM_mask, DSP, DSP_mask, DMAState, DSPInitCode, DSPInit.
+// The interrupt bits are flags that are written back as 1 to acknowledge; each mask bit sits one above its flag.
+#define DSP_CSR_RESET         (0x1)   // DSPReset
+#define DSP_CSR_ASSERT_INT    (0x2)   // DSPAssertInt: raises the DSP's interrupt
+#define DSP_CSR_HALT          (0x4)   // DSPHalt
+#define DSP_CSR_AID_INT       (0x8)   // AID: audio interface DMA interrupt
+#define DSP_CSR_AID_INT_MASK  (0x10)  // AID_mask: audio interface DMA interrupt enabled
 #define DSP_CSR_ARAM_INT      (0x20)  // ARAM DMA interrupt; written back to acknowledge it
-#define DSP_CSR_ARAM_DMA_BUSY (0x200) // ARAM DMA in progress
+#define DSP_CSR_ARAM_INT_MASK (0x40)  // ARAM_mask
+#define DSP_CSR_DSP_INT       (0x80)  // DSP: interrupt from the DSP (mailbox)
+#define DSP_CSR_DSP_INT_MASK  (0x100) // DSP_mask
+#define DSP_CSR_ARAM_DMA_BUSY (0x200) // DMAState: ARAM DMA in progress
+#define DSP_CSR_INIT_CODE     (0x400) // DSPInitCode
+#define DSP_CSR_INIT          (0x800) // DSPInit
 
 #define DSP_ARAM_SIZE        (9)
 #define DSP_ARAM_MODE        (11)
@@ -121,6 +133,17 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 // Documentation", chapter 5) for the mnemonics and Dolphin's open-source emulator (Source/Core/Core/HW/) where
 // YAGCD gives none. Indices are byte offset / 4 for the u32 arrays and byte offset / 2 for __MEMRegs.
 // Sources and tables: cleanup_notes/hw_register_names.md.
+
+// Drive commands: the top byte of DI_CMDBUF0. Names after Dolphin's DICommand enum
+// (Source/Core/Core/HW/DVD/DVDInterface.h); values are shifted into the top byte here.
+#define DI_CMD_INQUIRY            (0x12000000)
+#define DI_CMD_READ               (0xA8000000)
+#define DI_CMD_SEEK               (0xAB000000)
+#define DI_CMD_REQUEST_ERROR      (0xE0000000)
+#define DI_CMD_AUDIO_STREAM       (0xE1000000)
+#define DI_CMD_REQUEST_AUDIO_STATUS (0xE2000000)
+#define DI_CMD_STOP_MOTOR         (0xE3000000)
+#define DI_CMD_AUDIO_BUFFER_CONFIG (0xE4000000)
 
 // indices for __PIRegs[i] (processor interface, 0xCC003000)
 #define PI_INTSR         (0)  // interrupt cause (YAGCD INTSR)
@@ -157,6 +180,13 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define MI_PROT_TYPE     (8)  // protection type, 2 bits per region
 #define MI_IRQMASK       (14) // interrupt mask
 #define MI_IRQFLAG       (15) // interrupt cause
+
+// MI_IRQMASK / MI_IRQFLAG bits (Dolphin MemoryInterface.h MIIRQMask / MIIRQFlag: reg0-reg3, all_regs)
+#define MI_IRQ_REG0     (0x1)  // protected region 0 was accessed
+#define MI_IRQ_REG1     (0x2)
+#define MI_IRQ_REG2     (0x4)
+#define MI_IRQ_REG3     (0x8)
+#define MI_IRQ_ALL_REGS (0x10)
 #define MI_PROT_ADDR_LO  (17) // address that failed protection, low half
 #define MI_PROT_ADDR_HI  (18) // address that failed protection, high half
 

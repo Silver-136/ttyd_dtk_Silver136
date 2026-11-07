@@ -23,7 +23,7 @@ void __DSPHandler(__OSInterrupt intr, OSContext* context) {
     u32 mail;
 
     tmp = __DSPRegs[DSP_CONTROL_STATUS];
-    tmp = (tmp & ~0x28) | 0x80;
+    tmp = (tmp & ~(DSP_CSR_ARAM_INT | DSP_CSR_AID_INT)) | DSP_CSR_DSP_INT;
     __DSPRegs[DSP_CONTROL_STATUS] = tmp;
 
     OSClearContext(&exceptionContext);
