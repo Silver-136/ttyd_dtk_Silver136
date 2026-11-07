@@ -51,11 +51,7 @@
 
 static CloudRoomWork* cloud;
 
-#if VERSION <= VERSION_DEMO_JP
 static s8 cloud_once_flag;
-#else
-static u8 cloud_once_flag;
-#endif
 
 static void _mapsetofs_all(CloudRoomWork* wp);
 static void _mapclsofs_all(CloudRoomWork* wp);
@@ -861,12 +857,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_JP
             if (cloud_once_flag == 1) {
-#else
-            if (((s32) (cloud_once_flag & 0xFFFFFFFFFFFFFFFFu)) == 1) // FAKE: no-op 64-bit mask; needed for 100% (plain cloud_once_flag == 1 gives 97.9-98.1)
-          {
-#endif
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
