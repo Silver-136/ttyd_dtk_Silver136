@@ -96,7 +96,11 @@ void hammer_swing_se(void) {
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void hammer_hit_se(void) {
     MarioWork* m = marioGetPtr();
+#if VERSION <= VERSION_DEMO_JP
     s32 i;
+#else
+    u32 i;
+#endif
     s32 snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
     switch (pouchGetHammerLv()) {
     case 1:
@@ -112,8 +116,7 @@ void hammer_hit_se(void) {
 #if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < 5; i++) {
 #else
-    // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
-    for (i = 0; (u32)i < 10; i++) {
+    for (i = 0; i < 10; i++) {
 #endif
         if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
             snd = se_data[m->hammerSfxIdx + 1];

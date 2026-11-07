@@ -55,7 +55,7 @@ void caseReInit(void) {
  */
 s32 caseEntry(CaseSetup* setup) {
     CaseEntry* entry;
-    int i = 0;
+    s32 i = 0;
     for (entry = wp->entries; i < wp->count; i++, entry++) {
         if (!(entry->flags & CASE_FLAG_ACTIVE)) {
             break; //unused entry
@@ -77,8 +77,7 @@ s32 caseEntry(CaseSetup* setup) {
     entry->evtId = 0;
     memcpy(entry->lwData, setup->lwData, sizeof(entry->lwData));
 
-    // FAKE: no-op 64-bit mask; a plain `return i;` swaps the loop registers in both versions
-    return i & 0xFFFFFFFFFFFFFFFFu;
+    return i;
 }
 
 /** Releases case entry caseId so it no longer fires. */

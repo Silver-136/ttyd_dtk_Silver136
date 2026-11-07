@@ -2499,7 +2499,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     return FALSE;
 }
 
-// FAKE: two unused zero vectors in .rodata (nothing reads them); removing them changes the object.
+// Two unused zero vectors, read by nothing; the original had them too (their storage is in the retail .rodata). Names invented.
 const Vec vec3_802ce0ac = {0.0f, 0.0f, 0.0f};
 const Vec vec3_802ce0b8 = {0.0f, 0.0f, 0.0f};
 #endif

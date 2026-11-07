@@ -1191,7 +1191,7 @@ static void make_data(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        // FAKE: i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object
+        // i is never -1 here; the test is in the retail code all the same
         if (i != -1) {
             save = &cardGetFilePtr()->saves[i];
         } else {

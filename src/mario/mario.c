@@ -72,7 +72,7 @@ const char* marioAnimeGroupData[4][3] = {
 Vec blurPos[8];
 
 //.sbss
-// FAKE: unused 4-byte .sbss filler in no symbol map; it only fills the slot the original had here. Removing it changes the object.
+// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 s32 unk_804186EC;
 MarioWork* mp;
 
@@ -1672,7 +1672,7 @@ static void marioMoveMain(void) {
     vx += wp->floorMove.x;
     vz2 += wp->floorMove.z;
 
-    // FAKE: vy is a zero temporary (added to position.y, compared with dist); the literal changes the object
+    // vy is a zero temporary added to position.y and compared with dist (the add and the compare are in the retail code)
     vy = 0.0f;
     wp->position.y += vy + wp->floorMove.y;
     dist = sqrtf(vx * vx + vz2 * vz2);

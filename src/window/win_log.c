@@ -1317,11 +1317,8 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
         {165.0f, 68.0f}, {0.0f, 75.0f}, {97.0f, 150.0f}, {-139.0f, -33.0f},
         {41.0f, -163.0f}, {211.0f, -91.0f}, {-209.0f, 159.0f},
     };
-    GXColor c2;
-    GXColor c0;
 
-    // FAKE: c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object
-    GXColor white = (c2 = (c0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}));
+    GXColor white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     s32 tex;
     Mtx m;
     f32 top;

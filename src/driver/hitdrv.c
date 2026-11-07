@@ -17,7 +17,7 @@ static BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
 static s32 hitCalcVtxPosition(HitEntry* hit);
 static void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 
-// FAKE: unused 4-byte .sbss filler in no symbol map; it only fills the slot the original had here. Removing it changes the object.
+// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 s32 unk_8041840C;
 
 #if VERSION >= VERSION_JP

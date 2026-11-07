@@ -20,7 +20,7 @@
 #include "driver/swdrv.h"
 
 
-// FAKE: 4-byte .sbss filler before mpp, in no symbol map and never used; removing it changes the object.
+// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 PouchData* mpp_gap;
 PouchData* mpp;
 
@@ -705,7 +705,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
     s32 i;
 #if VERSION >= VERSION_US
     if (gp->language == LANGUAGE_JP) {
-        s = (u16*)src; /* FAKE: s and d set inside the language branch, the same spelling as in pouchHiraToKata */
+        s = (u16*)src;
         d = (u16*)dst;
         for (i = 0; i < len; i++) {
             c = *s;

@@ -296,15 +296,9 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
                 for (i = 0; i < obj->joints->partCount; i++) {
                     u8 t = obj->joints->parts[i].material->blendMode;
 
-                    // FAKE: the empty `if (!obj) { }` and `if (1) { }` blocks keep the target block layout of the blend-mode count
                     if (t == 2) {
                         n2++;
-                        if (!obj) {
-                        }
-                    }
-                    else if (t == 1) {
-                        if (1) {
-                        }
+                    } else if (t == 1) {
                         n1++;
                     }
                     for (k = 0; k < 8; k++) {
@@ -731,7 +725,7 @@ static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
     u32 sizeCheck;
     MapHeader* header = &wp->entries[group].header;
 
-    // FAKE: header is the address of a member and never NULL; removing the test changes the object
+    // header is the address of a member and never NULL; the test is in the retail code all the same
     if (header != NULL) {
         memset(header, 0, sizeof(MapHeader));
         wp->entries[group].header.loadFlags |= 1;

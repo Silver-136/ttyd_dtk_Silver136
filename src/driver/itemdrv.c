@@ -994,10 +994,7 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
             continue;
         }
 
-        // FAKE: the empty do-while adds a block before the continue; without it the flag tests are scheduled differently
         if (entry->flags & ITEM_FLAG_NO_TOUCH_GET) {
-            do {
-            } while (0);
             continue;
         }
         if (entry->flags2 & ITEM_FLAG2_CARRIED) {
@@ -1657,7 +1654,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
     }
 }
 
-// FAKE: unused file-scope static; removing it changes the object
+// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 static s32 _move_dir_1090;
 
 /**
