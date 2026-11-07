@@ -195,7 +195,7 @@ void marioBalloonMain(void) {
     }
     show = FALSE;
 
-    // FAKE: switch on !marioChkKey() (empty case 0, default turns the balloon off); the plain if changes the object
+    // A switch with an empty case 0: the original wrote it this way (a plain if compiles differently)
     switch (!marioChkKey()) {
         case 0:
             break;
