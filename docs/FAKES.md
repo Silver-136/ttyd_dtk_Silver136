@@ -277,7 +277,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
 | US | src/koopa_hit.c | kpaGetHitobjHead2 | ret is a spare copy of hit; returning hit changes the object | see comment |
 | Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
-| Both | src/kpa_act.c | kpa_score_disp_init | (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object | s32 i with the plain compare |
 | Both | src/kpa_act.c | kpaSetScoreStr | str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object | see comment |
 | Both | src/memory.c | smartAutoFree | no-op (s32) cast; the plain compare changes the object; `u16 type` copy of allocType for the first compare | plain compare |
 | US | src/nameent.c | nameMain | no-op (s32) cast; the plain ?: changes the object | see comment |
@@ -524,11 +523,9 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
 | Both | src/event/evt_case.c | _caseEntry | spare pointer to setup; using setup directly changes the object | see comment |
 | Both | src/event/evt_case.c | _evtCaseEntry | spare pointer to setup; using setup directly changes the object | see comment |
-| Both | src/event/evt_damage.c | evt_gazigazi_move_position | no-op (s32) casts of elapsed; dropping them changes the object | see comment |
 | Both | src/event/evt_door.c | door_position_sub | self-assignment through t; removing it changes the object | see comment |
 | Both | src/event/evt_img.c | evt_img_set_virtual_point | spare copy of pos; passing &pos changes the object | see comment |
 | Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
-| Both | src/event/evt_item.c | evt_item_move_3d_position | `u32 elapsed` with `(s32)` casts at the compare and the three intplGetValue calls | `s32 elapsed`, plain arguments: changes the object |
 | Both | src/event/evt_lottery.c | evt_lottery | bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object | see comment |
 | Both | src/event/evt_lottery.c | evt_lottery_error_check | g is a spare copy of gp; &gp->mLotteryInfo changes the object | see comment |
 | Both | src/event/evt_lottery.c | (file scope) | lotteryUnused: unused 4-byte .sbss filler, in no symbol map | removing it changes the object |
@@ -548,9 +545,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_npc.c | evt_npc_homing_target | discarded sqrtf call (retail code computes it and drops the result) | see comment |
 | Both | src/event/evt_nannpc.c | nanNPCHitMove | `dot` holds PSVECDotProduct for one use | the call inside the PSVECScale argument: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_init | subfunc1 stored through the global nanNPCWork while its neighbours go through w | `w->subfunc1 = ...`: changes the object |
-| Both | src/event/evt_npc.c | evt_npc_jump_position_nohit | no-op (s32) casts on the s32 elapsed; the plain arguments change the object | see comment |
-| Both | src/event/evt_npc.c | evt_npc_flag_onoff | no-op (u32) cast; the plain form changes the object | u32 mask local |
-| Both | src/event/evt_npc.c | evt_npc_status_onoff | no-op (u32) cast; the plain form changes the object | plain ~mask |
 | Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |

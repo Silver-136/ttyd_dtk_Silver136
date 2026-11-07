@@ -72,7 +72,7 @@ USER_FUNC(kpa_score_disp_main) {
  */
 USER_FUNC(kpa_score_disp_init) {
     EventEntry* e;
-    u32 i;
+    int i;
     e = evtEntryType(kpa_score_disp_evt, event->priority, 0, event->type);
     e->unitId = event->unitId;
     e->ownerNPC = event->ownerNPC;
@@ -86,8 +86,7 @@ USER_FUNC(kpa_score_disp_init) {
     e->ufBase = event->ufBase;
     ksdp = _mapAlloc(KPA_SCORE_SLOT_COUNT * sizeof(KpaScore));
 
-    // FAKE: (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object
-    for (i = 0; (s32)i < KPA_SCORE_SLOT_COUNT; i++) {
+    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
         ksdp[i].str[0] = 0;
         ksdp[i].timer = 0;
         ksdp[i].pos = (Vec){0.0f, 0.0f, 0.0f};

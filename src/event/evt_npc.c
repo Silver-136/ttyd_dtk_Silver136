@@ -782,7 +782,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
     s32 duration = evtGetValue(event, *args++);
     f32 arcHeight = (f32)evtGetValue(event, *args++);
     s32 sfxFlag;
-    s32 elapsed;
+    int elapsed;
     f32 t;
 
     if (isFirstCall) {
@@ -805,14 +805,13 @@ USER_FUNC(evt_npc_jump_position_nohit) {
         }
     }
 
-    elapsed = (s32)OSTicksToMilliseconds((OSTick)event->lifetime - (OSTick)event->savedTime);
+    elapsed = OSTicksToMilliseconds((OSTick)event->lifetime - (OSTick)event->savedTime);
 
     if (elapsed < duration) {
         t = (f32)elapsed / (f32)duration;
 
-        // FAKE: no-op (s32) casts on the s32 elapsed; the plain arguments change the object
-        npc->position.x = intplGetValue(EASING_LINEAR, npc->jumpStartPos.x, targetX, (s32)elapsed, duration);
-        npc->position.z = intplGetValue(EASING_LINEAR, npc->jumpStartPos.z, targetZ, (s32)elapsed, duration);
+        npc->position.x = intplGetValue(EASING_LINEAR, npc->jumpStartPos.x, targetX, elapsed, duration);
+        npc->position.z = intplGetValue(EASING_LINEAR, npc->jumpStartPos.z, targetZ, elapsed, duration);
         npc->position.y = npc->jumpStartPos.y + t * ((event->userdataf[1] * t) + event->userdataf[2]);
         return EVT_RETURN_BLOCK;
     }
@@ -1403,7 +1402,8 @@ USER_FUNC(evt_npc_wait_anim) {
 // s32 type (off/on), const char* npcName, s32 mask
 USER_FUNC(evt_npc_flag_onoff) {
     EvtWord* args = event->args;
-    s32 type, mask;
+    s32 type;
+    int mask;
     const char* name;
     NpcEntry* npc;
 
@@ -1413,8 +1413,7 @@ USER_FUNC(evt_npc_flag_onoff) {
     npc = evtNpcNameToPtr(event, name);
     switch (type) {
         case 0:
-            // FAKE: no-op (u32) cast; the plain form changes the object
-            npc->flags &= (u32)~mask;
+            npc->flags &= ~mask;
             break;
         case 1:
             npc->flags |= mask;
@@ -1463,7 +1462,8 @@ USER_FUNC(evt_npc_reaction_flag_onoff) {
 // s32 type (off/on), const char* npcName, s32 mask
 USER_FUNC(evt_npc_status_onoff) {
     EvtWord* args = event->args;
-    s32 type, mask;
+    s32 type;
+    u32 mask;
     const char* name;
     NpcEntry* npc;
 
@@ -1473,8 +1473,7 @@ USER_FUNC(evt_npc_status_onoff) {
     npc = evtNpcNameToPtr(event, name);
     switch (type) {
         case 0:
-            // FAKE: no-op (u32) cast; the plain form changes the object
-            npc->statusFlags &= ~(u32)mask;
+            npc->statusFlags &= ~mask;
             break;
         case 1:
             npc->statusFlags |= mask;

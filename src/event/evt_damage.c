@@ -108,7 +108,7 @@ USER_FUNC(evt_gazigazi_move_position) {
     s32 msec;
     s32 mode;
     NpcEntry* npc;
-    s32 elapsed;
+    int elapsed;
 
     name = (const char*)evtGetValue(event, args[0]);
     x0 = (f32)evtGetValue(event, args[1]);
@@ -125,10 +125,9 @@ USER_FUNC(evt_gazigazi_move_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
     if (elapsed < msec) {
-        // FAKE: no-op (s32) casts of elapsed; dropping them changes the object
-        x0 = intplGetValue(mode, x0, x1, (s32)elapsed, msec);
-        y0 = intplGetValue(mode, y0, y1, (s32)elapsed, msec);
-        z0 = intplGetValue(mode, z0, z1, (s32)elapsed, msec);
+        x0 = intplGetValue(mode, x0, x1, elapsed, msec);
+        y0 = intplGetValue(mode, y0, y1, elapsed, msec);
+        z0 = intplGetValue(mode, z0, z1, elapsed, msec);
         {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = x0;

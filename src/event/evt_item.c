@@ -286,7 +286,7 @@ USER_FUNC(evt_item_move_3d_position) {
     s32 ms = evtGetValue(event, args[4]);
     s32 mode = evtGetValue(event, args[5]);
     ItemEntry* item = itemNameToPtr(name);
-    u32 elapsed;
+    int elapsed;
     if (isFirstCall) {
         if (item == NULL) {
             return EVT_RETURN_DONE;
@@ -297,11 +297,11 @@ USER_FUNC(evt_item_move_3d_position) {
         event->userdata3f = item->position.z;
     }
 
-    // FAKE: no-op (s32) casts of the u32 elapsed; an s32 elapsed with plain arguments changes the object
-    if ((s32)(elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0])) < ms) {
-        item->position.x = intplGetValue(mode, event->userdataf[1], x, (s32)elapsed, ms);
-        item->position.y = intplGetValue(mode, event->userdataf[2], y, (s32)elapsed, ms);
-        item->position.z = intplGetValue(mode, event->userdata3f, z, (s32)elapsed, ms);
+    elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
+    if (elapsed < ms) {
+        item->position.x = intplGetValue(mode, event->userdataf[1], x, elapsed, ms);
+        item->position.y = intplGetValue(mode, event->userdataf[2], y, elapsed, ms);
+        item->position.z = intplGetValue(mode, event->userdata3f, z, elapsed, ms);
         return EVT_RETURN_BLOCK;
     }
     item->position.x = x;
