@@ -198,7 +198,7 @@ void OSFatal(GXColor fg, GXColor bg, const char* msg) {
     }
     EXIUnlock(0);
 
-    do {} while ((__EXIRegs[EXI0_CR] & 1) == 1);
+    do {} while ((__EXIRegs[EXI0_CR] & EXI_CR_TSTART) == EXI_CR_TSTART);
 
     __OSSetExceptionHandler(__OS_EXCEPTION_DECREMENTER, &OSDefaultExceptionHandler);
     GXAbortFrame();

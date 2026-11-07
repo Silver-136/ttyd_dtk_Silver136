@@ -46,7 +46,7 @@ static void ExiHandler(s32 chan, OSContext* context) {
 static void DbgHandler(__OSInterrupt interrupt, OSContext *context) {
     OSContext exceptionContext;
 
-    __PIRegs[PI_INTSR] = 0x1000;
+    __PIRegs[PI_INTSR] = PI_INT_DEBUG;
     if (ExiCallback) {
         OSClearContext(&exceptionContext);
         OSSetCurrentContext(&exceptionContext);

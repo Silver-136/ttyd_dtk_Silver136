@@ -103,7 +103,7 @@ void DVDInit(void) {
         __OSSetInterruptHandler(__OS_INTERRUPT_PI_DI, __DVDInterruptHandler);
         __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_DI);
         OSInitThreadQueue(&__DVDThreadQueue);
-        __DIRegs[DI_SR] = 0x2A;
+        __DIRegs[DI_SR] = DI_SR_BRKINTMASK | DI_SR_TCINTMASK | DI_SR_DEINTMASK;
         __DIRegs[DI_CVR] = 0;
 
         if (bootInfo->magic == 0xE5207C22) {
@@ -1484,7 +1484,7 @@ static void cbForInquirySync(s32 result, DVDCommandBlock* block) {
 
 void DVDReset(void) {
     DVDLowReset();
-    __DIRegs[DI_SR] = 0x2A;
+    __DIRegs[DI_SR] = DI_SR_BRKINTMASK | DI_SR_TCINTMASK | DI_SR_DEINTMASK;
     __DIRegs[DI_CVR] = __DIRegs[DI_CVR];
     ResetRequired = 0;
     ResumeFromHere = 0;

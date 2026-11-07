@@ -112,7 +112,7 @@ u32 AIGetStreamSampleCount(void) {
 }
 
 void AIResetStreamSampleCount(void) {
-    __AIRegs[AI_CR] = (__AIRegs[AI_CR] & ~0x20) | 0x20;
+    __AIRegs[AI_CR] = (__AIRegs[AI_CR] & ~AI_CR_SCRESET) | AI_CR_SCRESET;
 }
 
 void AISetStreamTrigger(u32 trigger) {
@@ -149,7 +149,7 @@ void AISetStreamPlayState(u32 state) {
 }
 
 u32 AIGetStreamPlayState(void) {
-    return __AIRegs[AI_CR] & 1;
+    return __AIRegs[AI_CR] & AI_CR_PSTAT;
 }
 
 void AISetDSPSampleRate(u32 rate) {
@@ -160,7 +160,7 @@ void AISetDSPSampleRate(u32 rate) {
     u8 vol_right;
 
     if (rate != AIGetDSPSampleRate()) {
-        __AIRegs[AI_CR] = (__AIRegs[AI_CR] & 0xFFFFFFBF);
+        __AIRegs[AI_CR] = (__AIRegs[AI_CR] & ~AI_CR_DSPSR);
         if (rate == AI_SAMPLERATE_32KHZ) {
             vol_left = AIGetStreamVolLeft();
             vol_right = AIGetStreamVolRight();
@@ -173,7 +173,7 @@ void AISetDSPSampleRate(u32 rate) {
             OLD_SET_REG_FIELD(0, __AIRegs[AI_CR], 1, 5, 1);
             OLD_SET_REG_FIELD(743, __AIRegs[AI_CR], 1, 1, afr_state);
             OLD_SET_REG_FIELD(744, __AIRegs[AI_CR], 1, 0, play_state);
-            __AIRegs[AI_CR] |= 0x40;
+            __AIRegs[AI_CR] |= AI_CR_DSPSR;
             OSRestoreInterrupts(old);
             AISetStreamVolLeft(vol_left);
             AISetStreamVolRight(vol_right);
@@ -212,7 +212,7 @@ static void __AI_set_stream_sample_rate(u32 rate) {
         vol_right = AIGetStreamVolRight();
         AISetStreamVolRight(0);
         AISetStreamVolLeft(0);
-        dsp_src_state = __AIRegs[AI_CR] & 0x40;
+        dsp_src_state = __AIRegs[AI_CR] & AI_CR_DSPSR;
         OLD_SET_REG_FIELD(0, __AIRegs[AI_CR], 1, 6, 0);
         old = OSDisableInterrupts();
         __AI_SRC_INIT();
@@ -286,7 +286,7 @@ void AIReset(void) {
 static void __AISHandler(__OSInterrupt interrupt, OSContext* context) {
     OSContext exceptionContext;
 
-    __AIRegs[AI_CR] |= 8;
+    __AIRegs[AI_CR] |= AI_CR_AIINT;
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
     if (__AIS_Callback) {

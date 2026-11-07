@@ -23,7 +23,7 @@ static void DBGEXIInit(void)
 static BOOL DBGEXISelect(u32 v)
 {
     u32 regs = __EXIRegs[EXI2_CSR];
-    regs &= 0x405;
+    regs &= (EXI_CSR_EXTINTMASK | EXI_CSR_TCINTMASK | EXI_CSR_EXIINTMASK);
     regs |= 0x80 | (v << 4);
     __EXIRegs[EXI2_CSR] = regs;
     return TRUE;
@@ -31,13 +31,13 @@ static BOOL DBGEXISelect(u32 v)
 
 static BOOL DBGEXIDeselect(void)
 {
-    __EXIRegs[EXI2_CSR] &= 0x405;
+    __EXIRegs[EXI2_CSR] &= (EXI_CSR_EXTINTMASK | EXI_CSR_TCINTMASK | EXI_CSR_EXIINTMASK);
     return TRUE;
 }
 
 static BOOL DBGEXISync(void)
 {
-    while (__EXIRegs[EXI2_CR] & 1)
+    while (__EXIRegs[EXI2_CR] & EXI_CR_TSTART)
         ;
     return TRUE;
 }
@@ -57,7 +57,7 @@ static BOOL DBGEXIImm(void* data, s32 byte_size, u32 write)
         __EXIRegs[EXI2_DATA] = writeVal;
     }
 
-    __EXIRegs[EXI2_CR] = 1 | (write << 2) | ((byte_size - 1U) << 4);
+    __EXIRegs[EXI2_CR] = EXI_CR_TSTART | (write << 2) | ((byte_size - 1U) << 4);
 
     DBGEXISync();
     if (!write) {
@@ -198,7 +198,7 @@ static void MWCallback(s32 interrupt, OSContext* context)
 
 static void DBGHandler(__OSInterrupt interrupt, OSContext* context)
 {
-    __PIRegs[PI_INTSR] = 0x1000;
+    __PIRegs[PI_INTSR] = PI_INT_DEBUG;
     if (DBGCallback) {
         (*DBGCallback)(interrupt, context);
     }

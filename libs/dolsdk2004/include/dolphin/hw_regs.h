@@ -135,9 +135,20 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define PI_FLIPPER_REV   (11) // console type / Flipper revision (Dolphin; YAGCD "console type")
 
 // PI_INTSR / PI_INTMR bits (YAGCD names, Dolphin INT_CAUSE_* values)
-#define PI_INT_ERROR (0x1)     // GP runtime error
-#define PI_INT_RSW   (0x2)     // reset switch pressed
-#define PI_INT_DEBUG (0x1000)  // debugger (development hardware)
+#define PI_INT_ERROR     (0x1)    // GP runtime error
+#define PI_INT_RSW       (0x2)    // reset switch pressed
+#define PI_INT_DI        (0x4)
+#define PI_INT_SI        (0x8)
+#define PI_INT_EXI       (0x10)
+#define PI_INT_AI        (0x20)
+#define PI_INT_DSP       (0x40)
+#define PI_INT_MEM       (0x80)
+#define PI_INT_VI        (0x100)
+#define PI_INT_PE_TOKEN  (0x200)
+#define PI_INT_PE_FINISH (0x400)
+#define PI_INT_CP        (0x800)
+#define PI_INT_DEBUG     (0x1000) // debugger (development hardware)
+#define PI_INT_HSP       (0x2000) // high speed port
 #define PI_INTSR_RSWST (0x10000) // reset switch state: clear while the button is down (not maskable)
 
 // indices for __MEMRegs[i] (memory interface, 0xCC004000; Dolphin MI_* names)
@@ -203,6 +214,18 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define EXI2_CSR (2 * EXI_CHAN_REGS + EXI_CSR)
 #define EXI2_CR   (2 * EXI_CHAN_REGS + EXI_CR)
 #define EXI2_DATA (2 * EXI_CHAN_REGS + EXI_DATA)
+
+// EXI_CSR bits (Dolphin field names; YAGCD gives the same layout)
+#define EXI_CSR_EXIINTMASK (0x1)
+#define EXI_CSR_EXIINT     (0x2)    // EXI interrupt
+#define EXI_CSR_TCINTMASK  (0x4)
+#define EXI_CSR_TCINT      (0x8)    // transfer complete interrupt
+#define EXI_CSR_CLK        (0x70)   // clock frequency field
+#define EXI_CSR_CS         (0x380)  // device select field
+#define EXI_CSR_EXTINTMASK (0x400)
+#define EXI_CSR_EXTINT     (0x800)  // device insertion / removal interrupt
+#define EXI_CSR_EXT        (0x1000) // device present
+#define EXI_CSR_ROMDIS     (0x2000) // boot ROM disable (channel 0 only)
 
 // EXI_CR bits
 #define EXI_CR_DMA    (0x2) // 1 = DMA, 0 = immediate
