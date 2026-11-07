@@ -606,6 +606,5 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_party.c | winPartyDisp | `GXColor red[1]` used as a scalar | plain `GXColor red`: changes the object |
 | Demos | src/window/win_party.c | winPartyDisp | iy assigned inside the winIconSet/winFontSetLabel arguments | separate statements: changes the early demos only (retail the same) |
 | Both | src/countdown.c | countDownDisp | `(u16)` cast on the digit icon id passed to iconDispGxCol (s32 parameter), twice | without the cast: changes the object |
-| Both | src/event/evt_eff.c | evt_eff (effBoobooN64Entry) | private six-argument prototype; the definition takes no arguments | not tried: a call without them drops the argument loads |
 | Both | src/party/party_chuchu.c | (file scope) partyWalkInit | private prototype with a second s32 mode (calls pass 1); the definition takes the party only | header prototype and one-argument calls: changes the object |
 | Both | src/mario/mario_motion.c | marioRollChgChk (marioCreviceWallChk) | private prototype taking the Vec by value; mot_slit.c defines it with const Vec* | the definition's prototype and `&mario->position`: changes the object |

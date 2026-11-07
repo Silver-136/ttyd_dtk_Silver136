@@ -1,7 +1,8 @@
 // Paper Mario 64 effect: booboo, up to 11 3D Boo models (three walk-cycle model frames, ten skins by type, skins 8-9
-// pulse) that stand, bob, hop or sway; the entry takes no arguments and the caller fills in each slot's flags,
+// pulse) that stand, bob, hop or sway; the entry ignores its arguments and the caller fills in each slot's flags,
 // position and state.
 
+#include "eff/n64/eff_booboo_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -323,7 +324,7 @@ static void effBoobooDisp(CameraId cameraId, EffectEntry* effect);
  * and whoever spawns it must then set each slot's flags, position and state.
  * Spawned only through evt_eff64 ("booboo_n64").
  */
-EffectEntry* effBoobooN64Entry(void) {
+EffectEntry* effBoobooN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBoobooN64Work* work;
     s32 i;
