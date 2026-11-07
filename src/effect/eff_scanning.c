@@ -45,7 +45,7 @@ EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
 static void effScanningMain(EffectEntry* effect) {
     effScanningData* data = effect->userdata;
     Vec position;
-    BOOL inBattle;
+    s32 inBattle;
 
     position = (Vec){ data->position.x, data->position.y, data->position.z };
     inBattle = gp->inBattle != 0;
@@ -65,8 +65,7 @@ static void effScanningMain(EffectEntry* effect) {
                 return;
             }
 
-            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
-            data->animId = animPoseEntry("EFF_Scan", (u32)inBattle);
+            data->animId = animPoseEntry("EFF_Scan", inBattle);
             animPoseSetAnim(data->animId, "Z_1", TRUE);
             data->state++;
             break;

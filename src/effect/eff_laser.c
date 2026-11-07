@@ -63,7 +63,7 @@ EffectEntry* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
 static void effLaserMain(EffectEntry* effect) {
     EffLaserWork* work = effect->userdata;
     Vec position;
-    BOOL inBattle;
+    s32 inBattle;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
     inBattle = gp->inBattle != 0;
@@ -83,8 +83,7 @@ static void effLaserMain(EffectEntry* effect) {
     switch (work->state) {
         case 0:
             if (work->poseId == -1) {
-                // FAKE: no-op (u32) cast on the BOOL argument; without it the object changes
-                work->poseId = animPoseEntry("MOBJ_EFF_laser", (u32)inBattle);
+                work->poseId = animPoseEntry("MOBJ_EFF_laser", inBattle);
                 animPoseSetAnim(work->poseId, "S_1", TRUE);
                 animPoseSetLocalTimeRate(work->poseId, 0.5f);
             }

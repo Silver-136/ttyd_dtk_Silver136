@@ -52,7 +52,7 @@ EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 static void effSyuryouMain(EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;
     Vec position;
-    BOOL inBattle;
+    s32 inBattle;
     s32 type;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
@@ -65,8 +65,7 @@ static void effSyuryouMain(EffectEntry* effect) {
             return;
         }
         if (work->poseId == -1) {
-            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
-            work->poseId = animPoseEntry("EFF_batug_tue", (u32)inBattle);
+            work->poseId = animPoseEntry("EFF_batug_tue", inBattle);
             animPoseSetAnim(work->poseId, "A_1", TRUE);
         }
         if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {
@@ -80,8 +79,7 @@ static void effSyuryouMain(EffectEntry* effect) {
             return;
         }
         if (work->poseId == -1) {
-            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
-            work->poseId = animPoseEntry("MOBJ_EFF_baria", (u32)inBattle);
+            work->poseId = animPoseEntry("MOBJ_EFF_baria", inBattle);
             animPoseSetAnim(work->poseId, "A_1", TRUE);
         }
         if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {

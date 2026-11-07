@@ -717,9 +717,7 @@ USER_FUNC(evt_nannpc_jump_position) {
     f32 z = evtGetValue(event, args[3]);
     s32 duration = evtGetValue(event, args[4]);
     f32 height = evtGetValue(event, args[5]);
-    s32 elapsed;
-    s32 el;
-    u32 uel;
+    int elapsed;
     f32 t;
     if (isFirstCall) {
         npc->startTime = gp->renderTime;
@@ -730,14 +728,11 @@ USER_FUNC(evt_nannpc_jump_position) {
         event->userdataf[2] = y - (f32)npc->ipos[1] - event->userdataf[1];
     }
 
-    // FAKE: el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object
-    el = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
-    uel = el;
-    if (el < duration) {
-        elapsed = uel;
+    elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
+    if (elapsed < duration) {
         t = (f32)elapsed / (f32)duration;
         npc->pos.x = intplGetValue(EASING_LINEAR, npc->ipos[0], x, elapsed, duration);
-        npc->pos.z = intplGetValue(EASING_LINEAR, npc->ipos[2], z, uel, duration);
+        npc->pos.z = intplGetValue(EASING_LINEAR, npc->ipos[2], z, elapsed, duration);
         npc->pos.y = t * (event->userdataf[1] * t + event->userdataf[2]) + (f32)npc->ipos[1];
         return EVT_RETURN_BLOCK;
     }

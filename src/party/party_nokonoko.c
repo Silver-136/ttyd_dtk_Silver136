@@ -27,7 +27,7 @@
 // alone, and calls through that prototype change the object.
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 
-static s32 nokoSe;
+static u32 nokoSe;
 #include "driver/hitdrv.h"
 #include "mario/mario_sbr.h"
 
@@ -89,8 +89,7 @@ void se_init(void) {
 /** Starts the looping shell-spin sound (SFX_PARTY_PNK_HOLD1) at the shell unless it is already playing. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void se_hold(PartyEntry* party) {
-    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe == -1 changes the object
-    if ((u32)nokoSe == 0xFFFFFFFFU) {
+    if (nokoSe == -1) {
         nokoSe = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_HOLD1), &party->position);
     }
 }
@@ -100,8 +99,7 @@ void se_hold(PartyEntry* party) {
 void se_off(void) {
     marioGetPtr();
 
-    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
-    if ((u32)nokoSe != 0xFFFFFFFFU) {
+    if (nokoSe != -1) {
         psndSFXOff(nokoSe);
         nokoSe = -1;
     }

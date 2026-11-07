@@ -43,7 +43,7 @@ EffectEntry* effTreasureMapEntry(s32 type, f32 x, f32 y, f32 z) {
 static void effTreasureMapMain(EffectEntry* effect) {
     EffTreasureMapWork* work = effect->userdata;
     Vec position;
-    BOOL inBattle;
+    s32 inBattle;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
     inBattle = gp->inBattle != 0;
@@ -53,8 +53,7 @@ static void effTreasureMapMain(EffectEntry* effect) {
             return;
         }
 
-        // FAKE: no-op cast (animPoseEntry takes s32); the plain argument changes the object
-        work->poseId = animPoseEntry("EFF_treasure_map", (u32)inBattle);
+        work->poseId = animPoseEntry("EFF_treasure_map", inBattle);
         animPoseSetAnim(work->poseId, "Z_1", TRUE);
     }
 

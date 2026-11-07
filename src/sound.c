@@ -1765,7 +1765,7 @@ s16 dtbl[16] = {0x0001, 0x0007, 0x0018, 0x003B, 0x0053, 0x006F, 0x00EC, 0x022B,
  */
 static u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 count, u8* src) {
     s8 delta;
-    u32 b;
+    int b;
     u32 scale;
     s32 sample;
 
@@ -1793,8 +1793,7 @@ static u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, 
             src++;
             entry->srcPos++;
 
-            // FAKE: no-op (s32) cast; without it the object changes
-            if ((s32)(b & 0xF) == 8) {
+            if ((b & 0xF) == 8) {
                 entry->runCount = ((b >> 4) & 0xF) + 4;
                 entry->nibble = 0;
                 continue;

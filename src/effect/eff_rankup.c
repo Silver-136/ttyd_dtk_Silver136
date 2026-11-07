@@ -59,7 +59,7 @@ EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
 static void effRankupMain(EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Vec position;
-    BOOL inBattle;
+    s32 inBattle;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
 #if VERSION >= VERSION_US
@@ -87,11 +87,10 @@ static void effRankupMain(EffectEntry* effect) {
                 return;
             }
 
-            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
 #if VERSION >= VERSION_US
-            work->poseId = animPoseEntry(eff_rankup_str_tbl[gp->language], (u32)inBattle);
+            work->poseId = animPoseEntry(eff_rankup_str_tbl[gp->language], inBattle);
 #else
-            work->poseId = animPoseEntry("EFF_TekiKyouka", (u32)inBattle);
+            work->poseId = animPoseEntry("EFF_TekiKyouka", inBattle);
 #endif
             animPoseSetAnim(work->poseId, "Z_1", TRUE);
             work->state++;

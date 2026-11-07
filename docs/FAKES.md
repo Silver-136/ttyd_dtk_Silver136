@@ -344,7 +344,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
 | Both | src/sound.c | SoundDVDSetPanCh | sign-bit test for pan >= 64; the plain comparison changes the object | see comment |
 | Both | src/sound.c | SoundDVDMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
-| Both | src/sound.c | ssDecodeDPCM | no-op (s32) cast; without it the object changes | see comment |
 | Both | src/sound.c | SoundSSMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
 | Early demos | src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
 | Early demos | src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
@@ -428,7 +427,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_hibashira.c | effHibashiraEntry | block-scoped temporary; `pillar->scale = (f32)sin(...) + 0.5f` changes the object | see comment |
 | Both | src/effect/eff_ibuki.c | effIbukiEntry | spare temporary a; `p->vx2 = irand(10) + 10;` changes the object | see comment |
 | Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | u32 i with the plain compare |
-| US | src/effect/eff_irekaeru.c | effIrekaeruMain | no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object | see comment |
 | Both | src/effect/eff_itemget.c | effItemGetEntry | spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjNearDistCheck2 | unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object | see comment |
@@ -447,7 +445,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
 | Both | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them the object changes | see comment |
-| Both | src/effect/eff_laser.c | effLaserMain | no-op (u32) cast on the BOOL argument; without it the object changes | u32 inBattle local without the cast |
 | JP | src/effect/eff_levelup.c | getX | (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object | see comment |
 | Both | src/effect/eff_levelup.c | effLevelupDisp | 0.5f held in `halfScale`; work array and texid_tbl walked by byte offsets (ofs/tofs) | `width * 0.5f`: changes the object |
 | Both | src/effect/eff_mahojin.c | effMahojinMain | work re-loaded from effect->userdata (it already holds it); without it the object changes | see comment |
@@ -459,10 +456,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_particle.c | effParticleEntry | w2 re-reads effect->userdata (the same pointer as work); using work for the free list changes the object | see comment |
 | Both | src/effect/eff_particle.c | effParticleMain | w re-reads effect->userdata (the same pointer as work); using work in the update loop changes the object | see comment |
 | Both | src/effect/eff_particle.c | particleStrippedPool | stand-in that nothing calls; its int-to-float constant (JP demo map @715) is the last item in .rodata; owner one of the UNUSED ParticleInit, EmitterInit, EmitterUpdate, ParticleUpdate (unknown which) | see comment |
-| US | src/effect/eff_rankup.c | effRankupMain | no-op (u32) cast (animPoseEntry takes s32); removing it changes the object | see comment |
-| Both | src/effect/eff_scanning.c | effScanningMain | no-op (u32) cast (animPoseEntry takes s32); removing it changes the object | see comment |
 | Both | src/effect/eff_starpoint.c | _cosf | dead guard (gz is always 0, emits no code); without it the caller's 2.0f constant is loaded at a different point and the object changes | see comment |
-| Both | src/effect/eff_treasure_map.c | effTreasureMapMain | no-op cast (animPoseEntry takes s32); the plain argument changes the object | see comment |
 | Both | src/effect/eff_updown.c | effUpdownMain | compound assignment inside the call; sin(arg * 0.25f) changes the object | see comment |
 | Both | src/effect/n64/eff_balloon_n64.c | effBalloonDisp | element pointer cast instead of &vtx[i + 2].x; the plain form changes the object | see comment |
 | Both | src/effect/n64/eff_blow_n64.c | effBlowN64Entry | zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object | see comment |
@@ -540,7 +534,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_mobj.c | evt_mobj_koopa_hidden_blk | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
-| Both | src/event/evt_nannpc.c | evt_nannpc_jump_position | el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object | see comment |
 | Early demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
 | Both | src/event/evt_npc.c | evt_npc_homing_target | discarded sqrtf call (retail code computes it and drops the result) | see comment |
 | Both | src/event/evt_nannpc.c | nanNPCHitMove | `dot` holds PSVECDotProduct for one use | the call inside the PSVECScale argument: changes the object |
@@ -636,7 +629,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_nokonoko.c | ccwall | assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object | see comment |
 | Both | src/party/party_nokonoko.c | lookupSafetyPos2 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
 | Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
-| Both | src/party/party_nokonoko.c | se_hold, se_off | `(u32)nokoSe == / != 0xFFFFFFFFU` tests on the s32 nokoSe | `nokoSe == -1` / `!= -1`: changes the object |
 | Both | src/party/party_nokonoko.c | (file scope) partyWalkInit | private prototype with a second s32 mode (calls pass 1); the definition takes the party only | header prototype and one-argument calls: changes the object |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
@@ -696,7 +688,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_mist2.c | effMist2Disp | constant locals w = 16.0f, k = 255.0f, h = 8.0f | literals: changes the object |
 | Both | src/effect/eff_nozle.c | effNozleMain | `< 21U` unsigned compares on the s32 timer and life | `< 21`: changes the object |
 | Both | src/effect/eff_nozle.c | effNozleDisp | separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5) | one reused pair: changes the object |
-| Both | src/effect/eff_syuryou.c | effSyuryouMain | no-op `(u32)` cast (animPoseEntry takes s32) | the plain argument changes the object |
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
 | US, PAL, US demo 2, PAL demo | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
