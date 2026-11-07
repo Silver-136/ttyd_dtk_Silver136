@@ -2831,7 +2831,6 @@ static void winMailDisp(WindowWork* wp) {
                 kind = wp->item.mail[i].kind;
                 mail = mailGetPtr(id);
 
-                // FAKE: GXColor black lives in its own bare block; declaring it in the loop body changes the object
                 {
                     GXColor black = { 0x00, 0x00, 0x00, 0xFF };
                     if (mail->flags & MAIL_FLAG_PEACH) {

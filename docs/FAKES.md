@@ -247,8 +247,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/kpa_act.c | kpaSetScoreStr | str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object | see comment |
 | Both | src/memory.c | smartAutoFree | no-op (s32) cast; the plain compare changes the object; `u16 type` copy of allocType for the first compare | plain compare |
 | US | src/nameent.c | nameMain | no-op (s32) cast; the plain ?: changes the object | see comment |
-| Both | src/nameent.c | nameEntDisp | opaque white copied through whiteInit, white and white2; one initialized local changes the object | see comment |
-| Both | src/nameent.c | nameWinQuad | second pair of /w///h/ locals for the TEXMTX1 scale; reusing aw/ah changes the object | see comment |
 | Both | src/npc_event.c | _2d_get_dead_jump_offset | spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object | see comment |
 | Both | src/pmario_sound.c | calc3D | v.z read through a (Vec*) cast of &v; plain v.z changes the object | see comment |
 | Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object | see comment |
@@ -539,7 +537,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_log.c | capture | reversed loop compare; i < 500 changes the object | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
-| Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object; GXColor black declared in an extra bare block inside the loop body (block re-indented) | see comment |
+| Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |
 | Both | src/window/win_root.c | winSortGX | constant locals `w = 128.0f`, `w2 = 136.0f` | literals: changes the object |
 | JP, Demos | src/window/win_root.c | winKirinukiGX | JP-side constant locals `w74 = 74.0f`, `w66 = 66.0f` | literals: changes the object |
 | Both | src/window/win_root.c | winRootDisp (winLogDisp) | private (s32, WindowWork*, s32) prototype; win_log.c defines winLogDisp(CameraId, void*, s32) | the definition's prototype in win_log.h: register allocation changes (also with winRootDisp's camId as CameraId) |

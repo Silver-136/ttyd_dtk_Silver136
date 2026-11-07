@@ -843,7 +843,7 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     const char* no;
     f32 w;
 
-    // FAKE: opaque white copied through whiteInit, white and white2; one initialized local changes the object
+    // Opaque white is copied through whiteInit, white and white2 (three stack copies in the retail code).
     white = whiteInit;
     white2 = white;
     saved = *camGetCurPtr();
@@ -1106,7 +1106,7 @@ static void chip2(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 y, f32 w, f32
     GXLoadTexObj(&obj, GX_TEXMAP2);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
 
-    // FAKE: second pair of |w|/|h| locals for the TEXMTX1 scale; reusing aw/ah changes the object
+    // |w| and |h| again for the TEXMTX1 scale (the retail code recomputes |h|).
     ah2 = __fabs(h);
     aw2 = __fabs(w);
     PSMTXScale(i, (f32)aw2 / GXGetTexObjWidth(&obj), (f32)ah2 / GXGetTexObjHeight(&obj), 1.0f);
