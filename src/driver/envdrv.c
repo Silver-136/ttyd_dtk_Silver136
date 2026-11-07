@@ -1238,13 +1238,11 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
 }
 
 /** The map object being drawn, from a TEV callback's info. */
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
 }
 
 /** A map object's parent object. */
-// FAKE: one-use inline helper for obj->parent; writing it out changes the object
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
 /**
  * Map TEV callback for refracting water: copies the screen area behind the water object (from the previous

@@ -705,11 +705,10 @@ static inline void mapLoadReloc_(MapEntry* entry) {
 }
 
 /**
+ * Whether the map header's stored file size equals the loaded size.
  * MWCC swaps == operands when the left side is a computed address (wp->entries[group]...);
  * through a pointer parameter the load stays on the left, as in the original (cmplw r0,r17).
  */
-// FAKE: the file-size check goes through this helper so the header's size stays the left operand of the compare;
-// the same `==` written in place on wp->entries[group].header swaps the operands and changes the object
 static inline BOOL mapHdrSizeOk_(MapHeader* h, u32 size) {
     return h->file.fileSize == size;
 }

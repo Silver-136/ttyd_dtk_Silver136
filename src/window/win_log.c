@@ -1831,7 +1831,6 @@ static void capture(CameraId camera, void* param) {
         idx = smartAlloc(2000, SMART_GROUP_TEMP)->address;
         memset(cnt, 0, g_moamoa_chain_num * 4);
 
-        // FAKE: reversed loop compare; i < 500 changes the object
         for (i = 0; 500 > i; i++) {
             idx[i] = cnt[i % g_moamoa_chain_num]++;
         }

@@ -1743,7 +1743,10 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
         unit->currentFp = pouch->currentFP;
         BtlUnit_ReviseHpFp(unit);
     } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-        unit->currentHp = *(s16*)((u8*)pouch->partyData + BattleTransPartyId(unit->currentKind) * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)); // FAKE: byte-offset load so the field offset folds into the index (mulli/addi/lhax), as in the target
+        s32 id = BattleTransPartyId(unit->currentKind);
+        PouchPartyData* party = &pouch->partyData[id];
+
+        unit->currentHp = party->currentHP;
         BtlUnit_ReviseHpFp(unit);
         info = &wp->partyInfo[unit->currentKind - TYPE_PARTNER_MIN];
         unit->sizeMultiplier = info->sizeMultiplier;
@@ -1814,7 +1817,9 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
         pouch->currentFP = unit->currentFp;
     } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
         s32 id = BattleTransPartyId(unit->currentKind);
-        *(s16*)((u8*)pouch + id * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)) = unit->currentHp; // FAKE: byte-offset store so the field offset folds into the index (mulli/addi/sthx), as in the target
+        PouchPartyData* party = &pouch->partyData[id];
+
+        party->currentHP = unit->currentHp;
         info = &wp->partyInfo[unit->currentKind - TYPE_PARTNER_MIN];
         info->sizeMultiplier = unit->sizeMultiplier;
         info->statusFlags = unit->statusFlags;

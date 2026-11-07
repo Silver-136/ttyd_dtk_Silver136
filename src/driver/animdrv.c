@@ -2562,7 +2562,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
     }
 }
 
-// FAKE: renderProc's per-draw pose-data read as an inline; its call-site temp gives the target wp/data register order
+/** The pose data renderProc is drawing. */
 static inline AnimationPoseData* rpCurData(void) {
     return wp->curPoseData;
 }

@@ -379,8 +379,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     GXColor white2;
     GXColor black2;
 
-    // FAKE: one-element colour array used as a scalar; a plain GXColor red changes the object
-    GXColor red[1];
+    GXColor red[1]; // indexed by the row (red[i], first row only): the retail code walks a pointer for it
     GXColor white;
     GXColor black;
 #if VERSION <= VERSION_DEMO_JP
