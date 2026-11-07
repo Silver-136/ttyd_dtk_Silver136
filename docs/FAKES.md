@@ -46,9 +46,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario_pouch.c | pouchGetPartyAttackLv | the partyData[partyId] address is formed by hand from mpp and sizeof(PouchPartyData) (same address), so the field offset is added to the scaled index before the base (addi + lhax) | `mpp->partyData[partyId].attackLevel` (add + lha 10) |
 | Both | libs/dolsdk2004/src/gx/GXGeometry.c | GXGetCullMode | `// fake match?` in the non-default branch: decodes genMode with `((hwMode >> 0xD) & 0x2) | (((int)hwMode >> 0xE) & 0x2) >> 1` instead of the readable switch | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
-| Both | libs/dolsdk2004/src/os/OSAudioSystem.c | __OSInitAudioSystem | no-effect statement `reg16 != 0x81800;` that fixes register allocation on retail ("fake but fixes reg alloc"); also `u8 errFlag` assigned once and never read | see comment |
 | Both | libs/dolsdk2004/src/gx/GXTev.c | GXSetTevSwapModeTable | spare temporary `int index = table * 2` for the tevKsel index (release build only) | `&__GXData->tevKsel[table * 2]` (both versions change) |
-| Both | libs/dolsdk2004/src/pad/Pad.c | PADRead | `chanShift` computed in the loop and never read | see comment |
 | Both | libs/dolsdk2004/src/vi/vi.c | VIGetNextField, VIInit | `value = (u16)value` (no-op cast) under `#if !DEBUG` | see comment |
 | Both | libs/musyx/src/musyx/runtime/HARDWARE.C | itdOffTab (data) | `static volatile const` table, read by SetupITD | plain `static const` (both versions change) |
 | Both | src/driver/casedrv.c | caseEntry | no-op 64-bit mask on the returned index | plain `return i;` (swaps the loop registers, both versions) |
@@ -59,15 +57,10 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | libs/dolsdk2004/src/os/OSMemory.c | __OSInitMemoryProtection | unused `u32 padding[9]` (release build only) pads the stack frame | see comment |
 | Both | libs/dolsdk2004/src/os/OSRtc.c | OSSetSoundMode, OSSetVideoMode, OSSetLanguage, __OSSetBootMode | unused `int unused` local pads the stack frame | see comment |
 | Both | libs/dolsdk2004/src/os/OSRtc.c | OSSetProgressiveMode, OSSetEuRgb60Mode, OSSetGbsMode | unused `u32 padding[1]` (release build only) pads the stack frame | see comment |
-| Both | libs/dolsdk2004/src/os/OSTime.c | __OSSetTime, __OSGetSystemTime, __OSTimeToSystemTime | local `timeAdjustAddr` copy of the `__OSSystemTime` address | `*__OSSystemTime` directly (changes the object) |
-| Both | libs/dolsdk2004/src/card/CARDUnlock.c | __CARDUnlock | dead locals `u8 fsts` (only assigned 0) and `u32 Ans2 = 0` (never read) | see comment |
 | Both | libs/dolsdk2004/src/gx/GXMisc.c | GXCompressZ16 | unused `u8 unused[4]` (release build only) pads the stack frame; release also keeps `temp` apart from `exp` (DEBUG aliases them) | see comment |
-| Both | libs/musyx/src/musyx/runtime/seq_api.c | seqGetInstanceForVoice | outer `for (i = 0; i < 8; ++i)` loop that never uses i | without the loop (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/snd3d.c | clip3FFF, SetFXParameters (inlines) | `static const f32 s3d_f16383[1]`, `s3d_f127[1]`, `s3d_f64[1]`, `s3d_f8192[1]` used as scalars | plain float literals (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/stream.c | sndStreamFrq | `#pragma push` / `#pragma inline_depth(3)` / `#pragma pop` around the function | without the pragmas (changes the object) |
 | Both | libs/musyx/src/musyx/runtime/synthmacros.c | mcmdSetPitchADSR | `MIN(sl, 0x3ffull)`: 64-bit literal in a u32 index | `0x3ff` (changes the object) |
-| Both | libs/trk/src/TRK_MINNOW_DOLPHIN.a/notify.c | TRKDoNotifyStopped | nested `if (err == 0)` repeating the outer test | see comment |
-| Both | libs/trk/src/TRK_MINNOW_DOLPHIN.a/nubinit.c | TRKInitializeEndian | first gTRKBigEndian = 1 store, set again below | see comment |
 | Both | libs/dolsdk2004/src/dsp/dsp_task.c | __DSPHandler; t0, t1, t2 (data) | unused `u8 unused[4]` pads the stack frame; unused statics `t0, t1, t2` fill .sbss | see comment |
 | Both | libs/dolsdk2004/src/support/List.c | DSAttachList | dead expression statement `linkPrev;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | callbackEventStream | dead expression statement `value;` (the unit is not built: no probe possible) | see comment |

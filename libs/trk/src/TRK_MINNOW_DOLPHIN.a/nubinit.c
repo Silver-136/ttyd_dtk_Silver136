@@ -22,7 +22,7 @@ BOOL TRKInitializeEndian(void) {
     unsigned char bendian[4];
     BOOL result = 0;
 
-    // FAKE: redundant store (set again below); removing it changes the object
+    // set first and again below (both stores are in the game code)
     gTRKBigEndian = 1;
 
     // read the four bytes back as one word to tell the byte order

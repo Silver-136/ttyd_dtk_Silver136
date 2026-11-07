@@ -45,7 +45,7 @@ asm static void __SetTime(OSTime time) {
 
 void __OSSetTime(OSTime time) {
     BOOL enabled;
-    OSTime* timeAdjustAddr; // FAKE: pointer copy of __OSSystemTime; *__OSSystemTime directly changes the object
+    OSTime* timeAdjustAddr;
 
     timeAdjustAddr = __OSSystemTime;
     enabled = OSDisableInterrupts();
@@ -58,7 +58,7 @@ void __OSSetTime(OSTime time) {
 
 OSTime __OSGetSystemTime(void) {
     BOOL enabled;
-    OSTime* timeAdjustAddr; // FAKE: pointer copy of __OSSystemTime; *__OSSystemTime directly changes the object
+    OSTime* timeAdjustAddr;
     OSTime result;
 
     timeAdjustAddr = __OSSystemTime;
@@ -71,7 +71,7 @@ OSTime __OSGetSystemTime(void) {
 
 OSTime __OSTimeToSystemTime(OSTime time) {
     BOOL enabled;
-    OSTime* timeAdjustAddr = __OSSystemTime; // FAKE: see __OSSetTime
+    OSTime* timeAdjustAddr = __OSSystemTime;
     OSTime result;
 
     enabled = OSDisableInterrupts();

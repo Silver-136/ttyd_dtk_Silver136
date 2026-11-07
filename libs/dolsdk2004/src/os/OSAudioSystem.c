@@ -18,7 +18,7 @@ static u8 DSPInitCode[128] = {
 #define __DSPWorkBuffer (void*)0x81000000
 
 void __OSInitAudioSystem(void) {
-    u8 errFlag; // FAKE: assigned once and never read; removing it changes the object
+    u8 errFlag; // assigned once, never read; its stack slot is in the game code
     u16 reg16;
     u32 start_tick;
 

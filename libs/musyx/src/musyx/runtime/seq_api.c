@@ -363,7 +363,7 @@ u32 seqGetInstanceForVoice(u32 vid) {
   SEQ_INSTANCE* seq;
   NOTE* n;
 
-  // FAKE: the outer loop never uses i (eight identical passes); without it the object changes
+  // the outer loop never uses i: eight identical passes (the loop is in the game code)
   for (i = 0; i < 8; ++i) {
     for (seq = seqActiveRoot; seq != NULL; seq = seq->next) {
       for (j = 0; j < 2; ++j) {

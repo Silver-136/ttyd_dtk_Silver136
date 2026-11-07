@@ -388,7 +388,7 @@ u32 PADRead(PADStatus* status) {
     u32 data[2];
     u32 chanBit;
     u32 sr;
-    int chanShift; // FAKE: computed but never read; removing it changes the object
+    int chanShift; // computed but never read; its stack slot is in the game code
     u32 motor;
 
     enabled = OSDisableInterrupts();

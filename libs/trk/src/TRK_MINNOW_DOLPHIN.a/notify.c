@@ -18,7 +18,8 @@ DSError TRKDoNotifyStopped(int cmd) {
     err = TRKGetFreeBuffer(&bufIdx, &msg);
 
     if (err == 0) {
-        // FAKE: the same test twice; removing the inner one changes the object
+        // the same test again (both tests are in the game code; other TRK versions append the command byte
+        // between them)
         if (err == 0) {
             if (cmd == DSMSG_NotifyStopped)
                 TRKTargetAddStopInfo(msg);
