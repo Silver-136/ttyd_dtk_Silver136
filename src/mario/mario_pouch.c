@@ -424,7 +424,6 @@ BOOL pouchGetItem(ItemType type) {
     return addHead(type);
 }
 
-
 /** Whether pouchGetItem would accept type: counter items always, list items when their list has room. */
 // Original name, place and size from the JP demo's link map (UNUSED there, 0x158 bytes): nothing calls it, so
 // the linker strips it; this body (NWPlayer123's) compiles to that size.

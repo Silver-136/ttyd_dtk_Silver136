@@ -238,7 +238,8 @@ void bero_name_search(BeroEntry** table, const char* name, s32* index) {
 }
 
 /** The entrance's enter script, or default_entevt. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// Original name from the JP demo's link map (UNUSED there, 0x18): every call is inlined, so the linker strips it.
+// This early-return form compiles to that size (a local-variable form gives 0x1c).
 EvtWord* bero_get_entevt(BeroEntry* bero) {
     if (bero->enterEvent == NULL) {
         return default_entevt;
@@ -247,7 +248,8 @@ EvtWord* bero_get_entevt(BeroEntry* bero) {
 }
 
 /** The entrance's exit script, or default_outevt. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// Original name from the JP demo's link map (UNUSED there, 0x18): every call is inlined, so the linker strips it.
+// This early-return form compiles to that size (a local-variable form gives 0x1c).
 EvtWord* bero_get_outevt(BeroEntry* bero) {
     if (bero->exitEvent == NULL) {
         return default_outevt;

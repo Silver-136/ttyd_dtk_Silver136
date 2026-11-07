@@ -967,7 +967,7 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
 
 /**
  * 1 if the map object kind name is a hammer block that Mario's current hammer level can break (chkBlock's test
- * as a function). The JP demo map lists it UNUSED (0x10c) as the last function of mot_hammer.o; nothing calls it,
+ * as a function). The JP demo map lists it UNUSED (0x10c) last in mot_hammer.o's source order (first in the map's reverse listing); nothing calls it,
  * so the link strips it. This form compiles to the map size there.
  */
 s32 breakableMobj(const char* name) {

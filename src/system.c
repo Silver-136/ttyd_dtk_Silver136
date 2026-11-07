@@ -876,8 +876,8 @@ f32 getV60FPS(f32 perFrame, s64 startTick, s64 endTick) {
 
 /**
  * Converts seconds to frames at 60 frames per second; no version calls it (JP demo map: UNUSED, 0x8).
- * The stripped converters (sysSec2Frame* and sysFrame2Sec/Msec*) are written at 60 frames per second as in the
- * JP demo; whether US and later switched them to gp->framerate, like the kept ones, is unknown.
+ * The stripped converters (sysSec2Frame* and sysFrame2Sec/Msec*) are written at 60 frames per second, which fits
+ * their JP demo map sizes (the JP demo strips them too); whether US and later switched them to gp->framerate, like the kept ones, is unknown.
  */
 s32 sysSec2Frame(s32 sec) {
     return sec * 60;
@@ -1148,11 +1148,14 @@ void* memcpy_as4(void* dest, const void* src, u32 count) {
 }
 #endif
 
-// Original name and size from the JP demo's link map (UNUSED there, 0x34 after memset_as4): nothing calls it, so
-// the linker strips it. Body from Super Paper Mario's memcmp_as4 (spm-decomp, CC0; same size), written like the
-// kept memcpy_as4.
 #ifdef __MWERKS__
-/** Compares count / 4 words of a and b: 0 when all are equal, else 1. */
+/**
+ * Compares count / 4 words of a and b: 0 when all are equal, else 1. Given count < 4 it loops 2^32 times (ctr = 0),
+ * like memcpy_as4.
+ */
+// Original name and size from the JP demo's link map (UNUSED there, 0x34 after memset_as4): nothing calls it, so
+// the linker strips it and only its size can be checked. Body from Super Paper Mario's memcmp_as4 (spm-decomp,
+// CC0; same size), in asm like the kept memcpy_as4.
 asm s32 memcmp_as4(const void* a, const void* b, u32 count) {
     nofralloc
     addi    r3, r3, -4
@@ -1186,7 +1189,6 @@ s32 memcmp_as4(const void* a, const void* b, u32 count) {
 }
 #endif
 // clang-format on
-
 
 /**
  * FAKE stand-in for constants of functions the linker dead-stripped (JP demo map: intplStringData and
