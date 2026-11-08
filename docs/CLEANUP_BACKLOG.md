@@ -9,9 +9,9 @@ to the original games through every step; US retail is the priority for readabil
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | <!--n:fakes_rows-->471<!--/n--> (<!--n:fakes_rows_both-->439<!--/n--> both, <!--n:fakes_rows_us-->19<!--/n--> US, <!--n:fakes_rows_jp-->7<!--/n--> JP, <!--n:fakes_rows_demos-->5<!--/n--> demos, <!--n:fakes_rows_pal-->1<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKES.md rows | <!--n:fakes_rows-->485<!--/n--> (<!--n:fakes_rows_both-->443<!--/n--> both, <!--n:fakes_rows_us-->21<!--/n--> US, <!--n:fakes_rows_jp-->10<!--/n--> JP, <!--n:fakes_rows_demos-->9<!--/n--> demos, <!--n:fakes_rows_pal-->2<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
 | FAKE comment sites | <!--n:all_fake_comment_sites-->733<!--/n--> in <!--n:all_fake_comment_sites_files-->211<!--/n--> files (libs <!--n:libs_fake_comment_sites-->25<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
-| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | <!--n:game_pragma_opt_star-->129<!--/n--> / <!--n:game_pragma_optimize-->4<!--/n--> / <!--n:game_pragma_dont_inline-->66<!--/n--> / <!--n:game_pragma_auto_inline-->4<!--/n--> (libs: `dont_inline` <!--n:libs_pragma_dont_inline-->4<!--/n-->, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
+| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | <!--n:game_pragma_opt_star-->129<!--/n--> / <!--n:game_pragma_optimize-->4<!--/n--> / <!--n:game_pragma_dont_inline-->66<!--/n--> / <!--n:game_pragma_auto_inline-->4<!--/n--> (libs: `dont_inline` <!--n:libs_pragma_dont_inline-->4<!--/n-->, VI's two pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | <!--n:game_section_placement-->17<!--/n--> (libs <!--n:libs_section_placement-->32<!--/n-->) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
 | `#pragma force_active` | <!--n:game_force_active-->13<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->4<!--/n-->) | 776 | the library pairs keep the `gap_*` objects |
 | `gap_*` padding objects | <!--n:game_gap_padding-->8<!--/n--> (libs <!--n:libs_gap_padding-->3<!--/n-->) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
@@ -19,9 +19,8 @@ to the original games through every step; US retail is the priority for readabil
 | inline asm | <!--n:game_inline_asm-->9<!--/n--> (libs <!--n:libs_inline_asm-->278<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly (the five TRK functions with C in other decompilations are C now) |
 | raw pointer arithmetic | <!--n:game_raw_pointer_math-->20<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
 
-FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
-struct views 21, dead stores / self-assignments / dead conditions 20, comma expressions `(0, x)` 19, placement or
-data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6, others ~45.
+FAKES.md rows by kind: no current breakdown (the old one counted about 195 rows); the classes that remain are listed
+in `docs/FAKES.md` and in the mweppc review record.
 
 ## 2. Types and declarations
 
@@ -63,8 +62,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 3. Names
 
-- L_/U_/N_ function names (Zephiles, 2026-10-27; mostly done 2026-10-28, see the commits): 70 functions carry his confidence prefix (L_ likely correct,
-  U_ likely wrong, N_ named by him from the code). Judge each against the JP demo map and the code, rename where a
+- L_/U_/N_ function names (Zephiles, 2026-10-27; mostly done 2026-10-28, see the commits): 70 functions carried Zephiles' confidence prefix (L_ likely correct,
+  U_ likely wrong, N_ named from the code); 6 still do (`L_allPartyRideOn`, `L_getTargetPos`, `L_marioChkRub`,
+  `L_psndBGM_stop`, `L_sweatEntry`, `N_marioChkUseParty`). Judge each against the JP demo map and the code, rename where a
   better or original name exists, then drop the prefix (`N__disp_2D` -> `_disp_2D`).
 - DONE (2026-10-27): descriptive function names (user): each of the 147 functions whose name is not in the symbol maps
   (docs/NAME_PROVENANCE.md, kind `function`) gets a comment at its definition saying the name is descriptive and
@@ -75,15 +75,16 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   PARTS_WORK_*), with shared names in include/battle/unit_work.h (C-read slots, the sisters' line, Barriern
   satellites, Bobbery's bomb, Mario, the lecture units, Vivian's Veil) and family headers
   rels/rsh|tik|muj|las/include/unit_boss_*.h; units built in several RELs (60) share include/battle/unit/<unit>.h
-  (0f45e78cd, cleanup_tools/unit_work_headers.py). 46 numeric slot arguments left (cleanup_tools/work_slots_left.py),
-  all write-only (no reader to name them from).
-- Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (about 60) are all writes; write-only or
+  (0f45e78cd, cleanup_tools/unit_work_headers.py). 153 numeric slot arguments left (cleanup_tools/work_slots_left.py,
+  2026-11-07); slots no script reads have nothing to name them from.
+- Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (83 in 35 files, debt_inventory 2026-11-07); write-only or
   unused fields keep offset names unless their meaning is clear (then `_UNUSED`).
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the
   real struct type.
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
-  from what our code does; other people's or other projects' names are not used (2026-10-26). Inherited struct
-  field names are credited in NAME_PROVENANCE.md.
+  from what our code does (2026-10-26). Later decisions allow, with credit in NAME_PROVENANCE.md: jdaster64's
+  pseudocode names, Zephiles' IconType names, the MetroTRK spellings of the community TRK decompilations, AxioDL's
+  MusyX state names and YAGCD/Dolphin hardware register names. Inherited struct field names are credited there too.
 - Icon ids: done (2026-11-05). Every icon id has a name: ours from the code and item table, the rest (373, incl.
   the US-only language variants the statuswindow / kpa / evt_shop tables use) from Zephiles' IconType enum
   (credited in NAME_PROVENANCE.md; cleanup_tools/icon_names_zephiles.py).
@@ -117,7 +118,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 4. Structure and layout of the source
 
-- Version blocks: 2,155 `#if`/`#ifdef VERSION_*` blocks (1,889 at adoption; more now because duplicated US/JP copies were
+- Version blocks: 2,155 `#if`/`#ifdef VERSION_*` blocks when US and JP were the only versions (1,889 at adoption; the
+  current count of version-test lines, with all seven versions, is in PROGRESS.md; more because duplicated US/JP copies were
   split into small per-difference blocks, which removed about 20,000 duplicated lines). Blocks whose arms were the
   same text (150, mostly function headers left by the demo-map static pass; found from two Zephiles spotted) are
   collapsed (2026-11-05, cleanup_tools/same_arm_scan.py; rerun it after any bulk edit of version blocks).
@@ -134,7 +136,7 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
   offset sum, the Smorg hop code's temporaries (hand-inlined `randf` in map units: settled as written, Codex round 9
   found the inline call changes literal-pool order).
-- Zero/template vector globals placed by hand (part of the 18 placements).
+- Zero/template vector globals placed by hand (part of the 17 placements).
 - JP-only local duplicates of party init functions (`*_init_800...` names), shared US float constants.
 - Long one-line statements in some map units (nested blocks on one line).
 
@@ -170,7 +172,7 @@ latest naming batches.
   DSErrorCode/DSReplyError (since renamed to the MetroTRK spellings), 207 address-named asm labels renamed by role (generic loop/done/skip names).
   PI/MI/DI/SI/EXI/AI register indices and bits named from YAGCD and Dolphin (2026-11-07,
   cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words. TRK codes
-  now carry the MetroTRK spellings (DS_*, DSREPLY_*, DSSTEP_*; 0x704-0x706 named, 2026-11-07). Game section placements (18) retested: all needed, all commented. The rest of
+  now carry the MetroTRK spellings (DS_*, DSREPLY_*, DSSTEP_*; 0x704-0x706 named, 2026-11-07). Game section placements (18 then, 17 now) retested: all needed, all commented. The rest of
   libs/ (MSL, TRK, runtime, smaller SDK folders) was read the same day: shared MSL/TRK private headers, names,
   BUG comments (libs_review_{msl,trk,sdk1,sdk2}.tsv).
 
@@ -188,9 +190,9 @@ never copied in). What the raw counts above mean for the libraries:
   pikmin2 and ac-decomp (CC0); TRK is built with `-enum int` (as in those projects; every TRK object stays identical).
 - **Unclear, keep:** THPDec IDCT/decoder blocks, AXFX reverb/chorus, MusyX CheapReverb/Chorus/StdReverb and
   snd_service math kernels (optimized paired-single code; the original form is not established).
-- **MusyX placeholder names:** the 67 `lbl_XXXXXXXX` occurrences are 31 branch labels inside the CheapReverb (20) and
-  Chorus (11) assembly kernels, not unknown fields or locals. Rename only labels whose role the code shows.
-- **Genuine placements, keep:** `__start` / `__ppc_eabi_init` / `__os.h` startup code in .init (many of the 35
+- **MusyX placeholder names:** done; the branch labels inside the CheapReverb and Chorus assembly kernels are named
+  by role (no `lbl_XXXXXXXX` left).
+- **Genuine placements, keep:** `__start` / `__ppc_eabi_init` / `__os.h` startup code in .init (many of the 32
   sites are extern declarations), runtime `__mem.c` memcpy/memset in .init, the destructor-chain pointer in .dtors,
   TRK's .init routines.
 - **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (hw_dspctrl 2 x 4, snd3d 7,
@@ -202,8 +204,8 @@ never copied in). What the raw counts above mean for the libraries:
 - **Padclamp:** the original type is ten one-byte fields (10-byte symbol). The plain type matches US; JP loses two
   bytes, so the wrapper stays (FAKES.md) until the JP object extent is understood.
 - **sndSeqPlayEx:** done 2026-11-07: a separate `static inline _seqPlaySong` copy (AxioDL's 2.0.2-2.0.3 form).
-- **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's three
-  pairs (getTiming, latch0/latch1) stay: a whole-unit flag changes other helpers.
+- **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's two
+  pairs (`__VIGetLatch0Position`, `__VIGetLatch1Position`) stay: a whole-unit flag changes other helpers.
 - **Sources no build uses:** Codex round 22 G recounted 101 library sources that none of the five builds then compiled.
   The 39 it marked for removal are gone (2026-11-03, user OK): the AX sound stack (AX, AXART, AXFX, SYN, MIX, SEQ;
   the game plays sound through MusyX, and the JP demo link map has none of these archives), the SDK copies of

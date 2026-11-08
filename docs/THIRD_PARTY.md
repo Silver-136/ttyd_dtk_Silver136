@@ -7,10 +7,10 @@ The game links libraries that Nintendo, Metrowerks and others wrote, and one REL
 | Folder | What it is | Where it comes from | Licence in this tree |
 |---|---|---|---|
 | `libs/dolsdk2004/` | Nintendo's Dolphin SDK libraries (OS, GX, DVD, VI, PAD, CARD, AR/ARQ, THP, ...), as built into the game | A decompilation of the archive libraries of the 2004-04-20 Dolphin SDK; its own README is `libs/dolsdk2004/README.md`. It came into this tree with the upstream project's setup (2025) and was completed and extended here. | No licence file of its own |
-| `libs/musyx/` | MusyX, the sound library (Factor 5) | The MusyX decompilation by Axiomatic Data Laboratories, extended here | MIT, `libs/musyx/LICENSE` |
-| `libs/msl/` | Metrowerks Standard Library (C library and math) | Decompiled in this project (2026) | This repository's MIT licence |
-| `libs/runtime/` | Metrowerks PowerPC EABI runtime (`__mem`, `__va_arg`, `runtime.c`, ...) | Decompiled in this project (2026) | This repository's MIT licence |
-| `libs/trk/` | Metrowerks Target Resident Kernel, the debugger stub linked into the game | Decompiled in this project (2026). The C of five functions (`support.c` TRKSuppAccessFile, TRKRequestSend, HandleOpenFileSupportRequest; `dolphin_trk.c` TRK__write_aram; `mem_TRK.c` TRK_fill_mem) is adapted from the matched decompilations of [Pikmin 2](https://github.com/projectPiki/pikmin2) and [Animal Crossing](https://github.com/ACreTeam/ac-decomp) (both CC0); the DS_* / DSREPLY_* constant names are the MetroTRK spellings those projects share (see NAME_PROVENANCE.md) | This repository's MIT licence |
+| `libs/musyx/` | MusyX, the sound library (Factor 5) | The MusyX decompilation by Axiomatic Data Laboratories, extended here | MIT, `libs/musyx/LICENSE` (the licence of the copy taken in 2025; AxioDL/musyx is now published under CC0) |
+| `libs/msl/` | Metrowerks Standard Library (C library and math) | Decompiled in the upstream project before this fork (2026, l-tata and LLCOOLT), extended here | This repository's MIT licence |
+| `libs/runtime/` | Metrowerks PowerPC EABI runtime (`__mem`, `__va_arg`, `runtime.c`, ...) | Decompiled in the upstream project before this fork (2026, l-tata and LLCOOLT), extended here | This repository's MIT licence |
+| `libs/trk/` | Metrowerks Target Resident Kernel, the debugger stub linked into the game | Decompiled in the upstream project before this fork (2026, l-tata and LLCOOLT), extended here. The C of five functions (`support.c` TRKSuppAccessFile, TRKRequestSend, HandleOpenFileSupportRequest; `dolphin_trk.c` TRK__write_aram; `mem_TRK.c` TRK_fill_mem) is adapted from the matched decompilations of [Pikmin 2](https://github.com/projectPiki/pikmin2) and [Animal Crossing](https://github.com/ACreTeam/ac-decomp) (both CC0); the DS_* / DSREPLY_* constant names are the MetroTRK spellings those projects share (see NAME_PROVENANCE.md) | This repository's MIT licence |
 
 The assembly in these folders is code that the original libraries shipped as assembly (for example paired-single math, cache and context routines, the TRK exception vectors). It is reproduced as assembly on purpose.
 
@@ -18,9 +18,9 @@ The assembly in these folders is code that the original libraries shipped as ass
 
 ## SGI GLU tessellator in `rels/tst/`
 
-The developer test REL `tst.rel` (European release only) contains a copy of the GLU polygon tessellator (libtess, by Eric Veach) from the OpenGL Sample Implementation by Silicon Graphics, Inc. Its reconstruction is in `rels/tst/src/glu/` with headers in `rels/tst/include/glu/`.
+The developer test REL `tst.rel` (in the European release and the JP store demo) contains a copy of the GLU polygon tessellator (libtess, by Eric Veach) from the OpenGL Sample Implementation by Silicon Graphics, Inc. Its reconstruction is in `rels/tst/src/glu/` with headers in `rels/tst/include/glu/`.
 
-It is under the SGI Free Software License B, version 2.0. Five of the eleven source files (`priorityq.c`, `priorityq-heap.c`, `render.c`, `sweep.c`, `tess.c`) carry the full notice at the top; `geom.c`, `mesh.c` and `tessmono.c` name the licence in their header; `dict.c`, `memalloc.c`, `normal.c` and the headers do not repeat it. These files cannot gain lines at the top without changing the build (the tessellator's assertions record source line numbers), so the notice for all of them is reproduced here:
+It is under the SGI Free Software License B, version 2.0. All eleven source files carry the full notice at the top; the headers do not repeat it, and the source files cannot gain or lose lines without changing the build (the tessellator's assertions record source line numbers). The notice:
 
 ```
 SGI FREE SOFTWARE LICENSE B (Version 2.0, Sept. 18, 2008)
@@ -54,7 +54,7 @@ Silicon Graphics, Inc.
 
 ## Build scripts in `tools/`
 
-`tools/project.py`, `tools/download_tool.py`, `tools/decompctx.py`, `tools/transform_dep.py` and `tools/changes_fmt.py` come from [dtk-template](https://github.com/encounter/dtk-template), the decomp-toolkit project template. `tools/ninja_syntax.py` is from the [ninja](https://github.com/ninja-build/ninja) project (Apache License 2.0, notice in the file). The other scripts were written for this project; see [tools/README.md](../tools/README.md).
+`tools/project.py`, `tools/download_tool.py`, `tools/decompctx.py`, `tools/transform_dep.py` and `tools/changes_fmt.py` come from [dtk-template](https://github.com/encounter/dtk-template), the decomp-toolkit project template. `tools/ninja_syntax.py` is from the [ninja](https://github.com/ninja-build/ninja) project (Apache License 2.0, notice in the file). The other scripts (`drop_relocations.py`, `progress_treemap.py`, `update_readme.py`, `ttydasm/`) were written for this project.
 
 ## Build-time tools
 

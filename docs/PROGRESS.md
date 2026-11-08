@@ -2,7 +2,7 @@
 
 ## Matching
 
-All seven versions build every unit from C and hash byte-identical to the originals: G8ME01 (US, 30 files), G8MJ01 (JP, 32), G8MP01 (PAL, 33), G8ME01_DEMO (June 2004 US demo, 7), G8MJ01_DEMO (JP demo, 33), G8ME01_DEMO2 (September 2004 US demo, 8), G8MP01_DEMO (September 2004 European demo, 8). The tables below are from the JP and US retail builds.
+All seven versions build every unit from C (two TRK files from assembly, as in the original) and hash byte-identical to the originals: G8ME01 (US, 30 files), G8MJ01 (JP, 32), G8MP01 (PAL, 33), G8ME01_DEMO (June 2004 US demo, 7), G8MJ01_DEMO (JP demo, 33), G8ME01_DEMO2 (September 2004 US demo, 8), G8MP01_DEMO (September 2004 European demo, 8). The tables below are from the JP and US retail builds.
 
 One row per commit window, at most 3 per day. Figures come from an objdiff-cli report on each window's final tree. Rows from 2026-10-10 to 2026-10-22 are the Japanese release (G8MJ01); the last row is the US release (G8ME01).
 
@@ -58,10 +58,10 @@ The cleanup keeps both builds byte-identical; every change is gated on JP (32 fi
 | Raw pointer math (`*(T*)((u8*)p + N)`) becomes struct fields | 4,644 | 0 (52 look-alikes such as script float encodings and sine-table indexes checked and kept) |
 | Offset-hiding macros (`#define X(p) *(T*)((u8*)p + N)`), including the US layout-shift macros | 157 | 1 (a listed fake) |
 | Array-index casts, type puns, hard-coded strides and per-file views of shared structs | 1,075 | 0 (54 look-alikes such as pixel math and byte-stream reads checked and kept) |
-| Placeholder struct fields (`unk*`, `field_*`) get names | 789 | 0 |
+| Placeholder struct fields (`unk*`, `field_*`) get names | 789 | 83 uses left (`debt_inventory.py`, 2026-11-07) |
 | `__declspec(section ...)` data placements | 26,648 | 434 (all needed or faithful to the original) |
 | Decompiler-generated local names (`var_r31`, `temp_r3`) | 483 | 0 |
-| Inline asm in game code | 31 | 4, the original's own GQR/MSR writes and word copy, behind named helpers in `hwaccess.h` |
+| Inline asm in game code | 31 | the original's own GQR/MSR writes (named helpers in `hwaccess.h`) and the word copy in `system.c`; counted in lines in the table below, which also includes the restored stripped `memcmp_as4` |
 | Script words: arrays, `args` views and script pointers typed as `EvtWord` | ~11,000 declarations | done |
 | Pointers stored in integers (`(s32)"name"` table fields, pointer values in `s32` slots) | 2,598 casts | 60, at SDK interfaces that take `u32` addresses or in listed fakes |
 
@@ -72,7 +72,7 @@ Placements that stay are needed or kept on purpose: SDK startup sections, paddin
 Same rule: every commit keeps all seven builds byte-identical (US 30 files, JP 32, PAL 33, US demo 7, JP demo 33, US demo 2 8, PAL demo 8, objdiff
 100 % code and data per unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory.py`, start = commit
 85ac972b, last counted <!--n:counted_date-->2026-11-07<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->8,945<!--/n--> tests in
-<!--n:version_tests_files-->872<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->1<!--/n-->, Demos <!--n:fakes_rows_demos-->5<!--/n-->). US retail is
+<!--n:version_tests_files-->872<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->2<!--/n-->, Demos <!--n:fakes_rows_demos-->9<!--/n-->). US retail is
 the readability priority. Comments that retell a script or describe a scene stay.
 
 | What | Start | Now |
@@ -84,7 +84,7 @@ the readability priority. Comments that retell a script or describe a scene stay
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
 | Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 60 units (one SDK unit, OSLink) |
 | Other optimizer and inline pragmas | 697 | <!--n:game_pragma_other-->203<!--/n--> |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | <!--n:game_fake_comment_sites-->708<!--/n--> in game code + <!--n:libs_fake_comment_sites-->25<!--/n--> in libs (FAKES.md rows 214 -> <!--n:fakes_rows-->471<!--/n-->). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | <!--n:game_fake_comment_sites-->708<!--/n--> in game code + <!--n:libs_fake_comment_sites-->25<!--/n--> in libs (FAKES.md rows 214 -> <!--n:fakes_rows-->485<!--/n-->). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
 | Doc comments | | about 12,000 functions and event scripts, 6,000 data tables and 1,240 files have a description, from LLCOOLT's readability pass (with the author's permission); the rest are open |
 | Certification review of `src/` | | every file read once (2026-10-27); about 3,500 edits kept where both builds stayed byte-identical: names and named constants, wrong or matching-process comments rewritten, dead code removed, `// BUG:` notes on retail oddities. The event scripts under `rels/` are not reviewed yet |
 | Inline asm in game code | 19 | <!--n:game_inline_asm-->9<!--/n--> |
@@ -97,4 +97,4 @@ the readability priority. Comments that retell a script or describe a scene stay
 | Data tables written out | | battle unit kind tables (241) and status vulnerability tables (313) list one field per line with its name |
 | Saved-game values | | 805 saved flags and words (`GSWF`/`GSW`) named from the scripts that set and test them; the story progress value (`GSW(0)`) has one name per step (407 values) from the game's own step labels and debug story list; area-local flags and words per area |
 | Macros | | alias macros written out; 37 statement macros became `static inline` functions; 43 unused macros removed; the macros that must stay (code generators, or the bytes change as functions) are laid out over several lines with a comment saying why |
-| Battle unit work slots | | the per-unit work slots of battle units and parts (about 3,200 script calls) named per unit from what each script stores in them (183 numeric slot arguments left) |
+| Battle unit work slots | | the per-unit work slots of battle units and parts (about 3,200 script calls) named per unit from what each script stores in them (153 numeric slot arguments left, 2026-11-07) |

@@ -7,7 +7,7 @@ Paper Mario: The Thousand-Year Door
 [Data Progress]: https://img.shields.io/badge/Data-100.00%25-blue
 [Linked Progress]: https://img.shields.io/badge/Linked-100.00%25-blue
 
-A matching decompilation of Paper Mario: The Thousand-Year Door. Seven versions are complete: the Japanese (G8MJ01), US (G8ME01) and European (G8MP01) releases, the early Japanese and US demos (G8MJ01_DEMO, G8ME01_DEMO) and the September 2004 US and European demos (G8ME01_DEMO2, G8MP01_DEMO). Every unit is built from C and each build reproduces its original game byte for byte.
+A matching decompilation of Paper Mario: The Thousand-Year Door. Seven versions are complete: the Japanese (G8MJ01), US (G8ME01) and European (G8MP01) releases, the early Japanese and US demos (G8MJ01_DEMO, G8ME01_DEMO) and the September 2004 US and European demos (G8ME01_DEMO2, G8MP01_DEMO). Every unit is built from C (except two debugger-kernel files, `targsupp.s` and `__exception.s`, which were assembly in the original too) and each build reproduces its original game byte for byte.
 
 ## Origins and credit
 
@@ -27,7 +27,7 @@ With every version matching, the work here is cleanup: the C should read like pl
 - **Comments checked against the code**: every source file and every room and battle-unit script was read, thousands of wrong comment claims were fixed, and retail bugs found on the way are marked with `// BUG:` and listed in [docs/KNOWN_GAME_BUGS.md](docs/KNOWN_GAME_BUGS.md).
 - **Names instead of numbers**: saved-game flags, story progress, unit work slots, icons, flag words, script values and states are named from the code that uses them and from the game's own data (map, animation and setup files, message text), which is read only as evidence and never copied in.
 - **One source tree for seven versions**: differences sit in small ordered `#if VERSION` blocks; blocks whose arms were the same text are gone.
-- **Matching tricks reviewed against the compiler's own source**: with [mweppc](https://github.com/doldecomp/mweppc) (a public-domain decompilation of the Metrowerks compiler the game was built with; thanks to NWPlayer123 for pointing us to it), every listed trick was checked. Many were not tricks at all (the instructions are in the retail code, or the original reserves the storage); others have natural forms such as `int` declarations, compound assignments or element pointers. The list went from 705 rows to under 480; the rules are in [docs/FAKES.md](docs/FAKES.md#what-is-not-a-fake).
+- **Matching tricks reviewed against the compiler's own source**: with [mweppc](https://github.com/doldecomp/mweppc) (a public-domain decompilation of the Metrowerks compiler the game was built with; thanks to NWPlayer123 for pointing us to it), every listed trick was checked. Many were not tricks at all (the instructions are in the retail code, or the original reserves the storage); others have natural forms such as `int` declarations, compound assignments or element pointers. The list went from 720 rows to 485; the rules are in [docs/FAKES.md](docs/FAKES.md#what-is-not-a-fake).
 - **Stripped functions restored**: functions the JP demo's linker maps list as unused (inlined everywhere, then stripped) are ordinary functions again where their body is known, with hand-written copies turned back into calls.
 - **Hardware registers named** in the SDK code (disc, controller, audio, memory-card, processor and memory interfaces), from the public YAGCD documentation and the Dolphin emulator's hardware code.
 
@@ -38,7 +38,7 @@ Beyond matching, the code has been cleaned up for reading: struct fields instead
 ![Progress treemap: one cell per file, sized by code bytes, colored by match percent](docs/progress.svg)
 
 <!-- progress-start -->
-**Progress** (every unit is built from C and every build is byte-identical to the original game):
+**Progress** (every unit is built from C or, for two TRK files, from the original's own assembly, and every build is byte-identical to the original game):
 
 | Measure | Value |
 |---|---|
@@ -199,7 +199,7 @@ Working on the code
 - Use struct fields, never pointer arithmetic on raw offsets. Where the US release changed a struct, the US-only members sit inside `#if VERSION >= VERSION_US` in the struct, so field accesses are right for every version. Game code tests the ordered `VERSION` from `include/version.h`; libs/ use the `VERSION_<id>` macros.
 - Script values and anything that may hold an address use the named types instead of `s32`: `EvtWord` for script words, `AddrWord` for address arithmetic, `SfxNameWord` for sound parameters that take a name or an id.
 - If a function needs a behaviour-identical trick to match, mark it with a `// FAKE:` comment that says what it does, and add a row to [docs/FAKES.md](docs/FAKES.md).
-- In the game code, inline asm appears only where the original source had it: the hardware helpers in `include/hwaccess.h` and the word copy `memcpy_as4` in `src/system.c`.
+- In the game code, inline asm appears only where the original source had it: the hardware helpers in `include/hwaccess.h` and the word copy `memcpy_as4` in `src/system.c`, plus the stripped `memcmp_as4` beside it, restored in asm like its neighbour and like Super Paper Mario's copy (only its size and place are known from the JP demo map).
 
 Diffing
 =======
@@ -217,6 +217,8 @@ License
 
 This project is open for anyone to use. The code is under the [MIT License](LICENSE): you may use, copy, change and share it for any purpose, including mods, tools, other projects and commercial work, without asking. Keep the licence text and copyright notice with copies of the code.
 
-The libraries in `libs/` and the tessellator in `rels/tst/` come from other sources and keep their own terms; [docs/THIRD_PARTY.md](docs/THIRD_PARTY.md) lists each one.
+Some libraries in `libs/` and the tessellator in `rels/tst/` come from other sources and keep their own terms (MusyX: MIT; the GLU tessellator: SGI Free Software License B). [docs/THIRD_PARTY.md](docs/THIRD_PARTY.md) lists every library, where it comes from and its licence in this tree.
+
+The maintainers' working scripts (`cleanup_tools/`, such as `verify_both.ps1` and `debt_inventory.py`, and the `cleanup_notes/` research records) that the docs mention live outside this repository; the build itself needs none of them.
 
 The repository contains no game data. Building it needs your own copy of the game, and the game itself remains Nintendo's.

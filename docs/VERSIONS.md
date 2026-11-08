@@ -81,7 +81,7 @@ Assembly files get the same index as `BUILD_VERSION` through `--defsym` (for exa
 - **Kiosk behaviour.** After a minute without input the early demos end the session (the September demos do the same): in the field or in a battle they raise the kiosk timeout flag, and in any other sequence they reset (`src/mario/mariost.c`). The retail games raise the same flag after two minutes in the field or a battle; it is only read in kiosk mode. The demo has an extra sequence, `seq_demo` (`src/sequence/seq_demo.c`, listed in `src/sequence/seqdef.c`).
 - **Older code.** Many functions are earlier versions of the JP code. The differences are marked `VERSION <= VERSION_DEMO_JP` (or `VERSION >= VERSION_JP` for what only the releases and the later demos have) throughout `src/`.
 - **Memory.** The smart heap is a fixed 7 MiB block from the default heap (`src/memory.c`).
-- **Small-data thresholds.** The main executables of the other versions are compiled with `-sdata 48 -sdata2 6`; the early demos with `-sdata 8 -sdata2 4`. RELs and TRK use `-sdata 0 -sdata2 0` in every version (`configure.py`).
+- **Small-data thresholds.** The main executables of the other versions are compiled with `-sdata 48 -sdata2 6`; the early demos with `-sdata 8 -sdata2 4`. RELs and TRK use `-sdata 0 -sdata2 0` in every version, except three TRK files (`serpoll.c`, `main.c`, `gdev_main.c`) built with `-sdata 8` (`configure.py`).
 - **Precompiled headers.** Main-executable units get the MSL math constants from `include/msl_main.pch` (the `MAIN_PCH` set in `configure.py`). The early demos keep those constants in a different set of units (`MAIN_PCH_DEMO_ADD`), and a few demo units use `include/msl_math.pch`, the math header without the constants (`MATH_PCH_DEMO`). RELs use `include/msl_rel.pch`.
 - **RELs.** The June US demo has six: `gon`, `hei`, `kpa`, `mri`, `nok` and `sys`.
 
@@ -90,11 +90,11 @@ Assembly files get the same index as `BUILD_VERSION` through `--defsym` (for exa
 The Japanese store demo is the demo code a little after the US demo, without the US demo's English text. It has all 31 RELs of the JP release and `tst`, 32 in all. Its `config/G8MJ01_DEMO` comes from the original linker maps of this demo, so its object boundaries are the original ones.
 
 - **Build.** Same small-data thresholds and precompiled-header sets as the June US demo. Every unit links from C. `tst.c` registers `tst_nakayama_init_evt`, which this version's `evt_init.c` does not define. The original linker left that reference as 0 with no relocation, and the build reproduces it by dropping the relocation before `dtk rel make` (`config/G8MJ01_DEMO/unresolved_symbols.txt`, see [BUILDING.md](BUILDING.md)).
-- LLCOOLT measured how many main executable functions the two demos share; his figures are in his tree's page and are not repeated here.
+- LLCOOLT measured how many main executable functions the two demos share; the figures are in that tree's page and are not repeated here.
 
 ### The September 2004 demos (`G8ME01_DEMO2`, `G8MP01_DEMO`)
 
-Both are kiosk builds of the release code. The US one was built a few days after the US release and the European one a few days before the European release (build dates are in `src/R_build.c`).
+Both are kiosk builds of the release code. The US one was built on 18 September 2004, nine days after the US release build (9 September), and the European one on 23 September, three days before the European release build (26 September); the dates are in `src/R_build.c`.
 
 - **`G8ME01_DEMO2` is the US code**, with the demo changes below and none of PAL's changes.
 - **`G8MP01_DEMO` is the PAL code**, except for a few PAL changes made after it: they are the `#if VERSION == VERSION_EU` blocks.

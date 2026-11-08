@@ -87,7 +87,7 @@ Each REL is linked into a partially linked module (`build/<version>/<area>/<area
 
 One REL needs a step in between: the Japanese demo's `tst.rel` references `tst_nakayama_init_evt`, which that version does not define, and the original linker left the reference as 0 with no relocation, which `dtk rel make` cannot produce from an undefined symbol. For that REL, `tools/drop_relocations.py` copies the linked module without the relocations against the symbols in `config/G8MJ01_DEMO/unresolved_symbols.txt`. `configure.py` sets this up through `config.rel_dropped_relocations`; no other version or REL uses it.
 
-Every unit of every version links from C.
+Every unit of every version links from C, except the two TRK assembly files (`targsupp.s`, `__exception.s`), which the original also had in assembly.
 
 ### Switching versions and building all seven
 

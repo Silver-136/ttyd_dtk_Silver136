@@ -13,7 +13,7 @@ Every area of the world is one REL, `rels/<code>/`, with maps named `<code>_NN` 
 | `aaa` | Mario Bros.' house | prologue | the opening scene |
 | `aji` | X-Naut Fortress | 7 | *ajito*, hideout |
 | `bom` | Fahr Outpost | 7 | after the Bob-ombs who live there |
-| `dig` | digest (ダイジェスト): plays demo.thp with characters; nothing in the game enters it | | JP only, one map |
+| `dig` | digest (ダイジェスト): plays demo.thp with characters; nothing in the game enters it | | JP, the JP store demo and PAL; one map |
 | `dmo` | opening demo (オープニングデモ): the storybook prologue after the boot logos | | |
 | `dou` | Pirate's Grotto | 5 | *dōkutsu*, cave |
 | `eki` | Riverside Station | 6 | *eki*, station |
@@ -32,12 +32,13 @@ Every area of the world is one REL, `rels/<code>/`, with maps named `<code>_NN` 
 | `muj` | Keelhaul Key | 5 | *mujintō*, desert island |
 | `nok` | Petalburg | 1 | after the Koopas (*Nokonoko*) who live there |
 | `pik` | Poshley Heights | 6, 7 | |
-| `qiz` | test map (init script only) | | JP only, one map |
+| `qiz` | test map (init script only) | | JP, the JP store demo and PAL; one map |
 | `rsh` | Excess Express | 6 | *ressha*, train |
 | `sys` | system maps: `sys_00` (an empty map) and `sys_01` (the chapter title screens) | | |
 | `tik` | Rogueport Sewers | | *chika*, underground |
 | `tou` | Glitzville and the Glitz Pit | 3 | *tōgijō*, arena |
 | `tou2` | Glitz Pit arena (`tou_03`, the fights) | 3 | |
+| `tst` | developer test REL (test battles and units, and the GLU tessellator) | | the JP store demo and PAL |
 | `usu` | Twilight Town | 4 | *usugurai*, dim |
 | `win` | Boggly Woods | 2 | |
 | `yuu` | Pianta Parlor games | | *yūgijō*, amusement hall |
