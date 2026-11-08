@@ -126,9 +126,10 @@ in `docs/FAKES.md` and in the mweppc review record.
   against it (cleanup_tools/demo_names.py); no further original name fits (2026-10-26).
 - Battle values still unnamed: pose types 32-34 and 53-55 (no code found selects them; only Mario's pose table
   lists 32). Dead bits (no reader): weapon special 0x200, target weighting 0x2000.
-- Comments from the game's own data: message paraphrases next to message calls (only 95 of 6,224 have one), place
-  comments per room and NPC identities where the game's data (debug story list maps, NPC tribe table, messages)
-  shows them.
+- Comments from the game's own data: place comments per room and NPC identities where the game's data (debug story
+  list maps, NPC tribe table, messages) shows them. Message paraphrases next to message calls: not added (decided
+  2026-11-08 after community feedback: more clutter than help, since text editing tools already show the
+  messages; the 95 existing ones stay).
 - Raw flag masks: about 230 bit tests/sets by number are left outside sound tables and counter/byte arithmetic
   (2026-10-26, down from about 1,800). Left: words whose bits mean different things per caller (evt_npc move
   functions' moveFlags), evt_mobj typeData words (per object kind; the switch block's high bits are never read in C),
