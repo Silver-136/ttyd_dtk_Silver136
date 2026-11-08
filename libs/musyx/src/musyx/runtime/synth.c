@@ -705,14 +705,14 @@ static void ZeroOffsetHandler(u32 i) {
     volUpdate = TRUE;
   }
 
-  if ((synthFlags & 1) == 0) {
+  if ((synthFlags & SYNTH_FLAG_MONO) == 0) {
     if ((sv->cFlags & SYNTH_CFLAG_PAN_CHANGED) != 0 ||
         (sv->midiDirtyFlags & (SYNTH_DIRTY_PANNING | SYNTH_DIRTY_SURROUND_PANNING)) != 0) {
       sv->cFlags &= ~SYNTH_CFLAG_PAN_CHANGED;
       pan = sv->panning[0] + (inpGetPanning(sv) - 8192) * 0x200;
       sv->lastPan = CLAMP_INV(pan, 0, 0x7f0000);
 
-      if ((synthFlags & 2) != 0) {
+      if ((synthFlags & SYNTH_FLAG_SURROUND) != 0) {
         if ((sv->lastSPan = sv->panning[1] + inpGetSurPanning(sv) * 512) > 0x7f0000) {
           sv->lastSPan = 0x7f0000;
         }
@@ -721,7 +721,7 @@ static void ZeroOffsetHandler(u32 i) {
       }
 
       volUpdate = TRUE;
-    } else if ((synthFlags & 2) == 0) {
+    } else if ((synthFlags & SYNTH_FLAG_SURROUND) == 0) {
       sv->lastSPan = 0;
     }
   } else {
@@ -1377,7 +1377,7 @@ static u32 synthHWMessageHandler(u32 mesg, u32 voiceID) {
   ret = FALSE;
 
   switch (mesg) {
-  case 0:
+  case HW_MESSAGE_SAMPLE_END:
     if (synthVoice[voiceID & 0xff].block != 0) {
       break;
     }
@@ -1388,15 +1388,15 @@ static u32 synthHWMessageHandler(u32 mesg, u32 voiceID) {
     macSampleEndNotify(&synthVoice[voiceID & 0xff]);
     break;
 
-  case 1:
+  case HW_MESSAGE_VOICE_KILL:
     voiceKill(voiceID & 0xff);
     break;
 
-  case 2:
+  case HW_MESSAGE_VIRTUAL_SAMPLE_START:
     ret = vsSampleStartNotify(voiceID);
     break;
 
-  case 3:
+  case HW_MESSAGE_VIRTUAL_SAMPLE_END:
     vsSampleEndNotify(hwGetVirtualSampleID(voiceID & 0xff));
     break;
 

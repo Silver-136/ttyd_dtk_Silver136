@@ -6,6 +6,20 @@
 #include "musyx/synthdata.h"
 #include "musyx/voice.h"
 
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// _PB.state
+#define DSP_PB_STATE_STOPPED 0
+#define DSP_PB_STATE_PLAYING 1
+
+// DSPvoice.state
+#define DSP_VOICE_STATE_INACTIVE 0
+#define DSP_VOICE_STATE_STARTING 1
+#define DSP_VOICE_STATE_PLAYING 2
+
+// DSPstudioinfo.state
+#define DSP_STUDIO_STATE_INACTIVE 0
+#define DSP_STUDIO_STATE_ACTIVE 1
+
 typedef struct FILTERInfo {
   // total size: 0x6
   u8 on;     // offset 0x0, size 0x1

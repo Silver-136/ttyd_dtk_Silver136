@@ -2,6 +2,19 @@
 #define ADSR_H
 
 #include "musyx/musyx.h"
+
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// ADSR_VARS.mode
+#define ADSR_MODE_LINEAR 0
+#define ADSR_MODE_DLS 1
+
+// ADSR_VARS.state
+#define ADSR_STATE_START 0
+#define ADSR_STATE_ATTACK 1
+#define ADSR_STATE_DECAY 2
+#define ADSR_STATE_SUSTAIN 3
+#define ADSR_STATE_RELEASE 4
+
 typedef struct ADSR_INFO {
   // total size: 0x14
   union ai_data {

@@ -3,6 +3,13 @@
 
 #include "musyx/dspvoice.h"
 #include "musyx/musyx.h"
+
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// Sample-rate conversion type (hwSetSRCType, DSPvoice.srcTypeSelect)
+#define SAL_SRC_POLYPHASE 0
+#define SAL_SRC_LINEAR 1
+#define SAL_SRC_NONE 2
+
 typedef void (*SND_SOME_CALLBACK)();
 
 #ifndef MAX

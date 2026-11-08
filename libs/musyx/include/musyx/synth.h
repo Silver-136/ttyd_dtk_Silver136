@@ -4,6 +4,11 @@
 
 #include "musyx/adsr.h"
 
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// synthFlags
+#define SYNTH_FLAG_MONO 1
+#define SYNTH_FLAG_SURROUND 2
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -3,6 +3,17 @@
 
 #include "musyx/musyx.h"
 
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// STREAM_INFO.state
+#define STREAM_STATE_FREE 0
+#define STREAM_STATE_STARTING 1
+#define STREAM_STATE_PLAYING 2
+#define STREAM_STATE_INACTIVE 3 // allocated, without a playback voice
+
+// STREAM_INFO.type
+#define STREAM_TYPE_PCM16 0
+#define STREAM_TYPE_ADPCM 1
+
 #ifdef __cplusplus
 extern "C" {
 #endif

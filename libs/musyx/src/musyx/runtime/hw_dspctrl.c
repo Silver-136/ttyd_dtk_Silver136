@@ -95,7 +95,7 @@ bool salInitDspCtrl(u8 numVoices, u8 numStudios, u32 defaultStudioDPL2) {
           itdPtr = (u32)dspITDBuffer;
           for (i = 0; i < salNumVoices; ++i) {
             MUSY_DEBUG("Initializing voice %d...\n", i);
-            dspVoice[i].state = 0;
+            dspVoice[i].state = DSP_VOICE_STATE_INACTIVE;
             dspVoice[i].postBreak = 0;
             dspVoice[i].startupBreak = 0;
             dspVoice[i].lastUpdate.pitch = 0xff;
@@ -126,7 +126,7 @@ bool salInitDspCtrl(u8 numVoices, u8 numStudios, u32 defaultStudioDPL2) {
 
           for (i = 0; i < salMaxStudioNum; ++i) {
             MUSY_DEBUG("Initializing studio %d...\n", i);
-            dspStudio[i].state = 0;
+            dspStudio[i].state = DSP_STUDIO_STATE_INACTIVE;
             if ((dspStudio[i].spb = (_SPB*)salMallocPhysical(sizeof(_SPB))) == NULL) {
               return FALSE;
             }
@@ -207,7 +207,7 @@ void salActivateStudio(u8 studio, u32 isMaster, SND_STUDIO_TYPE type) {
 #endif
   dspStudio[studio].voiceRoot = NULL;
   dspStudio[studio].alienVoiceRoot = NULL;
-  dspStudio[studio].state = 1;
+  dspStudio[studio].state = DSP_STUDIO_STATE_ACTIVE;
   dspStudio[studio].isMaster = isMaster;
   dspStudio[studio].numInputs = 0;
   dspStudio[studio].type = type;
@@ -596,7 +596,7 @@ static void DoDepopFade(long* dspStart, s16* dspDelta, long* hostSum) {
 static void HandleDepopVoice(DSPstudioinfo* stp, DSPvoice* dsp_vptr) {
   _PB* pb;
   dsp_vptr->postBreak = 0;
-  dsp_vptr->pb->state = 0;
+  dsp_vptr->pb->state = DSP_PB_STATE_STOPPED;
   pb = dsp_vptr->pb;
   if ((pb->mixerCtrl & MIXER_CTRL_L) != 0) {
     AddDpop(&stp->hostDPopSum.l, pb->dpop.aL);
@@ -720,16 +720,16 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
   }
   rampResetOffsetFlags[0] = 0;
   for (st = 0; st < salMaxStudioNum; st++) {
-    if (dspStudio[st].state == 1) {
+    if (dspStudio[st].state == DSP_STUDIO_STATE_ACTIVE) {
       stp = &dspStudio[st];
       for (dsp_vptr = stp->voiceRoot; dsp_vptr; dsp_vptr = next_dsp_vptr) {
         next_dsp_vptr = dsp_vptr->next;
         if ((dsp_vptr->postBreak != 0) || ((dsp_vptr->changed[0] & DSP_CHANGED_BREAK) != 0)) {
           HandleDepopVoice(stp, dsp_vptr);
           if (dsp_vptr->virtualSampleID != -1) {
-            salSynthSendMessage(dsp_vptr, 3);
+            salSynthSendMessage(dsp_vptr, HW_MESSAGE_VIRTUAL_SAMPLE_END);
           }
-          if ((dsp_vptr->state != 1) || (dsp_vptr->startupBreak != 0)) {
+          if ((dsp_vptr->state != DSP_VOICE_STATE_STARTING) || (dsp_vptr->startupBreak != 0)) {
             salDeactivateVoice(dsp_vptr);
             dsp_vptr->startupBreak = 0;
           }
@@ -802,17 +802,17 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       procVoiceFlag = 0;
       for (v = voiceNum; v > 0; v--) {
         dsp_vptr = voices[v - 1];
-        if (dsp_vptr->state != 0) {
+        if (dsp_vptr->state != DSP_VOICE_STATE_INACTIVE) {
           u8 i;
           pb = dsp_vptr->pb;
           for (s = 1; s < 5; s++) {
             rampResetOffsetFlags[s] = 0;
           }
-          if (dsp_vptr->state == 1) {
+          if (dsp_vptr->state == DSP_VOICE_STATE_STARTING) {
             dsp_vptr->virtualSampleID = -1;
             dsp_vptr->pb->ve.currentDelta = 0x8000;
             if (adsrSetup(&dsp_vptr->adsr) != 0) {
-              salSynthSendMessage(dsp_vptr, 0);
+              salSynthSendMessage(dsp_vptr, HW_MESSAGE_SAMPLE_END);
               salDeactivateVoice(dsp_vptr);
               continue;
             }
@@ -821,9 +821,9 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             case SAMPLE_COMP_ADPCM_VIRTUAL:
             case SAMPLE_COMP_PCM16_VIRTUAL:
               dsp_vptr->vSampleInfo.loopBufferLength = 0;
-              dsp_vptr->virtualSampleID = salSynthSendMessage(dsp_vptr, 2);
+              dsp_vptr->virtualSampleID = salSynthSendMessage(dsp_vptr, HW_MESSAGE_VIRTUAL_SAMPLE_START);
               if (dsp_vptr->vSampleInfo.loopBufferLength == 0) {
-                salSynthSendMessage(dsp_vptr, 1);
+                salSynthSendMessage(dsp_vptr, HW_MESSAGE_VOICE_KILL);
                 salDeactivateVoice(dsp_vptr);
                 continue;
               }
@@ -1011,7 +1011,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               pb->lpf.b0 = dsp_vptr->filter.coefB;
               pb->lpf.yn1 = 0;
             }
-            pb->state = (mix_start = dsp_vptr->singleOffset) ? 0 : 1;
+            pb->state =
+                (mix_start = dsp_vptr->singleOffset) ? DSP_PB_STATE_STOPPED : DSP_PB_STATE_PLAYING;
             pb->mix.vL = dsp_vptr->lastVolL = dsp_vptr->volL;
             pb->mix.vR = dsp_vptr->lastVolR = dsp_vptr->volR;
             pb->mix.vS = dsp_vptr->lastVolS = dsp_vptr->volS;
@@ -1062,7 +1063,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
                 pb->mixerCtrl |= MIXER_CTRL_AUXA_S;
               }
             }
-            dsp_vptr->state = 2;
+            dsp_vptr->state = DSP_VOICE_STATE_PLAYING;
             newVoice = 1;
             goto apply_changes;
           }
@@ -1094,13 +1095,13 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
           }
           if ((dsp_vptr->smp_info.loopLength == 0) &&
               (dsp_vptr->playInfo.posHi >= dsp_vptr->smp_info.length)) {
-            salSynthSendMessage(dsp_vptr, 0);
+            salSynthSendMessage(dsp_vptr, HW_MESSAGE_SAMPLE_END);
             salDeactivateVoice(dsp_vptr);
             continue;
           }
           if (((dsp_vptr->changed[0] & DSP_CHANGED_ADSR) != 0) &&
               (adsrSetup(&dsp_vptr->adsr) != 0)) {
-            salSynthSendMessage(dsp_vptr, 0);
+            salSynthSendMessage(dsp_vptr, HW_MESSAGE_SAMPLE_END);
             salDeactivateVoice(dsp_vptr);
             continue;
           }
@@ -1349,7 +1350,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               pptr[1] = 0;
               pptr += 2;
               pb->update.updNum[s]++;
-              salSynthSendMessage(dsp_vptr, 0);
+              salSynthSendMessage(dsp_vptr, HW_MESSAGE_SAMPLE_END);
               salDeactivateVoice(dsp_vptr);
               break;
             } else {
@@ -1406,7 +1407,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             }
           }
           if (VoiceDone != 0) {
-            salSynthSendMessage(dsp_vptr, 0);
+            salSynthSendMessage(dsp_vptr, HW_MESSAGE_SAMPLE_END);
             salDeactivateVoice(dsp_vptr);
           }
           DCStoreRangeNoSync(dsp_vptr->patchData, (u32)pptr - (u32)dsp_vptr->patchData);
@@ -1434,23 +1435,23 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               HandleDepopVoice(stp, dsp_vptr);
             }
             salDeactivateVoice(dsp_vptr);
-            salSynthSendMessage(dsp_vptr, 1);
+            salSynthSendMessage(dsp_vptr, HW_MESSAGE_VOICE_KILL);
             for (v = v - 1; v > 0; v--) {
-              if (voices[v - 1]->state == 2) {
+              if (voices[v - 1]->state == DSP_VOICE_STATE_PLAYING) {
                 HandleDepopVoice(stp, voices[v - 1]);
               }
               salDeactivateVoice(voices[v - 1]);
-              salSynthSendMessage(voices[v - 1], 1);
+              salSynthSendMessage(voices[v - 1], HW_MESSAGE_VOICE_KILL);
             }
             for (st1 = st + 1; st1 < salMaxStudioNum; st1++) {
-              if (dspStudio[st1].state == 1) {
+              if (dspStudio[st1].state == DSP_STUDIO_STATE_ACTIVE) {
                 for (dsp_vptr = dspStudio[st1].voiceRoot; dsp_vptr; dsp_vptr = next_dsp_vptr) {
                   next_dsp_vptr = dsp_vptr->next;
-                  if (dsp_vptr->state == 2) {
+                  if (dsp_vptr->state == DSP_VOICE_STATE_PLAYING) {
                     HandleDepopVoice(&dspStudio[st1], dsp_vptr);
                   }
                   salDeactivateVoice(dsp_vptr);
-                  salSynthSendMessage(dsp_vptr, 1);
+                  salSynthSendMessage(dsp_vptr, HW_MESSAGE_VOICE_KILL);
                 }
               }
             }
@@ -1660,7 +1661,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
   dspCmdPtr[2] = (u32)dspSurround;
   dspCmdPtr += 3;
   for (st = 0; st < salMaxStudioNum; st++) {
-    if ((dspStudio[st].state == 1) && (dspStudio[st].isMaster != 0)) {
+    if ((dspStudio[st].state == DSP_STUDIO_STATE_ACTIVE) && (dspStudio[st].isMaster != 0)) {
       if ((dspCmdPtr + 3) > (dspCmdMaxPtr - 4)) {
         u16 size;
         dspCmdPtr[0] = 13; // MORE
@@ -1760,7 +1761,7 @@ u32 salSynthSendMessage(DSPvoice* dsp_vptr, u32 mesg) {
 }
 
 void salActivateVoice(DSPvoice* dsp_vptr, u8 studio) {
-  if (dsp_vptr->state != 0) {
+  if (dsp_vptr->state != DSP_VOICE_STATE_INACTIVE) {
     salDeactivateVoice(dsp_vptr);
     dsp_vptr->changed[0] |= DSP_CHANGED_BREAK;
   }
@@ -1773,12 +1774,12 @@ void salActivateVoice(DSPvoice* dsp_vptr, u8 studio) {
   dsp_vptr->prev = NULL;
   dspStudio[studio].voiceRoot = dsp_vptr;
   dsp_vptr->startupBreak = 0;
-  dsp_vptr->state = 1;
+  dsp_vptr->state = DSP_VOICE_STATE_STARTING;
   dsp_vptr->studio = studio;
 }
 
 void salDeactivateVoice(DSPvoice* dsp_vptr) {
-  if (dsp_vptr->state == 0) {
+  if (dsp_vptr->state == DSP_VOICE_STATE_INACTIVE) {
     return;
   }
 
@@ -1792,7 +1793,7 @@ void salDeactivateVoice(DSPvoice* dsp_vptr) {
     dsp_vptr->next->prev = dsp_vptr->prev;
   }
 
-  dsp_vptr->state = 0;
+  dsp_vptr->state = DSP_VOICE_STATE_INACTIVE;
 }
 
 void salHandleAuxProcessing() {
@@ -1804,7 +1805,7 @@ void salHandleAuxProcessing() {
 
   for (sp = dspStudio, st = 0; st < salMaxStudioNum; ++st, sp++) {
 
-    if (sp->state != 1) {
+    if (sp->state != DSP_STUDIO_STATE_ACTIVE) {
       continue;
     }
 

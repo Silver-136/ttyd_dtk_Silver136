@@ -4,6 +4,13 @@
 #include "musyx/musyx.h"
 #include <stddef.h>
 
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// Messages the hardware layer sends to the synth (salSynthSendMessage)
+#define HW_MESSAGE_SAMPLE_END 0
+#define HW_MESSAGE_VOICE_KILL 1
+#define HW_MESSAGE_VIRTUAL_SAMPLE_START 2
+#define HW_MESSAGE_VIRTUAL_SAMPLE_END 3
+
 #ifdef __cplusplus
 extern "C" {
 #endif

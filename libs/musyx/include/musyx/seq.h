@@ -4,6 +4,12 @@
 #include "musyx/musyx.h"
 #include "musyx/voice.h"
 
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// SEQ_INSTANCE.state
+#define SEQ_STATE_FREE 0
+#define SEQ_STATE_PLAYING 1
+#define SEQ_STATE_PAUSED 2
+
 #ifdef __cplusplus
 extern "C" {
 #endif

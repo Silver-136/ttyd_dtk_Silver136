@@ -4,6 +4,13 @@
 #include "musyx/synth.h"
 #include "musyx/version.h"
 
+// Names follow AxioDL's MusyX decompilation (invented there, not original names).
+// VS_BUFFER.state
+#define VS_STATE_FREE 0
+#define VS_STATE_STREAMING 1
+#define VS_STATE_DRAINING 2       // tell the macro when the final samples have played
+#define VS_STATE_DRAINING_ABORT 3 // kill the voice after the final samples have played
+
 #ifdef __cplusplus
 extern "C" {
 #endif

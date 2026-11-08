@@ -789,7 +789,7 @@ static void mcmdSetPitchADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
     adsr.data.dls.dtime += (s32)((0.0078125f * svoice->orgNote) * (f32)dscale);
   }
 
-  svoice->pitchADSR.mode = 1;
+  svoice->pitchADSR.mode = ADSR_MODE_DLS;
   svoice->pitchADSR.data.dls.aMode = 0;
   svoice->pitchADSR.data.dls.aTime = adsrConvertTimeCents(adsr.data.dls.atime);
   svoice->pitchADSR.data.dls.dTime = adsrConvertTimeCents(adsr.data.dls.dtime);

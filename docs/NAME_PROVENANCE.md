@@ -48,6 +48,15 @@ and field names of the Dolphin emulator's hardware code (github.com/dolphin-emu/
 The definitions are our own; they are not original SDK names. Sources and tables:
 `cleanup_notes/hw_register_names.md` (outside the repo).
 
+## Credits for MusyX state names
+
+MusyX state and type names follow AxioDL's MusyX decompilation (github.com/AxioDL/musyx, CC0); they were invented
+there and are not original names: `STREAM_STATE_*`, `STREAM_TYPE_*` (stream.h), `SEQ_STATE_*` (seq.h),
+`DSP_VOICE_STATE_*`, `DSP_STUDIO_STATE_*`, `DSP_PB_STATE_*` (dspvoice.h), `ADSR_MODE_*`, `ADSR_STATE_*` (adsr.h),
+`VS_STATE_*` (voice.h), `HW_MESSAGE_*` (hardware.h), `SAL_SRC_*` (sal.h) and `SYNTH_FLAG_*` (synth.h). The
+definitions are ours, each value checked against our code (2026-11-07). For sample formats our own
+`SAMPLE_COMP_*` names (synthdata.h) stay; AxioDL's `SAMPLE_TYPE_*` are the same values.
+
 ## Credits for restored function bodies
 
 Functions the JP demo's linker maps list as UNUSED (stripped) carry their original names; where nothing in the game
