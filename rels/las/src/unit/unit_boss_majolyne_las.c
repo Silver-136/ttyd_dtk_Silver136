@@ -891,7 +891,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Attack event of Beldam: can use an item; otherwise unit work 8 selects her opening:
+ * Attack event of Beldam: can use an item; otherwise UNIT_WORK_ATTACK_STEP selects her opening:
  * blizzard, Slow powder (weapon_majolyne_powder_attack4), then Fast powder (weapon_majolyne_powder_attack5).
  * It then stays at step 4 for random choices; a fallback blizzard does not restart the opening.
  */

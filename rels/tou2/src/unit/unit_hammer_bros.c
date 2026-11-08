@@ -724,7 +724,7 @@ EVT_END()
 
 /**
  * Resolves the fourth hammer of the four-hammer attack:
- * if an earlier hammer already hit (unit work 10 is 1) it applies the last hit directly,
+ * if an earlier hammer already hit (UNIT_WORK_THROW_HIT is 1) it applies the last hit directly,
  * otherwise it runs damage_check_event_sub with the last-hit flag.
  */
 static EVT_BEGIN(renzoku_attack_event_sub_last)

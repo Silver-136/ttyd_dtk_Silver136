@@ -468,14 +468,14 @@ EVT_END()
 
 /**
  * Talk script of the Show-off Koopa, a French-accented flirt.
- * If Goombella (party id 1) is with Mario, the first talk has him woo her (stg1_nok_10),
+ * If Goombella (PARTY_GOOMBELLA) is with Mario, the first talk has him woo her (stg1_nok_10),
  * she turns him down rudely (stg1_nok_11), he retreats (stg1_nok_12) and she asks Mario to leave (stg1_nok_13),
  * setting LSWF_NOK_00_KIZAYAROU_TALKED; later talks play stg1_nok_14 and her reply stg1_nok_15.
  * With any other partner he asks Mario where his Goomba companion is (stg1_nok_16).
  */
 static EVT_BEGIN(kizayarou_talk)
     CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
+    IF_INT_EQUAL(LW(0), PARTY_GOOMBELLA)
         IF_INT_EQUAL(LSWF_NOK_00_KIZAYAROU_TALKED, 0)
             CALL(evt_msg_print, 0, STRING("stg1_nok_10"), 0, 0)
             CALL(evt_party_set_dir_npc, 0, STRING("me"))

@@ -427,7 +427,7 @@ EVT_END()
 
 /**
  * Koops comes back out of his shell after a shell attack:
- * clears the spin flag (unit work 8) and rotation,
+ * clears the spin flag (UNIT_WORK_SPIN_ON) and rotation,
  * then unfolds through PNK_K_1 (6 frames of 45 degrees) and PNK_K_2 (6 frames of 15 degrees).
  */
 static EVT_BEGIN(_restore_koura_pose)
@@ -448,10 +448,10 @@ static EVT_BEGIN(_restore_koura_pose)
 EVT_END()
 
 /**
- * Starts the shell spin: sets the spin flag (unit work 8)
+ * Starts the shell spin: sets the spin flag (UNIT_WORK_SPIN_ON)
  * and launches a background loop that adds a Y rotation every frame until the flag is cleared.
- * The speed ramps by 1 degree per frame towards the target in unit work 9 and is negated
- * when unit work 10 is set.
+ * The speed ramps by 1 degree per frame towards the target in UNIT_WORK_SPIN_SPEED and is negated
+ * when UNIT_WORK_SPIN_REVERSE is set.
  */
 static EVT_BEGIN(_koura_rotate_start)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 1)
@@ -491,7 +491,7 @@ static EVT_BEGIN(_koura_rotate_start)
 EVT_END()
 
 /**
- * Ends the shell spin: clears the spin flag (unit work 8), which stops the rotation loop,
+ * Ends the shell spin: clears the spin flag (UNIT_WORK_SPIN_ON), which stops the rotation loop,
  * and resets his rotation to 0.
  */
 static EVT_BEGIN(_koura_rotate_stop)

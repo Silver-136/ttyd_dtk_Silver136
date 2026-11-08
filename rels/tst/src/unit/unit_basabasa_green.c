@@ -358,7 +358,7 @@ EVT_END()
  * Init script of the bat: registers its wait, attack,
  * damage (damage_event_ceil, for while it hangs) and confusion handlers and the ceiling-fall event,
  * sets the pose sound table and the offsets of its hit, cursor and status icon for the upside-down pose,
- * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
+ * and if it starts in the sky (UNIT_WORK_START_FLYING = 1) runs ceil_sky_event right away; then starts the idle event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

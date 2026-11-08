@@ -406,7 +406,7 @@ EVT_END()
 
 /**
  * Init event of Doopliss: installs wait, phase, attack, damage and default confusion events,
- * clears unit work 0 (the form: 0 first speech, 1 fighting, 2 as the Mario double)
+ * clears UNIT_WORK_TALK_STATE (the form: 0 first speech, 1 fighting, 2 as the Mario double)
  * and stores half of his maximum HP in work 1 as the transformation threshold.
  */
 static EVT_BEGIN(init_event)

@@ -136,8 +136,8 @@ s32 marioSlitButton(void) {
 }
 
 /**
- * FALSE while Mario is slipping through a gap or dropping through a floor crack in Paper Mode (slit states 0x50-0x52,
- * 0x5A-0x5E), TRUE otherwise; marioChkKey treats FALSE as no control.
+ * FALSE while Mario is slipping through a gap or dropping through a floor crack in Paper Mode (SLIT_STATE_GAP_ENTER to
+ * SLIT_STATE_GAP_EXIT, SLIT_STATE_CRACK_1 to SLIT_STATE_CRACK_5), TRUE otherwise; marioChkKey treats FALSE as no control.
  */
 BOOL marioSlitKeyDisable(void) {
     MarioWork* mario = marioGetPtr();
@@ -353,7 +353,7 @@ BOOL marioGetSlitFloorPos(Vec* out) {
 }
 
 /**
- * TRUE while Mario is passing through a gap in Paper Mode (slit states 0x50-0x5E);
+ * TRUE while Mario is passing through a gap in Paper Mode (SLIT_STATE_GAP_ENTER to SLIT_STATE_CRACK_5);
  * the partners check it.
  */
 BOOL marioChkSlitThrouh(void) {
@@ -373,7 +373,7 @@ BOOL marioChkSlitThrouh(void) {
     return FALSE;
 }
 
-/** TRUE on the last frame of a pass through a gap (slit state 0x52 or 0x5E). */
+/** TRUE on the last frame of a pass through a gap (SLIT_STATE_GAP_EXIT or SLIT_STATE_CRACK_5). */
 BOOL marioChkSlitThrouhEnd(void) {
     MarioWork* mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_JP
@@ -754,9 +754,9 @@ static inline void slitSetSide(MarioWork* m) {
 
 /**
  * Paper Mode motion (paper curse, hold R): Mario turns sideways and thin, walks and runs slowly,
- * slips through narrow gaps and bars (states 0x50-0x52, walls off while he passes),
- * drops through floor cracks (0x5A-0x5E), and turns back when R is released and there is room.
- * Scripts end it with their own animations (0x6E, 0x78).
+ * slips through narrow gaps and bars (SLIT_STATE_GAP_ENTER to SLIT_STATE_GAP_EXIT, walls off while he passes),
+ * drops through floor cracks (SLIT_STATE_CRACK_1 to SLIT_STATE_CRACK_5), and turns back when R is released and there is room.
+ * Scripts end it with their own animations (SLIT_STATE_SCRIPT_END_1, SLIT_STATE_LECTURE_END_1).
  */
 void mot_slit(void) {
     MarioWork* m = marioGetPtr();

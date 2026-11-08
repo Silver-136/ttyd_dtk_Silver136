@@ -4891,27 +4891,27 @@ USER_FUNC(monosiri_check) {
             break;
         }
         for (j = 0; j < f->count; j++) {
-            if (!swGet(f->list[j] + 0x117A)) {
+            if (!swGet(f->list[j] + GSWF_TATTLE_BASE)) {
                 evtSetValue(event, args[0], 1);
                 evtSetValue(event, args[1], f->list[j]);
                 return EVT_RETURN_DONE;
             }
         }
     }
-    if (swGet(GSWF_ID(GSWF_GOR_GATEKEEPER_DEFEATED)) && !swGet(0x1181)) {
+    if (swGet(GSWF_ID(GSWF_GOR_GATEKEEPER_DEFEATED)) && !swGet(UNIT_GUS + GSWF_TATTLE_BASE)) {
         evtSetValue(event, args[0], 1);
-        evtSetValue(event, args[1], 7);
+        evtSetValue(event, args[1], UNIT_GUS);
         return EVT_RETURN_DONE;
     }
-    if (swGet(GSWF_ID(GSWF_PIT_BONETAIL_DEFEATED)) && !swGet(0x1225)) {
+    if (swGet(GSWF_ID(GSWF_PIT_BONETAIL_DEFEATED)) && !swGet(UNIT_BONETAIL + GSWF_TATTLE_BASE)) {
         evtSetValue(event, args[0], 1);
-        evtSetValue(event, args[1], 0xAB);
+        evtSetValue(event, args[1], UNIT_BONETAIL);
         return EVT_RETURN_DONE;
     }
 #if VERSION >= VERSION_JP
-    if (swGet(GSWF_ID(GSWF_JIN_00_ATOMIC_BOO_DEFEATED)) && !swGet(0x11C6)) {
+    if (swGet(GSWF_ID(GSWF_JIN_00_ATOMIC_BOO_DEFEATED)) && !swGet(UNIT_ATOMIC_BOO + GSWF_TATTLE_BASE)) {
         evtSetValue(event, args[0], 1);
-        evtSetValue(event, args[1], 0x4C);
+        evtSetValue(event, args[1], UNIT_ATOMIC_BOO);
         return EVT_RETURN_DONE;
     }
 #endif
@@ -4926,7 +4926,7 @@ USER_FUNC(monosiri_on) {
     s32 id = evtGetValue(event, args[0]);
     TattleEntry* tattle = battleGetUnitMonosiriPtr(id);
 
-    swSet(id + 0x117A);
+    swSet(id + GSWF_TATTLE_BASE);
     evtSetValue(event, args[1], (EvtWord)msgSearch(tattle->enemyTag));
     return EVT_RETURN_DONE;
 }

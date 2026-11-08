@@ -327,10 +327,10 @@ EVT_END()
 /**
  * Run by the Fuzzy Horde's damage event, as the Horde, on the final hit of an attack once 500 or fewer Fuzzies
  * are left: waits 2 seconds;
- * from JP on it stops if the Horde is gone or the Gold Fuzzy's unit work 1 is already set, and otherwise sets it
+ * from JP on it stops if the Horde is gone or the Gold Fuzzy's UNIT_WORK_CHOROGUN_GONE is already set, and otherwise sets it
  * and pays out the Horde's coins and EXP (chorogun_dead_reward).
  * Then every swarm Fuzzy runs away (chorogun_escape_all) and a second later the Horde unit (the Gold Fuzzy's
- * unit work 2) is removed; the early demos only set the flag at the end.
+ * UNIT_WORK_CHOROGUN) is removed; the early demos only set the flag at the end.
  */
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)

@@ -511,7 +511,7 @@ EVT_END()
 
 /**
  * Loop started by init_event that runs for as long as the Pider exists:
- * unit work 1 is the thread's alpha (init sets 255, which stays);
+ * UNIT_WORK_THREAD_ALPHA is the thread's alpha (init sets 255, which stays);
  * once battle_end_event sets it to 254 it drops by 2 a frame down to 2, so the thread fades out.
  * Every frame piders_draw_yarn draws the thread with that alpha.
  */
@@ -537,7 +537,7 @@ EVT_END()
 
 /**
  * Entry event (btlevtcmd_SetEventEntry): sets the Pider's height to 180
- * and the lower end of its thread (unit work 2, which piders_draw_yarn draws from y = 400 down to) to 400,
+ * and the lower end of its thread (UNIT_WORK_THREAD_END_Y, which piders_draw_yarn draws from y = 400 down to) to 400,
  * waits 80 frames plus x / 10, then lowers the thread's end from 400 to 0 over 40 frames,
  * so the thread drops from the ceiling.
  */
@@ -705,9 +705,9 @@ EVT_END()
 
 /**
  * Lowers the Pider to the ground (kuutei): four step sounds (SFX_ENM_PAIDA_MOVE1 the first time,
- * which clears the first-time flag in unit work 3, else MOVE2), a sway, a dive down to y = 10,
+ * which clears the first-time flag in UNIT_WORK_FIRST_LOWER, else MOVE2), a sway, a dive down to y = 10,
  * which becomes its home; then clears the part attributes 0x600000 so hammers
- * and shell-toss moves can reach it again, and sets unit work 0 (height state) to 1.
+ * and shell-toss moves can reach it again, and sets UNIT_WORK_LOWERED (height state) to 1.
  */
 static EVT_BEGIN(move_kuutei_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_LOWER, LW(0))
@@ -740,7 +740,7 @@ EVT_END()
 /**
  * Raises the Pider into the air (kuuchu): a sway and four step sounds while it rises to y = 70,
  * which becomes its home; then sets the part attributes 0x600000 so hammer-like
- * and shell-toss-like moves cannot target it, and sets unit work 0 (height state) to 0.
+ * and shell-toss-like moves cannot target it, and sets UNIT_WORK_LOWERED (height state) to 0.
  */
 static EVT_BEGIN(move_kuuchu_event)
     SPAWN_EVENT(yure_event)
@@ -764,7 +764,7 @@ EVT_END()
  * unless it is instantly KO'd (STATUS_INSTANT_KILL) or cannot act,
  * the Pider changes height with move_kuuchu_event (air) or move_kuutei_event (ground).
  * The first living Pider (turn order 1 from piders_get_zyun) switches to the other height.
- * The others read piders_get_first_pos_attr (the first Pider's height state, unit work 0,
+ * The others read piders_get_first_pos_attr (the first Pider's height state, UNIT_WORK_LOWERED,
  * flipped when it can act): with an odd number of Piders each goes up when that value is 0 and down otherwise;
  * with an even number the odd-ordered ones do the same and the even-ordered ones the reverse.
  */
@@ -931,7 +931,7 @@ EVT_END()
  * Wind-up of the web attack: the Pider faces the target,
  * takes its attack pose (PAI_A_1, part 2 shown as PAI_A_2a at its position, pivot 30 scaled by its size,
  * or 20 Tiny / 40 Huge / 30 in the early demos) and swings part 2 to 110 degrees, holds 20 frames, back to 70,
- * holds 15, then to 100, each with the attack sound; the final angle is stored in unit work 4.
+ * holds 15, then to 100, each with the attack sound; the final angle is stored in UNIT_WORK_WINDUP_ANGLE.
  */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
@@ -993,7 +993,7 @@ EVT_END()
 
 /**
  * Shorter wind-up: like piders_attack_common_event1
- * but it swings part 2 from the angle in unit work 4 straight to 100 degrees in 5 frames and stores it again.
+ * but it swings part 2 from the angle in UNIT_WORK_WINDUP_ANGLE straight to 100 degrees in 5 frames and stores it again.
  * Nothing in this file runs it.
  */
 static EVT_BEGIN(piders_attack_common_event1_2)
@@ -1210,7 +1210,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * Resolves the last web ball at its target: if an earlier ball already hit that target (its flag in unit work 11
+ * Resolves the last web ball at its target: if an earlier ball already hit that target (its flag in UNIT_WORK_TARGET_HIT
  * to 13), the ball is hidden and the guard result
  * and damage are applied with the last-hit flag without another accuracy check;
  * otherwise damage_check_event_sub resolves it normally with the last-hit flag.

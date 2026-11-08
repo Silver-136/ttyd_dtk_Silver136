@@ -228,8 +228,8 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Init event of the first Iron Cleft: unit work 0 = 0
- * and unit work 1 is the other Iron Cleft's unit id (the second id from get_id),
+ * Init event of the first Iron Cleft: UNIT_WORK_SILENT = 0
+ * and UNIT_WORK_TWIN_ID is the other Iron Cleft's unit id (the second id from get_id),
  * then the shared setup init_event_sub.
  */
 static EVT_BEGIN(init_event1)
@@ -241,8 +241,8 @@ static EVT_BEGIN(init_event1)
 EVT_END()
 
 /**
- * Init event of the second Iron Cleft: unit work 0 = 1
- * and unit work 1 is the other Iron Cleft's unit id (the first id from get_id),
+ * Init event of the second Iron Cleft: UNIT_WORK_SILENT = 1
+ * and UNIT_WORK_TWIN_ID is the other Iron Cleft's unit id (the first id from get_id),
  * then the shared setup init_event_sub.
  */
 static EVT_BEGIN(init_event2)

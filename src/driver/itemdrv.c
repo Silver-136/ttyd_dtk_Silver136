@@ -1014,7 +1014,7 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
                 if (y < entry->position.y) {
                     hitDist = 10.0f + (entry->position.y - y);
                     if (hitDist > 0.0f) {
-                        hit = hitCheckAttr(0x80000000, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f);
+                        hit = hitCheckAttr(HIT_ATTR_MOBJ, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f);
                     }
                 }
                 if (!hit) {

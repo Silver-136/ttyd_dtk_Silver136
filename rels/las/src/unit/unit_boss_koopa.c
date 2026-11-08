@@ -569,7 +569,7 @@ EVT_END()
 
 /**
  * Phase event of Bowser: skipped while he is knocked out (STATUS_INSTANT_KILL, instant KO).
- * Before the player phase (after turn 1), while he can act, it handles his leaning state (unit work 0).
+ * Before the player phase (after turn 1), while he can act, it handles his leaning state (UNIT_WORK_LEANING).
  * After the player phase it runs harf_hp_event so he can speak when his HP gets low.
  */
 static EVT_BEGIN(phase_event)
@@ -621,7 +621,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Event of Bowser when his HP first falls below the threshold stored in unit work 2:
+ * Event of Bowser when his HP first falls below the threshold stored in UNIT_WORK_HALF_HP:
  * if leaning forward, he groans and straightens up (KPA_U_3); the camera zooms in and he speaks (stg8_las_100) in a new stance (KPA_T_3, KPA_S_4).
  */
 static EVT_BEGIN(harf_hp_event)

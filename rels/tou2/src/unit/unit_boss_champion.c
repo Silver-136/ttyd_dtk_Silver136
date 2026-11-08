@@ -605,7 +605,7 @@ EVT_END()
  * Init event of Rawk Hawk: registers his wait, phase, attack,
  * damage and entry events (confusion uses the default confuse event),
  * clears the iron frame from the ceiling with init_ceil,
- * resets his phase counter in unit work 0 and sets his walk and run footstep sounds, then starts the wait event.
+ * resets his phase counter in UNIT_WORK_HP_STAGE and sets his walk and run footstep sounds, then starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -957,7 +957,7 @@ EVT_END()
 
 /**
  * Rawk Hawk's move choice. He uses an enemy item if one fits.
- * Otherwise unit work 0 (set by phase_event) picks the move: 0 chooses between Drop Kick and Screw Attack;
+ * Otherwise UNIT_WORK_HP_STAGE (set by phase_event) picks the move: 0 chooses between Drop Kick and Screw Attack;
  * 1 does Flying Chop and moves to 2; 2 chooses among the three;
  * 3 goes to the ceiling, does Roof Shake and moves to 4;
  * 4 draws among the three ground attacks and Roof Shake (Roof Shake only if he is not Tiny and the frame is down)

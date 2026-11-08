@@ -355,7 +355,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Sets up the Buzzy Beetle's handlers according to unit work 0.
+ * Sets up the Buzzy Beetle's handlers according to UNIT_WORK_CEILING.
  * With 0 it is on the floor: wait, attack, damage
  * and confusion scripts are installed (confusion reuses the attack script),
  * ceiling fall is disabled and its cursor offset is cleared.
@@ -674,7 +674,7 @@ EVT_END()
 /**
  * Counter-damage script of the Buzzy Beetle on the ceiling:
  * removes the ceiling attributes and tables, restores the floor pose and data tables,
- * resets unit work 0 and the hit offsets, drops its home position to the floor,
+ * resets UNIT_WORK_CEILING and the hit offsets, drops its home position to the floor,
  * re-runs init_event2 and runs the shared counter-damage script.
  */
 static EVT_BEGIN(counter_damage_event_ceil)

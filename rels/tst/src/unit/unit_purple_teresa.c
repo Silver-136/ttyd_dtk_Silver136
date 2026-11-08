@@ -327,7 +327,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Battle init script for the Dark Boo: installs the wait, attack, damage and confusion handlers,
- * clears unit work 0, lifts the unit and its home position to y = 15 and starts the wait event.
+ * clears UNIT_WORK_LIFTED, lifts the unit and its home position to y = 15 and starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -736,7 +736,7 @@ EVT_END()
 
 /**
  * One Boo's part of move_event, for the Boo or Dark Boo in LW(3):
- * after a random 60 to 80 frame delay (none for the Dark Boo itself) it marks the Boo as moved (unit work 0 = 1,
+ * after a random 60 to 80 frame delay (none for the Dark Boo itself) it marks the Boo as moved (UNIT_WORK_LIFTED = 1,
  * so each Boo does this once a battle), makes it untargetable by hammer-like
  * and shell-toss-like attacks (part attributes 0x600000) and,
  * while spinning for 60 frames (the Dark Boo itself does not spin but shows its talk pose),

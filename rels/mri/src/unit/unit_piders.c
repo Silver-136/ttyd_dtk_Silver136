@@ -945,7 +945,7 @@ EVT_END()
  * First part of the Pider's attack: turns to face the target,
  * plays the attack pose and puts part 2 (the attack part) at the Pider with its pivot at 20, 30 or 40 units in demos,
  * or 30 times its status-size multiplier in retail, then tilts part 2 (c_paid, pose PAI_A_2a) toward the target over 15 frames (0 to
- * 110 to 70 to 100 degrees) and keeps the final angle in unit work 4.
+ * 110 to 70 to 100 degrees) and keeps the final angle in UNIT_WORK_WINDUP_ANGLE.
  * The web-wad itself is part 3, launched by piders_attack_common_event3.
  * Guess: part 2 is the Pider's body rearing up to aim.
  */

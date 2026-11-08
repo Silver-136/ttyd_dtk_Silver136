@@ -1601,7 +1601,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         height = 10.0f;
     }
     if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
-        hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }
@@ -1618,7 +1618,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.4f * npc->height;
     if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
-        hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }
@@ -1635,7 +1635,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.75f * npc->height;
     if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
-        hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }

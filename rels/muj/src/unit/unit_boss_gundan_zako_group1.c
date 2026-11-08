@@ -306,7 +306,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
 
 /**
  * Init event of X-Naut group 1: installs its wait, attack, damage and confusion events,
- * clears unit work 0 (the pre-landing hit cue) and moves it to z = 15;
+ * clears UNIT_WORK_HIT_CUE (the pre-landing hit cue) and moves it to z = 15;
  * Lord Crump's init already registered the X-Naut crowd.
  */
 static EVT_BEGIN(init_event)
@@ -473,7 +473,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Hit check of X-Naut group 1's attack: waits for the lead X-Naut's pre-landing cue (unit work 0, raised when
+ * Hit check of X-Naut group 1's attack: waits for the lead X-Naut's pre-landing cue (UNIT_WORK_HIT_CUE, raised when
  * its landing timer reaches 10), then starts the target's avoid pose on a dodge
  * or applies the hit with the action-command defence.
  */

@@ -236,8 +236,8 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Init script of the red Iron Cleft: marks it as unit work 0 = 0
- * and stores the green Cleft's unit id in unit work 1 (from get_id), then runs init_event_sub.
+ * Init script of the red Iron Cleft: marks it as UNIT_WORK_GREEN = 0
+ * and stores the green Cleft's unit id in UNIT_WORK_OTHER_ID (from get_id), then runs init_event_sub.
  */
 static EVT_BEGIN(init_event1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, 0)
@@ -248,8 +248,8 @@ static EVT_BEGIN(init_event1)
 EVT_END()
 
 /**
- * Init script of the green Iron Cleft: marks it as unit work 0 = 1
- * and stores the red Cleft's unit id in unit work 1 (from get_id), then runs init_event_sub.
+ * Init script of the green Iron Cleft: marks it as UNIT_WORK_GREEN = 1
+ * and stores the red Cleft's unit id in UNIT_WORK_OTHER_ID (from get_id), then runs init_event_sub.
  */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, 1)

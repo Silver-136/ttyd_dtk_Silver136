@@ -680,8 +680,8 @@ EVT_END()
 
 /**
  * Damage event of Macho Grubba: default damage reaction, then,
- * if he was hit in the middle of one of his pose moves (unit work 2 is 1, 2, 3, 4 or 6) a short pause is added
- * and the camera returns to the default view, and unit work 2 is cleared.
+ * if he was hit in the middle of one of his pose moves (UNIT_WORK_SELF_BUFF is 1, 2, 3, 4 or 6) a short pause is added
+ * and the camera returns to the default view, and UNIT_WORK_SELF_BUFF is cleared.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -722,7 +722,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Sets Macho Grubba's size factor to LW(0), kept as a float in unit work 3,
+ * Sets Macho Grubba's size factor to LW(0), kept as a float in UNIT_WORK_BASE_SCALE,
  * and rescales the size-dependent offsets by the ratio new / old:
  * the hit offset becomes (26, 77, 0) times (ratio - 1), the hit cursor offset (25, 81, 0) times (ratio - 1),
  * and the HP gauge offset is multiplied by the ratio. phase_event uses it when he swells to 1.3 times his size.
@@ -759,8 +759,8 @@ EVT_BEGIN(base_size_change)
 EVT_END()
 
 /**
- * Macho Grubba's HP phases, checked after the player's phase while he can act (unit work 1 is the phase,
- * unit work 0 is reset to 0).
+ * Macho Grubba's HP phases, checked after the player's phase while he can act (UNIT_WORK_HP_STAGE is the phase,
+ * UNIT_WORK_ACTION_COUNT is reset to 0).
  * At 75% HP or below (phase 0 to 1) he strikes his entry pose and says stg3_tou_471_17.
  * At 50% or below (1 to 2) he says stg3_tou_471_18,
  * then swells in two spinning steps to 1.3 times his size (with the blur camera and the growth sounds)
@@ -1046,7 +1046,7 @@ EVT_END()
 
 /**
  * Macho Grubba's move choice, run once per action.
- * Unit work 0 counts the actions this turn (reset by phase_event) and unit work 1 is the HP phase.
+ * Unit work 0 counts the actions this turn (reset by phase_event) and UNIT_WORK_HP_STAGE is the HP phase.
  * While he is not Fast (STATUS_FAST) he uses Macho Speed.
  * Otherwise his first action of the turn is a pose move drawn at random (Build Up, Body, Footwork,
  * and in phase 2 or later also Posing, the code's names) and his second is a real attack:

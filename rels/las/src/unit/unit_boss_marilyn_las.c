@@ -469,7 +469,7 @@ EVT_END()
  * Marilyn's turn: uses an enemy item if the item-use check selects one;
  * otherwise draws lots between the shadow-slip attack,
  * the lightning attack and a charge-up (weights 40/35/25 in JP and later, 50/25/25 in the early demos).
- * The charge-up has weight 25 only while she has charged fewer than twice in a row (unit work 9 counts charges
+ * The charge-up has weight 25 only while she has charged fewer than twice in a row (UNIT_WORK_CHARGE_COUNT counts charges
  * and resets after either attack).
  */
 static EVT_BEGIN(attack_event)

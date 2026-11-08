@@ -519,7 +519,7 @@ static BattleDataEntry data_table_bunsin[] = {
 /**
  * Init script of the Wizzerd: registers its wait, attack, damage and confusion handlers,
  * lifts its home position to y 20, sets up its four floating hands (hand_init) with their resting offsets,
- * starts hand_ctrl_event to animate them, and clears unit work 4 (set on its copies) and unit work 6.
+ * starts hand_ctrl_event to animate them, and clears UNIT_WORK_BUNSIN (set on its copies) and UNIT_WORK_FADING.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -1428,7 +1428,7 @@ static EVT_BEGIN(recover_magic_event)
 EVT_END()
 
 /**
- * Wait script of the Wizzerd: unless it is a plain copy (unit work 4 set) its copies also play their idle pose,
+ * Wait script of the Wizzerd: unless it is a plain copy (UNIT_WORK_BUNSIN set) its copies also play their idle pose,
  * and each of the four hands bobs between two positions and poses at random intervals of 15 to 30 frames.
  * Under statuses 1, 2 or 9 the hands hold still (MAH_Z_2).
  */

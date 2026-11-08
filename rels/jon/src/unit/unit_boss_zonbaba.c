@@ -622,8 +622,8 @@ EVT_END()
 /**
  * Init script of Bonetail: marks the unit with flag 0x1000000, registers the wait, phase,
  * attack and damage handlers, uses the default confusion handler,
- * sets part 1 as the talking body and its base scale to (1.3, 1.3, 0.5), clears unit work 0 (stage 0),
- * sets unit work 1 to 2 (recoveries left), clears unit work 2 (has spoken the recovery line)
+ * sets part 1 as the talking body and its base scale to (1.3, 1.3, 0.5), clears UNIT_WORK_HP_STAGE (stage 0),
+ * sets unit work 1 to 2 (recoveries left), clears UNIT_WORK_RECOVER_TALK_DONE (has spoken the recovery line)
  * and installs battle_entry_event.
  */
 static EVT_BEGIN(init_event)
@@ -1189,7 +1189,7 @@ EVT_END()
  * After an item check it draws lots by stage, with weights stomp 25, bite 20 and 10 each for the cold,
  * confusion, sleep and tiny breaths.
  * From stage 1 it can also heal itself (recover_event), with a weight of 20 (50 in stage 2),
- * while it has recoveries left in unit work 1. The demo builds use weights 30 and 15 for the stomp and bite.
+ * while it has recoveries left in UNIT_WORK_RECOVERS_LEFT. The demo builds use weights 30 and 15 for the stomp and bite.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))

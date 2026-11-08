@@ -501,7 +501,7 @@ EVT_END()
  * Unison phase script of the Ice Puff, run before the player's phase:
  * skipped if it cannot act or its barrier is up;
  * otherwise it has a 50% chance to float up to y=40 (making part 1 untargetable by ground attacks,
- * attributes 0x600000) or back down to y=10, alternating via unit work 0.
+ * attributes 0x600000) or back down to y=10, alternating via UNIT_WORK_LOW.
  */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)

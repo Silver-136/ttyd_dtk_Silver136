@@ -328,7 +328,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Init event of the Red Spike Top: reads unit work 0 (0 = on the floor,
+ * Init event of the Red Spike Top: reads UNIT_WORK_ON_CEILING (0 = on the floor,
  * anything else = hanging from the ceiling),
  * applies the matching event set with init_event2, and starts the wait event.
  */

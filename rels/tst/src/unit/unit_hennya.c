@@ -196,7 +196,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Init script of the Spunia: sets unit flag 0x1000000 and registers its wait, attack,
+ * Init script of the Spunia: sets BATTLE_UNIT_FLAG_SOLID_MODEL and registers its wait, attack,
  * damage and confusion handlers (confusion reuses the attack script).
  */
 static EVT_BEGIN(init_event)

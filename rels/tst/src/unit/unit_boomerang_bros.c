@@ -276,7 +276,7 @@ EVT_END()
  * Chooses the Boomerang Bro's attack: on a first strike (BATTLE_FLAG_FIRST_ATTACK) it always makes the normal throw;
  * otherwise it runs a selected enemy-item script if one is returned, ending the turn.
  * If no item script is returned, with 3 HP or less it has a 30% chance of the double-throw renzoku_attack_event,
- * else the normal boomerang throw (normal_attack_event). Clears unit work 7 (action-command defence result already taken) first.
+ * else the normal boomerang throw (normal_attack_event). Clears UNIT_WORK_AC_DEFENCE_DONE (action-command defence result already taken) first.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 0)
@@ -312,7 +312,7 @@ EVT_END()
 /**
  * Resolves a boomerang hit on the target in LW(3) and LW(4) with the weapon in LW(6):
  * runs the pre-damage check, and a hit applies the damage;
- * only the first resolved hit of a throw is allowed to apply the action-command defence (unit work 7 marks that
+ * only the first resolved hit of a throw is allowed to apply the action-command defence (UNIT_WORK_AC_DEFENCE_DONE marks that
  * it has been used), with LW(7) = 1 for a last hit (a return-pass hit of the last boomerang).
  */
 static EVT_BEGIN(damage_check_sub)
@@ -370,7 +370,7 @@ EVT_END()
 /**
  * Last hit on a target (return pass of the last boomerang, LW(14) = 1):
  * if the outbound pass already hit (LW(0) = 1), it applies CheckDamage directly,
- * taking ResultACDefence first only if unit work 7 is clear. If the outbound pass did not hit,
+ * taking ResultACDefence first only if UNIT_WORK_AC_DEFENCE_DONE is clear. If the outbound pass did not hit,
  * it resolves the hit with damage_check_sub (LW(7) = 1).
  */
 static EVT_BEGIN(damage_check_last)
@@ -393,7 +393,7 @@ EVT_END()
  * back to it (ATTACK3).
  * A watcher hits the first target (unit work 1 and 3) and then the second (2 and 4) as it passes them on the way
  * out, and the second and the first again on the way back, those return hits being last hits when LW(14) is set.
- * Then the boomerang is hidden (ATTACK4) and unit work 0 goes up by one.
+ * Then the boomerang is hidden (ATTACK4) and UNIT_WORK_RETURNED goes up by one.
  */
 EVT_BEGIN(boomerang_move_event)
     // The Bro hurls the boomerang: it appears in his hand with the throw sound and starts to spin.
@@ -525,7 +525,7 @@ EVT_END()
  * The Boomerang Bro's normal attack, aimed at all enemies:
  * it records every target in unit work 1 to 4, winds up (BRO_A_2A),
  * then spawns boomerang_move_event to fly the boomerang through the targets and waits
- * until it has come back (unit work 0) before returning to BRO_S_1.
+ * until it has come back (UNIT_WORK_RETURNED) before returning to BRO_S_1.
  */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -594,7 +594,7 @@ EVT_END()
  * The Boomerang Bro's double throw (renzoku = chained):
  * like the normal attack but with weapon_boomerang_bros_renzoku_attack,
  * and the boomerang goes out and comes back twice (the second pass is the one that finishes the attack,
- * unit work 0 = 2).
+ * UNIT_WORK_RETURNED = 2).
  */
 static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

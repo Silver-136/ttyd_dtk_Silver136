@@ -1150,18 +1150,18 @@ static void stg2_21_init02(void) {
  */
 static void stg2_21_01_init(void) {
     swByteSet(GSW_MRI_PUNI_TRAPPED_BITS, 0xF6);
-    swByteSet(0x28D, 0xFF);
-    swByteSet(0x28E, 0xFF);
-    swByteSet(0x28F, 0xFF);
-    swByteSet(0x290, 0xFF);
-    swByteSet(0x291, 0xFF);
-    swByteSet(0x292, 0xFF);
-    swByteSet(0x293, 0xFF);
-    swByteSet(0x294, 0xFF);
-    swByteSet(0x295, 0xFF);
-    swByteSet(0x296, 0xFF);
-    swByteSet(0x297, 0xFF);
-    swByteSet(0x298, 0x7F);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 1, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 2, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 3, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 4, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 5, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 6, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 7, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 8, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 9, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 10, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 11, 0xFF);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 12, 0x7F);
 }
 
 /** Story point STG2_21_02 "Matching the Patterns" (mri_09): sets GSWF_MRI_17_PILLAR_SCENE_SEEN. */
@@ -1185,18 +1185,18 @@ static void stg2_21_04_init(void) {
  */
 static void stg2_21_06_init00(void) {
     swByteSet(GSW_MRI_PUNI_TRAPPED_BITS, 0);
-    swByteSet(0x28D, 0);
-    swByteSet(0x28E, 0);
-    swByteSet(0x28F, 0);
-    swByteSet(0x290, 0);
-    swByteSet(0x291, 0);
-    swByteSet(0x292, 0);
-    swByteSet(0x293, 0);
-    swByteSet(0x294, 0);
-    swByteSet(0x295, 0);
-    swByteSet(0x296, 0);
-    swByteSet(0x297, 0);
-    swByteSet(0x298, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 1, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 2, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 3, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 4, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 5, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 6, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 7, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 8, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 9, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 10, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 11, 0);
+    swByteSet(GSW_MRI_PUNI_TRAPPED_BITS + 12, 0);
 }
 
 /** Story point STG2_21_06 "The 101 Puni Switch" (mri_13): sets GSWF_MRI_16_WATER_SWITCH_PRESSED. */

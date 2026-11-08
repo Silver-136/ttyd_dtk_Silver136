@@ -442,7 +442,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init script of the Dark Puff: installs its wait, unison-phase, attack,
  * damage and confusion handlers (attack_event doubles as the confused turn),
- * clears unit work 0 (0 = floating high) and 1, and starts the charge-glow loop.
+ * clears UNIT_WORK_LOWERED (0 = floating high) and unit work 1, and starts the charge-glow loop.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -510,8 +510,8 @@ EVT_END()
 
 /**
  * Before the player's phase, if the Dark Puff can act and is not charged, 50% of the time it changes height:
- * down to 10 (hammers and shell tosses can reach it, unit work 0 = 1)
- * or back up to 40 (out of their reach, unit work 0 = 0).
+ * down to 10 (hammers and shell tosses can reach it, UNIT_WORK_LOWERED = 1)
+ * or back up to 40 (out of their reach, UNIT_WORK_LOWERED = 0).
  */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)

@@ -323,7 +323,7 @@ EVT_END()
 /**
  * Damage event of the Red Chomp: sets unit work 0 to 1 and work 2 to 2 and,
  * with attribute 4 (kFloating) set on it, runs the default damage reaction,
- * then clears the attribute and unit work 2.
+ * then clears the attribute and UNIT_WORK_CHAIN_MODE.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

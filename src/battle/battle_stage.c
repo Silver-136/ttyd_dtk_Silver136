@@ -740,7 +740,7 @@ BattleSpotWork* BatSpotGetPtr(void) {
 /**
  * Allocates the five spotlight cones from the battle heap at battle start
  * and places them in a row (x -100 to 100, z -50), white, 20 x 20 x 150.
- * They stay hidden until _lvup_spot_on sets flag 2.
+ * They stay hidden until _lvup_spot_on sets SPOT_FLAG_VISIBLE.
  */
 static void batSpotInit(void) {
     int i;

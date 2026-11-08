@@ -281,7 +281,7 @@ static BattleWeapon weapon_bomhei_bomb = {
 
 /**
  * The Bob-omb explodes: it shakes the camera, hides itself,
- * stops the fuse hiss (unit work 0 is the sound handle, then -1),
+ * stops the fuse hiss (UNIT_WORK_SPARK_SFX is the sound handle, then -1),
  * plays SFX_BTL_ENEMY_DIE1_2 and SFX_BTL_ENM_BOMB_ATTACK2 with the sandars blast effect, clears any fog,
  * stores its coin and experience rewards, waits one second and removes itself from the battle.
  * Before removal, demos wait for the active unit's attack to end; later versions do so only when
@@ -323,7 +323,7 @@ EVT_END()
 
 /**
  * Init script of the Bob-omb: registers its wait, attack, damage and confusion handlers,
- * sets unit work 0 (the fuse sound id) to -1 and sets its run and walk sounds.
+ * sets UNIT_WORK_SPARK_SFX (the fuse sound id) to -1 and sets its run and walk sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -684,8 +684,8 @@ static EVT_BEGIN(attack_event_spark)
 EVT_END()
 
 /**
- * Wait script of the lit Bob-omb: plays the idle pose and, if no fuse sound is playing yet (unit work 0 is -1),
- * starts the looping SFX_ENM_BOMB_WAIT1 and remembers its handle in unit work 0.
+ * Wait script of the lit Bob-omb: plays the idle pose and, if no fuse sound is playing yet (UNIT_WORK_SPARK_SFX is -1),
+ * starts the looping SFX_ENM_BOMB_WAIT1 and remembers its handle in UNIT_WORK_SPARK_SFX.
  */
 static EVT_BEGIN(wait_event_spark)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

@@ -575,7 +575,7 @@ EVT_END()
  * A sibling loop checks the target as the fireball passes its hit position (damage_check_last when LW(14) is 1,
  * else damage_check_no_last); a hit hides the fireball and ends the flight,
  * a miss lets it bounce on until it leaves the stage (x beyond 250).
- * At the end the part is hidden and unit work 1 (fireballs finished) goes up by one.
+ * At the end the part is hidden and UNIT_WORK_FIRE_DONE (fireballs finished) goes up by one.
  */
 EVT_BEGIN(fire_move_event)
     // The Fire Bro throws a fireball: it appears in its hand and starts spinning.
@@ -747,7 +747,7 @@ EVT_END()
 
 /**
  * The Fire Bro's single fireball: picks a target, throws one fireball ("BRO_A_1A") by spawning fire_move_event,
- * and waits until it reports back (unit work 1).
+ * and waits until it reports back (UNIT_WORK_FIRE_DONE).
  */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -797,7 +797,7 @@ EVT_END()
 /**
  * The Fire Bro's two-fireball attack (weapon_fire_bros_renzoku_attack):
  * throws one fireball, 32 frames later a second one, spawning fire_move_event each time,
- * and waits until both have reported back (unit work 1 reaches 2).
+ * and waits until both have reported back (UNIT_WORK_FIRE_DONE reaches 2).
  */
 static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -853,7 +853,7 @@ EVT_END()
  * after declaring the attack it stores a target from fire_bros_nagemakuri_set_target in the work of each
  * fireball part 2 to 7, then throws the six fireballs one after another (BRO_A_2A, 35 frames apart),
  * each with nagemakuri_judge_last_attack_event deciding whether it is the last at its target
- * and fire_move_event flying it. It waits until unit work 1 shows all six have finished.
+ * and fire_move_event flying it. It waits until UNIT_WORK_FIRE_DONE shows all six have finished.
  */
 static EVT_BEGIN(nagemakuri_attack_event)
     // Choose the targets for the Fire Bro's barrage of fireballs.

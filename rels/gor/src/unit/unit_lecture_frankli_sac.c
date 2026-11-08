@@ -427,7 +427,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Phase event that scripts the Star Power lesson: unit work 0 is the lesson step.
+ * Phase event that scripts the Star Power lesson: UNIT_WORK_LESSON is the lesson step.
  * On turn 1 he introduces the AP gauge (mac_0_b_t3_000, 001) with a spotlight on it (spot_square),
  * actend_event handles the later steps, branching on unit work 1 and 2.
  */

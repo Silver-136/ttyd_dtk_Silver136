@@ -404,7 +404,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Registers the Boo's wait, attack and damage events (confusion reuses the attack event),
- * clears unit work 0 (set once it has risen out of reach in move_event),
+ * clears UNIT_WORK_RAISED (set once it has risen out of reach in move_event),
  * puts it 15 units above the ground and starts the idle loop.
  */
 static EVT_BEGIN(init_event)
@@ -806,7 +806,7 @@ static EVT_BEGIN(move_event)
 EVT_END()
 
 /**
- * Spawned by move_event for the Boo in LW(3): marks its unit work 0,
+ * Spawned by move_event for the Boo in LW(3): marks its UNIT_WORK_RAISED,
  * makes it untargetable by hammer and shell-toss attacks and raises it to height 40 as its new home.
  * The acting Boo starts rising at once and changes to T_1 after 30 frames;
  * the others wait 60-80 frames and spin as they rise.

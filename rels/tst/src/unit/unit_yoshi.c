@@ -291,7 +291,7 @@ EVT_END()
 
 /**
  * Init for Yoshi: registers his wait, attack, damage, confusion and entry scripts and his walk,
- * run and jump sounds, clears unit work 2 (set while Ground Pound runs)
+ * run and jump sounds, clears UNIT_WORK_GROUND_POUND (set while Ground Pound runs)
  * and loads the model for his hatched colour.
  */
 static EVT_BEGIN(init_event)
@@ -1768,9 +1768,9 @@ EVT_END()
  * Flight of one of Yoshi's eggs (part LW(12)): it leaves Yoshi,
  * spins and dives at speed 5 to the hit position of the target LW(3), LW(4),
  * where it bursts with the egg sounds and a small bomb effect.
- * The pre-check result kept in part work 5 decides between the target's avoid and the hit,
- * which uses the weapon in part work 2 with statuses applied on any hit (0x40000000) and the last-hit flag
- * when part work 6 is set.
+ * The pre-check result kept in PARTS_WORK_PRECHECK decides between the target's avoid and the hit,
+ * which uses the weapon in PARTS_WORK_WEAPON with statuses applied on any hit (0x40000000) and the last-hit flag
+ * when PARTS_WORK_LAST_AT_TARGET is set.
  */
 EVT_BEGIN(_egg_attack_event)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
@@ -2156,7 +2156,7 @@ USER_FUNC(_get_yoshi_slide_distance) {
 /**
  * args: unit id, target x, target y (unused), target z.
  * Slides the unit 15 frames towards the target x and moves z to the target;
- * unit work 5 falls from 100 to 50 with the distance covered.
+ * UNIT_WORK_STEP_PITCH_SCALE falls from 100 to 50 with the distance covered.
  */
 USER_FUNC(_yoshi_slide_move) {
     BattleWork* wp = _battleWorkPointer;

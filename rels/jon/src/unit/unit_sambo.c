@@ -539,8 +539,8 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Init event of the Pokey: installs its wait, attack, damage and confusion events,
- * sets unit work 0 (its body length, in segments) to 4, applies the matching height (_body_param_set),
- * clears unit work 1 (its inherited summon depth) and sets its run and walk sounds.
+ * sets UNIT_WORK_BODY_COUNT (its body length, in segments) to 4, applies the matching height (_body_param_set),
+ * clears UNIT_WORK_CALL_DEPTH (its inherited summon depth) and sets its run and walk sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -579,7 +579,7 @@ EVT_END()
 
 /**
  * Damage event of the Pokey: runs the default damage handling for the segment that is currently on top,
- * picked from the body length in unit work 0 (1 to 4 gives part 4 to 1).
+ * picked from the body length in UNIT_WORK_BODY_COUNT (1 to 4 gives part 4 to 1).
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -601,7 +601,7 @@ EVT_END()
 /**
  * Damage event of the Pokey that loses its top segment:
  * with only its head left it just plays the damage pose (or the no-damage motion); otherwise it
- * takes one off the body length (unit work 0), re-applies the height and the status icon,
+ * takes one off the body length (UNIT_WORK_BODY_COUNT), re-applies the height and the status icon,
  * cut and kiss offsets for the shorter stack, and drops a loose segment (part 5) that hops twice to the
  * floor and blinks out.
  */
@@ -729,7 +729,7 @@ EVT_END()
 /**
  * Damage event of the Pokey for a hammer blow-away hit (data table tag 18,
  * damage patterns 14 and 16: Super and Ultra Hammer). With
- * only its head left (unit work 0 = 1) it takes the shot-away damage.
+ * only its head left (UNIT_WORK_BODY_COUNT = 1) it takes the shot-away damage.
  * Otherwise it loses a segment: the loose segment
  * (part 5) is knocked through each ally after it in turn, hitting them with marioWeapon_KaitenHammerInvolved
  * (pattern 15) or marioWeapon_UltraHammerInvolved, then flies off the stage edge; with pattern 16 the
@@ -1001,7 +1001,7 @@ EVT_END()
  * The Pokey's head attack for a stack of two to four segments:
  * it winds up by tilting back, leans over at the target
  * and brings the whole stack down on it (rotating z with the attack sounds), then straightens up and walks back.
- * The weapon used is weapon_sambo_head_attack_2 to 4 according to the body length (unit work 0).
+ * The weapon used is weapon_sambo_head_attack_2 to 4 according to the body length (UNIT_WORK_BODY_COUNT).
  */
 static EVT_BEGIN(attack_head_2_event)
     // Choose a target with the weapon that matches the stack height (2 to 4 segments).
@@ -1758,7 +1758,7 @@ static BattleUnitSetup entry_sambo = {
 };
 
 /**
- * Idle event: shows the pose table entry for the segment currently on top (unit work 0 of 1 to 4 gives part 4 to
+ * Idle event: shows the pose table entry for the segment currently on top (UNIT_WORK_BODY_COUNT of 1 to 4 gives part 4 to
  * 1).
  */
 static EVT_BEGIN(wait_event)
@@ -1809,7 +1809,7 @@ static EVT_BEGIN(sambo_rabbit_move)
 EVT_END()
 
 /**
- * Sets the unit's height and cut height from its body length in unit work 0:
+ * Sets the unit's height and cut height from its body length in UNIT_WORK_BODY_COUNT:
  * 20 per segment (1 to 4 segments gives 20, 40, 60 and 80).
  */
 static EVT_BEGIN(_body_param_set)

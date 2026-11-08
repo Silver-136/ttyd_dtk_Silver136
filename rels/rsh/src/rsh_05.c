@@ -2056,7 +2056,7 @@ static EVT_BEGIN(evt_access)
 EVT_END()
 
 /**
- * Trigger for the bottle shelf (bin_2): the first time (LSWF 12) Mario finds a Power Punch item (stg6_rsh_277,
+ * Trigger for the bottle shelf (bin_2): the first time (LSWF_RSH_05_BIN_POWER_PUNCH) Mario finds a Power Punch item (stg6_rsh_277,
  * item-get); afterwards it only prints stg6_rsh_279.
  */
 static EVT_BEGIN(evt_access2)

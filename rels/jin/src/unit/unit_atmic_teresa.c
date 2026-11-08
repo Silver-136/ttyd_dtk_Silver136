@@ -440,7 +440,7 @@ EVT_END()
 
 /**
  * Attack event of the Atomic Boo: runs a selected enemy-item script if one is returned.
- * While its face is visible (unit work 0 is 0) it picks 30/70 kaokakusi_event (hides its face),
+ * While its face is visible (UNIT_WORK_FACE_HIDDEN is 0) it picks 30/70 kaokakusi_event (hides its face),
  * 20/70 press_event and 20/70 bikkuri_event; while its face is hidden it picks 50/50 between surprise_event
  * and breath_event.
  */

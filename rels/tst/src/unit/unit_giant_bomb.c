@@ -606,8 +606,8 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init script of the Bob-ulk: registers its wait, phase,
  * attack and damage handlers and the default confusion handler.
- * Unit work 0 (fuse lit) is cleared, unit work 1 (fuse stages left) is 3,
- * unit work 2 (fuse sound handle) is -1 and unit work 3 (guard cycle) is 0.
+ * Unit work 0 (fuse lit) is cleared, UNIT_WORK_FUSE_LEFT (fuse stages left) is 3,
+ * UNIT_WORK_FUSE_SFX (fuse sound handle) is -1 and unit work 3 (guard cycle) is 0.
  * It sets the fuse part's pose (F_1), the pose sound timing table and the draw callback for the fuse flame.
  */
 static EVT_BEGIN(init_event)

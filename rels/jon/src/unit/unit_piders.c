@@ -947,7 +947,7 @@ EVT_END()
  * First part of the Pider's attack: shows the attack pose and puts part 2 (the attack part) at the unit,
  * then swings it back in three beats with the attack sound (rotation 0 to 110, 110 to 70,
  * 70 to 100 over 5 frames each, mirrored by the facing in LW(8)).
- * The part's pivot height depends on the unit's size status, and the final angle is stored in unit work 4.
+ * The part's pivot height depends on the unit's size status, and the final angle is stored in UNIT_WORK_WINDUP_ANGLE.
  */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
@@ -1009,7 +1009,7 @@ EVT_END()
 
 /**
  * Variant of piders_attack_common_event1 that skips the first two beats:
- * it starts from the angle saved in unit work 4
+ * it starts from the angle saved in UNIT_WORK_WINDUP_ANGLE
  * and swings the attack part to 100 over 5 frames with the attack sound, then stores the angle again.
  */
 static EVT_BEGIN(piders_attack_common_event1_2)

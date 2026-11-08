@@ -226,7 +226,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init script of Dull Bones: installs the wait, attack,
  * damage and confusion handlers (confusion reuses the attack),
- * clears unit work 1 (reward paid flag) and sets its landing sound, and starts the wait event.
+ * clears UNIT_WORK_REWARD_GIVEN (reward paid flag) and sets its landing sound, and starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -252,7 +252,7 @@ EVT_END()
 
 /**
  * Real death script of Dull Bones: spins it for 48 frames with the defeat sound, shows a smoke puff,
- * and the first time pays the coins, experience and star points (unit work 1 marks them as paid).
+ * and the first time pays the coins, experience and star points (UNIT_WORK_REWARD_GIVEN marks them as paid).
  * It then tilts it for 30 frames, collects any item it held,
  * and if the killing hit was flagged 0x400 removes the unit for good.
  */
@@ -310,10 +310,10 @@ EVT_END()
 
 /**
  * Fake death script of Dull Bones: it moves to the spot given in LW(2) to LW(4),
- * and the first time pays out the coins, experience and star points (unit work 1 = 1) with a smoke puff.
+ * and the first time pays out the coins, experience and star points (UNIT_WORK_REWARD_GIVEN = 1) with a smoke puff.
  * It then plays the crumbled pose KRN_D_2 with the crumble sound, waits a second,
  * makes the unit unavailable (KillUnit mode 2),
- * and sets unit work 2 to a random 2 to 4 (the countdown before it rebuilds).
+ * and sets UNIT_WORK_REBIRTH_TURNS to a random 2 to 4 (the countdown before it rebuilds).
  */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
@@ -355,7 +355,7 @@ EVT_END()
 
 /**
  * Reassembly script of Dull Bones, run from its attack turn while collapsed:
- * counts down the collapse timer in unit work 2 and stays down while it is still 1 or more;
+ * counts down the collapse timer in UNIT_WORK_REBIRTH_TURNS and stays down while it is still 1 or more;
  * at 0 it plays KRN_D_3 and KRN_D_4 with the unite sounds, restores full HP,
  * clears the collapsed attribute (0x20000) and resets its hit offset.
  */
@@ -381,7 +381,7 @@ EVT_END()
 
 /**
  * Attack script of Dull Bones: when battle flag 2 is set it uses the normal attack;
- * if it is still collapsed (unit work 2 is 1 or more), it runs rebirth_event and ends the turn, even if it stays down.
+ * if it is still collapsed (UNIT_WORK_REBIRTH_TURNS is 1 or more), it runs rebirth_event and ends the turn, even if it stays down.
  * After the item-use check, each roll weights the normal attack 85 and a friend call 15;
  * a friend needs free space beside it; with none, it rolls again.
  */

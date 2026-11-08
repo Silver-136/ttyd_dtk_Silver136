@@ -493,7 +493,7 @@ EVT_END()
 
 /**
  * Before the player's phase, if the Puff can act and has no saved-up toxins (counter attribute 0x200), it has a
- * 25 percent chance to change height: from low (unit work 0 = 1) it rises to y 40 and sets part attributes
+ * 25 percent chance to change height: from low (UNIT_WORK_LOWERED = 1) it rises to y 40 and sets part attributes
  * 0x600000 (no hammer or shell-toss hits), otherwise it drops to y 10 and clears them, with a movement sound.
  */
 static EVT_BEGIN(unison_phase_event)

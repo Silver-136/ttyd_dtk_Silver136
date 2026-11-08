@@ -1087,7 +1087,7 @@ EVT_END()
 
 /**
  * The Koopatrol comes out of guard (SHELL2, S_1): it hops and restores the normal defence, defence-attribute,
- * status, pose and data tables, clears unit work 0 and resets its hit offset.
+ * status, pose and data tables, clears UNIT_WORK_GUARD and resets its hit offset.
  */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

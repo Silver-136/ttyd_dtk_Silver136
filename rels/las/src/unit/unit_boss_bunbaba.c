@@ -556,7 +556,7 @@ EVT_END()
 
 /**
  * Init event of Gloomtail: installs its wait, phase, attack, damage and confusion events and entry event,
- * and clears unit work 0 (attack stage) and 1 (the flag that its low-HP line at 20 % was spoken).
+ * and clears UNIT_WORK_ATTACK_STAGE (attack stage) and UNIT_WORK_LOW_HP_TALKED (the flag that its low-HP line at 20 % was spoken).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)

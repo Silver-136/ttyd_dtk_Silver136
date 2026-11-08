@@ -262,7 +262,7 @@ static BattleUnitSetup entry_togezo = {
 
 /**
  * Init script of the Lakitu: registers its wait, unison-phase, attack, damage and confusion handlers,
- * clears unit work 0 (holding a Spiny egg) and 2, and sets the JGM_P_1 pose.
+ * clears UNIT_WORK_HOLD (holding a Spiny egg) and unit work 2, and sets the JGM_P_1 pose.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -279,10 +279,10 @@ EVT_END()
 
 /**
  * Damage event of the Lakitu.
- * When it is not holding a Spiny egg (unit work 0 = 0) it just runs the default damage reaction.
+ * When it is not holding a Spiny egg (UNIT_WORK_HOLD = 0) it just runs the default damage reaction.
  * When it is holding one, a hit that did damage or left it with instant KO (STATUS_INSTANT_KILL), sleep, dizzy, confusion,
  * electric, freeze or stop knocks the egg out of its hands:
- * part 2 is thrown 200 units behind it to the floor and hidden, the hold (unit work 0),
+ * part 2 is thrown 200 units behind it to the floor and hidden, the hold (UNIT_WORK_HOLD),
  * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
  * Otherwise, unless the damage code is 22 (status only), 30 (no damage), 31 (an attacker hurt by its spikes), 38 (lucky),
  * 39 (dodged) or 41 (protected by a bodyguard), a poison, burn, Tiny, defense-down,
@@ -393,7 +393,7 @@ EVT_END()
 
 /**
  * Start-of-turn event of the Lakitu (not on turn 1, and not while it is stunned or otherwise unable to act):
- * with a 50% chance it pulls out a Spiny egg and holds it up (unit work 0 = 1, hold pose table,
+ * with a 50% chance it pulls out a Spiny egg and holds it up (UNIT_WORK_HOLD = 1, hold pose table,
  * counter attribute on), so its next throw is the held egg.
  */
 static EVT_BEGIN(unison_phase_event)

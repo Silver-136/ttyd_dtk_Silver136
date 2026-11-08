@@ -440,9 +440,9 @@ EVT_END()
 
 /**
  * Chooses the Atomic Boo's attack: item use first;
- * while its face is visible (unit work 0 = 0) it covers its face 30 times in 70,
+ * while its face is visible (UNIT_WORK_FACE_HIDDEN = 0) it covers its face 30 times in 70,
  * uses the Press 20 in 70 and the split-up attack (bikkuri_event) 20 in 70;
- * while its face is covered (unit work 0 = 1) it picks the surprise attack (surprise_event)
+ * while its face is covered (UNIT_WORK_FACE_HIDDEN = 1) it picks the surprise attack (surprise_event)
  * or the Breath (breath_event) with equal chance.
  */
 static EVT_BEGIN(attack_event)
@@ -612,7 +612,7 @@ EVT_END()
 /**
  * The Atomic Boo's surprise attack (surprise_event), used while its face is covered:
  * it turns its back and backs off, uncovers its face
- * (unit work 0 = 0, normal pose table), lunges to x 0 in pose A_2 with SFX_BOSS_ATMTLSA_SURPRISED1 and a strong
+ * (UNIT_WORK_FACE_HIDDEN = 0, normal pose table), lunges to x 0 in pose A_2 with SFX_BOSS_ATMTLSA_SURPRISED1 and a strong
  * camera shake, and each target dodges or takes weapon_atmic_teresa_surprise (the guard result on the first target
  * only, if it is hit).
  * Then it floats home.
@@ -839,7 +839,7 @@ EVT_END()
 
 /**
  * The Atomic Boo's breath, used while its face is covered: it turns its back, backs off and uncovers its face
- * (unit work 0 = 0, pose A_3), returns home and blows (SFX_BOSS_ATMTLSA_BLOW2) a swarm of 30 small Boos at the
+ * (UNIT_WORK_FACE_HIDDEN = 0, pose A_3), returns home and blows (SFX_BOSS_ATMTLSA_BLOW2) a swarm of 30 small Boos at the
  * targets (teresa_appear_breath), with breath_event_sub resolving each target.
  * It then whistles them back (SFX_BOSS_ATMTLSA_WHISTLE1) and they merge into it in puffs of smoke
  * (SFX_BOSS_ATMTLSA_UNION1), restoring its size.

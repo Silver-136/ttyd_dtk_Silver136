@@ -483,7 +483,7 @@ EVT_END()
 
 /**
  * Before the player's phase, if the Ice Puff can act and its barrier is down,
- * it has a 50 percent chance to swap height: from the low position (unit work 0 set) it rises to y 40
+ * it has a 50 percent chance to swap height: from the low position (UNIT_WORK_LOW set) it rises to y 40
  * and sets part attributes 0x600000, otherwise it drops to y 10 and clears them.
  * The new height becomes its home position.
  */

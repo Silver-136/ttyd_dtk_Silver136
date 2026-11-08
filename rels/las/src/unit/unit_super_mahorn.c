@@ -612,7 +612,7 @@ static BattleUnitSetup entry_mahorn = {
 
 /**
  * Attack event of the Dark Wizzerd: on a first strike it punches.
- * Illusion copies (unit work 4 set) do nothing here.
+ * Illusion copies (UNIT_WORK_BUNSIN set) do nothing here.
  * Otherwise it can use an item; when it is the only enemy-side unit not knocked out it creates illusions (bunsin_event);
  * when illusions exist it casts its single-target magic;
  * else it draws a weighted number among the punch, the magic ball at one target,
@@ -627,7 +627,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Illusion copies (unit work 4 set) never act on their own.
+    // Illusion copies (UNIT_WORK_BUNSIN set) never act on their own.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -788,7 +788,7 @@ static BattleDataEntry data_table_bunsin[] = {
 
 /**
  * Init event of the Dark Wizzerd: installs its wait, attack, damage and confusion events,
- * starts hand_ctrl_event, which floats its hands, and clears unit work 4 (copy flag) and 6 (fade-out flag).
+ * starts hand_ctrl_event, which floats its hands, and clears UNIT_WORK_BUNSIN (copy flag) and UNIT_WORK_FADING (fade-out flag).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -929,7 +929,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Removes all the illusion copies of the Dark Wizzerd, if it is the real one (unit work 4 is 0):
+ * Removes all the illusion copies of the Dark Wizzerd, if it is the real one (UNIT_WORK_BUNSIN is 0):
  * spawns bunsin_kill_event for each copy.
  */
 static EVT_BEGIN(mahorn_subset_bunsin_all_kill)
@@ -1057,7 +1057,7 @@ EVT_END()
 
 /**
  * Makes an illusion copy of the Dark Wizzerd disappear:
- * fades it out once (unit work 6 marks it) and kills the unit.
+ * fades it out once (UNIT_WORK_FADING marks it) and kills the unit.
  */
 static EVT_BEGIN(bunsin_kill_event)
     CALL(btlevtcmd_GetUnitId, LW(0), LW(0))
@@ -1852,7 +1852,7 @@ EVT_END()
 
 /**
  * Creates one illusion copy of the Dark Wizzerd:
- * spawns entry_mahorn, copies the original's status, marks it as a copy (unit work 4 = 1),
+ * spawns entry_mahorn, copies the original's status, marks it as a copy (UNIT_WORK_BUNSIN = 1),
  * gives it the do-nothing attack event and a special vulnerability table (regist_bunsin).
  */
 static EVT_BEGIN(spawn_event)

@@ -283,7 +283,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init event of the Red Bones: installs its wait, attack, damage and confusion events,
  * sets the landing sound,
- * and clears unit work 1 (the flag that the death reward was already given).
+ * and clears UNIT_WORK_REWARD_GIVEN (the flag that the death reward was already given).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -306,7 +306,7 @@ EVT_END()
 
 /**
  * Dead event of the Red Bones: it spins for 48 frames with the death sound, a smoke puff appears and the coins,
- * experience and star points are awarded once (unit work 1 guards it);
+ * experience and star points are awarded once (UNIT_WORK_REWARD_GIVEN guards it);
  * then it tips over and is killed: with damage flag 0x400 (out for good, as from fire or an explosion) the unit
  * is
  * KOed and deleted, otherwise it is only marked inactive (KillUnit flag 2).
@@ -409,7 +409,7 @@ static EVT_BEGIN(fake_dead_event)
 EVT_END()
 
 /**
- * Turn event of the collapsed Red Bones: counts unit work 2 down and, when it reaches zero,
+ * Turn event of the collapsed Red Bones: counts UNIT_WORK_REVIVE_TURNS down and, when it reaches zero,
  * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
  * clears attribute 0x20000 and restores its HP to the maximum.
  */

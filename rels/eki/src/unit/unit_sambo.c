@@ -614,9 +614,9 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Init script of the Pokey.
- * Registers its wait, attack, damage and confusion scripts, starts it with 4 body segments (unit work 0),
+ * Registers its wait, attack, damage and confusion scripts, starts it with 4 body segments (UNIT_WORK_BODY_COUNT),
  * sets its height from that count through _body_param_set,
- * clears unit work 1 (its inherited summon depth), and sets its run and walk sounds.
+ * clears UNIT_WORK_CALL_DEPTH (its inherited summon depth), and sets its run and walk sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -676,8 +676,8 @@ EVT_END()
 
 /**
  * Damage reaction that knocks a segment off the Pokey's stack.
- * With one segment left (unit work 0 is 1) it only plays the damage pose;
- * otherwise it drops one segment (unit work 0 minus 1), recomputes the height with _body_param_set,
+ * With one segment left (UNIT_WORK_BODY_COUNT is 1) it only plays the damage pose;
+ * otherwise it drops one segment (UNIT_WORK_BODY_COUNT minus 1), recomputes the height with _body_param_set,
  * moves the status icon, cut and kiss offsets for the shorter stack and hands the hit to the next part down.
  * The lost segment (part 5) hops to the floor twice and blinks 40 times before disappearing.
  */
@@ -808,7 +808,7 @@ EVT_END()
  * the Pokey also takes marioWeapon_UltraHammerFinish.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
-    // With only the head left (unit work 0 is 1) the hit just plays the shot reaction, or the no-damage
+    // With only the head left (UNIT_WORK_BODY_COUNT is 1) the hit just plays the shot reaction, or the no-damage
     // flinch.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1005,7 +1005,7 @@ static EVT_BEGIN(damage_swallow_body)
 EVT_END()
 
 /**
- * Turn script of the Pokey. After an item-use check it works from the segment count (unit work 0).
+ * Turn script of the Pokey. After an item-use check it works from the segment count (UNIT_WORK_BODY_COUNT).
  * With a full stack of 4 and inherited summon depth at most 1,
  * it has a 30 percent chance to call a friend (call_friend_event) if there is room beside it.
  * With 2 or more segments it then rolls 0 to 69 and, on 30 or less,
@@ -1483,13 +1483,13 @@ EVT_END()
 
 /**
  * Spike attack of the Pokey (weapon_sambo_spike_attack_2 to _4, by segment count).
- * The Pokey throws one of its segments: it loses a segment (unit work 0 drops by one, the body is resized by
+ * The Pokey throws one of its segments: it loses a segment (UNIT_WORK_BODY_COUNT drops by one, the body is resized by
  * _body_param_set), and the thrown segment (part 5, pose SNB_B_1) hops off its top and flies at the target,
  * which dodges, guards or takes the hit (pre-damage check and action-command defence). On a hit the segment
  * bounces back and rolls away; on a miss it flies on off the stage. It is hidden afterwards.
  */
 static EVT_BEGIN(attack_spike_event)
-    // The throw depends on how many segments the Pokey has left (unit work 0): pick the weapon and a target.
+    // The throw depends on how many segments the Pokey has left (UNIT_WORK_BODY_COUNT): pick the weapon and a target.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
     SWITCH(LW(10))
         CASE_EQUAL(4)
@@ -1766,7 +1766,7 @@ static EVT_BEGIN(call_friend_event)
     END_INLINE_EVENT
 
     // A new Pokey pops up out of the ground beside the caller in a puff of smoke, and the new Pokey receives a summon depth one
-    // greater than its caller's (unit work 1).
+    // greater than its caller's (UNIT_WORK_CALL_DEPTH).
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_sambo), 0)
     SET_VALUE(LW(0), LW(6))
     SET_VALUE(LW(1), LW(7))
@@ -1826,7 +1826,7 @@ static BattleUnitSetup entry_sambo = {
 };
 
 /**
- * Wait script of the Pokey: shows the idle pose that matches its remaining body segments (unit work 0 picks the
+ * Wait script of the Pokey: shows the idle pose that matches its remaining body segments (UNIT_WORK_BODY_COUNT picks the
  * part index 1 to 4).
  */
 static EVT_BEGIN(wait_event)
@@ -1876,7 +1876,7 @@ static EVT_BEGIN(sambo_rabbit_move)
     RETURN
 EVT_END()
 
-/** Sets the Pokey's height and cut height to 20, 40, 60 or 80 units for 1, 2, 3 or 4 body segments (unit work 0). */
+/** Sets the Pokey's height and cut height to 20, 40, 60 or 80 units for 1, 2, 3 or 4 body segments (UNIT_WORK_BODY_COUNT). */
 
 // Body counts 4, 3, 2, 1 select stack parts 1, 2, 3, 4; part 5 is the detached body.
 static EVT_BEGIN(_body_param_set)

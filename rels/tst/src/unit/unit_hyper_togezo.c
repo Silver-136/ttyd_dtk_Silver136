@@ -393,7 +393,7 @@ static BattleWeapon weapon_togezo_charge = {
 
 /**
  * Init script of the Sky-Blue Spiny: registers its wait, attack, damage and confusion handlers,
- * clears unit work 0 (guarding flag) and unit work 3 (charged flag), and sets its run, walk and jump sounds.
+ * clears UNIT_WORK_GUARD (guarding flag) and UNIT_WORK_CHARGED (charged flag), and sets its run, walk and jump sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -502,8 +502,8 @@ EVT_END()
 /**
  * Attack script of the Sky-Blue Spiny.
  * If it is flipped over it runs its wake-up event and ends the turn. Otherwise, if no item script is selected,
- * guarding (unit work 0) makes it unfold (guard_cancel_event) and end the turn.
- * If it has just charged (unit work 3) it makes its normal attack and clears the flag.
+ * guarding (UNIT_WORK_GUARD) makes it unfold (guard_cancel_event) and end the turn.
+ * If it has just charged (UNIT_WORK_CHARGED) it makes its normal attack and clears the flag.
  * Otherwise it draws lots between the normal attack (40),
  * guarding (40) and charging up (20 on the first turn, 6 afterwards), which sets the charged flag.
  */
@@ -558,7 +558,7 @@ EVT_END()
  * The target takes the damage when it is reached.
  * After a hit it bounces back in two hops. It then either unrolls (TGZ_S_1) and runs home,
  * or returns home spinning (SFX_ENM_TOGEZO_ROLL3) and rests in guard
- * (swapping to the guard tables with unit work 0 set), with a 50 percent chance of the latter.
+ * (swapping to the guard tables with UNIT_WORK_GUARD set), with a 50 percent chance of the latter.
  */
 static EVT_BEGIN(normal_attack_event)
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
@@ -846,7 +846,7 @@ EVT_END()
  * The Sky-Blue Spiny uncurls from its guard stance:
  * plays the uncurl sound and a full turn into TGZ_S_1, restores the normal defence (4), defence attributes,
  * status resistances, pose and data tables, sets the shelled part attribute (0x1000) again
- * and clears unit work 0.
+ * and clears UNIT_WORK_GUARD.
  */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

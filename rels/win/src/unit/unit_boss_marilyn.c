@@ -317,7 +317,7 @@ EVT_END()
 
 /**
  * Init script of Marilyn in the Shadow Sirens fight:
- * installs her wait, phase, attack, damage and confusion handlers, clears unit work 8 (attack cycle step) and 3,
+ * installs her wait, phase, attack, damage and confusion handlers, clears UNIT_WORK_ATTACK_PLAN (attack cycle step) and unit work 3,
  * and starts the shared shadow-tail follower (majo3_shadow_tail_event).
  */
 static EVT_BEGIN(init_event)
@@ -450,11 +450,11 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Marilyn's turn: uses an item if the item-use check selects one, else follows unit work 8:
+ * Marilyn's turn: uses an item if the item-use check selects one, else follows UNIT_WORK_ATTACK_PLAN:
  * first turn the shadow slap, then she charges every turn
  * until Beldam's phase script sets her unit work 7 (a sister fell below the HP threshold),
  * which forces a lightning strike and switches her to a random pick (slap 50, lightning 20 once triggered,
- * charge 30 while she has charged fewer than 2 times in a row; unit work 9 counts the charges).
+ * charge 30 while she has charged fewer than 2 times in a row; UNIT_WORK_CHARGE_COUNT counts the charges).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))

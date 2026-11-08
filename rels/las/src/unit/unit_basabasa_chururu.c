@@ -321,7 +321,7 @@ EVT_END()
  * Init event of the Swoopula: installs wait, attack, ceiling damage (damage_event_ceil),
  * confusion and ceiling-fall (ceil_fall_ready_event, run when the stage's overhead iron frame falls) events
  * and the hang-from-ceiling hit offsets;
- * if unit work 0 is 1 it starts already in flight (ceil_sky_event).
+ * if UNIT_WORK_START_FLYING is 1 it starts already in flight (ceil_sky_event).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

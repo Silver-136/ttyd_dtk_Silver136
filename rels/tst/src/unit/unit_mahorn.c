@@ -1477,7 +1477,7 @@ EVT_END()
  * otherwise each hand flips between two poses at random 15 to 30 frame intervals.
  */
 static EVT_BEGIN(wait_event)
-    // Unless the unit is a clone (unit work 4 set), it also puts its clones back into their idle poses.
+    // Unless the unit is a clone (UNIT_WORK_BUNSIN set), it also puts its clones back into their idle poses.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))

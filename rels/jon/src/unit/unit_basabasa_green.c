@@ -309,7 +309,7 @@ EVT_END()
 /**
  * Init script of the Swampire: installs its wait, attack, damage (the ceiling version),
  * confusion and ceiling-fall handlers, the wing-flap pose sound table and the offsets for hanging upside down.
- * If unit work 0 is 1 it starts already off the ceiling and moves to its home position.
+ * If UNIT_WORK_START_FLYING is 1 it starts already off the ceiling and moves to its home position.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

@@ -537,8 +537,8 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Init script of a Pokey: registers its wait, attack, damage and confusion handlers,
- * starts it with four body segments (unit work 0 = 4, applied through _body_param_set),
- * clears unit work 1 (its inherited summon depth) and sets the rustling walk/run sounds.
+ * starts it with four body segments (UNIT_WORK_BODY_COUNT = 4, applied through _body_param_set),
+ * clears UNIT_WORK_CALL_DEPTH (its inherited summon depth) and sets the rustling walk/run sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -576,7 +576,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
 EVT_END()
 
 /**
- * Damage reaction of the Pokey: picks the part that takes the hit from its segment count (unit work 0: 1 segment
+ * Damage reaction of the Pokey: picks the part that takes the hit from its segment count (UNIT_WORK_BODY_COUNT: 1 segment
  * is part 4, 2 is part 3, 3 is part 2, 4 is part 1) and runs the default damage handling.
  */
 static EVT_BEGIN(damage_event)
@@ -598,7 +598,7 @@ EVT_END()
 
 /**
  * Damage reaction used when the hit can knock off body segments:
- * if only the head is left (unit work 0 = 1) it reacts as a plain hit,
+ * if only the head is left (UNIT_WORK_BODY_COUNT = 1) it reacts as a plain hit,
  * otherwise the segment count goes down by one and the parts, status icon height,
  * kiss hit offset and swallow attribute are rebuilt for the shorter Pokey (height by _body_param_set),
  * then subset_dmg_sambo_fall settles the remaining body.
@@ -848,7 +848,7 @@ EVT_END()
 /**
  * Damage reaction when the Pokey is swallowed by Yoshi:
  * like damage_event_bodylost, a lone head just reacts to the damage,
- * otherwise it loses a segment (unit work 0 down by one) and its parts are rebuilt for the shorter body.
+ * otherwise it loses a segment (UNIT_WORK_BODY_COUNT down by one) and its parts are rebuilt for the shorter body.
  */
 static EVT_BEGIN(damage_swallow_body)
     SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -922,8 +922,8 @@ static EVT_BEGIN(damage_swallow_body)
 EVT_END()
 
 /**
- * Chooses the Pokey's attack from its segment count (unit work 0): item use first;
- * with 4 segments and an inherited summon depth (unit work 1) of at most 1 there is a 30% chance it calls a friend
+ * Chooses the Pokey's attack from its segment count (UNIT_WORK_BODY_COUNT): item use first;
+ * with 4 segments and an inherited summon depth (UNIT_WORK_CALL_DEPTH) of at most 1 there is a 30% chance it calls a friend
  * (call_friend_event, when there is a free spot 40 units ahead with a positive x coordinate);
  * with 2 or more segments a 31-in-70 chance of the body slam (attack_head_2_event, when its weapon finds a
  * target) and otherwise the spike ball (attack_spike_event); a lone head uses attack_head_1_event.
@@ -1729,7 +1729,7 @@ static BattleUnitSetup entry_sambo = {
 
 /**
  * Idle event of the Pokey: sets the idle pose of the part that is currently its top segment,
- * chosen from the segment count in unit work 0.
+ * chosen from the segment count in UNIT_WORK_BODY_COUNT.
  */
 static EVT_BEGIN(wait_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -1780,7 +1780,7 @@ static EVT_BEGIN(sambo_rabbit_move)
 EVT_END()
 
 /**
- * Sets the Pokey's height and cut height (20, 40, 60 or 80) from the number of body segments left in unit work 0
+ * Sets the Pokey's height and cut height (20, 40, 60 or 80) from the number of body segments left in UNIT_WORK_BODY_COUNT
  * (1 to 4).
  */
 static EVT_BEGIN(_body_param_set)
