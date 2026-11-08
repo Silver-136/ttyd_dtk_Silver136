@@ -136,7 +136,6 @@ typedef struct BattleActions {
     s32 result;                      // 0x28, BattleACResultFlags
     s8 baseAcDifficulty;            // 0x2C
     u8 acDifficulty;                // 0x2D
-    u8 pad_2E[2];                    // 0x2E, never accessed
     s32 doneFlags;                   // 0x30, bit 0: AC finished (delete handler forces the end state otherwise)
     u32 acFlags;                     // 0x34, btlevtcmd_AcSetFlag; Ac<Command>Flags above
     s32 params[8];                   // 0x38, btlevtcmd_AcSetParam/AcSetParamAll/AcGetParam

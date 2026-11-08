@@ -83,7 +83,6 @@ typedef enum HitEntryFlags {
 
 struct HitEntry {
     u16 flags;                      // 0x0, HitEntryFlags
-    u8 pad_02[0x4 - 0x2];             // 0x2, never accessed
     s32 attributes;                 // 0x4, HitAttributes
     MapFileJoint* joint;            // 0x8
     Mtx worldMtx;                   // 0xC

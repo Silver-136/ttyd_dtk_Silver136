@@ -11,7 +11,6 @@
 
 typedef struct EffBomheiN64Work {
     s16 type;       // 0x0
-    u8 pad_2[2];    // 0x2
     Vec position;   // 0x4
     f32 scale;      // 0x10
     s32 timer;      // 0x14

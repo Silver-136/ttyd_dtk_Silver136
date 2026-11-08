@@ -15,7 +15,6 @@
 
 typedef struct EffKemuri9N64Work {
     u16 type;        // 0x0
-    u8 pad_2[2];     // 0x2
     Vec position;    // 0x4
     f32 dirX;        // 0x10
     f32 velY;        // 0x14

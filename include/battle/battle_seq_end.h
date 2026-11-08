@@ -27,7 +27,6 @@ typedef struct SeqEndObj {
     u16 nextValue;              // 0x26
     u8 paramDisp;               // 0x28
     u8 blinkTimer;              // 0x29, level-up object blink countdown (8 frames)
-    u8 pad_2A[0x2C - 0x2A];     // 0x2A
     s32 blinkOn;                // 0x2C, drawn while nonzero
     GXColor color;              // 0x30
 } SeqEndObj;

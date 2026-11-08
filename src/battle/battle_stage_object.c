@@ -3889,7 +3889,6 @@ USER_FUNC(_object_fall_wait) {
 typedef struct FallObjectEntry {
     s8 index; // 0x0
     s8 type; // 0x1
-    u8 pad_02[0x4 - 0x2]; // 0x2, never accessed
     s32 kind; // 0x4, 0 = unit, 1 = audience
     s32 unitId; // 0x8
     s32 partId; // 0xC

@@ -84,7 +84,6 @@ typedef struct BattleCommandAct {
     s32 enabled;       // 0x4
     const char* name;  // 0x8
     u16 icon;          // 0xC
-    u8 padE[2];        // 0xE
     s32 disableReason; // 0x10
 } BattleCommandAct;
 
@@ -93,7 +92,6 @@ typedef struct BattleCommandWeapon {
     s32 enabled;                 // 0x4
     const char* name;            // 0x8
     u16 icon;                    // 0xC
-    u8 padE[2];                  // 0xE
     s32 index;                   // 0x10
     s32 itemId;                  // 0x14
     s32 disableReason;           // 0x18
@@ -105,7 +103,6 @@ typedef struct BattleCommandOperation {
     s32 disableReason; // 0x8
     const char* name;  // 0xC
     u16 icon;          // 0x10
-    u8 pad12[2];       // 0x12
     const char* help;  // 0x14
     s32 cost;          // 0x18
 } BattleCommandOperation;
@@ -115,7 +112,6 @@ typedef struct BattleCommandParty {
     s32 enabled;       // 0x4
     const char* name;  // 0x8
     u16 icon;          // 0xC
-    u8 padE[2];        // 0xE
     const char* help;  // 0x10
     s16 hp;            // 0x14
     s16 maxHp;         // 0x16
@@ -139,7 +135,6 @@ typedef struct BattleSubMenu {
     s32 scrollState;                    // 0xC
     s32 reserved_10;                   // 0x10
     u8 shown;                    // 0x14
-    u8 pad_15[3];                    // 0x15
     s32 prevAbsPos;                   // 0x18
     s32 iconsArrived;                   // 0x1C
     s32 iconFlags[5];                // 0x20
@@ -185,11 +180,9 @@ typedef struct BattleCommand {
     s32 partyKind;                       // 0x54C, party kind chosen in the change-partner menu
     u8 dipMode;                          // 0x550, Double/Triple Dip count (2/3), 1 while picking
     u8 cancelled;                        // 0x551, command cancelled: the unit just waits
-    u8 pad_552[0x554 - 0x552];           // 0x552, never accessed
     s32 recCommand;                      // 0x554, state recorded by _commandRestoreRec (0 = none)
     u8 attackAudience;                   // 0x558, 1: an audience action (X attack or a thrown item) interrupted the menu, 2: the same during the
                                          // Dip cancel check (cleared at CMD_STATE_INIT)
-    u8 pad_559[0x55C - 0x559];           // 0x559, never accessed
     BattleSubMenu* subMenu;                       // 0x55C, battle_menu_disp.c
     s32 idleTimer;                       // 0x560, frames without input; idle camera at 900
     s32 disableReason;                   // 0x564, disableReason of the greyed-out option, picks the error message

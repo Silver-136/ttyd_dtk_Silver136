@@ -20,7 +20,6 @@ typedef struct EffKemuri4N64Work {
     s16 timer;       // 0x6
     u8 alpha;        // 0x8
     s8 texFlag;      // 0x9
-    u8 pad_A[2];     // 0xA
     Vec position;    // 0xC
     Vec scale;       // 0x18
     Vec rotation;    // 0x24

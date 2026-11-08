@@ -231,7 +231,6 @@ typedef enum WindowWorkFlags {
 
 typedef struct WindowWork {
     u16 flags;                  // 0x0, WindowWorkFlags
-    u8 pad_2[2];                // 0x2
     s32 buttonTrg;              // 0x4
     s32 buttonRep;              // 0x8
     s32 dirTrg;                 // 0xC

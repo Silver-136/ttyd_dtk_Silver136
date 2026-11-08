@@ -42,7 +42,6 @@ typedef enum CaseEntryFlags {
 
 typedef struct CaseSetup {
     u16 conditionId; // 0x0, trigger condition (CaseEntry.conditionId list); | CASE_SETUP_SHOW_HINT enables the interaction hint
-    u8 pad_2[2]; // 0x2
     const char* hitObjName; // 0x4
     u32 swFlag; // 0x8
     void* activeFunc; // 0xC
@@ -54,7 +53,6 @@ typedef struct CaseSetup {
 
 typedef struct CaseEntry {
     u16 flags; // 0x0, bit0 = in use, bit1 = triggered this frame (starts the event), bit2 = flag from setup 0x8000
-    u8 pad_2[2]; // 0x2
     s32 conditionId; // 0x4, CaseCondition
     char hitObjName[0x40]; // 0x8
     s32 caseId; // 0x48

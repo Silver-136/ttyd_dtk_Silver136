@@ -21,7 +21,6 @@ typedef struct PGLv2Work {
     s32 full;      // 0x18
     s32 inZone;    // 0x1C
     s16 zones[3];  // 0x20
-    u8 pad26[2];   // 0x26
     s32 endTimer;  // 0x28
 } PGLv2Work;
 

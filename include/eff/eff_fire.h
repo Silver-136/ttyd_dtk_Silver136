@@ -12,7 +12,6 @@ typedef struct EffFireWork {
     s32 type;               // 0x0
     Vec position;           // 0x4
     u8 alpha;               // 0x10
-    u8 pad11[3];
     s32 duration;           // 0x14
     s32 delay;              // 0x18
     s32 sparkTimer;         // 0x1C, counts up to range, then spawns a spark

@@ -956,7 +956,6 @@ typedef struct BattleUnit {
         };
         BtlStatusCopy statusTurns;                            // 0x118, the 0x1E status bytes as one block (party info save/restore)
     };
-    u8 pad_136[2];                                            // 0x136, never accessed
     s32 statusFlags;                                          // 0x138
 #if VERSION >= VERSION_US
     u16 usCommandDisabled[2];                                 // US and later (+4 from here): per-unit turns left for the two command blocks JP keeps in BattleWork commandDisabled[3..4]
@@ -988,7 +987,6 @@ typedef struct BattleUnit {
     BattleUnitPart* currentTarget;                            // 0x254
     s32 reserved_258;                                         // 0x258 (US 0x25C), cleared when the unit's action ends (btlseqAct 0x6000009)
     s16 hpDamageCount;                                        // 0x25C, hits taken this turn (BattleCheckDamage; SPECIAL_DIMINISH_BY_HIT subtracts it)
-    u8 pad_25E[0x260 - 0x25E];                                // 0x25E, never accessed
     s32 totalHpDamageTaken;                                   // 0x260
     s32 totalFpDamageTaken;                                   // 0x264 (US 0x268), sum of fpDamageTaken this turn
     s32 totalFpLost;                                          // 0x268 (US 0x26C), sum of fpLost this turn

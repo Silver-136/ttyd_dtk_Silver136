@@ -112,7 +112,6 @@ typedef struct ItemEntry {
     Vec position; // 0x3C
     f32 scale; // 0x48
     u8 alpha; // 0x4C
-    u8 pad_4D[0x50 - 0x4D]; // 0x4D, never accessed
     f32 speed; // 0x50
     s32 direction; // 0x54
     f32 velocityY; // 0x58

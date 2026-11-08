@@ -31,7 +31,6 @@ typedef struct RepeatWork {
     u8 gaugeWidth;     // 0x2A, gauge width: the third int argument of BattleAcDrawGauge (x, y, width, ...)
     s8 done;          // 0x2B
     u8 resetFlag;     // 0x2C
-    u8 pad_2D[3];     // 0x2D, never accessed
     s32 endTimer;     // 0x30
 } RepeatWork;
 

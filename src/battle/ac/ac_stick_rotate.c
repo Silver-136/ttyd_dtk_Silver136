@@ -32,10 +32,8 @@ typedef struct StickRotateWork {
     s8 iconDir;   // 0x6
     u8 iconTimer; // 0x7
     u16 steps;    // 0x8, direction changes so far; 8 = one full turn
-    u8 pad_A[2];
     s32 timer;    // 0xC
     u16 fastSteps; // 0x10, steps made sooner than STICK_ROTATE_PARAM_FAST_STEP_FRAMES frames
-    u8 pad_12[2];
     s32 endTimer; // 0x14
 } StickRotateWork;
 

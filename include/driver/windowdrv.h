@@ -48,7 +48,6 @@ struct WindowEntry {
     OSTime timestamp;               // 0x20, gp->renderTime at the start of the current fade/scroll step
     smartEntry* userdata; // 0x28
     s16 tailMode; // 0x2C, speech-bubble tail: 0 none, 0x10 position already on screen, 8 window above the speaker
-    u8 pad_2E[2]; // 0x2E
     Vec speakerPos; // 0x30, speech-bubble tail target (world position unless tailMode & 0x10)
     void (*main)(WindowEntry* entry); // 0x3C
     void (*delete)(WindowEntry* entry); // 0x40

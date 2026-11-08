@@ -199,12 +199,10 @@ typedef struct MarioMotHammer {    // mot_hammer.c mot_hammer
 typedef struct MarioMotHammer2 {   // mot_hammer.c mot_hammer2 / mot_ham2_post (spin hammer)
     u8 pad00[4];                   // 0x00
     s16 timer;                     // 0x04
-    u8 pad06[2];                   // 0x06
     f32 spinSpeed;                 // 0x08, deg/frame by hammer level
     u8 pad0C[4];                   // 0x0C
     f32 animTime;                  // 0x10
     s16 flags;                     // 0x14, MarioMotHammer2Flags
-    u8 pad16[2];                   // 0x16
     u32 sfxId;                     // 0x18 (u32: its -1 tests are unsigned compares in the retail code)
 } MarioMotHammer2;
 
@@ -406,7 +404,6 @@ typedef struct MarioWork {
     u8 pad_2A[0x2E - 0x2A];             // 0x2A, never accessed
     MarioMotion currMotionId;           // 0x2E
     MarioMotion prevMotionId;           // 0x30, currMotionId before the last motion change (marioChgMot)
-    u8 pad_32[0x34 - 0x32];             // 0x32, never accessed
     u32 frameCounter;                   // 0x34, +1 every marioMain frame; bit0 drives blinking
     s8 ctrlOffCount;                    // 0x38
     s8 keyOffCount;                     // 0x39
@@ -547,7 +544,6 @@ typedef struct MarioWork {
     u8 triggerR;                        // 0x253
     u8 analogA;                         // 0x254, always 0
     u8 analogB;                         // 0x255, always 0
-    u8 pad_256[0x258 - 0x256];          // 0x256, never accessed
     u32 demoButtonPrev;                 // 0x258, DemoPad buttons last frame
     u32 demoButtonNew;                  // 0x25C, DemoPad buttons pressed this frame
     void* balloonEffect;                // 0x260, EffectEntry*
@@ -595,7 +591,6 @@ typedef struct MarioWork {
 #endif
     u8 pad_2BC[0x2C0 - 0x2BC];          // 0x2BC, never accessed
     s16 coinDropTimer;                  // 0x2C0, set to 3 s by npcdrv (with muteki); marioMain drops a coin every 30 frames
-    u8 pad_2C2[0x2C4 - 0x2C2];          // 0x2C2, never accessed
     f32 kpaSpeed;                       // 0x2C4, Bowser walk speed (koopa.c, koopa_motion.c)
 #if VERSION >= VERSION_JP
     u32 bottomlessReload;               // 0x2C8, marioReloadMapOnBottomlessOn/Off; u32: marioBottomless tests it unsigned (cmplwi)

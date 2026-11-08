@@ -76,7 +76,6 @@ typedef enum CardFlags {
 
 typedef struct {
     vu16 flags; // 0x0, CardFlags
-    u8 pad_2[0x4 - 0x2]; // 0x2
     void* workArea; // 0x4
     s32 chan; // 0x8
     s32 fileNo; // 0xC

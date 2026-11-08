@@ -242,7 +242,6 @@ struct BattleAlliance {
 typedef struct BattleWorkPartyInfo {
     f32 sizeMultiplier;       // 0x0, saved BattleUnit.sizeMultiplier
     BtlStatusCopy statusTurns;     // 0x4, saved from BattleUnit.sleepTurns
-    u8 pad_22[0x24 - 0x22];   // 0x22, never accessed
     s32 statusFlags;          // 0x24, saved BattleUnit.statusFlags
 #if VERSION >= VERSION_US
     u16 usCommandDisabled[2]; // US and later: saved BattleUnit usCommandDisabled
@@ -262,7 +261,6 @@ typedef struct BattleWorkTarget {
     s32 score;             // 0x18
     u8 forwardLv;          // 0x1C
     s8 side;               // 0x1D
-    u8 pad_1E[2];          // 0x1E
     s32 reserved_20;       // 0x20, only set to -1
 } BattleWorkTarget;
 

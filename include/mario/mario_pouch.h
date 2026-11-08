@@ -429,12 +429,10 @@ typedef struct PouchData {
     s16 badges[MAX_BADGES];            // 0x1FA
     s16 equippedBadges[MAX_BADGES];    // 0x38A
     u8 emailIds[100];                 // 0x51A
-    u8 pad_57E[2];                 // 0x57E, never accessed
     u32 emailReceivedFlags[4];        // 0x580
     u32 emailReadFlags[4];            // 0x590
     u8 pad_5A0[0x10];              // 0x5A0, never accessed
     s16 shopPoints;                   // 0x5B0
-    u8 pad_5B2[2];                 // 0x5B2, never accessed
     u32 shopPointRewardFlags; // 0x5B4, bit i = shop point reward i claimed (evt_shop.c)
     u8 merleeCurseUsesRemaining;      // 0x5B8
     s8 turnsUntilMerleeActivation;    // 0x5B9

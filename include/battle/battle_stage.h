@@ -12,7 +12,6 @@
 
 typedef struct BattleSpotEntry {
     u16 flags; // 0x0, SPOT_FLAG_*
-    u8 pad_02[0x4 - 0x2]; // 0x2, never accessed
     Vec pos; // 0x4, cone position
     Vec rot; // 0x10, cone rotation, degrees
     Vec scale; // 0x1C, cone scale
@@ -96,7 +95,6 @@ typedef struct StageDark {
     u8 baseStart;   // 0x7
     u8 target;      // 0x8
     u8 baseTarget;  // 0x9
-    u8 pad_a[2];    // 0xA
     s32 time;       // 0xC
     s32 baseTime;   // 0x10
     s32 max;        // 0x14

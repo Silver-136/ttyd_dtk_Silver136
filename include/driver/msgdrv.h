@@ -69,7 +69,6 @@ typedef struct MsgWinData {
     u16 curPage; // 0x8, page being shown (page-break entries carry their page number)
     u16 pageState; // 0xA, 1: waiting for the key, 2: advance to the next page
     u16 pageAdvanced; // 0xC
-    u8 pad_0E[0x10 - 0xE]; // 0xE
     s32 nextEntry; // 0x10, index into entries
     u8 pad_14[0x18 - 0x14]; // 0x14
     OSTime openTime; // 0x18, set when the window opens; drives the open anim (SPM openTime)
@@ -93,7 +92,6 @@ typedef struct MsgWinData {
     s32 unitId; // 0x7A24
     s32 talkSfxGroup; // 0x7A28, <se n> tag value (0xFFFA entry); not read in C
     u8 talkVolume; // 0x7A2C, default 0x7F
-    u8 pad_7A2D[0x7A30 - 0x7A2D]; // 0x7A2D
     s32 parseTime; // 0x7A30, msgAnalize state
     s16 parseX; // 0x7A34
     s16 parseY; // 0x7A36

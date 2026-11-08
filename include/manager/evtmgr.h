@@ -189,7 +189,6 @@ struct EventEntry {
     s8 loopDepth;                      // 0xE, validated
     s8 switchDepth;                    // 0xF, validated
     u8 wNpcEventType;                  // 0x10, NpcEventType
-    u8 pad_11[3];                      // 0x11
     EvtWord* nextCommand;                 // 0x14, validated
     EvtWord* args;                     // 0x18, validated
     s8 labelIdTable[16];               // 0x1C

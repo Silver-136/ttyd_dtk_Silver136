@@ -53,7 +53,6 @@ typedef struct BattleStageObject {
     u8 reserved_72; // 0x72, only set to 0
     u8 shakePeriodLength; // 0x73
     u8 shakePeriodPosition; // 0x74
-    u8 pad_75[3]; // 0x75, never accessed
     f32 shakeAngle; // 0x78
 } BattleStageObject;
 

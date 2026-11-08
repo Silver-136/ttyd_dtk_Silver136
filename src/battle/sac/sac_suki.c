@@ -56,7 +56,6 @@ typedef struct SukiWork {
     s32 need;           // 0x18
     s32 time;           // 0x1C
     u8 flash;           // 0x20
-    u8 pad21[3];
     f32 offsetY;        // 0x24
     Vec starPos[6];     // 0x28
     char names[6][16];  // 0x70

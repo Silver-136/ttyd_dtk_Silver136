@@ -90,7 +90,6 @@ typedef struct BattleAudienceMember {
     u8 texId;                  // 0x1A, palette texture index for the member quad
     u8 type;                   // 0x1B, AudienceMemberType
     s16 itemId;                // 0x1C, -1 is invalid
-    u8 pad_1E[0x20 - 0x1E];    // 0x1E, never accessed
     s32** animTable;           // 0x20, set in BattleAudience_Entry_Sub
     s32* animStart;            // 0x24, current anim script (animTable entry); -3 jumps back here
     s32* animPc;               // 0x28, anim script read pointer (BattleAudienceAnimProcess)
@@ -102,7 +101,6 @@ typedef struct BattleAudienceMember {
     u8 colorG;                 // 0x42
     u8 colorB;                 // 0x43
     u8 colorA;                 // 0x44, 0xFF = opaque (separate draw pass)
-    u8 pad_45[0x48 - 0x45];    // 0x45, never accessed
     Vec position;              // 0x48
     Vec scale;                 // 0x54, final draw scale: baseScale * kind texture size (PSMTXScale in the member draw)
     Vec baseScale;             // 0x60
@@ -126,7 +124,6 @@ typedef struct BattleAudienceMember {
     f32 angle;                 // 0xE8, init 270, wrapped to 0..360
     struct BattleUnit* targetUnit; // 0xEC, the unit the member targets
     s16 targetMemberId;        // 0xF0, index of another member it interacts with
-    u8 pad_F2[0xF4 - 0xF2];    // 0xF2, never accessed
     s32 statusDelay;           // 0xF4, countdown before AUDIENCE_STATUS_SLEEP -> AUDIENCE_STATUS_WAIT_JUMP
     s32 interpFrameCounter;    // 0xF8, remaining frames for evt_audience movement; elapsed frames for Magnus 2
                                // (unit_boss_magnum_battender_mkII) audience suction
@@ -256,7 +253,6 @@ typedef struct BattleAudienceSound {
     s32 flags;                     // 0x0, AUD_SOUND_FLAG_PLAYING
     s32 sfxId;                     // 0x4
     u8 kind;                       // 0x8
-    u8 pad_09[0xC - 0x9];          // 0x9, never accessed
     s32 duration;                  // 0xC
     s32 fadeoutTime;              // 0x10
     s32 forceFadeTimer;           // 0x14

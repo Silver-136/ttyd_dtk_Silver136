@@ -119,7 +119,6 @@ typedef struct SoundStreamEntry {
     u16 scale;                 // 0x58
     u16 nibble;                // 0x5A
     u16 runCount;              // 0x5C
-    u8 pad5E[2];               // 0x5E
     u32 size;                  // 0x60
     u32 loopStart;             // 0x64
     SND_ADPCMSTREAM_INFO info; // 0x68
@@ -157,7 +156,6 @@ typedef struct SoundStream {
     u16 dataOffset;              // 0x4
     u16 pan;                     // 0x6
     u16 span;                    // 0x8
-    u8 padA[0xC - 0xA];          // 0xA
     f32 vol;                     // 0xC
     f32 curVol;                  // 0x10
     f32 fadeStep;                // 0x14
@@ -173,7 +171,6 @@ typedef struct SoundTemp {
     void* callback; // 0x0
     void* data;     // 0x4
     u8 midi;        // 0x8, sndSetAuxProcessingCallbacks midi (0xFF = none)
-    u8 pad9[3];     // 0x9
     s32 seqId;      // 0xC, sndSetAuxProcessingCallbacks seqID
 } SoundTemp;
 
@@ -221,7 +218,6 @@ typedef struct SoundWork {
     u16 fadeIn;                // 0x208
     u16 fadeOut;               // 0x20A
     u16 interruptDepth;        // 0x20C, OSDisableInterrupts nesting count
-    u8 pad_20E[0x210 - 0x20E]; // 0x20E
     BOOL interrupts;           // 0x210
     u16 coverState;            // 0x214, 0: closed, 1: cover opened, 2: waiting for streams to reload after close
     u8 pad216[2];              // 0x216
@@ -230,10 +226,8 @@ typedef struct SoundWork {
     u16 slotCount;             // 0x224
     u16 slotUsed[2];           // 0x226
     char filepath[0x100];      // 0x22A
-    u8 pad32A[2];              // 0x32A
     void* filedata;            // 0x32C
     u16 sampleBank;            // 0x330
-    u8 pad332[2];              // 0x332
     u8* dmaAddress;            // 0x334
     u32 dmaLength;             // 0x338
     u16 dmaBuf[0x140];         // 0x33C

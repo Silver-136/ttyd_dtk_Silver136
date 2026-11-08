@@ -134,7 +134,6 @@ typedef struct UnitWinWork {
     s32 mode;              // 0x50, UnitWinMode
     u16 flags2;            // 0x54, UNITWIN_FREE_*
 #if VERSION <= VERSION_DEMO_JP
-    u8 pad4A[2];           // 0x4A
     s32 caseId[16];        // 0x4C, one case event per counter hit object
 #else
     u8 pad56[2];           // 0x56

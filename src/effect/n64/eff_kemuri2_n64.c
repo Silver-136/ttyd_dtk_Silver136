@@ -13,7 +13,6 @@
 typedef struct EffKemuri2N64Work {
     s32 active;     // 0x0
     u16 type;       // 0x4
-    u8 pad_6[2];    // 0x6
     Vec position;   // 0x8
     u8 pad_14[0x44 - 0x14];
     f32 hSpeed;     // 0x44, horizontal speed: position.x/z += hSpeed * dirX/dirZ each frame (as hSpeed in eff_kemuri1)

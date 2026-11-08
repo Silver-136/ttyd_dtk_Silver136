@@ -231,7 +231,6 @@ typedef struct MapObject {
     u32 flags;                             // 0x0, MapObjFlags
     u8 blendMode;                          // 0x4
     u8 cameraId;                           // 0x5, dispEntry camera (4 by default; set by evt_lect_* / tik_00)
-    u8 pad_06[0x8 - 0x6];                  // 0x6, never accessed
     MapFileJoint* joints;                  // 0x8
     GXColor color;                         // 0xC
     Vec center;                            // 0x10
@@ -386,7 +385,6 @@ typedef struct MapEntry {
     GXColor blend;                 // 0x16
     GXColor blend2;                // 0x1A
     GXColor color;                 // 0x1E
-    u8 pad_22[0x24 - 0x22];        // 0x22, never accessed
     s32 fogEnable;                 // 0x24, fog_table word 0
     s32 fogType;                   // 0x28
     f32 fogStart;                  // 0x2C

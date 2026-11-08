@@ -148,7 +148,6 @@ typedef struct PuniData {
     u16 prevAnim;                       // 0x11E
     u8 animHoldCount;                   // 0x120
     u8 flag1Timer;                      // 0x121
-    u8 pad_122[0x124 - 0x122];          // 0x122
     s32 animTime;                       // 0x124
     s32 timer;                          // 0x128
     Vec pos;                            // 0x12C

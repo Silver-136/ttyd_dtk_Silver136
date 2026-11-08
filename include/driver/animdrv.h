@@ -87,7 +87,6 @@ typedef struct AnimNodeDelta {
 typedef struct AnimTexDelta {
     u8 step;    // 0x0, AnimTexMtx index step
     u8 bindAdd; // 0x1, added to texBindIdx
-    u8 pad_2[2];
     f32 transS; // 0x4
     f32 transT; // 0x8
 } AnimTexDelta;

@@ -16,7 +16,6 @@ typedef struct EffKemuri7N64Work {
     s16 field_0x4;    // 0x4
     s16 timer;        // 0x6
     u8 alpha;         // 0x8
-    u8 pad_9[3];      // 0x9
     Vec position;     // 0xC
     Vec scale;        // 0x18
     Vec rotation;     // 0x24

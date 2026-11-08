@@ -88,9 +88,12 @@ in `docs/FAKES.md` and in the mweppc review record.
   sac_deka); none of the written values shows what the field is, so they keep offset names.
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 394 (2026-11-08). The views among them were
   turned into the real types earlier (section 4); the large gaps left are documented "never accessed" bytes or
-  unread file-data fields (cam_road.h's curve record: one value read per 12-byte group, layout unknown). About 100 are
-  1-3 byte pads in front of a 4-byte member, the same bytes the compiler inserts by itself; keeping or dropping
-  them is a style choice (asked the user, 2026-11-08).
+  unread file-data fields (cam_road.h's curve record: one value read per 12-byte group, layout unknown). Alignment pads
+  (user: remove, 2026-11-08): 70 hand-written 1-3 byte pads that sat exactly where the compiler pads by itself
+  are gone (cleanup_tools/align_pads.py: pad offset + size equals the next member's offset, which is the pad
+  offset rounded up to that member's 4- or 8-byte alignment). Kept: BattleWeapon's pad_06/pad_AE and
+  BattleUnitSetup's pad_05, which the data tables write out in their initialisers, and 58 pads the tool cannot
+  prove (no offset comment on the next member, a version block next, or a struct-typed member).
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
   from what our code does (2026-10-26). Later decisions allow, with credit in NAME_PROVENANCE.md: jdaster64's
   pseudocode names, Zephiles' IconType names, the MetroTRK spellings of the community TRK decompilations, AxioDL's

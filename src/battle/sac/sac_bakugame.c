@@ -64,7 +64,6 @@ typedef struct BakuWork {
     f32 c8;             // 0xC8
     u8 holder;          // 0xCC, who holds the bomb: 0 Mario, 1 an enemy, 2 the audience
     u8 throwTarget;     // 0xCD, target of the button whose gauge ran out
-    u8 padce[2];        // 0xCE
     f32 gauge;          // 0xD0
     f32 vel;            // 0xD4
     f32 acc;            // 0xD8
@@ -82,7 +81,6 @@ typedef struct BakuWork {
     s32 htimer;         // 0x1C4
     s32 hsteps;         // 0x1C8
     s8 hmirror;           // 0x1CC
-    u8 pad1cd[3];       // 0x1CD
     Vec hpos;           // 0x1D0
     Vec hfrom;          // 0x1DC
     Vec hto;            // 0x1E8

@@ -15,7 +15,6 @@
 // entries 1.. are the puffs (position, speeds, direction, colour).
 typedef struct EffKemuri1Work {
     u16 type;           // 0x0
-    u8 pad_2[2];        // 0x2
     Vec position;       // 0x4
     f32 hSpeed;         // 0x10, along (dirX, dirZ)
     f32 f14, f18, f1C;  // 0x14, per type: horizontal speed factors

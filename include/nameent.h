@@ -16,7 +16,6 @@ typedef enum NameEntryType {
 
 typedef struct NameEntryWork {
     u16 flags; // 0x0, bit0 = nameEntWait called (permits input), bit1 = cancelled
-    u8 pad_2[2]; // 0x2
     s32 loadState; // 0x4, tpl load step (0 idle, 1 load, 3 free)
     s32 state; // 0x8, input state; 100 = confirm, 101 = finished (confirmed or cancelled)
     s32 type; // 0xC, NameEntryType

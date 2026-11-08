@@ -138,7 +138,6 @@ typedef enum FadeWorkFlags {
 
 typedef struct FadeWork {
     u16 flags; // 0x0, FadeWorkFlags
-    u8 pad_2[2]; // 0x2
     u32 pad_04; // 0x4, never accessed
     FadeEntry entries[5]; // 0x8
     s32 lastEntryId; // 0x350, entry index used by the last fadeEntry

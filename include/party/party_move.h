@@ -17,7 +17,6 @@ struct HitEntry;
 
 typedef struct Footmark {
     u8 flag;    // 0x0
-    u8 pad[3];  // 0x1
     Vec pos;    // 0x4
 } Footmark;
 
