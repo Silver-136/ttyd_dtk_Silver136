@@ -360,7 +360,10 @@ static void initTestHeap(void) {
     wp->testAlloc = wp->testHeap;
 }
 
-/** heavily inlined */
+/**
+ * Takes size bytes (rounded up to 32) from the pose scratch heap; when the heap is full it resets it (animPoseRefresh
+ * reallocates every pose's buffers) and retries. Inlined at most of its call sites.
+ */
 static void* testAlloc(u32 size) {
     void* alloc = wp->testAlloc;
 
@@ -1088,8 +1091,9 @@ static inline void apmCopy4(void* src, void* dst, s32 count, s32 size) {
 
 /** Copies count bytes of a frame buffer when there are any (demo animPoseMain helper). */
 static inline void apmCopy(void* src, void* dst, s32 count) {
-    if (count != 0)
+    if (count != 0) {
         memcpy(dst, src, count);
+    }
 }
 
 /**

@@ -195,7 +195,6 @@ static BeroEntry bero_entry_data[] = {
  * if the local flag LSWF_GON_08_FLOAT_BLOCK_MOVED says the switch has been used,
  * it lifts the block 600 units above its resting height.
  */
-// With this configuration, a set moved flag raises the block 600 units above its base position.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
@@ -467,7 +466,6 @@ static s32 key_tbl[] = {
  * Check for the locked door ("me"): if Mario carries a Castle Key (ITEM_CASTLE_KEY_0x0F),
  * opens the item select window with key_tbl; cancelling it cancels the lock execution so the door stays locked.
  */
-// If the key is present, cancel the lock event only when the item selection is cancelled.
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0F, LW(0))
     IF_INT_GREATER(LW(0), 0)

@@ -505,7 +505,7 @@ void btlseqEnd(BattleWork* wp) {
         work->flags &= ~1;
         if (work->levelUp) {
             work->selected = 1;
-            work->unk14 = 0;
+            work->reserved_14 = 0;
             work->objCount = 3;
             work->timer = 0;
             BattleAudience_WinSetActive(0);
@@ -582,7 +582,7 @@ void btlseqEnd(BattleWork* wp) {
             }
             if (ok) {
                 work->cursor = 0;
-                work->unk28 = 0;
+                work->reserved_28 = 0;
                 work->cursorCount = 2;
                 work->flags &= ~SEQEND_DISP_LVUP_HELP;
                 BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_JUMP_WAIT);

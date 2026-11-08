@@ -89,7 +89,7 @@ EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     p->position.y = y;
     p->position.z = z;
     p->timer = 1000;
-    p->field_0x14 = 0;
+    p->reserved_14 = 0;
     p->poseId[0] = -1;
     p->poseId[1] = -1;
     p->alpha = 255;
@@ -103,7 +103,7 @@ EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     p->position.y = y;
     p->position.z = z;
     p->timer = 1000;
-    p->field_0x14 = 0;
+    p->reserved_14 = 0;
     p->poseId[0] = -1;
     p->poseId[1] = -1;
     p->alpha = 255;

@@ -1841,15 +1841,15 @@ USER_FUNC(btlevtcmd_SetOverTurnCount) {
  */
 USER_FUNC(btlevtcmd_GetUnitWork) {
     EvtWord* args = event->args;
-    s32 id, i, index;
+    s32 id, slot, outVar;
     BattleUnit* unit;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
-    i = evtGetValue(event, args[1]);
-    index = args[2];
+    slot = evtGetValue(event, args[1]);
+    outVar = args[2];
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    evtSetValue(event, index, unit->work[i]);
+    evtSetValue(event, outVar, unit->work[slot]);
     return EVT_RETURN_DONE;
 }
 
@@ -1858,94 +1858,94 @@ USER_FUNC(btlevtcmd_SetUnitWork) {
     EvtWord* args = event->args;
     s32 btlId, id;
     EvtWord value;
-    s32 index;
+    s32 slot;
     BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    index = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[1]);
     value = evtGetValue(event, args[2]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    unit->work[index] = value;
+    unit->work[slot] = value;
     return EVT_RETURN_DONE;
 }
 
 /** Script: adds args[2] to the unit args[0]'s script work slot args[1]. */
 USER_FUNC(btlevtcmd_AddUnitWork) {
     EvtWord* args = event->args;
-    s32 btlId, id, value, index;
+    s32 btlId, id, value, slot;
     BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    index = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[1]);
     value = evtGetValue(event, args[2]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    unit->work[index] += value;
+    unit->work[slot] += value;
     return EVT_RETURN_DONE;
 }
 
 /** Script: returns in args[2] the unit args[0]'s work slot args[1] read as a float. */
 USER_FUNC(btlevtcmd_GetUnitWorkFloat) {
     EvtWord* args = event->args;
-    s32 id, i, index;
+    s32 id, slot, outVar;
     BattleUnit* unit;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
-    i = evtGetValue(event, args[1]);
-    index = args[2];
+    slot = evtGetValue(event, args[1]);
+    outVar = args[2];
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    evtSetFloat(event, index, *(f32*)&unit->work[i]);
+    evtSetFloat(event, outVar, *(f32*)&unit->work[slot]);
     return EVT_RETURN_DONE;
 }
 
 /** Script: stores the float args[2] in the unit args[0]'s work slot args[1]. */
 USER_FUNC(btlevtcmd_SetUnitWorkFloat) {
     EvtWord* args = event->args;
-    s32 btlId, id, index;
+    s32 btlId, id, slot;
     f32 value;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    index = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[1]);
     value = evtGetFloat(event, args[2]);
-    *(f32*)&BattleGetUnitPtr(_battleWorkPointer, id)->work[index] = value;
+    *(f32*)&BattleGetUnitPtr(_battleWorkPointer, id)->work[slot] = value;
     return EVT_RETURN_DONE;
 }
 
 /** Script: returns in args[3] work slot args[2] of part args[1] of the unit args[0]. */
 USER_FUNC(btlevtcmd_GetPartsWork) {
     EvtWord* args = event->args;
-    s32 id, partId, i, index;
+    s32 id, partId, slot, outVar;
     BattleUnitPart* part;
     BattleUnit* unit;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     partId = evtGetValue(event, args[1]);
-    i = evtGetValue(event, args[2]);
-    index = args[3];
+    slot = evtGetValue(event, args[2]);
+    outVar = args[3];
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     part = BtlUnit_GetPartsPtr(unit, partId);
-    evtSetValue(event, index, part->work[i]);
+    evtSetValue(event, outVar, part->work[slot]);
     return EVT_RETURN_DONE;
 }
 
 /** Script: stores args[3] in work slot args[2] of part args[1] of the unit args[0]. */
 USER_FUNC(btlevtcmd_SetPartsWork) {
     EvtWord* args = event->args;
-    s32 btlId, id, partId, index;
+    s32 btlId, id, partId, slot;
     EvtWord value;
     BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
     partId = evtGetValue(event, args[1]);
-    index = evtGetValue(event, args[2]);
+    slot = evtGetValue(event, args[2]);
     value = evtGetValue(event, args[3]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    *(EvtWord*)((u8*)BtlUnit_GetPartsPtr(unit, partId)->work + index * sizeof(EvtWord)) = value; // FAKE: byte-stride form of ->work[index] (index scaled before the field offset is added, as in the target)
+    *(EvtWord*)((u8*)BtlUnit_GetPartsPtr(unit, partId)->work + slot * sizeof(EvtWord)) = value; // FAKE: byte-stride form of ->work[slot] (slot scaled before the field offset is added, as in the target)
     return EVT_RETURN_DONE;
 }
 

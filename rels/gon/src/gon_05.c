@@ -294,7 +294,6 @@ static BeroEntry bero_entry_data[] = {
  * while the local flag LSWF_GON_05_FLOAT_BLOCK_0_MOVED is clear,
  * it lifts the block 525 units above its resting height.
  */
-// Block 0 starts 525 units above its placed position when its area flag is clear.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
@@ -559,7 +558,6 @@ EVT_END()
  * Map-init helper for the floating block blk_1:
  * moves it 489 units up if its saved state LSWF_GON_05_FLOAT_BLOCK_1_MOVED says it was raised.
  */
-// Block 1 starts 489 units above its placed position when its area flag is set.
 EVT_BEGIN(init_1)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)

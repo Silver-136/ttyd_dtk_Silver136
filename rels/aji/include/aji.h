@@ -47,9 +47,10 @@ extern s32 kusuri_tyogo_list[];
 // (peach_evt_pick_kusuri); cleared when she sets it in a slot (peach_evt_kaihei1-4); peach_evt_kusuri_select lists it
 // while set
 #define LSWF_AJI_06_RED_POTION_HELD LSWF(1)
-#define LSWF_AJI_06_BLUE_POTION_HELD LSWF(2) /* as LSWF(1) for the Blue Potion (peach_evt_kusuri_ao) */
-#define LSWF_AJI_06_ORANGE_POTION_HELD LSWF(3) /* as LSWF(1) for the Orange Potion (peach_evt_kusuri_ki) */
-#define LSWF_AJI_06_GREEN_POTION_HELD LSWF(4) /* as LSWF(1) for the Green Potion (peach_evt_kusuri_mid) */
+#define LSWF_AJI_06_BLUE_POTION_HELD LSWF(2)   // as LSWF(1) for the Blue Potion (peach_evt_kusuri_ao)
+#define LSWF_AJI_06_ORANGE_POTION_HELD LSWF(3) // as LSWF(1) for the Orange Potion (peach_evt_kusuri_ki)
+#define LSWF_AJI_06_GREEN_POTION_HELD LSWF(4)  // as LSWF(1) for the Green Potion (peach_evt_kusuri_mid)
+
 // set by peach_evt_check_all_kusuri_set when Peach confirms the placement (start event peach_evt_tyogo_entry on
 // A_sui1); peach_evt_pick_kusuri removes that event and clears it when a potion is taken back out, and
 // peach_evt_check_all_kusuri_set clears it when Peach declines

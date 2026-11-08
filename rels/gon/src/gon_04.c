@@ -270,7 +270,6 @@ static BeroEntry bero_entry_data[] = {
  * while LSWF_GON_04_FLOAT_BLOCK_1_MOVED is clear (the raised state) it moves the block 225 units up so it starts where it was left.
  * The IF_INT_EQUAL(1, 0) arm, which reads the flag the other way round, never runs.
  */
-// A clear area flag places block 1 225 units above its base; a set flag leaves it at the base.
 EVT_BEGIN(evt_gon_04flowblock_updown1_init)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
@@ -533,7 +532,6 @@ EVT_END()
  * Map-init helper for the second floating block (mobj_fltbl02):
  * moves it 200 units up if its saved state LSWF_GON_04_FLOAT_BLOCK_2_MOVED says it was raised.
  */
-// A set area flag places block 2 200 units above its base; a clear flag leaves it at the base.
 EVT_BEGIN(evt_gon_04flowblock_updown2_init)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)

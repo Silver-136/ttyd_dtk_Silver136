@@ -269,7 +269,7 @@ static f32 randf(f32 min, f32 max) {
 }
 
 static EVT_BEGIN(s_door_open)
-    IF_FLOAT_EQUAL(LW(0), FLOAT((0.0f)))
+    IF_FLOAT_EQUAL(LW(0), FLOAT(0.0f))
         IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
             SET_VALUE(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 1)
             BEGIN_INLINE_EVENT
@@ -299,7 +299,7 @@ static EVT_BEGIN(s_door_close)
             END_INLINE_EVENT
         END_IF
     END_IF
-    IF_FLOAT_EQUAL(LW(0), FLOAT((0.0f)))
+    IF_FLOAT_EQUAL(LW(0), FLOAT(0.0f))
         SET_VALUE(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
         CALL(evt_snd_sfxoff, GW(13))
     END_IF
@@ -1285,7 +1285,7 @@ EVT_END()
  * STG3_33_06_BOWSER_TREASURE placed at (-30, 0, -50) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
 EVT_BEGIN(init_ironA)
-    CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
+    CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
@@ -1314,7 +1314,7 @@ EVT_END()
  * STG3_33_06_BOWSER_TREASURE placed at (-60, 0, -25) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
 EVT_BEGIN(init_ironB)
-    CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
+    CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
@@ -2433,8 +2433,8 @@ static EVT_BEGIN(evt_poster_8)
         CALL(evt_mapobj_get_position, STRING("p_m_8"), LW(0), LW(1), LW(2))
 #endif
         CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, -1, PTR(evt_key))
-        CALL(evt_item_set_move_dir_speed, STRING("key"), FLOAT(180.0f), FLOAT((90.0f)))
-        CALL(evt_item_set_gravity, STRING("key"), FLOAT((1.0f)))
+        CALL(evt_item_set_move_dir_speed, STRING("key"), FLOAT(180.0f), FLOAT(90.0f))
+        CALL(evt_item_set_gravity, STRING("key"), FLOAT(1.0f))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
         CALL(evt_item_status_on, STRING("key"), ITEM_FLAG2_SKIP_BOUND_INIT)

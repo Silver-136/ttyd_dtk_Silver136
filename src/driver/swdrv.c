@@ -26,24 +26,26 @@ void swReInit(void) {
     memset(gp->lSW, 0, sizeof(gp->lSW));
 }
 
-/** Global Saved Work Flags -------------------------------------- */
 // Global Saved Work Flags --------------------------------------
-void swSet(s32 index) { //set specific bit
+
+/** Sets global saved flag GSWF(index). */
+void swSet(s32 index) {
     gp->gSWF[index / 32] |= (1 << (index % 32));
 }
 
 /** Returns whether global saved flag GSWF(index) is set. */
-BOOL swGet(s32 index) { //get specific bit
+BOOL swGet(s32 index) {
     return (gp->gSWF[index / 32] & (1 << (index % 32))) != 0;
 }
 
 /** Clears global saved flag GSWF(index). */
-void swClear(s32 index) { //clear specific bit
+void swClear(s32 index) {
     gp->gSWF[index / 32] &= ~(1 << (index % 32));
 }
 
-/** Global Saved Work -------------------------------------------- */
 // Global Saved Work --------------------------------------------
+
+/** Sets global saved word GSW(index); GSW(0), the story progress, is a full 32-bit value, the others are bytes. */
 void swByteSet(s32 index, s32 value) {
     if (index == 0) {
         gp->gSW0 = value;
@@ -61,24 +63,26 @@ s32 swByteGet(s32 index) {
     }
 }
 
-/** Local Saved Work Flags --------------------------------------- */
 // Local Saved Work Flags ---------------------------------------
-void _swSet(s32 index) { //set specific bit
+
+/** Sets area-local saved flag LSWF(index). */
+void _swSet(s32 index) {
     gp->lSWF[index / 32] |= (1 << (index % 32));
 }
 
 /** Returns whether area-local saved flag LSWF(index) is set. */
-BOOL _swGet(s32 index) { //get specific bit
+BOOL _swGet(s32 index) {
     return (gp->lSWF[index / 32] & (1 << (index % 32))) != 0;
 }
 
 /** Clears area-local saved flag LSWF(index). */
-void _swClear(s32 index) { //clear specific bit
+void _swClear(s32 index) {
     gp->lSWF[index / 32] &= ~(1 << (index % 32));
 }
 
-/** Local Saved Work --------------------------------------------- */
 // Local Saved Work ---------------------------------------------
+
+/** Sets area-local saved byte LSW(index). */
 void _swByteSet(s32 index, u8 value) {
     gp->lSW[index] = value;
 }

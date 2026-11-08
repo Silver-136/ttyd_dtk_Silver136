@@ -139,7 +139,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
-    s32 frames = evtGetValue(event, args[0]);
+    s32 durationMs = evtGetValue(event, args[0]);
     s32 elapsed;
 
     if (isFirstCall) {
@@ -149,13 +149,13 @@ static USER_FUNC(lect_mario_ido_sum) {
         evtSetFloat(event, LW(2), mario->position.z);
     }
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > frames) {
-        elapsed = frames;
+    if (elapsed > durationMs) {
+        elapsed = durationMs;
     }
-    mario->position.x = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    mario->position.y = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    mario->position.z = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= frames) {
+    mario->position.x = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    mario->position.y = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    mario->position.z = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= durationMs) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -566,7 +566,7 @@ static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 static USER_FUNC(lect_party_ido_sum) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
-    s32 frames = evtGetValue(event, args[1]);
+    s32 durationMs = evtGetValue(event, args[1]);
     s32 elapsed;
 
     if (isFirstCall) {
@@ -577,13 +577,13 @@ static USER_FUNC(lect_party_ido_sum) {
         return EVT_RETURN_BLOCK;
     }
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > frames) {
-        elapsed = frames;
+    if (elapsed > durationMs) {
+        elapsed = durationMs;
     }
-    party->position.x = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    party->position.y = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    party->position.z = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= frames) {
+    party->position.x = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    party->position.y = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    party->position.z = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= durationMs) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

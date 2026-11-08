@@ -4318,6 +4318,7 @@ static f32 cosf(f32 x) {
 /** A zero vector placed with the Star Stone jump code; nothing in this file reads it. */
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static const Vec item_jump_zero = {0.0f, 0.0f, 0.0f};
+
 /**
  * Moves the item named "stone" (the Star Stone) along a ballistic arc towards the target (arg0..arg2) at the
  * given horizontal speed and gravity, each frame, and plays the Star Stone jump sound on landing.

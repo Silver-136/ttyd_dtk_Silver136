@@ -9,7 +9,8 @@
 
 // ItemEntry.flags, named from itemdrv (itemMain, itemHitCheck, itemseq_*, the get sequence).
 typedef enum ItemEntry_Flags {
-    ITEM_FLAG_ACTIVE = (1 << 0),
+    ITEM_FLAG_ACTIVE = (1 << 0),              // 0x1, the entry is in use
+
     ITEM_FLAG_NO_TOUCH_GET = (1 << 1),        // 0x2, itemHitCheck ignores it (no pickup by touch)
     ITEM_FLAG_QUICK_GET = (1 << 2),           // 0x4, straight into the pouch without the get window
     ITEM_FLAG_BGM_SILENT = (1 << 3),          // 0x8, the get sequence dipped the BGM

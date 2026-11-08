@@ -154,7 +154,6 @@ void msgInit(void) {
     msgLoad("global", 1);
 }
 
-/** Loads the selected message file into the map or default heap (the early demos: a smart heap block) and builds its lookup table. */
 #if VERSION <= VERSION_DEMO_JP
 /** The text of a loaded message file (the demo keeps it in a smart heap block). */
 static inline const char* msgEntryText(MessageEntry* entry) {
@@ -162,6 +161,10 @@ static inline const char* msgEntryText(MessageEntry* entry) {
 }
 #endif
 
+/**
+ * Loads the selected message file into the map or default heap (the early demos: a smart heap block) and builds its
+ * lookup table.
+ */
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;
     const char* str;

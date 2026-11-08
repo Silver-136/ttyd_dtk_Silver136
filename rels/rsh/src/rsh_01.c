@@ -400,10 +400,8 @@ static s32 item_tbl_madam[] = {
 /**
  * Talk script used when Mario holds a Gold Ring: opens the item menu;
  * giving the ring pays Mario 30 coins and she thanks him (stg6_rsh_201, 202), cancelling prints stg6_rsh_201_2,
- * then the station-dependent music state is applied.
+ * then the station-dependent music state is applied. The ring is removed after the payment.
  */
-
-// Item-selection cancellation gives no reward; a non-cancelled selection pays 30 coins, then removes the ring.
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_200"), 0, STRING("マダム"))

@@ -221,7 +221,7 @@ typedef struct NpcEntry {
     char currentAnim[32];           // 0x2C
     char stayAnim[32];              // 0x4C
     char talkAnim[32];              // 0x6C
-    Vec position;                   // 0x8C, verified
+    Vec position;                   // 0x8C
     Vec prevPosition;               // 0x98
     Vec positionHistory[5];         // 0xA4
     Vec scale;                      // 0xE0
@@ -234,16 +234,16 @@ typedef struct NpcEntry {
     GXColor color;                  // 0x114
     s32 initEvtId;                  // 0x118
     s32 regularEvtId;               // 0x11C
-    EvtWord* initEvent;                // 0x120, verified
-    EvtWord* moveEvent;                // 0x124, verified
-    EvtWord* talkEvt;                  // 0x128
-    EvtWord* deadEvent;                // 0x12C, verified
-    EvtWord* findEvent;                // 0x130, verified
-    EvtWord* lostEvent;                // 0x134, verified
-    EvtWord* returnEvent;              // 0x138, verified
-    EvtWord* blowEvent;                // 0x13C, verified
+    EvtWord* initEvent;             // 0x120
+    EvtWord* moveEvent;             // 0x124
+    EvtWord* talkEvt;               // 0x128
+    EvtWord* deadEvent;             // 0x12C
+    EvtWord* findEvent;             // 0x130
+    EvtWord* lostEvent;             // 0x134
+    EvtWord* returnEvent;           // 0x138
+    EvtWord* blowEvent;             // 0x13C
     u32 interruptFlags;             // 0x140, NpcInterruptFlags
-    f32 direction;                  // 0x144, angle we're facing at, verified
+    f32 direction;                  // 0x144, angle we're facing at
     f32 savedDirection;             // 0x148, saved during field battle
     f32 width;                      // 0x14C
     f32 height;                     // 0x150
@@ -252,7 +252,7 @@ typedef struct NpcEntry {
     Vec jumpTargetPos;              // 0x164
     u8 pad_170[0x178 - 0x170];      // 0x170
     OSTime jumpTicks;               // 0x178, OSTime accumulated while jumping/falling, 0 on landing
-    f32 jumpElapsed;                   // 0x180, jumpTicks in seconds
+    f32 jumpElapsed;                // 0x180, jumpTicks in seconds
     u8 pad_184[0x188 - 0x184];      // 0x184
     OSTime moveTicks;               // 0x188, OSTime accumulated since the current evt move started
     OSTime dtTicks;                 // 0x190, frame delta (capped to 16 ms after a >500 ms gap)
@@ -278,13 +278,13 @@ typedef struct NpcEntry {
     const char* landSfx;            // 0x1F0
     s32 cameraId;                   // 0x1F4, CameraId
     NpcTerritoryType territoryType; // 0x1F8
-    Vec territoryBase;              // 0x1FC, verified
-    Vec territoryLoiter;            // 0x208, verified
-    Vec territoryHoming;            // 0x214, verified
-    f32 searchRange;                // 0x220, verified
-    f32 searchAngle;                // 0x224, verified
-    f32 homingRange;                // 0x228, verified
-    f32 homingAngle;                // 0x22C, verified
+    Vec territoryBase;              // 0x1FC
+    Vec territoryLoiter;            // 0x208
+    Vec territoryHoming;            // 0x214
+    f32 searchRange;                // 0x220
+    f32 searchAngle;                // 0x224
+    f32 homingRange;                // 0x228
+    f32 homingAngle;                // 0x22C
     NpcBattleInfo battleInfo;       // 0x230
     s32 attackMode;                 // 0x2F8, evt_npc_set_attack_mode
     struct HitEntry* wallHit;       // 0x2FC, npcHitCheckSide result
@@ -297,7 +297,7 @@ typedef struct NpcEntry {
     u32 fbatHitKind;                // 0x318, kind from fbatHitCheck when this NPC triggered the battle
     u16 koopaEncounterType;         // 0x31C, NpcKoopaEncount
     u16 hazardFlags;                // 0x31E, NpcKoopaEncount bits the NPC is immune to
-    u16 hitCooldown;       // 0x320
+    u16 hitCooldown;                // 0x320
     u8 pad_322[2];                  // 0x322
     struct NpcEntry* prev;          // 0x324
     struct NpcEntry* next;          // 0x328

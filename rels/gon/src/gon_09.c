@@ -127,7 +127,6 @@ static BeroEntry bero_entry_data[] = {
  * if the local flag LSWF_GON_09_FLOAT_BLOCK_MOVED is clear,
  * it lifts the block 200 units above its resting height.
  */
-// With this configuration, a clear moved flag places the block 200 units above its base position.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)

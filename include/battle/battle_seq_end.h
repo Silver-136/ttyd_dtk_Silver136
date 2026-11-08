@@ -40,11 +40,11 @@ typedef struct BattleSeqEndWork {
     s16 expDisp;                   // 0xA, counts down while exp is added to the pouch
     s32 levelUp;                   // 0xC, set when the pouch star points reach 100
     s32 selected;                  // 0x10
-    s32 unk14;                     // 0x14
+    s32 reserved_14;               // 0x14, only cleared
     s32 objCount;                  // 0x18
-    u8 field_0x1C[0x24 - 0x1C];    // 0x1C
+    u8 reserved_1C[0x24 - 0x1C];   // 0x1C, never accessed
     s32 cursor;                    // 0x24
-    s32 unk28;                     // 0x28
+    s32 reserved_28;               // 0x28, only cleared
     s32 cursorCount;               // 0x2C, number of level-up choices
     u32 flags;                     // 0x30
     struct IconEntry* icons[19];   // 0x34

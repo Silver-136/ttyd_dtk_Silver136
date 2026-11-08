@@ -5857,14 +5857,11 @@ EVT_END()
 
 /**
  * Background task of the harbor, named after its cargo (tsumini, 積荷): hides the cargo pile that doesn't fit the
- * story stage ("S_ni_03" up to the X-Naut Ph.D. report, "S_ni_01" after).
- * Then every frame, while Mario is outside
- * the dock area (it counts as inside at x >= -100 with z >= -70, or x < -100 with z >= -280; in ship form only
- * once
- * a ship change has set GF(12)), it hides the ships "S_fune_b" and "S_fune_c" and the crew NPCs (Flavio's crew
- * from STG4_32 to the end of chapter 4, otherwise Cortez), and restores them when he is inside.
- * It ends once
- * GF(13) is set (korutesu_talk, sailing to Keelhaul Key).
+ * story stage ("S_ni_03" up to the X-Naut Ph.D. report, "S_ni_01" after). Then every frame, while Mario is
+ * outside the dock area (it counts as inside at x >= -100 with z >= -70, or x < -100 with z >= -280; in ship form
+ * only once a ship change has set GF(12)), it hides the ships "S_fune_b" and "S_fune_c" and the crew NPCs
+ * (Flavio's crew from STG4_32 to the end of chapter 4, otherwise Cortez), and restores them when he is inside.
+ * It ends once GF(13) is set (korutesu_talk, sailing to Keelhaul Key).
  */
 EVT_BEGIN(tsumini)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
