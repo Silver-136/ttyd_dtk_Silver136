@@ -391,7 +391,9 @@ void winMain(void) {
             case WIN_MENU_ITEM_USE: {
 #if VERSION < VERSION_DEMO_EU
 #if VERSION >= VERSION_US
-                WindowPartyDt* list[11]; // only 7 entries used; the US frame has room for 11 (96 bytes)
+                // Only 7 entries are used; 11 gives the US frame size (0x60 against JP's 0x40), the original size is
+                // not known.
+                WindowPartyDt* list[11];
 #else
                 WindowPartyDt* list[7];
 #endif

@@ -133,6 +133,7 @@ void GXGetCullMode(GXCullMode* mode) {
     default:            *mode = hwMode;        break;
     }
 #else
+    // FAKE: the cull mode decoded with a bit expression instead of the readable switch above
     GXCullMode hwMode = __GXData->genMode;
     *mode = ((hwMode >> 0xD) & 0x2) | (((((int)hwMode >> 0xE) & 0x2) >> 0x1));
 #endif

@@ -914,6 +914,8 @@ static void senkaron_ext_main(void) {
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
+
+                        // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_LANDING1"), &pos);
                     }
                 }

@@ -856,6 +856,9 @@ static EVT_BEGIN(breath_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+
+        // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_TYPE with the next command word as its value, and the script goes on after the GOTO.
         GOTO(99)
     END_IF
     CALL(target_id_set, LW(3), LW(4))
@@ -936,6 +939,8 @@ EVT_BEGIN(breath_event_sub)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
         GOTO(98)
         CASE_END
     END_SWITCH

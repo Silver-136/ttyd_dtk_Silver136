@@ -1469,6 +1469,8 @@ EVT_BEGIN(drill_attack_event)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
         GOTO(98)
         CASE_END
     END_SWITCH
@@ -1598,6 +1600,8 @@ EVT_BEGIN(boomerang_attack_event)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
         GOTO(98)
         CASE_END
     END_SWITCH
@@ -1908,6 +1912,8 @@ EVT_BEGIN(aud_attack_event_sub)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
         GOTO(98)
         CASE_END
     END_SWITCH
@@ -2371,6 +2377,8 @@ static EVT_BEGIN(attack_event_r)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
         GOTO(98)
         CASE_END
     END_SWITCH

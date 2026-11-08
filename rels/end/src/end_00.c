@@ -167,6 +167,9 @@ EvtWord end_credit_para_evt[50];
 EvtWord end_credit_batten_evt[83];
 EvtWord end_credit_queen_evt[];
 EvtWord end_credit_moamoa_evt[108];
+
+// FAKE: the unit's dtrigf constants as hand-made globals after its own data; the unit is built without msl_rel.pch
+// (PCH_EXCLUDE in configure.py), whose constants would come first
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8)));
 f32 fd_end_00_neg_one_382;
 f32 fd_end_00___local_PI_383;

@@ -395,6 +395,9 @@ EVT_BEGIN(fall_attack_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+
+        // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_TYPE with the next command word as its value, and the script goes on after the GOTO.
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -432,6 +435,9 @@ static EVT_BEGIN(shake_attack_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+
+        // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_TYPE with the next command word as its value, and the script goes on after the GOTO.
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -665,6 +671,8 @@ void zakogun_ext_main2(void) {
                 zako->target.y = y + work->count * 2.0f;
                 zako->state = 35;
                 zakogun_set_pose(zako, 0x2C, 1, 1);
+
+                // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
                 psndSFXOn(SFX_NAME_WORD("SFX_BOSS_TEAM_3RD_ATTACK2"));
             case 35:
                 zako->pos.x += zako->vel.x;

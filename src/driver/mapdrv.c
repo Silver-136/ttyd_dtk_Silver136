@@ -1079,8 +1079,9 @@ void mapLoad(const char* map) {
 }
 #endif
 
-// FAKE: opt_common_subs off for this function only. With CSE on, `wp = mapWork` (last loop) becomes a CSE temp created
-// before the lifetime-split temps, so wp's register lands above i's. With it off, the second web of the reused `wp` is a
+// FAKE: opt_common_subs off for bmapUnLoad (the block also spans the early demos' mapPreLoad and mapLoad before
+// it). With CSE on, `wp = mapWork` (last loop) becomes a CSE temp created before the lifetime-split temps, so wp's
+// register lands above i's. With it off, the second web of the reused `wp` is a
 // split temp; split temps are created in order of the variables' first reference (i before wp before entry), which gives
 // the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
 #pragma opt_common_subs off

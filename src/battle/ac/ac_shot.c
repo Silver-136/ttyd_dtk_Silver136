@@ -112,6 +112,8 @@ s32 battleAcMain_Shot(BattleWork* work) {
             case AC_STATE_START:
                 sw->timer = 360;
                 ac->acState = AC_STATE_RUN;
+
+                // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
                 sw->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_AC_CURSOR_MOVE1"));
             case AC_STATE_RUN:
                 if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {

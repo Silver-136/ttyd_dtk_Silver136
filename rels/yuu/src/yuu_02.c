@@ -469,6 +469,8 @@ static USER_FUNC(fall_rtn) {
             case 0:
                 if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
                     data->monteCount++;
+
+                    // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
                     psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &marioGetPtr()->position);
                     m->hidden = 1;
                     m->state = 1;

@@ -6492,6 +6492,8 @@ static USER_FUNC(fall_rtn) {
                 m->vel.y -= 0.81666666f;
                 if (m->sub.pos.y <= 0.0f) {
                     m->sub.pos.y = 0.0f;
+
+                    // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
                     psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_LEAPED1"), &m->sub.pos);
                     if (__fabs(m->vel.y) <= 4.0) {
                         m->state++;
@@ -6906,6 +6908,8 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     } else {
                         data->stopCount[j] = irand(2);
                     }
+
+                    // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
                     psndSFXOn(SFX_NAME_WORD("SFX_EVT_GAME_SLOT_STOP1"));
                 }
                 count += slot_rotate_sub(wp, data, j);

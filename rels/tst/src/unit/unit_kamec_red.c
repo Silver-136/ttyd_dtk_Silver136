@@ -1780,6 +1780,9 @@ static EVT_BEGIN(all_recover_magic_event)
             SET_VALUE(LW(0), 1)
             RETURN
         END_IF
+
+        // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_TYPE with the next command word as its value, and the script goes on after the GOTO.
         GOTO(99)
     END_IF
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))

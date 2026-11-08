@@ -2,7 +2,7 @@
 
 Policy: no new fakes; the ones listed here are debt to be replaced by natural C. A fake is a behaviour-identical C trick (extra temp, no-op cast, dead guard, padding, inline helper, pragma) that makes the compiler emit the target code or layout. No fake uses assembly: there are no asm blocks or asm-backed functions in place of C.
 
-Every fake is marked at its site with a `// FAKE: ...` (or `/* FAKE: ... */`) comment and has a row here, one row per function. Cleanup means replacing a fake with natural C that still matches (all builds byte-identical: `cleanup_tools/verify_both.ps1`), then deleting its comment and its row.
+Every fake is marked at its site with a `// FAKE: ...` (or `/* FAKE: ... */`) comment and has a row here, one row per function. Exception: `__declspec(section ...)` data placements carry a FAKE comment but are counted as their own class in [PROGRESS.md](PROGRESS.md) (game section placements), not listed here row by row. Cleanup means replacing a fake with natural C that still matches (all builds byte-identical: `cleanup_tools/verify_both.ps1`), then deleting its comment and its row.
 
 This list is built from the FAKE comments in src/, rels/ and libs/. The Version column says where a fake is active: JP, US, PAL, Demos (one or both early demos: the June US demo and the JP store demo), All demos (the early demos and both September 2004 demos), US demo 2, PAL demo, or Both (the code JP and US retail share; other versions may see it too). Fakes needed only by PAL or the demos do not count as debt against JP and US retail, but are listed the same way. The Fake column summarises the comment text; "see comment" in the last column means the natural shapes tried are in the comment or were not recorded.
 
@@ -58,7 +58,7 @@ review took this list from 720 rows to 485.
 | US | src/driver/itemdrv.c | itemEntry | US: a named search pointer `e` and entries base `base`; the 0x79/0x7C searches are written as explicit loops, while 0x7B uses the itemFindDeletable inline (register numbering only) | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringShake | US: dead guard `s32 gz = 0; if (gz != 0) x = -1.0f;` (folded after register allocation, emits no code) only creates the -1.0f .sdata2 literal early, before the 28.0f of FontDrawStringMtx | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringVecPitch | US: `#pragma auto_inline off` around it keeps the FontDrawString/FontDrawStringPitch wrappers calling it, as in the target | see comment |
-| JP || src/manager/fontmgr.c | fontDrawStringVecPitch | msg = str spare copy; using str directly changes the object | see comment |
+| JP | src/manager/fontmgr.c | fontDrawStringVecPitch | msg = str spare copy; using str directly changes the object | see comment |
 | US | src/mario/mario_pouch.c | pouchHiraToKata | US: s and d are re-assigned inside the language branch (they already hold these values) | see comment |
 | US | src/mario/mario_pouch.c | pouchSortItem | US: block-scoped locals (shadowing j/i) and a separate sort counter m steer register colouring | see comment |
 | US | src/party/party_hit.c | partyChkBetweenWalls | US: `party_addf` inline add keeps the original fadds operand order (pos.y, 10.0f) | see comment |
@@ -85,7 +85,7 @@ review took this list from 720 rows to 485.
 | Both | rels/mri/src/mri_puni.c | evt_puni_set_lsw_index | slot offset computed in the caller (named local) and passed with idx 0; same slot, numbers off below the inlined extract temps (register colouring) | 720 decl orders and 5 statement orders of puniswSetindex's locals (the extract temps keep fixed @ids), off-free inline copy, block-scope off (91/104), off declared at positions 2-6 |
 | Both | rels/mri/src/mri_puni.c | puniSearchRandom | qrnd with the abs as `v = seed1; if (v < 0) v = -seed1;` (this numbers the seed1 load web after the start + count temp, so start + count is coloured first and takes r7): gives the target registers here, but the standalone qrnd ... | see comment |
 | Both | rels/mri/src/mri_puni.c | puniMoveHitLimited | (A25, replaces every earlier fake in this function) the first hitCheckFilter call goes through a cast to a typedef `PuniHitCheckStartFirst` whose parameter list puts the three start floats first: `((PuniHitCheckStartFirst)hitCheckFilter)(start.x, start.y, start.z, NULL, &pa.x, ..., dir.x, dir.y, dir.z)`. EABI assigns float and pointer args to f1-f6 / r3-r10 independently, so the registers and the `bl hitCheckFilter` are identical. Arguments are code-generated in list order, so the start loads now come before `addi r4` and the start copy `mr rv33,r4` is propagated away: lfs f1-f3 read r4 directly, and their write-after-read edges hold `addi r4` behind `addi r6` (sched sim: exactly the 21/21 requirement). The rest of the function is the natural form (p param, clears, `d = dist`, no self-assigns, no guard). 90.68 -> 97.04 (Q1) -> 99.78 (A11) -> 99.82 (A5) -> 99.91 (A25 pp/guard) -> 100 (A25) | 360+ statement orders, Vec* start/dir signatures, real hitMove/hitCheck fields, d via pointer/inline/f32[1]/holder, pa as 3 f32 locals (breaks stack), address temps, Vec s=start copy, volatile d (A11 round 1-3); float arg spellings (x*1.0f, +0.0f, casts, comma, inline identity) all fold; sx/sy/sz float temps give y-first (A25). Possible non-fake: the real hitCheckFilter prototype may list the floats first (would need hitdrv.h + every caller) |
-| Both | rels/rsh/src/rsh_05.c | ext_moamoa_main | integer cast (SFX_NAME_WORD) hoists the literal as an @ temp (same values); block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target (+1 more FAKE comment(s)) | see comment |
+| Both | rels/rsh/src/rsh_05.c | ext_moamoa_main | integer cast (SFX_NAME_WORD) hoists the literal as an @ temp (same values); block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target; an unreferenced 12-byte .rodata Vec `zv2` defined after the compound literal's template | see comment |
 | Both | rels/rsh/src/rsh_06.c | ext_moamoa_main | keeps the named in-argument holder `aa` of case 15 (dead store otherwise dropped by IRO), so the sum is a low-numbered named vreg as in the target { Vec tmp; static const Vec z0 = {0.0f, 0.0f, 0.0f}; tmp = z0; tmp.x = pose->mtx[0][3]; tmp.y = pose->mtx[1][3]; tmp.z = pose->mtx[2][3]; sp = tmp; }; integer cast (SFX_NAME_WORD) hoists the literal as an @ temp (sfx local removed) (+6 more FAKE comment(s)) | see comment |
 | Both | rels/tik/src/tik_00.c | (USER_FUNC near line 502) | (decomp-permuter): the dead condition moves the ssf load ahead of event->args; casts, temps and u32 index variants do not reproduce it | see comment |
 | Both | rels/tik/src/tik_05.c | tiz_broken_draw | copy temp; plain nx = dx / len changes regalloc (+4 B) | see comment |
@@ -165,7 +165,7 @@ review took this list from 720 rows to 485.
 | Both | src/manager/fontmgr.c | _JUTFont_DrawPos | fontHue/fontHueX/fontPos are invented inline helpers. Their params become @ temps created at the vertex 3/4 call sites (hr1 = vertex 3 hue, hr0 = vertex 4 hue, x1s = vertex 3 x), which is the register numbering the target needs.; vertex 2 x written as u16 (same 16 bits) so its first extsh is the vertex 3 fontPos param, not a store temp | x1s as named/inline local (definition-time @ ids), cast/expression args (substituted), non-const s16 params, hue before vertex-2 GXPosition3s16 (stb one slot early) |
 | Both | src/mario/mario_hit.c | marioLandonChk_old | dead re-definition (i is 0) gives zero/mone two reaching defs in IRO pass 0, so they stay named vregs instead of being constant-propagated; copies a 24-byte zero template; a real (LandonRay){0} adds a .rodata object and shifts every pool | see comment |
 | Both | src/mario/mario_hit.c | searchFrontWall | two-level wrapper so dir2 is allocated as a nested-inline local (lowest stack slot, COLOURING C2) | plain assignment / one-level `sfwVecSet`: 572/595; in-loop literal: 377; whole second loop as an inline: 365; inline dir builder: 575 (R) |
-| JP || src/mario/mario_pouch.c | pouchSortItem | `PouchData* pp[1]`, a one-element array used as a scalar | plain `PouchData* pp`: changes the object in JP and the early demos (US, PAL and the September demos stay the same) |
+| JP | src/mario/mario_pouch.c | pouchSortItem | `PouchData* pp[1]`, a one-element array used as a scalar | plain `PouchData* pp`: changes the object in JP and the early demos (US, PAL and the September demos stay the same) |
 | Both | src/motion/mot_hammer.c | hitEstimate | 5.0f held in local k5 for four products | see comment |
 | Both | src/motion/mot_hammer.c | mot_hammer2 | self-assignment keeps the branch; removing it (or the if) changes codegen | see comment |
 | Both | src/motion/mot_roll.c | k025, rabs, rollRad, rollCos, rSin (inline helpers) | k025/rabs/rollRad/rollCos/rSin are invented one-line inline helpers. Their result temps get later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, stickAngOut c in f31) and marioRollCan (v26 ... | 99.911 -> 100 (unit 19/19) |
@@ -198,7 +198,7 @@ review took this list from 720 rows to 485.
 | Both | src/event/evt_win.c | unitwin_setpartylank | a signed copy `ofs2` of the byte offset `ofs` (= index * sizeof(PouchPartyData)) is used for the level stores, so `pouch->partyData + ofs` is added again after pouchRevisePartyParam as in the target | struct indexing `partyData[i]` (s32 and u32 index), `&partyData[i]` pointer locals, a `u8 (*)[14]` row pointer, `partyData + i`, one byte-offset local without the copy (CSEs the add): all differ (tiny-TU lab in scratch/cleanup/sections/lab_pp) |
 | Both | src/window/win_badge.c | badge_disp | `p0` is a WindowWork* stepped one WinBadgeEnt at a time (`(WindowWork*)((WinBadgeEnt*)p0 + 1)`), so `p0->badge.list[0]` reads w->badge.list[i] with 0x404 kept in the load displacement | `w->badge.list[i]` (99.96%, induction increments swapped, in both loop orders 99.95/99.96%); a `WinBadgeEnt* e = w->badge.list` walk (99.90%, base precomputed) |
 | Both | src/window/win_badge.c | winBadgeMain | equip toggle reads the selection as `wt->badge.sel[0]` with `wt = (WindowWork*)((s32*)w + tab)` (base w + 4*tab, 0x3E4 in the displacement); both sort entries pass an untyped copy `void* p = w`, so r3 is loaded before m is chosen | `w->badge.sel[tab]` (r27/r28 swap); `s32* sel = &w->badge.sel[tab]` (addi + lwzx); `WindowWork* p = w` or `w` itself (copy propagated, mr moves after the branch) |
-| Both | src/window/win_item.c | item_disp | `p` is a WindowWork* stepped one s16 at a time (`(WindowWork*)((s16*)p + 1)`), so `p->item.skip[0]` reads skip[i] with 0x2E8 kept in the load displacement | `w->item.skip[i]` (r25/r26 swap); `s16* sk = w->item.skip` walk (base precomputed with addi); row/col declaration swap (worse) |
+| Both | src/window/win_item.c | item_disp | `p` is a WindowWork* stepped one s16 at a time (`(WindowWork*)((s16*)p + 1)`), so `p->item.skip[0]` reads skip[i] with 0x2E8 kept in the load displacement; `white` copied through white4 into white2 and white3 | `w->item.skip[i]` (r25/r26 swap); `s16* sk = w->item.skip` walk (base precomputed with addi); row/col declaration swap (worse) |
 | Both | src/window/win_main.c | float_0p5_8041dc98 (data, used through HALF_F) | the global 0.5f is `const volatile` so every use loads it | plain `const f32` (both versions change) |
 | Both | src/window/win_main.c | winMainStrippedPool | stand-in that nothing calls; it only places the int-to-float conversion constant in the pool | see comment |
 | Both | rels/gor/src/gor_01.c | cook_chk | `(volatile u32)args[n]` casts on the evtSetValue index | plain `args[n]` (both versions change) |
@@ -217,11 +217,11 @@ review took this list from 720 rows to 485.
 | Both | src/battle/battle_seq_command.c | BattleCommandInput | `wp = (BattleWork*)(void*)work` keeps wp its own copy (r24 as in the target); `(EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana` gives the target's signed cmpw | `wp = work`, `&work[0]`, `work + 0` (r22, 51 lines differ); plain pointer compare (cmplw) |
 | Both | rels/end/src/end_00.c | (data: `fd_end_00_*` dtrigf constants) | the unit's dtrigf constants are hand-made globals: in the original they follow the unit's own data instead of leading it, so the unit is built without msl_rel.pch (PCH_EXCLUDE in configure.py) | msl_rel.pch: constants placed first, end.rel 4 bytes short (R) |
 | Both | src/battle/battle_seq_command.c | _get_msg | empty `if (!event->args && !event->args) {}` in case 1; `#pragma auto_inline on` around the function in this `-inline noauto` unit (as an auto-inline candidate it gets the front end's simple optimizer pass: target string base register) | removing either changes the object in both versions (dead_probe.py; five declaration/argument orders under noauto) |
-| Both || src/event/evt_sub.c | coin_fmt | `#pragma force_active` keeps evt_npc's orphan "%f%f%f" (from the dead-stripped evt_npc_set_position_xls) at the start of evt_sub's .rodata; JP and later only | see comment |
+| Both | src/event/evt_sub.c | coin_fmt | `#pragma force_active` keeps evt_npc's orphan "%f%f%f" (from the dead-stripped evt_npc_set_position_xls) at the start of evt_sub's .rodata; JP and later only | see comment |
 | Both | src/event/evt_sub.c | evt_sub_spline_get_value_manual | `t = t;` self-assignment | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/event/evt_telop.c | telop | `scale = scale;` as the then-branch | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/manager/fontmgr.c | FontDrawMessageMtx | `scale = scale;` before iconDispGxAlpha | removing it changes the object in both versions (dead_probe.py) |
-| Both | src/mario/mario_kemuri.c | mario_kemuri_80130474 | `s = s;` as the then-branch of the dokan check | removing it changes the object in both versions (dead_probe.py) |
+| Both | src/mario/mario_kemuri.c | mario_kemuri | `s = s;` as the then-branch of the dokan check | removing it changes the object in both versions (dead_probe.py) |
 | Both | rels/gon/src/gon_03.c | senkaron_ext_main | `SFX_NAME_WORD` on a name literal at the use: the integer word keeps the address in a saved register (include/sfx_name_word.h) | a plain literal differs; settled with the other SFX_NAME_WORD literal sites if the sound functions prove to take a word |
 | Both | rels/gor/src/gor_03.c | fall_rtn | `SFX_NAME_WORD` on a name literal at the use: the integer word keeps the address in a saved register (include/sfx_name_word.h) | a plain literal differs; settled with the other SFX_NAME_WORD literal sites if the sound functions prove to take a word |
 | Both | rels/gor/src/gor_03.c | goryuugijo_main_slot | `SFX_NAME_WORD` on a name literal at the use: the integer word keeps the address in a saved register (include/sfx_name_word.h) | a plain literal differs; settled with the other SFX_NAME_WORD literal sites if the sound functions prove to take a word |
@@ -245,7 +245,7 @@ review took this list from 720 rows to 485.
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedPool | stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion constant into the pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaCamFollow | comma expression `(v = (...stageFlags & SIDE_SCROLLING) ^ 1, v == 1)` | `!(stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)`: changes the object |
-| Both || src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
+| Both | src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
 | Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
 | Both | src/memory.c | smartAutoFree | no-op (s32) cast; the plain compare changes the object; `u16 type` copy of allocType for the first compare | plain compare |
@@ -265,6 +265,7 @@ review took this list from 720 rows to 485.
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlDispAnimeSpeed | unused constant local kept by a per-function opt_dead_assignments off; without them the object changes | see comment |
+| Both | src/battle/battle_disp.c | btlDispMain | unsigned range tests `(u32)(k - a) <= b - a` written out by hand | `k >= a && k <= b`: changes the object |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PreCheckDamage | args is reused to hold the result index; out = args[5] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckDamage | args is reused to hold the result index; a separate out local changes the object | see comment |
@@ -278,6 +279,7 @@ review took this list from 720 rows to 485.
 | Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object; one-case inner `switch (type)` left by `goto done_fa` | see comment |
 | Both | src/battle/battle_seq.c | battleSortPhaseMoveTable | wp copied into a void* and cast back at every use; using wp directly changes the object | see comment |
 | Both | src/battle/battle_seq.c | BattleWaitAllActiveEvtEnd_NoBgSetEndWait | wp copied into a void* and cast back at its use; using wp directly changes the object | see comment |
+| Both | src/battle/battle_seq.c | btlseqAct | a `decrement` flag that is always TRUE, and its test | the plain decrement without the flag: changes the object |
 | Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | BattleCommandDisplay_WeaponMultiItemCancelCheckDisp | called through a cast that puts the float arguments first; the plain call changes the object ; x = 0.0f held in a local so the expression is 0.0f - w (a subtraction, not a negation) | see comment |
@@ -290,9 +292,9 @@ review took this list from 720 rows to 485.
 | Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
 | Both | src/sound.c | SoundDVDMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
 | Both | src/sound.c | SoundSSMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
-| Demos || src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
-| Demos || src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
-| Demos || src/sound.c | SoundSongStrippedName | stand-in for a dead-stripped song loader, probably SoundSongLoadPlayCh (JP demo map, UNUSED 0x258): it only keeps ".song" (@3563); body unknown | see comment |
+| Demos | src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
+| Demos | src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
+| Demos | src/sound.c | SoundSongStrippedName | stand-in for a dead-stripped song loader, probably SoundSongLoadPlayCh (JP demo map, UNUSED 0x258): it only keeps ".song" (@3563); body unknown | see comment |
 | Both | src/statuswindow.c | gaugeDisp | iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which evaluates the arguments in the retail order; the plain call changes the object. | see comment |
 | Both | src/statuswindow.c | statusWinEase | unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the object changes without it. | see comment |
 | Both | src/system.c | reviseAngle | spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object | see comment |
@@ -335,6 +337,7 @@ review took this list from 720 rows to 485.
 | Both | src/driver/mapdrv.c | mapSearchDmdJoint | no-op (s32) cast; name[0] != '/' changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for dead-stripped code, likely mapGetConvertDate, mapGetAnmDt and mapGetCurve (JP demo map, UNUSED; the floats' owner is not identified); it only keeps the constants in .rodata/.sdata2, in their original order. Bodies unknown. | see comment |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
+| Both | src/driver/mapdrv.c | _mapEnt | spare temporary `m` | the conditional expression of cases 2 and 3: changes the object |
 | Both | src/driver/shadowdrv.c | shadowInit | the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object; `wp` is a spare copy of cswp for one store | see comment |
 | Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
 | Both | src/driver/shadowdrv.c | shadowCharShadowDisp_Projection | cx (0.0f) doubles as the y coordinate of all 16 vertices | see comment |
@@ -412,12 +415,12 @@ review took this list from 720 rows to 485.
 | Both | src/event/evt_mobj.c | evt_mobj_tornadoswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_floatswitch_red | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_signboard | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
-| Both | src/event/evt_mobj.c | recoveryHeal | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_koopa_ojama_blk_evt | unused Vec local; removing the block changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_koopa_hidden_blk | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
-| Demos || src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
+| Demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
 | Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
@@ -446,12 +449,14 @@ review took this list from 720 rows to 485.
 | Both | src/mario/mario_hit.c | marioHitStrippedPool | stand-in that nothing calls (the linker strips it); it only places its five literals in this object's constant pool | see comment |
 | Both | src/mario/mario_hit.c | marioSlitChkWallAround | spare temporary k; the plain `pos.y = w->position.y + 5.0f;` changes the object | see comment |
 | Both | src/mario/mario_hit.c | (file) | `#pragma inline_max_size(1000)` for the rest of the file | removing it: changes the object |
+| Demos | src/mario/mario_hit.c | marioSearchGroundRoll | dead guard keeps rx/rz their own webs; the 24-byte zero ray copied from a volatile template | see comment |
+| Demos | src/mario/mario_hit.c | marioChkLandon2 | the 24-byte zero ray copied from a volatile template; a dead re-definition of gz at the loop end | `(LandonRay){0}` adds a .rodata object; see comment |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | no-op self-assignment as the then-branch; without it the branch is laid out differently | see comment |
-| US || src/mario/mario_kemuri.c | party_kemuri | empty then-branch `if (party->moveSpeed < 2.0f) { } else if (...)` (twice, US-and-later branch) | `moveSpeed >= 2.0f && kemuriTimer++ > 6`: changes the object |
+| US | src/mario/mario_kemuri.c | party_kemuri | empty then-branch `if (party->moveSpeed < 2.0f) { } else if (...)` (twice, US-and-later branch) | `moveSpeed >= 2.0f && kemuriTimer++ > 6`: changes the object |
 | Both | src/mario/mario_sbr.c | checkOneRevolution | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/mario/mario_sbr.c | marioGetRub | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |
-| Both || src/motion/mot_hammer.c | (file scope) cos | cos declared with a float parameter | libc_decls.h's `double cos(double)`: changes the object |
+| Both | src/motion/mot_hammer.c | (file scope) cos | cos declared with a float parameter | libc_decls.h's `double cos(double)`: changes the object |
 | Both | src/motion/mot_jump.c | mot_jumpNpc | one Vec holds the front distance (x) and the sin/cos pair (z, y); an f32 out with the s, c locals (as in mot_jumpSw) changes the object | see comment |
 | Both | src/motion/mot_plane.c | planeDead270 | stand-in that nothing calls; it only places its 270.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
@@ -477,16 +482,18 @@ review took this list from 720 rows to 485.
 | Both | src/party/party_nokonoko.c | ccwall | spare copy k of 30.0f; dist = w + 30.0f changes the object | see comment |
 | Both | src/party/party_nokonoko.c | lookupSafetyPos2 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
 | Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
+| Both | src/party/party_nokonoko.c | nokonoko_use | `dy` holds the x difference and `dx` the y difference | swapping them: changes the object |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
+| Both | src/sequence/seq_battle.c | loadTpl | `(u32)` cast on fileAsyncf's result before `!= 0` | comparing the s32 result: changes the object |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
 | Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |
-| JP || src/window/win_root.c | winKirinukiGX | JP-side constant locals `w74 = 74.0f`, `w66 = 66.0f` | literals: changes the object |
+| JP | src/window/win_root.c | winKirinukiGX | JP-side constant locals `w74 = 74.0f`, `w66 = 66.0f` | literals: changes the object |
 | Both | src/window/win_root.c | winRootDisp (winLogDisp) | private (s32, WindowWork*, s32) prototype; win_log.c defines winLogDisp(CameraId, void*, s32) | the definition's prototype in win_log.h: register allocation changes (also with winRootDisp's camId as CameraId) |
 | Both | rels/muj/src/muj_10.c | suifu_option_func | double-negation addition; either plain addition order changes the object. | see comment |
 | PAL | rels/tst/src/unit/unit_powan.c | powan_rider_follow | worldPositions read as `*(Vec**)` instead of `(Vec*)...->address` (register choice) | natural form with the typed smartEntry address |
@@ -498,7 +505,7 @@ review took this list from 720 rows to 485.
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
 | Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy) | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |
 | Both | src/driver/npcdrv.c | npcStrippedAnnouncePool | stand-in that nothing calls; it only places the banner's literals in this object's constant pool | see comment |
-| Both || src/driver/npcdrv.c | npcStrippedHitPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
+| Both | src/driver/npcdrv.c | npcStrippedHitPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | npcStrippedKoopaPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
 | Both | src/driver/npcdrv.c | (file scope) FontDrawStringShake | private `const char*` prototype; the definition takes `const s8*` (-char unsigned) | the definition's prototype: build errors at the const char* calls without casts (not built) |
 | Both | src/driver/npcdrv.c | npcDisp_blur | `#pragma optimization_level 2` (push/pop) for this function only | removing it changes the object |
@@ -514,10 +521,16 @@ review took this list from 720 rows to 485.
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5N64Entry, effKemuri5Main | `opt_propagation` off over both functions | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
-| US || src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
+| US | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
 | Both | src/event/evt_msg.c | _evt_msg_print (msgWindow_Entry) | call through a cast to an `(const char*, s32, s32)` function type, passing `(s16)event->msgPriority` | plain call with msgdrv.h's u16 priority prototype: changes the object |
-| PAL || src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
+| PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
 | Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |
 | Both | src/effect/eff_recovery.c | effRecoveryEntry | pp walks the records and `work = pp` each pass | stepping work itself: changes the object |
 | Both | src/sdk/arc.c | entryToPath | `#pragma inline_depth(3)` before entryToPath | removing it: changes the object (JP demo map not checked) |
 | Both | src/sequence/seq_mapchange.c | seq_mapChangeMain | LangTbl struct wrapper (lang_tbl) copied into a local `lang` | local `const char* lang[]` initialiser: changes the object |
+| Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
+| Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
+| PAL | rels/tst/src/unit/unit_yoshi.c | _btlYoshiDisp | btlDispTexPlane called through a float-first prototype so the float arguments are evaluated first (tst.rel: PAL and the JP demo) | see comment |
+| Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
+| Both | src/event/evt_cloud.c | evt_cloud_main | `(u32)`/`(s32)` casts on the half sizes | `(f32)(uw >> 1)`: changes the object |
+| Both | src/window/win_log.c | mapGX | the texture id goes through a spare temporary `tex` in a comma expression | `((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA`: changes the object |

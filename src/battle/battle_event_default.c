@@ -752,6 +752,8 @@ EVT_BEGIN(_Defence_core)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
     IF_INT_EQUAL(LW(3), -1)
+        // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs
+        // as SET_TYPE with the next command word as its value, and the script goes on after the GOTO.
         GOTO(99)
     END_IF
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))

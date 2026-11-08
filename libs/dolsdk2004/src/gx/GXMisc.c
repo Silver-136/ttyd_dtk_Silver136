@@ -375,6 +375,7 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt) {
 #if DEBUG
 #define temp exp
 #else
+    // FAKE: the release build keeps temp apart from exp (DEBUG aliases them)
     s32 temp;
     u8 unused[4]; // unused; the original had it too (its stack space is in the retail code)
 #endif

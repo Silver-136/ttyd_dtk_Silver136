@@ -53,6 +53,8 @@ Each entry names the file and the function (or script) that holds the bug, with 
 | `src/battle/battle_seq_end.c`, `_audience_Whistle_control` (`switch (work->state)`) | both | The audience is meant to whistle every 60-179 frames during the victory and level-up states, but the switch tests `BattleSeqEndWork.state`, which is set to 0 and never changed, instead of the end sequence step, so the repeating timed whistles never play; the one-off whistle at the start of the victory still does. |
 | `rels/gon/src/gon_04.c`, scripts `evt_gon_04flowblock_updown1` and `evt_gon_04flowblock_updown2`; the same loop in `gon_05.c` (two scripts), `gon_08.c` and `gon_09.c` (the `evt_mario_get_party` head test) | both | A sinking floating block should turn back when it comes down on a head. With no partner out the script compares Mario's head object with the bare mobj name, but mobj hit objects are named `MOBJ_` + name, so it never matches; with a partner out it compares `LW(7)`, which the script never sets, instead of the partner's head object, so only Mario's head is checked. |
 
+| Battle scripts with `GOTO(98)` or `GOTO(99)` and no matching `LABEL` (89 sites in unit, party and battle scripts; search for `this script has no LABEL`), for example `rels/aji/src/unit/unit_gundan_zako.c`, `normal_attack_event` | all | The label is not in the script, so `evtSearchLabel` returns the GOTO's own argument word: the number runs as opcode 98 (SET_SPD) or 99 (SET_TYPE) with the next command word as its value, and the script goes on after the GOTO instead of jumping. |
+
 ## Fragile but harmless in the shipped game
 
 | Where | Versions | Note |
