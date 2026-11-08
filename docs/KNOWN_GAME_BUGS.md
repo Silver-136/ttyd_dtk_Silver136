@@ -2,7 +2,7 @@
 
 Adapted from the page of the same name in llc00lt's tree (LLCOOLT/ttyd), used with permission, and checked against this tree.
 
-The builds are byte-identical, so the code reproduces the original game's bugs too. This page lists the ones found so far, with the place in the code. Most are marked in the source with a `// BUG:` comment. Do not fix them in the matching code: a fix changes the output. A mod that wants the fix can make it, and the comment says what the fix is.
+The builds are byte-identical, so the code reproduces the original game's bugs too. This page lists the notable ones found so far (crashes, wrong game logic, things a player or modder may run into), with the place in the code; most are also marked in the source with a `// BUG:` comment. The source has many more `// BUG:` comments for smaller code-level slips (in the libraries, the test REL and single scripts); those are documented only where they are. Do not fix them in the matching code: a fix changes the output. A mod that wants the fix can make it, and the comment says what the fix is.
 
 Each entry names the file and the function (or script) that holds the bug, with a short quote of the line where that helps; search for the `BUG` comment in that function.
 
