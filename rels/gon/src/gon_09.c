@@ -1,5 +1,5 @@
 // gon_09 (ゴンババ, Hooktail Castle): room between gon_08 and gon_05.
-// Floating block and switch puzzle with a Star Piece and Dry Bones-type enemies.
+// Floating block and switch puzzle with a Star Piece and Dull Bones-type enemies.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -391,7 +391,7 @@ static EVT_BEGIN(main_0)
 EVT_END()
 
 /**
- * Map init for gon_09: sets up the doors, four dormant Dry Bones,
+ * Map init for gon_09: sets up the doors, four dormant Dull Bones,
  * the Star Piece and the floating block (blk_0) with its switch (sw_0).
  */
 EVT_BEGIN(gon_09_init_evt)
@@ -402,7 +402,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
-    CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン00\""), -482, 0, 79)
     CALL(evt_npc_set_rotate, STRING("\"カロン00\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン00\""), STRING("KRN_Z_2"))
@@ -411,7 +411,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン00\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン00\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン00\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン01\""), -351, 0, 23)
     CALL(evt_npc_set_rotate, STRING("\"カロン01\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン01\""), STRING("KRN_Z_2"))
@@ -420,7 +420,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン01\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン01\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン01\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン02\""), 59, 0, 98)
     CALL(evt_npc_set_rotate, STRING("\"カロン02\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン02\""), STRING("KRN_Z_2"))
@@ -429,7 +429,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン02\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン02\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン02\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン03\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン03\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン03\""), 177, 0, 82)
     CALL(evt_npc_set_rotate, STRING("\"カロン03\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン03\""), STRING("KRN_Z_2"))

@@ -91,10 +91,10 @@ EvtWord senkarondummy_talk_event[2];
 EvtWord senkaron_entry_event[9];
 EvtWord senkaron_escape_event[4];
 
-/** NPC setup of gon_03: the Dry Bones dummy, Richard and the leader of the bone enemies. */
+/** NPC setup of gon_03: the Dull Bones dummy, Richard and the leader of the bone enemies. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "カロン1", // name (placeholder Dry Bones parked below the map)
+        "カロン1", // name (placeholder Dull Bones parked below the map)
         0, 0, // flags..reactionFlags
         senkarondummy_init_event, // initEvent
         senkarondummy_regl_event, // regularEvent
@@ -105,7 +105,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "リチャード", // name (collapsed Dry Bones holding the Hooktail letter)
+        "リチャード", // name (collapsed Dull Bones holding the Hooktail letter)
         0, 0, // flags..reactionFlags
         richard_init_event, // initEvent
         richard_regl_event, // regularEvent
@@ -116,7 +116,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "リーダー", // name (Dry Bones pile that sets off the bone swarm)
+        "リーダー", // name (Dull Bones pile that sets off the bone swarm)
         0, 0, // flags..reactionFlags
         leaderkaron_init_event, // initEvent
         NULL, // regularEvent
@@ -329,7 +329,7 @@ EVT_BEGIN(tegami_event)
 EVT_END()
 
 static EVT_BEGIN(senkaron_event)
-    // Only before the Dry Bones leader fight has happened: the swarm is set up and the music stops.
+    // Only before the Dull Bones leader fight has happened: the swarm is set up and the music stops.
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
         CALL(senkaronFlagOffMesPushing)
         SET_VALUE(GW(14), 0)
@@ -339,7 +339,7 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
 
-        // Mario freezes while the Dry Bones leader collapses and rebuilds himself, then threatens the
+        // Mario freezes while the Dull Bones leader collapses and rebuilds himself, then threatens the
         // intruders.
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -385,7 +385,7 @@ static EVT_BEGIN(senkaron_event)
             END_IF
         END_LOOP
 
-        // The thousand Dry Bones rush in and sweep Mario along the floor, spinning him.
+        // The thousand Dull Bones rush in and sweep Mario along the floor, spinning him.
         CALL(evt_npc_set_anim, STRING("リーダー"), STRING("KRN_R_1"))
         CALL(evt_cam3d_evt_off, 300, EASING_LINEAR)
         WAIT_MS(700)
@@ -562,8 +562,8 @@ static EVT_BEGIN(key_get)
 EVT_END()
 
 /**
- * Map init for gon_03 (Dry Bones hall): sets up the doors, music,
- * the Dry Bones NPCs (the leader, Richard and the lying bones),
+ * Map init for gon_03 (Dull Bones hall): sets up the doors, music,
+ * the Dull Bones NPCs (the leader, Richard and the lying bones),
  * the Koops' father letter scene and the Castle Key until it is picked up, and the spinning floor panel.
  * Locks the east door until the swarm has been dealt with.
  */
@@ -590,7 +590,7 @@ EVT_BEGIN(gon_03_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_13_02_KEY_2)
         CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0C, 200, 0, -200, ITEM_TYPE_STILL, -1, PTR(key_get))
     END_IF
-    CALL(evt_npc_entry, STRING("\"カロン2\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン2\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン2\""), -150, 0, 130)
     CALL(evt_npc_set_rotate, STRING("\"カロン2\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン2\""), STRING("KRN_Z_2"))
@@ -599,7 +599,7 @@ EVT_BEGIN(gon_03_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン2\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン2\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン2\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン3\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン3\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン3\""), 270, 0, -100)
     CALL(evt_npc_set_rotate, STRING("\"カロン3\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン3\""), STRING("KRN_Z_2"))
@@ -608,7 +608,7 @@ EVT_BEGIN(gon_03_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン3\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン3\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン3\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン4\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン4\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン4\""), 290, 0, 80)
     CALL(evt_npc_set_rotate, STRING("\"カロン4\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン4\""), STRING("KRN_Z_2"))
@@ -617,7 +617,7 @@ EVT_BEGIN(gon_03_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン4\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン4\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン4\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン5\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン5\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン5\""), -300, 0, -40)
     CALL(evt_npc_set_rotate, STRING("\"カロン5\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン5\""), STRING("KRN_Z_2"))
@@ -634,7 +634,7 @@ EVT_BEGIN(gon_03_init_evt)
 EVT_END()
 
 /**
- * NPC init for Richard, a Dry Bones in the hall:
+ * NPC init for Richard, a Dull Bones in the hall:
  * places him at the middle of the room, plays his idle animation and stops him from turning toward Mario.
  */
 EVT_BEGIN(richard_init_event)
@@ -676,7 +676,7 @@ EVT_BEGIN(richard_talk_event)
 EVT_END()
 
 /**
- * NPC init for the Dry Bones leader (リーダー): places him at the east end of the room
+ * NPC init for the Dull Bones leader (リーダー): places him at the east end of the room
  * until the swarm scene has been done, afterwards he is moved off the map.
  */
 EVT_BEGIN(leaderkaron_init_event)
@@ -695,8 +695,8 @@ EVT_BEGIN(leaderkaron_init_event)
 EVT_END()
 
 /**
- * Talk event for the Dry Bones leader: plays the bone-rattling sound and, the first time, starts senkaron_event,
- * the swarm of Dry Bones that rain from the ceiling and push Mario back toward the entrance.
+ * Talk event for the Dull Bones leader: plays the bone-rattling sound and, the first time, starts senkaron_event,
+ * the swarm of Dull Bones that rain from the ceiling and push Mario back toward the entrance.
  */
 EVT_BEGIN(leaderkaron_talk_event)
     BEGIN_INLINE_EVENT
@@ -716,7 +716,7 @@ EVT_BEGIN(leaderkaron_talk_event)
 EVT_END()
 
 /**
- * Sprite entries for the crowd of Dry Bones in the hall: the c_karon_g_h model with its KRN_R_1 animation,
+ * Sprite entries for the crowd of Dull Bones in the hall: the c_karon_g_h model with its KRN_R_1 animation,
  * one entry per animation phase offset.
  */
 static ExtTexInfo senkaron_ext_entry_data[] = {
@@ -748,24 +748,24 @@ static ExtTexInfo senkaron_ext_entry_data[] = {
     {0},
 };
 
-/** NPC init for the placeholder Dry Bones (カロン1): moves it far below the map. */
+/** NPC init for the placeholder Dull Bones (カロン1): moves it far below the map. */
 EVT_BEGIN(senkarondummy_init_event)
     CALL(evt_npc_set_position, STRING("カロン1"), 0, -1000, 0)
     RETURN
 EVT_END()
 
-/** NPC regular event for the placeholder Dry Bones; does nothing. */
+/** NPC regular event for the placeholder Dull Bones; does nothing. */
 EVT_BEGIN(senkarondummy_regl_event)
     RETURN
 EVT_END()
 
-/** Talk event for the placeholder Dry Bones; does nothing. */
+/** Talk event for the placeholder Dull Bones; does nothing. */
 EVT_BEGIN(senkarondummy_talk_event)
     RETURN
 EVT_END()
 
 /**
- * Registers the Dry Bones swarm: an ext-pose object of 1000 Dry Bones (senkaron) with its init,
+ * Registers the Dull Bones swarm: an ext-pose object of 1000 Dull Bones (senkaron) with its init,
  * per-frame and draw callbacks.
  */
 EVT_BEGIN(senkaron_entry_event)
@@ -802,7 +802,7 @@ void nokotaro_callback(s32 type) {
 #if VERSION >= VERSION_JP
 /**
  * Script helper (all but the early demos): writes 1 into LW(0)
- * when Mario is touching the Dry Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,
+ * when Mario is touching the Dull Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,
  * otherwise 0.
  * The swarm scene polls it to start the fight; the June US and JP demos start the fight
  * when Mario simply reaches x = 350.
@@ -834,8 +834,8 @@ static f32 randf(f32 min, f32 max) {
 }
 
 /**
- * Ext-pose init for the Dry Bones swarm: allocates the swarm work array
- * and puts each of the 1000 Dry Bones at a random spot above the room (y 200) with a random start delay,
+ * Ext-pose init for the Dull Bones swarm: allocates the swarm work array
+ * and puts each of the 1000 Dull Bones at a random spot above the room (y 200) with a random start delay,
  * ready to fall.
  */
 static void senkaron_ext_init(void) {
@@ -861,7 +861,7 @@ static void senkaron_ext_init(void) {
 }
 
 /**
- * Per-frame update of the Dry Bones swarm: each bone falls from the ceiling and lands,
+ * Per-frame update of the Dull Bones swarm: each bone falls from the ceiling and lands,
  * then once the attack starts shuffles toward Mario and shoves him west (marioPushedFlag);
  * hits from Mario's hammer knock bones into the air,
  * and when the swarm escapes the landed bones run off toward the room's edge and stop moving.
@@ -1159,7 +1159,7 @@ static USER_FUNC(senkaronFlagOffMesPushing) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: sets senkaronAttackStartFlag so the Dry Bones begin their fall delays. */
+/** Script helper: sets senkaronAttackStartFlag so the Dull Bones begin their fall delays. */
 static USER_FUNC(senkaronAttackStart) {
     senkaronAttackStartFlag = 1;
     return EVT_RETURN_DONE;

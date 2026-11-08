@@ -142,7 +142,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Cutscene run when Mario re-enters gon_01 after the Dry Bones swarm pushed him out of gon_03:
+ * Cutscene run when Mario re-enters gon_01 after the Dull Bones swarm pushed him out of gon_03:
  * Mario and his partner are thrown out through the open door, which swings shut; they tumble to the floor and get up.
  * If he was pushed out a second time the partner (Goombella or Koops) comments on it (stg1_gon_13 and
  * stg1_gon_14). Then the door to gon_02 is usable again.

@@ -635,7 +635,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Map init for gon_08: sets up the doors, Koopook, the dormant Dry Bones, the Life Shroom,
+ * Map init for gon_08: sets up the doors, Koopook, the dormant Dull Bones, the Life Shroom,
  * the floating block and switch (blk_0 and sw_0),
  * and the lock that Castle Key 0x0F opens (STG1_15_02_LOCK_3).
  */
@@ -647,7 +647,7 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
-    CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン00\""), -169, 100, -66)
     CALL(evt_npc_set_rotate, STRING("\"カロン00\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン00\""), STRING("KRN_Z_2"))
@@ -656,7 +656,7 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン00\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン00\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン00\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン01\""), 129, 0, 132)
     CALL(evt_npc_set_rotate, STRING("\"カロン01\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン01\""), STRING("KRN_Z_2"))
@@ -665,7 +665,7 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン01\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン01\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン01\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン02\""), 191, 100, -113)
     CALL(evt_npc_set_rotate, STRING("\"カロン02\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン02\""), STRING("KRN_Z_2"))

@@ -291,7 +291,7 @@ EventData stage1_evt[] = {
     {0, 2, 0, 36, "STG1_09_01", "カギ" NAME_EN("Key"), "gon_01", "w_bero_1", NULL},
     {0, 2, 0, 37, "STG1_09_02", "錠前" NAME_EN("Lock"), "gon_01", "w_bero_1", stg1_09_02_init},
     {0, 2, 0, 38, "STG1_10", "父の手紙" NAME_EN("Father's Letter"), "gon_03", "w_bero", stg1_10_init},
-    {0, 2, 0, 39, "STG1_11", "カロン１０００体" NAME_EN("1000 Dry Bones"), "gon_03", "w_bero", NULL},
+    {0, 2, 0, 39, "STG1_11", "カロン１０００体" NAME_EN("1000 Dry Bones"), "gon_03", "w_bero", NULL}, // the swarm is Dull Bones in the game's text
     {0, 2, 0, 40, "STG1_12", "ペラ階段" NAME_EN("Paper Stairs"), "gon_04", "w_bero_1", NULL},
     {0, 2, 0, 41, "STG1_12_01", "かぎ" NAME_EN("Key"), "gon_04", "w_bero_1", NULL},
     {0, 2, 0, 42, "STG1_12_02", "錠前" NAME_EN("Lock"), "gon_04", "w_bero_1", stg1_12_02_init},

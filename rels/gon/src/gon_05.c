@@ -890,7 +890,7 @@ static EVT_BEGIN(key_get)
 EVT_END()
 
 /**
- * Map init for gon_05 (hub room): sets up the doors, dormant Dry Bones,
+ * Map init for gon_05 (hub room): sets up the doors, dormant Dull Bones,
  * the two floating blocks (blk_0 and blk_1) with their switches, the Castle Key 0x0E,
  * the Star Piece and Last Stand P badge, the two keyed locks (Castle Key 0x0C to STG1_13_03_LOCK_2 and
  * 0x0E to STG1_15_04_LOCK_4, each with its door), the save block and the Shine Sprite power-up block.
@@ -902,7 +902,7 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
-    CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン00\""), -203, 0, 150)
     CALL(evt_npc_set_rotate, STRING("\"カロン00\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン00\""), STRING("KRN_Z_2"))
@@ -911,7 +911,7 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン00\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン00\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン00\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン01\""), -120, 0, 51)
     CALL(evt_npc_set_rotate, STRING("\"カロン01\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン01\""), STRING("KRN_Z_2"))
@@ -920,7 +920,7 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン01\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン01\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン01\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン02\""), 25, 0, 119)
     CALL(evt_npc_set_rotate, STRING("\"カロン02\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン02\""), STRING("KRN_Z_2"))
@@ -929,7 +929,7 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン02\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン02\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン02\""), 7)
-    CALL(evt_npc_entry, STRING("\"カロン03\""), STRING("c_karon_g"))
+    CALL(evt_npc_entry, STRING("\"カロン03\""), STRING("c_karon_g")) // a Dull Bones lying as a bone pile
     CALL(evt_npc_set_position, STRING("\"カロン03\""), 87, 0, -129)
     CALL(evt_npc_set_rotate, STRING("\"カロン03\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン03\""), STRING("KRN_Z_2"))
