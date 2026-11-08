@@ -85,7 +85,7 @@ static void make_jump_table(EventEntry* entry) {
     int i, n;
     EvtWord* cmd;
 
-    for (i = 0; i < 16; i++) { //initialize both tables
+    for (i = 0; i < 16; i++) { // initialize both tables
         entry->labelIdTable[i] = -1;
         entry->labelAddressTable[i] = 0;
     }

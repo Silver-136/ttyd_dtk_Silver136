@@ -193,21 +193,21 @@ static void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor co
     TEXGetGXTexObjFromPalette(*_battleWorkPointer->menuTex->data, &texobj, id);
     GXLoadTexObj(&texobj, GX_TEXMAP0);
     switch (GXGetTexObjFmt(&texobj)) {
-    case GX_TF_I4:
-        GXSetNumTevStages(1);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_TEXA, GX_CA_ZERO);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        break;
-    default:
-        GXSetNumTevStages(1);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-        break;
+        case GX_TF_I4:
+            GXSetNumTevStages(1);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_TEXA, GX_CA_ZERO);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+            break;
+        default:
+            GXSetNumTevStages(1);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+            GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+            break;
     }
 
     x = 0.5f * (f32)GXGetTexObjWidth(&texobj);
@@ -981,7 +981,7 @@ static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, 
     int i;
 
     blur = &part->blurWork;
-    for (i = 9; i > 0; i--) { //shift all slots forward one
+    for (i = 9; i > 0; i--) { // shift all slots forward one
         blur->work[i] = blur->work[i - 1];
     }
     blur->work[0].flags = flags;
@@ -1192,23 +1192,23 @@ static void _pose_def(BattleUnitPart* part) {
  */
 static void _pose_one_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
-    case 0:
-        part->poseState = 1;
-        switch (part->look) {
-            case PART_LOOK_PM_C_UNUSED:
-                animPoseSetEffect(part->poseId, "p_b_st", 1);
-                animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
-                break;
-            case PART_LOOK_PM_F_UNUSED:
-                animPoseSetEffect(part->poseId, "p_b_st", 1);
-                animPoseSetEffectAnim(part->poseId, "PM_F_1A", 1);
-                break;
-            case PART_LOOK_XLU:
-                animPoseSetEffect(part->poseId, "p_b_st", 1);
-                animPoseSetEffectAnim(part->poseId, "PM_Y_1A", 1);
-                break;
-        }
-        break;
+        case 0:
+            part->poseState = 1;
+            switch (part->look) {
+                case PART_LOOK_PM_C_UNUSED:
+                    animPoseSetEffect(part->poseId, "p_b_st", 1);
+                    animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
+                    break;
+                case PART_LOOK_PM_F_UNUSED:
+                    animPoseSetEffect(part->poseId, "p_b_st", 1);
+                    animPoseSetEffectAnim(part->poseId, "PM_F_1A", 1);
+                    break;
+                case PART_LOOK_XLU:
+                    animPoseSetEffect(part->poseId, "p_b_st", 1);
+                    animPoseSetEffectAnim(part->poseId, "PM_Y_1A", 1);
+                    break;
+            }
+            break;
     }
 }
 

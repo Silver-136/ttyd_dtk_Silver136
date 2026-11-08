@@ -104,108 +104,108 @@ USER_FUNC(urouro_main_func) {
     s32 sfxFlag;
 #endif
     switch (work->state) {
-    case UROURO_STATE_CHOOSE_WALK:
-        work->timer = work->walkTime / 2 + irand(work->walkTime / 2 + 1);
-        work->timer = urouro_jikan_hosei(work->timer);
-        work->count = 0;
-        npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
-        npc->moveDir = npc->direction;
-        work->state = UROURO_STATE_WALK;
-        break;
-    case UROURO_STATE_WALK:
-        dist = distABf(npc->position.x, npc->position.z, work->x, work->z);
-        if (animPoseGetPeraEnd(npc->poseId)) {
-            if (dist > work->radius) {
-                if (!(work->flags & UROURO_FLAG_OUTSIDE)) {
-                    work->flags |= UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME;
+        case UROURO_STATE_CHOOSE_WALK:
+            work->timer = work->walkTime / 2 + irand(work->walkTime / 2 + 1);
+            work->timer = urouro_jikan_hosei(work->timer);
+            work->count = 0;
+            npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
+            npc->moveDir = npc->direction;
+            work->state = UROURO_STATE_WALK;
+            break;
+        case UROURO_STATE_WALK:
+            dist = distABf(npc->position.x, npc->position.z, work->x, work->z);
+            if (animPoseGetPeraEnd(npc->poseId)) {
+                if (dist > work->radius) {
+                    if (!(work->flags & UROURO_FLAG_OUTSIDE)) {
+                        work->flags |= UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME;
+                    }
+                    if (work->flags & UROURO_FLAG_TURN_HOME) {
+                        npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, work->x, work->z));
+                        npc->moveDir = npc->direction;
+                        work->flags &= ~UROURO_FLAG_TURN_HOME;
+                    }
+                } else if (work->flags & UROURO_FLAG_OUTSIDE) {
+                    work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
                 }
-                if (work->flags & UROURO_FLAG_TURN_HOME) {
-                    npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, work->x, work->z));
-                    npc->moveDir = npc->direction;
-                    work->flags &= ~UROURO_FLAG_TURN_HOME;
-                }
-            } else if (work->flags & UROURO_FLAG_OUTSIDE) {
+            }
+            if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr()
+                && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f
+                && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z),
+                                  mario->directionView)) < 90.0f
+                && dist < work->radius) {
+                npc->direction = reviseAngle(npc->moveDir - 180.0f);
+                npc->moveDir = npc->direction;
                 work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
             }
-        }
-        if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr()
-            && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f
-            && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z),
-                              mario->directionView)) < 90.0f
-            && dist < work->radius) {
-            npc->direction = reviseAngle(npc->moveDir - 180.0f);
-            npc->moveDir = npc->direction;
-            work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
-        }
-        if (animPoseGetPeraEnd(npc->poseId) && npc->wallHit != 0) {
-            npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, work->x, work->z));
-            npc->moveDir = npc->direction;
-            work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
-        }
-        work->timer--;
-        if (work->timer == 0) {
-            work->state = UROURO_STATE_CHOOSE_WAIT;
-            break;
-        }
-        if (animPoseGetPeraEnd(npc->poseId)) {
-            lim = (20.0f * npc->moveSpeed) / 1000.0f;
-            step = npc->moveSpeed * npc->moveDt;
-            if (step >= lim) {
-                step = lim;
+            if (animPoseGetPeraEnd(npc->poseId) && npc->wallHit != 0) {
+                npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, work->x, work->z));
+                npc->moveDir = npc->direction;
+                work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
             }
-            npc->moveOffset.x = step * (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
+            work->timer--;
+            if (work->timer == 0) {
+                work->state = UROURO_STATE_CHOOSE_WAIT;
+                break;
+            }
+            if (animPoseGetPeraEnd(npc->poseId)) {
+                lim = (20.0f * npc->moveSpeed) / 1000.0f;
+                step = npc->moveSpeed * npc->moveDt;
+                if (step >= lim) {
+                    step = lim;
+                }
+                npc->moveOffset.x = step * (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
 #if VERSION <= VERSION_DEMO_JP
-            temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
-            npc->moveOffset.z = step * -temp;
+                temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
+                npc->moveOffset.z = step * -temp;
 #else
-            npc->moveOffset.z = step * -(f32)cos(npc->moveDir * 6.2831855f / 360.0f);
-            sfxFlag = 0;
-            if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-                if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-                    sfxFlag = PSND_SFX_DOOR_MUTE;
-                }
-            }
-            if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
-                if (npc->footstepToggle != 0) {
-                    if (npc->footstepSfxA != 0) {
-                        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
-                    }
-                } else {
-                    if (npc->footstepSfxB != 0) {
-                        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
+                npc->moveOffset.z = step * -(f32)cos(npc->moveDir * 6.2831855f / 360.0f);
+                sfxFlag = 0;
+                if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
+                    if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
+                        sfxFlag = PSND_SFX_DOOR_MUTE;
                     }
                 }
-                npc->footstepAccum = 0.0f;
-                npc->footstepToggle = (s8)(1 - npc->footstepToggle);
-            }
-            if (npc->footstepSfxB != 0 || npc->footstepToggle != 0) {
-                npc->footstepAccum += 1000.0f * npc->moveDt;
-            }
+                if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
+                    if (npc->footstepToggle != 0) {
+                        if (npc->footstepSfxA != 0) {
+                            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
+                        }
+                    } else {
+                        if (npc->footstepSfxB != 0) {
+                            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
+                        }
+                    }
+                    npc->footstepAccum = 0.0f;
+                    npc->footstepToggle = (s8)(1 - npc->footstepToggle);
+                }
+                if (npc->footstepSfxB != 0 || npc->footstepToggle != 0) {
+                    npc->footstepAccum += 1000.0f * npc->moveDt;
+                }
 #endif
-        }
-        break;
-    case UROURO_STATE_CHOOSE_WAIT:
-        work->timer = work->waitTime / 2 + irand(work->waitTime / 2 + 1);
-        npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
-        npc->moveDir = npc->direction;
-        work->count = 0;
-        if (work->flags & UROURO_FLAG_TURN_AROUND_UNUSED) {
-            work->count = irand(1000) % 3 + 2;
-        }
-        work->state = UROURO_STATE_WAIT;
-        break;
-    case UROURO_STATE_WAIT:
-        work->timer--;
-        if (work->timer == 0) {
-            work->timer = work->turnTime / 2 + irand(work->turnTime / 2 + 1);
-            if (work->count == 0) {
-                work->state = UROURO_STATE_CHOOSE_WALK;
-            } else {
-                work->count--;
-                npc->direction = reviseAngle(180.0f + npc->direction);
             }
-        }
-        break;
+            break;
+        case UROURO_STATE_CHOOSE_WAIT:
+            work->timer = work->waitTime / 2 + irand(work->waitTime / 2 + 1);
+            npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
+            npc->moveDir = npc->direction;
+            work->count = 0;
+            if (work->flags & UROURO_FLAG_TURN_AROUND_UNUSED) {
+                work->count = irand(1000) % 3 + 2;
+            }
+            work->state = UROURO_STATE_WAIT;
+            break;
+        case UROURO_STATE_WAIT:
+            work->timer--;
+            if (work->timer == 0) {
+                work->timer = work->turnTime / 2 + irand(work->turnTime / 2 + 1);
+                if (work->count == 0) {
+                    work->state = UROURO_STATE_CHOOSE_WALK;
+                } else {
+                    work->count--;
+                    npc->direction = reviseAngle(180.0f + npc->direction);
+                }
+            }
+            break;
     }
     return EVT_RETURN_BLOCK;
 }

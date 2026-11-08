@@ -3,7 +3,7 @@
  */
 #include "driver/seqdrv.h"
 #include "system.h"
-#include <string.h> //memset prototype
+#include <string.h> // memset prototype
 
 //.sdata
 SequenceType now_seq = SEQ_UNDEFINED;
@@ -35,18 +35,18 @@ void seqMain(void) {
     if (next_seq != now_seq) {
         if (now_seq != SEQ_UNDEFINED) {
             sysWaitDrawSync();
-            seq_data[now_seq][2](&seqWork); //call Exit function
+            seq_data[now_seq][2](&seqWork); // call Exit function
         }
-        prev_seq = now_seq; //store previous
+        prev_seq = now_seq; // store previous
         memset(&seqWork, 0, sizeof(SequenceWork));
         now_seq = next_seq;
         seqWork.sequence = next_seq;
         seqWork.state = 0;
         seqWork.mapName = next_p0;
         seqWork.beroName = next_p1;
-        seq_data[next_seq][0](&seqWork); //call Init function
+        seq_data[next_seq][0](&seqWork); // call Init function
     }
-    seq_data[now_seq][1](&seqWork); //call Main function
+    seq_data[now_seq][1](&seqWork); // call Main function
 }
 
 /**

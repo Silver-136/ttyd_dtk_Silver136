@@ -7,43 +7,43 @@
 #include "memory.h"
 
 typedef struct EnvironmentGlareTexCoord {
-    f32 x; //0x0, screen pixels, scaled by coordScale / fbWidth
-    f32 y; //0x4
+    f32 x; // 0x0, screen pixels, scaled by coordScale / fbWidth
+    f32 y; // 0x4
 } EnvironmentGlareTexCoord;
 
 typedef struct EnvironmentGlare {
-    GXBlendMode mode; //0x0
-    GXBlendFactor srcFactor; //0x4
-    GXBlendFactor dstFactor; //0x8
-    GXTevKColorSel kcolorSel0; //0xC
-    GXTevKColorSel kcolorSel1; //0x10
-    f32 coordScale; //0x14
-    s32 count; //0x18, number of coords that follow
-    EnvironmentGlareTexCoord coords[]; //0x1C
+    GXBlendMode mode; // 0x0
+    GXBlendFactor srcFactor; // 0x4
+    GXBlendFactor dstFactor; // 0x8
+    GXTevKColorSel kcolorSel0; // 0xC
+    GXTevKColorSel kcolorSel1; // 0x10
+    f32 coordScale; // 0x14
+    s32 count; // 0x18, number of coords that follow
+    EnvironmentGlareTexCoord coords[]; // 0x1C
 } EnvironmentGlare;
 
 // EnvironmentGlareFilter.flags
 #define ENV_GLARE_FILTER_Z (1 << 0) // envGlareFilterZ: zscale applies
 
 typedef struct EnvironmentGlareFilter {
-    u16 flags; //0x0, ENV_GLARE_FILTER_Z
-    u16 type; //0x2
-    u16 y0; //0x4
-    u16 y1; //0x6
-    u16 x0; //0x8
-    u16 x1; //0xA
-    f32 zscale; //0xC
+    u16 flags; // 0x0, ENV_GLARE_FILTER_Z
+    u16 type; // 0x2
+    u16 y0; // 0x4
+    u16 y1; // 0x6
+    u16 x0; // 0x8
+    u16 x1; // 0xA
+    f32 zscale; // 0xC
 } EnvironmentGlareFilter;
 
 #define ENV_DOF_PASS1 (1 << 0)
 #define ENV_DOF_PASS2 (1 << 1)
 
 typedef struct EnvironmentDof {
-    u16 flags; //0x0, ENV_DOF_PASS1 / ENV_DOF_PASS2
-    u8 level1; //0x2, pass 1 konst color
-    u8 level2; //0x3, pass 2 konst color
-    f32 radius1; //0x4, pass 1 sample offset (4 taps)
-    f32 radius2; //0x8, pass 2 sample offset
+    u16 flags; // 0x0, ENV_DOF_PASS1 / ENV_DOF_PASS2
+    u8 level1; // 0x2, pass 1 konst color
+    u8 level2; // 0x3, pass 2 konst color
+    f32 radius1; // 0x4, pass 1 sample offset (4 taps)
+    f32 radius2; // 0x8, pass 2 sample offset
 } EnvironmentDof; // two-pass depth-of-field style screen blur
 
 // EnvironmentWork.flags
@@ -79,19 +79,19 @@ typedef struct EnvBlurWork {
 } EnvBlurWork;
 
 typedef struct EnvironmentWork {
-    s32 flags; //0x0, EnvironmentFlags
-    smartEntry* capture; //0x4
-    smartEntry* capture2; //0x8
-    GXTexObj captureObj; //0xC
-    GXTexObj captureObj2; //0x2C
-    void* envBlur; //0x4C, see envBlurOn
-    GXTexObj envBlurObj; //0x50
-    EnvTexMtxWork texMtxWork; //0x70
-    EnvironmentDof dof; //0x88
-    u8 pad_94[0x98 - 0x94]; //0x94, never accessed
-    EnvBlurWork blur; //0x98
-    EnvironmentGlareFilter filter; //0xB0
-    Mtx yamiView; //0xC0, set by envSetYamiView
+    s32 flags; // 0x0, EnvironmentFlags
+    smartEntry* capture; // 0x4
+    smartEntry* capture2; // 0x8
+    GXTexObj captureObj; // 0xC
+    GXTexObj captureObj2; // 0x2C
+    void* envBlur; // 0x4C, see envBlurOn
+    GXTexObj envBlurObj; // 0x50
+    EnvTexMtxWork texMtxWork; // 0x70
+    EnvironmentDof dof; // 0x88
+    u8 pad_94[0x98 - 0x94]; // 0x94, never accessed
+    EnvBlurWork blur; // 0x98
+    EnvironmentGlareFilter filter; // 0xB0
+    Mtx yamiView; // 0xC0, set by envSetYamiView
 } EnvironmentWork;
 
 void envInit(void);

@@ -75,15 +75,15 @@ void hammer_swing_se(void) {
     MarioWork* m = marioGetPtr();
     s32 snd = PSND_SFX_MARIO_HAMMER_FURU1;
     switch (pouchGetHammerLv()) {
-    case 1:
-        snd = PSND_SFX_MARIO_HAMMER_FURU1;
-        break;
-    case 2:
-        snd = PSND_SFX_MARIO_HAMMER_FURU2;
-        break;
-    case 3:
-        snd = PSND_SFX_MARIO_HAMMER_FURU3;
-        break;
+        case 1:
+            snd = PSND_SFX_MARIO_HAMMER_FURU1;
+            break;
+        case 2:
+            snd = PSND_SFX_MARIO_HAMMER_FURU2;
+            break;
+        case 3:
+            snd = PSND_SFX_MARIO_HAMMER_FURU3;
+            break;
     }
     psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
 }
@@ -102,15 +102,15 @@ void hammer_hit_se(void) {
 #endif
     s32 snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
     switch (pouchGetHammerLv()) {
-    case 1:
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
-        break;
-    case 2:
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
-        break;
-    case 3:
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
-        break;
+        case 1:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
+            break;
+        case 2:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
+            break;
+        case 3:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
+            break;
     }
 #if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < 5; i++) {
@@ -268,15 +268,15 @@ void mot_hammer(void) {
             }
         }
         switch (pouchGetHammerLv()) {
-        case 1:
-            marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_2" : "M_H_1");
-            break;
-        case 2:
-            marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_5" : "M_H_4");
-            break;
-        case 3:
-            marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_8" : "M_H_7");
-            break;
+            case 1:
+                marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_2" : "M_H_1");
+                break;
+            case 2:
+                marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_5" : "M_H_4");
+                break;
+            case 3:
+                marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_8" : "M_H_7");
+                break;
         }
         if (kind != HAMMER_HIT_NONE) {
             {
@@ -524,198 +524,198 @@ void mot_hammer2(void) {
 #endif
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-        mario->hammerChargeTimer = 0;
-        mario->hammerChargeLv = 0;
-        mario->baseSpeed = 0.0f;
-        mario->airTimer = 0;
-        mario->currSubMotionId = 1;
-        mario->multiTimer = 30;
-        if (mario->hammerChargeLv == 3) {
-            mario->mot.hammer2.spinSpeed = 38.0f;
-        } else if (mario->hammerChargeLv <= 2) {
-            mario->mot.hammer2.spinSpeed = 15.0f;
-        } else {
-            mario->mot.hammer2.spinSpeed = 10.0f;
-        }
-        switch (pouchGetHammerLv()) {
-        case 1:
-            marioChgPose("M_H_3");
-            break;
-        case 2:
-            marioChgPose("M_H_6");
-            break;
-        case 3:
-            marioChgPose("M_H_9");
-            break;
-        }
-        mario->hitobjHammerNew = NULL;
-        mario->currSubMotionId = 1;
-        mario->multiTimer = 1;
-        break;
-    case 1:
-        if (--mario->multiTimer > 0) {
-            break;
-        }
-        if (180.0f == mario->displayDirectionTarget && mario->hammerDir == 1) {
-            mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-        }
-        if (0.0f == mario->displayDirectionTarget && mario->hammerDir == 0) {
-            mario->dispFlags |= MARIO_DISP_FLAG_FLIP;
-        }
-        marioPaperOn("p_kaiten_h");
-        marioChgPaper("P_H_1C");
-        marioPaperLightOff();
-        mario->mot.hammer2.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN1), &mario->position);
-        mario->mot.hammer2.animTime = 0.0f;
-        mario->poseTime = 0;
-        animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime);
-        mario->currSubMotionId = 10;
-        mario->multiTimer = 30;
-    case 10:
-        if (marioGetRub(PAD_BUTTON_B, &rubDir, &rubCount, &rubMag) == 1) {
-            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_AT_LEVEL;
-            mario->hammerChargeTimer++;
-            if (mario->hammerChargeTimer >= 20) {
-                mario->hammerChargeTimer = 20;
-            }
-        }
-        if (mario->hammerChargeTimer >= 4) {
-            mario->mot.hammer2.animTime += 6.0f;
-            if (mario->mot.hammer2.animTime >= 72.0f) {
-                mario->mot.hammer2.animTime = 72.0f;
-            }
-            mario->currSubMotionId = 11;
-            marioChgPaper("P_H_1B");
-            mario->hammerChargeLv = 3;
-            h2LevelUp(mario, 0.4f, 1.7f);
-        } else if (mario->hammerChargeTimer >= 3) {
-            h2Ramp(mario, 54.0f, 54.0f, 42.0f, 3, 0.4f, 1.7f);
-        } else if (mario->hammerChargeTimer >= 2) {
-            h2Ramp(mario, 36.0f, 36.0f, 30.0f, 2, 0.3f, 1.6f);
-        } else {
-            h2Ramp(mario, 18.0f, 24.0f, 18.0f, 1, 0.2f, 1.5f);
-        }
-        if (mario->mot.hammer2.flags & HAMMER2_FLAG_LEVEL_UP) {
-            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_LEVEL_UP;
-            if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_CHARGED_POSE)) {
-                mario->mot.hammer2.flags |= HAMMER2_FLAG_CHARGED_POSE;
-                switch (pouchGetHammerLv()) {
-                case 1:
-                    marioChgPose("M_H_3A");
-                    break;
-                case 2:
-                    marioChgPose("M_H_6A");
-                    break;
-                case 3:
-                    marioChgPose("M_H_9A");
-                    break;
-                }
-            }
-        }
-        if (strcmp(mario->paperAnimName, "P_H_1A") == 0) {
-            animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime / 6.0f);
-        }
-    case 11:
-        if (!(mario->buttonHold & PAD_BUTTON_B)) {
-            if (mario->mot.hammer2.sfxId != -1) {
-                psndSFXOff(mario->mot.hammer2.sfxId);
-                mario->mot.hammer2.sfxId = -1;
-            }
-            zoomOff();
-            switch (pouchGetHammerLv()) {
-            case 1:
-                marioChgPose("M_H_3B");
-                break;
-            case 2:
-                marioChgPose("M_H_6B");
-                break;
-            case 3:
-                marioChgPose("M_H_9B");
-                break;
-            }
-            marioChgPaper("P_H_1C");
-            mario->currSubMotionId = 20;
-            if (mario->hammerChargeLv == 3) {
-                mario->multiTimer = 0x30;
-            } else if (mario->hammerChargeLv == 2) {
-                mario->multiTimer = 0x42;
-            } else {
-                mario->multiTimer = 0x48;
-            }
-            mario->mot.hammer2.timer = 0;
+        case 0:
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+            mario->hammerChargeTimer = 0;
+            mario->hammerChargeLv = 0;
+            mario->baseSpeed = 0.0f;
+            mario->airTimer = 0;
+            mario->currSubMotionId = 1;
+            mario->multiTimer = 30;
             if (mario->hammerChargeLv == 3) {
                 mario->mot.hammer2.spinSpeed = 38.0f;
-            } else if (mario->hammerChargeLv == 2) {
-                mario->mot.hammer2.spinSpeed = 22.0f;
-            } else if (mario->hammerChargeLv <= 1) {
+            } else if (mario->hammerChargeLv <= 2) {
                 mario->mot.hammer2.spinSpeed = 15.0f;
+            } else {
+                mario->mot.hammer2.spinSpeed = 10.0f;
             }
-            effUltraHammerEntry(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, mario->multiTimer);
-        }
-        break;
-    case 20:
-        ang = mario->displayDirection;
-        mario->mot.hammer2.timer = 10;
-        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        ang2 = revise360(270.0f - mario->displayDirection);
-        hit = hammerHitWall(ang2, &s, &co, &len, &hx, &hy, &hz, &nx, &ny, &nz);
-        if (hit && (hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO))) {
-            ang = ang; // FAKE: self-assignment keeps the branch; removing it (or the if) changes codegen
-        }
-        if (hit) {
-            mario->hitobjHammer = hit;
-        }
-        mario->displayDirection = mario->mot.hammer2.spinSpeed * (mario->hammerDir ? -1.0f : 1.0f) + mario->displayDirection;
-        if ((s32)ang / 360 != (s32)mario->displayDirection / 360) {
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), &mario->position);
-        }
-        if (mario->mot.hammer2.timer == 1) {
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), &mario->position);
-        }
-        mario->multiTimer--;
-        if (mario->hammerChargeLv > 2 && mario->multiTimer == 10) {
-            h2ClrPaper(mario);
-        }
-        if (mario->multiTimer > 0) {
+            switch (pouchGetHammerLv()) {
+            case 1:
+                marioChgPose("M_H_3");
+                break;
+            case 2:
+                marioChgPose("M_H_6");
+                break;
+            case 3:
+                marioChgPose("M_H_9");
+                break;
+            }
+            mario->hitobjHammerNew = NULL;
+            mario->currSubMotionId = 1;
+            mario->multiTimer = 1;
             break;
-        }
-        if (mario->hammerChargeLv <= 2) {
-            mario->multiTimer = sysMsec2Frame(300);
-        } else {
-            mario->displayDirection = revise360(mario->displayDirection);
-            marioAdjustMoveDir();
+        case 1:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            if (180.0f == mario->displayDirectionTarget && mario->hammerDir == 1) {
+                mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+            }
+            if (0.0f == mario->displayDirectionTarget && mario->hammerDir == 0) {
+                mario->dispFlags |= MARIO_DISP_FLAG_FLIP;
+            }
+            marioPaperOn("p_kaiten_h");
+            marioChgPaper("P_H_1C");
+            marioPaperLightOff();
+            mario->mot.hammer2.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN1), &mario->position);
+            mario->mot.hammer2.animTime = 0.0f;
+            mario->poseTime = 0;
+            animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime);
+            mario->currSubMotionId = 10;
             mario->multiTimer = 30;
-        }
-        mario->currSubMotionId = 22;
-    case 22:
-        if (--mario->multiTimer > 0) {
+        case 10:
+            if (marioGetRub(PAD_BUTTON_B, &rubDir, &rubCount, &rubMag) == 1) {
+                mario->mot.hammer2.flags &= ~HAMMER2_FLAG_AT_LEVEL;
+                mario->hammerChargeTimer++;
+                if (mario->hammerChargeTimer >= 20) {
+                    mario->hammerChargeTimer = 20;
+                }
+            }
+            if (mario->hammerChargeTimer >= 4) {
+                mario->mot.hammer2.animTime += 6.0f;
+                if (mario->mot.hammer2.animTime >= 72.0f) {
+                    mario->mot.hammer2.animTime = 72.0f;
+                }
+                mario->currSubMotionId = 11;
+                marioChgPaper("P_H_1B");
+                mario->hammerChargeLv = 3;
+                h2LevelUp(mario, 0.4f, 1.7f);
+            } else if (mario->hammerChargeTimer >= 3) {
+                h2Ramp(mario, 54.0f, 54.0f, 42.0f, 3, 0.4f, 1.7f);
+            } else if (mario->hammerChargeTimer >= 2) {
+                h2Ramp(mario, 36.0f, 36.0f, 30.0f, 2, 0.3f, 1.6f);
+            } else {
+                h2Ramp(mario, 18.0f, 24.0f, 18.0f, 1, 0.2f, 1.5f);
+            }
+            if (mario->mot.hammer2.flags & HAMMER2_FLAG_LEVEL_UP) {
+                mario->mot.hammer2.flags &= ~HAMMER2_FLAG_LEVEL_UP;
+                if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_CHARGED_POSE)) {
+                    mario->mot.hammer2.flags |= HAMMER2_FLAG_CHARGED_POSE;
+                    switch (pouchGetHammerLv()) {
+                    case 1:
+                        marioChgPose("M_H_3A");
+                        break;
+                    case 2:
+                        marioChgPose("M_H_6A");
+                        break;
+                    case 3:
+                        marioChgPose("M_H_9A");
+                        break;
+                    }
+                }
+            }
+            if (strcmp(mario->paperAnimName, "P_H_1A") == 0) {
+                animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime / 6.0f);
+            }
+        case 11:
+            if (!(mario->buttonHold & PAD_BUTTON_B)) {
+                if (mario->mot.hammer2.sfxId != -1) {
+                    psndSFXOff(mario->mot.hammer2.sfxId);
+                    mario->mot.hammer2.sfxId = -1;
+                }
+                zoomOff();
+                switch (pouchGetHammerLv()) {
+                case 1:
+                    marioChgPose("M_H_3B");
+                    break;
+                case 2:
+                    marioChgPose("M_H_6B");
+                    break;
+                case 3:
+                    marioChgPose("M_H_9B");
+                    break;
+                }
+                marioChgPaper("P_H_1C");
+                mario->currSubMotionId = 20;
+                if (mario->hammerChargeLv == 3) {
+                    mario->multiTimer = 0x30;
+                } else if (mario->hammerChargeLv == 2) {
+                    mario->multiTimer = 0x42;
+                } else {
+                    mario->multiTimer = 0x48;
+                }
+                mario->mot.hammer2.timer = 0;
+                if (mario->hammerChargeLv == 3) {
+                    mario->mot.hammer2.spinSpeed = 38.0f;
+                } else if (mario->hammerChargeLv == 2) {
+                    mario->mot.hammer2.spinSpeed = 22.0f;
+                } else if (mario->hammerChargeLv <= 1) {
+                    mario->mot.hammer2.spinSpeed = 15.0f;
+                }
+                effUltraHammerEntry(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, mario->multiTimer);
+            }
             break;
-        }
-        if (mario->hammerChargeLv <= 2) {
-            h2ClrPaper(mario);
-            mario->displayDirection = revise360(mario->displayDirection);
+        case 20:
+            ang = mario->displayDirection;
+            mario->mot.hammer2.timer = 10;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            ang2 = revise360(270.0f - mario->displayDirection);
+            hit = hammerHitWall(ang2, &s, &co, &len, &hx, &hy, &hz, &nx, &ny, &nz);
+            if (hit && (hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO))) {
+                ang = ang; // FAKE: self-assignment keeps the branch; removing it (or the if) changes codegen
+            }
+            if (hit) {
+                mario->hitobjHammer = hit;
+            }
+            mario->displayDirection = mario->mot.hammer2.spinSpeed * (mario->hammerDir ? -1.0f : 1.0f) + mario->displayDirection;
+            if ((s32)ang / 360 != (s32)mario->displayDirection / 360) {
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), &mario->position);
+            }
+            if (mario->mot.hammer2.timer == 1) {
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), &mario->position);
+            }
+            mario->multiTimer--;
+            if (mario->hammerChargeLv > 2 && mario->multiTimer == 10) {
+                h2ClrPaper(mario);
+            }
+            if (mario->multiTimer > 0) {
+                break;
+            }
+            if (mario->hammerChargeLv <= 2) {
+                mario->multiTimer = sysMsec2Frame(300);
+            } else {
+                mario->displayDirection = revise360(mario->displayDirection);
+                marioAdjustMoveDir();
+                mario->multiTimer = 30;
+            }
+            mario->currSubMotionId = 22;
+        case 22:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            if (mario->hammerChargeLv <= 2) {
+                h2ClrPaper(mario);
+                mario->displayDirection = revise360(mario->displayDirection);
+                marioAdjustMoveDir();
+            }
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            mario->currSubMotionId = 23;
+            mario->multiTimer = 1;
+        case 23:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            mario->multiTimer = 1;
+        case 24:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+            mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioAdjustMoveDir();
-        }
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        mario->currSubMotionId = 23;
-        mario->multiTimer = 1;
-    case 23:
-        if (--mario->multiTimer > 0) {
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
             break;
-        }
-        mario->multiTimer = 1;
-    case 24:
-        if (--mario->multiTimer > 0) {
-            break;
-        }
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-        marioAdjustMoveDir();
-        marioChgMotSub(MARIO_MOTION_STAY, 0);
-        break;
     }
 }
 

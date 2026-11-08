@@ -2491,9 +2491,9 @@ EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
     if (index <= EVTDAT_UF_MAX) {
         index += EVTDAT_UF_BASE;
         shift = index % 32;
-        if (value != 0) { //set bit
+        if (value != 0) { // set bit
             entry->ufBase[index / 32] |= (1 << shift);
-        } else { //clear bit
+        } else { // clear bit
             entry->ufBase[index / 32] &= ~(1 << shift);
         }
         return value;
@@ -2539,9 +2539,9 @@ EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
     if (index <= EVTDAT_GF_MAX) {
         index += EVTDAT_GF_BASE;
         shift = index % 32;
-        if (value != 0) { //set bit
+        if (value != 0) { // set bit
             wp->gfData[index / 32] |= (1 << shift);
-        } else { //clear bit
+        } else { // clear bit
             wp->gfData[index / 32] &= ~(1 << shift);
         }
         return value;
@@ -2549,9 +2549,9 @@ EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
     if (index <= EVTDAT_LF_MAX) {
         index += EVTDAT_LF_BASE;
         shift = index % 32;
-        if (value != 0) { //set bit
+        if (value != 0) { // set bit
             entry->lfData[index / 32] |= (1 << shift);
-        } else { //clear bit
+        } else { // clear bit
             entry->lfData[index / 32] &= ~(1 << shift);
         }
         return value;

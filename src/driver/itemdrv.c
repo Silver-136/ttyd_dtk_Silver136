@@ -832,29 +832,29 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
 
     switch (entry->itemId) {
-    case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-        entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
-        break;
-    default:
+        case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+            entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
+            break;
+        default:
 #if VERSION <= VERSION_DEMO_JP
-        iconEntry(entry->name, itemDataTable[itemId].icon_id);
-        nm = entry->name;
-        iconSetPos(nm, x, y, z);
+            iconEntry(entry->name, itemDataTable[itemId].icon_id);
+            nm = entry->name;
+            iconSetPos(nm, x, y, z);
 #else
-        entry->effect = NULL;
-        iconEntry(entry->name, itemDataTable[itemId].icon_id);
-        iconSetPos(entry->name, x, y, z);
+            entry->effect = NULL;
+            iconEntry(entry->name, itemDataTable[itemId].icon_id);
+            iconSetPos(entry->name, x, y, z);
 #endif
-        iconSetScale(entry->name, entry->scale);
-        iconSetAlpha(entry->name, entry->alpha);
-        break;
+            iconSetScale(entry->name, entry->scale);
+            iconSetAlpha(entry->name, entry->alpha);
+            break;
     }
     entry->bounceFactor = entry->gravityScale = 1.0f;
     entry->baseTime = gp->renderTime;
     switch (entry->itemId) {
-    case ITEM_COIN: case ITEM_PIANTA_TOKEN: case ITEM_HEART: case ITEM_FLOWER:
-        entry->flags |= ITEM_FLAG_QUICK_GET;
-        break;
+        case ITEM_COIN: case ITEM_PIANTA_TOKEN: case ITEM_HEART: case ITEM_FLOWER:
+            entry->flags |= ITEM_FLAG_QUICK_GET;
+            break;
     }
 
     switch (type) {

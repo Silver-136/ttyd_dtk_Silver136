@@ -10,11 +10,11 @@
 // HEAP_MALLOC block is a series of these nodes
 typedef struct MapAllocEntry MapAllocEntry;
 struct MapAllocEntry {
-    MapAllocEntry* next; //0x0
-    u32 size; //0x4
-    u16 inuse; //0x8
-    u16 currId; //0xA
-    u8 pad_C[0x20 - 0xC]; //0xC
+    MapAllocEntry* next; // 0x0
+    u32 size; // 0x4
+    u16 inuse; // 0x8
+    u16 currId; // 0xA
+    u8 pad_C[0x20 - 0xC]; // 0xC
 };
 
 //.bss

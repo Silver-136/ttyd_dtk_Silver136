@@ -299,16 +299,16 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                 }
             } else {
                 switch (tagdata[0]) {
-                    case '>': //done reading the tag
+                    case '>': // done reading the tag
                         tagdone = TRUE;
 
                         // fallthrough
 
                     // fallthrough
-                    case ',': //found new tag data
+                    case ',': // found new tag data
                         tagdata++;
                         if (tagNum == 0) {
-                            tag[mbbpos] = '\0'; //terminate string
+                            tag[mbbpos] = '\0'; // terminate string
                             initEndPos = tagdata;
                         } else {
                             tagEndPos = (s16)mbbpos;
@@ -317,7 +317,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                         tagNum++;
                         break;
 
-                    default: //continue reading the tag
+                    default: // continue reading the tag
                         if (tagNum == 0) {
                             tag[mbbpos++] = *tagdata++;
                         } else {

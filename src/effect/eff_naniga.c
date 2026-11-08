@@ -154,114 +154,114 @@ static void effNanigaMain(EffectEntry* effect) {
         return;
     }
     switch (work->state) {
-    case 0:
-        work->state++;
-        work->timer = 30;
+        case 0:
+            work->state++;
+            work->timer = 30;
 
-        // fall through
-    case 1:
-        if (work->timer == 30) {
-            for (i = 0; i < 4; i++) {
-                effKemuTestDrawCam(effKemuTestEntry(2, work->screen.x, work->screen.y, work->screen.z,
-                                                    0.5f + (f32)irand(200) / 100.0f),
-                                   8);
+            // fall through
+        case 1:
+            if (work->timer == 30) {
+                for (i = 0; i < 4; i++) {
+                    effKemuTestDrawCam(effKemuTestEntry(2, work->screen.x, work->screen.y, work->screen.z,
+                                                        0.5f + (f32)irand(200) / 100.0f),
+                                       8);
+                }
+                psndSFXOn_3D("SFX_ITEM_WHAT1", &pos);
             }
-            psndSFXOn_3D("SFX_ITEM_WHAT1", &pos);
-        }
-        if (--work->timer < 0) {
-            work->timer = 60;
-            work->state++;
-        }
-        break;
-    case 2:
-        work->timer--;
-        if (work->timer < 0) {
-            work->timer = 0;
-            work->state++;
-            work->sfxId = psndSFXOn_3D("SFX_ITEM_WHAT2", &pos);
-        }
-        break;
-    case 3:
-        work->offset = intplGetValue(EASING_CUBIC_OUT, work->minOffset, work->maxOffset, work->timer, 300);
-        work->timer++;
-        if (work->timer > 300) {
-            psndSFXOff(work->sfxId);
-            switch (work->mode) {
-            case 0:
+            if (--work->timer < 0) {
+                work->timer = 60;
+                work->state++;
+            }
+            break;
+        case 2:
+            work->timer--;
+            if (work->timer < 0) {
+                work->timer = 0;
+                work->state++;
+                work->sfxId = psndSFXOn_3D("SFX_ITEM_WHAT2", &pos);
+            }
+            break;
+        case 3:
+            work->offset = intplGetValue(EASING_CUBIC_OUT, work->minOffset, work->maxOffset, work->timer, 300);
+            work->timer++;
+            if (work->timer > 300) {
+                psndSFXOff(work->sfxId);
+                switch (work->mode) {
+                case 0:
+                    work->timer = 60;
+                    work->state = 10;
+                    break;
+                case 1:
+                    work->timer = 0;
+                    work->state = 4;
+                    break;
+                case 2:
+                    work->timer = 0;
+                    work->state = 5;
+                    break;
+                }
+            }
+            break;
+        case 4:
+            if (work->timer < 10) {
+                work->timer++;
+            } else if (work->timer < 20) {
+                work->offset -= 4.0f;
+                work->timer++;
+            } else {
+                work->offset = work->maxOffset - 40.0f;
                 work->timer = 60;
                 work->state = 10;
-                break;
-            case 1:
-                work->timer = 0;
-                work->state = 4;
-                break;
-            case 2:
-                work->timer = 0;
-                work->state = 5;
-                break;
             }
-        }
-        break;
-    case 4:
-        if (work->timer < 10) {
-            work->timer++;
-        } else if (work->timer < 20) {
-            work->offset -= 4.0f;
-            work->timer++;
-        } else {
-            work->offset = work->maxOffset - 40.0f;
-            work->timer = 60;
-            work->state = 10;
-        }
-        break;
-    case 5:
-        if (work->timer < 10) {
-            work->timer++;
-        } else if (work->timer < 20) {
-            work->offset += 4.0f;
-            work->timer++;
-        } else {
-            work->offset = 40.0f + work->maxOffset;
-            work->timer = 60;
-            work->state = 10;
-        }
-        break;
-    case 10:
-        if (work->timer != 0) {
-            work->timer--;
-        } else if (animGroupBaseAsync("EFF_naniga", inBattle, NULL)) {
-            work->pose = animPoseEntry("EFF_naniga", inBattle);
-            animPoseSetAnim(work->pose, "A_1", TRUE);
-            work->state++;
-            evt = evtEntryType(sound_evt, 0, 0, 0);
-            evt->lwData[0] = FLOAT(pos.x);
-            evt->lwData[1] = FLOAT(pos.y);
-            evt->lwData[2] = FLOAT(pos.z);
-        }
-        break;
-    case 11:
-        if (animPoseGetLoopTimes(work->pose) > 0.8f) {
-            effItemGetEntry(10, work->position.x, work->position.y, work->position.z);
-            work->state++;
-        }
-        break;
-    case 12:
-        work->alpha -= 4;
-        if (work->alpha < 0) {
-            animPoseRelease(work->pose);
-            work->pose = -1;
-            work->timer = 30;
-            work->state++;
-        }
-        break;
-    case 13:
-        if (work->timer != 0) {
-            work->timer--;
-        } else {
-            effDelete(effect);
-            return;
-        }
-        break;
+            break;
+        case 5:
+            if (work->timer < 10) {
+                work->timer++;
+            } else if (work->timer < 20) {
+                work->offset += 4.0f;
+                work->timer++;
+            } else {
+                work->offset = 40.0f + work->maxOffset;
+                work->timer = 60;
+                work->state = 10;
+            }
+            break;
+        case 10:
+            if (work->timer != 0) {
+                work->timer--;
+            } else if (animGroupBaseAsync("EFF_naniga", inBattle, NULL)) {
+                work->pose = animPoseEntry("EFF_naniga", inBattle);
+                animPoseSetAnim(work->pose, "A_1", TRUE);
+                work->state++;
+                evt = evtEntryType(sound_evt, 0, 0, 0);
+                evt->lwData[0] = FLOAT(pos.x);
+                evt->lwData[1] = FLOAT(pos.y);
+                evt->lwData[2] = FLOAT(pos.z);
+            }
+            break;
+        case 11:
+            if (animPoseGetLoopTimes(work->pose) > 0.8f) {
+                effItemGetEntry(10, work->position.x, work->position.y, work->position.z);
+                work->state++;
+            }
+            break;
+        case 12:
+            work->alpha -= 4;
+            if (work->alpha < 0) {
+                animPoseRelease(work->pose);
+                work->pose = -1;
+                work->timer = 30;
+                work->state++;
+            }
+            break;
+        case 13:
+            if (work->timer != 0) {
+                work->timer--;
+            } else {
+                effDelete(effect);
+                return;
+            }
+            break;
     }
     while (work->offset < 0.0f) {
         work->offset += 40.0f * (f32)work->count;
@@ -271,22 +271,22 @@ static void effNanigaMain(EffectEntry* effect) {
     }
     state = work->state;
     switch (state) {
-    case 0:
-    case 1:
-        break;
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 10:
-        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, effNanigaDisp, effect);
-        break;
-    default:
-        if (state == 11 && animPoseGetLoopTimes(work->pose) < 0.8f) {
+        case 0:
+        case 1:
             break;
-        }
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, effNanigaDisp3, effect);
-        break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 10:
+            dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, effNanigaDisp, effect);
+            break;
+        default:
+            if (state == 11 && animPoseGetLoopTimes(work->pose) < 0.8f) {
+                break;
+            }
+            dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, effNanigaDisp3, effect);
+            break;
     }
     if (work->pose != -1) {
         dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effNanigaDisp2, effect);

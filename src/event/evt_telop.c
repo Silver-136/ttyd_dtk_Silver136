@@ -70,39 +70,39 @@ USER_FUNC(evt_telop_entry) {
         swSet(wp->id + GSWF_TELOP_SHOWN_BASE);
     }
     switch (event->userdata[0]) {
-    case 0:
-        wp->time = event->lifetime;
-        event->userdata[0]++;
-        break;
-    case 1:
-        ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
-        if (ms < 1000) {
-            wp->alpha = intplGetValue(EASING_SINE_IN_OUT, -256.0f, 256.0f, ms, 1000);
-        } else {
+        case 0:
             wp->time = event->lifetime;
             event->userdata[0]++;
-        }
-        dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
-        break;
-    case 2:
-        ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
-        if (ms > 5000) {
-            wp->time = event->lifetime;
-            event->userdata[0]++;
-        }
-        dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
-        break;
-    case 3:
-        ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
-        if (ms < 1000) {
-            wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 256.0f, -256.0f, ms, 1000);
-        } else {
-            event->userdata[0]++;
-        }
-        dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
-        break;
-    case 4:
-        return EVT_RETURN_DONE;
+            break;
+        case 1:
+            ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
+            if (ms < 1000) {
+                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, -256.0f, 256.0f, ms, 1000);
+            } else {
+                wp->time = event->lifetime;
+                event->userdata[0]++;
+            }
+            dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
+            break;
+        case 2:
+            ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
+            if (ms > 5000) {
+                wp->time = event->lifetime;
+                event->userdata[0]++;
+            }
+            dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
+            break;
+        case 3:
+            ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
+            if (ms < 1000) {
+                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 256.0f, -256.0f, ms, 1000);
+            } else {
+                event->userdata[0]++;
+            }
+            dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
+            break;
+        case 4:
+            return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
 }

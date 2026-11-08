@@ -18,25 +18,25 @@
 #include "mario/mario.h"
 
 typedef struct effMugiKemuriData {
-    s32 flag; //0x0
-    s32 type; //0x4
-    Vec pos; //0x8
-    Vec rot; //0x14
-    Vec scale; //0x20
-    f32 speed; //0x2C
-    f32 hSpeedScale; //0x30, horizontal step per frame = direction * vertical speed * this
-    f32 rising; //0x34, 1.0 until the vertical speed turns negative
-    f32 field_0x38; //0x38
-    f32 vy; //0x3C
-    f32 ay; //0x40
-    f32 jy; //0x44
-    f32 ky; //0x48
-    f32 dirX; //0x4C
-    f32 dirZ; //0x50
-    s32 timer; //0x54
-    s32 alpha; //0x58
-    f32 flip; //0x5C
-    s32 poseId; //0x60
+    s32 flag; // 0x0
+    s32 type; // 0x4
+    Vec pos; // 0x8
+    Vec rot; // 0x14
+    Vec scale; // 0x20
+    f32 speed; // 0x2C
+    f32 hSpeedScale; // 0x30, horizontal step per frame = direction * vertical speed * this
+    f32 rising; // 0x34, 1.0 until the vertical speed turns negative
+    f32 field_0x38; // 0x38
+    f32 vy; // 0x3C
+    f32 ay; // 0x40
+    f32 jy; // 0x44
+    f32 ky; // 0x48
+    f32 dirX; // 0x4C
+    f32 dirZ; // 0x50
+    s32 timer; // 0x54
+    s32 alpha; // 0x58
+    f32 flip; // 0x5C
+    s32 poseId; // 0x60
 } effMugiKemuriData;
 
 static void effMugiKemuriMain(EffectEntry* effect);

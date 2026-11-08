@@ -51,20 +51,20 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     effect = effEntry();
     count = 1;
     switch (type) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-        count = 17;
-        break;
-    case 6:
-        count = 17;
-        break;
-    case 7:
-        count = 9;
-        break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            count = 17;
+            break;
+        case 6:
+            count = 17;
+            break;
+        case 7:
+            count = 9;
+            break;
     }
     effect->type = "MObjBroken";
     effect->count = count;
@@ -85,34 +85,34 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
             n -= 8;
         }
         switch (type) {
-        case 0:
-        case 1:
-        case 2:
-            s = 6.25f;
-            col = (n - 1) % 4 / 2;
-            row = (n - 1) / 4;
-            depth = (n - 1) % 4 % 2;
-            break;
-        case 3:
-        case 4:
-        case 5:
-            s = 12.5f;
-            col = (n - 1) % 4 / 2;
-            row = (n - 1) / 4;
-            depth = (n - 1) % 4 % 2;
-            break;
-        case 6:
-            s = 12.5f;
-            col = (n - 1) % 2;
-            row = (n - 1) / 2;
-            depth = 0;
-            break;
-        case 7:
-            s = 12.5f;
-            col = (n - 1) % 2;
-            row = (n - 1) / 2;
-            depth = 0;
-            break;
+            case 0:
+            case 1:
+            case 2:
+                s = 6.25f;
+                col = (n - 1) % 4 / 2;
+                row = (n - 1) / 4;
+                depth = (n - 1) % 4 % 2;
+                break;
+            case 3:
+            case 4:
+            case 5:
+                s = 12.5f;
+                col = (n - 1) % 4 / 2;
+                row = (n - 1) / 4;
+                depth = (n - 1) % 4 % 2;
+                break;
+            case 6:
+                s = 12.5f;
+                col = (n - 1) % 2;
+                row = (n - 1) / 2;
+                depth = 0;
+                break;
+            case 7:
+                s = 12.5f;
+                col = (n - 1) % 2;
+                row = (n - 1) / 2;
+                depth = 0;
+                break;
         }
         work->position.x = col * s - s / 2.0f;
         work->position.y = row * s + s / 2.0f;
@@ -173,21 +173,21 @@ static void effMObjBrokenMain(EffectEntry* effect) {
         return;
     }
     switch (type) {
-    case 7:
-        if (!animGroupBaseAsync("EFF_sango", inBattle, NULL)) {
-            return;
-        }
-        break;
+        case 7:
+            if (!animGroupBaseAsync("EFF_sango", inBattle, NULL)) {
+                return;
+            }
+            break;
     }
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         switch (type) {
-        case 7:
-            if (work->poseId == -1) {
-                work->poseId = animPoseEntry("EFF_sango", inBattle);
-                animPoseSetAnim(work->poseId, (i & 1) ? "Z_2" : "Z_1", TRUE);
-            }
-            break;
+            case 7:
+                if (work->poseId == -1) {
+                    work->poseId = animPoseEntry("EFF_sango", inBattle);
+                    animPoseSetAnim(work->poseId, (i & 1) ? "Z_2" : "Z_1", TRUE);
+                }
+                break;
         }
         work->position.x += work->speed * polySinf(6.2831855f * work->angle / 360.0f);
         work->position.z += work->speed * -polyCosf(6.2831855f * work->angle / 360.0f);

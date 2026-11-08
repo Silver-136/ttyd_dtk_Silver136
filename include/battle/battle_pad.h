@@ -17,16 +17,16 @@
 #define BATTLE_PAD_STICK_BITS      0xFFFF0000 // the half above the PAD_BUTTON_* bits: the stick directions
 
 typedef struct BattleWorkPad {
-    PADStatus padData[2]; //0x0, current, last
+    PADStatus padData[2]; // 0x0, current, last
 
-    u32 buttonsPressedHistory[30]; //0x18
-    u32 buttonsHeldHistory[30]; //0x90
-    u32 buttonsHistory[30]; //0x108
-    u32 buttonsReleasedHistory[30]; //0x180
+    u32 buttonsPressedHistory[30]; // 0x18
+    u32 buttonsHeldHistory[30]; // 0x90
+    u32 buttonsHistory[30]; // 0x108
+    u32 buttonsReleasedHistory[30]; // 0x180
 
-    s8 holdRepeatState; //0x1F8
-    s8 holdRepeatFrameCounter; //0x1F9
-    u8 pad_0x1FA[2]; //0x1FA
+    s8 holdRepeatState; // 0x1F8
+    s8 holdRepeatFrameCounter; // 0x1F9
+    u8 pad_0x1FA[2]; // 0x1FA
 } BattleWorkPad;
 
 void BattlePadInit(void);

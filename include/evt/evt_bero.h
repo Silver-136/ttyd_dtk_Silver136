@@ -25,24 +25,24 @@ enum {
 };
 
 typedef struct BeroEntry {
-    const char* hitName; //0x0
-    u16 type; //0x4, BERO_TYPE_KIND_MASK: the exit kind (0 and 1 the edge exits w_/e_/n_/s_bero, 2 pipe
+    const char* hitName; // 0x0
+    u16 type; // 0x4, BERO_TYPE_KIND_MASK: the exit kind (0 and 1 the edge exits w_/e_/n_/s_bero, 2 pipe
               //     dokan, 0xF00 holes and some s_bero; 3 rare) | BERO_TYPE_BG_MODE | 0x2000 (on some pipes)
-    u16 sfxId; //0x6
-    s32 directionId; //0x8, 45-degree steps from north, 8 up, 9 down
-    s32 centerPosition; //0xC, x of centerPosition[3]
-    s32 centerPositionY; //0x10
-    s32 centerPositionZ; //0x14
-    s32 length; //0x18, -1 = default for type
-    EvtWord* enterEvent; //0x1C;
-    s32 caseType; //0x20, -1 = default for type
-    EvtWord* exitEvent; //0x24
-    const char* nextMapName; //0x28
-    const char* nextBeroName; //0x2C
-    u16 enterAnimeType; //0x30
-    u16 exitAnimeType; //0x32
-    const void* enterAnimeArg; //0x34, map animation name or script, by anime type
-    const void* exitAnimeArg; //0x38, map animation name or script, by anime type
+    u16 sfxId; // 0x6
+    s32 directionId; // 0x8, 45-degree steps from north, 8 up, 9 down
+    s32 centerPosition; // 0xC, x of centerPosition[3]
+    s32 centerPositionY; // 0x10
+    s32 centerPositionZ; // 0x14
+    s32 length; // 0x18, -1 = default for type
+    EvtWord* enterEvent; // 0x1C;
+    s32 caseType; // 0x20, -1 = default for type
+    EvtWord* exitEvent; // 0x24
+    const char* nextMapName; // 0x28
+    const char* nextBeroName; // 0x2C
+    u16 enterAnimeType; // 0x30
+    u16 exitAnimeType; // 0x32
+    const void* enterAnimeArg; // 0x34, map animation name or script, by anime type
+    const void* exitAnimeArg; // 0x38, map animation name or script, by anime type
 } BeroEntry;
 
 EVT_DEF(evt_bero_info_run);
@@ -87,7 +87,7 @@ extern EvtWord evt_bero_info_run[];
 
 extern s32 BeroID[16];
 extern BeroEntry* BeroINFOARR[16];
-extern s32 BeroSW[16]; //switches
+extern s32 BeroSW[16]; // switches
 extern EvtWord bero_case_entry_sub[];
 extern EvtWord bero_case_exec_door[];
 extern EvtWord bero_case_exec_gate[];

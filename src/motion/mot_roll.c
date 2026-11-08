@@ -650,68 +650,13 @@ void mot_roll(void) {
         mario->currSubMotionId = 0;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        z0 = 0;
-        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        marioAdjustMoveDir();
+        case 0:
+            z0 = 0;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+            marioAdjustMoveDir();
 #if VERSION <= VERSION_DEMO_JP
-        mario->hammerDir = 0;
-#else
-        v31 = mario->displayDirection;
-        if (v31 < 90.0f || v31 > 270.0f) {
-            mario->hammerDir = 1;
-            mario->directionView = revise360(270.0f - mario->targetYaw);
-            mario->moveDirection = 270.0f;
-        } else {
             mario->hammerDir = 0;
-            mario->directionView = revise360(90.0f - mario->targetYaw);
-            mario->moveDirection = 90.0f;
-        }
-#endif
-        marioGetRubInit();
-        mario->flags |= MARIO_FLAG_TUBE_MODE;
-        mario->rollFlags = ROLL_STATE_ROLLING;
-        mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        marioPaperOn("p_roll");
-        marioChgPose("M_I_U");
-        marioChgPaper("PM_R_1A");
-        mario->multiTimer = 0x41;
-        m = marioGetPtr();
-        m->wPlayerCollisionBox.x = 14.8f;
-        m->wPlayerCollisionBox.y = 14.8f;
-        m->baseDashSpeed = rollData[0];
-        marioGetPtr()->motRoll->spdX = 0.0f;
-        marioGetPtr()->motRoll->spdZ = 0.0f;
-        m->rotOfs.x = -6.0f;
-        m->rotOfs.y = 6.0f;
-        m->dispOfs.x = 6.0f;
-        m->dispOfs.y = 0.0f;
-        m->scale.x = 1.0f;
-        m->scale.y = 1.0f;
-        m->scale.z = 1.0f;
-        m->tubeScaleY = 1.0f;
-        mario->airTimer = 0;
-        if (mario->forceMoveTimer == 0) {
-            mario->baseSpeed = 0.0f;
-        }
-        zoomUp();
-        marioGetPtr()->motRoll->squashTrigger = 0;
-        marioGetPtr()->motRoll->squashState = 0;
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
-        mario->currSubMotionId = 1;
-        break;
-    case 1:
-        if (mario->multiTimer == 0x36) {
-            allPartyRideShip();
-        }
-        mario->dispOfs.y += 0.1f;
-        if (mario->dispOfs.y > 1.0f) {
-            mario->dispOfs.y = 1.0f;
-        }
-        if (--mario->multiTimer <= 0) {
-#if VERSION <= VERSION_DEMO_JP
+#else
             v31 = mario->displayDirection;
             if (v31 < 90.0f || v31 > 270.0f) {
                 mario->hammerDir = 1;
@@ -723,104 +668,159 @@ void mot_roll(void) {
                 mario->moveDirection = 90.0f;
             }
 #endif
-            mario->currSubMotionId = 0x1e;
+            marioGetRubInit();
+            mario->flags |= MARIO_FLAG_TUBE_MODE;
+            mario->rollFlags = ROLL_STATE_ROLLING;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            marioPaperOn("p_roll");
             marioChgPose("M_I_U");
-            marioChgPaper("PM_R_1B");
-            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-        }
-        break;
-    case 0x14:
-        mario->baseSpeed = 0.0f;
-        mario->rot.x = 0.0f;
-        mario->rot.z = 0.0f;
-        mario->rotOfs.x = 0.0f;
-        mario->rotOfs.y = 0.0f;
-        v31 = revise360(mario->directionView - mario->targetYaw);
-        mario->dispOfs.x = (v31 < 180.0f) ? 3.0f : -3.0f;
-        mario->dispOfs.y = 0.0f;
-        mario->multiTimer = 0x41;
-        mario->currSubMotionId = 0x15;
-        mario->displayDirection = 0.0f;
+            marioChgPaper("PM_R_1A");
+            mario->multiTimer = 0x41;
+            m = marioGetPtr();
+            m->wPlayerCollisionBox.x = 14.8f;
+            m->wPlayerCollisionBox.y = 14.8f;
+            m->baseDashSpeed = rollData[0];
+            marioGetPtr()->motRoll->spdX = 0.0f;
+            marioGetPtr()->motRoll->spdZ = 0.0f;
+            m->rotOfs.x = -6.0f;
+            m->rotOfs.y = 6.0f;
+            m->dispOfs.x = 6.0f;
+            m->dispOfs.y = 0.0f;
+            m->scale.x = 1.0f;
+            m->scale.y = 1.0f;
+            m->scale.z = 1.0f;
+            m->tubeScaleY = 1.0f;
+            mario->airTimer = 0;
+            if (mario->forceMoveTimer == 0) {
+                mario->baseSpeed = 0.0f;
+            }
+            zoomUp();
+            marioGetPtr()->motRoll->squashTrigger = 0;
+            marioGetPtr()->motRoll->squashState = 0;
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
+            mario->currSubMotionId = 1;
+            break;
+        case 1:
+            if (mario->multiTimer == 0x36) {
+                allPartyRideShip();
+            }
+            mario->dispOfs.y += 0.1f;
+            if (mario->dispOfs.y > 1.0f) {
+                mario->dispOfs.y = 1.0f;
+            }
+            if (--mario->multiTimer <= 0) {
+#if VERSION <= VERSION_DEMO_JP
+                v31 = mario->displayDirection;
+                if (v31 < 90.0f || v31 > 270.0f) {
+                    mario->hammerDir = 1;
+                    mario->directionView = revise360(270.0f - mario->targetYaw);
+                    mario->moveDirection = 270.0f;
+                } else {
+                    mario->hammerDir = 0;
+                    mario->directionView = revise360(90.0f - mario->targetYaw);
+                    mario->moveDirection = 90.0f;
+                }
+#endif
+                mario->currSubMotionId = 0x1e;
+                marioChgPose("M_I_U");
+                marioChgPaper("PM_R_1B");
+                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+            }
+            break;
+        case 0x14:
+            mario->baseSpeed = 0.0f;
+            mario->rot.x = 0.0f;
+            mario->rot.z = 0.0f;
+            mario->rotOfs.x = 0.0f;
+            mario->rotOfs.y = 0.0f;
+            v31 = revise360(mario->directionView - mario->targetYaw);
+            mario->dispOfs.x = (v31 < 180.0f) ? 3.0f : -3.0f;
+            mario->dispOfs.y = 0.0f;
+            mario->multiTimer = 0x41;
+            mario->currSubMotionId = 0x15;
+            mario->displayDirection = 0.0f;
 #if VERSION >= VERSION_JP
-        move_se_off();
+            move_se_off();
 #endif
-        zoomOff();
-        marioChgPaper("PM_R_1C");
-        marioPaperLightOff();
+            zoomOff();
+            marioChgPaper("PM_R_1C");
+            marioPaperLightOff();
 #if VERSION <= VERSION_DEMO_JP
-        psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_ROLL2, &mario->position);
+            psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_ROLL2, &mario->position);
 #else
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
 #endif
-    case 0x15:
-        if (--mario->multiTimer > 0) {
-            v31 = revise360(mario->directionView - mario->targetYaw);
+        case 0x15:
+            if (--mario->multiTimer > 0) {
+                v31 = revise360(mario->directionView - mario->targetYaw);
 
-            // BUG: in both branches the parenthesis closes after the comparison, so the snap tests t - n < 1
-            // instead of |t - n| < 1 (case 0x14 sets displayDirection to 0, below t, so both tests agree here).
-            if (v31 < 180.0f) {
-                f32 t = 90.0f;
-                f32 diff = t - mario->displayDirection;
-                f32 n = 0.1f * diff;
-                n += mario->displayDirection;
-                if (__fabsf((f32)((t - n) < 1.0f))) {
-                    n = t;
+                // BUG: in both branches the parenthesis closes after the comparison, so the snap tests t - n < 1
+                // instead of |t - n| < 1 (case 0x14 sets displayDirection to 0, below t, so both tests agree here).
+                if (v31 < 180.0f) {
+                    f32 t = 90.0f;
+                    f32 diff = t - mario->displayDirection;
+                    f32 n = 0.1f * diff;
+                    n += mario->displayDirection;
+                    if (__fabsf((f32)((t - n) < 1.0f))) {
+                        n = t;
+                    }
+                    mario->displayDirection = n;
+                    mario->displayDirectionTarget = n;
+                } else {
+                    f32 t = 270.0f;
+                    f32 diff = t - mario->displayDirection;
+                    f32 n = 0.1f * diff;
+                    n += mario->displayDirection;
+                    if (__fabsf((f32)((t - n) < 1.0f))) {
+                        n = t;
+                    }
+                    mario->displayDirection = n;
+                    mario->displayDirectionTarget = n;
                 }
-                mario->displayDirection = n;
-                mario->displayDirectionTarget = n;
             } else {
-                f32 t = 270.0f;
-                f32 diff = t - mario->displayDirection;
-                f32 n = 0.1f * diff;
-                n += mario->displayDirection;
-                if (__fabsf((f32)((t - n) < 1.0f))) {
-                    n = t;
+                v31 = revise360(mario->directionView - mario->targetYaw);
+                if (v31 >= 180.0f) {
+                    mario->displayDirection = 0.0f;
+                    mario->displayDirectionTarget = 0.0f;
+                    mario->moveDirection = 270.0f;
+                    mario->directionView = 270.0f;
+                } else {
+                    mario->displayDirection = 180.0f;
+                    mario->displayDirectionTarget = 180.0f;
+                    mario->moveDirection = 90.0f;
+                    mario->directionView = 90.0f;
                 }
-                mario->displayDirection = n;
-                mario->displayDirectionTarget = n;
-            }
-        } else {
-            v31 = revise360(mario->directionView - mario->targetYaw);
-            if (v31 >= 180.0f) {
-                mario->displayDirection = 0.0f;
-                mario->displayDirectionTarget = 0.0f;
-                mario->moveDirection = 270.0f;
-                mario->directionView = 270.0f;
-            } else {
-                mario->displayDirection = 180.0f;
-                mario->displayDirectionTarget = 180.0f;
-                mario->moveDirection = 90.0f;
-                mario->directionView = 90.0f;
-            }
-            marioSetSpec();
-            mario->rollFlags = ROLL_STATE_NONE;
+                marioSetSpec();
+                mario->rollFlags = ROLL_STATE_NONE;
 #if VERSION <= VERSION_DEMO_JP
-            mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-            mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-            mario->rot = (Vec){0.0f, 0.0f, 0.0f};
+                mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
+                mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+                mario->rot = (Vec){0.0f, 0.0f, 0.0f};
 #else
-            marioOfsRotReset();
+                marioOfsRotReset();
 #endif
-            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-            mario->flags &= ~MARIO_FLAG_TUBE_MODE;
-            marioPaperOff();
-            marioAdjustMoveDir();
-            marioChgPose("M_S_1");
-            if (marioGetPtr()->motStruct) {
-                void* z;
-                __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
-                z = 0;
-                marioGetPtr()->motStruct = z;
+                mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+                mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+                mario->flags &= ~MARIO_FLAG_TUBE_MODE;
+                marioPaperOff();
+                marioAdjustMoveDir();
+                marioChgPose("M_S_1");
+                if (marioGetPtr()->motStruct) {
+                    void* z;
+                    __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
+                    z = 0;
+                    marioGetPtr()->motStruct = z;
+                }
+                allPartyRideOff();
+                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+                mario->currSubMotionId = 0x16;
             }
-            allPartyRideOff();
-            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-            mario->currSubMotionId = 0x16;
-        }
-        break;
-    case 0x16:
-        marioChgMotSub(MARIO_MOTION_STAY, 0);
-        break;
+            break;
+        case 0x16:
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
+            break;
     }
     if (mario->currSubMotionId < 0x1e) {
         return;
@@ -856,46 +856,46 @@ void mot_roll(void) {
         v26 = 1.0f;
     }
     switch (marioGetPtr()->motRoll->squashState) {
-    case 1:
-        if (v26 < 1.4f) {
-            // FAKE: the 1.0f factor goes through the temporary k; the plain expression changes the object
-            k = 1.0f;
-            v26 = k * (1.4499999f - v26) + v26;
-            if (v26 >= 1.4f) {
-                v26 = 1.4f;
+        case 1:
+            if (v26 < 1.4f) {
+                // FAKE: the 1.0f factor goes through the temporary k; the plain expression changes the object
+                k = 1.0f;
+                v26 = k * (1.4499999f - v26) + v26;
+                if (v26 >= 1.4f) {
+                    v26 = 1.4f;
+                }
             }
-        }
-        if (mario->airTimer == 0) {
+            if (mario->airTimer == 0) {
 #if VERSION <= VERSION_DEMO_JP
-            s32 t = 2;
+                s32 t = 2;
 #endif
-            marioGetPtr()->motRoll->squashState = 2;
-        }
-        break;
-    case 2:
-        if (v26 > 0.4f) {
-            v26 = 0.4f * (0.35f - v26) + v26;
-            if (v26 <= 0.4f) {
-#if VERSION <= VERSION_DEMO_JP
-                s32 t = 3;
-#endif
-                v26 = 0.4f;
-                marioGetPtr()->motRoll->squashState = 3;
+                marioGetPtr()->motRoll->squashState = 2;
             }
-        }
-        break;
-    case 3:
-        if (v26 < 1.0f) {
-            v26 = 0.5f * (1.05f - v26) + v26;
-            if (v26 >= 1.0f) {
+            break;
+        case 2:
+            if (v26 > 0.4f) {
+                v26 = 0.4f * (0.35f - v26) + v26;
+                if (v26 <= 0.4f) {
 #if VERSION <= VERSION_DEMO_JP
-                s32 t = 0;
+                    s32 t = 3;
 #endif
-                marioGetPtr()->motRoll->squashState = 0;
-                v26 = 1.0f;
+                    v26 = 0.4f;
+                    marioGetPtr()->motRoll->squashState = 3;
+                }
             }
-        }
-        break;
+            break;
+        case 3:
+            if (v26 < 1.0f) {
+                v26 = 0.5f * (1.05f - v26) + v26;
+                if (v26 >= 1.0f) {
+#if VERSION <= VERSION_DEMO_JP
+                    s32 t = 0;
+#endif
+                    marioGetPtr()->motRoll->squashState = 0;
+                    v26 = 1.0f;
+                }
+            }
+            break;
     }
     mario->tubeScaleY = v26;
 #if VERSION <= VERSION_DEMO_JP

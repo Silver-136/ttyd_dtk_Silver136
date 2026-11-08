@@ -253,99 +253,99 @@ static void main_base(void) {
     }
 
     switch (w->state) {
-    case 1:
-        w->state = 2;
-        w->marioState = 1;
-        w->targetState = 1;
-        w->tableIdx = 0;
-        if (w->mode == 0) {
-            n = 0;
-            for (i = 0; i < 7; i++) {
-                w->table[n++] = 0;
-            }
-            for (i = 0; i < 7; i++) {
-                w->table[n++] = 2;
-            }
-            for (i = 0; i < 8; i++) {
-                w->table[n++] = 4;
-            }
-            for (i = 0; i < 3; i++) {
-                w->table[n++] = 6;
-            }
-            for (i = 0; i < 200; i++) {
-                s32 t;
-                a = irand(25);
-                j = irand(25);
-                t = w->table[a];
-                w->table[a] = w->table[j];
-                w->table[j] = t;
-            }
-        } else {
-            n = 0;
-            for (i = 0; i < 12; i++) {
-                w->table[n++] = 0;
-            }
-            for (i = 0; i < 4; i++) {
-                w->table[n++] = 1;
-            }
-            for (i = 0; i < 12; i++) {
-                w->table[n++] = 2;
-            }
-            for (i = 0; i < 4; i++) {
-                w->table[n++] = 3;
-            }
-            for (i = 0; i < 12; i++) {
-                w->table[n++] = 4;
-            }
-            for (i = 0; i < 4; i++) {
-                w->table[n++] = 5;
-            }
-            for (i = 0; i < 2; i++) {
-                w->table[n++] = 6;
-            }
-            for (i = 0; i < 200; i++) {
-                s32 t;
-                a = irand(50);
-                j = irand(50);
-                t = w->table[a];
-                w->table[a] = w->table[j];
-                w->table[j] = t;
-            }
-        }
-    case 2:
-        w->objTimer--;
-        if (w->objTimer <= 0) {
+        case 1:
+            w->state = 2;
+            w->marioState = 1;
+            w->targetState = 1;
+            w->tableIdx = 0;
             if (w->mode == 0) {
-                w->objTimer = 37;
+                n = 0;
+                for (i = 0; i < 7; i++) {
+                    w->table[n++] = 0;
+                }
+                for (i = 0; i < 7; i++) {
+                    w->table[n++] = 2;
+                }
+                for (i = 0; i < 8; i++) {
+                    w->table[n++] = 4;
+                }
+                for (i = 0; i < 3; i++) {
+                    w->table[n++] = 6;
+                }
+                for (i = 0; i < 200; i++) {
+                    s32 t;
+                    a = irand(25);
+                    j = irand(25);
+                    t = w->table[a];
+                    w->table[a] = w->table[j];
+                    w->table[j] = t;
+                }
             } else {
-                w->objTimer = 18;
-            }
-            if (w->timeLeft > 0) {
-                object_entry();
-            }
-        }
-        if (w->timeLeft <= 0) {
-            n = w->weaponNum;
-            for (j = 0; j < n; j++) {
-                if (w->weapon[j].state != 0) {
-                    break;
+                n = 0;
+                for (i = 0; i < 12; i++) {
+                    w->table[n++] = 0;
+                }
+                for (i = 0; i < 4; i++) {
+                    w->table[n++] = 1;
+                }
+                for (i = 0; i < 12; i++) {
+                    w->table[n++] = 2;
+                }
+                for (i = 0; i < 4; i++) {
+                    w->table[n++] = 3;
+                }
+                for (i = 0; i < 12; i++) {
+                    w->table[n++] = 4;
+                }
+                for (i = 0; i < 4; i++) {
+                    w->table[n++] = 5;
+                }
+                for (i = 0; i < 2; i++) {
+                    w->table[n++] = 6;
+                }
+                for (i = 0; i < 200; i++) {
+                    s32 t;
+                    a = irand(50);
+                    j = irand(50);
+                    t = w->table[a];
+                    w->table[a] = w->table[j];
+                    w->table[j] = t;
                 }
             }
-            for (i = 0; i < 10; i++) {
-                if (w->object[i].state != 0) {
-                    break;
+        case 2:
+            w->objTimer--;
+            if (w->objTimer <= 0) {
+                if (w->mode == 0) {
+                    w->objTimer = 37;
+                } else {
+                    w->objTimer = 18;
+                }
+                if (w->timeLeft > 0) {
+                    object_entry();
                 }
             }
-            if (j == n && i == 10) {
-                w->state = 3;
+            if (w->timeLeft <= 0) {
+                n = w->weaponNum;
+                for (j = 0; j < n; j++) {
+                    if (w->weapon[j].state != 0) {
+                        break;
+                    }
+                }
+                for (i = 0; i < 10; i++) {
+                    if (w->object[i].state != 0) {
+                        break;
+                    }
+                }
+                if (j == n && i == 10) {
+                    w->state = 3;
+                }
+            } else {
+                w->timeLeft--;
             }
-        } else {
-            w->timeLeft--;
-        }
-        break;
-    case 0:
-    case 3:
-        break;
+            break;
+        case 0:
+        case 3:
+            break;
     }
 }
 
@@ -370,54 +370,54 @@ static void main_mario(void) {
         BtlUnit_SetAnim(part, "M_S_1");
     }
     switch (w->marioState) {
-    case 1:
-        if (stick < -40) {
-            w->marioState = 2;
-            w->marioTimer = 0;
-            w->marioCnt = 10;
-            BtlUnit_SetAnim(part, "M_C_2A");
-        }
-        break;
-    case 2:
-        if (stick > -20) {
-            w->marioState = 1;
-            weapon_entry();
-        } else {
-            w->marioCnt--;
-            if (w->marioCnt == 2) {
-                BtlUnit_SetAnim(part, "M_C_2B");
-            }
-            if (w->marioCnt <= 0 && w->mode == 1) {
+        case 1:
+            if (stick < -40) {
+                w->marioState = 2;
+                w->marioTimer = 0;
                 w->marioCnt = 10;
-                weapon_entry();
+                BtlUnit_SetAnim(part, "M_C_2A");
             }
-        }
-        break;
-    case 3:
-        w->marioState = 4;
-        w->marioTimer = 0;
-        BtlUnit_SetAnim(part, "M_D_1");
-        BtlUnit_GetPos(mario, &x, &y, &z);
-        eff = effStampN64Entry(2, x, 20.0f + y, 10.0f + z);
-        ((EffStampN64Work*)eff->userdata)->r = 0;
-        ((EffStampN64Work*)eff->userdata)->g = 200;
-        ((EffStampN64Work*)eff->userdata)->b = 0;
-        ((EffStampN64Work*)eff->userdata)->r2 = 0;
-        ((EffStampN64Work*)eff->userdata)->g2 = 10;
-        ((EffStampN64Work*)eff->userdata)->b2 = 0;
-    case 4:
-        w->marioTimer++;
-        if (w->marioTimer == 30) {
-            BtlUnit_SetAnim(part, "M_X_1");
-        }
-        if (w->marioTimer == 180) {
-            BtlUnit_SetAnim(part, "M_I_Y");
-            w->marioState = 1;
+            break;
+        case 2:
+            if (stick > -20) {
+                w->marioState = 1;
+                weapon_entry();
+            } else {
+                w->marioCnt--;
+                if (w->marioCnt == 2) {
+                    BtlUnit_SetAnim(part, "M_C_2B");
+                }
+                if (w->marioCnt <= 0 && w->mode == 1) {
+                    w->marioCnt = 10;
+                    weapon_entry();
+                }
+            }
+            break;
+        case 3:
+            w->marioState = 4;
             w->marioTimer = 0;
-        }
-        break;
-    case 5:
-        break;
+            BtlUnit_SetAnim(part, "M_D_1");
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            eff = effStampN64Entry(2, x, 20.0f + y, 10.0f + z);
+            ((EffStampN64Work*)eff->userdata)->r = 0;
+            ((EffStampN64Work*)eff->userdata)->g = 200;
+            ((EffStampN64Work*)eff->userdata)->b = 0;
+            ((EffStampN64Work*)eff->userdata)->r2 = 0;
+            ((EffStampN64Work*)eff->userdata)->g2 = 10;
+            ((EffStampN64Work*)eff->userdata)->b2 = 0;
+        case 4:
+            w->marioTimer++;
+            if (w->marioTimer == 30) {
+                BtlUnit_SetAnim(part, "M_X_1");
+            }
+            if (w->marioTimer == 180) {
+                BtlUnit_SetAnim(part, "M_I_Y");
+                w->marioState = 1;
+                w->marioTimer = 0;
+            }
+            break;
+        case 5:
+            break;
     }
 }
 
@@ -428,39 +428,39 @@ static void main_mario(void) {
 static void main_target(void) {
     GenkiWork* w = get_ptr();
     switch (w->targetState) {
-    case 0:
-        break;
-    case 1:
-        w->reticleSpin = 0;
-        w->aimAngle = 30.0f;
-        w->targetSpeed = 1.25f;
-        w->targetState = 2;
-    case 2:
-        w->reticleSpin++;
-        if (w->reticleSpin >= 360) {
-            w->reticleSpin = w->reticleSpin - 360.0f;
-        }
-        w->aimAngle += w->targetSpeed;
-        if (w->aimAngle >= 60.0f) {
-            w->aimAngle = 60.0f;
-            w->targetSpeed = -1.25f;
-            w->targetState = 3;
-        }
-        break;
-    case 3:
-        w->reticleSpin++;
-        if (w->reticleSpin >= 360) {
-            w->reticleSpin = w->reticleSpin - 360.0f;
-        }
-        w->aimAngle += w->targetSpeed;
-        if (w->aimAngle <= 0.0f) {
-            w->aimAngle = 0.0f;
+        case 0:
+            break;
+        case 1:
+            w->reticleSpin = 0;
+            w->aimAngle = 30.0f;
             w->targetSpeed = 1.25f;
             w->targetState = 2;
-        }
-        break;
-    case 4:
-        break;
+        case 2:
+            w->reticleSpin++;
+            if (w->reticleSpin >= 360) {
+                w->reticleSpin = w->reticleSpin - 360.0f;
+            }
+            w->aimAngle += w->targetSpeed;
+            if (w->aimAngle >= 60.0f) {
+                w->aimAngle = 60.0f;
+                w->targetSpeed = -1.25f;
+                w->targetState = 3;
+            }
+            break;
+        case 3:
+            w->reticleSpin++;
+            if (w->reticleSpin >= 360) {
+                w->reticleSpin = w->reticleSpin - 360.0f;
+            }
+            w->aimAngle += w->targetSpeed;
+            if (w->aimAngle <= 0.0f) {
+                w->aimAngle = 0.0f;
+                w->targetSpeed = 1.25f;
+                w->targetState = 2;
+            }
+            break;
+        case 4:
+            break;
     }
 }
 
@@ -489,172 +489,172 @@ static void main_weapon(s32 idx) {
     wp->trail[0] = wp->pos;
 
     switch (wp->state) {
-    case 0:
-        wp->pos = (Vec){0.0f, -1000.0f, 0.0f};
-        break;
-    case 1:
-        wp->timer--;
-        if (wp->timer >= 0) {
+        case 0:
+            wp->pos = (Vec){0.0f, -1000.0f, 0.0f};
             break;
-        }
-        wp->state = 2;
-        BtlUnit_GetPos(mario, &wp->pos.x, &wp->pos.y, &wp->pos.z);
-        wp->pos.x += 20.0f * mario->sizeMultiplier;
-        wp->pos.y += 28.0f * mario->sizeMultiplier;
-        wp->vel = (Vec){10.0f * (f32)cos(ang), 10.0f * (f32)sin(ang), 0.0f};
-        for (i = 0; i < 7; i++) {
-            GenkiRing* r = &w->ring[i];
-            if (r->timer <= 0) {
-                r->timer = 30;
-                r->pos = w->targetPos;
-                r->scale = 2.0f * w->reticleSpin;
+        case 1:
+            wp->timer--;
+            if (wp->timer >= 0) {
                 break;
             }
-        }
-        BtlUnit_snd_se(mario, "SFX_BTL_SAC_HEART_SHOOT2", EVT_NULLPTR, 0);
-    case 2:
-        wp->pos.x += wp->vel.x;
-        wp->pos.y += wp->vel.y;
-        wp->vel.y -= 0.15f;
-        BtlUnit_GetPos(mario, &x, &y, &z);
-        if (wp->pos.x >= 250.0f || wp->pos.y >= 180.0f || wp->pos.y <= y) {
-            wp->state = 3;
-            break;
-        }
-        min = 10000000.0f;
-        near = -1;
-        for (i = 0; i < 10; i++) {
-            o = &w->object[i];
-            if (o->state == 2) {
-                f32 dx = wp->pos.x - o->pos.x;
-                f32 dy = wp->pos.y - o->pos.y;
-                f32 d = dx * dx + dy * dy;
-                if (d < min) {
-                    min = d;
-                    near = i;
+            wp->state = 2;
+            BtlUnit_GetPos(mario, &wp->pos.x, &wp->pos.y, &wp->pos.z);
+            wp->pos.x += 20.0f * mario->sizeMultiplier;
+            wp->pos.y += 28.0f * mario->sizeMultiplier;
+            wp->vel = (Vec){10.0f * (f32)cos(ang), 10.0f * (f32)sin(ang), 0.0f};
+            for (i = 0; i < 7; i++) {
+                GenkiRing* r = &w->ring[i];
+                if (r->timer <= 0) {
+                    r->timer = 30;
+                    r->pos = w->targetPos;
+                    r->scale = 2.0f * w->reticleSpin;
+                    break;
                 }
             }
-        }
-        if (near == -1) {
-            break;
-        }
-        o = &w->object[near];
-        {
-            f32 thr;
-            switch (o->kind) {
-            case GENKI_HAZARD:
-                thr = 344.0f;
-                break;
-            case GENKI_MARIO_HEART:
-            case GENKI_PARTNER_HEART:
-            case GENKI_FLOWER:
-                thr = 576.0f;
-                break;
-            default:
-                thr = 1296.0f;
+            BtlUnit_snd_se(mario, "SFX_BTL_SAC_HEART_SHOOT2", EVT_NULLPTR, 0);
+        case 2:
+            wp->pos.x += wp->vel.x;
+            wp->pos.y += wp->vel.y;
+            wp->vel.y -= 0.15f;
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            if (wp->pos.x >= 250.0f || wp->pos.y >= 180.0f || wp->pos.y <= y) {
+                wp->state = 3;
                 break;
             }
-            if (!(min <= thr && o->pos.y <= 200.0f)) {
+            min = 10000000.0f;
+            near = -1;
+            for (i = 0; i < 10; i++) {
+                o = &w->object[i];
+                if (o->state == 2) {
+                    f32 dx = wp->pos.x - o->pos.x;
+                    f32 dy = wp->pos.y - o->pos.y;
+                    f32 d = dx * dx + dy * dy;
+                    if (d < min) {
+                        min = d;
+                        near = i;
+                    }
+                }
+            }
+            if (near == -1) {
                 break;
             }
-        }
-        wp->state = 3;
-        o->state = 3;
-        effStardustN64Entry(5, o->pos.x, o->pos.y, o->pos.z, 10.0f);
+            o = &w->object[near];
+            {
+                f32 thr;
+                switch (o->kind) {
+                case GENKI_HAZARD:
+                    thr = 344.0f;
+                    break;
+                case GENKI_MARIO_HEART:
+                case GENKI_PARTNER_HEART:
+                case GENKI_FLOWER:
+                    thr = 576.0f;
+                    break;
+                default:
+                    thr = 1296.0f;
+                    break;
+                }
+                if (!(min <= thr && o->pos.y <= 200.0f)) {
+                    break;
+                }
+            }
+            wp->state = 3;
+            o->state = 3;
+            effStardustN64Entry(5, o->pos.x, o->pos.y, o->pos.z, 10.0f);
 #if VERSION <= VERSION_DEMO_JP
-        effHitEntry(0, 10, o->pos.x, o->pos.y, o->pos.z, 1.0f);
+            effHitEntry(0, 10, o->pos.x, o->pos.y, o->pos.z, 1.0f);
 #else
-        effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);
+            effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);
 #endif
-        switch (o->kind) {
-        case GENKI_MARIO_HEART:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
-            w->marioHp += 1;
-            if (w->marioHp >= 99) {
-                w->marioHp = 99;
+            switch (o->kind) {
+            case GENKI_MARIO_HEART:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
+                w->marioHp += 1;
+                if (w->marioHp >= 99) {
+                    w->marioHp = 99;
+                }
+                break;
+            case GENKI_MARIO_HEART_LARGE:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
+                w->marioHp += 3;
+                if (w->marioHp >= 99) {
+                    w->marioHp = 99;
+                }
+                break;
+            case GENKI_PARTNER_HEART:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
+                w->partyHp += 1;
+                if (w->partyHp >= 99) {
+                    w->partyHp = 99;
+                }
+                break;
+            case GENKI_PARTNER_HEART_LARGE:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
+                w->partyHp += 3;
+                if (w->partyHp >= 99) {
+                    w->partyHp = 99;
+                }
+                break;
+            case GENKI_FLOWER:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT4), &wp->pos);
+                w->fp += 1;
+                if (w->fp >= 99) {
+                    w->fp = 99;
+                }
+                break;
+            case GENKI_FLOWER_LARGE:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT6), &wp->pos);
+                w->fp += 3;
+                if (w->fp >= 99) {
+                    w->fp = 99;
+                }
+                break;
+            case GENKI_HAZARD:
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT7), &wp->pos);
+                w->marioState = 3;
+                break;
+            }
+            switch (o->kind) {
+            case GENKI_MARIO_HEART:
+            case GENKI_MARIO_HEART_LARGE:
+            case GENKI_PARTNER_HEART:
+            case GENKI_PARTNER_HEART_LARGE:
+            case GENKI_FLOWER:
+            case GENKI_FLOWER_LARGE:
+                if (audience >= 1 && audience <= 49) {
+                    BattleAudienceSoundCallKind(1);
+                }
+                if (audience >= 50 && audience <= 99) {
+                    BattleAudienceSoundCallKind(1);
+                    BattleAudienceSoundHandBeat();
+                }
+                if (audience >= 100 && audience <= 149) {
+                    BattleAudienceSoundCallKind(2);
+                }
+                if (audience >= 150) {
+                    BattleAudienceSoundCallKind(2);
+                    BattleAudienceSoundHandBeat();
+                }
+                break;
+            case GENKI_HAZARD:
+                if (audience >= 1 && audience <= 49) {
+                    BattleAudienceSoundBooingKind(1);
+                }
+                if (audience >= 50 && audience <= 99) {
+                    BattleAudienceSoundBooingKind(1);
+                }
+                if (audience >= 100 && audience <= 149) {
+                    BattleAudienceSoundBooingKind(2);
+                }
+                if (audience >= 150) {
+                    BattleAudienceSoundBooingKind(3);
+                }
+                break;
             }
             break;
-        case GENKI_MARIO_HEART_LARGE:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
-            w->marioHp += 3;
-            if (w->marioHp >= 99) {
-                w->marioHp = 99;
-            }
+        case 3:
+            wp->state = 0;
             break;
-        case GENKI_PARTNER_HEART:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
-            w->partyHp += 1;
-            if (w->partyHp >= 99) {
-                w->partyHp = 99;
-            }
-            break;
-        case GENKI_PARTNER_HEART_LARGE:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
-            w->partyHp += 3;
-            if (w->partyHp >= 99) {
-                w->partyHp = 99;
-            }
-            break;
-        case GENKI_FLOWER:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT4), &wp->pos);
-            w->fp += 1;
-            if (w->fp >= 99) {
-                w->fp = 99;
-            }
-            break;
-        case GENKI_FLOWER_LARGE:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT6), &wp->pos);
-            w->fp += 3;
-            if (w->fp >= 99) {
-                w->fp = 99;
-            }
-            break;
-        case GENKI_HAZARD:
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT7), &wp->pos);
-            w->marioState = 3;
-            break;
-        }
-        switch (o->kind) {
-        case GENKI_MARIO_HEART:
-        case GENKI_MARIO_HEART_LARGE:
-        case GENKI_PARTNER_HEART:
-        case GENKI_PARTNER_HEART_LARGE:
-        case GENKI_FLOWER:
-        case GENKI_FLOWER_LARGE:
-            if (audience >= 1 && audience <= 49) {
-                BattleAudienceSoundCallKind(1);
-            }
-            if (audience >= 50 && audience <= 99) {
-                BattleAudienceSoundCallKind(1);
-                BattleAudienceSoundHandBeat();
-            }
-            if (audience >= 100 && audience <= 149) {
-                BattleAudienceSoundCallKind(2);
-            }
-            if (audience >= 150) {
-                BattleAudienceSoundCallKind(2);
-                BattleAudienceSoundHandBeat();
-            }
-            break;
-        case GENKI_HAZARD:
-            if (audience >= 1 && audience <= 49) {
-                BattleAudienceSoundBooingKind(1);
-            }
-            if (audience >= 50 && audience <= 99) {
-                BattleAudienceSoundBooingKind(1);
-            }
-            if (audience >= 100 && audience <= 149) {
-                BattleAudienceSoundBooingKind(2);
-            }
-            if (audience >= 150) {
-                BattleAudienceSoundBooingKind(3);
-            }
-            break;
-        }
-        break;
-    case 3:
-        wp->state = 0;
-        break;
     }
 
     if (wp->eff) {
@@ -690,75 +690,75 @@ static void main_object(s32 idx) {
     s32 n;
 
     switch (o->state) {
-    case 0:
-        break;
-    case 1:
-        o->state = 2;
-        o->timer = 0;
-        if (w->mode == 0) {
-            n = 25;
-        } else {
-            n = 50;
-        }
-        if (w->tableIdx < n) {
-            o->kind = w->table[w->tableIdx];
-        } else if (irand(w->mode == 0 ? 7 : 14) == 0) {
-            o->kind = GENKI_HAZARD;
-        } else {
-            if (w->partyUnitId != -1) {
-                o->kind = kinds[irand(3)];
+        case 0:
+            break;
+        case 1:
+            o->state = 2;
+            o->timer = 0;
+            if (w->mode == 0) {
+                n = 25;
             } else {
-                o->kind = kinds[irand(2)];
+                n = 50;
             }
-            if (irand(5) == 0 && w->mode == 1) {
-                switch (o->kind) {
-                case GENKI_MARIO_HEART:
-                    o->kind = GENKI_MARIO_HEART_LARGE;
-                    break;
-                case GENKI_PARTNER_HEART:
-                    o->kind = GENKI_PARTNER_HEART_LARGE;
-                    break;
-                case GENKI_FLOWER:
-                    o->kind = GENKI_FLOWER_LARGE;
-                    break;
+            if (w->tableIdx < n) {
+                o->kind = w->table[w->tableIdx];
+            } else if (irand(w->mode == 0 ? 7 : 14) == 0) {
+                o->kind = GENKI_HAZARD;
+            } else {
+                if (w->partyUnitId != -1) {
+                    o->kind = kinds[irand(3)];
+                } else {
+                    o->kind = kinds[irand(2)];
+                }
+                if (irand(5) == 0 && w->mode == 1) {
+                    switch (o->kind) {
+                    case GENKI_MARIO_HEART:
+                        o->kind = GENKI_MARIO_HEART_LARGE;
+                        break;
+                    case GENKI_PARTNER_HEART:
+                        o->kind = GENKI_PARTNER_HEART_LARGE;
+                        break;
+                    case GENKI_FLOWER:
+                        o->kind = GENKI_FLOWER_LARGE;
+                        break;
+                    }
                 }
             }
-        }
-        if (w->partyUnitId == -1 && o->kind == GENKI_PARTNER_HEART) {
-            o->kind = GENKI_MARIO_HEART;
-        }
-        if (w->partyUnitId == -1 && o->kind == GENKI_PARTNER_HEART_LARGE) {
-            o->kind = GENKI_MARIO_HEART_LARGE;
-        }
-        w->tableIdx++;
-        if (w->mode == 0) {
-            s = &w->star[irand(7)];
-        } else {
-            s = &w->star[0];
-        }
-        BtlUnit_GetPos(mario, &x, &y, &z);
-        o->pos.x = s->pos.x;
-        o->pos.y = s->pos.y;
-        o->pos.z = z + idx;
-    case 2:
-        if (w->mode == 0) {
-            o->pos.y -= 1.32f;
-        } else {
-            o->pos.y -= 1.98f;
-        }
-        BtlUnit_GetPos(mario, &x, &y, &z);
-        if (o->pos.y <= 15.0f + y) {
-            o->state = 3;
-            effStardustEntry(5, 10, 60, o->pos.x, 15.0f + y, o->pos.z, 30.0f, 30.0f);
-        }
-        o->timer++;
-        if (o->timer > 120) {
-            o->timer = 0;
-        }
-        break;
-    case 3:
-        o->state = 0;
-        break;
+            if (w->partyUnitId == -1 && o->kind == GENKI_PARTNER_HEART) {
+                o->kind = GENKI_MARIO_HEART;
+            }
+            if (w->partyUnitId == -1 && o->kind == GENKI_PARTNER_HEART_LARGE) {
+                o->kind = GENKI_MARIO_HEART_LARGE;
+            }
+            w->tableIdx++;
+            if (w->mode == 0) {
+                s = &w->star[irand(7)];
+            } else {
+                s = &w->star[0];
+            }
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            o->pos.x = s->pos.x;
+            o->pos.y = s->pos.y;
+            o->pos.z = z + idx;
+        case 2:
+            if (w->mode == 0) {
+                o->pos.y -= 1.32f;
+            } else {
+                o->pos.y -= 1.98f;
+            }
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            if (o->pos.y <= 15.0f + y) {
+                o->state = 3;
+                effStardustEntry(5, 10, 60, o->pos.x, 15.0f + y, o->pos.z, 30.0f, 30.0f);
+            }
+            o->timer++;
+            if (o->timer > 120) {
+                o->timer = 0;
+            }
+            break;
+        case 3:
+            o->state = 0;
+            break;
     }
 }
 
@@ -788,88 +788,88 @@ static void main_star0(s32 idx) {
     EffStarStoneWork* ew;
 
     switch (s->state) {
-    case 1:
-        s->state = 2;
-        s->timer = 0;
-        s->eff = effStarStoneEntry(idx, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &s->pos.x, &s->pos.y, &s->pos.z);
-        s->pos.y += mario->sizeMultiplier * mario->height + 37.0f;
-        s->start = s->pos;
-        s->end = s->pos;
-        s->end.y += 30.0f;
-        s->scale = (Vec){0.0f, 0.0f, 0.0f};
-        s->rot = (Vec){0.0f, 0.0f, 0.0f};
-        s->radius = 0.0f;
-        s->angle = 6.283184f * idx / 7.0f;
-        s->angleSpeed = 0.1f;
-    case 2:
-        s->timer++;
-        if (s->timer <= 100) {
-            s->pos.y = intplGetValue(EASING_LINEAR, s->start.y, s->end.y, s->timer, 100);
-            BtlUnit_GetPos(mario, &x, &y, &z);
-            s->radius = intplGetValue(EASING_LINEAR, 0.0f, 40.0f, s->timer, 100);
-            s->angle += s->angleSpeed;
-            s->pos.x = s->radius * (f32)cos(s->angle) + x;
-            s->pos.z = s->radius * (f32)sin(s->angle) + z;
-            s->scale.x = s->scale.y = s->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 0.75f, s->timer, 100);
-        } else {
-            s->pos.y = s->end.y;
-            BtlUnit_GetPos(mario, &x, &y, &z);
-            s->angle += s->angleSpeed;
-            s->pos.x = s->radius * (f32)cos(s->angle) + x;
-            s->pos.z = s->radius * (f32)sin(s->angle) + z;
-            s->scale.x = s->scale.y = s->scale.z = 0.75f;
-        }
-        s->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, s->timer, 120);
-        if (s->timer >= 120) {
-            s->state = 3;
+        case 1:
+            s->state = 2;
             s->timer = 0;
+            s->eff = effStarStoneEntry(idx, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &s->pos.x, &s->pos.y, &s->pos.z);
+            s->pos.y += mario->sizeMultiplier * mario->height + 37.0f;
             s->start = s->pos;
-            s->end = (Vec){200.0f * rand() / 32767.0f, 180.0f, s->start.z};
-            s->vel = (Vec){0.0f, 0.0f, 0.0f};
-            s->vel.y = (2.0f * (s->end.y - s->start.y) - 60.0f * (60.0f * (0.2f - 0.01f * idx))) / 120.0f;
-        }
-        break;
-    case 3:
-        s->timer++;
-        s->pos.x = intplGetValue(EASING_QUADRATIC_OUT, s->start.x, s->end.x, s->timer, 60);
-        s->pos.y += s->vel.y;
-        s->vel.y += 0.2f - 0.01f * idx;
-        s->rot.y = 0.0f;
-        s->scale.x = s->scale.y = s->scale.z = 0.75f;
-        if (s->timer >= 60) {
-            s->state = 4;
-            s->timer = 0;
-
-            // BUG: the leftward speed set here is always overwritten by the statement after the if.
-            if (irand(2) == 0) {
-                s->vel.x = -2.0f - 0.05f * idx;
+            s->end = s->pos;
+            s->end.y += 30.0f;
+            s->scale = (Vec){0.0f, 0.0f, 0.0f};
+            s->rot = (Vec){0.0f, 0.0f, 0.0f};
+            s->radius = 0.0f;
+            s->angle = 6.283184f * idx / 7.0f;
+            s->angleSpeed = 0.1f;
+        case 2:
+            s->timer++;
+            if (s->timer <= 100) {
+                s->pos.y = intplGetValue(EASING_LINEAR, s->start.y, s->end.y, s->timer, 100);
+                BtlUnit_GetPos(mario, &x, &y, &z);
+                s->radius = intplGetValue(EASING_LINEAR, 0.0f, 40.0f, s->timer, 100);
+                s->angle += s->angleSpeed;
+                s->pos.x = s->radius * (f32)cos(s->angle) + x;
+                s->pos.z = s->radius * (f32)sin(s->angle) + z;
+                s->scale.x = s->scale.y = s->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 0.75f, s->timer, 100);
+            } else {
+                s->pos.y = s->end.y;
+                BtlUnit_GetPos(mario, &x, &y, &z);
+                s->angle += s->angleSpeed;
+                s->pos.x = s->radius * (f32)cos(s->angle) + x;
+                s->pos.z = s->radius * (f32)sin(s->angle) + z;
+                s->scale.x = s->scale.y = s->scale.z = 0.75f;
             }
-            s->vel.x = 2.0f + 0.05f * idx;
-            s->vel.y = 0.0f;
-        }
-        break;
-    case 4:
-        s->pos.x += s->vel.x;
-        if (s->pos.x < 0.0f) {
-            s->vel.x = 3.0f + 0.05f * idx;
-        }
-        if (s->pos.x > 200.0f) {
-            s->vel.x = -3.0f - 0.05f * idx;
-        }
-        s->vel.y += 0.1f + 0.01f * idx;
-        if (s->vel.y >= 6.283184f) {
-            s->vel.y -= 6.283184f;
-        }
-        s->pos.y = 10.0f * (f32)sin(s->vel.y) + 180.0f;
-        if (w->timeLeft <= 0) {
-            s->state = 5;
-            s->timer = 0;
-            s->pos = (Vec){0.0f, -1000.0f, 0.0f};
-        }
-        break;
-    case 5:
-        break;
+            s->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, s->timer, 120);
+            if (s->timer >= 120) {
+                s->state = 3;
+                s->timer = 0;
+                s->start = s->pos;
+                s->end = (Vec){200.0f * rand() / 32767.0f, 180.0f, s->start.z};
+                s->vel = (Vec){0.0f, 0.0f, 0.0f};
+                s->vel.y = (2.0f * (s->end.y - s->start.y) - 60.0f * (60.0f * (0.2f - 0.01f * idx))) / 120.0f;
+            }
+            break;
+        case 3:
+            s->timer++;
+            s->pos.x = intplGetValue(EASING_QUADRATIC_OUT, s->start.x, s->end.x, s->timer, 60);
+            s->pos.y += s->vel.y;
+            s->vel.y += 0.2f - 0.01f * idx;
+            s->rot.y = 0.0f;
+            s->scale.x = s->scale.y = s->scale.z = 0.75f;
+            if (s->timer >= 60) {
+                s->state = 4;
+                s->timer = 0;
+
+                // BUG: the leftward speed set here is always overwritten by the statement after the if.
+                if (irand(2) == 0) {
+                    s->vel.x = -2.0f - 0.05f * idx;
+                }
+                s->vel.x = 2.0f + 0.05f * idx;
+                s->vel.y = 0.0f;
+            }
+            break;
+        case 4:
+            s->pos.x += s->vel.x;
+            if (s->pos.x < 0.0f) {
+                s->vel.x = 3.0f + 0.05f * idx;
+            }
+            if (s->pos.x > 200.0f) {
+                s->vel.x = -3.0f - 0.05f * idx;
+            }
+            s->vel.y += 0.1f + 0.01f * idx;
+            if (s->vel.y >= 6.283184f) {
+                s->vel.y -= 6.283184f;
+            }
+            s->pos.y = 10.0f * (f32)sin(s->vel.y) + 180.0f;
+            if (w->timeLeft <= 0) {
+                s->state = 5;
+                s->timer = 0;
+                s->pos = (Vec){0.0f, -1000.0f, 0.0f};
+            }
+            break;
+        case 5:
+            break;
     }
     if (s->eff) {
         ew = s->eff->userdata;
@@ -893,82 +893,82 @@ static void main_star1(void) {
     EffStarStoneWork* ew;
 
     switch (w->star[0].state) {
-    case 1:
-        w->star[0].state = 2;
-        w->star[0].timer = 0;
-        w->star[0].eff = effStarStoneEntry(4, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->star[0].pos.x, &w->star[0].pos.y, &w->star[0].pos.z);
-        w->star[0].pos.y += mario->sizeMultiplier * mario->height + 37.0f;
-        w->star[0].start = w->star[0].pos;
-        w->star[0].end = w->star[0].pos;
-        w->star[0].end.y += 50.0f;
-        w->star[0].end.z += -1.0f;
-        w->star[0].scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->star[0].rot = (Vec){0.0f, 0.0f, 0.0f};
-    case 2:
-        w->star[0].timer++;
-        if (w->star[0].timer <= 100) {
-            w->star[0].pos.x = intplGetValue(EASING_LINEAR, w->star[0].start.x, w->star[0].end.x, w->star[0].timer, 100);
-            w->star[0].pos.y = intplGetValue(EASING_LINEAR, w->star[0].start.y, w->star[0].end.y, w->star[0].timer, 100);
-            w->star[0].pos.z = intplGetValue(EASING_LINEAR, w->star[0].start.z, w->star[0].end.z, w->star[0].timer, 100);
-            w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z =
-                intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star[0].timer, 100);
-        } else {
-            w->star[0].pos.x = w->star[0].end.x;
-            w->star[0].pos.y = w->star[0].end.y;
-            w->star[0].pos.z = w->star[0].end.z;
-            w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z = 2.0f;
-        }
-        w->star[0].rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star[0].timer, 120);
-        if (w->star[0].timer >= 120) {
-            w->star[0].state = 3;
+        case 1:
+            w->star[0].state = 2;
             w->star[0].timer = 0;
+            w->star[0].eff = effStarStoneEntry(4, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &w->star[0].pos.x, &w->star[0].pos.y, &w->star[0].pos.z);
+            w->star[0].pos.y += mario->sizeMultiplier * mario->height + 37.0f;
             w->star[0].start = w->star[0].pos;
-            w->star[0].end = (Vec){200.0f * rand() / 32767.0f, 180.0f, w->star[0].start.z};
-            w->star[0].vel = (Vec){0.0f, 0.0f, 0.0f};
-            w->star[0].vel.y = (2.0f * (w->star[0].end.y - w->star[0].start.y) - 60.0f * (60.0f * 0.2f)) / 120.0f;
-        }
-        break;
-    case 3:
-        w->star[0].timer++;
-        w->star[0].pos.x = intplGetValue(EASING_QUADRATIC_OUT, w->star[0].start.x, w->star[0].end.x, w->star[0].timer, 60);
-        w->star[0].pos.y += w->star[0].vel.y;
-        w->star[0].vel.y += 0.2f;
-        w->star[0].rot.y = 0.0f;
-        w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z = 2.0f;
-        if (w->star[0].timer >= 60) {
-            w->star[0].state = 4;
-            w->star[0].timer = 0;
-
-            // BUG: the leftward speed set here is always overwritten by the statement after the if.
-            if (irand(2) == 0) {
-                w->star[0].vel.x = -2.0f;
+            w->star[0].end = w->star[0].pos;
+            w->star[0].end.y += 50.0f;
+            w->star[0].end.z += -1.0f;
+            w->star[0].scale = (Vec){0.0f, 0.0f, 0.0f};
+            w->star[0].rot = (Vec){0.0f, 0.0f, 0.0f};
+        case 2:
+            w->star[0].timer++;
+            if (w->star[0].timer <= 100) {
+                w->star[0].pos.x = intplGetValue(EASING_LINEAR, w->star[0].start.x, w->star[0].end.x, w->star[0].timer, 100);
+                w->star[0].pos.y = intplGetValue(EASING_LINEAR, w->star[0].start.y, w->star[0].end.y, w->star[0].timer, 100);
+                w->star[0].pos.z = intplGetValue(EASING_LINEAR, w->star[0].start.z, w->star[0].end.z, w->star[0].timer, 100);
+                w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z =
+                    intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star[0].timer, 100);
+            } else {
+                w->star[0].pos.x = w->star[0].end.x;
+                w->star[0].pos.y = w->star[0].end.y;
+                w->star[0].pos.z = w->star[0].end.z;
+                w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z = 2.0f;
             }
-            w->star[0].vel.x = 2.0f;
-            w->star[0].vel.y = 0.0f;
-        }
-        break;
-    case 4:
-        w->star[0].pos.x += w->star[0].vel.x;
-        if (w->star[0].pos.x < 0.0f) {
-            w->star[0].vel.x = 3.0f;
-        }
-        if (w->star[0].pos.x > 200.0f) {
-            w->star[0].vel.x = -3.0f;
-        }
-        w->star[0].vel.y += 0.1f;
-        if (w->star[0].vel.y >= 6.283184f) {
-            w->star[0].vel.y -= 6.283184f;
-        }
-        w->star[0].pos.y = 10.0f * (f32)sin(w->star[0].vel.y) + 180.0f;
-        if (w->timeLeft <= 0) {
-            w->star[0].state = 5;
-            w->star[0].timer = 0;
-            w->star[0].pos = (Vec){0.0f, -1000.0f, 0.0f};
-        }
-        break;
-    case 5:
-        break;
+            w->star[0].rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star[0].timer, 120);
+            if (w->star[0].timer >= 120) {
+                w->star[0].state = 3;
+                w->star[0].timer = 0;
+                w->star[0].start = w->star[0].pos;
+                w->star[0].end = (Vec){200.0f * rand() / 32767.0f, 180.0f, w->star[0].start.z};
+                w->star[0].vel = (Vec){0.0f, 0.0f, 0.0f};
+                w->star[0].vel.y = (2.0f * (w->star[0].end.y - w->star[0].start.y) - 60.0f * (60.0f * 0.2f)) / 120.0f;
+            }
+            break;
+        case 3:
+            w->star[0].timer++;
+            w->star[0].pos.x = intplGetValue(EASING_QUADRATIC_OUT, w->star[0].start.x, w->star[0].end.x, w->star[0].timer, 60);
+            w->star[0].pos.y += w->star[0].vel.y;
+            w->star[0].vel.y += 0.2f;
+            w->star[0].rot.y = 0.0f;
+            w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z = 2.0f;
+            if (w->star[0].timer >= 60) {
+                w->star[0].state = 4;
+                w->star[0].timer = 0;
+
+                // BUG: the leftward speed set here is always overwritten by the statement after the if.
+                if (irand(2) == 0) {
+                    w->star[0].vel.x = -2.0f;
+                }
+                w->star[0].vel.x = 2.0f;
+                w->star[0].vel.y = 0.0f;
+            }
+            break;
+        case 4:
+            w->star[0].pos.x += w->star[0].vel.x;
+            if (w->star[0].pos.x < 0.0f) {
+                w->star[0].vel.x = 3.0f;
+            }
+            if (w->star[0].pos.x > 200.0f) {
+                w->star[0].vel.x = -3.0f;
+            }
+            w->star[0].vel.y += 0.1f;
+            if (w->star[0].vel.y >= 6.283184f) {
+                w->star[0].vel.y -= 6.283184f;
+            }
+            w->star[0].pos.y = 10.0f * (f32)sin(w->star[0].vel.y) + 180.0f;
+            if (w->timeLeft <= 0) {
+                w->star[0].state = 5;
+                w->star[0].timer = 0;
+                w->star[0].pos = (Vec){0.0f, -1000.0f, 0.0f};
+            }
+            break;
+        case 5:
+            break;
     }
     if (w->star[0].eff) {
         ew = w->star[0].eff->userdata;
@@ -1123,86 +1123,86 @@ static void disp_3D(CameraId cam, void* param) {
             flags = 0;
             s = 1.25f;
             switch (o->kind) {
-            case GENKI_MARIO_HEART:
-            case GENKI_MARIO_HEART_LARGE:
-                icon = ICON_STATUS_MARIO;
-                if (o->kind == GENKI_MARIO_HEART_LARGE) {
-                    s = 2.0f;
-                    if (genki_blink(o->timer)) {
-                        flags |= ICON_FLAG_GRAY;
-                    }
-                }
-                break;
-            case GENKI_PARTNER_HEART:
-            case GENKI_PARTNER_HEART_LARGE:
-                switch (party->currentKind) {
-                case UNIT_GOOMBELLA:
-                    icon = ICON_STATUS_GOOMBELLA;
-                    break;
-                case UNIT_KOOPS:
-                    icon = ICON_STATUS_KOOPS;
-                    break;
-                case UNIT_FLURRIE:
-                    icon = ICON_STATUS_FLURRIE;
-                    break;
-                case UNIT_YOSHI:
-                    switch (pouchGetPartyColor(PARTY_YOSHI)) {
-                    case 1:
-                        icon = ICON_STATUS_YOSHI_1;
-                        break;
-                    case 2:
-                        icon = ICON_STATUS_YOSHI_2;
-                        break;
-                    case 3:
-                        icon = ICON_STATUS_YOSHI_3;
-                        break;
-                    case 4:
-                        icon = ICON_STATUS_YOSHI_4;
-                        break;
-                    case 5:
-                        icon = ICON_STATUS_YOSHI_5;
-                        break;
-                    case 6:
-                        icon = ICON_STATUS_YOSHI_6;
-                        break;
-                    case 0:
-                        icon = ICON_STATUS_YOSHI;
-                        break;
+                case GENKI_MARIO_HEART:
+                case GENKI_MARIO_HEART_LARGE:
+                    icon = ICON_STATUS_MARIO;
+                    if (o->kind == GENKI_MARIO_HEART_LARGE) {
+                        s = 2.0f;
+                        if (genki_blink(o->timer)) {
+                            flags |= ICON_FLAG_GRAY;
+                        }
                     }
                     break;
-                case UNIT_VIVIAN:
-                    icon = ICON_STATUS_VIVIAN;
-                    break;
-                case UNIT_BOBBERY:
-                    icon = ICON_STATUS_BOBBERY;
-                    break;
-                case UNIT_MS_MOWZ:
-                    icon = ICON_STATUS_MS_MOWZ;
-                    break;
-                default:
-                    icon = 0;
-                    break;
-                }
-                if (o->kind == GENKI_PARTNER_HEART_LARGE) {
-                    s = 2.0f;
-                    if (genki_blink(o->timer)) {
-                        flags |= ICON_FLAG_GRAY;
+                case GENKI_PARTNER_HEART:
+                case GENKI_PARTNER_HEART_LARGE:
+                    switch (party->currentKind) {
+                    case UNIT_GOOMBELLA:
+                        icon = ICON_STATUS_GOOMBELLA;
+                        break;
+                    case UNIT_KOOPS:
+                        icon = ICON_STATUS_KOOPS;
+                        break;
+                    case UNIT_FLURRIE:
+                        icon = ICON_STATUS_FLURRIE;
+                        break;
+                    case UNIT_YOSHI:
+                        switch (pouchGetPartyColor(PARTY_YOSHI)) {
+                        case 1:
+                            icon = ICON_STATUS_YOSHI_1;
+                            break;
+                        case 2:
+                            icon = ICON_STATUS_YOSHI_2;
+                            break;
+                        case 3:
+                            icon = ICON_STATUS_YOSHI_3;
+                            break;
+                        case 4:
+                            icon = ICON_STATUS_YOSHI_4;
+                            break;
+                        case 5:
+                            icon = ICON_STATUS_YOSHI_5;
+                            break;
+                        case 6:
+                            icon = ICON_STATUS_YOSHI_6;
+                            break;
+                        case 0:
+                            icon = ICON_STATUS_YOSHI;
+                            break;
+                        }
+                        break;
+                    case UNIT_VIVIAN:
+                        icon = ICON_STATUS_VIVIAN;
+                        break;
+                    case UNIT_BOBBERY:
+                        icon = ICON_STATUS_BOBBERY;
+                        break;
+                    case UNIT_MS_MOWZ:
+                        icon = ICON_STATUS_MS_MOWZ;
+                        break;
+                    default:
+                        icon = 0;
+                        break;
                     }
-                }
-                break;
-            case GENKI_FLOWER:
-            case GENKI_FLOWER_LARGE:
-                icon = ICON_STATUS_FP;
-                if (o->kind == GENKI_FLOWER_LARGE) {
-                    s = 2.0f;
-                    if (genki_blink(o->timer)) {
-                        flags |= ICON_FLAG_GRAY;
+                    if (o->kind == GENKI_PARTNER_HEART_LARGE) {
+                        s = 2.0f;
+                        if (genki_blink(o->timer)) {
+                            flags |= ICON_FLAG_GRAY;
+                        }
                     }
-                }
-                break;
-            case GENKI_HAZARD:
-                icon = ICON_SAC_GENKI_HAZARD;
-                break;
+                    break;
+                case GENKI_FLOWER:
+                case GENKI_FLOWER_LARGE:
+                    icon = ICON_STATUS_FP;
+                    if (o->kind == GENKI_FLOWER_LARGE) {
+                        s = 2.0f;
+                        if (genki_blink(o->timer)) {
+                            flags |= ICON_FLAG_GRAY;
+                        }
+                    }
+                    break;
+                case GENKI_HAZARD:
+                    icon = ICON_SAC_GENKI_HAZARD;
+                    break;
             }
             PSMTXScale(m, s, s, 1.0f);
             PSMTXTransApply(m, m, o->pos.x, o->pos.y - 20.0f * s, o->pos.z);

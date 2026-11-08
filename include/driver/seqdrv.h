@@ -24,14 +24,14 @@ typedef enum SequenceType {
 } SequenceType;
 
 typedef struct SequenceWork {
-    SequenceType sequence; //0x0
-    s32 state; //0x4, 0-7
-    const char* mapName; //0x8
-    const char* beroName; //0xC
-    s32 counter; //0x10, frame counter (seq_battle)
-    u32 pad_14; //0x14, never accessed
-    u32 pad_18; //0x18, never accessed
-    u32 pad_1C; //0x1C, never accessed
+    SequenceType sequence; // 0x0
+    s32 state; // 0x4, 0-7
+    const char* mapName; // 0x8
+    const char* beroName; // 0xC
+    s32 counter; // 0x10, frame counter (seq_battle)
+    u32 pad_14; // 0x14, never accessed
+    u32 pad_18; // 0x18, never accessed
+    u32 pad_1C; // 0x1C, never accessed
 } SequenceWork;
 
 extern SequenceCallback seq_data[][3]; // Init, Main and Exit per SequenceType (sequence/seqdef.c)

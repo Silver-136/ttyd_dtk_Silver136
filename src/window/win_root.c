@@ -128,37 +128,37 @@ static inline void winRootTabMain(WindowWork* w) {
 
     for (i = 0; i < 5; i++) {
         switch (w->tab[i].state) {
-        case 0:
-            w->tab[i].x = i * 105 - 205;
-            w->tab[i].y = 300.0f;
-            w->tab[i].timer = i << 2;
-            w->tab[i].state++;
-            break;
-        case 1:
-        case 11:
-            if (--w->tab[i].timer < 0) {
-                w->tab[i].timer = 0;
+            case 0:
+                w->tab[i].x = i * 105 - 205;
+                w->tab[i].y = 300.0f;
+                w->tab[i].timer = i << 2;
                 w->tab[i].state++;
-            }
-            break;
-        case 2:
-            w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 185.0f, w->tab[i].timer++, WR_FRAMES(10));
-            if (w->tab[i].timer > WR_FRAMES(10)) {
+                break;
+            case 1:
+            case 11:
+                if (--w->tab[i].timer < 0) {
+                    w->tab[i].timer = 0;
+                    w->tab[i].state++;
+                }
+                break;
+            case 2:
+                w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 185.0f, w->tab[i].timer++, WR_FRAMES(10));
+                if (w->tab[i].timer > WR_FRAMES(10)) {
+                    w->tab[i].state++;
+                }
+                break;
+            case 10:
+                w->tab[i].timer = (4 - i) * 4;
                 w->tab[i].state++;
-            }
-            break;
-        case 10:
-            w->tab[i].timer = (4 - i) * 4;
-            w->tab[i].state++;
-            break;
-        case 12:
-            w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 180.0f, 300.0f, w->tab[i].timer++, WR_FRAMES(10));
-            if (w->tab[i].timer > WR_FRAMES(10)) {
-                w->tab[i].state++;
-            }
-            break;
-        case 13:
-            break;
+                break;
+            case 12:
+                w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 180.0f, 300.0f, w->tab[i].timer++, WR_FRAMES(10));
+                if (w->tab[i].timer > WR_FRAMES(10)) {
+                    w->tab[i].state++;
+                }
+                break;
+            case 13:
+                break;
         }
     }
 }
@@ -181,248 +181,248 @@ s32 winRootMain(WindowWork* w) {
     s32 ret;
 
     switch (w->active) {
-    case 0:
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1 | PSND_SFX_BYPASS_MUTE));
-        w->tabNum = 0;
-        WIN_ROOT_ADD_TAB(0);
-        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTY_GOOMBELLA)) {
-            WIN_ROOT_ADD_TAB(1);
-        }
-        WIN_ROOT_ADD_TAB(2);
-        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) {
-            WIN_ROOT_ADD_TAB(3);
-        }
-        WIN_ROOT_ADD_TAB(4);
+        case 0:
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1 | PSND_SFX_BYPASS_MUTE));
+            w->tabNum = 0;
+            WIN_ROOT_ADD_TAB(0);
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTY_GOOMBELLA)) {
+                WIN_ROOT_ADD_TAB(1);
+            }
+            WIN_ROOT_ADD_TAB(2);
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) {
+                WIN_ROOT_ADD_TAB(3);
+            }
+            WIN_ROOT_ADD_TAB(4);
 #if VERSION <= VERSION_DEMO_JP
-        {
-            s32 j;
-            for (j = 0; j < w->tabNum; j++) {
-                if (w->tab[j].id == w->menuSel) {
-                    w->tabSel = j;
+            {
+                s32 j;
+                for (j = 0; j < w->tabNum; j++) {
+                    if (w->tab[j].id == w->menuSel) {
+                        w->tabSel = j;
+                    }
                 }
             }
-        }
 #else
-        for (i = 0; i < w->tabNum; i++) {
-            if (w->tab[i].id == w->menuSel) {
-                w->tabSel = i;
+            for (i = 0; i < w->tabNum; i++) {
+                if (w->tab[i].id == w->menuSel) {
+                    w->tabSel = i;
+                }
             }
-        }
 #endif
-        for (i = 0; i < 5; i++) {
-            w->menu[i].state = -1;
-            w->menu[i].x = w->menu[i].y = 1000.0f;
-            w->menu[i].id = -1;
-        }
-        w->menu[0].x = w->menu[0].y = 1000.0f;
-        w->menu[0].state = 0;
-        w->menu[0].id = w->tab[w->tabSel].id;
-        w->msgState = 0;
-        w->msgOfsX = w->msgOfsY = 1000.0f;
-        w->msg = NULL;
-        w->msgName = NULL;
-        w->lastMsg = NULL;
-        winMarioInit(w);
-        winPartyInit(w);
-        winItemInit(w);
-        winBadgeInit(w);
-        winLogInit(w);
-        w->helpX = w->helpTgtX = w->tabSel * 105 - 270;
-        w->helpY = 300.0f;
-        w->helpTgtY = 185.0f;
-        w->sortPosX = w->sortTgtX = -1000.0f;
-        w->sortPosY = w->sortTgtY = -1000.0f;
-        winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
-        w->active = 10;
-        switch (w->menuSel) {
-        case 1:
-            winPartyInit2(w);
-            w->active = 12;
-            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
-            break;
-        case 2:
-            winItemInit2(w);
-            w->active = 13;
-            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
-            break;
-        case 3:
-            winBadgeInit2(w);
-            w->active = 14;
-            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
-            break;
-        case 4:
-            winLogInit2(w);
-            w->active = 15;
-            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
-            break;
-        }
-        if (gp->flags & GW_FLAG_E3) {
-            w->tabNum = 0;
-            WIN_ROOT_ADD_TAB(1);
-            winPartyInit2(w);
-            w->active = 12;
-            w->tabSel = 0;
-        }
-#if VERSION >= VERSION_JP
-        w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
-        w->texBufValid = 0;
-        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgCaptureDisp, w);
-#endif
-        break;
-    case 10:
-        if (w->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_START)) {
-            if (w->menu[0].state == 100) {
-                w->active = 20;
+            for (i = 0; i < 5; i++) {
+                w->menu[i].state = -1;
+                w->menu[i].x = w->menu[i].y = 1000.0f;
+                w->menu[i].id = -1;
             }
-        } else if (w->buttonTrg & PAD_BUTTON_A) {
-            if (w->tab[w->tabSel].id == 1 && !w->party.count) {
-                break;
-            }
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->active = w->tab[w->tabSel].id + 11;
-            switch (w->tab[w->tabSel].id) {
-            case 0:
-                winMarioInit2(w);
-                break;
+            w->menu[0].x = w->menu[0].y = 1000.0f;
+            w->menu[0].state = 0;
+            w->menu[0].id = w->tab[w->tabSel].id;
+            w->msgState = 0;
+            w->msgOfsX = w->msgOfsY = 1000.0f;
+            w->msg = NULL;
+            w->msgName = NULL;
+            w->lastMsg = NULL;
+            winMarioInit(w);
+            winPartyInit(w);
+            winItemInit(w);
+            winBadgeInit(w);
+            winLogInit(w);
+            w->helpX = w->helpTgtX = w->tabSel * 105 - 270;
+            w->helpY = 300.0f;
+            w->helpTgtY = 185.0f;
+            w->sortPosX = w->sortTgtX = -1000.0f;
+            w->sortPosY = w->sortTgtY = -1000.0f;
+            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
+            w->active = 10;
+            switch (w->menuSel) {
             case 1:
                 winPartyInit2(w);
+                w->active = 12;
+                w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             case 2:
                 winItemInit2(w);
+                w->active = 13;
+                w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             case 3:
                 winBadgeInit2(w);
+                w->active = 14;
+                w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             case 4:
                 winLogInit2(w);
+                w->active = 15;
+                w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             }
-#if VERSION >= VERSION_US
-        } else if (w->dirRep & DEMO_STICK_LEFT && w->menu[0].state == 100) {
-#else
-        } else if (w->dirRep & DEMO_STICK_LEFT) {
-#endif
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE2 | PSND_SFX_BYPASS_MUTE));
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE1 | PSND_SFX_BYPASS_MUTE));
-            w->tabSel--;
-            if (w->tabSel < 0) {
-                w->tabSel = w->tabNum - 1;
-            }
-            for (i = 4; i > 0; i--) {
-                w->menu[i] = w->menu[i - 1];
-            }
-            w->menu[0].x = w->menu[0].y = 1000.0f;
-            w->menu[0].state = 30;
-            w->menu[0].id = w->tab[w->tabSel].id;
-            w->helpTgtX = w->tabSel * 105 - 270;
-            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
-#if VERSION >= VERSION_US
-        } else if (w->dirRep & DEMO_STICK_RIGHT && w->menu[0].state == 100) {
-#else
-        } else if (w->dirRep & DEMO_STICK_RIGHT) {
-#endif
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE2 | PSND_SFX_BYPASS_MUTE));
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE1 | PSND_SFX_BYPASS_MUTE));
-            w->tabSel++;
-            if (w->tabSel >= w->tabNum) {
+            if (gp->flags & GW_FLAG_E3) {
+                w->tabNum = 0;
+                WIN_ROOT_ADD_TAB(1);
+                winPartyInit2(w);
+                w->active = 12;
                 w->tabSel = 0;
             }
-            for (i = 4; i > 0; i--) {
-                w->menu[i] = w->menu[i - 1];
-            }
-            w->menu[0].x = w->menu[0].y = 1000.0f;
-            w->menu[0].state = 20;
-            w->menu[0].id = w->tab[w->tabSel].id;
-            w->helpTgtX = w->tabSel * 105 - 270;
-            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
-        }
-        break;
-    case 100:
-#if VERSION >= VERSION_US
-        if (w->menu[0].state == 100) {
-#else
-        // BUG: tests the menu slot at the tab index, but menu[0] is always the current tab's entry; US and later
-        // test menu[0].
-        if (w->menu[w->tabSel].state == 100) {
-#endif
-            w->active = 10;
-        }
-        break;
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-        switch (w->active) {
-        case 11:
-            ret = winMarioMain(w);
-            break;
-        case 12:
-            ret = winPartyMain(w);
-            break;
-        case 13:
-            ret = winItemMain(w);
-            break;
-        case 14:
-            ret = winBadgeMain(w);
-            break;
-        case 15:
-            ret = winLogMain(w);
-            break;
-        }
-        if ((gp->flags & GW_FLAG_E3) && ret == -1) {
-            ret = -2;
-        }
-        if (ret == -1) {
-            w->helpTgtX = w->tabSel * 105 - 270;
-            w->helpTgtY = 185.0f;
-            w->active = 10;
-            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
-            w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
-        } else if (ret == -2) {
-            w->active = 20;
-            w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
-        }
-        break;
-    case 20:
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1 | PSND_SFX_BYPASS_MUTE));
-        for (i = 0; i < w->tabNum; i++) {
-            w->tab[i].state = 10;
-        }
-        for (i = 0; i < 5; i++) {
-            w->menu[i].state = 10;
-        }
-        w->msgState = 10;
 #if VERSION >= VERSION_JP
-        mapDispOn();
-        camDispOn(CAMERA_3D);
-#endif
-        w->active++;
-        break;
-    default:
-#if VERSION >= VERSION_JP
-        if (w->texBuf) {
-            smartFree(w->texBuf);
-            w->texBuf = NULL;
+            w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
             w->texBufValid = 0;
-        }
+            dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgCaptureDisp, w);
 #endif
-        w->active++;
-        if (w->active > 50) {
-            winMarioExit(w);
-            winPartyExit(w);
-            winItemExit(w);
-            winBadgeExit(w);
-            winLogExit(w);
-            if (w->party.confirmed && w->party.cursor != w->party.startCursor) {
-                return -2;
+            break;
+        case 10:
+            if (w->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_START)) {
+                if (w->menu[0].state == 100) {
+                    w->active = 20;
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_A) {
+                if (w->tab[w->tabSel].id == 1 && !w->party.count) {
+                    break;
+                }
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->active = w->tab[w->tabSel].id + 11;
+                switch (w->tab[w->tabSel].id) {
+                case 0:
+                    winMarioInit2(w);
+                    break;
+                case 1:
+                    winPartyInit2(w);
+                    break;
+                case 2:
+                    winItemInit2(w);
+                    break;
+                case 3:
+                    winBadgeInit2(w);
+                    break;
+                case 4:
+                    winLogInit2(w);
+                    break;
+                }
+#if VERSION >= VERSION_US
+            } else if (w->dirRep & DEMO_STICK_LEFT && w->menu[0].state == 100) {
+#else
+            } else if (w->dirRep & DEMO_STICK_LEFT) {
+#endif
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE2 | PSND_SFX_BYPASS_MUTE));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE1 | PSND_SFX_BYPASS_MUTE));
+                w->tabSel--;
+                if (w->tabSel < 0) {
+                    w->tabSel = w->tabNum - 1;
+                }
+                for (i = 4; i > 0; i--) {
+                    w->menu[i] = w->menu[i - 1];
+                }
+                w->menu[0].x = w->menu[0].y = 1000.0f;
+                w->menu[0].state = 30;
+                w->menu[0].id = w->tab[w->tabSel].id;
+                w->helpTgtX = w->tabSel * 105 - 270;
+                winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
+#if VERSION >= VERSION_US
+            } else if (w->dirRep & DEMO_STICK_RIGHT && w->menu[0].state == 100) {
+#else
+            } else if (w->dirRep & DEMO_STICK_RIGHT) {
+#endif
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE2 | PSND_SFX_BYPASS_MUTE));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE1 | PSND_SFX_BYPASS_MUTE));
+                w->tabSel++;
+                if (w->tabSel >= w->tabNum) {
+                    w->tabSel = 0;
+                }
+                for (i = 4; i > 0; i--) {
+                    w->menu[i] = w->menu[i - 1];
+                }
+                w->menu[0].x = w->menu[0].y = 1000.0f;
+                w->menu[0].state = 20;
+                w->menu[0].id = w->tab[w->tabSel].id;
+                w->helpTgtX = w->tabSel * 105 - 270;
+                winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
             }
-            if (w->item.useItem) {
-                return -3;
+            break;
+        case 100:
+#if VERSION >= VERSION_US
+            if (w->menu[0].state == 100) {
+#else
+            // BUG: tests the menu slot at the tab index, but menu[0] is always the current tab's entry; US and later
+            // test menu[0].
+            if (w->menu[w->tabSel].state == 100) {
+#endif
+                w->active = 10;
             }
-            return -1;
-        }
-        break;
+            break;
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+            switch (w->active) {
+            case 11:
+                ret = winMarioMain(w);
+                break;
+            case 12:
+                ret = winPartyMain(w);
+                break;
+            case 13:
+                ret = winItemMain(w);
+                break;
+            case 14:
+                ret = winBadgeMain(w);
+                break;
+            case 15:
+                ret = winLogMain(w);
+                break;
+            }
+            if ((gp->flags & GW_FLAG_E3) && ret == -1) {
+                ret = -2;
+            }
+            if (ret == -1) {
+                w->helpTgtX = w->tabSel * 105 - 270;
+                w->helpTgtY = 185.0f;
+                w->active = 10;
+                winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
+                w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
+            } else if (ret == -2) {
+                w->active = 20;
+                w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
+            }
+            break;
+        case 20:
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1 | PSND_SFX_BYPASS_MUTE));
+            for (i = 0; i < w->tabNum; i++) {
+                w->tab[i].state = 10;
+            }
+            for (i = 0; i < 5; i++) {
+                w->menu[i].state = 10;
+            }
+            w->msgState = 10;
+#if VERSION >= VERSION_JP
+            mapDispOn();
+            camDispOn(CAMERA_3D);
+#endif
+            w->active++;
+            break;
+        default:
+#if VERSION >= VERSION_JP
+            if (w->texBuf) {
+                smartFree(w->texBuf);
+                w->texBuf = NULL;
+                w->texBufValid = 0;
+            }
+#endif
+            w->active++;
+            if (w->active > 50) {
+                winMarioExit(w);
+                winPartyExit(w);
+                winItemExit(w);
+                winBadgeExit(w);
+                winLogExit(w);
+                if (w->party.confirmed && w->party.cursor != w->party.startCursor) {
+                    return -2;
+                }
+                if (w->item.useItem) {
+                    return -3;
+                }
+                return -1;
+            }
+            break;
     }
 
     winRootTabMain(w);
@@ -634,31 +634,31 @@ void winBgGX(WindowWork* wp, s32 type, f32 x, f32 y) {
     f32 sy;
 
     switch (type) {
-    case 0:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0x66, 0x60, 0xFF });
-        GXSetTevColor(GX_TEVREG1, (GXColor){ 0xE1, 0xA5, 0xA1, 0xFF });
-        GXSetTevColor(GX_TEVREG2, (GXColor){ 0xF0, 0xCD, 0xCB, 0xFF });
-        break;
-    case 1:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0x6B, 0x96, 0xFF });
-        GXSetTevColor(GX_TEVREG1, (GXColor){ 0xDB, 0xAB, 0xC6, 0xFF });
-        GXSetTevColor(GX_TEVREG2, (GXColor){ 0xEC, 0xD1, 0xE1, 0xFF });
-        break;
-    case 2:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0xBB, 0x9C, 0x21, 0xFF });
-        GXSetTevColor(GX_TEVREG1, (GXColor){ 0xD7, 0xCD, 0x76, 0xFF });
-        GXSetTevColor(GX_TEVREG2, (GXColor){ 0xEA, 0xE5, 0xAD, 0xFF });
-        break;
-    case 3:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0x2F, 0xA5, 0x30, 0xFF });
-        GXSetTevColor(GX_TEVREG1, (GXColor){ 0xA2, 0xD2, 0x6E, 0xFF });
-        GXSetTevColor(GX_TEVREG2, (GXColor){ 0xCB, 0xE7, 0xA7, 0xFF });
-        break;
-    case 4:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0x28, 0x7E, 0xC5, 0xFF });
-        GXSetTevColor(GX_TEVREG1, (GXColor){ 0x78, 0xB3, 0xD6, 0xFF });
-        GXSetTevColor(GX_TEVREG2, (GXColor){ 0xAF, 0xD6, 0xEA, 0xFF });
-        break;
+        case 0:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0x66, 0x60, 0xFF });
+            GXSetTevColor(GX_TEVREG1, (GXColor){ 0xE1, 0xA5, 0xA1, 0xFF });
+            GXSetTevColor(GX_TEVREG2, (GXColor){ 0xF0, 0xCD, 0xCB, 0xFF });
+            break;
+        case 1:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0x6B, 0x96, 0xFF });
+            GXSetTevColor(GX_TEVREG1, (GXColor){ 0xDB, 0xAB, 0xC6, 0xFF });
+            GXSetTevColor(GX_TEVREG2, (GXColor){ 0xEC, 0xD1, 0xE1, 0xFF });
+            break;
+        case 2:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xBB, 0x9C, 0x21, 0xFF });
+            GXSetTevColor(GX_TEVREG1, (GXColor){ 0xD7, 0xCD, 0x76, 0xFF });
+            GXSetTevColor(GX_TEVREG2, (GXColor){ 0xEA, 0xE5, 0xAD, 0xFF });
+            break;
+        case 3:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0x2F, 0xA5, 0x30, 0xFF });
+            GXSetTevColor(GX_TEVREG1, (GXColor){ 0xA2, 0xD2, 0x6E, 0xFF });
+            GXSetTevColor(GX_TEVREG2, (GXColor){ 0xCB, 0xE7, 0xA7, 0xFF });
+            break;
+        case 4:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0x28, 0x7E, 0xC5, 0xFF });
+            GXSetTevColor(GX_TEVREG1, (GXColor){ 0x78, 0xB3, 0xD6, 0xFF });
+            GXSetTevColor(GX_TEVREG2, (GXColor){ 0xAF, 0xD6, 0xEA, 0xFF });
+            break;
     }
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);

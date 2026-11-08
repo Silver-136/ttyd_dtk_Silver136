@@ -197,16 +197,16 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
         marioGetPtr()->kpaWork->rideProbeX[i] = 1000.0f;
     }
     switch (kpaGetLevel()) {
-    case 0:
-    case 1:
-    case 2:
-        n = 3;
-        r2 = 0.6f * (0.5 * m->wPlayerCollisionBox.x);
-        break;
-    case 3:
-        n = 7;
-        r2 = 0.6f * (0.5f * m->wPlayerCollisionBox.x / 3.0f);
-        break;
+        case 0:
+        case 1:
+        case 2:
+            n = 3;
+            r2 = 0.6f * (0.5 * m->wPlayerCollisionBox.x);
+            break;
+        case 3:
+            n = 7;
+            r2 = 0.6f * (0.5f * m->wPlayerCollisionBox.x / 3.0f);
+            break;
     }
     r2b = 2.0f * r2 - 0.05f;
     rad = 3.1415927f * deg;
@@ -215,43 +215,43 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     r3 = 3.0f * r2 - 0.05f;
     for (i = 0; i < n; i++) {
         switch (i) {
-        case 0:
-            ox = 0.0f;
-            oz = ox;
-            break;
-        case 1:
-            ang = rad / 180.0f;
-            ox = (r2 - 0.05f) * (f32)sin(ang);
-            nv = (f32)cos(ang);
-            oz = (r2 - 0.05f) * -nv;
-            break;
-        case 2:
-            ang = rad / 180.0f;
-            nv = (f32)sin(ang);
-            ox = (r2 - 0.05f) * -nv;
-            nv = (f32)cos(ang);
-            oz = (r2 - 0.05f) * -nv;
-            break;
-        case 3:
-            ang = rad / 180.0f;
-            ox = r2b * (f32)sin(ang);
-            oz = r2b * -(f32)cos(ang);
-            break;
-        case 4:
-            ang = rad / 180.0f;
-            ox = r2b * -(f32)sin(ang);
-            oz = r2b * -(f32)cos(ang);
-            break;
-        case 5:
-            ang = rad / 180.0f;
-            ox = r3 * (f32)sin(ang);
-            oz = r3 * -(f32)cos(ang);
-            break;
-        case 6:
-            ang = rad / 180.0f;
-            ox = r3 * -(f32)sin(ang);
-            oz = r3 * -(f32)cos(ang);
-            break;
+            case 0:
+                ox = 0.0f;
+                oz = ox;
+                break;
+            case 1:
+                ang = rad / 180.0f;
+                ox = (r2 - 0.05f) * (f32)sin(ang);
+                nv = (f32)cos(ang);
+                oz = (r2 - 0.05f) * -nv;
+                break;
+            case 2:
+                ang = rad / 180.0f;
+                nv = (f32)sin(ang);
+                ox = (r2 - 0.05f) * -nv;
+                nv = (f32)cos(ang);
+                oz = (r2 - 0.05f) * -nv;
+                break;
+            case 3:
+                ang = rad / 180.0f;
+                ox = r2b * (f32)sin(ang);
+                oz = r2b * -(f32)cos(ang);
+                break;
+            case 4:
+                ang = rad / 180.0f;
+                ox = r2b * -(f32)sin(ang);
+                oz = r2b * -(f32)cos(ang);
+                break;
+            case 5:
+                ang = rad / 180.0f;
+                ox = r3 * (f32)sin(ang);
+                oz = r3 * -(f32)cos(ang);
+                break;
+            case 6:
+                ang = rad / 180.0f;
+                ox = r3 * -(f32)sin(ang);
+                oz = r3 * -(f32)cos(ang);
+                break;
         }
         dist = bd;
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px + ox, yh, pz + oz, 0.0f, -1.0f, 0.0f);
@@ -322,31 +322,31 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
     n = *tbl++;
     if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
         switch (kpaGetLevel()) {
-        case 0:
-            off = 2.0f;
-            break;
-        case 1:
-            off = 0.0f;
-            break;
-        case 2:
-            off = 0.0f;
-            break;
-        case 3:
-            off = 35.0f;
-            break;
+            case 0:
+                off = 2.0f;
+                break;
+            case 1:
+                off = 0.0f;
+                break;
+            case 2:
+                off = 0.0f;
+                break;
+            case 3:
+                off = 35.0f;
+                break;
         }
     } else {
         switch (kpaGetLevel()) {
-        case 0:
-            if (mario->currMotionId == MARIO_MOTION_KPA_SWIM) {
-                off = 10.0f;
-            } else {
+            case 0:
+                if (mario->currMotionId == MARIO_MOTION_KPA_SWIM) {
+                    off = 10.0f;
+                } else {
+                    off = hgt;
+                }
+                break;
+            default:
                 off = hgt;
-            }
-            break;
-        default:
-            off = hgt;
-            break;
+                break;
         }
     }
     rad = 3.1415927f * deg / 180.0f;
@@ -595,21 +595,21 @@ HitEntry* kpaHitCheck(void) {
         i = p[3];
         p += 4;
         switch (i) {
-        case 1:
-            if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
-                continue;
-            }
-            break;
-        case 2:
-            if (mario->flags & MARIO_FLAG_IS_JUMPING) {
-                continue;
-            }
-            break;
-        case 3:
-            if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
-                continue;
-            }
-            break;
+            case 1:
+                if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
+                    continue;
+                }
+                break;
+            case 2:
+                if (mario->flags & MARIO_FLAG_IS_JUMPING) {
+                    continue;
+                }
+                break;
+            case 3:
+                if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
+                    continue;
+                }
+                break;
         }
         hit = hitCheckSphereFilter(NULL, x, y, z, r);
         if ((mario->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & HIT_ATTR_MOBJ) && mobjHitObjPtrToPtr(hit)->position.y > y) {

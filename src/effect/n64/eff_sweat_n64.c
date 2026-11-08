@@ -34,12 +34,12 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
     effect = effEntry();
     count = 1;
     switch (type) {
-    case 0:
-        count = 7;
-        break;
-    case 1:
-        count = 5;
-        break;
+        case 0:
+            count = 7;
+            break;
+        case 1:
+            count = 5;
+            break;
     }
     effect->type = "SweatN64";
     effect->count = count;
@@ -59,12 +59,12 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
         dir.z = -(f32)cos(0.0f);
         axis = dir;
         switch (type) {
-        case 0:
-            spread = (i - 1) % 3 * 14;
-            break;
-        case 1:
-            spread = (i - 1) % 4 * 16;
-            break;
+            case 0:
+                spread = (i - 1) % 3 * 14;
+                break;
+            case 1:
+                spread = (i - 1) % 4 * 16;
+                break;
         }
         if (angle > 0.0f) {
             spread *= -1.0f;

@@ -293,59 +293,59 @@ void kuribo_use(PartyEntry* party) {
     }
 
     switch (party->useMotionId) {
-    case 0:
-        if (!partyGetAppearPos3(party, &party->moveTarget)) {
-            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-            party->flags |= PARTY_FLAG_FORCE_FALL;
-        }
-        party->moveFrames = 4;
-        party->moveDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->targetDir = party->moveDir;
-        party->displayDirection = player->displayDirection;
-        party->displayDirectionTarget = player->displayDirection;
-        party->moveSpeed = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z) / party->moveFrames;
-        party->velY = 0.0f;
-        party->useMotionId = 1;
-        break;
-    case 1:
-        if (!partyGetAppearPos3(party, &party->moveTarget)) {
-            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-            party->flags |= PARTY_FLAG_FORCE_FALL;
-        }
-        party->position.x += (party->moveTarget.x - party->position.x) / party->moveFrames;
-        party->position.y += (party->moveTarget.y - party->position.y) / party->moveFrames;
-        party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
-        if (--party->moveFrames > 0) {
-            return;
-        }
-        partyChgPoseId(party, PARTY_POSE_STAND);
-        party->moveSpeed = 0.0f;
-        party->moveFrames = 100;
-        party->useMotionId = 10;
-        break;
-    case 10:
-        evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
-        marioStSystemLevel(1);
-        evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
-        party->useMotionId = 15;
-        break;
-    case 20:
-        party->moveFrames = 5;
-        party->useMotionId = 21;
-
-        // fall through
-    case 21:
-        if (--party->moveFrames > 0) {
+        case 0:
+            if (!partyGetAppearPos3(party, &party->moveTarget)) {
+                party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+                party->flags |= PARTY_FLAG_FORCE_FALL;
+            }
+            party->moveFrames = 4;
+            party->moveDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->targetDir = party->moveDir;
+            party->displayDirection = player->displayDirection;
+            party->displayDirectionTarget = player->displayDirection;
+            party->moveSpeed = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z) / party->moveFrames;
+            party->velY = 0.0f;
+            party->useMotionId = 1;
             break;
-        }
-        partyChgRunMode(party, PARTY_RUN_MOVE);
-        partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
-        partyChgMot(party, PARTY_MOTION_STAY);
-        partyChgPoseId(party, PARTY_POSE_STAND);
-        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-        party->flags &= ~PARTY_FLAG_FORCE_FALL;
-        break;
+        case 1:
+            if (!partyGetAppearPos3(party, &party->moveTarget)) {
+                party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+                party->flags |= PARTY_FLAG_FORCE_FALL;
+            }
+            party->position.x += (party->moveTarget.x - party->position.x) / party->moveFrames;
+            party->position.y += (party->moveTarget.y - party->position.y) / party->moveFrames;
+            party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
+            if (--party->moveFrames > 0) {
+                return;
+            }
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            party->moveSpeed = 0.0f;
+            party->moveFrames = 100;
+            party->useMotionId = 10;
+            break;
+        case 10:
+            evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
+            marioStSystemLevel(1);
+            evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
+            party->useMotionId = 15;
+            break;
+        case 20:
+            party->moveFrames = 5;
+            party->useMotionId = 21;
+
+            // fall through
+        case 21:
+            if (--party->moveFrames > 0) {
+                break;
+            }
+            partyChgRunMode(party, PARTY_RUN_MOVE);
+            partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
+            partyChgMot(party, PARTY_MOTION_STAY);
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
+            party->flags &= ~PARTY_FLAG_FORCE_FALL;
+            break;
     }
     partyChkGnd(party);
 }

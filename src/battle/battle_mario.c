@@ -7106,40 +7106,40 @@ USER_FUNC(_tatsumaki_effect) {
         ud[0] = 0;
     }
     switch (ud[0]) {
-    case 0:
-        ud[0]++;
-        ud[1] = 0;
-        ud[2] = (s32)unit->position.x;
-        ud[3] = (s32)unit->position.y - 40;
-        ud[4] = (s32)unit->position.z;
-        ud[5] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
-        ud[6] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
-        ud[7] = psndSFXOn("SFX_BTL_JUMP_TATUMAKI2");
-        v.x = ud[2];
-        v.y = ud[3];
-        v.z = ud[4];
-        psndSFX_pos(ud[7], &v);
+        case 0:
+            ud[0]++;
+            ud[1] = 0;
+            ud[2] = (s32)unit->position.x;
+            ud[3] = (s32)unit->position.y - 40;
+            ud[4] = (s32)unit->position.z;
+            ud[5] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
+            ud[6] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
+            ud[7] = psndSFXOn("SFX_BTL_JUMP_TATUMAKI2");
+            v.x = ud[2];
+            v.y = ud[3];
+            v.z = ud[4];
+            psndSFX_pos(ud[7], &v);
 
-        // fall through
-    case 1:
-        ud[1]++;
-        r = intplGetValue(EASING_CUBIC_OUT, 0.0f, 80.0f, ud[1], 90);
-        ang = ud[1] * 4;
-        dx = r * cosfd(ang);
-        dz = r * sinfd(ang);
-        ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[5])->userdata)->position.x = ud[2] + dx;
-        ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[5])->userdata)->position.y = ud[3];
-        ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[5])->userdata)->position.z = ud[4] + dz;
-        ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[6])->userdata)->position.x = ud[2] - dx;
-        ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[6])->userdata)->position.y = ud[3];
-        ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[6])->userdata)->position.z = ud[4] - dz;
-        if (ud[1] >= 90) {
-            psndSFXOff(ud[7]);
+            // fall through
+        case 1:
+            ud[1]++;
+            r = intplGetValue(EASING_CUBIC_OUT, 0.0f, 80.0f, ud[1], 90);
+            ang = ud[1] * 4;
+            dx = r * cosfd(ang);
+            dz = r * sinfd(ang);
+            ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[5])->userdata)->position.x = ud[2] + dx;
+            ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[5])->userdata)->position.y = ud[3];
+            ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[5])->userdata)->position.z = ud[4] + dz;
+            ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[6])->userdata)->position.x = ud[2] - dx;
+            ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[6])->userdata)->position.y = ud[3];
+            ((EffKamekiTornadeN64Work*)((EffectEntry*)ud[6])->userdata)->position.z = ud[4] - dz;
+            if (ud[1] >= 90) {
+                psndSFXOff(ud[7]);
+                return EVT_RETURN_DONE;
+            }
+            break;
+        default:
             return EVT_RETURN_DONE;
-        }
-        break;
-    default:
-        return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
 }

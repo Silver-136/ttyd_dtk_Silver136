@@ -180,11 +180,11 @@ static void effBrokenBarrierMain(EffectEntry* effect) {
     width = work->width;
     height = work->height;
     switch (type) {
-    case 2:
-    case 3:
-        width *= 4.0f;
-        height *= 4.0f;
-        break;
+        case 2:
+        case 3:
+            width *= 4.0f;
+            height *= 4.0f;
+            break;
     }
     w = (s32)width;
     halfW = 0.5f * width;
@@ -203,30 +203,30 @@ static void effBrokenBarrierMain(EffectEntry* effect) {
             a = (f32)(rand() % 360);
             t = (f32)(rand() % 360);
             switch (type) {
-            case 0:
-            case 2:
-                lat = 6.2831855f * t / 360.0f;
-                work->position.x = width * (f32)sin(lon = 6.2831855f * a / 360.0f) * (f32)cos(lat);
-                work->position.y = height * (f32)cos(lon) * (f32)cos(lat);
-                work->position.z = width * (f32)sin(lat);
-                work->velocity.x = 0.4f * work->position.x;
-                work->velocity.y = 0.4f * work->position.y;
-                work->velocity.z = 0.4f * work->position.z;
-                work->targetVel.x = 0.1f * work->velocity.x;
-                work->targetVel.y = 0.1f * work->velocity.y;
-                work->targetVel.z = 0.1f * work->velocity.z;
-                break;
-            case 1:
-            default:
-                work->position.x = (f32)(rand() % w) - halfW;
-                work->position.y = (f32)(rand() % h) - halfH;
-                work->position.z = (f32)(rand() % w) - halfW;
-                work->velocity.x = 0.3f * work->position.x;
-                work->velocity.y = 0.3f * work->position.y;
-                work->velocity.z = 0.3f * work->position.z;
-                work->targetVel.x = 0.02f * work->velocity.x;
-                work->targetVel.y = 0.02f * work->velocity.y;
-                work->targetVel.z = 0.02f * work->velocity.z;
+                case 0:
+                case 2:
+                    lat = 6.2831855f * t / 360.0f;
+                    work->position.x = width * (f32)sin(lon = 6.2831855f * a / 360.0f) * (f32)cos(lat);
+                    work->position.y = height * (f32)cos(lon) * (f32)cos(lat);
+                    work->position.z = width * (f32)sin(lat);
+                    work->velocity.x = 0.4f * work->position.x;
+                    work->velocity.y = 0.4f * work->position.y;
+                    work->velocity.z = 0.4f * work->position.z;
+                    work->targetVel.x = 0.1f * work->velocity.x;
+                    work->targetVel.y = 0.1f * work->velocity.y;
+                    work->targetVel.z = 0.1f * work->velocity.z;
+                    break;
+                case 1:
+                default:
+                    work->position.x = (f32)(rand() % w) - halfW;
+                    work->position.y = (f32)(rand() % h) - halfH;
+                    work->position.z = (f32)(rand() % w) - halfW;
+                    work->velocity.x = 0.3f * work->position.x;
+                    work->velocity.y = 0.3f * work->position.y;
+                    work->velocity.z = 0.3f * work->position.z;
+                    work->targetVel.x = 0.02f * work->velocity.x;
+                    work->targetVel.y = 0.02f * work->velocity.y;
+                    work->targetVel.z = 0.02f * work->velocity.z;
             }
             work->rotVelA = (f32)(rand() % 15);
             work->rotVelB = (f32)(rand() % 15);
@@ -236,21 +236,21 @@ static void effBrokenBarrierMain(EffectEntry* effect) {
         work->scale = scale_data[work->timer];
         work->rot += 4.0f;
         switch (type) {
-        case 2:
-        case 3:
-            work->velocity.x = 0.05f * -work->position.x;
-            work->velocity.y = 0.05f * -work->position.y;
-            work->velocity.z = 0.05f * -work->position.z;
-            if (sqrtf(work->velocity.x * work->velocity.x + work->velocity.y * work->velocity.y +
-                      work->velocity.z * work->velocity.z) < 1.0f) {
-                a = (f32)(rand() % 360);
-                t = (f32)(rand() % 360);
-                b = 6.2831855f * t / 360.0f;
-                work->position.x = width * (f32)sin(a = 6.2831855f * a / 360.0f) * (f32)cos(b);
-                work->position.y = height * (f32)cos(a) * (f32)cos(b);
-                work->position.z = width * (f32)sin(b);
-            }
-            break;
+            case 2:
+            case 3:
+                work->velocity.x = 0.05f * -work->position.x;
+                work->velocity.y = 0.05f * -work->position.y;
+                work->velocity.z = 0.05f * -work->position.z;
+                if (sqrtf(work->velocity.x * work->velocity.x + work->velocity.y * work->velocity.y +
+                          work->velocity.z * work->velocity.z) < 1.0f) {
+                    a = (f32)(rand() % 360);
+                    t = (f32)(rand() % 360);
+                    b = 6.2831855f * t / 360.0f;
+                    work->position.x = width * (f32)sin(a = 6.2831855f * a / 360.0f) * (f32)cos(b);
+                    work->position.y = height * (f32)cos(a) * (f32)cos(b);
+                    work->position.z = width * (f32)sin(b);
+                }
+                break;
         }
         work->position.x += work->velocity.x;
         work->position.y += work->velocity.y;

@@ -124,20 +124,20 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     effect = effEntry();
     count = num + 1;
     switch (type) {
-    case 0:
-        count = num + 1;
-        break;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-        num = 1;
-        count = 2;
-        break;
+        case 0:
+            count = num + 1;
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            num = 1;
+            count = 2;
+            break;
     }
     effect->type = "Fall";
     effect->count = count;

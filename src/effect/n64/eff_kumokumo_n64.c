@@ -232,87 +232,87 @@ EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 ro
         work->dt2 *= -1.0f;
     }
     switch (type) {
-    case 0:
-        work->r1 = 255;
-        work->g1 = 255;
-        work->b1 = 150;
-        work->r2 = 215;
-        work->g2 = 210;
-        work->b2 = 10;
-        break;
-    case 1:
-        work->r1 = 230;
-        work->g1 = 97;
-        work->b1 = 44;
-        work->r2 = 104;
-        work->g2 = 47;
-        work->b2 = 149;
-        break;
-    case 2:
-        work->r1 = 255;
-        work->g1 = 255;
-        work->b1 = 255;
-        work->r2 = 255;
-        work->g2 = 255;
-        work->b2 = 255;
-        break;
-    case 3:
-    case 4:
-    default:
-        work->r1 = 0;
-        work->g1 = 153;
-        work->b1 = 255;
-        work->r2 = 0;
-        work->g2 = 0;
-        work->b2 = 0;
-        break;
+        case 0:
+            work->r1 = 255;
+            work->g1 = 255;
+            work->b1 = 150;
+            work->r2 = 215;
+            work->g2 = 210;
+            work->b2 = 10;
+            break;
+        case 1:
+            work->r1 = 230;
+            work->g1 = 97;
+            work->b1 = 44;
+            work->r2 = 104;
+            work->g2 = 47;
+            work->b2 = 149;
+            break;
+        case 2:
+            work->r1 = 255;
+            work->g1 = 255;
+            work->b1 = 255;
+            work->r2 = 255;
+            work->g2 = 255;
+            work->b2 = 255;
+            break;
+        case 3:
+        case 4:
+        default:
+            work->r1 = 0;
+            work->g1 = 153;
+            work->b1 = 255;
+            work->r2 = 0;
+            work->g2 = 0;
+            work->b2 = 0;
+            break;
     }
     p = work + 1;
     for (i = 1; i < effect->count; i++, p++) {
         switch (type) {
-        case 0:
-        case 1:
-            p->x = 0.0f;
-            p->y = 3.0f;
-            p->z = 0.0f;
-            p->scale = 0.0f;
-            p->alpha = 204;
-            p->delay = i * 30;
-            p->rot = (f32)-irand(20);
-            p->s1 = 8.0f;
-            break;
-        case 2:
-            p->x = (f32)(200 - irand(400));
-            p->y = -(f32)(irand(50) + 200);
-            p->z = 0.0f;
-            p->scale = 1.0f;
-            p->alpha = 0;
-            p->delay = i * 15;
-            p->rot = 0.0f;
-            break;
-        case 3:
-            rot = (f32)irand(360);
-            scale = 200.0f + (f32)irand(200);
-            rot = 6.2831855f * rot / 360.0f;
-            p->x = scale * (f32)sin(rot);
-            p->y = scale * (f32)cos(rot);
-            p->z = 0.0f;
-            p->scale = 2.0f;
-            p->alpha = 0;
-            p->delay = i * 15;
-            p->rot = 0.0f;
-            break;
-        case 4:
-        default:
-            p->x = 0.0f;
-            p->y = 3.0f;
-            p->z = 0.0f;
-            p->scale = 0.0f;
-            p->alpha = 204;
-            p->delay = i * 30;
-            p->rot = (f32)-irand(20);
-            p->s1 = 8.0f;
-            break;
+            case 0:
+            case 1:
+                p->x = 0.0f;
+                p->y = 3.0f;
+                p->z = 0.0f;
+                p->scale = 0.0f;
+                p->alpha = 204;
+                p->delay = i * 30;
+                p->rot = (f32)-irand(20);
+                p->s1 = 8.0f;
+                break;
+            case 2:
+                p->x = (f32)(200 - irand(400));
+                p->y = -(f32)(irand(50) + 200);
+                p->z = 0.0f;
+                p->scale = 1.0f;
+                p->alpha = 0;
+                p->delay = i * 15;
+                p->rot = 0.0f;
+                break;
+            case 3:
+                rot = (f32)irand(360);
+                scale = 200.0f + (f32)irand(200);
+                rot = 6.2831855f * rot / 360.0f;
+                p->x = scale * (f32)sin(rot);
+                p->y = scale * (f32)cos(rot);
+                p->z = 0.0f;
+                p->scale = 2.0f;
+                p->alpha = 0;
+                p->delay = i * 15;
+                p->rot = 0.0f;
+                break;
+            case 4:
+            default:
+                p->x = 0.0f;
+                p->y = 3.0f;
+                p->z = 0.0f;
+                p->scale = 0.0f;
+                p->alpha = 204;
+                p->delay = i * 30;
+                p->rot = (f32)-irand(20);
+                p->s1 = 8.0f;
+                break;
         }
     }
     return effect;
@@ -373,83 +373,83 @@ static void effKumokumoMain(EffectEntry* effect) {
             continue;
         }
         switch (type) {
-        case 0:
-            work->alpha -= 2;
-            if (work->alpha < 0) {
-                work->x = 0.0f;
-                work->y = 3.0f;
-                work->z = 0.0f;
-                work->scale = 0.0f;
-                work->alpha = 204;
-                work->delay = i * 30;
-                work->rot = (f32)-irand(20);
-                work->s1 = 8.0f;
-            } else {
-                work->scale += (1.5f - work->scale) / 30.0f;
-                work->rot += (30.0f - work->rot) / 30.0f;
-                work->x += work->s1 * (f32)cos(6.2831855f * work->rot / 360.0f);
-                tmp2 = (f32)sin(6.2831855f * work->rot / 360.0f);
-                work->y += work->s1 * (2.0f * tmp2);
-                work->s1 += (2.0f - work->s1) / 30.0f;
-            }
-            break;
-        case 2:
-            work->alpha += (255 - work->alpha) / 4;
-            work->scale += -work->scale / 32.0f;
-            work->x += -work->x / 32.0f;
-            work->y += -work->y / 32.0f;
-            work->z += -work->z / 32.0f;
-            if (work->scale < 0.1f) {
-                work->x = (f32)(200 - irand(400));
-                work->y = -(f32)(irand(50) + 200);
-                work->z = 0.0f;
-                work->scale = 1.0f;
-                work->alpha = 0;
-                work->delay = i * 15;
-                work->rot = 0.0f;
-            }
-            work->rot = (f32)(u32)(rz_tbl[(u32)work->frame % 31] + (u32)(work->frame * 180) / 31);
-            work->rot = fmod(work->rot, 360.0);
-            break;
-        case 3:
-            work->alpha += (192 - work->alpha) / 4;
-            work->scale += -work->scale / 32.0f;
-            work->x += -work->x / 32.0f;
-            work->y += -work->y / 32.0f;
-            work->z += -work->z / 32.0f;
-            if (work->scale < 0.1f) {
-                ang = (f32)irand(360);
-                rad = 200.0f + (f32)irand(200);
-                ang = 6.2831855f * ang / 360.0f;
-                work->x = rad * (f32)sin(ang);
-                work->y = rad * (f32)cos(ang);
-                work->z = 0.0f;
-                work->scale = 3.0f;
-                work->alpha = 0;
-                work->delay = i * 15;
-                work->rot = 0.0f;
-            }
-            break;
-        case 4:
-            work->alpha -= 2;
-            if (work->alpha < 0) {
-                work->x = 0.0f;
-                work->y = 3.0f;
-                work->z = 0.0f;
-                work->scale = 0.0f;
-                work->alpha = 204;
-                work->delay = i * 30;
-                work->rot = (f32)-irand(20);
-                work->s1 = 8.0f;
-            } else {
-                work->scale += (1.0f - work->scale) / 30.0f;
-                work->rot += (30.0f - work->rot) / 30.0f;
-                work->x += work->s1 * (f32)cos(6.2831855f * work->rot / 360.0f);
-                tmp2 = (f32)sin(6.2831855f * work->rot / 360.0f);
-                work->y += work->s1 * (2.0f * tmp2);
-                work->s1 += (2.0f - work->s1) / 30.0f;
-            }
-            break;
+            case 0:
+                work->alpha -= 2;
+                if (work->alpha < 0) {
+                    work->x = 0.0f;
+                    work->y = 3.0f;
+                    work->z = 0.0f;
+                    work->scale = 0.0f;
+                    work->alpha = 204;
+                    work->delay = i * 30;
+                    work->rot = (f32)-irand(20);
+                    work->s1 = 8.0f;
+                } else {
+                    work->scale += (1.5f - work->scale) / 30.0f;
+                    work->rot += (30.0f - work->rot) / 30.0f;
+                    work->x += work->s1 * (f32)cos(6.2831855f * work->rot / 360.0f);
+                    tmp2 = (f32)sin(6.2831855f * work->rot / 360.0f);
+                    work->y += work->s1 * (2.0f * tmp2);
+                    work->s1 += (2.0f - work->s1) / 30.0f;
+                }
+                break;
+            case 2:
+                work->alpha += (255 - work->alpha) / 4;
+                work->scale += -work->scale / 32.0f;
+                work->x += -work->x / 32.0f;
+                work->y += -work->y / 32.0f;
+                work->z += -work->z / 32.0f;
+                if (work->scale < 0.1f) {
+                    work->x = (f32)(200 - irand(400));
+                    work->y = -(f32)(irand(50) + 200);
+                    work->z = 0.0f;
+                    work->scale = 1.0f;
+                    work->alpha = 0;
+                    work->delay = i * 15;
+                    work->rot = 0.0f;
+                }
+                work->rot = (f32)(u32)(rz_tbl[(u32)work->frame % 31] + (u32)(work->frame * 180) / 31);
+                work->rot = fmod(work->rot, 360.0);
+                break;
+            case 3:
+                work->alpha += (192 - work->alpha) / 4;
+                work->scale += -work->scale / 32.0f;
+                work->x += -work->x / 32.0f;
+                work->y += -work->y / 32.0f;
+                work->z += -work->z / 32.0f;
+                if (work->scale < 0.1f) {
+                    ang = (f32)irand(360);
+                    rad = 200.0f + (f32)irand(200);
+                    ang = 6.2831855f * ang / 360.0f;
+                    work->x = rad * (f32)sin(ang);
+                    work->y = rad * (f32)cos(ang);
+                    work->z = 0.0f;
+                    work->scale = 3.0f;
+                    work->alpha = 0;
+                    work->delay = i * 15;
+                    work->rot = 0.0f;
+                }
+                break;
+            case 4:
+                work->alpha -= 2;
+                if (work->alpha < 0) {
+                    work->x = 0.0f;
+                    work->y = 3.0f;
+                    work->z = 0.0f;
+                    work->scale = 0.0f;
+                    work->alpha = 204;
+                    work->delay = i * 30;
+                    work->rot = (f32)-irand(20);
+                    work->s1 = 8.0f;
+                } else {
+                    work->scale += (1.0f - work->scale) / 30.0f;
+                    work->rot += (30.0f - work->rot) / 30.0f;
+                    work->x += work->s1 * (f32)cos(6.2831855f * work->rot / 360.0f);
+                    tmp2 = (f32)sin(6.2831855f * work->rot / 360.0f);
+                    work->y += work->s1 * (2.0f * tmp2);
+                    work->s1 += (2.0f - work->s1) / 30.0f;
+                }
+                break;
         }
         work->frame++;
     }
@@ -564,26 +564,26 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
     GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
     GXSetCullMode(GX_CULL_NONE);
     switch (type) {
-    case 0:
-    case 1:
-        drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
-        break;
-    case 2:
-        drawModel(batten_vertex_tbl, batten_texcoord0_tbl, batten_texcoord1_tbl, batten_normal_tbl, batten_color0_tbl, batten_dl_0_tbl, batten_dl_0_size_tbl);
-        break;
-    case 3:
-        for (j = 0; j < 5; j++) {
-            PSMTXRotRad(rot, 'z', 0.017453292f * (360.0f * j / 5.0f));
-            PSMTXConcat(mtx2, rot, rot);
-            GXLoadPosMtxImm(rot, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
+        case 0:
+        case 1:
             drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
-        }
-        break;
-    case 4:
-    default:
-        drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
-        break;
+            break;
+        case 2:
+            drawModel(batten_vertex_tbl, batten_texcoord0_tbl, batten_texcoord1_tbl, batten_normal_tbl, batten_color0_tbl, batten_dl_0_tbl, batten_dl_0_size_tbl);
+            break;
+        case 3:
+            for (j = 0; j < 5; j++) {
+                PSMTXRotRad(rot, 'z', 0.017453292f * (360.0f * j / 5.0f));
+                PSMTXConcat(mtx2, rot, rot);
+                GXLoadPosMtxImm(rot, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
+                drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+            }
+            break;
+        case 4:
+        default:
+            drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+            break;
     }
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
@@ -596,21 +596,21 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     switch (type) {
-    case 0:
-    case 1:
-        effGetTexObj(0x34, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        break;
-    case 2:
-        effGetTexObj(0xB, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        break;
-    case 3:
-    case 4:
-    default:
-        effGetTexObjN64(7, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        break;
+        case 0:
+        case 1:
+            effGetTexObj(0x34, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            break;
+        case 2:
+            effGetTexObj(0xB, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            break;
+        case 3:
+        case 4:
+        default:
+            effGetTexObjN64(7, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            break;
     }
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();

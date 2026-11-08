@@ -391,8 +391,8 @@ USER_FUNC(evt_audience_reflesh_natural_all) {
     s32 chance, i;
 
     chance = evtGetValue(event, args[0]);
-    evtGetValue(event, args[1]); //unused
-    evtGetValue(event, args[2]); //unused
+    evtGetValue(event, args[1]); // unused
+    evtGetValue(event, args[2]); // unused
     i = 0;
     member = BattleAudienceGetPtr(0);
     for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
@@ -415,8 +415,8 @@ USER_FUNC(evt_audience_abnormal_natural_all) {
     u8 status;
 
     chance = evtGetValue(event, args[0]);
-    evtGetValue(event, args[1]); //unused
-    evtGetValue(event, args[2]); //unused
+    evtGetValue(event, args[1]); // unused
+    evtGetValue(event, args[2]); // unused
     i = 0;
     member = BattleAudienceGetPtr(0);
     for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {

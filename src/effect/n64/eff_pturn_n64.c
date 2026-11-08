@@ -104,15 +104,15 @@ EffectEntry* effPturnN64Entry(s32 type, s32 targetCount, f32 x, f32 y, f32 z) {
     work->pos.y = y;
     work->pos.z = z;
     switch (type) {
-    case 0:
-        work->age = 100;
-        break;
-    case 1:
-        work->age = 100;
-        break;
-    case 10:
-        work->age = 21;
-        break;
+        case 0:
+            work->age = 100;
+            break;
+        case 1:
+            work->age = 100;
+            break;
+        case 10:
+            work->age = 21;
+            break;
     }
     work->frame = 0;
     work->delay = 0;

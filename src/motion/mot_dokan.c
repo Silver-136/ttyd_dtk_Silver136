@@ -237,22 +237,22 @@ void mot_dokan(void) {
     }
 
     switch (mario->currSubMotionId) {
-    case 10:
-        mario->displayDirection = revise360(mario->displayDirection + mario->mot.dokan.rotSpeed);
-        mario->scale.x += -0.005f;
-        if (mario->scale.x < 0.0f) {
-            mario->scale.x = 0.0f;
-        }
-        mario->scale.y = mario->scale.x;
-        mario->scale.z = mario->scale.x;
-        break;
-    case 20: {
-        Vec v = {0.0f, 0.0f, 0.0f};
-        mario->scale = v;
-        mario->currSubMotionId = 21;
-        if (mario->flags & MARIO_FLAG_BG_MODE) {
-            mario->dispOfs2.y = -2.0f;
-        }
+        case 10:
+            mario->displayDirection = revise360(mario->displayDirection + mario->mot.dokan.rotSpeed);
+            mario->scale.x += -0.005f;
+            if (mario->scale.x < 0.0f) {
+                mario->scale.x = 0.0f;
+            }
+            mario->scale.y = mario->scale.x;
+            mario->scale.z = mario->scale.x;
+            break;
+        case 20: {
+            Vec v = {0.0f, 0.0f, 0.0f};
+            mario->scale = v;
+            mario->currSubMotionId = 21;
+            if (mario->flags & MARIO_FLAG_BG_MODE) {
+                mario->dispOfs2.y = -2.0f;
+            }
     }
     case 21:
         mario->displayDirection = revise360(mario->displayDirection + mario->mot.dokan.rotSpeed);
@@ -389,56 +389,56 @@ void mot_dokan(void) {
     }
 
     switch (mario->currSubMotionId) {
-    case 110:
-        if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
-            mario->camTarget.y = mario->position.y;
-        }
-        marioUpdateCamPos();
-        camFollowYOff();
-        mario->currSubMotionId = 111;
-    case 111:
-        mario->displayDirection += mario->mot.dokan.rotSpeed;
-        if (mario->displayDirection >= 540.0f) {
+        case 110:
+            if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
+                mario->camTarget.y = mario->position.y;
+            }
+            marioUpdateCamPos();
+            camFollowYOff();
+            mario->currSubMotionId = 111;
+        case 111:
+            mario->displayDirection += mario->mot.dokan.rotSpeed;
+            if (mario->displayDirection >= 540.0f) {
+                if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
+                    camFollowYOn();
+                }
+                marioChgPaper("PM_D_1B");
+                mario->multiTimer = 20;
+                mario->currSubMotionId = 112;
+                mario->rot.x = 0.0f;
+                mario->displayDirectionTarget = revise360(mario->displayDirection);
+                mario->displayDirection = mario->displayDirectionTarget;
+                mario->directionView = toMovedirSimple(mario->displayDirection);
+                mario->moveDirection = mario->directionView;
+                partyDokanEnd(marioGetPartyId(), mario->dokanType);
+                partyDokanEnd(marioGetExtraPartyId(), mario->dokanType);
+            }
+            break;
+        case 112:
+            if (--mario->multiTimer <= 0) {
+                mario->currSubMotionId = 113;
+            }
+            break;
+        case 113:
+            mario->returnPos = mario->position;
+            {
+                Vec v = {1.0f, 1.0f, 1.0f};
+                mario->scale = v;
+            }
+            marioOfsRotReset();
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
+            marioPaperOff();
+            marioChgMot(MARIO_MOTION_STAY);
+            mario->displayDirection = revise360(mario->displayDirection);
+            mario->displayDirectionTarget = mario->displayDirection;
+            mario->directionView = toMovedirSimple(mario->displayDirection);
+            mario->moveDirection = mario->directionView;
             if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
                 camFollowYOn();
             }
-            marioChgPaper("PM_D_1B");
-            mario->multiTimer = 20;
-            mario->currSubMotionId = 112;
-            mario->rot.x = 0.0f;
-            mario->displayDirectionTarget = revise360(mario->displayDirection);
-            mario->displayDirection = mario->displayDirectionTarget;
-            mario->directionView = toMovedirSimple(mario->displayDirection);
-            mario->moveDirection = mario->directionView;
-            partyDokanEnd(marioGetPartyId(), mario->dokanType);
-            partyDokanEnd(marioGetExtraPartyId(), mario->dokanType);
-        }
-        break;
-    case 112:
-        if (--mario->multiTimer <= 0) {
-            mario->currSubMotionId = 113;
-        }
-        break;
-    case 113:
-        mario->returnPos = mario->position;
-        {
-            Vec v = {1.0f, 1.0f, 1.0f};
-            mario->scale = v;
-        }
-        marioOfsRotReset();
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
-        marioPaperOff();
-        marioChgMot(MARIO_MOTION_STAY);
-        mario->displayDirection = revise360(mario->displayDirection);
-        mario->displayDirectionTarget = mario->displayDirection;
-        mario->directionView = toMovedirSimple(mario->displayDirection);
-        mario->moveDirection = mario->directionView;
-        if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
-            camFollowYOn();
-        }
-        mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
-        break;
+            mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
+            break;
     }
 }

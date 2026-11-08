@@ -142,147 +142,147 @@ s32 winBadgeMain(WindowWork* w) {
     s32 m;
 
     switch (w->badge.state) {
-    case 0:
-        if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-            return -1;
-        }
-        if (w->buttonTrg & PAD_BUTTON_START) {
-            return -2;
-        }
-        if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
-            w->badge.tab = 1 - w->badge.tab;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            if (w->badge.tab) {
-                winMakeEquipList(w);
+        case 0:
+            if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+                return -1;
             }
-        } else if (w->buttonTrg & PAD_BUTTON_A) {
-            if (w->badge.tab == 0 && !pouchGetHaveBadgeCnt()) {
+            if (w->buttonTrg & PAD_BUTTON_START) {
+                return -2;
+            }
+            if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
+                w->badge.tab = 1 - w->badge.tab;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                if (w->badge.tab) {
+                    winMakeEquipList(w);
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_A) {
+                if (w->badge.tab == 0 && !pouchGetHaveBadgeCnt()) {
+                    break;
+                }
+                if (w->badge.tab == 1 && w->badge.count == 0) {
+                    break;
+                }
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->badge.state = 10;
                 break;
+            } else if (w->buttonTrg & PAD_TRIGGER_Z) {
+                // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
+                void* p = w;
+                m = 3;
+                if (w->badge.tab == 0) {
+                    m = 2;
+                }
+                winSortEntry(p, m, -310.0f, 150.0f);
+                w->savedState = w->badge.state;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->badge.state = 1000;
             }
-            if (w->badge.tab == 1 && w->badge.count == 0) {
-                break;
-            }
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->badge.state = 10;
+            w->helpTgtX = -270.0f;
+            w->helpTgtY = VERSION_PICK(125, 130) - w->badge.tab * VERSION_PICK(40, 45);
+            winMsgEntry(w, 0, w->badge.tab == 0 ? "msg_menu_badge_all" : "msg_menu_badge_equip", 0);
             break;
-        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-            // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
-            void* p = w;
-            m = 3;
+        case 10:
             if (w->badge.tab == 0) {
-                m = 2;
-            }
-            winSortEntry(p, m, -310.0f, 150.0f);
-            w->savedState = w->badge.state;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->badge.state = 1000;
-        }
-        w->helpTgtX = -270.0f;
-        w->helpTgtY = VERSION_PICK(125, 130) - w->badge.tab * VERSION_PICK(40, 45);
-        winMsgEntry(w, 0, w->badge.tab == 0 ? "msg_menu_badge_all" : "msg_menu_badge_equip", 0);
-        break;
-    case 10:
-        if (w->badge.tab == 0) {
-            cnt = pouchGetHaveBadgeCnt();
-        } else {
-            cnt = w->badge.count;
-        }
-        pages = (cnt + 7) / 8;
-        tab = w->badge.tab;
-        if (w->buttonTrg & PAD_BUTTON_A) {
-            if (tab == 0) {
-                s32 idx = w->badge.sel[tab];
-                if (pouchEquipCheckBadgeIndex(idx)) {
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_REMOVE1 | PSND_SFX_BYPASS_MUTE));
-                    pouchUnEquipBadgeIndex(idx);
-                } else if (pouch->availableBP >= itemDataTable[pouchHaveBadge(idx)].bp_cost) {
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_PUT1 | PSND_SFX_BYPASS_MUTE));
-                    pouchEquipBadgeIndex(idx);
-                } else {
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
-                }
-                pouchReviseMarioParam();
-                pouchRevisePartyParam();
-                mario_change(w, pouchHaveBadge(idx));
+                cnt = pouchGetHaveBadgeCnt();
             } else {
-                // FAKE: the selection is read through w advanced by tab words (sel[0] of the shifted work); w->badge.sel[tab] swaps r27/r28, an s32* &w->badge.sel[tab] folds 0x3E4 into an addi + lwzx
-                WindowWork* wt = (WindowWork*)((s32*)w + tab);
-                s32 idx = w->badge.list[wt->badge.sel[0]].idx;
-                if (w->badge.list[wt->badge.sel[0]].equipped) {
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_REMOVE1 | PSND_SFX_BYPASS_MUTE));
-                    pouchUnEquipBadgeIndex(idx);
-                    w->badge.list[wt->badge.sel[0]].equipped = 0;
-                } else if (pouch->availableBP >= itemDataTable[pouchHaveBadge(idx)].bp_cost) {
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_PUT1 | PSND_SFX_BYPASS_MUTE));
-                    pouchEquipBadgeIndex(idx);
-                    w->badge.list[wt->badge.sel[0]].equipped = 1;
+                cnt = w->badge.count;
+            }
+            pages = (cnt + 7) / 8;
+            tab = w->badge.tab;
+            if (w->buttonTrg & PAD_BUTTON_A) {
+                if (tab == 0) {
+                    s32 idx = w->badge.sel[tab];
+                    if (pouchEquipCheckBadgeIndex(idx)) {
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_REMOVE1 | PSND_SFX_BYPASS_MUTE));
+                        pouchUnEquipBadgeIndex(idx);
+                    } else if (pouch->availableBP >= itemDataTable[pouchHaveBadge(idx)].bp_cost) {
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_PUT1 | PSND_SFX_BYPASS_MUTE));
+                        pouchEquipBadgeIndex(idx);
+                    } else {
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
+                    }
+                    pouchReviseMarioParam();
+                    pouchRevisePartyParam();
+                    mario_change(w, pouchHaveBadge(idx));
+                } else {
+                    // FAKE: the selection is read through w advanced by tab words (sel[0] of the shifted work); w->badge.sel[tab] swaps r27/r28, an s32* &w->badge.sel[tab] folds 0x3E4 into an addi + lwzx
+                    WindowWork* wt = (WindowWork*)((s32*)w + tab);
+                    s32 idx = w->badge.list[wt->badge.sel[0]].idx;
+                    if (w->badge.list[wt->badge.sel[0]].equipped) {
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_REMOVE1 | PSND_SFX_BYPASS_MUTE));
+                        pouchUnEquipBadgeIndex(idx);
+                        w->badge.list[wt->badge.sel[0]].equipped = 0;
+                    } else if (pouch->availableBP >= itemDataTable[pouchHaveBadge(idx)].bp_cost) {
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_BADGE_PUT1 | PSND_SFX_BYPASS_MUTE));
+                        pouchEquipBadgeIndex(idx);
+                        w->badge.list[wt->badge.sel[0]].equipped = 1;
+                    }
+                    pouchReviseMarioParam();
+                    pouchRevisePartyParam();
+                    mario_change(w, pouchHaveBadge(idx));
                 }
-                pouchReviseMarioParam();
-                pouchRevisePartyParam();
-                mario_change(w, pouchHaveBadge(idx));
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+                w->badge.state = 0;
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
+                return -2;
+            } else if (w->buttonRep & PAD_TRIGGER_L) {
+                w->badge.page[tab]--;
+                if (w->badge.page[tab] < 0) {
+                    w->badge.page[tab] = 0;
+                }
+                w->badge.sel[tab] = w->badge.page[tab] * 8;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->buttonRep & PAD_TRIGGER_R) {
+                w->badge.page[tab]++;
+                if (w->badge.page[tab] >= pages) {
+                    w->badge.page[tab] = pages - 1;
+                }
+                w->badge.sel[tab] = w->badge.page[tab] * 8;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->dirRep & DEMO_STICK_UP) {
+                w->badge.sel[tab]--;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->dirRep & DEMO_STICK_DOWN) {
+                w->badge.sel[tab]++;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->buttonTrg & PAD_TRIGGER_Z) {
+                // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
+                void* p = w;
+                m = 3;
+                if (tab == 0) {
+                    m = 2;
+                }
+                winSortEntry(p, m, -310.0f, 150.0f);
+                w->savedState = w->badge.state;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->badge.state = 1000;
             }
-        } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-            w->badge.state = 0;
-        } else if (w->buttonTrg & PAD_BUTTON_START) {
-            return -2;
-        } else if (w->buttonRep & PAD_TRIGGER_L) {
-            w->badge.page[tab]--;
-            if (w->badge.page[tab] < 0) {
-                w->badge.page[tab] = 0;
+            if (w->badge.sel[tab] < 0) {
+                w->badge.sel[tab] = cnt - 1;
             }
-            w->badge.sel[tab] = w->badge.page[tab] * 8;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->buttonRep & PAD_TRIGGER_R) {
-            w->badge.page[tab]++;
-            if (w->badge.page[tab] >= pages) {
-                w->badge.page[tab] = pages - 1;
+            if (w->badge.sel[tab] >= cnt) {
+                w->badge.sel[tab] = 0;
             }
-            w->badge.sel[tab] = w->badge.page[tab] * 8;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->dirRep & DEMO_STICK_UP) {
-            w->badge.sel[tab]--;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->dirRep & DEMO_STICK_DOWN) {
-            w->badge.sel[tab]++;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-            // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
-            void* p = w;
-            m = 3;
-            if (tab == 0) {
-                m = 2;
+            w->badge.page[tab] = w->badge.sel[tab] / 8;
+            w->helpTgtX = -110.0f;
+            w->helpTgtY = 110 - (w->badge.sel[tab] % 8) * 23;
+            if (w->badge.tab == 0) {
+                itemId = pouchHaveBadge(w->badge.sel[tab]);
+            } else {
+                itemId = w->badge.list[w->badge.sel[tab]].id;
             }
-            winSortEntry(p, m, -310.0f, 150.0f);
-            w->savedState = w->badge.state;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->badge.state = 1000;
-        }
-        if (w->badge.sel[tab] < 0) {
-            w->badge.sel[tab] = cnt - 1;
-        }
-        if (w->badge.sel[tab] >= cnt) {
-            w->badge.sel[tab] = 0;
-        }
-        w->badge.page[tab] = w->badge.sel[tab] / 8;
-        w->helpTgtX = -110.0f;
-        w->helpTgtY = 110 - (w->badge.sel[tab] % 8) * 23;
-        if (w->badge.tab == 0) {
-            itemId = pouchHaveBadge(w->badge.sel[tab]);
-        } else {
-            itemId = w->badge.list[w->badge.sel[tab]].id;
-        }
-        winMsgEntry(w, itemId, itemDataTable[itemId].menu_description, 0);
-        break;
-    case 1000:
-        if (!winSortWait(w)) {
-            w->badge.state = w->savedState;
-        }
-        if (w->buttonTrg & PAD_BUTTON_START) {
-            return -2;
-        }
-        break;
+            winMsgEntry(w, itemId, itemDataTable[itemId].menu_description, 0);
+            break;
+        case 1000:
+            if (!winSortWait(w)) {
+                w->badge.state = w->savedState;
+            }
+            if (w->buttonTrg & PAD_BUTTON_START) {
+                return -2;
+            }
+            break;
     }
     return 0;
 }

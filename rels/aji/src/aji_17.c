@@ -3829,32 +3829,32 @@ s32 btn_check(EventEntry* event, BOOL isFirstCall) {
 
     // A correct button combined with another dance button remains undecided.
     switch (dir) {
-    case 1:
-        if (a && !(b | x)) {
-            ret = 1;
-        } else if (!a && (b | x)) {
-            ret = 2;
-        }
-        break;
-    case 2:
-        if (b && !(a | x)) {
-            ret = 1;
-        } else if (!b && (a | x)) {
-            ret = 2;
-        }
-        break;
-    case 0:
-        if (x && !(a | b)) {
-            ret = 1;
-        } else if (!x && (a | b)) {
-            ret = 2;
-        }
-        break;
-    default:
-        if (a | b | x) {
-            ret = 2;
-        }
-        break;
+        case 1:
+            if (a && !(b | x)) {
+                ret = 1;
+            } else if (!a && (b | x)) {
+                ret = 2;
+            }
+            break;
+        case 2:
+            if (b && !(a | x)) {
+                ret = 1;
+            } else if (!b && (a | x)) {
+                ret = 2;
+            }
+            break;
+        case 0:
+            if (x && !(a | b)) {
+                ret = 1;
+            } else if (!x && (a | b)) {
+                ret = 2;
+            }
+            break;
+        default:
+            if (a | b | x) {
+                ret = 2;
+            }
+            break;
     }
     evtSetValue(event, args[1], ret);
     return EVT_RETURN_DONE;

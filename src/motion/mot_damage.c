@@ -174,100 +174,100 @@ void mot_damage(void) {
     }
 
     switch (mario->currSubMotionId) {
-    case 0:
-        if (mario->position.y >= mario->mot.damage.rootY - 160.0f) {
-            marioMakeJumpPara();
-            if (mario->jumpVelocityY <= -6.0f) {
-                mario->jumpVelocityY = -6.0f;
-                mario->jumpAccelerationY = 0.0f;
-                mario->jumpJerkY = 0.0f;
-                mario->jumpSnapY = 0.0f;
+        case 0:
+            if (mario->position.y >= mario->mot.damage.rootY - 160.0f) {
+                marioMakeJumpPara();
+                if (mario->jumpVelocityY <= -6.0f) {
+                    mario->jumpVelocityY = -6.0f;
+                    mario->jumpAccelerationY = 0.0f;
+                    mario->jumpJerkY = 0.0f;
+                    mario->jumpSnapY = 0.0f;
+                }
+                mario->position.y += mario->jumpVelocityY;
+            } else {
+                mario->jumpVelocityY = 0.3f;
+                mario->currSubMotionId = 1;
+                mario->multiTimer = 40;
             }
-            mario->position.y += mario->jumpVelocityY;
-        } else {
-            mario->jumpVelocityY = 0.3f;
-            mario->currSubMotionId = 1;
-            mario->multiTimer = 40;
-        }
-        break;
-    case 1:
-        if (--mario->multiTimer > 0) {
             break;
-        }
-        mario->multiTimer = 0;
-        mario->currSubMotionId = 10;
-        mario->mot.damage.riseSpeed = 20.0f;
-        break;
-    case 10:
-        if (++mario->multiTimer == 2) {
-            mario->currSubMotionId = 11;
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_LEAP_WATER1), &mario->position);
+        case 1:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            mario->multiTimer = 0;
+            mario->currSubMotionId = 10;
+            mario->mot.damage.riseSpeed = 20.0f;
+            break;
+        case 10:
+            if (++mario->multiTimer == 2) {
+                mario->currSubMotionId = 11;
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_LEAP_WATER1), &mario->position);
+                if (mario->damageHit != NULL) {
+                    evtEntry(evt_gazigazi, 0, 0);
+                }
+            }
+        case 11: {
+            f32 v;
+            f32 prevY = mario->position.y;
+            v = mario->mot.damage.riseSpeed;
+            mario->position.y += v;
+            v -= 1.0f;
+            if (v < 10.0f) {
+                v = 10.0f;
+            }
+            mario->mot.damage.riseSpeed = v;
+            if (mario->position.y >= mario->mot.damage.rootY && mario->mot.damage.rootY > prevY) {
+                Vec pos = mario->position;
+                marioSetSplash(1, &pos);
+            }
+            if (mario->position.y < 500.0f + mario->mot.damage.rootY) {
+                break;
+            }
             if (mario->damageHit != NULL) {
-                evtEntry(evt_gazigazi, 0, 0);
+                Vec* p = hitGetDamageReturnPos(mario->damageHit);
+                Vec t = {0.0f, 0.0f, 0.0f};
+                t.x = p->x;
+                t.y = p->y;
+                t.z = p->z;
+                dest = t;
+            } else {
+                Vec z = {0.0f, 0.0f, 0.0f};
+                dest = z;
+                if (strcmp(gp->currentMapName, "muj_00") == 0) {
+                    Vec a = {400.0f, 35.0f, -100.0f};
+                    dest = a;
+                }
+                if (strcmp(gp->currentMapName, "gor_00") == 0) {
+                    Vec a = {0.0f, 0.0f, -200.0f};
+                    dest = a;
+                }
+                if (strcmp(gp->currentMapName, "gor_04") == 0) {
+                    Vec a = {146.0f, 0.0f, 146.0f};
+                    dest = a;
+                }
             }
-        }
-    case 11: {
-        f32 v;
-        f32 prevY = mario->position.y;
-        v = mario->mot.damage.riseSpeed;
-        mario->position.y += v;
-        v -= 1.0f;
-        if (v < 10.0f) {
-            v = 10.0f;
-        }
-        mario->mot.damage.riseSpeed = v;
-        if (mario->position.y >= mario->mot.damage.rootY && mario->mot.damage.rootY > prevY) {
-            Vec pos = mario->position;
-            marioSetSplash(1, &pos);
-        }
-        if (mario->position.y < 500.0f + mario->mot.damage.rootY) {
-            break;
-        }
-        if (mario->damageHit != NULL) {
-            Vec* p = hitGetDamageReturnPos(mario->damageHit);
-            Vec t = {0.0f, 0.0f, 0.0f};
-            t.x = p->x;
-            t.y = p->y;
-            t.z = p->z;
-            dest = t;
-        } else {
-            Vec z = {0.0f, 0.0f, 0.0f};
-            dest = z;
-            if (strcmp(gp->currentMapName, "muj_00") == 0) {
-                Vec a = {400.0f, 35.0f, -100.0f};
-                dest = a;
+            if (mario->flags & MARIO_FLAG_BG_MODE) {
+                Vec t = {0.0f, 0.0f, 0.0f};
+                t.x = mario->returnPos.x;
+                t.y = mario->returnPos.y;
+                t.z = mario->returnPos.z;
+                dest = t;
             }
-            if (strcmp(gp->currentMapName, "gor_00") == 0) {
-                Vec a = {0.0f, 0.0f, -200.0f};
-                dest = a;
-            }
-            if (strcmp(gp->currentMapName, "gor_04") == 0) {
-                Vec a = {146.0f, 0.0f, 146.0f};
-                dest = a;
-            }
-        }
-        if (mario->flags & MARIO_FLAG_BG_MODE) {
-            Vec t = {0.0f, 0.0f, 0.0f};
-            t.x = mario->returnPos.x;
-            t.y = mario->returnPos.y;
-            t.z = mario->returnPos.z;
-            dest = t;
-        }
-        mario->baseSpeed = 8.0f;
-        d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
-        mario->multiTimer = (s16)(d / 8);
-        mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
-        mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-        mario->currSubMotionId = 12;
-        mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
-#if VERSION >= VERSION_JP
-        if (mario->multiTimer == 0) {
-            mario->multiTimer = 10;
+            mario->baseSpeed = 8.0f;
+            d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
+            mario->multiTimer = (s16)(d / 8);
+            mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-            mario->currSubMotionId = 14;
-        }
+            mario->currSubMotionId = 12;
+            mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
+#if VERSION >= VERSION_JP
+            if (mario->multiTimer == 0) {
+                mario->multiTimer = 10;
+                mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
+                mario->currSubMotionId = 14;
+            }
 #endif
-        break;
+            break;
     }
     case 12:
         mario->camTarget.y += mario->mot.damage.camStepY;
@@ -430,113 +430,113 @@ void mot_damageToge(void) {
     }
 
     switch (mario->currSubMotionId) {
-    case 0:
-        if (--mario->multiTimer > 0) {
-            break;
-        }
-        if (mario->prevMotionId == MARIO_MOTION_HIP || mario->prevMotionId == MARIO_MOTION_HIP_2) {
-            marioChgEvtPose("M_D_7");
-        } else {
-            marioChgPose("M_D_6");
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED2), &mario->position);
-        mario_simple_kemuri();
-        mario->currSubMotionId = 11;
-    case 11:
-        v = mario->mot.damage.riseSpeed;
-        mario->position.y += v;
-        v -= 1.0f;
-        if (v < 10.0f) {
-            v = 10.0f;
-        }
-        mario->mot.damage.riseSpeed = v;
-        if (mario->position.y < 500.0f + mario->mot.damage.rootY) {
-            break;
-        }
-        if (mario->damageHit != NULL) {
-            Vec* p = hitGetDamageReturnPos(mario->damageHit);
-            Vec t = {0.0f, 0.0f, 0.0f};
-            t.x = p->x;
-            t.y = p->y;
-            t.z = p->z;
-            dest = t;
-        } else {
-            Vec z = {0.0f, 0.0f, 0.0f};
-            dest = z;
-        }
-        mario->baseSpeed = 8.0f;
-        d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
-        mario->multiTimer = (s16)(d / 8);
-        mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
-
-        // BUG: no zero check (the knock-back motion above has one from JP on): with the return spot under 8 units
-        // away multiTimer is 0 and camStepY divides by zero.
-        mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-        mario->currSubMotionId = 12;
-        break;
-    case 12:
-        mario->camTarget.y += mario->mot.damage.camStepY;
-        movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
-        mario->camTarget.x = mario->position.x;
-        mario->camTarget.z = mario->position.z;
-        if (--mario->multiTimer > 0) {
-            break;
-        }
-        mario->currSubMotionId = 13;
-        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        marioSetFallPara();
-        break;
-    case 13:
-        if (--mario->multiTimer > 0) {
-            break;
-        }
-        mario->currSubMotionId = 20;
-        break;
-    case 20:
-        mario->hitobjStandOn = NULL;
-        spd = marioGetFallSpd();
-        if (spd <= -10.0f) {
-            spd = -10.0f;
-        }
-        h = marioChkLandon(&landY, spd);
-        if (h == NULL) {
-            mario->position.y += spd;
-        } else {
-            marioChgPose("M_D_2");
-            marioDmgRetQuakeOn();
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_LAND_DAMAGE2), &mario->position);
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
+        case 0:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            if (mario->prevMotionId == MARIO_MOTION_HIP || mario->prevMotionId == MARIO_MOTION_HIP_2) {
+                marioChgEvtPose("M_D_7");
+            } else {
+                marioChgPose("M_D_6");
+            }
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED2), &mario->position);
             mario_simple_kemuri();
-            mario->hitobjStandOn = h;
-            mario->hitobjJumpFrom = NULL;
-            mario->position.y = landY;
-        }
-        if (mario->hitobjStandOn == NULL) {
+            mario->currSubMotionId = 11;
+        case 11:
+            v = mario->mot.damage.riseSpeed;
+            mario->position.y += v;
+            v -= 1.0f;
+            if (v < 10.0f) {
+                v = 10.0f;
+            }
+            mario->mot.damage.riseSpeed = v;
+            if (mario->position.y < 500.0f + mario->mot.damage.rootY) {
+                break;
+            }
+            if (mario->damageHit != NULL) {
+                Vec* p = hitGetDamageReturnPos(mario->damageHit);
+                Vec t = {0.0f, 0.0f, 0.0f};
+                t.x = p->x;
+                t.y = p->y;
+                t.z = p->z;
+                dest = t;
+            } else {
+                Vec z = {0.0f, 0.0f, 0.0f};
+                dest = z;
+            }
+            mario->baseSpeed = 8.0f;
+            d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
+            mario->multiTimer = (s16)(d / 8);
+            mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
+
+            // BUG: no zero check (the knock-back motion above has one from JP on): with the return spot under 8 units
+            // away multiTimer is 0 and camStepY divides by zero.
+            mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
+            mario->currSubMotionId = 12;
             break;
-        }
-    case 30:
-        mario->multiTimer = 50;
-        mario->currSubMotionId = 31;
-    case 31:
-        if (--mario->multiTimer > 0) {
+        case 12:
+            mario->camTarget.y += mario->mot.damage.camStepY;
+            movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
+            mario->camTarget.x = mario->position.x;
+            mario->camTarget.z = mario->position.z;
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            mario->currSubMotionId = 13;
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+            marioSetFallPara();
             break;
-        }
-        pouchAddHP(-1);
-        if (pouchGetHP() <= 0) {
-            mario->currSubMotionId = 33;
+        case 13:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            mario->currSubMotionId = 20;
+            break;
+        case 20:
+            mario->hitobjStandOn = NULL;
+            spd = marioGetFallSpd();
+            if (spd <= -10.0f) {
+                spd = -10.0f;
+            }
+            h = marioChkLandon(&landY, spd);
+            if (h == NULL) {
+                mario->position.y += spd;
+            } else {
+                marioChgPose("M_D_2");
+                marioDmgRetQuakeOn();
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_LAND_DAMAGE2), &mario->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
+                mario_simple_kemuri();
+                mario->hitobjStandOn = h;
+                mario->hitobjJumpFrom = NULL;
+                mario->position.y = landY;
+            }
+            if (mario->hitobjStandOn == NULL) {
+                break;
+            }
+        case 30:
+            mario->multiTimer = 50;
+            mario->currSubMotionId = 31;
+        case 31:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            pouchAddHP(-1);
+            if (pouchGetHP() <= 0) {
+                mario->currSubMotionId = 33;
+                marioUpdateCamPos();
+                break;
+            }
+            marioChgPose("M_U_3");
+            mario->multiTimer = 12;
+            mario->currSubMotionId = 32;
+        case 32:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            marioChgMot(MARIO_MOTION_STAY);
             marioUpdateCamPos();
             break;
-        }
-        marioChgPose("M_U_3");
-        mario->multiTimer = 12;
-        mario->currSubMotionId = 32;
-    case 32:
-        if (--mario->multiTimer > 0) {
-            break;
-        }
-        marioChgMot(MARIO_MOTION_STAY);
-        marioUpdateCamPos();
-        break;
     }
 }
 

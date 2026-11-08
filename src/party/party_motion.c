@@ -571,24 +571,24 @@ void party_motion_stay(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
         chuchu_searchObject()) {
         switch (party->useMotionId) {
-        case 1:
-            if (--party->moveFrames > 0) {
+            case 1:
+                if (--party->moveFrames > 0) {
+                    break;
+                }
+                partyChgPoseId(party, PARTY_POSE_STAND);
+                party->moveFrames = 30;
+                party->useMotionId = 2;
                 break;
-            }
-            partyChgPoseId(party, PARTY_POSE_STAND);
-            party->moveFrames = 30;
-            party->useMotionId = 2;
-            break;
-        case 2:
-            if (--party->moveFrames > 0) {
+            case 2:
+                if (--party->moveFrames > 0) {
+                    break;
+                }
+                party->useMotionId = 0;
                 break;
-            }
-            party->useMotionId = 0;
-            break;
-        case 0:
-        default:
-            partyPoseA2(party);
-            break;
+            case 0:
+            default:
+                partyPoseA2(party);
+                break;
         }
     }
 }
@@ -2671,129 +2671,129 @@ void party_motion_jump(PartyEntry* party) {
         party->motionStep = 0;
     }
     switch (party->motionStep) {
-    case 0:
-        x = party->moveTarget.x;
-        y = party->moveTarget.y;
-        z = party->moveTarget.z;
-        if (party->forceMoveFrames != 0 || party->runMode == PARTY_RUN_FORCE_WALK) {
-            x = party->position.x;
-            y = party->position.y;
-            z = party->position.z;
-            movePos(&x, &z, party->moveSpeed, party->targetDir);
-            party->moveTarget = (Vec){x, y, z};
-        } else if (!(party->trigFlags & PARTY_TRIG_JUMP_TARGET_SET)) {
-            if (partyGetFootmarkReadId(id) == partyGetFootmarkWriteId(id)) {
-                if (partyGetTargetDist(id, party->position.x, party->position.z) > 2.0f * mario->wPlayerCollisionBox.x) {
-                    dir = partyGetTargetDir(id, party->position.x, party->position.z);
-                    getFrontFloor(party, &fl, dir);
-                    fl.y += 10.0f;
-                    y = fl.y;
-                    x = party->position.x;
-                    z = party->position.z;
-                    movePos(&x, &z, 0.6f * party->width, dir);
-                }
+        case 0:
+            x = party->moveTarget.x;
+            y = party->moveTarget.y;
+            z = party->moveTarget.z;
+            if (party->forceMoveFrames != 0 || party->runMode == PARTY_RUN_FORCE_WALK) {
+                x = party->position.x;
+                y = party->position.y;
+                z = party->position.z;
+                movePos(&x, &z, party->moveSpeed, party->targetDir);
                 party->moveTarget = (Vec){x, y, z};
-            } else {
-                partyGetReadId(id, &x, &y, &z);
-                lim = 50.0f;
-                dist = distABf(party->position.x, party->position.z, x, z);
-#if VERSION >= VERSION_US
-                dist2 = __fabsf(y - party->position.y);
-                if (50.0f > 1.4f * dist2) {
-                    lim = 1.4f * dist2;
-                }
-#else
-                // BUG: the signed height difference makes the limit negative for a target below the partner, so dist
-                // is clamped to a negative distance; US and later use its absolute value.
-                if (50.0f > 1.4f * (y - party->position.y)) {
-                    lim = 1.4f * (y - party->position.y);
-                }
-#endif
-                sincosf(&s, &c, angleABf(party->position.x, party->position.z, x, z));
-                if (dist > lim) {
-                    dist = lim;
-                    if (partyGetTargetMovespd(id) == 0.0f) {
-                        dist = 0.0f;
+            } else if (!(party->trigFlags & PARTY_TRIG_JUMP_TARGET_SET)) {
+                if (partyGetFootmarkReadId(id) == partyGetFootmarkWriteId(id)) {
+                    if (partyGetTargetDist(id, party->position.x, party->position.z) > 2.0f * mario->wPlayerCollisionBox.x) {
+                        dir = partyGetTargetDir(id, party->position.x, party->position.z);
+                        getFrontFloor(party, &fl, dir);
+                        fl.y += 10.0f;
+                        y = fl.y;
+                        x = party->position.x;
+                        z = party->position.z;
+                        movePos(&x, &z, 0.6f * party->width, dir);
                     }
-                    x = party->position.x;
-                    z = party->position.z;
-                    x = x + dist * s;
-                    z = z + dist * c;
-                    y += 10.0f;
                     party->moveTarget = (Vec){x, y, z};
                 } else {
-                    if (partyGetTargetMovespd(id) == 0.0f) {
-                        dist = 0.0f;
-                    }
-                    x = x + dist * s;
-                    z = z + dist * c;
-                    party->moveTarget = (Vec){x, y, z};
-                }
-                if (dist < lim) {
-                    partyNextReadId(id);
-                }
-            }
-        }
-        party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        if (party->forceMoveFrames == 0) {
-            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            party->moveSpeed = 2.25f * party->playerPtr->playerGravity;
-        }
-        partyJumpCalc(party, mario, party->moveDistance);
-        party->flags |= PARTY_FLAG_IS_JUMPING;
-        party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-        partyChgPoseId(party, PARTY_POSE_JUMP);
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_JUMP1), &party->position);
-        party->motionStep = 10;
-        if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-            partyNextReadId(partyGetFootmarkId(party));
-        }
-        break;
-    case 10:
-        if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-            partyNextReadId(partyGetFootmarkId(party));
-        }
-        party->velY += party->gravity;
-        party->position.y += party->velY;
-        if (party->position.y < -2000.0f) {
-            party->flags &= ~PARTY_FLAG_IS_JUMPING;
-            party->velY = 0.0f;
-            party->targetDir = angleABf(party->position.x, party->position.z, mario->position.x, mario->position.z);
-            party->position = mario->position;
-            partyChgMot(party, PARTY_MOTION_STAY);
-            break;
-        }
-        if (party->velY <= 0.0f) {
-            party->flags &= ~PARTY_FLAG_IS_JUMPING;
-            party->flags |= PARTY_FLAG_IS_FALLING;
-            hit = partySearchGround(party, __fabsf(party->velY), 0.0f);
-            if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
-                if (!party->splashTimer) {
-                    party->trigFlags |= PARTY_TRIG_SPLASH;
-                    party->flags |= PARTY_FLAG_FORCE_FALL;
-                }
-                party->hitobjStandOn = NULL;
-                partyChgMot(party, PARTY_MOTION_FALL);
-                party->gravity = -1.0f;
-                break;
-            }
-            party->hitobjStandOn = hit;
-            party->position.y = party->groundY;
-            if (hit) {
-                party->flags |= PARTY_FLAG_IS_GROUNDED;
+                    partyGetReadId(id, &x, &y, &z);
+                    lim = 50.0f;
+                    dist = distABf(party->position.x, party->position.z, x, z);
 #if VERSION >= VERSION_US
-                party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
+                    dist2 = __fabsf(y - party->position.y);
+                    if (50.0f > 1.4f * dist2) {
+                        lim = 1.4f * dist2;
+                    }
+#else
+                    // BUG: the signed height difference makes the limit negative for a target below the partner, so dist
+                    // is clamped to a negative distance; US and later use its absolute value.
+                    if (50.0f > 1.4f * (y - party->position.y)) {
+                        lim = 1.4f * (y - party->position.y);
+                    }
 #endif
-                party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
-                partyPlaySfxPartyLanding1(party);
+                    sincosf(&s, &c, angleABf(party->position.x, party->position.z, x, z));
+                    if (dist > lim) {
+                        dist = lim;
+                        if (partyGetTargetMovespd(id) == 0.0f) {
+                            dist = 0.0f;
+                        }
+                        x = party->position.x;
+                        z = party->position.z;
+                        x = x + dist * s;
+                        z = z + dist * c;
+                        y += 10.0f;
+                        party->moveTarget = (Vec){x, y, z};
+                    } else {
+                        if (partyGetTargetMovespd(id) == 0.0f) {
+                            dist = 0.0f;
+                        }
+                        x = x + dist * s;
+                        z = z + dist * c;
+                        party->moveTarget = (Vec){x, y, z};
+                    }
+                    if (dist < lim) {
+                        partyNextReadId(id);
+                    }
+                }
+            }
+            party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            if (party->forceMoveFrames == 0) {
+                party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+                party->moveSpeed = 2.25f * party->playerPtr->playerGravity;
+            }
+            partyJumpCalc(party, mario, party->moveDistance);
+            party->flags |= PARTY_FLAG_IS_JUMPING;
+            party->flags &= ~PARTY_FLAG_IS_GROUNDED;
+            partyChgPoseId(party, PARTY_POSE_JUMP);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_JUMP1), &party->position);
+            party->motionStep = 10;
+            if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
+                partyNextReadId(partyGetFootmarkId(party));
+            }
+            break;
+        case 10:
+            if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
+                partyNextReadId(partyGetFootmarkId(party));
+            }
+            party->velY += party->gravity;
+            party->position.y += party->velY;
+            if (party->position.y < -2000.0f) {
+                party->flags &= ~PARTY_FLAG_IS_JUMPING;
                 party->velY = 0.0f;
+                party->targetDir = angleABf(party->position.x, party->position.z, mario->position.x, mario->position.z);
+                party->position = mario->position;
                 partyChgMot(party, PARTY_MOTION_STAY);
-                party->trigFlags |= PARTY_TRIG_LANDED;
                 break;
             }
-        }
-        partyJumpFrontMove(party);
-        break;
+            if (party->velY <= 0.0f) {
+                party->flags &= ~PARTY_FLAG_IS_JUMPING;
+                party->flags |= PARTY_FLAG_IS_FALLING;
+                hit = partySearchGround(party, __fabsf(party->velY), 0.0f);
+                if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
+                    if (!party->splashTimer) {
+                        party->trigFlags |= PARTY_TRIG_SPLASH;
+                        party->flags |= PARTY_FLAG_FORCE_FALL;
+                    }
+                    party->hitobjStandOn = NULL;
+                    partyChgMot(party, PARTY_MOTION_FALL);
+                    party->gravity = -1.0f;
+                    break;
+                }
+                party->hitobjStandOn = hit;
+                party->position.y = party->groundY;
+                if (hit) {
+                    party->flags |= PARTY_FLAG_IS_GROUNDED;
+#if VERSION >= VERSION_US
+                    party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
+#endif
+                    party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
+                    partyPlaySfxPartyLanding1(party);
+                    party->velY = 0.0f;
+                    partyChgMot(party, PARTY_MOTION_STAY);
+                    party->trigFlags |= PARTY_TRIG_LANDED;
+                    break;
+                }
+            }
+            partyJumpFrontMove(party);
+            break;
     }
 }
 

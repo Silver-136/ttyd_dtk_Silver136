@@ -135,11 +135,11 @@ BOOL parseGet1Next(s32 type, void* data) {
     s8 c;
 
     switch (type) {
-    case PARSE_VEC:
-        result *= parseGet1Next(PARSE_FLOAT, data);
-        result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 1);
-        result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 2);
-        return result;
+        case PARSE_VEC:
+            result *= parseGet1Next(PARSE_FLOAT, data);
+            result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 1);
+            result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 2);
+            return result;
     }
 
     posStack = parse.pos;
@@ -175,30 +175,30 @@ BOOL parseGet1Next(s32 type, void* data) {
         return FALSE;
     }
     switch (type) {
-    case PARSE_STRING:
-        n = 0;
-        for (i = start; i < end; i++) {
-            if (p[i] == '"') {
-                for (i++; i < end; i++) {
-                    if (p[i] == '"') {
-                        break;
+        case PARSE_STRING:
+            n = 0;
+            for (i = start; i < end; i++) {
+                if (p[i] == '"') {
+                    for (i++; i < end; i++) {
+                        if (p[i] == '"') {
+                            break;
+                        }
+                        ((char*)data)[n] = p[i];
+                        n++;
                     }
-                    ((char*)data)[n] = p[i];
-                    n++;
                 }
             }
-        }
-        ((char*)data)[n] = 0;
-        *posp = i;
-        break;
-    case PARSE_INT:
-        sscanf((char*)&p[start], "%d", data);
-        *posp = stop;
-        break;
-    case PARSE_FLOAT:
-        sscanf((char*)&p[start], "%f", data);
-        *posp = stop;
-        break;
+            ((char*)data)[n] = 0;
+            *posp = i;
+            break;
+        case PARSE_INT:
+            sscanf((char*)&p[start], "%d", data);
+            *posp = stop;
+            break;
+        case PARSE_FLOAT:
+            sscanf((char*)&p[start], "%f", data);
+            *posp = stop;
+            break;
     }
     return TRUE;
 }

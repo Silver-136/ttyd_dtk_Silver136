@@ -10,7 +10,7 @@
 #include <string.h>
 
 //.sbss
-static OffscreenWork work[2]; //field, battle
+static OffscreenWork work[2]; // field, battle
 
 /** Returns the offscreen entry set for the current mode (battle or field, from gp->inBattle). */
 static inline OffscreenWork* offscreenGetWorkGp(void) {

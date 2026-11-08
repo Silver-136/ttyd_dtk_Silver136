@@ -60,24 +60,24 @@ EffectEntry* effKemuri12N64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f3
     work->position.z = z;
     work->scale = scale;
     switch (type) {
-    case 0:
-        work->b = 0;
-        work->g = 0;
-        work->r = 0;
-        work->a = 130;
-        break;
-    case 1:
-        work->r = 255;
-        work->b = 0;
-        work->g = 0;
-        work->a = 130;
-        break;
-    default:
-        work->r = 225;
-        work->g = 215;
-        work->b = 255;
-        work->a = 180;
-        break;
+        case 0:
+            work->b = 0;
+            work->g = 0;
+            work->r = 0;
+            work->a = 130;
+            break;
+        case 1:
+            work->r = 255;
+            work->b = 0;
+            work->g = 0;
+            work->a = 130;
+            break;
+        default:
+            work->r = 225;
+            work->g = 215;
+            work->b = 255;
+            work->a = 180;
+            break;
     }
     return effect;
 }
@@ -182,33 +182,33 @@ static void effKemuri12Disp(CameraId cameraId, void* param) {
         GXLoadTexMtxImm(scaleMtx, GX_TEXMTX1, GX_MTX2x4);
     }
     switch (type) {
-    case 0:
-    case 2:
-        vtx = size32x32_tex32x32_vtx;
-        break;
-    default:
-        // FAKE: self-assignment of work->position.z; removing it changes the object
-        work->position.z = work->position.z;
+        case 0:
+        case 2:
+            vtx = size32x32_tex32x32_vtx;
+            break;
+        default:
+            // FAKE: self-assignment of work->position.z; removing it changes the object
+            work->position.z = work->position.z;
 
-        // FAKE: float self-assign keeps the camera web live through the switch pre-RA (gives it degree >= K); emits no code
-        camera->near = camera->near;
-        vtx = size32x32_tex32x32_yougan_vtx;
-        break;
+            // FAKE: float self-assign keeps the camera web live through the switch pre-RA (gives it degree >= K); emits no code
+            camera->near = camera->near;
+            vtx = size32x32_tex32x32_yougan_vtx;
+            break;
     }
 
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(vtx);
     switch (type) {
-    case 0:
-    case 2:
-        GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
-        break;
-    default:
-        GXBegin(GX_TRIANGLES, GX_VTXFMT0, 18);
-        tri2(8, 9, 10, 0, 8, 10, 11, 0);
-        tri2(4, 5, 6, 0, 4, 6, 7, 0);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
-        break;
+        case 0:
+        case 2:
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            break;
+        default:
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 18);
+            tri2(8, 9, 10, 0, 8, 10, 11, 0);
+            tri2(4, 5, 6, 0, 4, 6, 7, 0);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            break;
     }
 }

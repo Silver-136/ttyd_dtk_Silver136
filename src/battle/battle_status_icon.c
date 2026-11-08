@@ -15,7 +15,7 @@
 typedef struct IconDispTableEntry IconDispTableEntry;
 struct IconDispTableEntry {
     s32 id;
-    BOOL (*callback)(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry); //0x4
+    BOOL (*callback)(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry); // 0x4
     s32 texId;
     s32 initialFlags;
 };
@@ -227,7 +227,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
 
 /** Status-icon cleanup when a unit is deleted; empty in every version. */
 void BattleStatusIconDelete(BattleUnit* unit) {
-    ; //stubbed in every version
+    ; // stubbed in every version
 }
 
 /**

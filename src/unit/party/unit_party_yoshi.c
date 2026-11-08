@@ -2121,28 +2121,28 @@ USER_FUNC(yoshi_original_color_anim_set) {
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
     switch (pouchGetPartyColor(PARTY_YOSHI)) {
-    case 1:
-        name = "c_babyyoshi2";
-        break;
-    case 2:
-        name = "c_babyyoshi3";
-        break;
-    case 3:
-        name = "c_babyyoshi4";
-        break;
-    case 4:
-        name = "c_babyyoshi5";
-        break;
-    case 5:
-        name = "c_babyyoshi6";
-        break;
-    case 6:
-        name = "c_babyyoshi7";
-        break;
-    case 0:
-    default:
-        name = NULL;
-        break;
+        case 1:
+            name = "c_babyyoshi2";
+            break;
+        case 2:
+            name = "c_babyyoshi3";
+            break;
+        case 3:
+            name = "c_babyyoshi4";
+            break;
+        case 4:
+            name = "c_babyyoshi5";
+            break;
+        case 5:
+            name = "c_babyyoshi6";
+            break;
+        case 6:
+            name = "c_babyyoshi7";
+            break;
+        case 0:
+        default:
+            name = NULL;
+            break;
     }
     if (isFirstCall) {
         if (name == NULL) {
@@ -2458,41 +2458,41 @@ USER_FUNC(_wait_yoshig_complete) {
  */
 static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
     switch (p->state) {
-    case 0:
-        p->state++;
-        p->delay = irand(3);
-        p->x = (f32)(-(i / 16 * 30 + 300) + irand(10));
-        p->y = 0.0f;
-        p->z = (f32)(i % 16 * 10 - 80);
-        p->frame = irand(6);
-        p->frameCount = irand(5);
-        p->vx = 0.1f * (f32)irand(10) + 3.0f;
-        p->vy = 0.0f;
-        p->vz = 0.001f * (f32)(irand(2000) - 1000);
-    case 1:
-        if (p->delay > 0) {
-            p->delay--;
+        case 0:
+            p->state++;
+            p->delay = irand(3);
+            p->x = (f32)(-(i / 16 * 30 + 300) + irand(10));
+            p->y = 0.0f;
+            p->z = (f32)(i % 16 * 10 - 80);
+            p->frame = irand(6);
+            p->frameCount = irand(5);
+            p->vx = 0.1f * (f32)irand(10) + 3.0f;
+            p->vy = 0.0f;
+            p->vz = 0.001f * (f32)(irand(2000) - 1000);
+        case 1:
+            if (p->delay > 0) {
+                p->delay--;
+                break;
+            }
+        case 2:
+            p->z += p->vz;
+            if (p->z >= VERSION_PICK(80.0f, 65.0f)) {
+                p->z = VERSION_PICK(80.0f, 65.0f);
+                p->vz *= -1.0f;
+            }
+            if (p->z <= -80.0f) {
+                p->z = -80.0f;
+                p->vz *= -1.0f;
+            }
+            p->x += p->vx;
+            if (p->x >= 300.0f) {
+                p->x = 300.0f;
+                p->vx = 0.0f;
+                p->state = 999;
+            }
             break;
-        }
-    case 2:
-        p->z += p->vz;
-        if (p->z >= VERSION_PICK(80.0f, 65.0f)) {
-            p->z = VERSION_PICK(80.0f, 65.0f);
-            p->vz *= -1.0f;
-        }
-        if (p->z <= -80.0f) {
-            p->z = -80.0f;
-            p->vz *= -1.0f;
-        }
-        p->x += p->vx;
-        if (p->x >= 300.0f) {
-            p->x = 300.0f;
-            p->vx = 0.0f;
-            p->state = 999;
-        }
-        break;
-    default:
-        return FALSE;
+        default:
+            return FALSE;
     }
     return TRUE;
 }
@@ -2532,52 +2532,52 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         w = (YoshiGundanWork*)unit->countersetWeapon;
     }
     switch (w->state) {
-    case 0:
-        w->state++;
-    case 1:
-        w->meanX = 0.0f;
-        allDone = TRUE;
-        for (i = 0; i < 256; i++) {
-            p = &w->parts[i];
-            p->frameCount++;
-            if (p->frameCount > 2) {
-                p->frameCount = 0;
-                p->frame++;
-                if (p->frame >= 6) {
-                    p->frame = 0;
+        case 0:
+            w->state++;
+        case 1:
+            w->meanX = 0.0f;
+            allDone = TRUE;
+            for (i = 0; i < 256; i++) {
+                p = &w->parts[i];
+                p->frameCount++;
+                if (p->frameCount > 2) {
+                    p->frameCount = 0;
+                    p->frame++;
+                    if (p->frame >= 6) {
+                        p->frame = 0;
+                    }
                 }
+                if (_gundan_part_update(p, i)) {
+                    allDone = FALSE;
+                }
+                w->meanX += p->x;
             }
-            if (_gundan_part_update(p, i)) {
-                allDone = FALSE;
-            }
-            w->meanX += p->x;
-        }
-        if (event->userdata[0] > 0) {
-            event->userdata[0]--;
-        } else {
-            f32 sc;
-            p = &w->parts[irand(256)];
-            sc = 1.0f + 0.05f * (f32)irand(20);
+            if (event->userdata[0] > 0) {
+                event->userdata[0]--;
+            } else {
+                f32 sc;
+                p = &w->parts[irand(256)];
+                sc = 1.0f + 0.05f * (f32)irand(20);
 #if VERSION <= VERSION_DEMO_JP
-            effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
+                effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
 #else
-            effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
+                effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
 #endif
-        }
-        w->meanX *= 0.00390625f;
-        pos.x = w->meanX;
-        pos.y = 0.0f;
-        pos.z = 0.0f;
-        psndSFX_pos(event->userdata[1], &pos);
-        if (allDone) {
-            w->state = 999;
-        }
-        break;
-    case 999:
-        psndSFXOff(event->userdata[1]);
-        BattleFree(unit->countersetWeapon);
-        unit->countersetWeapon = NULL;
-        return EVT_RETURN_DONE;
+            }
+            w->meanX *= 0.00390625f;
+            pos.x = w->meanX;
+            pos.y = 0.0f;
+            pos.z = 0.0f;
+            psndSFX_pos(event->userdata[1], &pos);
+            if (allDone) {
+                w->state = 999;
+            }
+            break;
+        case 999:
+            psndSFXOff(event->userdata[1]);
+            BattleFree(unit->countersetWeapon);
+            unit->countersetWeapon = NULL;
+            return EVT_RETURN_DONE;
     }
 #if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)_btlYoshiDisp, w);

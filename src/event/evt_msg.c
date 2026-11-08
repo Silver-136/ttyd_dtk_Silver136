@@ -520,21 +520,21 @@ void evtMsgFmtStr(char* buf, const char* name) {
         case 6:
             // FAKE: (signed char) cast on the first character; switch (*name) changes the object in US, PAL and the September demos
             switch ((signed char)*name) {
-            case 'A':
-            case 'E':
-            case 'I':
-            case 'O':
-            case 'U':
-            case 'a':
-            case 'e':
-            case 'i':
-            case 'o':
-            case 'u':
-                article = "an ";
-                break;
-            default:
-                article = "a ";
-                break;
+                case 'A':
+                case 'E':
+                case 'I':
+                case 'O':
+                case 'U':
+                case 'a':
+                case 'e':
+                case 'i':
+                case 'o':
+                case 'u':
+                    article = "an ";
+                    break;
+                default:
+                    article = "a ";
+                    break;
             }
             if ((marker = strstr(buf, "<AN>")) != NULL) {
                 len = strlen(buf) - strlen(marker);

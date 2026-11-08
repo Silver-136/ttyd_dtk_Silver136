@@ -94,41 +94,41 @@ EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 sc
     effect = effEntry();
     mod = type % 10;
     switch (mod) {
-    case 0:
-        n = 12;
-        break;
-    case 1:
-        n = 18;
-        break;
-    case 2:
-        n = 24;
-        break;
-    case 4:
-        n = 12;
-        break;
-    case 5:
-        n = 18;
-        break;
-    case 6:
-        n = 24;
-        break;
-    default:
-        n = 48;
-        break;
+        case 0:
+            n = 12;
+            break;
+        case 1:
+            n = 18;
+            break;
+        case 2:
+            n = 24;
+            break;
+        case 4:
+            n = 12;
+            break;
+        case 5:
+            n = 18;
+            break;
+        case 6:
+            n = 24;
+            break;
+        default:
+            n = 48;
+            break;
     }
     switch (mod) {
-    case 0:
-    case 4:
-        speed = 3.0f;
-        break;
-    case 1:
-    case 5:
-        speed = 4.0f;
-        break;
-    case 6:
-    default:
-        speed = 5.0f;
-        break;
+        case 0:
+        case 4:
+            speed = 3.0f;
+            break;
+        case 1:
+        case 5:
+            speed = 4.0f;
+            break;
+        case 6:
+        default:
+            speed = 5.0f;
+            break;
     }
     effect->type = "ConfettiN64";
     cnt = n + 1;
@@ -227,41 +227,41 @@ static void effConfettiMain(EffectEntry* effect) {
     w++;
     for (i = 0; i < count; i++, w++) {
         switch (mod) {
-        case 3:
-            if (w->delay > 0) {
-                w->delay--;
+            case 3:
                 if (w->delay > 0) {
-                    continue;
+                    w->delay--;
+                    if (w->delay > 0) {
+                        continue;
+                    }
                 }
-            }
-            w->life--;
-            if (w->life < 0) {
-                w->position.x = 0.1f * (f32)(rand() % 701) - 35.0f;
-                w->position.y = 0.0f;
-                w->position.z = 0.1f * (f32)(rand() % 301) - 15.0f;
-                w->velocity.x = 0.03f * (w->position.x + 0.1f * (f32)(rand() % 101) - 5.0f);
-                w->velocity.y = -1.7f - 0.01f * (0.1f * (f32)(rand() % 801));
-                w->velocity.z = 0.05f * (0.1f * (f32)(rand() % 201) - 10.0f);
-                w->life = 120;
                 w->life--;
-            }
-            break;
-        default:
-            if (w->delay > 0) {
-                w->delay--;
+                if (w->life < 0) {
+                    w->position.x = 0.1f * (f32)(rand() % 701) - 35.0f;
+                    w->position.y = 0.0f;
+                    w->position.z = 0.1f * (f32)(rand() % 301) - 15.0f;
+                    w->velocity.x = 0.03f * (w->position.x + 0.1f * (f32)(rand() % 101) - 5.0f);
+                    w->velocity.y = -1.7f - 0.01f * (0.1f * (f32)(rand() % 801));
+                    w->velocity.z = 0.05f * (0.1f * (f32)(rand() % 201) - 10.0f);
+                    w->life = 120;
+                    w->life--;
+                }
+                break;
+            default:
                 if (w->delay > 0) {
-                    continue;
+                    w->delay--;
+                    if (w->delay > 0) {
+                        continue;
+                    }
                 }
-            }
-            if (mod >= 4) {
-                w->velocity.x *= 0.98f;
-                w->velocity.y *= 0.98f;
-                w->velocity.z *= 0.98f;
-                if (frame > 5 && w->velocity.y > -0.5f) {
-                    w->velocity.y += w->accelY;
+                if (mod >= 4) {
+                    w->velocity.x *= 0.98f;
+                    w->velocity.y *= 0.98f;
+                    w->velocity.z *= 0.98f;
+                    if (frame > 5 && w->velocity.y > -0.5f) {
+                        w->velocity.y += w->accelY;
+                    }
                 }
-            }
-            break;
+                break;
         }
         w->position.x += w->velocity.x;
         w->position.y += w->velocity.y;
@@ -337,19 +337,19 @@ static void effConfettiDisp(CameraId cameraId, void* param) {
         PSMTXConcat(scale, tmp, scale);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         switch (type % 10) {
-        case 3:
-            effSetVtxDescN64(size6x6_tex16x16_2_vtx);
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 24);
-            tri2(0, 1, 2, 0, 0, 2, 3, 0);
-            tri2(4, 5, 6, 4, 4, 6, 7, 4);
-            tri2(8, 9, 10, 8, 8, 10, 11, 8);
-            tri2(12, 13, 14, 12, 12, 14, 15, 12);
-            break;
-        default:
-            effSetVtxDescN64(size6x6_tex16x16_vtx);
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-            tri2(0, 1, 2, 0, 0, 2, 3, 0);
-            break;
+            case 3:
+                effSetVtxDescN64(size6x6_tex16x16_2_vtx);
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 24);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(4, 5, 6, 4, 4, 6, 7, 4);
+                tri2(8, 9, 10, 8, 8, 10, 11, 8);
+                tri2(12, 13, 14, 12, 12, 14, 15, 12);
+                break;
+            default:
+                effSetVtxDescN64(size6x6_tex16x16_vtx);
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
+                break;
         }
     }
 }

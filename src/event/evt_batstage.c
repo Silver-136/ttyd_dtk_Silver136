@@ -93,17 +93,17 @@ USER_FUNC(evt_batstage_light_set_player_on) {
     u8 en2[4] = {0, 0, 0, 0};
 
     switch (sel) {
-    case 1:
-        en[2] = 1;
-        col[2][0] = 255;
-        col[2][1] = 255;
-        col[2][2] = 255;
-        break;
-    default:
-        en[0] = 1;
-        en[1] = 1;
-        en[2] = 1;
-        break;
+        case 1:
+            en[2] = 1;
+            col[2][0] = 255;
+            col[2][1] = 255;
+            col[2][2] = 255;
+            break;
+        default:
+            en[0] = 1;
+            en[1] = 1;
+            en[2] = 1;
+            break;
     }
     for (i = 0; i < 3; i++) {
         if (en[i]) {

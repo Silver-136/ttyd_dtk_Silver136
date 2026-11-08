@@ -31,12 +31,12 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     effect = effEntry();
     n = 1;
     switch (type) {
-    case 0:
-        n = 1;
-        break;
-    case 1:
-        n = 11;
-        break;
+        case 0:
+            n = 1;
+            break;
+        case 1:
+            n = 11;
+            break;
     }
     effect->type = "PuniBalloon";
     effect->count = n;

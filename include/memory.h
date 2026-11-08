@@ -33,26 +33,26 @@ typedef enum HEAP_TYPE {
 #endif
 
 typedef struct smartEntry {
-    void* address; //0x0
-    u32 size; //0x4
-    FileEntry* file; //0x8, file whose data lives in this block (smartGarbage checks its state)
-    u16 inUse; //0xC, 1 from smartAlloc, 0 when freed; written only
-    u8 type; //0xE, allocation type passed to smartAlloc
-    u8 pad_F; //0xF
-    u32 spaceAfter; //0x10, free bytes after this block (set from bytesLeft on allocation; prev->spaceAfter += size on free)
-    struct smartEntry* next; //0x14
-    struct smartEntry* prev; //0x18
+    void* address; // 0x0
+    u32 size; // 0x4
+    FileEntry* file; // 0x8, file whose data lives in this block (smartGarbage checks its state)
+    u16 inUse; // 0xC, 1 from smartAlloc, 0 when freed; written only
+    u8 type; // 0xE, allocation type passed to smartAlloc
+    u8 pad_F; // 0xF
+    u32 spaceAfter; // 0x10, free bytes after this block (set from bytesLeft on allocation; prev->spaceAfter += size on free)
+    struct smartEntry* next; // 0x14
+    struct smartEntry* prev; // 0x18
 } smartEntry;
 
 typedef struct SmartWork {
-    void* ptr; //0x0
-    smartEntry work[0x800]; //0x4-0xE004
-    u32 bytesLeft; //0xE004
-    smartEntry* allocHead; //0xE008, list of allocated blocks (smartAutoFree walks it)
-    smartEntry* allocTail; //0xE00C
-    smartEntry* head; //0xE010
-    smartEntry* tail; //0xE014
-    s32 waitsync; //0xE018
+    void* ptr; // 0x0
+    smartEntry work[0x800]; // 0x4-0xE004
+    u32 bytesLeft; // 0xE004
+    smartEntry* allocHead; // 0xE008, list of allocated blocks (smartAutoFree walks it)
+    smartEntry* allocTail; // 0xE00C
+    smartEntry* head; // 0xE010
+    smartEntry* tail; // 0xE014
+    s32 waitsync; // 0xE018
 } SmartWork;
 
 void memInit(void);

@@ -20,30 +20,30 @@ typedef struct BattleSpotEntry {
 } BattleSpotEntry;
 
 typedef struct BattleSpotWork {
-    s32 count; //0x0
-    BattleSpotEntry* entries; //0x4
-    BOOL dispOn; //0x8
+    s32 count; // 0x0
+    BattleSpotEntry* entries; // 0x4
+    BOOL dispOn; // 0x8
 } BattleSpotWork;
 
 typedef struct BattleStageData {
-    char* globalStageDataDir; //0x0
-    char* specificStageDataDir; //0x4
-    u32 numObjects; //0x8
-    BattleStageObjectData* objects; //0xC
-    BattleWeapon bgAWeapon; //0x10, background A1 falling (A2 has no weapon: _get_bgset_attack_data)
-    BattleWeapon bgBWeapon; //0xD0, background B falling
-    EvtWord* initEvt; //0x190
-    EvtWord* destroyBgA1Evt; //0x194
-    EvtWord* destroyBgA2Evt; //0x198
-    EvtWord* destroyBgBEvt; //0x19C
-    EvtWord* bgA1Evt; //0x1A0
-    EvtWord* bgA2Evt; //0x1A4
-    EvtWord* bgBEvt; //0x1A8
-    EvtWord* bgCEvt; //0x1AC
-    s8 reserved_1B0; //0x1B0, 0 in all 58 data tables, never read
-    s8 disableBgA1Destroy; //0x1B1
-    s8 disableBgA2Destroy; //0x1B2
-    s8 disableBgBDestroy; //0x1B3
+    char* globalStageDataDir; // 0x0
+    char* specificStageDataDir; // 0x4
+    u32 numObjects; // 0x8
+    BattleStageObjectData* objects; // 0xC
+    BattleWeapon bgAWeapon; // 0x10, background A1 falling (A2 has no weapon: _get_bgset_attack_data)
+    BattleWeapon bgBWeapon; // 0xD0, background B falling
+    EvtWord* initEvt; // 0x190
+    EvtWord* destroyBgA1Evt; // 0x194
+    EvtWord* destroyBgA2Evt; // 0x198
+    EvtWord* destroyBgBEvt; // 0x19C
+    EvtWord* bgA1Evt; // 0x1A0
+    EvtWord* bgA2Evt; // 0x1A4
+    EvtWord* bgBEvt; // 0x1A8
+    EvtWord* bgCEvt; // 0x1AC
+    s8 reserved_1B0; // 0x1B0, 0 in all 58 data tables, never read
+    s8 disableBgA1Destroy; // 0x1B1
+    s8 disableBgA2Destroy; // 0x1B2
+    s8 disableBgBDestroy; // 0x1B3
 } BattleStageData;
 
 // StageLight.flags
@@ -106,16 +106,16 @@ typedef struct StageDark {
 } StageDark;
 
 typedef struct BattleStage {
-    s32 reserved_00; //0x0, only set to 0
-    StageLight lights[12]; //0x4
-    StageDark stgDark; //0xAE4, stage darkening
-    StageDark audDark; //0xB04, audience darkening
-    f32 stageSizeX; //0xB24, btlevtcmd_GetStageSize (init 290)
-    f32 stageSizeY; //0xB28 (init 200)
-    f32 stageSizeZ; //0xB2C (init 90)
-    f32 audienceSizeX; //0xB30, btlevtcmd_GetStageAudienceAreaSize (init = stageSizeX)
-    f32 audienceSizeY; //0xB34, also the floor height past stageSizeZ (init -50)
-    f32 audienceSizeZ; //0xB38 (init 200)
+    s32 reserved_00; // 0x0, only set to 0
+    StageLight lights[12]; // 0x4
+    StageDark stgDark; // 0xAE4, stage darkening
+    StageDark audDark; // 0xB04, audience darkening
+    f32 stageSizeX; // 0xB24, btlevtcmd_GetStageSize (init 290)
+    f32 stageSizeY; // 0xB28 (init 200)
+    f32 stageSizeZ; // 0xB2C (init 90)
+    f32 audienceSizeX; // 0xB30, btlevtcmd_GetStageAudienceAreaSize (init = stageSizeX)
+    f32 audienceSizeY; // 0xB34, also the floor height past stageSizeZ (init -50)
+    f32 audienceSizeZ; // 0xB38 (init 200)
 } BattleStage;
 
 BattleStage* BattleStageGetPtr(void);

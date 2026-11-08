@@ -74,7 +74,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
         HW_ENABLE_MSR_FP_RI();
         PPCHalt();
 #endif
-        while (1) {} //softlock
+        while (1) {} // softlock
     }
 
     switch (error) {
@@ -110,7 +110,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     sprintf(print_buffer2, "Address:      Back Chain    LR Save\n");
 #endif
     strcat(print_buffer, print_buffer2);
-    stack = context->gpr[1]; //get r1 (stack)
+    stack = context->gpr[1]; // get r1 (stack)
     i = 0;
     while ((stack != 0) && (stack != 0xFFFFFFFF) && (i++ < 16)) {
 #if VERSION >= VERSION_US

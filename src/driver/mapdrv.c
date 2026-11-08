@@ -49,7 +49,7 @@ BOOL error_flag;
 MapObject* current_mp;
 BOOL mapClipOffFlag;
 s32 activeGroup;
-MapWork* mapWork; //allocates two entries
+MapWork* mapWork; // allocates two entries
 
 // Implementation forward declarations; definitions retain target order.
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);

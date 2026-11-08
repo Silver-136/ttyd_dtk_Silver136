@@ -1523,48 +1523,48 @@ USER_FUNC(debug_print_func) {
     *(RshDebugStr*)header = rsh_debug_str_init;
 
     switch (room) {
-    case 0:
-        strcpy(header, "RSH_01:");
-        switch (group) {
         case 0:
-            list = (const char**)rsh_01_rnd_npc_1_list;
+            strcpy(header, "RSH_01:");
+            switch (group) {
+            case 0:
+                list = (const char**)rsh_01_rnd_npc_1_list;
+                break;
+            case 1:
+                list = (const char**)rsh_01_rnd_npc_2_list;
+                break;
+            case 2:
+                list = (const char**)rsh_01_rnd_npc_3_list;
+                break;
+            }
             break;
         case 1:
-            list = (const char**)rsh_01_rnd_npc_2_list;
+            strcpy(header, "RSH_03:");
+            switch (group) {
+            case 0:
+                list = (const char**)rsh_03_rnd_npc_1_list;
+                break;
+            case 1:
+                list = (const char**)rsh_03_rnd_npc_2_list;
+                break;
+            }
             break;
         case 2:
-            list = (const char**)rsh_01_rnd_npc_3_list;
+            strcpy(header, "RSH_04:");
+            switch (group) {
+            case 0:
+                list = (const char**)rsh_04_rnd_npc_1_list;
+                break;
+            case 1:
+                list = (const char**)rsh_04_rnd_npc_2_list;
+                break;
+            case 2:
+                list = (const char**)rsh_04_rnd_npc_3_list;
+                break;
+            case 3:
+                list = (const char**)rsh_04_rnd_npc_4_list;
+                break;
+            }
             break;
-        }
-        break;
-    case 1:
-        strcpy(header, "RSH_03:");
-        switch (group) {
-        case 0:
-            list = (const char**)rsh_03_rnd_npc_1_list;
-            break;
-        case 1:
-            list = (const char**)rsh_03_rnd_npc_2_list;
-            break;
-        }
-        break;
-    case 2:
-        strcpy(header, "RSH_04:");
-        switch (group) {
-        case 0:
-            list = (const char**)rsh_04_rnd_npc_1_list;
-            break;
-        case 1:
-            list = (const char**)rsh_04_rnd_npc_2_list;
-            break;
-        case 2:
-            list = (const char**)rsh_04_rnd_npc_3_list;
-            break;
-        case 3:
-            list = (const char**)rsh_04_rnd_npc_4_list;
-            break;
-        }
-        break;
     }
     sprintf(buf, "%s%d(%s, %s)\n", header, group, list[index], value);
     return EVT_RETURN_DONE;
@@ -1618,45 +1618,45 @@ RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
     RshRndNpc* data = NULL;
 
     switch (room) {
-    case 0:
-        switch (group) {
         case 0:
-            data = rsh_01_rnd_npc_1;
+            switch (group) {
+            case 0:
+                data = rsh_01_rnd_npc_1;
+                break;
+            case 1:
+                data = rsh_01_rnd_npc_2;
+                break;
+            case 2:
+                data = rsh_01_rnd_npc_3;
+                break;
+            }
             break;
         case 1:
-            data = rsh_01_rnd_npc_2;
+            switch (group) {
+            case 0:
+                data = rsh_03_rnd_npc_1;
+                break;
+            case 1:
+                data = rsh_03_rnd_npc_2;
+                break;
+            }
             break;
         case 2:
-            data = rsh_01_rnd_npc_3;
+            switch (group) {
+            case 0:
+                data = rsh_04_rnd_npc_1;
+                break;
+            case 1:
+                data = rsh_04_rnd_npc_2;
+                break;
+            case 2:
+                data = rsh_04_rnd_npc_3;
+                break;
+            case 3:
+                data = rsh_04_rnd_npc_4;
+                break;
+            }
             break;
-        }
-        break;
-    case 1:
-        switch (group) {
-        case 0:
-            data = rsh_03_rnd_npc_1;
-            break;
-        case 1:
-            data = rsh_03_rnd_npc_2;
-            break;
-        }
-        break;
-    case 2:
-        switch (group) {
-        case 0:
-            data = rsh_04_rnd_npc_1;
-            break;
-        case 1:
-            data = rsh_04_rnd_npc_2;
-            break;
-        case 2:
-            data = rsh_04_rnd_npc_3;
-            break;
-        case 3:
-            data = rsh_04_rnd_npc_4;
-            break;
-        }
-        break;
     }
     if (data == NULL) {
         data = rsh_01_rnd_npc_1;
@@ -1674,51 +1674,51 @@ USER_FUNC(evt_rsh_set_rnd_npc) {
     s32 value;
 
     switch (room) {
-    case 0:
-        value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
-        switch (group) {
         case 0:
-            value |= index & 7;
+            value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                value |= index & 7;
+                break;
+            case 1:
+                value |= (index & 3) << 3;
+                break;
+            case 2:
+                value |= (index & 1) << 5;
+                break;
+            }
+            evtSetValue(NULL, GSW_RSH_01_RANDOM_NPCS, value);
             break;
         case 1:
-            value |= (index & 3) << 3;
+            value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                value |= index & 0xF;
+                break;
+            case 1:
+                value |= (index & 7) << 4;
+                break;
+            }
+            evtSetValue(NULL, GSW_RSH_03_RANDOM_NPCS, value);
             break;
         case 2:
-            value |= (index & 1) << 5;
+            value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                value |= index & 1;
+                break;
+            case 1:
+                value |= (index & 1) << 1;
+                break;
+            case 2:
+                value |= (index & 1) << 2;
+                break;
+            case 3:
+                value |= (index & 3) << 3;
+                break;
+            }
+            evtSetValue(NULL, GSW_RSH_04_RANDOM_NPCS, value);
             break;
-        }
-        evtSetValue(NULL, GSW_RSH_01_RANDOM_NPCS, value);
-        break;
-    case 1:
-        value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
-        switch (group) {
-        case 0:
-            value |= index & 0xF;
-            break;
-        case 1:
-            value |= (index & 7) << 4;
-            break;
-        }
-        evtSetValue(NULL, GSW_RSH_03_RANDOM_NPCS, value);
-        break;
-    case 2:
-        value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
-        switch (group) {
-        case 0:
-            value |= index & 1;
-            break;
-        case 1:
-            value |= (index & 1) << 1;
-            break;
-        case 2:
-            value |= (index & 1) << 2;
-            break;
-        case 3:
-            value |= (index & 3) << 3;
-            break;
-        }
-        evtSetValue(NULL, GSW_RSH_04_RANDOM_NPCS, value);
-        break;
     }
     return EVT_RETURN_DONE;
 }
@@ -1735,57 +1735,57 @@ USER_FUNC(evt_rsh_get_rnd_npc) {
     s32 index;
 
     switch (room) {
-    case 0:
-        value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
-        switch (group) {
         case 0:
-            index = value & 7;
+            value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                index = value & 7;
+                break;
+            case 1:
+                index = (value >> 3) & 3;
+                break;
+            case 2:
+                index = (value >> 5) & 1;
+                break;
+            default:
+                index = 0;
+                break;
+            }
             break;
         case 1:
-            index = (value >> 3) & 3;
+            value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                index = value & 0xF;
+                break;
+            case 1:
+                index = (value >> 4) & 7;
+                break;
+            default:
+                index = 0;
+                break;
+            }
             break;
         case 2:
-            index = (value >> 5) & 1;
+            value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                index = value & 1;
+                break;
+            case 1:
+                index = (value >> 1) & 1;
+                break;
+            case 2:
+                index = (value >> 2) & 1;
+                break;
+            case 3:
+                index = (value >> 3) & 3;
+                break;
+            default:
+                index = 0;
+                break;
+            }
             break;
-        default:
-            index = 0;
-            break;
-        }
-        break;
-    case 1:
-        value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
-        switch (group) {
-        case 0:
-            index = value & 0xF;
-            break;
-        case 1:
-            index = (value >> 4) & 7;
-            break;
-        default:
-            index = 0;
-            break;
-        }
-        break;
-    case 2:
-        value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
-        switch (group) {
-        case 0:
-            index = value & 1;
-            break;
-        case 1:
-            index = (value >> 1) & 1;
-            break;
-        case 2:
-            index = (value >> 2) & 1;
-            break;
-        case 3:
-            index = (value >> 3) & 3;
-            break;
-        default:
-            index = 0;
-            break;
-        }
-        break;
     }
     evtSetValue(event, args[2], index);
     return EVT_RETURN_DONE;

@@ -1616,43 +1616,43 @@ void yuunpc_pose_minigame4_main(void) {
             }
             mg = yuunpc_yuuminigame4_ptr->data;
             switch (npc->flags & YUUNPC_TURN_MASK) {
-            case 0:
-                break;
-            case YUUNPC_TURN_AWAY:
-                if (npc->turnTimer == 0) {
-                    npc->flags |= YUUNPC_TURN_FACING_BACK;
-                }
-                break;
-            case YUUNPC_TURN_BACK:
-                if (npc->turnTimer == 0) {
-                    npc->flags &= ~YUUNPC_TURN_MASK;
-                    npc->turnBaseDir = 0.0f;
-                    npc->motion = 0;
-                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
-                    npc->speed = 0.0f;
-                }
-                break;
-            case YUUNPC_TURN_FACING_BACK:
-                break;
+                case 0:
+                    break;
+                case YUUNPC_TURN_AWAY:
+                    if (npc->turnTimer == 0) {
+                        npc->flags |= YUUNPC_TURN_FACING_BACK;
+                    }
+                    break;
+                case YUUNPC_TURN_BACK:
+                    if (npc->turnTimer == 0) {
+                        npc->flags &= ~YUUNPC_TURN_MASK;
+                        npc->turnBaseDir = 0.0f;
+                        npc->motion = 0;
+                        yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                        npc->speed = 0.0f;
+                    }
+                    break;
+                case YUUNPC_TURN_FACING_BACK:
+                    break;
             }
             switch (npc->motion) {
-            case 0:
-            case 1:
-            case 2:
-                if (!(npc->flags & YUUNPC_FLAG_ON_GROUND)) {
-                    npc->motion = 3;
-                    yuunpc_pose_change(npc, npc->poses[3], 0.0f, yuunpc_wp->pose[npc->poses[3]].jump / yuunpc_wp->pose[npc->poses[3]].frames);
-                    npc->vy = 0.0f;
-                }
-                break;
-            case 3:
-            case 4:
-                if (npc->flags & YUUNPC_FLAG_ON_GROUND) {
-                    npc->motion = 0;
-                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
-                    npc->speed = 0.0f;
-                }
-                break;
+                case 0:
+                case 1:
+                case 2:
+                    if (!(npc->flags & YUUNPC_FLAG_ON_GROUND)) {
+                        npc->motion = 3;
+                        yuunpc_pose_change(npc, npc->poses[3], 0.0f, yuunpc_wp->pose[npc->poses[3]].jump / yuunpc_wp->pose[npc->poses[3]].frames);
+                        npc->vy = 0.0f;
+                    }
+                    break;
+                case 3:
+                case 4:
+                    if (npc->flags & YUUNPC_FLAG_ON_GROUND) {
+                        npc->motion = 0;
+                        yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                        npc->speed = 0.0f;
+                    }
+                    break;
             }
             if (npc->motion != 3 && npc->motion != 4) {
                 px = npc->pos.x;
@@ -1662,121 +1662,121 @@ void yuunpc_pose_minigame4_main(void) {
                 k = h;
 #endif
                 switch (h) {
-                case 0:
-                case 1:
-                    npc->dest = npc->goal;
-                    if (npc->pos.x < 1500.0f) {
-                        f32 dd = npc->pos.z - npc->dest.z;
-                        if (dd < 0.0f) {
-                            dd = -dd;
+                    case 0:
+                    case 1:
+                        npc->dest = npc->goal;
+                        if (npc->pos.x < 1500.0f) {
+                            f32 dd = npc->pos.z - npc->dest.z;
+                            if (dd < 0.0f) {
+                                dd = -dd;
+                            }
+                            if (dd > 16.666666f) {
+                                dd = 300.0f * (1.0f - dd / 300.0f);
+                                npc->dest.x = npc->pos.x + dd / 2.0f;
+                            }
                         }
-                        if (dd > 16.666666f) {
-                            dd = 300.0f * (1.0f - dd / 300.0f);
-                            npc->dest.x = npc->pos.x + dd / 2.0f;
-                        }
-                    }
-                    break;
+                        break;
 #if VERSION >= VERSION_JP
-                case 24:
-                case 25:
-                case 26:
-                case 27:
-                case 28:
-                    kind = 2;
-                    k -= 22;
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                    case 28:
+                        kind = 2;
+                        k -= 22;
 #endif
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
 #if VERSION <= VERSION_DEMO_JP
-                    if (h == 6) {
+                        if (h == 6) {
 #else
-                    if (k == 6) {
+                        if (k == 6) {
 #endif
-                        off = 0.0f;
-                    } else {
+                            off = 0.0f;
+                        } else {
 #if VERSION <= VERSION_DEMO_JP
-                        off = (3 - (h - 2)) * 50.0f;
+                            off = (3 - (h - 2)) * 50.0f;
 #else
-                        off = (3 - (k - 2)) * 50.0f;
+                            off = (3 - (k - 2)) * 50.0f;
 #endif
-                    }
-                    npc->dest.x = yuunpc_snap(px + off);
-                    {
+                        }
+                        npc->dest.x = yuunpc_snap(px + off);
+                        {
 #if VERSION <= VERSION_DEMO_JP
-                        f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
-                        npc->dest.z = npc->pos.z >= 0.0f ? 125.0f + sp : -125.0f + sp;
+                            f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
+                            npc->dest.z = npc->pos.z >= 0.0f ? 125.0f + sp : -125.0f + sp;
 #else
-                        f32 sp = ((npc->id % 101 - 50) / 50.0f) * (50.0f * (kind - 1) / 2.0f + 10.0f);
-                        npc->dest.z = npc->pos.z >= 0.0f ? 150.0f - 50.0f * kind / 2.0f + sp : -150.0f + 50.0f * kind / 2.0f + sp;
+                            f32 sp = ((npc->id % 101 - 50) / 50.0f) * (50.0f * (kind - 1) / 2.0f + 10.0f);
+                            npc->dest.z = npc->pos.z >= 0.0f ? 150.0f - 50.0f * kind / 2.0f + sp : -150.0f + 50.0f * kind / 2.0f + sp;
 #endif
-                    }
-                    npc->dest.y = npc->pos.y;
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                    off = (3 - (h - 7)) * 50.0f;
-                    npc->dest.x = yuunpc_snap(px + off);
-                    npc->dest.z = 0.65f * npc->goal.z;
-                    npc->dest.y = npc->pos.y;
-                    break;
-                case 11:
-                    npc->dest.x = yuunpc_snap(50.0f + px);
-                    npc->dest.z = npc->pos.z;
-                    npc->dest.y = npc->pos.y;
-                    break;
-                case 12:
-                case 13:
-                case 14:
-                case 15:
-                    if ((u16)npc->id & 3) {
-                        off = (3 - (h - 12)) * 50.0f;
-                        px += off;
-                        npc->dest.x = yuunpc_snap(px);
-                        npc->dest.z = -(75.0f + yuunpc_rnd10(npc));
+                        }
                         npc->dest.y = npc->pos.y;
-                    } else {
+                        break;
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                        off = (3 - (h - 7)) * 50.0f;
+                        npc->dest.x = yuunpc_snap(px + off);
+                        npc->dest.z = 0.65f * npc->goal.z;
+                        npc->dest.y = npc->pos.y;
+                        break;
+                    case 11:
                         npc->dest.x = yuunpc_snap(50.0f + px);
                         npc->dest.z = npc->pos.z;
                         npc->dest.y = npc->pos.y;
-                    }
-                    break;
-                case 16:
-                case 17:
-                case 18:
-                case 19:
-                    if ((u16)npc->id & 3) {
-                        off = (3 - (h - 16)) * 50.0f;
-                        px += off;
-                        npc->dest.x = yuunpc_snap(px);
-                        npc->dest.z = -25.0f + yuunpc_rnd10(npc);
-                        npc->dest.y = npc->pos.y;
-                    } else {
-                        npc->dest.x = yuunpc_snap(50.0f + px);
-                        npc->dest.z = npc->pos.z;
-                        npc->dest.y = npc->pos.y;
-                    }
-                    break;
-                case 20:
-                case 21:
-                case 22:
-                case 23:
-                    if ((u16)npc->id & 3) {
-                        off = (3 - (h - 20)) * 50.0f;
-                        px += off;
-                        npc->dest.x = yuunpc_snap(px);
-                        npc->dest.z = 75.0f + yuunpc_rnd10(npc);
-                        npc->dest.y = npc->pos.y;
-                    } else {
-                        npc->dest.x = yuunpc_snap(50.0f + px);
-                        npc->dest.z = npc->pos.z;
-                        npc->dest.y = npc->pos.y;
-                    }
-                    break;
+                        break;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                        if ((u16)npc->id & 3) {
+                            off = (3 - (h - 12)) * 50.0f;
+                            px += off;
+                            npc->dest.x = yuunpc_snap(px);
+                            npc->dest.z = -(75.0f + yuunpc_rnd10(npc));
+                            npc->dest.y = npc->pos.y;
+                        } else {
+                            npc->dest.x = yuunpc_snap(50.0f + px);
+                            npc->dest.z = npc->pos.z;
+                            npc->dest.y = npc->pos.y;
+                        }
+                        break;
+                    case 16:
+                    case 17:
+                    case 18:
+                    case 19:
+                        if ((u16)npc->id & 3) {
+                            off = (3 - (h - 16)) * 50.0f;
+                            px += off;
+                            npc->dest.x = yuunpc_snap(px);
+                            npc->dest.z = -25.0f + yuunpc_rnd10(npc);
+                            npc->dest.y = npc->pos.y;
+                        } else {
+                            npc->dest.x = yuunpc_snap(50.0f + px);
+                            npc->dest.z = npc->pos.z;
+                            npc->dest.y = npc->pos.y;
+                        }
+                        break;
+                    case 20:
+                    case 21:
+                    case 22:
+                    case 23:
+                        if ((u16)npc->id & 3) {
+                            off = (3 - (h - 20)) * 50.0f;
+                            px += off;
+                            npc->dest.x = yuunpc_snap(px);
+                            npc->dest.z = 75.0f + yuunpc_rnd10(npc);
+                            npc->dest.y = npc->pos.y;
+                        } else {
+                            npc->dest.x = yuunpc_snap(50.0f + px);
+                            npc->dest.z = npc->pos.z;
+                            npc->dest.y = npc->pos.y;
+                        }
+                        break;
                 }
                 PSVECSubtract(&npc->dest, &npc->pos, &npc->dir);
                 npc->dir.y = 0.0f;
@@ -1784,132 +1784,132 @@ void yuunpc_pose_minigame4_main(void) {
                 w = 150.0f * npc->errper;
                 mode = mg->state;
                 switch (mode) {
-                default:
-                    d = 0.0f;
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                    switch (h) {
-                    case 0:
+                    default:
+                        d = 0.0f;
+                        break;
+                    case 1:
                     case 2:
                     case 3:
                     case 4:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 16:
-                    case 17:
-                    case 18:
-                    case 20:
-                    case 21:
-                    case 22:
+                        switch (h) {
+                        case 0:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 16:
+                        case 17:
+                        case 18:
+                        case 20:
+                        case 21:
+                        case 22:
 #if VERSION >= VERSION_JP
-                    case 24:
-                    case 25:
-                    case 26:
+                        case 24:
+                        case 25:
+                        case 26:
 #endif
-                        if (npc->pos.z >= -150.0f && npc->pos.z < 150.0f + w) {
-                            d = 150.0f + w - npc->pos.z;
-                        } else {
-                            d = 0.0f;
-                        }
-                        break;
-                    case 1:
-                    case 10:
-                        d = 0.0f;
-                        break;
-                    case 5:
-                    case 6:
-#if VERSION >= VERSION_JP
-                    case 27:
-                    case 28:
-#endif
-                        z = npc->pos.z;
-                        if (z >= -150.0f && z < 150.0f) {
-                            f32 tt = 50.0f * kind;
-                            f32 a = -150.0f + tt + w;
-                            if (z >= a && z < 150.0f - tt) {
-                                d = 0.0f;
-                            } else if (z > 0.0f) {
-                                d = 150.0f + w - z;
+                            if (npc->pos.z >= -150.0f && npc->pos.z < 150.0f + w) {
+                                d = 150.0f + w - npc->pos.z;
                             } else {
-                                d = a - z;
+                                d = 0.0f;
                             }
-                        } else {
+                            break;
+                        case 1:
+                        case 10:
                             d = 0.0f;
-                        }
-                        break;
-                    }
-                    break;
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    switch (h) {
-                    case 0:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 16:
-                    case 17:
-                    case 18:
-                    case 20:
-                    case 21:
-                    case 22:
+                            break;
+                        case 5:
+                        case 6:
 #if VERSION >= VERSION_JP
-                    case 24:
-                    case 25:
-                    case 26:
+                        case 27:
+                        case 28:
 #endif
-                        if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
-                            d = -(-150.0f + w) + npc->pos.z;
-                        } else {
-                            d = 0.0f;
-                        }
-                        break;
-                    case 1:
-                    case 10:
-                        d = 0.0f;
-                        break;
-                    case 5:
-                    case 6:
-#if VERSION <= VERSION_DEMO_JP
-                    {
-#else
-                    case 27:
-                        case 28: {
-#endif
-                            if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+                            z = npc->pos.z;
+                            if (z >= -150.0f && z < 150.0f) {
                                 f32 tt = 50.0f * kind;
-                                if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {
+                                f32 a = -150.0f + tt + w;
+                                if (z >= a && z < 150.0f - tt) {
                                     d = 0.0f;
-                                } else if (npc->pos.z > 0.0f) {
-#if VERSION <= VERSION_DEMO_JP
-                                    d = -(100.0f + w) + npc->pos.z;
-#else
-                                    d = npc->pos.z - (150.0f - tt + w);
-#endif
+                                } else if (z > 0.0f) {
+                                    d = 150.0f + w - z;
                                 } else {
-                                    d = -(-150.0f + w) + npc->pos.z;
+                                    d = a - z;
                                 }
                             } else {
                                 d = 0.0f;
                             }
+                            break;
+                        }
+                        break;
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        switch (h) {
+                        case 0:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 16:
+                        case 17:
+                        case 18:
+                        case 20:
+                        case 21:
+                        case 22:
+#if VERSION >= VERSION_JP
+                        case 24:
+                        case 25:
+                        case 26:
+#endif
+                            if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+                                d = -(-150.0f + w) + npc->pos.z;
+                            } else {
+                                d = 0.0f;
+                            }
+                            break;
+                        case 1:
+                        case 10:
+                            d = 0.0f;
+                            break;
+                        case 5:
+                        case 6:
 #if VERSION <= VERSION_DEMO_JP
-                        } break;
-                    }
-                    break;
+                        {
+#else
+                        case 27:
+                            case 28: {
+#endif
+                                if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+                                    f32 tt = 50.0f * kind;
+                                    if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {
+                                        d = 0.0f;
+                                    } else if (npc->pos.z > 0.0f) {
+#if VERSION <= VERSION_DEMO_JP
+                                        d = -(100.0f + w) + npc->pos.z;
+#else
+                                        d = npc->pos.z - (150.0f - tt + w);
+#endif
+                                    } else {
+                                        d = -(-150.0f + w) + npc->pos.z;
+                                    }
+                                } else {
+                                    d = 0.0f;
+                                }
+#if VERSION <= VERSION_DEMO_JP
+                            } break;
+                        }
+                        break;
                 }
                 d -= 20.0f;
 #else
@@ -1931,245 +1931,235 @@ void yuunpc_pose_minigame4_main(void) {
                 cnt = d / 0.0f;
 #endif
                 switch (npc->flags & YUUNPC_TURN_MASK) {
-                case 0:
-                    if (mg->state == 0) {
-                        n = 1;
-                    } else {
-                        switch (mode) {
-                        case 1:
-                        case 5:
-                            if (cnt >= 60) {
-                                cnt += 60;
-                            } else {
-                                cnt += cnt;
+                    case 0:
+                        if (mg->state == 0) {
+                            n = 1;
+                        } else {
+                            switch (mode) {
+                            case 1:
+                            case 5:
+                                if (cnt >= 60) {
+                                    cnt += 60;
+                                } else {
+                                    cnt += cnt;
+                                }
+                                break;
+                            case 2:
+                            case 6:
+                                if (cnt >= mg->timer) {
+                                    cnt += mg->timer;
+                                } else {
+                                    cnt += cnt;
+                                }
+                                break;
                             }
-                            break;
-                        case 2:
-                        case 6:
-                            if (cnt >= mg->timer) {
-                                cnt += mg->timer;
+                            if (cnt < 30) {
+                                n = 0;
                             } else {
-                                cnt += cnt;
+#if VERSION <= VERSION_DEMO_JP
+                                n = (d - 50.0f) / 3.3333333f;
+#else
+                                n = d / 2.9166667f;
+#endif
                             }
-                            break;
                         }
+                        if (!(yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) && npc->goal.x > npc->pos.x && n <= 0) {
+                            npc->flags |= YUUNPC_TURN_AWAY;
+                            npc->turnTimer = 30;
+                            npc->turnBaseDir = ext->dir;
+                            npc->motion = 0;
+                            yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                            npc->speed = 0.0f;
+                            errper_set_rtn(npc);
+                        }
+                        break;
+                    case YUUNPC_TURN_AWAY:
+                    case YUUNPC_TURN_BACK:
+                        break;
+                    case YUUNPC_TURN_FACING_BACK:
                         if (cnt < 30) {
                             n = 0;
                         } else {
+                            cnt = 30;
 #if VERSION <= VERSION_DEMO_JP
                             n = (d - 50.0f) / 3.3333333f;
 #else
                             n = d / 2.9166667f;
 #endif
                         }
-                    }
-                    if (!(yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) && npc->goal.x > npc->pos.x && n <= 0) {
-                        npc->flags |= YUUNPC_TURN_AWAY;
-                        npc->turnTimer = 30;
-                        npc->turnBaseDir = ext->dir;
-                        npc->motion = 0;
-                        yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
-                        npc->speed = 0.0f;
-                        errper_set_rtn(npc);
-                    }
-                    break;
-                case YUUNPC_TURN_AWAY:
-                case YUUNPC_TURN_BACK:
-                    break;
-                case YUUNPC_TURN_FACING_BACK:
-                    if (cnt < 30) {
-                        n = 0;
-                    } else {
-                        cnt = 30;
-#if VERSION <= VERSION_DEMO_JP
-                        n = (d - 50.0f) / 3.3333333f;
-#else
-                        n = d / 2.9166667f;
-#endif
-                    }
-                    if (npc->goal.x == npc->pos.x || mg->state == 0 || ((mg->state == 4 || mg->state == 8) && cnt + n >= mg->timer)) {
-                        npc->flags &= ~YUUNPC_TURN_AWAY;
-                        npc->turnTimer = 30;
-                        errper_set_rtn(npc);
-                    }
-                    break;
+                        if (npc->goal.x == npc->pos.x || mg->state == 0 || ((mg->state == 4 || mg->state == 8) && cnt + n >= mg->timer)) {
+                            npc->flags &= ~YUUNPC_TURN_AWAY;
+                            npc->turnTimer = 30;
+                            errper_set_rtn(npc);
+                        }
+                        break;
                 }
             }
             switch (npc->flags & YUUNPC_TURN_MASK) {
-            case 0:
-                break;
-            case YUUNPC_TURN_AWAY:
-                npc->turnTimer--;
-                ext->dir = npc->turnBaseDir + -450.0f * (1.0f - npc->turnTimer / 30.0f);
-                ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
-                break;
-            case YUUNPC_TURN_FACING_BACK:
-                t = gp->retraceCount + (u16)npc->id;
-                if (t & 0x20) {
-                    n = 15 - (t & 0x1f);
-                } else {
-                    n = (t & 0x1f) - 15;
-                }
-                ext->dir = -450.0f + npc->turnBaseDir + 2.0f * n;
-                ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
-                break;
-            case YUUNPC_TURN_BACK:
-                npc->turnTimer--;
-                ext->dir = -180.0f + (-450.0f + npc->turnBaseDir) + -450.0f * (1.0f - npc->turnTimer / 30.0f);
-                ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
-                break;
+                case 0:
+                    break;
+                case YUUNPC_TURN_AWAY:
+                    npc->turnTimer--;
+                    ext->dir = npc->turnBaseDir + -450.0f * (1.0f - npc->turnTimer / 30.0f);
+                    ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
+                    break;
+                case YUUNPC_TURN_FACING_BACK:
+                    t = gp->retraceCount + (u16)npc->id;
+                    if (t & 0x20) {
+                        n = 15 - (t & 0x1f);
+                    } else {
+                        n = (t & 0x1f) - 15;
+                    }
+                    ext->dir = -450.0f + npc->turnBaseDir + 2.0f * n;
+                    ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
+                    break;
+                case YUUNPC_TURN_BACK:
+                    npc->turnTimer--;
+                    ext->dir = -180.0f + (-450.0f + npc->turnBaseDir) + -450.0f * (1.0f - npc->turnTimer / 30.0f);
+                    ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
+                    break;
             }
             npc->zofs = 0.0f;
             if (npc->pos.x < 1500.0f) {
                 dz = 0.0f;
                 mode = mg->state;
                 switch (mode) {
-                case 2:
-                case 3:
-                case 4:
-                    switch (npc->flags & YUUNPC_TURN_MASK) {
-                    case YUUNPC_TURN_FACING_BACK:
-                        dz = 0.0f;
-                        break;
-                    case YUUNPC_TURN_AWAY:
-                    case YUUNPC_TURN_BACK:
+                    case 2:
+                    case 3:
+                    case 4:
+                        switch (npc->flags & YUUNPC_TURN_MASK) {
+                        case YUUNPC_TURN_FACING_BACK:
+                            dz = 0.0f;
+                            break;
+                        case YUUNPC_TURN_AWAY:
+                        case YUUNPC_TURN_BACK:
 #if VERSION <= VERSION_DEMO_JP
-                        dz = 1.6666666f;
+                            dz = 1.6666666f;
 #else
-                        dz = 0.0f;
+                            dz = 0.0f;
 #endif
-                        break;
-                    case 0:
+                            break;
+                        case 0:
 #if VERSION <= VERSION_DEMO_JP
-                        dz = 3.3333333f;
+                            dz = 3.3333333f;
 #else
-                        dz = 2.9166667f;
+                            dz = 2.9166667f;
 #endif
+                            break;
+                        }
                         break;
-                    }
-                    break;
-                case 6:
-                case 7:
-                case 8:
-                    switch (npc->flags & YUUNPC_TURN_MASK) {
-                    case YUUNPC_TURN_FACING_BACK:
-                        dz = -0.0f;
-                        break;
-                    case YUUNPC_TURN_AWAY:
-                    case YUUNPC_TURN_BACK:
+                    case 6:
+                    case 7:
+                    case 8:
+                        switch (npc->flags & YUUNPC_TURN_MASK) {
+                        case YUUNPC_TURN_FACING_BACK:
+                            dz = -0.0f;
+                            break;
+                        case YUUNPC_TURN_AWAY:
+                        case YUUNPC_TURN_BACK:
 #if VERSION <= VERSION_DEMO_JP
-                        dz = -1.6666666f;
+                            dz = -1.6666666f;
 #else
-                        dz = -0.0f;
+                            dz = -0.0f;
 #endif
-                        break;
-                    case 0:
+                            break;
+                        case 0:
 #if VERSION <= VERSION_DEMO_JP
-                        dz = -3.3333333f;
+                            dz = -3.3333333f;
 #else
-                        dz = -2.9166667f;
+                            dz = -2.9166667f;
 #endif
+                            break;
+                        }
                         break;
-                    }
-                    break;
                 }
                 switch (mode) {
-                case 2:
-                case 6:
-                    dz = dz * (60 - mg->timer) / 60.0f;
-                    break;
+                    case 2:
+                    case 6:
+                        dz = dz * (60 - mg->timer) / 60.0f;
+                        break;
                 }
                 npc->zofs += dz;
             }
             do {
                 kind = 0;
                 switch (npc->motion) {
-                case 0:
-                    if (goalincheck(npc) == -1) {
-                        break;
-                    }
-                    if (yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) {
-                        break;
-                    }
-                    if (npc->state >= 2 || (npc->state <= 1 && irand(36) == 0)) {
-                        px = npc->pos.x;
-                        hb = YUUNPC_HIT_AT(25.0f + px, &npc->pos.z);
-                        ha = YUUNPC_HIT_AT(75.0f + px, &npc->pos.z);
-                        if (npc->state <= 3 && irand(2)) {
-                            if (hb >= npc->pos.y) {
-                                yuunpc_walk(npc);
+                    case 0:
+                        if (goalincheck(npc) == -1) {
+                            break;
+                        }
+                        if (yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) {
+                            break;
+                        }
+                        if (npc->state >= 2 || (npc->state <= 1 && irand(36) == 0)) {
+                            px = npc->pos.x;
+                            hb = YUUNPC_HIT_AT(25.0f + px, &npc->pos.z);
+                            ha = YUUNPC_HIT_AT(75.0f + px, &npc->pos.z);
+                            if (npc->state <= 3 && irand(2)) {
+                                if (hb >= npc->pos.y) {
+                                    yuunpc_walk(npc);
+                                    kind = 1;
+                                }
+                            } else if (!(npc->flags & YUUNPC_TURN_MASK) || ((npc->flags & YUUNPC_TURN_MASK) && (hb >= npc->pos.y || (hb < npc->pos.y && ha < npc->pos.y)))) {
+                                yuunpc_run(npc);
                                 kind = 1;
                             }
-                        } else if (!(npc->flags & YUUNPC_TURN_MASK) || ((npc->flags & YUUNPC_TURN_MASK) && (hb >= npc->pos.y || (hb < npc->pos.y && ha < npc->pos.y)))) {
-                            yuunpc_run(npc);
-                            kind = 1;
                         }
-                    }
-                    break;
-                case 1:
-                    if (goalincheck(npc) == -1) {
-                        yuunpc_stop(npc);
                         break;
-                    }
-                    if (npc->flags & YUUNPC_TURN_MASK) {
-                        Vec v1, s1;
-
-                        PSVECSubtract(&npc->dest, &npc->pos, &v1);
-                        PSVECNormalize(&v1, &v1);
-                        PSVECScale(&v1, &s1, 10.0f);
-                        ha = yuunpc_hit_ofs(npc, &s1);
-                        PSVECScale(&v1, &s1, 25.0f);
-                        hb = yuunpc_hit_ofs(npc, &s1);
-                        PSVECScale(&v1, &s1, 75.0f);
-                        hc = yuunpc_hit_ofs(npc, &s1);
-                        if (ha > npc->pos.y) {
-                            YUU_JUMP(npc);
-                        } else if (hb < npc->pos.y && hc == npc->pos.y) {
+                    case 1:
+                        if (goalincheck(npc) == -1) {
                             yuunpc_stop(npc);
-                        } else if (irand(60) == 0) {
-                            if (npc->state <= 1 && irand(3) == 0) {
-                                yuunpc_stop(npc);
-                            } else if (hb >= npc->pos.y) {
-                                yuunpc_run(npc);
-                            }
+                            break;
                         }
-                    } else {
-                        Vec v2, s2;
+                        if (npc->flags & YUUNPC_TURN_MASK) {
+                            Vec v1, s1;
 
-                        PSVECSubtract(&npc->dest, &npc->pos, &v2);
-                        PSVECNormalize(&v2, &v2);
-                        PSVECScale(&v2, &s2, 20.0f);
-                        ha = yuunpc_hit_ofs(npc, &s2);
-                        PSVECScale(&v2, &s2, 25.0f);
-                        hb = yuunpc_hit_ofs(npc, &s2);
-                        PSVECScale(&v2, &s2, 75.0f);
-                        hc = yuunpc_hit_ofs(npc, &s2);
-                        if (ha > npc->pos.y) {
-                            if (mg->state == 0) {
+                            PSVECSubtract(&npc->dest, &npc->pos, &v1);
+                            PSVECNormalize(&v1, &v1);
+                            PSVECScale(&v1, &s1, 10.0f);
+                            ha = yuunpc_hit_ofs(npc, &s1);
+                            PSVECScale(&v1, &s1, 25.0f);
+                            hb = yuunpc_hit_ofs(npc, &s1);
+                            PSVECScale(&v1, &s1, 75.0f);
+                            hc = yuunpc_hit_ofs(npc, &s1);
+                            if (ha > npc->pos.y) {
                                 YUU_JUMP(npc);
-                            } else {
+                            } else if (hb < npc->pos.y && hc == npc->pos.y) {
                                 yuunpc_stop(npc);
+                            } else if (irand(60) == 0) {
+                                if (npc->state <= 1 && irand(3) == 0) {
+                                    yuunpc_stop(npc);
+                                } else if (hb >= npc->pos.y) {
+                                    yuunpc_run(npc);
+                                }
                             }
-                        } else if ((hb < npc->pos.y && hc == npc->pos.y) || (npc->state <= 3 && irand(60) == 0)) {
-                            if (npc->state <= 1 && irand(3) == 0) {
-                                yuunpc_stop(npc);
-                            } else {
-                                yuunpc_run(npc);
-                            }
-                        }
-                    }
-#if VERSION <= VERSION_DEMO_JP
-                    t = gp->retraceCount;
-                    if (!(t & 0xf)) {
-                        if (t & 0x10) {
-                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
                         } else {
-                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
+                            Vec v2, s2;
+
+                            PSVECSubtract(&npc->dest, &npc->pos, &v2);
+                            PSVECNormalize(&v2, &v2);
+                            PSVECScale(&v2, &s2, 20.0f);
+                            ha = yuunpc_hit_ofs(npc, &s2);
+                            PSVECScale(&v2, &s2, 25.0f);
+                            hb = yuunpc_hit_ofs(npc, &s2);
+                            PSVECScale(&v2, &s2, 75.0f);
+                            hc = yuunpc_hit_ofs(npc, &s2);
+                            if (ha > npc->pos.y) {
+                                if (mg->state == 0) {
+                                    YUU_JUMP(npc);
+                                } else {
+                                    yuunpc_stop(npc);
+                                }
+                            } else if ((hb < npc->pos.y && hc == npc->pos.y) || (npc->state <= 3 && irand(60) == 0)) {
+                                if (npc->state <= 1 && irand(3) == 0) {
+                                    yuunpc_stop(npc);
+                                } else {
+                                    yuunpc_run(npc);
+                                }
+                            }
                         }
-                    }
-#else
-                    if (!(c28 & 0x3f)) {
-                        t = gp->retraceCount + i;
+#if VERSION <= VERSION_DEMO_JP
+                        t = gp->retraceCount;
                         if (!(t & 0xf)) {
                             if (t & 0x10) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
@@ -2177,74 +2167,74 @@ void yuunpc_pose_minigame4_main(void) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
                         }
-                    }
-                    c28++;
-#endif
-                    break;
-                case 2:
-                    if (goalincheck(npc) == -1) {
-                        yuunpc_stop(npc);
-                        break;
-                    }
-                    if (npc->flags & YUUNPC_TURN_MASK) {
-                        Vec v3, s3;
-
-                        PSVECSubtract(&npc->dest, &npc->pos, &v3);
-                        PSVECNormalize(&v3, &v3);
-                        PSVECScale(&v3, &s3, 20.0f);
-                        ha = yuunpc_hit_ofs(npc, &s3);
-                        PSVECScale(&v3, &s3, 25.0f);
-                        hb = yuunpc_hit_ofs(npc, &s3);
-                        PSVECScale(&v3, &s3, 75.0f);
-                        hc = yuunpc_hit_ofs(npc, &s3);
-                        if (ha > npc->pos.y) {
-                            YUU_JUMP(npc);
-                        } else if (hb < npc->pos.y && hc == npc->pos.y) {
-                            yuunpc_stop(npc);
-                        } else if (npc->state <= 3 && irand(60) == 0) {
-                            if (npc->state <= 1 && irand(3) == 0) {
-                                yuunpc_stop(npc);
-                            } else if (hb >= npc->pos.y) {
-                                yuunpc_walk(npc);
-                            }
-                        }
-                    } else {
-                        Vec v4, s4;
-
-                        PSVECSubtract(&npc->dest, &npc->pos, &v4);
-                        PSVECNormalize(&v4, &v4);
-                        PSVECScale(&v4, &s4, 5.0f);
-                        ha = yuunpc_hit_ofs(npc, &s4);
-                        PSVECScale(&v4, &s4, 45.0f);
-                        hb = yuunpc_hit_ofs(npc, &s4);
-                        PSVECScale(&v4, &s4, 55.0f);
-                        hc = yuunpc_hit_ofs(npc, &s4);
-                        if ((ha < npc->pos.y && hc == npc->pos.y) || hb > npc->pos.y) {
-                            if (mg->state == 0) {
-                                YUU_JUMP(npc);
-                            } else {
-                                yuunpc_stop(npc);
-                            }
-                        } else if (npc->state <= 3 && irand(60) == 0) {
-                            if (npc->state <= 1 && irand(3) == 0) {
-                                yuunpc_stop(npc);
-                            } else if (yuunpc_hit_get(25.0f + npc->pos.x, &npc->pos.z) >= npc->pos.y) {
-                                yuunpc_walk(npc);
-                            }
-                        }
-                    }
-#if VERSION <= VERSION_DEMO_JP
-                    t = gp->retraceCount;
-                    if (!(t & 7)) {
-                        if (t & 8) {
-                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
-                        } else {
-                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
-                        }
-                    }
 #else
-                    if (!(c27 & 0x3f)) {
-                        t = gp->retraceCount + i;
+                        if (!(c28 & 0x3f)) {
+                            t = gp->retraceCount + i;
+                            if (!(t & 0xf)) {
+                                if (t & 0x10) {
+                                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
+                                } else {
+                                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
+                                }
+                            }
+                        }
+                        c28++;
+#endif
+                        break;
+                    case 2:
+                        if (goalincheck(npc) == -1) {
+                            yuunpc_stop(npc);
+                            break;
+                        }
+                        if (npc->flags & YUUNPC_TURN_MASK) {
+                            Vec v3, s3;
+
+                            PSVECSubtract(&npc->dest, &npc->pos, &v3);
+                            PSVECNormalize(&v3, &v3);
+                            PSVECScale(&v3, &s3, 20.0f);
+                            ha = yuunpc_hit_ofs(npc, &s3);
+                            PSVECScale(&v3, &s3, 25.0f);
+                            hb = yuunpc_hit_ofs(npc, &s3);
+                            PSVECScale(&v3, &s3, 75.0f);
+                            hc = yuunpc_hit_ofs(npc, &s3);
+                            if (ha > npc->pos.y) {
+                                YUU_JUMP(npc);
+                            } else if (hb < npc->pos.y && hc == npc->pos.y) {
+                                yuunpc_stop(npc);
+                            } else if (npc->state <= 3 && irand(60) == 0) {
+                                if (npc->state <= 1 && irand(3) == 0) {
+                                    yuunpc_stop(npc);
+                                } else if (hb >= npc->pos.y) {
+                                    yuunpc_walk(npc);
+                                }
+                            }
+                        } else {
+                            Vec v4, s4;
+
+                            PSVECSubtract(&npc->dest, &npc->pos, &v4);
+                            PSVECNormalize(&v4, &v4);
+                            PSVECScale(&v4, &s4, 5.0f);
+                            ha = yuunpc_hit_ofs(npc, &s4);
+                            PSVECScale(&v4, &s4, 45.0f);
+                            hb = yuunpc_hit_ofs(npc, &s4);
+                            PSVECScale(&v4, &s4, 55.0f);
+                            hc = yuunpc_hit_ofs(npc, &s4);
+                            if ((ha < npc->pos.y && hc == npc->pos.y) || hb > npc->pos.y) {
+                                if (mg->state == 0) {
+                                    YUU_JUMP(npc);
+                                } else {
+                                    yuunpc_stop(npc);
+                                }
+                            } else if (npc->state <= 3 && irand(60) == 0) {
+                                if (npc->state <= 1 && irand(3) == 0) {
+                                    yuunpc_stop(npc);
+                                } else if (yuunpc_hit_get(25.0f + npc->pos.x, &npc->pos.z) >= npc->pos.y) {
+                                    yuunpc_walk(npc);
+                                }
+                            }
+                        }
+#if VERSION <= VERSION_DEMO_JP
+                        t = gp->retraceCount;
                         if (!(t & 7)) {
                             if (t & 8) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
@@ -2252,41 +2242,51 @@ void yuunpc_pose_minigame4_main(void) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
                         }
-                    }
-                    c27++;
+#else
+                        if (!(c27 & 0x3f)) {
+                            t = gp->retraceCount + i;
+                            if (!(t & 7)) {
+                                if (t & 8) {
+                                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
+                                } else {
+                                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
+                                }
+                            }
+                        }
+                        c27++;
 #endif
-                    break;
-                case 3:
-                case 4:
-                    break;
+                        break;
+                    case 3:
+                    case 4:
+                        break;
                 }
             } while (kind);
             switch (npc->motion) {
-            case 0:
-            case 1:
-            case 2:
-                if (hitcheck(npc) == -1) {
-                    npc->flags &= ~YUUNPC_FLAG_ON_GROUND;
-                } else {
-                    npc->flags |= YUUNPC_FLAG_ON_GROUND;
-                }
-                break;
-            case 3:
-            case 4:
-                hitcheck(npc);
-                if (fallcheck(npc) == -1) {
-                    npc->flags |= YUUNPC_FLAG_ON_GROUND;
-                } else {
-                    npc->flags &= ~YUUNPC_FLAG_ON_GROUND;
-                }
-                if (npc->pos.y <= -100.0f) {
-                    npc->flags |= YUUNPC_FLAG_FELL;
-                }
-                if (npc->pos.y <= -500.0f) {
-                    npc->flags |= YUUNPC_FLAG_GONE;
-                    ext->flags &= ~EXT_POSE_FLAG_VISIBLE;
-                }
-                break;
+                case 0:
+                case 1:
+                case 2:
+                    if (hitcheck(npc) == -1) {
+                        npc->flags &= ~YUUNPC_FLAG_ON_GROUND;
+                    } else {
+                        npc->flags |= YUUNPC_FLAG_ON_GROUND;
+                    }
+                    break;
+                case 3:
+                case 4:
+                    hitcheck(npc);
+                    if (fallcheck(npc) == -1) {
+                        npc->flags |= YUUNPC_FLAG_ON_GROUND;
+                    } else {
+                        npc->flags &= ~YUUNPC_FLAG_ON_GROUND;
+                    }
+                    if (npc->pos.y <= -100.0f) {
+                        npc->flags |= YUUNPC_FLAG_FELL;
+                    }
+                    if (npc->pos.y <= -500.0f) {
+                        npc->flags |= YUUNPC_FLAG_GONE;
+                        ext->flags &= ~EXT_POSE_FLAG_VISIBLE;
+                    }
+                    break;
             }
             (*ext->mtx)[0][3] = npc->pos.x;
             (*ext->mtx)[1][3] = npc->pos.y;

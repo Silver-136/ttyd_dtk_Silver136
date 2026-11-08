@@ -158,18 +158,18 @@ static void effKemuTestDisp(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     switch (type) {
-    case 1:
-        start = 1;
-        alpha = 0x40;
-        break;
-    case 3:
-        alpha = 0xc8;
-        break;
-    case 10:
-    case 12:
-        start = 1;
-        alpha = 0xc8;
-        break;
+        case 1:
+            start = 1;
+            alpha = 0x40;
+            break;
+        case 3:
+            alpha = 0xc8;
+            break;
+        case 10:
+        case 12:
+            start = 1;
+            alpha = 0xc8;
+            break;
     }
     w = 32.0f;
     neg = -w;
@@ -256,117 +256,117 @@ static void effKemuTestMain(EffectEntry* effect) {
         }
         work->frame++;
         switch (type) {
-        case 1:
-        case 3:
-        case 19:
-            work->pos.y += work->gravity;
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            break;
-        case 10:
-        case 14:
-            a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-            work->pos.x += work->gravity * (f32)sin(a);
-            work->pos.y += -work->gravity * (f32)cos(a);
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            break;
-        case 4:
-        case 9:
-        case 17:
-        case 20:
-            work->pos.x += work->vel.x;
-            work->pos.y += work->vel.y;
-            work->vel.x *= 0.9f;
-            work->vel.y *= 0.9f;
-            break;
-        case 5:
-        case 21:
-            work->pos.x += work->vel.x;
-            work->pos.y += work->vel.y;
-            work->vel.x *= 0.9f;
-            work->vel.y *= 0.9f;
-            break;
-        case 6:
-            work->pos.x += work->vel.x;
-            work->vel.x *= 0.95f;
-            work->pos.y += work->gravity;
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            break;
-        case 7:
-        case 8:
-        case 16:
-            work->pos.x += work->vel.x;
-            work->pos.y += work->vel.y;
-            work->vel.x *= 0.9f;
-            work->vel.y *= 0.9f;
-            break;
-        case 11:
-            work->pos.x += work->vel.x;
-            work->pos.y += work->vel.y;
-            work->pos.z += work->vel.z;
-            work->vel.x *= 0.9f;
-            work->vel.y *= 0.9f;
-            work->vel.z *= 0.9f;
-            break;
-        case 12:
-            a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-            work->pos.x += work->gravity * (f32)sin(a);
-            work->pos.y += -work->gravity * (f32)cos(a);
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            work->scale += 0.05f;
-            break;
-        case 13:
-            work->pos.x += work->vel.x;
-            work->pos.y += work->vel.y;
-            work->vel.x *= 0.9f;
-            work->vel.y *= 0.9f;
-            work->pos.y += work->gravity;
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            break;
+            case 1:
+            case 3:
+            case 19:
+                work->pos.y += work->gravity;
+                work->gravity += work->gravityAcc;
+                work->gravityAcc *= work->gravityMul;
+                break;
+            case 10:
+            case 14:
+                a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+                work->pos.x += work->gravity * (f32)sin(a);
+                work->pos.y += -work->gravity * (f32)cos(a);
+                work->gravity += work->gravityAcc;
+                work->gravityAcc *= work->gravityMul;
+                break;
+            case 4:
+            case 9:
+            case 17:
+            case 20:
+                work->pos.x += work->vel.x;
+                work->pos.y += work->vel.y;
+                work->vel.x *= 0.9f;
+                work->vel.y *= 0.9f;
+                break;
+            case 5:
+            case 21:
+                work->pos.x += work->vel.x;
+                work->pos.y += work->vel.y;
+                work->vel.x *= 0.9f;
+                work->vel.y *= 0.9f;
+                break;
+            case 6:
+                work->pos.x += work->vel.x;
+                work->vel.x *= 0.95f;
+                work->pos.y += work->gravity;
+                work->gravity += work->gravityAcc;
+                work->gravityAcc *= work->gravityMul;
+                break;
+            case 7:
+            case 8:
+            case 16:
+                work->pos.x += work->vel.x;
+                work->pos.y += work->vel.y;
+                work->vel.x *= 0.9f;
+                work->vel.y *= 0.9f;
+                break;
+            case 11:
+                work->pos.x += work->vel.x;
+                work->pos.y += work->vel.y;
+                work->pos.z += work->vel.z;
+                work->vel.x *= 0.9f;
+                work->vel.y *= 0.9f;
+                work->vel.z *= 0.9f;
+                break;
+            case 12:
+                a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+                work->pos.x += work->gravity * (f32)sin(a);
+                work->pos.y += -work->gravity * (f32)cos(a);
+                work->gravity += work->gravityAcc;
+                work->gravityAcc *= work->gravityMul;
+                work->scale += 0.05f;
+                break;
+            case 13:
+                work->pos.x += work->vel.x;
+                work->pos.y += work->vel.y;
+                work->vel.x *= 0.9f;
+                work->vel.y *= 0.9f;
+                work->pos.y += work->gravity;
+                work->gravity += work->gravityAcc;
+                work->gravityAcc *= work->gravityMul;
+                break;
         }
         switch (type) {
-        case 3:
-        case 6:
-        case 11:
-        case 16:
-            case 18: {
-                s32 r, g, b;
-                g = 0xff;
-                r = 0xff;
-                b = 0xff - work->frame * 60;
-                if (b < 0) {
-                    g = (s32)(0.8f * (f32)b) + 0xff;
-                    b = 0;
-                    if (g < 0) {
-                        r = (s32)(0.4f * (f32)g) + 0xff;
-                        g = 0;
-                        if (r < 0) {
-                            r = 0;
+            case 3:
+            case 6:
+            case 11:
+            case 16:
+                case 18: {
+                    s32 r, g, b;
+                    g = 0xff;
+                    r = 0xff;
+                    b = 0xff - work->frame * 60;
+                    if (b < 0) {
+                        g = (s32)(0.8f * (f32)b) + 0xff;
+                        b = 0;
+                        if (g < 0) {
+                            r = (s32)(0.4f * (f32)g) + 0xff;
+                            g = 0;
+                            if (r < 0) {
+                                r = 0;
+                            }
                         }
                     }
+                    work->r = r;
+                    work->g = g;
+                    work->b = b;
+                    if (type == 3 && i == 1 && work->frame == 0x1e) {
+                        play = 1;
+                    }
+                    break;
                 }
-                work->r = r;
-                work->g = g;
-                work->b = b;
-                if (type == 3 && i == 1 && work->frame == 0x1e) {
-                    play = 1;
-                }
+            case 7:
+                work->r += (s32)((f32)(0xbd - work->r) / 10.0f);
+                work->g += (s32)((f32)(0x10 - work->g) / 10.0f);
+                work->b += (s32)((f32)(0xaa - work->b) / 10.0f);
                 break;
-            }
-        case 7:
-            work->r += (s32)((f32)(0xbd - work->r) / 10.0f);
-            work->g += (s32)((f32)(0x10 - work->g) / 10.0f);
-            work->b += (s32)((f32)(0xaa - work->b) / 10.0f);
-            break;
-        case 12:
-            work->r += (s32)((f32)(0x82 - work->r) / 64.0f);
-            work->g += (s32)((f32)(0x82 - work->g) / 64.0f);
-            work->b += (s32)((f32)(0x82 - work->b) / 64.0f);
-            break;
+            case 12:
+                work->r += (s32)((f32)(0x82 - work->r) / 64.0f);
+                work->g += (s32)((f32)(0x82 - work->g) / 64.0f);
+                work->b += (s32)((f32)(0x82 - work->b) / 64.0f);
+                break;
         }
         if (work->frame >= work->life) {
             done++;
@@ -402,69 +402,69 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     effect = effEntry();
     count = 1;
     switch (type) {
-    case 0:
-    case 1:
-    case 15:
-    case 18:
-        count = 2;
-        break;
-    case 2:
-    case 16:
-        count = 5;
-        break;
-    case 3:
-        count = 0x21;
-        break;
-    case 4:
-        count = 0xb;
-        break;
-    case 5:
-        count = 4;
-        break;
-    case 6:
-        count = 7;
-        break;
-    case 7:
-        count = 7;
-        break;
-    case 8:
-        count = 0x41;
-        break;
-    case 9:
-        count = 0x15;
-        break;
-    case 10:
-        count = 7;
-        break;
-    case 11:
-        count = 9;
-        break;
-    case 12:
-        count = irand(3) + 4;
-        break;
-    case 13:
-        count = 0xb;
-        break;
-    case 14:
-        count = 5;
-        break;
-    case 17:
-        count = 0xb;
-        scale *= 0.5f;
-        break;
-    case 19:
-        count = 4;
-        break;
-    case 20:
-        count = 0xb;
-        scale *= 0.5f;
-        break;
-    case 21:
-        count = 3;
-        break;
-    case 22:
-        count = 4;
-        break;
+        case 0:
+        case 1:
+        case 15:
+        case 18:
+            count = 2;
+            break;
+        case 2:
+        case 16:
+            count = 5;
+            break;
+        case 3:
+            count = 0x21;
+            break;
+        case 4:
+            count = 0xb;
+            break;
+        case 5:
+            count = 4;
+            break;
+        case 6:
+            count = 7;
+            break;
+        case 7:
+            count = 7;
+            break;
+        case 8:
+            count = 0x41;
+            break;
+        case 9:
+            count = 0x15;
+            break;
+        case 10:
+            count = 7;
+            break;
+        case 11:
+            count = 9;
+            break;
+        case 12:
+            count = irand(3) + 4;
+            break;
+        case 13:
+            count = 0xb;
+            break;
+        case 14:
+            count = 5;
+            break;
+        case 17:
+            count = 0xb;
+            scale *= 0.5f;
+            break;
+        case 19:
+            count = 4;
+            break;
+        case 20:
+            count = 0xb;
+            scale *= 0.5f;
+            break;
+        case 21:
+            count = 3;
+            break;
+        case 22:
+            count = 4;
+            break;
     }
     effect->type = "KemuTest";
     effect->count = count;
@@ -486,217 +486,217 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     // FAKE: count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object
     for (i = 1; i < (count = effect->count); i++, work++) {
         switch (type) {
-        case 0:
-        case 15:
-        case 18:
-            work->pos.x = 0.0f;
-            work->pos.y = 0.0f;
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = 0;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            if (type == 15) {
-                work->r = 0x50;
-                work->g = 0x4b;
-                work->b = 0x4b;
-            }
-            break;
-        case 1:
-        case 19:
-            work->pos.x = 0.0f;
-            work->pos.y = 0.0f;
-            work->pos.z = 0.0f;
-            work->life = 0x80;
-            work->frame = 0;
-            work->gravity = 0.95f;
-            work->gravityAcc = -0.04f;
-            work->gravityMul = 0.94f;
-            work->delay = 0;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            if (type == 19) {
-                KemuF3 c = kemu_c;
-                KemuF3 a = kemu_a;
-                KemuF3 b = kemu_b;
-                work->pos.x = a.v[i - 1];
-                work->pos.y = b.v[i - 1];
-                work->scale = c.v[i - 1];
-                work->delay = i * 4;
-                work->r = 0x78;
-                work->g = 0x78;
-                work->b = 0x78;
-                work->gravity *= 0.8f;
-            }
-            break;
-        case 2:
-        case 16:
-            ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-            work->pos.x = 20.0f * (f32)sin(ang);
-            work->pos.y = 20.0f * (f32)cos(ang);
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = (i - 1) * 6;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            break;
-        case 3:
-            ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-            work->pos.x = 20.0f * (f32)sin(ang);
-            work->pos.y = 20.0f * (f32)cos(ang);
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = (i - 1) * 3;
-            work->gravity = 0.95f;
-            work->gravityAcc = -0.04f;
-            work->gravityMul = 0.94f;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            break;
-        case 4:
-        case 5:
-        case 9:
-        case 10:
-        case 13:
-        case 14:
-        case 17:
-        case 20:
-        case 21:
-            work->pos.x = 0.0f;
-            work->pos.y = 0.0f;
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = 0;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->delay = 0;
-            if (type == 4 || type == 13) {
-                f32 ang;
-                f32 spd;
-                f32 d;
-                d = bom_dir[i - 1];
-                spd = 2.0f * bom_spd[i - 1];
-
-                // FAKE: d copied through ang; `ang = 6.2831855f * (90.0f + d) / 360.0f` changes the object
-                ang = d;
-                ang = 6.2831855f * (90.0f + ang) / 360.0f;
-                work->vel.x = spd * (f32)sin(ang);
-                work->vel.y = -spd * (f32)cos(ang);
+            case 0:
+            case 15:
+            case 18:
+                work->pos.x = 0.0f;
+                work->pos.y = 0.0f;
+                work->pos.z = 0.0f;
+                work->life = 0x20;
+                work->frame = 0;
+                work->delay = 0;
+                work->r = 0xff;
+                work->g = 0xff;
+                work->b = 0xff;
                 work->scale = 1.0f;
-                work->delay = irand(0x1e);
-                if (type == 13) {
-                    work->gravity = 0.59999996f;
-                    work->gravityAcc = -0.08f;
-                    work->gravityMul = 0.94f;
-                    work->r = 0xaa;
-                    work->g = 0x82;
-                    work->b = 0xe6;
-                    work->vel.x *= 0.8f;
-                    work->vel.y *= 0.8f;
-                    work->life *= 2;
+                if (type == 15) {
+                    work->r = 0x50;
+                    work->g = 0x4b;
+                    work->b = 0x4b;
                 }
-            } else if (type == 5) {
-                KemuF4 d = kemu_d;
-                f32 spd = 3.0f;
-                f32 s = (f32)sin(6.2831855f * d.v[i] / 360.0f);
-                work->vel.x = spd * s;
-                work->vel.y = -spd * (f32)cos(6.2831855f * d.v[i] / 360.0f);
-                work->scale = 0.5f;
-            } else if (type == 21) {
-                KemuF3 e = kemu_e;
-                f32 spd = 3.0f;
-                f32 s = (f32)sin(6.2831855f * e.v[i] / 360.0f);
-                work->vel.x = spd * s;
-                work->vel.y = -spd * (f32)cos(6.2831855f * e.v[i] / 360.0f);
-                work->scale = 0.5f;
-            } else if (type == 9 || type == 17 || type == 20) {
-                f32 ang = (f32)irand(0x168);
-                f32 a2;
-                f32 spd;
-                if (i < (effect->count - 1) / 2 + 1) {
-                    spd = 4.5f;
-                } else {
-                    spd = 3.0f;
-                }
-                a2 = 6.2831855f * ang / 360.0f;
-                work->vel.x = spd * (f32)sin(a2);
-                work->vel.y = -spd * (f32)cos(a2);
-                work->scale = 1.0f;
-                work->delay = (i < (effect->count - 1) / 2 + 1) ? 0 : 8;
-                if (type == 9) {
-                    work->r = 0xf8;
-                    work->g = 0xc0;
-                    work->b = 0xde;
-                } else if (type == 17) {
-                    work->r = 0xff;
-                    work->g = 0xff;
-                    work->b = 0xff;
-                } else if (type == 20) {
-                    work->r = 0xff;
-                    work->g = 0x97;
-                    work->b = 0x10;
-                }
-            } else if (type == 10 || type == 14) {
+                break;
+            case 1:
+            case 19:
+                work->pos.x = 0.0f;
+                work->pos.y = 0.0f;
+                work->pos.z = 0.0f;
+                work->life = 0x80;
+                work->frame = 0;
                 work->gravity = 0.95f;
                 work->gravityAcc = -0.04f;
                 work->gravityMul = 0.94f;
-                work->life = 0x40;
-                work->scale = 1.0f;
                 work->delay = 0;
-                if (type == 10) {
-                    work->r = 0xaf;
-                    work->g = 0xa5;
-                    work->b = 0x9b;
+                work->r = 0xff;
+                work->g = 0xff;
+                work->b = 0xff;
+                work->scale = 1.0f;
+                if (type == 19) {
+                    KemuF3 c = kemu_c;
+                    KemuF3 a = kemu_a;
+                    KemuF3 b = kemu_b;
+                    work->pos.x = a.v[i - 1];
+                    work->pos.y = b.v[i - 1];
+                    work->scale = c.v[i - 1];
+                    work->delay = i * 4;
+                    work->r = 0x78;
+                    work->g = 0x78;
+                    work->b = 0x78;
+                    work->gravity *= 0.8f;
                 }
-            }
-            break;
-        case 6:
-            work->pos.x = (f32)(irand(0x28) - 0x14);
-            work->pos.y = (f32)(irand(0x14) - 0xa);
-            work->pos.z = 0.0f;
-            work->life = 0x40;
-            work->frame = 0;
-            work->delay = irand(10);
-            work->gravity = 0.59999996f;
-            work->gravityAcc = -0.04f;
-            work->gravityMul = 0.94f;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 0.6f;
-            spd = 1.0f;
-            work->vel.x = spd * (f32)sin(6.2831855f * angleABf(0.0f, 0.0f, work->pos.x, work->pos.y) / 360.0f);
-            break;
-        case 7: {
-            f32 a, s;
-            s = 1.0f + (f32)irand(0x28) / 10.0f;
-            work->pos.x = 0.0f;
-            work->pos.y = 0.0f;
-            work->pos.z = 0.0f;
-            work->life = 0x3c;
-            work->frame = 0;
-            a = 6.2831855f * (135.0f - 90.0f * ((f32)(i - 1) / (f32)(count - 2))) / 360.0f;
-            work->vel.x = s * (f32)cos(a);
-            work->vel.y = s * (f32)sin(a);
-            work->delay = irand(0x10);
-            work->r = 0xdc;
-            work->g = 0xc3;
-            work->b = 0xe9;
-            work->scale = 1.0f;
-            break;
+                break;
+            case 2:
+            case 16:
+                ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+                work->pos.x = 20.0f * (f32)sin(ang);
+                work->pos.y = 20.0f * (f32)cos(ang);
+                work->pos.z = 0.0f;
+                work->life = 0x20;
+                work->frame = 0;
+                work->delay = (i - 1) * 6;
+                work->r = 0xff;
+                work->g = 0xff;
+                work->b = 0xff;
+                work->scale = 1.0f;
+                break;
+            case 3:
+                ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+                work->pos.x = 20.0f * (f32)sin(ang);
+                work->pos.y = 20.0f * (f32)cos(ang);
+                work->pos.z = 0.0f;
+                work->life = 0x20;
+                work->frame = 0;
+                work->delay = (i - 1) * 3;
+                work->gravity = 0.95f;
+                work->gravityAcc = -0.04f;
+                work->gravityMul = 0.94f;
+                work->r = 0xff;
+                work->g = 0xff;
+                work->b = 0xff;
+                work->scale = 1.0f;
+                break;
+            case 4:
+            case 5:
+            case 9:
+            case 10:
+            case 13:
+            case 14:
+            case 17:
+            case 20:
+            case 21:
+                work->pos.x = 0.0f;
+                work->pos.y = 0.0f;
+                work->pos.z = 0.0f;
+                work->life = 0x20;
+                work->frame = 0;
+                work->delay = 0;
+                work->r = 0xff;
+                work->g = 0xff;
+                work->b = 0xff;
+                work->delay = 0;
+                if (type == 4 || type == 13) {
+                    f32 ang;
+                    f32 spd;
+                    f32 d;
+                    d = bom_dir[i - 1];
+                    spd = 2.0f * bom_spd[i - 1];
+
+                    // FAKE: d copied through ang; `ang = 6.2831855f * (90.0f + d) / 360.0f` changes the object
+                    ang = d;
+                    ang = 6.2831855f * (90.0f + ang) / 360.0f;
+                    work->vel.x = spd * (f32)sin(ang);
+                    work->vel.y = -spd * (f32)cos(ang);
+                    work->scale = 1.0f;
+                    work->delay = irand(0x1e);
+                    if (type == 13) {
+                        work->gravity = 0.59999996f;
+                        work->gravityAcc = -0.08f;
+                        work->gravityMul = 0.94f;
+                        work->r = 0xaa;
+                        work->g = 0x82;
+                        work->b = 0xe6;
+                        work->vel.x *= 0.8f;
+                        work->vel.y *= 0.8f;
+                        work->life *= 2;
+                    }
+                } else if (type == 5) {
+                    KemuF4 d = kemu_d;
+                    f32 spd = 3.0f;
+                    f32 s = (f32)sin(6.2831855f * d.v[i] / 360.0f);
+                    work->vel.x = spd * s;
+                    work->vel.y = -spd * (f32)cos(6.2831855f * d.v[i] / 360.0f);
+                    work->scale = 0.5f;
+                } else if (type == 21) {
+                    KemuF3 e = kemu_e;
+                    f32 spd = 3.0f;
+                    f32 s = (f32)sin(6.2831855f * e.v[i] / 360.0f);
+                    work->vel.x = spd * s;
+                    work->vel.y = -spd * (f32)cos(6.2831855f * e.v[i] / 360.0f);
+                    work->scale = 0.5f;
+                } else if (type == 9 || type == 17 || type == 20) {
+                    f32 ang = (f32)irand(0x168);
+                    f32 a2;
+                    f32 spd;
+                    if (i < (effect->count - 1) / 2 + 1) {
+                        spd = 4.5f;
+                    } else {
+                        spd = 3.0f;
+                    }
+                    a2 = 6.2831855f * ang / 360.0f;
+                    work->vel.x = spd * (f32)sin(a2);
+                    work->vel.y = -spd * (f32)cos(a2);
+                    work->scale = 1.0f;
+                    work->delay = (i < (effect->count - 1) / 2 + 1) ? 0 : 8;
+                    if (type == 9) {
+                        work->r = 0xf8;
+                        work->g = 0xc0;
+                        work->b = 0xde;
+                    } else if (type == 17) {
+                        work->r = 0xff;
+                        work->g = 0xff;
+                        work->b = 0xff;
+                    } else if (type == 20) {
+                        work->r = 0xff;
+                        work->g = 0x97;
+                        work->b = 0x10;
+                    }
+                } else if (type == 10 || type == 14) {
+                    work->gravity = 0.95f;
+                    work->gravityAcc = -0.04f;
+                    work->gravityMul = 0.94f;
+                    work->life = 0x40;
+                    work->scale = 1.0f;
+                    work->delay = 0;
+                    if (type == 10) {
+                        work->r = 0xaf;
+                        work->g = 0xa5;
+                        work->b = 0x9b;
+                    }
+                }
+                break;
+            case 6:
+                work->pos.x = (f32)(irand(0x28) - 0x14);
+                work->pos.y = (f32)(irand(0x14) - 0xa);
+                work->pos.z = 0.0f;
+                work->life = 0x40;
+                work->frame = 0;
+                work->delay = irand(10);
+                work->gravity = 0.59999996f;
+                work->gravityAcc = -0.04f;
+                work->gravityMul = 0.94f;
+                work->r = 0xff;
+                work->g = 0xff;
+                work->b = 0xff;
+                work->scale = 0.6f;
+                spd = 1.0f;
+                work->vel.x = spd * (f32)sin(6.2831855f * angleABf(0.0f, 0.0f, work->pos.x, work->pos.y) / 360.0f);
+                break;
+            case 7: {
+                f32 a, s;
+                s = 1.0f + (f32)irand(0x28) / 10.0f;
+                work->pos.x = 0.0f;
+                work->pos.y = 0.0f;
+                work->pos.z = 0.0f;
+                work->life = 0x3c;
+                work->frame = 0;
+                a = 6.2831855f * (135.0f - 90.0f * ((f32)(i - 1) / (f32)(count - 2))) / 360.0f;
+                work->vel.x = s * (f32)cos(a);
+                work->vel.y = s * (f32)sin(a);
+                work->delay = irand(0x10);
+                work->r = 0xdc;
+                work->g = 0xc3;
+                work->b = 0xe9;
+                work->scale = 1.0f;
+                break;
         }
         case 8: {
             f32 ang = (f32)irand(0x168);

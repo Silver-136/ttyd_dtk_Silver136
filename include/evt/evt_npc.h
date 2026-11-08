@@ -13,25 +13,25 @@
 #define EVT_NPC_PTR_MARIO ((NpcEntry*)-3)
 
 typedef struct NpcSetupInfo {
-    const char* name; //0x0
-    s32 flags; //0x4
-    s32 reactionFlags; //0x8
-    EvtWord* initEvent; //0xC
-    EvtWord* regularEvent; //0x10
-    EvtWord* talkEvent; //0x14
-    EvtWord* deadEvent; //0x18
-    EvtWord* findEvent; //0x1C
-    EvtWord* lostEvent; //0x20
-    EvtWord* returnEvent; //0x24
-    EvtWord* blowEvent; //0x28
-    NpcTerritoryType territoryType; //0x2C
-    Vec territoryBase; //0x30
-    Vec territoryLoiter; //0x3C
-    f32 searchRange; //0x48
-    f32 searchAngle; //0x4C
-    f32 homingRange; //0x50
-    f32 homingAngle; //0x54
-    s32 battleInfoId; //0x58
+    const char* name; // 0x0
+    s32 flags; // 0x4
+    s32 reactionFlags; // 0x8
+    EvtWord* initEvent; // 0xC
+    EvtWord* regularEvent; // 0x10
+    EvtWord* talkEvent; // 0x14
+    EvtWord* deadEvent; // 0x18
+    EvtWord* findEvent; // 0x1C
+    EvtWord* lostEvent; // 0x20
+    EvtWord* returnEvent; // 0x24
+    EvtWord* blowEvent; // 0x28
+    NpcTerritoryType territoryType; // 0x2C
+    Vec territoryBase; // 0x30
+    Vec territoryLoiter; // 0x3C
+    f32 searchRange; // 0x48
+    f32 searchAngle; // 0x4C
+    f32 homingRange; // 0x50
+    f32 homingAngle; // 0x54
+    s32 battleInfoId; // 0x58
 } NpcSetupInfo;
 
 USER_FUNC(evt_npc_entry);

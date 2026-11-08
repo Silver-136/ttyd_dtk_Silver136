@@ -91,19 +91,19 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
         type = type % 10;
     }
     switch (type) {
-    case 0:
-    case 1:
-        count = 21;
-        break;
-    case 2:
-        count = 41;
-        break;
-    case 6:
-        count = 9;
-        break;
-    default:
-        count = 11;
-        break;
+        case 0:
+        case 1:
+            count = 21;
+            break;
+        case 2:
+            count = 41;
+            break;
+        case 6:
+            count = 9;
+            break;
+        default:
+            count = 11;
+            break;
     }
     effect->type = "WaterDamageN64";
     effect->count = count;
@@ -134,62 +134,62 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
         p->position.z = 0.0f;
         p->scale = 2.0f;
         switch (type) {
-        case 0:
-            p->velX = rand() % 11 - 2;
-            p->velY = rand() % 11 - 5;
-            p->velZ = rand() % 11 - 5;
-            break;
-        case 1:
-            p->velX = -(rand() % 11 - 2);
-            p->velY = rand() % 11 - 5;
-            p->velZ = rand() % 11 - 5;
-            break;
-        case 2:
-            p->velX = 0.07f * (rand() % 100 - 50);
-            p->velY = 0.2f * (rand() % 100 + 10);
-            p->velZ = 0.07f * (rand() % 100 - 50);
-            break;
-        case 3:
-            p->velX = 0.5f * (rand() % 10 - 5);
-            p->velY = 0.5f * (rand() % 10 - 5);
-            p->velZ = 0.5f * (rand() % 10 - 5);
-            p->scale = 0.4f;
-            p->lifetime = i;
-            break;
-        case 4:
-            p->velX = rand() % 7 - 3;
-            p->velY = rand() % 3 + 1;
-            p->velZ = rand() % 7 - 3;
-            break;
-        case 5:
-            p->velX = 0.3f * (rand() % 10 - 5);
-            p->velY = 0.3f * (rand() % 10 + 5);
-            p->velZ = 0.3f * (rand() % 10 - 5);
-            p->scale = 1.0f;
-            p->lifetime = i;
-            break;
-        case 6:
-            a = 6.2831855f * i;
-            p->position.x = 10.0f * (f32)sin(a / effect->count);
-            p->position.z = 10.0f * (f32)cos(a / effect->count);
-            p->velX = p->position.x / 12.0f;
-            p->velY = 0.3f * (rand() % 5);
-            p->velZ = p->position.z / 12.0f;
-            p->scale = 1.0f;
-            p->lifetime = i;
-            break;
-        case 7:
-        default:
-            mario = marioGetPtr();
-            a = irand(90) - 45;
-            p->position.x = (f32)sin(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
-            p->position.z = (f32)cos(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
-            p->velX = mario->baseSpeed * p->position.x / 2.0f;
-            p->velY = 0.1f * (rand() % 10 + 5);
-            p->velZ = mario->baseSpeed * p->position.z / 2.0f;
-            p->scale = 1.0f;
-            p->lifetime = j;
-            break;
+            case 0:
+                p->velX = rand() % 11 - 2;
+                p->velY = rand() % 11 - 5;
+                p->velZ = rand() % 11 - 5;
+                break;
+            case 1:
+                p->velX = -(rand() % 11 - 2);
+                p->velY = rand() % 11 - 5;
+                p->velZ = rand() % 11 - 5;
+                break;
+            case 2:
+                p->velX = 0.07f * (rand() % 100 - 50);
+                p->velY = 0.2f * (rand() % 100 + 10);
+                p->velZ = 0.07f * (rand() % 100 - 50);
+                break;
+            case 3:
+                p->velX = 0.5f * (rand() % 10 - 5);
+                p->velY = 0.5f * (rand() % 10 - 5);
+                p->velZ = 0.5f * (rand() % 10 - 5);
+                p->scale = 0.4f;
+                p->lifetime = i;
+                break;
+            case 4:
+                p->velX = rand() % 7 - 3;
+                p->velY = rand() % 3 + 1;
+                p->velZ = rand() % 7 - 3;
+                break;
+            case 5:
+                p->velX = 0.3f * (rand() % 10 - 5);
+                p->velY = 0.3f * (rand() % 10 + 5);
+                p->velZ = 0.3f * (rand() % 10 - 5);
+                p->scale = 1.0f;
+                p->lifetime = i;
+                break;
+            case 6:
+                a = 6.2831855f * i;
+                p->position.x = 10.0f * (f32)sin(a / effect->count);
+                p->position.z = 10.0f * (f32)cos(a / effect->count);
+                p->velX = p->position.x / 12.0f;
+                p->velY = 0.3f * (rand() % 5);
+                p->velZ = p->position.z / 12.0f;
+                p->scale = 1.0f;
+                p->lifetime = i;
+                break;
+            case 7:
+            default:
+                mario = marioGetPtr();
+                a = irand(90) - 45;
+                p->position.x = (f32)sin(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
+                p->position.z = (f32)cos(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
+                p->velX = mario->baseSpeed * p->position.x / 2.0f;
+                p->velY = 0.1f * (rand() % 10 + 5);
+                p->velZ = mario->baseSpeed * p->position.z / 2.0f;
+                p->scale = 1.0f;
+                p->lifetime = j;
+                break;
         }
         p->alpha = 255;
     }
@@ -360,16 +360,16 @@ static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0xFF, 0xFF, alpha * work->alpha / 255 });
         GXSetTevColor(GX_TEVREG1, (GXColor){ 0x00, 0x20, 0x20, 0x00 });
         switch ((i + (gp->retraceCount >> 1)) & 3) {
-        case 0:
-        case 2:
-            effSetVtxDescN64(size8x8_tex16x16_0_vtx);
-            break;
-        case 1:
-            effSetVtxDescN64(size8x8_tex16x16_1_vtx);
-            break;
-        case 3:
-            effSetVtxDescN64(size8x8_tex16x16_2_vtx);
-            break;
+            case 0:
+            case 2:
+                effSetVtxDescN64(size8x8_tex16x16_0_vtx);
+                break;
+            case 1:
+                effSetVtxDescN64(size8x8_tex16x16_1_vtx);
+                break;
+            case 3:
+                effSetVtxDescN64(size8x8_tex16x16_2_vtx);
+                break;
         }
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
@@ -434,16 +434,16 @@ static void effWaterDamageDisp2(CameraId cameraId, void* param) {
         PSMTXConcat(mtx, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
         switch ((i + (gp->retraceCount >> 1)) & 3) {
-        case 0:
-        case 2:
-            effSetVtxDescN64(size8x8_tex16x16_0_vtx);
-            break;
-        case 1:
-            effSetVtxDescN64(size8x8_tex16x16_1_vtx);
-            break;
-        case 3:
-            effSetVtxDescN64(size8x8_tex16x16_2_vtx);
-            break;
+            case 0:
+            case 2:
+                effSetVtxDescN64(size8x8_tex16x16_0_vtx);
+                break;
+            case 1:
+                effSetVtxDescN64(size8x8_tex16x16_1_vtx);
+                break;
+            case 3:
+                effSetVtxDescN64(size8x8_tex16x16_2_vtx);
+                break;
         }
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);

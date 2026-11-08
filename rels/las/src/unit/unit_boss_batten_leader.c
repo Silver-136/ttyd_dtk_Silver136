@@ -3174,86 +3174,86 @@ USER_FUNC(battenSatelliteToOutside) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (isFirstCall) {
         switch (num) {
-        case 1:
-            i = 0;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut1_1) == TRUE) {
-                    break;
+            case 1:
+                i = 0;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut1_1) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            case 2:
+                i = 0;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut2_1) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
                 i++;
-            }
-            break;
-        case 2:
-            i = 0;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut2_1) == TRUE) {
-                    break;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut2_2) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            case 3:
+                i = 0;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut3_1) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
                 i++;
-            }
-            i++;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut2_2) == TRUE) {
-                    break;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut3_2) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
                 i++;
-            }
-            break;
-        case 3:
-            i = 0;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut3_1) == TRUE) {
-                    break;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut3_3) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            case 4:
+                i = 0;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut4_1) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
                 i++;
-            }
-            i++;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut3_2) == TRUE) {
-                    break;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut4_2) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
                 i++;
-            }
-            i++;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut3_3) == TRUE) {
-                    break;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut4_3) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
                 i++;
-            }
-            break;
-        case 4:
-            i = 0;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut4_1) == TRUE) {
-                    break;
+                while (TRUE) {
+                    if (battenSatelliteTo_Init(unit, i, splineTableOut4_4) == TRUE) {
+                        break;
+                    }
+                    i++;
                 }
-                i++;
-            }
-            i++;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut4_2) == TRUE) {
-                    break;
-                }
-                i++;
-            }
-            i++;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut4_3) == TRUE) {
-                    break;
-                }
-                i++;
-            }
-            i++;
-            while (TRUE) {
-                if (battenSatelliteTo_Init(unit, i, splineTableOut4_4) == TRUE) {
-                    break;
-                }
-                i++;
-            }
-            break;
-        default:
-            return EVT_RETURN_DONE;
+                break;
+            default:
+                return EVT_RETURN_DONE;
         }
     }
     moving = FALSE;

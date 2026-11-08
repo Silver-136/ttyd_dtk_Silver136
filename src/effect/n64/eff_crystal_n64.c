@@ -46,33 +46,33 @@ EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     work->scale = scale;
     work->reserved_18 = 0;
     switch (type) {
-    case 0:
-        work->variant = 0;
-        break;
-    case 1:
-        work->variant = 2;
-        break;
-    case 2:
-        work->variant = 4;
-        break;
-    case 3:
-        work->variant = 6;
-        break;
-    case 4:
-        work->variant = 7;
-        break;
-    case 5:
-        work->variant = 8;
-        break;
-    case 6:
-        work->variant = 9;
-        break;
-    default:
-        work->variant = 10;
+        case 0:
+            work->variant = 0;
+            break;
+        case 1:
+            work->variant = 2;
+            break;
+        case 2:
+            work->variant = 4;
+            break;
+        case 3:
+            work->variant = 6;
+            break;
+        case 4:
+            work->variant = 7;
+            break;
+        case 5:
+            work->variant = 8;
+            break;
+        case 6:
+            work->variant = 9;
+            break;
+        default:
+            work->variant = 10;
 
-        // BUG: Uses the raw lifetime even when work->lifetime was defaulted above.
-        work->scaleVel = -(scale - 0.1f) / (f32)lifetime;
-        break;
+            // BUG: Uses the raw lifetime even when work->lifetime was defaulted above.
+            work->scaleVel = -(scale - 0.1f) / (f32)lifetime;
+            break;
     }
     return effect;
 }
@@ -123,91 +123,91 @@ static void effCrystalMain(EffectEntry* effect) {
         fade = life * 16;
     }
     switch (variant) {
-    case 0:
-        work->r = 70;
-        work->g = 180;
-        work->b = 120;
-        sn = (f32)sin(6.2831855f * (f32)(frame * 2) / 360.0f);
-        work->a = 190 + (s32)(10.0f * sn);
-        work->a = work->a * alpha / 255;
-        break;
-    case 1:
-        work->r = 70;
-        work->g = 255;
-        work->b = 230;
-        work->a = 255;
-        work->a = work->a * alpha / 255;
-        break;
-    case 2:
-        work->r = 170;
-        work->g = 40;
-        work->b = 110;
-        sn = (f32)sin(6.2831855f * (f32)(frame * 2) / 360.0f);
-        work->a = 190 + (s32)(10.0f * sn);
-        work->a = work->a * alpha / 255;
-        break;
-    case 3:
-        work->r = 220;
-        work->g = 40;
-        work->b = 170;
-        work->a = 255;
-        work->a = work->a * alpha / 255;
-        break;
-    case 4:
-        work->r = 235;
-        work->g = 235;
-        work->b = 200;
-        sn = (f32)sin(6.2831855f * (f32)(frame * 2) / 360.0f);
-        work->a = 215 + (s32)(15.0f * sn);
-        work->a = work->a * alpha / 255;
-        break;
-    case 5:
-        work->r = 235;
-        work->g = 235;
-        work->b = 200;
-        work->a = 255;
-        work->a = work->a * alpha / 255;
-        break;
-    case 6:
-        work->r = 70;
-        work->g = 180;
-        work->b = 120;
-        work->a = 127;
-        work->a = work->a * fade / 255;
-        work->scale *= 1.1f;
-        break;
-    case 7:
-        work->r = 162;
-        work->g = 189;
-        work->b = 174;
-        work->a = 160;
-        work->a = work->a * fade / 255;
-        work->scale *= 1.1f;
-        break;
-    case 8:
-        work->r = 170;
-        work->g = 40;
-        work->b = 110;
-        work->a = 127;
-        work->a = work->a * fade / 255;
-        work->scale *= 1.1f;
-        break;
-    case 9:
-        work->r = 180;
-        work->g = 178;
-        work->b = 174;
-        work->a = 160;
-        work->a = work->a * fade / 255;
-        work->scale *= 1.1f;
-        break;
-    default:
-        work->r = 50;
-        work->g = 50;
-        work->b = 255;
-        work->a = 160;
-        work->a = work->a * fade / 255;
-        work->scale += work->scaleVel;
-        break;
+        case 0:
+            work->r = 70;
+            work->g = 180;
+            work->b = 120;
+            sn = (f32)sin(6.2831855f * (f32)(frame * 2) / 360.0f);
+            work->a = 190 + (s32)(10.0f * sn);
+            work->a = work->a * alpha / 255;
+            break;
+        case 1:
+            work->r = 70;
+            work->g = 255;
+            work->b = 230;
+            work->a = 255;
+            work->a = work->a * alpha / 255;
+            break;
+        case 2:
+            work->r = 170;
+            work->g = 40;
+            work->b = 110;
+            sn = (f32)sin(6.2831855f * (f32)(frame * 2) / 360.0f);
+            work->a = 190 + (s32)(10.0f * sn);
+            work->a = work->a * alpha / 255;
+            break;
+        case 3:
+            work->r = 220;
+            work->g = 40;
+            work->b = 170;
+            work->a = 255;
+            work->a = work->a * alpha / 255;
+            break;
+        case 4:
+            work->r = 235;
+            work->g = 235;
+            work->b = 200;
+            sn = (f32)sin(6.2831855f * (f32)(frame * 2) / 360.0f);
+            work->a = 215 + (s32)(15.0f * sn);
+            work->a = work->a * alpha / 255;
+            break;
+        case 5:
+            work->r = 235;
+            work->g = 235;
+            work->b = 200;
+            work->a = 255;
+            work->a = work->a * alpha / 255;
+            break;
+        case 6:
+            work->r = 70;
+            work->g = 180;
+            work->b = 120;
+            work->a = 127;
+            work->a = work->a * fade / 255;
+            work->scale *= 1.1f;
+            break;
+        case 7:
+            work->r = 162;
+            work->g = 189;
+            work->b = 174;
+            work->a = 160;
+            work->a = work->a * fade / 255;
+            work->scale *= 1.1f;
+            break;
+        case 8:
+            work->r = 170;
+            work->g = 40;
+            work->b = 110;
+            work->a = 127;
+            work->a = work->a * fade / 255;
+            work->scale *= 1.1f;
+            break;
+        case 9:
+            work->r = 180;
+            work->g = 178;
+            work->b = 174;
+            work->a = 160;
+            work->a = work->a * fade / 255;
+            work->scale *= 1.1f;
+            break;
+        default:
+            work->r = 50;
+            work->g = 50;
+            work->b = 255;
+            work->a = 160;
+            work->a = work->a * fade / 255;
+            work->scale += work->scaleVel;
+            break;
     }
     dispEntry(work->camera, dispCalcZ(&position), DISP_MODE_XLU, effCrystalDisp, effect);
 }

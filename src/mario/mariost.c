@@ -89,205 +89,205 @@ static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.
 // over it there.
 GXRenderModeObj sRMObjHReso = {
 #if VERSION >= VERSION_DEMO_EU
-    VI_TVMODE_PAL_INT, //viTVmode
-    0x260, //fbWidth
-    0x1C0, //efbHeight
-    0x212, //xfbHeight
-    0x1B, //viXOrigin
-    0x16, //viYOrigin
-    0x29A, //viWidth
-    0x212, //viHeight
+    VI_TVMODE_PAL_INT, // viTVmode
+    0x260, // fbWidth
+    0x1C0, // efbHeight
+    0x212, // xfbHeight
+    0x1B, // viXOrigin
+    0x16, // viYOrigin
+    0x29A, // viWidth
+    0x212, // viHeight
 #else
-    VI_TVMODE_NTSC_INT, //viTVmode
-    0x260, //fbWidth
-    0x1C0, //efbHeight
-    0x1C0, //xfbHeight
-    0x1B, //viXOrigin
-    0x10, //viYOrigin
-    0x29A, //viWidth
-    0x1C0, //viHeight
+    VI_TVMODE_NTSC_INT, // viTVmode
+    0x260, // fbWidth
+    0x1C0, // efbHeight
+    0x1C0, // xfbHeight
+    0x1B, // viXOrigin
+    0x10, // viYOrigin
+    0x29A, // viWidth
+    0x1C0, // viHeight
 #endif
-    VI_XFBMODE_DF, //xFBmode
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    VI_XFBMODE_DF, // xFBmode
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 
 #if VERSION == VERSION_DEMO_US_2
 /** sRMObjHReso's PAL twin (50Hz), copied over it on a PAL console. */
 GXRenderModeObj sRMObjHResoPal = {
-    VI_TVMODE_PAL_INT, //viTVmode
-    0x260, //fbWidth
-    0x1C0, //efbHeight
-    0x212, //xfbHeight
-    0x1B, //viXOrigin
-    0x16, //viYOrigin
-    0x29A, //viWidth
-    0x212, //viHeight
-    VI_XFBMODE_DF, //xFBmode
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    VI_TVMODE_PAL_INT, // viTVmode
+    0x260, // fbWidth
+    0x1C0, // efbHeight
+    0x212, // xfbHeight
+    0x1B, // viXOrigin
+    0x16, // viYOrigin
+    0x29A, // viWidth
+    0x212, // viHeight
+    VI_XFBMODE_DF, // xFBmode
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 #endif
 
 /** Video mode of the boot logo screens for NTSC progressive scan or PAL EURGB60, set by seq_logo after a hot reset. */
 GXRenderModeObj sRMObjHReso_prog = {
 #if VERSION >= VERSION_DEMO_EU
-    VI_TVMODE_EURGB60_INT, //viTVmode
+    VI_TVMODE_EURGB60_INT, // viTVmode
 #else
-    VI_TVMODE_NTSC_PROG, //viTVmode
+    VI_TVMODE_NTSC_PROG, // viTVmode
 #endif
-    0x260, //fbWidth
-    0x1C0, //efbHeight
-    0x1C0, //xfbHeight
-    0x1B, //viXOrigin
-    0x10, //viYOrigin
-    0x29A, //viWidth
-    0x1C0, //viHeight
+    0x260, // fbWidth
+    0x1C0, // efbHeight
+    0x1C0, // xfbHeight
+    0x1B, // viXOrigin
+    0x10, // viYOrigin
+    0x29A, // viWidth
+    0x1C0, // viHeight
 #if VERSION >= VERSION_DEMO_EU
-    VI_XFBMODE_DF, //xFBmode
+    VI_XFBMODE_DF, // xFBmode
 #else
-    VI_XFBMODE_SF, //xFBmode
+    VI_XFBMODE_SF, // xFBmode
 #endif
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 
 #if VERSION == VERSION_DEMO_US_2
 /** sRMObjHReso_prog's PAL twin (EURGB60), copied over it on a PAL console. */
 GXRenderModeObj sRMObjHReso_progPal = {
-    VI_TVMODE_EURGB60_INT, //viTVmode
-    0x260, //fbWidth
-    0x1C0, //efbHeight
-    0x1C0, //xfbHeight
-    0x1B, //viXOrigin
-    0x10, //viYOrigin
-    0x29A, //viWidth
-    0x1C0, //viHeight
-    VI_XFBMODE_DF, //xFBmode
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    VI_TVMODE_EURGB60_INT, // viTVmode
+    0x260, // fbWidth
+    0x1C0, // efbHeight
+    0x1C0, // xfbHeight
+    0x1B, // viXOrigin
+    0x10, // viYOrigin
+    0x29A, // viWidth
+    0x1C0, // viHeight
+    VI_XFBMODE_DF, // xFBmode
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 #endif
 
 GXRenderModeObj GXNtsc480IntDfMarioSt = {
 #if VERSION >= VERSION_DEMO_EU
-    VI_TVMODE_PAL_INT, //viTVmode
-    0x260, //fbWidth
-    0x1E0, //efbHeight
-    0x238, //xfbHeight
-    0x1E, //viXOrigin
-    0x6, //viYOrigin
-    0x294, //viWidth
-    0x238, //viHeight
+    VI_TVMODE_PAL_INT, // viTVmode
+    0x260, // fbWidth
+    0x1E0, // efbHeight
+    0x238, // xfbHeight
+    0x1E, // viXOrigin
+    0x6, // viYOrigin
+    0x294, // viWidth
+    0x238, // viHeight
 #else
-    VI_TVMODE_NTSC_INT, //viTVmode
-    0x260, //fbWidth
-    0x1E0, //efbHeight
-    0x1E0, //xfbHeight
-    0x1E, //viXOrigin
-    0x0, //viYOrigin
-    0x294, //viWidth
-    0x1E0, //viHeight
+    VI_TVMODE_NTSC_INT, // viTVmode
+    0x260, // fbWidth
+    0x1E0, // efbHeight
+    0x1E0, // xfbHeight
+    0x1E, // viXOrigin
+    0x0, // viYOrigin
+    0x294, // viWidth
+    0x1E0, // viHeight
 #endif
-    VI_XFBMODE_DF, //xFBmode
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    VI_XFBMODE_DF, // xFBmode
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 
 #if VERSION == VERSION_DEMO_US_2
 /** GXNtsc480IntDfMarioSt's PAL twin (50Hz), copied over it on a PAL console. */
 GXRenderModeObj GXNtsc480IntDfMarioStPal = {
-    VI_TVMODE_PAL_INT, //viTVmode
-    0x260, //fbWidth
-    0x1E0, //efbHeight
-    0x238, //xfbHeight
-    0x1E, //viXOrigin
-    0x6, //viYOrigin
-    0x294, //viWidth
-    0x238, //viHeight
-    VI_XFBMODE_DF, //xFBmode
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    VI_TVMODE_PAL_INT, // viTVmode
+    0x260, // fbWidth
+    0x1E0, // efbHeight
+    0x238, // xfbHeight
+    0x1E, // viXOrigin
+    0x6, // viYOrigin
+    0x294, // viWidth
+    0x238, // viHeight
+    VI_XFBMODE_DF, // xFBmode
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 #endif
 
 /** The game's main video mode for NTSC progressive scan or PAL EURGB60, used by marioStInit after a hot reset. */
 GXRenderModeObj GXNtsc480ProgMarioSt = {
 #if VERSION >= VERSION_DEMO_EU
-    VI_TVMODE_EURGB60_INT, //viTVmode
+    VI_TVMODE_EURGB60_INT, // viTVmode
 #else
-    VI_TVMODE_NTSC_PROG, //viTVmode
+    VI_TVMODE_NTSC_PROG, // viTVmode
 #endif
-    0x260, //fbWidth
-    0x1E0, //efbHeight
-    0x1E0, //xfbHeight
-    0x1E, //viXOrigin
-    0x0, //viYOrigin
-    0x294, //viWidth
-    0x1E0, //viHeight
+    0x260, // fbWidth
+    0x1E0, // efbHeight
+    0x1E0, // xfbHeight
+    0x1E, // viXOrigin
+    0x0, // viYOrigin
+    0x294, // viWidth
+    0x1E0, // viHeight
 #if VERSION >= VERSION_DEMO_EU
-    VI_XFBMODE_DF, //xFBmode
+    VI_XFBMODE_DF, // xFBmode
 #else
-    VI_XFBMODE_SF, //xFBmode
+    VI_XFBMODE_SF, // xFBmode
 #endif
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 
 #if VERSION == VERSION_DEMO_US_2
 /** GXNtsc480ProgMarioSt's PAL twin (EURGB60), copied over it on a PAL console. */
 GXRenderModeObj GXNtsc480ProgMarioStPal = {
-    VI_TVMODE_EURGB60_INT, //viTVmode
-    0x260, //fbWidth
-    0x1E0, //efbHeight
-    0x1E0, //xfbHeight
-    0x1E, //viXOrigin
-    0x0, //viYOrigin
-    0x294, //viWidth
-    0x1E0, //viHeight
-    VI_XFBMODE_DF, //xFBmode
-    0, //field_rendering
-    0, //aa
-    6, 6, 6, 6, 6, 6, //pix 0
-    6, 6, 6, 6, 6, 6, //pix 1
-    6, 6, 6, 6, 6, 6, //pix 2
-    6, 6, 6, 6, 6, 6, //pix 3
-    8, 8, 10, 12, 10, 8, 8, //vfilter
+    VI_TVMODE_EURGB60_INT, // viTVmode
+    0x260, // fbWidth
+    0x1E0, // efbHeight
+    0x1E0, // xfbHeight
+    0x1E, // viXOrigin
+    0x0, // viYOrigin
+    0x294, // viWidth
+    0x1E0, // viHeight
+    VI_XFBMODE_DF, // xFBmode
+    0, // field_rendering
+    0, // aa
+    6, 6, 6, 6, 6, 6, // pix 0
+    6, 6, 6, 6, 6, 6, // pix 1
+    6, 6, 6, 6, 6, 6, // pix 2
+    6, 6, 6, 6, 6, 6, // pix 3
+    8, 8, 10, 12, 10, 8, 8, // vfilter
 };
 #endif
 
@@ -440,9 +440,9 @@ void marioStInit(void) {
 #endif
 #endif
     gp->systemLevelFlags = 0;
-    badgeShop_init(); //Badge Shop
-    yuugijou_init(); //Pianta Parlor
-    johoya_init(); //information broker (johoya)
+    badgeShop_init(); // Badge Shop
+    yuugijou_init(); // Pianta Parlor
+    johoya_init(); // information broker (johoya)
 #if VERSION >= VERSION_US
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 670 * 1024);
 #else

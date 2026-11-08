@@ -401,134 +401,134 @@ void vivian_use(PartyEntry* party) {
     party->moveSpeed = 0.0f;
 
     switch (party->useMotionId) {
-    case 0:
-        marioChgMot(MARIO_MOTION_VIVIAN);
+        case 0:
+            marioChgMot(MARIO_MOTION_VIVIAN);
 #if VERSION >= VERSION_JP
-        party->work.vivian.followOfs = -13.0f;
+            party->work.vivian.followOfs = -13.0f;
 #endif
-        set_vivian_pos(party);
-        party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->displayDirection = m->displayDirection;
-        party->displayDirectionTarget = m->displayDirectionTarget;
-        party->moveSpeed = 0.0f;
-        party->velY = 0.0f;
-        party->useMotionId = 1;
-        party->moveFrames = 6;
-        partyChgPose(party, "PTR_A2_1");
-    case 1:
-        set_vivian_pos(party);
-        party->position.x += (party->moveTarget.x - party->position.x) / party->moveFrames;
-        party->position.y += (party->moveTarget.y - party->position.y) / party->moveFrames;
-        party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
-        party->trailPos = party->position;
-        if (--party->moveFrames > 0) {
-            break;
-        }
+            set_vivian_pos(party);
+            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->displayDirection = m->displayDirection;
+            party->displayDirectionTarget = m->displayDirectionTarget;
+            party->moveSpeed = 0.0f;
+            party->velY = 0.0f;
+            party->useMotionId = 1;
+            party->moveFrames = 6;
+            partyChgPose(party, "PTR_A2_1");
+        case 1:
+            set_vivian_pos(party);
+            party->position.x += (party->moveTarget.x - party->position.x) / party->moveFrames;
+            party->position.y += (party->moveTarget.y - party->position.y) / party->moveFrames;
+            party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
+            party->trailPos = party->position;
+            if (--party->moveFrames > 0) {
+                break;
+            }
 #if VERSION >= VERSION_JP
-        party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
+            party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
 #endif
-        party->displayDirectionTarget = m->displayDirectionTarget;
-        party->moveDir = toMovedirSimple(party->displayDirectionTarget);
-        party->trailPos = party->position;
+            party->displayDirectionTarget = m->displayDirectionTarget;
+            party->moveDir = toMovedirSimple(party->displayDirectionTarget);
+            party->trailPos = party->position;
 #if VERSION <= VERSION_DEMO_JP
-        party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
-        partyChgPose(party, "PTR_A2_2");
-        party->useMotionId = 2;
-        party->moveFrames = 2;
-    case 2:
-        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
-        partyChgPose(party, "PTR_A2_3");
-        partyPaperOn(party, "p_bibi");
-        partyChgPaper(party, "PM_B_1");
-        party->useMotionId = 3;
-        party->moveFrames = 4;
-    case 3:
-#else
-        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
-        partyChgPose(party, "PTR_A2_3");
-        partyPaperOn(party, "p_bibi");
-        partyChgPaper(party, "PM_B_1");
-#endif
-        party->dispOfs.y += 1.6f;
-        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
-        marioPaperOn("p_bibi");
-        marioChgPose("M_B_3");
-        marioChgPaper("PM_B_1");
-        party->useMotionId = 4;
-        party->moveFrames = 30;
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1), &party->position);
-    case 4:
-#if VERSION <= VERSION_DEMO_JP
-        if (30 - party->moveFrames <= 24) {
-            party->dispOfs.y += 0.4f;
-            m->dispOfs.y += 0.4f;
-#else
-        set_vivian_pos(party);
-        if (30 - party->moveFrames <= 24) {
-            party->dispOfs.y += 0.4f;
-            m->dispOfs2.y += 0.4f;
-#endif
-            if (party->dispOfs.y >= 8.0f) {
-                party->dispOfs.y = 8.0f;
-            }
-#if VERSION <= VERSION_DEMO_JP
-            if (m->dispOfs.y >= 8.0f) {
-                m->dispOfs.y = 8.0f;
-#else
-            if (m->dispOfs2.y >= 8.0f) {
-                m->dispOfs2.y = 8.0f;
-#endif
-            }
-        }
-        party->work.vivian.shadowSize += 1.0f;
-        if (party->work.vivian.shadowSize >= 20.0f) {
-            party->work.vivian.shadowSize = 20.0f;
+            party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
+            partyChgPose(party, "PTR_A2_2");
+            party->useMotionId = 2;
+            party->moveFrames = 2;
+        case 2:
             m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
-        }
-        if (--party->moveFrames > 0) {
-            break;
-        }
-        vivianRippleOn(party);
-        partyVivianTailStop(party);
-        party->useMotionId = 5;
-    case 5:
-#if VERSION >= VERSION_JP
-        set_vivian_pos(party);
+            partyChgPose(party, "PTR_A2_3");
+            partyPaperOn(party, "p_bibi");
+            partyChgPaper(party, "PM_B_1");
+            party->useMotionId = 3;
+            party->moveFrames = 4;
+        case 3:
+#else
+            m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
+            partyChgPose(party, "PTR_A2_3");
+            partyPaperOn(party, "p_bibi");
+            partyChgPaper(party, "PM_B_1");
 #endif
-        party->work.vivian.shadowSize -= 1.0f;
-        if (party->work.vivian.shadowSize <= 10.0f) {
-            party->work.vivian.shadowSize = 10.0f;
-            party->useMotionId = 10;
-            m->flags |= MARIO_FLAG_WALLS_DISABLED;
-        }
-        break;
-    case 10:
+            party->dispOfs.y += 1.6f;
+            m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
+            marioPaperOn("p_bibi");
+            marioChgPose("M_B_3");
+            marioChgPaper("PM_B_1");
+            party->useMotionId = 4;
+            party->moveFrames = 30;
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1), &party->position);
+        case 4:
 #if VERSION <= VERSION_DEMO_JP
-        hit = marioSearchGround(&gx, &gy, &gz, 100.0f, -100.0f);
-        if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
-            if (m->floorMove.y || m->floorMove.x) {
-                if ((f32)m->screenY > 480.0f || (f32)m->screenY < 50.0f) {
-                    camFollowYOn();
+            if (30 - party->moveFrames <= 24) {
+                party->dispOfs.y += 0.4f;
+                m->dispOfs.y += 0.4f;
+#else
+            set_vivian_pos(party);
+            if (30 - party->moveFrames <= 24) {
+                party->dispOfs.y += 0.4f;
+                m->dispOfs2.y += 0.4f;
+#endif
+                if (party->dispOfs.y >= 8.0f) {
+                    party->dispOfs.y = 8.0f;
+                }
+#if VERSION <= VERSION_DEMO_JP
+                if (m->dispOfs.y >= 8.0f) {
+                    m->dispOfs.y = 8.0f;
+#else
+                if (m->dispOfs2.y >= 8.0f) {
+                    m->dispOfs2.y = 8.0f;
+#endif
                 }
             }
-            if (m->floorMove.y < 0.0f) {
-                gx += 0.2f;
+            party->work.vivian.shadowSize += 1.0f;
+            if (party->work.vivian.shadowSize >= 20.0f) {
+                party->work.vivian.shadowSize = 20.0f;
+                m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             }
-            m->hitobjStandOn = hit;
-            m->position.y = gx;
-            party->position.y = gx;
-        }
-#else
-        set_vivian_pos(party);
+            if (--party->moveFrames > 0) {
+                break;
+            }
+            vivianRippleOn(party);
+            partyVivianTailStop(party);
+            party->useMotionId = 5;
+        case 5:
+#if VERSION >= VERSION_JP
+            set_vivian_pos(party);
 #endif
-        partyUpdateKeyData(party);
-        if (vivian_cancel_req) {
-            party->useMotionId = 20;
-        }
-        if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X))) {
-            party->useMotionId = 20;
-        }
-        break;
+            party->work.vivian.shadowSize -= 1.0f;
+            if (party->work.vivian.shadowSize <= 10.0f) {
+                party->work.vivian.shadowSize = 10.0f;
+                party->useMotionId = 10;
+                m->flags |= MARIO_FLAG_WALLS_DISABLED;
+            }
+            break;
+        case 10:
+#if VERSION <= VERSION_DEMO_JP
+            hit = marioSearchGround(&gx, &gy, &gz, 100.0f, -100.0f);
+            if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
+                if (m->floorMove.y || m->floorMove.x) {
+                    if ((f32)m->screenY > 480.0f || (f32)m->screenY < 50.0f) {
+                        camFollowYOn();
+                    }
+                }
+                if (m->floorMove.y < 0.0f) {
+                    gx += 0.2f;
+                }
+                m->hitobjStandOn = hit;
+                m->position.y = gx;
+                party->position.y = gx;
+            }
+#else
+            set_vivian_pos(party);
+#endif
+            partyUpdateKeyData(party);
+            if (vivian_cancel_req) {
+                party->useMotionId = 20;
+            }
+            if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X))) {
+                party->useMotionId = 20;
+            }
+            break;
     }
 
     m->position.x += m->floorMove.x;
@@ -570,148 +570,148 @@ void vivian_use(PartyEntry* party) {
     }
 
     switch (party->useMotionId) {
-    case 20:
+        case 20:
 #if VERSION >= VERSION_JP
-        party->work.vivian.followOfs = 0.0f;
+            party->work.vivian.followOfs = 0.0f;
 #endif
-        m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_1), &party->position);
-        party->useMotionId = 21;
-    case 21:
+            m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_1), &party->position);
+            party->useMotionId = 21;
+        case 21:
 #if VERSION >= VERSION_JP
-        set_vivian_pos(party);
+            set_vivian_pos(party);
 #endif
-        party->work.vivian.shadowSize += 1.0f;
-        if (party->work.vivian.shadowSize >= 20.0f) {
-            party->work.vivian.shadowSize = 20.0f;
-            party->useMotionId = 22;
-        }
-        break;
-    case 22:
-        marioAdjustMoveDir();
-        partyChgPose(party, "PTR_A2_4");
-        party->poseTime = 24;
-        partyVivianTailStart(party);
-        party->useMotionId = 23;
-        break;
-    case 23:
-#if VERSION >= VERSION_JP
-        set_vivian_pos(party);
-#endif
-        animPoseSetLocalTime(party->paperAnimGroup, 24.0f);
-        party->poseTime = 24;
-        party->useMotionId = 24;
-        party->moveFrames = 24;
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW2), &party->position);
-    case 24:
-#if VERSION >= VERSION_JP
-        set_vivian_pos(party);
-#endif
-        animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
-        party->dispOfs.y -= 0.4f;
-        if (party->dispOfs.y <= 2.7f) {
-            party->dispOfs.y = 2.7f;
-        }
-        if (--party->moveFrames <= 0) {
+            party->work.vivian.shadowSize += 1.0f;
+            if (party->work.vivian.shadowSize >= 20.0f) {
+                party->work.vivian.shadowSize = 20.0f;
+                party->useMotionId = 22;
+            }
             break;
-        }
-        if (party->moveFrames == 20) {
-            marioChgPose("M_S_1");
-            m->poseTime = 24;
-            party->work.vivian.marioAnimTime = 24;
-            party->useMotionId = 25;
-        }
-        break;
-    case 25:
-#if VERSION <= VERSION_DEMO_JP
-        animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
-        animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
-        m->dispOfs.y -= 0.4f;
-        if (m->dispOfs.y <= 2.7f) {
-            m->dispOfs.y = 2.7f;
-#else
-        set_vivian_pos(party);
-        animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
-        animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
-        m->dispOfs2.y -= 0.4f;
-        if (m->dispOfs2.y <= 2.7f) {
-            m->dispOfs2.y = 2.7f;
-#endif
-        }
-        party->dispOfs.y -= 0.4f;
-        if (party->dispOfs.y <= 2.7f) {
-            party->dispOfs.y = 2.7f;
-        }
-        party->work.vivian.marioAnimTime--;
-        if (--party->moveFrames > 0) {
+        case 22:
+            marioAdjustMoveDir();
+            partyChgPose(party, "PTR_A2_4");
+            party->poseTime = 24;
+            partyVivianTailStart(party);
+            party->useMotionId = 23;
             break;
-        }
-        party->useMotionId = 26;
-        party->moveFrames = 24;
-    case 26:
-#if VERSION <= VERSION_DEMO_JP
-        animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
-        animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
-        m->dispOfs.y -= 0.4f;
-        if (m->dispOfs.y <= 2.7f) {
-            m->dispOfs.y = 2.7f;
-#else
-        set_vivian_pos(party);
-        animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
-        animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
-        m->dispOfs2.y -= 0.4f;
-        if (m->dispOfs2.y <= 2.7f) {
-            m->dispOfs2.y = 2.7f;
+        case 23:
+#if VERSION >= VERSION_JP
+            set_vivian_pos(party);
 #endif
-        }
-        party->dispOfs.y -= 0.4f;
-        if (party->dispOfs.y <= 2.7f) {
-            party->dispOfs.y = 2.7f;
-        }
-
-        // BUG: the clamps test > 0 (not < 0), so any count left after the decrement is zeroed and state 26, entered
-        // with moveFrames 24, ends on its first frame.
-        if (--party->work.vivian.marioAnimTime > 0) {
-            party->work.vivian.marioAnimTime = 0;
-        }
-        if (--party->moveFrames > 0) {
-            party->moveFrames = 0;
-        }
-        if (party->work.vivian.marioAnimTime == 0 && party->moveFrames == 0) {
-            party->useMotionId = 27;
-            marioPaperOff();
-            m->reserved_20 = NULL;
-            m->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
-            m->hitobjJumpFrom = m->hitobjStandOn;
-            m->hitobjStandOn = NULL;
-            {
-                Vec zero = {0.0f, 0.0f, 0.0f};
+            animPoseSetLocalTime(party->paperAnimGroup, 24.0f);
+            party->poseTime = 24;
+            party->useMotionId = 24;
+            party->moveFrames = 24;
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW2), &party->position);
+        case 24:
+#if VERSION >= VERSION_JP
+            set_vivian_pos(party);
+#endif
+            animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
+            party->dispOfs.y -= 0.4f;
+            if (party->dispOfs.y <= 2.7f) {
+                party->dispOfs.y = 2.7f;
+            }
+            if (--party->moveFrames <= 0) {
+                break;
+            }
+            if (party->moveFrames == 20) {
+                marioChgPose("M_S_1");
+                m->poseTime = 24;
+                party->work.vivian.marioAnimTime = 24;
+                party->useMotionId = 25;
+            }
+            break;
+        case 25:
 #if VERSION <= VERSION_DEMO_JP
-                m->dispOfs = zero;
+            animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
+            animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
+            m->dispOfs.y -= 0.4f;
+            if (m->dispOfs.y <= 2.7f) {
+                m->dispOfs.y = 2.7f;
 #else
-                m->dispOfs2 = zero;
+            set_vivian_pos(party);
+            animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
+            animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
+            m->dispOfs2.y -= 0.4f;
+            if (m->dispOfs2.y <= 2.7f) {
+                m->dispOfs2.y = 2.7f;
 #endif
             }
-            marioChgSmallJumpMotion();
-            m->baseSpeed = 0.0f;
-        }
-        break;
-    case 27:
-        animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
-        party->work.vivian.shadowSize -= 1.0f;
-        if (!(party->work.vivian.shadowSize > 10.0f)) {
-            party->work.vivian.shadowSize = 10.0f;
-            partyPaperOff(party);
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_NODECAY;
-            party->work.vivian.shadowSize = 10.0f;
-            party->dispOfs.y = 0.0f;
-            partyChgRunMode(party, PARTY_RUN_MOVE);
-            party->moveMode = PARTY_MOVE_MODE_STAY;
-            partyChgPoseId(party, PARTY_POSE_STAND);
-            party->flags &= ~PARTY_FLAG_IS_EVT_USE;
-        }
-        break;
+            party->dispOfs.y -= 0.4f;
+            if (party->dispOfs.y <= 2.7f) {
+                party->dispOfs.y = 2.7f;
+            }
+            party->work.vivian.marioAnimTime--;
+            if (--party->moveFrames > 0) {
+                break;
+            }
+            party->useMotionId = 26;
+            party->moveFrames = 24;
+        case 26:
+#if VERSION <= VERSION_DEMO_JP
+            animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
+            animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
+            m->dispOfs.y -= 0.4f;
+            if (m->dispOfs.y <= 2.7f) {
+                m->dispOfs.y = 2.7f;
+#else
+            set_vivian_pos(party);
+            animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
+            animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
+            m->dispOfs2.y -= 0.4f;
+            if (m->dispOfs2.y <= 2.7f) {
+                m->dispOfs2.y = 2.7f;
+#endif
+            }
+            party->dispOfs.y -= 0.4f;
+            if (party->dispOfs.y <= 2.7f) {
+                party->dispOfs.y = 2.7f;
+            }
+
+            // BUG: the clamps test > 0 (not < 0), so any count left after the decrement is zeroed and state 26, entered
+            // with moveFrames 24, ends on its first frame.
+            if (--party->work.vivian.marioAnimTime > 0) {
+                party->work.vivian.marioAnimTime = 0;
+            }
+            if (--party->moveFrames > 0) {
+                party->moveFrames = 0;
+            }
+            if (party->work.vivian.marioAnimTime == 0 && party->moveFrames == 0) {
+                party->useMotionId = 27;
+                marioPaperOff();
+                m->reserved_20 = NULL;
+                m->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
+                m->hitobjJumpFrom = m->hitobjStandOn;
+                m->hitobjStandOn = NULL;
+                {
+                    Vec zero = {0.0f, 0.0f, 0.0f};
+#if VERSION <= VERSION_DEMO_JP
+                    m->dispOfs = zero;
+#else
+                    m->dispOfs2 = zero;
+#endif
+                }
+                marioChgSmallJumpMotion();
+                m->baseSpeed = 0.0f;
+            }
+            break;
+        case 27:
+            animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
+            party->work.vivian.shadowSize -= 1.0f;
+            if (!(party->work.vivian.shadowSize > 10.0f)) {
+                party->work.vivian.shadowSize = 10.0f;
+                partyPaperOff(party);
+                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+                party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_NODECAY;
+                party->work.vivian.shadowSize = 10.0f;
+                party->dispOfs.y = 0.0f;
+                partyChgRunMode(party, PARTY_RUN_MOVE);
+                party->moveMode = PARTY_MOVE_MODE_STAY;
+                partyChgPoseId(party, PARTY_POSE_STAND);
+                party->flags &= ~PARTY_FLAG_IS_EVT_USE;
+            }
+            break;
     }
 }
 

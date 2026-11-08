@@ -96,33 +96,33 @@ static void effBattenMain(EffectEntry* effect) {
     type = work->type;
     group = gp->inBattle != 0;
     switch (type) {
-    case 1:
-        if (!animGroupBaseAsync("EFF_batten_x", group, NULL)) {
-            return;
-        }
-        if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batten_x", group);
-            animPoseSetAnim(work->poseId, "A_1", 1);
-        }
-        break;
-    case 2:
-        if (!animGroupBaseAsync("EFF_batten_x", group, NULL)) {
-            return;
-        }
-        if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batten_x", group);
-            animPoseSetAnim(work->poseId, "A_2", 1);
-        }
-        break;
-    case 3:
-        if (!animGroupBaseAsync("EFF_batten_rocket", group, NULL)) {
-            return;
-        }
-        if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batten_rocket", group);
-            animPoseSetAnim(work->poseId, "A_1", 1);
-        }
-        break;
+        case 1:
+            if (!animGroupBaseAsync("EFF_batten_x", group, NULL)) {
+                return;
+            }
+            if (work->poseId == -1) {
+                work->poseId = animPoseEntry("EFF_batten_x", group);
+                animPoseSetAnim(work->poseId, "A_1", 1);
+            }
+            break;
+        case 2:
+            if (!animGroupBaseAsync("EFF_batten_x", group, NULL)) {
+                return;
+            }
+            if (work->poseId == -1) {
+                work->poseId = animPoseEntry("EFF_batten_x", group);
+                animPoseSetAnim(work->poseId, "A_2", 1);
+            }
+            break;
+        case 3:
+            if (!animGroupBaseAsync("EFF_batten_rocket", group, NULL)) {
+                return;
+            }
+            if (work->poseId == -1) {
+                work->poseId = animPoseEntry("EFF_batten_rocket", group);
+                animPoseSetAnim(work->poseId, "A_1", 1);
+            }
+            break;
     }
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
@@ -144,37 +144,37 @@ static void effBattenMain(EffectEntry* effect) {
     if (type == 0) {
         for (i = 1, work++; i < effect->count; i++, work++) {
             switch (work->state) {
-            case 0:
-                if (--work->frame < 0) {
-                    work->frame = 0;
-                    work->state++;
-                }
-                break;
-            case 1:
-                if (work->frame < 30) {
-                    work->scale += (1.0f - work->scale) / 8.0f;
-                    work->alpha = (128 - work->alpha) / 8.0f + work->alpha;
-                    work->frame++;
-                } else {
-                    work->frame = (3 - i) * 10;
-                    work->state++;
-                }
-                break;
-            case 2:
-                if (--work->frame < 0) {
-                    work->frame = 0;
-                    work->state++;
-                }
-                break;
-            case 3:
-                if (work->frame < 30) {
-                    work->scale += (10.0f - work->scale) / 8.0f;
-                    work->alpha = (-work->alpha) / 8.0f + work->alpha;
-                    work->frame++;
-                } else {
-                    done++;
-                }
-                break;
+                case 0:
+                    if (--work->frame < 0) {
+                        work->frame = 0;
+                        work->state++;
+                    }
+                    break;
+                case 1:
+                    if (work->frame < 30) {
+                        work->scale += (1.0f - work->scale) / 8.0f;
+                        work->alpha = (128 - work->alpha) / 8.0f + work->alpha;
+                        work->frame++;
+                    } else {
+                        work->frame = (3 - i) * 10;
+                        work->state++;
+                    }
+                    break;
+                case 2:
+                    if (--work->frame < 0) {
+                        work->frame = 0;
+                        work->state++;
+                    }
+                    break;
+                case 3:
+                    if (work->frame < 30) {
+                        work->scale += (10.0f - work->scale) / 8.0f;
+                        work->alpha = (-work->alpha) / 8.0f + work->alpha;
+                        work->frame++;
+                    } else {
+                        done++;
+                    }
+                    break;
             }
         }
         if (done >= effect->count - 1) {

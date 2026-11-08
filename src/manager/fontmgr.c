@@ -14,16 +14,16 @@
 #include "libc_decls.h"
 
 typedef struct FontWidthEntry {
-    u8 kerning; //0x0
-    u8 width; //0x1
+    u8 kerning; // 0x0
+    u8 width; // 0x1
 } FontWidthEntry;
 
 typedef struct FontWidthBlock {
-    u32 magic; //0x0, "WID1"
-    u32 size; //0x4
-    u16 firstcode; //0x8
-    u16 lastcode; //0xA
-    FontWidthEntry entries[]; //0xC
+    u32 magic; // 0x0, "WID1"
+    u32 size; // 0x4
+    u16 firstcode; // 0x8
+    u16 lastcode; // 0xA
+    FontWidthEntry entries[]; // 0xC
 } FontWidthBlock;
 
 //.sdata
@@ -51,10 +51,10 @@ Vec fontScale;
 GXColor fontColor;
 u8 fontAlpha;
 BOOL fontEdge;
-BinaryFontInfo* pfi; //pointer to font info
+BinaryFontInfo* pfi; // pointer to font info
 BinaryFontGlyph* blockGlyph;
 GXTexObj fgTexObj;
-BinaryFontHeader* pfh; //pointer to font header
+BinaryFontHeader* pfh; // pointer to font header
 
 // US and later pass single-byte characters to JUTFont_CodeToGlyph zero-extended
 #if VERSION >= VERSION_US
@@ -1073,7 +1073,7 @@ u16 JUTFont_CodeToGlyph(u32 code) {
     glyph = pfi->replace;
     blockcount = pfh->blockcount;
     for (i = 0; i < blockcount; i++) {
-        if (map->magic == 'MAP1') { //search for a correct mapping
+        if (map->magic == 'MAP1') { // search for a correct mapping
             basecode = map->firstchar;
             if (((u16)code) >= basecode && ((u16)code) <= map->lastchar) {
                 switch (map->mapping) {

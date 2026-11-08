@@ -479,32 +479,32 @@ USER_FUNC(evt_map_entry_airport_harbor) {
     EvtWord lw[16];
     mapGetMapObj(name);
     switch (type) {
-    case 0:
-        if (!animGroupBaseAsync("p_hikohki", 0, NULL)) {
-            return EVT_RETURN_BLOCK;
-        }
-        if (pouchCheckItem(ITEM_PLANE_CURSE) == 1) {
-            lw[0] = (EvtWord)name;
-            lw[1] = (EvtWord)hit;
-            evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);
-            lw[0] = (EvtWord)name;
-            lw[1] = (EvtWord)hit;
-            evtRunCaseEntry(1, 0, hit, 0, evt_nonride_airport, lw);
-        }
-        break;
-    case 1:
-        if (!animGroupBaseAsync("p_hune", 0, NULL)) {
-            return EVT_RETURN_BLOCK;
-        }
-        if (pouchCheckItem(ITEM_BOAT_CURSE) == 1) {
-            lw[0] = (EvtWord)name;
-            lw[1] = (EvtWord)hit;
-            evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);
-            lw[0] = (EvtWord)name;
-            lw[1] = (EvtWord)hit;
-            evtRunCaseEntry(1, 0, hit, 0, evt_nonride_airport, lw);
-        }
-        break;
+        case 0:
+            if (!animGroupBaseAsync("p_hikohki", 0, NULL)) {
+                return EVT_RETURN_BLOCK;
+            }
+            if (pouchCheckItem(ITEM_PLANE_CURSE) == 1) {
+                lw[0] = (EvtWord)name;
+                lw[1] = (EvtWord)hit;
+                evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);
+                lw[0] = (EvtWord)name;
+                lw[1] = (EvtWord)hit;
+                evtRunCaseEntry(1, 0, hit, 0, evt_nonride_airport, lw);
+            }
+            break;
+        case 1:
+            if (!animGroupBaseAsync("p_hune", 0, NULL)) {
+                return EVT_RETURN_BLOCK;
+            }
+            if (pouchCheckItem(ITEM_BOAT_CURSE) == 1) {
+                lw[0] = (EvtWord)name;
+                lw[1] = (EvtWord)hit;
+                evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);
+                lw[0] = (EvtWord)name;
+                lw[1] = (EvtWord)hit;
+                evtRunCaseEntry(1, 0, hit, 0, evt_nonride_airport, lw);
+            }
+            break;
     }
     return EVT_RETURN_DONE;
 }
@@ -523,18 +523,18 @@ USER_FUNC(evt_map_replace_mapobj) {
     mapObjGetPos(name, &pos);
     mapObjFlagOn(name, MAP_OBJ_FLAG_DISABLED);
     switch (type) {
-    case 0:
-        effTorchEntry(0, pos.x, pos.y - 3.0f, pos.z, 0.6f);
-        break;
+        case 0:
+            effTorchEntry(0, pos.x, pos.y - 3.0f, pos.z, 0.6f);
+            break;
 #if VERSION <= VERSION_DEMO_JP
-    case 1:
-            effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
-        break;
+        case 1:
+                effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
+            break;
 #else
-    case 1:
-        eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
-        ((EffFireWork*)eff->userdata)->useMapBlend = 1;
-        break;
+        case 1:
+            eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
+            ((EffFireWork*)eff->userdata)->useMapBlend = 1;
+            break;
 #endif
     }
     return EVT_RETURN_DONE;

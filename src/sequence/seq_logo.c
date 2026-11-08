@@ -450,7 +450,7 @@ void seq_logoMain(SequenceWork* work) {
             }
 #endif
             if (!(gp->flags & GW_FLAG_E3)) {
-                if (!wp->skipStory) { //play story demo
+                if (!wp->skipStory) { // play story demo
                     seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
                     return;
                 }
@@ -920,7 +920,7 @@ static void progDisp(CameraId camId, void* param) {
                     wp->promptStep++;
                 }
 
-                msg = romFontGetMessage(0); //Display Progressive Scan?
+                msg = romFontGetMessage(0); // Display Progressive Scan?
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
                     -(0.7f * width) / 2.0f,
@@ -929,7 +929,7 @@ static void progDisp(CameraId camId, void* param) {
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
 
-                msg = romFontGetMessage(1); //yes/no
+                msg = romFontGetMessage(1); // yes/no
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
                     -(0.7f * width) / 2.0f,
@@ -938,7 +938,7 @@ static void progDisp(CameraId camId, void* param) {
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
 
-                msg = romFontGetMessage(2); //selection box
+                msg = romFontGetMessage(2); // selection box
                 width = 0.7f * (f32)romFontGetWidth(msg);
                 romFontPrintGX(
                     -((width) / 2.0f - (f32)(75 * ((2 * wp->toggle) - 1))),
@@ -1005,9 +1005,9 @@ static void progDisp(CameraId camId, void* param) {
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
                     wp->promptStep++;
                 }
-                type = 3; //progressive turned on
+                type = 3; // progressive turned on
                 if (wp->toggle) {
-                    type = 4; //progressive turned off
+                    type = 4; // progressive turned off
                 }
                 msg = romFontGetMessage(type);
                 width = (f32)romFontGetWidth(msg);

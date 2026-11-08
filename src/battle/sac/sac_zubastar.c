@@ -158,51 +158,51 @@ static USER_FUNC(main_star) {
     ZubaStarWork* w = GetZubaStarPtr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     switch (w->star.state) {
-    case 0:
-        break;
-    case 1:
-        w->star.state = 2;
-        w->star.timer = 0;
-        w->star.eff = effStarStoneEntry(6, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += mario->sizeMultiplier * mario->height + 37.0f;
-        w->star.from = w->star.pos;
-        w->star.to = w->star.pos;
-        w->star.to.y += 50.0f;
-        w->star.to.z += -1.0f;
-        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-    case 2:
-        w->star.timer++;
-        if (w->star.timer <= 100) {
-            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
-            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
-            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
-        } else {
-            w->star.pos.x = w->star.to.x;
-            w->star.pos.y = w->star.to.y;
-            w->star.pos.z = w->star.to.z;
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
-        }
-        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
-        if (w->star.timer >= 120) {
-            w->star.state = 3;
+        case 0:
+            break;
+        case 1:
+            w->star.state = 2;
             w->star.timer = 0;
+            w->star.eff = effStarStoneEntry(6, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+            w->star.pos.y += mario->sizeMultiplier * mario->height + 37.0f;
             w->star.from = w->star.pos;
-            w->star.to.y = 300.0f;
-        }
-        break;
-    case 3:
-        w->star.timer++;
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
-        if (w->star.timer >= 60) {
-            w->star.state = 4;
-            w->star.timer = 0;
-        }
-        break;
-    case 4:
-        break;
+            w->star.to = w->star.pos;
+            w->star.to.y += 50.0f;
+            w->star.to.z += -1.0f;
+            w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+        case 2:
+            w->star.timer++;
+            if (w->star.timer <= 100) {
+                w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+                w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+                w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
+            } else {
+                w->star.pos.x = w->star.to.x;
+                w->star.pos.y = w->star.to.y;
+                w->star.pos.z = w->star.to.z;
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
+            }
+            w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+            if (w->star.timer >= 120) {
+                w->star.state = 3;
+                w->star.timer = 0;
+                w->star.from = w->star.pos;
+                w->star.to.y = 300.0f;
+            }
+            break;
+        case 3:
+            w->star.timer++;
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+            if (w->star.timer >= 60) {
+                w->star.state = 4;
+                w->star.timer = 0;
+            }
+            break;
+        case 4:
+            break;
     }
     if (w->star.eff) {
         EffStarStoneWork* d = (EffStarStoneWork*)w->star.eff->userdata;
@@ -421,173 +421,173 @@ USER_FUNC(zubastar_main) {
         w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};
     }
     switch (w->phase) {
-    case 0:
-        w->phase = 5;
-        w->cursor.state = 5;
-        break;
-    case 5:
-        w->phase = 6;
-        w->phaseCount = 0;
-        if (w->gaugeState == 0) {
-            w->gaugeState = 5;
-        }
-        if (w->gaugeState == 15) {
-            w->gaugeState = 16;
-        }
-    case 6:
-        if (w->cursor.state == 10 && w->gaugeState == 10) {
-            w->phase = 10;
-        }
-        break;
-    case 10:
-        w->phase = 11;
-        w->acTimer = 300;
-    case 11:
-        if (w->gauge >= 100.0f) {
-            EventEntry* ev;
-            w->phase = 20;
-            w->level++;
-            ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
-            v = w->level + 1;
-            ev->lwData[0] = v < 6 ? v : 6;
-            psndSFXOff(w->sfx);
+        case 0:
+            w->phase = 5;
+            w->cursor.state = 5;
             break;
-        }
-        w->acTimer--;
-        if (w->acTimer <= 0) {
-            w->phase = 15;
-            psndSFXOff(w->sfx);
-            break;
-        }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            w->gaugeV = 2.8f;
-        }
-        break;
-    case 15:
-        w->gaugeState = 20;
-        psndSFXOff(w->sfx);
-        w->phase = 30;
-        break;
-    case 20:
-        w->gaugeState = 15;
-        w->gaugeTimer = 0;
-        psndSFXOff(w->sfx);
-        if (audience >= 1 && audience <= 49) {
-            BattleAudienceSoundCallKind(1);
-        }
-        if (audience >= 50 && audience <= 99) {
-            BattleAudienceSoundCallKind(1);
-            BattleAudienceSoundWhistleKind(1);
-        }
-        if (audience >= 100 && audience <= 149) {
-            BattleAudienceSoundCallKind(2);
-            BattleAudienceSoundWhistleKind(2);
-        }
-        if (audience >= 150) {
-            BattleAudienceSoundCallKind(2);
-            BattleAudienceSoundWhistleKind(3);
-        }
-        w->phase = 21;
-        w->cursor.state = 15;
-    case 21:
-        if (w->cursor.state == 20) {
-            w->phase = 25;
+        case 5:
+            w->phase = 6;
             w->phaseCount = 0;
-        }
-        break;
-    case 25: {
-        f32 top[18];
-        f32 bot[18];
-        f32 dtop[17];
-        f32 dbot[17];
-        Vec a;
-        Vec b;
-        s32 n;
-        s32 j;
-        s32 ti;
-        s32 bi;
-        f32 mt, mb, f;
-        w->phase = 26;
-        w->cursor.state = 25;
-        if (irand(2) == 0) {
-            w->lstart = (Vec){0.0f, 240.0f, 0.0f};
-            w->lend = (Vec){0.0f, -240.0f, 0.0f};
-        } else {
-            w->lstart = (Vec){0.0f, -240.0f, 0.0f};
-            w->lend = (Vec){0.0f, 240.0f, 0.0f};
-        }
-        top[0] = bot[0] = -96.0f;
-        i = 0;
-        n = 1;
-
-        // BUG: reads 17 entries of lines[16]; the extra entry overlaps capture, whose value is never 5
-        for (; i < 17; i++) {
-            ZSLine* l = &w->lines[i];
-            if (l->state == 5) {
-                if (240.0f == l->y0) {
-                    top[n] = l->x0;
-                    bot[n] = l->x1;
-                } else {
-                    top[n] = l->x1;
-                    bot[n] = l->x0;
-                }
-                n++;
+            if (w->gaugeState == 0) {
+                w->gaugeState = 5;
             }
-        }
+            if (w->gaugeState == 15) {
+                w->gaugeState = 16;
+            }
+        case 6:
+            if (w->cursor.state == 10 && w->gaugeState == 10) {
+                w->phase = 10;
+            }
+            break;
+        case 10:
+            w->phase = 11;
+            w->acTimer = 300;
+        case 11:
+            if (w->gauge >= 100.0f) {
+                EventEntry* ev;
+                w->phase = 20;
+                w->level++;
+                ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
+                v = w->level + 1;
+                ev->lwData[0] = v < 6 ? v : 6;
+                psndSFXOff(w->sfx);
+                break;
+            }
+            w->acTimer--;
+            if (w->acTimer <= 0) {
+                w->phase = 15;
+                psndSFXOff(w->sfx);
+                break;
+            }
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                w->gaugeV = 2.8f;
+            }
+            break;
+        case 15:
+            w->gaugeState = 20;
+            psndSFXOff(w->sfx);
+            w->phase = 30;
+            break;
+        case 20:
+            w->gaugeState = 15;
+            w->gaugeTimer = 0;
+            psndSFXOff(w->sfx);
+            if (audience >= 1 && audience <= 49) {
+                BattleAudienceSoundCallKind(1);
+            }
+            if (audience >= 50 && audience <= 99) {
+                BattleAudienceSoundCallKind(1);
+                BattleAudienceSoundWhistleKind(1);
+            }
+            if (audience >= 100 && audience <= 149) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(2);
+            }
+            if (audience >= 150) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(3);
+            }
+            w->phase = 21;
+            w->cursor.state = 15;
+        case 21:
+            if (w->cursor.state == 20) {
+                w->phase = 25;
+                w->phaseCount = 0;
+            }
+            break;
+        case 25: {
+            f32 top[18];
+            f32 bot[18];
+            f32 dtop[17];
+            f32 dbot[17];
+            Vec a;
+            Vec b;
+            s32 n;
+            s32 j;
+            s32 ti;
+            s32 bi;
+            f32 mt, mb, f;
+            w->phase = 26;
+            w->cursor.state = 25;
+            if (irand(2) == 0) {
+                w->lstart = (Vec){0.0f, 240.0f, 0.0f};
+                w->lend = (Vec){0.0f, -240.0f, 0.0f};
+            } else {
+                w->lstart = (Vec){0.0f, -240.0f, 0.0f};
+                w->lend = (Vec){0.0f, 240.0f, 0.0f};
+            }
+            top[0] = bot[0] = -96.0f;
+            i = 0;
+            n = 1;
+
+            // BUG: reads 17 entries of lines[16]; the extra entry overlaps capture, whose value is never 5
+            for (; i < 17; i++) {
+                ZSLine* l = &w->lines[i];
+                if (l->state == 5) {
+                    if (240.0f == l->y0) {
+                        top[n] = l->x0;
+                        bot[n] = l->x1;
+                    } else {
+                        top[n] = l->x1;
+                        bot[n] = l->x0;
+                    }
+                    n++;
+                }
+            }
 #if VERSION <= VERSION_DEMO_JP
-        top[n] = 364.0f;
-        bot[n] = 304.0f;
+            top[n] = 364.0f;
+            bot[n] = 304.0f;
 #else
-        top[n] = 344.0f;
-        bot[n] = 264.0f;
+            top[n] = 344.0f;
+            bot[n] = 264.0f;
 #endif
-        for (i = 0; i < n; i++) {
-            for (j = i + 1; j < n + 1; j++) {
-                if (top[i] > top[j]) {
-                    f = top[i];
-                    top[i] = top[j];
-                    top[j] = f;
+            for (i = 0; i < n; i++) {
+                for (j = i + 1; j < n + 1; j++) {
+                    if (top[i] > top[j]) {
+                        f = top[i];
+                        top[i] = top[j];
+                        top[j] = f;
+                    }
+                    if (bot[i] > bot[j]) {
+                        f = bot[i];
+                        bot[i] = bot[j];
+                        bot[j] = f;
+                    }
                 }
-                if (bot[i] > bot[j]) {
-                    f = bot[i];
-                    bot[i] = bot[j];
-                    bot[j] = f;
+            }
+            for (i = 0; i < n; i++) {
+                dtop[i] = top[i + 1] - top[i];
+                dbot[i] = bot[i + 1] - bot[i];
+            }
+            mt = mb = 0.0f;
+            ti = bi = i = 0;
+            for (; i < n; i++) {
+                if (dtop[i] > mt) {
+                    mt = dtop[i];
+                    ti = i;
+                }
+                if (dbot[i] > mb) {
+                    mb = dbot[i];
+                    bi = i;
                 }
             }
-        }
-        for (i = 0; i < n; i++) {
-            dtop[i] = top[i + 1] - top[i];
-            dbot[i] = bot[i + 1] - bot[i];
-        }
-        mt = mb = 0.0f;
-        ti = bi = i = 0;
-        for (; i < n; i++) {
-            if (dtop[i] > mt) {
-                mt = dtop[i];
-                ti = i;
+            f = top[ti] + dtop[ti] * rand() / 32767.0f;
+            if (240.0f == w->lstart.y) {
+                w->lstart.x = f;
+            } else {
+                w->lend.x = f;
             }
-            if (dbot[i] > mb) {
-                mb = dbot[i];
-                bi = i;
-            }
-        }
-        f = top[ti] + dtop[ti] * rand() / 32767.0f;
-        if (240.0f == w->lstart.y) {
-            w->lstart.x = f;
-        } else {
-            w->lend.x = f;
-        }
 
-        // BUG: bi is the widest gap along the bottom edge (dbot), but the point is taken from top[] and dtop[]
-        f = top[bi] + dtop[bi] * rand() / 32767.0f;
-        if (-240.0f == w->lstart.y) {
-            w->lstart.x = f;
-        } else {
-            w->lend.x = f;
-        }
-        b = w->lend;
-        a = w->lstart;
-        zubastar_bunkatu(&a, &b);
+            // BUG: bi is the widest gap along the bottom edge (dbot), but the point is taken from top[] and dtop[]
+            f = top[bi] + dtop[bi] * rand() / 32767.0f;
+            if (-240.0f == w->lstart.y) {
+                w->lstart.x = f;
+            } else {
+                w->lend.x = f;
+            }
+            b = w->lend;
+            a = w->lstart;
+            zubastar_bunkatu(&a, &b);
     }
     case 26:
         if (w->cursor.state == 30) {
@@ -641,84 +641,84 @@ USER_FUNC(zubastar_main) {
     }
 
     switch (w->cursor.state) {
-    case 0:
-        break;
-    case 5:
-        w->cursor.state = 6;
-        w->cursor.timer = 0;
-    case 6:
-        w->cursor.timer++;
-        w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.timer, 15);
-        w->cursor.pos.z = 0.0f;
-        if (w->cursor.timer >= 15) {
-            w->cursor.state = 10;
-        }
-        break;
-    case 10:
-        w->cursor.pos = (Vec){0.0f, 300.0f, 0.0f};
-        break;
-    case 15:
-        w->cursor.state = 16;
-        w->cursor.timer = 0;
-    case 16:
-        w->cursor.timer++;
-        w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.timer, 15);
-        w->cursor.pos.z = 0.0f;
-        if (w->cursor.timer >= 15) {
-            w->cursor.state = 20;
-        }
-        break;
-    case 25:
-        w->cursor.state = 26;
-        w->ltimer = 0;
-        for (i = 0; i < 16; i++) {
-            ZSLine* l = &w->lines[i];
-            if (l->state == 0) {
-                w->lidx = i;
-                l->state = 5;
-                l->f4 = 0;
-                l->x0 = l->x1 = w->lstart.x;
-                l->y0 = l->y1 = w->lstart.y;
-                l->timer = 0;
-                break;
-            }
-        }
-        psndSFXOn("SFX_BTL_SAC_ZUBA_STAR2");
-    case 26:
-        w->ltimer++;
-        w->cursor.pos.x = intplGetValue(EASING_LINEAR, w->lstart.x, w->lend.x, w->ltimer, 15);
-        w->cursor.pos.y = intplGetValue(EASING_LINEAR, w->lstart.y, w->lend.y, w->ltimer, 15);
-        l = &w->lines[w->lidx];
-        l->x1 = w->cursor.pos.x;
-        l->y1 = w->cursor.pos.y;
-        if (w->ltimer >= 15) {
-            w->cursor.state = 27;
+        case 0:
+            break;
+        case 5:
+            w->cursor.state = 6;
             w->cursor.timer = 0;
+        case 6:
+            w->cursor.timer++;
+            w->cursor.pos.x = 0.0f;
+            w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.timer, 15);
+            w->cursor.pos.z = 0.0f;
+            if (w->cursor.timer >= 15) {
+                w->cursor.state = 10;
+            }
+            break;
+        case 10:
+            w->cursor.pos = (Vec){0.0f, 300.0f, 0.0f};
+            break;
+        case 15:
+            w->cursor.state = 16;
+            w->cursor.timer = 0;
+        case 16:
+            w->cursor.timer++;
+            w->cursor.pos.x = 0.0f;
+            w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.timer, 15);
+            w->cursor.pos.z = 0.0f;
+            if (w->cursor.timer >= 15) {
+                w->cursor.state = 20;
+            }
+            break;
+        case 25:
+            w->cursor.state = 26;
+            w->ltimer = 0;
+            for (i = 0; i < 16; i++) {
+                ZSLine* l = &w->lines[i];
+                if (l->state == 0) {
+                    w->lidx = i;
+                    l->state = 5;
+                    l->f4 = 0;
+                    l->x0 = l->x1 = w->lstart.x;
+                    l->y0 = l->y1 = w->lstart.y;
+                    l->timer = 0;
+                    break;
+                }
+            }
+            psndSFXOn("SFX_BTL_SAC_ZUBA_STAR2");
+        case 26:
+            w->ltimer++;
+            w->cursor.pos.x = intplGetValue(EASING_LINEAR, w->lstart.x, w->lend.x, w->ltimer, 15);
+            w->cursor.pos.y = intplGetValue(EASING_LINEAR, w->lstart.y, w->lend.y, w->ltimer, 15);
+            l = &w->lines[w->lidx];
+            l->x1 = w->cursor.pos.x;
+            l->y1 = w->cursor.pos.y;
+            if (w->ltimer >= 15) {
+                w->cursor.state = 27;
+                w->cursor.timer = 0;
 #if VERSION <= VERSION_DEMO_JP
-            // The early demos flash the screen from here.
-            fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
+                // The early demos flash the screen from here.
+                fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
 #else
-            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 8.0f, 0.0f, 30, 0);
+                btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 8.0f, 0.0f, 30, 0);
 #endif
-        }
-        break;
-    case 27:
-        w->cursor.timer++;
-        if (w->cursor.timer >= 5) {
-            w->cursor.state = 28;
-        }
-        break;
-    case 28:
-        w->cursor.state = 30;
+            }
+            break;
+        case 27:
+            w->cursor.timer++;
+            if (w->cursor.timer >= 5) {
+                w->cursor.state = 28;
+            }
+            break;
+        case 28:
+            w->cursor.state = 30;
 #if VERSION <= VERSION_DEMO_JP
-        fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
-    case 30:
-        w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};
-        break;
+        case 30:
+            w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};
+            break;
     }
     w->cursor.trail[3] = w->cursor.trail[2];
     w->cursor.trail[2] = w->cursor.trail[1];
@@ -726,99 +726,99 @@ USER_FUNC(zubastar_main) {
     w->cursor.trail[0] = w->cursor.pos;
 
     switch (w->gaugeState) {
-    case 0:
-        break;
-    case 5:
-        w->gaugeState = 6;
-        w->gaugeTimer = 0;
-        w->gaugePos = (Vec){-1000.0f, 0.0f, 0.0f};
-        w->unused90 = 200.0f;
-        w->gauge = 0.0f;
-        w->gaugeV = 0.0f;
-        w->gaugeAcc = -1.0f;
-        w->alpha = 255;
-        w->gaugeBlink = 0;
-        break;
-    case 6:
-        w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) {
-            w->gaugeState = 10;
-        }
-        break;
-    case 10:
-        w->gauge += w->gaugeV;
-        w->gauge += w->gaugeAcc;
-        if (w->gauge > 100.0f) {
-            w->gauge = 100.0f;
-        }
-        if (w->gauge < 0.0f) {
+        case 0:
+            break;
+        case 5:
+            w->gaugeState = 6;
+            w->gaugeTimer = 0;
+            w->gaugePos = (Vec){-1000.0f, 0.0f, 0.0f};
+            w->unused90 = 200.0f;
             w->gauge = 0.0f;
-        }
-        w->gaugeV -= 0.25f;
-        if (w->gaugeV < 0.0f) {
             w->gaugeV = 0.0f;
-        }
-        w->gaugeBlink++;
-        if (w->gaugeBlink >= 8) {
+            w->gaugeAcc = -1.0f;
+            w->alpha = 255;
             w->gaugeBlink = 0;
-        }
-        if (w->gauge <= 0.0f) {
-            w->gauge = 0.0f;
+            break;
+        case 6:
+            w->gaugeTimer++;
+            w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->gaugeTimer, 30);
+            if (w->gaugeTimer >= 30) {
+                w->gaugeState = 10;
+            }
+            break;
+        case 10:
+            w->gauge += w->gaugeV;
+            w->gauge += w->gaugeAcc;
+            if (w->gauge > 100.0f) {
+                w->gauge = 100.0f;
+            }
+            if (w->gauge < 0.0f) {
+                w->gauge = 0.0f;
+            }
+            w->gaugeV -= 0.25f;
+            if (w->gaugeV < 0.0f) {
+                w->gaugeV = 0.0f;
+            }
+            w->gaugeBlink++;
+            if (w->gaugeBlink >= 8) {
+                w->gaugeBlink = 0;
+            }
+            if (w->gauge <= 0.0f) {
+                w->gauge = 0.0f;
+                if (psndSFXChk(w->sfx) == 0) {
+                    psndSFXOff(w->sfx);
+                }
+            }
+            if (w->gauge > 0.0f) {
+                if (psndSFXChk(w->sfx) == -1) {
+                    w->sfx = psndSFXOn("SFX_BTL_SAC_ZUBA_STAR1");
+                }
+            }
             if (psndSFXChk(w->sfx) == 0) {
-                psndSFXOff(w->sfx);
+                psndSFX_pit(w->sfx, 683.0f * w->level + 4096.0f * w->gauge / 100.0f);
             }
-        }
-        if (w->gauge > 0.0f) {
-            if (psndSFXChk(w->sfx) == -1) {
-                w->sfx = psndSFXOn("SFX_BTL_SAC_ZUBA_STAR1");
+            break;
+        case 15:
+            w->gauge = 100.0f;
+            w->gaugeV = 0.0f;
+            w->gaugeAcc = 0.0f;
+            w->gaugeBlink = 0;
+            w->gaugeTimer++;
+            w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
+            if (w->gaugeTimer >= 30) {
+                w->gaugeTimer = 30;
             }
-        }
-        if (psndSFXChk(w->sfx) == 0) {
-            psndSFX_pit(w->sfx, 683.0f * w->level + 4096.0f * w->gauge / 100.0f);
-        }
-        break;
-    case 15:
-        w->gauge = 100.0f;
-        w->gaugeV = 0.0f;
-        w->gaugeAcc = 0.0f;
-        w->gaugeBlink = 0;
-        w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) {
-            w->gaugeTimer = 30;
-        }
-        break;
-    case 16:
-        w->gaugeState = 6;
-        w->gaugeTimer = 0;
-        w->gauge = 0.0f;
-        w->gaugeV = 0.0f;
-        w->gaugeAcc = -0.9f - 0.1f * w->level;
-        break;
-    case 20:
-        w->gaugeState = 21;
-        w->gaugeTimer = 0;
-        break;
-    case 21:
-        w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) {
-            w->gaugeTimer = 30;
-        }
-        break;
+            break;
+        case 16:
+            w->gaugeState = 6;
+            w->gaugeTimer = 0;
+            w->gauge = 0.0f;
+            w->gaugeV = 0.0f;
+            w->gaugeAcc = -0.9f - 0.1f * w->level;
+            break;
+        case 20:
+            w->gaugeState = 21;
+            w->gaugeTimer = 0;
+            break;
+        case 21:
+            w->gaugeTimer++;
+            w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
+            if (w->gaugeTimer >= 30) {
+                w->gaugeTimer = 30;
+            }
+            break;
     }
     for (i = 0; i < 16; i++) {
         ZSLine* l = &w->lines[i];
         switch (l->state) {
-        case 0:
-            break;
-        case 5:
-            l->timer++;
-            if (l->timer > 60) {
-                l->timer = 0;
-            }
-            break;
+            case 0:
+                break;
+            case 5:
+                l->timer++;
+                if (l->timer > 60) {
+                    l->timer = 0;
+                }
+                break;
         }
     }
     dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, zubastar_disp2D, NULL);
@@ -845,48 +845,48 @@ USER_FUNC(zubastar_bomb) {
         return 0;
     }
     switch (w->phase) {
-    case 0:
-        c = 0;
-        for (i = 0; i < w->count; i++) {
-            if (w->ptrs[i]->state != 10) {
-                break;
+        case 0:
+            c = 0;
+            for (i = 0; i < w->count; i++) {
+                if (w->ptrs[i]->state != 10) {
+                    break;
+                }
+                c++;
             }
-            c++;
-        }
-        if (c == w->count) {
-            return 2;
-        }
+            if (c == w->count) {
+                return 2;
+            }
     }
     sfx = "SFX_BTL_SAC_ZUBA_STAR3";
     for (k = 0; k < w->count; k++) {
         ZSObj* t = w->ptrs[k];
         switch (t->state) {
-        case 0: {
-            s32 steps = irand(30) + 30;
-            f32 sx, sy, sz;
-            s32 j;
-            t->fallDuration = steps;
-            sx = 0.0f;
-            sy = 0.0f;
-            sz = 0.0f;
-            t->start = (Vec){0.0f, 0.0f, 0.0f};
-            t->end = (Vec){0.0f, -1000.0f, 200.0f};
-            for (j = 0; j < t->vertexCount; j++) {
-                sx += t->verts[j].x;
-                sy += t->verts[j].y;
-                sz += t->verts[j].z;
-            }
-            t->center.x = sx / t->vertexCount;
-            t->center.y = sy / t->vertexCount;
-            t->center.z = sz / t->vertexCount;
-            t->end.x += 600.0f * (t->center.x - 104.0f) / 200.0f;
-            t->rot = 0.0f;
-            t->rotSpeed = 70.0f * rand() / 32767.0f - 35.0f;
-            t->vy = (2.0f * (t->end.y - t->start.y) - steps * (-1.25f * steps)) / (2.0f * steps);
-            t->fallFrame = 0;
-            t->state = 5;
-            psndSFXOn(sfx);
-            break;
+            case 0: {
+                s32 steps = irand(30) + 30;
+                f32 sx, sy, sz;
+                s32 j;
+                t->fallDuration = steps;
+                sx = 0.0f;
+                sy = 0.0f;
+                sz = 0.0f;
+                t->start = (Vec){0.0f, 0.0f, 0.0f};
+                t->end = (Vec){0.0f, -1000.0f, 200.0f};
+                for (j = 0; j < t->vertexCount; j++) {
+                    sx += t->verts[j].x;
+                    sy += t->verts[j].y;
+                    sz += t->verts[j].z;
+                }
+                t->center.x = sx / t->vertexCount;
+                t->center.y = sy / t->vertexCount;
+                t->center.z = sz / t->vertexCount;
+                t->end.x += 600.0f * (t->center.x - 104.0f) / 200.0f;
+                t->rot = 0.0f;
+                t->rotSpeed = 70.0f * rand() / 32767.0f - 35.0f;
+                t->vy = (2.0f * (t->end.y - t->start.y) - steps * (-1.25f * steps)) / (2.0f * steps);
+                t->fallFrame = 0;
+                t->state = 5;
+                psndSFXOn(sfx);
+                break;
         }
         case 5:
             t->pos.x = intplGetValue(EASING_LINEAR, t->start.x, t->end.x, t->fallFrame, t->fallDuration);

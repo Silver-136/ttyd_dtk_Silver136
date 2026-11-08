@@ -60,7 +60,7 @@ void seq_gameMain(SequenceWork* wp) {
                 gp->flags &= ~GW_FLAG_E3_TIMEOUT;
                 seqSetSeq(SEQ_GAME_OVER, NULL, NULL);
             }
-            marioGetPtr(); //unused
+            marioGetPtr(); // unused
             camera = camGetPtr(CAMERA_3D);
             position = camera->cameraPos;
             camera2 = camGetPtr(CAMERA_3D);

@@ -361,130 +361,130 @@ static void main_base(void) {
     s32 found;
 
     switch (w->state) {
-    case 1:
-        w->state = 2;
-        w->round = 1;
-        w->result = 0;
-        w->gaugeLen = 180.0f;
-        w->cursor = 0.0f;
-        create_timing();
-        w->gaugeState = 1;
-    case 2:
-        if (w->gaugeState != 3) {
-            break;
-        }
-        w->state = 3;
-        w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
-    case 3:
-        if (w->gaugeState == 3) {
-            w->cursor += 0.1f * w->result + 0.8f;
-            psndSFX_pit(w->sfx, 683.0f * w->result + 4096.0f * w->cursor / w->gaugeLen);
-            if (w->cursor >= w->gaugeLen) {
-                w->cursor = 0.0f;
-                w->round++;
-                w->result++;
-                w->starState = 6;
-                psndSFXOff(w->sfx);
-                ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
-                v = w->result + 1;
-                ev->lwData[0] = v < 6 ? v : 6;
-                if (w->round > 5) {
-                    w->state = 5;
-                    w->gaugeState = 5;
-                } else {
-                    w->state = 4;
-                    w->timer = 30;
-                    w->offsetY = -40.0f;
-                    create_timing();
-                }
+        case 1:
+            w->state = 2;
+            w->round = 1;
+            w->result = 0;
+            w->gaugeLen = 180.0f;
+            w->cursor = 0.0f;
+            create_timing();
+            w->gaugeState = 1;
+        case 2:
+            if (w->gaugeState != 3) {
+                break;
             }
-        }
-        for (i = 0; i < 8; i++) {
-            idx[i] = i;
-            pos[i] = w->timing[i].pos;
-        }
-        for (i = 0; i < 7; i++) {
-            for (j = i + 1; j < 8; j++) {
-                f32 pj;
-                f32 pi;
-                pi = pos[i];
-                pj = pos[j];
-                if (pi > pj) {
-                    s32 ti = idx[i];
-                    pos[i] = pj;
-                    idx[i] = idx[j];
-                    idx[j] = ti;
-                    pos[j] = pi;
-                }
-            }
-        }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            for (i = 0; i < 8; i++) {
-                t = &w->timing[idx[i]];
-                if (t->state == 2 && w->cursor >= t->pos - 7.0f && w->cursor <= 7.0f + t->pos) {
-                    if (t->type == 1) {
-                        t->state = 3;
-                        t->hit = 1;
-                        psndSFXOn("SFX_BTL_SAC_DOKKAN2");
-                        BattleAudienceSoundHandBeat();
+            w->state = 3;
+            w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
+        case 3:
+            if (w->gaugeState == 3) {
+                w->cursor += 0.1f * w->result + 0.8f;
+                psndSFX_pit(w->sfx, 683.0f * w->result + 4096.0f * w->cursor / w->gaugeLen);
+                if (w->cursor >= w->gaugeLen) {
+                    w->cursor = 0.0f;
+                    w->round++;
+                    w->result++;
+                    w->starState = 6;
+                    psndSFXOff(w->sfx);
+                    ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
+                    v = w->result + 1;
+                    ev->lwData[0] = v < 6 ? v : 6;
+                    if (w->round > 5) {
+                        w->state = 5;
+                        w->gaugeState = 5;
                     } else {
-                        w->result = 0;
-                        w->state = 5;
-                        w->gaugeState = 4;
-                        w->starState = 8;
-                        t->hit = 2;
-                        psndSFXOn("SFX_BTL_SAC_DOKKAN3");
-                        BattleAudienceSoundBooing();
-                        psndSFXOff(w->sfx);
+                        w->state = 4;
+                        w->timer = 30;
+                        w->offsetY = -40.0f;
+                        create_timing();
                     }
-                    break;
                 }
             }
-            if (i == 8) {
-                found = 0;
-                for (j = 0; j < 8; j++) {
-                    // FAKE: spare temporary t2; assigning t directly changes the object
-                    DekaTiming* t2 = &w->timing[idx[j]];
-                    t = t2;
-                    if (t->state == 2 && t->type == 1) {
-                        w->state = 5;
-                        w->gaugeState = 4;
-                        t->hit = 2;
-                        psndSFXOn("SFX_BTL_SAC_DOKKAN3");
-                        BattleAudienceSoundBooing();
-                        psndSFXOff(w->sfx);
-                        found = 1;
+            for (i = 0; i < 8; i++) {
+                idx[i] = i;
+                pos[i] = w->timing[i].pos;
+            }
+            for (i = 0; i < 7; i++) {
+                for (j = i + 1; j < 8; j++) {
+                    f32 pj;
+                    f32 pi;
+                    pi = pos[i];
+                    pj = pos[j];
+                    if (pi > pj) {
+                        s32 ti = idx[i];
+                        pos[i] = pj;
+                        idx[i] = idx[j];
+                        idx[j] = ti;
+                        pos[j] = pi;
+                    }
+                }
+            }
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                for (i = 0; i < 8; i++) {
+                    t = &w->timing[idx[i]];
+                    if (t->state == 2 && w->cursor >= t->pos - 7.0f && w->cursor <= 7.0f + t->pos) {
+                        if (t->type == 1) {
+                            t->state = 3;
+                            t->hit = 1;
+                            psndSFXOn("SFX_BTL_SAC_DOKKAN2");
+                            BattleAudienceSoundHandBeat();
+                        } else {
+                            w->result = 0;
+                            w->state = 5;
+                            w->gaugeState = 4;
+                            w->starState = 8;
+                            t->hit = 2;
+                            psndSFXOn("SFX_BTL_SAC_DOKKAN3");
+                            BattleAudienceSoundBooing();
+                            psndSFXOff(w->sfx);
+                        }
                         break;
                     }
                 }
-                if (found == 1) {
+                if (i == 8) {
+                    found = 0;
+                    for (j = 0; j < 8; j++) {
+                        // FAKE: spare temporary t2; assigning t directly changes the object
+                        DekaTiming* t2 = &w->timing[idx[j]];
+                        t = t2;
+                        if (t->state == 2 && t->type == 1) {
+                            w->state = 5;
+                            w->gaugeState = 4;
+                            t->hit = 2;
+                            psndSFXOn("SFX_BTL_SAC_DOKKAN3");
+                            BattleAudienceSoundBooing();
+                            psndSFXOff(w->sfx);
+                            found = 1;
+                            break;
+                        }
+                    }
+                    if (found == 1) {
+                        break;
+                    }
+                }
+            }
+            for (i = 0; i < 8; i++) {
+                t = &w->timing[idx[i]];
+                if (t->state == 2 && t->type != 2 && w->cursor > 7.0f + t->pos) {
+                    w->state = 5;
+                    w->gaugeState = 4;
+                    t->hit = 2;
+                    psndSFXOn("SFX_BTL_SAC_DOKKAN3");
+                    BattleAudienceSoundBooing();
+                    psndSFXOff(w->sfx);
                     break;
                 }
             }
-        }
-        for (i = 0; i < 8; i++) {
-            t = &w->timing[idx[i]];
-            if (t->state == 2 && t->type != 2 && w->cursor > 7.0f + t->pos) {
-                w->state = 5;
-                w->gaugeState = 4;
-                t->hit = 2;
-                psndSFXOn("SFX_BTL_SAC_DOKKAN3");
-                BattleAudienceSoundBooing();
-                psndSFXOff(w->sfx);
-                break;
+            break;
+        case 4:
+            w->timer--;
+            w->offsetY = intplGetValue(EASING_LINEAR, -40.0f, 0.0f, 30 - w->timer, 30);
+            if (w->timer <= 0) {
+                w->state = 3;
+                w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
             }
-        }
-        break;
-    case 4:
-        w->timer--;
-        w->offsetY = intplGetValue(EASING_LINEAR, -40.0f, 0.0f, 30 - w->timer, 30);
-        if (w->timer <= 0) {
-            w->state = 3;
-            w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
-        }
-        break;
-    case 5:
-        break;
+            break;
+        case 5:
+            break;
     }
 }
 
@@ -493,48 +493,48 @@ static void main_gauge(void) {
     DekaWork* w = get_ptr();
 
     switch (w->gaugeState) {
-    case 0:
-        break;
-    case 1:
-        w->gaugeState = 2;
-        w->gaugeTimer = 0;
-        w->gaugePos = (Vec){-1000.0f, 100.0f, 0.0f};
-        w->gaugeW = 500.0f;
-        w->alpha = 255;
-    case 2:
-        w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 0.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) {
-            w->gaugeState = 3;
+        case 0:
+            break;
+        case 1:
+            w->gaugeState = 2;
             w->gaugeTimer = 0;
-        }
-        break;
-    case 3:
-        w->gaugeTimer = 0;
-        break;
-    case 4:
-        w->gaugeTimer++;
-        if (w->gaugeTimer % 12 >= 0 && w->gaugeTimer % 12 <= 5) {
-            w->alpha = 0;
-        } else {
+            w->gaugePos = (Vec){-1000.0f, 100.0f, 0.0f};
+            w->gaugeW = 500.0f;
             w->alpha = 255;
-        }
-        if (w->gaugeTimer >= 80) {
-            w->gaugeState = 5;
+        case 2:
+            w->gaugeTimer++;
+            w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 0.0f, w->gaugeTimer, 30);
+            if (w->gaugeTimer >= 30) {
+                w->gaugeState = 3;
+                w->gaugeTimer = 0;
+            }
+            break;
+        case 3:
             w->gaugeTimer = 0;
-            w->alpha = 255;
-        }
-        break;
-    case 5:
-        w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, -1000.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) {
-            w->gaugeState = 3;
-            w->gaugeTimer = 0;
-        }
-        break;
-    case 6:
-        break;
+            break;
+        case 4:
+            w->gaugeTimer++;
+            if (w->gaugeTimer % 12 >= 0 && w->gaugeTimer % 12 <= 5) {
+                w->alpha = 0;
+            } else {
+                w->alpha = 255;
+            }
+            if (w->gaugeTimer >= 80) {
+                w->gaugeState = 5;
+                w->gaugeTimer = 0;
+                w->alpha = 255;
+            }
+            break;
+        case 5:
+            w->gaugeTimer++;
+            w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, -1000.0f, w->gaugeTimer, 30);
+            if (w->gaugeTimer >= 30) {
+                w->gaugeState = 3;
+                w->gaugeTimer = 0;
+            }
+            break;
+        case 6:
+            break;
     }
 }
 
@@ -547,22 +547,22 @@ static void main_timing(s32 idx) {
     DekaTiming* t = &w->timing[idx];
 
     switch (t->state) {
-    case 0:
-        t->type = 0;
-        break;
-    case 2:
-        t->alpha = 255;
-        t->off = (Vec){0.0f, 0.0f, 0.0f};
-        break;
-    case 3:
-        t->state = 4;
-        t->alpha = 255;
-        t->unk4 = 0;
-        break;
-    case 4:
-        break;
-    case 5:
-        break;
+        case 0:
+            t->type = 0;
+            break;
+        case 2:
+            t->alpha = 255;
+            t->off = (Vec){0.0f, 0.0f, 0.0f};
+            break;
+        case 3:
+            t->state = 4;
+            t->alpha = 255;
+            t->unk4 = 0;
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
     }
 }
 
@@ -582,83 +582,83 @@ static void main_star(void) {
     s32 k;
 
     switch (w->starState) {
-    case 1:
-        w->starState = 2;
-        w->starTimer = 0;
-        w->eff = effStarStoneEntry(0, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->starPos.x, &w->starPos.y, &w->starPos.z);
-        w->starPos.y += mario->sizeMultiplier * mario->height + 37.0f;
-        w->from = w->starPos;
-        w->to = w->starPos;
-        w->to.y += 50.0f;
-        w->to.z += -1.0f;
-        w->scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->rot = (Vec){0.0f, 0.0f, 0.0f};
-    case 2:
-        w->starTimer++;
-        if (w->starTimer <= 100) {
-            w->starPos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100);
-            w->starPos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100);
-            w->starPos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
-        } else {
-            w->starPos.x = w->to.x;
-            w->starPos.y = w->to.y;
-            w->starPos.z = w->to.z;
-            w->scale.x = w->scale.y = w->scale.z = 2.0f;
-        }
-        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
-        if (w->starTimer >= 120) {
-            w->starState = 3;
+        case 1:
+            w->starState = 2;
             w->starTimer = 0;
+            w->eff = effStarStoneEntry(0, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &w->starPos.x, &w->starPos.y, &w->starPos.z);
+            w->starPos.y += mario->sizeMultiplier * mario->height + 37.0f;
             w->from = w->starPos;
-            w->to.x = -100.0f;
-            w->to.y = 30.0f;
-            w->to.z = 50.0f;
-        }
-        break;
-    case 3:
-        w->starTimer++;
-        w->starPos.x = intplGetValue(EASING_QUADRATIC_OUT, w->from.x, w->to.x, w->starTimer, 60);
-        w->starPos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 60);
-        w->starPos.z = intplGetValue(EASING_QUADRATIC_OUT, w->from.z, w->to.z, w->starTimer, 60);
-        if (w->starTimer >= 60) {
-            w->starState = 4;
+            w->to = w->starPos;
+            w->to.y += 50.0f;
+            w->to.z += -1.0f;
+            w->scale = (Vec){0.0f, 0.0f, 0.0f};
+            w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        case 2:
+            w->starTimer++;
+            if (w->starTimer <= 100) {
+                w->starPos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100);
+                w->starPos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100);
+                w->starPos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100);
+                w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
+            } else {
+                w->starPos.x = w->to.x;
+                w->starPos.y = w->to.y;
+                w->starPos.z = w->to.z;
+                w->scale.x = w->scale.y = w->scale.z = 2.0f;
+            }
+            w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
+            if (w->starTimer >= 120) {
+                w->starState = 3;
+                w->starTimer = 0;
+                w->from = w->starPos;
+                w->to.x = -100.0f;
+                w->to.y = 30.0f;
+                w->to.z = 50.0f;
+            }
+            break;
+        case 3:
+            w->starTimer++;
+            w->starPos.x = intplGetValue(EASING_QUADRATIC_OUT, w->from.x, w->to.x, w->starTimer, 60);
+            w->starPos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 60);
+            w->starPos.z = intplGetValue(EASING_QUADRATIC_OUT, w->from.z, w->to.z, w->starTimer, 60);
+            if (w->starTimer >= 60) {
+                w->starState = 4;
+                w->starTimer = 0;
+            }
+            break;
+        case 6:
+            w->starState = 7;
             w->starTimer = 0;
-        }
-        break;
-    case 6:
-        w->starState = 7;
-        w->starTimer = 0;
-        w->sclFrom = w->sclTo = w->scale.x;
-        w->sclTo += 1.0f;
-        psndSFXOn("SFX_BTL_SAC_DOKKAN4");
-        if (num >= 1 && num <= 49) {
-            BattleAudienceSoundCallKind(1);
-        }
-        if (num >= 50 && num <= 99) {
-            BattleAudienceSoundCallKind(1);
-            BattleAudienceSoundWhistleKind(1);
-        }
-        if (num >= 100 && num <= 149) {
-            BattleAudienceSoundCallKind(2);
-            BattleAudienceSoundWhistleKind(2);
-        }
-        if (num >= 150) {
-            BattleAudienceSoundCallKind(2);
-            BattleAudienceSoundWhistleKind(3);
-        }
-    case 7: {
-        s32 tbl[11] = {1, 2, 0, 2, 3, 1, 3, 4, 2, 4, 5};
-        w->starTimer++;
-        w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5);
-        w->starPos.y = 12.5f * (w->scale.y - 2.0f) + 30.0f;
-        if (w->starTimer >= 43) {
-            w->starState = 5;
-            w->starTimer = 0;
-            w->scale.x = w->scale.y = w->scale.z = w->sclTo;
-        }
-        break;
+            w->sclFrom = w->sclTo = w->scale.x;
+            w->sclTo += 1.0f;
+            psndSFXOn("SFX_BTL_SAC_DOKKAN4");
+            if (num >= 1 && num <= 49) {
+                BattleAudienceSoundCallKind(1);
+            }
+            if (num >= 50 && num <= 99) {
+                BattleAudienceSoundCallKind(1);
+                BattleAudienceSoundWhistleKind(1);
+            }
+            if (num >= 100 && num <= 149) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(2);
+            }
+            if (num >= 150) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(3);
+            }
+        case 7: {
+            s32 tbl[11] = {1, 2, 0, 2, 3, 1, 3, 4, 2, 4, 5};
+            w->starTimer++;
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5);
+            w->starPos.y = 12.5f * (w->scale.y - 2.0f) + 30.0f;
+            if (w->starTimer >= 43) {
+                w->starState = 5;
+                w->starTimer = 0;
+                w->scale.x = w->scale.y = w->scale.z = w->sclTo;
+            }
+            break;
     }
     case 8:
         w->starState = 9;
@@ -964,14 +964,14 @@ static void disp_2D(CameraId cam, void* param) {
             PSMTXTrans(tr, x, w->gaugePos.y + t->off.y - 40.0f, w->gaugePos.z + t->off.z);
             PSMTXConcat(tr, sc, m);
             switch (t->hit) {
-            case 0:
-                break;
-            case 1:
-                btlDispTexPlane2(m, BTL_TEX(0x3E), col, 0);
-                break;
-            case 2:
-                btlDispTexPlane2(m, BTL_TEX(0x3F), col, 0);
-                break;
+                case 0:
+                    break;
+                case 1:
+                    btlDispTexPlane2(m, BTL_TEX(0x3E), col, 0);
+                    break;
+                case 2:
+                    btlDispTexPlane2(m, BTL_TEX(0x3F), col, 0);
+                    break;
             }
         }
     }

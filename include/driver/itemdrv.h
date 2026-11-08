@@ -97,46 +97,46 @@ typedef enum ItemEntryMode {
 } ItemEntryMode;
 
 typedef struct ItemEntry {
-    u16 flags; //0x0
-    u16 type; //0x2, ItemEntryType
-    s32 itemId; //0x4
-    s32 collectFlag; //0x8, saved flag set when the item is collected (-1: none)
-    char name[0x10]; //0xC
-    EffectEntry* effect; //0x1C
-    EvtWord* evtCode; //0x20, event script run on pickup (evtEntry)
-    u16 mode; //0x24, ItemEntryMode
-    u16 subState; //0x26, per-sequence state
-    s32 winId[3]; //0x28
-    u8 pad_34[0x38 - 0x34]; //0x34, never accessed
-    u32 flags2; //0x38, ItemEntry_Flags2
-    Vec position; //0x3C
-    f32 scale; //0x48
-    u8 alpha; //0x4C
-    u8 pad_4D[0x50 - 0x4D]; //0x4D, never accessed
-    f32 speed; //0x50
-    s32 direction; //0x54
-    f32 velocityY; //0x58
-    u8 pad_5C[0x60 - 0x5C]; //0x5C, never accessed
-    s64 airTime; //0x60
-    OSTime baseTime; //0x68, timestamp elapsed time is measured from
-    OSTime curTime; //0x70
-    s64 timer; //0x78
-    f32 bounceFactor; //0x80
-    f32 gravityScale; //0x84
-    s32 maxBounces; //0x88
-    s32 bounceCount; //0x8C
-    s32 savedDirection; //0x90
-    f32 savedSpeed; //0x94
+    u16 flags; // 0x0
+    u16 type; // 0x2, ItemEntryType
+    s32 itemId; // 0x4
+    s32 collectFlag; // 0x8, saved flag set when the item is collected (-1: none)
+    char name[0x10]; // 0xC
+    EffectEntry* effect; // 0x1C
+    EvtWord* evtCode; // 0x20, event script run on pickup (evtEntry)
+    u16 mode; // 0x24, ItemEntryMode
+    u16 subState; // 0x26, per-sequence state
+    s32 winId[3]; // 0x28
+    u8 pad_34[0x38 - 0x34]; // 0x34, never accessed
+    u32 flags2; // 0x38, ItemEntry_Flags2
+    Vec position; // 0x3C
+    f32 scale; // 0x48
+    u8 alpha; // 0x4C
+    u8 pad_4D[0x50 - 0x4D]; // 0x4D, never accessed
+    f32 speed; // 0x50
+    s32 direction; // 0x54
+    f32 velocityY; // 0x58
+    u8 pad_5C[0x60 - 0x5C]; // 0x5C, never accessed
+    s64 airTime; // 0x60
+    OSTime baseTime; // 0x68, timestamp elapsed time is measured from
+    OSTime curTime; // 0x70
+    s64 timer; // 0x78
+    f32 bounceFactor; // 0x80
+    f32 gravityScale; // 0x84
+    s32 maxBounces; // 0x88
+    s32 bounceCount; // 0x8C
+    s32 savedDirection; // 0x90
+    f32 savedSpeed; // 0x94
 } ItemEntry;
 
 typedef struct ItemWork {
-    s32 count; //0x0
-    ItemEntry* entries; //0x4
+    s32 count; // 0x0
+    ItemEntry* entries; // 0x4
     u32 currId; // 0x8, serial for auto-named entries ("_i%05x"): incremented before use, wraps at 0xFFFFF
-    EffectEntry* effect; //0xC
-    struct WinMgrSelect* select; //0x10
-    struct EventEntry* lectureEvt; //0x14
-    s32 msgWindowId; //0x18
+    EffectEntry* effect; // 0xC
+    struct WinMgrSelect* select; // 0x10
+    struct EventEntry* lectureEvt; // 0x14
+    s32 msgWindowId; // 0x18
 } ItemWork;
 
 void itemInit(void);

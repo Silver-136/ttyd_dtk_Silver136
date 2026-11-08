@@ -541,86 +541,86 @@ USER_FUNC(evt_party_jump_pos) {
     half = 0.5f;
     dy = 1.0f;
     switch (event->userdata3) {
-    case 0:
-        p->hitobjJumpFrom = p->hitobjStandOn;
-        p->hitobjStandOn = NULL;
-        p->moveSpeed = distABf(p->position.x, p->position.z, x, z) / ff;
-        p->targetDir = angleABf(p->position.x, p->position.z, x, z);
-        if (mode == 0) {
-            p->moveDir = p->targetDir;
-        }
-        partyChgPoseId(p, PARTY_POSE_JUMP);
-        dy = y - p->position.y;
-        half = 0.5f * ff;
-        if (__fabsf(dy) < 1.0f) {
-            dy = hgt;
-        } else if (dy >= 0.0f) {
-#if VERSION <= VERSION_DEMO_JP
-            dy += 0.5f * p->height;
-#else
-            dy += 37.0f;
-#endif
-        } else if (searchUnder2(tmp, x, y, z) != NULL) {
-            dy = hgt;
-        }
-        g = (dy + dy) / (half * half - half);
-        p->velY = g * half;
-        p->work.common.accelY = -g;
-        event->userdata[2] = (s32)(0.5f + half);
-        event->userdata3 = 1;
-    case 1:
-        movePos(&p->position.x, &p->position.z, p->moveSpeed, p->targetDir);
-        p->position.y += p->velY;
-        p->velY += p->work.common.accelY;
-        if (--event->userdata[2] <= 0) {
-            half = 0.5f * ff;
-            dy = y - p->position.y;
-            p->velY = 0.0f;
-            p->work.common.accelY = (dy + dy) / (half * half - half);
-            p->gravity = 0.0f;
-            event->userdata[2] = (s32)(0.5f + half);
-            event->userdata3 = 2;
-        }
-        break;
-    case 2:
-        movePos(&p->position.x, &p->position.z, p->moveSpeed, p->targetDir);
-        p->velY += p->work.common.accelY;
-        mode = 0;
-        ff = p->velY;
-        {
-#if VERSION <= VERSION_DEMO_JP
-            f32 groundY, dropDepth;
-            HitEntry* hit = _partySearchGround(
-                p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
-            if (hit != NULL && p->position.y + ff <= groundY) {
-#else
-            HitEntry* hit = partySearchGround(p, __fabsf(ff), __fabsf(ff));
-            if (hit != NULL && p->position.y + ff <= p->groundY) {
-#endif
-                p->hitobjStandOn = hit;
-                mode = 1;
-#if VERSION <= VERSION_DEMO_JP
-                p->position.y = groundY;
-#else
-                p->position.y = p->groundY;
-#endif
-                p->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
+        case 0:
+            p->hitobjJumpFrom = p->hitobjStandOn;
+            p->hitobjStandOn = NULL;
+            p->moveSpeed = distABf(p->position.x, p->position.z, x, z) / ff;
+            p->targetDir = angleABf(p->position.x, p->position.z, x, z);
+            if (mode == 0) {
+                p->moveDir = p->targetDir;
             }
-        }
-        if (mode) {
-            event->userdata[2] = 0;
-        } else {
+            partyChgPoseId(p, PARTY_POSE_JUMP);
+            dy = y - p->position.y;
+            half = 0.5f * ff;
+            if (__fabsf(dy) < 1.0f) {
+                dy = hgt;
+            } else if (dy >= 0.0f) {
+#if VERSION <= VERSION_DEMO_JP
+                dy += 0.5f * p->height;
+#else
+                dy += 37.0f;
+#endif
+            } else if (searchUnder2(tmp, x, y, z) != NULL) {
+                dy = hgt;
+            }
+            g = (dy + dy) / (half * half - half);
+            p->velY = g * half;
+            p->work.common.accelY = -g;
+            event->userdata[2] = (s32)(0.5f + half);
+            event->userdata3 = 1;
+        case 1:
+            movePos(&p->position.x, &p->position.z, p->moveSpeed, p->targetDir);
             p->position.y += p->velY;
-        }
-        if (--event->userdata[2] <= 0) {
-            partyChgPoseId(p, PARTY_POSE_STAND);
-            p->gravity = 0.0f;
-            p->work.common.accelY = 0.0f;
-            p->moveSpeed = 0.0f;
-            partyPrevRunMode(p);
-            return EVT_RETURN_YIELD;
-        }
-        break;
+            p->velY += p->work.common.accelY;
+            if (--event->userdata[2] <= 0) {
+                half = 0.5f * ff;
+                dy = y - p->position.y;
+                p->velY = 0.0f;
+                p->work.common.accelY = (dy + dy) / (half * half - half);
+                p->gravity = 0.0f;
+                event->userdata[2] = (s32)(0.5f + half);
+                event->userdata3 = 2;
+            }
+            break;
+        case 2:
+            movePos(&p->position.x, &p->position.z, p->moveSpeed, p->targetDir);
+            p->velY += p->work.common.accelY;
+            mode = 0;
+            ff = p->velY;
+            {
+#if VERSION <= VERSION_DEMO_JP
+                f32 groundY, dropDepth;
+                HitEntry* hit = _partySearchGround(
+                    p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
+                if (hit != NULL && p->position.y + ff <= groundY) {
+#else
+                HitEntry* hit = partySearchGround(p, __fabsf(ff), __fabsf(ff));
+                if (hit != NULL && p->position.y + ff <= p->groundY) {
+#endif
+                    p->hitobjStandOn = hit;
+                    mode = 1;
+#if VERSION <= VERSION_DEMO_JP
+                    p->position.y = groundY;
+#else
+                    p->position.y = p->groundY;
+#endif
+                    p->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
+                }
+            }
+            if (mode) {
+                event->userdata[2] = 0;
+            } else {
+                p->position.y += p->velY;
+            }
+            if (--event->userdata[2] <= 0) {
+                partyChgPoseId(p, PARTY_POSE_STAND);
+                p->gravity = 0.0f;
+                p->work.common.accelY = 0.0f;
+                p->moveSpeed = 0.0f;
+                partyPrevRunMode(p);
+                return EVT_RETURN_YIELD;
+            }
+            break;
     }
     return EVT_RETURN_BLOCK;
 }
@@ -751,13 +751,13 @@ USER_FUNC(evt_party_get_status) {
     s32 dst = args[1];
     s32 st;
     switch (id) {
-    case PARTY_VIVIAN:
-        st = vivianGetStatus();
-        evtSetValue(event, dst, st);
-        break;
-    case PARTY_BOBBERY:
-        evtSetValue(event, dst, bomheiGetStatus());
-        break;
+        case PARTY_VIVIAN:
+            st = vivianGetStatus();
+            evtSetValue(event, dst, st);
+            break;
+        case PARTY_BOBBERY:
+            evtSetValue(event, dst, bomheiGetStatus());
+            break;
     }
     return EVT_RETURN_DONE;
 }
@@ -1031,22 +1031,22 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
         event->userdata[0] = 0;
     }
     switch (event->userdata[0]) {
-    case 0:
-        if (nokonokoGetStatus(p) != NOKONOKO_STATUS_SHELL_HELD) {
-            ret = EVT_RETURN_BLOCK;
+        case 0:
+            if (nokonokoGetStatus(p) != NOKONOKO_STATUS_SHELL_HELD) {
+                ret = EVT_RETURN_BLOCK;
+                break;
+            }
+            nokotaro_hold_cancel(p);
+            event->userdata[0] = 1;
             break;
-        }
-        nokotaro_hold_cancel(p);
-        event->userdata[0] = 1;
-        break;
-    case 1:
-        if (nokonokoGetStatus(p) != NOKONOKO_STATUS_NONE) {
-            ret = EVT_RETURN_BLOCK;
+        case 1:
+            if (nokonokoGetStatus(p) != NOKONOKO_STATUS_NONE) {
+                ret = EVT_RETURN_BLOCK;
+                break;
+            }
+            ret = EVT_RETURN_DONE;
+            p->flags &= ~PARTY_FLAG_IS_EVT_USE;
             break;
-        }
-        ret = EVT_RETURN_DONE;
-        p->flags &= ~PARTY_FLAG_IS_EVT_USE;
-        break;
     }
     return ret;
 }

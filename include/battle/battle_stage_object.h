@@ -20,13 +20,13 @@ typedef enum BattleStageLayer {
 } BattleStageLayer;
 
 typedef struct BattleStageObjectData {
-    char* name; //0x0
-    u16 spawnSpecialUnitType; //0x4
-    u16 layer; //0x6, BattleStageLayer
-    Vec position; //0x8
-    u8 numFramesToStartFalling; //0x14
-    u8 numFramesToFall; //0x15
-    u8 pad_16[2]; //0x16
+    char* name; // 0x0
+    u16 spawnSpecialUnitType; // 0x4
+    u16 layer; // 0x6, BattleStageLayer
+    Vec position; // 0x8
+    u8 numFramesToStartFalling; // 0x14
+    u8 numFramesToFall; // 0x15
+    u8 pad_16[2]; // 0x16
 } BattleStageObjectData;
 
 // BattleStageObject.flags
@@ -36,25 +36,25 @@ typedef enum BattleStageObjectFlags {
 } BattleStageObjectFlags;
 
 typedef struct BattleStageObject {
-    s32 id; //0x0
-    Vec position; //0x4
-    Vec positionOffset; //0x10, added to position for mapObjTranslate
-    Vec rotation; //0x1C
-    Vec positionOffset2; //0x28, second offset (btlevtcmd stage-object position)
-    Vec prevPosition; //0x34, change detection
-    Vec prevPositionOffset; //0x40
-    Vec prevRotation; //0x4C
-    Vec prevPositionOffset2; //0x58
-    BattleStageObjectData* data; //0x64
-    u32 flags; //0x68, BattleStageObjectFlags
-    s32 battleUnitIdx; //0x6C
-    u8 numFramesToStartFalling; //0x70
-    u8 numFramesFalling; //0x71
-    u8 reserved_72; //0x72, only set to 0
-    u8 shakePeriodLength; //0x73
-    u8 shakePeriodPosition; //0x74
-    u8 pad_75[3]; //0x75, never accessed
-    f32 shakeAngle; //0x78
+    s32 id; // 0x0
+    Vec position; // 0x4
+    Vec positionOffset; // 0x10, added to position for mapObjTranslate
+    Vec rotation; // 0x1C
+    Vec positionOffset2; // 0x28, second offset (btlevtcmd stage-object position)
+    Vec prevPosition; // 0x34, change detection
+    Vec prevPositionOffset; // 0x40
+    Vec prevRotation; // 0x4C
+    Vec prevPositionOffset2; // 0x58
+    BattleStageObjectData* data; // 0x64
+    u32 flags; // 0x68, BattleStageObjectFlags
+    s32 battleUnitIdx; // 0x6C
+    u8 numFramesToStartFalling; // 0x70
+    u8 numFramesFalling; // 0x71
+    u8 reserved_72; // 0x72, only set to 0
+    u8 shakePeriodLength; // 0x73
+    u8 shakePeriodPosition; // 0x74
+    u8 pad_75[3]; // 0x75, never accessed
+    f32 shakeAngle; // 0x78
 } BattleStageObject;
 
 // one weapon of the stage tables; the tables initialise `weapon`
@@ -96,15 +96,15 @@ typedef enum StageNozzleType {
 } StageNozzleType;
 
 typedef struct BattleStageNozzleData {
-    u8 dirRate[3][4]; //0x0, weights for each nozzle's next direction
-    u8 typeRate[4]; //0xC
-    BattleWeaponData weapons[4]; //0x10, per nozzle type
+    u8 dirRate[3][4]; // 0x0, weights for each nozzle's next direction
+    u8 typeRate[4]; // 0xC
+    BattleWeaponData weapons[4]; // 0x10, per nozzle type
 } BattleStageNozzleData;
 
 typedef struct BattleStageFallObjectData {
-    BattleWeaponData frameWeapon; //0x0, falling iron frame
-    u8 rates[9]; //0xC0
-    BattleWeaponData weapons[9]; //0xCC
+    BattleWeaponData frameWeapon; // 0x0, falling iron frame
+    u8 rates[9]; // 0xC0
+    BattleWeaponData weapons[9]; // 0xCC
 } BattleStageFallObjectData;
 
 // BattleStageObjectWork.flags
@@ -119,26 +119,26 @@ typedef enum BattleStageFlags {
 
 // BattleWork.stageObjectWork (0x180C0)
 typedef struct BattleStageObjectWork {
-    u8 pad_00[0x4 - 0x0]; //0x0, never accessed
-    Vec bgRotation; //0x4
-    Vec bgRotationPrev; //0x10
-    u8 flags; //0x1C, BattleStageFlags
-    s32 bgDestroyEvtId; //0x20
-    s32 bgEvtId[4]; //0x24
-    BattleStageNozzleData* nozzleData; //0x34
-    BattleStageFallObjectData* fallObjectData; //0x38
-    BattleWeapon* nozzleWeapons[2]; //0x3C
-    BattleWeapon nozzleWeaponWork[2]; //0x44
-    u8 nozzleDir[3]; //0x1C4, BattleNozzleDir
-    u8 nozzleNextDir[3]; //0x1C7, BattleNozzleDir
-    s8 nozzleType; //0x1CA
-    s32 nozzleTurnEvtId[3]; //0x1CC
-    s32 nozzleWorkEvtId; //0x1D8
-    s32 fogTimer; //0x1DC
-    EffectEntry* fogEffect; //0x1E0
-    s32 closeWallEvtId; //0x1E4
-    s32 fallFrameEvtId; //0x1E8
-    s32 objectFallEvtId; //0x1EC
+    u8 pad_00[0x4 - 0x0]; // 0x0, never accessed
+    Vec bgRotation; // 0x4
+    Vec bgRotationPrev; // 0x10
+    u8 flags; // 0x1C, BattleStageFlags
+    s32 bgDestroyEvtId; // 0x20
+    s32 bgEvtId[4]; // 0x24
+    BattleStageNozzleData* nozzleData; // 0x34
+    BattleStageFallObjectData* fallObjectData; // 0x38
+    BattleWeapon* nozzleWeapons[2]; // 0x3C
+    BattleWeapon nozzleWeaponWork[2]; // 0x44
+    u8 nozzleDir[3]; // 0x1C4, BattleNozzleDir
+    u8 nozzleNextDir[3]; // 0x1C7, BattleNozzleDir
+    s8 nozzleType; // 0x1CA
+    s32 nozzleTurnEvtId[3]; // 0x1CC
+    s32 nozzleWorkEvtId; // 0x1D8
+    s32 fogTimer; // 0x1DC
+    EffectEntry* fogEffect; // 0x1E0
+    s32 closeWallEvtId; // 0x1E4
+    s32 fallFrameEvtId; // 0x1E8
+    s32 objectFallEvtId; // 0x1EC
 } BattleStageObjectWork;
 
 BattleStageObject* BattleGetObjectPtr(s32 id);

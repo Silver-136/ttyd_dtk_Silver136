@@ -660,71 +660,71 @@ static s32 star_control(EventEntry* evt, BOOL first) {
         s->starY[0] = s->cursorY;
     }
     switch (w->star.state) {
-    case 1:
-        w->star.state = 2;
-        w->star.timer = 0;
-        w->star.eff = effStarStoneEntry(3, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
-        w->star.from = w->star.pos;
-        w->star.to = w->star.pos;
-        w->star.to.y += 50.0f;
-        w->star.to.z += -1.0f;
-        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-    case 2:
-        w->star.timer++;
-        if (w->star.timer <= 100) {
-            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
-            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
-            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
-        } else {
-            w->star.pos.x = w->star.to.x;
-            w->star.pos.y = w->star.to.y;
-            w->star.pos.z = w->star.to.z;
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
-        }
-        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
-        if (w->star.timer >= 120) {
-            w->star.state = 3;
+        case 1:
+            w->star.state = 2;
             w->star.timer = 0;
+            w->star.eff = effStarStoneEntry(3, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+            w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
             w->star.from = w->star.pos;
-            w->star.to.y = 300.0f;
-        }
-        break;
-    case 3:
-        w->star.timer++;
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
-        if (w->star.timer >= 60) {
-            w->star.state = 4;
-            w->star.timer = 0;
-            w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
-            w->star.scale = (Vec){1.0f, 1.0f, 1.0f};
+            w->star.to = w->star.pos;
+            w->star.to.y += 50.0f;
+            w->star.to.z += -1.0f;
+            w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
             w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-            w->star.from.y = w->star.pos.y;
-            w->star.to.y = 0.0f;
+        case 2:
+            w->star.timer++;
+            if (w->star.timer <= 100) {
+                w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+                w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+                w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
+            } else {
+                w->star.pos.x = w->star.to.x;
+                w->star.pos.y = w->star.to.y;
+                w->star.pos.z = w->star.to.z;
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
+            }
+            w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+            if (w->star.timer >= 120) {
+                w->star.state = 3;
+                w->star.timer = 0;
+                w->star.from = w->star.pos;
+                w->star.to.y = 300.0f;
+            }
+            break;
+        case 3:
+            w->star.timer++;
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+            if (w->star.timer >= 60) {
+                w->star.state = 4;
+                w->star.timer = 0;
+                w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
+                w->star.scale = (Vec){1.0f, 1.0f, 1.0f};
+                w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+                w->star.from.y = w->star.pos.y;
+                w->star.to.y = 0.0f;
+                s->cursorX = w->star.pos.x;
+                s->cursorY = w->star.pos.y;
+                for (i = 0; i < 4; i++) {
+                    s->starX[i] = 0.0f;
+                    s->starY[i] = -1000.0f;
+                }
+            }
+            break;
+        case 4:
+            w->star.timer++;
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->star.from.y, w->star.to.y, w->star.timer, 60);
             s->cursorX = w->star.pos.x;
             s->cursorY = w->star.pos.y;
-            for (i = 0; i < 4; i++) {
-                s->starX[i] = 0.0f;
-                s->starY[i] = -1000.0f;
+            if (w->star.timer >= 60) {
+                w->star.state = 5;
+                w->star.timer = 0;
             }
-        }
-        break;
-    case 4:
-        w->star.timer++;
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->star.from.y, w->star.to.y, w->star.timer, 60);
-        s->cursorX = w->star.pos.x;
-        s->cursorY = w->star.pos.y;
-        if (w->star.timer >= 60) {
-            w->star.state = 5;
-            w->star.timer = 0;
-        }
-        break;
-    case 5:
-    case 6:
-        break;
+            break;
+        case 5:
+        case 6:
+            break;
     }
     if (w->star.eff) {
         EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
@@ -826,43 +826,43 @@ static s32 scissor_timer_get(EventEntry* evt) {
 static s32 scissor_timer_main(void) {
     ScissorWork* w = GetScissorPtr();
     switch (w->state) {
-    case 0:
-        w->timerDispX = 320.0f;
-        w->timerDispY = 185.0f;
-        w->state = 5;
-        w->step = 0;
-    case 5:
-        w->timerDispX = intplGetValue(EASING_QUADRATIC_OUT, 320.0f, 120.0f, w->step, 15);
-        w->step++;
-        if (w->step > 15) {
-            w->state = 10;
-        }
-        break;
-    case 10:
-        w->timer--;
-        if (w->timer <= 59) {
-            w->state = 15;
+        case 0:
+            w->timerDispX = 320.0f;
+            w->timerDispY = 185.0f;
+            w->state = 5;
             w->step = 0;
-        }
-        break;
-    case 15:
-        w->timerDispX = intplGetValue(EASING_QUADRATIC_OUT, 120.0f, 320.0f, w->step, 15);
-        w->step++;
-        if (w->step > 15) {
-            w->state = 20;
-        }
-        w->timer--;
-        if (w->timer < 0) {
-            w->timer = 0;
-        }
-        break;
-    case 20:
-        w->timer--;
-        if (w->timer < 0) {
-            w->timer = 0;
-            return 2;
-        }
-        break;
+        case 5:
+            w->timerDispX = intplGetValue(EASING_QUADRATIC_OUT, 320.0f, 120.0f, w->step, 15);
+            w->step++;
+            if (w->step > 15) {
+                w->state = 10;
+            }
+            break;
+        case 10:
+            w->timer--;
+            if (w->timer <= 59) {
+                w->state = 15;
+                w->step = 0;
+            }
+            break;
+        case 15:
+            w->timerDispX = intplGetValue(EASING_QUADRATIC_OUT, 120.0f, 320.0f, w->step, 15);
+            w->step++;
+            if (w->step > 15) {
+                w->state = 20;
+            }
+            w->timer--;
+            if (w->timer < 0) {
+                w->timer = 0;
+            }
+            break;
+        case 20:
+            w->timer--;
+            if (w->timer < 0) {
+                w->timer = 0;
+                return 2;
+            }
+            break;
     }
     return 0;
 }

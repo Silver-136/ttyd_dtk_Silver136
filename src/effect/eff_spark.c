@@ -133,14 +133,14 @@ static void effSparkMain(EffectEntry* effect) {
     counter = p->counter;
     p++;
     switch (type) {
-    case 0:
-        a = 0.1f;
-        b = 0.2f;
-        break;
-    default:
-        a = 0.2f;
-        b = a;
-        break;
+        case 0:
+            a = 0.1f;
+            b = 0.2f;
+            break;
+        default:
+            a = 0.2f;
+            b = a;
+            break;
     }
     for (i = 1; i < effect->count; i++, p++) {
         p->seq++;
@@ -163,14 +163,14 @@ static void effSparkMain(EffectEntry* effect) {
             p->scale = 1.0f;
         }
         switch (type) {
-        case 0:
-            p->alpha = a_data[p->seq];
-            p->scale = scale_data[p->seq];
-            break;
-        default:
-            p->alpha = a_data2[p->seq];
-            p->scale = scale_data2[p->seq];
-            break;
+            case 0:
+                p->alpha = a_data[p->seq];
+                p->scale = scale_data[p->seq];
+                break;
+            default:
+                p->alpha = a_data2[p->seq];
+                p->scale = scale_data2[p->seq];
+                break;
         }
         if ((counter & 1) == (i & 1)) {
             p->x += p->velX;

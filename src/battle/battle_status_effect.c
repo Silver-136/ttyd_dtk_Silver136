@@ -37,8 +37,8 @@ typedef struct StChgMsgData {
 
 #if VERSION <= VERSION_DEMO_JP
 s8 _st_pri_data[] = {
-    STATUS_CHARGE, //charge is elevated
-    STATUS_POISON, //poison is elevated
+    STATUS_CHARGE, // charge is elevated
+    STATUS_POISON, // poison is elevated
     STATUS_SLEEP,
     STATUS_STOP,
     STATUS_DIZZY,
@@ -102,8 +102,8 @@ StChgMsgData _st_chg_msg_data[] = {
 // Status Type Priority Data
 #if VERSION >= VERSION_JP
 s8 _st_pri_data[] = {
-    STATUS_CHARGE, //charge is elevated
-    STATUS_POISON, //poison is elevated
+    STATUS_CHARGE, // charge is elevated
+    STATUS_POISON, // poison is elevated
     STATUS_SLEEP,
     STATUS_STOP,
     STATUS_DIZZY,
@@ -147,7 +147,7 @@ static void BSE_KagegakureDelete(BattleUnit* unit);
  * empty in every version (the effect pointers start NULL).
  */
 void BattleStatusEffectInit(BattleUnit* unit) {
-    ; //empty in every version
+    ; // empty in every version
 }
 
 /**
@@ -400,41 +400,41 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
         return FALSE;
     }
     switch (active) {
-    case 1:
-        switch (state) {
         case 1:
-            unit->burnDamageFlameState = state + 1;
-            unit->burnDamageFlameScale = 1.0f;
-            BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
-            z += 5.0f;
-            unit->burnDamageFlameEff = effFireEntry(0, 0, x, y, z, unit->burnDamageFlameScale);
-            unit->burnDamageFlameAnimTimer = 0;
-            break;
-        case 2:
-            work = (f32*)unit->burnDamageFlameEff->userdata;
-            unit->burnDamageFlameAnimTimer++;
-            unit->burnDamageFlameScale = 1.6f * sinfd(unit->burnDamageFlameAnimTimer * 3) + 0.4f;
-            work[9] = unit->burnDamageFlameScale;
-            if (unit->burnDamageFlameAnimTimer >= 60) {
-                unit->burnDamageFlameState++;
-            }
-            break;
-        case 3:
-            effDelete(unit->burnDamageFlameEff);
-            unit->burnDamageFlameEff = NULL;
-            unit->burnDamageFlameState = 0;
-            if (!BtlUnit_CheckShadowGuard(unit)) {
-                BattleDamageDirect(UNIT_ID_SYSTEM, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
-            }
+            switch (state) {
+            case 1:
+                unit->burnDamageFlameState = state + 1;
+                unit->burnDamageFlameScale = 1.0f;
+                BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
+                z += 5.0f;
+                unit->burnDamageFlameEff = effFireEntry(0, 0, x, y, z, unit->burnDamageFlameScale);
+                unit->burnDamageFlameAnimTimer = 0;
+                break;
+            case 2:
+                work = (f32*)unit->burnDamageFlameEff->userdata;
+                unit->burnDamageFlameAnimTimer++;
+                unit->burnDamageFlameScale = 1.6f * sinfd(unit->burnDamageFlameAnimTimer * 3) + 0.4f;
+                work[9] = unit->burnDamageFlameScale;
+                if (unit->burnDamageFlameAnimTimer >= 60) {
+                    unit->burnDamageFlameState++;
+                }
+                break;
+            case 3:
+                effDelete(unit->burnDamageFlameEff);
+                unit->burnDamageFlameEff = NULL;
+                unit->burnDamageFlameState = 0;
+                if (!BtlUnit_CheckShadowGuard(unit)) {
+                    BattleDamageDirect(UNIT_ID_SYSTEM, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
+                }
 
-            // fall through
-        case 0:
+                // fall through
+            case 0:
+            default:
+                return FALSE;
+            }
+            break;
         default:
             return FALSE;
-        }
-        break;
-    default:
-        return FALSE;
     }
     return TRUE;
 }
@@ -469,7 +469,7 @@ static s32 _get_pri(s8 type) {
 
     for (val = _st_pri_data;; priority--, val++) {
         if (*val == -1) {
-            return -1; //reached end of list
+            return -1; // reached end of list
         }
         if (*val == type) {
             return priority;

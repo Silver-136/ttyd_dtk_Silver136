@@ -58,21 +58,21 @@ EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     work->poseId = -1;
     work->camId = CAMERA_3D;
     switch (type) {
-    case 0:
-    case 4:
-        work->bombType = 1;
-        work->bombScale = 1.0f;
-        break;
-    case 1:
-    case 2:
-    case 3:
-        work->bombType = 2;
-        work->bombScale = 4.0f;
-        break;
-    case 5:
-        work->frame = 100;
-        work->radius = radius;
-        break;
+        case 0:
+        case 4:
+            work->bombType = 1;
+            work->bombScale = 1.0f;
+            break;
+        case 1:
+        case 2:
+        case 3:
+            work->bombType = 2;
+            work->bombScale = 4.0f;
+            break;
+        case 5:
+            work->frame = 100;
+            work->radius = radius;
+            break;
     }
     if (work->type == 3 || work->type == 4) {
         animGroupBaseAsync("EFF_bakuhatu", camId, NULL);
@@ -139,57 +139,57 @@ static void effSandarsMain(EffectEntry* effect) {
         return;
     }
     switch (type) {
-    case 5:
-        work->frame--;
-        if (work->frame < 0) {
-            effDelete(effect);
-            return;
-        }
-        work++;
-        for (i = 1; i < effect->count; i++, work++) {
-            if (work->delay != 0) {
-                work->delay--;
-            } else {
-                if ((u32)work->frame < 15) {
-                    work->scale = scale_data[work->frame] / 100.0f;
-                }
-                work->frame++;
-                work->rot += work->rotSpeed;
+        case 5:
+            work->frame--;
+            if (work->frame < 0) {
+                effDelete(effect);
+                return;
             }
-        }
-        dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, effSandarsDisp2, effect);
-        return;
-    default:
-        break;
+            work++;
+            for (i = 1; i < effect->count; i++, work++) {
+                if (work->delay != 0) {
+                    work->delay--;
+                } else {
+                    if ((u32)work->frame < 15) {
+                        work->scale = scale_data[work->frame] / 100.0f;
+                    }
+                    work->frame++;
+                    work->rot += work->rotSpeed;
+                }
+            }
+            dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, effSandarsDisp2, effect);
+            return;
+        default:
+            break;
     }
     switch (work->state) {
-    case 0:
-        effBombN64SetCamId(effBombN64Entry(work->bombType, bx, by, bz), camId);
-        work->frame = 0;
-        work->state++;
-        break;
-    case 1:
-        if (type < 3) {
-            effDelete(effect);
-            return;
-        }
-        if (work->frame != 0) {
-            work->frame--;
-        } else if (animGroupBaseAsync("EFF_bakuhatu", inBattle, NULL)) {
-            work->poseId = animPoseEntry("EFF_bakuhatu", inBattle);
-            animPoseSetAnim(work->poseId, "Z_1", TRUE);
+        case 0:
+            effBombN64SetCamId(effBombN64Entry(work->bombType, bx, by, bz), camId);
+            work->frame = 0;
             work->state++;
-        }
-        break;
-    case 2:
-        work->alpha -= 8;
-        if (work->alpha < 0) {
-            animPoseRelease(work->poseId);
-            work->poseId = -1;
-            effDelete(effect);
-            return;
-        }
-        break;
+            break;
+        case 1:
+            if (type < 3) {
+                effDelete(effect);
+                return;
+            }
+            if (work->frame != 0) {
+                work->frame--;
+            } else if (animGroupBaseAsync("EFF_bakuhatu", inBattle, NULL)) {
+                work->poseId = animPoseEntry("EFF_bakuhatu", inBattle);
+                animPoseSetAnim(work->poseId, "Z_1", TRUE);
+                work->state++;
+            }
+            break;
+        case 2:
+            work->alpha -= 8;
+            if (work->alpha < 0) {
+                animPoseRelease(work->poseId);
+                work->poseId = -1;
+                effDelete(effect);
+                return;
+            }
+            break;
     }
     dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, effSandarsDisp, effect);
 }

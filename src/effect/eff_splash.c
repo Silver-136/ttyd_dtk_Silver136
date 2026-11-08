@@ -94,25 +94,25 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     coneCount = 0;
     dropCount = 0;
     switch (type) {
-    case 0:
-    case 1:
-        coneCount = 2;
-        dropCount = 10;
-        break;
-    case 2:
-        coneCount = 1;
-        dropCount = 10;
-        break;
-    case 3:
-        size *= 0.5f;
-        coneCount = 6;
-        dropCount = 0;
-        effWaterDamageN64Entry(2, 60, x, y, z, 1.0f);
-        break;
-    case 4:
-        coneCount = 2;
-        dropCount = 10;
-        break;
+        case 0:
+        case 1:
+            coneCount = 2;
+            dropCount = 10;
+            break;
+        case 2:
+            coneCount = 1;
+            dropCount = 10;
+            break;
+        case 3:
+            size *= 0.5f;
+            coneCount = 6;
+            dropCount = 0;
+            effWaterDamageN64Entry(2, 60, x, y, z, 1.0f);
+            break;
+        case 4:
+            coneCount = 2;
+            dropCount = 10;
+            break;
     }
     effect->type = "splash";
     effect->count = coneCount + dropCount + 1;
@@ -140,57 +140,57 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         work->sy = 1.0f;
         work->sx = 1.0f;
         switch (type) {
-        case 0:
-            if (i == 1) {
-                work->vy = 5.0f;
-                work->grav = 0.4f;
-                work->sx = work->sy = work->sz = 0.7f;
-            } else {
-                work->vy = 4.0f;
-                work->grav = 0.4f;
-            }
-            break;
-        case 1:
-            if (i == 1) {
-                work->vy = 7.0f;
-                work->grav = 0.4f;
-            } else {
-                work->vy = 4.0f;
-                work->grav = 0.4f;
-            }
-            break;
-        case 2:
-            work->vy = 2.0f;
-            work->grav = 0.1f;
-            break;
-        case 3:
-            work->vy = 0.0f;
-            work->grav = 0.0f;
-            switch (i - 1) {
             case 0:
+                if (i == 1) {
+                    work->vy = 5.0f;
+                    work->grav = 0.4f;
+                    work->sx = work->sy = work->sz = 0.7f;
+                } else {
+                    work->vy = 4.0f;
+                    work->grav = 0.4f;
+                }
+                break;
             case 1:
-                work->position.z = 0.0f;
+                if (i == 1) {
+                    work->vy = 7.0f;
+                    work->grav = 0.4f;
+                } else {
+                    work->vy = 4.0f;
+                    work->grav = 0.4f;
+                }
                 break;
             case 2:
+                work->vy = 2.0f;
+                work->grav = 0.1f;
+                break;
             case 3:
-                work->position.z = 10.0f;
+                work->vy = 0.0f;
+                work->grav = 0.0f;
+                switch (i - 1) {
+                case 0:
+                case 1:
+                    work->position.z = 0.0f;
+                    break;
+                case 2:
+                case 3:
+                    work->position.z = 10.0f;
+                    break;
+                case 4:
+                case 5:
+                    work->position.z = 20.0f;
+                    break;
+                }
                 break;
             case 4:
-            case 5:
-                work->position.z = 20.0f;
+                if (i == 1) {
+                    work->vy = 4.0f;
+                    work->grav = 0.48f;
+                } else {
+                    work->vy = 3.6f;
+                    work->grav = 0.8f;
+                }
+                work->sz = 0.01f;
                 break;
-            }
-            break;
-        case 4:
-            if (i == 1) {
-                work->vy = 4.0f;
-                work->grav = 0.48f;
-            } else {
-                work->vy = 3.6f;
-                work->grav = 0.8f;
-            }
-            work->sz = 0.01f;
-            break;
         }
     }
     for (i = coneCount + 1; i < effect->count; i++, work++) {
@@ -247,17 +247,17 @@ static void effSplashMain(EffectEntry* effect) {
         return;
     }
     switch (type) {
-    case 0:
-    case 1:
-        maxT = 30;
-        break;
-    case 2:
-    case 4:
-        maxT = 60;
-        break;
-    case 3:
-        maxT = 71;
-        break;
+        case 0:
+        case 1:
+            maxT = 30;
+            break;
+        case 2:
+        case 4:
+            maxT = 60;
+            break;
+        case 3:
+            maxT = 71;
+            break;
     }
     t = work->timer;
     work->timer = t + 1;
@@ -276,50 +276,50 @@ static void effSplashMain(EffectEntry* effect) {
         work->position.y += work->vy;
         work->vy -= work->grav;
         switch (type) {
-        case 1:
-            if (i == 1 && work->vy < 0.0f) {
-                work->sx *= 0.95f;
-                work->sy *= 0.95f;
-                work->sz *= 0.95f;
-            }
-            break;
-        case 3:
-            if (i < 7) {
-                if (t < 61) {
-                    work->sy = (f32)geso_scale_dt[t] / 96.0f;
+            case 1:
+                if (i == 1 && work->vy < 0.0f) {
+                    work->sx *= 0.95f;
+                    work->sy *= 0.95f;
+                    work->sz *= 0.95f;
                 }
-                if (t < 71) {
-                    work->position.x = 10.0f * ((f32)(geso_trans_dt[t * 2] + 40) / 8.0f);
-                    work->position.y = 10.0f * ((f32)(geso_trans_dt[t * 2 + 1] - 12) / 8.0f);
+                break;
+            case 3:
+                if (i < 7) {
+                    if (t < 61) {
+                        work->sy = (f32)geso_scale_dt[t] / 96.0f;
+                    }
+                    if (t < 71) {
+                        work->position.x = 10.0f * ((f32)(geso_trans_dt[t * 2] + 40) / 8.0f);
+                        work->position.y = 10.0f * ((f32)(geso_trans_dt[t * 2 + 1] - 12) / 8.0f);
+                    }
+                    switch (i - 1) {
+                    case 0:
+                    case 1:
+                        work->position.x *= 0.3f;
+                        work->position.y *= 0.5f;
+                        work->sy *= 0.6f;
+                        break;
+                    case 2:
+                    case 3:
+                        work->position.x *= 0.9f;
+                        break;
+                    case 4:
+                    case 5:
+                        work->position.x *= 1.3f;
+                        work->position.y *= 0.3f;
+                        work->sy *= 0.6f;
+                        break;
+                    }
+                    switch (i - 1) {
+                    case 1:
+                    case 3:
+                    case 5:
+                        work->sx = -1.0f;
+                        work->position.x *= -1.0f;
+                        break;
+                    }
                 }
-                switch (i - 1) {
-                case 0:
-                case 1:
-                    work->position.x *= 0.3f;
-                    work->position.y *= 0.5f;
-                    work->sy *= 0.6f;
-                    break;
-                case 2:
-                case 3:
-                    work->position.x *= 0.9f;
-                    break;
-                case 4:
-                case 5:
-                    work->position.x *= 1.3f;
-                    work->position.y *= 0.3f;
-                    work->sy *= 0.6f;
-                    break;
-                }
-                switch (i - 1) {
-                case 1:
-                case 3:
-                case 5:
-                    work->sx = -1.0f;
-                    work->position.x *= -1.0f;
-                    break;
-                }
-            }
-            break;
+                break;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effSplashDisp, effect);
@@ -409,17 +409,17 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     color = work->color;
     n = 0;
     switch (type) {
-    case 0:
-    case 1:
-    case 4:
-        n = 2;
-        break;
-    case 2:
-        n = 1;
-        break;
-    case 3:
-        n = 6;
-        break;
+        case 0:
+        case 1:
+        case 4:
+            n = 2;
+            break;
+        case 2:
+            n = 1;
+            break;
+        case 3:
+            n = 6;
+            break;
     }
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(CAMERA_3D)->viewYaw));
@@ -456,122 +456,122 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
         GXLoadPosMtxImm(trans, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         switch (type) {
-        case 0:
-        case 1:
-        case 2:
-        case 4:
-            effGetTexObj(0x41, &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            break;
-        case 3:
-            effGetTexObj(0x43, &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            break;
+            case 0:
+            case 1:
+            case 2:
+            case 4:
+                effGetTexObj(0x41, &texObj);
+                GXLoadTexObj(&texObj, GX_TEXMAP0);
+                break;
+            case 3:
+                effGetTexObj(0x43, &texObj);
+                GXLoadTexObj(&texObj, GX_TEXMAP0);
+                break;
         }
         switch (type) {
-        case 0:
-        case 1:
-        case 4:
-            PSMTXTrans(trans, (f32)gp->retraceCount / 20.0f, 0.0f, 0.0f);
-            break;
-        case 2:
-            PSMTXTrans(trans, (f32)gp->retraceCount / 40.0f, 0.0f, 0.0f);
-            break;
-        case 3:
-            PSMTXTrans(trans, (f32)gp->retraceCount / 10.0f, 0.0f, 0.0f);
-            break;
+            case 0:
+            case 1:
+            case 4:
+                PSMTXTrans(trans, (f32)gp->retraceCount / 20.0f, 0.0f, 0.0f);
+                break;
+            case 2:
+                PSMTXTrans(trans, (f32)gp->retraceCount / 40.0f, 0.0f, 0.0f);
+                break;
+            case 3:
+                PSMTXTrans(trans, (f32)gp->retraceCount / 10.0f, 0.0f, 0.0f);
+                break;
         }
         GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
         switch (type) {
-        case 0:
-        case 2:
-            topRadius = 23.0f;
-            bottomRadius = 15.0f;
-            height = -37.0f;
-            break;
-        case 1:
-            if (i == 1) {
-                topRadius = 1.8f;
-                bottomRadius = 6.0f;
-                height = -85.0f;
-            } else {
-                topRadius = bottomRadius = 11.6f;
-                height = -21.0f;
-            }
-            break;
-        case 4:
-            if (i == 1) {
-                topRadius = bottomRadius = 10.0f;
-                height = -20.0f;
-            } else {
-                topRadius = 15.0f;
-                bottomRadius = 12.0f;
-                height = -10.0f;
-            }
-            break;
+            case 0:
+            case 2:
+                topRadius = 23.0f;
+                bottomRadius = 15.0f;
+                height = -37.0f;
+                break;
+            case 1:
+                if (i == 1) {
+                    topRadius = 1.8f;
+                    bottomRadius = 6.0f;
+                    height = -85.0f;
+                } else {
+                    topRadius = bottomRadius = 11.6f;
+                    height = -21.0f;
+                }
+                break;
+            case 4:
+                if (i == 1) {
+                    topRadius = bottomRadius = 10.0f;
+                    height = -20.0f;
+                } else {
+                    topRadius = 15.0f;
+                    bottomRadius = 12.0f;
+                    height = -10.0f;
+                }
+                break;
         }
         switch (type) {
-        case 0:
-        case 1:
-        case 4:
-            b0 = g0 = r0 = 1.0f;
-            r1 = color.r / 255.0f;
-            g1 = color.g / 255.0f;
-            b1 = color.b / 255.0f;
-            break;
-        case 2:
-            r0 = 1.0f;
-            g0 = 0.869f;
-            b0 = 0.0f;
-            r1 = 1.0f;
-            g1 = 0.314f;
-            b1 = 0.0f;
-            break;
+            case 0:
+            case 1:
+            case 4:
+                b0 = g0 = r0 = 1.0f;
+                r1 = color.r / 255.0f;
+                g1 = color.g / 255.0f;
+                b1 = color.b / 255.0f;
+                break;
+            case 2:
+                r0 = 1.0f;
+                g0 = 0.869f;
+                b0 = 0.0f;
+                r1 = 1.0f;
+                g1 = 0.314f;
+                b1 = 0.0f;
+                break;
         }
         switch (type) {
-        case 0:
-        case 1:
-        case 2:
-        case 4:
-            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 18);
-            for (k = 0; k < 9; k++) {
-                ang = 6.2831855f * (f32)k / 8.0f;
-                cs = (f32)cos(ang);
-                sn = (f32)sin(ang);
-                kb = k & 1;
-                GXPosition3f32(topRadius * sn, 0.0f, topRadius * cs);
-                GXColor4u8((u8)(255.0f * r0), (u8)(255.0f * g0), (u8)(255.0f * b0), 255);
-                GXTexCoord2f32((f32)kb, 0.1f);
-                cs = (f32)cos(ang);
-                sn = (f32)sin(ang);
-                GXPosition3f32(bottomRadius * sn, height, bottomRadius * cs);
-                GXColor4u8((u8)(255.0f * r1), (u8)(255.0f * g1), (u8)(255.0f * b1), 255);
+            case 0:
+            case 1:
+            case 2:
+            case 4:
+                GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 18);
+                for (k = 0; k < 9; k++) {
+                    ang = 6.2831855f * (f32)k / 8.0f;
+                    cs = (f32)cos(ang);
+                    sn = (f32)sin(ang);
+                    kb = k & 1;
+                    GXPosition3f32(topRadius * sn, 0.0f, topRadius * cs);
+                    GXColor4u8((u8)(255.0f * r0), (u8)(255.0f * g0), (u8)(255.0f * b0), 255);
+                    GXTexCoord2f32((f32)kb, 0.1f);
+                    cs = (f32)cos(ang);
+                    sn = (f32)sin(ang);
+                    GXPosition3f32(bottomRadius * sn, height, bottomRadius * cs);
+                    GXColor4u8((u8)(255.0f * r1), (u8)(255.0f * g1), (u8)(255.0f * b1), 255);
 #if VERSION <= VERSION_DEMO_JP
-                GXTexCoord2f32((f32)(k & 1), 2.1f);
+                    GXTexCoord2f32((f32)(k & 1), 2.1f);
 #else
-                GXTexCoord2f32((f32)kb, 2.1f);
+                    GXTexCoord2f32((f32)kb, 2.1f);
 #endif
-            }
-            break;
-        case 3:
-            *(GXColor*)geso_shibuki_color0_tbl = color;
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-            GXSetArray(GX_VA_POS, geso_shibuki_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, geso_shibuki_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, geso_shibuki_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-            GXSetArray(GX_VA_TEX0, geso_shibuki_texcoord0_tbl, 4);
-            for (k2 = 0, sz = geso_shibuki_dl_0_size_tbl, dl = geso_shibuki_dl_0_tbl; k2 < 5; k2++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-            break;
+                }
+                break;
+            case 3:
+                *(GXColor*)geso_shibuki_color0_tbl = color;
+                GXClearVtxDesc();
+                GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+                GXSetArray(GX_VA_POS, geso_shibuki_vertex_tbl, 6);
+                GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+                GXSetArray(GX_VA_NRM, geso_shibuki_normal_tbl, 3);
+                GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+                GXSetArray(GX_VA_CLR0, geso_shibuki_color0_tbl, 4);
+                GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+                GXSetArray(GX_VA_TEX0, geso_shibuki_texcoord0_tbl, 4);
+                for (k2 = 0, sz = geso_shibuki_dl_0_size_tbl, dl = geso_shibuki_dl_0_tbl; k2 < 5; k2++, sz++, dl++) {
+                    GXCallDisplayList(*dl, *sz << 5);
+                }
+                break;
         }
     }
     GXSetCullMode(GX_CULL_NONE);
@@ -600,16 +600,16 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXIdentity(trans);
         GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
         switch (type) {
-        case 2:
-            r0 = 1.0f;
-            g0 = 0.869f;
-            b0 = 0.0f;
-            break;
-        default:
-            r0 = (1.0f + color.r / 255.0f) / 2;
-            g0 = (1.0f + color.g / 255.0f) / 2;
-            b0 = (1.0f + color.b / 255.0f) / 2;
-            break;
+            case 2:
+                r0 = 1.0f;
+                g0 = 0.869f;
+                b0 = 0.0f;
+                break;
+            default:
+                r0 = (1.0f + color.r / 255.0f) / 2;
+                g0 = (1.0f + color.g / 255.0f) / 2;
+                b0 = (1.0f + color.b / 255.0f) / 2;
+                break;
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(-w / 2, (w / 2), 0.0f);

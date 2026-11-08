@@ -157,23 +157,23 @@ static void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadPosMtxImm(out, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     switch (type) {
-    case 0:
-        idx %= 24;
-        GXSetTevColor(GX_TEVREG0, (GXColor){ color_rotation_data[idx], color_rotation_data[idx + 1],
-                                             color_rotation_data[idx + 2], alpha });
-        break;
-    case 1:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0x00, 0x00, alpha });
-        break;
-    case 2:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0x00, 0x00, 0xFF, alpha });
-        break;
-    case 3:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0x00, 0x00, alpha });
-        break;
-    case 4:
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
-        break;
+        case 0:
+            idx %= 24;
+            GXSetTevColor(GX_TEVREG0, (GXColor){ color_rotation_data[idx], color_rotation_data[idx + 1],
+                                                 color_rotation_data[idx + 2], alpha });
+            break;
+        case 1:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0x00, 0x00, alpha });
+            break;
+        case 2:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0x00, 0x00, 0xFF, alpha });
+            break;
+        case 3:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0x00, 0x00, alpha });
+            break;
+        case 4:
+            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
+            break;
     }
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-8.0f, 8.0f, 0.0f);
@@ -197,15 +197,15 @@ static void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
         GXLoadPosMtxImm(out, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         switch (type) {
-        case 3:
-            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xF1, 0x4B, 0x41, alpha });
-            break;
-        case 4:
-            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC9, 0xC0, 0xCF, alpha });
-            break;
-        default:
-            GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
-            break;
+            case 3:
+                GXSetTevColor(GX_TEVREG0, (GXColor){ 0xF1, 0x4B, 0x41, alpha });
+                break;
+            case 4:
+                GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC9, 0xC0, 0xCF, alpha });
+                break;
+            default:
+                GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
+                break;
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(-4.0f, 4.0f, 0.0f);

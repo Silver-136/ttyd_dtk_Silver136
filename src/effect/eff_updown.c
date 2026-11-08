@@ -125,33 +125,33 @@ static void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 
     u8 r0, g0, b0, a, r1, g1, b1;
 
     switch (type) {
-    case 0:
-        a = alpha;
-        b0 = 0xFF;
-        g0 = 0xFF;
-        r0 = 0xFF;
-        b1 = 0xFF;
-        g1 = 0xFF;
-        r1 = 0xFF;
-        break;
-    case 1:
-        a = alpha;
-        r0 = 0xE9;
-        g0 = 0x4A;
-        b0 = 0x3F;
-        r1 = 0xFE;
-        g1 = 0xE6;
-        b1 = 0x3E;
-        break;
-    case 2:
-        a = alpha;
-        r0 = 0x3F;
-        g0 = 0x3F;
-        b0 = 0xE9;
-        r1 = 0x74;
-        g1 = 0xC9;
-        b1 = 0xFF;
-        break;
+        case 0:
+            a = alpha;
+            b0 = 0xFF;
+            g0 = 0xFF;
+            r0 = 0xFF;
+            b1 = 0xFF;
+            g1 = 0xFF;
+            r1 = 0xFF;
+            break;
+        case 1:
+            a = alpha;
+            r0 = 0xE9;
+            g0 = 0x4A;
+            b0 = 0x3F;
+            r1 = 0xFE;
+            g1 = 0xE6;
+            b1 = 0x3E;
+            break;
+        case 2:
+            a = alpha;
+            r0 = 0x3F;
+            g0 = 0x3F;
+            b0 = 0xE9;
+            r1 = 0x74;
+            g1 = 0xC9;
+            b1 = 0xFF;
+            break;
     }
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x, y, 0.0f);

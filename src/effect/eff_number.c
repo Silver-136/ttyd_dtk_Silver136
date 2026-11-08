@@ -31,23 +31,23 @@ void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
 
     cam = camGetCurPtr();
     switch (type) {
-    case 0:
-        cols[1] = (GXColor){ 0xDE, 0x0B, 0x16, alpha };
-        cols[0] = (GXColor){ 0xFF, 0xF0, 0xF1, alpha };
-        break;
-    case 1:
-        cols[1] = (GXColor){ 0x68, 0xC0, 0x03, alpha };
-        cols[0] = (GXColor){ 0xEB, 0xFE, 0x6F, alpha };
-        break;
-    case 2:
-        cols[1] = (GXColor){ 0xFF, 0x56, 0x27, alpha };
-        cols[0] = (GXColor){ 0xFF, 0xC5, 0x18, alpha };
-        break;
-    case 3:
-    default:
-        cols[1] = (GXColor){ 0xFF, 0xFF, 0xFF, alpha };
-        cols[0] = (GXColor){ 0xFF, 0xFF, 0xFF, alpha };
-        break;
+        case 0:
+            cols[1] = (GXColor){ 0xDE, 0x0B, 0x16, alpha };
+            cols[0] = (GXColor){ 0xFF, 0xF0, 0xF1, alpha };
+            break;
+        case 1:
+            cols[1] = (GXColor){ 0x68, 0xC0, 0x03, alpha };
+            cols[0] = (GXColor){ 0xEB, 0xFE, 0x6F, alpha };
+            break;
+        case 2:
+            cols[1] = (GXColor){ 0xFF, 0x56, 0x27, alpha };
+            cols[0] = (GXColor){ 0xFF, 0xC5, 0x18, alpha };
+            break;
+        case 3:
+        default:
+            cols[1] = (GXColor){ 0xFF, 0xFF, 0xFF, alpha };
+            cols[0] = (GXColor){ 0xFF, 0xFF, 0xFF, alpha };
+            break;
     }
 
     GXSetNumChans(1);

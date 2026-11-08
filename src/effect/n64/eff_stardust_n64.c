@@ -103,26 +103,26 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
 
     effect = effEntry();
     switch (type) {
-    case 0:
-        radius = a;
-        count = 36;
-        break;
-    case 1:
-        radius = a;
-        count = 4;
-        break;
-    case 2:
-        radius = a;
-        count = 8;
-        break;
-    case 3:
-        radius = 8.0f;
-        count = 4;
-        break;
-    default:
-        count = 8;
-        radius = 8.0f;
-        break;
+        case 0:
+            radius = a;
+            count = 36;
+            break;
+        case 1:
+            radius = a;
+            count = 4;
+            break;
+        case 2:
+            radius = a;
+            count = 8;
+            break;
+        case 3:
+            radius = 8.0f;
+            count = 4;
+            break;
+        default:
+            count = 8;
+            radius = 8.0f;
+            break;
     }
     effect->type = "StardustN64";
     effect->count = count + 1;
@@ -151,58 +151,58 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
         fa = (f32)(rand() % randA) / 1000.0f;
         fb = (f32)(rand() % randB) / 1000.0f;
         switch (type) {
-        case 0:
-            p->ay = 0.0f;
-            a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
-            sn = (f32)sin(a1);
-            a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
-            angle = (f32)sin(a2);
-            p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-            sn = (f32)sin(a1);
-            angle = (f32)cos(a2);
-            p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-            p->position.z = 0.0f;
-            p->sub = 0;
-            break;
-        case 1:
-        case 2:
-            angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
-            if (i & 1) {
-                // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
-                ay = -(0.05f + (f32)(rand() % 50 / 1000));
-            } else {
-                ay = 0.0f;
-            }
-            p->ay = ay;
-            p->vx = 0.0f;
-            p->vy = 0.0f;
-            angle = 6.2831855f * angle / 360.0f;
-            p->position.x = (f32)sin(angle) * fa;
-            p->position.y = (f32)cos(angle) * fb;
-            p->position.z = 0.0f;
-            p->sub = i % 3;
-            p->scale = 1.0f;
-            p->lifetime = lifeA;
-            p->frame = 0;
-            break;
-        case 3:
-        case 4:
-        default:
-            angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
+            case 0:
+                p->ay = 0.0f;
+                a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
+                sn = (f32)sin(a1);
+                a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
+                angle = (f32)sin(a2);
+                p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+                sn = (f32)sin(a1);
+                angle = (f32)cos(a2);
+                p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+                p->position.z = 0.0f;
+                p->sub = 0;
+                break;
+            case 1:
+            case 2:
+                angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
+                if (i & 1) {
+                    // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
+                    ay = -(0.05f + (f32)(rand() % 50 / 1000));
+                } else {
+                    ay = 0.0f;
+                }
+                p->ay = ay;
+                p->vx = 0.0f;
+                p->vy = 0.0f;
+                angle = 6.2831855f * angle / 360.0f;
+                p->position.x = (f32)sin(angle) * fa;
+                p->position.y = (f32)cos(angle) * fb;
+                p->position.z = 0.0f;
+                p->sub = i % 3;
+                p->scale = 1.0f;
+                p->lifetime = lifeA;
+                p->frame = 0;
+                break;
+            case 3:
+            case 4:
+            default:
+                angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
 
-            // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
-            p->ay = -(0.05f + (f32)(rand() % 50 / 1000));
-            angle = 6.2831855f * angle / 360.0f;
-            p->vx = 0.0f;
-            p->vy = 0.0f;
-            p->position.x = (f32)sin(angle) * fa;
-            p->position.y = (f32)cos(angle) * fb;
-            p->position.z = 0.0f;
-            p->sub = i % 3;
-            p->scale = 1.0f;
-            p->lifetime = lifeB;
-            p->frame = 0;
-            break;
+                // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
+                p->ay = -(0.05f + (f32)(rand() % 50 / 1000));
+                angle = 6.2831855f * angle / 360.0f;
+                p->vx = 0.0f;
+                p->vy = 0.0f;
+                p->position.x = (f32)sin(angle) * fa;
+                p->position.y = (f32)cos(angle) * fb;
+                p->position.z = 0.0f;
+                p->sub = i % 3;
+                p->scale = 1.0f;
+                p->lifetime = lifeB;
+                p->frame = 0;
+                break;
         }
     }
     return effect;
@@ -251,56 +251,56 @@ static void effStardustMain(EffectEntry* effect) {
     for (i = 0; i < effect->count - 1; i++, work++) {
         work->variant = (frame + i) & 7;
         switch (type) {
-        case 0:
-            work->ay += -0.02f;
-            idx = frame - 1;
-            if (idx < 7) {
-                work->position.x = 0.01f * (work->vx * (f32)speed_data[idx]);
-                work->position.y = 0.01f * (work->vy * (f32)speed_data[idx]) + work->ay;
-                work->scale = 0.01f * (f32)scale_data[idx];
-            } else {
-                angle = (f32)(s32)effTblRandN64(360, i + 177);
-                mag = 1.0f + 0.5f * (f32)(i & 3);
-                angle = 6.2831855f * angle / 360.0f;
-                work->type = 10;
-                work->vx = mag * (f32)sin(angle);
-                work->vy = mag * (f32)cos(angle);
-                work->ay = -0.05f;
-            }
-            break;
-        case 10:
-            work->vx *= 0.96f;
-            work->vy *= 0.96f;
-            work->vy += work->ay;
-            work->position.x += work->vx;
-            work->position.y += work->vy;
-            work->scale += 0.1f * (0.1f - work->scale);
-            break;
-        default:
-            work->vx *= 0.9f;
-            work->vy += work->ay;
-
-            vx = work->vx;
-            vy = work->vy;
-            if (work->lifetime < 0) {
-                dead++;
-            }
-            work->position.x += vx;
-            work->position.y += vy;
-            work->lifetime--;
-            if (work->lifetime > 20 || work->lifetime < 0) {
-                work->variant = -1;
-            } else {
-                work->frame++;
-                frame = work->frame;
+            case 0:
+                work->ay += -0.02f;
                 idx = frame - 1;
                 if (idx < 7) {
+                    work->position.x = 0.01f * (work->vx * (f32)speed_data[idx]);
+                    work->position.y = 0.01f * (work->vy * (f32)speed_data[idx]) + work->ay;
                     work->scale = 0.01f * (f32)scale_data[idx];
                 } else {
-                    work->scale += 0.1f * (0.1f - work->scale);
+                    angle = (f32)(s32)effTblRandN64(360, i + 177);
+                    mag = 1.0f + 0.5f * (f32)(i & 3);
+                    angle = 6.2831855f * angle / 360.0f;
+                    work->type = 10;
+                    work->vx = mag * (f32)sin(angle);
+                    work->vy = mag * (f32)cos(angle);
+                    work->ay = -0.05f;
                 }
-            }
-            break;
+                break;
+            case 10:
+                work->vx *= 0.96f;
+                work->vy *= 0.96f;
+                work->vy += work->ay;
+                work->position.x += work->vx;
+                work->position.y += work->vy;
+                work->scale += 0.1f * (0.1f - work->scale);
+                break;
+            default:
+                work->vx *= 0.9f;
+                work->vy += work->ay;
+
+                vx = work->vx;
+                vy = work->vy;
+                if (work->lifetime < 0) {
+                    dead++;
+                }
+                work->position.x += vx;
+                work->position.y += vy;
+                work->lifetime--;
+                if (work->lifetime > 20 || work->lifetime < 0) {
+                    work->variant = -1;
+                } else {
+                    work->frame++;
+                    frame = work->frame;
+                    idx = frame - 1;
+                    if (idx < 7) {
+                        work->scale = 0.01f * (f32)scale_data[idx];
+                    } else {
+                        work->scale += 0.1f * (0.1f - work->scale);
+                    }
+                }
+                break;
         }
     }
     if (type != 0 && type != 10 && dead >= effect->count - 1) {
@@ -386,30 +386,30 @@ static void effStardustDisp(CameraId cameraId, void* param) {
         }
         GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, 255});
         switch (variant & 7) {
-        case 0:
-            vtx = &size8x8_tex22x22_vtx[12];
-            break;
-        case 1:
-            vtx = &size8x8_tex22x22_vtx[16];
-            break;
-        case 2:
-            vtx = &size8x8_tex22x22_vtx[20];
-            break;
-        case 3:
-            vtx = &size8x8_tex22x22_vtx[24];
-            break;
-        case 4:
-            vtx = &size8x8_tex22x22_vtx[28];
-            break;
-        case 5:
-            vtx = &size8x8_tex22x22_vtx[0];
-            break;
-        case 6:
-            vtx = &size8x8_tex22x22_vtx[4];
-            break;
-        case 7:
-            vtx = &size8x8_tex22x22_vtx[8];
-            break;
+            case 0:
+                vtx = &size8x8_tex22x22_vtx[12];
+                break;
+            case 1:
+                vtx = &size8x8_tex22x22_vtx[16];
+                break;
+            case 2:
+                vtx = &size8x8_tex22x22_vtx[20];
+                break;
+            case 3:
+                vtx = &size8x8_tex22x22_vtx[24];
+                break;
+            case 4:
+                vtx = &size8x8_tex22x22_vtx[28];
+                break;
+            case 5:
+                vtx = &size8x8_tex22x22_vtx[0];
+                break;
+            case 6:
+                vtx = &size8x8_tex22x22_vtx[4];
+                break;
+            case 7:
+                vtx = &size8x8_tex22x22_vtx[8];
+                break;
         }
         effSetVtxDescN64(vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);

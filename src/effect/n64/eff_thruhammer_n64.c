@@ -73,13 +73,13 @@ EffectEntry* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
 
     effect = effEntry();
     switch (type) {
-    case 0:
-        n = 4;
-        break;
-    case 1:
-    default:
-        n = 1;
-        break;
+        case 0:
+            n = 4;
+            break;
+        case 1:
+        default:
+            n = 1;
+            break;
     }
     effect->type = "ThruHammerN64";
     effect->count = n + 1;

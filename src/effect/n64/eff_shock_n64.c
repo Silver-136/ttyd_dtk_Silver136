@@ -149,24 +149,24 @@ EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     w->offset = 0.5f * a;
     w->offset2 = 0.5f * b;
     switch (type) {
-    case 0:
-    case 1:
-    case 3:
-        w->col0[0] = 255;
-        w->col0[1] = 255;
-        w->col0[2] = 0;
-        w->col1[0] = 255;
-        w->col1[1] = 255;
-        w->col1[2] = 255;
-        break;
-    default:
-        w->col0[0] = 70;
-        w->col0[1] = 180;
-        w->col0[2] = 120;
-        w->col1[0] = 255;
-        w->col1[1] = 255;
-        w->col1[2] = 255;
-        break;
+        case 0:
+        case 1:
+        case 3:
+            w->col0[0] = 255;
+            w->col0[1] = 255;
+            w->col0[2] = 0;
+            w->col1[0] = 255;
+            w->col1[1] = 255;
+            w->col1[2] = 255;
+            break;
+        default:
+            w->col0[0] = 70;
+            w->col0[1] = 180;
+            w->col0[2] = 120;
+            w->col1[0] = 255;
+            w->col1[1] = 255;
+            w->col1[2] = 255;
+            break;
     }
     return effect;
 }

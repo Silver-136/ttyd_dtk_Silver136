@@ -3887,27 +3887,27 @@ USER_FUNC(_object_fall_wait) {
 }
 
 typedef struct FallObjectEntry {
-    s8 index; //0x0
-    s8 type; //0x1
-    u8 pad_02[0x4 - 0x2]; //0x2, never accessed
-    s32 kind; //0x4, 0 = unit, 1 = audience
-    s32 unitId; //0x8
-    s32 partId; //0xC
-    s16 delay; //0x10
-    s16 reserved_12; //0x12
-    u8 noAc; //0x14
-    u8 forceHit; //0x15, set on earlier entries for the same unit once a hit is scheduled; damage then skips the evasion rolls
-    u8 pad_16[0x1C - 0x16]; //0x16, never accessed
-    s32 preCheck; //0x1C
-    s32 sfxId; //0x20
-    EffectEntry* effect; //0x24
-    BattleWeaponData weapon; //0x28
+    s8 index; // 0x0
+    s8 type; // 0x1
+    u8 pad_02[0x4 - 0x2]; // 0x2, never accessed
+    s32 kind; // 0x4, 0 = unit, 1 = audience
+    s32 unitId; // 0x8
+    s32 partId; // 0xC
+    s16 delay; // 0x10
+    s16 reserved_12; // 0x12
+    u8 noAc; // 0x14
+    u8 forceHit; // 0x15, set on earlier entries for the same unit once a hit is scheduled; damage then skips the evasion rolls
+    u8 pad_16[0x1C - 0x16]; // 0x16, never accessed
+    s32 preCheck; // 0x1C
+    s32 sfxId; // 0x20
+    EffectEntry* effect; // 0x24
+    BattleWeaponData weapon; // 0x28
 } FallObjectEntry;
 
 typedef struct FallObjectWork {
-    u8 count; //0x0
-    s8 prevTypes[3]; //0x1
-    FallObjectEntry entries[1]; //0x4
+    u8 count; // 0x0
+    s8 prevTypes[3]; // 0x1
+    FallObjectEntry entries[1]; // 0x4
 } FallObjectWork;
 
 /**

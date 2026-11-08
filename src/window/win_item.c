@@ -267,470 +267,470 @@ s32 winItemMain(WindowWork* w) {
     s32 k;
 
     switch (w->item.state) {
-    case 0:
-        if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-            return -1;
-        }
-        if (w->buttonTrg & PAD_BUTTON_START) {
-            return -2;
-        }
-        if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
-            w->item.mode = 1 - w->item.mode;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->buttonTrg & PAD_BUTTON_A) {
-            if (w->item.mode == 0 && pouchGetHaveItemCnt() == 0) {
-                break;
+        case 0:
+            if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+                return -1;
             }
-            if (w->item.mode == 1 && w->item.skipCount == 0) {
-                break;
+            if (w->buttonTrg & PAD_BUTTON_START) {
+                return -2;
             }
-            w->item.state = 10;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+            if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
+                w->item.mode = 1 - w->item.mode;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->buttonTrg & PAD_BUTTON_A) {
+                if (w->item.mode == 0 && pouchGetHaveItemCnt() == 0) {
+                    break;
+                }
+                if (w->item.mode == 1 && w->item.skipCount == 0) {
+                    break;
+                }
+                w->item.state = 10;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                break;
+            } else if (w->buttonTrg & PAD_TRIGGER_Z) {
+                winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
+                w->savedState = w->item.state;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->item.state = 1000;
+            }
+            w->helpTgtX = -275.0f;
+            w->helpTgtY = (f32)(125 - w->item.mode * VERSION_PICK(40, 50));
+            winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji", 0);
             break;
-        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-            winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
-            w->savedState = w->item.state;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->item.state = 1000;
-        }
-        w->helpTgtX = -275.0f;
-        w->helpTgtY = (f32)(125 - w->item.mode * VERSION_PICK(40, 50));
-        winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji", 0);
-        break;
-    case 10:
-        if (w->item.mode == 0) {
-            cnt = pouchGetHaveItemCnt();
-        } else {
-            cnt = w->item.skipCount;
-        }
-        mode = w->item.mode;
-        pages = (cnt + 9) / 10;
-        if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-            w->item.state = 0;
-        }
-        if (w->buttonTrg & PAD_BUTTON_A) {
+        case 10:
+            if (w->item.mode == 0) {
+                cnt = pouchGetHaveItemCnt();
+            } else {
+                cnt = w->item.skipCount;
+            }
+            mode = w->item.mode;
+            pages = (cnt + 9) / 10;
+            if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+                w->item.state = 0;
+            }
+            if (w->buttonTrg & PAD_BUTTON_A) {
+                if (w->item.mode == 0) {
+                    id = pouchHaveItem(w->item.cursor[mode]);
+                    if (itemDataTable[id].usable_locations & ITEM_USABLE_MENU) {
+                        w->item.useItem = id;
+                        w->item.useIdx = w->item.cursor[mode];
+                        w->item.state = 300;
+                        w->item.useTarget = 0;
+                        w->item.blink = 0;
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                        entry = winMgrGetPtr(w->useWin[0]);
+                        winMgrSetSize(w->useWin[0], entry->x, entry->y, entry->width, w->party.count * 28 + 68);
+                        winMgrOpen(w->useWin[0]);
+                        winMgrOpen(w->useWin[1]);
+                    }
+                } else {
+                    c = w->item.skip[w->item.cursor[mode]];
+                    if ((u32)(c - ITEM_SUPER_LUIGI1) <= ITEM_SUPER_LUIGI4 - ITEM_SUPER_LUIGI1 || c == ITEM_SUPER_LUIGI5) {
+                        w->item.state = 100;
+                        w->item.bookTgtX = -170.0f;
+                        w->item.bookTgtY = 160.0f;
+#if VERSION >= VERSION_JP
+                        w->flags |= WINDOW_FLAG_BOOK_OPEN;
+#endif
+                        book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
+                        w->item.bookIdx = c - ITEM_SUPER_LUIGI1;
+                        w->item.bookPage = 0;
+                        for (w->item.bookPages = 0; book[w->item.bookPages] != NULL; w->item.bookPages++) {
+                        }
+                        w->item.bookPages = (w->item.bookPages + 1) / 2;
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                    } else if (c == ITEM_MAILBOX_SP && pouchReceiveMailCount()) {
+                        w->item.state = 200;
+                        w->item.mailTgtX = -144.0f;
+                        w->item.mailTgtY = 180.0f;
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                    } else if (c == ITEM_RAGGED_DIARY) {
+                        w->item.useItem = c;
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                        return -2;
+                    }
+                }
+            } else if (w->buttonRep & PAD_TRIGGER_L) {
+                w->item.page[mode]--;
+                if (w->item.page[mode] < 0) {
+                    w->item.page[mode] = 0;
+                }
+                w->item.cursor[mode] = w->item.page[mode] * 10;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->buttonRep & PAD_TRIGGER_R) {
+                w->item.page[mode]++;
+                if (w->item.page[mode] >= pages) {
+                    w->item.page[mode] = pages - 1;
+                }
+                w->item.cursor[mode] = w->item.page[mode] * 10;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->dirRep & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
+                if (w->item.cursor[mode] % 2) {
+                    if ((n = w->item.cursor[mode] - 1) >= 0 && n < cnt) {
+                        w->item.cursor[mode]--;
+                    }
+                } else {
+                    if ((n = w->item.cursor[mode] + 1) >= 0 && n < cnt) {
+                        w->item.cursor[mode]++;
+                    }
+                }
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->dirRep & DEMO_STICK_UP) {
+                c = w->item.cursor[mode];
+                if ((n = c - 2) >= 0 && n < cnt) {
+                    w->item.cursor[mode] = c - 2;
+                }
+                w->item.page[mode] = w->item.cursor[mode] / 10;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->dirRep & DEMO_STICK_DOWN) {
+                c = w->item.cursor[mode];
+                if ((n = c + 2) >= 0 && n < cnt) {
+                    w->item.cursor[mode] = c + 2;
+                } else if (c + (c & 1) < cnt) {
+                    w->item.cursor[mode] = cnt - 1;
+                }
+                w->item.page[mode] = w->item.cursor[mode] / 10;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            } else if (w->buttonTrg & PAD_TRIGGER_Z) {
+                winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
+                w->savedState = w->item.state;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->item.state = 1000;
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
+                return -2;
+            }
+            w->helpTgtX = (f32)(w->item.cursor[mode] % 10 % 2 * 204 - 155);
+            w->helpTgtY = (f32)(110 - w->item.cursor[mode] % 10 / 2 * 38);
             if (w->item.mode == 0) {
                 id = pouchHaveItem(w->item.cursor[mode]);
-                if (itemDataTable[id].usable_locations & ITEM_USABLE_MENU) {
-                    w->item.useItem = id;
-                    w->item.useIdx = w->item.cursor[mode];
-                    w->item.state = 300;
-                    w->item.useTarget = 0;
-                    w->item.blink = 0;
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                    entry = winMgrGetPtr(w->useWin[0]);
-                    winMgrSetSize(w->useWin[0], entry->x, entry->y, entry->width, w->party.count * 28 + 68);
-                    winMgrOpen(w->useWin[0]);
-                    winMgrOpen(w->useWin[1]);
-                }
             } else {
-                c = w->item.skip[w->item.cursor[mode]];
-                if ((u32)(c - ITEM_SUPER_LUIGI1) <= ITEM_SUPER_LUIGI4 - ITEM_SUPER_LUIGI1 || c == ITEM_SUPER_LUIGI5) {
-                    w->item.state = 100;
-                    w->item.bookTgtX = -170.0f;
-                    w->item.bookTgtY = 160.0f;
-#if VERSION >= VERSION_JP
-                    w->flags |= WINDOW_FLAG_BOOK_OPEN;
+                id = w->item.skip[w->item.cursor[mode]];
+            }
+            winMsgEntry(w, id, itemDataTable[id].description, 0);
+            break;
+        case 100:
+            if (w->buttonTrg & PAD_BUTTON_A) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->item.bookPage++;
+                if (w->item.bookPage >= w->item.bookPages) {
+                    w->item.bookPage = w->item.bookPages - 1;
+                    w->item.state = 10;
+                    w->item.bookTgtX = 320.0f;
+                    w->item.bookTgtY = -240.0f;
+#if VERSION <= VERSION_DEMO_JP
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+#else
+                    w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
+                    w->helpX = w->helpTgtX;
+                    w->helpY = w->helpTgtY;
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #endif
-                    book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
-                    w->item.bookIdx = c - ITEM_SUPER_LUIGI1;
+                w->item.bookPage--;
+                if (w->item.bookPage < 0) {
                     w->item.bookPage = 0;
-                    for (w->item.bookPages = 0; book[w->item.bookPages] != NULL; w->item.bookPages++) {
-                    }
-                    w->item.bookPages = (w->item.bookPages + 1) / 2;
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                } else if (c == ITEM_MAILBOX_SP && pouchReceiveMailCount()) {
-                    w->item.state = 200;
-                    w->item.mailTgtX = -144.0f;
-                    w->item.mailTgtY = 180.0f;
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                } else if (c == ITEM_RAGGED_DIARY) {
-                    w->item.useItem = c;
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                    return -2;
+                    w->item.state = 10;
+                    w->item.bookTgtX = 320.0f;
+                    w->item.bookTgtY = -240.0f;
+#if VERSION >= VERSION_JP
+                    w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
+                    w->helpX = w->helpTgtX;
+                    w->helpY = w->helpTgtY;
+#endif
                 }
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
+                w->item.bookTgtX = 320.0f;
+                w->item.bookTgtY = -240.0f;
+#if VERSION >= VERSION_JP
+                w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
+                w->helpX = w->helpTgtX;
+                w->helpY = w->helpTgtY;
+#endif
+                return -2;
             }
-        } else if (w->buttonRep & PAD_TRIGGER_L) {
-            w->item.page[mode]--;
-            if (w->item.page[mode] < 0) {
-                w->item.page[mode] = 0;
+            w->helpTgtX = -170.0f;
+            w->helpTgtY = 150.0f;
+            break;
+        case 200:
+            if (w->buttonTrg & PAD_BUTTON_A) {
+                if (pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
+                    pouchOpenMail(w->item.mail[w->item.mailSel].id);
+                }
+                swSet(GSWF_ID(GSWF_MAIL_TUTORIAL_REPEAT_OFF));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                w->item.state = 201;
+                mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
+                FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
+                w->item.mailLines++;
+#if VERSION <= VERSION_DEMO_JP
+                w->item.mailLines += 7;
+                w->item.mailLine = 0;
+                if (mail->flags & MAIL_FLAG_PICTURE) {
+                    w->item.mailLines += 7;
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+#else
+                w->item.mailLine = 0;
+                if (mail->flags & MAIL_FLAG_PICTURE) {
+                    w->item.mailLines += 10;
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+#endif
+                w->item.state = 10;
+                w->item.mailTgtX = 320.0f;
+                w->item.mailTgtY = -240.0f;
+            } else if (w->dirRep & DEMO_STICK_UP) {
+                old = w->item.mailSel;
+                w->item.mailSel--;
+                if (w->item.mailSel < 0) {
+                    w->item.mailSel = 0;
+                }
+                w->item.mailPage = w->item.mailSel / 5;
+                w->item.mailLine = 0;
+                if (old != w->item.mailSel) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                }
+            } else if (w->dirRep & DEMO_STICK_DOWN) {
+                old = w->item.mailSel;
+                w->item.mailSel++;
+                if (w->item.mailSel >= w->item.mailNum) {
+                    w->item.mailSel = w->item.mailNum - 1;
+                }
+                w->item.mailPage = w->item.mailSel / 5;
+                w->item.mailLine = 0;
+                if (old != w->item.mailSel) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                }
+            } else if (w->buttonRep & PAD_TRIGGER_L) {
+                old = w->item.mailPage;
+                w->item.mailPage--;
+                if (w->item.mailPage < 0) {
+                    w->item.mailPage = 0;
+                }
+                w->item.mailSel = w->item.mailPage * 5;
+                if (old != w->item.mailPage) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                }
+            } else if (w->buttonRep & PAD_TRIGGER_R) {
+                pages = (w->item.mailNum + 4) / 5;
+                old = w->item.mailPage;
+                w->item.mailPage++;
+                if (w->item.mailPage >= pages) {
+                    w->item.mailPage = pages - 1;
+                }
+                w->item.mailSel = w->item.mailPage * 5;
+                if (old != w->item.mailPage) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                }
+            } else if (w->buttonTrg & PAD_TRIGGER_Z) {
+                winSortEntry(w, 7, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
+                w->savedState = w->item.state;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                w->item.state = 1000;
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
+                w->item.mailTgtX = 320.0f;
+                w->item.mailTgtY = -240.0f;
+                return -2;
             }
-            w->item.cursor[mode] = w->item.page[mode] * 10;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->buttonRep & PAD_TRIGGER_R) {
-            w->item.page[mode]++;
-            if (w->item.page[mode] >= pages) {
-                w->item.page[mode] = pages - 1;
-            }
-            w->item.cursor[mode] = w->item.page[mode] * 10;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->dirRep & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
-            if (w->item.cursor[mode] % 2) {
-                if ((n = w->item.cursor[mode] - 1) >= 0 && n < cnt) {
-                    w->item.cursor[mode]--;
+            w->helpTgtX = -96.0f;
+            w->helpTgtY = 120.0f - (f32)(w->item.mailSel % 5 * 40);
+            break;
+        case 201:
+            mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
+            if (mail->flags & MAIL_FLAG_PICTURE) {
+#if VERSION <= VERSION_DEMO_JP
+                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
+                if (w->mailRes) {
+                    w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
+#else
+#if VERSION >= VERSION_US
+                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
+#else
+                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+#endif
+                if (w->mailRes) {
+#if VERSION >= VERSION_US
+                    w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
+#else
+                    w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+#endif
+#endif
+                    w->item.state++;
                 }
             } else {
-                if ((n = w->item.cursor[mode] + 1) >= 0 && n < cnt) {
-                    w->item.cursor[mode]++;
-                }
-            }
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->dirRep & DEMO_STICK_UP) {
-            c = w->item.cursor[mode];
-            if ((n = c - 2) >= 0 && n < cnt) {
-                w->item.cursor[mode] = c - 2;
-            }
-            w->item.page[mode] = w->item.cursor[mode] / 10;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->dirRep & DEMO_STICK_DOWN) {
-            c = w->item.cursor[mode];
-            if ((n = c + 2) >= 0 && n < cnt) {
-                w->item.cursor[mode] = c + 2;
-            } else if (c + (c & 1) < cnt) {
-                w->item.cursor[mode] = cnt - 1;
-            }
-            w->item.page[mode] = w->item.cursor[mode] / 10;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-            winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
-            w->savedState = w->item.state;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->item.state = 1000;
-        } else if (w->buttonTrg & PAD_BUTTON_START) {
-            return -2;
-        }
-        w->helpTgtX = (f32)(w->item.cursor[mode] % 10 % 2 * 204 - 155);
-        w->helpTgtY = (f32)(110 - w->item.cursor[mode] % 10 / 2 * 38);
-        if (w->item.mode == 0) {
-            id = pouchHaveItem(w->item.cursor[mode]);
-        } else {
-            id = w->item.skip[w->item.cursor[mode]];
-        }
-        winMsgEntry(w, id, itemDataTable[id].description, 0);
-        break;
-    case 100:
-        if (w->buttonTrg & PAD_BUTTON_A) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->item.bookPage++;
-            if (w->item.bookPage >= w->item.bookPages) {
-                w->item.bookPage = w->item.bookPages - 1;
-                w->item.state = 10;
-                w->item.bookTgtX = 320.0f;
-                w->item.bookTgtY = -240.0f;
-#if VERSION <= VERSION_DEMO_JP
-            }
-        } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#else
-                w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
-                w->helpX = w->helpTgtX;
-                w->helpY = w->helpTgtY;
-            }
-        } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
-            w->item.bookPage--;
-            if (w->item.bookPage < 0) {
-                w->item.bookPage = 0;
-                w->item.state = 10;
-                w->item.bookTgtX = 320.0f;
-                w->item.bookTgtY = -240.0f;
-#if VERSION >= VERSION_JP
-                w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
-                w->helpX = w->helpTgtX;
-                w->helpY = w->helpTgtY;
-#endif
-            }
-        } else if (w->buttonTrg & PAD_BUTTON_START) {
-            w->item.bookTgtX = 320.0f;
-            w->item.bookTgtY = -240.0f;
-#if VERSION >= VERSION_JP
-            w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
-            w->helpX = w->helpTgtX;
-            w->helpY = w->helpTgtY;
-#endif
-            return -2;
-        }
-        w->helpTgtX = -170.0f;
-        w->helpTgtY = 150.0f;
-        break;
-    case 200:
-        if (w->buttonTrg & PAD_BUTTON_A) {
-            if (pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
-                pouchOpenMail(w->item.mail[w->item.mailSel].id);
-            }
-            swSet(GSWF_ID(GSWF_MAIL_TUTORIAL_REPEAT_OFF));
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            w->item.state = 201;
-            mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
-            FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
-            w->item.mailLines++;
-#if VERSION <= VERSION_DEMO_JP
-            w->item.mailLines += 7;
-            w->item.mailLine = 0;
-            if (mail->flags & MAIL_FLAG_PICTURE) {
-                w->item.mailLines += 7;
-            }
-        } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#else
-            w->item.mailLine = 0;
-            if (mail->flags & MAIL_FLAG_PICTURE) {
-                w->item.mailLines += 10;
-            }
-        } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
-            w->item.state = 10;
-            w->item.mailTgtX = 320.0f;
-            w->item.mailTgtY = -240.0f;
-        } else if (w->dirRep & DEMO_STICK_UP) {
-            old = w->item.mailSel;
-            w->item.mailSel--;
-            if (w->item.mailSel < 0) {
-                w->item.mailSel = 0;
-            }
-            w->item.mailPage = w->item.mailSel / 5;
-            w->item.mailLine = 0;
-            if (old != w->item.mailSel) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            }
-        } else if (w->dirRep & DEMO_STICK_DOWN) {
-            old = w->item.mailSel;
-            w->item.mailSel++;
-            if (w->item.mailSel >= w->item.mailNum) {
-                w->item.mailSel = w->item.mailNum - 1;
-            }
-            w->item.mailPage = w->item.mailSel / 5;
-            w->item.mailLine = 0;
-            if (old != w->item.mailSel) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            }
-        } else if (w->buttonRep & PAD_TRIGGER_L) {
-            old = w->item.mailPage;
-            w->item.mailPage--;
-            if (w->item.mailPage < 0) {
-                w->item.mailPage = 0;
-            }
-            w->item.mailSel = w->item.mailPage * 5;
-            if (old != w->item.mailPage) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            }
-        } else if (w->buttonRep & PAD_TRIGGER_R) {
-            pages = (w->item.mailNum + 4) / 5;
-            old = w->item.mailPage;
-            w->item.mailPage++;
-            if (w->item.mailPage >= pages) {
-                w->item.mailPage = pages - 1;
-            }
-            w->item.mailSel = w->item.mailPage * 5;
-            if (old != w->item.mailPage) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            }
-        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-            winSortEntry(w, 7, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
-            w->savedState = w->item.state;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->item.state = 1000;
-        } else if (w->buttonTrg & PAD_BUTTON_START) {
-            w->item.mailTgtX = 320.0f;
-            w->item.mailTgtY = -240.0f;
-            return -2;
-        }
-        w->helpTgtX = -96.0f;
-        w->helpTgtY = 120.0f - (f32)(w->item.mailSel % 5 * 40);
-        break;
-    case 201:
-        mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
-        if (mail->flags & MAIL_FLAG_PICTURE) {
-#if VERSION <= VERSION_DEMO_JP
-            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
-            if (w->mailRes) {
-                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
-#else
-#if VERSION >= VERSION_US
-            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
-#else
-            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
-#endif
-            if (w->mailRes) {
-#if VERSION >= VERSION_US
-                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
-#else
-                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
-#endif
-#endif
+                w->mailRes = NULL;
                 w->item.state++;
             }
-        } else {
-            w->mailRes = NULL;
-            w->item.state++;
-        }
-        break;
-    case 202:
-        if (w->item.mailLines > 8) {
-            if (keyGetDirRep(0) & DEMO_SUBSTICK_UP) {
-                if (w->item.mailLine > 0) {
-                    w->item.mailLine--;
-                }
-            } else if (keyGetDirRep(0) & DEMO_SUBSTICK_DOWN) {
+            break;
+        case 202:
+            if (w->item.mailLines > 8) {
+                if (keyGetDirRep(0) & DEMO_SUBSTICK_UP) {
+                    if (w->item.mailLine > 0) {
+                        w->item.mailLine--;
+                    }
+                } else if (keyGetDirRep(0) & DEMO_SUBSTICK_DOWN) {
 #if VERSION <= VERSION_DEMO_JP
-                if (w->item.mailLine + 8 < w->item.mailLines) {
+                    if (w->item.mailLine + 8 < w->item.mailLines) {
 #else
-                if (w->item.mailLine + 6 < w->item.mailLines) {
+                    if (w->item.mailLine + 6 < w->item.mailLines) {
 #endif
-                    w->item.mailLine++;
+                        w->item.mailLine++;
+                    }
                 }
             }
-        }
-        if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            if (w->mailRes) {
-                fileFree(w->mailRes);
+            if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                if (w->mailRes) {
+                    fileFree(w->mailRes);
+                }
+                w->item.state = 200;
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
+                if (w->mailRes) {
+                    fileFree(w->mailRes);
+                }
+                w->item.mailTgtX = 320.0f;
+                w->item.mailTgtY = -240.0f;
+                return -2;
             }
-            w->item.state = 200;
-        } else if (w->buttonTrg & PAD_BUTTON_START) {
-            if (w->mailRes) {
-                fileFree(w->mailRes);
-            }
-            w->item.mailTgtX = 320.0f;
-            w->item.mailTgtY = -240.0f;
-            return -2;
-        }
-        w->helpTgtX = -96.0f;
-        w->helpTgtY = 120.0f;
-        break;
-    case 300:
-        if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-            w->item.state = 10;
-            w->item.useItem = 0;
-            winMgrClose(w->useWin[0]);
-            winMgrClose(w->useWin[1]);
-        } else if (w->buttonTrg & PAD_BUTTON_A) {
-            mp = marioGetPtr();
+            w->helpTgtX = -96.0f;
+            w->helpTgtY = 120.0f;
+            break;
+        case 300:
+            if (w->buttonTrg & PAD_BUTTON_B) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+                w->item.state = 10;
+                w->item.useItem = 0;
+                winMgrClose(w->useWin[0]);
+                winMgrClose(w->useWin[1]);
+            } else if (w->buttonTrg & PAD_BUTTON_A) {
+                mp = marioGetPtr();
 #if VERSION <= VERSION_DEMO_JP
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
-                ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
+                    ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
 #else
-            ok = 0;
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            if (mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_PLANE) {
-                ok = 1;
-            }
-            if (marioRollCancelDisable() || marioSlitContinueChk()) {
-                ok = 1;
-            }
-            if (w->item.useTarget > 0 && marioBgmodeChk()) {
-                ok = 1;
-            }
-            if (w->item.useTarget > 1 && !marioBgmodeChk()) {
-                ok = 1;
-            }
-            if (!ok) {
+                ok = 0;
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+                if (mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_PLANE) {
+                    ok = 1;
+                }
+                if (marioRollCancelDisable() || marioSlitContinueChk()) {
+                    ok = 1;
+                }
+                if (w->item.useTarget > 0 && marioBgmodeChk()) {
+                    ok = 1;
+                }
+                if (w->item.useTarget > 1 && !marioBgmodeChk()) {
+                    ok = 1;
+                }
+                if (!ok) {
 #endif
+                    winMgrClose(w->useWin[0]);
+                    winMgrClose(w->useWin[1]);
+                    return -2;
+                }
+                party = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
+                k = 0;
+                for (i = 0; i < 7; i++) {
+                    if (party == winPartyDt[i].partyId) {
+                        list[k++] = &winPartyDt[i];
+                    }
+                }
+                for (i = 0; i < 7; i++) {
+#if VERSION >= VERSION_DEMO_EU
+                    if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
+                        !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
+#else
+                    if (party != winPartyDt[i].partyId) {
+#endif
+                        list[k++] = &winPartyDt[i];
+                    }
+                }
+
+                // BUG (early demos): only hp_restored is applied here; the FP and Star Power amounts are added from JP on.
+                if (w->item.useTarget < 1) {
+                    pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
+#if VERSION >= VERSION_JP
+                    pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
+                    pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
+#endif
+                } else {
+                    party = list[w->item.useTarget - 1]->partyId;
+                    pouchSetPartyHP(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
+#if VERSION >= VERSION_JP
+                    pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
+                    pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
+#endif
+                }
+                w->item.blink = 0;
+                w->item.state = 301;
+                break;
+            } else if (w->dirRep & DEMO_STICK_UP) {
+                old = w->item.useTarget;
+                w->item.useTarget--;
+                if (w->item.useTarget < 0) {
+                    w->item.useTarget = w->party.count;
+                }
+                if (old != w->item.useTarget) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                }
+            } else if (w->dirRep & DEMO_STICK_DOWN) {
+                old = w->item.useTarget;
+                w->item.useTarget++;
+                if (w->item.useTarget >= w->party.count + 1) {
+                    w->item.useTarget = 0;
+                }
+                if (old != w->item.useTarget) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+                }
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
+                w->item.useItem = 0;
                 winMgrClose(w->useWin[0]);
                 winMgrClose(w->useWin[1]);
                 return -2;
             }
-            party = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
-            k = 0;
-            for (i = 0; i < 7; i++) {
-                if (party == winPartyDt[i].partyId) {
-                    list[k++] = &winPartyDt[i];
-                }
-            }
-            for (i = 0; i < 7; i++) {
-#if VERSION >= VERSION_DEMO_EU
-                if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
-                    !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
-#else
-                if (party != winPartyDt[i].partyId) {
-#endif
-                    list[k++] = &winPartyDt[i];
-                }
-            }
-
-            // BUG (early demos): only hp_restored is applied here; the FP and Star Power amounts are added from JP on.
-            if (w->item.useTarget < 1) {
-                pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
-#if VERSION >= VERSION_JP
-                pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
-                pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
-#endif
+            w->helpTgtX = -80.0f;
+            old = w->item.useTarget;
+            if (old == 0) {
+                yoff = 0.0f;
+            } else if (old == 1) {
+                yoff = -16.0f;
             } else {
-                party = list[w->item.useTarget - 1]->partyId;
-                pouchSetPartyHP(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
-#if VERSION >= VERSION_JP
-                pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
-                pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
-#endif
+                yoff = -28.0f;
             }
-            w->item.blink = 0;
-            w->item.state = 301;
+            w->helpTgtY = (130.0f - 28.0f * old) + yoff;
             break;
-        } else if (w->dirRep & DEMO_STICK_UP) {
-            old = w->item.useTarget;
-            w->item.useTarget--;
-            if (w->item.useTarget < 0) {
-                w->item.useTarget = w->party.count;
+        case 301:
+            w->item.blink++;
+            if (w->item.blink > gp->framerate * 2) {
+                w->item.blink = 0;
+                pouchRemoveItemIndex(w->item.useItem, w->item.useIdx);
+                w->item.state = 10;
+                w->item.useItem = 0;
+                if (pouchGetHaveItemCnt() == 0) {
+                    w->item.state = 0;
+                } else if (w->item.cursor[0] >= pouchGetHaveItemCnt()) {
+                    w->item.cursor[0] = pouchGetHaveItemCnt() - 1;
+                }
+                winMgrClose(w->useWin[0]);
+                winMgrClose(w->useWin[1]);
             }
-            if (old != w->item.useTarget) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            break;
+        case 1000:
+            if (!winSortWait(w)) {
+                w->item.state = w->savedState;
             }
-        } else if (w->dirRep & DEMO_STICK_DOWN) {
-            old = w->item.useTarget;
-            w->item.useTarget++;
-            if (w->item.useTarget >= w->party.count + 1) {
-                w->item.useTarget = 0;
+            if (w->buttonTrg & PAD_BUTTON_START) {
+                return -2;
             }
-            if (old != w->item.useTarget) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            }
-        } else if (w->buttonTrg & PAD_BUTTON_START) {
-            w->item.useItem = 0;
-            winMgrClose(w->useWin[0]);
-            winMgrClose(w->useWin[1]);
-            return -2;
-        }
-        w->helpTgtX = -80.0f;
-        old = w->item.useTarget;
-        if (old == 0) {
-            yoff = 0.0f;
-        } else if (old == 1) {
-            yoff = -16.0f;
-        } else {
-            yoff = -28.0f;
-        }
-        w->helpTgtY = (130.0f - 28.0f * old) + yoff;
-        break;
-    case 301:
-        w->item.blink++;
-        if (w->item.blink > gp->framerate * 2) {
-            w->item.blink = 0;
-            pouchRemoveItemIndex(w->item.useItem, w->item.useIdx);
-            w->item.state = 10;
-            w->item.useItem = 0;
-            if (pouchGetHaveItemCnt() == 0) {
-                w->item.state = 0;
-            } else if (w->item.cursor[0] >= pouchGetHaveItemCnt()) {
-                w->item.cursor[0] = pouchGetHaveItemCnt() - 1;
-            }
-            winMgrClose(w->useWin[0]);
-            winMgrClose(w->useWin[1]);
-        }
-        break;
-    case 1000:
-        if (!winSortWait(w)) {
-            w->item.state = w->savedState;
-        }
-        if (w->buttonTrg & PAD_BUTTON_START) {
-            return -2;
-        }
-        break;
+            break;
     }
     return 0;
 }

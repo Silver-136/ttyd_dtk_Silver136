@@ -178,27 +178,27 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     userdata->overallScale = 1.0f;
     userdata->poseId = -1;
     switch (type) {
-    case 7:
-        ptr = userdata + 1;
-        for (i = 1; i < effect->count; i++, ptr++) {
-            ptr->position.x = 1000.0f;
-            ptr->position.y = 0.0f;
-            ptr->position.z = 0.0f;
-            ptr->scaleX = 1.0f;
-            ptr->scaleY = 1.0f;
-            ptr->scaleZ = 1.0f;
-            ptr->state = 0;
-            ptr->timer = 0;
-        }
-        break;
-    default:
-        // FAKE: size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object
-        size = gp->inBattle != 0;
-        userdata->poseId = animPoseEntry(anim_tbl[gp->language][type], size);
-        animPoseSetAnim(userdata->poseId, "A_1", TRUE);
-        animPoseSetMaterialFlagOn(userdata->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-        animPoseSetGXFunc(userdata->poseId, rendermodeFunc, FALSE);
-        break;
+        case 7:
+            ptr = userdata + 1;
+            for (i = 1; i < effect->count; i++, ptr++) {
+                ptr->position.x = 1000.0f;
+                ptr->position.y = 0.0f;
+                ptr->position.z = 0.0f;
+                ptr->scaleX = 1.0f;
+                ptr->scaleY = 1.0f;
+                ptr->scaleZ = 1.0f;
+                ptr->state = 0;
+                ptr->timer = 0;
+            }
+            break;
+        default:
+            // FAKE: size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object
+            size = gp->inBattle != 0;
+            userdata->poseId = animPoseEntry(anim_tbl[gp->language][type], size);
+            animPoseSetAnim(userdata->poseId, "A_1", TRUE);
+            animPoseSetMaterialFlagOn(userdata->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+            animPoseSetGXFunc(userdata->poseId, rendermodeFunc, FALSE);
+            break;
     }
     return effect;
 }
@@ -238,39 +238,39 @@ static void effNiceMain(EffectEntry* effect) {
         data = animPoseGetAnimDataPtr(wp->poseId);
         animPoseMain(wp->poseId);
         switch (type) {
-        case 0:
+            case 0:
 #if VERSION >= VERSION_US
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-            len = data->loopInfo->end;
-        {
-            f32 tbl[7][6] = {
-                { 32.0f, 34.0f, 34.0f, 34.0f, 34.0f, 36.0f },
-                { 32.0f, 34.0f, 39.0f, 34.0f, 34.0f, 41.0f },
-                { 35.0f, 37.0f, 39.0f, 35.0f, 35.0f, 39.0f },
-                { 45.0f, 40.0f, 42.0f, 46.0f, 39.0f, 40.0f },
-                { 48.0f, 40.0f, 80.0f, 40.0f, 58.0f, 58.0f },
-                { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f },
-                { 1000.0f, 37.0f, 46.0f, 42.0f, 39.0f, 62.0f },
-            };
-            start = tbl[type][gp->language];
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                len = data->loopInfo->end;
+            {
+                f32 tbl[7][6] = {
+                    { 32.0f, 34.0f, 34.0f, 34.0f, 34.0f, 36.0f },
+                    { 32.0f, 34.0f, 39.0f, 34.0f, 34.0f, 41.0f },
+                    { 35.0f, 37.0f, 39.0f, 35.0f, 35.0f, 39.0f },
+                    { 45.0f, 40.0f, 42.0f, 46.0f, 39.0f, 40.0f },
+                    { 48.0f, 40.0f, 80.0f, 40.0f, 58.0f, 58.0f },
+                    { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f },
+                    { 1000.0f, 37.0f, 46.0f, 42.0f, 39.0f, 62.0f },
+                };
+                start = tbl[type][gp->language];
 #else
-        case 1: {
-            len = data->loopInfo->end;
-            start = (gp->language == LANGUAGE_JP) ? 32.0f : 34.0f;
+            case 1: {
+                len = data->loopInfo->end;
+                start = (gp->language == LANGUAGE_JP) ? 32.0f : 34.0f;
 #endif
-            if (pose->localFrame > start) {
-                t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) {
-                    t = 0.0f;
+                if (pose->localFrame > start) {
+                    t = 1.0f - (pose->localFrame - start) / (len - start);
+                    if (t < 0.0f) {
+                        t = 0.0f;
+                    }
+                    animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
+                    animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
                 }
-                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
-                animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
-            }
 #if VERSION >= VERSION_US
         }
 #else
@@ -383,83 +383,83 @@ static void acrobatMain(EffectEntry* effect) {
         // FAKE: the sound name is read into a loop-local through SFX_NAME_WORD; psndSFXOn("SFX_SYSTEM_ACROBAT1") in case 0 changes the object
         const char* sfxName = SFX_NAME_WORD("SFX_SYSTEM_ACROBAT1");
         switch (wp->state) {
-        case 0:
-            wp->timer = i * 4;
-            wp->state++;
-            if (i == 1) {
-                psndSFXOn(sfxName);
-            }
-            break;
-        case 1:
-            wp->timer--;
-            if (wp->timer < 0) {
-                wp->timer = 0;
+            case 0:
+                wp->timer = i * 4;
                 wp->state++;
-            }
-            break;
-        case 2:
-            wp->timer++;
-            wp->position.x = intplGetValue(EASING_SINE_OUT, 500.0f, i * 4, wp->timer, 30);
-            if (wp->timer >= 30) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 3:
-            wp->timer++;
-            wp->scaleX = intplGetValue(EASING_SINE_OUT, 1.0f, 0.4f, wp->timer, 8);
-            wp->scaleY = intplGetValue(EASING_SINE_OUT, 1.0f, 1.5f, wp->timer, 8);
-            if (wp->timer >= 8) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 4:
-            wp->timer++;
-            if (wp->timer > (effect->count - i - 1) * 4) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 5:
-            wp->timer++;
-            wp->position.x = intplGetValue(EASING_WAVE_SHRINKING_FASTER, i * 4, i * 12, wp->timer, 30);
-            wp->scaleX = intplGetValue(EASING_SINE_OUT, 0.2f, 1.0f, wp->timer, 30);
-            wp->scaleY = intplGetValue(EASING_SINE_OUT, 1.5f, 1.0f, wp->timer, 30);
-            if (wp->timer >= 30) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 6:
-            wp->timer++;
-            if (wp->timer > 16) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 7:
-            wp->timer++;
-            wp->scaleX = intplGetValue(EASING_SINE_OUT, 1.0f, 1.5f, wp->timer, 15);
-            wp->scaleY = intplGetValue(EASING_SINE_OUT, 1.0f, 0.1f, wp->timer, 15);
-            if (wp->timer >= 15) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 8:
-            wp->timer++;
-            wp->scaleX = intplGetValue(EASING_SINE_OUT, 1.5f, 0.1f, wp->timer, 15);
-            wp->scaleY = intplGetValue(EASING_SINE_OUT, 0.1f, 2.0f, wp->timer, 15);
-            if (wp->timer >= 15) {
-                wp->timer = 0;
-                wp->state++;
-            }
-            break;
-        case 9:
-            done++;
-            wp->scaleX = wp->scaleY = wp->scaleZ = 0.0f;
-            break;
+                if (i == 1) {
+                    psndSFXOn(sfxName);
+                }
+                break;
+            case 1:
+                wp->timer--;
+                if (wp->timer < 0) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 2:
+                wp->timer++;
+                wp->position.x = intplGetValue(EASING_SINE_OUT, 500.0f, i * 4, wp->timer, 30);
+                if (wp->timer >= 30) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 3:
+                wp->timer++;
+                wp->scaleX = intplGetValue(EASING_SINE_OUT, 1.0f, 0.4f, wp->timer, 8);
+                wp->scaleY = intplGetValue(EASING_SINE_OUT, 1.0f, 1.5f, wp->timer, 8);
+                if (wp->timer >= 8) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 4:
+                wp->timer++;
+                if (wp->timer > (effect->count - i - 1) * 4) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 5:
+                wp->timer++;
+                wp->position.x = intplGetValue(EASING_WAVE_SHRINKING_FASTER, i * 4, i * 12, wp->timer, 30);
+                wp->scaleX = intplGetValue(EASING_SINE_OUT, 0.2f, 1.0f, wp->timer, 30);
+                wp->scaleY = intplGetValue(EASING_SINE_OUT, 1.5f, 1.0f, wp->timer, 30);
+                if (wp->timer >= 30) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 6:
+                wp->timer++;
+                if (wp->timer > 16) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 7:
+                wp->timer++;
+                wp->scaleX = intplGetValue(EASING_SINE_OUT, 1.0f, 1.5f, wp->timer, 15);
+                wp->scaleY = intplGetValue(EASING_SINE_OUT, 1.0f, 0.1f, wp->timer, 15);
+                if (wp->timer >= 15) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 8:
+                wp->timer++;
+                wp->scaleX = intplGetValue(EASING_SINE_OUT, 1.5f, 0.1f, wp->timer, 15);
+                wp->scaleY = intplGetValue(EASING_SINE_OUT, 0.1f, 2.0f, wp->timer, 15);
+                if (wp->timer >= 15) {
+                    wp->timer = 0;
+                    wp->state++;
+                }
+                break;
+            case 9:
+                done++;
+                wp->scaleX = wp->scaleY = wp->scaleZ = 0.0f;
+                break;
         }
     }
     if (done >= effect->count - 1) {

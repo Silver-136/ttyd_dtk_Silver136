@@ -1956,33 +1956,33 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
     top = base + d;
     for (; i < 5; i++) {
         switch (i) {
-        case 0:
-            z = x = 0.0f;
-            break;
-        case 1:
-            a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-            x = 9.0f * (f32)sin(a);
-            z = 9.0f * -marioSearchHead_roll_cos(a);
-            movePos(&x, &z, 3.0f, mario->directionView);
-            break;
-        case 2:
-            a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-            x = 9.0f * (f32)sin(a);
-            z = 9.0f * -marioSearchHead_roll_cos(a);
-            movePos(&x, &z, 3.0f, mario->directionView);
-            break;
-        case 3:
-            a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-            x = 9.0f * (f32)sin(a);
-            z = 9.0f * -marioSearchHead_roll_cos(a);
-            movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
-            break;
-        case 4:
-            a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-            x = 9.0f * (f32)sin(a);
-            z = 9.0f * -marioSearchHead_roll_cos(a);
-            movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
-            break;
+            case 0:
+                z = x = 0.0f;
+                break;
+            case 1:
+                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                z = 9.0f * -marioSearchHead_roll_cos(a);
+                movePos(&x, &z, 3.0f, mario->directionView);
+                break;
+            case 2:
+                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                z = 9.0f * -marioSearchHead_roll_cos(a);
+                movePos(&x, &z, 3.0f, mario->directionView);
+                break;
+            case 3:
+                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                z = 9.0f * -marioSearchHead_roll_cos(a);
+                movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
+                break;
+            case 4:
+                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                z = 9.0f * -marioSearchHead_roll_cos(a);
+                movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
+                break;
         }
         {
             Vec v = {0.0f, 0.0f, 0.0f};

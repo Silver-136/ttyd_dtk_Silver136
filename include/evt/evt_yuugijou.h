@@ -22,23 +22,23 @@ typedef struct MiniGameWork {
 } MiniGameWork;
 
 typedef struct PiantaParlorWork {
-    u32 flags; //0x00, 1: token counter shown, 2: tokens taken out (playing), 4: counter raised, 8: window closed
-    u32 keptTokens; //0x04, tokens deposited by yuugijou_montemedal_keep
-    s32 tokens; //0x08
-    u32 dispTick; //0x0C, counter-animation tick
-    u32 dispTokens; //0x10, token count currently shown (counts toward tokens)
+    u32 flags; // 0x00, 1: token counter shown, 2: tokens taken out (playing), 4: counter raised, 8: window closed
+    u32 keptTokens; // 0x04, tokens deposited by yuugijou_montemedal_keep
+    s32 tokens; // 0x08
+    u32 dispTick; // 0x0C, counter-animation tick
+    u32 dispTokens; // 0x10, token count currently shown (counts toward tokens)
     // minigame rows x five ranks (+1 spare slot); defaults set in yuugijou_init
 #if VERSION >= VERSION_US
     // US and later keep eight record rows (0x258 bytes in all): recordScore 0xD4, recordParam 0x194, pad_134 at 0x254
-    s32 recordOn[8][6]; //0x14
-    s32 recordScore[8][6]; //0xD4
-    s32 recordParam[8][6]; //0x194
+    s32 recordOn[8][6]; // 0x14
+    s32 recordScore[8][6]; // 0xD4
+    s32 recordParam[8][6]; // 0x194
 #else
-    s32 recordOn[4][6]; //0x14, ranks 0-4 set to 1 at init
-    s32 recordScore[4][6]; //0x74, default record values (game 1 ascending: times)
-    s32 recordParam[4][6]; //0xD4, per-rank value derived from recordScore (game 0, and all games in the early demos: constants)
+    s32 recordOn[4][6]; // 0x14, ranks 0-4 set to 1 at init
+    s32 recordScore[4][6]; // 0x74, default record values (game 1 ascending: times)
+    s32 recordParam[4][6]; // 0xD4, per-rank value derived from recordScore (game 0, and all games in the early demos: constants)
 #endif
-    u32 pad_134; //0x134, never accessed
+    u32 pad_134; // 0x134, never accessed
 } PiantaParlorWork;
 
 // Record arrays are [minigame][rank]; ranks 0-4 hold the defaults set in yuugijou_init, rank 5 is unused there.

@@ -45,42 +45,42 @@ EffectEntry* effCloudN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
     work->position.z = z;
     work->scale = scale;
     switch (type) {
-    case 0:
-        work->r = 255;
-        work->g = 255;
-        work->b = 255;
-        work->r2 = 225;
-        work->g2 = 225;
-        work->b2 = 225;
-        work->fade = 255;
-        break;
-    case 1:
-        work->r = 255;
-        work->g = 245;
-        work->b = 230;
-        work->r2 = 45;
-        work->g2 = 35;
-        work->b2 = 15;
-        work->fade = 255;
-        break;
-    case 2:
-        work->r = 255;
-        work->g = 0;
-        work->b = 0;
-        work->r2 = 155;
-        work->g2 = 125;
-        work->b2 = 125;
-        work->fade = 255;
-        break;
-    case 3:
-        work->r = 255;
-        work->g = 255;
-        work->b = 255;
-        work->r2 = 255;
-        work->g2 = 65;
-        work->b2 = 20;
-        work->fade = 255;
-        break;
+        case 0:
+            work->r = 255;
+            work->g = 255;
+            work->b = 255;
+            work->r2 = 225;
+            work->g2 = 225;
+            work->b2 = 225;
+            work->fade = 255;
+            break;
+        case 1:
+            work->r = 255;
+            work->g = 245;
+            work->b = 230;
+            work->r2 = 45;
+            work->g2 = 35;
+            work->b2 = 15;
+            work->fade = 255;
+            break;
+        case 2:
+            work->r = 255;
+            work->g = 0;
+            work->b = 0;
+            work->r2 = 155;
+            work->g2 = 125;
+            work->b2 = 125;
+            work->fade = 255;
+            break;
+        case 3:
+            work->r = 255;
+            work->g = 255;
+            work->b = 255;
+            work->r2 = 255;
+            work->g2 = 65;
+            work->b2 = 20;
+            work->fade = 255;
+            break;
     }
     work->pos.x = x;
     work->pos.y = y;

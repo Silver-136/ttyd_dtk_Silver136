@@ -488,70 +488,70 @@ static void effStarStoneMain(EffectEntry* effect) {
         psndSFXOff(w->sfx);
     }
     switch (w->state) {
-    case 0:
-        switch (type) {
-        case 6:
-            w->texScrollX -= 0.01f;
-            if (w->texScrollX <= 0.0f) {
-                w->texScrollX += 1.0f;
+        case 0:
+            switch (type) {
+            case 6:
+                w->texScrollX -= 0.01f;
+                if (w->texScrollX <= 0.0f) {
+                    w->texScrollX += 1.0f;
+                }
+                break;
+            default:
+                w->texScrollX += 0.01f;
+                if (w->texScrollX >= 1.0f) {
+                    w->texScrollX -= 1.0f;
+                }
+                break;
             }
             break;
-        default:
-            w->texScrollX += 0.01f;
-            if (w->texScrollX >= 1.0f) {
-                w->texScrollX -= 1.0f;
+        case 1:
+            w->flags |= STAR_STONE_FLAG_FALLING;
+            w->speedY = 0.0f;
+            w->gravity = 0.4f;
+            w->state++;
+            break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            hit = 0;
+            if (w->speedY < 0.0f) {
+                dist = 10.0f + __fabsf(w->speedY);
+                if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, w->position.x, w->position.y, w->position.z, 0.0f, -1.0f, 0.0f)) {
+                    hit = 1;
+                    w->position.y = 10.0f + hy;
+                    w->speedY *= -0.5f;
+                    w->state++;
+                    if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
+                        w->flags &= ~STAR_STONE_FLAG_SHINE_SFX_ON;
+                        psndSFXOff(w->sfx);
+                        ((EffStarStoneWork*)effect->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
+                    }
+                    if (!(w->flags & STAR_STONE_FLAG_NO_JUMP_SFX)) {
+                        psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
+                    }
+                    if (!(w->flags & STAR_STONE_FLAG_PLAIN) && w->state == 3) {
+                        e = effStardustN64Entry(4, w->position.x, w->position.y + 10.0f * w->scale + 5.0f * w->scale, w->position.z, 20.0f * w->scale);
+                        c = color_tbl[w->type];
+                        effStardustN64SetColor(e, (f32)c[0] / 255.0f, (f32)c[1] / 255.0f, (f32)c[2] / 255.0f);
+                    }
+                }
+            }
+            if (!hit) {
+                w->position.y += w->speedY;
+                w->speedY -= w->gravity;
+            }
+            if (w->state > 2) {
+                w->half0OffsetX -= (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+                w->half0OffsetZ -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+                w->half1OffsetX += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+                w->half1OffsetZ += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+                w->rot.z += (90.0f - w->rot.z) / 10.0f;
+            }
+            if (w->state > 3) {
+                w->rot.x += (-90.0f - w->rot.x) / 10.0f;
             }
             break;
-        }
-        break;
-    case 1:
-        w->flags |= STAR_STONE_FLAG_FALLING;
-        w->speedY = 0.0f;
-        w->gravity = 0.4f;
-        w->state++;
-        break;
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-        hit = 0;
-        if (w->speedY < 0.0f) {
-            dist = 10.0f + __fabsf(w->speedY);
-            if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, w->position.x, w->position.y, w->position.z, 0.0f, -1.0f, 0.0f)) {
-                hit = 1;
-                w->position.y = 10.0f + hy;
-                w->speedY *= -0.5f;
-                w->state++;
-                if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
-                    w->flags &= ~STAR_STONE_FLAG_SHINE_SFX_ON;
-                    psndSFXOff(w->sfx);
-                    ((EffStarStoneWork*)effect->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
-                }
-                if (!(w->flags & STAR_STONE_FLAG_NO_JUMP_SFX)) {
-                    psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
-                }
-                if (!(w->flags & STAR_STONE_FLAG_PLAIN) && w->state == 3) {
-                    e = effStardustN64Entry(4, w->position.x, w->position.y + 10.0f * w->scale + 5.0f * w->scale, w->position.z, 20.0f * w->scale);
-                    c = color_tbl[w->type];
-                    effStardustN64SetColor(e, (f32)c[0] / 255.0f, (f32)c[1] / 255.0f, (f32)c[2] / 255.0f);
-                }
-            }
-        }
-        if (!hit) {
-            w->position.y += w->speedY;
-            w->speedY -= w->gravity;
-        }
-        if (w->state > 2) {
-            w->half0OffsetX -= (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->half0OffsetZ -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->half1OffsetX += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->half1OffsetZ += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->rot.z += (90.0f - w->rot.z) / 10.0f;
-        }
-        if (w->state > 3) {
-            w->rot.x += (-90.0f - w->rot.x) / 10.0f;
-        }
-        break;
     }
     w->timer++;
     w->timer %= 60;
@@ -588,13 +588,13 @@ static void effStarStoneMain(EffectEntry* effect) {
     }
     if (!(w->flags & STAR_STONE_FLAG_EXTERNAL_DRAW)) {
         switch (type) {
-        case 0:
-        case 6:
-            dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStarStoneDisp_1, effect);
-            break;
-        default:
-            dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, effStarStoneDisp_2, effect);
-            break;
+            case 0:
+            case 6:
+                dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStarStoneDisp_1, effect);
+                break;
+            default:
+                dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, effStarStoneDisp_2, effect);
+                break;
         }
     }
 }
@@ -1002,12 +1002,12 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
 void effStarStoneDraw(CameraId cameraId, EffectEntry* effect) {
     EffStarStoneWork* w = effect->userdata;
     switch (w->type) {
-    case 0:
-    case 6:
-        effStarStoneDisp_1(cameraId, effect);
-        break;
-    default:
-        effStarStoneDisp_2(cameraId, effect);
-        break;
+        case 0:
+        case 6:
+            effStarStoneDisp_1(cameraId, effect);
+            break;
+        default:
+            effStarStoneDisp_2(cameraId, effect);
+            break;
     }
 }

@@ -196,98 +196,98 @@ static void main_base(void) {
         w->defBlinkTimer--;
     }
     switch (w->state) {
-    case 1:
-        w->state = 2;
-        w->atkBoost = w->atkDisp = 0.0f;
-        w->defBoost = w->defDisp = 0.0f;
-        w->gaugeX = -400.0f;
-        w->gaugeY = 90.0f;
-        w->timeLeft = 899;
-        for (i = 0; i < 9; i++) {
-            w->o3d[i].state = 1;
-        }
-    case 2:
-        n = 0;
-        for (i = 0; i < 9; i++) {
-            if (w->o3d[i].state != 4) {
-                break;
-            }
-            n++;
-        }
-        if (n == 9) {
-            w->state = 3;
-            w->timer = 0;
-        }
-        break;
-    case 3:
-        w->timer++;
-        w->gaugeX = intplGetValue(EASING_QUADRATIC_OUT, -400.0f, -120.0f, w->timer, 30);
-        if (w->timer >= 30) {
-            w->state = 4;
-            w->timer = 0;
-            w->cursorState = 1;
+        case 1:
+            w->state = 2;
+            w->atkBoost = w->atkDisp = 0.0f;
+            w->defBoost = w->defDisp = 0.0f;
+            w->gaugeX = -400.0f;
+            w->gaugeY = 90.0f;
+            w->timeLeft = 899;
             for (i = 0; i < 9; i++) {
-                w->o3d[i].state = 5;
+                w->o3d[i].state = 1;
             }
-        }
-        break;
-    case 4:
-        if (w->flags & 1) {
-            w->hazardTimer++;
-            if (w->hazardTimer == 30) {
-                BtlUnit_SetAnim(part, "M_X_1");
-            }
-        }
-        w->timeLeft--;
-        if (w->timeLeft <= 0) {
-            w->state = 5;
-            w->timer = 0;
-            w->cursorState = 7;
-            BtlUnit_SetAnim(part, "M_S_1");
+        case 2:
+            n = 0;
             for (i = 0; i < 9; i++) {
-                w->o3d[i].state = 6;
-                w->obj[i].state = 9;
-            }
-            n = (s32)(w->atkBoost + w->defBoost);
-            if (n >= 1) {
-                if (n == 1) {
-                    n = 2;
-                } else if (n == 2) {
-                    n = 3;
-                } else if (n == 3) {
-                    n = 4;
-                } else if (n == 4) {
-                    n = 5;
-                } else if (n >= 5) {
-                    n = 6;
+                if (w->o3d[i].state != 4) {
+                    break;
                 }
-                evtEntry(nice_event_pow, 0, EVENT_START_IMMEDIATE)->lwData[0] = n;
+                n++;
             }
-        }
-        break;
-    case 5:
-        n = 0;
-        for (i = 0; i < 9; i++) {
-            if (w->o3d[i].state != 8) {
-                break;
+            if (n == 9) {
+                w->state = 3;
+                w->timer = 0;
             }
-            n++;
-        }
-        if (n == 9) {
-            w->state = 6;
-            w->timer = 0;
-        }
-        break;
-    case 6:
-        w->timer++;
-        if (w->timer >= 30) {
-            w->state = 7;
-            w->timer = 0;
-        }
-        break;
-    case 0:
-    case 7:
-        break;
+            break;
+        case 3:
+            w->timer++;
+            w->gaugeX = intplGetValue(EASING_QUADRATIC_OUT, -400.0f, -120.0f, w->timer, 30);
+            if (w->timer >= 30) {
+                w->state = 4;
+                w->timer = 0;
+                w->cursorState = 1;
+                for (i = 0; i < 9; i++) {
+                    w->o3d[i].state = 5;
+                }
+            }
+            break;
+        case 4:
+            if (w->flags & 1) {
+                w->hazardTimer++;
+                if (w->hazardTimer == 30) {
+                    BtlUnit_SetAnim(part, "M_X_1");
+                }
+            }
+            w->timeLeft--;
+            if (w->timeLeft <= 0) {
+                w->state = 5;
+                w->timer = 0;
+                w->cursorState = 7;
+                BtlUnit_SetAnim(part, "M_S_1");
+                for (i = 0; i < 9; i++) {
+                    w->o3d[i].state = 6;
+                    w->obj[i].state = 9;
+                }
+                n = (s32)(w->atkBoost + w->defBoost);
+                if (n >= 1) {
+                    if (n == 1) {
+                        n = 2;
+                    } else if (n == 2) {
+                        n = 3;
+                    } else if (n == 3) {
+                        n = 4;
+                    } else if (n == 4) {
+                        n = 5;
+                    } else if (n >= 5) {
+                        n = 6;
+                    }
+                    evtEntry(nice_event_pow, 0, EVENT_START_IMMEDIATE)->lwData[0] = n;
+                }
+            }
+            break;
+        case 5:
+            n = 0;
+            for (i = 0; i < 9; i++) {
+                if (w->o3d[i].state != 8) {
+                    break;
+                }
+                n++;
+            }
+            if (n == 9) {
+                w->state = 6;
+                w->timer = 0;
+            }
+            break;
+        case 6:
+            w->timer++;
+            if (w->timer >= 30) {
+                w->state = 7;
+                w->timer = 0;
+            }
+            break;
+        case 0:
+        case 7:
+            break;
     }
     d = w->atkBoost - w->atkDisp;
     if (d != 0.0f) {
@@ -358,151 +358,151 @@ static void main_cursor(void) {
     EffectEntry* eff;
 
     switch (w->cursorState) {
-    case 1:
-        if (w->o3d[4].state < 5) {
-            break;
-        }
-        w->cursorState = 2;
-        w->cpos = w->o3d[4].pos;
-        w->cpos.z += 5.0f;
-        w->cscale = (Vec){0.5f, 0.5f, 1.0f};
-        w->idx = 4;
-        w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    case 2:
-        w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-        if (w->hazardTimer >= 120) {
-            BtlUnit_SetAnim(part, "M_I_Y");
-            w->flags &= ~1;
-            w->hazardTimer = 0;
-        }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            w->cursorState = 5;
-            ob = w->o3d[w->idx].link;
-            if (ob) {
-                ob->state = 5;
+        case 1:
+            if (w->o3d[4].state < 5) {
+                break;
+            }
+            w->cursorState = 2;
+            w->cpos = w->o3d[4].pos;
+            w->cpos.z += 5.0f;
+            w->cscale = (Vec){0.5f, 0.5f, 1.0f};
+            w->idx = 4;
+            w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+        case 2:
+            w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+            if (w->hazardTimer >= 120) {
+                BtlUnit_SetAnim(part, "M_I_Y");
+                w->flags &= ~1;
+                w->hazardTimer = 0;
+            }
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                w->cursorState = 5;
+                ob = w->o3d[w->idx].link;
+                if (ob) {
+                    ob->state = 5;
 #if VERSION <= VERSION_DEMO_JP
-                effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+                    effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
 #else
-                effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+                    effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
 #endif
-                switch (ob->type) {
-                case 0:
-                    prev = w->atkBoost;
-                    w->atkBoost += VERSION_PICK(0.25f, 0.2f);
-                    if (w->atkBoost > 9.0f) {
-                        w->atkBoost = 9.0f;
+                    switch (ob->type) {
+                    case 0:
+                        prev = w->atkBoost;
+                        w->atkBoost += VERSION_PICK(0.25f, 0.2f);
+                        if (w->atkBoost > 9.0f) {
+                            w->atkBoost = 9.0f;
+                        }
+                        if ((s32)w->atkBoost > (s32)prev) {
+                            w->atkBlinkTimer = 60;
+                            psndSFXOn("SFX_BTL_SAC_BODY6");
+                            sacMukiAudienceCall(num);
+                        }
+                        psndSFXOn("SFX_BTL_SAC_BODY4");
+                        break;
+                    case 1:
+                        prev = w->defBoost;
+                        w->defBoost += VERSION_PICK(0.25f, 0.2f);
+                        if (w->defBoost > 9.0f) {
+                            w->defBoost = 9.0f;
+                        }
+                        if ((s32)w->defBoost > (s32)prev) {
+                            w->defBlinkTimer = 60;
+                            psndSFXOn("SFX_BTL_SAC_BODY6");
+                            sacMukiAudienceCall(num);
+                        }
+                        psndSFXOn("SFX_BTL_SAC_BODY4");
+                        break;
+                    case 2:
+                        BtlUnit_SetAnim(part, "M_D_1");
+                        BtlUnit_GetPos(mario, &x, &y, &z);
+                        eff = effStampN64Entry(2, x, 20.0f + y, 10.0f + z);
+                        ((EffStampN64Work*)eff->userdata)->r = 0;
+                        ((EffStampN64Work*)eff->userdata)->g = 200;
+                        ((EffStampN64Work*)eff->userdata)->b = 0;
+                        ((EffStampN64Work*)eff->userdata)->r2 = 0;
+                        ((EffStampN64Work*)eff->userdata)->g2 = 10;
+                        ((EffStampN64Work*)eff->userdata)->b2 = 0;
+                        w->hazardTimer = 0;
+                        w->flags |= 1;
+                        psndSFXOn("SFX_BTL_SAC_BODY5");
+                        if (num >= 1 && num <= 49) {
+                            BattleAudienceSoundBooingKind(1);
+                        }
+                        if (num >= 50 && num <= 99) {
+                            BattleAudienceSoundBooingKind(1);
+                        }
+                        if (num >= 100 && num <= 149) {
+                            BattleAudienceSoundBooingKind(2);
+                        }
+                        if (num >= 150) {
+                            BattleAudienceSoundBooingKind(3);
+                        }
+                        break;
                     }
-                    if ((s32)w->atkBoost > (s32)prev) {
-                        w->atkBlinkTimer = 60;
-                        psndSFXOn("SFX_BTL_SAC_BODY6");
-                        sacMukiAudienceCall(num);
-                    }
-                    psndSFXOn("SFX_BTL_SAC_BODY4");
-                    break;
-                case 1:
-                    prev = w->defBoost;
-                    w->defBoost += VERSION_PICK(0.25f, 0.2f);
-                    if (w->defBoost > 9.0f) {
-                        w->defBoost = 9.0f;
-                    }
-                    if ((s32)w->defBoost > (s32)prev) {
-                        w->defBlinkTimer = 60;
-                        psndSFXOn("SFX_BTL_SAC_BODY6");
-                        sacMukiAudienceCall(num);
-                    }
-                    psndSFXOn("SFX_BTL_SAC_BODY4");
-                    break;
-                case 2:
-                    BtlUnit_SetAnim(part, "M_D_1");
-                    BtlUnit_GetPos(mario, &x, &y, &z);
-                    eff = effStampN64Entry(2, x, 20.0f + y, 10.0f + z);
-                    ((EffStampN64Work*)eff->userdata)->r = 0;
-                    ((EffStampN64Work*)eff->userdata)->g = 200;
-                    ((EffStampN64Work*)eff->userdata)->b = 0;
-                    ((EffStampN64Work*)eff->userdata)->r2 = 0;
-                    ((EffStampN64Work*)eff->userdata)->g2 = 10;
-                    ((EffStampN64Work*)eff->userdata)->b2 = 0;
-                    w->hazardTimer = 0;
-                    w->flags |= 1;
-                    psndSFXOn("SFX_BTL_SAC_BODY5");
-                    if (num >= 1 && num <= 49) {
-                        BattleAudienceSoundBooingKind(1);
-                    }
-                    if (num >= 50 && num <= 99) {
-                        BattleAudienceSoundBooingKind(1);
-                    }
-                    if (num >= 100 && num <= 149) {
-                        BattleAudienceSoundBooingKind(2);
-                    }
-                    if (num >= 150) {
-                        BattleAudienceSoundBooingKind(3);
-                    }
-                    break;
                 }
             }
-        }
-        if (keyGetDirTrg(0) & DEMO_STICK_RIGHT) {
-            if (w->idx % 3 != 2) {
-                w->cursorState = 3;
-                w->idx++;
+            if (keyGetDirTrg(0) & DEMO_STICK_RIGHT) {
+                if (w->idx % 3 != 2) {
+                    w->cursorState = 3;
+                    w->idx++;
+                }
             }
-        }
-        if (keyGetDirTrg(0) & DEMO_STICK_LEFT) {
-            if (w->idx % 3) {
-                w->cursorState = 3;
-                w->idx--;
+            if (keyGetDirTrg(0) & DEMO_STICK_LEFT) {
+                if (w->idx % 3) {
+                    w->cursorState = 3;
+                    w->idx--;
+                }
             }
-        }
-        if (keyGetDirTrg(0) & DEMO_STICK_UP) {
-            if (w->idx / 3) {
-                w->cursorState = 3;
-                w->idx -= 3;
+            if (keyGetDirTrg(0) & DEMO_STICK_UP) {
+                if (w->idx / 3) {
+                    w->cursorState = 3;
+                    w->idx -= 3;
+                }
             }
-        }
-        if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
-            if (w->idx / 3 != 2) {
-                w->cursorState = 3;
-                w->idx += 3;
+            if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
+                if (w->idx / 3 != 2) {
+                    w->cursorState = 3;
+                    w->idx += 3;
+                }
             }
-        }
-        break;
-    case 3:
-        w->cursorState = 4;
-        w->cursorTimer = 0;
-        w->cfrom = w->cpos;
-        w->cto = w->o3d[w->idx].pos;
-        psndSFXOn("SFX_BTL_SAC_BODY3");
-    case 4:
-        w->cursorTimer++;
-        w->cursorColor = (GXColor){0x0, 0x0, 0xFF, 0xFF};
-        if (!(w->flags & 1)) {
-            w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 5);
-            w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 5);
-            if (w->cursorTimer >= 5) {
-                w->cursorState = 2;
-            }
-        } else {
-            w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 25);
-            w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 25);
-            if (w->cursorTimer >= 25) {
-                w->cursorState = 2;
-            }
-        }
-        break;
-    case 5:
-        w->cursorState = 6;
-        w->cursorTimer = 0;
-    case 6:
-        w->cursorTimer++;
-        w->cursorColor = (GXColor){0xFF, 0x0, 0x0, 0xFF};
-        if (w->cursorTimer >= 1) {
-            w->cursorState = 2;
+            break;
+        case 3:
+            w->cursorState = 4;
             w->cursorTimer = 0;
-        }
-        break;
-    case 0:
-    case 7:
-        break;
+            w->cfrom = w->cpos;
+            w->cto = w->o3d[w->idx].pos;
+            psndSFXOn("SFX_BTL_SAC_BODY3");
+        case 4:
+            w->cursorTimer++;
+            w->cursorColor = (GXColor){0x0, 0x0, 0xFF, 0xFF};
+            if (!(w->flags & 1)) {
+                w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 5);
+                w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 5);
+                if (w->cursorTimer >= 5) {
+                    w->cursorState = 2;
+                }
+            } else {
+                w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 25);
+                w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 25);
+                if (w->cursorTimer >= 25) {
+                    w->cursorState = 2;
+                }
+            }
+            break;
+        case 5:
+            w->cursorState = 6;
+            w->cursorTimer = 0;
+        case 6:
+            w->cursorTimer++;
+            w->cursorColor = (GXColor){0xFF, 0x0, 0x0, 0xFF};
+            if (w->cursorTimer >= 1) {
+                w->cursorState = 2;
+                w->cursorTimer = 0;
+            }
+            break;
+        case 0:
+        case 7:
+            break;
     }
 }
 
@@ -517,68 +517,68 @@ static void main_point(s32 idx) {
     s32 i;
 
     switch (o->state) {
-    case 1:
-        o->state = 2;
-        o->timer = irand(30) + 30;
-        {
-            Vec p = {0.0f, 0.0f, 20.0f};
-            p.x = (f32)((idx % 3) * 48 - 48);
-            p.y = (f32)(125 - (idx / 3) * 48);
-            o->pos = p;
-        }
-        o->scale = (Vec){0.0f, 0.0f, 1.0f};
-        o->link = NULL;
-    case 2:
-        o->timer--;
-        if (o->timer <= 30) {
-            o->scale.x = o->scale.y = intplGetValue(EASING_LINEAR, 0.0f, 0.5f, 30 - o->timer, 30);
-        }
-        if (o->timer <= 0) {
-            o->state = 3;
-            o->timer = 0;
-        }
-        break;
-    case 3:
-        o->state = 4;
-        o->timer = 0;
-        o->scale = (Vec){0.5f, 0.5f, 1.0f};
-        break;
-    case 5:
-        if (o->link) {
-            if (o->link->state == 0) {
-                o->link = NULL;
+        case 1:
+            o->state = 2;
+            o->timer = irand(30) + 30;
+            {
+                Vec p = {0.0f, 0.0f, 20.0f};
+                p.x = (f32)((idx % 3) * 48 - 48);
+                p.y = (f32)(125 - (idx / 3) * 48);
+                o->pos = p;
             }
-        } else if (irand(65) == 0) {
-            for (i = 0; i < 9; i++) {
-                MukiObj* ob = &w->obj[i];
-                if (ob->state == 0) {
-                    ob->state = 1;
-                    ob->pos = o->pos;
-                    ob->pos.z = 0.0f;
-                    o->link = ob;
-                    break;
+            o->scale = (Vec){0.0f, 0.0f, 1.0f};
+            o->link = NULL;
+        case 2:
+            o->timer--;
+            if (o->timer <= 30) {
+                o->scale.x = o->scale.y = intplGetValue(EASING_LINEAR, 0.0f, 0.5f, 30 - o->timer, 30);
+            }
+            if (o->timer <= 0) {
+                o->state = 3;
+                o->timer = 0;
+            }
+            break;
+        case 3:
+            o->state = 4;
+            o->timer = 0;
+            o->scale = (Vec){0.5f, 0.5f, 1.0f};
+            break;
+        case 5:
+            if (o->link) {
+                if (o->link->state == 0) {
+                    o->link = NULL;
+                }
+            } else if (irand(65) == 0) {
+                for (i = 0; i < 9; i++) {
+                    MukiObj* ob = &w->obj[i];
+                    if (ob->state == 0) {
+                        ob->state = 1;
+                        ob->pos = o->pos;
+                        ob->pos.z = 0.0f;
+                        o->link = ob;
+                        break;
+                    }
                 }
             }
-        }
-        break;
-    case 6:
-        o->state = 7;
-        o->timer = irand(30) + 30;
-        o->link = NULL;
-    case 7:
-        o->timer--;
-        if (o->timer <= 30) {
-            o->scale.x = o->scale.y = intplGetValue(EASING_LINEAR, 0.5f, 0.0f, 30 - o->timer, 30);
-        }
-        if (o->timer <= 0) {
-            o->state = 8;
-            o->timer = 0;
-        }
-        break;
-    case 0:
-    case 4:
-    case 8:
-        break;
+            break;
+        case 6:
+            o->state = 7;
+            o->timer = irand(30) + 30;
+            o->link = NULL;
+        case 7:
+            o->timer--;
+            if (o->timer <= 30) {
+                o->scale.x = o->scale.y = intplGetValue(EASING_LINEAR, 0.5f, 0.0f, 30 - o->timer, 30);
+            }
+            if (o->timer <= 0) {
+                o->state = 8;
+                o->timer = 0;
+            }
+            break;
+        case 0:
+        case 4:
+        case 8:
+            break;
     }
 }
 
@@ -591,60 +591,60 @@ static void main_icon(s32 idx) {
     MukiObj* o = &w->obj[idx];
 
     switch (o->state) {
-    case 0:
-        o->pos = (Vec){0.0f, -1000.0f, 0.0f};
-        o->alpha = 0xFF;
-        break;
-    case 1:
-        o->state = 2;
-        o->timer = 0;
-        o->type = irand(3);
-        o->rot.y = 0.0f;
-        o->scale = (Vec){0.3f, 0.3f, 0.3f};
-    case 2:
-        o->timer++;
-        o->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 180.0f, 1080.0f, o->timer, 30);
-        o->alpha = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, o->timer, 30);
-        if (o->timer >= 30) {
-            o->state = 7;
-        }
-        break;
-    case 3:
-        o->state = 4;
-        o->timer = 0;
-        o->rot.y = 0.0f;
-    case 4:
-        o->timer++;
-        o->rot.y = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 900.0f, o->timer, 30);
-        o->alpha = intplGetValue(EASING_LINEAR, 255.0f, 0.0f, o->timer, 30);
-        if (o->timer >= 30) {
+        case 0:
+            o->pos = (Vec){0.0f, -1000.0f, 0.0f};
+            o->alpha = 0xFF;
+            break;
+        case 1:
+            o->state = 2;
+            o->timer = 0;
+            o->type = irand(3);
+            o->rot.y = 0.0f;
+            o->scale = (Vec){0.3f, 0.3f, 0.3f};
+        case 2:
+            o->timer++;
+            o->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 180.0f, 1080.0f, o->timer, 30);
+            o->alpha = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, o->timer, 30);
+            if (o->timer >= 30) {
+                o->state = 7;
+            }
+            break;
+        case 3:
+            o->state = 4;
+            o->timer = 0;
+            o->rot.y = 0.0f;
+        case 4:
+            o->timer++;
+            o->rot.y = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 900.0f, o->timer, 30);
+            o->alpha = intplGetValue(EASING_LINEAR, 255.0f, 0.0f, o->timer, 30);
+            if (o->timer >= 30) {
+                o->state = 0;
+            }
+            break;
+        case 5:
+            o->state = 6;
+        case 6:
             o->state = 0;
-        }
-        break;
-    case 5:
-        o->state = 6;
-    case 6:
-        o->state = 0;
-        break;
-    case 7:
-        o->state = 8;
-        o->timer = 0;
-        o->rot.y = 0.0f;
-        break;
-    case 8:
-        o->timer++;
-        o->alpha = 0xFF;
-        if (o->timer >= 90) {
-            o->state = 3;
-        }
-        break;
-    case 9:
-        if (o->alpha >= 8) {
-            o->alpha -= 8;
-        } else {
-            o->alpha = 0;
-        }
-        break;
+            break;
+        case 7:
+            o->state = 8;
+            o->timer = 0;
+            o->rot.y = 0.0f;
+            break;
+        case 8:
+            o->timer++;
+            o->alpha = 0xFF;
+            if (o->timer >= 90) {
+                o->state = 3;
+            }
+            break;
+        case 9:
+            if (o->alpha >= 8) {
+                o->alpha -= 8;
+            } else {
+                o->alpha = 0;
+            }
+            break;
     }
     if (o->eff) {
         EffStarStoneWork* e = (EffStarStoneWork*)o->eff->userdata;
@@ -665,51 +665,51 @@ static void main_star(void) {
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
 
     switch (w->star.state) {
-    case 1:
-        w->star.state = 2;
-        w->star.timer = 0;
-        w->star.eff = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
-        w->star.from = w->star.pos;
-        w->star.to = w->star.pos;
-        w->star.to.y += 50.0f;
-        w->star.to.z += -1.0f;
-        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-    case 2:
-        w->star.timer++;
-        if (w->star.timer <= 100) {
-            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
-            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
-            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
-        } else {
-            w->star.pos.x = w->star.to.x;
-            w->star.pos.y = w->star.to.y;
-            w->star.pos.z = w->star.to.z;
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
-        }
-        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
-        if (w->star.timer >= 120) {
-            w->star.state = 3;
+        case 1:
+            w->star.state = 2;
             w->star.timer = 0;
+            w->star.eff = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+            w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
             w->star.from = w->star.pos;
-            w->star.to.y = 300.0f;
-        }
-        break;
-    case 3:
-        w->star.timer++;
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
-        if (w->star.timer >= 60) {
-            w->star.state = 5;
-            w->star.timer = 0;
-        }
-        break;
-    case 0:
-    case 4:
-    case 5:
-        break;
+            w->star.to = w->star.pos;
+            w->star.to.y += 50.0f;
+            w->star.to.z += -1.0f;
+            w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+        case 2:
+            w->star.timer++;
+            if (w->star.timer <= 100) {
+                w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+                w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+                w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
+            } else {
+                w->star.pos.x = w->star.to.x;
+                w->star.pos.y = w->star.to.y;
+                w->star.pos.z = w->star.to.z;
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
+            }
+            w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+            if (w->star.timer >= 120) {
+                w->star.state = 3;
+                w->star.timer = 0;
+                w->star.from = w->star.pos;
+                w->star.to.y = 300.0f;
+            }
+            break;
+        case 3:
+            w->star.timer++;
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+            if (w->star.timer >= 60) {
+                w->star.state = 5;
+                w->star.timer = 0;
+            }
+            break;
+        case 0:
+        case 4:
+        case 5:
+            break;
     }
     if (w->star.eff) {
         EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
@@ -918,41 +918,41 @@ static void disp_3D_alpha(CameraId cam, void* param) {
             f32 a;
             f32 c;
             switch (o->type) {
-            case 0:
-                PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
-                PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
-                PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
-                c = 2.0f * o->rot.y;
-                a = mulf(c, 3.141592f) / 360.0f;
-                c = (f32)cos(a);
-                PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
-                col[0] = col[1] = (GXColor){0xE9, 0x4A, 0x3F, o->alpha};
-                col[2] = col[3] = (GXColor){0xFE, 0xE6, 0x3E, o->alpha};
-                btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
-                break;
-            case 1:
-                PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
-                PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
-                PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
-                c = 2.0f * o->rot.y;
-                a = mulf(c, 3.141592f) / 360.0f;
-                c = (f32)cos(a);
-                PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
-                col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, o->alpha};
-                col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, o->alpha};
-                btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
-                break;
-            case 2:
-                PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
-                PSMTXScaleApply(m, m, o->scale.x, o->scale.y, o->scale.z);
-                PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
-                c = 2.0f * o->rot.y;
-                a = mulf(c, 3.141592f) / 360.0f;
-                c = (f32)cos(a);
-                PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
-                col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};
-                btlDispTexPlane2(m, BTL_TEX(0x31), col[0], 0);
-                break;
+                case 0:
+                    PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
+                    PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
+                    PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
+                    c = 2.0f * o->rot.y;
+                    a = mulf(c, 3.141592f) / 360.0f;
+                    c = (f32)cos(a);
+                    PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
+                    col[0] = col[1] = (GXColor){0xE9, 0x4A, 0x3F, o->alpha};
+                    col[2] = col[3] = (GXColor){0xFE, 0xE6, 0x3E, o->alpha};
+                    btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+                    break;
+                case 1:
+                    PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
+                    PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
+                    PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
+                    c = 2.0f * o->rot.y;
+                    a = mulf(c, 3.141592f) / 360.0f;
+                    c = (f32)cos(a);
+                    PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
+                    col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, o->alpha};
+                    col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, o->alpha};
+                    btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+                    break;
+                case 2:
+                    PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
+                    PSMTXScaleApply(m, m, o->scale.x, o->scale.y, o->scale.z);
+                    PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
+                    c = 2.0f * o->rot.y;
+                    a = mulf(c, 3.141592f) / 360.0f;
+                    c = (f32)cos(a);
+                    PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
+                    col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};
+                    btlDispTexPlane2(m, BTL_TEX(0x31), col[0], 0);
+                    break;
             }
         }
     }
@@ -974,16 +974,16 @@ static USER_FUNC(set_weapon) {
     MukiWork* w = get_ptr();
     memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
     switch (type) {
-    case 0:
-        w->weapon.atkChangeChance = 100;
-        w->weapon.atkChangeTime = 3;
-        w->weapon.atkChangeStrength = power;
-        break;
-    case 1:
-        w->weapon.defChangeChance = 100;
-        w->weapon.defChangeTime = 3;
-        w->weapon.defChangeStrength = power;
-        break;
+        case 0:
+            w->weapon.atkChangeChance = 100;
+            w->weapon.atkChangeTime = 3;
+            w->weapon.atkChangeStrength = power;
+            break;
+        case 1:
+            w->weapon.defChangeChance = 100;
+            w->weapon.defChangeTime = 3;
+            w->weapon.defChangeStrength = power;
+            break;
     }
     evtSetValue(event, args[2], (EvtWord)&w->weapon);
     return 2;

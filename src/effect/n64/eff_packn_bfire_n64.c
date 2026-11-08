@@ -87,54 +87,54 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
     work->vel.z = (work->tgt.z - work->pos.z) / (f32)frames;
     work->scaleArg = scale;
     switch (type) {
-    case 0:
-        break;
-    case 1:
-        work->color[0] = 255;
-        work->color[1] = 88;
-        work->color[2] = 70;
-        work->color[3] = 55;
-        work->color[4] = 11;
-        work->color[5] = 51;
-        work->color[6] = 123;
-        work->color[7] = 255;
-        work->uvx = (f32)(rand() % 65);
-        work->uvy = (f32)(rand() % 65);
-        work->sx = 0.2f;
-        work->sy = 0.3f;
-        work->duvx = 0.0f;
-        work->duvy = 0.0f;
-        work->rot = 0.0f;
-        work->drot = -10.0f;
-        break;
-    default:
-        work->color[0] = 255;
-        work->color[1] = 88;
-        work->color[2] = 70;
-        work->color[3] = 55;
-        work->color[4] = 11;
-        work->color[5] = 51;
-        work->color[6] = 123;
-        work->color[7] = 255;
-        base = (f32)(rand() % 361);
-        for (i = 0; i < count; i++) {
-            work->pos.x = x;
-            work->pos.y = y;
-            work->pos.z = z;
-            angle = 6.2831855f * (base + (f32)((i * 360) / 8)) / 360.0f;
-            work->vel.x = 5.0f * (f32)sin(angle);
-            work->vel.y = 2.0f * (f32)cos(angle) + 3.0f;
+        case 0:
+            break;
+        case 1:
+            work->color[0] = 255;
+            work->color[1] = 88;
+            work->color[2] = 70;
+            work->color[3] = 55;
+            work->color[4] = 11;
+            work->color[5] = 51;
+            work->color[6] = 123;
+            work->color[7] = 255;
             work->uvx = (f32)(rand() % 65);
             work->uvy = (f32)(rand() % 65);
-            work->sx = 1.0f;
-            work->sy = 1.0f;
+            work->sx = 0.2f;
+            work->sy = 0.3f;
             work->duvx = 0.0f;
             work->duvy = 0.0f;
-            work->rot = -45.0f;
+            work->rot = 0.0f;
             work->drot = -10.0f;
-            work++;
-        }
-        break;
+            break;
+        default:
+            work->color[0] = 255;
+            work->color[1] = 88;
+            work->color[2] = 70;
+            work->color[3] = 55;
+            work->color[4] = 11;
+            work->color[5] = 51;
+            work->color[6] = 123;
+            work->color[7] = 255;
+            base = (f32)(rand() % 361);
+            for (i = 0; i < count; i++) {
+                work->pos.x = x;
+                work->pos.y = y;
+                work->pos.z = z;
+                angle = 6.2831855f * (base + (f32)((i * 360) / 8)) / 360.0f;
+                work->vel.x = 5.0f * (f32)sin(angle);
+                work->vel.y = 2.0f * (f32)cos(angle) + 3.0f;
+                work->uvx = (f32)(rand() % 65);
+                work->uvy = (f32)(rand() % 65);
+                work->sx = 1.0f;
+                work->sy = 1.0f;
+                work->duvx = 0.0f;
+                work->duvy = 0.0f;
+                work->rot = -45.0f;
+                work->drot = -10.0f;
+                work++;
+            }
+            break;
     }
     return effect;
 }
@@ -174,41 +174,41 @@ static void effPacknBfireMain(EffectEntry* effect) {
     } else {
         s32 frame = work->frame;
         switch (type) {
-        case 0:
-            if ((frame & 3) == 0) {
-                effPacknBfireN64Entry(1, work->frames, work->frames, work->pos.x, work->pos.y, work->pos.z,
-                                      work->tgt.x, work->tgt.y, work->tgt.z, 1.0f);
-            }
-            break;
-        case 1:
-            work->vel.x *= 0.97f;
-            work->vel.z *= 0.97f;
-            work->vel.y += 0.02f * (1.0f - work->vel.y);
-            work->pos.x += work->vel.x;
-            work->pos.y += work->vel.y;
-            work->pos.z += work->vel.z;
-            work->sx += 0.05f * (1.0f - work->sx);
-            work->sy += 0.1f * (1.0f - work->sy);
-            work->rot += work->drot;
-            break;
-        case 2:
-            for (i = 0; i < effect->count; i++) {
-                work->vel.x *= 0.9f;
-                work->vel.y -= 0.2f;
+            case 0:
+                if ((frame & 3) == 0) {
+                    effPacknBfireN64Entry(1, work->frames, work->frames, work->pos.x, work->pos.y, work->pos.z,
+                                          work->tgt.x, work->tgt.y, work->tgt.z, 1.0f);
+                }
+                break;
+            case 1:
+                work->vel.x *= 0.97f;
+                work->vel.z *= 0.97f;
+                work->vel.y += 0.02f * (1.0f - work->vel.y);
                 work->pos.x += work->vel.x;
                 work->pos.y += work->vel.y;
-                if (work->pos.y < 0.0f) {
-                    work->pos.y = 0.0f;
-                    if (work->vel.y < 0.0f) {
-                        work->vel.y *= -0.6f;
-                    }
-                }
-                work->sx += 0.07f * -work->sx;
-                work->sy += 0.05f * -work->sy;
+                work->pos.z += work->vel.z;
+                work->sx += 0.05f * (1.0f - work->sx);
+                work->sy += 0.1f * (1.0f - work->sy);
                 work->rot += work->drot;
-                work++;
-            }
-            break;
+                break;
+            case 2:
+                for (i = 0; i < effect->count; i++) {
+                    work->vel.x *= 0.9f;
+                    work->vel.y -= 0.2f;
+                    work->pos.x += work->vel.x;
+                    work->pos.y += work->vel.y;
+                    if (work->pos.y < 0.0f) {
+                        work->pos.y = 0.0f;
+                        if (work->vel.y < 0.0f) {
+                            work->vel.y *= -0.6f;
+                        }
+                    }
+                    work->sx += 0.07f * -work->sx;
+                    work->sy += 0.05f * -work->sy;
+                    work->rot += work->drot;
+                    work++;
+                }
+                break;
         }
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effPacknBfireDisp, effect);
     }

@@ -106,32 +106,32 @@ void countDownSetRestartTime(u32 restart) {
 void countDownMain(void) {
     if ((wp->flags & COUNTDOWN_FLAG_RUNNING) != 0) {
         switch (wp->state) {
-        case COUNTDOWN_STATE_SLIDE_IN:
-            if (++wp->counter < 30) {
-                wp->offX = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 0.0f, wp->counter, 30);
-            } else {
-                wp->counter = 0;
-                wp->state++;
-            }
-            break;
-        case COUNTDOWN_STATE_RUN:
+            case COUNTDOWN_STATE_SLIDE_IN:
+                if (++wp->counter < 30) {
+                    wp->offX = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 0.0f, wp->counter, 30);
+                } else {
+                    wp->counter = 0;
+                    wp->state++;
+                }
+                break;
+            case COUNTDOWN_STATE_RUN:
 #if VERSION >= VERSION_JP
-            if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
-                psndSFXOff(wp->sfxId);
-                wp->sfxId = -1;
-            }
+                if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
+                    psndSFXOff(wp->sfxId);
+                    wp->sfxId = -1;
+                }
 #endif
-            break;
-        case COUNTDOWN_STATE_SLIDE_OUT:
-            if (++wp->counter < 30) {
-                wp->offX = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 300.0f, wp->counter, 30);
-            } else {
-                wp->counter = 0;
-                wp->state++;
-                wp->flags &= ~COUNTDOWN_FLAG_RUNNING;
-                psndSFXOff(wp->sfxId);
-            }
-            break;
+                break;
+            case COUNTDOWN_STATE_SLIDE_OUT:
+                if (++wp->counter < 30) {
+                    wp->offX = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 300.0f, wp->counter, 30);
+                } else {
+                    wp->counter = 0;
+                    wp->state++;
+                    wp->flags &= ~COUNTDOWN_FLAG_RUNNING;
+                    psndSFXOff(wp->sfxId);
+                }
+                break;
         }
         if ((wp->flags & COUNTDOWN_FLAG_STOPPED) == 0 && marioStGetSystemLevel() == 0) {
             wp->elapsed += OSDiffTick(gp->renderTime, wp->prevTime);

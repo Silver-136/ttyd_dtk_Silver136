@@ -4602,70 +4602,70 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         }
     }
     switch ((s8)event->blocked) {
-    case 1:
-        unit->moveCurrentPos.x += unit->jumpStep.x;
-        unit->moveCurrentPos.y += unit->jumpStep.y;
-        unit->moveCurrentPos.z += unit->jumpStep.z;
-        BtlUnit_GetPos(unit, &x, &y, &z);
-        unit->jumpBaseY = y;
-        x = unit->moveCurrentPos.x;
-        sn = sin(unit->moveSpeedY);
-        y = unit->moveTotalFrames * sn + unit->moveCurrentPos.y;
-        z = unit->moveCurrentPos.z;
-        BtlUnit_SetPos(unit, x, y, z);
-        if (unit->moveTargetPos.y > y && unit->moveFrames < 3) {
-            y = unit->moveTargetPos.y;
+        case 1:
+            unit->moveCurrentPos.x += unit->jumpStep.x;
+            unit->moveCurrentPos.y += unit->jumpStep.y;
+            unit->moveCurrentPos.z += unit->jumpStep.z;
+            BtlUnit_GetPos(unit, &x, &y, &z);
+            unit->jumpBaseY = y;
+            x = unit->moveCurrentPos.x;
+            sn = sin(unit->moveSpeedY);
+            y = unit->moveTotalFrames * sn + unit->moveCurrentPos.y;
+            z = unit->moveCurrentPos.z;
             BtlUnit_SetPos(unit, x, y, z);
-        }
-        unit->jumpBaseY = y;
-        if (type < 3) {
-            sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
-            unit->moveSpeedY = unit->moveSpeedY + unit->fallAccel * (0.53 * sn + 1.0);
-        } else {
-            sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
-            unit->moveSpeedY = unit->moveSpeedY + unit->fallAccel * (0.8 * sn + 1.0);
-        }
-        unit->jumpAngle = unit->jumpAngle + unit->jumpAngleStep;
-        unit->jumpAngle = reviseAngle(unit->jumpAngle);
-        unit->moveFrames--;
-        if (unit->moveFrames == 0) {
-            y = unit->moveTargetPos.y;
-            BtlUnit_SetPos(unit, x, y, z);
+            if (unit->moveTargetPos.y > y && unit->moveFrames < 3) {
+                y = unit->moveTargetPos.y;
+                BtlUnit_SetPos(unit, x, y, z);
+            }
+            unit->jumpBaseY = y;
+            if (type < 3) {
+                sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
+                unit->moveSpeedY = unit->moveSpeedY + unit->fallAccel * (0.53 * sn + 1.0);
+            } else {
+                sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
+                unit->moveSpeedY = unit->moveSpeedY + unit->fallAccel * (0.8 * sn + 1.0);
+            }
+            unit->jumpAngle = unit->jumpAngle + unit->jumpAngleStep;
+            unit->jumpAngle = reviseAngle(unit->jumpAngle);
+            unit->moveFrames--;
+            if (unit->moveFrames == 0) {
+                y = unit->moveTargetPos.y;
+                BtlUnit_SetPos(unit, x, y, z);
 
-            // Both operands read the same field, not successive jump heights.
+                // Both operands read the same field, not successive jump heights.
+                unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
+                unit->fallAccel = 1.8f;
+                return EVT_RETURN_YIELD;
+            }
+            break;
+        case 2:
+            if (!BtlUnit_GetACPossibility(unit)) {
+                return EVT_RETURN_DONE;
+            }
+
+            // Both operands again read the same jumpBaseY field.
             unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
             unit->fallAccel = 1.8f;
-            return EVT_RETURN_YIELD;
-        }
-        break;
-    case 2:
-        if (!BtlUnit_GetACPossibility(unit)) {
-            return EVT_RETURN_DONE;
-        }
-
-        // Both operands again read the same jumpBaseY field.
-        unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
-        unit->fallAccel = 1.8f;
-        unit->moveFrames = 1;
-        unit->jumpAngle = 90.0f;
-        unit->jumpAngleStep = (f32)(360 / unit->moveFrames);
-        unit->moveTotalFrames = __fabs(unit->jumpBaseY - unit->jumpBaseY) / 16.5;
-        BtlUnit_GetPos(unit, &unit->moveCurrentPos.x, &unit->moveCurrentPos.y, &unit->moveCurrentPos.z);
-        event->blocked = 3;
-        break;
-    case 3:
-        sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
-        unit->moveCurrentPos.x = unit->moveCurrentPos.x + unit->moveTotalFrames * sn / 33.0;
-        sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
-        unit->moveCurrentPos.y = unit->moveCurrentPos.y - unit->moveTotalFrames * sn;
-        unit->jumpAngle = unit->jumpAngle + unit->jumpAngleStep;
-        unit->jumpAngle = reviseAngle(unit->jumpAngle);
-        BtlUnit_SetPos(unit, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
-        unit->moveFrames--;
-        if (unit->moveFrames == 0) {
-            return EVT_RETURN_YIELD;
-        }
-        break;
+            unit->moveFrames = 1;
+            unit->jumpAngle = 90.0f;
+            unit->jumpAngleStep = (f32)(360 / unit->moveFrames);
+            unit->moveTotalFrames = __fabs(unit->jumpBaseY - unit->jumpBaseY) / 16.5;
+            BtlUnit_GetPos(unit, &unit->moveCurrentPos.x, &unit->moveCurrentPos.y, &unit->moveCurrentPos.z);
+            event->blocked = 3;
+            break;
+        case 3:
+            sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
+            unit->moveCurrentPos.x = unit->moveCurrentPos.x + unit->moveTotalFrames * sn / 33.0;
+            sn = sin(6.28318531f * unit->jumpAngle / 360.0f);
+            unit->moveCurrentPos.y = unit->moveCurrentPos.y - unit->moveTotalFrames * sn;
+            unit->jumpAngle = unit->jumpAngle + unit->jumpAngleStep;
+            unit->jumpAngle = reviseAngle(unit->jumpAngle);
+            BtlUnit_SetPos(unit, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
+            unit->moveFrames--;
+            if (unit->moveFrames == 0) {
+                return EVT_RETURN_YIELD;
+            }
+            break;
     }
     return EVT_RETURN_BLOCK;
 }
@@ -5868,10 +5868,10 @@ USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming) {
         return EVT_RETURN_BLOCK;
     }
     switch (event->userdata[1]) {
-    case 0:
-        event->userdata[2] = (s32)loop;
-        event->userdata[1]++;
-        return EVT_RETURN_BLOCK;
+        case 0:
+            event->userdata[2] = (s32)loop;
+            event->userdata[1]++;
+            return EVT_RETURN_BLOCK;
     }
     if ((s32)loop != event->userdata[2]) {
         return EVT_RETURN_DONE;

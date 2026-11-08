@@ -632,7 +632,7 @@ static void write_header_main(void) {
  * No starter in this file sets its op (3).
  */
 static void read_main(void) {
-    s32 saveType; //invalid = -1, main = 0, backup = 1
+    s32 saveType; // invalid = -1, main = 0, backup = 1
 
     if (wp->result) {
         wp->op = CARD_OP_STOPPED;
@@ -731,7 +731,7 @@ void cardReadAll(void) {
 }
 
 static void read_all_main(void) {
-    s32 saveType; //invalid = -1, main = 0, backup = 1
+    s32 saveType; // invalid = -1, main = 0, backup = 1
 
     if (wp->result) {
         wp->op = CARD_OP_STOPPED;
@@ -1205,7 +1205,7 @@ static void make_data(void) {
 
 /** Card-removed callback for CARDMountAsync; does nothing. */
 static void mountDetachCallback(s32 chan, s32 result) {
-    ; //empty
+    ; // empty
 }
 
 /**

@@ -73,18 +73,18 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         type -= 3;
     }
     switch (type) {
-    case 0:
-        radius = 14.0f;
-        count = 7;
-        break;
-    case 1:
-        radius = 28.0f;
-        count = 9;
-        break;
-    default:
-        count = 11;
-        radius = 42.0f;
-        break;
+        case 0:
+            radius = 14.0f;
+            count = 7;
+            break;
+        case 1:
+            radius = 28.0f;
+            count = 9;
+            break;
+        default:
+            count = 11;
+            radius = 42.0f;
+            break;
     }
     effect->type = "Kemuri8N64";
     effect->count = count;

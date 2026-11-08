@@ -2288,28 +2288,28 @@ void puniModeChangeAttack(void) {
     for (i = 1; i < PUNI_DATA_MAX; i++, p++) {
         if (p->flags & PUNI_FLAG_ACTIVE) {
             switch (p->mode) {
-            case PUNI_MODE_IDLE:
-            case PUNI_MODE_JOIN:
-            case 2:
-            case 0x1d:
-                if (p->flags & PUNI_FLAG_PUNI) {
-                    f = searchBattleTeki_inl(p);
-                } else {
-                    f = searchBattleMikata_inl(p);
-                }
-                if (f) {
-                    p->target = f;
-                    p->mode = PUNI_MODE_ATTACK;
-                    p->modeStep = 0;
-                    p->depth = 0;
-                    p->flags |= PUNI_FLAG_COLLIDE;
-                    PuniDokuritsu(p);
-                    if (p->effect) {
-                        effDelete(p->effect);
-                        p->effect = NULL;
+                case PUNI_MODE_IDLE:
+                case PUNI_MODE_JOIN:
+                case 2:
+                case 0x1d:
+                    if (p->flags & PUNI_FLAG_PUNI) {
+                        f = searchBattleTeki_inl(p);
+                    } else {
+                        f = searchBattleMikata_inl(p);
                     }
-                }
-                break;
+                    if (f) {
+                        p->target = f;
+                        p->mode = PUNI_MODE_ATTACK;
+                        p->modeStep = 0;
+                        p->depth = 0;
+                        p->flags |= PUNI_FLAG_COLLIDE;
+                        PuniDokuritsu(p);
+                        if (p->effect) {
+                            effDelete(p->effect);
+                            p->effect = NULL;
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -3580,117 +3580,117 @@ void puniModeFall(PuniData* p) {
     s32 i;
 
     switch (p->modeStep) {
-    case 0:
-        p->flags &= ~PUNI_FLAG_COLLIDE;
-        {
-            Vec v = {0.0f, -0.8f, 0.0f};
-            p->vel = v;
-        }
-        p->modeStep = 1;
-        break;
-    case 1:
-        p->vel.x = 0.0f;
-        p->vel.y -= 0.45f;
+        case 0:
+            p->flags &= ~PUNI_FLAG_COLLIDE;
+            {
+                Vec v = {0.0f, -0.8f, 0.0f};
+                p->vel = v;
+            }
+            p->modeStep = 1;
+            break;
+        case 1:
+            p->vel.x = 0.0f;
+            p->vel.y -= 0.45f;
 #if VERSION <= VERSION_DEMO_JP
-        PSVECNormalize(&p->vel, &dir);
+            PSVECNormalize(&p->vel, &dir);
 #else
-        {
-            Vec v = {0.0f, -1.0f, 0.0f};
-            dir = v;
-        }
+            {
+                Vec v = {0.0f, -1.0f, 0.0f};
+                dir = v;
+            }
 #endif
-        mag = PSVECMag(&p->vel);
-        start = p->pos;
-        puniMoveAtari(p, start, dir, 0, mag);
-        h0 = p->hitMove;
-        if (h0 != NULL || p->hitCheck != NULL) {
-            if (h0 != NULL && (h0->attributes & HIT_ATTR_NPC_ONLY)) {
-                break;
-            }
-            h1 = p->hitCheck;
-            if (h1 != NULL && (h1->attributes & HIT_ATTR_NPC_ONLY)) {
-                break;
-            }
-            if (h0 != NULL && (h0->attributes & HIT_ATTR_SHALLOW_WATER)) {
-                p->modeVar0 = 0x12;
-                p->anim = 0;
-                p->modeStep = 2;
-                break;
-            }
-            if (h1 != NULL && (h1->attributes & HIT_ATTR_SHALLOW_WATER)) {
-                p->modeVar0 = 0x12;
-                p->anim = 0;
-                p->modeStep = 2;
-                break;
-            }
-            if (h0 != NULL && (h0->attributes & HIT_ATTR_WATER_HAZARD)) {
-                p->modeVar0 = 0x16;
-                p->anim = 3;
-                p->modeStep = 2;
-                break;
-            }
-            if (h1 != NULL && (h1->attributes & HIT_ATTR_WATER_HAZARD)) {
-                p->modeVar0 = 0x16;
-                p->anim = 3;
-                p->modeStep = 2;
-                break;
-            }
-            found = 0;
-            for (i = 0; i < 2; i++, t++) {
-                if (t->hit == NULL) {
-                    continue;
-                }
-                if ((void*)h0 == (void*)t->hit) {
-                    found = 1;
-                    p->moveStart = t->pos;
+            mag = PSVECMag(&p->vel);
+            start = p->pos;
+            puniMoveAtari(p, start, dir, 0, mag);
+            h0 = p->hitMove;
+            if (h0 != NULL || p->hitCheck != NULL) {
+                if (h0 != NULL && (h0->attributes & HIT_ATTR_NPC_ONLY)) {
                     break;
                 }
-                if ((void*)h1 == (void*)t->hit) {
-                    found = 1;
-                    p->moveStart = t->pos;
+                h1 = p->hitCheck;
+                if (h1 != NULL && (h1->attributes & HIT_ATTR_NPC_ONLY)) {
                     break;
                 }
-            }
-            if (found) {
-                p->modeVar0 = 0x17;
-            } else {
-                p->modeVar0 = 0xF;
-            }
+                if (h0 != NULL && (h0->attributes & HIT_ATTR_SHALLOW_WATER)) {
+                    p->modeVar0 = 0x12;
+                    p->anim = 0;
+                    p->modeStep = 2;
+                    break;
+                }
+                if (h1 != NULL && (h1->attributes & HIT_ATTR_SHALLOW_WATER)) {
+                    p->modeVar0 = 0x12;
+                    p->anim = 0;
+                    p->modeStep = 2;
+                    break;
+                }
+                if (h0 != NULL && (h0->attributes & HIT_ATTR_WATER_HAZARD)) {
+                    p->modeVar0 = 0x16;
+                    p->anim = 3;
+                    p->modeStep = 2;
+                    break;
+                }
+                if (h1 != NULL && (h1->attributes & HIT_ATTR_WATER_HAZARD)) {
+                    p->modeVar0 = 0x16;
+                    p->anim = 3;
+                    p->modeStep = 2;
+                    break;
+                }
+                found = 0;
+                for (i = 0; i < 2; i++, t++) {
+                    if (t->hit == NULL) {
+                        continue;
+                    }
+                    if ((void*)h0 == (void*)t->hit) {
+                        found = 1;
+                        p->moveStart = t->pos;
+                        break;
+                    }
+                    if ((void*)h1 == (void*)t->hit) {
+                        found = 1;
+                        p->moveStart = t->pos;
+                        break;
+                    }
+                }
+                if (found) {
+                    p->modeVar0 = 0x17;
+                } else {
+                    p->modeVar0 = 0xF;
+                }
 #if VERSION >= VERSION_JP
-            if (Punigp->floor == 0x12 && p->pos.y < -300.0f) {
-                s32 zero = 0;
-                puniswTrapSetindex(*(s16*)(&p->index), &zero);
-                p->flags &= ~PUNI_FLAG_NOT_IN_PARTY;
-            }
+                if (Punigp->floor == 0x12 && p->pos.y < -300.0f) {
+                    s32 zero = 0;
+                    puniswTrapSetindex(*(s16*)(&p->index), &zero);
+                    p->flags &= ~PUNI_FLAG_NOT_IN_PARTY;
+                }
 #endif
+                {
+                    Vec v = {0.0f, 0.0f, 0.0f};
+                    p->vel = v;
+                }
+                p->modeStep = 2;
+            } else if (p->pos.y <= -1000.0f) {
+                p->recoverFromPos = p->pos;
+                p->pos = Punigp->recoverPos;
+                p->pos.x += randf(0.0f, 2.0f) - 1.0f;
+                p->pos.z += randf(0.0f, 2.0f) - 1.0f;
+                p->prevPos = p->pos;
+                p->recoverToPos = p->pos;
+                p->modeVar0 = 0x10;
+                {
+                    Vec v = {0.0f, 0.0f, 0.0f};
+                    p->vel = v;
+                }
+                p->modeStep = 2;
+            }
+            break;
+        case 2:
+            p->mode = p->modeVar0;
             {
                 Vec v = {0.0f, 0.0f, 0.0f};
                 p->vel = v;
             }
-            p->modeStep = 2;
-        } else if (p->pos.y <= -1000.0f) {
-            p->recoverFromPos = p->pos;
-            p->pos = Punigp->recoverPos;
-            p->pos.x += randf(0.0f, 2.0f) - 1.0f;
-            p->pos.z += randf(0.0f, 2.0f) - 1.0f;
-            p->prevPos = p->pos;
-            p->recoverToPos = p->pos;
-            p->modeVar0 = 0x10;
-            {
-                Vec v = {0.0f, 0.0f, 0.0f};
-                p->vel = v;
-            }
-            p->modeStep = 2;
-        }
-        break;
-    case 2:
-        p->mode = p->modeVar0;
-        {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            p->vel = v;
-        }
-        p->modeStep = 0;
-        break;
+            p->modeStep = 0;
+            break;
     }
 }
 
@@ -6099,16 +6099,16 @@ USER_FUNC(evt_puni_rnd_pos) {
     }
     z = evtGetFloat(event, pz);
     switch (type) {
-    case 0:
-        rx = randf(x - 10.0f, x + 10.0f);
-        oy = ry;
-        rz = randf(z - 10.0f, z + 10.0f);
-        break;
-    case 1:
-        rx = randf(x - 50.0f, x + 50.0f);
-        oy = ry;
-        rz = randf(z - 50.0f, z + 50.0f);
-        break;
+        case 0:
+            rx = randf(x - 10.0f, x + 10.0f);
+            oy = ry;
+            rz = randf(z - 10.0f, z + 10.0f);
+            break;
+        case 1:
+            rx = randf(x - 50.0f, x + 50.0f);
+            oy = ry;
+            rz = randf(z - 50.0f, z + 50.0f);
+            break;
     }
     evtSetFloat(event, px, rx);
     evtSetFloat(event, py, oy);

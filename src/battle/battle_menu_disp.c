@@ -1563,212 +1563,212 @@ void DrawMainMenu(BattleWork* wp_) {
 
     camGetPtr(CAMERA_2D);
     switch (menu->scrollState) {
-    case 0:
-        n = 0;
-        for (i = 0; i < cursor->count; i++) {
-            if (menu->iconState[i] == 3) {
-                n++;
-            }
-        }
-        if (n == cursor->count) {
-            menu->scrollState = 1;
-        }
-        break;
-    case 1:
-        menu->shown = 1;
-        mc = menu->cursor;
-        diff = mc->absPos - menu->prevAbsPos;
-        if (diff == 1 || -(mc->count - 1) == diff) {
-            menu->scrollState = 2;
-            menu->shown = 0;
-            menu->prevAbsPos = menu->cursor->absPos;
+        case 0:
+            n = 0;
             for (i = 0; i < cursor->count; i++) {
-                menu->iconState[i] = 4;
-                menu->iconTimer[i] = 0;
-                menu->iconTimer[i + 10] = menu->iconSlot[i];
-                menu->iconSlot[i]--;
-                if (menu->iconSlot[i] == -1) {
-                    menu->iconSlot[i] = cursor->count - 1;
+                if (menu->iconState[i] == 3) {
+                    n++;
                 }
             }
-        } else if (diff == -1 || mc->count - 1 == diff) {
-            menu->scrollState = 2;
-            menu->shown = 0;
-            menu->prevAbsPos = menu->cursor->absPos;
-            for (i = 0; i < cursor->count; i++) {
-                menu->iconState[i] = 5;
-                menu->iconTimer[i] = 0;
-                menu->iconTimer[i + 10] = menu->iconSlot[i];
-                menu->iconSlot[i]++;
-                if (menu->iconSlot[i] == cursor->count) {
-                    menu->iconSlot[i] = 0;
+            if (n == cursor->count) {
+                menu->scrollState = 1;
+            }
+            break;
+        case 1:
+            menu->shown = 1;
+            mc = menu->cursor;
+            diff = mc->absPos - menu->prevAbsPos;
+            if (diff == 1 || -(mc->count - 1) == diff) {
+                menu->scrollState = 2;
+                menu->shown = 0;
+                menu->prevAbsPos = menu->cursor->absPos;
+                for (i = 0; i < cursor->count; i++) {
+                    menu->iconState[i] = 4;
+                    menu->iconTimer[i] = 0;
+                    menu->iconTimer[i + 10] = menu->iconSlot[i];
+                    menu->iconSlot[i]--;
+                    if (menu->iconSlot[i] == -1) {
+                        menu->iconSlot[i] = cursor->count - 1;
+                    }
+                }
+            } else if (diff == -1 || mc->count - 1 == diff) {
+                menu->scrollState = 2;
+                menu->shown = 0;
+                menu->prevAbsPos = menu->cursor->absPos;
+                for (i = 0; i < cursor->count; i++) {
+                    menu->iconState[i] = 5;
+                    menu->iconTimer[i] = 0;
+                    menu->iconTimer[i + 10] = menu->iconSlot[i];
+                    menu->iconSlot[i]++;
+                    if (menu->iconSlot[i] == cursor->count) {
+                        menu->iconSlot[i] = 0;
+                    }
                 }
             }
-        }
-        break;
-    case 2:
-        n = 0;
-        for (i = 0; i < cursor->count; i++) {
-            if (menu->iconState[i] == 3) {
-                n++;
+            break;
+        case 2:
+            n = 0;
+            for (i = 0; i < cursor->count; i++) {
+                if (menu->iconState[i] == 3) {
+                    n++;
+                }
             }
-        }
-        if (n == cursor->count) {
+            if (n == cursor->count) {
+                menu->scrollState = 1;
+            }
+            break;
+        case 10:
             menu->scrollState = 1;
-        }
-        break;
-    case 10:
-        menu->scrollState = 1;
-        menu->shown = 1;
-        break;
+            menu->shown = 1;
+            break;
     }
 
     menu->iconsArrived = 0;
     for (i = 0; i < cursor->count; i++) {
         switch (menu->iconState[i]) {
-        case 0:
-            menu->iconTimer[i]--;
-            if (menu->iconTimer[i] <= 0) {
-                menu->iconState[i] = 1;
-                menu->iconTimer[i] = 0;
-            }
-            break;
-        case 1:
-            menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+            case 0:
+                menu->iconTimer[i]--;
+                if (menu->iconTimer[i] <= 0) {
+                    menu->iconState[i] = 1;
+                    menu->iconTimer[i] = 0;
+                }
+                break;
+            case 1:
+                menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
 
-            // FAKE: c is zeroed and added to the step (a = c + ...); a = FRAMES_STEP(...) alone changes the object
-            c = 0.0f;
-            a = c + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
-            b = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
-            if (a >= b) {
-                a = b;
-            }
-            GetRingCenter(&pos[i]);
-            GetRingOffset(a, &ox, &oy);
-            pos[i].x += ox;
-            pos[i].y += oy;
-            pos[i].z = oy;
-            if (i == cursor->absPos) {
-                c = 270.0f + 90.0f * menu->iconTimer[i] / (f32)FRAMES(10);
-                if (c >= 360.0f) {
-                    c = 0.0f;
+                // FAKE: c is zeroed and added to the step (a = c + ...); a = FRAMES_STEP(...) alone changes the object
+                c = 0.0f;
+                a = c + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
+                b = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
+                if (a >= b) {
+                    a = b;
                 }
-                PSMTXRotRad(rot, 'x', 0.017453292f * c);
-                PSMTXTrans(trans, 20.0f + pos[i].x, pos[i].y, pos[i].z);
-                PSMTXConcat(trans, rot, mtx[i]);
-                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
-            } else {
-                c = 270.0f + 90.0f * menu->iconTimer[i] / (f32)FRAMES(10);
-                if (c >= 360.0f) {
-                    c = 0.0f;
+                GetRingCenter(&pos[i]);
+                GetRingOffset(a, &ox, &oy);
+                pos[i].x += ox;
+                pos[i].y += oy;
+                pos[i].z = oy;
+                if (i == cursor->absPos) {
+                    c = 270.0f + 90.0f * menu->iconTimer[i] / (f32)FRAMES(10);
+                    if (c >= 360.0f) {
+                        c = 0.0f;
+                    }
+                    PSMTXRotRad(rot, 'x', 0.017453292f * c);
+                    PSMTXTrans(trans, 20.0f + pos[i].x, pos[i].y, pos[i].z);
+                    PSMTXConcat(trans, rot, mtx[i]);
+                    menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
+                } else {
+                    c = 270.0f + 90.0f * menu->iconTimer[i] / (f32)FRAMES(10);
+                    if (c >= 360.0f) {
+                        c = 0.0f;
+                    }
+                    PSMTXRotRad(rot, 'x', 0.017453292f * c);
+                    PSMTXTrans(trans, pos[i].x, pos[i].y, pos[i].z);
+                    PSMTXConcat(trans, rot, mtx[i]);
                 }
-                PSMTXRotRad(rot, 'x', 0.017453292f * c);
-                PSMTXTrans(trans, pos[i].x, pos[i].y, pos[i].z);
-                PSMTXConcat(trans, rot, mtx[i]);
-            }
-            iconAngle[i] = 0.0f;
-            if (a >= b && menu->iconTimer[i] >= FRAMES(10)) {
-                menu->iconState[i] = 3;
-                menu->iconTimer[i] = -1;
-            }
-            menu->iconTimer[i]++;
-            break;
-        case 3:
-            a = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
-            GetRingCenter(&pos[i]);
-            GetRingOffset(a, &ox, &oy);
-            pos[i].x += ox;
-            pos[i].y += oy;
-            pos[i].z = oy;
-            if (i == cursor->absPos) {
-                PSMTXTrans(mtx[i], 20.0f + pos[i].x, pos[i].y, pos[i].z);
-                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
-            } else {
+                iconAngle[i] = 0.0f;
+                if (a >= b && menu->iconTimer[i] >= FRAMES(10)) {
+                    menu->iconState[i] = 3;
+                    menu->iconTimer[i] = -1;
+                }
+                menu->iconTimer[i]++;
+                break;
+            case 3:
+                a = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
+                GetRingCenter(&pos[i]);
+                GetRingOffset(a, &ox, &oy);
+                pos[i].x += ox;
+                pos[i].y += oy;
+                pos[i].z = oy;
+                if (i == cursor->absPos) {
+                    PSMTXTrans(mtx[i], 20.0f + pos[i].x, pos[i].y, pos[i].z);
+                    menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
+                } else {
+                    PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
+                }
+                iconAngle[i] = 0.0f;
+                break;
+            case 4:
+                c = kakutable[cursor->count - 3][menu->iconTimer[i + 10]];
+                b = kakutable[cursor->count - 3][menu->iconSlot[i]];
+                if (0.0f == b) {
+                    b = 360.0f;
+                }
+                a = 3.1415927f * c / 180.0f + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
+                b = 3.1415927f * b / 180.0f;
+                if (a >= b) {
+                    a = b;
+                    menu->iconState[i] = 3;
+                    menu->iconTimer[i] = -1;
+                }
+                GetRingCenter(&pos[i]);
+                GetRingOffset(a, &ox, &oy);
+                pos[i].x += ox;
+                pos[i].y += oy;
+                pos[i].z = oy;
                 PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
-            }
-            iconAngle[i] = 0.0f;
-            break;
-        case 4:
-            c = kakutable[cursor->count - 3][menu->iconTimer[i + 10]];
-            b = kakutable[cursor->count - 3][menu->iconSlot[i]];
-            if (0.0f == b) {
-                b = 360.0f;
-            }
-            a = 3.1415927f * c / 180.0f + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
-            b = 3.1415927f * b / 180.0f;
-            if (a >= b) {
-                a = b;
-                menu->iconState[i] = 3;
-                menu->iconTimer[i] = -1;
-            }
-            GetRingCenter(&pos[i]);
-            GetRingOffset(a, &ox, &oy);
-            pos[i].x += ox;
-            pos[i].y += oy;
-            pos[i].z = oy;
-            PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
-            iconAngle[i] = 0.0f;
-            menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
-            menu->iconTimer[i]++;
-            break;
-        case 5:
-            c = kakutable[cursor->count - 3][menu->iconTimer[i + 10]];
-            if (0.0f == c) {
-                c = 360.0f;
-            }
-            a = 3.1415927f * c / 180.0f - FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
-            b = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
-            if (a <= b) {
-                a = b;
-                menu->iconState[i] = 3;
-                menu->iconTimer[i] = -1;
-            }
-            GetRingCenter(&pos[i]);
-            GetRingOffset(a, &ox, &oy);
-            pos[i].x += ox;
-            pos[i].y += oy;
-            pos[i].z = oy;
-            PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
-            iconAngle[i] = 0.0f;
-            menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
-            menu->iconTimer[i]++;
-            break;
-        case 10:
-            menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
-            menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
-            GetRingCenter(&pos[i]);
-            GetRingOffset(0.0f, &ox, &oy);
-            pos[i].x += ox;
-            pos[i].y += oy;
-            pos[i].z = oy;
-            pos[i].x = intplGetValue(EASING_QUADRATIC_OUT, -60.0f, pos[i].x, menu->iconTimer[i], FRAMES(12));
-            pos[i].y = intplGetValue(EASING_QUADRATIC_OUT, 55.0f, pos[i].y, menu->iconTimer[i], FRAMES(12));
-            PSMTXTrans(mtx[i], 20.0f + pos[i].x, pos[i].y, pos[i].z);
-            iconAngle[i] = intplGetValue(EASING_LINEAR, 360.0f, 0.0f, menu->iconTimer[i], FRAMES(12));
-            menu->iconTimer[i]++;
-            if (menu->iconTimer[i] > FRAMES(12)) {
-                menu->iconState[i] = 3;
-            }
-            break;
-        case 11:
-            menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
-            menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
-            a = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
-            GetRingCenter(&pos[i]);
-            GetRingOffset(a, &ox, &oy);
-            pos[i].x += ox;
-            pos[i].y += oy;
-            pos[i].z = oy;
-            a = 0.1f * menu->iconTimer[i];
-            if (a >= 1.0f) {
-                menu->iconState[i] = 3;
-            }
-            PSMTXScale(scale, a, a, 1.0f);
-            PSMTXTrans(trans, pos[i].x, pos[i].y, pos[i].z);
-            PSMTXConcat(trans, scale, mtx[i]);
-            iconAngle[i] = 0.0f;
-            menu->iconTimer[i]++;
-            break;
+                iconAngle[i] = 0.0f;
+                menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
+                menu->iconTimer[i]++;
+                break;
+            case 5:
+                c = kakutable[cursor->count - 3][menu->iconTimer[i + 10]];
+                if (0.0f == c) {
+                    c = 360.0f;
+                }
+                a = 3.1415927f * c / 180.0f - FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
+                b = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
+                if (a <= b) {
+                    a = b;
+                    menu->iconState[i] = 3;
+                    menu->iconTimer[i] = -1;
+                }
+                GetRingCenter(&pos[i]);
+                GetRingOffset(a, &ox, &oy);
+                pos[i].x += ox;
+                pos[i].y += oy;
+                pos[i].z = oy;
+                PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
+                iconAngle[i] = 0.0f;
+                menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
+                menu->iconTimer[i]++;
+                break;
+            case 10:
+                menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
+                GetRingCenter(&pos[i]);
+                GetRingOffset(0.0f, &ox, &oy);
+                pos[i].x += ox;
+                pos[i].y += oy;
+                pos[i].z = oy;
+                pos[i].x = intplGetValue(EASING_QUADRATIC_OUT, -60.0f, pos[i].x, menu->iconTimer[i], FRAMES(12));
+                pos[i].y = intplGetValue(EASING_QUADRATIC_OUT, 55.0f, pos[i].y, menu->iconTimer[i], FRAMES(12));
+                PSMTXTrans(mtx[i], 20.0f + pos[i].x, pos[i].y, pos[i].z);
+                iconAngle[i] = intplGetValue(EASING_LINEAR, 360.0f, 0.0f, menu->iconTimer[i], FRAMES(12));
+                menu->iconTimer[i]++;
+                if (menu->iconTimer[i] > FRAMES(12)) {
+                    menu->iconState[i] = 3;
+                }
+                break;
+            case 11:
+                menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+                menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
+                a = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
+                GetRingCenter(&pos[i]);
+                GetRingOffset(a, &ox, &oy);
+                pos[i].x += ox;
+                pos[i].y += oy;
+                pos[i].z = oy;
+                a = 0.1f * menu->iconTimer[i];
+                if (a >= 1.0f) {
+                    menu->iconState[i] = 3;
+                }
+                PSMTXScale(scale, a, a, 1.0f);
+                PSMTXTrans(trans, pos[i].x, pos[i].y, pos[i].z);
+                PSMTXConcat(trans, scale, mtx[i]);
+                iconAngle[i] = 0.0f;
+                menu->iconTimer[i]++;
+                break;
         }
     }
     DrawMainIcon(menu, menu->acts, mtx, pos, iconAngle);

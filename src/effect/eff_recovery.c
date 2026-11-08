@@ -212,17 +212,17 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 
     effect = effEntry();
     switch (type) {
-    case 2:
-    case 3:
-        amount = 0;
-        break;
-    case 4:
-    case 5:
-        amount = 20;
-        break;
-    case 6:
-        amount = 11;
-        break;
+        case 2:
+        case 3:
+            amount = 0;
+            break;
+        case 4:
+        case 5:
+            amount = 20;
+            break;
+        case 6:
+            amount = 11;
+            break;
     }
     effect->type = "Recovery";
     effect->count = amount + 1;
@@ -230,12 +230,12 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, size);
     effect->userdata = work;
     switch (type) {
-    case 6:
-        effect->callback = effRecoveryMain2;
-        break;
-    default:
-        effect->callback = effRecoveryMain;
-        break;
+        case 6:
+            effect->callback = effRecoveryMain2;
+            break;
+        default:
+            effect->callback = effRecoveryMain;
+            break;
     }
     work->anim = effMayaAnimAlloc(&recovery_effAnimDt);
     effPlayMayaAnim(work->anim);
@@ -258,39 +258,39 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
         pos.z = work->position.z;
         sfxPos = pos;
         switch (work->type) {
-        case 0:
-        case 7:
-            if (work->amount <= 5) {
-                psndSFXOn_3D("SFX_HP_RECOVER_SMALL1", &sfxPos);
-            } else if (work->amount <= 10) {
-                psndSFXOn_3D("SFX_HP_RECOVER_MID1", &sfxPos);
-            } else {
+            case 0:
+            case 7:
+                if (work->amount <= 5) {
+                    psndSFXOn_3D("SFX_HP_RECOVER_SMALL1", &sfxPos);
+                } else if (work->amount <= 10) {
+                    psndSFXOn_3D("SFX_HP_RECOVER_MID1", &sfxPos);
+                } else {
+                    psndSFXOn_3D("SFX_HP_RECOVER_BIG1", &sfxPos);
+                }
+                break;
+            case 1:
+            case 8:
+                if (work->amount <= 5) {
+                    psndSFXOn_3D("SFX_FP_RECOVER_SMALL1", &sfxPos);
+                } else if (work->amount <= 10) {
+                    psndSFXOn_3D("SFX_FP_RECOVER_MID1", &sfxPos);
+                } else {
+                    psndSFXOn_3D("SFX_FP_RECOVER_BIG1", &sfxPos);
+                }
+                break;
+            case 4:
                 psndSFXOn_3D("SFX_HP_RECOVER_BIG1", &sfxPos);
-            }
-            break;
-        case 1:
-        case 8:
-            if (work->amount <= 5) {
-                psndSFXOn_3D("SFX_FP_RECOVER_SMALL1", &sfxPos);
-            } else if (work->amount <= 10) {
-                psndSFXOn_3D("SFX_FP_RECOVER_MID1", &sfxPos);
-            } else {
+                break;
+            case 5:
                 psndSFXOn_3D("SFX_FP_RECOVER_BIG1", &sfxPos);
-            }
-            break;
-        case 4:
-            psndSFXOn_3D("SFX_HP_RECOVER_BIG1", &sfxPos);
-            break;
-        case 5:
-            psndSFXOn_3D("SFX_FP_RECOVER_BIG1", &sfxPos);
-            break;
+                break;
         }
     }
     switch (type) {
-    case 6:
-        effDeleteMayaAnim(work->anim);
-        work->timer = 180;
-        break;
+        case 6:
+            effDeleteMayaAnim(work->anim);
+            work->timer = 180;
+            break;
     }
 
     // FAKE: pp walks the records and work is set from it each pass; stepping work itself changes the object
@@ -299,13 +299,13 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
         work = pp;
         work->position.x = 0.0f;
         switch (type) {
-        case 4:
-        case 5:
-            work->position.y = (i < 10) ? 0.0f : -15.0f;
-            break;
-        default:
-            work->position.y = 0.0f;
-            break;
+            case 4:
+            case 5:
+                work->position.y = (i < 10) ? 0.0f : -15.0f;
+                break;
+            default:
+                work->position.y = 0.0f;
+                break;
         }
         work->position.z = 0.0f;
         work->scale.x = 0.0f;
@@ -319,20 +319,20 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
         work->alpha = 255;
         work->angle = 0.0f;
         switch (type) {
-        case 6:
-            if (i == 1) {
-                work->scale.x = work->scale.y = work->scale.z = 1.5f;
-                work->alpha = 0;
-                work->delay = 0;
-            } else {
-                work->scale.x = work->scale.y = work->scale.z = 0.3f;
-                work->angle = (f32)(((i & 1) ? irand(80) : -irand(80)) + 90);
-                work->velocity.x = 1.8f * (f32)cos(6.2831855f * work->angle / 360.0f);
-                work->velocity.y = 1.8f * (f32)sin(6.2831855f * work->angle / 360.0f);
-                work->alpha = 255;
-                work->delay = delay;
-            }
-            break;
+            case 6:
+                if (i == 1) {
+                    work->scale.x = work->scale.y = work->scale.z = 1.5f;
+                    work->alpha = 0;
+                    work->delay = 0;
+                } else {
+                    work->scale.x = work->scale.y = work->scale.z = 0.3f;
+                    work->angle = (f32)(((i & 1) ? irand(80) : -irand(80)) + 90);
+                    work->velocity.x = 1.8f * (f32)cos(6.2831855f * work->angle / 360.0f);
+                    work->velocity.y = 1.8f * (f32)sin(6.2831855f * work->angle / 360.0f);
+                    work->alpha = 255;
+                    work->delay = delay;
+                }
+                break;
         }
     }
     return effect;
@@ -380,75 +380,75 @@ static void effRecoveryMain(EffectEntry* effect) {
         p++;
         for (i = 1; i < effect->count; i++, p++) {
             switch (p->state) {
-            case 0:
-                if (go) {
-                    a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)amount) / 360.0f;
-                    p->velocity.x = 12.0f * (f32)sin(a);
-                    p->velocity.y = 0.0f;
-                    a = cos(a);
-                    p->velocity.z = 12.0f * -a;
-                    p->timer = 0;
-                    p->state++;
-                }
-                break;
-            case 1:
-                if (p->timer < 10) {
-                    p->velocity.x *= 0.7f;
-                    p->velocity.y *= 0.7f;
-                    p->velocity.z *= 0.7f;
-                    p->position.x += p->velocity.x;
-                    p->position.y += p->velocity.y;
-                    p->position.z += p->velocity.z;
-                    p->scale.x = p->scale.y = p->scale.z = 1.0f;
-                    p->timer++;
-                } else {
-                    p->timer = 10;
-                    p->state++;
-                }
-                break;
-            case 2:
-                if (--p->timer <= 0) {
-                    p->timer = 0;
-                    p->state++;
-                }
-                break;
-            case 3:
-                if (p->timer < 40) {
-                    a = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 360.0f, ++p->timer, 40);
-                    d = distABf(0.0f, 0.0f, p->position.x, p->position.z);
-                    d *= 0.99f;
-                    a = 6.2831855f * (90.0f + (a + 360.0f * (f32)(i - 2) / (f32)amount)) / 360.0f;
-                    p->position.x = d * (f32)sin(a);
-                    p->position.z = d * -(f32)cos(a);
-                } else {
-                    p->timer = rand() % 20;
-                    p->state++;
-                }
-                break;
-            case 4:
-                if (--p->timer <= 0) {
-                    p->timer = 0;
-                    p->state++;
-                }
-                break;
-            case 5:
-                if (p->timer < 16) {
-                    p->timer++;
-                    p->position.x = intplGetValue(EASING_QUADRATIC_IN, p->position.x, 0.0f, p->timer, 16);
+                case 0:
+                    if (go) {
+                        a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)amount) / 360.0f;
+                        p->velocity.x = 12.0f * (f32)sin(a);
+                        p->velocity.y = 0.0f;
+                        a = cos(a);
+                        p->velocity.z = 12.0f * -a;
+                        p->timer = 0;
+                        p->state++;
+                    }
+                    break;
+                case 1:
+                    if (p->timer < 10) {
+                        p->velocity.x *= 0.7f;
+                        p->velocity.y *= 0.7f;
+                        p->velocity.z *= 0.7f;
+                        p->position.x += p->velocity.x;
+                        p->position.y += p->velocity.y;
+                        p->position.z += p->velocity.z;
+                        p->scale.x = p->scale.y = p->scale.z = 1.0f;
+                        p->timer++;
+                    } else {
+                        p->timer = 10;
+                        p->state++;
+                    }
+                    break;
+                case 2:
+                    if (--p->timer <= 0) {
+                        p->timer = 0;
+                        p->state++;
+                    }
+                    break;
+                case 3:
+                    if (p->timer < 40) {
+                        a = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 360.0f, ++p->timer, 40);
+                        d = distABf(0.0f, 0.0f, p->position.x, p->position.z);
+                        d *= 0.99f;
+                        a = 6.2831855f * (90.0f + (a + 360.0f * (f32)(i - 2) / (f32)amount)) / 360.0f;
+                        p->position.x = d * (f32)sin(a);
+                        p->position.z = d * -(f32)cos(a);
+                    } else {
+                        p->timer = rand() % 20;
+                        p->state++;
+                    }
+                    break;
+                case 4:
+                    if (--p->timer <= 0) {
+                        p->timer = 0;
+                        p->state++;
+                    }
+                    break;
+                case 5:
+                    if (p->timer < 16) {
+                        p->timer++;
+                        p->position.x = intplGetValue(EASING_QUADRATIC_IN, p->position.x, 0.0f, p->timer, 16);
 #if VERSION <= VERSION_DEMO_JP
-                    p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->timer, 16);
+                        p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->timer, 16);
 #else
-                    p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, baseY, p->timer, 16);
+                        p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, baseY, p->timer, 16);
 #endif
-                    p->position.z = intplGetValue(EASING_QUADRATIC_IN, p->position.z, 0.0f, p->timer, 20);
-                    p->scale.x = p->scale.y = p->scale.z = intplGetValue(EASING_QUADRATIC_IN, 1.0f, 0.0f, p->timer, 16);
-                } else {
-                    p->state++;
-                }
-                break;
-            case 6:
-                done++;
-                break;
+                        p->position.z = intplGetValue(EASING_QUADRATIC_IN, p->position.z, 0.0f, p->timer, 20);
+                        p->scale.x = p->scale.y = p->scale.z = intplGetValue(EASING_QUADRATIC_IN, 1.0f, 0.0f, p->timer, 16);
+                    } else {
+                        p->state++;
+                    }
+                    break;
+                case 6:
+                    done++;
+                    break;
             }
         }
         if (type == 0 || type == 1 || type == 7 || type == 8 || type == 4 || type == 5) {
@@ -474,30 +474,30 @@ static void effRecoveryMain(EffectEntry* effect) {
                         pos.z = work->position.z;
                         sfxPos = pos;
                         switch (work->type) {
-                        case 0:
-                            if (work->amount <= 5) {
-                                psndSFXOn_3D("SFX_HP_RECOVER_SHINE1", &sfxPos);
-                            } else if (work->amount <= 10) {
-                                psndSFXOn_3D("SFX_HP_RECOVER_SHINE2", &sfxPos);
-                            } else {
+                            case 0:
+                                if (work->amount <= 5) {
+                                    psndSFXOn_3D("SFX_HP_RECOVER_SHINE1", &sfxPos);
+                                } else if (work->amount <= 10) {
+                                    psndSFXOn_3D("SFX_HP_RECOVER_SHINE2", &sfxPos);
+                                } else {
+                                    psndSFXOn_3D("SFX_HP_RECOVER_SHINE3", &sfxPos);
+                                }
+                                break;
+                            case 1:
+                                if (work->amount <= 5) {
+                                    psndSFXOn_3D("SFX_FP_RECOVER_SHINE1", &sfxPos);
+                                } else if (work->amount <= 10) {
+                                    psndSFXOn_3D("SFX_FP_RECOVER_SHINE2", &sfxPos);
+                                } else {
+                                    psndSFXOn_3D("SFX_FP_RECOVER_SHINE3", &sfxPos);
+                                }
+                                break;
+                            case 4:
                                 psndSFXOn_3D("SFX_HP_RECOVER_SHINE3", &sfxPos);
-                            }
-                            break;
-                        case 1:
-                            if (work->amount <= 5) {
-                                psndSFXOn_3D("SFX_FP_RECOVER_SHINE1", &sfxPos);
-                            } else if (work->amount <= 10) {
-                                psndSFXOn_3D("SFX_FP_RECOVER_SHINE2", &sfxPos);
-                            } else {
+                                break;
+                            case 5:
                                 psndSFXOn_3D("SFX_FP_RECOVER_SHINE3", &sfxPos);
-                            }
-                            break;
-                        case 4:
-                            psndSFXOn_3D("SFX_HP_RECOVER_SHINE3", &sfxPos);
-                            break;
-                        case 5:
-                            psndSFXOn_3D("SFX_FP_RECOVER_SHINE3", &sfxPos);
-                            break;
+                                break;
                         }
                     }
                 }
@@ -619,24 +619,24 @@ static void effRecoveryDisp(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     switch (type) {
-    case 0:
-    case 2:
-    case 4:
-    case 7:
-        effGetTexObj(18, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        effGetTexObj(20, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP1);
-        break;
-    case 1:
-    case 3:
-    case 5:
-    case 8:
-        effGetTexObj(19, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        effGetTexObj(21, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP1);
-        break;
+        case 0:
+        case 2:
+        case 4:
+        case 7:
+            effGetTexObj(18, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            effGetTexObj(20, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP1);
+            break;
+        case 1:
+        case 3:
+        case 5:
+        case 8:
+            effGetTexObj(19, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            effGetTexObj(21, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP1);
+            break;
     }
     p = effect->userdata;
     PSMTXTrans(transMtx, p->position.x, p->position.y, p->position.z);
@@ -734,16 +734,16 @@ static void effRecoveryDisp2(CameraId cameraId, void* param) {
     PSMTXTrans(tmp, off, 0.0f, 0.0f);
     PSMTXConcat(mtx, tmp, mtx);
     switch (type) {
-    case 0:
-    case 2:
-    case 7:
-        effNumberGX(mtx, 0, amount, 0xFF, 1);
-        break;
-    case 1:
-    case 3:
-    case 8:
-        effNumberGX(mtx, 1, amount, 0xFF, 1);
-        break;
+        case 0:
+        case 2:
+        case 7:
+            effNumberGX(mtx, 0, amount, 0xFF, 1);
+            break;
+        case 1:
+        case 3:
+        case 8:
+            effNumberGX(mtx, 1, amount, 0xFF, 1);
+            break;
     }
 }
 

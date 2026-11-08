@@ -60,32 +60,32 @@ static void effSyuryouMain(EffectEntry* effect) {
     inBattle = gp->inBattle != 0;
 
     switch (type) {
-    case 0:
-        if (!animGroupBaseAsync("EFF_batug_tue", inBattle, NULL)) {
-            return;
-        }
-        if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batug_tue", inBattle);
-            animPoseSetAnim(work->poseId, "A_1", TRUE);
-        }
-        if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {
-            animPoseRelease(work->poseId);
-            effDelete(effect);
-            return;
-        }
-        break;
-    case 1:
-        if (!animGroupBaseAsync("MOBJ_EFF_baria", inBattle, NULL)) {
-            return;
-        }
-        if (work->poseId == -1) {
-            work->poseId = animPoseEntry("MOBJ_EFF_baria", inBattle);
-            animPoseSetAnim(work->poseId, "A_1", TRUE);
-        }
-        if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {
-            animPoseSetAnim(work->poseId, "S_1", FALSE);
-        }
-        break;
+        case 0:
+            if (!animGroupBaseAsync("EFF_batug_tue", inBattle, NULL)) {
+                return;
+            }
+            if (work->poseId == -1) {
+                work->poseId = animPoseEntry("EFF_batug_tue", inBattle);
+                animPoseSetAnim(work->poseId, "A_1", TRUE);
+            }
+            if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {
+                animPoseRelease(work->poseId);
+                effDelete(effect);
+                return;
+            }
+            break;
+        case 1:
+            if (!animGroupBaseAsync("MOBJ_EFF_baria", inBattle, NULL)) {
+                return;
+            }
+            if (work->poseId == -1) {
+                work->poseId = animPoseEntry("MOBJ_EFF_baria", inBattle);
+                animPoseSetAnim(work->poseId, "A_1", TRUE);
+            }
+            if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {
+                animPoseSetAnim(work->poseId, "S_1", FALSE);
+            }
+            break;
     }
 
     // soft delete: start fading out

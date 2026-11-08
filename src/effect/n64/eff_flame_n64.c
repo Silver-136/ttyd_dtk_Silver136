@@ -130,86 +130,86 @@ EffectEntry* effFlameN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->v1 = 0.0f;
     work->u1 = 0.0f;
     switch (type) {
-    case 0:
-        work->c0r = 75;
-        work->c0g = 75;
-        work->c0b = 75;
-        work->c1r = 255;
-        work->c1g = 247;
-        work->c1b = 155;
-        work->c1a = 0;
-        work->sx = 2.0f * scale;
-        work->sy = 0.6f * scale;
-        work->sz = scale;
-        work->u0vel = -0.9f;
-        work->v0vel = 0.04f;
-        work->u0target = 0.04f;
-        work->v0target = 0.9f;
-        work->u1vel = -0.9f;
-        work->v1vel = 0.04f;
-        work->u1target = 0.04f;
-        work->v1target = 0.9f;
-        break;
-    case 1:
-        work->c0r = 75;
-        work->c0g = 75;
-        work->c0b = 75;
-        work->c1r = 255;
-        work->c1g = 0;
-        work->c1b = 0;
-        work->c1a = 0;
-        work->sx = scale;
-        work->sy = scale;
-        work->sz = scale;
-        work->u0vel = 0.0f;
-        work->v0vel = 0.04f;
-        work->u0target = 0.04f;
-        work->v0target = 0.9f;
-        work->u1vel = 0.0f;
-        work->v1vel = 0.04f;
-        work->u1target = 0.04f;
-        work->v1target = 0.9f;
-        break;
-    case 2:
-        work->c0r = 25;
-        work->c0g = 121;
-        work->c0b = 142;
-        work->c1r = 34;
-        work->c1g = 0;
-        work->c1b = 255;
-        work->c1a = 81;
-        work->sx = scale;
-        work->sy = scale;
-        work->sz = scale;
-        work->u0vel = 0.0f;
-        work->v0vel = 0.04f;
-        work->u0target = 0.2f;
-        work->v0target = 1.3f;
-        work->u1vel = 0.0f;
-        work->v1vel = 0.04f;
-        work->u1target = 0.16000001f;
-        work->v1target = 1.04f;
-        break;
-    default:
-        work->c0r = 179;
-        work->c0g = 169;
-        work->c0b = 85;
-        work->c1r = 34;
-        work->c1g = 0;
-        work->c1b = 255;
-        work->c1a = 63;
-        work->sx = scale;
-        work->sy = scale;
-        work->sz = scale;
-        work->u0vel = 0.0f;
-        work->v0vel = 0.04f;
-        work->u0target = 0.1f;
-        work->v0target = 1.7f;
-        work->u1vel = 0.0f;
-        work->v1vel = 0.04f;
-        work->u1target = 0.080000006f;
-        work->v1target = 1.36f;
-        break;
+        case 0:
+            work->c0r = 75;
+            work->c0g = 75;
+            work->c0b = 75;
+            work->c1r = 255;
+            work->c1g = 247;
+            work->c1b = 155;
+            work->c1a = 0;
+            work->sx = 2.0f * scale;
+            work->sy = 0.6f * scale;
+            work->sz = scale;
+            work->u0vel = -0.9f;
+            work->v0vel = 0.04f;
+            work->u0target = 0.04f;
+            work->v0target = 0.9f;
+            work->u1vel = -0.9f;
+            work->v1vel = 0.04f;
+            work->u1target = 0.04f;
+            work->v1target = 0.9f;
+            break;
+        case 1:
+            work->c0r = 75;
+            work->c0g = 75;
+            work->c0b = 75;
+            work->c1r = 255;
+            work->c1g = 0;
+            work->c1b = 0;
+            work->c1a = 0;
+            work->sx = scale;
+            work->sy = scale;
+            work->sz = scale;
+            work->u0vel = 0.0f;
+            work->v0vel = 0.04f;
+            work->u0target = 0.04f;
+            work->v0target = 0.9f;
+            work->u1vel = 0.0f;
+            work->v1vel = 0.04f;
+            work->u1target = 0.04f;
+            work->v1target = 0.9f;
+            break;
+        case 2:
+            work->c0r = 25;
+            work->c0g = 121;
+            work->c0b = 142;
+            work->c1r = 34;
+            work->c1g = 0;
+            work->c1b = 255;
+            work->c1a = 81;
+            work->sx = scale;
+            work->sy = scale;
+            work->sz = scale;
+            work->u0vel = 0.0f;
+            work->v0vel = 0.04f;
+            work->u0target = 0.2f;
+            work->v0target = 1.3f;
+            work->u1vel = 0.0f;
+            work->v1vel = 0.04f;
+            work->u1target = 0.16000001f;
+            work->v1target = 1.04f;
+            break;
+        default:
+            work->c0r = 179;
+            work->c0g = 169;
+            work->c0b = 85;
+            work->c1r = 34;
+            work->c1g = 0;
+            work->c1b = 255;
+            work->c1a = 63;
+            work->sx = scale;
+            work->sy = scale;
+            work->sz = scale;
+            work->u0vel = 0.0f;
+            work->v0vel = 0.04f;
+            work->u0target = 0.1f;
+            work->v0target = 1.7f;
+            work->u1vel = 0.0f;
+            work->v1vel = 0.04f;
+            work->u1target = 0.080000006f;
+            work->v1target = 1.36f;
+            break;
     }
     work->smoothed.x = work->position.x;
     work->smoothed.y = work->position.y;
@@ -328,70 +328,70 @@ static void effFlameDisp(CameraId cameraId, void* param) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     switch (type) {
-    case 0:
-    case 1:
-        GXSetNumTevStages(4);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C2, GX_CC_C2, GX_CC_ONE);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_TEXA, GX_CA_ZERO, GX_CA_A2, GX_CA_TEXA);
-        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_A2, GX_CA_APREV, GX_CA_ZERO);
-        GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_C1);
-        GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-        effGetTexObjN64(47, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        effGetTexObjN64(48, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP1);
-        break;
-    case 2:
-        GXSetNumTevStages(5);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_C0);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A2, GX_CA_TEXA, GX_CA_A2);
-        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_A1, GX_CA_A2, GX_CA_APREV);
-        GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
-        GXSetTevOrder(GX_TEVSTAGE4, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE4, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE4, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE4, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE4, GX_CA_ZERO, GX_CA_A1, GX_CA_A0, GX_CA_APREV);
-        effGetTexObjN64(49, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
-        effGetTexObjN64(50, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP1);
-        break;
-    case 3:
-        break;
-    default:
-        break;
+        case 0:
+        case 1:
+            GXSetNumTevStages(4);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+            GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C2, GX_CC_C2, GX_CC_ONE);
+            GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_TEXA, GX_CA_ZERO, GX_CA_A2, GX_CA_TEXA);
+            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_A2, GX_CA_APREV, GX_CA_ZERO);
+            GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_C1);
+            GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+            effGetTexObjN64(47, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            effGetTexObjN64(48, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP1);
+            break;
+        case 2:
+            GXSetNumTevStages(5);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+            GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_C0);
+            GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A2, GX_CA_TEXA, GX_CA_A2);
+            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_A1, GX_CA_A2, GX_CA_APREV);
+            GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_FALSE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
+            GXSetTevOrder(GX_TEVSTAGE4, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE4, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE4, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE4, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE4, GX_CA_ZERO, GX_CA_A1, GX_CA_A0, GX_CA_APREV);
+            effGetTexObjN64(49, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            effGetTexObjN64(50, &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP1);
+            break;
+        case 3:
+            break;
+        default:
+            break;
     }
     PSMTXTrans(trn, work[0]->position.x, work[0]->position.y, work[0]->position.z);
     if (type == 2) {
@@ -407,24 +407,24 @@ static void effFlameDisp(CameraId cameraId, void* param) {
         PSMTXConcat(mtx, trn, mtx);
     }
     switch (type) {
-    case 0:
-        transformVtx(mtx, &work[0]->vtx[2], &stg_flame_v[2]);
-        transformVtx(mtx, &work[0]->vtx[3], &stg_flame_v[3]);
-        transformVtx(mtx, &work[0]->vtx[6], &stg_flame_v[6]);
-        transformVtx(mtx, &work[0]->vtx[7], &stg_flame_v[7]);
-        break;
-    case 1:
-        transformVtx(mtx, &work[0]->vtx[2], &stg_flame_3_v[2]);
-        transformVtx(mtx, &work[0]->vtx[3], &stg_flame_3_v[3]);
-        transformVtx(mtx, &work[0]->vtx[6], &stg_flame_3_v[6]);
-        transformVtx(mtx, &work[0]->vtx[7], &stg_flame_3_v[7]);
-        break;
-    default:
-        transformVtx(mtx, &work[0]->vtx[2], &stg_flame_2_v[2]);
-        transformVtx(mtx, &work[0]->vtx[3], &stg_flame_2_v[3]);
-        transformVtx(mtx, &work[0]->vtx[6], &stg_flame_2_v[6]);
-        transformVtx(mtx, &work[0]->vtx[7], &stg_flame_2_v[7]);
-        break;
+        case 0:
+            transformVtx(mtx, &work[0]->vtx[2], &stg_flame_v[2]);
+            transformVtx(mtx, &work[0]->vtx[3], &stg_flame_v[3]);
+            transformVtx(mtx, &work[0]->vtx[6], &stg_flame_v[6]);
+            transformVtx(mtx, &work[0]->vtx[7], &stg_flame_v[7]);
+            break;
+        case 1:
+            transformVtx(mtx, &work[0]->vtx[2], &stg_flame_3_v[2]);
+            transformVtx(mtx, &work[0]->vtx[3], &stg_flame_3_v[3]);
+            transformVtx(mtx, &work[0]->vtx[6], &stg_flame_3_v[6]);
+            transformVtx(mtx, &work[0]->vtx[7], &stg_flame_3_v[7]);
+            break;
+        default:
+            transformVtx(mtx, &work[0]->vtx[2], &stg_flame_2_v[2]);
+            transformVtx(mtx, &work[0]->vtx[3], &stg_flame_2_v[3]);
+            transformVtx(mtx, &work[0]->vtx[6], &stg_flame_2_v[6]);
+            transformVtx(mtx, &work[0]->vtx[7], &stg_flame_2_v[7]);
+            break;
     }
     PSMTXTrans(trn, work[0]->position.x, work[0]->position.y, work[0]->position.z);
     if (type == 2) {
@@ -440,24 +440,24 @@ static void effFlameDisp(CameraId cameraId, void* param) {
         PSMTXConcat(mtx, trn, mtx);
     }
     switch (type) {
-    case 0:
-        transformVtx(mtx, &work[0]->vtx[0], &stg_flame_v[0]);
-        transformVtx(mtx, &work[0]->vtx[1], &stg_flame_v[1]);
-        transformVtx(mtx, &work[0]->vtx[4], &stg_flame_v[4]);
-        transformVtx(mtx, &work[0]->vtx[5], &stg_flame_v[5]);
-        break;
-    case 1:
-        transformVtx(mtx, &work[0]->vtx[0], &stg_flame_3_v[0]);
-        transformVtx(mtx, &work[0]->vtx[1], &stg_flame_3_v[1]);
-        transformVtx(mtx, &work[0]->vtx[4], &stg_flame_3_v[4]);
-        transformVtx(mtx, &work[0]->vtx[5], &stg_flame_3_v[5]);
-        break;
-    default:
-        transformVtx(mtx, &work[0]->vtx[0], &stg_flame_2_v[0]);
-        transformVtx(mtx, &work[0]->vtx[1], &stg_flame_2_v[1]);
-        transformVtx(mtx, &work[0]->vtx[4], &stg_flame_2_v[4]);
-        transformVtx(mtx, &work[0]->vtx[5], &stg_flame_2_v[5]);
-        break;
+        case 0:
+            transformVtx(mtx, &work[0]->vtx[0], &stg_flame_v[0]);
+            transformVtx(mtx, &work[0]->vtx[1], &stg_flame_v[1]);
+            transformVtx(mtx, &work[0]->vtx[4], &stg_flame_v[4]);
+            transformVtx(mtx, &work[0]->vtx[5], &stg_flame_v[5]);
+            break;
+        case 1:
+            transformVtx(mtx, &work[0]->vtx[0], &stg_flame_3_v[0]);
+            transformVtx(mtx, &work[0]->vtx[1], &stg_flame_3_v[1]);
+            transformVtx(mtx, &work[0]->vtx[4], &stg_flame_3_v[4]);
+            transformVtx(mtx, &work[0]->vtx[5], &stg_flame_3_v[5]);
+            break;
+        default:
+            transformVtx(mtx, &work[0]->vtx[0], &stg_flame_2_v[0]);
+            transformVtx(mtx, &work[0]->vtx[1], &stg_flame_2_v[1]);
+            transformVtx(mtx, &work[0]->vtx[4], &stg_flame_2_v[4]);
+            transformVtx(mtx, &work[0]->vtx[5], &stg_flame_2_v[5]);
+            break;
     }
     GXInvalidateVtxCache();
     DCFlushRange(work[0]->vtx, sizeof(work[0]->vtx));
@@ -480,14 +480,14 @@ static void effFlameDisp(CameraId cameraId, void* param) {
     PSMTXConcat(scl, trn, trn);
     GXLoadTexMtxImm(trn, GX_TEXMTX1, GX_MTX2x4);
     switch (type) {
-    case 0:
-    case 1:
-        GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
-        break;
-    default:
-        GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        tri2(2, 1, 0, 0, 3, 2, 0, 0);
-        break;
+        case 0:
+        case 1:
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            break;
+        default:
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+            tri2(2, 1, 0, 0, 3, 2, 0, 0);
+            break;
     }
 }

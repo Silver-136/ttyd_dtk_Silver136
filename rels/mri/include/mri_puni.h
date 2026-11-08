@@ -101,9 +101,9 @@ typedef struct PuniWork {
     PuniTarget targets[10];   // 0x374
     s32 allMode;               // 0x43C
     s32 prevAllMode;               // 0x440
-    BOOL showPuniCounter; //0x444
-    BOOL showRemaining; //0x448
-    s32 puniCounterAlpha; //0x44C
+    BOOL showPuniCounter; // 0x444
+    BOOL showRemaining; // 0x448
+    s32 puniCounterAlpha; // 0x44C
     s32 seed0;                // 0x450
     s32 seed1;                // 0x454
     u32 sfx458;               // 0x458

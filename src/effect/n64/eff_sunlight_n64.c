@@ -214,28 +214,28 @@ static void effSunlightDisp(CameraId cameraId, void* payload) {
         PSMTXConcat(scale, trans, scale);
         GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
         switch (i) {
-        case 0:
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 12);
-            tri2(0, 1, 2, 0, 0, 2, 3, 0);
-            tri2(4, 5, 6, 0, 4, 6, 7, 0);
-            break;
-        case 1:
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-            tri2(8, 9, 10, 8, 8, 10, 11, 8);
-            break;
-        case 2:
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-            tri2(12, 13, 14, 12, 12, 14, 15, 12);
-            break;
-        case 3:
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 12);
-            tri2(16, 17, 18, 16, 16, 18, 19, 16);
-            tri2(20, 21, 22, 16, 20, 22, 23, 16);
-            break;
-        case 4:
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-            tri2(24, 25, 26, 24, 24, 26, 27, 24);
-            break;
+            case 0:
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 12);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(4, 5, 6, 0, 4, 6, 7, 0);
+                break;
+            case 1:
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+                tri2(8, 9, 10, 8, 8, 10, 11, 8);
+                break;
+            case 2:
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+                tri2(12, 13, 14, 12, 12, 14, 15, 12);
+                break;
+            case 3:
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 12);
+                tri2(16, 17, 18, 16, 16, 18, 19, 16);
+                tri2(20, 21, 22, 16, 20, 22, 23, 16);
+                break;
+            case 4:
+                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+                tri2(24, 25, 26, 24, 24, 26, 27, 24);
+                break;
         }
     }
     GXSetProjectionv(proj);

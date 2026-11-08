@@ -21,22 +21,22 @@ void battleCameraInit(void) {
     memset(camera, 0, sizeof(BattleCameraWork));
     camera->flags = 0;
     switch (wp->fbatInfo->firstAttack) {
-    case FIRST_ATTACK_JUMP:
-    case FIRST_ATTACK_SPIN_JUMP:
-    case FIRST_ATTACK_JUMP_UNUSED:
-    case FIRST_ATTACK_HAMMER:
-    case FIRST_ATTACK_SPIN_HAMMER:
-    case FIRST_ATTACK_ULTRA_HAMMER:
-    case FIRST_ATTACK_SHELL:
-    case FIRST_ATTACK_BOMB:
-        camera->mode = BTL_CAM_MODE_ENTRY_FIRST_STRIKE;
-        break;
-    case FIRST_ATTACK_ENEMY:
-        camera->mode = BTL_CAM_MODE_ENTRY_ENEMY_FIRST_STRIKE;
-        break;
-    case FIRST_ATTACK_NONE:
-        camera->mode = BTL_CAM_MODE_ENTRY_NORMAL;
-        break;
+        case FIRST_ATTACK_JUMP:
+        case FIRST_ATTACK_SPIN_JUMP:
+        case FIRST_ATTACK_JUMP_UNUSED:
+        case FIRST_ATTACK_HAMMER:
+        case FIRST_ATTACK_SPIN_HAMMER:
+        case FIRST_ATTACK_ULTRA_HAMMER:
+        case FIRST_ATTACK_SHELL:
+        case FIRST_ATTACK_BOMB:
+            camera->mode = BTL_CAM_MODE_ENTRY_FIRST_STRIKE;
+            break;
+        case FIRST_ATTACK_ENEMY:
+            camera->mode = BTL_CAM_MODE_ENTRY_ENEMY_FIRST_STRIKE;
+            break;
+        case FIRST_ATTACK_NONE:
+            camera->mode = BTL_CAM_MODE_ENTRY_NORMAL;
+            break;
     }
     camera->priLimit = 0;
     camera->zoom = 0.0f;
@@ -103,139 +103,139 @@ void battleCameraMain(void) {
     wp->cameraWork.prevAt.y = cam->cameraAt.y;
     wp->cameraWork.prevAt.z = cam->cameraAt.z;
     switch (wp->cameraWork.mode) {
-    case BTL_CAM_MODE_DEFAULT:
-        battleCameraMoveTo(1, 1, 0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\305\202\323\202\247\202\351\202\306");
-        break;
-    case BTL_CAM_MODE_DEFAULT_ZOOM:
-        zz = 0.5f * wp->cameraWork.zoom;
-        battleCameraMoveTo(1, 1, 0.0f, 110.0f, 750.0f - zz, 0.0f, 60.0f, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\305\202\323\202\247\202\351\202\306\203\131\201\133\203\200");
-        break;
-    case BTL_CAM_MODE_CURSOR_UP:
-        battleCameraMoveTo(1, 1, 0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\251\201\133\202\273\202\351\202\252\202\244\202\246\202\311");
+        case BTL_CAM_MODE_DEFAULT:
+            battleCameraMoveTo(1, 1, 0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\305\202\323\202\247\202\351\202\306");
+            break;
+        case BTL_CAM_MODE_DEFAULT_ZOOM:
+            zz = 0.5f * wp->cameraWork.zoom;
+            battleCameraMoveTo(1, 1, 0.0f, 110.0f, 750.0f - zz, 0.0f, 60.0f, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\305\202\323\202\247\202\351\202\306\203\131\201\133\203\200");
+            break;
+        case BTL_CAM_MODE_CURSOR_UP:
+            battleCameraMoveTo(1, 1, 0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\251\201\133\202\273\202\351\202\252\202\244\202\246\202\311");
 
-        // falls through
-    case BTL_CAM_MODE_FREE:
-        if (wp->cameraWork.moveToTimer > 0) {
-            moveLv3 = wp->cameraWork.moveSpeedLv;
-            wp->cameraWork.moveToTimer--;
-            pos.x = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.x, wp->cameraWork.moveToEndPos.x, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
-            pos.y = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.y, wp->cameraWork.moveToEndPos.y, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
-            pos.z = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.z, wp->cameraWork.moveToEndPos.z, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
-            atX = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.x, wp->cameraWork.moveToEndAt.x, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
-            atY = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.y, wp->cameraWork.moveToEndAt.y, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
-            atZ = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.z, wp->cameraWork.moveToEndAt.z, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
-            wp->cameraWork.moveSpeedLv = 3;
-            wp->cameraWork.zoomSpeedLv = 3;
-            battleCameraMoveTo(0, 0, pos.x, pos.y, pos.z, atX, atY, atZ, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-            wp->cameraWork.moveSpeedLv = moveLv3;
-        }
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\323\202\350\201\133");
-        break;
-    case BTL_CAM_MODE_BACKSTAGE:
-        battleCameraMoveTo(1, 1, 0.0f, 110.0f, -750.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\324\202\275\202\242\202\244\202\347");
-        break;
-    case BTL_CAM_MODE_BACKSTAGE_2:
-        battleCameraMoveTo(1, 1, 0.0f, 400.0f, -617.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\324\202\275\202\242\202\244\202\347\202\121");
-        break;
-    case BTL_CAM_MODE_AUDIENCE:
-        switch (pouchGetPtr()->rank) {
-        case 0:
-            zoomZ = 750.0f;
+            // falls through
+        case BTL_CAM_MODE_FREE:
+            if (wp->cameraWork.moveToTimer > 0) {
+                moveLv3 = wp->cameraWork.moveSpeedLv;
+                wp->cameraWork.moveToTimer--;
+                pos.x = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.x, wp->cameraWork.moveToEndPos.x, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+                pos.y = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.y, wp->cameraWork.moveToEndPos.y, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+                pos.z = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.z, wp->cameraWork.moveToEndPos.z, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+                atX = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.x, wp->cameraWork.moveToEndAt.x, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+                atY = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.y, wp->cameraWork.moveToEndAt.y, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+                atZ = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.z, wp->cameraWork.moveToEndAt.z, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+                wp->cameraWork.moveSpeedLv = 3;
+                wp->cameraWork.zoomSpeedLv = 3;
+                battleCameraMoveTo(0, 0, pos.x, pos.y, pos.z, atX, atY, atZ, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+                wp->cameraWork.moveSpeedLv = moveLv3;
+            }
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\323\202\350\201\133");
             break;
-        case 1:
-            zoomZ = 830.0f;
+        case BTL_CAM_MODE_BACKSTAGE:
+            battleCameraMoveTo(1, 1, 0.0f, 110.0f, -750.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\324\202\275\202\242\202\244\202\347");
             break;
-        case 2:
-            zoomZ = 920.0f;
+        case BTL_CAM_MODE_BACKSTAGE_2:
+            battleCameraMoveTo(1, 1, 0.0f, 400.0f, -617.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\324\202\275\202\242\202\244\202\347\202\121");
             break;
-        case 3:
-            zoomZ = 1000.0f;
+        case BTL_CAM_MODE_AUDIENCE:
+            switch (pouchGetPtr()->rank) {
+            case 0:
+                zoomZ = 750.0f;
+                break;
+            case 1:
+                zoomZ = 830.0f;
+                break;
+            case 2:
+                zoomZ = 920.0f;
+                break;
+            case 3:
+                zoomZ = 1000.0f;
+                break;
+            }
+            battleCameraMoveTo(1, 1, 0.0f, 110.0f, zoomZ, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\251\202\361\202\253\202\341\202\255");
             break;
-        }
-        battleCameraMoveTo(1, 1, 0.0f, 110.0f, zoomZ, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\251\202\361\202\253\202\341\202\255");
-        break;
-    case BTL_CAM_MODE_UNIT:
-        unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
-        if (unit2 == NULL) {
-            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
+        case BTL_CAM_MODE_UNIT:
+            unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
+            if (unit2 == NULL) {
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
+                break;
+            }
+            BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
+            BtlUnit_GetPos(unit2, &pos.x, &pos.y, &pos.z);
+            ofs = (BtlUnit_GetHeight(unit2) - 50.0f) / 2.0f;
+            pos.y += ofs;
+            w = BtlUnit_GetWidth(unit2) - 24.0f;
+            if (w < 0.0f) {
+                w = 0.0f;
+            }
+            zz = wp->cameraWork.zoom;
+            zz -= 1.5f * w;
+            ofs = -zz / 9.0f;
+            t = pos.y;
+            y = t;
+            if (t > 100.0f) {
+                t = 100.0f;
+            }
+            if (y < 0.0f) {
+                t = 0.0f;
+            }
+            battleCameraMoveTo(1, 1, pos.x, 110.0f + t + ofs, 750.0f - zz, pos.x, 60.0f + t + ofs, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\344\202\311\202\301\202\306\202\302\202\242\202\321");
             break;
-        }
-        BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
-        BtlUnit_GetPos(unit2, &pos.x, &pos.y, &pos.z);
-        ofs = (BtlUnit_GetHeight(unit2) - 50.0f) / 2.0f;
-        pos.y += ofs;
-        w = BtlUnit_GetWidth(unit2) - 24.0f;
-        if (w < 0.0f) {
-            w = 0.0f;
-        }
-        zz = wp->cameraWork.zoom;
-        zz -= 1.5f * w;
-        ofs = -zz / 9.0f;
-        t = pos.y;
-        y = t;
-        if (t > 100.0f) {
-            t = 100.0f;
-        }
-        if (y < 0.0f) {
-            t = 0.0f;
-        }
-        battleCameraMoveTo(1, 1, pos.x, 110.0f + t + ofs, 750.0f - zz, pos.x, 60.0f + t + ofs, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\344\202\311\202\301\202\306\202\302\202\242\202\321");
-        break;
-    case BTL_CAM_MODE_UNIT_TO_UNIT: {
-        f32 w, w2, d, ofs, t, zz, yy, atX, y;
-        unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
-        unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId2)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
-        if (unit == NULL || unit2 == NULL) {
-            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
+        case BTL_CAM_MODE_UNIT_TO_UNIT: {
+            f32 w, w2, d, ofs, t, zz, yy, atX, y;
+            unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
+            unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId2)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
+            if (unit == NULL || unit2 == NULL) {
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
+                break;
+            }
+            part2 = BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
+            part2->shadowScale = part2->shadowScale; // FAKE: zero-code use; makes this discarded result part2's first web
+            part2 = BattleGetUnitPartsPtr(wp->cameraWork.unitId2, wp->cameraWork.partsId2);
+            BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+            BtlUnit_GetHitPos(unit2, part2, &hit.x, &hit.y, &hit.z);
+            w = BtlUnit_GetWidth(unit) - 24.0f;
+            w2 = BtlUnit_GetWidth(unit2) - 24.0f;
+            if (w < 0.0f) {
+                w = 0.0f;
+            }
+            if (w2 < 0.0f) {
+                w2 = 0.0f;
+            }
+            d = wp->cameraWork.homingOffset2.x - wp->cameraWork.homingOffset.x;
+            yy = hit.x - pos.x;
+            if (d == 0.0f) {
+                t = 0.5f;
+            } else {
+                t = yy / d;
+            }
+            if (t > 1.0f) {
+                t = 1.0f;
+            }
+            if (t < 0.5f) {
+                t = 0.5f;
+            }
+            yy = (wp->cameraWork.homingOffset2.y / 80.0f) * (pos.y - wp->cameraWork.homingOffset2.y);
+            atX = (1.0f - t) * wp->cameraWork.homingOffset2.x;
+            ofs = (1.0f - t) * -(1.5f * (w + w2) - 2.0f * wp->cameraWork.zoom);
+            zz = -ofs / 10.0f;
+            if (yy > 100.0f) {
+                yy = 100.0f;
+            }
+            if (yy < 0.0f) {
+                yy = 0.0f;
+            }
+            y = 20.0 * -(1.0 - t) + yy;
+            battleCameraMoveTo(1, 1, atX, 110.0f + y + zz, 750.0f - ofs, atX, 60.0f + y + zz, -ofs, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
+            strcpy(name, "\202\251\202\337\202\347\201\100\202\121\202\344\202\311\202\301\202\306\202\251\202\361\202\302\202\242\202\321");
             break;
-        }
-        part2 = BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
-        part2->shadowScale = part2->shadowScale; // FAKE: zero-code use; makes this discarded result part2's first web
-        part2 = BattleGetUnitPartsPtr(wp->cameraWork.unitId2, wp->cameraWork.partsId2);
-        BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-        BtlUnit_GetHitPos(unit2, part2, &hit.x, &hit.y, &hit.z);
-        w = BtlUnit_GetWidth(unit) - 24.0f;
-        w2 = BtlUnit_GetWidth(unit2) - 24.0f;
-        if (w < 0.0f) {
-            w = 0.0f;
-        }
-        if (w2 < 0.0f) {
-            w2 = 0.0f;
-        }
-        d = wp->cameraWork.homingOffset2.x - wp->cameraWork.homingOffset.x;
-        yy = hit.x - pos.x;
-        if (d == 0.0f) {
-            t = 0.5f;
-        } else {
-            t = yy / d;
-        }
-        if (t > 1.0f) {
-            t = 1.0f;
-        }
-        if (t < 0.5f) {
-            t = 0.5f;
-        }
-        yy = (wp->cameraWork.homingOffset2.y / 80.0f) * (pos.y - wp->cameraWork.homingOffset2.y);
-        atX = (1.0f - t) * wp->cameraWork.homingOffset2.x;
-        ofs = (1.0f - t) * -(1.5f * (w + w2) - 2.0f * wp->cameraWork.zoom);
-        zz = -ofs / 10.0f;
-        if (yy > 100.0f) {
-            yy = 100.0f;
-        }
-        if (yy < 0.0f) {
-            yy = 0.0f;
-        }
-        y = 20.0 * -(1.0 - t) + yy;
-        battleCameraMoveTo(1, 1, atX, 110.0f + y + zz, 750.0f - ofs, atX, 60.0f + y + zz, -ofs, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
-        strcpy(name, "\202\251\202\337\202\347\201\100\202\121\202\344\202\311\202\301\202\306\202\251\202\361\202\302\202\242\202\321");
-        break;
     }
     case BTL_CAM_MODE_UNIT_MIDPOINT:
         unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
@@ -404,18 +404,18 @@ void battleCameraMain(void) {
         wp->cameraWork.modeFrame++;
         if (wp->cameraWork.modeFrame == 1) {
             switch (pouchGetPtr()->rank) {
-            case 0:
-                zoomZ = 750.0f;
-                break;
-            case 1:
-                zoomZ = 830.0f;
-                break;
-            case 2:
-                zoomZ = 920.0f;
-                break;
-            case 3:
-                zoomZ = 1000.0f;
-                break;
+                case 0:
+                    zoomZ = 750.0f;
+                    break;
+                case 1:
+                    zoomZ = 830.0f;
+                    break;
+                case 2:
+                    zoomZ = 920.0f;
+                    break;
+                case 3:
+                    zoomZ = 1000.0f;
+                    break;
             }
             wp->cameraWork.moveSpeedLv = 3;
             wp->cameraWork.zoomSpeedLv = 3;
@@ -615,126 +615,126 @@ void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 a
         }
     }
     switch (wp->cameraWork.moveSpeedLv) {
-    case 0:
-        *dX = (x - cam->cameraPos.x) / 1.5f;
-        *dY = (y - cam->cameraPos.y) / 1.5f;
-        *dAtX = (atX - cam->cameraAt.x) / 1.5f;
-        *dAtY = (atY - cam->cameraAt.y) / 1.5f;
-        cam->cameraPos.x += *dX;
-        cam->cameraPos.y += *dY;
-        cam->cameraAt.x += *dAtX;
-        cam->cameraAt.y += *dAtY;
-        cam->cameraUp.x = 0.0f;
-        cam->cameraUp.y = 1.0f;
-        cam->cameraUp.z = 0.0f;
-        break;
-    case 1:
-        *dX = (x - cam->cameraPos.x) / 15.0f;
-        *dY = (y - cam->cameraPos.y) / 15.0f;
-        *dAtX = (atX - cam->cameraAt.x) / 15.0f;
-        *dAtY = (atY - cam->cameraAt.y) / 15.0f;
-        cam->cameraPos.x += *dX;
-        cam->cameraPos.y += *dY;
+        case 0:
+            *dX = (x - cam->cameraPos.x) / 1.5f;
+            *dY = (y - cam->cameraPos.y) / 1.5f;
+            *dAtX = (atX - cam->cameraAt.x) / 1.5f;
+            *dAtY = (atY - cam->cameraAt.y) / 1.5f;
+            cam->cameraPos.x += *dX;
+            cam->cameraPos.y += *dY;
+            cam->cameraAt.x += *dAtX;
+            cam->cameraAt.y += *dAtY;
+            cam->cameraUp.x = 0.0f;
+            cam->cameraUp.y = 1.0f;
+            cam->cameraUp.z = 0.0f;
+            break;
+        case 1:
+            *dX = (x - cam->cameraPos.x) / 15.0f;
+            *dY = (y - cam->cameraPos.y) / 15.0f;
+            *dAtX = (atX - cam->cameraAt.x) / 15.0f;
+            *dAtY = (atY - cam->cameraAt.y) / 15.0f;
+            cam->cameraPos.x += *dX;
+            cam->cameraPos.y += *dY;
 
-        // BUG: only this speed level adds *dZ here; *dZ still holds the caller's value (0 on the frame's first call,
-        // the previous step on the shake calls), and the zoom switch below adds the new step again
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.x += *dAtX;
-        cam->cameraAt.y += *dAtY;
-        cam->cameraUp.x = 0.0f;
-        cam->cameraUp.y = 1.0f;
-        cam->cameraUp.z = 0.0f;
-        break;
-    case 2:
-        *dX = (x - cam->cameraPos.x) / 5.0f;
-        *dY = (y - cam->cameraPos.y) / 5.0f;
-        *dAtX = (atX - cam->cameraAt.x) / 5.0f;
-        *dAtY = (atY - cam->cameraAt.y) / 5.0f;
-        cam->cameraPos.x += *dX;
-        cam->cameraPos.y += *dY;
-        cam->cameraAt.x += *dAtX;
-        cam->cameraAt.y += *dAtY;
-        cam->cameraUp.x = 0.0f;
-        cam->cameraUp.y = 1.0f;
-        cam->cameraUp.z = 0.0f;
-        break;
-    case 3:
-        *dX = x - cam->cameraPos.x;
-        *dY = y - cam->cameraPos.y;
-        *dAtX = atX - cam->cameraAt.x;
-        *dAtY = atY - cam->cameraAt.y;
-        cam->cameraPos.x += *dX;
-        cam->cameraPos.y += *dY;
-        cam->cameraAt.x += *dAtX;
-        cam->cameraAt.y += *dAtY;
-        cam->cameraUp.x = 0.0f;
-        cam->cameraUp.y = 1.0f;
-        cam->cameraUp.z = 0.0f;
-        break;
-    case 4:
-        *dX = (x - cam->cameraPos.x) / 200.0f;
-        *dY = (y - cam->cameraPos.y) / 200.0f;
-        *dAtX = (atX - cam->cameraAt.x) / 200.0f;
-        *dAtY = (atY - cam->cameraAt.y) / 200.0f;
-        cam->cameraPos.x += *dX;
-        cam->cameraPos.y += *dY;
-        cam->cameraAt.x += *dAtX;
-        cam->cameraAt.y += *dAtY;
-        cam->cameraUp.x = 0.0f;
-        cam->cameraUp.y = 1.0f;
-        cam->cameraUp.z = 0.0f;
-        break;
-    case 5:
-        *dX = (x - cam->cameraPos.x) / 100.0f;
-        *dY = (y - cam->cameraPos.y) / 100.0f;
-        *dAtX = (atX - cam->cameraAt.x) / 100.0f;
-        *dAtY = (atY - cam->cameraAt.y) / 100.0f;
-        cam->cameraPos.x += *dX;
-        cam->cameraPos.y += *dY;
-        cam->cameraAt.x += *dAtX;
-        cam->cameraAt.y += *dAtY;
-        cam->cameraUp.x = 0.0f;
-        cam->cameraUp.y = 1.0f;
-        cam->cameraUp.z = 0.0f;
-        break;
+            // BUG: only this speed level adds *dZ here; *dZ still holds the caller's value (0 on the frame's first call,
+            // the previous step on the shake calls), and the zoom switch below adds the new step again
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.x += *dAtX;
+            cam->cameraAt.y += *dAtY;
+            cam->cameraUp.x = 0.0f;
+            cam->cameraUp.y = 1.0f;
+            cam->cameraUp.z = 0.0f;
+            break;
+        case 2:
+            *dX = (x - cam->cameraPos.x) / 5.0f;
+            *dY = (y - cam->cameraPos.y) / 5.0f;
+            *dAtX = (atX - cam->cameraAt.x) / 5.0f;
+            *dAtY = (atY - cam->cameraAt.y) / 5.0f;
+            cam->cameraPos.x += *dX;
+            cam->cameraPos.y += *dY;
+            cam->cameraAt.x += *dAtX;
+            cam->cameraAt.y += *dAtY;
+            cam->cameraUp.x = 0.0f;
+            cam->cameraUp.y = 1.0f;
+            cam->cameraUp.z = 0.0f;
+            break;
+        case 3:
+            *dX = x - cam->cameraPos.x;
+            *dY = y - cam->cameraPos.y;
+            *dAtX = atX - cam->cameraAt.x;
+            *dAtY = atY - cam->cameraAt.y;
+            cam->cameraPos.x += *dX;
+            cam->cameraPos.y += *dY;
+            cam->cameraAt.x += *dAtX;
+            cam->cameraAt.y += *dAtY;
+            cam->cameraUp.x = 0.0f;
+            cam->cameraUp.y = 1.0f;
+            cam->cameraUp.z = 0.0f;
+            break;
+        case 4:
+            *dX = (x - cam->cameraPos.x) / 200.0f;
+            *dY = (y - cam->cameraPos.y) / 200.0f;
+            *dAtX = (atX - cam->cameraAt.x) / 200.0f;
+            *dAtY = (atY - cam->cameraAt.y) / 200.0f;
+            cam->cameraPos.x += *dX;
+            cam->cameraPos.y += *dY;
+            cam->cameraAt.x += *dAtX;
+            cam->cameraAt.y += *dAtY;
+            cam->cameraUp.x = 0.0f;
+            cam->cameraUp.y = 1.0f;
+            cam->cameraUp.z = 0.0f;
+            break;
+        case 5:
+            *dX = (x - cam->cameraPos.x) / 100.0f;
+            *dY = (y - cam->cameraPos.y) / 100.0f;
+            *dAtX = (atX - cam->cameraAt.x) / 100.0f;
+            *dAtY = (atY - cam->cameraAt.y) / 100.0f;
+            cam->cameraPos.x += *dX;
+            cam->cameraPos.y += *dY;
+            cam->cameraAt.x += *dAtX;
+            cam->cameraAt.y += *dAtY;
+            cam->cameraUp.x = 0.0f;
+            cam->cameraUp.y = 1.0f;
+            cam->cameraUp.z = 0.0f;
+            break;
     }
     switch (wp->cameraWork.zoomSpeedLv) {
-    case 0:
-        *dZ = (z - cam->cameraPos.z) / 1.5f;
-        *dAtZ = (atZ - cam->cameraAt.z) / 1.5f;
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.z += *dAtZ;
-        break;
-    case 1:
-        *dZ = (z - cam->cameraPos.z) / 15.0f;
-        *dAtZ = (atZ - cam->cameraAt.z) / 15.0f;
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.z += *dAtZ;
-        break;
-    case 2:
-        *dZ = (z - cam->cameraPos.z) / 5.0f;
-        *dAtZ = (atZ - cam->cameraAt.z) / 5.0f;
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.z += *dAtZ;
-        break;
-    case 3:
-        *dZ = z - cam->cameraPos.z;
-        *dAtZ = atZ - cam->cameraAt.z;
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.z += *dAtZ;
-        break;
-    case 4:
-        *dZ = (z - cam->cameraPos.z) / 200.0f;
-        *dAtZ = (atZ - cam->cameraAt.z) / 200.0f;
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.z += *dAtZ;
-        break;
-    case 5:
-        *dZ = (z - cam->cameraPos.z) / 100.0f;
-        *dAtZ = (atZ - cam->cameraAt.z) / 100.0f;
-        cam->cameraPos.z += *dZ;
-        cam->cameraAt.z += *dAtZ;
-        break;
+        case 0:
+            *dZ = (z - cam->cameraPos.z) / 1.5f;
+            *dAtZ = (atZ - cam->cameraAt.z) / 1.5f;
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.z += *dAtZ;
+            break;
+        case 1:
+            *dZ = (z - cam->cameraPos.z) / 15.0f;
+            *dAtZ = (atZ - cam->cameraAt.z) / 15.0f;
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.z += *dAtZ;
+            break;
+        case 2:
+            *dZ = (z - cam->cameraPos.z) / 5.0f;
+            *dAtZ = (atZ - cam->cameraAt.z) / 5.0f;
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.z += *dAtZ;
+            break;
+        case 3:
+            *dZ = z - cam->cameraPos.z;
+            *dAtZ = atZ - cam->cameraAt.z;
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.z += *dAtZ;
+            break;
+        case 4:
+            *dZ = (z - cam->cameraPos.z) / 200.0f;
+            *dAtZ = (atZ - cam->cameraAt.z) / 200.0f;
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.z += *dAtZ;
+            break;
+        case 5:
+            *dZ = (z - cam->cameraPos.z) / 100.0f;
+            *dAtZ = (atZ - cam->cameraAt.z) / 100.0f;
+            cam->cameraPos.z += *dZ;
+            cam->cameraAt.z += *dAtZ;
+            break;
     }
 }
 

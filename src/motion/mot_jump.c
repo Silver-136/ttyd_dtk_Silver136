@@ -90,73 +90,73 @@ void mot_jumpStand(void) {
         mario->multiTimer = 0;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        if (++mario->multiTimer >= 3) {
-            mario->currSubMotionId = 4;
-            mario->jumpVelocityY = marioJumpStandData[0];
-            mario->jumpAccelerationY = marioJumpStandData[1];
-            mario->jumpJerkY = marioJumpStandData[2];
-            mario->jumpSnapY = marioJumpStandData[3];
-            chgPoseB(mario);
-        }
-        break;
-    case 4:
-        prev = mario->jumpVelocityY;
-        marioMakeJumpPara();
-        if (prev >= mario->jumpVelocityY) {
-            mario->currSubMotionId = 6;
-        }
-        mario->position.y += mario->jumpVelocityY;
-        mario->mot.jump.dist += mario->jumpVelocityY;
-        break;
-    case 6:
-        mario->position.y += mario->jumpVelocityY;
-        mario->mot.jump.dist += mario->jumpVelocityY;
-        if (mario->mot.jump.dist >= mario->mot.jump.standHeight * marioJumpStandData[9]) {
-            mario->currSubMotionId = 8;
-        }
-        if (mario->jumpVelocityY <= 0.0f) {
-            mario->currSubMotionId = 8;
-        }
-        break;
-    case 8:
-        mario->jumpVelocityY += (-1.0f - mario->jumpVelocityY) * marioJumpStandData[8];
-        mario->position.y += mario->jumpVelocityY;
-        mario->mot.jump.dist += mario->jumpVelocityY;
-        if (mario->jumpVelocityY <= 0.0f) {
-            mario->currSubMotionId = 10;
-            chgPoseC(mario);
-            marioSetPeakYpos();
-            mario->jumpVelocityY = marioJumpStandData[4];
-            mario->jumpAccelerationY = marioJumpStandData[5];
-            mario->jumpJerkY = marioJumpStandData[6];
-            mario->jumpSnapY = marioJumpStandData[7];
-            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
-            mario->flags |= MARIO_FLAG_IS_FALLING;
-            mario->currSubMotionId = 20;
-        }
-        break;
-    case 10:
-        marioMakeJumpPara();
-        if (mario->jumpVelocityY <= 0.0f) {
-            chgPoseC(mario);
-            marioSetPeakYpos();
-            mario->jumpVelocityY = marioJumpStandData[4];
-            mario->jumpAccelerationY = marioJumpStandData[5];
-            mario->jumpJerkY = marioJumpStandData[6];
-            mario->jumpSnapY = marioJumpStandData[7];
-            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
-            mario->flags |= MARIO_FLAG_IS_FALLING;
-            mario->currSubMotionId = 20;
-        }
-        mario->position.y += mario->jumpVelocityY;
-        break;
-    case 20:
-        if (--mario->multiTimer <= 0) {
-            mario->baseSpeed = 0.0f;
-            mario->currSubMotionId = 30;
-        }
-        break;
+        case 0:
+            if (++mario->multiTimer >= 3) {
+                mario->currSubMotionId = 4;
+                mario->jumpVelocityY = marioJumpStandData[0];
+                mario->jumpAccelerationY = marioJumpStandData[1];
+                mario->jumpJerkY = marioJumpStandData[2];
+                mario->jumpSnapY = marioJumpStandData[3];
+                chgPoseB(mario);
+            }
+            break;
+        case 4:
+            prev = mario->jumpVelocityY;
+            marioMakeJumpPara();
+            if (prev >= mario->jumpVelocityY) {
+                mario->currSubMotionId = 6;
+            }
+            mario->position.y += mario->jumpVelocityY;
+            mario->mot.jump.dist += mario->jumpVelocityY;
+            break;
+        case 6:
+            mario->position.y += mario->jumpVelocityY;
+            mario->mot.jump.dist += mario->jumpVelocityY;
+            if (mario->mot.jump.dist >= mario->mot.jump.standHeight * marioJumpStandData[9]) {
+                mario->currSubMotionId = 8;
+            }
+            if (mario->jumpVelocityY <= 0.0f) {
+                mario->currSubMotionId = 8;
+            }
+            break;
+        case 8:
+            mario->jumpVelocityY += (-1.0f - mario->jumpVelocityY) * marioJumpStandData[8];
+            mario->position.y += mario->jumpVelocityY;
+            mario->mot.jump.dist += mario->jumpVelocityY;
+            if (mario->jumpVelocityY <= 0.0f) {
+                mario->currSubMotionId = 10;
+                chgPoseC(mario);
+                marioSetPeakYpos();
+                mario->jumpVelocityY = marioJumpStandData[4];
+                mario->jumpAccelerationY = marioJumpStandData[5];
+                mario->jumpJerkY = marioJumpStandData[6];
+                mario->jumpSnapY = marioJumpStandData[7];
+                mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+                mario->flags |= MARIO_FLAG_IS_FALLING;
+                mario->currSubMotionId = 20;
+            }
+            break;
+        case 10:
+            marioMakeJumpPara();
+            if (mario->jumpVelocityY <= 0.0f) {
+                chgPoseC(mario);
+                marioSetPeakYpos();
+                mario->jumpVelocityY = marioJumpStandData[4];
+                mario->jumpAccelerationY = marioJumpStandData[5];
+                mario->jumpJerkY = marioJumpStandData[6];
+                mario->jumpSnapY = marioJumpStandData[7];
+                mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+                mario->flags |= MARIO_FLAG_IS_FALLING;
+                mario->currSubMotionId = 20;
+            }
+            mario->position.y += mario->jumpVelocityY;
+            break;
+        case 20:
+            if (--mario->multiTimer <= 0) {
+                mario->baseSpeed = 0.0f;
+                mario->currSubMotionId = 30;
+            }
+            break;
     }
     mario->airTimer++;
     if (marioSlitButton() != 2) {
@@ -219,28 +219,28 @@ void mot_jumpSw(void) {
         mario->currSubMotionId = 0;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        mario->multiTimer = mario->multiTimer - 1;
-        marioMakeJumpPara();
-        if (mario->jumpVelocityY <= 0.0f) {
-            chgPoseC(mario);
-            marioSetPeakYpos();
-            mario->jumpVelocityY = marioJumpSwData[4];
-            mario->jumpAccelerationY = marioJumpSwData[5];
-            mario->jumpJerkY = marioJumpSwData[6];
-            mario->jumpSnapY = marioJumpSwData[7];
-            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
-            mario->flags |= MARIO_FLAG_IS_FALLING;
-            mario->currSubMotionId = 10;
-        }
-        mario->position.y += mario->jumpVelocityY;
-        break;
-    case 10:
-        if (--mario->multiTimer <= 0) {
-            mario->baseSpeed = 0.0f;
-            mario->currSubMotionId = 20;
-        }
-        break;
+        case 0:
+            mario->multiTimer = mario->multiTimer - 1;
+            marioMakeJumpPara();
+            if (mario->jumpVelocityY <= 0.0f) {
+                chgPoseC(mario);
+                marioSetPeakYpos();
+                mario->jumpVelocityY = marioJumpSwData[4];
+                mario->jumpAccelerationY = marioJumpSwData[5];
+                mario->jumpJerkY = marioJumpSwData[6];
+                mario->jumpSnapY = marioJumpSwData[7];
+                mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+                mario->flags |= MARIO_FLAG_IS_FALLING;
+                mario->currSubMotionId = 10;
+            }
+            mario->position.y += mario->jumpVelocityY;
+            break;
+        case 10:
+            if (--mario->multiTimer <= 0) {
+                mario->baseSpeed = 0.0f;
+                mario->currSubMotionId = 20;
+            }
+            break;
     }
     mario->airTimer++;
 }
@@ -321,28 +321,28 @@ void mot_jumpNpc(void) {
         mario->currSubMotionId = 0;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        mario->multiTimer = mario->multiTimer - 1;
-        marioMakeJumpPara();
-        if (mario->jumpVelocityY <= 0.0f) {
-            chgPoseC(mario);
-            marioSetPeakYpos();
-            mario->jumpVelocityY = -0.03f;
-            mario->jumpAccelerationY = -0.02f;
-            mario->jumpJerkY = 0.04f;
-            mario->jumpSnapY = 0.0f;
-            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
-            mario->flags |= MARIO_FLAG_IS_FALLING;
-            mario->currSubMotionId = 20;
-        }
-        mario->position.y += mario->jumpVelocityY;
-        break;
-    case 20:
-        if (--mario->multiTimer <= 0) {
-            mario->baseSpeed = 0.0f;
-            mario->currSubMotionId = 30;
-        }
-        break;
+        case 0:
+            mario->multiTimer = mario->multiTimer - 1;
+            marioMakeJumpPara();
+            if (mario->jumpVelocityY <= 0.0f) {
+                chgPoseC(mario);
+                marioSetPeakYpos();
+                mario->jumpVelocityY = -0.03f;
+                mario->jumpAccelerationY = -0.02f;
+                mario->jumpJerkY = 0.04f;
+                mario->jumpSnapY = 0.0f;
+                mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+                mario->flags |= MARIO_FLAG_IS_FALLING;
+                mario->currSubMotionId = 20;
+            }
+            mario->position.y += mario->jumpVelocityY;
+            break;
+        case 20:
+            if (--mario->multiTimer <= 0) {
+                mario->baseSpeed = 0.0f;
+                mario->currSubMotionId = 30;
+            }
+            break;
     }
     mario->airTimer++;
 }
@@ -412,12 +412,12 @@ void mot_jump(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        if (--mario->multiTimer <= 0) {
-            chgPoseB(mario);
-            mario->currSubMotionId = 10;
-        }
-        break;
+        case 0:
+            if (--mario->multiTimer <= 0) {
+                chgPoseB(mario);
+                mario->currSubMotionId = 10;
+            }
+            break;
     }
     mario->airTimer++;
 }
@@ -450,12 +450,12 @@ void mot_jumpSmall(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        if (--mario->multiTimer <= 0) {
-            chgPoseB(mario);
-            mario->currSubMotionId = 10;
-        }
-        break;
+        case 0:
+            if (--mario->multiTimer <= 0) {
+                chgPoseB(mario);
+                mario->currSubMotionId = 10;
+            }
+            break;
     }
     mario->airTimer++;
 }
@@ -476,25 +476,25 @@ void mot_upstairs(void) {
         mario->currSubMotionId = 0;
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        mario->position.y = mario->position.y + mario->jumpVelocityY;
-        if (--mario->multiTimer <= 0) {
-            mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-            mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
-            mario->flags &= ~MARIO_FLAG_IS_STEPPING;
-            if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-                motSlitContinue();
-            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+        case 0:
+            mario->position.y = mario->position.y + mario->jumpVelocityY;
+            if (--mario->multiTimer <= 0) {
+                mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+                mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
+                mario->flags &= ~MARIO_FLAG_IS_STEPPING;
+                if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+                    motSlitContinue();
+                } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
 #if VERSION <= VERSION_DEMO_JP
-                motSlitContinue2();
+                    motSlitContinue2();
 #else
-                marioChgMot2(MARIO_MOTION_SLIT);
+                    marioChgMot2(MARIO_MOTION_SLIT);
 #endif
-            } else {
-                marioChgMotAuto();
+                } else {
+                    marioChgMotAuto();
+                }
             }
-        }
-        break;
+            break;
     }
 }
 
@@ -532,14 +532,14 @@ void mot_fall(void) {
         }
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        if (mario->position.y <= mario->lastGroundPos.y) {
-            if (!marioBgmodeChk()) {
-                camFollowYOn();
+        case 0:
+            if (mario->position.y <= mario->lastGroundPos.y) {
+                if (!marioBgmodeChk()) {
+                    camFollowYOn();
+                }
+                mario->currSubMotionId = 10;
             }
-            mario->currSubMotionId = 10;
-        }
-        break;
+            break;
     }
     mario->airTimer++;
 #if VERSION >= VERSION_US
@@ -596,18 +596,18 @@ void mot_land(void) {
         }
     }
     switch (mario->currSubMotionId) {
-    case 0:
-        marioChgMot(MARIO_MOTION_STAY);
-        break;
-    case 1:
-        if (--mario->multiTimer <= 0) {
+        case 0:
             marioChgMot(MARIO_MOTION_STAY);
-        }
-        break;
-    case 10:
-        if (--mario->multiTimer <= 0) {
-            marioChgMot(MARIO_MOTION_STAY);
-        }
-        break;
+            break;
+        case 1:
+            if (--mario->multiTimer <= 0) {
+                marioChgMot(MARIO_MOTION_STAY);
+            }
+            break;
+        case 10:
+            if (--mario->multiTimer <= 0) {
+                marioChgMot(MARIO_MOTION_STAY);
+            }
+            break;
     }
 }

@@ -175,137 +175,137 @@ static void effDogabonAttackMain(EffectEntry* effect) {
         ty = work->ty[i];
         tz = work->tz[i];
         switch (work->state[i]) {
-        case 0:
-            work->x[i] = tx;
-            work->y[i] = ty;
-            work->z[i] = tz;
-            if (work->delay[i] != 0) {
-                work->delay[i]--;
-            } else {
-                work->state[i] = 1;
+            case 0:
+                work->x[i] = tx;
+                work->y[i] = ty;
+                work->z[i] = tz;
+                if (work->delay[i] != 0) {
+                    work->delay[i]--;
+                } else {
+                    work->state[i] = 1;
+                    s = 0.01f * scale_data_2[work->timer[i]];
+                    work->scaleY[i] = s;
+                    work->scaleX[i] = s;
+                    work->timer[i]++;
+                }
+                break;
+            case 1:
                 s = 0.01f * scale_data_2[work->timer[i]];
                 work->scaleY[i] = s;
                 work->scaleX[i] = s;
                 work->timer[i]++;
-            }
-            break;
-        case 1:
-            s = 0.01f * scale_data_2[work->timer[i]];
-            work->scaleY[i] = s;
-            work->scaleX[i] = s;
-            work->timer[i]++;
-            if (work->timer[i] >= 8) {
-                if (type == 0) {
-                    work->state[i] = 2;
-                } else {
-                    work->state[i] = 20;
+                if (work->timer[i] >= 8) {
+                    if (type == 0) {
+                        work->state[i] = 2;
+                    } else {
+                        work->state[i] = 20;
+                    }
+                    work->timer[i] = 0;
                 }
-                work->timer[i] = 0;
-            }
-            break;
-        case 20:
-            t = 0.01f * move_data_hazure[work->timer[i]];
-            work->x[i] = t * (work->sx0[i] - tx) + tx;
-            work->y[i] = t * (work->sy0[i] - ty) + ty;
-            work->z[i] = t * (work->sz0[i] - tz) + tz;
-            work->scaleY[i] = 1.0f;
-            work->scaleX[i] = 1.0f;
-            work->timer[i]++;
-            if (work->timer[i] >= 20) {
-                work->state[i] = 5;
-                work->timer[i] = 0;
-                work->vx[i] = 0.5f * work->sx0[i];
-                work->vy[i] = 0.5f * work->sy0[i];
-                work->vz[i] = 0.5f * work->sz0[i];
-            }
-            break;
-        case 2:
-            t = 0.01f * move_data_1[work->timer[i]];
-            work->x[i] = t * (work->sx0[i] - tx) + tx;
-            work->y[i] = t * (work->sy0[i] - ty) + ty;
-            work->z[i] = t * (work->sz0[i] - tz) + tz;
-            work->scaleY[i] = 1.0f;
-            work->scaleX[i] = 1.0f;
-            work->timer[i]++;
-            if (work->timer[i] >= 15) {
-                work->state[i] = 3;
-                work->timer[i] = 0;
-            }
-            break;
-        case 3:
-            if (i == PIECES - 1) {
-                work->state[0] = 4;
-                work->state[1] = 4;
-                work->state[2] = 4;
-                work->state[3] = 4;
-                work->state[4] = 4;
-                work->state[5] = 4;
-                work->state[6] = 4;
-                work->state[7] = 4;
-                work->state[8] = 4;
-                work->state[9] = 4;
-                work->state[10] = 4;
-                work->state[11] = 4;
-                work->state[12] = 4;
-                work->state[13] = 4;
-                work->state[14] = 4;
-                work->state[15] = 4;
-                work->state[16] = 4;
-                work->state[17] = 4;
-                work->state[18] = 4;
-                work->state[19] = 4;
-                work->state[20] = 4;
-                work->state[21] = 4;
-                work->state[22] = 4;
-                work->state[23] = 4;
-                work->state[24] = 4;
-            }
-            break;
-        case 4:
-            moveScale = 0.01f * move_data_2[work->timer[i]];
-            c1 = cos(6.2831855f * (f32)(i * 180 / PIECES) / 360.0f);
-            ang = 6.2831855f * ((f32)(i * 1080 / PIECES) + 0.5f * (1080.0f * (1.0f - moveScale)) * c1) / 360.0f;
-            sn = sin(ang);
-            cn = cos(ang);
-            t = 15.0f / moveScale / moveScale;
-            work->x[i] = sn * t;
-            work->y[i] = y_data[i] + 10;
-            work->z[i] = cn * t;
-            work->timer[i]++;
-            if (work->timer[i] >= 70) {
-                work->state[i] = 5;
-                work->timer[i] = 0;
-                work->vx[i] = 0.5f * work->sx0[i];
-                work->vy[i] = 0.5f * work->sy0[i];
-                work->vz[i] = 0.5f * work->sz0[i];
-            }
-            break;
-        case 5:
-            work->x[i] += work->vx[i];
-            work->y[i] += work->vy[i];
-            work->z[i] += work->vz[i];
-            work->vx[i] *= 0.99f;
-            work->vy[i] *= 0.99f;
-            work->vz[i] *= 0.99f;
-            work->vy[i] += -0.1f;
-            work->timer[i]++;
-            if (work->timer[i] > 16) {
-                work->timer[i] = 0;
-                work->state[i] = 6;
-            }
-            work->rotZ[i] *= 0.9f;
-            break;
-        case 6:
-            PSMTXRotRad(rot, 'y', 0.017453292f * work->rotY[i]);
-            PSMTXTrans(trans, work->x[i], work->y[i], work->z[i]);
-            PSMTXConcat(rot, trans, trans);
-            smoke = effStoneSmokeN64Entry(0, 16, work->position.x + trans[0][3], work->position.y + trans[1][3],
-                                          work->position.z + trans[2][3], 1.0f);
-            ((EffStoneSmokeN64Work*)smoke->userdata)->r2 = 100;
-            ((EffStoneSmokeN64Work*)smoke->userdata)->g2 = 0;
-            ((EffStoneSmokeN64Work*)smoke->userdata)->b2 = 0;
-            work->state[i] = 7;
-            break;
+                break;
+            case 20:
+                t = 0.01f * move_data_hazure[work->timer[i]];
+                work->x[i] = t * (work->sx0[i] - tx) + tx;
+                work->y[i] = t * (work->sy0[i] - ty) + ty;
+                work->z[i] = t * (work->sz0[i] - tz) + tz;
+                work->scaleY[i] = 1.0f;
+                work->scaleX[i] = 1.0f;
+                work->timer[i]++;
+                if (work->timer[i] >= 20) {
+                    work->state[i] = 5;
+                    work->timer[i] = 0;
+                    work->vx[i] = 0.5f * work->sx0[i];
+                    work->vy[i] = 0.5f * work->sy0[i];
+                    work->vz[i] = 0.5f * work->sz0[i];
+                }
+                break;
+            case 2:
+                t = 0.01f * move_data_1[work->timer[i]];
+                work->x[i] = t * (work->sx0[i] - tx) + tx;
+                work->y[i] = t * (work->sy0[i] - ty) + ty;
+                work->z[i] = t * (work->sz0[i] - tz) + tz;
+                work->scaleY[i] = 1.0f;
+                work->scaleX[i] = 1.0f;
+                work->timer[i]++;
+                if (work->timer[i] >= 15) {
+                    work->state[i] = 3;
+                    work->timer[i] = 0;
+                }
+                break;
+            case 3:
+                if (i == PIECES - 1) {
+                    work->state[0] = 4;
+                    work->state[1] = 4;
+                    work->state[2] = 4;
+                    work->state[3] = 4;
+                    work->state[4] = 4;
+                    work->state[5] = 4;
+                    work->state[6] = 4;
+                    work->state[7] = 4;
+                    work->state[8] = 4;
+                    work->state[9] = 4;
+                    work->state[10] = 4;
+                    work->state[11] = 4;
+                    work->state[12] = 4;
+                    work->state[13] = 4;
+                    work->state[14] = 4;
+                    work->state[15] = 4;
+                    work->state[16] = 4;
+                    work->state[17] = 4;
+                    work->state[18] = 4;
+                    work->state[19] = 4;
+                    work->state[20] = 4;
+                    work->state[21] = 4;
+                    work->state[22] = 4;
+                    work->state[23] = 4;
+                    work->state[24] = 4;
+                }
+                break;
+            case 4:
+                moveScale = 0.01f * move_data_2[work->timer[i]];
+                c1 = cos(6.2831855f * (f32)(i * 180 / PIECES) / 360.0f);
+                ang = 6.2831855f * ((f32)(i * 1080 / PIECES) + 0.5f * (1080.0f * (1.0f - moveScale)) * c1) / 360.0f;
+                sn = sin(ang);
+                cn = cos(ang);
+                t = 15.0f / moveScale / moveScale;
+                work->x[i] = sn * t;
+                work->y[i] = y_data[i] + 10;
+                work->z[i] = cn * t;
+                work->timer[i]++;
+                if (work->timer[i] >= 70) {
+                    work->state[i] = 5;
+                    work->timer[i] = 0;
+                    work->vx[i] = 0.5f * work->sx0[i];
+                    work->vy[i] = 0.5f * work->sy0[i];
+                    work->vz[i] = 0.5f * work->sz0[i];
+                }
+                break;
+            case 5:
+                work->x[i] += work->vx[i];
+                work->y[i] += work->vy[i];
+                work->z[i] += work->vz[i];
+                work->vx[i] *= 0.99f;
+                work->vy[i] *= 0.99f;
+                work->vz[i] *= 0.99f;
+                work->vy[i] += -0.1f;
+                work->timer[i]++;
+                if (work->timer[i] > 16) {
+                    work->timer[i] = 0;
+                    work->state[i] = 6;
+                }
+                work->rotZ[i] *= 0.9f;
+                break;
+            case 6:
+                PSMTXRotRad(rot, 'y', 0.017453292f * work->rotY[i]);
+                PSMTXTrans(trans, work->x[i], work->y[i], work->z[i]);
+                PSMTXConcat(rot, trans, trans);
+                smoke = effStoneSmokeN64Entry(0, 16, work->position.x + trans[0][3], work->position.y + trans[1][3],
+                                              work->position.z + trans[2][3], 1.0f);
+                ((EffStoneSmokeN64Work*)smoke->userdata)->r2 = 100;
+                ((EffStoneSmokeN64Work*)smoke->userdata)->g2 = 0;
+                ((EffStoneSmokeN64Work*)smoke->userdata)->b2 = 0;
+                work->state[i] = 7;
+                break;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, effDogabonAttackDisp, effect);

@@ -173,5 +173,5 @@ s32 BattleRunWaitEvent(BattleUnit* unit) {
         evt->unitId = unit->unitId;
         unit->waitEventId = evt->eventId;
     }
-    return 0; //unused
+    return 0; // unused
 }

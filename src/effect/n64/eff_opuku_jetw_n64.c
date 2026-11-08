@@ -245,16 +245,16 @@ static void effOpukuJetwDisp(CameraId cameraId, void* payload) {
     g = work->colorG;
     b = work->colorB;
     switch (work->type) {
-    case 0:
-        tbl = adata;
-        n = 20;
-        m = 3;
-        break;
-    default:
-        tbl = a2data.e;
-        n = 11;
-        m = 3;
-        break;
+        case 0:
+            tbl = adata;
+            n = 20;
+            m = 3;
+            break;
+        default:
+            tbl = a2data.e;
+            n = 11;
+            m = 3;
+            break;
     }
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);

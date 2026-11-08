@@ -147,57 +147,57 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
         work->alpha = 255;
         st = work->state;
         switch (st) {
-        case 0:
-            work->x = 0.0f;
-            work->delay = (i - 1) * gp->framerate;
-            work->y = 0.0f;
-            work->z = 0.0f;
-            work->scaleY = 0.0f;
-            work->scaleX = 0.0f;
-            work->rotA = 0.0f;
-            work->pad2c = 0;
-            work->alpha = 0;
-            break;
-        case 30:
-        case 40:
-            if (st == 40) {
-                work->x = 26.0f * (f32)(i - 1) - 26.0f * (f32)(effect->count - 1) / 2.0f;
-                work->delay = (i - 1) * 10;
-                work->state = 50;
-            } else {
+            case 0:
                 work->x = 0.0f;
                 work->delay = (i - 1) * gp->framerate;
-            }
-            work->y = 500.0f;
-            work->z = 0.0f;
-            work->scaleY = 1.0f;
-            work->scaleX = 1.0f;
-            work->rotA = 0.0f;
-            work->pad2c = 0;
-            work->vel = 0.0f;
-            work->acc = 1.0f;
-            break;
-        case 10:
-        case 20:
-            work->x = 1000.0f;
-            work->y = 0.0f;
-            work->z = 0.0f;
-            work->scaleY = 1.0f;
-            work->scaleX = 1.0f;
-            work->rotA = 0.0f;
-            if (work->state == 10) {
-                work->delay = (i - 1) * 10;
-            } else {
-                work->delay = gp->framerate * 3;
+                work->y = 0.0f;
+                work->z = 0.0f;
                 work->scaleY = 0.0f;
                 work->scaleX = 0.0f;
-                work->x = 26.0f * (f32)(i - 3) - 26.0f * (f32)(effect->count - 3) / 2.0f;
+                work->rotA = 0.0f;
+                work->pad2c = 0;
                 work->alpha = 0;
-            }
-            work->pad2c = 0;
-            work->vel = 0.0f;
-            work->acc = 1.0f;
-            break;
+                break;
+            case 30:
+            case 40:
+                if (st == 40) {
+                    work->x = 26.0f * (f32)(i - 1) - 26.0f * (f32)(effect->count - 1) / 2.0f;
+                    work->delay = (i - 1) * 10;
+                    work->state = 50;
+                } else {
+                    work->x = 0.0f;
+                    work->delay = (i - 1) * gp->framerate;
+                }
+                work->y = 500.0f;
+                work->z = 0.0f;
+                work->scaleY = 1.0f;
+                work->scaleX = 1.0f;
+                work->rotA = 0.0f;
+                work->pad2c = 0;
+                work->vel = 0.0f;
+                work->acc = 1.0f;
+                break;
+            case 10:
+            case 20:
+                work->x = 1000.0f;
+                work->y = 0.0f;
+                work->z = 0.0f;
+                work->scaleY = 1.0f;
+                work->scaleX = 1.0f;
+                work->rotA = 0.0f;
+                if (work->state == 10) {
+                    work->delay = (i - 1) * 10;
+                } else {
+                    work->delay = gp->framerate * 3;
+                    work->scaleY = 0.0f;
+                    work->scaleX = 0.0f;
+                    work->x = 26.0f * (f32)(i - 3) - 26.0f * (f32)(effect->count - 3) / 2.0f;
+                    work->alpha = 0;
+                }
+                work->pad2c = 0;
+                work->vel = 0.0f;
+                work->acc = 1.0f;
+                break;
         }
     }
     return effect;
@@ -223,226 +223,226 @@ static void effMiniGameMain(EffectEntry* effect) {
     n = 0;
     for (i = 1, work++; i < effect->count; i++, work++) {
         switch (work->state) {
-        case 0:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_COUNT1));
-            }
-            break;
-        case 1:
-            work->scaleX += (1.0f - work->scaleX) / 4.0f;
-            work->scaleY += (1.0f - work->scaleY) / 4.0f;
-            work->alpha += (s32)((f32)(255 - work->alpha) / 4.0f);
-            if (work->alpha > 250) {
-                work->alpha = 255;
-                work->state++;
-            }
-            break;
-        case 2:
-            work->delay = (s32)(0.7f * (f32)gp->framerate);
-            work->state++;
-            break;
-        case 3:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 4:
-            work->scaleX += (10.0f - work->scaleX) / 4.0f;
-            work->scaleY += (10.0f - work->scaleY) / 4.0f;
-            work->alpha += (s32)((f32)(-work->alpha) / 4.0f);
-            if (work->alpha < 5) {
-                work->alpha = 0;
-                work->state++;
-            }
-            break;
-        case 5:
-            n++;
-            break;
-        case 10:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 11:
-            work->x += work->vel;
-            work->vel -= work->acc;
-            if (work->x < 26.0f * (f32)(i - 1) - 26.0f * (f32)(effect->count - 1) / 2.0f) {
-                work->x = 26.0f * (f32)(i - 1) - 26.0f * (f32)(effect->count - 1) / 2.0f;
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 12:
-            // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
-            if ((u32)work->delay < 20) {
-                work->scaleX = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
-                work->scaleY = (f32)poyon_scale[work->delay * 2] / 100.0f;
-                work->delay++;
-            } else {
-                work->acc = 2.0f;
-                work->vel = 0.0f;
-                work->delay = 120;
-                work->state++;
-            }
-            break;
-        case 13:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 14:
-            work->x += work->vel;
-            work->vel -= work->acc;
-            if (work->x < -1000.0f) {
-                work->state++;
-            }
-            break;
-        case 15:
-            n++;
-            break;
-        case 20:
-            if (work->delay == 0) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_START1));
-            }
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 21:
-            work->scaleX += (1.0f - work->scaleX) / 4.0f;
-            work->scaleY += (1.0f - work->scaleY) / 4.0f;
-            work->alpha += (s32)((f32)(255 - work->alpha) / 4.0f);
-            if (work->alpha > 250) {
-                work->alpha = 255;
-                work->state++;
-            }
-            break;
-        case 22:
-            work->delay = 60;
-            work->state++;
-            break;
-        case 23:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 24:
-            work->x += work->vel;
-            work->vel -= work->acc;
-            if (work->x < -1000.0f) {
-                work->state++;
-            }
-            break;
-        case 25:
-            n++;
-            break;
-        case 30:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 31:
-            work->y += work->vel;
-            work->vel -= work->acc;
-            if (work->y < 0.0f) {
-                work->y = 0.0f;
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 32:
-            // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
-            if ((u32)work->delay < 20) {
-                work->scaleX = (f32)poyon_scale[work->delay * 2] / 100.0f;
-                work->scaleY = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
-                work->delay++;
-            } else {
-                work->acc = 1.0f;
-                work->vel = 0.0f;
+            case 0:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_COUNT1));
+                }
+                break;
+            case 1:
+                work->scaleX += (1.0f - work->scaleX) / 4.0f;
+                work->scaleY += (1.0f - work->scaleY) / 4.0f;
+                work->alpha += (s32)((f32)(255 - work->alpha) / 4.0f);
+                if (work->alpha > 250) {
+                    work->alpha = 255;
+                    work->state++;
+                }
+                break;
+            case 2:
                 work->delay = (s32)(0.7f * (f32)gp->framerate);
                 work->state++;
-            }
-            break;
-        case 33:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
+                break;
+            case 3:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 4:
+                work->scaleX += (10.0f - work->scaleX) / 4.0f;
+                work->scaleY += (10.0f - work->scaleY) / 4.0f;
+                work->alpha += (s32)((f32)(-work->alpha) / 4.0f);
+                if (work->alpha < 5) {
+                    work->alpha = 0;
+                    work->state++;
+                }
+                break;
+            case 5:
+                n++;
+                break;
+            case 10:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 11:
+                work->x += work->vel;
+                work->vel -= work->acc;
+                if (work->x < 26.0f * (f32)(i - 1) - 26.0f * (f32)(effect->count - 1) / 2.0f) {
+                    work->x = 26.0f * (f32)(i - 1) - 26.0f * (f32)(effect->count - 1) / 2.0f;
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 12:
+                // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
+                if ((u32)work->delay < 20) {
+                    work->scaleX = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
+                    work->scaleY = (f32)poyon_scale[work->delay * 2] / 100.0f;
+                    work->delay++;
+                } else {
+                    work->acc = 2.0f;
+                    work->vel = 0.0f;
+                    work->delay = 120;
+                    work->state++;
+                }
+                break;
+            case 13:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 14:
+                work->x += work->vel;
+                work->vel -= work->acc;
+                if (work->x < -1000.0f) {
+                    work->state++;
+                }
+                break;
+            case 15:
+                n++;
+                break;
+            case 20:
+                if (work->delay == 0) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_START1));
+                }
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 21:
+                work->scaleX += (1.0f - work->scaleX) / 4.0f;
+                work->scaleY += (1.0f - work->scaleY) / 4.0f;
+                work->alpha += (s32)((f32)(255 - work->alpha) / 4.0f);
+                if (work->alpha > 250) {
+                    work->alpha = 255;
+                    work->state++;
+                }
+                break;
+            case 22:
+                work->delay = 60;
                 work->state++;
-            }
-            break;
-        case 34:
-            work->x -= 10.0f;
-            work->y += 10.0f;
-            work->rotB += 30.0f;
-            if (work->y > 300.0f) {
-                work->state++;
-            }
-            break;
-        case 35:
-            n++;
-            break;
-        case 50:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 51:
-            work->y += work->vel;
-            work->vel -= work->acc;
-            if (work->y < 0.0f) {
-                work->y = 0.0f;
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 52:
-            // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
-            if ((u32)work->delay < 20) {
-                work->scaleX = (f32)poyon_scale[work->delay * 2] / 100.0f;
-                work->scaleY = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
-                work->delay++;
-            } else {
-                work->acc = 1.0f;
-                work->vel = 0.0f;
-                work->delay = (s32)(0.7f * (f32)gp->framerate);
-                work->state++;
-            }
-            break;
-        case 53:
-            work->delay--;
-            if (work->delay < 0) {
-                work->delay = 0;
-                work->state++;
-            }
-            break;
-        case 54:
-            work->y += work->vel;
-            work->vel -= work->acc;
-            work->rotA += 3.0f;
-            if (work->y < -500.0f) {
-                work->state++;
-            }
-            break;
-        case 55:
-            n++;
-            break;
+                break;
+            case 23:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 24:
+                work->x += work->vel;
+                work->vel -= work->acc;
+                if (work->x < -1000.0f) {
+                    work->state++;
+                }
+                break;
+            case 25:
+                n++;
+                break;
+            case 30:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 31:
+                work->y += work->vel;
+                work->vel -= work->acc;
+                if (work->y < 0.0f) {
+                    work->y = 0.0f;
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 32:
+                // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
+                if ((u32)work->delay < 20) {
+                    work->scaleX = (f32)poyon_scale[work->delay * 2] / 100.0f;
+                    work->scaleY = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
+                    work->delay++;
+                } else {
+                    work->acc = 1.0f;
+                    work->vel = 0.0f;
+                    work->delay = (s32)(0.7f * (f32)gp->framerate);
+                    work->state++;
+                }
+                break;
+            case 33:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 34:
+                work->x -= 10.0f;
+                work->y += 10.0f;
+                work->rotB += 30.0f;
+                if (work->y > 300.0f) {
+                    work->state++;
+                }
+                break;
+            case 35:
+                n++;
+                break;
+            case 50:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 51:
+                work->y += work->vel;
+                work->vel -= work->acc;
+                if (work->y < 0.0f) {
+                    work->y = 0.0f;
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 52:
+                // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
+                if ((u32)work->delay < 20) {
+                    work->scaleX = (f32)poyon_scale[work->delay * 2] / 100.0f;
+                    work->scaleY = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
+                    work->delay++;
+                } else {
+                    work->acc = 1.0f;
+                    work->vel = 0.0f;
+                    work->delay = (s32)(0.7f * (f32)gp->framerate);
+                    work->state++;
+                }
+                break;
+            case 53:
+                work->delay--;
+                if (work->delay < 0) {
+                    work->delay = 0;
+                    work->state++;
+                }
+                break;
+            case 54:
+                work->y += work->vel;
+                work->vel -= work->acc;
+                work->rotA += 3.0f;
+                if (work->y < -500.0f) {
+                    work->state++;
+                }
+                break;
+            case 55:
+                n++;
+                break;
         }
     }
     if (n >= effect->count - 1) {

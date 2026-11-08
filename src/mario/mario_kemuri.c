@@ -262,26 +262,26 @@ static void kemuri(void) {
         sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);
         sincosf(&s, &c, toMovedirSimple(180.0f + (kpaGetStageViewType() == KPA_VIEW_SIDE ? mario->displayDirectionTarget : mario->displayDirection)));
         switch (kpaGetLevel()) {
-        case 0:
-            ct = 4;
-            dist = 10.0f;
-            scale = 0.5f;
-            break;
-        case 1:
-            ct = 7;
-            dist = 15.0f;
-            scale = 1.0f;
-            break;
-        case 2:
-            ct = 10;
-            dist = 20.0f;
-            scale = 2.0f;
-            break;
-        case 3:
-            ct = 10;
-            dist = 50.0f;
-            scale = 4.0f;
-            break;
+            case 0:
+                ct = 4;
+                dist = 10.0f;
+                scale = 0.5f;
+                break;
+            case 1:
+                ct = 7;
+                dist = 15.0f;
+                scale = 1.0f;
+                break;
+            case 2:
+                ct = 10;
+                dist = 20.0f;
+                scale = 2.0f;
+                break;
+            case 3:
+                ct = 10;
+                dist = 50.0f;
+                scale = 4.0f;
+                break;
         }
         x = mario->position.x + dist * s;
         y = 1.5f + mario->position.y;

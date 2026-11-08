@@ -527,69 +527,69 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
                     w[id] = 1;
                 }
                 switch (d->weapon->itemId) {
-                case ITEM_NULL:
-                    break;
-                case ITEM_POWER_PUNCH:
-                    if (!BtlUnit_CanActStatus(unit) || BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_MINI_MR_MINI:
-                    if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_MR_SOFTENER:
-                    if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_COURAGE_SHELL:
-                    if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_BOOS_SHEET:
-                    if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_VOLT_SHROOM:
-                    if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_REPEL_CAPE:
-                    if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_RUIN_POWDER:
-                    if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
-                        w[id] = 1;
-                    }
-                    break;
-                case ITEM_TASTY_TONIC:
-                    if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) && !BtlUnit_CheckStatus(unit, STATUS_STOP)
-                        && !BtlUnit_CheckStatus(unit, STATUS_DIZZY) && !BtlUnit_CheckStatus(unit, STATUS_POISON)
-                        && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && !BtlUnit_CheckStatus(unit, STATUS_BURN)
-                        && !BtlUnit_CheckStatus(unit, STATUS_FREEZE) && !BtlUnit_CheckStatus(unit, STATUS_TINY)
-                        && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN) && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
-                        w[id] = 1;
-                    }
-                    break;
-                default:
-                    if (itemDataTable[d->weapon->itemId].fp_restored) {
-                        s32 mx = BtlUnit_GetMaxFp(unit);
-                        if (BtlUnit_GetFp(unit) < mx) {
-                            mx = BtlUnit_GetMaxFp(unit);
-                            w[id] = w[id] * (1.0f + 0.1f * (mx - BtlUnit_GetFp(unit)));
-                        } else if (!itemDataTable[d->weapon->itemId].hp_restored
-                                   && !itemDataTable[d->weapon->itemId].sp_restored) {
+                    case ITEM_NULL:
+                        break;
+                    case ITEM_POWER_PUNCH:
+                        if (!BtlUnit_CanActStatus(unit) || BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
                             w[id] = 1;
                         }
-                    }
-                    break;
+                        break;
+                    case ITEM_MINI_MR_MINI:
+                        if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_MR_SOFTENER:
+                        if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_COURAGE_SHELL:
+                        if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_BOOS_SHEET:
+                        if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_VOLT_SHROOM:
+                        if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_REPEL_CAPE:
+                        if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_RUIN_POWDER:
+                        if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    case ITEM_TASTY_TONIC:
+                        if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) && !BtlUnit_CheckStatus(unit, STATUS_STOP)
+                            && !BtlUnit_CheckStatus(unit, STATUS_DIZZY) && !BtlUnit_CheckStatus(unit, STATUS_POISON)
+                            && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && !BtlUnit_CheckStatus(unit, STATUS_BURN)
+                            && !BtlUnit_CheckStatus(unit, STATUS_FREEZE) && !BtlUnit_CheckStatus(unit, STATUS_TINY)
+                            && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN) && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
+                            w[id] = 1;
+                        }
+                        break;
+                    default:
+                        if (itemDataTable[d->weapon->itemId].fp_restored) {
+                            s32 mx = BtlUnit_GetMaxFp(unit);
+                            if (BtlUnit_GetFp(unit) < mx) {
+                                mx = BtlUnit_GetMaxFp(unit);
+                                w[id] = w[id] * (1.0f + 0.1f * (mx - BtlUnit_GetFp(unit)));
+                            } else if (!itemDataTable[d->weapon->itemId].hp_restored
+                                       && !itemDataTable[d->weapon->itemId].sp_restored) {
+                                w[id] = 1;
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -644,21 +644,21 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit*
         }
     }
     switch (wp->fbatInfo->firstAttack) {
-    case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
-    case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
-        tmp = BattleGetMarioPtr(wp);
-        other = found;
-        found = tmp;
-        break;
-    case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
-        tmp = BattleGetPartnerPtr(wp, BattleGetMarioPtr(wp));
-        other = found;
-        found = tmp;
-        break;
-    case FIRST_ATTACK_ENEMY:
-    default:
-        other = BattleGetMarioPtr(wp);
-        break;
+        case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
+        case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
+            tmp = BattleGetMarioPtr(wp);
+            other = found;
+            found = tmp;
+            break;
+        case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
+            tmp = BattleGetPartnerPtr(wp, BattleGetMarioPtr(wp));
+            other = found;
+            found = tmp;
+            break;
+        case FIRST_ATTACK_ENEMY:
+        default:
+            other = BattleGetMarioPtr(wp);
+            break;
     }
     *attacker = found;
     *target = other;

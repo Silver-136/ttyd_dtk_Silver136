@@ -367,54 +367,54 @@ static void effBoobooMain(EffectEntry* effect) {
         done = 0;
         frame = work->frame[i];
         switch (work->state[i]) {
-        case 0:
-            done = 1;
-            break;
-        case 1:
-            done = 1;
-            work->anim[i] = 1;
-            break;
-        case 3:
-            work->anim[i] = anime_data_walk[frame % 8];
-            s = (f32)sin(6.2831855f * (f32)(frame * 10) / 360.0f);
-            work->rot[i] += s;
-            if (frame >= 36) {
+            case 0:
                 done = 1;
-                work->frame[i] = 0;
-            }
-            break;
-        case 2:
-            work->anim[i] = anime_data_walk[frame % 8];
-            s = (f32)sin(6.2831855f * (f32)(frame * 20) / 360.0f);
-            done = 1;
-            work->yoff[i] = 2.0f * s;
-            if (frame >= 9) {
-                work->yoff[i] = 0.0f;
+                break;
+            case 1:
                 done = 1;
-                work->frame[i] = 0;
-            }
-            break;
-        case 4:
-            work->anim[i] = anime_data_walk[frame % 8];
-            s = (f32)sin(6.2831855f * (f32)(frame * 20) / 360.0f);
-            work->yoff[i] = 4.0f * s;
-            if (frame >= 9) {
-                work->yoff[i] = 0.0f;
+                work->anim[i] = 1;
+                break;
+            case 3:
+                work->anim[i] = anime_data_walk[frame % 8];
+                s = (f32)sin(6.2831855f * (f32)(frame * 10) / 360.0f);
+                work->rot[i] += s;
+                if (frame >= 36) {
+                    done = 1;
+                    work->frame[i] = 0;
+                }
+                break;
+            case 2:
+                work->anim[i] = anime_data_walk[frame % 8];
+                s = (f32)sin(6.2831855f * (f32)(frame * 20) / 360.0f);
                 done = 1;
-                work->frame[i] = 0;
-            }
-            break;
-        case 5:
-        default:
-            work->anim[i] = anime_data_walk[frame % 8];
-            s = (f32)sin(6.2831855f * (f32)(frame * 5) / 360.0f);
-            work->yoff[i] = 12.0f * s;
-            if (frame >= 36) {
-                work->yoff[i] = 0.0f;
-                done = 1;
-                work->frame[i] = 0;
-            }
-            break;
+                work->yoff[i] = 2.0f * s;
+                if (frame >= 9) {
+                    work->yoff[i] = 0.0f;
+                    done = 1;
+                    work->frame[i] = 0;
+                }
+                break;
+            case 4:
+                work->anim[i] = anime_data_walk[frame % 8];
+                s = (f32)sin(6.2831855f * (f32)(frame * 20) / 360.0f);
+                work->yoff[i] = 4.0f * s;
+                if (frame >= 9) {
+                    work->yoff[i] = 0.0f;
+                    done = 1;
+                    work->frame[i] = 0;
+                }
+                break;
+            case 5:
+            default:
+                work->anim[i] = anime_data_walk[frame % 8];
+                s = (f32)sin(6.2831855f * (f32)(frame * 5) / 360.0f);
+                work->yoff[i] = 12.0f * s;
+                if (frame >= 36) {
+                    work->yoff[i] = 0.0f;
+                    done = 1;
+                    work->frame[i] = 0;
+                }
+                break;
         }
         work->frame[i]++;
         if (done && (work->flags[i] & 2)) {
@@ -453,42 +453,42 @@ static BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     switch (type) {
-    case 0:
-        booTexCommon(0x38, GX_CC_ZERO, &texObj);
-        break;
-    case 1:
-        GXSetNumTexGens(0);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
-        break;
-    case 2:
-        booTexCommon(0x39, GX_CC_ZERO, &texObj);
-        break;
-    case 3:
-        booTexCommon(0x3A, GX_CC_ZERO, &texObj);
-        break;
-    case 4:
-        booTexCommon(0x3B, GX_CC_ZERO, &texObj);
-        break;
-    case 5:
-        booTexCommon(0x3C, GX_CC_ZERO, &texObj);
-        break;
-    case 6:
-        booTexCommon(0x3D, GX_CC_ZERO, &texObj);
-        break;
-    case 7:
-        booTexCommon(0x3E, GX_CC_ZERO, &texObj);
-        break;
-    case 8:
-        booTexCommon(0x3F, GX_CC_C0, &texObj);
-        break;
-    case 9:
-        booTexCommon(0x40, GX_CC_C0, &texObj);
-        break;
+        case 0:
+            booTexCommon(0x38, GX_CC_ZERO, &texObj);
+            break;
+        case 1:
+            GXSetNumTexGens(0);
+            GXSetNumTevStages(1);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+            break;
+        case 2:
+            booTexCommon(0x39, GX_CC_ZERO, &texObj);
+            break;
+        case 3:
+            booTexCommon(0x3A, GX_CC_ZERO, &texObj);
+            break;
+        case 4:
+            booTexCommon(0x3B, GX_CC_ZERO, &texObj);
+            break;
+        case 5:
+            booTexCommon(0x3C, GX_CC_ZERO, &texObj);
+            break;
+        case 6:
+            booTexCommon(0x3D, GX_CC_ZERO, &texObj);
+            break;
+        case 7:
+            booTexCommon(0x3E, GX_CC_ZERO, &texObj);
+            break;
+        case 8:
+            booTexCommon(0x3F, GX_CC_C0, &texObj);
+            break;
+        case 9:
+            booTexCommon(0x40, GX_CC_C0, &texObj);
+            break;
     }
     if ((mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) && (work->flags[idx] & 8)) {
         mapGetBlend(&blend);
@@ -546,15 +546,15 @@ static void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
         animPhase[0] = work->anim[i];
         GXSetCullMode(GX_CULL_BACK);
         switch (animPhase[0]) {
-        case 0:
-            boo_polygon_0();
-            break;
-        case 1:
-            boo_polygon_1();
-            break;
-        case 2:
-            boo_polygon_2();
-            break;
+            case 0:
+                boo_polygon_0();
+                break;
+            case 1:
+                boo_polygon_1();
+                break;
+            case 2:
+                boo_polygon_2();
+                break;
         }
     }
 }

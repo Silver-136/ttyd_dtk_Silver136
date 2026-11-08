@@ -435,7 +435,7 @@ typedef struct PouchData {
     u8 pad_5A0[0x10];              // 0x5A0, never accessed
     s16 shopPoints;                   // 0x5B0
     u8 pad_5B2[2];                 // 0x5B2, never accessed
-    u32 shopPointRewardFlags; //0x5B4, bit i = shop point reward i claimed (evt_shop.c)
+    u32 shopPointRewardFlags; // 0x5B4, bit i = shop point reward i claimed (evt_shop.c)
     u8 merleeCurseUsesRemaining;      // 0x5B8
     s8 turnsUntilMerleeActivation;    // 0x5B9
     u8 merleeNextCurseType;           // 0x5BA

@@ -91,39 +91,39 @@ EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) 
     work->frame = 0;
     work->progress = 0.0f;
     switch (type) {
-    case 0:
-        work->color[0] = 255;
-        work->color[1] = 255;
-        work->color[2] = 255;
-        work->color[3] = 255;
-        work->color[4] = 255;
-        work->color[5] = 255;
-        break;
-    case 1:
-        work->color[0] = 255;
-        work->color[1] = 255;
-        work->color[2] = 0;
-        work->color[3] = 255;
-        work->color[4] = 0;
-        work->color[5] = 0;
-        break;
-    case 2:
-        work->color[0] = 255;
-        work->color[1] = 255;
-        work->color[2] = 0;
-        work->color[3] = 200;
-        work->color[4] = 255;
-        work->color[5] = 230;
-        break;
-    case 3:
-    default:
-        work->color[0] = 0;
-        work->color[1] = 255;
-        work->color[2] = 255;
-        work->color[3] = 0;
-        work->color[4] = 0;
-        work->color[5] = 230;
-        break;
+        case 0:
+            work->color[0] = 255;
+            work->color[1] = 255;
+            work->color[2] = 255;
+            work->color[3] = 255;
+            work->color[4] = 255;
+            work->color[5] = 255;
+            break;
+        case 1:
+            work->color[0] = 255;
+            work->color[1] = 255;
+            work->color[2] = 0;
+            work->color[3] = 255;
+            work->color[4] = 0;
+            work->color[5] = 0;
+            break;
+        case 2:
+            work->color[0] = 255;
+            work->color[1] = 255;
+            work->color[2] = 0;
+            work->color[3] = 200;
+            work->color[4] = 255;
+            work->color[5] = 230;
+            break;
+        case 3:
+        default:
+            work->color[0] = 0;
+            work->color[1] = 255;
+            work->color[2] = 255;
+            work->color[3] = 0;
+            work->color[4] = 0;
+            work->color[5] = 230;
+            break;
     }
     work->scale = scale;
     p = work + 1;
@@ -230,45 +230,45 @@ static void effHitDisp(CameraId cameraId, EffectEntry* effect) {
     alpha = work->alpha;
     frac = (s32)(256.0f * (prog - (f32)idx));
     switch (type) {
-    case 1:
-        if (frame - 1 < 13) {
-            t = fire_data[frame - 1];
-        } else {
-            t = 0;
-        }
-        r0 = work->color[0];
-        g0 = (work->color[1] * t) >> 8;
-        b0 = (work->color[2] * t) >> 8;
-        r1 = (work->color[3] * t) >> 8;
-        g1 = (work->color[4] * t) >> 8;
-        b1 = (work->color[5] * t) >> 8;
-        break;
-    case 2:
-        if (frame & 1) {
+        case 1:
+            if (frame - 1 < 13) {
+                t = fire_data[frame - 1];
+            } else {
+                t = 0;
+            }
+            r0 = work->color[0];
+            g0 = (work->color[1] * t) >> 8;
+            b0 = (work->color[2] * t) >> 8;
+            r1 = (work->color[3] * t) >> 8;
+            g1 = (work->color[4] * t) >> 8;
+            b1 = (work->color[5] * t) >> 8;
+            break;
+        case 2:
+            if (frame & 1) {
+                r0 = work->color[0];
+                g0 = work->color[1];
+                b0 = work->color[2];
+                r1 = work->color[3];
+                g1 = work->color[4];
+                b1 = work->color[5];
+            } else {
+                r0 = 0;
+                g0 = 0;
+                b0 = 0;
+                r1 = work->color[0];
+                g1 = work->color[1];
+                b1 = work->color[2];
+            }
+            break;
+        case 0:
+        default:
             r0 = work->color[0];
             g0 = work->color[1];
             b0 = work->color[2];
             r1 = work->color[3];
             g1 = work->color[4];
             b1 = work->color[5];
-        } else {
-            r0 = 0;
-            g0 = 0;
-            b0 = 0;
-            r1 = work->color[0];
-            g1 = work->color[1];
-            b1 = work->color[2];
-        }
-        break;
-    case 0:
-    default:
-        r0 = work->color[0];
-        g0 = work->color[1];
-        b0 = work->color[2];
-        r1 = work->color[3];
-        g1 = work->color[4];
-        b1 = work->color[5];
-        break;
+            break;
     }
     GXSetNumChans(0);
     GXSetNumTevStages(2);

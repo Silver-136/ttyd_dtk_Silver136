@@ -236,9 +236,9 @@ static void oneMessageDisp(WinMgrEntry* entry) {
 
         // BUG: only type 0 assigns msg before it is used below.
         switch (w->type) {
-        case 0:
-            msg = msgSearch("msg_you_gotta_mail");
-            break;
+            case 0:
+                msg = msgSearch("msg_you_gotta_mail");
+                break;
         }
         FontDrawStart();
         {
@@ -267,38 +267,38 @@ USER_FUNC(evt_win_one_message) {
     }
     w = event->userdatap[0];
     switch (w->state) {
-    case 0:
-        winMgrOpen(w->id);
-        w->state++;
-        break;
-    case 1:
-        if (winMgrAction(w->id) == 0) {
+        case 0:
+            winMgrOpen(w->id);
             w->state++;
-        }
-        break;
-    case 2:
-        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            switch (w->type) {
-            case 0:
-                psndSFXOn_3D("SFX_MAIL_RECEPTION1", &marioGetPtr()->position);
-                break;
+            break;
+        case 1:
+            if (winMgrAction(w->id) == 0) {
+                w->state++;
             }
+            break;
+        case 2:
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                switch (w->type) {
+                case 0:
+                    psndSFXOn_3D("SFX_MAIL_RECEPTION1", &marioGetPtr()->position);
+                    break;
+                }
+                w->state++;
+            }
+            break;
+        case 3:
+            winMgrClose(w->id);
             w->state++;
-        }
-        break;
-    case 3:
-        winMgrClose(w->id);
-        w->state++;
-        break;
-    case 4:
-        if (winMgrAction(w->id) == 0) {
-            w->state++;
-        }
-        break;
-    case 5:
-        winMgrDelete(w->id);
-        _mapFree(w);
-        return EVT_RETURN_DONE;
+            break;
+        case 4:
+            if (winMgrAction(w->id) == 0) {
+                w->state++;
+            }
+            break;
+        case 5:
+            winMgrDelete(w->id);
+            _mapFree(w);
+            return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
 }
@@ -321,18 +321,18 @@ static void coin_disp(WinMgrEntry* entry) {
         return;
     }
     switch (w->type) {
-    case COIN_WINDOW_COINS:
-        target = pouchGetCoin();
-        icon = ICON_ITEM_COIN;
-        break;
-    case COIN_WINDOW_SHINE_SPRITES:
-        target = pouchGetSuperCoin();
-        icon = ICON_ITEM_SHINE_SPRITE;
-        break;
-    case COIN_WINDOW_STAR_PIECES:
-        target = pouchGetStarPiece();
-        icon = ICON_ITEM_STAR_PIECE;
-        break;
+        case COIN_WINDOW_COINS:
+            target = pouchGetCoin();
+            icon = ICON_ITEM_COIN;
+            break;
+        case COIN_WINDOW_SHINE_SPRITES:
+            target = pouchGetSuperCoin();
+            icon = ICON_ITEM_SHINE_SPRITE;
+            break;
+        case COIN_WINDOW_STAR_PIECES:
+            target = pouchGetStarPiece();
+            icon = ICON_ITEM_STAR_PIECE;
+            break;
     }
     PSMTXTrans(pos, -220.0f, -113.0f, 0.0f);
     PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
@@ -386,15 +386,15 @@ USER_FUNC(evt_win_coin_on) {
     w->id = winMgrEntry(&coin_desc);
     w->timer = 0;
     switch (type) {
-    case COIN_WINDOW_COINS:
-        w->coins = pouchGetCoin();
-        break;
-    case COIN_WINDOW_SHINE_SPRITES:
-        w->coins = pouchGetSuperCoin();
-        break;
-    case COIN_WINDOW_STAR_PIECES:
-        w->coins = pouchGetStarPiece();
-        break;
+        case COIN_WINDOW_COINS:
+            w->coins = pouchGetCoin();
+            break;
+        case COIN_WINDOW_SHINE_SPRITES:
+            w->coins = pouchGetSuperCoin();
+            break;
+        case COIN_WINDOW_STAR_PIECES:
+            w->coins = pouchGetStarPiece();
+            break;
     }
     winMgrSetParam(w->id, w);
     winMgrOpen(w->id);
@@ -407,15 +407,15 @@ USER_FUNC(evt_win_coin_off) {
     CoinWin* w = (CoinWin*)evtGetValue(event, event->args[0]);
     s32 coins;
     switch (w->type) {
-    case COIN_WINDOW_COINS:
-        coins = pouchGetCoin();
-        break;
-    case COIN_WINDOW_SHINE_SPRITES:
-        coins = pouchGetSuperCoin();
-        break;
-    case COIN_WINDOW_STAR_PIECES:
-        coins = pouchGetStarPiece();
-        break;
+        case COIN_WINDOW_COINS:
+            coins = pouchGetCoin();
+            break;
+        case COIN_WINDOW_SHINE_SPRITES:
+            coins = pouchGetSuperCoin();
+            break;
+        case COIN_WINDOW_STAR_PIECES:
+            coins = pouchGetStarPiece();
+            break;
     }
     if (w->coins != coins) {
         return EVT_RETURN_BLOCK;
@@ -430,15 +430,15 @@ USER_FUNC(evt_win_coin_wait) {
     CoinWin* w = (CoinWin*)evtGetValue(event, event->args[0]);
     s32 coins;
     switch (w->type) {
-    case COIN_WINDOW_COINS:
-        coins = pouchGetCoin();
-        break;
-    case COIN_WINDOW_SHINE_SPRITES:
-        coins = pouchGetSuperCoin();
-        break;
-    case COIN_WINDOW_STAR_PIECES:
-        coins = pouchGetStarPiece();
-        break;
+        case COIN_WINDOW_COINS:
+            coins = pouchGetCoin();
+            break;
+        case COIN_WINDOW_SHINE_SPRITES:
+            coins = pouchGetSuperCoin();
+            break;
+        case COIN_WINDOW_STAR_PIECES:
+            coins = pouchGetStarPiece();
+            break;
     }
     return w->coins != coins ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }

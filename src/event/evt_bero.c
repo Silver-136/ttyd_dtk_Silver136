@@ -38,9 +38,9 @@
 s32 BeroEXEC;
 s32 BeroNUM, BeroNOWNUM;
 s32 BeroCAM; // pipe camera handshake: bero_case_exec_pipe_sub pokes it and polls it (POKE_INT / PEEK_INT)
-f32 BeroOX, BeroOY, BeroOZ; //offset position
-f32 BeroSX, BeroSY, BeroSZ; //start position
-f32 BeroEX, BeroEY, BeroEZ; //end position
+f32 BeroOX, BeroOY, BeroOZ; // offset position
+f32 BeroSX, BeroSY, BeroSZ; // start position
+f32 BeroEX, BeroEY, BeroEZ; // end position
 
 #if VERSION <= VERSION_DEMO_JP
 extern Vec BeroPT, BeroAT;
@@ -469,35 +469,35 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
     const char* dirs[8] = {"n_", "ne_", "e_", "se_", "s_", "sw_", "w_", "nw_"};
     s32 kind = bero->directionId;
     switch (kind) {
-    case BERO_DIR_AUTO:
-        // the original code compares kind here (it is 20000 in this case)
-        if (kind == BERO_DIR_NONE) {
-            kind = BERO_DIR_NONE;
-        } else {
-        switch (bero->type & BERO_TYPE_KIND_MASK) {
-            case BERO_TYPE_ROAD:
-            case BERO_TYPE_DOOR:
-                if (walk) {
-                    for (i = 0, p = dirs; i < 8; i++, p++) {
-                        if (!strncmp(*p, bero->hitName, strlen(*p))) {
-                            break;
+        case BERO_DIR_AUTO:
+            // the original code compares kind here (it is 20000 in this case)
+            if (kind == BERO_DIR_NONE) {
+                kind = BERO_DIR_NONE;
+            } else {
+            switch (bero->type & BERO_TYPE_KIND_MASK) {
+                case BERO_TYPE_ROAD:
+                case BERO_TYPE_DOOR:
+                    if (walk) {
+                        for (i = 0, p = dirs; i < 8; i++, p++) {
+                            if (!strncmp(*p, bero->hitName, strlen(*p))) {
+                                break;
+                            }
+                        }
+                    } else {
+                        for (i = 0; i < 8; i++) {
+                            if (!strncmp(dirs[i], bero->hitName, strlen(dirs[i]))) {
+                                break;
+                            }
                         }
                     }
-                } else {
-                    for (i = 0; i < 8; i++) {
-                        if (!strncmp(dirs[i], bero->hitName, strlen(dirs[i]))) {
-                            break;
-                        }
-                    }
-                }
-                break;
-            default:
-                i = BERO_DIR_NONE;
-                break;
-        }
-        kind = i;
-        }
-        break;
+                    break;
+                default:
+                    i = BERO_DIR_NONE;
+                    break;
+            }
+            kind = i;
+            }
+            break;
     }
     return kind;
 }
@@ -711,47 +711,47 @@ static void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Ve
     dist = 10000.0f;
     ofs = 20.0f;
     switch (kind) {
-    case BERO_DIR_W:
-        a = -a;
-        ofs = -ofs;
-    case BERO_DIR_E:
-        if (id == 0) {
+        case BERO_DIR_W:
+            a = -a;
+            ofs = -ofs;
+        case BERO_DIR_E:
+            if (id == 0) {
+                hitObjGetPos((const char*)name, start);
+                start->x -= ofs;
+                end->x = start->x + a;
+                end->y = start->y;
+                end->z = start->z;
+                hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, end->x, end->y, end->z, 0.0f, -1.0f, 0.0f);
+            } else {
+                hitObjGetPos((const char*)name, end);
+                end->x -= ofs;
+                start->x = end->x + a;
+                start->y = end->y;
+                start->z = end->z;
+                hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start->x, start->y, start->z, 0.0f, -1.0f, 0.0f);
+            }
+            end->y = start->y = hy;
+            break;
+        case BERO_DIR_DOWN:
+            a = -a;
+        case BERO_DIR_UP:
+            if (id == 0) {
+                hitObjGetPos((const char*)name, start);
+                end->x = start->x;
+                end->y = start->y + a;
+                end->z = start->z;
+            } else {
+                hitObjGetPos((const char*)name, end);
+                start->x = end->x;
+                start->y = end->y + a;
+                start->z = end->z;
+            }
+            break;
+        case BERO_DIR_NONE:
+        default:
             hitObjGetPos((const char*)name, start);
-            start->x -= ofs;
-            end->x = start->x + a;
-            end->y = start->y;
-            end->z = start->z;
-            hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, end->x, end->y, end->z, 0.0f, -1.0f, 0.0f);
-        } else {
             hitObjGetPos((const char*)name, end);
-            end->x -= ofs;
-            start->x = end->x + a;
-            start->y = end->y;
-            start->z = end->z;
-            hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start->x, start->y, start->z, 0.0f, -1.0f, 0.0f);
-        }
-        end->y = start->y = hy;
-        break;
-    case BERO_DIR_DOWN:
-        a = -a;
-    case BERO_DIR_UP:
-        if (id == 0) {
-            hitObjGetPos((const char*)name, start);
-            end->x = start->x;
-            end->y = start->y + a;
-            end->z = start->z;
-        } else {
-            hitObjGetPos((const char*)name, end);
-            start->x = end->x;
-            start->y = end->y + a;
-            start->z = end->z;
-        }
-        break;
-    case BERO_DIR_NONE:
-    default:
-        hitObjGetPos((const char*)name, start);
-        hitObjGetPos((const char*)name, end);
-        break;
+            break;
     }
 }
 

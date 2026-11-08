@@ -265,7 +265,7 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
     GXSetCurrentMtx(GX_PNMTX0);
 
     switch (type) {
-        case WINDOW_TYPE_PLATE: //images 29, 30, 31, 32
+        case WINDOW_TYPE_PLATE: // images 29, 30, 31, 32
         case WINDOW_TYPE_KANBAN:
             // left side of the frame
             GXSetNumTexGens(1);
@@ -352,7 +352,7 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
             GXTexCoord2f32(0.0f, 1.0f);
             break;
 
-        case WINDOW_TYPE_HOUSOU: //images 25, 26, 27, 28
+        case WINDOW_TYPE_HOUSOU: // images 25, 26, 27, 28
             // left side of the frame
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
@@ -438,7 +438,7 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
             GXTexCoord2f32(0.0f, 1.0f);
             break;
 
-        case WINDOW_TYPE_DIARY: //image 6
+        case WINDOW_TYPE_DIARY: // image 6
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
             MTXScale(letter_mtx, __fabsf(560.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[6]),
@@ -717,7 +717,7 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
     GXSetCurrentMtx(GX_PNMTX0);
 
     switch (type) {
-        case WINDOW_TYPE_NORMAL: //images 9-12, 13-16 for light/dark
+        case WINDOW_TYPE_NORMAL: // images 9-12, 13-16 for light/dark
             // left side
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
@@ -803,7 +803,7 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
             GXTexCoord2f32(0.0f, 1.0f);
             break;
 
-        case WINDOW_TYPE_SMALL: //images 3, 4
+        case WINDOW_TYPE_SMALL: // images 3, 4
             GXLoadTexObj(&wakuTexObj[dark ? WAKU_SMALL_DARK : WAKU_SMALL], GX_TEXMAP0);
             MTXScale(trans, width, height, 1.0f);
             MTXTransApply(trans, trans, x, y, 0.0f);
@@ -824,7 +824,7 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
             GXTexCoord2f32(0.0f, 1.0f);
             break;
 
-        case WINDOW_TYPE_BOSS: //images 17-20, 21-24
+        case WINDOW_TYPE_BOSS: // images 17-20, 21-24
             // left side
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
@@ -910,7 +910,7 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
             GXTexCoord2f32(0.0f, 1.0f);
             break;
 
-        case WINDOW_TYPE_TEC: //image 41
+        case WINDOW_TYPE_TEC: // image 41
             // main part: x 0 to 536
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
@@ -954,7 +954,7 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
             GXTexCoord2f32(0.0f, 1.0f);
             break;
 
-        case WINDOW_TYPE_MAJO: //images 33-36, 37-40
+        case WINDOW_TYPE_MAJO: // images 33-36, 37-40
             // left side
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);

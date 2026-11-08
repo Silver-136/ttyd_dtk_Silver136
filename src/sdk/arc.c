@@ -7,9 +7,9 @@
 #pragma unsigned_char off
 
 typedef struct FSTEntry {
-    u32 entryInfo; //top byte is 0 file 1 dir, u24 string offset
-    u32 entryOffsetOrParent; //file = offset, dir = parent index
-    u32 entrySizeOrNext; //file = size, dir = next entry
+    u32 entryInfo; // top byte is 0 file 1 dir, u24 string offset
+    u32 entryOffsetOrParent; // file = offset, dir = parent index
+    u32 entrySizeOrNext; // file = size, dir = next entry
 } FSTEntry;
 
 static inline int tolower(int c) {
@@ -40,9 +40,9 @@ BOOL ARCInitHandle(void* arcStart, ARCHandle* handle) {
     }
     handle->archiveStartAddr = arcStart;
     entry = (FSTEntry*)((u32)arcStart + header->fstStart);
-    handle->FSTStart = (void*)entry; //relative->absolute
-    handle->fileStart = (void*)((u32)arcStart + header->fileStart); //relative->absolute
-    handle->entryNum = entry->entrySizeOrNext; //entry 0 size is entry count
+    handle->FSTStart = (void*)entry; // relative->absolute
+    handle->fileStart = (void*)((u32)arcStart + header->fileStart); // relative->absolute
+    handle->entryNum = entry->entrySizeOrNext; // entry 0 size is entry count
     handle->FSTStringStart = (char*)&entry[handle->entryNum];
     handle->FSTLength = header->fstSize;
     handle->currDir = 0;

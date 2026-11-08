@@ -473,68 +473,68 @@ void chuchu_use(PartyEntry* party) {
     }
 
     switch (cp->useMotionId) {
-    case 0:
-        partyGetAppearPos3(party, &pos);
-        cp->moveTarget = pos;
-        cp->moveFrames = 4;
-        cp->moveDir = angleABf(cp->position.x, cp->position.z, cp->moveTarget.x, cp->moveTarget.z);
-        cp->targetDir = cp->moveDir;
-        cp->displayDirection = player->displayDirection;
-        cp->displayDirectionTarget = player->displayDirection;
-        cp->moveSpeed = distABf(cp->position.x, cp->position.z, cp->moveTarget.x, cp->moveTarget.z) / cp->moveFrames;
-        cp->velY = 0.0f;
-        cp->useMotionId = 1;
-        break;
-    case 1:
-        partyGetAppearPos3(party, &pos1);
-        cp->moveTarget = pos1;
-        cp->position.x += (cp->moveTarget.x - cp->position.x) / cp->moveFrames;
-        cp->position.y += (cp->moveTarget.y - cp->position.y) / cp->moveFrames;
-        cp->position.z += (cp->moveTarget.z - cp->position.z) / cp->moveFrames;
-        if (--cp->moveFrames > 0) {
-            return;
-        }
-        partyChgPoseId(party, PARTY_POSE_STAND);
-        cp->moveSpeed = 0.0f;
-        cp->useMotionId = 10;
-        break;
-    case 10:
-        cp->displayDirectionTarget = player->displayDirectionTarget;
-        cp->moveDir = toMovedir(cp->displayDirectionTarget);
-        cp->targetDir = cp->moveDir;
-        cp->useMotionId = 20;
-        cp->moveFrames = 25;
-        break;
-    case 20:
-        if (--cp->moveFrames > 0) {
+        case 0:
+            partyGetAppearPos3(party, &pos);
+            cp->moveTarget = pos;
+            cp->moveFrames = 4;
+            cp->moveDir = angleABf(cp->position.x, cp->position.z, cp->moveTarget.x, cp->moveTarget.z);
+            cp->targetDir = cp->moveDir;
+            cp->displayDirection = player->displayDirection;
+            cp->displayDirectionTarget = player->displayDirection;
+            cp->moveSpeed = distABf(cp->position.x, cp->position.z, cp->moveTarget.x, cp->moveTarget.z) / cp->moveFrames;
+            cp->velY = 0.0f;
+            cp->useMotionId = 1;
             break;
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL1), &cp->position);
-        partyChgPose(party, "PCH_A2_1");
-        cp->useMotionId = 21;
-        cp->moveFrames = 30;
-    case 21:
-        if (--cp->moveFrames > 0) {
+        case 1:
+            partyGetAppearPos3(party, &pos1);
+            cp->moveTarget = pos1;
+            cp->position.x += (cp->moveTarget.x - cp->position.x) / cp->moveFrames;
+            cp->position.y += (cp->moveTarget.y - cp->position.y) / cp->moveFrames;
+            cp->position.z += (cp->moveTarget.z - cp->position.z) / cp->moveFrames;
+            if (--cp->moveFrames > 0) {
+                return;
+            }
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            cp->moveSpeed = 0.0f;
+            cp->useMotionId = 10;
             break;
-        }
-        partyChgPoseId(party, PARTY_POSE_STAND);
-        evtEntryType(msg_evt, 0, 0, 26);
-        cp->useMotionId = 22;
-        break;
-    case 23:
-        partyChgPoseId(party, PARTY_POSE_STAND);
-        cp->useMotionId = 80;
-        break;
+        case 10:
+            cp->displayDirectionTarget = player->displayDirectionTarget;
+            cp->moveDir = toMovedir(cp->displayDirectionTarget);
+            cp->targetDir = cp->moveDir;
+            cp->useMotionId = 20;
+            cp->moveFrames = 25;
+            break;
+        case 20:
+            if (--cp->moveFrames > 0) {
+                break;
+            }
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL1), &cp->position);
+            partyChgPose(party, "PCH_A2_1");
+            cp->useMotionId = 21;
+            cp->moveFrames = 30;
+        case 21:
+            if (--cp->moveFrames > 0) {
+                break;
+            }
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            evtEntryType(msg_evt, 0, 0, 26);
+            cp->useMotionId = 22;
+            break;
+        case 23:
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            cp->useMotionId = 80;
+            break;
     }
 
     switch (cp->useMotionId) {
-    case 80:
-        cp->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        partyChgRunMode(party, PARTY_RUN_MOVE);
-        cp->moveMode = PARTY_MOVE_MODE_STAY;
-        marioChgMot(MARIO_MOTION_STAY);
-        marioStSystemLevel(0);
-        break;
+        case 80:
+            cp->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            partyChgRunMode(party, PARTY_RUN_MOVE);
+            cp->moveMode = PARTY_MOVE_MODE_STAY;
+            marioChgMot(MARIO_MOTION_STAY);
+            marioStSystemLevel(0);
+            break;
     }
     partyChkGnd(party);
 }

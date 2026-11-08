@@ -95,35 +95,35 @@ typedef enum FadeFlags {
 } FadeFlags;
 
 typedef struct FadeEntry {
-    u16 flags; //0x0, FadeFlags
-    u8 pad_2[2]; //0x2
-    FadeType type; //0x4
-    s32 state; //0x8, step within the fade type
-    u8 pad_0C[0x10 - 0xC]; //0xC, never accessed
+    u16 flags; // 0x0, FadeFlags
+    u8 pad_2[2]; // 0x2
+    FadeType type; // 0x4
+    s32 state; // 0x8, step within the fade type
+    u8 pad_0C[0x10 - 0xC]; // 0xC, never accessed
     s64 duration; // 0x10, fade duration
-    GXColor color; //0x18
-    f32 fadeSpotX; //0x1C
-    f32 fadeSpotY; //0x20
-    f32 progress; //0x24, 0..1 (1 - elapsed/duration when fading in)
-    f32 rotation; //0x28, degrees (z rotation of the fade texture)
-    Mtx texMtx; //0x2C, built in the fade draw (entries[0] only), loaded as GX_TEXMTX0
-    f32 elapsed; //0x5C, ms, +16.67 per frame (US and later: + 1000 / gp->framerate)
-    const char* animFile; //0x60, e.g. "OFF_d_dokan_down"
-    const char* animName; //0x64, e.g. "A_1"
-    s32 imageType; //0x68
-    s32 poseId; //0x6C, animPoseEntry handle, -1 = none
-    s32 paperPoseId; //0x70, animPaperPoseEntry handle, -1 = none
-    GXColor animColor; //0x74
-    f32 animOffsetX; //0x78
-    f32 animOffsetY; //0x7C
-    Vec VirtualPos; //0x80
-    ImageEntry* image; //0x8C
-    f32 scale; //0x90, fade texture scale
-    s32 scaleTimer; //0x94, frames into the scale interpolation
-    s32 sfxId; //0x98, SFX started by the fade, psndSFXOff on finish
-    OffscreenCallback callback; //0x9C
-    void* offparam; //0xA0
-    s32 delayFrames; //0xA4, frames to wait before the fade advances
+    GXColor color; // 0x18
+    f32 fadeSpotX; // 0x1C
+    f32 fadeSpotY; // 0x20
+    f32 progress; // 0x24, 0..1 (1 - elapsed/duration when fading in)
+    f32 rotation; // 0x28, degrees (z rotation of the fade texture)
+    Mtx texMtx; // 0x2C, built in the fade draw (entries[0] only), loaded as GX_TEXMTX0
+    f32 elapsed; // 0x5C, ms, +16.67 per frame (US and later: + 1000 / gp->framerate)
+    const char* animFile; // 0x60, e.g. "OFF_d_dokan_down"
+    const char* animName; // 0x64, e.g. "A_1"
+    s32 imageType; // 0x68
+    s32 poseId; // 0x6C, animPoseEntry handle, -1 = none
+    s32 paperPoseId; // 0x70, animPaperPoseEntry handle, -1 = none
+    GXColor animColor; // 0x74
+    f32 animOffsetX; // 0x78
+    f32 animOffsetY; // 0x7C
+    Vec VirtualPos; // 0x80
+    ImageEntry* image; // 0x8C
+    f32 scale; // 0x90, fade texture scale
+    s32 scaleTimer; // 0x94, frames into the scale interpolation
+    s32 sfxId; // 0x98, SFX started by the fade, psndSFXOff on finish
+    OffscreenCallback callback; // 0x9C
+    void* offparam; // 0xA0
+    s32 delayFrames; // 0xA4, frames to wait before the fade advances
 } FadeEntry;
 
 // FadeWork.flags
@@ -137,14 +137,14 @@ typedef enum FadeWorkFlags {
 } FadeWorkFlags;
 
 typedef struct FadeWork {
-    u16 flags; //0x0, FadeWorkFlags
-    u8 pad_2[2]; //0x2
-    u32 pad_04; //0x4, never accessed
-    FadeEntry entries[5]; //0x8
-    s32 lastEntryId; //0x350, entry index used by the last fadeEntry
-    f32 softness; //0x354, set to 0 by fadeTecSoftOn (then rises to 1), to 1 by fadeTecSoftOff (then falls to 0)
-    TEXPalette* texture; //0x358
-    BOOL loaded; //0x35C
+    u16 flags; // 0x0, FadeWorkFlags
+    u8 pad_2[2]; // 0x2
+    u32 pad_04; // 0x4, never accessed
+    FadeEntry entries[5]; // 0x8
+    s32 lastEntryId; // 0x350, entry index used by the last fadeEntry
+    f32 softness; // 0x354, set to 0 by fadeTecSoftOn (then rises to 1), to 1 by fadeTecSoftOff (then falls to 0)
+    TEXPalette* texture; // 0x358
+    BOOL loaded; // 0x35C
 } FadeWork;
 
 void fadeInit(void);

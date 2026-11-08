@@ -1695,15 +1695,15 @@ USER_FUNC(evt_sub_rumble_onoff) {
     s32 mode = evtGetValue(event, args[0]);
     s32 chan = evtGetValue(event, args[1]);
     switch (mode) {
-    case 0:
-        padRumbleOn(chan);
-        break;
-    case 1:
-        padRumbleOff(chan);
-        break;
-    case 2:
-        padRumbleHardOff(chan);
-        break;
+        case 0:
+            padRumbleOn(chan);
+            break;
+        case 1:
+            padRumbleOff(chan);
+            break;
+        case 2:
+            padRumbleHardOff(chan);
+            break;
     }
     return EVT_RETURN_DONE;
 }
@@ -1746,32 +1746,32 @@ USER_FUNC(evt_sub_area_check) {
     s32 result;
     f32 dist;
     switch (mode) {
-    case 0:
-        dist = distABf(cx, cy, px, py);
-        if (range < dist) {
-            result = 0;
-        } else {
+        case 0:
+            dist = distABf(cx, cy, px, py);
+            if (range < dist) {
+                result = 0;
+            } else {
+                result = 1;
+            }
+            break;
+        case 1:
             result = 1;
-        }
-        break;
-    case 1:
-        result = 1;
-        if (cx - range > px) {
+            if (cx - range > px) {
+                result = 0;
+            }
+            if (cx + range < px) {
+                result = 0;
+            }
+            if (cy - range > py) {
+                result = 0;
+            }
+            if (cy + range < py) {
+                result = 0;
+            }
+            break;
+        default:
             result = 0;
-        }
-        if (cx + range < px) {
-            result = 0;
-        }
-        if (cy - range > py) {
-            result = 0;
-        }
-        if (cy + range < py) {
-            result = 0;
-        }
-        break;
-    default:
-        result = 0;
-        break;
+            break;
     }
     evtSetValue(event, args[6], result);
     return EVT_RETURN_DONE;
@@ -2070,68 +2070,68 @@ USER_FUNC(evt_sub_get_coin) {
     eff = event->userdatap[1];
     work = event->wInterpWork;
     switch (state) {
-    case 0:
+        case 0:
 #if VERSION <= VERSION_DEMO_JP
-        iconEntry2D("iraiCoin", ICON_ITEM_COIN);
-        getScreenPoint(&b, &scr);
-        iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
-        iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN);
+            iconEntry2D("iraiCoin", ICON_ITEM_COIN);
+            getScreenPoint(&b, &scr);
+            iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
+            iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN);
 #else
-        iconEntry("iraiCoin", ICON_ITEM_COIN);
-        iconSetPos("iraiCoin", b.x, b.y, b.z);
-        iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN | ICON_FLAG_CAM_EFFECT_A);
-        ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
+            iconEntry("iraiCoin", ICON_ITEM_COIN);
+            iconSetPos("iraiCoin", b.x, b.y, b.z);
+            iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN | ICON_FLAG_CAM_EFFECT_A);
+            ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
 #endif
-        marioChgGetItemMotion();
-        event->userdata3 = winMgrEntry(coinget_window_desc);
-        winMgrOpen(event->userdata3);
-        winMgrSetParam(event->userdata3, work);
-        work[0] = coin;
-        work[1] = 0;
-        psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-        psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
-        event->userdata[2] = 200;
-        event->savedTime = gp->renderTime;
-        event->userdata[0] = 1;
-        return EVT_RETURN_BLOCK;
-    case 1:
-        if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
-            iconFlagOff("iraiCoin", ICON_FLAG_HIDDEN);
-            work[1] = 1;
-            event->userdata[2] = 500;
+            marioChgGetItemMotion();
+            event->userdata3 = winMgrEntry(coinget_window_desc);
+            winMgrOpen(event->userdata3);
+            winMgrSetParam(event->userdata3, work);
+            work[0] = coin;
+            work[1] = 0;
+            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+            psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
+            event->userdata[2] = 200;
             event->savedTime = gp->renderTime;
-            event->userdata[0] = 2;
-        }
-        return EVT_RETURN_BLOCK;
-    case 2:
-        if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
-            event->userdata[0] = 10;
-        }
-        return EVT_RETURN_BLOCK;
-    case 10:
-        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            event->userdata[0] = 100;
-        }
-        return EVT_RETURN_BLOCK;
-    case 100:
-        pouchAddCoin(coin);
-        effSoftDelete(eff);
-        iconDelete("iraiCoin");
-        marioChgStayMotion();
-        psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
-        psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
-        winMgrCloseAutoDelete(event->userdata3);
-        work[1] = 0;
-        event->userdata[0] = 101;
+            event->userdata[0] = 1;
+            return EVT_RETURN_BLOCK;
+        case 1:
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
+                iconFlagOff("iraiCoin", ICON_FLAG_HIDDEN);
+                work[1] = 1;
+                event->userdata[2] = 500;
+                event->savedTime = gp->renderTime;
+                event->userdata[0] = 2;
+            }
+            return EVT_RETURN_BLOCK;
+        case 2:
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
+                event->userdata[0] = 10;
+            }
+            return EVT_RETURN_BLOCK;
+        case 10:
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                event->userdata[0] = 100;
+            }
+            return EVT_RETURN_BLOCK;
+        case 100:
+            pouchAddCoin(coin);
+            effSoftDelete(eff);
+            iconDelete("iraiCoin");
+            marioChgStayMotion();
+            psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
+            psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
+            winMgrCloseAutoDelete(event->userdata3);
+            work[1] = 0;
+            event->userdata[0] = 101;
 
-        // BUG: returns DONE instead of BLOCK, so case 101 never runs and the 8-byte work block is never _mapFree'd.
-        return EVT_RETURN_DONE;
-    case 101:
-        if (!winMgrAction(event->userdata3)) {
-            _mapFree(work);
+            // BUG: returns DONE instead of BLOCK, so case 101 never runs and the 8-byte work block is never _mapFree'd.
             return EVT_RETURN_DONE;
-        }
-        return EVT_RETURN_BLOCK;
+        case 101:
+            if (!winMgrAction(event->userdata3)) {
+                _mapFree(work);
+                return EVT_RETURN_DONE;
+            }
+            return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
 }

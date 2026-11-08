@@ -174,125 +174,125 @@ static void main_base(void) {
     s32 i;
 
     switch (w->state) {
-    case 1:
-        w->state = 2;
-        w->timer = 0;
-    case 2:
-        if (w->round == 0) {
-            Vec v = {0.0f, -45.0f, 0.0f};
-            v.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 0.0f, w->timer, 15);
-            w->pos = v;
-        }
-        if (w->timer == 0) {
-            if (w->star.state != 4) {
-                break;
+        case 1:
+            w->state = 2;
+            w->timer = 0;
+        case 2:
+            if (w->round == 0) {
+                Vec v = {0.0f, -45.0f, 0.0f};
+                v.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 0.0f, w->timer, 15);
+                w->pos = v;
             }
-            memcpy(w->btn2, w->btn, sizeof(w->btn));
-            w->prev = w->cur;
-            if (w->round < 5) {
-                w->cur = 0;
-                w->need = w->round + 3;
-                w->time = w->round * 10 + 180;
-                for (i = 0; i < 7; i++) {
-                    SukiBtn* bt = &w->btn[i];
-                    if (i < w->need) {
-                        bt->state = 1;
-                    } else {
-                        bt->state = 0;
+            if (w->timer == 0) {
+                if (w->star.state != 4) {
+                    break;
+                }
+                memcpy(w->btn2, w->btn, sizeof(w->btn));
+                w->prev = w->cur;
+                if (w->round < 5) {
+                    w->cur = 0;
+                    w->need = w->round + 3;
+                    w->time = w->round * 10 + 180;
+                    for (i = 0; i < 7; i++) {
+                        SukiBtn* bt = &w->btn[i];
+                        if (i < w->need) {
+                            bt->state = 1;
+                        } else {
+                            bt->state = 0;
+                        }
+                    }
+                } else {
+                    for (i = 0; i < 7; i++) {
+                        w->btn[i].state = 0;
                     }
                 }
-            } else {
+            }
+            w->offsetY = intplGetValue(EASING_LINEAR, -80.0f, 0.0f, w->timer, 15);
+            w->timer++;
+            if (w->timer >= 15) {
+                if (w->round >= 5) {
+                    w->state = 5;
+                    w->timer = 0;
+                    w->star.state = 8;
+                } else {
+                    w->state = 4;
+                }
+                w->pos = (Vec){0.0f, -45.0f, 0.0f};
+            }
+            break;
+        case 3:
+            if (w->timer == 0) {
+                if (w->star.state != 4) {
+                    break;
+                }
+                psndSFXOn("SFX_BTL_SAC_SUKKIRI2");
+                memcpy(w->btn2, w->btn, sizeof(w->btn));
+                w->prev = w->cur;
                 for (i = 0; i < 7; i++) {
                     w->btn[i].state = 0;
                 }
             }
-        }
-        w->offsetY = intplGetValue(EASING_LINEAR, -80.0f, 0.0f, w->timer, 15);
-        w->timer++;
-        if (w->timer >= 15) {
-            if (w->round >= 5) {
+            w->offsetY = intplGetValue(EASING_LINEAR, -60.0f, 0.0f, w->timer, 15);
+            w->timer++;
+            if (w->timer >= 15) {
                 w->state = 5;
                 w->timer = 0;
                 w->star.state = 8;
-            } else {
-                w->state = 4;
             }
-            w->pos = (Vec){0.0f, -45.0f, 0.0f};
-        }
-        break;
-    case 3:
-        if (w->timer == 0) {
-            if (w->star.state != 4) {
-                break;
-            }
-            psndSFXOn("SFX_BTL_SAC_SUKKIRI2");
-            memcpy(w->btn2, w->btn, sizeof(w->btn));
-            w->prev = w->cur;
-            for (i = 0; i < 7; i++) {
-                w->btn[i].state = 0;
-            }
-        }
-        w->offsetY = intplGetValue(EASING_LINEAR, -60.0f, 0.0f, w->timer, 15);
-        w->timer++;
-        if (w->timer >= 15) {
-            w->state = 5;
-            w->timer = 0;
-            w->star.state = 8;
-        }
-        break;
-    case 4:
-        w->time--;
-        if (w->time <= 0) {
-            w->state = 3;
-            w->timer = 0;
             break;
-        }
-        if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y)) {
-            u32 trg = keyGetButtonTrg(0);
-            if (w->btn[w->cur].button & trg) {
-                EventEntry* e;
-                s32 n;
-                w->cur++;
-                psndSFXOn("SFX_BTL_SAC_SUKKIRI1");
-                if (w->cur < w->need) {
-                    break;
-                }
-                w->state = 2;
-                w->timer = 0;
-                w->round++;
-                w->star.state = 5;
-                e = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
-                n = w->round + 1;
-                e->lwData[0] = n < 6 ? n : 6;
-                if (num >= 1 && num <= 49) {
-                    BattleAudienceSoundCallKind(1);
-                }
-                if (num >= 50 && num <= 99) {
-                    BattleAudienceSoundCallKind(1);
-                    BattleAudienceSoundWhistleKind(1);
-                }
-                if (num >= 100 && num <= 149) {
-                    BattleAudienceSoundCallKind(2);
-                    BattleAudienceSoundWhistleKind(2);
-                }
-                if (num >= 150) {
-                    BattleAudienceSoundCallKind(2);
-                    BattleAudienceSoundWhistleKind(3);
-                }
-            } else {
+        case 4:
+            w->time--;
+            if (w->time <= 0) {
                 w->state = 3;
                 w->timer = 0;
+                break;
             }
-        }
-        break;
-    case 5:
-        w->timer++;
-        if (w->timer <= 30) {
-            Vec v = {0.0f, -45.0f, 0.0f};
-            v.x = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, -1000.0f, w->timer, 30);
-            w->pos = v;
-        }
-        break;
+            if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y)) {
+                u32 trg = keyGetButtonTrg(0);
+                if (w->btn[w->cur].button & trg) {
+                    EventEntry* e;
+                    s32 n;
+                    w->cur++;
+                    psndSFXOn("SFX_BTL_SAC_SUKKIRI1");
+                    if (w->cur < w->need) {
+                        break;
+                    }
+                    w->state = 2;
+                    w->timer = 0;
+                    w->round++;
+                    w->star.state = 5;
+                    e = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
+                    n = w->round + 1;
+                    e->lwData[0] = n < 6 ? n : 6;
+                    if (num >= 1 && num <= 49) {
+                        BattleAudienceSoundCallKind(1);
+                    }
+                    if (num >= 50 && num <= 99) {
+                        BattleAudienceSoundCallKind(1);
+                        BattleAudienceSoundWhistleKind(1);
+                    }
+                    if (num >= 100 && num <= 149) {
+                        BattleAudienceSoundCallKind(2);
+                        BattleAudienceSoundWhistleKind(2);
+                    }
+                    if (num >= 150) {
+                        BattleAudienceSoundCallKind(2);
+                        BattleAudienceSoundWhistleKind(3);
+                    }
+                } else {
+                    w->state = 3;
+                    w->timer = 0;
+                }
+            }
+            break;
+        case 5:
+            w->timer++;
+            if (w->timer <= 30) {
+                Vec v = {0.0f, -45.0f, 0.0f};
+                v.x = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, -1000.0f, w->timer, 30);
+                w->pos = v;
+            }
+            break;
     }
 }
 
@@ -303,19 +303,19 @@ static void main_button(s32 idx) {
     s32 tbl[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
 
     switch (b->state) {
-    case 0:
-        break;
-    case 2:
-        break;
-    case 1:
-        b->state = 2;
-        {
-            Vec v = {0.0f, -40.0f, 0.0f};
-            v.x = 60.0f * (f32)idx - 30.0f * (f32)(w->need - 1);
-            b->pos = v;
-        }
-        b->button = tbl[irand(4)];
-        break;
+        case 0:
+            break;
+        case 2:
+            break;
+        case 1:
+            b->state = 2;
+            {
+                Vec v = {0.0f, -40.0f, 0.0f};
+                v.x = 60.0f * (f32)idx - 30.0f * (f32)(w->need - 1);
+                b->pos = v;
+            }
+            b->button = tbl[irand(4)];
+            break;
     }
 }
 
@@ -329,102 +329,102 @@ static void main_star(void) {
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
 
     switch (w->star.state) {
-    case 1:
-        w->star.state = 2;
-        w->star.timer = 0;
-        w->star.eff = effStarStoneEntry(5, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
-        w->star.from = w->star.pos;
-        w->star.to = w->star.pos;
-        w->star.to.y += 50.0f;
-        w->star.to.z += -1.0f;
-        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-        w->effCamera = CAMERA_3D;
-    case 2:
-        w->star.timer++;
-        if (w->star.timer <= 100) {
-            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
-            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
-            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
-        } else {
-            w->star.pos.x = w->star.to.x;
-            w->star.pos.y = w->star.to.y;
-            w->star.pos.z = w->star.to.z;
-            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
-        }
-        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
-        if (w->star.timer >= 120) {
-            w->star.state = 3;
+        case 1:
+            w->star.state = 2;
             w->star.timer = 0;
+            w->star.eff = effStarStoneEntry(5, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+            w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
             w->star.from = w->star.pos;
+            w->star.to = w->star.pos;
+            w->star.to.y += 50.0f;
+            w->star.to.z += -1.0f;
+            w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+            w->effCamera = CAMERA_3D;
+        case 2:
+            w->star.timer++;
+            if (w->star.timer <= 100) {
+                w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+                w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+                w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
+            } else {
+                w->star.pos.x = w->star.to.x;
+                w->star.pos.y = w->star.to.y;
+                w->star.pos.z = w->star.to.z;
+                w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
+            }
+            w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+            if (w->star.timer >= 120) {
+                w->star.state = 3;
+                w->star.timer = 0;
+                w->star.from = w->star.pos;
+                w->star.to.y = 300.0f;
+            }
+            break;
+        case 3:
+            w->star.timer++;
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+            if (w->star.timer >= 60) {
+                w->star.state = 4;
+                w->star.timer = 0;
+                w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
+                w->star.scale = (Vec){2.0f, 2.0f, 2.0f};
+                w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+            }
+            break;
+        case 5:
+            w->star.state = 6;
+            w->star.timer = 0;
+            BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+            w->star.pos.y += 100.0f;
+            w->star.scale = (Vec){1.5f, 1.5f, 1.5f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+            w->star.from.y = w->star.pos.y;
             w->star.to.y = 300.0f;
-        }
-        break;
-    case 3:
-        w->star.timer++;
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
-        if (w->star.timer >= 60) {
-            w->star.state = 4;
-            w->star.timer = 0;
-            w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
-            w->star.scale = (Vec){2.0f, 2.0f, 2.0f};
-            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-        }
-        break;
-    case 5:
-        w->star.state = 6;
-        w->star.timer = 0;
-        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += 100.0f;
-        w->star.scale = (Vec){1.5f, 1.5f, 1.5f};
-        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-        w->star.from.y = w->star.pos.y;
-        w->star.to.y = 300.0f;
-        effStardustN64Entry(0, w->star.pos.x, w->star.pos.y, w->star.pos.z, 32.0f);
-        break;
-    case 6:
-        w->star.timer++;
-        w->star.rot.y = intplGetValue(EASING_LINEAR, 0.0f, 1440.0f, w->star.timer, 40);
-        if (w->star.timer >= 40) {
-            w->star.state = 7;
-            w->star.timer = 0;
-            effStardustN64Entry(4, w->star.pos.x, w->star.pos.y - 5.0f, w->star.pos.z, 40.0f);
-            effStardustN64Entry(4, 30.0f + w->star.pos.x, w->star.pos.y, w->star.pos.z, 40.0f);
-            effStardustN64Entry(4, w->star.pos.x - 30.0f, w->star.pos.y, w->star.pos.z, 40.0f);
-            psndSFXOn("SFX_BTL_SAC_SUKKIRI3");
-        }
-        break;
-    case 7:
-        w->star.timer++;
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->star.from.y, w->star.to.y, w->star.timer, 30);
-        if (w->star.timer >= 30) {
-            w->star.state = 4;
-            w->star.timer = 0;
-            w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
-            w->star.scale = (Vec){2.0f, 2.0f, 2.0f};
-            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-        }
-        break;
-    case 8:
-        w->effCamera = CAMERA_3D;
-        break;
-    case 9:
-        w->star.timer++;
-        w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 20);
-        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 20);
-        w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 20);
-        w->effCamera = CAMERA_3D_EFFECTB;
-        if (w->star.timer >= 20) {
-            w->star.state = 8;
-            w->star.timer = 0;
-        }
-        break;
-    case 0:
-    case 10:
-        break;
+            effStardustN64Entry(0, w->star.pos.x, w->star.pos.y, w->star.pos.z, 32.0f);
+            break;
+        case 6:
+            w->star.timer++;
+            w->star.rot.y = intplGetValue(EASING_LINEAR, 0.0f, 1440.0f, w->star.timer, 40);
+            if (w->star.timer >= 40) {
+                w->star.state = 7;
+                w->star.timer = 0;
+                effStardustN64Entry(4, w->star.pos.x, w->star.pos.y - 5.0f, w->star.pos.z, 40.0f);
+                effStardustN64Entry(4, 30.0f + w->star.pos.x, w->star.pos.y, w->star.pos.z, 40.0f);
+                effStardustN64Entry(4, w->star.pos.x - 30.0f, w->star.pos.y, w->star.pos.z, 40.0f);
+                psndSFXOn("SFX_BTL_SAC_SUKKIRI3");
+            }
+            break;
+        case 7:
+            w->star.timer++;
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->star.from.y, w->star.to.y, w->star.timer, 30);
+            if (w->star.timer >= 30) {
+                w->star.state = 4;
+                w->star.timer = 0;
+                w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
+                w->star.scale = (Vec){2.0f, 2.0f, 2.0f};
+                w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+            }
+            break;
+        case 8:
+            w->effCamera = CAMERA_3D;
+            break;
+        case 9:
+            w->star.timer++;
+            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 20);
+            w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 20);
+            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 20);
+            w->effCamera = CAMERA_3D_EFFECTB;
+            if (w->star.timer >= 20) {
+                w->star.state = 8;
+                w->star.timer = 0;
+            }
+            break;
+        case 0:
+        case 10:
+            break;
     }
     if (w->star.eff) {
         EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
@@ -645,55 +645,55 @@ void _disp_2D(s32 side, s32 idx) {
     }
 
     switch (b->button) {
-    case PAD_BUTTON_A:
-        t = ICON_BUTTON_A;
-        if (idx < cur) {
-            t = ICON_BUTTON_A_PRESSED;
-        }
-        icon = t;
-        break;
-    case PAD_BUTTON_B:
-        t = ICON_BUTTON_B;
-        if (idx < cur) {
-            t = ICON_BUTTON_B_PRESSED;
-        }
-        icon = t;
-        break;
-    case PAD_BUTTON_X:
-        t = ICON_BUTTON_X;
-        if (idx < cur) {
-            t = ICON_BUTTON_X_PRESSED;
-        }
-        icon = t;
-        break;
-    case PAD_BUTTON_Y:
-        t = ICON_BUTTON_Y;
-        if (idx < cur) {
-            t = ICON_BUTTON_Y_PRESSED;
-        }
-        icon = t;
-        break;
-    case PAD_TRIGGER_L:
-        t = ICON_TRIGGER_L;
-        if (idx < cur) {
-            t = ICON_TRIGGER_L_PRESSED;
-        }
-        icon = t;
-        break;
-    case PAD_TRIGGER_R:
-        t = ICON_TRIGGER_R;
-        if (idx < cur) {
-            t = ICON_TRIGGER_R_PRESSED;
-        }
-        icon = t;
-        break;
-    case PAD_TRIGGER_Z:
-        t = ICON_TRIGGER_Z;
-        if (idx < cur) {
-            t = ICON_TRIGGER_Z_PRESSED;
-        }
-        icon = t;
-        break;
+        case PAD_BUTTON_A:
+            t = ICON_BUTTON_A;
+            if (idx < cur) {
+                t = ICON_BUTTON_A_PRESSED;
+            }
+            icon = t;
+            break;
+        case PAD_BUTTON_B:
+            t = ICON_BUTTON_B;
+            if (idx < cur) {
+                t = ICON_BUTTON_B_PRESSED;
+            }
+            icon = t;
+            break;
+        case PAD_BUTTON_X:
+            t = ICON_BUTTON_X;
+            if (idx < cur) {
+                t = ICON_BUTTON_X_PRESSED;
+            }
+            icon = t;
+            break;
+        case PAD_BUTTON_Y:
+            t = ICON_BUTTON_Y;
+            if (idx < cur) {
+                t = ICON_BUTTON_Y_PRESSED;
+            }
+            icon = t;
+            break;
+        case PAD_TRIGGER_L:
+            t = ICON_TRIGGER_L;
+            if (idx < cur) {
+                t = ICON_TRIGGER_L_PRESSED;
+            }
+            icon = t;
+            break;
+        case PAD_TRIGGER_R:
+            t = ICON_TRIGGER_R;
+            if (idx < cur) {
+                t = ICON_TRIGGER_R_PRESSED;
+            }
+            icon = t;
+            break;
+        case PAD_TRIGGER_Z:
+            t = ICON_TRIGGER_Z;
+            if (idx < cur) {
+                t = ICON_TRIGGER_Z_PRESSED;
+            }
+            icon = t;
+            break;
     }
     if (icon) {
         Vec pos = {0.0f, 0.0f, 0.0f};
