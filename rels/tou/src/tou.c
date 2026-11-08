@@ -4141,6 +4141,7 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_msg_print_party, STRING("stg3_tou_365_04_03"))
         CALL(evt_pouch_add_item, ITEM_CHAMPS_BELT, LW(0))
     END_IF
+
     // After the Armored Harriers match (fighter 10) with Yoshi away, the egg hatches into Yoshi from the egg story
     // on (before it the ポグ NPC has a word); after any other match the egg hops and Yoshi returns.
     SET_VALUE(LF(0), 0)

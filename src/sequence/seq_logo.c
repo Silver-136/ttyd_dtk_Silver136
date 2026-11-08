@@ -790,7 +790,6 @@ static void logoDisp(CameraId camId, void* param) {
 }
 
 
-
 /**
  * Background draw callback queued for the frame the video mode switches:
  * sets the display copy and a 608x480 viewport and scissor for the interlaced

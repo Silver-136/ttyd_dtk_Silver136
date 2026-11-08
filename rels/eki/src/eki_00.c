@@ -825,6 +825,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
     return 0;
 }
+
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 

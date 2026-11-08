@@ -240,6 +240,7 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
     mario = marioGetPtr();
     {
         Vec pos, at;
+
         // Never read; unused in the original too: their initializer templates are in the retail code
         Vec unused0 = {0.0f, 0.0f, 0.0f};
         Vec unused1 = {0.0f, 0.0f, 0.0f};

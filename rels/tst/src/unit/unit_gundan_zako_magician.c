@@ -1078,6 +1078,7 @@ static EVT_BEGIN(one_recover_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+
         // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs as
         // SET_TYPE, and the script goes on past END_IF with LW(3) = -1.
         GOTO(99)
@@ -1122,6 +1123,7 @@ static EVT_BEGIN(all_recover_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+
         // BUG: this script has no LABEL(99): evtSearchLabel resumes at this GOTO's argument word, which runs as
         // SET_TYPE, and the script goes on past END_IF with LW(3) = -1.
         GOTO(99)

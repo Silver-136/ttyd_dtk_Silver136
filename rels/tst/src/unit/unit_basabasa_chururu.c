@@ -483,6 +483,7 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+
         // BUG: this skips the -30 drop of a ceiling Swoopula, but LABEL(99) still adds 30 when kCeiling is on,
         // so it ends 30 above its spot.
         GOTO(99)

@@ -520,6 +520,7 @@ EVT_BEGIN(gor_irai_tenshu_main)
                 // Mario declined to cancel.
                 CALL(evt_msg_print_add, 0, STRING("irai_12"))
             END_IF
+
             // BUG (JP and the JP demo): after a paid cancel LW(0) still holds the request number minus 1, so
             // cancelling request 3 also prints irai_04 below. US and later versions set LW(0) to 1 here.
 #if VERSION >= VERSION_US

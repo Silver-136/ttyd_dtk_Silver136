@@ -504,6 +504,7 @@ void VIInit(void) {
     HorVer.black = 1;
     HorVer.threeD = 0;
     OSInitThreadQueue(&retraceQueue);
+
     // clear the interrupt status bit 0x8000 of both display interrupts (as __VIRetraceHandler does)
     value = __VIRegs[VI_DISP_INT_0];
     value &= 0x7FFF;

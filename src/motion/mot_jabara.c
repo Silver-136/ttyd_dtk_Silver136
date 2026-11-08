@@ -241,6 +241,7 @@ static inline void jabaraLand(f32 y, void* hit) {
 static inline void animStep(MarioWork* mario) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
 }
+
 // End of the spring jump: reset the pose, optionally return to standing, free the motion work
 static inline void jabTail(BOOL stay) {
     jabaraResetPose();

@@ -277,6 +277,7 @@ inline Vec outV(Vec a, Vec b) {
 inline f32 inV(Vec a, Vec b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
+
 /** Unused: TRUE when all three components of a are zero (kept: the 0.0f it contains may shape the constant pool). */
 static inline BOOL crVecIsZero(Vec a) {
     if (a.x == 0.0f && a.y == 0.0f && a.z == 0.0f) {

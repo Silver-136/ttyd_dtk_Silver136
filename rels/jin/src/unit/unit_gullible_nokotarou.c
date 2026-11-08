@@ -600,6 +600,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 #if VERSION <= VERSION_DEMO_JP
+
         // BUG (early demos): offsets the miss overshoot by the target's (LW(3)) facing instead of his own,
         // so he ends 40 units on the side the target faces; JP and later use UNIT_ID_SELF.
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
