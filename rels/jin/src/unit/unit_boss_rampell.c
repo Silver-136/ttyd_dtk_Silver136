@@ -82,7 +82,6 @@ static EvtWord marioAttackEvent_NormalHammer[299];
 static EvtWord marioAttackEvent_KaitenHammer[299];
 static EvtWord wait_event_fmario[6];
 
-
 /**
  * Battle script helper: turns Doopliss (Rampell) black for the shadow look (faker_mario_makkuro_set)
  * and switches on the shadow tint on his first part's pose.
@@ -120,7 +119,6 @@ static USER_FUNC(vivian_comeback) {
     pouchGetPtr()->partyData[PARTY_VIVIAN].flags &= ~2;
     return EVT_RETURN_YIELD;
 }
-
 
 /**
  * Battle script helper: spawns the "scanning" effect at (args[1], args[2], args[3]) on the unit args[0],
@@ -1565,4 +1563,3 @@ static EVT_BEGIN(wait_event_fmario)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

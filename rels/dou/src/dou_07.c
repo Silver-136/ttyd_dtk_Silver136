@@ -446,7 +446,6 @@ static void majin_callback(s32 type) {
     }
 }
 
-
 /**
  * Script helper: blocks until music channel 1 has started playing,
  * so the genie's music is audible before the scene continues.

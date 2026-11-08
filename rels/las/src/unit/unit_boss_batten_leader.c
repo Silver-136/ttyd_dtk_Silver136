@@ -1127,7 +1127,6 @@ LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
  * -2 blinks randomly, -3 and -4 are random waits). The three head tables run in sibling events; the power table runs in the main event.
  */
 EVT_BEGIN(light_anim_rtn)
-
     // First head lamp (part 4): play the animation sequence given in LW(6) over and over.
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(6))

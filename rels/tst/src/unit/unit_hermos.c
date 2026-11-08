@@ -514,7 +514,6 @@ EVT_END()
  * (A_1B) and hits it with the usual dodge and guard checks, then hops back home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -694,7 +693,6 @@ static USER_FUNC(eff_fire) {
  * (75% chance of a 3-turn burn), with a smoke puff at the target.
  */
 static EVT_BEGIN(fire_attack_event)
-
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -852,7 +850,6 @@ EVT_END()
 
 // Only the hit branch advances to the next target; avoidance exits the entire sweep.
 static EVT_BEGIN(all_fire_attack_event)
-
     // Choose a target (this move reaches every opposing unit).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -980,4 +977,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

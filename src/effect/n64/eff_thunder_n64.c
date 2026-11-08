@@ -33,7 +33,6 @@ typedef struct EffThunderN64Work {
     EffectEntry* charge; // 0x48
 } EffThunderN64Work;
 
-
 static void effThunderMain(EffectEntry* effect);
 static void effThunderDisp(CameraId cameraId, void* payload);
 

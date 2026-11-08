@@ -15,7 +15,6 @@
 #include "battle/battle_damage.h"
 #include "system.h"
 
-
 BattleUnitKind unit_gullible_clauda;
 static BattleWeapon enemyWeapon_ClaudaNormalAttack;
 static BattleUnitDefense defence_clauda;
@@ -288,7 +287,6 @@ EVT_END()
  */
 // Body Slam uses the shared attack-level power callback, then restores position and facing.
 static EVT_BEGIN(attack_event_clauda)
-
     // She may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -419,4 +417,3 @@ static EVT_BEGIN(wait_event_clauda)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

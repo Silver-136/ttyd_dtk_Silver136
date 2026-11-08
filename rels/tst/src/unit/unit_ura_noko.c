@@ -517,7 +517,6 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
 
-
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
@@ -847,4 +846,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

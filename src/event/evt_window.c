@@ -303,7 +303,6 @@ USER_FUNC(evt_win_one_message) {
     return EVT_RETURN_BLOCK;
 }
 
-
 /**
  * Draws the coin counter window (type 0 coins, 1 Shine Sprites, 2 Star Pieces)
  * and rolls the shown number toward the pouch value,

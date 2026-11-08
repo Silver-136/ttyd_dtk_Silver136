@@ -573,4 +573,3 @@ static void effAcrobatDisp(CameraId cameraId, void* param) {
 #endif
     }
 }
-

@@ -655,7 +655,6 @@ USER_FUNC(kpa_muteki_check) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Draw callback of the Bowser HUD, queued each frame by kpa_status_main:
  * the stage/score/tries/time labels (language-specific icons), the six-digit score, the coin count,

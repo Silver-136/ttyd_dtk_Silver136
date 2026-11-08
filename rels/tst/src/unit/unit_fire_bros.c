@@ -578,7 +578,6 @@ EVT_END()
  * Then it is hidden and unit work 1 goes up by one.
  */
 EVT_BEGIN(fire_move_event)
-
     // The fireball leaves the Bro's hand with the throw sound, spinning.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FIREB_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -959,7 +958,6 @@ static EVT_BEGIN(nagemakuri_attack_event)
         END_IF
     END_LOOP
     WAIT_FRAMES(30)
-
 
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

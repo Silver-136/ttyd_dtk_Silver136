@@ -1097,7 +1097,6 @@ static NpcSetupInfo npcEnt[] = {
  * the Mayor explains and Mario's party reacts; his house door opens and closes as he enters.
  */
 EVT_BEGIN(usu00_stage4_coming_event)
-
     // The camera drops from the sky as Mario and the party arrive by pipe; the partner looks around.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -1489,7 +1488,6 @@ EVT_END()
  * and she joins the party after either answer.
  */
 EVT_BEGIN(usu00_vivian_joinup_event)
-
     // Vivian hears Mario found the Super Bombomb; he holds it out and she takes it, then notices it is broken.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT)
@@ -1709,7 +1707,6 @@ EVT_END()
  * "stg4_jin_152" otherwise); GW(0) gates repeats.
  */
 EVT_BEGIN(usu00_crowAB_talk_event)
-
     // Wait until this crow pair is allowed to talk again.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -1851,7 +1848,6 @@ EVT_END()
  * at z <= -250, Bowser's caw "kpa_stg5_009_7_2", and GW(1) as its gate.
  */
 EVT_BEGIN(usu00_crowCDE_talk_event)
-
     // Wait until this crow trio is allowed to talk again.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -2901,7 +2897,6 @@ EVT_BEGIN(kanbu_regl)
     RETURN
 EVT_END()
 
-
 void kpaSen_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kpaSen_ext_disp, NULL);
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpaSen_ext_shadow_disp, NULL);
@@ -3511,7 +3506,6 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
     Mtx mtx;
@@ -3554,7 +3548,6 @@ static USER_FUNC(delete_npc_regl_evt) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 /** Script helper: spawns a Star Stone effect at (args[1], args[2], args[3]) and names it args[0]. */
 static USER_FUNC(starstone_entry) {
@@ -3642,7 +3635,6 @@ EVT_END()
  * and the game moves on to muj_01 (entrance sekai_yami2).
  */
 static EVT_BEGIN(sekai_yami_evt)
-
     // The town is drawn in darkness and the light flickers.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3769,7 +3761,6 @@ EVT_END()
  * and the game moves on to muj_01 (entrance minnnanokoe).
  */
 static EVT_BEGIN(minnnanokoe_evt)
-
     // Set up the dark town with the townsfolk and a spinning Crystal Star effect over the square.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -4072,7 +4063,6 @@ EVT_END()
  * and starts Chapter 4 and Bowser interlude cutscenes.
  */
 EVT_BEGIN(usu_00_init_evt)
-
     // In Bowser's interlude (from Peach's talk with TEC to Bowser's town visit) Mario is Bowser; GF(1) marks it.
     SET_VALUE(GF(1), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
@@ -4326,4 +4316,3 @@ EVT_BEGIN(usu_00_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

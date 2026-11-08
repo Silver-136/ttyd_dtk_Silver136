@@ -17,7 +17,6 @@
 #include "system.h"
 #include "pmario_sound.h"
 
-
 static EvtWord n2_close[12];
 static EvtWord n2_open[12];
 EvtWord n1_close[12];
@@ -209,4 +208,3 @@ EVT_BEGIN(jin_02_init_evt)
     CALL(evt_mobj_switch_red, 0, STRING("mobj_switch1"), 485, 30, -10, PTR(evt_kaidan_temae), 0)
     RETURN
 EVT_END()
-

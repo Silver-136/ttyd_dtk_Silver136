@@ -923,9 +923,7 @@ static USER_FUNC(lect_push_b_check) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Script helper: blocks until the lecture music (BGM channel 1) has actually started playing. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
-

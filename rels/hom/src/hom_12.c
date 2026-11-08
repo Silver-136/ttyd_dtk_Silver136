@@ -15,7 +15,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord hom_12_init_evt[];
 #else
@@ -65,4 +64,3 @@ EVT_BEGIN(hom_12_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

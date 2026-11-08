@@ -244,13 +244,11 @@ extern EvtWord bteresa_talk_sub_minigame[];
 EvtWord bteresa_talk_sub_minigame[245];
 #endif
 
-
 #if VERSION == VERSION_DEMO_JP
 EvtWord bteresa_talk_sub_keihin[202];
 #else
 EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
 #endif
-
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord bteresa_table_talk[];
@@ -285,7 +283,6 @@ extern EvtWord ranking_set[];
 #else
 EvtWord ranking_set[65];
 #endif
-
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord exchange_set[200];

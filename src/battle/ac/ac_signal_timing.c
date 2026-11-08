@@ -15,7 +15,6 @@
 #include <string.h>
 #include "icon_ids.h"
 
-
 typedef struct SignalTimingWork {
     s32 hits;       // 0x0
 #if VERSION >= VERSION_JP
@@ -592,4 +591,3 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
 }
-

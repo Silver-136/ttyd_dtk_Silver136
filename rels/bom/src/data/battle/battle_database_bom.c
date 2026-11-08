@@ -608,7 +608,6 @@ EVT_BEGIN(bgset_bom_snow_event)
     RETURN
 EVT_END()
 
-
 USER_FUNC(_snow_control) {
     if (isFirstCall) {
         effSnowfallN64Entry(0, 64);

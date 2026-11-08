@@ -1270,4 +1270,3 @@ USER_FUNC(item_chk) {
     }
     return EVT_RETURN_DONE;
 }
-

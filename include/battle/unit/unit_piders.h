@@ -3,7 +3,6 @@
 // Work slots of unit_piders, shared by its copies in the jon, mri, tou2 and tst RELs, and by unit_churantalar
 // (the same piders_* code).
 
-
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_LOWERED 0      // 1 while hanging low (y 10, hammer and shell toss can reach it; move_kuutei_event), 0 while high up (y 70; move_kuuchu_event)
 #define UNIT_WORK_THREAD_ALPHA 1 // alpha of the thread piders_draw_yarn draws: 255 normally; battle_end_event sets 254, then yarn_event fades it by 2 per frame

@@ -40,7 +40,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-
 USER_FUNC(bgm_wait_stop);
 USER_FUNC(toron_check);
 void yuurei_callback(s32 type, void* param);
@@ -91,7 +90,6 @@ extern EvtWord evt_toron_catch2[];
 EvtWord evt_toron_catch2[359];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord evt_toron_appear[437];
 #else
@@ -101,7 +99,6 @@ EvtWord evt_toron_appear[408];
 EvtWord evt_toron_appear[414];
 #endif
 #endif
-
 
 #if VERSION >= VERSION_DEMO_EU
 static EvtWord evt_daiji_kami[96];
@@ -1071,7 +1068,6 @@ EVT_END()
  * then the story advances to STG6_26_ZIP_TOAD_CAUGHT and the map changes to rsh_02_b.
  */
 EVT_BEGIN(evt_toron_catch)
-
     // GF(0) requests the jumping loop to stop; GF(1) acknowledges its cleanup.
     SET_VALUE(LW(10), 0)
     SET_VALUE(GF(0), 0)
@@ -1664,7 +1660,6 @@ EVT_END()
  * and the Smorg window effect.
  */
 EVT_BEGIN(rsh_02_a_init_evt)
-
     // Decide whether a scripted entry is pending, then run the shared car init.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_20_END_OF_DAY_1)
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
@@ -2050,7 +2045,6 @@ EVT_END()
  * or Rogueport (gor_04) depending on the direction of the trip; otherwise it uses the normal doors.
  */
 EVT_BEGIN(rsh_02_a_init_evt_nidome)
-
     // Second visit: run the shared init and show the clean floors.
     CALL_CHILD(rsh_02_init_evt_nidome)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2323,4 +2317,3 @@ EVT_BEGIN(evt_nidome_bed)
     END_IF
     RETURN
 EVT_END()
-

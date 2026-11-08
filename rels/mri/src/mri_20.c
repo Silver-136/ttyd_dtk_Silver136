@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 BeroEntry bero_black_shadow[1];
 static BeroEntry bero_entry_data[5];
 static EvtWord evt_ueki_08[20];
@@ -191,4 +190,3 @@ EVT_BEGIN(mri_20_init_evt)
     END_IF
     RETURN
 EVT_END()
-

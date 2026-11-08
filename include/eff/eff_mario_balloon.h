@@ -18,4 +18,3 @@ typedef struct MarioBalloonWork {
 } MarioBalloonWork;
 
 EffectEntry* effMarioBalloonEntry(s32 type, struct NpcEntry* npc);
-

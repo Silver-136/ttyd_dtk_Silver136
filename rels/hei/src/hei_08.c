@@ -157,4 +157,3 @@ static USER_FUNC(npc_dead) {
     npcGroupDead(npcNameToPtr("チョロボン"), FALSE);
     return EVT_RETURN_DONE;
 }
-

@@ -25,7 +25,6 @@
 #include <string.h>
 #include "driver/mobjdrv.h"
 
-
 /**
  * Jump curves (speed, acceleration, jerk, snap): Mario's launch off a blue jump stand (mot_jumpStand), with its
  * fall and easing values; then the bounce off a switch (mot_jumpSw), rising (marioSetJumpPara) then falling.

@@ -1798,4 +1798,3 @@ EVT_BEGIN(bgset_tou_screen_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gamen"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
-

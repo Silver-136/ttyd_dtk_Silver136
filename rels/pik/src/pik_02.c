@@ -40,7 +40,6 @@
 #include "driver/seqdrv.h"
 #include "pik.h"
 
-
 static USER_FUNC(get_starstone_pos);
 USER_FUNC(get_starstone_seq);
 USER_FUNC(hoshi);
@@ -1312,4 +1311,3 @@ EVT_BEGIN(pik_02_init_evt)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
 EVT_END()
-

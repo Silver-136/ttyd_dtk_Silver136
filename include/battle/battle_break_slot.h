@@ -37,11 +37,9 @@ typedef struct BreakSlotWork {
     struct EventEntry* evt;           // 0x130
 } BreakSlotWork;
 
-
 void BattleBreakSlot_Init(void);
 void BattleBreakSlot_Main(void);
 void BattleBreakSlot_End(void);
-
 
 void BattleBreakSlot_DecBreakTurn(void);
 BreakSlotWork* BattleBreakSlotGetPtr(void);

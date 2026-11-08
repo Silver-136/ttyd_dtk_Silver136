@@ -69,7 +69,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
     return v;
 }
 
-
 static void winNameDisp(WinMgrEntry* win);
 static void winNameDisp2(WinMgrEntry* win);
 static void winHelpMain(WinMgrEntry* win);
@@ -1136,7 +1135,6 @@ static void winNameDisp(WinMgrEntry* win) {
     }
 }
 
-
 /** Draws the box that names an item Mario let go of (msg_window_item_release) when his pouch was full. */
 static void winNameDisp2(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
@@ -1173,7 +1171,6 @@ static void winNameDisp2(WinMgrEntry* win) {
         FontDrawMessage(-width / 2, win->y - 8, buffer);
     }
 }
-
 
 /** Per-frame update of the item description box shown under the get box. */
 static void winHelpMain(WinMgrEntry* win) {
@@ -2160,4 +2157,3 @@ void itemPickUp(ItemEntry* entry) {
     entry->timer = 0;
     entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
 }
-

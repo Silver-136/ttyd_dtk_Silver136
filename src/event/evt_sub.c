@@ -51,14 +51,12 @@
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
 
-
 #include "system.h"
 #include "driver/msgdrv.h"
 #include "manager/fontmgr.h"
 #include "manager/winmgr.h"
 #include <stdio.h>
 #include <dolphin/os.h>
-
 
 s32 stop;
 

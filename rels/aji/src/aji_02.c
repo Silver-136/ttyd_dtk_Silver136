@@ -31,7 +31,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-
 USER_FUNC(all_flag_off);
 USER_FUNC(hikaru_off_func);
 USER_FUNC(hikaru_on_func);
@@ -522,4 +521,3 @@ USER_FUNC(hikaru_off_func) {
     }
     return EVT_RETURN_DONE;
 }
-

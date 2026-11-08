@@ -20,7 +20,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];
 static BeroEntry bero_entry_data[2];
@@ -168,4 +167,3 @@ EVT_BEGIN(las_12_init_evt)
     SPAWN_EVENT(kabenuke_check_evt)
     RETURN
 EVT_END()
-

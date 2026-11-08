@@ -33,7 +33,6 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-
 USER_FUNC(item_check_necklace_exist);
 USER_FUNC(win_item_move_3d_position);
 USER_FUNC(mariowalk_wait);

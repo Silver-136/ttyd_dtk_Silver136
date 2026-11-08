@@ -240,7 +240,6 @@ EVT_END()
  * bounces off and walks back home.
  */
 static EVT_BEGIN(attack_event)
-
     // A First Strike aims at the first-strike target;
     // otherwise the Goomba picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -421,4 +420,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

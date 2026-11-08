@@ -10,4 +10,3 @@ EvtWord gon_bt00_init_evt[2];
 EVT_BEGIN(gon_bt00_init_evt)
     RETURN
 EVT_END()
-

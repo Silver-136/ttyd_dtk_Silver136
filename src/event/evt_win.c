@@ -62,7 +62,6 @@
 #include "demo/DEMOPad.h"
 #endif
 
-
 typedef enum UnitWinItemFlags {
     UNITWIN_ITEM_UNAVAILABLE = 1 << 0, // empty goods slot or already purchased
 } UnitWinItemFlags;
@@ -2259,4 +2258,3 @@ USER_FUNC(unitwin_setmariolevel) {
     evtSetValue(event, args[3], unequipped);
     return EVT_RETURN_DONE;
 }
-

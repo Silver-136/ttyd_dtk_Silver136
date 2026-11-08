@@ -305,7 +305,6 @@ EVT_END()
  * each checking damage, with the final-hit flag on the last dive.
  */
 static EVT_BEGIN(attack_event)
-
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -961,4 +960,3 @@ USER_FUNC(chorogun_escape_all) {
     }
     return 2;
 }
-

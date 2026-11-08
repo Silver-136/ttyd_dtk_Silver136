@@ -41,7 +41,6 @@
 #include "icon_ids.h"
 #include "evt/evt_save_flags.h"
 
-
 //.sbss
 static ShopWork* _wp;
 char mapname[16];

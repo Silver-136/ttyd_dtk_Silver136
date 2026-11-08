@@ -509,7 +509,6 @@ EVT_END()
  * and applies the damage with the action command defence check. It then turns around and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -880,4 +879,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

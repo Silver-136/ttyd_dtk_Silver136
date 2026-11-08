@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "icon_ids.h"
 
-
 //.sdata2
 static const GXColor sWhite = {255, 255, 255, 255};
 static const GXColor sShadow = {255, 255, 255, 153};

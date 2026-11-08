@@ -584,7 +584,6 @@ static BattleUnitSetup entry_togenoko = {
  * based on its state, the number of occupied Koopatrol slots (togenoko_getnum) and random chances.
  */
 static EVT_BEGIN(attack_event)
-
     // In a First Strike it just attacks normally.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -739,7 +738,6 @@ EVT_END()
  * and the pre-damage check decides between a miss and a hit; on a hit it then hops back.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -878,7 +876,6 @@ EVT_END()
  * slides home and pops out of the shell (SHELL2).
  */
 static EVT_BEGIN(shell_attack_event)
-
     // Choose the targets for the shell attack; a confused Koopatrol with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))

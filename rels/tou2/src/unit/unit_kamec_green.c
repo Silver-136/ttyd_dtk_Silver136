@@ -982,7 +982,6 @@ EVT_END()
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
-
     // At the start of a first strike the Magikoopa goes straight into its attack spell.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1138,7 +1137,6 @@ EVT_END()
  * and the magic sounds (SFX_ENM_KAMEKU_MAGIC1, 4 and 8).
  */
 static EVT_BEGIN(ground_magic_common_event1)
-
     // Casting begins on the ground: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1291,7 +1289,6 @@ EVT_END()
  * the KMG_A_3A to KMG_A_3D poses played in step on all of them, and the magic sounds.
  */
 static EVT_BEGIN(sky_magic_common_event)
-
     // Casting begins in the air: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -2117,4 +2114,3 @@ static EVT_BEGIN(wait_event)
     END_IF
     RETURN
 EVT_END()
-

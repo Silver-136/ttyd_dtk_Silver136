@@ -22,7 +22,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord w_close[12];
 static EvtWord w_open[12];
 static BeroEntry bero_entry_data[2];
@@ -190,4 +189,3 @@ EVT_BEGIN(jin_06_init_evt)
     END_IF
     RETURN
 EVT_END()
-

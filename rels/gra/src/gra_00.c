@@ -36,7 +36,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-
 static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);
 static USER_FUNC(zoom);
@@ -129,7 +128,6 @@ EVT_END()
  * he gasps, switches to his surprised pose and talk poses, and the camera is released.
  */
 EVT_BEGIN(name_seikai)
-
     // Doopliss gasps and strikes his surprised pose.
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -353,7 +351,6 @@ EVT_END()
  * and a right guess moves the story to STG4_14_NAME_GUESSING.
  */
 EVT_BEGIN(evt_machibuse)
-
     // Waits until Mario steps into the strip of road where Doopliss ambushes him.
     SET_VALUE(LF(0), 0)
     LOOP(0)

@@ -716,4 +716,3 @@ EVT_BEGIN(tou_00_init_evt)
     END_IF
     RETURN
 EVT_END()
-

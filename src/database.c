@@ -479,4 +479,3 @@ MapAttrEntry _map_attr_data[] = {
     { "las_30", 15, 7 },
     { NULL, -1, 0 },
 };
-

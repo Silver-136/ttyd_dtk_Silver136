@@ -10,7 +10,6 @@
 #include "mario/mario_pouch.h"
 #include "battle/battle_enemy_item.h"
 
-
 static void* _check_status_recover_item(BattleUnit* self);
 static void* _check_status_support_item(BattleUnit* self);
 static void* _check_status_attack_item(BattleUnit* self);
@@ -357,4 +356,3 @@ static void* _check_status_recover_item(BattleUnit* self) {
     }
     return NULL;
 }
-

@@ -31,7 +31,6 @@ typedef struct EffBalloonN64Work {
     f32 offsetY;                   // 0xC8
 } EffBalloonN64Work;
 
-
 /** Template vertices of the balloon, copied each frame before the 20 outline points are wobbled around it. */
 static effN64Vtx balloon_vtx[] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 255},
@@ -259,4 +258,3 @@ static void effBalloonDisp(CameraId cameraId, void* payload) {
         }
     }
 }
-

@@ -490,7 +490,6 @@ EVT_END()
  * and the bone then bounces off.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // The Dull Bones chooses who to throw a bone at (fixed by the field encounter when the battle opened with
     // its own first strike).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -638,7 +637,6 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
-
     // The camera zooms in on the Dull Bones as it starts calling for help.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -737,4 +735,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

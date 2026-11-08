@@ -1589,4 +1589,3 @@ USER_FUNC(moamoa_set_bodyScale) {
     wp->targetScale = 0.333f * (n - 3) + 1.0f;
     return 0;
 }
-

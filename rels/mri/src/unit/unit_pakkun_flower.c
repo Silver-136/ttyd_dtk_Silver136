@@ -20,7 +20,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(pakkun_ceil_exist);
 static USER_FUNC(shadow_scale_small);

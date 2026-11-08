@@ -1130,7 +1130,6 @@ EVT_END()
  * and a throw can pick the same target again.
  */
 static EVT_BEGIN(renzoku_attack_event)
-
     // Pick targets; a confused Arantula with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1326,4 +1325,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

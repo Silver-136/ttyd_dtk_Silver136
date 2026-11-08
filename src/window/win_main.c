@@ -46,7 +46,6 @@
 #include "win/win_party.h"
 #include "libc_decls.h"
 
-
 #define HALF_F float_0p5_8041dc98
 USER_FUNC(cam_r);
 USER_FUNC(lecture_key_mask_off);
@@ -84,7 +83,6 @@ static void winLectureKeyMask(void);
 void iconGetTexObj(GXTexObj* obj, u16 iconId);
 static void winDisp(CameraId camId, void* param);
 static void winDispKoopa(CameraId camId, void* param);
-
 
 /** Returns the pause menu's work area (shared by every menu tab). */
 WindowWork* winGetPtr(void) {
@@ -529,7 +527,6 @@ void winDvdClose(void) {
     }
     wp->res = NULL;
 }
-
 
 EVT_BEGIN(kime_pose)
 #if VERSION >= VERSION_JP
@@ -1778,7 +1775,6 @@ BOOL winLectureCheck(void) {
     wp->flags &= ~WINDOW_FLAG_LECTURE;
     return FALSE;
 }
-
 
 // FAKE: the global 0.5f (a real .sdata2 object) is `volatile` so each HALF_F use loads it; a plain const changes
 // the object in both versions

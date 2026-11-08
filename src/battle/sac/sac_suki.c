@@ -39,7 +39,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_stage.h"
 
-
 typedef struct SukiBtn {
     s32 state;  // 0x0
     s32 pad4;   // 0x4, never accessed
@@ -130,7 +129,6 @@ static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -120, 120, 0)
     RETURN
 EVT_END()
-
 
 USER_FUNC(main_suki) {
     SukiWork* w = get_ptr();
@@ -891,7 +889,6 @@ static void set_tev(MapTevCallbackInfo* info) {
     info->texCoord = 0;
     info->texMap = 0;
 }
-
 
 /**
  * Showstopper, the Garnet Star's special move (star stone effect type 5):

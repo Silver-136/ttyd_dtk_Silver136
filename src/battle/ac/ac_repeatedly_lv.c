@@ -37,7 +37,6 @@ typedef struct RepeatedlyLvWork {
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 
-
 /**
  * Reads the script parameters: params[0] picks the input (A by default; 2 B, 3 X, 4 Y, 5 R, 6 stick left,
  * 7 letting go of the stick held left, 8 the same while holding A, 11 A/B, 12 X/Y, 13 stick up/down,

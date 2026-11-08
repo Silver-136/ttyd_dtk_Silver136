@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static TreeAccess tree_tbl[4];
 static EvtWord evt_tree[7];
 static BeroEntry bero_entry_data[3];
@@ -92,4 +91,3 @@ EVT_BEGIN(bom_04_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bom04_hei2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

@@ -20,7 +20,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[5];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -248,4 +247,3 @@ EVT_BEGIN(win_02_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hikou"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

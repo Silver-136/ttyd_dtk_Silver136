@@ -75,4 +75,3 @@ void _prolog(void) {
     relSetEvtAddr("aji_19", aji_19_init_evt);
     relSetBtlAddr("aji", btlsetup_aji_tbl, btl_aji_setup_no_tbl);
 }
-

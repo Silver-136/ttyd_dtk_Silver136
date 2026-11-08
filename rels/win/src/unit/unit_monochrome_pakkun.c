@@ -19,7 +19,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);
 static USER_FUNC(shadow_scale_small);
@@ -453,7 +452,6 @@ EVT_END()
  * handles the guard and avoid cases, then runs return_event.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // A First Strike aims at the first-strike target after a short pause;
     // otherwise the plant picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

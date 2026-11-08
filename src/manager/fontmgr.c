@@ -63,7 +63,6 @@ BinaryFontHeader* pfh; //pointer to font header
 #define FONT_CH(c) (c)
 #endif
 
-
 // local prototypes
 void JUTFont_DrawStart(GXColor color);
 static void _JUTFont_DrawPos(u16 code, s16 x, s16 y);
@@ -1302,4 +1301,3 @@ static void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     GXTexCoord2u16(u0, v1);
     GXTexCoord2u8(n0, t1);
 }
-

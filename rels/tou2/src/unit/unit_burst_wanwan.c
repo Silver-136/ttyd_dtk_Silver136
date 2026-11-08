@@ -443,7 +443,6 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered. It always ends back in the wait event.
  */
 static EVT_BEGIN(attack_event)
-
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -917,4 +916,3 @@ static USER_FUNC(chain_init) {
     BtlUnit_SetAnim(part, "WAN_Z_2");
     return EVT_RETURN_DONE;
 }
-

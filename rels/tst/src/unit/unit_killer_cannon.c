@@ -237,7 +237,6 @@ EVT_END()
  * Some choices stop after the first free spot, while others scan all three; if none is free it fires nothing.
  */
 static EVT_BEGIN(attack_event)
-
     // Uses a held item if it has one to use.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

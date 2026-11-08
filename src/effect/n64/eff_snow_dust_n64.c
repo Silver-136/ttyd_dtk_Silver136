@@ -12,7 +12,6 @@
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
 
-
 static void effSnowDustMain(EffectEntry* effect);
 static void effSnowDustDisp(CameraId cameraId, void* param);
 

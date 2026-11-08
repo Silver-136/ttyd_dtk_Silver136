@@ -16,7 +16,6 @@
 #include "evt/evt_mobj.h"
 #endif
 
-
 static EvtWord w_close[12];
 static EvtWord w_open[12];
 static EvtWord e_close[12];
@@ -156,4 +155,3 @@ EVT_BEGIN(muj_11_init_evt)
 #endif
     RETURN
 EVT_END()
-

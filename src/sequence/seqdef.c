@@ -12,7 +12,6 @@
 #include "seq/seq_e3.h"
 #include "seq/seq_battle.h"
 
-
 #if VERSION <= VERSION_DEMO_JP
 #include "seq/seq_demo.h"
 SequenceCallback seq_data[9][3] = {

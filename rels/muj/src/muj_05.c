@@ -1556,4 +1556,3 @@ EVT_BEGIN(muj_05_init_evt)
     CALL_CHILD(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
-

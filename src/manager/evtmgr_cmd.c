@@ -729,7 +729,6 @@ s32 evt_case_large_equal(EventEntry* entry) { // 41
     s32 inputValue;
     s32 targetValue;
 
-
     depth = entry->switchDepth;
     targetValue = evtGetValue(entry, args[0]);
     state = entry->switchStates[depth];

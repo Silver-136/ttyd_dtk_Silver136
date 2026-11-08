@@ -22,7 +22,6 @@
 #include "driver/itemdrv.h"
 #include "gon.h"
 
-
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];
 static EvtWord door02_close[12];
@@ -449,4 +448,3 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
     RETURN
 EVT_END()
-

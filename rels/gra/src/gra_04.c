@@ -293,7 +293,6 @@ EVT_BEGIN(gra_04_init_evt)
     RETURN
 EVT_END()
 
-
 // Descriptive name (not in the symbol maps); placeholder unk_gra_00000530, JP gra .text+0x46C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 

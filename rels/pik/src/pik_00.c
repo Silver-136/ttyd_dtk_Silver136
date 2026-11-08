@@ -59,7 +59,6 @@
 #include "map/sharin.h"
 #include "map/sharin.h"
 
-
 USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);
 USER_FUNC(under);
@@ -2379,12 +2378,10 @@ static USER_FUNC(zoom) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Map TEV callback for the train model: forwards the map object's TEV info to envAddTev with index 7. */
 static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);
 }
-
 
 /**
  * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
@@ -2397,4 +2394,3 @@ static USER_FUNC(ramp_r) {
     evtSetFloat(event, LW(10), 1.8f * amp * wave);
     return EVT_RETURN_DONE;
 }
-

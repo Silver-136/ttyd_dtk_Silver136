@@ -17,7 +17,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 static EvtWord dead_evt1[10];
 static EvtWord dead_evt2[10];
@@ -315,4 +314,3 @@ EVT_BEGIN(hei_05_init_evt)
     END_IF
     RETURN
 EVT_END()
-

@@ -12,7 +12,6 @@
 #include "evt/evt_twoddisp.h"
 #include "libc_decls.h"
 
-
 typedef struct TwodEntry {
     char name[0x10];  // 0x0
     u16 flags;        // 0x10
@@ -225,4 +224,3 @@ EVT_END()
 // FAKE: placed in .sdata2 (both colors); without it the object changes
 __declspec(section ".sdata2") const GXColor twod_text_fog_color;
 __declspec(section ".sdata2") const GXColor twod_icon_fog_color;
-

@@ -358,7 +358,6 @@ EVT_END()
  * plays the engine sounds and ramps the wheel speeds GW(0) and GW(1) up to -15 (leftward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start)
-
     // The train is marked as moving and no longer at any station.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -472,7 +471,6 @@ EVT_END()
  * but ramps the speeds up to +15 (rightward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start2)
-
     // The train is marked as moving and no longer at any station.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -951,7 +949,6 @@ EVT_END()
  * Sets the train arrival flags and starts Peach's mail scene (peach_mail) until STG6_57_A_MAIL_FROM_PEACH.
  */
 EVT_BEGIN(evt_train2)
-
     // Control is taken away and Mario and the partners are hidden while the train pulls in.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2238,7 +2235,6 @@ EVT_END()
  * heals Mario and his partners (in JP and the early demos, only when a partner is supplied).
  */
 EVT_BEGIN(gor_04_init_evt)
-
     // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
     // arrived by blimp).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
@@ -2373,7 +2369,6 @@ EVT_BEGIN(gor_04_init_evt)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(ramp_r) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));
     f32 wave = sin(gp->retraceCount / 15.0f);
@@ -2381,7 +2376,6 @@ static USER_FUNC(ramp_r) {
     evtSetFloat(event, LW(10), 1.8f * amp * wave);
     return EVT_RETURN_DONE;
 }
-
 
 /** TEV callback for the train model: forwards to envAddTev with slot 7 to add the shared environment lighting. */
 static void resha_tev(MapTevCallbackInfo* info) {
@@ -2399,4 +2393,3 @@ static USER_FUNC(kpa_hikousen_yure) {
     npcNameToPtr("飛クッパ")->moveOffset.y = y;
     return EVT_RETURN_DONE;
 }
-

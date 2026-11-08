@@ -19,7 +19,6 @@ typedef struct TimingWideWork {
     s32 endTimer; // 0x10
 } TimingWideWork;
 
-
 static void actionCommandDisp(f32 x, f32 y);
 
 /**

@@ -14,7 +14,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_gullible_yoshi;
 static BattleWeapon enemyWeapon_YoshiNormalAttack;
 static BattleUnitDefense defence_yoshi;
@@ -288,7 +287,6 @@ EVT_END()
  * after the final hit he tumbles back and walks home.
  */
 static EVT_BEGIN(attack_event_yoshi)
-
     // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -515,4 +513,3 @@ EVT_END()
 #else
 EVT_END_PAD()
 #endif
-

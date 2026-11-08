@@ -15,7 +15,6 @@
 #include "battle/unit_work.h"
 #include "battle/battle_damage.h"
 
-
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -467,4 +466,3 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 #endif
-

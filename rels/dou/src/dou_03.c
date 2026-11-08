@@ -27,7 +27,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-
 EvtWord dou_03_custom[10];
 static BeroEntry bero_entry_data[8];
 EvtWord watergate_handle_init[34];
@@ -529,4 +528,3 @@ EVT_BEGIN(dou_03_init_evt)
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change"))
     RETURN
 EVT_END()
-

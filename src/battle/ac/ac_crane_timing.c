@@ -8,7 +8,6 @@
 #include <string.h>
 #include "battle/battle_sub.h"
 
-
 // BattleActions.params slots this command reads (btlevtcmd_AcSetParamAll)
 typedef enum CraneTimingParam {
     CRANE_PARAM_UNIT_ID = 1,
@@ -28,7 +27,6 @@ typedef struct CraneTimingWork {
     f32 range;      // 0x28
     s32 endTimer;   // 0x2C
 } CraneTimingWork;
-
 
 /**
  * Per-frame driver of action command 13, which no battle script in the tree sets up.

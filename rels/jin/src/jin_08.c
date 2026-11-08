@@ -27,7 +27,6 @@
 #include "driver/itemdrv.h"
 #include <dolphin/pad.h>
 
-
 static EvtWord e_close[12];
 static EvtWord e_open[12];
 EvtWord evt_roll_in[41];
@@ -467,4 +466,3 @@ EVT_BEGIN(jin_08_init_evt)
 #endif
     RETURN
 EVT_END()
-

@@ -64,7 +64,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-
 typedef struct SightWork {
     FileEntry* tpl;
     s32 level[5];
@@ -2517,7 +2516,6 @@ s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-
 // Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
 // gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
 // target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
@@ -2774,7 +2772,6 @@ s32 bom1000_jump(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Script helper: args[0] is a float Z offset; builds a look-at matrix from (0, 100, 100+z)
  * and hands it to the darkness effect (envSetYamiView) as its view.
@@ -2804,7 +2801,6 @@ static s32 anim_tevcallback(EventEntry* event, BOOL isFirstCall) {
     animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
-
 
 /** Script helper: creates a Star Stone effect named args[0] at (args[1], args[2], args[3]), size 1. */
 static s32 starstone_entry(EventEntry* event, BOOL isFirstCall) {
@@ -3141,4 +3137,3 @@ EVT_BEGIN(bom_01_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

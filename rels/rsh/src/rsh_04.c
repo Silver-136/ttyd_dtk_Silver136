@@ -48,7 +48,6 @@ EvtWord evt_rsh_konarikin_irai_party_talk[89];
 EvtWord evt_rsh_konarikin_irai_party_talk[85];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord evt_allow_kamotsu[77];
 #else
@@ -2001,7 +2000,6 @@ EVT_BEGIN(rsh_04_c_init_evt_nidome)
     SET_VALUE(GSWF_RSH_REVISIT_MAP_C, 1)
     RETURN
 EVT_END()
-
 
 // Suspend room-repeat dialogue while field-battle mode 2 or the ghost-diary window is active.
 static USER_FUNC(mario_flag) {

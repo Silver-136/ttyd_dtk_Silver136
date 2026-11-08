@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[5];
 static EvtWord evt_ueki_04[20];
 static KusaAccess ueki_access_data[7];
@@ -157,4 +156,3 @@ EVT_BEGIN(mri_18_init_evt)
     CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()
-

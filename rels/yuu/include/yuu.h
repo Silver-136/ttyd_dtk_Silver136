@@ -105,7 +105,6 @@ void yuuminigame_main_3roll(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_4slit(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_main_4slit(struct EventEntry* event, BOOL isFirstCall);
 
-
 USER_FUNC(eff_call_minigame);
 USER_FUNC(evt_yuucounter_alloc);
 USER_FUNC(evt_yuucounter_free);

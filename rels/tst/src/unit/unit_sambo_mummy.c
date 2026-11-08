@@ -791,7 +791,6 @@ EVT_END()
  * the Pokey also takes marioWeapon_UltraHammerFinish.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
-
     // With only the head left (unit work 0 is 1) the hit just plays the shot reaction, or the no-damage
     // flinch.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
@@ -1287,7 +1286,6 @@ EVT_END()
  * guard and hit results from the pre-damage check and the action command defence, and hops home.
  */
 static EVT_BEGIN(attack_head_1_event)
-
     // A Pokey reduced to a single segment attacks alone: it chooses a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_sambo_mummy_head_attack_1))
@@ -1474,7 +1472,6 @@ EVT_END()
  * bounces back and rolls away; on a miss it flies on off the stage. It is hidden afterwards.
  */
 static EVT_BEGIN(attack_spike_event)
-
     // The throw depends on how many segments the Pokey has left (unit work 0): pick the weapon and a target.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
     SWITCH(LW(10))
@@ -1714,7 +1711,6 @@ EVT_END()
  * The new Pokey's unit work 1 is the caller's plus one, which limits how many generations can summon.
  */
 static EVT_BEGIN(call_friend_event)
-
     // The Pokey rocks its stack from side to side, with a calling sound for each swing.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_SEND_GROUP1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1893,4 +1889,3 @@ static EVT_BEGIN(_body_param_set)
     END_SWITCH
     RETURN
 EVT_END()
-

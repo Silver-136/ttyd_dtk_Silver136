@@ -11,7 +11,6 @@
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_opuku_jetwrain_n64.h"
 
-
 typedef struct EffOpukuJetwrainWork {
     s32 type;      // 0x0
     Vec position;  // 0x4
@@ -296,4 +295,3 @@ static void effOpukuJetwrainDisp(CameraId cameraId, void* param) {
     }
     GXSetProjectionv(proj);
 }
-

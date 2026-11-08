@@ -14,7 +14,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static TreeAccess tree_tbl[4];
 static EvtWord evt_tree[7];
 static BeroEntry bero_entry_data[3];
@@ -88,4 +87,3 @@ EVT_BEGIN(bom_03_init_evt)
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 45, 5, 120, ITEM_TYPE_STILL, GSWF_STARPIECE_95, 0)
     RETURN
 EVT_END()
-

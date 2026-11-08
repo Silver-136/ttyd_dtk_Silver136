@@ -19,7 +19,6 @@
 #define UNIT_WORK_SPIN_SPEED 9    // signed target degrees/frame around Y; add 1 for nonnegative targets or subtract 1 for negative targets, then clamp to the target
 #define UNIT_WORK_SPIN_REVERSE 10 // nonzero makes the spin loop reverse direction (negates speed and target), then clears it
 
-
 BattleUnitKind unit_gullible_nokotarou;
 static BattleWeapon enemyWeapon_NokotarouKouraAttack;
 static BattleWeapon enemyWeapon_NokotarouShubibinAttack;
@@ -532,7 +531,6 @@ EVT_END()
  * comes out of the shell and walks home.
  */
 static EVT_BEGIN(attack_event_nokotarou_koura)
-
     // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -662,7 +660,6 @@ EVT_END()
  * he reappears on the opposite side, returns home and comes out of the shell.
  */
 static EVT_BEGIN(attack_event_nokotarou_shubibin)
-
     // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -779,4 +776,3 @@ static EVT_BEGIN(wait_event_nokotarou)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

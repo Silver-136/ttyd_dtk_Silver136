@@ -46,7 +46,6 @@ typedef struct PendulumWork {
     s32 endTimer; // 0x4C (0x48 in the early demos)
 } PendulumWork;
 
-
 /**
  * Shell Shield HP by swing position, as pairs of (upper end of the position range 0-100, HP):
  * 2 at the ends rising to 8 in the middle. Used by Koops's Shell Shield and to colour its gauge.

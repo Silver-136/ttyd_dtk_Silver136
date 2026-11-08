@@ -22,7 +22,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -505,4 +504,3 @@ EVT_BEGIN(las_22_init_evt)
     END_IF
     RETURN
 EVT_END()
-

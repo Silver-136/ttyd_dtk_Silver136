@@ -26,7 +26,6 @@
 #include "mario/mario_kemuri.h"
 #include "mot/mot_jabara.h"
 
-
 typedef struct MotJabaraWork {
     u32 flags;          // 0x00: MotJabaraFlags
     f32 swingAccel;     // 0x04: added to the swing speed while the push timer runs (2.4 start, 0.1 walk)
@@ -44,7 +43,6 @@ typedef enum MotJabaraFlags {
     JABARA_FLAG_CHARGE_2 = (1 << 17), // 0x20000, charge level 2 reached (its sound played once)
     JABARA_FLAG_CHARGE_3 = (1 << 18), // 0x40000, charge level 3 reached (its sound played once)
 } MotJabaraFlags;
-
 
 /**
  * Sets the camera z shift target, shift rate and zoom for a Spring Jump charge level,
@@ -99,7 +97,6 @@ static inline void* jabaraHitFront(f32 ang) {
     sincosf(&sn, &cs, ang);
     return hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px, py, pz, sn, 0.0f, cs);
 }
-
 
 /** Vertical camera shake (about 0.015 for 240 ms) when Mario bumps a ceiling during the Spring Jump. */
 static EVT_BEGIN(quake_evt)
@@ -902,7 +899,6 @@ static void jabaraSwingStart(s32 side) {
         mario->mot.jabara.state = 1;
     }
 }
-
 
 /** Starts a gentle swing while Mario moves hanging under a ceiling, if he is not already swinging. */
 static void jabaraSwingWalk(void) {

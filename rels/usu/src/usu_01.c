@@ -48,7 +48,6 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-
 static USER_FUNC(bgm_start_wait);
 static USER_FUNC(booboo_main);
 USER_FUNC(box_r);
@@ -3565,7 +3564,6 @@ USER_FUNC(box_r) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Script helper: blocks until the channel 1 BGM has started. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -3803,4 +3801,3 @@ EVT_BEGIN(usu_01_init_evt)
     SPAWN_EVENT(evt_sub_mail_event)
     RETURN
 EVT_END()
-

@@ -824,7 +824,6 @@ EVT_END()
  * (stg4_jin_26_01), below 25% he says he is nearly beaten (stg4_jin_26_02).
  */
 EVT_BEGIN(phase_event_fmario)
-
     // Before the player's phase on turn 3: Vivian makes her choice.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1601,4 +1600,3 @@ static EVT_BEGIN(wait_event_fmario)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

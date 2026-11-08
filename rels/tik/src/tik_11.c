@@ -55,7 +55,6 @@ static USER_FUNC(wariai_enzan_1);
 EvtWord powerdownya_face_left[16];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord powerdownya_mario_level_rtn[639];
 EvtWord powerdownya_party_lank_rtn[963];
@@ -272,7 +271,6 @@ static USER_FUNC(bgScrollControll) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Script helper. Blocks until the music on channel 1 has started, or returns immediately if the channel is empty. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -302,7 +300,6 @@ EVT_END()
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
 EVT_BEGIN(powerdownya_mario_level_rtn)
-
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
@@ -974,4 +971,3 @@ EVT_BEGIN(tik_11_init_evt)
     CALL(evt_map_playanim, STRING("anm_kem"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()
-

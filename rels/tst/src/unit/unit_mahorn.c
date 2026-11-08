@@ -689,7 +689,6 @@ EVT_END()
  * Afterwards the Wizzerd jumps back home.
  */
 static EVT_BEGIN(attack_punch_event)
-
     // Picks the target: the First Strike target on a First Strike, otherwise a random opposing unit;
     // with no target it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -857,7 +856,6 @@ EVT_END()
  * shots that hit land and the damage is resolved. Finally the clones return to their wait event.
  */
 static EVT_BEGIN(attack_enemy_common_event)
-
     // Declares the magic attack, pays its cost and turns to face the target.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1479,7 +1477,6 @@ EVT_END()
  * otherwise each hand flips between two poses at random 15 to 30 frame intervals.
  */
 static EVT_BEGIN(wait_event)
-
     // Unless the unit is a clone (unit work 4 set), it also puts its clones back into their idle poses.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)

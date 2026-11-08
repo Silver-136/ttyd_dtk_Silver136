@@ -399,7 +399,6 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
-
     // A Koopa flipped onto its back spends its turn getting back on its feet instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -572,4 +571,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

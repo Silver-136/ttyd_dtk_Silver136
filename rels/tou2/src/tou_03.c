@@ -257,7 +257,6 @@ extern EvtWord npc_entry[];
 EvtWord npc_entry[623];
 #endif
 
-
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_random_battle[317];
 #else
@@ -326,7 +325,6 @@ static EvtWord evt_boss[1901];
 #else
 static EvtWord evt_boss[VERSION_PICK(1916, 1919)];
 #endif
-
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_watch_match[];
@@ -5933,4 +5931,3 @@ EVT_BEGIN(tou_03_init_evt)
     END_IF
     RETURN
 EVT_END()
-

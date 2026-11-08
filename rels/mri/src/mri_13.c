@@ -33,7 +33,6 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-
 USER_FUNC(evt_puni_force_pose);
 USER_FUNC(yuka_fall_check);
 
@@ -638,4 +637,3 @@ EVT_BEGIN(mri_13_init_evt)
     END_IF
     RETURN
 EVT_END()
-

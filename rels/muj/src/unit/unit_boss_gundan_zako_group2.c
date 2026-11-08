@@ -33,7 +33,6 @@
 #define UNIT_WORK_ALL_LANDED 0 // 1 once all 25 members have landed (zakogun_ext_main2); hit_check_event waits for it before the final hit; the attacks clear it
 #define UNIT_WORK_HIT_LANDED 1 // fall attack: 1 once a hit landed; the final hit then skips the avoid check
 
-
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 
@@ -1035,4 +1034,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

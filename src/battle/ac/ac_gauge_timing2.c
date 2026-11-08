@@ -14,7 +14,6 @@
 #include "system.h"
 #include <string.h>
 
-
 typedef struct GT2Work {
     s32 frame;       // 0x0
     f32 cursor;      // 0x4
@@ -34,7 +33,6 @@ typedef struct GT2Work {
 
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-
 
 static void actionCommandDisp(f32 x, f32 y);
 

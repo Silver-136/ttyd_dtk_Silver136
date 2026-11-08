@@ -655,7 +655,6 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
     entry->position.z = z;
 }
 
-
 /**
  * Per-frame update of all map objects: works out which one Mario hammered, hit from below, stood on,
  * spun on or touched with an action, which one a partner, a Bobbery bomb or Bowser hit,
@@ -974,7 +973,6 @@ void mobjMain(void) {
     }
 }
 
-
 /** Returns the map object with this name; one past the table when there is none (the name is expected to exist). */
 MapObjectEntry* mobjNameToPtr(const char* name) {
     int i;
@@ -1204,7 +1202,6 @@ s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
         return 0;
     }
 }
-
 
 #if VERSION <= VERSION_DEMO_JP
 // FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.

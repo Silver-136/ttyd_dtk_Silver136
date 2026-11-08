@@ -314,7 +314,6 @@ EVT_END()
  * the holding state; the default damage then runs.
  */
 static EVT_BEGIN(damage_event)
-
     // While the Dark Lakitu is not holding an egg it just takes the default damage.
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -623,7 +622,6 @@ EVT_END()
  * Otherwise the egg drops to the floor further past the target and is hidden.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick a target; a confused Dark Lakitu with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_jyugem_attack))

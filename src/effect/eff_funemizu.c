@@ -599,4 +599,3 @@ static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-

@@ -18,7 +18,6 @@ typedef struct PowerGaugeLvWork {
     s32 timer;     // 0x10
 } PowerGaugeLvWork;
 
-
 /**
  * Per-frame driver of action command 16, which no battle script in the tree sets up.
  * A gauge fills over 100 frames; holding exactly L and R together stops it,
@@ -136,7 +135,6 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
 s32 battleAcResult_PowerGaugeLv(BattleWork* work) {
     return work->actionCommands.result;
 }
-
 
 static void actionCommandDisp(f32 x, f32 y);
 

@@ -19,7 +19,6 @@
 #include "party.h"
 #include "driver/camdrv.h"
 
-
 static EvtWord epilogue_evt[49];
 
 #if VERSION == VERSION_DEMO_JP
@@ -71,4 +70,3 @@ EVT_BEGIN(gor_12_init_evt)
     END_IF
     RETURN
 EVT_END_PAD()
-

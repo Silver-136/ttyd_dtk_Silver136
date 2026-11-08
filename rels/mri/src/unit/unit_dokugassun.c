@@ -331,7 +331,6 @@ EVT_END()
  * and poison checks run for each target.
  */
 static EVT_BEGIN(poisongas_event)
-
     // The Poison Puff picks the whole opposing side as its target (it is already charged up).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -755,4 +754,3 @@ EVT_END()
 #else
 EVT_END_PAD()
 #endif
-

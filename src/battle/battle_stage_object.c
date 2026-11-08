@@ -40,7 +40,6 @@
 #include "eff/eff_fall.h"
 #include "eff/eff_nozle.h"
 
-
 // local prototypes
 static void BattleObjectConfig(void);
 static void _mobj_shake_main(BattleStageObject* obj);
@@ -72,7 +71,6 @@ USER_FUNC(_get_bgset_attack_data);
 USER_FUNC(_mobj_destroy);
 USER_FUNC(_mobj_set_alpha);
 USER_FUNC(_set_mobj_rotate_x);
-
 
 extern BattleStageNozzleData battle_stage_nozzle_data[];
 extern BattleStageFallObjectData battle_stage_fall_object_data[];
@@ -530,7 +528,6 @@ void BattleStage_DestroyB(void) {
         wp->stageObjectWork.bgDestroyEvtId = entry->eventId;
     }
 }
-
 
 /**
  * Base weapon of a nozzle spray aimed at Mario's side (it skips enemies):

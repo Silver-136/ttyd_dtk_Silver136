@@ -156,7 +156,6 @@ EVT_BEGIN(kpa_05_init_evt)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(kpa_get_level) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], kpaGetLevel());

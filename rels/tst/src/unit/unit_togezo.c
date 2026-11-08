@@ -522,7 +522,6 @@ EVT_END()
  * then returns home, either uncurled (TURN2, TGZ_S_1) or in guard after 30% of hits.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -840,4 +839,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

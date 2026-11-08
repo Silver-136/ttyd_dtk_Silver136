@@ -14,7 +14,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_sinemon;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -492,4 +491,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

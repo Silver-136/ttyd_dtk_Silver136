@@ -42,7 +42,6 @@
 #include "driver/hitdrv.h"
 #endif
 
-
 USER_FUNC(countDisp);
 
 static BeroEntry bero_entry_data[4];

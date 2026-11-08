@@ -831,7 +831,6 @@ EVT_BEGIN(hei_07_init_evt)
     RETURN
 EVT_END()
 
-
 // The message callback shares LW14 (mouth/marker count) and LW15 (mouth-animation mode) with the event.
 static void callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
@@ -918,4 +917,3 @@ USER_FUNC(mario_set_dir) {
     mario->moveDirection = reviseAngle(mario->moveDirection + event->userdataf[2]);
     return EVT_RETURN_DONE;
 }
-

@@ -12,7 +12,6 @@
 #include <string.h>
 #include "eff/eff_n64.h"
 
-
 typedef struct EffHoraoSpellN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -276,4 +275,3 @@ static void effHoraoSpellDisp(CameraId cameraId, void* payload) {
         }
     }
 }
-

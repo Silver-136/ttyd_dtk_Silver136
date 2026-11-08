@@ -243,7 +243,6 @@ EVT_END()
  * kinds); then it walks home.
  */
 static EVT_BEGIN(attack_event)
-
     // Target: the first-strike target if the battle opened that way, otherwise one picked for its attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -424,4 +423,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

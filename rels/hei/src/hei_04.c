@@ -17,7 +17,6 @@
 #include "driver/itemdrv.h"
 #include "driver/npcdrv.h"
 
-
 static BeroEntry bero_entry_data[3];
 static EvtWord evt_ki_3[20];
 static TreeAccess ki_data[4];
@@ -132,4 +131,3 @@ EVT_BEGIN(hei_04_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group1"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

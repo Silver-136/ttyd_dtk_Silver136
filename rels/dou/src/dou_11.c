@@ -2957,4 +2957,3 @@ EVT_BEGIN(dou_11_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)
     RETURN
 EVT_END()
-

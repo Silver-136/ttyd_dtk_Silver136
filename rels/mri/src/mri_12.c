@@ -24,7 +24,6 @@
 #include "driver/itemdrv.h"
 #include "driver/npcdrv.h"
 
-
 static BeroEntry bero_entry_data[6];
 static EvtWord punipuni_ball00_init[32];
 static EvtWord punipuni_ball00[51];
@@ -255,4 +254,3 @@ EVT_BEGIN(mri_12_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -175, -310, -85, ITEM_TYPE_STILL, GSWF_STARPIECE_48, 0)
     RETURN
 EVT_END()
-

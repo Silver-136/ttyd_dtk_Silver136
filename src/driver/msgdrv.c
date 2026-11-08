@@ -39,7 +39,6 @@ const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
 
-
 // MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
 // A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
@@ -49,7 +48,6 @@ static void msgWindow_Clear_Main(WindowEntry* window);
 static void msgWindow_Delete(WindowEntry* window);
 static void selectWindow_Main(WindowEntry* window);
 static void selectWindow_Disp(CameraId camId, void* param);
-
 
 typedef struct MsgLookupEntry {
     u32 tagOffset; //0x0
@@ -2537,4 +2535,3 @@ static void selectWindow_Disp(CameraId camId, void* param) {
     pos.z = 0.0f;
     iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, window->alpha, 1.0f);
 }
-

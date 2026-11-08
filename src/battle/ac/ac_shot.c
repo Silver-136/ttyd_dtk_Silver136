@@ -45,7 +45,6 @@ typedef enum ShotParam {
     SHOT_PARAM_SPEED = 6,     // ShotWork.vel in tenths
 } ShotParam;
 
-
 static void _disp_target_mark(CameraId cameraId, void* param);
 static void _disp_target_mark_afterimage(CameraId cameraId, void* param);
 static void _ac_disp_init(BattleWork* work);

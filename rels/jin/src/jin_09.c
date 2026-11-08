@@ -16,7 +16,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[2];
 EvtWord jin_09_jumpstand[21];
 EvtWord jin_09_init_evt[214];
@@ -133,4 +132,3 @@ EVT_BEGIN(jin_09_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

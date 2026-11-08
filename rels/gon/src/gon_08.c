@@ -28,7 +28,6 @@
 #include "driver/itemdrv.h"
 #include "gon.h"
 
-
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];
 static EvtWord door02_close[12];
@@ -513,7 +512,6 @@ EVT_BEGIN(nokkosu_init)
 EVT_END()
 
 EVT_BEGIN(nokkosu_talk)
-
     // Koopook is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
@@ -693,4 +691,3 @@ EVT_BEGIN(gon_08_init_evt)
     END_IF
     RETURN
 EVT_END()
-

@@ -22,7 +22,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);
 static USER_FUNC(shadow_scale_small);
@@ -279,7 +278,6 @@ EVT_END()
  * 2 damage and a 50% chance of Poison (1 a turn for 10 turns); then it returns (return_event).
  */
 static EVT_BEGIN(breath_event)
-
     // Choose the targets for the breath; if there are none a confused plant is flustered and the turn ends.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -677,7 +675,6 @@ EVT_END()
  * strike) and bites it for 3 damage, then returns (return_event).
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

@@ -18,7 +18,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[2];
 EvtWord hari_trap[107];
 static HitDamageReturn hitDmgRetPoints[3];
@@ -136,4 +135,3 @@ EVT_BEGIN(tik_21_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 150, 0, -100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TIK_21_SPIKE_SHIELD_CHEST)
     RETURN
 EVT_END()
-

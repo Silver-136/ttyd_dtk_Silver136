@@ -11,7 +11,6 @@
 #include "evt/evt_sub.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[4];
 static BeroEntry e3_bero[2];
 
@@ -127,4 +126,3 @@ EVT_BEGIN(gon_00_init_evt)
     END_IF
     RETURN
 EVT_END()
-

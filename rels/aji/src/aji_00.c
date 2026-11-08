@@ -25,7 +25,6 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -312,4 +311,3 @@ EVT_BEGIN(aji_00_init_evt)
     END_SWITCH
     RETURN
 EVT_END()
-

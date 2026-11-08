@@ -17,7 +17,6 @@
 #include "icon_ids.h"
 #include "battle/unit_work.h"
 
-
 BattleUnitKind unit_lecture_frankli;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -990,4 +989,3 @@ EVT_BEGIN(lecture_end_event)
     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
     RETURN
 EVT_END()
-

@@ -490,7 +490,6 @@ EVT_END()
  * and it returns home with return_event.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Picks the target: the preset first-attack target (after a short pause) when battle flag 2 is set, otherwise a
     // random opposing unit; with none it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

@@ -1393,4 +1393,3 @@ static USER_FUNC(mario_cannot_use_command) {
     evtSetValue(event, var, weapon);
     return EVT_RETURN_DONE;
 }
-

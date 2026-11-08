@@ -396,7 +396,6 @@ EVT_END()
  * Then the boomerang is hidden (ATTACK4) and unit work 0 goes up by one.
  */
 EVT_BEGIN(boomerang_move_event)
-
     // The Bro hurls the boomerang: it appears in his hand with the throw sound and starts to spin.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -667,7 +666,6 @@ EVT_END()
  * second time as the last hit 30 to 40 frames later (the guard result is applied once).
  */
 EVT_BEGIN(normal_attack_event_confuse)
-
     // The confused Bro turns toward his own side and winds up for a throw.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_attack))
@@ -778,7 +776,6 @@ EVT_END()
  * hit.
  */
 EVT_BEGIN(renzoku_attack_event_confuse)
-
     // The confused Bro turns toward his own side and winds up for a throw.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_renzoku_attack))

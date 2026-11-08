@@ -316,7 +316,6 @@ EVT_END()
  * then flies back up and returns to its home position. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event_pata)
-
     // After a First Strike it attacks right away; otherwise it runs a selected item-use event, or picks a target
     // (a confused Parabuzzy with nobody to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -792,7 +791,6 @@ EVT_END()
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
-
     // If the Parabuzzy is lying on its back it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1062,7 +1060,6 @@ EVT_END()
  * takes two hops near the target, then walks back to its original x position and runs init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
-
     // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused
     // Parabuzzy with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -1206,4 +1203,3 @@ static EVT_BEGIN(wait_event_ceil)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

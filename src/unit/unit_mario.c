@@ -894,4 +894,3 @@ EVT_BEGIN(mario_win_reaction)
     RETURN
 EVT_END()
 #endif
-

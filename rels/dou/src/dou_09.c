@@ -21,7 +21,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[5];
 static EvtWord dou_puka_event_init0[8];
 static EvtWord dou_puka_event_0[24];
@@ -628,4 +627,3 @@ EVT_BEGIN(dou_09_init_evt)
     SPAWN_EVENT(bombwall_init)
     RETURN
 EVT_END()
-

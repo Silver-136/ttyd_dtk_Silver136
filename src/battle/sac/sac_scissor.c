@@ -88,7 +88,6 @@ typedef struct ScissorWork {
     /* 0x170 */ smartEntry* smart;
 } ScissorWork;
 
-
 static void scissor_disp_region(CameraId camera, void* param);
 static void scissor_capture(CameraId camera, void* param);
 static void tess(Pt* buf, s32 count);
@@ -955,7 +954,6 @@ static s32 scissor_control(EventEntry* evt, BOOL first) {
     dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, scissor_disp_control, NULL);
     return 0;
 }
-
 
 /**
  * Applies one closed loop: scores every enemy the loop covers (skipping KO'd, clone,

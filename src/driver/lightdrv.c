@@ -9,7 +9,6 @@
 #include <string.h>
 #include "libc_decls.h"
 
-
 //.sbss
 static LightWork work[2];
 

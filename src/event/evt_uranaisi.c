@@ -10,7 +10,6 @@
 #include "libc_decls.h"
 #include "evt/evt_uranaisi.h"
 
-
 typedef enum UranaiMode {
     URANAI_MODE_NEXT = 0,
     URANAI_MODE_STAR_PIECE = 1,

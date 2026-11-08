@@ -1305,4 +1305,3 @@ USER_FUNC(zakogun_end_sukima) {
 
 ZakoGunWork* work;
 ZakoGun* zakogun;
-

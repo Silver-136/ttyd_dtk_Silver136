@@ -616,7 +616,6 @@ static USER_FUNC(evt_nomal_cange) {
     return (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
-
 /** Script helper: blocks until the lecture music (BGM channel 1) has actually started playing. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -824,4 +823,3 @@ EVT_BEGIN(slit_majin_lecture)
     CALL(evt_npc_set_position, STRING("ペラ魔人"), 0, -1000, 0)
     RETURN
 EVT_END()
-

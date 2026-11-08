@@ -522,7 +522,6 @@ EVT_END()
  * After a first strike it pauses first. When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // After a First Strike it pauses a moment; otherwise it picks a target (a confused Dry Bones with nobody
     // to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -735,7 +734,6 @@ EVT_END()
  * only the last CheckDamage call uses the final-hit flag 256. On a hit the bone rebounds toward the thrower and is hidden.
  */
 static EVT_BEGIN(link_attack_event_sub)
-
     // The Dry Bones rears back and throws one of its three bones.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)

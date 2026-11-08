@@ -20,7 +20,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 EvtWord kpa_00_first_evt[61];
 EvtWord kpa_00_fly_evt[380];
 static NpcSetupInfo npcEnt[3];
@@ -59,7 +58,6 @@ EVT_END()
  * and play returns to Petalburg (nok_01).
  */
 EVT_BEGIN(kpa_00_fly_evt)
-
     // Cutscene start: controls are off and Mario is moved out of sight; Bowser's airship and Kammy are placed
     // small and far away.
     CALL(evt_mario_key_onoff, 0)
@@ -251,4 +249,3 @@ EVT_BEGIN(kpa_00_init_evt)
     END_SWITCH
     RETURN
 EVT_END_PAD()
-

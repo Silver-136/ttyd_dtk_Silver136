@@ -222,7 +222,6 @@ USER_FUNC(replace_evt) {
     Vec min;
     Vec max;
 
-
     min = (Vec){data->bboxMin.x, data->bboxMin.y, data->bboxMin.z};
     max = (Vec){data->bboxMax.x, data->bboxMax.y, data->bboxMax.z};
 

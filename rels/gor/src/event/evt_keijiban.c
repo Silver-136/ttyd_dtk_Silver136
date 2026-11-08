@@ -25,7 +25,6 @@ typedef struct KeijibanData {
     s32 maxEvtNo;
 } KeijibanData;
 
-
 KeijibanData _kjdt[1];
 
 s32 keijiban_data_make(const char* prefix, BOOL fill) {
@@ -176,4 +175,3 @@ USER_FUNC(keijiban_data_alloc) {
 KeijibanData _kjdt[] = {
     {0},
 };
-

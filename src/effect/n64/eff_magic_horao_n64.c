@@ -12,7 +12,6 @@
 #include "eff/n64/eff_hokori_n64.h"
 #include "eff/n64/eff_magic_horao_n64.h"
 
-
 typedef struct EffMagicHoraoN64Work {
     s32 type;       // 0x0
     Vec position;   // 0x4

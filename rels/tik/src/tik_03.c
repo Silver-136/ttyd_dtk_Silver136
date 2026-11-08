@@ -25,7 +25,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
 
@@ -257,7 +256,6 @@ EVT_END()
  * Ends with the music back to the sewer theme and story progress STG1_33_A_PUNI_PLEA_FOR_HELP.
  */
 EVT_BEGIN(puni_soguu_3)
-
     // Mario arrives; Punio spots him and scurries off to the west end of the room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -633,4 +631,3 @@ EVT_BEGIN(tik_03_init_evt)
     END_IF
     RETURN
 EVT_END()
-

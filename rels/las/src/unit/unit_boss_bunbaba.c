@@ -1256,7 +1256,6 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(_leg_smoke_effect) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -1272,4 +1271,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

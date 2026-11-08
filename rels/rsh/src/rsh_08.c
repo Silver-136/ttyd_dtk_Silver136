@@ -10,7 +10,6 @@
 #include "evt/evt_snd.h"
 #include "pmario_sound.h"
 
-
 BeroEntry bero_data_a_nidome[2];
 BeroEntry bero_data_b_nidome[2];
 BeroEntry bero_data_c_nidome[2];
@@ -123,4 +122,3 @@ EVT_BEGIN(rsh_08_a_init_evt)
     CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()
-

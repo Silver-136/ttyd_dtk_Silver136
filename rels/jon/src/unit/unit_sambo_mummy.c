@@ -775,7 +775,6 @@ EVT_END()
  * marioWeapon_UltraHammerFinish hit then lands on the Poison Pokey itself.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
-
     // With only its head left, the hammer blow just does its damage (or nothing, if it deals none).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1044,7 +1043,6 @@ EVT_END()
  * The weapon used is weapon_sambo_mummy_head_attack_2 to 4 according to the body length (unit work 0).
  */
 static EVT_BEGIN(attack_head_2_event)
-
     // Choose a target with the weapon that matches the stack height (2 to 4 segments).
     SET_VALUE(LW(6), LW(11))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(5))
@@ -1695,7 +1693,6 @@ static EVT_BEGIN(attack_spike_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
-
     // The Pokey sways back and forth, calling to a friend.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_SEND_GROUP1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1876,4 +1873,3 @@ static EVT_BEGIN(_body_param_set)
     END_SWITCH
     RETURN
 EVT_END()
-

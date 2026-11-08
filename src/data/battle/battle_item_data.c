@@ -4624,7 +4624,6 @@ BattleWeapon ItemWeaponData_PoisonKinoko = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
-
 // _nancy_mirage keeps x/y/z as three s32 words from userdata3 on (over wInterpRelatedTime)
 
 typedef struct ThrowWork {

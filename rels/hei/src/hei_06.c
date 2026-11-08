@@ -16,7 +16,6 @@
 #include "driver/itemdrv.h"
 #include "driver/npcdrv.h"
 
-
 static BeroEntry bero_entry_data[3];
 static TreeAccess ki_data[5];
 EvtWord evt_kusa_8[20];
@@ -113,4 +112,3 @@ EVT_BEGIN(hei_06_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 50, 50, 105, ITEM_TYPE_STILL, GSWF_HEI_06_INN_COUPON, 0)
     RETURN
 EVT_END()
-

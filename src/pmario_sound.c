@@ -11545,4 +11545,3 @@ BOOL psndENV_LPF(s32 id, u16 freq) {
 void psndStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }
-

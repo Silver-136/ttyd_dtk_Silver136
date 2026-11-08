@@ -132,4 +132,3 @@ EVT_BEGIN(tik_villager_urouro)
         WAIT_MS(1000)
     END_LOOP
 EVT_END()
-

@@ -18,7 +18,6 @@ typedef struct TimingAEntry {
     s32 value;
 } TimingAEntry;
 
-
 /**
  * Width of the A-press window for Mario's jumps and Goombella's Headbonk, one list per difficulty:
  * pairs of (up to this many bounces, frames). The first entry is the normal window;
@@ -132,7 +131,6 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
             break;
     }
 }
-
 
 /**
  * Judges the press when the script asks: succeeds

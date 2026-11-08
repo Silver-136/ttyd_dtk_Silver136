@@ -597,4 +597,3 @@ EVT_BEGIN(las_26_init_evt)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)
     RETURN
 EVT_END()
-

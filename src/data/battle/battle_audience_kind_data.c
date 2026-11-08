@@ -5,7 +5,6 @@
 #include "battle/battle_audience_kind_data.h"
 #include "battle/battle_audience_anim.h"
 
-
 extern s32 audience_kinopio_run_front[14];
 extern s32 audience_daisan_run_front[14];
 extern s32 audience_teresa_run_front[14];

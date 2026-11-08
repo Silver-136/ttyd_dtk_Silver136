@@ -34,7 +34,6 @@
 #include "evt/evt_damage.h"
 #include "evt/evt_npc.h"
 
-
 USER_FUNC(evt_box_pukapuka);
 USER_FUNC(evt_mario_check_menu);
 USER_FUNC(evt_mapgrp_translate2);
@@ -818,4 +817,3 @@ USER_FUNC(evt_mapgrp_translate2) {
     prev[2] = 10.0f * (z / 10.0f);
     return EVT_RETURN_DONE;
 }
-

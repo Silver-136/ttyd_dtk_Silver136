@@ -26,7 +26,6 @@ static void kemuri(void);
 static void kemuri_mugi(void);
 void mario_kemuri_landon(void);
 
-
 /**
  * Per-frame footstep effects for the player character,
  * run from marioMain and from Peach's and Bowser's main loops.

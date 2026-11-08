@@ -18,4 +18,3 @@ BattleAudienceKind audience_kind[] = {
     {0, audience_anim_pakkun, audience_item_pakkun, 0.0f, 20.0f, 1.0f, 1.0f, 1.0f},
     {0, audience_anim_luigi, audience_item_luigi, 0.0f, 40.0f, 1.0f, 1.2f, 1.2f},
 };
-

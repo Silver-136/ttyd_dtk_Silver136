@@ -13,7 +13,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffKemuri9N64Work {
     u16 type;        // 0x0
     u8 pad_2[2];     // 0x2

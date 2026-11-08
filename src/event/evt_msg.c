@@ -391,7 +391,6 @@ USER_FUNC(evt_msg_print_add_insert) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Lets the script's paused message window carry on (after a choice, for example) and waits until it closes. */
 USER_FUNC(evt_msg_continue) {
     if (isFirstCall) {

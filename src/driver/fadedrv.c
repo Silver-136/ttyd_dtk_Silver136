@@ -29,7 +29,6 @@ const f32 float_0_8041f774 = 0.0f;
 #pragma force_active reset
 #endif
 
-
 static FadeWork* wp;
 
 // local prototypes
@@ -558,7 +557,6 @@ static inline void fadeCapture(const char* name, const char* off, s32 mode) {
     args[7] = 480;
     evt_img_alloc_capture(&evt, TRUE);
 }
-
 
 /**
  * Once per frame: advances every active fade slot (progress from the render clock,
@@ -1238,7 +1236,6 @@ void fadeMain(void) {
     }
 }
 
-
 /**
  * Draws slot 0's fade (with the 2D camera's projection, on the fade, 2D or 3D camera fadeMain queues it on): the iris
  * or spot texture scaled around the spot position (growing with the fifth power of progress) or a flat colour,
@@ -1744,4 +1741,3 @@ TEXPalette* fadeGetTpl(void) {
 void fadeSetNarrowFast(void) {
     wp->entries[1].flags |= FADE_FLAG_NARROW_FAST;
 }
-

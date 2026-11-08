@@ -255,7 +255,6 @@ EVT_END()
  * then hits each target in turn.
  */
 static EVT_BEGIN(thunder_event)
-
     // The Puff picks a target from the opposing side; with none it gives up (flustered if confused).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -552,7 +551,6 @@ EVT_END()
  * it shivers and squashes, rises, dives into the target, then floats back up and home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // A First Strike aims at the first-strike target;
     // otherwise the Puff picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -701,4 +699,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
 EVT_END()
-

@@ -38,7 +38,6 @@ static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
-
 /** Inline copy of marioChkBero (TRUE = Mario passes through the hit), used by the roll, ship and wall-around checks. */
 static inline BOOL marioChkBeroInl(HitEntry* hit) {
     s32 attr = hitGetAttr(hit);
@@ -502,7 +501,6 @@ HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z) {
     return hit;
 }
 
-
 /** FALSE when floors are disabled for Mario or he is at y >= 5000 (out of the map), so marioChkGnd skips the floor. */
 static inline BOOL marioChkGndOk(void) {
     MarioWork* mario = marioGetPtr();
@@ -730,7 +728,6 @@ void marioChkGnd2(void) {
         }
     }
 }
-
 
 /**
  * Five-point ground search: the early demos probe at 0.375 of the collision width and return the first accepted floor.
@@ -1627,7 +1624,6 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     }
     return NULL;
 }
-
 
 /**
  * TRUE if the ceiling hit is a Super Block (MOBJ_PowerUpBlock), Save Block or Heart Block (free or paid):
@@ -3124,4 +3120,3 @@ void marioCheckWallShip(f32 dx, f32 dz) {
         PSVECAdd(&old, &diff, &mario->position);
     }
 }
-

@@ -1104,7 +1104,6 @@ USER_FUNC(_set_gonbaba_light) {
  * Each removed member except 32 lowers the audience count by one.
  */
 EVT_BEGIN(gon_extra_eaten_event)
-
     // The audience member is startled and lifted out of the crowd.
     WAIT_FRAMES(14)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, 6)
@@ -1267,7 +1266,6 @@ EVT_END()
  * surrender (unit work 3) once with stg1_gon_31_04.
  */
 EVT_BEGIN(gonbaba_damage_sub_event)
-
     // A hit with the cricket chirp (Attack FX R) is counted.
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1628,7 +1626,6 @@ EVT_END()
  * moved her unit.
  */
 static EVT_BEGIN(fumituke_attack_event)
-
     // Hooktail picks a target and declares the stomp.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_fumituke_attack))
@@ -1753,7 +1750,6 @@ EVT_END()
  * (SFX_BOSS_GNB_BREATH_FIRE1); each target in turn then dodges or takes weapon_gonbaba_firebreath_attack.
  */
 EVT_BEGIN(firebreath_attack_event)
-
     // Hooktail declares the fire breath on every target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_firebreath_attack))

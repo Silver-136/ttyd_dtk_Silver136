@@ -25,7 +25,6 @@
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
 
-
 static void effFukidashiMain(EffectEntry* effect);
 static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect);
 

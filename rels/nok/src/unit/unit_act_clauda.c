@@ -6,7 +6,6 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_sub.h"
 
-
 BattleUnitKind unit_act_clauda;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -148,4 +147,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

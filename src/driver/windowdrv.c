@@ -16,7 +16,6 @@
 WindowEntry* WinObjects;
 GXTexObj* wakuTexObj;
 
-
 // msgWindow.tpl texture indices (light/dark pairs)
 typedef enum WakuTexId {
     WAKU_ARROW = 1,
@@ -1093,7 +1092,6 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
         GXLoadPosMtxImm(camera->view, GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4u);
 
-
         GXPosition3f32(tailBaseX - 0.05f * width, tailBaseY, 0.0f);
         GXTexCoord2f32(0.0f, 0.0f);
 
@@ -1229,7 +1227,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
         GXPosition3f32(x, innerTop, 0.0f);
         GXTexCoord2f32(0.0f, third);
 
-
         GXPosition3f32(innerLeft, y, 0.0f);
         GXTexCoord2f32(third, 0.0f);
 
@@ -1241,7 +1238,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
 
         GXPosition3f32(innerLeft, innerTop, 0.0f);
         GXTexCoord2f32(third, third);
-
 
         GXPosition3f32(innerRight, y, 0.0f);
         GXTexCoord2f32(twothirds, 0.0f);
@@ -1255,7 +1251,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
         GXPosition3f32(innerRight, innerTop, 0.0f);
         GXTexCoord2f32(twothirds, third);
 
-
         GXPosition3f32(x, innerTop, 0.0f);
         GXTexCoord2f32(0.0f, third);
 
@@ -1268,7 +1263,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
         GXPosition3f32(x, innerBottom, 0.0f);
         GXTexCoord2f32(0.0f, twothirds);
 
-
         GXPosition3f32(innerLeft, innerTop, 0.0f);
         GXTexCoord2f32(third, third);
 
@@ -1280,7 +1274,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
 
         GXPosition3f32(innerLeft, innerBottom, 0.0f);
         GXTexCoord2f32(third, twothirds);
-
 
         GXPosition3f32(innerRight, innerTop, 0.0f);
         GXTexCoord2f32(twothirds, third);
@@ -1294,7 +1287,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
         GXPosition3f32(innerRight, innerBottom, 0.0f);
         GXTexCoord2f32(twothirds, twothirds);
 
-
         GXPosition3f32(x, innerBottom, 0.0f);
         GXTexCoord2f32(0.0f, twothirds);
 
@@ -1307,7 +1299,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
         GXPosition3f32(x, bottom, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
 
-
         GXPosition3f32(innerLeft, innerBottom, 0.0f);
         GXTexCoord2f32(third, twothirds);
 
@@ -1319,7 +1310,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
 
         GXPosition3f32(innerLeft, bottom, 0.0f);
         GXTexCoord2f32(third, 1.0f);
-
 
         GXPosition3f32(innerRight, innerBottom, 0.0f);
         GXTexCoord2f32(twothirds, twothirds);
@@ -1388,7 +1378,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXLoadTexObj(&wakuTexObj[gxTexMapID], GX_TEXMAP0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 0x24);
 
-
         right = left + width;
         bottom = top - height;
         innerLeft = left + curve;
@@ -1410,7 +1399,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXPosition3f32(left, innerTop, 0.0f);
         GXTexCoord2f32(0.0f, third);
 
-
         GXPosition3f32(innerLeft, top, 0.0f);
         GXTexCoord2f32(third, 0.0f);
 
@@ -1422,7 +1410,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
 
         GXPosition3f32(innerLeft, innerTop, 0.0f);
         GXTexCoord2f32(third, third);
-
 
         GXPosition3f32(innerRight, top, 0.0f);
         GXTexCoord2f32(twothirds, 0.0f);
@@ -1436,7 +1423,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXPosition3f32(innerRight, innerTop, 0.0f);
         GXTexCoord2f32(twothirds, third);
 
-
         GXPosition3f32(left, innerTop, 0.0f);
         GXTexCoord2f32(0.0f, third);
 
@@ -1449,7 +1435,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXPosition3f32(left, innerBottom, 0.0f);
         GXTexCoord2f32(0.0f, twothirds);
 
-
         GXPosition3f32(innerLeft, innerTop, 0.0f);
         GXTexCoord2f32(third, third);
 
@@ -1461,7 +1446,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
 
         GXPosition3f32(innerLeft, innerBottom, 0.0f);
         GXTexCoord2f32(third, twothirds);
-
 
         GXPosition3f32(innerRight, innerTop, 0.0f);
         GXTexCoord2f32(twothirds, third);
@@ -1475,7 +1459,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXPosition3f32(innerRight, innerBottom, 0.0f);
         GXTexCoord2f32(twothirds, twothirds);
 
-
         GXPosition3f32(left, innerBottom, 0.0f);
         GXTexCoord2f32(0.0f, twothirds);
 
@@ -1488,7 +1471,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         GXPosition3f32(left, bottom, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
 
-
         GXPosition3f32(innerLeft, innerBottom, 0.0f);
         GXTexCoord2f32(third, twothirds);
 
@@ -1500,7 +1482,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
 
         GXPosition3f32(innerLeft, bottom, 0.0f);
         GXTexCoord2f32(third, 1.0f);
-
 
         GXPosition3f32(innerRight, innerBottom, 0.0f);
         GXTexCoord2f32(twothirds, twothirds);
@@ -1529,4 +1510,3 @@ WindowEntry* windowGetPointer(s32 id) {
 GXTexObj* getWakuTexObj(s32 id) {
     return &wakuTexObj[id];
 }
-

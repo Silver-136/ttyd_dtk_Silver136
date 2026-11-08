@@ -28,7 +28,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord rival_init[21];
 static EvtWord rival_talk[20];
 EvtWord puni_6_init[21];
@@ -747,4 +746,3 @@ EVT_BEGIN(mri_06_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_futa"), 1, 0)
     RETURN
 EVT_END()
-

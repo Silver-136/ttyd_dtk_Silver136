@@ -292,7 +292,6 @@ EVT_END()
  * and a hit (damage with the action-command result); then it returns to its place.
  */
 static EVT_BEGIN(attack_event_patakuri)
-
     // If the item-use check selects an item event, the Paragoomba uses it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -569,7 +568,6 @@ EVT_END()
 
 /** The Goomba-form headbutt attack, the same as the Goomba's. */
 static EVT_BEGIN(attack_event)
-
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

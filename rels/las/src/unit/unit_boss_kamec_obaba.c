@@ -25,7 +25,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-
 USER_FUNC(eff_magic_support);
 static USER_FUNC(eff_magic_get_posX);
 static USER_FUNC(eff_magic);
@@ -1351,4 +1350,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -190,4 +190,3 @@ static USER_FUNC(make_name) {
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }
-

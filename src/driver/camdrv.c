@@ -36,7 +36,6 @@ Vec camUpDefault = { 0.0f, 1.0f, 0.0f };
 //.sbss
 CameraId currentCamNo;
 
-
 // forward declarations
 CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 near, f32 far, f32 nearZ, f32 farZ,
                            const char* name);
@@ -555,7 +554,6 @@ static void cam3dMain(CameraEntry* camera) {
                         break;
                 }
             }
-
 
             work.fovY = 25.0f;
             work.aspect = 1.0f;

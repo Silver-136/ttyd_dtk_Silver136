@@ -313,7 +313,6 @@ EVT_END()
  * It then walks home.
  */
 static EVT_BEGIN(attack_event)
-
     // In a first strike it waits, then uses the target of that strike; otherwise it chooses a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

@@ -100,4 +100,3 @@ NpcTerritoryInfo btl_nok_setup_no_tbl[] = {
     {"BTLNO_HEI_TEST1", 0},
     {0},
 };
-

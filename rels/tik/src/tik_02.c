@@ -606,7 +606,6 @@ EVT_END()
  * story progress is set to STG0_19_BLOOPER_BATTLE and the sewer music returns.
  */
 EVT_BEGIN(geso_battle)
-
     // The Blooper waits under the walkway and its tentacle lies across it; the scene waits until Mario hits it.
     CALL(evt_npc_set_position, STRING("ゲッソー"), -385, -60, 0)
     CALL(evt_npc_set_anim, STRING("ゲッソー"), STRING("GSO_S_1"))
@@ -932,4 +931,3 @@ EVT_BEGIN(tik_02_init_evt)
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_02"), STRING("ue_2"))
     RETURN
 EVT_END()
-

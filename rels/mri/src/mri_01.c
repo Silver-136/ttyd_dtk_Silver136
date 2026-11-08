@@ -426,7 +426,6 @@ EVT_END()
  * (and restores the camera) at its end.
  */
 EVT_BEGIN(elder_talk_sub)
-
     // The Elder asks what Mario wants and offers three choices: just saying hi, lost Punies, or "I love you".
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_22"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("stg2_mri_e15_22_sel"))
@@ -1236,7 +1235,6 @@ EVT_END()
  * (GSWF_MRI_PUNIO_JOINED). Sets the story to STG2_12_RIVAL_ARRIVAL.
  */
 EVT_BEGIN(meet_rival)
-
     // The beaten grunts decide to run back and report to Lord Crump.
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(15), 5)
@@ -3912,4 +3910,3 @@ EVT_BEGIN(mri_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

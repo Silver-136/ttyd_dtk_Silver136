@@ -271,7 +271,6 @@ EVT_END()
  * with the pre-damage check choosing between a dodge and a hit.
  */
 static EVT_BEGIN(attack_event)
-
     // Target: the first-strike target if the battle opened that way, otherwise one picked for its attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

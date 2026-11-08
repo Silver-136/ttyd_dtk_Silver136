@@ -134,7 +134,6 @@ void cardInit(void) {
     CARDInit();
 }
 
-
 /**
  * TRUE while a card operation is running or a card call is in flight (or busyFrames is nonzero; nothing in the
  * early demos sets it).
@@ -162,7 +161,6 @@ s32 cardGetCode(void) {
  * Delete (op 7) has no starter function.
  */
 void cardMain(void) {
-
     switch (wp->op) {
         case 1:
             write_main();
@@ -1427,4 +1425,3 @@ static inline void memcard_close(void) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_CALL_BUSY;
 }
-

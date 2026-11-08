@@ -572,4 +572,3 @@ static void effMiniGameDisp(CameraId cameraId, void* param) {
         }
     }
 }
-

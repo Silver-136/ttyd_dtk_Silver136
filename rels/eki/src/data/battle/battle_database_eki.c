@@ -1072,4 +1072,3 @@ NpcTerritoryInfo btl_eki_setup_no_tbl[] = {
     {"BTLNO_EKI_04_05", 18},
     {0},
 };
-

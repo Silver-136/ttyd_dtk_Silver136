@@ -347,7 +347,6 @@ BattleWeapon weapon_gesso_right_arm_rear_attack = {
  * stage (_check_zenei_kouei) and damage-checks the targets.
  */
 static EVT_BEGIN(attack_event)
-
     // The tentacle may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

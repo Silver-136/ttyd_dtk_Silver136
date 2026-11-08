@@ -19,7 +19,6 @@ typedef struct BDWork {
     s32 endTimer;
 } BDWork;
 
-
 /**
  * Buttons the button-press command can ask for: A, B, X, Y, then L, R and Z;
  * random picks use the first four or all seven.
@@ -401,4 +400,3 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
         }
     }
 }
-

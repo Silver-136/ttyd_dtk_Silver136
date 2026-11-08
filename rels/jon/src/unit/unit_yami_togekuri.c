@@ -519,7 +519,6 @@ static USER_FUNC(krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Angle in degrees (0-360) of the vector (x, z) from the sine table,
  * found by a seven-step binary search of SinTable and then placed in the right quadrant.
@@ -579,4 +578,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

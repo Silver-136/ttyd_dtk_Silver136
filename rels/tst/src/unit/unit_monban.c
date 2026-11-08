@@ -17,7 +17,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_monban;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -355,7 +354,6 @@ EVT_END()
  * Afterwards he walks home and laughs three times.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -482,7 +480,6 @@ EVT_END()
  * the pre-damage check decides between a dodge and a hit, then he laughs and returns to idle.
  */
 static EVT_BEGIN(throw_attack_event)
-
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -600,4 +597,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

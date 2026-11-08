@@ -22,7 +22,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[9];
 static EvtWord evt_switch_00_init[26];
@@ -295,4 +294,3 @@ EVT_BEGIN(tik_17_init_evt)
     CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch01"), 125, 0, 0, PTR(evt_switch_01), GSWF_TIK_17_MUJ_PIPE_RAISED)
     RETURN
 EVT_END()
-

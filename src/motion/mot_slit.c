@@ -49,11 +49,9 @@ typedef enum SlitState {
 #define SLIT_FLAG_RESUME 0x10 // mot.slit.flags: resumeState holds the state motSlitContinue2 returns to
 #endif
 
-
 BOOL marioCreviceWallChk(const Vec* p);
 
 int __abs(int);
-
 
 // Descriptive name (not in the symbol maps); placeholder unk_800a4e40, JP 0x800A4E40. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP

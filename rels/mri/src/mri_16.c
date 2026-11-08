@@ -497,4 +497,3 @@ EVT_BEGIN(mri_16_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 65, -260, -70, 0, GSWF_SHINE_19, 0)
     RETURN
 EVT_END()
-

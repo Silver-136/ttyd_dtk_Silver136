@@ -24,7 +24,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 EvtWord bero_in[45];
 EvtWord bero_out[53];
 static BeroEntry bero_data[2];
@@ -167,4 +166,3 @@ EVT_BEGIN(pik_03_init_evt)
     END_IF
     RETURN
 EVT_END()
-

@@ -392,7 +392,6 @@ EVT_END()
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
-
     // If KP Koopa is flipped over, wakeup_event counts down and gets it up only at zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -562,4 +561,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

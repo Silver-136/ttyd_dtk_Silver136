@@ -29,7 +29,6 @@
 #define UNIT_WORK_KINOPIKO_ID 7     // unit id of unit_act_kinopiko (entry_unit_data[6])
 #define UNIT_WORK_CHRISTINE_ID 8    // unit id of the spawned unitdata_Party_Christine (entry_unit_data[7])
 
-
 static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);
 USER_FUNC(_status_window_off);
@@ -495,7 +494,6 @@ EVT_END()
  * then bounces off and poses (PWD_Y_1) with the audience cheering and floats home; the victim springs back up.
  */
 EVT_BEGIN(_act_clauda_press_attack)
-
     // Flurrie pauses on stage, picks a random actor to flatten and turns toward it.
     CALL(btlevtcmd_AnimeChangePoseType, LW(5), LW(6), POSE_TYPE_TALK)
     WAIT_MS(1000)
@@ -833,4 +831,3 @@ USER_FUNC(_status_window_off) {
     _battleWorkPointer->statusWindowOff = 1;
     return EVT_RETURN_DONE;
 }
-

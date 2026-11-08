@@ -30,7 +30,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 EvtWord lecture_badge_after_00_evt[34];
 EvtWord dokan_2_in_evt[22];
 static BeroEntry bero_entry_data[12];
@@ -638,4 +637,3 @@ EVT_BEGIN(tik_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

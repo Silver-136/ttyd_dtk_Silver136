@@ -330,7 +330,6 @@ EVT_END()
  * it can instead spend its turn charging (weapon_patakuri_charge) unless it is already charged (STATUS_CHARGE).
  */
 static EVT_BEGIN(attack_event_patakuri)
-
     // Already charged: it goes straight to the dive attack.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -691,7 +690,6 @@ EVT_END()
 
 /** The Hyper Goomba-form attack: the Goomba headbutt, with the same charge option as the winged form. */
 static EVT_BEGIN(attack_event)
-
     // Target: the first-strike target if the battle opened that way, otherwise one picked for its attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

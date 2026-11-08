@@ -15,7 +15,6 @@
 #include "evt/evt_mobj.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];
 EvtWord tik_15_init_evt[91];
@@ -180,4 +179,3 @@ EVT_BEGIN(tik_15_init_evt)
 #endif
     RETURN
 EVT_END()
-

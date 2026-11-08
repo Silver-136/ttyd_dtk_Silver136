@@ -42,7 +42,6 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 extern NpcSetupBattleInfo btlsetup_tou_tbl[];
 
-
 static RankWork rank_work;
 static DispWork disp_work;
 static s32 champion_belt_onoff;
@@ -1285,4 +1284,3 @@ void _prolog(void) {
     relSetBtlAddr("tou", btlsetup_tou_tbl, btl_tou_setup_no_tbl);
     rankingInit();
 }
-

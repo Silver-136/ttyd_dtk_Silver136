@@ -227,7 +227,6 @@ EVT_END()
  * after Mario's first successful action command (001) and after his first failed one (002).
  */
 static EVT_BEGIN(phase_event)
-
     // Turn 1, before the player's phase: the camera swings to Mario, who turns round.
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -498,7 +497,6 @@ static PoseTableEntry pose_table_guard[] = {
  * Falls back to the flustered reaction when confused with nothing to hit.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

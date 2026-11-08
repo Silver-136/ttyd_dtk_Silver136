@@ -981,7 +981,6 @@ EVT_END()
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
-
     // When BATTLE_FLAG_FIRST_ATTACK is set, it simply fires its attack spell.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1134,7 +1133,6 @@ EVT_END()
  * (eff_staff2).
  */
 static EVT_BEGIN(ground_magic_common_event1)
-
     // The magic hum plays twice while the Magikoopa and its clones prepare.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1294,7 +1292,6 @@ EVT_END()
  * ground_magic_common_event1.
  */
 static EVT_BEGIN(sky_magic_common_event)
-
     // The magic hum plays twice while the flying Magikoopa and its clones prepare.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1464,7 +1461,6 @@ EVT_END()
  * result and damage are applied once. All of them then return to their stand pose.
  */
 static EVT_BEGIN(attack_magic_event)
-
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2134,4 +2130,3 @@ static EVT_BEGIN(wait_event)
     END_IF
     RETURN
 EVT_END()
-

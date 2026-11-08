@@ -418,7 +418,6 @@ EVT_END()
  * and applies the damage with the action command defence check. It then turns around and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the target (the one already chosen after a First Strike, otherwise sampled from the enemies); a
     // confused Dark Boo with nobody to hit just gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

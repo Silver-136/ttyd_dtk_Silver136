@@ -486,7 +486,6 @@ EVT_END()
  * after which it bounces back off the target, hops twice in place and hops home with return_event.
  */
 static EVT_BEGIN(attack_event)
-
     // The Gold Fuzzy first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

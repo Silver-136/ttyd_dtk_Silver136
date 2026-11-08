@@ -549,4 +549,3 @@ USER_FUNC(evt_las_cloud_ent) {
     wp->evt->lwData[0] = (EvtWord)wp;
     return EVT_RETURN_DONE;
 }
-

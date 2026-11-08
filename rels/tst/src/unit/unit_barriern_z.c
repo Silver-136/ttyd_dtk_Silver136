@@ -1102,7 +1102,6 @@ EVT_END()
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
-
     // The ring uses motion blur for the group attack and starts at the source unit in LW(12), in its Z_3 pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)

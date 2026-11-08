@@ -23,7 +23,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(_steal_item);
 
 BattleUnitKind unit_borodo_king;
@@ -454,7 +453,6 @@ EVT_END()
  * target before it gets up. The weapon is weapon_borodo_attack.
  */
 static EVT_BEGIN(_borodo_normal_attack)
-
     // Choose a target; a confused Bandit with none is flustered, and either way the turn ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -606,7 +604,6 @@ static EVT_BEGIN(_borodo_normal_attack)
 EVT_END()
 
 static EVT_BEGIN(_borodo_steal_attack)
-
     // Choose a target; a confused Bandit with none is flustered, and either way the turn ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -889,4 +886,3 @@ EVT_BEGIN(_borodo_king_emergency_revival_event)
     RETURN
 EVT_END()
 #endif
-

@@ -32,7 +32,6 @@ typedef struct MotRollWork {
 #endif
 } MotRollWork;          // size 0x14 before US, 0x18 US and later
 
-
 f32 roll_grx;
 f32 roll_grz;
 s32 roll_flyout_flag2;

@@ -2316,4 +2316,3 @@ static USER_FUNC(mahorn_get_live_num) {
     evtSetValue(event, args[0], num);
     return EVT_RETURN_DONE;
 }
-

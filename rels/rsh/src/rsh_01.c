@@ -30,7 +30,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 EvtWord s_bero_close[12];
 EvtWord s_bero_open[12];
 static BeroEntry bero_data_a[4];
@@ -1240,4 +1239,3 @@ EVT_BEGIN(rsh_01_c_init_evt_nidome)
     SET_VALUE(GSWF_RSH_REVISIT_MAP_C, 1)
     RETURN
 EVT_END()
-

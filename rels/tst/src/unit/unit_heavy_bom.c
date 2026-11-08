@@ -59,7 +59,6 @@ static EvtWord explosion_event[254];
 static EvtWord explosion_event[247];
 #endif
 
-
 /**
  * Script helper: gives the Bulky Bob-omb's body (part 1) the draw callback _fire_point_callback
  * and hides part 2, the separate flame shape that callback draws.
@@ -837,7 +836,6 @@ static EVT_BEGIN(explosion_event)
     RETURN
 EVT_END()
 
-
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnitPart* part = userdata;
     BattleUnit* unit = part->owner;
@@ -869,4 +867,3 @@ static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
         animPoseDrawShape(shapePose, shape);
     }
 }
-

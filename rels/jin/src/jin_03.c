@@ -13,7 +13,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord n_close[12];
 static EvtWord n_open[12];
 static EvtWord s_close[12];
@@ -273,4 +272,3 @@ EVT_BEGIN(jin_03_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 125, 0, 0, STRING("S_yuka"), 125, GSWF_STARPIECE_67)
     RETURN
 EVT_END()
-

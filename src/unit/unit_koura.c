@@ -10,7 +10,6 @@
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
 
-
 BattleUnitKind unit_koura;
 static BattleDataEntry data_table[7];
 static BattleUnitDefense defence;
@@ -483,4 +482,3 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
-

@@ -11,7 +11,6 @@
 #include "evt/evt_mobj.h"
 #include "pmario_sound.h"
 
-
 EvtWord oshimodo_event_sub[33];
 static EvtWord oshimodo_event[10];
 static BeroEntry bero_oshimodo[1];
@@ -179,4 +178,3 @@ EVT_BEGIN(tik_08_init_evt)
     CALL(evt_mobj_signboard, STRING("board"), 85, 0, 0, PTR(evt_kanban), 0)
     RETURN
 EVT_END()
-

@@ -40,7 +40,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-
 static BeroEntry bero_data[3];
 static HitDamageReturn dmgReturnPt[9];
 static const char* name_tbl[6];
@@ -1334,4 +1333,3 @@ EVT_BEGIN(pik_04_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group92"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

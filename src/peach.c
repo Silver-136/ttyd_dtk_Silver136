@@ -20,7 +20,6 @@
 #include "party.h"
 #include "mario/mario_kemuri.h"
 
-
 /**
  * Condition 0 of evt_peach_set_condition: drops the X-Naut disguise if she wears it (her mood stays);
  * otherwise clears Peach's mood, back to her ordinary poses.

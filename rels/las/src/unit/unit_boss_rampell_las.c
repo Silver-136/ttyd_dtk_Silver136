@@ -4786,7 +4786,6 @@ EVT_BEGIN(wait_event_chuchurina)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(eff_scanning) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

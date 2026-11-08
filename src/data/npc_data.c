@@ -475,4 +475,3 @@ NpcTerritoryInfo npc_define_territory_type[] = {
     {"NPC_TERRITORY_TYPE_SQUARE", NPC_TERRITORY_TYPE_SQUARE},
     {0}
 };
-

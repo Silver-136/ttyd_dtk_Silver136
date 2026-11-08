@@ -30,5 +30,4 @@ typedef struct EffCloudN64Work {
     f32 len[30];    // 0x2AC
 } EffCloudN64Work;
 
-
 EffectEntry* effCloudN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale);

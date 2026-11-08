@@ -1355,9 +1355,7 @@ static USER_FUNC(set_dir) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Script helper: blocks until BGM channel 1 (the lecture music) has started playing. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
-

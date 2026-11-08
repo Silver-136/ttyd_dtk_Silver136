@@ -25,7 +25,6 @@
 static void makeDisplayList(BOOL group);
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index);
 
-
 #define TWO_PI 6.28318530717958647692528676655900576839433879875021f
 
 typedef MapEntryAnimData MapAnim;
@@ -51,7 +50,6 @@ MapObject* current_mp;
 BOOL mapClipOffFlag;
 s32 activeGroup;
 MapWork* mapWork; //allocates two entries
-
 
 // Implementation forward declarations; definitions retain target order.
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
@@ -4452,4 +4450,3 @@ static void mapStrippedPool(const char** str, f32* val) {
     str[7] = "animation_table";
     str[8] = "curve_table";
 }
-

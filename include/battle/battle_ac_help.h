@@ -15,4 +15,3 @@ enum {
 
 void BattleAcHelpSetDispType(s32 type);
 void BattleAcHelpSetHelp(const char* msg);
-

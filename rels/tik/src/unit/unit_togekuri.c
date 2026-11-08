@@ -298,7 +298,6 @@ static f32 SinTable[] = {
  * and it hops back to its place.
  */
 static EVT_BEGIN(attack_event)
-
     // The Spiky Goomba may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -558,4 +557,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

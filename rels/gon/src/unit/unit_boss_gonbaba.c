@@ -83,7 +83,6 @@ u32 weaponGetPower_Gonbaba(BattleUnit* unit, BattleWeapon* weapon, BattleUnit* t
     return power;
 }
 
-
 /**
  * Script helper: spawns a puff of dust (an N64-style kemuri effect) at the position (args[0], args[1], args[2]);
  * used for Hooktail's footsteps.
@@ -449,7 +448,6 @@ static BattleUnitKindPart parts[] = {
  * before the battle starts.
  */
 static EVT_BEGIN(battle_entry_event)
-
     // The opening cutscene: the camera moves in on the stage as the map animation replays.
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
@@ -1665,7 +1663,6 @@ EVT_END()
  * which is checked for a miss or dodge before the action-command defence and damage; she then steps back.
  */
 static EVT_BEGIN(fumituke_attack_event)
-
     // Choose a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_fumituke_attack))
@@ -1794,7 +1791,6 @@ EVT_END()
  * and the partner (all targets), then returns her to her normal pose.
  */
 EVT_BEGIN(firebreath_attack_event)
-
     // Choose targets: the breath reaches Mario and his partner.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_firebreath_attack))
@@ -1901,4 +1897,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

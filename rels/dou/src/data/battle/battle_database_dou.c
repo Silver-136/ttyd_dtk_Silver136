@@ -14,7 +14,6 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
-
 static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_killer_cannon;
 
@@ -1580,4 +1579,3 @@ EVT_BEGIN(bgset_dou_wave_event)
     GOTO(0)
     RETURN
 EVT_END()
-

@@ -28,7 +28,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 #if VERSION <= VERSION_DEMO_JP
 static BeroEntry bero_entry_data[8];
 #else
@@ -455,4 +454,3 @@ EVT_BEGIN(tik_04_init_evt)
     END_IF
     RETURN
 EVT_END()
-

@@ -70,12 +70,10 @@ extern EvtWord quiz_ng[];
 EvtWord quiz_ng[21];
 #endif
 
-
 #if VERSION >= VERSION_JP
 EvtWord UNK_0x00022be8[21];
 EvtWord UNK_0x00022c3c[66];
 #endif
-
 
 #if VERSION >= VERSION_US
 EvtWord kuizu_sekizou[980];
@@ -1033,4 +1031,3 @@ EVT_BEGIN(aji_04_init_evt)
     SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
-

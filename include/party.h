@@ -22,7 +22,6 @@
 #define VIVIAN_FOLLOW_DIST 22.0f
 #endif
 
-
 // PartyEntry.motionId / partyChgMot, dispatched by the party move-mode handlers.
 typedef enum PartyMotion {
     PARTY_MOTION_STAY = 0,

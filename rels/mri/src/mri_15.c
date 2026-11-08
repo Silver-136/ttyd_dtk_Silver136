@@ -23,7 +23,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord bero_s_doa_close[10];
 static EvtWord bero_s_doa_open[10];
 EvtWord evt_dokan[12];
@@ -302,4 +301,3 @@ EVT_BEGIN(mri_15_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui"), 0, PTR(door_switch), 0)
     RETURN
 EVT_END()
-

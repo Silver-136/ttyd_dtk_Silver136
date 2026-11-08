@@ -5,7 +5,6 @@
 #include "battle/battle.h"
 #include "mario/mariost.h"
 
-
 /** Clears the battle input history of all four controllers; called from the battle's init in battle.c. */
 void BattlePadInit(void) {
     int i;

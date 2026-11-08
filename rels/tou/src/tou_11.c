@@ -29,7 +29,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 static EvtWord e_door_open[12];
@@ -397,4 +396,3 @@ EVT_BEGIN(tou_11_init_evt)
     END_SWITCH
     RETURN
 EVT_END()
-

@@ -17,7 +17,6 @@
 #include "system.h"
 #include "unit_boss_cortez.h"
 
-
 BattleUnitKind unit_boss_cortez_sword;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -910,4 +909,3 @@ EVT_BEGIN(cortez_weapon_blow_dead_event)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
 EVT_END()
-

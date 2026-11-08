@@ -473,4 +473,3 @@ static void effKemuri2Disp(CameraId camId, void* param) {
         GXTexCoord2f32(0.0f, 1.0f);
     }
 }
-

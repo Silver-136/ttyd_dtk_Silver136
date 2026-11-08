@@ -320,7 +320,6 @@ void BtlActRec_JudgeRuleKeep(void) {
     }
 }
 
-
 /**
  * Judges a "do it at least ruleParam times" condition:
  * 6 when count n reached ruleParam, otherwise 2 if it reached ruleParam2, else 1.

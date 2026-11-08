@@ -216,4 +216,3 @@ static EVT_BEGIN(main_evt)
     CALL(evt_yuuminigame_main_func)
     RETURN
 EVT_END()
-

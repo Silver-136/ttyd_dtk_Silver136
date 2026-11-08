@@ -761,7 +761,6 @@ EVT_END()
  * unit work 3 can bypass its pre-check result if an earlier bone hit.
  */
 static EVT_BEGIN(link_attack_event_sub)
-
     // Wind up and raise a bone above its head.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
@@ -890,7 +889,6 @@ static EVT_BEGIN(link_attack_event_sub)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
-
     // The camera zooms in on the Dark Bones.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

@@ -435,7 +435,6 @@ EVT_END()
  * It then turns away and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

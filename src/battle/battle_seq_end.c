@@ -57,7 +57,6 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
 
-
 // BattleSeqEndWork.flags: the result-screen displays btlseqEnd_DispMain adds (0x1 is only ever cleared)
 typedef enum SeqEndDispFlags {
     SEQEND_DISP_EXP_ICON = (1 << 1),            // 0x2, star point icons
@@ -139,7 +138,6 @@ EVT_BEGIN(_rank_up_event)
 EVT_END()
 #endif
 
-
 static RankUpData* _get_rank_data(s32 level) {
     RankUpData* rank;
 
@@ -171,7 +169,6 @@ const char* BattleGetRankNameLabel(s32 level) {
     }
     return found->rankUpName;
 }
-
 
 static void _ExecAllUnitBattleEndEvent(void);
 static void _check_audience_battle_end_exec(void);
@@ -1697,7 +1694,6 @@ USER_FUNC(_lvup_spot_on) {
     return 2;
 }
 
-
 /**
  * Script helper: args[0] a cone index; moves that spotlight cone every frame,
  * cone 0 following half of Mario's X and cones 1-4 on looping sine paths.
@@ -1831,7 +1827,6 @@ USER_FUNC(_lvup_object_noselect_delete) {
     }
     return 2;
 }
-
 
 /**
  * Script helper from _jump_event: carries the chosen level-up block over Mario's X and Z in 60 frames

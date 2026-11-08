@@ -21,7 +21,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 EvtWord n_bero_in[25];
 EvtWord n_bero_out[12];
 static BeroEntry bero_entry_data[6];
@@ -317,4 +316,3 @@ EVT_BEGIN(moo_02_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_POWER_PUNCH, 330, 0, 403, ITEM_TYPE_STILL, GSWF_MOO_02_POWER_PUNCH, 0)
     RETURN
 EVT_END()
-

@@ -133,4 +133,3 @@ static EVT_BEGIN(main_evt)
     CALL(evt_goryuugijo_main_func)
     RETURN
 EVT_END()
-

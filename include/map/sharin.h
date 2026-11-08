@@ -19,4 +19,3 @@ typedef struct SharinData {
     s32 driveSource;
     EvtFloat speed;
 } SharinData;
-

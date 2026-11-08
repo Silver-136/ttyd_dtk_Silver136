@@ -228,7 +228,6 @@ USER_FUNC(replace_evt) {
     Vec min;
     Vec max;
 
-
     min = (Vec){data->bboxMin.x, data->bboxMin.y, data->bboxMin.z};
     max = (Vec){data->bboxMax.x, data->bboxMax.y, data->bboxMax.z};
 
@@ -296,4 +295,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

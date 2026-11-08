@@ -13,4 +13,3 @@ typedef struct PidersYarn {
     f32 z1;
     u8 alpha;
 } PidersYarn;
-

@@ -140,4 +140,3 @@ void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
-

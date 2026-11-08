@@ -15,7 +15,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 #define HALF_PI 1.570796f
 #define PI 3.141592653589793f
 #define TWO_PI 6.283185307179586f

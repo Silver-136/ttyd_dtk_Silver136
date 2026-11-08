@@ -28,7 +28,6 @@
 #include "driver/mapdrv.h"
 #include "battle/unit_work.h"
 
-
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
@@ -620,7 +619,6 @@ next:
     if (wp->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED;
     if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
 }
-
 
 /**
  * Draw callback for one unit part: builds the model matrix from the unit's and part's position,
@@ -1432,4 +1430,3 @@ static void _btlStockExpDisp(CameraId camId, void* param) {
         }
     }
 }
-

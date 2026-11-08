@@ -26,7 +26,6 @@
 #include "party.h"
 #include <dolphin/pad.h>
 
-
 EvtWord evt_dokan1_message[52];
 EvtWord evt_dokan1[11];
 static BeroEntry bero_entry_data[6];
@@ -407,4 +406,3 @@ EVT_BEGIN(win_01_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 165, 0, -58, ITEM_TYPE_STILL, GSWF_WIN_01_INN_COUPON, 0)
     RETURN
 EVT_END()
-

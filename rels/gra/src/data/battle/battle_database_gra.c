@@ -1919,4 +1919,3 @@ NpcTerritoryInfo btl_gra_setup_no_tbl[] = {
     {"BTLNO_GRA_05_03", 12},
     {0},
 };
-

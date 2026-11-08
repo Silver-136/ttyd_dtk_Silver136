@@ -23,7 +23,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(_steal_item);
 
 BattleUnitKind unit_borodo;
@@ -884,4 +883,3 @@ EVT_BEGIN(_borodo_emergency_revival_event)
     RETURN
 EVT_END()
 #endif
-

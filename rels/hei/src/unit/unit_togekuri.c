@@ -298,7 +298,6 @@ static f32 SinTable[] = {
  * and it hops back to its place.
  */
 static EVT_BEGIN(attack_event)
-
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -506,7 +505,6 @@ static USER_FUNC(krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Returns the angle in degrees (0..360) of the point (x, z) by a binary search of the sine table;
  * apparently unused by this unit's scripts.
@@ -566,4 +564,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

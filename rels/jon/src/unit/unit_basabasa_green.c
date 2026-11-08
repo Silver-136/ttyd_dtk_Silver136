@@ -404,7 +404,6 @@ static EVT_BEGIN(ceil_fall_ready_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-
     // Use the item event selected by the item-use check; otherwise pick a target (a confused Swampire with nobody to bite gets
     // flustered).
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -627,4 +626,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

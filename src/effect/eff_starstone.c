@@ -1011,4 +1011,3 @@ void effStarStoneDraw(CameraId cameraId, EffectEntry* effect) {
         break;
     }
 }
-

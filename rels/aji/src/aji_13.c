@@ -1214,4 +1214,3 @@ USER_FUNC(bg_cam_chk) {
     }
     return EVT_RETURN_BLOCK;
 }
-

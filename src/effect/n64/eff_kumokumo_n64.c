@@ -652,4 +652,3 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
         }
     }
 }
-

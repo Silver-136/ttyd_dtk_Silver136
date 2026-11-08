@@ -1412,4 +1412,3 @@ NpcTerritoryInfo btl_win_setup_no_tbl[] = {
     {"BTLNO_WIN_03_01", 7},
     {0},
 };
-

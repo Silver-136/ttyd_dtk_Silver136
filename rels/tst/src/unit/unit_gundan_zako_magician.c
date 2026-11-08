@@ -523,7 +523,6 @@ EVT_END()
  * officer the dodgy bottle or the regen bottle.
  */
 static EVT_BEGIN(attack_event)
-
     // During a first strike it always throws the fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -692,7 +691,6 @@ EVT_END()
  * ends by resetting the camera and facing.
  */
 static EVT_BEGIN(attack_common_event2)
-
     // Pick the bottle's pose for the bottle being thrown (fire or Defense-down).
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))
@@ -1196,4 +1194,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

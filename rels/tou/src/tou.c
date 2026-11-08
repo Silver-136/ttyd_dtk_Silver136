@@ -189,7 +189,6 @@ static EvtWord evt_gardman[357];
 static EvtWord evt_gardman[VERSION_PICK(318, 335)];
 #endif
 
-
 #if VERSION >= VERSION_JP
 EvtWord evt_gardman_spawn[4];
 #endif

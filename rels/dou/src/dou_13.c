@@ -8,7 +8,6 @@
 #include "evt/evt_npc.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 EvtWord dou_13_init_evt[44];
 
@@ -71,4 +70,3 @@ EVT_BEGIN(dou_13_init_evt)
     END_IF
     RETURN
 EVT_END()
-

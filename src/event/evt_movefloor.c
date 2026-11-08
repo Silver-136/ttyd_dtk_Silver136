@@ -20,7 +20,6 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_movefloor.h"
 
-
 // MovingFloor.flags
 #define MOVING_FLOOR_NO_STOP_TIME 1 // moving_floor_get_stmsec returns 0
 #define MOVING_FLOOR_PAUSE 2        // read by moving_floor_get_pause; nothing in this file sets it
@@ -50,7 +49,6 @@ typedef struct MovingFloor {
     f32 turn;        // 0x80
     f32 angle;       // 0x84
 } MovingFloor;
-
 
 /**
  * Sine of each whole degree from 0 to 449 (the extra quarter turn lets it double as a cosine table).
@@ -115,7 +113,6 @@ static f32 sintbl[450] = {
     0.984808f, 0.987688f, 0.990268f, 0.992546f, 0.994522f, 0.996195f, 0.997564f, 0.998629f,
     0.999391f, 0.999848f,
 };
-
 
 static inline MovingFloor* movingFloorArg(EventEntry* event) {
     return (MovingFloor*)evtGetValue(event, event->args[0]);
@@ -943,4 +940,3 @@ EVT_BEGIN(ridedown_floor)
     END_LOOP
     RETURN
 EVT_END()
-

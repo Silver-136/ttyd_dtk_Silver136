@@ -20,7 +20,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e1_door_close[22];
@@ -428,4 +427,3 @@ EVT_BEGIN(las_19_init_evt)
     CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF_LAS_19_THUNDER_RAGE_BLOCK, 0)
     RETURN
 EVT_END()
-

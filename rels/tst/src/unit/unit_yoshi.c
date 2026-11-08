@@ -746,7 +746,6 @@ PoseSoundTiming posesound_normal_attack[] = {
  * Its weapon name btl_wn_pys_normal is Ground Pound in English (description msg_pys_hip_drop).
  */
 EVT_BEGIN(partyYoshiAttack_NormalAttack)
-
     // The enemy chosen in the menu is the target; the attack is declared and protecting-unit movement is waited out.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1077,7 +1076,6 @@ EVT_END()
  * (partyWeapon_YoshiNomikomi_Fire). partyWeapon_YoshiNomikomi_Involved is not used here.
  */
 EVT_BEGIN(partyYoshiAttack_Nomikomi)
-
     // The enemy chosen in the menu is the target; Gulp is declared and its FP cost paid.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1405,7 +1403,6 @@ EVT_END()
  * each flight run by _egg_attack_event.
  */
 EVT_BEGIN(partyYoshiAttack_EggAttack)
-
     // The target is chosen; the attack is declared and its FP cost paid.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1832,7 +1829,6 @@ EVT_END()
  * and each sampled enemy takes as many hits as the command's output gives, the last with the last-hit flag.
  */
 EVT_BEGIN(partyYoshiAttack_CallGuard)
-
     // Stampede is declared and its FP cost paid; every enemy is targeted.
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

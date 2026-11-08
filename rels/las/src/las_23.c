@@ -14,7 +14,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e1_door_close[22];
@@ -286,4 +285,3 @@ EVT_BEGIN(las_23_init_evt)
     CALL_CHILD(evt_gazigazi_entry)
     RETURN
 EVT_END()
-

@@ -32,7 +32,6 @@
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_FALL_EVENT 0 // part 1, slots 0-9 (index = drop number): event id of each falling object's hit event in roof_shake_attack_event, 0 once waited on
 
-
 USER_FUNC(check_ceil);
 USER_FUNC(init_ceil);
 USER_FUNC(eff_fall_hit_wait);
@@ -624,7 +623,6 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(entry_event)
-
     // The status window is hidden while Rawk Hawk and the partner trade words before the fight.
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
@@ -810,7 +808,6 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 static EVT_BEGIN(phase_event)
-
     // Only acts after the player's phase and while Rawk Hawk is able to act.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
@@ -968,7 +965,6 @@ EVT_END()
  * LW(9) receives the weapon each sub-event uses.
  */
 static EVT_BEGIN(attack_event)
-
     // Rawk Hawk may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1164,7 +1160,6 @@ EVT_END()
  * then hops back and jumps home.
  */
 EVT_BEGIN(screw_attack_event)
-
     // Choose the targets; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1271,7 +1266,6 @@ EVT_END()
  * then dives down onto the target with the chop and hits it once, then hops back and jumps home.
  */
 EVT_BEGIN(flying_chop_attack_event)
-
     // Choose a target; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1376,7 +1370,6 @@ EVT_BEGIN(flying_chop_attack_event)
 EVT_END()
 
 EVT_BEGIN(foot_stamp_attack_event)
-
     // Choose a target; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1806,4 +1799,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

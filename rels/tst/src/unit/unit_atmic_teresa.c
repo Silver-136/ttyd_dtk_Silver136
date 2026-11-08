@@ -618,7 +618,6 @@ EVT_END()
  * Then it floats home.
  */
 EVT_BEGIN(surprise_event)
-
     // The Atomic Boo picks its targets for the surprise attack, which hits the whole party.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_surprise))
@@ -730,7 +729,6 @@ EVT_END()
  * (SFX_BOSS_ATMTLSA_UNION1), restoring its size.
  */
 EVT_BEGIN(bikkuri_event)
-
     // The Atomic Boo picks its targets for the split-up attack, which hits the whole party.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_bikkuri))

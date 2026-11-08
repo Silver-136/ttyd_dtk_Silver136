@@ -15,7 +15,6 @@
 #include "pmario_sound.h"
 #include "driver/npcdrv.h"
 
-
 static EvtWord door02_close[22];
 #if VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
 static EvtWord door02_open[10];
@@ -146,4 +145,3 @@ EVT_BEGIN(gon_10_init_evt)
     END_IF
     RETURN
 EVT_END()
-

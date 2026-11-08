@@ -33,7 +33,6 @@
 #include "eff/eff_hit.h"
 #include "battle/battle_sub.h"
 
-
 typedef struct MukiObj { // 0x38
     s32 state;          // 0x0
     s32 timer;         // 0x4
@@ -93,7 +92,6 @@ static void main_icon(s32 idx);
 static void main_point(s32 idx);
 static void main_cursor(void);
 
-
 /**
  * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure
  * 3-turn Attack or Defense boost of the points earned in the minigame.
@@ -149,7 +147,6 @@ EVT_BEGIN(nice_event_pow)
     RETURN
 EVT_END()
 #endif
-
 
 USER_FUNC(main_muki) {
     MukiWork* w = get_ptr();
@@ -965,7 +962,6 @@ static void disp_3D_alpha(CameraId cam, void* param) {
 static MukiWork* get_ptr(void) {
     return (MukiWork*)_battleWorkPointer->actionCommands.work;
 }
-
 
 /**
  * Builds the boost weapon: copies the template and gives it a sure 3-turn attack up (args[0] 0)

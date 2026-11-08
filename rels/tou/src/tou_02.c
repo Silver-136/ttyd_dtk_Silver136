@@ -84,7 +84,6 @@ static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
 static f32 randf(f32 min, f32 max);
 
-
 s32 check_hammer(Fan* fan);
 static void pose_main(void);
 
@@ -2874,4 +2873,3 @@ EVT_BEGIN(tou_02_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_kaidan_7"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

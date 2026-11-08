@@ -20,7 +20,6 @@
 #include "sfx_name_word.h"
 #include "libc_decls.h"
 
-
 typedef StatusValue SVal;
 
 typedef StatusWindowWork SWork;
@@ -67,7 +66,6 @@ s16 gear_icon_tbl[6] = { ICON_MENU_GEAR, ICON_TEXT_YELLOW_GEAR, ICON_TEXT_YELLOW
 s16 badge_icon_tbl[6] = { ICON_MENU_BADGES, ICON_TEXT_GREEN_BADGES, ICON_TEXT_GREEN_ORDEN, ICON_TEXT_GREEN_BADGES, ICON_TEXT_GREEN_MEDALLAS, ICON_TEXT_GREEN_TESSERE };
 s16 journal_icon_tbl[6] = { ICON_MENU_JOURNAL, ICON_TEXT_BLUE_JOURNAL, ICON_TEXT_BLUE_JOURNAL, ICON_TEXT_BLUE_JOURNAL, ICON_TEXT_BLUE_DIARIO, ICON_TEXT_BLUE_CRONACA };
 #endif
-
 
 //.sbss
 static StatusWindowWork* wp;

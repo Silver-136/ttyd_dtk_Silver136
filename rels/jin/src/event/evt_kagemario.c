@@ -145,4 +145,3 @@ EVT_BEGIN(evt_usu_kagemario_party_kill)
     END_SWITCH
     RETURN
 EVT_END()
-

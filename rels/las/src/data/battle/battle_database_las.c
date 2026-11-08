@@ -3634,4 +3634,3 @@ EVT_BEGIN(stg_08_6_init_event)
     SPAWN_EVENT(stg_08_6_init_sub_event)
     RETURN
 EVT_END()
-

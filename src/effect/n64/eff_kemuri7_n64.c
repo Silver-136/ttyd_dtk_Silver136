@@ -11,7 +11,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffKemuri7N64Work {
     BOOL active;      // 0x0
     s16 field_0x4;    // 0x4

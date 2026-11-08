@@ -21,7 +21,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord n_close[12];
 static EvtWord n_open[12];
 static EvtWord w_close[12];
@@ -246,4 +245,3 @@ EVT_BEGIN(eki_05_init_evt)
 #endif
     RETURN
 EVT_END()
-

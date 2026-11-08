@@ -346,7 +346,6 @@ static ExtTexInfo ext_moamoa_data[] = {
     {0},
 };
 
-
 // Kept: the JP demo REL map lists this Smorg helper as its own function, and the target calls it, not inlined;
 // under -inline auto nothing else keeps a short static function out of line.
 #pragma dont_inline on
@@ -1773,7 +1772,6 @@ EVT_END()
  * plays the engine sounds and ramps the wheel speeds GW(0) and GW(1) up to -15 (leftward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start)
-
     // The train starts moving: the station flags are cleared and the bell rings.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -1879,7 +1877,6 @@ EVT_END()
  * but ramps the speeds up to +15 (rightward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start2)
-
     // The train starts moving on the return trip: the station flags are cleared.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -2708,4 +2705,3 @@ s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
 }
 
 void __cvt_ull_flt();
-

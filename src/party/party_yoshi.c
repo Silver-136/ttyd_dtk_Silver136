@@ -35,7 +35,6 @@ typedef struct YoshiWork {
     EffectEntry* effect;  // 0x14
 } YoshiWork;
 
-
 #if VERSION <= VERSION_DEMO_JP
 static f32 yoshiSignTbl[16] = {
     -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
@@ -1632,4 +1631,3 @@ void getStick(PartyEntry* party, f32* angle, f32* speed) {
     }
     *speed = dist;
 }
-

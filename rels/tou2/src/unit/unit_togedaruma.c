@@ -15,7 +15,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_togedaruma;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -415,7 +414,6 @@ EVT_END()
  * and it lands back in its stance (TGD_J_2, TGD_S_4).
  */
 static EVT_BEGIN(attack_event)
-
     // If the Bristle is flipped over, it counts down its recovery turn instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -574,4 +572,3 @@ static EVT_BEGIN(wait_event)
     GOTO(0)
     RETURN
 EVT_END()
-

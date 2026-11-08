@@ -14,7 +14,6 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
-
 static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_boss_gesso;
 
@@ -2662,4 +2661,3 @@ EVT_BEGIN(bgset_tik_wave_event)
     GOTO(0)
     RETURN
 EVT_END()
-

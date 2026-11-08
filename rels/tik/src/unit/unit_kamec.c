@@ -966,7 +966,6 @@ EVT_END()
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
-
     // When BATTLE_FLAG_FIRST_ATTACK is set, it simply fires its attack spell.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2109,4 +2108,3 @@ static EVT_BEGIN(wait_event)
     END_IF
     RETURN
 EVT_END()
-

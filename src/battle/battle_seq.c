@@ -46,7 +46,6 @@
 #include "battle/battle_seq_end.h"
 #include "battle/unit_work.h"
 
-
 // external prototypes
 
 // local prototypes
@@ -2924,4 +2923,3 @@ USER_FUNC(_set_haikei_entry_scale) {
     }
     return busy ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
-

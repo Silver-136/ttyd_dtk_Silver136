@@ -16,7 +16,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_dark_keeper;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -328,7 +327,6 @@ EVT_END()
  * then laughs three times (pose T_1, SFX_ENM_MONBAN_LAUGH1).
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Dark Craw with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -459,7 +457,6 @@ EVT_END()
  * After the part reaches the target, the hit or dodge is checked, and the Craw laughs three times afterwards.
  */
 static EVT_BEGIN(throw_attack_event)
-
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Dark Craw with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -577,4 +574,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

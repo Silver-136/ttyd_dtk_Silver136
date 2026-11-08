@@ -735,4 +735,3 @@ EVT_BEGIN(jin_07_init_evt)
     CALL(evt_map_replace_mapobj, STRING("honou04"), 0)
     RETURN
 EVT_END()
-

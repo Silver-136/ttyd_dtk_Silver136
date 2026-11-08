@@ -564,7 +564,6 @@ static USER_FUNC(lect_push_b_check) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Blocks until the music on channel 1 has started playing. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -873,4 +872,3 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
-

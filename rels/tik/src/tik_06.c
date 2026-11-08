@@ -24,7 +24,6 @@
 #include "evt/evt_snd.h"
 #endif
 
-
 static EvtWord oshimodo_event[32];
 static BeroEntry bero_entry_data[5];
 EvtWord iri_12_kino_makkino_talk[284];
@@ -319,4 +318,3 @@ EVT_BEGIN(tik_06_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF_STARPIECE_26, 0)
     RETURN
 EVT_END()
-

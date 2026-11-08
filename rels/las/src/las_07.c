@@ -13,7 +13,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord w1_door_close[22];
 static EvtWord w1_door_open[22];
 static EvtWord w2_door_close[22];
@@ -255,4 +254,3 @@ EVT_BEGIN(las_07_init_evt)
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF_LAS_07_P_UP_D_DOWN_P_BADGE_BLOCK, 1)
     RETURN
 EVT_END()
-

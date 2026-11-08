@@ -5592,7 +5592,6 @@ void puni_puni_main(void) {
                     case PUNI_MODE_DEAD:
                         p->flags &= ~PUNI_FLAG_STRAY;
 
-
                         // FAKE: the (u32) round trip keeps the name out of constant propagation, so its address is hoisted into a saved
                         // register before the loop as in the demo.
                         puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
@@ -7913,4 +7912,3 @@ EVT_BEGIN(mri_puni_init_none)
     CALL(evt_puni_set_maze)
     RETURN
 EVT_END()
-

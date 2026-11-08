@@ -15,7 +15,6 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
-
 static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_boss_cortez;
 extern BattleUnitKind unit_boss_kanbu3;
@@ -1499,4 +1498,3 @@ static USER_FUNC(_wave_offset) {
     evtSetValue(event, varY, stepY);
     return EVT_RETURN_DONE;
 }
-

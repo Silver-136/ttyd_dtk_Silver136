@@ -23,7 +23,6 @@
 #include "driver/itemdrv.h"
 #include "muj.h"
 
-
 EvtWord muj_03_event_01[22];
 static BeroEntry bero_entry_data[3];
 EvtWord nigeru_suifu01[271];
@@ -243,4 +242,3 @@ EVT_BEGIN(muj_03_init_evt)
     CALL_CHILD(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
-

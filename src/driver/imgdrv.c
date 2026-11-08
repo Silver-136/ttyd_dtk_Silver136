@@ -24,7 +24,6 @@ static ImageWork* wp = &work;
 
 // local prototypes
 
-
 static void imgShadowDisp(CameraId camId, void* param);
 
 /**
@@ -88,7 +87,6 @@ static void zFill(void) {
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z8, 0);
     GXSetColorUpdate(GX_TRUE);
 }
-
 
 /**
  * Draw callback for one image: binds its up to three captured textures (screen copies) as the pose's paper
@@ -231,7 +229,6 @@ static void imgDisp(CameraId camId, void* param) {
 }
 #endif
 
-
 /**
  * Draw callback for an image's shadow: shadowId 1 blends
  * and 2 subtracts the projected shadow over a full-screen quad on the image camera; 0 draws nothing.
@@ -289,7 +286,6 @@ static void imgDisp_ProjPlane(CameraId camId, void* param) {
     GXPosition3f32(-32.0f, -24.0f, 0.0f);
     GXColor4u8(0, 0, 0, 0);
 }
-
 
 /**
  * Copies capture slot sh's rectangle of the frame buffer into a texture,
@@ -618,7 +614,6 @@ void imgRelease(ImageEntry* entry, s32 type) {
 void imgSetShadow(ImageEntry* entry, s32 shadowId) {
     entry->shadowId = shadowId;
 }
-
 
 /**
  * Draw callback on the shadow camera: draws the image's pose with its captured textures into the shadow pass

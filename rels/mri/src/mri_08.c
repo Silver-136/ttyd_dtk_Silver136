@@ -27,7 +27,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 USER_FUNC(toge_enter_func00);
 
 EvtWord toge_1_init[17];
@@ -769,4 +768,3 @@ EVT_BEGIN(mri_08_init_evt)
     END_IF
     RETURN
 EVT_END()
-

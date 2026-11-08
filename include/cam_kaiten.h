@@ -8,4 +8,3 @@ typedef struct KaitenParam {
     f32 angle;
     f32 dist;
 } KaitenParam;
-

@@ -24,7 +24,6 @@
 #include "driver/itemdrv.h"
 #include "gon.h"
 
-
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];
 static EvtWord door02_close[12];
@@ -969,4 +968,3 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()
-

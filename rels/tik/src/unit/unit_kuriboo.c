@@ -229,7 +229,6 @@ EVT_END()
  * and a hit (camera shake, SFX_ENM_KURI_ATTACK1, damage), then the Goomba hops back to its place.
  */
 static EVT_BEGIN(attack_event)
-
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -407,4 +406,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -34,7 +34,6 @@
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
 
-
 typedef struct DekaTiming {
     s32 state;  // 0x0
     s32 unk4;   // 0x4
@@ -129,7 +128,6 @@ static void main_gauge(void);
 static void main_base(void);
 static void yuka_main(void);
 static void yuka_init(void);
-
 
 /** Shows the action-command success effect (level in LW(0)) when a round of the timing game is cleared. */
 static EVT_BEGIN(nice_event)

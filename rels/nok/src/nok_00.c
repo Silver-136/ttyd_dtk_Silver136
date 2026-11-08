@@ -896,7 +896,6 @@ EVT_END()
  * Saving is offered and the scene continues into the next Bowser action stage (mri_00).
  */
 EVT_BEGIN(nok_00_koopa_evt)
-
     // The Bowser interlude begins in the quiet village.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
@@ -1310,4 +1309,3 @@ void draw_poster(void* userdata, s32 group, Mtx* modeling) {
     }
     animPoseDrawShape(npc->poseId, poster->shape);
 }
-

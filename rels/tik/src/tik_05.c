@@ -92,7 +92,6 @@ static KaitenParam* ckpw;
 BrokenWork broken_work;
 s32 select;
 
-
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 static USER_FUNC(cam_kaiten_get_para);
@@ -1615,7 +1614,6 @@ USER_FUNC(is_dol_viewer) {
 #endif
 
 EVT_BEGIN(evt_mapwrite)
-
     // The camera moves in: in the prologue Goombella calls out to Frankly; later Mario just raises his hands.
     WAIT_MS(800)
     IF_INT_EQUAL(GW(15), 0)
@@ -2128,7 +2126,6 @@ EVT_END()
  * Sets story progress STG0_15_THE_PEDESTAL.
  */
 EVT_BEGIN(mahojin_event)
-
     // Mario walks onto the pedestal, the music stops and he is startled as the magic circle flashes into being.
     SET_VALUE(GW(15), 0)
     CALL(evt_mario_key_onoff, 0)
@@ -2561,7 +2558,6 @@ EVT_END()
  * and the story becomes STG7_52_THE_PEDESTAL.
  */
 EVT_BEGIN(mahojin_event7)
-
     // Mario walks onto the pedestal and Frankly tells him to hold up the last Crystal Star.
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -3206,4 +3202,3 @@ EVT_BEGIN(tik_05_init_evt)
 #endif
     RETURN
 EVT_END()
-

@@ -119,4 +119,3 @@ static EVT_BEGIN(main_evt)
     CALL(evt_yuutitle_main_func)
     RETURN
 EVT_END()
-

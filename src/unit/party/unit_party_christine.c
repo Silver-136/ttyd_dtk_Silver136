@@ -72,7 +72,6 @@ EvtWord partyChristineAttack_RenzokuAttack[1078];
 EvtWord partyChristineAttack_RenzokuAttack[1071];
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 EvtWord partyChristineAttack_Kiss[442];
 #else

@@ -311,7 +311,6 @@ EVT_END()
  * effect) and checks the damage for each in turn (usually with its freeze effect), then moves back home.
  */
 static EVT_BEGIN(bllizard_event)
-
     // Sample the opposing targets and check that a target is available for the blast.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -589,7 +588,6 @@ EVT_END()
  * then returns home and restores its scale.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -761,4 +759,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
 EVT_END()
-

@@ -633,4 +633,3 @@ USER_FUNC(_set_lecture_mode) {
     wp->lectureMode = 1;
     return EVT_RETURN_DONE;
 }
-

@@ -19,7 +19,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);
 static USER_FUNC(shadow_scale_small);
@@ -461,7 +460,6 @@ EVT_END()
  * some misses make the target dodge, a hit applies it with final-hit flag 256; then it returns via return_event.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

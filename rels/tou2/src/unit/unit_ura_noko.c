@@ -438,7 +438,6 @@ EVT_END()
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
-
     // If the Koopa is flipped over, wakeup_event attacks from its back or gets it up when the counter reaches zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

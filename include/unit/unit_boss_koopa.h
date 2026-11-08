@@ -14,4 +14,3 @@ typedef struct IconJumpWork {
     f32 vy;
     u8 pad[0x7C - 0x34];
 } IconJumpWork;
-

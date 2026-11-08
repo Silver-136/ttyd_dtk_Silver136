@@ -1317,7 +1317,6 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(_leg_smoke_effect) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);

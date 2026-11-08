@@ -819,7 +819,6 @@ EVT_BEGIN(syuryo_evt)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(eff_guruguru) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1462,4 +1461,3 @@ static USER_FUNC(make_name) {
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }
-

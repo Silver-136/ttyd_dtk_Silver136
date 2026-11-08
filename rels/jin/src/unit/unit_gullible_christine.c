@@ -309,7 +309,6 @@ EVT_END()
  * between a dodge and a hit.
  */
 static EVT_BEGIN(attack_event_christine)
-
     // She may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -554,4 +553,3 @@ EVT_END()
 #else
 EVT_END_PAD()
 #endif
-

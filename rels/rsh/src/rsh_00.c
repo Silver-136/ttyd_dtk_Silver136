@@ -1221,4 +1221,3 @@ EVT_BEGIN(rsh_00_c_init_evt_nidome)
     CALL_CHILD(evt_rsh_window)
     RETURN
 EVT_END()
-

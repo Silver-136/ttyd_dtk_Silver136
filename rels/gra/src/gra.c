@@ -66,4 +66,3 @@ void _epilog(void) {
 /** Empty stub the linker binds to calls that were left unresolved. */
 void _unresolved(void) {
 }
-

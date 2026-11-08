@@ -263,7 +263,6 @@ EVT_END()
  * before dropping back to its resting pose.
  */
 static EVT_BEGIN(thunder_event)
-
     // Dark Puff gets ready to strike the whole party with lightning.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -559,7 +558,6 @@ EVT_END()
  * the damage check decides between a miss and a hit, then it returns to S_1.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -710,4 +708,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
 EVT_END()
-

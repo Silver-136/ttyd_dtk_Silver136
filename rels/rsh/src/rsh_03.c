@@ -112,7 +112,6 @@ extern EvtWord evt_shop_open[];
 EvtWord evt_shop_open[267];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord evt_shop_close[420];
 #else
@@ -644,7 +643,6 @@ EVT_BEGIN(talk_waitless_pias_return)
 EVT_END()
 
 static EVT_BEGIN(talk_waitless)
-
     // From Pennington's assistant on, the waitress asks Mario for help.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(GSWF_RSH_WAITRESS_REQUEST_ACCEPTED, 0)
@@ -1468,7 +1466,6 @@ EVT_BEGIN(evt_shop_close)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
 
-
     END_INLINE_EVENT
 #if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
@@ -2104,4 +2101,3 @@ EVT_BEGIN(rsh_03_c_init_evt_nidome)
 #endif
     RETURN
 EVT_END()
-

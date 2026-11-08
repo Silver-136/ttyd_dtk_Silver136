@@ -3682,4 +3682,3 @@ void _prolog(void) {
     relSetEvtAddr("jon_06", jon_init_evt);
     relSetBtlAddr("jon", btlsetup_jon_tbl, btl_jon_setup_no_tbl);
 }
-

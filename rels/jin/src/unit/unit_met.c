@@ -473,7 +473,6 @@ EVT_END()
  * Afterwards it runs home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
-
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -747,7 +746,6 @@ EVT_END()
  * init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
-
     // First Strike: it takes the first-attack target already chosen.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -895,4 +893,3 @@ static EVT_BEGIN(wait_event_ceil)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -29,7 +29,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-
 EvtWord ne_close[22];
 EvtWord ne_open[22];
 EvtWord gra_06_ido[12];
@@ -49,7 +48,6 @@ extern EvtWord first_gra06jin[];
 #else
 EvtWord first_gra06jin[138];
 #endif
-
 
 #if VERSION >= VERSION_US
 EvtWord teresa_oidasare_evt[282];
@@ -188,7 +186,6 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(gra_06_saku_open)
-
     // The gate and its chain rattle, as if the gate were locked.
     CALL(evt_mapobj_get_position, STRING("kusari"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_GATE_CLOSED1"), LW(10), LW(11), LW(12), 0)
@@ -346,7 +343,6 @@ EVT_END()
  * control returns and the Steeple door's n_bero case is switched on again.
  */
 EVT_BEGIN(teresa_oidasare_evt)
-
     // Mario and his partner are placed high above the trail, as if dropped out of the Steeple.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -504,4 +500,3 @@ EVT_BEGIN(gra_06_init_evt)
     END_IF
     RETURN
 EVT_END()
-

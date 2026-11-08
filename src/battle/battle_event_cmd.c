@@ -3290,7 +3290,6 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Script: flies the unit args[0] to (args[1..3]) over args[4] frames along a curve bowed by args[5] units (0 =
  * straight), the bow vertical for type args[7] 0 and across the path in the x-y plane otherwise;
@@ -5392,7 +5391,6 @@ USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 #if VERSION >= VERSION_US
 // US and later: per-language width table [language][0] * [language][type + 1]

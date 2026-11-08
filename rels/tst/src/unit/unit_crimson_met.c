@@ -501,7 +501,6 @@ EVT_END()
  * if it hits it deals damage with the guard-timing check and bounces off, then walks home.
  */
 static EVT_BEGIN(attack_event)
-
     // If the Buzzy is lying on its back it spends its turn getting back up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

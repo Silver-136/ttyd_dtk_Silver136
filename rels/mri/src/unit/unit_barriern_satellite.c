@@ -308,4 +308,3 @@ static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     evtSetValue(event, z, (s32)p->z);
     return EVT_RETURN_DONE;
 }
-

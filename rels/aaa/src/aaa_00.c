@@ -66,13 +66,11 @@ static EvtWord evt_prologue[644];
 static EvtWord evt_prologue[713];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord evt_prologue2[196];
 #else
 EvtWord evt_prologue2[193];
 #endif
-
 
 #if VERSION >= VERSION_US
 static EvtWord epilogue_evt[328];
@@ -897,4 +895,3 @@ void mapdelete(void) {
         fileFree(wp->tpl);
     }
 }
-

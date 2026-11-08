@@ -21,7 +21,6 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 
-
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 static EvtWord toile_in[11];
@@ -377,4 +376,3 @@ EVT_BEGIN(tou_09_init_evt)
     CALL(evt_hitobj_onoff, STRING("a_door_9_ura"), 1, 0)
     RETURN
 EVT_END()
-

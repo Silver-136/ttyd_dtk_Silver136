@@ -19,7 +19,6 @@
 #include "win/win_main.h"
 #include <string.h>
 
-
 typedef struct CaseWork {
     s32 count; //0x0
     CaseEntry* entries; //0x4
@@ -29,7 +28,6 @@ typedef struct CaseWork {
 static CaseWork work;
 //.sdata
 static CaseWork* wp = &work;
-
 
 /** Allocates and clears the table of 64 case entries at boot. */
 void caseInit(void) {

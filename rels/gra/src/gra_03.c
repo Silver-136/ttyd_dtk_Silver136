@@ -9,7 +9,6 @@
 #include "evt/evt_mobj.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 EvtWord gra_03_init_evt[41];
 
@@ -66,4 +65,3 @@ EVT_BEGIN(gra_03_init_evt)
     CALL_CHILD(evt_usu_kagemario_party_kill)
     RETURN
 EVT_END()
-

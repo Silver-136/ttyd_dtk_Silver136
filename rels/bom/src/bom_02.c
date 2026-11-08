@@ -707,7 +707,6 @@ EVT_END()
  * while that job is active, with a short walk-up of Mario and the partner.
  */
 static EVT_BEGIN(talk_murabito_e)
-
     // Trouble Center job 30: the villager asks Mario to erase the graffiti on the 50th floor of the Pit of 100
     // Trials.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
@@ -1670,7 +1669,6 @@ static ShopperData35 shopper_data = {
     {"shop_00", "shop_01", "shop_02", "shop_03", "shop_04", "shop_05", "shop_06", "shop_07", "shop_08", "shop_09", "shop_10", "shop_11", "shop_12", "shop_13", "shop_14", "shop_15", "shop_16", "shop_17", "shop_18", "shop_19", "shop_20", "shop_21", "shop_22", "shop_23", "shop_24", "shop_25", "shop_26", "shop_27", "shop_28", "shop_29", "shop_30", "shop_31", "shop_32", "shop_33", "shop_34"}, // msgs
 };
 
-
 #if VERSION >= VERSION_DEMO_EU
 /** PAL only: shrinks a named "nice" effect to 5/7 of its size. */
 static USER_FUNC(nice_effect_shrink) {
@@ -1700,7 +1698,6 @@ static USER_FUNC(yami_view) {
  * the mayor speaks stg8_dark_08 and the map changes to las_26 at the sekai_yami2 entrance.
  */
 static EVT_BEGIN(sekai_yami_evt)
-
     // Mario and the partner are parked off-stage while the mayor and three villagers are placed in the village.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -2073,4 +2070,3 @@ static USER_FUNC(anim_tevcallback_mobj) {
     animPoseSetMaterialFlagOn(mobjNameToPtr(name)->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
-

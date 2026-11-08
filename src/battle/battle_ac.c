@@ -13,7 +13,6 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_pad.h"
 
-
 // local prototypes
 static s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask);
 

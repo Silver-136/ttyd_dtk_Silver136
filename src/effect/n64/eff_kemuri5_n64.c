@@ -33,7 +33,6 @@ typedef struct EffKemuri5N64Work {
     f32 dirZ;      // 0x48
 } EffKemuri5N64Work;
 
-
 /** Camera-facing landing puff quad. */
 static effN64Vtx kmr_a_1_v[] = {
     {-8, 7, 0, 0, 0, 255, 255, 255, 255},

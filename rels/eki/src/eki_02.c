@@ -70,7 +70,6 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
-
 /**
  * Per-frame script helper (started inline from the map init, never finishes):
  * while Mario stands on a rotating contraption piece (a hit object flagged 0x30),
@@ -153,4 +152,3 @@ EVT_BEGIN(eki_02_init_evt)
     CALL(evt_item_entry, STRING("item"), ITEM_STAR_PIECE, 540, 140, -40, ITEM_TYPE_STILL, GSWF_STARPIECE_86, 0)
     RETURN
 EVT_END()
-

@@ -1146,4 +1146,3 @@ static USER_FUNC(yuuranking_get_monte) {
     evtSetValue(event, event->args[0], _wp->monte);
     return EVT_RETURN_DONE;
 }
-

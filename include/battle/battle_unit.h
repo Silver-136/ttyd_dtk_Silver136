@@ -1185,7 +1185,6 @@ void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* s
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength);
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP && defined(BATTLE_UNIT_STATUS_ENUM)
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength);
 #else
@@ -1199,7 +1198,6 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type);
 #else
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type);
 #endif
-
 
 #if VERSION <= VERSION_DEMO_JP && defined(BATTLE_UNIT_STATUS_ENUM)
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type);

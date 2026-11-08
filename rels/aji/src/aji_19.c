@@ -268,4 +268,3 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     }
     return FALSE;
 }
-

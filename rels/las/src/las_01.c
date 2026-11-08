@@ -12,7 +12,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -135,4 +134,3 @@ EVT_BEGIN(las_01_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -710, 448, -175, ITEM_TYPE_STILL, GSWF_LAS_01_STOPWATCH, 0)
     RETURN
 EVT_END()
-

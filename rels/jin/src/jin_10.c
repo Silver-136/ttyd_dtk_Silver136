@@ -332,4 +332,3 @@ USER_FUNC(get_width) {
     evtSetFloat(event, args[1], 0.8f * party->width);
     return EVT_RETURN_DONE;
 }
-

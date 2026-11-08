@@ -18,7 +18,6 @@
 #include "driver/itemdrv.h"
 #include "driver/npcdrv.h"
 
-
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ki_6[20];
 static TreeAccess ki_data[8];
@@ -149,4 +148,3 @@ EVT_BEGIN(hei_02_init_evt)
     CALL(evt_cloud_ent, 0, STRING("kusa_13"), STRING("a_kusa_13"), 0)
     RETURN
 EVT_END()
-

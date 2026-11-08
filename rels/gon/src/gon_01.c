@@ -27,7 +27,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[5];
@@ -471,4 +470,3 @@ EVT_BEGIN(gon_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

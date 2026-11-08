@@ -268,7 +268,6 @@ EVT_END()
  * then hits each target in turn.
  */
 static EVT_BEGIN(thunder_event)
-
     // The Dark Puff targets the whole opposing side with its charged lightning.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -703,4 +702,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
 EVT_END()
-

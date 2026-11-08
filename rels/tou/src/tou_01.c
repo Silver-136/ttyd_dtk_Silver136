@@ -2506,7 +2506,6 @@ s32 yoshi_data[] = {
  */
 // Two close approaches at jump endpoints end the chase; intervening misses do not reset the count.
 EVT_BEGIN(evt_tamago_move)
-
     // The egg leaps out of the hot dog stand and bounces around the plaza along the yoshi_data points.
     CALL(evt_npc_flag_onoff, 1, STRING("たまご"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("たまご"), -400, 10, -135)
@@ -3602,7 +3601,6 @@ EVT_END()
  * the Chapter 3 intro, etc.).
  */
 EVT_BEGIN(tou_01_init_evt)
-
     // Entrances, blocks, the Star Piece panel, the Star Pieces and the Inn Coupon.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

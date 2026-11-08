@@ -719,4 +719,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
 EVT_END()
-

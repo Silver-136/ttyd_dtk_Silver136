@@ -37,7 +37,6 @@
 #include "battle/battle_sub.h"
 #include "eff/eff_stardust.h"
 
-
 typedef struct GenkiRing {
     s32 timer;
     Vec pos;
@@ -150,7 +149,6 @@ static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
 static GenkiWork* get_ptr(void);
-
 
 /**
  * Per-frame driver of the Sweet Treat / Sweet Feast minigame, run as a sibling event by genki_evt_common.
@@ -1231,7 +1229,6 @@ static void disp_3D(CameraId cam, void* param) {
 static void disp_3D_alpha(CameraId cam, void* param) {
 }
 
-
 /**
  * Shared body of Sweet Treat and Sweet Feast; LW(15) is the mode (0 or 1).
  * Pays the Star Power, plays the star intro, moves Mario left, runs the shooting game, then restores Mario's HP,
@@ -1402,7 +1399,6 @@ EVT_BEGIN(status_recover_evt)
     CALL(recover_cmd_disable)
     RETURN
 EVT_END()
-
 
 /** The minigame's work area, kept in the battle's shared action-command work buffer. */
 static GenkiWork* get_ptr(void) {

@@ -12,7 +12,6 @@
 #include "evt/evt_cam.h"
 #include "driver/seqdrv.h"
 
-
 EvtWord kpa_act_stg1_mobj[151];
 EvtWord kpa_act_stg1_item[31];
 static EvtWord kpa_fall[41];
@@ -129,4 +128,3 @@ EVT_BEGIN(kpa_02_init_evt)
     SPAWN_EVENT(kpa_time)
     RETURN
 EVT_END()
-

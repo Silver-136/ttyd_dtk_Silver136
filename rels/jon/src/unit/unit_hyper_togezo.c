@@ -557,7 +557,6 @@ EVT_END()
  * (swapping to the guard tables with unit work 0 set), each 50 percent of the time.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Sky-Blue Spiny with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -893,4 +892,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

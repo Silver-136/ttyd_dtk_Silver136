@@ -737,7 +737,6 @@ static EVT_BEGIN(drain_attack_event)
         LOOP(20)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(-0.024414062f), FLOAT(-0.024414062f), 0)
 
-
             WAIT_FRAMES(1)
         END_LOOP
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(1))

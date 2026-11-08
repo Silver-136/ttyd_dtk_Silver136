@@ -36,7 +36,6 @@
 #include "pmario_sound.h"
 #include "driver/seqdrv.h"
 
-
 static void depthDisp(CameraId camera, void* param);
 typedef struct TegamiWork {
     s32 alpha;

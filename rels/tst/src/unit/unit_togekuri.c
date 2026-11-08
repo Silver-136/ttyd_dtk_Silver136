@@ -306,7 +306,6 @@ static f32 SinTable[] = {
  * a miss lands it on the floor (TGK_D_1) before it hops back. Then it walks home.
  */
 static EVT_BEGIN(attack_event)
-
     // If an enemy-item script is selected, the Spiky Goomba runs it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

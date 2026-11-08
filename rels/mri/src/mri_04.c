@@ -573,4 +573,3 @@ EVT_BEGIN(mri_04_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

@@ -47,7 +47,6 @@ static void logoDisp(CameraId camId, void* param);
 static void dummy_draw(CameraId camId, void* param);
 static void progDisp(CameraId camId, void* param);
 
-
 #if VERSION < VERSION_US
 BOOL arcPreLoad(void);
 #endif
@@ -159,7 +158,6 @@ void seq_logoInit(SequenceWork* work) {
     }
 }
 #endif
-
 
 #if VERSION <= VERSION_DEMO_JP
 
@@ -492,7 +490,6 @@ void seq_logoMain(SequenceWork* work) {
     }
 }
 
-
 static void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;
@@ -633,7 +630,6 @@ static void logoDisp(CameraId camId, void* param) {
                     GXTexCoord2f32(0.0f, 1.0f);
                 }
                 break;
-
 
             case 2:
 #else
@@ -788,7 +784,6 @@ static void logoDisp(CameraId camId, void* param) {
         GXSetScissor(sciLeft, sciTop, sciWidth, sciHeight);
     }
 }
-
 
 /**
  * Background draw callback queued for the frame the video mode switches:

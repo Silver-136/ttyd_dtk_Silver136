@@ -12,7 +12,6 @@
 #include "system.h"
 #include <string.h>
 
-
 typedef struct PowerGaugeWork {
     s32 frame;     // 0x0
     f32 gauge;     // 0x4
@@ -25,7 +24,6 @@ typedef struct PowerGaugeWork {
     u32 button;    // 0x14
     s32 endTimer;  // 0x18
 } PowerGaugeWork;
-
 
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
@@ -242,7 +240,6 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
 s32 battleAcResult_PowerGauge(BattleWork* work) {
     return work->actionCommands.result;
 }
-
 
 /**
  * Display callback: slides the gauge in from the left over 20 frames,

@@ -44,7 +44,6 @@
 #include "driver/casedrv.h"
 #include "driver/hitdrv.h"
 
-
 typedef struct MarioJumpData {
     f32 jump[4];   // 0x0
     f32 fall[4];   // 0x10
@@ -73,7 +72,6 @@ static void mot_forceReset(void);
 static void mot_shadow(void);
 static void mot_partyUse(void);
 static void mot_dummy(void);
-
 
 // Private by-value Vec prototype; mot_slit.c defines marioCreviceWallChk(const Vec* p). The call copies the Vec to
 // the stack and passes a pointer to the copy (the copy is in the retail code), so the original called it this way.
@@ -917,7 +915,6 @@ void marioLandOn(void) {
     }
 }
 
-
 #if VERSION <= VERSION_DEMO_JP
 static f32 marioDemoHalf(f32 x) {
     if (x < 0.0) {
@@ -1187,7 +1184,6 @@ void marioChgMotJump2(void) {
         marioChgMot(MARIO_MOTION_JUMP_NPC);
     }
 }
-
 
 #if VERSION <= VERSION_DEMO_JP
 

@@ -177,7 +177,6 @@ s32 randn(s32 min, s32 max) {
     return min + rand() % (max - min);
 }
 
-
 /** Returns a random float between min and max. */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
@@ -2513,4 +2512,3 @@ USER_FUNC(teresa_eff) {
     effTeresaEntry(0, x, y + 20.0f, z + 20.0f);
     return EVT_RETURN_DONE;
 }
-

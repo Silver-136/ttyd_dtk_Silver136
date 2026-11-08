@@ -19,7 +19,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);
 static USER_FUNC(shadow_scale_small);
@@ -443,7 +442,6 @@ static EVT_BEGIN(return_event)
 EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
-
     // During a First Strike it pauses a moment; otherwise it picks a target (a confused Piranha Plant with
     // nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

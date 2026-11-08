@@ -843,4 +843,3 @@ EVT_BEGIN(dead_subevent)
     CALL(btlevtcmd_WaitEventEnd, LW(2))
     RETURN
 EVT_END()
-

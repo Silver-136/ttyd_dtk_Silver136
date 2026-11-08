@@ -194,4 +194,3 @@ static void effSleepDisp(CameraId camId, void* param) {
         }
     }
 }
-

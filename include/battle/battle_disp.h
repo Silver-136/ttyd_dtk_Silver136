@@ -20,9 +20,7 @@ void btlDispTexPlane3(Mtx mtx, u32 id, GXColor color0, GXColor color1, GXColor c
 void btlDispInit(void);
 StatusEffectType _GetStatusPoseType(BattleUnit* unit);
 
-
 void btlDispMain(void);
-
 
 void btlDispEntAnime(BattleUnit* unit);
 void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose);

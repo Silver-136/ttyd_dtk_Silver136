@@ -19,7 +19,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_data_a[2];
 static BeroEntry bero_data_b[2];
 static BeroEntry bero_data_c[2];
@@ -272,4 +271,3 @@ EVT_BEGIN(rsh_07_c_init_evt)
     CALL_CHILD(evt_rsh_window)
     RETURN
 EVT_END()
-

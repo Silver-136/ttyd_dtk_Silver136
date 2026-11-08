@@ -788,7 +788,6 @@ EVT_BEGIN(hom_10_init_evt)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(ramp_r) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));
     f32 wave = sin(gp->retraceCount / 15.0f);
@@ -796,7 +795,6 @@ static USER_FUNC(ramp_r) {
     evtSetFloat(event, LW(10), 1.8f * amp * wave);
     return EVT_RETURN_DONE;
 }
-
 
 /**
  * Texture-environment callback for the train's lights (the pika objects):

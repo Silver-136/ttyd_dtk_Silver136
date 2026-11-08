@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[2];
 static HitDamageReturn hitDmgRetPoints[7];
 EvtWord tik_20_init_evt[104];
@@ -86,4 +85,3 @@ EVT_BEGIN(tik_20_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk03"), 50, 60, -75, 0, GSWF_SHINE_12, 0)
     RETURN
 EVT_END()
-

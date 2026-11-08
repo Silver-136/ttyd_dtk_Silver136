@@ -15,7 +15,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];
 EvtWord item_box_00[34];
@@ -110,4 +109,3 @@ EVT_BEGIN(jin_05_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -10, 0, -40, ITEM_TYPE_STILL, GSWF_STARPIECE_68, 0)
     RETURN
 EVT_END()
-

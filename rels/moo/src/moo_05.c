@@ -18,7 +18,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 
 #if VERSION < VERSION_US
@@ -136,4 +135,3 @@ EVT_BEGIN(moo_05_init_evt)
     END_IF
     RETURN
 EVT_END()
-

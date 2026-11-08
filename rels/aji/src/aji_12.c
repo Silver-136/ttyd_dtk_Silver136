@@ -26,7 +26,6 @@
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
 
-
 static USER_FUNC(hikaru_off);
 static USER_FUNC(mario_chk);
 static USER_FUNC(thunder_main);
@@ -402,4 +401,3 @@ static USER_FUNC(hikaru_off) {
     hitGrpAttrOff("A_no1", HIT_ATTR_SPIKES);
     return EVT_RETURN_DONE;
 }
-

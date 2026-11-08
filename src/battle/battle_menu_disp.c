@@ -2158,4 +2158,3 @@ void DrawMultiItemWin(void) {
         DrawMenuHelpWin(items[cursor->absPos].help, x, y);
     }
 }
-

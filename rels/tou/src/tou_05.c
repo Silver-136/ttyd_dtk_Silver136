@@ -568,7 +568,6 @@ static EVT_BEGIN(init_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(talk_kinoshikowa)
-
     // First confirm all 20 trunks; after that acknowledgement, reward the player only once none remain.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
@@ -794,7 +793,6 @@ static EVT_BEGIN(evt_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(evt_sensyu)
-
     // The map's music fades out and, after a pause, Grubba's theme starts as he notices Mario.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -985,7 +983,6 @@ EVT_BEGIN(evt_sensyu2)
 EVT_END()
 
 static EVT_BEGIN(evt_1st_leagu)
-
     // Mario, his partner and Jolene are placed just outside the office door (z -160 to -180); the camera frames Grubba's desk.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1161,7 +1158,6 @@ EVT_END()
  * On later visits Mario just looks until A is pressed.
  */
 EVT_BEGIN(evt_nozoki)
-
     // Mario freezes in place; the first time, Grubba and Jolene are placed in the office below.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1460,7 +1456,6 @@ EVT_END()
  * and chooses the scene to run from the story progress.
  */
 EVT_BEGIN(tou_05_init_evt)
-
     // Set up the doors, the camera animation and the Star Piece on the floor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

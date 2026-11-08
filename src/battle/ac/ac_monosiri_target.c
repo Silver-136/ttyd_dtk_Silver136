@@ -11,7 +11,6 @@
 #include "version.h"
 #include "battle/battle_disp.h"
 
-
 // Local setup parameter slots, named from their exact consumers below.
 typedef enum MonosiriTargetParam {
     MONOSIRI_TARGET_PARAM_UNIT_ID = 0,
@@ -30,7 +29,6 @@ typedef struct MonosiriTargetWork {
     u32 sfxId;      // 0x38
     s32 endTimer;   // 0x3C
 } MonosiriTargetWork;
-
 
 static void actionCommandDisp(f32 x, f32 y);
 
@@ -213,4 +211,3 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     iconDispGx(&(Vec){-200.0f + x, 50.0f + y, 0.0f}, ICON_FLAG_2D, icon, 1.0f);
 }
-

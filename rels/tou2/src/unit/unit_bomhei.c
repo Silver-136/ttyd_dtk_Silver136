@@ -387,7 +387,6 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
-
     // The Bob-omb may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -552,7 +551,6 @@ EVT_END()
  * In both cases it explodes afterwards with bomb_event, removing itself.
  */
 static EVT_BEGIN(attack_event_spark)
-
     // The lit Bob-omb may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -672,4 +670,3 @@ static EVT_BEGIN(wait_event_spark)
     END_IF
     RETURN
 EVT_END()
-

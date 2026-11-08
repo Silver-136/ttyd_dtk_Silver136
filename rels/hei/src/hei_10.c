@@ -150,7 +150,6 @@ EvtWord golden_se[55];
 EvtWord evt_golden[319];
 EvtWord hei_10_init_evt[80];
 
-
 /** Returns a random float in 0..1 from the game's rand() (divided by 32767). */
 static inline f32 rand01(void) {
     return rand() / 32767.0f;
@@ -729,4 +728,3 @@ EVT_BEGIN(hei_10_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("mizu"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
-

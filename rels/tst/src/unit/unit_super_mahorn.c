@@ -1926,7 +1926,6 @@ EVT_END()
  * stopped or frozen (statuses 1, 2 and 9).
  */
 static EVT_BEGIN(wait_event)
-
     // The wizard and its copies take their idle pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -2359,4 +2358,3 @@ static USER_FUNC(mahorn_get_live_num) {
     evtSetValue(event, args[0], num);
     return EVT_RETURN_DONE;
 }
-

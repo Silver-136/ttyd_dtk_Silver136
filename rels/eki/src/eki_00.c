@@ -1736,7 +1736,6 @@ EVT_END()
  * Close Call P of the upper floor is moved 2000 units down while Mario is below.
  */
 EVT_BEGIN(evt_elv_down)
-
     // The elevator doors open and Mario walks to the doorway.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1934,7 +1933,6 @@ EVT_END()
  * cage.
  */
 EVT_BEGIN(evt_elv_up)
-
     // The music fades; the doors open and Mario walks to the doorway.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     BEGIN_INLINE_EVENT
@@ -2197,4 +2195,3 @@ EVT_BEGIN(eki_00_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kan"), 0, PTR(evt_kanban), 0)
     RETURN
 EVT_END()
-

@@ -12,7 +12,6 @@
 #include "evt/evt_cam.h"
 #include "pmario_sound.h"
 
-
 static EvtWord kpa_act_stg3_mobj[68];
 static EvtWord kpa_fall[41];
 static EvtWord kpa_goal[22];
@@ -107,4 +106,3 @@ EVT_BEGIN(kpa_06_init_evt)
     CALL(evt_koopa_set_level, GSW_KPA_BOWSER_LEVEL)
     RETURN
 EVT_END()
-

@@ -458,7 +458,6 @@ EVT_END()
  * then swoops back and returns to its idle pose.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -632,7 +631,6 @@ static USER_FUNC(eff_fire) {
  * On a hit it makes a smoke puff and applies the damage with the action command defence check.
  */
 static EVT_BEGIN(fire_attack_event)
-
     // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -782,7 +780,6 @@ EVT_END()
  * Afterwards it returns home. The unit's attack AI never selects it.
  */
 static EVT_BEGIN(all_fire_attack_event)
-
     // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -905,4 +902,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

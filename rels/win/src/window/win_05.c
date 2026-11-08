@@ -24,7 +24,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 EvtWord win_05_door_open[10];
 EvtWord win_05_door_close[10];
 static BeroEntry bero_entry_data[2];
@@ -156,4 +155,3 @@ EVT_BEGIN(win_05_init_evt)
     END_IF
     RETURN
 EVT_END()
-

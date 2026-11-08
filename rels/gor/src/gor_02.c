@@ -230,7 +230,6 @@ extern EvtWord powerupya_party_lank_rtn[];
 EvtWord powerupya_party_lank_rtn[786];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord powerupya_party_rtn[170];
 #else
@@ -241,20 +240,17 @@ EvtWord powerupya_party_rtn[167];
 #endif
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord powerupya_table_talk[];
 #else
 EvtWord powerupya_table_talk[91];
 #endif
 
-
 #if VERSION == VERSION_DEMO_JP
 EvtWord powerupya_direct_talk[103];
 #else
 EvtWord powerupya_direct_talk[96];
 #endif
-
 
 #if VERSION >= VERSION_JP
 s32 powerupya_item_tbl[2];
@@ -395,7 +391,6 @@ static EvtWord evt_door_03_close[166];
 #endif
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_door_03_open[12];
 #else
@@ -524,7 +519,6 @@ EvtWord epigraphy_map_after_stage4[290];
 EvtWord epigraphy_map_after_stage5[218];
 #endif
 #endif
-
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord epigraphy_map_after_stage6[225];
@@ -7363,4 +7357,3 @@ EVT_BEGIN(gor_02_init_evt)
     END_IF
     RETURN
 EVT_END()
-

@@ -33,7 +33,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];
 
@@ -42,7 +41,6 @@ extern EvtWord wall_roll_sub[];
 #else
 EvtWord wall_roll_sub[96];
 #endif
-
 
 #if VERSION >= VERSION_US
 EvtWord wall_roll[272];
@@ -53,7 +51,6 @@ EvtWord wall_roll[262];
 EvtWord wall_roll[264];
 #endif
 #endif
-
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord breakyuka_init[11];
@@ -580,4 +577,3 @@ EVT_BEGIN(mri_09_init_evt)
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF_MRI_09_BREAKING_FLOOR_BROKEN)
     RETURN
 EVT_END()
-

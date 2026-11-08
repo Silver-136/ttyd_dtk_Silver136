@@ -1246,4 +1246,3 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     }
     return FALSE;
 }
-

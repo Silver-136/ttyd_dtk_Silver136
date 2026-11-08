@@ -520,7 +520,6 @@ EVT_END()
  * plays a success jingle if the other switch is already pressed.
  */
 EVT_BEGIN(switch_1_evt)
-
     // Controls off; the camera swings to the platforms the first switch controls.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 400, 1368, 0, -40, 700, 1000, EASING_SINE_IN_OUT)
@@ -635,7 +634,6 @@ EVT_END()
  * whose ship-panel attribute (HIT_ATTR_SHIP_PANEL2) is turned on; no hit object is turned off.
  */
 EVT_BEGIN(switch_2_evt)
-
     // Controls off; the camera swings to the platforms the second switch controls.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 450, 45, 0, -75, -558, 1000, EASING_SINE_IN_OUT)
@@ -1091,7 +1089,6 @@ EVT_BEGIN(las_09_init_evt)
     RETURN
 EVT_END()
 
-
 static USER_FUNC(eff_guruguru) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1105,4 +1102,3 @@ static USER_FUNC(eff_guruguru) {
     effSetName(eff, name);
     return EVT_RETURN_DONE;
 }
-

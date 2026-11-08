@@ -59,7 +59,6 @@ static EvtWord explosion_event[254];
 static EvtWord explosion_event[247];
 #endif
 
-
 /**
  * Script helper: hooks _fire_point_callback onto the bomb's body (part 1), and hides part 2, the fuse flame,
  * so the callback can draw it at the fuse's locator.
@@ -845,7 +844,6 @@ static EVT_BEGIN(explosion_event)
     RETURN
 EVT_END()
 
-
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnitPart* part = userdata;
     BattleUnit* unit = part->owner;
@@ -877,4 +875,3 @@ static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
         animPoseDrawShape(shapePose, shape);
     }
 }
-

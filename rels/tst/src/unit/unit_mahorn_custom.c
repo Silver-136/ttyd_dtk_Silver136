@@ -637,7 +637,6 @@ static BattleUnitSetup entry_mahorn = {
  * size-up, defence-up, invisibility, dodgy and heal.
  */
 static EVT_BEGIN(attack_event)
-
     // On a First Strike it just punches.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1115,7 +1114,6 @@ EVT_END()
  * After a first strike it uses the first-strike target.
  */
 static EVT_BEGIN(attack_punch_event)
-
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Elite Wizzerd with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -2381,4 +2379,3 @@ static USER_FUNC(mahorn_get_live_num) {
     evtSetValue(event, args[0], num);
     return EVT_RETURN_DONE;
 }
-

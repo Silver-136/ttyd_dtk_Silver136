@@ -20,7 +20,6 @@
 #include "driver/mobjdrv.h"
 #include "eff/eff_n64.h"
 
-
 static void shadowCharShadowDisp_Collision(CameraId cameraId, void* param);
 static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param);
 static void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param);
@@ -29,7 +28,6 @@ static void cylinderShadowDraw(CameraId cameraId, void* param);
 static void projShadowEnd(CameraId cameraId, void* param);
 static void depthShadowEnd(CameraId cameraId, void* param);
 static void shadowDisp(CameraId cameraId, void* param);
-
 
 /**
  * The two light cameras that render shadow textures: 0, a fixed perspective light for the projected and depth
@@ -198,7 +196,6 @@ static f32 vertex_tbl[180] ATTRIBUTE_ALIGN(32) = {
     1.0f, -1.0f, 1.0f,
 };
 
-
 //.bss
 CharShadowWork char_shadow_work;
 ProjShadowWork proj_shadow_work;
@@ -240,7 +237,6 @@ GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
 
 static inline void depthShadowInit(void);
 static inline void projShadowInit(void);
-
 
 /**
  * Sets up the shadow system at boot: the 64-entry character shadow list (default mode 2, the cylinder shadow),
@@ -381,7 +377,6 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
     PSMTXCopy(wp->view, camGetCurPtr()->view);
 }
 
-
 /**
  * Shadow draw callback for every camera and pass:
  * on the 3D, offscreen and effect cameras draws the polygon, cylinder and texture character shadows;
@@ -463,7 +458,6 @@ static BOOL _filter(HitCheckQuery* query, HitEntry* hit) {
     return TRUE;
 }
 #pragma pop
-
 
 /**
  * Places each new shadow for this frame: casts a ray 150 units down from the owner
@@ -838,7 +832,6 @@ static inline void shadowSetTev(u8 a) {
 static inline void shadowSetMatZero(void) {
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, 0});
 }
-
 
 /**
  * Draws the cylinder (mode 2, the default) character shadows:

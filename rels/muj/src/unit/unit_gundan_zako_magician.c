@@ -504,7 +504,6 @@ EVT_END()
  * each only if he lacks that status. An unavailable Dodgy choice falls through to the later options; it rolls again only if none of them runs.
  */
 static EVT_BEGIN(attack_event)
-
     // In a first strike the X-Naut PhD simply throws its fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

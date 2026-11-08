@@ -16,7 +16,6 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 
-
 #include "mario/mario_party.h"
 #include "mario/mario_sbr.h"
 
@@ -25,7 +24,6 @@
 #endif
 
 #include <math.h>
-
 
 static BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
@@ -743,7 +741,6 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 }
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 
 /** Early demos only: partner-filtered ray that returns the hit object, the rounded hit distance in *dist and the normal. */
@@ -930,7 +927,6 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     pos->z += dist * cs;
     return NULL;
 }
-
 
 /**
  * Ceiling check: casts upward rays from 10 units above four points 0.3 of the width around *pos,

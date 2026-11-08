@@ -454,7 +454,6 @@ EVT_END()
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the First Strike target or a sampled enemy; a confused Lava
     // Bubble with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -629,7 +628,6 @@ static USER_FUNC(eff_fire) {
  * The ball bursts into smoke on the target and deals the burning damage.
  */
 static EVT_BEGIN(fire_attack_event)
-
     // Pick the First Strike target or a sampled enemy; a confused Lava
     // Bubble with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -783,7 +781,6 @@ EVT_END()
  * Nothing in the unit's tables or attack_event calls it, so it is unused.
  */
 static EVT_BEGIN(all_fire_attack_event)
-
     // Pick the First Strike target or a sampled enemy; a confused Lava
     // Bubble with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -906,4 +903,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

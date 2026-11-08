@@ -16,7 +16,6 @@
 #include "mario/mariost.h"
 #endif
 
-
 static void _disp(CameraId cameraId, void* param);
 
 /** s32 type, s32 x, s32 y, const char* msg, s32 frames */

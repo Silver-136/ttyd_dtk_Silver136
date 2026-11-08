@@ -19,7 +19,6 @@
 #include "mario/mario.h"
 #include "party.h"
 
-
 EvtWord evt_bom_snowfall[18];
 static TreeAccess tree_tbl[4];
 static EvtWord evt_tree[7];
@@ -208,4 +207,3 @@ EVT_BEGIN(bom_00_init_evt)
     END_IF
     RETURN
 EVT_END()
-

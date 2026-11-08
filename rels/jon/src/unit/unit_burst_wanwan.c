@@ -431,7 +431,6 @@ EVT_END()
  * During a first strike it pauses 750 ms first.
  */
 static EVT_BEGIN(attack_event)
-
     // During a First Strike it waits a moment first; otherwise it uses an item when the item check selects one, or picks a target
     // (a confused Red Chomp with nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -908,4 +907,3 @@ static USER_FUNC(chain_init) {
     BtlUnit_SetAnim(part, "WAN_Z_2");
     return EVT_RETURN_DONE;
 }
-

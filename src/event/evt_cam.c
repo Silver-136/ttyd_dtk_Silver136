@@ -616,4 +616,3 @@ USER_FUNC(evt_cam_letter_box_camid) {
     camGetPtr(CAMERA_2D)->letterBoxCamId = id;
     return EVT_RETURN_DONE;
 }
-

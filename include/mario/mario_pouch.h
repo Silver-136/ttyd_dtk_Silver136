@@ -387,7 +387,6 @@ typedef enum MajinaiType {
     MAJINAI_COIN_UP = 4,     // coin bonus after the battle
 } MajinaiType;
 
-
 typedef struct PouchPartyData {
     u16 flags;       // 0x0
     s16 maximumHP;   // 0x2, includes HP Plus P boost

@@ -15,7 +15,6 @@
 #include "eff/n64/eff_opuku_wgun_n64.h"
 #include "dolphin/os.h"
 
-
 /** Returns the sine of an angle given in degrees. */
 static inline f32 dsin(f32 a) { return sin(6.2831855f * a / 360.0f); }
 
@@ -344,4 +343,3 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         n += 2;
     }
 }
-

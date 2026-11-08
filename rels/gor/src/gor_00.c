@@ -147,7 +147,6 @@ static EvtWord marco_init[32];
 EvtWord marco_party_move[120];
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord marco_talk[362];
 #else
@@ -288,7 +287,6 @@ EvtWord into_gor_ship[265];
 EvtWord mony_run_away[108];
 #endif
 
-
 #if VERSION >= VERSION_JP
 EvtWord peton_run_away[88];
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
@@ -331,7 +329,6 @@ extern EvtWord return_gorotsuki_town[];
 #else
 EvtWord return_gorotsuki_town[625];
 #endif
-
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord gor_00_init_evt[535];
@@ -2493,7 +2490,6 @@ EVT_END()
  * and the story goes to STG0_03_TO_ROGUEPORT. Ends by spawning christine_osoware.
  */
 EVT_BEGIN(enter_gorotsuki_town)
-
     // Set up the opening: controls are off and the ship animation state starts at its offscreen position.
     CALL(evt_snd_bgm_scope, 0, 1)
     SET_TYPE(0)
@@ -2855,7 +2851,6 @@ EVT_END()
  * the sailors' events are cancelled and moved back, and gundan1000tai_afterbattle runs.
  */
 EVT_BEGIN(gundan1000tai_beforebattle)
-
     // If started directly, place Mario and the X-Nauts where they would be.
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_key_onoff, 0)
@@ -3108,7 +3103,6 @@ EVT_END()
  * If LW(0) is 1 on entry it repositions everyone first (used when started directly).
  */
 EVT_BEGIN(gundan1000tai_afterbattle)
-
     // If started directly, place Mario and the X-Nauts after the fight.
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_key_onoff, 0)
@@ -4673,7 +4667,6 @@ EVT_END()
  * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
  */
 EVT_BEGIN(gorotsuki_kikan)
-
     // Mario, his partner, Flavio, Cortez and the sailors are placed on the pier; the crowd of 100 sailors is
     // set up.
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -4845,7 +4838,6 @@ EVT_END()
  * the music changes back to Rogueport's and Mario gets control.
  */
 EVT_BEGIN(into_gor_ship)
-
     // Hide Mario, the partners and the others, then place them on the ship off screen to the right.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -5059,7 +5051,6 @@ EVT_END()
  * Ends by setting STG4_15_08_BOWSER_ROGUEPORT_DOCK, saving, and changing to usu_00.
  */
 EVT_BEGIN(gor_00_koopa_evt)
-
     // Bowser (controlled through the Mario slot) is set up under the dock, out of sight.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_mode, 2)
@@ -6128,7 +6119,6 @@ EVT_END()
  * Peach thanks everyone and the ship (ship_a_animation) sets sail.
  */
 static EVT_BEGIN(epilogue_evt)
-
     // Set up the epilogue: Mario faces the cast, the camera is wide, and the Puni mushrooms are prepared.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 100, 15, 210)
@@ -6619,7 +6609,6 @@ EVT_END()
  * Sets STG9_02_RETURN_TO_ROGUEPORT and returns control.
  */
 EVT_BEGIN(return_gorotsuki_town)
-
     // Set up the post-credits return: only Mario and Goombella (as partner) are present, and the ship animation
     // starts.
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -7089,4 +7078,3 @@ EVT_BEGIN(gor_00_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

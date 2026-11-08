@@ -240,4 +240,3 @@ EVT_BEGIN(las_18_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
-

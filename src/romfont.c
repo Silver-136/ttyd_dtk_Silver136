@@ -11,7 +11,6 @@
 #include "mario/mariost.h"
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 #include "mario/mariost.h"
 #include <dolphin/os.h>
@@ -421,7 +420,6 @@ static void romFontMake(void) {
     __memFree(HEAP_DEFAULT, uniqueChars);
     __memFree(HEAP_DEFAULT, chars);
 }
-
 
 /** Looks a character code up in the glyph cache; falls back to the first glyph when the code was not baked. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.

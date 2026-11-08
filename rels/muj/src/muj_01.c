@@ -2461,4 +2461,3 @@ EVT_BEGIN(muj_01_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-

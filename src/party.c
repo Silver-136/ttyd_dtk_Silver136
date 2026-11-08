@@ -1324,7 +1324,6 @@ void partyHello(PartyEntry* party) {
     partyHello_inl(party);
 }
 
-
 /**
  * Runs the partner's appear: step 0 places her at Mario's middle
  * and launches a 16-frame hop to her appear position while she grows from nothing (with the appear sound),
@@ -1558,7 +1557,6 @@ s32 partyGoodbyeMain(PartyEntry* party) {
     }
     return 0;
 }
-
 
 /** Resets the partner's scale to 1 (leaving the appear mode). */
 static inline void partyChgRunM(PartyEntry* party) {

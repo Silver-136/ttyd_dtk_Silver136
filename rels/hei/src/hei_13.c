@@ -22,7 +22,6 @@
 #include "hei.h"
 #include "driver/npcdrv.h"
 
-
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];
 EvtWord evt_anm_kan[59];
@@ -168,4 +167,3 @@ EVT_BEGIN(hei_13_init_evt)
     END_IF
     RETURN
 EVT_END()
-

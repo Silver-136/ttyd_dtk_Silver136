@@ -514,7 +514,6 @@ EVT_END()
  * and writes each sister's new slot back to her unit work 5.
  */
 EVT_BEGIN(majo_unison_phase_event)
-
     // Read the HP of each sister still standing (Vivian, Marilyn, Beldam) under the
     // formation slot she holds now.
     SET_VALUE(LW(0), -1)

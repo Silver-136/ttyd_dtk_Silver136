@@ -655,4 +655,3 @@ EVT_BEGIN(evt_50)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-

@@ -30,7 +30,6 @@ typedef struct EventStage {
 
 void stg0_00_init(void);
 
-
 void stg9_02_init(void);
 
 EventStage* eventStgDtPtr(s32 stage);

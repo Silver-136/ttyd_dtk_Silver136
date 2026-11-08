@@ -27,7 +27,6 @@
 static BOOL chkCollision(f32* outY);
 static void flyMain(void);
 
-
 /**
  * Tuning values of Mario's paper airplane flight: top speed, gravity and drag, the nose-up and nose-down pitch
  * limits, turn and glide rates, and the pose offsets for each phase of the flight.
@@ -572,7 +571,6 @@ void mot_plane(void) {
     marioUpdateCamCollision(mp->position);
     mp->moveDist = mp->baseSpeed;
 }
-
 
 #define PI 3.1415927f
 

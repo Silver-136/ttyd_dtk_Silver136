@@ -417,4 +417,3 @@ EVT_BEGIN(dou_05_init_evt)
     CALL(cam_displacement)
     RETURN
 EVT_END()
-

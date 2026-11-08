@@ -15,7 +15,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 static EvtWord dou_puka_event_main0[60];
 static EvtWord dou_puka_event_main1[60];
@@ -166,4 +165,3 @@ EVT_BEGIN(dou_08_init_evt)
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_02"), STRING("Ship_Change_02"))
     RETURN
 EVT_END()
-

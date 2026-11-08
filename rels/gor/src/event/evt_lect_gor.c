@@ -1443,9 +1443,7 @@ static USER_FUNC(set_dir) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Script helper that waits until the lecture music (BGM channel 1) has started. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
-

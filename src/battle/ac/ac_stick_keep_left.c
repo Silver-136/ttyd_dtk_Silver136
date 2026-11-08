@@ -19,7 +19,6 @@ typedef struct SklWork {
     u32 sfx[12];  // 0xC
 } SklWork;
 
-
 // BattleActions.params of this command
 enum {
     STICK_KEEP_PARAM_LIGHTS = 0,    // lights to hold through

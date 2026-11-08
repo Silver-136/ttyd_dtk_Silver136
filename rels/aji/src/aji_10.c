@@ -48,7 +48,6 @@ static USER_FUNC(peach_evt_toumei);
 static USER_FUNC(peach_set_pose);
 static USER_FUNC(viewport);
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -479,7 +478,6 @@ EVT_BEGIN(monitor_init)
 EVT_END()
 
 static EVT_BEGIN(peach_evt_stg1)
-
     // The scene opens: Peach is led through the fortress by X-Naut underlings.
     // The viewport expands from 1 by 1 to the full screen.
     CALL(evt_mario_key_onoff, 0)

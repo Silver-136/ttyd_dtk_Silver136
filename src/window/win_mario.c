@@ -23,7 +23,6 @@
 #include "win/win_root.h"
 #include "driver/mapdrv.h"
 
-
 typedef struct LinkDt {
     s16 x;              // 0x0
     s16 y;              // 0x2
@@ -34,7 +33,6 @@ typedef struct LinkDt {
     const char* msg;    // 0x14
     u8 links[4];        // 0x18
 } LinkDt;
-
 
 /**
  * Entries of the pause menu's Mario screen: level, Star Rank, hammer, boots, HP, FP, BP,
@@ -460,7 +458,6 @@ static void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
             break;
     }
 }
-
 
 /**
  * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,

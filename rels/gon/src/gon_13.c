@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[2];
 EvtWord item_get03[34];
 static EvtWord switch_evt[68];
@@ -103,4 +102,3 @@ EVT_BEGIN(gon_13_init_evt)
     END_IF
     RETURN
 EVT_END()
-

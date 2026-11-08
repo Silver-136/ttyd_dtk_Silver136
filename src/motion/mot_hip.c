@@ -20,7 +20,6 @@
 #include "koopa_motion.h"
 #include "mot/mot_hip.h"
 
-
 // Ids of the two hip-drop sounds (the drop sound and Mario's voice): US and later keep them in
 // MarioWork.hipSfxId, JP and the early demos in the hip motion work.
 #if VERSION >= VERSION_US

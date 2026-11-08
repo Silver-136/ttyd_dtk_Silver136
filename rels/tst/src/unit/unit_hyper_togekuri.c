@@ -333,7 +333,6 @@ static f32 SinTable[] = {
  * with a charge option (weapon_togekuri_charge) at the start unless it is already charged (STATUS_CHARGE).
  */
 static EVT_BEGIN(attack_event)
-
     // Already charged: it goes straight to the roll attack.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -643,4 +642,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

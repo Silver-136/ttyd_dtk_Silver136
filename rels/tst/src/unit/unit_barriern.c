@@ -1092,7 +1092,6 @@ EVT_END()
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
-
     // The Yux's ring (part LW(15)) is made visible and flung at the target, with motion blur enabled only for the group attack.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
@@ -1401,7 +1400,6 @@ EVT_END()
  * afterwards the satellites go back to their orbit.
  */
 static EVT_BEGIN(wawawa_attack_event)
-
     // The Yux prepares a group attack on the whole party with its satellites.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_wawawa_attack))

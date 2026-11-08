@@ -1787,7 +1787,6 @@ EVT_BEGIN(peach_damage_event)
 EVT_END()
 
 EVT_BEGIN(peach_change_evt)
-
     // The status window is hidden and the camera moves in on the Shadow Queen (possessing Peach).
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -6023,4 +6022,3 @@ USER_FUNC(shadow_queen_connect) {
     BtlUnit_SetPartsPos(part, wpos[wk->idx[1]].x, wpos[wk->idx[1]].y, wpos[wk->idx[1]].z);
     return 0;
 }
-

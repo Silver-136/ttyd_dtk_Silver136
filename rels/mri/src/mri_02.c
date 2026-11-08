@@ -482,4 +482,3 @@ EVT_BEGIN(mri_02_init_evt)
     SPAWN_EVENT(mri_hikari_color)
     RETURN
 EVT_END()
-

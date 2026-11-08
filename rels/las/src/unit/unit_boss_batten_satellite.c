@@ -19,7 +19,6 @@
 
 s32 bts_x_flag_data;
 
-
 USER_FUNC(bts_x_flag_get);
 static USER_FUNC(bts_wariai_enzan_0f);
 static USER_FUNC(bts_wariai_enzan_0);

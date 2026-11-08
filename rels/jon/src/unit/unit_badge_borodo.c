@@ -23,7 +23,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-
 static USER_FUNC(_steal_item);
 
 BattleUnitKind unit_badge_borodo;
@@ -453,7 +452,6 @@ EVT_END()
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(_borodo_normal_attack)
-
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -609,7 +607,6 @@ EVT_END()
  * If nothing was taken it just bows, then returns home.
  */
 static EVT_BEGIN(_borodo_steal_attack)
-
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -880,4 +877,3 @@ EVT_BEGIN(_badge_borodo_emergency_revival_event)
     RETURN
 EVT_END()
 #endif
-

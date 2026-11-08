@@ -25,7 +25,6 @@
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
 
-
 USER_FUNC(_hikaru_off);
 USER_FUNC(_hikaru_on);
 static USER_FUNC(ride_chk);
@@ -379,4 +378,3 @@ static USER_FUNC(loop_onoff) {
     }
     return EVT_RETURN_BLOCK;
 }
-

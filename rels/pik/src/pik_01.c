@@ -1222,7 +1222,6 @@ EVT_BEGIN(pik_01_koopa_evt)
     RETURN
 EVT_END()
 
-
 /**
  * Script helper for the chapter 8 darkness scenes:
  * sets the "yami" (darkness) overlay view (envSetYamiView) to look from (0, 100, 100 + z) at (0, 0, z),
@@ -1253,7 +1252,6 @@ static USER_FUNC(anim_tevcallback) {
     animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
-
 
 /**
  * Script helper: creates a star stone effect (effStarStoneEntry) at position args[1..3] (floats)
@@ -1317,7 +1315,6 @@ USER_FUNC(kpa_lock_hit_scale) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Map TEV callback registered with evt_map_set_tevcallback in the init script:
  * forwards the map object's TEV info to envAddTev with index 4.
@@ -1325,7 +1322,6 @@ USER_FUNC(kpa_lock_hit_scale) {
 void test_tev(MapTevCallbackInfo* info) {
     envAddTev(4, info);
 }
-
 
 /**
  * Second map TEV callback of this map (used for the opuku and HEIPO objects):
@@ -1723,4 +1719,3 @@ EVT_BEGIN(pik_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

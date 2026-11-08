@@ -33,7 +33,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
 
-
 static USER_FUNC(mario_kirimomi);
 USER_FUNC(mario_reset);
 USER_FUNC(party_kirimomi);
@@ -49,7 +48,6 @@ static EvtWord evt_first[517];
 #else
 static EvtWord evt_first[525];
 #endif
-
 
 #if VERSION >= VERSION_US
 EvtWord rock_main[105];
@@ -514,4 +512,3 @@ static USER_FUNC(mario_kirimomi) {
     mario->rot.z = fmod(mario->rot.z, 360.0);
     return EVT_RETURN_DONE;
 }
-

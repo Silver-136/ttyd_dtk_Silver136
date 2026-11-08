@@ -15,7 +15,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_togedaruma;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -414,7 +413,6 @@ EVT_END()
  * The pre-damage check decides between a dodge and a hit with the action-command result, then it returns home.
  */
 static EVT_BEGIN(attack_event)
-
     // Flipped over: it counts down its recovery turn instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -581,4 +579,3 @@ static EVT_BEGIN(wait_event)
     GOTO(0)
     RETURN
 EVT_END()
-

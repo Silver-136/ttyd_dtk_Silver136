@@ -1989,4 +1989,3 @@ void _prolog(void) {
     }
     relSetBtlAddr("rsh", btlsetup_rsh_tbl, btl_rsh_setup_no_tbl);
 }
-

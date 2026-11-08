@@ -119,7 +119,6 @@ USER_FUNC(peach_set_pos) {
 }
 
 EVT_BEGIN(peach_evt_syawa_main)
-
     // The music dips and Peach is led to the tub.
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(2))
     CALL(evt_snd_envoff, PSND_PAUSE)

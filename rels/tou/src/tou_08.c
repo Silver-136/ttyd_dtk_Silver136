@@ -552,7 +552,6 @@ EVT_END()
  * the Glitz Pit music resumes and the story advances to STG3_20_MAJORS_10TH_PLACE.
  */
 static EVT_BEGIN(evt_1st_leagu)
-
     // Jolene opens the door and leads Mario and the partner into the major-league locker room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1260,7 +1259,6 @@ EVT_END()
 #endif
 
 EVT_BEGIN(tou_08_init_evt)
-
     // The story is moved up to match Mario's rank, then the pending story-jump flags are applied.
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))

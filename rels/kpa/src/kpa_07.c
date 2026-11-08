@@ -31,7 +31,6 @@
 #include "driver/msgdrv.h"
 #include "driver/seqdrv.h"
 
-
 static USER_FUNC(get_starstone_pos);
 static USER_FUNC(set_starstone_pos);
 USER_FUNC(set_starstone_ry);
@@ -114,7 +113,6 @@ EVT_END()
  * and play goes to Rogueport (gor_04).
  */
 EVT_BEGIN(kpa_07_evt)
-
     // The scene opens on the empty room; Kammy is hidden until she catches up with Bowser.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -249, 0, 0)
@@ -569,4 +567,3 @@ static USER_FUNC(starstone_fall) {
     ((EffStarStoneWork*)eff->userdata)->state = 1;
     return EVT_RETURN_DONE;
 }
-

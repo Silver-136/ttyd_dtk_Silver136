@@ -30,7 +30,6 @@
 
 static s32 x_flag_data[2];
 
-
 static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_add);
@@ -769,7 +768,6 @@ EVT_END()
  * At 25% or below (2 to 3) he switches to the wobbly pose table (pose_table_furafura) and says stg3_tou_471_19.
  */
 static EVT_BEGIN(phase_event)
-
     // Only runs after the player's phase, and while Macho Grubba is able to act.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
@@ -1261,7 +1259,6 @@ EVT_END()
  * jumps from there onto the target and lands with a hip drop that hits once, bounces off, and walks back home.
  */
 EVT_BEGIN(gance_attack_attack_event)
-
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1467,7 +1464,6 @@ EVT_END()
  * hitting each selected target once as he reaches it, and walks back home.
  */
 EVT_BEGIN(gance_rariat_attack_attack_event)
-
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1623,7 +1619,6 @@ EVT_END()
  * and lands on it with a hip drop that hits once, bounces off, and walks back home.
  */
 EVT_BEGIN(gance_body_attack_attack_event)
-
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))

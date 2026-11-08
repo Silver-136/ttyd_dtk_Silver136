@@ -10,7 +10,6 @@
 #include "driver/npcdrv.h"
 #include "party/party_yoshi.h"
 
-
 /** Removes the partner in Mario's first party slot (currPartySlotId[0]) and marks the slot empty (-1). */
 static inline void marioPartyKillSlot0(void) {
     MarioWork* mario = marioGetPtr();

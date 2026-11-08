@@ -11,4 +11,3 @@ EvtWord qiz_00_init_evt[2];
 EVT_BEGIN(qiz_00_init_evt)
     RETURN
 EVT_END()
-

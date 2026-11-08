@@ -1243,7 +1243,6 @@ EVT_BEGIN(nokotarou_tabidachi_init)
     RETURN
 EVT_END()
 
-
 /**
  * Script helper: sets the view matrix of the yami (darkness) overlay (envSetYamiView) to look from (-100 + d,
  * 100, 0) at (d, 0, 0), with d the float args[0].
@@ -1496,7 +1495,6 @@ static USER_FUNC(anim_tevcallback) {
     animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
-
 
 /**
  * Script helper: creates a star stone effect (effStarStoneEntry) at position args[1..3] (floats)
@@ -1851,4 +1849,3 @@ EVT_BEGIN(nok_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

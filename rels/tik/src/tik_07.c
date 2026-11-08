@@ -27,7 +27,6 @@
 #include "driver/itemdrv.h"
 #include <dolphin/pad.h>
 
-
 EvtWord bero_00_open_door[12];
 EvtWord bero_00_close_door[12];
 static BeroEntry bero_entry_data[8];
@@ -452,4 +451,3 @@ EVT_BEGIN(tik_07_init_evt)
     END_IF
     RETURN
 EVT_END()
-

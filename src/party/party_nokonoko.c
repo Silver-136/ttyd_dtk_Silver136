@@ -22,7 +22,6 @@
 #include "party/party_hit.h"
 #include "eff/eff_kemutest.h"
 
-
 // Private prototype with a second mode argument: the calls pass 1 (the li r4,1 is in the retail code), so the
 // original called it this way; party_move.c defines partyWalkInit(party) alone.
 extern void partyWalkInit(PartyEntry* party, s32 mode);
@@ -1452,4 +1451,3 @@ static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     }
     *out = *p;
 }
-

@@ -1463,4 +1463,3 @@ EVT_BEGIN(hei_00_init_evt)
     DEBUG_PUT_MSG(STRING("おわったよ"))
     RETURN
 EVT_END()
-

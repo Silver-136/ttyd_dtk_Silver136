@@ -65,7 +65,6 @@ EvtWord partySandersAttack_NormalAttack[946];
 EvtWord partySandersAttack_NormalAttack[970];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord partySandersAttack_SuperBombAttack[1118];
 EvtWord partySandersAttack_CounterSet[242];

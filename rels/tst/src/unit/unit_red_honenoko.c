@@ -488,7 +488,6 @@ EVT_END()
  * On a hit the bone lands, the damage is resolved and it bounces back; the bone part is hidden again at the end.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -639,7 +638,6 @@ EVT_END()
  * position in LW(0) to LW(2) with this unit's status copied by honenoko_copy_status.
  */
 static EVT_BEGIN(call_friend_event)
-
     // The camera zooms in on the Red Bones.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

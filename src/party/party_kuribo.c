@@ -23,7 +23,6 @@
 #define kuribo_init_800C23B4 kuribo_init
 #endif
 
-
 //.sbss
 u32 msg_ep; // cleared by kuribo_init; nothing reads it
 
@@ -196,7 +195,6 @@ USER_FUNC(pre_kurio_use) {
     }
 }
 
-
 /**
  * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
  * lets Mario move again and unmutes sound effects (JP and later also restore her floor collision).
@@ -247,7 +245,6 @@ EVT_BEGIN(kurio_msg_evt)
     CALL(post_kurio_use)
     RETURN
 EVT_END()
-
 
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
@@ -418,4 +415,3 @@ void kuribo_bye(PartyEntry* party) {
         partyChgRunMode(party, PARTY_RUN_DELETE);
     }
 }
-

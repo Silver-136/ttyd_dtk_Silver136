@@ -7,7 +7,6 @@
 
 s32 uranaisi_ryokin_rtn(s32 mode);
 
-
 USER_FUNC(uranaisi_data_alloc);
 USER_FUNC(uranaisi_data_free);
 USER_FUNC(uranaisi_next_check);

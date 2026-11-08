@@ -9788,4 +9788,3 @@ NpcTerritoryInfo btl_jon_setup_no_tbl[] = {
     {"BTLNO_JON_100_ZONBABA", 51},
     {0},
 };
-

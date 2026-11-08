@@ -501,4 +501,3 @@ EVT_BEGIN(luigi_gor_first_talk)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
-

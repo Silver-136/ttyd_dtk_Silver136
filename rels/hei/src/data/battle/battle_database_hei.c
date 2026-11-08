@@ -2433,4 +2433,3 @@ NpcTerritoryInfo btl_hei_setup_no_tbl[] = {
 #endif
     {0},
 };
-

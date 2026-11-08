@@ -72,7 +72,6 @@ f32 cloudGetBreathPower(Vec pos, f32 width);
 void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
-
 //.data
 char* luigi_pose[14][2] = { { "Z_1", "Z_1R" }, { "S_1", "S_1R" },   { "W_1", "W_1R" },   { "R_1", "R_1R" },
                             { "T_1", "T_1R" }, { "J_1A", "J_1RR" }, { "J_1B", "J_1BR" }, { "Z_2", "Z_2R" },
@@ -2643,7 +2642,6 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) continue;                                         \
     if (npc->flags & NPC_FLAG_2D) continue;
 
-
 typedef struct {
     s32 v[11];
 } SinTbl;
@@ -2652,7 +2650,6 @@ static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
-
 
 /** Position of the hammer head during the spin hammer in the early demos. */
 static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) {

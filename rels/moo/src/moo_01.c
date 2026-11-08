@@ -21,7 +21,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[3];
 
 #if VERSION < VERSION_US
@@ -166,4 +165,3 @@ EVT_BEGIN(moo_01_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_VOLT_SHROOM, -80, 0, 140, ITEM_TYPE_STILL, GSWF_MOO_01_VOLT_SHROOM, 0)
     RETURN
 EVT_END()
-

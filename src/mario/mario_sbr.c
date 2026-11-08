@@ -19,7 +19,6 @@
 #include "mot/mot_walk.h"
 #include "libc_decls.h"
 
-
 typedef struct RubWork {
     s32 state;       // 0x0
     s32 count;      // 0x4
@@ -34,7 +33,6 @@ typedef struct RubWork {
     u8 unk28[0x3C - 0x28]; // 0x28
     s16 hist[21];   // 0x3C
 } RubWork;
-
 
 RubWork rubwork;
 
@@ -423,7 +421,6 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
 #else
         marioChgMot(speed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #endif
-
 
 #if VERSION >= VERSION_JP
         mario->moveDirection = dir;

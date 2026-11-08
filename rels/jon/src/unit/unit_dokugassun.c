@@ -283,7 +283,6 @@ EVT_END()
  * and each target in turn is hit or avoids it by the usual checks; then it floats home.
  */
 static EVT_BEGIN(poisongas_event)
-
     // Pick the party as the targets; a confused Poison Puff with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -538,7 +537,6 @@ EVT_END()
  * then floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Poison Puff with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -754,4 +752,3 @@ EVT_END()
 #else
 EVT_END_PAD()
 #endif
-

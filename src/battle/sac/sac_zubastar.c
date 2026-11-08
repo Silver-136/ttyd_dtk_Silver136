@@ -29,7 +29,6 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_sub.h"
 
-
 typedef struct ZSObj {
     /* 0x00 */ s32 state;
     /* 0x04 */ s32 vertexCount;
@@ -92,7 +91,6 @@ typedef struct ZubaStarWork {
 
 ZubaStarWork* GetZubaStarPtr(void);
 
-
 /**
  * Supernova's hit, given by marioAttackEvent_ZubaStar to every enemy: 0, 3, 6, 9, 12 or 15 damage by the
  * minigame result (weaponGetPower_ZubaStar); it always hits, pierces defense and cannot be guarded.
@@ -149,7 +147,6 @@ USER_FUNC(wait_star_stone_up) {
 }
 
 static void zubaStarDispStar(CameraId cam, void* param);
-
 
 /**
  * Script helper run as a sibling script for the whole move:
@@ -237,7 +234,6 @@ ZubaStarWork* GetZubaStarPtr(void) {
 u32 weaponGetPower_ZubaStar(BattleUnit* a, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
     return weapon->hpDamageWork[GetZubaStarPtr()->level];
 }
-
 
 /** Adds a polygon of n points to the list of screen pieces the cut picture is made of. */
 static void zubastar_create_takaku(s32 n, Vec* pts) {

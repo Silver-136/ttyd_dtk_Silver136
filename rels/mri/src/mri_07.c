@@ -21,7 +21,6 @@
 #include "driver/npcdrv.h"
 #include "pmario_sound.h"
 
-
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
@@ -353,4 +352,3 @@ EVT_BEGIN(mri_07_init_evt)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     RETURN
 EVT_END()
-

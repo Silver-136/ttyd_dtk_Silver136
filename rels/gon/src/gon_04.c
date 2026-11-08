@@ -35,7 +35,6 @@ typedef struct KemuriPos {
     s32 z;
 } KemuriPos;
 
-
 static EvtWord w1_door_close[12];
 static EvtWord w1_door_open[12];
 static EvtWord w2_door_close[12];
@@ -1202,4 +1201,3 @@ EVT_BEGIN(gon_04_init_evt)
     SET_VALUE(GF(10), 0)
     RETURN
 EVT_END()
-

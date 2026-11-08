@@ -1768,4 +1768,3 @@ NpcTerritoryInfo btl_jin_setup_no_tbl[] = {
     {"BTLNO_JIN_10_06", 24},
     {0},
 };
-

@@ -546,7 +546,6 @@
 #define ICON_MENU_JOURNAL VERSION_PICK(0x216, 0x218) // field menu shortcut label: journal
 #define ICON_TRIGGER_Z_ALT VERSION_PICK(0x217, 0x219)
 
-
 // US and later only: language variants of text icons (JP has no such icon)
 #if VERSION >= VERSION_US
 #define ICON_POWER_RUSH_D 0x04A

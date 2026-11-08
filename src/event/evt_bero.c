@@ -2146,4 +2146,3 @@ s32 BeroID[16];
 #if VERSION <= VERSION_DEMO_JP
 Vec BeroPT, BeroAT;
 #endif
-

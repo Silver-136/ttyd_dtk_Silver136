@@ -22,7 +22,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[4];
 
 #if VERSION >= VERSION_DEMO_EU
@@ -406,4 +405,3 @@ EVT_BEGIN(dou_02_init_evt)
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change"))
     RETURN
 EVT_END()
-

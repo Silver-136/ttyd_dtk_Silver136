@@ -604,4 +604,3 @@ static USER_FUNC(test_glare) {
     }
     return EVT_RETURN_BLOCK;
 }
-

@@ -20,7 +20,6 @@ typedef struct PointData {
     u8 r, g, b;
 } PointData;
 
-
 typedef struct EffOpukuWprotectN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4

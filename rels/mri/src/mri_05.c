@@ -721,4 +721,3 @@ EVT_BEGIN(mri_05_init_evt)
     SPAWN_EVENT(mario_shabon_check)
     RETURN
 EVT_END()
-

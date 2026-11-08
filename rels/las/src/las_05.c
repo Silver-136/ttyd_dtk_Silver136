@@ -430,7 +430,6 @@ USER_FUNC(kurokaron_move_position) {
     return EVT_RETURN_BLOCK;
 }
 
-
 /** Returns a random float in [min, max] using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
@@ -1165,7 +1164,6 @@ static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
 }
 
 static EVT_BEGIN(senkaron_event)
-
     // First visit: controls are off and Dark Bones appears with a rattling sound.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_mario_key_onoff, 0)
@@ -1784,4 +1782,3 @@ static USER_FUNC(make_name) {
     evtSetValue(event, args[2], (EvtWord)name);
     return EVT_RETURN_DONE;
 }
-

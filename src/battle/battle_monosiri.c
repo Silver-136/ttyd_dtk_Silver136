@@ -12,7 +12,6 @@
 #include "../src/battle/battle_monosiri_same_tbl.inc"
 #endif
 
-
 //.data
 TattleEntry monosiriMessageTable[] = {
     {NULL, NULL, NULL, NULL, NULL, NULL}, //0x0 (0)

@@ -147,7 +147,6 @@ static inline BOOL marioLandChk(f32 vy) {
     return FALSE;
 }
 
-
 /**
  * Prepares a pipe arrival (evt_bero's pipe entry script): disables floors;
  * arg 4 (sideways pipe) also shrinks Mario and both partners to nothing and hides them,

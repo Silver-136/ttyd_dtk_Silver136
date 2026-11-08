@@ -2585,7 +2585,6 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
     GXEnd();
 }
 
-
 /**
  * Queues the calling Pider's thread for drawing this frame (piders_draw_yarn_sub);
  * called every frame by its events.
@@ -2595,7 +2594,6 @@ USER_FUNC(piders_draw_yawn) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, piders_draw_yarn_sub, npc);
     return EVT_RETURN_DONE;
 }
-
 
 /**
  * Starts Magikoopa's magic effect (eff_magic1_n64) from args[0-2] toward args[3-5]
@@ -2626,7 +2624,6 @@ USER_FUNC(kamec_fire_magic) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Ends the calling Magikoopa's magic effect: the early demos delete the effect passed in args[0];
  * JP and later find it by the Magikoopa's name and let it run out.
@@ -2640,7 +2637,6 @@ USER_FUNC(kamec_fire_magic_delete) {
     return EVT_RETURN_DONE;
 }
 #endif
-
 
 /**
  * Ends the calling Magikoopa's magic effect: the early demos delete the effect passed in args[0];
@@ -4232,7 +4228,6 @@ USER_FUNC(chain_main) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Sets args[0] to the 3D camera's x position; the side-scrolling enemies use it to wake up
  * when they scroll into view.
@@ -4242,7 +4237,6 @@ USER_FUNC(camGetPos) {
     evtSetFloat(event, args[0], camGetPtr(CAMERA_3D)->cameraPos.x);
     return EVT_RETURN_DONE;
 }
-
 
 /**
  * For side-scrolling enemies: sets args[0] to 0 when there is floor under and just ahead of the calling NPC,
@@ -4274,7 +4268,6 @@ USER_FUNC(cliffCheck) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * For side-scrolling enemies: sets args[0] to 1
  * if a ceiling is just above the calling NPC's head (checked 15 units either side), else 0.
@@ -4296,7 +4289,6 @@ USER_FUNC(upperCheck) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Sets args[0] to the calling NPC's walking speed, stored in the z of its territory loiter setting. */
 USER_FUNC(getSpdWalk) {
     EvtWord* args = event->args;
@@ -4304,7 +4296,6 @@ USER_FUNC(getSpdWalk) {
     evtSetFloat(event, args[0], npc->territoryLoiter.z);
     return EVT_RETURN_DONE;
 }
-
 
 /** Sets args[0] to the calling NPC's running speed, stored in the z of its territory homing setting. */
 USER_FUNC(getSpdRun) {
@@ -4314,14 +4305,12 @@ USER_FUNC(getSpdRun) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Sets the calling NPC's maximum fall speed to args[0]. */
 USER_FUNC(limitSpd) {
     f32 v = evtGetFloat(event, event->args[0]);
     evtNpcNameToPtr(event, "me")->maxFallSpeed = v;
     return EVT_RETURN_DONE;
 }
-
 
 /** Lost event of Hammer Bros.: looks back and forth and resumes. */
 EVT_BEGIN(hbross_lost_event)
@@ -4706,7 +4695,6 @@ USER_FUNC(zakoEntryDokan) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Sets args[0] to 1 while the calling X-Naut spawner's pipe map object (mobj9 or mobj14) still exists, else 0. */
 USER_FUNC(dokanCheck) {
     EvtWord* args = event->args;
@@ -4725,7 +4713,6 @@ USER_FUNC(dokanCheck) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 /**
  * Drops an X-Naut in from the calling drop point in Bowser's side-scrolling stage (X-Naut drop 1,
@@ -4784,7 +4771,6 @@ USER_FUNC(zakoEntryFall) {
     return EVT_RETURN_DONE;
 }
 
-
 // Descriptive name (not in the symbol maps); placeholder unk_800ece0c, JP 0x800ECE0C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
@@ -4824,7 +4810,6 @@ USER_FUNC(npc_fire_eff_fadeout) {
 }
 #endif
 
-
 /**
  * Sets up the X-Naut PhD's bottle helper (slave_0):
  * Mario cannot hit it, side-scrolling mode, gravity, intangible, and immune to every Bowser-stage defeat but
@@ -4836,7 +4821,6 @@ USER_FUNC(set_bottle_flag_init) {
     npc->hazardFlags |= (KPA_ENCOUNT_STOMP | KPA_ENCOUNT_FIRE | KPA_ENCOUNT_STAR | KPA_ENCOUNT_MOBJ | KPA_ENCOUNT_MAGMA);
     return EVT_RETURN_DONE;
 }
-
 
 /** For the side-scrolling Blooper: sets args[0] to 1 if there is floor within 5 units below it, else 0. */
 USER_FUNC(gesso_ground_check) {
@@ -4851,7 +4835,6 @@ USER_FUNC(gesso_ground_check) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 /** Init event of Goombas in Bowser's side-scrolling stages: enemy flags, side-scrolling mode, fall speed limit 400. */
 EVT_BEGIN(kuriboo2D_init_event)
@@ -5385,4 +5368,3 @@ EVT_BEGIN(gesso2D_move_event)
     GOTO(1)
     RETURN
 EVT_END()
-

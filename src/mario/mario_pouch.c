@@ -19,7 +19,6 @@
 
 #include "driver/swdrv.h"
 
-
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 PouchData* mpp_gap;
 PouchData* mpp;
@@ -144,6 +143,7 @@ ItemType pouchKeepItem(s32 id) {
 ItemType pouchHaveBadge(s32 id) {
     return mpp->badges[id];
 }
+
 // JP and the demos call nothing here and strip it (JP demo map: UNUSED, 0x14, the same size as in US).
 ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
@@ -678,7 +678,6 @@ void pouchHiraToKata(const char* src, char* dst) {
 #endif
 }
 #endif
-
 
 /**
  * Sort key of an item name for the alphabetical sorts.

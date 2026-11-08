@@ -99,7 +99,6 @@ s32 chusan_mov_tbl[28];
 s32 chusan_act_tbl[8];
 MiniGameWork* yuunpc_yuuminigame4_ptr;
 
-
 ExtTexInfo ext_yuunpc_minigame1_data[6];
 ExtTexInfo ext_yuunpc_minigame2_data[6];
 ExtTexInfo ext_yuunpc_minigame3_data[6];

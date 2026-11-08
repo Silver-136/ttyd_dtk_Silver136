@@ -183,4 +183,3 @@ static void effAkariSflushDisp(CameraId cameraId, void* payload) {
         }
     }
 }
-

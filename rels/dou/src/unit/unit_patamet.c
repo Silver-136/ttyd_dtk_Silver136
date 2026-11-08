@@ -324,7 +324,6 @@ EVT_END()
  * passes it (avoid) or hits it with SFX_ENM_PATAMET_ATTACK1 damage, then flies back home.
  */
 static EVT_BEGIN(attack_event_pata)
-
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -811,7 +810,6 @@ EVT_END()
  * It then walks back to its home position.
  */
 static EVT_BEGIN(attack_event)
-
     // A unit lying on its back spends the turn getting up.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1080,7 +1078,6 @@ EVT_END()
 
 // A completed drop attack restores the upright ground form, not the flipped damage-fall state.
 static EVT_BEGIN(attack_event_ceil)
-
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1228,4 +1225,3 @@ static EVT_BEGIN(wait_event_ceil)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -6,7 +6,6 @@
 #include "battle/battle_ac.h"
 #include "evt/evt_word.h"
 
-
 extern EvtWord marioAttackEvent_BakuGame[];
 
 extern EvtWord hitCheck_AudienceTeam[];

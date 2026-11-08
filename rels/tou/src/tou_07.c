@@ -957,4 +957,3 @@ USER_FUNC(tou_07_belt_camid) {
     return EVT_RETURN_DONE;
 }
 #endif
-

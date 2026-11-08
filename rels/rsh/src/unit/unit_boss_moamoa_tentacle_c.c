@@ -559,4 +559,3 @@ static EVT_BEGIN(wait_event)
     END_IF
     RETURN
 EVT_END()
-

@@ -8,7 +8,6 @@
 #include <math.h>
 #include "himo.h"
 
-
 typedef struct HimoWork {
     /* 0x00 */ Vec p0;
     /* 0x0C */ Vec p1;
@@ -22,7 +21,6 @@ typedef struct HimoWork {
 s8 Pos[6] ATTRIBUTE_ALIGN(32) = { 1, 0, 0, -1, 0, 0 };
 s8 Nrm[3] ATTRIBUTE_ALIGN(32) = { 0, 0, 127 };
 u8 Col[4] ATTRIBUTE_ALIGN(32) = { 0xFF, 0xFF, 0xFF, 0xFF };
-
 
 static void vivihimoDisp(CameraId camId, HimoWork* w);
 
@@ -94,7 +92,6 @@ void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB) {
         vivihimoDisp(camGetCurNo(), pw);
     }
 }
-
 
 /**
  * Builds the matrix for a ribbon segment at spline parameter t:
@@ -205,4 +202,3 @@ static void vivihimoDisp(CameraId camId, HimoWork* w) {
         t = (f32)(i + 1) / 15.0f;
     }
 }
-

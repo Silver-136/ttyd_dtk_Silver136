@@ -16,7 +16,6 @@
 #include "eff/eff_n64.h"
 #include "dolphin/os.h"
 
-
 static inline void Vec2Vtx(Vec* v, s16* o) {
     OSf32tos16(&v->x, &o[0]);
     OSf32tos16(&v->y, &o[1]);

@@ -2105,4 +2105,3 @@ NpcTerritoryInfo btl_gon_setup_no_tbl[] = {
     {"BTLNO_GON_11_01", 20},
     {0},
 };
-

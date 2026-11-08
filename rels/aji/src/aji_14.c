@@ -535,4 +535,3 @@ EVT_BEGIN(aji_14_init_evt)
     SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
-

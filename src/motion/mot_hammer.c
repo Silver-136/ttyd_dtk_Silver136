@@ -41,7 +41,6 @@ enum {
 };
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz);
 
-
 /**
  * Hammer hit sounds of the Attack FX badges: pairs of badge (R, B, G, Y, P) and the sound it swaps in;
  * with several equipped, each swing moves on to the next one worn.
@@ -172,7 +171,6 @@ static inline f32 hamDir(MarioWork* mario) {
     return r;
 }
 
-
 static const char isS1_str[14];
 static const char isB1_str[17];
 static const char isS2_str[14];
@@ -221,7 +219,6 @@ static void quakeOn(s32 lv) {
         evtEntry(lv3quake_evt, 0, 0);
     }
 }
-
 
 /**
  * Normal hammer swing (B button): picks the swing pose for the hammer level,
@@ -394,7 +391,6 @@ void mot_hammer(void) {
     }
 }
 
-
 /**
  * Checks for the Super Hammer spin from the stay motion:
  * while B is held Mario glares (M_I_Y pose and voice),
@@ -448,7 +444,6 @@ s32 marioChkHammer2(void) {
     mario->hammerDir = rubDir;
     return 1;
 }
-
 
 /** Moves the camera in for a spin hammer charge level: z shift and zoom, with a 40-unit upward zoom offset. */
 static inline void mot_ham(f32 shiftZ, f32 zoom) {
@@ -724,7 +719,6 @@ void mot_hammer2(void) {
     }
 }
 
-
 /**
  * Current facing angle of the spinning hammer, for npcdrv to see whether it hits an NPC:
  * -1 if Mario is not doing the spin hammer, -2 if not in the spinning phase.
@@ -739,7 +733,6 @@ f32 marioGetAngleKaitenHammer(void) {
     }
     return revise360(270.0f - mario->displayDirection);
 }
-
 
 /**
  * Cleanup run whenever the spin hammer motion ends:

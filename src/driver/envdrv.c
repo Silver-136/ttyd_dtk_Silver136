@@ -87,7 +87,6 @@ static void envDisp_DepthOfField(void);
 static void envDisp_Blur(void);
 static void envDisp_FF(void);
 
-
 /**
  * DVD read callback for the asynchronous env.tpl load:
  * unpacks the palette, closes the file and marks env_tpl ready.
@@ -1488,4 +1487,3 @@ void envSetYami(MapTevCallbackInfo* info) {
     info->indStage = unk18;
     info->texMap = map;
 }
-

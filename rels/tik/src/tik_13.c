@@ -11,7 +11,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[2];
 EvtWord tik_13_init_evt[60];
 
@@ -60,4 +59,3 @@ EVT_BEGIN(tik_13_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -30, 52, -70, ITEM_TYPE_STILL, GSWF_STARPIECE_29, 0)
     RETURN
 EVT_END()
-

@@ -246,7 +246,6 @@ EVT_END()
  * The charged-Bill variants (LW(12) = 1) have weight 0 and are never picked.
  */
 static EVT_BEGIN(attack_event)
-
     // If the item-use check selects an item event, the B. Bill Blaster uses it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

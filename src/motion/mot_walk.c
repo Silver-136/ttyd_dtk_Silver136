@@ -15,7 +15,6 @@
 #include "mario/mario_pouch.h"
 #include "sfx_name_word.h"
 
-
 /**
  * Footstep sounds for walking and running: every interval frames one foot's step (the ..R sounds) and halfway
  * between them the other foot's (..L), chosen by the floor's hit attribute (0x100, 0x200000, 0x100000, 0x1000,

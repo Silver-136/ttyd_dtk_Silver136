@@ -17,7 +17,6 @@
 #include "mario/mariost.h"
 #endif
 
-
 //.bss
 #if VERSION <= VERSION_DEMO_JP
 u32 aramMemArray[8];
@@ -2653,4 +2652,3 @@ static void SoundAIDMACallback(void) {
         n -= 2;
     }
 }
-

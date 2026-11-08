@@ -606,4 +606,3 @@ void puniDrawShadow(void) {
         }
     }
 }
-

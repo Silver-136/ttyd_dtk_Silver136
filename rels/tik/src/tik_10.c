@@ -14,7 +14,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[4];
 static EvtWord item_get00[34];
 EvtWord tik_10_init_evt[44];
@@ -100,4 +99,3 @@ EVT_BEGIN(tik_10_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 0, 26, -110, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_TIK_10_MUSHROOM_CHEST)
     RETURN
 EVT_END()
-

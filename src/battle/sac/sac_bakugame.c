@@ -34,7 +34,6 @@
 #include "pmario_sound.h"
 #include "battle/battle_disp.h"
 
-
 typedef struct BakuBtn {
     s32 state;  // 0x0
     s32 timer;  // 0x4

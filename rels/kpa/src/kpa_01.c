@@ -322,7 +322,6 @@ EVT_END()
  * Plays when Bowser reaches x = 625 or re-enters from the other side.
  */
 EVT_BEGIN(kpa_01_syuppatu_evt)
-
     // The big castle door swings open and Bowser is startled by the person on the other side.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("door"), LW(0), LW(1), LW(2))

@@ -20,7 +20,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e1_door_close[22];
@@ -319,4 +318,3 @@ EVT_BEGIN(las_25_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 600, 60, -75, 0, 0)
     RETURN
 EVT_END()
-

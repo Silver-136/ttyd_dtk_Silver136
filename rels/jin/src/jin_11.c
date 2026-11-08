@@ -11,7 +11,6 @@
 #include "evt/evt_map.h"
 #include "pmario_sound.h"
 
-
 EvtWord jin_11_ana[12];
 static EvtWord s_close[12];
 static EvtWord s_open[12];
@@ -111,4 +110,3 @@ EVT_BEGIN(jin_11_init_evt)
     END_IF
     RETURN
 EVT_END()
-

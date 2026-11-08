@@ -7,7 +7,6 @@
 
 void partyJoin(s32 partnerId);
 
-
 s32 marioGetPartyId(void);
 s32 marioGetExtraPartyId(void);
 s32 partyGetTechLv(s32 partnerId);

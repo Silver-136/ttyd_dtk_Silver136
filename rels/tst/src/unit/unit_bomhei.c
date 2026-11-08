@@ -408,7 +408,6 @@ EVT_END()
  * a miss lets it dodge past, a hit applies the damage with SFX_ENM_BOMB_MOVE3, and it walks back.
  */
 static EVT_BEGIN(attack_event)
-
     // Use an item if the item-use check selects one; otherwise pick a target (a confused Bob-omb with nobody to bump gets
     // flustered).
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -574,7 +573,6 @@ EVT_END()
  * dealing the bomb weapon's damage to the target when it connects.
  */
 static EVT_BEGIN(attack_event_spark)
-
     // Use an item if the item-use check selects one; otherwise pick a target (a confused Bob-omb with nobody to hit gets
     // flustered).
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -698,4 +696,3 @@ static EVT_BEGIN(wait_event_spark)
     END_IF
     RETURN
 EVT_END()
-

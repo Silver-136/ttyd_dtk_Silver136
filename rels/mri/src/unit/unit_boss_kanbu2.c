@@ -14,7 +14,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_boss_kanbu2;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -392,4 +391,3 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         RETURN
 EVT_END()
-

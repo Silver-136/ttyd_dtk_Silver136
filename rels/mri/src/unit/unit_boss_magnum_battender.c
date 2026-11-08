@@ -44,7 +44,6 @@
 // attack_event_r subtracts 1 and waits while the result is 1 or more; set to 1 at launch and after each attack
 #define ROCKET_PUNCH_WORK_WAIT 1
 
-
 static EffectEntry* eff_charge;
 #include "unit/unit_boss_magnum_battender.h"
 #include "libc_decls.h"

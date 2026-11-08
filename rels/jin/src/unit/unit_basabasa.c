@@ -433,7 +433,6 @@ EVT_END()
  * The pre-damage check decides between a dodge and a hit, then it flies back home.
  */
 static EVT_BEGIN(attack_event)
-
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -581,4 +580,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -339,7 +339,6 @@ static void BSE_FreezeDelete(BattleUnit* unit) {
     }
 }
 
-
 static void BSE_Kagegakure(BattleUnit* unit) {
     char name[0x10];
     f32 x, y, z;
@@ -722,4 +721,3 @@ static void _st_chg_msg_disp(void) {
     FontDrawStart();
     FontDrawMessage(x, (s32)y + (lines - 1) * 29, (const char*)st->text);
 }
-

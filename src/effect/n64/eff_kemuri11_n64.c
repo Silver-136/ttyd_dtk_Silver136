@@ -12,7 +12,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffKemuri11N64Work {
     u16 type;         // 0x0
     Vec position;     // 0x4
@@ -32,7 +31,6 @@ typedef struct EffKemuri11N64Work {
     u8 r2, g2, b2;    // 0x53
     u8 pad[2];        // 0x56
 } EffKemuri11N64Work;
-
 
 /** Smoke body mesh (20 vertices, drawn as 18 triangles) each puff of smoke effect 11 is drawn with. */
 static effN64Vtx stg_thruhammer_v[] = {

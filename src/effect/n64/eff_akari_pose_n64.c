@@ -246,4 +246,3 @@ static void effAkariPoseDisp(CameraId cameraId, void* param) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }
-

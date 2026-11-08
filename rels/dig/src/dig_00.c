@@ -498,4 +498,3 @@ EVT_BEGIN(dig_00_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

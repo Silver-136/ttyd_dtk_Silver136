@@ -297,7 +297,6 @@ EVT_END()
  * each target is hit or avoids it by the usual guard check, and it returns home.
  */
 static EVT_BEGIN(poisongas_event)
-
     // The Puff picks a target from the opposing side; with none it gives up (flustered if confused).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -562,7 +561,6 @@ EVT_END()
  * then dives onto the target, handles guard and miss results and returns home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // A First Strike aims at the first-strike target;
     // otherwise the Puff picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -777,4 +775,3 @@ EVT_END()
 #else
 EVT_END_PAD()
 #endif
-

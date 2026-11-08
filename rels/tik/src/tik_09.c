@@ -11,7 +11,6 @@
 #include "system.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 EvtWord evt_tik09_dokan[51];
 EvtWord tik_09_init_evt[36];
@@ -95,4 +94,3 @@ EVT_BEGIN(tik_09_init_evt)
     SPAWN_EVENT(evt_tik09_dokan)
     RETURN
 EVT_END()
-

@@ -24,7 +24,6 @@ void bomhei_init_800BFBB0(PartyEntry* party);
 void kuribo_init_800C23B4(PartyEntry* party);
 void vivian_init_801809C0(PartyEntry* party);
 
-
 /**
  * One entry per partner id (empty for 0): the partner's field model and the functions that set it up, move it,
  * use its field ability and remove it; partyEntryMain and the other party calls read it by partner id.

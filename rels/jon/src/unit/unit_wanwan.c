@@ -918,4 +918,3 @@ static USER_FUNC(chain_init) {
     BtlUnit_SetAnim(part, "WAN_Z_2");
     return EVT_RETURN_DONE;
 }
-

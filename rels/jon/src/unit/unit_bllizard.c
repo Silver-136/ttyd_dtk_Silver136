@@ -265,7 +265,6 @@ EVT_END()
  * It then returns home.
  */
 static EVT_BEGIN(bllizard_event)
-
     // Pick the party as the target; a confused Ice Puff with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -533,7 +532,6 @@ EVT_END()
  * either way it floats back up and home.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Pick the target (the First Strike target or a sampled enemy); a confused Ice Puff
     // with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -717,4 +715,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
 EVT_END()
-

@@ -428,7 +428,6 @@ EVT_END()
  * Then it returns home.
  */
 static EVT_BEGIN(attack_event)
-
     // The Iron Cleft uses an enemy item if it holds one that fits.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

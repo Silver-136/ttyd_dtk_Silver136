@@ -225,7 +225,6 @@ EVT_BEGIN(muj_21_init_evt)
     RETURN
 EVT_END()
 
-
 /**
  * Script helper, one per frame: keeps two wake effects (funemizu) beside the ship S_fune_m
  * so water churns behind it. Always blocks.
@@ -265,4 +264,3 @@ static USER_FUNC(fune_eff) {
     }
     return EVT_RETURN_BLOCK;
 }
-

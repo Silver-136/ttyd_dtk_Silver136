@@ -90,7 +90,6 @@ static inline void partyVivianTailStart(PartyEntry* party) {
     }
 }
 
-
 /**
  * Post-step for Mario's Vivian motion: if Mario takes damage while hidden,
  * pops both of them back out at once (paper off, offsets and walls restored, Vivian back to follow mode);

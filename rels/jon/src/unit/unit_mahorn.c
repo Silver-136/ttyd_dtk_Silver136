@@ -1786,4 +1786,3 @@ static USER_FUNC(hand_init) {
     }
     return EVT_RETURN_DONE;
 }
-

@@ -297,7 +297,6 @@ static void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);
 void gcResetCheck(void);
 
-
 /**
  * Start-up.
  * The early demos have no error handler (they turn on the SDK's DVD fatal message instead),

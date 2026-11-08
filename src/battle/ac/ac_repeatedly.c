@@ -14,7 +14,6 @@
 #include "icon_ids.h"
 #include "dolphin/si.h"
 
-
 typedef struct RepeatWork {
     u32 btn0;         // 0x0
     u32 btn1;         // 0x4
@@ -36,10 +35,8 @@ typedef struct RepeatWork {
     s32 endTimer;     // 0x30
 } RepeatWork;
 
-
 static void actionCommandDisp(f32 x, f32 y);
 void battleAcDelete_Repeatedly(BattleWork* work);
-
 
 #if VERSION <= VERSION_DEMO_JP
 static s32 _power_table[] = {80, 60, 50, 40, 28, 16, 8};
@@ -478,4 +475,3 @@ static void actionCommandDisp(f32 x, f32 y) {
     d->blinkTimer++;
     d->frame2++;
 }
-

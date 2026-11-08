@@ -1237,4 +1237,3 @@ s32 effFallCheckHit(EffectEntry* effect) {
     }
     return 0;
 }
-

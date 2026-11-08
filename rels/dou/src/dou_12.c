@@ -12,7 +12,6 @@
 #include "evt/evt_npc.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[5];
 static HitDamageReturn hitDmgRetPoints[5];
 EvtWord dou_12_init_evt[47];
@@ -122,4 +121,3 @@ EVT_BEGIN(dou_12_init_evt)
     END_IF
     RETURN
 EVT_END()
-

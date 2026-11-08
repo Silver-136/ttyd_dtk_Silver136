@@ -84,7 +84,6 @@ extern EvtWord evt_check00[];
 EvtWord evt_check00[23];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord blue_jail_open[60];
 #else
@@ -1742,4 +1741,3 @@ EVT_BEGIN(mri_03_init_evt)
     END_IF
     RETURN
 EVT_END()
-

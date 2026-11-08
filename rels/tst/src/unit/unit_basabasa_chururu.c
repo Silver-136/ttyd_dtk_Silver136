@@ -464,7 +464,6 @@ EVT_END()
  * it applies weapon_basabasa_drain_attack_biribiri_counterd instead and drains nothing.
  */
 static EVT_BEGIN(attack_event)
-
     // The Swoopula first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

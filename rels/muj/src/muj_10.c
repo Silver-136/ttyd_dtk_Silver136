@@ -875,4 +875,3 @@ void elmosalpha_func(NanNPC* npc) {
             break;
     }
 }
-

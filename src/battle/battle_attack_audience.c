@@ -323,4 +323,3 @@ EVT_BEGIN(btlataudevtPresentItem_Get)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-

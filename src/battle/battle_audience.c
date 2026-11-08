@@ -69,7 +69,6 @@ const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
         (sound)->volumeMultiplier = 100;                                                           \
     }
 
-
 // local prototypes
 static void BattleAudienceSettingAudience(void);
 static void BattleAudienceGuestTPLRead(s32 index, AudienceMemberType member, const char* tplName);
@@ -1325,7 +1324,6 @@ void BattleAudience_End(void) {
 #endif
 }
 
-
 /**
  * Fills the crowd when a battle starts.
  * The size limit comes from Mario's rank (50/100/150/200, none before the first crystal star),
@@ -1601,7 +1599,6 @@ static void BattleAudienceGuestTPLRead(s32 id, AudienceMemberType member, const 
         audience->guestType[id] = member;
     }
 }
-
 
 /**
  * Per-frame crowd update: counts the members present on each half, moves members a script is hopping,
@@ -2153,7 +2150,6 @@ static void BattleAudienceItemCtrlProcess(void) {
     }
 }
 
-
 /**
  * Per-frame update of the Star Power sparkles the crowd sends up after an appeal or good move:
  * spawns one per pending point, flies each to the Star Power gauge (statusGetApPos),
@@ -2333,7 +2329,6 @@ static BOOL BattleAudienceApSrcEntry(void) {
     star->targetPos = (Vec){-96.0f, 106.0f, 0.0f};
     return TRUE;
 }
-
 
 /**
  * Per-frame update of the audience-count window: the number shown moves toward the real count by a tenth of
@@ -3478,7 +3473,6 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
     return id;
 #endif
 }
-
 
 /**
  * Returns the number of members in the stands as counted this frame (not those arriving or leaving);

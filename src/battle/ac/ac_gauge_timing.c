@@ -12,7 +12,6 @@
 #include <string.h>
 #include "battle/battle_disp.h"
 
-
 static void actionCommandDisp(f32 x, f32 y);
 
 // BattleActions.params slots this command reads (btlevtcmd_AcSetParamAll)
@@ -40,7 +39,6 @@ typedef struct GaugeWork {
     u32 sfxId;    // 0x24
     s32 endTimer; // 0x28
 } GaugeWork;
-
 
 /**
  * Per-frame driver of action command 19, used by Koops's Shell Toss and Power Shell.

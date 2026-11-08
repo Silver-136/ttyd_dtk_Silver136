@@ -796,7 +796,6 @@ EVT_END()
  * With a single segment left it only plays the knock-back (subsetevt_shot_damage) or no-damage reaction.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
-
     // With only the head left there is nothing to knock off: just the knock-back or no-damage reaction plays.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1478,7 +1477,6 @@ EVT_END()
  * If the target Superguards (CheckDamage result 21), the segment flies back and hits the Pokey itself.
  */
 static EVT_BEGIN(attack_spike_event)
-
     // The weapon depends on how many segments the stack has (4, 3 or 2).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
     SWITCH(LW(10))
@@ -1718,7 +1716,6 @@ EVT_END()
  * at most 1 call).
  */
 static EVT_BEGIN(call_friend_event)
-
     // The Pokey sways left and right in widening arcs.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_SEND_GROUP1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)

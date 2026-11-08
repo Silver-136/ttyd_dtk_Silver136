@@ -1387,7 +1387,6 @@ USER_FUNC(get_puni_pos) {
     return EVT_RETURN_DONE;
 }
 
-
 /** Creates a Star Stone effect at the given x, y, z (args[1] to args[3]) and gives it the name in args[0]. */
 static USER_FUNC(starstone_entry) {
     EvtWord* args = event->args;

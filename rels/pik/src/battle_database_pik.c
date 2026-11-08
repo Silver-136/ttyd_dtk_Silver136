@@ -578,4 +578,3 @@ NpcTerritoryInfo btl_pik_setup_no_tbl[] = {
     {"BTLNO_PIK_03_09", 9},
     {0},
 };
-

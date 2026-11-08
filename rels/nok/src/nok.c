@@ -111,4 +111,3 @@ EVT_BEGIN(nokonoko_urouro_regl)
     END_LOOP
     RETURN
 EVT_END()
-

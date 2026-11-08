@@ -529,7 +529,6 @@ EVT_END()
  * and the bone then bounces off.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -677,7 +676,6 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
-
     // The camera zooms in on the skeleton.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

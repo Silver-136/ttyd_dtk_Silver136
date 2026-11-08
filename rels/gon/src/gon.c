@@ -55,4 +55,3 @@ void _prolog(void) {
     relSetEvtAddr("gon_bt00", gon_bt00_init_evt);
     relSetBtlAddr("gon", btlsetup_gon_tbl, btl_gon_setup_no_tbl);
 }
-

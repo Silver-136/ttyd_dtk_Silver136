@@ -18,7 +18,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_data[3];
 static EvtWord evt_dakuto[44];
 EvtWord evt_nusumi[182];
@@ -202,4 +201,3 @@ EVT_BEGIN(tou_13_init_evt)
     END_IF
     RETURN
 EVT_END()
-

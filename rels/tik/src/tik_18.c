@@ -17,7 +17,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];
 static HitDamageReturn hitDmgRetPoints[13];
@@ -156,4 +155,3 @@ EVT_BEGIN(tik_18_init_evt)
 #endif
     RETURN
 EVT_END()
-

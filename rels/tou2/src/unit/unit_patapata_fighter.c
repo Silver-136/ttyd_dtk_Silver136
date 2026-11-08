@@ -321,7 +321,6 @@ EVT_END()
  * a miss makes it fly past, a hit applies the damage, and it returns to its stance.
  */
 static EVT_BEGIN(attack_event_patapata)
-
     // Use the target of the opening first attack if there was one; otherwise use an enemy item, or choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -795,7 +794,6 @@ EVT_END()
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
-
     // If flipped over, wakeup_event counts down and rights it only when the counter reaches zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -965,4 +963,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

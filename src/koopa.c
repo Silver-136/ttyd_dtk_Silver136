@@ -39,7 +39,6 @@ const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 // the struct type changes the object.
 extern f32 marioJumpData[];
 
-
 /**
  * Bowser's size per power-up level (small, normal, big, giant): his width (kpaGetWidth) and model scale
  * (kpaSetLevel); then the 28 voice clips of which one plays at random when the pause menu opens as Bowser.

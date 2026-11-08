@@ -798,4 +798,3 @@ s32 badgeShop_SpecialCheck(void) {
     return count;
 }
 #endif
-

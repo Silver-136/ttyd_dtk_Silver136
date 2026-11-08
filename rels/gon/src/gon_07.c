@@ -28,7 +28,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];
 EvtWord out_func[14];
@@ -365,4 +364,3 @@ EVT_BEGIN(gon_07_init_evt)
     END_IF
     RETURN
 EVT_END()
-

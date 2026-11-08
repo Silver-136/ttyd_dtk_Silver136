@@ -73,4 +73,3 @@ void _epilog(void) {
 /** Linker stub for unresolved symbols; does nothing. */
 void _unresolved(void) {
 }
-

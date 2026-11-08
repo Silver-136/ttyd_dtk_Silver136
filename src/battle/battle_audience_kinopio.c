@@ -25,7 +25,6 @@
 #include "libc_decls.h"
 #include "battle/battle_break_slot.h"
 
-
 static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front);

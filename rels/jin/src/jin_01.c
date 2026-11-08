@@ -21,7 +21,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord s1_close[12];
 static EvtWord s1_open[12];
 static EvtWord s2_close[12];
@@ -243,4 +242,3 @@ EVT_BEGIN(jin_01_init_evt)
     CALL_CHILD(evt_sub_tree_access_entry)
     RETURN
 EVT_END()
-

@@ -306,7 +306,6 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
-
 /**
  * Returns a heading in degrees (0 to 360) for the offset (x, z):
  * finds the whole degree whose sine in SinTable is closest to |z| / length by bisection and
@@ -402,7 +401,6 @@ static f32 SinTable[] = {
  * and it hops back to its place.
  */
 static EVT_BEGIN(attack_event)
-
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -593,4 +591,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

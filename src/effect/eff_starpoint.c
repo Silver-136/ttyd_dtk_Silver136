@@ -165,4 +165,3 @@ static void effStarPointDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-

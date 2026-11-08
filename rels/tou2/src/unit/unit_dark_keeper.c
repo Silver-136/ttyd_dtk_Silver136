@@ -16,7 +16,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_dark_keeper;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -344,7 +343,6 @@ EVT_END()
  * Afterwards it walks home and laughs three times before going back to its stance.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -474,7 +472,6 @@ EVT_END()
  * either way the spear is hidden again. Then it laughs three times and returns to its stance.
  */
 static EVT_BEGIN(throw_attack_event)
-
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -591,4 +588,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

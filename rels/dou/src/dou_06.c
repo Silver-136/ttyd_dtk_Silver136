@@ -9,7 +9,6 @@
 #include "party/party_motion.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 EvtWord dou_06_init_evt[41];
 
@@ -69,4 +68,3 @@ EVT_BEGIN(dou_06_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 50, 0, 0, STRING("s06_jimen"), 125, GSWF_STARPIECE_80)
     RETURN
 EVT_END()
-

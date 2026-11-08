@@ -18,7 +18,6 @@
 #include "mario/mario.h"
 #include "party.h"
 
-
 static USER_FUNC(mario_kirimomi);
 static USER_FUNC(z);
 
@@ -178,4 +177,3 @@ static USER_FUNC(mario_kirimomi) {
     }
     return EVT_RETURN_BLOCK;
 }
-

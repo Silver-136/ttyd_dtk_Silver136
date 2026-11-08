@@ -21,7 +21,6 @@
 #include "sfx_name_word.h"
 #include "libc_decls.h"
 
-
 typedef struct StageClearWork {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -33,7 +32,6 @@ typedef struct StageClearWork {
     s32 confetti; // 0x24
     s32 done;     // 0x28
 } StageClearWork;
-
 
 static void effStageClearMain(EffectEntry* effect);
 static void effStageClearDisp(CameraId cameraId, void* payload);
@@ -461,4 +459,3 @@ static void effStageClearDisp(CameraId cameraId, void* payload) {
 s32 effStageClearEndChk(EffectEntry* effect) {
     return ((StageClearWork*)effect->userdata)->done != 0;
 }
-

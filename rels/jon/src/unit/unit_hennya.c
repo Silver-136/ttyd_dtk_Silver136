@@ -15,7 +15,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_hennya;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -244,7 +243,6 @@ EVT_END()
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(attack_event)
-
     // After a First Strike it pauses a moment; otherwise it uses an item if it has one, or picks a target (a
     // confused Spunia with nobody to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -390,4 +388,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

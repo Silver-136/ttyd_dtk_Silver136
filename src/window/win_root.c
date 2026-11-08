@@ -27,7 +27,6 @@
 #include "win/win_party.h"
 #include "win/win_root.h"
 
-
 typedef struct WinSortData {
     const char* name;
     void (*func)(WindowWork* wp);
@@ -1107,7 +1106,6 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-
 /**
  * Draws an open two-page book at (x, y).
  * a == 0 is a Super Luigi book read from the Items page:
@@ -1931,7 +1929,6 @@ static void sort_4_3_func(WindowWork* wp) {
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
-
 
 /** Journal badge log by name, JP and later: names normalized through pouchHiraToKata first. */
 static s32 compare_func5_1(const void* a, const void* b) {

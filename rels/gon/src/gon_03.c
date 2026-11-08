@@ -139,7 +139,6 @@ static EVT_BEGIN(door01_close)
     RETURN
 EVT_END()
 
-
 /**
  * Door animation callback, opening for the w_bero exit to gon_02:
  * rotates map object "door01" about Y by -0.444 times the value in LW(0).

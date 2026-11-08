@@ -330,7 +330,6 @@ EVT_END()
  * the pre-damage check decides between an avoid animation on the target and a hit, then it flies back home.
  */
 static EVT_BEGIN(attack_event_patapata)
-
     // Choose the First Strike victim or a sampled opposing unit; a ready item is used instead.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -807,7 +806,6 @@ EVT_END()
  * a miss makes it bounce past and a hit damages the target, after which it returns to its home position.
  */
 static EVT_BEGIN(attack_event)
-
     // A unit lying on its back spends the turn getting up.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -981,4 +979,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

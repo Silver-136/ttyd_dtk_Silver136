@@ -14,7 +14,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_hyper_sinnosuke;
 static BattleUnitDefense defence;
 static BattleUnitDefense defence_turn;
@@ -373,7 +372,6 @@ EVT_END()
  * A miss runs on past it; a hit shakes the camera and the Cleft bounces off in two hops. Then it returns home.
  */
 static EVT_BEGIN(attack_event)
-
     // If the Hyper Bald Cleft is flipped over, it counts down its recovery turn instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -565,4 +563,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

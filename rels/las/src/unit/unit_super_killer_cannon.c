@@ -254,7 +254,6 @@ EVT_END()
  * If none of the tested positions is free, nothing is launched.
  */
 static EVT_BEGIN(attack_event)
-
     // If the AI wants to use a held item, the Blaster does that instead and ends its turn.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -683,4 +682,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

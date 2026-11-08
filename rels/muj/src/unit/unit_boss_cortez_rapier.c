@@ -481,4 +481,3 @@ static EVT_BEGIN(cortez_damage_sub_event)
     LABEL(90)
     RETURN
 EVT_END()
-

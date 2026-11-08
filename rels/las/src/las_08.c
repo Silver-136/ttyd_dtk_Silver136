@@ -453,7 +453,6 @@ EVT_BEGIN(las_08_init_evt)
     RETURN
 EVT_END()
 
-
 USER_FUNC(hi_onoff) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);

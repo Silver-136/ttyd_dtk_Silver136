@@ -291,7 +291,6 @@ EVT_END()
  * It then closes its mouth (PKF_A_3C) and burrows back with return_event.
  */
 static EVT_BEGIN(breath_event)
-
     // Choose a target from the opposing party for the breath.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -725,7 +724,6 @@ EVT_END()
  * Then it burrows back with return_event.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

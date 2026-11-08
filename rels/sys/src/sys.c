@@ -1208,7 +1208,6 @@ const char* lang_prefix[] = {
 #endif
 };
 
-
 /**
  * Init event of sys_01, the chapter title card map:
  * draws the background (bg), starts the title (display) for the chapter named by the map entry (prologue, stg_1
@@ -1530,4 +1529,3 @@ USER_FUNC(sys_01_start_end_wait) {
     return EVT_RETURN_DONE;
 }
 #endif
-

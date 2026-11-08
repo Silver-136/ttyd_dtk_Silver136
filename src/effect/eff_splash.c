@@ -626,4 +626,3 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
         GXTexCoord2f32(0.0f, 1.0f);
     }
 }
-

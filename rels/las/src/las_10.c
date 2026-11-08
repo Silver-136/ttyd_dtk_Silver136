@@ -31,7 +31,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-
 USER_FUNC(check_party_pos);
 USER_FUNC(make_kagi_tbl);
 USER_FUNC(temae_kesu);
@@ -1508,4 +1507,3 @@ USER_FUNC(temae_kesu) {
     }
     return EVT_RETURN_DONE;
 }
-

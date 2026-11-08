@@ -142,4 +142,3 @@ void hitObjAttrOn(const char* name, u32 mask);
 void hitObjFlagOn(const char* name, u16 mask);
 HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
-

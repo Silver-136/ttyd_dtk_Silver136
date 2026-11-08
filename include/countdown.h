@@ -39,7 +39,6 @@ typedef struct CountdownWork {
 void countDownInit(void);
 void countDownSaveReStart(void);
 
-
 void countDownMain(void);
 void countDownStart(u32 limit, u32 restart);
 void countDownSetRestartTime(u32 restart);

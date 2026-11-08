@@ -17,7 +17,6 @@
 #include "mario/mario.h"
 #include "party.h"
 
-
 static EvtWord evt_tou_balloon[85];
 EvtWord evt_anim[66];
 static f32 spline_dt[9];
@@ -222,4 +221,3 @@ EVT_BEGIN(tou_20_init_evt)
     END_INLINE_EVENT
     RETURN
 EVT_END()
-

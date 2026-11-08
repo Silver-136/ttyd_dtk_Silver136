@@ -258,7 +258,6 @@ static void majin_callback(s32 type) {
     }
 }
 
-
 /** Script helper: blocks until BGM channel 1 has started, or returns immediately if the channel is empty. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -571,4 +570,3 @@ EVT_BEGIN(gon_06_init_evt)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     RETURN
 EVT_END()
-

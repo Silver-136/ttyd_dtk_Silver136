@@ -19,7 +19,6 @@
 
 void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj, void*** image, s32* x0, s32* y0, s32* x1, s32* y1);
 
-
 static ExtdrvWork work[2];
 
 // Field or battle work. A macro: as an inline function the object changes.

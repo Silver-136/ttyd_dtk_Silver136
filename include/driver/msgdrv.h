@@ -131,7 +131,6 @@ typedef struct MessageWork {
 void msgInit(void);
 void msgLoad(const char* filename, s32 index);
 
-
 MessageWork* msgGetWork(void);
 
 const char* msgSearch(const char* tag);

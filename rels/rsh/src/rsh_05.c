@@ -960,7 +960,6 @@ static void ext_moamoa_main(void) {
         }
     }
 
-
     // One ordinary hit per update; Bobbery's hit code 4 leaves that latch clear.
     pose = extGetPosePtr();
     sfx = 0;
@@ -2229,4 +2228,3 @@ EVT_BEGIN(rsh_05_a_init_evt_nidome)
     CALL_CHILD(rsh_05_init_evt_nidome)
     RETURN
 EVT_END()
-

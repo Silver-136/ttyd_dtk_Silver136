@@ -760,7 +760,6 @@ static NpcSetupInfo npcEnt[] = {
  * and the story advances to STG3_07_MINORS_9TH_PL.
  */
 EVT_BEGIN(evt_saisyo_after)
-
     // Mario, the partner, Grubba and Jolene are placed in the room after the first match.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -996,7 +995,6 @@ EVT_BEGIN(evt_saisyo_after)
 EVT_END()
 
 EVT_BEGIN(evt_saisyo_after_re)
-
     // Mario, the partner and Jolene are placed in the room after the comeback's first match.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -1132,7 +1130,6 @@ EVT_END()
  * it is stored with evt_pouch_set_yoshiname and Yoshi joins as partner 4 (all_party_lecture).
  */
 EVT_BEGIN(evt_tou_chibi_yoshi)
-
     // Yoshi's colour comes from the time since the egg was received and the matching baby Yoshi is created off-screen.
     CALL(setYoshiColor)
     CALL(getYoshiColor, LW(0))
@@ -1528,7 +1525,6 @@ EVT_END()
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
 static EVT_BEGIN(evt_gardman)
-
     // Lock input, wait for landing and, in US and later, also wait for talking to end.
 #if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), 0)
@@ -1733,7 +1729,6 @@ static EVT_BEGIN(bed_entry)
 EVT_END()
 
 EVT_BEGIN(evt_okorareru)
-
     // Jolene waits in the room until Mario comes back out through the broken wall.
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -85)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
@@ -1885,7 +1880,6 @@ static EVT_BEGIN(evt_block)
 EVT_END()
 
 EVT_BEGIN(tou_10_init_evt)
-
     // Music for the story stage, and the story jump to the Yoshi egg stage (GSWF_TOU_10_JUMP_STORY_TO_EGG).
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
@@ -2013,4 +2007,3 @@ USER_FUNC(name_check) {
     }
     return EVT_RETURN_DONE;
 }
-

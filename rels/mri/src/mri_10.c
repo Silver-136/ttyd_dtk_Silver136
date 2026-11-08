@@ -16,7 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static BeroEntry bero_entry_data[2];
 static EvtWord item_evt[68];
 EvtWord mri_10_init_evt[100];
@@ -103,4 +102,3 @@ EVT_BEGIN(mri_10_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 0, 0, 25, MOBJ_ITEMBOX_BIG, 0, PTR(item_evt), GSWF_MRI_10_SUPER_BOOTS_CHEST)
     RETURN
 EVT_END()
-

@@ -72,4 +72,3 @@ EVT_BEGIN(hei_11_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("mizu"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
-

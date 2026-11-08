@@ -2939,4 +2939,3 @@ USER_FUNC(evt_npc_release_filednpc) {
     }
     return EVT_RETURN_DONE;
 }
-

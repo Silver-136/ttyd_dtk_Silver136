@@ -18,7 +18,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord e_close[12];
 static EvtWord e_open[12];
 static EvtWord w_close[12];
@@ -335,4 +334,3 @@ EVT_BEGIN(eki_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

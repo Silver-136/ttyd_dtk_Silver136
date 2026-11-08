@@ -13,7 +13,6 @@
 #include "driver/npcdrv.h"
 #include "pmario_sound.h"
 
-
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static EvtWord door02_close[12];
@@ -190,4 +189,3 @@ EVT_BEGIN(gon_02_init_evt)
     CALL(evt_mobj_badgeblk, STRING("m"), 200, 60, -50, ITEM_POWER_BOUNCE, 0, GSWF_GON_02_POWER_BOUNCE_BADGE_BLOCK, 1)
     RETURN
 EVT_END()
-

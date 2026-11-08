@@ -277,4 +277,3 @@ NpcTerritoryInfo btl_gor_setup_no_tbl[] = {
     {"BTLNO_GOR_02_01", 5},
     {0},
 };
-

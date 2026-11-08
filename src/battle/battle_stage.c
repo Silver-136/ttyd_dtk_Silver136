@@ -71,7 +71,6 @@ EVT_BEGIN(screen_evt)
     RETURN
 EVT_END()
 
-
 // forward declarations
 static void batSpotDisp(CameraId camId, void* param);
 static BattleSpotEntry* batSpotEntry(void);

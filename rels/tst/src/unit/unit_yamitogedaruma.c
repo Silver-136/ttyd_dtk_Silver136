@@ -430,7 +430,6 @@ EVT_END()
  * a hit shakes the camera and damages the target (8 damage, 7 in the early demos). It then hops home.
  */
 static EVT_BEGIN(attack_event)
-
     // While it is lying on its back it only counts down and rights itself instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

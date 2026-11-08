@@ -32,7 +32,6 @@ static void itemUseDisp(WinMgrEntry* entry);
 static void itemUseDisp2(WinMgrEntry* entry);
 static void item_disp(WindowWork* w, f32 xo, f32 yo);
 
-
 /** Pages of Super Luigi volume 1 for the book reader in the item menu, ending with NULL. */
 static const char* luigi_book_1[] = {
     "msg_luigi_book1_txt1",
@@ -129,7 +128,6 @@ u16 menu_skip_list[] = {ITEM_STRANGE_SACK, ITEM_HAMMER, ITEM_SUPER_HAMMER, ITEM_
 #else
 u16 menu_skip_list[] = {ITEM_HAMMER, ITEM_SUPER_HAMMER, ITEM_ULTRA_HAMMER, ITEM_BOOTS, ITEM_SUPER_BOOTS, ITEM_ULTRA_BOOTS, ITEM_BOAT_CURSE, ITEM_TUBE_CURSE, ITEM_PAPER_CURSE, ITEM_PLANE_CURSE, ITEM_MAGICAL_MAP, ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
 #endif
-
 
 /**
  * Windows opened when an item is used from the menu: the target list of Mario and his partners, and the

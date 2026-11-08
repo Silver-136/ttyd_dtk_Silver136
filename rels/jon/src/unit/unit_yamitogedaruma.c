@@ -15,7 +15,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_yamitogedaruma;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -570,4 +569,3 @@ static EVT_BEGIN(wait_event)
     GOTO(0)
     RETURN
 EVT_END()
-

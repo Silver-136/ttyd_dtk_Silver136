@@ -126,7 +126,6 @@ static EvtWord sell_evt[VERSION_PICK(135, 146)];
 EvtWord zaiko_buy_evt[VERSION_PICK(174, 185)];
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord buy_evt[41];
 extern EvtWord badgeshopper_talk_evt[];
@@ -195,7 +194,6 @@ extern EvtWord bottakuru_init[];
 #else
 EvtWord bottakuru_init[25];
 #endif
-
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord bottakuru_talk[231];
@@ -354,18 +352,15 @@ static EvtWord epilogue_evt[312];
 static EvtWord epilogue_evt[313];
 #endif
 
-
 #if VERSION >= VERSION_US
 EvtWord dai_disp[52];
 #endif
-
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord gor_01_init_evt[542];
 #else
 EvtWord gor_01_init_evt[VERSION_PICK(546, 548)];
 #endif
-
 
 #if VERSION >= VERSION_JP
 SimpleRecipe R_simple_recipe_table[26];
@@ -5288,7 +5283,6 @@ EVT_BEGIN(gor_01_koopa_evt)
     RETURN
 EVT_END()
 
-
 /** Sets the darkness projection view from (0, 100, 100 + z) toward (0, 0, z), with z from args[0]. */
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
@@ -5429,7 +5423,6 @@ EVT_END()
  * and the game changes to the nok_01 scene "minnnanokoe" with BGM_EVT_STG8_VOICE1.
  */
 static EVT_BEGIN(minnnanokoe_evt)
-
     // Controls are locked and Mario and his partner are moved off the map.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -5948,7 +5941,6 @@ EVT_END()
  * who jumps away across the rooftops while Goombella turns to follow; the game then changes to pik_04.
  */
 static EVT_BEGIN(epilogue_evt)
-
     // The epilogue: Ms. Mowz's theme starts and the badge shop's rooms are set up for the scene.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_CYUCYURINA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -6089,7 +6081,6 @@ EVT_END()
  * the Shadow Queen's darkness scenes and the epilogue.
  */
 EVT_BEGIN(gor_01_init_evt)
-
     // Work out which special scene this visit belongs to: Bowser's visit in Chapter 6 or the darkness scenes in
     // Chapter 8.
     SET_VALUE(LF(0), 0)
@@ -7294,7 +7285,6 @@ s32 iri_18_item_tbl[] = {
  * which also unlocks the recipe log.
  */
 EVT_BEGIN(cooking_evt)
-
     // Controls are locked while Mario and his partners walk up to Zess T.'s stove.
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
@@ -7729,4 +7719,3 @@ USER_FUNC(chk_special_cook) {
     evtSetValue(event, args[1], found);
     return EVT_RETURN_DONE;
 }
-

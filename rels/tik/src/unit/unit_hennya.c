@@ -15,7 +15,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-
 BattleUnitKind unit_hennya;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -251,7 +250,6 @@ EVT_END()
  * A flustered (confused) unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
-
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -397,4 +395,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

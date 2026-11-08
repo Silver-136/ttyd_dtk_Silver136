@@ -26,7 +26,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 EvtWord toge_7_init[17];
 EvtWord toge_7_talk[44];
 EvtWord toge_8_init[17];
@@ -736,4 +735,3 @@ EVT_BEGIN(mri_11_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_sunomae"), 1, 0)
     RETURN
 EVT_END()
-

@@ -598,7 +598,6 @@ static inline BOOL tubuCheck(u8 type) {
     return FALSE;
 }
 
-
 /**
  * Journal input.
  * State 0 picks an entry; 10 is the world map (load the map TPL, move the cursor with the stick or D-pad,
@@ -1088,7 +1087,6 @@ s32 winLogMain(WindowWork* w) {
     return 0;
 }
 
-
 /**
  * Every frame: runs the entry buttons' slide animations (chosen one to the top-left, the rest off screen,
  * and back) and eases the map, Crystal Star, badge and recipe panels toward their targets.
@@ -1167,7 +1165,6 @@ void winLogMain2(WindowWork* w) {
 
 static void mapGX(WindowWork* w, f32 x, f32 y);
 static void monoshiriGX(WindowWork* w, f32 x, f32 y);
-
 
 /**
  * Draws the Journal (menu slot idx): the map panel,
@@ -1306,7 +1303,6 @@ const char* winGetMapTplName(void) {
 /** Local fabs on the __fabs intrinsic, used for the map arrows' bobbing offset. */
 static inline double fabs(double x) { return __fabs(x); }
 
-
 /**
  * Draws the world map panel: the scrolled map texture,
  * the route dots revealed so far (the hovered place blinks), the current chapter's goal icon,
@@ -1440,7 +1436,6 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
         winTexSet(0xBB, (Vec){(x - 220.0f) - o, y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     }
 }
-
 
 /**
  * Draws the Tattle log page: the known/total count,
@@ -1866,7 +1861,6 @@ static void capture(CameraId camera, void* param) {
     GXSetScissor(sx, sy, sw, sh);
 }
 
-
 /**
  * Draws the Tattle card: the half-book page, the captured portrait with a soft edge and fade-in alpha,
  * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the early demos),
@@ -2012,4 +2006,3 @@ static void monosiri_disp(CameraId camera, void* param) {
 #endif
     }
 }
-

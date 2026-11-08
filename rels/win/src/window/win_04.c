@@ -122,7 +122,6 @@ extern EvtWord win_04_init_evt[];
 EvtWord win_04_init_evt[94];
 #endif
 
-
 /**
  * Door-open callback for the west bero exit: names the door map objects "S_doa_w_l" and "S_doa_w_r"
  * and runs the shared evt_win_door_open.

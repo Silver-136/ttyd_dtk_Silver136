@@ -31,7 +31,6 @@ typedef enum CloudUseState {
 
 Vec cloud_at;
 
-
 #include "driver/hitdrv.h"
 #include "driver/effdrv.h"
 #include "memory.h"

@@ -10,7 +10,6 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_memcard.h"
 
-
 /**
  * Functions are emitted in reverse source order (deferred inlining). Waits
  * until the current memory card operation finishes, then stores cardmgr's result code in args[0]:

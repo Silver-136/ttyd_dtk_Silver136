@@ -24,7 +24,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-
 static EvtWord e_door_close[12];
 static EvtWord e_door_open[12];
 static BeroEntry bero_entry_data[2];
@@ -230,4 +229,3 @@ EVT_BEGIN(las_17_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
-

@@ -15,7 +15,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[3];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -110,4 +109,3 @@ EVT_BEGIN(dou_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-

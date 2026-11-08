@@ -11,7 +11,6 @@
 #include "system.h"
 #include <string.h>
 
-
 typedef struct PGLv2Work {
     s32 timer;     // 0x0
     s32 maxFrames; // 0x4
@@ -25,7 +24,6 @@ typedef struct PGLv2Work {
     u8 pad26[2];   // 0x26
     s32 endTimer;  // 0x28
 } PGLv2Work;
-
 
 /**
  * Lip Lock gauge speed by difficulty: how fast holding A fills the gauge (300 at the easiest down to 40),

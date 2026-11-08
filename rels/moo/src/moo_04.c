@@ -28,7 +28,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-
 static USER_FUNC(mario_kirimomi);
 
 static f32 spline_dt[9];
@@ -326,4 +325,3 @@ static USER_FUNC(mario_kirimomi) {
     }
     return EVT_RETURN_DONE;
 }
-

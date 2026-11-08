@@ -40,7 +40,6 @@ typedef struct GameOverWork {
     EventEntry* evt; // 0x0
 } GameOverWork;
 
-
 static GameOverWork work;
 /** Points at the Game Over sequence's work. */
 static GameOverWork* wp = &work;
@@ -438,4 +437,3 @@ void seq_gameOverMain(SequenceWork* seq) {
             break;
     }
 }
-

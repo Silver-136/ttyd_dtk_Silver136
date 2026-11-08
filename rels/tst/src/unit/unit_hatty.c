@@ -299,7 +299,6 @@ EVT_END()
  * guard-timing damage check and the flight home) is therefore never reached.
  */
 static EVT_BEGIN(attack_event)
-
     // hatty first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

@@ -50,9 +50,7 @@ static BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
 
-
 // The evt_snd script functions belong to this file (see evt_snd.c).
-
 
 USER_FUNC(evt_snd_bgmon) {
     EvtWord* args = event->args;
@@ -718,7 +716,6 @@ void partyWalkChkGnd(PartyEntry* party) {
 }
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 void partyChgWalkPose(PartyEntry* party, f32 spd) {
     if (spd >= 1.25f) {
@@ -942,7 +939,6 @@ void partyFlyAdjustY(PartyEntry* party) {
     }
 }
 #endif
-
 
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);
@@ -3870,7 +3866,6 @@ static void partyGorFix(PartyEntry* party) {
 }
 #endif
 
-
 // The early demos define the jump, follow, stay, damage, slit and roll motions here, after the helpers above; JP and later define
 // them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
 #if VERSION <= VERSION_DEMO_JP
@@ -5591,4 +5586,3 @@ static BOOL party_roll(PartyEntry* party) {
     return ret;
 }
 #endif
-

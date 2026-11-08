@@ -18,7 +18,6 @@
 #include "pmario_sound.h"
 #include "driver/npcdrv.h"
 
-
 static BeroEntry bero_entry_data[3];
 EvtWord gra_01_after_ranpel2[94];
 static TreeAccess tree_tbl[4];
@@ -139,4 +138,3 @@ EVT_BEGIN(gra_01_init_evt)
     CALL_CHILD(evt_usu_kagemario_party_kill)
     RETURN
 EVT_END()
-

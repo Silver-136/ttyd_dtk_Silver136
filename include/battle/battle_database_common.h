@@ -352,4 +352,3 @@ extern ItemDropData battle_item_yami_patakuri[];
 extern ItemDropData battle_item_yami_togekuri[];
 extern ItemDropData battle_item_yamitogedaruma[];
 extern ItemDropData battle_item_zonbaba[];
-

@@ -36,7 +36,6 @@
 #define bomhei_init_800BFBB0 bomhei_init
 #endif
 
-
 /** Height bob of Bobbery over Mario's head per frame of Mario's carry walk (M_W_7), in quarter units. */
 #if VERSION >= VERSION_JP
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
@@ -75,7 +74,6 @@ static inline BOOL isBombRock(HitEntry* hit) {
     }
     return FALSE;
 }
-
 
 // Stops Bobbery's two looping sounds.
 static inline void bomheiCleanSfx(PartyEntry* p) {
@@ -374,7 +372,6 @@ typedef struct BomheiWork {
     u32 flags;  // 0x0
     s32 timer;  // 0x4
 } BomheiWork;
-
 
 // Bobbery's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define BOMHEI_WORK(p) ((BomheiWork*)(p)->useStruct)

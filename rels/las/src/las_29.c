@@ -1000,7 +1000,6 @@ EVT_END()
  * and the party is taken to gor_01 (sekai_yami1).
  */
 EVT_BEGIN(last_evt_1)
-
     // Mario and his partner walk in through the west door and it closes behind them.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1338,7 +1337,6 @@ EVT_END()
  * and the map changes to usu_00 (sekai_yami2).
  */
 EVT_BEGIN(last_evt_2)
-
     // The Shadow Queen asks who called her and where her vessel is; Grodus answers.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1448,7 +1446,6 @@ EVT_END()
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
 EVT_BEGIN(last_evt_3)
-
     // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1878,7 +1875,6 @@ EVT_END()
  * voices of everyone) to continue with last_evt_3_2.
  */
 EVT_BEGIN(last_evt_3_1)
-
     // The defeated Shadow Queen hovers over the floor.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2127,7 +2123,6 @@ EVT_END()
  * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
  */
 EVT_BEGIN(last_evt_3_2)
-
     // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2632,7 +2627,6 @@ EVT_END()
  * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
  */
 EVT_BEGIN(last_evt_4)
-
     // The Shadow Queen is beaten: the music stops; she, the Sirens and Mario's partner speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)

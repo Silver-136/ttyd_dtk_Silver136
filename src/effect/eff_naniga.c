@@ -24,7 +24,6 @@
 #include "eff/eff_naniga.h"
 #include "driver/mapdrv.h"
 
-
 typedef struct EffNanigaWork {
     s32 type;      // 0x0
     Vec position;  // 0x4

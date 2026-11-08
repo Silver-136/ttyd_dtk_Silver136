@@ -1210,4 +1210,3 @@ EVT_BEGIN(stg_02_1_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ueki"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
-

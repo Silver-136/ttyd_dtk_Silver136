@@ -8,7 +8,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-
 /** Camera-facing 32x32 smoke puff, used by types 0 and 2. */
 static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, -16, 0, 0, 0, 0, 0, 0, 255},
@@ -213,4 +212,3 @@ static void effKemuri12Disp(CameraId cameraId, void* param) {
         break;
     }
 }
-

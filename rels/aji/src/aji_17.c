@@ -176,7 +176,6 @@ s32 peach_evt_stg4_read_quiz_data(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-
 /**
  * Script function: waits until channel 1's music has started or the channel is empty (psndBGMStartCheck),
  * so the dance can be timed to the waltz.
@@ -3941,4 +3940,3 @@ s32 horogram_set_pose(EventEntry* event, BOOL isFirstCall) {
     animPoseSetAnim(npc2->poseId, name, TRUE);
     return EVT_RETURN_DONE;
 }
-

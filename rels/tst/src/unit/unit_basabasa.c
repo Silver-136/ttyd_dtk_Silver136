@@ -456,7 +456,6 @@ EVT_END()
  * afterwards it returns to its idle pose BSA_S_1 (BSA_S_2 if it is still on the ceiling).
  */
 static EVT_BEGIN(attack_event)
-
     // The Swooper first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

@@ -390,7 +390,6 @@ EVT_END()
  * and a hit (camera shake, bounces off); then it walks home.
  */
 static EVT_BEGIN(attack_event)
-
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -561,4 +560,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -17,7 +17,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-
 static BeroEntry bero_entry_data[5];
 static KusaAccess ueki_access_data[7];
 static EvtWord cloud_wind_event[39];
@@ -165,4 +164,3 @@ EVT_BEGIN(mri_19_init_evt)
     SPAWN_EVENT(puni_piders_check)
     RETURN
 EVT_END()
-

@@ -183,7 +183,6 @@ HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx) {
     return hitEntrySub(joint, NULL, mtx, TRUE, 0);
 }
 
-
 typedef struct HitAnimJointList {
     s32 count;
     void* joints[1];
@@ -1555,4 +1554,3 @@ void hitStrippedPool(f32* f) {
     f[0] = 0.0f;
     f[1] = 0.1f;
 }
-

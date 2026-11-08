@@ -284,4 +284,3 @@ s32* audience_anim_luigi[] = {
     NULL,
     NULL,
 };
-

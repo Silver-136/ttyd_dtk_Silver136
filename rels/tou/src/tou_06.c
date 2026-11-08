@@ -291,7 +291,6 @@ EVT_END()
  * Mail 12 is received and opened and the story advances to STG3_20_08_MS_MOWZ.
  */
 EVT_BEGIN(evt_chuchu)
-
     // Ms. Mowz waits on the crates with her theme playing; Mario and the partner spot her.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_CYUCYURINA1"))
@@ -592,7 +591,6 @@ EVT_END()
  * the Lv1 big blocks, the job 13 trunks, and the scene to run from story progress.
  */
 EVT_BEGIN(tou_06_init_evt)
-
     // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -857,4 +855,3 @@ USER_FUNC(make_tbl) {
     }
     return EVT_RETURN_DONE;
 }
-

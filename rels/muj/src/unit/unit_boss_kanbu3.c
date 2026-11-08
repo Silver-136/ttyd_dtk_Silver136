@@ -59,7 +59,6 @@ static EvtWord damage_event[337];
 static EvtWord damage_event[315];
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[393];
 #else
@@ -658,7 +657,6 @@ EVT_END()
  * unit work 0; LW(0) returns 1 when he called, 0 when a group was already there.
  */
 EVT_BEGIN(call_event)
-
     // If no X-Naut group is on the stage yet, Lord Crump waves them in.
     CALL(check_exist_group, LW(15))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))

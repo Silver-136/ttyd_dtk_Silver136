@@ -487,7 +487,6 @@ EVT_END()
  * After a first strike it pauses first. When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
-
     // After a First Strike it pauses a moment; otherwise it picks a target (a confused Dull Bones with nobody
     // to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -733,4 +732,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -11,7 +11,6 @@
 #include <string.h>
 #include "icon_ids.h"
 
-
 typedef struct AirGaugeWork {
     s32 frame;      // 0x0, frames since input started
     f32 gauge;      // 0x4, 0..100, drained by _GetGaugeDecValue

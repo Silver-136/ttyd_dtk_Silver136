@@ -55,7 +55,6 @@ static s32 mobj_brickblk(MapObjectEntry* mobj);
 static s32 mobj_signboard(MapObjectEntry* mobj);
 static s32 mobj_lock(MapObjectEntry* mobj);
 
-
 // The objects JP, US and the US September demo strip (the A/B ride switches, red tornado switch, arrow,
 // trap floor and breaking rock) stay in the early demos, the PAL demo and PAL.
 #if VERSION >= VERSION_DEMO_EU
@@ -112,7 +111,6 @@ static inline BOOL isAnimA13(const s8* a) {
 extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag,
                             EvtWord* evtCode);
 
-
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 #if VERSION >= VERSION_JP
                             EVT_BEGIN(kpa_powerup_evt)
@@ -128,7 +126,6 @@ EVT_BEGIN(evt_fire)
     RETURN
 EVT_END()
 #endif
-
 
 // ---- entry, delete and property functions ----
 
@@ -1912,7 +1909,6 @@ EVT_BEGIN(evt_lock_sound)
     RETURN
 EVT_END()
 
-
 static s32 mobj_lock(MapObjectEntry* mobj) {
 #if VERSION >= VERSION_US
     s32 i;
@@ -3636,7 +3632,6 @@ BOOL mobj_kf_ride_check(f32 x, f32 z, f32 px, f32 pz, f32 r) {
     }
     return FALSE;
 }
-
 
 /**
  * Main function of the flipping floor panels (MOBJ_KururinFloor) that hide Star Pieces:
@@ -5640,4 +5635,3 @@ USER_FUNC(evt_mobj_koopa_pole) {
     }
     return EVT_RETURN_DONE;
 }
-

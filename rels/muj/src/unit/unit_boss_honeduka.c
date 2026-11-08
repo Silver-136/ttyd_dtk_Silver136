@@ -12,7 +12,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_OWNER 0 // unit id whose UNIT_DATA_WEAPON_BREAK_EVENT the damage sub event runs (no code spawns this unit or sets the slot)
 
-
 BattleUnitKind unit_boss_honeduka;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -180,4 +179,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-

@@ -906,7 +906,6 @@ EVT_BEGIN(aji_09_init_evt)
     RETURN
 EVT_END()
 
-
 USER_FUNC(dot_mario) {
     PartyEntry* party = partyGetPtr(0);
 

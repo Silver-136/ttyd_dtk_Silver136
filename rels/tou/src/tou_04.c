@@ -995,7 +995,6 @@ EVT_END()
  * and gives story-dependent lines about the league, Grubba and the rematch.
  */
 EVT_BEGIN(talk_g_4)
-
     // Before STG3_03_GRUBBA, the guard lets Mario through the first time he asks to become a fighter.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
@@ -2769,4 +2768,3 @@ EVT_BEGIN(tou_04_init_evt)
     END_IF
     RETURN
 EVT_END()
-

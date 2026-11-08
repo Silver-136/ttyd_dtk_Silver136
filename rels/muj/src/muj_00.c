@@ -1947,7 +1947,6 @@ EVT_END()
  * Mario and his partner are positioned for the scene; the story advances to STG5_40_TRUE_IDENTITY and control returns.
  */
 EVT_BEGIN(dai3_shurai_sub)
-
     // Mario loses control and waits for his partner; the sailors are moved onto the pier.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -2995,7 +2994,6 @@ EVT_END()
  * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
  */
 EVT_BEGIN(kaizoku_vs_dai3)
-
     // The fight begins: Mario loses control and the crowds on both ships are set up.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -4347,4 +4345,3 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_b_bero01"), 1, 0)
     RETURN
 EVT_END()
-

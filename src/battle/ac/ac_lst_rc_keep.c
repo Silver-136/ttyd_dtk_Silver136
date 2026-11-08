@@ -19,7 +19,6 @@ typedef struct LstRcWork {
     s32 endTimer; // 0xC
 } LstRcWork;
 
-
 /**
  * Release window of the unused two-stick hammer charge command, by difficulty (80 frames at the easiest
  * down to 5), and the names of the star icons it removes when it ends.
@@ -347,4 +346,3 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
     }
 }
 #pragma optimize_for_size reset
-

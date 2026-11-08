@@ -44,7 +44,6 @@ static s32 texid_tbl[6][6] = {
 };
 #endif
 
-
 #if VERSION <= VERSION_DEMO_JP
 static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };
 #endif
@@ -339,4 +338,3 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-

@@ -315,4 +315,3 @@ static void effOpukuJetwDisp(CameraId cameraId, void* payload) {
         }
     }
 }
-

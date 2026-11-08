@@ -92,7 +92,6 @@ typedef struct WinDt {
     u8 next[4]; // 0x18
 } WinDt;
 
-
 #if VERSION <= VERSION_DEMO_JP
 static BOOL loadMain(SequenceWork* seq);
 #else

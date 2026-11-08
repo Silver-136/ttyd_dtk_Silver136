@@ -379,4 +379,3 @@ EVT_BEGIN(gon_12_init_evt)
     CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()
-
