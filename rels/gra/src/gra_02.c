@@ -79,7 +79,7 @@ EVT_END()
 /** NPC of the shed: the shopkeeper who has been turned into a pig, who wanders around and talks to Mario. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ブタお店の主人", // name
+        "ブタお店の主人", // name (a Twilighter shopkeeper cursed into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         shopmaster_pig_init, // initEvent

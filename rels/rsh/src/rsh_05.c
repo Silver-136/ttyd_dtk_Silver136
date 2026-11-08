@@ -1546,9 +1546,9 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
 #pragma opt_lifetimes reset
 
 static EVT_BEGIN(evt_moamoa_init)
-    CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
+    CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a")) // hidden Smorg model A for the swarm sprites
     CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
-    CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
+    CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b")) // hidden Smorg model B for the swarm sprites
     CALL(evt_npc_set_position, STRING("moa_b"), 0, -1000, 0)
     CALL(evt_ext_entry, 400, PTR(ext_moamoa_data), PTR(ext_moamoa_init), PTR(ext_moamoa_main), PTR(ext_moamoa_dispent))
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_ACTIVE)
@@ -1980,7 +1980,7 @@ static BeroEntry bero_data_c[] = {
 /** NPCs of the car: the conductor and the waitress. */
 static NpcSetupInfo npc_data[] = {
     {
-        "車掌", // name
+        "車掌", // name (the conductor of the Excess Express)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_syashou, // initEvent
@@ -1990,7 +1990,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ウェイトレス", // name
+        "ウェイトレス", // name (the waitress of the Excess Express)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_waitless, // initEvent

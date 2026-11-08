@@ -262,7 +262,7 @@ EVT_END()
 /** The six Jabbies (トゲ族１ to 6) of the first hive. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "トゲ族１", // name
+        "トゲ族１", // name (a Jabbi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_1_init, // initEvent
@@ -274,7 +274,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲ族２", // name
+        "トゲ族２", // name (a Jabbi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_2_init, // initEvent
@@ -286,7 +286,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲ族３", // name
+        "トゲ族３", // name (a Jabbi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_3_init, // initEvent
@@ -298,7 +298,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲ族４", // name
+        "トゲ族４", // name (a Jabbi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_4_init, // initEvent
@@ -310,7 +310,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲ族５", // name
+        "トゲ族５", // name (a Jabbi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_5_init, // initEvent
@@ -322,7 +322,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲ族６", // name
+        "トゲ族６", // name (a Jabbi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_6_init, // initEvent

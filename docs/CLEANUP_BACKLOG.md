@@ -123,6 +123,10 @@ in `docs/FAKES.md` and in the mweppc review record.
   strings, model names, symbol prefixes, unit names), and give each one an English note at its definition or NPC
   table entry (what it is, and its English name when the game gives one). Evidence order: US message text and the
   NPC/model data, then the code; where only game knowledge settles it, ask the user. Original symbol names stay.
+  **NPCs done (2026-11-08):** every NpcSetupInfo name (all versions), the first evt_npc_entry per name and file,
+  and the 352 NPC kinds and 56 field-AI kinds in src/data/npc_data.c carry a note (record
+  cleanup_notes\npc_english_names.md). Open: the bone-pile NPCs カロン00.. in gon (model c_karon_g: Dry Bones or
+  Dull Bones?); map objects and effect names are not covered yet.
 
 ## 4. Structure and layout of the source
 

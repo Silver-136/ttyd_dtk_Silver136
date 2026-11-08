@@ -625,7 +625,7 @@ EVT_END()
  * Sets the story to "Gold Fuzzy".
  */
 EVT_BEGIN(evt_golden)
-    CALL(evt_npc_entry, STRING("dummy"), STRING("c_chorobon"))
+    CALL(evt_npc_entry, STRING("dummy"), STRING("c_chorobon")) // hidden Fuzzy NPC behind the Fuzzy swarm sprites
     CALL(evt_npc_set_position, STRING("dummy"), 0, -1000, 0)
     SPAWN_EVENT_GET_ID(PTR(golden_se), LW(15))
     WAIT_FRAMES(10)

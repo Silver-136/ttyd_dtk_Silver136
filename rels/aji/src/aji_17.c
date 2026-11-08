@@ -1706,19 +1706,19 @@ static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_mario_set_mode, 1)
 
     // The dummy Peach and two hologram Peaches are created for the dance.
-    CALL(evt_npc_entry, STRING("\203_\203~\201["), STRING("c_peach"))
+    CALL(evt_npc_entry, STRING("\203_\203~\201["), STRING("c_peach")) // invisible Peach stand-in for TEC's dance
     CALL(evt_npc_flag_onoff, 1, STRING("\203_\203~\201["), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("\203_\203~\201["), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_width, STRING("\203_\203~\201["), FLOAT(20.0f))
     CALL(evt_npc_set_height, STRING("\203_\203~\201["), FLOAT(47.0f))
-    CALL(evt_npc_entry, STRING("\203z\203\215\203O\203\211\203\200"), STRING("c_peach"))
+    CALL(evt_npc_entry, STRING("\203z\203\215\203O\203\211\203\200"), STRING("c_peach")) // hologram of Peach that TEC makes as her dance partner
     CALL(evt_npc_set_tribe, STRING("\203z\203\215\203O\203\211\203\200"), STRING("\203s\201[\203`\225P"))
     CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\200"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\200"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_color, STRING("\203z\203\215\203O\203\211\203\200"), 255, 255, 255, 255)
     CALL(evt_npc_set_width, STRING("\203z\203\215\203O\203\211\203\200"), FLOAT(20.0f))
     CALL(evt_npc_set_height, STRING("\203z\203\215\203O\203\211\203\200"), FLOAT(47.0f))
-    CALL(evt_npc_entry, STRING("\203z\203\215\203O\203\211\203\2002"), STRING("c_peach_r"))
+    CALL(evt_npc_entry, STRING("\203z\203\215\203O\203\211\203\2002"), STRING("c_peach_r")) // second hologram Peach (c_peach_r) for the dance
     CALL(evt_npc_set_tribe, STRING("\203z\203\215\203O\203\211\203\2002"), STRING("\203s\201[\203`\225P"))
     CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\2002"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\2002"), NPC_FLAG_NO_HIT)
@@ -3224,7 +3224,7 @@ EVT_END()
 /** NPC setup records for 手下１, 手下２ and シュリョー in TEC's room. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"手下１"*/"\216\350\211\272\202P", // name
+        /*"手下１"*/"\216\350\211\272\202P", // name (an X-Naut grunt in TEC's room)
         0, 0, // flags..reactionFlags
         teshita1_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -3233,7 +3233,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"手下２"*/"\216\350\211\272\202Q", // name
+        /*"手下２"*/"\216\350\211\272\202Q", // name (an X-Naut grunt in TEC's room)
         0, 0, // flags..reactionFlags
         teshita2_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -3242,7 +3242,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"シュリョー"*/"\203V\203\205\203\212\203\207\201[", // name
+        /*"シュリョー"*/"\203V\203\205\203\212\203\207\201[", // name (Sir Grodus)
         0, 0, // flags..reactionFlags
         syuryo_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

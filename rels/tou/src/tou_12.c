@@ -246,7 +246,7 @@ EVT_END()
 // Hidden dummy NPCs provide talk events for the separately posed injured NPCs.
 static NpcSetupInfo npcEnt[] = {
     {
-        "マイケル", // name
+        "マイケル", // name (King K, a fighter)
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_michel, // initEvent
@@ -256,7 +256,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブロッツ", // name
+        "ブロッツ", // name (Bandy Andy, a fighter)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_brots, // initEvent
@@ -266,7 +266,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マイケルダミー", // name
+        "マイケルダミー", // name (stand-in for the flattened King K)
         NPC_FLAG_NO_DRAW | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_michel_dummy, // initEvent
@@ -278,7 +278,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブロッツダミー", // name
+        "ブロッツダミー", // name (stand-in for the flattened Bandy Andy)
         NPC_FLAG_NO_DRAW | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_brots_dummy, // initEvent
@@ -290,7 +290,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノシコワ", // name
+        "キノシコワ", // name (Jolene)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinoshikowa, // initEvent

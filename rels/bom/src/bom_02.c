@@ -1512,7 +1512,7 @@ EVT_END()
  * and the talk script kiza_talk.
  */
 static EVT_BEGIN(kiza_entry)
-    CALL(evt_npc_entry, STRING("キザ野郎"), STRING("c_kiza"))
+    CALL(evt_npc_entry, STRING("キザ野郎"), STRING("c_kiza")) // a dandy who pines for the girl at the inn
     CALL(evt_npc_set_tribe, STRING("キザ野郎"), STRING("キザ野郎"))
     CALL(evt_npc_set_position, STRING("キザ野郎"), -190, 5, -130)
     CALL(evt_npc_set_ry, STRING("キザ野郎"), 90)
@@ -1524,7 +1524,7 @@ EVT_END()
 /** The cast of the east village: the mayor, Bob-omb villagers E to I, the shop clerk and General White. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "村長", // name
+        "村長", // name (the mayor of Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_soncho, // initEvent
@@ -1536,7 +1536,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボムヘイE", // name
+        "ボムヘイE", // name (Swob)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_e, // initEvent
@@ -1548,7 +1548,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボムヘイF", // name
+        "ボムヘイF", // name (a Bob-omb from Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_f, // initEvent
@@ -1560,7 +1560,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボムヘイG", // name
+        "ボムヘイG", // name (a Bob-omb from Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_g, // initEvent
@@ -1572,7 +1572,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボムヘイH", // name
+        "ボムヘイH", // name (Gob)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_h, // initEvent
@@ -1584,7 +1584,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボムヘイI", // name
+        "ボムヘイI", // name (a Bob-omb from Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_i, // initEvent
@@ -1596,7 +1596,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (manager of Northwinds Mart)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_tenin, // initEvent
@@ -1608,7 +1608,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ホワイト", // name
+        "ホワイト", // name (General White)
         NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent

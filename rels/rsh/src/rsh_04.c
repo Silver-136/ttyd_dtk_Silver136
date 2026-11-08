@@ -1308,7 +1308,7 @@ EVT_END()
 /** NPCs of the car: the conductor, the salaryman, Goldbob and his wife, Little Narikin and Pennington. */
 static NpcSetupInfo npc_data[] = {
     {
-        "車掌", // name
+        "車掌", // name (the conductor of the Excess Express)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_syashou, // initEvent
@@ -1320,7 +1320,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "サラリーマン", // name
+        "サラリーマン", // name (the Ratooey businessman)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_sarary, // initEvent
@@ -1332,7 +1332,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ナリキンパパ", // name
+        "ナリキンパパ", // name (Goldbob)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_papa, // initEvent
@@ -1344,7 +1344,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ナリキンママ", // name
+        "ナリキンママ", // name (Sylvia)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mama, // initEvent
@@ -1356,7 +1356,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "コナリキン", // name
+        "コナリキン", // name (Bub)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_konari, // initEvent
@@ -1368,7 +1368,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ポワン探偵", // name
+        "ポワン探偵", // name (Pennington)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan, // initEvent
@@ -1681,9 +1681,9 @@ EVT_BEGIN(rsh_04_a_init_evt)
         SET_VALUE(LW(0), 0)
         CALL_CHILD(bero_case_switch_off)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
-        CALL(evt_npc_entry, STRING("moa1"), STRING("c_n_moa_a"))
-        CALL(evt_npc_entry, STRING("moa2"), STRING("c_n_moa_a"))
-        CALL(evt_npc_entry, STRING("moa3"), STRING("c_n_moa_a"))
+        CALL(evt_npc_entry, STRING("moa1"), STRING("c_n_moa_a")) // a Smorg blob by the locked west door on day 3
+        CALL(evt_npc_entry, STRING("moa2"), STRING("c_n_moa_a")) // a Smorg blob by the locked west door on day 3
+        CALL(evt_npc_entry, STRING("moa3"), STRING("c_n_moa_a")) // a Smorg blob by the locked west door on day 3
         CALL(evt_npc_set_position, STRING("moa1"), -440, 10, -100)
         CALL(evt_npc_set_position, STRING("moa2"), -441, 30, -125)
         CALL(evt_npc_set_position, STRING("moa3"), -442, 40, -75)

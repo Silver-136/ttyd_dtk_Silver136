@@ -620,7 +620,7 @@ EVT_END()
 /** NPC setup of gon_08: Koopook, who gives the side request. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ノッコス", // name
+        "ノッコス", // name (Koopook, who asks for help in Hooktail Castle)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         nokkosu_init, // initEvent

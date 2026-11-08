@@ -677,10 +677,10 @@ EVT_END()
  * plus a baby Yoshi model chosen by the Yoshi partner's color.
  */
 EVT_BEGIN(chief_mario_talk_init)
-    CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario"))
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
-    CALL(evt_npc_entry, STRING("ノコタロウ"), STRING("c_pnk"))
-    CALL(evt_npc_entry, STRING("クラウダ"), STRING("c_windy"))
+    CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario")) // Doopliss disguised as Mario
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
+    CALL(evt_npc_entry, STRING("ノコタロウ"), STRING("c_pnk")) // Koops, travelling with the fake Mario
+    CALL(evt_npc_entry, STRING("クラウダ"), STRING("c_windy")) // Flurrie, travelling with the fake Mario
     CALL(getYoshiColor, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -874,7 +874,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "村人Ａ", // name
+        "村人Ａ", // name (Gloomer)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerA_init, // initEvent
@@ -886,7 +886,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｂ", // name
+        "村人Ｂ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerB_init, // initEvent
@@ -898,7 +898,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｃ", // name
+        "村人Ｃ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerC_init, // initEvent
@@ -910,7 +910,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｄ", // name
+        "村人Ｄ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerD_init, // initEvent
@@ -922,7 +922,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｅ", // name
+        "村人Ｅ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerE_init, // initEvent
@@ -934,7 +934,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｋ", // name
+        "村人Ｋ", // name (a Twilighter villager (she))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerK_init, // initEvent
@@ -946,7 +946,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村長", // name
+        "村長", // name (the mayor of Twilight Town)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         village_chief_init, // initEvent
@@ -958,7 +958,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ビビアン", // name
+        "ビビアン", // name (Vivian)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         vivian_init, // initEvent
@@ -970,7 +970,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "宿店員", // name
+        "宿店員", // name (the Twilight Town innkeeper)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -980,7 +980,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村人Ａ", // name
+        "ブタ村人Ａ", // name (Freddy (a Twilighter turned into a pig))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerA_pig_init, // initEvent
@@ -992,7 +992,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村人Ｄ", // name
+        "ブタ村人Ｄ", // name (a Twilighter turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerD_pig_init, // initEvent
@@ -1004,7 +1004,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村人Ｅ", // name
+        "ブタ村人Ｅ", // name (a Twilighter turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerE_pig_init, // initEvent
@@ -1016,7 +1016,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村人Ｋ", // name
+        "ブタ村人Ｋ", // name (villager K turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerK_pig_init, // initEvent
@@ -1028,7 +1028,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村長", // name
+        "ブタ村長", // name (Mayor Dour turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         village_chief_pig_init, // initEvent
@@ -1040,7 +1040,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＡ", // name
+        "カラスＡ", // name (a Twilight Town crow (chats about the Internet))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_a_init, // initEvent
@@ -1050,7 +1050,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＢ", // name
+        "カラスＢ", // name (a Twilight Town crow (chats about the Internet))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_b_init, // initEvent
@@ -1060,7 +1060,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＣ", // name
+        "カラスＣ", // name (a Twilight Town crow (chats about energy))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_c_init, // initEvent
@@ -1070,7 +1070,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＤ", // name
+        "カラスＤ", // name (a Twilight Town crow (chats about energy))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_d_init, // initEvent
@@ -1080,7 +1080,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＥ", // name
+        "カラスＥ", // name (a Twilight Town crow (chats about energy))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_e_init, // initEvent
@@ -1332,9 +1332,9 @@ EVT_END()
  * or shadow collision, for their cutscenes.
  */
 EVT_BEGIN(usu00_3witch_init)
-    CALL(evt_npc_entry, STRING("マリリン"), STRING("c_maririn"))
-    CALL(evt_npc_entry, STRING("マジョリン"), STRING("c_majyorin"))
-    CALL(evt_npc_entry, STRING("ランペル"), STRING("c_ranpel"))
+    CALL(evt_npc_entry, STRING("マリリン"), STRING("c_maririn")) // Marilyn
+    CALL(evt_npc_entry, STRING("マジョリン"), STRING("c_majyorin")) // Beldam
+    CALL(evt_npc_entry, STRING("ランペル"), STRING("c_ranpel")) // Doopliss
     CALL(evt_npc_set_tribe, STRING("マリリン"), STRING("マリリン"))
     CALL(evt_npc_set_tribe, STRING("マジョリン"), STRING("マジョリン"))
     CALL(evt_npc_set_tribe, STRING("ランペル"), STRING("ランペル"))
@@ -2989,7 +2989,7 @@ static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_delete, STRING("宿店員"))
     CALL(evt_npc_delete, STRING("村人Ｂ"))
     CALL(evt_npc_delete, STRING("村長"))
-    CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be"))
+    CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be")) // Kammy Koopa
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ"))
     CALL(evt_npc_set_position, STRING("ババ"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
@@ -2998,7 +2998,7 @@ static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_change_interrupt, STRING("ババ"), 6, PTR(baba_talk))
     CALL(evt_npc_set_width, STRING("ババ"), 30)
     CALL(evt_npc_set_height, STRING("ババ"), 40)
-    CALL(evt_npc_entry, STRING("カンブー"), STRING("c_kanbu"))
+    CALL(evt_npc_entry, STRING("カンブー"), STRING("c_kanbu")) // Lord Crump
     CALL(evt_npc_set_tribe, STRING("カンブー"), STRING("第三勢力幹部"))
     CALL(evt_npc_set_position, STRING("カンブー"), 100, 0, 200)
     CALL(evt_npc_set_ry, STRING("カンブー"), 90)
@@ -3007,13 +3007,13 @@ static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_change_interrupt, STRING("カンブー"), 6, PTR(kanbu_talk))
     CALL(evt_npc_set_width, STRING("カンブー"), 30)
     CALL(evt_npc_set_height, STRING("カンブー"), 60)
-    CALL(evt_npc_entry, STRING("トゲノコ"), STRING("c_togenoko"))
+    CALL(evt_npc_entry, STRING("トゲノコ"), STRING("c_togenoko")) // hidden Koopatrol model for the army crowd sprites
     CALL(evt_npc_set_position, STRING("トゲノコ"), 0, -1000, 0)
-    CALL(evt_npc_entry, STRING("ハンマー"), STRING("c_burosu_h"))
+    CALL(evt_npc_entry, STRING("ハンマー"), STRING("c_burosu_h")) // hidden Hammer Bro model for the army crowd sprites
     CALL(evt_npc_set_position, STRING("ハンマー"), 0, -1000, 0)
-    CALL(evt_npc_entry, STRING("カメック"), STRING("c_kamek"))
+    CALL(evt_npc_entry, STRING("カメック"), STRING("c_kamek")) // hidden Magikoopa model for the army crowd sprites
     CALL(evt_npc_set_position, STRING("カメック"), 0, -1000, 0)
-    CALL(evt_npc_entry, STRING("ザコ"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("ザコ"), STRING("c_zako_n")) // hidden X-Naut model for the army crowd sprites
     CALL(evt_npc_set_position, STRING("ザコ"), 0, -1000, 0)
     RETURN
 EVT_END()
@@ -3728,22 +3728,22 @@ EVT_END()
  * minnnanokoe_evt ("minna no koe", everyone's voices).
  */
 static EVT_BEGIN(minnnanokoe_npc_entry)
-    CALL(evt_npc_entry, STRING("おばさん"), STRING("c_f_mama"))
+    CALL(evt_npc_entry, STRING("おばさん"), STRING("c_f_mama")) // Eve
     CALL(evt_npc_set_tribe, STRING("おばさん"), STRING("ウスグラおばさん"))
     CALL(evt_npc_set_position, STRING("おばさん"), -120, 0, -90)
     CALL(evt_npc_set_ry, STRING("おばさん"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_entry, STRING("子供１"), STRING("c_f_child_a"))
+    CALL(evt_npc_entry, STRING("子供１"), STRING("c_f_child_a")) // a Twilight Town child cheering Mario (finale)
     CALL(evt_npc_set_tribe, STRING("子供１"), STRING("ウスグラ子供A"))
     CALL(evt_npc_set_position, STRING("子供１"), -80, 0, -25)
     CALL(evt_npc_set_ry, STRING("子供１"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("子供１"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_entry, STRING("子供２"), STRING("c_f_child_b"))
+    CALL(evt_npc_entry, STRING("子供２"), STRING("c_f_child_b")) // a Twilight Town child cheering Mario (finale)
     CALL(evt_npc_set_tribe, STRING("子供２"), STRING("ウスグラ子供B"))
     CALL(evt_npc_set_position, STRING("子供２"), -50, 0, 0)
     CALL(evt_npc_set_ry, STRING("子供２"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("子供２"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_entry, STRING("子供３"), STRING("c_f_child_c"))
+    CALL(evt_npc_entry, STRING("子供３"), STRING("c_f_child_c")) // a Twilight Town child cheering Mario (finale)
     CALL(evt_npc_set_tribe, STRING("子供３"), STRING("ウスグラ子供C"))
     CALL(evt_npc_set_position, STRING("子供３"), -100, 0, 10)
     CALL(evt_npc_set_ry, STRING("子供３"), 90)

@@ -978,7 +978,7 @@ EVT_END()
  */
 static NpcSetupInfo npc_data[] = {
     {
-        "土産屋", // name
+        "土産屋", // name (Toadia)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_miyage, // initEvent
@@ -990,7 +990,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "３人娘１", // name
+        "３人娘１", // name (one of the Traveling Sisters 3)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume1, // initEvent
@@ -1002,7 +1002,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "３人娘２", // name
+        "３人娘２", // name (one of the Traveling Sisters 3)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume2, // initEvent
@@ -1014,7 +1014,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "３人娘３", // name
+        "３人娘３", // name (one of the Traveling Sisters 3)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume3, // initEvent
@@ -1026,7 +1026,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ターくん１", // name
+        "ターくん１", // name (a Poshley Heights resident)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_takun1, // initEvent
@@ -1038,7 +1038,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ターくん２", // name
+        "ターくん２", // name (a Poshley Heights resident)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_takun2, // initEvent
@@ -1050,7 +1050,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員女", // name
+        "店員女", // name (the hotel receptionist)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1059,7 +1059,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キザ野郎", // name
+        "キザ野郎", // name (Dupree)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_kiza, // initEvent
@@ -1181,39 +1181,39 @@ static KinopioData kino_dt = {
  * with their positions and facings.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("シュリョー"), STRING("c_shuryo"))
+    CALL(evt_npc_entry, STRING("シュリョー"), STRING("c_shuryo")) // Sir Grodus (epilogue)
     CALL(evt_npc_set_tribe, STRING("シュリョー"), STRING("第三勢力総統"))
     CALL(evt_npc_set_position, STRING("シュリョー"), 10, 0, 250)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 90)
     CALL(evt_npc_set_anim, STRING("シュリョー"), STRING("S_4"))
     CALL(evt_npc_set_width, STRING("シュリョー"), 40)
-    CALL(evt_npc_entry, STRING("カンブー"), STRING("c_kanbu_ibt"))
+    CALL(evt_npc_entry, STRING("カンブー"), STRING("c_kanbu_ibt")) // Lord Crump (epilogue)
     CALL(evt_npc_set_tribe, STRING("カンブー"), STRING("第三勢力幹部"))
     CALL(evt_npc_set_position, STRING("カンブー"), 90, 0, 250)
     CALL(evt_npc_set_ry, STRING("カンブー"), 270)
-    CALL(evt_npc_entry, STRING("軍団Ａ"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("軍団Ａ"), STRING("c_zako_n")) // an X-Naut (epilogue)
     CALL(evt_npc_set_tribe, STRING("軍団Ａ"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("軍団Ａ"), 35, 5, 1240)
     CALL(evt_npc_set_ry, STRING("軍団Ａ"), 270)
-    CALL(evt_npc_entry, STRING("軍団Ｂ"), STRING("c_zako_m"))
+    CALL(evt_npc_entry, STRING("軍団Ｂ"), STRING("c_zako_m")) // an X-Naut PhD (epilogue)
     CALL(evt_npc_set_tribe, STRING("軍団Ｂ"), STRING("第三勢力研究員"))
     CALL(evt_npc_set_position, STRING("軍団Ｂ"), 7, 5, 151)
     CALL(evt_npc_set_ry, STRING("軍団Ｂ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("軍団Ｂ"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_entry, STRING("軍団Ｃ"), STRING("c_zako_e"))
+    CALL(evt_npc_entry, STRING("軍団Ｃ"), STRING("c_zako_e")) // an Elite X-Naut (epilogue)
     CALL(evt_npc_set_tribe, STRING("軍団Ｃ"), STRING("第三勢力エリート"))
     CALL(evt_npc_set_position, STRING("軍団Ｃ"), -48, 0, 193)
     CALL(evt_npc_set_ry, STRING("軍団Ｃ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("軍団Ｃ"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_entry, STRING("軍団Ｄ"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("軍団Ｄ"), STRING("c_zako_n")) // an X-Naut (epilogue)
     CALL(evt_npc_set_tribe, STRING("軍団Ｄ"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("軍団Ｄ"), 142, 5, 233)
     CALL(evt_npc_set_ry, STRING("軍団Ｄ"), 270)
-    CALL(evt_npc_entry, STRING("軍団Ｅ"), STRING("c_zako_e"))
+    CALL(evt_npc_entry, STRING("軍団Ｅ"), STRING("c_zako_e")) // an Elite X-Naut (epilogue)
     CALL(evt_npc_set_tribe, STRING("軍団Ｅ"), STRING("第三勢力エリート"))
     CALL(evt_npc_set_position, STRING("軍団Ｅ"), 138, 5, 316)
     CALL(evt_npc_set_ry, STRING("軍団Ｅ"), 270)
-    CALL(evt_npc_entry, STRING("ポワン"), STRING("c_powan"))
+    CALL(evt_npc_entry, STRING("ポワン"), STRING("c_powan")) // Pennington (epilogue)
     CALL(evt_npc_set_tribe, STRING("ポワン"), STRING("ポワン探偵"))
     CALL(evt_npc_set_position, STRING("ポワン"), -29, 0, 455)
     CALL(evt_npc_set_ry, STRING("ポワン"), 90)

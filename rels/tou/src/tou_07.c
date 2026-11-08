@@ -201,7 +201,7 @@ EVT_END()
 /** NPCs of the champion's room: Grubba, Jolene and a guard. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガンス", // name
+        "ガンス", // name (Grubba)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gans, // initEvent
@@ -213,7 +213,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノシコワ", // name
+        "キノシコワ", // name (Jolene)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gans, // initEvent
@@ -225,7 +225,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン", // name
+        "ガードマン", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gans, // initEvent
@@ -500,7 +500,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 30, -95, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
 #if VERSION >= VERSION_JP
-    CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h"))
+    CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h")) // Rawk Hawk's Champ's Belt (c_bred_h, anim C_1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 56)
     CALL(evt_npc_set_position, STRING("ベルト"), LW(0), LW(1), LW(2))

@@ -13,7 +13,7 @@
 #include <dolphin/os.h>
 #include "evt/evt_damage.h"
 
-#define GAZIGAZI "ガジガジ" // "ガジガジ"
+#define GAZIGAZI "ガジガジ" // the creature that bites Mario in hazard water (no English name in the game)
 
 /**
  * Creates the Gazigazi biter NPC (model c_gazigazi) out of sight at y -1000, not billboarded.

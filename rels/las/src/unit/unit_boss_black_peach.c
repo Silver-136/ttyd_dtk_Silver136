@@ -1186,7 +1186,7 @@ inline void hand_light_init(void) {
  * builds the pattern table with make_pattern and registers the ext drawing callbacks (hand_init, hand_main).
  */
 EVT_BEGIN(shadow_queen_1000)
-    CALL(evt_npc_entry, STRING("dummy"), STRING("c_s_hand"))
+    CALL(evt_npc_entry, STRING("dummy"), STRING("c_s_hand")) // hidden helper holding the Shadow Queen's small-hand anim
     CALL(evt_npc_set_anim, STRING("dummy"), STRING("KRT_S_1"))
     CALL(evt_npc_set_position, STRING("dummy"), 0, -1000, 0)
     CALL(make_pattern)

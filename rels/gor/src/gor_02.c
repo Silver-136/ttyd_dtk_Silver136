@@ -3284,7 +3284,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "パワーアップ屋", // name
+        "パワーアップ屋", // name (Merlon)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         powerupya_init, // initEvent
@@ -3300,7 +3300,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリハカセ", // name
+        "クリハカセ", // name (Professor Frankly)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kurihakase_init, // initEvent
@@ -3312,7 +3312,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "情報屋完璧", // name
+        "情報屋完璧", // name (Grifty)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -3324,7 +3324,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "盗賊団親分", // name
+        "盗賊団親分", // name (Ishnail, leader of the Robbos)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         oyabun_init, // initEvent
@@ -3336,7 +3336,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "盗賊団１", // name
+        "盗賊団１", // name (Gus of the Robbos)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         tozokudan1_init, // initEvent
@@ -3348,7 +3348,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "盗賊団２", // name
+        "盗賊団２", // name (Garf of the Robbos)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         tozokudan2_init, // initEvent
@@ -3360,7 +3360,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "盗賊団３", // name
+        "盗賊団３", // name (Goose of the Robbos)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         tozokudan3_init, // initEvent
@@ -3372,7 +3372,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "サンダース", // name
+        "サンダース", // name (Admiral Bobbery)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         sanders_init, // initEvent
@@ -3384,7 +3384,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリボー４", // name
+        "クリボー４", // name (Goomfrey)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo4_init, // initEvent
@@ -3396,7 +3396,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "チューさん３", // name
+        "チューさん３", // name (Pierre)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan3_init, // initEvent
@@ -3408,7 +3408,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ロテン３", // name
+        "ロテン３", // name (Arfur, a Doogan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten3_init, // initEvent
@@ -3420,7 +3420,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボロドー１", // name
+        "ボロドー１", // name (Swindell, a bandit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo1_init, // initEvent
@@ -3432,7 +3432,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボロドー２", // name
+        "ボロドー２", // name (Larson, a bandit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo2_init, // initEvent
@@ -3444,7 +3444,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クラガリさん", // name
+        "クラガリさん", // name (Darkly)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuragarisan_init, // initEvent
@@ -3456,7 +3456,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ルイージ", // name
+        "ルイージ", // name (Luigi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
@@ -6020,7 +6020,7 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
 
     // A hidden Peach stand-in is loaded; a short narration plays over a camera view of the house.
-    CALL(evt_npc_entry, STRING("ピーチダミー"), STRING("c_peach"))
+    CALL(evt_npc_entry, STRING("ピーチダミー"), STRING("c_peach")) // hidden Peach stand-in in the house scene
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -7046,7 +7046,7 @@ EVT_END()
  * and map blending off.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -240, 0, -260)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 270)
@@ -7201,7 +7201,7 @@ EVT_BEGIN(gor_02_init_evt)
     // and light animations start.
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_npc_entry, STRING("盗賊"), STRING("c_borodo_n"))
+        CALL(evt_npc_entry, STRING("盗賊"), STRING("c_borodo_n")) // a bandit
         CALL(evt_npc_set_tribe, STRING("盗賊"), STRING("盗賊"))
         CALL(evt_npc_set_position, STRING("盗賊"), 0, -1000, 0)
         CALL(evt_npc_set_ry, STRING("盗賊"), 90)

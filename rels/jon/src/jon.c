@@ -363,7 +363,7 @@ u8 enemy_100[] = {
  */
 NpcSetupInfo npcEnt_kuriboo[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Goomba family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         kuriboo_init_event, // initEvent
@@ -396,7 +396,7 @@ NpcSetupInfo npcEnt_kuriboo[] = {
  */
 NpcSetupInfo npcEnt_patakuri[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Paragoomba family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patakuri_init_event, // initEvent
@@ -429,7 +429,7 @@ NpcSetupInfo npcEnt_patakuri[] = {
  */
 NpcSetupInfo npcEnt_hannya[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Spania family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         hannya_init_event, // initEvent
@@ -462,7 +462,7 @@ NpcSetupInfo npcEnt_hannya[] = {
  */
 NpcSetupInfo npcEnt_chorobon[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Fuzzy family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         chorobon_init_event, // initEvent
@@ -495,7 +495,7 @@ NpcSetupInfo npcEnt_chorobon[] = {
  */
 NpcSetupInfo npcEnt_sinnosuke[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Bald Cleft family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sinnosuke_init_event, // initEvent
@@ -528,7 +528,7 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
  */
 NpcSetupInfo npcEnt_sinemon[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Moon Cleft family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sinemon_init_event, // initEvent
@@ -561,7 +561,7 @@ NpcSetupInfo npcEnt_sinemon[] = {
  */
 NpcSetupInfo npcEnt_nokonoko[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Koopa Troopa family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         nokonoko_init_event, // initEvent
@@ -594,7 +594,7 @@ NpcSetupInfo npcEnt_nokonoko[] = {
  */
 NpcSetupInfo npcEnt_patapata[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Paratroopa family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patapata_init_event, // initEvent
@@ -627,7 +627,7 @@ NpcSetupInfo npcEnt_patapata[] = {
  */
 NpcSetupInfo npcEnt_met[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Buzzy Beetle family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         met_init_event, // initEvent
@@ -660,7 +660,7 @@ NpcSetupInfo npcEnt_met[] = {
  */
 NpcSetupInfo npcEnt_patamet[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Parabuzzy family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patamet_init_event, // initEvent
@@ -693,7 +693,7 @@ NpcSetupInfo npcEnt_patamet[] = {
  */
 NpcSetupInfo npcEnt_sambo[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Pokey family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sambo_init_event, // initEvent
@@ -726,7 +726,7 @@ NpcSetupInfo npcEnt_sambo[] = {
  */
 NpcSetupInfo npcEnt_honenoko[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Dull Bones family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         honenoko2_init_event, // initEvent
@@ -759,7 +759,7 @@ NpcSetupInfo npcEnt_honenoko[] = {
  */
 NpcSetupInfo npcEnt_karon[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Dry Bones family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         karon_init_event, // initEvent
@@ -792,7 +792,7 @@ NpcSetupInfo npcEnt_karon[] = {
  */
 NpcSetupInfo npcEnt_dokugassun[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Poison Puff family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         dokugassun_init_event, // initEvent
@@ -825,7 +825,7 @@ NpcSetupInfo npcEnt_dokugassun[] = {
  */
 NpcSetupInfo npcEnt_piders[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Pider family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         piders_init_event, // initEvent
@@ -857,7 +857,7 @@ NpcSetupInfo npcEnt_piders[] = {
  */
 NpcSetupInfo npcEnt_teresa[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Boo family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         teresa_init_event, // initEvent
@@ -890,7 +890,7 @@ NpcSetupInfo npcEnt_teresa[] = {
  */
 NpcSetupInfo npcEnt_hbom[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Bob-omb family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         hbom_init_event, // initEvent
@@ -923,7 +923,7 @@ NpcSetupInfo npcEnt_hbom[] = {
  */
 NpcSetupInfo npcEnt_bubble[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Lava Bubble family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         bubble_init_event, // initEvent
@@ -956,7 +956,7 @@ NpcSetupInfo npcEnt_bubble[] = {
  */
 NpcSetupInfo npcEnt_wanwan[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Chain-Chomp family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         wanwan_init_event, // initEvent
@@ -988,7 +988,7 @@ NpcSetupInfo npcEnt_wanwan[] = {
  */
 NpcSetupInfo npcEnt_mahoon[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Wizzerd family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         mahoon_init_event, // initEvent
@@ -1021,7 +1021,7 @@ NpcSetupInfo npcEnt_mahoon[] = {
  */
 NpcSetupInfo npcEnt_pakkun[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Piranha Plant family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         pakkun_init_event, // initEvent
@@ -1054,7 +1054,7 @@ NpcSetupInfo npcEnt_pakkun[] = {
  */
 NpcSetupInfo npcEnt_togenoko[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Koopatrol family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         togenoko_init_event, // initEvent
@@ -1087,7 +1087,7 @@ NpcSetupInfo npcEnt_togenoko[] = {
  */
 NpcSetupInfo npcEnt_basabasa2[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Swooper family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         basabasa2_init_event, // initEvent
@@ -1120,7 +1120,7 @@ NpcSetupInfo npcEnt_basabasa2[] = {
  */
 NpcSetupInfo npcEnt_togedaruma[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Bristle family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         togedaruma_init_event, // initEvent
@@ -1153,7 +1153,7 @@ NpcSetupInfo npcEnt_togedaruma[] = {
  */
 NpcSetupInfo npcEnt_pansy[] = {
     {
-        "敵", // name
+        "敵", // name (Pit of 100 Trials floor enemy (Crazee Dayzee family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         pansy_init_event, // initEvent
@@ -1186,7 +1186,7 @@ NpcSetupInfo npcEnt_pansy[] = {
  */
 NpcSetupInfo npcEnt_zonbaba[] = {
     {
-        "敵", // name
+        "敵", // name (Bonetail, the floor-100 boss of the Pit)
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, NULL, NULL, // reactionFlags..talkEvent
         enemy_common_dead_event, // deadEvent
@@ -1784,7 +1784,7 @@ EVT_END()
  */
 NpcSetupInfo npcEnt_idouya[] = {
     {
-        "移動屋", // name
+        "移動屋", // name (a Mover)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, // reactionFlags..initEvent
         move_event, // regularEvent
@@ -1957,7 +1957,7 @@ EVT_END()
  */
 NpcSetupInfo npcEnt_gyousyou[] = {
     {
-        "行商人", // name
+        "行商人", // name (Charlieton)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, // reactionFlags..initEvent
         move_event, // regularEvent
@@ -3002,7 +3002,7 @@ EVT_END()
  * or an ordinary floor (iri_12_makkino_fall).
  */
 EVT_BEGIN(iri_12_init_fall)
-    CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k"))
+    CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k")) // Pine T. Sr.
     CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("マッキノ"), NPC_STATUS_FACE_MOVE_DIR)

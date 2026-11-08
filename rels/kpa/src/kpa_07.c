@@ -44,10 +44,10 @@ EvtWord kpa_07_hipattack_eff[149];
 EvtWord kpa_07_evt[1224];
 EvtWord kpa_07_init_evt[52];
 
-/** NPCs of the Rawk Hawk scene: Kammy Koopa (ババ) and Rawk Hawk (ブレッドハート). */
+/** NPCs of the Rawk Hawk scene: Kammy Koopa (ババ), Rawk Hawk (ブレッドハート) and his Champ's Belt (belt). */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -57,7 +57,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブレッドハート", // name
+        "ブレッドハート", // name (Rawk Hawk)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -448,7 +448,7 @@ EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_entry, STRING("belt"), STRING("c_bred_h"))
+    CALL(evt_npc_entry, STRING("belt"), STRING("c_bred_h")) // Rawk Hawk's Champ's Belt (c_bred_h, anim C_1)
     CALL(evt_npc_set_tribe, STRING("belt"), STRING("ブレッドハート"))
     CALL(evt_npc_flag_onoff, 1, STRING("belt"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_pera_onoff, STRING("belt"), 0)

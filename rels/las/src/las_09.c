@@ -787,7 +787,7 @@ EVT_END()
 /** NPCs of the Shadow Sirens scene: Beldam (マジョリン), Marilyn (マリリン) and Doopliss (ランペル). */
 static NpcSetupInfo npcEnt[] = {
     {
-        "マジョリン", // name
+        "マジョリン", // name (Beldam)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         majyorin_init, // initEvent
@@ -797,7 +797,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マリリン", // name
+        "マリリン", // name (Marilyn)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         maririn_init, // initEvent
@@ -807,7 +807,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ランペル", // name
+        "ランペル", // name (Doopliss)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         ranpel_init, // initEvent
@@ -824,7 +824,7 @@ static NpcSetupInfo npcEnt[] = {
  * In the cutscene it plays the fake professor who turns out to be Doopliss.
  */
 EVT_BEGIN(majyorin_evt_npc_entry)
-    CALL(evt_npc_entry, STRING("にせ"), STRING("c_kuri_h"))
+    CALL(evt_npc_entry, STRING("にせ"), STRING("c_kuri_h")) // Doopliss disguised as Professor Frankly
     CALL(evt_npc_set_tribe, STRING("にせ"), STRING("クリハカセ"))
     CALL(evt_npc_flag_onoff, 1, STRING("にせ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("にせ"), NPC_STATUS_FACE_MOVE_DIR)

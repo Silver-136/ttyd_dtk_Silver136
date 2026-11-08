@@ -1971,7 +1971,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "飛空船", // name
+        "飛空船", // name (Stewart, the blimp conductor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_hikuu, // initEvent
@@ -1983,7 +1983,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "酒場店主", // name
+        "酒場店主", // name (manager of the Glitzville juice shop)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_sakaba, // initEvent
@@ -1995,7 +1995,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (the Glitzville souvenir shopkeeper)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mise, // initEvent
@@ -2007,7 +2007,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ホットドッグ", // name
+        "ホットドッグ", // name (Mr. Hoggle of the Hot Dog Stand)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_hot, // initEvent
@@ -2019,7 +2019,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "たまご", // name
+        "たまご", // name (the egg that hatches into the Yoshi partner)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -2028,7 +2028,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "パパ", // name
+        "パパ", // name (Goldbob)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_papa, // initEvent
@@ -2040,7 +2040,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ママ", // name
+        "ママ", // name (Sylvia)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mama, // initEvent
@@ -2052,7 +2052,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "コナリキン", // name
+        "コナリキン", // name (Bub)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_konari, // initEvent
@@ -2064,7 +2064,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "３人娘１", // name
+        "３人娘１", // name (one of the Traveling Sisters 3)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_musume_1, // initEvent
@@ -2076,7 +2076,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "３人娘２", // name
+        "３人娘２", // name (one of the Traveling Sisters 3)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_musume_2, // initEvent
@@ -2088,7 +2088,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "３人娘３", // name
+        "３人娘３", // name (one of the Traveling Sisters 3)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_musume_3, // initEvent
@@ -2100,7 +2100,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノピオ1", // name
+        "キノピオ1", // name (a Toad from Glitzville)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino_1, // initEvent
@@ -2112,7 +2112,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノピオ2", // name
+        "キノピオ2", // name (a Toad from Glitzville)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino_2, // initEvent
@@ -2124,7 +2124,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ロテン2", // name
+        "ロテン2", // name (a Doogan fight fan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_roten_2, // initEvent
@@ -2136,7 +2136,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ジュゲム1", // name
+        "ジュゲム1", // name (a Lakitu)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_jugem_1, // initEvent
@@ -2148,7 +2148,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ジュゲム2", // name
+        "ジュゲム2", // name (a Lakitu fight fan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_jugem_2, // initEvent
@@ -2160,7 +2160,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "美女", // name
+        "美女", // name (a mysterious lady in Glitzville (name not given))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_bijyo, // initEvent
@@ -2172,7 +2172,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キザ野郎", // name
+        "キザ野郎", // name (Dupree)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kiza, // initEvent
@@ -2184,7 +2184,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "サラリーマン", // name
+        "サラリーマン", // name (the Ratooey businessman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         init_sarary, // initEvent
@@ -3078,7 +3078,7 @@ static USER_FUNC(yami_view) {
  * and stops any existing regular events of キノピオ1 and ロテン1.
  */
 static EVT_BEGIN(sekai_yami_npc_init)
-    CALL(evt_npc_entry, STRING("キノシコワ"), STRING("c_ksikowa"))
+    CALL(evt_npc_entry, STRING("キノシコワ"), STRING("c_ksikowa")) // Jolene
     CALL(evt_npc_set_tribe, STRING("キノシコワ"), STRING("キノシコワ"))
     CALL(evt_npc_set_position, STRING("キノシコワ"), 4, 0, 420)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
@@ -3195,12 +3195,12 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, 350)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_entry, STRING("ブレッドハート"), STRING("c_bred_h"))
+    CALL(evt_npc_entry, STRING("ブレッドハート"), STRING("c_bred_h")) // Rawk Hawk (final 'everyone's voices' scene)
     CALL(evt_npc_set_tribe, STRING("ブレッドハート"), STRING("ブレッドハート"))
     CALL(evt_npc_set_position, STRING("ブレッドハート"), -50, 0, 250)
     CALL(evt_npc_set_ry, STRING("ブレッドハート"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("ブレッドハート"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_entry, STRING("シンエモンＡ"), STRING("c_sinemon_a"))
+    CALL(evt_npc_entry, STRING("シンエモンＡ"), STRING("c_sinemon_a")) // one of the Iron Clefts (final cheering scene)
     CALL(evt_npc_set_tribe, STRING("シンエモンＡ"), STRING("アイアンシンエモン"))
     CALL(evt_npc_set_position, STRING("シンエモンＡ"), 50, 0, 375)
     CALL(evt_npc_set_ry, STRING("シンエモンＡ"), 270)
@@ -3210,7 +3210,7 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＡ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
 #endif
-    CALL(evt_npc_entry, STRING("シンエモンＢ"), STRING("c_sinemon_m"))
+    CALL(evt_npc_entry, STRING("シンエモンＢ"), STRING("c_sinemon_m")) // one of the Iron Clefts (final cheering scene)
     CALL(evt_npc_set_tribe, STRING("シンエモンＢ"), STRING("アイアンシンエモン2"))
     CALL(evt_npc_set_position, STRING("シンエモンＢ"), -50, 0, 400)
     CALL(evt_npc_set_ry, STRING("シンエモンＢ"), 90)
@@ -3220,17 +3220,17 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＢ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
 #endif
-    CALL(evt_npc_entry, STRING("レポーター"), STRING("c_report"))
+    CALL(evt_npc_entry, STRING("レポーター"), STRING("c_report")) // a local reporter
     CALL(evt_npc_set_tribe, STRING("レポーター"), STRING("リポーター"))
     CALL(evt_npc_set_position, STRING("レポーター"), 75, 0, 350)
     CALL(evt_npc_set_ry, STRING("レポーター"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("レポーター"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_entry, STRING("カメラマン"), STRING("c_kinopio_b"))
+    CALL(evt_npc_entry, STRING("カメラマン"), STRING("c_kinopio_b")) // a Toad cameraman (final cheering scene)
     CALL(evt_npc_set_tribe, STRING("カメラマン"), STRING("キノピオ青"))
     CALL(evt_npc_set_position, STRING("カメラマン"), 100, 0, 375)
     CALL(evt_npc_set_ry, STRING("カメラマン"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("カメラマン"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_entry, STRING("ウラノコ"), STRING("c_uranoko"))
+    CALL(evt_npc_entry, STRING("ウラノコ"), STRING("c_uranoko")) // Shellshock, a fighter
     CALL(evt_npc_set_tribe, STRING("ウラノコ"), STRING("ウラノコ"))
     CALL(evt_npc_set_position, STRING("ウラノコ"), -100, 0, 300)
     CALL(evt_npc_set_ry, STRING("ウラノコ"), 90)

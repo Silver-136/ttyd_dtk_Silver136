@@ -2255,7 +2255,7 @@ static EVT_BEGIN(evt_prologue)
 EVT_END()
 
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("コルテス"), STRING("c_korutesu3"))
+    CALL(evt_npc_entry, STRING("コルテス"), STRING("c_korutesu3")) // Cortez
     CALL(evt_npc_set_tribe, STRING("コルテス"), STRING("コルテス"))
     CALL(evt_npc_set_position, STRING("コルテス"), FLOAT(-830.0f), FLOAT(147.0f), FLOAT(-98.0f))
     CALL(evt_npc_set_ry, STRING("コルテス"), 90)

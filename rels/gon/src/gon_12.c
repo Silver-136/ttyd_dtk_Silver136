@@ -294,7 +294,7 @@ EVT_END()
 /** NPC setup of gon_12: Ms. Mowz. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "チュチュリーナ", // name
+        "チュチュリーナ", // name (Ms. Mowz)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent

@@ -908,7 +908,7 @@ EVT_END()
 /** NPCs of the town square: Detective Pennington, the souvenir shop owner, the Narikin family, the madam and Kammy. */
 static NpcSetupInfo npc_data[] = {
     {
-        "ポワン探偵", // name
+        "ポワン探偵", // name (Pennington)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan, // initEvent
@@ -920,7 +920,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "土産屋", // name
+        "土産屋", // name (Toadia)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         miyageya_init, // initEvent
@@ -930,7 +930,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ナリキンママ", // name
+        "ナリキンママ", // name (Sylvia)
         0, 0, // flags..reactionFlags
         narikin_mama_init, // initEvent
         NULL, // regularEvent
@@ -941,7 +941,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ナリキンパパ", // name
+        "ナリキンパパ", // name (Goldbob)
         0, 0, // flags..reactionFlags
         narikin_papa_init, // initEvent
         NULL, // regularEvent
@@ -952,7 +952,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "コナリキン", // name
+        "コナリキン", // name (Bub)
         0, 0, // flags..reactionFlags
         konarikin_init, // initEvent
         NULL, // regularEvent
@@ -963,7 +963,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マダム", // name
+        "マダム", // name (Toodles)
         0, 0, // flags..reactionFlags
         madam_init, // initEvent
         NULL, // regularEvent
@@ -974,7 +974,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa)
         0, 0, // flags..reactionFlags
         baba_init, // initEvent
         NULL, // regularEvent
@@ -1023,7 +1023,7 @@ EVT_END()
  * and gives her the floating regular script and her talk script.
  */
 EVT_BEGIN(resaresa_entry)
-    CALL(evt_npc_entry, STRING("レサレサ"), STRING("c_resaresa"))
+    CALL(evt_npc_entry, STRING("レサレサ"), STRING("c_resaresa")) // Bow
     CALL(evt_npc_set_tribe, STRING("レサレサ"), STRING("レサレサ"))
     CALL(evt_npc_set_position, STRING("レサレサ"), 30, 15, 120)
     CALL(evt_npc_set_ry, STRING("レサレサ"), 90)
@@ -1044,7 +1044,7 @@ EVT_END()
  * and gives him the floating regular script and his talk script.
  */
 EVT_BEGIN(sebaschan_entry)
-    CALL(evt_npc_entry, STRING("セバスチャン"), STRING("c_sebaschan"))
+    CALL(evt_npc_entry, STRING("セバスチャン"), STRING("c_sebaschan")) // Bootler
     CALL(evt_npc_set_tribe, STRING("セバスチャン"), STRING("セバスチャン"))
     CALL(evt_npc_set_position, STRING("セバスチャン"), 75, 4, 90)
     CALL(evt_npc_set_ry, STRING("セバスチャン"), 270)
@@ -1544,7 +1544,7 @@ EVT_END()
  * and parks him off screen at (0, -1000, 0) until the shop scene calls for him.
  */
 EVT_BEGIN(iri_27_npc_entry)
-    CALL(evt_npc_entry, STRING("ルイージ"), STRING("c_luigi"))
+    CALL(evt_npc_entry, STRING("ルイージ"), STRING("c_luigi")) // Luigi (Trouble Center request 27)
     CALL(evt_npc_set_tribe, STRING("ルイージ"), STRING("ルイージ"))
     CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("ルイージ"), NPC_STATUS_FACE_MOVE_DIR)

@@ -397,7 +397,7 @@ EVT_END()
 /** NPC setup of dou_11: the named sailors C, D and E of the crowd, Francesca and Frankie. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "水夫C", // name
+        "水夫C", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_c_init, // initEvent
@@ -409,7 +409,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫D", // name
+        "水夫D", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_d_init, // initEvent
@@ -421,7 +421,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫E", // name
+        "水夫E", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_e_init, // initEvent
@@ -433,7 +433,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "モニー", // name
+        "モニー", // name (Francesca)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
@@ -445,7 +445,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピートン", // name
+        "ピートン", // name (Frankie)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent

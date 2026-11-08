@@ -726,7 +726,7 @@ EVT_END()
 /** NPC setup of dou_04: the Goomba Kurichero, whose talk script runs job 21. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "クリチェロ", // name
+        "クリチェロ", // name (Goom Goom (Trouble Center client))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         kuribo_init, // initEvent

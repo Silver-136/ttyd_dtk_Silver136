@@ -135,7 +135,7 @@ EVT_END()
 /** NPC setup entry for Jabble (ちびトゲ), the little Jabbi. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ちびトゲ", // name
+        "ちびトゲ", // name (Jabble)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         chibitoge_init, // initEvent

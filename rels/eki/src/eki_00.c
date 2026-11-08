@@ -1570,9 +1570,9 @@ EVT_END()
  * and registers the ext-pose callbacks (ext_moamoa_data/init/main/dispent) that draw the swarm.
  */
 static EVT_BEGIN(evt_moamoa_init)
-    CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
+    CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a")) // hidden Smorg NPC behind the swarm sprites
     CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
-    CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
+    CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b")) // hidden Smorg NPC behind the swarm sprites
     CALL(evt_npc_set_position, STRING("moa_b"), 0, -1000, 0)
     CALL(evt_ext_entry, 150, PTR(ext_moamoa_data), PTR(ext_moamoa_init), PTR(ext_moamoa_main), PTR(ext_moamoa_dispent))
     RETURN

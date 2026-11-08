@@ -472,7 +472,7 @@ EVT_END()
 /** NPCs of the skull rock before the Embers are beaten: Bobbery, Flavio and the two Embers. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "サンダース", // name
+        "サンダース", // name (Admiral Bobbery)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sanders_init, // initEvent
@@ -484,7 +484,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マルコ", // name
+        "マルコ", // name (Flavio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         marco_init, // initEvent
@@ -496,7 +496,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "エルモス１", // name
+        "エルモス１", // name (an Ember fought at the skull rock)
         NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -513,7 +513,7 @@ static NpcSetupInfo npcEnt[] = {
         7, // battleInfoId
     },
     {
-        "エルモス２", // name
+        "エルモス２", // name (an Ember fought at the skull rock)
         NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -535,7 +535,7 @@ static NpcSetupInfo npcEnt[] = {
 /** NPCs of the skull rock once the Embers have been beaten: Bobbery and Flavio. */
 NpcSetupInfo npcEnt_after[] = {
     {
-        "サンダース", // name
+        "サンダース", // name (Admiral Bobbery)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sanders_init, // initEvent
@@ -547,7 +547,7 @@ NpcSetupInfo npcEnt_after[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マルコ", // name
+        "マルコ", // name (Flavio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         marco_init, // initEvent

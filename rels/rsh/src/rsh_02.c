@@ -803,7 +803,7 @@ EVT_END()
 /** NPCs of the passenger car: the gourmet Toad, Pennington, the ghost, Toron and the salaryman. */
 static NpcSetupInfo npc_data[] = {
     {
-        "グルメキノピオ", // name
+        "グルメキノピオ", // name (Heff T.)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gurume, // initEvent
@@ -815,7 +815,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ポワン探偵", // name
+        "ポワン探偵", // name (Pennington)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_powan, // talkEvent
@@ -825,7 +825,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ゆうれい", // name
+        "ゆうれい", // name (Ghost T.)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_yuurei, // initEvent
@@ -837,7 +837,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トロン", // name
+        "トロン", // name (Zip Toad)
         NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_toron, // initEvent
@@ -849,7 +849,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "サラリーマン", // name
+        "サラリーマン", // name (the Ratooey businessman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_sarary, // talkEvent

@@ -1160,7 +1160,7 @@ static ExtTexInfo ext_data[] = {
  */
 EVT_BEGIN(evt_bom1000)
     CALL(make_ext_table)
-    CALL(evt_npc_entry, STRING("dummy"), STRING("c_bom_sen"))
+    CALL(evt_npc_entry, STRING("dummy"), STRING("c_bom_sen")) // hidden Bob-omb NPC behind the crowd sprites
     CALL(evt_ext_entry, 1000, PTR(ext_data), PTR(ext_init), PTR(ext_main), PTR(ext_dispent))
     RETURN
 EVT_END()
@@ -2384,7 +2384,7 @@ EVT_END()
  * and her talk script musume_talk.
  */
 static EVT_BEGIN(musume_a_entry)
-    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202`"), STRING("c_dance_r"))
+    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202`"), STRING("c_dance_r")) // one of the Traveling Sisters 3 (red)
     CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202`"), STRING("\227x\202\350\216q"))
     CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202`"), 370, 5, -120)
     CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202`"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
@@ -2397,7 +2397,7 @@ EVT_END()
  * and her talk script musume_talk.
  */
 static EVT_BEGIN(musume_b_entry)
-    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202a"), STRING("c_dance_p"))
+    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202a"), STRING("c_dance_p")) // one of the Traveling Sisters 3 (pink)
     CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202a"), STRING("\227x\202\350\216q\203s\203\223\203N"))
     CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202a"), 400, 5, -150)
     CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202a"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
@@ -2410,7 +2410,7 @@ EVT_END()
  * and her talk script musume_talk.
  */
 static EVT_BEGIN(musume_c_entry)
-    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202b"), STRING("c_dance_k"))
+    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202b"), STRING("c_dance_k")) // one of the Traveling Sisters 3 (yellow-green)
     CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202b"), STRING("\227x\202\350\216q\211\251\227\316"))
     CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202b"), 430, 5, -100)
     CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202b"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
@@ -2421,7 +2421,7 @@ EVT_END()
 /** The cast of the village square: the mayor, Nitro, Pentrit, Surary, the Bob-omb soldier D and General White. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"村長"*/"\221\272\222\267", // name
+        /*"村長"*/"\221\272\222\267", // name (the mayor of Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_soncho, // initEvent
@@ -2433,7 +2433,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ニトロ"*/"\203j\203g\203\215", // name
+        /*"ニトロ"*/"\203j\203g\203\215", // name (Nob, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_nitoro, // initEvent
@@ -2445,7 +2445,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ペントリット"*/("\203y\203\223\203g\203\212\203b\203g"), // name
+        /*"ペントリット"*/("\203y\203\223\203g\203\212\203b\203g"), // name (Rob, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_pentrit, // initEvent
@@ -2457,7 +2457,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"スラリー"*/("\203X\203\211\203\212\201["), // name
+        /*"スラリー"*/("\203X\203\211\203\212\201["), // name (Fred, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_surary, // initEvent
@@ -2469,7 +2469,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボムヘイD"*/"\203{\203\200\203w\203CD", // name
+        /*"ボムヘイD"*/"\203{\203\200\203w\203CD", // name (a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_d, // initEvent
@@ -2481,7 +2481,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ホワイト"*/("\203z\203\217\203C\203g"), // name
+        /*"ホワイト"*/("\203z\203\217\203C\203g"), // name (General White)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent

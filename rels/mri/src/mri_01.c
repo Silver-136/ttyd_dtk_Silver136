@@ -835,7 +835,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガイド", // name
+        "ガイド", // name (Punio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         guide_init, // initEvent
@@ -847,7 +847,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ライバル", // name
+        "ライバル", // name (Puniper)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         rival_init, // initEvent
@@ -859,7 +859,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ族長老", // name
+        "プニ族長老", // name (the Puni elder)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         elder_init, // initEvent
@@ -871,7 +871,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ族１", // name
+        "プニ族１", // name (a Puni villager (the first talkable one))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_1_init, // initEvent
@@ -883,7 +883,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ族２", // name
+        "プニ族２", // name (a Puni)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_2_init, // initEvent
@@ -895,7 +895,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ族", // name
+        "プニ族", // name (a Puni villager who flees from Bowser)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_init, // initEvent
@@ -905,7 +905,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ族B", // name
+        "プニ族B", // name (a second Puni villager who flees from Bowser)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_init, // initEvent
@@ -915,7 +915,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガイド妹", // name
+        "ガイド妹", // name (Petuni)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         sister_init, // initEvent
@@ -2338,47 +2338,47 @@ s32 puni_position[] = {
  * the Magnus von Grapple robot with its cross and circle parts, five X-Naut grunts and a dummy.
  */
 EVT_BEGIN(boss_battle_init)
-    CALL(evt_npc_entry, STRING("第三勢力幹部"), STRING("c_kanbu_ibt"))
+    CALL(evt_npc_entry, STRING("第三勢力幹部"), STRING("c_kanbu_ibt")) // Lord Crump
     CALL(evt_npc_set_tribe, STRING("第三勢力幹部"), STRING("第三勢力幹部"))
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_entry, STRING("ボスロボット"), STRING("c_mb_robo_1a"))
+    CALL(evt_npc_entry, STRING("ボスロボット"), STRING("c_mb_robo_1a")) // Magnus von Grapple
     CALL(evt_npc_set_tribe, STRING("ボスロボット"), STRING("ボスロボット"))
     CALL(evt_npc_set_position, STRING("ボスロボット"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ボスロボット"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("ボスロボット"), 270)
-    CALL(evt_npc_entry, STRING("ボスロボットバツ"), STRING("c_mb_robo_c"))
+    CALL(evt_npc_entry, STRING("ボスロボットバツ"), STRING("c_mb_robo_c")) // the cross mark drawn on Magnus von Grapple
     CALL(evt_npc_set_tribe, STRING("ボスロボットバツ"), STRING("ボスロボットバツ"))
     CALL(evt_npc_set_position, STRING("ボスロボットバツ"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ボスロボットバツ"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_ry, STRING("ボスロボットバツ"), 270)
-    CALL(evt_npc_entry, STRING("ボスロボットマル"), STRING("c_mb_robo_1a"))
+    CALL(evt_npc_entry, STRING("ボスロボットマル"), STRING("c_mb_robo_1a")) // circle mark kept at Magnus von Grapple's locator
     CALL(evt_npc_set_tribe, STRING("ボスロボットマル"), STRING("ボスロボット"))
     CALL(evt_npc_set_position, STRING("ボスロボットマル"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ボスロボットマル"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_anim, STRING("ボスロボットマル"), STRING("L_1"))
     CALL(evt_npc_set_ry, STRING("ボスロボットマル"), 270)
-    CALL(evt_npc_entry, STRING("部下１"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("部下１"), STRING("c_zako_n")) // an X-Naut grunt in the boss scene
     CALL(evt_npc_set_tribe, STRING("部下１"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("部下１"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("部下１"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_entry, STRING("部下２"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("部下２"), STRING("c_zako_n")) // an X-Naut grunt in the boss scene
     CALL(evt_npc_set_tribe, STRING("部下２"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("部下２"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("部下２"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_entry, STRING("部下３"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("部下３"), STRING("c_zako_n")) // an X-Naut grunt in the boss scene
     CALL(evt_npc_set_tribe, STRING("部下３"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("部下３"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("部下３"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_entry, STRING("部下４"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("部下４"), STRING("c_zako_n")) // an X-Naut grunt in the boss scene
     CALL(evt_npc_set_tribe, STRING("部下４"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("部下４"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("部下４"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_entry, STRING("部下５"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("部下５"), STRING("c_zako_n")) // an X-Naut grunt in the boss scene
     CALL(evt_npc_set_tribe, STRING("部下５"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("部下５"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("部下５"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_zako_n")) // invisible stand-in that bounces the Emerald Star in
     CALL(evt_npc_set_position, STRING("ダミー"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GW(10), 0)
@@ -3852,7 +3852,7 @@ EVT_BEGIN(mri_01_init_evt)
         CALL(evt_mario_kill_party, 0)
 
         // Bowser's visit: Kammy is created and the first (or, later, second) part of the interlude plays.
-        CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be"))
+        CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be")) // Kammy Koopa
         CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ（地上）"))
         CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 1, STRING("ババ"), NPC_STATUS_FACE_MOVE_DIR)

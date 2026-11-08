@@ -126,7 +126,7 @@ static BeroEntry bero_data[] = {
 /** NPCs of this room: the guard who brings Mario here before the title match (evt_tojikome). */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガードマン", // name
+        "ガードマン", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

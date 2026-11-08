@@ -1831,7 +1831,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "うらない師", // name
+        "うらない師", // name (Merluvlee, the fortune-teller)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         uranaisi_init, // initEvent
@@ -1843,7 +1843,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "星マニア", // name
+        "星マニア", // name (Dazzle)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
 #if VERSION <= VERSION_DEMO_JP
@@ -1859,7 +1859,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "情報屋ケチ", // name
+        "情報屋ケチ", // name (Wonky)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1871,7 +1871,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリボー５", // name
+        "クリボー５", // name (a Goomba of the sewers)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo5_init, // initEvent
@@ -1883,7 +1883,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "チューさん４", // name
+        "チューさん４", // name (a Squeek archaeologist who lost her partner)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan4_init, // initEvent
@@ -1895,7 +1895,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボロドー３", // name
+        "ボロドー３", // name (Eddie the Mask)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo3_init, // initEvent
@@ -1907,7 +1907,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボロドー４", // name
+        "ボロドー４", // name (a Bandit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo4_init, // initEvent
@@ -1919,7 +1919,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピンクボム兵", // name
+        "ピンクボム兵", // name (a pink Bob-omb who wants to sell tips like Wonky)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         pinkbom_init, // initEvent
@@ -1931,7 +1931,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マスター２", // name
+        "マスター２", // name (Herb T., the cola bar owner)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         master_2_init, // initEvent
@@ -1943,7 +1943,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (manager of the Deepdown Depot)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -3182,7 +3182,7 @@ EVT_END()
  * at (-540, 20, -25) facing right, ignoring walls and unable to be touched.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella (epilogue)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -540, 20, -25)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)

@@ -764,7 +764,7 @@ EVT_BEGIN(evt_diary_read)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_npc_check, STRING("\202\344\202\244\202\352\202\242"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_npc_entry, STRING("\202\344\202\244\202\352\202\242"), STRING("c_ghost_k"))
+        CALL(evt_npc_entry, STRING("\202\344\202\244\202\352\202\242"), STRING("c_ghost_k")) // Ghost T., who appears when Mario reads his diary
         CALL(evt_npc_set_position, STRING("\202\344\202\244\202\352\202\242"), 0, -1000, 0)
         CALL(evt_npc_set_tribe, STRING("\202\344\202\244\202\352\202\242"), STRING("\202\344\202\244\202\352\202\242"))
         CALL(evt_npc_set_anim, STRING("\202\344\202\244\202\352\202\242"), STRING("O_1"))

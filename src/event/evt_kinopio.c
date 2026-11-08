@@ -547,7 +547,7 @@ EVT_BEGIN(evt_50)
     CALL(get_npcname, LW(10))
 #if VERSION >= VERSION_JP
     CALL(evt_npc_get_position, LW(10), LW(13), LW(14), LW(15))
-    CALL(evt_npc_entry, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("c_jugem_c"))
+    CALL(evt_npc_entry, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("c_jugem_c")) // Lakitu cameraman who takes the 50th-stay inn photo
     CALL(evt_npc_set_tribe, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("\203J\203\201\203\211\203}\203\223"))
     CALL(cameraman_on)
     CALL(evt_npc_flag_onoff, 1, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), NPC_FLAG_INSTANT_TURN)

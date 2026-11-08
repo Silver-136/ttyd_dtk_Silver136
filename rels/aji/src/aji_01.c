@@ -2404,7 +2404,7 @@ EVT_BEGIN(peach_evt_init)
     // Chapter 5: a guard stands watch while Peach works on the invisibility potion and the data disk.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_45_PEACH_POTION_PUZZLE)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
-            CALL(evt_npc_entry, STRING("見張り"), STRING("c_zako_n"))
+            CALL(evt_npc_entry, STRING("見張り"), STRING("c_zako_n")) // an X-Naut guard watching while Peach is invisible
             CALL(evt_npc_set_tribe, STRING("見張り"), STRING("第三勢力部下"))
             CALL(evt_npc_set_position, STRING("見張り"), -900, 1000, -50)
             CALL(evt_npc_set_ry, STRING("見張り"), 90)
@@ -2569,7 +2569,7 @@ EVT_END()
 /** The three X-Naut underlings (teshita) in the central hall, each with its own setup and talk scripts. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "手下１", // name
+        "手下１", // name (an X-Naut underling in the central hall)
         0, 0, // flags..reactionFlags
         teshita1_init, // initEvent
         NULL, // regularEvent
@@ -2580,7 +2580,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "手下２", // name
+        "手下２", // name (an X-Naut underling in the central hall)
         0, 0, // flags..reactionFlags
         teshita2_init, // initEvent
         teshita2_regl, // regularEvent
@@ -2591,7 +2591,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "手下３", // name
+        "手下３", // name (an X-Naut underling in the central hall)
         0, 0, // flags..reactionFlags
         teshita3_init, // initEvent
         teshita3_regl, // regularEvent

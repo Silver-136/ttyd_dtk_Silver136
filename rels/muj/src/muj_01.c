@@ -944,7 +944,7 @@ EVT_END()
  * called from muj_01_init_evt from STG8_00_START on.
  */
 static EVT_BEGIN(musume_a_entry)
-    CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r"))
+    CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r")) // one of the Traveling Sisters 3
     CALL(evt_npc_set_tribe, STRING("３人娘Ａ"), STRING("踊り子"))
     CALL(evt_npc_set_position, STRING("３人娘Ａ"), 200, -10, 360)
     CALL(evt_npc_set_ry, STRING("３人娘Ａ"), 90)
@@ -955,7 +955,7 @@ EVT_END()
 
 /** Adds the second dancer (3人娘Ｂ, model c_dance_p, the pink one) with walk and talk animations and musume_talk. */
 static EVT_BEGIN(musume_b_entry)
-    CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p"))
+    CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p")) // one of the Traveling Sisters 3
     CALL(evt_npc_set_tribe, STRING("３人娘Ｂ"), STRING("踊り子ピンク"))
     CALL(evt_npc_set_position, STRING("３人娘Ｂ"), 235, -7, 310)
     CALL(evt_npc_set_ry, STRING("３人娘Ｂ"), 90)
@@ -969,7 +969,7 @@ EVT_END()
  * and musume_talk.
  */
 static EVT_BEGIN(musume_c_entry)
-    CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k"))
+    CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k")) // one of the Traveling Sisters 3
     CALL(evt_npc_set_tribe, STRING("３人娘Ｃ"), STRING("踊り子黄緑"))
     CALL(evt_npc_set_position, STRING("３人娘Ｃ"), 280, -10, 300)
     CALL(evt_npc_set_ry, STRING("３人娘Ｃ"), 90)
@@ -984,7 +984,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガラの悪い水夫", // name
+        "ガラの悪い水夫", // name (Pa-Patch, a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         garawaru_init, // initEvent
@@ -996,7 +996,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マルコ", // name
+        "マルコ", // name (Flavio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         marco_init, // initEvent
@@ -1008,7 +1008,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "めがね水夫", // name
+        "めがね水夫", // name (Four-Eyes, a Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         megane_init, // initEvent
@@ -1020,7 +1020,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "オドオド水夫", // name
+        "オドオド水夫", // name (the timid Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         odoodo_init, // initEvent
@@ -1032,7 +1032,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (Thriff T.)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1042,7 +1042,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "宿店員", // name
+        "宿店員", // name (a Toad girl who runs the inn)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1052,7 +1052,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫A", // name
+        "水夫A", // name (a Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_a_init, // initEvent
@@ -1064,7 +1064,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫ボム兵", // name
+        "水夫ボム兵", // name (a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_bomb_init, // initEvent
@@ -1076,7 +1076,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫D", // name
+        "水夫D", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_d_init, // initEvent
@@ -1088,7 +1088,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボロ水夫A", // name
+        "ボロ水夫A", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         borosuifu_a_init, // initEvent
@@ -1100,7 +1100,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボロ水夫B", // name
+        "ボロ水夫B", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         borosuifu_b_init, // initEvent
@@ -1112,7 +1112,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "モニー", // name
+        "モニー", // name (Francesca)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
@@ -1124,7 +1124,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピートン", // name
+        "ピートン", // name (Frankie)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent
@@ -1136,7 +1136,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "エルモスA", // name
+        "エルモスA", // name (an Ember that attacks the crew's camp)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1146,7 +1146,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "エルモスB", // name
+        "エルモスB", // name (an Ember that attacks the crew's camp)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1156,7 +1156,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "エルモスC", // name
+        "エルモスC", // name (an Ember that attacks the crew's camp)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -2283,11 +2283,11 @@ EVT_END()
  * and stops sailor D's regular event and moves him beside them.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella (epilogue)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 0, 0, 200)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 270)
-    CALL(evt_npc_entry, STRING("サンダース"), STRING("c_bomt_n"))
+    CALL(evt_npc_entry, STRING("サンダース"), STRING("c_bomt_n")) // Admiral Bobbery
     CALL(evt_npc_set_tribe, STRING("サンダース"), STRING("サンダース"))
     CALL(evt_npc_set_position, STRING("サンダース"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("サンダース"), 90)

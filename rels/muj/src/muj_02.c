@@ -534,7 +534,7 @@ EVT_END()
 /** NPCs of the jungle clearing: Francesca and Frankie, the couple looking for their lost wedding ring. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "モニー", // name
+        "モニー", // name (Francesca)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
@@ -546,7 +546,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピートン", // name
+        "ピートン", // name (Frankie)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent

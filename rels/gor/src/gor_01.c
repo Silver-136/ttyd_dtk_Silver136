@@ -2537,7 +2537,7 @@ EVT_END()
 /** NPC setup of Kick, Luigi's friend in chapters 2 and 3. */
 NpcSetupInfo kickEnt[] = {
     {
-        "キック", // name
+        "キック", // name (Blooey, Luigi's Blooper friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kick_init, // initEvent
@@ -2567,7 +2567,7 @@ EVT_END()
 /** NPC setup of Torque, Luigi's friend in chapters 4 and 5. */
 NpcSetupInfo torqueEnt[] = {
     {
-        "トルク", // name
+        "トルク", // name (Torque, Luigi's friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         torque_init, // initEvent
@@ -2605,7 +2605,7 @@ EVT_END()
 /** NPC setup of the second Kick, on the rooftop after Lord Crump's defeat. */
 NpcSetupInfo kick2Ent[] = {
     {
-        "キック２", // name
+        "キック２", // name (Blooey, Luigi's Blooper friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kick2_init, // initEvent
@@ -2625,7 +2625,7 @@ static EVT_BEGIN(borodo2_init)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)
                     IF_INT_EQUAL(GSWF_TROUBLE_WORK(3), 0)
-                        CALL(evt_npc_entry, STRING("ボロドー２"), STRING("c_borodo_n"))
+                        CALL(evt_npc_entry, STRING("ボロドー２"), STRING("c_borodo_n")) // Larson, the thief from Goomther's request
                         CALL(evt_npc_set_tribe, STRING("ボロドー２"), STRING("盗賊"))
                         CALL(evt_npc_flag_onoff, 1, STRING("ボロドー２"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                         CALL(evt_npc_set_position, STRING("ボロドー２"), 402, 0, -302)
@@ -2786,7 +2786,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "バッジ店長", // name
+        "バッジ店長", // name (manager of the Lovely Howz of Badges)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         badgemaster_init, // initEvent
@@ -2798,7 +2798,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "バッジ店員", // name
+        "バッジ店員", // name (clerk at the Lovely Howz of Badges)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -2810,7 +2810,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノじい", // name
+        "キノじい", // name (Toadsworth)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kinoji_init, // initEvent
@@ -2822,7 +2822,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ナンシー", // name
+        "ナンシー", // name (Zess T.)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         nancy_init, // initEvent
@@ -2834,7 +2834,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マルコ", // name
+        "マルコ", // name (Flavio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         marco_init, // initEvent
@@ -2846,7 +2846,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マスター", // name
+        "マスター", // name (Podley, the innkeeper)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         master_init, // initEvent
@@ -2858,7 +2858,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店長", // name
+        "店長", // name (Plenn T. (Toad Bros. Bazaar))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -2867,7 +2867,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (Thriff T., of Toad Bros. Bazaar)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         shoptender_init, // initEvent
@@ -2879,7 +2879,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "宿店員", // name
+        "宿店員", // name (the woman who runs the Rogueport inn)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         yadotender_init, // initEvent
@@ -2891,7 +2891,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ロテン１", // name
+        "ロテン１", // name (a Doogan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten1_init, // initEvent
@@ -2903,7 +2903,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ロテン２", // name
+        "ロテン２", // name (a Doogan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten2_init, // initEvent
@@ -2915,7 +2915,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリボー１", // name
+        "クリボー１", // name (Goomther)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo1_init, // initEvent
@@ -2927,7 +2927,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリボー２", // name
+        "クリボー２", // name (a local Goomba)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         kuribo2_init, // initEvent
@@ -2939,7 +2939,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリボー３", // name
+        "クリボー３", // name (McGoomba)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo3_init, // initEvent
@@ -2951,7 +2951,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "チューさん１", // name
+        "チューさん１", // name (Mousimilian)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan1_init, // initEvent
@@ -2963,7 +2963,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "チューさん２", // name
+        "チューさん２", // name (a regular who recounts every love of his life)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan2_init, // initEvent
@@ -2975,7 +2975,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫ボム兵", // name
+        "水夫ボム兵", // name (a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         bomhei_init, // initEvent
@@ -2987,7 +2987,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ボッタクール", // name
+        "ボッタクール", // name (Charlieton)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         bottakuru_init, // initEvent
@@ -2999,7 +2999,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ルイージ", // name
+        "ルイージ", // name (Luigi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
@@ -3011,7 +3011,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "盗賊", // name
+        "盗賊", // name (a bandit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         thief_init, // initEvent
@@ -3023,7 +3023,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノピコ", // name
+        "キノピコ", // name (a Toadette (kinopiko) entry with no events)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -4414,13 +4414,13 @@ EVT_BEGIN(bar_door_anime)
 EVT_END()
 
 EVT_BEGIN(christine_nakama_init)
-    CALL(evt_npc_entry, STRING("マフィア１"), STRING("c_m_buka"))
+    CALL(evt_npc_entry, STRING("マフィア１"), STRING("c_m_buka")) // Vinny, a Pianta
     CALL(evt_npc_set_tribe, STRING("マフィア１"), STRING("マフィア"))
-    CALL(evt_npc_entry, STRING("マフィア２"), STRING("c_m_buka"))
+    CALL(evt_npc_entry, STRING("マフィア２"), STRING("c_m_buka")) // Tony, a Pianta
     CALL(evt_npc_set_tribe, STRING("マフィア２"), STRING("マフィア"))
-    CALL(evt_npc_entry, STRING("盗賊団１"), STRING("c_monban"))
+    CALL(evt_npc_entry, STRING("盗賊団１"), STRING("c_monban")) // Gus of the Robbos
     CALL(evt_npc_set_tribe, STRING("盗賊団１"), STRING("盗賊団"))
-    CALL(evt_npc_entry, STRING("盗賊団２"), STRING("c_monban"))
+    CALL(evt_npc_entry, STRING("盗賊団２"), STRING("c_monban")) // Garf of the Robbos
     CALL(evt_npc_set_tribe, STRING("盗賊団２"), STRING("盗賊団"))
     CALL(evt_npc_set_position, STRING("マフィア１"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("マフィア２"), 0, -1000, 0)
@@ -4906,7 +4906,7 @@ EVT_BEGIN(box_copy)
 EVT_END()
 
 EVT_BEGIN(ultrahammer_check)
-    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_kinopio"))
+    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_kinopio")) // invisible stand-in that carries the item box in a jump
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -5125,7 +5125,7 @@ static EVT_BEGIN(gor_goki2_urouro)
 EVT_END()
 
 static EVT_BEGIN(koopa_npc_entry)
-    CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be"))
+    CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be")) // Kammy Koopa (chapter 6 Bowser interlude)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ"))
     CALL(evt_npc_set_position, STRING("ババ"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 270)
@@ -5654,7 +5654,7 @@ s32 iri_16_item_tbl[] = {
  */
 static EVT_BEGIN(iri_16_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
-        CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu"))
+        CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu")) // Ms. Mowz
         CALL(evt_npc_set_tribe, STRING("チュチュリーナ"), STRING("チュチュリーナ"))
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), -516, 189, -110)
         CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 90)
@@ -5851,7 +5851,7 @@ EVT_END()
  * both intangible and with move animation.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella (epilogue)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 55, 154, -110)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 270)

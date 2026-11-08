@@ -1355,7 +1355,7 @@ EVT_END()
  * (most demo characters rise straight up through the middle of the screen).
  */
 EVT_BEGIN(end_credit_gesso_evt)
-    CALL(evt_npc_entry, STRING("gesso"), STRING("c_gesso"))
+    CALL(evt_npc_entry, STRING("gesso"), STRING("c_gesso")) // Blooper in the credits parade
     CALL(evt_npc_set_anim, STRING("gesso"), STRING("GSO_S2_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("gesso"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("gesso"))
@@ -1379,7 +1379,7 @@ EVT_END()
 
 /** Parade script for Hooktail (ゴンババ): the silhouette enters from the right in the early demos, from the left in the other versions. */
 EVT_BEGIN(end_credit_gonbaba_evt)
-    CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba"))
+    CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba")) // Hooktail in the credits parade
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_set_anim, STRING("gonbaba"), STRING("GNB_S_1"))
 #else
@@ -1432,7 +1432,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(end_credit_batten_evt)
-    CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1b"))
+    CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1b")) // Magnus von Grapple in the credits parade
     CALL(evt_npc_set_anim, STRING("batten"), STRING("MGN_W_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("batten"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("batten"))
@@ -1444,7 +1444,7 @@ EVT_BEGIN(end_credit_batten_evt)
  * falls down the screen as a silhouette.
  */
 EVT_BEGIN(end_credit_batten2_evt)
-    CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2a"))
+    CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2a")) // Magnus von Grapple 2.0 in the credits parade
     CALL(evt_npc_set_anim, STRING("batten2"), STRING("J_2"))
     CALL(evt_npc_flag_onoff, 1, STRING("batten2"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("batten2"))
@@ -1475,7 +1475,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 /** Early-demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_korutesu_evt)
-    CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1"))
+    CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1")) // Cortez in the credits parade (early demos)
     CALL(evt_npc_set_anim, STRING("kortesu"), STRING("KRT_S_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("kortesu"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("kortesu"))
@@ -1484,7 +1484,7 @@ EVT_BEGIN(end_credit_korutesu_evt)
 
 /** JP and later: parade script for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
 EVT_BEGIN(end_credit_atomic_evt)
-    CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs"))
+    CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs")) // Atomic Boo in the credits parade
     CALL(evt_npc_set_anim, STRING("atomic"), STRING("W_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("atomic"), NPC_FLAG_NO_CULL | NPC_FLAG_INSTANT_TURN)
     CALL(evt_end_npc_silhouette_on, STRING("atomic"))
@@ -1528,7 +1528,7 @@ EVT_BEGIN(end_credit_batten2_evt)
 
 /** JP and later: parade script for Cortez (korutesu): enters from the left, pauses, then returns left. */
 EVT_BEGIN(end_credit_korutesu_evt)
-    CALL(evt_npc_entry, STRING("korutesu"), STRING("c_korutesu1"))
+    CALL(evt_npc_entry, STRING("korutesu"), STRING("c_korutesu1")) // Cortez in the credits parade
     CALL(evt_npc_set_anim, STRING("korutesu"), STRING("KRT_S_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("korutesu"), NPC_FLAG_NO_CULL | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("korutesu"), 90)
@@ -1570,7 +1570,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 /** Early-demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_queen_evt)
-    CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage"))
+    CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage")) // the Shadow Queen in the credits parade
     CALL(evt_npc_set_anim, STRING("queen"), STRING("KRT_S_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("queen"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("queen"))
@@ -1583,7 +1583,7 @@ EVT_BEGIN(end_credit_queen_evt)
  */
 EVT_BEGIN(end_credit_para_evt)
     WAIT_MS(1000)
-    CALL(evt_npc_entry, STRING("para"), STRING("c_bom_sen"))
+    CALL(evt_npc_entry, STRING("para"), STRING("c_bom_sen")) // a Bob-omb crowd figure in the credits parade
     CALL(evt_npc_set_anim, STRING("para"), STRING("S_2"))
     CALL(evt_npc_flag_onoff, 1, STRING("para"), NPC_FLAG_NO_CULL | NPC_FLAG_INSTANT_TURN)
     CALL(evt_end_npc_silhouette_on, STRING("para"))
@@ -2280,10 +2280,10 @@ USER_FUNC(evt_end_moamoa_exit) {
  */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(end_credit_moamoa_evt)
-    CALL(evt_npc_entry, STRING("モアモアダミー"), STRING("c_n_moa_a"))
+    CALL(evt_npc_entry, STRING("モアモアダミー"), STRING("c_n_moa_a")) // hidden small Smorg behind the giant Smorg silhouette
     CALL(evt_npc_set_position, STRING("モアモアダミー"), 0, -1000, 0)
     CALL(evt_end_npc_silhouette_on, STRING("モアモアダミー"))
-    CALL(evt_npc_entry, STRING("モアモア"), STRING("c_g_moamoa"))
+    CALL(evt_npc_entry, STRING("モアモア"), STRING("c_g_moamoa")) // the giant Smorg in the credits parade
     CALL(evt_npc_set_anim, STRING("モアモア"), STRING("S_3"))
     CALL(evt_npc_set_position, STRING("モアモア"), 0, -1000, 0)
     CALL(evt_npc_set_scale, STRING("モアモア"), FLOAT(0.5f), FLOAT(0.5f), FLOAT(0.5f))

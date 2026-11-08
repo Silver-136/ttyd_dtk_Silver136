@@ -1,5 +1,5 @@
 // kpa_01 (クッパ編, Bowser's interludes): a Bowser's Castle scene in the hall with Kammy Koopa, the Hammer Bros. and the
-// Spiny guards.
+// Koopatrol guards.
 
 #include "version.h"
 #include "koopa.h"
@@ -80,7 +80,7 @@ static EvtWord shan_init[46];
 EvtWord kpa_01_init_evt[];
 
 /**
- * Throne-room door opens: the two Spiny guards walk to their posts and swing the double door open,
+ * Throne-room door opens: the two Koopatrol guards walk to their posts and swing the double door open,
  * each door leaf rotating about 100 degrees over 2 s with a sound at the door. Used by the arrival cutscene.
  */
 EVT_BEGIN(kpa_01_door_open)
@@ -163,7 +163,7 @@ EVT_BEGIN(kpa_01_door_open)
     RETURN
 EVT_END()
 
-/** Reverse of kpa_01_door_open: the double door swings shut over 2 s with the Spiny guards stepping aside. */
+/** Reverse of kpa_01_door_open: the double door swings shut over 2 s with the Koopatrol guards stepping aside. */
 EVT_BEGIN(kpa_01_door_close)
     SET_FLOAT_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 1)
@@ -197,7 +197,7 @@ EVT_BEGIN(kpa_01_door_close)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 
-        // The first Spiny guard walks back to its post beside the door.
+        // The first Koopatrol guard walks back to its post beside the door.
         CALL(evt_npc_set_anim, STRING("トゲノコＡ"), STRING("W_3"))
         LOOP(0)
             IF_INT_NOT_EQUAL(GW(1), 1)
@@ -259,7 +259,7 @@ EVT_END()
 
 /**
  * Arrival cutscene for Bowser (story progress STG1_19_PEACH_TEC):
- * the camera follows the long corridor, Bowser stomps in, the Spiny guards open the door and he laughs.
+ * the camera follows the long corridor, Bowser stomps in, the Koopatrol guards open the door and he laughs.
  * After Bowser's line and a guard's reply, the story advances to STG1_19_01_BOWSER_BOWSER_CASTLE
  * and the player gets control.
  */
@@ -531,7 +531,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_043"), 0, STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
 
-    // Bowser storms off and breaks through the wall in his airship while the Spiny guards react.
+    // Bowser storms off and breaks through the wall in his airship while the Koopatrol guards react.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_044"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 430, 180, 517, 430, 90, 0, 1500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -905,19 +905,19 @@ EVT_BEGIN(douzou_3_touch_evt)
     RETURN
 EVT_END()
 
-/** Talk script of the first Spiny guard. */
+/** Talk script of the first Koopatrol guard. */
 EVT_BEGIN(togenoko_A_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_002"), 0, STRING("me"))
     RETURN
 EVT_END()
 
-/** Talk script of the second Spiny guard. */
+/** Talk script of the second Koopatrol guard. */
 EVT_BEGIN(togenoko_B_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_004"), 0, STRING("me"))
     RETURN
 EVT_END()
 
-/** Init for the third Spiny guard: standard NPC init, then gravity, floor collision and NPC_STATUS_FACE_MOVE_DIR. */
+/** Init for the third Koopatrol guard: standard NPC init, then gravity, floor collision and NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(togenoko_C_init_evt)
     CALL_CHILD(npc_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -1020,12 +1020,12 @@ EVT_BEGIN(hkoopa_init_evt)
 EVT_END()
 
 /**
- * NPCs of Bowser's hall: the four Spiny guards (A and B can be talked to), the five Hammer Bros., Kammy
+ * NPCs of Bowser's hall: the four Koopatrol guards (A and B can be talked to), the five Hammer Bros., Kammy
  * Koopa (ババ), a Magikoopa (カメック) and Bowser's airship.
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "トゲノコＡ", // name
+        "トゲノコＡ", // name (a Koopatrol guard in Bowser's castle (talkable))
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1036,7 +1036,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲノコＢ", // name
+        "トゲノコＢ", // name (a Koopatrol guard in Bowser's castle (talkable))
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1047,7 +1047,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲノコＣ", // name
+        "トゲノコＣ", // name (a Koopatrol guard in Bowser's castle)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1056,7 +1056,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲノコＤ", // name
+        "トゲノコＤ", // name (a Koopatrol guard in Bowser's castle)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1065,7 +1065,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ハンマーＡ", // name
+        "ハンマーＡ", // name (a Hammer Bro in Bowser's castle (gossips about Peach))
         0, 0, // flags..reactionFlags
         hammer_AB_init_evt, // initEvent
         NULL, // regularEvent
@@ -1076,7 +1076,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ハンマーＢ", // name
+        "ハンマーＢ", // name (a Hammer Bro in Bowser's castle)
         0, 0, // flags..reactionFlags
         hammer_AB_init_evt, // initEvent
         NULL, // regularEvent
@@ -1087,7 +1087,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ハンマーＣ", // name
+        "ハンマーＣ", // name (a Hammer Bro in Bowser's castle)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1098,7 +1098,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ハンマーＤ", // name
+        "ハンマーＤ", // name (a Hammer Bro in Bowser's castle)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1109,7 +1109,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ハンマーＥ", // name
+        "ハンマーＥ", // name (a Hammer Bro in Bowser's castle)
         0, 0, // flags..reactionFlags
         hammer_E_init_evt, // initEvent
         NULL, // regularEvent
@@ -1120,7 +1120,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa)
         0, 0, // flags..reactionFlags
         baba_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1129,7 +1129,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カメック", // name
+        "カメック", // name (a Magikoopa in Bowser's castle)
         0, 0, // flags..reactionFlags
         kamek_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1138,7 +1138,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "飛クッパ", // name
+        "飛クッパ", // name (Bowser flying in his airship)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         hkoopa_init_evt, // initEvent
@@ -1292,7 +1292,7 @@ void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
 
 /**
  * Script helper: rotates the point (args[2], args[3]) about the centre (args[0], args[1]) by args[4] degrees
- * around Y, returning x in args[5] and z in args[6]. Moves the Spiny guards along an arc around the door.
+ * around Y, returning x in args[5] and z in args[6]. Moves the Koopatrol guards along an arc around the door.
  */
 USER_FUNC(get_togenoko_pos) {
     EvtWord* args = event->args;

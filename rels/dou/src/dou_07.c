@@ -82,7 +82,7 @@ EVT_END()
 /** NPC setup of dou_07: the Ember (Elmos) that appears in the room. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "エルモス", // name
+        "エルモス", // name (an Ember)
         NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         bubble_init_event, // initEvent

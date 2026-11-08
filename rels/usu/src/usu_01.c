@@ -1347,7 +1347,7 @@ EVT_END()
 
 /** Spawns the first young woman in her dancer form (model "c_dance_r") and runs musume_a_init on her. */
 static EVT_BEGIN(musume_a_entry)
-    CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r"))
+    CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r")) // one of the Traveling Sisters 3 (dancer form)
     CALL(evt_npc_set_tribe, STRING("３人娘Ａ"), STRING("踊り子"))
     SET_VALUE(LW(0), STRING("３人娘Ａ"))
     CALL_CHILD(musume_a_init)
@@ -1356,7 +1356,7 @@ EVT_END()
 
 /** Spawns the pig form of the first young woman ("c_bubusan" model) and runs musume_a_init on her. */
 EVT_BEGIN(musume_a_pig_entry)
-    CALL(evt_npc_entry, STRING("ブタ３人娘Ａ"), STRING("c_bubusan"))
+    CALL(evt_npc_entry, STRING("ブタ３人娘Ａ"), STRING("c_bubusan")) // one of the Traveling Sisters 3 as a pig
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ａ"), STRING("ブタ"))
     SET_VALUE(LW(0), STRING("ブタ３人娘Ａ"))
     CALL_CHILD(musume_a_init)
@@ -1382,7 +1382,7 @@ EVT_END()
 
 /** Spawns the second young woman in her pink dancer form (model "c_dance_p") and runs musume_b_init on her. */
 static EVT_BEGIN(musume_b_entry)
-    CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p"))
+    CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p")) // one of the Traveling Sisters 3 (dancer form)
     CALL(evt_npc_set_tribe, STRING("３人娘Ｂ"), STRING("踊り子ピンク"))
     SET_VALUE(LW(0), STRING("３人娘Ｂ"))
     CALL_CHILD(musume_b_init)
@@ -1391,7 +1391,7 @@ EVT_END()
 
 /** Spawns the pig form of the second young woman and runs musume_b_init on her. */
 EVT_BEGIN(musume_b_pig_entry)
-    CALL(evt_npc_entry, STRING("ブタ３人娘Ｂ"), STRING("c_bubusan"))
+    CALL(evt_npc_entry, STRING("ブタ３人娘Ｂ"), STRING("c_bubusan")) // one of the Traveling Sisters 3 as a pig
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ｂ"), STRING("ブタ"))
     SET_VALUE(LW(0), STRING("ブタ３人娘Ｂ"))
     CALL_CHILD(musume_b_init)
@@ -1417,7 +1417,7 @@ EVT_END()
 
 /** Spawns the third young woman in her green dancer form (model "c_dance_k") and runs musume_c_init on her. */
 static EVT_BEGIN(musume_c_entry)
-    CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k"))
+    CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k")) // one of the Traveling Sisters 3 (dancer form)
     CALL(evt_npc_set_tribe, STRING("３人娘Ｃ"), STRING("踊り子黄緑"))
     SET_VALUE(LW(0), STRING("３人娘Ｃ"))
     CALL_CHILD(musume_c_init)
@@ -1426,7 +1426,7 @@ EVT_END()
 
 /** Spawns the pig form of the third young woman and runs musume_c_init on her. */
 EVT_BEGIN(musume_c_pig_entry)
-    CALL(evt_npc_entry, STRING("ブタ３人娘Ｃ"), STRING("c_bubusan"))
+    CALL(evt_npc_entry, STRING("ブタ３人娘Ｃ"), STRING("c_bubusan")) // one of the Traveling Sisters 3 as a pig
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ｃ"), STRING("ブタ"))
     SET_VALUE(LW(0), STRING("ブタ３人娘Ｃ"))
     CALL_CHILD(musume_c_init)
@@ -1465,7 +1465,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "村人Ｆ", // name
+        "村人Ｆ", // name (a Twilighter novelist)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerF_init, // initEvent
@@ -1477,7 +1477,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｇ", // name
+        "村人Ｇ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerG_init, // initEvent
@@ -1489,7 +1489,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｈ", // name
+        "村人Ｈ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerH_init, // initEvent
@@ -1501,7 +1501,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｉ", // name
+        "村人Ｉ", // name (a Twilighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerI_init, // initEvent
@@ -1513,7 +1513,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村人Ｊ", // name
+        "村人Ｊ", // name (an old Twilighter woman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerJ_init, // initEvent
@@ -1525,7 +1525,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店の主人", // name
+        "店の主人", // name (manager of the Twilight Shop)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         shop_man_init, // initEvent
@@ -1537,7 +1537,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "お店の奥さん", // name
+        "お店の奥さん", // name (wife of the Twilight Shop manager)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         shop_woman_init, // initEvent
@@ -1549,7 +1549,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キザ野郎", // name
+        "キザ野郎", // name (Dupree)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         kizayarou_init, // initEvent
@@ -1561,7 +1561,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "おばさん", // name
+        "おばさん", // name (Eve)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         aunt_init, // initEvent
@@ -1573,7 +1573,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "子供Ａ", // name
+        "子供Ａ", // name (the oldest of three Twilighter brothers)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         childA_init, // initEvent
@@ -1585,7 +1585,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "子供Ｂ", // name
+        "子供Ｂ", // name (the middle of three Twilighter brothers)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         childB_init, // initEvent
@@ -1597,7 +1597,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "子供Ｃ", // name
+        "子供Ｃ", // name (the youngest of three Twilighter brothers)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         childC_init, // initEvent
@@ -1609,7 +1609,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "門番", // name
+        "門番", // name (the gatekeeper of Twilight Town)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         gatekeeper_init, // initEvent
@@ -1621,7 +1621,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタキザ野郎", // name
+        "ブタキザ野郎", // name (the Twilight Shop manager turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kizayarou_pig_init, // initEvent
@@ -1633,7 +1633,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタおばさん", // name
+        "ブタおばさん", // name (a Twilighter mother turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         aunt_pig_init, // initEvent
@@ -1645,7 +1645,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ門番", // name
+        "ブタ門番", // name (the Twilight Town gatekeeper turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         gatekeeper_pig_init, // initEvent
@@ -1661,7 +1661,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村人Ｉ", // name
+        "ブタ村人Ｉ", // name (a Twilighter turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerI_pig_init, // initEvent
@@ -1673,7 +1673,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブタ村人Ｊ", // name
+        "ブタ村人Ｊ", // name (a Twilighter turned into a pig)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerJ_pig_init, // initEvent
@@ -1685,7 +1685,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＦ", // name
+        "カラスＦ", // name (a Twilight Town crow (gossips about the fake Mario))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_f_init, // initEvent
@@ -1695,7 +1695,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＧ", // name
+        "カラスＧ", // name (a Twilight Town crow (gossips about the fake Mario))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_g_init, // initEvent
@@ -1705,7 +1705,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＨ", // name
+        "カラスＨ", // name (Flo, a crow mother (her son Ronnie))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_h_init, // initEvent
@@ -1715,7 +1715,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＩ", // name
+        "カラスＩ", // name (Maude, a crow mother)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_i_init, // initEvent
@@ -1725,7 +1725,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カラスＪ", // name
+        "カラスＪ", // name (a poetic crow who wants to go on a journey)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_j_init, // initEvent

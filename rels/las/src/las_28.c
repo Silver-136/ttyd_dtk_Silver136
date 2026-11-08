@@ -203,7 +203,7 @@ EVT_END()
 /** NPCs of the throne room scene: Sir Grodus (シュリョー), Bowser (クッパ) and Kammy Koopa (ババ). */
 static NpcSetupInfo npcEnt[] = {
     {
-        "シュリョー", // name
+        "シュリョー", // name (Sir Grodus, X-Naut leader)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         syuryo_init, // initEvent
@@ -213,7 +213,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クッパ", // name
+        "クッパ", // name (Bowser)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         koopa_init, // initEvent
@@ -223,7 +223,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         baba_init, // initEvent
@@ -233,7 +233,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピーチ姫", // name
+        "ピーチ姫", // name (Princess Peach)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

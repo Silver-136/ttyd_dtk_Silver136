@@ -520,7 +520,7 @@ EVT_END()
 /** NPCs of the west village, including General White. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ノコノコA", // name
+        "ノコノコA", // name (a Petalburg Koopa)
         0, 0, // flags..reactionFlags
         nokonoko_A_init, // initEvent
         nokonoko_A_regl, // regularEvent
@@ -531,7 +531,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコB", // name
+        "ノコノコB", // name (a Petalburg Toad)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_B_regl, // regularEvent
@@ -543,7 +543,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコC", // name
+        "ノコノコC", // name (a Petalburg Koopa kid who loves video games)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_C_regl, // regularEvent
@@ -554,7 +554,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコD", // name
+        "ノコノコD", // name (a Koopa who is a Peach fan)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -565,7 +565,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコF", // name
+        "ノコノコF", // name (Bub-ulber)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -576,7 +576,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "宿店員", // name
+        "宿店員", // name (the Petalburg innkeeper)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -585,7 +585,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (Niff T., the Petalburg shopkeeper)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -594,7 +594,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -603,7 +603,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ホワイト", // name
+        "ホワイト", // name (General White)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent
@@ -876,7 +876,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
  * intangible, placed just in front of the S_ie_mad02 wall object, and then hooks it up with pposter_init.
  */
 EVT_BEGIN(nok_00_koopa_npc_entry)
-    CALL(evt_npc_entry, STRING("poster"), STRING("c_p_peach"))
+    CALL(evt_npc_entry, STRING("poster"), STRING("c_p_peach")) // a Princess Peach poster (Bowser interlude prop)
     CALL(evt_npc_pera_onoff, STRING("poster"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("poster"), NPC_FLAG_NO_HIT)
     CALL(evt_mapobj_get_position, STRING("S_ie_mad02"), LW(0), LW(1), LW(2))

@@ -200,7 +200,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ビビアン", // name
+        "ビビアン", // name (Vivian)
         NPC_FLAG_TALK_POSE, // flags
         0, // reactionFlags
         vivian_init, // initEvent
@@ -212,7 +212,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マリリン", // name
+        "マリリン", // name (Marilyn)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         maririn_init, // initEvent
@@ -224,7 +224,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マジョリン", // name
+        "マジョリン", // name (Beldam)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         majorin_init, // initEvent
@@ -236,7 +236,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ファビオ", // name
+        "ファビオ", // name (Doe T. (Trouble Center client))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         fabio_init, // initEvent
@@ -923,7 +923,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 270, -1)
     CALL(evt_party_set_dir, 1, 270, -1)
-    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_majyorin"))
+    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_majyorin")) // invisible stand-in that carries the dropped necklace
     CALL(evt_npc_set_position, STRING("ダミー"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_DRAW)

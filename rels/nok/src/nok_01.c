@@ -844,7 +844,7 @@ EVT_END()
 /** NPCs of the east village: four other Koopas, the mayor, the gate guard, Koops, Koops's father and Koopie Koo. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ノコノコG", // name
+        "ノコノコG", // name (a Bub-ulb)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_G_regl, // regularEvent
@@ -855,7 +855,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコH", // name
+        "ノコノコH", // name (a Petalburg Koopa)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_H_regl, // regularEvent
@@ -866,7 +866,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコI", // name
+        "ノコノコI", // name (a Petalburg Toad)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_I_regl, // regularEvent
@@ -877,7 +877,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコノコK", // name
+        "ノコノコK", // name (Toce T.)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -888,7 +888,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "村長", // name
+        "村長", // name (Kroop, mayor of Petalburg)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -900,7 +900,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "門番ノコノコ", // name
+        "門番ノコノコ", // name (the gatekeeper of Petalburg)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         monban_init, // initEvent
@@ -912,7 +912,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコタロウ", // name
+        "ノコタロウ", // name (Koops)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokotarou_init, // initEvent
@@ -924,7 +924,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコタロウ父", // name
+        "ノコタロウ父", // name (Koopley, Koops's father)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokopapa_init, // initEvent
@@ -936,7 +936,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコリン", // name
+        "ノコリン", // name (Koopie Koo)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokorin_init, // initEvent
@@ -1221,7 +1221,7 @@ EVT_END()
  * Koopie Koo and the mayor in a line, removes the active partner and starts the scene.
  */
 EVT_BEGIN(nokotarou_tabidachi_init)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
     CALL(evt_npc_set_anim, STRING("クリスチーヌ"), STRING("PKR_S_1"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -100, 0, -65)

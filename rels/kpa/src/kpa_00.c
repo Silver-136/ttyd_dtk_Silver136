@@ -210,7 +210,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -220,7 +220,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "飛クッパ", // name
+        "飛クッパ", // name (Bowser flying in his airship)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent

@@ -7823,17 +7823,17 @@ EVT_END()
  * without wall collision and with shadows not projected to the floor.
  */
 EVT_BEGIN(mri_puni_init_dvd)
-    CALL(evt_npc_entry, STRING("\203v\203jsp"), STRING("c_puni"))
+    CALL(evt_npc_entry, STRING("\203v\203jsp"), STRING("c_puni")) // hidden Puni model stand-in for the Puni system
     CALL(evt_npc_set_tribe, STRING("\203v\203jsp"), STRING("\203v\203j\221\260"))
-    CALL(evt_npc_entry, STRING("\203g\203Qsp"), STRING("c_toge"))
+    CALL(evt_npc_entry, STRING("\203g\203Qsp"), STRING("c_toge")) // hidden Jabbi model stand-in for the Puni system
     CALL(evt_npc_set_tribe, STRING("\203g\203Qsp"), STRING("\203g\203Q\221\260"))
-    CALL(evt_npc_entry, STRING("\203K\203C\203hsp"), STRING("c_pguide"))
+    CALL(evt_npc_entry, STRING("\203K\203C\203hsp"), STRING("c_pguide")) // hidden Punio stand-in for the Puni system
     CALL(evt_npc_set_tribe, STRING("\203K\203C\203hsp"), STRING("\203K\203C\203h"))
-    CALL(evt_npc_entry, STRING("\203K\203C\203h\226\205sp"), STRING("c_psister"))
+    CALL(evt_npc_entry, STRING("\203K\203C\203h\226\205sp"), STRING("c_psister")) // hidden Petuni stand-in for the Puni system
     CALL(evt_npc_set_tribe, STRING("\203K\203C\203h\226\205sp"), STRING("\203K\203C\203h\226\205"))
-    CALL(evt_npc_entry, STRING("\202\277\202\321\203g\203Qsp"), STRING("c_tchibi"))
+    CALL(evt_npc_entry, STRING("\202\277\202\321\203g\203Qsp"), STRING("c_tchibi")) // hidden Jabble stand-in for the Puni system
     CALL(evt_npc_set_tribe, STRING("\202\277\202\321\203g\203Qsp"), STRING("\202\277\202\321\203g\203Q"))
-    CALL(evt_npc_entry, STRING("\203\211\203C\203o\203\213sp"), STRING("c_prival"))
+    CALL(evt_npc_entry, STRING("\203\211\203C\203o\203\213sp"), STRING("c_prival")) // hidden Puniper stand-in for the Puni system
     CALL(evt_npc_set_tribe, STRING("\203\211\203C\203o\203\213sp"), STRING("\203\211\203C\203o\203\213"))
     CALL(evt_npc_set_position, STRING("\203v\203jsp"), 0, 4294966296, 0)
     CALL(evt_npc_set_position, STRING("\203g\203Qsp"), 0, 4294966296, 0)

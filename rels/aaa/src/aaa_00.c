@@ -94,7 +94,7 @@ EvtWord aaa_00_init_evt[81];
 /** The two actors of the house: Parakarry, who delivers the letter in the prologue, and Luigi. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "パレッタ", // name
+        "パレッタ", // name (Parakarry, the mail carrier with Peach's letter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -103,7 +103,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ルイージ", // name
+        "ルイージ", // name (Luigi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -619,14 +619,14 @@ EVT_END()
  * ready for epilogue_evt2 to move them in.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach"))
+    CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach")) // Princess Peach (epilogue)
     CALL(evt_npc_set_tribe, STRING("ピーチ姫"), STRING("ピーチ姫（普通）"))
     CALL(evt_npc_set_position, STRING("ピーチ姫"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_map_blend_set_flag, 1, STRING("ピーチ姫"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("ピーチ姫"), 4096)
-    CALL(evt_npc_entry, STRING("キノじい"), STRING("c_kino_ji"))
+    CALL(evt_npc_entry, STRING("キノじい"), STRING("c_kino_ji")) // Toadsworth (epilogue)
     CALL(evt_npc_set_tribe, STRING("キノじい"), STRING("キノじい"))
     CALL(evt_npc_set_position, STRING("キノじい"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("キノじい"), 270)

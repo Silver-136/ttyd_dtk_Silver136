@@ -582,7 +582,7 @@ ExtTexInfo zakogun_ext_entry_data[] = {
  * and 500 extended poses driven by zakogun_ext_init and zakogun_ext_main.
  */
 EVT_BEGIN(zakogun_entry)
-    CALL(evt_npc_entry, STRING("ext_zakogun"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("ext_zakogun"), STRING("c_zako_n")) // hidden X-Naut template for the 500-sprite horde
     CALL(evt_npc_set_position, STRING("ext_zakogun"), 0, -1000, 0)
     CALL(evt_ext_entry, 500, PTR(zakogun_ext_entry_data), PTR(zakogun_ext_init), PTR(zakogun_ext_main), 0)
     RETURN

@@ -257,7 +257,7 @@ EVT_END()
 /** NPCs of the Puni shop: Jabble (ちびトゲ), the Puni clerk (プニ店員) and the information seller (プニ情報屋). */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ちびトゲ", // name
+        "ちびトゲ", // name (Jabble)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         chibitoge_init, // initEvent
@@ -269,7 +269,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ店員", // name
+        "プニ店員", // name (Pungent, the Puni shopkeeper)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         punishop_init, // initEvent
@@ -281,7 +281,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ情報屋", // name
+        "プニ情報屋", // name (Pungry)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puniinfo_init, // initEvent

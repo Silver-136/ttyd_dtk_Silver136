@@ -1492,7 +1492,7 @@ EVT_END()
 /** NPC setup of Luigi at the station. */
 static NpcSetupInfo luigiEnt[] = {
     {
-        "ルイージ", // name
+        "ルイージ", // name (Luigi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
@@ -1540,7 +1540,7 @@ EVT_END()
 /** NPC setup of Screamy, Luigi's companion at the station. */
 NpcSetupInfo screamEnt[] = {
     {
-        "ス・クリーミ", // name
+        "ス・クリーミ", // name (Screamy, Luigi's friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         scream_init, // initEvent
@@ -1560,7 +1560,7 @@ NpcSetupInfo screamEnt[] = {
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "飛行船係員", // name
+        "飛行船係員", // name (Stewart, the blimp conductor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         hikosenkakari_init, // initEvent
@@ -1572,7 +1572,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "駅員", // name
+        "駅員", // name (Porter, the Rogueport station manager)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         ekiin_init, // initEvent
@@ -1584,7 +1584,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ジュゲムＡ", // name
+        "ジュゲムＡ", // name (Laki)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         jugemu_a_init, // initEvent
@@ -1596,7 +1596,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノピオ女Ｂ", // name
+        "キノピオ女Ｂ", // name (a Toad woman who dreams of station romance)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kinopiko_b_init, // initEvent
@@ -1608,7 +1608,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa (Bowser interlude))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         baba_init, // initEvent
@@ -1618,7 +1618,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "飛クッパ", // name
+        "飛クッパ", // name (Bowser in his flying craft, leaving for Glitzville)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         hkoopa_init, // initEvent
@@ -2325,7 +2325,7 @@ EVT_BEGIN(gor_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mario_kill_party, 0)
-        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be"))
+        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be")) // Kammy Koopa's broom
         CALL(evt_npc_set_anim, STRING("houki"), STRING("H_1"))
         CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)

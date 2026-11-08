@@ -155,7 +155,7 @@ EVT_END()
 /** NPCs of the hidden dock: the bespectacled sailor. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "めがね水夫", // name
+        "めがね水夫", // name (Four-Eyes, a Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         megane_init, // initEvent
@@ -591,9 +591,9 @@ EVT_BEGIN(senin_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_npc_entry, STRING("オドオド水夫"), STRING("c_odo_k"))
+    CALL(evt_npc_entry, STRING("オドオド水夫"), STRING("c_odo_k")) // the timid Toad sailor
     CALL(evt_npc_set_tribe, STRING("オドオド水夫"), STRING("オドオド水夫"))
-    CALL(evt_npc_entry, STRING("ピートン"), STRING("c_m_waka"))
+    CALL(evt_npc_entry, STRING("ピートン"), STRING("c_m_waka")) // Frankie
     CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
     CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
     CALL(evt_npc_set_position, STRING("コルテス"), 0, -1000, 0)

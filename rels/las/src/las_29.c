@@ -213,7 +213,7 @@ EVT_END()
 /** NPCs of the Shadow Queen's chamber: Sir Grodus (シュリョー) and the others who appear in the ending. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "シュリョー", // name
+        "シュリョー", // name (Sir Grodus, X-Naut leader)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         syuryo_init, // initEvent
@@ -223,7 +223,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピーチ姫", // name
+        "ピーチ姫", // name (Princess Peach)
         NPC_FLAG_TALK_POSE, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -232,7 +232,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブラックピーチ", // name
+        "ブラックピーチ", // name (the Shadow Queen in Peach's body)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -241,7 +241,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マジョリン", // name
+        "マジョリン", // name (Beldam)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -250,7 +250,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マリリン", // name
+        "マリリン", // name (Marilyn)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -259,7 +259,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ランペル", // name
+        "ランペル", // name (Doopliss)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -268,7 +268,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "影の女王", // name
+        "影の女王", // name (the Shadow Queen (her own shadow form))
         NPC_FLAG_TALK_POSE, // flags
         0, // reactionFlags
         q_kage_init, // initEvent
@@ -1428,7 +1428,7 @@ EVT_END()
 
 #if VERSION < VERSION_US  // JP and JP demo only (US and PAL dropped it)
 EVT_BEGIN(nise_mario_init)
-    CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario"))
+    CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario")) // stand-in Mario swapped in at the bad-ending choice (JP)
     CALL(evt_npc_set_tribe, STRING("にせマリオ"), STRING("にせマリオ"))
     CALL(evt_npc_set_position, STRING("にせマリオ"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_INSTANT_TURN)
@@ -2654,7 +2654,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
 
     // Professor Frankly (クリハカセ) is set up out of sight for later, and the room starts to quake.
-    CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h"))
+    CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h")) // Professor Frankly
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("クリハカセ"), 0, -1000, 0)

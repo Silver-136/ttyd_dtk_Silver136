@@ -1408,7 +1408,7 @@ EVT_END()
 
 NpcSetupInfo rsh_03_rnd_npc_2_ent[] = {
     {
-        "乗客２", // name
+        "乗客２", // name (a passenger on the Excess Express)
         0, 0, // flags..reactionFlags
         npc_urouro_init_event, // initEvent
         npc_urouro_move_event, // regularEvent
@@ -1449,7 +1449,7 @@ EVT_END()
 
 NpcSetupInfo rsh_04_rnd_npc_3_ent[] = {
     {
-        "乗客３", // name
+        "乗客３", // name (a passenger on the Excess Express)
         0, 0, // flags..reactionFlags
         npc_urouro_init_event, // initEvent
         npc_urouro_move_event, // regularEvent

@@ -1493,7 +1493,7 @@ EVT_END()
 /** NPCs of the corridor: Jolene, Grubba, the champion, one more resident and eleven guards. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "キノシコワ", // name
+        "キノシコワ", // name (Jolene)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1502,7 +1502,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガンス", // name
+        "ガンス", // name (Grubba)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1511,7 +1511,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "チャンピョン", // name
+        "チャンピョン", // name (Rawk Hawk)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_champ, // initEvent
@@ -1521,7 +1521,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ブロッツ", // name
+        "ブロッツ", // name (Bandy Andy, a fighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_brots, // initEvent
@@ -1533,7 +1533,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン１", // name
+        "ガードマン１", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_1, // initEvent
@@ -1545,7 +1545,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン２", // name
+        "ガードマン２", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_2, // initEvent
@@ -1557,7 +1557,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン３", // name
+        "ガードマン３", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_3, // initEvent
@@ -1569,7 +1569,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン４", // name
+        "ガードマン４", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_4, // initEvent
@@ -1581,7 +1581,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン５", // name
+        "ガードマン５", // name (a Glitz Pit guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_5, // initEvent
@@ -1593,7 +1593,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン６", // name
+        "ガードマン６", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_6, // initEvent
@@ -1605,7 +1605,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン７", // name
+        "ガードマン７", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_7, // initEvent
@@ -1617,7 +1617,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン８", // name
+        "ガードマン８", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_8, // initEvent
@@ -1629,7 +1629,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン９", // name
+        "ガードマン９", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_9, // initEvent
@@ -1641,7 +1641,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン１０", // name
+        "ガードマン１０", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_10, // initEvent
@@ -1653,7 +1653,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン１１", // name
+        "ガードマン１１", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_g_11, // initEvent

@@ -2337,10 +2337,10 @@ void ext_yuunpc_minigame4_main(void) {
  * and registers the 300-sprite crowd ext with its init, main and draw callbacks.
  */
 EVT_BEGIN(evt_yuunpc_minigame1)
-    CALL(evt_npc_entry, STRING("yuunpc0"), STRING("c_kinopiko"))
-    CALL(evt_npc_entry, STRING("yuunpc1"), STRING("c_roten"))
-    CALL(evt_npc_entry, STRING("yuunpc2"), STRING("c_jugemu"))
-    CALL(evt_npc_entry, STRING("yuunpc3"), STRING("c_kinopio"))
+    CALL(evt_npc_entry, STRING("yuunpc0"), STRING("c_kinopiko")) // hidden Toad woman template for the Plane Mode crowd
+    CALL(evt_npc_entry, STRING("yuunpc1"), STRING("c_roten")) // hidden stall-keeper (ロテン) template for the Plane Mode crowd
+    CALL(evt_npc_entry, STRING("yuunpc2"), STRING("c_jugemu")) // hidden Lakitu template for the Plane Mode crowd
+    CALL(evt_npc_entry, STRING("yuunpc3"), STRING("c_kinopio")) // hidden Toad template for the Plane Mode crowd
     CALL(evt_npc_set_position, STRING("yuunpc0"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("yuunpc1"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("yuunpc2"), 0, -1000, 0)
@@ -2394,11 +2394,11 @@ EVT_BEGIN(evt_yuunpc_minigame4)
     CALL(evt_npc_entry, STRING("yuunpc1"), STRING("c_roten"))
     CALL(evt_npc_entry, STRING("yuunpc2"), STRING("c_jugemu"))
     CALL(evt_npc_entry, STRING("yuunpc3"), STRING("c_kinopio"))
-    CALL(evt_npc_entry, STRING("yuunpc4"), STRING("c_bom_n"))
-    CALL(evt_npc_entry, STRING("yuunpc5"), STRING("c_tyusan"))
-    CALL(evt_npc_entry, STRING("yuusp0"), STRING("c_luigi"))
-    CALL(evt_npc_entry, STRING("yuusp1"), STRING("c_nokorin"))
-    CALL(evt_npc_entry, STRING("yuusp2"), STRING("c_joho_a"))
+    CALL(evt_npc_entry, STRING("yuunpc4"), STRING("c_bom_n")) // hidden Bob-omb template for the Paper Mode field
+    CALL(evt_npc_entry, STRING("yuunpc5"), STRING("c_tyusan")) // hidden Squeek template for the Paper Mode field
+    CALL(evt_npc_entry, STRING("yuusp0"), STRING("c_luigi")) // Luigi, special racer in the Pianta Parlor Paper Mode
+    CALL(evt_npc_entry, STRING("yuusp1"), STRING("c_nokorin")) // Koopie Koo, special racer in the Pianta Parlor Paper Mode
+    CALL(evt_npc_entry, STRING("yuusp2"), STRING("c_joho_a")) // Wonky, special racer in the Pianta Parlor Paper Mode
     CALL(evt_npc_set_position, STRING("yuunpc0"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("yuunpc1"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("yuunpc2"), 0, -1000, 0)

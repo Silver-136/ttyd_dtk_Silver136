@@ -1370,7 +1370,7 @@ EVT_END()
 /** Cast of Sir Grodus's room: three X-Naut underlings, Lord Crump, Sir Grodus, Beldam, Marilyn and Vivian. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "手下１", // name
+        "手下１", // name (an X-Naut grunt at Grodus's monitor)
         0, 0, // flags..reactionFlags
         teshita1_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1379,7 +1379,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "手下２", // name
+        "手下２", // name (an X-Naut grunt in Grodus's room)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         teshita2_init, // initEvent
@@ -1389,7 +1389,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "手下３", // name
+        "手下３", // name (an X-Naut grunt in Grodus's room)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         teshita3_init, // initEvent
@@ -1399,7 +1399,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カンブー", // name
+        "カンブー", // name (Lord Crump)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         kanbu_init, // initEvent
@@ -1409,7 +1409,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "シュリョー", // name
+        "シュリョー", // name (Sir Grodus)
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         syuryo_init, // initEvent
@@ -1419,7 +1419,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マジョリン", // name
+        "マジョリン", // name (Beldam)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1428,7 +1428,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マリリン", // name
+        "マリリン", // name (Marilyn)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1437,7 +1437,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ビビアン", // name
+        "ビビアン", // name (Vivian)
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1483,7 +1483,7 @@ EVT_BEGIN(aji_10_init_evt)
         SPAWN_EVENT(peach_evt_stg1)
         CASE_EQUAL(STG2_25_AFTER_THE_BOSS_BATTLE)
         CALL(evt_mario_set_mode, 1)
-        CALL(evt_npc_entry, STRING("研究員"), STRING("c_zako_m"))
+        CALL(evt_npc_entry, STRING("研究員"), STRING("c_zako_m")) // an X-Naut PhD (researcher) reporting to Grodus
         CALL(evt_npc_set_tribe, STRING("研究員"), STRING("第三勢力研究員"))
         CALL(evt_npc_set_stay_anim, STRING("研究員"))
         CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1507,7 +1507,7 @@ EVT_BEGIN(aji_10_init_evt)
         CASE_BETWEEN(STG5_45_PEACH_POTION_PUZZLE, STG5_46_PEACH_DISK_SEARCH)
         CALL(evt_mario_set_mode, 1)
         CALL(peach_evt_toumei)
-        CALL(evt_npc_entry, STRING("みはり"), STRING("c_baria_c"))
+        CALL(evt_npc_entry, STRING("みはり"), STRING("c_baria_c")) // an X-Yux guarding Peach's door
         CALL(evt_npc_set_tribe, STRING("みはり"), STRING("バリアーンカスタム"))
         CALL(evt_npc_set_position, STRING("みはり"), 370, 60, -65)
         CALL(evt_npc_set_ry, STRING("みはり"), 270)

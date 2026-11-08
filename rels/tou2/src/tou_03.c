@@ -631,10 +631,10 @@ void ext_kyaku_init(void) {
  * and registers the crowd billboard set with the extdrv drawer.
  */
 EVT_BEGIN(evt_kyaku)
-    CALL(evt_npc_entry, STRING("kyaku1"), STRING("c_kinopio"))
-    CALL(evt_npc_entry, STRING("kyaku2"), STRING("c_kinopiko"))
-    CALL(evt_npc_entry, STRING("kyaku3"), STRING("c_roten"))
-    CALL(evt_npc_entry, STRING("kyaku4"), STRING("c_jugemu"))
+    CALL(evt_npc_entry, STRING("kyaku1"), STRING("c_kinopio")) // a Toad spectator in the arena crowd
+    CALL(evt_npc_entry, STRING("kyaku2"), STRING("c_kinopiko")) // a Toad woman spectator in the arena crowd
+    CALL(evt_npc_entry, STRING("kyaku3"), STRING("c_roten")) // a stall-keeper spectator in the arena crowd
+    CALL(evt_npc_entry, STRING("kyaku4"), STRING("c_jugemu")) // a Lakitu spectator in the arena crowd
     CALL(evt_npc_set_tribe, STRING("kyaku1"), STRING("\203L\203m\203s\203I"))
     CALL(evt_npc_set_tribe, STRING("kyaku2"), STRING("\203L\203m\203s\203I\217\227"))
     CALL(evt_npc_set_tribe, STRING("kyaku3"), STRING("\203\215\203e\203\223"))
@@ -1239,7 +1239,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ガンス"*/"\203K\203\223\203X", // name
+        /*"ガンス"*/"\203K\203\223\203X", // name (Grubba)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1248,7 +1248,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノシコワ"*/"\203L\203m\203V\203R\203\217", // name
+        /*"キノシコワ"*/"\203L\203m\203V\203R\203\217", // name (Jolene)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinosikowa, // initEvent
@@ -1258,7 +1258,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"マッチョガンス"*/"\203}\203b\203`\203\207\203K\203\223\203X", // name
+        /*"マッチョガンス"*/"\203}\203b\203`\203\207\203K\203\223\203X", // name (Macho Grubba)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1267,7 +1267,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノシチョフ"*/"\203L\203m\203V\203`\203\207\203t", // name
+        /*"キノシチョフ"*/"\203L\203m\203V\203`\203\207\203t", // name (Prince Mush, Jolene's brother)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -2008,11 +2008,11 @@ EVT_END()
 EVT_BEGIN(burst_chain_entry)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_1"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_2"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_3"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_4"), STRING("c_wanwan_a"))
+        CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 1
+        CALL(evt_npc_entry, STRING("\215\2750_1"), STRING("c_wanwan_a")) // chain link 2 of 5 of the Red Chomp fighter, team slot 1
+        CALL(evt_npc_entry, STRING("\215\2750_2"), STRING("c_wanwan_a")) // chain link 3 of 5 of the Red Chomp fighter, team slot 1
+        CALL(evt_npc_entry, STRING("\215\2750_3"), STRING("c_wanwan_a")) // chain link 4 of 5 of the Red Chomp fighter, team slot 1
+        CALL(evt_npc_entry, STRING("\215\2750_4"), STRING("c_wanwan_a")) // chain link 5 of 5 of the Red Chomp fighter, team slot 1
         CALL(evt_npc_set_anim, STRING("\215\2750_0"), STRING("WAN_S_1B"))
         CALL(evt_npc_set_anim, STRING("\215\2750_1"), STRING("WAN_S_1B"))
         CALL(evt_npc_set_anim, STRING("\215\2750_2"), STRING("WAN_S_1B"))
@@ -2025,11 +2025,11 @@ EVT_BEGIN(burst_chain_entry)
         CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_4"), 1074003968)
         CALL(burst_chain, STRING("\223G\202P"), 0)
         CASE_EQUAL(1)
-        CALL(evt_npc_entry, STRING("\215\2751_0"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_1"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_2"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_3"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_4"), STRING("c_wanwan_a"))
+        CALL(evt_npc_entry, STRING("\215\2751_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 2
+        CALL(evt_npc_entry, STRING("\215\2751_1"), STRING("c_wanwan_a")) // chain link 2 of 5 of the Red Chomp fighter, team slot 2
+        CALL(evt_npc_entry, STRING("\215\2751_2"), STRING("c_wanwan_a")) // chain link 3 of 5 of the Red Chomp fighter, team slot 2
+        CALL(evt_npc_entry, STRING("\215\2751_3"), STRING("c_wanwan_a")) // chain link 4 of 5 of the Red Chomp fighter, team slot 2
+        CALL(evt_npc_entry, STRING("\215\2751_4"), STRING("c_wanwan_a")) // chain link 5 of 5 of the Red Chomp fighter, team slot 2
         CALL(evt_npc_set_anim, STRING("\215\2751_0"), STRING("WAN_S_1B"))
         CALL(evt_npc_set_anim, STRING("\215\2751_1"), STRING("WAN_S_1B"))
         CALL(evt_npc_set_anim, STRING("\215\2751_2"), STRING("WAN_S_1B"))

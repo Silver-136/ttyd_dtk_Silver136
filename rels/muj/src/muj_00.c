@@ -1480,7 +1480,7 @@ EVT_END()
  * called at map init from STG8_00_START on.
  */
 static EVT_BEGIN(kiza_entry)
-    CALL(evt_npc_entry, STRING("キザ野郎"), STRING("c_kiza"))
+    CALL(evt_npc_entry, STRING("キザ野郎"), STRING("c_kiza")) // Dupree
     CALL(evt_npc_set_tribe, STRING("キザ野郎"), STRING("キザ野郎"))
     CALL(evt_npc_set_position, STRING("キザ野郎"), 575, 25, -420)
     CALL(evt_npc_set_ry, STRING("キザ野郎"), 270)
@@ -1495,7 +1495,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガラの悪い水夫", // name
+        "ガラの悪い水夫", // name (Pa-Patch, a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         garawaru_init, // initEvent
@@ -1507,7 +1507,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マルコ", // name
+        "マルコ", // name (Flavio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         marco_init, // initEvent
@@ -1519,7 +1519,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "めがね水夫", // name
+        "めがね水夫", // name (Four-Eyes, a Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1529,7 +1529,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "第三勢力幹部", // name
+        "第三勢力幹部", // name (Lord Crump)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -1539,7 +1539,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "オドオド水夫", // name
+        "オドオド水夫", // name (the timid Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         odoodo_init, // initEvent
@@ -1551,7 +1551,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫A", // name
+        "水夫A", // name (a Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_a_init, // initEvent
@@ -1563,7 +1563,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫ボム兵", // name
+        "水夫ボム兵", // name (a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_bomb_init, // initEvent
@@ -1575,7 +1575,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫C", // name
+        "水夫C", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_c_init, // initEvent
@@ -1587,7 +1587,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫D", // name
+        "水夫D", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_d_init, // initEvent
@@ -1599,7 +1599,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫E", // name
+        "水夫E", // name (a shipwrecked Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_e_init, // initEvent
@@ -1611,7 +1611,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "コルテス", // name
+        "コルテス", // name (Cortez)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         korutesu_init, // initEvent
@@ -1623,7 +1623,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "モニー", // name
+        "モニー", // name (Francesca)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
@@ -1635,7 +1635,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピートン", // name
+        "ピートン", // name (Frankie)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent
@@ -1647,7 +1647,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "コブロン", // name
+        "コブロン", // name (the Whacka)
         NPC_FLAG_TALK_POSE, // flags
         7, // reactionFlags
         koburon_init, // initEvent
@@ -4209,7 +4209,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL_CHILD(kiza_entry)
     END_IF
     CALL_CHILD(koburon_evt)
-    CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
+    CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b")) // invisible stand-in whose jump drives the ship's bob
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 

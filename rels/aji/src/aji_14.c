@@ -175,10 +175,10 @@ USER_FUNC(waku) {
  * and starts waku, which keeps them on the locator17 bone of the robots ロボット and ロボット２.
  */
 EVT_BEGIN(evt_robot_waku)
-    CALL(evt_npc_entry, STRING("枠"), STRING("c_mb_robo_2a"))
+    CALL(evt_npc_entry, STRING("枠"), STRING("c_mb_robo_2a")) // frame part (c_mb_robo_2a) kept on the robot's bone
     CALL(evt_npc_flag_onoff, 1, STRING("枠"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_anim, STRING("枠"), STRING("L_1"))
-    CALL(evt_npc_entry, STRING("枠２"), STRING("c_mb_robo_2a"))
+    CALL(evt_npc_entry, STRING("枠２"), STRING("c_mb_robo_2a")) // frame part (c_mb_robo_2a) kept on the second robot
     CALL(evt_npc_flag_onoff, 1, STRING("枠２"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_anim, STRING("枠２"), STRING("L_1"))
     BEGIN_INLINE_EVENT
@@ -475,7 +475,7 @@ EVT_END()
 /** The two actors of the boss room: Lord Crump (kanbu) and the Magnus von Grapple 2.0 robot. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "幹部", // name
+        "幹部", // name (Lord Crump)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -484,7 +484,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ロボット", // name
+        "ロボット", // name (Magnus von Grapple 2.0)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -526,7 +526,7 @@ EVT_BEGIN(aji_14_init_evt)
         RETURN
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_npc_entry, STRING("ロボット２"), STRING("c_mb_robo_2b"))
+        CALL(evt_npc_entry, STRING("ロボット２"), STRING("c_mb_robo_2b")) // Magnus von Grapple 2.0 after the fight (wreck)
         CALL(evt_npc_set_anim, STRING("ロボット２"), STRING("MGN_Q_1"))
         CALL(evt_npc_set_position, STRING("ロボット２"), 0, -1000, 0)
         CALL_CHILD(evt_robot_waku)

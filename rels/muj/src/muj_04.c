@@ -57,7 +57,7 @@ EvtWord muj_04_init_evt[131];
 /** NPCs of the rope bridge: Admiral Bobbery, the nervous sailor, the bespectacled sailor and the two Embers. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "サンダース", // name
+        "サンダース", // name (Admiral Bobbery)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -66,7 +66,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "オドオド水夫", // name
+        "オドオド水夫", // name (the timid Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -76,7 +76,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "めがね水夫", // name
+        "めがね水夫", // name (Four-Eyes, a Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -86,7 +86,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "エルモスA", // name
+        "エルモスA", // name (an Ember attacking Bobbery on the rope bridge)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -96,7 +96,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "エルモスB", // name
+        "エルモスB", // name (an Ember attacking Bobbery on the rope bridge)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent

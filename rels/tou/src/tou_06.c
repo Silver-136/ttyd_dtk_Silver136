@@ -560,7 +560,7 @@ EVT_END()
 /** NPCs of the storage room: Ms. Mowz, for her scene on the first visit. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "チュチュリーナ", // name
+        "チュチュリーナ", // name (Ms. Mowz)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

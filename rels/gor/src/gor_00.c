@@ -661,7 +661,7 @@ static EVT_BEGIN(marco_init)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_npc_set_ry, STRING("me"), 90)
         CALL(evt_npc_set_position, STRING("me"), 77, 51, 110)
-        CALL(evt_npc_entry, STRING("第三部下"), STRING("c_zako_n"))
+        CALL(evt_npc_entry, STRING("第三部下"), STRING("c_zako_n")) // an X-Naut grunt who reports the ship infiltration
         CALL(evt_npc_set_tribe, STRING("第三部下"), STRING("第三勢力部下"))
         CALL(evt_npc_set_position, STRING("第三部下"), 0, -1000, 0)
     END_SWITCH
@@ -1533,7 +1533,7 @@ EVT_END()
 static EVT_BEGIN(sanders_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_entry, STRING("サンダース"), STRING("c_bomt_n"))
+        CALL(evt_npc_entry, STRING("サンダース"), STRING("c_bomt_n")) // Admiral Bobbery
         CALL(evt_npc_set_tribe, STRING("サンダース"), STRING("サンダース"))
         CALL(evt_npc_set_ry, STRING("サンダース"), 90)
         CALL(evt_npc_change_interrupt, STRING("サンダース"), 6, PTR(sanders_talk))
@@ -1592,7 +1592,7 @@ EVT_END()
 EVT_BEGIN(tentyou_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_entry, STRING("店長"), STRING("c_gshop_m"))
+        CALL(evt_npc_entry, STRING("店長"), STRING("c_gshop_m")) // Thriff T. (Toad Bros. Bazaar)
         CALL(evt_npc_set_tribe, STRING("店長"), STRING("店員男"))
         CALL(evt_npc_set_ry, STRING("店長"), 90)
         CALL(evt_npc_set_position, STRING("店長"), -12, 128, 40)
@@ -1620,7 +1620,7 @@ EVT_END()
 EVT_BEGIN(tenin_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_entry, STRING("店員"), STRING("c_gshop_w"))
+        CALL(evt_npc_entry, STRING("店員"), STRING("c_gshop_w")) // a Toad of the Keelhaul Key crew
         CALL(evt_npc_set_tribe, STRING("店員"), STRING("店員女"))
         CALL(evt_npc_set_ry, STRING("店員"), 90)
         CALL(evt_npc_set_position, STRING("店員"), -30, 128, 120)
@@ -1646,7 +1646,7 @@ static EVT_BEGIN(borodo2_init)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
-                    CALL(evt_npc_entry, STRING("ボロドー２"), STRING("c_borodo_n"))
+                    CALL(evt_npc_entry, STRING("ボロドー２"), STRING("c_borodo_n")) // Larson, the thief from Goomther's request
                     CALL(evt_npc_set_tribe, STRING("ボロドー２"), STRING("盗賊"))
                     CALL(evt_npc_flag_onoff, 1, STRING("ボロドー２"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                     CALL(evt_npc_set_position, STRING("ボロドー２"), -168, 15, -540)
@@ -1949,7 +1949,7 @@ EVT_END()
 /** NPC setup of Luigi at the harbor. */
 static NpcSetupInfo luigiEnt[] = {
     {
-        "ルイージ", // name
+        "ルイージ", // name (Luigi)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
@@ -1996,7 +1996,7 @@ EVT_END()
 /** NPC setup of the second figure beside Luigi at the harbor (model c_lp_pansy). */
 NpcSetupInfo rakganEnt[] = {
     {
-        "ラクガン", // name
+        "ラクガン", // name (Hayzee, Luigi's Dayzee friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         rakgan_init, // initEvent
@@ -2016,7 +2016,7 @@ NpcSetupInfo rakganEnt[] = {
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "モニー", // name
+        "モニー", // name (Francesca)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         mony_init, // initEvent
@@ -2032,7 +2032,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ピートン", // name
+        "ピートン", // name (Frankie)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         peton_init, // initEvent
@@ -2048,7 +2048,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "マルコ", // name
+        "マルコ", // name (Flavio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         marco_init, // initEvent
@@ -2060,7 +2060,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガラの悪い水夫", // name
+        "ガラの悪い水夫", // name (Pa-Patch, a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         garawaru_init, // initEvent
@@ -2072,7 +2072,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "めがね水夫", // name
+        "めがね水夫", // name (Four-Eyes, a sailor bound for Keelhaul Key)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         megane_init, // initEvent
@@ -2084,7 +2084,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "オドオド水夫", // name
+        "オドオド水夫", // name (the timid Toad sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         odoodo_init, // initEvent
@@ -2096,7 +2096,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "オドオド水夫兄", // name
+        "オドオド水夫兄", // name (the nervous sailor's elder brother)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         odoodo_ani_init, // initEvent
@@ -2108,7 +2108,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫Ａ", // name
+        "水夫Ａ", // name (a sailor who has come to hate the sea)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         suifu_a_init, // initEvent
@@ -2120,7 +2120,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫Ｂ", // name
+        "水夫Ｂ", // name (a Toad sailor at Rogueport Harbor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         suifu_b_init, // initEvent
@@ -2132,7 +2132,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫Ｄ", // name
+        "水夫Ｄ", // name (a sailor of the Keelhaul Key crew)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         suifu_d_init, // initEvent
@@ -2144,7 +2144,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫ボム兵Ａ", // name
+        "水夫ボム兵Ａ", // name (Bomberto, a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         suifubomb_a_init, // initEvent
@@ -2156,7 +2156,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫ボム兵Ｂ", // name
+        "水夫ボム兵Ｂ", // name (a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         suifubomb_b_init, // initEvent
@@ -2168,7 +2168,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "水夫ボム兵Ｃ", // name
+        "水夫ボム兵Ｃ", // name (a Bob-omb sailor)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         suifubomb_c_init, // initEvent
@@ -2180,7 +2180,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "コルテス", // name
+        "コルテス", // name (Cortez)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         korutesu_init, // initEvent
@@ -2192,7 +2192,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "モコリム", // name
+        "モコリム", // name (Lumpy)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         mokorim_init, // initEvent
@@ -2204,7 +2204,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa (Bowser interlude))
         0, 0, // flags..reactionFlags
         baba_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -2444,13 +2444,13 @@ EVT_END()
  * and parks them below the map at y=-1000.
  */
 EVT_BEGIN(enter_gorotsuki_town_init)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
-    CALL(evt_npc_entry, STRING("第三勢力幹部"), STRING("c_kanbu_ibt"))
+    CALL(evt_npc_entry, STRING("第三勢力幹部"), STRING("c_kanbu_ibt")) // Lord Crump
     CALL(evt_npc_set_tribe, STRING("第三勢力幹部"), STRING("第三勢力幹部"))
-    CALL(evt_npc_entry, STRING("第三勢力部下Ａ"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("第三勢力部下Ａ"), STRING("c_zako_n")) // an X-Naut grunt in the opening ambush
     CALL(evt_npc_set_tribe, STRING("第三勢力部下Ａ"), STRING("第三勢力部下"))
-    CALL(evt_npc_entry, STRING("第三勢力部下Ｂ"), STRING("c_zako_n"))
+    CALL(evt_npc_entry, STRING("第三勢力部下Ｂ"), STRING("c_zako_n")) // an X-Naut grunt in the opening ambush
     CALL(evt_npc_set_tribe, STRING("第三勢力部下Ｂ"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 0, -1000, 0)
@@ -5994,21 +5994,21 @@ static EVT_BEGIN(epilogue_npc_entry)
 
     // Remove the regular harbor NPCs so only the epilogue cast remains.
     // Peach and Toadsworth wait at the right of the pier.
-    CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach"))
+    CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach")) // Princess Peach (epilogue)
     CALL(evt_npc_set_tribe, STRING("ピーチ姫"), STRING("ピーチ姫"))
     CALL(evt_npc_set_position, STRING("ピーチ姫"), 125, 15, 235)
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_7"), STRING("P_T_13"))
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_S_7"))
-    CALL(evt_npc_entry, STRING("キノじい"), STRING("c_kino_ji"))
+    CALL(evt_npc_entry, STRING("キノじい"), STRING("c_kino_ji")) // Toadsworth
     CALL(evt_npc_set_tribe, STRING("キノじい"), STRING("キノじい"))
     CALL(evt_npc_set_position, STRING("キノじい"), 165, 15, 205)
     CALL(evt_npc_set_ry, STRING("キノじい"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("キノじい"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 
     // Professor Frankly, Goombella, Koops and Flurrie line up.
-    CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h"))
+    CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h")) // Professor Frankly
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_set_position, STRING("クリハカセ"), 30, 15, 200)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
@@ -6018,12 +6018,12 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 10, 15, 235)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_entry, STRING("ノコタロウ"), STRING("c_pnk"))
+    CALL(evt_npc_entry, STRING("ノコタロウ"), STRING("c_pnk")) // Koops (epilogue)
     CALL(evt_npc_set_tribe, STRING("ノコタロウ"), STRING("ノコタロウ"))
     CALL(evt_npc_set_position, STRING("ノコタロウ"), -15, 15, 220)
     CALL(evt_npc_set_ry, STRING("ノコタロウ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_entry, STRING("クラウダ"), STRING("c_windy"))
+    CALL(evt_npc_entry, STRING("クラウダ"), STRING("c_windy")) // Flurrie (epilogue)
     CALL(evt_npc_set_tribe, STRING("クラウダ"), STRING("クラウダ"))
     CALL(evt_npc_set_position, STRING("クラウダ"), -40, 15, 200)
     CALL(evt_npc_set_ry, STRING("クラウダ"), 90)
@@ -6052,7 +6052,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_position, STRING("チビヨッシー"), -45, 15, 240)
     CALL(evt_npc_set_ry, STRING("チビヨッシー"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_entry, STRING("ビビアン"), STRING("c_vivian"))
+    CALL(evt_npc_entry, STRING("ビビアン"), STRING("c_vivian")) // Vivian (epilogue)
     CALL(evt_npc_set_tribe, STRING("ビビアン"), STRING("ビビアン"))
     CALL(evt_npc_set_position, STRING("ビビアン"), -65, 15, 220)
     CALL(evt_npc_set_ry, STRING("ビビアン"), 90)
@@ -6066,7 +6066,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     // Ms. Mowz joins the line-up only if she became a partner.
     CALL(evt_mario_chk_join_party, LW(0), PARTY_MS_MOWZ)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu"))
+        CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu")) // Ms. Mowz
         CALL(evt_npc_set_tribe, STRING("チュチュリーナ"), STRING("チュチュリーナ"))
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), -95, 15, 235)
         CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 90)
@@ -6074,12 +6074,12 @@ static EVT_BEGIN(epilogue_npc_entry)
     END_IF
 
     // Punio and Puniko wait offscreen below the map until their entrance.
-    CALL(evt_npc_entry, STRING("プニオ"), STRING("c_pguide"))
+    CALL(evt_npc_entry, STRING("プニオ"), STRING("c_pguide")) // Punio (epilogue)
     CALL(evt_npc_set_tribe, STRING("プニオ"), STRING("ガイド"))
     CALL(evt_npc_set_position, STRING("プニオ"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("プニオ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("プニオ"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_entry, STRING("プニコ"), STRING("c_psister"))
+    CALL(evt_npc_entry, STRING("プニコ"), STRING("c_psister")) // Petuni, Punio's sister (epilogue)
     CALL(evt_npc_set_tribe, STRING("プニコ"), STRING("ガイド妹"))
     CALL(evt_npc_set_position, STRING("プニコ"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("プニコ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -6932,7 +6932,7 @@ EVT_BEGIN(gor_00_init_evt)
     CALL_CHILD(sanders_init)
     CALL_CHILD(tentyou_init)
     CALL_CHILD(tenin_init)
-    CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
+    CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b")) // invisible stand-in whose motion drives the ship's hop
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
     CALL_CHILD(borodo2_init)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_07_BOWSER_ACTION_STAGE)
@@ -7007,7 +7007,7 @@ EVT_BEGIN(gor_00_init_evt)
         // Chapter 4 Bowser interlude.
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
         CALL(evt_mario_kill_party, 0)
-        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be"))
+        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be")) // Kammy Koopa's broom
         CALL(evt_npc_set_anim, STRING("houki"), STRING("H_2"))
         CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_CULL)

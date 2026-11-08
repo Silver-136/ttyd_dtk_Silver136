@@ -1331,18 +1331,18 @@ USER_FUNC(moamoa_on) {
  * and adds the 750-sprite swarm effect with ext_moamoa_data, ext_moamoa_init and ext_moamoa_main.
  */
 static EVT_BEGIN(evt_moamoa)
-    CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
-    CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
+    CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a")) // hidden Smorg model A for the battle swarm sprites
+    CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b")) // hidden Smorg model B for the battle swarm sprites
     CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("moa_b"), 0, -1000, 0)
-    CALL(evt_npc_entry, STRING("kinopio"), STRING("c_kinodebu"))
-    CALL(evt_npc_entry, STRING("cook"), STRING("c_puku_c"))
-    CALL(evt_npc_entry, STRING("powan"), STRING("c_powan"))
-    CALL(evt_npc_entry, STRING("sarary"), STRING("c_smoko"))
-    CALL(evt_npc_entry, STRING("rose"), STRING("c_rose"))
-    CALL(evt_npc_entry, STRING("papa"), STRING("c_papab"))
-    CALL(evt_npc_entry, STRING("mama"), STRING("c_mamab"))
-    CALL(evt_npc_entry, STRING("konari"), STRING("c_konari"))
+    CALL(evt_npc_entry, STRING("kinopio"), STRING("c_kinodebu")) // Heff T., passenger (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("cook"), STRING("c_puku_c")) // Chef Shimi, passenger (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("powan"), STRING("c_powan")) // Pennington, passenger (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("sarary"), STRING("c_smoko")) // the Ratooey businessman (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("rose"), STRING("c_rose")) // Toodles, passenger (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("papa"), STRING("c_papab")) // Goldbob, passenger (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("mama"), STRING("c_mamab")) // Sylvia, passenger (hidden during the Smorg battle)
+    CALL(evt_npc_entry, STRING("konari"), STRING("c_konari")) // Bub, passenger (hidden during the Smorg battle)
     CALL(evt_npc_set_position, STRING("kinopio"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("cook"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("powan"), 0, -1000, 0)

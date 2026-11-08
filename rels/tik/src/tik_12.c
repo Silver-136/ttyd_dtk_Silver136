@@ -440,7 +440,7 @@ EVT_END()
 /** NPCs of this room: Merlee, whose table talk is registered on the a_majinai area. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "まじない師", // name
+        "まじない師", // name (Merlee, the charmer)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         majinaisi_init, // initEvent

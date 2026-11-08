@@ -188,7 +188,7 @@ EVT_END()
 /** NPCs of the cage trap scene: the guide Puni, his sister and the rival Puni. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガイド", // name
+        "ガイド", // name (Punio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         guide_init, // initEvent
@@ -200,7 +200,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガイド妹", // name
+        "ガイド妹", // name (Petuni)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sister_init, // initEvent
@@ -212,7 +212,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ライバル", // name
+        "ライバル", // name (Puniper)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         rival_init, // initEvent

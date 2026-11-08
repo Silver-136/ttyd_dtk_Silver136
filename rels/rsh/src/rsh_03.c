@@ -758,7 +758,7 @@ EVT_END()
 /** NPCs of the dining car: the cook, the waitress and the shop clerk. */
 static NpcSetupInfo npc_data[] = {
     {
-        "コック", // name
+        "コック", // name (Chef Shimi)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cook, // initEvent
@@ -770,7 +770,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ウェイトレス", // name
+        "ウェイトレス", // name (the waitress of the Excess Express)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_waitless, // initEvent
@@ -782,7 +782,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (owner of the Sales Stall)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1114,7 +1114,7 @@ EVT_END()
  */
 NpcSetupInfo npc_data_lunch[] = {
     {
-        "コック", // name
+        "コック", // name (Chef Shimi)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_cook, // talkEvent
@@ -1124,7 +1124,7 @@ NpcSetupInfo npc_data_lunch[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ウェイトレス", // name
+        "ウェイトレス", // name (the waitress of the Excess Express)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_waitless, // talkEvent
@@ -1134,7 +1134,7 @@ NpcSetupInfo npc_data_lunch[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "店員", // name
+        "店員", // name (owner of the Sales Stall)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1143,7 +1143,7 @@ NpcSetupInfo npc_data_lunch[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トロン", // name
+        "トロン", // name (Zip Toad)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_toron, // talkEvent
@@ -1153,7 +1153,7 @@ NpcSetupInfo npc_data_lunch[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "サラリーマン", // name
+        "サラリーマン", // name (the Ratooey businessman)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_sarary, // talkEvent
@@ -1163,7 +1163,7 @@ NpcSetupInfo npc_data_lunch[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ポワン探偵", // name
+        "ポワン探偵", // name (Pennington)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_powan, // talkEvent

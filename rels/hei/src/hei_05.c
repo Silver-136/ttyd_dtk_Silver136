@@ -85,7 +85,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "シンエモン1", // name
+        "シンエモン1", // name (a Bristle gate guard (named as a Moon Cleft))
         0, 0, // flags..reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent
@@ -104,7 +104,7 @@ static NpcSetupInfo npcEnt[] = {
         11, // battleInfoId
     },
     {
-        "シンエモン2", // name
+        "シンエモン2", // name (a Bristle gate guard (named as a Moon Cleft))
         0, 0, // flags..reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent

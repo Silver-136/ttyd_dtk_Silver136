@@ -443,7 +443,7 @@ ExtTexInfo chorogun_ext_entry_data[] = {
  * and registers the 1000-sprite Fuzzy swarm (init and per-frame update callbacks; the update queues the draw).
  */
 EVT_BEGIN(chorogun_entry)
-    CALL(evt_npc_entry, STRING("ext_chorobon"), STRING("c_chorobon"))
+    CALL(evt_npc_entry, STRING("ext_chorobon"), STRING("c_chorobon")) // hidden Fuzzy NPC behind the Fuzzy Horde sprites
     CALL(evt_npc_set_position, STRING("ext_chorobon"), 0, -1000, 0)
     CALL(evt_ext_entry, 1000, PTR(chorogun_ext_entry_data), PTR(chorogun_ext_init), PTR(chorogun_ext_main), 0)
     RETURN

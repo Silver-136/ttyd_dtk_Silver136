@@ -1214,7 +1214,7 @@ static TreeAccess ki_data[] = {
 /** NPC set up by this table: ババ, Kammy Koopa in the Bowser interlude (hei_00_koopa_evt). */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ババ", // name
+        "ババ", // name (Kammy Koopa (Bowser interlude))
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1315,7 +1315,7 @@ EVT_END()
  * wall-ignoring NPC.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella (epilogue)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -200, 25, 35)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 270)

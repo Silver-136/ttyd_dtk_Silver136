@@ -1018,7 +1018,7 @@ ExtTexInfo teresa_ext_entry_data[] = {
  * and registers the 30-sprite small-Boo effect (init and per- frame update callbacks).
  */
 EVT_BEGIN(teresa_entry)
-    CALL(evt_npc_entry, STRING("ext_teresa"), STRING("c_teresa"))
+    CALL(evt_npc_entry, STRING("ext_teresa"), STRING("c_teresa")) // hidden Boo NPC behind the small-Boo sprites
     CALL(evt_npc_set_position, STRING("ext_teresa"), 0, -1000, 0)
     CALL(evt_ext_entry, 30, PTR(teresa_ext_entry_data), PTR(teresa_ext_init), PTR(teresa_ext_main), 0)
     RETURN

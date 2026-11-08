@@ -409,7 +409,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガンス", // name
+        "ガンス", // name (Grubba)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -418,7 +418,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノシコワ", // name
+        "キノシコワ", // name (Jolene)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -427,7 +427,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガードマン", // name
+        "ガードマン", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -436,7 +436,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "トゲノコエース", // name
+        "トゲノコエース", // name (the Koopinator, a fighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_togenoko, // initEvent
@@ -448,7 +448,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ウラノコ", // name
+        "ウラノコ", // name (Shellshock, a fighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_uranoko, // initEvent
@@ -460,7 +460,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "チャンピョン", // name
+        "チャンピョン", // name (Rawk Hawk)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -952,7 +952,7 @@ EVT_BEGIN(evt_champion_win)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("ガンス"), -45, -95, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
-    CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h"))
+    CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h")) // Rawk Hawk's Champ's Belt (c_bred_h, anim C_1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 56)
     CALL(evt_npc_set_position, STRING("ベルト"), LW(0), LW(1), LW(2))
@@ -1051,7 +1051,7 @@ EVT_END()
  * with no wall collision or hitbox for the Yoshi.
  */
 static EVT_BEGIN(epilogue_npc_entry)
-    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
+    CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella (epilogue)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 30, 0, -50)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 270)

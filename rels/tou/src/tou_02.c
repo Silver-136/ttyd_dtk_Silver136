@@ -1368,7 +1368,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ガードマン１"*/"\203K\201[\203h\203}\203\223\202P", // name
+        /*"ガードマン１"*/"\203K\201[\203h\203}\203\223\202P", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard1, // initEvent
@@ -1380,7 +1380,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ガードマン２"*/"\203K\201[\203h\203}\203\223\202Q", // name
+        /*"ガードマン２"*/"\203K\201[\203h\203}\203\223\202Q", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard2, // initEvent
@@ -1392,7 +1392,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"マダム"*/"\203}\203_\203\200", // name
+        /*"マダム"*/"\203}\203_\203\200", // name (Toodles)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_madam, // initEvent
@@ -1404,7 +1404,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"レポーター"*/"\203\214\203|\201[\203^\201[", // name
+        /*"レポーター"*/"\203\214\203|\201[\203^\201[", // name (a local reporter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_repo, // initEvent
@@ -1416,7 +1416,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カメラマン１"*/"\203J\203\201\203\211\203}\203\223\202P", // name
+        /*"カメラマン１"*/"\203J\203\201\203\211\203}\203\223\202P", // name (a rookie cameraman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cam1, // initEvent
@@ -1428,7 +1428,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カメラマン２"*/"\203J\203\201\203\211\203}\203\223\202Q", // name
+        /*"カメラマン２"*/"\203J\203\201\203\211\203}\203\223\202Q", // name (a freelance cameraman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cam2, // initEvent
@@ -1440,7 +1440,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピオ４"*/"\203L\203m\203s\203I\202S", // name
+        /*"キノピオ４"*/"\203L\203m\203s\203I\202S", // name (a Toad who works at the Glitz Pit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino4, // initEvent
@@ -1452,7 +1452,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピオ５"*/"\203L\203m\203s\203I\202T", // name
+        /*"キノピオ５"*/"\203L\203m\203s\203I\202T", // name (a Toad father in the crowd)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino5, // initEvent
@@ -1464,7 +1464,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピコ"*/"\203L\203m\203s\203R", // name
+        /*"キノピコ"*/"\203L\203m\203s\203R", // name (a Toad child, a Prince Mush fan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinopiko, // initEvent
@@ -1476,7 +1476,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"バッジ屋"*/"\203o\203b\203W\211\256", // name
+        /*"バッジ屋"*/"\203o\203b\203W\211\256", // name (Ms. Mowz)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_chu, // initEvent
@@ -1488,7 +1488,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223", // name
+        /*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223", // name (Rawk Hawk)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_champ, // initEvent
@@ -1500,7 +1500,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノシコワ"*/"\203L\203m\203V\203R\203\217", // name
+        /*"キノシコワ"*/"\203L\203m\203V\203R\203\217", // name (Jolene)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_shikowa, // initEvent
@@ -1512,7 +1512,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ウラノコ"*/"\203E\203\211\203m\203R", // name
+        /*"ウラノコ"*/"\203E\203\211\203m\203R", // name (Shellshock, a fighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_uranoko, // initEvent
@@ -1524,7 +1524,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"アイアンＡ"*/"\203A\203C\203A\203\223\202`", // name
+        /*"アイアンＡ"*/"\203A\203C\203A\203\223\202`", // name (the older Iron Adonis twin)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ironA, // initEvent
@@ -1536,7 +1536,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"アイアンＢ"*/"\203A\203C\203A\203\223\202a", // name
+        /*"アイアンＢ"*/"\203A\203C\203A\203\223\202a", // name (the younger Iron Adonis twin)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ironB, // initEvent
@@ -1548,7 +1548,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボロドー"*/"\203{\203\215\203h\201[", // name
+        /*"ボロドー"*/"\203{\203\215\203h\201[", // name (a Bandit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_borodo, // initEvent
@@ -2231,9 +2231,9 @@ EVT_BEGIN(evt_momikucha)
     IF_INT_EQUAL(LF(0), 0)
         RETURN
     END_IF
-    CALL(evt_npc_entry, STRING("fan"), STRING("c_kinopio"))
-    CALL(evt_npc_entry, STRING("fan2"), STRING("c_kinopiko"))
-    CALL(evt_npc_entry, STRING("fan3"), STRING("c_jugemu"))
+    CALL(evt_npc_entry, STRING("fan"), STRING("c_kinopio")) // hidden Toad template for the fan-mob sprites
+    CALL(evt_npc_entry, STRING("fan2"), STRING("c_kinopiko")) // hidden female Toad template for the fan-mob sprites
+    CALL(evt_npc_entry, STRING("fan3"), STRING("c_jugemu")) // hidden Lakitu template for the fan-mob sprites
     CALL(evt_npc_set_position, STRING("fan"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan2"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan3"), 0, -1000, 0)

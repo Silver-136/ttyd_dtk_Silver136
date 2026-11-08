@@ -347,7 +347,7 @@ EVT_END()
 /** NPCs of this room: the parrot. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "オウム", // name
+        "オウム", // name (Doopliss's parrot)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         oumu_init, // initEvent

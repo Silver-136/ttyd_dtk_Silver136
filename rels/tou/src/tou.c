@@ -1574,7 +1574,7 @@ EVT_BEGIN(party_npc_replace)
     CALL(evt_mario_get_party, LW(3))
     SWITCH(LW(3))
         CASE_EQUAL(1)
-        CALL(evt_npc_entry, STRING("dummy_party"), STRING("c_pkr"))
+        CALL(evt_npc_entry, STRING("dummy_party"), STRING("c_pkr")) // stand-in for Goombella in the poisoned-cake scene
         CALL(evt_npc_set_anim, STRING("dummy_party"), STRING("PKR_D_3"))
         CALL(evt_npc_change_interrupt, STRING("dummy_party"), 6, PTR(dummy_party_msg_pkr))
         CASE_EQUAL(2)
@@ -1708,7 +1708,7 @@ EVT_BEGIN(evt_tamago_byebye)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_check, STRING("たまご"), LW(10))
     IF_INT_EQUAL(LW(10), 0)
-        CALL(evt_npc_entry, STRING("たまご"), STRING("c_babyyoshi"))
+        CALL(evt_npc_entry, STRING("たまご"), STRING("c_babyyoshi")) // the egg that hatches into the Yoshi partner
     END_IF
     CALL(evt_npc_set_tribe, STRING("たまご"), STRING("たまご"))
     CALL(evt_npc_set_anim, STRING("たまご"), STRING("PYS_E_2"))

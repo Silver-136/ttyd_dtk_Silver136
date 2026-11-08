@@ -822,7 +822,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ノコタロウ", // name
+        "ノコタロウ", // name (Koops)
         0, 0, // flags..reactionFlags
         nokotarou_init, // initEvent
         nokotarou_reg, // regularEvent
@@ -837,7 +837,7 @@ static NpcSetupInfo npcEnt[] = {
         -1, // battleInfoId
     },
     {
-        "ノコリン", // name
+        "ノコリン", // name (Koopie Koo)
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

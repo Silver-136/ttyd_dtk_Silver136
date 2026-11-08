@@ -53,7 +53,7 @@ EVT_END()
 /** NPCs of the ending ship scene: Peach. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ピーチ姫", // name
+        "ピーチ姫", // name (Princess Peach (ending ship scene))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         peach_init, // initEvent

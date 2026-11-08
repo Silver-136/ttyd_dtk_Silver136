@@ -615,7 +615,7 @@ EVT_END()
 /** NPCs of the jail: the Puni Elder, the guide's sister, the guide Puni and Puni 3. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "プニ族長老", // name
+        "プニ族長老", // name (the Puni elder)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         elder_init, // initEvent
@@ -627,7 +627,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガイド妹", // name
+        "ガイド妹", // name (Petuni)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sister_init, // initEvent
@@ -639,7 +639,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ガイド", // name
+        "ガイド", // name (Punio)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         guide_init, // initEvent
@@ -651,7 +651,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "プニ族３", // name
+        "プニ族３", // name (a Puni)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puni_3_init, // initEvent

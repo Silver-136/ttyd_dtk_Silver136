@@ -391,7 +391,7 @@ EVT_END()
 /** NPCs of this room: the Blooper's tentacle, which starts the boss scene when Mario hits it. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ゲッソーのゲソ", // name
+        "ゲッソーのゲソ", // name (a tentacle of the Blooper boss)
         0, // flags
         3, // reactionFlags
         geso_init, // initEvent

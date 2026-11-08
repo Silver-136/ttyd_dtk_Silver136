@@ -691,7 +691,7 @@ EVT_END()
 /** NPCs of Grubba's office: Grubba and Jolene. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ガンス", // name
+        "ガンス", // name (Grubba)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gans, // initEvent
@@ -703,7 +703,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "キノシコワ", // name
+        "キノシコワ", // name (Jolene)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinoshikowa, // initEvent

@@ -86,7 +86,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "シンノスケ1", // name
+        "シンノスケ1", // name (a Bald Cleft on the gate pillar)
         0, 0, // flags..reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent
@@ -105,7 +105,7 @@ static NpcSetupInfo npcEnt[] = {
         8, // battleInfoId
     },
     {
-        "シンノスケ2", // name
+        "シンノスケ2", // name (a Bald Cleft on the gate pillar)
         0, 0, // flags..reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent

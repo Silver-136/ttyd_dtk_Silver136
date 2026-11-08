@@ -239,7 +239,7 @@ EVT_END()
  */
 static EVT_BEGIN(iri_12_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
-        CALL(evt_npc_entry, STRING("キーノ"), STRING("c_kokinopio"))
+        CALL(evt_npc_entry, STRING("キーノ"), STRING("c_kokinopio")) // Pine T. Jr.
         CALL(evt_npc_set_tribe, STRING("キーノ"), STRING("キノピオ子"))
         CALL(evt_npc_set_position, STRING("キーノ"), 60, 0, -70)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
@@ -251,7 +251,7 @@ static EVT_BEGIN(iri_12_init)
         CALL(evt_npc_status_onoff, 1, STRING("キーノ"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_change_interrupt, STRING("キーノ"), 6, PTR(iri_12_kino_talk))
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)
-            CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k"))
+            CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k")) // Pine T. Sr.
             CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
             CALL(evt_npc_set_position, STRING("マッキノ"), 90, 0, -70)
             CALL(evt_npc_set_ry, STRING("マッキノ"), 90)

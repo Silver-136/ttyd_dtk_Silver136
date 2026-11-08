@@ -45,6 +45,8 @@ Every area of the world is one REL, `rels/<code>/`, with maps named `<code>_NN` 
 
 ## Characters
 
+Every NPC carries an English note where it is defined: its map's setup entry (`"モニー", // name (Francesca)`) or the `evt_npc_entry` call that creates it, and every NPC kind and field-AI kind in `src/data/npc_data.c`. The notes come from the US text (mostly Goombella's tattle line for that NPC, which is stored under the NPC's name), the battle-unit names, and the scripts. A note that starts with "lit." is a literal translation of a Japanese name the English game never names.
+
 ### Partners
 
 | In the code | English | Field code | Battle unit |

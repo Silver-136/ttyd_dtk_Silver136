@@ -1657,7 +1657,7 @@ EVT_END()
 /** The NPCs of the room: Dark Bones (黒カロン), which does not turn to face Mario, and a Dry Bones (カロン) without events. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "黒カロン", // name
+        "黒カロン", // name (the Dark Bones pile (Palace of Shadow))
         NPC_FLAG_NO_TALK_TURN, // flags
         0, // reactionFlags
         kurokaron_init, // initEvent
@@ -1669,7 +1669,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "カロン", // name
+        "カロン", // name (a Dry Bones (no events; no script uses it))
         0, 0, NULL, NULL, NULL, NULL, NULL, NULL, // flags..lostEvent
         NULL, NULL, 0, // returnEvent..territoryType
         {0}, // territoryBase

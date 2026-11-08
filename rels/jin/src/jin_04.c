@@ -598,7 +598,7 @@ EVT_BEGIN(hontonosugata_mario)
     // Stage the scene; the Ruby Star appears at the fake Mario's position and bounces along.
     CALL_CHILD(hontonosugata_mario_init)
     CALL(evt_item_entry, STRING("rubystar"), ITEM_RUBY_STAR, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_mario"))
+    CALL(evt_npc_entry, STRING("ダミー"), STRING("c_mario")) // hidden Mario stand-in the Ruby Star follows
     CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 30)
@@ -894,7 +894,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ランペル", // name
+        "ランペル", // name (Doopliss)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         ranperu_init, // initEvent
@@ -904,7 +904,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "にせマリオ", // name
+        "にせマリオ", // name (Doopliss disguised as Mario)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         nisemario_init, // initEvent
@@ -914,7 +914,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クリスチーヌ", // name
+        "クリスチーヌ", // name (Goombella (siding with the fake Mario))
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -923,7 +923,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ノコタロウ", // name
+        "ノコタロウ", // name (Koops)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -932,7 +932,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "クラウダ", // name
+        "クラウダ", // name (Flurrie)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -941,7 +941,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "ヨッシー", // name
+        "ヨッシー", // name (the Yoshi partner)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

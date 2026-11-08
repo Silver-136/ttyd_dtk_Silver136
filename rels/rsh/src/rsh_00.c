@@ -608,9 +608,9 @@ EVT_BEGIN(evt_rsh_moamoa_on_window)
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_47_ESCAPING_THE_SMORGS)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_MOAMOA_VOICE2"), LW(10))
         CALL(evt_snd_sfx_vol, LW(10), 88)
-        CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
+        CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a")) // hidden Smorg model A for the window swarm sprites
         CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
-        CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
+        CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b")) // hidden Smorg model B for the window swarm sprites
         CALL(evt_npc_set_position, STRING("moa_b"), 0, -1000, 0)
         CALL(evt_ext_entry, 1000, PTR(moamoa_data), PTR(moamoa_init), PTR(moamoa_main), PTR(moamoa_dispent))
         CALL(evt_moamoa_set_seq_all, 4)
@@ -953,7 +953,7 @@ EVT_END()
 /** NPCs of the driver's cab: the driver. */
 static NpcSetupInfo npc_data[] = {
     {
-        "運転手", // name
+        "運転手", // name (the engineer of the Excess Express)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_unten, // initEvent

@@ -418,7 +418,7 @@ USER_FUNC(bonbaba_wait_landon) {
 /** The single NPC of the room, Gloomtail (ボンババ), whose rendering skips view-volume culling and camera-angle correction. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "ボンババ", // name
+        "ボンババ", // name (Gloomtail)
         NPC_FLAG_NO_CULL | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION, // flags
         0, // reactionFlags
         bonbaba_init, // initEvent
@@ -443,7 +443,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_cam3d_evt_set, 100, 5, 77, 0, 35, -150, 0, EASING_SINE_IN_OUT)
-    CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h"))
+    CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h")) // Professor Frankly (Shadow Queen awakening scene)
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_set_position, STRING("クリハカセ"), -58, 0, -280)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)

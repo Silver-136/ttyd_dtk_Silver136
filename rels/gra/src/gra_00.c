@@ -625,7 +625,7 @@ static BeroEntry bero_entry_data[] = {
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        "にせマリオ", // name
+        "にせマリオ", // name (Doopliss disguised as Mario)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

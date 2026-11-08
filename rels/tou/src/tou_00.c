@@ -642,7 +642,7 @@ USER_FUNC(kemuri_move) {
 /** NPCs of this map: Bowser in his airship, who flies over Glitzville in the chapter 4 interlude. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "飛クッパ", // name
+        "飛クッパ", // name (Bowser flying in his airship)
         NPC_FLAG_TALK_POSE, // flags
         0, // reactionFlags
         hkoopa_init, // initEvent

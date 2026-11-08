@@ -94,7 +94,7 @@ EvtWord senkaron_escape_event[4];
 /** NPC setup of gon_03: the Dry Bones dummy, Richard and the leader of the bone enemies. */
 static NpcSetupInfo npcEnt[] = {
     {
-        "カロン1", // name
+        "カロン1", // name (placeholder Dry Bones parked below the map)
         0, 0, // flags..reactionFlags
         senkarondummy_init_event, // initEvent
         senkarondummy_regl_event, // regularEvent
@@ -105,7 +105,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "リチャード", // name
+        "リチャード", // name (collapsed Dry Bones holding the Hooktail letter)
         0, 0, // flags..reactionFlags
         richard_init_event, // initEvent
         richard_regl_event, // regularEvent
@@ -116,7 +116,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        "リーダー", // name
+        "リーダー", // name (Dry Bones pile that sets off the bone swarm)
         0, 0, // flags..reactionFlags
         leaderkaron_init_event, // initEvent
         NULL, // regularEvent

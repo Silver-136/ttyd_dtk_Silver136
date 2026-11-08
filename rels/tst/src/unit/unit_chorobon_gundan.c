@@ -474,7 +474,7 @@ ExtTexInfo chorogun_ext_entry_data[] = {
  * and registers a 1000-pose extdrv object driven by chorogun_ext_init and chorogun_ext_main.
  */
 EVT_BEGIN(chorogun_entry)
-    CALL(evt_npc_entry, STRING("ext_chorobon"), STRING("c_chorobon"))
+    CALL(evt_npc_entry, STRING("ext_chorobon"), STRING("c_chorobon")) // hidden Fuzzy template for the 1000-Fuzzy swarm
     CALL(evt_npc_set_position, STRING("ext_chorobon"), 0, -1000, 0)
     CALL(evt_ext_entry, 1000, PTR(chorogun_ext_entry_data), PTR(chorogun_ext_init), PTR(chorogun_ext_main), 0)
     RETURN

@@ -935,7 +935,7 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_N_7"))
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_entry, STRING("dummy1"), STRING("c_pguide"))
+        CALL(evt_npc_entry, STRING("dummy1"), STRING("c_pguide")) // invisible stand-in carrying the partner Flurrie knocks
         CALL(evt_npc_flag_onoff, 1, STRING("dummy1"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_flag_onoff, 1, STRING("dummy1"), NPC_FLAG_NO_DRAW)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -980,7 +980,7 @@ EVT_BEGIN(clouda_nakama)
         CALL(evt_npc_delete, STRING("dummy1"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_entry, STRING("dummy2"), STRING("c_pguide"))
+        CALL(evt_npc_entry, STRING("dummy2"), STRING("c_pguide")) // invisible stand-in carrying Punio when Flurrie knocks him
         CALL(evt_npc_flag_onoff, 1, STRING("dummy2"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_flag_onoff, 1, STRING("dummy2"), NPC_FLAG_NO_DRAW)
         CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
