@@ -63,9 +63,14 @@ in `docs/FAKES.md` and in the mweppc review record.
 ## 3. Names
 
 - L_/U_/N_ function names (Zephiles, 2026-10-27; mostly done 2026-10-28, see the commits): 70 functions carried Zephiles' confidence prefix (L_ likely correct,
-  U_ likely wrong, N_ named from the code); 6 still do (`L_allPartyRideOn`, `L_getTargetPos`, `L_marioChkRub`,
-  `L_psndBGM_stop`, `L_sweatEntry`, `N_marioChkUseParty`). Judge each against the JP demo map and the code, rename where a
-  better or original name exists, then drop the prefix (`N__disp_2D` -> `_disp_2D`).
+  U_ likely wrong, N_ named from the code). Judged 2026-11-08 against the JP demo map: `marioChkRub` (same
+  address in the JP demo build), `allPartyRideOn` (its stripped slot) and `yoshi_hitobj_ride` (was L_sweatEntry:
+  the slot holds both names, the body records Yoshi's stand-on hit object) are original; `marioChkUseParty` is new
+  in JP, so its name stays descriptive (NAME_PROVENANCE.md). Two keep the prefix: `L_getTargetPos` is a global copy
+  (called from party_motion) of the static getTargetPos that party_move's callers inline; one function for both
+  makes three of those callers 0x18 bytes shorter (tested), so the name stays taken, and
+  `L_psndBGM_stop` sits in a slot of four stripped demo functions while its body stops battle-start sound effects,
+  not the BGM (new in JP; the demos clear the flag inline).
 - DONE (2026-10-27): descriptive function names (user): each of the 147 functions whose name is not in the symbol maps
   (docs/NAME_PROVENANCE.md, kind `function`) gets a comment at its definition saying the name is descriptive and
   giving the placeholder it replaced and its JP address (e.g. `unk_8013be14`, JP 0x8013BE14), so readers can search

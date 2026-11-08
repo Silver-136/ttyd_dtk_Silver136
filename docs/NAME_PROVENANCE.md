@@ -2019,6 +2019,7 @@ YoshiNomikomi_Spew, gonbaba_fumituke, gesso_ikasumi, KaitenHammer), so they are 
 
 | Kind | Unit | Name | Replaced placeholder | Date |
 | --- | --- | --- | --- | --- |
+| function | mario | `marioChkUseParty` (Zephiles' name; new in JP, no map names it) | `N_marioChkUseParty` | 2026-11-08 |
 | data | cardmgr | `cardFileName` ("mariost_save_file") | `str_802CCC80` | 2026-10-25 |
 | data | cardmgr | `cardGameTitle` (memory card title, US/JP text) | `str_802CCC94` | 2026-10-25 |
 | data | cardmgr | `cardDateFormat` (memory card comment format) | `str_802CCCAC` | 2026-10-25 |

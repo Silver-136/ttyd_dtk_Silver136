@@ -33,7 +33,7 @@ s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
 
-    if (N_marioChkUseParty()) {
+    if (marioChkUseParty()) {
         mario->partyUseDelay = 0;
         mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;

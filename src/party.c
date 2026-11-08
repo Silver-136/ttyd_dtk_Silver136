@@ -2019,8 +2019,10 @@ void allPartyForceRideOn(void) {
 /**
  * Puts both partners in the ride mode (11) to hop onto Mario (the bellows motion, mot_jabara, in JP and later;
  * the early demos use allPartyRideJabara).
+ * Name from the JP demo map, which lists allPartyRideOn (stripped there) in this slot, next to allPartyRideOff and
+ * allPartyRideOff2.
  */
-void L_allPartyRideOn(void) {
+void allPartyRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
         partyChgRunMode(party, PARTY_RUN_RIDE);

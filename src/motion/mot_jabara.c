@@ -347,7 +347,7 @@ void mot_jabara(void) {
                 mario->currSubMotionId = 0x64;
                 break;
             }
-            L_allPartyRideOn();
+            allPartyRideOn();
             psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS1_1), &mario->position);
             jabaraSetSpd(0.2f, 0.005f, 1.5f);
             mario->multiTimer = 8;

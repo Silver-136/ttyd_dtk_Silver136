@@ -596,7 +596,11 @@ BOOL marioChkCtrl(void) {
 }
 
 #if VERSION >= VERSION_JP
-BOOL N_marioChkUseParty(void) {
+/**
+ * Nonzero when a D-pad direction or Start was pressed this frame, or while Mario's control is off.
+ * Descriptive name (Zephiles'); the function is new in JP retail, so no map names it.
+ */
+BOOL marioChkUseParty(void) {
     // buttonNew is truncated to u16 before the test (all tested bits are in the low half; the clrlwi is in the retail code)
     if ((u16)gp->buttonNew[0] & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP | PAD_BUTTON_START)) {
         return TRUE;
@@ -1185,7 +1189,7 @@ void marioMain(void) {
         return;
     }
 #if VERSION >= VERSION_JP
-    if (N_marioChkUseParty()) {
+    if (marioChkUseParty()) {
         marioColorChk();
         p = mp;
         if (pouchEquipCheckBadge(ITEM_SLOW_GO)) {
@@ -1613,7 +1617,7 @@ static void marioMoveMain(void) {
     if (wp->currMotionId == MARIO_MOTION_SHIP) {
         return;
     }
-    if (L_marioChkRub()) {
+    if (marioChkRub()) {
         return;
     }
     vx = 0.0f;

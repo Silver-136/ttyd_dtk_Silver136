@@ -620,7 +620,7 @@ BOOL marioFrontActionValidChk(void);
 BOOL marioCheckMenuDisable(void);
 BOOL marioChkKey(void);
 BOOL marioChkCtrl(void);
-BOOL N_marioChkUseParty(void);
+BOOL marioChkUseParty(void);
 void marioFBattlePrepare(void);
 void marioFBattlePost(void);
 s32 marioCtrlOffChk(void);

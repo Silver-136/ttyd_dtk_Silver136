@@ -1127,8 +1127,11 @@ BOOL marioChkItemMotion(void) {
     return TRUE;
 }
 
-/** Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero. */
-s32 L_marioChkRub(void) {
+/**
+ * Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero.
+ * Name from the JP demo map (marioChkRub, at this function's address in the JP demo build).
+ */
+s32 marioChkRub(void) {
 #if VERSION <= VERSION_DEMO_JP
     MarioWork* mario = marioGetPtr();
 #endif

@@ -119,8 +119,10 @@ s32 evt_get_yoshi_frm(void) {
  * Records the hit object Yoshi stands on (NULL when airborne) and,
  * while Mario rides on the ground and is not jumping or falling,
  * makes it Mario's stand-on object too so moving floors carry both.
+ * Name from the JP demo map, which lists yoshi_hitobj_ride and sweatEntry (both stripped there) in this slot of
+ * the source; the body fits yoshi_hitobj_ride, and the sweat effect is entered inline in yoshi_use.
  */
-void L_sweatEntry(PartyEntry* party, void* hit) {
+void yoshi_hitobj_ride(PartyEntry* party, void* hit) {
     party->hitobjStandOn = hit;
     if (yoshiGetStatus() == YOSHI_STATUS_RIDING && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
         party->playerPtr->hitobjStandOn = hit;
@@ -372,7 +374,7 @@ void yoshi_damageToge(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* extra;
 
-    L_sweatEntry(party, NULL);
+    yoshi_hitobj_ride(party, NULL);
     marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
     party->useMotionId = 10;
     partyChgPose(party, "PYS_S_2");
@@ -853,7 +855,7 @@ void yoshi_use(PartyEntry* party) {
                         return;
                     }
                 }
-                L_sweatEntry(party, NULL);
+                yoshi_hitobj_ride(party, NULL);
                 mario->mot.yoshi.baseY = party->groundY;
                 party->position.y = party->groundY + mario->mot.yoshi.bobOfs;
             }
@@ -958,7 +960,7 @@ void yoshi_use(PartyEntry* party) {
             mario->airTimer = 0;
             mario->jumpPeakAirTime = 0;
             party->hitobjJumpFrom = party->hitobjStandOn;
-            L_sweatEntry(party, NULL);
+            yoshi_hitobj_ride(party, NULL);
             mario->hitobjStandOn = NULL;
             mario->lastGroundPos = mario->position;
             jumpheight = 100.0f;
@@ -1338,7 +1340,7 @@ static void searchGround(PartyEntry* party) {
 #endif
             pos = party->position;
             marioSetSplash(0, &pos);
-            L_sweatEntry(party, NULL);
+            yoshi_hitobj_ride(party, NULL);
             fall(party);
             party->position.y += party->gravity;
             set_damage_root_ypos(mario->position.y - 8.0f);
@@ -1398,7 +1400,7 @@ static void searchGround(PartyEntry* party) {
             }
         }
     }
-    L_sweatEntry(party, hit);
+    yoshi_hitobj_ride(party, hit);
     if (hit == NULL) {
         party->flags &= ~PARTY_FLAG_IS_GROUNDED;
         fall(party);
@@ -1438,7 +1440,7 @@ static void searchGround2(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         hit = _partySearchGround(party, &ground.y, &depth, 11.0f, 0.0f);
     }
-    L_sweatEntry(party, hit);
+    yoshi_hitobj_ride(party, hit);
     if (hit == NULL) {
         return;
     }
@@ -1448,7 +1450,7 @@ static void searchGround2(PartyEntry* party) {
         hit = partySearchGround(party, 11.0f, 0.0f);
     }
     if (hit == NULL) {
-        L_sweatEntry(party, hit);
+        yoshi_hitobj_ride(party, hit);
         return;
     }
 #endif
@@ -1456,7 +1458,7 @@ static void searchGround2(PartyEntry* party) {
     if (attr & HIT_ATTR_WATER_HAZARD) {
         Vec pos = party->position;
         marioSetSplash(0, &pos);
-        L_sweatEntry(party, NULL);
+        yoshi_hitobj_ride(party, NULL);
         party->gravity = -0.4f;
         party->work.common.accelY = -0.4f;
         party->work.yoshi.gravityAccel = 0.0f;
