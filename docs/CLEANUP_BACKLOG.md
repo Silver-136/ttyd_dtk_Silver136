@@ -83,9 +83,14 @@ in `docs/FAKES.md` and in the mweppc review record.
   (0f45e78cd, cleanup_tools/unit_work_headers.py). 153 numeric slot arguments left (cleanup_tools/work_slots_left.py,
   2026-11-07); slots no script reads have nothing to name them from.
 - Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (83 in 35 files, debt_inventory 2026-11-07); write-only or
-  unused fields keep offset names unless their meaning is clear (then `_UNUSED`).
-- Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the
-  real struct type.
+  unused fields keep offset names unless their meaning is clear (then `_UNUSED`). Checked 2026-11-08: the 20 code
+  uses left are all one-time writes at setup that nothing reads (effects, gor_irai, jin_07, las_04, muj, tou_03,
+  sac_deka); none of the written values shows what the field is, so they keep offset names.
+- Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 394 (2026-11-08). The views among them were
+  turned into the real types earlier (section 4); the large gaps left are documented "never accessed" bytes or
+  unread file-data fields (cam_road.h's curve record: one value read per 12-byte group, layout unknown). About 100 are
+  1-3 byte pads in front of a 4-byte member, the same bytes the compiler inserts by itself; keeping or dropping
+  them is a style choice (asked the user, 2026-11-08).
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
   from what our code does (2026-10-26). Later decisions allow, with credit in NAME_PROVENANCE.md: jdaster64's
   pseudocode names, Zephiles' IconType names, the MetroTRK spellings of the community TRK decompilations, AxioDL's
