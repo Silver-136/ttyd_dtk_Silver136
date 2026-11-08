@@ -23,4 +23,6 @@ BOOL THPSimpleSetVolume(s32 vol, s32 time);
 void seq_demoInit(SequenceWork* work);
 void seq_demoMain(SequenceWork* work);
 void seq_demoExit(SequenceWork* work);
+f32 THPSimpleGetFrameRate(void);
+s32 THPSimpleGetVolume(void);
 #endif

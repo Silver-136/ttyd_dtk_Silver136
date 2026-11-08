@@ -10,3 +10,4 @@ s32 marioGetHammerLevel(void);
 void mot_ham2_post(void);
 void mot_hammer(void);
 void mot_hammer2(void);
+s32 breakableMobj(const char* name);

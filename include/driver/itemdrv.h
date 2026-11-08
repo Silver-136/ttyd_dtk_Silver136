@@ -3,6 +3,7 @@
 #include "version.h"
 
 #include "driver/effdrv.h"
+#include "driver/hitdrv.h"
 #include "evt/evt_word.h"
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
@@ -159,3 +160,5 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 void itemStatusOn(ItemEntry* entry, u32 flags);
 void itemCoinDrop(Vec* position);
+HitEntry* itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy);
+HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy);

@@ -97,3 +97,6 @@ USER_FUNC(kpa_get_pole_name);
 USER_FUNC(kpa_get_width);
 USER_FUNC(kpa_powerup);
 USER_FUNC(kpa_score_to_str);
+void evt_mobj_rideswitch(void);
+void mobj_sign(void);
+void mobj_koopa_stone_blk(void);

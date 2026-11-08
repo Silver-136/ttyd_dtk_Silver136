@@ -7,3 +7,4 @@
 
 EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 dir);
 EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle);
+EffectEntry* effMugiEntry(void);

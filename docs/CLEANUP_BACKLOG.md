@@ -95,6 +95,13 @@ in `docs/FAKES.md` and in the mweppc review record.
   in their initialisers (`{0}, // pad_05`: BattleWeapon pad_06/pad_AE, BattleUnitSetup pad_05, three field_0x2),
   and 45 the tool cannot prove: a struct-typed, 1- or 2-byte member next, a version block or the struct's end
   next, or no known offset.
+- Prototypes of restored stripped functions (rule, user 2026-11-08): a global function the JP demo map lists as
+  stripped gets its prototype in its unit's header, like every other global (the header is the interface); no
+  private declarations. Done for the 15 that had none (pouch addHead/addHeadCheck/addTail/pouchGetItemCheck,
+  itemHitCheckY/Up, statusWinEase, breakableMobj, effMugiEntry, evt_mobj_rideswitch, mobj_sign,
+  mobj_koopa_stone_blk, THPSimpleGetFrameRate/Volume, rndi; itemdrv.h now includes hitdrv.h for HitEntry).
+  Not covered: FAKE stand-ins (`*Stripped*`, forceSdata), non-static inline helpers, partyNrmToAngle (its
+  pointer prototype in party.c is a FAKES row); cleanup_tools/uncalled_protos.py lists the rest.
 - One-line brace blocks (`{ decl; stmt; }`): laid out one statement per line (2026-11-08, 36 sites,
   cleanup_tools/split_blocks.py); SGI's GLU code keeps its own style.
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or

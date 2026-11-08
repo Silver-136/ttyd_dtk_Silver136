@@ -524,6 +524,10 @@ char* pouchGetYoshiName(void);
 BOOL pouchRemoveItemIndex(ItemType type, s32 index);
 void pouchSortItem(s32 mode);
 void pouchHiraToKata(const char* src, char* dst);
+BOOL addHead(ItemType type);
+BOOL addHeadCheck(ItemType type);
+BOOL addTail(ItemType type);
+BOOL pouchGetItemCheck(ItemType type);
 
 // Names from LLCOOLT's tree.
 enum {
