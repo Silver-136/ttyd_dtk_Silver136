@@ -696,7 +696,7 @@ void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
  */
 static inline void mapLoadReloc_(MapEntry* entry) {
     u32 k;
-    for (k = 0; k < (u32)entry->header.file.relCount; k++) {
+    for (k = 0; k < entry->header.file.relCount; k++) {
         u32* rel = (u32*)((u8*)entry->header.data + entry->header.rel[k]);
         if (*rel <= 0x80000000) {
             *rel += (u32)entry->header.data;
@@ -731,20 +731,20 @@ static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
         memcpy(header, data, sizeof(MapFileHeader));
         if (mapHdrSizeOk_(&wp->entries[group].header, datSize)) {
             sizeCheck = sizeof(MapFileHeader);
-            if ((u32)wp->entries[group].header.file.dataSize != 0u) {
+            if (wp->entries[group].header.file.dataSize != 0) {
                 wp->entries[group].header.data = &data[sizeCheck];
                 sizeCheck = wp->entries[group].header.file.dataSize;
                 sizeCheck += sizeof(MapFileHeader);
             }
-            if ((u32)wp->entries[group].header.file.relCount != 0u) {
+            if (wp->entries[group].header.file.relCount != 0) {
                 wp->entries[group].header.rel = (u32*)&data[sizeCheck];
                 sizeCheck += 4 * wp->entries[group].header.file.relCount;
             }
-            if ((u32)wp->entries[group].header.file.chunkCount != 0u) {
+            if (wp->entries[group].header.file.chunkCount != 0) {
                 wp->entries[group].header.chunks = (MapFileChunk*)&data[sizeCheck];
                 sizeCheck += sizeof(MapFileChunk) * wp->entries[group].header.file.chunkCount;
             }
-            if ((u32)wp->entries[group].header.file.unused != 0u) {
+            if (wp->entries[group].header.file.unused != 0) {
                 wp->entries[group].header.unused = &data[sizeCheck];
                 sizeCheck += 8 * wp->entries[group].header.file.unused;
             }

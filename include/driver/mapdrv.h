@@ -158,11 +158,11 @@ typedef struct MapFileJoint {
 } MapFileJoint;
 
 typedef struct MapFileHeader {
-    s32 fileSize;     // 0x0
-    s32 dataSize;     // 0x4
-    s32 relCount;     // 0x8
-    s32 chunkCount;   // 0xC
-    s32 unused;       // 0x10
+    u32 fileSize;     // 0x0
+    u32 dataSize;     // 0x4
+    u32 relCount;     // 0x8
+    u32 chunkCount;   // 0xC
+    u32 unused;       // 0x10, count of a table of 8-byte entries the loader steps over; 0 in every retail map
     u8 reserved[0xC]; // 0x14
 } MapFileHeader;
 
@@ -185,7 +185,7 @@ typedef struct MapHeader {
     void* data;                 // 0x20
     u32* rel;                   // 0x24, relocation table: offsets into data of the pointers to rebase
     MapFileChunk* chunks;       // 0x28
-    void* unused;               // 0x2C
+    void* unused;               // 0x2C, that table (MapFileHeader.unused); no retail map has one
     const char* strings;        // 0x30
     u8 pad_34[0x3C - 0x34]; // 0x34, never accessed
     s32 loadFlags;             // 0x3C, bit 1 set by mapLoadHeader_ before the header copy

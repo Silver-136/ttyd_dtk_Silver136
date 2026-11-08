@@ -30,7 +30,7 @@ Some code looks odd but is not a trick, because the original game's code shows i
 
 Most of these were found with [mweppc](https://github.com/doldecomp/mweppc), a public-domain decompilation of the
 Metrowerks compiler the game was built with (GC 2.6), which shows why a given source form produces given code. The
-review took this list from 720 rows to 485.
+review took this list from 720 rows to 498 (13 of them re-listed by the adversarial review, whose rows had been lost).
 
 ## Rows
 
