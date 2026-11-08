@@ -9,7 +9,7 @@
 typedef enum NameEntryType {
     NAMEENT_FILE = 0,       // the save file name (seq_load)
     NAMEENT_YOSHI = 1,      // Yoshi's name (tou_10); blank gives his default name
-    NAMEENT_DOOPLISS = 2,   // guessing Doopliss's name before the Letter P is back (gra_00): n/N/p blanked
+    NAMEENT_DOOPLISS = 2,   // guessing Doopliss's name before the Letter P is back (gra_00): hiragana n, katakana n and Latin p blanked
     NAMEENT_DOOPLISS_P = 3, // the same guess afterwards
     NAMEENT_PASSWORD = 4,   // the X-Naut Fortress password (aji_01)
 } NameEntryType;

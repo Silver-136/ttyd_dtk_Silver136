@@ -224,7 +224,6 @@ void marioAdjustMoveDir(void) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
-
 #if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(180.0f);
 #else
@@ -237,7 +236,6 @@ void marioAdjustMoveDir(void) {
         mario->displayDirection = 180.0f;
         mario->displayDirectionTarget = 180.0f;
     } else {
-
 #if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(0.0f);
 #else

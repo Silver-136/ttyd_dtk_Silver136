@@ -355,11 +355,8 @@ USER_FUNC(evt_npc_get_home_position) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * devs forgot to change s32 to f32 when copypasting, fix in rewrite const char* lookupName, f32 x, f32 y, f32 z
- */
-// BUG: the coordinates pass through s32 locals, so their fractions are lost
-// const char* lookupName, f32 x, f32 y, f32 z
+/** const char* lookupName, f32 x, f32 y, f32 z */
+// BUG: the coordinates pass through s32 locals, so their fractions are lost.
 USER_FUNC(evt_npc_set_home_position) {
     EvtWord* args = event->args;
     const char* name;

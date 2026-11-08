@@ -343,7 +343,7 @@ s32 kusuri_id[] = {
 
 /**
  * Peach's potion pick: builds the list of potions she still holds (red, blue, orange, green,
- * from the local flags LSWF_AJI_06_RED_POTION_HELD to 4) and shows the item menu.
+ * from the local flags LSWF_AJI_06_RED_POTION_HELD .. GREEN_POTION_HELD) and shows the item menu.
  * Returns in LW(0) the potion number (1 to 4) she chose, or 0 if the menu was cancelled or she has no potion.
  */
 EVT_BEGIN(peach_evt_kusuri_select)
@@ -383,7 +383,7 @@ EVT_BEGIN(peach_evt_kusuri_select)
 EVT_END()
 
 /**
- * Takes the potion LW(0) out of a slot: sets the matching "have it" flag (LSWF_AJI_06_RED_POTION_HELD to 4),
+ * Takes the potion LW(0) out of a slot: sets the matching "have it" flag (LSWF_AJI_06_RED_POTION_HELD .. GREEN_POTION_HELD),
  * removes the potion item object (kusuri_aka, kusuri_ao, kusuri_ki or kusuri_mid) and,
  * if the start had already been armed (LSWF_AJI_06_MIX_START_OFFERED), cancels it and silences the siren.
  */

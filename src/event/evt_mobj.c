@@ -2419,7 +2419,6 @@ void mobj_sign(void) {
 // duration, x, y, z), and calls through it change the object.
 extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 number, s32 duration);
 
-/** case 3 heal sequence; case 4 spells the same steps out inline (only this split reproduces the target registers) */
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED (case 3).
 // FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there changes the object
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.

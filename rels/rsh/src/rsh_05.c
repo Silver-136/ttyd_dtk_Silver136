@@ -267,8 +267,8 @@ static ExtTexInfo ext_moamoa_data[] = {
     {0},
 };
 
-// Kept: the REL maps and the target show this Smorg helper called, not inlined (eki_00, rsh_00, rsh_05 and rsh_06
-// alike); under -inline auto nothing else keeps a short static function out of line.
+// Kept: the JP demo REL map lists this Smorg helper as its own function, and the target calls it, not inlined;
+// under -inline auto nothing else keeps a short static function out of line.
 #pragma dont_inline on
 
 /**
@@ -387,8 +387,8 @@ static inline void /**/ moamoa_pose_change_i(Moamoa* moa, const char* model, con
     }
 }
 
-// Kept: the REL maps and the target show this Smorg helper called, not inlined (eki_00, rsh_00, rsh_05 and rsh_06
-// alike); under -inline auto nothing else keeps a short static function out of line.
+// Kept: the JP demo REL map lists this Smorg helper as its own function, and the target calls it, not inlined;
+// under -inline auto nothing else keeps a short static function out of line.
 #pragma dont_inline on
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
     MoamoaPoseDef* def = wp->defs;

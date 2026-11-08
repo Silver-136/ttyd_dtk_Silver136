@@ -353,7 +353,7 @@ u32 seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_cal
   return seqId;
 }
 
-// The GC release library of MusyX 2.0.2 and later inlines seqPlaySong into sndSeqPlayEx
+// The GC release library of MusyX 2.0.2-2.0.3 inlines seqPlaySong into sndSeqPlayEx
 static inline u32 _seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_call,
                                u8 studio) {
   int i;

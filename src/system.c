@@ -1132,7 +1132,6 @@ asm void* memcpy_as4(void* dest, const void* src, u32 count) {
  * the asm returns the address of the last word written (r3 is advanced by stwu) and, given count < 4,
  * loops 2^32 times (ctr = 0); no caller uses the result or passes less than one word.
  */
-// the same word copy in C
 void* memcpy_as4(void* dest, const void* src, u32 count) {
     u32* d = (u32*)dest;
     const u32* s = (const u32*)src;

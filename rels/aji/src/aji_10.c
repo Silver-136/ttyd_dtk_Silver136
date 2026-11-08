@@ -1538,7 +1538,8 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_npc_check_delete, STRING("バリアーンカスタム"))
     END_IF
 
-    // The visited flag is already set before this test; retain the event words.
+    // BUG: the visited flag is set on the line before its test for 0, so the branch below (the east-door lock)
+    // never runs.
     SET_VALUE(GSWF_AJI_10_VISITED, 1)
     IF_INT_EQUAL(GSWF_AJI_10_VISITED, 0)
         SET_VALUE(LW(0), STRING("e_bero"))

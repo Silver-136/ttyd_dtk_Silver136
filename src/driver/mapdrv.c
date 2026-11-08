@@ -4426,11 +4426,12 @@ void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a) {
 }
 
 // FAKE: stand-in for functions the linker dead-stripped; it only keeps the constants they left behind in
-// .rodata/.sdata2, in their original order. Nothing calls it. The JP demo map lists the likely owners UNUSED:
-// mapGetConvertDate (0x26c, with a function-static date$2457, 0x20 .bss) for the map.dat path and ".", "information",
-// the two version names, the no-date text and "not converted" (map @2508-@2514), mapGetAnmDt (0xa8) for
-// "animation_table" (@2530, which the loader also reads) and mapGetCurve (0x120) for "curve_table" (@2724). Their
-// bodies are not known; the owner of the floats is not identified.
+// .rodata/.sdata2, in their original order. Nothing calls it. The JP demo map lists stripped functions in this
+// file (UNUSED): mapGetConvertDate (0x26c, with a function-static date$2457, 0x20 .bss), mapGetAnmDt (0xa8) and
+// mapGetCurve (0x120). By their meaning the date and "not converted" texts fit mapGetConvertDate, "animation_table"
+// (@2530) mapGetAnmDt and "curve_table" (@2724) mapGetCurve, but the map does not show which function owned which
+// constant: ".", "information" and "ver1.02" are also read by _mapLoad, and the owner of the floats is unknown.
+// The bodies are not known.
 static void mapStrippedPool(const char** str, f32* val) {
     str[0] = ".";
     val[0] = 3.0f;

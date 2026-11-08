@@ -893,8 +893,8 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             SET_VALUE(LW(7), LW(13))
             CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
 
-            // BUG: this IF never gets an END_IF (END_SIBLING_EVENT comes first); the rest of the script is indented one level deeper because of it
-            // BUG: this IF has no END_IF; END_SIBLING_EVENT below comes first (the missing end-if in Love Slap).
+            // BUG: this IF has no END_IF; END_SIBLING_EVENT below comes first, so the rest of the script is indented one
+            // level deeper.
             IF_INT_GREATER_OR_EQUAL(LW(0), 180)
                 SUBTRACT(LW(0), 360)
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, LW(0), 0, 4)

@@ -23,9 +23,7 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define __AIRegs         ((volatile u32 *)0xCC006C00)
 #endif
 
-// Offsets for __VIRegs
-
-// offsets for __VIRegs[i]
+// indices for __VIRegs[i]
 #define VI_VERT_TIMING        (0)
 #define VI_DISP_CONFIG        (1)
 #define VI_HORIZ_TIMING_0L    (2)
@@ -106,10 +104,10 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define DSP_CSR_AID_INT_MASK  (0x10)  // AID_mask: audio interface DMA interrupt enabled
 #define DSP_CSR_ARAM_INT      (0x20)  // ARAM DMA interrupt; written back to acknowledge it
 #define DSP_CSR_ARAM_INT_MASK (0x40)  // ARAM_mask
-#define DSP_CSR_DSP_INT       (0x80)  // DSP: interrupt from the DSP (mailbox)
+#define DSP_CSR_DSP_INT       (0x80)  // DSP: interrupt from the DSP
 #define DSP_CSR_DSP_INT_MASK  (0x100) // DSP_mask
 #define DSP_CSR_ARAM_DMA_BUSY (0x200) // DMAState: ARAM DMA in progress
-#define DSP_CSR_INIT_CODE     (0x400) // DSPInitCode
+#define DSP_CSR_DSP_DMA_BUSY  (0x400) // the SDK asserts "DSP DMA already in progress" on it (Dolphin: DSPInitCode)
 #define DSP_CSR_INIT          (0x800) // DSPInit
 
 #define DSP_ARAM_SIZE        (9)
@@ -130,9 +128,10 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 #define DSP_DMA_START_FLAG (0x8000) // set to start DSP
 
 // Register and bit names below follow the public hardware documentation: YAGCD ("Yet Another GameCube
-// Documentation", chapter 5) for the mnemonics and Dolphin's open-source emulator (Source/Core/Core/HW/) where
-// YAGCD gives none. Indices are byte offset / 4 for the u32 arrays and byte offset / 2 for __MEMRegs.
-// Sources and tables: cleanup_notes/hw_register_names.md.
+// Documentation", chapter 5) for the mnemonics and Dolphin's open-source emulator (Source/Core/Core/HW/) for the
+// rest (the DSP_CSR_* and DI_CMD_* names follow Dolphin). Indices are byte offset / 4 for the u32 arrays and
+// byte offset / 2 for __MEMRegs.
+// Sources and tables: cleanup_notes/hw_register_names.md (outside the repository).
 
 // Drive commands: the top byte of DI_CMDBUF0. Names after Dolphin's DICommand enum
 // (Source/Core/Core/HW/DVD/DVDInterface.h); values are shifted into the top byte here.

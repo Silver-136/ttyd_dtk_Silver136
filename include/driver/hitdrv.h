@@ -62,7 +62,8 @@ typedef enum HitAttributes {
     HIT_ATTR_SNOW = (1 << 20),             // 0x100000, footstep material
     HIT_ATTR_WOOD = (1 << 21),             // 0x200000, footstep material
     HIT_ATTR_METAL = (1 << 22),            // 0x400000, footstep and landing material: footstep/landing sound 6
-                                           // (all of aji; eki_02 gears, eki_00 elevator; tou stairs, box, lockers)
+                                           // (US maps: aji_02-07, 12-14, 19; eki_00 elevator, eki_02 gears, eki_04;
+                                           // tou_03-13 stairs, boxes, lockers; yuu_00)
     HIT_ATTR_BERO = (1 << 23),             // 0x800000, an exit (set by the bero/door scripts)
     HIT_ATTR_DAMAGE_RETURN = (1 << 30),    // 0x40000000, hitDamageReturnSet
     HIT_ATTR_MOBJ = (1 << 31),             // 0x80000000, a map object's hit cube

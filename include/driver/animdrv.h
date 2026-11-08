@@ -172,7 +172,7 @@ typedef struct AnimPoseGroup {
 // this is the structure of the actual stored files
 // AnimationPoseData.flags: which draw stages (animPoseDrawMtx's xluMode: 1 DISP_MODE_OPAQUE, 2 DISP_MODE_ALPHA_TEST,
 // 3 DISP_MODE_XLU) have parts in this file; a stage without its bit is skipped. Only bits 0-3 occur in the retail
-// animation files (cleanup_notes/map_files_evidence.md): 552 of them carry only bit 0.
+// animation files: 511 of the 656 US files carry only bit 0 (2026-11-07 count).
 typedef enum AnimDataFlags {
     ANIM_DATA_STAGE_ALPHA_TEST_ALT = (1 << 0), // 0x1, also selects the alpha-test stage (most character files)
     ANIM_DATA_STAGE_OPAQUE = (1 << 1),         // 0x2, stage 1

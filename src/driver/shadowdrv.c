@@ -971,7 +971,10 @@ void shadowSetType(s32 id, u8 type) {
 }
 
 #if VERSION >= VERSION_JP
-/** Sets the alpha of shadow id (despite the name); the early demos have no per-shadow alpha. */
+/**
+ * Sets the alpha of shadow id (despite the name). The early demos have no per-shadow alpha; their shadowSetMode
+ * (JP demo map: UNUSED, 0x18, stripped) did something else, and its body there is unknown.
+ */
 void shadowSetMode(s32 id, u8 alpha) {
     ShadowEntry* entry = &cswp->entries[id];
     entry->alpha = alpha;

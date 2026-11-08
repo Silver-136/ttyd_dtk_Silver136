@@ -144,11 +144,10 @@ ItemType pouchKeepItem(s32 id) {
 ItemType pouchHaveBadge(s32 id) {
     return mpp->badges[id];
 }
-#if VERSION >= VERSION_US
+// JP and the demos call nothing here and strip it (JP demo map: UNUSED, 0x14, the same size as in US).
 ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
 }
-#endif
 
 /** Number of items Mario carries (out of 20 slots). */
 s32 pouchGetHaveItemCnt(void) {
@@ -250,7 +249,6 @@ BOOL pouchGetMaxAndList(ItemType type, s32* maximum, s16** table1, s16** table2)
     return FALSE;
 }
 
-/** we have obtained an item, update the appropriate data */
 // Puts type at the front of its list (pouchGetMaxAndList) if that has an empty slot: the entries above the last
 // empty slot move down one place (the worn-badge list, if any, moves in step and gets 0 at the front).
 // Returns 1, or 0 when the list is full or type is not a pouch item.

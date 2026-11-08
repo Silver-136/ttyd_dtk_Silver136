@@ -69,7 +69,7 @@ void AIInitDMA(u32 start_addr, u32 length) {
 }
 
 BOOL AIGetDMAEnableFlag(void) {
-    return (__DSPRegs[DSP_DMA_CONTROL_LEN] & (1 << 15)) >> 15;
+    return (__DSPRegs[DSP_DMA_CONTROL_LEN] & DSP_DMA_START_FLAG) >> 15;
 }
 
 void AIStartDMA(void) {

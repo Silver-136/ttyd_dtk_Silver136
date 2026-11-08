@@ -216,7 +216,8 @@ s32 bero_id_filter(EvtWord id) {
 }
 
 /** Finds hit object `name` in entrance table `table`; *index (optional) is its position, or that of the end marker. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+// Original name from the JP demo's link map (UNUSED there, 0x9c): every call is inlined, so the linker strips it.
+// This body compiles to 0x88 on its own, so the original differs somewhere; the inlined copies match.
 void bero_name_search(BeroEntry** table, const char* name, s32* index) {
     BeroEntry** entry;
     const char* hitName;
@@ -258,7 +259,6 @@ EvtWord* bero_get_outevt(BeroEntry* bero) {
 }
 
 /** const char** mapName, const char** beroName */
-// const char** mapName, const char** beroName
 USER_FUNC(evt_bero_mapchange) {
     EvtWord* args = event->args;
     const char *map, *bero;

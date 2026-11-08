@@ -29,7 +29,7 @@ void __OSInitAudioSystem(void) {
 
     __DSPRegs[DSP_ARAM_SIZE] = 0x43;
     ASSERTMSGLINE(113, !(__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_ARAM_DMA_BUSY), "__OSInitAudioSystem(): ARAM DMA already in progress");
-    ASSERTMSGLINE(117, !(__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_INIT_CODE), "__OSInitAudioSystem(): DSP DMA already in progress");
+    ASSERTMSGLINE(117, !(__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_DSP_DMA_BUSY), "__OSInitAudioSystem(): DSP DMA already in progress");
     ASSERTMSGLINE(121, (__DSPRegs[DSP_CONTROL_STATUS] & DSP_CSR_HALT), "__OSInitAudioSystem(): DSP already working");
     
     __DSPRegs[DSP_CONTROL_STATUS] = (DSP_CSR_INIT | DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);
@@ -64,7 +64,7 @@ void __OSInitAudioSystem(void) {
     __DSPRegs[DSP_CONTROL_STATUS] = reg16;
 
     __DSPRegs[DSP_CONTROL_STATUS] &= ~DSP_CSR_INIT;
-    while ((__DSPRegs[DSP_CONTROL_STATUS]) & DSP_CSR_INIT_CODE);
+    while ((__DSPRegs[DSP_CONTROL_STATUS]) & DSP_CSR_DSP_DMA_BUSY);
     
     __DSPRegs[DSP_CONTROL_STATUS] &= ~DSP_CSR_HALT;
     errFlag = 0;
@@ -104,7 +104,7 @@ void __OSStopAudioSystem(void) {
     __DSPRegs[DSP_CONTROL_STATUS] = DSP_CSR_INIT | DSP_CSR_HALT;
     reg16 = __DSPRegs[DSP_DMA_CONTROL_LEN];
     __DSPRegs[DSP_DMA_CONTROL_LEN] = reg16 & ~DSP_DMA_START_FLAG;
-    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], DSP_CSR_INIT_CODE);
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], DSP_CSR_DSP_DMA_BUSY);
     waitUntil(__DSPRegs[DSP_CONTROL_STATUS], DSP_CSR_ARAM_DMA_BUSY);
     __DSPRegs[DSP_CONTROL_STATUS] = (DSP_CSR_INIT | DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);
     __DSPRegs[DSP_MAILBOX_IN_HI] = 0;
