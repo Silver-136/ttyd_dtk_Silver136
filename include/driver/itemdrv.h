@@ -131,7 +131,7 @@ typedef struct ItemEntry {
 typedef struct ItemWork {
     s32 count; //0x0
     ItemEntry* entries; //0x4
-    u32 currId; //0x8, next available itemId
+    u32 currId; // 0x8, serial for auto-named entries ("_i%05x"): incremented before use, wraps at 0xFFFFF
     EffectEntry* effect; //0xC
     struct WinMgrSelect* select; //0x10
     struct EventEntry* lectureEvt; //0x14

@@ -37,9 +37,8 @@
 #include "mario/mario_hit.h"
 #endif
 
-// Ride teardown clears these two known flags plus legacy bit 18.
-// Keep 0x40000: no standalone setter/reader was established for that bit.
-enum { PARTY_RIDE_CLEAR_MASK = PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | 0x40000 };
+// Ride teardown clears the plane, boat and bellows ride flags.
+enum { PARTY_RIDE_CLEAR_MASK = PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | PARTY_FLAG_IS_RIDING_JABARA };
 
 PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
@@ -106,8 +105,8 @@ void partyPaperOff(PartyEntry* party) {
 }
 
 /**
- * Turns off paper-mode lighting on the partner's model (used by the partner motion code when leaving a paper
- * shape).
+ * Turns off paper-mode lighting on the partner's model (the partner motion code calls it right after
+ * partyChgPaper(party, "PM_R_1C"), while setting a paper pose).
  */
 void partyPaperLightOff(PartyEntry* party) {
     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);

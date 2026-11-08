@@ -21,7 +21,7 @@ enum {
 typedef enum CameraMoveState {
     CAM_MOVE_NONE = 0,
     CAM_MOVE_BACK = 1,       // progressA runs 1 -> 0: evt_cam3d_evt_off
-    CAM_MOVE_TO_UNUSED = 2,  // handled like CAM_MOVE_TO_STORED, never set
+    CAM_MOVE_TO_UNUSED = 2,  // never set; handled like CAM_MOVE_TO_STORED for progress, like NONE/BACK for the target
     CAM_MOVE_TO_STORED = 3,  // progressA runs 0 -> 1 towards storedPos/storedAt
 } CameraMoveState;
 

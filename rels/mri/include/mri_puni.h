@@ -25,8 +25,8 @@ typedef struct PuniAnimSet {
     s16 end[10];    // 0x3C
 } PuniAnimSet;
 
-// PuniData.flags (mri_puni). Kinds: PUNI/TOGE/SPRITE_*/NPC_* (one each). 0x4, 0x2000 and 0x400000 (set, never
-// read), 0x10000/0x200000 (scripts only) and 0x80000000 are not named.
+// PuniData.flags (mri_puni). Kinds: PUNI/TOGE/SPRITE_*/NPC_* (one each). Bits set but never read carry _UNUSED;
+// 0x10000/0x200000 (used by scripts only) and 0x80000000 are not named.
 typedef enum PuniFlags {
     PUNI_FLAG_PUNI = (1 << 0),               // 0x1
     PUNI_FLAG_TOGE = (1 << 1),               // 0x2

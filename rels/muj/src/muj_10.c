@@ -537,7 +537,7 @@ s32 senin_event_erumospos[] = {
 /**
  * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
  * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka; also places the 60 Embers
- * (invisible, alpha 0) and the named sailors, Mony and Peton. Versions before US play the Cortez scene here too
+ * (invisible, alpha 0) and the named sailors, Francesca and Frankie. Versions before US play the Cortez scene here too
  * (US and PAL: korutesu_appear_event).
  */
 EVT_BEGIN(senin_event)
@@ -704,7 +704,7 @@ EVT_END()
 #if VERSION >= VERSION_US
 /**
  * Cortez appears on the dock (STG5_41_RETURN_TO_THE_GROTTO):
- * the sailors and Mony talk (stg5_dou_19_01 to 03),
+ * the sailors and Francesca talk (stg5_dou_19_01 to 03),
  * Cortez arrives in his tornado (korutesu_apper) and speaks (stg5_dou_19_04),
  * the Embers fade in around the crowd, the story becomes STG5_41_01_ALL_ABOARD
  * and the map changes to muj_00.

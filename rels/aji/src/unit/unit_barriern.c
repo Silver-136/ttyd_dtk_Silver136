@@ -1856,31 +1856,31 @@ static USER_FUNC(outSplineTableSet) {
     switch (evtGetValue(event, args[1])) {
         case 1:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut1_1;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut1_1;
             break;
         case 2:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut2_1;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut2_1;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut2_2;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut2_2;
             break;
         case 3:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut3_1;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_1;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut3_2;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[6]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut3_3;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_2;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_3;
             break;
         case 4:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_1;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_1;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_2;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[6]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_3;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[7]), 1);
-            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_4;
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_2;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_3;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 3]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_4;
             break;
     }
     return EVT_RETURN_DONE;

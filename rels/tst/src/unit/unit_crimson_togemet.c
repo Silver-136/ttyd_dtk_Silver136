@@ -355,7 +355,7 @@ static BattleUnitKindPart parts[] = {
  * applies the matching event set with init_event2, and starts the wait event.
  */
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, LW(15))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
     CALL_CHILD(init_event2)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -368,7 +368,7 @@ EVT_END()
  * and the fall script. Both set the run and walk sounds and clear the flipped-over count.
  */
 static EVT_BEGIN(init_event2)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, LW(15))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
     IF_INT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
         CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -710,7 +710,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
 #if VERSION >= VERSION_JP
@@ -744,7 +744,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_turn))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
 #if VERSION >= VERSION_JP
@@ -873,7 +873,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
 #if VERSION >= VERSION_JP

@@ -24,7 +24,7 @@ typedef enum MsgPrintFlags {
 #define MSG_PRINT_WIN_TOGELR 0x80000000             // evt_msg_togelr was called: tail toward a speaker on the left ...
 #define MSG_PRINT_WIN_TOGELR_RIGHT 0x40000000       // ... or on the right
 #define MSG_PRINT_WIN_TOGELR_ABOVE 0x20000000       // window above the speaker
-#define MSG_PRINT_WIN_SCREEN_POS_UNUSED 0x01000000  // the tail position is on screen already; nothing sets it
+#define MSG_PRINT_WIN_SCREEN_POS 0x01000000         // the tail position is on screen already (passed in evt_msg_toge's mode, las_29)
 
 // evt_msg_toge: how the next message window's tail is placed (event->printWindowFlags low bits)
 typedef enum MsgTogeMode {

@@ -2029,12 +2029,12 @@ static void btlseqMove(BattleWork* wp) {
                         unit->totalHpDamageTaken = 0;
                         unit->hpDamageTaken = 0;
                         unit->hpDamageCount = 0;
-                        unit->superguardCountTaken = 0;
+                        unit->attackerHitCountTaken = 0;
                         unit->totalFpDamageTaken = 0;
                         unit->fpDamageTaken = 0;
                         unit->totalFpLost = 0;
                         unit->fpLost = 0;
-                        unit->superguardedCount = 0;
+                        unit->attackHitCount = 0;
                     }
                 }
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {

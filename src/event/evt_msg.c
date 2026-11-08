@@ -151,7 +151,7 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
                 win->tailMode |= 8;
             }
         }
-        if (event->printWindowFlags & MSG_PRINT_WIN_SCREEN_POS_UNUSED) {
+        if (event->printWindowFlags & MSG_PRINT_WIN_SCREEN_POS) {
             win->tailMode |= 0x10;
         }
         event->printWindowFlags = 0;

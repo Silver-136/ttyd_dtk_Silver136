@@ -981,7 +981,8 @@ static void rankingControll(void) {
             }
         }
 
-        // Check if a match is booked (2532), and move our opponent (507) to above us for the fight.
+        // If a match is booked (GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED), move the opponent (GSW_GLITZ_PIT_LAST_OPPONENT)
+        // to above us for the fight.
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (idx = 0; idx < nAbove; idx++) {
                 // BUG: above[] holds positions in rank_wp->entries, but the saved value is a fighter id (entries[].id);
@@ -1079,7 +1080,7 @@ static void rankingControll(void) {
     memcpy(rank_wp->entries, buf, sizeof(RankEntry) * rank_wp->count);
     __memFree(HEAP_DEFAULT, buf);
 
-    // Calculate our current rank and store it in 580.
+    // Calculate our current rank and store it in GSW_GLITZ_PIT_RANK.
     rank = 0;
     for (i = 0; i < rank_wp->count; i++) {
         if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {

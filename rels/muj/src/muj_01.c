@@ -901,7 +901,7 @@ EVT_BEGIN(borosuifu_b_talk)
     RETURN
 EVT_END()
 
-/** Init event of Mony in the camp: placed between STG5_59_ROGUEPORT_DOCK and STG5_61_FRANKLYS_HOUSE_STG_5. */
+/** Init event of Francesca in the camp: placed between STG5_59_ROGUEPORT_DOCK and STG5_61_FRANKLYS_HOUSE_STG_5. */
 static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_59_ROGUEPORT_DOCK, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -910,13 +910,13 @@ static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
 
-/** Talk event of Mony in the camp: says stg5_muj_147. */
+/** Talk event of Francesca in the camp: says stg5_muj_147. */
 static EVT_BEGIN(mony_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_147"), 0, STRING("me"))
     RETURN
 EVT_END()
 
-/** Init event of Peton in the camp: placed between STG5_59_ROGUEPORT_DOCK and STG5_61_FRANKLYS_HOUSE_STG_5. */
+/** Init event of Frankie in the camp: placed between STG5_59_ROGUEPORT_DOCK and STG5_61_FRANKLYS_HOUSE_STG_5. */
 static EVT_BEGIN(peton_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_59_ROGUEPORT_DOCK, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -925,7 +925,7 @@ static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
-/** Talk event of Peton in the camp: says stg5_muj_148. */
+/** Talk event of Frankie in the camp: says stg5_muj_148. */
 static EVT_BEGIN(peton_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_148"), 0, STRING("me"))
     RETURN
@@ -980,7 +980,7 @@ EVT_END()
 
 /**
  * NPCs of the camp: the rough sailor, Flavio, the bespectacled sailor, the nervous sailor, the shop and inn
- * clerks, sailors A, bomb and D, the two ragged sailors, Mony, Peeton and the three Elmos ghosts.
+ * clerks, sailors A, bomb and D, the two ragged sailors, Francesca, Frankie and the three Elmos ghosts.
  */
 static NpcSetupInfo npcEnt[] = {
     {

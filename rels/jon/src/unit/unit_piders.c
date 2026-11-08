@@ -359,7 +359,7 @@ static USER_FUNC(piders_get_first_pos_attr) {
             break;
         }
     }
-    attr = unit->work[UNIT_WORK_LOW];
+    attr = unit->work[UNIT_WORK_LOWERED];
     if (BtlUnit_CanActStatus(unit)) {
         if (attr == 0) {
             attr = 1;
@@ -515,9 +515,9 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(entry_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_END_Y, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_LOWER, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_ALPHA, 255)
     CALL(piders_yarn_init)
     SPAWN_EVENT(yarn_event)
@@ -730,9 +730,9 @@ EVT_END()
  * The first time it uses a different step sound.
  */
 static EVT_BEGIN(move_kuutei_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_LOWER, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_LOWER, 0)
         BEGIN_SIBLING_EVENT
             LOOP(4)
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -753,7 +753,7 @@ static EVT_BEGIN(move_kuutei_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 1)
     RETURN
 EVT_END()
 
@@ -774,7 +774,7 @@ static EVT_BEGIN(move_kuuchu_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 0)
     RETURN
 EVT_END()
 
@@ -801,7 +801,7 @@ static EVT_BEGIN(unison_phase_event)
     END_IF
     CALL(piders_get_zyun, UNIT_ID_SELF, LW(14))
     IF_INT_EQUAL(LW(14), 1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(move_kuuchu_event)
         ELSE

@@ -1070,7 +1070,8 @@ u32 VIGetTvFormat(void) {
         format = CurrTvMode;
         break;
     default:
-        // BUG: unreachable by design; in a build without asserts format is returned uninitialised here.
+        // Unreachable by design; in a build without asserts format would be returned uninitialised here.
+
         ASSERTLINE(2527, FALSE);
     }
     

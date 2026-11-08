@@ -484,7 +484,7 @@ USER_FUNC(mario_main_init_func) {
 
 /**
  * Script helper: records the distance and angle from the ship centre (args[0], args[1]) of Mario,
- * his partner and the six NPCs on the ship (Flavio, Cortez, Mony, Garawaru, Peton, Odoodo),
+ * his partner and the six NPCs on the ship (Flavio, Cortez, Francesca, Garawaru, Frankie, Odoodo),
  * so mario_main_func can swing them around as the pirate ship turns.
  */
 USER_FUNC(mario_main_setup_func) {
@@ -1254,13 +1254,13 @@ static EVT_BEGIN(korutesu_talk)
     RETURN
 EVT_END()
 
-/** Init event of Mony (nothing to set up on this map). */
+/** Init event of Francesca (nothing to set up on this map). */
 static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
 
 /**
- * Talk event of Mony: stg5_muj_94_04 at STG5_36_HOLE_IN_THE_WALL,
+ * Talk event of Francesca: stg5_muj_94_04 at STG5_36_HOLE_IN_THE_WALL,
  * stg5_muj_117_07 in the later beach stage, stg5_muj_146_02 at STG5_64_02_F_F_SAIL_OFF.
  */
 static EVT_BEGIN(mony_talk)
@@ -1275,13 +1275,13 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
-/** Init event of Peton (nothing to set up on this map). */
+/** Init event of Frankie (nothing to set up on this map). */
 static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
 /**
- * Talk event of Peton: stg5_muj_94_05 at STG5_36_HOLE_IN_THE_WALL,
+ * Talk event of Frankie: stg5_muj_94_05 at STG5_36_HOLE_IN_THE_WALL,
  * stg5_muj_117_08 in the later beach stage, stg5_muj_146_01 at STG5_64_02_F_F_SAIL_OFF.
  */
 static EVT_BEGIN(peton_talk)
@@ -1491,7 +1491,7 @@ EVT_END()
 
 /**
  * NPCs of the beach: the rough sailor, Flavio, the bespectacled sailor (Four-Eyes), Lord Crump (第三勢力幹部), the
- * nervous sailor, sailors A, bomb, C, D and E, Cortez, Mony, Peeton and the Whacka.
+ * nervous sailor, sailors A, bomb, C, D and E, Cortez, Francesca, Frankie and the Whacka.
  */
 static NpcSetupInfo npcEnt[] = {
     {
@@ -3624,7 +3624,7 @@ EVT_END()
 
 /**
  * The pirate ship leaves Keelhaul Key with Mario aboard (STG5_49_BOWSER_TWILIGHT_TOWN_2):
- * Cortez, Flavio, Mony, Peton and the sailors talk (stg5_muj_133 to 143),
+ * Cortez, Flavio, Francesca, Frankie and the sailors talk (stg5_muj_133 to 143),
  * Mario and his partner jump aboard and the ship sails away.
  */
 EVT_BEGIN(leave_island)
@@ -3721,7 +3721,7 @@ EVT_BEGIN(leave_island)
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     SPAWN_EVENT(option_ship_marco)
 
-    // Mony, Peeton and the rough sailor say they will stay on the island.
+    // Francesca, Frankie and the rough sailor say they will stay on the island.
     CALL(evt_msg_print, 0, STRING("stg5_muj_138"), 0, STRING("モニー"))
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, 200)
@@ -4071,7 +4071,7 @@ EVT_BEGIN(into_muj_ship)
     RETURN
 EVT_END()
 
-/** Moves the NPCs on the ship by the ship's displacement (GW(0), GW(1)) while Mony and Peton board. */
+/** Moves the NPCs on the ship by the ship's displacement (GW(0), GW(1)) while Francesca and Frankie board. */
 EVT_BEGIN(mony_peton_boarding_sub)
     SET_FLOAT_VALUE(LW(10), GW(0))
     SET_FLOAT_VALUE(LW(11), GW(1))
@@ -4096,9 +4096,9 @@ EVT_BEGIN(mony_peton_boarding_sub)
 EVT_END()
 
 /**
- * Mony and Peton boarding the ship (STG5_64_01_WEDDING_RING_DELIVERY):
- * when Mario brings them to the ship Peeton says they are ready for Rogueport,
- * and Mony urges her father to hold on (stg5_muj_145, 146)
+ * Francesca and Frankie boarding the ship (STG5_64_01_WEDDING_RING_DELIVERY):
+ * when Mario brings them to the ship Frankie says they are ready for Rogueport,
+ * and Francesca urges her father to hold on (stg5_muj_145, 146)
  * and the story becomes STG5_64_02_F_F_SAIL_OFF.
  */
 EVT_BEGIN(mony_peton_boarding)

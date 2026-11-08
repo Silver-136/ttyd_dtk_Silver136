@@ -577,7 +577,7 @@ skip:
             }
         }
         if (weapon->special & SPECIAL_DIMINISH_BY_TARGET) {
-            if ((damage -= attacker->superguardedCount) <= 0) {
+            if ((damage -= attacker->attackHitCount) <= 0) {
                 damage = 1;
             }
         }
@@ -1659,8 +1659,8 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         flags |= DAMAGE_RESULT_SUPERGUARD;
         psndSFXOn("SFX_SYSTEM_GREAT1");
         BattleAudience_Case_GuardGood();
-        attacker->superguardedCount++;
-        target->superguardCountTaken = attacker->superguardedCount;
+        attacker->attackHitCount++;
+        target->attackerHitCountTaken = attacker->attackHitCount;
         switch (weapon->superguardsAllowed) {
             case 2:
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
@@ -1814,8 +1814,8 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         break;
     }
-    attacker->superguardedCount++;
-    target->superguardCountTaken = attacker->superguardedCount;
+    attacker->attackHitCount++;
+    target->attackerHitCountTaken = attacker->attackHitCount;
     if (cw.result) {
         if (cw.payback) {
             cw.count += damage * 50 / 100;

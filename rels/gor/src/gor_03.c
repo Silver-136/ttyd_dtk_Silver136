@@ -1560,7 +1560,7 @@ EVT_BEGIN(maffiaboss_teshita_irai)
     RETURN
 EVT_END()
 
-/** Short dialogue of Mony (mac_5_040) and Peeton (mac_5_041) when the train ticket scene starts. */
+/** Short dialogue of Francesca (mac_5_040) and Frankie (mac_5_041) when the train ticket scene starts. */
 EVT_BEGIN(maffiaboss_train_ticket_init)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1581,7 +1581,7 @@ EVT_END()
 /**
  * Scene in which Don Pianta gives Mario the Train Ticket (mac_5_046 to 084):
  * the key item jingle, Don Pianta moves to the casino spot as the casino version of himself,
- * Mony and Peeton talk, and the story is set to STG5_65_TRAIN_TICKET.
+ * Francesca and Frankie talk, and the story is set to STG5_65_TRAIN_TICKET.
  */
 EVT_BEGIN(maffiaboss_train_ticket)
     // Don Pianta lies ill in bed; Francesca and Frankie turn to him and cry out.
@@ -2108,7 +2108,7 @@ EVT_BEGIN(maffia3_talk)
 EVT_END()
 
 /**
- * Init event of Mony (モニー): places her by story progress:
+ * Init event of Francesca (モニー): places her by story progress:
  * (-265, 155, -225) up to the Thousand-Year Door chapter, (-145, 155, -95) on the chapter 5 F&F arrival step,
  * (-240, 155, -95) from the train ticket until the train leaves, and (-130, 155, -115) after that.
  */
@@ -2131,7 +2131,7 @@ static EVT_BEGIN(mony_init)
 EVT_END()
 
 /**
- * Talk event of Mony: prints one line by story progress (mac_2_044_05, mac_5_044,
+ * Talk event of Francesca: prints one line by story progress (mac_2_044_05, mac_5_044,
  * then gor_03_04_01 to 04 for chapters 5 to the epilogue and afterwards).
  */
 static EVT_BEGIN(mony_talk)
@@ -2153,7 +2153,7 @@ static EVT_BEGIN(mony_talk)
 EVT_END()
 
 /**
- * Init event of Peeton (ピートン): while Trouble Center request 19 is active he stands at (275, 0, 413);
+ * Init event of Frankie (ピートン): while Trouble Center request 19 is active he stands at (275, 0, 413);
  * otherwise she is placed by story progress at one of four spots in the hall (e.g. (-280, 155, -185) in the
  * early chapters, (-198, 155, -80) after the train leaves).
  */
@@ -2257,14 +2257,14 @@ EVT_BEGIN(peton_talk_common)
     RETURN
 EVT_END()
 
-/** Talk event of Peeton: just runs peton_talk_common. */
+/** Talk event of Frankie: just runs peton_talk_common. */
 static EVT_BEGIN(peton_talk)
     CALL_CHILD(peton_talk_common)
     RETURN
 EVT_END()
 
 /**
- * Talk event of Peeton across the desk: retail returns immediately while request 19 is active;
+ * Talk event of Frankie across the desk: retail returns immediately while request 19 is active;
  * otherwise runs peton_talk_common, which also handles the request in the early demos.
  */
 EVT_BEGIN(peton_desk_talk)
@@ -3830,7 +3830,7 @@ EVT_BEGIN(kuribo_1_talk)
 EVT_END()
 
 /**
- * NPC setup of the west side and the Pianta Parlor: Don Pianta and his henchmen, Monie and Peeton, the
+ * NPC setup of the west side and the Pianta Parlor: Don Pianta and his henchmen, Francesca and Frankie, the
  * lottery Bob-omb Lucky, Luigi, Bunny Teresa, the customers, the clerk, the Toads, the Koopa and the Goomba.
  */
 static NpcSetupInfo npcEnt[] = {

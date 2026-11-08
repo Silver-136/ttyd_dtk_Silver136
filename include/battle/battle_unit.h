@@ -92,7 +92,7 @@ typedef enum BattleUnit_Flags {
     BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER = (1 << 16),     // 0x10000, drawn and shadowed together with its partner (Veil)
     BATTLE_UNIT_FLAG_FLOAT_CAPABLE = (1 << 20),           // 0x100000, floats (bobs) when FLOAT_ACTIVE is also set
     BATTLE_UNIT_FLAG_FLOAT_ACTIVE = (1 << 21),            // 0x200000, float bob running (off during some attacks)
-    BATTLE_UNIT_FLAG_SOLID_MODEL = (1 << 24),             // 0x1000000, 3D model (large bosses): not mirrored like paper when
+    BATTLE_UNIT_FLAG_SOLID_MODEL = (1 << 24),             // 0x1000000, 3D model (bosses and some others): not mirrored like paper when
                                                           // it turns away from the camera; model lighting on
     BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING = (1 << 25),  // 0x2000000
     BATTLE_UNIT_FLAG_ACTING = (1 << 26),                  // 0x4000000, its attack event has started
@@ -995,11 +995,12 @@ typedef struct BattleUnit {
     s8 hpDamageTaken;                            // 0x26C
     s8 fpDamageTaken;                            // 0x26D
     s8 fpLost;                                   // 0x26E (US 0x272), FP actually lost by the last hit (fpDamageTaken clamped to current FP)
-    s8 superguardCountTaken;                     // 0x26F (US 0x273), attacker's superguardedCount after its hit on this unit
+    s8 attackerHitCountTaken;                    // 0x26F (US 0x273), the attacker's attackHitCount after its hit on this unit
     u32 damagePattern;                           // 0x270, damage pattern of the last hit (selects the hurt pose), 0 when cleared
     s32 damageCode;                              // 0x274
     BattleUnitToken_Flags tokenFlags;           // 0x278
-    s32 superguardedCount;                       // 0x27C (US 0x280), hits this unit resolved as attacker this turn (BattleCheckDamage counts every one, superguarded or not); weapon special 0x20 subtracts it from damage
+    s32 attackHitCount;                          // 0x27C (US 0x280), hits this unit resolved as attacker this turn (BattleCheckDamage counts every one);
+                                                 // SPECIAL_DIMINISH_BY_TARGET subtracts it from damage
     s32 totalDamageDealt;                        // 0x280, damage this unit dealt as attacker
     s32 initEventId;                             // 0x284
     EvtWord* waitEventCode;                         // 0x288

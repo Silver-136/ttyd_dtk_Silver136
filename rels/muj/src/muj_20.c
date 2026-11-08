@@ -2161,7 +2161,7 @@ static void draw(CameraId camera, void* param) {
 
 /**
  * The title scene of the opening (entered as "prologue" from aaa_00 after the Mario's house prologue):
- * plays BGM_OPENING1 (in the two June demos the init starts it instead), starts the title logo,
+ * plays BGM_OPENING1 (in the two early demos the init starts it instead), starts the title logo,
  * sails the steamship S_fune_m in over 10 seconds and waits for Press Start (GF(1)),
  * switching to BGM_EVT_SAILING1 if nothing is pressed within 5 seconds.
  * After the press it plays SFX_PRESS_START1, sails the ship on out and fades to white into sys_01 ("prologue").

@@ -104,8 +104,8 @@ USER_FUNC(evt_shuryolight_run_head_evt);
 // floating block 21blk2 in las_21: 1 = down at -580, 0 = up at -130; set by las_21_init_evt, toggled by
 // floatblk21_2_evt (switch 21switch2)
 #define LSWF_LAS_21_BLK2_LOWERED LSWF(9)
-// set and cleared by last_evt_2 and last_evt_3 (las_29) for the light flashes; map_color_tev (C) draws the map white
-// while set, black otherwise (dossier names the C use hikari_on_evt)
+// set by last_evt_2 and set and cleared by last_evt_3 (las_29) for the light flashes; map_color_tev (C) draws the
+// map white while set, black otherwise
 #define LSWF_LAS_29_MAP_LIT_WHITE LSWF(10)
 // times switch1 was pressed in las_13 (switch1_evt, up to 255); switch_check wants 2; las_13_init_evt resets it until
 // GSWF_LAS_13_SWITCH_PUZZLE_SOLVED

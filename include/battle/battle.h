@@ -34,8 +34,7 @@ void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
 typedef struct BattleAlliance BattleAlliance;
 
 // BattleWork.flags, named from the code that sets and tests them (lecture bits: Frankly's tutorials, which commands
-// stay selectable). 0x4 (set on command confirm, never read), 0x10000/0x20000 (forced icons, never set) are not
-// named.
+// stay selectable). Bits that are set but never read, or read but never set, carry _UNUSED.
 typedef enum BattleFlags {
     BATTLE_FLAG_GUARD_MOVE = (1 << 0),            // 0x1, btlevtcmd_WaitGuardMove / GuardMoveEnd
     BATTLE_FLAG_FIRST_ATTACK = (1 << 1),          // 0x2, first-strike sequence

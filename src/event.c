@@ -812,9 +812,9 @@ EventStage event_dt[] = {
  * resets the badge shop, Pianta Parlor and information seller, zeroes the play clock and makes the player Mario.
  * seq_load calls it when a new file starts; later story points' setups build on it.
  */
-// Stage 0 / Prologue -----------------------------------------------------------------
 void stg0_00_init(void) {
-    pouchGetPtr(); // return value unused
+    pouchGetPtr();
+
     pouchInit();
     pouchGetItem(ITEM_BOOTS);
     pouchGetItem(ITEM_MAGICAL_MAP);

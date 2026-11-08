@@ -1339,7 +1339,7 @@ EVT_END()
  */
 EVT_BEGIN(last_evt_2)
 
-    // The Shadow Queen speaks and orders Grodus around.
+    // The Shadow Queen asks who called her and where her vessel is; Grodus answers.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -310, 0, 0)
@@ -1422,7 +1422,7 @@ EVT_BEGIN(last_evt_2)
 #endif
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 300, FADE_IN_BLACK, 300)
 
-    // The scene ends in the dark world (usu_00).
+    // The scene ends in Twilight Town (usu_00, entrance sekai_yami2).
     CALL(evt_bero_mapchange, STRING("usu_00"), STRING("sekai_yami2"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -2049,7 +2049,7 @@ EVT_BEGIN(koe_evt)
         CALL(make_koe_pos, LW(2), LW(3), LW(4))
         BEGIN_INLINE_EVENT
             ADD(GW(1), 1)
-            CALL(evt_msg_toge, 16777219, LW(2), LW(3), LW(4))
+            CALL(evt_msg_toge, MSG_PRINT_WIN_SCREEN_POS | MSG_TOGE_AT_POS_FAR, LW(2), LW(3), LW(4))
 #if VERSION >= VERSION_US
             CALL(evt_msg_pri, GW(6))
             ADD(GW(6), 1)
@@ -2169,7 +2169,7 @@ EVT_BEGIN(last_evt_3_2)
         CALL(make_koe_pos, LW(2), LW(3), LW(4))
         BEGIN_INLINE_EVENT
             ADD(GW(1), 1)
-            CALL(evt_msg_toge, 16777219, LW(2), LW(3), LW(4))
+            CALL(evt_msg_toge, MSG_PRINT_WIN_SCREEN_POS | MSG_TOGE_AT_POS_FAR, LW(2), LW(3), LW(4))
 #if VERSION >= VERSION_US
             CALL(evt_msg_pri, GW(6))
             ADD(GW(6), 1)

@@ -802,7 +802,7 @@ void nokotaro_callback(s32 type) {
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
- * Script helper (all but the June demos): writes 1 into LW(0)
+ * Script helper (all but the early demos): writes 1 into LW(0)
  * when Mario is touching the Dry Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,
  * otherwise 0.
  * The swarm scene polls it to start the fight; the June US and JP demos start the fight

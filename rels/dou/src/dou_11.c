@@ -1,4 +1,4 @@
-// dou_11 (洞窟, Pirate's Grotto): large room with stranded sailors (suifu), Monie and Peeton (US text: Francesca and Frankie), floating islands, bobbing platforms and a bomb wall (story STG5_29_WAVE_DODGING to STG5_36_HOLE_IN_THE_WALL).
+// dou_11 (洞窟, Pirate's Grotto): large room with stranded sailors (suifu), Francesca and Frankie (US text: Francesca and Frankie), floating islands, bobbing platforms and a bomb wall (story STG5_29_WAVE_DODGING to STG5_36_HOLE_IN_THE_WALL).
 // Doors to dou_10 and to Keelhaul Key (muj_10, muj_00).
 
 #include "version.h"
@@ -327,7 +327,7 @@ static EVT_BEGIN(suifu_e_talk)
 EVT_END()
 
 /**
- * Init of Monie (モニー): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE she stands at (700,
+ * Init of Francesca (モニー): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE she stands at (700,
  * 50, 0).
  */
 static EVT_BEGIN(mony_init)
@@ -339,7 +339,7 @@ static EVT_BEGIN(mony_init)
 EVT_END()
 
 /**
- * Talk script of Monie: she and Peeton (ピートン) speak in turn,
+ * Talk script of Francesca: she and Frankie (ピートン) speak in turn,
  * stg5_dou_16_10 and 16_11 while the sailors are shipwrecked and stg5_dou_17_10
  * and 17_11 at STG5_35_ESCAPE_ROUTE.
  */
@@ -358,7 +358,7 @@ static EVT_BEGIN(mony_talk)
 EVT_END()
 
 /**
- * Init of Peeton (ピートン): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE he stands at (750,
+ * Init of Frankie (ピートン): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE he stands at (750,
  * 50, 0).
  */
 static EVT_BEGIN(peton_init)
@@ -370,7 +370,7 @@ static EVT_BEGIN(peton_init)
 EVT_END()
 
 /**
- * Talk script of Peeton: turns Monie to face Mario and the two speak in turn,
+ * Talk script of Frankie: turns Francesca to face Mario and the two speak in turn,
  * stg5_dou_16_10 and 16_11 while the sailors are shipwrecked and stg5_dou_17_10
  * and 17_11 at STG5_35_ESCAPE_ROUTE.
  */
@@ -394,7 +394,7 @@ static EVT_BEGIN(peton_talk)
     RETURN
 EVT_END()
 
-/** NPC setup of dou_11: the named sailors C, D and E of the crowd, Monie and Peeton. */
+/** NPC setup of dou_11: the named sailors C, D and E of the crowd, Francesca and Frankie. */
 static NpcSetupInfo npcEnt[] = {
     {
         "水夫C", // name
@@ -1402,10 +1402,10 @@ EVT_END()
 
 /**
  * Set-up of the stranded sailors for STG5_29_WAVE_DODGING:
- * makes Sailors C, D, E and Monie and Peeton intangible,
+ * makes Sailors C, D, E and Francesca and Frankie intangible,
  * spawns the crowd of 100 sailors from suifudata on the left platform with their animations,
  * adds a hidden crowd entry (100) that follows Mario as a blocker, and hides crowd members 95 and 96,
- * keeping Monie and Peeton at their places every frame so the two stand in the crowd.
+ * keeping Francesca and Frankie at their places every frame so the two stand in the crowd.
  */
 EVT_BEGIN(torinoko_suifu_init)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1520,7 +1520,7 @@ EVT_END()
 
 /**
  * After the sailors have crossed: Mario walks to the right platform, Sailors D and E talk to him (stg5_dou_16),
- * Monie recognises him and runs over, Peeton follows, she tells how they got here and asks why he came,
+ * Francesca recognises him and runs over, Frankie follows, she tells how they got here and asks why he came,
  * Mario reacts, and then both stand ready for conversation.
  * Sets STG5_30_SHIPWRECKED_SAILORS.
  */
@@ -1576,7 +1576,7 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_set_dir_to_target, STRING("水夫E"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_01"), 0, STRING("水夫E"))
 
-    // Monie appears, startled, recognises Mario and runs across the platform.
+    // Francesca appears, startled, recognises Mario and runs across the platform.
     SET_INT_READ_ADDR(PTR(suifudata_after))
     SET_VALUE(LW(10), 95)
     MULTIPLY(LW(10), 4)
@@ -1595,7 +1595,7 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_03"), 0, STRING("モニー"))
 
-    // Peeton runs in after her; Monie keeps talking while Mario reacts with surprise and a raised hand.
+    // Frankie runs in after her; Francesca keeps talking while Mario reacts with surprise and a raised hand.
     SET_INT_READ_ADDR(PTR(suifudata_after))
     SET_VALUE(LW(10), 96)
     MULTIPLY(LW(10), 4)
@@ -1625,7 +1625,7 @@ EVT_BEGIN(suifu_orei)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_06"), 0, STRING("モニー"))
 
-    // Monie and Peeton become talkable, the story moves on to the stranded sailors step and control returns.
+    // Francesca and Frankie become talkable, the story moves on to the stranded sailors step and control returns.
     CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_change_interrupt, STRING("モニー"), 6, PTR(mony_talk))
     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1913,8 +1913,8 @@ EVT_BEGIN(bombwall_suifuout)
 EVT_END()
 
 /**
- * After Bobbery has blown the wall: the camera shows Sailor C, D, Peeton,
- * Monie and the crowd (95 sailors) leaving through the hole one
+ * After Bobbery has blown the wall: the camera shows Sailor C, D, Frankie,
+ * Francesca and the crowd (95 sailors) leaving through the hole one
  * after another with a line each (stg5_dou_17_12 to 15), then Sailor E; the camera returns to Mario.
  */
 EVT_BEGIN(bombwall_after)
@@ -1956,7 +1956,7 @@ EVT_BEGIN(bombwall_after)
     CALL(evt_npc_move_position, STRING("水夫D"), 780, -185, 0, FLOAT(180.0f), 0)
     CALL(evt_npc_set_position, STRING("水夫D"), 0, -1000, 0)
 
-    // Peeton and Monie follow and Monie says they are leaving.
+    // Frankie and Francesca follow and Francesca says they are leaving.
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("ピートン"), 270)
@@ -1983,7 +1983,7 @@ EVT_BEGIN(bombwall_after)
     WAIT_WHILE(GF(0))
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_14"), 0, STRING("モニー"))
 
-    // Peeton and Monie leave, then the crowd of 95 sailors streams out of the hole one after another.
+    // Frankie and Francesca leave, then the crowd of 95 sailors streams out of the hole one after another.
     CALL(evt_nannpc_set_subfunc, 2, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ピートン"), 800, -185, 0, FLOAT(180.0f), 0)
@@ -2817,13 +2817,13 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 /**
  * Init script of dou_11, the big room with the stranded sailors:
- * music and ambience, exits, NPCs (Sailors C, D, E; Monie and Peeton use their ring models),
+ * music and ambience, exits, NPCs (Sailors C, D, E; Francesca and Frankie use their ring models),
  * the bombable wall by story step, the stranded-sailors cutscenes (STG5_29_WAVE_DODGING and
  * STG5_34_KICKED_OFF), the two blue island switches, the swaying background ship,
  * bobbing barrels and bottles, and the dust shaking during the X-Naut raid (muj_00 dai3_shurai; STG5_40_TRUE_IDENTITY).
  */
 EVT_BEGIN(dou_11_init_evt)
-    // Music, ambience and exits for the room; the NPCs are set up and Monie and Peeton get their ring models.
+    // Music, ambience and exits for the room; the NPCs are set up and Francesca and Frankie get their ring models.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU12"))
     CALL(evt_snd_set_rev_mode, 2)

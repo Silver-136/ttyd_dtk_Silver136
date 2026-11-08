@@ -2313,7 +2313,8 @@ static USER_FUNC(under) {
 
 /**
  * Message callback for Trouble Center request 29 (irai_29_15):
- * when the second page of the text appears it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
+ * when the second page of the text appears (curPage 1) it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
+
  */
 void irai_29_15_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;

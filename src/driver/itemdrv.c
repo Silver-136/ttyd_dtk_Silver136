@@ -98,7 +98,7 @@ static inline ItemWork* itemGetWork(void) {
 
 /**
  * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:
- * the June demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
+ * the early demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
  * JP and later (the September demos too) do so only outside battle and when the same bit is set.
  */
 inline void itemCheckBadge(ItemEntry* entry) {
@@ -1190,7 +1190,7 @@ static void winHelpDisp(WinMgrEntry* win) {
     }
 }
 
-/** Draws the full-pouch warning: JP and later choose item or badge wording; the June demos always use the item-full message. */
+/** Draws the full-pouch warning: JP and later choose item or badge wording; the early demos always use the item-full message. */
 #if VERSION <= VERSION_DEMO_JP
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
@@ -1230,7 +1230,7 @@ static void winFullDisp(WinMgrEntry* win) {
 }
 
 /**
- * The item-get sequence. The June demos have no sub-states 2 (control off) and 8 (motion abort),
+ * The item-get sequence. The early demos have no sub-states 2 (control off) and 8 (motion abort),
  * so later 3-7 and 9 are their 2-7; no badge flag bookkeeping, no item renaming after a swap,
  * and the icon flags are 0x40/0x100 where later versions have 0x100/0x200.
  */

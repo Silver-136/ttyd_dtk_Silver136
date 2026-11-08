@@ -51,7 +51,8 @@ extern s32 kusuri_tyogo_list[];
 #define LSWF_AJI_06_ORANGE_POTION_HELD LSWF(3) /* as LSWF(1) for the Orange Potion (peach_evt_kusuri_ki) */
 #define LSWF_AJI_06_GREEN_POTION_HELD LSWF(4) /* as LSWF(1) for the Green Potion (peach_evt_kusuri_mid) */
 // set by peach_evt_check_all_kusuri_set when Peach confirms the placement (start event peach_evt_tyogo_entry on
-// A_sui1); peach_evt_pick_kusuri removes that event and clears it when a potion is taken back out
+// A_sui1); peach_evt_pick_kusuri removes that event and clears it when a potion is taken back out, and
+// peach_evt_check_all_kusuri_set clears it when Peach declines
 #define LSWF_AJI_06_MIX_START_OFFERED LSWF(5)
 // set by peach_evt_tyogo while the machine runs, cleared at its end; while set peach_evt_kaihei1-4 dispense instead
 // of setting or taking potions
@@ -66,7 +67,7 @@ extern s32 kusuri_tyogo_list[];
 // 1 = invisibility and STG5_45_PEACH_POTION_PUZZLE
 #define LSWF_AJI_06_MIX_CORRECT LSWF(9)
 // set by peach_evt_tyogo when Peach accepts the result (drink event on A_bika1); peach_evt_check_all_kusuri_set
-// returns early while set; peach_evt_kusuri_nomu clears it
+// returns early while set; peach_evt_kusuri_nomu clears it, and peach_evt_tyogo when she declines
 #define LSWF_AJI_06_DRINK_PENDING LSWF(10)
 // set while a memo (peach_evt_memo1-4) or the locked-door line peach_aji_226 (bero_peach_evt) is shown;
 // peach_evt_wait_memo waits until it is clear; peach_evt_stg5 clears it

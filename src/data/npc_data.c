@@ -88,6 +88,7 @@ NpcTribeInfo npcTribe[] = {
     {"盗賊団親分", "c_binbo", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_THIEF_MOVE1L", "SFX_FLD_NPC_THIEF_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"マフィア", "c_m_buka", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 35.0f, 55.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_MONTE_MOVE1L", "SFX_FLD_NPC_MONTE_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"マフィアボス", "c_m_boss", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 35.0f, 55.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_MONTE_MOVE1L", "SFX_FLD_NPC_MONTE_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
+    // Frankie (ピートン) and Francesca (モニー), the Pianta couple; the original symbols call them peton and mony.
     {"ピートン", "c_m_waka", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 35.0f, 55.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_MONTE_MOVE1L", "SFX_FLD_NPC_MONTE_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"ピートン（指輪）", "c_m_waka", "S_2", "Z_2", "S_2", "T_2", "W_2", "R_2", "S_2", "S_2", 35.0f, 55.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_MONTE_MOVE1L", "SFX_FLD_NPC_MONTE_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"モニー", "c_m_ojo", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 35.0f, 55.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_MONTE_MOVE1L", "SFX_FLD_NPC_MONTE_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},

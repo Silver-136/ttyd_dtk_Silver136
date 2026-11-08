@@ -41,7 +41,7 @@ static void BattlePartyInfoWorkInit(BattleWork* wp);
 static void BattleCheckUnitBroken(BattleWork* wp);
 
 /**
- * Per-frame battle entry called by the battle game sequence;
+ * Per-frame battle entry, called every frame from the main loop (marioStMain);
  * flags BATTLE_SEQ_END once BattleMain reports the battle is over.
  */
 void battleMain(void) {

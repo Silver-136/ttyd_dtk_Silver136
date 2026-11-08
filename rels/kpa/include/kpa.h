@@ -46,8 +46,7 @@ USER_FUNC(kpa_time_countdown);
 // Area-local saved values (KPA; swReInit clears them on every area change), named from the area's
 // scripts
 // kpa_01 scene cue: cleared by kpa_01_syuppatu_evt, douzou_3_touch_evt and hammer_AB_talk_evt before a message; the
-// callbacks kpa_stg1_008/014_2/034/036_cb set it at a page so waiting inline events start (dossier names those C uses
-// kpa_01_init_evt)
+// callbacks kpa_stg1_008/014_2/034/036_cb set it at a page so waiting inline events start
 #define LSWF_KPA_01_MSG_CUE LSWF(1)
 // cleared by kpa_init; set when kpa_stage_start ends (kpa_04 and kpa_06 init set it directly); kpa_time waits for it
 // before counting down

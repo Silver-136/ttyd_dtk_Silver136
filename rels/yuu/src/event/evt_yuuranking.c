@@ -878,8 +878,8 @@ static USER_FUNC(evt_yuuranking_main_func) {
  * type 0 (Plane Mode) is the score divided by 30000 (25000 in the early demos),
  * types 3 and 2 (Boat and Tube Mode) count the time beyond a fixed par per 2 seconds (the early demos use score / 10000),
  * type 1 (Paper Mode) gives 15 times the fraction of the score limit not used.
- * Then it adds the bonus, applies the multiplier (below 256 multiplies, 256 and above adds mul - 256,
- * negative values subtract) and clamps at 0. ("kesan" is calculation.)
+ * Then it adds the bonus, applies the multiplier (1 to 255 multiply, 0 leaves the value, 256 and above add
+ * mul - 256, negative values subtract) and clamps at 0. ("kesan" is calculation.)
  */
 static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     s32 ret;

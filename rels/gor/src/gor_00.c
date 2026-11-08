@@ -489,7 +489,7 @@ static void alpha_tev(MapTevCallbackInfo* info) {
 }
 
 /**
- * Init event of Francesca (Mony): while Mario is looking for Don Pianta (STG2_44 to STG2_45) she
+ * Init event of Francesca (Francesca): while Mario is looking for Don Pianta (STG2_44 to STG2_45) she
  * stands at (130, 15, 250) facing 90 degrees.
  */
 static EVT_BEGIN(mony_init)
@@ -503,7 +503,7 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /**
- * Regular event of Francesca (Mony).
+ * Regular event of Francesca (Francesca).
  * On the Chapter 5 step where Frankie and Francesca arrive (STG5_64_03_F_F_ARRIVE) it runs
  * mony_run_away; the US and later releases first wait for GF(15).
  */
@@ -604,7 +604,7 @@ static EVT_BEGIN(mony_talk)
 EVT_END()
 
 /**
- * Init event of Frankie (Peton): while Mario is looking for Don Pianta (STG2_44 to STG2_45) he
+ * Init event of Frankie (Frankie): while Mario is looking for Don Pianta (STG2_44 to STG2_45) he
  * stands at (185, 15, 250) facing 270 degrees, next to Francesca.
  */
 static EVT_BEGIN(peton_init)
@@ -618,7 +618,7 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /**
- * Regular event of Frankie (Peton).
+ * Regular event of Frankie (Frankie).
  * Same as gor_00_mony_regl: on the Chapter 5 arrival step it runs peton_run_away;
  * the US and later releases first wait for GF(15).
  */
@@ -635,7 +635,7 @@ EVT_END()
 #endif
 
 /**
- * Talk event of Frankie (Peton).
+ * Talk event of Frankie (Frankie).
  * At STG2_44_FINDING_DON_PIANTA it runs the shared talk scene mony_peton_talk;
  * at STG2_45_DAUGHTER_LOCATED he says mac_2_087_01,
  * or mac_2_085_01 once Mario has helped him and Francesca.
@@ -655,7 +655,7 @@ static EVT_BEGIN(peton_talk)
 EVT_END()
 
 /**
- * Init event of Flavio (Marco) for Chapter 4 (STG4_32 to STG4_END_OFF_TO_THE_KEYS):
+ * Init event of Flavio for Chapter 4 (STG4_32 to STG4_END_OFF_TO_THE_KEYS):
  * places him at (77, 51, 110) facing 90 degrees
  * and enters a spare third-force grunt NPC ("c_zako_n", an X-Naut grunt) hidden below the map.
  */
@@ -672,7 +672,7 @@ static EVT_BEGIN(marco_init)
 EVT_END()
 
 /**
- * Moves Mario's partner out of the way before Marco's (Flavio's) departure talk:
+ * Moves Mario's partner out of the way before Flavio's departure talk:
  * depending on where the partner stands it walks it to the pier,
  * hops it up onto the ledge at (90, 50, 150) and turns it to face left, then lets it follow again.
  */
@@ -2014,7 +2014,7 @@ NpcSetupInfo rakganEnt[] = {
 };
 
 /**
- * NPC setup of the harbor: Monie and Peeton, Marco, Cortez, the sailors and Bob-omb sailors, Mokorim, Baba
+ * NPC setup of the harbor: Francesca and Frankie, Flavio, Cortez, the sailors and Bob-omb sailors, Mokorim, Baba
  * and the other people of the docks.
  */
 static NpcSetupInfo npcEnt[] = {
@@ -3558,7 +3558,7 @@ EVT_BEGIN(shukko_event_move_ship)
 EVT_END()
 
 /**
- * The Chapter 4 departure scene: after Marco (Flavio) is told that Mario is ready, the whole crew boards,
+ * The Chapter 4 departure scene: after Flavio is told that Mario is ready, the whole crew boards,
  * the ship leaves Rogueport (with the camera swinging around it), an X-Naut grunt reports (mac_4_095),
  * the story becomes STG4_END_OFF_TO_THE_KEYS
  * and the game goes on to the Chapter 5 sail ("sys_01"/"stg_5").
@@ -4554,7 +4554,7 @@ void suifu100taikikan_seq00(NanNPC* npc) {
 }
 
 /**
- * Per-frame behaviour of one sailor extra heading off after Marco's speech:
+ * Per-frame behaviour of one sailor extra heading off after Flavio's speech:
  * walks a fixed route in order (left along the pier, around the back, over to the right, down and up the stairs,
  * back to the center and out of sight), moving in straight lines at a random speed, then hides below the map.
  */
@@ -4640,7 +4640,7 @@ void suifu100taikikan_seq01(NanNPC* npc) {
 
 #if VERSION >= VERSION_JP
 /**
- * Marco (Flavio) runs off across the harbor and up the stairs and out of the map:
+ * Flavio runs off across the harbor and up the stairs and out of the map:
  * along the pier, then up through a series of jumps at the back, and is hidden below the map at the end.
  * Only in JP and later releases.
  */
@@ -4668,8 +4668,8 @@ EVT_END()
  * from Keelhaul Key (Flavio hails the return to his hometown, mac_5_000_00, and Cortez offers to sail Mario back
  * to
  * the island whenever he likes, mac_5_000_08).
- * Marco (Flavio), Cortez and a crowd of 100 sailor extras are waiting;
- * Marco makes a speech, the sailors scatter, Marco runs off,
+ * Flavio, Cortez and a crowd of 100 sailor extras are waiting;
+ * Flavio makes a speech, the sailors scatter, Flavio runs off,
  * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
  */
 EVT_BEGIN(gorotsuki_kikan)
@@ -4944,7 +4944,7 @@ EVT_BEGIN(into_gor_ship)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-/** Mony and Peton step off the ship and run off into town one after the other */
+/** Francesca and Frankie step off the ship and run off into town one after the other */
 static EVT_BEGIN(mony_peton_event)
     CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("mac_5_039"), 0, STRING("ピートン"))
@@ -4956,7 +4956,7 @@ static EVT_BEGIN(mony_peton_event)
 #else
 
 /**
- * Francesca (Mony) hops off the ship, runs along the pier, up the back stairs and out of the map,
+ * Francesca (Francesca) hops off the ship, runs along the pier, up the back stairs and out of the map,
  * then is hidden below it. JP and later releases.
  */
 EVT_BEGIN(mony_run_away)
@@ -5004,7 +5004,7 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /**
- * Frankie (Peton) runs along the pier, up the back stairs and out of the map, then is hidden below it.
+ * Frankie (Frankie) runs along the pier, up the back stairs and out of the map, then is hidden below it.
  * JP and later releases.
  */
 EVT_BEGIN(peton_run_away)
@@ -5984,7 +5984,7 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 /**
- * Sets up the ending scene at the harbor: deletes the harbor NPCs (Francesca, Frankie, Marco, sailors, Cortez,
+ * Sets up the ending scene at the harbor: deletes the harbor NPCs (Francesca, Frankie, Flavio, sailors, Cortez,
  * Baba; every NPC in JP and later releases) and enters the cast who gather there:
  * Peach, Toadsworth, Professor Frankly, Goombella, Koops, Flurrie, the Yoshi kid, Vivian, Bobbery (Sanders),
  * Ms. Mowz and Punio and Puniko.

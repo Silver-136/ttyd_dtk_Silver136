@@ -148,7 +148,7 @@ EVT_END()
 
 /**
  * Handler of the sw_0 switch for the floating block blk_0:
- * the camera shakes (with controller rumble in JP and the June demos only) while the block rises
+ * the camera shakes (with controller rumble in JP and the early demos only) while the block rises
  * or falls 200 units (the direction follows LSWF_GON_09_FLOAT_BLOCK_MOVED, which is toggled), with block-float sounds;
  * if the descending block's head-contact check matches,
  * it reverses and the switch is cancelled.

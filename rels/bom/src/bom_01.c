@@ -3021,14 +3021,12 @@ static EVT_BEGIN(minnnanokoe_evt)
                 SET_VALUE(LW(3), STRING("stg8_las_148_70"))
             END_SWITCH
             BEGIN_INLINE_EVENT
-#if VERSION >= VERSION_US
-#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
+#if VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2
                 CALL(evt_msg_pri, GW(6))
                 ADD(GW(6), 1)
                 IF_INT_EQUAL(GW(6), 10)
                     SET_VALUE(GW(6), 0)
                 END_IF
-#endif
 #endif
                 CALL(evt_msg_print, 0, LW(3), 0, 0)
             END_INLINE_EVENT

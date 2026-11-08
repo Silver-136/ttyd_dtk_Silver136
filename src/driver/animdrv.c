@@ -378,7 +378,7 @@ static void* testAlloc(u32 size) {
 /**
  * Boot setup: allocates the pools (64 animation files, 64 texture files, 256 poses,
  * a 1024-vector scratch buffer), the pose vertex heap and the tangent table used to bend paper,
- * and loads a/vivian.bin (the hair and tail chain data of Vivian and her sisters)
+ * and loads a/vivian.bin (the chain data of Vivian's hair)
  * and a/ag2tg.bin (the animation-group to texture-group map).
  */
 void animInit(void) {

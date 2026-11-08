@@ -276,7 +276,8 @@ USER_FUNC(party_tev) {
 
 /**
  * Message-window callback for the Bowser interlude text "kpa_stg5_009_7":
- * when page 1 is shown (type 3) it fades BGM channel 1 out and starts the "BGM_FF_GET_ITEM1" jingle.
+ * when the second page appears (type 3, curPage 1) it fades BGM channel 1 out and starts the "BGM_FF_GET_ITEM1"
+ * jingle.
  */
 void kpa_stg5_009_7_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;

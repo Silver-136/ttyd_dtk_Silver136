@@ -1439,6 +1439,8 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
     npages = (num + 27) / 28;
     winTexInit((TEXPalette*)*w->res->data);
     for (p = 0; p < npages; p++) {
+        // BUG: as in the loop above, j is read before this loop sets it: 4 after a tile loop ran, uninitialized if
+        // every page of the first loop was skipped.
         if (scroll + (y - j * 56) - p * 232 > 400.0f || scroll + (y - j * 56) - p * 232 < -400.0f) {
             continue;
         }

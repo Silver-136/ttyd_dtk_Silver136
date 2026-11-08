@@ -437,7 +437,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
 
-        // Motions 3 to 5: the same three speeds, starting from the other end.
+        // US and later, motions 3 to 5: the same three speeds, starting from the other end.
 #if VERSION >= VERSION_US
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_01"))
@@ -488,7 +488,8 @@ EVT_BEGIN(minigame01_start)
 #endif
     CALL(yuuminigame_set_dataadr, 1, LW(15))
 
-// Platform 2 (S_dai_02) slides along Z, with the same choice of motions.
+// Platform 2 (S_dai_02) slides along Z, with the same choice of motions (US and later; JP and the early demos only have motion 2).
+
 #if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
@@ -539,7 +540,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
 
-        // Motions 3 to 5: the same three speeds, starting from the other end.
+        // US and later, motions 3 to 5: the same three speeds, starting from the other end.
 #if VERSION >= VERSION_US
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_02"))
@@ -590,7 +591,8 @@ EVT_BEGIN(minigame01_start)
 #endif
     CALL(yuuminigame_set_dataadr, 2, LW(15))
 
-// Platform 3 (S_dai_03) moves on X and Z at once, with the same choice of motions.
+// Platform 3 (S_dai_03) moves on X and Z at once, with the same choice of motions (US and later; JP and the early demos only have motion 2).
+
 #if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
@@ -645,7 +647,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
 
-        // Motions 3 to 5: the same three speeds, starting from the other end.
+        // US and later, motions 3 to 5: the same three speeds, starting from the other end.
 #if VERSION >= VERSION_US
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_03"))
@@ -747,7 +749,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
 
-        // Motions 3 to 5: the same three speeds, starting from the other end.
+        // US and later, motions 3 to 5: the same three speeds, starting from the other end.
 #if VERSION >= VERSION_US
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_04"))
@@ -849,7 +851,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
 
-        // Motions 3 to 5: the same three speeds, starting from the other end.
+        // US and later, motions 3 to 5: the same three speeds, starting from the other end.
 #if VERSION >= VERSION_US
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_05"))

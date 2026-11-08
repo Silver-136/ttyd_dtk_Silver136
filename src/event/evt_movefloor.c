@@ -601,7 +601,8 @@ USER_FUNC(evt_moving_floor_delete) {
     EventEntry* e = evtGetPtrID(id);
     MovingFloor* w = (MovingFloor*)e->lwData[9];
 
-    // BUG: w is dereferenced here before the NULL check below.
+    // BUG: e is NULL when the event is no longer running (evtGetPtrID), yet e->lwData[9] is read above before the
+    // evtCheckID test, and w is dereferenced here before the NULL check below.
     moving_floor_stop_se_sub(w);
     if (w != NULL) {
         _mapFree(w);

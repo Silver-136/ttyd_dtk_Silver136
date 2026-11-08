@@ -67,5 +67,6 @@ void zakogun_set_pose(struct ZakoGun* zako, s32 base, s32 num, s32 div);
 #define LSWF_MUJ_00_WHACKA_OUT LSWF(1)
 // set by koburon_dead each time Whacka is hit (with GSW_MUJ_WHACKA_HIT_COUNT); no code reads it
 #define LSWF_MUJ_00_WHACKA_HIT_UNUSED LSWF(2)
-// US only: plain brick bblk00 in muj_03 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken; JP uses GSWF_MUJ_03_BRICK
+// US and later: plain brick bblk00 in muj_03 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken; JP and the early
+// demos use GSWF_MUJ_03_BRICK
 #define LSWF_MUJ_03_BRICK_BBLK00 LSWF(3)

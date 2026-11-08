@@ -25,9 +25,10 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_HALF_HP 2      // half of its max HP (set at init); harf_hp_event compares the HP against it
-#define UNIT_WORK_HALF_HP_DONE 3 // 1 once harf_hp_event has played the stg3_tou_403_06_02 line
-#define UNIT_WORK_ATTACK_STEP 4  // fixed opening order: 0 fire, 1 bite, 2 hip attack; from 3 on attack_event draws lots
+#define UNIT_WORK_MARIO_HIT_TALK_UNUSED 1 // cleared at init; read only by the las copy (its first-hit talk)
+#define UNIT_WORK_HALF_HP 2               // half of its max HP (set at init); harf_hp_event compares the HP against it
+#define UNIT_WORK_HALF_HP_TALKED 3        // 1 once harf_hp_event has played the stg3_tou_403_06_02 line
+#define UNIT_WORK_ATTACK_STEP 4           // fixed opening order: 0 fire, 1 bite, 2 hip attack; from 3 on attack_event draws lots
 
 #include "unit/unit_boss_koopa.h"
 static void _disp_icon(CameraId camera, void* param);
@@ -388,11 +389,12 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(entry_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK_UNUSED, 0)
+
     CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
     DIVIDE(LW(0), 2)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_MOVE1L"), STRING("SFX_BOSS_KOOPA_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_MOVE1L"), STRING("SFX_BOSS_KOOPA_MOVE1R"), 0, 8, 8)
@@ -493,12 +495,12 @@ EVT_END()
  * zooms in on him and has him say stg3_tou_403_06_02 in a new talk pose.
  */
 static EVT_BEGIN(harf_hp_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_DONE, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP, LW(1))
         IF_INT_LESS(LW(0), LW(1))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_DONE, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, 1)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL_CHILD(koopa_zoom)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KPA_T_3"))

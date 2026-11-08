@@ -131,7 +131,7 @@ typedef enum StatusDamageResult {
     STATUS_RESULT_FRIGHT = (1 << 2),       // 0x4, -> DAMAGE_CODE_FRIGHT
     STATUS_RESULT_GALE_FORCE = (1 << 3),   // 0x8, -> DAMAGE_CODE_GALE_FORCE
     STATUS_RESULT_INSTANT_KILL = (1 << 4), // 0x10, on the final hit the target dies
-    STATUS_RESULT_SLEEP = (1 << 5),        // 0x20, the damage is applied without the hit reaction
+    STATUS_RESULT_SLEEP = (1 << 5),        // 0x20, the hit cannot wake the target it just put to sleep (canWake 0)
 } StatusDamageResult;
 
 // What BattlePreCheckDamage, BattleCheckCounter and BattleCheckDamage return (scripts: btlevtcmd_(Command)PreCheckDamage,

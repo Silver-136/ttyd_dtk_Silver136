@@ -788,11 +788,10 @@ EVT_END()
  * when she is enraged (unit work 7) and its cooldown (unit work 9) is over.
  * The selection cutoffs stay fixed at 40 for shadow slip, 60 for enlarging powder and 80 for shrinking powder,
  * with the blizzard otherwise.
- * Unit work 8 = 3 (set when she drops below 66% HP) uses the blizzard next;
+ * UNIT_WORK_ATTACK_STEP = 3 (set when she drops below 66% HP) uses the blizzard next;
  * the blizzard sets a two-phase cooldown.
  */
 static EVT_BEGIN(attack_event)
-
     // Use an item if the AI decided to.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

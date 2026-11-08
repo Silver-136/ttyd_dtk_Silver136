@@ -2554,7 +2554,7 @@ USER_FUNC(evt_npc_majo_disp_off) {
 
 /**
  * Writes how enemy NPC args[0] was defeated (koopaEncounterType, set by _npcDead) to args[1];
- * Bowser's side-scrolling levels score by it.
+ * npc_event's defeat script picks the death animation by it.
  */
 USER_FUNC(evt_npc_get_kpencount_type) {
     EvtWord* args = event->args;
@@ -2579,7 +2579,7 @@ USER_FUNC(evt_npc_calc_score) {
 /**
  * Puffs broom smoke (kemuri) behind Kamek's broom every 8
  * or 16 frames depending on the animation state (3 or 2), sized by the NPC's scale.
- * On kpa_01 the smoke is drawn on camera 7 (not in the June demos).
+ * On kpa_01 the smoke is drawn on camera 7 (not in the early demos).
  */
 static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
     static u8 cnt;

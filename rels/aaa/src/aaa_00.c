@@ -268,7 +268,7 @@ static EVT_BEGIN(evt_prologue)
     // Parakarry glides in to the mailbox, with movement sounds at intervals in JP and later.
     CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
 
-    // The mailbox shakes as she drops the mail in.
+    // The mailbox shakes as Parakarry drops the mail in.
     CALL(evt_npc_reverse_ry, STRING("パレッタ"))
     WAIT_MS(500)
     CALL(evt_mapobj_get_position, STRING("S_posuto"), LW(0), LW(1), LW(2))

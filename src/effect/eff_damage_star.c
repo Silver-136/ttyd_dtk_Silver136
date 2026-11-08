@@ -53,7 +53,7 @@ static u8 color_rotation_data[] = {
 };
 
 /**
- * Keyframes of the damage badge's parent joint: it slides in from the left with a small bob and settles
+ * Keyframes of the damage star's parent joint: it slides in from the left with a small bob and settles
  * slightly to the side of the hit over 65 frames.
  */
 MayaHermitKey damageStar_effHermit_0[] = {
@@ -137,7 +137,7 @@ MayaHermitKey damageStar_effHermit_0[] = {
 };
 
 /**
- * Keyframes of the damage badge itself: it pops in with a squash and stretch, tips over around frame 40,
+ * Keyframes of the damage star itself: it pops in with a squash and stretch, tips over around frame 40,
  * then shrinks to nothing by frame 65. The damage number is drawn on this joint.
  */
 MayaHermitKey damageStar_effHermit_1[] = {
@@ -253,7 +253,7 @@ MayaHermitKey damageStar_effHermit_1[] = {
     },
 };
 
-/** The damage badge's square face: four corners with texture coordinates. */
+/** The damage star's square face: four corners with texture coordinates. */
 s16 damageStar_effFace_pPlane168_0[] = {
     4, // vertex count
     -1024, -1024, 0, 0, 512,
@@ -262,15 +262,15 @@ s16 damageStar_effFace_pPlane168_0[] = {
     -1024, 1024, 0, 0, 0,
 };
 s16* damageStar_effFaceDt_pPlane168 = damageStar_effFace_pPlane168_0;
-/** The two badge joints and their keyframes; only the second joint has a face to draw. */
+/** The two star joints and their keyframes; only the second joint has a face to draw. */
 MayaPoly damageStar_effAnimRST[] = {
     {7, damageStar_effHermit_0, 0, NULL},
     {10, damageStar_effHermit_1, 1, &damageStar_effFaceDt_pPlane168},
 };
 
-/** Joint list of the damage badge animation. */
+/** Joint list of the damage star animation. */
 MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
-/** The damage badge animation (65 frames), started by effDamageStarEntry and positioning the number. */
+/** The damage star animation (65 frames), started by effDamageStarEntry and positioning the number. */
 MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
 
 static void effDamageStarMain(EffectEntry* effect);

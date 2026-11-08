@@ -75,8 +75,7 @@ typedef enum BattleWeaponCounterResist_Flags {
     COUNTER_RESIST_ALL = 0x7FF,
 } BattleWeaponCounterResist_Flags;
 
-// BattleWeapon.special (bits checked in battle_damage.c; 0x200 and 0x8000 are set in some tables, their use is
-// not clear)
+// BattleWeapon.special (bits checked in battle_damage.c)
 typedef enum BattleWeaponSpecialFlags {
     SPECIAL_BADGE_POWER = 0x1, // badges add to or subtract from the power (BattleCalculateDamage)
     SPECIAL_STATUS_POWER = 0x2, // Huge/Tiny, Attack Up/Down and Merlee's boost change the power

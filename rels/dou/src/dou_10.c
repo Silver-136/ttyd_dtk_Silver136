@@ -799,6 +799,8 @@ USER_FUNC(evt_sub_entrymgr_getreg) {
             break;
         }
     }
+
+    // BUG: nothing checks that id was found; a missing id reads the entry one past the table.
     evtSetFloat(event, args[2], e->reg[0]);
     evtSetFloat(event, args[3], e->reg[1]);
     evtSetFloat(event, args[4], e->reg[2]);
@@ -818,7 +820,10 @@ USER_FUNC(evt_sub_entrymgr_setreg) {
             break;
         }
     }
+
+    // BUG: nothing checks that id was found; a missing id writes the entry one past the table.
     e->reg[0] = evtGetFloat(event, args[2]);
+
     e->reg[1] = evtGetFloat(event, args[3]);
     e->reg[2] = evtGetFloat(event, args[4]);
     return EVT_RETURN_DONE;

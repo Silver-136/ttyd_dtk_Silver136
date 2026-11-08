@@ -885,7 +885,6 @@ void card_tev(MapTevCallbackInfo* info) {
 
 /**
  * Script helper. Takes an offscreen bounding box (args[0..3]) and stores it in the capture work area.
- * Unusual: the original stores args[0] into all four fields.
  */
 USER_FUNC(uranai_bbox) {
     EvtWord* args = event->args;

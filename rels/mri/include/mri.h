@@ -91,7 +91,7 @@ void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end);
 // out
 #define LSWF_MRI_06_HIDDEN_COIN_BRICK LSWF(1)
 // cleared by mri_01_koopa_second_evt before kpa_stg3_012; the callback mri_stg3_012_cb sets it at the second page to
-// start a waiting inline event (dossier names the C use elder_kaisetsu)
+// start a waiting inline event
 #define LSWF_MRI_01_KOOPA_MSG_CUE LSWF(2)
 // set by sekai_yami_evt and minnnanokoe_evt (mri_00) when the room goes dark (envSetYami); puni_puni_disp
 // (mri_puni.c, _swGet(3)) then draws each Puni with the darkness TEV

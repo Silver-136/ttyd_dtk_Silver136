@@ -115,6 +115,14 @@ in `docs/FAKES.md` and in the mweppc review record.
   MapObjectFlags 0x20 (set on A-button objects, never read), damage result 0x10000,
   unit attribute 0x100). Tools: flag_names.py (struct fields), word_masks.py (values by source, also locals),
   material_flags.py (pose material word).
+- **English identity for developer and Japanese names (user idea, 2026-11-08):** the original symbols and the
+  Japanese strings name characters, NPCs, objects, items and maps in the developers' own words, which do not always
+  map cleanly to the English game (example: the symbols `mony_*`/`peton_*` and the NPC strings モニー/ピートン are
+  Francesca and Frankie, the Pianta couple; comments had romanised them as Mony/Peton). Pass: find every
+  developer/Japanese name whose English identity the scripts, code and US messages do not make clear (NPC name
+  strings, model names, symbol prefixes, unit names), and give each one an English note at its definition or NPC
+  table entry (what it is, and its English name when the game gives one). Evidence order: US message text and the
+  NPC/model data, then the code; where only game knowledge settles it, ask the user. Original symbol names stay.
 
 ## 4. Structure and layout of the source
 

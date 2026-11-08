@@ -1,5 +1,5 @@
 // gon_08 (ゴンババ, Hooktail Castle): room linking gon_04, gon_09 and gon_12.
-// Nokkos (nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story STG1_15_02_LOCK_3).
+// Koopook (original symbols nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story STG1_15_02_LOCK_3).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -216,7 +216,7 @@ EVT_END()
 
 /**
  * Handler of the sw_0 switch for the floating block blk_0:
- * the camera shakes (with controller rumble in JP and the June demos only) while the block rises
+ * the camera shakes (with controller rumble in JP and the early demos only) while the block rises
  * or falls 600 units (the direction follows LSWF_GON_08_FLOAT_BLOCK_MOVED, which is toggled), with block-float sounds;
  * if the descending block's head-contact check matches,
  * it reverses and the switch is cancelled.
@@ -496,7 +496,7 @@ static EVT_BEGIN(evt_unlock)
 EVT_END()
 
 /**
- * NPC init for Nokkos (ノッコス), the Koopa who asks for Mario's help in the Trouble Center request 7:
+ * NPC init for Koopook (ノッコス), the Koopa who asks for Mario's help in the Trouble Center request 7:
  * when that request is active he is placed on the high ledge (y 500) and faces right;
  * otherwise he stays where the map put him.
  */
@@ -514,16 +514,16 @@ EVT_END()
 
 EVT_BEGIN(nokkosu_talk)
 
-    // Nokkos is made intangible so he can move freely.
+    // Koopook is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
-    // Nokkos greets Mario.
+    // Koopook greets Mario.
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #else
 #if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT
-        // Mario walks up to Nokkos and faces him.
+        // Mario walks up to Koopook and faces him.
         CALL(evt_mario_mov_pos2, -206, -147, FLOAT(120.0f))
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
@@ -552,7 +552,7 @@ EVT_BEGIN(nokkosu_talk)
 #endif
     END_IF
 
-    // The partner walks up next to Mario and Nokkos greets them.
+    // The partner walks up next to Mario and Koopook greets them.
 #if VERSION >= VERSION_US
     CALL(evt_party_move_pos2, 0, -228, -130, FLOAT(120.0f))
     CALL(evt_party_set_dir, 0, 90, 200)
@@ -585,7 +585,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
 
-    // Nokkos and Koops take turns talking (Mario has no lines), then Nokkos offers the reward.
+    // Koopook and Koops take turns talking (Mario has no lines), then Koopook offers the reward.
     CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_03"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))
@@ -598,7 +598,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_party_run, 0)
 #endif
 
-    // Nokkos hands over a Special Card as thanks.
+    // Koopook hands over a Special Card as thanks.
     CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))
@@ -609,7 +609,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
 
-    // Nokkos jumps down off the ledge and out of sight.
+    // Koopook jumps down off the ledge and out of sight.
     CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
 
@@ -621,7 +621,7 @@ EVT_BEGIN(nokkosu_talk)
     RETURN
 EVT_END()
 
-/** NPC setup of gon_08: Nokkos, who gives the side request. */
+/** NPC setup of gon_08: Koopook, who gives the side request. */
 static NpcSetupInfo npcEnt[] = {
     {
         "ノッコス", // name
@@ -639,7 +639,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Map init for gon_08: sets up the doors, Nokkos, the dormant Dry Bones, the Life Shroom,
+ * Map init for gon_08: sets up the doors, Koopook, the dormant Dry Bones, the Life Shroom,
  * the floating block and switch (blk_0 and sw_0),
  * and the lock that Castle Key 0x0F opens (STG1_15_02_LOCK_3).
  */

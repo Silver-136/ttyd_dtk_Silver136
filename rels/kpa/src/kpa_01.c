@@ -1260,7 +1260,7 @@ void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
 }
 
 /**
- * Message callback for kpa_stg1_036: sets LSWF_KPA_01_MSG_CUE on page 2,
+ * Message callback for kpa_stg1_036: sets LSWF_KPA_01_MSG_CUE when the third page appears (curPage 2),
  * which a waiting inline event of the departure cutscene reacts to.
  */
 void kpa_stg1_036_cb(s32 type, smartEntry* smart) {

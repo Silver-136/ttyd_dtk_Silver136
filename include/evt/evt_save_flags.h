@@ -15,7 +15,9 @@
 #define GSWF_SAVE_BLOCK_TUTORIAL_SEEN GSWF(233)
 // set by the heart block's first use outside kiosk mode (evt_mobj); its tutorial runs only while it is clear
 #define GSWF_HEART_BLOCK_TUTORIAL_SEEN GSWF(234)
-// set by the first item pickup (itemdrv) outside kiosk mode; also read by the battle audience's item throws
+// set by the first item pickup (itemdrv) outside kiosk mode and by the first shop purchase (evt_shop
+// item_first_hit); also read by the battle audience's item throws
+
 #define GSWF_ITEM_TUTORIAL_SEEN GSWF(235)
 #define GSWF_GLITZ_PIT_MATCH_RESERVED GSWF(2388)
 // Glitz Pit: the last match's special condition was kept (rule result 6)
@@ -46,7 +48,8 @@
 #define GSWF_MAIL_KOOPIE_KOO_SENT GSWF(9)
 // set by mail_evt_gor_01 when mail 19 (Petuni) arrives at STG4_37; the event stops once set
 #define GSWF_MAIL_PETUNI_SENT GSWF(10)
-#define GSWF_MAIL_BOO_SENT GSWF(11)              /* set by mail_evt_gor_04 when mail 20 (Boo) arrives at STG5_66 */
+// set by mail_evt_gor_04 when mail 20 (Boo) arrives at STG5_66, and by the story-jump init stg6_00 (event.c)
+#define GSWF_MAIL_BOO_SENT GSWF(11)
 // set by mail_evt_rsh_03_a when mail 21 (Pa-Patch) arrives from STG6_45 on; the event stops once set
 #define GSWF_MAIL_PA_PATCH_SENT GSWF(12)
 // set by mail_evt_hom_00 when mail 22 (King K) arrives at STG6_42; the event stops once set
@@ -124,7 +127,7 @@
 // (swGet(0xFB)) double points within 15 minutes of GSW 14
 #define GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE GSWF(251)
 // set by mail_evt_pik_00 (RDM Issue 6); shopper_talk_evt (rsh_03 greets with stg6_shop_04_1) and add_shop_point
-// (swGet(0xFC)) double points within 15 minutes of GSW 23
+// double points within 15 minutes of GSW 23
 #define GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE GSWF(252)
 // set by win_04 init on every entry (JP and later); win_log's map-dot check reads it for dot type 1, but no tubuDt dot uses type 1
 #define GSWF_WIN_04_ENTERED GSWF(253)
@@ -757,8 +760,8 @@
 // set by evt_tou_match_after_default (tou.c) on first reaching rank 3: evt_mail_4; rankingInit then hides the Hand-
 // It-Overs and shows the Destructors; init_brots (tou_04) tests it
 #define GSWF_GLITZ_PIT_DESTRUCTORS_JOINED GSWF(2421)
-// set by evt_tou_match_after_default (tou.c) on first reaching rank 2 or 1: evt_mail_5 (remove the lobby posters,
-// story STG3_20_13)
+// set by evt_tou_match_after_default (tou.c) on first reaching rank 1: evt_mail_5 (remove the lobby posters,
+// story STG3_20_13); the empty CASE for rank 2 before it does nothing (script CASEs do not fall through)
 #define GSWF_TOU_RANK_1_MAIL_DONE GSWF(2423)
 // tou_06 MOBJ_Lv1BigBlock "a" (evt_mobj_lv_blk); also set by stg3_20_12_init (event.c)
 #define GSWF_TOU_06_BIG_BLOCK_A_BROKEN GSWF(2425)
@@ -1703,7 +1706,7 @@
 // deepest Pit of 100 Trials level reached, raised by jon_init_evt (jon); tik_06's sign (evt_kanban2) prints it
 #define GSW_JON_DEEPEST_LEVEL GSW(33)
 // shown by tik_06's sign (evt_kanban2) as Star Pieces found out of 100; itemseq_GetItem (itemdrv) adds 1
-// per item get of type 8
+// per Star Piece get (item get type 8)
 #define GSW_STAR_PIECES_FOUND_COUNT GSW(34)
 // high byte of the Power Bounce record (see GSW(32)), raised by marioAttackEvent_RenzokuJump (battle_mario); tik_06's
 // sign prints it

@@ -372,7 +372,7 @@ BOOL partyChkJoin(s32 partnerId) {
 
 /**
  * The partner's current HP from the pouch (0 for invalid ids);
- * party.c compares it with PARTY_PINCH_HP for the low-HP (peril) animations.
+ * party.c compares it with PARTY_PINCH_HP for the low-HP animations.
  */
 s32 partyGetHp(s32 partnerId) {
     s32 ret = 0;

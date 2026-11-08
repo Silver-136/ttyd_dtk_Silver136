@@ -1868,7 +1868,7 @@ void puniMoveNormal(PuniData* p) {
 #endif
 
 /**
- * The June demos' two move steps (up to the JP demo): both move through puniMoveAtari with the velocity reflected off walls;
+ * The early demos' two move steps (up to the JP demo): both move through puniMoveAtari with the velocity reflected off walls;
  * the limited one first caps the speed at maxSpeed.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -3326,7 +3326,7 @@ void puniModeRecover(PuniData* p) {
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 #if VERSION <= VERSION_DEMO_JP
-/** The June demos' puni main loop calls this directly with the sound name; their puniModeDead below calls it too. */
+/** The early demos' puni main loop calls this directly with the sound name; their puniModeDead below calls it too. */
 static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     switch (p->modeStep) {
         case 0:
@@ -7316,7 +7316,7 @@ USER_FUNC(evt_puni_zenmetsu_check) {
 
 /**
  * Checks whether every Puni of one side is lower than height args[1] (args[0] picks Puni or Jabbi).
- * args[2] = 1 if no one is higher, otherwise 0 (the June demos: 1 only if everyone is exactly at that height).
+ * args[2] = 1 if no one is higher, otherwise 0 (the early demos: 1 only if everyone is exactly at that height).
  * mri_08 and mri_11 use it to wait until the Punies are down at height 0.
  */
 USER_FUNC(evt_puni_landon_check) {

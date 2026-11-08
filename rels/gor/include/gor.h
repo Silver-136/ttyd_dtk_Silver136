@@ -86,5 +86,5 @@ void goryuugijo_main_slot(struct EventEntry* event, BOOL isFirstCall);
 // desk_talk_check skips its check
 #define LSWF_GOR_03_TALK_SCENE_ACTIVE LSWF(3)
 // cleared by gor_00_koopa_evt before kpa_stg4_018; the message callback gor_stg4_018_cb sets it on the second page to
-// start the camera shake and other inline events (dossier names the C use gor_muj_ship_pera)
+// start the camera shake and other inline events
 #define LSWF_GOR_00_KOOPA_MSG_CUE LSWF(6)

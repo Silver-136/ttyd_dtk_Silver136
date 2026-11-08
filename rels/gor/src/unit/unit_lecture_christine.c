@@ -20,7 +20,7 @@
 #include "battle/battle_database_common.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_PAIRED_UNIT 0 // the other lecture unit's id: this unit keeps the lecture_frankli unit here and writes its own id into its slot 0 (its phase_event makes that unit speak)
+#define UNIT_WORK_PAIRED_UNIT_UNUSED 0 // the lecture_frankli unit's id, written at setup and never read (Frankly reads his own slot 0, which holds this unit's id)
 
 static USER_FUNC(_battle_set_lecture_unit_id);
 USER_FUNC(_set_lecture_mode);
@@ -221,7 +221,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), STRING("SFX_PARTY_BATTLE_LANDING1"))
     CALL(_set_lecture_mode)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_lecture_frankli), 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PAIRED_UNIT, LW(3))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PAIRED_UNIT_UNUSED, LW(3))
     CALL(_battle_set_lecture_unit_id, LW(3))
     CALL(btlevtcmd_ChangeFaceDirection, LW(3), -1)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))

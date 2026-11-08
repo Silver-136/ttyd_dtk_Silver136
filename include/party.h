@@ -8,7 +8,7 @@
 #include "party_member.h"
 #include <dolphin/types.h>
 
-// A partner is in a pinch (peril poses) at this HP or below
+// A partner is in a pinch (low-HP poses) at this HP or below: Danger (5) in JP and later, Peril (1) in the early demos
 #if VERSION <= VERSION_DEMO_JP
 #define PARTY_PINCH_HP 1
 #else
@@ -64,9 +64,7 @@ typedef enum PartyFlags {
     PARTY_FLAG_CONTINUE_FOLLOW_MARKER = (1 << 15), // 0x8000, set by partyReInit for mode 6; partyChgMoveMode clears it if the old mode is 6; no explicit reader found
     PARTY_FLAG_IS_RIDING_PLANE = (1 << 16),
     PARTY_FLAG_IS_RIDING_SHIP = (1 << 17),
-#if VERSION <= VERSION_DEMO_JP
-    PARTY_FLAG_IS_RIDING_JABARA = (1 << 18),
-#endif
+    PARTY_FLAG_IS_RIDING_JABARA = (1 << 18), // 0x40000, set by the early demos' bellows ride; later versions only clear it
     PARTY_FLAG_IS_BEHIND_MARIO = (1 << 19),
     PARTY_FLAG_SLEEP_ON = (1 << 22),
     PARTY_FLAG_BG_MODE = (1 << 23),
@@ -197,8 +195,7 @@ typedef enum PartyDispFlags {
     PARTY_DISP_FLAG_SLIT_DIR_280 = (1 << 9),      // 0x200, slit walk drawn at direction 280 (else 260)
 } PartyDispFlags;
 
-// PartyEntry.trigFlags: one-shot change requests and door-move state (evt_party_trigflg_onoff). 0x10000 (no code sets it)
-// and 0x800000 are not named.
+// PartyEntry.trigFlags: one-shot change requests and door-move state (evt_party_trigflg_onoff).
 typedef enum PartyTrigFlags {
     PARTY_TRIG_SLIT_INIT = (1 << 0),             // 0x1, start of the slit / roll paper motion
     PARTY_TRIG_CHG_MOT = (1 << 1),               // 0x2, motion changed

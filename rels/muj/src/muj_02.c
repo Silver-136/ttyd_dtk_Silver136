@@ -135,9 +135,9 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Positions Mario, his partner, Mony and Peton for a conversation with the couple:
- * LW(10) 0 (Mony was talked to): Mario and the partner walk to Mony's right and Peton walks up beside her;
- * LW(10) 1 (Peton): they walk to Peton's left and Mony walks up beside him.
+ * Positions Mario, his partner, Francesca and Frankie for a conversation with the couple:
+ * LW(10) 0 (Francesca was talked to): Mario and the partner walk to Francesca's right and Frankie walks up beside her;
+ * LW(10) 1 (Frankie): they walk to Frankie's left and Francesca walks up beside him.
  * Locks Mario's pose after he moves into place.
  */
 EVT_BEGIN(mony_peton_setup)
@@ -186,7 +186,7 @@ EVT_BEGIN(mony_peton_setup)
 EVT_END()
 
 /**
- * Display event for Peeton's repeated declaration: runs countDisp so the repetition
+ * Display event for Frankie's repeated declaration: runs countDisp so the repetition
  * count is drawn on screen each frame.
  */
 EVT_BEGIN(lost_wedding_ring_sub)
@@ -196,7 +196,7 @@ EVT_END()
 
 /**
  * The lost wedding ring request (STG5_64_LOST_WEDDING_RING):
- * Peton and Mony ask Mario to find the ring they lost in the jungle (stg5_muj_171 onwards),
+ * Frankie and Francesca ask Mario to find the ring they lost in the jungle (stg5_muj_171 onwards),
  * then one of them moves back to their jungle position, depending on whether Mario has the ring.
  * Their regular events restart and Mario's pose lock is cleared before the partner resumes.
  */
@@ -209,7 +209,7 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_npc_get_reglid, STRING("ピートン"), LW(0))
     DELETE_EVENT(LW(0))
 
-    // Mony and Peeton are placed; Mario and his partner approach them.
+    // Francesca and Frankie are placed; Mario and his partner approach them.
     CALL_CHILD(mony_peton_setup)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -221,7 +221,7 @@ EVT_BEGIN(lost_wedding_ring)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
 
-    // Peeton and Mony learn that the boss is sick.
+    // Frankie and Francesca learn that the boss is sick.
     CALL(evt_msg_print, 0, STRING("stg5_muj_171"), 0, STRING("ピートン"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_172"), 0, STRING("モニー"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -235,7 +235,7 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_cam3d_evt_set, LW(0), 118, 343, LW(0), 54, -18, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 
-    // Mony explains that she dropped the wedding ring and Peeton tries to calm her.
+    // Francesca explains that she dropped the wedding ring and Frankie tries to calm her.
     CALL(evt_msg_print, 0, STRING("stg5_muj_173"), 0, STRING("モニー"))
     CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("モニー"))
     WAIT_MS(500)
@@ -245,7 +245,7 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_msg_print, 0, STRING("stg5_muj_175"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_176"), 0, STRING("ピートン"))
 
-    // Mony makes Peeton promise to say he loves her 100 times.
+    // Francesca makes Frankie promise to say he loves her 100 times.
     CALL(evt_msg_print, 0, STRING("stg5_muj_177"), 0, STRING("モニー"))
     CALL(evt_npc_get_position, STRING("ピートン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ピートン"), LW(0), LW(1), LW(2), 225, 30)
@@ -264,7 +264,7 @@ EVT_BEGIN(lost_wedding_ring)
 
     // Advance the count from 10 to 100, incrementing after each repeated message.
     LOOP(90)
-        // Peeton says it again and again, tiring himself out.
+        // Frankie says it again and again, tiring himself out.
         CALL(evt_msg_print_add, 0, STRING("stg5_muj_182_01"))
         ADD(GW(0), 1)
     END_LOOP
@@ -274,7 +274,7 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_set_dir_to_target, STRING("モニー"), STRING("ピートン"))
     WAIT_MS(500)
 
-    // Mony forgives him.
+    // Francesca forgives him.
     CALL(evt_msg_print, 0, STRING("stg5_muj_183"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_184"), 0, STRING("ピートン"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -340,7 +340,7 @@ EVT_BEGIN(wedding_ring_consign)
 EVT_END()
 
 /**
- * Mony and Peton's reunion after the ring has been handed over:
+ * Francesca and Frankie's reunion after the ring has been handed over:
  * they are placed beside Mario, talk (stg5_muj_196 to 198), then walk off the left edge of the screen.
  */
 EVT_BEGIN(find_wedding_ring)
@@ -403,7 +403,7 @@ EVT_BEGIN(find_wedding_ring)
 EVT_END()
 
 /**
- * Init event of Mony in the jungle: sets NPC_STATUS_FACE_MOVE_DIR (she turns to face the way she moves)
+ * Init event of Francesca in the jungle: sets NPC_STATUS_FACE_MOVE_DIR (she turns to face the way she moves)
  * and between STG5_63_KEELHAUL_ANYTIME and STG5_64_LOST_WEDDING_RING she is placed at (500, 0, -40).
  */
 static EVT_BEGIN(mony_init)
@@ -416,7 +416,7 @@ static EVT_BEGIN(mony_init)
 EVT_END()
 
 /**
- * Regular loop shared by Mony and Peton: they pace left and right around their spawn point,
+ * Regular loop shared by Francesca and Frankie: they pace left and right around their spawn point,
  * turning to face the way they walk and pausing 1 to 1.5 seconds between steps.
  */
 EVT_BEGIN(mony_peton_regl)
@@ -451,7 +451,7 @@ EVT_BEGIN(mony_peton_regl)
     RETURN
 EVT_END()
 
-/** Regular event of Mony: runs the shared pacing loop mony_peton_regl while the couple stands in the jungle. */
+/** Regular event of Francesca: runs the shared pacing loop mony_peton_regl while the couple stands in the jungle. */
 EVT_BEGIN(mony_regl)
     SET_VALUE(LW(0), 500)
     SET_VALUE(LW(1), 0)
@@ -461,7 +461,7 @@ EVT_BEGIN(mony_regl)
 EVT_END()
 
 /**
- * Talk event of Mony: says stg5_muj_169 at STG5_63_KEELHAUL_ANYTIME and
+ * Talk event of Francesca: says stg5_muj_169 at STG5_63_KEELHAUL_ANYTIME and
  * then starts the lost wedding ring request (lost_wedding_ring).
  */
 static EVT_BEGIN(mony_talk)
@@ -486,8 +486,8 @@ static EVT_BEGIN(mony_talk)
 EVT_END()
 
 /**
- * Init event of Peton in the jungle: NPC_STATUS_FACE_MOVE_DIR set (he turns to face the way he moves),
- * and between STG5_63_KEELHAUL_ANYTIME and STG5_64_LOST_WEDDING_RING he is placed beside Mony.
+ * Init event of Frankie in the jungle: NPC_STATUS_FACE_MOVE_DIR set (he turns to face the way he moves),
+ * and between STG5_63_KEELHAUL_ANYTIME and STG5_64_LOST_WEDDING_RING he is placed beside Francesca.
  */
 static EVT_BEGIN(peton_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -498,7 +498,7 @@ static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
-/** Regular event of Peton: runs the shared pacing loop mony_peton_regl while the couple stands in the jungle. */
+/** Regular event of Frankie: runs the shared pacing loop mony_peton_regl while the couple stands in the jungle. */
 EVT_BEGIN(peton_regl)
     SET_VALUE(LW(0), 400)
     SET_VALUE(LW(1), 0)
@@ -508,7 +508,7 @@ EVT_BEGIN(peton_regl)
 EVT_END()
 
 /**
- * Talk event of Peton: says stg5_muj_170 at STG5_63_KEELHAUL_ANYTIME and
+ * Talk event of Frankie: says stg5_muj_170 at STG5_63_KEELHAUL_ANYTIME and
  * then starts the lost wedding ring request (lost_wedding_ring).
  */
 static EVT_BEGIN(peton_talk)
@@ -532,7 +532,7 @@ static EVT_BEGIN(peton_talk)
     RETURN
 EVT_END()
 
-/** NPCs of the jungle clearing: Mony and Peeton, the couple looking for their lost wedding ring. */
+/** NPCs of the jungle clearing: Francesca and Frankie, the couple looking for their lost wedding ring. */
 static NpcSetupInfo npcEnt[] = {
     {
         "モニー", // name
@@ -754,7 +754,7 @@ void printCount(CameraId camera, void* param) {
 }
 
 /**
- * Display callback for Peeton's declaration count: queues a 2D draw each frame (always blocks, so it runs until
+ * Display callback for Frankie's declaration count: queues a 2D draw each frame (always blocks, so it runs until
  * killed).
  */
 USER_FUNC(countDisp) {

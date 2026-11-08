@@ -1108,7 +1108,7 @@ EVT_END()
  * Map init for gon_11 (Hooktail's lair): sets up the door back to gon_10, the music and ambience,
  * and the Hooktail and Koops' father NPCs.
  * Before Hooktail is beaten (STG1_16_HOOKTAIL) it enlarges Hooktail and starts gonbaba_event;
- * afterwards Hooktail is moved below the map; all versions but the June demos then delete both NPCs.
+ * afterwards Hooktail is moved below the map; all versions but the early demos then delete both NPCs.
  * Also sets up the Trouble Center request 16 cloud and chest (iri_16_init).
  */
 EVT_BEGIN(gon_11_init_evt)

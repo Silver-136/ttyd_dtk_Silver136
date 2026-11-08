@@ -677,7 +677,7 @@ s32 marioKeyOffChk(void) {
 
 /**
  * Takes control away from the player (counted: each call needs a marioCtrlOn) and returns the new count;
- * marioMain then skips input and motion.
+ * while it is off, marioUpdateKeyData blanks the player's input.
  */
 s32 marioCtrlOff(void) {
     MarioWork* wp = mp;
