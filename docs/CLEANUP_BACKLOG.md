@@ -193,7 +193,7 @@ never copied in). What the raw counts above mean for the libraries:
 - **Genuine placements, keep:** `__start` / `__ppc_eabi_init` / `__os.h` startup code in .init (many of the 35
   sites are extern declarations), runtime `__mem.c` memcpy/memset in .init, the destructor-chain pointer in .dtors,
   TRK's .init routines.
-- **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (vi 20 bytes, hw_dspctrl 2 x 4,
+- **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (hw_dspctrl 2 x 4,
   snd_service 16, synth_dbtab 24, snd3d 7, US OSError 12) and the force_active pairs around them.
 - **MCC is not built** (no configure entry): its 17 `int unused[N]` frame pads (FAKES.md) are not active debt. The
   original debug records show no extra locals, so a fake buffer would not be a fix either.
