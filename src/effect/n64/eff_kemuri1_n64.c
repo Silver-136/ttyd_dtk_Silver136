@@ -370,7 +370,10 @@ static void effKemuri1Disp(CameraId cameraId, void* param) {
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
             } else {
                 // FAKE: colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object
-                { GXColor* c; GXSetChanMatColor(GX_COLOR0A0, *(c = &(GXColor){0, 0, 0, 0}, c->r = work->r, c->g = work->g, c->b = work->b, c->a = 0xFF, c)); }
+                {
+                    GXColor* c;
+                    GXSetChanMatColor(GX_COLOR0A0, *(c = &(GXColor){0, 0, 0, 0}, c->r = work->r, c->g = work->g, c->b = work->b, c->a = 0xFF, c));
+                }
                 PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
                 PSMTXConcat(view, mtx, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);

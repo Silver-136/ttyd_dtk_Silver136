@@ -10530,8 +10530,18 @@ sgfound:
     // FAKE: w is a copy of the walker sfx[0], and the two never-true gz blocks compile to no code; without them the
     // object changes.
     w[0] = sfx[0];
-    { s32 gz = 0; if (gz != 0) { w[0] = (PaperSoundEffect*)(((s32)w[0] / gz) / (gz / (s32)w[0])); } }
-    { s32 gz = 0; if (gz != 0) { cnt = ((s32)e / (s32)w[0]) / ((s32)w[0] / (s32)e) + (i / gz) + (fade / gz) + (psnd.flags / gz) + (psnd.sfxVolume / gz); } }
+    {
+        s32 gz = 0;
+        if (gz != 0) {
+            w[0] = (PaperSoundEffect*)(((s32)w[0] / gz) / (gz / (s32)w[0]));
+        }
+    }
+    {
+        s32 gz = 0;
+        if (gz != 0) {
+            cnt = ((s32)e / (s32)w[0]) / ((s32)w[0] / (s32)e) + (i / gz) + (fade / gz) + (psnd.flags / gz) + (psnd.sfxVolume / gz);
+        }
+    }
     psnd.sfxActiveCount[0] = cnt;
     psnd.sfxDelay = 0;
 }
@@ -10578,7 +10588,12 @@ static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u3
         }
 
         // FAKE: dead int guard (COLOURING W): its division temps add pre-RA interference at the loop-1 tail (one more neighbour for the loop pointer); folded after RA, no code
-        { s32 gz = 0; if (gz != 0) { delay = (i / sid) / (sid / i); } }
+        {
+            s32 gz = 0;
+            if (gz != 0) {
+                delay = (i / sid) / (sid / i);
+            }
+        }
     }
 
     if (sfx == NULL) {

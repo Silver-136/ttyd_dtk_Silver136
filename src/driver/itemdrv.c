@@ -1762,7 +1762,11 @@ static void itemseq_Bound(ItemEntry* entry) {
             t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
             dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
-            { f32 c = cos(6.2831855f * entry->direction / 360.0f); dz = dt * (entry->speed * -c); } // FAKE: cos result in a local
+            // FAKE: cos result in a local
+            {
+                f32 c = cos(6.2831855f * entry->direction / 360.0f);
+                dz = dt * (entry->speed * -c);
+            }
             if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
                 dz = 0.0f;
             }
@@ -1804,7 +1808,10 @@ static void itemseq_Bound(ItemEntry* entry) {
                         x = entry->position.x;
                         y = 20.0f + entry->position.y;
                         z = entry->position.z;
-                        { f64 d = __fabs(dy); hitDist = 20.0 + d; }
+                        {
+                            f64 d = __fabs(dy);
+                            hitDist = 20.0 + d;
+                        }
                         if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
                             entry->position.y = hitY - 20.0f - 4.0f;
                             r = h;
@@ -1812,7 +1819,10 @@ static void itemseq_Bound(ItemEntry* entry) {
                             x = entry->position.x;
                             y = entry->position.y;
                             z = entry->position.z;
-                            { f64 d = __fabs(dy); hitDist = 20.0 + d; }
+                            {
+                                f64 d = __fabs(dy);
+                                hitDist = 20.0 + d;
+                            }
                             if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
                                 entry->position.y = hitY - 20.0f;
                                 r = h;
@@ -1864,7 +1874,10 @@ static void itemseq_Bound(ItemEntry* entry) {
                 f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                 HitEntry* h;
                 f32 x = entry->position.x, y = 20.0f + entry->position.y, z = entry->position.z;
-                { f64 d = __fabs(dy); hitDist = 20.0 + d; }
+                {
+                    f64 d = __fabs(dy);
+                    hitDist = 20.0 + d;
+                }
                 h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f);
                 if (h) {
                     entry->position.y = hitY;
@@ -1944,7 +1957,11 @@ static void itemseq_Bound(ItemEntry* entry) {
                         v = entry->velocityY * dt + (-980.0f * entry->gravityScale) * ((t2 + dt) * (t2 + dt) - t2sq);
                         entry->velocityY = 0.7f * (entry->bounceFactor * (-v / dt));
                     }
-                    { f64 d = __fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale))); peak = d; } // FAKE: fabs result in an f64 local
+                    // FAKE: fabs result in an f64 local
+                    {
+                        f64 d = __fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale)));
+                        peak = d;
+                    }
                     height = entry->velocityY * peak + peak * ((-980.0f * entry->gravityScale) * peak);
                     if (!isFloor && height <= 8.0f) {
                         itemModeChange(entry, ITEM_MODE_GROUND);
@@ -2062,7 +2079,11 @@ HitEntry* itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
     HitEntry* hit;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
 
-    { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
+    // FAKE: f64 local keeps 20.0 on the left of the fadd
+    {
+        f64 d = __fabs(vy);
+        hitDist = 20.0 + d;
+    }
     if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) != NULL) {
         entry->position.y = hitY;
     } else {
@@ -2083,7 +2104,11 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
     x = entry->position.x;
     y = 20.0f + entry->position.y;
     z = entry->position.z;
-    { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
+    // FAKE: f64 local keeps 20.0 on the left of the fadd
+    {
+        f64 d = __fabs(vy);
+        hitDist = 20.0 + d;
+    }
     if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
         entry->position.y = hitY - 20.0f - 4.0f;
         return hit;
@@ -2091,7 +2116,11 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
     x = entry->position.x;
     y = entry->position.y;
     z = entry->position.z;
-    { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
+    // FAKE: f64 local keeps 20.0 on the left of the fadd
+    {
+        f64 d = __fabs(vy);
+        hitDist = 20.0 + d;
+    }
     if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
         entry->position.y = hitY - 20.0f;
         return hit;

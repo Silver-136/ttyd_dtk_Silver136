@@ -1601,7 +1601,10 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
             hit.y = 0.0f;
         }
         PSVECNormalize(&hit, &hit);
-        { f32 dp = PSVECDotProduct(&dir, &hit); PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f); }
+        {
+            f32 dp = PSVECDotProduct(&dir, &hit);
+            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);
@@ -1651,7 +1654,10 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
         PSVECNormalize(&hit, &hit);
         C_VECReflect(&dir, &hit, &refl);
         PSVECScale(&refl, &p->vel, dist);
-        { f32 dp = PSVECDotProduct(&dir, &hit); PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f); }
+        {
+            f32 dp = PSVECDotProduct(&dir, &hit);
+            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);
@@ -1723,7 +1729,10 @@ void puniMoveDecel(PuniData* p) {
         PSVECNormalize(&hit, &hit);
         C_VECReflect(&d2, &hit, &refl);
         PSVECScale(&refl, &p->vel, dist);
-        { f32 dot = PSVECDotProduct(&d2, &hit); PSVECScale(&hit, &hit, -(dist - d) * dot + 0.1f); }
+        {
+            f32 dot = PSVECDotProduct(&d2, &hit);
+            PSVECScale(&hit, &hit, -(dist - d) * dot + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);
@@ -1786,7 +1795,10 @@ void puniMoveLimitedNormal(PuniData* p) {
             hit.y = 0.0f;
         }
         PSVECNormalize(&hit, &hit);
-        { f32 dp = PSVECDotProduct(&d2, &hit); PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f); }
+        {
+            f32 dp = PSVECDotProduct(&d2, &hit);
+            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);
@@ -1847,7 +1859,10 @@ void puniMoveNormal(PuniData* p) {
         PSVECNormalize(&hit, &hit);
         C_VECReflect(&d2, &hit, &refl);
         PSVECScale(&refl, &p->vel, dist);
-        { f32 dp = PSVECDotProduct(&d2, &hit); PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f); }
+        {
+            f32 dp = PSVECDotProduct(&d2, &hit);
+            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);
@@ -3926,7 +3941,10 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
             hit.y = 0.0f;
         }
         PSVECNormalize(&hit, &hit);
-        { f32 dp = PSVECDotProduct(d2, &hit); PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f); }
+        {
+            f32 dp = PSVECDotProduct(d2, &hit);
+            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);
@@ -4949,7 +4967,10 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
         PSVECNormalize(&hit, &hit);
         C_VECReflect(d2, &hit, &refl);
         PSVECScale(&refl, &p->vel, dist);
-        { f32 dot = PSVECDotProduct(d2, &hit); PSVECScale(&hit, &hit, -(dist - d) * dot + 0.1f); }
+        {
+            f32 dot = PSVECDotProduct(d2, &hit);
+            PSVECScale(&hit, &hit, -(dist - d) * dot + 0.1f);
+        }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);

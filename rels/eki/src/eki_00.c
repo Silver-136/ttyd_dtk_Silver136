@@ -1200,7 +1200,10 @@ static void ext_moamoa_main(void) {
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
-                    { f32 k; rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f; }
+                    {
+                        f32 k;
+                        rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f;
+                    }
                     x = (dist * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[2][3] - (dist * polyCosf(rad));
                 }

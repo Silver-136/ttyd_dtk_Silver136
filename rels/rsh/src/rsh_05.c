@@ -1141,7 +1141,11 @@ static void ext_moamoa_main(void) {
                     x = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
                     dist = (*pose->mtx)[1][3];
                     z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
-                    { f32 hopSpeed; f32 k; f32 r1 = rand() / 32767.0f; hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
+                    {
+                        f32 hopSpeed;
+                        f32 k;
+                        f32 r1 = rand() / 32767.0f;
+                        hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         g2 = randf(0.4f, 0.4f);
                         x2 = x;
@@ -1258,7 +1262,10 @@ static void ext_moamoa_main(void) {
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
-                    { f32 k; rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f; }
+                    {
+                        f32 k;
+                        rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f;
+                    }
                     x = (dist * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[2][3] - (dist * polyCosf(rad));
                 }
@@ -1331,7 +1338,10 @@ static void ext_moamoa_main(void) {
 
             case MOAMOA_STATE_ESCAPE_RUN:
                 d = distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -275.0f, -100.0f);
-                { f32 a3; f32 k; tz = rand() / 32767.0f;
+                {
+                    f32 a3;
+                    f32 k;
+                    tz = rand() / 32767.0f;
                     a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -275.0f, -100.0f);
                     a3 += ((tz * (k = 45.0f - -45.0f)) + -45.0f);
                     if (d > 6.0f && (x = (*pose->mtx)[1][3]) < 60.0f) {
@@ -1435,7 +1445,10 @@ static void ext_moamoa_main(void) {
         mario->floorMove.z = 0.0f;
     } else {
         v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
-        { static const Vec zv2 = {0.0f, 0.0f, 0.0f}; } // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+        // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+        {
+            static const Vec zv2 = {0.0f, 0.0f, 0.0f};
+        }
         if (PSVECMag(&v) > 2.0f) {
             PSVECNormalize(&v, &v);
             mario->floorMove.x = 2.0f * v.x;
@@ -1446,7 +1459,10 @@ static void ext_moamoa_main(void) {
 }
 #else
     v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
-    { static const Vec zv2 = {0.0f, 0.0f, 0.0f}; } // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+    // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+    {
+        static const Vec zv2 = {0.0f, 0.0f, 0.0f};
+    }
     if (PSVECMag(&v) > 2.0f) {
         PSVECNormalize(&v, &v);
         mario->floorMove.x = 2.0f * v.x;
