@@ -38,6 +38,15 @@ demos) are Zephiles' names: the JP demo's map has one `DrawMenuPinchMark` (0x2c8
 the September demos on, `DrawMenuPinchMark` (0x58) only calls the two halves in an order that keeps the front mark
 on top. The stem is the original name; the Mario/Party parts follow `BattleGetMarioPtr`/`BattleGetPartyPtr`.
 
+## Credits for TRK names
+
+The MetroTRK constant names in `libs/trk/include/trk.h` (DSError values `DS_NoError` ... `DS_InvalidProcessID`,
+`DS_OSError`, `DS_Error800`; reply errors `DSREPLY_NoError` ... `DSREPLY_InvalidThreadID`; `DSSTEP_*`, `DSIOResult`
+`DS_IO*`, `DSFileHandle` `DS_Std*`; the `DSMSG_*` command ids) are the spellings the community TRK decompilations
+share (projectPiki/pikmin2, ACreTeam/ac-decomp, zeldaret/tp, all CC0), taken to be MetroTRK's own source
+spellings (not proven by a symbol map: enum names leave no symbols). They replace the descriptive `DSERR_*` / `DSREPLY_*` names we had invented (2026-11-07). The
+values were checked against our handlers; the comments in trk.h say where this code returns each.
+
 ## Credits for hardware register names
 
 The register index and bit names for the PI, MI, DI, SI, EXI and AI register arrays in

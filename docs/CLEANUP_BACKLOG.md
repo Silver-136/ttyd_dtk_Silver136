@@ -16,7 +16,7 @@ to the original games through every step; US retail is the priority for readabil
 | `#pragma force_active` | <!--n:game_force_active-->13<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->10<!--/n-->) | 776 | the library pairs keep the `gap_*` objects |
 | `gap_*` padding objects | <!--n:game_gap_padding-->8<!--/n--> (libs <!--n:libs_gap_padding-->7<!--/n-->) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
 | `fd_*` math-static data | <!--n:game_fake_data_fd-->28<!--/n--> lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
-| inline asm | <!--n:game_inline_asm-->9<!--/n--> (libs <!--n:libs_inline_asm-->281<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
+| inline asm | <!--n:game_inline_asm-->9<!--/n--> (libs <!--n:libs_inline_asm-->281<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly (the five TRK functions with C in other decompilations are C now) |
 | raw pointer arithmetic | <!--n:game_raw_pointer_math-->20<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
 
 FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
@@ -167,10 +167,10 @@ latest naming batches.
   new names where the code proves the meaning (GX_DIRTY_*, CARD_STATUS_*, OS_FONT_ENCODE_*), code-only BUG
   comments, plain forms, marked devices; snd3d's SND3D_UNUSED blocks (uncompiled) removed. Done the same evening: MusyX
   SYNTH_CFLAG_*, SYNTH_DIRTY_*, MIXER_CTRL_*, DSP_CHANGED_*, SAMPLE_COMP_TYPE, MACRO_OP_* (from the handlers), TRK
-  DSErrorCode/DSReplyError, 207 address-named asm labels renamed by role (generic loop/done/skip names).
+  DSErrorCode/DSReplyError (since renamed to the MetroTRK spellings), 207 address-named asm labels renamed by role (generic loop/done/skip names).
   PI/MI/DI/SI/EXI/AI register indices and bits named from YAGCD and Dolphin (2026-11-07,
-  cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words, TRK codes nothing
-  returns (0x704-0x706). Game section placements (18) retested: all needed, all commented. The rest of
+  cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words. TRK codes
+  now carry the MetroTRK spellings (DS_*, DSREPLY_*, DSSTEP_*; 0x704-0x706 named, 2026-11-07). Game section placements (18) retested: all needed, all commented. The rest of
   libs/ (MSL, TRK, runtime, smaller SDK folders) was read the same day: shared MSL/TRK private headers, names,
   BUG comments (libs_review_{msl,trk,sdk1,sdk2}.tsv).
 
@@ -183,8 +183,9 @@ never copied in). What the raw counts above mean for the libraries:
   70 assembly functions are assembly in the original sources too. The hardware/ABI routines (PPCArch, OS cache /
   context / exception / interrupt / time / startup, AI stack switch, DB, TRK MSR/cache, GX paired-single and FIFO
   helpers, OSFastCast) are real assembly by what they do; their exact original spelling is not proven.
-- **Candidates for C (open):** TRK `support.c` HandleOpenFileSupportRequest, TRKRequestSend, TRKSuppAccessFile
-  (ordinary protocol and file-request code). Needs the TRK version and API settled first; no form passed yet.
+- **TRK assembly turned into C (2026-11-07):** `support.c` HandleOpenFileSupportRequest, TRKRequestSend,
+  TRKSuppAccessFile, `dolphin_trk.c` TRK__write_aram and `mem_TRK.c` TRK_fill_mem, after the matched GC 2.6 C of
+  pikmin2 and ac-decomp (CC0); TRK is built with `-enum int` (as in those projects; every TRK object stays identical).
 - **Unclear, keep:** THPDec IDCT/decoder blocks, AXFX reverb/chorus, MusyX CheapReverb/Chorus/StdReverb and
   snd_service math kernels (optimized paired-single code; the original form is not established).
 - **MusyX placeholder names:** the 67 `lbl_XXXXXXXX` occurrences are 31 branch labels inside the CheapReverb (20) and
@@ -192,9 +193,10 @@ never copied in). What the raw counts above mean for the libraries:
 - **Genuine placements, keep:** `__start` / `__ppc_eabi_init` / `__os.h` startup code in .init (many of the 35
   sites are extern declarations), runtime `__mem.c` memcpy/memset in .init, the destructor-chain pointer in .dtors,
   TRK's .init routines.
-- **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (vi 20 bytes, hw_dspctrl 2 x 4,
-  snd3d 7, US OSError 12) and the force_active pairs around them. The synth_dbtab (24) and snd_service (16) gaps
-  are gone (2026-11-07): compressorTable is 32-byte aligned as in AxioDL's 2.0.2-2.0.3 source.
+- **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (hw_dspctrl 2 x 4, snd3d 7,
+  US OSError 12) and the force_active pairs around them. The synth_dbtab (24) and snd_service (16) gaps are gone
+  (2026-11-07): compressorTable is 32-byte aligned as in AxioDL's 2.0.2-2.0.3 source; the vi gap (20) was only the
+  alignment pad before DEMOFontBitmap, which the linker inserts itself.
 - **MCC is not built** (no configure entry): its 17 `int unused[N]` frame pads (FAKES.md) are not active debt. The
   original debug records show no extra locals, so a fake buffer would not be a fix either.
 - **Padclamp:** the original type is ten one-byte fields (10-byte symbol). The plain type matches US; JP loses two

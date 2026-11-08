@@ -10,7 +10,7 @@ The game links libraries that Nintendo, Metrowerks and others wrote, and one REL
 | `libs/musyx/` | MusyX, the sound library (Factor 5) | The MusyX decompilation by Axiomatic Data Laboratories, extended here | MIT, `libs/musyx/LICENSE` |
 | `libs/msl/` | Metrowerks Standard Library (C library and math) | Decompiled in this project (2026) | This repository's MIT licence |
 | `libs/runtime/` | Metrowerks PowerPC EABI runtime (`__mem`, `__va_arg`, `runtime.c`, ...) | Decompiled in this project (2026) | This repository's MIT licence |
-| `libs/trk/` | Metrowerks Target Resident Kernel, the debugger stub linked into the game | Decompiled in this project (2026) | This repository's MIT licence |
+| `libs/trk/` | Metrowerks Target Resident Kernel, the debugger stub linked into the game | Decompiled in this project (2026). The C of five functions (`support.c` TRKSuppAccessFile, TRKRequestSend, HandleOpenFileSupportRequest; `dolphin_trk.c` TRK__write_aram; `mem_TRK.c` TRK_fill_mem) is adapted from the matched decompilations of [Pikmin 2](https://github.com/projectPiki/pikmin2) and [Animal Crossing](https://github.com/ACreTeam/ac-decomp) (both CC0); the DS_* / DSREPLY_* constant names are the MetroTRK spellings those projects share (see NAME_PROVENANCE.md) | This repository's MIT licence |
 
 The assembly in these folders is code that the original libraries shipped as assembly (for example paired-single math, cache and context routines, the TRK exception vectors). It is reproduced as assembly on purpose.
 

@@ -504,17 +504,12 @@ void VIInit(void) {
     HorVer.black = 1;
     HorVer.threeD = 0;
     OSInitThreadQueue(&retraceQueue);
+    // clear the interrupt status bit 0x8000 of both display interrupts (as __VIRetraceHandler does)
     value = __VIRegs[VI_DISP_INT_0];
-    value &= ~0x8000;
-#if !DEBUG
-    value = (u16)value; // FAKE: no-op cast; removing it changes the object
-#endif
+    value &= 0x7FFF;
     __VIRegs[VI_DISP_INT_0] = value;
     value = __VIRegs[VI_DISP_INT_1];
-    value = value & ~0x8000;
-#if !DEBUG
-    value = (u16)value; // FAKE: no-op cast; removing it changes the object
-#endif
+    value &= 0x7FFF;
     __VIRegs[VI_DISP_INT_1] = value;
     PreCB = NULL;
     PostCB = NULL;
@@ -1301,9 +1296,3 @@ int __VIGetLatchPosition(u32 port, s16* px, s16* py) {
         return __VIGetLatch1Position(px, py);
     }
 }
-
-#pragma force_active on
-#if !defined(VERSION_G8ME01_DEMO) && !defined(VERSION_G8MJ01_DEMO)
-__declspec(section ".data") u8 gap_05_803BF7CC_data[20] = {0};
-#endif
-#pragma force_active reset

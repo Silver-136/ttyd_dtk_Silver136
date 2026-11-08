@@ -292,7 +292,7 @@ cflags_trk = [
     "-sdata 0",
     "-sdata2 0",
     "-inline auto,deferred",
-    "-enum min",
+    "-enum int",
     "-char signed",
 ]
 
@@ -1059,7 +1059,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mutex_TRK.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/notify.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/flush_cache.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mem_TRK.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mem_TRK.c", extra_cflags=["-inline noauto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/targimpl.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/targsupp.s"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mpc_7xx_603e.c"),

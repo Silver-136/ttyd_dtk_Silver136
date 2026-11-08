@@ -130,145 +130,6 @@ done:
     blr
 }
 
-asm void TRK__write_aram(register void* src, register u32 dst, register u32* n) {
-    nofralloc
-    clrlwi r11, r1, 27
-    mr r12, r1
-    subfic r11, r11, -0x80
-    stwux r1, r1, r11
-    mflr r0
-    stw r0, 0x4(r12)
-    stmw r23, -0x24(r12)
-    mr r31, r4
-    cmplwi r31, 0x4000
-    mr r30, r3
-    mr r23, r5
-    blt done
-    lwz r4, 0x0(r23)
-    lis r0, 0x800
-    add r3, r31, r4
-    cmplw r3, r0
-    ble skip
-    b done
-skip:
-    clrlwi r0, r31, 27
-    clrrwi r27, r31, 5
-    add r26, r4, r0
-    li r24, 0x0
-    addi r0, r26, 0x1f
-    clrrwi r26, r0, 5
-    cmplwi r26, 0x0
-    addi r3, r26, 0x1f
-    srwi r3, r3, 5
-    ble loop3
-    srwi. r0, r3, 3
-    mtctr r0
-    beq skip2
-loop:
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    bdnz loop
-    andi. r3, r3, 0x7
-    beq loop3
-skip2:
-    mtctr r3
-loop2:
-    dcbf r24, r30
-    addi r24, r24, 0x20
-    bdnz loop2
-loop3:
-    bl ARGetDMAStatus
-    cmplwi r3, 0x0
-    bne loop3
-    bl __ARGetInterruptStatus
-    clrlwi. r24, r31, 27
-    mr r29, r3
-    lis r25, 0x800
-    beq skip3
-    addi r28, r1, 0x20
-    mr r25, r27
-    dcbi r0, r28
-    bl __ARClearInterrupt
-    mr r4, r28
-    mr r5, r27
-    li r3, 0x1
-    li r6, 0x20
-    bl ARStartDMA
-loop4:
-    bl __ARGetInterruptStatus
-    clrlwi. r0, r3, 16
-    beq loop4
-    mr r3, r30
-    mr r5, r24
-    addi r4, r1, 0x20
-    bl TRK_memcpy
-    dcbf r0, r30
-skip3:
-    lwz r0, 0x0(r23)
-    add r31, r31, r0
-    clrlwi. r24, r31, 27
-    beq skip5
-    clrrwi r23, r31, 5
-    cmplw r23, r25
-    beq skip4
-    addi r28, r1, 0x20
-    dcbi r0, r28
-    bl __ARClearInterrupt
-    mr r4, r28
-    mr r5, r23
-    li r3, 0x1
-    li r6, 0x20
-    bl ARStartDMA
-loop5:
-    bl __ARGetInterruptStatus
-    clrlwi. r0, r3, 16
-    beq loop5
-skip4:
-    add r25, r30, r31
-    addi r4, r1, 0x20
-    mr r3, r25
-    subfic r5, r24, 0x20
-    add r4, r4, r24
-    bl TRK_memcpy
-    dcbf r0, r25
-skip5:
-    sync
-    bl __ARClearInterrupt
-    mr r4, r30
-    mr r5, r27
-    mr r6, r26
-    li r3, 0x0
-    bl ARStartDMA
-    clrlwi. r0, r29, 16
-    bne done
-loop6:
-    bl __ARGetInterruptStatus
-    clrlwi. r0, r3, 16
-    beq loop6
-    bl __ARClearInterrupt
-done:
-    lwz r10, 0x0(r1)
-    lmw r23, -0x24(r10)
-    lwz r0, 0x4(r10)
-    mtlr r0
-    mr r1, r10
-    blr
-}
-
 void EnableMetroTRKInterrupts(void) {
     EnableEXI2Interrupts();
 }
@@ -348,6 +209,87 @@ void TRK__read_aram(register void* dst, register u32 src, register u32* n) {
 
     if (status == 0)
         __ARClearInterrupt();
+}
+
+/* Writes *n bytes to ARAM at dst with one DMA of whole 32-byte blocks: length bytes from src to the first block
+   (dst & ~31), so src stands for that block. When the range does not start or end on a block boundary, the ARAM
+   block there is read into buf first and its bytes outside the range are copied into main memory, so the DMA
+   writes them back unchanged. Form after the matched GC 2.6 decompilations of pikmin2 and ac-decomp (CC0). */
+void TRK__write_aram(void* src, u32 dst, u32* n) {
+    u8 buf[32] __attribute__((aligned(32)));
+    u32 status;
+    register u32 bufAddr;
+    u32 start;
+    u32 length;
+    u16 oldStatus;
+    u32 firstBlock;
+    int offset;
+    u32 i;
+    u8* tail;
+
+    // BUG: an out-of-range request returns without an error and writes nothing
+    if (dst < 0x4000 || dst + *n > 0x8000000)
+        return;
+
+    start = dst & ~31;
+    offset = 0;
+    length = *n + (dst & 31);
+    length = (length + 31) & ~31;
+
+    for (i = 0; i < length; i += 32) {
+        __dcbf((void*)offset, (int)src);
+        offset += 32;
+    }
+
+    do {
+        status = ARGetDMAStatus();
+    } while (status);
+
+    oldStatus = __ARGetInterruptStatus();
+    firstBlock = 0x8000000;
+
+    offset = dst & 31;
+    if (offset) {
+        // the first block starts before dst: copy the ARAM bytes in front of dst to src
+        firstBlock = start;
+        bufAddr = (u32)buf;
+        asm { dcbi r0, bufAddr }
+        __ARClearInterrupt();
+        ARStartDMA(1, bufAddr, start, 32);
+        while (__ARGetInterruptStatus() == 0) {}
+
+        TRK_memcpy(src, buf, offset);
+        __dcbf(src, 0);
+    }
+
+    dst += *n;
+    offset = dst & 31;
+    if (offset) {
+        // the last block ends after the range: the ARAM bytes behind it (buf already holds the block when the
+        // range starts and ends in the same one)
+        u32 lastBlock = dst & ~31;
+        if (lastBlock != firstBlock) {
+            bufAddr = (u32)buf;
+            asm { dcbi r0, bufAddr }
+            __ARClearInterrupt();
+            ARStartDMA(1, bufAddr, lastBlock, 32);
+            while (__ARGetInterruptStatus() == 0) {}
+        }
+
+        // BUG: dst is the ARAM end address here, so the bytes go to src plus that address, not to the end of the
+        // range in main memory (src + dst - start)
+        tail = (u8*)src + dst;
+        TRK_memcpy(tail, buf + offset, 32 - offset);
+        __dcbf(tail, 0);
+    }
+
+    __sync();
+    __ARClearInterrupt();
+    ARStartDMA(0, (u32)src, start, length);
+    if (oldStatus == 0) {
+        while (__ARGetInterruptStatus() == 0) {}
+        __ARClearInterrupt();
+    }
 }
 
 __declspec(section ".init") void __TRK_reset(void) {
