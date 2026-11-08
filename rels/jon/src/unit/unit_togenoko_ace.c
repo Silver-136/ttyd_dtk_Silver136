@@ -536,7 +536,7 @@ EVT_END()
  * Run when a hit flips the Dark Koopatrol (data table entry 13, damage flag 0x200000):
  * swaps in the turned defence, resistance, data
  * and pose tables (the guarding-turned poses if it was in its shell,
- * unit work 0), sets the flipped status flag with an over-turn count of 2, switches off its spike counter,
+ * UNIT_WORK_GUARD), sets the flipped status flag with an over-turn count of 2, switches off its spike counter,
  * and hops twice with SFX_ENM_INSIDE1.
  */
 static EVT_BEGIN(dmg_turn_event)
@@ -571,7 +571,7 @@ EVT_END()
 /**
  * Run from attack_event while the Dark Koopatrol is flipped: counts the over-turn down by one and,
  * once it reaches 0, restores the normal tables and spike counter with SFX_ENM_INSIDE2, hops upright
- * and clears unit work 0 (the guard flag).
+ * and clears UNIT_WORK_GUARD (the guard flag).
  */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -616,7 +616,7 @@ static BattleUnitSetup entry_togenoko = {
 /**
  * Attack event of the Dark Koopatrol. In the forced-attack case it just does the normal attack.
  * If flipped, it spends its action on the recovery countdown.
- * While guarding (unit work 0 = 1) it leaves the guard with 80 percent chance.
+ * While guarding (UNIT_WORK_GUARD = 1) it leaves the guard with 80 percent chance.
  * If it is Charged (STATUS_CHARGE), it picks the normal or shell attack at 50/35.
  * Otherwise it runs a selected enemy-item script if one is returned, then rolls among normal attack, shell attack and charge
  * if none is selected. The friend_event and guard options have zero chance in this script.
@@ -1107,7 +1107,7 @@ EVT_END()
 
 /**
  * The Dark Koopatrol pulls into its shell to guard (SHELL1, A_1) with a wobble:
- * it takes the guarding defence, resistance, pose and data tables and sets unit work 0 (the guard flag).
+ * it takes the guarding defence, resistance, pose and data tables and sets UNIT_WORK_GUARD (the guard flag).
  */
 static EVT_BEGIN(guard_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -1146,7 +1146,7 @@ EVT_END()
 
 /**
  * The Dark Koopatrol comes out of its guard (SHELL2, S_1) with a hop:
- * restores the normal defence, resistance, pose and data tables and clears unit work 0.
+ * restores the normal defence, resistance, pose and data tables and clears UNIT_WORK_GUARD.
  */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

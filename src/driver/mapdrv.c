@@ -1940,9 +1940,9 @@ void mapSetMaterialFogMapObj(MapObject* obj);
 
 /**
  * TRUE when the object must go in the translucent pass:
- * its own colour (flag 0x40) or its material is not fully opaque,
- * or the map-wide blend colour (entry flag 2, unless object flag 0x800)
- * or second blend colour (entry flag 4, unless object flag 0x1000) is.
+ * its own colour (MAP_OBJ_FLAG_COLOR) or its material is not fully opaque,
+ * or the map-wide blend colour (MAP_ENTRY_BLEND, unless MAP_OBJ_FLAG_NO_MAP_BLEND)
+ * or second blend colour (MAP_ENTRY_BLEND2, unless MAP_OBJ_FLAG_NO_MAP_BLEND2) is.
  */
 static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matColor) {
     if ((flags & MAP_OBJ_FLAG_COLOR) && objColor.a != 0xFF) {
@@ -1970,7 +1970,7 @@ static inline void callPackedLists(MapFileMesh* mesh) {
 
 /**
  * Draws one map object on camera cam: for objects drawn inside a group, sets the GX blend,
- * alpha test and z mode for its blend mode and (flag 0x8000) biases the depth projection by its index among its
+ * alpha test and z mode for its blend mode and (MAP_OBJ_FLAG_DEPTH_OFFSET) biases the depth projection by its index among its
  * siblings; then loads its matrices, cull mode and fog and draws each part from the prebuilt display lists
  * or by setting up the material and mesh. Skips hidden or fully transparent group members.
  */
@@ -3244,7 +3244,7 @@ void mapSetMaterialFog(void) {
     }
 }
 
-/** As mapSetMaterialFog for a map object, which can opt out of the fog with flag 0x80000. */
+/** As mapSetMaterialFog for a map object, which can opt out of the fog with MAP_OBJ_FLAG_NO_FOG. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void mapSetMaterialFogMapObj(MapObject* obj) {
     CameraEntry* camera = camGetCurPtr();
@@ -4117,7 +4117,7 @@ void mapFogOff(void) {
 
 /**
  * Sets and enables the map-wide blend colour, which tints
- * and fades every map object that does not opt out (flag 0x800); evt_map.
+ * and fades every map object that does not opt out (MAP_OBJ_FLAG_NO_MAP_BLEND); evt_map.
  */
 void mapSetBlend(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];

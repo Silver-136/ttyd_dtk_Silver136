@@ -945,7 +945,7 @@ USER_FUNC(zakogun_escape2) {
 
 /**
  * Hit check of group 2's fall attack: four hits 20 frames apart as the X-Nauts drop,
- * then a last hit once all 25 have landed (unit work 0), each through hit_check_event_sub.
+ * then a last hit once all 25 have landed (UNIT_WORK_ALL_LANDED), each through hit_check_event_sub.
  */
 static EVT_BEGIN(hit_check_event)
     WAIT_FRAMES(10)
@@ -976,7 +976,7 @@ EVT_END()
 /**
  * One hit of a group 2 attack: checks for a miss (playing an avoid pose for some miss results),
  * or applies the hit with the action-command defence (the last hit when LW(15) is 1).
- * In the fall attack the first landed hit sets unit work 1, after which the last hit skips the dodge check.
+ * In the fall attack the first landed hit sets UNIT_WORK_HIT_LANDED, after which the last hit skips the dodge check.
  */
 EVT_BEGIN(hit_check_event_sub)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_group2_attack))

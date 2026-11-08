@@ -736,7 +736,7 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Init script of the Spike Top.
- * Calls init_event2 to set the unit up for its current state (unit work 0) and starts the wait script.
+ * Calls init_event2 to set the unit up for its current state (UNIT_WORK_ON_CEILING) and starts the wait script.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
@@ -746,7 +746,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Configures the Spike Top for the floor (unit work 0 is 0: normal scripts, hit cursor at the body)
+ * Configures the Spike Top for the floor (UNIT_WORK_ON_CEILING is 0: normal scripts, hit cursor at the body)
  * or for the ceiling (nonzero: raised to height 130, ceiling pose/data tables and scripts, hit offsets lowered,
  * ceiling- fall event set). Also sets its run and walk sounds and clears the overturned counter.
  */

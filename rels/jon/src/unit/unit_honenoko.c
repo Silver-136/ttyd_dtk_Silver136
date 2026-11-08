@@ -235,7 +235,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Init script of the Dull Bones: registers its wait, attack, damage and confusion handlers,
- * clears unit work 1 (set once its reward has been paid out)
+ * clears UNIT_WORK_REWARD_GIVEN (set once its reward has been paid out)
  * and sets its landing sound (SFX_ENM_HONENOKO_LANDING1).
  */
 static EVT_BEGIN(init_event)
@@ -260,7 +260,7 @@ EVT_END()
 /**
  * Real defeat script of the Dull Bones (data event 49):
  * it spins for 48 frames (SFX_BTL_ENEMY_DIE1_1) and bursts into smoke.
- * Its coins and experience are stored only if they were not paid already (unit work 1, which fake_dead_event
+ * Its coins and experience are stored only if they were not paid already (UNIT_WORK_REWARD_GIVEN, which fake_dead_event
  * also sets), a star-point effect shows the experience, it tips over,
  * returns any item it held and is removed from the battle.
  */
@@ -318,9 +318,9 @@ EVT_END()
 
 /**
  * Collapse script of the Dull Bones (data event 15):
- * it walks home, pays its coins and experience out once (unit work 1), shows the star-point effect,
+ * it walks home, pays its coins and experience out once (UNIT_WORK_REWARD_GIVEN), shows the star-point effect,
  * crumbles into a pile of bones (KRN_D_2, SFX_ENM_HONENOKO_CRUMBLE1)
- * and is taken off the field for 2 to 4 turns (unit work 2), after which rebirth_event brings it back.
+ * and is taken off the field for 2 to 4 turns (UNIT_WORK_REBIRTH_TURNS), after which rebirth_event brings it back.
  * Its hit offset is lowered by 20.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -363,7 +363,7 @@ EVT_END()
 
 /**
  * Count-down for a collapsed Dull Bones, run from its attack script:
- * unit work 2 goes down by one each turn, and at 0 it pieces itself back together (KRN_D_3 and D_4,
+ * UNIT_WORK_REBIRTH_TURNS goes down by one each turn, and at 0 it pieces itself back together (KRN_D_3 and D_4,
  * SFX_ENM_HONENOKO_UNITE1 and UNITE2) with full HP and a normal hit offset.
  */
 static EVT_BEGIN(rebirth_event)
@@ -388,7 +388,7 @@ EVT_END()
 
 /**
  * Attack script of the Dull Bones. On a first strike it just throws its bone.
- * If it is collapsed (unit work 2 above 0) it runs rebirth_event.
+ * If it is collapsed (UNIT_WORK_REBIRTH_TURNS above 0) it runs rebirth_event.
  * Otherwise, after an item check, it rolls with weights 85 for a bone throw
  * and 15 for a friend call, rerolling if no free spot is found,
  * trying space in front of it first and then behind it.

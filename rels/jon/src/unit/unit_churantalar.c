@@ -1287,7 +1287,7 @@ EVT_END()
 
 /**
  * Damage check of the last chained throw at a target:
- * if an earlier throw already flagged this target (unit work 11 to
+ * if an earlier throw already flagged this target (UNIT_WORK_TARGET1_HIT to
  * 13) it sets the web attributes and deals the damage with the defence result and the 256 argument; otherwise it runs
  * damage_check_event_sub with LW(8) = 1 and LW(10) = 0.
  */

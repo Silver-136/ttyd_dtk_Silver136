@@ -321,7 +321,7 @@ BattleUnitSetup entry_group3 = {
 /**
  * Init event of Lord Crump: installs his wait, entry, phase, attack,
  * damage and confusion events and his walk and run sounds,
- * clears unit work 0 (which X-Naut group is in play: 0 to 2) and 1 (guarding),
+ * clears UNIT_WORK_GROUP (which X-Naut group is in play: 0 to 2) and UNIT_WORK_GUARD (guarding),
  * registers the X-Naut crowd (zakogun_entry) and sets up the first formation (zakogun_ext_init1).
  */
 static EVT_BEGIN(init_event)
@@ -362,14 +362,14 @@ EVT_END()
 
 /**
  * Damage event of Lord Crump.
- * With group 3 in play (unit work 0 = 2), a knockout hit that no Life Shroom saves shows his hurt pose and
+ * With group 3 in play (UNIT_WORK_GROUP = 2), a knockout hit that no Life Shroom saves shows his hurt pose and
  * after 120 frames group 3 flees (zakogun_escape3).
  * Then the default damage reaction runs.
  * With group 1 in play, the first hit that leaves him at 15 HP
  * or less calls group 1 off (zakogun_escape1, unless it is already dying),
  * and he complains the party won't get off that easily (stg5_muj_125_01),
  * shouts for the X-Nauts (stg5_muj_125_02) and group 2 comes down with the ceiling (down_ceil);
- * unit work 0 becomes 1.
+ * UNIT_WORK_GROUP becomes 1.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
@@ -500,7 +500,7 @@ EVT_END()
  * and he runs off to the right, where he recovers to full HP (five recovery effects)
  * and loses the KO status (27).
  * Group 3, the crowd of 500 X-Nauts, arrives as he runs back;
- * unit work 0 becomes 2, his data table loses this event (data_table2),
+ * UNIT_WORK_GROUP becomes 2, his data table loses this event (data_table2),
  * and he says he is down but not out (stg5_muj_125_03).
  */
 static EVT_BEGIN(dead_event)
@@ -624,7 +624,7 @@ EVT_END()
 
 /**
  * Phase event of Lord Crump: before the player's turn (from turn 2), if he is not KO'd (STATUS_INSTANT_KILL) and can act,
- * with group 3 in play (unit work 0 = 2) he calls it back when it is gone (call_event).
+ * with group 3 in play (UNIT_WORK_GROUP = 2) he calls it back when it is gone (call_event).
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
@@ -654,7 +654,7 @@ EVT_END()
 /**
  * Lord Crump calls his horde (call_event): if no horde unit is on the stage yet,
  * he plays the call sound and pose (C_1; C_2 when calling group 2) and brings in horde group 1, 2 or 3 according to
- * unit work 0; LW(0) returns 1 when he called, 0 when a group was already there.
+ * UNIT_WORK_GROUP; LW(0) returns 1 when he called, 0 when a group was already there.
  */
 EVT_BEGIN(call_event)
     // If no X-Naut group is on the stage yet, Lord Crump waves them in.
@@ -758,7 +758,7 @@ EVT_END()
 
 /**
  * Attack event of Lord Crump: uses an item when the item check says so.
- * With group 1 or 2 in play (unit work 0 at most 1) and not guarding, he picks by weights 75 normal attack,
+ * With group 1 or 2 in play (UNIT_WORK_GROUP at most 1) and not guarding, he picks by weights 75 normal attack,
  * 0 guard (so guard_event is never chosen) and 30 calling the group (call_event);
  * if the group is already present he rolls again.
  * While guarding he lowers his guard or waits (no_event), 50/50.
@@ -828,7 +828,7 @@ EVT_END()
 
 /**
  * Lord Crump raises his guard (guard poses G_1 and G_2),
- * switches to the guard defence and pose tables and sets unit work 1 (guarding); attack_event gives it weight 0.
+ * switches to the guard defence and pose tables and sets UNIT_WORK_GUARD (guarding); attack_event gives it weight 0.
  */
 static EVT_BEGIN(guard_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -850,7 +850,7 @@ EVT_END()
 
 /**
  * Lord Crump lowers his guard: hops back into his standing pose,
- * restores his normal defence and pose tables and clears unit work 1.
+ * restores his normal defence and pose tables and clears UNIT_WORK_GUARD.
  */
 static EVT_BEGIN(guard_cancel_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)

@@ -396,7 +396,7 @@ static BattleWeapon weapon_togezo_charge = {
 
 /**
  * Init event of the Sky-Blue Spiny: registers its wait, attack, damage and confusion events,
- * clears unit work 0 (guarding) and 3 (charged), and sets its run, walk and jump sounds,
+ * clears UNIT_WORK_GUARD (guarding) and UNIT_WORK_CHARGED (charged), and sets its run, walk and jump sounds,
  * then starts the wait event.
  */
 static EVT_BEGIN(init_event)
@@ -496,8 +496,8 @@ EVT_END()
 /**
  * Attack event of the Sky-Blue Spiny: a flipped unit runs wakeup_event;
  * otherwise it uses an enemy item if one fits.
- * While curled up guarding (unit work 0 = 1) it runs guard_cancel_event;
- * after a charge (unit work 3 = 1) it does the rolling attack.
+ * While curled up guarding (UNIT_WORK_GUARD = 1) it runs guard_cancel_event;
+ * after a charge (UNIT_WORK_CHARGED = 1) it does the rolling attack.
  * Otherwise it draws among the rolling attack (normal_attack_event),
  * curling up to guard (guard_event) and charging up (charge_event), with weights 40, 40, 20 on turn 1 and 40,
  * 40, 6 later.
@@ -553,7 +553,7 @@ EVT_END()
  * A miss rolls past and winds down; a hit shakes the camera,
  * knocks the target and the Spiny rebounds in two hops.
  * After a hit there is a 50% chance that it keeps rolling home
- * and ends curled up in its guard state (guard tables and unit work 0 = 1);
+ * and ends curled up in its guard state (guard tables and UNIT_WORK_GUARD = 1);
  * otherwise it unrolls, returns home and stands up.
  */
 static EVT_BEGIN(normal_attack_event)

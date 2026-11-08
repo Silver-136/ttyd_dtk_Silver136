@@ -535,7 +535,7 @@ USER_FUNC(_btlgon_get_escape_param) {
  * If he accepts one she bites him as he walks up (weapon_gonbaba_kamituki_attack), gloats that he was duped
  * (stg1_gon_30, with Goombella's or Koops' reply) and the fight goes on.
  * If he refuses all three she grumbles that he is not very trusting (stg1_gon_31).
- * Either way she then sets unit work 3, lunges at the stands, takes away audience members
+ * Either way she then sets UNIT_WORK_NEGOTIATED, lunges at the stands, takes away audience members
  * (gon_extra_eaten_event) and is set to 10 HP.
  */
 EVT_BEGIN(negotiation_event)
@@ -741,7 +741,7 @@ EVT_BEGIN(negotiation_event)
     LABEL(50)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
 
-    // Both paths meet here: unit work 3 is set to 1 (the surrender is used up) and Hooktail turns toward the
+    // Both paths meet here: UNIT_WORK_NEGOTIATED is set to 1 (the surrender is used up) and Hooktail turns toward the
     // audience with heavy steps that shake the camera.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_W_4"))
@@ -1257,13 +1257,13 @@ EVT_END()
 
 /**
  * Hooktail's damage reaction (data-table event 9, run by subsetevt_damage).
- * A hit with the Attack FX R sound (DAMAGE_RESULT_ATTACK_FX_R, the cricket chirp) counts up unit work 0 (to 20),
+ * A hit with the Attack FX R sound (DAMAGE_RESULT_ATTACK_FX_R, the cricket chirp) counts up UNIT_WORK_POWER_DOWN (to 20),
  * lowers unit work 1, the defense change of her GONBABA_DEFENSE_ATTR parts (down to -2), and switches
  * to the weak pose table.
  * A hit that does damage or carries that sound plays GNB_D_2 (part 1) or GNB_D_1, and the latter lets up to two
- * swallowed spectators (counted down in unit work 4) drop out beside her and run away.
+ * swallowed spectators (counted down in UNIT_WORK_EATEN_AUDIENCE) drop out beside her and run away.
  * On the last hit with that sound she complains the first two times (stg1_gon_21, 22, unit work 2), or after the
- * surrender (unit work 3) once with stg1_gon_31_04.
+ * surrender (UNIT_WORK_NEGOTIATED) once with stg1_gon_31_04.
  */
 EVT_BEGIN(gonbaba_damage_sub_event)
     // A hit with the cricket chirp (Attack FX R) is counted.
@@ -1447,7 +1447,7 @@ EVT_END()
 
 /**
  * Defeat of Hooktail.
- * The first time her HP runs out (unit work 3 = 0) she does not die
+ * The first time her HP runs out (UNIT_WORK_NEGOTIATED = 0) she does not die
  * but goes into negotiation_event instead, where she begs and bargains with Mario.
  * The second time she collapses (GNB_X_1, GNB_D_3, GNB_H_1 to 3, with SFX_BOSS_GNB_DOWN1 to 3),
  * the camera pulls back, the stg1_gon_32 line is shown and the unit is removed.

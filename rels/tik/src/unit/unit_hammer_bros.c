@@ -709,7 +709,7 @@ EVT_END()
 /**
  * One of the first three throws of the series: damage_check_event_sub with the series weapon,
  * as a non-final throw
- * that records a hit in unit work 10.
+ * that records a hit in UNIT_WORK_THROW_HIT.
  */
 static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     SET_VALUE(LW(9), PTR(&weapon_hammer_bros_renzoku_attack))
@@ -720,7 +720,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * The fourth and final throw of the series: if an earlier throw hit (unit work 10 is 1) it always hits, playing
+ * The fourth and final throw of the series: if an earlier throw hit (UNIT_WORK_THROW_HIT is 1) it always hits, playing
  * the hit flight, applying the action-command result and the damage and the bounce; otherwise it is an ordinary
  * final throw through damage_check_event_sub.
  */
@@ -835,7 +835,7 @@ EVT_END()
 
 /**
  * A non-final throw of the barrage: damage_check_event_sub with the barrage weapon,
- * recording a hit in unit work 10
+ * recording a hit in UNIT_WORK_THROW_HIT
  * plus the target's first slot.
  */
 static EVT_BEGIN(nagemakuri_attack_event_sub_no_last)
@@ -847,7 +847,7 @@ static EVT_BEGIN(nagemakuri_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * The last throw of the barrage at a target: if an earlier throw at the same target hit (unit work 10 plus its
+ * The last throw of the barrage at a target: if an earlier throw at the same target hit (UNIT_WORK_THROW_HIT plus its
  * first slot is 1) it always hits, playing the hit flight, applying the action-command result and the damage and
  * the bounce; otherwise it is an ordinary final throw through damage_check_event_sub.
  */

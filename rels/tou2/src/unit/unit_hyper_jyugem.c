@@ -328,7 +328,7 @@ static BattleUnitSetup entry_togezo = {
 
 /**
  * Init event of the Dark Lakitu: registers its wait, unison-phase, attack, damage and confusion events,
- * clears unit work 0 (holding a Spiny) and 2 (has charged),
+ * clears UNIT_WORK_HOLD (holding a Spiny) and UNIT_WORK_CHARGED (has charged),
  * sets part 2 (the Spiny it carries) to the "JGM_P_1" pose and starts the wait event.
  */
 static EVT_BEGIN(init_event)
@@ -346,10 +346,10 @@ EVT_END()
 
 /**
  * Damage event of the Dark Lakitu.
- * When it is not holding a Spiny egg (unit work 0 = 0) it just runs the default damage reaction.
+ * When it is not holding a Spiny egg (UNIT_WORK_HOLD = 0) it just runs the default damage reaction.
  * When it is holding one, a hit that did damage or left it with instant KO (STATUS_INSTANT_KILL), sleep, dizzy, confusion,
  * electric, freeze or stop knocks the egg out of its hands:
- * part 2 is thrown 200 units behind it to the floor and hidden, the hold (unit work 0),
+ * part 2 is thrown 200 units behind it to the floor and hidden, the hold (UNIT_WORK_HOLD),
  * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
  * Otherwise, unless the damage code is 22 (status only), 30 (no damage), 31 (attack stopped by top spikes),
  * 38 (lucky), 39 (dodgy) or 41 (protected), a poison, burn, Tiny, defense-down,

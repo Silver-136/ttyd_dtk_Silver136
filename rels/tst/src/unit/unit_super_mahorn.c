@@ -605,7 +605,7 @@ static BattleUnitSetup entry_mahorn = {
 };
 
 /**
- * Attack event of the Dark Wizzerd. On a first strike it punches; otherwise a copy (unit work 4 set) does nothing here.
+ * Attack event of the Dark Wizzerd. On a first strike it punches; otherwise a copy (UNIT_WORK_BUNSIN set) does nothing here.
  * The real one runs a selected enemy-item script if one is returned;
  * if it is the only unit left on its side it splits into copies (bunsin_event);
  * if it already has copies it casts single-target magic unless confused.
@@ -796,7 +796,7 @@ static BattleDataEntry data_table_bunsin[] = {
 /**
  * Init event of the Dark Wizzerd: installs its wait, attack, damage and confusion events,
  * floats it at height 20, sets up its four floating hands (parts 2 to 5) with their destination offsets,
- * starts hand_ctrl_event to move them every frame, and clears unit work 4 (copy flag) and 6.
+ * starts hand_ctrl_event to move them every frame, and clears UNIT_WORK_BUNSIN (copy flag) and UNIT_WORK_FADING.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -907,7 +907,7 @@ static EVT_BEGIN(hand_ctrl_event)
 EVT_END()
 
 /**
- * Damage event of the Dark Wizzerd: remembers in unit work 5 whether it has copies.
+ * Damage event of the Dark Wizzerd: remembers in UNIT_WORK_KILL_BUNSIN whether it has copies.
  * A targeted copy removes itself (bunsin_kill_event) and returns without default damage handling.
  * The real one runs default damage handling, then removes all its copies if it still exists and had copies
  * before the hit.
@@ -1063,7 +1063,7 @@ EVT_END()
 
 /**
  * Plain-miss reaction (data table entry 46, damage code 40: an evasive part or a failed accuracy roll):
- * if this unit is a copy (unit work 4 set) it removes itself with bunsin_kill_event.
+ * if this unit is a copy (UNIT_WORK_BUNSIN set) it removes itself with bunsin_kill_event.
  */
 static EVT_BEGIN(avoid_miss_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
@@ -1075,7 +1075,7 @@ static EVT_BEGIN(avoid_miss_event)
 EVT_END()
 
 /**
- * Removes one Wizzerd copy (unit id in LW(0)): returns if it is already gone, otherwise marks it (unit work 6),
+ * Removes one Wizzerd copy (unit id in LW(0)): returns if it is already gone, otherwise marks it (UNIT_WORK_FADING),
  * fades it out with alpha_down_event, waits for any attack to end and kills it.
  */
 static EVT_BEGIN(bunsin_kill_event)
@@ -1894,7 +1894,7 @@ EVT_END()
 
 /**
  * Spawns one Wizzerd copy at LW(0) to LW(2): creates entry_mahorn invisible, positions it,
- * copies the real one's HP and status (mahorn_copy_status), marks it as a copy (unit work 4 = 1),
+ * copies the real one's HP and status (mahorn_copy_status), marks it as a copy (UNIT_WORK_BUNSIN = 1),
  * gives it the attack_event_bunsin attack event and the regist_bunsin status table.
  */
 static EVT_BEGIN(spawn_event)

@@ -724,7 +724,7 @@ EVT_END()
 
 /**
  * Unused first-strike shell-attack script for the grounded Koopa form:
- * it hops into its shell, spins up (unit work 1 is the spin speed) and dashes into the first attack target;
+ * it hops into its shell, spins up (UNIT_WORK_SPIN_SPEED is the spin speed) and dashes into the first attack target;
  * the hit is applied with the action-command result, then it bounces off and walks home.
  */
 static EVT_BEGIN(first_attack_event)

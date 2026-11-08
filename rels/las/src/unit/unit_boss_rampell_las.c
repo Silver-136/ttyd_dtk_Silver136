@@ -606,7 +606,7 @@ EVT_END()
 /**
  * Init event of Doopliss in his own form: installs his wait, phase, attack, damage,
  * confusion and entry events and clears his unit work,
- * including the form record (unit work 12) and the shadow state.
+ * including the form record (UNIT_WORK_FORM) and the shadow state.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -2540,7 +2540,7 @@ EVT_END()
 
 /**
  * Init event of Doopliss as Koops (Nokotarou): sets his vulnerability table (regist_nokotarou),
- * clears all statuses and installs the Koops-form events, with unit work 8 (the shell spinning flag) cleared.
+ * clears all statuses and installs the Koops-form events, with UNIT_WORK_SHELL_SPINNING (the shell spinning flag) cleared.
  */
 static EVT_BEGIN(init_event_nokotarou)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(11), PTR(pose_table_nokotarou_stay))
@@ -2633,7 +2633,7 @@ static EVT_BEGIN(_change_koura_pose_fast)
     RETURN
 EVT_END()
 
-/** Event script: Koops comes back out of his shell (PNK_K_1 then PNK_K_2) and clears the spin flag (unit work 8). */
+/** Event script: Koops comes back out of his shell (PNK_K_1 then PNK_K_2) and clears the spin flag (UNIT_WORK_SHELL_SPINNING). */
 static EVT_BEGIN(_restore_koura_pose)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPINNING, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -2653,7 +2653,7 @@ EVT_END()
 
 /**
  * Event script: starts the Koops shell spin, which keeps rotating the shell part every frame
- * while unit work 8 is 1.
+ * while UNIT_WORK_SHELL_SPINNING is 1.
  */
 static EVT_BEGIN(_koura_rotate_start)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPINNING, 1)
@@ -2692,7 +2692,7 @@ static EVT_BEGIN(_koura_rotate_start)
     RETURN
 EVT_END()
 
-/** Event script: stops the Koops shell spin by clearing unit work 8. */
+/** Event script: stops the Koops shell spin by clearing UNIT_WORK_SHELL_SPINNING. */
 static EVT_BEGIN(_koura_rotate_stop)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPINNING, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)

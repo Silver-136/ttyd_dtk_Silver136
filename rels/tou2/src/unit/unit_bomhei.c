@@ -303,7 +303,7 @@ EVT_END()
 
 /**
  * Init event of the Bob-omb: registers its wait, attack, damage and confusion events,
- * clears the fuse-sound handle in unit work 0 and sets its walk and run footstep sounds,
+ * clears the fuse-sound handle in UNIT_WORK_SPARK_SFX and sets its walk and run footstep sounds,
  * then starts the wait event.
  */
 static EVT_BEGIN(init_event)
@@ -659,7 +659,7 @@ EVT_END()
 /**
  * Wait event of the lit Bob-omb: sets the idle pose from the pose table
  * and starts the looping fuse sound ("SFX_ENM_BOMB_WAIT1") once,
- * keeping its handle in unit work 0 so bomb_event can stop it.
+ * keeping its handle in UNIT_WORK_SPARK_SFX so bomb_event can stop it.
  */
 static EVT_BEGIN(wait_event_spark)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

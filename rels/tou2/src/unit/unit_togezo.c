@@ -358,7 +358,7 @@ static BattleWeapon weapon_togezo_attack = {
 
 /**
  * Init script of the Spiny: registers the wait, attack, damage and confusion handlers,
- * clears unit work 0 (guarding) and 3, sets the run, walk and jump sounds and starts the idle event.
+ * clears UNIT_WORK_GUARD (guarding) and unit work 3, sets the run, walk and jump sounds and starts the idle event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -469,7 +469,7 @@ EVT_END()
 
 /**
  * The Spiny's action: it wakes up first if it is on its back; otherwise it uses an item if the item-use check selects one;
- * if guarding (unit work 0 = 1) it uncurls (guard_cancel_event);
+ * if guarding (UNIT_WORK_GUARD = 1) it uncurls (guard_cancel_event);
  * otherwise it either rolls into the target (normal_attack_event) or curls up to guard (guard_event), 50% each.
  */
 static EVT_BEGIN(attack_event)
@@ -509,7 +509,7 @@ EVT_END()
  * The Spiny's rolling attack: it picks a target, curls into a ball (TGZ_P_1),
  * spins toward it with SFX_ENM_TOGEZO_ROLL1 to 5, and either misses or rams it,
  * with the action-command defence applied on a hit; after a hit it bounces off (SFX_ENM_TOGEZO_JUMP1),
- * and with a 30% chance after that hit it ends the move curled up in guard (unit work 0 = 1),
+ * and with a 30% chance after that hit it ends the move curled up in guard (UNIT_WORK_GUARD = 1),
  * otherwise it uncurls (TGZ_S_1) and returns.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -792,7 +792,7 @@ EVT_END()
 /**
  * The Spiny uncurls from its guard (SFX_ENM_TOGEZO_TURN2, pose TGZ_S_1):
  * it restores the normal defence, status and pose tables and data table,
- * turns the body part attribute 4096 back on and clears unit work 0.
+ * turns the body part attribute 4096 back on and clears UNIT_WORK_GUARD.
  */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

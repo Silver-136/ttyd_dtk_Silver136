@@ -78,8 +78,8 @@
 // set by the mail window (win_item) when a mail is opened; mail_evt prints mail_first_hit again on later mails while
 // clear
 #define GSWF_MAIL_TUTORIAL_REPEAT_OFF GSWF(38)
-// set by muj_00 init when Cortez's trip from Rogueport (GSWF(3125)) ends, cleared by gor_00 init when the trip back
-// ends; no code reads it
+// set by muj_00 init when Cortez's trip from Rogueport (GSWF_GOR_SAILING_TO_KEELHAUL) ends, cleared by gor_00 init when
+// the trip back ends; no code reads it
 #define GSWF_MUJ_ARRIVED_BY_SHIP_UNUSED GSWF(39)
 // set by cooking_evt (gor_01) when Zess T. hands over a cooked item; the journal (win_log) adds its recipe page once
 // set
@@ -163,7 +163,8 @@
 // set by mokorim_talk (gor_00) on Lumpy's first pitch (salari_before_000..002); later talks start at
 // salari_before_003
 #define GSWF_GOR_LUMPY_FIRST_TALK_DONE GSWF(1182)
-// set by mokorim_talk (gor_00) from STG6_56 when Lumpy reports striking oil and repays GSW(116)'s investments
+// set by mokorim_talk (gor_00) from STG6_56 when Lumpy reports striking oil and repays GSW_GOR_LUMPY_INVESTMENT_COUNT's
+// investments
 #define GSWF_GOR_LUMPY_REPAYMENT_DONE GSWF(1183)
 // set by powerupya_table_talk (gor_02) after Merlon's full introduction (powerup_00)
 #define GSWF_GOR_MERLON_FIRST_TALK_DONE GSWF(1185)
@@ -176,11 +177,11 @@
 // set by nancy_talk (gor_01) when Mario gives Zess T. the Contact Lens and the west gate opens; shop stock, doors and
 // her later talks (cooking) test it
 #define GSWF_GOR_ZESS_T_GOT_CONTACT_LENS GSWF(1188)
-// set by shoptender_talk (gor_01) when the lens is ordered before STG1_17; gor_01 init then sets GSWF(1191) once
-// STG1_17 is reached
+// set by shoptender_talk (gor_01) when the lens is ordered before STG1_17; gor_01 init then sets
+// GSWF_GOR_CONTACT_LENS_ARRIVED once STG1_17 is reached
 #define GSWF_GOR_CONTACT_LENS_ORDERED_EARLY GSWF(1189)
-// set by shoptender_talk (gor_01) when the lens is ordered from STG1_17 on; gor_01 init (after GSW(108) shows 90 s)
-// and tik_01 init set GSWF(1191)
+// set by shoptender_talk (gor_01) when the lens is ordered from STG1_17 on; gor_01 init (after
+// GSW_GOR_CONTACT_LENS_ORDER_TIME shows 90 s) and tik_01 init set GSWF_GOR_CONTACT_LENS_ARRIVED
 #define GSWF_GOR_CONTACT_LENS_ORDERED_LATE GSWF(1190)
 // set by gor_01 init or tik_01 init once the ordered lens is in; the shop stocks goods_list2 and the clerk announces
 // it (gor_01_015)
@@ -199,10 +200,11 @@
 #define GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL GSWF(1196)
 // set by cooking_evt (gor_01) after Zess T. introduces her cooking (gor_01_cook_001)
 #define GSWF_GOR_ZESS_T_COOKING_INTRO_DONE GSWF(1197)
-// set by thief_talk (gor_01) after the thief returns the stolen coins (GSW(2)/GSW(3)); evt_door_04_close tests it
+// set by thief_talk (gor_01) after the thief returns the stolen coins
+// (GSW_GOR_STOLEN_COINS_LOW/GSW_GOR_STOLEN_COINS_HIGH); evt_door_04_close tests it
 #define GSWF_GOR_THIEF_FOUND_IN_HIDEOUT GSWF(1198)
-// set by evt_door_04_close (gor_01) when Mario leaves the thief's room after GSWF(1198); thief_talk then uses
-// mac_0_065_04 instead of _03
+// set by evt_door_04_close (gor_01) when Mario leaves the thief's room after GSWF_GOR_THIEF_FOUND_IN_HIDEOUT;
+// thief_talk then uses mac_0_065_04 instead of _03
 #define GSWF_GOR_THIEF_HIDEOUT_LEFT GSWF(1199)
 // set by christine_nakama_after (gor_01) after Goombella's save-block reminder (mac_0_061_01); gor_01 init at STG0_07
 // spawns it while clear
@@ -243,8 +245,8 @@
 // set by master_talk (gor_01) or kurihakase_talk (gor_02) at STG4_33 when told where Bobbery lives; sanders_talk
 // picks its line
 #define GSWF_GOR_BOBBERY_HOME_LEARNED GSWF(1214)
-// set by sanders_talk (gor_02) when Bobbery denies who he is before GSWF(1214); marco_talk (gor_00) then uses
-// mac_4_045_01
+// set by sanders_talk (gor_02) when Bobbery denies who he is before GSWF_GOR_BOBBERY_HOME_LEARNED; marco_talk (gor_00)
+// then uses mac_4_045_01
 #define GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD GSWF(1215)
 // set by sanders_open_door (gor_02) when Bobbery unlocks his door; door events and sanders_init test it
 #define GSWF_GOR_BOBBERY_DOOR_UNLOCKED GSWF(1216)
@@ -518,19 +520,19 @@
 #define GSWF_HEI_01_FIRE_FLOWER_BLOCK GSWF(1785) /* the hei_01 ? block (evt_mobj_badgeblk) holding a Fire Flower */
 #define GSWF_HEI_02_COIN_TREE GSWF(1786)         /* the coin in hei_02's tree item_ki_6 */
 #define GSWF_HEI_02_POW_BLOCK_BLOCK GSWF(1787)   /* the hei_02 ? block (evt_mobj_badgeblk) holding a POW Block */
-// set with 1789 by either dead event of the linked pillar enemies (hei_03 シンノスケ1/2); hei_03 init and hashira_evt test
-// it; the gate opens once both are set; hei_05's copy of hashira_evt also tests it
+// set with GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED by either dead event of the linked pillar enemies (hei_03 シンノスケ1/2);
+// hei_03 init and hashira_evt test it; the gate opens once both are set; hei_05's copy of hashira_evt also tests it
 #define GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED GSWF(1788)
-// set with 1788 by either dead event of the linked pillar enemies (hei_03 シンノスケ1/2); hei_03 init and hashira_evt test
-// it; the gate opens once both are set; hei_05's copy of hashira_evt also tests it
+// set with GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED by either dead event of the linked pillar enemies (hei_03 シンノスケ1/2);
+// hei_03 init and hashira_evt test it; the gate opens once both are set; hei_05's copy of hashira_evt also tests it
 #define GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED GSWF(1789)
 #define GSWF_HEI_04_COIN_BUSH GSWF(1790)         /* the coin in hei_04's bush item_kusa_11 */
 #define GSWF_HEI_04_COIN_TREE GSWF(1791)         /* the coin in hei_04's tree item_ki_3 */
-// set with 1793 by either dead event of the linked pillar enemies (hei_05 シンエモン1/2); hei_05 init tests it; the gate
-// opens once both are set
+// set with GSWF_HEI_05_PILLAR_ENEMY_2_DEFEATED by either dead event of the linked pillar enemies (hei_05 シンエモン1/2);
+// hei_05 init tests it; the gate opens once both are set
 #define GSWF_HEI_05_PILLAR_ENEMY_1_DEFEATED GSWF(1792)
-// set with 1792 by either dead event of the linked pillar enemies (hei_05 シンエモン1/2); hei_05 init tests it; the gate
-// opens once both are set
+// set with GSWF_HEI_05_PILLAR_ENEMY_1_DEFEATED by either dead event of the linked pillar enemies (hei_05 シンエモン1/2);
+// hei_05 init tests it; the gate opens once both are set
 #define GSWF_HEI_05_PILLAR_ENEMY_2_DEFEATED GSWF(1793)
 #define GSWF_HEI_06_COIN_BUSH GSWF(1794)         /* the coin in hei_06's bush item_kusa_8 */
 #define GSWF_HEI_06_FIRE_FLOWER_BLOCK GSWF(1795) /* the hei_06 ? block (evt_mobj_badgeblk) holding a Fire Flower */
@@ -662,8 +664,8 @@
 #define GSWF_TOU_04_GUARD_1_ESCORT_UNUSED GSWF(2379)
 // tou_04 init would run evt_gardman2 (guard 3 leads Mario to tou_03); nothing sets it to 1 (only cleared)
 #define GSWF_TOU_04_GUARD_3_ESCORT_UNUSED GSWF(2380)
-// set by tou_04 init while the title match is booked (GSWF(2383)); runs evt_gardman3 (special match, on to tou_11),
-// which clears it; guards 3 and 9 test it
+// set by tou_04 init while the title match is booked (GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED); runs evt_gardman3 (special
+// match, on to tou_11), which clears it; guards 3 and 9 test it
 #define GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11 GSWF(2381)
 // tou_04 init would run evt_gardman4 (guard 6, champion's room, to tou_03); nothing sets it to 1 (only cleared)
 #define GSWF_TOU_04_GUARD_6_ESCORT_UNUSED GSWF(2382)
@@ -803,7 +805,7 @@
 // test it
 #define GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN GSWF(2445)
 // set by tou_10 init on the first entry with story at STG3_12 or later; first_tamago (partner pep talk) runs then
-// only if GSW(505) is 2 or more
+// only if GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT is 2 or more
 #define GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED GSWF(2446)
 // set by evt_cake (tou.c) when the fan's cake is put on the locker-room table, cleared when eaten (evt_eat_cake) or
 // by evt_tou_08_cake; evt_cake_init and tou_08 init test it
@@ -930,14 +932,14 @@
 // set by rankingInit (tou.c/tou2.c); once set, the fighters' points are loaded from the saved bytes instead of the
 // defaults; cleared by the ranking reset
 #define GSWF_GLITZ_PIT_RANKING_SAVED GSWF(2529)
-// set by rankingInit (tou.c/tou2.c) the first time the Wings of Night appear (GSWF(2413)); they start marked beaten
-// (below Mario) only that first time
+// set by rankingInit (tou.c/tou2.c) the first time the Wings of Night appear (GSWF_GLITZ_PIT_SIR_SWOOP_JOINED); they
+// start marked beaten (below Mario) only that first time
 #define GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED GSWF(2530)
-// set by rankingInit (tou.c/tou2.c) the first time the Destructors appear (GSWF(2421)); they start marked beaten
-// (below Mario) only that first time
+// set by rankingInit (tou.c/tou2.c) the first time the Destructors appear (GSWF_GLITZ_PIT_DESTRUCTORS_JOINED); they
+// start marked beaten (below Mario) only that first time
 #define GSWF_GLITZ_PIT_DESTRUCTORS_PLACED GSWF(2531)
-// set by evt_tou_set_ranking_win_lose (tou.c/tou2.c) with GSW(507); rankingControll then keeps that opponent next to
-// Mario; cleared by the ranking reset
+// set by evt_tou_set_ranking_win_lose (tou.c/tou2.c) with GSW_GLITZ_PIT_LAST_OPPONENT; rankingControll then keeps that
+// opponent next to Mario; cleared by the ranking reset
 #define GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED GSWF(2532)
 #define GSWF_TOU_01_INN_COUPON GSWF(2533)        /* the Inn Coupon lying in tou_01 (evt_item_entry item_05) */
 // the Necklace the Shadow Sirens drop (witchtrio_lose, win_00); win_00 init places it at STG2_08 and adds the キザ野郎
@@ -1095,19 +1097,19 @@
 #define GSWF_DOU_09_BOMB_WALL_BLOWN GSWF(2981)
 // set by torinoko_suifu (dou_11) after the stranded sailors shout for help at STG5_29; dou_11 init spawns it while 0
 #define GSWF_DOU_11_SAILORS_SHOUT_SEEN GSWF(2982)
-// the dou_11 blue switch "mobj01" (ukishima_switch1_evt); with GSWF(2984) it raises the floating platforms (ukishima
-// events)
+// the dou_11 blue switch "mobj01" (ukishima_switch1_evt); with GSWF_DOU_11_SWITCH_2_PRESSED it raises the floating
+// platforms (ukishima events)
 #define GSWF_DOU_11_SWITCH_1_PRESSED GSWF(2983)
-// the dou_11 blue switch "mobj02" (ukishima_switch2_evt); with GSWF(2983) it raises the floating platforms (ukishima
-// events)
+// the dou_11 blue switch "mobj02" (ukishima_switch2_evt); with GSWF_DOU_11_SWITCH_1_PRESSED it raises the floating
+// platforms (ukishima events)
 #define GSWF_DOU_11_SWITCH_2_PRESSED GSWF(2984)
 #define GSWF_DOU_07_P_DOWN_D_UP GSWF(2985)       /* the P-Down, D-Up lying in dou_07 (evt_item_entry "item_00") */
 // the dou_05 chest "mobj_box00" (MOBJ_ITEMBOX_NORMAL): Defend Plus P in US and later, Damage Dodge P before US
 #define GSWF_DOU_05_BADGE_CHEST GSWF(2986)
 // the Black Key dropped by the dou_07 Ember (erumosu_dead) and re-entered by dou_07 init
 #define GSWF_DOU_07_BLACK_KEY GSWF(2987)
-// set by apper_elmos (dou_07) when the Ember appears at the black chest; dou_07 init respawns it while GSWF(2989) is
-// 0
+// set by apper_elmos (dou_07) when the Ember appears at the black chest; dou_07 init respawns it while
+// GSWF_DOU_07_EMBER_DEFEATED is 0
 #define GSWF_DOU_07_EMBER_APPEARED GSWF(2988)
 // set by erumosu_dead (dou_07); dou_07 init stops setting up the Ember and places the Black Key once set
 #define GSWF_DOU_07_EMBER_DEFEATED GSWF(2989)
@@ -1162,7 +1164,8 @@
 #define GSWF_MUJ_05_FLAVIO_FAVOR_ASKED GSWF(3142)
 // the Wedding Ring lying in muj_05 (evt_item_entry "item00", from STG5_63)
 #define GSWF_MUJ_05_WEDDING_RING GSWF(3143)
-// before US only: the muj_03 brick "bblk00" (evt_mobj_brick MOBJ_BRICK_PLAIN); US and later use LSWF(3) instead
+// before US only: the muj_03 brick "bblk00" (evt_mobj_brick MOBJ_BRICK_PLAIN); US and later use
+// LSWF_MUJ_03_BRICK_BBLK00 instead
 #define GSWF_MUJ_03_BRICK GSWF(3145)
 // the muj_02 badge block (evt_mobj_badgeblk kind 1, "mobj_badge_gat") holding Head Rattle
 #define GSWF_MUJ_02_HEAD_RATTLE_BADGE_BLOCK GSWF(3146)
@@ -1174,7 +1177,7 @@
 // the muj_02 ? block (evt_mobj_badgeblk, "mobj_hatena") holding a Courage Shell
 #define GSWF_MUJ_02_COURAGE_SHELL_BLOCK GSWF(3150)
 // set by koburon_talk (muj_00) after Whacka's first greeting, and by koburon_dead; later talks pick the line by
-// GSW(721)
+// GSW_MUJ_WHACKA_HIT_COUNT
 #define GSWF_MUJ_WHACKA_FIRST_TALK_DONE GSWF(3151)
 // the Keel Mango of the muj_02 tree "item_treeb_01" (evt_treeb_01); muj_02 init clears it on every entry, and in US and
 // later sets it before STG5_43
@@ -1216,13 +1219,13 @@
 #define GSWF_RSH_04_STUCK_DOOR_SEEN GSWF(3433)
 // set by talk_gurume (rsh_02) when he asks Mario to check the noisy room next door (STG6_13)
 #define GSWF_RSH_GOURMET_NOISE_TALK_DONE GSWF(3434)
-// set by evt_rsh_door_open on entering heya_4 in rsh_02 once GSWF(3434) is set; talk_gurume then insists someone is
-// there
+// set by evt_rsh_door_open on entering heya_4 in rsh_02 once GSWF_RSH_GOURMET_NOISE_TALK_DONE is set; talk_gurume then
+// insists someone is there
 #define GSWF_RSH_NOISY_ROOM_CHECKED GSWF(3435)
 // set by talk_syashou (rsh_04) during Bub's request (engineer dream); talk_konari and the partner hint event test it
 #define GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD GSWF(3436)
 // set by talk_toron (rsh_01) during Bub's request (autograph); evt_rsh_konarikin_irai_party_talk needs it and
-// GSWF(3436)
+// GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD
 #define GSWF_RSH_ZIP_TOAD_BUB_HINT_HEARD GSWF(3437)
 // set by talk_syashou (rsh_04) after the conductor first tells of the missing blanket (STG6_12); later asks are
 // shorter
@@ -1263,8 +1266,8 @@
 // set by evt_moamoa_escape1 (rsh_05) when the conductor is freed from the Smorg; evt_moamoa_init keeps him free and
 // talkable
 #define GSWF_RSH_SMORG_CONDUCTOR_FREED GSWF(3451)
-// set by talk_konari (rsh_04) when Bub repeats his hint; with GSWF(3436) the conductor or Bub talk advances to
-// STG6_10
+// set by talk_konari (rsh_04) when Bub repeats his hint; with GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD the conductor or Bub
+// talk advances to STG6_10
 #define GSWF_RSH_BUB_HINT_REPEATED GSWF(3452)
 // set (B/C cleared) by the revisit init of rsh_01_a/rsh_04_a; rsh_05_a and rsh_08_a pick their a entrance data by it
 #define GSWF_RSH_REVISIT_MAP_A GSWF(3453)
@@ -1374,17 +1377,17 @@
 #define GSWF_EKI_01_PAPER_6_BLOWN_AWAY GSWF(3753)
 // the eki_03 hidden block blk02 (MOBJ_BRICK_HIDDEN_ITEM) holding a Thunder Rage
 #define GSWF_EKI_03_THUNDER_RAGE_HIDDEN_BLOCK GSWF(3754)
-// set by talk_papa_taihou_kyoka (pik_00) when Goldbob permits the cannon; with GSWF(3876) gives STG7_03;
-// bom_01/bom_02 talks and mail events test it
+// set by talk_papa_taihou_kyoka (pik_00) when Goldbob permits the cannon; with GSWF_BOM_GENERAL_WHITE_AGREED gives
+// STG7_03; bom_01/bom_02 talks and mail events test it
 #define GSWF_PIK_GOLDBOB_PERMISSION_GIVEN GSWF(3874)
-// set by evt_white_bed (bom_02) when General White wakes and agrees to ready the cannon; with GSWF(3874) gives
-// STG7_03; bom and pik_00 talks test it
+// set by evt_white_bed (bom_02) when General White wakes and agrees to ready the cannon; with
+// GSWF_PIK_GOLDBOB_PERMISSION_GIVEN gives STG7_03; bom and pik_00 talks test it
 #define GSWF_BOM_GENERAL_WHITE_AGREED GSWF(3876)
 // set by nokonoko_A_talk (nok_00) and boss_noko_talk (nok_01) when asked about General White at STG7_02 (also
 // stg7_03_white_1); garawaru_talk (muj_01) and talk_sakaba (tou_01) give their hint only then
 #define GSWF_NOK_GENERAL_WHITE_HINT_HEARD GSWF(3877)
-// set by garawaru_talk (muj_01) at STG7_02 when the sailor says General White left for an arena (needs GSWF(3877));
-// no code reads it
+// set by garawaru_talk (muj_01) at STG7_02 when the sailor says General White left for an arena (needs
+// GSWF_NOK_GENERAL_WHITE_HINT_HEARD); no code reads it
 #define GSWF_MUJ_01_WHITE_HINT_HEARD_UNUSED GSWF(3878)
 // set by talk_sakaba (tou_01) when the bar owner says General White went to a huge tree (STG7_02); mri_01 puni_1_talk
 // then gives the next hint
@@ -1465,13 +1468,13 @@
 // set by aji_17 init at STG7_25_00_1 the first time (heals the party, spawns evt_last); later entries spawn evt_last2
 #define GSWF_AJI_17_LAST_SCENE_SEEN GSWF(4186)
 // aji_03 floor switch A_sui1 (evt_sw0), pressed first in the order 1-3-2; cleared by evt_sw_reinit on a wrong order;
-// aji_03 init sets it once GSWF(4197) is set
+// aji_03 init sets it once GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is set
 #define GSWF_AJI_03_SWITCH_1_PRESSED GSWF(4188)
 // aji_03 floor switch A_sui2 (evt_sw1), pressed last in the order 1-3-2; cleared by evt_sw_reinit on a wrong order;
-// aji_03 init sets it once GSWF(4197) is set
+// aji_03 init sets it once GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is set
 #define GSWF_AJI_03_SWITCH_2_PRESSED GSWF(4189)
 // aji_03 floor switch A_sui3 (evt_sw2), pressed second in the order 1-3-2; cleared by evt_sw_reinit on a wrong order;
-// aji_03 init sets it once GSWF(4197) is set
+// aji_03 init sets it once GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is set
 #define GSWF_AJI_03_SWITCH_3_PRESSED GSWF(4190)
 // set by evt_machine (aji_18) when ITEM_CARD_KEY_0x1D goes into slot 1; all three slots give STG7_16; aji_18 init
 // sets it from STG7_16
@@ -1700,28 +1703,29 @@
 // 8 bytes (GSW 23..30): play-time ticks saved by mail_evt_pik_00 (RDM Issue 6); add_shop_point doubles rsh_03 shop
 // points for 15 minutes after it
 #define GSW_SHOP_RSH_03_SALE_START_TIME GSW(23)
-// low byte of the Power Bounce record (record = GSW(32) + 256 * GSW(35), max 9999), raised by
-// marioAttackEvent_RenzokuJump (battle_mario); tik_06's sign prints it
+// low byte of the Power Bounce record (record = GSW_MAIN_POWER_BOUNCE_RECORD_LO + 256 *
+// GSW_MAIN_POWER_BOUNCE_RECORD_HI, max 9999), raised by marioAttackEvent_RenzokuJump (battle_mario); tik_06's sign
+// prints it
 #define GSW_MAIN_POWER_BOUNCE_RECORD_LO GSW(32)
 // deepest Pit of 100 Trials level reached, raised by jon_init_evt (jon); tik_06's sign (evt_kanban2) prints it
 #define GSW_JON_DEEPEST_LEVEL GSW(33)
 // shown by tik_06's sign (evt_kanban2) as Star Pieces found out of 100; itemseq_GetItem (itemdrv) adds 1
 // per Star Piece get (item get type 8)
 #define GSW_STAR_PIECES_FOUND_COUNT GSW(34)
-// high byte of the Power Bounce record (see GSW(32)), raised by marioAttackEvent_RenzokuJump (battle_mario); tik_06's
-// sign prints it
+// high byte of the Power Bounce record (see GSW_MAIN_POWER_BOUNCE_RECORD_LO), raised by marioAttackEvent_RenzokuJump
+// (battle_mario); tik_06's sign prints it
 #define GSW_MAIN_POWER_BOUNCE_RECORD_HI GSW(35)
 // 8-byte play-time stamp (GSW 100..107) saved by epigraphy_map_after_stage6 (gor_02); kurihakase_talk loads the
 // elapsed ms at STG6_71 to pick a wait line or run kurihakase_after3minutes after 180000 ms
 #define GSW_GOR_FRANKLY_STG6_START_TIME GSW(100)
 // 8-byte play-time stamp (GSW 108..115) saved by shoptender_talk (gor_01) when the lens is ordered; gor_01 init sets
-// GSWF(1191) once 90000 ms have passed
+// GSWF_GOR_CONTACT_LENS_ARRIVED once 90000 ms have passed
 #define GSW_GOR_CONTACT_LENS_ORDER_TIME GSW(108)
 // 100-coin investments given to Lumpy in mokorim_talk (gor_00), 0..3 (3 = he takes no more); from STG6_56 he repays 1
 // = 300, 2 = 600 (500 before US), 3 = 999 coins
 #define GSW_GOR_LUMPY_INVESTMENT_COUNT GSW(116)
 // bteresa_talk (gor_03): 0..5, raised by one per talk while not above the count of minigame top-score flags
-// GSWF(1240..1243); picks bunny_teresa_11 .. _11_4
+// GSWF_GOR_PLANE_GAME_TOP_SCORE..GSWF_GOR_PAPER_GAME_TOP_SCORE; picks bunny_teresa_11 .. _11_4
 #define GSW_GOR_PARLOR_ATTENDANT_TALK_STAGE GSW(117)
 // 4 bytes (GSW 118..121): indices into badge_bottakuru_table for Charlieton's four offers, rolled by
 // badgeShop_bottakuruGeneration; a sold one is set to the last (empty) entry; read by gor_01 talk and winmgr
@@ -1732,8 +1736,8 @@
 // evt_tou_match_make_default_sub (tou.c) from evt_tou_get_rule_info, 1 in tou_10 evt_match_make_sub and the
 // stg3_06/stg3_21 story-jump inits (event.c); evt_match (tou_03) passes it to evt_npc_set_battle_rule
 #define GSW_GLITZ_PIT_CONDITION_PARAM GSW(503)
-// second match-condition parameter (battleRule[2]); copied to FieldBattleInfo.ruleParam2 and used by
-// battle_actrecord threshold checks (some turn checks treat 0xFF specially); set and passed like GSW(503)
+// second match-condition parameter (battleRule[2]); copied to FieldBattleInfo.ruleParam2 and used by battle_actrecord
+// threshold checks (some turn checks treat 0xFF specially); set and passed like GSW_GLITZ_PIT_CONDITION_PARAM
 #define GSW_GLITZ_PIT_CONDITION_PARAM2 GSW(504)
 // losses to the Armored Harriers (fighter 10), added by evt_match (tou_03) up to 100; tou_10 init runs the
 // first_tamago partner pep talk once when it is 2 or more

@@ -389,7 +389,7 @@ static BattleWeapon weapon_togezo_charge = {
 
 /**
  * Init script of the Sky-Blue Spiny: registers its wait, attack, damage and confusion handlers,
- * clears unit work 0 (guarding flag) and unit work 3 (charged flag), and sets its run, walk and jump sounds.
+ * clears UNIT_WORK_GUARD (guarding flag) and UNIT_WORK_CHARGED (charged flag), and sets its run, walk and jump sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -498,8 +498,8 @@ EVT_END()
 /**
  * Attack script of the Sky-Blue Spiny.
  * If it is flipped over it runs wakeup_event and ends the turn; otherwise, after an item check,
- * if it is guarding (unit work 0) it unfolds (guard_cancel_event).
- * If it has just charged (unit work 3) it makes its normal attack and clears the flag.
+ * if it is guarding (UNIT_WORK_GUARD) it unfolds (guard_cancel_event).
+ * If it has just charged (UNIT_WORK_CHARGED) it makes its normal attack and clears the flag.
  * Otherwise it draws lots between the normal attack (40),
  * guarding (40) and charging up (20 on the first turn, 6 afterwards), which sets the charged flag.
  */
@@ -554,7 +554,7 @@ EVT_END()
  * The target takes the damage when it is reached.
  * On a hit it bounces back in two hops, then either unrolls (TGZ_S_1) and runs home,
  * or returns home spinning (SFX_ENM_TOGEZO_ROLL3) and rests in guard
- * (swapping to the guard tables with unit work 0 set), each 50 percent of the time.
+ * (swapping to the guard tables with UNIT_WORK_GUARD set), each 50 percent of the time.
  */
 static EVT_BEGIN(normal_attack_event)
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a

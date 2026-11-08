@@ -491,7 +491,7 @@ EVT_END()
 
 /**
  * Bowser's half-HP line ("harf" is the original spelling of "half"):
- * the first time his HP drops below the value in unit work 2 (half his max HP) it sets unit work 3,
+ * the first time his HP drops below the value in UNIT_WORK_HALF_HP (half his max HP) it sets UNIT_WORK_HALF_HP_TALKED,
  * zooms in on him and has him say stg3_tou_403_06_02 in a new talk pose.
  */
 static EVT_BEGIN(harf_hp_event)
@@ -517,7 +517,7 @@ EVT_END()
 
 /**
  * Bowser's move choice. He uses an enemy item if one fits.
- * His first three turns are scripted by unit work 4: fire breath, then bite, then hip drop.
+ * His first three turns are scripted by UNIT_WORK_ATTACK_STEP: fire breath, then bite, then hip drop.
  * After that he draws lots with weights 30 (hip drop), 30 (bite),
  * 0 (critical bite, never drawn) and 30 (fire breath). LW(9) receives the weapon each sub-event uses.
  */

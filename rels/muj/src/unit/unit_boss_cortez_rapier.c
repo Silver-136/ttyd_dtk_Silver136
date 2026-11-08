@@ -223,7 +223,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Init event of Cortez's rapier weapon: sets the unit flag 0x1000000, installs its wait, phase, unison phase,
+ * Init event of Cortez's rapier weapon: sets BATTLE_UNIT_FLAG_SOLID_MODEL, installs its wait, phase, unison phase,
  * attack, damage and (default) confusion events,
  * stores weapon number 3 in unit work 2 and clears unit work 1 (its down countdown; nonzero makes it sit out its
  * attack), and gives it no actions per turn until Cortez's third form.

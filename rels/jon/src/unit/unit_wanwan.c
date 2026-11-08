@@ -282,7 +282,7 @@ static BattleWeapon weapon_wanwan_attack = {
 /**
  * Init event of the Chain-Chomp: installs its wait, attack, damage and confusion events,
  * sets up its chain (chain_init) and starts chain_event, sets the landing sound,
- * and sets unit work 1 (the volume of its barking, 127 at the start) and unit work 0 = 1.
+ * and sets UNIT_WORK_SOUND_VOLUME (the volume of its barking, 127 at the start) and unit work 0 = 1.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -316,7 +316,7 @@ static EVT_BEGIN(chain_event)
 EVT_END()
 
 /**
- * Damage event of the Chain-Chomp: marks it as being damaged (unit work 2 = 2, attribute 4) around the default
+ * Damage event of the Chain-Chomp: marks it as being damaged (UNIT_WORK_CHAIN_STATE = 2, attribute 4) around the default
  * damage handling.
  */
 static EVT_BEGIN(damage_event)
@@ -716,7 +716,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Script helper event: lowers the volume of the Chain-Chomp's barking (unit work 1) by about 30 percent,
+ * Script helper event: lowers the volume of the Chain-Chomp's barking (UNIT_WORK_SOUND_VOLUME) by about 30 percent,
  * to a minimum of 32, each time it is called.
  */
 static EVT_BEGIN(sound_gensui_event)

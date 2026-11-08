@@ -244,7 +244,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Init event of the Dull Bones: registers its wait, attack, damage and confusion events,
- * clears unit work 1 (the rewards-paid flag), sets the landing sound for jumps and starts the wait event.
+ * clears UNIT_WORK_REWARD_GIVEN (the rewards-paid flag), sets the landing sound for jumps and starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -267,7 +267,7 @@ EVT_END()
 
 /**
  * Final death of the Dull Bones: it spins around quickly with the defeat sound, puffs smoke,
- * pays its coins and EXP (once, tracked in unit work 1,
+ * pays its coins and EXP (once, tracked in UNIT_WORK_REWARD_GIVEN,
  * since a crumbled Dull Bones may already have paid) with a star-point effect,
  * spins for 30 more frames and removes the unit (KillUnit mode 2, or 0 when the hit has damage-code bit 1024).
  */

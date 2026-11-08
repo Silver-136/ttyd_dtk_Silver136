@@ -370,7 +370,7 @@ static BattleWeapon weapon_togezo_attack = {
 
 /**
  * Init event of the Spiny: installs its wait, attack, damage and confusion events,
- * clears unit work 0 (guarding) and 3, and sets its run, walk and jump sounds.
+ * clears UNIT_WORK_GUARD (guarding) and unit work 3, and sets its run, walk and jump sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -479,7 +479,7 @@ EVT_END()
 /**
  * Attack event of the Spiny: if flipped over it only wakes up.
  * Otherwise it uses an enemy item if the item-use check selects one;
- * a guarding Spiny (unit work 0 = 1) leaves its guard, and an unguarded one rolls 0 to 99:
+ * a guarding Spiny (UNIT_WORK_GUARD = 1) leaves its guard, and an unguarded one rolls 0 to 99:
  * below 50 the roll attack (normal_attack_event), else it curls up to guard (guard_event).
  */
 static EVT_BEGIN(attack_event)
@@ -806,7 +806,7 @@ EVT_END()
 
 /**
  * Undoes guard_event: the Spiny spins back the other way (TURN2 sound) into TGZ_S_1, restores the normal tables,
- * turns the part's attribute 0x1000 back on and clears unit work 0.
+ * turns the part's attribute 0x1000 back on and clears UNIT_WORK_GUARD.
  */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

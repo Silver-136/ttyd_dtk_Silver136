@@ -589,7 +589,7 @@ static BattleUnitSetup entry_togenoko = {
 
 /**
  * The Dark Koopatrol's action: it handles a flipped turn with the recovery countdown;
- * while guarding (unit work 0 = 1) it mostly (80%) stands up again (guard_cancel_event);
+ * while guarding (UNIT_WORK_GUARD = 1) it mostly (80%) stands up again (guard_cancel_event);
  * when charged it makes a normal or shell attack;
  * otherwise it may use an item; recruitment checks use zero thresholds, so this chooser never calls a friend.
  * It otherwise picks between the normal attack, the shell attack,
@@ -1117,7 +1117,7 @@ EVT_END()
  * The Dark Koopatrol comes out of guard: it hops back to pose S_1 with SFX_ENM_TOGENOKO_SHELL2 and MOVE6,
  * restores the normal defense, defense attributes, resistances, pose table, data table and hit offset,
  * and clears
- * unit work 0.
+ * UNIT_WORK_GUARD.
  */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

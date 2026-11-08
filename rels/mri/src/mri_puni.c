@@ -4602,7 +4602,7 @@ void puni_puni_disp(CameraId camId, void* param) {
     puniLoadVertex();
     puniLoadTexture();
     puniLoadTev();
-    if (!_swGet(3)) {
+    if (!_swGet(3)) { // LSWF_MRI_00_DARKNESS_ON
         puniDraw();
     } else {
         for (ip = &info, i = 0, off = 0; i < puniGetPoseNum(); i++, off += sizeof(PunidrvPose)) {

@@ -196,7 +196,7 @@ BattleUnitSetup entry_npc_christine = {
 
 /**
  * Init event of Lord Crump: installs his wait, attack, damage, confusion and phase events,
- * spawns the Goombella unit (entry_npc_christine) at (-140, 0, 5) as his unit work 0,
+ * spawns the Goombella unit (entry_npc_christine) at (-140, 0, 5) as his UNIT_WORK_NPC,
  * clears work 1 to 3 (message flags) and sets the heavy walk and run sounds.
  */
 static EVT_BEGIN(init_event)

@@ -284,7 +284,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init event of the Dull Bones: installs its wait, attack, damage and confusion events,
  * sets the landing sound,
- * and clears unit work 1 (the flag that the death reward was already given).
+ * and clears UNIT_WORK_REWARD_GIVEN (the flag that the death reward was already given).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -403,7 +403,7 @@ static EVT_BEGIN(fake_dead_event)
 EVT_END()
 
 /**
- * Turn event of the collapsed Dull Bones: counts unit work 2 down and, when it reaches zero,
+ * Turn event of the collapsed Dull Bones: counts UNIT_WORK_REBIRTH_TURNS down and, when it reaches zero,
  * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
  * clears attribute 0x20000 and restores its HP to the maximum.
  */

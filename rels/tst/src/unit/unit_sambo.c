@@ -631,7 +631,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
 EVT_END()
 
 /**
- * Damage handler: unit work 0 holds the number of body segments left (4 to 1),
+ * Damage handler: UNIT_WORK_BODY_COUNT holds the number of body segments left (4 to 1),
  * and the part that takes the hit is the matching segment part (4 down to 1).
  * It then runs the default damage reaction on that part.
  */
@@ -656,7 +656,7 @@ EVT_END()
  * Data-table events 16 and 19, run by subsetevt_damage for damage pattern 8 (a hit by Koops' shell) and 15
  * or 17 (hit by an enemy knocked into it by the Super or Ultra Hammer): a segment is knocked off.
  * With a single segment left it just plays the hurt reaction (or the no-damage one).
- * Otherwise one segment is lost (unit work 0 down by 1):
+ * Otherwise one segment is lost (UNIT_WORK_BODY_COUNT down by 1):
  * _body_param_set shrinks the unit's height, the status icon,
  * cut and kiss offsets are lowered to the new top (at one segment Yoshi can swallow it),
  * the old segment part is disabled and the next one becomes the active part,
@@ -1712,7 +1712,7 @@ EVT_END()
  * The Pokey calls another Pokey: it sways left and right in widening arcs,
  * then a new Pokey (entry_sambo) rises out of the floor at the free spot beside it with a puff of smoke
  * and a camera shake, and that spot becomes its home.
- * The new unit's unit work 1 is set one higher than the caller's (attack_event only lets Pokeys with unit work 1
+ * The new unit's UNIT_WORK_CALL_DEPTH is set one higher than the caller's (attack_event only lets Pokeys with UNIT_WORK_CALL_DEPTH
  * at most 1 call).
  */
 static EVT_BEGIN(call_friend_event)
@@ -1875,7 +1875,7 @@ static EVT_BEGIN(sambo_rabbit_move)
     RETURN
 EVT_END()
 
-/** Sets the Pokey's height and cut height to 20 units per body segment left (unit work 0): 20, 40, 60 or 80. */
+/** Sets the Pokey's height and cut height to 20 units per body segment left (UNIT_WORK_BODY_COUNT): 20, 40, 60 or 80. */
 static EVT_BEGIN(_body_param_set)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     SWITCH(LW(0))

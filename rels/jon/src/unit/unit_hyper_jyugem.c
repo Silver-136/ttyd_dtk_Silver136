@@ -276,7 +276,7 @@ static BattleUnitSetup entry_togezo = {
 
 /**
  * Init script of the Dark Lakitu: registers its wait, unison-phase, attack, damage and confusion handlers,
- * clears unit work 0 (set while it holds a Spiny egg) and unit work 2 (charged flag),
+ * clears UNIT_WORK_HOLD (set while it holds a Spiny egg) and UNIT_WORK_CHARGED (charged flag),
  * and puts its second part (the egg) in the JGM_P_1 pose.
  */
 static EVT_BEGIN(init_event)
@@ -294,7 +294,7 @@ EVT_END()
 
 /**
  * Damage script of the Dark Lakitu. While it is not holding an egg it just takes the default damage.
- * While it is holding one (unit work 0 set), a hit that damages it,
+ * While it is holding one (UNIT_WORK_HOLD set), a hit that damages it,
  * or one after which it has STATUS_INSTANT_KILL, STATUS_SLEEP, STATUS_DIZZY, STATUS_CONFUSE, STATUS_ELECTRIC, STATUS_FREEZE or STATUS_STOP (KO, Sleep, Dizzy, Confuse, Electric, Freeze, Stop),
  * makes it drop the egg: the egg part is thrown away behind it,
  * the holding state and counter attribute are cleared and its pose table is restored
@@ -414,7 +414,7 @@ EVT_END()
 /**
  * Before the player's phase, on every turn but the first, if the Dark Lakitu can act and is not in STATUS_INSTANT_KILL, STATUS_DIZZY,
  * STATUS_CONFUSE or STATUS_ELECTRIC (KO, Dizzy, Confuse, Electric), it has a 50 percent chance to pick up an egg:
- * it plays JGM_A_1 and A_2 with the hold sounds, sets unit work 0 and counter attribute 1 (top-spiky) on part 1,
+ * it plays JGM_A_1 and A_2 with the hold sounds, sets UNIT_WORK_HOLD and counter attribute 1 (top-spiky) on part 1,
  * switches to the holding pose table and raises its hit offset by 20.
  */
 static EVT_BEGIN(unison_phase_event)
@@ -503,7 +503,7 @@ EVT_END()
  * Attack script of the Dark Lakitu.
  * After an item check it draws lots: 40 against 90 (70 after the first turn) between throwing an egg that
  * hatches a Spiny into a free spot (friend_event, trying spots in front of it up to the centre line first, then behind it up to x 150)
- * and an attack. A charged Dark Lakitu (unit work 2 set) always throws an egg.
+ * and an attack. A charged Dark Lakitu (UNIT_WORK_CHARGED set) always throws an egg.
  * Otherwise the attack is drawn from the plain egg throw,
  * the Spiny-hatching throw and charging up (charge_event) in the ratio 30:30:30 on the first turn
  * and 30:30:10 afterwards.
@@ -590,7 +590,7 @@ EVT_END()
 /**
  * The Dark Lakitu's egg throw: if it is not already holding an egg it takes one (JGM_A_1 and A_2),
  * then throws it (SFX_ENM_JUGEM_THROW1) in an arc at the target and the target takes the damage.
- * If unit work 1 is set and the target guarded the egg (damage flag 0x40000) the
+ * If UNIT_WORK_REBOUND_SPAWN is set and the target guarded the egg (damage flag 0x40000) the
  * egg also bounces to a free spot and hatches a Sky-Blue Spiny there (togezo_copy_status copies its size
  * status).
  * Otherwise the egg drops to the floor further past the target and is hidden.

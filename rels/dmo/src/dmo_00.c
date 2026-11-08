@@ -598,14 +598,14 @@ USER_FUNC(adjust) {
 
 /** Moves the two crystal effects to the CAMERA_3D_EFFECTA camera. */
 USER_FUNC(eff_cam) {
-    ((s32*)effNameToPtr("eff0")->userdata)[0x38 / 4] = 5;
-    ((s32*)effNameToPtr("eff1")->userdata)[0x38 / 4] = 5;
+    ((s32*)effNameToPtr("eff0")->userdata)[0x38 / 4] = CAMERA_3D_EFFECTA;
+    ((s32*)effNameToPtr("eff1")->userdata)[0x38 / 4] = CAMERA_3D_EFFECTA;
     return EVT_RETURN_DONE;
 }
 
 /** The same for the radiation effect. */
 USER_FUNC(eff_cam1) {
-    ((s32*)effNameToPtr("eff2")->userdata)[0x98 / 4] = 5;
+    ((s32*)effNameToPtr("eff2")->userdata)[0x98 / 4] = CAMERA_3D_EFFECTA;
     return EVT_RETURN_DONE;
 }
 

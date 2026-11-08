@@ -95,7 +95,7 @@ typedef enum BattleWeaponSpecialFlags {
     SPECIAL_FORCE_RESULT_10000 = 0x8000, // a final hit always adds result bit 0x10000 (BattleCheckDamage)
     SPECIAL_CONFUSED_ACTION = 0x10000, // can be picked as a confused unit's action
     SPECIAL_UNGUARDABLE = 0x20000,
-    SPECIAL_CONTACTS_CLONES = 0x40000, // hits clone parts (PartsAttribute 0x4000) instead of passing through
+    SPECIAL_CONTACTS_CLONES = 0x40000, // hits clone parts (kClone) instead of passing through
 } BattleWeaponSpecialFlags;
 
 // BattleWeapon.damagePattern / BattleUnit.damagePattern: the target's reaction to the hit. The names are the

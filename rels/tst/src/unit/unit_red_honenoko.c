@@ -237,7 +237,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Battle init script for the Red Bones: installs the wait, attack, damage and confusion handlers,
- * clears unit work 1 and sets the bone-landing jump sound.
+ * clears UNIT_WORK_REWARD_GIVEN and sets the bone-landing jump sound.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -323,7 +323,7 @@ EVT_END()
  * Called when the Red Bones is knocked down but not truly defeated:
  * it walks back to its home position, and the first time awards its coins, experience and star points.
  * Then it collapses into a pile of bones (KRN_D_2 pose with the crumble sound),
- * picks 2, 3 or 4 turns to stay down in unit work 2, lowers its hit offset and restarts the wait event.
+ * picks 2, 3 or 4 turns to stay down in UNIT_WORK_REVIVE_TURNS, lowers its hit offset and restarts the wait event.
  */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
@@ -365,7 +365,7 @@ EVT_END()
 
 /**
  * Runs on the Red Bones' turn while it lies collapsed:
- * counts the stay-down turns in unit work 2 down,
+ * counts the stay-down turns in UNIT_WORK_REVIVE_TURNS down,
  * and when they run out plays the reassembling poses (KRN_D_3 and KRN_D_4) with the unite sounds,
  * clears the attribute flag that marked it down and restores its HP to the maximum.
  */
@@ -391,7 +391,7 @@ EVT_END()
 
 /**
  * Attack AI. In a fixed-attack battle it throws a bone (normal_attack_event).
- * If it is collapsed (unit work 2 at least
+ * If it is collapsed (UNIT_WORK_REVIVE_TURNS at least
  * 1) it takes its turn to rebuild itself with rebirth_event. Otherwise it uses an enemy item if selected by the item-use check, or draws
  * a bone throw (60) or calling a Dull Bones (40) if there is room beside it.
  */

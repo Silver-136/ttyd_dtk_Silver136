@@ -713,7 +713,7 @@ USER_FUNC(zakogun_attack3_1) {
 
 /**
  * Script helper, second step of group 3 attack (args[0] = sound id):
- * rolls the ball left to x = -200 (marking each target it passes in unit work 0), then rolls it back to about x = -30,
+ * rolls the ball left to x = -200 (marking each target it passes in UNIT_WORK_REACHED_TARGET), then rolls it back to about x = -30,
  * stops the sound and pauses 20 frames before finishing.
  */
 USER_FUNC(zakogun_attack3_2) {
@@ -831,7 +831,7 @@ USER_FUNC(zakogun_escape3) {
 
 /**
  * Hit check of X-Naut group 3's attack: for each selected target in turn it waits
- * until the ball reaches it (unit work 0), then starts its avoid pose on a dodge
+ * until the ball reaches it (UNIT_WORK_REACHED_TARGET), then starts its avoid pose on a dodge
  * or applies the hit with the action-command defence.
  */
 static EVT_BEGIN(hit_check_event)

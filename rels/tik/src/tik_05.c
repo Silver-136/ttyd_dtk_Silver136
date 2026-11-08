@@ -997,7 +997,7 @@ USER_FUNC(tiz_stone) {
     t /= 10000.0f;
     eff = effNameToPtr("tiz_dust");
     if (eff != NULL) {
-        effStardustN64SetDrawCam(eff, 7);
+        effStardustN64SetDrawCam(eff, CAMERA_3D_EFFECTB);
     }
     eff = effNameToPtr("tiz_stone");
     if (eff != NULL) {
@@ -1007,7 +1007,7 @@ USER_FUNC(tiz_stone) {
     }
     eff = effNameToPtr("tiz_dust2");
     if (eff != NULL) {
-        effStardust2N64SetDrawCam(eff, 7);
+        effStardust2N64SetDrawCam(eff, CAMERA_3D_EFFECTB);
     }
     return EVT_RETURN_DONE;
 }
@@ -1576,8 +1576,8 @@ USER_FUNC(stardust_setting) {
     EffectEntry* eff1 = effNameToPtr(name1);
     EffectEntry* eff2 = effNameToPtr(name2);
 
-    effStardustN64SetDrawCam(eff1, 5);
-    effStardustN64SetDrawCam(eff2, 5);
+    effStardustN64SetDrawCam(eff1, CAMERA_3D_EFFECTA);
+    effStardustN64SetDrawCam(eff2, CAMERA_3D_EFFECTA);
     return EVT_RETURN_DONE;
 }
 

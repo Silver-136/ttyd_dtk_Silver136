@@ -323,7 +323,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init script of the Boo: registers its wait, attack,
  * damage and confusion handlers (confusion reuses the attack script),
- * clears unit work 0 (the "has moved" flag used by move_event) and lifts it to y 15,
+ * clears UNIT_WORK_RAISED (the "has moved" flag used by move_event) and lifts it to y 15,
  * which is also its home position, then starts it waiting.
  */
 static EVT_BEGIN(init_event)
@@ -819,7 +819,7 @@ static USER_FUNC(teresa_check_trans) {
 
 /**
  * Battle script helper: sets args[0] to 1 when at least one Boo
- * or Dark Boo has not yet used its move (unit work 0 is 0), else 0.
+ * or Dark Boo has not yet used its move (UNIT_WORK_RAISED is 0), else 0.
  */
 static USER_FUNC(teresa_check_move) {
     EvtWord* args = event->args;

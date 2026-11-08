@@ -426,7 +426,7 @@ EVT_END()
 /**
  * Init script of Beldam in the Shadow Sirens fight:
  * installs her wait, phase, attack and damage scripts and the default confusion script,
- * clears unit work 8 (attack cycle step), 9 (blizzard cooldown) and 3 (shadow-tail pause),
+ * clears UNIT_WORK_ATTACK_STEP (attack cycle step), UNIT_WORK_BLIZZARD_WAIT (blizzard cooldown) and unit work 3 (shadow-tail pause),
  * starts majo3_shadow_tail_event and allocates 10 user words into GW(15).
  */
 static EVT_BEGIN(init_event)
@@ -652,10 +652,10 @@ static EVT_BEGIN(unison_phase_event)
 EVT_END()
 
 /**
- * Beldam's phase script, after the player's phase: counts down her blizzard cooldown (unit work 9).
+ * Beldam's phase script, after the player's phase: counts down her blizzard cooldown (UNIT_WORK_BLIZZARD_WAIT).
  * If she can act, it checks HP once per sister (unit work 6):
  * below 66% Beldam herself complains (btl_majo3_03), all living sisters get unit work 7 (enraged) and,
- * the first time, her next attack is the blizzard (unit work 8 = 3);
+ * the first time, her next attack is the blizzard (UNIT_WORK_ATTACK_STEP = 3);
  * Marilyn below 50% gets ordered to hit Mario (btl_majo3_04, Marilyn grunts if she can act)
  * and Vivian below 50% gets scolded (btl_majo3_06, she apologizes if she can act), each setting that sister's unit work 7.
  */
@@ -781,10 +781,10 @@ EVT_END()
 
 /**
  * Beldam's attack choice: uses an item if the AI picks one;
- * otherwise unit work 8 runs a fixed opening of shadow slip, shrinking powder on an enemy,
+ * otherwise UNIT_WORK_ATTACK_STEP runs a fixed opening of shadow slip, shrinking powder on an enemy,
  * then enlarging powder on an ally,
  * and afterwards a roll whose range size starts at 40 and grows by 20 for each useful powder and for the blizzard
- * when she is enraged (unit work 7) and its cooldown (unit work 9) is over.
+ * when she is enraged (unit work 7) and its cooldown (UNIT_WORK_BLIZZARD_WAIT) is over.
  * The selection cutoffs stay fixed at 40 for shadow slip, 60 for enlarging powder and 80 for shrinking powder,
  * with the blizzard otherwise.
  * UNIT_WORK_ATTACK_STEP = 3 (set when she drops below 66% HP) uses the blizzard next;
@@ -799,7 +799,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // Opening moves by unit work 8: shadow slip, then shrinking powder on an enemy,
+    // Opening moves by UNIT_WORK_ATTACK_STEP: shadow slip, then shrinking powder on an enemy,
     // then enlarging powder on an ally; 3 is the blizzard.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))

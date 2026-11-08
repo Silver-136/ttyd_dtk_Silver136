@@ -255,7 +255,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of the Boomerang Bro: clears unit work 7, uses an enemy item if one fits,
+ * Attack event of the Boomerang Bro: clears UNIT_WORK_AC_DEFENCE_DONE, uses an enemy item if one fits,
  * and otherwise throws boomerangs. A first strike always uses normal_attack_event.
  * With 3 HP or less it has a 30% chance of the two-throw renzoku_attack_event;
  * otherwise it uses normal_attack_event.
@@ -294,7 +294,7 @@ EVT_END()
 /**
  * Shared damage check for the boomerang hits: LW(6) is the weapon, LW(3) and LW(4) the target and part,
  * and LW(7) = 1 marks the last hit. It pre-checks the hit and returns LW(0) = 1 when it hit.
- * The first hit runs ResultACDefence so the action command is judged once (unit work 7 tracks that);
+ * The first hit runs ResultACDefence so the action command is judged once (UNIT_WORK_AC_DEFENCE_DONE tracks that);
  * the last hit includes the last-hit flag (256) in CheckDamage.
  */
 static EVT_BEGIN(damage_check_sub)
@@ -375,8 +375,8 @@ EVT_END()
  * then the second (unit work 2 and 4) as the boomerang passes them on the way out,
  * keeping the results in unit work 5 and 6, and hits them again in reverse order on the way back,
  * the final check counting as the last hit when LW(14) is 1;
- * unit work 7, the guard-result flag, is cleared before the return hits.
- * Once back the part is hidden again and unit work 0 (boomerangs returned) goes up by one.
+ * UNIT_WORK_AC_DEFENCE_DONE, the guard-result flag, is cleared before the return hits.
+ * Once back the part is hidden again and UNIT_WORK_RETURNED (boomerangs returned) goes up by one.
  */
 EVT_BEGIN(boomerang_move_event)
     // The boomerang is thrown: its throw sound plays and it appears spinning above the Boomerang Bro's hand.
@@ -493,7 +493,7 @@ EVT_BEGIN(boomerang_move_event)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 40, FLOAT(20.0f), EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
     CALL(evt_snd_sfxoff, LW(8))
 
-    // It disappears into the Boomerang Bro's hand and the returned count (unit work 0) goes up.
+    // It disappears into the Boomerang Bro's hand and the returned count (UNIT_WORK_RETURNED) goes up.
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -505,7 +505,7 @@ EVT_END()
  * Normal attack of the Boomerang Bro: picks the target set, pays the weapon cost,
  * collects every selected enemy into unit work (slots from 1 and 3 upward),
  * plays the throw animation "BRO_A_2A" and spawns boomerang_move_event once,
- * waiting until it reports the boomerang is back (unit work 0).
+ * waiting until it reports the boomerang is back (UNIT_WORK_RETURNED).
  * A confused Bro aimed at its own side runs normal_attack_event_confuse instead.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -574,7 +574,7 @@ EVT_END()
 /**
  * Two-throw attack of the Boomerang Bro (weapon_boomerang_bros_renzoku_attack):
  * selects its targets like normal_attack_event, then throws the boomerang twice, with a 750 ms pause before the second 27-frame wind-up,
- * spawning boomerang_move_event each time and waiting until both have returned (unit work 0 reaches 2).
+ * spawning boomerang_move_event each time and waiting until both have returned (UNIT_WORK_RETURNED reaches 2).
  * Aimed at its own side (confusion) it runs normal_attack_event_confuse.
  */
 static EVT_BEGIN(renzoku_attack_event)
@@ -647,7 +647,7 @@ EVT_END()
  * it turns around and throws the boomerang (part 2) out to x 250 and back to its home position,
  * without the per-target tracking of boomerang_move_event.
  * Then for each selected target a dodge plays the matching avoid reaction,
- * and a hit gets two damage checks 30 to 40 frames apart (the guard result is taken once, unit work 7).
+ * and a hit gets two damage checks 30 to 40 frames apart (the guard result is taken once, UNIT_WORK_AC_DEFENCE_DONE).
  */
 EVT_BEGIN(normal_attack_event_confuse)
     // The attack is announced and it waits for any guard movement to end, with the targets being those of its own side.

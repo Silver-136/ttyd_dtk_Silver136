@@ -305,7 +305,7 @@ EVT_END()
 /**
  * Init event of the Swooper: registers its events (the ceiling-aware damage_event_ceil and the ceiling-fall
  * event), the pose sound table and the offsets for hanging upside down.
- * If unit work 0 is 1 it starts already dropped from the ceiling, then starts the wait event.
+ * If UNIT_WORK_START_FLYING is 1 it starts already dropped from the ceiling, then starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

@@ -658,7 +658,7 @@ static Vec splineTableOut4_4[] = {
 
 /**
  * Init script of the Yux: sets its wait, unison phase, attack, damage and confusion events, shrinks part 1,
- * clears the two Mini-Yux slots (work 4 and 5) and creates the Mini-Yux it starts with (unit work 0 gives the
+ * clears the two Mini-Yux slots (work 4 and 5) and creates the Mini-Yux it starts with (UNIT_WORK_SATELLITE_COUNT gives the
  * count): each is spawned, linked to its Yux, placed at its ring position around it and scaled.
  * Finally the outward spline tables for the Mini-Yux are set.
  */
@@ -670,7 +670,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, 1, FLOAT(0.7998047f), FLOAT(0.7998047f), FLOAT(1.0f))
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_CAPABLE | BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
-    SET_VALUE(LW(0), 4)
+    SET_VALUE(LW(0), UNIT_WORK_SATELLITE)
     LOOP(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(0), -1)
         ADD(LW(0), 1)
@@ -681,7 +681,7 @@ static EVT_BEGIN(init_event)
     IF_INT_LESS(LW(6), LW(7))
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(5))
         SET_VALUE(LW(8), LW(6))
-        ADD(LW(8), 4)
+        ADD(LW(8), UNIT_WORK_SATELLITE)
         CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_barriern_satellite), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(8), LW(3))
         CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_OWNER, LW(5))
@@ -729,7 +729,7 @@ EVT_END()
  * so they glow while they move.
  */
 static EVT_BEGIN(satellite_blur_on)
-    SET_VALUE(LW(2), 4)
+    SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
     LOOP(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(2), LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
@@ -744,7 +744,7 @@ EVT_END()
 
 /** Turns off the part attribute that satellite_blur_on set on the Mini-Yux. */
 static EVT_BEGIN(satellite_blur_off)
-    SET_VALUE(LW(2), 4)
+    SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
     LOOP(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(2), LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
@@ -894,7 +894,7 @@ static EVT_BEGIN(unison_phase_event)
     CALL(evt_sub_random, 10, LW(0))
     WAIT_FRAMES(LW(0))
     SET_VALUE(LW(0), 0)
-    SET_VALUE(LW(1), 4)
+    SET_VALUE(LW(1), UNIT_WORK_SATELLITE)
     LOOP(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(1), LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
@@ -915,7 +915,7 @@ static EVT_BEGIN(unison_phase_event)
     CALL(barriernSatelliteToInside, UNIT_ID_SELF, LW(1))
     CALL_CHILD(satellite_blur_off)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(4))
-    SET_VALUE(LW(1), 4)
+    SET_VALUE(LW(1), UNIT_WORK_SATELLITE)
     SET_VALUE(LW(5), 0)
     LOOP(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(1), LW(2))
@@ -959,7 +959,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(_check_satellite)
     SET_VALUE(LW(0), 0)
-    SET_VALUE(LW(1), 4)
+    SET_VALUE(LW(1), UNIT_WORK_SATELLITE)
     LOOP(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(1), LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
@@ -1350,9 +1350,9 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK6"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
     WAIT_FRAMES(20)
-    SET_VALUE(LW(11), 4)
+    SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+        IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
             BREAK_LOOP
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1362,9 +1362,9 @@ static EVT_BEGIN(wawawa_attack_event)
     END_LOOP
     WAIT_FRAMES(20)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(11), 4)
+    SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+        IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
             BREAK_LOOP
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1377,9 +1377,9 @@ static EVT_BEGIN(wawawa_attack_event)
     LOOP(10)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(0), 0)
-        SET_VALUE(LW(11), 4)
+        SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
         LOOP(0)
-            IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+            IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
                 BREAK_LOOP
             END_IF
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1387,9 +1387,9 @@ static EVT_BEGIN(wawawa_attack_event)
             ADD(LW(11), 1)
         END_LOOP
     END_LOOP
-    SET_VALUE(LW(11), 4)
+    SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+        IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
             BREAK_LOOP
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1412,12 +1412,12 @@ static EVT_BEGIN(wawawa_attack_event)
     SET_VALUE(LW(15), 7)
     SPAWN_EVENT(wawawa_attack_event_sub)
     WAIT_FRAMES(30)
-    SET_VALUE(LW(11), 4)
+    SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
     ADD(LW(13), 1)
     ADD(LW(14), 1)
     ADD(LW(15), 1)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+        IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
             BREAK_LOOP
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1443,9 +1443,9 @@ static EVT_BEGIN(wawawa_attack_event)
     LOOP(10)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(0), 0)
-        SET_VALUE(LW(11), 4)
+        SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
         LOOP(0)
-            IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+            IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
                 BREAK_LOOP
             END_IF
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1529,9 +1529,9 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(_check_satellite)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
-    SET_VALUE(LW(11), 4)
+    SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(LW(11), 6)
+        IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
             BREAK_LOOP
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
@@ -1905,7 +1905,7 @@ static USER_FUNC(_check_satellite) {
     if (unit == NULL) {
         return EVT_RETURN_DONE;
     }
-    for (i = 4; i < 6; i++) {
+    for (i = UNIT_WORK_SATELLITE; i < UNIT_WORK_SATELLITE + 2; i++) {
         if (unit->work[i] != -1) {
             if (BattleGetUnitPtr(_battleWorkPointer, unit->work[i]) != NULL) {
                 alive = TRUE;

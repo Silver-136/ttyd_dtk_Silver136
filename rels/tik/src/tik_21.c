@@ -54,7 +54,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(hari_trap)
     CALL(evt_hit_bind_mapobj, STRING("a_toge"), STRING("s_toge"))
     LOOP(0)
-        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("a_yuka"), 2048)
+        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("a_yuka"), HIT_ATTR_SPIKES)
         CALL(evt_mapobj_get_position, STRING("s_toge"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -5, 30, 150)
@@ -80,7 +80,7 @@ EVT_BEGIN(hari_trap)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("a_yuka"), 2048)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("a_yuka"), HIT_ATTR_SPIKES)
 #if VERSION >= VERSION_US
         WAIT_MS(2000)
 #else

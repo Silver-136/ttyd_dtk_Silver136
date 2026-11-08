@@ -297,7 +297,7 @@ BattleUnitSetup entry_unit_data[] = {
 /**
  * Entry of Flurrie's stage play "Paper Mario" (her epilogue):
  * hides the status window, places Mario's actor at Mario's spot
- * and moves the real Mario off the left edge of the stage, and keeps its own unit id in unit work 0.
+ * and moves the real Mario off the left edge of the stage, and keeps its own unit id in UNIT_WORK_MARIO_ID.
  * It spawns the eight other actors of entry_unit_data (Flurrie as Clauda, two Boos, the Atomic Boo, two Toads,
  * a female Toad and Goombella), keeping their unit ids in unit work 1 to 8, and starts _battle_event.
  * After two seconds the narration (ep_39) tells of Flurrie's hit play about the adventure,
@@ -416,7 +416,7 @@ EVT_BEGIN(_act_target_enemy)
 EVT_END()
 
 /**
- * Picks Mario (unit work 0) or Clauda (unit work 1) as the target of a Boo attack:
+ * Picks Mario (UNIT_WORK_MARIO_ID) or Clauda (UNIT_WORK_CLAUDA_ID) as the target of a Boo attack:
  * returns the unit id in LW(3) and the body id in LW(4).
  */
 EVT_BEGIN(_act_target_mario)

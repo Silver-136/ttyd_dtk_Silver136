@@ -270,7 +270,7 @@ static BattleWeapon weapon_wanwan_attack = {
 /**
  * Init script of the Red Chomp: registers its wait, attack, damage and confusion handlers,
  * sets unit work 0 (the chained flag) to 1, sets up the chain parts (chain_init) and starts chain_event,
- * sets its landing sound and unit work 1 (sound volume) to 127.
+ * sets its landing sound and UNIT_WORK_SOUND_VOLUME (sound volume) to 127.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -705,7 +705,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Lowers the Red Chomp's bark volume (unit work 1) to 70 percent per call, with a floor of 32.
+ * Lowers the Red Chomp's bark volume (UNIT_WORK_SOUND_VOLUME) to 70 percent per call, with a floor of 32.
  * The status idle loops in wait_event call it.
  */
 static EVT_BEGIN(sound_gensui_event)

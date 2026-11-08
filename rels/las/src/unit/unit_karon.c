@@ -285,7 +285,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init event of the Dry Bones: installs its wait, attack, damage and confusion events,
  * sets the thrown-bone part poses (KRN_H_1) and the landing sound,
- * and clears unit work 1 (the flag that the death reward was already given).
+ * and clears UNIT_WORK_REWARD_GIVEN (the flag that the death reward was already given).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -311,7 +311,7 @@ EVT_END()
 
 /**
  * Dead event of the Dry Bones: it spins for 48 frames with the death sound, a smoke puff appears and the coins,
- * experience and star points are awarded once (unit work 1 guards it);
+ * experience and star points are awarded once (UNIT_WORK_REWARD_GIVEN guards it);
  * then it tips over and the unit is killed: KO'd and deleted
  * when the hit defeated it for good (damage flag 0x400,
  * also set by certain counter and instant-kill results, not just fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
@@ -414,7 +414,7 @@ static EVT_BEGIN(fake_dead_event)
 EVT_END()
 
 /**
- * Turn event of the collapsed Dry Bones: counts unit work 2 down and, when it reaches zero,
+ * Turn event of the collapsed Dry Bones: counts UNIT_WORK_REBIRTH_TURNS down and, when it reaches zero,
  * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
  * clears attribute 0x20000 and restores its HP to the maximum.
  */
@@ -707,7 +707,7 @@ EVT_END()
 /**
  * Attack of the Dry Bones: three bones thrown at one target in sequence (weapon_honenoko_link_attack).
  * It spawns link_attack_event_sub for bone parts 2, 3 and 4, 40 and 35 frames apart,
- * and waits until the last one has finished (unit work 4 = -1).
+ * and waits until the last one has finished (UNIT_WORK_LINK_BONE_COUNT = -1).
  */
 static EVT_BEGIN(link_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_HIT, 0)
@@ -754,7 +754,7 @@ EVT_END()
  * One bone of the three-bone throw of the Dry Bones: LW(12) is the bone part (2, 3 or 4).
  * Wind-up, a spinning arc to the target and dodge or hit handling as in normal_attack_event;
  * every bone that enters the hit branch does a damage check; on the third bone,
- * unit work 3 can bypass its pre-check result if an earlier bone hit.
+ * UNIT_WORK_LINK_HIT can bypass its pre-check result if an earlier bone hit.
  */
 static EVT_BEGIN(link_attack_event_sub)
     // Wind-up for this bone: arm back (KRN_A_1), then forward (KRN_A_2).

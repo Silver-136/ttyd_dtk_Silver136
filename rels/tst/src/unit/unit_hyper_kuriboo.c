@@ -235,7 +235,7 @@ static BattleWeapon weapon_kuriboo_charge = {
 
 /**
  * Init event of the Hyper Goomba: installs wait, attack, damage and confusion events, sets the Goomba run,
- * walk and jump sounds and clears unit work 0 (the "charged" flag).
+ * walk and jump sounds and clears UNIT_WORK_CHARGED_UNUSED (the "charged" flag).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -266,7 +266,7 @@ EVT_END()
 /**
  * Attack event of the Hyper Goomba: when already charged (STATUS_CHARGE), it goes straight to the headbutt.
  * Otherwise it may use an enemy item; if none is used, it draws lots (75% charge when the turn count is at most 1, 50% later) to either spend its turn charging,
- * with a crystal effect and a hop (weapon_kuriboo_charge, unit work 0 set to 1),
+ * with a crystal effect and a hop (weapon_kuriboo_charge, UNIT_WORK_CHARGED_UNUSED set to 1),
  * or to run at a target and headbutt it (weapon_kuriboo_attack),
  * with the pre-damage check choosing between a dodge and a hit.
  */

@@ -1626,7 +1626,7 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 /**
- * Damage event of Sir Grodus: default damage handling, then clears unit work 3,
+ * Damage event of Sir Grodus: default damage handling, then clears UNIT_WORK_SELF_SPELL,
  * which his self-cast Shikaeshi (4) and Yokeyoke (5) spells set; for those it first waits and resets the camera.
  */
 static EVT_BEGIN(damage_event)

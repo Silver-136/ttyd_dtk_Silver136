@@ -597,8 +597,8 @@ static Vec splineTableOut4_4[] = {
  * Init script of a Yux (also used by the X-Yux and Z-Yux):
  * registers its wait, unison-phase, attack, damage and confusion handlers, sets its body part scale to 1.0,
  * empties its four satellite slots (unit work 4 to 7 = -1)
- * and spawns as many Mini-X-Yux satellites as unit work 0 asks for.
- * Each satellite gets the Yux's unit id in its unit work 0 and 1 in its unit work 1,
+ * and spawns as many Mini-X-Yux satellites as UNIT_WORK_SATELLITE_COUNT asks for.
+ * Each satellite gets the Yux's unit id in its BARRIERN_SATELLITE_WORK_OWNER and 1 in its BARRIERN_SATELLITE_WORK_IDLE_POSE,
  * and is placed around the Yux (battleGetBarriernSatelliteInitPos) before the satellite orbit spline is set up.
  */
 static EVT_BEGIN(init_event)
@@ -947,7 +947,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
  * after a short random delay, if it has fewer than four satellites,
  * the satellites merge into it (SFX_ENM_BARRI_ATTACK9 and SPLIT1) and it spawns up to two new Mini-X-Yux,
  * then the satellites spread out again around it (SFX_ENM_BARRI_SPLIT2) with their afterimage blur on;
- * unit work 0 is updated to the new satellite count.
+ * UNIT_WORK_SATELLITE_COUNT is updated to the new satellite count.
  */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
@@ -1111,7 +1111,7 @@ EVT_END()
  * the attacking part (LW(15)) takes the Z_3 pose
  * and is launched at the target (its attribute 16777216 cleared while it flies),
  * the Yux plays A_5 and results 3, 6 or 2 start the target's avoid reaction;
- * afterwards unit work 1 selects the single- or combined-ring flight and scale timing.
+ * afterwards UNIT_WORK_WAWAWA_ATTACK selects the single- or combined-ring flight and scale timing.
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
@@ -1212,7 +1212,7 @@ EVT_END()
 /**
  * The part of the Yux's ring attack when the shot hits:
  * the attacking part (LW(15)) is flung at the target in the Z_3 pose while the Yux plays A_5;
- * the satellites' state (unit work 1) decides whether the part stays visible.
+ * the satellites' state (UNIT_WORK_WAWAWA_ATTACK) decides whether the part stays visible.
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_hit)
@@ -1333,7 +1333,7 @@ EVT_END()
 /**
  * The Yux's single ring attack with weapon_wakka_attack:
  * it picks a target, spins (SFX_ENM_BARRI_ATTACK1 to 9, poses A_1 to A_4) and sends its ring at the target,
- * resolved by damage_check_event_sub; unit work 1 is 0 for this attack.
+ * resolved by damage_check_event_sub; UNIT_WORK_WAWAWA_ATTACK is 0 for this attack.
  */
 static EVT_BEGIN(wakka_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1348,8 +1348,8 @@ static EVT_BEGIN(wakka_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 0, LW(3))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(3))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(4))
     SET_VALUE(LW(9), PTR(&weapon_wakka_attack))
     SET_VALUE(LW(10), 1)
     SET_VALUE(LW(12), -2)
@@ -1388,9 +1388,9 @@ static EVT_BEGIN(wakka_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK7"), EVT_NULLPTR, 0, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 15, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_RING_SFX, LW(0))
     CALL_CHILD(damage_check_event_sub)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 7, 15, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_RING_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     SET_VALUE(LW(0), -6)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(14))
@@ -1419,7 +1419,7 @@ EVT_END()
  * The Yux's group attack with weapon_wawawa_attack:
  * it and its satellites strike a pose (F_1/F_2),
  * spin in unison (SFX_ENM_BARRI_ATTACK1 to 10) and every satellite sends its ring at the target in turn,
- * handing each shot to wawawa_attack_event_sub (unit work 2 counts the shots);
+ * handing each shot to wawawa_attack_event_sub (UNIT_WORK_RINGS_DONE counts the shots);
  * afterwards the satellites go back to their orbit.
  */
 static EVT_BEGIN(wawawa_attack_event)
@@ -1441,21 +1441,21 @@ static EVT_BEGIN(wawawa_attack_event)
 
     // Five targets are picked at random from the target list, one per ring, and stored.
     CALL(barriern_wawawa_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 0, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 1, LW(2))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 2, LW(4))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 3, LW(6))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 4, LW(8))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 5, LW(1))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 6, LW(3))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 7, LW(5))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 8, LW(7))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 9, LW(9))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 10, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 11, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 12, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 13, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 14, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 1, LW(2))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 2, LW(4))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 3, LW(6))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 4, LW(8))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(1))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 1, LW(3))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 2, LW(5))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 3, LW(7))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 4, LW(9))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 1, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 2, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 3, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 4, 0)
 
     // The camera zooms in on the Yux, the attack is declared on every target and its cost is paid.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -1466,8 +1466,8 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_wawawa_attack))
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 0, LW(3))
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(3))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
@@ -1613,14 +1613,14 @@ EVT_END()
 /**
  * One ring of the wawawa attack: records the target, plays SFX_ENM_BARRI_ATTACK4 and 8,
  * and scans the stored target records to choose one no-last or last variant for this ring,
- * then counts the shot in unit work 2.
+ * then counts the shot in UNIT_WORK_RINGS_DONE.
  */
 static EVT_BEGIN(wawawa_attack_event_sub)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(13), LW(3))
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(14), LW(4))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK8"), EVT_NULLPTR, 0, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(15), 15, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(15), PARTS_WORK_RING_SFX, LW(0))
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(13), 3)
             CALL_CHILD(wawawa_attack_event_sub_last)
@@ -1638,7 +1638,7 @@ static EVT_BEGIN(wawawa_attack_event_sub)
         END_IF
     END_LOOP
     CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_RINGS_DONE, 1)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), 15, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), PARTS_WORK_RING_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     RETURN
 EVT_END()
@@ -1694,7 +1694,7 @@ EVT_END()
 /**
  * Idle event of the Yux: checks its satellites (_check_satellite)
  * and keeps checking them every frame in a sibling event, sets its idle pose,
- * tells each satellite to start idling (unit work 1 = 1),
+ * tells each satellite to start idling (BARRIERN_SATELLITE_WORK_IDLE_POSE = 1),
  * and at random intervals of 30 to 150 frames holds the S_3 pose for 180 frames,
  * as long as it can act and is not confused, dizzy or poisoned.
  */

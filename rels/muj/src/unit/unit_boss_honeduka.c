@@ -132,10 +132,10 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Init event of the standalone Bone Pile unit: sets unit flag 0x1000000 (no mirror flip),
+ * Init event of the standalone Bone Pile unit: sets BATTLE_UNIT_FLAG_SOLID_MODEL (no mirror flip),
  * installs its wait and damage events and gives it no actions per turn.
  * Nothing in the tree spawns this unit (Cortez's bone pile is his own part 4);
- * its owner would be in unit work 0.
+ * its owner would be in UNIT_WORK_OWNER.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
@@ -159,7 +159,7 @@ EVT_END()
 
 /**
  * Damage sub-event of the Bone Pile (honeduka):
- * after it is hit it runs its owner's (unit work 0, Cortez) bone-pile damage event,
+ * after it is hit it runs its owner's (UNIT_WORK_OWNER, Cortez) bone-pile damage event,
  * mode2_honeduka_damage_event (data tag 70 on the early demos, 71 later;
  * the tag number differs by version), then returns to waiting.
  */

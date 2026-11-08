@@ -582,12 +582,12 @@ USER_FUNC(_btlgon_get_escape_param) {
 }
 
 /**
- * Hooktail's plea the first time her HP runs out (called from dead_event while unit work 3 is 0).
+ * Hooktail's plea the first time her HP runs out (called from dead_event while UNIT_WORK_NEGOTIATED is 0).
  * She begs for mercy (stg1_gon_23, stg1_gon_24) and offers coins, then a rare badge, then a sniff of her feet
  * (yes/no prompts stg1_gon_24, stg1_gon_26, stg1_gon_28).
  * Accepting any offer walks Mario up to her and she bites
  * him (stg1_gon_30, the partner calls her a coward, stg1_gon_30_03, stg1_gon_30_04); refusing all three gets
- * stg1_gon_31. Either way unit work 3 is set to 1 so the real defeat plays next time, she draws eight audience
+ * stg1_gon_31. Either way UNIT_WORK_NEGOTIATED is set to 1 so the real defeat plays next time, she draws eight audience
  * members into the eating scene (gon_extra_eaten_event, spawned eight times; two escape) and recovers to 10 HP.
  */
 EVT_BEGIN(negotiation_event)
@@ -787,7 +787,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     LABEL(50)
 
-    // Both paths meet here: her one plea is used up (unit work 3 is set to 1).
+    // Both paths meet here: her one plea is used up (UNIT_WORK_NEGOTIATED is set to 1).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 1)
 
@@ -1390,14 +1390,14 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         RETURN
     END_IF
 
-    // After her plea (unit work 3 is 1) the first two cricket speeches are skipped; she gives the third one
+    // After her plea (UNIT_WORK_NEGOTIATED is 1) the first two cricket speeches are skipped; she gives the third one
     // (label 50) once.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(50)
     END_IF
 
-    // Her speech counter (unit work 2) decides which line she speaks.
+    // Her speech counter (UNIT_WORK_MESSAGE_STEP) decides which line she speaks.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         RETURN
@@ -1485,7 +1485,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 EVT_END()
 
 /**
- * Dead event of Hooktail. The first time she would die (unit work 3 is 0) it runs negotiation_event instead.
+ * Dead event of Hooktail. The first time she would die (UNIT_WORK_NEGOTIATED is 0) it runs negotiation_event instead.
  * Otherwise she collapses (GNB_X_1), the camera closes in on her, she speaks her last line (stg1_gon_32),
  * the death animation plays (GNB_D_3, GNB_H_1), exp is stored and the unit is marked defeated with KillUnit.
  */

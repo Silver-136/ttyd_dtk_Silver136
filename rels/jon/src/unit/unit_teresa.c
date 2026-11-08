@@ -406,7 +406,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Init event of the Boo: installs its wait, attack, damage and confusion events,
- * clears unit work 0 (its "has moved" flag, used by move_event) and sets its height to 15.
+ * clears UNIT_WORK_RAISED (its "has moved" flag, used by move_event) and sets its height to 15.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -777,7 +777,7 @@ static EVT_BEGIN(trans_event)
 EVT_END()
 
 /**
- * The Boo's group move: for every Boo that has not moved yet (unit work 0 = 0) it starts move_event_sub,
+ * The Boo's group move: for every Boo that has not moved yet (UNIT_WORK_RAISED = 0) it starts move_event_sub,
  * adding 20 frames to the wait each time, then waits 80 frames plus that before returning to the S_1 pose.
  * The EU release also counts the Boos and attempts to enforce a minimum wait of 145 frames,
  * but its count is cleared on every pass and never reaches 2.

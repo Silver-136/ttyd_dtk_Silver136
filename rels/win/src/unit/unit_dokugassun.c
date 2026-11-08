@@ -512,8 +512,8 @@ EVT_END()
 
 /**
  * Before the player's phase, if the Puff can act and its barrier is down, with a 25% chance it changes height:
- * from high (unit work 0 = 0) it dives to height 10,
- * where hammers and shell tosses can reach it (unit work 0 = 1);
+ * from high (UNIT_WORK_LOWERED = 0) it dives to height 10,
+ * where hammers and shell tosses can reach it (UNIT_WORK_LOWERED = 1);
  * from low it rises to height 40 and turns kHammerlikeCannotTarget
  * and kShellTosslikeCannotTarget back on. The new height becomes its home.
  */

@@ -537,7 +537,7 @@ EVT_END()
 
 /**
  * Vivian's attack choice: uses an item if the AI picks one.
- * Otherwise she always uses the shadow slip (unit work 8 = 0)
+ * Otherwise she always uses the shadow slip (UNIT_WORK_ATTACK_STEP = 0)
  * until Beldam's phase script sets her unit work 7 (from her low-HP check or the group-enrage branch);
  * then her next attack is the flame and from then on she picks shadow slip 70% or flame 30%.
  */

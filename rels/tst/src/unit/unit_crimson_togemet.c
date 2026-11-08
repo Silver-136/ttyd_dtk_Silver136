@@ -350,7 +350,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Init event of the Red Spike Top: reads unit work 0 (0 = on the floor,
+ * Init event of the Red Spike Top: reads UNIT_WORK_ON_CEILING (0 = on the floor,
  * anything else = hanging from the ceiling),
  * applies the matching event set with init_event2, and starts the wait event.
  */
@@ -362,7 +362,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Installs the handlers for the spiked unit's current form, chosen by unit work 0:
+ * Installs the handlers for the spiked unit's current form, chosen by UNIT_WORK_ON_CEILING:
  * on the ground (0) its normal wait, attack, damage and confusion scripts;
  * on the ceiling (1) the ceiling pose and data tables at height 130 with the ceiling scripts
  * and the fall script. Both set the run and walk sounds and clear the flipped-over count.

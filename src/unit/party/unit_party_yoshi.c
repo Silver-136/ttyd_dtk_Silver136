@@ -309,7 +309,7 @@ EVT_END()
 
 /**
  * Init for Yoshi: registers his wait, attack, damage, confusion and entry scripts and his walk,
- * run and jump sounds, clears unit work 2 (Ground Pound sets it to 1 from its run-up until the first pound)
+ * run and jump sounds, clears UNIT_WORK_GROUND_POUND (Ground Pound sets it to 1 from its run-up until the first pound)
  * and loads the model for his hatched colour.
  */
 static EVT_BEGIN(init_event)
@@ -1716,8 +1716,8 @@ EVT_END()
 
 /**
  * Throws one Mini-Egg: launches egg part LW(12) from Yoshi to target LW(3)/LW(4) in a spinning arc,
- * bursts it there and applies the damage weapon in its part work 2,
- * or plays the target's dodge when part work 5 marks a miss.
+ * bursts it there and applies the damage weapon in its PARTS_WORK_WEAPON,
+ * or plays the target's dodge when PARTS_WORK_PRECHECK marks a miss.
  */
 EVT_BEGIN(_egg_attack_event)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))

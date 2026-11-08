@@ -357,7 +357,7 @@ static USER_FUNC(piders_get_zyun) {
 
 /**
  * Script helper: arg0 receives the height the first living Pider (or Arantula) will have after this turn's move:
- * its unit work 0 (1 = low, 0 = high), flipped when it is able to act, since the first one always switches.
+ * its UNIT_WORK_LOWERED (1 = low, 0 = high), flipped when it is able to act, since the first one always switches.
  * unison_phase_event lines the other Piders up against it.
  */
 static USER_FUNC(piders_get_first_pos_attr) {
@@ -550,7 +550,7 @@ EVT_END()
 
 /**
  * Background loop for the Pider's thread: while the unit exists,
- * once unit work 1 has been lowered below 255 it keeps subtracting 2 from it each frame down to 2
+ * once UNIT_WORK_THREAD_ALPHA has been lowered below 255 it keeps subtracting 2 from it each frame down to 2
  * and redraws the thread with that value (piders_draw_yarn), which fades the thread out;
  * battle_end_event starts this by setting the value to 254.
  */
@@ -576,7 +576,7 @@ EVT_END()
 
 /**
  * Entrance of the Pider: moves it to height 180, waits 80 frames plus a tenth of its x position,
- * then eases unit work 2, the lower end of its thread (piders_draw_yarn draws it down from y 400),
+ * then eases UNIT_WORK_THREAD_END_Y, the lower end of its thread (piders_draw_yarn draws it down from y 400),
  * from 400 to 0 over 40 frames, so the thread unrolls from the ceiling.
  */
 static EVT_BEGIN(entry_event)
@@ -741,7 +741,7 @@ EVT_END()
 
 /**
  * Moves the Pider down to its low perch ("kuutei", height 10) with a sway
- * and SFX_ENM_PAIDA_MOVE2 (SFX_ENM_PAIDA_MOVE1 the first time, while unit work 3 is set),
+ * and SFX_ENM_PAIDA_MOVE2 (SFX_ENM_PAIDA_MOVE1 the first time, while UNIT_WORK_FIRST_LOWER is set),
  * sets its home position there, clears kHammerlikeCannotTarget and
  * kShellTosslikeCannotTarget (6291456) on its body part so hammers and shell attacks reach it,
  * and sets unit work 0 to 1.
@@ -799,7 +799,7 @@ EVT_END()
 
 /**
  * Start-of-turn event of the Pider (not while it is KO'd or unable to act): the first living Pider
- * (piders_get_zyun = 1) switches between its high and low perch (unit work 0);
+ * (piders_get_zyun = 1) switches between its high and low perch (UNIT_WORK_LOWERED);
  * each other one moves high or low (move_kuuchu_event or move_kuutei_event) against the first one's new height
  * (piders_get_first_pos_attr).
  * With an odd number of Piders they all match it; with an even number those at odd places match and those at
@@ -969,7 +969,7 @@ EVT_END()
  * Start of the Pider's web attack: strikes the PAI_A_1 pose,
  * brings the second part (Guess: the web shot) into the PAI_A_2a pose
  * and swings it around with three SFX_ENM_PAIDA_ATTACK1 whooshes.
- * The swing radius depends on the unit's size (statuses 10 and 11); the final rotation is saved in unit work 4.
+ * The swing radius depends on the unit's size (statuses 10 and 11); the final rotation is saved in UNIT_WORK_WINDUP_ANGLE.
  */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
@@ -1030,7 +1030,7 @@ static EVT_BEGIN(piders_attack_common_event1)
 EVT_END()
 
 /**
- * A shortened version of the web wind-up: starts from the rotation saved in unit work 4
+ * A shortened version of the web wind-up: starts from the rotation saved in UNIT_WORK_WINDUP_ANGLE
  * and makes only one more swing with SFX_ENM_PAIDA_ATTACK1.
  */
 static EVT_BEGIN(piders_attack_common_event1_2)

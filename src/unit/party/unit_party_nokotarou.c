@@ -34,7 +34,7 @@
 #define UNIT_WORK_SHELL_SPIN_SPEED 1   // degrees per frame the shell spin ramps up to (45, 36, 24, 15, 12; the sign gives the direction)
 #define UNIT_WORK_SHELL_SPIN_REVERSE 2 // nonzero makes the spin loop flip the spin direction once (the loop clears it)
 #define UNIT_WORK_CHARGE_SFX 3         // sound id of SFX_BTL_NOKO_IPPATSU1 while Tsuranuki charges (-1 before it starts); its pitch follows the AC
-#define UNIT_WORK_SFX_PITCH_BASE 4     // base pitch (3410) of the charge sound; evt_snd_sfx_pit gets base * slot 5 / 100
+#define UNIT_WORK_SFX_PITCH_BASE 4     // base pitch (3410) of the charge sound; evt_snd_sfx_pit gets base * UNIT_WORK_SFX_PITCH_RATE / 100
 #define UNIT_WORK_SFX_PITCH_RATE 5     // percentage 0-100 of the base pitch (ramps while the shell is held, or the AC output in Tsuranuki); 0 after the shot
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_SPIN_DUST 0    // part 1: 1 makes the shell spin raise kemuri_test dust once per revolution (Tsuranuki charge)
