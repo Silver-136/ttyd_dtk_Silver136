@@ -73,11 +73,11 @@ void flying_se_on(void) {
 }
 
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-static void zoomUp(f32 targetZ, f32 rate, f32 zoom) {
+static void zoomUp(void) {
     MarioWork* mario = marioGetPtr();
-    mario->camShiftTargetZ = targetZ;
-    mario->camShiftRate.z = rate;
-    mario->camZoom = zoom;
+    mario->camShiftTargetZ = 0.4f;
+    mario->camShiftRate.z = 0.01f;
+    mario->camZoom = 2.0f;
     mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
@@ -270,7 +270,7 @@ void mot_plane(void) {
     }
     switch (mp->currSubMotionId) {
     case 0:
-        zoomUp(0.4f, 0.01f, 2.0f);
+        zoomUp();
         marioPreJump();
         marioChgPose("M_J_1B");
         mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;

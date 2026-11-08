@@ -995,20 +995,15 @@ inline void SoundEfxMuteCh(s32 chan) {
 }
 
 /**
- * Frees the first effect channel whose priority is at most maxPriority and returns it (40 when none qualifies);
- * used to make room for a new effect.
+ * Stops the effects on all effect channels and frees the channels (unused; the JP demo map lists it stripped,
+ * 0x7c bytes, which this loop compiles to).
  */
-static s32 SoundEfxStopAll(u8 maxPriority) {
+static void SoundEfxStopAll(void) {
     s32 chan;
-    SoundEffect* sfx = sound.effects;
 
-    for (chan = 0; chan < SOUND_EFFECT_MAX; chan++, sfx++) {
-        if (sfx->priority <= maxPriority) {
-            SoundEfxMuteCh(chan);
-            return chan;
-        }
+    for (chan = 0; chan < SOUND_EFFECT_MAX; chan++) {
+        SoundEfxMuteCh(chan);
     }
-    return chan;
 }
 
 /** Returns whether the effect on chan is still sounding (it does not free the channel). */

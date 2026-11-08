@@ -600,10 +600,7 @@ s32 a_b(s32 target, s32 cur) {
     if (d) {
         d /= 10;
         if (!d) {
-            d = -1;
-            if (target > cur) {
-                d = 1;
-            }
+            d = target > cur ? 1 : -1;
         }
     }
     return d;
