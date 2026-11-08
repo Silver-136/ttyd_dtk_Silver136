@@ -126,7 +126,9 @@ in `docs/FAKES.md` and in the mweppc review record.
   **NPCs done (2026-11-08):** every NpcSetupInfo name (all versions), the first evt_npc_entry per name and file,
   and the 352 NPC kinds and 56 field-AI kinds in src/data/npc_data.c carry a note (record
   cleanup_notes\npc_english_names.md). The gon bone piles (カロン, model c_karon_g) are Dull Bones (user); the gon
-  comments that called them Dry Bones are fixed. Map objects and effect names are not covered yet.
+  comments that called them Dry Bones are fixed. Items done too (every itemDataTable row carries its US name or a
+  note). Checked and not needed: map-object names are English already (box, save, switch ...) and every effect
+  file opens with an English description. Done.
 
 ## 4. Structure and layout of the source
 
