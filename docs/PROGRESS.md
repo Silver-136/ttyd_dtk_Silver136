@@ -71,7 +71,7 @@ Placements that stay are needed or kept on purpose: SDK startup sections, paddin
 
 Same rule: every commit keeps all seven builds byte-identical (US 30 files, JP 32, PAL 33, US demo 7, JP demo 33, US demo 2 8, PAL demo 8, objdiff
 100 % code and data per unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory.py`, start = commit
-85ac972b, last counted <!--n:counted_date-->2026-11-07<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->8,944<!--/n--> tests in
+85ac972b, last counted <!--n:counted_date-->2026-11-08<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->8,942<!--/n--> tests in
 <!--n:version_tests_files-->872<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->3<!--/n-->, Demos <!--n:fakes_rows_demos-->12<!--/n-->). US retail is
 the readability priority. Comments that retell a script or describe a scene stay.
 

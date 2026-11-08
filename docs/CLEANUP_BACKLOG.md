@@ -3,7 +3,7 @@
 Everything left to clean up, in one place. All seven builds (US, JP, PAL, the two early demos, the two September 2004 demos) must stay byte-identical
 to the original games through every step; US retail is the priority for readability; nothing here changes behaviour. Per-function detail for the fakes lives in
 [FAKES.md](FAKES.md); invented names are listed in [NAME_PROVENANCE.md](NAME_PROVENANCE.md). Counts are from
-<!--n:counted_date-->2026-11-07<!--/n--> (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
+<!--n:counted_date-->2026-11-08<!--/n--> (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
 
 ## 1. Matching tricks (debt by policy)
 
