@@ -457,7 +457,7 @@ asm void WriteFPSCR(register void* data) {
 
 
 DSError TRKValidMemory32(const void* addr, size_t length, int readWriteable) {
-    DSError err = DSERR_INVALID_MEMORY;
+    DSError err = DS_InvalidMemory;
     const u8* start;
     const u8* end;
     int i;
@@ -466,13 +466,13 @@ DSError TRKValidMemory32(const void* addr, size_t length, int readWriteable) {
     end = ((const u8*)addr + (length - 1));
 
     if (end < start)
-        return DSERR_INVALID_MEMORY;
+        return DS_InvalidMemory;
 
     for (i = 0; i < (int)(sizeof(gTRKMemMap) / sizeof(memRange)); i++) {
         if ((start <= (const u8*)gTRKMemMap[i].end) && (end >= (const u8*)gTRKMemMap[i].start)) {
             if (((readWriteable == 0) && !gTRKMemMap[i].readable) ||
                 ((readWriteable == 1) && !gTRKMemMap[i].writeable)) {
-                err = DSERR_INVALID_MEMORY;
+                err = DS_InvalidMemory;
             } else {
                 err = 0;
 
@@ -523,7 +523,7 @@ DSError TRKTargetAccessMemory(void* data, u32 start, size_t* length, int accessO
     }
 
     if (gTRKExceptionStatus.exceptionDetected) {
-        error = DSERR_EXCEPTION;
+        error = DS_CWDSException;
         *length = 0;
     }
 
@@ -538,7 +538,7 @@ DSError TRKTargetReadInstruction(void* data, u32 start) {
     error = TRKTargetAccessMemory(data, start, &instructionLength, 0, 1);
 
     if (error == 0 && instructionLength != 4)
-        error = DSERR_INVALID_MEMORY;
+        error = DS_InvalidMemory;
 
     return error;
 }
@@ -551,7 +551,7 @@ DSError TRKTargetAccessDefault(u32 firstRegister, u32 lastRegister, TRKBuffer* b
     TRKExceptionStatus tempExceptionStatus;
 
     if (lastRegister > 0x24)
-        return DSERR_INVALID_REGISTER;
+        return DS_InvalidRegister;
 
     tempExceptionStatus = gTRKExceptionStatus;
     gTRKExceptionStatus.exceptionDetected = 0;
@@ -566,7 +566,7 @@ DSError TRKTargetAccessDefault(u32 firstRegister, u32 lastRegister, TRKBuffer* b
 
     if (gTRKExceptionStatus.exceptionDetected) {
         *registersLengthPtr = 0;
-        error = DSERR_EXCEPTION;
+        error = DS_CWDSException;
     }
 
     gTRKExceptionStatus = tempExceptionStatus;
@@ -652,7 +652,7 @@ DSError TRKTargetAccessFP(u32 firstRegister, u32 lastRegister, TRKBuffer* b, siz
     u32 current;
 
     if (lastRegister > 0x21)
-        return DSERR_INVALID_REGISTER;
+        return DS_InvalidRegister;
 
     tempExceptionStatus = gTRKExceptionStatus;
     gTRKExceptionStatus.exceptionDetected = 0;
@@ -675,7 +675,7 @@ DSError TRKTargetAccessFP(u32 firstRegister, u32 lastRegister, TRKBuffer* b, siz
 
     if (gTRKExceptionStatus.exceptionDetected) {
         *registerStorageSize = 0;
-        error = DSERR_EXCEPTION;
+        error = DS_CWDSException;
     }
 
     gTRKExceptionStatus = tempExceptionStatus;
@@ -690,7 +690,7 @@ DSError TRKTargetAccessExtended1(u32 firstRegister, u32 lastRegister, TRKBuffer*
     u32 count;
 
     if (lastRegister > 0x60)
-        return DSERR_INVALID_REGISTER;
+        return DS_InvalidRegister;
 
     tempExceptionStatus = gTRKExceptionStatus;
     gTRKExceptionStatus.exceptionDetected = 0;
@@ -717,7 +717,7 @@ DSError TRKTargetAccessExtended1(u32 firstRegister, u32 lastRegister, TRKBuffer*
 
     if (gTRKExceptionStatus.exceptionDetected) {
         *registersLengthPtr = 0;
-        error = DSERR_EXCEPTION;
+        error = DS_CWDSException;
     }
 
     gTRKExceptionStatus = tempExceptionStatus;
@@ -733,7 +733,7 @@ DSError TRKTargetAccessExtended2(u32 firstRegister, u32 lastRegister, TRKBuffer*
     u32 current;
 
     if (lastRegister > 0x1F)
-        return DSERR_INVALID_REGISTER;
+        return DS_InvalidRegister;
 
     tempExceptionStatus = gTRKExceptionStatus;
     gTRKExceptionStatus.exceptionDetected = 0;
@@ -760,7 +760,7 @@ DSError TRKTargetAccessExtended2(u32 firstRegister, u32 lastRegister, TRKBuffer*
 
     if (gTRKExceptionStatus.exceptionDetected) {
         *registerStorageSize = 0;
-        error = DSERR_EXCEPTION;
+        error = DS_CWDSException;
     }
 
     gTRKExceptionStatus = tempExceptionStatus;
@@ -900,7 +900,7 @@ void TRKTargetAddExceptionInfo(TRKBuffer* buffer) {
 
 DSError TRKTargetSingleStep(u32 count, BOOL stepOver) {
     if (stepOver)
-        return DSERR_UNSUPPORTED;
+        return DS_UnsupportedError;
 
     gTRKStepStatus.count = count;
     gTRKStepStatus.type = 0;
@@ -910,7 +910,7 @@ DSError TRKTargetSingleStep(u32 count, BOOL stepOver) {
 
 DSError TRKTargetStepOutOfRange(u32 rangeStart, u32 rangeEnd, BOOL stepOver) {
     if (stepOver)
-        return DSERR_UNSUPPORTED;
+        return DS_UnsupportedError;
 
     gTRKStepStatus.rangeStart = rangeStart;
     gTRKStepStatus.rangeEnd = rangeEnd;
@@ -1003,7 +1003,7 @@ DSError TRKTargetAccessARAM(void* data, u32 start, size_t* length, BOOL read) {
         TRK__write_aram(data, start, length);
 
     if (gTRKExceptionStatus.exceptionDetected) {
-        error = DSERR_EXCEPTION;
+        error = DS_CWDSException;
         *length = 0;
     }
 

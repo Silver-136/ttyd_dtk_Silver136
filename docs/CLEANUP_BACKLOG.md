@@ -167,10 +167,10 @@ latest naming batches.
   new names where the code proves the meaning (GX_DIRTY_*, CARD_STATUS_*, OS_FONT_ENCODE_*), code-only BUG
   comments, plain forms, marked devices; snd3d's SND3D_UNUSED blocks (uncompiled) removed. Done the same evening: MusyX
   SYNTH_CFLAG_*, SYNTH_DIRTY_*, MIXER_CTRL_*, DSP_CHANGED_*, SAMPLE_COMP_TYPE, MACRO_OP_* (from the handlers), TRK
-  DSErrorCode/DSReplyError, 207 address-named asm labels renamed by role (generic loop/done/skip names).
+  DSErrorCode/DSReplyError (since renamed to the MetroTRK spellings), 207 address-named asm labels renamed by role (generic loop/done/skip names).
   PI/MI/DI/SI/EXI/AI register indices and bits named from YAGCD and Dolphin (2026-11-07,
-  cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words, TRK codes nothing
-  returns (0x704-0x706). Game section placements (18) retested: all needed, all commented. The rest of
+  cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words. TRK codes
+  now carry the MetroTRK spellings (DS_*, DSREPLY_*, DSSTEP_*; 0x704-0x706 named, 2026-11-07). Game section placements (18) retested: all needed, all commented. The rest of
   libs/ (MSL, TRK, runtime, smaller SDK folders) was read the same day: shared MSL/TRK private headers, names,
   BUG comments (libs_review_{msl,trk,sdk1,sdk2}.tsv).
 

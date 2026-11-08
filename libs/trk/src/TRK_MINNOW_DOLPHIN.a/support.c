@@ -69,13 +69,13 @@ DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* 
     CommandReply reply;
 
     if (data == 0 || *count == 0)
-        return 2;
+        return DS_ParameterError;
 
     exit = 0;
     *io_result = DS_IONoError;
     i = 0;
-    error = 0;
-    while (!exit && i < *count && error == 0 && *io_result == DS_IONoError) {
+    error = DS_NoError;
+    while (!exit && i < *count && error == DS_NoError && *io_result == DS_IONoError) {
         memset(&reply, 0, sizeof(CommandReply));
 
         if (*count - i <= 0x800)
@@ -96,26 +96,26 @@ DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* 
         TRKGetFreeBuffer(&bufferId, &buffer);
         error = TRKAppendBuffer_ui8(buffer, (u8*)&reply, sizeof(CommandReply));
 
-        if (!read && error == 0)
+        if (!read && error == DS_NoError)
             error = TRKAppendBuffer_ui8(buffer, data + i, length);
 
-        if (error == 0) {
+        if (error == DS_NoError) {
             if (need_reply) {
                 // a console read waits without a time limit
                 BOOL waitForever = read && file_handle == DS_Stdin;
 
                 // the target code tests read for the third argument although both arms pass 5
                 error = TRKRequestSend(buffer, &replyBufferId, read ? 5 : 5, 3, !waitForever);
-                if (error == 0)
+                if (error == DS_NoError)
                     replyBuffer = TRKGetBuffer(replyBufferId);
 
                 replyIOResult = *(u32*)(replyBuffer->data + 0x10);
                 replyLength = *(u16*)(replyBuffer->data + 0x14);
-                if (read && error == 0 && replyLength <= length) {
+                if (read && error == DS_NoError && replyLength <= length) {
                     TRKSetBufferPosition(replyBuffer, sizeof(CommandReply));
                     error = TRKReadBuffer_ui8(replyBuffer, data + i, replyLength);
-                    if (error == 0x302)
-                        error = 0;
+                    if (error == DS_MessageBufferReadError)
+                        error = DS_NoError;
                 }
 
                 if (replyLength != length) {
@@ -141,7 +141,7 @@ DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* 
 /* Sends msgBuf and waits for the reply, trying retryCount + 1 times; unused is never read; with useTimeout zero
    the wait for a packet has no limit. */
 DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 retryCount, int useTimeout) {
-    DSError error = 0;
+    DSError error = DS_NoError;
     TRKBuffer* buffer;
     u32 counter;
     int count;
@@ -151,10 +151,10 @@ DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 retryCo
 
     *bufferId = -1;
 
-    for (count = retryCount + 1; count != 0 && *bufferId == -1 && error == 0; count--) {
+    for (count = retryCount + 1; count != 0 && *bufferId == -1 && error == DS_NoError; count--) {
         MWTRACE(1, "Calling MessageSend\n");
         error = TRKMessageSend(msgBuf);
-        if (error == 0) {
+        if (error == DS_NoError) {
             if (useTimeout)
                 counter = 0;
 
@@ -187,20 +187,20 @@ DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 retryCo
                 if (buffer->length < sizeof(CommandReply))
                     badReply = 1;
 
-                if (error == 0 && !badReply) {
+                if (error == DS_NoError && !badReply) {
                     msgReplyError = buffer->data[8];
                     MWTRACE(1, "msg_error : 0x%02x\n", msgReplyError);
                 }
 
-                if (error == 0 && !badReply) {
-                    if ((int)msgCmd != DSMSG_ReplyACK || msgReplyError != 0) {
+                if (error == DS_NoError && !badReply) {
+                    if ((int)msgCmd != DSMSG_ReplyACK || msgReplyError != DSREPLY_NoError) {
                         MWTRACE(8, "RequestSend : Bad ack or non ack received msg_command : 0x%02x msg_error 0x%02x\n",
                                 msgCmd, msgReplyError);
                         badReply = 1;
                     }
                 }
 
-                if (error != 0 || badReply) {
+                if (error != DS_NoError || badReply) {
                     TRKReleaseBuffer(*bufferId);
                     *bufferId = -1;
                 }
@@ -209,7 +209,7 @@ DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 unused, u32 retryCo
     }
 
     if (*bufferId == -1)
-        error = 0x800;
+        error = DS_Error800;
 
     return error;
 }
@@ -233,14 +233,14 @@ DSError HandleOpenFileSupportRequest(const char* path, u8 requestArg, u32* fileH
     TRKGetFreeBuffer(&bufferId, &buffer);
     error = TRKAppendBuffer_ui8(buffer, (u8*)&reply, sizeof(CommandReply));
 
-    if (error == 0)
+    if (error == DS_NoError)
         error = TRKAppendBuffer_ui8(buffer, (const u8*)path, strlen(path) + 1);
 
-    if (error == 0) {
+    if (error == DS_NoError) {
         *ioResult = DS_IONoError;
         error = TRKRequestSend(buffer, &replyBufferId, 7, 3, 0);
 
-        if (error == 0)
+        if (error == DS_NoError)
             replyBuffer = TRKGetBuffer(replyBufferId);
 
         // BUG: on a send error replyBuffer is read without being set
@@ -267,19 +267,19 @@ DSError HandleCloseFileSupportRequest(int file_handle, DSIOResult* ioResult) {
 
     error = TRKGetFreeBuffer(&bufferId, &buffer);
 
-    if (error == 0)
+    if (error == DS_NoError)
         error = TRKAppendBuffer_ui8(buffer, (u8*)&reply, sizeof(CommandReply));
 
-    if (error == 0) {
+    if (error == DS_NoError) {
         TRKBuffer* replyBuffer;
 
         *ioResult = DS_IONoError;
         error = TRKRequestSend(buffer, &replyBufferId, 3, 3, 0);
 
-        if (error == 0)
+        if (error == DS_NoError)
             replyBuffer = TRKGetBuffer(replyBufferId);
 
-        if (error == 0)
+        if (error == DS_NoError)
             *ioResult = *(u32*)(replyBuffer->data + 0x10);
 
         TRKReleaseBuffer(replyBufferId);
@@ -306,15 +306,15 @@ DSError HandlePositionFileSupportRequest(u32 file_handle, u32* position, u8 when
 
     error = TRKGetFreeBuffer(&bufferId, &buffer);
 
-    if (error == 0)
+    if (error == DS_NoError)
         error = TRKAppendBuffer_ui8(buffer, (u8*)&reply, sizeof(CommandReply));
 
-    if (error == 0) {
+    if (error == DS_NoError) {
         *ioResult = DS_IONoError;
         *position = -1;
         error = TRKRequestSend(buffer, &replyBufferId, 3, 3, 0);
 
-        if (error == 0) {
+        if (error == DS_NoError) {
             replyBuffer = TRKGetBuffer(replyBufferId);
             if (replyBuffer != 0) {
                 *ioResult = *(u32*)(replyBuffer->data + 0x10);
