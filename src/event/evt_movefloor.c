@@ -121,9 +121,11 @@ static inline MovingFloor* movingFloorArg(EventEntry* event) {
     return (MovingFloor*)evtGetValue(event, event->args[0]);
 }
 
-// Kind 1 floors bob up and down (3 units, phase from the frame counter and the event id)
+// Keeps the last bob offset in prevYoff, then sets the new one: kind 1 floors bob up and down (3 units, phase from
+// the frame counter and the event id)
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void setsinnow(MovingFloor* w, EventEntry* event) {
+    w->prevYoff = w->yoff;
     if (w->kind == 1) {
         w->yoff = 3.0f * sintbl[(s32)(5.625f * (f32)((gp->retraceCount + event->eventId * 39) & 63))];
     } else {
@@ -214,7 +216,6 @@ USER_FUNC(evt_moving_floor_alloc) {
     w->prev[0] = w->pos3[0];
     w->prev[1] = w->pos3[1];
     w->prev[2] = w->pos3[2];
-    w->prevYoff = w->yoff;
     setsinnow(w, event);
     evtSetValue(event, args[0], (EvtWord)w);
     return EVT_RETURN_DONE;
@@ -397,7 +398,6 @@ USER_FUNC(evt_moving_floor_main) {
     w->prev[0] = w->pos3[0];
     w->prev[1] = w->pos3[1];
     w->prev[2] = w->pos3[2];
-    w->prevYoff = w->yoff;
     setsinnow(w, event);
     w->pos3[w->idx] = w->pos;
     evtSetFloat(event, args[1], w->pos3[0]);
@@ -476,7 +476,6 @@ USER_FUNC(moving_floor_update_turn) {
 USER_FUNC(moving_floor_getf_pos) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
-    w->prevYoff = w->yoff;
     setsinnow(w, event);
     evtSetFloat(event, args[1], w->pos3[0]);
     evtSetFloat(event, args[2], w->pos3[1] + w->yoff);

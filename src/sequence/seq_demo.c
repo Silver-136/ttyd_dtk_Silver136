@@ -408,12 +408,13 @@ BOOL THPSimpleSetBuffer(u8* buffer) {
 void ReadFrameAsync(void) {
     if (!SimpleControl.dvdError && SimpleControl.preFetchState == TRUE) {
         if (SimpleControl.totalReadFrame > SimpleControl.header.numFrames - 1) {
-            if (SimpleControl.loop != 1) {
+            if (SimpleControl.loop == 1) {
+                SimpleControl.totalReadFrame = 0;
+                SimpleControl.curOffset = (s32)SimpleControl.header.movieDataOffsets;
+                SimpleControl.readSize = (s32)SimpleControl.header.firstFrameSize;
+            } else {
                 return;
             }
-            SimpleControl.totalReadFrame = 0;
-            SimpleControl.curOffset = (s32)SimpleControl.header.movieDataOffsets;
-            SimpleControl.readSize = (s32)SimpleControl.header.firstFrameSize;
         }
 
         SimpleControl.readProgress = TRUE;

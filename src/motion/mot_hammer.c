@@ -210,10 +210,9 @@ s32 marioGetHammerLevel(void) {
     return pouchGetPtr()->hammerLevel;
 }
 
-/** Starts the impact camera shake for Mario's hammer level (lv1quake_evt to lv3quake_evt). */
+/** Starts the impact camera shake for hammer level lv (lv1quake_evt to lv3quake_evt). */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-static void quakeOn(void) {
-    s32 lv = pouchGetPtr()->hammerLevel;
+static void quakeOn(s32 lv) {
     if (lv == 1) {
         evtEntry(lv1quake_evt, 0, 0);
     } else if (lv == 2) {
@@ -325,7 +324,7 @@ void mot_hammer(void) {
     mario->poseTime = n;
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)n);
     if (done) {
-        quakeOn();
+        quakeOn(marioGetHammerLevel());
         mario->currSubMotionId = 1;
         mario->hitobjHammer = mario->hitobjHammerNew;
 #if VERSION >= VERSION_JP
