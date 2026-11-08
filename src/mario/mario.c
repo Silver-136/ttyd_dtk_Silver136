@@ -1754,7 +1754,7 @@ void marioChgDamagePose(void) {
     MarioMotion mot = wp->currMotionId;
 
     if (mot != MARIO_MOTION_SHIP && mot != MARIO_MOTION_ROLL && mot != MARIO_MOTION_PLANE && mot != MARIO_MOTION_JABARA && mot != MARIO_MOTION_YOSHI) {
-        // A switch with a single case: the original wrote it this way (a plain if compiles differently)
+        // A switch with a single case: a plain if compiles differently, so the original most likely had the switch too
         switch (wp->dispFlags & MARIO_DISP_FLAG_SLIT) {
         case 0:
             marioChgPose("M_D_1");

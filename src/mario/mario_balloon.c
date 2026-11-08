@@ -195,7 +195,7 @@ void marioBalloonMain(void) {
     }
     show = FALSE;
 
-    // A switch with an empty case 0: the original wrote it this way (a plain if compiles differently)
+    // A switch with an empty case 0: a plain if compiles differently, so the original most likely had the switch too
     switch (!marioChkKey()) {
         case 0:
             break;
