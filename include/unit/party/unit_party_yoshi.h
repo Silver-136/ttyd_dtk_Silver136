@@ -14,7 +14,6 @@ typedef struct YoshiGundanPart {
     u8 pad18[0xC]; // 0x18, never accessed
     u8 frameCount;
     u8 frame;
-    u8 pad26[2];
     s32 delay;
     s32 state;
 } YoshiGundanPart;

@@ -58,7 +58,6 @@ typedef struct YuuNpc {
     s32 turnTimer;
     s16 poseId;
     s16 poses[4];
-    u8 field_0x5e[2];
     NpcEntry* npc;
     f32 animSpeed;
     u64 time;

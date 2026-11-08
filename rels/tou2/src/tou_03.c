@@ -62,7 +62,6 @@ static void screen_capture(CameraId cameraId, void* param);
 static void pose_main(void);
 typedef struct Kyaku {
     u16 flags;
-    u8 pad_0x2[2];
     Vec pos;
     s16 animIdx;
     u8 pad_0x12[6];

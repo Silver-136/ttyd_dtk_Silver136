@@ -52,7 +52,6 @@ typedef struct Fan {
     u16 flags;
     s16 state;
     s16 animIdx;
-    u8 pad_0x6[2];
     u64 time;
     Vec pos;
     Vec vel;

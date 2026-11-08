@@ -84,12 +84,10 @@ typedef struct BomAnim {
 typedef struct Bom {
     u8 state;
     u8 next;
-    u8 pad_2[2];
     Vec target;
     f32 speed;
     f32 gravity;
     s16 timer;
-    u8 pad_1a[2];
     f32 vy;
     s32 anim;
     u8 pad_24[4];
@@ -97,7 +95,6 @@ typedef struct Bom {
 } Bom;
 typedef struct BomWork {
     u16 flags;
-    u8 pad_2[2];
     s32 count;
     BomAnim anims[8];
     s32 animCount;

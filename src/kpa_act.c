@@ -14,7 +14,6 @@
 typedef struct KpaScore {
     char str[8];
     u8 timer;
-    u8 pad_9[3];
     Vec pos;
 } KpaScore;
 
