@@ -1236,7 +1236,9 @@ EVT_BEGIN(dmg_evt)
 EVT_END()
 
 // Writes one vertex position through the local FIFO pointer, reading the components z, y, x first.
-// FAKE: volatile FIFO pointer and component read order z, y, x; a macro, not an inline function (as a function, or with plain stores, the object changes).
+// FAKE: stands in for the SDK's GXPosition3f32(v->x, v->y, v->z), which reads z, y, x the same way (arguments
+// are evaluated right to left) but loads the FIFO address after the loop counters are set up; the explicit
+// fifo pointer set before the loop puts that load first, as in the target. The volatile is the SDK's own (GXWGFifo).
 #define YUKA_POSITION(fifo, v) \
     {                          \
         f32 _x, _y, _z;        \

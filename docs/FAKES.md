@@ -308,7 +308,7 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | src/battle/battle_sub.c | btlsubResetMoveColorLvAll | spare copies w and w2 of work and c of 0xFF; the plain loop changes the object | see comment |
 | Both | src/battle/battle_unit.c | BtlUnit_snd_se | called through a prototype with s32 pitch (BtlUnit_snd_se_pos takes s16) | the plain call changes the object |
 | Both | src/battle/sac/sac_deka.c | main_base | spare temporary t2; assigning t directly changes the object | see comment |
-| Both | src/battle/sac/sac_deka.c | yuka_disp | volatile FIFO pointer and component read order z, y, x (YUKA_POSITION macro) | plain stores, or an inline function, change the object |
+| Both | src/battle/sac/sac_deka.c | yuka_disp | YUKA_POSITION macro and an explicit `fifo = &GXWGFifo` before the loop stand in for the SDK GXPosition3f32 (the volatile is the SDK's own) | GXPosition3f32(v->x, v->y, v->z) matches the z, y, x reads but puts the FIFO address load (lis) after the loop counter setup; a for loop or an earlier `i = 0` do not help |
 | Both | src/battle/sac/sac_deka.c | get_ride_pos | 64.0f held in local k for three products | literal 64.0f: changes the object |
 | Both | src/battle/sac/sac_muki.c | addf | addf() for x + 32.0f in disp_2D; the plain sum changes the object | see comment |
 | Both | src/battle/sac/sac_muki.c | mulf | mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object | see comment |
