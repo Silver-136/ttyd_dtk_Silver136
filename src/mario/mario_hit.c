@@ -52,36 +52,21 @@ static inline BOOL marioChkBeroInl(HitEntry* hit) {
 }
 
 /**
- * Turns a surface normal into Mario's groundRot tilt (x and z, degrees rounded to 0.01)
+ * Turns a surface normal (nx, ny, nz) into Mario's groundRot tilt (x and z, degrees rounded to 0.01)
  * and returns the surface's slope in degrees from horizontal (0 = flat floor, 90 = wall, 180 = flat ceiling).
- * Used by marioSearchHead.
  */
-static inline f32 marioHitNrmAngle(Vec* nrm) {
-    f32 nz = nrm->z;
-    f32 ny = nrm->y;
-    f32 nx = nrm->x;
-    MarioWork* mario = marioGetPtr();
-    f32 y100 = 100.0f * ny;
-    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, y100) - 180.0f) + 0.5f) / 100.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, y100) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
-}
-
-#if VERSION <= VERSION_DEMO_JP
-
-/** Demo-only form of marioHitNrmAngle taking the normal as three floats (the demo's tube ground and landing checks). */
-static inline f32 marioHitNrmAngleXYZ(f32 nx, f32 ny, f32 nz) {
+// Original names and sizes (_ABCtoAngleY 0x234, ABCtoAngleY 0x210) from the JP demo map (UNUSED there: every
+// call is inlined).
+f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
     mario->groundRot.y = 0.0f;
     mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
     return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
-#endif
 
-/** marioHitNrmAngle without the local copies: sets groundRot from the normal and returns the slope in degrees. */
-static inline f32 marioHitNrmAnglePtr(Vec* nrm) {
+/** _ABCtoAngleY for a normal vector. */
+f32 ABCtoAngleY(Vec* nrm) {
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->z, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
     mario->groundRot.y = 0.0f;
@@ -870,12 +855,12 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
             } else {
                 lim = 50.0f;
             }
-            if (marioHitNrmAnglePtr(&outNrm) >= lim) {
+            if (ABCtoAngleY(&outNrm) >= lim) {
                 hit = NULL;
             }
         }
         if (hit) {
-            mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
+            mario->groundSlope = ABCtoAngleY(&outNrm);
             if (outPos.y < y0 && __fabsf(outPos.y - y0) >= 2.0f) {
                 if (__fabsf(outPos.y - y0) > __fabsf(h)) {
                     *b = __fabsf(y0 - outPos.y);
@@ -928,15 +913,6 @@ typedef struct LandonRay {
     Vec dir;
 } LandonRay;
 
-/** marioHitNrmAngle for marioLandonChk_old: sets groundRot from the normal and returns the slope in degrees. */
-static inline f32 landonNrmAngle(f32 nx, f32 ny, f32 nz) {
-    MarioWork* mario = marioGetPtr();
-    f32 y100 = 100.0f * ny;
-    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, y100) - 180.0f) + 0.5f) / 100.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, y100) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
-}
 
 /** marioHitCheckVecInl taking the ray as a LandonRay (position and direction), for the landing checks. */
 static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm, f32* dist) {
@@ -1130,7 +1106,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
         ny = nrm.y;
         nz = nrm.z;
         if (hit) {
-            mario->groundSlope = marioHitNrmAngleXYZ(nx, ny, nz);
+            mario->groundSlope = _ABCtoAngleY(nx, ny, nz);
             if (oy < y0 && __fabsf(oy - y0) >= lim) {
                 if (__fabsf(oy - y0) > __fabsf(h)) {
                     *b = __fabsf(y0 - oy);
@@ -1222,7 +1198,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                 hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
             }
             if (hit) {
-                r = marioHitNrmAnglePtr(&outNrm);
+                r = ABCtoAngleY(&outNrm);
                 if (r <= 105.0f && r >= 75.0f) {
                     continue;
                 }
@@ -1424,7 +1400,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
         ny = nrm.y;
         nz = nrm.z;
         if (hit) {
-            mario->groundSlope = landonNrmAngle(nx, ny, nz);
+            mario->groundSlope = _ABCtoAngleY(nx, ny, nz);
             d = (s32)(100.0f * ((ystart - hy) - dist) + 0.5f) / 100.0f;
             if (__fabsf(d) < 0.1f) {
                 *outY = (s32)(100.0f * hy + 0.5f) / 100.0f;
@@ -1560,7 +1536,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
         ny = nrm.y;
         nz = nrm.z;
         if (hit) {
-            mario->groundSlope = marioHitNrmAngleXYZ(nx, ny, nz);
+            mario->groundSlope = _ABCtoAngleY(nx, ny, nz);
             d = (s32)(100.0f * ((ystart - hy) - dist) + 0.5f) / 100.0f;
             if (__fabsf(d) < 0.1f) {
                 *y = (s32)(100.0f * hy + 0.5f) / 100.0f;
@@ -1613,7 +1589,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
                 hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
             }
             if (hit) {
-                mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
+                mario->groundSlope = ABCtoAngleY(&outNrm);
                 if (__fabsf((s32)(100.0f * ((pyl - outPos.y) - dist) + 0.5f) / 100.0f) < 0.1f) {
                     *y = outPos.y;
                     return hit;
@@ -1882,7 +1858,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
             hit = marioHitCheck2(&p, &d, &outPos, &outNrm, &dist);
         }
         if (hit) {
-            f32 r = marioHitNrmAngle(&outNrm);
+            f32 r = _ABCtoAngleY(outNrm.x, outNrm.y, outNrm.z);
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
 #if VERSION <= VERSION_DEMO_JP
                 f32 lim = (mario->flags & MARIO_FLAG_PAPER_MODE) ? 75.0f : 50.0f;
@@ -2793,7 +2769,7 @@ static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
         ok = marioHitCheckVecChk(&v, &dir, &outPos, &outNrm, &dist, &hit);
     }
     if (ok) {
-        mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
+        mario->groundSlope = ABCtoAngleY(&outNrm);
         if (outPos.y < y0 && __fabsf(outPos.y - y0) >= 2.0f) {
             *h = y0 - outPos.y;
             *ang = angleABf(x0, z0, outPos.x, outPos.z);
