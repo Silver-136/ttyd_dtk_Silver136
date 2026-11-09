@@ -235,7 +235,8 @@ void marioBalloonMain(void) {
     // (u16)(currMotionId - 1) > 1 tests 'not MARIO_MOTION_WALK and not MARIO_MOTION_DASH' (the subtract, clrlwi and cmplwi
     // are in the retail code)
     if (mario->airTimer != 0 || (mario->flags & MARIO_FLAG_PAPER_MODE) || (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ||
-        (mario->currMotionId != MARIO_MOTION_STAY && (u16)(mario->currMotionId - 1) > 1)) {
+        !(mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK ||
+          mario->currMotionId == MARIO_MOTION_DASH)) {
         show = FALSE;
     }
 

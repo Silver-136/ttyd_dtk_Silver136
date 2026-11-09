@@ -263,7 +263,6 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlDispAnimeSpeed | unused constant local kept by a per-function opt_dead_assignments off; without them the object changes | see comment |
-| Both | src/battle/battle_disp.c | btlDispMain | unsigned range tests `(u32)(k - a) <= b - a` written out by hand | `k >= a && k <= b`: changes the object |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PreCheckDamage | args is reused to hold the result index; out = args[5] changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckDamage | args is reused to hold the result index; a separate out local changes the object | see comment |
@@ -419,8 +418,6 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
-| Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
-| Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
 | Both | src/event/evt_party.c | (file scope) bomheiGetStatus | private prototype returning s32; party_bomhei.c returns u8 | `u8 bomheiGetStatus(void)` in party_bomhei.h: changes the object |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |

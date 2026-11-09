@@ -427,9 +427,8 @@ USER_FUNC(evt_party_move_pos) {
         return EVT_RETURN_DONE;
     }
     if (event->userdata[2] == 0) {
-        // FAKE: hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object
         u8 t = p->runMode;
-        if (t != 0 && (u8)(t - 1) > 1) {
+        if (t != 0 && !(t == 1 || t == 2)) {
             return EVT_RETURN_BLOCK;
         }
         event->userdata[2] = 1;
@@ -468,9 +467,8 @@ USER_FUNC(evt_party_move_pos2) {
         return EVT_RETURN_DONE;
     }
     if (event->userdata[2] == 0) {
-        // FAKE: hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object
         u8 t = p->runMode;
-        if (t != 0 && (u8)(t - 1) > 1) {
+        if (t != 0 && !(t == 1 || t == 2)) {
             return EVT_RETURN_BLOCK;
         }
         event->userdata[2] = 1;

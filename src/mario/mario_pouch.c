@@ -749,9 +749,13 @@ static s32 comp_aiueo(const void* a, const void* b) {
     s16 ib = *(s16*)b;
 #if VERSION <= VERSION_DEMO_JP
     s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
-    if (r > 0)
+    if (r > 0) {
         return 1;
-    return -(r < 0);
+    }
+    if (r < 0) {
+        return -1;
+    }
+    return 0;
 #else
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
@@ -768,7 +772,10 @@ static s32 comp_kind(const void* paramA, const void* paramB) {
     if (x > y) {
         return 1;
     }
-    return -(x < y);
+    if (x < y) {
+        return -1;
+    }
+    return 0;
 }
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
@@ -783,9 +790,13 @@ static s32 comp_aiueo_r(const void* a, const void* b) {
     s16 ib = *(s16*)b;
 #if VERSION <= VERSION_DEMO_JP
     s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
-    if (r < 0)
+    if (r < 0) {
         return 1;
-    return -(r > 0);
+    }
+    if (r > 0) {
+        return -1;
+    }
+    return 0;
 #else
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
@@ -802,7 +813,10 @@ static s32 comp_kind_r(const void* paramA, const void* paramB) {
     if (x < y) {
         return 1;
     }
-    return -(x > y);
+    if (x > y) {
+        return -1;
+    }
+    return 0;
 }
 
 /**
@@ -864,7 +878,7 @@ void pouchSortItem(s32 mode) {
         }
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
-    if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
+    if (mode == 2 || mode == 3 || mode == 9 || mode == 10) {
         n = 0;
         for (j = 0; j < MAX_KEY_ITEMS; j++) {
             if (pp[0]->keyItems[j] != 0) {
@@ -887,7 +901,7 @@ void pouchSortItem(s32 mode) {
     }
 
     // PAL and the PAL demo sort badge names by the pouchHiraToKata key
-    if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
+    if (mode == 4 || mode == 5 || mode == 6 || mode == 11 || mode == 12 || mode == 13) {
 #if VERSION <= VERSION_DEMO_JP
         i = 0;
         for (n = 0; n < MAX_BADGES; n++) {

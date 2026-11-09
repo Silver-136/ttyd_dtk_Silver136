@@ -64,9 +64,11 @@ static s32 compare(const void* a, const void* b) {
 #endif
     if (value1 > value2) {
         return 1;
-    } else {
-        return -(value1 < value2);
     }
+    if (value1 < value2) {
+        return -1;
+    }
+    return 0;
 }
 
 /**

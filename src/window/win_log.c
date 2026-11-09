@@ -1268,7 +1268,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
     }
-    if (w->log.state == 14 || (u32)(w->log.state - 20) <= 2 || w->log.state == 1001) {
+    if (w->log.state == 14 || w->log.state == 20 || w->log.state == 21 || w->log.state == 22 || w->log.state == 1001) {
         monoshiriGX(w, x - 170.0f, 130.0f + y);
     }
     for (i = 0; i < w->log.count; i++) {

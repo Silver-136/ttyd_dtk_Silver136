@@ -587,12 +587,12 @@ next:
                 shadowEntry(spos.x, 10.0f + h, spos.z, scale);
             }
 
-            // FAKE: unsigned range tests written out by hand; k >= a && k <= b changes the object
             k = unit->currentKind;
 
             if (k == UNIT_VIVIAN || k == UNIT_DOOPLISS_CHAPTER8_VIVIAN || k == UNIT_MARILYN_CHAPTER8
-                || (u32)(k - UNIT_BELDAM_CHAPTER2) <= UNIT_VIVIAN_CHAPTER2 - UNIT_BELDAM_CHAPTER2
-                || (u32)(k - UNIT_UNUSED_BELDAM2) <= UNIT_UNUSED_MARILYN3 - UNIT_UNUSED_BELDAM2
+                || k == UNIT_BELDAM_CHAPTER2 || k == UNIT_MARILYN_CHAPTER2 || k == UNIT_VIVIAN_CHAPTER2
+                || k == UNIT_UNUSED_BELDAM2 || k == UNIT_UNUSED_MARILYN2 || k == UNIT_UNUSED_VIVIAN2
+                || k == UNIT_UNUSED_BELDAM3 || k == UNIT_UNUSED_MARILYN3
                 || k == UNIT_BELDAM_CHAPTER8) {
                 viv.x = unit->work[SHADOW_TAIL_WORK_X];
                 viv.y = unit->work[SHADOW_TAIL_WORK_Y];

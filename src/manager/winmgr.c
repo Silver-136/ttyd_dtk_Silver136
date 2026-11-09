@@ -1030,14 +1030,20 @@ s32 select_comp_starpiece(const void* a, const void* b) {
     if (itemDataTable[itemA->id].type_sort_order > itemDataTable[itemB->id].type_sort_order) {
         return 1;
     }
-    return -(itemDataTable[itemA->id].type_sort_order < itemDataTable[itemB->id].type_sort_order);
+    if (itemDataTable[itemA->id].type_sort_order < itemDataTable[itemB->id].type_sort_order) {
+        return -1;
+    }
+    return 0;
 #else
     u16 x = itemDataTable[itemA->id].star_piece_price;
     u16 y = itemDataTable[itemB->id].star_piece_price;
     if (x > y) {
         return 1;
     }
-    return -(x < y);
+    if (x < y) {
+        return -1;
+    }
+    return 0;
 #endif
 }
 #endif
@@ -1052,7 +1058,10 @@ s32 select_comp_type(const void* a, const void* b) {
     if (x > y) {
         return 1;
     }
-    return -(x < y);
+    if (x < y) {
+        return -1;
+    }
+    return 0;
 }
 #endif
 
@@ -1066,7 +1075,10 @@ s32 select_comp_bteresa(const void* a, const void* b) {
     if (x > y) {
         return 1;
     }
-    return -(x < y);
+    if (x < y) {
+        return -1;
+    }
+    return 0;
 }
 #endif
 

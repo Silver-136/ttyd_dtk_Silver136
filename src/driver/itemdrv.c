@@ -389,7 +389,8 @@ static BOOL itemGetNokoCheck(ItemEntry* entry) {
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         return FALSE;
     }
-    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || mario->currMotionId == MARIO_MOTION_JUMP_STAND ||
+        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
         return FALSE;
     }
 #else
@@ -423,7 +424,8 @@ static BOOL itemGetNokoCheck(ItemEntry* entry) {
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         return FALSE;
     }
-    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || mario->currMotionId == MARIO_MOTION_JUMP_STAND ||
+        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
         return FALSE;
     }
 #endif
@@ -1278,7 +1280,8 @@ static void itemseq_GetItem(ItemEntry* entry) {
             if (!(entry->flags & ITEM_FLAG_FORCE_GET) || entry->flags & ITEM_FLAG_NOKO_GET) {
                 if (!marioChkItemGetMotion()) {
 #if VERSION >= VERSION_JP
-                    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || (u16)(mario->currMotionId - 6) <= 2 ||
+                    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || mario->currMotionId == MARIO_MOTION_JUMP_STAND ||
+                        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 ||
                         mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
                         entry->subState = 8;
                     }

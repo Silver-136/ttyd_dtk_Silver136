@@ -592,7 +592,7 @@ void nokonoko_use(PartyEntry* party) {
             if (party->moveSpeed <= 0.0f) {
                 party->moveSpeed = 0.0f;
                 flags = lookupSafetyPos(party->moveTarget, party->height, &out);
-                if (party->hitobjStandOn != NULL && ((u32)(flags - 1) <= 1 || flags == 4 || flags == 8)) {
+                if (party->hitobjStandOn != NULL && (flags == 1 || flags == 2 || flags == 4 || flags == 8)) {
                     party->useMotionId = 70;
                     break;
                 }
@@ -805,7 +805,7 @@ void nokonoko_use(PartyEntry* party) {
         case 88:
             party->moveSpeed = 0.0f;
             flags = lookupSafetyPos(party->moveTarget, party->height, &out2);
-            if (party->hitobjStandOn != NULL && ((u32)(flags - 1) <= 1 || flags == 4 || flags == 8)) {
+            if (party->hitobjStandOn != NULL && (flags == 1 || flags == 2 || flags == 4 || flags == 8)) {
                 party->useMotionId = 70;
                 break;
             }

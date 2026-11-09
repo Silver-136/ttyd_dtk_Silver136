@@ -494,9 +494,7 @@ void winRootDisp(s32 camId, WindowWork* wp) {
                 continue;
             }
 
-            // hand-written unsigned range test for the closing states 10 and 11 (the subtract and the cmplwi are in the
-            // retail code)
-            if (i > 0 && (u32)(state - 10) <= 1) {
+            if (i > 0 && (state == 10 || state == 11)) {
                 continue;
             }
             switch (wp->menu[i].id) {
