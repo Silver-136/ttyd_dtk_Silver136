@@ -282,6 +282,10 @@ cflags_static = with_game_msl([
     "-DMUSY_VERSION_PATCH=3",
 ])
 
+# Game units compiled without deferred code generation: functions are generated in source order as
+# they are parsed (the whole-file form of `#pragma defer_codegen off`).
+cflags_static_nodefer = [("-inline auto" if f == "-inline auto,deferred" else f) for f in cflags_static]
+
 # TRK flags
 cflags_trk = [
     *cflags_base,
@@ -438,7 +442,7 @@ config.libs = [
         "objects": [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_table.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_stick_keep_left.c", extra_cflags=["-O4,s", "-inline off"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_timing_a.c", extra_cflags=["-O4,s", "-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_timing_a.c", cflags=cflags_static_nodefer, extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_repeatedly.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_shot.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_lst_rc_keep.c"),
@@ -543,7 +547,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_fire.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_spark.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_updown.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_charge.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_charge.c", cflags=cflags_static_nodefer),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_toge_flush.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_ice.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_torch.c"),
@@ -688,7 +692,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rappa_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_recover_heart_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_release_n64.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ripple_n64.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ripple_n64.c", cflags=cflags_static_nodefer),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rothammer_fail_n64.c", extra_cflags=["-opt noprop"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rothammer_success_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rubble_n64.c"),
@@ -1698,7 +1702,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_lect_hei.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kuriboo.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_chorobon_gundan.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "hei_10.c", extra_cflags=["-opt nolifetimes"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "hei_10.c", extra_cflags=["-opt nolifetimes", "-inline auto,deferred"]),
         ]
     ),
     Rel(
@@ -1739,7 +1743,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_faker_mario.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_atmic_teresa.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "jin_00.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "jin_07.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "jin_07.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(
@@ -1976,7 +1980,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_06.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_05.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_moamoa.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_00.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_00.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh.c"),
         ]
     ),
@@ -2044,11 +2048,11 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuuminigame.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_02.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_03.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuunpc.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuunpc.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuuranking.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_01.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuucounter.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_00.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_00.c", extra_cflags=["-inline noauto,deferred"]),
         ]
     ),
     Rel(

@@ -1,6 +1,5 @@
 // Action command: press A in time with the timing gauge (ac_timing_a); the standard attack timing prompt.
 
-#pragma defer_codegen off
 #include "version.h"
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle.h"

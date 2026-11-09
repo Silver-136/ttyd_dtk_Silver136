@@ -1,7 +1,6 @@
 // yuu_00 (遊技場, Pianta Parlor): minigame 1, Plane Mode (hikoki); entered from gor_03.
 
 #include "version.h"
-#pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_yuuranking.h"
 #include "evt/evt_cmd.h"

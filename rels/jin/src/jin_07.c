@@ -23,7 +23,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-#pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
 #include "dolphin/mtx.h"

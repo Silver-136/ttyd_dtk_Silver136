@@ -2,7 +2,6 @@
 // scene; door to rsh_01.
 
 #include "version.h"
-#pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"

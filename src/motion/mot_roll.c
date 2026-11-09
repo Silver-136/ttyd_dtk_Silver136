@@ -1,7 +1,6 @@
 // Mario's tube (roll) motion: rolling up, moving through small gaps and unrolling.
 
 #include "version.h"
-#pragma defer_codegen on
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"

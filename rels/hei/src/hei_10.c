@@ -1,8 +1,5 @@
 // hei_10 (平原, Petal Meadows): Shhwonk Fortress central room linking hei_07, hei_09 and hei_11.
 // The Gold Fuzzy (gold_chorobon) and its Fuzzy swarm appear here; Multibounce block.
-// Deferred code generation for this unit.
-
-#pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "driver/mapdrv.h"
 #include "evt/evt_cmd.h"

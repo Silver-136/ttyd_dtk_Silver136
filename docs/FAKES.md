@@ -386,7 +386,6 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | src/effect/n64/eff_radiation_n64.c | effRadiationMain | comma expression for the decrement test; --p->delay <= 0 changes the object | see comment |
 | Both | src/effect/n64/eff_recover_heart_n64.c | effRecoverHeartDisp | tex first holds the type test, then the texture id; testing the condition directly changes the object | see comment |
 | Both | src/effect/n64/eff_ripple_n64.c | effRippleDisp | type is read through a cast of userdata before work is set; reading work->type changes the object | see comment |
-| Both | src/effect/n64/eff_ripple_n64.c | (file) | `#pragma defer_codegen off` for the whole file | removing it: changes the object (a configure.py flag form not tried) |
 | Both | src/effect/n64/eff_rothammer_fail_n64.c | effRotHammerFailN64Entry | child = work + 1 through a pointer step and back; the plain assignment changes the object; zero held in a local for the 0.0f stores and sin(zero)/cos(zero) | see comment |
 | Both | src/effect/n64/eff_small_star_n64.c | effSmallStarN64Entry | zero kept in a local for the comparisons; comparing with 0.0f literals changes the object | see comment |
 | Both | src/effect/n64/eff_small_star_n64.c | alphaf, effSmallStarMain | `opt_propagation` and `opt_lifetimes` off over both functions | removing it changes the object; the file-wide `-opt noprop,nolifetimes` changes other functions (2026-11-07) |

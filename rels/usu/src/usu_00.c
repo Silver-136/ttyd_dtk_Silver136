@@ -2,7 +2,6 @@
 // villagers turned into pigs; also the town's chapter 7 and 8 scenes.
 
 #include "version.h"
-#pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
