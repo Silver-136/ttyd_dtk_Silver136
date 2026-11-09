@@ -1341,9 +1341,8 @@ void bmapLoad(const char* map, const char* map2) {
         }
     }
 
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    wp = (0, &mapWork[1]);
     activeGroup = 1;
+    wp = mapGetWork();
     memset(wp, 0, sizeof(MapWork));
 #if VERSION <= VERSION_DEMO_JP
     if (map != NULL) {
