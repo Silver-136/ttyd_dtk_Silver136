@@ -21,11 +21,6 @@
 #if VERSION <= VERSION_DEMO_JP
 #include "mario/mario_balloon.h"
 #include "mario/mario_hit.h"
-static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
-    f32 dot = vx * nx + vz * nz;
-    *mx = 0.5f * (vx - dot * nx);
-    *mz = 0.5f * (vz - dot * nz);
-}
 #endif
 
 /** Slope of a floor normal: its angle from vertical in degrees. */
@@ -642,11 +637,18 @@ HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
     return hitCheckSphereFilter(kpaFlameHitFilter, x, y, z, r);
 }
 
-// FAKE: stand-in for a function the linker stripped from the original object; its 0.5f is the first
-// literal in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file). The JP demo
-// map shows the head of koopa_hit.o as kpaSearchWallFront (kept there, 0x320 bytes) and the stripped
-// _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
-// (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
+/**
+ * Slides a move (vx, vz) along a wall with normal (nx, nz): the move minus its part into the wall, at half speed.
+ * Original name and size (0x28) from the JP demo map (UNUSED there: kpaSearchWallFront's calls are inlined).
+ * JP and later never call it; its stripped copy is what puts 0.5f first in this object's .sdata2 pool (code is
+ * generated bottom-up, so it sits last in the file there).
+ */
+void _reflect(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
+    f32 dot = vx * nx + vz * nz;
+    *mx = 0.5f * (vx - dot * nx);
+    *mz = 0.5f * (vz - dot * nz);
+}
+
 #if VERSION <= VERSION_DEMO_JP
 /** early demos only: Koopa's front-wall search (two rays at 3/4 and 1/4 of the body height), called from searchFrontWall */
 HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
@@ -686,7 +688,7 @@ HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
         if (chkBalloon(hit)) {
             mario->hitobjFrontWall = hit;
         }
-        kpaWallSlide(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
+        _reflect(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
     }
     dist = range;
     p.y = pos->y + h2;
@@ -699,12 +701,12 @@ HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
             if (dist < bestDist) {
                 hit = hit2;
                 bestDist = dist;
-                kpaWallSlide(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
+                _reflect(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
             }
         } else {
             hit = hit2;
             bestDist = dist;
-            kpaWallSlide(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
+            _reflect(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
         }
     }
     if (hit) {
@@ -716,9 +718,5 @@ HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
     pos->x += dx * s;
     pos->z += dx * c;
     return NULL;
-}
-#else
-static f32 kpaHalf(f32 v) {
-    return 0.5f * v;
 }
 #endif
