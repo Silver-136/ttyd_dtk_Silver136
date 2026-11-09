@@ -120,7 +120,8 @@ void kpaAddCoin(s32 coins) {
  * Takes the first free popup slot and shows score (without leading zeros) centred 20 units above pos for 30
  * frames; does nothing when all 50 are in use.
  */
-static inline void kpaSetScoreStr(s32 score, Vec* pos) {
+// Original name and size (0x268) from the JP demo map (UNUSED there: every call is inlined).
+inline void kpaScoreDispEntry(s32 score, Vec* pos) {
     char* p;
     char* str;
     s32 t;
@@ -170,7 +171,7 @@ void kpaAddCoinPos(s32 coins, Vec* pos) {
         score = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(score);
-    kpaSetScoreStr(score, pos);
+    kpaScoreDispEntry(score, pos);
 }
 
 /** Adds score points, capped at 10000 per call, to the Super Bowser total and returns the points added. */
@@ -198,7 +199,7 @@ void kpaAddScorePos(s32 score, Vec* pos) {
         sc = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(sc);
-    kpaSetScoreStr(sc, pos);
+    kpaScoreDispEntry(sc, pos);
 }
 
 /** Script helper: switches the player character's (Bowser's) animation to the pose named by args[0]. */

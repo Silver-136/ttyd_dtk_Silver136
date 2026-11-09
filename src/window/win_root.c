@@ -123,7 +123,8 @@ static void winSortMain(WindowWork* wp);
  * on open they drop in one by one (4 frames apart) from y 300 to 185 over 10 frames;
  * states 10-13 (set when the menu closes) slide them back up, rightmost first.
  */
-static inline void winRootTabMain(WindowWork* w) {
+// Original name and size (0x188) from the JP demo map (UNUSED there: every call is inlined).
+inline void winTabMain(WindowWork* w) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
@@ -425,7 +426,7 @@ s32 winRootMain(WindowWork* w) {
             break;
     }
 
-    winRootTabMain(w);
+    winTabMain(w);
 
     winBgMain(w);
     winMsgMain(w);

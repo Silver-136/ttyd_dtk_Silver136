@@ -41,7 +41,7 @@
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 #endif
 
-/** Camera shake of 600 ms (camera 4), run when Bobbery's blast hits a bomb rock (isBombRock). */
+/** Camera shake of 600 ms (camera 4), run when Bobbery's blast hits a bomb rock (chkBreakable). */
 EVT_BEGIN(longQuake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(15.0f / 1024.0f), FLOAT(15.0f / 1024.0f), 600)
     RETURN
@@ -57,7 +57,8 @@ EVT_END()
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 #endif
 
-static inline BOOL isBombRock(HitEntry* hit) {
+// Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
+inline BOOL chkBreakable(HitEntry* hit) {
     CaseEntry* c;
     if (hit == NULL) {
         return FALSE;
@@ -435,7 +436,8 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
  * Holds Bobbery above Mario's head: 36 units up (plus a bob from m_w_7_sync while Mario plays the carry walk
  * M_W_7), 6 behind along his facing, facing the same way as Mario.
  */
-static inline void bomheiSetHoldPos(PartyEntry* party) {
+// Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
+inline void bomhei_hold(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 height = 36.0f;
 
@@ -526,7 +528,7 @@ static void bomhei_use_main(PartyEntry* party) {
             if (BOMHEI_WORK(party)->flags & 2) {
                 partyChgPose(party, "L_2");
             }
-            bomheiSetHoldPos(party);
+            bomhei_hold(party);
             bomheiChkHitAttr(party);
 #if VERSION <= VERSION_DEMO_JP
             if ((party->flags & PARTY_FLAG_IS_EVT_USE) || !(mario->buttonHold & PAD_BUTTON_X)) {
@@ -711,7 +713,7 @@ static void bomhei_use_main(PartyEntry* party) {
                 }
                 partyMove(party);
             } else {
-                bomheiSetHoldPos(party);
+                bomhei_hold(party);
             }
             if (--party->moveFrames > 0) {
                 bomheiChkHitAttr(party);
@@ -742,7 +744,7 @@ static void bomhei_use_main(PartyEntry* party) {
             BOMHEI_WORK(party)->timer = 0;
             party->moveSpeed = 0.0f;
             partyMove(party);
-            if (isBombRock(party->hitobjAction)) {
+            if (chkBreakable(party->hitobjAction)) {
                 evtEntryType(longQuake_evt, 0, 0, 0);
             } else {
                 evtEntryType(quake_evt, 0, 0, 0);
@@ -985,7 +987,8 @@ static void mario_controll(PartyEntry* party) {
  * All versions probe 4 units down from 2 above that point. The early demos keep the moved point's original height;
  * JP and later move pos to the floor hit, rounded to 0.001 units.
  */
-static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
+// Original name and size (0xf8) from the JP demo map (UNUSED there: every call is inlined).
+inline BOOL chkGndAttr(Vec* pos, f32 dist, f32 angle) {
 #if VERSION <= VERSION_DEMO_JP
     f32 x, y, z;
     f32 hx, hy, hz, d, nx, ny, nz;
@@ -1052,7 +1055,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
  * Where a partner reappears next to Mario after leaving the screen (Bobbery after his blast in the early demos,
  * Koops and the party_motion fall-ins): 6 units along Mario's yaw,
  * else behind or in front of him at his collision radius,
- * whichever has no wall and floor that passes bomheiChkReturnGround; else behind him at that radius.
+ * whichever has no wall and floor that passes chkGndAttr; else behind him at that radius.
  */
 void partyGetReturnPos(Vec* out) {
     MarioWork* mario = marioGetPtr();
@@ -1070,7 +1073,7 @@ void partyGetReturnPos(Vec* out) {
     sincosf(&s, &c, angle);
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c) == NULL) {
         p = mario->position;
-        if (bomheiChkReturnGround(&p, 6.0f, angle)) {
+        if (chkGndAttr(&p, 6.0f, angle)) {
             out->x = p.x;
             out->y = p.y;
             out->z = p.z;
@@ -1086,7 +1089,7 @@ void partyGetReturnPos(Vec* out) {
     sincosf(&s, &c, angle);
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c) == NULL) {
         p = mario->position;
-        if (bomheiChkReturnGround(&p, mario->wPlayerCollisionBox.x, angle)) {
+        if (chkGndAttr(&p, mario->wPlayerCollisionBox.x, angle)) {
             out->x = p.x;
             out->y = p.y;
             out->z = p.z;
@@ -1098,7 +1101,7 @@ void partyGetReturnPos(Vec* out) {
     sincosf(&s, &c, angle);
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c) == NULL) {
         p = mario->position;
-        if (bomheiChkReturnGround(&p, mario->wPlayerCollisionBox.x, angle)) {
+        if (chkGndAttr(&p, mario->wPlayerCollisionBox.x, angle)) {
             out->x = p.x;
             out->y = p.y;
             out->z = p.z;
@@ -1149,7 +1152,7 @@ static HitEntry* check_front(PartyEntry* party) {
             } else {
                 lim = 30.0f;
             }
-            if (q.targetDistance <= lim && isBombRock(hit)) {
+            if (q.targetDistance <= lim && chkBreakable(hit)) {
                 return hit;
             }
             found = NULL;
@@ -1161,14 +1164,14 @@ static HitEntry* check_front(PartyEntry* party) {
     q.targetDistance = 2.0f + height;
     hit = hitCheckVecFilter(&q, NULL);
     if (hit != NULL) {
-        if (isBombRock(hit)) {
+        if (chkBreakable(hit)) {
             return hit;
         }
         last = hit;
     }
 
     hit = party->hitobjStandOn;
-    if (hit != NULL && isBombRock(hit)) {
+    if (hit != NULL && chkBreakable(hit)) {
         return hit;
     }
     if (found != NULL) {

@@ -230,7 +230,8 @@ static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
  * For the Luigi model only: swaps each animation in luigi_pose for its "R" twin
  * when the camera sees him from behind, and back again when it sees him from the front.
  */
-static inline void npcLuigiPoseFlip(NpcEntry* entry) {
+// Original name and size (0x1b4) from the JP demo map (UNUSED there: every call is inlined).
+inline void luigiMain(NpcEntry* entry) {
     if (entry->flags & NPC_FLAG_LUIGI_POSE_FLIP) {
         AnimationPose* animPose;
         AnimTableEntry* anim;
@@ -309,7 +310,7 @@ static void npcDisp_xlu(CameraId cameraId, void* param) {
         animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
     }
 
-    npcLuigiPoseFlip(entry);
+    luigiMain(entry);
     animPoseMain(entry->poseId);
     animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
     animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
@@ -355,7 +356,7 @@ static void npcDisp(CameraId camId, void* param) {
             }
 #endif
 
-            npcLuigiPoseFlip(entry);
+            luigiMain(entry);
             animPoseMain(entry->poseId);
             animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
             break;
@@ -385,7 +386,7 @@ static void npcDisp_offscreen_xlu(CameraId camId, void* param) {
 
     npcDimColor(entry);
 
-    npcLuigiPoseFlip(entry);
+    luigiMain(entry);
     animPoseMain(entry->poseId);
     animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
     animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
@@ -421,7 +422,7 @@ static void npcDisp_offscreen(CameraId camId, void* param) {
             npcDimColor(entry);
 #endif
 
-            npcLuigiPoseFlip(entry);
+            luigiMain(entry);
             animPoseMain(entry->poseId);
             animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
             break;
@@ -2586,7 +2587,8 @@ void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
  * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
  * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
  */
-static inline BOOL fbat_canHit(NpcEntry* npc) {
+// Original name and size (0xfc) from the JP demo map (UNUSED there: every call is inlined).
+inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();
     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
@@ -2659,7 +2661,7 @@ void* fbatHitCheck(u32 flags, void* result) {
         total = wp->total;
         npc = wp->entries;
         if (!noJump || mario->mutekiTimer <= 0) {
-            if (fbat_canHit(npc)) {
+            if (npcCheckEnableTouchMario(npc)) {
                 enemyOnly = flags & FBAT_CHECK_ENEMY;
                 checkJump = flags & FBAT_CHECK_JUMP;
                 for (i = 0; i < total; i++, npc++) {
@@ -2734,7 +2736,7 @@ void* fbatHitCheck(u32 flags, void* result) {
     if (flags & FBAT_CHECK_HAMMER) {
         while (hit == NULL) {
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
-            if (!fbat_canHit(npc)) break;
+            if (!npcCheckEnableTouchMario(npc)) break;
             if (flags & FBAT_CHECK_CURRENT) {
                 s32 v;
 #if VERSION <= VERSION_DEMO_JP
@@ -2835,7 +2837,7 @@ void* fbatHitCheck(u32 flags, void* result) {
 #if VERSION <= VERSION_DEMO_JP
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0)
                 break;
-            if (!fbat_canHit(npc))
+            if (!npcCheckEnableTouchMario(npc))
                 break;
             if (flags & FBAT_CHECK_CURRENT) {
                 f32 reach, swingAngle;
@@ -2877,7 +2879,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                         continue;
 #else
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
-            if (!fbat_canHit(npc)) break;
+            if (!npcCheckEnableTouchMario(npc)) break;
             if (flags & FBAT_CHECK_CURRENT) {
                 f32 angle, r;
                 f32 x, y, z;
@@ -2937,7 +2939,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             u32 b;
             f32 x, y, z, r;
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
-            if (!fbat_canHit(npc)) break;
+            if (!npcCheckEnableTouchMario(npc)) break;
             b = flags & FBAT_CHECK_CURRENT;
             if (b) {
                 s32 st;
@@ -2971,7 +2973,7 @@ void* fbatHitCheck(u32 flags, void* result) {
         party = partyGetPtr(marioGetPartyId());
         while (hit == NULL) {
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
-            if (!fbat_canHit(npc)) break;
+            if (!npcCheckEnableTouchMario(npc)) break;
             if (!(flags & FBAT_CHECK_CURRENT)) break;
             if (party == NULL) break;
             if (party->memberKind != PARTY_BOBBERY) break;
