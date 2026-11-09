@@ -441,6 +441,18 @@ USER_FUNC(uranaisi_supercoin_makelabel) {
     return EVT_RETURN_DONE;
 }
 
+/** The id of name in a fortune table (ends with a NULL name), or -1. The parameter order is not fixed by the code. */
+// Original name and size (0x88) from the JP demo map (UNUSED there: every call is inlined).
+s32 search_moji_no(UranaiEntry* table, const char* name) {
+    s32 i;
+    for (i = 0; table[i].name != NULL; i++) {
+        if (!strcmp(name, table[i].name)) {
+            return table[i].id;
+        }
+    }
+    return -1;
+}
+
 /** Marks the Shine Sprite fortune last picked by uranaisi_supercoin_makelabel as told. */
 USER_FUNC(uranaisi_supercoin_setreadflag) {
     UranaiWork* wp = &_udt;
@@ -515,15 +527,6 @@ inc:
     return infoId;
 }
 
-static inline s32 starpiece_search(const char* name) {
-    s32 i;
-    for (i = 0; uranai_table_starpiece[i].name != NULL; i++) {
-        if (!strcmp(name, uranai_table_starpiece[i].name)) {
-            return uranai_table_starpiece[i].id;
-        }
-    }
-    return -1;
-}
 
 s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;
@@ -570,7 +573,7 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
             if (labelId != -1 && labelId <= maxLabel) {
                 saved = initEndPos[tagEndPos];
                 initEndPos[tagEndPos] = 0;
-                flagId = starpiece_search((const char*)initEndPos);
+                flagId = search_moji_no(uranai_table_starpiece, (const char*)initEndPos);
                 initEndPos[tagEndPos] = saved;
                 if (flagId != -1 && evtGetValue(NULL, flagId) == 0) {
                     if (type & 1) {
@@ -587,15 +590,6 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     return count;
 }
 
-static inline s32 supercoin_search(const char* name) {
-    s32 i;
-    for (i = 0; uranai_table_supercoin[i].name != NULL; i++) {
-        if (!strcmp(name, uranai_table_supercoin[i].name)) {
-            return uranai_table_supercoin[i].id;
-        }
-    }
-    return -1;
-}
 
 s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;
@@ -642,7 +636,7 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
             if (labelId != -1 && labelId <= maxLabel) {
                 saved = initEndPos[tagEndPos];
                 initEndPos[tagEndPos] = 0;
-                flagId = supercoin_search((const char*)initEndPos);
+                flagId = search_moji_no(uranai_table_supercoin, (const char*)initEndPos);
                 initEndPos[tagEndPos] = saved;
                 if (flagId != -1 && evtGetValue(NULL, flagId) == 0) {
                     if (type & 1) {
