@@ -692,7 +692,8 @@ void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
  * Turns the file-relative pointers listed in the map.dat relocation table into real addresses by adding the data
  * base.
  */
-static inline void mapLoadReloc_(MapEntry* entry) {
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void Locate(MapEntry* entry) {
     u32 k;
     for (k = 0; k < entry->header.file.relCount; k++) {
         u32* rel = (u32*)((u8*)entry->header.data + entry->header.rel[k]);
@@ -750,7 +751,7 @@ static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
                 wp->entries[group].header.strings = (const char*)&data[sizeCheck];
             }
             wp->entries[group].header.rawFile = data;
-            mapLoadReloc_(&wp->entries[group]);
+            Locate(&wp->entries[group]);
         }
     }
 }
@@ -1610,7 +1611,8 @@ typedef struct MapAnimLightData2 {
  * Applies a material animation (texture scroll, scale, rotation) at the animation's current time to texture
  * transform d->idx of the material, with the transform centre from the data.
  */
-static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, MapMaterial* obj) {
+// Original name and size (0x190) from the JP demo map (UNUSED there: every call is inlined).
+void mapCalcAnimUV(MapAnim* a_, MapAnimMatData* d, MapMaterial* obj) {
     int n, c;
     f32 cur;
     for (n = 1; n < d->keyCount; n++) {
@@ -1648,7 +1650,7 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMateri
         MapAnimKey4* k0 = &d->keys[n - 1];
         MapAnimKey4* k1 = &d->keys[n];
 
-        // FAKE: cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapMainMatKeys_ changes the object
+        // FAKE: cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapCalcAnimUV changes the object
         cur = a_->time;
         if (cur <= d->keys[n].time) {
             cur = a_->time;
@@ -1707,7 +1709,8 @@ static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightDa
  * Applies a light colour animation at the animation's current time to the light's colour,
  * spot angle and attenuation angle.
  */
-static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightData2* d, f32* cv) {
+// Original name and size (0x1b4) from the JP demo map (UNUSED there: every call is inlined).
+void mapCalcAnimLightCol(MapAnim* anim, LightEntry* lp, MapAnimLightData2* d, f32* cv) {
     int n, c;
     f32 cur;
 
@@ -1738,7 +1741,8 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
     }
 }
 
-static inline MapMaterial* mapMainFindTbl_(const char* name) {
+// Original name and size (0xb8) from the JP demo map (UNUSED there: every call is inlined).
+MapMaterial* mapSearchDmdMaterial(const char* name) {
 #if VERSION <= VERSION_DEMO_JP
     int j;
     int i;
@@ -1779,9 +1783,9 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     if (x_) {                                \
         strcat(b_, x_);                      \
     }                                        \
-    obj = mapMainFindTbl_(b_);               \
+    obj = mapSearchDmdMaterial(b_);               \
     if (obj) {                               \
-        mapMainMatKeys_(a_, i_, obj); \
+        mapCalcAnimUV(a_, i_, obj); \
     }                                        \
 }
 
@@ -1792,7 +1796,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     if (x_) {                                  \
         strcat(b_, x_);                        \
     }                                          \
-    obj = mapMainFindTbl_(b_);                 \
+    obj = mapSearchDmdMaterial(b_);                 \
     if (obj) {                                 \
         mapMainAlphaKeys_(a_, i_, obj); \
     }                                          \
@@ -1921,7 +1925,7 @@ void mapMain(void) {
                 for (k = 0; k < lc->count; k++) {
                     LightEntry* lp = lightNameToPtr((const char*)lc->items[k]->name);
                     if (lp) {
-                        mapMainLight_lc(anim, lp, lc->items[k], cv);
+                        mapCalcAnimLightCol(anim, lp, lc->items[k], cv);
                     }
                 }
             }
@@ -1960,7 +1964,8 @@ static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matC
 }
 
 /** Draws every packed display list of the mesh straight from the map file. */
-static inline void callPackedLists(MapFileMesh* mesh) {
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+void mapSetPolygonGeometry(MapFileMesh* mesh) {
     int j;
     for (j = 0; j < mesh->displayListCount; j++) {
         GXCallDisplayList((void*)mesh->displayLists.packedLists[j].offset, mesh->displayLists.packedLists[j].size);
@@ -2094,7 +2099,7 @@ static void _mapDispMapObj(CameraId cam, MapObject* obj) {
             mapSetMaterialLastStageBlend(obj->flags, obj->color, material->blendColor);
             mapSetPolygonVtxDesc(obj, mesh);
             GXCallDisplayList(obj->displayList[i], obj->displayListSize[i]);
-            callPackedLists(mesh);
+            mapSetPolygonGeometry(mesh);
         }
     } else {
         for (i = 0; i < obj->joints->partCount; i++) {

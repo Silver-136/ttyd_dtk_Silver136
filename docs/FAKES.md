@@ -325,7 +325,7 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | src/driver/itemdrv.c | makeVecByValue2 (itemNearDistCheck) | second identical copy of the makeVecByValue inline | one inline for both uses: changes the object |
 | Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
 | Both | src/driver/mapdrv.c | mapLoad | wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object | mapGetWork() at the declaration / after sysWaitDrawSync / in the memset |
-| Both | src/driver/mapdrv.c | mapMainAlphaKeys_ | cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapMainMatKeys_ changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapMainAlphaKeys_ | cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapCalcAnimUV changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapSearchDmdJoint | no-op (s32) cast; name[0] != '/' changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for dead-stripped code, likely mapGetConvertDate, mapGetAnmDt and mapGetCurve (JP demo map, UNUSED; the floats' owner is not identified); it only keeps the constants in .rodata/.sdata2, in their original order. Bodies unknown. | see comment |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
