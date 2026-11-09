@@ -48,14 +48,6 @@ EVT_BEGIN(msg_heavy_bomb_fire)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_heavybomb_dynamite"), 120)
     RETURN
 EVT_END()
-typedef struct {
-    f32 v[65];
-} AudDeltaArr;
-typedef struct {
-    s32 v[11];
-} AudWArr;
-const AudDeltaArr R_audience_delta_multiplier = {{8.0f,11.0f,14.0f,17.0f,20.0f,23.0f,26.0f,29.0f,32.0f,35.0f,38.0f,41.0f,44.0f,47.0f,50.0f,53.0f,56.0f,59.0f,62.0f,65.0f,68.0f,71.0f,74.0f,77.0f,80.0f,83.0f,86.0f,89.0f,92.0f,95.0f,98.0f,101.0f,104.0f,107.0f,110.0f,113.0f,116.0f,119.0f,122.0f,125.0f,128.0f,131.0f,134.0f,137.0f,140.0f,143.0f,146.0f,149.0f,152.0f,155.0f,158.0f,161.0f,164.0f,167.0f,170.0f,173.0f,176.0f,179.0f,182.0f,185.0f,188.0f,191.0f,194.0f,197.0f,200.0f}};
-const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
 
 // A macro, not an inline function: as a function the registers in the callers change.
 #define AUD_SOUND_START(sound, dur, fade)                                                           \
@@ -1346,19 +1338,17 @@ static void BattleAudienceSettingAudience(void) {
     s32 kind;
     s32 used;
     s32 list[200];
-    AudDeltaArr delta;
     s32 perm[12];
     s32 weights[12];
     s32 counts[13];
-    AudWArr w;
     BattleDebugCtrl* debug = &_battleWorkPointer->debug;
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     NpcBattleRandom* rec = &_battleWorkPointer->fbatInfo->setup->random;
     PouchData* pouch = pouchGetPtr();
     s32 cnt;
     s32 q;
+    f32 delta[65] = {8.0f,11.0f,14.0f,17.0f,20.0f,23.0f,26.0f,29.0f,32.0f,35.0f,38.0f,41.0f,44.0f,47.0f,50.0f,53.0f,56.0f,59.0f,62.0f,65.0f,68.0f,71.0f,74.0f,77.0f,80.0f,83.0f,86.0f,89.0f,92.0f,95.0f,98.0f,101.0f,104.0f,107.0f,110.0f,113.0f,116.0f,119.0f,122.0f,125.0f,128.0f,131.0f,134.0f,137.0f,140.0f,143.0f,146.0f,149.0f,152.0f,155.0f,158.0f,161.0f,164.0f,167.0f,170.0f,173.0f,176.0f,179.0f,182.0f,185.0f,188.0f,191.0f,194.0f,197.0f,200.0f};
 
-    delta = R_audience_delta_multiplier;
     switch (pouch->rank) {
         case 0: audience->maxAudience = 50; break;
         case 1: audience->maxAudience = 100; break;
@@ -1371,7 +1361,7 @@ static void BattleAudienceSettingAudience(void) {
     i = pouch->level - 1;
     lim = 64;
     if (i < 65) lim = i;
-    audience->audienceDeltaMultiplier = delta.v[lim];
+    audience->audienceDeltaMultiplier = delta[lim];
 
     if (debug->flags & BATTLE_DEBUG_AUDIENCE_NUM) {
         audience->targetAudienceCount = (f32)debug->audienceNum;
@@ -1426,65 +1416,66 @@ static void BattleAudienceSettingAudience(void) {
             }
             hasKind = 1;
             break;
-        default:
-            w = R_num_audience_type_weights;
-            sum = 0;
-            target = irand(100);
-            kind = 12;
-            for (i = 1; i < 12; i++) {
-                sum += w.v[i - 1];
-                if (target < sum) {
-                    kind = i;
-                    break;
-                }
-            }
-            for (i = 0; i < 12; i++) perm[i] = i;
-            for (j = 0; j < 24; j++) {
-                s32 a = irand(12);
-                s32 b = irand(12);
-                s32 t = perm[a];
-                perm[a] = perm[b];
-                perm[b] = t;
-            }
-            for (i = 0, k = 0; i <= 11; i++) {
-                id = perm[i];
-                if (k >= kind) {
-                    weights[id] = 0;
-                } else if (rec->values[id] != 0) {
-                    weights[id] = rec->values[id] * (irand(10) + 1);
-                    if (audience_kind[id].flags & AUDIENCE_KIND_WIDE) {
-                        weights[id] *= 2;
+        default: {
+            s32 w[11] = {20,40,20,5,3,2,1,1,1,1,1};
+                sum = 0;
+                target = irand(100);
+                kind = 12;
+                for (i = 1; i < 12; i++) {
+                    sum += w[i - 1];
+                    if (target < sum) {
+                        kind = i;
+                        break;
                     }
-                    k++;
-                } else {
-                    weights[id] = 0;
                 }
-            }
-            if (debug->audienceKind != 0) {
-                switch (debug->audienceKind) {
-                case 1: id = AUDIENCE_TOAD; break;
-                case 2: id = AUDIENCE_GOOMBA; break;
-                case 3: id = AUDIENCE_KOOPA; break;
-                case 4: id = AUDIENCE_DULL_BONES; break;
-                case 5: id = AUDIENCE_PUNI; break;
-                case 6: id = AUDIENCE_BOO; break;
-                case 7: id = AUDIENCE_XNAUT; break;
-                case 8: id = AUDIENCE_HAMMER_BRO; break;
-                case 9: id = AUDIENCE_SHY_GUY; break;
-                case 10: id = AUDIENCE_CRAZY_DAYZEE; break;
-                case 11: id = AUDIENCE_BULKY_BOBOMB; break;
-                case 12: id = AUDIENCE_PIRANHA_PLANT; break;
+                for (i = 0; i < 12; i++) perm[i] = i;
+                for (j = 0; j < 24; j++) {
+                    s32 a = irand(12);
+                    s32 b = irand(12);
+                    s32 t = perm[a];
+                    perm[a] = perm[b];
+                    perm[b] = t;
                 }
-                for (i = 0; i < 12; i++) {
-                    if (i == id) {
-                        weights[i] = 1;
+                for (i = 0, k = 0; i <= 11; i++) {
+                    id = perm[i];
+                    if (k >= kind) {
+                        weights[id] = 0;
+                    } else if (rec->values[id] != 0) {
+                        weights[id] = rec->values[id] * (irand(10) + 1);
+                        if (audience_kind[id].flags & AUDIENCE_KIND_WIDE) {
+                            weights[id] *= 2;
+                        }
+                        k++;
                     } else {
-                        weights[i] = 0;
+                        weights[id] = 0;
                     }
                 }
-            }
-            hasKind = 1;
-            break;
+                if (debug->audienceKind != 0) {
+                    switch (debug->audienceKind) {
+                    case 1: id = AUDIENCE_TOAD; break;
+                    case 2: id = AUDIENCE_GOOMBA; break;
+                    case 3: id = AUDIENCE_KOOPA; break;
+                    case 4: id = AUDIENCE_DULL_BONES; break;
+                    case 5: id = AUDIENCE_PUNI; break;
+                    case 6: id = AUDIENCE_BOO; break;
+                    case 7: id = AUDIENCE_XNAUT; break;
+                    case 8: id = AUDIENCE_HAMMER_BRO; break;
+                    case 9: id = AUDIENCE_SHY_GUY; break;
+                    case 10: id = AUDIENCE_CRAZY_DAYZEE; break;
+                    case 11: id = AUDIENCE_BULKY_BOBOMB; break;
+                    case 12: id = AUDIENCE_PIRANHA_PLANT; break;
+                    }
+                    for (i = 0; i < 12; i++) {
+                        if (i == id) {
+                            weights[i] = 1;
+                        } else {
+                            weights[i] = 0;
+                        }
+                    }
+                }
+                hasKind = 1;
+                break;
+        }
     }
     memset(counts, 0, sizeof(counts));
     ar = (s32)(audience->targetAudienceCount + audience->addedAudienceCount);

@@ -897,9 +897,9 @@ static void cylinderShadowDraw(CameraId cameraId, void* param) {
     }
 }
 
-const Vec vec3_802c1ac0 = {0.0f, 0.0f, 0.0f};
-
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
+    // unused; its zero template is in the original data (an anonymous object in the JP demo map)
+    Vec unused = {0.0f, 0.0f, 0.0f};
     s32 id = cswp->numEntries;
     ShadowEntry* entry = &cswp->entries[id];
 
@@ -924,13 +924,13 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     return id;
 }
 
-const Vec vec3_802c1ad8 = {0.0f, 0.0f, 0.0f};
-
 /**
  * Adds a shadow for this frame like shadowEntry with an explicit mode:
  * 0 polygon, 1 textured, 2 cylinder, 3 projected.
  */
 s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
+    // unused; its zero template is in the original data (an anonymous object in the JP demo map)
+    Vec unused = {0.0f, 0.0f, 0.0f};
     s32 id = cswp->numEntries;
     ShadowEntry* entry = &cswp->entries[id];
 
@@ -955,10 +955,10 @@ s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
     return id;
 }
 
-const Vec vec3_802c1af0 = {0.0f, 0.0f, 0.0f};
-
 /** Sets the volume shape of shadow id: 0 cylinder, 1 cube. */
 void shadowSetType(s32 id, u8 type) {
+    // unused; its zero template is in the original data (an anonymous object in the JP demo map)
+    Vec unused = {0.0f, 0.0f, 0.0f};
     ShadowEntry* entry = &cswp->entries[id];
     entry->type = type;
 }
