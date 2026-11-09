@@ -603,8 +603,11 @@ BOOL SoundSLibLoadDVD(const char* path) {
     return TRUE;
 }
 
-/** Stops every song, effect, DVD-audio track and stream before sound data is dropped. */
-static inline void _ssDropStop(void) {
+/**
+ * Stops every song, effect, DVD-audio track and stream. Only SoundDropData calls it (inlined); the JP demo map
+ * lists its out-of-line copy as stripped (SoundStopAll, 0x208 bytes, which this body compiles to there).
+ */
+inline void SoundStopAll(void) {
     u32 i;
 
     for (i = 0; i < SOUND_SONG_MAX; i++) {
@@ -689,8 +692,10 @@ BOOL SoundDropData(void) {
     u32 i;
 
     group = sound.groups;
-    _ssDropStop();
+    SoundStopAll();
     sndSilence();
+    // a second stop pass, SoundStopAll's loops written out; a second SoundStopAll() call differs from the target
+    // only in the register order of its song loop
     for (i = 0; i < SOUND_SONG_MAX; i++) {
         SoundSong* song = &sound.songs[i];
         if (sndSeqGetValid(song->seqId)) {
