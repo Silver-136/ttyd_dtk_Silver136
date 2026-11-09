@@ -240,58 +240,19 @@ inline ShadowConfig* shadowGetConfig(s32 idx) {
     return &shadowConfig[idx];
 }
 
-static inline void depthShadowInit(void);
-static inline void projShadowInit(void);
+/** The character shadow work. */
+inline CharShadowWork* shadowGetCharShadowWork(void) {
+    return cswp;
+}
 
 /**
- * Sets up the shadow system at boot: the 64-entry character shadow list (default mode 2, the cylinder shadow),
- * the character shadow texture buffer, the projected and depth shadow work,
- * and the 8-bit and 16-bit ramp textures that depth shadows use to compare depths.
+ * Sets up the shadow system at boot: the character shadows, the depth shadow (with the 8-bit and 16-bit ramp
+ * textures that depth shadows use to compare depths) and the projected shadow.
  */
 void shadowInit(void) {
-    u32 bufferSize;
-    CharShadowWork* wp;
-    void* ramp;
-    u32 i;
-    u32 j;
-
-    cswp->base.flags = 0;
-    cswp->base.drawCount = 0;
-    cswp->base.configIdx = 1;
-    cswp->base.color = (GXColor){0, 0, 0, 0x6E};
-    cswp->projection = 1;
-    cswp->defaultMode = SHADOW_MODE_CYLINDER;
-    cswp->defaultSizeY = 20.0f;
-    cswp->defaultEnabled = 1;
-    cswp->numEntries = 0;
-    cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
-    memset(cswp->entries, 0, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
-
-    // FAKE: wp is a spare copy of cswp; cswp->base.texBuffer changes the object
-    wp = cswp;
-    bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
-    wp->base.texBuffer = smartAlloc(bufferSize, SMART_GROUP_PERMANENT);
-    depthShadowInit();
-
-    bufferSize = GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0);
-    ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0));
-    for (i = 0; i < 256; i++) {
-        ((u8*)ramp)[(((i & 0x3) * 8) + (((i & 0xC) * 16) + (((i & 0x80) / 4) + ((i & 0x70) / 16))))] = i;
-    }
-    GXInitTexObj(&rampTex8, ramp, 0x10, 0x10, GX_TF_I8, GX_CLAMP, GX_REPEAT, GX_FALSE);
-    GXInitTexObjLOD(&rampTex8, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    DCFlushRange(ramp, bufferSize);
-
-    // FAKE: the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object
-    i = GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0);
-    ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0));
-    for (j = 0; j < 0x10000; j++) {
-        ((u16*)ramp)[(((j & 0x3) * 4) + (((j & 0xFC) * 256) + (((j & 0xFC00) / 64) + ((j & 0x300) / 256))))] = j;
-    }
-    GXInitTexObj(&rampTex16, ramp, 0x100, 0x100, GX_TF_IA8, GX_CLAMP, GX_REPEAT, GX_FALSE);
-    GXInitTexObjLOD(&rampTex16, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    DCFlushRange(ramp, i);
-    projShadowInit();
+    shadowCharShadowInit();
+    shadowDepthShadowInit();
+    shadowProjShadowInit();
 }
 
 /**
@@ -407,6 +368,27 @@ static void shadowDisp(CameraId cameraId, void* param) {
                 break;
         }
     }
+}
+
+/** Sets up the character shadows: the 64-entry list (default mode 2, the cylinder shadow) and the texture buffer. */
+inline void shadowCharShadowInit(void) {
+    CharShadowWork* wp;
+    u32 size;
+
+    cswp->base.flags = 0;
+    cswp->base.drawCount = 0;
+    cswp->base.configIdx = 1;
+    cswp->base.color = (GXColor){0, 0, 0, 0x6E};
+    cswp->projection = 1;
+    cswp->defaultMode = SHADOW_MODE_CYLINDER;
+    cswp->defaultSizeY = 20.0f;
+    cswp->defaultEnabled = 1;
+    cswp->numEntries = 0;
+    cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
+    memset(cswp->entries, 0, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
+    wp = shadowGetCharShadowWork();
+    size = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
+    wp->base.texBuffer = smartAlloc(size, SMART_GROUP_PERMANENT);
 }
 
 #pragma push
@@ -998,6 +980,16 @@ s32 shadowGetCharShadowProjection(void) {
     return cswp->projection;
 }
 
+/** Sets up the depth shadow work (config 0, colour black at alpha 0x40) and the 8-bit and 16-bit ramp textures. */
+inline void shadowDepthShadowInit(void) {
+    dswp->flags = SHADOW_WORK_ALLOC;
+    dswp->drawCount = 0;
+    dswp->configIdx = 0;
+    dswp->color = (GXColor){0, 0, 0, 0x40};
+    CreateRampTex8(&rampTex8);
+    CreateRampTex16(&rampTex16);
+}
+
 /** Returns the 16x16 8-bit ramp texture used to compare depths for depth shadows. */
 GXTexObj* shadowGetRamp8TexObj(void) {
     return &rampTex8;
@@ -1027,14 +1019,6 @@ f32 (*shadowGetDepthShadowDepthMtx(void))[4] {
 
 f32 (*shadowGetDepthShadowProjTexMtx(void))[4] {
     return dswp->texMtx;
-}
-
-/** Resets the depth shadow work: config 0, colour black at alpha 0x40. */
-static inline void depthShadowInit(void) {
-    dswp->flags = SHADOW_WORK_ALLOC;
-    dswp->drawCount = 0;
-    dswp->configIdx = 0;
-    dswp->color = (GXColor){0, 0, 0, 0x40};
 }
 
 /** Returns the colour to subtract for the depth shadow: the inverse of its colour scaled by its alpha. */
@@ -1070,7 +1054,7 @@ f32 (*shadowGetProjShadowProjTexMtx(void))[4] {
 }
 
 /** Resets the projected shadow work: config 0, colour black at alpha 0x40. */
-static inline void projShadowInit(void) {
+inline void shadowProjShadowInit(void) {
     pswp->flags = SHADOW_WORK_ALLOC;
     pswp->drawCount = 0;
     pswp->configIdx = 0;
@@ -1150,6 +1134,38 @@ inline void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj) {
     } else {
         C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
     }
+}
+
+/** Makes the 8-bit ramp texture (16x16 I8, texel value = index in the 4x4-tiled layout). */
+inline void CreateRampTex8(GXTexObj* obj) {
+    void* ramp;
+    u32 size;
+    u32 i;
+
+    size = GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0);
+    ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x10, 0x10, GX_TF_I8, GX_FALSE, 0));
+    for (i = 0; i < 256; i++) {
+        ((u8*)ramp)[(((i & 0x3) * 8) + (((i & 0xC) * 16) + (((i & 0x80) / 4) + ((i & 0x70) / 16))))] = i;
+    }
+    GXInitTexObj(obj, ramp, 0x10, 0x10, GX_TF_I8, GX_CLAMP, GX_REPEAT, GX_FALSE);
+    GXInitTexObjLOD(obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    DCFlushRange(ramp, size);
+}
+
+/** Makes the 16-bit ramp texture (256x256 IA8, texel value = index in the 4x4-tiled layout). */
+inline void CreateRampTex16(GXTexObj* obj) {
+    void* ramp;
+    u32 size;
+    u32 i;
+
+    size = GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0);
+    ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0));
+    for (i = 0; i < 0x10000; i++) {
+        ((u16*)ramp)[(((i & 0x3) * 4) + (((i & 0xFC) * 256) + (((i & 0xFC00) / 64) + ((i & 0x300) / 256))))] = i;
+    }
+    GXInitTexObj(obj, ramp, 0x100, 0x100, GX_TF_IA8, GX_CLAMP, GX_REPEAT, GX_FALSE);
+    GXInitTexObjLOD(obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    DCFlushRange(ramp, size);
 }
 
 /**
@@ -1270,7 +1286,7 @@ inline void depthShadowBegin(CameraId cameraId, void* param) {
  * Finishes the depth shadow pass: restores the camera state and colour writes,
  * and if anything was drawn copies the depth buffer into the depth shadow texture and computes its matrices.
  */
-// size is set only when SHADOW_WORK_ALLOC is set; depthShadowInit always sets that flag.
+// size is set only when SHADOW_WORK_ALLOC is set; shadowDepthShadowInit always sets that flag.
 static void depthShadowEnd(CameraId cameraId, void* param) {
     ShadowConfig* cfg;
     u32 texFmt;
