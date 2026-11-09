@@ -390,7 +390,8 @@ static BOOL itemGetNokoCheck(ItemEntry* entry) {
         return FALSE;
     }
     if (mario->currMotionId == MARIO_MOTION_JUMP_SW || mario->currMotionId == MARIO_MOTION_JUMP_STAND ||
-        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 ||
+        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
         return FALSE;
     }
 #else
@@ -425,7 +426,8 @@ static BOOL itemGetNokoCheck(ItemEntry* entry) {
         return FALSE;
     }
     if (mario->currMotionId == MARIO_MOTION_JUMP_SW || mario->currMotionId == MARIO_MOTION_JUMP_STAND ||
-        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+        mario->currMotionId == MARIO_MOTION_JUMP_2 || mario->currMotionId == MARIO_MOTION_JUMP_3 ||
+        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
         return FALSE;
     }
 #endif

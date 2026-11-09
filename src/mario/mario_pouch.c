@@ -857,7 +857,7 @@ void pouchSortItem(s32 mode) {
 #endif
 
     pp[0] = mpp;
-    if ((u32)mode <= 1 || mode == 7 || mode == 8) {
+    if (mode == 0 || mode == 1 || mode == 7 || mode == 8) {
         n = 0;
         for (j = 0; j < MAX_HELD_ITEMS; j++) {
             if (pp[0]->heldItems[j] != 0) {

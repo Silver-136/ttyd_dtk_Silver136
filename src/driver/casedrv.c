@@ -284,7 +284,7 @@ CaseEntry* caseCheckHitObj(void* obj) {
     for (i = 0; i < wp->count; i++, entry++) {
         // a hit-object condition: not CASE_FUNC, CASE_GSWF or CASE_LSWF
         if ((entry->flags & CASE_FLAG_ACTIVE) && entry->conditionId != CASE_FUNC &&
-            (u32)(entry->conditionId - CASE_GSWF) > 1) {
+            !(entry->conditionId == CASE_GSWF || entry->conditionId == CASE_LSWF)) {
             if (!strcmp(hitGetName(obj), entry->hitObjName)) return entry;
         }
     }
@@ -303,7 +303,7 @@ CaseEntry* caseCheckHitObj2(void* obj) {
     for (i = 0; i < wp->count; i++, entry++) {
         if ((entry->flags & CASE_FLAG_ACTIVE) && entry->conditionId != CASE_FUNC &&
             // the first two tests are always true for CASE_BOBBERY (as in the game code)
-            (u32)(entry->conditionId - CASE_GSWF) > 1 && entry->conditionId == CASE_BOBBERY) {
+            !(entry->conditionId == CASE_GSWF || entry->conditionId == CASE_LSWF) && entry->conditionId == CASE_BOBBERY) {
             if (!strcmp(hitGetName(obj), entry->hitObjName)) return entry;
         }
     }
