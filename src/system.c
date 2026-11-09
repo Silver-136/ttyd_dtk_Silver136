@@ -283,28 +283,16 @@ static void fsort(void** base, u32 n) {
     static void** gt;
     static void** tail;
     static void* p;
-    void** end;
     void** mid;
-    void** start;
-    void** pv;
     int c;
-    int s;
-    int b;
-    int half;
-    u32 g;
-    u32 t;
-    u32 k;
-    int step;
-    u32 mask;
 
     do {
-        end = &base[n - 1];
-        tail = end;
+        tail = &base[n - 1];
 
         if (n == 2) {
-            if (comp(base[0], *tail) > 0) {
-                p = base[0];
-                base[0] = *tail;
+            if (comp(*base, *tail) > 0) {
+                p = *base;
+                *base = *tail;
                 *tail = p;
             }
             return;
@@ -312,37 +300,35 @@ static void fsort(void** base, u32 n) {
 
         if (n == 4) {
             lo = base;
-            mid = tail;
-            gt = tail;
+            mid = gt = tail;
             hi = tail - 1;
         } else if (n < 40) {
-            mid = &base[n >> 1];
-            if (comp(base[0], *tail) > 0) {
-                if (comp(base[0], *mid) < 0) {
+            /* median of three */
+            mid = &base[n / 2];
+            if (comp(*base, *tail) > 0) {
+                if (comp(*base, *mid) < 0) {
                     p = *tail;
                     *tail = *mid;
-                    *mid = base[0];
-                    base[0] = p;
+                    *mid = *base;
+                    *base = p;
                 } else if (comp(*mid, *tail) < 0) {
-                    p = base[0];
-                    base[0] = *mid;
+                    p = *base;
+                    *base = *mid;
                     *mid = *tail;
                     *tail = p;
                 } else {
-                    p = base[0];
-                    base[0] = *tail;
+                    p = *base;
+                    *base = *tail;
                     *tail = p;
                 }
-            } else {
-                if (comp(base[0], *mid) > 0) {
-                    p = base[0];
-                    base[0] = *mid;
-                    *mid = p;
-                } else if (comp(*mid, *tail) > 0) {
-                    p = *mid;
-                    *mid = *tail;
-                    *tail = p;
-                }
+            } else if (comp(*base, *mid) > 0) {
+                p = *base;
+                *base = *mid;
+                *mid = p;
+            } else if (comp(*mid, *tail) > 0) {
+                p = *mid;
+                *mid = *tail;
+                *tail = p;
             }
             if (n == 3) {
                 return;
@@ -351,67 +337,70 @@ static void fsort(void** base, u32 n) {
             gt = tail;
             hi = tail - 1;
         } else {
-            /* bit length of n */
-            mask = 0xFFFFFFFF;
-            step = 32;
-            k = 63;
-            while (mask != 0) {
+            void** first;
+            void** pv;
+            int s;
+            int bits;
+            int half;
+            u32 g;
+            u32 t;
+            u32 clz;
+            int step;
+            u32 mask;
+
+            /* bit length of n: count leading zeros by binary search */
+            for (mask = ~0, step = 32, clz = 63; mask != 0; step = half) {
                 t = mask & n;
                 half = step >> 1;
-                mask &= mask << ((half == 0) ? 1 : half);
-
-                if (t != 0)
-                    k -= step;
-                else
+                mask &= mask << (half ? half : 1);
+                if (t != 0) {
+                    clz -= step;
+                } else {
                     mask >>= step;
-                step = half;
+                }
             }
-            b = (k > 32) ? 0 : 32 - k;
+            bits = (clz > 32) ? 0 : 32 - clz;
 
-            /* s ~ sqrt(n) */
-            if (b & 1) {
-                s = 1 << (b >> 1);
-            } else {
-                s = n >> (b >> 1);
-            }
-
+            /* sample about sqrt(n) elements, n / s apart */
+            s = (bits & 1) ? 1 << (bits >> 1) : n >> (bits >> 1);
             g = n / s;
+
             mid = &base[(s / 2) * g];
             tail = &base[(s - 1) * g];
-            start = base;
+            first = base;
 
-            /* quickselect the median of the strided sample to *mid */
-            for (;;) {
-                lo = start;
-                gt = tail;
-                hi = tail;
-                pv = &start[(tail - start) / 2 / g * g];
+            /* quickselect the median of the sample into *mid */
+            do {
+                lo = first;
+                hi = gt = tail;
+                pv = &first[(tail - first) / 2 / g * g];
 
-            sel_scan:
+            sel_right:
                 while (hi >= lo) {
                     c = comp(*hi, *pv);
                     if (c > 0) {
                         gt = hi;
                     } else if (c < 0) {
-                        goto sel_lscan;
+                        goto sel_left;
                     }
                     hi -= g;
                 }
                 goto sel_done;
-            sel_lscan:
+            sel_left:
                 while (lo < hi) {
                     c = comp(*lo, *pv);
                     if (c >= 0) {
                         p = *lo;
                         *lo = *hi;
                         *hi = p;
-                        if (c > 0)
+                        if (c > 0) {
                             gt = hi;
-                        else
+                        } else {
                             pv = hi;
+                        }
                         lo += g;
                         hi -= g;
-                        goto sel_scan;
+                        goto sel_right;
                     }
                     lo += g;
                 }
@@ -424,50 +413,45 @@ static void fsort(void** base, u32 n) {
                 }
 
                 if (gt <= mid) {
-                    start = gt;
+                    first = gt;
                 } else if (hi >= mid) {
                     tail = hi;
                 } else {
                     break;
                 }
-
-                if (start >= tail) {
-                    break;
-                }
-            }
+            } while (first < tail);
 
             lo = base;
-            tail = end;
-            gt = end;
-            hi = end;
+            hi = gt = tail = &base[n - 1];
         }
 
-        /* main partition around *mid */
-    scan:
+        /* three-way partition around *mid */
+    right:
         while (hi >= lo) {
             c = comp(*hi, *mid);
             if (c > 0) {
                 gt = hi;
             } else if (c < 0) {
-                goto lscan;
+                goto left;
             }
             hi--;
         }
         goto done;
-    lscan:
+    left:
         while (lo < hi) {
             c = comp(*lo, *mid);
             if (c >= 0) {
                 p = *lo;
                 *lo = *hi;
                 *hi = p;
-                if (c > 0)
+                if (c > 0) {
                     gt = hi;
-                else
+                } else {
                     mid = hi;
+                }
                 lo++;
                 hi--;
-                goto scan;
+                goto right;
             }
             lo++;
         }
@@ -478,7 +462,7 @@ static void fsort(void** base, u32 n) {
             *mid = p;
         }
 
-        /* recurse smaller side, iterate larger side */
+        /* recurse into the smaller side, loop on the larger */
         if (hi - base < tail - gt) {
             lo = hi;
             hi = base;
@@ -488,9 +472,9 @@ static void fsort(void** base, u32 n) {
             tail = hi;
             hi = gt;
         }
-        n = (tail - base) + 1;
+        n = tail - base + 1;
         if (lo > hi) {
-            fsort(hi, (lo - hi) + 1);
+            fsort(hi, lo - hi + 1);
         }
     } while (n > 1);
 }
@@ -504,53 +488,45 @@ void qqsort(void* base, u32 n, u32 size, QSortCompare compare) {
     u8* dst;
     void** idx;
     u32 i;
-    void** table;
-    u8* buf;
-    void** slot;
-    u8* cur;
-    void* p;
-    u32 j;
-    void** pp;
-    u8* src;
+    void** table = tmp0;
+    u8* buf = tmp1;
 
-    table = tmp0;
-    buf = tmp1;
     comp = compare;
     if (n <= 1) {
         return;
     }
 
-    src = (u8*)base;
-    pp = table;
-    j = 0;
-    while (j++ < n) {
-        *pp++ = src;
-        src += size;
-    }
+    /* sort an array of pointers to the elements */
+    {
+        void** pp;
+        u8* src;
+        u32 j;
 
+        for (src = base, pp = table, j = 0; j < n; j++, src += size) {
+            *pp++ = src;
+        }
+    }
     fsort(table, n);
 
-    dst = (u8*)base;
-    idx = table;
-    i = 0;
-    while (i++ < n) {
-        p = *idx;
-        if (p != NULL) {
-            slot = idx;
-            if (p != dst) {
-                memcpy(buf, cur = dst, size);
+    /* apply the permutation in place, cycle by cycle */
+    for (dst = base, idx = table, i = 0; i++ < n; dst += size, idx++) {
+        if (*idx != NULL) {
+            void** slot = idx;
+
+            if (*slot != dst) {
+                u8* hole;
+
+                memcpy(buf, hole = dst, size);
                 do {
-                    memcpy(cur, *slot, size);
-                    cur = (u8*)*slot;
+                    memcpy(hole, *slot, size);
+                    hole = *slot;
                     *slot = NULL;
-                    slot = &table[(u32)(cur - (u8*)base) / size];
-                } while ((p = *slot) != dst);
-                memcpy(cur, buf, size);
+                    slot = &table[(hole - (u8*)base) / size];
+                } while (*slot != dst);
+                memcpy(hole, buf, size);
                 *slot = NULL;
             }
         }
-        dst += size;
-        idx++;
     }
 }
 
