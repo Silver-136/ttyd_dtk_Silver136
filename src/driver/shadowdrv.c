@@ -235,6 +235,11 @@ GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x8E}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x16},
 };
 
+/** The shadow config at index idx. */
+inline ShadowConfig* shadowGetConfig(s32 idx) {
+    return &shadowConfig[idx];
+}
+
 static inline void depthShadowInit(void);
 static inline void projShadowInit(void);
 
@@ -340,44 +345,6 @@ static inline void shadowSetupPolygon(void) {
 }
 
 /**
- * Starts rendering a projected or depth shadow texture:
- * saves the view, viewport and scissor, switches to the light's view and projection from the shadow config,
- * and for depth shadows writes depth only.
- */
-static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
-    f32 (*proj)[4];
-    ShadowConfig* cfg;
-    u16 size;
-    Vec pos;
-
-    GXInvalidateTexAll();
-
-    size = ShadowSizeTbl[(cfg = &shadowConfig[wp->configIdx])->sizeIdx];
-    if (depth) {
-        GXSetColorUpdate(GX_FALSE);
-    }
-    GXGetViewportv(tmp_vp);
-    GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
-    GXSetViewport(0.0f, 0.0f, size, size, 0.0f, 1.0f);
-    GXSetScissor(1, 1, size - 2, size - 2);
-
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    cfg = (0, &shadowConfig[wp->configIdx]);
-    proj = wp->proj;
-    pos = cfg->pos;
-    C_MTXLookAt(wp->view, &pos, &cfg->up, &cfg->target);
-    if (cfg->projType == 0) {
-        C_MTXFrustum(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
-    } else {
-        C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
-    }
-
-    GXSetProjection(wp->proj, (cfg = &shadowConfig[wp->configIdx])->projType);
-    PSMTXCopy(camGetCurPtr()->view, tmp_view);
-    PSMTXCopy(wp->view, camGetCurPtr()->view);
-}
-
-/**
  * Shadow draw callback for every camera and pass:
  * on the 3D, offscreen and effect cameras draws the polygon, cylinder and texture character shadows;
  * on the shadow camera (by render pass) places and renders the projected character shadows and begins
@@ -424,16 +391,16 @@ static void shadowDisp(CameraId cameraId, void* param) {
                     cfg->target.y = cam->cameraAt.y;
                     cfg->target.z = cam->cameraAt.z;
                 }
-                shadowBegin(&cswp->base, FALSE);
+                projShadowBegin(cameraId, &cswp->base);
                 shadowCharShadowDisp_Projection(cameraId, param);
                 projShadowEnd(cameraId, &cswp->base);
                 break;
             case DISP_MODE_OPAQUE:
-                shadowBegin(pswp, FALSE);
+                projShadowBegin(cameraId, pswp);
                 break;
             case DISP_MODE_XLU:
                 projShadowEnd(cameraId, pswp);
-                shadowBegin(dswp, TRUE);
+                depthShadowBegin(cameraId, dswp);
                 break;
             case DISP_MODE_CUSTOM_LAST:
                 depthShadowEnd(cameraId, dswp);
@@ -1173,6 +1140,18 @@ inline void GetTexProjMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
     }
 }
 
+/** Sets a light camera's view matrix and projection (perspective or orthographic) from shadow config cfg. */
+inline void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj) {
+    Vec pos = cfg->pos;
+
+    C_MTXLookAt(view, &pos, &cfg->up, &cfg->target);
+    if (cfg->projType == 0) {
+        C_MTXFrustum(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
+    } else {
+        C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
+    }
+}
+
 /**
  * Returns the labels of the six depth shadow display modes; no version calls it (JP demo map: UNUSED, 0xc). The
  * map names its table DispModeMsg$893, a function-local static; the early demos keep the table in .data, the later
@@ -1196,9 +1175,32 @@ s32 shadowGetConfig_DispModeNum(void) {
     return 6;
 }
 
-/** Puts back the current camera's view matrix saved by shadowBegin. */
+/** Puts back the current camera's view matrix saved by projShadowBegin and depthShadowBegin. */
 static inline void shadowRestoreView(void) {
     PSMTXCopy(tmp_view, camGetCurPtr()->view);
+}
+
+/**
+ * Starts a projected shadow pass: saves the view, viewport and scissor and switches to the light's view and
+ * projection from the shadow config.
+ */
+inline void projShadowBegin(CameraId cameraId, void* param) {
+    ProjShadowWork* wp = param;
+    u16 size;
+
+    GXInvalidateTexAll();
+
+    size = ShadowSizeTbl[shadowGetConfig(wp->configIdx)->sizeIdx];
+    GXGetViewportv(tmp_vp);
+    GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
+    GXSetViewport(0.0f, 0.0f, size, size, 0.0f, 1.0f);
+    GXSetScissor(1, 1, size - 2, size - 2);
+
+    SetCamera(shadowGetConfig(wp->configIdx), wp->view, wp->proj);
+
+    GXSetProjection(wp->proj, shadowGetConfig(wp->configIdx)->projType);
+    PSMTXCopy(camGetCurPtr()->view, tmp_view);
+    PSMTXCopy(wp->view, camGetCurPtr()->view);
 }
 
 /**
@@ -1239,6 +1241,29 @@ static void projShadowEnd(CameraId cameraId, void* param) {
     GXInitTexObjLOD(&wp->texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GetTexProjMtx(wp, wp->texMtx, NULL);
     wp->flags |= SHADOW_WORK_READY;
+}
+
+/**
+ * Starts the depth shadow pass like projShadowBegin, with colour writes off (depth only).
+ */
+inline void depthShadowBegin(CameraId cameraId, void* param) {
+    ProjShadowWork* wp = param;
+    u16 size;
+
+    GXInvalidateTexAll();
+
+    size = ShadowSizeTbl[shadowGetConfig(wp->configIdx)->sizeIdx];
+    GXSetColorUpdate(GX_FALSE);
+    GXGetViewportv(tmp_vp);
+    GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
+    GXSetViewport(0.0f, 0.0f, size, size, 0.0f, 1.0f);
+    GXSetScissor(1, 1, size - 2, size - 2);
+
+    SetCamera(shadowGetConfig(wp->configIdx), wp->view, wp->proj);
+
+    GXSetProjection(wp->proj, shadowGetConfig(wp->configIdx)->projType);
+    PSMTXCopy(camGetCurPtr()->view, tmp_view);
+    PSMTXCopy(wp->view, camGetCurPtr()->view);
 }
 
 /**
