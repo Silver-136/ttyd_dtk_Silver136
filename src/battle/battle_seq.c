@@ -88,102 +88,14 @@ static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
 static void btlseqInit(BattleWork* wp);
 static void btlseqFirstAct(BattleWork* wp);
 static void btlseqTurn(BattleWork* wp);
-
-// Lucky Start badge: _set_effect_luck copies this weapon and keeps one of its four statuses (Electric, Dodgy,
-// HP Regen or FP Regen) at random
-
-// Descriptive name (not in the symbol maps).
-const BattleWeapon weapon_lucky_start = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
-    NULL, // hpDamageFn
-    {0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-    TARGET_PROP_SAME_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, // poisonStrength..confuseTime
-    100, // electricChance
-    3, // electricTime
-    100, // dodgyChance
-    3, // dodgyTime
-    0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
-    0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
-    0, 0, 0, // holdFastTime..invisibleTime
-    3, // hpRegenTime
-    2, // hpRegenStrength
-    3, // fpRegenTime
-    2, // fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
+#if VERSION <= VERSION_DEMO_JP
+extern EvtWord _default_haikei_set_entry_event[];
+#endif
 
 /** Black: the colour of the curtain fade that opens every battle (btlseqFirstAct). */
 static const GXColor c = {0, 0, 0, 0xFF};
 /** White: the window colour of the Glitz Pit rule banner drawn by _rule_disp. */
 static const GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
-
-/**
- * Glitz Pit bonus-condition messages for minor-league fights, indexed by the battle's rule type ("a" = unused);
- * _rule_disp shows the one for the fight at the start of turn 1, e.g. "Don't use your jump!".
- */
-const char* _rule_msg_table_2bu[] = {
-    "a", "stg3_tou_cp_001", "a", "stg3_tou_cp_002", "a", "stg3_tou_cp_004", "stg3_tou_cp_008", "a",
-    "a", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "stg3_tou_cp_000", "a", "a", "a", "a", "a",
-    "a", "a", "stg3_tou_cp_005", "a", "a", "a", "a", "a",
-    "stg3_tou_cp_006", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "a", "stg3_tou_cp_009", "a", "a", "a", "a",
-    "stg3_tou_cp_003", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "a", "stg3_tou_cp_007", "a", "a", "a", "a",
-    "a", "a", "a", "a",
-};
-
-/** Glitz Pit bonus-condition messages for major-league fights (top ten), by rule type; shown by _rule_disp. */
-const char* _rule_msg_table_1bu[] = {
-    "test", "stg3_tou_cp_011", "a", "stg3_tou_cp_012", "a", "stg3_tou_cp_014", "stg3_tou_cp_019", "a",
-    "a", "a", "a", "stg3_tou_cp_020", "a", "a", "a", "a",
-    "a", "a", "stg3_tou_cp_010", "a", "stg3_tou_cp_018", "a", "a", "a",
-    "a", "a", "stg3_tou_cp_015", "a", "a", "a", "a", "a",
-    "stg3_tou_cp_016", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "a", "stg3_tou_cp_021", "a", "a", "a", "a",
-    "stg3_tou_cp_013", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "a", "stg3_tou_cp_017", "a", "a", "a", "stg3_tou_cp_024",
-    "stg3_tou_cp_023", "stg3_tou_cp_022", "a", "a",
-};
-
-/** Glitz Pit bonus-condition messages after chapter 3, by rule type; shown by _rule_disp. */
-const char* _rule_msg_table_after[] = {
-    "a", "stg3_tou_cp_041", "a", "stg3_tou_cp_042", "a", "stg3_tou_cp_044", "stg3_tou_cp_049", "a",
-    "a", "a", "a", "stg3_tou_cp_050", "a", "a", "a", "a",
-    "a", "a", "stg3_tou_cp_040", "a", "stg3_tou_cp_048", "a", "a", "a",
-    "a", "a", "stg3_tou_cp_045", "a", "a", "a", "a", "a",
-    "stg3_tou_cp_046", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "a", "stg3_tou_cp_051", "a", "a", "a", "a",
-    "stg3_tou_cp_043", "a", "a", "a", "a", "a", "a", "a",
-    "a", "a", "a", "stg3_tou_cp_047", "a", "a", "a", "stg3_tou_cp_054",
-    "stg3_tou_cp_053", "stg3_tou_cp_052", "a", "a",
-};
-
-#if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(_default_haikei_set_entry_event)
-    CALL(_set_haikei_entry_scale)
-    RETURN
-EVT_END()
-#endif
 
 /**
  * Per-frame driver of the battle flow, called from the battle main loop (battle.c):
@@ -655,28 +567,56 @@ static void btlseqFirstAct(BattleWork* wp) {
 
 /**
  * Lucky Start: for every living unit wearing the badge,
- * applies one random status from weapon_lucky_start (Electrified, Dodgy, HP Regen or FP Regen, 3 turns) with
+ * applies one random status from its weapon (Electrified, Dodgy, HP Regen or FP Regen, 3 turns) with
  * SFX_SYSTEM_LUCKY1 and a Nice sparkle by the unit. No script arguments; run by nanika_luck_event.
  */
 USER_FUNC(_set_effect_luck) {
     BattleWork* wp = _battleWorkPointer;
-    f32* pz;
-    f32* py;
-    BattleWeapon weapon = weapon_lucky_start;
-    f32 z;
-    f32 y;
-    BattleWeapon* pw;
-    f32 x;
+    // the four statuses Lucky Start chooses from; one is kept at random per unit
+    BattleWeapon weapon = {
+        NULL, 0, // name..icon
+        {0}, // pad_06
+        0, NULL, // itemId..description
+        100, // baseAccuracy
+        0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
+        NULL, // hpDamageFn
+        {0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+        TARGET_PROP_SAME_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        NULL, // acHelpMsg
+        SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_ALL, // counterResistFlags
+        TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0, 0, 0, // poisonStrength..confuseTime
+        100, // electricChance
+        3, // electricTime
+        100, // dodgyChance
+        3, // dodgyTime
+        0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
+        0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+        0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
+        0, 0, 0, // holdFastTime..invisibleTime
+        3, // hpRegenTime
+        2, // hpRegenStrength
+        3, // fpRegenTime
+        2, // fpRegenStrength
+        {0}, // pad_AE
+        NULL, // attackEvtScript
+        {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+    };
     BattleUnit* unit;
     BattleUnitPart* part;
-    NiceEffectWork* effect;
     int i;
+    BattleWeapon* pw = &weapon;
+    Vec pos;
     EffectEntry* e;
 
-    // FAKE: pointer locals set through comma expressions `(0, &x)`; passing &weapon, &y and &z directly changes the object
-    pw = (0, &weapon);
-    pz = (0, &z);
-    py = (0, &y);
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
@@ -716,12 +656,11 @@ USER_FUNC(_set_effect_luck) {
             }
             part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(wp), unit, part, pw, DAMAGE_RESULT_FINAL_HIT);
-            BtlUnit_GetPos(unit, &x, py, pz);
+            BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
             psndSFXOn(SFX_NAME_WORD("SFX_SYSTEM_LUCKY1"));
 
-            e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
-            effect = e->userdata;
-            effect->overallScale = 0.75f;
+            e = effNiceEntry(NICE_EFFECT_LUCKY, pos.x - 45.0f, 60.0f + pos.y, pos.z);
+            ((NiceEffectWork*)e->userdata)->overallScale = 0.75f;
         }
     }
     return EVT_RETURN_DONE;
@@ -1868,6 +1807,55 @@ static void btlseqTurn(BattleWork* wp) {
             break;
     }
 }
+
+/**
+ * Glitz Pit bonus-condition messages for minor-league fights, indexed by the battle's rule type ("a" = unused);
+ * _rule_disp shows the one for the fight at the start of turn 1, e.g. "Don't use your jump!".
+ */
+const char* _rule_msg_table_2bu[] = {
+    "a", "stg3_tou_cp_001", "a", "stg3_tou_cp_002", "a", "stg3_tou_cp_004", "stg3_tou_cp_008", "a",
+    "a", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "stg3_tou_cp_000", "a", "a", "a", "a", "a",
+    "a", "a", "stg3_tou_cp_005", "a", "a", "a", "a", "a",
+    "stg3_tou_cp_006", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "a", "stg3_tou_cp_009", "a", "a", "a", "a",
+    "stg3_tou_cp_003", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "a", "stg3_tou_cp_007", "a", "a", "a", "a",
+    "a", "a", "a", "a",
+};
+
+/** Glitz Pit bonus-condition messages for major-league fights (top ten), by rule type; shown by _rule_disp. */
+const char* _rule_msg_table_1bu[] = {
+    "test", "stg3_tou_cp_011", "a", "stg3_tou_cp_012", "a", "stg3_tou_cp_014", "stg3_tou_cp_019", "a",
+    "a", "a", "a", "stg3_tou_cp_020", "a", "a", "a", "a",
+    "a", "a", "stg3_tou_cp_010", "a", "stg3_tou_cp_018", "a", "a", "a",
+    "a", "a", "stg3_tou_cp_015", "a", "a", "a", "a", "a",
+    "stg3_tou_cp_016", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "a", "stg3_tou_cp_021", "a", "a", "a", "a",
+    "stg3_tou_cp_013", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "a", "stg3_tou_cp_017", "a", "a", "a", "stg3_tou_cp_024",
+    "stg3_tou_cp_023", "stg3_tou_cp_022", "a", "a",
+};
+
+/** Glitz Pit bonus-condition messages after chapter 3, by rule type; shown by _rule_disp. */
+const char* _rule_msg_table_after[] = {
+    "a", "stg3_tou_cp_041", "a", "stg3_tou_cp_042", "a", "stg3_tou_cp_044", "stg3_tou_cp_049", "a",
+    "a", "a", "a", "stg3_tou_cp_050", "a", "a", "a", "a",
+    "a", "a", "stg3_tou_cp_040", "a", "stg3_tou_cp_048", "a", "a", "a",
+    "a", "a", "stg3_tou_cp_045", "a", "a", "a", "a", "a",
+    "stg3_tou_cp_046", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "a", "stg3_tou_cp_051", "a", "a", "a", "a",
+    "stg3_tou_cp_043", "a", "a", "a", "a", "a", "a", "a",
+    "a", "a", "a", "stg3_tou_cp_047", "a", "a", "a", "stg3_tou_cp_054",
+    "stg3_tou_cp_053", "stg3_tou_cp_052", "a", "a",
+};
+
+#if VERSION <= VERSION_DEMO_JP
+EVT_BEGIN(_default_haikei_set_entry_event)
+    CALL(_set_haikei_entry_scale)
+    RETURN
+EVT_END()
+#endif
 
 static void _rule_disp(CameraId cameraId, void* param) {
     FieldBattleInfo* info = _battleWorkPointer->fbatInfo;
