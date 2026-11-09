@@ -225,7 +225,8 @@ void partyChkGnd(PartyEntry* party) {
 }
 
 /** Stores the floor tilt from normal n in the partner's groundRot (x and z, in degrees) and returns the slope. */
-static inline f32 partyNrmSet(PartyEntry* party, Vec n) {
+// Original name and size (0x1f0) from the JP demo map (UNUSED there: every call is inlined).
+static f32 ABCtoAngleY(PartyEntry* party, Vec n) {
     party->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.z, 100.0f * n.y) - 180.0f);
     party->groundRotY = 0.0f;
     party->groundRotZ = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.x, 100.0f * n.y) - 180.0f);
@@ -367,12 +368,12 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         gy = outPos.y;
 #endif
         if (hit) {
-            if (partyNrmSet(party, outNrm) >= 50.0f) {
+            if (ABCtoAngleY(party, outNrm) >= 50.0f) {
                 hit = NULL;
             }
         }
         if (hit) {
-            party->groundSlope = partyNrmSet(party, outNrm);
+            party->groundSlope = ABCtoAngleY(party, outNrm);
             if (gy < baseY && __fabsf(gy - baseY) >= 2.0f) {
                 if (__fabsf(gy - baseY) > __fabsf(depth)) {
                     party->dropDepth = __fabsf(baseY - gy);
@@ -458,12 +459,12 @@ HitEntry* _partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 ra
         pos.z = pz + oz;
         hit = partyHitCheckGnd(party, &pos, &dir, len, &gy, &outNrm);
         if (hit) {
-            if (partyNrmSet(party, outNrm) >= 50.0f) {
+            if (ABCtoAngleY(party, outNrm) >= 50.0f) {
                 hit = NULL;
             }
         }
         if (hit) {
-            party->groundSlope = partyNrmSet(party, outNrm);
+            party->groundSlope = ABCtoAngleY(party, outNrm);
             if (gy < baseY && __fabsf(gy - baseY) >= 2.0f) {
                 if (__fabsf(gy - baseY) > __fabsf(depth)) {
                     *outDepth = __fabsf(baseY - gy);

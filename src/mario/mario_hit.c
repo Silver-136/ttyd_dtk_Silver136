@@ -57,7 +57,7 @@ static inline BOOL marioChkBeroInl(HitEntry* hit) {
  */
 // Original names and sizes (_ABCtoAngleY 0x234, ABCtoAngleY 0x210) from the JP demo map (UNUSED there: every
 // call is inlined).
-f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
+static f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
     mario->groundRot.y = 0.0f;
@@ -66,7 +66,7 @@ f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
 }
 
 /** _ABCtoAngleY for a normal vector. */
-f32 ABCtoAngleY(Vec* nrm) {
+static f32 ABCtoAngleY(Vec* nrm) {
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->z, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
     mario->groundRot.y = 0.0f;

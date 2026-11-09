@@ -595,7 +595,7 @@ BOOL checkAirPort(void) {
  * the yaw clamped to stay in the flying direction, and the collision checks that end the flight on the ground,
  * a wall or water.
  */
-f32 movedir2dispdir(f32 dir);
+static f32 movedir2dispdir(f32 dir);
 
 static void flyMain(void) {
     f32 s2, c2, s, c;
@@ -883,7 +883,7 @@ void mot_plane_post(void) {
 
 /** The display direction for a plane flying toward dir (the sprite faces left between 90 and 270). */
 // Original name and size (0x68) from the JP demo map (UNUSED there: flyMain's call is inlined).
-f32 movedir2dispdir(f32 dir) {
+static f32 movedir2dispdir(f32 dir) {
     BOOL left = FALSE;
 
     if (dir >= 90.0f && dir <= 270.0f) {
