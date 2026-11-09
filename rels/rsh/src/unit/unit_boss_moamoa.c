@@ -1246,13 +1246,13 @@ USER_FUNC(moamoa_on) {
     for (i = 0; i < ap->numWorldPositions; i++, p++) {
         *p = (Vec){0.0f, -1000.0f, 0.0f};
     }
-    for (i = 0; i < g_moamoa_chain_num; i++) {
+    for (i = 0; i < g_moamoa_chain_max; i++) {
         wp->chainIdx[i][0] = animPoseGetGroupIdx(wp->poseId[0], g_moamoa_chain_tbl[i].parent);
         wp->chainIdx[i][1] = animPoseGetGroupIdx(wp->poseId[0], g_moamoa_chain_tbl[i].child);
     }
     elem = wp->elems;
     for (i = 0; i < wp->count; i++, elem++) {
-        elem->chain = i % g_moamoa_chain_num;
+        elem->chain = i % g_moamoa_chain_max;
         elem->order = wp->chainNum[elem->chain]++;
     }
     moamoa1_on(event, isFirstCall);

@@ -448,7 +448,7 @@ typedef struct MoaChain {
     const char* parent; // joint group the segment hangs from
     const char* child;
 } MoaChain;
-extern const s32 g_moamoa_chain_num;
+extern const s32 g_moamoa_chain_max;
 extern MoaChain g_moamoa_chain_tbl[47];
 
 void animPoseAutoRelease(s32 type);

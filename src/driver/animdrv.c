@@ -235,7 +235,7 @@ void* vivihimoData[4] = {
 };
 #endif
 
-const s32 g_moamoa_chain_num = 0x2F;
+const s32 g_moamoa_chain_max = 0x2F;
 MoaChain g_moamoa_chain_tbl[47] = {
     { "joint_00", "jointdai1_A01" },
     { "jointdai1_A01", "jointdai1_A02" },

@@ -640,13 +640,13 @@ void evalOn(void) {
     for (i = 0; i < n; i++) {
         pos[i] = (Vec){0.0f, -1000.0f, 0.0f};
     }
-    for (i = 0; i < g_moamoa_chain_num; i++) {
+    for (i = 0; i < g_moamoa_chain_max; i++) {
         wp->chainIdx[i][0] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].parent);
         wp->chainIdx[i][1] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].child);
     }
     moa = wp->moa;
     for (j = 0; j < wp->count; j++, moa++) {
-        moa->group = j % g_moamoa_chain_num;
+        moa->group = j % g_moamoa_chain_max;
         moa->order = wp->chainNum[moa->group]++;
     }
     moa = wp->moa;

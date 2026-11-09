@@ -2122,7 +2122,7 @@ void end_ext_moamoa_init(void) {
         v.y = end_randf(-10.0f, 10.0f);
         v.z = end_randf(-10.0f, 10.0f);
         elem->pos = v;
-        elem->chain = i % g_moamoa_chain_num;
+        elem->chain = i % g_moamoa_chain_max;
         elem->idx = end_moa_chain_count[elem->chain]++;
     }
 }
@@ -2247,11 +2247,11 @@ USER_FUNC(evt_end_moamoa_init) {
     for (i = 0; i < n; i++) {
         p[i] = (Vec){0.0f, -1000.0f, 0.0f};
     }
-    end_moa_chain_count = _mapAlloc(g_moamoa_chain_num * sizeof(s32));
-    memset(end_moa_chain_count, 0, g_moamoa_chain_num * sizeof(s32));
-    end_moa_chain_group = _mapAlloc(g_moamoa_chain_num * sizeof(s32[2]));
-    memset(end_moa_chain_group, 0, g_moamoa_chain_num * sizeof(s32[2]));
-    for (i = 0; i < g_moamoa_chain_num; i++) {
+    end_moa_chain_count = _mapAlloc(g_moamoa_chain_max * sizeof(s32));
+    memset(end_moa_chain_count, 0, g_moamoa_chain_max * sizeof(s32));
+    end_moa_chain_group = _mapAlloc(g_moamoa_chain_max * sizeof(s32[2]));
+    memset(end_moa_chain_group, 0, g_moamoa_chain_max * sizeof(s32[2]));
+    for (i = 0; i < g_moamoa_chain_max; i++) {
         end_moa_chain_group[i][0] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].parent);
         end_moa_chain_group[i][1] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].child);
     }

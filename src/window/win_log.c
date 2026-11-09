@@ -1822,17 +1822,17 @@ static void capture(CameraId camera, void* param) {
     animPosePeraOn(m->pose1);
     if (m->id == UNIT_SMORG) {
         gpos = (Vec*)animPoseGetAnimPosePtr(m->pose1)->worldPositions->address;
-        cnt = smartAlloc(g_moamoa_chain_num * 4, SMART_GROUP_TEMP)->address;
+        cnt = smartAlloc(g_moamoa_chain_max * 4, SMART_GROUP_TEMP)->address;
         idx = smartAlloc(2000, SMART_GROUP_TEMP)->address;
-        memset(cnt, 0, g_moamoa_chain_num * 4);
+        memset(cnt, 0, g_moamoa_chain_max * 4);
 
         for (i = 0; 500 > i; i++) {
-            idx[i] = cnt[i % g_moamoa_chain_num]++;
+            idx[i] = cnt[i % g_moamoa_chain_max]++;
         }
         animPoseSetMaterialFlagOn(m->pose2, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         animPosePeraOff(m->pose2);
         for (i = 0; i < 500; i++) {
-            k = i % g_moamoa_chain_num;
+            k = i % g_moamoa_chain_max;
             f = (f32)idx[i] / (f32)cnt[k];
             a = &gpos[animPoseGetGroupIdx(m->pose1, g_moamoa_chain_tbl[k].parent)];
             b = &gpos[animPoseGetGroupIdx(m->pose1, g_moamoa_chain_tbl[k].child)];
