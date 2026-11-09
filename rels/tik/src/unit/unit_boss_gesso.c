@@ -48,7 +48,7 @@ static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 
 #if VERSION < VERSION_US
-EvtWord gesso_arm_wait_event[4];
+EvtWord test_event[4];
 static EvtWord battle_entry_event[315];
 #else
 static EvtWord battle_entry_event[313];
@@ -252,7 +252,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION < VERSION_US
-EVT_BEGIN(gesso_arm_wait_event)
+EVT_BEGIN(test_event)
     CALL(_test_rtn)
     RETURN
 EVT_END()
@@ -319,7 +319,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_StartWaitEvent, LW(3))
     END_INLINE_EVENT
 #if VERSION < VERSION_US
-    SPAWN_EVENT(gesso_arm_wait_event)
+    SPAWN_EVENT(test_event)
 #endif
     CALL(btlevtcmd_WaitEventEnd, LW(14))
     CALL(btlevtcmd_WaitEventEnd, LW(15))

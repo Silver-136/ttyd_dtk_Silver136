@@ -114,7 +114,7 @@ EvtWord majo_kyorokyoro[84];
 EvtWord last_evt_3_2[1837];
 #else
 EvtWord last_evt_2[383];
-EvtWord nise_mario_init[29];
+EvtWord last_evt_3_npc_entry[29];
 #if VERSION == VERSION_DEMO_JP
 EvtWord last_evt_3[1376];
 #else
@@ -1427,7 +1427,7 @@ EVT_BEGIN(last_evt_2)
 EVT_END()
 
 #if VERSION < VERSION_US  // JP and JP demo only (US and PAL dropped it)
-EVT_BEGIN(nise_mario_init)
+EVT_BEGIN(last_evt_3_npc_entry)
     CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario")) // stand-in Mario swapped in at the bad-ending choice (JP)
     CALL(evt_npc_set_tribe, STRING("にせマリオ"), STRING("にせマリオ"))
     CALL(evt_npc_set_position, STRING("にせマリオ"), 0, -1000, 0)
@@ -3230,12 +3230,12 @@ EVT_BEGIN(las_29_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION <= VERSION_DEMO_JP
             CALL(rousoku_init, 1)
-            CALL_CHILD(nise_mario_init)
+            CALL_CHILD(last_evt_3_npc_entry)
 #else
             CALL(evt_snd_set_rev_mode, 2)
             CALL(rousoku_init, 1)
 #if VERSION < VERSION_US
-            CALL_CHILD(nise_mario_init)
+            CALL_CHILD(last_evt_3_npc_entry)
 #endif
 #endif
             SPAWN_EVENT(last_evt_3)
