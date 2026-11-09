@@ -89,7 +89,8 @@ EVT_END()
 const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 
 // FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
-static inline EvtWord blkHitCheck(MapObjectEntry* m) {
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+EvtWord _mobj_check_ground(MapObjectEntry* m) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     dist = 1.0f + (f32)__fabs(m->velocity.y);
     return (EvtWord)hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f);
@@ -99,7 +100,8 @@ static inline EvtWord blkHitCheck(MapObjectEntry* m) {
  * True when the animation name is "A_1" to "A_3" (an 'A' and a digit 1-3 in the third character);
  * used by the switch-block code to tell its hit animations from the others.
  */
-static inline BOOL isAnimA13(const s8* a) {
+// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
+BOOL _mobj_check_lightup(const s8* a) {
     if (a[0] == 'A' && a[2] >= '1' && a[2] <= '3') {
         return TRUE;
     }
@@ -1541,7 +1543,7 @@ static s32 mobj_float_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 99:
             if (mobj->linkedName[0] == 0) {
-                if (blkHitCheck(mobj)) {
+                if (_mobj_check_ground(mobj)) {
                     if (strcmp((const char*)animPoseGetCurrentAnim(mobj->poseId), "S_1")) {
                         animPoseSetAnim(mobj->poseId, "S_1", 1);
                         mobj->flags |= MOBJ_FLAG_NO_SHADOW;
@@ -1640,7 +1642,7 @@ USER_FUNC(evt_mobj_float_blk) {
     mobj->flagVar = flagVar;
     mobj->state = 99;
     mobjCalcMtx(mobj);
-    if (blkHitCheck(mobj)) {
+    if (_mobj_check_ground(mobj)) {
         animPoseSetAnim(mobj->poseId, "S_1", 1);
         mobj->flags |= MOBJ_FLAG_NO_SHADOW;
     } else {
@@ -1685,9 +1687,9 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
             }
             mobj->typeData[1] = (mobj->typeData[1] & 0x40000000) | _mobj_get_switch_anim_index(mobj->poseId);
             if (mobj->linkedName[0]) {
-                if (blkHitCheck(mobjNameToPtr(mobj->linkedName))) {
+                if (_mobj_check_ground(mobjNameToPtr(mobj->linkedName))) {
                     if (evtCheckID(mobj->eventId)) {
-                        if (isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
+                        if (_mobj_check_lightup((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
                             animIndex = 0;
                         } else {
                             animIndex = 3;
@@ -1713,7 +1715,7 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
                     animIndex = 3;
                 }
             } else {
-                a = isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId));
+                a = _mobj_check_lightup((const s8*)animPoseGetCurrentAnim(mobj->poseId));
                 animIndex = a ? 3 : 0;
                 mobj->typeDataU[1] |= 0x80000000;
             }
@@ -1754,7 +1756,7 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
                 mobjNameToPtr(mobj->linkedName);
             }
             {
-                const char* nextAnim = isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId)) ? "A_3" : "S_1";
+                const char* nextAnim = _mobj_check_lightup((const s8*)animPoseGetCurrentAnim(mobj->poseId)) ? "A_3" : "S_1";
                 animPoseSetAnim(mobj->poseId, nextAnim, 1);
             }
             mobj->state++;
@@ -1781,7 +1783,7 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
             if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
                 break;
             }
-            if (isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
+            if (_mobj_check_lightup((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
                 animPoseSetAnim(mobj->poseId, "A_3", 1);
             } else {
                 animPoseSetAnim(mobj->poseId, "S_1", 1);
@@ -1798,12 +1800,12 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
                 break;
             }
             if (mobj->linkedName[0]) {
-                if (blkHitCheck(mobjNameToPtr(mobj->linkedName))) {
+                if (_mobj_check_ground(mobjNameToPtr(mobj->linkedName))) {
                     animPoseSetAnim(mobj->poseId, "S_1", 0);
                 } else {
                     animPoseSetAnim(mobj->poseId, "A_3", 0);
                 }
-            } else if (isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
+            } else if (_mobj_check_lightup((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
                 animPoseSetAnim(mobj->poseId, "A_3", 1);
             } else {
                 animPoseSetAnim(mobj->poseId, "S_1", 1);
@@ -1870,7 +1872,7 @@ USER_FUNC(evt_mobj_switch_float_blk) {
     if (mobj->linkedName[0]) {
         other = mobjNameToPtr(mobj->linkedName);
         strcpy(other->linkedName, mobj->name);
-        if (blkHitCheck(other)) {
+        if (_mobj_check_ground(other)) {
             animPoseSetAnim(mobj->poseId, "S_1", 1);
         } else {
             animPoseSetAnim(mobj->poseId, "A_3", 1);

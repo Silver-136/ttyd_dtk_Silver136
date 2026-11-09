@@ -235,7 +235,8 @@ void nokonoko_use_post(PartyEntry* party) {
  * Spins the shell's sprite 50 degrees a frame, clockwise or counter-clockwise depending on
  * which way it travels on screen.
  */
-static inline void noko_spin(PartyEntry* party) {
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+void nokoFastSpin(PartyEntry* party) {
     f32 dir;
     if (revise360(party->targetDir - party->camDir) > 180.0f) {
         dir = 1.0f;
@@ -250,7 +251,8 @@ static inline void noko_spin(PartyEntry* party) {
  * aimed along its direction of travel (the bump effect when the shell hits a wall or grabs an item;
  * 3 when it launches).
  */
-static inline void noko_star(PartyEntry* party, s32 n) {
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+void hitstar(PartyEntry* party, s32 n) {
     f32 c = (f32)cos(6.2831855f * party->targetDir / 360.0f);
     f32 s = (f32)sin(6.2831855f * party->targetDir / 360.0f);
     effSmallStarN64Entry(3, n, party->position.x, party->position.y + party->height, party->position.z, s, (-1.0f), -c);
@@ -406,7 +408,7 @@ void nokonoko_use(PartyEntry* party) {
             break;
         case 10:
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA1), &party->position);
-            noko_star(party, 3);
+            hitstar(party, 3);
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->useMotionId = 11;
@@ -416,7 +418,7 @@ void nokonoko_use(PartyEntry* party) {
                 party->moveSpeed = 10.0f;
             }
         case 12:
-            noko_spin(party);
+            nokoFastSpin(party);
             if (gp->retraceCount & 1) {
                 effKemuTestDrawCam(effKemuTestEntry(0, party->position.x, party->height / 4.0f + party->position.y,
                                                     party->position.z, 0.3f),
@@ -430,14 +432,14 @@ void nokonoko_use(PartyEntry* party) {
                     itemPickUp(party->work.nokonoko.heldItem);
                     party->useMotionId = 50;
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
-                    noko_star(party, 1);
+                    hitstar(party, 1);
                     break;
                 }
             }
             if (ccwall(party, 0) != NULL) {
                 party->useMotionId = 50;
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
-                noko_star(party, 1);
+                hitstar(party, 1);
                 break;
             }
             if (party->moveDistance >= 120.0f) {
@@ -471,7 +473,7 @@ void nokonoko_use(PartyEntry* party) {
                 se_hold(party);
             }
         case 20:
-            noko_spin(party);
+            nokoFastSpin(party);
             if (gp->retraceCount % 30 == 0) {
                 effKemuTestDrawCam(effKemuTestEntry(5, party->position.x, party->position.y, party->position.z, 1.0f),
                                    party->camId);
@@ -479,12 +481,12 @@ void nokonoko_use(PartyEntry* party) {
             if (ccwall(party, 0) != NULL) {
                 party->useMotionId = 50;
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
-                noko_star(party, 1);
+                hitstar(party, 1);
                 se_off();
                 break;
             }
 #if VERSION <= VERSION_DEMO_JP
-            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); noko_star(party, 1); se_off(); break;)
+            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); hitstar(party, 1); se_off(); break;)
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
                 if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
 #else
@@ -495,7 +497,7 @@ void nokonoko_use(PartyEntry* party) {
                     itemPickUp(party->work.nokonoko.heldItem);
                     party->useMotionId = 50;
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
-                    noko_star(party, 1);
+                    hitstar(party, 1);
                     se_off();
                     break;
                 }
@@ -523,7 +525,7 @@ void nokonoko_use(PartyEntry* party) {
             se_off();
             break;
         case 21:
-            noko_spin(party);
+            nokoFastSpin(party);
             if (gp->retraceCount % 30 == 0) {
                 effKemuTestDrawCam(effKemuTestEntry(5, party->position.x, party->position.y, party->position.z, 1.0f),
                                    party->camId);
@@ -564,10 +566,10 @@ void nokonoko_use(PartyEntry* party) {
                 party->useMotionId = 70;
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
 #endif
-                noko_star(party, 1);
+                hitstar(party, 1);
                 return;
             }
-            noko_spin(party);
+            nokoFastSpin(party);
             party->moveSpeed += 0.1f * ((-1.0f) - party->moveSpeed);
             party->moveDistance -= party->moveSpeed;
             if (party->moveDistance <= 0.0f) {
@@ -586,7 +588,7 @@ void nokonoko_use(PartyEntry* party) {
             if (party->work.nokonoko.shellSpin <= 0.0f) {
                 party->work.nokonoko.shellSpin = 0.0f;
             }
-            noko_spin(party);
+            nokoFastSpin(party);
             party->moveSpeed += ((-2.0f) - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
             party->moveDistance -= party->moveSpeed;
             if (party->moveSpeed <= 0.0f) {
@@ -631,7 +633,7 @@ void nokonoko_use(PartyEntry* party) {
             }
             break;
         case 54:
-            noko_spin(party);
+            nokoFastSpin(party);
             party->moveSpeed += 0.5f;
             if (party->moveSpeed >= 4.0f) {
                 party->moveSpeed = 4.0f;
@@ -648,7 +650,7 @@ void nokonoko_use(PartyEntry* party) {
                 party->useMotionId = 70;
                 return;
             }
-            noko_spin(party);
+            nokoFastSpin(party);
             party->work.nokonoko.shellSpin -= 2.2f;
             if (party->work.nokonoko.shellSpin <= 0.0f) {
                 party->work.nokonoko.shellSpin = 0.0f;
@@ -695,7 +697,7 @@ void nokonoko_use(PartyEntry* party) {
             party->moveDistance += 75.0f;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_BACK1), &party->position);
         case 81:
-            noko_spin(party);
+            nokoFastSpin(party);
             party->moveSpeed += 3.0f;
             if (party->moveSpeed >= 18.0f) {
                 party->moveSpeed = 18.0f;
@@ -706,7 +708,7 @@ void nokonoko_use(PartyEntry* party) {
                 if (party->work.nokonoko.heldItem != NULL) {
                     itemPickUp(party->work.nokonoko.heldItem);
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
-                    noko_star(party, 1);
+                    hitstar(party, 1);
                 }
             }
             hit = ccwall(party, 1);
@@ -725,7 +727,7 @@ void nokonoko_use(PartyEntry* party) {
             }
             break;
         case 82:
-            noko_spin(party);
+            nokoFastSpin(party);
             party->moveSpeed += 0.35f * ((-1.0f) - party->moveSpeed);
             if (party->work.nokonoko.heldItem == NULL) {
                 party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
@@ -733,7 +735,7 @@ void nokonoko_use(PartyEntry* party) {
                 if (party->work.nokonoko.heldItem != NULL) {
                     itemPickUp(party->work.nokonoko.heldItem);
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
-                    noko_star(party, 1);
+                    hitstar(party, 1);
                 }
             }
             if (ccwall(party, 1) != NULL) {
@@ -749,7 +751,7 @@ void nokonoko_use(PartyEntry* party) {
             }
             break;
         case 84:
-            noko_spin(party);
+            nokoFastSpin(party);
             if (ccwall(party, 1) != NULL) {
                 party->useMotionId = 100;
                 break;
@@ -762,7 +764,7 @@ void nokonoko_use(PartyEntry* party) {
             }
             break;
         case 86:
-            noko_spin(party);
+            nokoFastSpin(party);
             if (--party->moveFrames <= 0) {
                 party->useMotionId = 100;
             }
@@ -844,7 +846,7 @@ void nokonoko_use(PartyEntry* party) {
             party->work.nokonoko.shellSpin = 50.0f;
             break;
         case 90:
-            noko_spin(party);
+            nokoFastSpin(party);
             party->moveSpeed += 0.5f;
             if (party->moveSpeed >= 4.0f) {
                 party->moveSpeed = 4.0f;
