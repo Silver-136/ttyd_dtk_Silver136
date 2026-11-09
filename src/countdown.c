@@ -18,7 +18,6 @@
 
 //.sdata2
 static const GXColor sWhite = {255, 255, 255, 255};
-static const GXColor sShadow = {255, 255, 255, 153};
 
 //.sbss
 static CountdownWork* wp;
@@ -175,7 +174,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
         PSMTXTrans(base, work->x + work->offX, work->y + work->offY, 0.0f);
         PSMTXScale(scale, 2.5f, 1.0f, 1.0f);
         PSMTXConcat(base, scale, mtx);
-        shadow = sShadow;
+        shadow = (GXColor){255, 255, 255, 153};
         iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_BG, shadow);
         digits[0] = sec / 100;
         sec %= 100;

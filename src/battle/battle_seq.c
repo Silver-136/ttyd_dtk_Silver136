@@ -92,11 +92,6 @@ static void btlseqTurn(BattleWork* wp);
 extern EvtWord _default_haikei_set_entry_event[];
 #endif
 
-/** Black: the colour of the curtain fade that opens every battle (btlseqFirstAct). */
-static const GXColor c = {0, 0, 0, 0xFF};
-/** White: the window colour of the Glitz Pit rule banner drawn by _rule_disp. */
-static const GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
-
 /**
  * Per-frame driver of the battle flow, called from the battle main loop (battle.c):
  * dispatches on the top-level SEQ_UNKNOWN step to setup (0), the opening act (1),
@@ -408,7 +403,11 @@ static void btlseqFirstAct(BattleWork* wp) {
             if (--wp->ruleDispTimer > 0) {
                 break;
             }
-            fadeEntry(FADE_CURTAIN_VERTICAL_A2, 200, c);
+            {
+                // black: the curtain fade that opens every battle
+                GXColor c = {0, 0, 0, 0xFF};
+                fadeEntry(FADE_CURTAIN_VERTICAL_A2, 200, c);
+            }
             wp->curtainSfxId = psndSFXOn("SFX_OFF_BTL_START_CURTAIN_UP1");
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000002);
 
@@ -665,6 +664,10 @@ USER_FUNC(_set_effect_luck) {
     }
     return EVT_RETURN_DONE;
 }
+
+extern const char* _rule_msg_table_2bu[];
+extern const char* _rule_msg_table_1bu[];
+extern const char* _rule_msg_table_after[];
 
 /**
  * SEQ_TURN steps, one full turn: start-of-turn bookkeeping, the Glitz Pit bonus-condition banner on turn 1,
@@ -1808,6 +1811,38 @@ static void btlseqTurn(BattleWork* wp) {
     }
 }
 
+static void _rule_disp(CameraId cameraId, void* param) {
+    FieldBattleInfo* info = _battleWorkPointer->fbatInfo;
+    char buf[256];
+    f32 x;
+    f32 y;
+    u16 lines;
+
+    // FAKE: s32 width holding the u16 result, halved as (u16)width / 2 (twin _get_item_announce_disp shape)
+    s32 width;
+
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
+        if (evtGetValue(NULL, GSW_GLITZ_PIT_RANK) < 11) {
+            sprintf(buf, msgSearch(_rule_msg_table_1bu[info->ruleType]), info->ruleParam);
+        } else {
+            sprintf(buf, msgSearch(_rule_msg_table_2bu[info->ruleType]), info->ruleParam);
+        }
+    } else {
+        sprintf(buf, msgSearch(_rule_msg_table_after[info->ruleType]), info->ruleParam);
+    }
+    width = FontGetMessageWidthLine(buf, &lines);
+    lines++;
+    x = 0.0f;
+    y = 120.0f;
+    {
+        // white: the rule banner's window
+        GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
+        windowDispGX_Waku_col(0, color, (x - (u16)width / 2) - 10.0f, 94.0f, width + 20, lines * 29 + 3, 10.0f);
+    }
+    FontDrawStart();
+    FontDrawMessage(x - (u16)width / 2, (s32)y - 29, buf);
+}
+
 /**
  * Glitz Pit bonus-condition messages for minor-league fights, indexed by the battle's rule type ("a" = unused);
  * _rule_disp shows the one for the fight at the start of turn 1, e.g. "Don't use your jump!".
@@ -1856,34 +1891,6 @@ EVT_BEGIN(_default_haikei_set_entry_event)
     RETURN
 EVT_END()
 #endif
-
-static void _rule_disp(CameraId cameraId, void* param) {
-    FieldBattleInfo* info = _battleWorkPointer->fbatInfo;
-    char buf[256];
-    f32 x;
-    f32 y;
-    u16 lines;
-
-    // FAKE: s32 width holding the u16 result, halved as (u16)width / 2 (twin _get_item_announce_disp shape)
-    s32 width;
-
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-        if (evtGetValue(NULL, GSW_GLITZ_PIT_RANK) < 11) {
-            sprintf(buf, msgSearch(_rule_msg_table_1bu[info->ruleType]), info->ruleParam);
-        } else {
-            sprintf(buf, msgSearch(_rule_msg_table_2bu[info->ruleType]), info->ruleParam);
-        }
-    } else {
-        sprintf(buf, msgSearch(_rule_msg_table_after[info->ruleType]), info->ruleParam);
-    }
-    width = FontGetMessageWidthLine(buf, &lines);
-    lines++;
-    x = 0.0f;
-    y = 120.0f;
-    windowDispGX_Waku_col(0, color, (x - (u16)width / 2) - 10.0f, 94.0f, width + 20, lines * 29 + 3, 10.0f);
-    FontDrawStart();
-    FontDrawMessage(x - (u16)width / 2, (s32)y - 29, buf);
-}
 
 /**
  * SEQ_PHASE steps: runs btlseqMove through each of the turn's five phases (before player, player, after player,

@@ -1060,7 +1060,6 @@ static void effFallDispInseki(CameraId cameraId, void* payload) {
 }
 
 /** Opaque white, the tint register colour the falling water is drawn with in effFallDispWater. */
-static const GXColor white255 = { 255, 255, 255, 255 };
 /** Draws the falling water (type 3) as a translucent quad, plus the splash display lists once it has landed. */
 static void effFallDispWater(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
@@ -1118,7 +1117,7 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
     PSMTXConcat(trans, scl, trans);
     PSMTXConcat(mtx, trans, trans);
     GXLoadPosMtxImm(trans, GX_PNMTX0);
-    GXSetTevColor(GX_TEVREG0, white255);
+    GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, 255});
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32((-hw) / 2.0f, hh, 0.0f);
     GXColor4u8(255, 255, 255, 255);

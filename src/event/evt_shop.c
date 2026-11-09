@@ -60,18 +60,6 @@ static USER_FUNC(get_value);
  * Text colours of the shop windows: white for the item name, price, point count, list title and the list's
  * "Pts." and "Prizes" headings; in the Shop Prizes list, prizes already earned are red and the rest black.
  */
-static const GXColor shop_name_color = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor shop_price_color = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor shop_point_num_color = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor shop_title_color = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor shop_list_head5_color = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor shop_list_head6_color = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor shop_list_pts_got_color = {0xF0, 0x00, 0x00, 0xFF};
-static const GXColor shop_list_pts_color = {0x00, 0x00, 0x00, 0xFF};
-static const GXColor shop_list_unit_got_color = {0xF0, 0x00, 0x00, 0xFF};
-static const GXColor shop_list_unit_color = {0x00, 0x00, 0x00, 0xFF};
-static const GXColor shop_list_item_got_color = {0xF0, 0x00, 0x00, 0xFF};
-static const GXColor shop_list_item_color = {0x00, 0x00, 0x00, 0xFF};
 
 static WinMgrDesc window_desc[3];
 ShopPoint shopPointList[11];
@@ -133,6 +121,871 @@ WinMgrDesc list_desc[] = {
     {0, 3, 8, -60, 160, 340, 300, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, list_disp},
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, point_disp},
 };
+
+static EvtWord buy_evt[];
+EvtWord evt_shoplist[];
+EvtWord first_shopping_evt[];
+EvtWord keep_evt[];
+static EvtWord main_evt[];
+EvtWord point_evt[];
+static EvtWord sell_evt[];
+EvtWord shopper_talk_evt[];
+EvtWord unkeep_evt[];
+extern u16 point_disp_icons[];
+
+static void name_disp(WinMgrEntry* entry) {
+    ShopWork* wp = _wp;
+    const char* name;
+    s32 i;
+    Vec pos;
+    Mtx m;
+    char buf[64];
+
+    name = msgSearch(itemDataTable[wp->items[wp->cur].id].name);
+    if (!winMgrAction(wp->win[0])) {
+        FontDrawStart();
+        FontDrawEdge();
+        {
+            GXColor nameColor = {0xFF, 0xFF, 0xFF, 0xFF};
+            FontDrawColor(nameColor);
+        }
+        FontDrawString(-FontGetMessageWidth(name) / 2, 108.0f, name);
+        FontDrawEdgeOff();
+    }
+    for (i = 0; i < wp->count; i++) {
+        if (wp->itemFlags[i] & SHOP_ITEM_FLAG_SOLD_OUT) {
+            continue;
+        }
+        mapObjGetPos(wp->objs[i].mobj, &pos);
+        pos.y += 30.0f;
+        PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &pos, &pos);
+        PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &pos, &pos);
+        pos.x *= gp->fbWidth / 2.0f;
+        pos.y *= gp->efbHeight / 2.0f;
+        sprintf(buf, "%d", wp->items[i].price);
+        PSMTXTrans(m, 12.0f * (strlen(buf) - 1) + pos.x, pos.y, pos.z);
+        {
+            GXColor priceColor = {0xFF, 0xFF, 0xFF, 0xFF};
+            iconNumberDispGx(m, wp->items[i].price, FALSE, priceColor);
+        }
+    }
+}
+
+/** Updates the item description window (winMgrHelpMain). */
+static void help_main(WinMgrEntry* entry) {
+    winMgrHelpMain(entry);
+}
+
+/** Draws the description of the shelf item Mario stands in front of in the help window. */
+static void help_disp(WinMgrEntry* entry) {
+    ShopWork* wp = _wp;
+    ShopItem* item = &wp->items[wp->cur];
+
+    if (!winMgrAction(wp->win[1])) {
+        entry->msg = msgSearch(itemDataTable[item->id].description);
+        winMgrHelpDraw(entry);
+    }
+}
+
+/**
+ * Draws the shop points window: the "points" label icon (per language)
+ * and a counter that rolls a tenth of the way toward the pouch's shop points each frame,
+ * so gains count up visibly.
+ */
+static void point_disp(WinMgrEntry* entry) {
+    ShopWork* wp = _wp;
+    PouchData* pouch = pouchGetPtr();
+    s32 diff;
+    Mtx m;
+    Mtx s;
+
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
+        return;
+    }
+    PSMTXTrans(m, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
+
+#if VERSION >= VERSION_US
+    PSMTXScale(s, gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
+    PSMTXConcat(m, s, m);
+    ((void (*)(Mtx, s16, u16))iconDispGx2)(m, ICON_FLAG_2D, point_disp_icons[gp->language]);
+#else
+    if (gp->language == LANGUAGE_JP) {
+        PSMTXScale(s, 1.1f, 1.1f, 1.1f);
+        PSMTXConcat(m, s, m);
+        iconDispGx2(m, ICON_FLAG_2D, ICON_JAPANESE_TEXT_POINTS);
+    } else {
+        PSMTXScale(s, 0.8f, 1.1f, 1.1f);
+        PSMTXConcat(m, s, m);
+        iconDispGx2(m, ICON_FLAG_2D, ICON_TEXT_POINTS);
+    }
+#endif
+
+    PSMTXTrans(m, 124.0f + entry->x, entry->y - 38.0f, 0.0f);
+    {
+        GXColor pointNumColor = {0xFF, 0xFF, 0xFF, 0xFF};
+        iconNumberDispGx(m, wp->points, FALSE, pointNumColor);
+    }
+    diff = pouch->shopPoints - wp->points;
+    if (diff) {
+        diff /= 10;
+        if (!diff) {
+            diff = pouch->shopPoints > wp->points ? 1 : -1;
+        }
+        wp->points += diff;
+    }
+}
+
+/** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; US and later squeeze it to fit. */
+static void title_disp(WinMgrEntry* entry) {
+    const char* msg;
+
+#if VERSION >= VERSION_US
+    f32 w;
+    Mtx m;
+    Mtx s;
+#endif
+
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
+        return;
+    }
+    msg = msgSearch("msg_shop_point_list4");
+
+#if VERSION >= VERSION_US
+    w = FontGetMessageWidth(msg);
+#endif
+
+    FontDrawStart();
+    FontDrawEdge();
+    {
+        GXColor titleColor = {0xFF, 0xFF, 0xFF, 0xFF};
+        FontDrawColor(titleColor);
+    }
+
+#if VERSION >= VERSION_US
+    if (w > entry->width - 20) {
+        PSMTXTrans(m, entry->x + 10, entry->y - 12, 0.0f);
+        PSMTXScale(s, (entry->width - 20) / w, 1.0f, 1.0f);
+    } else {
+        PSMTXTrans(m, entry->x + (entry->width - w) / 2, entry->y - 12, 0.0f);
+        PSMTXScale(s, 1.0f, 1.0f, 1.0f);
+    }
+    PSMTXConcat(m, s, m);
+    FontDrawMessageMtx(m, msg);
+#else
+    FontDrawMessage(entry->x + (entry->width - FontGetMessageWidth(msg)) / 2, entry->y - 12, msg);
+#endif
+
+    FontDrawEdgeOff();
+}
+
+/**
+ * Draws the shop point prize list: a column of point thresholds and the prize item names,
+ * prizes already claimed in red.
+ * US and later scale long headings and names to fit.
+ */
+static void list_disp(WinMgrEntry* entry) {
+    PouchData* pouch;
+    const char* msg;
+
+#if VERSION >= VERSION_US
+    s32 i;
+    ItemData* item;
+    f32 w;
+#else
+    u32 mask;
+    s32 i;
+    ItemData* item;
+#endif
+
+    char buf[256];
+    Mtx m;
+    Mtx s;
+
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
+        return;
+    }
+    pouch = pouchGetPtr();
+    i = 0;
+    msg = msgSearch("msg_shop_point_list5");
+
+#if VERSION >= VERSION_US
+    w = FontGetMessageWidth(msg);
+#endif
+
+    FontDrawStart();
+    FontDrawEdge();
+    {
+        GXColor listHead5Color = {0xFF, 0xFF, 0xFF, 0xFF};
+        FontDrawColor(listHead5Color);
+    }
+
+#if VERSION >= VERSION_US
+    if (w > 80.0f) {
+        PSMTXTrans(m, 10.0f + (entry->x + 10), entry->y + 13, 0.0f);
+        PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
+    } else {
+        PSMTXTrans(m, (entry->x + 10) + (100.0f - w) / 2, entry->y + 13, 0.0f);
+        PSMTXScale(s, 1.0f, 1.0f, 1.0f);
+    }
+    PSMTXConcat(m, s, m);
+    FontDrawMessageMtx(m, msg);
+    FontDrawEdgeOff();
+    msg = msgSearch("msg_shop_point_list6");
+    w = FontGetMessageWidth(msg);
+#else
+    FontDrawMessage(entry->x + 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
+    FontDrawEdgeOff();
+    msg = msgSearch("msg_shop_point_list6");
+#endif
+
+    FontDrawStart();
+    FontDrawEdge();
+    {
+        GXColor listHead6Color = {0xFF, 0xFF, 0xFF, 0xFF};
+        FontDrawColor(listHead6Color);
+    }
+
+#if VERSION >= VERSION_US
+    if (w > 80.0f) {
+        PSMTXTrans(m, 10.0f + (entry->x + entry->width / 2 - 10), entry->y + 13, 0.0f);
+        PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
+    } else {
+        PSMTXTrans(m, (entry->x + entry->width / 2 - 10) + (100.0f - w) / 2, entry->y + 13, 0.0f);
+        PSMTXScale(s, 1.0f, 1.0f, 1.0f);
+    }
+    PSMTXConcat(m, s, m);
+    FontDrawMessageMtx(m, msg);
+#else
+    FontDrawMessage(entry->x + entry->width / 2 - 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
+#endif
+
+    FontDrawEdgeOff();
+    FontDrawStart();
+    for (; shopPointList[i].pts != -1; i++) {
+        item = &itemDataTable[shopPointList[i].item];
+        FontDrawStart();
+#if VERSION >= VERSION_US
+        if (pouch->shopPointRewardFlags & (1 << i)) {
+#else
+        if (pouch->shopPointRewardFlags & (mask = 1 << i)) {
+#endif
+            {
+                GXColor listPtsGotColor = {0xF0, 0x00, 0x00, 0xFF};
+                FontDrawColor(listPtsGotColor);
+            }
+        } else {
+            {
+                GXColor listPtsColor = {0x00, 0x00, 0x00, 0xFF};
+                FontDrawColor(listPtsColor);
+            }
+        }
+        sprintf(buf, "%s", winZenkakuStr(shopPointList[i].pts));
+        FontDrawMessage(entry->x + (entry->width / 2 - (s32)FontGetMessageWidth(buf)) - 90, entry->y - 20 - i * 26, buf);
+#if VERSION >= VERSION_US
+        msg = msgSearch("msg_shop_point_list5");
+        w = 0.64f * FontGetMessageWidth(msg);
+        FontDrawStart();
+        if (pouch->shopPointRewardFlags & (1 << i)) {
+#else
+        FontDrawStart();
+        if (pouch->shopPointRewardFlags & mask) {
+#endif
+            {
+                GXColor listUnitGotColor = {0xF0, 0x00, 0x00, 0xFF};
+                FontDrawColor(listUnitGotColor);
+            }
+        } else {
+            {
+                GXColor listUnitColor = {0x00, 0x00, 0x00, 0xFF};
+                FontDrawColor(listUnitColor);
+            }
+        }
+#if VERSION >= VERSION_US
+        if (w > 60.0f) {
+            PSMTXTrans(m, entry->x + entry->width / 2 - 88, entry->y - 28 - i * 26, 0.0f);
+            PSMTXScale(s, 0.64f * 60.0f / w, 0.64f, 0.64f);
+        } else {
+            PSMTXTrans(m, entry->x + entry->width / 2 - 88, entry->y - 28 - i * 26, 0.0f);
+            PSMTXScale(s, 0.64f, 0.64f, 0.64f);
+        }
+        PSMTXConcat(m, s, m);
+        FontDrawMessageMtx(m, msg);
+        msg = msgSearch(item->name);
+        FontDrawStart();
+        if (pouch->shopPointRewardFlags & (1 << i)) {
+#else
+        sprintf(buf, "%s", msgSearch("msg_shop_point_list5"));
+        PSMTXTrans(m, entry->x + (entry->width / 2 - 0.6f * FontGetMessageWidth(buf)) - 40.0f, entry->y - 28 - i * 26, 0.0f);
+        PSMTXScale(s, 0.64f, 0.64f, 0.64f);
+        PSMTXConcat(m, s, m);
+        FontDrawMessageMtx(m, buf);
+        msg = msgSearch(item->name);
+        FontDrawStart();
+        if (pouch->shopPointRewardFlags & mask) {
+#endif
+            {
+                GXColor listItemGotColor = {0xF0, 0x00, 0x00, 0xFF};
+                FontDrawColor(listItemGotColor);
+            }
+        } else {
+            {
+                GXColor listItemColor = {0x00, 0x00, 0x00, 0xFF};
+                FontDrawColor(listItemColor);
+            }
+        }
+#if VERSION >= VERSION_US
+        PSMTXTrans(m, entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, 0.0f);
+        if (FontGetMessageWidth(msg) > entry->width / 2 - 10) {
+            PSMTXScale(s, (f32)(entry->width / 2 - 10) / FontGetMessageWidth(msg), 1.0f, 1.0f);
+        } else {
+            PSMTXScale(s, 1.0f, 1.0f, 1.0f);
+        }
+        PSMTXConcat(m, s, m);
+        FontDrawMessageMtx(m, msg);
+#else
+        FontDrawMessage(entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, msg);
+#endif
+    }
+}
+
+/**
+ * Opens the three prize list windows (title, list, points), then blocks until B closes them;
+ * plays the open and close sounds.
+ */
+USER_FUNC(disp_list) {
+    if (isFirstCall) {
+        event->userdata[0] = winMgrEntry(&list_desc[0]);
+        event->userdata[1] = winMgrEntry(&list_desc[1]);
+        event->userdata[2] = winMgrEntry(&list_desc[2]);
+        winMgrOpen(event->userdata[0]);
+        winMgrOpen(event->userdata[1]);
+        winMgrOpen(event->userdata[2]);
+#if VERSION <= VERSION_DEMO_JP
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
+#else
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
+#endif
+    }
+    if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+        winMgrCloseAutoDelete(event->userdata[0]);
+        winMgrCloseAutoDelete(event->userdata[1]);
+        winMgrCloseAutoDelete(event->userdata[2]);
+#if VERSION <= VERSION_DEMO_JP
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
+#else
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
+#endif
+        return EVT_RETURN_YIELD;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Sets up a shop on map load.
+ * args: the six shelf objects (map object and hit names), their items and prices,
+ * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
+ * and an optional sell-price override table.
+ * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
+ * books), gives the shopkeeper its talk script and starts the shop driver.
+ */
+USER_FUNC(evt_shop_setup) {
+    s32 i;
+    ShopWork* wp;
+    EvtWord* args = event->args;
+    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
+    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
+    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
+    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
+    Vec pos;
+    char buf[32];
+
+    wp = _mapAlloc(sizeof(ShopWork));
+    memset(wp, 0, sizeof(ShopWork));
+    _wp = wp;
+    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
+    wp->objs = objs;
+    wp->items = items;
+    wp->shopper = shopper;
+    wp->db = db;
+    wp->count = 6;
+    for (i = 0; i < wp->count; i++) {
+        mapObjGetPos(wp->objs[i].mobj, &pos);
+        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
+        sprintf(buf, "shp%d", i);
+        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
+        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
+        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
+        wp->itemFlags[i] = 0;
+        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+    }
+
+    {
+        NpcEntry* npc = npcNameToPtr(shopper->name);
+        npc->talkEvt = shopper_talk_evt;
+    }
+    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
+    wp->mainEvt->lwData[0] = (EvtWord)wp;
+    for (i = 0; i < 3; i++) {
+        wp->win[i] = winMgrEntry(&window_desc[i]);
+    }
+    wp->sel = -1;
+#if VERSION <= VERSION_DEMO_JP
+#if VERSION == VERSION_DEMO_JP
+    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
+#endif
+#else
+    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
+#endif
+    return EVT_RETURN_DONE;
+}
+
+/** Opens (args[0] nonzero) or closes the shop points window, starting its counter from the current points. */
+USER_FUNC(point_disp_onoff) {
+    s32 on = evtGetValue(event, event->args[0]);
+    PouchData* pouch = pouchGetPtr();
+    ShopWork* wp = _wp;
+    wp->points = pouch->shopPoints;
+    if (on) {
+        winMgrOpen(wp->win[2]);
+    } else {
+        winMgrClose(wp->win[2]);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Blocks until the shop points window has counted up to Mario's points;
+ * JP and later play a tick sound each frame meanwhile.
+ */
+#if VERSION <= VERSION_DEMO_JP
+static USER_FUNC(point_wait) {
+#else
+USER_FUNC(point_wait) {
+#endif
+    ShopWork* wp = _wp;
+    PouchData* pouch = pouchGetPtr();
+#if VERSION <= VERSION_DEMO_JP
+    return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+}
+#else
+    if (wp->points != pouch->shopPoints) {
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
+#endif
+
+/** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
+USER_FUNC(shop_flag_onoff) {
+    EvtWord* args = event->args;
+    s32 on = evtGetValue(event, args[0]);
+    s32 mask = evtGetValue(event, args[1]);
+    ShopWork* wp = _wp;
+    if (on) {
+        wp->flags |= mask;
+    } else {
+        wp->flags &= ~mask;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Writes Mario's shop points (pouch, 0-300) to args[0]. */
+USER_FUNC(get_shop_point) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    evtSetValue(event, args[0], pouch->shopPoints);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Adds args[0] shop points, doubled on mri_07, usu_01 or rsh_03 when that shop's sale flag is on
+ * and the play-time values in args[1..3] are under 900000 (the sale's time limit); caps the total at 300.
+ */
+USER_FUNC(add_shop_point) {
+    EvtWord* args = event->args;
+    s32 add = evtGetValue(event, args[0]);
+    s32 mriSaleMs = evtGetValue(event, args[1]);
+    s32 usuSaleMs = evtGetValue(event, args[2]);
+    s32 rshSaleMs = evtGetValue(event, args[3]);
+    PouchData* pouch = pouchGetPtr();
+
+    if (!strcmp(gp->currentMapName, "mri_07") && swGet(GSWF_ID(GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE)) && mriSaleMs < 900000) {
+        add *= 2;
+    }
+    if (!strcmp(gp->currentMapName, "usu_01") && swGet(GSWF_ID(GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE)) && usuSaleMs < 900000) {
+        add *= 2;
+    }
+    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(GSWF_ID(GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE)) && rshSaleMs < 900000) {
+        add *= 2;
+    }
+    pouch->shopPoints += add;
+    if (pouch->shopPoints > 300) {
+        pouch->shopPoints = 300;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Clears Mario's shop points and the prizes claimed, after the 300-point prize. */
+USER_FUNC(reset_shop_point) {
+    PouchData* pouch = pouchGetPtr();
+    pouch->shopPoints = 0;
+    pouch->shopPointRewardFlags = 0;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Finds the next prize Mario has earned but not claimed:
+ * writes 0, its item id and its name to args[0..2], or -1 to all three when there is none.
+ * At 300 points it always offers the 300-point prize.
+ */
+USER_FUNC(chk_shop_point) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    s32 i = 0;
+    s32 j;
+    ShopPoint* p;
+    ShopPoint* q;
+    s32 v;
+
+    for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
+        if (v <= pouch->shopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
+            if (pouch->shopPoints != 300) {
+                evtSetValue(event, args[0], 0);
+                evtSetValue(event, args[1], p->item);
+                evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[p->item].name));
+            } else {
+                for (j = 0; shopPointList[j].pts != 300; j++) {
+                }
+                evtSetValue(event, args[0], 0);
+                evtSetValue(event, args[1], shopPointList[j].item);
+                evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[shopPointList[j].item].name));
+            }
+            return EVT_RETURN_DONE;
+        }
+    }
+    evtSetValue(event, args[0], -1);
+    evtSetValue(event, args[1], -1);
+    evtSetValue(event, args[2], -1);
+    return EVT_RETURN_DONE;
+}
+
+/** Marks the lowest earned but unclaimed shop point prize as claimed. */
+USER_FUNC(exchange_shop_point) {
+    PouchData* pouch = pouchGetPtr();
+    ShopPoint* p;
+    s32 i = 0;
+    s32 v;
+
+    for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
+        if (v <= pouch->shopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
+            pouch->shopPointRewardFlags |= (1 << i);
+            return EVT_RETURN_DONE;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Looks up the prize for the point threshold in args[0] and writes its item id and name to args[1]
+ * and args[2] (-1 when there is no such threshold).
+ */
+USER_FUNC(shop_point_item) {
+    EvtWord* args = event->args;
+    s32 pts = evtGetValue(event, args[0]);
+    ShopPoint* p;
+    s32 v;
+
+    pouchGetPtr();
+    for (p = shopPointList; (v = p->pts) != -1; p++) {
+        if (v == pts) {
+            evtSetValue(event, args[1], p->item);
+            evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[p->item].name));
+            return EVT_RETURN_DONE;
+        }
+    }
+    evtSetValue(event, args[1], -1);
+    evtSetValue(event, args[2], -1);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the shopkeeper NPC's name to args[0]. */
+USER_FUNC(shopper_name) {
+    evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->name);
+    return EVT_RETURN_DONE;
+}
+
+static USER_FUNC(disp_off) {
+    ShopWork* wp = (ShopWork*)evtGetValue(event, event->args[0]);
+    wp->flags &= ~1;
+    return EVT_RETURN_DONE;
+}
+
+/** For the shelf item Mario picked (ShopWork in args[0]): writes its name, item id and price to args[1..3]. */
+static USER_FUNC(get_value) {
+    EvtWord* args = event->args;
+    ShopWork* wp = (ShopWork*)evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], (EvtWord)msgSearch(itemDataTable[wp->items[wp->cur].id].name));
+    evtSetValue(event, args[2], wp->items[wp->cur].id);
+    evtSetValue(event, args[3], wp->items[wp->cur].price);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the shop's message id number args[1] (from ShopperData.msgs) to args[2]; args[0] is the ShopWork. */
+USER_FUNC(get_msg) {
+    EvtWord* args = event->args;
+    ShopWork* wp = (ShopWork*)evtGetValue(event, args[0]);
+    s32 i = evtGetValue(event, args[1]);
+    evtSetValue(event, args[2], (EvtWord)wp->shopper->msgs[i]);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the shop's after-buy script (ShopperData.buy_evt, may be NULL) to args[0]. */
+USER_FUNC(get_buy_evt) {
+    evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->buy_evt);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Records the item id just bought (args[0]) so the shop driver can hide one-off items once the purchase script
+ * ends.
+ */
+USER_FUNC(set_buy_item_id) {
+    _wp->buyItem = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the shop's ShopWork pointer to args[0]. */
+static USER_FUNC(get_ptr) {
+    evtSetValue(event, event->args[0], (EvtWord)_wp);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the shop's talk hook script (ShopperData.fook_evt, may be NULL) to args[0]. */
+USER_FUNC(get_fook_evt) {
+    evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->fook_evt);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the name and sell price of item args[0] to args[1] and args[2]. */
+USER_FUNC(name_price) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], (EvtWord)msgSearch(itemDataTable[id].name));
+    evtSetValue(event, args[2], itemDataTable[id].sell_price);
+    return EVT_RETURN_DONE;
+}
+
+/** Sets LW(0) to the number of items Mario carries, to check he has something to sell. */
+USER_FUNC(sell_pouchcheck_func) {
+    pouchGetPtr();
+    event->lwData[0] = pouchGetHaveItemCnt();
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Applies the shop's sell-price overrides (ShopDb) to the item table, saving the original prices,
+ * around the sell menu.
+ */
+USER_FUNC(item_data_db_arrange) {
+    ShopDb* db = _wp->db;
+    if (db) {
+        for (; db->id; db++) {
+            db->save = itemDataTable[db->id].sell_price;
+            itemDataTable[db->id].sell_price = db->price;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Puts back the sell prices item_data_db_arrange replaced. */
+USER_FUNC(item_data_db_restore) {
+    ShopDb* db = _wp->db;
+    if (db) {
+        for (; db->id; db++) {
+            itemDataTable[db->id].sell_price = db->save;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Sets LW(0) to the number of items Mario carries and LW(1) to the free stored-item slots. */
+USER_FUNC(keep_pouchcheck_func) {
+    pouchGetPtr();
+    event->lwData[0] = pouchGetHaveItemCnt();
+    event->lwData[1] = pouchGetEmptyKeepItemCnt();
+    return EVT_RETURN_DONE;
+}
+
+/** Sets LW(0) to the number of stored items and LW(1) to the free slots in Mario's item pouch. */
+USER_FUNC(unkeep_pouchcheck_func) {
+    pouchGetPtr();
+    event->lwData[0] = pouchGetKeepItemCnt();
+    event->lwData[1] = pouchGetEmptyHaveItemCnt();
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Shop driver, every frame: when Mario stands on a shelf's hit object,
+ * opens the name and description windows for that item; A starts buy_evt.
+ * Waits while a partner ability, the Ghost Diary or (JP and later) a field item pickup is active,
+ * and on rsh_03 on day 3 until the shopkeeper is woken.
+ * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
+ */
+#if VERSION <= VERSION_DEMO_JP
+static USER_FUNC(evt_shop_main_func) {
+#else
+USER_FUNC(evt_shop_main_func) {
+#endif
+    ShopWork* wp;
+    MarioWork* mario;
+    PartyEntry* party;
+    BOOL found;
+    HitEntry* hit;
+    u32 trg;
+    s32 i;
+    MapObject* mobj;
+    char buf[32];
+
+    found = FALSE;
+    wp = (ShopWork*)event->lwData[0];
+    mario = marioGetPtr();
+    party = partyGetPtr(0);
+    hit = mario->hitobjStandOn;
+    wp->flags &= ~1;
+    trg = keyGetButtonTrg(0);
+
+    // FAKE: the masks do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
+    if ((!marioChkCtrl() & 0x7ffffff) || (!marioChkKey() & 0x7ffffff)) {
+        trg = 0;
+    }
+    if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
+        evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
+        !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
+        return EVT_RETURN_BLOCK;
+    }
+    if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        if (wp->sel != -1) {
+            wp->sel = -1;
+            winMgrClose(wp->win[0]);
+            winMgrClose(wp->win[1]);
+        }
+        return EVT_RETURN_BLOCK;
+    }
+#if VERSION <= VERSION_DEMO_JP
+    if (winGhostDiaryChk()) {
+#else
+    if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
+#endif
+        if (wp->sel != -1) {
+            wp->sel = -1;
+            winMgrClose(wp->win[0]);
+            winMgrClose(wp->win[1]);
+        }
+        return EVT_RETURN_BLOCK;
+    }
+    if (!(wp->flags & 2)) {
+        if (hit) {
+            for (i = 0; i < wp->count; i++) {
+                if (!strcmp(wp->objs[i].hit, hitGetName(hit))) {
+                    break;
+                }
+            }
+
+            // itemFlags[i] is read before the i < wp->count test; a full six-item shop with no matching hit reads one past itemFlags.
+            if (!(wp->itemFlags[i] & 1) && i < wp->count) {
+                if (wp->sel != i) {
+                    if (wp->sel == -1) {
+                        winMgrOpen(wp->win[0]);
+                        winMgrOpen(wp->win[1]);
+                    }
+                    wp->sel = i;
+                    wp->cur = i;
+                    winMgrHelpInit(winMgrGetPtr(wp->win[1]));
+                }
+                found = TRUE;
+            }
+        }
+        if (!found && wp->sel != -1) {
+            wp->sel = -1;
+            winMgrClose(wp->win[0]);
+            winMgrClose(wp->win[1]);
+        }
+        if (wp->sel != -1) {
+            wp->flags |= 1;
+            if (trg & PAD_BUTTON_A) {
+                marioKeyOff();
+                wp->buyEvt = evtEntry(buy_evt, 0, 0);
+                wp->buyEvt->lwData[0] = (EvtWord)wp;
+                wp->flags |= 2;
+                winMgrClose(wp->win[0]);
+                winMgrClose(wp->win[1]);
+                wp->sel = -1;
+                wp->buyItem = 0;
+            }
+        }
+    } else if (!evtCheckID(wp->buyEvt->eventId)) {
+        wp->flags &= ~2;
+        marioKeyOn();
+        if (wp->buyItem == ITEM_CONTACT_LENS) {
+            wp->itemFlags[wp->cur] |= 1;
+        }
+        if (wp->buyItem == ITEM_SUPER_LUIGI1) {
+            wp->itemFlags[wp->cur] |= 1;
+        }
+        if (wp->buyItem == ITEM_SUPER_LUIGI2) {
+            wp->itemFlags[wp->cur] |= 1;
+        }
+        if (wp->buyItem == ITEM_SUPER_LUIGI3) {
+            wp->itemFlags[wp->cur] |= 1;
+        }
+        if (wp->buyItem == ITEM_SUPER_LUIGI4) {
+            wp->itemFlags[wp->cur] |= 1;
+        }
+        if (wp->buyItem == ITEM_SUPER_LUIGI5) {
+            wp->itemFlags[wp->cur] |= 1;
+        }
+    }
+    for (i = 0; i < wp->count; i++) {
+        mobj = mapGetMapObj(wp->objs[i].mobj);
+        if (mobj) {
+            sprintf(buf, "shp%d", i);
+            if (wp->itemFlags[i] & 1) {
+                iconFlagOn(buf, ICON_FLAG_HIDDEN);
+            } else if (mobj->flags & MAP_OBJ_FLAG_HIDDEN) {
+                iconFlagOn(buf, ICON_FLAG_HIDDEN);
+            } else {
+                iconFlagOff(buf, ICON_FLAG_HIDDEN);
+            }
+        }
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/** TRUE while the shop set up on the current map has its item display up or a purchase running (any ShopWork flag). */
+BOOL evtShopIsActive(void) {
+    if (!strcmp(gp->currentMapName, mapname) && _wp->flags) {
+        return TRUE;
+    }
+    return FALSE;
+}
 
 #if VERSION <= VERSION_DEMO_JP
 /** the early demos define the prize list script here, in .data (JP and later: .sdata); the US demo never runs it */
@@ -788,821 +1641,3 @@ static EVT_BEGIN(main_evt)
     CALL(evt_shop_main_func)
     RETURN
 EVT_END()
-
-static void name_disp(WinMgrEntry* entry) {
-    ShopWork* wp = _wp;
-    const char* name;
-    s32 i;
-    Vec pos;
-    Mtx m;
-    char buf[64];
-
-    name = msgSearch(itemDataTable[wp->items[wp->cur].id].name);
-    if (!winMgrAction(wp->win[0])) {
-        FontDrawStart();
-        FontDrawEdge();
-        FontDrawColor(shop_name_color);
-        FontDrawString(-FontGetMessageWidth(name) / 2, 108.0f, name);
-        FontDrawEdgeOff();
-    }
-    for (i = 0; i < wp->count; i++) {
-        if (wp->itemFlags[i] & SHOP_ITEM_FLAG_SOLD_OUT) {
-            continue;
-        }
-        mapObjGetPos(wp->objs[i].mobj, &pos);
-        pos.y += 30.0f;
-        PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &pos, &pos);
-        PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &pos, &pos);
-        pos.x *= gp->fbWidth / 2.0f;
-        pos.y *= gp->efbHeight / 2.0f;
-        sprintf(buf, "%d", wp->items[i].price);
-        PSMTXTrans(m, 12.0f * (strlen(buf) - 1) + pos.x, pos.y, pos.z);
-        iconNumberDispGx(m, wp->items[i].price, FALSE, shop_price_color);
-    }
-}
-
-/** Updates the item description window (winMgrHelpMain). */
-static void help_main(WinMgrEntry* entry) {
-    winMgrHelpMain(entry);
-}
-
-/** Draws the description of the shelf item Mario stands in front of in the help window. */
-static void help_disp(WinMgrEntry* entry) {
-    ShopWork* wp = _wp;
-    ShopItem* item = &wp->items[wp->cur];
-
-    if (!winMgrAction(wp->win[1])) {
-        entry->msg = msgSearch(itemDataTable[item->id].description);
-        winMgrHelpDraw(entry);
-    }
-}
-
-/**
- * Draws the shop points window: the "points" label icon (per language)
- * and a counter that rolls a tenth of the way toward the pouch's shop points each frame,
- * so gains count up visibly.
- */
-static void point_disp(WinMgrEntry* entry) {
-    ShopWork* wp = _wp;
-    PouchData* pouch = pouchGetPtr();
-    s32 diff;
-    Mtx m;
-    Mtx s;
-
-    if (entry->flags & WINMGR_FLAG_ANIMATING) {
-        return;
-    }
-    PSMTXTrans(m, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
-
-#if VERSION >= VERSION_US
-    PSMTXScale(s, gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
-    PSMTXConcat(m, s, m);
-    ((void (*)(Mtx, s16, u16))iconDispGx2)(m, ICON_FLAG_2D, point_disp_icons[gp->language]);
-#else
-    if (gp->language == LANGUAGE_JP) {
-        PSMTXScale(s, 1.1f, 1.1f, 1.1f);
-        PSMTXConcat(m, s, m);
-        iconDispGx2(m, ICON_FLAG_2D, ICON_JAPANESE_TEXT_POINTS);
-    } else {
-        PSMTXScale(s, 0.8f, 1.1f, 1.1f);
-        PSMTXConcat(m, s, m);
-        iconDispGx2(m, ICON_FLAG_2D, ICON_TEXT_POINTS);
-    }
-#endif
-
-    PSMTXTrans(m, 124.0f + entry->x, entry->y - 38.0f, 0.0f);
-    iconNumberDispGx(m, wp->points, FALSE, shop_point_num_color);
-    diff = pouch->shopPoints - wp->points;
-    if (diff) {
-        diff /= 10;
-        if (!diff) {
-            diff = pouch->shopPoints > wp->points ? 1 : -1;
-        }
-        wp->points += diff;
-    }
-}
-
-/** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; US and later squeeze it to fit. */
-static void title_disp(WinMgrEntry* entry) {
-    const char* msg;
-
-#if VERSION >= VERSION_US
-    f32 w;
-    Mtx m;
-    Mtx s;
-#endif
-
-    if (entry->flags & WINMGR_FLAG_ANIMATING) {
-        return;
-    }
-    msg = msgSearch("msg_shop_point_list4");
-
-#if VERSION >= VERSION_US
-    w = FontGetMessageWidth(msg);
-#endif
-
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor(shop_title_color);
-
-#if VERSION >= VERSION_US
-    if (w > entry->width - 20) {
-        PSMTXTrans(m, entry->x + 10, entry->y - 12, 0.0f);
-        PSMTXScale(s, (entry->width - 20) / w, 1.0f, 1.0f);
-    } else {
-        PSMTXTrans(m, entry->x + (entry->width - w) / 2, entry->y - 12, 0.0f);
-        PSMTXScale(s, 1.0f, 1.0f, 1.0f);
-    }
-    PSMTXConcat(m, s, m);
-    FontDrawMessageMtx(m, msg);
-#else
-    FontDrawMessage(entry->x + (entry->width - FontGetMessageWidth(msg)) / 2, entry->y - 12, msg);
-#endif
-
-    FontDrawEdgeOff();
-}
-
-/**
- * Draws the shop point prize list: a column of point thresholds and the prize item names,
- * prizes already claimed in red.
- * US and later scale long headings and names to fit.
- */
-static void list_disp(WinMgrEntry* entry) {
-    PouchData* pouch;
-    const char* msg;
-
-#if VERSION >= VERSION_US
-    s32 i;
-    ItemData* item;
-    f32 w;
-#else
-    u32 mask;
-    s32 i;
-    ItemData* item;
-#endif
-
-    char buf[256];
-    Mtx m;
-    Mtx s;
-
-    if (entry->flags & WINMGR_FLAG_ANIMATING) {
-        return;
-    }
-    pouch = pouchGetPtr();
-    i = 0;
-    msg = msgSearch("msg_shop_point_list5");
-
-#if VERSION >= VERSION_US
-    w = FontGetMessageWidth(msg);
-#endif
-
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor(shop_list_head5_color);
-
-#if VERSION >= VERSION_US
-    if (w > 80.0f) {
-        PSMTXTrans(m, 10.0f + (entry->x + 10), entry->y + 13, 0.0f);
-        PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
-    } else {
-        PSMTXTrans(m, (entry->x + 10) + (100.0f - w) / 2, entry->y + 13, 0.0f);
-        PSMTXScale(s, 1.0f, 1.0f, 1.0f);
-    }
-    PSMTXConcat(m, s, m);
-    FontDrawMessageMtx(m, msg);
-    FontDrawEdgeOff();
-    msg = msgSearch("msg_shop_point_list6");
-    w = FontGetMessageWidth(msg);
-#else
-    FontDrawMessage(entry->x + 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
-    FontDrawEdgeOff();
-    msg = msgSearch("msg_shop_point_list6");
-#endif
-
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor(shop_list_head6_color);
-
-#if VERSION >= VERSION_US
-    if (w > 80.0f) {
-        PSMTXTrans(m, 10.0f + (entry->x + entry->width / 2 - 10), entry->y + 13, 0.0f);
-        PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
-    } else {
-        PSMTXTrans(m, (entry->x + entry->width / 2 - 10) + (100.0f - w) / 2, entry->y + 13, 0.0f);
-        PSMTXScale(s, 1.0f, 1.0f, 1.0f);
-    }
-    PSMTXConcat(m, s, m);
-    FontDrawMessageMtx(m, msg);
-#else
-    FontDrawMessage(entry->x + entry->width / 2 - 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
-#endif
-
-    FontDrawEdgeOff();
-    FontDrawStart();
-    for (; shopPointList[i].pts != -1; i++) {
-        item = &itemDataTable[shopPointList[i].item];
-        FontDrawStart();
-#if VERSION >= VERSION_US
-        if (pouch->shopPointRewardFlags & (1 << i)) {
-#else
-        if (pouch->shopPointRewardFlags & (mask = 1 << i)) {
-#endif
-            FontDrawColor(shop_list_pts_got_color);
-        } else {
-            FontDrawColor(shop_list_pts_color);
-        }
-        sprintf(buf, "%s", winZenkakuStr(shopPointList[i].pts));
-        FontDrawMessage(entry->x + (entry->width / 2 - (s32)FontGetMessageWidth(buf)) - 90, entry->y - 20 - i * 26, buf);
-#if VERSION >= VERSION_US
-        msg = msgSearch("msg_shop_point_list5");
-        w = 0.64f * FontGetMessageWidth(msg);
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & (1 << i)) {
-#else
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & mask) {
-#endif
-            FontDrawColor(shop_list_unit_got_color);
-        } else {
-            FontDrawColor(shop_list_unit_color);
-        }
-#if VERSION >= VERSION_US
-        if (w > 60.0f) {
-            PSMTXTrans(m, entry->x + entry->width / 2 - 88, entry->y - 28 - i * 26, 0.0f);
-            PSMTXScale(s, 0.64f * 60.0f / w, 0.64f, 0.64f);
-        } else {
-            PSMTXTrans(m, entry->x + entry->width / 2 - 88, entry->y - 28 - i * 26, 0.0f);
-            PSMTXScale(s, 0.64f, 0.64f, 0.64f);
-        }
-        PSMTXConcat(m, s, m);
-        FontDrawMessageMtx(m, msg);
-        msg = msgSearch(item->name);
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & (1 << i)) {
-#else
-        sprintf(buf, "%s", msgSearch("msg_shop_point_list5"));
-        PSMTXTrans(m, entry->x + (entry->width / 2 - 0.6f * FontGetMessageWidth(buf)) - 40.0f, entry->y - 28 - i * 26, 0.0f);
-        PSMTXScale(s, 0.64f, 0.64f, 0.64f);
-        PSMTXConcat(m, s, m);
-        FontDrawMessageMtx(m, buf);
-        msg = msgSearch(item->name);
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & mask) {
-#endif
-            FontDrawColor(shop_list_item_got_color);
-        } else {
-            FontDrawColor(shop_list_item_color);
-        }
-#if VERSION >= VERSION_US
-        PSMTXTrans(m, entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, 0.0f);
-        if (FontGetMessageWidth(msg) > entry->width / 2 - 10) {
-            PSMTXScale(s, (f32)(entry->width / 2 - 10) / FontGetMessageWidth(msg), 1.0f, 1.0f);
-        } else {
-            PSMTXScale(s, 1.0f, 1.0f, 1.0f);
-        }
-        PSMTXConcat(m, s, m);
-        FontDrawMessageMtx(m, msg);
-#else
-        FontDrawMessage(entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, msg);
-#endif
-    }
-}
-
-/**
- * Opens the three prize list windows (title, list, points), then blocks until B closes them;
- * plays the open and close sounds.
- */
-USER_FUNC(disp_list) {
-    if (isFirstCall) {
-        event->userdata[0] = winMgrEntry(&list_desc[0]);
-        event->userdata[1] = winMgrEntry(&list_desc[1]);
-        event->userdata[2] = winMgrEntry(&list_desc[2]);
-        winMgrOpen(event->userdata[0]);
-        winMgrOpen(event->userdata[1]);
-        winMgrOpen(event->userdata[2]);
-#if VERSION <= VERSION_DEMO_JP
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
-#else
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
-#endif
-    }
-    if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-        winMgrCloseAutoDelete(event->userdata[0]);
-        winMgrCloseAutoDelete(event->userdata[1]);
-        winMgrCloseAutoDelete(event->userdata[2]);
-#if VERSION <= VERSION_DEMO_JP
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
-#else
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
-#endif
-        return EVT_RETURN_YIELD;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Sets up a shop on map load.
- * args: the six shelf objects (map object and hit names), their items and prices,
- * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
- * and an optional sell-price override table.
- * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
- * books), gives the shopkeeper its talk script and starts the shop driver.
- */
-USER_FUNC(evt_shop_setup) {
-    s32 i;
-    ShopWork* wp;
-    EvtWord* args = event->args;
-    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
-    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
-    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
-    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
-    Vec pos;
-    char buf[32];
-
-    wp = _mapAlloc(sizeof(ShopWork));
-    memset(wp, 0, sizeof(ShopWork));
-    _wp = wp;
-    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
-    wp->objs = objs;
-    wp->items = items;
-    wp->shopper = shopper;
-    wp->db = db;
-    wp->count = 6;
-    for (i = 0; i < wp->count; i++) {
-        mapObjGetPos(wp->objs[i].mobj, &pos);
-        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
-        sprintf(buf, "shp%d", i);
-        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
-        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
-        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
-        wp->itemFlags[i] = 0;
-        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-    }
-
-    {
-        NpcEntry* npc = npcNameToPtr(shopper->name);
-        npc->talkEvt = shopper_talk_evt;
-    }
-    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
-    wp->mainEvt->lwData[0] = (EvtWord)wp;
-    for (i = 0; i < 3; i++) {
-        wp->win[i] = winMgrEntry(&window_desc[i]);
-    }
-    wp->sel = -1;
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION == VERSION_DEMO_JP
-    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
-#endif
-#else
-    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
-#endif
-    return EVT_RETURN_DONE;
-}
-
-/** Opens (args[0] nonzero) or closes the shop points window, starting its counter from the current points. */
-USER_FUNC(point_disp_onoff) {
-    s32 on = evtGetValue(event, event->args[0]);
-    PouchData* pouch = pouchGetPtr();
-    ShopWork* wp = _wp;
-    wp->points = pouch->shopPoints;
-    if (on) {
-        winMgrOpen(wp->win[2]);
-    } else {
-        winMgrClose(wp->win[2]);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Blocks until the shop points window has counted up to Mario's points;
- * JP and later play a tick sound each frame meanwhile.
- */
-#if VERSION <= VERSION_DEMO_JP
-static USER_FUNC(point_wait) {
-#else
-USER_FUNC(point_wait) {
-#endif
-    ShopWork* wp = _wp;
-    PouchData* pouch = pouchGetPtr();
-#if VERSION <= VERSION_DEMO_JP
-    return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-}
-#else
-    if (wp->points != pouch->shopPoints) {
-        psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-        return EVT_RETURN_BLOCK;
-    }
-    return EVT_RETURN_DONE;
-}
-#endif
-
-/** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
-USER_FUNC(shop_flag_onoff) {
-    EvtWord* args = event->args;
-    s32 on = evtGetValue(event, args[0]);
-    s32 mask = evtGetValue(event, args[1]);
-    ShopWork* wp = _wp;
-    if (on) {
-        wp->flags |= mask;
-    } else {
-        wp->flags &= ~mask;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Writes Mario's shop points (pouch, 0-300) to args[0]. */
-USER_FUNC(get_shop_point) {
-    EvtWord* args = event->args;
-    PouchData* pouch = pouchGetPtr();
-    evtSetValue(event, args[0], pouch->shopPoints);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Adds args[0] shop points, doubled on mri_07, usu_01 or rsh_03 when that shop's sale flag is on
- * and the play-time values in args[1..3] are under 900000 (the sale's time limit); caps the total at 300.
- */
-USER_FUNC(add_shop_point) {
-    EvtWord* args = event->args;
-    s32 add = evtGetValue(event, args[0]);
-    s32 mriSaleMs = evtGetValue(event, args[1]);
-    s32 usuSaleMs = evtGetValue(event, args[2]);
-    s32 rshSaleMs = evtGetValue(event, args[3]);
-    PouchData* pouch = pouchGetPtr();
-
-    if (!strcmp(gp->currentMapName, "mri_07") && swGet(GSWF_ID(GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE)) && mriSaleMs < 900000) {
-        add *= 2;
-    }
-    if (!strcmp(gp->currentMapName, "usu_01") && swGet(GSWF_ID(GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE)) && usuSaleMs < 900000) {
-        add *= 2;
-    }
-    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(GSWF_ID(GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE)) && rshSaleMs < 900000) {
-        add *= 2;
-    }
-    pouch->shopPoints += add;
-    if (pouch->shopPoints > 300) {
-        pouch->shopPoints = 300;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Clears Mario's shop points and the prizes claimed, after the 300-point prize. */
-USER_FUNC(reset_shop_point) {
-    PouchData* pouch = pouchGetPtr();
-    pouch->shopPoints = 0;
-    pouch->shopPointRewardFlags = 0;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Finds the next prize Mario has earned but not claimed:
- * writes 0, its item id and its name to args[0..2], or -1 to all three when there is none.
- * At 300 points it always offers the 300-point prize.
- */
-USER_FUNC(chk_shop_point) {
-    EvtWord* args = event->args;
-    PouchData* pouch = pouchGetPtr();
-    s32 i = 0;
-    s32 j;
-    ShopPoint* p;
-    ShopPoint* q;
-    s32 v;
-
-    for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
-        if (v <= pouch->shopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
-            if (pouch->shopPoints != 300) {
-                evtSetValue(event, args[0], 0);
-                evtSetValue(event, args[1], p->item);
-                evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[p->item].name));
-            } else {
-                for (j = 0; shopPointList[j].pts != 300; j++) {
-                }
-                evtSetValue(event, args[0], 0);
-                evtSetValue(event, args[1], shopPointList[j].item);
-                evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[shopPointList[j].item].name));
-            }
-            return EVT_RETURN_DONE;
-        }
-    }
-    evtSetValue(event, args[0], -1);
-    evtSetValue(event, args[1], -1);
-    evtSetValue(event, args[2], -1);
-    return EVT_RETURN_DONE;
-}
-
-/** Marks the lowest earned but unclaimed shop point prize as claimed. */
-USER_FUNC(exchange_shop_point) {
-    PouchData* pouch = pouchGetPtr();
-    ShopPoint* p;
-    s32 i = 0;
-    s32 v;
-
-    for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
-        if (v <= pouch->shopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
-            pouch->shopPointRewardFlags |= (1 << i);
-            return EVT_RETURN_DONE;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Looks up the prize for the point threshold in args[0] and writes its item id and name to args[1]
- * and args[2] (-1 when there is no such threshold).
- */
-USER_FUNC(shop_point_item) {
-    EvtWord* args = event->args;
-    s32 pts = evtGetValue(event, args[0]);
-    ShopPoint* p;
-    s32 v;
-
-    pouchGetPtr();
-    for (p = shopPointList; (v = p->pts) != -1; p++) {
-        if (v == pts) {
-            evtSetValue(event, args[1], p->item);
-            evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[p->item].name));
-            return EVT_RETURN_DONE;
-        }
-    }
-    evtSetValue(event, args[1], -1);
-    evtSetValue(event, args[2], -1);
-    return EVT_RETURN_DONE;
-}
-
-/** Writes the shopkeeper NPC's name to args[0]. */
-USER_FUNC(shopper_name) {
-    evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->name);
-    return EVT_RETURN_DONE;
-}
-
-static USER_FUNC(disp_off) {
-    ShopWork* wp = (ShopWork*)evtGetValue(event, event->args[0]);
-    wp->flags &= ~1;
-    return EVT_RETURN_DONE;
-}
-
-/** For the shelf item Mario picked (ShopWork in args[0]): writes its name, item id and price to args[1..3]. */
-static USER_FUNC(get_value) {
-    EvtWord* args = event->args;
-    ShopWork* wp = (ShopWork*)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], (EvtWord)msgSearch(itemDataTable[wp->items[wp->cur].id].name));
-    evtSetValue(event, args[2], wp->items[wp->cur].id);
-    evtSetValue(event, args[3], wp->items[wp->cur].price);
-    return EVT_RETURN_DONE;
-}
-
-/** Writes the shop's message id number args[1] (from ShopperData.msgs) to args[2]; args[0] is the ShopWork. */
-USER_FUNC(get_msg) {
-    EvtWord* args = event->args;
-    ShopWork* wp = (ShopWork*)evtGetValue(event, args[0]);
-    s32 i = evtGetValue(event, args[1]);
-    evtSetValue(event, args[2], (EvtWord)wp->shopper->msgs[i]);
-    return EVT_RETURN_DONE;
-}
-
-/** Writes the shop's after-buy script (ShopperData.buy_evt, may be NULL) to args[0]. */
-USER_FUNC(get_buy_evt) {
-    evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->buy_evt);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Records the item id just bought (args[0]) so the shop driver can hide one-off items once the purchase script
- * ends.
- */
-USER_FUNC(set_buy_item_id) {
-    _wp->buyItem = evtGetValue(event, event->args[0]);
-    return EVT_RETURN_DONE;
-}
-
-/** Writes the shop's ShopWork pointer to args[0]. */
-static USER_FUNC(get_ptr) {
-    evtSetValue(event, event->args[0], (EvtWord)_wp);
-    return EVT_RETURN_DONE;
-}
-
-/** Writes the shop's talk hook script (ShopperData.fook_evt, may be NULL) to args[0]. */
-USER_FUNC(get_fook_evt) {
-    evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->fook_evt);
-    return EVT_RETURN_DONE;
-}
-
-/** Writes the name and sell price of item args[0] to args[1] and args[2]. */
-USER_FUNC(name_price) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], (EvtWord)msgSearch(itemDataTable[id].name));
-    evtSetValue(event, args[2], itemDataTable[id].sell_price);
-    return EVT_RETURN_DONE;
-}
-
-/** Sets LW(0) to the number of items Mario carries, to check he has something to sell. */
-USER_FUNC(sell_pouchcheck_func) {
-    pouchGetPtr();
-    event->lwData[0] = pouchGetHaveItemCnt();
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Applies the shop's sell-price overrides (ShopDb) to the item table, saving the original prices,
- * around the sell menu.
- */
-USER_FUNC(item_data_db_arrange) {
-    ShopDb* db = _wp->db;
-    if (db) {
-        for (; db->id; db++) {
-            db->save = itemDataTable[db->id].sell_price;
-            itemDataTable[db->id].sell_price = db->price;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Puts back the sell prices item_data_db_arrange replaced. */
-USER_FUNC(item_data_db_restore) {
-    ShopDb* db = _wp->db;
-    if (db) {
-        for (; db->id; db++) {
-            itemDataTable[db->id].sell_price = db->save;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Sets LW(0) to the number of items Mario carries and LW(1) to the free stored-item slots. */
-USER_FUNC(keep_pouchcheck_func) {
-    pouchGetPtr();
-    event->lwData[0] = pouchGetHaveItemCnt();
-    event->lwData[1] = pouchGetEmptyKeepItemCnt();
-    return EVT_RETURN_DONE;
-}
-
-/** Sets LW(0) to the number of stored items and LW(1) to the free slots in Mario's item pouch. */
-USER_FUNC(unkeep_pouchcheck_func) {
-    pouchGetPtr();
-    event->lwData[0] = pouchGetKeepItemCnt();
-    event->lwData[1] = pouchGetEmptyHaveItemCnt();
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Shop driver, every frame: when Mario stands on a shelf's hit object,
- * opens the name and description windows for that item; A starts buy_evt.
- * Waits while a partner ability, the Ghost Diary or (JP and later) a field item pickup is active,
- * and on rsh_03 on day 3 until the shopkeeper is woken.
- * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
- */
-#if VERSION <= VERSION_DEMO_JP
-static USER_FUNC(evt_shop_main_func) {
-#else
-USER_FUNC(evt_shop_main_func) {
-#endif
-    ShopWork* wp;
-    MarioWork* mario;
-    PartyEntry* party;
-    BOOL found;
-    HitEntry* hit;
-    u32 trg;
-    s32 i;
-    MapObject* mobj;
-    char buf[32];
-
-    found = FALSE;
-    wp = (ShopWork*)event->lwData[0];
-    mario = marioGetPtr();
-    party = partyGetPtr(0);
-    hit = mario->hitobjStandOn;
-    wp->flags &= ~1;
-    trg = keyGetButtonTrg(0);
-
-    // FAKE: the masks do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
-    if ((!marioChkCtrl() & 0x7ffffff) || (!marioChkKey() & 0x7ffffff)) {
-        trg = 0;
-    }
-    if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
-        evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
-        !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
-        return EVT_RETURN_BLOCK;
-    }
-    if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        if (wp->sel != -1) {
-            wp->sel = -1;
-            winMgrClose(wp->win[0]);
-            winMgrClose(wp->win[1]);
-        }
-        return EVT_RETURN_BLOCK;
-    }
-#if VERSION <= VERSION_DEMO_JP
-    if (winGhostDiaryChk()) {
-#else
-    if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
-#endif
-        if (wp->sel != -1) {
-            wp->sel = -1;
-            winMgrClose(wp->win[0]);
-            winMgrClose(wp->win[1]);
-        }
-        return EVT_RETURN_BLOCK;
-    }
-    if (!(wp->flags & 2)) {
-        if (hit) {
-            for (i = 0; i < wp->count; i++) {
-                if (!strcmp(wp->objs[i].hit, hitGetName(hit))) {
-                    break;
-                }
-            }
-
-            // itemFlags[i] is read before the i < wp->count test; a full six-item shop with no matching hit reads one past itemFlags.
-            if (!(wp->itemFlags[i] & 1) && i < wp->count) {
-                if (wp->sel != i) {
-                    if (wp->sel == -1) {
-                        winMgrOpen(wp->win[0]);
-                        winMgrOpen(wp->win[1]);
-                    }
-                    wp->sel = i;
-                    wp->cur = i;
-                    winMgrHelpInit(winMgrGetPtr(wp->win[1]));
-                }
-                found = TRUE;
-            }
-        }
-        if (!found && wp->sel != -1) {
-            wp->sel = -1;
-            winMgrClose(wp->win[0]);
-            winMgrClose(wp->win[1]);
-        }
-        if (wp->sel != -1) {
-            wp->flags |= 1;
-            if (trg & PAD_BUTTON_A) {
-                marioKeyOff();
-                wp->buyEvt = evtEntry(buy_evt, 0, 0);
-                wp->buyEvt->lwData[0] = (EvtWord)wp;
-                wp->flags |= 2;
-                winMgrClose(wp->win[0]);
-                winMgrClose(wp->win[1]);
-                wp->sel = -1;
-                wp->buyItem = 0;
-            }
-        }
-    } else if (!evtCheckID(wp->buyEvt->eventId)) {
-        wp->flags &= ~2;
-        marioKeyOn();
-        if (wp->buyItem == ITEM_CONTACT_LENS) {
-            wp->itemFlags[wp->cur] |= 1;
-        }
-        if (wp->buyItem == ITEM_SUPER_LUIGI1) {
-            wp->itemFlags[wp->cur] |= 1;
-        }
-        if (wp->buyItem == ITEM_SUPER_LUIGI2) {
-            wp->itemFlags[wp->cur] |= 1;
-        }
-        if (wp->buyItem == ITEM_SUPER_LUIGI3) {
-            wp->itemFlags[wp->cur] |= 1;
-        }
-        if (wp->buyItem == ITEM_SUPER_LUIGI4) {
-            wp->itemFlags[wp->cur] |= 1;
-        }
-        if (wp->buyItem == ITEM_SUPER_LUIGI5) {
-            wp->itemFlags[wp->cur] |= 1;
-        }
-    }
-    for (i = 0; i < wp->count; i++) {
-        mobj = mapGetMapObj(wp->objs[i].mobj);
-        if (mobj) {
-            sprintf(buf, "shp%d", i);
-            if (wp->itemFlags[i] & 1) {
-                iconFlagOn(buf, ICON_FLAG_HIDDEN);
-            } else if (mobj->flags & MAP_OBJ_FLAG_HIDDEN) {
-                iconFlagOn(buf, ICON_FLAG_HIDDEN);
-            } else {
-                iconFlagOff(buf, ICON_FLAG_HIDDEN);
-            }
-        }
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** TRUE while the shop set up on the current map has its item display up or a purchase running (any ShopWork flag). */
-BOOL evtShopIsActive(void) {
-    if (!strcmp(gp->currentMapName, mapname) && _wp->flags) {
-        return TRUE;
-    }
-    return FALSE;
-}
