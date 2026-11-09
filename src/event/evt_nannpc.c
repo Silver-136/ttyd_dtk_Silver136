@@ -34,8 +34,9 @@ char* nanNPCMakeString(char* name) {
     return name;
 }
 
-/** the early demos' search through that helper */
-static inline NanNPC* nanNPCSearch2(char* name) {
+/** the early demos' search through that helper (nanNPCMakeString is inlined only here) */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+NanNPC* nanNPCNameToPtr(char* name) {
     s32 i;
     NanNPC* p;
     NanNPCWork* w = nanNPCWork;
@@ -668,7 +669,7 @@ USER_FUNC(evt_nannpc_move_position2) {
     Vec step;
     args = event->args;
 #if VERSION <= VERSION_DEMO_JP
-    npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
+    npc = nanNPCNameToPtr((char*)evtGetValue(event, args[0]));
     now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
 #else
     npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
@@ -705,7 +706,7 @@ USER_FUNC(evt_nannpc_move_position2) {
 USER_FUNC(evt_nannpc_jump_position) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_JP
-    NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
+    NanNPC* npc = nanNPCNameToPtr((char*)evtGetValue(event, args[0]));
 #else
     char* name = (char*)evtGetValue(event, args[0]);
     NanNPC* npc = nanNPCSearch(name);
