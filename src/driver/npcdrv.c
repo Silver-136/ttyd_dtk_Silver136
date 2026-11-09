@@ -2587,25 +2587,10 @@ typedef struct FbatHitResult {
 
 static NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
+s32 _getHammerMotionParam(void);
+void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z);
+void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
 
-/** Position of Mario's hammer head at frame f (0-10) of the swing; angle is the swing direction, r the reach. */
-static inline void npcHammerPos(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z) {
-    MarioWork* mario = marioGetPtr();
-    f32 s1, c1, s2, c2;
-    s32 tbl[11] = {0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101};
-
-    if (f < 0.0f) {
-        f = 0.0f;
-    }
-    if (f >= 11.0f) {
-        f = 10.0f;
-    }
-    sincosf(&s1, &c1, angle);
-    sincosf(&s2, &c2, tbl[(s32)f]);
-    *x = mario->position.x + s2 * (s1 * r);
-    *z = mario->position.z + s2 * (c1 * r);
-    *y = mario->position.y + r * c2;
-}
 
 /**
  * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
@@ -2639,24 +2624,6 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) continue;                                         \
     if (npc->flags & NPC_FLAG_2D) continue;
 
-/** Position of the hammer head during the spin hammer; angle is the spin angle, r the reach. */
-static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) {
-    MarioWork* mario = marioGetPtr();
-    f32 s, c;
-
-    sincosf(&s, &c, angle);
-#if VERSION <= VERSION_DEMO_JP
-    // the early demos scale x and z by s once more and put the head at r * c above Mario; JP and later use
-    // a flat circle 15 units up
-    *x = mario->position.x + s * (s * r);
-    *z = s * (c * r) + mario->position.z;
-    *y = r * c + mario->position.y;
-#else
-    *x = s * r + mario->position.x;
-    *z = c * r + mario->position.z;
-    *y = 15.0f + mario->position.y;
-#endif
-}
 
 /**
  * Finds the NPC Mario or the partner hits this frame.
@@ -2779,7 +2746,6 @@ void* fbatHitCheck(u32 flags, void* result) {
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
             if (flags & FBAT_CHECK_CURRENT) {
-                MarioWork* m;
                 s32 v;
 #if VERSION <= VERSION_DEMO_JP
                 f32 f;
@@ -2798,14 +2764,10 @@ void* fbatHitCheck(u32 flags, void* result) {
                 r = 1.5f * mario->wPlayerCollisionBox.x;
                 angle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
 #endif
-                m = marioGetPtr();
-                animPoseGetAnimPosePtr(m->paperAnimGroupId[marioAnimeId()]);
-                v = (s32)m->multiTimer;
+                v = _getHammerMotionParam();
 #if VERSION <= VERSION_DEMO_JP
-                if (v > 20)
-                    v = 10;
                 f = v;
-                npcHammerPos(f, reach, swingAngle, &x, &y, &z);
+                _getHammerPoint(f, reach, swingAngle, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
@@ -2835,8 +2797,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (dist >= res.dist)
                         continue;
 #else
-                if (v > 20) v = 10;
-                npcHammerPos(v, r, angle, &x, &y, &z);
+                _getHammerPoint(v, r, angle, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     if (npc == NULL) continue;
@@ -2895,7 +2856,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 if (swingAngle < 0.0f)
                     break;
                 reach = 1.5f * mario->wPlayerCollisionBox.x;
-                npcKaitenHammerPos(swingAngle, reach, &x, &y, &z);
+                _getKaitenHammerPoint(swingAngle, reach, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
@@ -2934,7 +2895,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle = marioGetAngleKaitenHammer();
                 if (angle < 0.0f) break;
                 r = 1.5f * mario->wPlayerCollisionBox.x;
-                npcKaitenHammerPos(angle, r, &x, &y, &z);
+                _getKaitenHammerPoint(angle, r, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, NPC_REACTION_HAMMER)
@@ -3048,12 +3009,58 @@ void* fbatHitCheck(u32 flags, void* result) {
     return hit;
 }
 
-#if VERSION >= VERSION_JP
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
-void npcStrippedHitPool(f32* f) {
-    f[0] = 15.0f;
+// The three hammer helpers: original names, sizes and place from the JP demo map (UNUSED there). They are plain
+// functions: this unit auto-inlines every call, and the linker strips the out-of-line copies.
+/** Mario's hammer swing frame (multiTimer; past 20 counts as 10). */
+s32 _getHammerMotionParam(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 frame;
+
+    animPoseGetAnimPosePtr(mario->paperAnimGroupId[marioAnimeId()]);
+    frame = (s32)mario->multiTimer;
+    if (frame > 20) {
+        frame = 10;
+    }
+    return frame;
 }
+
+/** Position of Mario's hammer head at frame f (0-10) of the swing; angle is the swing direction, r the reach. */
+void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z) {
+    MarioWork* mario = marioGetPtr();
+    f32 s1, c1, s2, c2;
+    s32 tbl[11] = {0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101};
+
+    if (f < 0.0f) {
+        f = 0.0f;
+    }
+    if (f >= 11.0f) {
+        f = 10.0f;
+    }
+    sincosf(&s1, &c1, angle);
+    sincosf(&s2, &c2, tbl[(s32)f]);
+    *x = mario->position.x + s2 * (s1 * r);
+    *z = mario->position.z + s2 * (c1 * r);
+    *y = mario->position.y + r * c2;
+}
+
+/** Position of the hammer head during the spin hammer; angle is the spin angle, r the reach. */
+void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z) {
+    MarioWork* mario = marioGetPtr();
+    f32 s, c;
+
+    sincosf(&s, &c, angle);
+#if VERSION <= VERSION_DEMO_JP
+    // the early demos scale x and z by s once more and put the head at r * c above Mario; JP and later use
+    // a flat circle 15 units up
+    *x = mario->position.x + s * (s * r);
+    *z = s * (c * r) + mario->position.z;
+    *y = r * c + mario->position.y;
+#else
+    *x = s * r + mario->position.x;
+    *z = c * r + mario->position.z;
+    *y = 15.0f + mario->position.y;
 #endif
+}
 
 /**
  * Sphere test of the point (x, y, z) with radius r against an NPC's upright cylinder (half its width);
@@ -3090,7 +3097,7 @@ static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f3
     for (t = 0.0f; t <= 11.0f; t += 1.0f) {
         f32 x, y, z;
 
-        npcHammerPos(t, r, angle, &x, &y, &z);
+        _getHammerPoint(t, r, angle, &x, &y, &z);
 #if VERSION <= VERSION_DEMO_JP
         hit = _npcHitCheckSphere(npc, &d, x, y, z, 10.0f);
 #else
