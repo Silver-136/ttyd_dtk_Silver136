@@ -1643,16 +1643,15 @@ void mapCalcAnimUV(MapAnim* a_, MapAnimMatData* d, MapMaterial* obj) {
  * Applies an alpha animation at the animation's current time to the material,
  * stored as 255 minus 255 times the animated value in blendColor.r.
  */
-static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMaterial* obj) {
+// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
+void mapCalcAnimColor(MapAnim* a_, MapAnimAlphaData* d, MapMaterial* obj) {
     int n;
     f32 cur;
     for (n = 1; n < d->keyCount; n++) {
         MapAnimKey4* k0 = &d->keys[n - 1];
         MapAnimKey4* k1 = &d->keys[n];
 
-        // FAKE: cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapCalcAnimUV changes the object
-        cur = a_->time;
-        if (cur <= d->keys[n].time) {
+        if (a_->time <= d->keys[n].time) {
             cur = a_->time;
         } else if (n == d->keyCount - 1) {
             cur = k1->time;
@@ -1798,7 +1797,7 @@ MapMaterial* mapSearchDmdMaterial(const char* name) {
     }                                          \
     obj = mapSearchDmdMaterial(b_);                 \
     if (obj) {                                 \
-        mapMainAlphaKeys_(a_, i_, obj); \
+        mapCalcAnimColor(a_, i_, obj); \
     }                                          \
 }
 
