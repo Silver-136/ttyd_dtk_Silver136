@@ -2588,8 +2588,6 @@ typedef struct FbatHitResult {
 static NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 
-#if VERSION <= VERSION_DEMO_JP
-
 /** Position of Mario's hammer head at frame f (0-10) of the swing; angle is the swing direction, r the reach. */
 static inline void npcHammerPos(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z) {
     MarioWork* mario = marioGetPtr();
@@ -2608,7 +2606,6 @@ static inline void npcHammerPos(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z)
     *z = mario->position.z + s2 * (c1 * r);
     *y = mario->position.y + r * c2;
 }
-#endif
 
 /**
  * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
@@ -2642,26 +2639,24 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) continue;                                         \
     if (npc->flags & NPC_FLAG_2D) continue;
 
-typedef struct {
-    s32 v[11];
-} SinTbl;
-#if VERSION >= VERSION_JP
-static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
-#endif
-
-#if VERSION <= VERSION_DEMO_JP
-
-/** Position of the hammer head during the spin hammer in the early demos. */
+/** Position of the hammer head during the spin hammer; angle is the spin angle, r the reach. */
 static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) {
     MarioWork* mario = marioGetPtr();
     f32 s, c;
 
     sincosf(&s, &c, angle);
+#if VERSION <= VERSION_DEMO_JP
+    // the early demos scale x and z by s once more and put the head at r * c above Mario; JP and later use
+    // a flat circle 15 units up
     *x = mario->position.x + s * (s * r);
     *z = s * (c * r) + mario->position.z;
     *y = r * c + mario->position.y;
-}
+#else
+    *x = s * r + mario->position.x;
+    *z = c * r + mario->position.z;
+    *y = 15.0f + mario->position.y;
 #endif
+}
 
 /**
  * Finds the NPC Mario or the partner hits this frame.
@@ -2686,13 +2681,12 @@ void* fbatHitCheck(u32 flags, void* result) {
 #if VERSION <= VERSION_DEMO_JP
     f32 r, angle, angle2, r2;
 #else
-    f32 angle, r2, angle2, r;
+    f32 angle2, r2, r, angle;
 #endif
     PartyEntry* party;
     FbatHitResult res;
     MarioWork* mario;
     NpcWork* wp = npcGetWorkPtrInline();
-    SinTbl tbl;
 
     mario = marioGetPtr();
     res.kind = 0;
@@ -2787,8 +2781,8 @@ void* fbatHitCheck(u32 flags, void* result) {
             if (flags & FBAT_CHECK_CURRENT) {
                 MarioWork* m;
                 s32 v;
-                f32 f;
 #if VERSION <= VERSION_DEMO_JP
+                f32 f;
                 f32 x, y, z;
                 f32 reach, swingAngle;
                 if (mario->currMotionId != MARIO_MOTION_HAMMER)
@@ -2798,7 +2792,6 @@ void* fbatHitCheck(u32 flags, void* result) {
                 // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
                 swingAngle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
 #else
-                f32 c2, s2, c1, s1;
                 f32 x, y, z;
                 f32 r, angle;
                 if (mario->currMotionId != MARIO_MOTION_HAMMER) break;
@@ -2843,16 +2836,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                         continue;
 #else
                 if (v > 20) v = 10;
-                f = v;
-                m = marioGetPtr();
-                tbl = sSinTbl;
-                if (f < 0.0f) f = 0.0f;
-                if (f >= 11.0f) f = 10.0f;
-                sincosf(&s1, &c1, angle);
-                sincosf(&s2, &c2, tbl.v[(s32)f]);
-                x = m->position.x + s2 * (s1 * r);
-                z = m->position.z + s2 * (c1 * r);
-                y = m->position.y + r * c2;
+                npcHammerPos(v, r, angle, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     if (npc == NULL) continue;
@@ -2945,17 +2929,12 @@ void* fbatHitCheck(u32 flags, void* result) {
             if (!fbat_canHit(npc)) break;
             if (flags & FBAT_CHECK_CURRENT) {
                 f32 angle, r;
-                MarioWork* m;
-                f32 c, s, x, y, z;
+                f32 x, y, z;
                 if (mario->currMotionId != MARIO_MOTION_HAMMER_2) break;
                 angle = marioGetAngleKaitenHammer();
                 if (angle < 0.0f) break;
                 r = 1.5f * mario->wPlayerCollisionBox.x;
-                m = marioGetPtr();
-                sincosf(&s, &c, angle);
-                x = s * r + m->position.x;
-                z = c * r + m->position.z;
-                y = 15.0f + m->position.y;
+                npcKaitenHammerPos(angle, r, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, NPC_REACTION_HAMMER)
@@ -3106,39 +3085,15 @@ static NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 
 static NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
     f32 t;
     f32 d;
-#if VERSION <= VERSION_DEMO_JP
     NpcEntry* hit;
 
     for (t = 0.0f; t <= 11.0f; t += 1.0f) {
         f32 x, y, z;
 
         npcHammerPos(t, r, angle, &x, &y, &z);
+#if VERSION <= VERSION_DEMO_JP
         hit = _npcHitCheckSphere(npc, &d, x, y, z, 10.0f);
 #else
-    float tmpi2;
-    NpcEntry* hit;
-
-    for (t = 0.0f; t <= 11.0f; t += 1.0f) {
-        f32 f = t;
-        MarioWork* mario = marioGetPtr();
-        f32 c2, s2, c1, s1;
-        f32 x, y, z;
-        SinTbl tbl = *(volatile const SinTbl*)&sSinTbl; // FAKE: volatile copy; a plain struct copy `tbl = sSinTbl` changes the object
-
-        if (f < 0.0f) {
-            f = 0.0f;
-        }
-        if (f >= 11.0f) {
-            f = 10.0f;
-        }
-        sincosf(&s1, &c1, angle);
-        sincosf(&s2, &c2, tbl.v[(s32)f]);
-
-        // FAKE: x goes through the spare float tmpi2; assigning x directly changes the object
-        tmpi2 = mario->position.x + s2 * (s1 * r);
-        x = tmpi2;
-        z = mario->position.z + s2 * (c1 * r);
-        y = mario->position.y + r * c2;
         hit = _npcHitCheckSphere(npc, &d, x, y, z, 12.0f);
 #endif
         if (hit) {
