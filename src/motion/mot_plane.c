@@ -593,13 +593,14 @@ static inline BOOL planeChkUnder(void) {
  * the yaw clamped to stay in the flying direction, and the collision checks that end the flight on the ground,
  * a wall or water.
  */
+f32 movedir2dispdir(f32 dir);
+
 static void flyMain(void) {
     f32 s2, c2, s, c;
     MarioWork* mp;
     f32 t;
     f32 a;
     f32 v;
-    BOOL yawInLeftHalf;
     s32 stallFrames;
     f32 speedSin;
 
@@ -649,12 +650,7 @@ static void flyMain(void) {
             mp->motPlane->yaw += 0.1f * (210.0f - mp->motPlane->yaw);
         }
     }
-    yawInLeftHalf = FALSE;
-    t = mp->motPlane->yaw;
-    if (t >= 90.0f && t <= 270.0f) {
-        yawInLeftHalf = TRUE;
-    }
-    mp->displayDirection = revise360(yawInLeftHalf ? -t - 90.0f : 270.0f - t);
+    mp->displayDirection = movedir2dispdir(mp->motPlane->yaw);
     if (mp->wStickDir1 != 0) {
         if (mp->baseSpeed) {
             a = __fabsf((f32)mp->wStickDir1);
@@ -883,9 +879,15 @@ void mot_plane_post(void) {
     allPartyRideOff2();
 }
 
-// FAKE: stand-in that nothing calls; it only places its 270.0f literal in this object's constant pool
-static f32 planeDead270(void) {
-    return 270.0f;
+/** The display direction for a plane flying toward dir (the sprite faces left between 90 and 270). */
+// Original name and size (0x68) from the JP demo map (UNUSED there: flyMain's call is inlined).
+f32 movedir2dispdir(f32 dir) {
+    BOOL left = FALSE;
+
+    if (dir >= 90.0f && dir <= 270.0f) {
+        left = TRUE;
+    }
+    return revise360(left ? -dir - 90.0f : 270.0f - dir);
 }
 
 /**
