@@ -716,6 +716,9 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Then on-screen culling, draw, shadow, blur and offscreen registration.
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
+void npcCheckInWater(NpcEntry* entry, const char* sfx);
+void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
+
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -728,7 +731,6 @@ void npcMain(void) {
     f32 dist;
     Vec dv;
     Vec dv2;
-    FirstStrikeInfo* firstStrike;
     s32 marioFindable;
     f32 speedScale;
 
@@ -781,18 +783,7 @@ void npcMain(void) {
             }
 
             if (entry->flags & NPC_FLAG_READY) {
-                if (entry->statusFlags & NPC_STATUS_IN_WATER) {
-                    entry->statusFlags |= NPC_STATUS_WAS_IN_WATER;
-                } else {
-                    entry->statusFlags &= ~NPC_STATUS_WAS_IN_WATER;
-                }
-                entry->statusFlags &= ~NPC_STATUS_IN_WATER;
-                if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
-                    entry->statusFlags |= NPC_STATUS_IN_WATER;
-                    if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
-                        psndSFXOn_3D(kpaSfx, &entry->position);
-                    }
-                }
+                npcCheckInWater(entry, kpaSfx);
                 if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
                     entry->maxFallSpeed = 100.0f;
                     speedScale = 0.5f;
@@ -1182,57 +1173,7 @@ void npcMain(void) {
     }
 
     fbat = gp->fbatData;
-    firstStrike = &fbat->firstStrike;
-    if (firstStrike->enabled) {
-        switch (firstStrike->type) {
-            case FIRST_STRIKE_MARIO:
-#if VERSION <= VERSION_DEMO_JP
-                (firstStrike->timer)++;
-                if (firstStrike->timer < 30) {
-                    firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
-                } else if (firstStrike->timer < 150) {
-                    firstStrike->x = 0.0f;
-                } else if (firstStrike->timer < 180) {
-                    firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
-#else
-                firstStrike->timer++;
-                if (firstStrike->timer < 20) {
-                    firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 20);
-                } else if (firstStrike->timer < 80) {
-                    firstStrike->x = 0.0f;
-                } else if (firstStrike->timer < 100) {
-                    firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
-#endif
-                } else {
-                    firstStrike->hitKind = 0;
-                    break;
-                }
-                firstStrike->y = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-                dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
-                break;
-            case FIRST_STRIKE_ENEMY:
-                (firstStrike->timer)++;
-#else
-                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
-                break;
-            case FIRST_STRIKE_ENEMY:
-                firstStrike->timer++;
-#endif
-                if (firstStrike->timer > 60) {
-                    firstStrike->hitKind = 0;
-                    break;
-                }
-                firstStrike->x = 0.0f;
-                firstStrike->y = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-                dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
-#else
-                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
-#endif
-                break;
-        }
-    }
+    _fbatFitstAttackAnnounceMain(&fbatGetPointer()->firstStrike);
     switch (fbat->mode) {
         case FBAT_MODE_FIELD:
             npcKoopaModeMain();
@@ -1746,10 +1687,59 @@ void fbatSetAttackAnnounceEnable(void) {
 /** Plain multiply, so the banner's coordinates are scaled by 0.1 in the order the original code did it. */
 static inline f32 mulf(f32 a, f32 b) { return a * b; }
 
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
-void npcStrippedAnnouncePool(f32* f) {
-    f[0] = -600.0f;
-    f[1] = 600.0f;
+/** Runs the first-strike banner (slide in, hold, slide out) and queues its draw. */
+// Original name and size (0x138) from the JP demo map (UNUSED there: npcMain's call is inlined).
+void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike) {
+    if (firstStrike->enabled) {
+        switch (firstStrike->type) {
+            case FIRST_STRIKE_MARIO:
+#if VERSION <= VERSION_DEMO_JP
+                (firstStrike->timer)++;
+                if (firstStrike->timer < 30) {
+                    firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
+                } else if (firstStrike->timer < 150) {
+                    firstStrike->x = 0.0f;
+                } else if (firstStrike->timer < 180) {
+                    firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
+#else
+                firstStrike->timer++;
+                if (firstStrike->timer < 20) {
+                    firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 20);
+                } else if (firstStrike->timer < 80) {
+                    firstStrike->x = 0.0f;
+                } else if (firstStrike->timer < 100) {
+                    firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
+#endif
+                } else {
+                    firstStrike->hitKind = 0;
+                    break;
+                }
+                firstStrike->y = 0.0f;
+#if VERSION <= VERSION_DEMO_JP
+                dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+                break;
+            case FIRST_STRIKE_ENEMY:
+                (firstStrike->timer)++;
+#else
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+                break;
+            case FIRST_STRIKE_ENEMY:
+                firstStrike->timer++;
+#endif
+                if (firstStrike->timer > 60) {
+                    firstStrike->hitKind = 0;
+                    break;
+                }
+                firstStrike->x = 0.0f;
+                firstStrike->y = 0.0f;
+#if VERSION <= VERSION_DEMO_JP
+                dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+#else
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
+#endif
+                break;
+        }
+    }
 }
 
 /**
@@ -3662,12 +3652,28 @@ void npcClearDeadInfo(void) {
     memset(gp->fbatData->deadInfo, 0, sizeof(gp->fbatData->deadInfo));
 }
 
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places 60.0f and the water splash's sound name
+// in this object's constant pools (npcCheckInWater takes the name from npcMain). Removing it changes the object.
 void npcStrippedKoopaPool(f32* f, const char** p) {
     f[0] = 60.0f;
-    f[1] = 365.0f;
-    p[0] = "kpa_03";
-    p[1] = "SFX_KUPPA_3RD_WATER_FALL1";
+    p[0] = "SFX_KUPPA_3RD_WATER_FALL1";
+}
+
+/** On kpa_03, marks an NPC at or below the water line (y 365) as in water, with a splash when it enters. */
+// Original name and size (0xb8) from the JP demo map (UNUSED there: npcMain's call is inlined).
+void npcCheckInWater(NpcEntry* entry, const char* sfx) {
+    if (entry->statusFlags & NPC_STATUS_IN_WATER) {
+        entry->statusFlags |= NPC_STATUS_WAS_IN_WATER;
+    } else {
+        entry->statusFlags &= ~NPC_STATUS_WAS_IN_WATER;
+    }
+    entry->statusFlags &= ~NPC_STATUS_IN_WATER;
+    if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
+        entry->statusFlags |= NPC_STATUS_IN_WATER;
+        if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
+            psndSFXOn_3D(sfx, &entry->position);
+        }
+    }
 }
 
 /**
