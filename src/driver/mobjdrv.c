@@ -661,6 +661,36 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
  * and reports it to the object; runs each object's main function, drops falling ones,
  * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
  */
+/** A falling map object: rises and slows, then drops, landing on the ground with a damped bounce. */
+// Original name and size (0x120) from the JP demo map (UNUSED there: mobjMain's call is inlined).
+void mobjHitCheckGround(MapObjectEntry* entry) {
+    f32 hx, hy, hz, dist, nx, ny, nz;
+
+    if (entry->velocity.y >= 0.0f) {
+        entry->position.y += entry->velocity.y;
+        entry->velocity.y -= entry->gravity;
+    } else {
+#if VERSION <= VERSION_DEMO_JP
+        dist = 1.0f + (f32)__fabs(entry->velocity.y);
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+                           10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
+#else
+        dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+                           10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
+#endif
+            entry->position.y = hy;
+            entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
+            if (__fabs(entry->velocity.y) <= 2.0) {
+                entry->velocity.y = 0.0f;
+            }
+        } else {
+            entry->position.y += entry->velocity.y;
+            entry->velocity.y -= entry->gravity;
+        }
+    }
+}
+
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -678,7 +708,6 @@ void mobjMain(void) {
     GXColor blend2;
     GXColor evt;
     Vec camPos;
-    f32 nz, ny, nx, dist, hz, hy, hx;
 
     wp = mobjGetWork();
     count = wp->count;
@@ -755,29 +784,7 @@ void mobjMain(void) {
             entry->flags &= ~MOBJ_FLAG_UPDATE_MTX;
         }
         if (entry->flags & MOBJ_FLAG_GRAVITY) {
-            if (entry->velocity.y >= 0.0f) {
-                entry->position.y += entry->velocity.y;
-                entry->velocity.y -= entry->gravity;
-            } else {
-#if VERSION <= VERSION_DEMO_JP
-                dist = 1.0f + (f32)__fabs(entry->velocity.y);
-                if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                                   10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
-#else
-                dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
-                if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                                   10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
-#endif
-                    entry->position.y = hy;
-                    entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
-                    if (__fabs(entry->velocity.y) <= 2.0) {
-                        entry->velocity.y = 0.0f;
-                    }
-                } else {
-                    entry->position.y += entry->velocity.y;
-                    entry->velocity.y -= entry->gravity;
-                }
-            }
+            mobjHitCheckGround(entry);
             mobjCalcMtx(entry);
         }
         if (!(entry->flags & MOBJ_FLAG_HIT)) {
