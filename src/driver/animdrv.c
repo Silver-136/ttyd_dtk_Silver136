@@ -3145,8 +3145,8 @@ static inline void apdScratchN(s32 posNum, s32 nrmNum) {
     }
 }
 
-// FAKE: the C0 block of animPoseDrawMtx written as an inline helper; its locals become inline temps, which gives the target nonvolatile colours (m/data) and stack slots
-static inline void apdEval(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
+// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
+void _animPoseEvalMtx(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
     Mtx tmp;
     Mtx *m;
     Mtx rot;
@@ -3191,7 +3191,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
     pose = &wp->poses[poseId];
     if (pose->paperId != -1) {
         if (pose->flags & (ANIM_POSE_FLAG_WORLD_POSITION_EVAL | ANIM_POSE_FLAG_WORLD_MATRIX_EVAL)) {
-            apdEval(pose, matrix, rotY, scale);
+            _animPoseEvalMtx(pose, matrix, rotY, scale);
         }
         paper = &wp->poses[pose->paperId];
 

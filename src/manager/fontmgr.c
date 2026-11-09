@@ -81,7 +81,8 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
  * The width entry (kerning and advance width in pixels) of a glyph, from the font's WID1 block that covers it;
  * NULL if no block does (callers do not check).
  */
-static inline FontWidthEntry* fontGetWidth(u16 code) {
+// Original name and size (0x74) from the JP demo map (UNUSED there: every call is inlined).
+FontWidthEntry* JUTFont_GetWidthEntry(u16 code) {
     FontWidthBlock* block = (FontWidthBlock*)&pfh[1];
     u32 i;
 
@@ -103,7 +104,8 @@ static inline FontWidthEntry* fontGetWidth(u16 code) {
  * with FontDrawEdge on, first draws it four times in the outline colour (fontColTbl[0]) offset 2 px left, right,
  * down and up, then restores the colour.
  */
-static inline void fontDrawCodeEdge(u16 code) {
+// Original name and size (0x12c) from the JP demo map (UNUSED there: every call is inlined).
+void JUTFont_Draw(u16 code) {
     if (fontEdge) {
         GXColor save = fontColor;
         FontDrawColorIDX(0);
@@ -260,7 +262,7 @@ void FontDrawCode(f32 x, f32 y, u16 code) {
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    fontDrawCodeEdge(code);
+    JUTFont_Draw(code);
 }
 
 /**
@@ -271,7 +273,7 @@ void FontDrawCodeMtx(Mtx mtx, u16 code) {
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    fontDrawCodeEdge(code);
+    JUTFont_Draw(code);
 }
 
 /**
@@ -297,11 +299,11 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
         } else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
-        width = fontGetWidth(code)->width;
+        width = JUTFont_GetWidthEntry(code)->width;
         PSMTXTransApply(scale, trans, x, pos.y, pos.z);
         PSMTXConcat(camera->view, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
-        fontDrawCodeEdge(code);
+        JUTFont_Draw(code);
         x += fontScale.x * (width + charspace[gp->language]);
     }
 }
@@ -345,11 +347,11 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
         } else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
-        width = fontGetWidth(code)->width;
+        width = JUTFont_GetWidthEntry(code)->width;
         PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
         PSMTXConcat(camera->view, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
-        fontDrawCodeEdge(code);
+        JUTFont_Draw(code);
         if (pitch < 0.0f) {
             x += fontScale.x * (width + charspace[gp->language]);
         } else {
@@ -418,11 +420,11 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
             }
         }
         if (code != 0xFFFF) {
-            width = fontGetWidth(code)->width;
+            width = JUTFont_GetWidthEntry(code)->width;
             PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
             PSMTXConcat(camera->view, trans, trans);
             GXLoadPosMtxImm(trans, GX_PNMTX0);
-            fontDrawCodeEdge(code);
+            JUTFont_Draw(code);
             if (pitch < 0.0f) {
                 x += fontScale.x * (width + charspace[gp->language]);
             } else {
@@ -431,11 +433,11 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
 #else
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
-        width = fontGetWidth(code)->width;
+        width = JUTFont_GetWidthEntry(code)->width;
         PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
         PSMTXConcat(camera->view, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
-        fontDrawCodeEdge(code);
+        JUTFont_Draw(code);
         if (pitch < 0.0f) {
             x += fontScale.x * (width + charspace[gp->language]);
         } else {
@@ -546,7 +548,7 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
         }
         if (code != 0xFFFF) {
             fontDrawCodeEdgeXY(code, x, y);
-            x += fontGetWidth(code)->width + charspace[gp->language];
+            x += JUTFont_GetWidthEntry(code)->width + charspace[gp->language];
         }
     }
 }
@@ -573,13 +575,13 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
         fontDrawCodeEdgeXY(code, x, 0.0f);
-        x += fontGetWidth(code)->width + charspace[gp->language];
+        x += JUTFont_GetWidthEntry(code)->width + charspace[gp->language];
     }
 }
 
 /** A glyph's advance width in pixels from the WID1 block. */
 inline u8 fontGetGlyphWidth(u16 code) {
-    return fontGetWidth(code)->width;
+    return JUTFont_GetWidthEntry(code)->width;
 }
 
 /**
@@ -617,7 +619,7 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         PSMTXTransApply(scale, trans, sx, sy, 0.0f);
         PSMTXConcat(camera->view, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
-        fontDrawCodeEdge(code);
+        JUTFont_Draw(code);
         x += fontScale.x * (width + charspace[gp->language]);
     }
 }
@@ -712,7 +714,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
         }
         if (code != 0xFFFF) {
             fontDrawCodeEdgeI(code, cx, cy);
-            cx += fontGetWidth(code)->width + charspace[gp->language];
+            cx += JUTFont_GetWidthEntry(code)->width + charspace[gp->language];
         }
     }
 }
@@ -802,8 +804,8 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
             PSMTXConcat(camera->view, mtx, m2);
             PSMTXConcat(m2, m, m2);
             GXLoadPosMtxImm(m2, GX_PNMTX0);
-            fontDrawCodeEdge(code);
-            cx += fontGetWidth(code)->width + charspace[gp->language];
+            JUTFont_Draw(code);
+            cx += JUTFont_GetWidthEntry(code)->width + charspace[gp->language];
         }
     }
 }
@@ -820,7 +822,7 @@ u16 kanjiSearch(u32 code) {
 
 /** A glyph's advance width in pixels (code is a glyph index, not a character code). */
 u16 kanjiGetWidth(u16 code) {
-    return fontGetWidth(code)->width;
+    return JUTFont_GetWidthEntry(code)->width;
 }
 
 /**
@@ -886,7 +888,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
             }
         }
         if (code != 0xFFFF) {
-            width += fontGetWidth(code)->width + charspace[gp->language];
+            width += JUTFont_GetWidthEntry(code)->width + charspace[gp->language];
         }
     }
     if (maxWidth < width) {
@@ -1041,8 +1043,8 @@ void JUTFontSetup(u16 font) {
         GXInitTexObj(&fgTexObj, &blockGlyph[1], blockGlyph->sheetwidth, blockGlyph->sheetheight,
             GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&fgTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        fontGetWidth(JUTFont_CodeToGlyph(' '))->width = 7;
-        fontGetWidth(JUTFont_CodeToGlyph(0x8140))->width = 9;
+        JUTFont_GetWidthEntry(JUTFont_CodeToGlyph(' '))->width = 7;
+        JUTFont_GetWidthEntry(JUTFont_CodeToGlyph(0x8140))->width = 9;
     }
 }
 
@@ -1225,7 +1227,7 @@ static void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     f32 tv;
     f32 scale;
     u8 kern;
-    entry = fontGetWidth(code);
+    entry = JUTFont_GetWidthEntry(code);
     kern = entry->kerning;
     glyph = blockGlyph;
     row = (code - glyph->firstcode) / glyph->sheetrows;
