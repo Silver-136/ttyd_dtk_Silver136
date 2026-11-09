@@ -96,24 +96,7 @@ f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 
 const char* paper_ship[4] = {"p_hune", "p_hune_g", "p_hune_y", "p_hune_v"};
 
-/**
- * Which way a boat panel (dock) faces from its hit attribute:
- * 1 (0x4000) and 2 (0x8000) dock along -z and +z, 3 (0x10000) and 4 (0x20000) along -x and +x, 0 for no dock.
- */
-static inline s32 harborKind(HitEntry* hit) {
-    s32 k = 0;
-    s32 attr = hitGetAttr(hit);
-    if (attr & HIT_ATTR_SHIP_PANEL1) {
-        k = 1;
-    } else if (attr & HIT_ATTR_SHIP_PANEL2) {
-        k = 2;
-    } else if (attr & HIT_ATTR_SHIP_PANEL3) {
-        k = 3;
-    } else if (attr & HIT_ATTR_SHIP_PANEL4) {
-        k = 4;
-    }
-    return k;
-}
+s32 getHarborType(HitEntry* hit);
 
 // Macro, not inline: as static inline harborProbe(m, ang, &pos, out) the object changes.
 #define HARBOR_PROBE(ANG, POS)                                                                      \
@@ -123,7 +106,7 @@ static inline s32 harborKind(HitEntry* hit) {
     ty = 20.0f + m->position.y;                                                                     \
     dist = 40.0f;                                                                                   \
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tx, ty, tz, 0.0f, -1.0f, 0.0f); \
-    if (hit != NULL && harborKind(hit) != 0) {                                                      \
+    if (hit != NULL && getHarborType(hit) != 0) {                                                      \
         hitObjGetPos(hitGetName(hit), &POS);                                                        \
         roundedX = (s32)((100.0f * POS.x + 0.5f) / 100.0f);                                         \
         roundedY = (s32)((100.0f * POS.y + 0.5f) / 100.0f);                                         \
@@ -371,7 +354,7 @@ static inline void shipEff(f32 s) {
 }
 
 // FAKE: case-0 block as an inline helper so hit/attr/r are inline temps numbered
-// above harborKind's k (register pick only; same behaviour as the inline block).
+// above getHarborType's k (register pick only; same behaviour as the inline block).
 static inline void shipDecideDir(MarioWork* m, Vec* pp1, Vec* pp2) {
     MarioWork* m2;
     s32 r;
@@ -583,7 +566,7 @@ void mot_ship(void) {
             fx = (s32)((100.0f * pos.x + 0.5f) / 100.0f);
             fz = (s32)((100.0f * pos.z + 0.5f) / 100.0f);
             ms->harborPos.y = mm->position.y - 15.0f;
-            r27 = harborKind(mm->hitobjJumpFrom);
+            r27 = getHarborType(mm->hitobjJumpFrom);
             if (r27 == 1) {
                 ms->harborPos.x = fx;
                 ms->harborPos.z = fz - 50.0f - 30.30303f;
@@ -1170,6 +1153,26 @@ static void shipMove(void) {
 #endif
     }
     m->moveDist = len;
+}
+
+/**
+ * Which way a boat panel (dock) faces from its hit attribute:
+ * 1 (0x4000) and 2 (0x8000) dock along -z and +z, 3 (0x10000) and 4 (0x20000) along -x and +x, 0 for no dock.
+ */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: every call is inlined).
+s32 getHarborType(HitEntry* hit) {
+    s32 k = 0;
+    s32 attr = hitGetAttr(hit);
+    if (attr & HIT_ATTR_SHIP_PANEL1) {
+        k = 1;
+    } else if (attr & HIT_ATTR_SHIP_PANEL2) {
+        k = 2;
+    } else if (attr & HIT_ATTR_SHIP_PANEL3) {
+        k = 3;
+    } else if (attr & HIT_ATTR_SHIP_PANEL4) {
+        k = 4;
+    }
+    return k;
 }
 
 // FAKE: stand-in that nothing calls; it only places these literals in this object's constant pool
