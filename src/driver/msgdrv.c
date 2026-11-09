@@ -331,7 +331,8 @@ void msgLoad(const char* filename, s32 index) {
 }
 
 /** Records y as the top of a new page for paging back with Z, up to 110 pages, unless the window keeps no page list. */
-static inline void msgAddPage(smartEntry* smart, s32 y) {
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+void msgPageAdd(smartEntry* smart, s32 y) {
     MsgWinData* d = smart->address;
     if (!(d->flags & MSG_WIN_FLAG_NO_PAGE_LOG) && d->pageCount < 110) {
         if (d->pageCount == 0 || d->pageY[d->pageCount - 1] != y) {
@@ -356,7 +357,8 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
 }
 
 /** Plays the talking blip once per frame at the window's talk volume, except in small (type 1) windows. */
-static inline void msgVoiceSE(smartEntry* smart) {
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+void msgSEOn(smartEntry* smart) {
     MsgWinData* d = smart->address;
     if (d->window->type != WINDOW_TYPE_SMALL && !msgSEflag) {
         psndSFXOnVol(SFX_NAME_WORD(PSND_SFX_MESSAGE1_1 | PSND_SFX_BYPASS_MUTE), d->talkVolume);
@@ -383,7 +385,7 @@ static s32 msgMain(smartEntry* smart) {
             data->callback(0, smart);
         }
         data->flags &= ~MSG_WIN_FLAG_START;
-        msgAddPage(smart, 0);
+        msgPageAdd(smart, 0);
     }
     if (data->scrollTarget > data->scrollPos) {
         data->scrollPos += 0.36f * OSTicksToMilliseconds(gp->renderTime - data->lastUpdateTime);
@@ -445,7 +447,7 @@ static s32 msgMain(smartEntry* smart) {
             case MSG_GLYPH_SCROLL:
                 data->scrollTarget -= entry->y;
                 data->playTime = entry->time;
-                msgAddPage(smart, data->scrollTarget);
+                msgPageAdd(smart, data->scrollTarget);
                 break;
             case MSG_GLYPH_ONCE_STOP:
                 data->nextEntry = i + 1;
@@ -500,12 +502,12 @@ static s32 msgMain(smartEntry* smart) {
                     data->callback(5, smart);
                 }
                 if (entry->value & MSG_CHAR_VOICE) {
-                    msgVoiceSE(smart);
+                    msgSEOn(smart);
                 } else if (entry->value & MSG_CHAR_TALK) {
                     if (((MsgWinData*)smart->address)->window->type != WINDOW_TYPE_SYSTEM) {
                         ((MsgWinData*)smart->address)->talkTimer = 15;
                     }
-                    msgVoiceSE(smart);
+                    msgSEOn(smart);
                 }
                 break;
         }

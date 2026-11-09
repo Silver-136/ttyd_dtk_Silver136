@@ -593,7 +593,8 @@ void partyClearFootmark2(void) {
 }
 
 /** TRUE while Mario is in a jump (MARIO_FLAG_IS_JUMPING); footmarks laid then get the jump bit. */
-static inline BOOL partyChkMarioJumpFlag(void) {
+// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
+BOOL footmarkGetJumpTrig(void) {
     MarioWork* mario = marioGetPtr();
     BOOL ret = FALSE;
     if (mario->flags & MARIO_FLAG_IS_JUMPING) {
@@ -607,7 +608,8 @@ static inline BOOL partyChkMarioJumpFlag(void) {
  * or readId is exactly writeId + 1 (this full check does not account for wrapping).
  * Argument mask 1 marks a jump; the slit argument is 2 in the early demos and 4 in JP and later, stored as FOOTMARK_FLAG_SLIT (4).
  */
-static inline void partyPutFootmark(s32 id, Vec pos, u32 flags) {
+// Original name and size (0x14c) from the JP demo map (UNUSED there: every call is inlined).
+void partyRecordFootmarkSub(s32 id, Vec pos, u32 flags) {
     MarioWork* mario = marioGetPtr();
     Footmark* fm = &footmarkBuf[id][writeId[id]];
 
@@ -643,7 +645,8 @@ static inline void partyPutFootmark(s32 id, Vec pos, u32 flags) {
 }
 
 /** TRUE while the other party member is jumping (PARTY_FLAG_IS_JUMPING); its footmarks then get the jump bit. */
-static inline BOOL partyChkOtherFlag(PartyEntry* other) {
+// Original name and size (0x18) from the JP demo map (UNUSED there: every call is inlined).
+BOOL footmarkGetJumpTrig2(PartyEntry* other) {
     BOOL ret = FALSE;
     if (other->flags & PARTY_FLAG_IS_JUMPING) {
         ret = TRUE;
@@ -664,7 +667,7 @@ void partyRecordFootmark(PartyEntry* party) {
     BOOL far;
 
     if (party->currentSlotId == 0) {
-        if (partyChkMarioJumpFlag()) {
+        if (footmarkGetJumpTrig()) {
             flags |= FOOTMARK_FLAG_JUMP;
         }
         if (marioChkSlitThrouh()) {
@@ -675,9 +678,9 @@ void partyRecordFootmark(PartyEntry* party) {
 #endif
         }
 #if VERSION <= VERSION_DEMO_JP
-        partyPutFootmark(partyGetFootmarkId(party), marioGetPtr()->position, flags);
+        partyRecordFootmarkSub(partyGetFootmarkId(party), marioGetPtr()->position, flags);
 #else
-        partyPutFootmark(partyGetFootmarkId(party), mario->position, flags);
+        partyRecordFootmarkSub(partyGetFootmarkId(party), mario->position, flags);
 #endif
     } else {
         far = FALSE;
@@ -698,10 +701,10 @@ void partyRecordFootmark(PartyEntry* party) {
                 party->footmarkMode = 1;
                 partyClearFootmark();
             }
-            if (partyChkOtherFlag(other)) {
+            if (footmarkGetJumpTrig2(other)) {
                 flags |= FOOTMARK_FLAG_JUMP;
             }
-            partyPutFootmark(partyGetFootmarkId(party), other->position, flags);
+            partyRecordFootmarkSub(partyGetFootmarkId(party), other->position, flags);
         } else {
             if (party->footmarkMode == 1) {
                 party->footmarkMode = 0;
@@ -709,7 +712,7 @@ void partyRecordFootmark(PartyEntry* party) {
                 // FAKE: call through a no-op function-pointer cast; the plain call changes the object
                 ((void (*)(void))partyClearFootmark2)();
             }
-            if (partyChkMarioJumpFlag()) {
+            if (footmarkGetJumpTrig()) {
                 flags |= FOOTMARK_FLAG_JUMP;
             }
             if (marioChkSlitThrouh()) {
@@ -720,9 +723,9 @@ void partyRecordFootmark(PartyEntry* party) {
 #endif
             }
 #if VERSION <= VERSION_DEMO_JP
-            partyPutFootmark(partyGetFootmarkId(party), marioGetPtr()->position, flags);
+            partyRecordFootmarkSub(partyGetFootmarkId(party), marioGetPtr()->position, flags);
 #else
-            partyPutFootmark(partyGetFootmarkId(party), mario->position, flags);
+            partyRecordFootmarkSub(partyGetFootmarkId(party), mario->position, flags);
 #endif
         }
     }
@@ -1578,7 +1581,7 @@ void partyWalkMain(PartyEntry* party) {
     u32 flags = 0;
     MarioWork* mario = party->playerPtr;
     if (party->currentSlotId == 0) {
-        if (partyChkMarioJumpFlag()) {
+        if (footmarkGetJumpTrig()) {
             flags |= FOOTMARK_FLAG_JUMP;
         }
         if (marioChkSlitThrouh()) {
@@ -1589,9 +1592,9 @@ void partyWalkMain(PartyEntry* party) {
 #endif
         }
 #if VERSION <= VERSION_DEMO_JP
-        partyPutFootmark(0, marioGetPtr()->position, flags);
+        partyRecordFootmarkSub(0, marioGetPtr()->position, flags);
 #else
-        partyPutFootmark(0, mario->position, flags);
+        partyRecordFootmarkSub(0, mario->position, flags);
 #endif
     } else {
         other = anotherPartyGetPtr(party->currentSlotId);
@@ -1602,18 +1605,18 @@ void partyWalkMain(PartyEntry* party) {
             if ((other->currentMemberId == PARTY_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD ||
                 PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
-                flags = partyChkMarioJumpFlag();
-                partyPutFootmark(1, marioGetPtr()->position, flags);
+                flags = footmarkGetJumpTrig();
+                partyRecordFootmarkSub(1, marioGetPtr()->position, flags);
             } else {
                 flags = FALSE;
                 if (other->flags & PARTY_FLAG_IS_JUMPING) {
                     flags = TRUE;
                 }
-                partyPutFootmark(1, other->position, flags);
+                partyRecordFootmarkSub(1, other->position, flags);
             }
         } else {
-            flags = partyChkMarioJumpFlag();
-            partyPutFootmark(1, marioGetPtr()->position, flags);
+            flags = footmarkGetJumpTrig();
+            partyRecordFootmarkSub(1, marioGetPtr()->position, flags);
         }
     }
     walkMain(party);
@@ -1891,8 +1894,8 @@ void partyFlyMain(PartyEntry* party) {
     PartyEntry* p;
 
     if (party->currentSlotId == 0) {
-        flags = partyChkMarioJumpFlag();
-        partyPutFootmark(0, marioGetPtr()->position, flags);
+        flags = footmarkGetJumpTrig();
+        partyRecordFootmarkSub(0, marioGetPtr()->position, flags);
     } else {
         anotherPartyGetPtr(party->currentSlotId);
         p = partyGetPtr(0);
@@ -1901,10 +1904,10 @@ void partyFlyMain(PartyEntry* party) {
             if (p->flags & PARTY_FLAG_IS_JUMPING) {
                 flags = TRUE;
             }
-            partyPutFootmark(1, p->position, flags);
+            partyRecordFootmarkSub(1, p->position, flags);
         } else {
-            flags = partyChkMarioJumpFlag();
-            partyPutFootmark(0, marioGetPtr()->position, flags);
+            flags = footmarkGetJumpTrig();
+            partyRecordFootmarkSub(0, marioGetPtr()->position, flags);
         }
     }
     flyMain(party);

@@ -691,7 +691,8 @@ static s32 checkOneRevolution(s32 dir) {
 }
 
 /** Fills the rub history with the angle v. */
-static inline void rubClearHist(s32 v) {
+// Original name and size (0x60) from the JP demo map (UNUSED there: every call is inlined).
+void clearChkbuf(s32 v) {
     u32 i;
     s16* p = rubwork.hist;
     for (i = 0; i < 21; i++) {
@@ -729,7 +730,7 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
     a = dir;
     if (mag < 50.0f) {
         if (++rw->idleTimer > 10) {
-            rubClearHist(a);
+            clearChkbuf(a);
             rw->num = 0;
         }
         return -1;
@@ -752,13 +753,13 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
         }
         if (rw->num == 0) {
             rw->start = a;
-            rubClearHist(a);
+            clearChkbuf(a);
         }
         rw->stallFrames = 0;
         rw->num++;
         if (checkOneRevolution(0) == 1) {
             ret = 1;
-            rubClearHist(rw->start);
+            clearChkbuf(rw->start);
             rw->count++;
         }
         rw->dir = 1;
@@ -779,13 +780,13 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
         }
         if (rw->num == 0) {
             rw->start = a;
-            rubClearHist(a);
+            clearChkbuf(a);
         }
         rw->stallFrames = 0;
         rw->num++;
         if (checkOneRevolution(1) == 1) {
             ret = 1;
-            rubClearHist(rw->start);
+            clearChkbuf(rw->start);
             rw->count++;
         }
         rw->dir = 2;

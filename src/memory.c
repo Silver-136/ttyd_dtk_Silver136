@@ -139,7 +139,8 @@ void memInit(void) {
  * Turns the whole HEAP_MALLOC heap into one free map heap block for _mapAlloc.
  * JP and the early demos also reset the allocation id counter.
  */
-static inline void mapallocInit(void) {
+// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
+void _mapAllocInit(void) {
 // the declaration order differs per version (it sets which callee-saved register holds each)
 #if VERSION >= VERSION_US
     u32 size;
@@ -183,7 +184,7 @@ void memClear(HEAP_TYPE heap) {
     OSDestroyHeap(heapHandle[heap]);
     OSCreateHeap(heapStart[heap], heapEnd[heap]);
     if (heap == HEAP_MALLOC) {
-        mapallocInit();
+        _mapAllocInit();
     }
 }
 

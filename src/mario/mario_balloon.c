@@ -61,7 +61,8 @@ void marioBalloonOff(void) {
  * a map object whose hint is 1 or a case-event hit flagged for the balloon with the "front + A" condition.
  * Hits with attribute 0x800000 never count.
  */
-static inline BOOL chkBalloonFrontA(HitEntry* hit) {
+// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBalloonTypeTouch(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
     s32 attr;
@@ -88,7 +89,8 @@ static inline BOOL chkBalloonFrontA(HitEntry* hit) {
  * TRUE when the hit directly in front of Mario is a hinted map object or a balloon case event triggered by A
  * while facing or pushing it. Hits Mario passes through (marioChkBero) never count.
  */
-static inline BOOL chkBalloonFront(HitEntry* hit) {
+// Original name and size (0xb4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBalloonTypeFront(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
 
@@ -121,7 +123,8 @@ static inline BOOL chkBalloonFront(HitEntry* hit) {
  * TRUE when the floor Mario stands on is a hinted map object or a balloon case event triggered by A
  * while pushing or standing on it. Attribute 0x800000 hits and pass-through hits (marioChkBero) never count.
  */
-static inline BOOL chkBalloonStandOn(HitEntry* hit) {
+// Original name and size (0xc4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBalloonTypeRide(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
     s32 attr;
@@ -161,7 +164,8 @@ static inline BOOL chkBalloonStandOn(HitEntry* hit) {
  * -1 if it is not one, 1 if it is still closed, 0 once opened.
  * marioBalloonMain uses it so the "!" shows only over unopened chests.
  */
-static inline s32 chkItemBox(HitEntry* hit) {
+// Original name and size (0xa8) from the JP demo map (UNUSED there: every call is inlined).
+s32 treasureBox(HitEntry* hit) {
     MapObjectEntry* mobj;
     s32 ret = -1;
 
@@ -203,21 +207,21 @@ void marioBalloonMain(void) {
             return;
     }
 
-    if (chkBalloonFrontA(mario->hitobjFrontA)) {
+    if (chkBalloonTypeTouch(mario->hitobjFrontA)) {
         type = 0;
         show = TRUE;
     }
-    if (chkBalloonFront(mario->hitobjFront)) {
+    if (chkBalloonTypeFront(mario->hitobjFront)) {
         type = 0;
         show = TRUE;
     }
-    if (chkBalloonStandOn(mario->hitobjStandOn)) {
+    if (chkBalloonTypeRide(mario->hitobjStandOn)) {
         type = 0;
         show = TRUE;
     }
     if (mario->hitobjFront != NULL) {
-        if (chkItemBox(mario->hitobjFront) >= 0) {
-            show = chkItemBox(mario->hitobjFront);
+        if (treasureBox(mario->hitobjFront) >= 0) {
+            show = treasureBox(mario->hitobjFront);
         }
     }
 

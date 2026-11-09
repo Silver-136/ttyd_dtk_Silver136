@@ -9713,7 +9713,8 @@ static inline s32 psndSongFindCh(void) {
 
 /** Looks BGM name up in psbgmlist (or decodes a numeric id) into *pi (the early demos return it). */
 #if VERSION <= VERSION_DEMO_JP
-static inline s32 psndBGMSearch(char* name) {
+// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
+s32 searchPSBGMList(char* name) {
     SoundBGMEntry* entry;
     s32 i;
     entry = psbgmlist;
@@ -9722,7 +9723,7 @@ static inline s32 psndBGMSearch(char* name) {
     }
     for (i = 0; i < 0x106; i++, entry++) {
 #else
-static inline void psndBGMSearchP(const char* name, s32* pi) {
+void searchPSBGMList(const char* name, s32* pi) {
     SoundBGMEntry* entry;
     entry = psbgmlist;
     if (SFX_NAME_IS_ID(name)) {
@@ -9782,7 +9783,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
 
     // FAKE: fo/ft/fl are copies of the parameters; flags is reused to hold the volume and fadetime to hold the
     // PSND_RESTART test; the never-true gz block after the early return gives ft and fo a second definition; fade2
-    // repeats fade, and the name is looked up through psndBGMSearchP. Using the parameters directly changes the object.
+    // repeats fade, and the name is looked up through searchPSBGMList. Using the parameters directly changes the object.
     fo = fadeout;
     ft = fadetime;
     fl = flags;
@@ -9791,7 +9792,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         return FALSE;
     }
 #if VERSION <= VERSION_DEMO_JP
-    i = psndBGMSearch(bgm_name);
+    i = searchPSBGMList(bgm_name);
     idx = flags & 0xF;
 
     // FAKE: the BGM id lives in the bgm_name parameter once the name is looked up (the demo reuses its
@@ -9833,7 +9834,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             fo = (((fo / (fo + 1)) / ((fo + 1) / fo)) / ((fo / (fo + 2)) / ((fo + 2) / fo)));
         }
     }
-    psndBGMSearchP(bgm_name, &i);
+    searchPSBGMList(bgm_name, &i);
     idx = fl & 0xF;
     id = i;
     fade = &psbgm[fl & 0xF].fade;

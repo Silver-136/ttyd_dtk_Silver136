@@ -106,7 +106,8 @@ void flying_se_off(void) {
  * Turns Mario back from the plane: normal 20x37 collision box, rotation and offsets cleared,
  * paper animation off, mirror and facing locks released.
  */
-static inline void planeReset(void) {
+// Original name and size (0xc8) from the JP demo map (UNUSED there: every call is inlined).
+void paper_plane_off(void) {
     MarioWork* mario = marioGetPtr();
     mario->wPlayerCollisionBox.x = 20.0f;
     mario->wPlayerCollisionBox.y = 37.0f;
@@ -406,7 +407,7 @@ void mot_plane(void) {
         marioClearJumpPara();
         mp->baseSpeed = 0.0f;
         flying_se_off();
-        planeReset();
+        paper_plane_off();
         allPartyRideOff2();
         if (mp->currSubMotionId == 20) {
             marioChgMot(MARIO_MOTION_JUMP);
@@ -425,7 +426,7 @@ void mot_plane(void) {
             if (--mp->multiTimer > 0) {
                 break;
             }
-            planeReset();
+            paper_plane_off();
             marioChgPose("M_J_1C");
             mp->position.y = 1.0f + (mp->mot.plane.groundY - 37.0f);
             mp->baseSpeed = 0.0f;
@@ -468,7 +469,7 @@ void mot_plane(void) {
             }
         case 53:
             flying_se_off();
-            planeReset();
+            paper_plane_off();
             mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mp->baseSpeed = 0.0f;
             mp->mot.plane.turnSpeed = 0.0f;
@@ -523,7 +524,7 @@ void mot_plane(void) {
                 mp->jumpPeakAirTime = 0;
                 mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
                 marioAdjustMoveDir();
-                planeReset();
+                paper_plane_off();
                 if (mp->motStruct != NULL) {
                     __memFree(HEAP_DEFAULT, mp->motStruct);
                     mp->motStruct = NULL;
@@ -562,7 +563,7 @@ void mot_plane(void) {
             marioClearJumpPara();
             flying_se_off();
             mp->baseSpeed = 0.0f;
-            planeReset();
+            paper_plane_off();
             allPartyRideOff2();
             marioSetFallPara();
             camFollowYOn();
@@ -578,7 +579,8 @@ void mot_plane(void) {
  * TRUE when the floor under the plane has one of the attributes 0x38 (0x8 and the plane panel bits 0x10/0x20);
  * over such a floor flyMain speeds the plane up (to 2) and keeps its dive limit at -22.
  */
-static inline BOOL planeChkUnder(void) {
+// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
+BOOL checkAirPort(void) {
     BOOL ret = FALSE;
     MarioWork* mario = marioGetPtr();
     if (mario->hitobjUnder != NULL && (hitGetAttr(mario->hitobjUnder) & 0x38)) {
@@ -700,7 +702,7 @@ static void flyMain(void) {
             if (t <= planeData[28]) {
                 t = planeData[28];
             }
-            if (!planeChkUnder()) {
+            if (!checkAirPort()) {
                 mp->motPlane->pitchRecover = t;
                 mp->motPlane->pitch += mp->motPlane->pitchRecover;
             } else {
@@ -747,7 +749,7 @@ static void flyMain(void) {
                     t = 0.0f;
                 }
                 t *= 90.0f / planeData[0];
-                if (!planeChkUnder()) {
+                if (!checkAirPort()) {
                     a = planeData[25] * (f32)sin(PI * t / 180.0f);
                     if (a <= planeData[26]) {
                         a = 2.0f * planeData[26];
@@ -789,14 +791,14 @@ static void flyMain(void) {
                     mp->motPlane->pitchSpeed = 1.0f;
                 }
             }
-            if (!planeChkUnder()) {
+            if (!checkAirPort()) {
                 mp->motPlane->pitchRecover += 0.1f * (1.0f - mp->motPlane->pitchRecover);
                 if (mp->motPlane->pitchRecover >= 0.0f) {
                     mp->motPlane->pitchRecover = 0.0f;
                 }
             }
         }
-        if (planeChkUnder()) {
+        if (checkAirPort()) {
             mp->motPlane->pitchMin = -22.0f;
         } else {
             mp->motPlane->pitchMin += 0.1f * (planeData[4] - mp->motPlane->pitchMin);
@@ -869,7 +871,7 @@ void mot_plane_post(void) {
     MarioWork* mario = marioGetPtr();
     camFollowYOn();
     flying_se_off();
-    planeReset();
+    paper_plane_off();
     mario->camShiftTargetX = 0.0f;
     mario->camShiftTargetY = 0.0f;
     if (mario->motStruct != NULL) {

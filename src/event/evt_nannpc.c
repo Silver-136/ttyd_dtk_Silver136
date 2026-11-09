@@ -234,7 +234,8 @@ static s32 nannpc_zcompare(const void* paramA, const void* paramB) {
  * Sets the TEV, channel and fog state for drawing crowd sprites tinted by each NPC's colour (TEV colour register
  * 1).
  */
-static inline void nannpc_loadTev(void) {
+// Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
+void nannpc_ext_AlphaLoadTev(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
@@ -261,7 +262,7 @@ static void nannpc_ext_disp() {
     if (w->flags & NANNPC_WORK_DEPTH_SORT) {
         extLoadVertex();
         extLoadTexture();
-        nannpc_loadTev();
+        nannpc_ext_AlphaLoadTev();
         for (i = extGetPoseNum() - 1; i >= 0; i--) {
             np = w->npc + i;
             sp = w->sort + i;

@@ -625,7 +625,8 @@ void marioForceSlitAnime(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
 }
 
-static inline void slitInit(void) {
+// Original name and size (0xe4) from the JP demo map (UNUSED there: every call is inlined).
+void init_slit(void) {
     MarioWork* mario = marioGetPtr();
     mario->mot.slit.reserved_0 = 0.0f;
     mario->mot.slit.counter = 0;
@@ -658,7 +659,7 @@ static inline void slitInit(void) {
  */
 void marioReInit_slit(void) {
     MarioWork* mario = marioGetPtr();
-    slitInit();
+    init_slit();
     mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     mario->currMotionId = MARIO_MOTION_SLIT;
     mario->slitState = SLIT_STATE_READY;
@@ -766,7 +767,7 @@ void mot_slit(void) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-        slitInit();
+        init_slit();
         m->slitState = SLIT_STATE_INIT;
         m->airTimer = 0;
     }

@@ -152,7 +152,8 @@ USER_FUNC(evt_twoddisp_entry) {
 }
 
 /** Finds the overlay entry with the given name, or NULL. */
-static inline TwodEntry* twod_find(const char* name) {
+// Original name and size (0x80) from the JP demo map (UNUSED there: every call is inlined).
+TwodEntry* twodNameToPtr(const char* name) {
     s32 i;
     TwodEntry* p;
 
@@ -171,8 +172,8 @@ USER_FUNC(evt_twoddisp_set_position) {
     char* name = (char*)evtGetValue(event, args[0]);
     TwodEntry* p;
 
-    // twod_find returns NULL for a name that is not registered; the result is not checked.
-    p = twod_find(name);
+    // twodNameToPtr returns NULL for a name that is not registered; the result is not checked.
+    p = twodNameToPtr(name);
     p->x = evtGetFloat(event, args[1]);
     p->y = evtGetFloat(event, args[2]);
     return EVT_RETURN_DONE;
@@ -184,8 +185,8 @@ USER_FUNC(evt_twoddisp_set_base_position) {
     char* name = (char*)evtGetValue(event, args[0]);
     TwodEntry* p;
 
-    // twod_find returns NULL for a name that is not registered; the result is not checked.
-    p = twod_find(name);
+    // twodNameToPtr returns NULL for a name that is not registered; the result is not checked.
+    p = twodNameToPtr(name);
     p->baseX = evtGetFloat(event, args[1]);
     p->baseY = evtGetFloat(event, args[2]);
     return EVT_RETURN_DONE;
@@ -202,8 +203,8 @@ USER_FUNC(evt_twoddisp_flag_onoff) {
     onoff = evtGetValue(event, args[0]);
     name = (char*)evtGetValue(event, args[1]);
 
-    // twod_find returns NULL for a name that is not registered; the result is not checked.
-    p = twod_find(name);
+    // twodNameToPtr returns NULL for a name that is not registered; the result is not checked.
+    p = twodNameToPtr(name);
     if (onoff) {
         p->flags |= evtGetValue(event, args[2]);
     } else {

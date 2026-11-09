@@ -116,7 +116,8 @@ void partyPaperLightOff(PartyEntry* party) {
  * TRUE when one of the seven partners is in a pinch:
  * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in JP and later), which switches her to the tired pose set.
  */
-static inline BOOL partyIsPinch(PartyEntry* party) {
+// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
+BOOL partyChkHerohero(PartyEntry* party) {
     BOOL pinch = FALSE;
 
     if (party->currentMemberId < PARTNER_COUNT) {
@@ -128,8 +129,8 @@ static inline BOOL partyIsPinch(PartyEntry* party) {
 }
 
 // FAKE: same behaviour as partyChgPoseId (inlined), but with the pinch check written out in place instead of
-// partyIsPinch(). Only partyReInit's first call uses it: that call needs this form while its other
-// two calls need the partyIsPinch() form (see docs/FAKES.md).
+// partyChkHerohero(). Only partyReInit's first call uses it: that call needs this form while its other
+// two calls need the partyChkHerohero() form (see docs/FAKES.md).
 static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index) {
     BOOL pinch;
     s32 poseIdx = index;
@@ -185,7 +186,7 @@ const char* partyChgPoseId(PartyEntry* party, s32 index) {
     if ((party->flags2 & PARTY_DISP_FLAG_POSE_LOCK) != 0) {
         return party->animName;
     }
-    if (partyIsPinch(party) == TRUE) {
+    if (partyChkHerohero(party) == TRUE) {
         if (index == PARTY_POSE_STAND) {
             poseIdx = PARTY_POSE_PINCH_STAND;
         } else if (index == PARTY_POSE_WALK) {
@@ -524,7 +525,8 @@ static void setAnimPoseMaterialFlag(PartyEntry* party) {
 }
 
 /** Allocates and zeroes the follower slot (1) if it is empty; returns 1, or -1 if taken. */
-static inline s32 partyGetFreeSlot2(void) {
+// Original name and size (0x5c) from the JP demo map (UNUSED there: every call is inlined).
+s32 getExtraPartyEntryId(void) {
     if (partyPtrTbl[1] == NULL) {
         memset(partyPtrTbl[1] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
         return 1;
@@ -600,7 +602,7 @@ s32 partyEntry2(s32 memberId) {
     PartyEntry* party;
 
     player = marioGetPtr();
-    slot = partyGetFreeSlot2();
+    slot = getExtraPartyEntryId();
     if (slot < 0) {
         return -1;
     }
@@ -638,7 +640,7 @@ s32 partyEntry2Hello(s32 memberId) {
     PartyEntry* party;
 
     player = marioGetPtr();
-    slot = partyGetFreeSlot2();
+    slot = getExtraPartyEntryId();
     if (slot < 0) {
         return -1;
     }
@@ -673,7 +675,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     PartyEntry* party;
 
     player = marioGetPtr();
-    slot = partyGetFreeSlot2();
+    slot = getExtraPartyEntryId();
     if (slot < 0) {
         return -1;
     }
@@ -1041,7 +1043,8 @@ void partyPrevRunMode(PartyEntry* party) {
 #endif
 
 /** Counts the active partner slots. */
-static inline s32 partyCountActive(void) {
+// Original name and size (0x6c) from the JP demo map (UNUSED there: every call is inlined).
+s32 partyGetNum(void) {
     s32 count = 0;
     s32 i;
     for (i = 0; i < 2; i++) {
@@ -1063,7 +1066,7 @@ void partyMain(void) {
 #if VERSION >= VERSION_JP
     marioGetPtr();
 #endif
-    if (partyCountActive()) {
+    if (partyGetNum()) {
 #if VERSION >= VERSION_JP
         marioUsePartyMain();
 #endif
@@ -3241,7 +3244,7 @@ static void partyDisp(CameraId cam, void* param) {
     f32 yoff;
     BOOL flip;
 
-    if (!partyCountActive()) {
+    if (!partyGetNum()) {
         return;
     }
     if (party->flags & PARTY_FLAG_KEEP_POSE_UNUSED) {

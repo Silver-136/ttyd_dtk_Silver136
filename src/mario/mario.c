@@ -1136,7 +1136,8 @@ static inline void marioMainBlur(MarioWork* wp) {
  * End-of-frame bookkeeping for marioMain: remembers the air timer and floor,
  * starts the game over sequence when HP is 0, clears the moving-floor push and counts the frame.
  */
-static inline void marioMainEnd(MarioWork* wp) {
+// Original name and size (0x88) from the JP demo map (UNUSED there: every call is inlined).
+void marioPostMain(MarioWork* wp) {
     wp->prevAirTimer = wp->airTimer;
     wp->prevHitobjStandOn = wp->hitobjStandOn;
     if (pouchGetHP() <= 0) {
@@ -1257,7 +1258,7 @@ void marioMain(void) {
                 blurPosId -= 8;
             }
         }
-        marioMainEnd(wp);
+        marioPostMain(wp);
         return;
     }
     if (wp->flags & MARIO_FLAG_CTRL_OFF) {
@@ -1271,7 +1272,7 @@ void marioMain(void) {
         marioMotion();
         if (wp->characterId == CHARACTER_BOWSER) {
             kpaMain();
-            marioMainEnd(mp);
+            marioPostMain(mp);
             return;
         }
         if (wp->characterId == CHARACTER_PEACH) {
@@ -1289,7 +1290,7 @@ void marioMain(void) {
             wp->hitobjFrontA = NULL;
             wp->hitobjPush = NULL;
             wp->hitobjWall = NULL;
-            marioMainEnd(mp);
+            marioPostMain(mp);
             return;
         }
         if (wp->currMotionId == MARIO_MOTION_VIVIAN) {
@@ -1304,7 +1305,7 @@ void marioMain(void) {
             marioBottomless();
             partyMain();
             marioCamMain();
-            marioMainEnd(mp);
+            marioPostMain(mp);
             return;
         }
         if (wp->currMotionId == MARIO_MOTION_JABARA) {
@@ -1315,7 +1316,7 @@ void marioMain(void) {
             marioBottomless();
             partyMain();
             marioCamMain();
-            marioMainEnd(mp);
+            marioPostMain(mp);
             return;
         }
         if (wp->currMotionId == MARIO_MOTION_YOSHI) {
@@ -1326,7 +1327,7 @@ void marioMain(void) {
             mario_kemuri();
             partyMain();
             marioCamMain();
-            marioMainEnd(mp);
+            marioPostMain(mp);
             return;
         }
         if (wp->currMotionId == MARIO_MOTION_JUMP_3) {
@@ -1337,7 +1338,7 @@ void marioMain(void) {
             partyMain();
             marioCamMain();
             marioMainBlur(wp);
-            marioMainEnd(mp);
+            marioPostMain(mp);
             return;
         }
         flags = wp->flags;
@@ -1398,7 +1399,7 @@ void marioMain(void) {
     partyMain();
     marioCamMain();
     marioMainBlur(wp);
-    marioMainEnd(mp);
+    marioPostMain(mp);
 }
 
 /** TRUE while Mario rolls as a paper tube. */
@@ -1490,7 +1491,8 @@ static void marioCtrlOff2Main(void) {
 }
 
 /** Stores Mario's current screen position in MarioWork. */
-static inline void marioMove_screenPos(void) {
+// Original name and size (0xd4) from the JP demo map (UNUSED there: every call is inlined).
+void marioUpdateScreenPos(void) {
     MarioWork* p = mp;
     f32 x1, y1, z1;
     marioGetScreenPos(p->position, &x1, &y1, &z1);
@@ -1513,7 +1515,7 @@ void marioMove(void) {
 
     prev = wp->position;
     marioMoveMain();
-    marioMove_screenPos();
+    marioUpdateScreenPos();
     if (wp->dispFlags & MARIO_DISP_FLAG_ZOOM) {
         if (wp->controlStickSensitivity || !(wp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             marioCamZoomOff();

@@ -325,7 +325,7 @@ static inline HitEntry* partyBehindGround(PartyEntry* party) {
 }
 
 static f32 partyStayDist(PartyEntry* party);
-static u32 partyGetFrontAttr(PartyEntry* party, f32 dir);
+u32 getFrontFloorAttr(PartyEntry* party, f32 dir);
 static f32 partyHomingOff(PartyEntry* party);
 static f32 partyGetGndY(f32 x, f32 y, f32 z);
 static f32 partyGetDirGndY(Vec u, f32 md);
@@ -1071,7 +1071,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         fm = partyGetFootmarkPtr(id);
         t = fm->pos;
         dir = angleABf(px, pz, t.x, t.z);
-        attr = partyGetFrontAttr(party, dir);
+        attr = getFrontFloorAttr(party, dir);
         if (!(attr & HIT_ATTR_SPIKES)) {
             goto found;
         }
@@ -1545,7 +1545,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         t = fm->pos;
 
         // dir is not set yet on the first pass: the demo reads it uninitialized here.
-        attr = partyGetFrontAttr(party, dir);
+        attr = getFrontFloorAttr(party, dir);
         if (!(attr & HIT_ATTR_SPIKES)) {
             goto found;
         }
@@ -3676,9 +3676,10 @@ static f32 partyGetGndY(f32 x, f32 y, f32 z) {
  * Homing walk uses it to skip footmarks over 0x800 floors.
  */
 #if VERSION <= VERSION_DEMO_JP
-static inline u32 partyGetFrontAttr(PartyEntry* party, f32 dir) {
+// Original name and size (0xac) from the JP demo map (UNUSED there: every call is inlined).
+u32 getFrontFloorAttr(PartyEntry* party, f32 dir) {
 #else
-static u32 partyGetFrontAttr(PartyEntry* party, f32 dir) {
+u32 getFrontFloorAttr(PartyEntry* party, f32 dir) {
 #endif
     HitCheckQuery q;
     HitEntry* hit;

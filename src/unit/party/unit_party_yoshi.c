@@ -2456,7 +2456,8 @@ USER_FUNC(_wait_yoshig_complete) {
  * then runs it right, bouncing between the depth limits, until it reaches X 300.
  * Returns FALSE once it has finished.
  */
-static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
+// Original name and size (0x240) from the JP demo map (UNUSED there: every call is inlined).
+s32 _yoshig_main(YoshiGundanPart* p, s32 i) {
     switch (p->state) {
         case 0:
             p->state++;
@@ -2547,7 +2548,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                         p->frame = 0;
                     }
                 }
-                if (_gundan_part_update(p, i)) {
+                if (_yoshig_main(p, i)) {
                     allDone = FALSE;
                 }
                 w->meanX += p->x;

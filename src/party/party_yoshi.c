@@ -433,7 +433,8 @@ static void searchHead(PartyEntry* party);
  * PYS_F_1) at the shared pose time.
  */
 // Descriptive name (inline helper; not in the symbol maps).
-static inline f32 getOfs(PartyEntry* party) {
+// Original name and size (0xf8) from the JP demo map (UNUSED there: every call is inlined).
+f32 yoshiAnimeOfsy(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 ofs = 0.0f;
 
@@ -945,10 +946,10 @@ void yoshi_use(PartyEntry* party) {
         movePos(&ox, &oz, -6.0f, toMovedir(party->displayDirection));
         mario->dispOfs.x = ox;
         mario->dispOfs.z = oz;
-        mario->dispOfs2.y = 8.0f + getOfs(party);
+        mario->dispOfs2.y = 8.0f + yoshiAnimeOfsy(party);
         extra = partyGetPtr(marioGetExtraPartyId());
         if (extra) {
-            extra->dispOfs.y = getOfs(party);
+            extra->dispOfs.y = yoshiAnimeOfsy(party);
         }
     }
 

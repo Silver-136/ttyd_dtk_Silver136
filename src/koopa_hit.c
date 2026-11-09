@@ -148,7 +148,8 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
 }
 
 /** Clears the ten ceiling-hit slots (headHit/headDist). */
-static inline void kpa_headClear(void) {
+// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
+void kpaClearHitobjHead(void) {
     s32 i;
     for (i = 0; i < KPA_HIT_SLOTS; i++) {
         marioGetPtr()->kpaWork->headHit[i] = NULL;
@@ -317,7 +318,7 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
     }
     off = *outB;
     *outB = -1.0f;
-    kpa_headClear();
+    kpaClearHitobjHead();
     tbl = headchkofs[kpaGetLevel()];
     n = *tbl++;
     if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
@@ -579,7 +580,7 @@ HitEntry* kpaHitCheck(void) {
         return NULL;
     }
     mario->kpaWork->objHit = NULL;
-    kpa_headClear();
+    kpaClearHitobjHead();
     if (kpaFireAttackCheck() == 1) {
         return NULL;
     }

@@ -79,7 +79,8 @@ static inline s32 kpa_stay_chk(void) {
  * on every frame of sub-states 0x1E/0x1F (a stroke has ended and his downward speed is braked),
  * otherwise every 10 frames while rising and every 30 while sinking.
  */
-static inline void kpa_swim_splash(void) {
+// Original name and size (0x198) from the JP demo map (UNUSED there: every call is inlined).
+void kpaBubble(void) {
     MarioWork* mario = marioGetPtr();
     s32 st;
     s32 lim;
@@ -858,7 +859,7 @@ void kpa_swim(void) {
         }
     }
     kpaSwimMove();
-    kpa_swim_splash();
+    kpaBubble();
     switch (mario->currSubMotionId) {
         case 0:
             if (mario->hitobjStandOn != NULL) {
@@ -977,7 +978,7 @@ void kpa_swim(void) {
                 mario->jumpSnapY = 0.0f;
                 mario->currSubMotionId = 0x20;
             }
-            kpa_swim_splash();
+            kpaBubble();
             if (marioBgmodeChk() != 1) {
                 camFollowYOn();
             }
@@ -1004,7 +1005,7 @@ void kpa_swim(void) {
                 mario->kpaSpeed = 0.0f;
                 mario->baseSpeed = 0.0f;
             }
-            kpa_swim_splash();
+            kpaBubble();
             break;
         case 0x20:
             if (kpaChkHitobjRide()) {
