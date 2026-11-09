@@ -95,7 +95,8 @@
  * stay, walk or dash, slit/roll/ship with no air time, or riding Yoshi.
  * The landon and rideon waits pair it with a non-null hitobjStandOn.
  */
-static inline BOOL marioChkLanding(void) {
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL _check_motion(void) {
     MarioWork* mp = marioGetPtr();
     s32 m = mp->currMotionId;
     if (m == MARIO_MOTION_STAY || m == MARIO_MOTION_WALK || m == MARIO_MOTION_DASH) {
@@ -121,7 +122,8 @@ static inline BOOL marioChkLanding(void) {
  * clears the jump state and air timers, records the jump distance, re-enables camera Y follow.
  * True when he landed.
  */
-static inline BOOL marioLandChk(f32 vy) {
+// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
+static BOOL chkgnd(f32 vy) {
     MarioWork* mp = marioGetPtr();
     f32 a;
     f32 y;
@@ -1547,7 +1549,7 @@ USER_FUNC(evt_mario_jump_pos) {
         case 2:
             movePos(&mp->position.x, &mp->position.z, mp->baseSpeed, mp->directionView);
             marioMakeJumpPara();
-            if (marioLandChk(mp->jumpVelocityY)) {
+            if (chkgnd(mp->jumpVelocityY)) {
                 event->userdata[2] = 0;
             } else {
                 mp->position.y += mp->jumpVelocityY;
@@ -1685,7 +1687,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         case 2:
             movePos(&mp->position.x, &mp->position.z, mp->baseSpeed, mp->directionView);
             marioMakeJumpPara();
-            if (marioLandChk(mp->jumpVelocityY)) {
+            if (chkgnd(mp->jumpVelocityY)) {
                 event->userdata[2] = 0;
             } else {
                 mp->position.y += mp->jumpVelocityY;
@@ -1747,7 +1749,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         case 12:
             movePos(&mp->position.x, &mp->position.z, mp->baseSpeed, mp->directionView);
             marioMakeJumpPara();
-            if (marioLandChk(mp->jumpVelocityY)) {
+            if (chkgnd(mp->jumpVelocityY)) {
                 event->userdata[2] = 0;
             } else {
                 mp->position.y += mp->jumpVelocityY;
@@ -1778,7 +1780,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
 
 /** Blocks until Mario stands on ground (a hit object under him and a grounded motion). */
 USER_FUNC(evt_mario_wait_landon) {
-    if (marioGetPtr()->hitobjStandOn && marioChkLanding()) {
+    if (marioGetPtr()->hitobjStandOn && _check_motion()) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -1789,7 +1791,7 @@ USER_FUNC(evt_mario_wait_landon) {
  * used for rides (evt_sub, usu_00, usu_01, yuu_03).
  */
 USER_FUNC(evt_mario_wait_rideon) {
-    if (marioGetPtr()->hitobjStandOn && marioChkLanding()) {
+    if (marioGetPtr()->hitobjStandOn && _check_motion()) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -1798,7 +1800,7 @@ USER_FUNC(evt_mario_wait_rideon) {
 /** Writes 1 to arg 0 if Mario stands on ground (and yields), else 0; used in las_28. */
 USER_FUNC(evt_mario_check_landon) {
     EvtWord* args = event->args;
-    if (marioGetPtr()->hitobjStandOn && marioChkLanding()) {
+    if (marioGetPtr()->hitobjStandOn && _check_motion()) {
         evtSetValue(event, args[0], 1);
         return EVT_RETURN_YIELD;
     }
@@ -1864,7 +1866,7 @@ USER_FUNC(evt_koopa_hip_attack) {
         case 2:
             movePos(&mp->position.x, &mp->position.z, mp->baseSpeed, mp->directionView);
             marioMakeJumpPara();
-            if (!marioLandChk(mp->jumpVelocityY)) {
+            if (!chkgnd(mp->jumpVelocityY)) {
                 mp->position.y += mp->jumpVelocityY;
                 break;
             }

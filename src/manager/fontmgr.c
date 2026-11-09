@@ -580,7 +580,8 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
 }
 
 /** A glyph's advance width in pixels from the WID1 block. */
-inline u8 fontGetGlyphWidth(u16 code) {
+// Original name and size (0x78) from the JP demo map (UNUSED there: every call is inlined).
+u8 JUTFont_GetWidth(u16 code) {
     return JUTFont_GetWidthEntry(code)->width;
 }
 
@@ -615,7 +616,7 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         }
         sx = x + fontScale.x * (irand(10000) % 3);
         sy = y + fontScale.y * (irand(10000) % 3);
-        width = fontGetGlyphWidth(code);
+        width = JUTFont_GetWidth(code);
         PSMTXTransApply(scale, trans, sx, sy, 0.0f);
         PSMTXConcat(camera->view, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);

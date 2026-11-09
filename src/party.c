@@ -954,7 +954,7 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 #pragma dont_inline reset
 
 #if VERSION >= VERSION_JP
-// kept: the target calls partyForceChgRunMode from party_force_ride_yoshi and allPartyForceRideOn; a function this
+// kept: the target calls partyChgRunMode2 from party_force_ride_yoshi and allPartyForceRideOn; a function this
 // small is auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
 #endif
@@ -962,8 +962,8 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
  * Like partyChgRunMode but enters mode already at motion step sub,
  * without the mode's start-up (the change trigger is cleared).
  */
-// Descriptive name (not in the symbol maps).
-void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
+// Original name and size (0x208) from the JP demo map (UNUSED there: every call is inlined).
+void partyChgRunMode2(PartyEntry* party, s32 mode, s32 sub) {
 #if VERSION <= VERSION_DEMO_JP
     partyLeaveRunMode(party);
 #else
@@ -2002,7 +2002,7 @@ static void getRidePos(PartyEntry* party, Vec* pos) {
 void allPartyForceRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        partyForceChgRunMode(party, 11, 11);
+        partyChgRunMode2(party, 11, 11);
 #if VERSION >= VERSION_JP
         party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
@@ -2010,7 +2010,7 @@ void allPartyForceRideOn(void) {
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        partyForceChgRunMode(party, 11, 11);
+        partyChgRunMode2(party, 11, 11);
 #if VERSION >= VERSION_JP
         party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
@@ -2804,7 +2804,7 @@ const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
 
-    partyForceChgRunMode(party, 12, 10);
+    partyChgRunMode2(party, 12, 10);
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
     getRidePos(party, &pos);
     party->position = pos;

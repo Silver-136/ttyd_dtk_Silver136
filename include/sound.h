@@ -45,7 +45,7 @@ typedef struct StreamHeader {
 
 typedef struct SoundGroup {
     u16 flags;               // 0x0, SOUND_GROUP_*
-    u16 index;               // 0x2, position in the group list (SoundSongGetGroup lookup key)
+    u16 index;               // 0x2, position in the group list (searchSongPtr lookup key)
     SND_GROUPID groupId;     // 0x4
     SND_SONGID songId;       // 0x6
     void* arrfile;           // 0x8

@@ -369,8 +369,8 @@ void yoshi_jumpStand(void) {
  * plays the hurt motion (MARIO_MOTION_DAMAGE_TOGE) with the hurt poses and puts Yoshi
  * and the extra partner in run mode 0xd.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800b474c, JP 0x800B474C. See docs/NAME_PROVENANCE.md.
-void yoshi_damageToge(PartyEntry* party) {
+// Original name and size (0x138) from the JP demo map (UNUSED there: every call is inlined).
+void damageToge(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* extra;
 
@@ -432,7 +432,6 @@ static void searchHead(PartyEntry* party);
  * Mario's vertical ride bob this frame: twice the bob table entry for Yoshi's pose (PYS_S_2, PYS_R_2 or
  * PYS_F_1) at the shared pose time.
  */
-// Descriptive name (inline helper; not in the symbol maps).
 // Original name and size (0xf8) from the JP demo map (UNUSED there: every call is inlined).
 f32 yoshiAnimeOfsy(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -852,7 +851,7 @@ void yoshi_use(PartyEntry* party) {
                     }
                 } else if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
                     if (party->position.y <= party->groundY) {
-                        yoshi_damageToge(party);
+                        damageToge(party);
                         return;
                     }
                 }
@@ -1368,7 +1367,7 @@ static void searchGround(PartyEntry* party) {
 #else
         if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
 #endif
-            yoshi_damageToge(party);
+            damageToge(party);
 #if VERSION >= VERSION_JP
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             {
@@ -1475,7 +1474,7 @@ static void searchGround2(PartyEntry* party) {
         return;
     }
     if (attr & HIT_ATTR_SPIKES) {
-        yoshi_damageToge(party);
+        damageToge(party);
     }
     party->flags |= PARTY_FLAG_IS_GROUNDED;
     party->velY = 0.0f;
@@ -1528,7 +1527,7 @@ static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
             }
         }
         if (hitGetAttr(hit) & HIT_ATTR_SPIKES) {
-            yoshi_damageToge(party);
+            damageToge(party);
         }
         attr = hitGetAttr(hit);
         if ((attr & (HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) && !(attr & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH))) {
@@ -1565,7 +1564,7 @@ static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
         }
         hit = dou10_yoko_yari2(&work1);
         if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
-            yoshi_damageToge(party);
+            damageToge(party);
         }
 #if VERSION <= VERSION_DEMO_JP
         return;
@@ -1573,7 +1572,7 @@ static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     } else {
         hit = dou10_yoko_yari2(&work2);
         if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
-            yoshi_damageToge(party);
+            damageToge(party);
         }
     }
 #if VERSION <= VERSION_DEMO_JP

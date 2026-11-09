@@ -69,7 +69,8 @@ static void zoomOff(void) {
  * restores the facing saved at take-off, clears the offsets and rotation,
  * resets the 20x37 collision box and releases the front-pose and facing locks.
  */
-static inline void jabaraResetPose(void) {
+// Original name and size (0xc0) from the JP demo map (UNUSED there: every call is inlined).
+void _marioRefresh(void) {
     MarioWork* mario = marioGetPtr();
     mario->displayDirection = mario->mot.jabara.dir;
     mario->displayDirectionTarget = mario->mot.jabara.dir;
@@ -87,7 +88,8 @@ static inline void jabaraResetPose(void) {
  * Casts a short ray (half Mario's width) from just above his head along angle ang (degrees);
  * returns the hit, used while walking hanging under a ceiling to stop at walls.
  */
-static inline void* jabaraHitFront(f32 ang) {
+// Original name and size (0xcc) from the JP demo map (UNUSED there: every call is inlined).
+void* check_stopper(f32 ang) {
     f32 sn, cs, hx, hy, hz, dist, nx, ny, nz;
     MarioWork* mario = marioGetPtr();
     f32 px = mario->position.x;
@@ -241,7 +243,7 @@ static inline void animStep(MarioWork* mario) {
 
 // End of the spring jump: reset the pose, optionally return to standing, free the motion work
 static inline void jabTail(BOOL stay) {
-    jabaraResetPose();
+    _marioRefresh();
     if (stay) {
         marioChgMotSub(MARIO_MOTION_STAY, 0);
     }
@@ -261,8 +263,8 @@ static inline void jabTail(BOOL stay) {
     jabTail(TRUE);
 
 static void swingMain(void);
-static void jabaraSwingStart(s32 s);
-static void jabaraSwingWalk(void);
+void setCatchSwing(s32 s);
+void setPutiSwing(void);
 
 /**
  * Spring Jump (Ultra Boots): Mario squashes into a spring, charges while the stick is rotated,
@@ -503,7 +505,7 @@ void mot_jabara(void) {
                 mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
                 marioChgPose("M_J_5A");
                 psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_CATCH1), &mario->position);
-                jabaraSwingStart(overheadHit);
+                setCatchSwing(overheadHit);
             } else {
                 mario->currSubMotionId = 0x28;
             }
@@ -753,14 +755,14 @@ void mot_jabara(void) {
                 }
                 if (mario->controlStickSensitivity) {
                     marioChgPose("M_W_6");
-                    jabaraSwingWalk();
+                    setPutiSwing();
                     hit = FALSE;
                     moveX = 1.0f;
                     if (mario->hitobjHead != NULL && (hitGetAttr(mario->hitobjHead) & HIT_ATTR_JABARA)) {
                         hit = TRUE;
                     }
                     if (hit) {
-                        if (jabaraHitFront(mario->controlStickAngle) == NULL) {
+                        if (check_stopper(mario->controlStickAngle) == NULL) {
                             moveX = moveX * (f32)sin(3.1415927f * mario->controlStickAngle / 180.0f);
                             mario->position.x += moveX;
                             if (moveX > 0.0f) {
@@ -860,7 +862,7 @@ void mot_jabara_post(void) {
 #if VERSION >= VERSION_JP
     allPartyRideOff();
 #endif
-    jabaraResetPose();
+    _marioRefresh();
     if (marioGetPtr()->motStruct) {
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
         marioGetPtr()->motStruct = NULL;
@@ -886,7 +888,8 @@ void mot_jabara_post(void) {
  * Starts the swing after grabbing a ceiling with a fast initial spin;
  * side < 0 (ceiling found on side -1 by marioChkOverheadJabara) uses the reverse swing state 0xB.
  */
-static void jabaraSwingStart(s32 side) {
+// Original name and size (0xb4) from the JP demo map (UNUSED there: every call is inlined).
+void setCatchSwing(s32 side) {
     MarioWork* mario = marioGetPtr();
     mario->mot.jabara.rotTimer = 4;
     mario->mot.jabara.rotSpeed = 24.0f;
@@ -901,7 +904,8 @@ static void jabaraSwingStart(s32 side) {
 }
 
 /** Starts a gentle swing while Mario moves hanging under a ceiling, if he is not already swinging. */
-static void jabaraSwingWalk(void) {
+// Original name and size (0x94) from the JP demo map (UNUSED there: every call is inlined).
+void setPutiSwing(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->mot.jabara.state != 0) {
         return;

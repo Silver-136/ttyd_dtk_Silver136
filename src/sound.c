@@ -830,7 +830,8 @@ void SoundCloseCover(void) {
 }
 
 /** Returns the song library group with index, or NULL. */
-inline SoundGroup* SoundSongGetGroup(u8 groupIndex) {
+// Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined).
+SoundGroup* searchSongPtr(u8 groupIndex) {
     u16 index = groupIndex;
     SoundGroup* group;
 
@@ -859,7 +860,7 @@ void SoundSongPlayCh(s32 chan, u32 groupInfo) {
         sndSeqStop(song->seqId);
     }
     song->vol = 127;
-    group = SoundSongGetGroup((u8)groupInfo);
+    group = searchSongPtr((u8)groupInfo);
     if (group) {
         song->group = group;
         group->groupId = (SND_GROUPID)((groupInfo >> 16) & 0xFF);
@@ -1411,15 +1412,17 @@ static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
 
 /** Disables interrupts for stream bookkeeping; nests. */
-inline void SoundIntOff(void) {
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+void sndDisableIRQ(void) {
     if (!sound.interruptDepth) {
         sound.interrupts = OSDisableInterrupts();
     }
     sound.interruptDepth++;
 }
 
-/** Undoes one SoundIntOff, restoring interrupts at the outermost level. */
-inline void SoundIntOn(void) {
+/** Undoes one sndDisableIRQ, restoring interrupts at the outermost level. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void sndEnableIRQ(void) {
     if (sound.interruptDepth) {
         if (!--sound.interruptDepth) {
             OSRestoreInterrupts(sound.interrupts);
@@ -1540,7 +1543,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     for (i = 0; i < SOUND_STREAM_MAX; i++) {
         stream = &sound.streams[i];
 #else
-    SoundIntOff();
+    sndDisableIRQ();
     stream = sound.streams;
     for (i = 0; i < SOUND_STREAM_MAX; i++, stream++) {
 #endif
@@ -1558,7 +1561,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
             if (entry) {
 #if VERSION <= VERSION_DEMO_JP
                 if (result >= 0) {
-                    SoundIntOff();
+                    sndDisableIRQ();
 #else
                 if (result < 0) {
                     goto end;
@@ -1584,7 +1587,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                     stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
                 }
 #if VERSION <= VERSION_DEMO_JP
-                SoundIntOn();
+                sndEnableIRQ();
 #endif
                 if (stream->count == 2) {
                     if (sound.coverState == SOUND_COVER_RELOADING && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
@@ -1634,7 +1637,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                 stream->entries[1].srcPos = 0;
                 stream->entries[1].pos = 0;
             }
-            SoundIntOff();
+            sndDisableIRQ();
 #endif
             sndStreamActivate(stream->entries[0].streamId);
             if (stream->count == 2) {
@@ -1642,7 +1645,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
             }
             SoundSSSetPanCh(i, stream->pan);
 #if VERSION <= VERSION_DEMO_JP
-            SoundIntOn();
+            sndEnableIRQ();
 #endif
             stream->flags |= SOUND_STREAM_FLAG_STARTED;
             break;
@@ -1650,7 +1653,7 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     }
 #if VERSION >= VERSION_JP
     end:
-    SoundIntOn();
+    sndEnableIRQ();
 #endif
 }
 
@@ -2299,14 +2302,14 @@ void SoundSSStopCh(s32 chan) {
             return;
         }
 #else
-        SoundIntOff();
+        sndDisableIRQ();
 #endif
         if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
             sound.slotUsed[stream->slot] = 0;
         }
         stream->flags = 0;
 #if VERSION <= VERSION_DEMO_JP
-        SoundIntOff();
+        sndDisableIRQ();
 #endif
         DVDMgrClose(stream->entries[0].dvd);
         DVDMgrClose(stream->entries[1].dvd);
@@ -2314,7 +2317,7 @@ void SoundSSStopCh(s32 chan) {
         if (stream->count == 2) {
             sndStreamFree(stream->entries[1].streamId);
         }
-        SoundIntOn();
+        sndEnableIRQ();
         sound.streamChannel = -1;
     }
 }
@@ -2422,12 +2425,12 @@ void SoundSSSetPlayFreqCh(s32 chan, u16 freq) {
     if (stream->flags) {
         stream->freq = freq;
         if (stream->flags & SOUND_STREAM_FLAG_STARTED) {
-            SoundIntOff();
+            sndDisableIRQ();
             sndStreamFrq(stream->entries[0].streamId, stream->freq);
             if (stream->count == 2) {
                 sndStreamFrq(stream->entries[1].streamId, stream->freq);
             }
-            SoundIntOn();
+            sndEnableIRQ();
         }
     }
 }

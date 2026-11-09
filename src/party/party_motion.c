@@ -4993,8 +4993,8 @@ void party_motion_beside_mario(PartyEntry* party) {
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     }
 }
-static void partyStayFlyY(PartyEntry* party);
-static void partyStayChkGnd(PartyEntry* party);
+void hitcheck_party_motion_stay_fly(PartyEntry* party);
+void hitcheck_party_motion_stay(PartyEntry* party);
 
 /**
  * Demos: the standing motion (motion 0 of the stay and walk modes):
@@ -5116,10 +5116,10 @@ void party_motion_stay(PartyEntry* party) {
     party->position.x = v.x;
     party->position.z = v.z;
     if (party->moveKind == 1) {
-        partyStayFlyY(party);
+        hitcheck_party_motion_stay_fly(party);
         return;
     }
-    partyStayChkGnd(party);
+    hitcheck_party_motion_stay(party);
     party_force_reset_outofscreen(party);
     if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 && party->currentMemberId == PARTY_MS_MOWZ &&
         chuchu_searchObject()) {
@@ -5156,7 +5156,8 @@ static void partyPoseA2(PartyEntry* party) {
     }
 }
 
-static void partyStayFlyY(PartyEntry* party) {
+// Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
+void hitcheck_party_motion_stay_fly(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 depth, gy;
 
@@ -5175,7 +5176,8 @@ static void partyStayFlyY(PartyEntry* party) {
  * snaps it to the floor, flags shallow water and damage floors,
  * and starts a fall (motion 3, gravity -1.5) or a water splash when there is no floor.
  */
-static void partyStayChkGnd(PartyEntry* party) {
+// Original name and size (0x158) from the JP demo map (UNUSED there: every call is inlined).
+void hitcheck_party_motion_stay(PartyEntry* party) {
     HitEntry* hit;
     f32 depth2;
     f32 hh;
