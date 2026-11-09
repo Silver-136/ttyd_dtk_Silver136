@@ -694,8 +694,8 @@ BOOL SoundDropData(void) {
     group = sound.groups;
     SoundStopAll();
     sndSilence();
-    // a second stop pass, SoundStopAll's loops written out; a second SoundStopAll() call differs from the target
-    // only in the register order of its song loop
+    // a second stop pass: song, effect and DVD loops written out, streams through SoundSSStopCh; a second
+    // SoundStopAll() call, or channel calls for the other loops, change the loops' register order
     for (i = 0; i < SOUND_SONG_MAX; i++) {
         SoundSong* song = &sound.songs[i];
         if (sndSeqGetValid(song->seqId)) {
@@ -728,44 +728,7 @@ BOOL SoundDropData(void) {
     }
 
     for (i = 0; i < SOUND_STREAM_MAX; i++) {
-        SoundStream* stream;
-        if (sound.streams[i].flags) {
-            stream = &sound.streams[i];
-#if VERSION <= VERSION_DEMO_JP
-            if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
-                stream->flags |= SOUND_STREAM_FLAG_END;
-                continue;
-#else
-            if (!sound.interruptDepth) {
-                sound.interrupts = OSDisableInterrupts();
-#endif
-            }
-#if VERSION >= VERSION_JP
-            sound.interruptDepth++;
-#endif
-            if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
-                sound.slotUsed[stream->slot] = 0;
-            }
-            stream->flags = 0;
-#if VERSION <= VERSION_DEMO_JP
-            if (!sound.interruptDepth) {
-                sound.interrupts = OSDisableInterrupts();
-            }
-            sound.interruptDepth++;
-#endif
-            DVDMgrClose(stream->entries[0].dvd);
-            DVDMgrClose(stream->entries[1].dvd);
-            sndStreamFree(stream->entries[0].streamId);
-            if (stream->count == 2) {
-                sndStreamFree(stream->entries[1].streamId);
-            }
-            if (sound.interruptDepth) {
-                if (!(--sound.interruptDepth)) {
-                    OSRestoreInterrupts(sound.interrupts);
-                }
-            }
-            sound.streamChannel = -1;
-        }
+        SoundSSStopCh(i);
     }
 
     // BUG: SoundLoadDVD2 stores into slot dataId but never increments it, so dataId is 0 here and none of these
