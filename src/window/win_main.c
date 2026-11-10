@@ -37,9 +37,6 @@
 #include "win/win_root.h"
 #include "driver/itemdrv.h"
 
-#if VERSION >= VERSION_US
-#endif
-
 #include "driver/msgdrv.h"
 #include "mario/mario_pouch.h"
 #include "mario/mariost.h"

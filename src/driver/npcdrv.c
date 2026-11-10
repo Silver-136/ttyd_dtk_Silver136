@@ -2584,7 +2584,6 @@ s32 _getHammerMotionParam(void);
 void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z);
 void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
 
-
 /**
  * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
  * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
@@ -2617,7 +2616,6 @@ inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
     if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                                      \
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) continue;                                         \
     if (npc->flags & NPC_FLAG_2D) continue;
-
 
 /**
  * Finds the NPC Mario or the partner hits this frame.

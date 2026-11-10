@@ -62,7 +62,6 @@ extern BattleUnitKind unit_gundan_zako;
 extern BattleUnitKind unit_monochrome_pakkun;
 extern BattleUnitKind unit_piders;
 
-extern s32 evt_cloud_main_evt[];
 extern EvtWord mri_puni_init_dvd[];
 USER_FUNC(evt_mri_get16bitdata);
 USER_FUNC(evt_mri_puni_win_attack);

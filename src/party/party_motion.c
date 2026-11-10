@@ -3,9 +3,6 @@
 
 #include "version.h"
 #include "mot/mot_slit.h"
-#include "evt/evt_cmd.h"
-#include "manager/evtmgr.h"
-#include "manager/evtmgr_cmd.h"
 #include "pmario_sound.h"
 #include "driver/hitdrv.h"
 #include <dolphin/types.h>

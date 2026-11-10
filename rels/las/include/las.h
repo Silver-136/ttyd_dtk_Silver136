@@ -59,8 +59,6 @@ extern BattleUnitKind unit_super_killer;
 extern BattleUnitKind unit_super_mahorn;
 extern BattleUnitKind unit_wanwan;
 
-extern s32 evt_cloud_main_evt[];
-extern f32 kurokaron_move_list[6][2];
 USER_FUNC(bts_x_flag_add);
 USER_FUNC(bts_x_flag_set);
 USER_FUNC(bts_x_flag_wait);

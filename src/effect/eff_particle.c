@@ -100,7 +100,7 @@ s32 rndi(void) {
     return seed;
 }
 
-/** Pseudo-random f32 in [0, 1) from a linear congruential generator on the global seed. */
+/** Pseudo-random f32 in [0, 1) from a linear congruential generator on the file's seed. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 f32 rndf(void) {
     seed = seed * 0x5EEDF715 + 0x1B0CB173;

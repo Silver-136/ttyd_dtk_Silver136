@@ -237,7 +237,6 @@ s32 marioGetoffYoshi(void) {
 }
 
 /** Clears Mario's and the extra partner's display offsets (the bob added while riding). */
-// Descriptive name (inline helper; not in the symbol maps).
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void reset_all_ofs(PartyEntry* party) {
     PartyEntry* extra;

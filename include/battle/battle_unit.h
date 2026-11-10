@@ -998,7 +998,6 @@ typedef struct BattleUnit {
     s32 damageCode;                                           // 0x274
     BattleUnitToken_Flags tokenFlags;                         // 0x278
     s32 attackHitCount;                                       // 0x27C (US 0x280), hits this unit resolved as attacker this turn (BattleCheckDamage counts every one);
-
                                                  // SPECIAL_DIMINISH_BY_TARGET subtracts it from damage
     s32 totalDamageDealt;                                     // 0x280, damage this unit dealt as attacker
     s32 initEventId;                                          // 0x284

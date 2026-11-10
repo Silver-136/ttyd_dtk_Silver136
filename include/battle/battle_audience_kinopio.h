@@ -5,4 +5,3 @@
 #include "dolphin/types.h"
 
 void BattleAudienceCtrlProcessKinopio(s32 index);
-

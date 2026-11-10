@@ -28,7 +28,6 @@ static GXFifoObj FifoObj;
 static GXData gxData;
 GXData* const __GXData = &gxData;
 
-
 void* __piReg = NULL;
 void* __cpReg = NULL;
 void* __peReg = NULL;
@@ -354,8 +353,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
     {
         u32 reg = 0;
-#if DEBUG
-#endif
         GX_SET_CP_REG(3, reg);
 
         SET_REG_FIELD(0, __GXData->perfSel, 4, 4, 0);

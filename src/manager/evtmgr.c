@@ -600,7 +600,7 @@ void evtSetPri(EventEntry* entry, u32 priority) {
     entry->priority = (u8)priority;
 }
 
-/** Sets how many commands per frame the event runs (speed times the global evtSpd). */
+/** Sets how many commands per frame the event runs (speed times evtSpd). */
 void evtSetSpeed(EventEntry* entry, f32 speed) {
     entry->timescale = speed * evtSpd;
 }

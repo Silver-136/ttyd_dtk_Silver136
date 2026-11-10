@@ -117,13 +117,10 @@ const char e3_anim_str10[] = "PWD_A_7";
 #endif
 
 // Forward Declarations
+static void e3Disp(CameraId cameraId, void* param);
+static void e3DispOffscreen(CameraId cameraId, void* param);
 #if VERSION == VERSION_DEMO_US_1
-static void e3Disp(CameraId cameraId, void* param);
-static void e3DispOffscreen(CameraId cameraId, void* param);
 static void e3DispShadow(f32 x, f32 y, f32 z);
-#else
-static void e3Disp(CameraId cameraId, void* param);
-static void e3DispOffscreen(CameraId cameraId, void* param);
 #endif
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION != VERSION_DEMO_JP

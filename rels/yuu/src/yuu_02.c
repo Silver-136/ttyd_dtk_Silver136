@@ -68,7 +68,6 @@ static Monte* monte_p; /* monte_p */
 static Monte* icon_monte_p;
 #endif
 
-extern MonteTableXZ montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 

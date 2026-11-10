@@ -36,7 +36,7 @@ BOOL gxsubMiscSetGX(s32 mode) {
  * the title logo's top half, which the demo's title screen draws at the logo's top position (seq_title.c).
  */
 void gxsubFillGX(s32 x, s32 y, s32 w, s32 h, GXColor* color) {
-    static u8 filltex[2] ATTRIBUTE_ALIGN(32) = {0xFF, 0xFF}; // 1x1 I4 texel used when no texture is set
+    static u8 filltex[2] ATTRIBUTE_ALIGN(32) = {0xFF, 0xFF}; // white I4 texture (4-bit texels) used when no texture is set
     Mtx mtx;
     GXTexObj obj;
     GXColor c;

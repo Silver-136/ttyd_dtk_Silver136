@@ -385,7 +385,7 @@ static ExtTexInfo nannpc_entry_data[] = {
     {0},
 };
 
-// US/PAL: every frame entry doubled
+// US and later: every frame entry doubled
 static s16 dai3_animtbl[] = {
 #if VERSION >= VERSION_US
     0, 0, 0, 0, 1, 1, 1, 1,

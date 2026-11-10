@@ -71,7 +71,6 @@ extern EvtWord minigame03_end[];
 extern EvtWord minigame03_start[];
 extern EvtWord minigame04_end[];
 extern EvtWord minigame04_start[];
-extern s32 minigame_view_monte[];
 extern EvtWord yuu_02_icon_monte_entry_evt[];
 extern EvtWord yuu_02_jumpret[];
 extern EvtWord yuu_03_icon_monte_entry_evt[];

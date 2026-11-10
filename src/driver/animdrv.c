@@ -287,6 +287,8 @@ MoaChain g_moamoa_chain_tbl[47] = {
 };
 
 //.bss
+// FAKE: extern declarations of objects defined at the end of the file (g_modeling_mtx_stack and tanfTbl static
+// there): the .bss order comes from the definitions; static declarations here would place them first.
 extern Mtx g_modeling_mtx_stack[32];
 extern AnimationWork work;
 

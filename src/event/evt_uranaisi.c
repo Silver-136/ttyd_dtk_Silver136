@@ -527,7 +527,6 @@ inc:
     return infoId;
 }
 
-
 s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;
     char label[64];
@@ -589,7 +588,6 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     }
     return count;
 }
-
 
 s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;

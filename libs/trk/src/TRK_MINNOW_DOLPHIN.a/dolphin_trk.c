@@ -77,7 +77,6 @@ done:
 
 /* Differs from InitMetroTRK: sets MSR bit 0x8000 (EE) instead of clearing it, and passes 2 to
    InitMetroTRKCommTable instead of r5. */
-#pragma weak InitMetroTRK_BBA
 asm void InitMetroTRK_BBA(void) {
     nofralloc
     subi r1, r1, 0x4

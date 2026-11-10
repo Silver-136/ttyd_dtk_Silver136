@@ -54,6 +54,7 @@
 static u8 kurokaron_prev_goal;
 static u8 kurokaron_move_index;
 static u8 kurokaron_move_flag;
+static f32 kurokaron_move_list[6][2];
 
 typedef struct SenkaronWork {
     s32 attackStart;

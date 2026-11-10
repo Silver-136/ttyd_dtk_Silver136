@@ -295,7 +295,11 @@ GXRenderModeObj GXNtsc480ProgMarioStPal = {
 static void viPostCallback(u32 retraceCount);
 static void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);
+#if VERSION <= VERSION_DEMO_JP
+static void gcResetCheck(void);
+#else
 void gcResetCheck(void);
+#endif
 
 /**
  * Start-up.

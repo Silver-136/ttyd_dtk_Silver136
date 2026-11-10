@@ -1,6 +1,6 @@
-// Gecko_setjmp.c of the Metrowerks runtime library (its own object in the JP demo map). Linked only by the
-// versions that use setjmp: the early demos, PAL and the PAL demo; JP, US and the US September demo leave
-// it out.
+// Gecko_setjmp.c of the Metrowerks runtime library (its own object in the JP demo map). In the early demos,
+// PAL and the PAL demo only: tst.rel's GLU tessellator (JP demo, PAL) calls them; the US demo and the PAL demo
+// keep them unreferenced, as their original links did. JP, US and the US September demo leave the file out.
 /* setjmp and longjmp of the Metrowerks runtime, in assembly as in the original source. They
  * save and restore the return address, the condition register, r1, r2, r13-r31, f14-f31 (each with its
  * paired-single half) and the FPSCR. */

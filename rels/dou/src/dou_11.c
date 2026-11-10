@@ -42,7 +42,6 @@
 #include "driver/seqdrv.h"
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
-BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static USER_FUNC(dou_mario_kaiten_hosei);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);

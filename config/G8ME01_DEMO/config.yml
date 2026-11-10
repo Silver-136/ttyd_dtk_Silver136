@@ -344,7 +344,7 @@ force_active:
 - effSpiritDisp
 - effSpiritMain
 - effSpiritEntry
-# Runtime runtime.c __setjmp and longjmp: unreferenced in the demo dol but kept by the original link
+# Runtime Gecko_setjmp.c __setjmp and longjmp: unreferenced in the demo dol but kept by the original link
 - __setjmp
 - longjmp
 # unit_mario.c faker_mario_makkuro_set: unreferenced in the demo dol but kept by the original link

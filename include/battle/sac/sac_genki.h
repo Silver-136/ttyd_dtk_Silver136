@@ -7,4 +7,3 @@
 
 extern EvtWord marioAttackEvent_Genki0[];
 extern EvtWord marioAttackEvent_Genki1[];
-

@@ -240,9 +240,6 @@ void battleAcDelete_PowerGaugeLv2(BattleWork* work) {
     }
 }
 
-// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
-// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-
 /**
  * Draws the gauge with level marks from gaugeParams (pulsing red once full), the A icon and a star,
  * both lit while holding A is safe.

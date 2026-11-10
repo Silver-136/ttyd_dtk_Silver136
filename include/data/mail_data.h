@@ -1,4 +1,4 @@
-// mail_data.c: the Mail Box SP letter table (MailData, mail_data) and the mailGetPtr lookup.
+// mail_data.c: the Mail Box SP letter table (MailData records in the file-local mail_data) and the mailGetPtr lookup.
 
 #pragma once
 

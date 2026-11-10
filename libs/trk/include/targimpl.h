@@ -1,7 +1,7 @@
 #ifndef TRK_TARGIMPL_H
 #define TRK_TARGIMPL_H
 
-/* Register blocks of the target (MetroTRK's PowerPC 6xx/7xx layout, as in targimpl.c). The including file
+/* Register blocks of the target (MetroTRK's PowerPC 6xx/7xx layout, used by targimpl.c and dolphin_trk.c). The including file
    defines u32, u64 and BOOL first. */
 
 typedef struct Default_PPC {

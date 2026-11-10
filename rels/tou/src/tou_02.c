@@ -83,7 +83,11 @@ static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
 static f32 randf(f32 min, f32 max);
 
+#if VERSION <= VERSION_DEMO_JP
+static s32 check_hammer(Fan* fan);
+#else
 s32 check_hammer(Fan* fan);
+#endif
 static void pose_main(void);
 
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);

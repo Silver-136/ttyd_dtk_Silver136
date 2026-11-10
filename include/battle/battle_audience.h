@@ -139,7 +139,6 @@ typedef struct BattleAudienceMember {
     s32 interpType;            // 0x128
     union {
         s32 statusTimer;       // 0x12C, set to 5 and counted down while status == AUDIENCE_STATUS_IGNITE or SHELL;
-
                                // some handlers keep an event id or a member index here
         f32 bobAngle;          // 0x12C, kinopio bob phase (radians)
     };

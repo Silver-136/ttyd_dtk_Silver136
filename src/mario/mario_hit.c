@@ -913,7 +913,6 @@ typedef struct LandonRay {
     Vec dir;
 } LandonRay;
 
-
 /** marioHitCheckVecInl taking the ray as a LandonRay (position and direction), for the landing checks. */
 static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;

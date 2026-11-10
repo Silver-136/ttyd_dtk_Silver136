@@ -100,9 +100,6 @@ static USER_FUNC(bgm_start_wait);
 static USER_FUNC(stone_bg);
 static void coingetDisp(WinMgrEntry* entry);
 
-#if VERSION < VERSION_US
-#endif
-
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)

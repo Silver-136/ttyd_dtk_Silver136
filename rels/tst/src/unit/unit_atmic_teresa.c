@@ -42,7 +42,6 @@ USER_FUNC(teresa_wait_bikkuri2);
 USER_FUNC(teresa_wait_bikkuri);
 USER_FUNC(teresa_appear_bikkuri);
 USER_FUNC(target_id_set);
-void teresa_ext_disp(CameraId camera, void* param);
 void teresa_ext_main(void);
 void teresa_ext_init(void);
 

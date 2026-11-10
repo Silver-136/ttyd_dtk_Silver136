@@ -30,7 +30,8 @@ Some code looks odd but is not a trick, because the original game's code shows i
 
 Most of these were found with [mweppc](https://github.com/doldecomp/mweppc), a public-domain decompilation of the
 Metrowerks compiler the game was built with (GC 2.6), which shows why a given source form produces given code. The
-review took this list from 720 rows to 498 (13 of them re-listed by the adversarial review, whose rows had been lost).
+review took this list from 720 rows to 498 (13 of them re-listed by the adversarial review, whose rows had been lost); later
+work has brought it lower (the current count is in docs/PROGRESS.md).
 
 ## Rows
 
@@ -64,6 +65,7 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | libs/dolsdk2004/src/gx/GXGeometry.c | GXGetCullMode | `// fake match?` in the non-default branch: decodes genMode with `((hwMode >> 0xD) & 0x2) | (((int)hwMode >> 0xE) & 0x2) >> 1` instead of the readable switch | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
 | Both | libs/musyx/src/musyx/runtime/snd3d.c | startListNum (data) | `extern` declaration of the file-local array ahead of its static definition, for its .bss place (local copy plus an unused external reference) | static declaration (moves it), `= {0}` at the definition (moves it to .data) |
+| Both | src/driver/animdrv.c | g_modeling_mtx_stack, tanfTbl (data) | `extern` declarations of the file-local objects ahead of their static definitions at the end of the file, for their .bss order | static declarations (place them first) |
 | Demos | src/memory.c | smartWork (data) | early demos: `extern` declaration of the file-local smartWork so `wp = &smartWork` comes first while the object keeps its .bss place | static declaration (moves it), `= {0}` (.data) |
 | Both | libs/musyx/src/musyx/runtime/HARDWARE.C | itdOffTab (data) | `static volatile const` table, read by SetupITD | plain `static const` (both versions change) |
 | Both | src/driver/effdrv.c | effMayaKeyInterp (inline, used by effCalcMayaAnimMatrix) | channel fields still read through byte offsets; unnecessary register qualifiers removed, typed MayaHermitChannel indexing changes both objects | fresh US/JP ordinary-local and typed-channel probes |
@@ -203,7 +205,7 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | rels/gor/src/gor_01.c | chk_marco_fuki (fbatNpcTalkCheck) | call through a cast to a `(MarioWork*)` function type, passing marioGetPtr() to the no-argument function | plain `fbatNpcTalkCheck()`: the marioGetPtr call goes, changes the object (gor.rel versions) |
 | Both | libs/dolsdk2004/src/os/OSAudioSystem.c | __OSInitAudioSystem | dead comparison `reg16 != 0x81800;` | without it (both versions change) |
 | Both | rels/tou2/src/tou2.c | tou_champion_belt | the star stone work is read through `EffStarStoneWork** work = (EffStarStoneWork**)&eff->userdata`, so userdata is reloaded at every store as in the target | an `EffStarStoneWork*` local from `eff->userdata` (86.67%); `((EffStarStoneWork*)eff->userdata)->field` per access (99.26%) |
-| Both | include/battle/battle_ac.h (ac_air_gauge, ac_power_gauge_lv, ac_timing_a) | battleAcDisp_AirGauge, battleAcDisp_PowerGaugeLv, battleAcDisp_TimingA | `AC_SLIDE_TIMER_AT(disp, i)` reads slideTimer through a byte offset from a register-held index (i = 4), `*(s32*)((u8*)&disp->slideTimer + i - 4)` | `disp->slideTimer` (98.86% in power_gauge_lv); `(&disp->slideTimer)[i - 4]` (78.95%) |
+| Both | include/battle/battle_ac.h | battleAcDisp_AirGauge, battleAcDisp_PowerGaugeLv, battleAcDisp_TimingA (ac_air_gauge, ac_power_gauge_lv, ac_timing_a) | `AC_SLIDE_TIMER_AT(disp, i)` reads slideTimer through a byte offset from a register-held index (i = 4), `*(s32*)((u8*)&disp->slideTimer + i - 4)` | `disp->slideTimer` (98.86% in power_gauge_lv); `(&disp->slideTimer)[i - 4]` (78.95%) |
 | Both | src/battle/sac/sac_scissor.c | scissor_damage_sub2 | `q = &t->x[j]; y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)]` reads ScissorTri y[j] through the x pointer, keeping the target r9/r10 order | `t->y[j]` / `t->x[j]` (99.65%); `q = &t->x[j]; y0 = t->y[j]; x0 = *q` (99.65%) |
 | US | src/effect/eff_pointget.c | effPointGetDisp | US: the digit table pointer is read as `texid_tbl[0].tbl[gp->language * 3 + slot]`, one flat index over the three-word PointGetTexSet rows, so the address is (language * 3 + slot) * 4 as in the target | `texid_tbl[gp->language].tbl[slot]` (row address shared with .count, 1455 disasm lines differ), the same with .count read first, `(&texid_tbl[lang].tbl[0])[slot]`, a `PointGetTex* [6][3]` table (2D index folds the row too), a flat union slot array (needs designated initialisers, which MWCC C mode rejects) |
 | Both | src/event/evt_win.c | unitwin_help_disp | goods slot byte offset `idx = wp->goodsIdx * sizeof(s32)` computed before winMgrAction and read as `*(s32*)((u8*)goods + idx)` (slwi before the call, lwzx after) | `goods[wp->goodsIdx]` (74%), `s32 idx = wp->goodsIdx; goods[idx]` (87.2%, slwi after the call) |
@@ -428,7 +430,7 @@ review took this list from 720 rows to 498 (13 of them re-listed by the adversar
 | Both | src/manager/winmgr.c | select_disp_party | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
 | Both | src/manager/winmgr.c | select_disp_mario | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
 | Both | src/manager/winmgr.c | select_disp_luigi | `ent` is a second name for entry | entry directly, no zero (tried together): changes the object |
-| Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
+| Both | src/event/evt_win.c | select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
 | Both | src/event/evt_win.c | ICONGX2 (evt_win list displays) | iconDispGx called through a (Vec*, u16, f32, u16) function-pointer cast macro (9 uses) | plain iconDispGx(pos, flags, id, scale): changes the object |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
 | Both | src/mario/mario.c | marioDispBlur | `opt_dead_assignments` off keeps the never-used sin/cos quadrant computation | removing the pragma or the code changes the object; the file-wide `-opt nodeadstore` changes other functions (2026-11-07) |

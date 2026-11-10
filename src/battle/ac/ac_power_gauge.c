@@ -25,9 +25,6 @@ typedef struct PowerGaugeWork {
     s32 endTimer;  // 0x18
 } PowerGaugeWork;
 
-// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
-// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-
 static void actionCommandDisp(f32 x, f32 y);
 
 /**

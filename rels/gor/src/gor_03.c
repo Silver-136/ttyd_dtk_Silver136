@@ -7428,7 +7428,7 @@ static USER_FUNC(kuzi_bomb_bomb_eff) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper that saves all 16 local words (LW) of the script into a global array. */
+/** Script helper that saves all 16 local words (LW) of the script into the file's xlw array. */
 static USER_FUNC(enzan_lw_save) {
     s32 i;
 

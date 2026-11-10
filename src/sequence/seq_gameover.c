@@ -281,6 +281,10 @@ static EVT_BEGIN(evt_gameover)
     RETURN
 EVT_END()
 
+/**
+ * Enters the game over sequence: resets the windows, fades out all sound, turns reverb off and clears the sound
+ * flags, then sets system level 4. JP and later also show the 3D camera, stop the BGM and unequip Slow Go.
+ */
 void seq_gameOverInit(SequenceWork* seq) {
     winReInit();
 #if VERSION >= VERSION_JP

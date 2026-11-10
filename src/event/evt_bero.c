@@ -106,7 +106,7 @@ EVT_END()
 #endif
 
 // s32 x, s32 y, s32 z (JP and later)
-// Descriptive name (not in the symbol maps).
+// Original name from the JP demo's link map.
 #if VERSION <= VERSION_DEMO_JP
 static BeroEntry bero_null[] = {
     {

@@ -36,21 +36,6 @@ extern EvtWord evt_sub_tree_access_entry[];
 
 extern WinMgrDesc coinget_window_desc[1];
 
-#if VERSION <= VERSION_DEMO_JP
-#else
-extern EvtWord kusa_evt[43];
-#endif
-
-#if VERSION >= VERSION_DEMO_EU
-#else
-extern EvtWord mail_evt_gor_02_2[61];
-#endif
-
-#if VERSION <= VERSION_DEMO_JP
-#else
-extern EvtWord tree_evt[251];
-#endif
-
 USER_FUNC(evt_sub_status_gauge_force_update);
 USER_FUNC(evt_sub_area_check);
 USER_FUNC(evt_sub_check_intersect);

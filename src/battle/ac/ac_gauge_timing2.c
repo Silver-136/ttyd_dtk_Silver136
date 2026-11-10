@@ -31,9 +31,6 @@ typedef struct GT2Work {
     s32 endTimer; // 0x6C
 } GT2Work;
 
-// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
-// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-
 static void actionCommandDisp(f32 x, f32 y);
 
 /**

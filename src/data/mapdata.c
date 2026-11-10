@@ -570,7 +570,7 @@ AreaData* areaDataPtr(const char* areaName) {
     return NULL;
 }
 
-/** Returns the global world_data table that lists every area and its maps. */
+/** Returns the world_data table that lists every area and its maps. */
 WorldData* worldDataPtr(void) {
     return &world_data;
 }

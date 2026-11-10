@@ -68,7 +68,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 static void rankingInit(void);
-void rankingInit(void);
 static RankWork* rank_wp;
 static void rankingExit(void);
 static DispWork* dwp;

@@ -26,5 +26,4 @@
 #define GX_OPCODE_MASK 0xF8
 #define GX_VAT_MASK    0x07
 
-
 #endif

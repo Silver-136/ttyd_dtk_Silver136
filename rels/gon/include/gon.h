@@ -32,7 +32,6 @@ extern BattleUnitKind unit_patakuri;
 extern BattleUnitKind unit_patapata;
 extern BattleUnitKind unit_togekuri;
 
-extern s32 evt_cloud_main_evt[];
 
 // Area-local saved values (GON; swReInit clears them on every area change), named from the area's
 // scripts

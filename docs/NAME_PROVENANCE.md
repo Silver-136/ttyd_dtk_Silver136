@@ -332,6 +332,69 @@ it, the map's size); `memcmp_as4` in `src/system.c` follows Super Paper Mario's 
 | data | yuu | `yuucounter_window_null_evt` | `unk_evt_yuu_00019740` | .data:0x00004598 | yes |
 | data | yuu | `yuu_03_monte_p` | `unk_yuu_bss00000010` | .bss:0x00000010 | yes |
 
+## Descriptive names marked in the code but missing from the tables above (2026-11-10)
+
+These carry a `Descriptive name` comment at their definition but were not in the generated tables (most are
+functions and data that exist only from JP on, so the JP demo map cannot name them). Not original; who chose
+each name is not recorded. Found by cleanup_tools/provenance_markers.py, which checks every marker against
+this file.
+
+| Name | File |
+| --- | --- |
+| `item_hog_table` | src/battle/battle_information.c |
+| `_set_initial_upgrade_cursor_position` | src/battle/battle_seq_end.c |
+| `_draw_select_one_to_upgrade_text` | src/battle/battle_seq_end.c |
+| `_display_select_one_to_upgrade_text` | src/battle/battle_seq_end.c |
+| `_disp_2D` | src/battle/sac/sac_suki.c |
+| `ohko_rate_tbl` | src/battle/sac/sac_suki.c |
+| `itemPickUpFromFieldCheck` | src/driver/itemdrv.c |
+| `mapDispOff` | src/driver/mapdrv.c |
+| `mapDispOn` | src/driver/mapdrv.c |
+| `fbatPreventMarioEventChk` | src/driver/npcdrv.c |
+| `setupErrorHandler` | src/error_handler.c |
+| `systemErrorHandler` | src/error_handler.c |
+| `evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos` | src/event/evt_bero.c |
+| `evt_img_set_z` | src/event/evt_img.c |
+| `cameraman_on` | src/event/evt_kinopio.c |
+| `evt_mapdisp_onoff` | src/event/evt_map.c |
+| `evt_mario_party_door_halve_hitbox` | src/event/evt_mario.c |
+| `evt_party_cloud_lock_animations_on_off` | src/event/evt_party.c |
+| `evt_pouch_remove_item_index` | src/event/evt_pouch.c |
+| `evt_sub_status_gauge_force_update` | src/event/evt_sub.c |
+| `stg9_02_init` | src/event.c |
+| `dou10_yoko_yari3` | src/mario/mario_hit.c |
+| `pouchUnEquipBadgeID` | src/mario/mario_pouch.c |
+| `marioSetBottomlessRespawnPosOnBeroEntry` | src/mario/mario_sbr.c |
+| `marioSetBottomlessRespawnPos` | src/mario/mario_sbr.c |
+| `marioReloadMapOnBottomlessOn` | src/mario/mario_sbr.c |
+| `marioReloadMapOnBottomlessOff` | src/mario/mario_sbr.c |
+| `marioGetMovementSpeed` | src/mario/mario_sbr.c |
+| `battleMapAlloc` | src/memory.c |
+| `battleMapFree` | src/memory.c |
+| `mot_jumpNpc_post` | src/motion/mot_jump.c |
+| `marioShipGetDir` | src/motion/mot_ship.c |
+| `marioSlitSetAfterLand` | src/motion/mot_slit.c |
+| `cloudLockAnimationsOff` | src/party/party_cloud.c |
+| `cloudLockAnimationsOn` | src/party/party_cloud.c |
+| `_cloud_use` | src/party/party_cloud.c |
+| `partyFollowCloseOn` | src/party/party_motion.c |
+| `partyFollowCloseOff` | src/party/party_motion.c |
+| `partyPlaySfxPartyLanding1` | src/party/party_move.c |
+| `marioForceVivianAnime` | src/party/party_vivian.c |
+| `vivianDisplayTailCheck` | src/party/party_vivian.c |
+| `chgMotion` | src/party/party_yoshi.c |
+| `fall` | src/party/party_yoshi.c |
+| `searchHead` | src/party/party_yoshi.c |
+| `partyLeaveRunMode` | src/party.c |
+| `evt_snd_bgm_unpause` | src/sequence/seq_gameover.c |
+| `getDebugMode` | src/sequence/seq_title.c |
+| `statusClearBlink` | src/statuswindow.c |
+| `stat_name_tbl` | src/window/win_mario.c |
+| `compare_func4_1` | src/window/win_root.c |
+| `compare_func4_1_r` | src/window/win_root.c |
+| `compare_func4_2` | src/window/win_root.c |
+| `compare_func4_2_r` | src/window/win_root.c |
+
 ## Invented names for objects the original left unnamed
 
 Made-up names, but there is no original name to recover: at these places the JP demo's linker maps show a

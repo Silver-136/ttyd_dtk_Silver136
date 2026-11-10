@@ -1384,8 +1384,8 @@ static void teresa_ext_disp(CameraId camera, void* param) {
 }
 
 /**
- * Battle script helper: remembers the Atomic Boo's battle unit id (translated from args[0]) in a global for the
- * effect callbacks.
+ * Battle script helper: remembers the Atomic Boo's battle unit id (translated from args[0]) in atmic_teresa_id
+ * for the effect callbacks.
  */
 static USER_FUNC(atmic_teresa_id_set) {
     s32 id = evtGetValue(event, event->args[0]);

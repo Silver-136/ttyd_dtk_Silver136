@@ -1,4 +1,4 @@
-// evt_kinopio.c: inn scripts and helpers (evt_kinopio_setup, bed and payment commands); kinopio is Toad.
+// evt_kinopio.c: inn scripts and helpers (evt_kinopio_setup, kinopio_house_talk_evt); kinopio is Toad.
 
 #pragma once
 
@@ -15,4 +15,3 @@ extern EvtWord evt_50[];
 USER_FUNC(cameraman_on);
 #endif
 
-USER_FUNC(offset);
