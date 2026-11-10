@@ -1631,10 +1631,6 @@ static void zFill(void) {
     GXSetColorUpdate(GX_TRUE);
 }
 
-/** Returns a * b + c; an inline helper of disp_maku. */
-// FAKE: a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object
-static inline f32 fadeMadd(f32 a, f32 b, f32 c) { return a * b + c; }
-
 /**
  * Draws slot 1's or slot 4's curtain or stage animation (maku is Japanese for curtain) on its camera,
  * scaled to the screen and offset by fadeSetAnimOfsPos or placed at the virtual world position,
@@ -1714,8 +1710,13 @@ static void disp_maku(CameraId camId, void* param) {
         depth = 0.0f;
         zFill();
     }
-    PSMTXTrans(mtx, 64.0f * (fadeMadd(entry->animOffsetX, scale, 0.0f) / gp->fbWidth),
-        48.0f * (fadeMadd(entry->animOffsetY, scale, 0.0f) / gp->efbHeight), depth);
+    {
+        // zero offset; the retail code adds it with fmadds (a literal 0.0f would fold away)
+        f32 ofs = 0.0f;
+
+        PSMTXTrans(mtx, 64.0f * ((entry->animOffsetX * scale + ofs) / gp->fbWidth),
+            48.0f * ((entry->animOffsetY * scale + ofs) / gp->efbHeight), depth);
+    }
     PSMTXTrans(mtx2, -32.0f, 24.0f, 0.0f);
     PSMTXConcat(mtx, mtx2, mtx);
     sx = 608.0f / gp->fbWidth;

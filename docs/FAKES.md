@@ -321,7 +321,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/animdrv.c | animPoseDisp_MakeExtTexture | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
 | Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object; glareIter/glareCur EnvironmentGlare pointers stepped by `(EnvironmentGlareTexCoord*)p + 1` (glareCur re-copied from glareIter) | see comment |
 | Both | src/driver/envdrv.c | envCapture, envCapture2 | `& 0xFFFF` masks on the u16 frame sizes before halving | `(u16)((u32)width / 2)`: changes the object |
-| Both | src/driver/fadedrv.c | fadeMadd | a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object | see comment |
 | Both | src/driver/fadedrv.c | fadeStrippedPool | stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool | see comment |
 | Both | src/driver/hitdrv.c | hitCheckVecFilter | 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object | see comment |
 | Both | src/driver/icondrv.c | iconDispGxAlpha | iconId++ then iconId-- (no net change); without them the object changes | see comment |
