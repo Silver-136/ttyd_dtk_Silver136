@@ -21,8 +21,10 @@ static GXFifoObj* DefaultFifoObj;
 static GXRenderModeObj* rmode;
 static vu32 FrameCount;
 static u32 FrameMissThreshold;
+
 /** Set by DEMOEnableGPHangWorkaround: DEMOBeforeRender and DEMODoneRender then guard against GPU hangs. */
 static BOOL GPHangWorkaround = FALSE;
+
 /** True until the first frame is shown; DEMOSwapBuffers turns the video output on then (black until then). */
 static GXBool DemoFirstFrame = GX_TRUE;
 

@@ -82,6 +82,7 @@ typedef struct KyakuWork {
     s32 animNum;
     KyakuAnim anim[32];
 } KyakuWork;
+
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static s32 tou_03_bss_0xC;
 static KyakuWork* kyaku_wp;

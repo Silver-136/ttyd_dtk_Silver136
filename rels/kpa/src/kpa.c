@@ -45,6 +45,7 @@ typedef struct KpaGameWork {
 } KpaGameWork;
 static KpaGameWork* kwp;
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
+
 // IconFlags.ICON_FLAG_2D. icondrv.h cannot be included: its iconDispGx takes the scale last, and with it the calls
 // below compile differently (the original evaluates the scale first), so the prototype above stays.
 #if VERSION <= VERSION_DEMO_JP

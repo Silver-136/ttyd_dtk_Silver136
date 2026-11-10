@@ -630,6 +630,7 @@ s16 marioSetMutekiTime(s32 msec);
 BOOL marioBgmodeChk(void);
 void marioBgmodeOn(void);
 void marioBgmodeOff(void);
+
 // marioChkSts: TRUE when Mario is in any of the given states
 typedef enum MarioStsCheck {
     MARIO_STS_JUMPING = (1 << 0),  // 0x1, MARIO_FLAG_IS_JUMPING

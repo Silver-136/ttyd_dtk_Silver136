@@ -48,6 +48,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Jumps the camera 3D by the offset ofs (position and look-at both) with an immediate transition;
  * used to move the view to the item-get stage and back.

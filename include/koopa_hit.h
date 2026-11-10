@@ -7,6 +7,7 @@
 
 HitEntry* kpaChkHitobjRide(void);
 long kpaClearHitobjRide(void);
+
 // kpaEnemyHitChk results
 typedef enum KpaEnemyHit {
     KPA_ENEMY_HIT_NONE = 0,

@@ -41,6 +41,7 @@ typedef struct GameOverWork {
 } GameOverWork;
 
 static GameOverWork work;
+
 /** Points at the Game Over sequence's work. */
 static GameOverWork* wp = &work;
 

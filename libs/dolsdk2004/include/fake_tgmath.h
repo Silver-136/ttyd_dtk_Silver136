@@ -59,6 +59,7 @@ inline float floor(float x) {
 
     if(x < 0) 
     return (float)--i;  
+
         // x < 0 -> int conversion of x above rounded toward zero(so decrement)                
     return (float)i;
 }

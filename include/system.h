@@ -35,6 +35,7 @@ typedef enum EasingType {
 } EasingType;
 
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps);
+
 // qqsort's comparator; many callers pass one with typed element pointers, through a cast
 typedef s32 (*QSortCompare)(const void*, const void*);
 void qqsort(void* base, u32 n, u32 size, QSortCompare compare);
@@ -75,7 +76,6 @@ s32 LZ77Decode(u8* input, u8* output);
 void* memcpy_as4(void* dest, const void* src, u32 count);
 s32 memcmp_as4(const void* a, const void* b, u32 count);
 
-inline Vec initializeVec(Vec* input);
 
 extern const char* build_date_ptr;
 extern const char* build_time_ptr;

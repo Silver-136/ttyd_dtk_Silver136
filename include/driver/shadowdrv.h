@@ -130,14 +130,3 @@ f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
 const char** shadowGetConfig_DispMode(void);
 s32 shadowGetConfig_DispModeNum(void);
-// inline in shadowdrv.c; the out-of-line copies are unused (JP demo map: stripped)
-CharShadowWork* shadowGetCharShadowWork(void);
-ShadowConfig* shadowGetConfig(s32 idx);
-void shadowCharShadowInit(void);
-void shadowDepthShadowInit(void);
-void shadowProjShadowInit(void);
-void CreateRampTex8(GXTexObj* obj);
-void CreateRampTex16(GXTexObj* obj);
-void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj);
-void projShadowBegin(CameraId cameraId, void* param);
-void depthShadowBegin(CameraId cameraId, void* param);

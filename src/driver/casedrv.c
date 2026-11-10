@@ -26,6 +26,7 @@ typedef struct CaseWork {
 
 //.sbss
 static CaseWork work;
+
 //.sdata
 static CaseWork* wp = &work;
 

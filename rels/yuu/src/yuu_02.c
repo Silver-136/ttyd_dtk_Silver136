@@ -52,6 +52,7 @@ typedef struct RollWork {
     s32 monteCount;
     EventEntry* viewEvent;
 } RollWork;
+
 // yuu_02's spawn table: x/z ranges, and a type word that ends the table (0).
 typedef struct MonteTableXZ {
     f32 x0;

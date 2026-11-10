@@ -107,6 +107,7 @@ static void effSleepMain(EffectEntry* effect) {
 //   computed in the inner loop body, and the y products go through sleepPos so `1.0f * y` is not
 //   folded away by the front end (CExpr_IsOne).
 static inline void sleepPos(f32 x, f32 one, f32 y) { GXPosition3f32(x, one * y, 0.0f); }
+
 /**
  * Draws each visible mark as a camera-facing strip of 8 quads whose x offset follows a sine wave,
  * giving a wavy ribbon texture.

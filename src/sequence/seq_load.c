@@ -103,6 +103,7 @@ static void continueGame(void);
 
 #if VERSION <= VERSION_DEMO_JP
 s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
+
 /** Early demos: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_sub_rumble_onoff, 0, 0)
@@ -148,6 +149,7 @@ static WinDt win_dt3[4] = {
 };
 
 static LoadWork work;
+
 /** Points at the file-select (load) sequence's work. */
 static LoadWork* wp = &work;
 

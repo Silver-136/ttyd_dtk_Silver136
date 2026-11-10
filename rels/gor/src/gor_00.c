@@ -75,6 +75,7 @@ static s32* itemsel_table_ram;
 static KaitenParam* ckp0;
 static KaitenParam* ckp1;
 static KaitenParam* ckpw;
+
 /** Returns its f32 argument unchanged. */
 static inline f32 fid(f32 x) { return x; }
 static void gundan1000tai_seq01(NanNPC* npc);

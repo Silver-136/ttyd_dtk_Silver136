@@ -85,14 +85,19 @@ static inline s32 angOut(f32 center, f32 half, f32 x) {
 // later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, stickAngOut c
 // in f31) and marioRollCan (v26 in f26, fabs/sin/cos volatiles). Behaviour-identical to the expressions they wrap.
 static inline f32 k025(void) { return 0.025f; }
+
 /** sin of a (radians) as a float. */
 static inline f32 rSin(f32 a) { return (f32)sin(a); }
+
 /** Absolute value of x. */
 static inline f32 rabs(f32 x) { return __fabsf(x); }
+
 /** Degrees to radians. */
 static inline f32 rollRad(f32 d) { return 3.1415927f * d / 180.0f; }
+
 /** cos of a (radians) as a float. */
 static inline f32 rollCos(f32 a) { return (f32)cos(a); }
+
 /** 1 if the control stick points outside +/-half degrees of Mario's move direction (angOut with the stick angle). */
 // Returns 1 when the stick direction lies outside moveDirection +/- half degrees (angOut with both angles read here).
 static inline s32 stickAngOut(f32 half) {

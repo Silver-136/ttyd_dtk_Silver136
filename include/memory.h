@@ -76,6 +76,7 @@ void _mapFree(void* alloc);
 
 void smartInit(void);
 void smartReInit(void);
+
 // smartAlloc groups: smartAutoFree frees a whole group.
 enum {
     SMART_GROUP_PERMANENT = 0,  // never auto-freed

@@ -15,6 +15,7 @@ s32 kpaGetAttackMode(void);
 f32 kpaGetBaseScale(s32 lv);
 s32 kpaGetBodyStatus(void);
 s32 kpaGetStageType(void);
+
 // kpaGetStageViewType
 enum {
     KPA_VIEW_SIDE = 0,  // side-scrolling stages kpa_02 to kpa_06

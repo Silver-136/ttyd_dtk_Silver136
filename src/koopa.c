@@ -35,6 +35,7 @@ static void kpaFireMain(void);
 static void kpaFall(void);
 void fire_se_init(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
+
 // FAKE: unsized f32 array view of mario_motion.c's MarioJumpData marioJumpData; reading marioJumpData.jump through
 // the struct type changes the object.
 extern f32 marioJumpData[];
@@ -49,6 +50,7 @@ static s32 kpaPauseSeTable[28] = {PSND_SFX_VOICE_KOOPA_ANGRY1_1, PSND_SFX_VOICE_
                            PSND_SFX_VOICE_KOOPA_LAUGH2_1, PSND_SFX_VOICE_KOOPA_LAUGH2_2, PSND_SFX_VOICE_KOOPA_QUESTION1, PSND_SFX_VOICE_KOOPA_SATIATED1_2, PSND_SFX_VOICE_KOOPA_SATIATED2_1, PSND_SFX_VOICE_KOOPA_SATIATED2_2, PSND_SFX_VOICE_KOOPA_SURPRISED1_1, PSND_SFX_VOICE_KOOPA_SURPRISED1_2, PSND_SFX_VOICE_KOOPA_SURPRISED2_1, PSND_SFX_VOICE_KOOPA_SURPRISED2_2,
                            PSND_SFX_VOICE_KOOPA_THINK1_1, PSND_SFX_VOICE_KOOPA_THINK1_2, PSND_SFX_VOICE_KOOPA_THINK2_1, PSND_SFX_VOICE_KOOPA_THINK2_2, PSND_SFX_VOICE_KOOPA_VEXATIOUS1_1, PSND_SFX_VOICE_KOOPA_VEXATIOUS1_2, PSND_SFX_VOICE_KOOPA_VEXATIOUS2_1, PSND_SFX_VOICE_KOOPA_VEXATIOUS2_2};
 static EffectEntry* fireefp;
+
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 static u8* fireefp_pad;
 

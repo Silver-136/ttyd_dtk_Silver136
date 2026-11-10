@@ -683,6 +683,7 @@ EVT_BEGIN(btldefaultevt_Wait)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
 /** Action that ends a tutorial battle turn: runs the lecture unit's data-table event 70 (69 in the early demos). */
 EVT_BEGIN(btldefaultevt_LectureEnd)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
@@ -780,6 +781,7 @@ EVT_BEGIN(btldefaultevt_Defend)
     CALL_CHILD(_Defence_core)
     RETURN
 EVT_END()
+
 /** The partner's Defend command. */
 EVT_BEGIN(btldefaultevt_DefendParty)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))

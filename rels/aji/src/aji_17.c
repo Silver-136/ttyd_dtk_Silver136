@@ -3923,6 +3923,7 @@ static s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall) {
 
 /** Suffix added to a pose name to get the matching pose of the mirrored hologram. */
 static const char horogram_pose_suffix[] = "R";
+
 /**
  * Script function: sets the pose args[0] on the hologram NPC
  * and the matching mirrored pose (name plus "R") on the second hologram.

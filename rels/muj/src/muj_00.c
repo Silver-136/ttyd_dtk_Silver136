@@ -67,6 +67,7 @@ typedef struct OrbitData {
     f32 dist;
 } OrbitData;
 static OrbitData* _op;
+
 // Advance actor i by d degrees around (cx, cz), using the caller's t, rad, r and x.
 #define ORBIT(i, p)           \
     op[i].angle += d;         \

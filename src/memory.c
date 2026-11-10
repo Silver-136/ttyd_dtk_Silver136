@@ -55,6 +55,7 @@ u32 R_battlemapalloc_size;
 BOOL g_bFirstSmartAlloc;
 void* R_battlemapalloc_base_ptr;
 void* mapalloc_base_ptr;
+
 // US and later map heap: callers pass the heap base; battle maps get their own sub-heap
 #define MAPBASE_PARAM void* base_,
 #define MAPBASE ((MapAllocEntry*)base_)

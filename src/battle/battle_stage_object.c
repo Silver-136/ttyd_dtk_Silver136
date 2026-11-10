@@ -2432,18 +2432,21 @@ BattleStageObjectData _object_spot_light_data[] = {
 };
 BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
+
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
+
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
@@ -2574,6 +2577,7 @@ EVT_BEGIN(_nozzle_work_event_0)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
+
 /**
  * Nozzle attack during battle (BattleStage_NozzleWorkCheck(1)):
  * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.

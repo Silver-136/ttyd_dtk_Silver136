@@ -158,6 +158,7 @@ static RuleData ruleDt_re[14] = {
 /** Pointers to the fighter ranking and to the ranking board's display work. */
 static RankWork* rank_wp = &rank_work;
 static DispWork* dwp = &disp_work;
+
 /** Full-width digits 0-9 used to print rank numbers on the ranking board. */
 static const char* suuji[] = { "０", "１", "２", "３", "４", "５", "６", "７", "８", "９" };
 
@@ -181,6 +182,7 @@ static void rankingControll(void);
 static void insert(s32* arr, s32 n, s32 from, s32 to);
 static void rankingExit(void);
 static void rankingInit(void);
+
 /**
  * Script helper: arg0 = 1 hides the Champ's Belt that tou_champion_belt draws on Rawk Hawk,
  * 0 shows it again (used when the belt is handed over after the title match).

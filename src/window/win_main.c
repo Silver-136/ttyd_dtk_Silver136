@@ -78,6 +78,7 @@ static WindowWork* wp;
 #include "manager/evtmgr_cmd.h"
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 static void winLectureKeyMask(void);
+
 // Private u16 iconId prototype (icondrv.h and the definition take s32): winIconSet's s32 id is truncated at the
 // call (the clrlwi is in the retail code), so the original declared it this way here.
 void iconGetTexObj(GXTexObj* obj, u16 iconId);

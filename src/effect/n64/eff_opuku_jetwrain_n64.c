@@ -55,6 +55,7 @@ static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
 
 /** Returns whether a < 12 (the loop bound over the wave grid columns). */
 inline int inline_fn2(s32 a) { return a < 12; }
+
 /** Returns whether n < 13 (the loop bound over the wave grid width). */
 inline int inline_fn(s32 n) { return n < 13; }
 

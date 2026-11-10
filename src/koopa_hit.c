@@ -511,6 +511,7 @@ typedef struct HeadSphereSet4 {
     s32 count;
     HeadSphere spheres[4];
 } HeadSphereSet4;
+
 /**
  * Bowser's collision spheres for each power-up level (small, normal, big, giant): count, then forward offset,
  * height, radius and when each is active; kpaHitCheck tests them against map objects through head_sphere_data.

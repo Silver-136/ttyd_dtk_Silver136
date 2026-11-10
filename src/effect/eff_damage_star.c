@@ -262,6 +262,7 @@ static s16 damageStar_effFace_pPlane168_0[] = {
     -1024, 1024, 0, 0, 0,
 };
 static s16* damageStar_effFaceDt_pPlane168 = damageStar_effFace_pPlane168_0;
+
 /** The two star joints and their keyframes; only the second joint has a face to draw. */
 static MayaPoly damageStar_effAnimRST[] = {
     {7, damageStar_effHermit_0, 0, NULL},
@@ -270,6 +271,7 @@ static MayaPoly damageStar_effAnimRST[] = {
 
 /** Joint list of the damage star animation. */
 static MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
+
 /** The damage star animation (65 frames), started by effDamageStarEntry and positioning the number. */
 static MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
 

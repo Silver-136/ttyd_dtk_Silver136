@@ -85,6 +85,7 @@ static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 200)
     RETURN
 EVT_END()
+
 /** Animation names of the coloured switch blocks, in the order mobj_switch_float_blk steps through them. */
 static const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 

@@ -47,6 +47,7 @@ typedef struct SysChar {
     s32 state;
     s32 texid;
 } SysChar;
+
 // US: room for 64 letters, plus the chapter subtitle rendered once into a texture
 typedef struct SysWork {
     s32 state;

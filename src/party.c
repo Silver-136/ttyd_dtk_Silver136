@@ -710,6 +710,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
 
 static void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
+
 /** Lets partyPreDisp draw the partner's shadow again. */
 static void partyShadowOn(PartyEntry* party) {
     if (party) {
@@ -850,6 +851,7 @@ void partyUsePost(PartyEntry* party) {
 
 static inline void partyChgRunM(PartyEntry* party);
 static inline void partyChgRunMo(PartyEntry* party);
+
 /**
  * Cleanup when the partner leaves run mode prev for mode:
  * gets off a ride (11) unless she is leaving, ends the hello pop-out (4) back into following,
@@ -2360,6 +2362,7 @@ static inline void partyChgRunMo(PartyEntry* party) {
 #include "driver/npcdrv.h"
 #include "mot/mot_plane.h"
 extern f32 partyNrmToAngle(Vec* n);
+
 /** TRUE when hit is a floor the partner may stand on (not flagged with hit attributes 0x200 or 0x800). */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) == 0;

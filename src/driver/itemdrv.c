@@ -1767,6 +1767,7 @@ static void itemseq_Bound(ItemEntry* entry) {
             t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
             dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
+
             // FAKE: cos result in a local
             {
                 f32 c = cos(6.2831855f * entry->direction / 360.0f);
@@ -2109,6 +2110,7 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
     x = entry->position.x;
     y = 20.0f + entry->position.y;
     z = entry->position.z;
+
     // FAKE: f64 local keeps 20.0 on the left of the fadd
     {
         f64 d = __fabs(vy);
@@ -2121,6 +2123,7 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
     x = entry->position.x;
     y = entry->position.y;
     z = entry->position.z;
+
     // FAKE: f64 local keeps 20.0 on the left of the fadd
     {
         f64 d = __fabs(vy);

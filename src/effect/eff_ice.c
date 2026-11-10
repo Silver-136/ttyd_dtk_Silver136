@@ -932,6 +932,7 @@ static MayaPoly ice_effAnimRST[] = {
 
 /** Joint list of the ice block animation. */
 static MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};
+
 /**
  * The ice block animation (119 frames), played by effIceMain: it runs to frame 90 and holds there
  * until the freeze ends, then plays on through the shatter.

@@ -71,6 +71,7 @@ static DispWork* dwp;
 static FighterData fighterDt[23];
 static FighterData fighterDt_re[21];
 static void rankingControll(void);
+
 // Count the visible fighters preceding the player entry.
 // A macro, not an inline function: as a function the registers at the call sites change.
 #define GET_RANK(rank, i)                                       \
@@ -122,6 +123,7 @@ static void printRanking(void);
 static RuleData ruleDt_2bu[10];
 static RuleData ruleDt_1bu[14];
 static RuleData ruleDt_re[14];
+
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static s32 tou_bss_1C;
 static RankWork rank_work;

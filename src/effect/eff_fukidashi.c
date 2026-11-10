@@ -68,6 +68,7 @@ static s8 anim_data_tenten[] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
 
 static s8 anim_data_moja[] = { 0, 0, 1, 1, 2, 2, 3, 3, -10};
 static s8* anim_data_table[] = { anim_data_bikkuri, anim_data_hatena, anim_data_bikkuri, anim_data_loop, anim_data_tenten, anim_data_moja, anim_data_loop };
+
 /**
  * The same mark sequences for bubbles spawned with a duration: each holds its last frame until the
  * duration runs out. anim_data_table_2 picks one per bubble type.

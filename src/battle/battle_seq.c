@@ -571,6 +571,7 @@ static void btlseqFirstAct(BattleWork* wp) {
  */
 static USER_FUNC(_set_effect_luck) {
     BattleWork* wp = _battleWorkPointer;
+
     // the four statuses Lucky Start chooses from; one is kept at random per unit
     BattleWeapon weapon = {
         NULL, 0, // name..icon

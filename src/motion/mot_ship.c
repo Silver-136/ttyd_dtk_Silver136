@@ -122,6 +122,7 @@ static BOOL checkHarbor(Vec* out);
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
 static void shipMove(void);
+
 /**
  * Facing bit of the boat (motShip flag 2) for the partner follow code in party.c,
  * which seats the partners on the matching side; 0 when no boat work is allocated.

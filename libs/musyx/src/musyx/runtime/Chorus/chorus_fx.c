@@ -289,6 +289,7 @@ done:
   addi r1, r1, 0x40
   blr
 }
+
 /* clang-format on */
 #else
 static void do_src1(_SND_CHORUS_SRCINFO* src) {

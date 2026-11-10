@@ -13,6 +13,7 @@ static s32 lastGX ATTRIBUTE_ALIGN(32) = 8;
 static BOOL fillTexEdgeOn;
 static BOOL fillTexAlphaOff;
 static GXTexObj* pFillTexObj;
+
 /**
  * Early demos only.
  * Records mode as the last applied GX setup; returns TRUE when it differs from the previous one,

@@ -212,14 +212,19 @@ static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
 
 /** Which of the six waypoints of kurokaron_move_list Dark Bones is currently heading for. */
 u8 kurokaron_move_index = 0;
+
 /** State bits of Dark Bones: 1 patrol direction, 2 fleeing from Mario, 4 and 8 flee steering state. */
 u8 kurokaron_move_flag = 0;
+
 /** How many times in a row Dark Bones picked the same waypoint. */
 u8 kurokaron_same_goal = 0;
+
 /** Vivian's status on the previous frame, used to notice when she stops hiding Mario. */
 s32 kurokaron_vivian_prev_sts = 0;
+
 /** Frames Dark Bones stands still (set to 60 when Vivian stops hiding Mario next to him). */
 u8 kurokaron_stop_cnt = 0;
+
 /** Frames Dark Bones has been running away. */
 u16 kurokaron_run_cnt = 0;
 

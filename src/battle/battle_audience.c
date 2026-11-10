@@ -33,16 +33,19 @@ static EVT_BEGIN(msg_puni_all_escape)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_puni_escape"), 120)
     RETURN
 EVT_END()
+
 /** Announces that a crowd of Puni has gathered in the audience (btl_msg_audience_puni_meeting). */
 static EVT_BEGIN(msg_puni_all_enter)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_puni_meeting"), 120)
     RETURN
 EVT_END()
+
 /** Announces that the Crazee Dayzee in the audience sang everyone to sleep (btl_msg_audience_pansy_sleep). */
 static EVT_BEGIN(msg_pansy_sing)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_pansy_sleep"), 120)
     RETURN
 EVT_END()
+
 /** Announces that a Bulky Bob-omb in the audience lit its fuse (btl_msg_audience_heavybomb_dynamite). */
 static EVT_BEGIN(msg_heavy_bomb_fire)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_heavybomb_dynamite"), 120)

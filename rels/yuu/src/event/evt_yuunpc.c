@@ -38,6 +38,7 @@ typedef struct YuuNpcPose {
     u16 flags;
     f32 walkAnimSpeed;
 } YuuNpcPose;
+
 // motion: 0 stand, 1 walk, 2 run (yuunpc_stop/walk/run), 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
 // that starts from turnBaseDir; errper (set by errper_set_rtn) is the random spread of the goal position
 typedef struct YuuNpc {

@@ -180,6 +180,7 @@ static EvtWord evt_after_peach[188];
 EvtWord tou_02_init_evt[VERSION_PICK(576, 919)];
 
 int __cvt_ull_flt();
+
 /**
  * Builds the fan crowd's animation table (FanAnim) from ext_fan_data:
  * groups the per-frame texture entries by model name and animation,

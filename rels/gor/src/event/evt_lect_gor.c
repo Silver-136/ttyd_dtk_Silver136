@@ -54,6 +54,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Moves a camera's stored target by the offset ofs:
  * saves the current position and look-at as the preset,

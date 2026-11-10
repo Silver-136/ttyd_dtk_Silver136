@@ -48,6 +48,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Shifts the 3D camera's current position and look-at target by ofs (the camera's preset values are saved,
  * the shifted ones become its new stored target, with an instant move).

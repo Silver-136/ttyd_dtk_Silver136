@@ -1251,6 +1251,7 @@ static void ext_moamoa_main(void) {
                         f32 k;
                         f32 r1 = rand() / 32767.0f;
                         hopSpeed = r1 * mmI(1.0f - 1.0f) + 1.0f;
+
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         g2 = randf(0.4f, 0.4f);
                         {

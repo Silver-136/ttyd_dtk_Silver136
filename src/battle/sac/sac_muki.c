@@ -739,9 +739,11 @@ static USER_FUNC(end_muki) {
 /** Float add, kept as a function so disp_2D matches the original's operation order. */
 // FAKE: addf() for x + 32.0f in disp_2D; the plain sum changes the object
 static inline f32 addf(f32 a, f32 b) { return a + b; }
+
 /** Float multiply, kept as a function so disp_3D_alpha matches the original's operation order. */
 // FAKE: mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object
 static inline f32 mulf(f32 x, f32 y) { return x * y; }
+
 /**
  * Draws the two gauges on the left: attack (red) and defense (blue),
  * each a bar filled by the fractional part of the level with the level number beside it,

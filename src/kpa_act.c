@@ -24,6 +24,7 @@ typedef struct KpaScore {
 
 static KpaScore* ksdp;
 static USER_FUNC(kpa_score_disp_main);
+
 /** Endless loop that runs kpa_score_disp_main once a frame, keeping the Super Bowser score popups moving. */
 static EVT_BEGIN(kpa_score_disp_evt)
     LOOP(0)

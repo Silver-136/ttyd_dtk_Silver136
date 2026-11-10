@@ -98,6 +98,7 @@ static const char* mario_status_name_table[] = {"ＨＰ", "ＦＰ", "ＢＰ"};
 
 /** What a level-up adds to Mario's HP, FP and BP: 5, 5 and 3. */
 static s32 mario_status_henka_table[] = {5, 5, 3};
+
 /** The ceiling of Mario's HP, FP and BP (200, 200 and 99). */
 #if VERSION >= VERSION_JP
 s32 mario_status_max_table[] = {200, 200, 99};

@@ -41,6 +41,7 @@ typedef struct EffSplashWork {
 
 static s16 geso_shibuki_vertex_tbl[] __attribute__((aligned(32))) = { -27648, 0, 0, -21503, 0, 0, -15871, 0, 0, -10751, 0, 0, -5631, 0, 0, 0, 0, 0, -28426, 333, 0, -23324, 3291, 0, -18243, 5029, 0, -13562, 6464, 0, -8405, 6754, 0, -1797, 4829, 0, -28349, 2048, 0, -23897, 4665, 0, -19006, 6861, 0, -14421, 8524, 0, -9359, 9043, 0, -3897, 6702, 0};
 static s16 geso_shibuki_texcoord0_tbl[] __attribute__((aligned(32))) = { -11004, 6276, -3325, 6276, -3325, 18299, -11004, 18299, 4352, 6276, 4352, 18299, 12031, 6276, 12031, 18299, 19709, 6276, 19709, 18299, 27388, 6276, 27388, 18299, -11004, 512, -3325, 512, 4352, 512, 12031, 512, 19709, 512, 27388, 0 };
+
 /**
  * Height of the first six spray columns of the Blooper splash (type 3) per frame, in 96ths:
  * they shoot up to about two and a half times full height, then sink over 60 frames.
@@ -61,6 +62,7 @@ static u8 geso_shibuki_dl_0_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x0
 static u8 geso_shibuki_dl_0_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x0E, 0x00, 0x01, 0x0E, 0x0F, 0x00, 0x01, 0x0F, 0x08, 0x00, 0x01, 0x04, 0x09, 0x00, 0x01, 0x06, 0x02, 0x00, 0x00, 0x05, 0x03, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8 geso_shibuki_dl_0_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x0F, 0x00, 0x01, 0x0F, 0x10, 0x00, 0x01, 0x10, 0x09, 0x00, 0x01, 0x06, 0x0A, 0x00, 0x01, 0x08, 0x03, 0x00, 0x00, 0x07, 0x04, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8 geso_shibuki_dl_0_4[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x10, 0x00, 0x01, 0x10, 0x11, 0x00, 0x01, 0x11, 0x0A, 0x00, 0x01, 0x08, 0x0B, 0x00, 0x01, 0x0A, 0x04, 0x00, 0x00, 0x09, 0x05, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
 /** The five display lists of the Blooper spray (shibuki) model. */
 static u8* geso_shibuki_dl_0_tbl[] = { geso_shibuki_dl_0_0, geso_shibuki_dl_0_1, geso_shibuki_dl_0_2, geso_shibuki_dl_0_3, geso_shibuki_dl_0_4 };
 

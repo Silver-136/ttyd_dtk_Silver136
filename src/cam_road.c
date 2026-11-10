@@ -784,8 +784,10 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
 
 // FAKE: cos through an inline so the first-block cs is an inline @ temp (numbered above the hoisted +-1 constants, f15 as in the target)
 static inline f32 camRoadCos(f32 x) { return (f32)cos(x); }
+
 // FAKE: l2 through an inline so it is an inline @ temp (numbered with the sgn ?: temps) -> 2nd-web lim1/lim2 colour f27/f25 as in the target
 static inline f32 crMul(f32 a, f32 b) { return a * b; }
+
 // FAKE: the t/s solve through an inline (s via pointer) so t is the inline return @ temp, numbered above the CSE temps
 // (v2.x load, frsp dB.x) -> t is simplified before the r1/r2 products and colours f5 as in the target
 static inline f32 camRoadSolve(f32 ax, f32 az, Vec* dB, Vec* v2, f32* sp) {

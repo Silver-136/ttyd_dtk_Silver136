@@ -44,6 +44,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Moves the camera by the offset ofs: the new target position and look-at are the current ones plus ofs,
  * applied instantly (zero-length move) with curve EASING_SINE_IN_OUT.

@@ -63,6 +63,7 @@ static u8 kura_kiss[] = {
 
 /** Heart colours of kiss types 0, 1 and 2: red, pink and deep red; alpha is filled in when drawn by effKissDisp. */
 static GXColor kiss_col[] = {{0xEB, 0x26, 0x34, 0}, {0xF5, 0x6B, 0x75, 0}, {0xDA, 0, 0, 0}};
+
 /** Twelve pastel RGB tints the type 3 lip mark cycles through, one step per frame. Read by effKissDisp. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,

@@ -66,6 +66,7 @@ static seq_e3_work work;
 
 //.sdata
 static seq_e3_work* wp = &work;
+
 /**
  * The scenarios of the trade-show menu (four in US and later, three before): the story progress each one
  * starts at and where its box sits on screen.

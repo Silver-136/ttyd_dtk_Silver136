@@ -694,6 +694,7 @@ BOOL SoundDropData(void) {
     group = sound.groups;
     SoundStopAll();
     sndSilence();
+
     // a second stop pass: song, effect and DVD loops written out, streams through SoundSSStopCh; a second
     // SoundStopAll() call, or channel calls for the other loops, change the loops' register order
     for (i = 0; i < SOUND_SONG_MAX; i++) {

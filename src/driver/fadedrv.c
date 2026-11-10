@@ -1465,6 +1465,7 @@ static void zFill(void) {
 /** Returns a * b + c; an inline helper of disp_maku. */
 // FAKE: a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object
 static inline f32 fadeMadd(f32 a, f32 b, f32 c) { return a * b + c; }
+
 /**
  * Draws slot 1's or slot 4's curtain or stage animation (maku is Japanese for curtain) on its camera,
  * scaled to the screen and offset by fadeSetAnimOfsPos or placed at the virtual world position,

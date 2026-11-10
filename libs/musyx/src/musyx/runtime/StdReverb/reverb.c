@@ -601,6 +601,7 @@ done:
   addi r1, r1, 0xc0
   blr
 }
+
 /* clang-format on */
 #else
 static void HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {

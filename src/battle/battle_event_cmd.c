@@ -3584,6 +3584,7 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 static void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
+
 /**
  * Refund badge payout when the unit uses an item:
  * (70 + 5 per Refund badge)% of the item's sell price in coins, with a coin effect at the unit.

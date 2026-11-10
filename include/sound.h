@@ -247,7 +247,6 @@ BOOL SoundLoadDVD2PushGroup(u8* groupIds);
 void SoundLoadDVD2Free(void);
 BOOL SoundSLibLoadDVD(const char* path);
 BOOL SoundDropData(void);
-void SoundStopAll(void);
 void SoundSetOutputMode(SND_OUTPUTMODE mode);
 void SoundOpenCover(void);
 void SoundCloseCover(void);

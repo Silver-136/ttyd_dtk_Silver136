@@ -38,6 +38,7 @@ typedef struct STREAM_INFO {
   u32 flags;
   u8 state;
   u8 type;
+
   /* These were moved to near the start of the structure in later versions */
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 0)
   u8 hwStreamHandle;

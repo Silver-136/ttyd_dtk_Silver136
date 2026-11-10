@@ -362,6 +362,7 @@ EVT_BEGIN(enemy_event_dead_event)
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN
 EVT_END()
+
 /**
  * Dead event for helper NPCs that belong to another enemy (bones, magic shots): simply deletes it.
  * Early-demo position of the JP-and-later definition below.
@@ -551,6 +552,7 @@ EVT_BEGIN(enemy_common_flag_init_event)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
+
 /**
  * Early-demo copy (PAL and the September PAL demo have it too, above): kuriboo_move_event with the enemy flags
  * set directly instead of enemy_common_flag_init_event; only the NPC test map in tst.rel uses it (tst_npc_init_evt)
@@ -568,6 +570,7 @@ EVT_BEGIN(testnpc_move_event)
     GOTO(0)
     RETURN
 EVT_END()
+
 /** Init event of the stationary test enemy: standard enemy flags. Early-demo position of the JP-and-later definition below. */
 EVT_BEGIN(testenemynpc_init_event)
     CALL_CHILD(enemy_common_flag_init_event)

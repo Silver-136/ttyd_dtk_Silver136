@@ -44,6 +44,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Moves the 3D camera by the offset ofs in one step (duration 0),
  * keeping the current position as its preset; used to shift the camera 2016 units above or below the scene.

@@ -139,6 +139,7 @@ typedef struct BattleAudienceMember {
     s32 interpType;            // 0x128
     union {
         s32 statusTimer;       // 0x12C, set to 5 and counted down while status == AUDIENCE_STATUS_IGNITE or SHELL;
+
                                // some handlers keep an event id or a member index here
         f32 bobAngle;          // 0x12C, kinopio bob phase (radians)
     };
@@ -411,6 +412,7 @@ void BattleAudience_GetItemOn2(s32* memberId, f32* x, f32* y, f32* z, ItemType* 
 void BattleAudience_SetTarget(s32 index);
 void BattleAudience_Attack(s32 index);
 void BattleAudience_ChangeStatus(s32 index, s32 status);
+
 // Every caller reads the results of GetExist, GetSysCtrl and GetEscapeChangeOK as u8 (`(u8)` casts), but the
 // definitions return int: declared u8, they would mask their result to a byte, which the game code does not do.
 BOOL BattleAudience_GetExist(s32 id);

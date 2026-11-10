@@ -31,6 +31,7 @@ typedef enum PartyMotion {
     PARTY_MOTION_UPSTAIRS = 6,
     PARTY_MOTION_DAMAGE = 7,
 } PartyMotion;
+
 // PartyEntry.runMode; 4..7 are distinct hello variants and remain unnamed here.
 typedef enum PartyRunMode {
     PARTY_RUN_MOVE_RESET = 0,

@@ -73,6 +73,7 @@ typedef struct SightWork {
     s32 count2;
 } SightWork;
 static SightWork* sight_wp;
+
 // make_name's sprintf buffer.
 static char name[64];
 typedef struct BomAnim {
@@ -104,6 +105,7 @@ typedef struct BomWork {
 static smartEntry* lp;
 static void pose_change(s32 i, const char* name);
 static ExtTexInfo ext_data[31];
+
 /**
  * Approximates sin(x) with a short polynomial for x in [0, 2*pi) radians,
  * folding the argument into the first quadrant;

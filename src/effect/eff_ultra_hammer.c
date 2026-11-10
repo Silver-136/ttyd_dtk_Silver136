@@ -13,6 +13,9 @@
 #include <dolphin/vi.h>
 #include <string.h>
 
+// Defined below (inline) and used only in this file.
+inline Vec initializeVec(Vec* input);
+
 u8 wakka_dl_0_0[];
 u8 wakka_dl_0_1[];
 u8 wakka_dl_0_2[];

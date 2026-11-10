@@ -144,4 +144,5 @@ EVT_BEGIN(all_juyoitem_lecture)
     CALL_CHILD(LW(0))
     RETURN
 EVT_END()
+
 // clang-format on

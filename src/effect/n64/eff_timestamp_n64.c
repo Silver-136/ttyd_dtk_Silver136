@@ -49,6 +49,7 @@ static s32 pos_data[30] = {
 
 /** Size in percent of the ten pieces, repeating every four pieces. */
 static u8 scale_data[4] = {120, 80, 40, 60};
+
 /**
  * Red, green and blue of each piece: the table runs round the colour wheel from red through magenta, blue,
  * cyan, green and yellow back to red (only the first ten entries, red to green, are used).

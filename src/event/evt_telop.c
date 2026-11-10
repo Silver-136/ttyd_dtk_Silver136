@@ -46,6 +46,7 @@ static const char* msg_tbl[] = {
 };
 
 static TelopWork work;
+
 /** State of the area name banner (fade timer and the area shown); wp points to it. */
 static TelopWork* wp = &work;
 

@@ -40,6 +40,7 @@ static inline void OSInitFastCast(void) {
 
 #endif
 }
+
 // clang-format off
 
 static inline s16 __OSf32tos16(register f32 inF) {

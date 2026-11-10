@@ -30,6 +30,7 @@ typedef struct CamShiftWork {
 #endif
 
 static CamShiftWork work;
+
 /**
  * State of the sideways camera lead
  * (the camera drifts ahead of where Mario is heading); wp is the pointer the code uses.

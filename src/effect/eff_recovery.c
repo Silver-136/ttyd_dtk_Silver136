@@ -178,6 +178,7 @@ static s16 recovery_effFace_pPlane2_q007_0[] = {
     -768, 768, 0, 0, 0,
 };
 static s16* recovery_effFaceDt_pPlane2_q007 = recovery_effFace_pPlane2_q007_0;
+
 /** The recovery icon's single animated part: its keyframes and plane. */
 static MayaPoly recovery_effAnimRST[] = {
     {10, recovery_effHermit_0, 1, &recovery_effFaceDt_pPlane2_q007},
@@ -185,6 +186,7 @@ static MayaPoly recovery_effAnimRST[] = {
 
 /** Part list of the recovery icon animation. */
 static MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
+
 /** Recovery icon animation (79 frames), started by effRecoveryEntry; moves the central icon, its number and label. */
 static MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
 

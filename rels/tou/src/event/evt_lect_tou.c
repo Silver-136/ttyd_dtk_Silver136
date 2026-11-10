@@ -53,6 +53,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Snaps the 3D camera by an offset (position and look-at together) with an instant move,
  * so the item-get backdrop can be shown far above or below the scene.

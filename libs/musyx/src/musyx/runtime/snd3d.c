@@ -11,6 +11,7 @@ static u8 s3dCallCnt;
 u8 gap_08_80418DD9_sbss[7];
 static SND_EMITTER* s3dEmitterRoot;
 static SND_LISTENER* s3dListenerRoot;
+
 // The room list (s3dRoomRoot) of the original source is not reconstructed: only the room functions this
 // game does not link use it.
 static u32 snd_used_studios;

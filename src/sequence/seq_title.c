@@ -23,6 +23,7 @@
 #include "seq/seq_e3.h"
 
 TitleWork work2;
+
 /**
  * Title screen state (logo animation, the press-start prompt, the debug flag);
  * wp2 is the pointer the code uses.

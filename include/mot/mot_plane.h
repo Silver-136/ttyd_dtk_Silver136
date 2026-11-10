@@ -30,6 +30,7 @@ typedef struct MotPlaneWork {
 } MotPlaneWork;                   // size 0x48
 
 void marioForcePlaneAnime(void);
+
 // marioGetPlaneStatus
 enum {
     PLANE_STATUS_NONE = 0,

@@ -76,6 +76,7 @@ static u8 scale_dt[] = {
 };
 
 static void effFireMain(EffectEntry* effect);
+
 /** Emits one flame quad iw wide and ih tall: white at the top, black at the base. */
 static inline void effFireQuad(s32 iw, s32 ih) {
     f32 w, h;

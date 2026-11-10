@@ -70,6 +70,7 @@ static u16 puni_hag_patern_data[] = { 0, 65535 };
 static u16 puni_jpu_patern_data[] = { 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 65534 };
 static u16 puni_jpd_patern_data[] = { 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 65534 };
 static u16 puni_wan_patern_data[] = { 104, 105, 106, 107, 108, 109, 110, 111, 65534 };
+
 /**
  * The ten Puni action sequences in the order of the animation sets
  * (idle, walk, run, damage, down, roll, stray, jump up, jump down, wander); registered with
@@ -95,6 +96,7 @@ static u16 toge_dmg_patern_data[] = { 120, 65535 };
 static u16 toge_dwn_patern_data[] = { 121, 122, 123, 124, 125, 126, 127, 128, 65535 };
 static u16 toge_rol_patern_data[] = { 129, 65535 };
 static u16 toge_hag_patern_data[] = { 0, 65535 };
+
 /**
  * The ten Jabbi action sequences in the same order as puni_patern_table
  * (the stray sequence stands in for the last four).
@@ -1509,6 +1511,7 @@ static void puniPositionRecover(PuniData* p) {
 }
 
 static const Vec puni_fall_dir;
+
 /**
  * Moves a Puni by its velocity with wall collision:
  * casts a ray from start along dir for dist units,
@@ -1569,10 +1572,12 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
 }
 
 static const Vec puni_fall_dir;
+
 /* FAKE: hitCheckFilter called through a cast with the three start floats listed first. EABI assigns float and
    pointer args to f1-f6 and r3-r10 independently, so the registers and the call are identical; the reorder makes
    the start loads code-generate before the pointer args, so they read r4 directly (scheduling). */
 typedef void* (*PuniHitCheckStartFirst)(f32, f32, f32, void*, f32*, f32*, f32*, f32*, f32*, f32*, f32*, f32, f32, f32);
+
 // Descriptive name (not in the symbol maps); placeholder unk_mri_000095f0, JP mri .text+0x952C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
@@ -1620,6 +1625,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
 #endif
 
 static const Vec puni_fall_dir;
+
 // Descriptive name (not in the symbol maps); placeholder unk_mri_0000980c, JP mri .text+0x9748. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
@@ -3443,6 +3449,7 @@ static void puniModeWind_kaiten(PuniData* p) {
 }
 
 static const Vec puni_fall_dir;
+
 /**
  * Wind mode: Flurrie's breath blows the Puni away from Mario in a sliding, spinning arc:
  * it accelerates up to a speed set by the breath power, then slows down;
@@ -3735,6 +3742,7 @@ static void puniModePreupdraft(PuniData* p) {
 }
 
 static const Vec puni_fall_dir;
+
 /**
  * Updraft mode: the Puni floats upward inside a soap bubble (balloon effect following it,
  * with a gentle sideways wobble and a bubble sound), blown sideways by Flurrie's breath.
@@ -4765,6 +4773,7 @@ static void puni_puni_init(void) {
 }
 
 static const Vec puni_fall_dir;
+
 /**
  * Checks that a stray Puni has not been pushed out of the map and puts it back at the recovery position
  * if needed, then makes it lost (hagure). Written as an inline helper for puniModeMain.
@@ -4939,6 +4948,7 @@ void puniModeMain(PuniData* p) {
 #endif
 
 static const Vec puni_fall_dir;
+
 /**
  * Inline copy of the wall-collision move that reflects the velocity (puniMoveHit),
  * taking start and direction by pointer; used by puniMoveMain.
@@ -6538,6 +6548,7 @@ static BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
 }
 
 static const Vec puni_fall_dir;
+
 // Integer part of v, one lower for negative v (so not a true floor for negative whole numbers).
 static inline s32 puniFloor(f32 v) {
     s32 i = v;
@@ -6600,6 +6611,7 @@ static void puniHagurePos(PuniData* p) {
 
 /** The zero vector, used as the default exit position. */
 static const Vec exit_zero0 = {0.0f, 0.0f, 0.0f};
+
 /**
  * Writes a Puni's save slot (floor number and x, y, z as signed 16-bit values,
  * 7 bytes starting at LSW offset off); the exit routine's copy of puniswSetindex.
@@ -6627,6 +6639,7 @@ static inline void puni_exit_swset(s32 off, s32 val, Vec* pos) {
 #pragma push
 #pragma opt_dead_assignments off
 static const Vec puni_fall_dir;
+
 /**
  * Called when Mario leaves the map (args[0] = 2 for a loading zone, args[2] its direction,
  * args[3] the name of the next map or NULL).
@@ -7186,6 +7199,7 @@ USER_FUNC(evt_puni_get_lsw_index) {
 #pragma push
 #pragma opt_dead_assignments off
 static const Vec puni_fall_dir;
+
 /** Script helper: writes LSW slot args[1] from base args[0]: floor args[2] and position args[3] to args[5]. */
 USER_FUNC(evt_puni_set_lsw_index) {
     s32 off;
@@ -7435,6 +7449,7 @@ USER_FUNC(evt_puni_force_se_off) {
 static const Vec puni_save_zero = { 0.0f, 0.0f, 0.0f };
 #pragma push
 static const Vec puni_fall_dir;
+
 // FAKE: the zero-position branch of evt_puni_all_save inlines its own copy of puni_exit_swset with another local
 // declaration order (register colouring only)
 static inline void puni_set3(s32 off, s32 val, Vec* pos) {
@@ -7531,6 +7546,7 @@ static const char* npcGetTribeName(const char** name) {
 }
 
 static const Vec puni_fall_dir;
+
 /**
  * Per-frame callback of the spider check: turns each live spider-tribe NPC of the map (Piders)
  * into a Puni target (slots 2 to 9) at its position,

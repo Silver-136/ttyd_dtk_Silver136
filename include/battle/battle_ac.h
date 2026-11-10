@@ -157,6 +157,7 @@ void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, 
 
 void BattleActionCommandStart(BattleWork* work);
 void BattleActionCommandStop(BattleWork* work);
+
 // BattleActionCommandCheckDefence: ActionCommands.defenseResult (3 is never set; battle_damage.c tests > 3 for "guarded")
 enum {
     GUARD_RESULT_NONE = 0,

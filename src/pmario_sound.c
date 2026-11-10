@@ -8999,6 +8999,7 @@ PaperSoundBGM psbgm[2];
 static PaperSoundEffect pssfx[40];
 static PaperSoundEnv psenv[16];
 PaperSoundWork psnd;
+
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static u8 _buf[0x80];
 

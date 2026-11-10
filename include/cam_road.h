@@ -79,6 +79,7 @@ typedef struct CamRoadState {
     f32 f_58;              // 0x58
     f32 shiftXRate;        // 0x5c
 } CamRoadState;
+
 /* camera parameters a camera road produces (camdrv blends them into the live camera) */
 typedef struct CameraParams {
     f32 fovY;              // 0x0

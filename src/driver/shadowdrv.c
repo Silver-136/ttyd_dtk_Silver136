@@ -20,6 +20,19 @@
 #include "driver/mobjdrv.h"
 #include "eff/eff_n64.h"
 
+// Defined below as inline functions and used only in this file (the JP demo map lists their out-of-line copies
+// as stripped); declared here because earlier code calls them.
+CharShadowWork* shadowGetCharShadowWork(void);
+ShadowConfig* shadowGetConfig(s32 idx);
+void shadowCharShadowInit(void);
+void shadowDepthShadowInit(void);
+void shadowProjShadowInit(void);
+void CreateRampTex8(GXTexObj* obj);
+void CreateRampTex16(GXTexObj* obj);
+void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj);
+void projShadowBegin(CameraId cameraId, void* param);
+void depthShadowBegin(CameraId cameraId, void* param);
+
 static void shadowCharShadowDisp_Collision(CameraId cameraId, void* param);
 static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param);
 static void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param);
@@ -212,6 +225,7 @@ static Mtx tmp_view;
 static CharShadowWork* cswp = &char_shadow_work;
 static ProjShadowWork* pswp = &proj_shadow_work;
 static DepthShadowWork* dswp = &depth_shadow_work;
+
 /** Side lengths of the square shadow textures (400, 256, 128, 64 pixels) that a shadow config picks from. */
 static u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
 

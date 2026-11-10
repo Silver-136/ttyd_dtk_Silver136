@@ -23,8 +23,10 @@ static void effItemUseDisp(CameraId cameraId, void* payload);
  * and settles at 100%. Read by effItemGetMain.
  */
 static u8 scale_data[12] = { 0x00, 0x12, 0x26, 0x3B, 0x4E, 0x60, 0x6E, 0x78, 0x79, 0x72, 0x69, 0x64 };
+
 /** Light grey-white used as the sparkles' highlight colour beside the per-type tint; set by effItemGetDisp. */
 GXColor white = { 0xE1, 0xE1, 0xE1, 0xFF };
+
 /**
  * Sparkle tint per effect type 0-9 (gold, green, lime, red, yellow-green, blue, orange, pink, slate
  * blue, gold). Read by effItemGetDisp (effItemUseDisp draws untinted).

@@ -51,6 +51,7 @@ static u8 ibuki_color0_tbl[] __attribute__((aligned(32))) = { 0xFF, 0xFF, 0xFF, 
 
 /** The four display lists of the breath stream's strip mesh. */
 static u8* ibuki_dl_0_tbl[] = { ibuki_dl_0_0, ibuki_dl_0_1, ibuki_dl_0_2, ibuki_dl_0_3 };
+
 /** Sizes in 32-byte units of the four display lists of the breath stream's strip mesh; used by effIbukiDisp. */
 static u8 ibuki_dl_0_size_tbl[4] = { 2, 2, 2, 2 };
 

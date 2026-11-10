@@ -76,6 +76,7 @@ BattleUnitKind unit_object_switch = {
  */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+
 /** The switch has no status vulnerabilities (all zero). */
 static StatusVulnerability regist = {0};
 

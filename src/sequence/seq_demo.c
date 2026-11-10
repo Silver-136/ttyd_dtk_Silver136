@@ -1078,6 +1078,7 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
 #include "gxsub.h"
 static SeqDemoWork* wp = &work;
 static void demoDisp(CameraId cameraId, void* param);
+
 /**
  * Enters the demo's movie sequence: frees field memory, hides the status bar,
  * randomly picks full-size or two half-size pictures, opens demo.thp in a map-heap buffer,

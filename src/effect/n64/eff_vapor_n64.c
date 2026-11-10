@@ -11,6 +11,7 @@
 
 /** A table of plus and minus ones that nothing in this effect reads. */
 f32 vaporUnused[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
+
 /**
  * Sideways offset of the steam puff over its first 30 frames, one row of 30 per type (type 1 drifts left).
  */
@@ -65,6 +66,7 @@ static effN64Vtx size64x64_tex32x32_vtx[] = {
 
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static const GXColor kColor1;
+
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static const GXColor kColor2;
 

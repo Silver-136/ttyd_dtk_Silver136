@@ -76,6 +76,7 @@ typedef struct ScissorWork {
         /* 0x0DC */ f32 starX[4];  // other stars (idx 1..4), x
         /* 0x0EC */ f32 starY[4];  // other stars (idx 1..4), y
     } stars;
+
     /* 0x0FC */ s32 state;
     /* 0x100 */ s32 step;
     /* 0x104 */ s32 timer;
@@ -85,6 +86,7 @@ typedef struct ScissorWork {
     /* 0x114 */ Pt* points; // cursor path as Pt pairs (0x1000 bytes, up to 0x200 points)
     /* 0x118 */ struct ScissorTri* tris; // triangle list (0x3000 bytes), drawn by scissor_disp_region
     SacStarStone star;
+
     /* 0x170 */ smartEntry* smart;
 } ScissorWork;
 

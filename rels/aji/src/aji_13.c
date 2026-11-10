@@ -75,6 +75,7 @@ static EvtWord move_up_down[226];
 #endif
 
 static EvtWord move_r[84];
+
 /* moving-floor gimmick read by shikake_init: hit, mapobj, two motion params, time; a NULL mapobj ends the table */
 typedef struct ShikakeMove {
     const char* hit;

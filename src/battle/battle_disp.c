@@ -131,6 +131,7 @@ f32 getFloatDispOffset(BattleUnitPart* part);
 f32 getGravityDispOffset(BattleUnitPart* part);
 static void gravityOffsetControl(BattleUnitPart* part);
 static void statusPoseControl(BattleUnitPart* part);
+
 /** Emits one vertex of a flat-coloured quad at (x, y) on the 2D plane. */
 void btlDispGXPoint2DRasta(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a) {
     GXPosition3f32(x, y, 0.0f);

@@ -13,6 +13,7 @@
 
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static GXColor shock_zero_color0;
+
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static GXColor shock_zero_color1;
 

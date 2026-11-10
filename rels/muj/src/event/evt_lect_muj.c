@@ -43,6 +43,7 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
+
 /**
  * Jumps a camera by the offset ofs: saves its current position and target as the preset
  * and sets the stored position and target to the current ones plus ofs (state 3, curve EASING_SINE_IN_OUT, zero duration).

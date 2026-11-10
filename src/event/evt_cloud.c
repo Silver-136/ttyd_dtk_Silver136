@@ -51,6 +51,7 @@ static s8 cloud_once_flag;
 static CloudWork* cloud_p;
 
 static USER_FUNC(evt_cloud_main);
+
 /**
  * Per-object event started by the cloud registration command for each blowable scenery piece;
  * runs evt_cloud_main (LW(0) = its CloudWork).

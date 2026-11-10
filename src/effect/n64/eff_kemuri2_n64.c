@@ -27,6 +27,7 @@ typedef struct EffKemuri2N64Work {
 
 /** Short puff animation (types 0-1): the sprite cell on each frame, ending at the -1 marker. */
 static s8 anim_data_0[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, -1};
+
 /** Longer puff animation (type 2): the sprite cell on each frame, ending at the -1 marker. */
 static s8 anim_data_1[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1};
 static s8* anim_data_table[] = {anim_data_0, anim_data_1};

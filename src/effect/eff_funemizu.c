@@ -134,8 +134,10 @@ static s8 gor_fune_normal_tbl[] __attribute__((aligned(32))) = { 0, 0, 64, 0, 0,
 #endif
 
 static u8 gor_fune_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
 /** The two base-layer display lists of the type 2 wake, drawn with the sizes below. */
 static u8* gor_fune_dl_0_tbl[] = { gor_fune_dl_0_0, gor_fune_dl_0_1 };
+
 /**
  * Sizes in 32-byte units of the base-layer display lists of the type 2 wake, the second wake mesh gor_00
  * shows beside the ship arriving in Rogueport harbour (muj_20 and muj_21 use it too); used by effFunemizuDisp.

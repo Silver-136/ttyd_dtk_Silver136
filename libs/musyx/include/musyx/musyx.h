@@ -803,6 +803,7 @@ bool sndAddListenerEx(SND_LISTENER* li, SND_FVECTOR* pos, SND_FVECTOR* dir, SND_
 bool sndUpdateListener(SND_LISTENER* li, SND_FVECTOR* pos, SND_FVECTOR* dir, SND_FVECTOR* heading,
                        SND_FVECTOR* up, u8 vol, SND_ROOM* room);
 bool sndRemoveListener(SND_LISTENER* li);
+
 //
 // Functions to add emitters directly to a studio
 //

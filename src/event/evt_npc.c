@@ -34,6 +34,7 @@ EVT_BEGIN(npc_init_evt)
     RETURN
     END
 EVT_END()
+
 // clang-format on
 
 // const char* npcDesc, const char* npcName

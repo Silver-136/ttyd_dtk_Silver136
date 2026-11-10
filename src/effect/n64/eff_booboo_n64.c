@@ -259,6 +259,7 @@ static u32 boo_dl_2_28[] __attribute__((aligned(32))) = {0x98000389, 0x2304116E,
 static u32 boo_dl_2_29[] __attribute__((aligned(32))) = {0x9800038C, 0x1F04118D, 0x2001126D, 0x0A010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 boo_dl_2_30[] __attribute__((aligned(32))) = {0x9800038C, 0x2504116D, 0x1301048B, 0x26010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 boo_dl_2_31[] __attribute__((aligned(32))) = {0x98000389, 0x2504118A, 0x2601046E, 0x16010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+
 /** Walk cycle of the Boos: which of the three Boo model frames to show on each of eight steps. */
 static u8 anime_data_walk[] = {1, 1, 2, 2, 1, 1, 0, 0};
 

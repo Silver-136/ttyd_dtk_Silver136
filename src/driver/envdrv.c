@@ -79,6 +79,7 @@ static EnvironmentWork work[2];
 
 //.sbss
 static TEXPalette* env_tpl = NULL;
+
 /** Set once env.tpl has finished loading and is unpacked; cleared by envInit. */
 static s32 tpl_ok = 0;
 
@@ -1247,6 +1248,7 @@ static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
 
 /** A map object's parent object. */
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
+
 /**
  * Map TEV callback for refracting water: copies the screen area behind the water object (from the previous
  * frame's screen rectangle, at half size), builds a wavy indirect texture whose strength grows as the camera

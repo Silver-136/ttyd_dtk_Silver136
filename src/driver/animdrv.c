@@ -326,6 +326,7 @@ static AnimationWork* wp = &work;
 //.sbss
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 s32 anim_unused_sbss;
+
 //.sbss
 static Mtx* g_modeling_mtx;
 static s32 g_modeling_mtx_lv;
@@ -2332,6 +2333,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
     }
     for (i[0] = 0; i[0] < texCount; i[0]++) {
         flags = 0;
+
         // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
         anim = &animEntries[texIdRemap[(u32) ((texCount - i[0]) - 1)]];
         rotate = anim->rotate;

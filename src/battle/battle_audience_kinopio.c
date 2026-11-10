@@ -952,6 +952,7 @@ static void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
 s32 intrudeSound;
 
 static const Vec v0 = {0.0f, 0.0f, 0.0f};
+
 /**
  * Status 15, Shy Guy phase event: the Shy Guy runs onto the stage
  * and either makes a stage prop fall (BattleStage_ObjectFallCheck) or wiggles three times
