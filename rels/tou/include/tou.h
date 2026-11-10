@@ -40,17 +40,11 @@ extern EvtWord tou_13_init_evt[];
 extern EvtWord tou_20_init_evt[];
 
 extern EvtWord evt_match_after_stop_npcs[];
-USER_FUNC(chk);
 
 #if VERSION >= VERSION_JP
 USER_FUNC(evt_rankingReset);
 #endif
 
-USER_FUNC(fight_money);
-USER_FUNC(make_monitor);
-USER_FUNC(octo_start);
-USER_FUNC(octo_stop);
-USER_FUNC(onoff);
 USER_FUNC(tou_mario_free_wait);
 USER_FUNC(tou_mario_keyoff_check);
 USER_FUNC(tou_mario_talk_end_wait);

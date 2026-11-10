@@ -40,6 +40,16 @@
 #include "eff/eff_fall.h"
 #include "eff/eff_nozle.h"
 
+static USER_FUNC(_set_mobj_shake_init);
+static BattleStageObjectData _object_wall_data;
+static BattleUnitSetup _entry_tree_data;
+static BattleUnitSetup _entry_switch_data;
+static EvtWord _object_turn_event_A1[7];
+static EvtWord _object_turn_event_A2[7];
+static EvtWord _object_turn_event_B[7];
+static EvtWord _object_turn_event_core[175];
+static EvtWord _nozzle_work_event_core[199];
+
 // local prototypes
 static void BattleObjectConfig(void);
 static void _mobj_shake_main(BattleStageObject* obj);
@@ -2425,37 +2435,37 @@ BattleStageObjectData _object_nozzle_data[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
+static BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
 BattleStageObjectData _object_spot_light_data[] = {
     {"spotlight", 6, STAGE_LAYER_SPOTLIGHT, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };
-BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
-BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+static BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+static BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
-EVT_BEGIN(_object_turn_event_A1)
+static EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
-EVT_BEGIN(_object_turn_event_A2)
+static EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
-EVT_BEGIN(_object_turn_event_B)
+static EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 #endif
 
-EVT_BEGIN(_object_turn_event_core)
+static EVT_BEGIN(_object_turn_event_core)
     CALL(_set_mobj_shake_init, LW(9))
     CALL(_set_mobj_shake, LW(9))
     CALL(_set_mobj_rotate_x, LW(9))
@@ -2522,11 +2532,11 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
 /** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
-EVT_BEGIN(_nozzle_turn_event)
+static EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
 EVT_END()
-EVT_BEGIN(_close_wall_event)
+static EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(_announce_wall_message)
     RETURN
@@ -2538,7 +2548,7 @@ EVT_END()
  * runs every unit's ceiling-fall reaction script, drops the frame, damages everyone the frame weapon reaches,
  * shakes the camera and fades it out.
  */
-EVT_BEGIN(_fall_frame_event)
+static EVT_BEGIN(_fall_frame_event)
     CALL(_fall_frame_wait)
     CALL(_fall_frame_wait_unit_ready)
     CALL(_fall_frame, LW(12))
@@ -2572,7 +2582,7 @@ EVT_END()
  * The early demos place this script and _nozzle_work_event_1 here; JP has its copies after the default
  * destroy scripts below, US and later after _set_mobj_rotate_x.
  */
-EVT_BEGIN(_nozzle_work_event_0)
+static EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
@@ -2582,7 +2592,7 @@ EVT_END()
  * Nozzle attack during battle (BattleStage_NozzleWorkCheck(1)):
  * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.
  */
-EVT_BEGIN(_nozzle_work_event_1)
+static EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
@@ -2596,7 +2606,7 @@ EVT_END()
  * and runs each one on its targets, with one action-command guard check on the Mario side and dodges
  * where the pre-check says so.
  */
-EVT_BEGIN(_nozzle_work_event_core)
+static EVT_BEGIN(_nozzle_work_event_core)
     CALL(_nozzle_work_wait)
     CALL(_nozzle_work_effect, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -2672,7 +2682,7 @@ EVT_END()
  * An object falls from the ceiling: waits for other stage events, runs _object_fall_attack,
  * and if the object landed in the audience waits another second. Started by BattleStage_ObjectFallCheck.
  */
-EVT_BEGIN(_object_fall_event)
+static EVT_BEGIN(_object_fall_event)
     CALL(_object_fall_wait)
     CALL(_object_fall_attack, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -2683,7 +2693,7 @@ EVT_END()
 
 /** The escape wall at the left edge of the stage, which closes in battles that cannot be fled. */
 #if VERSION >= VERSION_JP
-BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
+static BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
 
 /** The overhead spotlight; the entry with no name ends the list. */
 BattleStageObjectData _object_spot_light_data[] = {
@@ -2692,34 +2702,34 @@ BattleStageObjectData _object_spot_light_data[] = {
 };
 
 /** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */
-BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+static BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
 /** Unit setup for a hittable stage switch, spawned for stage objects that ask for one (unit_object_switch.c). */
-BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+static BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
-EVT_BEGIN(_object_turn_event_A1)
+static EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
-EVT_BEGIN(_object_turn_event_A2)
+static EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
-EVT_BEGIN(_object_turn_event_B)
+static EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(_object_turn_event_core)
     RETURN
 EVT_END()
 
 /** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
-EVT_BEGIN(_nozzle_turn_event)
+static EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
 EVT_END()
@@ -2727,13 +2737,13 @@ EVT_END()
 
 #if VERSION < VERSION_US
 #if VERSION >= VERSION_JP
-EVT_BEGIN(_close_wall_event)
+static EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(_announce_wall_message)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_nozzle_work_event_0)
+static EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
@@ -2745,7 +2755,7 @@ EVT_END()
  * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.
  */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(_nozzle_work_event_1)
+static EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
@@ -2841,19 +2851,19 @@ static USER_FUNC(_set_mobj_rotate_x) {
 /* US and later: these three scripts sit after _set_mobj_rotate_x so the message string pools after its Vec literal;
    these builds show the wall banner with btlevtcmd_AnnounceMessage for 180 frames */
 #if VERSION >= VERSION_US
-EVT_BEGIN(_close_wall_event)
+static EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_AnnounceMessage, 2, 0, -225, STRING("btl_msg_escape_wall_close2"), 180)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_nozzle_work_event_0)
+static EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_nozzle_work_event_1)
+static EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
@@ -3016,7 +3026,7 @@ static USER_FUNC(_bgset_audience_bgset_access) {
 }
 
 /** Gives each piece of layer args[0] a random wobble period of 60-69 frames, starting at the start or the middle of the period. */
-USER_FUNC(_set_mobj_shake_init) {
+static USER_FUNC(_set_mobj_shake_init) {
     BattleWork* wp = _battleWorkPointer;
     s32 layer;
     int i;

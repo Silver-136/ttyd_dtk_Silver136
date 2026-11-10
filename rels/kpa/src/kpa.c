@@ -38,6 +38,17 @@
 #include "driver/seqdrv.h"
 #include "icon_ids.h"
 
+static USER_FUNC(kpa_time_countdown);
+static USER_FUNC(kpa_pole_hitoff);
+static USER_FUNC(kpa_set_time);
+static USER_FUNC(kpa_status_main);
+static USER_FUNC(kpa_muteki_check);
+static USER_FUNC(kpa_get_msg);
+static USER_FUNC(kpa_nohitenemy_ct_clear);
+static USER_FUNC(kpa_add_coin);
+static USER_FUNC(kpa_make_item_name);
+static USER_FUNC(kpa_make_mobj_name);
+
 typedef struct KpaGameWork {
     u8 stage;
     u8 lives;
@@ -78,7 +89,7 @@ EvtWord kpa_fall_sub[37];
 EvtWord kpa_bgm_change[180];
 EvtWord kpa_stage_start[168];
 static u16 numeric_id[10];
-EvtWord kpa_status_main_evt[9];
+static EvtWord kpa_status_main_evt[9];
 EvtWord kpa_time[88];
 EvtWord kpa_stage_clear[35];
 
@@ -251,7 +262,7 @@ USER_FUNC(kpa_mobj_on) {
  * Script helper: writes a fresh unique map-object name ("mobj0", "mobj1", ... in hex) to args[0],
  * so kpa_read_mobj can give every block its own name.
  */
-USER_FUNC(kpa_make_mobj_name) {
+static USER_FUNC(kpa_make_mobj_name) {
     static char name[16];
     static s32 no;
     EvtWord* args = event->args;
@@ -263,7 +274,7 @@ USER_FUNC(kpa_make_mobj_name) {
 }
 
 /** Script helper: writes a fresh unique item name ("item 0", "item 1", ... in hex) to args[0] for kpa_read_item. */
-USER_FUNC(kpa_make_item_name) {
+static USER_FUNC(kpa_make_item_name) {
     static char name[16];
     static s32 no;
     EvtWord* args = event->args;
@@ -280,7 +291,7 @@ USER_FUNC(kpa_make_item_name) {
  * then takes back the coin that the pickup itself put in Mario's pouch (pouchGetItem runs before the pickup
  * script), so only the stage tally counts.
  */
-USER_FUNC(kpa_add_coin) {
+static USER_FUNC(kpa_add_coin) {
     EvtWord* args = event->args;
 
     kpaAddCoinPos(1, &(Vec){evtGetFloat(event, args[0]), evtGetFloat(event, args[1]), evtGetFloat(event, args[2])});
@@ -385,7 +396,7 @@ EVT_BEGIN(kpa_fall_sub)
     RETURN
 EVT_END()
 
-USER_FUNC(kpa_nohitenemy_ct_clear) {
+static USER_FUNC(kpa_nohitenemy_ct_clear) {
     MarioWork* mario = marioGetPtr();
 
     mario->kpaNoHitTimer = 0;
@@ -408,7 +419,7 @@ USER_FUNC(kpa_fire_off) {
  * Script helper: args[0] = scale. Resizes Bowser uniformly and scales his collision box to match.
  * kpa_stage_start uses it to shrink him to about 0.4 for the intro and restore 1.0.
  */
-USER_FUNC(kpa_set_scale) {
+static USER_FUNC(kpa_set_scale) {
     f32 scale = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
 
@@ -586,7 +597,7 @@ u16 kpa_status_icon_tbl[6][3] = {
  * Event that calls kpa_status_main every frame so the HUD (score, coins, stage, tries, time) keeps being drawn.
  * Started by kpa_status_init.
  */
-EVT_BEGIN(kpa_status_main_evt)
+static EVT_BEGIN(kpa_status_main_evt)
     LOOP(0)
         CALL(kpa_status_main)
         WAIT_FRAMES(1)
@@ -636,7 +647,7 @@ EVT_BEGIN(kpa_time)
     RETURN
 EVT_END()
 
-USER_FUNC(kpa_get_msg) {
+static USER_FUNC(kpa_get_msg) {
     static char label[16];
     EvtWord* args = event->args;
     s32 n = kwp->lives;
@@ -651,7 +662,7 @@ USER_FUNC(kpa_get_msg) {
 }
 
 /** Script helper: returns in LW(0) whether Bowser is currently invincible (kpaMutekiCheck). */
-USER_FUNC(kpa_muteki_check) {
+static USER_FUNC(kpa_muteki_check) {
     event->lwData[0] = kpaMutekiCheck();
     return EVT_RETURN_DONE;
 }
@@ -748,7 +759,7 @@ static void kpa_status_disp(CameraId camera, void* param) {
 }
 
 /** Script helper: queues kpa_status_disp for this frame on the 2D camera. */
-USER_FUNC(kpa_status_main) {
+static USER_FUNC(kpa_status_main) {
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, kpa_status_disp, NULL);
     return EVT_RETURN_DONE;
 }
@@ -788,7 +799,7 @@ USER_FUNC(kpa_status_init) {
  * args[2] = result.
  * Computes the time left (180 minus elapsed seconds), stores it in the HUD and returns it in args[2].
  */
-USER_FUNC(kpa_set_time) {
+static USER_FUNC(kpa_set_time) {
     EvtWord* args = event->args;
     s32 sec = evtGetValue(event, args[0]) / 1000;
     s32 time = 180 - (sec + evtGetValue(event, args[1]) * 10);
@@ -802,7 +813,7 @@ USER_FUNC(kpa_set_time) {
 }
 
 /** Script helper: makes the goal pole ("pole") untouchable so a timed-out run cannot still finish. */
-USER_FUNC(kpa_pole_hitoff) {
+static USER_FUNC(kpa_pole_hitoff) {
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("pole");
 
     if (mobj != NULL) {
@@ -840,7 +851,7 @@ EVT_BEGIN(kpa_stage_clear)
     RETURN
 EVT_END()
 
-USER_FUNC(kpa_stageclear_disp_entry) {
+static USER_FUNC(kpa_stageclear_disp_entry) {
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, kpa_stageclear_disp, NULL);
     return EVT_RETURN_DONE;
 }
@@ -849,7 +860,7 @@ USER_FUNC(kpa_stageclear_disp_entry) {
  * Script helper for the goal tally: each call removes one second from the time left and adds 100 points;
  * it blocks the script (EVT_RETURN_BLOCK) until the time reaches zero.
  */
-USER_FUNC(kpa_time_countdown) {
+static USER_FUNC(kpa_time_countdown) {
     KpaGameWork* wp = kwp;
 
     if (wp->time != 0) {
@@ -861,7 +872,7 @@ USER_FUNC(kpa_time_countdown) {
 }
 
 /** Script helper: returns the 3D camera position (x, y, z) in args[0..2]. */
-USER_FUNC(kpa_get_cam_pt) {
+static USER_FUNC(kpa_get_cam_pt) {
     EvtWord* args = event->args;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 

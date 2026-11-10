@@ -93,7 +93,7 @@ void _unresolved(void) {
  * Script helper: sets the evt colour override of the map object named args[0] to the RGB in args[1..3] (alpha
  * 255) and turns the override on. Used to fade treasure chests in from black.
  */
-USER_FUNC(mobj_set_color) {
+static USER_FUNC(mobj_set_color) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 r = evtGetValue(event, args[1]);
@@ -107,7 +107,7 @@ USER_FUNC(mobj_set_color) {
 }
 
 /** Script helper: turns off the evt colour override of the map object named args[0]. */
-USER_FUNC(mobj_color_off) {
+static USER_FUNC(mobj_color_off) {
     MapObjectEntry* mobj = mobjNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
     animPoseSetMaterialFlagOff(mobj->poseId, MAP_OBJ_FLAG_COLOR);
@@ -115,7 +115,7 @@ USER_FUNC(mobj_color_off) {
 }
 
 /** Script helper: sets the Y rotation (degrees) of the map object named args[0] to args[1]. */
-USER_FUNC(mobj_set_ry) {
+static USER_FUNC(mobj_set_ry) {
     EvtWord* args = event->args;
     MapObjectEntry* mobj = mobjNameToPtr((const char*)evtGetValue(event, args[0]));
 

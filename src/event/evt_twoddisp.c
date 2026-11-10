@@ -12,6 +12,8 @@
 #include "evt/evt_twoddisp.h"
 #include "libc_decls.h"
 
+static EvtWord twoddisp_main_event[9];
+
 typedef struct TwodEntry {
     char name[0x10];  // 0x0
     u16 flags;        // 0x10
@@ -70,7 +72,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
 }
 
 /** Registers twoddisp_disp on the 2D camera for this frame; run every frame by twoddisp_main_event. */
-USER_FUNC(twoddisp_main) {
+static USER_FUNC(twoddisp_main) {
     u32 i;
     for (i = 0; (s32)i < 100; i++) {
     }
@@ -214,7 +216,7 @@ USER_FUNC(evt_twoddisp_flag_onoff) {
 }
 
 /** Background script started by evt_twoddisp_init: draws the overlays every frame, forever. */
-EVT_BEGIN(twoddisp_main_event)
+static EVT_BEGIN(twoddisp_main_event)
     LOOP(0)
         CALL(twoddisp_main)
         WAIT_FRAMES(1)

@@ -60,7 +60,7 @@ static USER_FUNC(make_gonbaba_projection_evt);
 static USER_FUNC(proj_mtx);
 static USER_FUNC(proj_off);
 static USER_FUNC(proj_on);
-USER_FUNC(shake);
+static USER_FUNC(shake);
 static USER_FUNC(shake_reset);
 USER_FUNC(hei_00_mario_keyoff_check);
 static USER_FUNC(cam_test2);
@@ -236,7 +236,7 @@ static USER_FUNC(proj_mtx) {
  * Script helper: shakes the 3D camera each frame by toggling its view offset in z every three frames;
  * runs while Hooktail flies over.
  */
-USER_FUNC(shake) {
+static USER_FUNC(shake) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
     if (isFirstCall) {

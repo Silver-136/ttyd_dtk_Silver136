@@ -16,37 +16,37 @@
 // Defined below (inline) and used only in this file.
 inline Vec initializeVec(Vec* input);
 
-u8 wakka_dl_0_0[];
-u8 wakka_dl_0_1[];
-u8 wakka_dl_0_2[];
-u8 wakka_dl_0_3[];
-u8 wakka_dl_0_4[];
-u8 wakka_dl_0_5[];
-u8 wakka_dl_0_6[];
-u8 wakka_dl_0_7[];
-u8 wakka_dl_0_8[];
-u8 wakka_dl_0_9[];
-u8 wakka_dl_0_10[];
-u8 wakka_dl_0_11[];
-u8 wakka_dl_0_12[];
-u8 wakka_dl_0_13[];
-u8 wakka_dl_0_14[];
-u8 wakka_dl_0_15[];
-u8 wakka_dl_0_16[];
-u8 wakka_dl_0_17[];
-u8 wakka_dl_0_18[];
-u8 wakka_dl_0_19[];
-void* wakka_dl_0_tbl[];
-u8 wakka_dl_0_size_tbl[];
-s16 wakka_vertex_tbl[];
-s8 wakka_normal_tbl[];
-u8 wakka_color0_tbl[];
-s16 wakka_texcoord0_tbl[];
+static u8 wakka_dl_0_0[32];
+static u8 wakka_dl_0_1[32];
+static u8 wakka_dl_0_2[32];
+static u8 wakka_dl_0_3[32];
+static u8 wakka_dl_0_4[32];
+static u8 wakka_dl_0_5[32];
+static u8 wakka_dl_0_6[32];
+static u8 wakka_dl_0_7[32];
+static u8 wakka_dl_0_8[32];
+static u8 wakka_dl_0_9[32];
+static u8 wakka_dl_0_10[32];
+static u8 wakka_dl_0_11[32];
+static u8 wakka_dl_0_12[32];
+static u8 wakka_dl_0_13[32];
+static u8 wakka_dl_0_14[32];
+static u8 wakka_dl_0_15[32];
+static u8 wakka_dl_0_16[32];
+static u8 wakka_dl_0_17[32];
+static u8 wakka_dl_0_18[32];
+static u8 wakka_dl_0_19[32];
+static void* wakka_dl_0_tbl[20];
+static u8 wakka_dl_0_size_tbl[20];
+static s16 wakka_vertex_tbl[126];
+static s8 wakka_normal_tbl[3];
+static u8 wakka_color0_tbl[8];
+static s16 wakka_texcoord0_tbl[84];
 
 #ifdef __MWERKS__
 
 #if VERSION >= VERSION_JP
-s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
+static s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     24347, 0, -8825, // 0
     20710, 0, -15961, // 1
     15047, 0, -21625, // 2
@@ -91,7 +91,7 @@ s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 0, -26514, // 41
 };
 #else
-s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
+static s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     24347, 2284, -8524,
     20710, 4131, -15417,
     15047, 5596, -20888,
@@ -136,7 +136,7 @@ s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 6862, -25610,
 };
 #endif
-s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
+static s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     24576, 0, // 0
     25600, 0, // 1
     25600, 8192, // 2
@@ -182,12 +182,12 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
+static s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 61, 16,
 };
 #else
 /** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
-void* wakka_dl_0_tbl[] = {
+static void* wakka_dl_0_tbl[] = {
     wakka_dl_0_0, // 0
     wakka_dl_0_1, // 1
     wakka_dl_0_2, // 2
@@ -219,17 +219,17 @@ static f32 scroll_tbl[] = {
     -2.9166667f, -3.0625f, -3.2083333f, -3.3541667f, -3.5f
 };
 
-s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
+static s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 64, 0, // 0
 };
 #endif
 
-u8 wakka_color0_tbl[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_color0_tbl[] ATTRIBUTE_ALIGN(32) = {
     0xFF, 0xFF, 0xFF, 0x7F, // 0
     0xFF, 0xFF, 0xFF, 0x00  // 1
 };
 
-u8 wakka_dl_0_0[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_0[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     1, 0, 0, 2, // 0
@@ -240,7 +240,7 @@ u8 wakka_dl_0_0[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_1[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_1[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     2, 0, 0, 5, // 0
@@ -251,7 +251,7 @@ u8 wakka_dl_0_1[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_2[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_2[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     3, 0, 0, 7, // 0
@@ -262,7 +262,7 @@ u8 wakka_dl_0_2[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_3[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_3[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     39, 0, 0, 38, // 0
@@ -273,7 +273,7 @@ u8 wakka_dl_0_3[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_4[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_4[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     38, 0, 0, 36, // 0
@@ -284,7 +284,7 @@ u8 wakka_dl_0_4[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_5[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_5[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     37, 0, 0, 34, // 0
@@ -295,7 +295,7 @@ u8 wakka_dl_0_5[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_6[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_6[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     36, 0, 0, 32, // 0
@@ -306,7 +306,7 @@ u8 wakka_dl_0_6[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_7[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_7[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     35, 0, 0, 30, // 0
@@ -317,7 +317,7 @@ u8 wakka_dl_0_7[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_8[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_8[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     34, 0, 0, 28, // 0
@@ -328,7 +328,7 @@ u8 wakka_dl_0_8[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_9[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_9[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     33, 0, 0, 26, // 0
@@ -339,7 +339,7 @@ u8 wakka_dl_0_9[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_10[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_10[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     32, 0, 0, 24, // 0
@@ -350,7 +350,7 @@ u8 wakka_dl_0_10[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_11[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_11[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     31, 0, 0, 22, // 0
@@ -361,7 +361,7 @@ u8 wakka_dl_0_11[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_12[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_12[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     30, 0, 0, 20, // 0
@@ -372,7 +372,7 @@ u8 wakka_dl_0_12[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_13[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_13[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     29, 0, 0, 18, // 0
@@ -383,7 +383,7 @@ u8 wakka_dl_0_13[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_14[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_14[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     28, 0, 0, 16, // 0
@@ -394,7 +394,7 @@ u8 wakka_dl_0_14[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_15[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_15[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     27, 0, 0, 14, // 0
@@ -405,7 +405,7 @@ u8 wakka_dl_0_15[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_16[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_16[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     26, 0, 0, 12, // 0
@@ -416,7 +416,7 @@ u8 wakka_dl_0_16[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_17[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_17[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     25, 0, 0, 9, // 0
@@ -427,7 +427,7 @@ u8 wakka_dl_0_17[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_18[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_18[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     24, 0, 0, 8, // 0
@@ -438,7 +438,7 @@ u8 wakka_dl_0_18[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
-u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
+static u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
     (GX_DRAW_TRIANGLE_STRIP | GX_VTXFMT0), // command
     0, 4, // number of verts
     41, 0, 1, 41, // 0
@@ -451,7 +451,7 @@ u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
 
 /** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
 #if VERSION <= VERSION_DEMO_JP
-void* wakka_dl_0_tbl[] = {
+static void* wakka_dl_0_tbl[] = {
     wakka_dl_0_0, // 0
     wakka_dl_0_1, // 1
     wakka_dl_0_2, // 2
@@ -475,7 +475,7 @@ void* wakka_dl_0_tbl[] = {
 };
 #endif
 /** Display-list sizes (32-byte units) of the ring model's lists. */
-u8 wakka_dl_0_size_tbl[] = {
+static u8 wakka_dl_0_size_tbl[] = {
     1, // 0
     1, // 1
     1, // 2

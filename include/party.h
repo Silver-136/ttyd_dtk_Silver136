@@ -390,8 +390,6 @@ void partyStop(PartyEntry* party);
 void party_force_ride_yoshi(PartyEntry* party);
 void party_ride_yoshi_force_move(void);
 
-extern char* yoshigroup[7];
-
 // partyChgPoseId index: column of partyPoseTbl (animation name letter in the table). Columns 8 and 9 hold other
 // animations in the early demos, and some callers build the same number for every version, so they stay numeric.
 enum {

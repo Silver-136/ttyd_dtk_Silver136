@@ -137,7 +137,7 @@ void setsinnow(MovingFloor* w, EventEntry* event) {
  * LW(5) the stop time at each end in ms, LW(11) the turn per frame in degrees
  * and LW(12) the kind (1 bobs up and down). Returns the block in args[0].
  */
-USER_FUNC(evt_moving_floor_alloc) {
+static USER_FUNC(evt_moving_floor_alloc) {
     EvtWord* args = event->args;
     MovingFloor* w = (MovingFloor*)_mapAlloc(sizeof(MovingFloor));
     memset(w, 0, sizeof(MovingFloor));
@@ -219,7 +219,7 @@ USER_FUNC(evt_moving_floor_alloc) {
 }
 
 /** Frees a moving floor's work block from the map heap and clears args[0]. */
-USER_FUNC(evt_moving_floor_free) {
+static USER_FUNC(evt_moving_floor_free) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     if (w == NULL) {
@@ -235,7 +235,7 @@ USER_FUNC(evt_moving_floor_free) {
  * and sets the speed so the leg takes its configured time.
  * Modes 0-2 go back and forth, mode 3 cycles eight half-legs, mode 4 four legs, mode 5 stays put.
  */
-USER_FUNC(evt_moving_floor_init) {
+static USER_FUNC(evt_moving_floor_init) {
     MovingFloor* w = movingFloorArg(event);
     s32 dir;
     f32 t;
@@ -385,7 +385,7 @@ USER_FUNC(evt_moving_floor_init) {
  * Advances the floor by the time elapsed since the last update (in ms, from the event's lifetime timer)
  * and returns its new X, Y and Z in args[1]-args[3], with the kind 1 bob added to Y.
  */
-USER_FUNC(evt_moving_floor_main) {
+static USER_FUNC(evt_moving_floor_main) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     s32 us = OSTicksToMicroseconds((u32)event->lifetime - (u32)w->start);
@@ -404,14 +404,14 @@ USER_FUNC(evt_moving_floor_main) {
 }
 
 /** Stamps the current event time as the start of the next time step of the moving floor. */
-USER_FUNC(evt_moving_floor_main2) {
+static USER_FUNC(evt_moving_floor_main2) {
     MovingFloor* w = movingFloorArg(event);
     w->start = event->lifetime;
     return EVT_RETURN_DONE;
 }
 
 /** Sets args[1] to 1 once the current leg has run its full time (scaled to half for mode 3's half-legs), else 0. */
-USER_FUNC(moving_floor_get_end) {
+static USER_FUNC(moving_floor_get_end) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     s32 elapsed = (s32)w->cur;
@@ -424,7 +424,7 @@ USER_FUNC(moving_floor_get_end) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(moving_floor_get_pause) {
+static USER_FUNC(moving_floor_get_pause) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     if (w->flags & MOVING_FLOOR_PAUSE) {
@@ -439,7 +439,7 @@ USER_FUNC(moving_floor_get_pause) {
  * Returns the floor's kind in args[1]: 0 carries Mario and partners along and plays the moving sound,
  * 1 bobs up and down as it travels and does neither.
  */
-USER_FUNC(moving_floor_get_kind) {
+static USER_FUNC(moving_floor_get_kind) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     evtSetValue(event, args[1], w->kind);
@@ -447,7 +447,7 @@ USER_FUNC(moving_floor_get_kind) {
 }
 
 /** Returns the floor's mode (from LW(6)) in args[1]. */
-USER_FUNC(moving_floor_get_mode) {
+static USER_FUNC(moving_floor_get_mode) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     evtSetValue(event, args[1], w->mode);
@@ -455,7 +455,7 @@ USER_FUNC(moving_floor_get_mode) {
 }
 
 /** Adds the floor's turn speed to its Y rotation, wrapped to 0-360 degrees, and returns the angle in args[1]. */
-USER_FUNC(moving_floor_update_turn) {
+static USER_FUNC(moving_floor_update_turn) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     w->angle += w->turn;
@@ -470,7 +470,7 @@ USER_FUNC(moving_floor_update_turn) {
 }
 
 /** Returns the floor's current X, Y and Z in args[1]-args[3] without moving it, refreshing the kind 1 bob. */
-USER_FUNC(moving_floor_getf_pos) {
+static USER_FUNC(moving_floor_getf_pos) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     setsinnow(w, event);
@@ -484,7 +484,7 @@ USER_FUNC(moving_floor_getf_pos) {
  * Returns how far the floor moved in the last step (X, Y, Z deltas in args[1]-args[3]);
  * the script shifts anyone riding it by this amount.
  */
-USER_FUNC(moving_floor_getf_now_bpoint) {
+static USER_FUNC(moving_floor_getf_now_bpoint) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     evtSetFloat(event, args[1], w->pos3[0] - w->prev[0]);
@@ -497,7 +497,7 @@ USER_FUNC(moving_floor_getf_now_bpoint) {
  * Returns the stop time at each end of the floor's travel in frames (from the ms value in LW(5)),
  * or 0 during mode 3's mid-point stops. The PAL demo and PAL convert with gp->framerate instead of a fixed 60.
  */
-USER_FUNC(moving_floor_get_stmsec) {
+static USER_FUNC(moving_floor_get_stmsec) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     if (w->flags & MOVING_FLOOR_NO_STOP_TIME) {
@@ -513,7 +513,7 @@ USER_FUNC(moving_floor_get_stmsec) {
 }
 
 /** Returns in args[1] the X/Z scale for the floor's shadow object, shrinking as the floor rises: (500 - y) / 500. */
-USER_FUNC(moving_floor_getf_xz_scale) {
+static USER_FUNC(moving_floor_getf_xz_scale) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     f32 v = evtGetFloat(event, (s32)(w->pos3[1] + w->yoff));
@@ -526,7 +526,7 @@ USER_FUNC(moving_floor_getf_xz_scale) {
  * keeping the time already spent so it retraces the same leg;
  * the script calls it when Mario's or a partner's head hits a vertical (mode 1) floor from below.
  */
-USER_FUNC(moving_floor_reverse) {
+static USER_FUNC(moving_floor_reverse) {
     MovingFloor* w = movingFloorArg(event);
     f32 end;
     if (w->speed >= 0.0f) {
@@ -539,7 +539,7 @@ USER_FUNC(moving_floor_reverse) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(moving_floor_set_se) {
+static USER_FUNC(moving_floor_set_se) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
     char* name = (char*)evtGetValue(event, args[1]);
@@ -575,14 +575,14 @@ void moving_floor_stop_se_sub(MovingFloor* w) {
 }
 
 /** Stops the floor's movement sound if one is playing and sounds are not halted. */
-USER_FUNC(moving_floor_stop_se) {
+static USER_FUNC(moving_floor_stop_se) {
     MovingFloor* w = movingFloorArg(event);
     moving_floor_stop_se_sub(w);
     return EVT_RETURN_DONE;
 }
 
 /** Halts the floor's sounds for good; set when Mario takes an exit to another area so no sound outlives it. */
-USER_FUNC(moving_floor_halt_se) {
+static USER_FUNC(moving_floor_halt_se) {
     MovingFloor* w = movingFloorArg(event);
     w->seHalt = 1;
     return EVT_RETURN_DONE;

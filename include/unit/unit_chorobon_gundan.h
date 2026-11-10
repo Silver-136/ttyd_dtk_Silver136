@@ -23,11 +23,7 @@ typedef struct Chorogun {
     Vec target; // 0x24
 } Chorogun;
 
-extern Chorogun* chorogun;
-extern s32 chorogun_targetId;
-
 extern BattleUnitKind unit_chorobon_gundan;
-extern BattleWeapon weapon_chorobon_gundan_attack;
 
 // unit_chorobon_gundan.c
 USER_FUNC(chorogun_appear);

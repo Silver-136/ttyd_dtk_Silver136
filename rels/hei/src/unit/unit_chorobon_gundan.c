@@ -27,8 +27,8 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-Chorogun* chorogun;
-s32 chorogun_targetId;
+static Chorogun* chorogun;
+static s32 chorogun_targetId;
 
 USER_FUNC(chorogun_after_attack);
 USER_FUNC(chorogun_approach_target);
@@ -51,7 +51,7 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[15];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_chorobon_gundan_attack;
+static BattleWeapon weapon_chorobon_gundan_attack;
 
 #if VERSION >= VERSION_JP
 EvtWord chorogun_dead_reward[73];
@@ -184,7 +184,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Fuzzy Horde's attack: 1 damage to a single target, a plain attack. */
-BattleWeapon weapon_chorobon_gundan_attack = {
+static BattleWeapon weapon_chorobon_gundan_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

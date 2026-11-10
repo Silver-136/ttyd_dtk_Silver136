@@ -2,6 +2,17 @@
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 
+static u8 __THPReadFrameHeader(void);
+static u8 __THPReadScaneHeader(void);
+static u8 __THPReadQuantizationTable(void);
+static u8 __THPReadHuffmanTableSpecification(void);
+static void __THPDecompressiMCURow512x448(void);
+static void __THPDecompressiMCURow640x480(void);
+static void __THPDecompressiMCURowNxN(void);
+static void __THPHuffDecodeDCTCompY(THPFileInfo*, THPCoeff*);
+static void __THPHuffDecodeDCTCompU(THPFileInfo*, THPCoeff*);
+static void __THPHuffDecodeDCTCompV(THPFileInfo*, THPCoeff*);
+
 static THPHuffmanTab* Ydchuff __attribute__((aligned(32)));
 static THPHuffmanTab* Udchuff __attribute__((aligned(32)));
 static THPHuffmanTab* Vdchuff __attribute__((aligned(32)));
@@ -209,7 +220,7 @@ static void __THPSetupBuffers(void)
     }
 }
 
-u8 __THPReadFrameHeader(void)
+static u8 __THPReadFrameHeader(void)
 {
     u8 i, utmp8;
 
@@ -245,7 +256,7 @@ u8 __THPReadFrameHeader(void)
     return 0;
 }
 
-u8 __THPReadScaneHeader(void)
+static u8 __THPReadScaneHeader(void)
 {
     u8 i, utmp8;
     __THPInfo->c += 2;
@@ -280,7 +291,7 @@ u8 __THPReadScaneHeader(void)
     return 0;
 }
 
-u8 __THPReadQuantizationTable(void)
+static u8 __THPReadQuantizationTable(void)
 {
     u16 length, id, i, row, col;
     f32 q_temp[64];
@@ -315,7 +326,7 @@ u8 __THPReadQuantizationTable(void)
     return 0;
 }
 
-u8 __THPReadHuffmanTableSpecification(void)
+static u8 __THPReadHuffmanTableSpecification(void)
 {
     u8 t_class, id, i, tab_index;
     u16 length, num_Vij;
@@ -454,7 +465,7 @@ static inline void __THPGQRRestore(void)
     }
 }
 
-void __THPPrepBitStream(void)
+static void __THPPrepBitStream(void)
 {
     u32* ptr;
     u32 offset, i, j, k;
@@ -1156,7 +1167,7 @@ inline void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos)
     }
 }
 
-void __THPDecompressiMCURow512x448(void)
+static void __THPDecompressiMCURow512x448(void)
 {
     u8 cl_num;
     u32 x_pos;
@@ -1456,7 +1467,7 @@ _FailedCheckNoBits1:
     return (h->Vij[(s32)(code + h->valPtr[cnt])]);
 }
 
-void __THPDecompressiMCURow640x480(void)
+static void __THPDecompressiMCURow640x480(void)
 {
     u8 cl_num;
     u32 x_pos;
@@ -1523,7 +1534,7 @@ void __THPDecompressiMCURow640x480(void)
     __THPInfo->dLC[2] += 0xA00;
 }
 
-void __THPDecompressiMCURowNxN(void)
+static void __THPDecompressiMCURowNxN(void)
 {
     u8 cl_num;
     u32 x_pos, x;
@@ -1591,7 +1602,7 @@ void __THPDecompressiMCURowNxN(void)
     __THPInfo->dLC[2] += ((sizeof(u8) * 64) * (x / 16));
 }
 
-void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
+static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
 {
     {
         register s32 t;
@@ -1964,7 +1975,7 @@ void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
 #undef cnt4
 }
 
-void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block)
+static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block)
 {
     register s32 t;
     register THPCoeff diff;
@@ -2084,7 +2095,7 @@ void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block)
     }
 }
 
-void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block)
+static void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block)
 {
     register s32 t;
     register THPCoeff diff;

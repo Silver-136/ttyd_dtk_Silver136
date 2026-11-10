@@ -34,6 +34,8 @@
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
 
+static EvtWord dmg_evt[100];
+
 typedef struct DekaTiming {
     s32 state;  // 0x0
     s32 unk4;   // 0x4
@@ -1195,7 +1197,7 @@ EVT_END()
  * With 0-1 rounds cleared it misses ceiling enemies and floating ones whose part cannot be hammered;
  * with 2-3 only ceiling enemies are missed; 4-5 hit everyone.
  */
-EVT_BEGIN(dmg_evt)
+static EVT_BEGIN(dmg_evt)
     CALL(get_result, LW(10))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     LABEL(10)

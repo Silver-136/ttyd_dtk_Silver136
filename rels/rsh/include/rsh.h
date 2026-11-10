@@ -56,12 +56,6 @@ extern EvtWord rsh_07_a_init_evt[];
 extern EvtWord rsh_07_b_init_evt[];
 extern EvtWord rsh_07_c_init_evt[];
 extern EvtWord rsh_08_a_init_evt[];
-USER_FUNC(debug_print_func);
-USER_FUNC(evt_rsh_get_rnd_npc);
-USER_FUNC(evt_rsh_get_rnd_npc_data);
-USER_FUNC(evt_rsh_get_rnd_npc_talk_evt);
-USER_FUNC(evt_rsh_set_rnd_npc);
-USER_FUNC(evt_rsh_set_rnd_npc_talk_evt);
 USER_FUNC(boss_moamoa_check_zenei_kouei);
 USER_FUNC(mario_normalize_wait);
 

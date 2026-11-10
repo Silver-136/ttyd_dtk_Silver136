@@ -46,7 +46,7 @@ static EvtWord erumos00_attack[50];
 static EvtWord erumos01_attack[50];
 static EvtWord sanders_attack[88];
 static EvtWord mario_katsugi[24];
-EvtWord sanders_funto[];
+static EvtWord sanders_funto[477];
 static EvtWord yashi_yure_init[5];
 static EvtWord yashi_yure[255];
 static HitDamageReturn hitDmgRetPoints[4];
@@ -337,7 +337,7 @@ EVT_END()
  * Mario meets Admiral Bobbery and the two scared sailors, Bobbery orders the sailors away (stg5_muj_23 to 28),
  * the Embers keep attacking him, Mario is carried off by the sailors and the party moves to muj_03.
  */
-EVT_BEGIN(sanders_funto)
+static EVT_BEGIN(sanders_funto)
     CALL(evt_npc_set_position, STRING("サンダース"), 0, 112, 0)
     CALL(evt_npc_set_ry, STRING("サンダース"), 90)
     CALL(evt_npc_set_position, STRING("オドオド水夫"), -25, 112, -20)

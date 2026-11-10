@@ -86,7 +86,7 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
-EvtWord firebar_coin[68];
+static EvtWord firebar_coin[68];
 static FirebarSetup firebardesc[7];
 static EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
@@ -195,7 +195,7 @@ static BeroEntry bero_entry_data[] = {
  * LW(0..2) is the fire bar's position; the sign of LW(2) picks the launch direction range (0: all round,
  * negative: 90..270, positive: 270..450 degrees).
  */
-EVT_BEGIN(firebar_coin)
+static EVT_BEGIN(firebar_coin)
     SWITCH(LW(2))
         CASE_EQUAL(0)
         SET_VALUE(LW(3), 0)

@@ -36,7 +36,7 @@ typedef struct StChgMsgData {
 } StChgMsgData;
 
 #if VERSION <= VERSION_DEMO_JP
-s8 _st_pri_data[] = {
+static s8 _st_pri_data[] = {
     STATUS_CHARGE, // charge is elevated
     STATUS_POISON, // poison is elevated
     STATUS_SLEEP,
@@ -101,7 +101,7 @@ static StChgMsgData _st_chg_msg_data[] = {
 //.sdata
 // Status Type Priority Data
 #if VERSION >= VERSION_JP
-s8 _st_pri_data[] = {
+static s8 _st_pri_data[] = {
     STATUS_CHARGE, // charge is elevated
     STATUS_POISON, // poison is elevated
     STATUS_SLEEP,

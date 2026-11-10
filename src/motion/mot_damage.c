@@ -47,7 +47,7 @@ static s32 gazigazi(EventEntry* evt, BOOL isFirstCall);
  * Spawned when Mario climbs out of the water in mot_damage:
  * records where he surfaced, then plays the Gazigazi biting him (evt_gazigazi_appear in evt_damage.c).
  */
-EVT_BEGIN(evt_gazigazi)
+static EVT_BEGIN(evt_gazigazi)
     CALL(gazigazi)
     SPAWN_EVENT(evt_gazigazi_appear)
     RETURN

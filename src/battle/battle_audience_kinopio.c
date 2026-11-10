@@ -949,7 +949,7 @@ static void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
     }
 }
 
-s32 intrudeSound;
+static s32 intrudeSound;
 
 static const Vec v0 = {0.0f, 0.0f, 0.0f};
 

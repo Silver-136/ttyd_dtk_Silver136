@@ -5,7 +5,7 @@
  * Items a Toad in the audience can throw, with relative weights (the {0, 0} row ends each table):
  * healing items, mostly Mushrooms, and a few attack items.
  */
-BattleAudienceItemKind audience_item_kinopio[] = {
+static BattleAudienceItemKind audience_item_kinopio[] = {
     {ITEM_COIN, 10},
     {ITEM_HEART, 10},
     {ITEM_FLOWER, 10},
@@ -22,7 +22,7 @@ BattleAudienceItemKind audience_item_kinopio[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items an X-Naut in the audience can throw: only junk (a rock or a can) that damages Mario. */
-BattleAudienceItemKind audience_item_daisan[] = {
+static BattleAudienceItemKind audience_item_daisan[] = {
     {ITEM_AUDIENCE_ROCK, 10},
     {ITEM_AUDIENCE_CAN, 10},
     {0, 0},
@@ -30,7 +30,7 @@ BattleAudienceItemKind audience_item_daisan[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Boo in the audience can throw: Repel Cape, Boo's Sheet, Spite Pouch, or junk. */
-BattleAudienceItemKind audience_item_teresa[] = {
+static BattleAudienceItemKind audience_item_teresa[] = {
     {ITEM_REPEL_CAPE, 10},
     {ITEM_BOOS_SHEET, 20},
     {ITEM_SPITE_POUCH, 10},
@@ -41,14 +41,14 @@ BattleAudienceItemKind audience_item_teresa[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Hammer Bro in the audience can throw: only a hammer that damages Mario. */
-BattleAudienceItemKind audience_item_hammer_bros[] = {
+static BattleAudienceItemKind audience_item_hammer_bros[] = {
     {ITEM_AUDIENCE_HAMMER, 10},
     {0, 0},
 };
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Dull Bones in the audience can throw: a bone, a rock or a can, all junk that damages Mario. */
-BattleAudienceItemKind audience_item_honenoko[] = {
+static BattleAudienceItemKind audience_item_honenoko[] = {
     {ITEM_AUDIENCE_BONE, 10},
     {ITEM_AUDIENCE_ROCK, 10},
     {ITEM_AUDIENCE_CAN, 10},
@@ -56,7 +56,7 @@ BattleAudienceItemKind audience_item_honenoko[] = {
 };
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 1
-BattleAudienceItemKind audience_item_heiho[] = {
+static BattleAudienceItemKind audience_item_heiho[] = {
     {ITEM_ICE_STORM, 10},
     {ITEM_EARTH_QUAKE, 10},
     {ITEM_VOLT_SHROOM, 10},
@@ -81,13 +81,13 @@ BattleAudienceItemKind audience_item_heiho[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Crazee Dayzee in the audience can throw: none (empty table). */
-BattleAudienceItemKind audience_item_pansy[] = {
+static BattleAudienceItemKind audience_item_pansy[] = {
     {0, 0},
 };
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 1
 /** Items a Puni in the audience can throw: coins, hearts, flowers and mostly healing or slowing items. */
-BattleAudienceItemKind audience_item_puni[] = {
+static BattleAudienceItemKind audience_item_puni[] = {
     {ITEM_COIN, 10},
     {ITEM_HEART, 10},
     {ITEM_FLOWER, 10},
@@ -103,7 +103,7 @@ BattleAudienceItemKind audience_item_puni[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 1
 /** Items a Koopa in the audience can throw: coins, hearts, flowers, Courage Shell, POW Block, or junk. */
-BattleAudienceItemKind audience_item_nokonoko[] = {
+static BattleAudienceItemKind audience_item_nokonoko[] = {
     {ITEM_COIN, 10},
     {ITEM_HEART, 10},
     {ITEM_FLOWER, 10},
@@ -116,13 +116,13 @@ BattleAudienceItemKind audience_item_nokonoko[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Bulky Bob-omb in the audience can throw: none (empty table). */
-BattleAudienceItemKind audience_item_heavy_bomb[] = {
+static BattleAudienceItemKind audience_item_heavy_bomb[] = {
     {0, 0},
 };
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Goomba in the audience can throw: only junk (a rock or a can) that damages Mario. */
-BattleAudienceItemKind audience_item_kuriboo[] = {
+static BattleAudienceItemKind audience_item_kuriboo[] = {
     {ITEM_AUDIENCE_ROCK, 20},
     {ITEM_AUDIENCE_CAN, 20},
     {0, 0},
@@ -130,13 +130,13 @@ BattleAudienceItemKind audience_item_kuriboo[] = {
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 2
 /** Items a Piranha Plant in the audience can throw: none (empty table). */
-BattleAudienceItemKind audience_item_pakkun[] = {
+static BattleAudienceItemKind audience_item_pakkun[] = {
     {0, 0},
 };
 #endif
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 1
 /** Items Luigi throws from the audience: coins, hearts, flowers and good healing items, or a rock. */
-BattleAudienceItemKind audience_item_luigi[] = {
+static BattleAudienceItemKind audience_item_luigi[] = {
     {ITEM_COIN, 10},
     {ITEM_HEART, 10},
     {ITEM_FLOWER, 10},

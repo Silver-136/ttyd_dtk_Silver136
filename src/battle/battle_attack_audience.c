@@ -29,6 +29,9 @@
 #include "battle/battle_attack_audience.h"
 #include "libc_decls.h"
 
+static EvtWord btlataudevtPresentItem_Damage[14];
+static EvtWord btlataudevtPresentItem_Get[49];
+
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 /**
@@ -290,7 +293,7 @@ EvtWord* btlataudGetAttackEventPtr(s32 unitId) {
 }
 
 /** Runs when a harmful item thrown by the audience hits its target: clears the item and applies the damage. */
-EVT_BEGIN(btlataudevtPresentItem_Damage)
+static EVT_BEGIN(btlataudevtPresentItem_Damage)
     CALL(_delete_present_item, LW(0))
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
         CALL(_damage, LW(0))
@@ -304,7 +307,7 @@ EVT_END()
  * pauses the target's wait animation, hands over the item,
  * plays the catching pose and the "Got <item>!" announcement, then clears the item.
  */
-EVT_BEGIN(btlataudevtPresentItem_Get)
+static EVT_BEGIN(btlataudevtPresentItem_Get)
     CALL(_get_present_target_id, LW(3))
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))

@@ -93,7 +93,7 @@ static EvtWord ItemEvent_Teki_Yokeeru_Core[13];
 static EvtWord ItemEvent_Teki_Yokeeru[14];
 BattleWeapon ItemWeaponData_Teki_Yokeeru;
 BattleWeapon ItemWeaponData_Madowaseno_Kona;
-EvtWord ItemEvent_Nemure_Yoikoyo[VERSION_PICK(57, 91)];
+static EvtWord ItemEvent_Nemure_Yoikoyo[VERSION_PICK(57, 91)];
 BattleWeapon ItemWeaponData_Nemure_Yoikoyo;
 static EvtWord ItemEvent_Stop_Watch_Core[143];
 static EvtWord ItemEvent_Stop_Watch[86];
@@ -2062,7 +2062,7 @@ BattleWeapon ItemWeaponData_Madowaseno_Kona = {
 };
 
 /** Sleepy Sheep: a flock of sheep runs across the enemies, putting them to sleep for five turns. */
-EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
+static EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Nemure_Yoikoyo))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
@@ -4976,7 +4976,7 @@ static void _nancy_disp(CameraId cameraId, void* param) {
 }
 
 /** Fills the party's Star Power when unit args[0] is on the player's side, for Trial Stew. */
-USER_FUNC(_full_ap_recover) {
+static USER_FUNC(_full_ap_recover) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = evtGetValue(event, event->args[0]);
     BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));

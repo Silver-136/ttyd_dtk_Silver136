@@ -49,7 +49,7 @@ static EvtWord init_event[48];
 static EvtWord damage_event[16];
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft;
 static BattleWeapon partyWeapon_ChuchurinaNormalAttackRight;
-BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast;
+static BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast;
 static BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast;
 BattleWeapon partyWeapon_ChuchurinaMadowaseAttack;
 BattleWeapon partyWeapon_ChuchurinaItemSteal;
@@ -371,7 +371,7 @@ static BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
 };
 
 /** Love Slap's final slap (or one after a failed command), its power the command's gauge level. */
-BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
+static BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06

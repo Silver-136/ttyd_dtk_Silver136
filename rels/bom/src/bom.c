@@ -24,7 +24,7 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-EvtWord evt_bress[4];
+static EvtWord evt_bress[4];
 
 /**
  * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
@@ -143,7 +143,7 @@ USER_FUNC(bress) {
  * Event script started at module load (not tied to one map):
  * runs the bress breath-puff helper for the lifetime of the module.
  */
-EVT_BEGIN(evt_bress)
+static EVT_BEGIN(evt_bress)
     CALL(bress)
     RETURN
 EVT_END()

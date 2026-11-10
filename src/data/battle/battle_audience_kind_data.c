@@ -5,43 +5,43 @@
 #include "battle/battle_audience_kind_data.h"
 #include "battle/battle_audience_anim.h"
 
-extern s32 audience_kinopio_run_front[14];
-extern s32 audience_daisan_run_front[14];
-extern s32 audience_teresa_run_front[14];
-extern s32 audience_hammer_bros_run_front[14];
-extern s32 audience_honenoko_run_front[14];
-extern s32 audience_heiho_run_front[14];
-extern s32 audience_pansy_run_front[14];
-extern s32 audience_puni_run_front[14];
-extern s32 audience_nokonoko_run_front[14];
-extern s32 audience_heavy_bomb_run_front[14];
-extern s32 audience_kuriboo_run_front[14];
-extern s32 audience_pakkun_run_front[14];
-extern s32 audience_luigi_run_front[14];
-extern s32* audience_anim_kinopio[19];
-extern s32* audience_anim_daisan[19];
-extern s32* audience_anim_teresa[19];
-extern s32* audience_anim_hammer_bros[19];
-extern s32* audience_anim_honenoko[19];
-extern s32* audience_anim_heiho[19];
-extern s32* audience_anim_pansy[19];
-extern s32* audience_anim_puni[19];
-extern s32* audience_anim_nokonoko[19];
-extern s32* audience_anim_heavy_bomb[19];
-extern s32* audience_anim_kuriboo[19];
-extern s32* audience_anim_pakkun[19];
-extern s32* audience_anim_luigi[19];
-extern BattleAudienceItemKind audience_item_kinopio[12];
+static s32 audience_kinopio_run_front[14];
+static s32 audience_daisan_run_front[14];
+static s32 audience_teresa_run_front[14];
+static s32 audience_hammer_bros_run_front[14];
+static s32 audience_honenoko_run_front[14];
+static s32 audience_heiho_run_front[14];
+static s32 audience_pansy_run_front[14];
+static s32 audience_puni_run_front[14];
+static s32 audience_nokonoko_run_front[14];
+static s32 audience_heavy_bomb_run_front[14];
+static s32 audience_kuriboo_run_front[14];
+static s32 audience_pakkun_run_front[14];
+static s32 audience_luigi_run_front[14];
+static s32* audience_anim_kinopio[19];
+static s32* audience_anim_daisan[19];
+static s32* audience_anim_teresa[19];
+static s32* audience_anim_hammer_bros[19];
+static s32* audience_anim_honenoko[19];
+static s32* audience_anim_heiho[19];
+static s32* audience_anim_pansy[19];
+static s32* audience_anim_puni[19];
+static s32* audience_anim_nokonoko[19];
+static s32* audience_anim_heavy_bomb[19];
+static s32* audience_anim_kuriboo[19];
+static s32* audience_anim_pakkun[19];
+static s32* audience_anim_luigi[19];
+static BattleAudienceItemKind audience_item_kinopio[12];
 
 #if VERSION <= VERSION_DEMO_JP
-extern BattleAudienceItemKind audience_item_heiho[18];
+static BattleAudienceItemKind audience_item_heiho[18];
 #else
-extern BattleAudienceItemKind audience_item_heiho[17];
+static BattleAudienceItemKind audience_item_heiho[17];
 #endif
 
-extern BattleAudienceItemKind audience_item_puni[11];
-extern BattleAudienceItemKind audience_item_nokonoko[8];
-extern BattleAudienceItemKind audience_item_luigi[12];
+static BattleAudienceItemKind audience_item_puni[11];
+static BattleAudienceItemKind audience_item_nokonoko[8];
+static BattleAudienceItemKind audience_item_luigi[12];
 extern BattleAudienceKind audience_kind[13];
 extern s32 audience_kinopio_wait_front[8];
 extern s32 audience_kinopio_wait_back[8];
@@ -217,14 +217,14 @@ extern s32 audience_luigi_sleep_front[8];
 extern s32 audience_luigi_sleep_back[8];
 extern s32 audience_luigi_confuse_front[8];
 extern s32 audience_luigi_confuse_back[8];
-extern BattleAudienceItemKind audience_item_daisan[3];
-extern BattleAudienceItemKind audience_item_teresa[6];
-extern BattleAudienceItemKind audience_item_hammer_bros[2];
-extern BattleAudienceItemKind audience_item_honenoko[4];
-extern BattleAudienceItemKind audience_item_pansy[1];
-extern BattleAudienceItemKind audience_item_heavy_bomb[1];
-extern BattleAudienceItemKind audience_item_kuriboo[3];
-extern BattleAudienceItemKind audience_item_pakkun[1];
+static BattleAudienceItemKind audience_item_daisan[3];
+static BattleAudienceItemKind audience_item_teresa[6];
+static BattleAudienceItemKind audience_item_hammer_bros[2];
+static BattleAudienceItemKind audience_item_honenoko[4];
+static BattleAudienceItemKind audience_item_pansy[1];
+static BattleAudienceItemKind audience_item_heavy_bomb[1];
+static BattleAudienceItemKind audience_item_kuriboo[3];
+static BattleAudienceItemKind audience_item_pakkun[1];
 
 #if VERSION >= VERSION_JP
 #include "../src/data/battle/battle_audience_run_front.inc"

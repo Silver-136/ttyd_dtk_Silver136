@@ -56,7 +56,7 @@ extern EvtWord wedding_ring_consign[];
 EvtWord wedding_ring_consign[30];
 #endif
 
-EvtWord find_wedding_ring[];
+static EvtWord find_wedding_ring[180];
 static EvtWord mony_init[19];
 static EvtWord mony_peton_regl[97];
 static EvtWord mony_regl[13];
@@ -342,7 +342,7 @@ EVT_END()
  * Francesca and Frankie's reunion after the ring has been handed over:
  * they are placed beside Mario, talk (stg5_muj_196 to 198), then walk off the left edge of the screen.
  */
-EVT_BEGIN(find_wedding_ring)
+static EVT_BEGIN(find_wedding_ring)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)

@@ -145,26 +145,10 @@ BattleStageObject* BattleSearchObjectPtr(const char* name);
 
 void BattleStageObjectMain(void);
 
-USER_FUNC(_set_mobj_shake_init);
-
 void BattleStageObjectInit(void);
 
-extern EvtWord _close_wall_event[];
-extern BattleUnitSetup _entry_switch_data;
-extern BattleUnitSetup _entry_tree_data;
-extern EvtWord _fall_frame_event[];
-extern EvtWord _nozzle_turn_event[];
-extern EvtWord _nozzle_work_event_0[];
-extern EvtWord _nozzle_work_event_1[];
-extern EvtWord _nozzle_work_event_core[];
-extern EvtWord _object_fall_event[];
 extern BattleStageObjectData _object_nozzle_data[];
 extern BattleStageObjectData _object_spot_light_data[];
-extern EvtWord _object_turn_event_A1[];
-extern EvtWord _object_turn_event_A2[];
-extern EvtWord _object_turn_event_B[];
-extern EvtWord _object_turn_event_core[];
-extern BattleStageObjectData _object_wall_data;
 
 BOOL BattleFogForceStop(void);
 void BattleStage_DestroyA1(void);

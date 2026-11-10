@@ -23,6 +23,8 @@
 #include "data/mapdata.h"
 #include "muj.h"
 
+static USER_FUNC(muj_ship_puka_func);
+
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
@@ -106,7 +108,7 @@ void _unresolved(void) {
  * Script helper for muj_ship_puka: args[0] = step index (used modulo 16), args[1] = amplitude;
  * returns the amplitude times the matching entry of muj_ship_puka_data into args[2].
  */
-USER_FUNC(muj_ship_puka_func) {
+static USER_FUNC(muj_ship_puka_func) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     f32 value = evtGetFloat(event, args[1]);
@@ -327,7 +329,7 @@ static USER_FUNC(tornade_alpha_func) {
  * Debug stub for muj_mario_pos_osreport: reads Mario's state and pad 0's button triggers
  * but prints nothing in this build; always blocks.
  */
-USER_FUNC(muj_mario_pos_osreport_func) {
+static USER_FUNC(muj_mario_pos_osreport_func) {
     marioGetPtr();
     keyGetButtonTrg(0);
     return EVT_RETURN_BLOCK;

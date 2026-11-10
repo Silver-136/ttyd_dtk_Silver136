@@ -52,7 +52,7 @@ static NpcSetupInfo npcEnt[5];
 static BeroEntry bero_entry_data[3];
 static EvtWord witchtrio_momeru[880];
 static EvtWord majorin_have_picture[25];
-EvtWord witchtrio_picture[533];
+static EvtWord witchtrio_picture[533];
 static EvtWord mario_vs_witchtrio[554];
 static EvtWord get_necklace[115];
 static EvtWord witchtrio_lose_item[19];
@@ -555,7 +555,7 @@ EVT_END()
  * then Beldam blames Vivian, refuses to give back the necklace and orders her to find Mario
  * (stg2_win_e06_00 to 12). The story becomes STG2_06_THE_SKETCH.
  */
-EVT_BEGIN(witchtrio_picture)
+static EVT_BEGIN(witchtrio_picture)
     // Mario and his party are moved off the map: the scene shows the three Sirens alone.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -495, 165, 582, -495, 45, -108, 0, EASING_SINE_IN_OUT)

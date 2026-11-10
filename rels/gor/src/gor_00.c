@@ -271,8 +271,8 @@ static EvtWord shukko_event[498];
 static ExtTexInfo nannpc_entry_data01[41];
 static s16 suifu_animtbl[41];
 static s16 suifu_run_animtbl[21];
-Vec suifu100kaidanDOWN[];
-Vec suifu100kaidanUP[];
+static Vec suifu100kaidanDOWN[4];
+static Vec suifu100kaidanUP[4];
 
 #if VERSION >= VERSION_JP
 EvtWord marco_run_away[100];
@@ -301,7 +301,7 @@ static EvtWord peach_mail[215];
 static EvtWord peach_mail[209];
 #endif
 
-f32 gor_ship_puka_data[];
+static f32 gor_ship_puka_data[16];
 static EvtWord gor_ship_puka[21];
 static EvtWord gor_muj_ship_sub[53];
 static EvtWord option_ship_mario[139];
@@ -3769,7 +3769,7 @@ static s16 suifu_run_animtbl[] = {
 };
 
 /** Four points where the crowd sailors walk down the stairs; each picks one of the first three at random. */
-Vec suifu100kaidanDOWN[] = {
+static Vec suifu100kaidanDOWN[] = {
     {309.0f, 15.0f, -375.0f},
     {322.0f, 15.0f, -397.0f},
     {338.0f, 15.0f, -410.0f},
@@ -3777,7 +3777,7 @@ Vec suifu100kaidanDOWN[] = {
 };
 
 /** Four points where the crowd sailors walk up the stairs; each picks one of the first three at random. */
-Vec suifu100kaidanUP[] = {
+static Vec suifu100kaidanUP[] = {
     {143.0f, 115.0f, -514.0f},
     {167.0f, 115.0f, -534.0f},
     {189.0f, 115.0f, -553.0f},
@@ -5457,7 +5457,7 @@ static EVT_BEGIN(peach_mail)
 EVT_END()
 
 /** Up-and-down offsets, in 16 steps, that make a ship at the dock bob on the water. */
-f32 gor_ship_puka_data[] = {
+static f32 gor_ship_puka_data[] = {
     -0.0f, -0.5f, -1.0f, -1.5f, -2.0f, -2.200000047683716f, -2.5f, -2.700000047683716f, -2.700000047683716f, -2.700000047683716f, -2.5f, -2.200000047683716f, -2.0f, -1.5f, -1.0f, -0.5f,
 };
 

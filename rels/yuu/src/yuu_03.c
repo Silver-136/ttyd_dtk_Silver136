@@ -78,7 +78,7 @@ USER_FUNC(yuu_03_cam_shift_reset);
 static USER_FUNC(yuuminigame4_opening_chk);
 static USER_FUNC(yuuminigame4_opening_on_off);
 static USER_FUNC(yuuminigame4_set_phase);
-USER_FUNC(yuunpc_go);
+static USER_FUNC(yuunpc_go);
 static USER_FUNC(evt_ryushi_init);
 static USER_FUNC(evt_nomal_cange);
 static USER_FUNC(evt_slit_cancel);
@@ -88,7 +88,7 @@ USER_FUNC(yuu_03_icon_monte_restart);
 EvtWord yuu_03_icon_monte_entry_evt[4];
 #endif
 
-EvtWord ryushi_event[25];
+static EvtWord ryushi_event[25];
 EvtWord yuu_03_kaijo_init[12];
 EvtWord yuu_03_kaijo_init2[12];
 static EvtWord minigame04_main[33];
@@ -246,7 +246,7 @@ static USER_FUNC(re_init_yuunpc) {
  * Script call that clears bit 1 of the NPC work flags (yuunpc_wp_flag_off),
  * letting the racers move once the game starts.
  */
-USER_FUNC(yuunpc_go) {
+static USER_FUNC(yuunpc_go) {
     yuunpc_wp_flag_off(YUUNPC_WP_FLAG_WAIT);
     return EVT_RETURN_DONE;
 }
@@ -612,7 +612,7 @@ EVT_END()
  * Runs the wind particle effect for one gust: clears the particles for the direction in LW(1)
  * and updates them each frame until GW(0) becomes 1 (gust over) or 2 (abort).
  */
-EVT_BEGIN(ryushi_event)
+static EVT_BEGIN(ryushi_event)
     SET_VALUE(GW(0), 0)
     CALL(evt_ryushi_clr, LW(1))
     LOOP(0)

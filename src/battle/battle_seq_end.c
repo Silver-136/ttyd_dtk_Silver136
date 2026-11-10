@@ -57,6 +57,13 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
 
+static EvtWord _rank_up_event[11];
+static EvtWord _confetti_control_event[42];
+static EvtWord _jump_event[74];
+static EvtWord _move_to_heart_event[70];
+static EvtWord _move_to_flower_event[76];
+static EvtWord _move_to_badge_point_event[70];
+
 // BattleSeqEndWork.flags: the result-screen displays btlseqEnd_DispMain adds (0x1 is only ever cleared)
 typedef enum SeqEndDispFlags {
     SEQEND_DISP_EXP_ICON = (1 << 1),            // 0x2, star point icons
@@ -89,7 +96,7 @@ static USER_FUNC(_lvup_select_obj_lvup_param_disp);
 static USER_FUNC(_lvup_select_object_init);
 static USER_FUNC(_lvup_spot_move);
 static USER_FUNC(_lvup_spot_off);
-USER_FUNC(_lvup_spot_on);
+static USER_FUNC(_lvup_spot_on);
 static USER_FUNC(_nozzle_set_offset);
 static USER_FUNC(_set_confetti_control_evtid);
 
@@ -131,7 +138,7 @@ s32 bp_tex_tbl[6] = {59, 59, 60, 61, 62, 63};
 
 /** Prints Mario's current rank-up message. */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(_rank_up_event)
+static EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
     RETURN
@@ -1346,7 +1353,7 @@ EVT_BEGIN(_curtain_close_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_confetti_control_event)
+static EVT_BEGIN(_confetti_control_event)
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(5), 5)
     LOOP(LW(5))
@@ -1361,7 +1368,7 @@ EVT_BEGIN(_confetti_control_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_jump_event)
+static EVT_BEGIN(_jump_event)
     BEGIN_SIBLING_EVENT
         CALL(_lvup_object_noselect_delete)
     END_SIBLING_EVENT
@@ -1383,7 +1390,7 @@ EVT_BEGIN(_jump_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_move_to_heart_event)
+static EVT_BEGIN(_move_to_heart_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_LVUP_CURSOR1"), 0, 125, 0, 0)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
@@ -1401,7 +1408,7 @@ EVT_BEGIN(_move_to_heart_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_move_to_flower_event)
+static EVT_BEGIN(_move_to_flower_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_LVUP_CURSOR1"), 0, 125, 0, 0)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
@@ -1420,7 +1427,7 @@ EVT_BEGIN(_move_to_flower_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_move_to_badge_point_event)
+static EVT_BEGIN(_move_to_badge_point_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_LVUP_CURSOR1"), 0, 125, 0, 0)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
@@ -1438,7 +1445,7 @@ EVT_BEGIN(_move_to_badge_point_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(_koura_delete_event)
+static EVT_BEGIN(_koura_delete_event)
     CALL(_check_guard_koura, UNIT_ID_MARIO, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DESTROY_EVENT)
@@ -1447,7 +1454,7 @@ EVT_BEGIN(_koura_delete_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(_rank_up_event)
+static EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
     RETURN
@@ -1646,7 +1653,7 @@ static USER_FUNC(_lvup_disp_flag_onoff) {
  * Script helper: args[0] a cone index (0-4); places that spotlight cone at x = 25n - 50 (y 25 or -10
  * alternately), 15 x 15 x 150 and white, shows it and turns spotlight cone drawing on.
  */
-USER_FUNC(_lvup_spot_on) {
+static USER_FUNC(_lvup_spot_on) {
     BattleSpotWork* spot = BatSpotGetPtr();
     EvtWord* args = event->args;
     s32 n;

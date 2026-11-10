@@ -13,6 +13,9 @@
 #include <dolphin/os.h>
 #include "evt/evt_damage.h"
 
+static USER_FUNC(evt_gazigazi_move_position);
+static USER_FUNC(camdir);
+
 #define GAZIGAZI "ガジガジ" // the creature that bites Mario in hazard water (no English name in the game)
 
 /**
@@ -74,7 +77,7 @@ EVT_BEGIN(evt_gazigazi_appear)
     RETURN
 EVT_END()
 
-USER_FUNC(camdir) {
+static USER_FUNC(camdir) {
     f32 yaw;
     s32 dir;
     CameraEntry* camera;
@@ -101,7 +104,7 @@ USER_FUNC(camdir) {
 
 /** const char* name, s32 x0, s32 y0, s32 z0, s32 x1, s32 y1, s32 z1, s32 msec, s32 mode */
 // const char* name, s32 x0, s32 y0, s32 z0, s32 x1, s32 y1, s32 z1, s32 msec, s32 mode
-USER_FUNC(evt_gazigazi_move_position) {
+static USER_FUNC(evt_gazigazi_move_position) {
     EvtWord* args = event->args;
     const char* name;
     f32 x0, y0, z0, x1, y1, z1;

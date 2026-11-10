@@ -85,11 +85,11 @@ static USER_FUNC(yuuminigame2_opening_on_off);
 static USER_FUNC(yuuminigame2_set_phase);
 static BOOL get_monte_check(Vec* a, Vec* b);
 
-const char* s_nametbl[21];
+static const char* s_nametbl[21];
 static const char* a2_nametbl[21];
-const char* a_nametbl[21];
-s32 turn_tbl[22];
-s32 hoko_tbl[22];
+static const char* a_nametbl[21];
+static s32 turn_tbl[22];
+static s32 hoko_tbl[22];
 static MonteTable montetable[6];
 static EvtWord minigame_view_monte[4];
 EvtWord yuu_01_kaijo_init[12];
@@ -112,7 +112,7 @@ EvtWord yuu_01_init_evt[VERSION_PICK(1076, 1166)];
  * Map object names of the Boat Mode hazards by index: 1-4 the big whirlpools, 5-12 the small whirlpools
  * and 13-20 the barrels (index 0 is unused). a2_nametbl and a_nametbl below list their hit objects.
  */
-const char* s_nametbl[] = {
+static const char* s_nametbl[] = {
     NULL, "S_dai_uzu1", "S_dai_uzu2", "S_dai_uzu3", "S_dai_uzu4", "S_uzu1", "S_uzu2", "S_uzu3", "S_uzu4", "S_uzu5",
     "S_uzu6", "S_uzu7", "S_uzu8", "S_taru01", "S_taru02", "S_taru03", "S_taru04", "S_taru05", "S_taru06",
     "S_taru07", "S_taru08",
@@ -144,7 +144,7 @@ static const char* a2_nametbl[] = {
 };
 
 /** Hit object names of the Boat Mode hazards, indexed like s_nametbl; yuuminigame2_get_name returns them. */
-const char* a_nametbl[] = {
+static const char* a_nametbl[] = {
     NULL, "A_dai_uzu1", "A_dai_uzu2", "A_dai_uzu3", "A_dai_uzu4", "A_uzu1", "A_uzu2", "A_uzu3", "A_uzu4", "A_uzu5",
     "A_uzu6", "A_uzu7", "A_uzu8", "A_taru01", "A_taru02", "A_taru03", "A_taru04", "A_taru05", "A_taru06",
     "A_taru07", "A_taru08",
@@ -154,7 +154,7 @@ const char* a_nametbl[] = {
  * Degrees per frame the boat turns while caught by each Boat Mode hazard (same indices as s_nametbl):
  * 5 for the big whirlpools and 10 for the small ones, alternating direction; the barrels do not turn it.
  */
-s32 turn_tbl[] = {
+static s32 turn_tbl[] = {
     0, 5, -5, 5, -5, 10, -10, 10,
     -10, 10, -10, 10, -10, 0, 0, 0,
     0, 0, 0, 0, 0, 0,
@@ -164,7 +164,7 @@ s32 turn_tbl[] = {
  * Direction (degrees, give or take 45 at random) each small whirlpool (indices 5-12) flings the boat;
  * yuuminigame2_gamerule passes it to marioSetSwirlPower.
  */
-s32 hoko_tbl[] = {
+static s32 hoko_tbl[] = {
     0, 0, 0, 0, 0, 45, 135, 45,
     135, 45, 45, 135, 180, 0, 0, 0,
     0, 0, 0, 0, 0, 0,

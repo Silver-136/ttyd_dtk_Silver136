@@ -75,16 +75,16 @@ static EvtWord minigame01_start_cam[40];
 static EvtWord minigame01_start_cam_cancel[20];
 
 #if VERSION >= VERSION_US
-EvtWord minigame01_start[1504];
-EvtWord minigame01_end[224];
+static EvtWord minigame01_start[1504];
+static EvtWord minigame01_end[224];
 EvtWord yuu_00_init_evt[437];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord minigame01_start[348];
-EvtWord minigame01_end[227];
+static EvtWord minigame01_start[348];
+static EvtWord minigame01_end[227];
 #else
-EvtWord minigame01_start[355];
-EvtWord minigame01_end[236];
+static EvtWord minigame01_start[355];
+static EvtWord minigame01_end[236];
 #endif
 EvtWord yuu_00_init_evt[11];
 #endif
@@ -382,7 +382,7 @@ EVT_END()
  * US and later pick a random travel time and direction for each), plays the opening camera (skippable),
  * shows the countdown effect, switches Mario into plane mode and starts the coin counter.
  */
-EVT_BEGIN(minigame01_start)
+static EVT_BEGIN(minigame01_start)
     CALL(yuu_atai_init)
     CALL(yuu_atai_push, LW(0))
     CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_LOOP, 0)
@@ -960,7 +960,7 @@ EVT_BEGIN(minigame01_start)
     RETURN
 EVT_END()
 
-EVT_BEGIN(minigame01_end)
+static EVT_BEGIN(minigame01_end)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
     CALL(yuuminigame_get_dataadr, 1, LW(15))

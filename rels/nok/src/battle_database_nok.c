@@ -14,7 +14,7 @@ extern BattleUnitKind unit_act_mario;
 static BattleStageObjectData nok_btlobject_data[10];
 static BattleStageData nok_btlstage_data[1];
 static BattleUnitSetup btlparty_nok_hei_ep[1];
-BattleGroupSetup btlgrp_nok_hei_ep;
+static BattleGroupSetup btlgrp_nok_hei_ep;
 static NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[2];
 NpcSetupBattleInfo btlsetup_nok_tbl[2];
 NpcTerritoryInfo btl_nok_setup_no_tbl[2];
@@ -61,7 +61,7 @@ static BattleUnitSetup btlparty_nok_hei_ep[] = {
     },
 };
 
-BattleGroupSetup btlgrp_nok_hei_ep = {
+static BattleGroupSetup btlgrp_nok_hei_ep = {
     1, // numEnemies
     btlparty_nok_hei_ep, // enemyData
     25, // heldItemWeight

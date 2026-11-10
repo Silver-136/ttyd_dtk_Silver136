@@ -60,6 +60,10 @@
 #include "evt/evt_save_flags.h"
 #include "rels/tou/include/tou_ranking.h"
 
+static USER_FUNC(chk);
+static USER_FUNC(onoff);
+static USER_FUNC(make_monitor);
+
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
@@ -2756,7 +2760,7 @@ static EVT_BEGIN(evt_michel_7)
 EVT_END()
 
 // Wait for the story-selected NPC, then update the monitor texture and fade while remaining active.
-USER_FUNC(make_monitor) {
+static USER_FUNC(make_monitor) {
     NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
     GansWork* wp;
 
@@ -2817,7 +2821,7 @@ static void monitor_tev(MapTevCallbackInfo* info) {
 }
 
 /** Script helper: args[0] = 1/0 to fade the registration monitor in or out. */
-USER_FUNC(onoff) {
+static USER_FUNC(onoff) {
     gans_wp->onoff = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
@@ -2830,7 +2834,7 @@ static USER_FUNC(getYoshiColor) {
 }
 
 /** Script helper: args[0] receives 1 if Yoshi is currently in the party, else 0. */
-USER_FUNC(chk) {
+static USER_FUNC(chk) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], partyChkJoin(PARTY_YOSHI) != 0);
     return EVT_RETURN_DONE;
@@ -2880,7 +2884,7 @@ USER_FUNC(tou_mario_keyoff_check) {
 #endif
 
 /** Script helper: stops Octor's regular script and parks him at (80, 0, 85) facing 270 degrees. */
-USER_FUNC(octo_stop) {
+static USER_FUNC(octo_stop) {
     NpcEntry* npc = npcNameToPtr_NoAssert("\203I\203N\203g\201[\203\213");
 
     if (npc != NULL) {
@@ -2893,7 +2897,7 @@ USER_FUNC(octo_stop) {
 }
 
 /** Script helper: restarts Octor's regular script. */
-USER_FUNC(octo_start) {
+static USER_FUNC(octo_start) {
     NpcEntry* npc = npcNameToPtr_NoAssert("\203I\203N\203g\201[\203\213");
 
     if (npc != NULL) {
@@ -2907,7 +2911,7 @@ USER_FUNC(octo_start) {
  * 1 on a loss, 20 on a win that leaves Mario at rank 0 (the champion's seat), and otherwise a payout that grows
  * as Mario's rank number falls.
  */
-USER_FUNC(fight_money) {
+static USER_FUNC(fight_money) {
     EvtWord* args = event->args;
     s32 rank = evtGetValue(event, args[0]);
     s32 win = evtGetValue(event, args[1]);

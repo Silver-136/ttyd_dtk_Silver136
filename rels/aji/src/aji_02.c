@@ -51,7 +51,7 @@ typedef struct RootRoute {
 static RootRoute root_data[3];
 static EvtWord hikaru_on[4];
 static EvtWord hikaru_off[4];
-EvtWord hikaru_yuka[28];
+static EvtWord hikaru_yuka[28];
 static EvtWord evt_box[95];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[83];
@@ -166,7 +166,7 @@ EVT_END()
  * pans the camera over the room for about three seconds and switches the lights off again (hikaru_off),
  * leaving the shocking panels in place.
  */
-EVT_BEGIN(hikaru_yuka)
+static EVT_BEGIN(hikaru_yuka)
     CALL_CHILD(hikaru_on)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 80, 172, 562, 80, 50, -10, 1000, EASING_SINE_IN_OUT)

@@ -14,6 +14,8 @@
 #include "system.h"
 #include "driver/animdrv.h"
 
+static void puniMakeTexture(CameraId camId, void* param);
+
 void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj, void*** image, s32* x0, s32* y0, s32* x1, s32* y1);
 static f32 camGetRy(void);
 static s32 compare(const void* a, const void* b);
@@ -160,7 +162,7 @@ void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), voi
  * animPoseDisp_MakeExtTexture and builds for each one a textured quad (size scaled by 0.342 per pixel,
  * centred on the bounding box the animation reports) with a small display list that draws it.
  */
-void puniMakeTexture(CameraId camId, void* param) {
+static void puniMakeTexture(CameraId camId, void* param) {
     PunidrvWork* wp = work;
     PunidrvTexInfo* info = param;
     PunidrvTex* tex = wp->texs;

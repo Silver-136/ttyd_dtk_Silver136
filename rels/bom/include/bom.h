@@ -20,5 +20,4 @@ extern BattleUnitKind unit_bllizard;
 extern BattleUnitKind unit_ice_pakkun;
 extern BattleUnitKind unit_kuriboo;
 
-extern EvtWord evt_bress[];
 USER_FUNC(bress);

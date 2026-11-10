@@ -104,7 +104,7 @@ static USER_FUNC(marcoship_stop_func);
 
 static EvtWord hiru_yoru_event[46];
 static EvtWord yoru_hiru_event[46];
-EvtWord urouro[61];
+static EvtWord urouro[61];
 static EvtWord urouro_fuwafuwa[35];
 static EvtWord buruburu[23];
 static EvtWord fuwafuwa[15];
@@ -311,7 +311,7 @@ static USER_FUNC(urouro_fuwafuwa_func) {
  * Makes the NPC in LW(0) pace back and forth between two deck points (LW(11), LW(13) and LW(1), LW(3)) forever
  * using urouro_func.
  */
-EVT_BEGIN(urouro)
+static EVT_BEGIN(urouro)
     CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
     LOOP(0)
         CALL(urouro_func, LW(0), LW(11), LW(13), LW(1), LW(3), LW(4), LW(5), EASING_LINEAR)

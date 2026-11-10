@@ -58,7 +58,7 @@ typedef struct TargetWork {
     s32 count;
     EffectEntry* eff;
 } TargetWork;
-extern EvtWord aud_hit_event[];
+static EvtWord aud_hit_event[24];
 static EffectEntry* eff_tor;
 static s32 torCount;
 static EffectEntry* eff_jet[2];
@@ -109,7 +109,7 @@ static BattleWeapon weapon_batten_drill_attack;
 static BattleWeapon weapon_batten_boomerang_attack;
 static BattleWeapon weapon_batten_aud_attack;
 static BattleUnitSetup entry_rocket_punch;
-EvtWord aud_hit_event[24];
+static EvtWord aud_hit_event[24];
 static EvtWord aud_no_hit_event[16];
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
@@ -481,7 +481,7 @@ static BattleUnitSetup entry_rocket_punch = {
  * moves it to the hit position over LW(5) frames, makes it jump away along an arc,
  * deletes it and lowers the audience size by one.
  */
-EVT_BEGIN(aud_hit_event)
+static EVT_BEGIN(aud_hit_event)
     CALL(evt_audience_move_position_frame, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_audience_jump_position_gravity, LW(0), LW(6), LW(7), LW(8), LW(9), LW(10))
     CALL(evt_audience_delete, LW(0))

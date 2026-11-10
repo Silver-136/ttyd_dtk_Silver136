@@ -39,6 +39,10 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_stage.h"
 
+static EvtWord flash_evt[182];
+static EvtWord flash_main_evt[52];
+static EvtWord flash_cancel_evt[194];
+
 typedef struct SukiBtn {
     s32 state;  // 0x0
     s32 pad4;   // 0x4, never accessed
@@ -1069,7 +1073,7 @@ EVT_END()
  * Darkens the battle for the finishing flash: hooks the flash TEV callback onto the stage objects, hides Mario,
  * the partner and the audience, blacks out the enemies and darkens the stage.
  */
-EVT_BEGIN(flash_evt)
+static EVT_BEGIN(flash_evt)
     CALL(evt_map_set_tevcallback, 1, PTR(set_tev))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bti_S"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bti_S"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -1119,7 +1123,7 @@ EVT_BEGIN(flash_evt)
 EVT_END()
 
 /** One step of the flash: sets the stage brightness to LW(10) and tints every enemy the opposite way (255 - LW(10)). */
-EVT_BEGIN(flash_main_evt)
+static EVT_BEGIN(flash_main_evt)
     SET_VALUE(LW(11), 255)
     SUBTRACT(LW(11), LW(10))
     CALL(flash_update, LW(10))
@@ -1142,7 +1146,7 @@ EVT_END()
  * Undoes flash_evt: restores the stage objects (and the "gamen" screen's TEV callback where the stage has one),
  * shows Mario, the partner and the audience again, resets the enemies' colour and the stage darkness.
  */
-EVT_BEGIN(flash_cancel_evt)
+static EVT_BEGIN(flash_cancel_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bti_S"), MAP_OBJ_TEV_CALLBACK_MASK)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bti_S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(exist_map, STRING("A1"), LW(0))

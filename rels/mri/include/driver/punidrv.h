@@ -66,7 +66,6 @@ void puniSinCosRet(u32 deg, f32* x, f32* z, f32 rx, f32 rz);
 void puniInit(void);
 void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void),
                void (*mainFunc2)(void));
-void puniMakeTexture(CameraId camId, void* param);
 void puniReset(void);
 void puniFadeOff(BOOL useFade);
 void puniMain(void);

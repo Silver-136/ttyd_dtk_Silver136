@@ -8,7 +8,6 @@
 #include "evt/evt_cmd.h"
 
 extern EvtWord evt_memcard_save[];
-extern EvtWord evt_memcard_nosave[];
 
 extern EvtWord evt_memcard_check[];
 extern EvtWord evt_memcard_copy[];
@@ -22,17 +21,11 @@ extern EvtWord evt_memcard_start[];
 
 #if VERSION >= VERSION_JP
 USER_FUNC(memcard_buf_reset);
-USER_FUNC(memcard_code);
 #endif
 
-USER_FUNC(memcard_copy);
 USER_FUNC(memcard_create);
 USER_FUNC(memcard_delete);
-USER_FUNC(memcard_file_existance);
 USER_FUNC(memcard_format);
-USER_FUNC(memcard_header_write);
-USER_FUNC(memcard_ipl);
-USER_FUNC(memcard_load);
 
 #if VERSION >= VERSION_JP
 USER_FUNC(memcard_watch_chk);

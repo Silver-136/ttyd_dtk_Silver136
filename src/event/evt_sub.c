@@ -58,6 +58,14 @@
 #include <stdio.h>
 #include <dolphin/os.h>
 
+static USER_FUNC(mail_evt_gor_04_keyoff_check);
+static USER_FUNC(irai_mail_check);
+static USER_FUNC(get_stop);
+static USER_FUNC(set_stop);
+static USER_FUNC(stageclear_wait);
+static USER_FUNC(stone_bg_open);
+static USER_FUNC(stone_ry);
+
 s32 stop;
 
 typedef struct SplineWork {
@@ -108,7 +116,7 @@ EVT_END()
  * Sway of a hammered tree, one row per frame for 25 frames: the trunk's tilt in degrees and the leaves' two
  * offsets, swinging out and settling back to rest. tree_evt reads it.
  */
-s32 tree_data[] = {
+static s32 tree_data[] = {
     FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f),
     FLOAT(-0.5341796875f), FLOAT(1.4462890625f), FLOAT(1.623046875f),
     FLOAT(-1.1708984375f), FLOAT(3.1748046875f), FLOAT(3.56640625f),
@@ -150,7 +158,7 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(tree_evt)
+static EVT_BEGIN(tree_evt)
     SET_VALUE(LF(0), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LF(0), 1)
@@ -228,7 +236,7 @@ static s32 kusa_data[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(kusa_evt)
+static EVT_BEGIN(kusa_evt)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -273,7 +281,7 @@ WinMgrDesc coinget_window_desc[] = {
  * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
  */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(tree_evt)
+static EVT_BEGIN(tree_evt)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -356,7 +364,7 @@ EVT_END()
  * Run per bush by evt_sub_kusa_access_entry.
  */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(kusa_evt)
+static EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
@@ -814,7 +822,7 @@ EVT_BEGIN(evt_sub_mail_vibration)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mail_evt)
+static EVT_BEGIN(mail_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -849,7 +857,7 @@ EVT_END()
  * Petalburg (nok_01): once Kroop's talk is done (STG1_02),
  * sends Frankly's mail (16, plus 26) when Mario walks past x = 190.
  */
-EVT_BEGIN(mail_evt_nok_01)
+static EVT_BEGIN(mail_evt_nok_01)
     IF_INT_EQUAL(GSWF_MAIL_FRANKLY_SENT, 1)
         RETURN
     END_IF
@@ -879,7 +887,7 @@ EVT_END()
  * when Mario crosses x = -100; also delivers any Trouble Center follow-up mail that is due (irai_mail_check).
  * Loops for as long as the map runs.
  */
-EVT_BEGIN(mail_evt_gor_03)
+static EVT_BEGIN(mail_evt_gor_03)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
         SET_VALUE(LW(10), LW(0))
@@ -916,7 +924,7 @@ EVT_END()
  * when Mario crosses the line from (-280, -50) to (-230, 220); also delivers due Trouble Center follow-up mail.
  * Loops for as long as the map runs.
  */
-EVT_BEGIN(mail_evt_gor_02)
+static EVT_BEGIN(mail_evt_gor_02)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
         SET_VALUE(LW(10), LW(0))
@@ -949,7 +957,7 @@ EVT_BEGIN(mail_evt_gor_02)
 EVT_END()
 
 /** Rogueport (gor_01): at STG4_37 sends Petuni's mail (19) when Mario crosses x = 350. */
-EVT_BEGIN(mail_evt_gor_01)
+static EVT_BEGIN(mail_evt_gor_01)
     IF_INT_EQUAL(GSWF_MAIL_PETUNI_SENT, 1)
         RETURN
     END_IF
@@ -978,7 +986,7 @@ EVT_END()
  * but only while Mario has control (mail_evt_gor_04_keyoff_check);
  * also delivers due Trouble Center follow-up mail. Loops for as long as the map runs.
  */
-EVT_BEGIN(mail_evt_gor_04)
+static EVT_BEGIN(mail_evt_gor_04)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
         SET_VALUE(LW(10), LW(0))
@@ -1019,7 +1027,7 @@ EVT_END()
  * from day 3 (STG6_45) sends Pa-Patch's mail (21)
  * when Mario crosses the line at x = -100 (JP and the early demos: 400).
  */
-EVT_BEGIN(mail_evt_rsh_03_a)
+static EVT_BEGIN(mail_evt_rsh_03_a)
     IF_INT_EQUAL(GSWF_MAIL_PA_PATCH_SENT, 1)
         RETURN
     END_IF
@@ -1051,7 +1059,7 @@ EVT_END()
  * Riverside Station (hom_00): once the drawbridge is down (STG6_42) sends King K's mail (22)
  * when Mario crosses x = -600.
  */
-EVT_BEGIN(mail_evt_hom_00)
+static EVT_BEGIN(mail_evt_hom_00)
     IF_INT_EQUAL(GSWF_MAIL_KING_K_SENT, 1)
         RETURN
     END_IF
@@ -1079,7 +1087,7 @@ EVT_END()
  * Rogueport (gor_02): at STG6_71 sends Zip Toad's mail (23) when Mario crosses the line from
  * (-1000, -4226) to (1000, 7374). The PAL demo and PAL also wait until Mario is out of motion 25.
  */
-EVT_BEGIN(mail_evt_gor_02_2)
+static EVT_BEGIN(mail_evt_gor_02_2)
     IF_INT_EQUAL(GSWF_MAIL_ZIP_TOAD_SENT, 1)
         RETURN
     END_IF
@@ -1114,7 +1122,7 @@ EVT_END()
  * Fahr Outpost (bom_01): at STG7_02 after the cannon is approved sends Rawk Hawk's mail (24)
  * when Mario crosses x = -230.
  */
-EVT_BEGIN(mail_evt_bom_01)
+static EVT_BEGIN(mail_evt_bom_01)
     IF_INT_EQUAL(GSWF_MAIL_RAWK_HAWK_SENT, 1)
         RETURN
     END_IF
@@ -1140,7 +1148,7 @@ EVT_BEGIN(mail_evt_bom_01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mail_evt_tik_00)
+static EVT_BEGIN(mail_evt_tik_00)
     IF_INT_EQUAL(GSWF_MAIL_GHOST_T_SENT, 1)
         RETURN
     END_IF
@@ -1173,7 +1181,7 @@ EVT_END()
  * Boggly Woods (win_01): after Flurrie joins (STG2_09) sends mail 27,
  * issue 1 of the RDM series (GSWF_MAIL_RDM_ISSUE_1_SENT), when Mario crosses x = 390.
  */
-EVT_BEGIN(mail_evt_win_01)
+static EVT_BEGIN(mail_evt_win_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_1_SENT, 1)
         RETURN
     END_IF
@@ -1197,7 +1205,7 @@ EVT_BEGIN(mail_evt_win_01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mail_evt_tou_01)
+static EVT_BEGIN(mail_evt_tou_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_2_SENT, 1)
         RETURN
     END_IF
@@ -1227,7 +1235,7 @@ EVT_END()
  * Twilight Town (usu_01): at STG4_04_01 sends mail 29 (RDM issue 3)
  * when Mario crosses x = 110 (the early demos: 300).
  */
-EVT_BEGIN(mail_evt_usu_01)
+static EVT_BEGIN(mail_evt_usu_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
         RETURN
     END_IF
@@ -1255,7 +1263,7 @@ EVT_BEGIN(mail_evt_usu_01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mail_evt_gor_01_2)
+static EVT_BEGIN(mail_evt_gor_01_2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
         SET_VALUE(LW(10), LW(0))
@@ -1290,7 +1298,7 @@ EVT_BEGIN(mail_evt_gor_01_2)
 EVT_END()
 
 /** Excess Express (rsh_03_a): on day 2 (STG6_21) sends mail 31 (RDM issue 5) when Mario crosses x = 400. */
-EVT_BEGIN(mail_evt_rsh_03_a_2)
+static EVT_BEGIN(mail_evt_rsh_03_a_2)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_5_SENT, 1)
         RETURN
     END_IF
@@ -1318,7 +1326,7 @@ EVT_END()
  * Poshley Heights (pik_00): at STG7_02 after the cannon is approved sends mail 32 (RDM issue 6)
  * when Mario crosses x = -60 and starts the rsh_03 double-points sale.
  */
-EVT_BEGIN(mail_evt_pik_00)
+static EVT_BEGIN(mail_evt_pik_00)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_6_SENT, 1)
         RETURN
     END_IF
@@ -2117,7 +2125,7 @@ USER_FUNC(evt_sub_get_coin) {
 #pragma opt_lifetimes reset
 
 /** Turns the star stone item args[0] to the yaw args[1] (degrees) while it spins up in evt_sub_starstone. */
-USER_FUNC(stone_ry) {
+static USER_FUNC(stone_ry) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
     s32 ang = evtGetValue(event, args[1]);
@@ -2154,25 +2162,25 @@ static USER_FUNC(stone_bg) {
 }
 
 /** Starts the opening of the "sub_bg" item-get background effect in evt_sub_starstone. */
-USER_FUNC(stone_bg_open) {
+static USER_FUNC(stone_bg_open) {
     EffectEntry* e = effNameToPtr("sub_bg");
     ((ItemGetWork*)e->userdata)->state = 1;
     return EVT_RETURN_DONE;
 }
 
 /** Blocks until the "sub_clear" stage-clear effect has finished. */
-USER_FUNC(stageclear_wait) {
+static USER_FUNC(stageclear_wait) {
     return effStageClearEndChk(effNameToPtr("sub_clear")) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /** Sets the module-level stop flag to args[0]; evt_sub_starstone raises it 9.7 seconds after the white flash starts. */
-USER_FUNC(set_stop) {
+static USER_FUNC(set_stop) {
     stop = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
 /** Returns the stop flag set by set_stop in args[0]. */
-USER_FUNC(get_stop) {
+static USER_FUNC(get_stop) {
     evtSetValue(event, event->args[0], stop);
     return EVT_RETURN_DONE;
 }
@@ -2272,7 +2280,7 @@ USER_FUNC(evt_sub_check_intersect) {
             }                                                      \
         }                                                          \
     }
-USER_FUNC(irai_mail_check) {
+static USER_FUNC(irai_mail_check) {
     EvtWord* args = event->args;
     s32 arg = evtGetValue(event, args[0]);
     s32 ret = 0;
@@ -2295,7 +2303,7 @@ USER_FUNC(irai_mail_check) {
  * Returns in args[0] how many of Mario's control and key locks are on;
  * mail_evt_gor_04 holds the mail while it is nonzero.
  */
-USER_FUNC(mail_evt_gor_04_keyoff_check) {
+static USER_FUNC(mail_evt_gor_04_keyoff_check) {
     EvtWord* args = event->args;
     s32 a = marioCtrlOffChk();
     s32 b = marioKeyOffChk();

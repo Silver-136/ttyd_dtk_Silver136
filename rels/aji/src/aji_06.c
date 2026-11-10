@@ -83,9 +83,9 @@ static EvtWord peach_evt_kaihei_open[51];
 static EvtWord peach_evt_kaihei_open_all[28];
 static EvtWord peach_evt_kaihei_close[46];
 static EvtWord peach_evt_kaihei_close_all[28];
-s32 kusuri_tyogo_list[8];
-s32 kusuri_list[5];
-s32 kusuri_id[4];
+static s32 kusuri_tyogo_list[8];
+static s32 kusuri_list[5];
+static s32 kusuri_id[4];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord peach_evt_kusuri_select[];
@@ -327,17 +327,17 @@ static EVT_BEGIN(peach_evt_kaihei_close_all)
 EVT_END()
 
 /** The correct recipe: the order in which the four potions must be dispensed into the beaker. */
-s32 kusuri_tyogo_list[] = {
+static s32 kusuri_tyogo_list[] = {
     1, 2, 3, 2, 3, 1, 3, 4,
 };
 
 /** Item-menu list of held potions, terminated by -1. */
-s32 kusuri_list[] = {
+static s32 kusuri_list[] = {
     -1, -1, -1, -1, -1,
 };
 
 /** Ids of the four potion bottles, indexed by potion number minus 1. */
-s32 kusuri_id[] = {
+static s32 kusuri_id[] = {
     102, 101, 103, 104,
 };
 

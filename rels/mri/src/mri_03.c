@@ -110,7 +110,7 @@ static EvtWord bluejail_alpha[119];
 static EvtWord bluejail_event[249];
 static EvtWord mario_kirimomi_event[50];
 static EvtWord party_kirimomi_event[57];
-s32 JailAwayTable_New[15];
+static s32 JailAwayTable_New[15];
 static EvtWord kinoko_small[35];
 
 #if VERSION >= VERSION_US
@@ -1093,7 +1093,7 @@ static EVT_BEGIN(party_kirimomi_event)
 EVT_END()
 
 /** Points (x, z pairs, 10000 ends the list) the Punies run to when they flee in the blue-cell scene. */
-s32 JailAwayTable_New[] = {
+static s32 JailAwayTable_New[] = {
     -83, -216, -153, -195, -205, -154, -241, -95,
     -220, -25, -190, 0, -160, 40, 10000,
 };

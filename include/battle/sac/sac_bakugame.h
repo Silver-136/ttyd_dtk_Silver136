@@ -8,6 +8,3 @@
 
 extern EvtWord marioAttackEvent_BakuGame[];
 
-extern EvtWord hitCheck_AudienceTeam[];
-extern EvtWord hitCheck_EnemyTeam[];
-extern EvtWord hitCheck_MarioTeam[];

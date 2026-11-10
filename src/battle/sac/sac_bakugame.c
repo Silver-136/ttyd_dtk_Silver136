@@ -34,6 +34,10 @@
 #include "pmario_sound.h"
 #include "battle/battle_disp.h"
 
+static EvtWord hitCheck_MarioTeam[146];
+static EvtWord hitCheck_EnemyTeam[53];
+static EvtWord hitCheck_AudienceTeam[15];
+
 typedef struct BakuBtn {
     s32 state;  // 0x0
     s32 timer;  // 0x4
@@ -1530,7 +1534,7 @@ EVT_END()
  * The bomb blew up on Mario's side: the weapon (LW(9)) hits the partner, if alive, then Mario,
  * who first spins back round if the game left him facing left. LW(2) is the success-effect level (-1 = none).
  */
-EVT_BEGIN(hitCheck_MarioTeam)
+static EVT_BEGIN(hitCheck_MarioTeam)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(50)
@@ -1577,7 +1581,7 @@ EVT_BEGIN(hitCheck_MarioTeam)
 EVT_END()
 
 /** The bomb blew up on the enemy side: the weapon (LW(9)) hits every targeted enemy part that is not a clone (kClone). */
-EVT_BEGIN(hitCheck_EnemyTeam)
+static EVT_BEGIN(hitCheck_EnemyTeam)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     LABEL(10)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
@@ -1599,7 +1603,7 @@ EVT_END()
  * The bomb blew up in the crowd: every audience member under system control in a normal state falls asleep
  * (status 13 via evt_audience_abnormal_natural_all at 100%), and the success effect shows.
  */
-EVT_BEGIN(hitCheck_AudienceTeam)
+static EVT_BEGIN(hitCheck_AudienceTeam)
     CALL(evt_audience_abnormal_natural_all, 100)
     IF_INT_NOT_EQUAL(LW(2), -1)
         CALL(btlevtcmd_ACSuccessEffect, LW(2), 0, 100, 0)

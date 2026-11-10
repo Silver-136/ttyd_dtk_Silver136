@@ -63,10 +63,10 @@ static USER_FUNC(irai_init_func);
 static USER_FUNC(irai_main_func);
 static USER_FUNC(irai_start_func);
 
-const char* irai_msg_client[30];
-const char* irai_msg_contents[30];
+static const char* irai_msg_client[30];
+static const char* irai_msg_contents[30];
 static const char* irai_msg_exposition[30];
-const char* irai_msg_kakunin[30];
+static const char* irai_msg_kakunin[30];
 static const char* irai_msg_hikiukechu[30];
 static s32 irai_item_data01[2];
 static s32 irai_item_data02[2];
@@ -78,7 +78,7 @@ static s32 irai_item_data23[2];
 static s32 irai_item_data25[2];
 static s32 irai_item_data29[2];
 static s32 irai_item_null[1];
-s32* irai_item_table[30];
+static s32* irai_item_table[30];
 static EvtWord irai_start_event_null[2];
 static EvtWord irai_start_event01[13];
 static EvtWord irai_start_event04[8];
@@ -98,7 +98,7 @@ static EvtWord gor_irai_main[VERSION_PICK(105, 126)];
 static EvtWord gor_irai_tenshu_main[VERSION_PICK(258, 261)];
 
 /** Message keys of the client names, one for each Trouble Center job. */
-const char* irai_msg_client[] = {
+static const char* irai_msg_client[] = {
     "irai_client_01", "irai_client_02", "irai_client_03", "irai_client_04", "irai_client_05", "irai_client_06",
     "irai_client_07", "irai_client_08", "irai_client_09", "irai_client_10", "irai_client_11", "irai_client_12",
     "irai_client_13", "irai_client_14", "irai_client_15", "irai_client_16", "irai_client_17", "irai_client_18",
@@ -107,7 +107,7 @@ const char* irai_msg_client[] = {
 };
 
 /** Message keys of the job descriptions, one for each Trouble Center job. */
-const char* irai_msg_contents[] = {
+static const char* irai_msg_contents[] = {
     "irai_contents_01", "irai_contents_02", "irai_contents_03", "irai_contents_04", "irai_contents_05",
     "irai_contents_06", "irai_contents_07", "irai_contents_08", "irai_contents_09", "irai_contents_10",
     "irai_contents_11", "irai_contents_12", "irai_contents_13", "irai_contents_14", "irai_contents_15",
@@ -151,7 +151,7 @@ static const char* irai_msg_exposition[] = {
 };
 
 /** Message keys of the confirmation prompts shown before a job is taken. */
-const char* irai_msg_kakunin[] = {
+static const char* irai_msg_kakunin[] = {
     "irai_43", "irai_44", "irai_45", "irai_46", "irai_47", "irai_48", "irai_49", "irai_50", "irai_51", "irai_52",
     "irai_53", "irai_54", "irai_55", "irai_56", "irai_57", "irai_58", "irai_59", "irai_60", "irai_61", "irai_62",
     "irai_63", "irai_64", "irai_65", "irai_66", "irai_67", "irai_68", "irai_69", "irai_70", "irai_71", "irai_72",
@@ -242,7 +242,7 @@ static s32 irai_item_null[] = {
 };
 
 /** Item lists for each Trouble Center job: the items the player can hand over to finish it. */
-s32* irai_item_table[] = {
+static s32* irai_item_table[] = {
     irai_item_data01, irai_item_data02, irai_item_null, irai_item_null, irai_item_null, irai_item_null,
     irai_item_null, irai_item_null, irai_item_null, irai_item_null, irai_item_null, irai_item_null,
     irai_item_data13, irai_item_null, irai_item_null, irai_item_data16, irai_item_data17, irai_item_null,

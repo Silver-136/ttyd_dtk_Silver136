@@ -3230,7 +3230,7 @@ void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
 }
 
 // .sdata: defined after mapSetMaterialTev so it follows that function's static scrl_uv in .sdata
-s32 fog_type[5] = {2, 4, 5, 6, 7};
+static s32 fog_type[5] = {2, 4, 5, 6, 7};
 
 /**
  * Sets the GX fog to the map's fog (fog_table or mapSetFog) when map fog is on, else turns fog off;

@@ -367,8 +367,8 @@ SimpleRecipe R_simple_recipe_table[26];
 CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
 #endif
 
-s32 naniga_okorukana_list[20];
-s32 special_cook_list[16];
+static s32 naniga_okorukana_list[20];
+static s32 special_cook_list[16];
 static EvtWord cooking_evt_sub[284];
 static s32 iri_18_item_tbl[2];
 EvtWord cooking_evt[];
@@ -6682,7 +6682,7 @@ CookRecipe R_cookbook_recipe_table[] = {
 };
 #endif
 
-s32 naniga_okorukana_list[] = {
+static s32 naniga_okorukana_list[] = {
     ITEM_FIRE_FLOWER,
     ITEM_TASTY_TONIC,
     ITEM_FRESH_JUICE,
@@ -6706,7 +6706,7 @@ s32 naniga_okorukana_list[] = {
 };
 
 /** Dishes that get the special radiating light when Zess T. cooks them, ending with -1. */
-s32 special_cook_list[] = {
+static s32 special_cook_list[] = {
     ITEM_ZESS_SPECIAL,
     ITEM_ZESS_DELUXE,
     ITEM_ZESS_DYNAMITE,

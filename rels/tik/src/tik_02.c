@@ -55,7 +55,7 @@ static EvtWord geso_talk[8];
 static EvtWord geso_dead[7];
 static NpcSetupInfo npcEnt[2];
 static EvtWord ukishima_move[134];
-char geso_checkpose[];
+static char geso_checkpose[6];
 static EvtWord ukishima_apper[294];
 static EvtWord geso_battle[676];
 static EvtWord wall_bomb[142];
@@ -457,7 +457,7 @@ static EVT_BEGIN(ukishima_move)
 EVT_END()
 
 /** Pose Mario takes when he checks the Blooper's tentacle: plain standing (M_S_1) instead of his look pose. */
-char geso_checkpose[] = "M_S_1";
+static char geso_checkpose[] = "M_S_1";
 
 /**
  * Raises the two floating islands (ugo_yuka_1 and ugo_yuka_2) of the Blooper room out of the water,

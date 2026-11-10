@@ -32,7 +32,7 @@ static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_data[3];
 static EvtWord evt_box_open[115];
-EvtWord evt_sw_complete[272];
+static EvtWord evt_sw_complete[272];
 EvtWord eki_06_init_evt[132];
 
 /**
@@ -134,7 +134,7 @@ static EVT_BEGIN(evt_box_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_sw_complete)
+static EVT_BEGIN(evt_sw_complete)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -140, 152, 528, -140, 57, -12, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)

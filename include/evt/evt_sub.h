@@ -37,38 +37,16 @@ extern EvtWord evt_sub_tree_access_entry[];
 extern WinMgrDesc coinget_window_desc[1];
 
 #if VERSION <= VERSION_DEMO_JP
-extern EvtWord kusa_evt[41];
 #else
 extern EvtWord kusa_evt[43];
 #endif
 
-extern EvtWord mail_evt[80];
-extern EvtWord mail_evt_bom_01[65];
-extern EvtWord mail_evt_gor_01[61];
-extern EvtWord mail_evt_gor_01_2[93];
-extern EvtWord mail_evt_gor_02[87];
-
 #if VERSION >= VERSION_DEMO_EU
-extern EvtWord mail_evt_gor_02_2[68];
 #else
 extern EvtWord mail_evt_gor_02_2[61];
 #endif
 
-extern EvtWord mail_evt_gor_03[87];
-extern EvtWord mail_evt_gor_04[97];
-extern EvtWord mail_evt_hom_00[61];
-extern EvtWord mail_evt_nok_01[64];
-extern EvtWord mail_evt_pik_00[71];
-extern EvtWord mail_evt_rsh_03_a[61];
-extern EvtWord mail_evt_rsh_03_a_2[61];
-extern EvtWord mail_evt_tik_00[80];
-extern EvtWord mail_evt_tou_01[67];
-extern EvtWord mail_evt_usu_01[61];
-extern EvtWord mail_evt_win_01[61];
-extern s32 tree_data[75];
-
 #if VERSION <= VERSION_DEMO_JP
-extern EvtWord tree_evt[249];
 #else
 extern EvtWord tree_evt[251];
 #endif
@@ -94,13 +72,6 @@ USER_FUNC(evt_sub_status_gauge_check_update);
 USER_FUNC(evt_sub_status_gauge_force_close);
 USER_FUNC(evt_sub_status_gauge_force_open);
 USER_FUNC(evt_sub_system_flag_onoff);
-USER_FUNC(get_stop);
-USER_FUNC(irai_mail_check);
-USER_FUNC(mail_evt_gor_04_keyoff_check);
-USER_FUNC(set_stop);
-USER_FUNC(stageclear_wait);
-USER_FUNC(stone_bg_open);
-USER_FUNC(stone_ry);
 USER_FUNC(evt_key_get_button);
 
 #if VERSION >= VERSION_DEMO_EU

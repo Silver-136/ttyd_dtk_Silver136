@@ -243,7 +243,6 @@ void PuniDokuritsu(PuniData* p);
 void puniMoveDecel(PuniData* p);
 void puniswTrapGetindex(s32 idx, s32* out);
 PuniData* puniGetPunidat(void);
-USER_FUNC(evt_make_texbuf);
 USER_FUNC(evt_puni_all_fall_check);
 USER_FUNC(evt_puni_all_movestop);
 USER_FUNC(evt_puni_all_save);
@@ -251,7 +250,6 @@ USER_FUNC(evt_puni_attack_on);
 USER_FUNC(evt_puni_count);
 USER_FUNC(evt_puni_count_area);
 USER_FUNC(evt_puni_dokan_onoff);
-USER_FUNC(evt_puni_exit);
 USER_FUNC(evt_puni_fade_onoff);
 USER_FUNC(evt_puni_flag_onoff);
 USER_FUNC(evt_puni_force_se_off);
@@ -268,7 +266,6 @@ USER_FUNC(evt_puni_init_teki);
 USER_FUNC(evt_puni_jump_position);
 USER_FUNC(evt_puni_korokoro);
 USER_FUNC(evt_puni_landon_check);
-USER_FUNC(evt_puni_main);
 USER_FUNC(evt_puni_move_position);
 USER_FUNC(evt_puni_move_position2);
 USER_FUNC(evt_puni_pera_onoff);
@@ -294,8 +291,6 @@ USER_FUNC(evt_puni_zenmetsu_check);
 USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 USER_FUNC(evt_target_set_soko);
-USER_FUNC(puni_disp_info_kassencheck);
-USER_FUNC(puni_disp_info_sub);
 
 // Names from LLCOOLT's tree.
 enum {

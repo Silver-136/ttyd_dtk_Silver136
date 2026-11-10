@@ -519,7 +519,7 @@ static void disp_sight(CameraId camera, void* param) {
  * once the sight direction is not idle (5), queues disp_sight every frame until the direction is set to 6,
  * which frees everything and ends it.
  */
-s32 sight(EventEntry* event, BOOL isFirstCall) {
+static s32 sight(EventEntry* event, BOOL isFirstCall) {
     s32 i;
 
     if (isFirstCall) {

@@ -47,7 +47,7 @@ static USER_FUNC(_get_mario_hammer_lv);
 static USER_FUNC(_battle_majinai_effect);
 static USER_FUNC(_majinai_powerup_check);
 static USER_FUNC(_paper_light_off);
-USER_FUNC(_fire_wave);
+static USER_FUNC(_fire_wave);
 static USER_FUNC(_mario_fire_ball_controll);
 static USER_FUNC(_kaiten_hammer_acrobat_rotate);
 static USER_FUNC(_hammer_star_effect);
@@ -7313,7 +7313,7 @@ static USER_FUNC(_mario_fire_ball_controll) {
 }
 
 /** Spawns a fire pillar at args[0..2] scaled by 0.6 * args[3]; Fire Drive's burn on each target. */
-USER_FUNC(_fire_wave) {
+static USER_FUNC(_fire_wave) {
     EvtWord* args = event->args;
     f32 x = evtGetValue(event, args[0]);
     f32 y = evtGetValue(event, args[1]);

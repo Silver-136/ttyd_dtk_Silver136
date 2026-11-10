@@ -16,6 +16,9 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_msg.h"
 
+static USER_FUNC(yuuminigame_end);
+static USER_FUNC(yuuminigame_window_end);
+
 //.bss
 PiantaParlorWork yuugijouwork;
 
@@ -512,13 +515,13 @@ USER_FUNC(yuugijou_set_yupflag) {
 }
 
 /** Flags the pause window as finished (flag 8), which evtYuuWindowEndChk reports to the window code. */
-USER_FUNC(yuuminigame_window_end) {
+static USER_FUNC(yuuminigame_window_end) {
     yuwp->flags |= PARLOR_FLAG_WINDOW_DONE;
     return EVT_RETURN_DONE;
 }
 
 /** Starts minigame_end as a separate event so the quit warp runs after the pause window. */
-USER_FUNC(yuuminigame_end) {
+static USER_FUNC(yuuminigame_end) {
     evtEntryType(minigame_end, 0, 0, EVENT_TYPE_DEFAULT);
     return EVT_RETURN_DONE;
 }

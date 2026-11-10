@@ -76,24 +76,13 @@ s32 __THPAudioGetNewSample(THPAudioDecodeInfo*);
 void __THPAudioInitialize(THPAudioDecodeInfo*, u8*);
 
 void __THPSetupBuffers(void);
-u8 __THPReadFrameHeader(void);
-u8 __THPReadScaneHeader(void);
-u8 __THPReadQuantizationTable(void);
-u8 __THPReadHuffmanTableSpecification(void);
 void __THPHuffGenerateSizeTable(void);
 void __THPHuffGenerateCodeTable(void);
 void __THPHuffGenerateDecoderTables(u8 tabIndex);
 void __THPRestartDefinition(void);
-void __THPPrepBitStream(void);
 static void __THPDecompressYUV(void*, void*, void*);
 void __THPGQRRestore(void);
-void __THPDecompressiMCURow512x448(void);
-void __THPDecompressiMCURow640x480(void);
-void __THPDecompressiMCURowNxN(void);
 void __THPInverseDCTNoYPos(THPCoeff*, u32);
-void __THPHuffDecodeDCTCompY(THPFileInfo*, THPCoeff*);
-void __THPHuffDecodeDCTCompU(THPFileInfo*, THPCoeff*);
-void __THPHuffDecodeDCTCompV(THPFileInfo*, THPCoeff*);
 
 #ifdef __cplusplus
 }

@@ -10,4 +10,3 @@
 extern EvtWord marioAttackEvent_Deka[];
 u32 weaponGetPower_Deka(BattleUnit* attacker, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part);
 
-extern EvtWord dmg_evt[];

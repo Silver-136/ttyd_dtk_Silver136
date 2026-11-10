@@ -51,6 +51,10 @@
 #include "driver/seqdrv.h"
 #include "senkaron.h"
 
+static u8 kurokaron_prev_goal;
+static u8 kurokaron_move_index;
+static u8 kurokaron_move_flag;
+
 typedef struct SenkaronWork {
     s32 attackStart;
     s32 escape;
@@ -93,7 +97,7 @@ static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord kurokaron_move[103];
 static ExtTexInfo senkaron_ext_entry_data[26];
-s32 move_check_list[20];
+static s32 move_check_list[20];
 static EvtWord senkaron_event[917];
 static EvtWord kurokaron_init[29];
 static EvtWord kurokaron_talk[13];
@@ -211,22 +215,22 @@ static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
 }
 
 /** Which of the six waypoints of kurokaron_move_list Dark Bones is currently heading for. */
-u8 kurokaron_move_index = 0;
+static u8 kurokaron_move_index = 0;
 
 /** State bits of Dark Bones: 1 patrol direction, 2 fleeing from Mario, 4 and 8 flee steering state. */
-u8 kurokaron_move_flag = 0;
+static u8 kurokaron_move_flag = 0;
 
 /** How many times in a row Dark Bones picked the same waypoint. */
-u8 kurokaron_same_goal = 0;
+static u8 kurokaron_same_goal = 0;
 
 /** Vivian's status on the previous frame, used to notice when she stops hiding Mario. */
-s32 kurokaron_vivian_prev_sts = 0;
+static s32 kurokaron_vivian_prev_sts = 0;
 
 /** Frames Dark Bones stands still (set to 60 when Vivian stops hiding Mario next to him). */
-u8 kurokaron_stop_cnt = 0;
+static u8 kurokaron_stop_cnt = 0;
 
 /** Frames Dark Bones has been running away. */
-u16 kurokaron_run_cnt = 0;
+static u16 kurokaron_run_cnt = 0;
 
 /**
  * Per-frame flee steering for Dark Bones (kurokaron_move_flag bit 2 set):
@@ -678,7 +682,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** The waypoint Dark Bones last reached. */
-u8 kurokaron_prev_goal = 5;
+static u8 kurokaron_prev_goal = 5;
 
 /** The six waypoints (x, z) around the room that Dark Bones patrols along. */
 static f32 kurokaron_move_list[6][2] = {
@@ -769,7 +773,7 @@ static ExtTexInfo senkaron_ext_entry_data[] = {
 };
 
 /** Index boundaries used to split the swarm's cell and overlap checks across 20 frame groups. */
-s32 move_check_list[] = {
+static s32 move_check_list[] = {
     25, 52, 79, 107, 136, 166, 197, 229,
     263, 298, 335, 374, 416, 461, 510, 565,
     628, 703, 806, 1000,

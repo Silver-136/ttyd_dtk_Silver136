@@ -78,7 +78,7 @@ EVT_END()
  * pops the stage background layers in with _set_haikei_entry_scale.
  */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(_default_haikei_set_entry_event)
+static EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
 EVT_END()
@@ -89,7 +89,7 @@ static void btlseqInit(BattleWork* wp);
 static void btlseqFirstAct(BattleWork* wp);
 static void btlseqTurn(BattleWork* wp);
 #if VERSION <= VERSION_DEMO_JP
-extern EvtWord _default_haikei_set_entry_event[];
+static EvtWord _default_haikei_set_entry_event[4];
 #endif
 
 /**
@@ -666,9 +666,9 @@ static USER_FUNC(_set_effect_luck) {
     return EVT_RETURN_DONE;
 }
 
-extern const char* _rule_msg_table_2bu[];
-extern const char* _rule_msg_table_1bu[];
-extern const char* _rule_msg_table_after[];
+static const char* _rule_msg_table_2bu[68];
+static const char* _rule_msg_table_1bu[68];
+static const char* _rule_msg_table_after[68];
 
 /**
  * SEQ_TURN steps, one full turn: start-of-turn bookkeeping, the Glitz Pit bonus-condition banner on turn 1,
@@ -1848,7 +1848,7 @@ static void _rule_disp(CameraId cameraId, void* param) {
  * Glitz Pit bonus-condition messages for minor-league fights, indexed by the battle's rule type ("a" = unused);
  * _rule_disp shows the one for the fight at the start of turn 1, e.g. "Don't use your jump!".
  */
-const char* _rule_msg_table_2bu[] = {
+static const char* _rule_msg_table_2bu[] = {
     "a", "stg3_tou_cp_001", "a", "stg3_tou_cp_002", "a", "stg3_tou_cp_004", "stg3_tou_cp_008", "a",
     "a", "a", "a", "a", "a", "a", "a", "a",
     "a", "a", "stg3_tou_cp_000", "a", "a", "a", "a", "a",
@@ -1861,7 +1861,7 @@ const char* _rule_msg_table_2bu[] = {
 };
 
 /** Glitz Pit bonus-condition messages for major-league fights (top ten), by rule type; shown by _rule_disp. */
-const char* _rule_msg_table_1bu[] = {
+static const char* _rule_msg_table_1bu[] = {
     "test", "stg3_tou_cp_011", "a", "stg3_tou_cp_012", "a", "stg3_tou_cp_014", "stg3_tou_cp_019", "a",
     "a", "a", "a", "stg3_tou_cp_020", "a", "a", "a", "a",
     "a", "a", "stg3_tou_cp_010", "a", "stg3_tou_cp_018", "a", "a", "a",
@@ -1874,7 +1874,7 @@ const char* _rule_msg_table_1bu[] = {
 };
 
 /** Glitz Pit bonus-condition messages after chapter 3, by rule type; shown by _rule_disp. */
-const char* _rule_msg_table_after[] = {
+static const char* _rule_msg_table_after[] = {
     "a", "stg3_tou_cp_041", "a", "stg3_tou_cp_042", "a", "stg3_tou_cp_044", "stg3_tou_cp_049", "a",
     "a", "a", "a", "stg3_tou_cp_050", "a", "a", "a", "a",
     "a", "a", "stg3_tou_cp_040", "a", "stg3_tou_cp_048", "a", "a", "a",
@@ -1887,7 +1887,7 @@ const char* _rule_msg_table_after[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(_default_haikei_set_entry_event)
+static EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
 EVT_END()

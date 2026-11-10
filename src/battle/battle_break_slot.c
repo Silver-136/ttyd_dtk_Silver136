@@ -40,7 +40,7 @@ static u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
 #endif
 
 /** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
-EVT_BEGIN(kinoko_effect)
+static EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxHp, LW(3), LW(5))
@@ -66,7 +66,7 @@ EVT_BEGIN(kinoko_effect)
 EVT_END()
 
 /** BINGO! with three Fire Flowers: fully restores Mario's FP. */
-EVT_BEGIN(flower_effect)
+static EVT_BEGIN(flower_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxFp, LW(3), LW(5))
@@ -78,7 +78,7 @@ EVT_BEGIN(flower_effect)
 EVT_END()
 
 /** BINGO! with three Shine Sprites: fully restores Mario's and the partner's HP, then a second later Mario's FP. */
-EVT_BEGIN(shine_effect)
+static EVT_BEGIN(shine_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxHp, LW(3), LW(5))
@@ -115,7 +115,7 @@ EVT_END()
  * Weapon for the Poison Mushroom BINGO! (doku_kinoko_effect): halves the HP of Mario and the partner;
  * always hits, pierces defense and can't be guarded.
  */
-BattleWeapon weapon_doku_kinoko = {
+static BattleWeapon weapon_doku_kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -179,7 +179,7 @@ static BattleWeapon weapon_doku_kinoko_fp = {
  * with three Poison Mushrooms: hits Mario and the partner with the HP-halving weapon,
  * then a second later halves Mario's FP.
  */
-EVT_BEGIN(doku_kinoko_effect)
+static EVT_BEGIN(doku_kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko), 0, LW(5))
@@ -205,36 +205,36 @@ static u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BT
 #endif
 
 /** BINGO! with three Stars: no script work; the Star Power refill and sound are done by BattleBreakSlot_Main. */
-EVT_BEGIN(star_effect)
+static EVT_BEGIN(star_effect)
     RETURN
 EVT_END()
 
 /** Announces the Mushroom BINGO! result (msg_slot_HP_max) for 120 frames. */
-EVT_BEGIN(msg_hp_max)
+static EVT_BEGIN(msg_hp_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_HP_max"), 120)
     RETURN
 EVT_END()
 
 /** Announces the Fire Flower BINGO! result (msg_slot_FP_max). */
-EVT_BEGIN(msg_fp_max)
+static EVT_BEGIN(msg_fp_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_FP_max"), 120)
     RETURN
 EVT_END()
 
 /** Announces the Star BINGO! result (msg_slot_SP_max). */
-EVT_BEGIN(msg_star_max)
+static EVT_BEGIN(msg_star_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_SP_max"), 120)
     RETURN
 EVT_END()
 
 /** Announces the Shine Sprite BINGO! result (msg_slot_HPFPSP_max). */
-EVT_BEGIN(msg_super_max)
+static EVT_BEGIN(msg_super_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_HPFPSP_max"), 120)
     RETURN
 EVT_END()
 
 /** Announces the Poison Mushroom BINGO! result (msg_slot_HPFPSP_half). */
-EVT_BEGIN(msg_fault)
+static EVT_BEGIN(msg_fault)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_HPFPSP_half"), 120)
     RETURN
 EVT_END()

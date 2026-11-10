@@ -49,6 +49,9 @@
 #include "evt/evt_cmd.h"
 #endif
 
+static EvtWord evt_continue[11];
+static s32 stone_id[7];
+
 // LoadWork.flags (file select)
 typedef enum LoadWorkFlags {
     LOAD_FLAG_DIM = (1 << 0),          // 0x1
@@ -102,7 +105,7 @@ static void loadDraw(CameraId camera, void* param);
 static void continueGame(void);
 
 #if VERSION <= VERSION_DEMO_JP
-s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
+static s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
 
 /** Early demos: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
 static EVT_BEGIN(evt_shake)
@@ -1424,7 +1427,7 @@ static void loadDraw(CameraId camera, void* param) {
 
 /** Icons of the seven Crystal Stars, drawn on a save file's panel for each star that file has collected. */
 #if VERSION >= VERSION_JP
-s32 stone_id[7] = {
+static s32 stone_id[7] = {
     ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR,
     ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR
 };
@@ -1441,7 +1444,7 @@ EVT_END()
 #endif
 
 /** Preloads the Mario, Bowser and Peach story-transition animations before a saved file is continued. */
-EVT_BEGIN(evt_continue)
+static EVT_BEGIN(evt_continue)
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_mario"))
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_kuppa"))
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_peach"))

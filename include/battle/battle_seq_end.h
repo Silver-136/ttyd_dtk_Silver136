@@ -60,13 +60,6 @@ typedef struct BattleSeqEndWork {
 
 extern EvtWord _event_MajinaiEnd[];
 
-extern EvtWord _confetti_control_event[];
 extern EvtWord _curtain_close_event[];
-extern EvtWord _jump_event[];
-extern EvtWord _koura_delete_event[];
-extern EvtWord _move_to_badge_point_event[];
-extern EvtWord _move_to_flower_event[];
-extern EvtWord _move_to_heart_event[];
-extern EvtWord _rank_up_event[];
 const char* BattleGetRankNameLabel(s32 level);
 void btlseqEnd(struct BattleWork* wp);

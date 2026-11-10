@@ -85,7 +85,7 @@ static USER_FUNC(yuuminigame3_set_phase);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
 USER_FUNC(yuu_02_icon_monte_onoff);
 
-Vec fukkipoint[15];
+static Vec fukkipoint[15];
 
 #if VERSION >= VERSION_JP
 EvtWord yuu_02_icon_monte_entry_evt[4];
@@ -131,7 +131,7 @@ EvtWord yuu_02_init_evt[28];
  * yuuminigame3_gamerule tracks which one Mario has passed and drops him back onto the last one
  * after he falls off the course.
  */
-Vec fukkipoint[] = {
+static Vec fukkipoint[] = {
     {300.0f, 0.0f, 300.0f},
     {750.0f, 0.0f, 300.0f},
     {1150.0f, 0.0f, 300.0f},

@@ -29,7 +29,7 @@
 static EvtWord evt_dokan1_message[52];
 static EvtWord evt_dokan1[11];
 static BeroEntry bero_entry_data[6];
-EvtWord guide_bigtree[336];
+static EvtWord guide_bigtree[336];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord peach_mail[242];
@@ -175,7 +175,7 @@ static BeroEntry bero_entry_data[] = {
  * She then leaves the party; a stand-in NPC ("ガイド") comes up out of the pipe and hops away east,
  * and the story becomes STG2_02_TO_THE_GREAT_TREE.
  */
-EVT_BEGIN(guide_bigtree)
+static EVT_BEGIN(guide_bigtree)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), -50)

@@ -54,6 +54,16 @@
 #include "jon.h"
 #include "driver/seqdrv.h"
 
+static USER_FUNC(wait_landon);
+static USER_FUNC(iri_12_makkino_set_y);
+static USER_FUNC(iri_12_paper_init);
+static USER_FUNC(shikakeFlag);
+static USER_FUNC(wanwan_set_home_pos);
+static USER_FUNC(setup_npc_ex_para);
+static USER_FUNC(yattukeFlag);
+static USER_FUNC(enemy_info);
+static USER_FUNC(evt_raster);
+
 static void raster_disp(CameraId cameraId, void* param);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -66,16 +76,16 @@ void _epilog(void);
 void _prolog(void);
 
 #if VERSION >= VERSION_US
-EvtWord jon_init_evt[400];
+static EvtWord jon_init_evt[400];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord jon_init_evt[329];
+static EvtWord jon_init_evt[329];
 #else
-EvtWord jon_init_evt[391];
+static EvtWord jon_init_evt[391];
 #endif
 #endif
 
-u8 enemy_100[100];
+static u8 enemy_100[100];
 static NpcSetupInfo npcEnt_kuriboo[2];
 static NpcSetupInfo npcEnt_patakuri[2];
 static NpcSetupInfo npcEnt_hannya[2];
@@ -94,7 +104,7 @@ static NpcSetupInfo npcEnt_piders[2];
 static NpcSetupInfo npcEnt_teresa[2];
 static NpcSetupInfo npcEnt_hbom[2];
 static NpcSetupInfo npcEnt_bubble[2];
-NpcSetupInfo npcEnt_wanwan[2];
+static NpcSetupInfo npcEnt_wanwan[2];
 static NpcSetupInfo npcEnt_mahoon[2];
 static NpcSetupInfo npcEnt_pakkun[2];
 static NpcSetupInfo npcEnt_togenoko[2];
@@ -167,7 +177,7 @@ static EvtWord iri_12_makkino_move_dokan_side[94];
 static EvtWord iri_12_enemy_dead_event[18];
 static EvtWord iri_12_makkino_urouro[25];
 static EvtWord iri_12_makkino_buruburu[44];
-EvtWord iri_12_makkino_okiru[33];
+static EvtWord iri_12_makkino_okiru[33];
 static EvtWord iri_12_makkino_talk[55];
 static EvtWord iri_12_makkino_fall[79];
 static EvtWord iri_12_makkino_fall_return[71];
@@ -185,7 +195,7 @@ extern EvtWord zonbaba_first_event[];
 EvtWord zonbaba_first_event[677];
 #endif
 
-EVT_BEGIN(jon_init_evt)
+static EVT_BEGIN(jon_init_evt)
     // When the map is entered without an entrance (GW_FLAG_NO_ENTRANCE, a direct map warp), the floor number is
     // derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
@@ -349,7 +359,7 @@ EVT_END()
  * numbers twice and then the next five twice, so the number grows by ten every twenty floors. The last twenty floors
  * break the pattern: they stop at 49 and end with 46 and 51.
  */
-u8 enemy_100[] = {
+static u8 enemy_100[] = {
     1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 16, 17, 18, 19, 20,
     21, 22, 23, 24, 25, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 26, 27, 28, 29, 30,
@@ -954,7 +964,7 @@ static NpcSetupInfo npcEnt_bubble[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Chain-Chomp that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_wanwan[] = {
+static NpcSetupInfo npcEnt_wanwan[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Chain-Chomp family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -2897,7 +2907,7 @@ EVT_END()
  * restores normal talk and move animations and turns him toward Mario.
  * Started by the message callback when his text reaches page 2.
  */
-EVT_BEGIN(iri_12_makkino_okiru)
+static EVT_BEGIN(iri_12_makkino_okiru)
     CALL(evt_npc_set_anim, STRING("マッキノ"), STRING("O_1"))
     CALL(evt_npc_wait_anim, STRING("マッキノ"), 1)
     CALL(evt_npc_set_balloontype, STRING("マッキノ"), 1)
@@ -3412,7 +3422,7 @@ static void iri_12_msgcb(s32 type, void* param) {
 }
 
 /** Script helper: blocks until the sailor NPC has landed on the floor (returns at once if he cannot land). */
-USER_FUNC(wait_landon) {
+static USER_FUNC(wait_landon) {
     // マッキノ
     NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
 
@@ -3423,7 +3433,7 @@ USER_FUNC(wait_landon) {
 }
 
 /** Script helper: args[0] = y; sets the sailor NPC's height directly. */
-USER_FUNC(iri_12_makkino_set_y) {
+static USER_FUNC(iri_12_makkino_set_y) {
     f32 y = evtGetFloat(event, event->args[0]);
 
     npcNameToPtr("\203}\203b\203L\203m")->position.y = y;
@@ -3431,7 +3441,7 @@ USER_FUNC(iri_12_makkino_set_y) {
 }
 
 /** Script helper: turns off paper-peraform bending and paper lighting on the sailor's model, for the pipe jump. */
-USER_FUNC(iri_12_paper_init) {
+static USER_FUNC(iri_12_paper_init) {
     NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
 
     animPosePaperPeraOff(npc->poseId);
@@ -3439,7 +3449,7 @@ USER_FUNC(iri_12_paper_init) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(shikakeFlag) {
+static USER_FUNC(shikakeFlag) {
     s32 type = evtGetValue(event, event->args[0]);
     NpcEntry* npc = npcNameToPtr("\223G");
 
@@ -3461,7 +3471,7 @@ USER_FUNC(shikakeFlag) {
 }
 
 /** Script helper: args[0..2] = x, y, z; writes them into the Chain Chomp setup's territoryBase before it is spawned. */
-USER_FUNC(wanwan_set_home_pos) {
+static USER_FUNC(wanwan_set_home_pos) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);
@@ -3477,7 +3487,7 @@ USER_FUNC(wanwan_set_home_pos) {
  * Script helper: args[0] = NPC name; sets its loiter height to 50 and homing height to 180
  * so flyers can chase over the room.
  */
-USER_FUNC(setup_npc_ex_para) {
+static USER_FUNC(setup_npc_ex_para) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     NpcEntry* npc = evtNpcNameToPtr(event, name);
 
@@ -3487,7 +3497,7 @@ USER_FUNC(setup_npc_ex_para) {
 }
 
 /** Script helper: sets NPC_BATTLE_NO_BUMP_ATTACK on the floor enemy's battle info. */
-USER_FUNC(yattukeFlag) {
+static USER_FUNC(yattukeFlag) {
     npcNameToPtr("\223G")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
     return EVT_RETURN_DONE;
 }
@@ -3498,7 +3508,7 @@ USER_FUNC(yattukeFlag) {
  * Japanese name (args[2]) and battle setup number (args[3]) from btlsetup_jon_tbl;
  * falls back to Goomba when the name is not a tribe.
  */
-USER_FUNC(enemy_info) {
+static USER_FUNC(enemy_info) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     s32 no = enemy_100[idx];
@@ -3531,7 +3541,7 @@ USER_FUNC(enemy_info) {
  * Blocks forever, growing the amplitude 0.2 and phase 0.01 per frame,
  * and queues raster_disp each frame on the 2D camera.
  */
-USER_FUNC(evt_raster) {
+static USER_FUNC(evt_raster) {
     f32* work = event->lwDataF;
 
     if (isFirstCall) {

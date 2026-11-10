@@ -107,7 +107,7 @@ static USER_FUNC(get_camcurve_init);
 static USER_FUNC(iri_13_free_item_tbl);
 static USER_FUNC(iri_13_make_item_tbl);
 static USER_FUNC(iri_13_update_item_tbl);
-USER_FUNC(lecture);
+static USER_FUNC(lecture);
 USER_FUNC(monosiri_check);
 static USER_FUNC(monosiri_on);
 static USER_FUNC(set_depthPlaneOffset);
@@ -4860,7 +4860,7 @@ static USER_FUNC(set_depthPlaneOffset) {
 }
 
 /** Starts the lecture window and blocks until the player closes it. */
-USER_FUNC(lecture) {
+static USER_FUNC(lecture) {
     if (isFirstCall) {
         winLectureOn();
     }

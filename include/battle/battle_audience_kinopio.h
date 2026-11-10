@@ -6,4 +6,3 @@
 
 void BattleAudienceCtrlProcessKinopio(s32 index);
 
-extern s32 intrudeSound;

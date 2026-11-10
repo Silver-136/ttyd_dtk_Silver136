@@ -32,6 +32,19 @@
 #include "system.h"
 #include "driver/casedrv.h"
 
+static USER_FUNC(npc_hide_onoff);
+static USER_FUNC(get_noclip_map);
+static USER_FUNC(npc_light);
+static USER_FUNC(npc_dark);
+static USER_FUNC(animation);
+static USER_FUNC(init_inside_group);
+static USER_FUNC(inside_group);
+static USER_FUNC(door_group);
+static USER_FUNC(outside_group);
+static USER_FUNC(in_pos);
+static USER_FUNC(out_pos);
+static USER_FUNC(inout_hit);
+
 typedef struct HouseData {
     s32 type;               // 0x0
     const char* hit[4];     // 0x4, hit object names
@@ -235,7 +248,7 @@ USER_FUNC(snd_door_out) {
  * works out where Mario stands outside (from hit[1]) and inside (from hit[3]),
  * and returns the HouseWork in args[1].
  */
-USER_FUNC(door_entry) {
+static USER_FUNC(door_entry) {
     EvtWord* args = event->args;
     HouseData* d = (HouseData*)evtGetValue(event, args[0]);
     Vec pos = {0.0f, 0.0f, 0.0f};
@@ -1381,7 +1394,7 @@ EVT_BEGIN(evt_door_entry)
     RETURN
 EVT_END()
 
-USER_FUNC(inout_hit) {
+static USER_FUNC(inout_hit) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)w->data->hit[0]);
@@ -1392,7 +1405,7 @@ USER_FUNC(inout_hit) {
 }
 
 /** Returns the X and Z of the spot outside the house that door_entry worked out. */
-USER_FUNC(out_pos) {
+static USER_FUNC(out_pos) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], w->out.x);
@@ -1401,7 +1414,7 @@ USER_FUNC(out_pos) {
 }
 
 /** Returns the X and Z of the spot inside the house that door_entry worked out. */
-USER_FUNC(in_pos) {
+static USER_FUNC(in_pos) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], w->in.x);
@@ -1410,7 +1423,7 @@ USER_FUNC(in_pos) {
 }
 
 /** Returns the house's outside map group name (HouseData.outside). */
-USER_FUNC(outside_group) {
+static USER_FUNC(outside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)w->data->outside);
@@ -1418,7 +1431,7 @@ USER_FUNC(outside_group) {
 }
 
 /** Returns the house's door map group name (HouseData.door); also used as the sound position. */
-USER_FUNC(door_group) {
+static USER_FUNC(door_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)w->data->door);
@@ -1426,7 +1439,7 @@ USER_FUNC(door_group) {
 }
 
 /** Returns HouseData.inside: the interior map group and its hit object, shown while Mario is inside. */
-USER_FUNC(inside_group) {
+static USER_FUNC(inside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)w->data->inside[0]);
@@ -1435,7 +1448,7 @@ USER_FUNC(inside_group) {
 }
 
 /** Returns HouseData.initInside: the map group and hit object evt_door_setup hides at map start. */
-USER_FUNC(init_inside_group) {
+static USER_FUNC(init_inside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)w->data->initInside[0]);
@@ -1444,7 +1457,7 @@ USER_FUNC(init_inside_group) {
 }
 
 /** Returns the house's four map animation names (HouseData.anim): [0] opening, [2] closing; 0 for none. */
-USER_FUNC(animation) {
+static USER_FUNC(animation) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)w->data->anim[0]);
@@ -1505,12 +1518,12 @@ USER_FUNC(animation) {
  * Keeps Mario, both partners and the house's listed NPCs,
  * map objects and items lit (exempt from the map blend) while house_in darkens the town.
  */
-USER_FUNC(npc_dark) {
+static USER_FUNC(npc_dark) {
     NPC_LIGHT_BODY(animPoseSetMaterialFlagOn, iconFlagOn)
 }
 
 /** Undoes npc_dark when Mario leaves the house, letting the map blend reach them again. */
-USER_FUNC(npc_light) {
+static USER_FUNC(npc_light) {
     NPC_LIGHT_BODY(animPoseSetMaterialFlagOff, iconFlagOff)
 }
 
@@ -1518,7 +1531,7 @@ USER_FUNC(npc_light) {
  * Returns entry args[1] of HouseData.noclip (map groups whose view culling is turned off while Mario is inside),
  * or -1 past the end of the list.
  */
-USER_FUNC(get_noclip_map) {
+static USER_FUNC(get_noclip_map) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
     s32 idx = evtGetValue(event, args[1]);
@@ -1843,7 +1856,7 @@ USER_FUNC(evt_door_load_mapflag) {
  * Hides (args[1] on) or shows every NPC in the DoorParam's npcs list,
  * so NPCs on the other side of the door are only drawn while Mario is in their room.
  */
-USER_FUNC(npc_hide_onoff) {
+static USER_FUNC(npc_hide_onoff) {
     EvtWord* args = event->args;
     DoorParam* d = (DoorParam*)evtGetValue(event, args[0]);
     BOOL on = evtGetValue(event, args[1]);

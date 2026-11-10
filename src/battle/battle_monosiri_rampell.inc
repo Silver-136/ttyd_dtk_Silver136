@@ -3,7 +3,7 @@
  * Tattle group for Doopliss: both chapter 4 fights, his invincible form and the chapter 8 fight
  * with all his copies of Mario and the partners. Tattling any one marks them all.
  */
-BattleUnitType same_tbl_rampell_1[] = {
+static BattleUnitType same_tbl_rampell_1[] = {
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
     UNIT_DOOPLISS_CHAPTER4_FIGHT2,
@@ -23,7 +23,7 @@ BattleUnitType same_tbl_rampell_1[] = {
  * Tattle group for Doopliss, listed from the chapter 8 fight. The same units as same_tbl_rampell_1,
  * which battleSetUnitMonosiriFlag finds first, so this and the later Doopliss groups are never reached.
  */
-BattleUnitType same_tbl_rampell_2[] = {
+static BattleUnitType same_tbl_rampell_2[] = {
     UNIT_DOOPLISS_CHAPTER8,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER4_FIGHT2,
@@ -40,7 +40,7 @@ BattleUnitType same_tbl_rampell_2[] = {
 };
 
 /** Tattle group for Doopliss, listed from the second chapter 4 fight; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_1[] = {
+static BattleUnitType same_tbl_rampell_faker_1[] = {
     UNIT_DOOPLISS_CHAPTER4_FIGHT2,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -57,7 +57,7 @@ BattleUnitType same_tbl_rampell_faker_1[] = {
 };
 
 /** Tattle group for Doopliss, listed from his invincible chapter 4 form; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_2[] = {
+static BattleUnitType same_tbl_rampell_faker_2[] = {
     UNIT_DOOPLISS_CHAPTER4_INVINCIBLE,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -74,7 +74,7 @@ BattleUnitType same_tbl_rampell_faker_2[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Mario; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_3[] = {
+static BattleUnitType same_tbl_rampell_faker_3[] = {
     UNIT_DOOPLISS_CHAPTER8_MARIO,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -91,7 +91,7 @@ BattleUnitType same_tbl_rampell_faker_3[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Goombella; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_4[] = {
+static BattleUnitType same_tbl_rampell_faker_4[] = {
     UNIT_DOOPLISS_CHAPTER8_GOOMBELLA,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -108,7 +108,7 @@ BattleUnitType same_tbl_rampell_faker_4[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Koops; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_5[] = {
+static BattleUnitType same_tbl_rampell_faker_5[] = {
     UNIT_DOOPLISS_CHAPTER8_KOOPS,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -125,7 +125,7 @@ BattleUnitType same_tbl_rampell_faker_5[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Yoshi; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_6[] = {
+static BattleUnitType same_tbl_rampell_faker_6[] = {
     UNIT_DOOPLISS_CHAPTER8_YOSHI,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -142,7 +142,7 @@ BattleUnitType same_tbl_rampell_faker_6[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Flurrie; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_7[] = {
+static BattleUnitType same_tbl_rampell_faker_7[] = {
     UNIT_DOOPLISS_CHAPTER8_FLURRIE,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -159,7 +159,7 @@ BattleUnitType same_tbl_rampell_faker_7[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Vivian; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_8[] = {
+static BattleUnitType same_tbl_rampell_faker_8[] = {
     UNIT_DOOPLISS_CHAPTER8_VIVIAN,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -176,7 +176,7 @@ BattleUnitType same_tbl_rampell_faker_8[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Bobbery; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_9[] = {
+static BattleUnitType same_tbl_rampell_faker_9[] = {
     UNIT_DOOPLISS_CHAPTER8_BOBBERY,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,
@@ -193,7 +193,7 @@ BattleUnitType same_tbl_rampell_faker_9[] = {
 };
 
 /** Tattle group for Doopliss, listed from his copy of Ms. Mowz; same units as same_tbl_rampell_1. */
-BattleUnitType same_tbl_rampell_faker_10[] = {
+static BattleUnitType same_tbl_rampell_faker_10[] = {
     UNIT_DOOPLISS_CHAPTER8_MS_MOWZ,
     UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     UNIT_DOOPLISS_CHAPTER8,

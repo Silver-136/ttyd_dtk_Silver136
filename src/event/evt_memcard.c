@@ -16,7 +16,7 @@
  * 0 on success, negative for errors (-3 no card, -2 a different card, -6/-13 needs formatting, -4 no save file,
  * -8/-9 no space, -10 save data it cannot use), as the save/load scripts below switch on it.
  */
-USER_FUNC(memcard_code) {
+static USER_FUNC(memcard_code) {
     EvtWord* args = event->args;
     s32 code = cardGetCode();
 
@@ -79,7 +79,7 @@ USER_FUNC(memcard_watch_end) {
  * Reads the whole memory card (save file and headers) on the first call,
  * blocking the script until the read is done.
  */
-USER_FUNC(memcard_load) {
+static USER_FUNC(memcard_load) {
     if (isFirstCall) {
         cardBufReset();
         cardReadAll();
@@ -127,7 +127,7 @@ USER_FUNC(memcard_delete) {
 }
 
 /** Copies save slot args[0] onto slot args[1] (both 1-based), blocking until the card write finishes. */
-USER_FUNC(memcard_copy) {
+static USER_FUNC(memcard_copy) {
     EvtWord* args = event->args;
     s32 from = evtGetValue(event, args[0]) - 1;
     s32 to = evtGetValue(event, args[1]) - 1;
@@ -142,7 +142,7 @@ USER_FUNC(memcard_copy) {
 }
 
 /** Writes the save file's header block on the first call, blocking until done. */
-USER_FUNC(memcard_header_write) {
+static USER_FUNC(memcard_header_write) {
     if (isFirstCall) {
         cardWriteHeader();
     }
@@ -156,7 +156,7 @@ USER_FUNC(memcard_header_write) {
  * Asks for a reset to the GameCube main menu (IPL) so the player can free card space there;
  * gp->resetType 2 makes the main loop reset, and the script never resumes.
  */
-USER_FUNC(memcard_ipl) {
+static USER_FUNC(memcard_ipl) {
     gp->resetType = RESET_TYPE_MENU;
     return EVT_RETURN_BLOCK;
 }
@@ -165,7 +165,7 @@ USER_FUNC(memcard_ipl) {
  * Sets args[1] to 1 if save slot args[0] (1-based) holds a save and 0
  * if it is empty (save flag bit 0 set reads as empty); evt_memcard_copy uses it to ask before overwriting.
  */
-USER_FUNC(memcard_file_existance) {
+static USER_FUNC(memcard_file_existance) {
     EvtWord* args = event->args;
     s32 slot = evtGetValue(event, args[0]) - 1;
 
@@ -188,7 +188,7 @@ USER_FUNC(memcard_write) {
     return EVT_RETURN_DONE;
 }
 
-EvtWord evt_memcard_nosave[19];
+static EvtWord evt_memcard_nosave[19];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_memcard_check[];
@@ -212,7 +212,7 @@ EvtWord evt_memcard_save[510];
  * Tells the player they can continue without saving and asks yes or no;
  * yes sets GF(0) so the caller goes on without a memory card.
  */
-EVT_BEGIN(evt_memcard_nosave)
+static EVT_BEGIN(evt_memcard_nosave)
     CALL(evt_msg_print_add, 0, STRING("msg_nosave_start"))
     CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
     CALL(evt_msg_continue)

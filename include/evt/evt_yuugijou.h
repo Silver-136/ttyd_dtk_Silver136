@@ -133,9 +133,7 @@ USER_FUNC(yuugijou_montemedal_keep);
 USER_FUNC(yuugijou_montemedal_return);
 USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuugijou_set_yupflag);
-USER_FUNC(yuuminigame_end);
 USER_FUNC(yuuminigame_get_window_evt);
-USER_FUNC(yuuminigame_window_end);
 void evtYuuSetWindowEvt(EvtWord* evt);
 
 // Names from LLCOOLT's tree.

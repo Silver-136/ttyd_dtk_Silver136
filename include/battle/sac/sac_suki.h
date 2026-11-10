@@ -7,6 +7,3 @@
 
 extern EvtWord marioAttackEvent_Suki[];
 
-extern EvtWord flash_cancel_evt[];
-extern EvtWord flash_evt[];
-extern EvtWord flash_main_evt[];

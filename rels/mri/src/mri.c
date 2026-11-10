@@ -40,6 +40,8 @@
 #include "mri_puni.h"
 #include "driver/seqdrv.h"
 
+static USER_FUNC(evt_mri_door_naname_func);
+
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
@@ -326,7 +328,7 @@ EVT_BEGIN(evt_mri_door_naname_close)
     RETURN
 EVT_END()
 
-USER_FUNC(evt_mri_door_naname_func) {
+static USER_FUNC(evt_mri_door_naname_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x0 = evtGetFloat(event, args[1]);
@@ -464,7 +466,7 @@ EVT_BEGIN(mri_punipuni_itemremove)
     RETURN
 EVT_END()
 
-USER_FUNC(hakari_color) {
+static USER_FUNC(hakari_color) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 now = evtGetValue(event, args[1]);

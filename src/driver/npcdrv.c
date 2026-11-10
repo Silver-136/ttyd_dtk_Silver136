@@ -57,6 +57,8 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_sbr.h"
 
+static EvtWord _evt_majinai_coin_up_effect[31];
+
 #define NPC_RAD2DEG(r) ((r) * 57.29579f)
 
 typedef struct NpcWork2 {
@@ -3606,7 +3608,7 @@ EVT_END()
  * After a won battle with Merlee's coin curse: plays her spell effect and sounds over Mario,
  * shows "msg_mj_coin_up" and, when it was her last use, "msg_mj_last".
  */
-EVT_BEGIN(_evt_majinai_coin_up_effect)
+static EVT_BEGIN(_evt_majinai_coin_up_effect)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SPAWN_EVENT(evt_majinai_effect_se_fld)
     CALL(_majinai_effect)

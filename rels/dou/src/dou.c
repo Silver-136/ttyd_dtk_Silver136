@@ -11,6 +11,8 @@
 #include "system.h"
 #include "dou.h"
 
+static USER_FUNC(dou_mario_pos_osreport_func);
+
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
@@ -167,7 +169,7 @@ USER_FUNC(evt_dou_normal_puka) {
  * Mario and reads the button trigger, prints nothing and blocks forever.
  * Only the unused dou_mario_pos_osreport calls it.
  */
-USER_FUNC(dou_mario_pos_osreport_func) {
+static USER_FUNC(dou_mario_pos_osreport_func) {
     // This diagnostic helper polls input but remains blocked; it does not finish the event.
     marioGetPtr();
 

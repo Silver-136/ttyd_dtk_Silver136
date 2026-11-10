@@ -8,5 +8,3 @@
 
 extern EvtWord evt_gazigazi_appear[];
 extern EvtWord evt_gazigazi_entry[];
-USER_FUNC(camdir);
-USER_FUNC(evt_gazigazi_move_position);

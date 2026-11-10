@@ -79,7 +79,7 @@ EvtWord unkeep_evt[147];
 #endif
 
 EvtWord point_evt[VERSION_PICK(15, 34)];
-EvtWord evt_shoplist[10];
+static EvtWord evt_shoplist[10];
 static EvtWord main_evt[4];
 
 /**
@@ -123,7 +123,7 @@ static WinMgrDesc list_desc[] = {
 };
 
 static EvtWord buy_evt[];
-EvtWord evt_shoplist[];
+static EvtWord evt_shoplist[10];
 EvtWord first_shopping_evt[];
 EvtWord keep_evt[];
 static EvtWord main_evt[];
@@ -452,7 +452,7 @@ static void list_disp(WinMgrEntry* entry) {
  * Opens the three prize list windows (title, list, points), then blocks until B closes them;
  * plays the open and close sounds.
  */
-USER_FUNC(disp_list) {
+static USER_FUNC(disp_list) {
     if (isFirstCall) {
         event->userdata[0] = winMgrEntry(&list_desc[0]);
         event->userdata[1] = winMgrEntry(&list_desc[1]);
@@ -557,7 +557,7 @@ USER_FUNC(evt_shop_setup) {
 }
 
 /** Opens (args[0] nonzero) or closes the shop points window, starting its counter from the current points. */
-USER_FUNC(point_disp_onoff) {
+static USER_FUNC(point_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     PouchData* pouch = pouchGetPtr();
     ShopWork* wp = _wp;
@@ -594,7 +594,7 @@ USER_FUNC(point_wait) {
 #endif
 
 /** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
-USER_FUNC(shop_flag_onoff) {
+static USER_FUNC(shop_flag_onoff) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
     s32 mask = evtGetValue(event, args[1]);
@@ -608,7 +608,7 @@ USER_FUNC(shop_flag_onoff) {
 }
 
 /** Writes Mario's shop points (pouch, 0-300) to args[0]. */
-USER_FUNC(get_shop_point) {
+static USER_FUNC(get_shop_point) {
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();
     evtSetValue(event, args[0], pouch->shopPoints);
@@ -619,7 +619,7 @@ USER_FUNC(get_shop_point) {
  * Adds args[0] shop points, doubled on mri_07, usu_01 or rsh_03 when that shop's sale flag is on
  * and the play-time values in args[1..3] are under 900000 (the sale's time limit); caps the total at 300.
  */
-USER_FUNC(add_shop_point) {
+static USER_FUNC(add_shop_point) {
     EvtWord* args = event->args;
     s32 add = evtGetValue(event, args[0]);
     s32 mriSaleMs = evtGetValue(event, args[1]);
@@ -644,7 +644,7 @@ USER_FUNC(add_shop_point) {
 }
 
 /** Clears Mario's shop points and the prizes claimed, after the 300-point prize. */
-USER_FUNC(reset_shop_point) {
+static USER_FUNC(reset_shop_point) {
     PouchData* pouch = pouchGetPtr();
     pouch->shopPoints = 0;
     pouch->shopPointRewardFlags = 0;
@@ -656,7 +656,7 @@ USER_FUNC(reset_shop_point) {
  * writes 0, its item id and its name to args[0..2], or -1 to all three when there is none.
  * At 300 points it always offers the 300-point prize.
  */
-USER_FUNC(chk_shop_point) {
+static USER_FUNC(chk_shop_point) {
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();
     s32 i = 0;
@@ -688,7 +688,7 @@ USER_FUNC(chk_shop_point) {
 }
 
 /** Marks the lowest earned but unclaimed shop point prize as claimed. */
-USER_FUNC(exchange_shop_point) {
+static USER_FUNC(exchange_shop_point) {
     PouchData* pouch = pouchGetPtr();
     ShopPoint* p;
     s32 i = 0;
@@ -707,7 +707,7 @@ USER_FUNC(exchange_shop_point) {
  * Looks up the prize for the point threshold in args[0] and writes its item id and name to args[1]
  * and args[2] (-1 when there is no such threshold).
  */
-USER_FUNC(shop_point_item) {
+static USER_FUNC(shop_point_item) {
     EvtWord* args = event->args;
     s32 pts = evtGetValue(event, args[0]);
     ShopPoint* p;
@@ -727,7 +727,7 @@ USER_FUNC(shop_point_item) {
 }
 
 /** Writes the shopkeeper NPC's name to args[0]. */
-USER_FUNC(shopper_name) {
+static USER_FUNC(shopper_name) {
     evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->name);
     return EVT_RETURN_DONE;
 }
@@ -749,7 +749,7 @@ static USER_FUNC(get_value) {
 }
 
 /** Writes the shop's message id number args[1] (from ShopperData.msgs) to args[2]; args[0] is the ShopWork. */
-USER_FUNC(get_msg) {
+static USER_FUNC(get_msg) {
     EvtWord* args = event->args;
     ShopWork* wp = (ShopWork*)evtGetValue(event, args[0]);
     s32 i = evtGetValue(event, args[1]);
@@ -758,7 +758,7 @@ USER_FUNC(get_msg) {
 }
 
 /** Writes the shop's after-buy script (ShopperData.buy_evt, may be NULL) to args[0]. */
-USER_FUNC(get_buy_evt) {
+static USER_FUNC(get_buy_evt) {
     evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->buy_evt);
     return EVT_RETURN_DONE;
 }
@@ -767,7 +767,7 @@ USER_FUNC(get_buy_evt) {
  * Records the item id just bought (args[0]) so the shop driver can hide one-off items once the purchase script
  * ends.
  */
-USER_FUNC(set_buy_item_id) {
+static USER_FUNC(set_buy_item_id) {
     _wp->buyItem = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
@@ -779,13 +779,13 @@ static USER_FUNC(get_ptr) {
 }
 
 /** Writes the shop's talk hook script (ShopperData.fook_evt, may be NULL) to args[0]. */
-USER_FUNC(get_fook_evt) {
+static USER_FUNC(get_fook_evt) {
     evtSetValue(event, event->args[0], (EvtWord)_wp->shopper->fook_evt);
     return EVT_RETURN_DONE;
 }
 
 /** Writes the name and sell price of item args[0] to args[1] and args[2]. */
-USER_FUNC(name_price) {
+static USER_FUNC(name_price) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)msgSearch(itemDataTable[id].name));
@@ -794,7 +794,7 @@ USER_FUNC(name_price) {
 }
 
 /** Sets LW(0) to the number of items Mario carries, to check he has something to sell. */
-USER_FUNC(sell_pouchcheck_func) {
+static USER_FUNC(sell_pouchcheck_func) {
     pouchGetPtr();
     event->lwData[0] = pouchGetHaveItemCnt();
     return EVT_RETURN_DONE;
@@ -804,7 +804,7 @@ USER_FUNC(sell_pouchcheck_func) {
  * Applies the shop's sell-price overrides (ShopDb) to the item table, saving the original prices,
  * around the sell menu.
  */
-USER_FUNC(item_data_db_arrange) {
+static USER_FUNC(item_data_db_arrange) {
     ShopDb* db = _wp->db;
     if (db) {
         for (; db->id; db++) {
@@ -816,7 +816,7 @@ USER_FUNC(item_data_db_arrange) {
 }
 
 /** Puts back the sell prices item_data_db_arrange replaced. */
-USER_FUNC(item_data_db_restore) {
+static USER_FUNC(item_data_db_restore) {
     ShopDb* db = _wp->db;
     if (db) {
         for (; db->id; db++) {
@@ -827,7 +827,7 @@ USER_FUNC(item_data_db_restore) {
 }
 
 /** Sets LW(0) to the number of items Mario carries and LW(1) to the free stored-item slots. */
-USER_FUNC(keep_pouchcheck_func) {
+static USER_FUNC(keep_pouchcheck_func) {
     pouchGetPtr();
     event->lwData[0] = pouchGetHaveItemCnt();
     event->lwData[1] = pouchGetEmptyKeepItemCnt();
@@ -835,7 +835,7 @@ USER_FUNC(keep_pouchcheck_func) {
 }
 
 /** Sets LW(0) to the number of stored items and LW(1) to the free slots in Mario's item pouch. */
-USER_FUNC(unkeep_pouchcheck_func) {
+static USER_FUNC(unkeep_pouchcheck_func) {
     pouchGetPtr();
     event->lwData[0] = pouchGetKeepItemCnt();
     event->lwData[1] = pouchGetEmptyHaveItemCnt();
@@ -989,7 +989,7 @@ BOOL evtShopIsActive(void) {
 
 #if VERSION <= VERSION_DEMO_JP
 /** the early demos define the prize list script here, in .data (JP and later: .sdata); the US demo never runs it */
-EVT_BEGIN(evt_shoplist)
+static EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)
     CALL(evt_mario_key_onoff, 1)
@@ -1626,7 +1626,7 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /** JP and later define the prize list script here, in .sdata (the early demos: earlier in the file, in .data) */
-EVT_BEGIN(evt_shoplist)
+static EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)
     CALL(evt_mario_key_onoff, 1)

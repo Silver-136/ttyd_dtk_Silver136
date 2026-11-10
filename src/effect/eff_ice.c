@@ -904,6 +904,27 @@ static MayaHermitKey ice_effHermit_17[] = {
 #undef ICE_FACE
 #endif
 
+#if VERSION >= VERSION_JP
+// From JP on, the face pointers are defined after this table (eff_ice_face.inc below).
+static s16* ice_effFaceDt_pPlane1;
+static s16* ice_effFaceDt_pPlane2;
+static s16* ice_effFaceDt_pPlane3;
+static s16* ice_effFaceDt_pPlane4;
+static s16* ice_effFaceDt_pPlane5;
+static s16* ice_effFaceDt_pPlane6;
+static s16* ice_effFaceDt_pPlane7;
+static s16* ice_effFaceDt_pPlane8;
+static s16* ice_effFaceDt_pPlane9;
+static s16* ice_effFaceDt_pPlane10;
+static s16* ice_effFaceDt_pPlane11;
+static s16* ice_effFaceDt_pPlane12;
+static s16* ice_effFaceDt_pPlane13;
+static s16* ice_effFaceDt_pPlane14;
+static s16* ice_effFaceDt_pPlane15;
+static s16* ice_effFaceDt_pPlane16;
+static s16* ice_effFaceDt_pPlane17;
+#endif
+
 /** Joints of the ice block animation: the root, the 16 face shards and the frost overlay. */
 static MayaPoly ice_effAnimRST[] = {
     {8, ice_effHermit_0, 0, NULL},

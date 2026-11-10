@@ -8,5 +8,3 @@
 extern EvtWord marioAttackEvent_Genki0[];
 extern EvtWord marioAttackEvent_Genki1[];
 
-extern EvtWord genki_evt_common[];
-extern EvtWord status_recover_evt[];

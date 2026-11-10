@@ -37,6 +37,8 @@
 #include "mario/mario_hit.h"
 #endif
 
+static char* yoshigroup[7];
+
 // Ride teardown clears the plane, boat and bellows ride flags.
 enum { PARTY_RIDE_CLEAR_MASK = PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | PARTY_FLAG_IS_RIDING_JABARA };
 
@@ -538,7 +540,7 @@ s32 getExtraPartyEntryId(void) {
  * Animation group names for Yoshi's seven colours,
  * indexed by the colour he hatched with (pouchGetPartyColor).
  */
-char* yoshigroup[7] = {
+static char* yoshigroup[7] = {
     "c_babyyoshi",
     "c_babyyoshi2",
     "c_babyyoshi3",

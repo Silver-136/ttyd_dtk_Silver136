@@ -98,8 +98,8 @@ static EvtWord q_kage_init[10];
 static NpcSetupInfo npcEnt[8];
 static HikariList40 hikari_data;
 static HikariList27 hikari_data_2;
-EvtWord hikari_off_evt[42];
-EvtWord hikari_on_evt[63];
+static EvtWord hikari_off_evt[42];
+static EvtWord hikari_on_evt[63];
 static EvtWord flush_on[106];
 static EvtWord flush_off[106];
 static EvtWord last_evt_1[1078];
@@ -370,7 +370,7 @@ static HikariList27 hikari_data_2 = {
  * Event script: blows out candle LW(0) (its fire effect shrinks from 0.5 to 0 over 100 ms with the candle-off
  * sound); LW(1) is nonzero for the dark candle variant.
  */
-EVT_BEGIN(hikari_off_evt)
+static EVT_BEGIN(hikari_off_evt)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
     CALL(hikari_se, LW(10), 1, LW(9))
@@ -392,7 +392,7 @@ EVT_END()
  * Event script: lights candle LW(0) (its fire effect grows to 0.65 over 150 ms, then settles at 0.5,
  * with the candle-off sound); LW(1) selects the dark variant.
  */
-EVT_BEGIN(hikari_on_evt)
+static EVT_BEGIN(hikari_on_evt)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
     CALL(hikari_se, LW(10), 1, LW(9))

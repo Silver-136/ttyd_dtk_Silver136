@@ -1,5 +1,5 @@
 // Pose tables per member: before the items in both orders, but before the member tables only in retail.
-s32* audience_anim_kinopio[] = {
+static s32* audience_anim_kinopio[] = {
     audience_kinopio_wait_front,
     audience_kinopio_wait_back,
     audience_kinopio_jump_front,
@@ -21,7 +21,7 @@ s32* audience_anim_kinopio[] = {
     NULL,
 };
 
-s32* audience_anim_daisan[] = {
+static s32* audience_anim_daisan[] = {
     audience_daisan_wait_front,
     audience_daisan_wait_back,
     audience_daisan_jump_front,
@@ -43,7 +43,7 @@ s32* audience_anim_daisan[] = {
     NULL,
 };
 
-s32* audience_anim_teresa[] = {
+static s32* audience_anim_teresa[] = {
     audience_teresa_wait_front,
     audience_teresa_wait_back,
     audience_teresa_jump_front,
@@ -65,7 +65,7 @@ s32* audience_anim_teresa[] = {
     NULL,
 };
 
-s32* audience_anim_hammer_bros[] = {
+static s32* audience_anim_hammer_bros[] = {
     audience_hammer_bros_wait_front,
     audience_hammer_bros_wait_back,
     audience_hammer_bros_jump_front,
@@ -87,7 +87,7 @@ s32* audience_anim_hammer_bros[] = {
     NULL,
 };
 
-s32* audience_anim_honenoko[] = {
+static s32* audience_anim_honenoko[] = {
     audience_honenoko_wait_front,
     audience_honenoko_wait_back,
     audience_honenoko_jump_front,
@@ -109,7 +109,7 @@ s32* audience_anim_honenoko[] = {
     NULL,
 };
 
-s32* audience_anim_heiho[] = {
+static s32* audience_anim_heiho[] = {
     audience_heiho_wait_front,
     audience_heiho_wait_back,
     audience_heiho_jump_front,
@@ -131,7 +131,7 @@ s32* audience_anim_heiho[] = {
     NULL,
 };
 
-s32* audience_anim_pansy[] = {
+static s32* audience_anim_pansy[] = {
     audience_pansy_wait_front,
     audience_pansy_wait_back,
     audience_pansy_jump_front,
@@ -153,7 +153,7 @@ s32* audience_anim_pansy[] = {
     NULL,
 };
 
-s32* audience_anim_puni[] = {
+static s32* audience_anim_puni[] = {
     audience_puni_wait_front,
     audience_puni_wait_back,
     audience_puni_jump_front,
@@ -175,7 +175,7 @@ s32* audience_anim_puni[] = {
     NULL,
 };
 
-s32* audience_anim_nokonoko[] = {
+static s32* audience_anim_nokonoko[] = {
     audience_nokonoko_wait_front,
     audience_nokonoko_wait_back,
     audience_nokonoko_jump_front,
@@ -197,7 +197,7 @@ s32* audience_anim_nokonoko[] = {
     NULL,
 };
 
-s32* audience_anim_heavy_bomb[] = {
+static s32* audience_anim_heavy_bomb[] = {
     audience_heavy_bomb_wait_front,
     audience_heavy_bomb_wait_back,
     audience_heavy_bomb_jump_front,
@@ -219,7 +219,7 @@ s32* audience_anim_heavy_bomb[] = {
     NULL,
 };
 
-s32* audience_anim_kuriboo[] = {
+static s32* audience_anim_kuriboo[] = {
     audience_kuriboo_wait_front,
     audience_kuriboo_wait_back,
     audience_kuriboo_jump_front,
@@ -241,7 +241,7 @@ s32* audience_anim_kuriboo[] = {
     NULL,
 };
 
-s32* audience_anim_pakkun[] = {
+static s32* audience_anim_pakkun[] = {
     audience_pakkun_wait_front,
     audience_pakkun_wait_back,
     audience_pakkun_jump_front,
@@ -263,7 +263,7 @@ s32* audience_anim_pakkun[] = {
     audience_pakkun_eat_front,
 };
 
-s32* audience_anim_luigi[] = {
+static s32* audience_anim_luigi[] = {
     audience_luigi_wait_front,
     audience_luigi_wait_back,
     audience_luigi_jump_front,

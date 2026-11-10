@@ -37,6 +37,8 @@
 #include "battle/battle_sub.h"
 #include "eff/eff_stardust.h"
 
+static EvtWord status_recover_evt[180];
+
 typedef struct GenkiRing {
     s32 timer;
     Vec pos;
@@ -1234,7 +1236,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
  * Pays the Star Power, plays the star intro, moves Mario left, runs the shooting game, then restores Mario's HP,
  * the partner's HP and FP by the three scores, cures both of bad statuses and slides the enemies back.
  */
-EVT_BEGIN(genki_evt_common)
+static EVT_BEGIN(genki_evt_common)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(13))
     CALL(btlevtcmd_GetBodyId, LW(13), LW(14))
     CALL(btlevtcmd_CheckStatus, LW(13), STATUS_INSTANT_KILL, LW(0))
@@ -1351,7 +1353,7 @@ EVT_END()
  * Cures the unit in LW(9) of sleep, stop, dizzy, poison, confusion, burn, freeze, tiny, attack down,
  * defense down and slow, then clears the command-blocking turns (recover_cmd_disable).
  */
-EVT_BEGIN(status_recover_evt)
+static EVT_BEGIN(status_recover_evt)
     CALL(btlevtcmd_CheckStatus, LW(9), STATUS_SLEEP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_OnOffStatus, LW(9), STATUS_SLEEP, 0, 0, 0)

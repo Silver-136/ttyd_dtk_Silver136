@@ -51,6 +51,9 @@
 #include "driver/npcdrv.h"
 #include "koopa_motion.h"
 #include "eff/eff_mobj_broken.h"
+
+static USER_FUNC(fire_func);
+static USER_FUNC(kpa_powerup);
 static s32 mobj_brickblk(MapObjectEntry* mobj);
 static s32 mobj_signboard(MapObjectEntry* mobj);
 static s32 mobj_lock(MapObjectEntry* mobj);
@@ -124,7 +127,7 @@ extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u
 
 /** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(evt_fire)
+static EVT_BEGIN(evt_fire)
     CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
     RETURN
 EVT_END()
@@ -134,7 +137,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord kpa_powerup_evt[];
-extern EvtWord evt_fire[];
+static EvtWord evt_fire[8];
 #endif
 
 /** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
@@ -2631,7 +2634,7 @@ USER_FUNC(evt_mobj_recovery_blk) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(mobj_save_blk_sysevt)
+static EVT_BEGIN(mobj_save_blk_sysevt)
     SET_TYPE(0)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LF(10), 0)
@@ -4059,7 +4062,7 @@ USER_FUNC(evt_mobj_breaking_rock) {
  * Bowser stage power-up pickup. args: x, y, z of the pickup.
  * Adds 500 points there (1000 more at level 3) and powers Bowser up.
  */
-USER_FUNC(kpa_powerup) {
+static USER_FUNC(kpa_powerup) {
     EvtWord* args = event->args;
     Vec pos;
     pos.x = evtGetFloat(event, args[0]);
@@ -4757,7 +4760,7 @@ USER_FUNC(evt_mobj_koopa_dokan) {
  * Spawns a fire effect at args[0..2] lasting args[3] frames and grows it to full size over the following frames;
  * blocks until it is fully grown. Used by evt_fire when Bowser burns a coral.
  */
-USER_FUNC(fire_func) {
+static USER_FUNC(fire_func) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -5117,7 +5120,7 @@ static USER_FUNC(kpa_set_dir) {
  * Writes the name of the goal pole whose event is running (event->thisMapObj) to args[0],
  * or 0 outside a map object event.
  */
-USER_FUNC(kpa_get_pole_name) {
+static USER_FUNC(kpa_get_pole_name) {
     MapObjectEntry* mobj = event->thisMapObj;
     EvtWord* args = event->args;
     if (mobj != NULL) {
@@ -5129,7 +5132,7 @@ USER_FUNC(kpa_get_pole_name) {
 }
 
 /** Writes the name of the flag attached to the running goal pole (its linkedName, "<pole>_h") to args[0], or 0. */
-USER_FUNC(kpa_get_hata_name) {
+static USER_FUNC(kpa_get_hata_name) {
     MapObjectEntry* mobj = event->thisMapObj;
     EvtWord* args = event->args;
     if (mobj != NULL) {
@@ -5148,7 +5151,7 @@ static USER_FUNC(kpa_get_level) {
 }
 
 /** Writes the width of the player's collision box (Bowser's, growing with his level) to args[0] as an integer. */
-USER_FUNC(kpa_get_width) {
+static USER_FUNC(kpa_get_width) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], (s32)marioGetPtr()->wPlayerCollisionBox.x);
     return EVT_RETURN_DONE;
@@ -5166,7 +5169,7 @@ static USER_FUNC(kpa_get_mario_pos) {
 }
 #endif
 /** Formats the score args[0] (0-9999) without leading zeros into the floating pole-score text. */
-USER_FUNC(kpa_score_to_str) {
+static USER_FUNC(kpa_score_to_str) {
     s32 score = evtGetValue(event, event->args[0]);
     s32 d[4];
     s32 i, j;
@@ -5203,7 +5206,7 @@ static void kpa_disp_pole_score(CameraId camId, void* param) {
  * Shows the goal-pole score rising from (args[0], args[1], args[2]) by args[3] per frame until Y 230;
  * never returns, so it runs in its own inline event.
  */
-USER_FUNC(kpa_disp_pole_score_main) {
+static USER_FUNC(kpa_disp_pole_score_main) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -5224,7 +5227,7 @@ USER_FUNC(kpa_disp_pole_score_main) {
 }
 
 /** Allocates and clears the pole-score text work from map memory; called at the start of the goal-pole sequence. */
-USER_FUNC(kpa_disp_pole_init) {
+static USER_FUNC(kpa_disp_pole_init) {
     psw = _mapAlloc(sizeof(KpaPoleScoreWork));
     psw->str[0] = 0;
     psw->z = 0.0f;
@@ -5234,7 +5237,7 @@ USER_FUNC(kpa_disp_pole_init) {
 }
 
 /** Clears Mario's air timer so Bowser's jump onto the goal pole does not count as a long fall. */
-USER_FUNC(kpa_clear_jump_data) {
+static USER_FUNC(kpa_clear_jump_data) {
     MarioWork* mario = marioGetPtr();
     mario->airTimer = 0;
     return EVT_RETURN_DONE;
@@ -5246,7 +5249,7 @@ EVT_BEGIN(kpa_powerup_evt)
     CALL(kpa_powerup, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
-EVT_BEGIN(evt_fire)
+static EVT_BEGIN(evt_fire)
     CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
     RETURN
 EVT_END()

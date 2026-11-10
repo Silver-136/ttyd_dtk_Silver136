@@ -40,7 +40,7 @@ static s32 work[1];
 
 static USER_FUNC(evt_action_sub);
 static USER_FUNC(gravity_scale);
-USER_FUNC(movie);
+static USER_FUNC(movie);
 static USER_FUNC(sound_fade);
 static USER_FUNC(z);
 
@@ -133,7 +133,7 @@ static void movie_draw(CameraId camera, void* param) {
  * Sets GF(0) to TRUE when the movie is within two frames of its end (or after 300 frames on an IS-Viewer unit).
  * Never finishes by itself.
  */
-USER_FUNC(movie) {
+static USER_FUNC(movie) {
     u32 type;
 
     if (isFirstCall) {

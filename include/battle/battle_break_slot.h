@@ -44,17 +44,6 @@ void BattleBreakSlot_End(void);
 void BattleBreakSlot_DecBreakTurn(void);
 BreakSlotWork* BattleBreakSlotGetPtr(void);
 
-extern EvtWord doku_kinoko_effect[];
-extern EvtWord flower_effect[];
-extern EvtWord kinoko_effect[];
-extern EvtWord msg_fault[];
-extern EvtWord msg_fp_max[];
-extern EvtWord msg_hp_max[];
-extern EvtWord msg_star_max[];
-extern EvtWord msg_super_max[];
-extern EvtWord shine_effect[];
-extern EvtWord star_effect[];
-
 void BattleBreakSlot_HideReel(void);
 u8 BattleBreakSlot_CheckReaction(void);
 void BattleBreakSlot_Disp(void);

@@ -59,20 +59,6 @@ extern BattleUnitKind unit_yami_patakuri;
 extern BattleUnitKind unit_yami_togekuri;
 extern BattleUnitKind unit_yamitogedaruma;
 
-extern u8 enemy_100[];
-extern EvtWord iri_12_makkino_okiru[];
-extern EvtWord jon_init_evt[];
-extern NpcSetupInfo npcEnt_wanwan[];
-USER_FUNC(enemy_info);
-USER_FUNC(evt_raster);
-USER_FUNC(iri_12_makkino_set_y);
-USER_FUNC(iri_12_paper_init);
-USER_FUNC(setup_npc_ex_para);
-USER_FUNC(shikakeFlag);
-USER_FUNC(wait_landon);
-USER_FUNC(wanwan_set_home_pos);
-USER_FUNC(yattukeFlag);
-
 // Area-local saved values (JON; swReInit clears them on every area change), named from the area's
 // scripts
 // passed to evt_mobj_signboard for board (setup_return); mobj_signboard never sets or reads its flag

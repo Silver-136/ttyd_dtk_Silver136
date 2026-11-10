@@ -37,10 +37,6 @@ extern BattleUnitKind unit_gundan_zako;
 extern BattleUnitKind unit_gundan_zako_elite;
 extern BattleUnitKind unit_gundan_zako_magician;
 
-extern s32 kusuri_id[];
-extern s32 kusuri_list[];
-extern s32 kusuri_tyogo_list[];
-
 // Area-local saved values (AJI; swReInit clears them on every area change), named from the area's
 // scripts
 // set when Peach picks up the Red Potion (peach_evt_kusuri_aka) or takes it back out of a slot

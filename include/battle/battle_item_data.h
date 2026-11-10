@@ -6,8 +6,6 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_database_common.h"
 
-USER_FUNC(_full_ap_recover);
-
 extern BattleWeapon ItemWeaponData_Attiike_Shisshi;
 extern BattleWeapon ItemWeaponData_BiribiriCandy;
 extern BattleWeapon ItemWeaponData_Biribiri_Kinoko;

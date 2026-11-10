@@ -33,5 +33,4 @@ extern BattleUnitKind unit_hermos;
 extern BattleUnitKind unit_killer;
 extern BattleUnitKind unit_kuriboo;
 extern BattleUnitKind unit_patamet;
-USER_FUNC(dou_mario_pos_osreport_func);
 USER_FUNC(evt_dou_normal_puka);

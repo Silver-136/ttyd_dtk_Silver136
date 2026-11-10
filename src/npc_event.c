@@ -255,7 +255,7 @@ static USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
 
-EvtWord _2d_dead_rotate_event[];
+static EvtWord _2d_dead_rotate_event[16];
 
 EvtWord nokonoko_shell_return_event[50];
 EvtWord togenoko_shell_return_event[50];
@@ -513,7 +513,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
 EVT_END()
 
 /** Tilts the calling side-scrolling enemy 12 degrees a frame for 15 frames as it falls off screen. */
-EVT_BEGIN(_2d_dead_rotate_event)
+static EVT_BEGIN(_2d_dead_rotate_event)
     SET_VALUE(LW(0), -12)
     LOOP(15)
         CALL(evt_npc_add_rotate, STRING("me"), 0, 0, LW(0))

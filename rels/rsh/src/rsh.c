@@ -38,6 +38,13 @@
 #include "npc_event.h"
 #include "rsh.h"
 
+static USER_FUNC(debug_print_func);
+static USER_FUNC(evt_rsh_set_rnd_npc_talk_evt);
+static USER_FUNC(evt_rsh_get_rnd_npc_talk_evt);
+static USER_FUNC(evt_rsh_get_rnd_npc_data);
+static USER_FUNC(evt_rsh_set_rnd_npc);
+static USER_FUNC(evt_rsh_get_rnd_npc);
+
 typedef struct RshRndNpc {
     const char* name;
     const char* model;
@@ -1510,7 +1517,7 @@ EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
     RETURN
 EVT_END()
 
-USER_FUNC(debug_print_func) {
+static USER_FUNC(debug_print_func) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);
@@ -1571,7 +1578,7 @@ USER_FUNC(debug_print_func) {
 }
 
 /** Sets the talkEvt of the named NPC. Args: [0] NPC name, [1] event script to run when Mario talks to it. */
-USER_FUNC(evt_rsh_set_rnd_npc_talk_evt) {
+static USER_FUNC(evt_rsh_set_rnd_npc_talk_evt) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     EvtWord* evt = (EvtWord*)evtGetValue(event, args[1]); // event script for the npc talk
@@ -1584,7 +1591,7 @@ USER_FUNC(evt_rsh_set_rnd_npc_talk_evt) {
  * Looks up the talk script of a passenger candidate.
  * Args: [0] room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), [1] group, [2] index; [3] receives the script address.
  */
-USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
+static USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);
@@ -1598,7 +1605,7 @@ USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
  * Looks up the model data of a passenger candidate.
  * Args: [0] room, [1] group, [2] index; [3] receives the model (animation) name, [4] the Japanese tribe name.
  */
-USER_FUNC(evt_rsh_get_rnd_npc_data) {
+static USER_FUNC(evt_rsh_get_rnd_npc_data) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);
@@ -1666,7 +1673,7 @@ static RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
 }
 
 // OR a choice into its packed field; the initializer clears each saved word before setting choices.
-USER_FUNC(evt_rsh_set_rnd_npc) {
+static USER_FUNC(evt_rsh_set_rnd_npc) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);
@@ -1727,7 +1734,7 @@ USER_FUNC(evt_rsh_set_rnd_npc) {
  * Reads a random passenger pick back out of the packed state word.
  * Args: [0] room, [1] group; [2] receives the candidate index (0 for unknown groups).
  */
-USER_FUNC(evt_rsh_get_rnd_npc) {
+static USER_FUNC(evt_rsh_get_rnd_npc) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);

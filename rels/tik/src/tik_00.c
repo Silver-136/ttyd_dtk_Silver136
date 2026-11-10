@@ -120,7 +120,7 @@ typedef struct CardName {
     s32 value;
 } CardName;
 static CardName name_tbl[9];
-EvtWord evt_uranai_cap[4];
+static EvtWord evt_uranai_cap[4];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord uranai_init[];
@@ -555,7 +555,7 @@ static CardName name_tbl[] = {
 };
 
 /** Event that runs the card-capture helper (uranai_cap_evt) for the fortune-telling scene. */
-EVT_BEGIN(evt_uranai_cap)
+static EVT_BEGIN(evt_uranai_cap)
     CALL(uranai_cap_evt)
     RETURN
 EVT_END()
