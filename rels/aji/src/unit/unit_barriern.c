@@ -706,12 +706,6 @@ static USER_FUNC(barriern_zanzou3) {
     return barriern_zanzou_sub(isFirstCall, unit, scales, 2);
 }
 
-/** Inline helper: interpolates from start to end with the easing mode over cur of total steps (intplGetValue). */
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
-static inline f32 intpl_ff(f32 start, f32 end, s32 mode, s32 cur, s32 total) {
-    return intplGetValue(mode, start, end, cur, total);
-}
-
 /**
  * Runs one frame of the Yux afterimage effect of the given type (0 shrinking in, 1 and 2 expanding out):
  * scales the body part and the five ghost rings (parts 2 to 6, offset in depth by 0.5 each)
@@ -785,7 +779,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         f32 s;
 
         part = BtlUnit_GetPartsPtr(unit, i);
-        s = intpl_ff(start[j], end[j], mode, zanzou_count[0], frames);
+        s = intplGetValue(mode, start[j], end[j], zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
         part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[0], frames);
     }

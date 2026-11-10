@@ -92,9 +92,8 @@ void _epilog(void) {
 void _unresolved(void) {
 }
 
-/** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
-// Descriptive name (not in the symbol maps); placeholder unk_gor_0000050c, JP gor .text+0x440. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+// Descriptive name (not in the symbol maps); placeholder unk_gor_0000050c, JP gor .text+0x440. See docs/NAME_PROVENANCE.md.
 /** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
 USER_FUNC(evt_gor_msg_cat_free) {
     if (gor_msg_cat_buf == NULL) {

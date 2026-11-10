@@ -2006,9 +2006,7 @@ static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return TRUE;
 }
 
-/** Slope of a floor normal in degrees (partyNrmToAngle), taking the normal by value. */
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
-
 /** Slope of a floor normal in degrees (partyNrmToAngle), taking the normal by value. */
 static inline f32 partyAppearNrmAngle(Vec n) {
     return partyNrmToAngle(&n);

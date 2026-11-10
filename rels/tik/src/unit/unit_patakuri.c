@@ -100,7 +100,7 @@ BattleUnitKind unit_patakuri = {
 /** Defence of the Paragoomba (Paragoomba form): no damage reduction. */
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
-/** Defence of the Paragoomba (Paragoomba form): no damage reduction. */
+/** Defence attributes of the Paragoomba (Paragoomba form): none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**

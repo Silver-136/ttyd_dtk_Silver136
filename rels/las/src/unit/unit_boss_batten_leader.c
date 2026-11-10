@@ -1051,7 +1051,7 @@ static BattleUnitSetup entry_batten_satellite = {
 /** Lamp sequence of Grodus's power lamp: a steady cycle of its lit and dim animations. */
 static LightSeq3 btl_shuryolight_pow_normal = {{{"L_1B", -2}, {"L_1A", 80}, {"L_1B", 80}}, NULL};
 
-/** Lamp sequence of Grodus's power lamp: blinking. */
+/** Lamp sequence of Grodus's power lamp: one step, animation L_4E. */
 static LightSeq1 btl_shuryolight_pow_tenmetu2 = {{{"L_4E", 0}}, NULL};
 
 /** Lamp sequence of Grodus's power lamp: blinking. */

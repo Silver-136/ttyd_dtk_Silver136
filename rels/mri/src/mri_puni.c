@@ -112,15 +112,6 @@ static PuniTexInfo* Punitex;
 PuniMap* Punimap;
 
 /**
- * Maps a loading-zone (bero) id through bero_id_filter;
- * used to compare the loading-zone indexes stored for the Punies.
- */
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
-static inline s32 puni_bero_id_filter(s32 id) {
-    return bero_id_filter(id);
-}
-
-/**
  * Returns the table of Puni data (Punidat, PUNI_DATA_MAX slots: Mario's stand-in, the Punies 1 to 102,
  * the blockers 103 to 109 and the Jabbi 110 to 209). Used by the C code of mri.c, mri_01, mri_03, mri_13 and mri_16.
  */
@@ -7129,7 +7120,8 @@ USER_FUNC(evt_puni_dokan_onoff) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 on = evtGetValue(event, args[1]);
-    PuniData* p = &Punidat[puni_bero_id_filter(id)] + PUNI_SOLID_FIRST;
+    s32 slot = bero_id_filter(id);
+    PuniData* p = &Punidat[slot] + PUNI_SOLID_FIRST;
     if (on == 0) {
         p->flags |= PUNI_FLAG_COLLIDE;
     } else {

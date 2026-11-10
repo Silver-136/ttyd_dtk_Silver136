@@ -723,11 +723,6 @@ static USER_FUNC(barriern_zanzou3) {
     return barriern_zanzou_sub(isFirstCall, unit, scales, 2);
 }
 
-/** Interpolates between two floats with intplGetValue, using the given easing mode, current frame and total frames. */
-static inline f32 intpl_ff(f32 start, f32 end, s32 mode, s32 cur, s32 total) {
-    return intplGetValue(mode, start, end, cur, total);
-}
-
 /**
  * Shared body of the Yux's afterimage effects.
  * type 0: parts 2-6 shrink in from large and transparent to the body over 36 frames;
@@ -800,7 +795,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         f32 s;
 
         part = BtlUnit_GetPartsPtr(unit, i);
-        s = intpl_ff(start[j], end[j], mode, zanzou_count[0], frames);
+        s = intplGetValue(mode, start[j], end[j], zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
         part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[0], frames);
     }

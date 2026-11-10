@@ -42,12 +42,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | US | rels/tik/src/tik_00.c | evt_uranaisi_msg_set | US: the "pos" tag is a file-scope 4-byte struct `uranaisi_pos_tag` placed before uranaisi_next_evt (.rodata order) and copied into a local; the tag is read through `char* t = tag.s` so tag[0] is not hoisted out of the loop | see comment |
 | Both | rels/win/src/window/win_06.c | cam_kaiten_init (fid) | an identity `f32 fid(f32 x)` around one value | written out at the call (both versions change) |
 | Both | rels/jin/src/jin_07.c | computePosHermite (jin07HermiteMul3) | the product `(a * b) * c` through an inline | written out at the call (both versions change) |
-| Both | rels/aji/src/unit/unit_barriern.c | barriern_zanzou_sub (intpl_ff) | intplGetValue called through a float-first inline wrapper | written out at the call (both versions change) |
-| Both | rels/aji/src/unit/unit_barriern_custom.c | barriern_zanzou_sub (intpl_ff) | intplGetValue called through a float-first inline wrapper | written out at the call (both versions change) |
-| Both | rels/aji/src/unit/unit_barriern_z.c | barriern_zanzou_sub (intpl_ff) | intplGetValue called through a float-first inline wrapper | written out at the call (both versions change) |
-| Both | rels/moo/src/unit/unit_barriern_z.c | barriern_zanzou_sub (intpl_ff) | intplGetValue called through a float-first inline wrapper | written out at the call (both versions change) |
-| Both | rels/mri/src/unit/unit_barriern.c | barriern_zanzou_sub (intpl_ff) | intplGetValue called through a float-first inline wrapper | written out at the call (both versions change) |
-| Both | rels/mri/src/mri_puni.c | puni_exit_swset (puni_bero_id_filter) | bero_id_filter called through an inline wrapper | written out at the call (both versions change) |
 | Both | src/party/party_move.c | partyGetAppearPos3 (partyAppearNrmAngle) | partyNrmToAngle called through a by-value Vec inline | written out at the call (both versions change) |
 | Both | src/mario/mario_hit.c | sfwVecSetNested (sfwVecSet) | a Vec store `*d = v` through an inline | written out at the call (both versions change) |
 | Both | src/battle/ac/ac_stick_rotate.c | battleAcDisp_StickRotate | `work` is a function-local macro for `((BattleWork*)param)` instead of a local | a `BattleWork* work = param;` local, before or after disp (both versions change) |

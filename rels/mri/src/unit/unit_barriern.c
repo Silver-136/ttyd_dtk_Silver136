@@ -373,12 +373,6 @@ static USER_FUNC(barriern_zanzou3) {
     return barriern_zanzou_sub(isFirstCall, unit, scales, 2);
 }
 
-/** Inline helper: calls intplGetValue with the arguments in a different order (start, end, mode, step, total). */
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
-static inline f32 intpl_ff(f32 start, f32 end, s32 mode, s32 cur, s32 total) {
-    return intplGetValue(mode, start, end, cur, total);
-}
-
 /**
  * Shared code of the Yux afterimage blur. Part 1 is the body, parts 2 to 6 the blur copies.
  * Type 0 shrinks the copies in toward the body over 36 frames,
@@ -453,7 +447,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         f32 s;
 
         part = BtlUnit_GetPartsPtr(unit, i);
-        s = intpl_ff(start[j], end[j], mode, zanzou_count[0], frames);
+        s = intplGetValue(mode, start[j], end[j], zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
         part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[0], frames);
     }
