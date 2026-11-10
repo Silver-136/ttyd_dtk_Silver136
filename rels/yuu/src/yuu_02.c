@@ -1098,6 +1098,6 @@ EVT_END()
 EVT_END()
 #else
     RETURN
-EVT_END_PAD()
+EVT_END()
 #endif
 #endif

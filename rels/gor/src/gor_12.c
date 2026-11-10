@@ -69,4 +69,4 @@ EVT_BEGIN(gor_12_init_evt)
         SPAWN_EVENT(epilogue_evt)
     END_IF
     RETURN
-EVT_END_PAD()
+EVT_END()

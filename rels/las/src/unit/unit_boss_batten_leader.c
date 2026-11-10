@@ -2812,7 +2812,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 static USER_FUNC(btlevtcmd_AnimeGetPose) {
 #else
-EVT_END_PAD()
+EVT_END()
 
 USER_FUNC(btlevtcmd_AnimeGetPose) {
 #endif

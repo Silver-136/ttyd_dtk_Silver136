@@ -214,7 +214,7 @@ EVT_BEGIN(las_30_init_evt)
 #if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
-EVT_END_PAD()
+EVT_END()
 #endif
 
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */

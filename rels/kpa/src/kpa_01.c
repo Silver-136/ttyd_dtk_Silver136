@@ -1206,7 +1206,7 @@ EVT_BEGIN(kpa_01_init_evt)
 #if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
-EVT_END_PAD()
+EVT_END()
 
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;

@@ -403,5 +403,5 @@ EVT_BEGIN(win_03_init_evt)
 #if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
-EVT_END_PAD4()
+EVT_END()
 #endif

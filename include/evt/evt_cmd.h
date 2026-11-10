@@ -27,20 +27,6 @@
     }                 \
     ;
 
-// EVT_END plus one trailing zero pad word
-#define EVT_END_PAD()  \
-    OPCODE_END_SCRIPT, \
-    0                  \
-    }                  \
-    ;
-
-// EVT_END plus four trailing zero pad words
-#define EVT_END_PAD4() \
-    OPCODE_END_SCRIPT, \
-    0, 0, 0, 0         \
-    }                  \
-    ;
-
 // Used to define native C functions that scripts can call
 #define USER_FUNC(function) s32(function)(EventEntry * event, BOOL isFirstCall)
 

@@ -2251,7 +2251,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 #if VERSION >= VERSION_US
-EVT_END_PAD()
+EVT_END()
 #else
 EVT_END()
 #endif

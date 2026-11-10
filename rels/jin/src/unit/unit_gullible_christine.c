@@ -551,5 +551,5 @@ static EVT_BEGIN(wait_event_christine)
 #if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
-EVT_END_PAD()
+EVT_END()
 #endif

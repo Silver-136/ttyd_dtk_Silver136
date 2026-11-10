@@ -248,4 +248,4 @@ EVT_BEGIN(kpa_00_init_evt)
         SPAWN_EVENT(kpa_00_fly_evt)
     END_SWITCH
     RETURN
-EVT_END_PAD()
+EVT_END()

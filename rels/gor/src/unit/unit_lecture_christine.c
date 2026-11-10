@@ -585,7 +585,7 @@ static EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
-EVT_END_PAD()
+EVT_END()
 
 /**
  * Script helper: computes the facing direction (degrees) from point (args[0], args[1]) to (args[2], args[3])

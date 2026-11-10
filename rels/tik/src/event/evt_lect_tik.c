@@ -928,7 +928,7 @@ EVT_BEGIN(plane_majin_lecture)
 #if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
-EVT_END_PAD()
+EVT_END()
 #endif
 
 /** Script helper. Stores TRUE in args[0] while the R trigger is held on controller 0, otherwise FALSE. */

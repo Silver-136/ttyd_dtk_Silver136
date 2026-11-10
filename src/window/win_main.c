@@ -898,7 +898,7 @@ static USER_FUNC(itemUseFunc) {
     CALL(lecture_key_mask_off)
     RETURN
 #if VERSION >= VERSION_US
-EVT_END_PAD() // US and later: the script ends with one zero word (object 0x1E4 bytes)
+EVT_END() // US and later: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
 #endif

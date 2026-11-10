@@ -1250,5 +1250,5 @@ EVT_BEGIN(dmo_00_init_evt)
 EVT_END()
 #else
     RETURN
-EVT_END_PAD()
+EVT_END()
 #endif

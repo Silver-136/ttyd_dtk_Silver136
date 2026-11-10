@@ -1261,4 +1261,4 @@ EVT_END()
 static EVT_BEGIN(wait_event_ceil)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-EVT_END_PAD()
+EVT_END()

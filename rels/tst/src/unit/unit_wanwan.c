@@ -758,7 +758,7 @@ static EVT_BEGIN(wait_sound_event2)
 #if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
-EVT_END_PAD()
+EVT_END()
 #endif
 
 /**
