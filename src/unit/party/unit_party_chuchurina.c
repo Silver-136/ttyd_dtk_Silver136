@@ -73,7 +73,7 @@ static EvtWord partyChuchurinaAttack_Kiss[568];
 
 static EvtWord chuchurina_appeal_event[86];
 static EvtWord party_win_reaction[18];
-static EvtWord attack_audience_event[VERSION_PICK(204, 205)];
+static EvtWord attack_audience_event[204];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;

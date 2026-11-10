@@ -124,11 +124,7 @@ static EvtWord elmos_a_kaku[13];
 static EvtWord elmos_a_shuku[13];
 static ExtTexInfo ext_entry_data[21];
 
-#if VERSION <= VERSION_DEMO_JP
 static s16 elmos_animtbl[21];
-#else
-static s16 elmos_animtbl[22];
-#endif
 
 static EvtWord nannpc_mode_setup[35];
 static s32 mist_pos[91];
@@ -979,11 +975,7 @@ static ExtTexInfo ext_entry_data[] = {
 static s16 elmos_animtbl[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
-#if VERSION <= VERSION_DEMO_JP
     16, 17, 18, 19, -1,
-#else
-    16, 17, 18, 19, -1, 0,
-#endif
 };
 
 /**

@@ -113,19 +113,11 @@ static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];
 
-#if VERSION <= VERSION_DEMO_JP
 static s16 suifu_animtbl[41];
 static s16 suifu_animtbl_run[21];
 static s16 elmos_animtbl[21];
 static s16 dai3_animtbl[41];
 static s16 dai3_animtbl_run[21];
-#else
-static s16 suifu_animtbl[42];
-static s16 suifu_animtbl_run[22];
-static s16 elmos_animtbl[22];
-static s16 dai3_animtbl[42];
-static s16 dai3_animtbl_run[22];
-#endif
 
 static EvtWord nannpc_mode_setup[98];
 static EvtWord back_dark[27];
@@ -908,33 +900,21 @@ static s16 suifu_animtbl[] = {
     5, 5, 6, 6, 6, 7, 7, 7,
     8, 8, 8, 9, 9, 9, 10, 10,
     10, 11, 11, 11, 12, 12, 12, 13,
-#if VERSION <= VERSION_DEMO_JP
     -1,
-#else
-    -1, 0,
-#endif
 };
 
 /** Frame sequence of the running sailors of the crowd (the jumping fight), ended by -1. */
 static s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
-#if VERSION <= VERSION_DEMO_JP
     22, 22, 23, 23, -1,
-#else
-    22, 22, 23, 23, -1, 0,
-#endif
 };
 
 /** Frame sequence of the c_elmos crowd on the pirate ship, ended by -1. */
 static s16 elmos_animtbl[] = {
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, 30, 30, 31, 31,
-#if VERSION <= VERSION_DEMO_JP
     32, 32, 33, 33, -1,
-#else
-    32, 32, 33, 33, -1, 0,
-#endif
 };
 
 /** Frame sequence of the X-Naut ship's crowd (mass NPCs 205 to 304), ended by -1. */
@@ -944,22 +924,14 @@ static s16 dai3_animtbl[] = {
     39, 39, 40, 40, 40, 41, 41, 41,
     42, 42, 42, 43, 43, 43, 44, 44,
     44, 45, 45, 45, 46, 46, 46, 47,
-#if VERSION <= VERSION_DEMO_JP
     -1,
-#else
-    -1, 0,
-#endif
 };
 
 /** Running frame sequence of the X-Naut ship's crowd, ended by -1. */
 static s16 dai3_animtbl_run[] = {
     48, 48, 49, 49, 50, 50, 51, 51,
     52, 52, 53, 53, 54, 54, 55, 55,
-#if VERSION <= VERSION_DEMO_JP
     56, 56, 57, 57, -1,
-#else
-    56, 56, 57, 57, -1, 0,
-#endif
 };
 
 /**

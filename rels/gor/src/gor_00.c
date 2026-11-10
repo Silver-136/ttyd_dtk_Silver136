@@ -123,8 +123,8 @@ static void alpha_tev(MapTevCallbackInfo* info);
 #endif
 
 static ExtTexInfo nannpc_entry_data[41];
-static s16 dai3_animtbl[VERSION_PICK(42, 82)];
-static s16 dai3_run_animtbl[VERSION_PICK(22, 42)];
+static s16 dai3_animtbl[VERSION_PICK(41, 81)];
+static s16 dai3_run_animtbl[VERSION_PICK(21, 41)];
 static EvtWord no00_custom[48];
 static BeroEntry bero_entry_data[2];
 static EvtWord mony_init[18];
@@ -405,7 +405,7 @@ static s16 dai3_animtbl[] = {
     12, 12, 13, 13, 14, 14, 15, 15,
     16, 16, 17, 17, 18, 18, 19, 19,
 #endif
-    -1, 0,
+    -1,
 };
 
 /** Animation frame table for the harbor crowd while it runs. */
@@ -416,11 +416,11 @@ static s16 dai3_run_animtbl[] = {
     28, 28, 29, 29, 30, 30, 31, 31,
     32, 32, 33, 33, 34, 34, 35, 35,
     36, 36, 37, 37, 38, 38, 39, 39,
-    -1, 0,
+    -1,
 #else
     20, 21, 22, 23, 24, 25, 26, 27,
     28, 29, 30, 31, 32, 33, 34, 35,
-    36, 37, 38, 39, -1, 0,
+    36, 37, 38, 39, -1,
 #endif
 };
 

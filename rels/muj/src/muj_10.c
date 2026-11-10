@@ -60,13 +60,8 @@ EvtWord oidasare_event[156];
 
 static ExtTexInfo test_ext_entry_data[31];
 
-#if VERSION <= VERSION_DEMO_JP
 static s16 suifu_animtbl[41];
 static s16 elmos_animtbl[21];
-#else
-static s16 suifu_animtbl[42];
-static s16 elmos_animtbl[22];
-#endif
 
 static s32 senin_event_suifupos[380];
 static s32 senin_event_erumospos[180];
@@ -437,22 +432,14 @@ static s16 suifu_animtbl[] = {
     8, 8, 9, 9, 10, 10, 11, 11,
     12, 12, 13, 13, 14, 14, 15, 15,
     16, 16, 17, 17, 18, 18, 19, 19,
-#if VERSION <= VERSION_DEMO_JP
     -1,
-#else
-    -1, 0,
-#endif
 };
 
 /** Frame sequence of the Embers on the hidden dock, ended by -1. */
 static s16 elmos_animtbl[] = {
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
-#if VERSION <= VERSION_DEMO_JP
     28, 28, 29, 29, -1,
-#else
-    28, 28, 29, 29, -1, 0,
-#endif
 };
 
 /** Positions (x, y, z, facing) of the 95 sailors on the hidden dock, placed by senin_event. */
