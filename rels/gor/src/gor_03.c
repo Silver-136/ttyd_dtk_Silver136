@@ -142,7 +142,7 @@ static USER_FUNC(goryuugijo_door_init_slot);
 static USER_FUNC(goryuugijo_get_slot_phase);
 static USER_FUNC(goryuugijo_set_slot_phase);
 static USER_FUNC(kuzi_bomb_bomb_eff);
-USER_FUNC(kuzi_get_keihin);
+static USER_FUNC(kuzi_get_keihin);
 static USER_FUNC(mario_keyoff_wait);
 static USER_FUNC(setmertn);
 static USER_FUNC(teresa_badge_item_list_init);

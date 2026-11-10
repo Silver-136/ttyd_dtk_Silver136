@@ -45,7 +45,7 @@
 #define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success changes it by 24 per frame for 15 frames (-24 when FACE_DIR_TOWARD_UNIT gives >= 0, else +24)
 
 static USER_FUNC(_dictionary);
-USER_FUNC(_set_hustle);
+static USER_FUNC(_set_hustle);
 static USER_FUNC(_monosiri_flag_on);
 static USER_FUNC(btlevtcmd_get_monosiri_msg_no);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);

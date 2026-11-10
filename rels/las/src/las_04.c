@@ -78,7 +78,7 @@ static void firebar_disp(CameraId camera, void* param);
 
 static USER_FUNC(coin_entry);
 static USER_FUNC(firebar_disp_evt);
-USER_FUNC(firebar_entry);
+static USER_FUNC(firebar_entry);
 static void firebar_cb(FirebarWork* wp, s32 type);
 
 static EvtWord w_door_close[22];

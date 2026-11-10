@@ -52,7 +52,7 @@ typedef struct {
     Vec delta;
 } BeltWork;
 
-USER_FUNC(bg_cam_chk);
+static USER_FUNC(bg_cam_chk);
 static USER_FUNC(mario_chk);
 USER_FUNC(hit_group_chk);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);

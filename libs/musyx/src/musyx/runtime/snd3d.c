@@ -388,6 +388,9 @@ bool sndUpdateListener(SND_LISTENER* li, SND_FVECTOR* pos, SND_FVECTOR* dir, SND
 
 
 static u8 startGroupNum;            // size: 0x1
+// FAKE: extern on a file-local array (defined static further down) keeps its .bss place; a static declaration
+// here moves it (a static tentative is placed by its first declaration). The object gets a local copy plus an
+// unused external reference.
 extern START_LIST startListNum[64]; // size: 0x700
 static u8 startListNumnum;          // size: 0x1
 

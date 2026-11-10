@@ -92,7 +92,7 @@ static s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
-void ext_fan_dispent(void);
+static void ext_fan_dispent(void);
 
 static EvtWord s_door_open[58];
 static EvtWord s_door_close[58];

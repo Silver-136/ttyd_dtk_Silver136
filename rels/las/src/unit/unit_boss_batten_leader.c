@@ -57,7 +57,7 @@ static void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
 
 static USER_FUNC(_set_draw_callback);
 static USER_FUNC(btl_hitoffsetx);
-USER_FUNC(btlevtcmd_AnimeGetPose);
+static USER_FUNC(btlevtcmd_AnimeGetPose);
 static USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);
 static USER_FUNC(enzan_lw_load2);

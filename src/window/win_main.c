@@ -49,7 +49,7 @@
 #define HALF_F float_0p5_8041dc98
 static USER_FUNC(cam_r);
 USER_FUNC(lecture_key_mask_off);
-USER_FUNC(wait);
+static USER_FUNC(wait);
 USER_FUNC(all_party_slit_off);
 static USER_FUNC(party_color);
 static USER_FUNC(famicom_check);

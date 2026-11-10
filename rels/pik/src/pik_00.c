@@ -61,7 +61,7 @@
 
 static USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);
-USER_FUNC(under);
+static USER_FUNC(under);
 static USER_FUNC(zoom);
 
 #if VERSION >= VERSION_US

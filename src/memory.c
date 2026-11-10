@@ -19,6 +19,8 @@ struct MapAllocEntry {
 
 //.bss
 #if VERSION <= VERSION_DEMO_JP
+// FAKE: extern on the file-local smartWork (defined static below) so wp can point at it while it keeps its
+// .bss place; a static declaration here moves it, and `= {0}` would put it in .data.
 extern SmartWork smartWork;
 #else
 static SmartWork smartWork;

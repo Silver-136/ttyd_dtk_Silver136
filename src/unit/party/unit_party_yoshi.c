@@ -50,7 +50,7 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #include "icon_ids.h"
 
 USER_FUNC(yoshi_original_color_anim_set);
-USER_FUNC(_gundan_yoshi_run_effect);
+static USER_FUNC(_gundan_yoshi_run_effect);
 static USER_FUNC(_wait_yoshig_complete);
 static USER_FUNC(_wait_yoshig_run);
 static USER_FUNC(_check_swallow_attribute);

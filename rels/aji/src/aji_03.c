@@ -34,7 +34,7 @@
 #include "aji.h"
 #include <dolphin/pad.h>
 
-void icon_disp(CameraId camera, void* param);
+static void icon_disp(CameraId camera, void* param);
 
 static USER_FUNC(evt_sousa_icon);
 static USER_FUNC(item_chk);

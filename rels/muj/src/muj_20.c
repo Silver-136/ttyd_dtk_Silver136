@@ -83,7 +83,7 @@ static USER_FUNC(alpha_set_func);
 static USER_FUNC(elmos1000tai_init);
 static USER_FUNC(fune_eff);
 static USER_FUNC(kaizoku_fune_eff);
-USER_FUNC(logo);
+static USER_FUNC(logo);
 static USER_FUNC(marcoship_shizumu_func);
 static USER_FUNC(marcoship_yure_func);
 static USER_FUNC(marcoship_yure_init_func);

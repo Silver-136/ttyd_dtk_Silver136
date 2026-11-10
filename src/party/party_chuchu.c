@@ -58,8 +58,8 @@ static char* mobj_list[] = {
 /** Zero vector that starts the position of a nearby item when Ms. Mowz searches for treasure. */
 static const Vec vecA = {0.0f, 0.0f, 0.0f};
 
-USER_FUNC(set_msg);
-USER_FUNC(search_result);
+static USER_FUNC(set_msg);
+static USER_FUNC(search_result);
 static USER_FUNC(post_msg);
 
 /**

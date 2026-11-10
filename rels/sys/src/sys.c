@@ -69,7 +69,7 @@ typedef struct SysWork {
 static SysWork* g_wp;
 
 static USER_FUNC(bg);
-USER_FUNC(display);
+static USER_FUNC(display);
 static USER_FUNC(init);
 
 #if VERSION >= VERSION_US

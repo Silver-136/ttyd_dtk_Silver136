@@ -71,8 +71,8 @@ Placements that stay are needed or kept on purpose: SDK startup sections, paddin
 
 Same rule: every commit keeps all seven builds byte-identical (US 30 files, JP 32, PAL 33, US demo 7, JP demo 33, US demo 2 8, PAL demo 8, objdiff
 100 % code and data per unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory.py`, start = commit
-85ac972b, last counted <!--n:counted_date-->2026-11-10<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->8,878<!--/n--> tests in
-<!--n:version_tests_files-->873<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->3<!--/n-->, Demos <!--n:fakes_rows_demos-->12<!--/n-->). US retail is
+85ac972b, last counted <!--n:counted_date-->2026-11-10<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->8,875<!--/n--> tests in
+<!--n:version_tests_files-->873<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->3<!--/n-->, Demos <!--n:fakes_rows_demos-->13<!--/n-->). US retail is
 the readability priority. Comments that retell a script or describe a scene stay.
 
 | What | Start | Now |
@@ -84,7 +84,7 @@ the readability priority. Comments that retell a script or describe a scene stay
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
 | Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 60 units (one SDK unit, OSLink) |
 | Other optimizer and inline pragmas | 697 | <!--n:game_pragma_other-->203<!--/n--> |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | <!--n:game_fake_comment_sites-->694<!--/n--> in game code + <!--n:libs_fake_comment_sites-->27<!--/n--> in libs (FAKES.md rows 214 -> <!--n:fakes_rows-->482<!--/n-->). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | <!--n:game_fake_comment_sites-->695<!--/n--> in game code + <!--n:libs_fake_comment_sites-->28<!--/n--> in libs (FAKES.md rows 214 -> <!--n:fakes_rows-->484<!--/n-->). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
 | Doc comments | | about 12,000 functions and event scripts, 6,000 data tables and 1,240 files have a description, from LLCOOLT's readability pass (with the author's permission); the rest are open |
 | Certification review of `src/` | | every file read once (2026-10-27); about 3,500 edits kept where both builds stayed byte-identical: names and named constants, wrong or matching-process comments rewritten, dead code removed, `// BUG:` notes on retail oddities. The event scripts under `rels/` are not reviewed yet |
 | Inline asm in game code | 19 | <!--n:game_inline_asm-->9<!--/n--> |
