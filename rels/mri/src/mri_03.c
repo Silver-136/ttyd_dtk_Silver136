@@ -72,7 +72,7 @@ static EvtWord bero_custom_00[37];
 static BeroEntry bero_entry_data[3];
 static s16 puni_rand_position[178];
 static EvtWord jail_init_00[52];
-EvtWord red_jail_open[63];
+static EvtWord red_jail_open[63];
 static EvtWord evt_opendoor00[19];
 static EvtWord evt_unlock00[6];
 static EvtWord evt_unlock00_01[4];
@@ -85,9 +85,9 @@ EvtWord evt_check00[23];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord blue_jail_open[60];
+static EvtWord blue_jail_open[60];
 #else
-EvtWord blue_jail_open[65];
+static EvtWord blue_jail_open[65];
 #endif
 
 static EvtWord evt_opendoor01[19];
@@ -114,9 +114,9 @@ s32 JailAwayTable_New[15];
 static EvtWord kinoko_small[35];
 
 #if VERSION >= VERSION_US
-EvtWord guide_sister[769];
+static EvtWord guide_sister[769];
 #else
-EvtWord guide_sister[775];
+static EvtWord guide_sister[775];
 #endif
 
 static EvtWord elder_shaberi[13];
@@ -127,7 +127,7 @@ extern EvtWord toraware_elder[];
 EvtWord toraware_elder[423];
 #endif
 
-EvtWord guide_sister_before[128];
+static EvtWord guide_sister_before[128];
 static KusaAccess ueki_access_data[5];
 EvtWord mri_03_init_evt[206];
 
@@ -776,7 +776,7 @@ EVT_END()
  * Opens the red cell door: sets GSWF_MRI_03_RED_JAIL_OPENED,
  * swings the door open with a sound and turns off its collision groups. Called when the door unlocks.
  */
-EVT_BEGIN(red_jail_open)
+static EVT_BEGIN(red_jail_open)
     SET_VALUE(GSWF_MRI_03_RED_JAIL_OPENED, 1)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
@@ -847,7 +847,7 @@ EVT_END()
  * Opens the blue cell door: sets GSWF_MRI_03_BLUE_JAIL_OPENED, swings the door open with a sound,
  * disables its collision groups and runs the scene with Punio's sister (guide_sister).
  */
-EVT_BEGIN(blue_jail_open)
+static EVT_BEGIN(blue_jail_open)
     SET_VALUE(GSWF_MRI_03_BLUE_JAIL_OPENED, 1)
 #if VERSION < VERSION_US
     CALL(evt_mario_key_onoff, 0)
@@ -1259,7 +1259,7 @@ EVT_END()
  * Petuni gives Punio a Dried Shroom that shrinks as he eats it, and Petuni joins the Puni group (GSWF_MRI_PETUNI_JOINED).
  * Sets the story to STG2_20_PUNIO_PETUNI.
  */
-EVT_BEGIN(guide_sister)
+static EVT_BEGIN(guide_sister)
     // The Punies step back from the opened blue cell and Mario and his partner spin around.
 #if VERSION < VERSION_US
     CALL(evt_mario_key_onoff, 0)
@@ -1623,7 +1623,7 @@ EVT_END()
  * Short scene before the blue cell opens (story STG2_19_INSIDE_THE_BLUE_CELL): Punio waits by the cell and talks;
  * sets GSWF_MRI_PUNIO_WAITING_AT_JAIL and the story to STG2_19_01_PUNIO_PETUNI_BEFORE.
  */
-EVT_BEGIN(guide_sister_before)
+static EVT_BEGIN(guide_sister_before)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_puni_wait_systemmode, 2)
     CALL(evt_mario_set_dir, 270, 0, 0)

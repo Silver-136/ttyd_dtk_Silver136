@@ -30,7 +30,7 @@ static EvtWord e1_door_open[22];
 static EvtWord e2_door_close[22];
 static EvtWord e2_door_open[22];
 static EvtWord door_matigai_evt[15];
-EvtWord door_seikai_evt[19];
+static EvtWord door_seikai_evt[19];
 static BeroEntry bero_entry_data[5];
 static BeroEntry e_bero_1_matigai[1];
 static BeroEntry e_bero_1_seikai[1];
@@ -39,7 +39,7 @@ static const char* taimatu_data[16];
 static EvtWord hikari_anim[52];
 static EvtWord taimatu_evt[18];
 static s32 mugen_kairou_list[7];
-EvtWord mugen_kairou_init[96];
+static EvtWord mugen_kairou_init[96];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_08_init_evt[];
@@ -168,7 +168,7 @@ static EVT_BEGIN(door_matigai_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(door_seikai_evt)
+static EVT_BEGIN(door_seikai_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         ADD(GSW_LAS_08_CORRECT_DOOR_COUNT, 1)
         IF_INT_GREATER_OR_EQUAL(GSW_LAS_08_CORRECT_DOOR_COUNT, 7)
@@ -402,7 +402,7 @@ static s32 mugen_kairou_list[] = {
  * so that the right one counts the round (the list entry, 7 or 3, decides which; in the last round e_bero_1
  * keeps its exit to las_09).
  */
-EVT_BEGIN(mugen_kairou_init)
+static EVT_BEGIN(mugen_kairou_init)
     CALL_CHILD(taimatu_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         CALL(mugen_kairou_get_list, GSW_LAS_08_CORRECT_DOOR_COUNT, LW(0))

@@ -81,12 +81,12 @@ extern EvtWord boss_noko_talk[];
 EvtWord boss_noko_talk[352];
 #endif
 
-EvtWord nokorin_init[30];
+static EvtWord nokorin_init[30];
 
 #if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
-EvtWord nokorin_talk[281];
+static EvtWord nokorin_talk[281];
 #else
-EvtWord nokorin_talk[267];
+static EvtWord nokorin_talk[267];
 #endif
 
 static EvtWord odoriko_1_talk[44];
@@ -634,7 +634,7 @@ EVT_END()
  * while Koops has joined but she has not yet spoken to him (STG1_07 up to before 17) she stands at (30, 50, -315)
  * instead.
  */
-EVT_BEGIN(nokorin_init)
+static EVT_BEGIN(nokorin_init)
     CALL(evt_npc_set_position, STRING("me"), -85, 50, -300)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
@@ -647,7 +647,7 @@ EVT_BEGIN(nokorin_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(nokorin_talk)
+static EVT_BEGIN(nokorin_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 0)

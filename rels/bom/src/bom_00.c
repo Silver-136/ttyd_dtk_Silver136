@@ -25,7 +25,7 @@ static EvtWord evt_tree[7];
 static EvtWord first_evt_dokan[36];
 static BeroEntry bero_entry_data[3];
 static EvtWord first_evt[108];
-EvtWord first_evt2[101];
+static EvtWord first_evt2[101];
 EvtWord bom_00_init_evt[66];
 
 /** Starts the snowfall effect (snowfall_n64) shared by the Fahr Outpost field maps. */
@@ -148,7 +148,7 @@ EVT_END()
  * the camera pulls down from above, Mario and the partner walk in from the pipe
  * and the partner comments (stg7_bom_01_00). It does not advance the story.
  */
-EVT_BEGIN(first_evt2)
+static EVT_BEGIN(first_evt2)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

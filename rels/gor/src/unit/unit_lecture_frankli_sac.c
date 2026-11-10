@@ -19,7 +19,7 @@
 #include "battle/battle_event_default.h"
 #include "battle/battle_sub.h"
 
-u8 dark;
+static u8 dark;
 static s32 darkCount;
 f32 point[4];
 #include "battle/battle_break_slot.h"
@@ -32,7 +32,7 @@ f32 point[4];
 static USER_FUNC(_battle_set_lecture_unit_id);
 static USER_FUNC(_set_actend_event);
 static USER_FUNC(aud_attack_end);
-USER_FUNC(aud_attack_init);
+static USER_FUNC(aud_attack_init);
 static USER_FUNC(aud_dec);
 static USER_FUNC(aud_inc);
 static USER_FUNC(aud_joy);
@@ -293,7 +293,7 @@ static USER_FUNC(hammer_on) {
  * Script helper that starts the audience attack part of the lecture:
  * sets the lecture flag and remembers the message window id.
  */
-USER_FUNC(aud_attack_init) {
+static USER_FUNC(aud_attack_init) {
     BattleWork* wp = _battleWorkPointer;
 
     wp->lectureFlags |= 1;

@@ -48,7 +48,7 @@ static EvtWord evt_machibuse[VERSION_PICK(666, 694)];
 static BeroEntry bero_entry_data[3];
 static NpcSetupInfo npcEnt[2];
 static TreeAccess tree_tbl[2];
-EvtWord evt_majin_key[5];
+static EvtWord evt_majin_key[5];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord gra_00_init_evt[];
@@ -643,7 +643,7 @@ static TreeAccess tree_tbl[] = {
 };
 
 /** Pickup callback of the Black Key: sets GSWF_GRA_00_BLACK_KEY so the key is not spawned again. */
-EVT_BEGIN(evt_majin_key)
+static EVT_BEGIN(evt_majin_key)
     SET_VALUE(GSWF_GRA_00_BLACK_KEY, 1)
     RETURN
 EVT_END()

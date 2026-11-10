@@ -75,7 +75,7 @@ static EvtWord partySandersAttack_CounterSet[201];
 static EvtWord partySandersAttack_TimeBombSet[290];
 #endif
 
-EvtWord _shot_bomb_event[155];
+static EvtWord _shot_bomb_event[155];
 static EvtWord sanders_appeal_event[121];
 static EvtWord attack_audience_event[284];
 EvtWord sanders_battle_end_event[14];
@@ -1483,7 +1483,7 @@ EVT_END()
  * Spawned by Bomb Squad for each bomb (LW(3)): flies it along the arc given by the angle LW(0) and power LW(1),
  * then bounces it to a stop, deletes it if it landed off the stage, and starts its fuse sizzle.
  */
-EVT_BEGIN(_shot_bomb_event)
+static EVT_BEGIN(_shot_bomb_event)
     CALL(_shot_move, LW(3), LW(0), LW(1), LW(0), LW(1), LW(2), LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     SET_FLOAT_VALUE(LW(6), LW(5))

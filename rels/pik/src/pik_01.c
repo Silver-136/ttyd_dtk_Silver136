@@ -64,7 +64,7 @@ static const char* name_tbl[2];
 static EvtWord evt_powan[346];
 static EvtWord init_powan[18];
 static EvtWord talk_powan[8];
-EvtWord miyageya_talk[563];
+static EvtWord miyageya_talk[563];
 static EvtWord miyageya_init[24];
 static s32 iri_29_item_tbl1[2];
 static s32 iri_29_item_tbl2[2];
@@ -375,7 +375,7 @@ EVT_END()
  * Otherwise story-progress dependent chatter, with a special line during the Bowser interlude (STG7_20 to
  * 25).
  */
-EVT_BEGIN(miyageya_talk)
+static EVT_BEGIN(miyageya_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
 
         // Once Mario looks like Luigi, a longer scene plays.

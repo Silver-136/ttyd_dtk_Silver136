@@ -56,7 +56,7 @@ static USER_FUNC(kusuri_list_add);
 static USER_FUNC(kusuri_list_get_no);
 static USER_FUNC(kusuri_list_init);
 static USER_FUNC(peach_chg_pose);
-USER_FUNC(peach_evt_seikai_check);
+static USER_FUNC(peach_evt_seikai_check);
 static USER_FUNC(peach_evt_toumei_onoff);
 static USER_FUNC(peach_set_scale);
 static USER_FUNC(yuka_anim_reverse_end);
@@ -93,40 +93,40 @@ extern EvtWord peach_evt_kusuri_select[];
 EvtWord peach_evt_kusuri_select[73];
 #endif
 
-EvtWord peach_evt_pick_kusuri[55];
-EvtWord peach_evt_check_all_kusuri_set[72];
-EvtWord peach_evt_kusuri_dasu[141];
+static EvtWord peach_evt_pick_kusuri[55];
+static EvtWord peach_evt_check_all_kusuri_set[72];
+static EvtWord peach_evt_kusuri_dasu[141];
 static EvtWord peach_evt_seikai_evt[33];
-EvtWord peach_evt_kaihei1[187];
-EvtWord peach_evt_kaihei2[174];
-EvtWord peach_evt_kaihei3[174];
-EvtWord peach_evt_kaihei4[174];
-EvtWord peach_evt_stop_renji[15];
+static EvtWord peach_evt_kaihei1[187];
+static EvtWord peach_evt_kaihei2[174];
+static EvtWord peach_evt_kaihei3[174];
+static EvtWord peach_evt_kaihei4[174];
+static EvtWord peach_evt_stop_renji[15];
 static EvtWord peach_evt_pato_on[46];
 static EvtWord peach_evt_pato_off[18];
 static EvtWord peach_evt_hari_on[100];
 static EvtWord peach_evt_hari_off[27];
-EvtWord peach_evt_sugata_modoru[85];
-EvtWord peach_evt_kusuri_nomu[435];
+static EvtWord peach_evt_sugata_modoru[85];
+static EvtWord peach_evt_kusuri_nomu[435];
 static EvtWord kusuri_color_seiko[52];
 static EvtWord kusuri_color_sippai[93];
 static s32 peach_evt_bika_move_data[33];
-EvtWord peach_evt_tyogo_sub[432];
-EvtWord peach_evt_tyogo[557];
-EvtWord peach_evt_tyogo_entry[6];
-EvtWord peach_evt_kusuri_aka[19];
-EvtWord peach_evt_kusuri_ao[19];
-EvtWord peach_evt_kusuri_ki[19];
-EvtWord peach_evt_kusuri_mid[19];
-EvtWord peach_evt_wait_memo[18];
-EvtWord peach_evt_memo1[20];
+static EvtWord peach_evt_tyogo_sub[432];
+static EvtWord peach_evt_tyogo[557];
+static EvtWord peach_evt_tyogo_entry[6];
+static EvtWord peach_evt_kusuri_aka[19];
+static EvtWord peach_evt_kusuri_ao[19];
+static EvtWord peach_evt_kusuri_ki[19];
+static EvtWord peach_evt_kusuri_mid[19];
+static EvtWord peach_evt_wait_memo[18];
+static EvtWord peach_evt_memo1[20];
 static EvtWord peach_evt_memo2[20];
 static EvtWord peach_evt_memo3[20];
 static EvtWord peach_evt_memo4[20];
 static EvtWord peach_evt_stg5[385];
 static EvtWord peach_evt_matigai_kusuri[14];
-EvtWord peach_evt_tadashii_kusuri[155];
-EvtWord peach_evt_door[75];
+static EvtWord peach_evt_tadashii_kusuri[155];
+static EvtWord peach_evt_door[75];
 static EvtWord peach_evt_stg5_1[258];
 static EvtWord kikai_init[137];
 static EvtWord evt_memo1[14];
@@ -387,7 +387,7 @@ EVT_END()
  * removes the potion item object (kusuri_aka, kusuri_ao, kusuri_ki or kusuri_mid) and,
  * if the start had already been armed (LSWF_AJI_06_MIX_START_OFFERED), cancels it and silences the siren.
  */
-EVT_BEGIN(peach_evt_pick_kusuri)
+static EVT_BEGIN(peach_evt_pick_kusuri)
     SWITCH(LW(0))
         CASE_EQUAL(1)
         SET_VALUE(LSWF_AJI_06_RED_POTION_HELD, 1)
@@ -418,7 +418,7 @@ EVT_END()
  * on yes (peach_aji_229) the mixing case script (peach_evt_tyogo_entry) is attached to the start switch A_sui1
  * and the siren S_pato1 starts to turn; on no (peach_aji_228) nothing is armed.
  */
-EVT_BEGIN(peach_evt_check_all_kusuri_set)
+static EVT_BEGIN(peach_evt_check_all_kusuri_set)
     SET_VALUE(LW(0), LSW_AJI_06_SLOT_1_POTION)
     ADD(LW(0), LSW_AJI_06_SLOT_2_POTION)
     ADD(LW(0), LSW_AJI_06_SLOT_3_POTION)
@@ -453,7 +453,7 @@ EVT_END()
  * If a press was accepted in the timing window (LSWF_AJI_06_DISPENSE_PRESSED), the beaker contents S_naka also rise by an eighth
  * (GW(10)) and the potion's colour is blended in (kusuri_color_set); LSWF_AJI_06_DISPENSE_PRESSED is cleared at the end.
  */
-EVT_BEGIN(peach_evt_kusuri_dasu)
+static EVT_BEGIN(peach_evt_kusuri_dasu)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_ONCE, 0)
@@ -530,7 +530,7 @@ EVT_END()
  * of kusuri_tyogo_list (peach_evt_seikai_check): right adds 1 to the score GW(13) and flashes the slot's lamps,
  * wrong subtracts 1.
  */
-EVT_BEGIN(peach_evt_kaihei1)
+static EVT_BEGIN(peach_evt_kaihei1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LSWF_AJI_06_MIXING_RUNNING, 0)
@@ -605,7 +605,7 @@ EVT_END()
  * Case script of the second mixing slot (A_sui3):
  * uses slot 2 (potion placed at x = -65).
  */
-EVT_BEGIN(peach_evt_kaihei2)
+static EVT_BEGIN(peach_evt_kaihei2)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LSWF_AJI_06_MIXING_RUNNING, 0)
@@ -678,7 +678,7 @@ EVT_END()
  * Case script of the third mixing slot (A_sui4):
  * uses slot 3 (potion placed at x = -10).
  */
-EVT_BEGIN(peach_evt_kaihei3)
+static EVT_BEGIN(peach_evt_kaihei3)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LSWF_AJI_06_MIXING_RUNNING, 0)
@@ -751,7 +751,7 @@ EVT_END()
  * Case script of the fourth mixing slot (A_sui5):
  * uses slot 4 (potion placed at x = 35).
  */
-EVT_BEGIN(peach_evt_kaihei4)
+static EVT_BEGIN(peach_evt_kaihei4)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LSWF_AJI_06_MIXING_RUNNING, 0)
@@ -825,7 +825,7 @@ EVT_END()
  * in the last step (GW(11) = 8) while the machine is heating (LSWF_AJI_06_DISPENSE_WINDOW_OPEN) it sets LSWF_AJI_06_DISPENSE_PRESSED,
  * which ends the wait for the stop-switch press.
  */
-EVT_BEGIN(peach_evt_stop_renji)
+static EVT_BEGIN(peach_evt_stop_renji)
     IF_INT_EQUAL(GW(11), 8)
         IF_INT_EQUAL(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 1)
             SET_VALUE(LSWF_AJI_06_DISPENSE_PRESSED, 1)
@@ -920,7 +920,7 @@ EVT_END()
  * After Peach has grown or shrunk from a wrong potion,
  * scales her back to normal size over time (peach_set_scale), starting from big or small depending on LSW_AJI_06_WRONG_POTION_EFFECT.
  */
-EVT_BEGIN(peach_evt_sugata_modoru)
+static EVT_BEGIN(peach_evt_sugata_modoru)
     WAIT_MS(15000)
     SWITCH(LSW_AJI_06_WRONG_POTION_EFFECT)
         CASE_EQUAL(0)
@@ -958,7 +958,7 @@ EVT_END()
  * If it was right she turns invisible (SFX_PEACH_TOUMEI1, peach_evt_toumei_onoff, evt_peach_set_condition 2),
  * the scene plays (peach_aji_237 to 242) and the story becomes STG5_45_PEACH_POTION_PUZZLE.
  */
-EVT_BEGIN(peach_evt_kusuri_nomu)
+static EVT_BEGIN(peach_evt_kusuri_nomu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_adjust_dir)
 
@@ -1166,7 +1166,7 @@ static s32 peach_evt_bika_move_data[] = {
  * A score of at least 9 plays kusuri_color_seiko; anything less
  * kusuri_color_sippai.
  */
-EVT_BEGIN(peach_evt_tyogo_sub)
+static EVT_BEGIN(peach_evt_tyogo_sub)
     CALL(evt_mario_key_onoff, 0)
 
     // The machine stops its floor and TEC tells Peach to press the button where the beaker stops
@@ -1346,7 +1346,7 @@ EVT_END()
  * (peach_aji_232, 233) and attaches peach_evt_kusuri_nomu to A_bika1;
  * no empties the machine and opens the hatches for another try.
  */
-EVT_BEGIN(peach_evt_tyogo)
+static EVT_BEGIN(peach_evt_tyogo)
     // The machine is started: the hatches close and the sirens stop.
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1528,14 +1528,14 @@ EVT_END()
 /**
  * Case script entry for the start switch: spawns peach_evt_tyogo and deletes its case.
  */
-EVT_BEGIN(peach_evt_tyogo_entry)
+static EVT_BEGIN(peach_evt_tyogo_entry)
     SPAWN_EVENT(peach_evt_tyogo)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
 
 /** Collects the red potion item (kusuri_aka) and waits for the get-item sequence to end. */
-EVT_BEGIN(peach_evt_kusuri_aka)
+static EVT_BEGIN(peach_evt_kusuri_aka)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_aka"))
     CALL(evt_item_get_item_end_wait, STRING("kusuri_aka"))
@@ -1546,7 +1546,7 @@ EVT_BEGIN(peach_evt_kusuri_aka)
 EVT_END()
 
 /** Collects the blue potion item (kusuri_ao) and waits for the get-item sequence to end. */
-EVT_BEGIN(peach_evt_kusuri_ao)
+static EVT_BEGIN(peach_evt_kusuri_ao)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_ao"))
     CALL(evt_item_get_item_end_wait, STRING("kusuri_ao"))
@@ -1557,7 +1557,7 @@ EVT_BEGIN(peach_evt_kusuri_ao)
 EVT_END()
 
 /** Collects the orange potion item (kusuri_ki) and waits for the get-item sequence to end. */
-EVT_BEGIN(peach_evt_kusuri_ki)
+static EVT_BEGIN(peach_evt_kusuri_ki)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_ki"))
     CALL(evt_item_get_item_end_wait, STRING("kusuri_ki"))
@@ -1568,7 +1568,7 @@ EVT_BEGIN(peach_evt_kusuri_ki)
 EVT_END()
 
 /** Collects the green potion item (kusuri_mid) and waits for the get-item sequence to end. */
-EVT_BEGIN(peach_evt_kusuri_mid)
+static EVT_BEGIN(peach_evt_kusuri_mid)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_mid"))
     CALL(evt_item_get_item_end_wait, STRING("kusuri_mid"))
@@ -1579,7 +1579,7 @@ EVT_BEGIN(peach_evt_kusuri_mid)
 EVT_END()
 
 /** Waits until no memo text is being shown (LSWF_AJI_06_PEACH_MSG_OPEN = 0), so that machine messages do not collide with a memo. */
-EVT_BEGIN(peach_evt_wait_memo)
+static EVT_BEGIN(peach_evt_wait_memo)
     LOOP(0)
         IF_INT_EQUAL(LSWF_AJI_06_PEACH_MSG_OPEN, 0)
             WAIT_FRAMES(1)
@@ -1593,7 +1593,7 @@ EVT_BEGIN(peach_evt_wait_memo)
 EVT_END()
 
 /** Peach reads recipe memo 1 (peach_aji_225_1); LSWF_AJI_06_PEACH_MSG_OPEN is set while the text is up. */
-EVT_BEGIN(peach_evt_memo1)
+static EVT_BEGIN(peach_evt_memo1)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_225_1"), 0, 0)
@@ -1723,7 +1723,7 @@ static EVT_BEGIN(peach_evt_matigai_kusuri)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_tadashii_kusuri)
+static EVT_BEGIN(peach_evt_tadashii_kusuri)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_adjust_dir)
     CALL(evt_del_case_evt, 0, LW(0))
@@ -1768,7 +1768,7 @@ EVT_BEGIN(peach_evt_tadashii_kusuri)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_door)
+static EVT_BEGIN(peach_evt_door)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_AJI_06_RIGHT_POTION_CHOSEN, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_255_01"), 0, 0)
@@ -2120,7 +2120,7 @@ static USER_FUNC(peach_set_scale) {
  * Script function: checks whether the potion number in args[1] equals step args[0] of kusuri_tyogo_list (1, 2,
  * 3, 2, 3, 1, 3, 4); returns 1 or 0 in args[2].
  */
-USER_FUNC(peach_evt_seikai_check) {
+static USER_FUNC(peach_evt_seikai_check) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     s32 v = evtGetValue(event, args[1]);

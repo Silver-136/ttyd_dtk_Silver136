@@ -47,15 +47,15 @@ static EvtWord main_0[491];
 #endif
 #endif
 
-EvtWord init_1[37];
+static EvtWord init_1[37];
 
 #if VERSION >= VERSION_US
-EvtWord main_1[465];
+static EvtWord main_1[465];
 #else
 #if VERSION <= VERSION_DEMO_JP
-EvtWord main_1[489];
+static EvtWord main_1[489];
 #else
-EvtWord main_1[491];
+static EvtWord main_1[491];
 #endif
 #endif
 
@@ -558,7 +558,7 @@ EVT_END()
  * Map-init helper for the floating block blk_1:
  * moves it 489 units up if its saved state LSWF_GON_05_FLOAT_BLOCK_1_MOVED says it was raised.
  */
-EVT_BEGIN(init_1)
+static EVT_BEGIN(init_1)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_1"), LW(5))
@@ -580,7 +580,7 @@ EVT_END()
  * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF_GON_05_FLOAT_BLOCK_1_MOVED.
  * A descending head-contact match reverses the block and cancels the switch press.
  */
-EVT_BEGIN(main_1)
+static EVT_BEGIN(main_1)
 #if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif

@@ -58,7 +58,7 @@ EvtWord powerdownya_face_left[16];
 #if VERSION >= VERSION_US
 static EvtWord powerdownya_mario_level_rtn[639];
 static EvtWord powerdownya_party_lank_rtn[963];
-EvtWord powerdownya_table_talk[105];
+static EvtWord powerdownya_table_talk[105];
 #else
 #if VERSION == VERSION_DEMO_JP
 static EvtWord powerdownya_mario_level_rtn[613];
@@ -67,7 +67,7 @@ static EvtWord powerdownya_party_lank_rtn[896];
 static EvtWord powerdownya_mario_level_rtn[616];
 static EvtWord powerdownya_party_lank_rtn[937];
 #endif
-EvtWord powerdownya_table_talk[84];
+static EvtWord powerdownya_table_talk[84];
 #endif
 
 static EvtWord powerdownya_direct_talk[8];
@@ -859,7 +859,7 @@ static EVT_BEGIN(powerdownya_party_lank_rtn)
     RETURN
 EVT_END()
 
-EVT_BEGIN(powerdownya_table_talk)
+static EVT_BEGIN(powerdownya_table_talk)
     CALL(setmertn, STRING("パワーダウン屋"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

@@ -22,19 +22,19 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[4];
-BattleWeapon weapon_boomerang_bros_attack;
-BattleWeapon weapon_boomerang_bros_renzoku_attack;
+static BattleWeapon weapon_boomerang_bros_attack;
+static BattleWeapon weapon_boomerang_bros_renzoku_attack;
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
 static EvtWord attack_event[71];
 static EvtWord damage_check_sub[107];
 static EvtWord damage_check_no_last[7];
 static EvtWord damage_check_last[38];
-EvtWord boomerang_move_event[355];
+static EvtWord boomerang_move_event[355];
 static EvtWord normal_attack_event[174];
 static EvtWord renzoku_attack_event[178];
-EvtWord normal_attack_event_confuse[322];
-EvtWord renzoku_attack_event_confuse[328];
+static EvtWord normal_attack_event_confuse[322];
+static EvtWord renzoku_attack_event_confuse[328];
 static EvtWord wait_event[6];
 
 /**
@@ -160,7 +160,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of the Boomerang Bro's attack: 2 damage. */
-BattleWeapon weapon_boomerang_bros_attack = {
+static BattleWeapon weapon_boomerang_bros_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -197,7 +197,7 @@ BattleWeapon weapon_boomerang_bros_attack = {
 };
 
 /** Weapon of the Boomerang Bro's rapid-fire attack: 2 damage. */
-BattleWeapon weapon_boomerang_bros_renzoku_attack = {
+static BattleWeapon weapon_boomerang_bros_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -378,7 +378,7 @@ EVT_END()
  * UNIT_WORK_AC_DEFENCE_DONE, the guard-result flag, is cleared before the return hits.
  * Once back the part is hidden again and UNIT_WORK_RETURNED (boomerangs returned) goes up by one.
  */
-EVT_BEGIN(boomerang_move_event)
+static EVT_BEGIN(boomerang_move_event)
     // The boomerang is thrown: its throw sound plays and it appears spinning above the Boomerang Bro's hand.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -649,7 +649,7 @@ EVT_END()
  * Then for each selected target a dodge plays the matching avoid reaction,
  * and a hit gets two damage checks 30 to 40 frames apart (the guard result is taken once, UNIT_WORK_AC_DEFENCE_DONE).
  */
-EVT_BEGIN(normal_attack_event_confuse)
+static EVT_BEGIN(normal_attack_event_confuse)
     // The attack is announced and it waits for any guard movement to end, with the targets being those of its own side.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_attack))
@@ -763,7 +763,7 @@ EVT_END()
  * and a hit gets four damage checks 30 to 40 frames apart.
  * Nothing in this unit runs it; renzoku_attack_event uses normal_attack_event_confuse instead.
  */
-EVT_BEGIN(renzoku_attack_event_confuse)
+static EVT_BEGIN(renzoku_attack_event_confuse)
     // The attack is announced and it waits for any guard movement to end, with the targets being those of its own side.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_renzoku_attack))

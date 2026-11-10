@@ -806,7 +806,7 @@ static USER_FUNC(set_weapon) {
 }
 
 /** Hides (args[0] 0) or shows the audience. */
-USER_FUNC(aud_set_draw) {
+static USER_FUNC(aud_set_draw) {
     EvtWord* args = event->args;
     BattleAudience* a = BattleAudienceBaseGetPtr();
     if (evtGetValue(event, args[0]) == 0) {

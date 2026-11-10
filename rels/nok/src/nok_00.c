@@ -51,7 +51,7 @@ typedef struct PosterWork {
     s32 group;
     s32 shape;
 } PosterWork;
-PosterWork* poster;
+static PosterWork* poster;
 static void draw_poster(void* userdata, s32 group, Mtx* modeling);
 
 static USER_FUNC(pposter_init);
@@ -59,7 +59,7 @@ static USER_FUNC(pposter_nok_on);
 
 static EvtWord nokonoko_A_init[27];
 static EvtWord nokonoko_A_regl[2];
-EvtWord nokonoko_A_talk[55];
+static EvtWord nokonoko_A_talk[55];
 static EvtWord nokonoko_B_init[12];
 static EvtWord nokonoko_B_regl[19];
 static EvtWord nokonoko_B_talk[44];
@@ -105,7 +105,7 @@ EvtWord first_time_camera[195];
 
 static HitDamageReturn hitDmgRetPoints[10];
 static EvtWord nok_00_koopa_npc_entry[35];
-EvtWord nok_00_koopa_evt[1250];
+static EvtWord nok_00_koopa_evt[1250];
 EvtWord nok_00_init_evt[205];
 
 /**
@@ -113,7 +113,7 @@ EvtWord nok_00_init_evt[205];
  * Once the message entry index exceeds 49 it sets the local flag LSWF_NOK_00_KOOPA_MSG_CUE,
  * which releases the parallel thread waiting to switch Kammy's animation.
  */
-void nok_stg2_013_cb(s32 type, void** work) {
+static void nok_stg2_013_cb(s32 type, void** work) {
     s32* msg = *work;
 
     switch (type) {
@@ -160,7 +160,7 @@ EVT_END()
  * before father and son reunite, before Frankly's house, the chapter 7 hint about General White,
  * and after the finale). In chapter 7 he sets GSWF_NOK_GENERAL_WHITE_HINT_HEARD.
  */
-EVT_BEGIN(nokonoko_A_talk)
+static EVT_BEGIN(nokonoko_A_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_02"), 0, 0)
@@ -895,7 +895,7 @@ EVT_END()
  * and the story advances to STG2_25_05_BOWSER_PETALBURG.
  * Saving is offered and the scene continues into the next Bowser action stage (mri_00).
  */
-EVT_BEGIN(nok_00_koopa_evt)
+static EVT_BEGIN(nok_00_koopa_evt)
     // The Bowser interlude begins in the quiet village.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))

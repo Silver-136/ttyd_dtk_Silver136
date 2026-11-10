@@ -46,12 +46,12 @@ EvtWord evt_to_tou[293];
 #endif
 
 static EvtWord evt_pos_keep[39];
-EvtWord evt_to_gor[247];
+static EvtWord evt_to_gor[247];
 static const char* kemuri_name[5];
 static EvtWord tou_00_koopa_evt[678];
 static EvtWord hkoopa_init[7];
 static NpcSetupInfo npcEnt[2];
-EvtWord evt_skip[43];
+static EvtWord evt_skip[43];
 EvtWord tou_00_init_evt[76];
 
 /**
@@ -271,7 +271,7 @@ static EVT_BEGIN(evt_pos_keep)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_to_gor)
+static EVT_BEGIN(evt_to_gor)
     CALL(evt_cam3d_evt_set, 0, 241, 534, 0, 145, -8, 0, EASING_LINEAR)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -658,7 +658,7 @@ static NpcSetupInfo npcEnt[] = {
  * Lets the player skip the blimp scene: after 1.1 s,
  * A or B ends the scene and changes map (tou_01 normally, or back to gor_04 on the return trip).
  */
-EVT_BEGIN(evt_skip)
+static EVT_BEGIN(evt_skip)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1100)
     LOOP(0)

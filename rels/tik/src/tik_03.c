@@ -25,7 +25,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-EvtWord bero_05_custom_in[30];
+static EvtWord bero_05_custom_in[30];
 static EvtWord bero_05_custom_out[12];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -42,13 +42,13 @@ static EvtWord puni_walk_se[20];
 static EvtWord puni_soguu_3[584];
 static EvtWord anm_para_snd[72];
 static EvtWord anm_rapa_snd[72];
-EvtWord puni_switch[133];
+static EvtWord puni_switch[133];
 static EvtWord puni_nakama[93];
-EvtWord tik03_switch_evt[70];
+static EvtWord tik03_switch_evt[70];
 EvtWord tik_03_init_evt[116];
 
 // Returning after the boss clears the visit-local gift and game-win flags.
-EVT_BEGIN(bero_05_custom_in)
+static EVT_BEGIN(bero_05_custom_in)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
             SET_VALUE(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -486,7 +486,7 @@ EVT_END()
  * the camera shakes, success jingle plays, the wall (kabe_1) is replaced and the passage (para) opens.
  * Sets GSWF_TIK_03_SECRET_PASSAGE_OPEN and story progress STG1_34_PUNIS_SECRET_PASSAGE.
  */
-EVT_BEGIN(puni_switch)
+static EVT_BEGIN(puni_switch)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -563,7 +563,7 @@ EVT_END()
  * hides the wall and sets GSWF_TIK_03_SECRET_PASSAGE_OPEN;
  * pressed while open, it plays the closing animation (anm_rapa), clears the flag and restores the hit areas.
  */
-EVT_BEGIN(tik03_switch_evt)
+static EVT_BEGIN(tik03_switch_evt)
     IF_INT_EQUAL(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
         CALL(evt_map_playanim, STRING("anm_para"), MAP_ANIM_PLAY_ONCE, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)

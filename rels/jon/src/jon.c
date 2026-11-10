@@ -109,8 +109,8 @@ extern EvtWord enemy_setup[];
 EvtWord enemy_setup[1055];
 #endif
 
-s32 treasure_tbl[10];
-EvtWord evt_open_box[46];
+static s32 treasure_tbl[10];
+static EvtWord evt_open_box[46];
 static EvtWord move_event[55];
 static EvtWord get_map_name[111];
 
@@ -147,7 +147,7 @@ static EvtWord setup_boss[9];
 static BeroEntry bero_return[4];
 static BeroEntry bero_return2[2];
 static BeroEntry bero_return3[2];
-EvtWord setup_return[190];
+static EvtWord setup_return[190];
 static BeroEntry bero_prev_return[3];
 static BeroEntry bero_prev_return2[2];
 static BeroEntry bero_prev_return3[2];
@@ -170,7 +170,7 @@ static EvtWord iri_12_makkino_buruburu[44];
 EvtWord iri_12_makkino_okiru[33];
 static EvtWord iri_12_makkino_talk[55];
 static EvtWord iri_12_makkino_fall[79];
-EvtWord iri_12_makkino_fall_return[71];
+static EvtWord iri_12_makkino_fall_return[71];
 static EvtWord iri_12_init_fall[38];
 static EvtWord iri_12_init[65];
 static EvtWord evt_iri_30_touch_rakugaki[14];
@@ -1590,7 +1590,7 @@ EVT_END()
  * Item ids of the rest-room chest rewards in the Pit of 100 Trials, one for every tenth floor
  * (read by evt_open_box).
  */
-s32 treasure_tbl[] = {
+static s32 treasure_tbl[] = {
     ITEM_SLEEPY_STOMP, ITEM_FIRE_DRIVE, ITEM_ZAP_TAP, ITEM_PITY_FLOWER, ITEM_STRANGE_SACK,
     ITEM_DOUBLE_DIP, ITEM_DOUBLE_DIP_P, ITEM_BUMP_ATTACK, ITEM_LUCKY_DAY, ITEM_RETURN_POSTAGE,
 };
@@ -1599,7 +1599,7 @@ s32 treasure_tbl[] = {
  * Opens a rest-room chest: locks controls, takes the reward for this floor from treasure_tbl (entry (floor + 1)
  * / 10 - 1, so one reward per tenth floor), has the item pop out of the chest and gives it to Mario.
  */
-EVT_BEGIN(evt_open_box)
+static EVT_BEGIN(evt_open_box)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
@@ -2309,7 +2309,7 @@ static BeroEntry bero_return3[] = {
  * points the downward pipe at the next map (jon_00, or jon_01 from floor 50 on, jon_02 after floor 70),
  * and places that floor's treasure chest (own opened flag per floor, running evt_open_box) and the signboard.
  */
-EVT_BEGIN(setup_return)
+static EVT_BEGIN(setup_return)
     SET_VALUE(LW(0), PTR(bero_return))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
@@ -2969,7 +2969,7 @@ EVT_END()
  * Sailor drops in on a rest-room floor: lands, then does his farewell (iri_12_makkino_return),
  * or the Bonetail variants on floor 100, and marks the job's return flag (GSWF_TROUBLE_WORK(2)).
  */
-EVT_BEGIN(iri_12_makkino_fall_return)
+static EVT_BEGIN(iri_12_makkino_fall_return)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_MARIO_MOVING)

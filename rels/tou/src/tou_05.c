@@ -67,7 +67,7 @@ static EvtWord talk_kinoshikowa[386];
 static NpcSetupInfo npcEnt[3];
 static EvtWord evt_kinoshikowa[222];
 static EvtWord evt_sensyu[430];
-EvtWord evt_sensyu2[208];
+static EvtWord evt_sensyu2[208];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_1st_leagu[456];
@@ -77,7 +77,7 @@ static EvtWord evt_1st_leagu[467];
 
 static EvtWord evt_nozoki_msg[33];
 static EvtWord evt_nozoki[769];
-EvtWord evt_sensyu_reentry[293];
+static EvtWord evt_sensyu_reentry[293];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord tou_05_init_evt[];
@@ -924,7 +924,7 @@ EVT_END()
  * Declining (menu choice 1, "I don't think so") advances to STG3_03_GRUBBA and installs talk_gans on a_p_tukue;
  * signing (choice 0) advances to STG3_04_GONZALES_IS_BORN and runs evt_kinoshikowa.
  */
-EVT_BEGIN(evt_sensyu2)
+static EVT_BEGIN(evt_sensyu2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 20, 0, 0)
     CALL(evt_party_set_pos, 0, 0, 0, -30)
@@ -1390,7 +1390,7 @@ static EVT_BEGIN(evt_nozoki)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_sensyu_reentry)
+static EVT_BEGIN(evt_sensyu_reentry)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)

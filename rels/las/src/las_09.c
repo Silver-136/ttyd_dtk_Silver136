@@ -54,10 +54,10 @@ static EvtWord first_evt[210];
 #endif
 
 static EvtWord bomb_wanwan[149];
-EvtWord bomb_wanwan1_evt[27];
-EvtWord bomb_wanwan2_evt[27];
-EvtWord switch_1_evt[279];
-EvtWord switch_2_evt[280];
+static EvtWord bomb_wanwan1_evt[27];
+static EvtWord bomb_wanwan2_evt[27];
+static EvtWord switch_1_evt[279];
+static EvtWord switch_2_evt[280];
 static EvtWord goikkou_talk[31];
 static EvtWord majyorin_init[12];
 static EvtWord maririn_init[12];
@@ -65,7 +65,7 @@ static EvtWord ranpel_init[12];
 static NpcSetupInfo npcEnt[4];
 static EvtWord majyorin_evt_npc_entry[26];
 static EvtWord majyorin_evt_main[652];
-EvtWord majyorin_evt[55];
+static EvtWord majyorin_evt[55];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_09_init_evt[];
@@ -483,7 +483,7 @@ EVT_END()
  * Event script: Bobbery explodes the first Chain Chomp statue (map object wan3, hit object A_wan1).
  * Disables automatic letterboxing, locks Mario's controls, runs bomb_wanwan and sets GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP.
  */
-EVT_BEGIN(bomb_wanwan1_evt)
+static EVT_BEGIN(bomb_wanwan1_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(0), STRING("wan3"))
@@ -500,7 +500,7 @@ EVT_END()
  * Event script: Bobbery explodes the second Chain Chomp statue (wan1, hit object A_wan2).
  * Same as bomb_wanwan1_evt but sets GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP.
  */
-EVT_BEGIN(bomb_wanwan2_evt)
+static EVT_BEGIN(bomb_wanwan2_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(0), STRING("wan1"))
@@ -519,7 +519,7 @@ EVT_END()
  * after another, opening the way and the "Ship_Change" harbour exit;
  * plays a success jingle if the other switch is already pressed.
  */
-EVT_BEGIN(switch_1_evt)
+static EVT_BEGIN(switch_1_evt)
     // Controls off; the camera swings to the platforms the first switch controls.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 400, 1368, 0, -40, 700, 1000, EASING_SINE_IN_OUT)
@@ -633,7 +633,7 @@ EVT_END()
  * Same as switch_1_evt for the platforms S_daizadai2_1..3 and the harbour exit Ship_Change1,
  * whose ship-panel attribute (HIT_ATTR_SHIP_PANEL2) is turned on; no hit object is turned off.
  */
-EVT_BEGIN(switch_2_evt)
+static EVT_BEGIN(switch_2_evt)
     // Controls off; the camera swings to the platforms the second switch controls.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 450, 45, 0, -75, -558, 1000, EASING_SINE_IN_OUT)
@@ -991,7 +991,7 @@ static EVT_BEGIN(majyorin_evt_main)
     RETURN
 EVT_END()
 
-EVT_BEGIN(majyorin_evt)
+static EVT_BEGIN(majyorin_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LF(0), 0)
     LOOP(0)

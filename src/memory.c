@@ -26,7 +26,7 @@ static SmartWork smartWork;
 
 //.sdata
 // {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
-s32 size_table[HEAP_COUNT][2] = {
+static s32 size_table[HEAP_COUNT][2] = {
 #if VERSION <= VERSION_DEMO_JP
     {1, 0x3784},
 #else

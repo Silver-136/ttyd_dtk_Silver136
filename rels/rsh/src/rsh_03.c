@@ -47,7 +47,7 @@ static char tmp[32];
 static Vec camPt;
 static Vec camAt;
 
-USER_FUNC(fire);
+static USER_FUNC(fire);
 static USER_FUNC(iri_22_make_item_tbl);
 static USER_FUNC(mario_flag);
 static USER_FUNC(omiseFukki);
@@ -98,7 +98,7 @@ static EvtWord evt_lunch_talk[113];
 static EvtWord evt_lunch_talk[101];
 #endif
 
-EvtWord evt_shop_moamoa_talk[59];
+static EvtWord evt_shop_moamoa_talk[59];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[18];
@@ -1256,7 +1256,7 @@ static EVT_BEGIN(evt_lunch_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_shop_moamoa_talk)
+static EVT_BEGIN(evt_shop_moamoa_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_45_DAY_3_STARTS)
         SET_VALUE(LW(0), 0)
@@ -1589,7 +1589,7 @@ static EVT_BEGIN(evt_shop_close)
     RETURN
 EVT_END()
 
-USER_FUNC(fire) {
+static USER_FUNC(fire) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     Vec pos;
 

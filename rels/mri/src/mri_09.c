@@ -43,12 +43,12 @@ EvtWord wall_roll_sub[96];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord wall_roll[272];
+static EvtWord wall_roll[272];
 #else
 #if VERSION <= VERSION_DEMO_JP
-EvtWord wall_roll[262];
+static EvtWord wall_roll[262];
 #else
-EvtWord wall_roll[264];
+static EvtWord wall_roll[264];
 #endif
 #endif
 
@@ -211,7 +211,7 @@ EVT_END()
  * the floor and wall collisions change, small stars burst from the four switches, which are removed.
  * Sets the story to STG2_21_02_MATCHING_THE_PATTERNS.
  */
-EVT_BEGIN(wall_roll)
+static EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
 #if VERSION >= VERSION_US

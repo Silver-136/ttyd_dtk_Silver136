@@ -18,7 +18,7 @@
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_fire_bros.h"
 
-USER_FUNC(fire_bros_nagemakuri_set_target);
+static USER_FUNC(fire_bros_nagemakuri_set_target);
 
 BattleUnitKind unit_fire_bros;
 static BattleUnitDefense defence;
@@ -27,27 +27,27 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[7];
-BattleWeapon weapon_fire_bros_attack;
-BattleWeapon weapon_fire_bros_renzoku_attack;
-BattleWeapon weapon_fire_bros_nagemakuri_attack;
+static BattleWeapon weapon_fire_bros_attack;
+static BattleWeapon weapon_fire_bros_renzoku_attack;
+static BattleWeapon weapon_fire_bros_nagemakuri_attack;
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
 static EvtWord attack_event[92];
 static EvtWord damage_check_sub[167];
 static EvtWord damage_check_no_last[7];
 static EvtWord damage_check_last[113];
-EvtWord fire_move_event[605];
+static EvtWord fire_move_event[605];
 static EvtWord normal_attack_event[125];
 static EvtWord renzoku_attack_event[141];
 static EvtWord nagemakuri_attack_event[316];
-EvtWord nagemakuri_judge_last_attack_event[73];
+static EvtWord nagemakuri_judge_last_attack_event[73];
 static EvtWord wait_event[6];
 
 /**
  * Advances the weapon target list to the next target and returns its unit and part index,
  * or -1 and 0 at the end of the list.
  */
-void fire_bros_get_next_target(s32* unitIdx, s32* partIdx) {
+static void fire_bros_get_next_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
 
     wt->currentTarget++;
@@ -62,7 +62,7 @@ void fire_bros_get_next_target(s32* unitIdx, s32* partIdx) {
 }
 
 /** Returns the unit and part index of the weapon target currently selected in the target list. */
-void fire_bros_get_target(s32* unitIdx, s32* partIdx) {
+static void fire_bros_get_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
     BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
 
@@ -75,7 +75,7 @@ void fire_bros_get_target(s32* unitIdx, s32* partIdx) {
  * collects the possible targets and writes five random (unit, part) pairs
  * into the script variables passed as arguments; the barrage stores five pairs per fireball part.
  */
-USER_FUNC(fire_bros_nagemakuri_set_target) {
+static USER_FUNC(fire_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;
     s32 unitIdx[20];
     s32 partIdx[20];
@@ -243,7 +243,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon record of the Fire Bro's fireball throw: 3 damage and inflicts burn (30%). */
-BattleWeapon weapon_fire_bros_attack = {
+static BattleWeapon weapon_fire_bros_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -283,7 +283,7 @@ BattleWeapon weapon_fire_bros_attack = {
 };
 
 /** Weapon record of the Fire Bro's rapid-fire fireball throws: 2 damage and inflicts burn (30%). */
-BattleWeapon weapon_fire_bros_renzoku_attack = {
+static BattleWeapon weapon_fire_bros_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -326,7 +326,7 @@ BattleWeapon weapon_fire_bros_renzoku_attack = {
  * Weapon record of the Fire Bro's fireball barrage on the whole party: 1 damage, can hit several targets
  * and inflicts burn (30%).
  */
-BattleWeapon weapon_fire_bros_nagemakuri_attack = {
+static BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -577,7 +577,7 @@ EVT_END()
  * a miss lets it bounce on until it leaves the stage (x beyond 250).
  * At the end the part is hidden and UNIT_WORK_FIRE_DONE (fireballs finished) goes up by one.
  */
-EVT_BEGIN(fire_move_event)
+static EVT_BEGIN(fire_move_event)
     // The Fire Bro throws a fireball: it appears in its hand and starts spinning.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FIREB_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -968,7 +968,7 @@ EVT_END()
  * barrage at its target: LW(14) = 0 if a later fireball part (up to part 7) is aimed at the same target,
  * otherwise 1.
  */
-EVT_BEGIN(nagemakuri_judge_last_attack_event)
+static EVT_BEGIN(nagemakuri_judge_last_attack_event)
     SET_VALUE(LW(0), LW(10))
     SET_VALUE(LW(1), LW(11))
     SET_VALUE(LW(13), LW(15))

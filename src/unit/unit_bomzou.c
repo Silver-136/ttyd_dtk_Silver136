@@ -27,7 +27,7 @@ static BattleUnitKindPart parts[1];
 static EvtWord init_event[70];
 static EvtWord phase_event[67];
 static EvtWord wait_event[57];
-EvtWord end_battle_evt[19];
+static EvtWord end_battle_evt[19];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord explosion_event[172];
@@ -358,7 +358,7 @@ EVT_END()
  * stops the fuse sizzle loop whose sound id Bobbery's Bomb Squad throw stored in unit work 1,
  * so the sound does not outlive the battle.
  */
-EVT_BEGIN(end_battle_evt)
+static EVT_BEGIN(end_battle_evt)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_snd_sfxoff, LW(0))

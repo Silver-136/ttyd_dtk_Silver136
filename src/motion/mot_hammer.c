@@ -45,7 +45,7 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
  * Hammer hit sounds of the Attack FX badges: pairs of badge (R, B, G, Y, P) and the sound it swaps in;
  * with several equipped, each swing moves on to the next one worn.
  */
-s32 se_data[] = {
+static s32 se_data[] = {
     ITEM_ATTACK_FX_R, PSND_SFX_MARIO_HAMMER_PIKKYO_R1,
     ITEM_ATTACK_FX_B, PSND_SFX_MARIO_HAMMER_PIKKYO_B1,
     ITEM_ATTACK_FX_G, PSND_SFX_MARIO_HAMMER_PIKKYO_G1,

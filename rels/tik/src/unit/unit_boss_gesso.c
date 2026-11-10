@@ -67,9 +67,9 @@ static EvtWord phase_event[488];
 
 static EvtWord attack_event[48];
 static BattleWeapon weapon_gesso_ikasumi_attack;
-EvtWord gesso_ikasumi_attack[193];
+static EvtWord gesso_ikasumi_attack[193];
 static EvtWord wait_event[6];
-EvtWord dead_subevent[48];
+static EvtWord dead_subevent[48];
 
 /**
  * Unit kind of the Blooper (HP 12, level 41): its size, offsets, damage sounds, status vulnerability,
@@ -681,7 +681,7 @@ static BattleWeapon weapon_gesso_ikasumi_attack = {
  * whose action command can reduce it; it ends by returning the Blooper to its wait pose.
  */
 // Check defense timing only for the first selected target, while processing damage for every target.
-EVT_BEGIN(gesso_ikasumi_attack)
+static EVT_BEGIN(gesso_ikasumi_attack)
     SET_VALUE(LW(12), PTR(&weapon_gesso_ikasumi_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
@@ -847,7 +847,7 @@ EVT_END()
  * It kills both tentacles (the units held in its work slots 1 and 2), each in a parallel event,
  * and waits for both to finish.
  */
-EVT_BEGIN(dead_subevent)
+static EVT_BEGIN(dead_subevent)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_LEFT_ARM, LW(3))
     CALL(btlevtcmd_GetUnitId, LW(3), LW(3))
     BEGIN_SIBLING_EVENT_GET_ID(LW(1))

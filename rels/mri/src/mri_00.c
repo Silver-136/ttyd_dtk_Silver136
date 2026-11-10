@@ -63,7 +63,7 @@ static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(evt_cloud_main);
 static USER_FUNC(evt_mri_cloud_ent);
-USER_FUNC(evt_mri_cloud_init);
+static USER_FUNC(evt_mri_cloud_init);
 static USER_FUNC(get_puni_pos);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
@@ -74,7 +74,7 @@ static USER_FUNC(yami_view);
 static s16 puni_rand_position[196];
 static EvtWord mario_see_you_init[54];
 static f32 spline_dt[24];
-EvtWord seal_bigtree[213];
+static EvtWord seal_bigtree[213];
 static EvtWord seal_bigtree2[143];
 static EvtWord guide_init[72];
 static EvtWord guide_talk[29];
@@ -98,9 +98,9 @@ static NpcSetupInfo npcEnt[7];
 static EvtWord bero_01_doa_close[7];
 static EvtWord bero_01_doa_open[7];
 static EvtWord first_time_w_bero[18];
-EvtWord out_ne_bero[44];
+static EvtWord out_ne_bero[44];
 static EvtWord out_w_bero[12];
-EvtWord out_dokan_1[30];
+static EvtWord out_dokan_1[30];
 static BeroEntry bero_lostitem[1];
 static BeroEntry bero_entry_data[4];
 static EvtWord first_bigtree[99];
@@ -276,7 +276,7 @@ static f32 spline_dt[] = {
  * runs off along a spline path and ends in front of the tree.
  * Sets the story to STG2_03_01_SEALED_ENTRANCE.
  */
-EVT_BEGIN(seal_bigtree)
+static EVT_BEGIN(seal_bigtree)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_move_beside_mario, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -740,7 +740,7 @@ EVT_END()
  * the first time through, the Punio NPC is hidden and follower Punio (party slot 1) takes his place,
  * then he is marked as following Mario (GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO). Returns 0 to the door code in LW(0).
  */
-EVT_BEGIN(out_ne_bero)
+static EVT_BEGIN(out_ne_bero)
     IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 0)
         WAIT_MS(50)
         CALL(evt_npc_set_ry, STRING("ガイド"), 90)
@@ -771,7 +771,7 @@ EVT_END()
  * once the Puni boss is beaten it records that Mario has left the tree after chapter 2
  * and clears the Jabbi-mushroom and Petuni quiz-egg flags so those can be repeated. Returns 0 in LW(0).
  */
-EVT_BEGIN(out_dokan_1)
+static EVT_BEGIN(out_dokan_1)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
             SET_VALUE(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -1078,7 +1078,7 @@ static USER_FUNC(evt_cloud_main) {
 }
 
 /** Allocates the 16 cloud work slots and names their images and offscreen buffers. */
-USER_FUNC(evt_mri_cloud_init) {
+static USER_FUNC(evt_mri_cloud_init) {
     s32 i;
 
     cloud = _mapAlloc(sizeof(CloudRoomWork) * 16);

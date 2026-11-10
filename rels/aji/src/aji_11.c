@@ -34,7 +34,7 @@ static USER_FUNC(peach_evt_toumei);
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
-EvtWord peach_evt_bero[50];
+static EvtWord peach_evt_bero[50];
 static BeroEntry bero_peach_data[2];
 static EvtWord key_evt[5];
 static EvtWord evt_gajigaji_anim[13];
@@ -48,8 +48,8 @@ extern EvtWord peach_evt_disksys[];
 EvtWord peach_evt_disksys[164];
 #endif
 
-EvtWord peach_evt_tana1[50];
-EvtWord peach_evt_tana2[31];
+static EvtWord peach_evt_tana1[50];
+static EvtWord peach_evt_tana2[31];
 static EvtWord peach_evt_stg5[105];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -122,7 +122,7 @@ static BeroEntry bero_entry_data[] = {
  * she refuses to leave (peach_aji_249_01 if the disk has not been read, peach_aji_250 if it has)
  * and LW(0) = 1 cancels the exit; otherwise LW(0) = 0 lets her through.
  */
-EVT_BEGIN(peach_evt_bero)
+static EVT_BEGIN(peach_evt_bero)
     IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
             IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_PLAYED, 0)
@@ -313,7 +313,7 @@ EVT_END()
  * Prints peach_aji_245, gives ITEM_DATA_DISK and prints peach_aji_246;
  * sets GSWF_AJI_11_DATA_DISK_TAKEN and registers the console script on a_disksys.
  */
-EVT_BEGIN(peach_evt_tana1)
+static EVT_BEGIN(peach_evt_tana1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_245"), 0, STRING("mario"))
     CALL(evt_item_entry, STRING("disk"), ITEM_DATA_DISK, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -328,7 +328,7 @@ EVT_BEGIN(peach_evt_tana1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_tana2)
+static EVT_BEGIN(peach_evt_tana2)
     CALL(evt_mario_key_onoff, 0)
 
     // Remove the disk when returning it here, not when playing it in the monitor.

@@ -31,7 +31,7 @@ static void flyMain(void);
  * Tuning values of Mario's paper airplane flight: top speed, gravity and drag, the nose-up and nose-down pitch
  * limits, turn and glide rates, and the pose offsets for each phase of the flight.
  */
-f32 planeData[41] = {
+static f32 planeData[41] = {
     5.0f, -0.02f, -0.03f, 25.0f, -45.0f, 0.4f, 1.0f, 0.1f, -0.1f, 1.5f,
     0.2f, 0.05f, 3.4f, 1.0f, 0.025f, 0.045f, 0.8f, 1.5f, -0.3f, -5.0f,
     3.9f, -0.112f, 0.118f, 0.5f, 0.4f, -8.0f, -2.0f, -4.0f, -2.0f, 0.2f,

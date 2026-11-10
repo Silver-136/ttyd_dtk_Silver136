@@ -43,7 +43,7 @@ static BattleWeapon weapon_mahorn_attack_magic;
 static BattleWeapon weapon_mahorn_all_attack_magic;
 static BattleWeapon weapon_mahorn_dekadeka_magic;
 static BattleWeapon weapon_mahorn_katikati_magic;
-BattleWeapon weapon_mahorn_confuse_magic;
+static BattleWeapon weapon_mahorn_confuse_magic;
 static BattleWeapon weapon_mahorn_recover_magic;
 static EvtWord attack_event[152];
 static PoseTableEntry pose_table[17];
@@ -330,7 +330,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
 };
 
 /** Attack data for the Wizzerd's confusion spell: no damage, 50% Confusion. */
-BattleWeapon weapon_mahorn_confuse_magic = {
+static BattleWeapon weapon_mahorn_confuse_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

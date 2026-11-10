@@ -24,7 +24,7 @@
 
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];
-EvtWord evt_anm_kan[59];
+static EvtWord evt_anm_kan[59];
 EvtWord hei_13_init_evt[110];
 
 /**
@@ -106,7 +106,7 @@ static TreeAccess ki_data[] = {
 };
 
 // Award Horsetail at ten hammer hits, at most once until this room is initialized again.
-EVT_BEGIN(evt_anm_kan)
+static EVT_BEGIN(evt_anm_kan)
     IF_INT_EQUAL(GF(0), 1)
         GOTO(99)
     END_IF

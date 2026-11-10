@@ -31,13 +31,13 @@
 u8* lightGetPaperCraft(void);
 
 static USER_FUNC(_leg_smoke_effect);
-USER_FUNC(_btlgon_get_escape_param);
-USER_FUNC(_set_gonbaba_light);
-USER_FUNC(_wait_damage_event_end);
+static USER_FUNC(_btlgon_get_escape_param);
+static USER_FUNC(_set_gonbaba_light);
+static USER_FUNC(_wait_damage_event_end);
 
-BattleWeapon weapon_gonbaba_fumituke_attack;
-BattleWeapon weapon_gonbaba_firebreath_attack;
-BattleWeapon weapon_gonbaba_kamituki_attack;
+static BattleWeapon weapon_gonbaba_fumituke_attack;
+static BattleWeapon weapon_gonbaba_firebreath_attack;
+static BattleWeapon weapon_gonbaba_kamituki_attack;
 BattleUnitKind unit_boss_gonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -54,7 +54,7 @@ static PoseTableEntry pose_table_weak[9];
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
 static EvtWord battle_entry_event[375];
-EvtWord negotiation_event[1786];
+static EvtWord negotiation_event[1786];
 EvtWord gon_extra_eaten_event[389];
 static EvtWord damage_event[10];
 
@@ -69,11 +69,11 @@ static EvtWord init_event[160];
 static EvtWord phase_event[2];
 static EvtWord attack_event[56];
 static EvtWord fumituke_attack_event[386];
-EvtWord firebreath_attack_event[261];
+static EvtWord firebreath_attack_event[261];
 static EvtWord wait_event[6];
 
 /** Hooktail's attack power: the weapon's base power minus the attack drop in the attacker's work[0] (at least 1). */
-u32 weaponGetPower_Gonbaba(BattleUnit* unit, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
+static u32 weaponGetPower_Gonbaba(BattleUnit* unit, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
     s32 power = weapon->hpDamageWork[0];
 
     power -= unit->work[UNIT_WORK_POWER_DOWN];
@@ -101,7 +101,7 @@ static USER_FUNC(_leg_smoke_effect) {
  * Weapon data for Hooktail's stomp: damage from its own formula (weaponGetPower_Gonbaba), a hammer-type hit,
  * one target.
  */
-BattleWeapon weapon_gonbaba_fumituke_attack = {
+static BattleWeapon weapon_gonbaba_fumituke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -146,7 +146,7 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
  * Weapon data for Hooktail's fire breath: damage from its own formula (weaponGetPower_Gonbaba), fire element,
  * every target.
  */
-BattleWeapon weapon_gonbaba_firebreath_attack = {
+static BattleWeapon weapon_gonbaba_firebreath_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -187,7 +187,7 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
 };
 
 /** Weapon data for Hooktail's bite: 5 damage, every target. */
-BattleWeapon weapon_gonbaba_kamituki_attack = {
+static BattleWeapon weapon_gonbaba_kamituki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -553,7 +553,7 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_btlgon_get_escape_param) {
+static USER_FUNC(_btlgon_get_escape_param) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);
@@ -590,7 +590,7 @@ USER_FUNC(_btlgon_get_escape_param) {
  * stg1_gon_31. Either way UNIT_WORK_NEGOTIATED is set to 1 so the real defeat plays next time, she draws eight audience
  * members into the eating scene (gon_extra_eaten_event, spawned eight times; two escape) and recovers to 10 HP.
  */
-EVT_BEGIN(negotiation_event)
+static EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_btl_camera_wait_move_end)
 
@@ -1128,7 +1128,7 @@ EVT_BEGIN(negotiation_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_set_gonbaba_light) {
+static USER_FUNC(_set_gonbaba_light) {
     u8* light = lightGetPaperCraft();
     Mtx mtx;
 
@@ -1265,7 +1265,7 @@ EVT_BEGIN(gon_extra_eaten_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_wait_damage_event_end) {
+static USER_FUNC(_wait_damage_event_end) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id;
@@ -1790,7 +1790,7 @@ EVT_END()
  * spawns the gonbaba_breath flame effect and deals the weapon_gonbaba_firebreath_attack damage to Mario
  * and the partner (all targets), then returns her to her normal pose.
  */
-EVT_BEGIN(firebreath_attack_event)
+static EVT_BEGIN(firebreath_attack_event)
     // Choose targets: the breath reaches Mario and his partner.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_firebreath_attack))

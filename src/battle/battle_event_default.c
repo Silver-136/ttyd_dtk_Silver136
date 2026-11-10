@@ -28,7 +28,7 @@
 
 static USER_FUNC(_anime_load);
 static USER_FUNC(_anime_load_wait);
-USER_FUNC(_backfire);
+static USER_FUNC(_backfire);
 static USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all);
 static USER_FUNC(_check_pose_stay);
 static USER_FUNC(_get_escape_rate);
@@ -1105,7 +1105,7 @@ EVT_BEGIN(btldefaultevt_DefendParty)
 EVT_END()
 #endif
 
-USER_FUNC(_backfire) {
+static USER_FUNC(_backfire) {
     s32 id;
     BattleUnit* unit;
     BattleWork* wp = _battleWorkPointer;

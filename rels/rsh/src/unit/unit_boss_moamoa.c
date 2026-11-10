@@ -119,8 +119,8 @@ static EvtWord damage_event[10];
 static const char* MOAMOA_TAIJOU[4];
 static EvtWord dead_event[349];
 static const char* moamoa2_change_tbl[7];
-EvtWord moamoa_tentacl_on[208];
-EvtWord moamoa_mouth_on[132];
+static EvtWord moamoa_tentacl_on[208];
+static EvtWord moamoa_mouth_on[132];
 static EvtWord phase_event[159];
 static EvtWord attack_event[19];
 static EvtWord wait_event[6];
@@ -690,7 +690,7 @@ static const char* moamoa2_change_tbl[] = {
  * links them to the main body through unit work 3 to 5, attaches the swarm Moamoa chains to them (moamoa1_on),
  * switches the defence table to moamoa_defence and plays each tentacle's B_1 idle pose.
  */
-EVT_BEGIN(moamoa_tentacl_on)
+static EVT_BEGIN(moamoa_tentacl_on)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_RESTORE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("V_2"))
     WAIT_FRAMES(1)
@@ -744,7 +744,7 @@ EVT_END()
  * work 6, attaches the swarm Moamoa chains to it (moamoa2_on),
  * and sets the main body's moamoa2_defence and moamoa1_pose_table before playing the mouth's transformation sequence.
  */
-EVT_BEGIN(moamoa_mouth_on)
+static EVT_BEGIN(moamoa_mouth_on)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_RESTORE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(40)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("V_2"))

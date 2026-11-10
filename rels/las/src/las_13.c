@@ -29,7 +29,7 @@ static EvtWord e_door_close[12];
 static EvtWord e_door_open[12];
 static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
-EvtWord switch_check[114];
+static EvtWord switch_check[114];
 static EvtWord switch1_evt[11];
 static EvtWord switch2_evt[15];
 static EvtWord hint_plate[14];
@@ -100,7 +100,7 @@ EVT_END()
  * it sparkles both switches away, plays a success jingle and makes the key chest (Palace Key 0x28) appear,
  * then sets GSWF_LAS_13_SWITCH_PUZZLE_SOLVED.
  */
-EVT_BEGIN(switch_check)
+static EVT_BEGIN(switch_check)
     SET_VALUE(LW(0), 0)
     IF_INT_EQUAL(LSW_LAS_13_SWITCH_1_COUNT, 2)
         ADD(LW(0), 1)

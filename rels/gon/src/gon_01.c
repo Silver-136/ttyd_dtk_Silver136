@@ -30,7 +30,7 @@
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[5];
-EvtWord honenoko_oidasare_evt[466];
+static EvtWord honenoko_oidasare_evt[466];
 
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
 extern EvtWord gon_01_GATEEVENT_evt[];
@@ -148,7 +148,7 @@ static BeroEntry bero_entry_data[] = {
  * stg1_gon_14). Then the door to gon_02 is usable again.
  */
 // Animate separate Mario and partner bounce arcs before restoring controls and reopening the door.
-EVT_BEGIN(honenoko_oidasare_evt)
+static EVT_BEGIN(honenoko_oidasare_evt)
     // Control is taken; Mario appears at the east edge of the room with his partner, the door open.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)

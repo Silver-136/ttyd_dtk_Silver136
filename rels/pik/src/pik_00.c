@@ -120,7 +120,7 @@ EvtWord talk_ekiin[146];
 #endif
 
 static EvtWord init_papa[8];
-EvtWord talk_papa_taihou_kyoka[VERSION_PICK(403, 405)];
+static EvtWord talk_papa_taihou_kyoka[VERSION_PICK(403, 405)];
 static EvtWord talk_papa[141];
 static EvtWord init_mama[8];
 static s32 iri_29_item_tbl[2];
@@ -169,7 +169,7 @@ static EvtWord door_2_close[14];
 static DoorParam door_2;
 static EvtWord evt_rot_door_sub[63];
 static EvtWord evt_rot_door[9];
-EvtWord evt_pik_00_arrival[86];
+static EvtWord evt_pik_00_arrival[86];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_seacret[];
@@ -1190,7 +1190,7 @@ static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
  * if General White has also been woken (GSWF_BOM_GENERAL_WHITE_AGREED),
  * advance the story to STG7_03_GOLDBOB. The camera zooms in on the pair for the conversation.
  */
-EVT_BEGIN(talk_papa_taihou_kyoka)
+static EVT_BEGIN(talk_papa_taihou_kyoka)
     IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
         SET_VALUE(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 1)
 
@@ -2012,7 +2012,7 @@ EVT_END()
  * card, and after ten seconds the game
  * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_HOM_TRAIN_AT_POSHLEY.
  */
-EVT_BEGIN(evt_pik_00_arrival)
+static EVT_BEGIN(evt_pik_00_arrival)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

@@ -104,7 +104,7 @@ static u16* toge_patern_table[] = { toge_nom_patern_data, toge_wlk_patern_data, 
                              toge_hag_patern_data, toge_hag_patern_data };
 
 //.bss
-PuniData* Punidat;
+static PuniData* Punidat;
 static PuniWork* Punigp;
 static PuniTexInfo* Punitex;
 PuniMap* Punimap;
@@ -4153,7 +4153,7 @@ static void puniModePrehagure(PuniData* p) {
  * It rejoins Mario (and re-collects other lost Punies near it) once he is within 150 units,
  * goes to the gather or flee modes for targets in range and to the wind mode when blown.
  */
-void puniModeHagure(PuniData* p) {
+static void puniModeHagure(PuniData* p) {
     switch (p->modeStep) {
         case 0:
             // the bubble follows an NpcEntry-shaped view whose position field is p->bubblePos
@@ -4609,7 +4609,7 @@ static void puniModeCustom(PuniData* p) {
  * while the dark view (area flag
  * 3, LSWF_MRI_00_DARKNESS_ON) is on, it sets up the dark lighting for each pose first.
  */
-void puni_puni_disp(CameraId camId, void* param) {
+static void puni_puni_disp(CameraId camId, void* param) {
     MapTevCallbackInfo info;
     s32 off;
     MapTevCallbackInfo* ip;

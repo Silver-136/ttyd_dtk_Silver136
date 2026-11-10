@@ -70,12 +70,12 @@ EvtWord evt_toile_door[236];
 static EvtWord evt_toile_door2[136];
 
 #if VERSION >= VERSION_US
-EvtWord evt_champion_win[290];
+static EvtWord evt_champion_win[290];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord evt_champion_win[269];
+static EvtWord evt_champion_win[269];
 #else
-EvtWord evt_champion_win[271];
+static EvtWord evt_champion_win[271];
 #endif
 #endif
 
@@ -919,7 +919,7 @@ static EVT_BEGIN(evt_toile_door2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_champion_win)
+static EVT_BEGIN(evt_champion_win)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_US
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))

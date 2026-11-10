@@ -97,7 +97,7 @@ static s32 horogram_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 horogram_init(EventEntry* event, BOOL isFirstCall);
 static s32 horogram_set_pose(EventEntry* event, BOOL isFirstCall);
 static s32 move_center(EventEntry* event, BOOL isFirstCall);
-s32 noise(EventEntry* event, BOOL isFirstCall);
+static s32 noise(EventEntry* event, BOOL isFirstCall);
 static s32 peach_dance_after_fail(EventEntry* event, BOOL isFirstCall);
 static s32 peach_set_pose(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(peach_set_pose);
@@ -118,8 +118,8 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
 EvtWord evt_emergency[48];
-EvtWord evt_last[728];
-EvtWord evt_last2[339];
+static EvtWord evt_last[728];
+static EvtWord evt_last2[339];
 static EvtWord evt_camera[68];
 static EvtWord mail_sousin_se[36];
 static EvtWord peach_evt_stg1[1131];
@@ -152,7 +152,7 @@ static EvtWord teshita1_init[9];
 static EvtWord teshita2_init[9];
 static EvtWord syuryo_init[9];
 static NpcSetupInfo npcEnt[4];
-EvtWord tec_talk[36];
+static EvtWord tec_talk[36];
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord aji_17_init_evt[250];
@@ -404,7 +404,7 @@ EVT_END()
  * It is TEC's farewell: it introduces itself, asks Mario to save Peach from Grodus in the Palace of Shadow,
  * tells him to use the teleporter while backup power lasts, and says it will cease to exist.
  */
-EVT_BEGIN(evt_last)
+static EVT_BEGIN(evt_last)
     // The party enters TEC's room and the music stops.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -647,7 +647,7 @@ EVT_END()
  * the emergency lights start (evt_emergency) and the story becomes STG7_25_THE_LAST_MAIL
  * before control returns. The partner follows once Mario moves.
  */
-EVT_BEGIN(evt_last2)
+static EVT_BEGIN(evt_last2)
     // The party is back in TEC's room after the Last Mail; the music stops.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -3253,7 +3253,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
-EVT_BEGIN(tec_talk)
+static EVT_BEGIN(tec_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_map_replayanim, 0, STRING("moza"))
     IF_INT_EQUAL(GSWF_AJI_17_TEC_FIRST_TALK_DONE, 0)
@@ -3399,7 +3399,7 @@ EVT_END()
 
 // target .data tail pad word
 
-s32 noise(EventEntry* event, BOOL isFirstCall) {
+static s32 noise(EventEntry* event, BOOL isFirstCall) {
     EvtWord alpha = evtGetValue(event, event->args[0]);
     dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
     return EVT_RETURN_DONE;

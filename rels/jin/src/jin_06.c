@@ -25,7 +25,7 @@
 static EvtWord w_close[12];
 static EvtWord w_open[12];
 static BeroEntry bero_entry_data[2];
-EvtWord jin_06_wall_open_evt[5];
+static EvtWord jin_06_wall_open_evt[5];
 static EvtWord jin_06_jumpstand[53];
 static EvtWord mobj_box00[34];
 EvtWord jin_06_init_evt[165];
@@ -73,7 +73,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-EVT_BEGIN(jin_06_wall_open_evt)
+static EVT_BEGIN(jin_06_wall_open_evt)
     SET_VALUE(GSWF_JIN_06_WALL_PANEL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()

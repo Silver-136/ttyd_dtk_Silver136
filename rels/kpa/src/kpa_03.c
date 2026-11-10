@@ -16,7 +16,7 @@
 static EvtWord kpa_act_stg2_mobj[209];
 static EvtWord kpa_act_stg2_item[85];
 static EvtWord kpa_fall[41];
-EvtWord kairyu_evt[38];
+static EvtWord kairyu_evt[38];
 
 #if VERSION == VERSION_EU
 static EvtWord jumpstand_evt[62];
@@ -100,7 +100,7 @@ EVT_END()
  * Gives Bowser a small constant push (hosei) while he is between x = -175 and -100 below y = 400:
  * the sea current at this part of stage 2. Runs until the stage ends.
  */
-EVT_BEGIN(kairyu_evt)
+static EVT_BEGIN(kairyu_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         IF_INT_NOT_EQUAL(LSWF_KPA_STAGE_ENDED, 0)

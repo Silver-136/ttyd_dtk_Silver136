@@ -57,7 +57,7 @@ static EvtWord sekai_yami_evt[113];
 static EvtWord sekai_yami_evt[118];
 #endif
 
-EvtWord bomb_wall[155];
+static EvtWord bomb_wall[155];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_26_init_evt[];
@@ -473,7 +473,7 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(bomb_wall)
+static EVT_BEGIN(bomb_wall)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)

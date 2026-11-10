@@ -31,7 +31,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_togekuri_attack;
-BattleWeapon weapon_togekuri_charge;
+static BattleWeapon weapon_togekuri_charge;
 static PoseTableEntry pose_table[19];
 static BattleDataEntry data_table[3];
 static EvtWord init_event[42];
@@ -171,7 +171,7 @@ static BattleWeapon weapon_togekuri_attack = {
 };
 
 /** H. S. Goomba's charge-up move (no damage, used on itself). */
-BattleWeapon weapon_togekuri_charge = {
+static BattleWeapon weapon_togekuri_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

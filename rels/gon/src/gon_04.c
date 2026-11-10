@@ -47,35 +47,35 @@ static BeroEntry bero_entry_data[6];
 static EvtWord evt_gon_04flowblock_updown1_init[37];
 
 #if VERSION >= VERSION_US
-EvtWord evt_gon_04flowblock_updown1[465];
+static EvtWord evt_gon_04flowblock_updown1[465];
 #else
 #if VERSION <= VERSION_DEMO_JP
-EvtWord evt_gon_04flowblock_updown1[489];
+static EvtWord evt_gon_04flowblock_updown1[489];
 #else
-EvtWord evt_gon_04flowblock_updown1[491];
+static EvtWord evt_gon_04flowblock_updown1[491];
 #endif
 #endif
 
 static EvtWord evt_gon_04flowblock_updown2_init[37];
 
 #if VERSION >= VERSION_US
-EvtWord evt_gon_04flowblock_updown2[465];
+static EvtWord evt_gon_04flowblock_updown2[465];
 #else
 #if VERSION <= VERSION_DEMO_JP
-EvtWord evt_gon_04flowblock_updown2[489];
+static EvtWord evt_gon_04flowblock_updown2[489];
 #else
-EvtWord evt_gon_04flowblock_updown2[491];
+static EvtWord evt_gon_04flowblock_updown2[491];
 #endif
 #endif
 
 static KemuriPos kemuri_pos1[5];
 static KemuriPos kemuri_pos2[5];
 static EvtWord evt_kaidan_pera_anime[203];
-EvtWord evt_kaidan_pera_init[29];
-EvtWord evt_kaidan_pera[214];
+static EvtWord evt_kaidan_pera_init[29];
+static EvtWord evt_kaidan_pera[214];
 static EvtWord evt_hashi_pera[209];
-EvtWord evt_hashi_pera0[16];
-EvtWord evt_hashi_pera1[16];
+static EvtWord evt_hashi_pera0[16];
+static EvtWord evt_hashi_pera1[16];
 static EvtWord evt_hashi[50];
 static s32 key_tbl[2];
 
@@ -294,7 +294,7 @@ EVT_END()
  * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
-EVT_BEGIN(evt_gon_04flowblock_updown1)
+static EVT_BEGIN(evt_gon_04flowblock_updown1)
 #if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
@@ -555,7 +555,7 @@ EVT_END()
  * flips that block between its low and high position (200 units apart) with the floating-block sound
  * and camera shake, and flips the state flag LSWF_GON_04_FLOAT_BLOCK_2_MOVED.
  */
-EVT_BEGIN(evt_gon_04flowblock_updown2)
+static EVT_BEGIN(evt_gon_04flowblock_updown2)
 #if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
@@ -863,7 +863,7 @@ static EVT_BEGIN(evt_kaidan_pera_anime)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kaidan_pera_init)
+static EVT_BEGIN(evt_kaidan_pera_init)
     IF_INT_EQUAL(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 0)
@@ -874,7 +874,7 @@ EVT_BEGIN(evt_kaidan_pera_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kaidan_pera)
+static EVT_BEGIN(evt_kaidan_pera)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     CALL(evt_mario_key_onoff, 0)
     LOOP(0)
@@ -1029,7 +1029,7 @@ EVT_END()
  * Runs when Mario presses the right-hand blue bridge switch (mobj_hashi0):
  * unfolds the right paper bridge and sets the story to STG1_14_PAPER_BRIDGE_RIGHT.
  */
-EVT_BEGIN(evt_hashi_pera0)
+static EVT_BEGIN(evt_hashi_pera0)
     SET_VALUE(GF(10), 1)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(evt_hashi_pera)
@@ -1042,7 +1042,7 @@ EVT_END()
  * Runs when Mario presses the left-hand blue bridge switch (mobj_hashi1):
  * unfolds the left paper bridge and sets the story to STG1_14_01_PAPER_BRIDGE_LEFT.
  */
-EVT_BEGIN(evt_hashi_pera1)
+static EVT_BEGIN(evt_hashi_pera1)
     SET_VALUE(GF(10), 1)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(evt_hashi_pera)

@@ -133,14 +133,14 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 static KinopioData kino_dt;
-EvtWord kyoshu_event[196];
+static EvtWord kyoshu_event[196];
 static EvtWord maruco_buruburu[17];
 static EvtWord garawaru_buruburu[17];
 static EvtWord suifu_a_buruburu[17];
 static EvtWord suifu_bom_buruburu[17];
-EvtWord nakamaware_event[791];
+static EvtWord nakamaware_event[791];
 static EvtWord settoku_event[54];
-EvtWord settoku_event_main[95];
+static EvtWord settoku_event_main[95];
 static EvtWord delete_npc_regl_evt[24];
 static EvtWord sekai_yami_shake[11];
 static EvtWord sekai_yami_evt[283];
@@ -1525,7 +1525,7 @@ static KinopioData kino_dt = {
  * him to explore the island (stg5_muj_15, 16); if Mario says no, Flavio calls a show of hands (stg5_muj_18 to 22);
  * then the story advances to STG5_12_FLAVIO_PA_PATCH and control returns.
  */
-EVT_BEGIN(kyoshu_event)
+static EVT_BEGIN(kyoshu_event)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_position, STRING("水夫A"), -193, 0, 77)
     CALL(evt_npc_set_ry, STRING("水夫A"), 90)
@@ -1625,7 +1625,7 @@ EVT_END()
  * the fight is battle info 6. Afterwards kyoshu_event plays.
  * The GSWF_MUJ_01_CREW_SPLIT_SKIP flag jumps straight to kyoshu_event.
  */
-EVT_BEGIN(nakamaware_event)
+static EVT_BEGIN(nakamaware_event)
     // With the skip flag set (only the STG5_12 story-point start in event.c sets it), go straight to the show of hands.
     IF_INT_EQUAL(GSWF_MUJ_01_CREW_SPLIT_SKIP, 1)
         CALL(evt_mario_key_onoff, 0)
@@ -1841,7 +1841,7 @@ EVT_END()
  * Flavio learns that Bobbery is missing (settoku): everyone turns to face Flavio, he speaks (stg5_muj_29),
  * the timid sailor answers (stg5_muj_30) and GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN is set.
  */
-EVT_BEGIN(settoku_event_main)
+static EVT_BEGIN(settoku_event_main)
     CALL(evt_set_dir_to_target, STRING("水夫A"), STRING("マルコ"))
     CALL(evt_set_dir_to_target, STRING("水夫ボム兵"), STRING("マルコ"))
     CALL(evt_set_dir_to_target, STRING("ガラの悪い水夫"), STRING("マルコ"))

@@ -42,7 +42,7 @@
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
 
-s32* tbl;
+static s32* tbl;
 
 static USER_FUNC(free_tbl);
 static USER_FUNC(get_pos);
@@ -56,9 +56,9 @@ static EvtWord w_door_close[12];
 static BeroEntry bero_data[3];
 static EvtWord evt_ana[9];
 static EvtWord evt_kontena[21];
-EvtWord evt_kaidan[91];
+static EvtWord evt_kaidan[91];
 static const char* cloud_kontena2_list[5];
-EvtWord evt_kontena2[23];
+static EvtWord evt_kontena2[23];
 static EvtWord evt_block_broken[5];
 static s32 key_tbl[2];
 
@@ -192,7 +192,7 @@ EVT_END()
  * The hidden staircase appears: the camera frames it, a paper-unfold animation plays with the stairs sound,
  * the stairs and their hit volume are enabled and the story advances to STG3_20_10_HIDDEN_STAIRWAY.
  */
-EVT_BEGIN(evt_kaidan)
+static EVT_BEGIN(evt_kaidan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -90, 208, 680, -90, 80, -8, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -228,7 +228,7 @@ static const char* cloud_kontena2_list[] = {
     NULL,
 };
 
-EVT_BEGIN(evt_kontena2)
+static EVT_BEGIN(evt_kontena2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)

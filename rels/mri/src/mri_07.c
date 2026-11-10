@@ -37,7 +37,7 @@ static EvtWord chibitoge_talk[4];
 static EvtWord punishop_init[12];
 static EvtWord punishop_talk[2];
 static EvtWord puniinfo_init[12];
-EvtWord puniinfo_talk[118];
+static EvtWord puniinfo_talk[118];
 static NpcSetupInfo npcEnt[4];
 static BeroEntry bero_entry_data[2];
 EvtWord mri_07_init_evt[108];
@@ -212,7 +212,7 @@ EVT_END()
  * Talk script of the Puni information seller: cycles through three lines of tips (counter LSW_MRI_07_PUNI_INFO_TALK_INDEX);
  * the set of lines changes after the boss fight and again at the end of the story.
  */
-EVT_BEGIN(puniinfo_talk)
+static EVT_BEGIN(puniinfo_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
         SWITCH(LSW_MRI_07_PUNI_INFO_TALK_INDEX)

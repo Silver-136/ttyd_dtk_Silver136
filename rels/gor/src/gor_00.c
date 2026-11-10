@@ -77,7 +77,7 @@ static KaitenParam* ckp1;
 static KaitenParam* ckpw;
 /** Returns its f32 argument unchanged. */
 static inline f32 fid(f32 x) { return x; }
-void gundan1000tai_seq01(NanNPC* npc);
+static void gundan1000tai_seq01(NanNPC* npc);
 static void gundan1000tai_seq00(NanNPC* npc);
 
 static USER_FUNC(alpha_init_func);
@@ -99,7 +99,7 @@ static USER_FUNC(gor_ship_puka_func);
 static USER_FUNC(gundan1000tai_areacheck);
 static USER_FUNC(gundan1000tai_circle_pos_func);
 static USER_FUNC(gundan1000tai_init);
-USER_FUNC(gundan1000tai_totsuend);
+static USER_FUNC(gundan1000tai_totsuend);
 static USER_FUNC(gundan1000tai_totsugeki);
 static USER_FUNC(hosei_mario_pos);
 static USER_FUNC(hosei_party_pos);
@@ -108,7 +108,7 @@ static USER_FUNC(scale_func);
 static USER_FUNC(suifu100taikikan_away);
 static USER_FUNC(suifu100taikikan_init);
 USER_FUNC(npc_all_delete);
-void gor_stg4_018_cb(s32 type, smartEntry* smart);
+static void gor_stg4_018_cb(s32 type, smartEntry* smart);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
 static f32 lineardec_type(s32 step, s32 total, f32 start, f32 end);
 static void alpha_tev(MapTevCallbackInfo* info);
@@ -132,7 +132,7 @@ static EvtWord mony_init[18];
 EvtWord gor_00_mony_regl[VERSION_PICK(9, 11)];
 #endif
 
-EvtWord mony_peton_talk[286];
+static EvtWord mony_peton_talk[286];
 static EvtWord mony_talk[28];
 static EvtWord peton_init[18];
 
@@ -155,7 +155,7 @@ static EvtWord marco_talk[364];
 
 static EvtWord garawaru_urouro2[25];
 static EvtWord garawaru_init[74];
-EvtWord garawaru_regl[60];
+static EvtWord garawaru_regl[60];
 static EvtWord garawaru_talk[77];
 static EvtWord megane_init[18];
 static EvtWord megane_regl[2];
@@ -187,7 +187,7 @@ static EvtWord suifubomb_a_talk[VERSION_PICK(226, 218)];
 
 static EvtWord suifubomb_b_urouro2[27];
 static EvtWord suifubomb_b_init[39];
-EvtWord suifubomb_b_regl[60];
+static EvtWord suifubomb_b_regl[60];
 static EvtWord suifubomb_b_talk[116];
 static EvtWord suifubomb_c_init[14];
 static EvtWord suifubomb_c_talk[8];
@@ -217,9 +217,9 @@ static EvtWord borodo2_talk[13];
 static EvtWord mokorim_init[28];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord mokorim_talk[521];
+static EvtWord mokorim_talk[521];
 #else
-EvtWord mokorim_talk[546];
+static EvtWord mokorim_talk[546];
 #endif
 
 static EvtWord baba_init[9];
@@ -247,7 +247,7 @@ extern EvtWord enter_gorotsuki_town[];
 EvtWord enter_gorotsuki_town[594];
 #endif
 
-EvtWord christine_osoware[357];
+static EvtWord christine_osoware[357];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord gundan1000tai_beforebattle[];
@@ -261,7 +261,7 @@ static EvtWord gundan1000tai_zaza_se[61];
 static EvtWord gundan1000tai_jump_se[19];
 static EvtWord gundan1000tai_yure[22];
 static EvtWord gundan1000tai_afterbattle[1201];
-EvtWord mony_peton_after[37];
+static EvtWord mony_peton_after[37];
 static EvtWord shukko_event_move_ship_se00[20];
 static EvtWord shukko_event_move_ship_se01[20];
 static const char* shukko_npc_list[10];
@@ -292,7 +292,7 @@ EvtWord peton_run_away[88];
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
 #endif
 
-EvtWord gor_00_koopa_evt[1095];
+static EvtWord gor_00_koopa_evt[1095];
 
 #if VERSION >= VERSION_DEMO_EU
 static EvtWord peach_mail[215];
@@ -516,7 +516,7 @@ EVT_BEGIN(gor_00_mony_regl)
 EVT_END()
 #endif
 
-EVT_BEGIN(mony_peton_talk)
+static EVT_BEGIN(mony_peton_talk)
     CALL(evt_snd_bgmoff_f, PSND_PAUSE, 3000)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
@@ -903,7 +903,7 @@ EVT_END()
  * (GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED) and then stands facing right;
  * at most other stages he runs garawaru_urouro2, and he stays put during Chapter 4's Flavio scene.
  */
-EVT_BEGIN(garawaru_regl)
+static EVT_BEGIN(garawaru_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
@@ -1447,7 +1447,7 @@ EVT_END()
  * until the X-Naut ambush has been seen; at most other stages he keeps pacing (suifubomb_b_urouro2),
  * and he stays put during Chapter 4's Flavio scene.
  */
-EVT_BEGIN(suifubomb_b_regl)
+static EVT_BEGIN(suifubomb_b_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
@@ -1702,7 +1702,7 @@ static EVT_BEGIN(mokorim_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mokorim_talk)
+static EVT_BEGIN(mokorim_talk)
     SET_VALUE(LF(15), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
@@ -2732,7 +2732,7 @@ EVT_END()
  * creates the crowd of X-Naut extras (1000 in JP and the early demos, 400 in US and later) and spawns gundan1000tai_beforebattle.
  * If LW(0) is 1 on entry it first repositions Mario (the entry used when the event is started directly).
  */
-EVT_BEGIN(christine_osoware)
+static EVT_BEGIN(christine_osoware)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_cont_onoff, 0)
@@ -3413,7 +3413,7 @@ static EVT_BEGIN(gundan1000tai_afterbattle)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mony_peton_after)
+static EVT_BEGIN(mony_peton_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     LOOP(0)
@@ -4101,7 +4101,7 @@ static USER_FUNC(gundan1000tai_areacheck) {
 }
 
 /** Calls off the charge: sets the recall flag on every crowd extra so they run back to their resting spots. */
-USER_FUNC(gundan1000tai_totsuend) {
+static USER_FUNC(gundan1000tai_totsuend) {
     s32 i;
     NanNPCWork* wp = nanNPCWork;
 
@@ -4168,7 +4168,7 @@ static void gundan1000tai_seq00(NanNPC* npc) {
  * stands, hops around in random arcs (jumping in place, shuffling left and right),
  * and when recalled either runs back to its destination and idles, or idles directly from the shuffle states.
  */
-void gundan1000tai_seq01(NanNPC* npc) {
+static void gundan1000tai_seq01(NanNPC* npc) {
     f32 radius;
     f32 s;
     f32 angle;
@@ -5050,7 +5050,7 @@ EVT_END()
  * he scorches her and her broom, and he orders her to find out about Princess Peach and the Crystal Stars.
  * Ends by setting STG4_15_08_BOWSER_ROGUEPORT_DOCK, saving, and changing to usu_00.
  */
-EVT_BEGIN(gor_00_koopa_evt)
+static EVT_BEGIN(gor_00_koopa_evt)
     // Bowser (controlled through the Mario slot) is set up under the dock, out of sight.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_mode, 2)
@@ -5593,7 +5593,7 @@ static EVT_BEGIN(gor_muj_ship_pera)
     RETURN
 EVT_END()
 
-void gor_stg4_018_cb(s32 type, smartEntry* smart) {
+static void gor_stg4_018_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
     switch (type) {

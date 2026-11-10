@@ -32,7 +32,7 @@ static EvtWord switch_evt[46];
 static EvtWord enemy1_dead_evt[11];
 static EvtWord enemy2_dead_evt[11];
 static EvtWord enemy3_dead_evt[11];
-EvtWord enemy4_dead_evt[102];
+static EvtWord enemy4_dead_evt[102];
 static EvtWord hint_plate[24];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -140,7 +140,7 @@ EVT_END()
  * if the first three were beaten in order it sets the order to 4,
  * plays a success jingle and makes the blue floating switch appear in a puff of smoke.
  */
-EVT_BEGIN(enemy4_dead_evt)
+static EVT_BEGIN(enemy4_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 4)

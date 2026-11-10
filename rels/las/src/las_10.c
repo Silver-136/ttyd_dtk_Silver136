@@ -59,7 +59,7 @@ static const char* kabe_list_2[8];
 static const char* kabe_list_3[8];
 static EvtWord las_10_temae_kabe[12];
 static EvtWord first_evt[182];
-EvtWord tenkyugi_evt[311];
+static EvtWord tenkyugi_evt[311];
 static EvtWord tenkyugi_evt2[134];
 static EvtWord kagi_rotate[69];
 static s32 kagi_tbl[9];
@@ -87,7 +87,7 @@ EvtWord kagi8_evt[80];
 static EvtWord daiza_up[201];
 static EvtWord kagi_8_off[48];
 static const char* daiza_name[25];
-EvtWord kagi_8_on[365];
+static EvtWord kagi_8_on[365];
 static EvtWord kagi_8_init[11];
 static EvtWord kagi_8_syutugen[19];
 static s32 daiza_key_tbl[2];
@@ -609,7 +609,7 @@ EVT_END()
  * Mario and his partner are placed on the platform, the partner comments,
  * and the map changes to las_19 (chgmap_evt) for the planets sequence.
  */
-EVT_BEGIN(tenkyugi_evt)
+static EVT_BEGIN(tenkyugi_evt)
     // The eighth key is in place: the music fades out and the tower shakes.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
@@ -1183,7 +1183,7 @@ static const char* daiza_name[] = {
  * apart; then it turns their hit objects on, binds them to the stands
  * and registers the key use events for stands that are still empty (turned stands are shown already turned).
  */
-EVT_BEGIN(kagi_8_on)
+static EVT_BEGIN(kagi_8_on)
     // Right after the Star Key is placed (story still before STG8_05_STAR_KEY_SLOT) the eight key stands rise
     // out of the floor one after another, shaking the screen.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)

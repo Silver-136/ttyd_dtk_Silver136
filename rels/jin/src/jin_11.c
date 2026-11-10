@@ -11,14 +11,14 @@
 #include "evt/evt_map.h"
 #include "pmario_sound.h"
 
-EvtWord jin_11_ana[12];
+static EvtWord jin_11_ana[12];
 static EvtWord s_close[12];
 static EvtWord s_open[12];
 static BeroEntry bero_entry_data[3];
-EvtWord evt_yuka[5];
+static EvtWord evt_yuka[5];
 EvtWord jin_11_init_evt[54];
 
-EVT_BEGIN(jin_11_ana)
+static EVT_BEGIN(jin_11_ana)
     SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 1)
     CALL(evt_bero_mapchange, STRING("jin_07"), 0)
     SET_VALUE(LW(0), 1)
@@ -85,7 +85,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Script run when Mario breaks the weak floor: sets the story to "Breaking the floor". */
-EVT_BEGIN(evt_yuka)
+static EVT_BEGIN(evt_yuka)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_13_03_BREAKING_THE_FLOOR)
     RETURN
 EVT_END()

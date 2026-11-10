@@ -19,7 +19,7 @@
 #include "driver/npcdrv.h"
 
 static BeroEntry bero_entry_data[3];
-EvtWord gra_01_after_ranpel2[94];
+static EvtWord gra_01_after_ranpel2[94];
 static TreeAccess tree_tbl[4];
 EvtWord gra_01_init_evt[107];
 
@@ -65,7 +65,7 @@ static BeroEntry bero_entry_data[] = {
  * Vivian is placed behind Mario, runs up and says her first trail line (stg4_gra_16_01);
  * sets GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN so it plays once.
  */
-EVT_BEGIN(gra_01_after_ranpel2)
+static EVT_BEGIN(gra_01_after_ranpel2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_run, 0)
     CALL(evt_party_set_pos, 0, -640, 0, 0)

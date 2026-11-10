@@ -251,7 +251,7 @@ static USER_FUNC(getSpdWalk);
 static USER_FUNC(upperCheck);
 static USER_FUNC(cliffCheck);
 static USER_FUNC(camGetPos);
-USER_FUNC(chain_main);
+static USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
 
@@ -4136,7 +4136,7 @@ EVT_BEGIN(hbross_find_event)
     RETURN
 EVT_END()
 
-USER_FUNC(chain_main) {
+static USER_FUNC(chain_main) {
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* end = me->slaves[3];
     NpcEntry* cur;

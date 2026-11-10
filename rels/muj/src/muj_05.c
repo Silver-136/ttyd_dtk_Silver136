@@ -68,7 +68,7 @@ static EvtWord sanders_talk[178];
 static EvtWord marco_init[24];
 static EvtWord marco_talk[146];
 static EvtWord erumosu_regl[4];
-EvtWord erumosu_a_dead[23];
+static EvtWord erumosu_a_dead[23];
 static EvtWord erumosu_b_dead[12];
 static NpcSetupInfo npcEnt[5];
 static NpcSetupInfo npcEnt_after[3];
@@ -78,7 +78,7 @@ static EvtWord hammer_event[10];
 static EvtWord sanders_kyushutsu_sub[250];
 static EvtWord erumosu_guruguru[13];
 static EvtWord erumosu_guruguru_dir[11];
-EvtWord sanders_kyushutsu[63];
+static EvtWord sanders_kyushutsu[63];
 static EvtWord marco_hanauta[2];
 static EvtWord marco_and_jewel[84];
 static EvtWord blueeye_flush[78];
@@ -98,7 +98,7 @@ static EvtWord case_event_delete[42];
 static EvtWord penalty_event[187];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
-EvtWord answer_event[125];
+static EvtWord answer_event[125];
 static EvtWord iwa01_hammer[73];
 static EvtWord iwa01_ride_a[20];
 static EvtWord iwa02_ride[66];
@@ -106,9 +106,9 @@ static EvtWord iwa02_hammer[20];
 static EvtWord iwa02_ride_a[28];
 static EvtWord iwa02_nonride_a[5];
 static EvtWord bombwall_bomb[143];
-EvtWord dokuroiwa_bomb[309];
-EvtWord dokuroiwa_init[123];
-EvtWord muj_05_first[26];
+static EvtWord dokuroiwa_bomb[309];
+static EvtWord dokuroiwa_init[123];
+static EvtWord muj_05_first[26];
 static EvtWord yure_yashi_ha1[180];
 static EvtWord yure_yashi[88];
 static EvtWord evt_kusa_1[20];
@@ -452,7 +452,7 @@ static EVT_BEGIN(erumosu_regl)
     RETURN
 EVT_END()
 
-EVT_BEGIN(erumosu_a_dead)
+static EVT_BEGIN(erumosu_a_dead)
     SET_VALUE(GSWF_MUJ_05_EMBERS_DEFEATED, 1)
     DELETE_EVENT(GW(0))
     DELETE_EVENT(GW(2))
@@ -718,7 +718,7 @@ EVT_END()
  * Starts the Ember fight near Bobbery: unless the Embers are already defeated,
  * links Embers 1 and 2 as a battle pair (battle info 8) and starts them circling.
  */
-EVT_BEGIN(sanders_kyushutsu)
+static EVT_BEGIN(sanders_kyushutsu)
     CALL(evt_npc_set_position, STRING("サンダース"), -88, 200, -34)
     IF_INT_EQUAL(GSWF_MUJ_05_EMBERS_DEFEATED, 0)
         CALL(evt_npc_set_position, STRING("エルモス１"), -158, 23, 0)
@@ -1029,7 +1029,7 @@ EVT_END()
  * Correct skull rock answer: Mario is frozen, the rock flashes five times,
  * the camera shakes and the rock opens (GSWF_MUJ_05_SKULL_ROCK_OPENED).
  */
-EVT_BEGIN(answer_event)
+static EVT_BEGIN(answer_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 525, 119, 584, 525, 23, 42, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -1245,7 +1245,7 @@ EVT_END()
  * says he must head back to camp (stg5_muj_93_08_02) and leaves,
  * and the story moves to STG5_19_GEMS_AND_JINGLES.
  */
-EVT_BEGIN(dokuroiwa_bomb)
+static EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_hitobj_onoff, STRING("e_bero"), 1, 1)
     CALL(evt_mapobj_get_position, STRING("S_dokuro_iwa"), LW(0), LW(1), LW(2))
@@ -1330,7 +1330,7 @@ EVT_END()
  * buffer and, once STG5_19_GEMS_AND_JINGLES is reached, hides the rock and turns off its hit (A_dokuro_iwa),
  * leaving the exit e_bero on; before that stage it turns e_bero off.
  */
-EVT_BEGIN(dokuroiwa_init)
+static EVT_BEGIN(dokuroiwa_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 0)
     CALL(evt_dokuroiwa_command_init)
@@ -1365,7 +1365,7 @@ EVT_BEGIN(dokuroiwa_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(muj_05_first)
+static EVT_BEGIN(muj_05_first)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP

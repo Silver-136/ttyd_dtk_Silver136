@@ -43,7 +43,7 @@ typedef struct CortezWork {
 } CortezWork;
 static BattleUnitSetup entry_honeduka;
 
-USER_FUNC(_cortez_check_drain_audience);
+static USER_FUNC(_cortez_check_drain_audience);
 static USER_FUNC(_make_cortez_work_area);
 static USER_FUNC(_check_zenei_kouei);
 static USER_FUNC(_cortez_recovery_audience);
@@ -91,7 +91,7 @@ static BattleWeapon weapon_cortez_mode2_charge;
 static BattleWeapon weapon_cortez_mode2_bone_attack;
 static BattleWeapon weapon_cortez_mode3_kamitsuki_attack;
 static PoseSoundTiming pose_sound_timing_table[73];
-PoseTableEntry pose_table_mode_1[10];
+static PoseTableEntry pose_table_mode_1[10];
 static PoseTableEntry pose_table_mode_1_hone[10];
 static PoseTableEntry pose_table_mode_2_normal[4];
 static PoseTableEntry pose_table_mode_2_upper_normal[4];
@@ -107,7 +107,7 @@ static PoseTableEntry pose_table_mode_2_lower_normal_counter[4];
 static PoseTableEntry pose_table_mode_2_lower_charge[4];
 static PoseTableEntry pose_table_mode_2_lower_charge_counter[4];
 static PoseTableEntry pose_table_fly_bone[4];
-PoseTableEntry pose_table_mode_3[12];
+static PoseTableEntry pose_table_mode_3[12];
 static PoseTableEntry pose_table_honeduka[4];
 static BattleDataEntry data_table[7];
 static BattleUnitKindPart parts[19];
@@ -125,8 +125,8 @@ static EvtWord phase_event[196];
 static EvtWord attack_event_mode1[44];
 static EvtWord attack_event_mode2[47];
 static EvtWord at2_head_bat_event[202];
-EvtWord at2_hone_charge_event[146];
-EvtWord at2_hone_rain_attack_event[605];
+static EvtWord at2_hone_charge_event[146];
+static EvtWord at2_hone_rain_attack_event[605];
 static EvtWord _bone_rain_event[114];
 static EvtWord attack_event_mode3[52];
 
@@ -737,7 +737,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 
 /** Poses of Cortez in his first form. */
-PoseTableEntry pose_table_mode_1[] = {
+static PoseTableEntry pose_table_mode_1[] = {
     {POSE_TYPE_SLEEP, "KRT_N_1"},
     {POSE_TYPE_CONFUSE, "KRT_K_1"},
 #if VERSION <= VERSION_DEMO_JP
@@ -891,7 +891,7 @@ static PoseTableEntry pose_table_fly_bone[] = {
 };
 
 /** Poses of Cortez in his final form. */
-PoseTableEntry pose_table_mode_3[] = {
+static PoseTableEntry pose_table_mode_3[] = {
 #if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Z_1"},
@@ -1360,7 +1360,7 @@ static EVT_BEGIN(at2_head_bat_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(at2_hone_charge_event)
+static EVT_BEGIN(at2_hone_charge_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(1))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
@@ -1405,7 +1405,7 @@ EVT_END()
  * throws his bones into the air and has them fall on the player's side in a shower (spawned through
  * _bone_rain_event).
  */
-EVT_BEGIN(at2_hone_rain_attack_event)
+static EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, 0)
     SET_VALUE(LW(12), PTR(&weapon_cortez_mode2_bone_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -2951,7 +2951,7 @@ static USER_FUNC(_cortez_collect_energy) {
  * Script helper: scans the 100 audience seats (10 rows of 10) and records
  * which are occupied in Cortez's work area; writes the number of occupied seats to args[1].
  */
-USER_FUNC(_cortez_check_drain_audience) {
+static USER_FUNC(_cortez_check_drain_audience) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

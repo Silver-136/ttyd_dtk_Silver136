@@ -31,7 +31,7 @@
 
 static EvtWord ne_close[22];
 static EvtWord ne_open[22];
-EvtWord gra_06_ido[12];
+static EvtWord gra_06_ido[12];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord gra_06_ido_in_sub[];
@@ -50,12 +50,12 @@ EvtWord first_gra06jin[138];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord teresa_oidasare_evt[282];
+static EvtWord teresa_oidasare_evt[282];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord teresa_oidasare_evt[272];
+static EvtWord teresa_oidasare_evt[272];
 #else
-EvtWord teresa_oidasare_evt[274];
+static EvtWord teresa_oidasare_evt[274];
 #endif
 #endif
 
@@ -82,7 +82,7 @@ static EVT_BEGIN(ne_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gra_06_ido)
+static EVT_BEGIN(gra_06_ido)
     SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 1)
     CALL(evt_bero_mapchange, STRING("jin_09"), 0)
     SET_VALUE(LW(0), 1)
@@ -342,7 +342,7 @@ EVT_END()
  * Mario and the partner drop from above onto the trail and land,
  * control returns and the Steeple door's n_bero case is switched on again.
  */
-EVT_BEGIN(teresa_oidasare_evt)
+static EVT_BEGIN(teresa_oidasare_evt)
     // Mario and his partner are placed high above the trail, as if dropped out of the Steeple.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

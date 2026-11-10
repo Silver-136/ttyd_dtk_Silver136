@@ -58,12 +58,12 @@ static EvtWord ufo_main[525];
 static EvtWord evt_ufo_init[115];
 static EvtWord evt_zenmai[141];
 static EvtWord blink_sw[33];
-EvtWord evt_ufo_sousaban[VERSION_PICK(267, 279)];
+static EvtWord evt_ufo_sousaban[VERSION_PICK(267, 279)];
 static EvtWord evt_sw[141];
-EvtWord evt_sw_reinit[88];
-EvtWord evt_sw0[72];
-EvtWord evt_sw1[72];
-EvtWord evt_sw2[72];
+static EvtWord evt_sw_reinit[88];
+static EvtWord evt_sw0[72];
+static EvtWord evt_sw1[72];
+static EvtWord evt_sw2[72];
 static s32 haguruma_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -72,8 +72,8 @@ static EvtWord evt_haguruma[130];
 static EvtWord evt_haguruma[132];
 #endif
 
-EvtWord badge_evt[5];
-EvtWord badge_evt2[5];
+static EvtWord badge_evt[5];
+static EvtWord badge_evt2[5];
 static EvtWord badge_evt3[5];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -673,7 +673,7 @@ static EVT_BEGIN(blink_sw)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_ufo_sousaban)
+static EVT_BEGIN(evt_ufo_sousaban)
     // Mario is locked in place while the crane powers up.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 230, 200, 380, 230, 130, -13, 1000, EASING_SINE_IN_OUT)
@@ -848,7 +848,7 @@ static EVT_BEGIN(evt_sw)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_sw_reinit)
+static EVT_BEGIN(evt_sw_reinit)
     SET_VALUE(GF(15), 1)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_1_PRESSED, 0)
@@ -879,7 +879,7 @@ EVT_BEGIN(evt_sw_reinit)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_sw0)
+static EVT_BEGIN(evt_sw0)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 0)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 0)
             SET_VALUE(LF(0), 1)
@@ -907,7 +907,7 @@ EVT_BEGIN(evt_sw0)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_sw1)
+static EVT_BEGIN(evt_sw1)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
             SET_VALUE(LF(0), 1)
@@ -935,7 +935,7 @@ EVT_BEGIN(evt_sw1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_sw2)
+static EVT_BEGIN(evt_sw2)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 0)
             SET_VALUE(LF(0), 1)
@@ -1014,12 +1014,12 @@ static EVT_BEGIN(evt_haguruma)
     RETURN
 EVT_END()
 
-EVT_BEGIN(badge_evt)
+static EVT_BEGIN(badge_evt)
     SET_VALUE(GSWF_AJI_03_FEELING_FINE, 1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(badge_evt2)
+static EVT_BEGIN(badge_evt2)
     SET_VALUE(GSWF_AJI_03_FEELING_FINE_P, 1)
     RETURN
 EVT_END()

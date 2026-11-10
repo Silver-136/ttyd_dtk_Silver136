@@ -70,7 +70,7 @@ EvtWord syuryo_evt[1254];
 #endif
 
 static EvtWord gareki_fall[45];
-EvtWord koopa_evt[1671];
+static EvtWord koopa_evt[1671];
 static EvtWord shuryolight_init[18];
 static EvtWord shan_init[46];
 
@@ -862,7 +862,7 @@ EVT_END()
  * Bowser and Kammy are left dazed with spinning stars, Grodus (now cracked) staggers away,
  * and the story moves to STG8_15_GRODUS. Bowser and Kammy get talk events (koopa_talk/baba_talk).
  */
-EVT_BEGIN(koopa_evt)
+static EVT_BEGIN(koopa_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KOOPA_QUAKE1"), 75, 300, 0, LW(0))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 1500)

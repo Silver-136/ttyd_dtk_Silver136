@@ -71,7 +71,7 @@ static EvtWord evt_daijisouna_kami[206];
 static EvtWord evt_daijisouna_kami[208];
 #endif
 
-EvtWord evt_syasyou_auto_talk[27];
+static EvtWord evt_syasyou_auto_talk[27];
 static EvtWord init_syashou[56];
 static s32 item_tbl2[2];
 
@@ -143,8 +143,8 @@ static EvtWord evt_access_entry[25];
 #endif
 
 static EvtWord evt_door_msg[102];
-EvtWord evt_narikin_room[87];
-EvtWord evt_powan_room[83];
+static EvtWord evt_narikin_room[87];
+static EvtWord evt_powan_room[83];
 
 #if VERSION >= VERSION_US
 static EvtWord rsh_04_init_evt[214];
@@ -638,7 +638,7 @@ static EVT_BEGIN(evt_daijisouna_kami)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_syasyou_auto_talk)
+static EVT_BEGIN(evt_syasyou_auto_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_DIARY_TALK_DONE, 1)
         RETURN
     END_IF
@@ -1498,7 +1498,7 @@ static EVT_BEGIN(evt_door_msg)
 EVT_END()
 
 // GW(14)/GW(15) hold the two repeat-message event IDs for the active room.
-EVT_BEGIN(evt_narikin_room)
+static EVT_BEGIN(evt_narikin_room)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
     LOOP(0)
@@ -1540,7 +1540,7 @@ EVT_BEGIN(evt_narikin_room)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_powan_room)
+static EVT_BEGIN(evt_powan_room)
     SET_VALUE(LF(0), 0)
     LOOP(0)
         IF_INT_EQUAL(GSWF_RSH_04_IN_ROOM_3, 1)

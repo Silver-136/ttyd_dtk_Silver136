@@ -64,7 +64,7 @@ void _prolog(void);
 
 EvtWord kpa_init[49];
 EvtWord kpa_read_mobj[291];
-EvtWord kpa_coin_evt[7];
+static EvtWord kpa_coin_evt[7];
 EvtWord kpa_read_item[34];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -175,7 +175,7 @@ EVT_END()
  * Pickup script for the stage coins made by kpa_read_item; LW(0)..LW(2) = coin position.
  * Adds a coin to Bowser's coin tally through kpa_add_coin.
  */
-EVT_BEGIN(kpa_coin_evt)
+static EVT_BEGIN(kpa_coin_evt)
     CALL(kpa_add_coin, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()

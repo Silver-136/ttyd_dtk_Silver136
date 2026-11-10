@@ -150,7 +150,7 @@ static USER_FUNC(viewport);
 static void kuji_bomb_055_callback(s32 type, MsgWinData** work);
 
 static EvtWord debug_event[16];
-EvtWord gor_03_down_evt[8];
+static EvtWord gor_03_down_evt[8];
 static BeroEntry bero_entry_data[6];
 static BeroEntry yuu_00_data[1];
 static BeroEntry yuu_01_data[1];
@@ -158,7 +158,7 @@ static BeroEntry yuu_02_data[1];
 static BeroEntry yuu_03_data[1];
 static EvtWord maffiaboss_ticket_put[31];
 static EvtWord maffiaboss_ticket_check[241];
-EvtWord maffiaboss_init[73];
+static EvtWord maffiaboss_init[73];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord maffiaboss_maffiaboss[];
@@ -166,7 +166,7 @@ extern EvtWord maffiaboss_maffiaboss[];
 EvtWord maffiaboss_maffiaboss[495];
 #endif
 
-EvtWord maffiaboss_airship_ticket[768];
+static EvtWord maffiaboss_airship_ticket[768];
 static EvtWord maffiaboss_teshita_irai[253];
 static EvtWord maffiaboss_train_ticket_init[50];
 
@@ -176,7 +176,7 @@ extern EvtWord maffiaboss_train_ticket[];
 EvtWord maffiaboss_train_ticket[824];
 #endif
 
-EvtWord maffiaboss_talk_common[106];
+static EvtWord maffiaboss_talk_common[106];
 static EvtWord maffiaboss_talk[10];
 static EvtWord maffiaboss_desk_talk[VERSION_PICK(46, 54)];
 static EvtWord maffiaboss_casino_init[17];
@@ -245,9 +245,9 @@ EvtWord bteresa_talk_sub_minigame[245];
 #endif
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord bteresa_talk_sub_keihin[202];
+static EvtWord bteresa_talk_sub_keihin[202];
 #else
-EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
+static EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
@@ -257,7 +257,7 @@ EvtWord bteresa_table_talk[437];
 #endif
 
 static EvtWord bteresa_init[18];
-EvtWord bteresa_talk[81];
+static EvtWord bteresa_talk[81];
 static EvtWord kyaku1_init[2];
 static EvtWord kyaku1_talk[66];
 static EvtWord kyaku4_init[2];
@@ -285,9 +285,9 @@ EvtWord ranking_set[65];
 #endif
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord exchange_set[200];
+static EvtWord exchange_set[200];
 #else
-EvtWord exchange_set[VERSION_PICK(195, 210)];
+static EvtWord exchange_set[VERSION_PICK(195, 210)];
 #endif
 
 static EvtWord roten_4_init[13];
@@ -338,7 +338,7 @@ static EvtWord evt_door_02_00[44];
 static EvtWord evt_wall_02_0[15];
 static const char* door_data_02_0_npc[6];
 static EvtWord door_data_02_0_open_sub[13];
-EvtWord door_data_02_0_open[28];
+static EvtWord door_data_02_0_open[28];
 static EvtWord door_data_02_0_close[51];
 static const char* door_data_02_mobj[2];
 static DoorParam door_data_02_0l;
@@ -347,7 +347,7 @@ static EvtWord evt_door_02_10[15];
 static EvtWord evt_door_02_11[15];
 static EvtWord evt_wall_02_1[28];
 static const char* door_data_02_1_npc[6];
-EvtWord desk_talk_check[173];
+static EvtWord desk_talk_check[173];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_door_02_1_open[];
@@ -406,10 +406,10 @@ static EvtWord evt_door_04_close[70];
 
 static DoorParam door_data_04_roll;
 static EvtWord evt_door_04_entry[20];
-EvtWord wall_bomb_init[51];
+static EvtWord wall_bomb_init[51];
 static EvtWord wall_bomb[146];
 static EvtWord uraguchi_tenin[23];
-EvtWord uraguchi_event[323];
+static EvtWord uraguchi_event[323];
 static EvtWord uraguchi_check[34];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
@@ -604,7 +604,7 @@ static USER_FUNC(evt_exchange_msg_set) {
  * paper, tube and boat), and patches the two-digit vertical-position field in the opening selection tag from
  * the number of entries. The text pointer goes to args[1].
  */
-USER_FUNC(minigameselect_msg_set) {
+static USER_FUNC(minigameselect_msg_set) {
     EvtWord* args = event->args;
     const s8* msg = (const s8*)msgSearch((const char*)evtGetValue(event, args[0]));
     s32 flags[4];
@@ -798,7 +798,7 @@ static EVT_BEGIN(debug_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gor_03_down_evt)
+static EVT_BEGIN(gor_03_down_evt)
     SET_VALUE(GSWF_GOR_03_DROP_TO_TIK_07_PENDING, 1)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -1116,7 +1116,7 @@ EVT_END()
  * lying on the platform (turned 90 degrees about X) during STG5_58_FAIR_WINDS to STG5_64_03_F_F_ARRIVE,
  * or out of sight afterwards) and, after the reunion scene at STG2_45_DAUGHTER_LOCATED, runs the ticket check.
  */
-EVT_BEGIN(maffiaboss_init)
+static EVT_BEGIN(maffiaboss_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
         CALL(evt_npc_set_position, STRING("me"), -198, 155, -80)
@@ -1300,7 +1300,7 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     RETURN
 EVT_END()
 
-EVT_BEGIN(maffiaboss_airship_ticket)
+static EVT_BEGIN(maffiaboss_airship_ticket)
     // Wait until Mario reaches the area in front of Don Pianta's desk.
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1822,7 +1822,7 @@ EVT_END()
  * runs the Blimp Ticket and Train Ticket scenes, the henchmen's request scene at STG5_61_FRANKLYS_HOUSE_STG_5,
  * and the generic lines (gor_03_01_01 to 01_03) otherwise.
  */
-EVT_BEGIN(maffiaboss_talk_common)
+static EVT_BEGIN(maffiaboss_talk_common)
     SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -2703,7 +2703,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     RETURN
 EVT_END()
 
-EVT_BEGIN(bteresa_talk_sub_keihin)
+static EVT_BEGIN(bteresa_talk_sub_keihin)
     // If Teresa has no prizes left, she apologizes.
     CALL(evt_badgeShop_bteresa_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -3100,7 +3100,7 @@ static EVT_BEGIN(bteresa_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(bteresa_talk)
+static EVT_BEGIN(bteresa_talk)
     SET_VALUE(LW(1), GSW_GOR_PARLOR_ATTENDANT_TALK_STAGE)
     SET_VALUE(LW(0), 0)
     ADD(LW(0), GSWF_GOR_PLANE_GAME_TOP_SCORE)
@@ -3426,7 +3426,7 @@ EVT_END()
  * The price list is a menu; the coins are taken and the medals are added to the counter;
  * also first returns any medals Mario left on deposit.
  */
-EVT_BEGIN(exchange_set)
+static EVT_BEGIN(exchange_set)
     // Mario stops at the Pianta Changer's counter.
     CALL(evt_mario_key_onoff, 0)
 
@@ -4426,7 +4426,7 @@ static EVT_BEGIN(door_data_02_0_open_sub)
     RETURN
 EVT_END()
 
-EVT_BEGIN(door_data_02_0_open)
+static EVT_BEGIN(door_data_02_0_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
     SPAWN_EVENT(door_data_02_0_open_sub)
     SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
@@ -4553,7 +4553,7 @@ static const char* door_data_02_1_npc[] = {
     NULL,
 };
 
-EVT_BEGIN(desk_talk_check)
+static EVT_BEGIN(desk_talk_check)
     CALL(desk_talk_init_func)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
@@ -5041,7 +5041,7 @@ static EVT_BEGIN(evt_door_04_entry)
     RETURN
 EVT_END()
 
-EVT_BEGIN(wall_bomb_init)
+static EVT_BEGIN(wall_bomb_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
@@ -5121,7 +5121,7 @@ EVT_END()
  * jingle: the clerk unlocks the door (evt_door_01_entry on door_data_01_1), lets him through (043_01) and
  * GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE is set.
  */
-EVT_BEGIN(uraguchi_event)
+static EVT_BEGIN(uraguchi_event)
     // The area music is held while Mario and the party turn to face the clerk.
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_envoff, PSND_PAUSE)

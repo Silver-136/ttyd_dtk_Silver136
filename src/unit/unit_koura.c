@@ -27,10 +27,10 @@ static EvtWord phase_event[22];
 static EvtWord phase_event[38];
 #endif
 
-EvtWord koura_open[72];
-EvtWord koura_close[79];
+static EvtWord koura_open[72];
+static EvtWord koura_close[79];
 static EvtWord damage_core[92];
-EvtWord pose_tbl_reset[58];
+static EvtWord pose_tbl_reset[58];
 static EvtWord dead_event[243];
 EvtWord destroy_event[47];
 static EvtWord damage_event[10];
@@ -252,7 +252,7 @@ EVT_END()
  * Shows Mario, makes him targetable again and the shell untargetable, and sets unit work 1 (open) and 2.
  * Does nothing if already open.
  */
-EVT_BEGIN(koura_open)
+static EVT_BEGIN(koura_open)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
@@ -279,7 +279,7 @@ EVT_END()
  * hiding him and making the shell the target again. Also run before a Mario/partner position swap.
  * Does nothing if already closed.
  */
-EVT_BEGIN(koura_close)
+static EVT_BEGIN(koura_close)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -352,7 +352,7 @@ EVT_END()
  * Data tag 61: reapplies the crack-stage pose table for the shell's current HP (as damage_core does, but without
  * the hurt pose); plays the crack sound unless the shell is intact.
  */
-EVT_BEGIN(pose_tbl_reset)
+static EVT_BEGIN(pose_tbl_reset)
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(3)

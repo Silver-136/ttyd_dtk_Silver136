@@ -25,13 +25,13 @@
 
 static EvtWord bero_s_doa_close[10];
 static EvtWord bero_s_doa_open[10];
-EvtWord evt_dokan[12];
+static EvtWord evt_dokan[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord door_switch_init[17];
 static EvtWord door_switch[59];
 static EvtWord dai3_escape[32];
 static EvtWord dai3_battle_init[66];
-EvtWord dai3_battle[140];
+static EvtWord dai3_battle[140];
 static EvtWord ueki_evt_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_15_init_evt[156];
@@ -52,7 +52,7 @@ static EVT_BEGIN(bero_s_doa_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_dokan)
+static EVT_BEGIN(evt_dokan)
     IF_INT_EQUAL(GSWF_MRI_15_CRUMP_GONE, 0)
         SET_VALUE(GSWF_MRI_15_CRUMP_GONE, 1)
     END_IF
@@ -172,7 +172,7 @@ EVT_END()
  * then once Mario is on A_yuka at x <= 20 and BeroEXEC equals 65536, the two X-Naut grunts (battle info 11) attack;
  * afterwards they are removed. Sets the story to STG2_23_01_X_NAUT_BATTLE.
  */
-EVT_BEGIN(dai3_battle)
+static EVT_BEGIN(dai3_battle)
     CALL(evt_seq_wait, SEQ_GAME)
     IF_INT_EQUAL(GSWF_MRI_15_CRUMP_GONE, 0)
         SPAWN_EVENT_GET_ID(PTR(dai3_escape), LW(10))

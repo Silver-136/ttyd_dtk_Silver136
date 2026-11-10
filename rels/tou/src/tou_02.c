@@ -96,8 +96,8 @@ void ext_fan_dispent(void);
 
 static EvtWord s_door_open[58];
 static EvtWord s_door_close[58];
-EvtWord n_1_door_open[22];
-EvtWord n_1_door_close[22];
+static EvtWord n_1_door_open[22];
+static EvtWord n_1_door_close[22];
 static EvtWord n_2_door_open[22];
 static EvtWord n_2_door_close[22];
 static EvtWord n_3_door_open[12];
@@ -105,7 +105,7 @@ static EvtWord n_3_door_close[12];
 static EvtWord n_4_door_open[12];
 static EvtWord n_4_door_close[12];
 static BeroEntry bero_data[6];
-EvtWord evt_move_g[63];
+static EvtWord evt_move_g[63];
 static EvtWord init_gard1[39];
 static EvtWord talk_gard1[70];
 static EvtWord init_gard2[39];
@@ -136,7 +136,7 @@ static EvtWord talk_kinopio_f[112];
 static EvtWord init_chu[20];
 static EvtWord talk_chu[67];
 static EvtWord init_champ[32];
-s32 move_pos[26];
+static s32 move_pos[26];
 static EvtWord move_champ[155];
 static EvtWord talk_champ[34];
 static EvtWord init_shikowa[32];
@@ -165,7 +165,7 @@ extern EvtWord mario_momikucha_msg[];
 EvtWord mario_momikucha_msg[111];
 #endif
 
-EvtWord evt_momikucha[105];
+static EvtWord evt_momikucha[105];
 static EvtWord evt_key[173];
 static EvtWord evt_poster_1[5];
 static EvtWord evt_poster_2[5];
@@ -310,7 +310,7 @@ static EVT_BEGIN(s_door_close)
 EVT_END()
 
 /** Swings open the double doors door_2_a / door_2_b (the first lobby door pair). */
-EVT_BEGIN(n_1_door_open)
+static EVT_BEGIN(n_1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2_b"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -319,7 +319,7 @@ EVT_BEGIN(n_1_door_open)
 EVT_END()
 
 /** Swings the double doors door_2_a / door_2_b closed again. */
-EVT_BEGIN(n_1_door_close)
+static EVT_BEGIN(n_1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2_b"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -477,7 +477,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
-EVT_BEGIN(evt_move_g)
+static EVT_BEGIN(evt_move_g)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     ADD(LW(2), 100)
     CALL(evt_mario_mov_pos, LW(0), LW(2), 500)
@@ -1138,7 +1138,7 @@ static EVT_BEGIN(init_champ)
 EVT_END()
 
 /** Thirteen (x, z) points around the lobby that move_champ steps through; it does not use the values. */
-s32 move_pos[] = {
+static s32 move_pos[] = {
     0, 0, -100, -70, -225, 50, -230, 135,
     -105, 110, 10, -10, 135, 135, 220, 40,
     138, -65, 35, -50, 0, 110, -80, -40,
@@ -2209,7 +2209,7 @@ EVT_BEGIN(mario_momikucha_msg)
 EVT_END()
 
 // If both first-time mob scenes qualify, the champion Mario selection takes priority.
-EVT_BEGIN(evt_momikucha)
+static EVT_BEGIN(evt_momikucha)
     SET_VALUE(LF(0), 0)
     SET_VALUE(GF(10), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)

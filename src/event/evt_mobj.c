@@ -5415,7 +5415,7 @@ static EVT_BEGIN(kpa_pole_move)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kpa_move_to_toride)
+static EVT_BEGIN(kpa_move_to_toride)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
     SET_VALUE(LSWF(5), 1) // LSWF_KPA_GOAL_WALK_STARTED (rels/kpa/include/kpa.h)

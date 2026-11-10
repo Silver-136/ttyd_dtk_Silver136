@@ -30,7 +30,7 @@ static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[2];
 static EvtWord peach_evt_yuge[43];
-EvtWord peach_evt_syawa_main[798];
+static EvtWord peach_evt_syawa_main[798];
 static EvtWord peach_evt_syawa_init[63];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -118,7 +118,7 @@ static USER_FUNC(peach_set_pos) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(peach_evt_syawa_main)
+static EVT_BEGIN(peach_evt_syawa_main)
     // The music dips and Peach is led to the tub.
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(2))
     CALL(evt_snd_envoff, PSND_PAUSE)

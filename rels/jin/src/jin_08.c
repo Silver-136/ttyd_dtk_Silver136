@@ -32,7 +32,7 @@ static EvtWord e_open[12];
 static EvtWord evt_roll_in[41];
 static BeroEntry bero_entry_data[3];
 static EvtWord evt_open[73];
-EvtWord evt_open_kagi[73];
+static EvtWord evt_open_kagi[73];
 static EvtWord evt_unlock[11];
 static EvtWord oumu_init[2];
 
@@ -172,7 +172,7 @@ EVT_END()
  * Chest script for the second chest (hako2): the lid swings open
  * and Mario receives the Steeple Key (ITEM_STEEPLE_KEY_0x17); sets GSWF_JIN_08_STEEPLE_KEY_TAKEN.
  */
-EVT_BEGIN(evt_open_kagi)
+static EVT_BEGIN(evt_open_kagi)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("hako2"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TBOX_OPEN1"), LW(10), LW(11), LW(12), 0)

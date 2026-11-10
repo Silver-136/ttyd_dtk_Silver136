@@ -52,7 +52,7 @@ static USER_FUNC(bgm_start_wait);
 static USER_FUNC(booboo_main);
 static USER_FUNC(box_r);
 static USER_FUNC(check_tabemono);
-USER_FUNC(chk_fuki);
+static USER_FUNC(chk_fuki);
 static USER_FUNC(delete_item_list);
 static USER_FUNC(get_item_list);
 static USER_FUNC(ie2_npc_disp_off);
@@ -80,7 +80,7 @@ static EvtWord villagerJ_talk[57];
 static EvtWord shop_man_init[36];
 static EvtWord shop_man_talk[28];
 static EvtWord shop_woman_init[7];
-EvtWord shop_woman_talk[163];
+static EvtWord shop_woman_talk[163];
 static EvtWord kizayarou_init[38];
 static EvtWord kizayarou_pig_init[14];
 static EvtWord kizayarou_talk[33];
@@ -139,11 +139,11 @@ static EvtWord cam_down[8];
 static EvtWord usu01_check_vivian[36];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord usu01_crowFG_talk_event[347];
+static EvtWord usu01_crowFG_talk_event[347];
 static EvtWord usu01_crowHI_talk_event[246];
 static EvtWord usu01_crowJ_talk_event[222];
 #else
-EvtWord usu01_crowFG_talk_event[VERSION_PICK(355, 394)];
+static EvtWord usu01_crowFG_talk_event[VERSION_PICK(355, 394)];
 static EvtWord usu01_crowHI_talk_event[VERSION_PICK(250, 289)];
 static EvtWord usu01_crowJ_talk_event[VERSION_PICK(226, 265)];
 #endif
@@ -162,9 +162,9 @@ static DoorParam door_1;
 static EvtWord evt_door_2_1_1[15];
 static EvtWord evt_door_2_1_2[2];
 static EvtWord evt_wall_2_1[28];
-EvtWord loop_msg[84];
-EvtWord mise_kiza_msg[32];
-EvtWord mawari_house_delay[46];
+static EvtWord loop_msg[84];
+static EvtWord mise_kiza_msg[32];
+static EvtWord mawari_house_delay[46];
 static EvtWord door_2_1_open[23];
 static DoorParam door_2_1;
 static EvtWord evt_ie2_door2_1[244];
@@ -177,7 +177,7 @@ static EvtWord door_3_open[12];
 static EvtWord door_3_close[14];
 static DoorParam door_3;
 static BeroEntry bero_entry_data[3];
-EvtWord usu01_gusun[80];
+static EvtWord usu01_gusun[80];
 static EvtWord evt_monban_buta_main[34];
 static EvtWord evt_monban_buta[18];
 static EvtWord evt_monban_buta2[17];
@@ -190,7 +190,7 @@ static EvtWord lock_item_check[39];
 static EvtWord lock_item_check[41];
 #endif
 
-EvtWord unlock[13];
+static EvtWord unlock[13];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
@@ -433,7 +433,7 @@ static EVT_BEGIN(shop_woman_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(shop_woman_talk)
+static EVT_BEGIN(shop_woman_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_03_SHOP_KEY)
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 0)
@@ -1877,7 +1877,7 @@ static EVT_BEGIN(usu01_check_vivian)
     RETURN
 EVT_END()
 
-EVT_BEGIN(usu01_crowFG_talk_event)
+static EVT_BEGIN(usu01_crowFG_talk_event)
     // No balloon is showing yet; GW(0) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -2492,7 +2492,7 @@ EVT_END()
  * a sibling loop closes the speaker's bubble and pauses it
  * while that speaker is the NPC Mario would talk to (chk_fuki), so he can be spoken to.
  */
-EVT_BEGIN(loop_msg)
+static EVT_BEGIN(loop_msg)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_10_DOOPLISS_BATTLE)
         RETURN
     END_IF
@@ -2540,7 +2540,7 @@ EVT_END()
  * through loop_msg the dandy (stg4_usu_61_3, swearing he just woke up in the shop)
  * and the shopkeeper (stg4_usu_61_4, demanding why he was there with his wife) repeat their lines.
  */
-EVT_BEGIN(mise_kiza_msg)
+static EVT_BEGIN(mise_kiza_msg)
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(0), STRING("キザ野郎"))
         SET_VALUE(LW(1), STRING("stg4_usu_61_3"))
@@ -2556,7 +2556,7 @@ EVT_BEGIN(mise_kiza_msg)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mawari_house_delay)
+static EVT_BEGIN(mawari_house_delay)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_01_THE_MAYORS_A_PIG)
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
             SPAWN_EVENT(evt_monban_buta2)
@@ -2694,7 +2694,7 @@ static USER_FUNC(check_tabemono) {
  * Script helper: returns in args[1] TRUE if the NPC that the A button would talk to this frame (talkTarget)
  * is the one named args[0].
  */
-USER_FUNC(chk_fuki) {
+static USER_FUNC(chk_fuki) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     NpcEntry* npc = npcGetWorkPtr()->talkTarget;
@@ -3093,7 +3093,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-EVT_BEGIN(usu01_gusun)
+static EVT_BEGIN(usu01_gusun)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
         RETURN
     END_IF
@@ -3247,7 +3247,7 @@ EVT_END()
  * Unlocks the shop storage door: registers an A-button trigger at A_usu01_ie2_door3 to run the door script
  * and sets STG4_04_STORAGE_ROOM_UNLOCKED.
  */
-EVT_BEGIN(unlock)
+static EVT_BEGIN(unlock)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
     RETURN

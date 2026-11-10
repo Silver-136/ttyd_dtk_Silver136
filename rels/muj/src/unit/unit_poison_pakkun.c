@@ -33,8 +33,8 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_poison_pakkun_attack;
-BattleWeapon weapon_poison_pakkun_breath_attack;
+static BattleWeapon weapon_poison_pakkun_attack;
+static BattleWeapon weapon_poison_pakkun_breath_attack;
 static EvtWord attack_event[79];
 static EvtWord breath_event[369];
 static PoseTableEntry pose_table[18];
@@ -148,7 +148,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of the Putrid Piranha's attack: 3 damage, hammer-type contact attack. */
-BattleWeapon weapon_poison_pakkun_attack = {
+static BattleWeapon weapon_poison_pakkun_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -185,7 +185,7 @@ BattleWeapon weapon_poison_pakkun_attack = {
 };
 
 /** Weapon of the Putrid Piranha's breath: 2 damage, jump-type contact attack. */
-BattleWeapon weapon_poison_pakkun_breath_attack = {
+static BattleWeapon weapon_poison_pakkun_breath_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

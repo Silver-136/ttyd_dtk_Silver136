@@ -23,9 +23,9 @@
 #include "driver/itemdrv.h"
 #include "muj.h"
 
-EvtWord muj_03_event_01[22];
+static EvtWord muj_03_event_01[22];
 static BeroEntry bero_entry_data[3];
-EvtWord nigeru_suifu01[271];
+static EvtWord nigeru_suifu01[271];
 static EvtWord evt_kusa_5[20];
 static EvtWord evt_kusa_7[20];
 static TreeAccess tree_tbl[5];
@@ -37,7 +37,7 @@ EvtWord muj_03_init_evt[112];
  * the first time he enters there from STG5_13_BOBBERY_THE_BRIDGE on it starts nigeru_suifu01,
  * sets GSWF_MUJ_03_FLEEING_SAILORS_SEEN and returns 1 in LW(0) (0 otherwise).
  */
-EVT_BEGIN(muj_03_event_01)
+static EVT_BEGIN(muj_03_event_01)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 0)
             SPAWN_EVENT(nigeru_suifu01)
@@ -94,7 +94,7 @@ static BeroEntry bero_entry_data[] = {
  * and run away from him; they move with no wall collision
  * and with special footstep sounds for the glasses sailor.
  */
-EVT_BEGIN(nigeru_suifu01)
+static EVT_BEGIN(nigeru_suifu01)
     CALL(evt_npc_set_position, STRING("オドオド水夫"), 570, 150, -50)
     CALL(evt_npc_set_ry, STRING("オドオド水夫"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_WALL_COLLISION)

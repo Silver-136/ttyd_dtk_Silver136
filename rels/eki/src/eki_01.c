@@ -35,12 +35,12 @@ static EvtWord evt_chk[23];
 #endif
 
 static EvtWord evt_lock[10];
-EvtWord evt_kami_1[5];
-EvtWord evt_kami_2[5];
-EvtWord evt_kami_3[5];
-EvtWord evt_kami_4[5];
-EvtWord evt_kami_5[5];
-EvtWord evt_kami_6[5];
+static EvtWord evt_kami_1[5];
+static EvtWord evt_kami_2[5];
+static EvtWord evt_kami_3[5];
+static EvtWord evt_kami_4[5];
+static EvtWord evt_kami_5[5];
+static EvtWord evt_kami_6[5];
 EvtWord eki_01_init_evt[223];
 
 /**
@@ -237,32 +237,32 @@ static EVT_BEGIN(evt_lock)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kami_1)
+static EVT_BEGIN(evt_kami_1)
     SET_VALUE(GSWF_EKI_01_PAPER_1_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kami_2)
+static EVT_BEGIN(evt_kami_2)
     SET_VALUE(GSWF_EKI_01_PAPER_2_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kami_3)
+static EVT_BEGIN(evt_kami_3)
     SET_VALUE(GSWF_EKI_01_PAPER_3_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kami_4)
+static EVT_BEGIN(evt_kami_4)
     SET_VALUE(GSWF_EKI_01_PAPER_4_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kami_5)
+static EVT_BEGIN(evt_kami_5)
     SET_VALUE(GSWF_EKI_01_PAPER_5_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kami_6)
+static EVT_BEGIN(evt_kami_6)
     SET_VALUE(GSWF_EKI_01_PAPER_6_BLOWN_AWAY, 1)
     RETURN
 EVT_END()

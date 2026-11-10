@@ -41,7 +41,7 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(bgm_wait_stop);
-USER_FUNC(toron_check);
+static USER_FUNC(toron_check);
 static void yuurei_callback(s32 type, void* param);
 static void powan_callback(s32 type, void* param);
 
@@ -49,11 +49,11 @@ static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
 static EvtWord evt_powan_msg[36];
-EvtWord evt_nabe[247];
+static EvtWord evt_nabe[247];
 static EvtWord init_gurume[38];
 static EvtWord talk_gurume[176];
 static EvtWord talk_powan[2];
-EvtWord init_yuurei[250];
+static EvtWord init_yuurei[250];
 static EvtWord evt_shake[39];
 static EvtWord evt_shake2[6];
 static s32 item_tbl2[2];
@@ -71,8 +71,8 @@ static NpcSetupInfo npc_data[6];
 static const char* door_3[7];
 static const char* door_4[7];
 static const char* door_5[7];
-EvtWord evt_1day_end[68];
-EvtWord evt_2day_end[68];
+static EvtWord evt_1day_end[68];
+static EvtWord evt_2day_end[68];
 static EvtWord evt_normal_yado[119];
 static EvtWord evt_bed[22];
 
@@ -143,7 +143,7 @@ EvtWord rsh_02_b_init_evt_nidome[213];
 #endif
 
 EvtWord rsh_02_c_init_evt_nidome[136];
-EvtWord evt_nidome_bed[126];
+static EvtWord evt_nidome_bed[126];
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
 // Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
@@ -300,7 +300,7 @@ EVT_END()
  * the gourmet Toad confesses and Pennington appears and walks off,
  * and the story moves to STG6_05_GALLEY_KETTLE_DISCOVERED.
  */
-EVT_BEGIN(evt_nabe)
+static EVT_BEGIN(evt_nabe)
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_04_GRILLING_HEFF_T)
         SET_VALUE(LF(0), 1)
@@ -453,7 +453,7 @@ static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
 
-EVT_BEGIN(init_yuurei)
+static EVT_BEGIN(init_yuurei)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_13_TALK_TO_THE_CONDUCTOR)
         RETURN
@@ -747,7 +747,7 @@ EVT_BEGIN(talk_yuurei)
 EVT_END()
 
 // Report contact with this NPC only while player input/control and the system level permit it.
-USER_FUNC(toron_check) {
+static USER_FUNC(toron_check) {
     NpcEntry* hit = fbatHitCheckAll();
 
     // トロン
@@ -908,7 +908,7 @@ static const char* door_5[] = {
  * asks to sleep, then fades out with a spotlight on Mario, sets STG6_20_END_OF_DAY_1,
  * restores HP/FP of Mario and the party and warps to rsh_02_a for the next morning.
  */
-EVT_BEGIN(evt_1day_end)
+static EVT_BEGIN(evt_1day_end)
     CALL(evt_msg_print, 0, STRING("stg6_yado_02"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_yado_02_yn"))
     CALL(evt_msg_continue)
@@ -979,7 +979,7 @@ static USER_FUNC(bgm_wait_stop) {
  * Bed scene at the end of day 2 (story STG6_43_CONDUCTOR_APPEARS):
  * same as evt_1day_end but sets STG6_44_END_OF_DAY_2 before warping to rsh_02_a.
  */
-EVT_BEGIN(evt_2day_end)
+static EVT_BEGIN(evt_2day_end)
     CALL(evt_msg_print, 0, STRING("stg6_yado_02"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_yado_02_yn"))
     CALL(evt_msg_continue)
@@ -2267,7 +2267,7 @@ EVT_END()
  * restores HP/FP and changes the map to a train-travel scene of the hom area (hom_10, hom_11 or hom_12),
  * setting GSW_HOM_TRAIN_LEG to the next leg only when stopped at Riverside.
  */
-EVT_BEGIN(evt_nidome_bed)
+static EVT_BEGIN(evt_nidome_bed)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL_CHILD(evt_normal_yado)

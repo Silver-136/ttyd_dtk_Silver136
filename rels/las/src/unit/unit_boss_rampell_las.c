@@ -226,7 +226,7 @@ static BattleUnitKindPart parts_chuchurina[1];
 static BattleWeapon enemyWeapon_ChuchurinaNormalAttackR;
 static BattleWeapon enemyWeapon_ChuchurinaNormalAttackL;
 static BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast;
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast;
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast;
 static EvtWord init_event_chuchurina[51];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -4415,7 +4415,7 @@ static BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
 };
 
 /** Weapon of the last left-hand hit of Doopliss's Ms. Mowz attack: damage 2, 3 or 4 by partner rank. */
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast = {
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

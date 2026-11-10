@@ -105,12 +105,12 @@ static EvtWord evt_rsh_rnd_npc_4_4_talk[8];
 static EvtWord evt_rsh_rnd_npc_4_5_talk[8];
 static EvtWord evt_rsh_rnd_npc_4_6_talk[8];
 static EvtWord evt_rsh_rnd_npc_4_7_talk[8];
-EvtWord evt_rsh_rnd_npc_4_8_talk[39];
+static EvtWord evt_rsh_rnd_npc_4_8_talk[39];
 static EvtWord evt_rsh_rnd_npc_4_9_talk[8];
 static EvtWord evt_rsh_rnd_npc_4_10_talk[8];
 static EvtWord evt_rsh_rnd_npc_5_1_talk[8];
 static EvtWord evt_rsh_rnd_npc_5_2_talk[8];
-EvtWord evt_rsh_rnd_npc_5_3_talk[47];
+static EvtWord evt_rsh_rnd_npc_5_3_talk[47];
 static EvtWord evt_rsh_rnd_npc_5_4_talk[8];
 static EvtWord evt_rsh_rnd_npc_5_5_talk[8];
 static EvtWord evt_rsh_rnd_npc_5_6_talk[8];
@@ -1071,7 +1071,7 @@ static EVT_BEGIN(evt_rsh_rnd_npc_4_7_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_rsh_rnd_npc_4_8_talk)
+static EVT_BEGIN(evt_rsh_rnd_npc_4_8_talk)
     IF_INT_EQUAL(GSWF_RSH_TRAVELER_SECRETS_HEARD, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_42"), 0, STRING("me"))
         CALL(evt_msg_select, 0, STRING("stg6_rsh_c_42_sel"))
@@ -1123,7 +1123,7 @@ static EVT_BEGIN(evt_rsh_rnd_npc_5_2_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_rsh_rnd_npc_5_3_talk)
+static EVT_BEGIN(evt_rsh_rnd_npc_5_3_talk)
     IF_INT_EQUAL(GSWF_RSH_QUIZ_PASSENGER_DONE, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_47"), 0, STRING("me"))
         CALL(evt_msg_select, 0, STRING("stg6_rsh_c_47_sel"))

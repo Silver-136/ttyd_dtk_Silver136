@@ -42,7 +42,7 @@ static PoseTableEntry pose_table_object[3];
 static BattleUnitKindPart unitpartsdata_Mario[3];
 BattleUnitKind unitdata_Mario;
 static EvtWord battle_entry_event[73];
-EvtWord mario_ride_btl_entry_event[120];
+static EvtWord mario_ride_btl_entry_event[120];
 static EvtWord init_event[75];
 
 #if VERSION >= VERSION_US
@@ -308,7 +308,7 @@ EVT_END()
  * Motion 0x1A is MARIO_MOTION_YOSHI (battle_seq.c picks this event then), so Mario arrives riding Yoshi
  * and jumps off.
  */
-EVT_BEGIN(mario_ride_btl_entry_event)
+static EVT_BEGIN(mario_ride_btl_entry_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 250)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

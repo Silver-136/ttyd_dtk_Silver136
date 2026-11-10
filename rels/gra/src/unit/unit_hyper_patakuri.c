@@ -26,7 +26,7 @@ static BattleUnitDefense defence_patakuri;
 static BattleUnitDefenseAttr defence_patakuri_attr;
 static StatusVulnerability regist_patakuri;
 static BattleWeapon weapon_patakuri_attack;
-BattleWeapon weapon_patakuri_charge;
+static BattleWeapon weapon_patakuri_charge;
 static BattleUnitKindPart parts_patakuri[1];
 static PoseTableEntry pose_table_patakuri[19];
 static BattleDataEntry data_table_patakuri[3];
@@ -175,7 +175,7 @@ static BattleWeapon weapon_patakuri_attack = {
 };
 
 /** H. Paragoomba's charge-up move (no damage, used on itself). */
-BattleWeapon weapon_patakuri_charge = {
+static BattleWeapon weapon_patakuri_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

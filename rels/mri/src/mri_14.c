@@ -48,7 +48,7 @@ static EvtWord first_time_w_bero[60];
 static BeroEntry bero_entry_data[3];
 static EvtWord npc_rotate[28];
 static EvtWord kanbu_urouro[75];
-EvtWord dai3_kanbu[192];
+static EvtWord dai3_kanbu[192];
 static EvtWord flash_and_wait[16];
 static EvtWord flash2_and_wait[26];
 static EvtWord starstone_rotate[6];
@@ -238,7 +238,7 @@ static EVT_BEGIN(kanbu_urouro)
     RETURN
 EVT_END()
 
-EVT_BEGIN(dai3_kanbu)
+static EVT_BEGIN(dai3_kanbu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

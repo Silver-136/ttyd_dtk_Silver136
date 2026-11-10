@@ -34,7 +34,7 @@ static USER_FUNC(scale_func);
 static EvtWord s_door_open[22];
 static EvtWord s_door_close[22];
 static BeroEntry bero_entry_data[2];
-EvtWord tensou_ride[245];
+static EvtWord tensou_ride[245];
 static EvtWord tensou_switch[62];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -43,7 +43,7 @@ extern EvtWord evt_tensou2[];
 EvtWord evt_tensou2[216];
 #endif
 
-EvtWord tensou_init[69];
+static EvtWord tensou_init[69];
 static EvtWord evt_haguruma[5];
 EvtWord aji_07_init_evt[];
 
@@ -120,7 +120,7 @@ static USER_FUNC(scale_func) {
  * to the sewers tik_00 (setting GSWF_AJI_TELEPORT_TO_TIK_PENDING) normally,
  * to moo_04 during STG7_25_THE_LAST_MAIL.
  */
-EVT_BEGIN(tensou_ride)
+static EVT_BEGIN(tensou_ride)
     // Mario and his partner walk onto the teleporter pad.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -310,7 +310,7 @@ EVT_BEGIN(evt_tensou2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(tensou_init)
+static EVT_BEGIN(tensou_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A__sui"), 0, PTR(tensou_switch), 0)

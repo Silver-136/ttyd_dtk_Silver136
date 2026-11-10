@@ -67,8 +67,8 @@ static USER_FUNC(_nozzle_turn);
 static USER_FUNC(_set_mobj_shake);
 static USER_FUNC(_bgset_audience_bgset_access);
 static USER_FUNC(_bgset_kemuri_effect);
-USER_FUNC(_get_bgset_attack_data);
-USER_FUNC(_mobj_destroy);
+static USER_FUNC(_get_bgset_attack_data);
+static USER_FUNC(_mobj_destroy);
 static USER_FUNC(_mobj_set_alpha);
 static USER_FUNC(_set_mobj_rotate_x);
 
@@ -2890,7 +2890,7 @@ static USER_FUNC(_mobj_set_alpha) {
  * Hides every piece of background layer args[0], makes any tree or switch unit on it untargetable,
  * and sets the layer's GONE flag so it cannot fall again.
  */
-USER_FUNC(_mobj_destroy) {
+static USER_FUNC(_mobj_destroy) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
     BattleUnit* unit;
@@ -2930,7 +2930,7 @@ USER_FUNC(_mobj_destroy) {
  * the stage's bgAWeapon for A1, bgBWeapon for B, or 0 for A2,
  * other layers and weapons without a damage function.
  */
-USER_FUNC(_get_bgset_attack_data) {
+static USER_FUNC(_get_bgset_attack_data) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);

@@ -64,7 +64,7 @@ static USER_FUNC(screen_evt_func);
  * Started by tou_gamen_screen_tev_init: calls screen_evt_func from an inline event,
  * which queues one capture of the frame for the Glitzville arena's big screen.
  */
-EVT_BEGIN(screen_evt)
+static EVT_BEGIN(screen_evt)
     BEGIN_INLINE_EVENT
         CALL(screen_evt_func, LW(0))
     END_INLINE_EVENT

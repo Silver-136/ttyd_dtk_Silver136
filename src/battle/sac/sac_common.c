@@ -116,7 +116,7 @@ static EVT_BEGIN(enemy_slide_go_evt)
 EVT_END()
 
 /** Per-enemy script of sac_enemy_slide_return: slides the unit back to its home position at speed 7. */
-EVT_BEGIN(enemy_slide_return_evt)
+static EVT_BEGIN(enemy_slide_return_evt)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 1)

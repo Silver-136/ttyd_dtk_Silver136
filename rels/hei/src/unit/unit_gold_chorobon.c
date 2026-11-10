@@ -28,10 +28,10 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[15];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_gold_chorobon_attack;
+static BattleWeapon weapon_gold_chorobon_attack;
 static PoseSoundTiming pose_sound_timing_table[4];
-EvtWord gold_chorobon_rabbit_move[123];
-BattleUnitSetup entry_chorogun;
+static EvtWord gold_chorobon_rabbit_move[123];
+static BattleUnitSetup entry_chorogun;
 EvtWord call_chorogun_event[67];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -194,7 +194,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Gold Fuzzy's attack: 1 damage to a single target, a jump-style hit. */
-BattleWeapon weapon_gold_chorobon_attack = {
+static BattleWeapon weapon_gold_chorobon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -246,7 +246,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * then jumps in steps of LW(8) units toward x=LW(5) (height LW(6), depth LW(7)), squashing between hops,
  * and finishes with a jump to the requested position with its attack sound.
  */
-EVT_BEGIN(gold_chorobon_rabbit_move)
+static EVT_BEGIN(gold_chorobon_rabbit_move)
     LOOP(2)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
         WAIT_FRAMES(1)
@@ -292,7 +292,7 @@ EVT_END()
  * Setup entry that adds the Fuzzy horde unit on the enemy side at (75, 0, 0)
  * when the Gold Fuzzy calls for backup.
  */
-BattleUnitSetup entry_chorogun = {
+static BattleUnitSetup entry_chorogun = {
     &unit_chorobon_gundan, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05

@@ -104,7 +104,7 @@ static EvtWord villagerC_init[7];
 static EvtWord villagerC_talk[52];
 static EvtWord villagerD_init[19];
 static EvtWord villagerD_pig_init[19];
-EvtWord villagerD_talk[88];
+static EvtWord villagerD_talk[88];
 static EvtWord villagerE_init[19];
 static EvtWord villagerE_pig_init[19];
 static EvtWord villagerE_talk[65];
@@ -122,7 +122,7 @@ EvtWord village_chief_talk[199];
 #endif
 
 static EvtWord chief_mario_talk_init[183];
-EvtWord chief_mario_talk[55];
+static EvtWord chief_mario_talk[55];
 static EvtWord vivian_init[44];
 static s32 key_tbl[2];
 
@@ -155,7 +155,7 @@ extern EvtWord usu00_vivian_cry_event[];
 EvtWord usu00_vivian_cry_event[58];
 #endif
 
-EvtWord usu00_vivian_joinup_event[608];
+static EvtWord usu00_vivian_joinup_event[608];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 static EvtWord usu00_check_vivian[33];
@@ -442,7 +442,7 @@ EVT_END()
  * Talk script of villager D: the Bowser interlude line, an oink plus pig text before the Doopliss fight,
  * then human text by story progress.
  */
-EVT_BEGIN(villagerD_talk)
+static EVT_BEGIN(villagerD_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_msg_print, 0, STRING("kpa_stg5_008"), 0, STRING("me"))
@@ -726,7 +726,7 @@ static EVT_BEGIN(chief_mario_talk_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(chief_mario_talk)
+static EVT_BEGIN(chief_mario_talk)
     IF_INT_NOT_EQUAL(GSWF_USU_00_MAYOR_THANKED_FAKE_MARIO, 0)
         RETURN
     END_IF
@@ -1486,7 +1486,7 @@ EVT_END()
  * Mario can hand it over from the item menu and she thanks him. The item is spent before his answer,
  * and she joins the party after either answer.
  */
-EVT_BEGIN(usu00_vivian_joinup_event)
+static EVT_BEGIN(usu00_vivian_joinup_event)
     // Vivian hears Mario found the Super Bombomb; he holds it out and she takes it, then notices it is broken.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT)

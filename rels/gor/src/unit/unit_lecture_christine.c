@@ -24,7 +24,7 @@
 
 static USER_FUNC(_battle_set_lecture_unit_id);
 static USER_FUNC(_set_lecture_mode);
-USER_FUNC(_get_defence_ac_result);
+static USER_FUNC(_get_defence_ac_result);
 static USER_FUNC(_config_key_record);
 static USER_FUNC(_krb_get_dir);
 extern BattleUnitKind unit_lecture_frankli;
@@ -55,7 +55,7 @@ static EvtWord lecture_zutsuki_attack_event[570];
  * Script helper that converts the defence action command result of the battle into the tutorial's own code:
  * 2 for result 1, 3 for 2, 1 for 4, 0 for 5, otherwise 0, stored in args[0].
  */
-USER_FUNC(_get_defence_ac_result) {
+static USER_FUNC(_get_defence_ac_result) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 var = args[0];

@@ -43,7 +43,7 @@ extern EvtWord water_shikake[];
 EvtWord water_shikake[312];
 #endif
 
-EvtWord bar_shikake[7];
+static EvtWord bar_shikake[7];
 static EvtWord bar_shikake_up[7];
 static EvtWord switch_up_down[106];
 static HitDamageReturn hitDmgRetPoints[5];
@@ -331,7 +331,7 @@ EVT_BEGIN(water_shikake)
 EVT_END()
 
 /** Hit script of the light-blue bar switch when Mario rides it: sets the bar-switch state to 1 so the bar sinks. */
-EVT_BEGIN(bar_shikake)
+static EVT_BEGIN(bar_shikake)
     DEBUG_PUT_MSG(STRING("のったとき"))
     CALL(ss_set, 1)
     RETURN

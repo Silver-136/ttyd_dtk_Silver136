@@ -43,7 +43,7 @@ static EvtWord evt_last_mail[56];
 static EvtWord peach_evt_door_open[41];
 static EvtWord peach_evt_stg1[97];
 static EvtWord peach_evt_stg1_1[86];
-EvtWord peach_evt_stg2_1[103];
+static EvtWord peach_evt_stg2_1[103];
 static EvtWord peach_evt_stg2[107];
 static EvtWord peach_evt_stg3[158];
 static EvtWord peach_evt_stg6[138];
@@ -306,7 +306,7 @@ static EVT_BEGIN(peach_evt_stg1_1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_stg2_1)
+static EVT_BEGIN(peach_evt_stg2_1)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 

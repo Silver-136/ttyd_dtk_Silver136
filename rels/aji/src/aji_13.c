@@ -102,8 +102,8 @@ static EvtWord shikake_init[66];
 static EvtWord evt_sw[134];
 static EvtWord evt_hari[70];
 static EvtWord evt_ramp[68];
-EvtWord evt_bcv_sw[99];
-EvtWord evt_key_get[5];
+static EvtWord evt_bcv_sw[99];
+static EvtWord evt_key_get[5];
 static s32 key_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -1032,7 +1032,7 @@ static EVT_BEGIN(evt_ramp)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_bcv_sw)
+static EVT_BEGIN(evt_bcv_sw)
     SET_VALUE(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -575, 152, 578, -575, 57, 37, 1000, EASING_SINE_IN_OUT)
@@ -1057,7 +1057,7 @@ EVT_BEGIN(evt_bcv_sw)
 EVT_END()
 
 /** Pick-up event of the Card Key (ITEM_CARD_KEY_0x20): sets GSWF_AJI_13_CARD_KEY. */
-EVT_BEGIN(evt_key_get)
+static EVT_BEGIN(evt_key_get)
     SET_VALUE(GSWF_AJI_13_CARD_KEY, 1)
     RETURN
 EVT_END()

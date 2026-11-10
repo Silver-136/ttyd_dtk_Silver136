@@ -39,15 +39,15 @@ static void majin_callback(s32 type);
 static EvtWord erumosu_regl[2];
 
 #if VERSION >= VERSION_US
-EvtWord erumosu_dead[28];
+static EvtWord erumosu_dead[28];
 #else
-EvtWord erumosu_dead[25];
+static EvtWord erumosu_dead[25];
 #endif
 
 static NpcSetupInfo npcEnt[2];
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
-EvtWord apper_elmos[43];
+static EvtWord apper_elmos[43];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord peramajin_before[];
@@ -64,7 +64,7 @@ static EVT_BEGIN(erumosu_regl)
     RETURN
 EVT_END()
 
-EVT_BEGIN(erumosu_dead)
+static EVT_BEGIN(erumosu_dead)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(GSWF_DOU_07_EMBER_DEFEATED, 1)
     SPAWN_EVENT(enemy_event_dead_event)
@@ -130,7 +130,7 @@ static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x24, -1,
 };
 
-EVT_BEGIN(apper_elmos)
+static EVT_BEGIN(apper_elmos)
     SET_VALUE(GSWF_DOU_07_EMBER_APPEARED, 1)
     CALL(evt_npc_set_position, STRING("エルモス"), 100, -6, -37)
     CALL(evt_npc_set_color, STRING("エルモス"), 255, 255, 255, 0)

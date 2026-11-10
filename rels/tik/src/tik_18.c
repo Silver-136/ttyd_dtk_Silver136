@@ -18,7 +18,7 @@
 #include "pmario_sound.h"
 
 static BeroEntry bero_entry_data[5];
-EvtWord tik_18_cloud_evt[5];
+static EvtWord tik_18_cloud_evt[5];
 static HitDamageReturn hitDmgRetPoints[13];
 EvtWord tik_18_init_evt[96];
 
@@ -93,7 +93,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-EVT_BEGIN(tik_18_cloud_evt)
+static EVT_BEGIN(tik_18_cloud_evt)
     SET_VALUE(GSWF_TIK_18_WALL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()

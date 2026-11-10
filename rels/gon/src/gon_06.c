@@ -42,7 +42,7 @@ static EvtWord door01_open[12];
 static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
-EvtWord evt_ori_open[130];
+static EvtWord evt_ori_open[130];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord tsuritenjo_event[];
@@ -148,7 +148,7 @@ static BeroEntry bero_entry_data[] = {
  * slides it back down and shakes the camera when it lands, while its hit areas follow it.
  */
 // Raise the bound gate 150 units at 2 units per frame, wait, then lower it at 10 per frame.
-EVT_BEGIN(evt_ori_open)
+static EVT_BEGIN(evt_ori_open)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 2)
     CALL(evt_hit_bind_mapobj, STRING("a_ori_03"), STRING("ori02"))

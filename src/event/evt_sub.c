@@ -88,8 +88,8 @@ static const char coin_fmt[] = "%f%f%f";
 /** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 
-USER_FUNC(bgm_start_wait);
-USER_FUNC(stone_bg);
+static USER_FUNC(bgm_start_wait);
+static USER_FUNC(stone_bg);
 static void coingetDisp(WinMgrEntry* entry);
 
 #if VERSION < VERSION_US
@@ -2152,7 +2152,7 @@ USER_FUNC(stone_ry) {
  * Puts the star stone, its glow and Mario (or the Doopliss Mario NPC before STG4_15) on camera 5,
  * so they draw in front of the stage-clear background in evt_sub_starstone.
  */
-USER_FUNC(stone_bg) {
+static USER_FUNC(stone_bg) {
     char* name;
     CameraEntry* cam;
     EffectEntry* eff;
@@ -2199,7 +2199,7 @@ USER_FUNC(get_stop) {
 }
 
 /** Blocks until the music started on channel 1 has begun playing. */
-USER_FUNC(bgm_start_wait) {
+static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 

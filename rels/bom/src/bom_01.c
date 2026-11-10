@@ -101,7 +101,7 @@ typedef struct BomWork {
     u8 pad_ac[4];
     Bom bom[1000];
 } BomWork;
-smartEntry* lp;
+static smartEntry* lp;
 static void pose_change(s32 i, const char* name);
 static ExtTexInfo ext_data[31];
 /**
@@ -238,7 +238,7 @@ EvtWord evt_bom_01_karakara[123];
 #endif
 
 static ExtTexInfo ext_data[31];
-EvtWord evt_bom1000[15];
+static EvtWord evt_bom1000[15];
 static EvtWord gamen_shake[8];
 static EvtWord gamen_shake2[26];
 static EvtWord mario_tobideru[54];
@@ -1155,7 +1155,7 @@ static ExtTexInfo ext_data[] = {
  * Registers the 1000-sprite Bob-omb crowd of the cannon scene (make_ext_table frames,
  * ext_init, ext_main, ext_dispent).
  */
-EVT_BEGIN(evt_bom1000)
+static EVT_BEGIN(evt_bom1000)
     CALL(make_ext_table)
     CALL(evt_npc_entry, STRING("dummy"), STRING("c_bom_sen")) // hidden Bob-omb NPC behind the crowd sprites
     CALL(evt_ext_entry, 1000, PTR(ext_data), PTR(ext_init), PTR(ext_main), PTR(ext_dispent))

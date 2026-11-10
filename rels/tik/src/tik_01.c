@@ -35,8 +35,8 @@ static EvtWord dokan_2_in_evt[22];
 static BeroEntry bero_entry_data[12];
 static EvtWord ashioto[35];
 static EvtWord gorotuki_sanninngumi[694];
-EvtWord wall_bomb00[139];
-EvtWord wall_bomb01[140];
+static EvtWord wall_bomb00[139];
+static EvtWord wall_bomb01[140];
 static EvtWord mobj_box00[34];
 
 #if VERSION == VERSION_DEMO_JP
@@ -465,7 +465,7 @@ static EVT_BEGIN(gorotuki_sanninngumi)
 EVT_END()
 
 // Skip the capture animation only when both bounding-box dimensions are zero.
-EVT_BEGIN(wall_bomb00)
+static EVT_BEGIN(wall_bomb00)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, STRING("bom_kabe_1"), LW(0), LW(1), LW(2))
@@ -506,7 +506,7 @@ EVT_BEGIN(wall_bomb00)
 EVT_END()
 
 // Skip the capture animation only when both bounding-box dimensions are zero.
-EVT_BEGIN(wall_bomb01)
+static EVT_BEGIN(wall_bomb01)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, STRING("bom_kabe_3"), LW(0), LW(1), LW(2))

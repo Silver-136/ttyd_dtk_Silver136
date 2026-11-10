@@ -38,7 +38,7 @@
 
 static USER_FUNC(set_depthPlaneOffset);
 
-EvtWord bero_02_into_event[14];
+static EvtWord bero_02_into_event[14];
 static BeroEntry bero_entry_data[4];
 static EvtWord guide_init[2];
 static EvtWord guide_talk[8];
@@ -64,7 +64,7 @@ extern EvtWord trap_event[];
 EvtWord trap_event[716];
 #endif
 
-EvtWord trap_check[185];
+static EvtWord trap_check[185];
 static EvtWord punipuni_ball00_init[34];
 static EvtWord punipuni_ball00[45];
 static EvtWord breakyuka_init[11];
@@ -75,7 +75,7 @@ static EvtWord breakyuka_main[135];
 static EvtWord breakyuka_main[131];
 #endif
 
-EvtWord strange_statue[56];
+static EvtWord strange_statue[56];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord switch_event[];
@@ -90,7 +90,7 @@ EvtWord mri_17_init_evt[208];
  * it starts the strange statue scene (strange_statue) and records it with GSWF_MRI_17_PILLAR_SCENE_SEEN.
  * Returns 0 in LW(0).
  */
-EVT_BEGIN(bero_02_into_event)
+static EVT_BEGIN(bero_02_into_event)
     IF_INT_EQUAL(GSWF_MRI_17_PILLAR_SCENE_SEEN, 0)
         SPAWN_EVENT(strange_statue)
         SET_VALUE(GSWF_MRI_17_PILLAR_SCENE_SEEN, 1)
@@ -606,7 +606,7 @@ EVT_BEGIN(trap_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(trap_check)
+static EVT_BEGIN(trap_check)
     SET_VALUE(LW(10), 50)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), -25)
@@ -781,7 +781,7 @@ EVT_END()
  * Scene on first arrival in the pipe room: the partner walks to the strange statue,
  * looks left and right and comments on it (stg2_mri_e18_00_11).
  */
-EVT_BEGIN(strange_statue)
+static EVT_BEGIN(strange_statue)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)

@@ -48,10 +48,10 @@ static USER_FUNC(_battle_majinai_effect);
 static USER_FUNC(_majinai_powerup_check);
 static USER_FUNC(_paper_light_off);
 USER_FUNC(_fire_wave);
-USER_FUNC(_mario_fire_ball_controll);
+static USER_FUNC(_mario_fire_ball_controll);
 static USER_FUNC(_kaiten_hammer_acrobat_rotate);
 static USER_FUNC(_hammer_star_effect);
-USER_FUNC(_record_renzoku_count);
+static USER_FUNC(_record_renzoku_count);
 static USER_FUNC(_tatsumaki_effect);
 static USER_FUNC(_wait_jyabara_hit_iron_frame);
 static USER_FUNC(_bgset_iron_frame_check);
@@ -77,12 +77,12 @@ EvtWord marioAttackEvent_JyabaraJump[];
 static EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord marioAttackEvent_TatsumakiJump[1661];
+static EvtWord marioAttackEvent_TatsumakiJump[1661];
 #else
-EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
+static EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
 #endif
 
-EvtWord marioAttackEvent_RenzokuJump[840];
+static EvtWord marioAttackEvent_RenzokuJump[840];
 static EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -3576,7 +3576,7 @@ EVT_END()
  * then on a successful second command Mario spins into a tornado (_tatsumaki_effect) that hits every airborne
  * enemy with badgeWeapon_TatsumakiJumpInvolved.
  */
-EVT_BEGIN(marioAttackEvent_TatsumakiJump)
+static EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
     // if due, and the stomp's Action Command set up.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -4163,7 +4163,7 @@ EVT_END()
  * The number of bounces allowed is capped by mario_get_renzoku_count_max,
  * and the best combo is recorded by _record_renzoku_count.
  */
-EVT_BEGIN(marioAttackEvent_RenzokuJump)
+static EVT_BEGIN(marioAttackEvent_RenzokuJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
     // if due, and the Action Command set up.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -7148,7 +7148,7 @@ static USER_FUNC(_tatsumaki_effect) {
  * Records a Power Bounce combo of args[0]: keeps this battle's best (capped at 100) and, on a new pouch record,
  * sets powerBounceRecord and makes the audience react.
  */
-USER_FUNC(_record_renzoku_count) {
+static USER_FUNC(_record_renzoku_count) {
     s32 n = evtGetValue(event, *event->args);
     BattleActRecord* rec = &_battleWorkPointer->actRecord;
     PouchData* pouch = pouchGetPtr();
@@ -7289,7 +7289,7 @@ static USER_FUNC(_kaiten_hammer_acrobat_rotate) {
  * Keeps a fire effect on Mario's part args[1] (the Fire Drive fireball) until the part's work[0] is cleared,
  * then deletes it.
  */
-USER_FUNC(_mario_fire_ball_controll) {
+static USER_FUNC(_mario_fire_ball_controll) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

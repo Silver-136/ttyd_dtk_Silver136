@@ -59,7 +59,7 @@ static KusaAccess ueki_access_data[6];
 static EvtWord punipuni_ball00_init[41];
 static EvtWord punipuni_ball00[51];
 static EvtWord punipuni_ball01_init[41];
-EvtWord punipuni_ball01[51];
+static EvtWord punipuni_ball01[51];
 static EvtWord mario_shabon_move_sound[14];
 static EvtWord mario_shabon_break_sound[9];
 static EvtWord mario_shabon_check[251];
@@ -410,7 +410,7 @@ static USER_FUNC(mario_shabon_effdel) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(punipuni_ball01)
+static EVT_BEGIN(punipuni_ball01)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 0)
         CALL_CHILD(mri_punipuni_itemselect)

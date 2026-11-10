@@ -69,7 +69,7 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 static const char* nokotaro_pose[2];
-EvtWord tegami_event[305];
+static EvtWord tegami_event[305];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord senkaron_event[583];
@@ -223,7 +223,7 @@ static const char* nokotaro_pose[] = {
  * hidden in the castle, and it will try tricks when beaten), then realizes it is not his father after all
  * (stg1_gon_09). The story is set to STG1_10_FATHERS_LETTER before the conversation.
  */
-EVT_BEGIN(tegami_event)
+static EVT_BEGIN(tegami_event)
     // Wait until Mario walks far enough into the hall.
     LOOP(0)
         WAIT_FRAMES(1)

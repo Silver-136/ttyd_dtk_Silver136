@@ -108,7 +108,7 @@ static EvtWord e1_open[12];
 static EvtWord e1_close[12];
 static EvtWord e2_open[12];
 static EvtWord e2_close[12];
-EvtWord jin_00_dai[16];
+static EvtWord jin_00_dai[16];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord jin_00_dai_in_sub[];
@@ -436,7 +436,7 @@ static EVT_BEGIN(e2_close)
     RETURN
 EVT_END()
 
-EVT_BEGIN(jin_00_dai)
+static EVT_BEGIN(jin_00_dai)
     DEBUG_PUT_MSG(STRING("出る"))
     CALL(evt_mario_normalize)
     SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 1)

@@ -48,7 +48,7 @@ static EvtWord evt_kusa_2[20];
 static EvtWord evt_kusa_4[20];
 static EvtWord evt_kusa_7[20];
 static KusaAccess kusa_data[7];
-EvtWord kusa_dokan[59];
+static EvtWord kusa_dokan[59];
 static const char* name_tbl[25];
 static EvtWord bridge_evt_02[192];
 static EvtWord bridge_evt[30];
@@ -60,13 +60,13 @@ static EvtWord nokotaro_get[55];
 #endif
 
 static EvtWord nokotaro_kanyu[40];
-EvtWord nokotaro_nakama[276];
+static EvtWord nokotaro_nakama[276];
 static EvtWord nokotarou_init[7];
 static EvtWord nokotarou_reg[2];
 static EvtWord nokotarou_talk_2[34];
 static EvtWord nokotarou_talk[4];
 static EvtWord nokorin_pose[57];
-EvtWord evt_nokorin[869];
+static EvtWord evt_nokorin[869];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[3];
 
@@ -76,7 +76,7 @@ static EvtWord peach_mail[250];
 static EvtWord peach_mail[287];
 #endif
 
-EvtWord christine_hei_01[46];
+static EvtWord christine_hei_01[46];
 
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
@@ -205,7 +205,7 @@ static KusaAccess kusa_data[] = {
  * Case script for the grass patch a_kusa_1: Mario hits it, the grass shakes and a pipe rises out of it;
  * sets GSWF_HEI_01_BUSH_PIPE_REVEALED and enables the "dokan" exit.
  */
-EVT_BEGIN(kusa_dokan)
+static EVT_BEGIN(kusa_dokan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("anm_kusa_1"), LW(5), LW(6), LW(7))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(5), LW(6), LW(7), 0)
@@ -398,7 +398,7 @@ EVT_END()
  * the Fuzzy-gold story step is on, and Koops has not asked yet, he waits at the right edge,
  * walks up to Mario when he comes close and asks to join.
  */
-EVT_BEGIN(nokotaro_nakama)
+static EVT_BEGIN(nokotaro_nakama)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
         RETURN
     END_IF
@@ -548,7 +548,7 @@ EVT_END()
  * shell, knocking them down ("FINE! IGNORE ME!", stg1_hei_12_07 and 08), and Koops promises to come back
  * stronger (stg1_hei_12_09). Skipped once GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN is set.
  */
-EVT_BEGIN(evt_nokorin)
+static EVT_BEGIN(evt_nokorin)
     // Skipped once Koopie Koo has said her farewell.
     IF_INT_EQUAL(GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN, 1)
         RETURN
@@ -961,7 +961,7 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
-EVT_BEGIN(christine_hei_01)
+static EVT_BEGIN(christine_hei_01)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)

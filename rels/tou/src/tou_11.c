@@ -35,11 +35,11 @@ static EvtWord e_door_open[12];
 static EvtWord e_door_close[12];
 static BeroEntry bero_data[3];
 static NpcSetupInfo npcEnt[2];
-EvtWord evt_tojikome[296];
+static EvtWord evt_tojikome[296];
 static EvtWord evt_tojikome_nidome[104];
 static EvtWord evt_tojikome_sandome[37];
 static EvtWord evt_tojikome_msg[30];
-EvtWord evt_postar[23];
+static EvtWord evt_postar[23];
 EvtWord tou_11_init_evt[178];
 
 /**
@@ -138,7 +138,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 // Mark this scene seen before starting the guard choreography and map transition.
-EVT_BEGIN(evt_tojikome)
+static EVT_BEGIN(evt_tojikome)
     // Plays only once, with the music stopped.
     IF_INT_EQUAL(GSWF_TOU_11_LOCKED_IN_SEEN, 1)
         RETURN
@@ -302,7 +302,7 @@ static EVT_BEGIN(evt_tojikome_msg)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_postar)
+static EVT_BEGIN(evt_postar)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))

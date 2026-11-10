@@ -37,10 +37,10 @@ static BeroEntry bero_entry_data[5];
 static EvtWord puni_walk_se[20];
 static EvtWord puni_soguu_1[102];
 static EvtWord puni_soguu_2[146];
-EvtWord plane_tobashi_check[87];
-EvtWord tik04_wall_blow_evt[5];
+static EvtWord plane_tobashi_check[87];
+static EvtWord tik04_wall_blow_evt[5];
 static EvtWord kaidan_pera[122];
-EvtWord tik_04_switch_evt[41];
+static EvtWord tik_04_switch_evt[41];
 static EvtWord mobj_box00[34];
 EvtWord tik_04_init_evt[220];
 
@@ -267,7 +267,7 @@ static EVT_BEGIN(puni_soguu_2)
 EVT_END()
 
 // Accept only the two intended landing surfaces; otherwise show the hint and watch the next flight.
-EVT_BEGIN(plane_tobashi_check)
+static EVT_BEGIN(plane_tobashi_check)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(0))
         IF_INT_EQUAL(LW(0), 24)
@@ -306,7 +306,7 @@ EVT_BEGIN(plane_tobashi_check)
     RETURN
 EVT_END()
 
-EVT_BEGIN(tik04_wall_blow_evt)
+static EVT_BEGIN(tik04_wall_blow_evt)
     SET_VALUE(GSWF_TIK_04_WALL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
@@ -354,7 +354,7 @@ EVT_END()
  * Takes control, pans the camera to the stairs (450, 255, 628), runs kaidan_pera,
  * enables the stairs' hit area and sets story progress STG0_12_01_PAPER_STAIR_SWITCH.
  */
-EVT_BEGIN(tik_04_switch_evt)
+static EVT_BEGIN(tik_04_switch_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 450, 255, 628, 450, 150, 37, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1500)

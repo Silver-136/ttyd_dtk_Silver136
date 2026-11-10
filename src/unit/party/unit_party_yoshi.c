@@ -51,38 +51,38 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 
 USER_FUNC(yoshi_original_color_anim_set);
 USER_FUNC(_gundan_yoshi_run_effect);
-USER_FUNC(_wait_yoshig_complete);
-USER_FUNC(_wait_yoshig_run);
-USER_FUNC(_check_swallow_attribute);
-USER_FUNC(_get_swallow_param);
-USER_FUNC(_get_nomikomi_hit_position);
+static USER_FUNC(_wait_yoshig_complete);
+static USER_FUNC(_wait_yoshig_run);
+static USER_FUNC(_check_swallow_attribute);
+static USER_FUNC(_get_swallow_param);
+static USER_FUNC(_get_nomikomi_hit_position);
 
 PoseTableEntry pose_table_yoshi_stay[25];
 static BattleDataEntry data_table[8];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
-PoseTableEntry pose_table_egg_g[4];
-PoseTableEntry pose_table_egg_y[4];
-PoseTableEntry pose_table_egg_p[4];
-BattleUnitKindPart unitpartsdata_Party_Yoshi[7];
+static PoseTableEntry pose_table_egg_g[4];
+static PoseTableEntry pose_table_egg_y[4];
+static PoseTableEntry pose_table_egg_p[4];
+static BattleUnitKindPart unitpartsdata_Party_Yoshi[7];
 BattleUnitKind unitdata_Party_Yoshi;
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[54];
 static EvtWord damage_event[16];
 BattleWeapon partyWeapon_YoshiNormalAttack;
 BattleWeapon partyWeapon_YoshiNomikomi_Shot;
-BattleWeapon partyWeapon_YoshiNomikomi_Spew;
-BattleWeapon partyWeapon_YoshiNomikomi_Dmg0;
-BattleWeapon partyWeapon_YoshiNomikomi_Fire;
+static BattleWeapon partyWeapon_YoshiNomikomi_Spew;
+static BattleWeapon partyWeapon_YoshiNomikomi_Dmg0;
+static BattleWeapon partyWeapon_YoshiNomikomi_Fire;
 BattleWeapon partyWeapon_YoshiNomikomi_Involved;
 BattleWeapon partyWeapon_YoshiEggAttack_Minimini;
 BattleWeapon partyWeapon_YoshiCallGuard;
-PoseSoundTiming posesound_normal_attack[15];
-EvtWord partyYoshiAttack_NormalAttack[1025];
-EvtWord partyYoshiAttack_Nomikomi[1000];
-EvtWord partyYoshiAttack_EggAttack[1266];
-EvtWord _egg_attack_event[195];
+static PoseSoundTiming posesound_normal_attack[15];
+static EvtWord partyYoshiAttack_NormalAttack[1025];
+static EvtWord partyYoshiAttack_Nomikomi[1000];
+static EvtWord partyYoshiAttack_EggAttack[1266];
+static EvtWord _egg_attack_event[195];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord partyYoshiAttack_CallGuard[];
@@ -90,12 +90,12 @@ extern EvtWord partyYoshiAttack_CallGuard[];
 EvtWord partyYoshiAttack_CallGuard[553];
 #endif
 
-EvtWord yoshi_appeal_event[39];
+static EvtWord yoshi_appeal_event[39];
 static EvtWord party_win_reaction[25];
 static EvtWord attack_audience_event[290];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
-u8 _yoshig_tpl_no_tbl[6];
+static u8 _yoshig_tpl_no_tbl[6];
 
 /**
  * Yoshi's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
@@ -187,7 +187,7 @@ static StatusVulnerability regist = {
 #endif
 
 /** Pose table for a green Mini-Egg (egg parts 2-7): the CHU_C_1 egg model for every pose. */
-PoseTableEntry pose_table_egg_g[] = {
+static PoseTableEntry pose_table_egg_g[] = {
     {POSE_TYPE_NORMAL, "CHU_C_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_1"},
     {POSE_TYPE_DAMAGE, "CHU_C_1"},
@@ -195,7 +195,7 @@ PoseTableEntry pose_table_egg_g[] = {
 };
 
 /** Pose table for a yellow Mini-Egg: the CHU_C_2 egg model for every pose. */
-PoseTableEntry pose_table_egg_y[] = {
+static PoseTableEntry pose_table_egg_y[] = {
     {POSE_TYPE_NORMAL, "CHU_C_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_2"},
     {POSE_TYPE_DAMAGE, "CHU_C_2"},
@@ -203,7 +203,7 @@ PoseTableEntry pose_table_egg_y[] = {
 };
 
 /** Pose table for a pink Mini-Egg: the CHU_C_3 egg model for every pose. */
-PoseTableEntry pose_table_egg_p[] = {
+static PoseTableEntry pose_table_egg_p[] = {
     {POSE_TYPE_NORMAL, "CHU_C_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_3"},
     {POSE_TYPE_DAMAGE, "CHU_C_3"},
@@ -227,7 +227,7 @@ static BattleDataEntry data_table[] = {
 };
 #endif
 
-BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
+static BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
     {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay},
     {2, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
     {3, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
@@ -439,7 +439,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
  * Gulp (4 FP), the hit on an enemy that is spat straight out (no swallow attribute 2):
  * pierces defence; by rank 2, 3 or 3 damage on a failed action command, 4, 5 or 6 on success.
  */
-BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
+static BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
@@ -483,7 +483,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
 };
 
 /** Gulp's 0-damage tongue hit on an enemy that cannot be swallowed or after a failed action command. */
-BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
+static BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
@@ -525,7 +525,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
  * Gulp's fire breath after swallowing an enemy with swallow attribute 4:
  * 1 fire damage to every enemy, pierces defence.
  */
-BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
+static BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
@@ -706,7 +706,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
  * Footstep sounds during Ground Pound's run-up and flutter (walk, run, the fast-leg poses and the flutter pose):
  * left and right steps played by _yoshi_slide_move_sound at fixed points of each loop.
  */
-PoseSoundTiming posesound_normal_attack[] = {
+static PoseSoundTiming posesound_normal_attack[] = {
     {"PYS_W_1", 0.01f, _yoshi_slide_move_sound, "SFX_PARTY_BATTLE_MOVE1L", 0, 1},
     {"PYS_W_1", 0.25f, _yoshi_slide_move_sound, "SFX_PARTY_BATTLE_MOVE1R", 0, 1},
     {"PYS_R_1", 0.01f, _yoshi_slide_move_sound, "SFX_PARTY_BATTLE_MOVE1L", 0, 1},
@@ -729,7 +729,7 @@ PoseSoundTiming posesound_normal_attack[] = {
  * and flutters above it during the action command (the yoroyoro jump helpers),
  * then pounds it once per hit the command earned before returning home.
  */
-EVT_BEGIN(partyYoshiAttack_NormalAttack)
+static EVT_BEGIN(partyYoshiAttack_NormalAttack)
     // Pick the target, pay the cost and aim the camera at Yoshi.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1047,7 +1047,7 @@ EVT_END()
  * others are either spat into the enemy behind them or, by their swallowAttribute bits,
  * swallowed whole for their experience.
  */
-EVT_BEGIN(partyYoshiAttack_Nomikomi)
+static EVT_BEGIN(partyYoshiAttack_Nomikomi)
     // Pick the target and pay the cost.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1352,7 +1352,7 @@ EVT_END()
  * Yoshi's Mini-Egg: he lays eggs as the action command allows and throws each at a target (_egg_attack_event);
  * hits can shrink the enemies. Ends with an optional stylish.
  */
-EVT_BEGIN(partyYoshiAttack_EggAttack)
+static EVT_BEGIN(partyYoshiAttack_EggAttack)
     // Pay the cost and pick a random target for each of the six egg parts.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1719,7 +1719,7 @@ EVT_END()
  * bursts it there and applies the damage weapon in its PARTS_WORK_WEAPON,
  * or plays the target's dodge when PARTS_WORK_PRECHECK marks a miss.
  */
-EVT_BEGIN(_egg_attack_event)
+static EVT_BEGIN(_egg_attack_event)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
     MULTIPLY_FLOAT(LW(6), 10)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1978,7 +1978,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
 EVT_END()
 
 /** Yoshi's Appeal (data tag 5): appeal pose and sound, then the audience is fired up. */
-EVT_BEGIN(yoshi_appeal_event)
+static EVT_BEGIN(yoshi_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2098,7 +2098,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 #endif
 
-u8 _yoshig_tpl_no_tbl[6] = { // battle tex id per sweat frame (US ids +0x16)
+static u8 _yoshig_tpl_no_tbl[6] = { // battle tex id per sweat frame (US ids +0x16)
     VERSION_PICK(0x46, 0x5C), VERSION_PICK(0x49, 0x5F), VERSION_PICK(0x47, 0x5D), VERSION_PICK(0x46, 0x5C),
     VERSION_PICK(0x4A, 0x60), VERSION_PICK(0x48, 0x5E),
 };
@@ -2345,7 +2345,7 @@ static void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
  * its position plus its bintaHitOffset (scaled by size, X mirrored by facing).
  * args[0] and args[2] (the part) are read but not used.
  */
-USER_FUNC(_get_nomikomi_hit_position) {
+static USER_FUNC(_get_nomikomi_hit_position) {
     BattleWork* wp;
     EvtWord* args;
     BattleUnit* unit;
@@ -2375,7 +2375,7 @@ USER_FUNC(_get_nomikomi_hit_position) {
 }
 
 /** Returns unit args[0]'s swallowRate in args[1]; Gulp treats -1 as cannot be swallowed. */
-USER_FUNC(_get_swallow_param) {
+static USER_FUNC(_get_swallow_param) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
@@ -2394,7 +2394,7 @@ USER_FUNC(_get_swallow_param) {
  * Returns 1 in args[2] if unit args[0]'s swallowAttribute has any of the bits in args[1], else 0.
  * Gulp checks bit 8 (hurts when swallowed), 2 (spat as a shot) and 1 and 4 (how it is swallowed whole).
  */
-USER_FUNC(_check_swallow_attribute) {
+static USER_FUNC(_check_swallow_attribute) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id, out;
@@ -2418,7 +2418,7 @@ USER_FUNC(_check_swallow_attribute) {
  * Blocks until the Stampede herd of unit args[0] exists
  * and its average X position (meanX) has crossed the stage centre, so the attack can start hitting enemies.
  */
-USER_FUNC(_wait_yoshig_run) {
+static USER_FUNC(_wait_yoshig_run) {
     BattleUnit* unit;
     YoshiGundanWork* w;
     s32 id;
@@ -2437,7 +2437,7 @@ USER_FUNC(_wait_yoshig_run) {
 }
 
 /** Blocks until unit args[0]'s Stampede herd has run off and its work (kept in countersetWeapon) is freed. */
-USER_FUNC(_wait_yoshig_complete) {
+static USER_FUNC(_wait_yoshig_complete) {
     BattleUnit* unit;
     s32 id;
 

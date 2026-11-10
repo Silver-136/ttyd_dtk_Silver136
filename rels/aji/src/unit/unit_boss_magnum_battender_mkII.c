@@ -59,9 +59,9 @@ typedef struct TargetWork {
     EffectEntry* eff;
 } TargetWork;
 extern EvtWord aud_hit_event[];
-EffectEntry* eff_tor;
+static EffectEntry* eff_tor;
 static s32 torCount;
-EffectEntry* eff_jet[2];
+static EffectEntry* eff_jet[2];
 static s32 jetCount;
 static s32* list;
 static EffectEntry* eff_suikomi;

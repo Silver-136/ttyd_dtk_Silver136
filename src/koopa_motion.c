@@ -29,7 +29,7 @@ static void kpaSwimMove(void);
  */
 static f32 _walkSpdTbl[4] = {0.6f, 1.4f, 1.4f, 1.4f};
 static f32 _dashSpdTbl[4] = {1.2f, 2.0f, 2.0f, 2.0f};
-s32 _rateTbl[4] = {0, 0, 0, 0};
+static s32 _rateTbl[4] = {0, 0, 0, 0};
 static s32 _rateTbl2[4] = {0, 0, 0, 0};
 static f32 scaleDt[9] = {1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 2.0f, 4.0f, 3.0f, 5.0f};
 

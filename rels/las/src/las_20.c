@@ -30,8 +30,8 @@ static const char* haguruma_kage2[5];
 static EvtWord haguruma_evt[194];
 static EvtWord dai_evt[13];
 static const char* hosi_name[14];
-EvtWord hosi_sw_check[303];
-EvtWord hosi_onoff[69];
+static EvtWord hosi_sw_check[303];
+static EvtWord hosi_onoff[69];
 static EvtWord hosi_02_sw_evt[15];
 static EvtWord hosi_03_sw_evt[15];
 static EvtWord hosi_04_sw_evt[15];
@@ -39,7 +39,7 @@ static EvtWord hosi_05_sw_evt[15];
 static EvtWord hosi_06_sw_evt[15];
 static EvtWord hosi_07_sw_evt[15];
 static EvtWord hosi_08_sw_evt[15];
-EvtWord hosi_init[175];
+static EvtWord hosi_init[175];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_20_init_evt[];
@@ -285,7 +285,7 @@ static const char* hosi_name[] = {
  * When solved it flashes the stars in a running light, shakes the camera,
  * removes the switches and sets the story to STG8_11_STAR_PUZZLE.
  */
-EVT_BEGIN(hosi_sw_check)
+static EVT_BEGIN(hosi_sw_check)
     SET_VALUE(LW(0), 0)
 
     // Compare the seven star switches against the solution (stars 2, 4, 5 and 7 lit, the others off).
@@ -391,7 +391,7 @@ EVT_END()
  * Event script: toggles one star (LW(0) lit model, LW(1) dark model, LW(2) the switch state flag in LSWF):
  * lighting it plays a stardust effect and sound, switching it off hides the lit model again.
  */
-EVT_BEGIN(hosi_onoff)
+static EVT_BEGIN(hosi_onoff)
     GET_INT_INDEXED(LW(2), LW(3))
     IF_INT_EQUAL(LW(3), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
@@ -482,7 +482,7 @@ static EVT_BEGIN(hosi_08_sw_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(hosi_init)
+static EVT_BEGIN(hosi_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_02a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_03a"), MAP_OBJ_FLAG_HIDDEN)

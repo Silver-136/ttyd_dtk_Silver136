@@ -80,7 +80,7 @@ BattleWeapon ItemWeaponData_Kaminari_Gorogoro;
 static EvtWord ItemEvent_Kirakira_Otoshi_Core[451];
 static EvtWord ItemEvent_Kirakira_Otoshi[29];
 BattleWeapon ItemWeaponData_Kirakira_Otoshi;
-EvtWord ItemEvent_Koorino_Ibuki[310];
+static EvtWord ItemEvent_Koorino_Ibuki[310];
 BattleWeapon ItemWeaponData_Koorino_Ibuki;
 static EvtWord ItemEvent_Yurayura_Jishin[342];
 BattleWeapon ItemWeaponData_Yurayura_Jishin;
@@ -104,7 +104,7 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink;
 BattleWeapon ItemWeaponData_Katikati_Koura;
 static EvtWord ItemEvent_Suitooru[281];
 BattleWeapon ItemWeaponData_Suitooru;
-EvtWord ItemEvent_Teki_Kyouka[236];
+static EvtWord ItemEvent_Teki_Kyouka[236];
 BattleWeapon ItemWeaponData_Teki_Kyouka;
 BattleWeapon ItemWeaponData_Minimini_Kun;
 BattleWeapon ItemWeaponData_Funyafunya_Kun;
@@ -1494,7 +1494,7 @@ BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
 };
 
 /** Ice Storm: an icy wind blows over the enemies for 3 ice damage each, with a chance to freeze them for two turns. */
-EVT_BEGIN(ItemEvent_Koorino_Ibuki)
+static EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     // The camera closes in on the user; on the player's side they first walk forward.
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Koorino_Ibuki))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -2530,7 +2530,7 @@ BattleWeapon ItemWeaponData_Suitooru = {
 };
 
 /** Trade Off: raises the enemies' level by 5 (_rank_up), which raises the Star Points they are worth. */
-EVT_BEGIN(ItemEvent_Teki_Kyouka)
+static EVT_BEGIN(ItemEvent_Teki_Kyouka)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Teki_Kyouka))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

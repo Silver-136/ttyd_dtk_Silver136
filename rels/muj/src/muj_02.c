@@ -67,7 +67,7 @@ static EvtWord peton_talk[50];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[2];
 static EvtWord evt_switch_init[17];
-EvtWord evt_treeb_01[20];
+static EvtWord evt_treeb_01[20];
 static EvtWord evt_kusa_2[20];
 static EvtWord evt_kusa_6[20];
 static TreeAccess tree_tbl[7];
@@ -574,7 +574,7 @@ static EVT_BEGIN(evt_switch_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_treeb_01)
+static EVT_BEGIN(evt_treeb_01)
     CALL(evt_item_delete_check, STRING("item_treeb_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_treeb_01"), ITEM_KEEL_MANGO, -350, 90, -70, ITEM_TYPE_FALL_NO_PICKUP, GSWF_MUJ_02_KEEL_MANGO_TREE, 0)

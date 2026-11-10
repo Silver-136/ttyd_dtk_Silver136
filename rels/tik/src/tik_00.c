@@ -147,12 +147,12 @@ EvtWord starmaniac_init[14];
 static EvtWord starmaniac_get_event[5];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord starmaniac_talk[192];
+static EvtWord starmaniac_talk[192];
 #else
-EvtWord starmaniac_talk[VERSION_PICK(227, 238)];
+static EvtWord starmaniac_talk[VERSION_PICK(227, 238)];
 #endif
 
-EvtWord johoyaketi_talk[VERSION_PICK(186, 209)];
+static EvtWord johoyaketi_talk[VERSION_PICK(186, 209)];
 static EvtWord kuribo5_init[2];
 static EvtWord kuribo5_talk[76];
 static EvtWord chusan4_init[13];
@@ -217,8 +217,8 @@ static EvtWord evt_door_04_close[87];
 #endif
 
 static DoorParam door_data_04;
-EvtWord evt_door_stg7_open[27];
-EvtWord evt_door_stg7_close[7];
+static EvtWord evt_door_stg7_open[27];
+static EvtWord evt_door_stg7_close[7];
 static EvtWord evt_door_04_entry[64];
 static EvtWord tensou_return[243];
 
@@ -228,7 +228,7 @@ extern EvtWord tensou_init_event[];
 EvtWord tensou_init_event[182];
 #endif
 
-EvtWord tensou_event[209];
+static EvtWord tensou_event[209];
 static EvtWord tensou_anim_event[30];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -238,8 +238,8 @@ EvtWord tensou_sw_event[94];
 #endif
 
 static EvtWord kurihakase_event[221];
-EvtWord hashira_bomb_sub[144];
-EvtWord hashira_bomb[45];
+static EvtWord hashira_bomb_sub[144];
+static EvtWord hashira_bomb[45];
 static EvtWord epilogue_npc_entry[25];
 static EvtWord epilogue_evt[127];
 static EvtWord mobj_box01[34];
@@ -1412,7 +1412,7 @@ static EVT_BEGIN(starmaniac_get_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(starmaniac_talk)
+static EVT_BEGIN(starmaniac_talk)
     // If Dazzle has no badges left to trade, he apologises and the talk ends.
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -1544,7 +1544,7 @@ EVT_BEGIN(starmaniac_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(johoyaketi_talk)
+static EVT_BEGIN(johoyaketi_talk)
     IF_INT_EQUAL(GSWF_TIK_00_WONKY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaketi_00"), 0, STRING("me"))
         SET_VALUE(GSWF_TIK_00_WONKY_FIRST_TALK_DONE, 1)
@@ -2673,7 +2673,7 @@ static DoorParam door_data_04 = {
  * While GSWF_TIK_00_STG7_DOOR_OPENED is clear, the message tik_000 (no speaker) is shown and the event returns;
  * the normal door opening runs only after that flag is set (evt_door_stg7_close sets it, from the inside trigger).
  */
-EVT_BEGIN(evt_door_stg7_open)
+static EVT_BEGIN(evt_door_stg7_open)
     IF_INT_EQUAL(GSWF_TIK_00_STG7_DOOR_OPENED, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -2685,7 +2685,7 @@ EVT_BEGIN(evt_door_stg7_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_door_stg7_close)
+static EVT_BEGIN(evt_door_stg7_close)
     SET_VALUE(GSWF_TIK_00_STG7_DOOR_OPENED, 1)
     SPAWN_EVENT(evt_door_close)
     RETURN
@@ -2936,7 +2936,7 @@ static USER_FUNC(scale_func) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(tensou_event)
+static EVT_BEGIN(tensou_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -3117,7 +3117,7 @@ static EVT_BEGIN(kurihakase_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(hashira_bomb_sub)
+static EVT_BEGIN(hashira_bomb_sub)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, STRING("S_ana_before"), LW(0), LW(1), LW(2))
@@ -3163,7 +3163,7 @@ EVT_END()
  * If it has not been bombed, registers hashira_bomb_sub as a Bobbery trigger on the hit area a_bom_mae;
  * otherwise leaves the destroyed state.
  */
-EVT_BEGIN(hashira_bomb)
+static EVT_BEGIN(hashira_bomb)
     IF_INT_EQUAL(GSWF_TIK_00_PILLAR_BOMBED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_bom_go"), 1, 0)

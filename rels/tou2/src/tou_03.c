@@ -238,7 +238,7 @@ static EvtWord s2_door_open2[19];
 static EvtWord s2_open[18];
 static EvtWord s2_close[17];
 static BeroEntry bero_data[5];
-EvtWord evt_tougi[777];
+static EvtWord evt_tougi[777];
 static EvtWord init_kinosikowa[13];
 static NpcSetupInfo npcEnt[5];
 
@@ -257,12 +257,12 @@ EvtWord npc_entry[623];
 #endif
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord evt_random_battle[317];
+static EvtWord evt_random_battle[317];
 #else
-EvtWord evt_random_battle[VERSION_PICK(335, 338)];
+static EvtWord evt_random_battle[VERSION_PICK(335, 338)];
 #endif
 
-EvtWord evt_random_battle2[VERSION_PICK(317, 326)];
+static EvtWord evt_random_battle2[VERSION_PICK(317, 326)];
 static EvtWord evt_teki_nyuujyou[107];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -273,7 +273,7 @@ EvtWord evt_teki_nyuujyou_default[183];
 
 static EvtWord burst_chain_entry[289];
 static EvtWord burst_wangwang[69];
-EvtWord evt_match[VERSION_PICK(362, 381)];
+static EvtWord evt_match[VERSION_PICK(362, 381)];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_kurikuri_opening[];
@@ -281,7 +281,7 @@ extern EvtWord evt_kurikuri_opening[];
 EvtWord evt_kurikuri_opening[442];
 #endif
 
-EvtWord evt_kurikuri_win[231];
+static EvtWord evt_kurikuri_win[231];
 EvtWord evt_kurikuri_lose[];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -302,7 +302,7 @@ EvtWord evt_champ_opening[556];
 EvtWord evt_champ_opening_re[767];
 #endif
 
-EvtWord evt_champ_win[335];
+static EvtWord evt_champ_win[335];
 EvtWord evt_champ_lose[];
 EvtWord evt_default_opening[];
 EvtWord evt_default_win[];
@@ -314,7 +314,7 @@ static EvtWord evt_champion[358];
 static EvtWord evt_champion[VERSION_PICK(365, 376)];
 #endif
 
-EvtWord evt_champion2[VERSION_PICK(178, 189)];
+static EvtWord evt_champion2[VERSION_PICK(178, 189)];
 static const char* block_data[9];
 static EvtWord evt_shake[39];
 static EvtWord evt_boss_stone[63];
@@ -409,7 +409,7 @@ static ExtTexInfo ext_kyaku_data[] = {
 EVT_BEGIN(x)
 EVT_END()
 
-s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
+static s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
     FieldBattleData* fbat = fbatGetPointer();
 
     fbat->hitKind = FBAT_HIT_ENEMY_FIRST;
@@ -1000,7 +1000,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
-EVT_BEGIN(evt_tougi)
+static EVT_BEGIN(evt_tougi)
     // Place Mario and the partner at whichever south door they came through, facing the fight in the ring.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1568,7 +1568,7 @@ EVT_END()
  * two Iron Cleft-type fighters ("Ran") burst in, Grubba comments,
  * a gong rings and a battle starts (battle setup 10); afterwards Grubba reacts to whether Mario won or lost.
  */
-EVT_BEGIN(evt_random_battle)
+static EVT_BEGIN(evt_random_battle)
     // Mario is startled as the Iron Clefts shout for Gonzales and charge into the ring.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
@@ -1758,7 +1758,7 @@ EVT_END()
  * after it Grubba and Bowser comment on the result
  * and the music fades out with story progress temporarily set to STG4_00_WELCOME_TO_STAGE_4.
  */
-EVT_BEGIN(evt_random_battle2)
+static EVT_BEGIN(evt_random_battle2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -2111,7 +2111,7 @@ EVT_END()
  * may trigger the rank 7 and rank 5 ambushes, and finally warps to the locker room map (tou_07, tou_08 or tou_10
  * by the player's rank).
  */
-EVT_BEGIN(evt_match)
+static EVT_BEGIN(evt_match)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU1"))
 #else
@@ -2439,7 +2439,7 @@ EVT_END()
  * the defeated Goombas lie dazed, Mario is set to M_S_1, the partner strikes its victory pose (evt_kime_pose),
  * Grubba asks a yes/no question and confetti and crowd cheers close the scene.
  */
-EVT_BEGIN(evt_kurikuri_win)
+static EVT_BEGIN(evt_kurikuri_win)
     CALL(evt_cam3d_evt_set, 70, 138, 263, 70, 90, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_set_position, STRING("\223G\202P"), 50, 60, 0)
     CALL(evt_npc_set_position, STRING("\223G\202Q"), 90, 80, 25)
@@ -3242,7 +3242,7 @@ EVT_END()
  * Rawk Hawk and the announcer print messages selected by story progress,
  * confetti falls and the crowd speaks from the stands.
  */
-EVT_BEGIN(evt_champ_win)
+static EVT_BEGIN(evt_champ_win)
     CALL(tou_champion_belt_onoff, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(15), STRING("\203K\203\223\203X"))
@@ -3971,7 +3971,7 @@ static EVT_BEGIN(evt_champion)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_champion2)
+static EVT_BEGIN(evt_champion2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -4112,7 +4112,7 @@ static s32 screen_evt(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** The unit's own out-of-line copy of the SDK's GXSetTexCoordGen, calling GXSetTexCoordGen2 with no normalisation. */
-void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType func, GXTexGenSrc src, u32 mtx) {
+static void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType func, GXTexGenSrc src, u32 mtx) {
     GXSetTexCoordGen2(dst, func, src, mtx, GX_FALSE, GX_PTIDENTITY);
 }
 

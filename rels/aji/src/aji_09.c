@@ -36,7 +36,7 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(check_kou_evt);
-USER_FUNC(dot_mario);
+static USER_FUNC(dot_mario);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord s_door_open[22];
@@ -58,11 +58,11 @@ static const char* rokka_data[21];
 static EvtWord evt_rokka_open[127];
 static EvtWord evt_rokka_close[165];
 static EvtWord evt_rokka_init[34];
-EvtWord peach_evt_fuku_g[36];
+static EvtWord peach_evt_fuku_g[36];
 static EvtWord peach_evt_ka_open[46];
 static EvtWord peach_evt_ka_close[46];
-EvtWord peach_evt_kou_in[172];
-EvtWord peach_evt_kou_out[89];
+static EvtWord peach_evt_kou_in[172];
+static EvtWord peach_evt_kou_out[89];
 static EvtWord peach_evt_kou1_in[72];
 static EvtWord peach_evt_kou1_out[43];
 static EvtWord peach_evt_kou2_in[72];
@@ -445,7 +445,7 @@ static EVT_BEGIN(evt_rokka_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_fuku_g)
+static EVT_BEGIN(peach_evt_fuku_g)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_134"), 0, STRING("mario"))
     CALL(evt_msg_print, 0, STRING("peach_aji_135"), 0, 0)
@@ -489,7 +489,7 @@ static EVT_BEGIN(peach_evt_ka_close)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_kou_in)
+static EVT_BEGIN(peach_evt_kou_in)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
     SET_VALUE(LW(0), LW(9))
@@ -552,7 +552,7 @@ EVT_BEGIN(peach_evt_kou_in)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_kou_out)
+static EVT_BEGIN(peach_evt_kou_out)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -906,7 +906,7 @@ EVT_BEGIN(aji_09_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(dot_mario) {
+static USER_FUNC(dot_mario) {
     PartyEntry* party = partyGetPtr(0);
 
     // Keep the event blocked until the dot-mode animation group is available.

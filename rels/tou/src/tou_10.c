@@ -44,11 +44,11 @@
 
 static USER_FUNC(getYoshiColor);
 static USER_FUNC(name_check);
-USER_FUNC(setYoshiColor);
+static USER_FUNC(setYoshiColor);
 USER_FUNC(tou_10_mario_keyoff_check);
 USER_FUNC(tou_10_mario_free_wait);
 
-EvtWord room_out[8];
+static EvtWord room_out[8];
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 static BeroEntry bero_data[2];
@@ -64,7 +64,7 @@ static EvtWord init_brots[49];
 static EvtWord talk_brots[38];
 static EvtWord init_gangan[17];
 static EvtWord talk_gangan[141];
-EvtWord init_poku[43];
+static EvtWord init_poku[43];
 static EvtWord talk_poku[55];
 static EvtWord init_iron[45];
 static EvtWord talk_iron[30];
@@ -73,20 +73,20 @@ static EvtWord talk_iron2[30];
 static NpcSetupInfo npcEnt[11];
 
 #if VERSION >= VERSION_US
-EvtWord evt_saisyo_after[733];
+static EvtWord evt_saisyo_after[733];
 static EvtWord evt_saisyo_after_re[367];
 EvtWord evt_tou_chibi_yoshi[424];
 static EvtWord evt_1st_leagu[235];
-EvtWord evt_1st_leagu_re[249];
+static EvtWord evt_1st_leagu_re[249];
 static EvtWord evt_door[25];
 static EvtWord evt_rec[274];
 static EvtWord evt_gardman[202];
 #else
-EvtWord evt_saisyo_after[691];
+static EvtWord evt_saisyo_after[691];
 static EvtWord evt_saisyo_after_re[325];
 EvtWord evt_tou_chibi_yoshi[424];
 static EvtWord evt_1st_leagu[214];
-EvtWord evt_1st_leagu_re[228];
+static EvtWord evt_1st_leagu_re[228];
 static EvtWord evt_door[25];
 static EvtWord evt_rec[274];
 #if VERSION == VERSION_DEMO_JP
@@ -96,7 +96,7 @@ static EvtWord evt_gardman[198];
 #endif
 #endif
 
-EvtWord evt_match_make_sub[138];
+static EvtWord evt_match_make_sub[138];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_match_make[];
@@ -107,7 +107,7 @@ EvtWord evt_match_make[116];
 static EvtWord bed_entry[10];
 static EvtWord evt_okorareru[301];
 static EvtWord evt_syorui[92];
-EvtWord first_tamago[52];
+static EvtWord first_tamago[52];
 static EvtWord evt_block[5];
 EvtWord tou_10_init_evt[254];
 
@@ -170,7 +170,7 @@ static USER_FUNC(getYoshiColor) {
  * Script helper: picks Yoshi's color from the real time that has passed since the egg was received (stored in
  * GSW_TOU_EGG_RECEIVED_TIME), modulo 20 minutes, and stores it in the pouch.
  */
-USER_FUNC(setYoshiColor) {
+static USER_FUNC(setYoshiColor) {
     OSTime start;
     s32 i;
     s32 minutes;
@@ -201,7 +201,7 @@ USER_FUNC(setYoshiColor) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(room_out)
+static EVT_BEGIN(room_out)
     SET_VALUE(GSWF_TOU_10_ENTERED_UNUSED, 1)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -518,7 +518,7 @@ EVT_END()
  * unless Mario has left by blimp after the chapter (GSWF_TOU_LEFT_AFTER_CHAPTER); otherwise his position is left alone.
  * He faces 270.
  */
-EVT_BEGIN(init_poku)
+static EVT_BEGIN(init_poku)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
@@ -759,7 +759,7 @@ static NpcSetupInfo npcEnt[] = {
  * The minor-league fighters (マイケル, オクトール, ブロッツ, ガンガン) then introduce themselves (stg3_tou_93_5 to 93_16)
  * and the story advances to STG3_07_MINORS_9TH_PL.
  */
-EVT_BEGIN(evt_saisyo_after)
+static EVT_BEGIN(evt_saisyo_after)
     // Mario, the partner, Grubba and Jolene are placed in the room after the first match.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -1333,7 +1333,7 @@ static EVT_BEGIN(evt_1st_leagu)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_1st_leagu_re)
+static EVT_BEGIN(evt_1st_leagu_re)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
     CALL(evt_party_set_pos, 0, -120, 0, -105)
@@ -1632,7 +1632,7 @@ static EVT_BEGIN(evt_gardman)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_match_make_sub)
+static EVT_BEGIN(evt_match_make_sub)
     CALL(evt_cam3d_evt_set, -75, 91, 188, -75, 57, -1, 1000, EASING_SINE_IN_OUT)
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(1)
@@ -1854,7 +1854,7 @@ static EVT_BEGIN(evt_syorui)
     RETURN
 EVT_END()
 
-EVT_BEGIN(first_tamago)
+static EVT_BEGIN(first_tamago)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     BEGIN_INLINE_EVENT

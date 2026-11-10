@@ -71,7 +71,7 @@ static void monosiri_disp(CameraId camera, void* param);
  * The map page draws them, and the cursor names the nearest big one.
  */
 #if VERSION >= VERSION_JP
-TubuDt tubuDt[] = {
+static TubuDt tubuDt[] = {
     {14, -34, 1, 0, STG0_03_TO_ROGUEPORT, "gor"},
     {-4, -31, 0, 2, STG0_11_3_GOOMBA_GOONS, "gor"},
     {-20, -31, 0, 2, STG0_11_3_GOOMBA_GOONS, "gor"},
@@ -170,7 +170,7 @@ TubuDt tubuDt[] = {
 static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
 
-s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
+static s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
 
 /**
  * Adds a Journal entry button (0 map, 1 Crystal Stars, 2 badge log, 3 recipe log,
@@ -202,7 +202,7 @@ void logEntry(WindowWork* w, s32 id) {
 #if VERSION <= VERSION_DEMO_JP
 #define TUBU_TYPE(t) 0
 #define TUBU_SEQ_361 360
-TubuDt tubuDt[] = {
+static TubuDt tubuDt[] = {
     {14, -34, 1, 0, 3, "gor"},
     {-4, -31, 0, TUBU_TYPE(2), 12, "gor"},
     {-20, -31, 0, TUBU_TYPE(2), 12, "gor"},

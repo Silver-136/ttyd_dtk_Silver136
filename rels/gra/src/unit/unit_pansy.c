@@ -20,7 +20,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_pansy_attack;
+static BattleWeapon weapon_pansy_attack;
 static EvtWord attack_event[58];
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[2];
@@ -126,7 +126,7 @@ static BattleUnitKindPart parts[] = {
  * Crazee Dayzee's song: 2 damage to every target, ignoring defense, with a chance to put each target to sleep for
  * 5 turns (sleepChance 50 in US and later, 75 in JP and the early demos).
  */
-BattleWeapon weapon_pansy_attack = {
+static BattleWeapon weapon_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

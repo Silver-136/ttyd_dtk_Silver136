@@ -221,7 +221,7 @@ EvtWord gor_02_hitobj_on[54];
 #endif
 
 static EvtWord gor_02_event_00[18];
-EvtWord gor_02_event_01[30];
+static EvtWord gor_02_event_01[30];
 static BeroEntry bero_entry_data[3];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -263,16 +263,16 @@ EvtWord powerupya_talk[119];
 extern EvtWord powerupya_orb_use[];
 #endif
 
-EvtWord mapball_init[19];
+static EvtWord mapball_init[19];
 static EvtWord powerupya_init[58];
 
 #if VERSION >= VERSION_US
-EvtWord johoyaperfect_talk[169];
+static EvtWord johoyaperfect_talk[169];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord johoyaperfect_talk[133];
+static EvtWord johoyaperfect_talk[133];
 #else
-EvtWord johoyaperfect_talk[146];
+static EvtWord johoyaperfect_talk[146];
 #endif
 #endif
 
@@ -285,9 +285,9 @@ static EvtWord kurihakase_talk[421];
 #endif
 
 static EvtWord oyabun_init[7];
-EvtWord oyabun_talk[364];
-EvtWord tozokudan1_init[36];
-EvtWord tozokudan1_talk[285];
+static EvtWord oyabun_talk[364];
+static EvtWord tozokudan1_init[36];
+static EvtWord tozokudan1_talk[285];
 static EvtWord tozokudan2_init[24];
 static s32 key_tbl[2];
 
@@ -301,7 +301,7 @@ static EvtWord tozokudan2_house_door[139];
 static EvtWord mario_yokeru[127];
 static EvtWord evt_unlock_mario[78];
 static EvtWord evt_unlock[6];
-EvtWord evt_unlock_npc[97];
+static EvtWord evt_unlock_npc[97];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord tozokudan2_talk[];
@@ -310,8 +310,8 @@ EvtWord tozokudan2_talk[121];
 #endif
 
 static EvtWord tozokudan3_init[17];
-EvtWord tozokudan3_talk[22];
-EvtWord sanders_open_door[56];
+static EvtWord tozokudan3_talk[22];
+static EvtWord sanders_open_door[56];
 static EvtWord sanders_init[37];
 
 #if VERSION >= VERSION_DEMO_EU
@@ -480,7 +480,7 @@ static EvtWord evt_gor_door_close[66];
 static EvtWord evt_gor_offscren_door_entry[26];
 static EvtWord mario_kirimomi_event[67];
 static EvtWord cam_yurasu_event[8];
-EvtWord steel_coin[386];
+static EvtWord steel_coin[386];
 static EvtWord kurihakase_first_talk[787];
 static EvtWord kurihakase_wall_remove[257];
 static EvtWord kurihakase_lecture[286];
@@ -501,31 +501,31 @@ EvtWord epigraphy_map[];
 #if VERSION >= VERSION_US
 static EvtWord epigraphy_map_after_stage1[258];
 static EvtWord epigraphy_map_after_stage2[400];
-EvtWord epigraphy_map_after_stage3[368];
+static EvtWord epigraphy_map_after_stage3[368];
 static EvtWord epigraphy_map_after_stage4[297];
 static EvtWord epigraphy_map_after_stage5[225];
 #else
 #if VERSION == VERSION_DEMO_JP
 static EvtWord epigraphy_map_after_stage1[246];
 static EvtWord epigraphy_map_after_stage2[388];
-EvtWord epigraphy_map_after_stage3[356];
+static EvtWord epigraphy_map_after_stage3[356];
 static EvtWord epigraphy_map_after_stage4[285];
 static EvtWord epigraphy_map_after_stage5[213];
 #else
 static EvtWord epigraphy_map_after_stage1[251];
 static EvtWord epigraphy_map_after_stage2[393];
-EvtWord epigraphy_map_after_stage3[361];
+static EvtWord epigraphy_map_after_stage3[361];
 static EvtWord epigraphy_map_after_stage4[290];
 static EvtWord epigraphy_map_after_stage5[218];
 #endif
 #endif
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord epigraphy_map_after_stage6[225];
-EvtWord kurihakase_after3minutes[172];
+static EvtWord epigraphy_map_after_stage6[225];
+static EvtWord kurihakase_after3minutes[172];
 #else
-EvtWord epigraphy_map_after_stage6[245];
-EvtWord kurihakase_after3minutes[177];
+static EvtWord epigraphy_map_after_stage6[245];
+static EvtWord kurihakase_after3minutes[177];
 #endif
 
 static HitDamageReturn hitDmgRetPoints[13];
@@ -564,7 +564,7 @@ MonosiriFollow follow[8];
 
 static EvtWord evt_monosiri[39];
 static EvtWord evt_monosiri_follow[18];
-EvtWord evt_cloud[10];
+static EvtWord evt_cloud[10];
 static EvtWord iri_19_init[20];
 static EvtWord epilogue_npc_entry[40];
 static EvtWord epilogue_evt_sub[56];
@@ -640,7 +640,7 @@ EVT_END()
  * places Frankly as the follower (party slot 1) out of sight below the map and sets GSWF_GOR_02_TUTORIAL_PIPE_TAKEN.
  * Returns 0 in LW(0) so the pipe still works.
  */
-EVT_BEGIN(gor_02_event_01)
+static EVT_BEGIN(gor_02_event_01)
     IF_INT_EQUAL(GSWF_GOR_02_TUTORIAL_PIPE_TAKEN, 1)
         SET_VALUE(LW(0), 0)
         RETURN
@@ -1619,7 +1619,7 @@ EVT_END()
  * Map init for the shop's crystal: hides the red one ("S_i01_sui_aka") until the Up Arrow has been used,
  * then hides the blue one.
  */
-EVT_BEGIN(mapball_init)
+static EVT_BEGIN(mapball_init)
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
@@ -1662,7 +1662,7 @@ EVT_END()
  * (johoyaperfect_01 and 02), refused when Mario is short (09), otherwise paid for, told and marked as read.
  * The data is then freed; JP and later loop back to the list.
  */
-EVT_BEGIN(johoyaperfect_talk)
+static EVT_BEGIN(johoyaperfect_talk)
     IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 1)
@@ -1976,7 +1976,7 @@ static EVT_BEGIN(oyabun_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(oyabun_talk)
+static EVT_BEGIN(oyabun_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         IF_INT_EQUAL(GSWF_GOR_ISHNAIL_FIRST_TALK_DONE, 0)
@@ -2114,7 +2114,7 @@ EVT_END()
  * before he is beaten he stands at (-82, 0, 134);
  * afterwards at (-153, 0, -459) facing right with the center wall open. Clears GW(10).
  */
-EVT_BEGIN(tozokudan1_init)
+static EVT_BEGIN(tozokudan1_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_DEFEATED, 1)
         CALL(evt_hitobj_onoff, STRING("A_center_kabe_atr"), 1, 0)
@@ -2127,7 +2127,7 @@ EVT_BEGIN(tozokudan1_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(tozokudan1_talk)
+static EVT_BEGIN(tozokudan1_talk)
     IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_DEFEATED, 0)
         IF_INT_EQUAL(GW(10), 1)
             CALL(evt_msg_print, 0, STRING("gor_02_006_01"), 0, STRING("me"))
@@ -2390,7 +2390,7 @@ EVT_END()
  * the thief thanks him, pays 20 coins, the lock opens and he goes in;
  * the key is removed and the job marked solved.
  */
-EVT_BEGIN(evt_unlock_npc)
+static EVT_BEGIN(evt_unlock_npc)
     CALL(evt_npc_flag_onoff, 1, STRING("盗賊団２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("irai_01_03"), 0, STRING("盗賊団２"))
     CALL(evt_sub_get_coin, 20)
@@ -2475,7 +2475,7 @@ static EVT_BEGIN(tozokudan3_init)
 EVT_END()
 
 /** Talk event of the gang member at the back door: first line, then a repeat line (irai_oku_00 and 01). */
-EVT_BEGIN(tozokudan3_talk)
+static EVT_BEGIN(tozokudan3_talk)
     IF_INT_EQUAL(GSWF_GOR_TROUBLE_CENTER_BACKWAY_TALK, 0)
         CALL(evt_msg_print, 0, STRING("irai_oku_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_TROUBLE_CENTER_BACKWAY_TALK, 1)
@@ -2489,7 +2489,7 @@ EVT_END()
  * Makes Sanders walk to Bobbery's door and open it (50, 25) and sets GSWF_GOR_BOBBERY_DOOR_UNLOCKED,
  * then says mac_4_056_01. Does nothing if the door is already open.
  */
-EVT_BEGIN(sanders_open_door)
+static EVT_BEGIN(sanders_open_door)
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 1)
         RETURN
     END_IF
@@ -5299,7 +5299,7 @@ static EVT_BEGIN(cam_yurasu_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(steel_coin)
+static EVT_BEGIN(steel_coin)
     // Setup: the thief is placed to their right and Mario and the partner come in from the left edge.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kmn"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_ry, STRING("盗賊"), 270)
@@ -6394,7 +6394,7 @@ EVT_END()
  * he deciphers the map for the next star (mac_3_001_01 on);
  * once the Twilight Town pipe has rejected Mario, he discusses that rejection further. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
  */
-EVT_BEGIN(epigraphy_map_after_stage3)
+static EVT_BEGIN(epigraphy_map_after_stage3)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6649,7 +6649,7 @@ static EVT_BEGIN(epigraphy_map_after_stage5)
     RETURN
 EVT_END()
 
-EVT_BEGIN(epigraphy_map_after_stage6)
+static EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -6724,7 +6724,7 @@ EVT_END()
  * with a different line depending on whether Mario has the Ultra Hammer,
  * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
  */
-EVT_BEGIN(kurihakase_after3minutes)
+static EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("mac_6_007"), 0, STRING("クリハカセ"))
     WAIT_MS(500)
@@ -7014,7 +7014,7 @@ static EVT_BEGIN(evt_monosiri_follow)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_cloud)
+static EVT_BEGIN(evt_cloud)
     SET_VALUE(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 1)
     SET_VALUE(LW(0), PTR(&door_data_04_ura))
     CALL_CHILD(evt_door_entry)

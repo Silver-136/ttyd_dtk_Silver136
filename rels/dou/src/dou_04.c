@@ -50,7 +50,7 @@ static EvtWord lift_event_init[17];
 static EvtWord lift_event[5];
 static HitDamageReturn hitDmgRetPoints[4];
 static EvtWord kuribo_init[16];
-EvtWord kuribo_talk[740];
+static EvtWord kuribo_talk[740];
 static NpcSetupInfo npcEnt[2];
 EvtWord dou_04_init_evt[96];
 
@@ -481,7 +481,7 @@ static EVT_BEGIN(kuribo_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kuribo_talk)
+static EVT_BEGIN(kuribo_talk)
     // Only while job 21 is active does he have anything to say.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)

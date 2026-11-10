@@ -56,7 +56,7 @@ static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_gundan_zako_group1_attack;
 static EvtWord init_event[44];
 static EvtWord damage_event[134];
-EvtWord damage_event_kaiten_hammer[30];
+static EvtWord damage_event_kaiten_hammer[30];
 static EvtWord dead_event[138];
 static EvtWord attack_event[85];
 static EvtWord hit_check_event[95];
@@ -376,7 +376,7 @@ EVT_END()
  * when damage was dealt, plays the hurt animation (zakogun_damage_pose), shakes the X-Nauts in place (zakogun_start_sukima 1)
  * for 80 frames, then restores the X-Nauts to formation.
  */
-EVT_BEGIN(damage_event_kaiten_hammer)
+static EVT_BEGIN(damage_event_kaiten_hammer)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))

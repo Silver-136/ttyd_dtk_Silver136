@@ -105,20 +105,20 @@ static EvtWord flush_off[106];
 static EvtWord last_evt_1[1078];
 
 #if VERSION >= VERSION_US
-EvtWord last_evt_2[358];
-EvtWord last_evt_3[1349];
+static EvtWord last_evt_2[358];
+static EvtWord last_evt_3[1349];
 static EvtWord b_peach_fuwafuwa[39];
 static EvtWord last_evt_3_1[524];
 static EvtWord koe_evt[78];
 static EvtWord majo_kyorokyoro[84];
 static EvtWord last_evt_3_2[1837];
 #else
-EvtWord last_evt_2[383];
+static EvtWord last_evt_2[383];
 static EvtWord last_evt_3_npc_entry[29];
 #if VERSION == VERSION_DEMO_JP
-EvtWord last_evt_3[1376];
+static EvtWord last_evt_3[1376];
 #else
-EvtWord last_evt_3[1379];
+static EvtWord last_evt_3[1379];
 #endif
 static EvtWord b_peach_fuwafuwa[39];
 static EvtWord last_evt_3_1[540];
@@ -606,7 +606,7 @@ static USER_FUNC(all_hikari_change_kuro) {
  * Map TEV callback used while the hall flashes:
  * draws the object in a flat colour, white when LSWF_LAS_29_MAP_LIT_WHITE is set and black otherwise, instead of its texture.
  */
-void map_color_tev(MapTevCallbackInfo* info) {
+static void map_color_tev(MapTevCallbackInfo* info) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1336,7 +1336,7 @@ EVT_END()
  * the Shadow Queen speaks with Grodus, then turns on Peach, her vessel (Peach collapses), the hall flashes,
  * and the map changes to usu_00 (sekai_yami2).
  */
-EVT_BEGIN(last_evt_2)
+static EVT_BEGIN(last_evt_2)
     // The Shadow Queen asks who called her and where her vessel is; Grodus answers.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1445,7 +1445,7 @@ EVT_END()
  * If the battle result is BATTLE_RESULT_STOPPED the story continues with last_evt_3_1,
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
-EVT_BEGIN(last_evt_3)
+static EVT_BEGIN(last_evt_3)
     // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

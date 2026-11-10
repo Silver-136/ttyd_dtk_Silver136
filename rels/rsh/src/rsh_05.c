@@ -170,8 +170,8 @@ extern EvtWord evt_moamoa_help[];
 EvtWord evt_moamoa_help[166];
 #endif
 
-EvtWord evt_moamoa_escape0[15];
-EvtWord evt_moamoa_escape1[15];
+static EvtWord evt_moamoa_escape0[15];
+static EvtWord evt_moamoa_escape1[15];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_moamoa_escape[205];
@@ -1701,7 +1701,7 @@ EVT_END()
  * Runs when the swarm gives up its first target:
  * frees the waitress (evt_moamoa_help) and gives her talk_waitless as her talk event.
  */
-EVT_BEGIN(evt_moamoa_escape0)
+static EVT_BEGIN(evt_moamoa_escape0)
     SET_VALUE(LW(0), STRING(("ウェイトレス")))
     SPAWN_EVENT(evt_moamoa_help)
     SET_VALUE(GSWF_RSH_SMORG_WAITRESS_FREED, 1)
@@ -1709,7 +1709,7 @@ EVT_BEGIN(evt_moamoa_escape0)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_moamoa_escape1)
+static EVT_BEGIN(evt_moamoa_escape1)
     SET_VALUE(LW(0), STRING("車掌"))
     SPAWN_EVENT(evt_moamoa_help)
     SET_VALUE(GSWF_RSH_SMORG_CONDUCTOR_FREED, 1)

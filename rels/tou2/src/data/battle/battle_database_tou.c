@@ -92,7 +92,7 @@ static NpcBattleSelect btlgrpsel_tou_btlno_tou_01_23_off[2];
 static NpcBattleSelect btlgrpsel_tou_btlno_tou_01_24_off[2];
 NpcSetupBattleInfo btlsetup_tou_tbl[26];
 NpcTerritoryInfo btl_tou_setup_no_tbl[26];
-EvtWord bgset_tou_screen_evt[22];
+static EvtWord bgset_tou_screen_evt[22];
 
 /**
  * Stage objects of the Glitz Pit arena (stg_03_0), in two sets: entries 0-5 for the normal arena (the big
@@ -1790,7 +1790,7 @@ NpcTerritoryInfo btl_tou_setup_no_tbl[] = {
  * initialises the big monitor texture, then installs tou_gamen_screen_tev as TEV callback 8 on the "gamen"
  * (screen) map object so the monitor shows the battle picture.
  */
-EVT_BEGIN(bgset_tou_screen_evt)
+static EVT_BEGIN(bgset_tou_screen_evt)
     CALL(tou_gamen_screen_tev_init)
     WAIT_FRAMES(1)
     CALL(evt_map_set_tevcallback, 8, PTR(tou_gamen_screen_tev))

@@ -117,13 +117,13 @@ static EvtWord ele_2[622];
 
 static EvtWord evt_elv_init[271];
 static EvtWord key_lock[14];
-EvtWord last_key_lock[36];
-EvtWord last_elv_lock[36];
+static EvtWord last_key_lock[36];
+static EvtWord last_elv_lock[36];
 static EvtWord evt_key_init[242];
 static EvtWord evt_aikotoba[188];
 static EvtWord peach_evt_stg1[32];
 static EvtWord peach_evt_stg1_1[41];
-EvtWord peach_evt_stg1_2[106];
+static EvtWord peach_evt_stg1_2[106];
 static EvtWord peach_evt_stg3_1[64];
 static EvtWord peach_evt_stg3[25];
 static EvtWord peach_evt_stg5[51];
@@ -1694,7 +1694,7 @@ static EVT_BEGIN(key_lock)
 EVT_END()
 
 // Door and elevator lock messages share the same capped three-attempt counter.
-EVT_BEGIN(last_key_lock)
+static EVT_BEGIN(last_key_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_45_02"), 0, 0)
     IF_INT_LESS(GSW_AJI_01_LOCKED_EXIT_TRIES, 3)
@@ -1710,7 +1710,7 @@ EVT_BEGIN(last_key_lock)
     RETURN
 EVT_END()
 
-EVT_BEGIN(last_elv_lock)
+static EVT_BEGIN(last_elv_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_45_01"), 0, 0)
     IF_INT_LESS(GSW_AJI_01_LOCKED_EXIT_TRIES, 3)
@@ -1892,7 +1892,7 @@ EVT_END()
  * the e_bero_5 exit is overwritten with e_bero_5_peach and she says peach_aji_41.
  * GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN makes it run only once.
  */
-EVT_BEGIN(peach_evt_stg1_2)
+static EVT_BEGIN(peach_evt_stg1_2)
     IF_INT_EQUAL(GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN, 1)
         RETURN
     END_IF

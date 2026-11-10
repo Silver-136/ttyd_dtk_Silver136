@@ -21,7 +21,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_sinnosuke_attack;
-BattleWeapon weapon_sinnosuke_charge;
+static BattleWeapon weapon_sinnosuke_charge;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_turn[15];
 static BattleDataEntry data_table[3];
@@ -175,7 +175,7 @@ static BattleWeapon weapon_sinnosuke_attack = {
 };
 
 /** Weapon record of the Hyper Bald Cleft's charge-up: no HP damage. */
-BattleWeapon weapon_sinnosuke_charge = {
+static BattleWeapon weapon_sinnosuke_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

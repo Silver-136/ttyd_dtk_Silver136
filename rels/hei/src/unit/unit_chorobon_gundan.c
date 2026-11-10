@@ -37,10 +37,10 @@ USER_FUNC(chorogun_counterd);
 USER_FUNC(chorogun_dive_target);
 USER_FUNC(chorogun_escape);
 USER_FUNC(chorogun_get_alive_num);
-USER_FUNC(chorogun_set_target_id);
-void chorogun_ext_disp(CameraId camera, void* param);
-void chorogun_ext_main(void);
-void chorogun_ext_init(void);
+static USER_FUNC(chorogun_set_target_id);
+static void chorogun_ext_disp(CameraId camera, void* param);
+static void chorogun_ext_main(void);
+static void chorogun_ext_init(void);
 extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
@@ -67,11 +67,11 @@ static EvtWord damage_event[59];
 
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];
-ExtTexInfo chorogun_ext_entry_data[21];
+static ExtTexInfo chorogun_ext_entry_data[21];
 EvtWord chorogun_entry[19];
 
 /** Finds the Fuzzy Horde unit (initial kind 0x15) among the battle's units and returns it, or NULL. */
-BattleUnit* chorogun_get_ptr(void) {
+static BattleUnit* chorogun_get_ptr(void) {
     s32 i;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -414,7 +414,7 @@ EVT_END()
  * Sprite entries of the Fuzzy horde's extra Fuzzies:
  * copies of the Fuzzy model playing the walk animation from staggered starting frames.
  */
-ExtTexInfo chorogun_ext_entry_data[] = {
+static ExtTexInfo chorogun_ext_entry_data[] = {
     {"c_chorobon", "CBN_W_1", 0.0f},
     {"c_chorobon", "CBN_W_1", 2.0f},
     {"c_chorobon", "CBN_W_1", 4.0f},
@@ -449,7 +449,7 @@ EVT_BEGIN(chorogun_entry)
     RETURN
 EVT_END()
 
-void chorogun_ext_init(void) {
+static void chorogun_ext_init(void) {
     s32 i;
     s32 a, b;
     f32 tx, ty, tz;
@@ -496,7 +496,7 @@ void chorogun_ext_init(void) {
  * through marching toward the target (30..50) and the dive attack,
  * to running off the stage (60, 61) and being hidden (99). Also plays the landing and movement sounds.
  */
-void chorogun_ext_main(void) {
+static void chorogun_ext_main(void) {
     BattleWork* wp;
     BattleUnit* unit;
     s32 i;
@@ -725,7 +725,7 @@ void chorogun_ext_main(void) {
 }
 
 /** Draw callback of the Fuzzy swarm: loads the render setup, vertices, textures and TEV setup and draws the sprites. */
-void chorogun_ext_disp(CameraId camera, void* param) {
+static void chorogun_ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -751,7 +751,7 @@ USER_FUNC(chorogun_get_alive_num) {
 }
 
 /** Battle script helper: remembers the unit id args[0] as the target of the Fuzzies' dive attack. */
-USER_FUNC(chorogun_set_target_id) {
+static USER_FUNC(chorogun_set_target_id) {
     chorogun_targetId = evtGetValue(event, event->args[0]);
     return 2;
 }

@@ -291,7 +291,7 @@ extern Mtx g_modeling_mtx_stack[32];
 extern AnimationWork work;
 
 #if VERSION <= VERSION_DEMO_JP
-f32 tanfTbl[0xB2];
+static f32 tanfTbl[0xB2];
 #else
 extern f32 tanfTbl[0xB2];
 #endif
@@ -4046,6 +4046,6 @@ const char* animPoseGetGroupName(s32 poseId, s32 group) {
 
 // Uninitialised objects are emitted in reverse definition order, so these end up as g_modeling_mtx_stack, work,
 // tanfTbl in .bss.
-f32 tanfTbl[0xB2];
+static f32 tanfTbl[0xB2];
 AnimationWork work;
 static Mtx g_modeling_mtx_stack[32];

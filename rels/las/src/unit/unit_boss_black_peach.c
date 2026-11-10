@@ -188,7 +188,7 @@ EvtWord peach_entry_event[62];
 EvtWord peach_damage_event[17];
 #endif
 
-EvtWord peach_change_evt[556];
+static EvtWord peach_change_evt[556];
 static EvtWord peach_phase_event[46];
 static EvtWord peach_dead_event[11];
 static EvtWord peack_attack_black_thunder[147];
@@ -1786,7 +1786,7 @@ EVT_BEGIN(peach_damage_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_change_evt)
+static EVT_BEGIN(peach_change_evt)
     // The status window is hidden and the camera moves in on the Shadow Queen (possessing Peach).
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)

@@ -28,7 +28,7 @@ static EvtWord w_open[12];
 static BeroEntry bero_data[4];
 static EvtWord grass_open_1[14];
 static EvtWord grass_open_2[23];
-EvtWord evt_boots[42];
+static EvtWord evt_boots[42];
 static EvtWord evt_elvkey[5];
 static EvtWord evt_head[38];
 EvtWord eki_05_init_evt[];
@@ -162,7 +162,7 @@ EVT_END()
  * gives them to Mario with the important-item message and lecture,
  * and sets the story to STG6_36_SPRING_JUMP.
  */
-EVT_BEGIN(evt_boots)
+static EVT_BEGIN(evt_boots)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("tbox"), LW(0), LW(1), LW(2))
     CALL(lect_juyoitem_rel_set, PTR(all_juyoitem_lecture_rel))

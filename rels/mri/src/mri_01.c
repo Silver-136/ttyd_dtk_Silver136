@@ -116,9 +116,9 @@ extern EvtWord bigtree_firstbattle[];
 EvtWord bigtree_firstbattle[734];
 #endif
 
-EvtWord meet_rival[2247];
-EvtWord rival_nakama[1137];
-EvtWord elder_kaisetsu[206];
+static EvtWord meet_rival[2247];
+static EvtWord rival_nakama[1137];
+static EvtWord elder_kaisetsu[206];
 static EvtWord puni_taiki[119];
 static s32 puni_position[102];
 static EvtWord boss_battle_init[215];
@@ -141,12 +141,12 @@ static EvtWord door_switch_init[17];
 static EvtWord ueki_puni_nigeru[100];
 static EvtWord evt_ueki_01[18];
 static EvtWord evt_ueki_02[24];
-EvtWord evt_ueki_03[49];
+static EvtWord evt_ueki_03[49];
 static EvtWord evt_ueki_08[8];
 static KusaAccess ueki_access_data[5];
-EvtWord puni_mario_wait[49];
+static EvtWord puni_mario_wait[49];
 static EvtWord mri_01_koopa_first_evt[400];
-EvtWord mri_01_koopa_second_evt[682];
+static EvtWord mri_01_koopa_second_evt[682];
 EvtWord mri_01_init_evt[464];
 
 /** Screen flash: fades out over 20 ms, holds for 50 ms, then fades back in over 80 ms. */
@@ -1234,7 +1234,7 @@ EVT_END()
  * argues with Punio and the villagers react; at the end Punio joins Mario's Puni group
  * (GSWF_MRI_PUNIO_JOINED). Sets the story to STG2_12_RIVAL_ARRIVAL.
  */
-EVT_BEGIN(meet_rival)
+static EVT_BEGIN(meet_rival)
     // The beaten grunts decide to run back and report to Lord Crump.
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(15), 5)
@@ -1824,7 +1824,7 @@ EVT_END()
  * the Puni elder gives Mario the Puni Orb, the rival and Punio join the group and nine Punies follow Mario.
  * Sets the story to STG2_15_11_PUNIES and starts elder_kaisetsu.
  */
-EVT_BEGIN(rival_nakama)
+static EVT_BEGIN(rival_nakama)
     CALL(evt_puni_init_puni, 5, 14, -89, 0, 0, 0)
     CALL(evt_puni_flag_onoff, 5, 0, PUNI_FLAG_NOT_IN_PARTY)
     CALL(evt_puni_set_dir, 5, 90)
@@ -2118,7 +2118,7 @@ EVT_END()
  * The Puni elder calls Mario back right after the Puni Orb scene (Mario takes a fall pose with a camera shake)
  * and tells him she can call lost Punies back for him. Sets GSWF_MRI_01_ELDER_TIP_SEEN.
  */
-EVT_BEGIN(elder_kaisetsu)
+static EVT_BEGIN(elder_kaisetsu)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), 25)
@@ -2281,7 +2281,7 @@ static USER_FUNC(akari_charge_entry) {
  * Message callback for the "kpa_stg3_012" line:
  * at callback type 3, when the current page index is 1 it sets local flag LSWF_MRI_01_KOOPA_MSG_CUE. Used in Bowser's visit.
  */
-void mri_stg3_012_cb(s32 type, void* param) {
+static void mri_stg3_012_cb(s32 type, void* param) {
     u16* work = *(u16**)param;
 
     switch (type) {
@@ -3393,7 +3393,7 @@ static EVT_BEGIN(evt_ueki_02)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_ueki_03)
+static EVT_BEGIN(evt_ueki_03)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
         IF_INT_EQUAL(GSWF_MRI_01_BOWSER_PLANT_SCENE_SEEN, 0)
             CALL(evt_mario_key_onoff, 0)
@@ -3441,7 +3441,7 @@ static KusaAccess ueki_access_data[] = {
  * When Mario comes back from mri_02, places eligible Punies that are not stuck in a trap on the village floor at a
  * random spot.
  */
-EVT_BEGIN(puni_mario_wait)
+static EVT_BEGIN(puni_mario_wait)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)
     LOOP(0)
@@ -3564,7 +3564,7 @@ static EVT_BEGIN(mri_01_koopa_first_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mri_01_koopa_second_evt)
+static EVT_BEGIN(mri_01_koopa_second_evt)
     // Bowser leaps up to the Puni Elder, who suddenly grows huge and shouts at him to begone.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)

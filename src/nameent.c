@@ -41,7 +41,7 @@ static void nameEntDisp(CameraId cameraId, void* param);
  * NULL marks an empty cell and a full-width space a blank key; cell 9 is patched at run time between the "n" kana
  * and a blank, depending on the name type.
  */
-const char* hiragana_tbl[] = {
+static const char* hiragana_tbl[] = {
     "あ", "い", "う", "え", "お", "わ",
     "　", "を", "　", "ん", "０", "１",
     "２", "３", "か", "き", "く", "け",
@@ -66,7 +66,7 @@ const char* hiragana_tbl[] = {
 };
 
 /** Katakana grid of the name-entry screen: the same layout as hiragana_tbl, cell for cell. */
-const char* katakana_tbl[] = {
+static const char* katakana_tbl[] = {
     "ア", "イ", "ウ", "エ", "オ", "ワ",
     "　", "ヲ", "　", "ン", "０", "１",
     "２", "３", "カ", "キ", "ク", "ケ",

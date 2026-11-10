@@ -76,7 +76,7 @@ static DoorParam ie3_door;
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_kime_pose[52];
 static EvtWord evt_taihou[190];
-EvtWord urotuku_white[190];
+static EvtWord urotuku_white[190];
 static EvtWord init_soncho[13];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -128,7 +128,7 @@ static EvtWord talk_white[117];
 #endif
 
 static EvtWord iri_25_white_bed[363];
-EvtWord evt_white_bed[505];
+static EvtWord evt_white_bed[505];
 static EvtWord kiza_talk[28];
 static EvtWord kiza_entry[30];
 static NpcSetupInfo npcEnt[9];
@@ -476,7 +476,7 @@ static EVT_BEGIN(evt_taihou)
     RETURN
 EVT_END()
 
-EVT_BEGIN(urotuku_white)
+static EVT_BEGIN(urotuku_white)
     IF_INT_EQUAL(GSWF_BOM_WHITE_MISSING_SCENE_SEEN, 1)
         CALL(evt_msg_print, 0, STRING("stg7_bom_41_01"), 0, STRING("me"))
         RETURN
@@ -1315,7 +1315,7 @@ EVT_END()
  * When he finally wakes (stg7_bom_55 onwards) White talks with Mario and leaves for the cannon;
  * answering no at any prompt gives up (stg7_bom_54).
  */
-EVT_BEGIN(evt_white_bed)
+static EVT_BEGIN(evt_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
 

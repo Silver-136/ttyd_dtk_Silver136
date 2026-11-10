@@ -35,8 +35,8 @@ static const char* haguruma_hontai2[6];
 static const char* haguruma_kage[12];
 static const char* haguruma_kage2[5];
 static EvtWord haguruma_evt[194];
-EvtWord cloud_blk_evt[10];
-EvtWord break_floor_evt[5];
+static EvtWord cloud_blk_evt[10];
+static EvtWord break_floor_evt[5];
 static EvtWord jump_evt[68];
 
 #if VERSION >= VERSION_US
@@ -259,14 +259,14 @@ EVT_END()
  * Event script: runs when the cloud over the big stone block has been blown away by Flurrie.
  * Sets GSWF_LAS_24_HAKO_BLOWN_AWAY and allows the block to react to hits.
  */
-EVT_BEGIN(cloud_blk_evt)
+static EVT_BEGIN(cloud_blk_evt)
     SET_VALUE(GSWF_LAS_24_HAKO_BLOWN_AWAY, 1)
     CALL(evt_mobj_flag_onoff, 0, STRING("blk"), MOBJ_FLAG_HIT_EVERY_FRAME)
     RETURN
 EVT_END()
 
 /** Event script: runs when the breaking floor gives way; sets the story to STG8_12_LARGE_STONE_BLOCK. */
-EVT_BEGIN(break_floor_evt)
+static EVT_BEGIN(break_floor_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_12_LARGE_STONE_BLOCK)
     RETURN
 EVT_END()

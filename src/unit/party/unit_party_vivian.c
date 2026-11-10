@@ -36,9 +36,9 @@
 
 static USER_FUNC(_vivian_make_extra_work_area);
 static USER_FUNC(_disp_heart_entry_stop_check);
-USER_FUNC(_disp_heart_entry_stop);
+static USER_FUNC(_disp_heart_entry_stop);
 static void _disp_heart(CameraId camera, void* param);
-USER_FUNC(_disp_heart_entry);
+static USER_FUNC(_disp_heart_entry);
 static USER_FUNC(_make_kagenuke_weapon);
 USER_FUNC(_get_vivian_attack_position);
 static USER_FUNC(_get_move_frame);
@@ -56,7 +56,7 @@ static EvtWord wait_event[6];
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[68];
 static EvtWord damage_event[16];
-EvtWord vivian_hide_event[209];
+static EvtWord vivian_hide_event[209];
 BattleWeapon partyWeapon_VivianNormalAttack;
 BattleWeapon partyWeapon_VivianShadowGuard;
 BattleWeapon partyWeapon_VivianMagicalPowder;
@@ -359,7 +359,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(vivian_hide_event)
+static EVT_BEGIN(vivian_hide_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, VIVIAN_WORK_HIDE_TURNS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         SUBTRACT(LW(0), 1)
@@ -1603,7 +1603,7 @@ static USER_FUNC(_make_kagenuke_weapon) {
  * popping in by frame args[0] and settling by frame args[1] (state kept in event->heart).
  * Ends early once _disp_heart_entry_stop is called.
  */
-USER_FUNC(_disp_heart_entry) {
+static USER_FUNC(_disp_heart_entry) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1664,7 +1664,7 @@ static void _disp_heart(CameraId camera, void* param) {
 }
 
 /** Stops the heart display of the event whose id is args[0] (sets its heart.stop). */
-USER_FUNC(_disp_heart_entry_stop) {
+static USER_FUNC(_disp_heart_entry_stop) {
     EventEntry* e = evtGetPtrID(evtGetValue(event, *event->args));
     e->heart.stop = 1;
     return EVT_RETURN_DONE;

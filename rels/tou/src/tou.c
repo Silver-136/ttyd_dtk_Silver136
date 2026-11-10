@@ -181,7 +181,7 @@ static EvtWord party_npc_replace[139];
 static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
 static EvtWord evt_tamago_byebye[160];
-EvtWord talk_gardman[191];
+static EvtWord talk_gardman[191];
 
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_gardman[357];
@@ -211,24 +211,24 @@ EvtWord evt_eat_doku_cake[270];
 EvtWord evt_doku_cake[234];
 #endif
 
-EvtWord evt_michel_1[39];
-EvtWord evt_michel_2[42];
+static EvtWord evt_michel_1[39];
+static EvtWord evt_michel_2[42];
 static EvtWord evt_michel_3_sub[97];
-EvtWord evt_michel_3[256];
-EvtWord evt_michel_4[312];
-EvtWord evt_michel_5[42];
-EvtWord evt_michel_6[42];
-EvtWord evt_michel_7[42];
+static EvtWord evt_michel_3[256];
+static EvtWord evt_michel_4[312];
+static EvtWord evt_michel_5[42];
+static EvtWord evt_michel_6[42];
+static EvtWord evt_michel_7[42];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord evt_michel_8[606];
+static EvtWord evt_michel_8[606];
 #else
-EvtWord evt_michel_8[VERSION_PICK(620, 616)];
+static EvtWord evt_michel_8[VERSION_PICK(620, 616)];
 #endif
 
 static EvtWord evt_michel_9[40];
-EvtWord evt_mail_1[157];
-EvtWord evt_mail_2[154];
+static EvtWord evt_mail_1[157];
+static EvtWord evt_mail_2[154];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_eat_cake[];
@@ -238,11 +238,11 @@ EvtWord evt_eat_cake[157];
 EvtWord evt_cake_init[31];
 #endif
 
-EvtWord evt_cake[37];
+static EvtWord evt_cake[37];
 static EvtWord evt_koopa_after[5];
-EvtWord evt_mail_3[157];
-EvtWord evt_mail_4[151];
-EvtWord evt_mail_5[157];
+static EvtWord evt_mail_3[157];
+static EvtWord evt_mail_4[151];
+static EvtWord evt_mail_5[157];
 static EvtWord evt_tamago_hello[41];
 static EvtWord evt_tamago_hello2[75];
 EvtWord evt_tou_ranking_msg[62];
@@ -1756,7 +1756,7 @@ EVT_END()
  * he steps out and swings the door of the current map (tou_10, tou_08 or tou_07) open, leaves, and Mario walks out;
  * the script then changes map to tou_04 (title match booked, before chapter 3 ends) or tou_03 (the ring).
  */
-EVT_BEGIN(talk_gardman)
+static EVT_BEGIN(talk_gardman)
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
             CALL(evt_msg_print, 0, STRING("stg3_tou_304_01"), 0, STRING("ガードマン"))
@@ -2536,7 +2536,7 @@ EVT_BEGIN(evt_doku_cake)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_1)
+static EVT_BEGIN(evt_michel_1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir_npc, STRING("マイケル"))
         CALL(evt_party_set_dir_npc, 0, STRING("マイケル"))
@@ -2548,7 +2548,7 @@ EVT_BEGIN(evt_michel_1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_2)
+static EVT_BEGIN(evt_michel_2)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_npc_10_01_02"), 0, STRING("マイケル"))
@@ -2593,7 +2593,7 @@ static EVT_BEGIN(evt_michel_3_sub)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_3)
+static EVT_BEGIN(evt_michel_3)
     CALL(evt_set_dir_to_target, STRING("マイケル"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_17"), 0, STRING("マイケル"))
     CALL(evt_cam3d_evt_set, 100, 93, 290, 100, 57, -8, 1000, EASING_SINE_IN_OUT)
@@ -2659,7 +2659,7 @@ EVT_BEGIN(evt_michel_3)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_4)
+static EVT_BEGIN(evt_michel_4)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_24"), 0, STRING("マイケル"))
@@ -2723,7 +2723,7 @@ EVT_BEGIN(evt_michel_4)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_5)
+static EVT_BEGIN(evt_michel_5)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_25"), 0, STRING("マイケル"))
@@ -2733,7 +2733,7 @@ EVT_BEGIN(evt_michel_5)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_6)
+static EVT_BEGIN(evt_michel_6)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_26"), 0, STRING("マイケル"))
@@ -2743,7 +2743,7 @@ EVT_BEGIN(evt_michel_6)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_7)
+static EVT_BEGIN(evt_michel_7)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_27"), 0, STRING("マイケル"))
@@ -3000,7 +3000,7 @@ USER_FUNC(tou_champion_belt_onoff) {
  * the minor-league room and the match terminal, Grubba (ガンス) books his first match over the monitor
  * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
  */
-EVT_BEGIN(evt_michel_8)
+static EVT_BEGIN(evt_michel_8)
     // The Bob-omb fighter and Cleftor talk about missing King K.
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)
     CALL(evt_npc_set_position, STRING("ガンガン"), 95, 0, 50)
@@ -3240,7 +3240,7 @@ static EVT_BEGIN(evt_michel_9)
 EVT_END()
 
 /** Mail scene: Mario notices a notification (bubble, mail jingle, vibration) and the party reads stg3_tou_297_03. */
-EVT_BEGIN(evt_mail_1)
+static EVT_BEGIN(evt_mail_1)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3293,7 +3293,7 @@ EVT_BEGIN(evt_mail_1)
 EVT_END()
 
 /** Mail scene: the same notification with message stg3_tou_297_22. */
-EVT_BEGIN(evt_mail_2)
+static EVT_BEGIN(evt_mail_2)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3426,7 +3426,7 @@ EVT_BEGIN(evt_cake_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_cake)
+static EVT_BEGIN(evt_cake)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_cake"), 0, PTR(evt_eat_cake), 0)
     CALL(evt_cam3d_evt_set, 55, 102, 362, 55, 45, -9, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1100)
@@ -3447,7 +3447,7 @@ static EVT_BEGIN(evt_koopa_after)
 EVT_END()
 
 /** Mail scene: the same notification with message stg3_tou_297_25. */
-EVT_BEGIN(evt_mail_3)
+static EVT_BEGIN(evt_mail_3)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3500,7 +3500,7 @@ EVT_BEGIN(evt_mail_3)
 EVT_END()
 
 /** Mail scene: the same notification, with its own message. */
-EVT_BEGIN(evt_mail_4)
+static EVT_BEGIN(evt_mail_4)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3551,7 +3551,7 @@ EVT_BEGIN(evt_mail_4)
 EVT_END()
 
 /** Mail scene: the same notification with message stg3_tou_307_05. */
-EVT_BEGIN(evt_mail_5)
+static EVT_BEGIN(evt_mail_5)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

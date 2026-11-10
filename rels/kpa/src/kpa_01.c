@@ -62,12 +62,12 @@ EvtWord kpa_01_syuppatu_evt[1729];
 static EvtWord kpa_01_pos_check[23];
 static EvtWord douzou_1_touch_evt[19];
 static EvtWord douzou_2_touch_evt[19];
-EvtWord douzou_3_touch_evt[43];
+static EvtWord douzou_3_touch_evt[43];
 static EvtWord togenoko_A_talk_evt[8];
 static EvtWord togenoko_B_talk_evt[8];
 static EvtWord togenoko_C_init_evt[14];
 static EvtWord hammer_AB_init_evt[13];
-EvtWord hammer_AB_talk_evt[111];
+static EvtWord hammer_AB_talk_evt[111];
 static EvtWord hammer_C_talk_evt[19];
 static EvtWord hammer_D_talk_evt[8];
 static EvtWord hammer_E_init_evt[9];
@@ -885,7 +885,7 @@ EVT_END()
  * Examine script for the third statue (a_zou_3): Bowser comments;
  * a jingle (BGM_FF_GET_ITEM1) plays when the message reaches its third page.
  */
-EVT_BEGIN(douzou_3_touch_evt)
+static EVT_BEGIN(douzou_3_touch_evt)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
     BEGIN_INLINE_EVENT
@@ -933,7 +933,7 @@ static EVT_BEGIN(hammer_AB_init_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(hammer_AB_talk_evt)
+static EVT_BEGIN(hammer_AB_talk_evt)
     IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("kpa_stg1_006"), 0, STRING("ハンマーＡ"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_007"), 0, STRING("ハンマーＢ"))

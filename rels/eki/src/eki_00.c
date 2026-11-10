@@ -177,7 +177,7 @@ extern EvtWord evt_bridge[];
 EvtWord evt_bridge[14];
 #endif
 
-EvtWord evt_bridge2[118];
+static EvtWord evt_bridge2[118];
 static EvtWord evt_origami[198];
 static EvtWord evt_moamoa_init[29];
 static EvtWord evt_meet_moamoa[215];
@@ -1482,7 +1482,7 @@ EVT_BEGIN(evt_bridge)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_bridge2)
+static EVT_BEGIN(evt_bridge2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)

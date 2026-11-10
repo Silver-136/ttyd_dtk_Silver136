@@ -35,7 +35,7 @@ static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];
 static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
-EvtWord vivian_check[92];
+static EvtWord vivian_check[92];
 static EvtWord switch_evt[48];
 static EvtWord hint_plate[14];
 
@@ -132,7 +132,7 @@ static USER_FUNC(switch_alpha_off) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(vivian_check)
+static EVT_BEGIN(vivian_check)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(15), 0)
     LOOP(0)

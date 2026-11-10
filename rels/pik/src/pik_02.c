@@ -42,7 +42,7 @@
 
 static USER_FUNC(get_starstone_pos);
 static USER_FUNC(get_starstone_seq);
-USER_FUNC(hoshi);
+static USER_FUNC(hoshi);
 static USER_FUNC(hoshi_delete);
 static USER_FUNC(hoshi_jump);
 static USER_FUNC(hoshi_r);
@@ -499,7 +499,7 @@ static USER_FUNC(npc_set_pos) {
  * Script helper: creates the Garnet Star effect (star stone type 5) on the altar at (0, 60, -950)
  * and keeps its pointer in LW(10) of the running script.
  */
-USER_FUNC(hoshi) {
+static USER_FUNC(hoshi) {
     event->lwData[10] = (EvtWord)effStarStoneEntry(5, 0.0f, 60.0f, -950.0f, 1.0f);
     return EVT_RETURN_DONE;
 }

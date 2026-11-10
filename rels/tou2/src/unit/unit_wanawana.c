@@ -23,7 +23,7 @@
 
 static f32 tanf(f32 x);
 
-USER_FUNC(replace_evt);
+static USER_FUNC(replace_evt);
 
 BattleUnitKind unit_wanawana;
 static BattleUnitDefense defence;
@@ -153,7 +153,7 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_wanawana", "nakayama_test4", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
-void replace_disp(CameraId camera, void* param) {
+static void replace_disp(CameraId camera, void* param) {
     WanaWork* wp = param;
     CameraEntry saved;
     AnimationPoseData* data;
@@ -201,7 +201,7 @@ void replace_disp(CameraId camera, void* param) {
  * Display callback of the trap part (set by replace_evt): once the floor texture is ready it binds it as the
  * paper texture with an identity matrix for draw type 0 and clears the paper texture for any other type.
  */
-void replace_callback(BattleUnitPart* part, s32 type) {
+static void replace_callback(BattleUnitPart* part, s32 type) {
     WanaWork* wp = (WanaWork*)part->owner->countersetWeapon;
 
     if (wp->ready) {
@@ -218,7 +218,7 @@ void replace_callback(BattleUnitPart* part, s32 type) {
     }
 }
 
-USER_FUNC(replace_evt) {
+static USER_FUNC(replace_evt) {
     BattleUnitPart* part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, UNIT_ID_SELF));
     AnimationPoseData* data = animPoseGetAnimBaseDataPtr(part->poseId);

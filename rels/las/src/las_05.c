@@ -73,7 +73,7 @@ static USER_FUNC(kurokaron_get_move_pos);
 static USER_FUNC(kurokaron_move_position);
 static USER_FUNC(make_name);
 static USER_FUNC(mario_land_on);
-USER_FUNC(party_hit);
+static USER_FUNC(party_hit);
 static USER_FUNC(party_land_on);
 static USER_FUNC(senkaronAttackStart);
 static USER_FUNC(senkaronFlagOffMesPushing);
@@ -676,7 +676,7 @@ static BeroEntry bero_entry_data[] = {
 u8 kurokaron_prev_goal = 5;
 
 /** The six waypoints (x, z) around the room that Dark Bones patrols along. */
-f32 kurokaron_move_list[6][2] = {
+static f32 kurokaron_move_list[6][2] = {
     {500.0f, -130.0f}, {0.0f, -200.0f}, {-500.0f, -130.0f}, {-500.0f, 130.0f}, {0.0f, 200.0f}, {500.0f, 130.0f},
 };
 
@@ -1626,7 +1626,7 @@ static USER_FUNC(chk_mario_ctrloff) {
  * Script helper: returns 1 in args[0] when the active partner (Koops or Bobbery) is hitting Dark Bones,
  * otherwise 0.
  */
-USER_FUNC(party_hit) {
+static USER_FUNC(party_hit) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     NpcEntry* npc = npcNameToPtr("黒カロン");
     EvtWord* args = event->args;

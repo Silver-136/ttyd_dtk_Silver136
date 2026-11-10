@@ -58,7 +58,7 @@ static EvtWord get_necklace[115];
 static EvtWord witchtrio_lose_item[19];
 static EvtWord witchtrio_mess_vivi[8];
 static EvtWord witchtrio_mess_mari[8];
-EvtWord witchtrio_lose[563];
+static EvtWord witchtrio_lose[563];
 static EvtWord ki_data_evt_01[20];
 static TreeAccess tree_access_data[10];
 static EvtWord iri_28_enemy_all_dead[148];
@@ -904,7 +904,7 @@ static EVT_BEGIN(witchtrio_mess_mari)
     RETURN
 EVT_END()
 
-EVT_BEGIN(witchtrio_lose)
+static EVT_BEGIN(witchtrio_lose)
     // The Sirens and Mario's party are placed for the aftermath,
     // with a hidden stand-in Beldam that will carry the necklace.
     CALL(evt_mario_key_onoff, 0)

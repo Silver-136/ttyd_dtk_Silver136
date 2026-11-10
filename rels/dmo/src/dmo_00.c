@@ -65,10 +65,10 @@ typedef struct DemoWork {
     s32 winAlpha;
 } DemoWork;
 static DemoWork work;
-char buf[0x200];
+static char buf[0x200];
 static DemoWork* wp;
 
-USER_FUNC(adjust);
+static USER_FUNC(adjust);
 static USER_FUNC(book_r);
 static USER_FUNC(demo_scale);
 static USER_FUNC(demo_winonoff);
@@ -576,7 +576,7 @@ static USER_FUNC(next) {
  * Script helper: args[0] is a float from 0 to 1;
  * sets the zoom amount into the last picture (img4) and moves its scale and position accordingly.
  */
-USER_FUNC(adjust) {
+static USER_FUNC(adjust) {
     EvtWord* args = event->args;
     Mtx trans;
     Mtx scale;

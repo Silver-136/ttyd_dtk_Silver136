@@ -85,9 +85,9 @@ static s32 item_tbl[21];
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(chk_cook_msg);
-USER_FUNC(chk_marco_fuki);
+static USER_FUNC(chk_marco_fuki);
 static USER_FUNC(chk_special_cook);
-USER_FUNC(chusan1_alwaysencont);
+static USER_FUNC(chusan1_alwaysencont);
 USER_FUNC(cook_chk);
 USER_FUNC(cook_chk2);
 static USER_FUNC(cook_effect);
@@ -140,20 +140,20 @@ static EvtWord kinoji_init[2];
 static EvtWord kinoji_talk[76];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord nancy_init_check[585];
+static EvtWord nancy_init_check[585];
 #else
-EvtWord nancy_init_check[608];
+static EvtWord nancy_init_check[608];
 #endif
 
-EvtWord nancy_init[58];
+static EvtWord nancy_init[58];
 static EvtWord nancy_door_anime[99];
 static EvtWord nancy_regl[35];
 static s32 item_tbl_nancy[2];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord nancy_talk[173];
+static EvtWord nancy_talk[173];
 #else
-EvtWord nancy_talk[175];
+static EvtWord nancy_talk[175];
 #endif
 
 static EvtWord marco_init[14];
@@ -162,7 +162,7 @@ static EvtWord master_init[12];
 static EvtWord iri_20_master_tubuyaki[37];
 EvtWord master_talk[];
 static EvtWord shoptender_init[27];
-EvtWord shoptender_talk[227];
+static EvtWord shoptender_talk[227];
 static EvtWord yadotender_init[2];
 static EvtWord yadotender_talk[2];
 static EvtWord roten1_init[12];
@@ -196,9 +196,9 @@ EvtWord bottakuru_init[25];
 #endif
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord bottakuru_talk[231];
+static EvtWord bottakuru_talk[231];
 #else
-EvtWord bottakuru_talk[VERSION_PICK(292, 314)];
+static EvtWord bottakuru_talk[VERSION_PICK(292, 314)];
 #endif
 
 static EvtWord luigi_init[43];
@@ -216,7 +216,7 @@ static NpcSetupInfo kick2Ent[2];
 static EvtWord borodo2_init[51];
 static EvtWord borodo2_talk[280];
 static EvtWord thief_init[13];
-EvtWord thief_talk[163];
+static EvtWord thief_talk[163];
 static NpcSetupInfo npcEnt[22];
 static EvtWord christine_nakama_before[18];
 static BeroEntry bero_entry_data[4];
@@ -265,7 +265,7 @@ static EvtWord house03_f1_fade[54];
 static EvtWord luigi_f2_fade_check[27];
 static EvtWord house03_f2_fade[54];
 static EvtWord house03_suiteki[49];
-EvtWord marco_hitorigoto[67];
+static EvtWord marco_hitorigoto[67];
 static EvtWord evt_door_03_00_f1[12];
 static EvtWord evt_door_03_01_f1[12];
 static EvtWord house_03_f1_open[64];
@@ -290,7 +290,7 @@ static DoorParam door_data_04;
 static EvtWord koushukei_dai[63];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
-ShopItem goods_list2[6];
+static ShopItem goods_list2[6];
 static ShopItem goods_luigi1[6];
 static ShopItem goods_luigi2[6];
 static ShopItem goods_luigi3[6];
@@ -311,9 +311,9 @@ extern EvtWord maffia_assault[];
 EvtWord maffia_assault[797];
 #endif
 
-EvtWord christine_nakama_after[82];
+static EvtWord christine_nakama_after[82];
 static EvtWord box_copy[19];
-EvtWord ultrahammer_check[222];
+static EvtWord ultrahammer_check[222];
 static EvtWord ultrahammer_get[39];
 static EvtWord keijiban_omote_joho[93];
 static EvtWord keijiban_ura_joho[93];
@@ -337,9 +337,9 @@ static s32 iri_16_item_tbl[2];
 static EvtWord iri_16_init[34];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord iri_16_tyutyu_talk[443];
+static EvtWord iri_16_tyutyu_talk[443];
 #else
-EvtWord iri_16_tyutyu_talk[445];
+static EvtWord iri_16_tyutyu_talk[445];
 #endif
 
 static EvtWord marco_jewel[22];
@@ -457,7 +457,7 @@ static USER_FUNC(nancy_block_func) {
  * Sets or clears bit 0 of the NPC work flags (args[0] nonzero sets it);
  * Trouble Center job 5 turns it on so the target NPC keeps reacting to Mario hitting it.
  */
-USER_FUNC(chusan1_alwaysencont) {
+static USER_FUNC(chusan1_alwaysencont) {
     EvtWord* args = event->args;
     NpcWork* wp = npcGetWorkPtr();
 
@@ -918,7 +918,7 @@ EVT_END()
  * and the first scene runs (gor_01_000 to gor_01_007), where she turns away, Mario crushes her lost
  * contact lens and she ends up blocking the way. Sets GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE.
  */
-EVT_BEGIN(nancy_init_check)
+static EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
 
     // Wait until Mario walks into the alley zone in front of Zess T.
@@ -1166,7 +1166,7 @@ EVT_END()
  * after the lens is delivered she stands at her door at (-405, 10, -100).
  * Also switches the west exit "w_bero" off until the lens is delivered.
  */
-EVT_BEGIN(nancy_init)
+static EVT_BEGIN(nancy_init)
     SET_VALUE(LSWF_GOR_01_ZESS_T_GREETED, 0)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         IF_INT_EQUAL(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 0)
@@ -1255,7 +1255,7 @@ static s32 item_tbl_nancy[] = {
  * she then thanks him, walks into her house, the west exit opens and GSWF_GOR_ZESS_T_GOT_CONTACT_LENS is set.
  * After that talking to her runs cooking_evt.
  */
-EVT_BEGIN(nancy_talk)
+static EVT_BEGIN(nancy_talk)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1763,7 +1763,7 @@ static EVT_BEGIN(shoptender_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(shoptender_talk)
+static EVT_BEGIN(shoptender_talk)
     DEBUG_PUT_MSG(STRING("店員TALK"))
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         DEBUG_PUT_MSG(STRING("店員TALK２"))
@@ -2303,7 +2303,7 @@ EVT_END()
  * greets Mario, then loops through a buy menu (coins checked, item added to the pouch, stock decremented)
  * until Mario declines or the stock is empty. The US and PAL releases format prices with the message formatter.
  */
-EVT_BEGIN(bottakuru_talk)
+static EVT_BEGIN(bottakuru_talk)
     // Charlieton is sold out, or has nothing Mario can still buy: he only thanks him.
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
@@ -2722,7 +2722,7 @@ static EVT_BEGIN(thief_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(thief_talk)
+static EVT_BEGIN(thief_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_08_STOLEN_COINS, STG0_END_TO_STAGE_1)
         IF_INT_EQUAL(GSWF_GOR_THIEF_FOUND_IN_HIDEOUT, 0)
@@ -3561,7 +3561,7 @@ static USER_FUNC(house03_f2_fade_func) {
  * Returns 1 in args[0] when the NPC Mario is currently able to talk to is Marco (Flavio), else 0.
  * Used to cut Marco's muttering when Mario is next to him.
  */
-USER_FUNC(chk_marco_fuki) {
+static USER_FUNC(chk_marco_fuki) {
     EvtWord* args = event->args;
 
     // FAKE: passes marioGetPtr() to fbatNpcTalkCheck, which takes no arguments, through a cast; the plain
@@ -3768,7 +3768,7 @@ EVT_END()
  * Marco's (Flavio's) muttering while Mario is in the bar before Chapter 4's Flavio talk:
  * shows mac_4_004 over and over, cancelling it when he becomes Mario's talk target. Does nothing from STG4_32 on.
  */
-EVT_BEGIN(marco_hitorigoto)
+static EVT_BEGIN(marco_hitorigoto)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         RETURN
     END_IF
@@ -4183,7 +4183,7 @@ static ShopItem goods_list[] = {
  * Goods of the item shop once the Contact Lens has arrived and until it is delivered:
  * the Contact Lens (10 coins) takes the Mushroom's place.
  */
-ShopItem goods_list2[] = {
+static ShopItem goods_list2[] = {
     {ITEM_CONTACT_LENS, 10},
     {ITEM_HONEY_SYRUP, 5},
     {ITEM_TASTY_TONIC, 3},
@@ -4863,7 +4863,7 @@ EVT_BEGIN(maffia_assault)
     RETURN
 EVT_END()
 
-EVT_BEGIN(christine_nakama_after)
+static EVT_BEGIN(christine_nakama_after)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_SAVE_BLOCK)
         RETURN
@@ -4905,7 +4905,7 @@ static EVT_BEGIN(box_copy)
     RETURN
 EVT_END()
 
-EVT_BEGIN(ultrahammer_check)
+static EVT_BEGIN(ultrahammer_check)
     CALL(evt_npc_entry, STRING("ダミー"), STRING("c_kinopio")) // invisible stand-in that carries the item box in a jump
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
@@ -5671,7 +5671,7 @@ EVT_END()
  * She then joins the party as a partner (all_party_lecture for partner 7).
  * The "Ms. Mowz" theme plays during the talk.
  */
-EVT_BEGIN(iri_16_tyutyu_talk)
+static EVT_BEGIN(iri_16_tyutyu_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
 
         // Ms. Mowz's own theme replaces the plaza music for the whole talk.

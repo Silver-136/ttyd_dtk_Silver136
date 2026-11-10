@@ -54,7 +54,7 @@ static EvtWord n_2_door_open[22];
 static EvtWord n_2_door_close[22];
 static BeroEntry bero_data[3];
 static BeroEntry bero_data_nidome[2];
-EvtWord evt_carry_up_bridge[92];
+static EvtWord evt_carry_up_bridge[92];
 static EvtWord init_powan_toron_konari_papa_gurume[23];
 static EvtWord talk_powan[8];
 static EvtWord talk_toron[8];
@@ -66,7 +66,7 @@ static EvtWord talk_ekiin1[32];
 static EvtWord init_ekiin2[13];
 static EvtWord talk_ekiin2[28];
 static NpcSetupInfo npc_data[9];
-EvtWord evt_bridge_down[144];
+static EvtWord evt_bridge_down[144];
 static s32 key_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -78,9 +78,9 @@ static EvtWord evt_chk[23];
 static EvtWord evt_lock[10];
 static EvtWord evt_train_door[13];
 static EvtWord evt_train[262];
-EvtWord evt_train_nidome[307];
+static EvtWord evt_train_nidome[307];
 static EvtWord evt_hom_touchaku[460];
-EvtWord evt_hom_touchaku_nidome[56];
+static EvtWord evt_hom_touchaku_nidome[56];
 
 #if VERSION >= VERSION_US
 EvtWord hom_00_init_evt[259];
@@ -189,7 +189,7 @@ static BeroEntry bero_data_nidome[] = {
  * then asks whether Mario wants the Station Key (yes/no);
  * on yes he is given the key (ITEM_STATION_KEY_0x18) and the story becomes "Station Key obtained".
  */
-EVT_BEGIN(evt_carry_up_bridge)
+static EVT_BEGIN(evt_carry_up_bridge)
     IF_INT_EQUAL(GSWF_HOM_DRAWBRIDGE_PROBLEM_EXPLAINED, 0)
         CALL(evt_msg_print, 0, STRING("stg6_hom_04"), 0, STRING("me"))
         CALL(evt_cam3d_evt_set, -65, 33, 575, 213, 64, 102, 3000, EASING_SINE_IN_OUT)
@@ -415,7 +415,7 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
-EVT_BEGIN(evt_bridge_down)
+static EVT_BEGIN(evt_bridge_down)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
@@ -575,7 +575,7 @@ EVT_END()
  * the train starts (hom_10_evt_resha_start, or start2 on the return trip),
  * the train-leg counter is set to 1 (outbound) or 3 (return) and the map changes to rsh_02_c.
  */
-EVT_BEGIN(evt_train_nidome)
+static EVT_BEGIN(evt_train_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -809,7 +809,7 @@ EVT_END()
  * Arrival cutscene on the second visit (entering through "nidome"):
  * the train pulls in, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE is set and the map changes to rsh_02_b.
  */
-EVT_BEGIN(evt_hom_touchaku_nidome)
+static EVT_BEGIN(evt_hom_touchaku_nidome)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)

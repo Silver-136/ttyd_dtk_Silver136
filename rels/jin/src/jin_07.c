@@ -69,7 +69,7 @@ static EvtWord w_close[12];
 static EvtWord w_open[12];
 static EvtWord e_close[12];
 static EvtWord e_open[12];
-EvtWord jin_07_juyo_oumu_vivian[59];
+static EvtWord jin_07_juyo_oumu_vivian[59];
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[4];
 static EvtWord evt_locked[14];
@@ -130,7 +130,7 @@ EVT_END()
  * and the camera goes
  * back to normal. It runs once after the parrot's first special talk in jin_08 (oumu_juyo_talk sets LSWF_JIN_PARROT_SCENE_PENDING).
  */
-EVT_BEGIN(jin_07_juyo_oumu_vivian)
+static EVT_BEGIN(jin_07_juyo_oumu_vivian)
     IF_INT_NOT_EQUAL(LSWF_JIN_PARROT_SCENE_PENDING, 0)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 0)
         CALL(evt_mario_key_onoff, 0)

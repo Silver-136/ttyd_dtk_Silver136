@@ -41,7 +41,7 @@
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
-USER_FUNC(geso_set_checkpose);
+static USER_FUNC(geso_set_checkpose);
 static USER_FUNC(hokori_color_func);
 static USER_FUNC(mario_hosei_all);
 static USER_FUNC(ripple_scale_func);
@@ -233,7 +233,7 @@ static USER_FUNC(hokori_color_func) {
  * Script helper.
  * Gives the named NPC (the Blooper) the geso_checkpose table, which defines how the game checks its poses.
  */
-USER_FUNC(geso_set_checkpose) {
+static USER_FUNC(geso_set_checkpose) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     NpcEntry* npc = evtNpcNameToPtr(event, name);
 

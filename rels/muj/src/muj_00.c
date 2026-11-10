@@ -162,7 +162,7 @@ EvtWord koburon_init[31];
 EvtWord koburon_regp[140];
 #endif
 
-EvtWord koburon_talk[87];
+static EvtWord koburon_talk[87];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord koburon_dead[];
@@ -170,7 +170,7 @@ extern EvtWord koburon_dead[];
 EvtWord koburon_dead[139];
 #endif
 
-EvtWord koburon_evt[24];
+static EvtWord koburon_evt[24];
 static EvtWord kiza_talk[8];
 static EvtWord kiza_entry[30];
 static NpcSetupInfo npcEnt[15];
@@ -193,7 +193,7 @@ EvtWord tama_shoot[69];
 
 static EvtWord npc_kyorokyoro[39];
 static EvtWord dai3_shurai_sub[1112];
-EvtWord dai3_shurai[53];
+static EvtWord dai3_shurai[53];
 static EvtWord dai3_shurai_after[68];
 static s32 kaizoku_vs_dai3_suifupos[380];
 static s32 kaizoku_vs_dai3_elmospos[400];
@@ -1372,7 +1372,7 @@ EVT_BEGIN(koburon_regp)
     RETURN
 EVT_END()
 
-EVT_BEGIN(koburon_talk)
+static EVT_BEGIN(koburon_talk)
     IF_INT_EQUAL(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("koburon_01"), 0, STRING("me"))
         SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
@@ -1455,7 +1455,7 @@ EVT_END()
  * Map-init helper: once eight Whacka Bumps have been given the Whacka NPC is deleted;
  * otherwise its hit box is set to 15 wide and 22 high.
  */
-EVT_BEGIN(koburon_evt)
+static EVT_BEGIN(koburon_evt)
     IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 8)
         CALL(evt_npc_delete, STRING("コブロン"))
         RETURN
@@ -2257,7 +2257,7 @@ EVT_END()
  * then starts dai3_shurai_sub (the X-Naut ship's approach).
  * Spawned from map init at STG5_36_HOLE_IN_THE_WALL.
  */
-EVT_BEGIN(dai3_shurai)
+static EVT_BEGIN(dai3_shurai)
     CALL(evt_mapobj_trans, 1, STRING("S_c"), 0, -1000, 0)
     CALL(evt_mapobj_rotate, 1, STRING("S_c"), 0, 0, 0)
     SET_FLOAT_VALUE(GW(13), 0)

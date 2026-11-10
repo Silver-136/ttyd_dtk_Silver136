@@ -132,7 +132,7 @@ static EvtWord evt_ship_shadow[91];
 static EvtWord init_hikuu[12];
 static EvtWord talk_hikuu[84];
 static EvtWord init_sakaba[8];
-EvtWord talk_sakaba[369];
+static EvtWord talk_sakaba[369];
 static EvtWord init_mise[12];
 static EvtWord talk_mise[2];
 static EvtWord init_hot[13];
@@ -967,7 +967,7 @@ EVT_END()
  * Handles Trouble Center job 25 first; otherwise his lines depend on story progress,
  * including the scene at STG3_20_00_MAJORS_8TH_PLACE where he hands over the Super Hammer a fan left.
  */
-EVT_BEGIN(talk_sakaba)
+static EVT_BEGIN(talk_sakaba)
     // The Trouble Center search for General White: the keeper says White just stopped by.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)

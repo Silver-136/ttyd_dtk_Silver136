@@ -66,7 +66,7 @@ static s32 suifudata[400];
 static s32 suifudata_after[400];
 static EvtWord watarikiri_suifu_init[128];
 static EvtWord ukishima_watari_run[458];
-EvtWord ukishima_watari[186];
+static EvtWord ukishima_watari[186];
 static EvtWord ukishima_check[40];
 static EvtWord ukishima_apper[286];
 
@@ -88,7 +88,7 @@ static EvtWord torinoko_suifu_pukapuka[69];
 static EvtWord _suifu_sakebu[101];
 static EvtWord torinoko_suifu_sakebu[103];
 static EvtWord torinoko_suifu_init[192];
-EvtWord torinoko_suifu[172];
+static EvtWord torinoko_suifu[172];
 static EvtWord suifu_orei[339];
 static EvtWord escapeway_event[98];
 
@@ -952,7 +952,7 @@ EVT_END()
  * Sets GSWF_DOU_11_SAILORS_CROSSED, removes the invisible ship hit area (fune_atari),
  * gives control back and starts suifu_orei.
  */
-EVT_BEGIN(ukishima_watari)
+static EVT_BEGIN(ukishima_watari)
     CALL(evt_cam3d_evt_set, 160, 174, 527, 160, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_nannpc_get_position, 99, LW(1), LW(2), LW(3))
@@ -1468,7 +1468,7 @@ EVT_END()
  * hides Sailors C to E, Mario sees the crowd shouting (stg5_dou_11 and the small_00 to 05 lines),
  * the camera pans over them, and then the message stg5_dou_13. Sets GSWF_DOU_11_SAILORS_SHOUT_SEEN.
  */
-EVT_BEGIN(torinoko_suifu)
+static EVT_BEGIN(torinoko_suifu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("水夫C"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("水夫D"), 0, -1000, 0)

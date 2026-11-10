@@ -22,8 +22,8 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[5];
-BattleWeapon _lec_weapon_jump;
-BattleWeapon _lec_weapon_hammer;
+static BattleWeapon _lec_weapon_jump;
+static BattleWeapon _lec_weapon_hammer;
 static BattleDataEntry data_table[4];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[38];
@@ -40,7 +40,7 @@ EvtWord lecAttackEvent_Jump[735];
 EvtWord lecAttackEvent_Hammer[651];
 #endif
 
-EvtWord lecture_end_event[51];
+static EvtWord lecture_end_event[51];
 
 /**
  * Unit kind of Prof. Frankly:
@@ -139,7 +139,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /** Prof. Frankly's jump: damage from Mario's boot level to a single target, a jump-style hit. */
-BattleWeapon _lec_weapon_jump = {
+static BattleWeapon _lec_weapon_jump = {
     "btl_wn_mario_normal_jump", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
@@ -177,7 +177,7 @@ BattleWeapon _lec_weapon_jump = {
 };
 
 /** Prof. Frankly's hammer: damage from Mario's hammer level to a single target, a hammer-style hit. */
-BattleWeapon _lec_weapon_hammer = {
+static BattleWeapon _lec_weapon_hammer = {
     "btl_wn_mario_normal_hammer", // name
     ICON_ITEM_HAMMER, // icon
     {0}, // pad_06
@@ -975,7 +975,7 @@ EVT_END()
  * the status window is hidden and Frankly says his closing line (mac_0_b_t2_024),
  * then a battle flag (32) is set to end the fight.
  */
-EVT_BEGIN(lecture_end_event)
+static EVT_BEGIN(lecture_end_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 0, 58, 256, 0, 41, 0, 30, 11)

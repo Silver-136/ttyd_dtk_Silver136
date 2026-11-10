@@ -72,7 +72,7 @@ EvtWord move_g[233];
 #endif
 
 static EvtWord move_g_1_dokimasen[25];
-EvtWord init_g_1[59];
+static EvtWord init_g_1[59];
 static EvtWord move_g_1_dokimasu[51];
 static EvtWord talk_g_1[90];
 static EvtWord move_g_1[52];
@@ -134,14 +134,14 @@ static EvtWord init_brots[58];
 static EvtWord talk_brots[149];
 static NpcSetupInfo npcEnt[16];
 static EvtWord evt_drop[33];
-EvtWord evt_gans[145];
+static EvtWord evt_gans[145];
 static EvtWord evt_kinoshikowa[193];
-EvtWord evt_kinoshikowa2[161];
-EvtWord evt_kinoshikowa3[179];
+static EvtWord evt_kinoshikowa2[161];
+static EvtWord evt_kinoshikowa3[179];
 static EvtWord evt_gardman[173];
-EvtWord evt_gardman2[164];
-EvtWord evt_gardman3[298];
-EvtWord evt_gardman4[177];
+static EvtWord evt_gardman2[164];
+static EvtWord evt_gardman3[298];
+static EvtWord evt_gardman4[177];
 static EvtWord evt_toile[107];
 static EvtWord evt_toile2[107];
 static s32 key_tbl[2];
@@ -153,7 +153,7 @@ static EvtWord evt_chk[23];
 #endif
 
 static EvtWord evt_lock[14];
-EvtWord evt_souko_talk[272];
+static EvtWord evt_souko_talk[272];
 static EvtWord evt_bred_nigeru[116];
 static EvtWord boss_msg[14];
 static EvtWord out_from_tou_10_re[22];
@@ -662,7 +662,7 @@ static EVT_BEGIN(move_g_1_dokimasen)
     RETURN
 EVT_END()
 
-EVT_BEGIN(init_g_1)
+static EVT_BEGIN(init_g_1)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
         CALL(evt_npc_set_position, STRING("me"), -580, 0, 300)
     ELSE
@@ -1685,7 +1685,7 @@ static USER_FUNC(kemuri_stop) {
     return EVT_RETURN_DONE;
 }
 
-EVT_BEGIN(evt_gans)
+static EVT_BEGIN(evt_gans)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("ガンス"), -350, 0, -570)
     CALL(evt_mario_set_pos, -350, 0, -580)
@@ -1807,7 +1807,7 @@ static EVT_BEGIN(evt_kinoshikowa)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kinoshikowa2)
+static EVT_BEGIN(evt_kinoshikowa2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -350, 0, -570)
     CALL(evt_mario_set_pos, -350, 0, -580)
@@ -1862,7 +1862,7 @@ EVT_BEGIN(evt_kinoshikowa2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kinoshikowa3)
+static EVT_BEGIN(evt_kinoshikowa3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -625, 0, -300)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -620, 0, -300)
@@ -1992,7 +1992,7 @@ static EVT_BEGIN(evt_gardman)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_gardman2)
+static EVT_BEGIN(evt_gardman2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
@@ -2056,7 +2056,7 @@ EVT_BEGIN(evt_gardman2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_gardman3)
+static EVT_BEGIN(evt_gardman3)
     // The guard opens the door of the major-league locker room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -2167,7 +2167,7 @@ EVT_BEGIN(evt_gardman3)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_gardman4)
+static EVT_BEGIN(evt_gardman4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 3)
@@ -2343,7 +2343,7 @@ static EVT_BEGIN(evt_lock)
 EVT_END()
 
 // Trigger once Mario enters the central X interval; the seen flag is set only after the conversation.
-EVT_BEGIN(evt_souko_talk)
+static EVT_BEGIN(evt_souko_talk)
     IF_INT_EQUAL(GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN, 1)
         RETURN
     END_IF

@@ -69,7 +69,7 @@ typedef struct SysWork {
 } SysWork;
 static SysWork* g_wp;
 
-USER_FUNC(bg);
+static USER_FUNC(bg);
 USER_FUNC(display);
 USER_FUNC(init);
 
@@ -77,7 +77,7 @@ USER_FUNC(init);
 USER_FUNC(sys_01_start_end_wait);
 #endif
 
-USER_FUNC(start);
+static USER_FUNC(start);
 static void sys_01_release(void);
 static void _unresolved(void);
 static void _epilog(void);
@@ -1487,7 +1487,7 @@ USER_FUNC(display) {
     return EVT_RETURN_BLOCK;
 }
 
-USER_FUNC(start) {
+static USER_FUNC(start) {
     SysWork* wp = g_wp;
 
     gp->flags |= GW_FLAG_CURTAIN_OPEN;
@@ -1502,7 +1502,7 @@ USER_FUNC(start) {
  * Script helper: creates the item-get effect used as the title card background
  * and points it at the 3D effect A camera.
  */
-USER_FUNC(bg) {
+static USER_FUNC(bg) {
     EffectEntry* eff = effItemGetEntry(0, 0.0f, 0.0f, 0.0f);
 
     ((ItemGetWork*)eff->userdata)->state = 1;

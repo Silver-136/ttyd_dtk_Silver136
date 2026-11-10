@@ -56,7 +56,7 @@ static EventEntry* xevt;
 static void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
 
 static USER_FUNC(_set_draw_callback);
-USER_FUNC(btl_hitoffsetx);
+static USER_FUNC(btl_hitoffsetx);
 USER_FUNC(btlevtcmd_AnimeGetPose);
 static USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);
@@ -2907,7 +2907,7 @@ static USER_FUNC(pose_check_evt_stop) {
 }
 
 /** Script helper: sets hitOffsetX of part args[1] of the unit args[0] to args[2]. */
-USER_FUNC(btl_hitoffsetx) {
+static USER_FUNC(btl_hitoffsetx) {
     s32 id;
     EvtWord* args = event->args;
     s32 partNo;
