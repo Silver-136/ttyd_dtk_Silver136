@@ -354,11 +354,7 @@ static u32 nozle_4_dl_0_7[] __attribute__((aligned(32))) = {0x98000619, 0x000119
 #if VERSION <= VERSION_DEMO_JP
 static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 #else
-static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {
-    0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-};
+static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 static GXColor nozle_1_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 204}, {255, 255, 255, 51}, {255, 255, 255, 76}, {255, 255, 255, 102},
     {255, 255, 255, 0}, {255, 255, 255, 127}, {0, 0, 0, 0}, {0, 0, 0, 0},
@@ -393,16 +389,12 @@ static u8 nozle_3_dl_0_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0
 
 /** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
 static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
-static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {
-    0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-};
+static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
 };
 #else
-static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64, 0};
+static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 #endif
 
 static void* nozle_4_dl_0_tbl[] = {nozle_4_dl_0_0, nozle_4_dl_0_1, nozle_4_dl_0_2, nozle_4_dl_0_3, nozle_4_dl_0_4, nozle_4_dl_0_5, nozle_4_dl_0_6, nozle_4_dl_0_7};
@@ -415,9 +407,10 @@ static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0
  * remaining life as it shrinks away at the end.
  */
 #if VERSION <= VERSION_DEMO_JP
-static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}
-    , {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}
-};
+static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}};
+
+/** Early demos: a shrinking scale table (sx, sy in percent) that nothing reads. */
+static u8 scale_dt2[][2] = {{80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}};
 #else
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}};
 #endif
