@@ -51,7 +51,7 @@ static Vec nowv;
 static f32 maer;
 static s32 xlw[16];
 static s32 xlw2[16];
-static char xmemo[20];
+static char xmemo[17];
 static EventEntry* xevt;
 static void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
 

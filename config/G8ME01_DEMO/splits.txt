@@ -2622,7 +2622,7 @@ event/evt_memcard.c:
 gxsub.c:
 	.text       start:0x8024FD64 end:0x802500D4
 	.data       start:0x803BB398 end:0x803BB3A8
-	.sdata      start:0x80415480 end:0x804154A4
+	.sdata      start:0x80415480 end:0x804154C0
 	.sbss       start:0x80415AF0 end:0x80415AFC
 	.sdata2     start:0x8041E040 end:0x8041E048
 

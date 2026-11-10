@@ -140,7 +140,6 @@ typedef struct SeqDemoWork {
     BOOL fullScreen; // 0x0, draw the movie once at full size instead of twice at half size
     s32 frame;       // 0x4, frame last drawn (-1 when none)
     FileEntry* tpl;  // 0x8, mariost.tpl
-    u8 pad_C[4];     // 0xC
 } SeqDemoWork;
 static SeqDemoWork work;
 #endif

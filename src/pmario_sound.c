@@ -9348,7 +9348,7 @@ void psndExit(void) {
  * marks sound as ready and returns FALSE.
  */
 BOOL psndPushGroup(void) {
-    static u8 tbl[4];
+    static u8 tbl[2];
     static s32 group;
 
     if (_psndPushGroup_trg) {
