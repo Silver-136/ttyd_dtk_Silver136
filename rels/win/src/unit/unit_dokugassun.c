@@ -52,11 +52,7 @@ static EvtWord unison_phase_event[140];
 static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[12];
-#else
-static EvtWord wait_event[12];
-#endif
 
 /**
  * Unit data of the Poison Puff (btl_un_dokugassun): 15 HP, level 34,
@@ -770,8 +766,4 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif

@@ -3674,13 +3674,9 @@ static f32 partyGetGndY(f32 x, f32 y, f32 z) {
 /**
  * hit attributes of the floor 20 units ahead in direction dir (probed from 20 up, 40 down), 0 if none.
  * Homing walk uses it to skip footmarks over 0x800 floors.
+ * Original name and size (0xac) from the JP demo map (UNUSED there: every call is inlined).
  */
-#if VERSION <= VERSION_DEMO_JP
-// Original name and size (0xac) from the JP demo map (UNUSED there: every call is inlined).
 u32 getFrontFloorAttr(PartyEntry* party, f32 dir) {
-#else
-u32 getFrontFloorAttr(PartyEntry* party, f32 dir) {
-#endif
     HitCheckQuery q;
     HitEntry* hit;
     f32 s, c;

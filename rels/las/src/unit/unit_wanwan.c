@@ -47,11 +47,7 @@ static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_sound_event2[11];
-#else
-static EvtWord wait_sound_event2[11];
-#endif
 
 /**
  * Unit data of the Chain-Chomp: 7 HP, 34x36 units in size; ties together its sounds, parts,
@@ -728,11 +724,7 @@ static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif
 
 /**
  * Script helper (runs every frame): lays out the Chain-Chomp's chain.

@@ -119,11 +119,7 @@ static EvtWord s_en1_turn[30];
 #if VERSION >= VERSION_US
 EvtWord yuu_02_init_evt[262];
 #else
-#if VERSION == VERSION_DEMO_JP
 EvtWord yuu_02_init_evt[28];
-#else
-EvtWord yuu_02_init_evt[28];
-#endif
 #endif
 
 /**

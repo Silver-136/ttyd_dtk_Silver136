@@ -63,11 +63,7 @@ static EvtWord renzoku_attack_event_sub[55];
 static EvtWord renzoku_attack_event_sub_no_last[10];
 static EvtWord renzoku_attack_event_sub_last[79];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[6];
-#else
-static EvtWord wait_event[6];
-#endif
 
 /** Script helper: allocates the Pider's PidersYarn buffer and keeps it in the unit's countersetWeapon slot. */
 static USER_FUNC(piders_yarn_init) {
@@ -1251,8 +1247,4 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif

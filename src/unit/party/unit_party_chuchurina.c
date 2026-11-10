@@ -2250,11 +2250,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
-#if VERSION >= VERSION_US
 EVT_END()
-#else
-EVT_END()
-#endif
 
 /** Ms. Mowz's defence: 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

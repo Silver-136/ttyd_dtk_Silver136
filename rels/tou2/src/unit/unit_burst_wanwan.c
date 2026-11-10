@@ -48,11 +48,7 @@ static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_sound_event2[11];
-#else
-static EvtWord wait_sound_event2[11];
-#endif
 
 /**
  * Unit kind of the Red Chomp (HP 6, level 24): its size, offsets, damage sounds, status vulnerability,
@@ -752,11 +748,7 @@ static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

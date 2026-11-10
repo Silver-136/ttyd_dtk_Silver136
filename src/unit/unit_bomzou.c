@@ -29,11 +29,7 @@ static EvtWord phase_event[67];
 static EvtWord wait_event[57];
 static EvtWord end_battle_evt[19];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord explosion_event[172];
-#else
-static EvtWord explosion_event[172];
-#endif
 
 static BattleDataEntry data_table[4];
 static EvtWord damage_event[10];
@@ -419,11 +415,7 @@ static EVT_BEGIN(explosion_event)
     LABEL(99)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif
 
 /**
  * Data table events: knocked out (49) queues the blast, tag 53 is the blast itself,

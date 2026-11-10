@@ -62,11 +62,7 @@ static EvtWord powder_attack_check[16];
 static EvtWord powder_attack_event[179];
 static EvtWord wait_event[6];
 
-#if VERSION >= VERSION_US
 EvtWord majo3_shadow_tail_event[78];
-#else
-EvtWord majo3_shadow_tail_event[78];
-#endif
 
 /**
  * Unit data of Beldam (btl_un_majolyne1), the Shadow Sirens' leader in Boggly Woods: 9 HP, level 26.

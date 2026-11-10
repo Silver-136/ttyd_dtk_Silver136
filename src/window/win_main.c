@@ -891,11 +891,7 @@ static USER_FUNC(itemUseFunc) {
     WAIT_MS(500)
     CALL(lecture_key_mask_off)
     RETURN
-#if VERSION >= VERSION_US
-EVT_END() // US and later: the script ends with one zero word (object 0x1E4 bytes)
-#else
 EVT_END()
-#endif
 
 USER_FUNC(itemUseFunc) {
     PartyEntry* party;
@@ -994,11 +990,7 @@ USER_FUNC(itemUseFunc) {
 }
 
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
-#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(itemUseFunc2) {
-#else
-static USER_FUNC(itemUseFunc2) {
-#endif
     statusWinForceOff();
     return EVT_RETURN_DONE;
 }
@@ -1020,11 +1012,7 @@ USER_FUNC(famicom_check) {
 }
 
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(PARTY_YOSHI)) for the 8-bit item pose. */
-#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(party_color) {
-#else
-static USER_FUNC(party_color) {
-#endif
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));

@@ -57,11 +57,7 @@ static EvtWord kagenuke_attack_event[204];
 
 static EvtWord flame_attack_event[185];
 
-#if VERSION >= VERSION_US
 static EvtWord wait_event[6];
-#else
-static EvtWord wait_event[6];
-#endif
 
 /**
  * Unit data of Vivian (btl_un_vivian1), the lead unit of the Shadow Sirens fight in Boggly Woods: 10 HP,

@@ -32,11 +32,7 @@ static EvtWord dead_event_yoshi[177];
 
 static EvtWord attack_event_yoshi[748];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event_yoshi[6];
-#else
-static EvtWord wait_event_yoshi[6];
-#endif
 
 /**
  * Unit kind of the Yoshi double:
@@ -508,8 +504,4 @@ EVT_END()
 static EVT_BEGIN(wait_event_yoshi)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif

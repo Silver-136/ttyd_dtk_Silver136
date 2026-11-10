@@ -39,11 +39,7 @@ static EvtWord dead_event_christine[147];
 
 static EvtWord attack_event_christine[690];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event_christine[6];
-#else
-static EvtWord wait_event_christine[6];
-#endif
 
 /**
  * Unit kind of the Goombella double:
@@ -548,8 +544,4 @@ static USER_FUNC(_krb_get_dir) {
 static EVT_BEGIN(wait_event_christine)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif

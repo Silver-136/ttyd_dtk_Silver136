@@ -197,11 +197,7 @@ static EvtWord batten_leader_shikaeshi_attack_event[176];
 static EvtWord batten_leader_yokeyoke_attack_event[176];
 static EvtWord batten_leader_stop_attack_event[328];
 
-#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[15];
-#else
-static EvtWord wait_event[15];
-#endif
 
 /**
  * Event script: moves the battle camera to the close view of Sir Grodus (position 83, 84, 349 looking at 83, 60,

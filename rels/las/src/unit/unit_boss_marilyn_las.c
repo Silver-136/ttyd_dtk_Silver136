@@ -53,11 +53,7 @@ static EvtWord kagenuke_attack_event[238];
 static EvtWord thunder_attack_event[235];
 static EvtWord charge_attack_event[58];
 
-#if VERSION >= VERSION_US
 static EvtWord wait_event[6];
-#else
-static EvtWord wait_event[6];
-#endif
 
 /**
  * Unit data of Marilyn in the Palace of Shadow: 40 HP, level 57;

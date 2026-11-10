@@ -211,11 +211,7 @@ EVT_BEGIN(las_30_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
     CALL_CHILD(rousoku_init)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif
 
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {

@@ -925,11 +925,7 @@ EVT_BEGIN(plane_majin_lecture)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), CAMERA_3D)
     CALL(evt_npc_set_position, STRING("ペラ魔人"), 0, -1000, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
-#else
-EVT_END()
-#endif
 
 /** Script helper. Stores TRUE in args[0] while the R trigger is held on controller 0, otherwise FALSE. */
 #if VERSION >= VERSION_JP
