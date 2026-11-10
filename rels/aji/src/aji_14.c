@@ -29,7 +29,7 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(waku);
+static USER_FUNC(waku);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
@@ -113,7 +113,7 @@ static BeroEntry bero_entry_data[] = {
  * or sets the frame position to (0, -1000, 0) otherwise. Then resets all cached group positions
  * to (0, -1000, 0). Blocks forever.
  */
-USER_FUNC(waku) {
+static USER_FUNC(waku) {
     NpcEntry* npc;
     AnimationPose* pose;
     s32 i;

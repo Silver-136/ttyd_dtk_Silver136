@@ -22,6 +22,4 @@ typedef struct MailData {
     s32 icon;          // 0x10, texture drawn next to the title with MAIL_FLAG_PICTURE (win_root mail list)
 } MailData;
 
-extern MailData mail_data[44];
-
 MailData* mailGetPtr(s32 id);

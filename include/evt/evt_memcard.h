@@ -23,14 +23,9 @@ extern EvtWord evt_memcard_start[];
 USER_FUNC(memcard_buf_reset);
 #endif
 
-USER_FUNC(memcard_create);
-USER_FUNC(memcard_delete);
-USER_FUNC(memcard_format);
-
 #if VERSION >= VERSION_JP
 USER_FUNC(memcard_watch_chk);
 USER_FUNC(memcard_watch_end);
 #endif
 
 USER_FUNC(memcard_watch_start);
-USER_FUNC(memcard_write);

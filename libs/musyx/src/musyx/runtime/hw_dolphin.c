@@ -16,7 +16,7 @@ static u16 dram_image[4096] ATTRIBUTE_ALIGN(32);
 // Uninitialized, so MWCC lays these out in reverse declaration order
 static SND_SOME_CALLBACK userCallback;
 u8 salAIBufferIndex;
-void* salAIBufferBase;
+static void* salAIBufferBase;
 static volatile u32 salDspIsDone;
 static volatile u32 salLogicIsWaiting;
 static volatile u32 salLogicActive;
@@ -33,7 +33,7 @@ static volatile OSTick salLastTick = 0;
 static volatile u32 salLogicActive = 0;
 static volatile u32 salLogicIsWaiting = 0;
 static volatile u32 salDspIsDone = 0;
-void* salAIBufferBase = NULL;
+static void* salAIBufferBase = NULL;
 u8 salAIBufferIndex = 0;
 static SND_SOME_CALLBACK userCallback = NULL;
 #endif
@@ -52,7 +52,7 @@ static void callUserCallback() {
   salLogicActive = 0;
 }
 
-void salCallback() {
+static void salCallback() {
   salAIBufferIndex = (salAIBufferIndex + 1) % 4;
   AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * DMA_BUFFER_LEN),
             DMA_BUFFER_LEN);
@@ -64,12 +64,12 @@ void salCallback() {
   }
 }
 
-void dspInitCallback() {
+static void dspInitCallback() {
   salDspIsDone = TRUE;
   salDspInitIsDone = TRUE;
 }
 
-void dspResumeCallback() {
+static void dspResumeCallback() {
   salDspIsDone = TRUE;
   if (salLogicIsWaiting) {
     salLogicIsWaiting = FALSE;

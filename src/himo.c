@@ -18,7 +18,7 @@ typedef struct HimoWork {
     /* 0xB8 */ Vec t2[4];
 } HimoWork;
 
-s8 Pos[6] ATTRIBUTE_ALIGN(32) = { 1, 0, 0, -1, 0, 0 };
+static s8 Pos[6] ATTRIBUTE_ALIGN(32) = { 1, 0, 0, -1, 0, 0 };
 static s8 Nrm[3] ATTRIBUTE_ALIGN(32) = { 0, 0, 127 };
 static u8 Col[4] ATTRIBUTE_ALIGN(32) = { 0xFF, 0xFF, 0xFF, 0xFF };
 

@@ -73,4 +73,3 @@ GXTexObj* getWakuTexObj(s32 id);
 extern GXTexObj* wakuTexObj;
 
 extern BOOL tpl_loaded;
-extern TEXPalette* winTpl;

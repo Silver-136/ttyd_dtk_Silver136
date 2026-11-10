@@ -91,7 +91,7 @@ static USER_FUNC(memcard_load) {
 }
 
 /** Formats the memory card on the first call, blocking the script until it finishes; check memcard_code afterwards. */
-USER_FUNC(memcard_format) {
+static USER_FUNC(memcard_format) {
     if (isFirstCall) {
         cardFormat();
     }
@@ -102,7 +102,7 @@ USER_FUNC(memcard_format) {
 }
 
 /** Creates the game's save file on the card on the first call, blocking until done. */
-USER_FUNC(memcard_create) {
+static USER_FUNC(memcard_create) {
     if (isFirstCall) {
         cardCreate();
     }
@@ -113,7 +113,7 @@ USER_FUNC(memcard_create) {
 }
 
 /** Erases save slot args[0] (1-based, as shown on the file select screen), blocking until the card write finishes. */
-USER_FUNC(memcard_delete) {
+static USER_FUNC(memcard_delete) {
     EvtWord* args = event->args;
     s32 slot = evtGetValue(event, args[0]) - 1;
 
@@ -178,7 +178,7 @@ static USER_FUNC(memcard_file_existance) {
 }
 
 /** Writes the current game to the save slot in gp->saveSlot, blocking until the card write finishes. */
-USER_FUNC(memcard_write) {
+static USER_FUNC(memcard_write) {
     if (isFirstCall) {
         cardWrite(gp->saveSlot);
     }

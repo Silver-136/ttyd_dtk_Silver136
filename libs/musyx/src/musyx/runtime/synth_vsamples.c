@@ -15,7 +15,7 @@ u32 vidGetPublicId(u32 voice);
 u32 seqGetInstanceForVoice(u32 vid);
 u32 hwGetSampleExtraData(u32 voice);
 
-VS vs;
+static VS vs;
 
 void vsInit() {
   u32 i;

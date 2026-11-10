@@ -156,7 +156,7 @@ static f32 _vp[GX_VIEWPORT_SZ];
 static f32 _pm[GX_PROJECTION_SZ];
 static s32 AudioSystem;
 static AIDCallback OldAIDCallback;
-BOOL Initialized;
+static BOOL Initialized;
 
 // Forward Declarations
 static void __THPSimpleDVDCallback(s32 result, DVDFileInfo* fileInfo);

@@ -43,7 +43,7 @@ static f32 planeData[41] = {
  * Plays the paper airplane fold sound (SFX_MARIO_AIRPLANE1) four times, 12 frames apart,
  * at the position in LW(0..2) while Mario folds into the plane on take-off.
  */
-EVT_BEGIN(sound_evt)
+static EVT_BEGIN(sound_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
     WAIT_FRAMES(12)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)

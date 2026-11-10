@@ -22,13 +22,17 @@
 #include "sfx_name_word.h"
 #include "seq/seq_e3.h"
 
-TitleWork work2;
+#if VERSION < VERSION_US
+static void pressStartGX(s32 alpha, f32 x, f32 y);
+#endif
+
+static TitleWork work2;
 
 /**
  * Title screen state (logo animation, the press-start prompt, the debug flag);
  * wp2 is the pointer the code uses.
  */
-TitleWork* wp2 = &work2;
+static TitleWork* wp2 = &work2;
 
 #if VERSION >= VERSION_US
 #define TITLE_FRAMES_PER_SEC (gp->framerate)

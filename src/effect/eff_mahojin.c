@@ -31,7 +31,7 @@ static const char* name_tbl[] = {
  * Positions of the seven star pieces around the magic circle, evenly spaced on a ring of radius about 14
  * starting at the back; effMahojinDisp uses them to sort the pieces by depth before drawing.
  */
-Vec pos_tbl[7] = {
+static Vec pos_tbl[7] = {
     { 0.0f, 0.0f, -14.321f },
     { 10.7071f, 0.0f, -9.1648f },
     { 13.843f, 0.0f, 2.7905f },

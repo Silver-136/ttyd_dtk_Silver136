@@ -2,7 +2,7 @@
 
 #include "data/mail_data.h"
 
-MailData mail_data[44] = {
+static MailData mail_data[44] = {
     {MAIL_FLAG_PEACH, 0, 0, "msg_mail_peach_stg1_name_00", "msg_mail_peach_stg1_00", 0},
     {MAIL_FLAG_PEACH, 0, 1, "msg_mail_peach_stg2_name_00", "msg_mail_peach_stg2_00", 0},
     {MAIL_FLAG_PEACH, 0, 2, "msg_mail_peach_stg3_name_00", "msg_mail_peach_stg3_00", 0},

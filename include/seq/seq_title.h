@@ -28,3 +28,6 @@ s32 getDebugMode(void);
 void seq_titleInit(SequenceWork* work);
 void seq_titleMain(SequenceWork* work);
 void seq_titleExit(SequenceWork* work);
+#if VERSION >= VERSION_US
+void pressStartGX(s32 alpha, f32 x, f32 y);
+#endif

@@ -82,7 +82,7 @@ static void _MarioExpDisp(CameraId camId, void* param);
 static void _GetExpIcon_Disp(CameraId camId, void* param);
 static void _lvup_select_object_disp(CameraId camId, void* param);
 
-USER_FUNC(_check_guard_koura);
+static USER_FUNC(_check_guard_koura);
 static USER_FUNC(_disable_enemy_unit_disp);
 static USER_FUNC(_get_rank_up_msg);
 static USER_FUNC(_lvup_ap_recover_full);
@@ -2158,7 +2158,7 @@ static void _BattleMarioKouraDelete(void) {
  * Script helper: args[0] a unit; sets args[1] to the unit id of the Shell Shield guarding it,
  * or -1 when it has none.
  */
-USER_FUNC(_check_guard_koura) {
+static USER_FUNC(_check_guard_koura) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;

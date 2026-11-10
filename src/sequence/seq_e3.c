@@ -55,6 +55,8 @@ typedef enum winTexMode {
 #include <dolphin/pad.h>
 #endif
 
+static void pressStartGX(s32 alpha, f32 x, f32 y);
+
 typedef struct seq_e3_entry {
     s32 id; // 0x0
     f32 x;  // 0x4
@@ -924,12 +926,10 @@ static void e3DispOffscreen(CameraId cameraId, void* param) {
     offscreenAddBoundingBox(offscreenNameToId("fOff_peron"), left, top, right, bottom);
 }
 
-#if VERSION >= VERSION_US // US and later: local here, seq_title has the global copy
-static
-#endif
+// seq_title.c has its own copy (global there from US on)
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-void pressStartGX(s32 alpha, f32 x, f32 y) {
+static void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scale;
@@ -974,7 +974,7 @@ static void e3DispShadow(f32 x, f32 y, f32 z) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
 #else
-void pressStartGX(s32 alpha, f32 x, f32 y) {
+static void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scale;

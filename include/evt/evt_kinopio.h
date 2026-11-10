@@ -15,5 +15,4 @@ extern EvtWord evt_50[];
 USER_FUNC(cameraman_on);
 #endif
 
-USER_FUNC(breakfast);
 USER_FUNC(offset);

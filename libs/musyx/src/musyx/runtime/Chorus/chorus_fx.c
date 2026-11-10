@@ -109,7 +109,7 @@ static float rsmpTab12khz[512] = {
     0.802215576172f,  0.097503662109f,
 };
 
-const double i2fMagic = 4.503601774854144E15; // 0x4330000080000000 (2^52 + 2^31): int-to-float constant of the asm kernels
+static const double i2fMagic = 4.503601774854144E15; // 0x4330000080000000 (2^52 + 2^31): int-to-float constant of the asm kernels
 
 #ifdef __MWERKS__
 // clang-format off

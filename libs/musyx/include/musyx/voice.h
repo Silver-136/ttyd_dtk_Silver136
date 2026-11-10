@@ -201,8 +201,6 @@ typedef struct _VS {
                   const SND_VIRTUALSAMPLE_INFO*); // size 0x4
 } VS;
 
-extern VS vs;
-
 typedef struct _SPB {
   // total size: 0x36
   u16 dpopLHi;     // offset 0x0, size 0x2

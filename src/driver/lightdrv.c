@@ -15,7 +15,7 @@ static LightWork work[2];
 //.bss
 static LightEntry paperLight3D;
 static LightEntry paperLight3DImg;
-LightEntry paperCraft;
+static LightEntry paperCraft;
 static LightEntry booLight;
 
 // Field (group 0) or battle (group 1) light work. A macro: as an inline function the object changes.

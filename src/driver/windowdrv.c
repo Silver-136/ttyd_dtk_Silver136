@@ -15,6 +15,7 @@
 //.sbss
 static WindowEntry* WinObjects;
 GXTexObj* wakuTexObj;
+static TEXPalette* winTpl;
 
 // msgWindow.tpl texture indices (light/dark pairs)
 typedef enum WakuTexId {
@@ -1111,7 +1112,7 @@ end:
 #if VERSION >= VERSION_JP
 BOOL tpl_loaded; // Set by the asynchronous setup callback after msgWindow.tpl is unpacked and wakuTexObj is built.
 #endif
-TEXPalette* winTpl;
+static TEXPalette* winTpl = NULL;
 
 /** Whether the window frame textures can be drawn; the early demos load them synchronously and need no check. */
 static inline BOOL windowTplReady(void) {

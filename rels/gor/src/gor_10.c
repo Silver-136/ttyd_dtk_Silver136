@@ -49,7 +49,7 @@ static void draw(CameraId camera, void* param);
 static USER_FUNC(cam_yure);
 static USER_FUNC(depth);
 static USER_FUNC(mabuta);
-USER_FUNC(tegami);
+static USER_FUNC(tegami);
 
 /**
  * Draw callback of the letter: draws the letter picture (from mariost.tpl, texture 4) centred at y -74 with the
@@ -65,7 +65,7 @@ static void draw(CameraId camera, void* param) {
  * on the first call loads mariost.tpl into the work block,
  * then each call raises the alpha by 2 up to 128 and queues the 2D draw of the letter. Never finishes.
  */
-USER_FUNC(tegami) {
+static USER_FUNC(tegami) {
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(TegamiWork));
         memset(wp, 0, sizeof(TegamiWork));

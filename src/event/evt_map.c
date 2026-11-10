@@ -453,7 +453,7 @@ static USER_FUNC(check) {
  * Returns 1 in args[0] while Mario stands on some hit object other than the one in LW(1);
  * 0 when he is on it or airborne. Loop test for evt_nonride_airport.
  */
-USER_FUNC(check2) {
+static USER_FUNC(check2) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
     evtSetValue(event, args[0], 0);

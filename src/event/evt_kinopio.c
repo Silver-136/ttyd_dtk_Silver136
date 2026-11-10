@@ -244,7 +244,7 @@ USER_FUNC(offset) {
  * Puts the inn's breakfast item (KinopioWork.breakfastItem) at its spot as the fixed item "breakfast",
  * unless one is already there or the inn has none.
  */
-USER_FUNC(breakfast) {
+static USER_FUNC(breakfast) {
     ItemEntry* item = itemNameToPtr("breakfast");
     if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
         KinopioWork* w = *wp;

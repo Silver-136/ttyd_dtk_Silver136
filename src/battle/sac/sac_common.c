@@ -17,7 +17,7 @@
 #include "battle/battle_sub.h"
 
 static s32 count;
-s32 count2;
+static s32 count2;
 static s32 handBeatEnable;
 static s32 cheerEnable;
 static u8 volPer;

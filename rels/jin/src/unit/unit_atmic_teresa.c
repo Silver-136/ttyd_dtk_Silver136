@@ -29,7 +29,7 @@
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_atmic_teresa.h"
 
-AtmTeresa* teresa;
+static AtmTeresa* teresa;
 static s32 teresa_count;
 
 static void teresa_ext_disp(CameraId camera, void* param);
