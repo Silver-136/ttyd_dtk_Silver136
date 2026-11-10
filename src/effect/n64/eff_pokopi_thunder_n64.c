@@ -128,9 +128,6 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     return effect;
 }
 
-/** Returns i * step. */
-inline float inline_fn(s32 i, float step) { return ((f32)i) * step; }
-
 /** Counts down the lifetime and halves the alpha every frame after the first 11 frames (40 for type 2). */
 static void effPokopiThunderMain(EffectEntry* effect) {
     EffPokopiThunderN64Work* work = effect->userdata;
@@ -158,13 +155,12 @@ static void effPokopiThunderMain(EffectEntry* effect) {
     }
     frame = work->frame;
 
-    // FAKE: inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object
     if (type == 2) {
         if (frame >= 40) {
-            work->alpha = (s32)inline_fn(work->alpha, 0.5f);
+            work->alpha *= 0.5f;
         }
     } else if (frame >= 11) {
-        work->alpha = (s32)inline_fn(work->alpha, 0.5f);
+        work->alpha *= 0.5f;
     }
     dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, effPokopiThunderDisp, effect);
 }
