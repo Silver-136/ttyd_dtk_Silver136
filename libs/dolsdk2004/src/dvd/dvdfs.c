@@ -185,7 +185,7 @@ BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
     
     if (0 > entry) {
         DVDGetCurrentDir(currentDir, 128);
-        OSReport("Warning: DVDOpen(): file '%s' was not found under %s.\n\0", fileName, currentDir);
+        OSReport("Warning: DVDOpen(): file '%s' was not found under %s.\n", fileName, currentDir);
         return FALSE;
     }
     
@@ -336,8 +336,8 @@ s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 p
     ASSERTMSGLINE(813, !(length & 0x1F), "DVDRead(): length must be  multiple of 32 byte  ");
     ASSERTMSGLINE(815, !(offset & 3), "DVDRead(): offset must be multiple of 4 byte  ");
 
-    DVD_ASSERTMSGLINE(820, (0 <= offset) && (offset <= fileInfo->length), "DVDRead(): specified area is out of the file  \0");
-    DVD_ASSERTMSGLINE(826, (0 <= offset + length) && (offset + length < fileInfo->length + DVD_MIN_TRANSFER_SIZE), "DVDRead(): specified area is out of the file  \0");
+    DVD_ASSERTMSGLINE(820, (0 <= offset) && (offset <= fileInfo->length), "DVDRead(): specified area is out of the file  ");
+    DVD_ASSERTMSGLINE(826, (0 <= offset + length) && (offset + length < fileInfo->length + DVD_MIN_TRANSFER_SIZE), "DVDRead(): specified area is out of the file  ");
 
     block = &fileInfo->cb;
     result = DVDReadAbsAsyncPrio(block, addr, length, fileInfo->startAddr + offset, cbForReadSync, prio);

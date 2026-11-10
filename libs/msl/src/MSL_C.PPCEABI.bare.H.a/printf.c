@@ -1049,7 +1049,7 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
                 wchar_t* wcs_ptr = va_arg(arg, wchar_t*);
 
                 if (wcs_ptr == NULL) {
-                    wcs_ptr = L"\0";
+                    wcs_ptr = L"";
                 }
 
                 // wcstombs returns a byte count (0..n), never a negative value: this error branch is never taken
