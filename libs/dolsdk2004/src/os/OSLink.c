@@ -115,9 +115,9 @@ const void* __OSStringTable AT_ADDRESS(OS_BASE_CACHED | 0x30D0);
 
 // Empty notification hooks: Link calls OSNotifyLink with each module it links, OSUnlink calls OSNotifyUnlink.
 // The calls stay out of line because the unit is built with -inline noauto (configure.py).
-void OSNotifyLink(OSModuleInfo* module) {}
+__declspec(weak) void OSNotifyLink(OSModuleInfo* module) {}
 
-void OSNotifyUnlink(OSModuleInfo* module) {}
+__declspec(weak) void OSNotifyUnlink(OSModuleInfo* module) {}
 
 void OSSetStringTable(void* stringTable) {
     __OSStringTable = stringTable;

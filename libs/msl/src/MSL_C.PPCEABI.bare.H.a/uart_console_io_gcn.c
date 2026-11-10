@@ -7,7 +7,7 @@ int InitializeUART(unsigned long baudRate);
 int WriteUARTN(const void* buf, unsigned long len);
 int __TRK_write_console(__file_handle handle, unsigned char* buffer, size_t* count, __idle_proc idle_proc);
 
-int __write_console(__file_handle handle, unsigned char* buffer, size_t* count, __idle_proc idle_proc) {
+__declspec(weak) int __write_console(__file_handle handle, unsigned char* buffer, size_t* count, __idle_proc idle_proc) {
     static int initialized = 0;
     int ret;
 
