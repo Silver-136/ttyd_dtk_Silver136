@@ -41,8 +41,8 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_mario.h"
 #undef GXSetTexCoordGen
-static f32 cosf(f32 x);
-static f32 sinf(f32 x);
+__declspec(weak) f32 cosf(f32 x);
+__declspec(weak) f32 sinf(f32 x);
 typedef struct ScreenWork {
     void* buf;
     s32 ready;
@@ -4307,11 +4307,11 @@ static s32 confupose(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-static f32 sinf(f32 x) {
+__declspec(weak) f32 sinf(f32 x) {
     return sin(x);
 }
 
-static f32 cosf(f32 x) {
+__declspec(weak) f32 cosf(f32 x) {
     return cos(x);
 }
 

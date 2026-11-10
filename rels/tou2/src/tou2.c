@@ -175,7 +175,7 @@ static const Vec downButtonPos = { 0.0f, -125.0f, 0.0f };
 
 // local prototypes
 static f32 camGetRy(void);
-f32 atan2f(f32 y, f32 x);
+__declspec(weak) f32 atan2f(f32 y, f32 x);
 static void disp_proc(CameraId cameraId, void* param);
 static void printRanking(void);
 static void rankingControll(void);
@@ -256,7 +256,7 @@ static f32 camGetRy(void) {
 }
 
 /** Single-precision wrapper around atan2 (radians). */
-f32 atan2f(f32 y, f32 x) {
+__declspec(weak) f32 atan2f(f32 y, f32 x) {
     return atan2(y, x);
 }
 

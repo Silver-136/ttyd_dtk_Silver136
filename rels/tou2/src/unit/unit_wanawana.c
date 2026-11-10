@@ -21,7 +21,7 @@
 #include "battle/battle_sub.h"
 #include "battle/unit/unit_wanawana.h"
 
-static f32 tanf(f32 x);
+__declspec(weak) f32 tanf(f32 x);
 
 static USER_FUNC(replace_evt);
 
@@ -38,7 +38,7 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[19];
 static EvtWord wait_event[6];
 
-static f32 tanf(f32 x) {
+__declspec(weak) f32 tanf(f32 x) {
     return tan(x);
 }
 

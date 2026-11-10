@@ -24,7 +24,7 @@
 
 static USER_FUNC(get_attacker);
 static u16 krb_comp_dir(f32 x, f32 z);
-f32 hypotf(f32 x, f32 y);
+__declspec(weak) f32 hypotf(f32 x, f32 y);
 static USER_FUNC(krb_get_dir);
 
 BattleUnitKind unit_togekuri;
@@ -342,7 +342,7 @@ static u16 krb_comp_dir(f32 x, f32 z) {
 }
 
 /** Single-precision wrapper around hypot, so the code that calls hypotf(x, z) gets a float result. */
-f32 hypotf(f32 x, f32 y) {
+__declspec(weak) f32 hypotf(f32 x, f32 y) {
     return hypot(x, y);
 }
 
