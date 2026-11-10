@@ -231,7 +231,7 @@ static USER_FUNC(paper_off) {
  * Turns distance args[0] into an x/z offset across the camera's view (yaw + 90 degrees),
  * written to args[1] and args[2]; places the second partner beside the bed.
  */
-USER_FUNC(offset) {
+static USER_FUNC(offset) {
     EvtWord* args = event->args;
     f32 dist = evtGetFloat(event, args[0]);
     f32 ang = 6.2831855f * (90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;

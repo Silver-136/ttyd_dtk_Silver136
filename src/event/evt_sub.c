@@ -66,7 +66,7 @@ static USER_FUNC(stageclear_wait);
 static USER_FUNC(stone_bg_open);
 static USER_FUNC(stone_ry);
 
-s32 stop;
+static s32 stop;
 
 typedef struct SplineWork {
     s32 n;         // 0x0

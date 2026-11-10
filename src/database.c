@@ -20,8 +20,8 @@
 #include "mario/mariost.h"
 
 //.sbss
-void* ptr;
-u32 size;
+static void* ptr;
+static u32 size;
 
 /**
  * Loads the map's enemy setup file (m/<map>/s; setup/<map>/setup.xml in the early demos) from the map archive

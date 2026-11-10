@@ -50,7 +50,7 @@ static EvtWord sekizou_talk[69];
 static EvtWord sekizou_talk[2];
 #endif
 
-EvtWord evt_item[5];
+static EvtWord evt_item[5];
 static EvtWord evt_down_snd[116];
 static EvtWord evt_up_snd_[12];
 static EvtWord evt_up_snd__[76];
@@ -240,7 +240,7 @@ EVT_END()
  * Pick-up event of the elevator key dropped after the quiz (ITEM_ELEVATOR_KEY_0x1C):
  * sets the story to STG7_14_ELEVATOR_KEY_B.
  */
-EVT_BEGIN(evt_item)
+static EVT_BEGIN(evt_item)
     SET_VALUE(GSW_STORY_PROGRESS, STG7_14_ELEVATOR_KEY_B)
     RETURN
 EVT_END()

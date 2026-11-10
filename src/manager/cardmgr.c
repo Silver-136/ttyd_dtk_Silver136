@@ -61,7 +61,7 @@ const char cardDateFormat[0x20] = "%2d月%2d日のセーブデータです";
 static CardWork* wp;
 
 //.sdata
-const char* version = VERSION_PICK("009", "010");
+static const char* version = VERSION_PICK("009", "010");
 
 // local prototypes
 static void check_sum(CardSaveSlot* save);

@@ -74,7 +74,7 @@ static BeroEntry bero_entry_data[6];
 static BeroEntry e3_bero[2];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
-EvtWord evt_snd[234];
+static EvtWord evt_snd[234];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord moji_msg[];
@@ -750,7 +750,7 @@ static EVT_BEGIN(cam_shake2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_snd)
+static EVT_BEGIN(evt_snd)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     WAIT_MS(33)
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF1_ROCK_BREAK1"), LW(0), LW(1), LW(2), 0)

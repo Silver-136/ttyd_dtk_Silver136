@@ -44,7 +44,7 @@ static FireScaleKey scale1[] = {
 
 // The early demos define scale2 (described below) here.
 #if VERSION <= VERSION_DEMO_JP
-FireScaleKey scale2[] = {
+static FireScaleKey scale2[] = {
     {0, 1.0f},
     {100, 1.2f},
     {160, 0.95f},
@@ -102,7 +102,7 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect);
 
 /** Slower looping 200-frame swell of the flame's size (up to 1.2) for flame type 4; read by effFireMain. */
 #if VERSION >= VERSION_JP
-FireScaleKey scale2[] = {
+static FireScaleKey scale2[] = {
     { 0, 1.0f },
     { 100, 1.2f },
     { 160, 0.95f },

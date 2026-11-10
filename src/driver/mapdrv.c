@@ -37,7 +37,7 @@ static GXColor paper_ambient;
 static GXColor paperCraft_ambient;
 static GXTexObj projTexObj;
 static void* projTexImgRef;
-Mtx projMtx;
+static Mtx projMtx;
 BOOL __mapdrv_make_dl;
 
 #if VERSION >= VERSION_JP

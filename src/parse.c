@@ -6,7 +6,7 @@
 #include "libc_decls.h"
 
 //.bss
-ParseWork parse;
+static ParseWork parse;
 
 /**
  * Starts parsing a text buffer of size bytes: the whole buffer becomes the single open block at depth 0.

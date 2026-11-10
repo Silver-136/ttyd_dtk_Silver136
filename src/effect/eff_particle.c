@@ -90,7 +90,7 @@ static GXColor hibana_col[32] = {
 };
 
 /** Random seed of the particle generator, advanced by rndf for every random draw in this file. */
-s32 seed = 1;
+static s32 seed = 1;
 
 /** Pseudo-random integer: the next value of rndf's linear congruential generator. */
 // Original name from the JP demo's link map (UNUSED there, 0x20, just before rndf): nothing calls it, so the linker
