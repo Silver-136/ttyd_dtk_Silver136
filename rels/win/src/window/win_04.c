@@ -109,7 +109,7 @@ EvtWord clouda_nakama[1556];
 
 static EvtWord touch_door[39];
 static EvtWord mirror_ball_event[18];
-static u32 texture_0[1248];
+static u32 texture_0[1248] ATTRIBUTE_ALIGN(32);
 static Vec rose_table_direct[55];
 static f32 rose_table[120];
 static EvtWord flower_event[28];
@@ -1146,7 +1146,7 @@ static EVT_BEGIN(mirror_ball_event)
 EVT_END()
 
 /* GX_TF_CMPR texel data, 101x92 (GXInitTexObj in the draw function) */
-static u32 texture_0[] = {
+static u32 texture_0[] ATTRIBUTE_ALIGN(32) = {
     0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF,
     0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF,
     0x7841AB2C, 0xFFFFDF8B, 0x00000001, 0xFFFFFFFF, 0xF4578103, 0x55C37050, 0x7861CB91, 0xBF2F0289,

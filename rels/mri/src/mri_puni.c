@@ -4652,16 +4652,13 @@ static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03,
 };
 
-/**
- * The four corners of the square shadow drawn under each Puni (2.4 units wide, on the ground). The JP demo map has
- * 0x30 bytes here; the last 0x10 (zero) bytes belong to a further object that is not identified yet.
- */
-static f32 shadow_vtx[16] = {
+/** The four corners of the square shadow drawn under each Puni (2.4 units wide, on the ground). */
+static f32 shadow_vtx[12] ATTRIBUTE_ALIGN(32) = {
     -1.2f, 0.0f, -1.2f, -1.2f, 0.0f, 1.2f, 1.2f, 0.0f, 1.2f, 1.2f, 0.0f, -1.2f,
 };
 
 /** Texture coordinates of the shadow square, one pair per corner. */
-static f32 shadow_coord[8] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f };
+static f32 shadow_coord[8] ATTRIBUTE_ALIGN(32) = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f };
 
 /**
  * Draw callback for one Puni's shadow: a dark translucent shadow quad (texture 0x2C) placed under the pose,

@@ -16,8 +16,8 @@ static BOOL autoInvalidation = TRUE;
 static void defaultOptionalCommandChecker(DVDCommandBlock*, DVDCommandCheckerCallback);
 static DVDCommandChecker checkOptionalCommand = defaultOptionalCommandChecker;
 
-static DVDBB2 BB2;
-static DVDDiskID CurrDiskID;
+static DVDBB2 BB2 ATTRIBUTE_ALIGN(32);
+static DVDDiskID CurrDiskID ATTRIBUTE_ALIGN(32);
 static DVDCommandBlock DummyCommandBlock;
 static OSAlarm ResetAlarm;
 

@@ -473,15 +473,8 @@ static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03,
 };
 
-// JP and later keep this 64-byte array in .sdata, above the -sdata 48 limit, hence the explicit section (layout debt);
-// 12 of the 16 floats are set
-#if VERSION <= VERSION_DEMO_JP
-static f32 shadow_vtx[16] = {
-#else
-// FAKE: placed in .sdata; without it the object changes
-__declspec(section ".sdata") static f32 shadow_vtx[16] = {
-#endif
-
+/** Positions of the shadow quad's four corners (2.4 units square, flat on the ground). */
+static f32 shadow_vtx[12] ATTRIBUTE_ALIGN(32) = {
     -1.2f, 0.0f, -1.2f,
     -1.2f, 0.0f, 1.2f,
     1.2f, 0.0f, 1.2f,
@@ -489,7 +482,7 @@ __declspec(section ".sdata") static f32 shadow_vtx[16] = {
 };
 
 /** Texture coordinates of the shadow quad's four corners. */
-static f32 shadow_coord[8] = {
+static f32 shadow_coord[8] ATTRIBUTE_ALIGN(32) = {
     0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 };
 

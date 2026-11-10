@@ -3397,8 +3397,6 @@ EVT_BEGIN(aji_17_init_evt)
     RETURN
 EVT_END()
 
-// target .data tail pad word
-
 static s32 noise(EventEntry* event, BOOL isFirstCall) {
     EvtWord alpha = evtGetValue(event, event->args[0]);
     dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);

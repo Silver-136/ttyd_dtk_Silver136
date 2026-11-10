@@ -9,7 +9,7 @@
 #include "driver/camdrv.h"
 f32 queen_uv[4]
 = {0.0f, -0.0016000001f, 0.0f, -0.00080000004f};
-static s32 lastGX ATTRIBUTE_ALIGN(32) = 8;
+static s32 lastGX = 8;
 static BOOL fillTexEdgeOn;
 static BOOL fillTexAlphaOff;
 static GXTexObj* pFillTexObj;

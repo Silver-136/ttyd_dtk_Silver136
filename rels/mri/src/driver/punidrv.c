@@ -22,7 +22,7 @@ void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), voi
 
 static f32 sintbl[450];
 static u8 shadow_dl[32];
-static f32 shadow_vtx[56];
+static f32 shadow_vtx[51];
 static PunidrvWork* work;
 
 /**
@@ -474,7 +474,7 @@ static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
     0xA0, 0x00, 0x12, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x01,
 };
 
-static f32 shadow_vtx[56] ATTRIBUTE_ALIGN(32) = {
+static f32 shadow_vtx[51] ATTRIBUTE_ALIGN(32) = {
     0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.707107f, 0.0f,
     0.707107f, 1.0f, 0.0f, 0.0f, 0.707107f, 0.0f, -0.707106f, 1e-06f,
     0.0f, -1.0f, -0.707106f, 0.0f, -0.707107f, -1.0f, 0.0f, -1e-06f,
@@ -484,7 +484,7 @@ static f32 shadow_vtx[56] ATTRIBUTE_ALIGN(32) = {
     -0.707108f, 0.0f, 0.707105f,
 };
 
-static GXColor shadow_col[8] ATTRIBUTE_ALIGN(32) = {
+static GXColor shadow_col[1] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x80},
 };
 

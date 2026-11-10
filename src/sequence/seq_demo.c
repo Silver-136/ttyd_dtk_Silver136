@@ -146,7 +146,7 @@ static SeqDemoWork work;
 #endif
 
 static THPSimple SimpleControl;
-static s32 WorkBuffer[16];
+static s32 WorkBuffer[16] ATTRIBUTE_ALIGN(32);
 static s16 SoundBuffer[2][SAMPLES_PER_AUDIO_FRAME * 2] ATTRIBUTE_ALIGN(32);
 
 //.sbss
