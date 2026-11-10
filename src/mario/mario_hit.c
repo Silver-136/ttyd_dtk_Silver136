@@ -968,7 +968,7 @@ static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm,
 /**
  * Tube ground search: the early demos test three points and return the first accepted floor;
  * on flat ground the centre stays put and the two side probes move 3 units ahead.
- * JP and later test four points on nearly flat ground or three on slopes, skip slopes of 75–105 degrees,
+ * JP and later test four points on nearly flat ground or three on slopes, skip slopes of 75 to 105 degrees,
  * and keep the highest accepted floor.
  */
 HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
