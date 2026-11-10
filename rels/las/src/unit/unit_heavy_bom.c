@@ -25,7 +25,7 @@
 static USER_FUNC(_set_draw_callback);
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling);
 
-static BattleUnitKind unit_heavy_bom;
+BattleUnitKind unit_heavy_bom;
 static BattleWeapon weapon_heavy_bomb_super_explosion;
 static BattleWeapon weapon_heavy_bomb_guard;
 static BattleWeapon weapon_heavy_bomb_guard_2;
@@ -64,7 +64,7 @@ static EvtWord explosion_event[247];
  * Unit data of the Bulky Bob-omb; ties together its sounds, parts, status vulnerability, init event
  * and event table.
  */
-static BattleUnitKind unit_heavy_bom = {
+BattleUnitKind unit_heavy_bom = {
     UNIT_BULKY_BOB_OMB, // unitType
     "btl_un_heavy_bom", // name
     6, // maxHp

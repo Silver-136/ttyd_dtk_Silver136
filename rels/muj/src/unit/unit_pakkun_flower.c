@@ -25,7 +25,7 @@ static USER_FUNC(shadow_scale_return);
 static USER_FUNC(shadow_scale_small);
 static USER_FUNC(pakkun_ceil_exist);
 
-static BattleUnitKind unit_pakkun_flower;
+BattleUnitKind unit_pakkun_flower;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -48,7 +48,7 @@ static EvtWord wait_event[6];
  * Unit kind of the Piranha Plant (HP 15, level 33):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
-static BattleUnitKind unit_pakkun_flower = {
+BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT, // unitType
     "btl_un_pakkun_flower", // name
     15, // maxHp

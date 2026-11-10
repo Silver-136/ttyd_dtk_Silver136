@@ -29,7 +29,7 @@
  * Jump curves (speed, acceleration, jerk, snap): Mario's launch off a blue jump stand (mot_jumpStand), with its
  * fall and easing values; then the bounce off a switch (mot_jumpSw), rising (marioSetJumpPara) then falling.
  */
-static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
+f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 f32 marioJumpSwData[] = {2.5f, -0.1f, 0.02f, -0.01f, -0.08f, -0.4f, 0.0f, -0.002f};
 
 /** Switches to the rising jump pose M_J_1B, only for plain Mario (not Bowser, and not while carrying Bobbery). */

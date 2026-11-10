@@ -39,8 +39,8 @@ static BattleWeapon weapon_vivian_kagenuke_attack1;
 static BattleWeapon weapon_vivian_flame_attack1;
 static BattleUnitSetup entry_marilyn;
 static BattleUnitSetup entry_majolyne;
-static EvtWord vivian_down[19];
-static EvtWord vivian_up[27];
+EvtWord vivian_down[19];
+EvtWord vivian_up[27];
 static EvtWord init_event[179];
 static EvtWord entry_event[46];
 static EvtWord damage_event[22];
@@ -297,7 +297,7 @@ static BattleUnitSetup entry_majolyne = {
  * Vivian sinks into her shadow: after 250 ms plays the shadow sound (SFX_BOSS_VIVI_SHADOW1)
  * and hides her model (battle_evt_majo_disp_off).
  */
-static EVT_BEGIN(vivian_down)
+EVT_BEGIN(vivian_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_VIVI_SHADOW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -310,7 +310,7 @@ EVT_END()
  * Vivian rises out of her shadow at the position in LW(0..2):
  * after 250 ms plays the rising sound (SFX_BOSS_VIVI_SHADOW2), shows her model and sets her position.
  */
-static EVT_BEGIN(vivian_up)
+EVT_BEGIN(vivian_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_VIVI_SHADOW2"), EVT_NULLPTR, 0, EVT_NULLPTR)

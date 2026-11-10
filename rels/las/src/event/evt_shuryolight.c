@@ -13,14 +13,14 @@
 
 static ShuryoWork* slhp;
 
-static USER_FUNC(evt_shuryolight_set_anim);
-static USER_FUNC(evt_shuryolight_wait_anim_end);
+USER_FUNC(evt_shuryolight_set_anim);
+USER_FUNC(evt_shuryolight_wait_anim_end);
 USER_FUNC(evt_shuryolight_delete);
-static USER_FUNC(evt_shuryolight_run_tue_evt);
+USER_FUNC(evt_shuryolight_run_tue_evt);
 USER_FUNC(evt_shuryolight_run_head_evt);
-static USER_FUNC(evt_shuryolight_run_power_evt);
-static USER_FUNC(evt_shuryolight_get_status);
-static USER_FUNC(evt_shuryolight_get_anim_time);
+USER_FUNC(evt_shuryolight_run_power_evt);
+USER_FUNC(evt_shuryolight_get_status);
+USER_FUNC(evt_shuryolight_get_anim_time);
 static s32 shuryolightRunEvt(EvtWord* code, s32 id);
 static void shuryolightSetAnim(s32 index, s32 anim);
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling);
@@ -275,7 +275,7 @@ USER_FUNC(evt_shuryolight_init) {
 }
 
 /** Script helper: sets the animation of lamp args[0] to args[1]. */
-static USER_FUNC(evt_shuryolight_set_anim) {
+USER_FUNC(evt_shuryolight_set_anim) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 
@@ -284,7 +284,7 @@ static USER_FUNC(evt_shuryolight_set_anim) {
 }
 
 /** Script helper: blocks until the animation of lamp args[0] has played through once. */
-static USER_FUNC(evt_shuryolight_wait_anim_end) {
+USER_FUNC(evt_shuryolight_wait_anim_end) {
     s32 index = evtGetValue(event, event->args[0]);
     ShuryoLight* light = &slhp->lights[index];
 
@@ -295,7 +295,7 @@ static USER_FUNC(evt_shuryolight_wait_anim_end) {
 }
 
 /** Script helper: returns in args[1] the length in milliseconds of one loop of lamp args[0]'s current animation. */
-static USER_FUNC(evt_shuryolight_get_anim_time) {
+USER_FUNC(evt_shuryolight_get_anim_time) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     ShuryoLight* light = &slhp->lights[index];
@@ -306,7 +306,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time) {
 }
 
 /** Script helper: returns in args[1] the current animation number of lamp args[0]. */
-static USER_FUNC(evt_shuryolight_get_status) {
+USER_FUNC(evt_shuryolight_get_status) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     ShuryoLight* light = &slhp->lights[index];
@@ -338,7 +338,7 @@ USER_FUNC(evt_shuryolight_run_evt) {
 }
 
 /** Script helper: replaces the power lamp event with the script in args[0]. */
-static USER_FUNC(evt_shuryolight_run_power_evt) {
+USER_FUNC(evt_shuryolight_run_power_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
 
     slhp->powerEvt = shuryolightRunEvt(code, slhp->powerEvt);
@@ -354,7 +354,7 @@ USER_FUNC(evt_shuryolight_run_head_evt) {
 }
 
 /** Script helper: replaces the staff lamp event with the script in args[0]. */
-static USER_FUNC(evt_shuryolight_run_tue_evt) {
+USER_FUNC(evt_shuryolight_run_tue_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
 
     slhp->tueEvt = shuryolightRunEvt(code, slhp->tueEvt);

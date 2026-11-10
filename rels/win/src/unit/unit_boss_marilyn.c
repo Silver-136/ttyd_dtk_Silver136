@@ -36,8 +36,8 @@ static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_marilyn_kagenuke_attack1;
 static BattleWeapon weapon_marilyn_thunder_attack1;
 static BattleWeapon weapon_marilyn_charge1;
-static EvtWord marilyn_down[19];
-static EvtWord marilyn_up[27];
+EvtWord marilyn_down[19];
+EvtWord marilyn_up[27];
 static EvtWord init_event[37];
 static EvtWord damage_event[22];
 static EvtWord dead_event[152];
@@ -292,7 +292,7 @@ static BattleWeapon weapon_marilyn_charge1 = {
  * Marilyn sinks into her shadow: after 250 ms plays the shadow sound (SFX_BOSS_MARI_SHADOW1)
  * and hides her model (battle_evt_majo_disp_off).
  */
-static EVT_BEGIN(marilyn_down)
+EVT_BEGIN(marilyn_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MARI_SHADOW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -305,7 +305,7 @@ EVT_END()
  * Marilyn rises out of her shadow at the position in LW(0..2):
  * after 250 ms plays the rising sound (SFX_BOSS_MARI_SHADOW2), shows her model again and sets her position.
  */
-static EVT_BEGIN(marilyn_up)
+EVT_BEGIN(marilyn_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MARI_SHADOW2"), EVT_NULLPTR, 0, EVT_NULLPTR)

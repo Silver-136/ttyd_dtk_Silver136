@@ -15,7 +15,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-static BattleUnitKind unit_hyper_sinemon;
+BattleUnitKind unit_hyper_sinemon;
 static BattleUnitDefense defence;
 static BattleUnitDefense defence_turn;
 static BattleUnitDefenseAttr defence_attr;
@@ -38,7 +38,7 @@ static EvtWord wait_event[6];
  * Unit data of the Hyper Cleft; ties together its sounds, parts, status vulnerability, init event
  * and event table.
  */
-static BattleUnitKind unit_hyper_sinemon = {
+BattleUnitKind unit_hyper_sinemon = {
     UNIT_HYPER_CLEFT, // unitType
     "btl_un_hyper_sinemon", // name
     4, // maxHp

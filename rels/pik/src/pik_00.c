@@ -80,24 +80,24 @@ static EvtWord evt_clank_main[104];
 static EvtWord evt_clank[21];
 static EvtWord evt_bg[81];
 static EvtWord evt_hoshi[88];
-static EvtWord hom_10_evt_resha_start[244];
-static EvtWord hom_10_evt_resha_start2[259];
-static EvtWord hom_10_evt_resha_start3[11];
-static EvtWord hom_10_evt_resha_start4[11];
+EvtWord hom_10_evt_resha_start[244];
+EvtWord hom_10_evt_resha_start2[259];
+EvtWord hom_10_evt_resha_start3[11];
+EvtWord hom_10_evt_resha_start4[11];
 static EvtWord stop_1[90];
 static EvtWord stop_2[90];
-static EvtWord hom_10_evt_resha_stop[36];
+EvtWord hom_10_evt_resha_stop[36];
 static EvtWord evt_ramp[33];
 static const char* pika_tbl[15];
 static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
-static EvtWord hom_10_evt_resha_right[35];
-static EvtWord hom_10_evt_resha_left[28];
+EvtWord hom_10_evt_resha_right[35];
+EvtWord hom_10_evt_resha_left[28];
 
 #if VERSION <= VERSION_DEMO_JP
-static EvtWord hom_10_init_evt[104];
+EvtWord hom_10_init_evt[104];
 #else
-static EvtWord hom_10_init_evt[140];
+EvtWord hom_10_init_evt[140];
 #endif
 
 static EvtWord resha_noru[8];
@@ -426,7 +426,7 @@ EVT_END()
  * the train's speed, which also scrolls the scenery; GW(1) drives the big drive wheels sha_1_4/sha_1_5 and rods
  * bou_2/bou_4: it follows GW(0), and after 1.5 seconds runs up to 10 faster for 2 seconds; Guess: wheel spin).
  */
-static EVT_BEGIN(hom_10_evt_resha_start)
+EVT_BEGIN(hom_10_evt_resha_start)
     // The train starts moving: the station flags are cleared.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -529,7 +529,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
 EVT_END()
 
 /** Same as hom_10_evt_resha_start but for the return trip: the train accelerates in the opposite direction to +15. */
-static EVT_BEGIN(hom_10_evt_resha_start2)
+EVT_BEGIN(hom_10_evt_resha_start2)
     // The train starts moving on the return trip: the station flags are cleared.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -641,7 +641,7 @@ EVT_END()
  * Sets the train to travel at its cruising speed of -15 immediately (the outbound direction),
  * without the departure acceleration; used by the running-train scenes.
  */
-static EVT_BEGIN(hom_10_evt_resha_start3)
+EVT_BEGIN(hom_10_evt_resha_start3)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(-15.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(-15.0f))
@@ -652,7 +652,7 @@ EVT_END()
  * Sets the train to travel at its cruising speed of +15 immediately (the return direction),
  * without the departure acceleration.
  */
-static EVT_BEGIN(hom_10_evt_resha_start4)
+EVT_BEGIN(hom_10_evt_resha_start4)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(15.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(15.0f))
@@ -733,7 +733,7 @@ EVT_END()
  * gor_04 and hom_00 and the trip direction), which brings the train speed to zero
  * and clears the train-moving flag.
  */
-static EVT_BEGIN(hom_10_evt_resha_stop)
+EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
         SPAWN_EVENT(stop_1)
@@ -853,7 +853,7 @@ EVT_END()
  * Sets up the train scene with the outbound (right-moving) train:
  * runs the shared set-up and hides the rear cars unless the map is rsh_06_a.
  */
-static EVT_BEGIN(hom_10_evt_resha_right)
+EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_06_a"))
@@ -869,7 +869,7 @@ EVT_END()
  * Sets up the train scene with the return (left-moving) train:
  * runs the shared set-up and hides the cars that are not part of the return view.
  */
-static EVT_BEGIN(hom_10_evt_resha_left)
+EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
@@ -878,7 +878,7 @@ static EVT_BEGIN(hom_10_evt_resha_left)
     RETURN
 EVT_END()
 
-static EVT_BEGIN(hom_10_init_evt)
+EVT_BEGIN(hom_10_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
     CALL(evt_mario_cont_onoff, 0)

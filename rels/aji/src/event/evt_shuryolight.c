@@ -13,14 +13,14 @@
 
 static ShuryoWork* slhp;
 
-static USER_FUNC(evt_shuryolight_set_anim);
-static USER_FUNC(evt_shuryolight_wait_anim_end);
-static USER_FUNC(evt_shuryolight_delete);
-static USER_FUNC(evt_shuryolight_run_tue_evt);
-static USER_FUNC(evt_shuryolight_run_head_evt);
-static USER_FUNC(evt_shuryolight_run_power_evt);
-static USER_FUNC(evt_shuryolight_get_status);
-static USER_FUNC(evt_shuryolight_get_anim_time);
+USER_FUNC(evt_shuryolight_set_anim);
+USER_FUNC(evt_shuryolight_wait_anim_end);
+USER_FUNC(evt_shuryolight_delete);
+USER_FUNC(evt_shuryolight_run_tue_evt);
+USER_FUNC(evt_shuryolight_run_head_evt);
+USER_FUNC(evt_shuryolight_run_power_evt);
+USER_FUNC(evt_shuryolight_get_status);
+USER_FUNC(evt_shuryolight_get_anim_time);
 static s32 shuryolightRunEvt(EvtWord* code, s32 id);
 static void shuryolightSetAnim(s32 index, s32 anim);
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling);
@@ -30,10 +30,10 @@ static const char* yellow_light_anim[5];
 static const char* red_light_anim[5];
 static const char* orange_light_anim[5];
 EvtWord shuryolight_pow_normal[44];
-static EvtWord shuryolight_pow_tenmetu[31];
+EvtWord shuryolight_pow_tenmetu[31];
 EvtWord shuryolight_head_normal[30];
-static EvtWord shuryolight_head_tenmetu[20];
-static EvtWord shuryolight_head_off[14];
+EvtWord shuryolight_head_tenmetu[20];
+EvtWord shuryolight_head_off[14];
 EvtWord shuryolight_tue_normal[31];
 
 /**
@@ -106,7 +106,7 @@ EVT_END()
  * Blinking pattern for the power lamp (light 0) of Grodus's staff base:
  * lit for 0.7 to 4.7 seconds at random, then off for 200 ms, forever.
  */
-static EVT_BEGIN(shuryolight_pow_tenmetu)
+EVT_BEGIN(shuryolight_pow_tenmetu)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 0, 1)
         CALL(evt_sub_random, 3000, LW(0))
@@ -143,7 +143,7 @@ EVT_END()
  * Flashing pattern for the three head lamps (lights 1 to 3):
  * plays animation 4 on all of them and waits for it to end, forever.
  */
-static EVT_BEGIN(shuryolight_head_tenmetu)
+EVT_BEGIN(shuryolight_head_tenmetu)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 1, 4)
         CALL(evt_shuryolight_set_anim, 2, 4)
@@ -154,7 +154,7 @@ static EVT_BEGIN(shuryolight_head_tenmetu)
 EVT_END()
 
 /** Turns the three head lamps (lights 1 to 3) off by setting animation 3 on each. */
-static EVT_BEGIN(shuryolight_head_off)
+EVT_BEGIN(shuryolight_head_off)
     CALL(evt_shuryolight_set_anim, 1, 3)
     CALL(evt_shuryolight_set_anim, 2, 3)
     CALL(evt_shuryolight_set_anim, 3, 3)
@@ -281,7 +281,7 @@ USER_FUNC(evt_shuryolight_init) {
 }
 
 /** Script function: sets lamp args[0] to animation args[1] (shuryolightSetAnim). */
-static USER_FUNC(evt_shuryolight_set_anim) {
+USER_FUNC(evt_shuryolight_set_anim) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 
@@ -290,7 +290,7 @@ static USER_FUNC(evt_shuryolight_set_anim) {
 }
 
 /** Script function: blocks until the animation of lamp args[0] has played through once. */
-static USER_FUNC(evt_shuryolight_wait_anim_end) {
+USER_FUNC(evt_shuryolight_wait_anim_end) {
     s32 index = evtGetValue(event, event->args[0]);
     ShuryoLight* light = &slhp->lights[index];
 
@@ -301,7 +301,7 @@ static USER_FUNC(evt_shuryolight_wait_anim_end) {
 }
 
 /** Script function: returns in args[1] the length in milliseconds of the current animation loop of lamp args[0]. */
-static USER_FUNC(evt_shuryolight_get_anim_time) {
+USER_FUNC(evt_shuryolight_get_anim_time) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     ShuryoLight* light = &slhp->lights[index];
@@ -313,7 +313,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time) {
 }
 
 /** Script function: returns in args[1] the current animation (status) number of lamp args[0]. */
-static USER_FUNC(evt_shuryolight_get_status) {
+USER_FUNC(evt_shuryolight_get_status) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     ShuryoLight* light = &slhp->lights[index];
@@ -347,7 +347,7 @@ USER_FUNC(evt_shuryolight_run_evt) {
 }
 
 /** Script function: starts the event script in args[0] as the power lamp's script, replacing the previous one. */
-static USER_FUNC(evt_shuryolight_run_power_evt) {
+USER_FUNC(evt_shuryolight_run_power_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
 
     slhp->powerEvt = shuryolightRunEvt(code, slhp->powerEvt);
@@ -355,7 +355,7 @@ static USER_FUNC(evt_shuryolight_run_power_evt) {
 }
 
 /** Script function: starts the event script in args[0] as the head lamps' script, replacing the previous one. */
-static USER_FUNC(evt_shuryolight_run_head_evt) {
+USER_FUNC(evt_shuryolight_run_head_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
 
     slhp->headEvt = shuryolightRunEvt(code, slhp->headEvt);
@@ -363,7 +363,7 @@ static USER_FUNC(evt_shuryolight_run_head_evt) {
 }
 
 /** Script function: starts the event script in args[0] as the staff lamp's script, replacing the previous one. */
-static USER_FUNC(evt_shuryolight_run_tue_evt) {
+USER_FUNC(evt_shuryolight_run_tue_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
 
     slhp->tueEvt = shuryolightRunEvt(code, slhp->tueEvt);
@@ -371,7 +371,7 @@ static USER_FUNC(evt_shuryolight_run_tue_evt) {
 }
 
 /** Script function: stops the running power, head and staff lamp scripts. */
-static USER_FUNC(evt_shuryolight_delete) {
+USER_FUNC(evt_shuryolight_delete) {
     s32 i;
 
     if (slhp->powerEvt != 0) {

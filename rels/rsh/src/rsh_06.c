@@ -230,25 +230,25 @@ static EvtWord evt_clank_main[104];
 static EvtWord evt_clank[21];
 static EvtWord evt_bg[81];
 static EvtWord evt_hoshi[88];
-static EvtWord hom_10_evt_resha_start[244];
-static EvtWord hom_10_evt_resha_start2[259];
-static EvtWord hom_10_evt_resha_start3[11];
-static EvtWord hom_10_evt_resha_start4[11];
+EvtWord hom_10_evt_resha_start[244];
+EvtWord hom_10_evt_resha_start2[259];
+EvtWord hom_10_evt_resha_start3[11];
+EvtWord hom_10_evt_resha_start4[11];
 static EvtWord stop_1[90];
 static EvtWord stop_2[90];
-static EvtWord hom_10_evt_resha_stop[36];
+EvtWord hom_10_evt_resha_stop[36];
 static EvtWord evt_ramp[33];
 static const char* pika_tbl[15];
 static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
-static EvtWord hom_10_evt_resha_right[35];
-static EvtWord hom_10_evt_resha_left[28];
+EvtWord hom_10_evt_resha_right[35];
+EvtWord hom_10_evt_resha_left[28];
 
 #if VERSION <= VERSION_DEMO_JP
-static EvtWord hom_10_init_evt[104];
+EvtWord hom_10_init_evt[104];
 extern EvtWord evt_resha_init[];
 #else
-static EvtWord hom_10_init_evt[140];
+EvtWord hom_10_init_evt[140];
 EvtWord evt_resha_init[13];
 #endif
 
@@ -1806,7 +1806,7 @@ EVT_END()
  * Departure of the train outbound: clears the at-station flags, rings the bell,
  * plays the engine sounds and ramps the wheel speeds GW(0) and GW(1) up to -15 (leftward).
  */
-static EVT_BEGIN(hom_10_evt_resha_start)
+EVT_BEGIN(hom_10_evt_resha_start)
     // The train starts moving: the station flags are cleared and the bell rings.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -1911,7 +1911,7 @@ EVT_END()
  * Departure of the train on the return trip: like hom_10_evt_resha_start
  * but ramps the speeds up to +15 (rightward).
  */
-static EVT_BEGIN(hom_10_evt_resha_start2)
+EVT_BEGIN(hom_10_evt_resha_start2)
     // The train starts moving on the return trip: the station flags are cleared.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -2019,7 +2019,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
 EVT_END()
 
 /** Puts the train at full outbound speed at once: marks it moving and sets GW(0) and GW(1) to -15. */
-static EVT_BEGIN(hom_10_evt_resha_start3)
+EVT_BEGIN(hom_10_evt_resha_start3)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(-15.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(-15.0f))
@@ -2027,7 +2027,7 @@ static EVT_BEGIN(hom_10_evt_resha_start3)
 EVT_END()
 
 /** Puts the train at full return speed at once: marks it moving and sets GW(0) and GW(1) to +15. */
-static EVT_BEGIN(hom_10_evt_resha_start4)
+EVT_BEGIN(hom_10_evt_resha_start4)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(15.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(15.0f))
@@ -2103,7 +2103,7 @@ static EVT_BEGIN(stop_2)
     RETURN
 EVT_END()
 
-static EVT_BEGIN(hom_10_evt_resha_stop)
+EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
         SPAWN_EVENT(stop_1)
@@ -2203,7 +2203,7 @@ EVT_END()
  * Train facing right: runs hom_10_evt_resha_sub and, outside rsh_06_a,
  * hides the rear cars (train_7, train_8) and their couplings.
  */
-static EVT_BEGIN(hom_10_evt_resha_right)
+EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_06_a"))
@@ -2216,7 +2216,7 @@ static EVT_BEGIN(hom_10_evt_resha_right)
 EVT_END()
 
 /** Train facing left: runs hom_10_evt_resha_sub and hides the front cars (train_1, train_6) and their couplings. */
-static EVT_BEGIN(hom_10_evt_resha_left)
+EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
@@ -2230,7 +2230,7 @@ EVT_END()
  * does not use: the train drives past while the camera pans for about 4 seconds,
  * then the map changes to rsh_02_a (entrance nidome).
  */
-static EVT_BEGIN(hom_10_init_evt)
+EVT_BEGIN(hom_10_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
     CALL(evt_mario_cont_onoff, 0)

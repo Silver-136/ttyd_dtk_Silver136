@@ -189,8 +189,8 @@ static StatusVulnerability regist_vivian;
 static BattleDataEntry data_table_vivian[2];
 static BattleUnitKindPart parts_vivian[1];
 static BattleWeapon weapon_vivian_kagenuke_attack;
-static EvtWord vivian_down[19];
-static EvtWord vivian_up[27];
+EvtWord vivian_down[19];
+EvtWord vivian_up[27];
 static EvtWord init_event_vivian[64];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -3780,7 +3780,7 @@ static BattleWeapon weapon_vivian_kagenuke_attack = {
  * Event script: Doopliss, as Vivian, sinks into her shadow (sound SFX_BOSS_VIVI_SHADOW1 after 250 ms and
  * battle_evt_majo_disp_off).
  */
-static EVT_BEGIN(vivian_down)
+EVT_BEGIN(vivian_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_VIVI_SHADOW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -3793,7 +3793,7 @@ EVT_END()
  * Event script: Doopliss, as Vivian, rises out of her shadow at the position in LW(0..2) (sound
  * SFX_BOSS_VIVI_SHADOW2, battle_evt_majo_disp_on and a move there).
  */
-static EVT_BEGIN(vivian_up)
+EVT_BEGIN(vivian_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_VIVI_SHADOW2"), EVT_NULLPTR, 0, EVT_NULLPTR)

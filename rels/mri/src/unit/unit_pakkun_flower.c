@@ -25,7 +25,7 @@ static USER_FUNC(pakkun_ceil_exist);
 static USER_FUNC(shadow_scale_small);
 static USER_FUNC(shadow_scale_return);
 
-static BattleUnitKind unit_pakkun_flower;
+BattleUnitKind unit_pakkun_flower;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -48,7 +48,7 @@ static EvtWord wait_event[6];
  * Unit data of the Piranha Plant; ties together its sounds, parts, status vulnerability, init event
  * and event table.
  */
-static BattleUnitKind unit_pakkun_flower = {
+BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT, // unitType
     "btl_un_pakkun_flower", // name
     15, // maxHp

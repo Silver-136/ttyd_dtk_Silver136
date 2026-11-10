@@ -36,8 +36,8 @@ const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 #endif
 
 static USER_FUNC(evt_yuuranking_main_func);
-static USER_FUNC(yuuranking_get_monte);
-static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
+USER_FUNC(yuuranking_get_monte);
+s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
 static void evt_yuuranking_disp_func(CameraId camera, void* param);
 static s32 fontlenpitch(const char* str, s32 pitch);
 
@@ -867,7 +867,7 @@ static YuuRankingWork* _wp;
  * type 1 (a time) by how far under max it is out of 15;
  * then adds bonus and applies mul (a multiplier below 0x100, an additive amount above it). Never negative.
  */
-static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
+s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     s32 ret;
 
     if (score < 0) {
@@ -1142,7 +1142,7 @@ USER_FUNC(yuuranking_wait_button) {
     return EVT_RETURN_BLOCK;
 }
 
-static USER_FUNC(yuuranking_get_monte) {
+USER_FUNC(yuuranking_get_monte) {
     evtSetValue(event, event->args[0], _wp->monte);
     return EVT_RETURN_DONE;
 }

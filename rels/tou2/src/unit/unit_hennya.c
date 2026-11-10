@@ -16,7 +16,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-static BattleUnitKind unit_hennya;
+BattleUnitKind unit_hennya;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -34,7 +34,7 @@ static EvtWord wait_event[6];
  * Unit data of the Spunia: 12 HP and level 33, with its parts, status vulnerability, init event and event
  * data table.
  */
-static BattleUnitKind unit_hennya = {
+BattleUnitKind unit_hennya = {
     UNIT_SPUNIA, // unitType
     "btl_un_hennya", // name
     12, // maxHp

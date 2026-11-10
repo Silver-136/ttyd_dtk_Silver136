@@ -263,7 +263,7 @@ f32 atan2f(f32 y, f32 x) {
  * The first call picks the page that holds the player's rank (11 fighters per page) and
  * then every frame handles L/R to flip pages and B to close; returns YIELD (finished) when B is pressed.
  */
-static USER_FUNC(evt_tou_print_ranking) {
+USER_FUNC(evt_tou_print_ranking) {
     s32 i;
     s32 rank;
 
@@ -546,7 +546,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
  * The rule table depends on story progress and on whether the player is ranked lower than 11th;
  * an unknown id falls back to the last entry.
  */
-static USER_FUNC(evt_tou_get_rule_msg2) {
+USER_FUNC(evt_tou_get_rule_msg2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 num;
@@ -602,7 +602,7 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
  * anything else picks any rule at random.
  * Outputs: arg1 = rule name, arg2 = rule id, arg3/arg4 = the rule's two parameters.
  */
-static USER_FUNC(evt_tou_get_rule_info) {
+USER_FUNC(evt_tou_get_rule_info) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
     s32 num;
@@ -743,7 +743,7 @@ USER_FUNC(evt_tou_get_fighter_battle_msg) {
  * Script helper: arg0 = fighter id; arg1 receives the fighter's current position in the visible ranking (0 is
  * the champion).
  */
-static USER_FUNC(evt_tou_get_fighter_rank) {
+USER_FUNC(evt_tou_get_fighter_rank) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 rank = 0;
@@ -795,7 +795,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
  * otherwise the one directly below (or above if there is none);
  * the champion's slot picks the second fighter in the list.
  */
-static USER_FUNC(evt_tou_get_next_match) {
+USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
     BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
     s32 list[32];

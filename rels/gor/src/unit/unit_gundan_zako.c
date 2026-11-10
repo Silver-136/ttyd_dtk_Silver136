@@ -16,7 +16,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-static BattleUnitKind unit_gundan_zako;
+BattleUnitKind unit_gundan_zako;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -40,7 +40,7 @@ static EvtWord wait_event[6];
  * Unit kind of the X-Naut:
  * 4 HP, level 13, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
-static BattleUnitKind unit_gundan_zako = {
+BattleUnitKind unit_gundan_zako = {
     UNIT_X_NAUT, // unitType
     "btl_un_gundan_zako", // name
     4, // maxHp

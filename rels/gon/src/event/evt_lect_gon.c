@@ -84,7 +84,7 @@ static USER_FUNC(effitemgetchange_cam_ptr);
 static USER_FUNC(effitemget_open);
 static USER_FUNC(effitemget_open_ptr);
 static USER_FUNC(effitemget_busaiku);
-static USER_FUNC(lect_mobj_hit_nasi);
+USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(dai_moveti_set);
 static USER_FUNC(dai_moveti_get);
 static USER_FUNC(lect_push_r_check);
@@ -470,7 +470,7 @@ static USER_FUNC(effitemget_busaiku) {
  * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  * Nothing in this file calls it.
  */
-static USER_FUNC(lect_mobj_hit_nasi) {
+USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
     s32 i;

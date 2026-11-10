@@ -40,7 +40,7 @@ static USER_FUNC(mahorn_shuffle);
 static USER_FUNC(hand_end);
 
 BattleUnitKind unit_super_mahorn;
-static BattleUnitKind unit_super_mahorn_bunsin;
+BattleUnitKind unit_super_mahorn_bunsin;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -153,7 +153,7 @@ BattleUnitKind unit_super_mahorn = {
  * Unit data of the Dark Wizzerd's illusion copy in the Pit of 100 Trials:
  * 10 HP, level 1; it lists the real one's status table, which spawn_event replaces with regist_bunsin.
  */
-static BattleUnitKind unit_super_mahorn_bunsin = {
+BattleUnitKind unit_super_mahorn_bunsin = {
     UNIT_DARK_WIZZERD_CLONE, // unitType
     "btl_un_super_mahorn_bunsin", // name
     10, // maxHp

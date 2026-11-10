@@ -26,7 +26,7 @@
 static USER_FUNC(eff_poison_barrier);
 static USER_FUNC(eff_poison_breath);
 
-static BattleUnitKind unit_dokugassun;
+BattleUnitKind unit_dokugassun;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -63,7 +63,7 @@ static EvtWord wait_event[13];
  * a floating cloud that slams into a target for 8 damage or raises a poison barrier and then breathes poison
  * gas on everyone. win.rel carries this copy, but no battle group of Boggly Woods places it.
  */
-static BattleUnitKind unit_dokugassun = {
+BattleUnitKind unit_dokugassun = {
     UNIT_POISON_PUFF, // unitType
     "btl_un_dokugassun", // name
     15, // maxHp

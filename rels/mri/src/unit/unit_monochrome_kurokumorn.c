@@ -18,7 +18,7 @@
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_monochrome_kurokumorn.h"
 
-static BattleUnitKind unit_monochrome_kurokumorn;
+BattleUnitKind unit_monochrome_kurokumorn;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -43,7 +43,7 @@ static EvtWord wait_event[12];
  * Unit data of the Dark Puff; ties together its sounds, parts, status vulnerability, init event
  * and event table.
  */
-static BattleUnitKind unit_monochrome_kurokumorn = {
+BattleUnitKind unit_monochrome_kurokumorn = {
     UNIT_DARK_PUFF, // unitType
     "btl_un_monochrome_kurokumorn", // name
     3, // maxHp

@@ -140,21 +140,21 @@ static s32 champion_belt_onoff;
 
 static USER_FUNC(evt_rankingReInit);
 USER_FUNC(evt_tou_get_fighter_info);
-static USER_FUNC(evt_tou_get_fighter_rank);
-static USER_FUNC(evt_tou_get_next_match);
+USER_FUNC(evt_tou_get_fighter_rank);
+USER_FUNC(evt_tou_get_next_match);
 USER_FUNC(evt_tou_get_ranking);
-static USER_FUNC(evt_tou_get_rule_info);
+USER_FUNC(evt_tou_get_rule_info);
 USER_FUNC(evt_tou_get_rule_msg2);
-static USER_FUNC(evt_tou_print_ranking);
+USER_FUNC(evt_tou_print_ranking);
 static USER_FUNC(getYoshiColor);
-static USER_FUNC(tou_champion_belt_onoff);
+USER_FUNC(tou_champion_belt_onoff);
 USER_FUNC(tou_champion_belt);
 static f32 camGetRy(void);
 static void monitor_tev(MapTevCallbackInfo* info);
-static USER_FUNC(evt_tou_set_rule_result);
-static USER_FUNC(evt_tou_set_ranking_win_lose);
-static USER_FUNC(evt_tou_get_fighter_battle_msg);
-static USER_FUNC(evt_tou_get_fighter_name2);
+USER_FUNC(evt_tou_set_rule_result);
+USER_FUNC(evt_tou_set_ranking_win_lose);
+USER_FUNC(evt_tou_get_fighter_battle_msg);
+USER_FUNC(evt_tou_get_fighter_name2);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
@@ -559,7 +559,7 @@ USER_FUNC(evt_tou_get_ranking) {
  * the one ranked just above him, or the one just below
  * after the last rule was not met (GSWF_GLITZ_PIT_CONDITION_KEPT clear). Mario at rank 0 gets the second fighter.
  */
-static USER_FUNC(evt_tou_get_next_match) {
+USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
     s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
     s32 rank;
@@ -613,7 +613,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
 }
 
 /** Script helper: args[0] = fighter id; args[1] receives the fighter's title (second name string). */
-static USER_FUNC(evt_tou_get_fighter_name2) {
+USER_FUNC(evt_tou_get_fighter_name2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
@@ -631,7 +631,7 @@ static USER_FUNC(evt_tou_get_fighter_name2) {
  * Script helper: args[0] = fighter id; args[1] receives that fighter's current position on the board (hidden
  * fighters are skipped).
  */
-static USER_FUNC(evt_tou_get_fighter_rank) {
+USER_FUNC(evt_tou_get_fighter_rank) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 rank = 0;
@@ -655,7 +655,7 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
  * Script helper: args[0] = fighter id; args[1] and args[2] receive the fighter's pre-match taunt
  * and victory message ids.
  */
-static USER_FUNC(evt_tou_get_fighter_battle_msg) {
+USER_FUNC(evt_tou_get_fighter_battle_msg) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
@@ -677,7 +677,7 @@ static USER_FUNC(evt_tou_get_fighter_battle_msg) {
  * rule id (args[2]) and the two rule parameters (args[3], args[4]).
  * The table depends on Mario's rank and the story.
  */
-static USER_FUNC(evt_tou_get_rule_info) {
+USER_FUNC(evt_tou_get_rule_info) {
     EvtWord* args = event->args;
     s32 mode = evtGetValue(event, args[0]);
     s32 num;
@@ -781,7 +781,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
  * jitters the score of every visible (not hidden) fighter by a random amount,
  * records the opponent in GSW_GLITZ_PIT_LAST_OPPONENT and re-sorts the board.
  */
-static USER_FUNC(evt_tou_set_ranking_win_lose) {
+USER_FUNC(evt_tou_set_ranking_win_lose) {
     EvtWord* args = event->args;
     s32 lose = evtGetValue(event, args[0]);
     s32 id = evtGetValue(event, args[1]);
@@ -829,7 +829,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
  * Script helper: args[0] = rule result bits from the match (the 0x4 bit = rule met);
  * sets GSWF_GLITZ_PIT_CONDITION_KEPT when 0x4 is set and clears it when 0x2 or 0x1 is set.
  */
-static USER_FUNC(evt_tou_set_rule_result) {
+USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
     if (result & 4) {
@@ -1374,7 +1374,7 @@ EVT_BEGIN(evt_tou_locker_init)
 EVT_END()
 
 /** Script helper: shows the ranking window (disp_proc) and blocks while it is open; L/R switch pages, B closes it. */
-static USER_FUNC(evt_tou_print_ranking) {
+USER_FUNC(evt_tou_print_ranking) {
     s32 rank;
     s32 i;
 
@@ -2989,7 +2989,7 @@ USER_FUNC(tou_champion_belt) {
 }
 
 /** Script helper: args[0] = 1 hides the Champion's Belt effect, 0 shows it. */
-static USER_FUNC(tou_champion_belt_onoff) {
+USER_FUNC(tou_champion_belt_onoff) {
     champion_belt_onoff = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }

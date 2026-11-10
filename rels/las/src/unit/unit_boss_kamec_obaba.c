@@ -62,10 +62,10 @@ static EvtWord attack_magic_event[269];
 static EvtWord magic_select_pri_obaba[52];
 static EvtWord magic_select_pri_koopa[52];
 static EvtWord dekadeka_magic_event[73];
-static EvtWord katikati_magic_event[4];
-static EvtWord biribiri_magic_event[4];
-static EvtWord trans_magic_event[4];
-static EvtWord recover_magic_event[90];
+EvtWord katikati_magic_event[4];
+EvtWord biribiri_magic_event[4];
+EvtWord trans_magic_event[4];
+EvtWord recover_magic_event[90];
 static EvtWord wait_event[6];
 
 /** Weapon of Kammy Koopa's magic blast: damage 5. */
@@ -1202,7 +1202,7 @@ EVT_END()
  * Katikati spell of Kammy Koopa: uses the same casting script as dekadeka_magic_event with
  * weapon_kamec_obaba_katikati_magic: Defense +3 for 3 turns on one ally.
  */
-static EVT_BEGIN(katikati_magic_event)
+EVT_BEGIN(katikati_magic_event)
     CALL_CHILD(dekadeka_magic_event)
     RETURN
 EVT_END()
@@ -1211,7 +1211,7 @@ EVT_END()
  * Biribiri spell of Kammy Koopa: uses the same casting script as dekadeka_magic_event with
  * weapon_kamec_obaba_biribiri_magic: Electrified for 3 turns on one ally.
  */
-static EVT_BEGIN(biribiri_magic_event)
+EVT_BEGIN(biribiri_magic_event)
     CALL_CHILD(dekadeka_magic_event)
     RETURN
 EVT_END()
@@ -1220,7 +1220,7 @@ EVT_END()
  * Trans spell of Kammy Koopa: uses the same casting script as dekadeka_magic_event with
  * weapon_kamec_obaba_trans_magic: Invisible for 3 turns on one ally.
  */
-static EVT_BEGIN(trans_magic_event)
+EVT_BEGIN(trans_magic_event)
     CALL_CHILD(dekadeka_magic_event)
     RETURN
 EVT_END()
@@ -1229,7 +1229,7 @@ EVT_END()
  * Recover spell of Kammy Koopa: she heals the target by 8 HP with the recovery effect;
  * if the target is the unit in GW(8) (Bowser) the effect is placed higher (+100) and 30 to the left, otherwise 50 up.
  */
-static EVT_BEGIN(recover_magic_event)
+EVT_BEGIN(recover_magic_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)

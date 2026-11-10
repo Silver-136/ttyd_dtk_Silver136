@@ -72,7 +72,7 @@ static USER_FUNC(bgm_start_wait);
 static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 static USER_FUNC(efffukidashichange_cam);
 static USER_FUNC(lect_npc_balloon_on_off);
-static USER_FUNC(lect_mobj_hit_nasi);
+USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(effitemget_open_ptr);
 static USER_FUNC(effitemgetchange_cam_ptr);
 static USER_FUNC(lect_map_cam_chg);
@@ -674,7 +674,7 @@ EVT_END()
  * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
  * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  */
-static USER_FUNC(lect_mobj_hit_nasi) {
+USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
     s32 i;

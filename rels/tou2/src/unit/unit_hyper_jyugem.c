@@ -23,7 +23,7 @@
 
 static USER_FUNC(togezo_copy_status);
 
-static BattleUnitKind unit_hyper_jyugem;
+BattleUnitKind unit_hyper_jyugem;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -66,7 +66,7 @@ static USER_FUNC(togezo_copy_status) {
  * Unit data of the Dark Lakitu: 13 HP and level 26, with its parts, status vulnerability, init event and
  * event data table.
  */
-static BattleUnitKind unit_hyper_jyugem = {
+BattleUnitKind unit_hyper_jyugem = {
     UNIT_DARK_LAKITU, // unitType
     "btl_un_hyper_jyugem", // name
     13, // maxHp

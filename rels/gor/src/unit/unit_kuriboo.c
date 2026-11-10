@@ -18,7 +18,7 @@
 
 static USER_FUNC(krb_get_dir);
 
-static BattleUnitKind unit_kuriboo;
+BattleUnitKind unit_kuriboo;
 static PoseTableEntry pose_table[20];
 static BattleDataEntry data_table[2];
 static BattleUnitDefense defence;
@@ -36,7 +36,7 @@ static EvtWord wait_event[6];
  * Unit kind of the Goomba:
  * 2 HP, level 7, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
-static BattleUnitKind unit_kuriboo = {
+BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // unitType
     "btl_un_kuriboo", // name
     2, // maxHp

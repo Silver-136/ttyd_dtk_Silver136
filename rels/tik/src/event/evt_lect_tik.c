@@ -73,7 +73,7 @@ static USER_FUNC(evtflash);
 static USER_FUNC(lect_slit_check);
 static USER_FUNC(dai_moveti_get);
 static USER_FUNC(dai_moveti_set);
-static USER_FUNC(lect_mobj_hit_nasi);
+USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(effitemget_busaiku);
 static USER_FUNC(effitemget_open_ptr);
 static USER_FUNC(effitemget_open);
@@ -461,7 +461,7 @@ static USER_FUNC(effitemget_busaiku) {
  * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
  * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  */
-static USER_FUNC(lect_mobj_hit_nasi) {
+USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
     s32 i;

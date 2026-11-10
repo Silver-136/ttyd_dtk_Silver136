@@ -19,7 +19,7 @@ static s32 color_change_evt(s32 on);
 
 static USER_FUNC(check);
 static USER_FUNC(test);
-static USER_FUNC(evt_kagemario_change);
+USER_FUNC(evt_kagemario_change);
 
 static EvtWord evt_check[4];
 EvtWord evt_usu_kagemario_party_kill[42];
@@ -104,7 +104,7 @@ USER_FUNC(evt_kagemario_init) {
 }
 
 /** Script helper: turns the Shadow Mario look on or off from args[0]. */
-static USER_FUNC(evt_kagemario_change) {
+USER_FUNC(evt_kagemario_change) {
     color_change_evt(event->args[0]);
     return EVT_RETURN_DONE;
 }

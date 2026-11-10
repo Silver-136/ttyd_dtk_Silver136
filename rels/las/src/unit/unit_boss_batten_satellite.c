@@ -20,12 +20,12 @@
 static s32 bts_x_flag_data;
 
 USER_FUNC(bts_x_flag_get);
-static USER_FUNC(bts_wariai_enzan_0f);
-static USER_FUNC(bts_wariai_enzan_0);
+USER_FUNC(bts_wariai_enzan_0f);
+USER_FUNC(bts_wariai_enzan_0);
 USER_FUNC(bts_wariai_enzan_1f_intpl_w);
-static USER_FUNC(bts_wariai_enzan_1f_intpl);
-static USER_FUNC(bts_wariai_enzan_1f);
-static USER_FUNC(bts_wariai_enzan_1);
+USER_FUNC(bts_wariai_enzan_1f_intpl);
+USER_FUNC(bts_wariai_enzan_1f);
+USER_FUNC(bts_wariai_enzan_1);
 
 static BattleWeapon weapon_batten_satellite_attack;
 BattleUnitKind unit_boss_batten_satellite;
@@ -518,7 +518,7 @@ USER_FUNC(bts_x_flag_set) {
  * - 1, c = args[2] and d = args[3], and returns it as a float in args[4]; a mixing ratio used to place satellite
  * afterimages.
  */
-static USER_FUNC(bts_wariai_enzan_0f) {
+USER_FUNC(bts_wariai_enzan_0f) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
     f32 b = evtGetFloat(event, args[1]) - 1.0f;
@@ -530,7 +530,7 @@ static USER_FUNC(bts_wariai_enzan_0f) {
 }
 
 /** Script helper: the same mixing ratio as bts_wariai_enzan_0f but stores the result as an integer in args[4]. */
-static USER_FUNC(bts_wariai_enzan_0) {
+USER_FUNC(bts_wariai_enzan_0) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
     f32 b = evtGetFloat(event, args[1]) - 1.0f;
@@ -595,7 +595,7 @@ USER_FUNC(bts_wariai_enzan_1f_intpl_w) {
  * and b = args[1]. Values at least 14 subtract 14 from the mode and complement the interpolation;
  * values at least 28 return c directly.
  */
-static USER_FUNC(bts_wariai_enzan_1f_intpl) {
+USER_FUNC(bts_wariai_enzan_1f_intpl) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
     f32 b = evtGetFloat(event, args[1]);
@@ -623,7 +623,7 @@ static USER_FUNC(bts_wariai_enzan_1f_intpl) {
  * Script helper: float ratio mix (a*c + d*(b-a)) / b with a = args[0] - 1, b = args[1], c = args[2],
  * d = args[3], returned in args[4].
  */
-static USER_FUNC(bts_wariai_enzan_1f) {
+USER_FUNC(bts_wariai_enzan_1f) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
     f32 b = evtGetFloat(event, args[1]);
@@ -635,7 +635,7 @@ static USER_FUNC(bts_wariai_enzan_1f) {
 }
 
 /** Script helper: the same mix as bts_wariai_enzan_1f but returned as an integer in args[4]. */
-static USER_FUNC(bts_wariai_enzan_1) {
+USER_FUNC(bts_wariai_enzan_1) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
     f32 b = evtGetFloat(event, args[1]);

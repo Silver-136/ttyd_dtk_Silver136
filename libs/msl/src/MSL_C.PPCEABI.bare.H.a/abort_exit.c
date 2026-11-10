@@ -14,7 +14,7 @@ extern void (*_dtors[])(void);
 
 int __aborting = 0;
 
-static void (*__atexit_funcs[max_funcs])(void);
+void (*__atexit_funcs[max_funcs])(void);
 int __atexit_curr_func = 0;
 
 void (*__stdio_exit)(void) = NULL;

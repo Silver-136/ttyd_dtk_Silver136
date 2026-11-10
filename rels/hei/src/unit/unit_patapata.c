@@ -15,7 +15,7 @@
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_patapata.h"
 
-static BattleUnitKind unit_patapata;
+BattleUnitKind unit_patapata;
 static BattleWeapon weapon_patapata_attack;
 static BattleUnitDefense defence_patapata;
 static BattleUnitDefenseAttr defence_patapata_attr;
@@ -55,7 +55,7 @@ static EvtWord wait_event[6];
  * Unit kind of the Paratroopa:
  * 4 HP, level 9, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
-static BattleUnitKind unit_patapata = {
+BattleUnitKind unit_patapata = {
     UNIT_PARATROOPA, // unitType
     "btl_un_patapata", // name
     4, // maxHp

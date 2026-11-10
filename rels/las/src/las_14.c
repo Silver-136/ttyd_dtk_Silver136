@@ -55,7 +55,7 @@ static EvtWord w_door_open[12];
 static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
 static const char* capturemap[3];
-static Vec v_list[8];
+Vec v_list[8];
 static EvtWord evt_cloud_main_evt[4];
 static EvtWord cloud_evt[35];
 static EvtWord touch_evt[2];
@@ -253,7 +253,7 @@ static const char* capturemap[] = {
  * The eight corners of a 100-unit box around a cloud's hit object; _get_boundingbox projects them to the
  * screen to size the cloud capture.
  */
-static Vec v_list[] = {
+Vec v_list[] = {
     {-50.0f, 100.0f, 50.0f},
     {50.0f, 100.0f, 50.0f},
     {50.0f, 0.0f, 50.0f},

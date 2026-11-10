@@ -67,7 +67,7 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
 }
 
 static USER_FUNC(lect_mario_ido_sum);
-static USER_FUNC(lect_mobj_hit_nasi);
+USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_status_on);
 static USER_FUNC(lecture_button_flag_on_off);
@@ -94,7 +94,7 @@ static USER_FUNC(juyoitem_get_no);
 static USER_FUNC(juyoitem_end);
 static USER_FUNC(juyoitem_gogo);
 static USER_FUNC(juyoitem_goato);
-static USER_FUNC(lect_mobj_set_nosysblend);
+USER_FUNC(lect_mobj_set_nosysblend);
 static USER_FUNC(lect_push_a_check);
 static USER_FUNC(lect_push_b_check);
 static USER_FUNC(bgm_start_wait);
@@ -466,7 +466,7 @@ static USER_FUNC(effitemget_busaiku) {
  * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
  * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  */
-static USER_FUNC(lect_mobj_hit_nasi) {
+USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
     s32 i;
@@ -527,7 +527,7 @@ static USER_FUNC(juyoitem_goato) {
  * Script helper: turns off the system blend on map object args[0] ("me" for the running one)
  * so it is not tinted by the map's lighting.
  */
-static USER_FUNC(lect_mobj_set_nosysblend) {
+USER_FUNC(lect_mobj_set_nosysblend) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
 

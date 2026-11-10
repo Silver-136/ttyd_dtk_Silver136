@@ -18,7 +18,7 @@
 
 static USER_FUNC(krb_get_dir);
 
-static BattleUnitKind unit_kuriboo;
+BattleUnitKind unit_kuriboo;
 static PoseTableEntry pose_table[20];
 static BattleDataEntry data_table[2];
 static BattleUnitDefense defence;
@@ -36,7 +36,7 @@ static EvtWord wait_event[6];
  * Unit data of the Goomba; ties together its sounds, parts, status vulnerability, init event
  * and event table.
  */
-static BattleUnitKind unit_kuriboo = {
+BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // unitType
     "btl_un_kuriboo", // name
     2, // maxHp

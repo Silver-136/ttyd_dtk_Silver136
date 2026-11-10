@@ -80,12 +80,12 @@ static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_set);
 static USER_FUNC(bgm_start_wait);
 static USER_FUNC(lect_push_b_check);
-static USER_FUNC(lect_mobj_set_nosysblend);
+USER_FUNC(lect_mobj_set_nosysblend);
 static USER_FUNC(juyoitem_goato);
 static USER_FUNC(juyoitem_gogo);
 static USER_FUNC(juyoitem_end);
 static USER_FUNC(juyoitem_get_no);
-static USER_FUNC(lect_mobj_hit_nasi);
+USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(effitemget_busaiku);
 static USER_FUNC(effitemget_open_ptr);
 static USER_FUNC(effitemget_open);
@@ -827,7 +827,7 @@ EVT_END()
  * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  * Unused in this file.
  */
-static USER_FUNC(lect_mobj_hit_nasi) {
+USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
     s32 i;
@@ -886,7 +886,7 @@ static USER_FUNC(juyoitem_goato) {
     return EVT_RETURN_DONE;
 }
 
-static USER_FUNC(lect_mobj_set_nosysblend) {
+USER_FUNC(lect_mobj_set_nosysblend) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
 

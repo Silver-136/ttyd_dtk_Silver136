@@ -16,7 +16,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-static BattleUnitKind unit_gundan_zako;
+BattleUnitKind unit_gundan_zako;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -41,7 +41,7 @@ static EvtWord wait_event[6];
  * a jump attack and a growth potion that makes it Huge. win.rel carries this copy,
  * but no battle group of Boggly Woods places it.
  */
-static BattleUnitKind unit_gundan_zako = {
+BattleUnitKind unit_gundan_zako = {
     UNIT_X_NAUT, // unitType
     "btl_un_gundan_zako", // name
     4, // maxHp

@@ -14,7 +14,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-static BattleUnitKind unit_sinemon;
+BattleUnitKind unit_sinemon;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static BattleUnitDefense defence_turn;
@@ -36,7 +36,7 @@ static EvtWord wait_event[6];
  * Unit kind of the Moon Cleft:
  * 6 HP, level 26, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
-static BattleUnitKind unit_sinemon = {
+BattleUnitKind unit_sinemon = {
     UNIT_MOON_CLEFT, // unitType
     "btl_un_sinemon", // name
     6, // maxHp

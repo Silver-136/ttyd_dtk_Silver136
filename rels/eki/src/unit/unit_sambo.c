@@ -20,7 +20,7 @@
 #include "system.h"
 #include "battle/unit/unit_sambo.h"
 
-static BattleUnitKind unit_sambo;
+BattleUnitKind unit_sambo;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -56,7 +56,7 @@ static EvtWord sambo_rabbit_move[74];
 static EvtWord _body_param_set[49];
 
 /** Unit data of the Pokey: 4 HP, level 11; the battle starts it from init_event. */
-static BattleUnitKind unit_sambo = {
+BattleUnitKind unit_sambo = {
     UNIT_POKEY, // unitType
     "btl_un_sambo", // name
     4, // maxHp

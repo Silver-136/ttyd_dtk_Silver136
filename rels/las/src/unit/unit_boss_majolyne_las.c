@@ -42,8 +42,8 @@ static BattleWeapon weapon_majolyne_powder_attack2;
 static BattleWeapon weapon_majolyne_powder_attack3;
 static BattleWeapon weapon_majolyne_powder_attack4;
 static BattleWeapon weapon_majolyne_powder_attack5;
-static EvtWord majolyne_down[19];
-static EvtWord majolyne_up[27];
+EvtWord majolyne_down[19];
+EvtWord majolyne_up[27];
 static EvtWord majo3_zoom[25];
 EvtWord btl_vivian_zoom[7];
 EvtWord btl_marilyn_zoom[7];
@@ -492,7 +492,7 @@ static BattleWeapon weapon_majolyne_powder_attack5 = {
  * Event script: Beldam sinks into her shadow (the shadow-step sound SFX_BOSS_MAJO_SHADOW1 plays after 250 ms and
  * battle_evt_majo_disp_off hides her).
  */
-static EVT_BEGIN(majolyne_down)
+EVT_BEGIN(majolyne_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MAJO_SHADOW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -505,7 +505,7 @@ EVT_END()
  * Event script: Beldam rises out of her shadow at the position in LW(0..2):
  * the second shadow sound plays, battle_evt_majo_disp_on shows her and she is moved there.
  */
-static EVT_BEGIN(majolyne_up)
+EVT_BEGIN(majolyne_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MAJO_SHADOW2"), EVT_NULLPTR, 0, EVT_NULLPTR)

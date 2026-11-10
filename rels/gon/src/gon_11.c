@@ -79,7 +79,7 @@ EvtWord gonbaba_event[1410];
 #endif
 
 static const char* capturemap[2];
-static Vec v_list[8];
+Vec v_list[8];
 static EvtWord evt_cloud_main_evt[4];
 static EvtWord iri_16_box_evt[33];
 static EvtWord iri_16_cloud_evt[36];
@@ -668,7 +668,7 @@ static const char* capturemap[] = {
 };
 
 /** Corners of a box, as offsets from its centre, that a script helper projects to the screen. */
-static Vec v_list[] = {
+Vec v_list[] = {
     {-50.0f, 100.0f, 50.0f},
     {50.0f, 100.0f, 50.0f},
     {50.0f, 0.0f, 50.0f},

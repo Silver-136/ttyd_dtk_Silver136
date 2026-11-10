@@ -39,7 +39,7 @@ static YuuRankingWork* _wp;
 
 static USER_FUNC(evt_yuuranking_main_func);
 USER_FUNC(yuuranking_get_monte);
-static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
+s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
 static void evt_yuuranking_disp_func(CameraId camera, void* param);
 static s32 fontlenpitch(const char* str, s32 pitch);
 
@@ -881,7 +881,7 @@ static USER_FUNC(evt_yuuranking_main_func) {
  * Then it adds the bonus, applies the multiplier (1 to 255 multiply, 0 leaves the value, 256 and above add
  * mul - 256, negative values subtract) and clamps at 0. ("kesan" is calculation.)
  */
-static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
+s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     s32 ret;
 
     if (score < 0) {

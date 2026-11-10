@@ -75,8 +75,8 @@ static USER_FUNC(effitemget_open);
 static USER_FUNC(effitemgetchange_cam);
 static USER_FUNC(lect_itemget_kesan);
 static USER_FUNC(lect_mario_ido_sum);
-static USER_FUNC(lect_mobj_hit_nasi);
-static USER_FUNC(lect_mobj_set_nosysblend);
+USER_FUNC(lect_mobj_hit_nasi);
+USER_FUNC(lect_mobj_set_nosysblend);
 static USER_FUNC(lect_party_ido_sum);
 static USER_FUNC(lect_push_b_check);
 static USER_FUNC(lect_status_off);
@@ -1147,7 +1147,7 @@ EVT_END()
  * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
  * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  */
-static USER_FUNC(lect_mobj_hit_nasi) {
+USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
     s32 i;
@@ -1303,7 +1303,7 @@ static USER_FUNC(juyoitem_goato) {
 }
 
 /** Script helper: args[0] = map object name ("me" = this object); sets its model not to blend with the system color. */
-static USER_FUNC(lect_mobj_set_nosysblend) {
+USER_FUNC(lect_mobj_set_nosysblend) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
 

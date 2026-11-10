@@ -64,7 +64,7 @@ EvtWord kaokakusi_event[110];
 EvtWord press_event[264];
 EvtWord surprise_event[303];
 EvtWord bikkuri_event[285];
-static EvtWord breath_event[254];
+EvtWord breath_event[254];
 EvtWord breath_event_sub[102];
 static EvtWord wait_event[6];
 s32 atmic_teresa_id[1];
@@ -839,7 +839,7 @@ EVT_END()
  * then blows on every enemy at once (breath_event_sub is spawned per target) for about two seconds with
  * SFX_BOSS_ATMTLSA_BLOW2. A whistle and three puffs of smoke follow before it settles back.
  */
-static EVT_BEGIN(breath_event)
+EVT_BEGIN(breath_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_breath))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_atmic_teresa_breath), LW(3), LW(4))
