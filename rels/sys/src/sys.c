@@ -34,10 +34,8 @@
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "system.h"
+#include "rel_module.h"
 
-typedef void (*voidfunctionptr)(void);
-extern voidfunctionptr _ctors[];
-extern voidfunctionptr _dtors[];
 typedef struct SysChar {
     f32 x;
     f32 y;
@@ -80,9 +78,6 @@ USER_FUNC(sys_01_start_end_wait);
 
 static USER_FUNC(start);
 static void sys_01_release(void);
-static void _unresolved(void);
-static void _epilog(void);
-void _prolog(void);
 
 static EvtWord dummy_evt[2];
 
@@ -225,10 +220,10 @@ static const char* msg_tbl[] = {
 };
 
 /**
- * JP and the demo list _epilog and _unresolved as file-local in their symbol maps (US and PAL: global).
- * The binding does not reach the REL, so they follow rel_module.h, which declares the hooks for every module.
+ * Module unload hook: frees sys_01's texture when sys_01 is the current map, clears the 2D camera's
+ * letter-box-off flag and runs the destructors.
  */
-static void _epilog(void) {
+void _epilog(void) {
     voidfunctionptr* dtor;
 
     if (strcmp(gp->currentMapName, "sys_01") == 0) {
@@ -241,7 +236,7 @@ static void _epilog(void) {
 }
 
 /** Linker stub for unresolved references in the relocatable module; does nothing. */
-static void _unresolved(void) {
+void _unresolved(void) {
 }
 
 /**
