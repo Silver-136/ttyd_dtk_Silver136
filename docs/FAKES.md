@@ -426,9 +426,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/manager/fontmgr.c | fontDrawPairY | no-op (s16) casts on ix; the plain argument changes the object | see comment |
 | Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment; tried 2026-11-01: demos checked: same empty test, no code in any version; __assert/__assert2 are UNUSED in the JP demo map; no evidence of a macro |
 | Both | src/manager/winmgr.c | winMgrSelectDelete | spare copies of sel, sel->items and a heap-id local (redundant inner heap assignment removed); the plain __memFree(HEAP_DEFAULT, sel->items); __memFree(HEAP_DEFAULT, sel); changes the object | see comment |
-| Both | src/manager/winmgr.c | select_disp | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
-| Both | src/manager/winmgr.c | select_disp_party | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
-| Both | src/manager/winmgr.c | select_disp_mario | ofs (always 0.0f) added to every row y, with a no-op update ofs = ofs + 0.0f | see comment |
 | Both | src/manager/winmgr.c | select_disp_luigi | `ent` is a second name for entry | entry directly, no zero (tried together): changes the object |
 | Both | src/event/evt_win.c | select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
 | Both | src/event/evt_win.c | ICONGX2 (evt_win list displays) | iconDispGx called through a (Vec*, u16, f32, u16) function-pointer cast macro (9 uses) | plain iconDispGx(pos, flags, id, scale): changes the object |
