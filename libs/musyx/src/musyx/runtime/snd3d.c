@@ -8,7 +8,6 @@
 #include "musyx/s3d_key.h"
 
 static u8 s3dCallCnt;
-u8 gap_08_80418DD9_sbss[7];
 static SND_EMITTER* s3dEmitterRoot;
 static SND_LISTENER* s3dListenerRoot;
 
