@@ -233,8 +233,8 @@ never copied in). What the raw counts above mean for the libraries:
 - **Genuine placements, keep:** `__start` / `__ppc_eabi_init` / `__os.h` startup code in .init (many of the 32
   sites are extern declarations), runtime `__mem.c` memcpy/memset in .init, the destructor-chain pointer in .dtors,
   TRK's .init routines.
-- **Scaffolding, keep until a natural layout is found:** the library `gap_*` object of US OSError (12);
-  hw_dspctrl's 2 x 4 and snd3d's 7 are gone (2026-11-10: the linker leaves that space itself). The game-code fillers
+- **Scaffolding, keep until a natural layout is found:** no library `gap_*` objects are left
+  (hw_dspctrl 2 x 4, snd3d 7 and OSError 12 went 2026-11-10: the linker leaves that space itself). The game-code fillers
   in dispdrv (28, JP+) and eff_gonbaba_breath (28/20, JP+) are real space: removing them moves the DOL and the force_active pairs around them. The synth_dbtab (24) and snd_service (16) gaps are gone
   (2026-11-07): compressorTable is 32-byte aligned as in AxioDL's 2.0.2-2.0.3 source; the vi gap (20) was only the
   alignment pad before DEMOFontBitmap, which the linker inserts itself.

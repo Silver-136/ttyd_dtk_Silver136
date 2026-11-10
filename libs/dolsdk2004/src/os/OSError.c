@@ -5,11 +5,6 @@
 #include "__os.h"
 
 OSErrorHandler __OSErrorTable[__OS_EXCEPTION_FLOATING_POINT_EXCEPTION + 1];
-#ifdef VERSION_G8ME01
-#pragma force_active on
-u8 gap_OSError_bss[0xC];
-#pragma force_active reset
-#endif
 
 #define FPSCR_ENABLE (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE)
 u32 __OSFpscrEnableBits = FPSCR_ENABLE;
