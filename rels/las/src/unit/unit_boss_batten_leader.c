@@ -200,7 +200,7 @@ static EvtWord batten_leader_stop_attack_event[328];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[15];
 #else
-static EvtWord wait_event[16];
+static EvtWord wait_event[15];
 #endif
 
 /**

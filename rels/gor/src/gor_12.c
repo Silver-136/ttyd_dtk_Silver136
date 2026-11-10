@@ -22,9 +22,9 @@
 static EvtWord epilogue_evt[49];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord gor_12_init_evt[27];
+EvtWord gor_12_init_evt[26];
 #else
-EvtWord gor_12_init_evt[35];
+EvtWord gor_12_init_evt[34];
 #endif
 
 /**

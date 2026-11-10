@@ -19,7 +19,7 @@ static EvtWord init_event[20];
 static EvtWord main_event[4];
 static EvtWord damage_event[56];
 static EvtWord attack_event[2];
-static EvtWord wait_event[7];
+static EvtWord wait_event[6];
 
 /**
  * Unit definition of the test UFO unit: 120 HP and level 1, with its sizes, damage sounds, status vulnerability,

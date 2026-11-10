@@ -81,7 +81,7 @@ static EvtWord dai3_shurai_after[46];
 static HitDamageReturn hitDmgRetPoints[7];
 
 #if VERSION >= VERSION_US
-EvtWord muj_10_init_evt[207];
+EvtWord muj_10_init_evt[206];
 #else
 #if VERSION == VERSION_DEMO_JP
 EvtWord muj_10_init_evt[183];

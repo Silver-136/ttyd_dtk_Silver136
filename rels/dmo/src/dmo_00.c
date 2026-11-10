@@ -96,9 +96,9 @@ static EvtWord chusan_move[25];
 EvtWord dmo_00_init_evt[268];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord dmo_00_init_evt[247];
+EvtWord dmo_00_init_evt[246];
 #else
-EvtWord dmo_00_init_evt[262];
+EvtWord dmo_00_init_evt[261];
 #endif
 #endif
 

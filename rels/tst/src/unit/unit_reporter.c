@@ -12,7 +12,7 @@ static PoseTableEntry pose_table[7];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[15];
-static EvtWord wait_event[7];
+static EvtWord wait_event[6];
 
 /**
  * Unit definition of the placeholder unit `reporter`:

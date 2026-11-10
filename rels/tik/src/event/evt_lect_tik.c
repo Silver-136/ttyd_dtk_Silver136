@@ -103,7 +103,7 @@ EvtWord plane_majin_lecture_init[73];
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord plane_majin_lecture[];
 #else
-EvtWord plane_majin_lecture[715];
+EvtWord plane_majin_lecture[714];
 #endif
 
 /**

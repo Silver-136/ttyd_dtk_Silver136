@@ -37,7 +37,7 @@ static EvtWord mobj_box02[34];
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_30_init_evt[];
 #else
-EvtWord las_30_init_evt[71];
+EvtWord las_30_init_evt[70];
 #endif
 
 /**

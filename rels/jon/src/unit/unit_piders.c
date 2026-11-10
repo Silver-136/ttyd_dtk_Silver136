@@ -87,7 +87,7 @@ static EvtWord renzoku_attack_event_sub_last[79];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[6];
 #else
-static EvtWord wait_event[7];
+static EvtWord wait_event[6];
 #endif
 
 /**

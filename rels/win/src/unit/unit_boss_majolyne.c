@@ -63,7 +63,7 @@ static EvtWord powder_attack_event[179];
 static EvtWord wait_event[6];
 
 #if VERSION >= VERSION_US
-EvtWord majo3_shadow_tail_event[79];
+EvtWord majo3_shadow_tail_event[78];
 #else
 EvtWord majo3_shadow_tail_event[78];
 #endif

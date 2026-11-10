@@ -46,9 +46,9 @@ static BattleWeapon lec_weapon_zutsuki_1;
 static BattleWeapon lec_weapon_zutsuki_2;
 
 #if VERSION == VERSION_DEMO_JP
-static EvtWord lecture_zutsuki_attack_event[554];
+static EvtWord lecture_zutsuki_attack_event[553];
 #else
-static EvtWord lecture_zutsuki_attack_event[570];
+static EvtWord lecture_zutsuki_attack_event[569];
 #endif
 
 /**

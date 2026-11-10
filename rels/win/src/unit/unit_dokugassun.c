@@ -55,7 +55,7 @@ static EvtWord charge_event[58];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[12];
 #else
-static EvtWord wait_event[13];
+static EvtWord wait_event[12];
 #endif
 
 /**

@@ -58,7 +58,7 @@ static EvtWord kagenuke_attack_event[204];
 static EvtWord flame_attack_event[185];
 
 #if VERSION >= VERSION_US
-static EvtWord wait_event[7];
+static EvtWord wait_event[6];
 #else
 static EvtWord wait_event[6];
 #endif

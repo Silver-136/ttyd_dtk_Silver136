@@ -9,7 +9,7 @@
 #include <dolphin/mtx.h>
 
 /** Camera-facing 32x32 smoke puff, used by types 0 and 2. */
-static effN64Vtx size32x32_tex32x32_vtx[] = {
+static effN64Vtx size32x32_tex32x32_vtx[] ATTRIBUTE_ALIGN(8) = {
     {-16, -16, 0, 0, 0, 0, 0, 0, 255},
     {16, -16, 0, -1024, 0, 0, 0, 0, 255},
     {16, 16, 0, -1024, 1024, 0, 0, 0, 255},
@@ -17,7 +17,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
 };
 
 /** Lava (yougan) smoke mesh with two extra quads behind the front one, used by type 1 and types above 2. */
-static effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
+static effN64Vtx size32x32_tex32x32_yougan_vtx[] ATTRIBUTE_ALIGN(8) = {
     {-16, -16, 15, 0, 0, 0, 0, 0, 255},
     {16, -16, 15, -1024, 0, 0, 0, 0, 255},
     {16, 16, 15, -1024, 1024, 0, 0, 0, 255},

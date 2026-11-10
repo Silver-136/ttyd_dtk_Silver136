@@ -48,8 +48,8 @@ static USER_FUNC(dou_mario_kaiten_hosei);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static ExtTexInfo ext_entry_data[31];
-static s16 suifu_animtbl[42];
-static s16 suifu_run_animtbl[22];
+static s16 suifu_animtbl[41];
+static s16 suifu_run_animtbl[21];
 static EvtWord suifu_c_init[22];
 static EvtWord suifu_c_talk[22];
 static EvtWord suifu_d_init[22];

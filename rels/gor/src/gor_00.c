@@ -269,8 +269,8 @@ static const char* shukko_npc_list[10];
 static EvtWord shukko_event_move_ship[223];
 static EvtWord shukko_event[498];
 static ExtTexInfo nannpc_entry_data01[41];
-static s16 suifu_animtbl[42];
-static s16 suifu_run_animtbl[22];
+static s16 suifu_animtbl[41];
+static s16 suifu_run_animtbl[21];
 Vec suifu100kaidanDOWN[];
 Vec suifu100kaidanUP[];
 

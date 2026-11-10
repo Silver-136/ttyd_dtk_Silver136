@@ -497,12 +497,8 @@ u16 compressorTable[3360] ATTRIBUTE_ALIGN(32) = {
     21581, 21587, 21593, 21599, 21606, 21612, 21618, 21624, 21630, 21637, 21643, 21649,
 };
 
-struct {
-  u16 v[3][3];
-  u16 pad;
-} dspSRCCycles = {
-    {{2990, 2990, 1115}, {3300, 3300, 1115}, {3700, 3700, 1115}},
-    0,
+static u16 dspSRCCycles[3][3] = {
+    {2990, 2990, 1115}, {3300, 3300, 1115}, {3700, 3700, 1115},
 };
 
 static const u16 dspMixerCyclesMain[16] = {
@@ -659,7 +655,7 @@ static void SortVoices(DSPvoice** voices, long l, long r) {
 }
 
 void salBuildCommandList(s16* dest, u32 nsDelay) {
-  static const u16 pbOffsets[9] = {10, 12, 24, 14, 16, 26, 18, 20, 22}; // nine used (loop i < 9), the tenth is 0
+  static const u16 pbOffsets[9] = {10, 12, 24, 14, 16, 26, 18, 20, 22};
   static DSPvoice* voices[64]; // filled per studio with no bound check: more than 64 voices would overrun it
 
   u8 s;
@@ -1421,10 +1417,10 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
           switch (pb->src.ratioHi) {
           case 0:
           case 1:
-            cyclesUsed += dspSRCCycles.v[pb->src.ratioHi][pb->srcSelect];
+            cyclesUsed += dspSRCCycles[pb->src.ratioHi][pb->srcSelect];
             break;
           default:
-            cyclesUsed += dspSRCCycles.v[2][pb->srcSelect];
+            cyclesUsed += dspSRCCycles[2][pb->srcSelect];
             break;
           }
           for (s = 0; s < 5; s++) {

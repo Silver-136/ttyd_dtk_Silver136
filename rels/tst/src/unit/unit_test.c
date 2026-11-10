@@ -28,7 +28,7 @@ static EvtWord damage_event[10];
 static EvtWord dmg_turn_event[54];
 static EvtWord wakeup_event[67];
 static EvtWord attack_event[190];
-static EvtWord wait_event[7];
+static EvtWord wait_event[6];
 
 /** Base defence of the test unit `test`: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

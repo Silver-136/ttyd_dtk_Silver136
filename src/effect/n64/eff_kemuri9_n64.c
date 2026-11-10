@@ -35,13 +35,13 @@ typedef struct EffKemuri9N64Work {
 } EffKemuri9N64Work;
 
 #if VERSION <= VERSION_DEMO_JP
-static effN64Vtx size16x16_tex32x32_vtx[] = {
+static effN64Vtx size16x16_tex32x32_vtx[] ATTRIBUTE_ALIGN(8) = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, -1024, 0, 0, 0, 0, 255},
     {8, 8, 0, -1024, 1024, 0, 0, 0, 255},
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
-static effN64Vtx size32x32_tex32x32_vtx[] = {
+static effN64Vtx size32x32_tex32x32_vtx[] ATTRIBUTE_ALIGN(8) = {
     {-16, -16, 0, 0, 0, 0, 0, 0, 255},
     {16, -16, 0, -1024, 0, 0, 0, 0, 255},
     {16, 16, 0, -1024, 1024, 0, 0, 0, 255},

@@ -32,7 +32,7 @@ static EvtWord end_battle_evt[19];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord explosion_event[172];
 #else
-static EvtWord explosion_event[173];
+static EvtWord explosion_event[172];
 #endif
 
 static BattleDataEntry data_table[4];

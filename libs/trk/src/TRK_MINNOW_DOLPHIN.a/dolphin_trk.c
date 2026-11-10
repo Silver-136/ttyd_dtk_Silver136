@@ -3,6 +3,9 @@ typedef int DSError;
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
+typedef unsigned long long u64;
+
+#include "targimpl.h"
 
 void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu);
 void TRKSaveExtended1Block(void);
@@ -20,20 +23,8 @@ void ARStartDMA(u32 type, u32 mainmem_addr, u32 aram_addr, u32 length);
 extern u8 _db_stack_addr[];
 extern u8 gTRKInterruptVectorTable[];
 
-typedef struct ProcessorState_PPC {
-    u8 pad[0x238];
-    u32 DBAT3U;
-} ProcessorState_PPC;
-
-typedef struct TRKState {
-    u8 pad[0x8C];
-    u32 msr;
-    u8 pad2[0x98 - 0x90];
-    BOOL isStopped;
-} TRKState;
-
 extern ProcessorState_PPC gTRKCPUState;
-extern TRKState gTRKState;
+extern TRKState_PPC gTRKState;
 
 static u32 TRK_ISR_OFFSETS[15] = {0x100, 0x200, 0x300, 0x400, 0x500, 0x600, 0x700, 0x800,
                                   0x900, 0xC00, 0xD00, 0xF00, 0x1300, 0x1400, 0x1700};
@@ -137,7 +128,7 @@ void EnableMetroTRKInterrupts(void) {
 u32 TRKTargetTranslate(u32 addr) {
     if (addr >= lc_base) {
         // 0x4000 = the 16 KB locked cache at lc_base, mapped when DBAT3 is valid
-        if ((addr < lc_base + 0x4000) && ((gTRKCPUState.DBAT3U & 3) != 0))
+        if ((addr < lc_base + 0x4000) && ((gTRKCPUState.Extended1.DBAT3U & 3) != 0))
             return addr;
     }
 
@@ -161,7 +152,7 @@ void __TRK_copy_vectors(void) {
     // the word at 0x44 is a mask: bit i set = copy the vector at TRK_ISR_OFFSETS[i] (4, the 0x500 external
     // interrupt, is never copied); lc_base is always 0xE0000000 (TRKInitializeTarget), so the first branch is
     // never taken
-    if (lc_base <= 0x44 && lc_base + 0x4000 > 0x44 && (gTRKCPUState.DBAT3U & 3))
+    if (lc_base <= 0x44 && lc_base + 0x4000 > 0x44 && (gTRKCPUState.Extended1.DBAT3U & 3))
         maskPtr = (u32*)0x44;
     else
         maskPtr = (u32*)0x80000044;
@@ -176,7 +167,7 @@ void __TRK_copy_vectors(void) {
 
 DSError TRKInitializeTarget(void) {
     gTRKState.isStopped = 1;
-    gTRKState.msr = __TRK_get_MSR();
+    gTRKState.MSR = __TRK_get_MSR();
     lc_base = 0xE0000000;
     return 0;
 }

@@ -1,5 +1,3 @@
-#include "trk.h"
-
 typedef int BOOL;
 typedef int DSError;
 typedef unsigned long size_t;
@@ -7,6 +5,9 @@ typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
 typedef unsigned long long u64;
+
+#include "trk.h"
+#include "targimpl.h"
 
 typedef struct TRKBuffer TRKBuffer;
 
@@ -48,56 +49,6 @@ typedef struct TRKRestoreFlags_PPC {
     u8 DEC;
     u8 linker_padding[7]; // 9 bytes in all (JP demo map: gTRKRestoreFlags size 9)
 } TRKRestoreFlags_PPC;
-
-typedef struct Default_PPC {
-    u32 GPR[32];
-    u32 PC;
-    u32 LR;
-    u32 CR;
-    u32 CTR;
-    u32 XER;
-} Default_PPC;
-
-typedef struct Extended1_PPC {
-    u32 SR[16];
-    u32 TBL;
-    u32 TBU;
-    u32 HID0;
-    u32 HID1;
-    u32 MSR;
-    u32 PVR;
-    u32 IBAT[8];
-    u32 DBAT[8];
-    u32 SDR1;
-    u32 SPRG[4];
-    u32 DAR;
-    u32 DSISR;
-    u32 pad_b4[7];
-    u32 DEC;
-    u32 pad_d4[31];
-    u32 exceptionID;
-    u32 pad_154[47];
-} Extended1_PPC;
-
-typedef struct ProcessorState_PPC {
-    Default_PPC Default;
-    u8 Float[0x1A8 - 0x94];
-    Extended1_PPC Extended1;
-    u8 Extended2[0x430 - 0x1A8 - 0x210];
-} ProcessorState_PPC;
-
-typedef struct TRKState_PPC {
-    u32 GPR[32];
-    u32 LR;
-    u32 CTR;
-    u32 XER;
-    u32 MSR;
-    u32 DAR;
-    u32 DSISR;
-    BOOL isStopped;
-    BOOL inputActivated;
-    void* inputPendingPtr;
-} TRKState_PPC;
 
 void* memset(void* dst, int val, size_t n);
 void MWTRACE(u8 level, char* fmt, ...);

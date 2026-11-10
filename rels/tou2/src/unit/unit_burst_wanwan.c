@@ -51,7 +51,7 @@ static EvtWord wait_sound_event1[25];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_sound_event2[11];
 #else
-static EvtWord wait_sound_event2[12];
+static EvtWord wait_sound_event2[11];
 #endif
 
 /**

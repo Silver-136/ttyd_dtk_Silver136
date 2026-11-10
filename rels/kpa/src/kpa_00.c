@@ -23,7 +23,7 @@
 static EvtWord kpa_00_first_evt[61];
 static EvtWord kpa_00_fly_evt[380];
 static NpcSetupInfo npcEnt[3];
-EvtWord kpa_00_init_evt[24];
+EvtWord kpa_00_init_evt[23];
 
 /**
  * Opening cutscene of the Bowser interludes: the camera pans across Bowser's Castle to a BGM_STGK_CASTLE1 start,

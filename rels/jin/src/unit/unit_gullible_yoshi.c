@@ -35,7 +35,7 @@ static EvtWord attack_event_yoshi[748];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event_yoshi[6];
 #else
-static EvtWord wait_event_yoshi[7];
+static EvtWord wait_event_yoshi[6];
 #endif
 
 /**

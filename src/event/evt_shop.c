@@ -78,7 +78,7 @@ EvtWord keep_evt[VERSION_PICK(148, 167)];
 EvtWord unkeep_evt[147];
 #endif
 
-EvtWord point_evt[VERSION_PICK(15, 35)];
+EvtWord point_evt[VERSION_PICK(15, 34)];
 EvtWord evt_shoplist[10];
 static EvtWord main_evt[4];
 
@@ -1612,9 +1612,7 @@ EVT_BEGIN(point_evt)
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, LW(14))
     END_SWITCH
     RETURN
-    OPCODE_END_SCRIPT,
-    0 // US and later: the object is 0x8C bytes (trailing zero word)
-};
+EVT_END()
 
 // US and later: point window icon per language (first object of evt_shop .sdata)
 u16 point_disp_icons[] = {ICON_JAPANESE_TEXT_POINTS, ICON_TEXT_POINTS, ICON_TEXT_PUNKTE, ICON_TEXT_POINTS, ICON_TEXT_PUNTOS, ICON_TEXT_PUNTI};

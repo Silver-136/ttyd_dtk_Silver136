@@ -82,7 +82,7 @@ static EvtWord ceil_fall_ready_event[158];
 static EvtWord attack_event_ceil[467];
 #endif
 
-static EvtWord wait_event_ceil[7];
+static EvtWord wait_event_ceil[6];
 
 /**
  * Unit kind of Red Parabuzzy: 5 max HP, level 17. The battle engine reads it when the unit spawns:

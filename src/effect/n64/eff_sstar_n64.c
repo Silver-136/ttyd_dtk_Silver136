@@ -60,7 +60,7 @@ static effN64Vtx size128x128_tex32x32_vtx[] = {
  * Template for the star's dust trail: five pairs of top and bottom points, widening along the trail,
  * copied into the work and placed by five of the eight stored frame matrices (3 to 7 frames back).
  */
-static effN64Vtx shooting_dust_vtx[10] = {
+static effN64Vtx shooting_dust_vtx[10] ATTRIBUTE_ALIGN(8) = {
     {0, 8, 0, 0, 0, 0, 0, 0, 191},
     {0, -8, 0, 0, 2048, 0, 0, 0, 191},
     {0, 9, 0, 512, 0, 0, 0, 0, 191},

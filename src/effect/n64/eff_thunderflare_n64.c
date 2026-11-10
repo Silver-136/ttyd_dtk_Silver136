@@ -29,7 +29,7 @@ typedef struct EffThunderflareN64Elem {
  * 16x16 quad drawn for the even sparks, followed by a 24x24 copy with its texture turned 45 degrees for the
  * odd sparks. The vertex colours (white top, red bottom) are not used: the draw has no colour channel.
  */
-static effN64Vtx size16x16_tex32x32_vtx[] = {
+static effN64Vtx size16x16_tex32x32_vtx[] ATTRIBUTE_ALIGN(8) = {
     {-8, -8, 0, 0, 0, 250, 250, 250, 255},
     {8, -8, 0, 1024, 0, 250, 250, 250, 255},
     {8, 8, 0, 1024, 1024, 250, 0, 0, 255},

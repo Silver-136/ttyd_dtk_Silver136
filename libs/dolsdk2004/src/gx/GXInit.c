@@ -28,15 +28,11 @@ static GXFifoObj FifoObj;
 static GXData gxData;
 GXData* const __GXData = &gxData;
 
-u32 resetFuncRegistered;
-u32 calledOnce;
-OSTime time;
-u32 peCount;
 
-void* __memReg;
-void* __peReg;
-void* __cpReg;
-void* __piReg;
+void* __piReg = NULL;
+void* __cpReg = NULL;
+void* __peReg = NULL;
+void* __memReg = NULL;
 
 #if DEBUG
 GXBool __GXinBegin;
@@ -139,6 +135,9 @@ static void __GXDefaultVerifyCallback(GXWarningLevel level, u32 id, const char* 
 #endif
 
 static int __GXShutdown(BOOL final) {
+    static u32 peCount;
+    static OSTime time;
+    static u32 calledOnce;
     u32 reg;
     u32 peCountNew;
     OSTime timeNew;
@@ -237,6 +236,7 @@ void __GXInitRevisionBits(void) {
 }
 
 GXFifoObj* GXInit(void* base, u32 size) {
+    static u32 resetFuncRegistered;
     u32 i;
     u32 reg;
     u32 freqBase;

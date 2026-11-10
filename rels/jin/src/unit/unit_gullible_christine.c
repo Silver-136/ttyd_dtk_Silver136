@@ -42,7 +42,7 @@ static EvtWord attack_event_christine[690];
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event_christine[6];
 #else
-static EvtWord wait_event_christine[7];
+static EvtWord wait_event_christine[6];
 #endif
 
 /**

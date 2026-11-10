@@ -122,7 +122,7 @@ EvtWord yuu_02_init_evt[262];
 #if VERSION == VERSION_DEMO_JP
 EvtWord yuu_02_init_evt[28];
 #else
-EvtWord yuu_02_init_evt[29];
+EvtWord yuu_02_init_evt[28];
 #endif
 #endif
 

@@ -873,13 +873,7 @@ EVT_BEGIN(evt_lecture_msg)
 #if VERSION <= VERSION_DEMO_JP
     WAIT_MS(500)
     RETURN
-#if VERSION == VERSION_DEMO_JP
 EVT_END()
-#else
-OPCODE_END_SCRIPT,
-    0 // the US demo: a trailing zero word in the object (the JP gap_05 data word)
-};
-#endif
 
 static USER_FUNC(itemUseFunc) {
     PartyEntry* party;

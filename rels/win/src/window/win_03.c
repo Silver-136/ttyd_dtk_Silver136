@@ -56,7 +56,7 @@ static EvtWord dummy_event[4];
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord win_03_init_evt[];
 #else
-EvtWord win_03_init_evt[108];
+EvtWord win_03_init_evt[104];
 #endif
 
 /**
