@@ -47,12 +47,12 @@
 #include "libc_decls.h"
 
 #define HALF_F float_0p5_8041dc98
-USER_FUNC(cam_r);
+static USER_FUNC(cam_r);
 USER_FUNC(lecture_key_mask_off);
 USER_FUNC(wait);
 USER_FUNC(all_party_slit_off);
 static USER_FUNC(party_color);
-USER_FUNC(famicom_check);
+static USER_FUNC(famicom_check);
 static USER_FUNC(itemUseFunc2);
 EvtWord evt_lecture_msg[];
 EvtWord evt_item_use[];
@@ -996,11 +996,7 @@ static USER_FUNC(itemUseFunc2) {
 }
 
 /** Sets args[0] to 1 if Mario is in his 8-bit form (WINDOW_FLAG_8BIT), else 0; picks the partner pose script. */
-#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(famicom_check) {
-#else
-USER_FUNC(famicom_check) {
-#endif
     EvtWord* args = event->args;
 
     if (wp->flags & WINDOW_FLAG_8BIT) {
@@ -1031,11 +1027,7 @@ USER_FUNC(all_party_slit_off) {
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
-#if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(cam_r) {
-#else
-USER_FUNC(cam_r) {
-#endif
     CameraEntry* cam;
     Vec v;
     f32 s;
