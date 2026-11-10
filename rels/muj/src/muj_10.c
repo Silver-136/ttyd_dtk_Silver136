@@ -77,12 +77,10 @@ static HitDamageReturn hitDmgRetPoints[7];
 
 #if VERSION >= VERSION_US
 EvtWord muj_10_init_evt[206];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord muj_10_init_evt[183];
 #else
 EvtWord muj_10_init_evt[204];
-#endif
 #endif
 
 /**

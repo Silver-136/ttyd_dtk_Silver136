@@ -75,12 +75,10 @@ static EvtWord marco_kyorokyoro[28];
 
 #if VERSION >= VERSION_US
 static EvtWord marco_talk[848];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord marco_talk[788];
 #else
 static EvtWord marco_talk[831];
-#endif
 #endif
 
 static EvtWord megane_init[14];
@@ -2125,14 +2123,12 @@ static EVT_BEGIN(sekai_yami_evt)
 #if VERSION <= VERSION_DEMO_JP
         WAIT_MS(1000)
         LOOP(2)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         WAIT_MS(100)
         LOOP(1)
 #else
         WAIT_MS(500)
         LOOP(2)
-#endif
 #endif
 
             // The screen flashes white once in US/PAL, twice in JP and the early demos.

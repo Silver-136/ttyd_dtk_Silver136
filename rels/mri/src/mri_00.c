@@ -131,12 +131,10 @@ static EvtWord evt_switch_init[17];
 
 #if VERSION >= VERSION_US
 EvtWord mri_00_init_evt[377];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 EvtWord mri_00_init_evt[291];
 #else
 EvtWord mri_00_init_evt[296];
-#endif
 #endif
 
 /**

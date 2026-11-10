@@ -133,12 +133,10 @@ static EvtWord shuryolight_delete[20];
 
 #if VERSION >= VERSION_US
 EvtWord las_29_init_evt[180];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord las_29_init_evt[161];
 #else
 EvtWord las_29_init_evt[182];
-#endif
 #endif
 
 /**

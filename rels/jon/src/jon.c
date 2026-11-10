@@ -77,12 +77,10 @@ void _prolog(void);
 
 #if VERSION >= VERSION_US
 static EvtWord jon_init_evt[400];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord jon_init_evt[329];
 #else
 static EvtWord jon_init_evt[391];
-#endif
 #endif
 
 static u8 enemy_100[100];
@@ -135,12 +133,10 @@ static EvtWord idouya_setup[38];
 
 #if VERSION >= VERSION_US
 static EvtWord talk_gyousyou[219];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord talk_gyousyou[186];
 #else
 static EvtWord talk_gyousyou[207];
-#endif
 #endif
 
 static NpcSetupInfo npcEnt_gyousyou[2];

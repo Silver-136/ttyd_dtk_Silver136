@@ -1589,8 +1589,7 @@ EVT_BEGIN(peach_evt_dance)
         END_IF
 #if VERSION >= VERSION_DEMO_EU
         CALL_CHILD(dance_btn_clear_all) // PAL clears the buttons at once, as JP does
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
             CALL(dance_flag_check, 4096, LW(5))
             IF_INT_NOT_EQUAL(LW(5), 0)
@@ -1601,7 +1600,6 @@ EVT_BEGIN(peach_evt_dance)
         END_INLINE_EVENT
 #else
         CALL_CHILD(dance_btn_clear_all)
-#endif
 #endif
         LOOP(0)
             CALL(evt_sub_get_stopwatch, LW(12), LW(4))

@@ -94,12 +94,10 @@ static EvtWord chusan_move[25];
 
 #if VERSION >= VERSION_US
 EvtWord dmo_00_init_evt[268];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord dmo_00_init_evt[246];
 #else
 EvtWord dmo_00_init_evt[261];
-#endif
 #endif
 
 /**

@@ -77,12 +77,10 @@ static s32 item_tbl2[2];
 
 #if VERSION >= VERSION_US
 static EvtWord talk_syashou[413];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord talk_syashou[354];
 #else
 static EvtWord talk_syashou[367];
-#endif
 #endif
 
 static EvtWord talk_sarary_repeat[43];
@@ -100,12 +98,10 @@ static s32 item_tbl3[2];
 
 #if VERSION >= VERSION_US
 static EvtWord talk_konari[265];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord talk_konari[217];
 #else
 static EvtWord talk_konari[219];
-#endif
 #endif
 
 static EvtWord talk_powan_repeat[43];

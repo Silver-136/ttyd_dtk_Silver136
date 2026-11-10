@@ -77,12 +77,10 @@ EvtWord UNK_0x00022c3c[66];
 
 #if VERSION >= VERSION_US
 static EvtWord kuizu_sekizou[980];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord kuizu_sekizou[874];
 #else
 static EvtWord kuizu_sekizou[920];
-#endif
 #endif
 
 static EvtWord sekizou_init[47];

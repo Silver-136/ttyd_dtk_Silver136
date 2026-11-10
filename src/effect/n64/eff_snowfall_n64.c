@@ -231,8 +231,7 @@ static void effSnowfallMain(EffectEntry* effect) {
     }
 #if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSnowfallDisp, effect);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     if (gp->inBattle == 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, effSnowfallDisp, effect);
     } else {
@@ -240,7 +239,6 @@ static void effSnowfallMain(EffectEntry* effect) {
     }
 #else
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, effSnowfallDisp, effect);
-#endif
 #endif
 }
 

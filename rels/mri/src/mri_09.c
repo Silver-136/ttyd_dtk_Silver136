@@ -44,12 +44,10 @@ EvtWord wall_roll_sub[96];
 
 #if VERSION >= VERSION_US
 static EvtWord wall_roll[272];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 static EvtWord wall_roll[262];
 #else
 static EvtWord wall_roll[264];
-#endif
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
@@ -69,12 +67,10 @@ static EvtWord get_blue_jail_key[143];
 
 #if VERSION >= VERSION_US
 EvtWord mri_09_init_evt[230];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 EvtWord mri_09_init_evt[216];
 #else
 EvtWord mri_09_init_evt[228];
-#endif
 #endif
 
 /** Exit of mri_09: west road w_bero to mri_03. */

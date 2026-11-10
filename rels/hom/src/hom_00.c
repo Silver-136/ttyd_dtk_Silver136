@@ -84,12 +84,10 @@ static EvtWord evt_hom_touchaku_nidome[56];
 
 #if VERSION >= VERSION_US
 EvtWord hom_00_init_evt[259];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord hom_00_init_evt[223];
 #else
 EvtWord hom_00_init_evt[247];
-#endif
 #endif
 
 /**

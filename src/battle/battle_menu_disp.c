@@ -1865,12 +1865,10 @@ void DrawWeaponWin(void) {
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION <= VERSION_DEMO_JP
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, spCost, NULL);
-#else
-#if VERSION >= VERSION_DEMO_EU
+#elif VERSION >= VERSION_DEMO_EU
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, spCost, NULL, 220); // name width that the label is scaled down to fit
 #else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, spCost, NULL, 0);
-#endif
 #endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
@@ -2061,12 +2059,10 @@ void DrawChangePartyWin(void) {
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION <= VERSION_DEMO_JP
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, spCost, items);
-#else
-#if VERSION >= VERSION_DEMO_EU
+#elif VERSION >= VERSION_DEMO_EU
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, spCost, items, 150); // name width that the label is scaled down to fit
 #else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, spCost, items, 1);
-#endif
 #endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);

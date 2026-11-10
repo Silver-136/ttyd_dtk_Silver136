@@ -39,12 +39,10 @@ static EvtWord init_0[37];
 
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 static EvtWord main_0[489];
 #else
 static EvtWord main_0[491];
-#endif
 #endif
 
 static s32 key_tbl[2];
@@ -60,12 +58,10 @@ static EvtWord nokkosu_init[16];
 
 #if VERSION >= VERSION_US
 static EvtWord nokkosu_talk[226];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 static EvtWord nokkosu_talk[115];
 #else
 static EvtWord nokkosu_talk[157];
-#endif
 #endif
 
 static NpcSetupInfo npcEnt[2];

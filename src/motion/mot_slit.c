@@ -1273,8 +1273,7 @@ void mot_slit(void) {
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
                 marioChgPose("M_S_1");
-#else
-#if VERSION == VERSION_EU
+#elif VERSION == VERSION_EU
             if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 if (!m->controlStickSensitivity) {
                     m->baseSpeed = 0.0f;
@@ -1289,7 +1288,6 @@ void mot_slit(void) {
 #if VERSION >= VERSION_US
             } else {
                 slitSpeedDown(m);
-#endif
 #endif
 #endif
             }

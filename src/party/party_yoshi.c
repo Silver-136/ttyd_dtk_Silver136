@@ -790,12 +790,10 @@ void yoshi_use(PartyEntry* party) {
             } else {
                 YOSHI_WORK(party)->dir = -1;
             }
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             YOSHI_WORK(party)->dir = (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) ? 1 : -1;
 #else
             YOSHI_WORK(party)->dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1 : -1;
-#endif
 #endif
             mario->hitobjJumpFrom = mario->hitobjStandOn;
             mario->hitobjStandOn = NULL;
@@ -1576,12 +1574,10 @@ static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     }
 #if VERSION <= VERSION_DEMO_JP
     marioChkWallAround(&pos, spd, dir, party->width, partyGetHeight(party));
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     partyChkWallAround(party, &pos, spd, dir, party->width, mario->wPlayerCollisionBox.y);
 #else
     marioChkWallAround(&pos, 1, spd, dir, party->width, mario->wPlayerCollisionBox.y);
-#endif
 #endif
     party->position.x = pos.x;
     party->position.z = pos.z;

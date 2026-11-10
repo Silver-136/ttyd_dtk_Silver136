@@ -73,12 +73,10 @@ static s32 item_tbl_waitless[2];
 
 #if VERSION >= VERSION_US
 static EvtWord talk_waitless_pias_return[158];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord talk_waitless_pias_return[110];
 #else
 static EvtWord talk_waitless_pias_return[112];
-#endif
 #endif
 
 static EvtWord talk_waitless[268];
@@ -114,12 +112,10 @@ EvtWord evt_shop_open[267];
 
 #if VERSION >= VERSION_US
 static EvtWord evt_shop_close[420];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord evt_shop_close[294];
 #else
 static EvtWord evt_shop_close[317];
-#endif
 #endif
 
 static EvtWord evt_shop_door_init[36];

@@ -64,12 +64,10 @@ static EvtWord evt_poster_15[7];
 
 #if VERSION >= VERSION_US
 EvtWord eki_03_init_evt[470];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord eki_03_init_evt[476];
 #else
 EvtWord eki_03_init_evt[471];
-#endif
 #endif
 
 /**

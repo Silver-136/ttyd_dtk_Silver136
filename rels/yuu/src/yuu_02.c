@@ -1042,8 +1042,7 @@ EVT_BEGIN(yuu_02_init_evt)
 #if VERSION <= VERSION_DEMO_JP
     RETURN
 EVT_END()
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_mon"), MAP_OBJ_FLAG_DISABLED)
@@ -1094,5 +1093,4 @@ EVT_END()
 #else
     RETURN
 EVT_END()
-#endif
 #endif

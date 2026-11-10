@@ -1666,8 +1666,7 @@ static EVT_BEGIN(evt_random_battle)
     CALL(evt_npc_check, STRING("敵３"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_position, STRING("敵３"), 0, -1000, 0)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     CALL(evt_npc_set_battle_info, STRING("乱"), 10)
     CALL(evt_npc_battle_start, STRING("乱"))
     CALL(evt_npc_wait_battle_end)
@@ -1703,7 +1702,6 @@ static EVT_BEGIN(evt_random_battle)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_position, STRING("\223G\202R"), 0, -1000, 0)
 #endif
-#endif
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), -50)
@@ -1717,8 +1715,7 @@ static EVT_BEGIN(evt_random_battle)
         CALL(evt_msg_print, 0, STRING("stg3_tou_406"), 0, STRING("乱"))
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_403_02"), 0, STRING("ガンス"))
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         CALL(evt_npc_set_anim, STRING("乱"), STRING("SIN_K_1"))
         CALL(evt_npc_set_anim, STRING("乱２"), STRING("SIN_K_1"))
         CALL(evt_npc_flag_onoff, 0, STRING("乱"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1734,7 +1731,6 @@ static EVT_BEGIN(evt_random_battle)
         CALL(evt_msg_print, 0, STRING("stg3_tou_406"), 0, STRING("\227\220"))
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_403_02"), 0, STRING("\203K\203\223\203X"))
-#endif
 #endif
         WAIT_MS(300)
         ELSE
@@ -2115,14 +2111,12 @@ EVT_END()
 static EVT_BEGIN(evt_match)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU1"))
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_mario_set_pos, -600, 0, 0)
         CALL(evt_party_set_pos, 0, -610, 0, -10)
     END_INLINE_EVENT
-#endif
 #endif
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(19)
@@ -2166,8 +2160,7 @@ static EVT_BEGIN(evt_match)
     CALL(evt_npc_set_battle_rule, STRING("敵１"), GSW_GLITZ_PIT_CONDITION, GSW_GLITZ_PIT_CONDITION_PARAM, GSW_GLITZ_PIT_CONDITION_PARAM2)
     CALL(evt_npc_battle_start, STRING("敵１"))
     CALL(evt_npc_wait_battle_end)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         CALL(evt_npc_set_attack_mode, STRING("敵１"), 16)
         CALL(_firstattack_setting)
     END_IF
@@ -2184,7 +2177,6 @@ static EVT_BEGIN(evt_match)
     CALL(evt_npc_set_battle_rule, STRING("\223G\202P"), GSW_GLITZ_PIT_CONDITION, GSW_GLITZ_PIT_CONDITION_PARAM, GSW_GLITZ_PIT_CONDITION_PARAM2)
     CALL(evt_npc_battle_start, STRING("\223G\202P"))
     CALL(evt_npc_wait_battle_end)
-#endif
 #endif
     CALL(evt_npc_get_battle_rule_keep_result, LW(0))
     CALL(evt_tou_set_rule_result, LW(0))
@@ -4884,8 +4876,7 @@ static EVT_BEGIN(evt_boss)
     CALL(gans_white_off)
     DELETE_EVENT(LW(9))
     CALL(evt_msg_print, 0, STRING("stg3_tou_466_01"), 0, STRING("マッチョガンス"))
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     CALL(evt_npc_get_position, STRING("ガンス"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("マッチョガンス"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("マッチョガンス"), 270)
@@ -4915,7 +4906,6 @@ static EVT_BEGIN(evt_boss)
     CALL(gans_white_off)
     DELETE_EVENT(LW(9))
     CALL(evt_msg_print, 0, STRING("stg3_tou_466_01"), 0, STRING("\203}\203b\203`\203\207\203K\203\223\203X"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -150, 155, 288, -150, 105, -8, 0, EASING_SINE_IN_OUT)

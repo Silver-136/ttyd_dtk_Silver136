@@ -1139,8 +1139,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #endif
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     s32 ref;
 
     if (strstr(fmt, "%")) {
@@ -1160,7 +1159,6 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     vsprintf(buf, fmt, args);
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
-#endif
 #endif
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
     }

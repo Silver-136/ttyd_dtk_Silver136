@@ -3704,8 +3704,7 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_hot"), MAP_OBJ_FLAG_DISABLED)
@@ -3894,7 +3893,6 @@ EVT_BEGIN(tou_01_init_evt)
     END_INLINE_EVENT
 #else
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 20, 0, 0)
-#endif
 #endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)

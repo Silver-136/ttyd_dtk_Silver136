@@ -48,24 +48,20 @@ static EvtWord evt_gon_04flowblock_updown1_init[37];
 
 #if VERSION >= VERSION_US
 static EvtWord evt_gon_04flowblock_updown1[465];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 static EvtWord evt_gon_04flowblock_updown1[489];
 #else
 static EvtWord evt_gon_04flowblock_updown1[491];
-#endif
 #endif
 
 static EvtWord evt_gon_04flowblock_updown2_init[37];
 
 #if VERSION >= VERSION_US
 static EvtWord evt_gon_04flowblock_updown2[465];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 static EvtWord evt_gon_04flowblock_updown2[489];
 #else
 static EvtWord evt_gon_04flowblock_updown2[491];
-#endif
 #endif
 
 static KemuriPos kemuri_pos1[5];

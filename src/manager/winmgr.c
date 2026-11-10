@@ -1465,8 +1465,7 @@ static void select_disp(WinMgrEntry* entry) {
             winFontInit();
             winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        black, buf);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             if (tw > 30.0) {
                 tw = 30.0f;
             }
@@ -1477,7 +1476,6 @@ static void select_disp(WinMgrEntry* entry) {
             winFontInit();
             winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), buf);
-#endif
 #endif
         }
         if (sel->newItem) {

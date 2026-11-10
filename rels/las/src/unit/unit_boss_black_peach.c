@@ -3830,12 +3830,10 @@ static EVT_BEGIN(queen_attack_event)
         CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 60, 20, 30, 30)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 30, 20, 30, 30)
-#endif
 #endif
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
         IF_INT_EQUAL(LW(1), 1)

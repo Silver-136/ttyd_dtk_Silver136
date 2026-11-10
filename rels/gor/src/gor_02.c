@@ -232,12 +232,10 @@ EvtWord powerupya_party_lank_rtn[786];
 
 #if VERSION >= VERSION_US
 static EvtWord powerupya_party_rtn[170];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord powerupya_party_rtn[152];
 #else
 static EvtWord powerupya_party_rtn[167];
-#endif
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
@@ -268,12 +266,10 @@ static EvtWord powerupya_init[58];
 
 #if VERSION >= VERSION_US
 static EvtWord johoyaperfect_talk[169];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord johoyaperfect_talk[133];
 #else
 static EvtWord johoyaperfect_talk[146];
-#endif
 #endif
 
 static EvtWord kurihakase_init[134];
@@ -383,12 +379,10 @@ static const char* door_data_03_mobj[2];
 
 #if VERSION >= VERSION_DEMO_EU
 static EvtWord evt_door_03_close[178];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord evt_door_03_close[144];
 #else
 static EvtWord evt_door_03_close[166];
-#endif
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
@@ -420,14 +414,12 @@ static EvtWord evt_wall_04[38];
 #if VERSION >= VERSION_US
 static EvtWord evt_door_04_open[19];
 static EvtWord evt_door_04_close[21];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord evt_door_04_open[12];
 static EvtWord evt_door_04_close[14];
 #else
 static EvtWord evt_door_04_open[14];
 static EvtWord evt_door_04_close[16];
-#endif
 #endif
 
 static const char* door_data_04_npc[2];
@@ -504,8 +496,7 @@ static EvtWord epigraphy_map_after_stage2[400];
 static EvtWord epigraphy_map_after_stage3[368];
 static EvtWord epigraphy_map_after_stage4[297];
 static EvtWord epigraphy_map_after_stage5[225];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord epigraphy_map_after_stage1[246];
 static EvtWord epigraphy_map_after_stage2[388];
 static EvtWord epigraphy_map_after_stage3[356];
@@ -517,7 +508,6 @@ static EvtWord epigraphy_map_after_stage2[393];
 static EvtWord epigraphy_map_after_stage3[361];
 static EvtWord epigraphy_map_after_stage4[290];
 static EvtWord epigraphy_map_after_stage5[218];
-#endif
 #endif
 
 #if VERSION == VERSION_DEMO_JP

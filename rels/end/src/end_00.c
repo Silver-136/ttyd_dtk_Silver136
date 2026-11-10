@@ -2038,12 +2038,10 @@ void end_staff_roll_exit(void) {
     JUTFont_Free();
     JUTFontSetup(0);
     msgLoad("global", 1);
-#else
-#if VERSION < VERSION_US
+#elif VERSION < VERSION_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
-#endif
 #endif
 }
 #pragma dont_inline reset

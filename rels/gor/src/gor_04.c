@@ -109,12 +109,10 @@ static EvtWord gor_04_koopa_evt[1123];
 
 #if VERSION >= VERSION_US
 EvtWord gor_04_init_evt[255];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord gor_04_init_evt[244];
 #else
 EvtWord gor_04_init_evt[253];
-#endif
 #endif
 
 /**

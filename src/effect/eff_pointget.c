@@ -174,8 +174,7 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     f32 ox;
     f32 oy;
     f32 x;
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     f32 pos;
     f32 total;
     f32 ox;
@@ -190,7 +189,6 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     f32 x0;
     f32 ox;
     f32 oy;
-#endif
 #endif
     GXTexObj texObj;
     Mtx mtx;

@@ -921,8 +921,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     maxScale = 0.0f;
 #if VERSION <= VERSION_DEMO_JP
     scale = 1.0f;
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     {
         Vec one = {1.0f, 1.0f, 1.0f};
         scale = one;
@@ -933,7 +932,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
 #else
     scale = 1.0f;
-#endif
 #endif
     if (window->type < 0) {
         window->type = WINDOW_TYPE_NORMAL;
@@ -1080,10 +1078,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry->time = time;
 #if VERSION <= VERSION_DEMO_JP
                 x = 0;
-#else
-#if VERSION < VERSION_US
+#elif VERSION < VERSION_US
                 x = 0;
-#endif
 #endif
                 if (0.0f == maxScale) {
                     maxScale = 1.0f;
@@ -1091,8 +1087,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #if VERSION <= VERSION_DEMO_JP
                 y -= 32.0f * maxScale;
                 savedScroll -= 32.0f * maxScale;
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
                 if (data->flags & MSG_WIN_FLAG_SMALL) {
                     // US and later: tighter line spacing
                     y -= 0.7f * (32.0f * maxScale);
@@ -1104,7 +1099,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #else
                 y -= 32.0f * maxScale;
                 savedScroll -= 32.0f * maxScale;
-#endif
 #endif
                 msg++;
                 entry++;
@@ -1619,26 +1613,22 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
 #if VERSION <= VERSION_DEMO_JP
                         wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
                         // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                         wwR = 0.55f * (scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
 #else
                         // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                         wwR = 0.55f * (scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
 #endif
-#endif
                         entry->glyph = glyph;
                         entry->x = rubyX;
                         entry->y = ys[0];
 #if VERSION <= VERSION_DEMO_JP
                         entry->scale = 0.55f * scale;
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
                         entry->scale = 0.55f * scale.x;
 #else
                         entry->scale = 0.55f * scale;
-#endif
 #endif
                         entry->value = flags;
                         if (fp[0]) {
@@ -1710,8 +1700,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 if (maxScale < scale) {
                     maxScale = scale;
                 }
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
                 if (maxScale < scale.y) {
                     maxScale = scale.y;
                 }
@@ -1719,7 +1708,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 if (maxScale < scale) {
                     maxScale = scale;
                 }
-#endif
 #endif
                 entry->time = time;
                 x += wwD;

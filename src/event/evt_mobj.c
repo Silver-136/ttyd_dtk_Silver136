@@ -62,12 +62,10 @@ static s32 mobj_lock(MapObjectEntry* mobj);
 // trap floor and breaking rock) stay in the early demos, the PAL demo and PAL.
 #if VERSION >= VERSION_DEMO_EU
 #define MOBJ_EXTRA_OBJS 1
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 #define MOBJ_EXTRA_OBJS 1
 #else
 #define MOBJ_EXTRA_OBJS 0
-#endif
 #endif
 
 /**

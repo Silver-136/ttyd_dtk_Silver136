@@ -285,8 +285,7 @@ static void titleMain(SequenceWork* work) {
             } else if (++wp2->idle > VERSION_PICK(60, gp->framerate) * 20 - VERSION_PICK(60, gp->framerate)) {
                 wp2->state = 20;
             }
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 wp2->fadeAlpha += 0.1f;
@@ -311,7 +310,6 @@ static void titleMain(SequenceWork* work) {
             } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
                 wp2->state = 20;
             }
-#endif
 #endif
             break;
         case 10:

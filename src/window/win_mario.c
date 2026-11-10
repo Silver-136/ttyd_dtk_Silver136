@@ -329,8 +329,7 @@ const char* winZenkakuStr(s32 n) {
         for (i = 0; i < strlen(buf); i++) {
             strcat(tmp2, tbl[(s8)buf[i] - '0']);
         }
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     static char tmp2[0x100];
     sprintf(tmp2, "%d", n);
 #else
@@ -350,7 +349,6 @@ const char* winZenkakuStr(s32 n) {
         // the digit character is sign-extended before the index (the extsb is in the retail code)
         strcat(tmp2, tbl[(s8)buf[i] - '0']);
     }
-#endif
 #endif
     return tmp2;
 }
@@ -531,8 +529,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     f32 row3;
     f32 numX;
     f32 rubyW;
-#else
-#if VERSION < VERSION_US
+#elif VERSION < VERSION_US
     f32 x;
     f32 y;
     f32 rowA;
@@ -547,7 +544,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     f32 numX;
     f32 row3;
     f32 rubyW;
-#endif
 #endif
     s32 i;
     s64 secs;

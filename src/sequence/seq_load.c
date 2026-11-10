@@ -1142,8 +1142,7 @@ static void loadDraw(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
         sprintf(buf, "データ%d", i + 1);
         FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         if (gp->language == LANGUAGE_JP) {
             str = "データ";
         } else {
@@ -1154,7 +1153,6 @@ static void loadDraw(CameraId camera, void* param) {
 #else
         sprintf(buf, "\203f\201[\203^%s", winZenkakuStr(i + 1));
         FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
-#endif
 #endif
         FontDrawEdgeOff();
         FontDrawScale(1.0f);

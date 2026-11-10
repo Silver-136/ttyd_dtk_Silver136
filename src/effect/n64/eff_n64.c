@@ -368,13 +368,11 @@ void effTexSetupN64(void) {
     if (wp->effTexture == NULL) {
 #if VERSION <= VERSION_DEMO_JP
         sprintf(path, "%s/eff/jp/effect_n64.tpl", getMarioStDvdRoot());
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
         lang = gp->language == LANGUAGE_JP ? "jp" : "us";
         sprintf(path, "%s/e/%s/effect_n64.tpl", getMarioStDvdRoot(), lang);
 #else
         sprintf(path, "%s/e/jp/effect_n64.tpl", getMarioStDvdRoot());
-#endif
 #endif
         entry = DVDMgrOpen(path, 2, 0);
         length = OSRoundUp32B(DVDMgrGetLength(entry));

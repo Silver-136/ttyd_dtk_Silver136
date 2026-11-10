@@ -237,8 +237,7 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 2:
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             work->state++;
             break;
 
@@ -316,7 +315,6 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 2:
-#endif
 #endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});

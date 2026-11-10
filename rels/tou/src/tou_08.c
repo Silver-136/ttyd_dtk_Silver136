@@ -71,12 +71,10 @@ static EvtWord evt_toile_door2[136];
 
 #if VERSION >= VERSION_US
 static EvtWord evt_champion_win[290];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord evt_champion_win[269];
 #else
 static EvtWord evt_champion_win[271];
-#endif
 #endif
 
 static EvtWord bed_entry[10];

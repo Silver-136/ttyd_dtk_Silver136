@@ -576,12 +576,10 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
             if (i == 5) {
 #if VERSION <= VERSION_DEMO_JP
                 FontDrawMessage(-188.0f + wp->x, wp->y + (104.0f - 24.0f * ofs), (const char*)rk);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
                 yuuDrawLeft(18.8f + (-188.0f + wp->x), wp->y + (104.0f - 24.0f * ofs), 1.0f, (const char*)rk, 80);
 #else
                 FontDrawMessage(18.8f + (-188.0f + wp->x), wp->y + (104.0f - 24.0f * ofs), (const char*)rk);
-#endif
 #endif
             } else {
                 FontDrawStringPitch(-150.4f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, (const char*)rk);

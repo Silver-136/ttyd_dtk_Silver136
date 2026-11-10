@@ -49,12 +49,10 @@ static EvtWord evt_koopa_after[118];
 
 #if VERSION >= VERSION_US
 EvtWord aji_18_init_evt[301];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord aji_18_init_evt[296];
 #else
 EvtWord aji_18_init_evt[299];
-#endif
 #endif
 
 /**

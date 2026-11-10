@@ -2227,8 +2227,7 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
         if (b->recoveredItems[i]) {
 #if VERSION <= VERSION_DEMO_JP
             itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
                                           npc->position.z);
             if (item) {
@@ -2239,7 +2238,6 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
             itemFlagOn(itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
                                  npc->position.z),
                        ITEM_FLAG_LOST_BADGE_TO_SHOP);
-#endif
 #endif
             b->recoveredItems[i] = z;
         }
@@ -3657,8 +3655,7 @@ void npcGetBackItemEntry(NpcEntry* npc) {
         if (info->recoveredItems[i]) {
 #if VERSION <= VERSION_DEMO_JP
             itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
                                           npc->position.y, npc->position.z);
             if (item) {
@@ -3669,7 +3666,6 @@ void npcGetBackItemEntry(NpcEntry* npc) {
             itemFlagOn(itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
                                  npc->position.y, npc->position.z),
                        ITEM_FLAG_LOST_BADGE_TO_SHOP);
-#endif
 #endif
             info->recoveredItems[i] = 0;
         }

@@ -160,12 +160,10 @@ static EvtWord out_from_tou_10_re[22];
 
 #if VERSION >= VERSION_US
 EvtWord tou_04_init_evt[652];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord tou_04_init_evt[662];
 #else
 EvtWord tou_04_init_evt[668];
-#endif
 #endif
 
 /**

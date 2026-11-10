@@ -92,12 +92,10 @@ EvtWord evt_toron_catch2[359];
 
 #if VERSION >= VERSION_US
 static EvtWord evt_toron_appear[437];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord evt_toron_appear[408];
 #else
 static EvtWord evt_toron_appear[414];
-#endif
 #endif
 
 #if VERSION >= VERSION_DEMO_EU

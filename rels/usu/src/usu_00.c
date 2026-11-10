@@ -163,14 +163,12 @@ static EvtWord usu00_check_vivian[33];
 #if VERSION >= VERSION_US
 static EvtWord usu00_crowAB_talk_event[338];
 static EvtWord usu00_crowCDE_talk_event[346];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord usu00_crowAB_talk_event[291];
 static EvtWord usu00_crowCDE_talk_event[299];
 #else
 static EvtWord usu00_crowAB_talk_event[299];
 static EvtWord usu00_crowCDE_talk_event[307];
-#endif
 #endif
 
 static EvtWord chief_pig_event[66];
@@ -246,12 +244,10 @@ static EvtWord epilogue_evt[73];
 
 #if VERSION >= VERSION_US
 EvtWord usu_00_init_evt[660];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord usu_00_init_evt[544];
 #else
 EvtWord usu_00_init_evt[658];
-#endif
 #endif
 
 /**

@@ -393,8 +393,7 @@ void marioStInit(void) {
     gp->language = LANGUAGE_US;
 #endif
     gp->framerate = 60;
-#else
-#if VERSION >= VERSION_DEMO_EU
+#elif VERSION >= VERSION_DEMO_EU
     if (VIGetTvFormat() == VI_NTSC) {
         gp->framerate = 60;
     } else if (VIGetTvFormat() == VI_EURGB60) {
@@ -441,7 +440,6 @@ void marioStInit(void) {
         gp->language = LANGUAGE_US;
     }
     gp->framerate = 60;
-#endif
 #endif
     gp->systemLevelFlags = 0;
     badgeShop_init(); // Badge Shop

@@ -267,15 +267,13 @@ const char* romFontGetMessage(s32 msg) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     if (wp->language != ROM_FONT_LANGUAGE_SJIS && gp->language == LANGUAGE_JP) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];
 #else
     return msg_tbl[0][msg]; // always the Japanese table
-#endif
 #endif
 }
 

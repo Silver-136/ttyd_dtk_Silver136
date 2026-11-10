@@ -59,12 +59,10 @@ static EvtWord punipuni_mario_halt[33];
 
 #if VERSION >= VERSION_US
 static EvtWord time_bomb[931];
-#else
-#if VERSION <= VERSION_DEMO_JP
+#elif VERSION <= VERSION_DEMO_JP
 static EvtWord time_bomb[938];
 #else
 static EvtWord time_bomb[937];
-#endif
 #endif
 
 static EvtWord bomb_check[14];

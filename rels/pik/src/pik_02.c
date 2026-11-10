@@ -92,12 +92,10 @@ static EvtWord nise_starstone_init[18];
 
 #if VERSION >= VERSION_US
 EvtWord pik_02_init_evt[172];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord pik_02_init_evt[181];
 #else
 EvtWord pik_02_init_evt[166];
-#endif
 #endif
 
 /**

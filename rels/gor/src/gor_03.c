@@ -2493,8 +2493,7 @@ static EVT_BEGIN(exchange_keep_sub)
             CALL(yuugijou_get_montemedal, LW(1))
 #if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_91"), 0, 0, LW(1))
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
@@ -2505,7 +2504,6 @@ static EVT_BEGIN(exchange_keep_sub)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_91"), 0, STRING("バニーテレサ"), LW(1))
-#endif
 #endif
             CALL(yuugijou_montemedal_keep)
             SET_VALUE(LW(0), 48)
@@ -3227,10 +3225,8 @@ static EVT_BEGIN(slot_set)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
-#endif
 #endif
     CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -3286,10 +3282,8 @@ static EVT_BEGIN(slot_set)
     WAIT_MS(600)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_run, 0)
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     CALL(evt_party_run, 0)
-#endif
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN

@@ -67,12 +67,10 @@ static EvtWord evt_dakuto2[44];
 
 #if VERSION >= VERSION_US
 EvtWord evt_tou_bed[440];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 EvtWord evt_tou_bed[428];
 #else
 EvtWord evt_tou_bed[432];
-#endif
 #endif
 
 static EvtWord bed_entry[10];

@@ -94,12 +94,10 @@ static EvtWord ele1_door_close[139];
 
 #if VERSION >= VERSION_US
 static EvtWord ele_1[607];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord ele_1[591];
 #else
 static EvtWord ele_1[595];
-#endif
 #endif
 
 static EvtWord ele2_door_open[139];
@@ -107,12 +105,10 @@ static EvtWord ele2_door_close[139];
 
 #if VERSION >= VERSION_US
 static EvtWord ele_2[634];
-#else
-#if VERSION == VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_JP
 static EvtWord ele_2[618];
 #else
 static EvtWord ele_2[622];
-#endif
 #endif
 
 static EvtWord evt_elv_init[271];

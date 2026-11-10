@@ -2139,12 +2139,10 @@ static void draw(CameraId camera, void* param) {
         }
         pressStartGX(wp, alpha, 0.0f, -100.0f);
     }
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     winTexSetNearest(logoTex[gp->language], (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
 #else
     winTexSetNearest(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
-#endif
 #endif
     *camGetCurPtr() = saved;
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);

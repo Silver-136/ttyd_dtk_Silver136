@@ -1110,12 +1110,10 @@ static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
         } else {
 #if VERSION <= VERSION_DEMO_JP
             marioChkWallAround(&pos, spd, dir, party->width, party->height);
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
             partyChkWallAround(party, &pos, spd, dir, party->width, party->height);
 #else
             marioChkWallAround(&pos, 1, spd, dir, party->width, party->height);
-#endif
 #endif
             party->position.x = pos.x;
             party->position.z = pos.z;
