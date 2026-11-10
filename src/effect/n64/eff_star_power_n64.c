@@ -168,7 +168,7 @@ static void effStarPowerMain(EffectEntry* effect) {
  * The star power mesh (akari, "light"): the five-pointed star body first,
  * then from vertex 20 the glow shell around it, each shaded light at the tips and dark inside.
  */
-effN64Vtx testsrc_akari_v[] = {
+static effN64Vtx testsrc_akari_v[] = {
     {147, -202, 0, 0, 0, 255, 255, 255, 255},
     {143, -46, 0, 0, 0, 0, 0, 0, 255},
     {133, -43, 0, 0, 0, 0, 0, 0, 255},

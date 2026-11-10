@@ -24,8 +24,8 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-EvtWord win_05_door_open[10];
-EvtWord win_05_door_close[10];
+static EvtWord win_05_door_open[10];
+static EvtWord win_05_door_close[10];
 static BeroEntry bero_entry_data[2];
 static EvtWord item_get00[34];
 static EvtWord cloud_toujou[126];
@@ -35,7 +35,7 @@ EvtWord win_05_init_evt[42];
  * Door-open callback for the bero exit "w_bero":
  * names the two door map objects "S_doa_e_l" and "S_doa_e_r" and runs the shared evt_win_door_open.
  */
-EVT_BEGIN(win_05_door_open)
+static EVT_BEGIN(win_05_door_open)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SPAWN_EVENT(evt_win_door_open)
@@ -46,7 +46,7 @@ EVT_END()
  * Door-close callback for the bero exit "w_bero":
  * names the door map objects "S_doa_e_l" and "S_doa_e_r" and runs the shared evt_win_door_close.
  */
-EVT_BEGIN(win_05_door_close)
+static EVT_BEGIN(win_05_door_close)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SPAWN_EVENT(evt_win_door_close)

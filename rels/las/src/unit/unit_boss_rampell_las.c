@@ -60,7 +60,7 @@ static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_rampell_attack;
 static BattleUnitSetup entry_marilyn;
 static BattleUnitSetup entry_majolyne;
-EvtWord mutate_event[584];
+static EvtWord mutate_event[584];
 static EvtWord init_event[198];
 static EvtWord entry_event[46];
 static EvtWord damage_event[22];
@@ -183,15 +183,15 @@ static EvtWord dead_event_yoshi[80];
 
 static EvtWord attack_event_yoshi[748];
 static EvtWord wait_event_yoshi[6];
-BattleUnitDefense defence_vivian;
-BattleUnitDefenseAttr defence_attr_vivian;
-StatusVulnerability regist_vivian;
-BattleDataEntry data_table_vivian[2];
-BattleUnitKindPart parts_vivian[1];
-BattleWeapon weapon_vivian_kagenuke_attack;
+static BattleUnitDefense defence_vivian;
+static BattleUnitDefenseAttr defence_attr_vivian;
+static StatusVulnerability regist_vivian;
+static BattleDataEntry data_table_vivian[2];
+static BattleUnitKindPart parts_vivian[1];
+static BattleWeapon weapon_vivian_kagenuke_attack;
 static EvtWord vivian_down[19];
 static EvtWord vivian_up[27];
-EvtWord init_event_vivian[64];
+static EvtWord init_event_vivian[64];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord dead_event_vivian[];
@@ -199,15 +199,15 @@ extern EvtWord dead_event_vivian[];
 EvtWord dead_event_vivian[80];
 #endif
 
-EvtWord attack_event_vivian[222];
-EvtWord wait_event_vivian[6];
-BattleUnitDefense defence_sanders;
-BattleUnitDefenseAttr defence_attr_sanders;
-StatusVulnerability regist_sanders;
-BattleDataEntry data_table_sanders[2];
-BattleUnitKindPart parts_sanders[1];
-BattleWeapon enemyWeapon_SandersNormalAttack;
-EvtWord init_event_sanders[51];
+static EvtWord attack_event_vivian[222];
+static EvtWord wait_event_vivian[6];
+static BattleUnitDefense defence_sanders;
+static BattleUnitDefenseAttr defence_attr_sanders;
+static StatusVulnerability regist_sanders;
+static BattleDataEntry data_table_sanders[2];
+static BattleUnitKindPart parts_sanders[1];
+static BattleWeapon enemyWeapon_SandersNormalAttack;
+static EvtWord init_event_sanders[51];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord dead_event_sanders[];
@@ -215,19 +215,19 @@ extern EvtWord dead_event_sanders[];
 EvtWord dead_event_sanders[80];
 #endif
 
-EvtWord attack_event_sanders[24];
-EvtWord attack_event_sanders_normal[325];
-EvtWord wait_event_sanders[6];
-BattleUnitDefense defence_chuchurina;
-BattleUnitDefenseAttr defence_attr_chuchurina;
-StatusVulnerability regist_chuchurina;
-BattleDataEntry data_table_chuchurina[2];
-BattleUnitKindPart parts_chuchurina[1];
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackR;
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackL;
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast;
+static EvtWord attack_event_sanders[24];
+static EvtWord attack_event_sanders_normal[325];
+static EvtWord wait_event_sanders[6];
+static BattleUnitDefense defence_chuchurina;
+static BattleUnitDefenseAttr defence_attr_chuchurina;
+static StatusVulnerability regist_chuchurina;
+static BattleDataEntry data_table_chuchurina[2];
+static BattleUnitKindPart parts_chuchurina[1];
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackR;
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackL;
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast;
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast;
-EvtWord init_event_chuchurina[51];
+static EvtWord init_event_chuchurina[51];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord dead_event_chuchurina[];
@@ -235,9 +235,9 @@ extern EvtWord dead_event_chuchurina[];
 EvtWord dead_event_chuchurina[80];
 #endif
 
-EvtWord attack_event_chuchurina[24];
-EvtWord attack_event_chuchurina_normal[831];
-EvtWord wait_event_chuchurina[6];
+static EvtWord attack_event_chuchurina[24];
+static EvtWord attack_event_chuchurina_normal[831];
+static EvtWord wait_event_chuchurina[6];
 
 /**
  * Unit data of Doopliss in his own form in the Palace of Shadow: 40 HP, level 57;
@@ -432,7 +432,7 @@ static BattleUnitSetup entry_majolyne = {
     NULL, // itemDropTable
 };
 
-EVT_BEGIN(mutate_event)
+static EVT_BEGIN(mutate_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -3670,18 +3670,18 @@ EVT_END()
  * Defence of Doopliss as Vivian against each element (normal, fire, ice, explosion, electric):
  * none, so every hit does its full damage.
  */
-BattleUnitDefense defence_vivian = {0};
+static BattleUnitDefense defence_vivian = {0};
 
 /**
  * Damage modifiers of Doopliss as Vivian per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr defence_attr_vivian = {0};
+static BattleUnitDefenseAttr defence_attr_vivian = {0};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability regist_vivian = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_vivian = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
-StatusVulnerability regist_vivian = {
+static StatusVulnerability regist_vivian = {
     40, // sleep
     50, // stop
     40, // dizzy
@@ -3711,13 +3711,13 @@ StatusVulnerability regist_vivian = {
  * Data table of Doopliss as Vivian: event scripts the battle looks up by tag
  * (only the defeat event).
  */
-BattleDataEntry data_table_vivian[] = {
+static BattleDataEntry data_table_vivian[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_vivian},
     {0},
 };
 
 /** Part of Doopliss as Vivian: its one body part with hit box, defence tables and pose table. */
-BattleUnitKindPart parts_vivian[] = {
+static BattleUnitKindPart parts_vivian[] = {
     {
         1, // partNum
         "btl_un_rampell", // partName
@@ -3740,7 +3740,7 @@ BattleUnitKindPart parts_vivian[] = {
  * Weapon of Doopliss's kagenuke attack as Vivian: damage 3, 4 or 5 by the real partner's rank (Normal, Super, Ultra;
  * weaponGetPowerFromGulliblePartyAttackLv).
  */
-BattleWeapon weapon_vivian_kagenuke_attack = {
+static BattleWeapon weapon_vivian_kagenuke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -3807,7 +3807,7 @@ EVT_END()
  * Init event of Doopliss in Vivian's form: swaps in Vivian's pose table, data table, parts and kind (141),
  * sets her defences and event handlers, starts the shadow-tail event and clears all statuses.
  */
-EVT_BEGIN(init_event_vivian)
+static EVT_BEGIN(init_event_vivian)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(11), PTR(pose_table_vivian_stay))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_vivian))
     CALL(btlevtcmd_ReplaceParts, UNIT_ID_SELF, LW(11), PTR(parts_vivian), 1)
@@ -3862,7 +3862,7 @@ EVT_END()
  * otherwise sinks into the shadow, rises in front of one target and strikes it (weapon_vivian_kagenuke_attack,
  * PTR_A2_2 with its attack sound) with the dodge or defence check, then returns home through the shadow.
  */
-EVT_BEGIN(attack_event_vivian)
+static EVT_BEGIN(attack_event_vivian)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -3939,7 +3939,7 @@ EVT_BEGIN(attack_event_vivian)
 EVT_END()
 
 /** Wait event of Doopliss as Vivian: plays her idle animation from the pose table. */
-EVT_BEGIN(wait_event_vivian)
+static EVT_BEGIN(wait_event_vivian)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
@@ -3948,18 +3948,18 @@ EVT_END()
  * Defence of Doopliss as Bobbery against each element (normal, fire, ice, explosion, electric):
  * none, so every hit does its full damage.
  */
-BattleUnitDefense defence_sanders = {0};
+static BattleUnitDefense defence_sanders = {0};
 
 /**
  * Damage modifiers of Doopliss as Bobbery per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr defence_attr_sanders = {0};
+static BattleUnitDefenseAttr defence_attr_sanders = {0};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability regist_sanders = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_sanders = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
-StatusVulnerability regist_sanders = {
+static StatusVulnerability regist_sanders = {
     40, // sleep
     50, // stop
     40, // dizzy
@@ -3989,13 +3989,13 @@ StatusVulnerability regist_sanders = {
  * Data table of Doopliss as Bobbery: event scripts the battle looks up by tag
  * (only the defeat event).
  */
-BattleDataEntry data_table_sanders[] = {
+static BattleDataEntry data_table_sanders[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_sanders},
     {0},
 };
 
 /** Part of Doopliss as Bobbery: its one body part with hit box, defence tables and pose table. */
-BattleUnitKindPart parts_sanders[] = {
+static BattleUnitKindPart parts_sanders[] = {
     {
         1, // partNum
         "btl_un_rampell", // partName
@@ -4018,7 +4018,7 @@ BattleUnitKindPart parts_sanders[] = {
  * Weapon of Doopliss's attack as Bobbery: damage 4, 5 or 6 by the real partner's rank (Normal, Super, Ultra;
  * weaponGetPowerFromGulliblePartyAttackLv).
  */
-BattleWeapon enemyWeapon_SandersNormalAttack = {
+static BattleWeapon enemyWeapon_SandersNormalAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -4061,7 +4061,7 @@ BattleWeapon enemyWeapon_SandersNormalAttack = {
 };
 
 /** Init event of Doopliss in Bobbery's form: swaps in Bobbery's tables, kind and handlers and clears all statuses. */
-EVT_BEGIN(init_event_sanders)
+static EVT_BEGIN(init_event_sanders)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(11), PTR(pose_table_sanders_stay))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_sanders))
     CALL(btlevtcmd_ReplaceParts, UNIT_ID_SELF, LW(11), PTR(parts_sanders), 1)
@@ -4109,7 +4109,7 @@ EVT_END()
  * Attack event of Doopliss as Bobbery: uses an enemy item if one is queued,
  * otherwise runs attack_event_sanders_normal.
  */
-EVT_BEGIN(attack_event_sanders)
+static EVT_BEGIN(attack_event_sanders)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -4127,7 +4127,7 @@ EVT_END()
  * attack_event_sanders): he runs up beside the target, lights his fuse (A_3, Bobbery's THUNDERS attack sounds)
  * and explodes after a second (bomb effect), then the damage check runs and he is blown back home in a jump.
  */
-EVT_BEGIN(attack_event_sanders_normal)
+static EVT_BEGIN(attack_event_sanders_normal)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
@@ -4209,7 +4209,7 @@ EVT_BEGIN(attack_event_sanders_normal)
 EVT_END()
 
 /** Wait event of Doopliss as Bobbery: plays his idle animation from the pose table. */
-EVT_BEGIN(wait_event_sanders)
+static EVT_BEGIN(wait_event_sanders)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
@@ -4218,18 +4218,18 @@ EVT_END()
  * Defence of Doopliss as Ms. Mowz against each element (normal, fire, ice, explosion, electric):
  * none, so every hit does its full damage.
  */
-BattleUnitDefense defence_chuchurina = {0};
+static BattleUnitDefense defence_chuchurina = {0};
 
 /**
  * Damage modifiers of Doopliss as Ms. Mowz per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr defence_attr_chuchurina = {0};
+static BattleUnitDefenseAttr defence_attr_chuchurina = {0};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability regist_chuchurina = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_chuchurina = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
-StatusVulnerability regist_chuchurina = {
+static StatusVulnerability regist_chuchurina = {
     40, // sleep
     50, // stop
     40, // dizzy
@@ -4259,13 +4259,13 @@ StatusVulnerability regist_chuchurina = {
  * Data table of Doopliss as Ms. Mowz: event scripts the battle looks up by tag
  * (only the defeat event).
  */
-BattleDataEntry data_table_chuchurina[] = {
+static BattleDataEntry data_table_chuchurina[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_chuchurina},
     {0},
 };
 
 /** Part of Doopliss as Ms. Mowz: its one body part with hit box, defence tables and pose table. */
-BattleUnitKindPart parts_chuchurina[] = {
+static BattleUnitKindPart parts_chuchurina[] = {
     {
         1, // partNum
         "btl_un_rampell", // partName
@@ -4288,7 +4288,7 @@ BattleUnitKindPart parts_chuchurina[] = {
  * Weapon of Doopliss's right-hand slaps as Ms. Mowz: no damage function, so these hits do no damage; only the
  * last hit does.
  */
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -4334,7 +4334,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
  * Weapon of Doopliss's left-hand slaps as Ms. Mowz: no damage function, so these hits do no damage; only the
  * last hit does.
  */
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -4377,7 +4377,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
 };
 
 /** Weapon of the last right-hand hit of Doopliss's Ms. Mowz attack: damage 2, 3 or 4 by partner rank. */
-BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
+static BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -4453,7 +4453,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast = {
 };
 
 /** Init event of Doopliss in Ms. Mowz's form: swaps in her tables, kind and handlers and clears all statuses. */
-EVT_BEGIN(init_event_chuchurina)
+static EVT_BEGIN(init_event_chuchurina)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(11), PTR(pose_table_chuchurina_stay))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_chuchurina))
     CALL(btlevtcmd_ReplaceParts, UNIT_ID_SELF, LW(11), PTR(parts_chuchurina), 1)
@@ -4496,7 +4496,7 @@ EVT_BEGIN(dead_event_chuchurina)
     RETURN
 EVT_END()
 
-EVT_BEGIN(attack_event_chuchurina)
+static EVT_BEGIN(attack_event_chuchurina)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -4509,7 +4509,7 @@ EVT_BEGIN(attack_event_chuchurina)
     RETURN
 EVT_END()
 
-EVT_BEGIN(attack_event_chuchurina_normal)
+static EVT_BEGIN(attack_event_chuchurina_normal)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
@@ -4781,7 +4781,7 @@ EVT_BEGIN(attack_event_chuchurina_normal)
     RETURN
 EVT_END()
 
-EVT_BEGIN(wait_event_chuchurina)
+static EVT_BEGIN(wait_event_chuchurina)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()

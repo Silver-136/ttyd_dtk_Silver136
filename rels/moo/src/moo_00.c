@@ -34,14 +34,14 @@
 #include "evt/evt_bero.h"
 
 static USER_FUNC(mario_kirimomi);
-USER_FUNC(mario_reset);
-USER_FUNC(party_kirimomi);
-USER_FUNC(party_reset);
+static USER_FUNC(mario_reset);
+static USER_FUNC(party_kirimomi);
+static USER_FUNC(party_reset);
 
 static BeroEntry bero_entry_data[3];
 static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
-EvtWord party_damage_pose2[52];
+static EvtWord party_damage_pose2[52];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_first[517];
@@ -134,7 +134,7 @@ static EVT_BEGIN(party_damage_pose)
 EVT_END()
 
 /** Event script: puts the active partner into its second "hurt" pose, set when the partner lands in the crash landing. */
-EVT_BEGIN(party_damage_pose2)
+static EVT_BEGIN(party_damage_pose2)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -461,7 +461,7 @@ EVT_BEGIN(moo_00_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(party_reset) {
+static USER_FUNC(party_reset) {
     PartyEntry* party = partyGetPtr(0);
 
     party->scale.x = party->scale.y = party->scale.z = 1.0f;
@@ -474,7 +474,7 @@ USER_FUNC(party_reset) {
  * Script helper: resets Mario's scale, rotation offset and Z rotation to their normal values
  * after the tumbling in the crash scene.
  */
-USER_FUNC(mario_reset) {
+static USER_FUNC(mario_reset) {
     MarioWork* mario = marioGetPtr();
 
     mario->scale.x = mario->scale.y = mario->scale.z = 1.0f;
@@ -487,7 +487,7 @@ USER_FUNC(mario_reset) {
  * Script helper: makes the partner tumble head over heels.
  * args[0] is the angle in degrees; the partner is rotated about its centre to that angle.
  */
-USER_FUNC(party_kirimomi) {
+static USER_FUNC(party_kirimomi) {
     f32 angle = evtGetFloat(event, event->args[0]);
     PartyEntry* party = partyGetPtr(0);
 

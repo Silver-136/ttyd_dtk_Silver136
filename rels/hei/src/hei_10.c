@@ -141,8 +141,8 @@ void hei_test_water_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[4];
 static ExtTexInfo ext_data[21];
-EvtWord golden_se[55];
-EvtWord evt_golden[319];
+static EvtWord golden_se[55];
+static EvtWord evt_golden[319];
 EvtWord hei_10_init_evt[80];
 
 /** Returns a random float in 0..1 from the game's rand() (divided by 32767). */
@@ -309,7 +309,7 @@ static void ext_shadow_disp(CameraId camera, void* param) {
  * and the initial vertical speed from the gravity,
  * then switches it to the hopping state (100) that returns to state next.
  */
-void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
+static void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 dy;
     f32 dist;
     f32 angle;
@@ -466,7 +466,7 @@ static void ext_dispent(void) {
 }
 
 /** Script helper: switches every Fuzzy of the swarm to the fleeing state. */
-s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall) {
+static s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 i;
     Chorobon* chb = wp->chb;
@@ -480,7 +480,7 @@ s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall) {
 
 /** Script helper: blocks until every Fuzzy has finished fleeing (state 99), then resets the ext-pose effect. */
 // Keep the extended-pose system alive until every Fuzzy reaches the escape-complete state.
-s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
+static s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
     ExtdrvPose* pose = extGetPosePtr();
     Chorobon* chb = wp->chb;
     s32 i;
@@ -570,7 +570,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
 #pragma opt_propagation reset
 
 /** Script helper: blocks until the Gold Fuzzy's current animation has reached the frame given by args[0]. */
-s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
+static s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
     f32 frame = evtGetFloat(event, *event->args);
     NpcEntry* npc = npcNameToPtr("ゴールドチョロボン");
 
@@ -581,7 +581,7 @@ s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: blocks until the Gold Fuzzy's animation has completed another loop. */
-s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
+static s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("ゴールドチョロボン");
 
     if (isFirstCall) {
@@ -597,7 +597,7 @@ s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
  * Looping sound script for the Gold Fuzzy: plays hop and wait sounds at animation frames 35,
  * 50 and 95 of its idle animation.
  */
-EVT_BEGIN(golden_se)
+static EVT_BEGIN(golden_se)
     LOOP(0)
         CALL(wait_anim_frame, 35)
         CALL(evt_npc_get_position, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(2))
@@ -619,7 +619,7 @@ EVT_END()
  * and afterwards a swarm of Fuzzies (ext poses) appears and flees while it hops away.
  * Sets the story to "Gold Fuzzy".
  */
-EVT_BEGIN(evt_golden)
+static EVT_BEGIN(evt_golden)
     CALL(evt_npc_entry, STRING("dummy"), STRING("c_chorobon")) // hidden Fuzzy NPC behind the Fuzzy swarm sprites
     CALL(evt_npc_set_position, STRING("dummy"), 0, -1000, 0)
     SPAWN_EVENT_GET_ID(PTR(golden_se), LW(15))

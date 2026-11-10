@@ -122,15 +122,15 @@ void TRKRestoreExtended1Block(void);
 void TRKUARTInterruptHandler(void);
 
 
-u16 TRK_saved_exceptionID = 0;
+static u16 TRK_saved_exceptionID = 0;
 TRKState_PPC gTRKState;
 ProcessorState_PPC gTRKCPUState;
 u8 gTRKSaveState[0x94];
 u8 TRKvalue128_temp[0x10];
 
 TRKRestoreFlags_PPC gTRKRestoreFlags = {0, 0};
-TRKExceptionStatus gTRKExceptionStatus = {{0, 0, 0}, 1, 0};
-TRKStepStatus gTRKStepStatus = {0};
+static TRKExceptionStatus gTRKExceptionStatus = {{0, 0, 0}, 1, 0};
+static TRKStepStatus gTRKStepStatus = {0};
 
 const memRange gTRKMemMap[1] = {{(u8*)0, (u8*)0xFFFFFFFF, 1, 1}};
 
@@ -160,7 +160,7 @@ void TRKSwapAndGo(void);
 void TRKInterruptHandlerEnableInterrupts(void);
 u32 __TRK_get_MSR(void);
 void __TRK_set_MSR(u32 msr);
-void TRK_ppc_memcpy(void* dest, const void* src, int n, u32 destMsr, u32 srcMsr);
+static void TRK_ppc_memcpy(void* dest, const void* src, int n, u32 destMsr, u32 srcMsr);
 void ReadFPSCR(void* data);
 void WriteFPSCR(void* data);
 
@@ -177,7 +177,7 @@ asm void __TRK_set_MSR(register u32 msr) {
 }
 
 /* Byte copy that sets the MSR to srcMsr for each load and to destMsr for each store (r6/r7), then restores it. */
-asm void TRK_ppc_memcpy(register void* dest, register const void* src, register int n, register u32 destMsr, register u32 srcMsr) {
+static asm void TRK_ppc_memcpy(register void* dest, register const void* src, register int n, register u32 destMsr, register u32 srcMsr) {
     nofralloc
     mfmsr r8
     li r10, 0x0

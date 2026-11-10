@@ -34,9 +34,9 @@ EvtWord chibitoge_nakama[287];
 
 static EvtWord chibitoge_init[29];
 static EvtWord chibitoge_talk[4];
-EvtWord punishop_init[12];
-EvtWord punishop_talk[2];
-EvtWord puniinfo_init[12];
+static EvtWord punishop_init[12];
+static EvtWord punishop_talk[2];
+static EvtWord puniinfo_init[12];
 EvtWord puniinfo_talk[118];
 static NpcSetupInfo npcEnt[4];
 static BeroEntry bero_entry_data[2];
@@ -190,19 +190,19 @@ static EVT_BEGIN(chibitoge_talk)
 EVT_END()
 
 /** Init for the Puni clerk of the shop: places the clerk at (207, 0, -6) facing left. */
-EVT_BEGIN(punishop_init)
+static EVT_BEGIN(punishop_init)
     CALL(evt_npc_set_position, STRING("me"), 207, 0, -6)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
 EVT_END()
 
 /** Talk script of the Puni clerk: does nothing; the shop menu itself is opened by the shop setup (evt_shop_setup). */
-EVT_BEGIN(punishop_talk)
+static EVT_BEGIN(punishop_talk)
     RETURN
 EVT_END()
 
 /** Init for the Puni information seller: places it at (235, 0, 124) facing left. */
-EVT_BEGIN(puniinfo_init)
+static EVT_BEGIN(puniinfo_init)
     CALL(evt_npc_set_position, STRING("me"), 235, 0, 124)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN

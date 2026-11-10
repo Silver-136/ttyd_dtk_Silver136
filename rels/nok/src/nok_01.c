@@ -52,25 +52,25 @@ static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(yami_view);
 
-EvtWord nokonoko_G_regl[19];
-EvtWord nokonoko_G_talk[44];
-EvtWord nokonoko_H_regl[19];
-EvtWord nokonoko_H_talk[52];
-EvtWord nokonoko_I_regl[19];
-EvtWord nokonoko_I_talk[44];
-EvtWord open_gate[221];
-EvtWord monban_init[14];
-EvtWord monban_talk[56];
+static EvtWord nokonoko_G_regl[19];
+static EvtWord nokonoko_G_talk[44];
+static EvtWord nokonoko_H_regl[19];
+static EvtWord nokonoko_H_talk[52];
+static EvtWord nokonoko_I_regl[19];
+static EvtWord nokonoko_I_talk[44];
+static EvtWord open_gate[221];
+static EvtWord monban_init[14];
+static EvtWord monban_talk[56];
 static EvtWord nokotarou_init[26];
 static EvtWord nokotarou_talk[36];
-EvtWord nokopapa_init[19];
-EvtWord nokopapa_talk[72];
-EvtWord nokonoko_K_talk[69];
+static EvtWord nokopapa_init[19];
+static EvtWord nokopapa_talk[72];
+static EvtWord nokonoko_K_talk[69];
 
 #if VERSION >= VERSION_US
-EvtWord boss_noko_open_gate[184];
+static EvtWord boss_noko_open_gate[184];
 #else
-EvtWord boss_noko_open_gate[181];
+static EvtWord boss_noko_open_gate[181];
 #endif
 
 static s32 iri_17_item_tbl[2];
@@ -97,15 +97,15 @@ static EvtWord odoriko_3_talk[44];
 static EvtWord odoriko_3_init[33];
 static NpcSetupInfo npcEnt[10];
 static BeroEntry bero_entry_data[4];
-const char* son_npc[2];
-const char* son_mobj[2];
-const char* son_item[2];
-HouseParam son_data;
-const char* taro_npc[2];
-const char* taro_map[2];
-const char* taro_mobj[2];
-const char* taro_item[2];
-HouseParam taro_data;
+static const char* son_npc[2];
+static const char* son_mobj[2];
+static const char* son_item[2];
+static HouseParam son_data;
+static const char* taro_npc[2];
+static const char* taro_map[2];
+static const char* taro_mobj[2];
+static const char* taro_item[2];
+static HouseParam taro_data;
 static const char* ie_npc[2];
 static const char* ie_map[2];
 static HouseParam ie_data;
@@ -117,12 +117,12 @@ extern EvtWord nokotarou_tabidachi[];
 EvtWord nokotarou_tabidachi[328];
 #endif
 
-EvtWord nokotarou_tabidachi_init[89];
+static EvtWord nokotarou_tabidachi_init[89];
 static EvtWord sekai_yami_npc[59];
 static EvtWord sekai_yami_evt[234];
 static EvtWord minnnanokoe_evt[416];
 static EvtWord evt_switch_init[17];
-EvtWord e3_talk[12];
+static EvtWord e3_talk[12];
 static EvtWord epilogue_npc_entry[31];
 static EvtWord epilogue_evt_sub[194];
 static EvtWord epilogue_evt[148];
@@ -137,7 +137,7 @@ EvtWord nok_01_init_evt[337];
  * when the message advances to page index 9 it clears GF(0),
  * which releases the parallel thread that puts Mario to sleep (evt_mario_sleep_on) while Mayor Kroop talks.
  */
-void iri_08_msg(s32 type, void** work) {
+static void iri_08_msg(s32 type, void** work) {
     u16* msg = *work;
 
     if (type == 3 && msg[4] == 9) {
@@ -149,7 +149,7 @@ void iri_08_msg(s32 type, void** work) {
  * Regular script for Koopa G: wanders at random within 100 units of
  * where he stands (urouro_init_func / urouro_main_func).
  */
-EVT_BEGIN(nokonoko_G_regl)
+static EVT_BEGIN(nokonoko_G_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -160,7 +160,7 @@ EVT_END()
  * Talk script for Koopa G: story-progress dependent chatter (before the Gold Fuzzy,
  * before the father and son reunite, before Frankly's house, up to the end of chapter 8, and afterwards).
  */
-EVT_BEGIN(nokonoko_G_talk)
+static EVT_BEGIN(nokonoko_G_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_20"), 0, 0)
@@ -177,7 +177,7 @@ EVT_BEGIN(nokonoko_G_talk)
 EVT_END()
 
 /** Regular script for Koopa H: wanders at random within 100 units of his spot. */
-EVT_BEGIN(nokonoko_H_regl)
+static EVT_BEGIN(nokonoko_H_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -188,7 +188,7 @@ EVT_END()
  * Talk script for Koopa H: story-progress dependent chatter;
  * before Frankly's house he asks a yes/no question and follows up on the answer.
  */
-EVT_BEGIN(nokonoko_H_talk)
+static EVT_BEGIN(nokonoko_H_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_22"), 0, 0)
@@ -207,7 +207,7 @@ EVT_BEGIN(nokonoko_H_talk)
 EVT_END()
 
 /** Regular script for Koopa I: wanders at random within 100 units of his spot. */
-EVT_BEGIN(nokonoko_I_regl)
+static EVT_BEGIN(nokonoko_I_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -215,7 +215,7 @@ EVT_BEGIN(nokonoko_I_regl)
 EVT_END()
 
 /** Talk script for Koopa I: story-progress dependent chatter, same schedule as Koopa G. */
-EVT_BEGIN(nokonoko_I_talk)
+static EVT_BEGIN(nokonoko_I_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_24"), 0, 0)
@@ -237,7 +237,7 @@ EVT_END()
  * runs in and has a short exchange with Mario and the partner before walking off.
  * Sets the story to STG1_03_PETALBURG_GATEKEEPER.
  */
-EVT_BEGIN(open_gate)
+static EVT_BEGIN(open_gate)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg1_nok_28"), 0, STRING("me"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -299,7 +299,7 @@ EVT_END()
  * Init for the gatekeeper Koopa (門番ノコノコ): once the gate has been opened (STG1_03 and later) he stands
  * beside the gate at (370, 0, -76) instead of in front of it.
  */
-EVT_BEGIN(monban_init)
+static EVT_BEGIN(monban_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_03_PETALBURG_GATEKEEPER)
         CASE_DEFAULT
@@ -312,7 +312,7 @@ EVT_END()
  * Talk script for the gatekeeper: refuses to open the gate until Mario has spoken with Kroop,
  * runs open_gate the first time after that, and afterwards has story-progress dependent lines.
  */
-EVT_BEGIN(monban_talk)
+static EVT_BEGIN(monban_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
         CALL(evt_msg_print, 0, STRING("stg1_nok_26"), 0, 0)
@@ -367,7 +367,7 @@ EVT_END()
  * Init for Koops's father (nokopapa): after Hooktail is defeated he moves to a spot by the house at (92, 50,
  * -308), facing west.
  */
-EVT_BEGIN(nokopapa_init)
+static EVT_BEGIN(nokopapa_init)
     CALL_CHILD(npc_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG1_16_HOOKTAIL)
@@ -382,7 +382,7 @@ EVT_END()
  * After Hooktail, the line depends on the chapter
  * and on whether Koops (party id 2) is currently Mario's partner.
  */
-EVT_BEGIN(nokopapa_talk)
+static EVT_BEGIN(nokopapa_talk)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
@@ -413,7 +413,7 @@ EVT_END()
  * Talk script for Koopa K. If Trouble Center request 14 is active he gives it the first time he is spoken to and
  * repeats a reminder afterwards; otherwise story-progress dependent chatter.
  */
-EVT_BEGIN(nokonoko_K_talk)
+static EVT_BEGIN(nokonoko_K_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_14_00"), 0, 0)
@@ -438,7 +438,7 @@ EVT_BEGIN(nokonoko_K_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(boss_noko_open_gate)
+static EVT_BEGIN(boss_noko_open_gate)
     CALL(evt_msg_print, 0, STRING("stg1_nok_37"), 0, STRING("me"))
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     BEGIN_INLINE_EVENT
@@ -1008,25 +1008,25 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** NPCs inside the mayor's house: the mayor. */
-const char* son_npc[] = {
+static const char* son_npc[] = {
     "村長",
     NULL,
 };
 
 /** Map objects inside the mayor's house: the spinning floor kururin3. */
-const char* son_mobj[] = {
+static const char* son_mobj[] = {
     "kururin3",
     NULL,
 };
 
 /** Items inside the mayor's house: the Turtley Leaf iri_08 of request 8. */
-const char* son_item[] = {
+static const char* son_item[] = {
     "iri_08",
     NULL,
 };
 
 /** Door of the mayor's house: outside hit area A_son_doa, the inside room and its NPCs and objects. */
-HouseParam son_data = {
+static HouseParam son_data = {
     1, // type
     9, // hitInKind
     "A_son_doa", // hitIn
@@ -1044,31 +1044,31 @@ HouseParam son_data = {
 };
 
 /** NPCs inside Koops's house: Koops. */
-const char* taro_npc[] = {
+static const char* taro_npc[] = {
     "ノコタロウ",
     NULL,
 };
 
 /** Map group whose bounding-box culling is off while Mario is inside Koops's house: the room S_taro_in. */
-const char* taro_map[] = {
+static const char* taro_map[] = {
     "S_taro_in",
     NULL,
 };
 
 /** Map objects inside Koops's house: the box. */
-const char* taro_mobj[] = {
+static const char* taro_mobj[] = {
     "box",
     NULL,
 };
 
 /** Items inside Koops's house: item_01. */
-const char* taro_item[] = {
+static const char* taro_item[] = {
     "item_01",
     NULL,
 };
 
 /** Door of Koops's house: outside hit area A_taro_doa, the inside room and its NPCs and objects. */
-HouseParam taro_data = {
+static HouseParam taro_data = {
     1, // type
     9, // hitInKind
     "A_taro_doa", // hitIn
@@ -1220,7 +1220,7 @@ EVT_END()
  * Set-up for nokotarou_tabidachi: creates the Goombella NPC (クリスチーヌ), positions Mario, Koops, his father,
  * Koopie Koo and the mayor in a line, removes the active partner and starts the scene.
  */
-EVT_BEGIN(nokotarou_tabidachi_init)
+static EVT_BEGIN(nokotarou_tabidachi_init)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
     CALL(evt_npc_set_anim, STRING("クリスチーヌ"), STRING("PKR_S_1"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
@@ -1477,7 +1477,7 @@ static EVT_BEGIN(evt_switch_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(e3_talk)
+static EVT_BEGIN(e3_talk)
     CALL(evt_msg_print, 0, STRING("nok_01_for_E3"), 0, 0)
     CALL(evt_bero_mapchange, STRING("kpa_02"), 0)
     RETURN

@@ -57,8 +57,8 @@ typedef struct RyushiWork {
     s32 b2;
 } RyushiWork;
 static void* yuunpc_wp;
-s32 ryuwp;
-RyushiWork* xwp;
+static s32 ryuwp;
+static RyushiWork* xwp;
 
 #if VERSION >= VERSION_JP
 Monte* yuu_03_monte_p;
@@ -66,22 +66,22 @@ Monte* yuu_03_monte_p;
 
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static f32 randf(f32 min, f32 max);
-USER_FUNC(evt_ryushi_init);
+static USER_FUNC(evt_ryushi_init);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
 USER_FUNC(evt_ryushi);
-USER_FUNC(evt_ryushi_clr);
-USER_FUNC(re_init_yuunpc);
+static USER_FUNC(evt_ryushi_clr);
+static USER_FUNC(re_init_yuunpc);
 USER_FUNC(yuu_03_icon_monte_entry);
 USER_FUNC(yuu_03_cam_shift_reset);
-USER_FUNC(yuuminigame4_opening_chk);
-USER_FUNC(yuuminigame4_opening_on_off);
-USER_FUNC(yuuminigame4_set_phase);
+static USER_FUNC(yuuminigame4_opening_chk);
+static USER_FUNC(yuuminigame4_opening_on_off);
+static USER_FUNC(yuuminigame4_set_phase);
 USER_FUNC(yuunpc_go);
-USER_FUNC(evt_ryushi_init);
+static USER_FUNC(evt_ryushi_init);
 static USER_FUNC(evt_nomal_cange);
-USER_FUNC(evt_slit_cancel);
+static USER_FUNC(evt_slit_cancel);
 USER_FUNC(yuu_03_icon_monte_restart);
 
 #if VERSION >= VERSION_JP
@@ -91,9 +91,9 @@ EvtWord yuu_03_icon_monte_entry_evt[4];
 EvtWord ryushi_event[25];
 EvtWord yuu_03_kaijo_init[12];
 EvtWord yuu_03_kaijo_init2[12];
-EvtWord minigame04_main[33];
-EvtWord minigame04_start_cam[40];
-EvtWord minigame04_start_cam_cancel[20];
+static EvtWord minigame04_main[33];
+static EvtWord minigame04_start_cam[40];
+static EvtWord minigame04_start_cam_cancel[20];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord minigame04_start[];
@@ -214,7 +214,7 @@ USER_FUNC(yuu_03_icon_monte_restart) {
 #endif
 
 /** args[0] = minigame work pointer, args[1] = new phase for the Paper Mode state machine. */
-USER_FUNC(yuuminigame4_set_phase) {
+static USER_FUNC(yuuminigame4_set_phase) {
     EvtWord* args = event->args;
     SlitWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -226,7 +226,7 @@ USER_FUNC(yuuminigame4_set_phase) {
  * Script call that forces Mario out of the paper-thin "slit" squeeze motion
  * if he has just started a new motion (marioSlitForceCancel).
  */
-USER_FUNC(evt_slit_cancel) {
+static USER_FUNC(evt_slit_cancel) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -237,7 +237,7 @@ USER_FUNC(evt_slit_cancel) {
 }
 
 /** Script call that re-runs the Paper Mode racer set-up for the next round (ext_yuunpc_minigame4_init_sub). */
-USER_FUNC(re_init_yuunpc) {
+static USER_FUNC(re_init_yuunpc) {
     ext_yuunpc_minigame4_init_sub();
     return EVT_RETURN_DONE;
 }
@@ -279,7 +279,7 @@ static USER_FUNC(evt_nomal_cange) {
  * args[0] = minigame work pointer, args[1] = on/off.
  * Sets or clears the "opening cutscene pending" bit (flags bit 0).
  */
-USER_FUNC(yuuminigame4_opening_on_off) {
+static USER_FUNC(yuuminigame4_opening_on_off) {
     EvtWord* args = event->args;
     SlitWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -295,7 +295,7 @@ USER_FUNC(yuuminigame4_opening_on_off) {
  * args[0] = minigame work pointer, args[1] = output.
  * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
  */
-USER_FUNC(yuuminigame4_opening_chk) {
+static USER_FUNC(yuuminigame4_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
@@ -328,7 +328,7 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v) {
  * sets up a textured additive GX pipeline and draws each active particle as a camera-facing quad that sways
  * sideways on a sine table, tinted by the work colours.
  */
-void ryushi_disp(CameraId camera, void* param) {
+static void ryushi_disp(CameraId camera, void* param) {
     RyushiWork* hdr = xwp;
     s32 g = hdr->g;
     s32 b = hdr->b;
@@ -407,7 +407,7 @@ static f32 randf(f32 min, f32 max) {
  * Allocates the particle array (241 entries: one header plus 240 particles)
  * and sets the header's default colours, scale and counters.
  */
-USER_FUNC(evt_ryushi_init) {
+static USER_FUNC(evt_ryushi_init) {
     RyushiWork* p;
     RyushiWork* q;
     s32 i;
@@ -437,7 +437,7 @@ USER_FUNC(evt_ryushi_init) {
  * args[0] = direction mode (0 streaks toward -z, 1 toward +z).
  * Resets the particle header and lays the 240 particles out on a jittered grid (10 by 6 by 4) around the camera.
  */
-USER_FUNC(evt_ryushi_clr) {
+static USER_FUNC(evt_ryushi_clr) {
     RyushiWork* p = xwp;
     EvtWord* args = event->args;
     s32 i;
@@ -646,7 +646,7 @@ EVT_END()
  * Set-up for minigame 4 (Paper Mode): freezes Mario's controls, allocates the minigame work area,
  * dismisses the partners, starts the crowd sound and sets phase 1.
  */
-EVT_BEGIN(minigame04_main)
+static EVT_BEGIN(minigame04_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(yuu_03_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 3)
@@ -663,7 +663,7 @@ EVT_END()
  * Opening cutscene of Paper Mode: pans the 3D camera along the course,
  * then shows the "menu_title_minigame4" title card.
  */
-EVT_BEGIN(minigame04_start_cam)
+static EVT_BEGIN(minigame04_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1520.0f), FLOAT(335.0f), FLOAT(850.0f), FLOAT(-1520.0f), FLOAT(65.0f), FLOAT(-25.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -688,7 +688,7 @@ EVT_END()
  * Cleans up when the player skips the opening camera:
  * frees the title card, turns off the event camera and puts Mario at the start spot.
  */
-EVT_BEGIN(minigame04_start_cam_cancel)
+static EVT_BEGIN(minigame04_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)

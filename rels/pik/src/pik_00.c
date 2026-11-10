@@ -59,7 +59,7 @@
 #include "map/sharin.h"
 #include "map/sharin.h"
 
-USER_FUNC(img_flag);
+static USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);
 USER_FUNC(under);
 static USER_FUNC(zoom);
@@ -68,7 +68,7 @@ static USER_FUNC(zoom);
 USER_FUNC(pik_00_statuswin_force_off);
 #endif
 
-void irai_29_15_cb(s32 type, smartEntry* smart);
+static void irai_29_15_cb(s32 type, smartEntry* smart);
 static void resha_tev(MapTevCallbackInfo* info);
 
 static HitDamageReturn dmgReturnPt[2];
@@ -100,7 +100,7 @@ static EvtWord hom_10_init_evt[104];
 static EvtWord hom_10_init_evt[140];
 #endif
 
-EvtWord resha_noru[8];
+static EvtWord resha_noru[8];
 static BeroEntry bero_data[3];
 static const char* name_tbl[6];
 EvtWord evt_pik_yajirushi[71];
@@ -111,7 +111,7 @@ static EvtWord evt_train[252];
 static EvtWord evt_train[295];
 #endif
 
-EvtWord init_ekiin[8];
+static EvtWord init_ekiin[8];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_ekiin[];
@@ -123,7 +123,7 @@ static EvtWord init_papa[8];
 EvtWord talk_papa_taihou_kyoka[VERSION_PICK(403, 405)];
 static EvtWord talk_papa[141];
 static EvtWord init_mama[8];
-s32 iri_29_item_tbl[2];
+static s32 iri_29_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_mama[316];
@@ -142,7 +142,7 @@ static EvtWord talk_madam_ring_return[52];
 static EvtWord talk_madam_ring_return[54];
 #endif
 
-s32 iri_23_item_tbl[2];
+static s32 iri_23_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_madam[183];
@@ -156,19 +156,19 @@ static NpcSetupInfo npc_data[7];
 static EvtWord evt_door[15];
 static EvtWord evt_door2[12];
 static EvtWord evt_wall[22];
-const char* ie1_mobj[2];
+static const char* ie1_mobj[2];
 static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
 static EvtWord evt_door_2[12];
 static EvtWord evt_door2_2[12];
 static EvtWord evt_wall_2[29];
-const char* door_2_npc[2];
+static const char* door_2_npc[2];
 static EvtWord door_2_open[12];
 static EvtWord door_2_close[14];
 static DoorParam door_2;
-EvtWord evt_rot_door_sub[63];
-EvtWord evt_rot_door[9];
+static EvtWord evt_rot_door_sub[63];
+static EvtWord evt_rot_door[9];
 EvtWord evt_pik_00_arrival[86];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -922,7 +922,7 @@ EVT_END()
  * Exit event of the n_bero door towards the Excess Express (rsh_01_a):
  * sets GF(11) (which keeps ie_1 hidden, see under) and returns 0 in LW(0), so the normal door exit goes ahead.
  */
-EVT_BEGIN(resha_noru)
+static EVT_BEGIN(resha_noru)
     SET_VALUE(GF(11), 1)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -1106,7 +1106,7 @@ static EVT_BEGIN(evt_train)
 EVT_END()
 
 /** Init for the station attendant (駅員): puts him at (-250, 60, -350) next to the train door. */
-EVT_BEGIN(init_ekiin)
+static EVT_BEGIN(init_ekiin)
     CALL(evt_npc_set_position, STRING("me"), -250, 60, -350)
     RETURN
 EVT_END()
@@ -1408,7 +1408,7 @@ static EVT_BEGIN(init_mama)
 EVT_END()
 
 /** Items the player may offer for Trouble Center request 29: the Present only, ended by -1. */
-s32 iri_29_item_tbl[] = {
+static s32 iri_29_item_tbl[] = {
     ITEM_PRESENT, -1,
 };
 
@@ -1617,7 +1617,7 @@ static EVT_BEGIN(talk_madam_ring_return)
 EVT_END()
 
 /** Items the player may offer for Trouble Center request 23: the Wrestling Mag only, ended by -1. */
-s32 iri_23_item_tbl[] = {
+static s32 iri_23_item_tbl[] = {
     ITEM_WRESTLING_MAG, -1,
 };
 
@@ -1817,7 +1817,7 @@ static EVT_BEGIN(evt_wall)
 EVT_END()
 
 /** Map objects inside the first villa: the badge chest. */
-const char* ie1_mobj[] = {
+static const char* ie1_mobj[] = {
     "mobj_badge_gat",
     NULL,
 };
@@ -1896,7 +1896,7 @@ static EVT_BEGIN(evt_wall_2)
 EVT_END()
 
 /** NPCs inside the second villa: the madam. */
-const char* door_2_npc[] = {
+static const char* door_2_npc[] = {
     "マダム",
     NULL,
 };
@@ -1946,7 +1946,7 @@ static DoorParam door_2 = {
  * its spin speed (GW(10)) decays by about 4 percent per frame, the angle accumulates in GW(11),
  * and a turning sound plays while the speed stays above 0.3.
  */
-EVT_BEGIN(evt_rot_door_sub)
+static EVT_BEGIN(evt_rot_door_sub)
     SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(GW(11), FLOAT(0.0f))
     CALL(evt_hit_bind_mapobj, STRING("a_door_3"), STRING("door_3"))
@@ -1973,7 +1973,7 @@ EVT_BEGIN(evt_rot_door_sub)
 EVT_END()
 
 /** Called when Mario pushes the spinning door: adds 0.5 to its spin speed GW(10), capped at 10. */
-EVT_BEGIN(evt_rot_door)
+static EVT_BEGIN(evt_rot_door)
     IF_INT_LESS(GW(10), 10)
         ADD_FLOAT(GW(10), FLOAT(0.5f))
     END_IF
@@ -2258,7 +2258,7 @@ EVT_BEGIN(pik_00_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(img_flag) {
+static USER_FUNC(img_flag) {
     animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
 }
@@ -2315,7 +2315,7 @@ static USER_FUNC(under) {
  * when the second page of the text appears (curPage 1) it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
 
  */
-void irai_29_15_cb(s32 type, smartEntry* smart) {
+static void irai_29_15_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
     if (type == 3 && info->curPage == 1) {

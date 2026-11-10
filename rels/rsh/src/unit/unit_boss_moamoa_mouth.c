@@ -31,7 +31,7 @@ static EvtWord dead_event[88];
 static EvtWord phase_event[2];
 static EvtWord attack_event[21];
 static EvtWord evt_attack_other_arm[81];
-const char* mouth_Attack_front[7];
+static const char* mouth_Attack_front[7];
 static EvtWord evt_attack[302];
 static EvtWord wait_event[6];
 
@@ -339,7 +339,7 @@ EVT_END()
  * Animation names the Smorg mouth plays for its attack, in three NULL-ended sections:
  * A_2_1 and A_2_2, then A_2_3, then A_2_4.
  */
-const char* mouth_Attack_front[] = {
+static const char* mouth_Attack_front[] = {
     "A_2_1",
     "A_2_2",
     NULL,

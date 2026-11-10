@@ -26,7 +26,7 @@
 #include "driver/itemdrv.h"
 
 EvtWord bero_05_custom_in[30];
-EvtWord bero_05_custom_out[12];
+static EvtWord bero_05_custom_out[12];
 
 #if VERSION <= VERSION_DEMO_JP
 static BeroEntry bero_entry_data[6];
@@ -39,11 +39,11 @@ static EvtWord guide_init[48];
 static EvtWord guide_talk[11];
 static NpcSetupInfo npcEnt[2];
 static EvtWord puni_walk_se[20];
-EvtWord puni_soguu_3[584];
-EvtWord anm_para_snd[72];
-EvtWord anm_rapa_snd[72];
+static EvtWord puni_soguu_3[584];
+static EvtWord anm_para_snd[72];
+static EvtWord anm_rapa_snd[72];
 EvtWord puni_switch[133];
-EvtWord puni_nakama[93];
+static EvtWord puni_nakama[93];
 EvtWord tik03_switch_evt[70];
 EvtWord tik_03_init_evt[116];
 
@@ -64,7 +64,7 @@ EVT_BEGIN(bero_05_custom_in)
     RETURN
 EVT_END()
 
-EVT_BEGIN(bero_05_custom_out)
+static EVT_BEGIN(bero_05_custom_out)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_35_PUNI_JOINS)
         SET_VALUE(GSW_STORY_PROGRESS, STG1_END_TO_STAGE_2)
     END_IF
@@ -255,7 +255,7 @@ EVT_END()
  * where he asks for help (mac_1_012 to mac_1_029_00, with a yes/no prompt at mac_1_014).
  * Ends with the music back to the sewer theme and story progress STG1_33_A_PUNI_PLEA_FOR_HELP.
  */
-EVT_BEGIN(puni_soguu_3)
+static EVT_BEGIN(puni_soguu_3)
     // Mario arrives; Punio spots him and scurries off to the west end of the room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -441,7 +441,7 @@ EVT_END()
  * a SFX_STG1_LOAD_APPEAR1 step sound at each of seven positions from X = 55 to 425 and at -454, in sequence,
  * timed to the opening animation.
  */
-EVT_BEGIN(anm_para_snd)
+static EVT_BEGIN(anm_para_snd)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_LOAD_APPEAR1"), 55, -50, -90, 0)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_LOAD_APPEAR1"), 115, -50, -90, 0)
@@ -461,7 +461,7 @@ EVT_BEGIN(anm_para_snd)
 EVT_END()
 
 /** The same as anm_para_snd played in reverse order, for the passage closing again. */
-EVT_BEGIN(anm_rapa_snd)
+static EVT_BEGIN(anm_rapa_snd)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_LOAD_APPEAR1"), -454, -50, -90, 0)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_LOAD_APPEAR1"), 425, -50, -90, 0)
@@ -526,7 +526,7 @@ EVT_END()
  * then the guide Puni joins as the second partner (mac_1_031): his NPC is removed and he follows Mario.
  * Sets story progress STG1_35_PUNI_JOINS.
  */
-EVT_BEGIN(puni_nakama)
+static EVT_BEGIN(puni_nakama)
     LOOP(0)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_34_PUNIS_SECRET_PASSAGE)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

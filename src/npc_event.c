@@ -37,7 +37,7 @@
  * Sets args[0] to the model name of the calling NPC's tribe,
  * so a helper NPC (Dry Bones' bone, Magikoopa's and Wizzerd's magic) can be entered with the same model.
  */
-USER_FUNC(mahoon_get_groupname) {
+static USER_FUNC(mahoon_get_groupname) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     evtSetValue(event, args[0], (EvtWord)npc->tribe->modelName);
@@ -45,7 +45,7 @@ USER_FUNC(mahoon_get_groupname) {
 }
 
 /** Sets args[0] to 1 if the calling NPC ran into a wall on its last move, else 0. */
-USER_FUNC(npc_check_wall_stop) {
+static USER_FUNC(npc_check_wall_stop) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     if (npc->wallHit) {
@@ -60,7 +60,7 @@ USER_FUNC(npc_check_wall_stop) {
  * Spins the NPC named args[0] 18 degrees a frame while it is still being blown away (Flurrie's Gale Force);
  * then faces it forward again and finishes.
  */
-USER_FUNC(_wait_blow_end) {
+static USER_FUNC(_wait_blow_end) {
     const char* nm = (const char*)evtGetValue(event, event->args[0]);
     NpcEntry* npc = evtNpcNameToPtr(event, nm);
     if (npcCheckBlow(npc)) {
@@ -76,7 +76,7 @@ USER_FUNC(_wait_blow_end) {
  * if the calling enemy has floor within 5 units below it (it was stomped flat on the ground),
  * 0 if not or when kpaGetLevel is 0 (the player is not Bowser, or Bowser is small).
  */
-USER_FUNC(pressCheck) {
+static USER_FUNC(pressCheck) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 hx, hy, hz, dist, nx, ny, nz;
@@ -98,7 +98,7 @@ USER_FUNC(pressCheck) {
  * jumps it toward args[1-3] taking args[4] ms (or at speed args[5]), with height args[6],
  * until it falls below y args[7]. Blocks until then.
  */
-USER_FUNC(_2d_dead_jump) {
+static USER_FUNC(_2d_dead_jump) {
     EvtWord* args = event->args;
     const char* id = (const char*)evtGetValue(event, args[0]);
     f32 tx = evtGetFloat(event, args[1]);
@@ -189,7 +189,7 @@ USER_FUNC(_2d_dead_jump) {
  * Sets args[1] to the sideways offset for a side-scrolling death hop of the NPC named args[0]:
  * 20 away from Mario's side, 0 when level with him.
  */
-USER_FUNC(_2d_get_dead_jump_offset) {
+static USER_FUNC(_2d_get_dead_jump_offset) {
     EvtWord* args = event->args;
     f32 d;
     f32 k;
@@ -216,7 +216,7 @@ USER_FUNC(_2d_get_dead_jump_offset) {
  * Builds the name of the calling Bill Blaster's bullet number args[0]:
  * the blaster's own name with the digit args[0] + 1 appended, returned in args[1] (a static buffer).
  */
-USER_FUNC(killer_make_name) {
+static USER_FUNC(killer_make_name) {
     static char name[32];
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
@@ -231,26 +231,26 @@ USER_FUNC(killer_make_name) {
 }
 
 /** Sets args[0] to the height Pider drops from: the z of the calling NPC's territory loiter setting. */
-USER_FUNC(piders_get_height) {
+static USER_FUNC(piders_get_height) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     evtSetFloat(event, args[0], npc->territoryLoiter.z);
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(piders_draw_yawn);
-USER_FUNC(gesso_ground_check);
-USER_FUNC(set_bottle_flag_init);
+static USER_FUNC(piders_draw_yawn);
+static USER_FUNC(gesso_ground_check);
+static USER_FUNC(set_bottle_flag_init);
 USER_FUNC(npc_fire_eff_fadeout);
-USER_FUNC(zakoEntryFall);
-USER_FUNC(dokanCheck);
+static USER_FUNC(zakoEntryFall);
+static USER_FUNC(dokanCheck);
 USER_FUNC(zakoEntryDokan);
-USER_FUNC(limitSpd);
-USER_FUNC(getSpdRun);
-USER_FUNC(getSpdWalk);
-USER_FUNC(upperCheck);
-USER_FUNC(cliffCheck);
-USER_FUNC(camGetPos);
+static USER_FUNC(limitSpd);
+static USER_FUNC(getSpdRun);
+static USER_FUNC(getSpdWalk);
+static USER_FUNC(upperCheck);
+static USER_FUNC(cliffCheck);
+static USER_FUNC(camGetPos);
 USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
@@ -259,9 +259,9 @@ EvtWord _2d_dead_rotate_event[];
 
 EvtWord nokonoko_shell_return_event[50];
 EvtWord togenoko_shell_return_event[50];
-EvtWord met_init_event_common[21];
-EvtWord met_set_anim_wait_event[48];
-EvtWord met_set_anim_walk_event[48];
+static EvtWord met_init_event_common[21];
+static EvtWord met_set_anim_wait_event[48];
+static EvtWord met_set_anim_walk_event[48];
 
 EvtWord killer_move_event[79];
 
@@ -1196,7 +1196,7 @@ EVT_END()
 
 // No RETURN and no end marker (21 words, size 0x54 in both symbol maps): a CALL_CHILD of this script continues
 // into met_set_anim_wait_event, which follows it in .data, sets the wait pose and returns (a shared tail).
-EvtWord met_init_event_common[] = {
+static EvtWord met_init_event_common[] = {
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1207,7 +1207,7 @@ EvtWord met_init_event_common[] = {
  * Sets the standing pose of a Buzzy Beetle (MET) or Spike Top (TMT),
  * or the upside-down ceiling pose (SMT/STM) when it clings to the ceiling (battle setup work 0 is 1).
  */
-EVT_BEGIN(met_set_anim_wait_event)
+static EVT_BEGIN(met_set_anim_wait_event)
     CALL(evt_npc_get_btlsetup_work, STRING("me"), 0, LW(15))
     IF_INT_EQUAL(LW(15), 0)
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
@@ -1228,7 +1228,7 @@ EVT_BEGIN(met_set_anim_wait_event)
 EVT_END()
 
 /** Sets the walking pose of a Buzzy Beetle or Spike Top, normal or on the ceiling (see met_set_anim_wait_event). */
-EVT_BEGIN(met_set_anim_walk_event)
+static EVT_BEGIN(met_set_anim_walk_event)
     CALL(evt_npc_get_btlsetup_work, STRING("me"), 0, LW(15))
     IF_INT_EQUAL(LW(15), 0)
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
@@ -2589,7 +2589,7 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
  * Queues the calling Pider's thread for drawing this frame (piders_draw_yarn_sub);
  * called every frame by its events.
  */
-USER_FUNC(piders_draw_yawn) {
+static USER_FUNC(piders_draw_yawn) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, piders_draw_yarn_sub, npc);
     return EVT_RETURN_DONE;
@@ -4232,7 +4232,7 @@ USER_FUNC(chain_main) {
  * Sets args[0] to the 3D camera's x position; the side-scrolling enemies use it to wake up
  * when they scroll into view.
  */
-USER_FUNC(camGetPos) {
+static USER_FUNC(camGetPos) {
     EvtWord* args = event->args;
     evtSetFloat(event, args[0], camGetPtr(CAMERA_3D)->cameraPos.x);
     return EVT_RETURN_DONE;
@@ -4242,7 +4242,7 @@ USER_FUNC(camGetPos) {
  * For side-scrolling enemies: sets args[0] to 0 when there is floor under and just ahead of the calling NPC,
  * 1 when only under it (a ledge ahead), 2 when there is no floor under it.
  */
-USER_FUNC(cliffCheck) {
+static USER_FUNC(cliffCheck) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 dirv;
@@ -4272,7 +4272,7 @@ USER_FUNC(cliffCheck) {
  * For side-scrolling enemies: sets args[0] to 1
  * if a ceiling is just above the calling NPC's head (checked 15 units either side), else 0.
  */
-USER_FUNC(upperCheck) {
+static USER_FUNC(upperCheck) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 hx, hy, hz, dist, nx, ny, nz;
@@ -4290,7 +4290,7 @@ USER_FUNC(upperCheck) {
 }
 
 /** Sets args[0] to the calling NPC's walking speed, stored in the z of its territory loiter setting. */
-USER_FUNC(getSpdWalk) {
+static USER_FUNC(getSpdWalk) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     evtSetFloat(event, args[0], npc->territoryLoiter.z);
@@ -4298,7 +4298,7 @@ USER_FUNC(getSpdWalk) {
 }
 
 /** Sets args[0] to the calling NPC's running speed, stored in the z of its territory homing setting. */
-USER_FUNC(getSpdRun) {
+static USER_FUNC(getSpdRun) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     evtSetFloat(event, args[0], npc->territoryHoming.z);
@@ -4306,7 +4306,7 @@ USER_FUNC(getSpdRun) {
 }
 
 /** Sets the calling NPC's maximum fall speed to args[0]. */
-USER_FUNC(limitSpd) {
+static USER_FUNC(limitSpd) {
     f32 v = evtGetFloat(event, event->args[0]);
     evtNpcNameToPtr(event, "me")->maxFallSpeed = v;
     return EVT_RETURN_DONE;
@@ -4696,7 +4696,7 @@ USER_FUNC(zakoEntryDokan) {
 }
 
 /** Sets args[0] to 1 while the calling X-Naut spawner's pipe map object (mobj9 or mobj14) still exists, else 0. */
-USER_FUNC(dokanCheck) {
+static USER_FUNC(dokanCheck) {
     EvtWord* args = event->args;
     char name[32];
     NpcEntry* me = evtNpcNameToPtr(event, "me");
@@ -4719,7 +4719,7 @@ USER_FUNC(dokanCheck) {
  * or drops 1-3 / 4-6 for the two points of the second area):
  * picks the first one parked below the stage and restarts its move event in falling mode (unit work 2).
  */
-USER_FUNC(zakoEntryFall) {
+static USER_FUNC(zakoEntryFall) {
     char names[3][16];
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* zako;
@@ -4815,7 +4815,7 @@ USER_FUNC(npc_fire_eff_fadeout) {
  * Mario cannot hit it, side-scrolling mode, gravity, intangible, and immune to every Bowser-stage defeat but
  * the goal pole.
  */
-USER_FUNC(set_bottle_flag_init) {
+static USER_FUNC(set_bottle_flag_init) {
     NpcEntry* npc = evtNpcNameToPtr(event, "slave_0");
     npc->flags |= (NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY | NPC_FLAG_2D | NPC_FLAG_NO_PLAYER_ATTACK);
     npc->hazardFlags |= (KPA_ENCOUNT_STOMP | KPA_ENCOUNT_FIRE | KPA_ENCOUNT_STAR | KPA_ENCOUNT_MOBJ | KPA_ENCOUNT_MAGMA);
@@ -4823,7 +4823,7 @@ USER_FUNC(set_bottle_flag_init) {
 }
 
 /** For the side-scrolling Blooper: sets args[0] to 1 if there is floor within 5 units below it, else 0. */
-USER_FUNC(gesso_ground_check) {
+static USER_FUNC(gesso_ground_check) {
     EvtWord* args = event->args;
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 hx, hy, hz, dist, nx, ny, nz;

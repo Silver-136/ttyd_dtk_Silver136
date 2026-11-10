@@ -36,35 +36,35 @@
 
 void icon_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_sousa_icon);
-USER_FUNC(item_chk);
-USER_FUNC(evt_itemNameToItemID);
+static USER_FUNC(evt_sousa_icon);
+static USER_FUNC(item_chk);
+static USER_FUNC(evt_itemNameToItemID);
 
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[2];
-EvtWord evt_kaitentou[44];
-EvtWord evt_kaitentou2[44];
+static EvtWord evt_kaitentou[44];
+static EvtWord evt_kaitentou2[44];
 static EvtWord evt_hari[125];
-EvtWord ufo_hand[129];
-EvtWord move_left[5];
-EvtWord move_left2[5];
-EvtWord move_up[5];
-EvtWord move_up2[5];
-EvtWord hand_success[65];
-EvtWord hand_fail[128];
-EvtWord hand_release[65];
-EvtWord ufo_main[525];
-EvtWord evt_ufo_init[115];
-EvtWord evt_zenmai[141];
-EvtWord blink_sw[33];
+static EvtWord ufo_hand[129];
+static EvtWord move_left[5];
+static EvtWord move_left2[5];
+static EvtWord move_up[5];
+static EvtWord move_up2[5];
+static EvtWord hand_success[65];
+static EvtWord hand_fail[128];
+static EvtWord hand_release[65];
+static EvtWord ufo_main[525];
+static EvtWord evt_ufo_init[115];
+static EvtWord evt_zenmai[141];
+static EvtWord blink_sw[33];
 EvtWord evt_ufo_sousaban[VERSION_PICK(267, 279)];
 static EvtWord evt_sw[141];
 EvtWord evt_sw_reinit[88];
 EvtWord evt_sw0[72];
 EvtWord evt_sw1[72];
 EvtWord evt_sw2[72];
-s32 haguruma_tbl[2];
+static s32 haguruma_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_haguruma[130];
@@ -74,7 +74,7 @@ static EvtWord evt_haguruma[132];
 
 EvtWord badge_evt[5];
 EvtWord badge_evt2[5];
-EvtWord badge_evt3[5];
+static EvtWord badge_evt3[5];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_03_init_evt[];
@@ -144,7 +144,7 @@ static BeroEntry bero_entry_data[] = {
  * used for the rotating warning beacon S_pato4 once the crane has been powered.
  * The object is unhidden while it spins and hidden again at the end.
  */
-EVT_BEGIN(evt_kaitentou)
+static EVT_BEGIN(evt_kaitentou)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)
@@ -167,7 +167,7 @@ EVT_END()
  * until GF(15) is set (evt_sw_reinit sets it to stop all spinners);
  * the lamp spinners (S_pato1 to 3) of the crane power switches use it.
  */
-EVT_BEGIN(evt_kaitentou2)
+static EVT_BEGIN(evt_kaitentou2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)
@@ -247,7 +247,7 @@ EVT_END()
  * over one second and back.
  * GF(9) stays 1 through both motions, then becomes 0 for the two-frame wait before the next cycle.
  */
-EVT_BEGIN(ufo_hand)
+static EVT_BEGIN(ufo_hand)
     LOOP(0)
         SET_VALUE(GF(9), 1)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 3000, 1000)
@@ -290,13 +290,13 @@ EVT_END()
  * Sets GF(10) to 1, the flag evt_ufo_sousaban raises while the crane is driven along X.
  * No calls to this script appear in this file; evt_ufo_sousaban sets GF(10) itself.
  */
-EVT_BEGIN(move_left)
+static EVT_BEGIN(move_left)
     SET_VALUE(GF(10), 1)
     RETURN
 EVT_END()
 
 /** Sets GF(10) back to 0; no calls appear in this file. */
-EVT_BEGIN(move_left2)
+static EVT_BEGIN(move_left2)
     SET_VALUE(GF(10), 0)
     RETURN
 EVT_END()
@@ -305,19 +305,19 @@ EVT_END()
  * Sets GF(11) to 1, the flag evt_ufo_sousaban raises while the crane is driven along Z.
  * No calls to this script appear in this file; evt_ufo_sousaban sets GF(11) itself.
  */
-EVT_BEGIN(move_up)
+static EVT_BEGIN(move_up)
     SET_VALUE(GF(11), 1)
     RETURN
 EVT_END()
 
 /** Sets GF(11) back to 0; no calls appear in this file. */
-EVT_BEGIN(move_up2)
+static EVT_BEGIN(move_up2)
     SET_VALUE(GF(11), 0)
     RETURN
 EVT_END()
 
 /** Rotates all three claw-arm pairs from 0 to 30 degrees over one second. */
-EVT_BEGIN(hand_success)
+static EVT_BEGIN(hand_success)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 3000, 1000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -339,7 +339,7 @@ EVT_END()
  * Rotates the claw-arm pairs from 0 to 50 degrees and back, one second per step.
  * No calls appear in this file; ufo_main calls hand_success for both item_chk results.
  */
-EVT_BEGIN(hand_fail)
+static EVT_BEGIN(hand_fail)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 5000, 1000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -372,7 +372,7 @@ EVT_BEGIN(hand_fail)
 EVT_END()
 
 /** Rotates the claw-arm pairs from 30 degrees back to 0 over one second. */
-EVT_BEGIN(hand_release)
+static EVT_BEGIN(hand_release)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 3000, 0, 1000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -390,7 +390,7 @@ EVT_BEGIN(hand_release)
     RETURN
 EVT_END()
 
-EVT_BEGIN(ufo_main)
+static EVT_BEGIN(ufo_main)
     SET_VALUE(GF(10), 0)
     SET_VALUE(GF(11), 0)
     SET_VALUE(GF(12), 0)
@@ -573,7 +573,7 @@ EVT_END()
  * and the prize-light balls S_tama_a/S_tama_b blink alternately and S_hikari rotates
  * until GF(14) (crane shut down). ufo_main starts after these inline events are launched.
  */
-EVT_BEGIN(evt_ufo_init)
+static EVT_BEGIN(evt_ufo_init)
     LOOP(3)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(100)
@@ -622,7 +622,7 @@ EVT_END()
  * one revolution takes 2 seconds, 1 second once STG7_19_THE_DOOR_TO_LORD_CRUMP is reached.
  * Plays SFX_STG7_AMB_GEAR1.
  */
-EVT_BEGIN(evt_zenmai)
+static EVT_BEGIN(evt_zenmai)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_AMB_GEAR1"), 0)
     LOOP(0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
@@ -661,7 +661,7 @@ EVT_END()
  * Makes the switch lamps pair LW(0) and LW(1) blink forever (the three crane power switches use it while they
  * are not yet pressed).
  */
-EVT_BEGIN(blink_sw)
+static EVT_BEGIN(blink_sw)
     LOOP(0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
@@ -964,7 +964,7 @@ EVT_BEGIN(evt_sw2)
 EVT_END()
 
 /** Key item list for the item menu in the crane game room: the Cog. */
-s32 haguruma_tbl[] = {
+static s32 haguruma_tbl[] = {
     85, -1,
 };
 
@@ -1024,7 +1024,7 @@ EVT_BEGIN(badge_evt2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(badge_evt3)
+static EVT_BEGIN(badge_evt3)
     SET_VALUE(GSWF_STARPIECE_98, 1)
     RETURN
 EVT_END()
@@ -1170,7 +1170,7 @@ EVT_BEGIN(aji_03_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(evt_sousa_icon) {
+static USER_FUNC(evt_sousa_icon) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
     s32 x = evtGetValue(event, args[1]);
@@ -1221,7 +1221,7 @@ void icon_disp(CameraId camera, void* param) {
 }
 
 /** Script function: looks up the item named in args[0] and returns its item ID in args[1] and the name in args[2]. */
-USER_FUNC(evt_itemNameToItemID) {
+static USER_FUNC(evt_itemNameToItemID) {
     static char tmp[64];
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -1238,7 +1238,7 @@ USER_FUNC(evt_itemNameToItemID) {
  * the items named keihin00 to keihin31.
  * Returns TRUE and the prize's name in args[0] and args[1], or FALSE and 0 when nothing is within reach.
  */
-USER_FUNC(item_chk) {
+static USER_FUNC(item_chk) {
     char name[256];
     EvtWord* args = event->args;
     f32 x = evtGetValue(event, GW(10));

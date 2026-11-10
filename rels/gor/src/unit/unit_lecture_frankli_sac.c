@@ -20,7 +20,7 @@
 #include "battle/battle_sub.h"
 
 u8 dark;
-s32 darkCount;
+static s32 darkCount;
 f32 point[4];
 #include "battle/battle_break_slot.h"
 
@@ -30,18 +30,18 @@ f32 point[4];
 #define UNIT_WORK_AC_FAILURES 2  // failed action commands in step 2: 0 -> mac_0_b_t3_008, 1 -> 009, then 010 each time
 
 static USER_FUNC(_battle_set_lecture_unit_id);
-USER_FUNC(_set_actend_event);
-USER_FUNC(aud_attack_end);
+static USER_FUNC(_set_actend_event);
+static USER_FUNC(aud_attack_end);
 USER_FUNC(aud_attack_init);
-USER_FUNC(aud_dec);
-USER_FUNC(aud_inc);
-USER_FUNC(aud_joy);
-USER_FUNC(blinkAP);
-USER_FUNC(get_ac_result);
-USER_FUNC(get_actkind);
-USER_FUNC(hammer_on);
+static USER_FUNC(aud_dec);
+static USER_FUNC(aud_inc);
+static USER_FUNC(aud_joy);
+static USER_FUNC(blinkAP);
+static USER_FUNC(get_ac_result);
+static USER_FUNC(get_actkind);
+static USER_FUNC(hammer_on);
 static USER_FUNC(lecture_init);
-void spot_square_disp(CameraId cameraId, void* param);
+static void spot_square_disp(CameraId cameraId, void* param);
 
 BattleUnitKind unit_lecture_frankli_sac;
 static BattleUnitDefense defence;
@@ -50,7 +50,7 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[5];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
-EvtWord _test_event[20];
+static EvtWord _test_event[20];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord stop_wait_event[];
@@ -180,7 +180,7 @@ static BattleUnitKindPart parts[] = {
  * Test event: Frankly's lecture intro (mac_0_b_t3_000) and sets the act-end event of Mario to none.
  * Not used by the rest of the file.
  */
-EVT_BEGIN(_test_event)
+static EVT_BEGIN(_test_event)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
     CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t3_000"), 0, -2)
@@ -188,7 +188,7 @@ EVT_BEGIN(_test_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_set_actend_event) {
+static USER_FUNC(_set_actend_event) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     s32 id = evtGetValue(event, args[0]);
@@ -243,31 +243,31 @@ static USER_FUNC(lecture_init) {
 }
 
 /** Script helper that stores the kind of action Mario chose in the command menu (actType) in args[0]. */
-USER_FUNC(get_actkind) {
+static USER_FUNC(get_actkind) {
     evtSetValue(event, event->args[0], _battleWorkPointer->commandMenu.actType);
     return EVT_RETURN_DONE;
 }
 
 /** Script helper that stores the success of the last action command in args[0]. */
-USER_FUNC(get_ac_result) {
+static USER_FUNC(get_ac_result) {
     evtSetValue(event, event->args[0], _battleWorkPointer->lastAcSuccess);
     return EVT_RETURN_DONE;
 }
 
 /** Script helper that makes the audience cheer as in the Star Power lecture. */
-USER_FUNC(aud_joy) {
+static USER_FUNC(aud_joy) {
     BattleAudienceJoySACLecture();
     return EVT_RETURN_DONE;
 }
 
 /** Script helper that adds 5 audience members. */
-USER_FUNC(aud_inc) {
+static USER_FUNC(aud_inc) {
     BattleAudienceAddAudienceNum(5);
     return EVT_RETURN_DONE;
 }
 
 /** Script helper that removes 5 audience members. */
-USER_FUNC(aud_dec) {
+static USER_FUNC(aud_dec) {
     BattleAudienceAddAudienceNum(-5);
     return EVT_RETURN_DONE;
 }
@@ -276,7 +276,7 @@ USER_FUNC(aud_dec) {
  * Script helper that readies audience seat 48 to throw a hammer (item 0xEF) onto the stage;
  * blocks until the hammer is readied, then freezes the audience again.
  */
-USER_FUNC(hammer_on) {
+static USER_FUNC(hammer_on) {
     BattleAudience* aud = BattleAudienceBaseGetPtr();
     BattleAudienceMember* member = BattleAudienceGetPtr(48);
 
@@ -302,13 +302,13 @@ USER_FUNC(aud_attack_init) {
 }
 
 /** Script helper that ends the audience attack part: sets the lecture flag. */
-USER_FUNC(aud_attack_end) {
+static USER_FUNC(aud_attack_end) {
     _battleWorkPointer->lectureFlags |= 1;
     return EVT_RETURN_DONE;
 }
 
 /** Script helper that makes the AP (Star Power) gauge in the status window blink for 160 frames. */
-USER_FUNC(blinkAP) {
+static USER_FUNC(blinkAP) {
     statusAPBlink(160);
     return EVT_RETURN_DONE;
 }
@@ -318,7 +318,7 @@ USER_FUNC(blinkAP) {
  * args[0..3] are the left, top, right and bottom of the lit area,
  * args[4] the fade time and args[5] the hold time (frames). Used to point at the gauge.
  */
-USER_FUNC(spot_square) {
+static USER_FUNC(spot_square) {
     EvtWord* args = event->args;
     s32 fadeFrames;
     s32 holdFrames;
@@ -345,7 +345,7 @@ USER_FUNC(spot_square) {
 }
 
 /** Draws one axis-aligned black quad in 2D from (x0, y0) to (x1, y1). */
-void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1) {
+static void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x0, y0, 0.0f);
     GXPosition3f32(x1, y0, 0.0f);
@@ -354,7 +354,7 @@ void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1) {
 }
 
 /** Draw callback of spot_square: fills the screen with translucent black in four quads around the lit rectangle. */
-void spot_square_disp(CameraId cameraId, void* param) {
+static void spot_square_disp(CameraId cameraId, void* param) {
     CameraEntry* cam;
     Mtx mtx;
 

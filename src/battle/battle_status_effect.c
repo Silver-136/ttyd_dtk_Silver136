@@ -70,7 +70,7 @@ s8 _st_pri_data[] = {
  * msg1 when the change is marked changed, msg0 otherwise; only Charge differs ("...But it had no effect!").
  * Ends with type -1.
  */
-StChgMsgData _st_chg_msg_data[] = {
+static StChgMsgData _st_chg_msg_data[] = {
     { STATUS_POISON, "\202\307\202\255", "msg_st_chg_poison", "msg_st_chg_poison" },
     { STATUS_CHARGE, "\203`\203\203\201[\203W", "msg_st_chg_charge", "msg_st_chg_charge3" },
     { STATUS_SLEEP, "\202\313\202\336\202\350", "msg_st_chg_sleep", "msg_st_chg_sleep" },

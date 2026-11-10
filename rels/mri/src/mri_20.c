@@ -16,14 +16,14 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-BeroEntry bero_black_shadow[1];
+static BeroEntry bero_black_shadow[1];
 static BeroEntry bero_entry_data[5];
 static EvtWord evt_ueki_08[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_20_init_evt[123];
 
 /** Exit of mri_20: pipe dokan1 to mri_04. */
-BeroEntry bero_black_shadow[] = {
+static BeroEntry bero_black_shadow[] = {
     {
         "dokan1", // hitName
         2, // type

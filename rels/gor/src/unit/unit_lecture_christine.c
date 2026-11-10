@@ -23,9 +23,9 @@
 #define UNIT_WORK_PAIRED_UNIT_UNUSED 0 // the lecture_frankli unit's id, written at setup and never read (Frankly reads his own slot 0, which holds this unit's id)
 
 static USER_FUNC(_battle_set_lecture_unit_id);
-USER_FUNC(_set_lecture_mode);
+static USER_FUNC(_set_lecture_mode);
 USER_FUNC(_get_defence_ac_result);
-USER_FUNC(_config_key_record);
+static USER_FUNC(_config_key_record);
 static USER_FUNC(_krb_get_dir);
 extern BattleUnitKind unit_lecture_frankli;
 
@@ -35,20 +35,20 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
-BattleUnitSetup entry_lecture_frankli;
+static BattleUnitSetup entry_lecture_frankli;
 static EvtWord init_event[78];
 static EvtWord damage_event[10];
-EvtWord lecture_christine_ac_counter_damage_event[117];
+static EvtWord lecture_christine_ac_counter_damage_event[117];
 static EvtWord phase_event[2];
 static EvtWord wait_event[6];
 static EvtWord attack_event[19];
-BattleWeapon lec_weapon_zutsuki_1;
-BattleWeapon lec_weapon_zutsuki_2;
+static BattleWeapon lec_weapon_zutsuki_1;
+static BattleWeapon lec_weapon_zutsuki_2;
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord lecture_zutsuki_attack_event[554];
+static EvtWord lecture_zutsuki_attack_event[554];
 #else
-EvtWord lecture_zutsuki_attack_event[570];
+static EvtWord lecture_zutsuki_attack_event[570];
 #endif
 
 /**
@@ -84,7 +84,7 @@ USER_FUNC(_get_defence_ac_result) {
  * marks the defence result as 4, resets the action command pad
  * and stores args[0] as the first entry of the pad's pressed-button history.
  */
-USER_FUNC(_config_key_record) {
+static USER_FUNC(_config_key_record) {
     s32 record = event->args[0];
     BattleWork* wp = _battleWorkPointer;
     BattleWorkPad* pad = &wp->actionCommands.pad;
@@ -193,7 +193,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Setup entry that adds Prof. Frankly at (0, 0, -45) when the tutorial battle starts. */
-BattleUnitSetup entry_lecture_frankli = {
+static BattleUnitSetup entry_lecture_frankli = {
     &unit_lecture_frankli, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
@@ -245,7 +245,7 @@ EVT_END()
  * says mac_0_b_t2_015 and advances the lecture's unit work (to 8 if it was 7,
  * otherwise sets 7 on the other slot).
  */
-EVT_BEGIN(lecture_christine_ac_counter_damage_event)
+static EVT_BEGIN(lecture_christine_ac_counter_damage_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
@@ -303,7 +303,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Goombella's headbutt 1: 1 damage to a single target, a jump-style hit. */
-BattleWeapon lec_weapon_zutsuki_1 = {
+static BattleWeapon lec_weapon_zutsuki_1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -339,7 +339,7 @@ BattleWeapon lec_weapon_zutsuki_1 = {
 };
 
 /** Goombella's headbutt 2: 1 damage to a single target, a jump-style hit. */
-BattleWeapon lec_weapon_zutsuki_2 = {
+static BattleWeapon lec_weapon_zutsuki_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -382,7 +382,7 @@ BattleWeapon lec_weapon_zutsuki_2 = {
  * A guard (mac_0_b_t2_006), at progress 7 for the B Superguard (mac_0_b_t2_014), and waits for the button. After
  * the hit it stores the guard result in the lecture's unit work 3 (4, 5 or 6) and returns home.
  */
-EVT_BEGIN(lecture_zutsuki_attack_event)
+static EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 3)
         SET_VALUE(LW(12), PTR(&lec_weapon_zutsuki_1))
@@ -624,7 +624,7 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
  * Script helper that turns on the lecture mode of the battle:
  * locks Mario's HP and sets lectureMode.
  */
-USER_FUNC(_set_lecture_mode) {
+static USER_FUNC(_set_lecture_mode) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = BattleTransID(event, UNIT_ID_MARIO);
     BattleUnit* unit = BattleGetUnitPtr(wp, id);

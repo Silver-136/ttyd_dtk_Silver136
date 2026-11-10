@@ -36,18 +36,18 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-EffectEntry* marioeff;
+static EffectEntry* marioeff;
 
-USER_FUNC(evt_pcharge_pos);
-USER_FUNC(mario_shabon_eff);
-USER_FUNC(mario_shabon_effdel);
-USER_FUNC(mario_shabon_effpos);
-USER_FUNC(mario_shabon_init);
+static USER_FUNC(evt_pcharge_pos);
+static USER_FUNC(mario_shabon_eff);
+static USER_FUNC(mario_shabon_effdel);
+static USER_FUNC(mario_shabon_effpos);
+static USER_FUNC(mario_shabon_init);
 
-EvtWord puni_4_init[17];
-EvtWord puni_4_talk[20];
-EvtWord puni_5_init[17];
-EvtWord puni_5_talk[20];
+static EvtWord puni_4_init[17];
+static EvtWord puni_4_talk[20];
+static EvtWord puni_5_init[17];
+static EvtWord puni_5_talk[20];
 static NpcSetupInfo npcEnt[3];
 static EvtWord bero_s_doa_close[10];
 static EvtWord bero_s_doa_open[10];
@@ -58,12 +58,12 @@ static EvtWord evt_ueki_04[20];
 static KusaAccess ueki_access_data[6];
 static EvtWord punipuni_ball00_init[41];
 static EvtWord punipuni_ball00[51];
-EvtWord punipuni_ball01_init[41];
+static EvtWord punipuni_ball01_init[41];
 EvtWord punipuni_ball01[51];
-EvtWord mario_shabon_move_sound[14];
-EvtWord mario_shabon_break_sound[9];
-EvtWord mario_shabon_check[251];
-EvtWord evt_shabon_s[312];
+static EvtWord mario_shabon_move_sound[14];
+static EvtWord mario_shabon_break_sound[9];
+static EvtWord mario_shabon_check[251];
+static EvtWord evt_shabon_s[312];
 EvtWord mri_05_init_evt[178];
 
 /**
@@ -71,7 +71,7 @@ EvtWord mri_05_init_evt[178];
  * clears the hit object he stands on, sets the air timer to 1 and switches to motion 8 (MARIO_MOTION_JUMP_3,
  * a jump that marioMain leaves to the script: no jump sound, no player input).
  */
-USER_FUNC(mario_shabon_init) {
+static USER_FUNC(mario_shabon_init) {
     MarioWork* mario = marioGetPtr();
 
     mario->hitobjStandOn = NULL;
@@ -81,7 +81,7 @@ USER_FUNC(mario_shabon_init) {
 }
 
 /** Init for the fourth villager Puni: after chapter 2, once Mario has left the tree, it is moved to a new spot. */
-EVT_BEGIN(puni_4_init)
+static EVT_BEGIN(puni_4_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -92,7 +92,7 @@ EVT_BEGIN(puni_4_init)
 EVT_END()
 
 /** Talk script of the fourth villager Puni: a line before the finale and a different one afterwards. */
-EVT_BEGIN(puni_4_talk)
+static EVT_BEGIN(puni_4_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_019_1"), 0, STRING("me"))
@@ -103,7 +103,7 @@ EVT_BEGIN(puni_4_talk)
 EVT_END()
 
 /** Init for the fifth villager Puni: after chapter 2, once Mario has left the tree, it is moved to a new spot. */
-EVT_BEGIN(puni_5_init)
+static EVT_BEGIN(puni_5_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -114,7 +114,7 @@ EVT_BEGIN(puni_5_init)
 EVT_END()
 
 /** Talk script of the fifth villager Puni: a line before the finale and a different one afterwards. */
-EVT_BEGIN(puni_5_talk)
+static EVT_BEGIN(puni_5_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_020"), 0, STRING("me"))
@@ -367,7 +367,7 @@ EVT_END()
  * if the orb is already on it, places it and lights the beam; otherwise hides the beam.
  * Sets the pedestal's target position and floor.
  */
-EVT_BEGIN(punipuni_ball01_init)
+static EVT_BEGIN(punipuni_ball01_init)
     CALL_CHILD(mri_punipuni_setup)
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 1)
         CALL(evt_item_set_position, LW(10), 150, -109, -37)
@@ -381,7 +381,7 @@ EVT_BEGIN(punipuni_ball01_init)
     RETURN
 EVT_END()
 
-USER_FUNC(mario_shabon_eff) {
+static USER_FUNC(mario_shabon_eff) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -392,7 +392,7 @@ USER_FUNC(mario_shabon_eff) {
 }
 
 /** Moves the Puni bubble effect around Mario to x, y, z (args[0] to args[2]). */
-USER_FUNC(mario_shabon_effpos) {
+static USER_FUNC(mario_shabon_effpos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -405,7 +405,7 @@ USER_FUNC(mario_shabon_effpos) {
 }
 
 /** Deletes the Puni bubble effect around Mario. */
-USER_FUNC(mario_shabon_effdel) {
+static USER_FUNC(mario_shabon_effdel) {
     effDelete(marioeff);
     return EVT_RETURN_DONE;
 }
@@ -431,7 +431,7 @@ EVT_BEGIN(punipuni_ball01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mario_shabon_move_sound)
+static EVT_BEGIN(mario_shabon_move_sound)
     LOOP(0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SOAPBALL_MOVE1"), LW(0), LW(1), LW(2), 0)
         WAIT_MS(500)
@@ -439,12 +439,12 @@ EVT_BEGIN(mario_shabon_move_sound)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mario_shabon_break_sound)
+static EVT_BEGIN(mario_shabon_break_sound)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SOAPBALL_BREAK1"), LW(0), LW(1), LW(2), 0)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mario_shabon_check)
+static EVT_BEGIN(mario_shabon_check)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
     LOOP(0)
@@ -537,7 +537,7 @@ EVT_BEGIN(mario_shabon_check)
     RETURN
 EVT_END()
 
-USER_FUNC(evt_pcharge_pos) {
+static USER_FUNC(evt_pcharge_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -556,7 +556,7 @@ USER_FUNC(evt_pcharge_pos) {
  * three independent loops spawn a Puni balloon effect at a random spot, raise it over about 7 seconds,
  * delete it and show a small pop only when the chosen endpoint parameter is below 40.
  */
-EVT_BEGIN(evt_shabon_s)
+static EVT_BEGIN(evt_shabon_s)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_random, 700, LW(0))
         WAIT_MS(LW(0))

@@ -82,7 +82,7 @@ static AnimeEntry anime_data[30] = {
  * The 30 steps over which the inner glow ring shrinks back and brightens:
  * size in hundredths and alpha per step.
  */
-AnimeEntry anime_data_2[30] = {
+static AnimeEntry anime_data_2[30] = {
     {0x0BB8, 0x0000},
     {0x0B54, 0x0005},
     {0x0AF0, 0x000A},
@@ -124,7 +124,7 @@ static effN64Vtx size16x16_tex64x64_vtx[] = {
 };
 
 /** The ring strip as eight thin bands, each half mirrored, drawn in pairs from the outside in. */
-effN64Vtx size16x16_tex256x32_vtx[] = {
+static effN64Vtx size16x16_tex256x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 8192, 0, 0, 0, 0, 255},
     {8, -6, 0, 8192, 1024, 0, 0, 0, 255},
@@ -160,7 +160,7 @@ effN64Vtx size16x16_tex256x32_vtx[] = {
 };
 
 /** 16x16 quad lying flat in the ground plane, drawn for the large glow. */
-effN64Vtx size16x16_tex128x128_vtx[] = {
+static effN64Vtx size16x16_tex128x128_vtx[] = {
     {-8, 0, -8, 0, 0, 0, 0, 0, 255},
     {8, 0, -8, 4096, 0, 0, 0, 0, 255},
     {8, 0, 8, 4096, 4096, 0, 0, 0, 255},
@@ -168,7 +168,7 @@ effN64Vtx size16x16_tex128x128_vtx[] = {
 };
 
 /** The release flash as two mirrored halves of one 16x16 quad. */
-effN64Vtx size16x16_tex64x64_0_vtx[] = {
+static effN64Vtx size16x16_tex64x64_0_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 2048, 0, 0, 0, 0, 255},
     {8, 0, 0, 2048, 1024, 0, 0, 0, 255},
@@ -180,7 +180,7 @@ effN64Vtx size16x16_tex64x64_0_vtx[] = {
 };
 
 /** Full-screen 640x480 rectangle drawn for the white screen flash of variants 2 and 3. */
-effN64Vtx rectangle_vtx[] = {
+static effN64Vtx rectangle_vtx[] = {
     {0, 0, 0, 2048, 1024, 0, 0, 0, 255},
     {640, 0, 0, 0, 1024, 0, 0, 0, 255},
     {640, 480, 0, 0, 0, 0, 0, 0, 255},

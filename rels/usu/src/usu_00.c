@@ -78,42 +78,42 @@ typedef struct KpaSen {
 KpaSen* kpaSen;
 
 static USER_FUNC(anim_tevcallback);
-USER_FUNC(bakuhatu_kemuri);
+static USER_FUNC(bakuhatu_kemuri);
 static USER_FUNC(booboo_main);
 static USER_FUNC(delete_npc_regl_evt);
 static USER_FUNC(getYoshiColor);
-USER_FUNC(kpaSen_toge_syugo);
-USER_FUNC(kpaSen_zako_syugo);
+static USER_FUNC(kpaSen_toge_syugo);
+static USER_FUNC(kpaSen_zako_syugo);
 static USER_FUNC(npc_process);
-USER_FUNC(party_scale);
+static USER_FUNC(party_scale);
 static USER_FUNC(small_star);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(white_off);
-USER_FUNC(white_on);
+static USER_FUNC(white_off);
+static USER_FUNC(white_on);
 static USER_FUNC(yami_view);
-USER_FUNC(party_tev);
+static USER_FUNC(party_tev);
 
-EvtWord villagerA_init[28];
-EvtWord villagerA_pig_init[19];
-EvtWord villagerA_talk[65];
-EvtWord villagerB_init[7];
-EvtWord villagerB_talk[52];
-EvtWord villagerC_init[7];
-EvtWord villagerC_talk[52];
-EvtWord villagerD_init[19];
-EvtWord villagerD_pig_init[19];
+static EvtWord villagerA_init[28];
+static EvtWord villagerA_pig_init[19];
+static EvtWord villagerA_talk[65];
+static EvtWord villagerB_init[7];
+static EvtWord villagerB_talk[52];
+static EvtWord villagerC_init[7];
+static EvtWord villagerC_talk[52];
+static EvtWord villagerD_init[19];
+static EvtWord villagerD_pig_init[19];
 EvtWord villagerD_talk[88];
-EvtWord villagerE_init[19];
-EvtWord villagerE_pig_init[19];
-EvtWord villagerE_talk[65];
-EvtWord villagerK_init[19];
-EvtWord villagerK_pig_init[19];
-EvtWord villagerK_talk[65];
-EvtWord village_chief_init[20];
-EvtWord village_chief_pig_init[27];
-s32 iri_15_item_tbl[2];
+static EvtWord villagerE_init[19];
+static EvtWord villagerE_pig_init[19];
+static EvtWord villagerE_talk[65];
+static EvtWord villagerK_init[19];
+static EvtWord villagerK_pig_init[19];
+static EvtWord villagerK_talk[65];
+static EvtWord village_chief_init[20];
+static EvtWord village_chief_pig_init[27];
+static s32 iri_15_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord village_chief_talk[];
@@ -121,7 +121,7 @@ extern EvtWord village_chief_talk[];
 EvtWord village_chief_talk[199];
 #endif
 
-EvtWord chief_mario_talk_init[183];
+static EvtWord chief_mario_talk_init[183];
 EvtWord chief_mario_talk[55];
 static EvtWord vivian_init[44];
 static s32 key_tbl[2];
@@ -132,22 +132,22 @@ static EvtWord vivian_talk[27];
 static EvtWord vivian_talk[29];
 #endif
 
-EvtWord nise_mario_talk[8];
-EvtWord christine_talk[8];
-EvtWord nokotaro_talk[8];
-EvtWord cloud_talk[8];
-EvtWord yoshi_talk[8];
-EvtWord crow_a_init[8];
-EvtWord crow_b_init[8];
-EvtWord crow_c_init[8];
-EvtWord crow_d_init[8];
-EvtWord crow_e_init[8];
+static EvtWord nise_mario_talk[8];
+static EvtWord christine_talk[8];
+static EvtWord nokotaro_talk[8];
+static EvtWord cloud_talk[8];
+static EvtWord yoshi_talk[8];
+static EvtWord crow_a_init[8];
+static EvtWord crow_b_init[8];
+static EvtWord crow_c_init[8];
+static EvtWord crow_d_init[8];
+static EvtWord crow_e_init[8];
 static EvtWord urouro_move[24];
 static NpcSetupInfo npcEnt[20];
-EvtWord usu00_stage4_coming_event[839];
-EvtWord usu00_3witch_init[41];
-EvtWord usu00_3witch_event[275];
-EvtWord gra00_2witch_find_ranpel_event[197];
+static EvtWord usu00_stage4_coming_event[839];
+static EvtWord usu00_3witch_init[41];
+static EvtWord usu00_3witch_event[275];
+static EvtWord gra00_2witch_find_ranpel_event[197];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord usu00_vivian_cry_event[];
@@ -158,38 +158,38 @@ EvtWord usu00_vivian_cry_event[58];
 EvtWord usu00_vivian_joinup_event[608];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
-EvtWord usu00_check_vivian[33];
+static EvtWord usu00_check_vivian[33];
 
 #if VERSION >= VERSION_US
-EvtWord usu00_crowAB_talk_event[338];
-EvtWord usu00_crowCDE_talk_event[346];
+static EvtWord usu00_crowAB_talk_event[338];
+static EvtWord usu00_crowCDE_talk_event[346];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord usu00_crowAB_talk_event[291];
-EvtWord usu00_crowCDE_talk_event[299];
+static EvtWord usu00_crowAB_talk_event[291];
+static EvtWord usu00_crowCDE_talk_event[299];
 #else
-EvtWord usu00_crowAB_talk_event[299];
-EvtWord usu00_crowCDE_talk_event[307];
+static EvtWord usu00_crowAB_talk_event[299];
+static EvtWord usu00_crowCDE_talk_event[307];
 #endif
 #endif
 
-EvtWord chief_pig_event[66];
+static EvtWord chief_pig_event[66];
 static KinopioData kino_dt;
 static const char* yado_npc[2];
-const char* yado_mobj[2];
-const char* village_chief_npc[8];
+static const char* yado_mobj[2];
+static const char* village_chief_npc[8];
 static EvtWord evt_door_1_1[12];
 static EvtWord evt_door_1_2[2];
 static EvtWord evt_wall_1[30];
-const char* door_1_npc[2];
+static const char* door_1_npc[2];
 static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
-EvtWord evt_door_2_1[12];
-EvtWord evt_door_2_2[15];
+static EvtWord evt_door_2_1[12];
+static EvtWord evt_door_2_2[15];
 static EvtWord evt_wall_2[123];
-EvtWord evt_door2_chk[30];
-EvtWord evt_door2_close[14];
+static EvtWord evt_door2_chk[30];
+static EvtWord evt_door2_close[14];
 static DoorParam door_2;
 static EvtWord evt_door_3_1[12];
 static EvtWord evt_door_3_2[12];
@@ -197,36 +197,36 @@ static EvtWord evt_wall_3[30];
 static EvtWord door_3_open[12];
 static EvtWord door_3_close[14];
 static DoorParam door_3;
-EvtWord dokan_1_evt[32];
+static EvtWord dokan_1_evt[32];
 static BeroEntry bero_entry_data[3];
 static EvtWord oshimodo_event[28];
 static BeroEntry bero_oshimodo[1];
-EvtWord koopa_dokan_evt[57];
-BeroEntry bero_koopa_dokan[1];
-EvtWord door_ie1_koopa_evt[26];
-EvtWord door_ie2_koopa_evt[26];
-EvtWord door_ie3_koopa_evt[26];
+static EvtWord koopa_dokan_evt[57];
+static BeroEntry bero_koopa_dokan[1];
+static EvtWord door_ie1_koopa_evt[26];
+static EvtWord door_ie2_koopa_evt[26];
+static EvtWord door_ie3_koopa_evt[26];
 static EvtWord evt_ki_1[20];
 static EvtWord evt_ki_2[28];
 static TreeAccess tree_tbl[4];
-EvtWord usu_00_tree_init[7];
-EvtWord kusa_01_evt[26];
-EvtWord evt_kusa_04[25];
-EvtWord evt_kusa_06[25];
+static EvtWord usu_00_tree_init[7];
+static EvtWord kusa_01_evt[26];
+static EvtWord evt_kusa_04[25];
+static EvtWord evt_kusa_06[25];
 static KusaAccess kusa_tbl[21];
-EvtWord usu_00_kusa_init[7];
-EvtWord evt_ichikorori_ball_get[5];
-EvtWord usu_00_touch_ichikorori_ball[72];
+static EvtWord usu_00_kusa_init[7];
+static EvtWord evt_ichikorori_ball_get[5];
+static EvtWord usu_00_touch_ichikorori_ball[72];
 static BoobooName booboo_name[5];
-ExtTexInfo kpaSen_ext_entry_data[39];
+static ExtTexInfo kpaSen_ext_entry_data[39];
 static EvtWord baba_talk[8];
-EvtWord kanbu_regl[48];
-EvtWord kanbu_talk[4];
+static EvtWord kanbu_regl[48];
+static EvtWord kanbu_talk[4];
 static EvtWord koopa_npc_entry[205];
-EvtWord usu_00_koopa_first_evt[196];
-EvtWord bakuhatu_evt[64];
-EvtWord murabito_out[172];
-EvtWord usu_00_koopa_second_evt[1315];
+static EvtWord usu_00_koopa_first_evt[196];
+static EvtWord bakuhatu_evt[64];
+static EvtWord murabito_out[172];
+static EvtWord usu_00_koopa_second_evt[1315];
 static EvtWord sekai_yami_npc_init[17];
 static EvtWord sekai_yami_npc[22];
 static EvtWord sekai_yami_shake[11];
@@ -268,7 +268,7 @@ static USER_FUNC(getYoshiColor) {
  * Script helper: clears the TEV-callback material flags on the active partner's paper-anim group,
  * so the shadow tint applied during the night scenes no longer applies to the partner.
  */
-USER_FUNC(party_tev) {
+static USER_FUNC(party_tev) {
     animPoseSetMaterialFlagOff(partyGetPtr(PARTY_SLOT_PARTY)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK_MASK);
     return EVT_RETURN_DONE;
 }
@@ -278,7 +278,7 @@ USER_FUNC(party_tev) {
  * when the second page appears (type 3, curPage 1) it fades BGM channel 1 out and starts the "BGM_FF_GET_ITEM1"
  * jingle.
  */
-void kpa_stg5_009_7_cb(s32 type, smartEntry* smart) {
+static void kpa_stg5_009_7_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
     switch (type) {
@@ -308,7 +308,7 @@ static USER_FUNC(booboo_main) {
  * hides her below the map until the Doopliss fight (STG4_10)
  * and parks her at (-180, 0, 0) during the Bowser interlude.
  */
-EVT_BEGIN(villagerA_init)
+static EVT_BEGIN(villagerA_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -321,7 +321,7 @@ EVT_BEGIN(villagerA_init)
 EVT_END()
 
 /** Init script of the pig form of villager A: shown until STG4_10, then moved below the map for good. */
-EVT_BEGIN(villagerA_pig_init)
+static EVT_BEGIN(villagerA_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -335,7 +335,7 @@ EVT_END()
  * Talk script of villager A: the Bowser interlude line, an oink plus pig text before the Doopliss fight,
  * then human text that changes with Chapter 4 progress and after the ending.
  */
-EVT_BEGIN(villagerA_talk)
+static EVT_BEGIN(villagerA_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_msg_print, 0, STRING("kpa_stg5_005"), 0, STRING("me"))
@@ -356,7 +356,7 @@ EVT_BEGIN(villagerA_talk)
 EVT_END()
 
 /** Init script of villager B: enables move/talk animation. */
-EVT_BEGIN(villagerB_init)
+static EVT_BEGIN(villagerB_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｂ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
@@ -366,7 +366,7 @@ EVT_END()
  * then text by Chapter 4 progress (before the Doopliss fight, until leaving Twilight Town,
  * until Frankly's house, then after the ending).
  */
-EVT_BEGIN(villagerB_talk)
+static EVT_BEGIN(villagerB_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_msg_print, 0, STRING("kpa_stg5_006"), 0, STRING("me"))
@@ -385,7 +385,7 @@ EVT_BEGIN(villagerB_talk)
 EVT_END()
 
 /** Init script of villager C: enables move/talk animation. */
-EVT_BEGIN(villagerC_init)
+static EVT_BEGIN(villagerC_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
@@ -395,7 +395,7 @@ EVT_END()
  * then text by Chapter 4 progress (before the Doopliss fight, until leaving Twilight Town,
  * until Frankly's house, then after the ending).
  */
-EVT_BEGIN(villagerC_talk)
+static EVT_BEGIN(villagerC_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_msg_print, 0, STRING("kpa_stg5_007"), 0, STRING("me"))
@@ -417,7 +417,7 @@ EVT_END()
  * Init script of villager D (human form): enables move/talk animation and keeps him below the map
  * until the Doopliss fight (STG4_10).
  */
-EVT_BEGIN(villagerD_init)
+static EVT_BEGIN(villagerD_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｄ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -428,7 +428,7 @@ EVT_BEGIN(villagerD_init)
 EVT_END()
 
 /** Init script of the pig form of villager D: shown until STG4_10, then moved below the map. */
-EVT_BEGIN(villagerD_pig_init)
+static EVT_BEGIN(villagerD_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｄ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -473,7 +473,7 @@ EVT_END()
  * Init script of villager E (human form): enables move/talk animation and keeps him below the map
  * until the Doopliss fight (STG4_10).
  */
-EVT_BEGIN(villagerE_init)
+static EVT_BEGIN(villagerE_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｅ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -484,7 +484,7 @@ EVT_BEGIN(villagerE_init)
 EVT_END()
 
 /** Init script of the pig form of villager E: shown until STG4_10, then moved below the map. */
-EVT_BEGIN(villagerE_pig_init)
+static EVT_BEGIN(villagerE_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｅ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -498,7 +498,7 @@ EVT_END()
  * Talk script of villager E: the Bowser interlude line, an oink plus pig text before the Doopliss fight,
  * then human text by story progress.
  */
-EVT_BEGIN(villagerE_talk)
+static EVT_BEGIN(villagerE_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_msg_print, 0, STRING("kpa_stg5_009"), 0, STRING("me"))
@@ -522,7 +522,7 @@ EVT_END()
  * Init script of villager K (human form): enables move/talk animation and keeps him below the map
  * until the Doopliss fight (STG4_10).
  */
-EVT_BEGIN(villagerK_init)
+static EVT_BEGIN(villagerK_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｋ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -533,7 +533,7 @@ EVT_BEGIN(villagerK_init)
 EVT_END()
 
 /** Init script of the pig form of villager K: shown until STG4_10, then moved below the map. */
-EVT_BEGIN(villagerK_pig_init)
+static EVT_BEGIN(villagerK_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｋ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -547,7 +547,7 @@ EVT_END()
  * Talk script of villager K: the Bowser interlude line, an oink plus pig text before the Doopliss fight,
  * then human text by story progress.
  */
-EVT_BEGIN(villagerK_talk)
+static EVT_BEGIN(villagerK_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_msg_print, 0, STRING("kpa_stg5_006"), 0, STRING("me"))
@@ -572,7 +572,7 @@ EVT_END()
  * hidden below the map from the first gatekeeper conversation (STG4_01_00)
  * until the Super Bombomb is lost (STG4_11).
  */
-EVT_BEGIN(village_chief_init)
+static EVT_BEGIN(village_chief_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_01_00_GATEKEEPER_CONVERSATION)
@@ -586,7 +586,7 @@ EVT_END()
  * Init script of the pig Mayor: visible only between the gatekeeper conversation (STG4_01_00)
  * and the loss of the Super Bombomb (STG4_11), otherwise parked below the map.
  */
-EVT_BEGIN(village_chief_pig_init)
+static EVT_BEGIN(village_chief_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_01_00_GATEKEEPER_CONVERSATION)
@@ -599,7 +599,7 @@ EVT_BEGIN(village_chief_pig_init)
 EVT_END()
 
 /** Item menu choices in the Mayor's trouble 17: only the Routing Slip, which Mario hands over to finish it. */
-s32 iri_15_item_tbl[] = {
+static s32 iri_15_item_tbl[] = {
     ITEM_ROUTING_SLIP, -1,
 };
 
@@ -675,7 +675,7 @@ EVT_END()
  * Init script of the Mayor's lawn scene: spawns the stand-in Mario ("nise" Mario), Goombella, Koops and Flurrie,
  * plus a baby Yoshi model chosen by the Yoshi partner's color.
  */
-EVT_BEGIN(chief_mario_talk_init)
+static EVT_BEGIN(chief_mario_talk_init)
     CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario")) // Doopliss disguised as Mario
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
     CALL(evt_npc_entry, STRING("ノコタロウ"), STRING("c_pnk")) // Koops, travelling with the fake Mario
@@ -796,61 +796,61 @@ static EVT_BEGIN(vivian_talk)
 EVT_END()
 
 /** Talk script of the stand-in Mario NPC: one line, "stg4_usu_25_01". */
-EVT_BEGIN(nise_mario_talk)
+static EVT_BEGIN(nise_mario_talk)
     CALL(evt_msg_print, 0, STRING("stg4_usu_25_01"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Talk script of the Goombella (Christine) stand-in: one line, "stg4_usu_25_02". */
-EVT_BEGIN(christine_talk)
+static EVT_BEGIN(christine_talk)
     CALL(evt_msg_print, 0, STRING("stg4_usu_25_02"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Talk script of the Koops (Nokotaro) stand-in: one line, "stg4_usu_25_03". */
-EVT_BEGIN(nokotaro_talk)
+static EVT_BEGIN(nokotaro_talk)
     CALL(evt_msg_print, 0, STRING("stg4_usu_25_03"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Talk script of the Flurrie (Clouda) stand-in: one line, "stg4_usu_25_04". */
-EVT_BEGIN(cloud_talk)
+static EVT_BEGIN(cloud_talk)
     CALL(evt_msg_print, 0, STRING("stg4_usu_25_04"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Talk script of the Yoshi stand-in: one line, "stg4_usu_25_05". */
-EVT_BEGIN(yoshi_talk)
+static EVT_BEGIN(yoshi_talk)
     CALL(evt_msg_print, 0, STRING("stg4_usu_25_05"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Init script of crow A: puts it on its perch at (-420, 90, 26). */
-EVT_BEGIN(crow_a_init)
+static EVT_BEGIN(crow_a_init)
     CALL(evt_npc_set_position, STRING("me"), -420, 90, 26)
     RETURN
 EVT_END()
 
 /** Init script of crow B: puts it on its perch at (-405, 60, 30). */
-EVT_BEGIN(crow_b_init)
+static EVT_BEGIN(crow_b_init)
     CALL(evt_npc_set_position, STRING("me"), -405, 60, 30)
     RETURN
 EVT_END()
 
 /** Init script of crow C: puts it on its perch at (29, 120, -215). */
-EVT_BEGIN(crow_c_init)
+static EVT_BEGIN(crow_c_init)
     CALL(evt_npc_set_position, STRING("me"), 29, 120, -215)
     RETURN
 EVT_END()
 
 /** Init script of crow D: puts it on its perch at (75, 110, -233). */
-EVT_BEGIN(crow_d_init)
+static EVT_BEGIN(crow_d_init)
     CALL(evt_npc_set_position, STRING("me"), 75, 110, -233)
     RETURN
 EVT_END()
 
 /** Init script of crow E: puts it on its perch at (104, 110, -233). */
-EVT_BEGIN(crow_e_init)
+static EVT_BEGIN(crow_e_init)
     CALL(evt_npc_set_position, STRING("me"), 104, 110, -233)
     RETURN
 EVT_END()
@@ -1095,7 +1095,7 @@ static NpcSetupInfo npcEnt[] = {
  * Chapter 4 opening cutscene: Mario arrives in Twilight Town, a human villager turns out to be a pig,
  * the Mayor explains and Mario's party reacts; his house door opens and closes as he enters.
  */
-EVT_BEGIN(usu00_stage4_coming_event)
+static EVT_BEGIN(usu00_stage4_coming_event)
     // The camera drops from the sky as Mario and the party arrive by pipe; the partner looks around.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -1330,7 +1330,7 @@ EVT_END()
  * Spawns the Shadow Sirens (Marilyn, Beldam as Majolyne) and Doopliss (Ranpel) as NPCs with no wall hit
  * or shadow collision, for their cutscenes.
  */
-EVT_BEGIN(usu00_3witch_init)
+static EVT_BEGIN(usu00_3witch_init)
     CALL(evt_npc_entry, STRING("マリリン"), STRING("c_maririn")) // Marilyn
     CALL(evt_npc_entry, STRING("マジョリン"), STRING("c_majyorin")) // Beldam
     CALL(evt_npc_entry, STRING("ランペル"), STRING("c_ranpel")) // Doopliss
@@ -1351,7 +1351,7 @@ EVT_END()
  * with Marilyn grunting along (98, 107).
  * Beldam and Marilyn vanish, the story becomes STG4_11_SUPERBOMBBOMB_LOST and the map changes to gra_06.
  */
-EVT_BEGIN(usu00_3witch_event)
+static EVT_BEGIN(usu00_3witch_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1414,7 +1414,7 @@ EVT_END()
  * Cutscene: Beldam and Marilyn find Doopliss (Ranpel),
  * set STG4_15_04_SHADOW_SIRENS_DOOPLISS and change the map to aji_10 with a story fade.
  */
-EVT_BEGIN(gra00_2witch_find_ranpel_event)
+static EVT_BEGIN(gra00_2witch_find_ranpel_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -500, 0, 0)
@@ -1683,7 +1683,7 @@ EVT_END()
  * Background loop: while Vivian is the active partner (id 6) but her ability status is not 2,
  * it clears the crow-talk gates GW(0) and GW(1).
  */
-EVT_BEGIN(usu00_check_vivian)
+static EVT_BEGIN(usu00_check_vivian)
     LABEL(0)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 6)
@@ -1705,7 +1705,7 @@ EVT_END()
  * and A is pressed with no partner ability in use, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
  * "stg4_jin_152" otherwise); GW(0) gates repeats.
  */
-EVT_BEGIN(usu00_crowAB_talk_event)
+static EVT_BEGIN(usu00_crowAB_talk_event)
     // Wait until this crow pair is allowed to talk again.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -1846,7 +1846,7 @@ EVT_END()
  * Background watcher for crows C, D and E; like the A/B watcher but around crow D with a fixed 60-unit area cut off
  * at z <= -250, Bowser's caw "kpa_stg5_009_7_2", and GW(1) as its gate.
  */
-EVT_BEGIN(usu00_crowCDE_talk_event)
+static EVT_BEGIN(usu00_crowCDE_talk_event)
     // Wait until this crow trio is allowed to talk again.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -1987,7 +1987,7 @@ EVT_END()
  * Trigger: when Mario walks within 100 units of the pig Mayor,
  * the party says "stg4_usu_21" and the story moves to STG4_01_THE_MAYORS_A_PIG.
  */
-EVT_BEGIN(chief_pig_event)
+static EVT_BEGIN(chief_pig_event)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING("ブタ村長"), LW(3), LW(4), LW(5))
@@ -2041,7 +2041,7 @@ static const char* yado_npc[] = {
 };
 
 /** Map objects hidden and shown with the inn's interior: its save block. */
-const char* yado_mobj[] = {
+static const char* yado_mobj[] = {
     "pblk00",
     NULL,
 };
@@ -2050,7 +2050,7 @@ const char* yado_mobj[] = {
  * NPCs that belong to the Mayor's house (house 2) interior: the Mayor in human and pig form, the fake Mario
  * and the partners who can stand inside during his scenes.
  */
-const char* village_chief_npc[] = {
+static const char* village_chief_npc[] = {
     "村長",
     "ブタ村長",
     "にせマリオ",
@@ -2091,7 +2091,7 @@ static EVT_BEGIN(evt_wall_1)
 EVT_END()
 
 /** NPCs that belong to house 1's interior: villager B. */
-const char* door_1_npc[] = {
+static const char* door_1_npc[] = {
     "村人Ｂ",
     NULL,
 };
@@ -2137,7 +2137,7 @@ static DoorParam door_1 = {
  * Door script for house 2's door "S__ie2_door" (evtIn of door_2):
  * turns it about y by the angle in LW(0), scaled to door units.
  */
-EVT_BEGIN(evt_door_2_1)
+static EVT_BEGIN(evt_door_2_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
     CALL(evt_mapobj_rotate, 1, STRING("S__ie2_door"), 0, LW(0), 0)
     RETURN
@@ -2147,7 +2147,7 @@ EVT_END()
  * Door script for house 2's door (evtOut of door_2):
  * turns "S__ie2_door" about x by LW(0) scaled by 0.5 and adds 1 to GW(2).
  */
-EVT_BEGIN(evt_door_2_2)
+static EVT_BEGIN(evt_door_2_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S__ie2_door"), LW(0), 0, 0)
     ADD(GW(2), 1)
@@ -2201,7 +2201,7 @@ EVT_END()
  * Enter-house-2 script: hides the "S_gochisou" feast
  * and its hit area outside the story range (STG4_11 to STG4_15), and dips BGM and ambience.
  */
-EVT_BEGIN(evt_door2_chk)
+static EVT_BEGIN(evt_door2_chk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_11_SUPERBOMBBOMB_LOST, STG4_15_DOOPLISS_BATTLE_2)
         CASE_DEFAULT
@@ -2215,7 +2215,7 @@ EVT_BEGIN(evt_door2_chk)
 EVT_END()
 
 /** Leave-house-2 script: restores BGM and ambient sound and removes the low-pass filter set on entry. */
-EVT_BEGIN(evt_door2_close)
+static EVT_BEGIN(evt_door2_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -2319,7 +2319,7 @@ static DoorParam door_3 = {
  * before Chapter 4 starts it hides Mario and his partner and waits on GF(0) for the arrival cutscene;
  * returns LW(0) = 0.
  */
-EVT_BEGIN(dokan_1_evt)
+static EVT_BEGIN(dokan_1_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_00_WELCOME_TO_STAGE_4)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
@@ -2416,7 +2416,7 @@ static BeroEntry bero_oshimodo[] = {
  * Bowser interlude: Bowser's (the player slot's) pipe attempt;
  * plays "kpa_stg5_009_2", runs the pipe, then disables its case until Bowser's motion reaches 3 or 10.
  */
-EVT_BEGIN(koopa_dokan_evt)
+static EVT_BEGIN(koopa_dokan_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg5_009_2"), 0, STRING("mario"))
@@ -2444,7 +2444,7 @@ EVT_BEGIN(koopa_dokan_evt)
 EVT_END()
 
 /** Replacement for the pipe in Bowser's interlude: Bowser says a line and goes nowhere (koopa_dokan_evt). */
-BeroEntry bero_koopa_dokan[] = {
+static BeroEntry bero_koopa_dokan[] = {
     {
         "dokan_1", // hitName
         2, // type
@@ -2467,7 +2467,7 @@ BeroEntry bero_koopa_dokan[] = {
  * Bowser interlude: stops the player (Bowser) from entering house 1 with the message "kpa_stg5_009_4" shown at
  * the door.
  */
-EVT_BEGIN(door_ie1_koopa_evt)
+static EVT_BEGIN(door_ie1_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("S_ie1_door"), LW(0), LW(1), LW(2))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -2480,7 +2480,7 @@ EVT_END()
  * Bowser interlude: stops the player (Bowser) from entering house 2 with the message "kpa_stg5_009_5" shown at
  * the door.
  */
-EVT_BEGIN(door_ie2_koopa_evt)
+static EVT_BEGIN(door_ie2_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("S__ie2_door"), LW(0), LW(1), LW(2))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -2493,7 +2493,7 @@ EVT_END()
  * Bowser interlude: stops the player (Bowser) from entering house 3 with the message "kpa_stg5_009_6" shown at
  * the door.
  */
-EVT_BEGIN(door_ie3_koopa_evt)
+static EVT_BEGIN(door_ie3_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("S_ie3_door"), LW(0), LW(1), LW(2))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -2542,7 +2542,7 @@ static TreeAccess tree_tbl[] = {
 };
 
 /** Registers tree_tbl with the shared tree-shaking script (evt_sub_tree_access_entry). */
-EVT_BEGIN(usu_00_tree_init)
+static EVT_BEGIN(usu_00_tree_init)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(evt_sub_tree_access_entry)
     RETURN
@@ -2552,7 +2552,7 @@ EVT_END()
  * Bush "kusa_01" script: during the Bowser interlude,
  * Bowser pressing A in front of it plays "kpa_stg5_009_7" and ends the BGM.
  */
-EVT_BEGIN(kusa_01_evt)
+static EVT_BEGIN(kusa_01_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
@@ -2563,7 +2563,7 @@ EVT_BEGIN(kusa_01_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kusa_04)
+static EVT_BEGIN(evt_kusa_04)
     IF_INT_EQUAL(GF(1), 1)
         RETURN
     END_IF
@@ -2574,7 +2574,7 @@ EVT_BEGIN(evt_kusa_04)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_kusa_06)
+static EVT_BEGIN(evt_kusa_06)
     IF_INT_EQUAL(GF(1), 1)
         RETURN
     END_IF
@@ -2614,14 +2614,14 @@ static KusaAccess kusa_tbl[] = {
 };
 
 /** Registers kusa_tbl with the shared bush script (evt_sub_kusa_access_entry). */
-EVT_BEGIN(usu_00_kusa_init)
+static EVT_BEGIN(usu_00_kusa_init)
     SET_VALUE(LW(0), PTR(kusa_tbl))
     CALL_CHILD(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
 
 /** Pickup callback for the rolling Super Bombomb: sets the story to STG4_12_01_SUPERBOMBBOMB_FOUND. */
-EVT_BEGIN(evt_ichikorori_ball_get)
+static EVT_BEGIN(evt_ichikorori_ball_get)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_12_01_SUPERBOMBBOMB_FOUND)
     RETURN
 EVT_END()
@@ -2631,7 +2631,7 @@ EVT_END()
  * from STG4_12_VIVIAN, it bounces the item away from Mario, with gravity and bounce rate set,
  * until he picks it up.
  */
-EVT_BEGIN(usu_00_touch_ichikorori_ball)
+static EVT_BEGIN(usu_00_touch_ichikorori_ball)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_12_VIVIAN)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), -260)
@@ -2667,7 +2667,7 @@ static BoobooName booboo_name[] = {
  * Sprite list of the 200-strong crowd in Bowser's second Twilight Town scene: X-Nauts (c_zako_n) for Crump's
  * side, Koopatrols, Hammer Bros and Magikoopas for Kammy's, each pose with a staggered start time.
  */
-ExtTexInfo kpaSen_ext_entry_data[] = {
+static ExtTexInfo kpaSen_ext_entry_data[] = {
     {"c_zako_n", "S_1", 0.0f},
     {"c_zako_n", "S_1", 8.0f},
     {"c_zako_n", "S_1", 16.0f},
@@ -2713,7 +2713,7 @@ ExtTexInfo kpaSen_ext_entry_data[] = {
  * Init of the Koopa-troop crowd effect used in the Bowser interlude:
  * allocates 200 sprite records and lays them out in rows (100 troopers, 100 mixed Koopatrols, Hammer Bros and Magikoopas).
  */
-void kpaSen_ext_init(void) {
+static void kpaSen_ext_init(void) {
     ExtdrvPose* pose = extGetPosePtr();
     Vec base = {85.0f, 0.0f, 75.0f};
     s32 i;
@@ -2780,7 +2780,7 @@ void kpaSen_ext_init(void) {
  * Picks an animation frame between lo and hi for crowd sprite i,
  * mixing in retraceCount so neighboring sprites animate out of step (6 or 7 ticks per frame depending on flag).
  */
-s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag) {
+static s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag) {
     s32 range = hi - lo + 1;
     s32 n = flag ? 6 : 7;
     u32 t = gp->retraceCount + i * i;
@@ -2789,7 +2789,7 @@ s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag) {
 }
 
 /** Per-frame update of the Koopa-troop crowd: counts down each sprite's wait and runs its marching/animation state. */
-void kpaSen_ext_main(void) {
+static void kpaSen_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 i;
     s32 lo;
@@ -2843,7 +2843,7 @@ void kpaSen_ext_main(void) {
  * Draw callback of the Koopa-troop crowd: loads the render mode, vertices, textures and TEV,
  * then draws every sprite.
  */
-void kpaSen_ext_disp(CameraId camera, void* param) {
+static void kpaSen_ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -2853,7 +2853,7 @@ void kpaSen_ext_disp(CameraId camera, void* param) {
 }
 
 /** Shadow draw callback of the Koopa-troop crowd: draws a flattened copy of the sprites using the shadow matrix. */
-void kpaSen_ext_shadow_disp(CameraId camera, void* param) {
+static void kpaSen_ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {10.0f, 0.0f, 0.0f, 0.0f},
         {0.0f, 10.0f, 0.0f, 0.1f},
@@ -2877,7 +2877,7 @@ EVT_END()
  * Regular-behavior script of Kanbu (Lord Crump, tribe "third-force executive"):
  * paces between x=-200 and x=100, turning around at each end, forever.
  */
-EVT_BEGIN(kanbu_regl)
+static EVT_BEGIN(kanbu_regl)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("カンブー"), -200, 200, 0, FLOAT(30.0f), 0)
@@ -2896,13 +2896,13 @@ EVT_BEGIN(kanbu_regl)
     RETURN
 EVT_END()
 
-void kpaSen_ext_dispent(void) {
+static void kpaSen_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kpaSen_ext_disp, NULL);
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpaSen_ext_shadow_disp, NULL);
 }
 
 /** Script helper: resets the first 100 crowd sprites (the troopers) to state 0 so they gather again. */
-USER_FUNC(kpaSen_zako_syugo) {
+static USER_FUNC(kpaSen_zako_syugo) {
     s32 i;
 
     for (i = 0; i < 100; i++) {
@@ -2912,7 +2912,7 @@ USER_FUNC(kpaSen_zako_syugo) {
 }
 
 /** Script helper: resets crowd sprites 100 to 199 (Kammy's mixed troops) to state 0 so they gather again. */
-USER_FUNC(kpaSen_toge_syugo) {
+static USER_FUNC(kpaSen_toge_syugo) {
     s32 i;
 
     for (i = 100; i < 200; i++) {
@@ -2933,7 +2933,7 @@ static USER_FUNC(small_star) {
 }
 
 /** Script helper: spawns an explosion smoke puff at x = args[0], y = args[1] for the Bowser interlude blast. */
-USER_FUNC(bakuhatu_kemuri) {
+static USER_FUNC(bakuhatu_kemuri) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -2943,19 +2943,19 @@ USER_FUNC(bakuhatu_kemuri) {
 }
 
 /** Script helper: turns the white fade-out overlay on. */
-USER_FUNC(white_on) {
+static USER_FUNC(white_on) {
     fadeWhiteOutOn();
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: turns the white fade-out overlay off. */
-USER_FUNC(white_off) {
+static USER_FUNC(white_off) {
     fadeWhiteOutOff();
     return EVT_RETURN_DONE;
 }
 
 /** Talk script of Kanbu (Lord Crump, tribe "third-force executive"): runs the second Bowser interlude scene. */
-EVT_BEGIN(kanbu_talk)
+static EVT_BEGIN(kanbu_talk)
     CALL_CHILD(usu_00_koopa_second_evt)
     RETURN
 EVT_END()
@@ -3017,7 +3017,7 @@ static EVT_BEGIN(koopa_npc_entry)
     RETURN
 EVT_END()
 
-EVT_BEGIN(usu_00_koopa_first_evt)
+static EVT_BEGIN(usu_00_koopa_first_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -300, 0, 50)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -3072,7 +3072,7 @@ EVT_BEGIN(usu_00_koopa_first_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(bakuhatu_evt)
+static EVT_BEGIN(bakuhatu_evt)
     CALL(bakuhatu_kemuri, FLOAT(0.0f), FLOAT(0.0f))
     WAIT_MS(100)
     CALL(bakuhatu_kemuri, FLOAT(0.0f), FLOAT(180.0f))
@@ -3094,7 +3094,7 @@ EVT_BEGIN(bakuhatu_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(murabito_out)
+static EVT_BEGIN(murabito_out)
     CALL(delete_npc_regl_evt, STRING("村人Ｃ"))
     CALL(delete_npc_regl_evt, STRING("村人Ｅ"))
     BEGIN_INLINE_EVENT
@@ -3140,7 +3140,7 @@ EVT_BEGIN(murabito_out)
     RETURN
 EVT_END()
 
-EVT_BEGIN(usu_00_koopa_second_evt)
+static EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_motion, MARIO_MOTION_STAY)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3869,7 +3869,7 @@ EVT_END()
 __declspec(section ".rodata") Vec party_scale_vec = {1.0f, 1.0f, 1.0f};
 
 /** Script helper: sets Mario's partner scale to party_scale_vec. */
-USER_FUNC(party_scale) {
+static USER_FUNC(party_scale) {
     partyGetPtr(0)->scale = party_scale_vec;
     return EVT_RETURN_DONE;
 }

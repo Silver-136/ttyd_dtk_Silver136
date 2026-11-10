@@ -73,19 +73,19 @@ void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 //.data
-char* luigi_pose[14][2] = { { "Z_1", "Z_1R" }, { "S_1", "S_1R" },   { "W_1", "W_1R" },   { "R_1", "R_1R" },
+static char* luigi_pose[14][2] = { { "Z_1", "Z_1R" }, { "S_1", "S_1R" },   { "W_1", "W_1R" },   { "R_1", "R_1R" },
                             { "T_1", "T_1R" }, { "J_1A", "J_1RR" }, { "J_1B", "J_1BR" }, { "Z_2", "Z_2R" },
                             { "S_2", "S_2R" }, { "T_2", "T_2R" },   { "L_1", "L_1R" },   { "L_2", "L_2R" },
                             { "L_3", "L_3R" }, { "I_1", "I_1R" } };
 
 //.sdata
-char MarioStayPose[32] = "KPA_S_1";
-char MarioTalkPose[32] = "KPA_T_1";
+static char MarioStayPose[32] = "KPA_S_1";
+static char MarioTalkPose[32] = "KPA_T_1";
 
 //.sbss
 BOOL dbg_battleskip = 0;
-u32 npcMainCount = 0;
-NpcFieldEntry* release_wp = NULL;
+static u32 npcMainCount = 0;
+static NpcFieldEntry* release_wp = NULL;
 static NpcWork2 work;
 
 static inline NpcWork* npcGetWorkPtr2(BOOL inBattle) {
@@ -3516,7 +3516,7 @@ void npcExecAllReglEvt(void) {
  * Script helper for _evt_majinai_coin_up_effect:
  * sets args[0] to 1 when Merlee has no curse uses left (so her "last time" message follows), else 0.
  */
-USER_FUNC(_check) {
+static USER_FUNC(_check) {
     EvtWord* args = event->args;
     s32 index = *args++;
 

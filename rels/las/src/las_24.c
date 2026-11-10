@@ -37,7 +37,7 @@ static const char* haguruma_kage2[5];
 static EvtWord haguruma_evt[194];
 EvtWord cloud_blk_evt[10];
 EvtWord break_floor_evt[5];
-EvtWord jump_evt[68];
+static EvtWord jump_evt[68];
 
 #if VERSION >= VERSION_US
 static EvtWord dai_evt[17];
@@ -277,7 +277,7 @@ EVT_END()
  * hops him off to (-450, -200); a partner that is not at height -200 and lands on the stand ("MOBJ_jump")
  * within 90 frames jumps to (-455, -200).
  */
-EVT_BEGIN(jump_evt)
+static EVT_BEGIN(jump_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

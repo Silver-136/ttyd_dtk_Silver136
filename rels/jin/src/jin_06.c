@@ -26,7 +26,7 @@ static EvtWord w_close[12];
 static EvtWord w_open[12];
 static BeroEntry bero_entry_data[2];
 EvtWord jin_06_wall_open_evt[5];
-EvtWord jin_06_jumpstand[53];
+static EvtWord jin_06_jumpstand[53];
 static EvtWord mobj_box00[34];
 EvtWord jin_06_init_evt[165];
 
@@ -83,7 +83,7 @@ EVT_END()
  * Mario is launched up (the partner jumps up after him once it is standing on the stand) through the hole to the
  * floor above.
  */
-EVT_BEGIN(jin_06_jumpstand)
+static EVT_BEGIN(jin_06_jumpstand)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

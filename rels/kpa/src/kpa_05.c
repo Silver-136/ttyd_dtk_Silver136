@@ -18,7 +18,7 @@
 static USER_FUNC(kpa_get_level);
 
 static EvtWord kpa_act_stg3_mobj[118];
-EvtWord kpa_act_stg3_item[79];
+static EvtWord kpa_act_stg3_item[79];
 static EvtWord kpa_fall[92];
 static EvtWord jumpstand_evt[60];
 static NpcSetupInfo npcEnt[1];
@@ -46,7 +46,7 @@ static EvtWord kpa_act_stg3_mobj[] = {
 };
 
 /** Coins Bowser can collect in side-scrolling stage 3, as x and y positions. */
-EvtWord kpa_act_stg3_item[] = {
+static EvtWord kpa_act_stg3_item[] = {
     KPA_ITEM(-175.0f, 175.0f), KPA_ITEM(-125.0f, 175.0f), KPA_ITEM(-25.0f, 175.0f), KPA_ITEM(25.0f, 175.0f),
     KPA_ITEM(250.0f, 0.0f), KPA_ITEM(300.0f, 0.0f), KPA_ITEM(350.0f, 0.0f), KPA_ITEM(350.0f, 25.0f),
     KPA_ITEM(350.0f, 50.0f), KPA_ITEM(400.0f, 50.0f), KPA_ITEM(450.0f, 50.0f), KPA_ITEM(450.0f, 25.0f),

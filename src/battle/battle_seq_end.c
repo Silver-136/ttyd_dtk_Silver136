@@ -76,22 +76,22 @@ static void _GetExpIcon_Disp(CameraId camId, void* param);
 static void _lvup_select_object_disp(CameraId camId, void* param);
 
 USER_FUNC(_check_guard_koura);
-USER_FUNC(_disable_enemy_unit_disp);
-USER_FUNC(_get_rank_up_msg);
-USER_FUNC(_lvup_ap_recover_full);
-USER_FUNC(_lvup_disp_flag_onoff);
-USER_FUNC(_lvup_obj_set_color);
-USER_FUNC(_lvup_object_decide_bound);
-USER_FUNC(_lvup_object_noselect_delete);
-USER_FUNC(_lvup_object_select_move);
-USER_FUNC(_lvup_select_obj_disp_on);
-USER_FUNC(_lvup_select_obj_lvup_param_disp);
-USER_FUNC(_lvup_select_object_init);
-USER_FUNC(_lvup_spot_move);
-USER_FUNC(_lvup_spot_off);
+static USER_FUNC(_disable_enemy_unit_disp);
+static USER_FUNC(_get_rank_up_msg);
+static USER_FUNC(_lvup_ap_recover_full);
+static USER_FUNC(_lvup_disp_flag_onoff);
+static USER_FUNC(_lvup_obj_set_color);
+static USER_FUNC(_lvup_object_decide_bound);
+static USER_FUNC(_lvup_object_noselect_delete);
+static USER_FUNC(_lvup_object_select_move);
+static USER_FUNC(_lvup_select_obj_disp_on);
+static USER_FUNC(_lvup_select_obj_lvup_param_disp);
+static USER_FUNC(_lvup_select_object_init);
+static USER_FUNC(_lvup_spot_move);
+static USER_FUNC(_lvup_spot_off);
 USER_FUNC(_lvup_spot_on);
-USER_FUNC(_nozzle_set_offset);
-USER_FUNC(_set_confetti_control_evtid);
+static USER_FUNC(_nozzle_set_offset);
+static USER_FUNC(_set_confetti_control_evtid);
 
 /**
  * Mario's rank titles: Rising Star from level 1, B-list Star at 10, A-list Star at 20 and Superstar at 30,
@@ -99,7 +99,7 @@ USER_FUNC(_set_confetti_control_evtid);
  * a 0xFFFF entry ends the list. Read by _get_rank_data for the level-up show and by BattleGetRankNameLabel
  * for the pause menu's Mario page.
  */
-RankUpData _rank_up_data[] = {
+static RankUpData _rank_up_data[] = {
     {1, 0, "msg_menu_mario_name_0", "butai_01"},
     {10, 1, "msg_menu_mario_name_1", "butai_01"},
     {20, 2, "msg_menu_mario_name_2", "butai_02"},
@@ -1496,7 +1496,7 @@ USER_FUNC(_display_select_one_to_upgrade_text) {
  * Script helper: args[0] a stage object name, args[1] a float; sets that object's Y position offset.
  * The level-up show lowers nozzle_l, nozzle_c and nozzle_r by 40 with it.
  */
-USER_FUNC(_nozzle_set_offset) {
+static USER_FUNC(_nozzle_set_offset) {
     EvtWord* args = event->args;
     const char* name;
     f32 ofs;
@@ -1512,7 +1512,7 @@ USER_FUNC(_nozzle_set_offset) {
 }
 
 /** Script helper for the level-up show: refills Star Power (AP) to its maximum and marks the audience excited. */
-USER_FUNC(_lvup_ap_recover_full) {
+static USER_FUNC(_lvup_ap_recover_full) {
     BattleAudience* aud = BattleAudienceBaseGetPtr();
 
     aud->excited = TRUE;
@@ -1526,7 +1526,7 @@ USER_FUNC(_lvup_ap_recover_full) {
  * Mario and the partner (JP and later run Bobbery's event but never hide him).
  * A stage iron frame (if_body, if_wire) is hidden and marked gone.
  */
-USER_FUNC(_disable_enemy_unit_disp) {
+static USER_FUNC(_disable_enemy_unit_disp) {
     BattleWork* wp = _battleWorkPointer;
     s32 i;
     BattleUnit* unit;
@@ -1573,7 +1573,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
  * Script helper: stores args[0], the _confetti_control_event id, so btlseqEnd can delete it after the level-up.
  * The empty triple check does nothing.
  */
-USER_FUNC(_set_confetti_control_evtid) {
+static USER_FUNC(_set_confetti_control_evtid) {
     EvtWord* args = event->args;
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
 
@@ -1586,7 +1586,7 @@ USER_FUNC(_set_confetti_control_evtid) {
 }
 
 /** Script helper: turns on drawing of the HP/FP/BP level-up blocks. */
-USER_FUNC(_lvup_select_obj_disp_on) {
+static USER_FUNC(_lvup_select_obj_disp_on) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
 
     work->flags |= SEQEND_DISP_LVUP_SELECT;
@@ -1597,7 +1597,7 @@ USER_FUNC(_lvup_select_obj_disp_on) {
  * Script helper: makes all three level-up blocks show their current value,
  * an arrow and the next value (paramDisp 1).
  */
-USER_FUNC(_lvup_select_obj_lvup_param_disp) {
+static USER_FUNC(_lvup_select_obj_lvup_param_disp) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     s32 i;
 
@@ -1611,7 +1611,7 @@ USER_FUNC(_lvup_select_obj_lvup_param_disp) {
  * Script helper: args[0] a level-up block (0 HP, 1 FP, 2 BP), args[1] to args[4] the r, g,
  * b and a it is drawn with; the scripts dim unselected blocks and light the selected one.
  */
-USER_FUNC(_lvup_obj_set_color) {
+static USER_FUNC(_lvup_obj_set_color) {
     EvtWord* args = event->args;
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     SeqEndObj* obj;
@@ -1628,7 +1628,7 @@ USER_FUNC(_lvup_obj_set_color) {
  * Script helper: args[0] on or off, args[1] a raw SeqEndDispFlags mask to set
  * or clear (the scripts only pass 0x20, the level-up help message).
  */
-USER_FUNC(_lvup_disp_flag_onoff) {
+static USER_FUNC(_lvup_disp_flag_onoff) {
     EvtWord* args = event->args;
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     s32 on = evtGetValue(event, args[0]);
@@ -1699,7 +1699,7 @@ USER_FUNC(_lvup_spot_on) {
  * cone 0 following half of Mario's X and cones 1-4 on looping sine paths.
  * Nothing advances it past state 1, so it never finishes and its fade-out branch (states 2 and 3) never runs.
  */
-USER_FUNC(_lvup_spot_move) {
+static USER_FUNC(_lvup_spot_move) {
     BattleSpotWork* spot = BatSpotGetPtr();
     s32 n = evtGetValue(event, event->args[0]);
     BattleSpotEntry* e = spot->entries + n;
@@ -1767,7 +1767,7 @@ USER_FUNC(_lvup_spot_move) {
  * Script helper: args[0] a frame count; fades all five spotlight cones from cone 0's alpha to 0 over that time,
  * hiding each as it reaches 0, and yields until done.
  */
-USER_FUNC(_lvup_spot_off) {
+static USER_FUNC(_lvup_spot_off) {
     BattleSpotWork* spot = BatSpotGetPtr();
     EvtWord* args = event->args;
     BattleSpotEntry* e;
@@ -1796,7 +1796,7 @@ USER_FUNC(_lvup_spot_off) {
  * Script helper from _jump_event: fades the unchosen level-up blocks out over 30 frames
  * and hides their numbers (paramDisp 3).
  */
-USER_FUNC(_lvup_object_noselect_delete) {
+static USER_FUNC(_lvup_object_noselect_delete) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     s32 sel = work->selected;
     s32 i;
@@ -1832,7 +1832,7 @@ USER_FUNC(_lvup_object_noselect_delete) {
  * Script helper from _jump_event: carries the chosen level-up block over Mario's X and Z in 60 frames
  * while spinning it six full turns.
  */
-USER_FUNC(_lvup_object_select_move) {
+static USER_FUNC(_lvup_object_select_move) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     s32 sel = work->selected;
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -1863,7 +1863,7 @@ USER_FUNC(_lvup_object_select_move) {
  * bounces it 30 units up and back over 16 frames,
  * then sets it blinking with its new value (paramDisp 4) and spawns a sparkle effect.
  */
-USER_FUNC(_lvup_object_decide_bound) {
+static USER_FUNC(_lvup_object_decide_bound) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     SeqEndObj* obj = &work->objs[work->selected];
     s32 half;
@@ -1896,7 +1896,7 @@ USER_FUNC(_lvup_object_decide_bound) {
  * HP and FP from Mario's base maximums (next +5, none past 200)
  * and BP from his maximum BP (next +3, none past 99), and turns their display on.
  */
-USER_FUNC(_lvup_select_object_init) {
+static USER_FUNC(_lvup_select_object_init) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     PouchData* pouch = pouchGetPtr();
 
@@ -2179,7 +2179,7 @@ USER_FUNC(_check_guard_koura) {
  * Script helper for _rank_up_event: sets args[0] to the rank-up message for Mario's current level;
  * btlseqEnd only starts that event at a rank-up level, as there is no NULL check.
  */
-USER_FUNC(_get_rank_up_msg) {
+static USER_FUNC(_get_rank_up_msg) {
     s32 out = event->args[0];
 
     evtSetValue(event, out, (EvtWord)_get_rank_data(pouchGetPtr()->level)->rankUpMessage);

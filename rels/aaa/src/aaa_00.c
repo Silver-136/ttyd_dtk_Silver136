@@ -49,7 +49,7 @@ typedef struct AaaWork {
 } AaaWork;
 static AaaWork* wp;
 
-USER_FUNC(mapdraw);
+static USER_FUNC(mapdraw);
 
 static NpcSetupInfo npcEnt[3];
 static EvtWord evt_door[15];
@@ -67,9 +67,9 @@ static EvtWord evt_prologue[713];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord evt_prologue2[196];
+static EvtWord evt_prologue2[196];
 #else
-EvtWord evt_prologue2[193];
+static EvtWord evt_prologue2[193];
 #endif
 
 #if VERSION >= VERSION_US
@@ -444,7 +444,7 @@ static void draw(CameraId camera, void* param) {
  * Luigi shows Mario the Magical Map, the mariost.tpl title picture fades in over
  * the scene, and the game moves on to muj_20 with the story at STG0_02_MARIOS_HOUSE.
  */
-EVT_BEGIN(evt_prologue2)
+static EVT_BEGIN(evt_prologue2)
     // Back in the house after the letter has been read: Mario and Luigi are placed on a black background.
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -873,7 +873,7 @@ EVT_BEGIN(aaa_00_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(mapdraw) {
+static USER_FUNC(mapdraw) {
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(AaaWork));
         memset(wp, 0, sizeof(AaaWork));

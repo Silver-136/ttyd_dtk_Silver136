@@ -20,7 +20,7 @@
 
 static BeroEntry bero_data[3];
 static EvtWord evt_dakuto[44];
-EvtWord evt_nusumi[182];
+static EvtWord evt_nusumi[182];
 static EvtWord evt_first[42];
 EvtWord tou_13_init_evt[117];
 
@@ -74,7 +74,7 @@ static EVT_BEGIN(evt_dakuto)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_nusumi)
+static EVT_BEGIN(evt_nusumi)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), 75)

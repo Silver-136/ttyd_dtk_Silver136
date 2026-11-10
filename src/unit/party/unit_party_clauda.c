@@ -30,14 +30,14 @@
 #include "battle/battle_damage.h"
 #include "icon_ids.h"
 
-USER_FUNC(_clauda_make_extra_work_area);
-USER_FUNC(_make_kumoguard_weapon);
-USER_FUNC(_get_clauda_kiss_hit_position);
-USER_FUNC(_make_kiss_weapon);
-USER_FUNC(_make_breath_weapon);
+static USER_FUNC(_clauda_make_extra_work_area);
+static USER_FUNC(_make_kumoguard_weapon);
+static USER_FUNC(_get_clauda_kiss_hit_position);
+static USER_FUNC(_make_kiss_weapon);
+static USER_FUNC(_make_breath_weapon);
 static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);
-USER_FUNC(_check_blow_rate);
+static USER_FUNC(_check_blow_rate);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 BattleWeapon partyWeapon_ClaudaNormalAttack;
@@ -46,19 +46,19 @@ BattleWeapon partyWeapon_ClaudaPredationAttack;
 BattleWeapon partyWeapon_ClaudaKumogakureAttack;
 PoseTableEntry pose_table_clauda_stay[25];
 static BattleDataEntry data_table[8];
-BattleUnitKindPart unitpartsdata_Party_Clauda[1];
+static BattleUnitKindPart unitpartsdata_Party_Clauda[1];
 BattleUnitKind unitdata_Party_Clauda;
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[60];
 static EvtWord damage_event[16];
-EvtWord partyClaudaAttack_NormalAttack[700];
-EvtWord partyClaudaAttack_BreathAttack[520];
-EvtWord partyClaudaAttack_PredationAttack[875];
+static EvtWord partyClaudaAttack_NormalAttack[700];
+static EvtWord partyClaudaAttack_BreathAttack[520];
+static EvtWord partyClaudaAttack_PredationAttack[875];
 EvtWord partyClaudaAttack_KumoGuard[290];
-EvtWord clauda_appeal_event[71];
+static EvtWord clauda_appeal_event[71];
 static EvtWord attack_audience_event[15];
-EvtWord attack_bad_audience_event[348];
-EvtWord attack_good_audience_event[216];
+static EvtWord attack_bad_audience_event[348];
+static EvtWord attack_good_audience_event[216];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -321,7 +321,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Flurrie's single body part: model c_windy with her defence, element and pose tables. */
-BattleUnitKindPart unitpartsdata_Party_Clauda[] = {
+static BattleUnitKindPart unitpartsdata_Party_Clauda[] = {
     {1, "btl_un_clauda", "c_windy", 0.0f, 0.0f, 0.0f, 16.0f, 44.0f, 5.0f, 0.0f, 44.0f, 0.0f, 26, 50, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_clauda_stay},
 };
 
@@ -439,7 +439,7 @@ EVT_END()
  * the action command deciding whether the slam connects at all (a failed command deals no damage), then floats
  * back home.
  */
-EVT_BEGIN(partyClaudaAttack_NormalAttack)
+static EVT_BEGIN(partyClaudaAttack_NormalAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -637,7 +637,7 @@ EVT_END()
  * the action command output sets the blow-away chance of a copy of the weapon (_make_breath_weapon) that is
  * then tried against each enemy.
  */
-EVT_BEGIN(partyClaudaAttack_BreathAttack)
+static EVT_BEGIN(partyClaudaAttack_BreathAttack)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -830,7 +830,7 @@ EVT_END()
  * Flurrie's Lip Lock: she floats to the enemy's kiss point (_get_clauda_kiss_hit_position) and kisses it,
  * healing herself by the HP damage dealt, then floats back.
  */
-EVT_BEGIN(partyClaudaAttack_PredationAttack)
+static EVT_BEGIN(partyClaudaAttack_PredationAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1206,7 +1206,7 @@ EVT_END()
  * Flurrie's Appeal (data tag 5): appeal pose and sound, a kiss effect towards the audience,
  * then the audience is fired up.
  */
-EVT_BEGIN(clauda_appeal_event)
+static EVT_BEGIN(clauda_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1253,7 +1253,7 @@ EVT_END()
  * bone or hammer to throw (or nothing, per _check_aud_item_type):
  * she body slams it with a squash-and-stretch landing, then floats home.
  */
-EVT_BEGIN(attack_bad_audience_event)
+static EVT_BEGIN(attack_bad_audience_event)
     CALL(btlevtcmd_OffUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_1"))
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
@@ -1342,7 +1342,7 @@ EVT_BEGIN(attack_bad_audience_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(attack_good_audience_event)
+static EVT_BEGIN(attack_good_audience_event)
     CALL(btlevtcmd_OffUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_1"))
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
@@ -1445,7 +1445,7 @@ static EVT_BEGIN(party_win_reaction)
 EVT_END()
 #endif
 
-USER_FUNC(_clauda_make_extra_work_area) {
+static USER_FUNC(_clauda_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
@@ -1507,7 +1507,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
  * Returns in args[1] the Gale Force vulnerability (vulnStatus->galeForceRate) of unit args[0];
  * Gale Force shakes every enemy with a non-zero rate while Flurrie blows.
  */
-USER_FUNC(_check_blow_rate) {
+static USER_FUNC(_check_blow_rate) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     s32 id, out;
@@ -1590,7 +1590,7 @@ static USER_FUNC(_clauda_breath_effect_fire) {
  * sets its gale force chance to args[1] (the action command output),
  * and writes the copy's address back into args[0].
  */
-USER_FUNC(_make_breath_weapon) {
+static USER_FUNC(_make_breath_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1615,7 +1615,7 @@ USER_FUNC(_make_breath_weapon) {
  * Copies the weapon pointed to by args[0] into the unit's spare weapon unchanged
  * and writes the copy's address back into args[0]; args[1] (the action command output) is read but not used.
  */
-USER_FUNC(_make_kiss_weapon) {
+static USER_FUNC(_make_kiss_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1640,7 +1640,7 @@ USER_FUNC(_make_kiss_weapon) {
  * its kissHitOffset point (scaled, X mirrored by facing) lowered by 30 units times the kisser's (args[0]) size,
  * but not below the floor.
  */
-USER_FUNC(_get_clauda_kiss_hit_position) {
+static USER_FUNC(_get_clauda_kiss_hit_position) {
     EvtWord* args = event->args;
     Vec pos, floorPos;
     s32 dir;
@@ -1683,7 +1683,7 @@ USER_FUNC(_get_clauda_kiss_hit_position) {
  * sets its Dodgy duration (dodgyTime) to args[1] turns, and writes the copy's address back into args[0].
  * Used by Dodgy Fog.
  */
-USER_FUNC(_make_kumoguard_weapon) {
+static USER_FUNC(_make_kumoguard_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;

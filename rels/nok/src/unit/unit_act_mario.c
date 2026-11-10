@@ -31,7 +31,7 @@
 
 static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);
-USER_FUNC(_status_window_off);
+static USER_FUNC(_status_window_off);
 extern BattleUnitKind unit_act_atmic_teresa;
 extern BattleUnitKind unit_act_clauda;
 extern BattleUnitKind unit_act_kinopiko;
@@ -50,16 +50,16 @@ static EvtWord damage_event[10];
 static EvtWord phase_event[2];
 static EvtWord attack_event[5];
 static EvtWord wait_event[6];
-BattleUnitSetup entry_unit_data[8];
+static BattleUnitSetup entry_unit_data[8];
 static EvtWord battle_entry_event[168];
-EvtWord _battle_event[155];
-EvtWord _act_target_enemy[33];
-EvtWord _act_target_mario[26];
-EvtWord _act_mario_jump_attack[240];
-EvtWord _act_clauda_press_attack[350];
-EvtWord _act_clauda_breath_attack[269];
-EvtWord _act_teresa_attack[190];
-EvtWord _act_atmic_teresa_press_attack[188];
+static EvtWord _battle_event[155];
+static EvtWord _act_target_enemy[33];
+static EvtWord _act_target_mario[26];
+static EvtWord _act_mario_jump_attack[240];
+static EvtWord _act_clauda_press_attack[350];
+static EvtWord _act_clauda_breath_attack[269];
+static EvtWord _act_teresa_attack[190];
+static EvtWord _act_atmic_teresa_press_attack[188];
 
 /**
  * Unit kind of the Mario actor (HP 10, level 1):
@@ -211,7 +211,7 @@ EVT_END()
  * Cast of Flurrie's epilogue stage play: Flurrie as Clauda, two Boos, the Atomic Boo, two Toads,
  * a female Toad and Goombella, with their starting spots.
  */
-BattleUnitSetup entry_unit_data[] = {
+static BattleUnitSetup entry_unit_data[] = {
     {
         &unit_act_clauda, // unitKindParams
         ALLIANCE_PLAYER, // alliance
@@ -350,7 +350,7 @@ EVT_END()
  * and a male and a female Toad each say a line (talk pose).
  * It repeats forever; nothing in it ends the battle.
  */
-EVT_BEGIN(_battle_event)
+static EVT_BEGIN(_battle_event)
     LABEL(0)
     CALL_CHILD(_act_mario_jump_attack)
     WAIT_FRAMES(1)
@@ -401,7 +401,7 @@ EVT_END()
  * Picks a random enemy actor of the play (unit work 2, 3 or 4: the two Boos and the Atomic Boo) as the target:
  * returns its unit id in LW(3) and its body id in LW(4).
  */
-EVT_BEGIN(_act_target_enemy)
+static EVT_BEGIN(_act_target_enemy)
     CALL(evt_sub_random, 2, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -419,7 +419,7 @@ EVT_END()
  * Picks Mario (UNIT_WORK_MARIO_ID) or Clauda (UNIT_WORK_CLAUDA_ID) as the target of a Boo attack:
  * returns the unit id in LW(3) and the body id in LW(4).
  */
-EVT_BEGIN(_act_target_mario)
+static EVT_BEGIN(_act_target_mario)
     CALL(evt_sub_random, 1, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -436,7 +436,7 @@ EVT_END()
  * and jumps on a random enemy actor (which gets a hit effect, a cheer from the audience and its hurt pose),
  * bounces back with a few smaller hops and runs to his home position.
  */
-EVT_BEGIN(_act_mario_jump_attack)
+static EVT_BEGIN(_act_mario_jump_attack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_TALK)
     WAIT_MS(1000)
@@ -493,7 +493,7 @@ EVT_END()
  * and squashes it flat while she squashes and stretches,
  * then bounces off and poses (PWD_Y_1) with the audience cheering and floats home; the victim springs back up.
  */
-EVT_BEGIN(_act_clauda_press_attack)
+static EVT_BEGIN(_act_clauda_press_attack)
     // Flurrie pauses on stage, picks a random actor to flatten and turns toward it.
     CALL(btlevtcmd_AnimeChangePoseType, LW(5), LW(6), POSE_TYPE_TALK)
     WAIT_MS(1000)
@@ -600,7 +600,7 @@ EVT_END()
  * who each get a hit effect and a cheer and shake while the breath lasts, then the effect is removed,
  * she poses and the audience cheers.
  */
-EVT_BEGIN(_act_clauda_breath_attack)
+static EVT_BEGIN(_act_clauda_breath_attack)
     CALL(btlevtcmd_JumpSetting, LW(5), 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_AnimeChangePoseType, LW(5), LW(6), POSE_TYPE_TALK)
     WAIT_MS(1000)
@@ -673,7 +673,7 @@ EVT_END()
  * reappears beside Mario or Flurrie (picked at random), hits it, and floats back home;
  * the target gets a hit effect and its hurt pose and the audience cheers.
  */
-EVT_BEGIN(_act_teresa_attack)
+static EVT_BEGIN(_act_teresa_attack)
     CALL_CHILD(_act_target_mario)
     CALL(btlevtcmd_AnimeChangePoseType, LW(5), LW(6), POSE_TYPE_RUN)
     BEGIN_SIBLING_EVENT
@@ -727,7 +727,7 @@ EVT_END()
  * The Atomic Boo's attack in the play: it rises above the left side of the stage and drops onto Mario
  * and Flurrie, both getting a hit effect, their hurt pose and a cheer, then it returns to its home position.
  */
-EVT_BEGIN(_act_atmic_teresa_press_attack)
+static EVT_BEGIN(_act_atmic_teresa_press_attack)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_ID, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_AnimeChangePose, LW(5), LW(6), STRING("R_1"))
@@ -827,7 +827,7 @@ static USER_FUNC(_clauda_breath_effect_ready) {
  * Script helper: turns the battle status window off (statusWindowOff = 1)
  * so it does not show during the stage play.
  */
-USER_FUNC(_status_window_off) {
+static USER_FUNC(_status_window_off) {
     _battleWorkPointer->statusWindowOff = 1;
     return EVT_RETURN_DONE;
 }

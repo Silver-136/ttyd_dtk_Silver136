@@ -633,7 +633,7 @@ static char* double2hex(long double num, char* buff, print_format format) {
 /* Rounds dec to new_length digits (ties to even). A negative length, or a carry that consumes every digit,
    gives 0; the second case jumps back into the first branch through return_zero. Not static, but no header
    declares it: only this file calls it. */
-void round_decimal(decimal* dec, int new_length) {
+static void round_decimal(decimal* dec, int new_length) {
     char c;
     char* p;
     int carry;

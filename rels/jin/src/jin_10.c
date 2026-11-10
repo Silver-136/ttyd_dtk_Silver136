@@ -22,8 +22,8 @@
 #include "jin.h"
 
 static USER_FUNC(get_pos);
-USER_FUNC(get_width);
-USER_FUNC(set_pos);
+static USER_FUNC(get_width);
+static USER_FUNC(set_pos);
 
 static EvtWord door_close[12];
 static EvtWord door_open[12];
@@ -35,8 +35,8 @@ static EvtWord push_evt[126];
 static EvtWord push_evt[132];
 #endif
 
-EvtWord unpush_evt[252];
-EvtWord vivi_chk[42];
+static EvtWord unpush_evt[252];
+static EvtWord vivi_chk[42];
 EvtWord jin_10_init_evt[59];
 
 /** Script helper: returns Mario's current position in args[0..2]. */
@@ -110,7 +110,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Script helper: moves Mario directly to the position (args[0], args[1], args[2]). */
-USER_FUNC(set_pos) {
+static USER_FUNC(set_pos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -182,7 +182,7 @@ EVT_END()
  * (checked only while Mario is left of the gate, and skipped while Mario is hidden in Vivian's Veil),
  * and plays the grid-movement sound while it moves.
  */
-EVT_BEGIN(unpush_evt)
+static EVT_BEGIN(unpush_evt)
     LOOP(0)
         // Waits while Mario is pushing the gate.
         LOOP(0)
@@ -282,7 +282,7 @@ EVT_BEGIN(unpush_evt)
 EVT_END()
 
 // This loop polls Vivian and Mario proximity, but the distance test has no action in either branch.
-EVT_BEGIN(vivi_chk)
+static EVT_BEGIN(vivi_chk)
     LOOP(0)
         CALL(evt_party_get_status, 6, LW(0))
         IF_INT_EQUAL(LW(0), 2)
@@ -325,7 +325,7 @@ EVT_BEGIN(jin_10_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(get_width) {
+static USER_FUNC(get_width) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(evtGetValue(event, args[0]));
 

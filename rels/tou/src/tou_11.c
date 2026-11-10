@@ -36,8 +36,8 @@ static EvtWord e_door_close[12];
 static BeroEntry bero_data[3];
 static NpcSetupInfo npcEnt[2];
 EvtWord evt_tojikome[296];
-EvtWord evt_tojikome_nidome[104];
-EvtWord evt_tojikome_sandome[37];
+static EvtWord evt_tojikome_nidome[104];
+static EvtWord evt_tojikome_sandome[37];
 static EvtWord evt_tojikome_msg[30];
 EvtWord evt_postar[23];
 EvtWord tou_11_init_evt[178];
@@ -247,7 +247,7 @@ EVT_END()
  * and goes to check (stg3_tou_409_02), the door will not open (locked-door sound),
  * the partner panics that they are locked in (stg3_tou_410), and the screen irises out to tou_03.
  */
-EVT_BEGIN(evt_tojikome_nidome)
+static EVT_BEGIN(evt_tojikome_nidome)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -275,7 +275,7 @@ EVT_BEGIN(evt_tojikome_nidome)
 EVT_END()
 
 /** Third shut-in scene: the partner's remark stg3_tou_421_01 and the normal Glitz Pit music and ambience return. */
-EVT_BEGIN(evt_tojikome_sandome)
+static EVT_BEGIN(evt_tojikome_sandome)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

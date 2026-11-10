@@ -60,9 +60,9 @@ LinkDt linkDt[18] = {
     {3, -74, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_scoin", {15, 17, 4, 4}},
     {3, -102, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_time", {16, 11, 4, 4}},
 };
-const char* hammer_help[] = {NULL, "msg_hammer_1", "msg_hammer_2", "msg_hammer_3"};
-const char* boots_help[] = {NULL, "msg_boots_1", "msg_boots_2", "msg_boots_3"};
-const char* hammer_pose[] = {NULL, "M_H_1", "M_H_4", "M_H_7"};
+static const char* hammer_help[] = {NULL, "msg_hammer_1", "msg_hammer_2", "msg_hammer_3"};
+static const char* boots_help[] = {NULL, "msg_boots_1", "msg_boots_2", "msg_boots_3"};
+static const char* hammer_pose[] = {NULL, "M_H_1", "M_H_4", "M_H_7"};
 
 /**
  * Sets up the Mario window when the pause menu opens:

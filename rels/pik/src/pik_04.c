@@ -46,14 +46,14 @@ static const char* name_tbl[6];
 static EvtWord evt_door[12];
 static EvtWord evt_door2[12];
 static EvtWord evt_wall[29];
-const char* ie_3_npc[3];
+static const char* ie_3_npc[3];
 static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
-EvtWord evt_door_h[22];
-EvtWord evt_door2_h[19];
-EvtWord evt_wall_h[12];
-const char* hotel_npc[3];
+static EvtWord evt_door_h[22];
+static EvtWord evt_door2_h[19];
+static EvtWord evt_wall_h[12];
+static const char* hotel_npc[3];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord door_2_open[12];
@@ -63,7 +63,7 @@ static EvtWord door_2_open[18];
 
 static EvtWord door_2_close[14];
 static DoorParam door_2;
-EvtWord imginit[46];
+static EvtWord imginit[46];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord imgstart[];
@@ -77,21 +77,21 @@ EvtWord evt_up[402];
 EvtWord evt_down[404];
 #endif
 
-EvtWord init_miyage[8];
-EvtWord talk_miyage[2];
+static EvtWord init_miyage[8];
+static EvtWord talk_miyage[2];
 static EvtWord talk_musume[20];
-EvtWord init_musume1[13];
-EvtWord talk_musume1[4];
-EvtWord init_musume2[13];
-EvtWord talk_musume2[4];
-EvtWord init_musume3[13];
-EvtWord talk_musume3[4];
-EvtWord init_takun1[2];
-EvtWord talk_takun1[28];
-EvtWord init_takun2[2];
-EvtWord talk_takun2[28];
-EvtWord init_takun3[7];
-EvtWord talk_takun3[28];
+static EvtWord init_musume1[13];
+static EvtWord talk_musume1[4];
+static EvtWord init_musume2[13];
+static EvtWord talk_musume2[4];
+static EvtWord init_musume3[13];
+static EvtWord talk_musume3[4];
+static EvtWord init_takun1[2];
+static EvtWord talk_takun1[28];
+static EvtWord init_takun2[2];
+static EvtWord talk_takun2[28];
+static EvtWord init_takun3[7];
+static EvtWord talk_takun3[28];
 static EvtWord init_kiza[13];
 static EvtWord talk_kiza[8];
 static NpcSetupInfo npc_data[9];
@@ -102,8 +102,8 @@ extern EvtWord evt_roten[];
 EvtWord evt_roten[113];
 #endif
 
-EvtWord evt_kinopio_to_bed[29];
-EvtWord evt_kinopio_from_bed[27];
+static EvtWord evt_kinopio_to_bed[29];
+static EvtWord evt_kinopio_from_bed[27];
 static KinopioData kino_dt;
 static EvtWord epilogue_npc_entry[169];
 static EvtWord epilogue_evt_sub[91];
@@ -202,7 +202,7 @@ static EVT_BEGIN(evt_wall)
 EVT_END()
 
 /** NPCs inside the house at ie_3: two of the Ta-kun (ターくん), who moved here from Shiver City. */
-const char* ie_3_npc[] = {
+static const char* ie_3_npc[] = {
     "ターくん１",
     "ターくん２",
     NULL,
@@ -252,7 +252,7 @@ static DoorParam door_1 = {
  * Door callback (evtIn of door_2, the hotel's double door door_h): the opening angle LW(0) is scaled by
  * -0.5546875 and applied to door_h_a as a rotation about y, and the mirror angle to door_h_b.
  */
-EVT_BEGIN(evt_door_h)
+static EVT_BEGIN(evt_door_h)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5546875f))
     CALL(evt_mapobj_rotate, 1, STRING("door_h_a"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -265,7 +265,7 @@ EVT_END()
  * half the angle in LW(0) is applied as a rotation about x to both
  * door_h_a and door_h_b. Nothing in this file refers to it (door_2's evtOut is NULL).
  */
-EVT_BEGIN(evt_door2_h)
+static EVT_BEGIN(evt_door2_h)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_h_a"), LW(0), 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING("door_h_b"), LW(0), 0, 0)
@@ -276,14 +276,14 @@ EVT_END()
  * Wall callback (evtWall of door_2, the hotel entrance): rotates the front wall hotel_kabe_1 about y by LW(0)
  * scaled by -0.75, so the wall swings open as Mario goes in.
  */
-EVT_BEGIN(evt_wall_h)
+static EVT_BEGIN(evt_wall_h)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.75f))
     CALL(evt_mapobj_rotate, 1, STRING("hotel_kabe_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** NPCs inside the hotel: the receptionist and the French-accented dandy (キザ野郎) who is smitten with her. */
-const char* hotel_npc[] = {
+static const char* hotel_npc[] = {
     "店員女",
     "キザ野郎",
     NULL,
@@ -336,7 +336,7 @@ static DoorParam door_2 = {
  * Called by the map init: sets up the image capture used by imgstart and imgend to fade the hotel lobby out and
  * in (a paper "OFF_hei_07" image bound to an offscreen buffer of 608 by 480), and leaves it off.
  */
-EVT_BEGIN(imginit)
+static EVT_BEGIN(imginit)
     CALL(evt_paper_entry, STRING("OFF_hei_07"))
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_hei_07"))
@@ -826,7 +826,7 @@ EVT_END()
  * Init for the souvenir stall owner (土産屋), who sells Fresh Pasta at the stall a_roten (evt_roten): places the
  * owner at (-363, 10, 142) (y 15 in JP and the early demos).
  */
-EVT_BEGIN(init_miyage)
+static EVT_BEGIN(init_miyage)
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("me"), -363, 10, 142)
 #else
@@ -836,7 +836,7 @@ EVT_BEGIN(init_miyage)
 EVT_END()
 
 /** Talk script of the souvenir stall owner: empty; the sale runs through the stall's case event evt_roten. */
-EVT_BEGIN(talk_miyage)
+static EVT_BEGIN(talk_miyage)
     RETURN
 EVT_END()
 
@@ -852,7 +852,7 @@ EVT_END()
  * Init for the first of the three girls (３人娘１):
  * after the Thousand-Year Door has been opened she is moved off screen.
  */
-EVT_BEGIN(init_musume1)
+static EVT_BEGIN(init_musume1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("３人娘１"), 0, -1000, 0)
@@ -861,13 +861,13 @@ EVT_BEGIN(init_musume1)
 EVT_END()
 
 /** Talk script of the first girl: runs the shared conversation of all three girls (talk_musume). */
-EVT_BEGIN(talk_musume1)
+static EVT_BEGIN(talk_musume1)
     CALL_CHILD(talk_musume)
     RETURN
 EVT_END()
 
 /** Init for the second of the three girls (３人娘２): moved off screen after the Thousand-Year Door has been opened. */
-EVT_BEGIN(init_musume2)
+static EVT_BEGIN(init_musume2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("３人娘２"), 0, -1000, 0)
@@ -876,13 +876,13 @@ EVT_BEGIN(init_musume2)
 EVT_END()
 
 /** Talk script of the second girl: runs the shared conversation of the three girls. */
-EVT_BEGIN(talk_musume2)
+static EVT_BEGIN(talk_musume2)
     CALL_CHILD(talk_musume)
     RETURN
 EVT_END()
 
 /** Init for the third of the three girls (３人娘３): moved off screen after the Thousand-Year Door has been opened. */
-EVT_BEGIN(init_musume3)
+static EVT_BEGIN(init_musume3)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("３人娘３"), 0, -1000, 0)
@@ -891,13 +891,13 @@ EVT_BEGIN(init_musume3)
 EVT_END()
 
 /** Talk script of the third girl: runs the shared conversation of the three girls. */
-EVT_BEGIN(talk_musume3)
+static EVT_BEGIN(talk_musume3)
     CALL_CHILD(talk_musume)
     RETURN
 EVT_END()
 
 /** Init for Ta-kun 1: nothing to do. */
-EVT_BEGIN(init_takun1)
+static EVT_BEGIN(init_takun1)
     RETURN
 EVT_END()
 
@@ -905,7 +905,7 @@ EVT_END()
  * Talk script for Ta-kun 1: story-progress dependent line (before the Thousand-Year Door,
  * up to the end of chapter 8, and afterwards).
  */
-EVT_BEGIN(talk_takun1)
+static EVT_BEGIN(talk_takun1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_13"), 0, STRING("me"))
@@ -918,12 +918,12 @@ EVT_BEGIN(talk_takun1)
 EVT_END()
 
 /** Init for Ta-kun 2: nothing to do. */
-EVT_BEGIN(init_takun2)
+static EVT_BEGIN(init_takun2)
     RETURN
 EVT_END()
 
 /** Talk script for Ta-kun 2: story-progress dependent line, same schedule as Ta-kun 1. */
-EVT_BEGIN(talk_takun2)
+static EVT_BEGIN(talk_takun2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_15"), 0, STRING("me"))
@@ -936,13 +936,13 @@ EVT_BEGIN(talk_takun2)
 EVT_END()
 
 /** Init for Ta-kun 3: turns on the walk and talk animations, floor collision and gravity. */
-EVT_BEGIN(init_takun3)
+static EVT_BEGIN(init_takun3)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん３"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
 /** Talk script for Ta-kun 3: story-progress dependent line, same schedule as Ta-kun 1. */
-EVT_BEGIN(talk_takun3)
+static EVT_BEGIN(talk_takun3)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_17"), 0, STRING("me"))
@@ -1128,7 +1128,7 @@ EVT_END()
  * toBedEvt of the hotel's Kinopio data: walks Mario to the elevator,
  * rides it up (evt_up) and walks him to the bed in the inn room.
  */
-EVT_BEGIN(evt_kinopio_to_bed)
+static EVT_BEGIN(evt_kinopio_to_bed)
     CALL(evt_mario_mov_pos2, 340, -25, FLOAT(70.0f))
     CALL(evt_mario_mov_pos2, 370, 5, FLOAT(70.0f))
     CALL_CHILD(evt_up)
@@ -1142,7 +1142,7 @@ EVT_END()
  * fromBedEvt of the hotel's Kinopio data: after sleeping,
  * walks Mario from the bed back to the elevator and rides it down (evt_down).
  */
-EVT_BEGIN(evt_kinopio_from_bed)
+static EVT_BEGIN(evt_kinopio_from_bed)
     CALL(evt_party_run, 0)
     CALL(evt_mario_mov_pos2, 220, -15, FLOAT(70.0f))
     CALL(evt_mario_mov_pos2, 285, -80, FLOAT(70.0f))

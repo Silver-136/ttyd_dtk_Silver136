@@ -27,16 +27,16 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-EvtWord dou_03_custom[10];
+static EvtWord dou_03_custom[10];
 static BeroEntry bero_entry_data[8];
-EvtWord watergate_handle_init[34];
+static EvtWord watergate_handle_init[34];
 static s32 itemsel_table[2];
-EvtWord watergate_lever[20];
-EvtWord watergate_geer_small[20];
-EvtWord watergate_geer_large[20];
-EvtWord nagare_taru[38];
-EvtWord nagare_taru_se[45];
-EvtWord nagare_bin[33];
+static EvtWord watergate_lever[20];
+static EvtWord watergate_geer_small[20];
+static EvtWord watergate_geer_large[20];
+static EvtWord nagare_taru[38];
+static EvtWord nagare_taru_se[45];
+static EvtWord nagare_bin[33];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord watergate_handle[];
@@ -51,7 +51,7 @@ static HitDamageReturn hitDmgRetPoints[18];
 EvtWord dou_03_init_evt[130];
 
 /** Enter event of the dou_03 doors: switches the "on_off" hit object group off; leaves LW(0) = 0. */
-EVT_BEGIN(dou_03_custom)
+static EVT_BEGIN(dou_03_custom)
     CALL(evt_hitobj_onoff, STRING("on_off"), 1, 0)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -181,7 +181,7 @@ static BeroEntry bero_entry_data[] = {
  * Sets up the floodgate at map load: before STG5_22_FLOODGATE_HANDLE the winch lever is hidden
  * and the exit behind the gate (s_bero) is switched off; afterwards the gate is already up.
  */
-EVT_BEGIN(watergate_handle_init)
+static EVT_BEGIN(watergate_handle_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero"))
@@ -200,7 +200,7 @@ static s32 itemsel_table[] = {
 };
 
 /** Turns the floodgate winch lever (S_reba) forever, 2 degrees per frame. */
-EVT_BEGIN(watergate_lever)
+static EVT_BEGIN(watergate_lever)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(evt_mapobj_rotate, 1, STRING("S_reba"), LW(0), 0, 0)
@@ -211,7 +211,7 @@ EVT_BEGIN(watergate_lever)
 EVT_END()
 
 /** Turns the small winch gear (S_zenmai1) forever, 2 degrees per frame. */
-EVT_BEGIN(watergate_geer_small)
+static EVT_BEGIN(watergate_geer_small)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(evt_mapobj_rotate, 1, STRING("S_zenmai1"), LW(0), 0, 0)
@@ -222,7 +222,7 @@ EVT_BEGIN(watergate_geer_small)
 EVT_END()
 
 /** Turns the large winch gear (S_zenmai2) forever, 4 degrees per frame the other way. */
-EVT_BEGIN(watergate_geer_large)
+static EVT_BEGIN(watergate_geer_large)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(evt_mapobj_rotate, 1, STRING("S_zenmai2"), LW(0), 0, 0)
@@ -236,7 +236,7 @@ EVT_END()
  * After the floodgate opens, the barrel (S_taru) is swept away along Z for 2 seconds and
  * then hidden along with its hit area.
  */
-EVT_BEGIN(nagare_taru)
+static EVT_BEGIN(nagare_taru)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -252,7 +252,7 @@ EVT_BEGIN(nagare_taru)
 EVT_END()
 
 /** Plays the barrel-moving sound at the barrel's position three times, a second apart. */
-EVT_BEGIN(nagare_taru_se)
+static EVT_BEGIN(nagare_taru_se)
     CALL(evt_mapobj_get_position, STRING("S_taru"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_BARREL_MOVE1"), LW(0), LW(1), LW(2), LW(9))
     WAIT_MS(1000)
@@ -265,7 +265,7 @@ EVT_BEGIN(nagare_taru_se)
 EVT_END()
 
 /** After the floodgate opens, the bottle (S_bin) is swept away along Z for 1.2 seconds and then hidden. */
-EVT_BEGIN(nagare_bin)
+static EVT_BEGIN(nagare_bin)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 1200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

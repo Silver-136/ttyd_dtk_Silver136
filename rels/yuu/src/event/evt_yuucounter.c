@@ -49,7 +49,7 @@ void iconDispGxCol(Mtx pos, s16 flags, u16 iconId, GXColor color);
 #define COUNTER_ICON_2D 0x10
 #endif
 
-USER_FUNC(evt_yuucounter_main_func);
+static USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
 
 static EvtWord main_evt[4];
@@ -172,7 +172,7 @@ USER_FUNC(evt_yuucounter_alloc) {
  * Body of the counter event: queues the 2D draw callback each frame until the free request flag is set,
  * then marks itself stopped.
  */
-USER_FUNC(evt_yuucounter_main_func) {
+static USER_FUNC(evt_yuucounter_main_func) {
     YuuCounterWork* wp = (YuuCounterWork*)event->lwData[0];
 
     if (wp->flags & 1) {

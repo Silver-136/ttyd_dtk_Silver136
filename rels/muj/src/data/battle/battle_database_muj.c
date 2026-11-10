@@ -19,83 +19,83 @@ static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_boss_cortez;
 extern BattleUnitKind unit_boss_kanbu3;
 
-BattleStageObjectData muj_btlobject_data[31];
-BattleStageData muj_btlstage_data[4];
-BattleUnitSetup btlparty_muj_muj_cortez[1];
-BattleGroupSetup btlgrp_muj_muj_cortez;
-BattleUnitSetup btlparty_muj_muj_kanbu[2];
-BattleGroupSetup btlgrp_muj_muj_kanbu;
-BattleUnitSetup btlparty_muj_muj_01_01[3];
-BattleGroupSetup btlgrp_muj_muj_01_01;
-BattleUnitSetup btlparty_muj_muj_05_01[3];
-BattleGroupSetup btlgrp_muj_muj_05_01;
-BattleUnitSetup btlparty_muj_muj_05_02[3];
-BattleGroupSetup btlgrp_muj_muj_05_02;
-BattleUnitSetup btlparty_muj_muj_00_01[3];
-BattleGroupSetup btlgrp_muj_muj_00_01;
-BattleUnitSetup btlparty_muj_muj_02_01_off_01[1];
-BattleGroupSetup btlgrp_muj_muj_02_01_off_01;
-BattleUnitSetup btlparty_muj_muj_02_01_off_02[2];
-BattleGroupSetup btlgrp_muj_muj_02_01_off_02;
-BattleUnitSetup btlparty_muj_muj_02_01_off_03[3];
-BattleGroupSetup btlgrp_muj_muj_02_01_off_03;
-BattleUnitSetup btlparty_muj_muj_02_01_off_04[4];
-BattleGroupSetup btlgrp_muj_muj_02_01_off_04;
-BattleUnitSetup btlparty_muj_muj_02_04_off_01[1];
-BattleGroupSetup btlgrp_muj_muj_02_04_off_01;
-BattleUnitSetup btlparty_muj_muj_02_04_off_02[2];
-BattleGroupSetup btlgrp_muj_muj_02_04_off_02;
-BattleUnitSetup btlparty_muj_muj_02_04_off_03[3];
-BattleGroupSetup btlgrp_muj_muj_02_04_off_03;
-BattleUnitSetup btlparty_muj_muj_02_07_off_01[2];
-BattleGroupSetup btlgrp_muj_muj_02_07_off_01;
-BattleUnitSetup btlparty_muj_muj_02_07_off_02[3];
-BattleGroupSetup btlgrp_muj_muj_02_07_off_02;
-BattleUnitSetup btlparty_muj_muj_02_07_off_03[4];
-BattleGroupSetup btlgrp_muj_muj_02_07_off_03;
-BattleUnitSetup btlparty_muj_muj_03_01_off_01[2];
-BattleGroupSetup btlgrp_muj_muj_03_01_off_01;
-BattleUnitSetup btlparty_muj_muj_03_01_off_02[3];
-BattleGroupSetup btlgrp_muj_muj_03_01_off_02;
-BattleUnitSetup btlparty_muj_muj_03_01_off_03[3];
-BattleGroupSetup btlgrp_muj_muj_03_01_off_03;
-BattleUnitSetup btlparty_muj_muj_03_02_off_01[2];
-BattleGroupSetup btlgrp_muj_muj_03_02_off_01;
-BattleUnitSetup btlparty_muj_muj_03_02_off_02[3];
-BattleGroupSetup btlgrp_muj_muj_03_02_off_02;
-BattleUnitSetup btlparty_muj_muj_03_02_off_03[3];
-BattleGroupSetup btlgrp_muj_muj_03_02_off_03;
-BattleUnitSetup btlparty_muj_muj_03_04_off_01[2];
-BattleGroupSetup btlgrp_muj_muj_03_04_off_01;
-BattleUnitSetup btlparty_muj_muj_03_04_off_02[3];
-BattleGroupSetup btlgrp_muj_muj_03_04_off_02;
-BattleUnitSetup btlparty_muj_muj_03_04_off_03[3];
-BattleGroupSetup btlgrp_muj_muj_03_04_off_03;
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test1_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test2_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test3_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test4_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_cortez_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_kanbu_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_01_01_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_05_01_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_05_02_off[2];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_02_01_off[4];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_02_02_off[4];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_02_07_off[4];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_03_01_off[4];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_03_02_off[4];
-NpcBattleSelect btlgrpsel_muj_btlno_muj_03_04_off[4];
+static BattleStageObjectData muj_btlobject_data[31];
+static BattleStageData muj_btlstage_data[4];
+static BattleUnitSetup btlparty_muj_muj_cortez[1];
+static BattleGroupSetup btlgrp_muj_muj_cortez;
+static BattleUnitSetup btlparty_muj_muj_kanbu[2];
+static BattleGroupSetup btlgrp_muj_muj_kanbu;
+static BattleUnitSetup btlparty_muj_muj_01_01[3];
+static BattleGroupSetup btlgrp_muj_muj_01_01;
+static BattleUnitSetup btlparty_muj_muj_05_01[3];
+static BattleGroupSetup btlgrp_muj_muj_05_01;
+static BattleUnitSetup btlparty_muj_muj_05_02[3];
+static BattleGroupSetup btlgrp_muj_muj_05_02;
+static BattleUnitSetup btlparty_muj_muj_00_01[3];
+static BattleGroupSetup btlgrp_muj_muj_00_01;
+static BattleUnitSetup btlparty_muj_muj_02_01_off_01[1];
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_01;
+static BattleUnitSetup btlparty_muj_muj_02_01_off_02[2];
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_02;
+static BattleUnitSetup btlparty_muj_muj_02_01_off_03[3];
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_03;
+static BattleUnitSetup btlparty_muj_muj_02_01_off_04[4];
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_04;
+static BattleUnitSetup btlparty_muj_muj_02_04_off_01[1];
+static BattleGroupSetup btlgrp_muj_muj_02_04_off_01;
+static BattleUnitSetup btlparty_muj_muj_02_04_off_02[2];
+static BattleGroupSetup btlgrp_muj_muj_02_04_off_02;
+static BattleUnitSetup btlparty_muj_muj_02_04_off_03[3];
+static BattleGroupSetup btlgrp_muj_muj_02_04_off_03;
+static BattleUnitSetup btlparty_muj_muj_02_07_off_01[2];
+static BattleGroupSetup btlgrp_muj_muj_02_07_off_01;
+static BattleUnitSetup btlparty_muj_muj_02_07_off_02[3];
+static BattleGroupSetup btlgrp_muj_muj_02_07_off_02;
+static BattleUnitSetup btlparty_muj_muj_02_07_off_03[4];
+static BattleGroupSetup btlgrp_muj_muj_02_07_off_03;
+static BattleUnitSetup btlparty_muj_muj_03_01_off_01[2];
+static BattleGroupSetup btlgrp_muj_muj_03_01_off_01;
+static BattleUnitSetup btlparty_muj_muj_03_01_off_02[3];
+static BattleGroupSetup btlgrp_muj_muj_03_01_off_02;
+static BattleUnitSetup btlparty_muj_muj_03_01_off_03[3];
+static BattleGroupSetup btlgrp_muj_muj_03_01_off_03;
+static BattleUnitSetup btlparty_muj_muj_03_02_off_01[2];
+static BattleGroupSetup btlgrp_muj_muj_03_02_off_01;
+static BattleUnitSetup btlparty_muj_muj_03_02_off_02[3];
+static BattleGroupSetup btlgrp_muj_muj_03_02_off_02;
+static BattleUnitSetup btlparty_muj_muj_03_02_off_03[3];
+static BattleGroupSetup btlgrp_muj_muj_03_02_off_03;
+static BattleUnitSetup btlparty_muj_muj_03_04_off_01[2];
+static BattleGroupSetup btlgrp_muj_muj_03_04_off_01;
+static BattleUnitSetup btlparty_muj_muj_03_04_off_02[3];
+static BattleGroupSetup btlgrp_muj_muj_03_04_off_02;
+static BattleUnitSetup btlparty_muj_muj_03_04_off_03[3];
+static BattleGroupSetup btlgrp_muj_muj_03_04_off_03;
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test1_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test2_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test3_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test4_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_cortez_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_kanbu_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_01_01_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_05_01_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_05_02_off[2];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_02_01_off[4];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_02_02_off[4];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_02_07_off[4];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_03_01_off[4];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_03_02_off[4];
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_03_04_off[4];
 NpcSetupBattleInfo btlsetup_muj_tbl[16];
 NpcTerritoryInfo btl_muj_setup_no_tbl[16];
-EvtWord bgset_muj_wave_event[59];
-EvtWord bgset_muj_sun_event[18];
+static EvtWord bgset_muj_wave_event[59];
+static EvtWord bgset_muj_sun_event[18];
 
 /**
  * Scenery props of the four Keelhaul Key battle stages, in order: each entry names a model of the stage file
  * and where it stands.
  */
-BattleStageObjectData muj_btlobject_data[] = {
+static BattleStageObjectData muj_btlobject_data[] = {
     {"A1", 2, STAGE_LAYER_A1, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},
     {"hata", 2, STAGE_LAYER_A2, {178.0f, 0.0f, -49.0f}, 0, 60, {0}},
     {"iwa", 2, STAGE_LAYER_A2, {-183.0f, 0.0f, -28.0f}, 10, 50, {0}},
@@ -133,7 +133,7 @@ BattleStageObjectData muj_btlobject_data[] = {
  * The four Keelhaul Key battle stages (stg_05_1, stg_05_2, stg_05_5 and stg_05_0), each with its slice of
  * muj_btlobject_data and the sun background script.
  */
-BattleStageData muj_btlstage_data[] = {
+static BattleStageData muj_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_05_1", // specificStageDataDir
@@ -179,7 +179,7 @@ BattleStageData muj_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_muj_muj_cortez[] = {
+static BattleUnitSetup btlparty_muj_muj_cortez[] = {
     {
         &unit_boss_cortez, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -192,7 +192,7 @@ BattleUnitSetup btlparty_muj_muj_cortez[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_cortez = {
+static BattleGroupSetup btlgrp_muj_muj_cortez = {
     1, // numEnemies
     btlparty_muj_muj_cortez, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -202,7 +202,7 @@ BattleGroupSetup btlgrp_muj_muj_cortez = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_kanbu[] = {
+static BattleUnitSetup btlparty_muj_muj_kanbu[] = {
     {
         &unit_boss_gundan_zako_group1, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -225,7 +225,7 @@ BattleUnitSetup btlparty_muj_muj_kanbu[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_kanbu = {
+static BattleGroupSetup btlgrp_muj_muj_kanbu = {
     2, // numEnemies
     btlparty_muj_muj_kanbu, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -235,7 +235,7 @@ BattleGroupSetup btlgrp_muj_muj_kanbu = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_01_01[] = {
+static BattleUnitSetup btlparty_muj_muj_01_01[] = {
     {
         &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -268,7 +268,7 @@ BattleUnitSetup btlparty_muj_muj_01_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_01_01 = {
+static BattleGroupSetup btlgrp_muj_muj_01_01 = {
     3, // numEnemies
     btlparty_muj_muj_01_01, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -278,7 +278,7 @@ BattleGroupSetup btlgrp_muj_muj_01_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_05_01[] = {
+static BattleUnitSetup btlparty_muj_muj_05_01[] = {
     {
         &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -311,7 +311,7 @@ BattleUnitSetup btlparty_muj_muj_05_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_05_01 = {
+static BattleGroupSetup btlgrp_muj_muj_05_01 = {
     3, // numEnemies
     btlparty_muj_muj_05_01, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -321,7 +321,7 @@ BattleGroupSetup btlgrp_muj_muj_05_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_05_02[] = {
+static BattleUnitSetup btlparty_muj_muj_05_02[] = {
     {
         &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -354,7 +354,7 @@ BattleUnitSetup btlparty_muj_muj_05_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_05_02 = {
+static BattleGroupSetup btlgrp_muj_muj_05_02 = {
     3, // numEnemies
     btlparty_muj_muj_05_02, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -364,7 +364,7 @@ BattleGroupSetup btlgrp_muj_muj_05_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_00_01[] = {
+static BattleUnitSetup btlparty_muj_muj_00_01[] = {
     {
         &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -397,7 +397,7 @@ BattleUnitSetup btlparty_muj_muj_00_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_00_01 = {
+static BattleGroupSetup btlgrp_muj_muj_00_01 = {
     3, // numEnemies
     btlparty_muj_muj_00_01, // enemyData
     25, // heldItemWeight
@@ -408,7 +408,7 @@ BattleGroupSetup btlgrp_muj_muj_00_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_01_off_01[] = {
+static BattleUnitSetup btlparty_muj_muj_02_01_off_01[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -421,7 +421,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_01_off_01 = {
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_01 = {
     1, // numEnemies
     btlparty_muj_muj_02_01_off_01, // enemyData
     25, // heldItemWeight
@@ -432,7 +432,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_01_off_02[] = {
+static BattleUnitSetup btlparty_muj_muj_02_01_off_02[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -455,7 +455,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_01_off_02 = {
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_02 = {
     2, // numEnemies
     btlparty_muj_muj_02_01_off_02, // enemyData
     25, // heldItemWeight
@@ -466,7 +466,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_01_off_03[] = {
+static BattleUnitSetup btlparty_muj_muj_02_01_off_03[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -499,7 +499,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_01_off_03 = {
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_03 = {
     3, // numEnemies
     btlparty_muj_muj_02_01_off_03, // enemyData
     25, // heldItemWeight
@@ -510,7 +510,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
+static BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -553,7 +553,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_01_off_04 = {
+static BattleGroupSetup btlgrp_muj_muj_02_01_off_04 = {
     4, // numEnemies
     btlparty_muj_muj_02_01_off_04, // enemyData
     25, // heldItemWeight
@@ -564,7 +564,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_04 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_04_off_01[] = {
+static BattleUnitSetup btlparty_muj_muj_02_04_off_01[] = {
     {
         &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -577,7 +577,7 @@ BattleUnitSetup btlparty_muj_muj_02_04_off_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_04_off_01 = {
+static BattleGroupSetup btlgrp_muj_muj_02_04_off_01 = {
     1, // numEnemies
     btlparty_muj_muj_02_04_off_01, // enemyData
     25, // heldItemWeight
@@ -588,7 +588,7 @@ BattleGroupSetup btlgrp_muj_muj_02_04_off_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_04_off_02[] = {
+static BattleUnitSetup btlparty_muj_muj_02_04_off_02[] = {
     {
         &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -611,7 +611,7 @@ BattleUnitSetup btlparty_muj_muj_02_04_off_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_04_off_02 = {
+static BattleGroupSetup btlgrp_muj_muj_02_04_off_02 = {
     2, // numEnemies
     btlparty_muj_muj_02_04_off_02, // enemyData
     25, // heldItemWeight
@@ -622,7 +622,7 @@ BattleGroupSetup btlgrp_muj_muj_02_04_off_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_04_off_03[] = {
+static BattleUnitSetup btlparty_muj_muj_02_04_off_03[] = {
     {
         &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -655,7 +655,7 @@ BattleUnitSetup btlparty_muj_muj_02_04_off_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_04_off_03 = {
+static BattleGroupSetup btlgrp_muj_muj_02_04_off_03 = {
     3, // numEnemies
     btlparty_muj_muj_02_04_off_03, // enemyData
     25, // heldItemWeight
@@ -666,7 +666,7 @@ BattleGroupSetup btlgrp_muj_muj_02_04_off_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_07_off_01[] = {
+static BattleUnitSetup btlparty_muj_muj_02_07_off_01[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -689,7 +689,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_07_off_01 = {
+static BattleGroupSetup btlgrp_muj_muj_02_07_off_01 = {
     2, // numEnemies
     btlparty_muj_muj_02_07_off_01, // enemyData
     25, // heldItemWeight
@@ -700,7 +700,7 @@ BattleGroupSetup btlgrp_muj_muj_02_07_off_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_07_off_02[] = {
+static BattleUnitSetup btlparty_muj_muj_02_07_off_02[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -733,7 +733,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_07_off_02 = {
+static BattleGroupSetup btlgrp_muj_muj_02_07_off_02 = {
     3, // numEnemies
     btlparty_muj_muj_02_07_off_02, // enemyData
     25, // heldItemWeight
@@ -744,7 +744,7 @@ BattleGroupSetup btlgrp_muj_muj_02_07_off_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
+static BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
     {
         &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -787,7 +787,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_02_07_off_03 = {
+static BattleGroupSetup btlgrp_muj_muj_02_07_off_03 = {
     4, // numEnemies
     btlparty_muj_muj_02_07_off_03, // enemyData
     25, // heldItemWeight
@@ -798,7 +798,7 @@ BattleGroupSetup btlgrp_muj_muj_02_07_off_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_01_off_01[] = {
+static BattleUnitSetup btlparty_muj_muj_03_01_off_01[] = {
     {
         &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -821,7 +821,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_01_off_01 = {
+static BattleGroupSetup btlgrp_muj_muj_03_01_off_01 = {
     2, // numEnemies
     btlparty_muj_muj_03_01_off_01, // enemyData
     25, // heldItemWeight
@@ -832,7 +832,7 @@ BattleGroupSetup btlgrp_muj_muj_03_01_off_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
+static BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
     {
         &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -865,7 +865,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_01_off_02 = {
+static BattleGroupSetup btlgrp_muj_muj_03_01_off_02 = {
     3, // numEnemies
     btlparty_muj_muj_03_01_off_02, // enemyData
     25, // heldItemWeight
@@ -876,7 +876,7 @@ BattleGroupSetup btlgrp_muj_muj_03_01_off_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
+static BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
     {
         &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -909,7 +909,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_01_off_03 = {
+static BattleGroupSetup btlgrp_muj_muj_03_01_off_03 = {
     3, // numEnemies
     btlparty_muj_muj_03_01_off_03, // enemyData
     25, // heldItemWeight
@@ -920,7 +920,7 @@ BattleGroupSetup btlgrp_muj_muj_03_01_off_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_02_off_01[] = {
+static BattleUnitSetup btlparty_muj_muj_03_02_off_01[] = {
     {
         &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -943,7 +943,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_02_off_01 = {
+static BattleGroupSetup btlgrp_muj_muj_03_02_off_01 = {
     2, // numEnemies
     btlparty_muj_muj_03_02_off_01, // enemyData
     25, // heldItemWeight
@@ -954,7 +954,7 @@ BattleGroupSetup btlgrp_muj_muj_03_02_off_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
+static BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
     {
         &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -987,7 +987,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_02_off_02 = {
+static BattleGroupSetup btlgrp_muj_muj_03_02_off_02 = {
     3, // numEnemies
     btlparty_muj_muj_03_02_off_02, // enemyData
     25, // heldItemWeight
@@ -998,7 +998,7 @@ BattleGroupSetup btlgrp_muj_muj_03_02_off_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
+static BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
     {
         &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1031,7 +1031,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_02_off_03 = {
+static BattleGroupSetup btlgrp_muj_muj_03_02_off_03 = {
     3, // numEnemies
     btlparty_muj_muj_03_02_off_03, // enemyData
     25, // heldItemWeight
@@ -1042,7 +1042,7 @@ BattleGroupSetup btlgrp_muj_muj_03_02_off_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_04_off_01[] = {
+static BattleUnitSetup btlparty_muj_muj_03_04_off_01[] = {
     {
         &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1065,7 +1065,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_04_off_01 = {
+static BattleGroupSetup btlgrp_muj_muj_03_04_off_01 = {
     2, // numEnemies
     btlparty_muj_muj_03_04_off_01, // enemyData
     25, // heldItemWeight
@@ -1076,7 +1076,7 @@ BattleGroupSetup btlgrp_muj_muj_03_04_off_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
+static BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
     {
         &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1109,7 +1109,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_04_off_02 = {
+static BattleGroupSetup btlgrp_muj_muj_03_04_off_02 = {
     3, // numEnemies
     btlparty_muj_muj_03_04_off_02, // enemyData
     25, // heldItemWeight
@@ -1120,7 +1120,7 @@ BattleGroupSetup btlgrp_muj_muj_03_04_off_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
+static BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
     {
         &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1153,7 +1153,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_muj_muj_03_04_off_03 = {
+static BattleGroupSetup btlgrp_muj_muj_03_04_off_03 = {
     3, // numEnemies
     btlparty_muj_muj_03_04_off_03, // enemyData
     25, // heldItemWeight
@@ -1164,87 +1164,87 @@ BattleGroupSetup btlgrp_muj_muj_03_04_off_03 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test1_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test1_off[] = {
     {50, &btlgrp_muj_muj_01_01, &muj_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test2_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test2_off[] = {
     {50, &btlgrp_muj_muj_01_01, muj_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test3_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test3_off[] = {
     {50, &btlgrp_muj_muj_01_01, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_test4_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_test4_off[] = {
     {50, &btlgrp_muj_muj_01_01, &muj_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_cortez_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_cortez_off[] = {
     {50, &btlgrp_muj_muj_cortez, &muj_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_kanbu_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_kanbu_off[] = {
     {50, &btlgrp_muj_muj_kanbu, &muj_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_01_01_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_01_01_off[] = {
     {50, &btlgrp_muj_muj_01_01, muj_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_05_01_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_05_01_off[] = {
     {50, &btlgrp_muj_muj_05_01, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_05_02_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_05_02_off[] = {
     {50, &btlgrp_muj_muj_05_02, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_02_01_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_02_01_off[] = {
     {10, &btlgrp_muj_muj_02_01_off_01, &muj_btlstage_data[1]},
     {20, &btlgrp_muj_muj_02_01_off_02, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_02_01_off_03, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_02_02_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_02_02_off[] = {
     {10, &btlgrp_muj_muj_02_04_off_01, &muj_btlstage_data[1]},
     {20, &btlgrp_muj_muj_02_04_off_02, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_02_04_off_03, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_02_07_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_02_07_off[] = {
     {10, &btlgrp_muj_muj_02_07_off_01, &muj_btlstage_data[1]},
     {20, &btlgrp_muj_muj_02_07_off_02, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_02_07_off_03, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_03_01_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_03_01_off[] = {
     {10, &btlgrp_muj_muj_03_01_off_01, &muj_btlstage_data[1]},
     {20, &btlgrp_muj_muj_03_01_off_02, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_03_01_off_03, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_03_02_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_03_02_off[] = {
     {10, &btlgrp_muj_muj_03_02_off_01, &muj_btlstage_data[1]},
     {20, &btlgrp_muj_muj_03_02_off_02, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_03_02_off_03, &muj_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_muj_btlno_muj_03_04_off[] = {
+static NpcBattleSelect btlgrpsel_muj_btlno_muj_03_04_off[] = {
     {10, &btlgrp_muj_muj_03_04_off_01, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_03_04_off_02, &muj_btlstage_data[1]},
     {10, &btlgrp_muj_muj_03_04_off_03, &muj_btlstage_data[1]},
@@ -1438,7 +1438,7 @@ NpcTerritoryInfo btl_muj_setup_no_tbl[] = {
  * Battle background event for the beach stage: endlessly bobs the three wave layers (nami_1, nami_2, nami_3)
  * with different periods and amplitudes through _wave_offset, so the sea moves behind the fight.
  */
-EVT_BEGIN(bgset_muj_wave_event)
+static EVT_BEGIN(bgset_muj_wave_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
@@ -1457,7 +1457,7 @@ EVT_BEGIN(bgset_muj_wave_event)
 EVT_END()
 
 /** Battle background event that adds the sunlight_n64 effect (sunlight_bt) over the beach stage. */
-EVT_BEGIN(bgset_muj_sun_event)
+static EVT_BEGIN(bgset_muj_sun_event)
     CALL(evt_eff64, STRING("sunlight_bt"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     RETURN
 EVT_END()

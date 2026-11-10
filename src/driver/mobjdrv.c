@@ -41,12 +41,12 @@ typedef struct CubeMesh {
 
 /** Draw mode of the built-in collision cube (hit attribute HIT_ATTR_MOBJ set), shared by the cube, head and front hit joints. */
 #if VERSION >= VERSION_JP
-MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
+static MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
 #endif
 
 /** Draw mode of the second part of a two-part object's collision (the MOBJ~ part). */
 #if VERSION >= VERSION_JP
-MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
+static MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
 #endif
 
 // cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
@@ -62,7 +62,7 @@ typedef struct CubeVtxData18 {
 } CubeVtxData18;
 
 /** Corners of the built-in unit collision cube (1 wide and deep, 1 tall, base at the origin). */
-CubeVtxData34 cubeDVP = {
+static CubeVtxData34 cubeDVP = {
     8,
     {
         {-0.5f, 0.0f, 0.5f},
@@ -77,7 +77,7 @@ CubeVtxData34 cubeDVP = {
 };
 
 /** Face normals of the built-in collision cube: front, top, back, bottom, right, left. */
-CubeVtxData18 cubeDVN = {
+static CubeVtxData18 cubeDVN = {
     6,
     {
         {0.0f, 0.0f, 1.0f},
@@ -90,7 +90,7 @@ CubeVtxData18 cubeDVN = {
 };
 
 /** Vertex data table of the collision cube (positions and normals); its meshes point here. */
-void* cubeDDT[26] = {
+static void* cubeDDT[26] = {
     &cubeDVP, &cubeDVN, NULL, NULL, NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -98,7 +98,7 @@ void* cubeDDT[26] = {
 };
 
 /* GX display list data: six unpacked index lists of 205 words (count, then one index record per vertex) */
-u32 cubeDN[1230] = {
+static u32 cubeDN[1230] = {
     0x00000004, 0x00000005, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00060005,
     0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00020005, 0xFFFFFFFF, 0xFFFFFFFF,
     0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00040005, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
@@ -256,48 +256,48 @@ u32 cubeDN[1230] = {
 };
 
 /** Mesh of the full collision cube: all six faces. */
-CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
+static CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
 
 #if VERSION <= VERSION_DEMO_JP
-MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
+static MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
 #endif
 
 /** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
-MapFileJoint cubeDJ = {
+static MapFileJoint cubeDJ = {
     NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
     {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ, 1,
     {{NULL, (MapFileMesh*)&cubeDP}},
 };
 
 /** Mesh of the head-hit collision: only the cube's bottom face, struck from below. */
-CubeMesh headDP = {0, {0}, 0, 1, 0, cubeDDT, {&cubeDN[410]}};
+static CubeMesh headDP = {0, {0}, 0, 1, 0, cubeDDT, {&cubeDN[410]}};
 
 /** Joint of the head-hit collision (type 1), a flat square at the object's base, copied in by mobjHitEntry. */
-MapFileJoint headDJ = {
+static MapFileJoint headDJ = {
     NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
     {-0.5f, 0.0f, -0.5f}, {0.5f, 0.0f, 0.5f}, {0}, &cubeMSJ, 1,
     {{NULL, (MapFileMesh*)&headDP}},
 };
 
 /** Mesh of the front hit part: only the cube's front face. */
-CubeMesh frontDP = {0, {0}, 0, 1, 0, cubeDDT, {&cubeDN[1025]}};
+static CubeMesh frontDP = {0, {0}, 0, 1, 0, cubeDDT, {&cubeDN[1025]}};
 
 /** Joint of a two-part object's front hit part (type 2), copied in by mobjHitEntry. */
-MapFileJoint frontDJ = {
+static MapFileJoint frontDJ = {
     NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
     {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ, 1,
     {{NULL, (MapFileMesh*)&frontDP}},
 };
 
 #if VERSION <= VERSION_DEMO_JP
-MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
+static MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
 #endif
 
 /** Mesh of a two-part object's second hit part: the five faces other than the front one. */
-CubeMesh front2DP = {0, {0}, 0, 5, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820]}};
+static CubeMesh front2DP = {0, {0}, 0, 5, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820]}};
 
 /** Joint of a two-part object's second hit part (type 2), copied in by mobjHitEntry. */
-MapFileJoint front2DJ = {
+static MapFileJoint front2DJ = {
     NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
     {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &front2MSJ, 1,
     {{NULL, (MapFileMesh*)&front2DP}},
@@ -306,7 +306,7 @@ MapFileJoint front2DJ = {
 #define MAX_MOBJ_WORK 3
 
 //.sbss
-BOOL koopaRunFlag;
+static BOOL koopaRunFlag;
 
 //.bss
 static MapObjectWork work[MAX_MOBJ_WORK];

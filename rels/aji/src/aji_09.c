@@ -35,18 +35,18 @@
 #include "aji.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(check_kou_evt);
+static USER_FUNC(check_kou_evt);
 USER_FUNC(dot_mario);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord s_door_open[22];
 static EvtWord s_door_close[22];
 static BeroEntry bero_entry_data[2];
-EvtWord peach_evt_bero_out1[25];
-BeroEntry bero_data_peach1[2];
-EvtWord peach_evt_bero_out2[25];
-BeroEntry bero_data_peach2[2];
-EvtWord evt_kou1[115];
+static EvtWord peach_evt_bero_out1[25];
+static BeroEntry bero_data_peach1[2];
+static EvtWord peach_evt_bero_out2[25];
+static BeroEntry bero_data_peach2[2];
+static EvtWord evt_kou1[115];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_kou2[];
@@ -54,20 +54,20 @@ extern EvtWord evt_kou2[];
 EvtWord evt_kou2[155];
 #endif
 
-const char* rokka_data[21];
-EvtWord evt_rokka_open[127];
-EvtWord evt_rokka_close[165];
-EvtWord evt_rokka_init[34];
+static const char* rokka_data[21];
+static EvtWord evt_rokka_open[127];
+static EvtWord evt_rokka_close[165];
+static EvtWord evt_rokka_init[34];
 EvtWord peach_evt_fuku_g[36];
-EvtWord peach_evt_ka_open[46];
-EvtWord peach_evt_ka_close[46];
+static EvtWord peach_evt_ka_open[46];
+static EvtWord peach_evt_ka_close[46];
 EvtWord peach_evt_kou_in[172];
 EvtWord peach_evt_kou_out[89];
-EvtWord peach_evt_kou1_in[72];
-EvtWord peach_evt_kou1_out[43];
-EvtWord peach_evt_kou2_in[72];
-EvtWord peach_evt_kou2_out[43];
-EvtWord s_bero_out[90];
+static EvtWord peach_evt_kou1_in[72];
+static EvtWord peach_evt_kou1_out[43];
+static EvtWord peach_evt_kou2_in[72];
+static EvtWord peach_evt_kou2_out[43];
+static EvtWord s_bero_out[90];
 static EvtWord peach_evt_stg3[262];
 static EvtWord evt_memo1[21];
 static EvtWord evt_memo2[14];
@@ -127,7 +127,7 @@ static BeroEntry bero_entry_data[] = {
  * without the X-Naut disguise (GSWF_AJI_PEACH_IN_UNIFORM = 0) TEC's voice tells her she must change first
  * (peach_aji_133) and LW(0) = 1 tells the exit to be cancelled; disguised, LW(0) = 0 lets her through.
  */
-EVT_BEGIN(peach_evt_bero_out1)
+static EVT_BEGIN(peach_evt_bero_out1)
     IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_133"), 0, 0)
@@ -143,7 +143,7 @@ EVT_END()
  * Replacement for the south door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads
  * on to aji_01 (n_bero_4).
  */
-BeroEntry bero_data_peach1[] = {
+static BeroEntry bero_data_peach1[] = {
     {
         "s_bero", // hitName
         1, // type
@@ -170,7 +170,7 @@ BeroEntry bero_data_peach1[] = {
  * while disguised TEC's voice says peach_aji_155_01 (she must change back into the dress before leaving)
  * and LW(0) = 1 cancels the exit; undisguised, LW(0) = 0 lets her through.
  */
-EVT_BEGIN(peach_evt_bero_out2)
+static EVT_BEGIN(peach_evt_bero_out2)
     IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 0)
         SET_VALUE(LW(0), 0)
     ELSE
@@ -186,7 +186,7 @@ EVT_END()
  * Replacement for the south door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads
  * on to aji_17 (w_bero).
  */
-BeroEntry bero_data_peach2[] = {
+static BeroEntry bero_data_peach2[] = {
     {
         "s_bero", // hitName
         1, // type
@@ -212,7 +212,7 @@ BeroEntry bero_data_peach2[] = {
  * Case script for the first changing booth's curtain (A_kou1_ka_omo and A_kou1_ka_ura):
  * rolls the curtain S_kou1_ka open or closed depending on GF(0), toggling it each time.
  */
-EVT_BEGIN(evt_kou1)
+static EVT_BEGIN(evt_kou1)
     CALL(evt_hit_bind_mapobj, STRING("A_kou1_ka_omo"), STRING("S_kou1_ka"))
     CALL(evt_hit_bind_mapobj, STRING("A_kou1_ka_ura"), STRING("S_kou1_ka"))
     IF_INT_EQUAL(GF(0), 0)
@@ -313,7 +313,7 @@ EVT_BEGIN(evt_kou2)
 EVT_END()
 
 /** Names of the locker parts (door and hit areas) that the room sets up; read until the terminator. */
-const char* rokka_data[] = {
+static const char* rokka_data[] = {
     "R_door_1",
     "a_door_1",
     "a_door_1_omote",
@@ -341,7 +341,7 @@ const char* rokka_data[] = {
  * Opens a locker door: swings the locker (map object LW(0)) open by 120 degrees over 40 frames with
  * SFX_PEACH_LOCKER_OPEN1, then attaches evt_rokka_close to its push and stand-on areas so that it closes again.
  */
-EVT_BEGIN(evt_rokka_open)
+static EVT_BEGIN(evt_rokka_open)
     CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_LOCKER_OPEN1"), LW(13), LW(14), LW(15), 0)
     SET_VALUE(LW(5), LW(0))
@@ -380,7 +380,7 @@ EVT_BEGIN(evt_rokka_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_rokka_close)
+static EVT_BEGIN(evt_rokka_close)
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_del_case_evt, 0, LW(12))
         CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
@@ -430,7 +430,7 @@ EVT_BEGIN(evt_rokka_close)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_rokka_init)
+static EVT_BEGIN(evt_rokka_init)
     SET_INT_READ_ADDR(PTR(&rokka_data))
     LOOP(0)
         READ_INT3(LW(0), LW(1), LW(2))
@@ -457,7 +457,7 @@ EVT_BEGIN(peach_evt_fuku_g)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_ka_open)
+static EVT_BEGIN(peach_evt_ka_open)
     SET_VALUE(LW(2), LW(0))
     CALL(evt_mapobj_get_position, LW(0), LW(1), LW(3), LW(4))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_CURTAIN_OPEN1"), LW(1), LW(3), LW(4), 0)
@@ -473,7 +473,7 @@ EVT_BEGIN(peach_evt_ka_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_ka_close)
+static EVT_BEGIN(peach_evt_ka_close)
     SET_VALUE(LW(2), LW(0))
     CALL(evt_mapobj_get_position, LW(0), LW(1), LW(3), LW(4))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_CURTAIN_CLOSE1"), LW(1), LW(3), LW(4), 0)
@@ -588,7 +588,7 @@ EVT_BEGIN(peach_evt_kou_out)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_kou1_in)
+static EVT_BEGIN(peach_evt_kou1_in)
     CALL(check_kou_evt, 0, 1, LF(0))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam_letter_box_disable, 1)
@@ -615,7 +615,7 @@ EVT_BEGIN(peach_evt_kou1_in)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_kou1_out)
+static EVT_BEGIN(peach_evt_kou1_out)
     CALL(check_kou_evt, 1, 1, LF(0))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam_letter_box_disable, 1)
@@ -635,7 +635,7 @@ EVT_BEGIN(peach_evt_kou1_out)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_kou2_in)
+static EVT_BEGIN(peach_evt_kou2_in)
     CALL(check_kou_evt, 0, 0, LF(0))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam_letter_box_disable, 1)
@@ -662,7 +662,7 @@ EVT_BEGIN(peach_evt_kou2_in)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_kou2_out)
+static EVT_BEGIN(peach_evt_kou2_out)
     CALL(check_kou_evt, 1, 0, LF(0))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam_letter_box_disable, 1)
@@ -682,7 +682,7 @@ EVT_BEGIN(peach_evt_kou2_out)
     RETURN
 EVT_END()
 
-EVT_BEGIN(s_bero_out)
+static EVT_BEGIN(s_bero_out)
 #if VERSION >= VERSION_US
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -932,7 +932,7 @@ static USER_FUNC(peach_set_pose) {
  * or when at STG3_33_03_PEACH_GRODUS the change-back remark has not yet been made
  * and the booth number args[1] equals the booth she changed in.
  */
-USER_FUNC(check_kou_evt) {
+static USER_FUNC(check_kou_evt) {
     EvtWord* args = event->args;
     s32 value;
     s32 result;

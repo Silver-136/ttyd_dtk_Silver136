@@ -41,9 +41,9 @@ typedef struct MonitorWork {
 } MonitorWork;
 static MonitorWork* monitor_wp;
 
-USER_FUNC(monitor_cap_evt);
-USER_FUNC(monitor_cap_init);
-USER_FUNC(monitor_kanbu_flag_onoff);
+static USER_FUNC(monitor_cap_evt);
+static USER_FUNC(monitor_cap_init);
+static USER_FUNC(monitor_kanbu_flag_onoff);
 static USER_FUNC(peach_evt_toumei);
 static USER_FUNC(peach_set_pose);
 static USER_FUNC(viewport);
@@ -55,22 +55,22 @@ static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord bero_peach_evt[30];
 static BeroEntry bero_peach_data[2];
-EvtWord monitor_on[33];
-EvtWord monitor_off[37];
-EvtWord monitor_init[41];
+static EvtWord monitor_on[33];
+static EvtWord monitor_off[37];
+static EvtWord monitor_init[41];
 static EvtWord peach_evt_stg1[1411];
 static EvtWord peach_evt_stg2[463];
 static EvtWord peach_evt_stg3[251];
-EvtWord peach_move[72];
-EvtWord peach_evt_stg3_syuryo_talk[138];
+static EvtWord peach_move[72];
+static EvtWord peach_evt_stg3_syuryo_talk[138];
 static EvtWord peach_evt_stg4[235];
 static EvtWord peach_evt_stg5[281];
 static EvtWord peach_evt_stg6[349];
-EvtWord eff_test[36];
+static EvtWord eff_test[36];
 static EvtWord teshita1_init[9];
 static EvtWord teshita2_init[9];
 static EvtWord teshita3_init[9];
-EvtWord kanbu_init[9];
+static EvtWord kanbu_init[9];
 static EvtWord syuryo_init[24];
 static NpcSetupInfo npcEnt[9];
 
@@ -236,7 +236,7 @@ static BeroEntry bero_peach_data[] = {
  * and a texture buffer for the live image on Sir Grodus's monitor,
  * and clears its ready and officer flags.
  */
-USER_FUNC(monitor_cap_init) {
+static USER_FUNC(monitor_cap_init) {
     u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I4, GX_FALSE, 0);
 
     monitor_wp = _mapAlloc(sizeof(MonitorWork));
@@ -250,7 +250,7 @@ USER_FUNC(monitor_cap_init) {
  * Script function: sets monitor_wp->kanbu from args[0]:
  * nonzero makes the monitor show the officer (カンブー) instead of the grunt (手下１).
  */
-USER_FUNC(monitor_kanbu_flag_onoff) {
+static USER_FUNC(monitor_kanbu_flag_onoff) {
     monitor_wp->kanbu = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
@@ -261,7 +261,7 @@ USER_FUNC(monitor_kanbu_flag_onoff) {
  * draws that NPC's poses into the frame buffer and copies the result into the monitor texture (0x130 by 0xF0,
  * RGB565). Sets monitor_wp->ready when done.
  */
-void monitor_cap_capture(CameraId cameraId, void* param) {
+static void monitor_cap_capture(CameraId cameraId, void* param) {
     CameraEntry saved = *camGetCurPtr();
     Mtx44 projMtx;
     Mtx lookAt;
@@ -336,7 +336,7 @@ void monitor_cap_capture(CameraId cameraId, void* param) {
  * Script function that queues monitor_cap_capture every frame so the monitor picture stays live;
  * never finishes (blocks).
  */
-USER_FUNC(monitor_cap_evt) {
+static USER_FUNC(monitor_cap_evt) {
     dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, monitor_cap_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
@@ -346,7 +346,7 @@ USER_FUNC(monitor_cap_evt) {
  * once the picture is ready, binds the captured texture with a projective texture matrix aimed at the screen,
  * so the screen shows the captured NPC.
  */
-void monitor_cap_tev(MapTevCallbackInfo* info) {
+static void monitor_cap_tev(MapTevCallbackInfo* info) {
     Mtx proj;
     Mtx view;
     GXTexObj tex;
@@ -431,7 +431,7 @@ static USER_FUNC(peach_evt_toumei) {
  * Opens Sir Grodus's monitor: unhides it, plays SFX_PEACH_SCREEN_OPEN1 and the opening animation monitore_1,
  * and waits for it to finish.
  */
-EVT_BEGIN(monitor_on)
+static EVT_BEGIN(monitor_on)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("monitor"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_SCREEN_OPEN1"), LW(0), LW(1), LW(2), 0)
@@ -445,7 +445,7 @@ EVT_END()
  * Closes the monitor: plays the closing animation monitore_2 with SFX_PEACH_SCREEN_SHUT1
  * and hides the monitor afterwards.
  */
-EVT_BEGIN(monitor_off)
+static EVT_BEGIN(monitor_off)
     CALL(evt_map_playanim, STRING("monitore_2"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("monitore_2"), LW(0), LW(1))
     CALL(evt_mapobj_get_position, STRING("monitor"), LW(2), LW(3), LW(4))
@@ -460,7 +460,7 @@ EVT_END()
  * chooses the officer or the grunt as the picture by story point (the officer at STG5_43_X_NAUTS_RETREAT),
  * starts the capture and installs the texture callback on monitor_1.
  */
-EVT_BEGIN(monitor_init)
+static EVT_BEGIN(monitor_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(monitor_cap_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
@@ -1037,7 +1037,7 @@ EVT_END()
  * Walks Peach (Mario) from where she stands to the spot in front of Sir Grodus's chair:
  * around him if she is behind him on his side, then to x = -130 and finally to (-150, 0).
  */
-EVT_BEGIN(peach_move)
+static EVT_BEGIN(peach_move)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("シュリョー"), LW(3), LW(4), LW(5))
     SET_VALUE(LW(6), LW(3))
@@ -1067,7 +1067,7 @@ EVT_END()
  * 151); afterwards the story becomes STG3_33_03_PEACH_GRODUS
  * and she is sent to the changing room aji_09 through s_bero.
  */
-EVT_BEGIN(peach_evt_stg3_syuryo_talk)
+static EVT_BEGIN(peach_evt_stg3_syuryo_talk)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), NPC_FLAG_NO_HIT)
@@ -1311,7 +1311,7 @@ EVT_END()
  * (akari_charge_n64) under the TEC fade: fade on, effect at (-300, 95, 200) after a second,
  * fade off a second later.
  */
-EVT_BEGIN(eff_test)
+static EVT_BEGIN(eff_test)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_fade_tec_onoff, 1, 0)
     WAIT_MS(1000)
@@ -1347,7 +1347,7 @@ EVT_END()
  * Initialisation of the officer NPC (カンブー): runs the common NPC set-up (npc_init_evt)
  * and sets NPC_STATUS_FACE_MOVE_DIR (2) on it, so it turns to face the way it moves.
  */
-EVT_BEGIN(kanbu_init)
+static EVT_BEGIN(kanbu_init)
     CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN

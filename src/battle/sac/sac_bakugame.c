@@ -243,13 +243,13 @@ static USER_FUNC(main_star) {
 }
 
 /** Clears Clock Out's work area at the start of the move. */
-USER_FUNC(init_bakugame) {
+static USER_FUNC(init_bakugame) {
     memset(GetBakuGamePtr(), 0, sizeof(BakuWork));
     return EVT_RETURN_DONE;
 }
 
 /** Deletes the Crystal Star effect and its dust once the bomb game is over. */
-USER_FUNC(end_bakugame) {
+static USER_FUNC(end_bakugame) {
     BakuWork* w = GetBakuGamePtr();
     effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
     effDelete(w->star.eff);
@@ -264,7 +264,7 @@ USER_FUNC(end_bakugame) {
  * BattleSetStatusDamage scales the chance by the target's Stop rate,
  * so 127 still lands for sure on targets with a rate of 79% or more.
  */
-USER_FUNC(bakuGameDecideWeapon) {
+static USER_FUNC(bakuGameDecideWeapon) {
     EvtWord* args = event->args;
     s32 v;
     BakuWork* w;

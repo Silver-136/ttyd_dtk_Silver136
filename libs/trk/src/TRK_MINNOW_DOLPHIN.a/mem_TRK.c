@@ -5,7 +5,7 @@ typedef unsigned int u32;
    in words and bytes. dst itself walks the buffer with pre-increment stores (stbu/stwu), so it always points one
    unit before the next address to write. The casts on the left are CodeWarrior's cast-as-lvalue extension.
    Form after the matched GC 2.6 decompilations of pikmin2 and ac-decomp (CC0). */
-void TRK_fill_mem(void* dst, int val, unsigned int n) {
+static void TRK_fill_mem(void* dst, int val, unsigned int n) {
     u32 v, i, j;
     v = (u8)val;
 

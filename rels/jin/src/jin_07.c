@@ -51,13 +51,13 @@ typedef struct Teresa {
 } Teresa;
 static Teresa* pTeresa;
 static s32 g_nNumEndProc[1];
-s32 g_nNumOutBox[1];
+static s32 g_nNumOutBox[1];
 f32 randf(f32 min, f32 max);
 static inline f32 cosf(f32 x) { return cos(x); }
 
-USER_FUNC(senteresa_okure_move);
-USER_FUNC(senteresa_okure_move_init);
-USER_FUNC(senteresa_get_position);
+static USER_FUNC(senteresa_okure_move);
+static USER_FUNC(senteresa_okure_move_init);
+static USER_FUNC(senteresa_get_position);
 static void senteresa_ext_shadow_disp(void);
 static void senteresa_ext_dispent(void);
 static void senteresa_ext_main(void);
@@ -72,11 +72,11 @@ static EvtWord e_open[12];
 EvtWord jin_07_juyo_oumu_vivian[59];
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[4];
-EvtWord evt_locked[14];
+static EvtWord evt_locked[14];
 static EvtWord evt_unlock[7];
 static NpcSetupInfo npcEnt[2];
 static ExtTexInfo senteresa_ext_entry_data[5];
-EvtWord evt_teresa_box_open[576];
+static EvtWord evt_teresa_box_open[576];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord jin_07_init_evt[];
@@ -226,7 +226,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Case script for the locked west door: Mario is told the door is locked (stg4_jin_48). */
-EVT_BEGIN(evt_locked)
+static EVT_BEGIN(evt_locked)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg4_jin_48"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -324,7 +324,7 @@ inline f32 jin07HermiteMul3(f32 a, f32 b, f32 c) {
  * Moves a Boo along a cubic Hermite curve from the box to its target using the Boo's tangent values
  * and its progress t, writing the position into the pose matrix.
  */
-void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
+static void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
     Vec m0 = {0.0f, 0.0f, 0.0f};
     Vec m1 = {1.0f, 0.0f, 0.0f};
     f32 t = ter->t;
@@ -422,7 +422,7 @@ static void senteresa_ext_shadow_disp(void) {
 }
 
 /** Script helper: returns the position of Boo number args[0] in the swarm in args[1..3]. */
-USER_FUNC(senteresa_get_position) {
+static USER_FUNC(senteresa_get_position) {
     EvtWord* args = event->args;
     ExtdrvPose* pose = extGetPosePtr();
 
@@ -437,7 +437,7 @@ USER_FUNC(senteresa_get_position) {
  * Script helper: stores the start (args[0..2]) and target (args[3..5]) positions for the late Boo's flight into
  * LW(10..15).
  */
-USER_FUNC(senteresa_okure_move_init) {
+static USER_FUNC(senteresa_okure_move_init) {
     EvtWord* args = event->args;
 
     event->lwData[10] = evtGetValue(event, args[0]);
@@ -453,7 +453,7 @@ USER_FUNC(senteresa_okure_move_init) {
  * Script helper: moves the late Boo NPC along a Hermite curve between the stored start
  * and target for the progress value args[0] (0..1).
  */
-USER_FUNC(senteresa_okure_move) {
+static USER_FUNC(senteresa_okure_move) {
     EvtWord* args = event->args;
     NpcEntry* npc = npcNameToPtr("\203e\203\214\203T");
     f32 t = evtGetFloat(event, args[0]);
@@ -480,7 +480,7 @@ USER_FUNC(senteresa_okure_move) {
  * a late Boo then flies out, asks Mario a question (stg4_jin_69) and gives him an item before disappearing.
  * Sets the story to "Boo box".
  */
-EVT_BEGIN(evt_teresa_box_open)
+static EVT_BEGIN(evt_teresa_box_open)
     // The music stops and Mario freezes.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_PAUSE)

@@ -38,13 +38,13 @@ static f32 bom_spd[] = {
 };
 
 /** Sprite size of each of the ten explosion fragments. */
-f32 bom_scale[10] = {
+static f32 bom_scale[10] = {
     1.4f, 1.3f, 1.2f, 1.3f, 1.4f,
     1.3f, 1.6f, 1.6f, 1.6f, 1.6f
 };
 
 /** Z rotation in degrees of each of the ten explosion fragments' sprites. */
-f32 bom_ry[10] = {
+static f32 bom_ry[10] = {
     0.0f, 234.0f, 468.0f, 702.0f, 936.0f,
     1260.0f, 1404.0f, 1638.0f, 1902.0f, 1976.0f
 };

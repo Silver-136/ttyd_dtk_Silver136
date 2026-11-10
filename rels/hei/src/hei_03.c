@@ -26,7 +26,7 @@ static EvtWord door_open[96];
 static EvtWord shake_evt[39];
 static EvtWord hashira_evt_sub[56];
 static EvtWord hashira_evt[132];
-EvtWord mon_msg[14];
+static EvtWord mon_msg[14];
 EvtWord hei_03_init_evt[165];
 
 /** Doors of this room: the west exit (w_bero) to hei_02 and the east exit (e_bero) to hei_04. */
@@ -256,7 +256,7 @@ static EVT_BEGIN(hashira_evt)
 EVT_END()
 
 /** Talk script for the closed gate (a_mon): the partner remarks that the gate will not open (stg1_hei_15). */
-EVT_BEGIN(mon_msg)
+static EVT_BEGIN(mon_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg1_hei_15"), 0, STRING("party"))
     CALL(evt_mario_key_onoff, 1)

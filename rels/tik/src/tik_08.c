@@ -11,7 +11,7 @@
 #include "evt/evt_mobj.h"
 #include "pmario_sound.h"
 
-EvtWord oshimodo_event_sub[33];
+static EvtWord oshimodo_event_sub[33];
 static EvtWord oshimodo_event[10];
 static BeroEntry bero_oshimodo[1];
 static BeroEntry bero_entry_data[3];
@@ -23,7 +23,7 @@ EvtWord tik_08_init_evt[68];
  * Pushes Mario back from the Twilight Town pipe (oshimodo = push back) before it is open:
  * he walks out of the pipe (bero exec), the "no entry" message tik_08_01 is shown and controls return.
  */
-EVT_BEGIN(oshimodo_event_sub)
+static EVT_BEGIN(oshimodo_event_sub)
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)

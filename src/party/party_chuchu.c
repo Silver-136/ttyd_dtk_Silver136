@@ -35,7 +35,7 @@ typedef struct ChuchuTreasure {
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 /** Map objects Ms. Mowz can sniff out: blocks, and from JP on the treasure chests and the Kururin floor. */
-char* mobj_list[] = {
+static char* mobj_list[] = {
 #if VERSION >= VERSION_JP
     "MOBJ_TreasureBox",
     "MOBJ_BigTreasureBox",
@@ -60,14 +60,14 @@ static const Vec vecA = {0.0f, 0.0f, 0.0f};
 
 USER_FUNC(set_msg);
 USER_FUNC(search_result);
-USER_FUNC(post_msg);
+static USER_FUNC(post_msg);
 
 /**
  * Ms. Mowz's search report, run by chuchu_use after her sniff:
  * set_msg finds the nearest hidden thing, search_result plays the reaction,
  * the message from the party group is printed, and post_msg lets chuchu_use end.
  */
-EVT_BEGIN(msg_evt)
+static EVT_BEGIN(msg_evt)
     CALL(set_msg)
     CALL(search_result)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -334,7 +334,7 @@ static USER_FUNC(set_msg) {
 #endif
 
 /** Script helper: clears LW0 and advances Ms. Mowz's use step (22 to 23) so chuchu_use ends the search. */
-USER_FUNC(post_msg) {
+static USER_FUNC(post_msg) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
     event->lwData[0] = 0;

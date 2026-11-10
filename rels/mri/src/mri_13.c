@@ -33,18 +33,18 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_puni_force_pose);
-USER_FUNC(yuka_fall_check);
+static USER_FUNC(evt_puni_force_pose);
+static USER_FUNC(yuka_fall_check);
 
-BeroEntry bero_dai3_kanbu[1];
+static BeroEntry bero_dai3_kanbu[1];
 static BeroEntry bero_entry_data[3];
 static EvtWord punipuni_mario_halt[33];
 static EvtWord punipuni_ball00_init[54];
 static EvtWord punipuni_ball00[68];
 static EvtWord yuka_init[48];
-EvtWord yuka_slot[113];
-EvtWord yuka_shake[11];
-EvtWord yuka_shake2[68];
+static EvtWord yuka_slot[113];
+static EvtWord yuka_shake[11];
+static EvtWord yuka_shake2[68];
 static EvtWord yuka_check[133];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -58,7 +58,7 @@ static KusaAccess ueki_access_data[7];
 EvtWord mri_13_init_evt[205];
 
 /** Exit of mri_13: east road e_bero to mri_14. */
-BeroEntry bero_dai3_kanbu[] = {
+static BeroEntry bero_dai3_kanbu[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
@@ -218,7 +218,7 @@ EVT_END()
  * shows the count GW(0) (Punies still needed) with the ones, tens and hundreds drums turned to match,
  * shows the S_isk_03_c cover below 10 and hides it at 10 or more, and plays a click when the number changes.
  */
-EVT_BEGIN(yuka_slot)
+static EVT_BEGIN(yuka_slot)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(13), GW(0))
@@ -253,7 +253,7 @@ EVT_BEGIN(yuka_slot)
     RETURN
 EVT_END()
 
-USER_FUNC(yuka_fall_check) {
+static USER_FUNC(yuka_fall_check) {
     s32 i;
 
     for (i = 1; i < 103; i++) {
@@ -283,7 +283,7 @@ USER_FUNC(yuka_fall_check) {
  * Resets the display of the Puni whose slot index is args[0]:
  * clears its offsets, spin and velocity so it stands still.
  */
-USER_FUNC(evt_puni_force_pose) {
+static USER_FUNC(evt_puni_force_pose) {
     s32 offset = evtGetValue(event, event->args[0]) * sizeof(PuniData);
     PuniData* puni = (PuniData*)((u8*)puniGetPunidat() + offset);
 
@@ -296,7 +296,7 @@ USER_FUNC(evt_puni_force_pose) {
  * Camera shake while the elevator platform moves (in the June US demo and the JP demo 1.5-second shakes repeated
  * until the script is deleted, in later builds five 1-second shakes).
  */
-EVT_BEGIN(yuka_shake)
+static EVT_BEGIN(yuka_shake)
 #if VERSION <= VERSION_DEMO_JP
     LOOP(0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1500)
@@ -312,7 +312,7 @@ EVT_END()
  * Fading camera shake for the last part of the elevator descent:
  * a series of shakes that die down over about 10 seconds, ending in a final stronger one.
  */
-EVT_BEGIN(yuka_shake2)
+static EVT_BEGIN(yuka_shake2)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 1000)

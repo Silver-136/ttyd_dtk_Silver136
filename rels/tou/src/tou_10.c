@@ -43,7 +43,7 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(getYoshiColor);
-USER_FUNC(name_check);
+static USER_FUNC(name_check);
 USER_FUNC(setYoshiColor);
 USER_FUNC(tou_10_mario_keyoff_check);
 USER_FUNC(tou_10_mario_free_wait);
@@ -52,43 +52,43 @@ EvtWord room_out[8];
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 static BeroEntry bero_data[2];
-EvtWord init_kino[13];
-EvtWord talk_kino[24];
-EvtWord init_gard[2];
-EvtWord talk_gard[69];
+static EvtWord init_kino[13];
+static EvtWord talk_kino[24];
+static EvtWord init_gard[2];
+static EvtWord talk_gard[69];
 static EvtWord init_michel[42];
 static EvtWord talk_michel[94];
-EvtWord init_octo[17];
-EvtWord talk_octo[141];
+static EvtWord init_octo[17];
+static EvtWord talk_octo[141];
 static EvtWord init_brots[49];
 static EvtWord talk_brots[38];
-EvtWord init_gangan[17];
-EvtWord talk_gangan[141];
+static EvtWord init_gangan[17];
+static EvtWord talk_gangan[141];
 EvtWord init_poku[43];
-EvtWord talk_poku[55];
-EvtWord init_iron[45];
-EvtWord talk_iron[30];
-EvtWord init_iron2[45];
-EvtWord talk_iron2[30];
+static EvtWord talk_poku[55];
+static EvtWord init_iron[45];
+static EvtWord talk_iron[30];
+static EvtWord init_iron2[45];
+static EvtWord talk_iron2[30];
 static NpcSetupInfo npcEnt[11];
 
 #if VERSION >= VERSION_US
 EvtWord evt_saisyo_after[733];
-EvtWord evt_saisyo_after_re[367];
+static EvtWord evt_saisyo_after_re[367];
 EvtWord evt_tou_chibi_yoshi[424];
 static EvtWord evt_1st_leagu[235];
 EvtWord evt_1st_leagu_re[249];
 static EvtWord evt_door[25];
-EvtWord evt_rec[274];
+static EvtWord evt_rec[274];
 static EvtWord evt_gardman[202];
 #else
 EvtWord evt_saisyo_after[691];
-EvtWord evt_saisyo_after_re[325];
+static EvtWord evt_saisyo_after_re[325];
 EvtWord evt_tou_chibi_yoshi[424];
 static EvtWord evt_1st_leagu[214];
 EvtWord evt_1st_leagu_re[228];
 static EvtWord evt_door[25];
-EvtWord evt_rec[274];
+static EvtWord evt_rec[274];
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_gardman[237];
 #else
@@ -105,8 +105,8 @@ EvtWord evt_match_make[116];
 #endif
 
 static EvtWord bed_entry[10];
-EvtWord evt_okorareru[301];
-EvtWord evt_syorui[92];
+static EvtWord evt_okorareru[301];
+static EvtWord evt_syorui[92];
 EvtWord first_tamago[52];
 static EvtWord evt_block[5];
 EvtWord tou_10_init_evt[254];
@@ -251,7 +251,7 @@ static BeroEntry bero_data[] = {
 };
 
 /** NPC init for Jolene (キノシコワ): placed at (0, 0, -160) until the first match. */
-EVT_BEGIN(init_kino)
+static EVT_BEGIN(init_kino)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_05_MATCH)
         CALL(evt_npc_set_position, STRING("me"), 0, 0, -160)
@@ -264,7 +264,7 @@ EVT_END()
  * she tells Mario to log on to the terminal instead (stg3_tou_66),
  * or once GF(0) is set says she doesn't date fighters (stg3_tou_73).
  */
-EVT_BEGIN(talk_kino)
+static EVT_BEGIN(talk_kino)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_05_MATCH)
         IF_INT_EQUAL(GF(0), 0)
@@ -277,7 +277,7 @@ EVT_BEGIN(talk_kino)
 EVT_END()
 
 /** NPC init for the room guard (empty). */
-EVT_BEGIN(init_gard)
+static EVT_BEGIN(init_gard)
     RETURN
 EVT_END()
 
@@ -285,7 +285,7 @@ EVT_END()
  * Talk script of the guard (ガードマン) who comes to fetch Mario for a match:
  * he walks out through the door, Mario follows him, and the map changes to tou_03, the arena.
  */
-EVT_BEGIN(talk_gard)
+static EVT_BEGIN(talk_gard)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
@@ -364,14 +364,14 @@ static EVT_BEGIN(talk_michel)
 EVT_END()
 
 /** NPC init for Octor (オクトール): placed at (80, 0, 85) facing 270. */
-EVT_BEGIN(init_octo)
+static EVT_BEGIN(init_octo)
     CALL(evt_npc_set_position, STRING("オクトール"), 80, 0, 85)
     CALL(evt_npc_status_onoff, 1, STRING("オクトール"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("オクトール"), 270)
     RETURN
 EVT_END()
 
-EVT_BEGIN(talk_octo)
+static EVT_BEGIN(talk_octo)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
         SWITCH(LW(0))
@@ -458,7 +458,7 @@ static EVT_BEGIN(talk_brots)
 EVT_END()
 
 /** NPC init for Gangan (ガンガン): placed at (-75, 0, 90) facing 90. */
-EVT_BEGIN(init_gangan)
+static EVT_BEGIN(init_gangan)
     CALL(evt_npc_set_position, STRING("me"), -75, 0, 90)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -466,7 +466,7 @@ EVT_BEGIN(init_gangan)
 EVT_END()
 
 /** Talk script of Gangan: story-dependent lines like talk_octo. */
-EVT_BEGIN(talk_gangan)
+static EVT_BEGIN(talk_gangan)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
         SWITCH(LW(0))
@@ -542,7 +542,7 @@ EVT_END()
  * from STG3_20_02_BACK_TO_THE_MINORS to STG3_20_04_CONFISCATED until guard 1 has stepped aside,
  * asks if Mario is back in the minors (05_15).
  */
-EVT_BEGIN(talk_poku)
+static EVT_BEGIN(talk_poku)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(12)
@@ -565,7 +565,7 @@ EVT_BEGIN(talk_poku)
 EVT_END()
 
 /** NPC init for the first Iron Cleft: placed at (75, 0, -100) facing 270, scaled 1.5 in X and Y. */
-EVT_BEGIN(init_iron)
+static EVT_BEGIN(init_iron)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS(LW(0), 11)
@@ -583,7 +583,7 @@ EVT_BEGIN(init_iron)
 EVT_END()
 
 /** Talk script of the first Iron Cleft (stg3_npc_10_06_07, rematch lines stg3_npc_re_080/081). */
-EVT_BEGIN(talk_iron)
+static EVT_BEGIN(talk_iron)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_npc_10_06_07"), 0, 0)
     ELSE
@@ -597,7 +597,7 @@ EVT_BEGIN(talk_iron)
 EVT_END()
 
 /** NPC init for the second Iron Cleft: placed at (100, 0, -80) facing 270, scaled 1.5 in X and Y. */
-EVT_BEGIN(init_iron2)
+static EVT_BEGIN(init_iron2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS(LW(0), 11)
@@ -615,7 +615,7 @@ EVT_BEGIN(init_iron2)
 EVT_END()
 
 /** Talk script of the second Iron Cleft (stg3_npc_10_06_08, rematch lines). */
-EVT_BEGIN(talk_iron2)
+static EVT_BEGIN(talk_iron2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_npc_10_06_08"), 0, 0)
     ELSE
@@ -994,7 +994,7 @@ EVT_BEGIN(evt_saisyo_after)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_saisyo_after_re)
+static EVT_BEGIN(evt_saisyo_after_re)
     // Mario, the partner and Jolene are placed in the room after the comeback's first match.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -1436,7 +1436,7 @@ EVT_END()
  * and shows him the match terminal, where Grubba picks his opponents (65).
  * The door is registered to evt_door so Mario cannot leave yet.
  */
-EVT_BEGIN(evt_rec)
+static EVT_BEGIN(evt_rec)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, -180)
     CALL(evt_party_set_pos, 0, 0, 0, -200)
@@ -1728,7 +1728,7 @@ static EVT_BEGIN(bed_entry)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_okorareru)
+static EVT_BEGIN(evt_okorareru)
     // Jolene waits in the room until Mario comes back out through the broken wall.
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -85)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
@@ -1822,7 +1822,7 @@ EVT_BEGIN(evt_okorareru)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_syorui)
+static EVT_BEGIN(evt_syorui)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_yoshi_ride, 0, 0)
@@ -1998,7 +1998,7 @@ EVT_BEGIN(tou_10_init_evt)
 EVT_END()
 
 // Only the single full-width-space placeholder selects the default localized name.
-USER_FUNC(name_check) {
+static USER_FUNC(name_check) {
     EvtWord* args = event->args;
 
     // a full-width space

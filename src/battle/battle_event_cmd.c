@@ -6943,7 +6943,7 @@ static void _PartsMoveSoundControlEnd(BattleUnitPart* part) {
 }
 
 /** Mario's voice clips for acrobatic moves; btlevtcmd_snd_voice type 1 plays one at random. */
-const char* _mario_acrobat_voice_table[5] = {
+static const char* _mario_acrobat_voice_table[5] = {
     "SFX_VOICE_MARIO_AC3_1", "SFX_VOICE_MARIO_AC3_2", "SFX_VOICE_MARIO_AC3_3",
     "SFX_VOICE_MARIO_AC3_4", "SFX_VOICE_MARIO_AC3_5",
 };
@@ -6952,7 +6952,7 @@ const char* _mario_acrobat_voice_table[5] = {
  * Mario's voice clips for ordinary attacks, two sets of five;
  * btlevtcmd_snd_voice type 2 plays one at random.
  */
-const char* _mario_attack_voice_table[10] = {
+static const char* _mario_attack_voice_table[10] = {
     "SFX_VOICE_MARIO_AC1_1", "SFX_VOICE_MARIO_AC1_2", "SFX_VOICE_MARIO_AC1_3",
     "SFX_VOICE_MARIO_AC1_4", "SFX_VOICE_MARIO_AC1_5", "SFX_VOICE_MARIO_AC2_1",
     "SFX_VOICE_MARIO_AC2_2", "SFX_VOICE_MARIO_AC2_3", "SFX_VOICE_MARIO_AC2_4",

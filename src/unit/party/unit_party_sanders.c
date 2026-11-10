@@ -30,11 +30,11 @@
 #include "battle/battle_damage.h"
 #include "icon_ids.h"
 
-USER_FUNC(_get_bomb_hit_position);
-USER_FUNC(_judge_on_stage);
-USER_FUNC(_sanders_make_extra_work_area);
-USER_FUNC(_shot_move);
-USER_FUNC(_make_counterset_weapon);
+static USER_FUNC(_get_bomb_hit_position);
+static USER_FUNC(_judge_on_stage);
+static USER_FUNC(_sanders_make_extra_work_area);
+static USER_FUNC(_shot_move);
+static USER_FUNC(_make_counterset_weapon);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_sanders_stay[25];
@@ -46,7 +46,7 @@ static BattleDataEntry data_table[8];
 static BattleDataEntry data_table[9];
 #endif
 
-BattleUnitKindPart unitpartsdata_Party_Sanders[1];
+static BattleUnitKindPart unitpartsdata_Party_Sanders[1];
 BattleUnitKind unitdata_Party_Sanders;
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[63];
@@ -57,33 +57,33 @@ BattleWeapon partyWeapon_SandersNormalAttack;
 BattleWeapon partyWeapon_SandersTimeBombSet;
 BattleWeapon partyWeapon_SandersCounterSet;
 BattleWeapon partyWeapon_SandersSuperBombAttack;
-EvtWord partySandersAttack_FirstAttack[321];
+static EvtWord partySandersAttack_FirstAttack[321];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partySandersAttack_NormalAttack[946];
+static EvtWord partySandersAttack_NormalAttack[946];
 #else
-EvtWord partySandersAttack_NormalAttack[970];
+static EvtWord partySandersAttack_NormalAttack[970];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord partySandersAttack_SuperBombAttack[1118];
-EvtWord partySandersAttack_CounterSet[242];
-EvtWord partySandersAttack_TimeBombSet[331];
+static EvtWord partySandersAttack_SuperBombAttack[1118];
+static EvtWord partySandersAttack_CounterSet[242];
+static EvtWord partySandersAttack_TimeBombSet[331];
 #else
-EvtWord partySandersAttack_SuperBombAttack[1116];
-EvtWord partySandersAttack_CounterSet[201];
-EvtWord partySandersAttack_TimeBombSet[290];
+static EvtWord partySandersAttack_SuperBombAttack[1116];
+static EvtWord partySandersAttack_CounterSet[201];
+static EvtWord partySandersAttack_TimeBombSet[290];
 #endif
 
 EvtWord _shot_bomb_event[155];
-EvtWord sanders_appeal_event[121];
+static EvtWord sanders_appeal_event[121];
 static EvtWord attack_audience_event[284];
 EvtWord sanders_battle_end_event[14];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static EvtWord attack_event[2];
-BattleUnitSetup entry_bomzou;
+static BattleUnitSetup entry_bomzou;
 static EvtWord party_win_reaction[9];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -194,7 +194,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Bobbery's single battle part: his targetable body (model c_bomt_n) with the normal pose table. */
-BattleUnitKindPart unitpartsdata_Party_Sanders[] = {
+static BattleUnitKindPart unitpartsdata_Party_Sanders[] = {
     {1, "btl_un_sanders", "c_bomt_n", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_sanders_stay},
 };
 
@@ -534,7 +534,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
  * he moves up to the first-attack target's hit point (_get_bomb_hit_position) and explodes on it,
  * then returns home.
  */
-EVT_BEGIN(partySandersAttack_FirstAttack)
+static EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -621,7 +621,7 @@ EVT_END()
  * Bobbery's Bomb: he walks up to the enemy, lights his fuse during the action command and explodes on it,
  * damaging the target, then walks back home.
  */
-EVT_BEGIN(partySandersAttack_NormalAttack)
+static EVT_BEGIN(partySandersAttack_NormalAttack)
     // Pick the target, pay the cost and aim the camera at Bobbery and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -914,7 +914,7 @@ EVT_END()
  * Bobbery's Bob-ombast: he charges a huge explosion with the action command and blasts every enemy at once,
  * then returns home.
  */
-EVT_BEGIN(partySandersAttack_SuperBombAttack)
+static EVT_BEGIN(partySandersAttack_SuperBombAttack)
     // Target every enemy, pay the cost and aim the camera at Bobbery.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1263,7 +1263,7 @@ EVT_END()
  * Bobbery's Hold Fast: he braces himself; the action command output plus one sets how many turns the Hold Fast
  * status lasts (_make_counterset_weapon), so enemies that touch him take explosive counter damage.
  */
-EVT_BEGIN(partySandersAttack_CounterSet)
+static EVT_BEGIN(partySandersAttack_CounterSet)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1343,7 +1343,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-BattleUnitSetup entry_bomzou = {
+static BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
@@ -1359,7 +1359,7 @@ BattleUnitSetup entry_bomzou = {
  * Bobbery's Bomb Squad: for each successful action command he throws one of up to three bombs (unit_bomzou)
  * along the aimed arc (_shot_bomb_event); bombs that land off the stage are removed, the rest explode next turn.
  */
-EVT_BEGIN(partySandersAttack_TimeBombSet)
+static EVT_BEGIN(partySandersAttack_TimeBombSet)
     // Pay the cost and spawn three hidden bombs at Bobbery's position.
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_bomzou), 0)
@@ -1525,7 +1525,7 @@ EVT_BEGIN(_shot_bomb_event)
 EVT_END()
 
 /** Bobbery's Appeal (data tag 5): appeal pose and sound, then the audience is fired up. */
-EVT_BEGIN(sanders_appeal_event)
+static EVT_BEGIN(sanders_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1704,7 +1704,7 @@ EVT_END()
  * acting before the player's turn, placed off stage until the throw moves it.
  */
 #if VERSION >= VERSION_JP
-BattleUnitSetup entry_bomzou = {
+static BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
@@ -1725,7 +1725,7 @@ static EVT_BEGIN(party_win_reaction)
 EVT_END()
 #endif
 
-USER_FUNC(_sanders_make_extra_work_area) {
+static USER_FUNC(_sanders_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
@@ -1788,7 +1788,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
  * its position plus its bintaHitOffset (scaled by size, X mirrored by facing).
  * args[0] and args[2] (the part) are read but not used.
  */
-USER_FUNC(_get_bomb_hit_position) {
+static USER_FUNC(_get_bomb_hit_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1819,7 +1819,7 @@ USER_FUNC(_get_bomb_hit_position) {
  * Copies the weapon pointed to by args[0] into the unit's spare weapon,
  * sets its Hold Fast duration (holdFastTime) to args[1] turns, and writes the copy's address back into args[0].
  */
-USER_FUNC(_make_counterset_weapon) {
+static USER_FUNC(_make_counterset_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1845,7 +1845,7 @@ USER_FUNC(_make_counterset_weapon) {
  * with power args[2] / 10, until it reaches the floor.
  * Then returns the landing point in args[3]-args[5] and its horizontal speed in args[6] for the bounces.
  */
-USER_FUNC(_shot_move) {
+static USER_FUNC(_shot_move) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -1893,7 +1893,7 @@ USER_FUNC(_shot_move) {
  * Returns in args[1] whether unit args[0] is on the stage:
  * TRUE when its X is within the stage half-width plus 40. Bomb Squad removes bombs that land outside.
  */
-USER_FUNC(_judge_on_stage) {
+static USER_FUNC(_judge_on_stage) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleStage* stage;

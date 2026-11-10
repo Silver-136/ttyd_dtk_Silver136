@@ -30,7 +30,7 @@
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];
-EvtWord out_func[14];
+static EvtWord out_func[14];
 static BeroEntry bero_entry_data[3];
 static EvtWord shake_evt[150];
 static EvtWord item_evt[268];
@@ -62,7 +62,7 @@ EVT_END()
  * ends the countdown timer (evt_sub_countdown_end) and, at STG1_13_A_SUSPICIOUS_ROOM,
  * stops the ceiling's rumble sound GW(10).
  */
-EVT_BEGIN(out_func)
+static EVT_BEGIN(out_func)
     CALL(evt_sub_countdown_end)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_13_A_SUSPICIOUS_ROOM)
         CALL(evt_snd_sfxoff, GW(10))

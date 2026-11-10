@@ -29,22 +29,22 @@
 #include "battle/battle_audience_kind_data.h"
 #include "libc_decls.h"
 /** Announces that the Puni in the audience all ran away (btl_msg_audience_puni_escape), for 120 frames. */
-EVT_BEGIN(msg_puni_all_escape)
+static EVT_BEGIN(msg_puni_all_escape)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_puni_escape"), 120)
     RETURN
 EVT_END()
 /** Announces that a crowd of Puni has gathered in the audience (btl_msg_audience_puni_meeting). */
-EVT_BEGIN(msg_puni_all_enter)
+static EVT_BEGIN(msg_puni_all_enter)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_puni_meeting"), 120)
     RETURN
 EVT_END()
 /** Announces that the Crazee Dayzee in the audience sang everyone to sleep (btl_msg_audience_pansy_sleep). */
-EVT_BEGIN(msg_pansy_sing)
+static EVT_BEGIN(msg_pansy_sing)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_pansy_sleep"), 120)
     RETURN
 EVT_END()
 /** Announces that a Bulky Bob-omb in the audience lit its fuse (btl_msg_audience_heavybomb_dynamite). */
-EVT_BEGIN(msg_heavy_bomb_fire)
+static EVT_BEGIN(msg_heavy_bomb_fire)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_heavybomb_dynamite"), 120)
     RETURN
 EVT_END()
@@ -105,7 +105,7 @@ static void BattleAudienceSoundMain(void);
 static void BattleAudienceNoiseMain(void);
 
 /** Weapon for an empty can thrown by a spectator (ITEM_AUDIENCE_CAN): 1 damage plus 1 per extra hit. */
-BattleWeapon weapon_data_akikan = {
+static BattleWeapon weapon_data_akikan = {
     NULL, 0, // name..icon
     {0}, // pad_06
     ITEM_AUDIENCE_CAN, // itemId
@@ -138,7 +138,7 @@ BattleWeapon weapon_data_akikan = {
 };
 
 /** Weapon for a rock thrown by a spectator (ITEM_AUDIENCE_ROCK); copied into presentWeapon like the can's. */
-BattleWeapon weapon_data_brick = {
+static BattleWeapon weapon_data_brick = {
     NULL, 0, // name..icon
     {0}, // pad_06
     ITEM_AUDIENCE_ROCK, // itemId
@@ -171,7 +171,7 @@ BattleWeapon weapon_data_brick = {
 };
 
 /** Weapon for a bone thrown by a Dull Bones in the audience (ITEM_AUDIENCE_BONE). */
-BattleWeapon weapon_data_bone = {
+static BattleWeapon weapon_data_bone = {
     NULL, 0, // name..icon
     {0}, // pad_06
     ITEM_AUDIENCE_BONE, // itemId
@@ -204,7 +204,7 @@ BattleWeapon weapon_data_bone = {
 };
 
 /** Weapon for a hammer thrown by a Hammer Bro in the audience (ITEM_AUDIENCE_HAMMER). */
-BattleWeapon weapon_data_hammer = {
+static BattleWeapon weapon_data_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
     ITEM_AUDIENCE_HAMMER, // itemId
@@ -241,7 +241,7 @@ BattleWeapon weapon_data_hammer = {
  * each of the ten rows (centred in the 20 columns), so the stands fill out as the rank goes up.
  * The free-seat pickers (BattleAudience_NoUsedHaitiRand and kin) choose from these seats.
  */
-s32 haiti_data[][10] = {
+static s32 haiti_data[][10] = {
     { 18, 16, 16, 0, 0, 0, 0, 0, 0, 0 },
     { 18, 18, 18, 16, 16, 14, 0, 0, 0, 0 },
     { 20, 20, 20, 20, 18, 18, 18, 16, 0, 0 },

@@ -25,8 +25,8 @@
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(_hikaru_off);
-USER_FUNC(_hikaru_on);
+static USER_FUNC(_hikaru_off);
+static USER_FUNC(_hikaru_on);
 static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
@@ -306,7 +306,7 @@ static USER_FUNC(thunder_main) {
     return EVT_RETURN_BLOCK;
 }
 
-USER_FUNC(_hikaru_off) {
+static USER_FUNC(_hikaru_off) {
     char name[64];
     s32 i;
 
@@ -323,7 +323,7 @@ USER_FUNC(_hikaru_off) {
  * Script function: shows the dark panel objects nashi_01 to 24
  * and hides the lit ones hikaru_01 to 24 (every panel in its unlit state).
  */
-USER_FUNC(_hikaru_on) {
+static USER_FUNC(_hikaru_on) {
     char name[64];
     s32 i;
 

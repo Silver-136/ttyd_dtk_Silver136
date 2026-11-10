@@ -18,7 +18,7 @@
 
 static BeroEntry bero_entry_data[3];
 static TreeAccess ki_data[5];
-EvtWord evt_kusa_8[20];
+static EvtWord evt_kusa_8[20];
 static KusaAccess kusa_data[10];
 EvtWord hei_06_init_evt[63];
 
@@ -69,7 +69,7 @@ static TreeAccess ki_data[] = {
 };
 
 /** Reward script for bush 8: if not yet taken, a Coin pops out of the bush when Mario hits it. */
-EVT_BEGIN(evt_kusa_8)
+static EVT_BEGIN(evt_kusa_8)
     CALL(evt_item_delete_check, STRING("item_kusa_8"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_kusa_8"), ITEM_COIN, 200, 75, 60, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_HEI_06_COIN_BUSH, 0)

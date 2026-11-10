@@ -35,7 +35,7 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(evtflash);
-USER_FUNC(muj_item_move_3d_position);
+static USER_FUNC(muj_item_move_3d_position);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
 
 static EvtWord back_dark[27];
@@ -44,15 +44,15 @@ static EvtWord bero_custom[135];
 static EvtWord w_close[12];
 static EvtWord w_open[12];
 static BeroEntry bero_entry_data[2];
-EvtWord korutesu_yure[86];
-EvtWord korutesu_flush[24];
-EvtWord korutesu_flush2[36];
-EvtWord korutesu_rotate[28];
-EvtWord korutesu_small[56];
-EvtWord korutesu_small2[56];
-EvtWord korutesu_rotate2[28];
-EvtWord korutesu_large[56];
-EvtWord korutesu_blur[43];
+static EvtWord korutesu_yure[86];
+static EvtWord korutesu_flush[24];
+static EvtWord korutesu_flush2[36];
+static EvtWord korutesu_rotate[28];
+static EvtWord korutesu_small[56];
+static EvtWord korutesu_small2[56];
+static EvtWord korutesu_rotate2[28];
+static EvtWord korutesu_large[56];
+static EvtWord korutesu_blur[43];
 static EvtWord starstone_fuwafuwa[53];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -61,7 +61,7 @@ static EvtWord korutesu_event[616];
 static EvtWord korutesu_event[627];
 #endif
 
-EvtWord korutesu_event_after[140];
+static EvtWord korutesu_event_after[140];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord kosho_event[];
@@ -69,7 +69,7 @@ extern EvtWord kosho_event[];
 EvtWord kosho_event[517];
 #endif
 
-EvtWord coin_effect[151];
+static EvtWord coin_effect[151];
 EvtWord muj_12_init_evt[60];
 
 /** White fade-out colour of the screen flash in the Cortez scenes. */
@@ -223,7 +223,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Shakes the camera and plays a ship-shaking sound at Cortez until GF(0) is set, to show him thrashing. */
-EVT_BEGIN(korutesu_yure)
+static EVT_BEGIN(korutesu_yure)
     CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_SHAKE2"), LW(0), LW(1), LW(2), LW(10))
     LOOP(0)
@@ -246,7 +246,7 @@ EVT_BEGIN(korutesu_yure)
 EVT_END()
 
 /** Flashes the screen (evtflash) at random intervals until GF(0) is set, as Cortez shows his power. */
-EVT_BEGIN(korutesu_flush)
+static EVT_BEGIN(korutesu_flush)
     LOOP(0)
         CALL(evt_snd_sfxon, STRING("SFX_STG5_KOR_APPEAR_LIGHT1"), 0)
         CALL(evtflash)
@@ -264,7 +264,7 @@ EVT_END()
  * Three screen flashes with random pauses (0.8 s plus up to 0.5 s, then 1.6 s plus up to 1 s),
  * used after the battle with Cortez.
  */
-EVT_BEGIN(korutesu_flush2)
+static EVT_BEGIN(korutesu_flush2)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_KOR_APPEAR_LIGHT1"), 0)
     CALL(evtflash)
     CALL(evt_sub_random, 500, LW(10))
@@ -281,7 +281,7 @@ EVT_BEGIN(korutesu_flush2)
 EVT_END()
 
 /** Spins Cortez (NPC "コルテス") around his Y axis while he shrinks. */
-EVT_BEGIN(korutesu_rotate)
+static EVT_BEGIN(korutesu_rotate)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 1800, 2700)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -295,7 +295,7 @@ EVT_BEGIN(korutesu_rotate)
 EVT_END()
 
 /** Shrinks Cortez while he glides to a new position over 2.7 seconds, scaling him by LW(2). */
-EVT_BEGIN(korutesu_small)
+static EVT_BEGIN(korutesu_small)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
@@ -316,7 +316,7 @@ EVT_BEGIN(korutesu_small)
 EVT_END()
 
 /** Second shrinking glide for Cortez, also 2.7 seconds. */
-EVT_BEGIN(korutesu_small2)
+static EVT_BEGIN(korutesu_small2)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
@@ -337,7 +337,7 @@ EVT_BEGIN(korutesu_small2)
 EVT_END()
 
 /** Spins Cortez around his Y axis while he grows again (second rotation). */
-EVT_BEGIN(korutesu_rotate2)
+static EVT_BEGIN(korutesu_rotate2)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 1800, 0, 1300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -351,7 +351,7 @@ EVT_BEGIN(korutesu_rotate2)
 EVT_END()
 
 /** Makes Cortez glide to a new position and grow (scale LW(2)) over 1.3 seconds. */
-EVT_BEGIN(korutesu_large)
+static EVT_BEGIN(korutesu_large)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
         ADD(LW(1), -30)
@@ -375,7 +375,7 @@ EVT_END()
  * Camera blur loop: switches the environment blur on and alternates between two camera positions every 100 ms
  * until GF(0) is cleared.
  */
-EVT_BEGIN(korutesu_blur)
+static EVT_BEGIN(korutesu_blur)
     LOOP(0)
         BEGIN_INLINE_EVENT
             CALL(evt_env_blur_on, 1, 200)
@@ -607,7 +607,7 @@ static EVT_BEGIN(korutesu_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(korutesu_event_after)
+static EVT_BEGIN(korutesu_event_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -65, 0, 0)
     CALL(evt_party_set_pos, 0, -100, 0, 0)
@@ -788,7 +788,7 @@ EVT_END()
  * Loop that makes Cortez's treasure pile glitter:
  * picks one of eleven spots at random and spawns a hagetaka flush effect there.
  */
-EVT_BEGIN(coin_effect)
+static EVT_BEGIN(coin_effect)
     LOOP(0)
         CALL(evt_sub_random, 10, LW(10))
         SWITCH(LW(10))
@@ -903,7 +903,7 @@ static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
  * Script helper: moves the named item to the position (args[1], args[2], args[3]) over args[4] ms using
  * interpolation mode args[5], adding args[6] to its height; blocks until it arrives.
  */
-USER_FUNC(muj_item_move_3d_position) {
+static USER_FUNC(muj_item_move_3d_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
     f32 x = evtGetValue(event, args[1]);

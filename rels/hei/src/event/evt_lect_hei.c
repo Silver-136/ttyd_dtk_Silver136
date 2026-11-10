@@ -93,7 +93,7 @@ static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-EvtWord nokotaro_party_lecture_init[48];
+static EvtWord nokotaro_party_lecture_init[48];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord nokotaro_party_lecture[];
@@ -462,7 +462,7 @@ static USER_FUNC(effitemget_busaiku) {
  * Starts the Koops lecture: Mario is placed at x=350 facing east, the camera frames the pair,
  * and the partner is walked in.
  */
-EVT_BEGIN(nokotaro_party_lecture_init)
+static EVT_BEGIN(nokotaro_party_lecture_init)
     CALL(evt_mario_set_pos, 350, 0, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

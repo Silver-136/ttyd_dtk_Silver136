@@ -42,12 +42,12 @@
 #include "driver/hitdrv.h"
 #endif
 
-USER_FUNC(countDisp);
+static USER_FUNC(countDisp);
 
 static BeroEntry bero_entry_data[4];
-EvtWord mony_peton_setup[139];
-EvtWord lost_wedding_ring_sub[4];
-EvtWord lost_wedding_ring[395];
+static EvtWord mony_peton_setup[139];
+static EvtWord lost_wedding_ring_sub[4];
+static EvtWord lost_wedding_ring[395];
 static s32 itemsel_table00[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -58,11 +58,11 @@ EvtWord wedding_ring_consign[30];
 
 EvtWord find_wedding_ring[];
 static EvtWord mony_init[19];
-EvtWord mony_peton_regl[97];
-EvtWord mony_regl[13];
+static EvtWord mony_peton_regl[97];
+static EvtWord mony_regl[13];
 static EvtWord mony_talk[50];
 static EvtWord peton_init[19];
-EvtWord peton_regl[13];
+static EvtWord peton_regl[13];
 static EvtWord peton_talk[50];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[2];
@@ -139,7 +139,7 @@ static BeroEntry bero_entry_data[] = {
  * LW(10) 1 (Frankie): they walk to Frankie's left and Francesca walks up beside him.
  * Locks Mario's pose after he moves into place.
  */
-EVT_BEGIN(mony_peton_setup)
+static EVT_BEGIN(mony_peton_setup)
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_npc_get_position, STRING("モニー"), LW(0), LW(1), LW(2))
         BEGIN_INLINE_EVENT
@@ -188,7 +188,7 @@ EVT_END()
  * Display event for Frankie's repeated declaration: runs countDisp so the repetition
  * count is drawn on screen each frame.
  */
-EVT_BEGIN(lost_wedding_ring_sub)
+static EVT_BEGIN(lost_wedding_ring_sub)
     CALL(countDisp)
     RETURN
 EVT_END()
@@ -199,7 +199,7 @@ EVT_END()
  * then one of them moves back to their jungle position, depending on whether Mario has the ring.
  * Their regular events restart and Mario's pose lock is cleared before the partner resumes.
  */
-EVT_BEGIN(lost_wedding_ring)
+static EVT_BEGIN(lost_wedding_ring)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT)
@@ -418,7 +418,7 @@ EVT_END()
  * Regular loop shared by Francesca and Frankie: they pace left and right around their spawn point,
  * turning to face the way they walk and pausing 1 to 1.5 seconds between steps.
  */
-EVT_BEGIN(mony_peton_regl)
+static EVT_BEGIN(mony_peton_regl)
     LOOP(0)
         SET_VALUE(LW(3), LW(0))
         CALL(evt_sub_random, 15, LW(10))
@@ -451,7 +451,7 @@ EVT_BEGIN(mony_peton_regl)
 EVT_END()
 
 /** Regular event of Francesca: runs the shared pacing loop mony_peton_regl while the couple stands in the jungle. */
-EVT_BEGIN(mony_regl)
+static EVT_BEGIN(mony_regl)
     SET_VALUE(LW(0), 500)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), -40)
@@ -498,7 +498,7 @@ static EVT_BEGIN(peton_init)
 EVT_END()
 
 /** Regular event of Frankie: runs the shared pacing loop mony_peton_regl while the couple stands in the jungle. */
-EVT_BEGIN(peton_regl)
+static EVT_BEGIN(peton_regl)
     SET_VALUE(LW(0), 400)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), -40)
@@ -693,7 +693,7 @@ EVT_BEGIN(muj_02_init_evt)
     RETURN
 EVT_END()
 
-void printCount(CameraId camera, void* param) {
+static void printCount(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
     char buf[32];
 #else
@@ -756,7 +756,7 @@ void printCount(CameraId camera, void* param) {
  * Display callback for Frankie's declaration count: queues a 2D draw each frame (always blocks, so it runs until
  * killed).
  */
-USER_FUNC(countDisp) {
+static USER_FUNC(countDisp) {
     dispEntry(CAMERA_2D, 399.0f, DISP_MODE_OPAQUE, printCount, NULL);
     return EVT_RETURN_BLOCK;
 }

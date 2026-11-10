@@ -99,7 +99,7 @@ static void scissor_damage_sub(BattleUnit* unit, s32* out);
  * Art Attack's per-loop hit: scissor_damage hits each enemy inside a closed loop with it, for the power
  * scissor_damage worked out (0 to 3, returned by weaponGetPower_Scissor); it always hits, pierces defense and cannot be guarded.
  */
-BattleWeapon weapon_scissor = {
+static BattleWeapon weapon_scissor = {
     "btl_wn_sac_scissor", // name
     ICON_SAC_SCISSOR, // icon
     {0}, // pad_06
@@ -141,7 +141,7 @@ BattleWeapon weapon_scissor = {
  * Art Attack's finishing hit: no damage of its own, given by marioAttackEvent_Scissor to each enemy
  * that took damage during the drawing, with damage pattern 27 for the hurt pose.
  */
-BattleWeapon weapon_scissor_finish = {
+static BattleWeapon weapon_scissor_finish = {
     "btl_wn_sac_scissor", // name
     0, // icon
     {0}, // pad_06

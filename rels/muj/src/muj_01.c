@@ -57,21 +57,21 @@ static s32* itemsel_table_ram;
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(delete_itemsel_table);
-USER_FUNC(evt_mario_get_reqdir);
+static USER_FUNC(evt_mario_get_reqdir);
 static USER_FUNC(make_itemsel_table);
-USER_FUNC(muj_get_door_check);
-USER_FUNC(sekai_yami_omise);
+static USER_FUNC(muj_get_door_check);
+static USER_FUNC(sekai_yami_omise);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(yami_view);
 
-EvtWord custom_door_dark2[34];
-EvtWord custom_door_light2[30];
+static EvtWord custom_door_dark2[34];
+static EvtWord custom_door_light2[30];
 static EvtWord garawaru_init[39];
 static EvtWord garawaru_talk[270];
 static EvtWord marco_init[31];
-EvtWord marco_kyorokyoro[28];
+static EvtWord marco_kyorokyoro[28];
 
 #if VERSION >= VERSION_US
 static EvtWord marco_talk[848];
@@ -92,13 +92,13 @@ static EvtWord suifu_a_talk[48];
 static EvtWord suifu_bomb_init[14];
 static EvtWord suifu_bomb_talk[48];
 static EvtWord suifu_d_init[13];
-EvtWord suifu_d_regl[24];
+static EvtWord suifu_d_regl[24];
 static EvtWord suifu_d_talk[56];
-EvtWord borosuifu_a_init[13];
-EvtWord borosuifu_a_talk[56];
-EvtWord borosuifu_b_init[22];
-EvtWord borosuifu_b_regl[30];
-EvtWord borosuifu_b_talk[56];
+static EvtWord borosuifu_a_init[13];
+static EvtWord borosuifu_a_talk[56];
+static EvtWord borosuifu_b_init[22];
+static EvtWord borosuifu_b_regl[30];
+static EvtWord borosuifu_b_talk[56];
 static EvtWord mony_init[14];
 static EvtWord mony_talk[8];
 static EvtWord peton_init[14];
@@ -117,29 +117,29 @@ extern EvtWord muj_00_door_open[];
 EvtWord muj_00_door_open[247];
 #endif
 
-EvtWord muj_00_door_close[22];
+static EvtWord muj_00_door_close[22];
 static const char* mise_npc[2];
-EvtWord mise_data_open[32];
-EvtWord mise_data_close[36];
+static EvtWord mise_data_open[32];
+static EvtWord mise_data_close[36];
 static DoorParam mise_data;
 static const char* yado_npc[2];
-EvtWord mise_open_event[22];
-EvtWord mise_close_event[26];
+static EvtWord mise_open_event[22];
+static EvtWord mise_close_event[26];
 static DoorParam yado_data;
-EvtWord evt_door_entry_custom00[39];
-EvtWord evt_door_entry_custom01[39];
+static EvtWord evt_door_entry_custom00[39];
+static EvtWord evt_door_entry_custom01[39];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 static KinopioData kino_dt;
 EvtWord kyoshu_event[196];
-EvtWord maruco_buruburu[17];
-EvtWord garawaru_buruburu[17];
-EvtWord suifu_a_buruburu[17];
-EvtWord suifu_bom_buruburu[17];
+static EvtWord maruco_buruburu[17];
+static EvtWord garawaru_buruburu[17];
+static EvtWord suifu_a_buruburu[17];
+static EvtWord suifu_bom_buruburu[17];
 EvtWord nakamaware_event[791];
-EvtWord settoku_event[54];
+static EvtWord settoku_event[54];
 EvtWord settoku_event_main[95];
 static EvtWord delete_npc_regl_evt[24];
 static EvtWord sekai_yami_shake[11];
@@ -148,14 +148,14 @@ static EvtWord minnnanokoe_evt[402];
 static EvtWord epilogue_npc_entry[60];
 static EvtWord epilogue_evt_sub[117];
 static EvtWord epilogue_evt[88];
-EvtWord yakan_anime[17];
+static EvtWord yakan_anime[17];
 EvtWord muj_01_init_evt[225];
 
 /**
  * Fades the white map blend layer 1 from opaque to clear over 300 ms;
  * run when the player walks into a building (shop, inn) so the outdoor lighting fades away.
  */
-EVT_BEGIN(custom_door_dark2)
+static EVT_BEGIN(custom_door_dark2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -172,7 +172,7 @@ EVT_END()
  * Fades the white map blend layer 1 back in over 300 ms and then switches it off;
  * the opposite of custom_door_dark2, run when leaving a building.
  */
-EVT_BEGIN(custom_door_light2)
+static EVT_BEGIN(custom_door_light2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -324,7 +324,7 @@ EVT_END()
  * Turns Flavio (マルコ) from LW(0) to LW(1) degrees about y over 150 ms; marco_talk calls it in pairs
  * (0 to 180 and back) so he glances around while talking.
  */
-EVT_BEGIN(marco_kyorokyoro)
+static EVT_BEGIN(marco_kyorokyoro)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(0), LW(1), 150)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -785,7 +785,7 @@ EVT_END()
  * Regular event of sailor D: once the story reaches STG5_59_ROGUEPORT_DOCK he wanders around his spawn
  * point (urouro) with a radius of 100 units and a movement speed of 30.
  */
-EVT_BEGIN(suifu_d_regl)
+static EVT_BEGIN(suifu_d_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -818,7 +818,7 @@ static EVT_BEGIN(suifu_d_talk)
 EVT_END()
 
 /** Init event of the shabby sailor A: from STG5_59_ROGUEPORT_DOCK on he is placed at (95, 0, 82). */
-EVT_BEGIN(borosuifu_a_init)
+static EVT_BEGIN(borosuifu_a_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
         CALL(evt_npc_set_position, STRING("me"), 95, 0, 82)
@@ -830,7 +830,7 @@ EVT_END()
  * Talk event of the shabby sailor A: a different line (stg5_muj_154 to 158) for each stretch of the story from
  * Fair Winds to STG8_END_AFTER_THE_BATTLE, stg5_muj_158_1 otherwise.
  */
-EVT_BEGIN(borosuifu_a_talk)
+static EVT_BEGIN(borosuifu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
         CALL(evt_msg_print, 0, STRING("stg5_muj_154"), 0, STRING("me"))
@@ -852,7 +852,7 @@ EVT_END()
  * Init event of the shabby sailor B: turns on NPC_STATUS_FACE_MOVE_DIR and,
  * from STG5_59_ROGUEPORT_DOCK on, places him at (-350, 0, 0) facing right.
  */
-EVT_BEGIN(borosuifu_b_init)
+static EVT_BEGIN(borosuifu_b_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
@@ -866,7 +866,7 @@ EVT_END()
  * Regular event of the shabby sailor B: from STG5_59_ROGUEPORT_DOCK on he walks back and forth between
  * x = 350 and x = -350 (speed 40), pausing 1 s at each end.
  */
-EVT_BEGIN(borosuifu_b_regl)
+static EVT_BEGIN(borosuifu_b_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
         LOOP(0)
@@ -883,7 +883,7 @@ EVT_END()
  * Talk event of the shabby sailor B: a different line (stg5_muj_164 to 168, then 168_1) for each stretch of the story,
  * as for sailor A.
  */
-EVT_BEGIN(borosuifu_b_talk)
+static EVT_BEGIN(borosuifu_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
         CALL(evt_msg_print, 0, STRING("stg5_muj_164"), 0, STRING("me"))
@@ -1302,7 +1302,7 @@ EVT_END()
  * run when Mario leaves through the door (it does nothing when evt_mario_party_use_check returns 4 or when he is
  * too far from the door).
  */
-EVT_BEGIN(muj_00_door_close)
+static EVT_BEGIN(muj_00_door_close)
     CALL(evt_mario_party_use_check, LW(4))
     IF_INT_EQUAL(LW(4), 4)
         RETURN
@@ -1326,7 +1326,7 @@ static const char* mise_npc[] = {
  * fades the outside blend away, lowers the music and ambience to 50 percent and puts a low-pass filter on the
  * ambience.
  */
-EVT_BEGIN(mise_data_open)
+static EVT_BEGIN(mise_data_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -1341,7 +1341,7 @@ EVT_END()
  * Close event of the shop building: restores the exterior blend flags,
  * fades the light back in and restores the music and ambience volume and filter.
  */
-EVT_BEGIN(mise_data_close)
+static EVT_BEGIN(mise_data_close)
     BEGIN_INLINE_EVENT
         CALL_CHILD(custom_door_light2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -1380,7 +1380,7 @@ static const char* yado_npc[] = {
 };
 
 /** Open event of the inn: darkens the outside, shows the interior (S_yado) and muffles the music and ambience. */
-EVT_BEGIN(mise_open_event)
+static EVT_BEGIN(mise_open_event)
     SPAWN_EVENT(door_dark)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     SPAWN_EVENT(custom_door_dark2)
@@ -1391,7 +1391,7 @@ EVT_BEGIN(mise_open_event)
 EVT_END()
 
 /** Close event of the inn: lights the outside again, hides the interior and restores music and ambience. */
-EVT_BEGIN(mise_close_event)
+static EVT_BEGIN(mise_close_event)
     SPAWN_EVENT(door_light)
     SPAWN_EVENT(custom_door_light2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -1422,7 +1422,7 @@ static DoorParam yado_data = {
 };
 
 /** Registers muj_00_door_open and muj_00_door_close as the door cases for the first custom door of the map. */
-EVT_BEGIN(evt_door_entry_custom00)
+static EVT_BEGIN(evt_door_entry_custom00)
     CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 17)
@@ -1436,7 +1436,7 @@ EVT_BEGIN(evt_door_entry_custom00)
 EVT_END()
 
 /** Registers muj_00_door_open and muj_00_door_close as the door cases for the second custom door of the map. */
-EVT_BEGIN(evt_door_entry_custom01)
+static EVT_BEGIN(evt_door_entry_custom01)
     CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 19)
@@ -1584,7 +1584,7 @@ EVT_BEGIN(kyoshu_event)
 EVT_END()
 
 /** Makes Flavio shiver (muj_npc_buruburu, 1 unit every 10 ms for 10 seconds). */
-EVT_BEGIN(maruco_buruburu)
+static EVT_BEGIN(maruco_buruburu)
     CALL(evt_npc_flag_onoff, 0, STRING("マルコ"), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
         CALL(muj_npc_buruburu, STRING("マルコ"), 0, FLOAT(1.0f), 10, 10000)
@@ -1593,7 +1593,7 @@ EVT_BEGIN(maruco_buruburu)
 EVT_END()
 
 /** Makes the rough sailor (ガラの悪い水夫) shiver (muj_npc_buruburu for 10 seconds). */
-EVT_BEGIN(garawaru_buruburu)
+static EVT_BEGIN(garawaru_buruburu)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
         CALL(muj_npc_buruburu, STRING("ガラの悪い水夫"), 0, FLOAT(1.0f), 10, 10000)
@@ -1602,7 +1602,7 @@ EVT_BEGIN(garawaru_buruburu)
 EVT_END()
 
 /** Makes sailor A shiver (muj_npc_buruburu for 10 seconds). */
-EVT_BEGIN(suifu_a_buruburu)
+static EVT_BEGIN(suifu_a_buruburu)
     CALL(evt_npc_flag_onoff, 0, STRING("水夫A"), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
         CALL(muj_npc_buruburu, STRING("水夫A"), 0, FLOAT(1.0f), 10, 10000)
@@ -1611,7 +1611,7 @@ EVT_BEGIN(suifu_a_buruburu)
 EVT_END()
 
 /** Makes the bomb-shaped sailor shiver (muj_npc_buruburu for 10 seconds). */
-EVT_BEGIN(suifu_bom_buruburu)
+static EVT_BEGIN(suifu_bom_buruburu)
     CALL(evt_npc_flag_onoff, 0, STRING("水夫ボム兵"), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
         CALL(muj_npc_buruburu, STRING("水夫ボム兵"), 0, FLOAT(1.0f), 10, 10000)
@@ -1823,7 +1823,7 @@ EVT_BEGIN(nakamaware_event)
 EVT_END()
 
 /** Moves the sailors and Flavio to their places in the camp for the persuasion scene. */
-EVT_BEGIN(settoku_event)
+static EVT_BEGIN(settoku_event)
     CALL(evt_npc_set_position, STRING("水夫A"), -203, 0, 61)
     CALL(evt_npc_set_ry, STRING("水夫A"), 90)
     CALL(evt_npc_set_position, STRING("水夫ボム兵"), -220, 0, 160)
@@ -1925,7 +1925,7 @@ static USER_FUNC(delete_itemsel_table) {
 }
 
 /** Script helper: writes the direction Mario is currently requested to face (displayDirectionTarget) into args[0]. */
-USER_FUNC(evt_mario_get_reqdir) {
+static USER_FUNC(evt_mario_get_reqdir) {
     EvtWord* args = event->args;
 
     evtSetFloat(event, args[0], marioGetPtr()->displayDirectionTarget);
@@ -1936,7 +1936,7 @@ USER_FUNC(evt_mario_get_reqdir) {
  * Script helper: writes 1 into args[2] if Mario is within args[1] units (horizontal) of the door's outside hit
  * box, otherwise 0. args[0] is the door parameter block.
  */
-USER_FUNC(muj_get_door_check) {
+static USER_FUNC(muj_get_door_check) {
     EvtWord* args = event->args;
     DoorParam* door = (DoorParam*)evtGetValue(event, args[0]);
     f32 range = evtGetFloat(event, args[1]);
@@ -2000,7 +2000,7 @@ static USER_FUNC(anim_tevcallback_mobj) {
 }
 
 /** Script helper for the dark-world scene: tints the six shop icons shp0 to shp5 dark grey (0x40, 0x40, 0x40). */
-USER_FUNC(sekai_yami_omise) {
+static USER_FUNC(sekai_yami_omise) {
     char name[40];
     s32 i;
     IconEntry* icon;
@@ -2372,7 +2372,7 @@ static EVT_BEGIN(epilogue_evt)
 EVT_END()
 
 /** Plays the kettle (yakan) animation of the map and keeps replaying it when it finishes. */
-EVT_BEGIN(yakan_anime)
+static EVT_BEGIN(yakan_anime)
     LOOP(0)
         CALL(evt_map_playanim, STRING("yakan"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_checkanim, STRING("yakan"), LW(0), LW(1))

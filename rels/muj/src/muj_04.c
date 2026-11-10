@@ -34,21 +34,21 @@
 #include "evt/evt_sub.h"
 #include "data_tables.h"
 
-USER_FUNC(mario_moveride_check);
+static USER_FUNC(mario_moveride_check);
 
 static NpcSetupInfo npcEnt[6];
 static EvtWord evt_haikei_in[16];
 static BeroEntry bero_entry_data[5];
-const char* hitname[17];
-const char* mapanim[17];
-EvtWord mario_hashi_anime[34];
-EvtWord erumos00_attack[50];
-EvtWord erumos01_attack[50];
-EvtWord sanders_attack[88];
-EvtWord mario_katsugi[24];
+static const char* hitname[17];
+static const char* mapanim[17];
+static EvtWord mario_hashi_anime[34];
+static EvtWord erumos00_attack[50];
+static EvtWord erumos01_attack[50];
+static EvtWord sanders_attack[88];
+static EvtWord mario_katsugi[24];
 EvtWord sanders_funto[];
-EvtWord yashi_yure_init[5];
-EvtWord yashi_yure[255];
+static EvtWord yashi_yure_init[5];
+static EvtWord yashi_yure[255];
 static HitDamageReturn hitDmgRetPoints[4];
 static TreeAccess tree_tbl[3];
 static KusaAccess kusa_tbl[5];
@@ -194,7 +194,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Hit areas of the 17 planks of the rope bridge, in order; mapanim holds the matching map animations. */
-const char* hitname[] = {
+static const char* hitname[] = {
     "A_hasi01",
     "A_hasi02",
     "A_hasi03",
@@ -214,7 +214,7 @@ const char* hitname[] = {
     "A_hasi017",
 };
 
-const char* mapanim[] = {
+static const char* mapanim[] = {
     "S_hasi01",
     "S_hasi02",
     "S_hasi03",
@@ -238,7 +238,7 @@ const char* mapanim[] = {
  * Loop that makes the rope bridge sway: whenever Mario steps on a different plank (mario_moveride_check) it
  * plays a creak sound at his feet and the plank's map animation.
  */
-EVT_BEGIN(mario_hashi_anime)
+static EVT_BEGIN(mario_hashi_anime)
     SET_VALUE(LW(1), 0)
     LOOP(0)
         CALL(mario_moveride_check)
@@ -256,7 +256,7 @@ EVT_END()
  * First Ember (Elmos A) swoops in over the bridge at Bobbery, gliding to x = -25 then -35 at height 125
  * over and over, with its footstep sounds muted.
  */
-EVT_BEGIN(erumos00_attack)
+static EVT_BEGIN(erumos00_attack)
     CALL(evt_npc_sound_data_set, STRING("エルモスA"), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     WAIT_MS(500)
     LOOP(0)
@@ -269,7 +269,7 @@ EVT_BEGIN(erumos00_attack)
 EVT_END()
 
 /** Second Ember (Elmos B) swoops in from the other side, gliding to x = 25 then 35 at height 125. */
-EVT_BEGIN(erumos01_attack)
+static EVT_BEGIN(erumos01_attack)
     CALL(evt_npc_sound_data_set, STRING("エルモスB"), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     WAIT_MS(500)
     LOOP(0)
@@ -285,7 +285,7 @@ EVT_END()
  * Admiral Bobbery (Sanders) is attacked by the Embers:
  * repeatedly spawns hit effects at random offsets around him and spins him round while they attack him.
  */
-EVT_BEGIN(sanders_attack)
+static EVT_BEGIN(sanders_attack)
     WAIT_MS(600)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -321,7 +321,7 @@ EVT_END()
  * every frame sets Mario's position to the sailor's position plus 40 up,
  * so he appears carried (used while Bobbery rescues them).
  */
-EVT_BEGIN(mario_katsugi)
+static EVT_BEGIN(mario_katsugi)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("めがね水夫"), LW(0), LW(1), LW(2))
         ADD(LW(1), 40)
@@ -484,7 +484,7 @@ EVT_BEGIN(sanders_funto)
 EVT_END()
 
 /** Init event of the coconut palm: sets its state GW(10) to 0 (nothing dropped yet). */
-EVT_BEGIN(yashi_yure_init)
+static EVT_BEGIN(yashi_yure_init)
     SET_VALUE(GW(10), 0)
     RETURN
 EVT_END()
@@ -494,7 +494,7 @@ EVT_END()
  * (ITEM_COCONUT), state GW(10) counting the hits; each coconut can be picked up where it lands.
  */
 // Only the first two shakes schedule coconut pickups; later shakes still increment the counter.
-EVT_BEGIN(yashi_yure)
+static EVT_BEGIN(yashi_yure)
     ADD(GW(10), 1)
     IF_INT_EQUAL(GW(10), 1)
         CALL(evt_mario_key_onoff, 0)
@@ -631,7 +631,7 @@ EVT_BEGIN(muj_04_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(mario_moveride_check) {
+static USER_FUNC(mario_moveride_check) {
     s32 i;
     const char* name;
     const char* anim;

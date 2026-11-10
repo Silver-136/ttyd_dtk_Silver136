@@ -38,21 +38,21 @@ typedef struct DigAnim {
 } DigAnim;
 static s32 work[1];
 
-USER_FUNC(evt_action_sub);
-USER_FUNC(gravity_scale);
+static USER_FUNC(evt_action_sub);
+static USER_FUNC(gravity_scale);
 USER_FUNC(movie);
-USER_FUNC(sound_fade);
+static USER_FUNC(sound_fade);
 static USER_FUNC(z);
 
 static s32* wp[1];
 static DigAnim anim_tbl[48];
-EvtWord evt_action_1_2[154];
-EvtWord evt_action_1[7];
-EvtWord evt_action_2[7];
-EvtWord evt_action_jump[42];
-EvtWord evt_action_fall[45];
-EvtWord evt_action_walk[57];
-EvtWord evt_action[111];
+static EvtWord evt_action_1_2[154];
+static EvtWord evt_action_1[7];
+static EvtWord evt_action_2[7];
+static EvtWord evt_action_jump[42];
+static EvtWord evt_action_fall[45];
+static EvtWord evt_action_walk[57];
+static EvtWord evt_action[111];
 EvtWord dig_00_init_evt[107];
 
 /**
@@ -99,7 +99,7 @@ void dig_thpStop(void) {
  * On an IS-Viewer unit it draws the line "the movie plays here" (in Japanese) instead and counts frames.
  * The EU release logs a message when a frame fails to decode.
  */
-void movie_draw(CameraId camera, void* param) {
+static void movie_draw(CameraId camera, void* param) {
     u16 width;
     u16 height;
     const char* msg;
@@ -153,7 +153,7 @@ USER_FUNC(movie) {
 }
 
 /** Script helper: fades the movie sound to zero over two seconds. */
-USER_FUNC(sound_fade) {
+static USER_FUNC(sound_fade) {
     THPSimpleSetVolume(0, 2000);
     return EVT_RETURN_DONE;
 }
@@ -162,14 +162,14 @@ USER_FUNC(sound_fade) {
  * Script helper: args[0] is an NPC name; sets its jump gravity to 0.1
  * so it floats down slowly (the "fall" parade action).
  */
-USER_FUNC(gravity_scale) {
+static USER_FUNC(gravity_scale) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
     npc->jumpGravity = 0.1f;
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(evt_action_sub) {
+static USER_FUNC(evt_action_sub) {
     EvtWord* args = event->args;
     s32 idx;
     u32* maskp;
@@ -293,7 +293,7 @@ static DigAnim anim_tbl[] = {
  * the character appears at a random X below the bottom of the screen facing a random side, rises for 0.7 s,
  * then either turns left and right (LF(0) = 0) or just waits for a second, sinks away in 0.4 s and is deleted.
  */
-EVT_BEGIN(evt_action_1_2)
+static EVT_BEGIN(evt_action_1_2)
     CALL(evt_sub_random, 400, LW(0))
     SUBTRACT(LW(0), 200)
     CALL(evt_npc_get_height, LW(10), LW(9))
@@ -348,19 +348,19 @@ EVT_BEGIN(evt_action_1_2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_action_1)
+static EVT_BEGIN(evt_action_1)
     SET_VALUE(LF(0), 0)
     CALL_CHILD(evt_action_1_2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_action_2)
+static EVT_BEGIN(evt_action_2)
     SET_VALUE(LF(0), 1)
     CALL_CHILD(evt_action_1_2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_action_jump)
+static EVT_BEGIN(evt_action_jump)
     CALL(evt_sub_random, 400, LW(0))
     SUBTRACT(LW(0), 200)
     CALL(evt_sub_random, 360, LW(5))
@@ -373,7 +373,7 @@ EVT_BEGIN(evt_action_jump)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_action_fall)
+static EVT_BEGIN(evt_action_fall)
     CALL(evt_sub_random, 400, LW(0))
     SUBTRACT(LW(0), 200)
     CALL(evt_npc_set_position, LW(10), LW(0), 300, 0)
@@ -391,7 +391,7 @@ EVT_BEGIN(evt_action_fall)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_action_walk)
+static EVT_BEGIN(evt_action_walk)
     CALL(evt_sub_random, 320, LW(0))
     SUBTRACT(LW(0), 160)
     SUBTRACT(LW(0), 100)
@@ -408,7 +408,7 @@ EVT_BEGIN(evt_action_walk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_action)
+static EVT_BEGIN(evt_action)
     LOOP(0)
         CALL(evt_action_sub, LW(0), LW(1), LW(2), LW(3))
         SET_VALUE(LW(10), LW(1))

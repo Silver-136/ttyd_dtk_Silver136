@@ -30,8 +30,8 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-EvtWord s_bero_close[12];
-EvtWord s_bero_open[12];
+static EvtWord s_bero_close[12];
+static EvtWord s_bero_open[12];
 static BeroEntry bero_data_a[4];
 static BeroEntry bero_data_b[4];
 static BeroEntry bero_data_c[4];
@@ -50,9 +50,9 @@ static EvtWord talk_madam_ring_return[67];
 
 static EvtWord talk_madam[195];
 static NpcSetupInfo npc_data[7];
-NpcSetupInfo npc_data_2[3];
+static NpcSetupInfo npc_data_2[3];
 static EvtWord evt_daiji_kami[41];
-EvtWord evt_pikary_arrival[141];
+static EvtWord evt_pikary_arrival[141];
 
 #if VERSION <= VERSION_DEMO_JP
 static const char* access_tbl[5];
@@ -80,7 +80,7 @@ EvtWord talk_syasyou[19];
 static BeroEntry bero_data_a_return[4];
 static BeroEntry bero_data_b_return[4];
 static BeroEntry bero_data_c_return[4];
-BeroEntry gor_bero[2];
+static BeroEntry gor_bero[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_01_init_evt_nidome[];
@@ -96,7 +96,7 @@ EvtWord rsh_01_c_init_evt_nidome[41];
  * Enter animation of the south door (s_bero) of rsh_01:
  * slides the s_tobira door object by the door animation's progress value in LW(0), scaled by -0.333.
  */
-EVT_BEGIN(s_bero_close)
+static EVT_BEGIN(s_bero_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.3330078f))
     CALL(evt_mapobj_trans, 0, STRING("s_tobira"), LW(0), 0, 0)
     RETURN
@@ -107,7 +107,7 @@ EVT_END()
  * slides the s_tobira door object by the door animation's progress value in LW(0),
  * scaled by -0.333 (same motion as s_bero_close).
  */
-EVT_BEGIN(s_bero_open)
+static EVT_BEGIN(s_bero_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.3330078f))
     CALL(evt_mapobj_trans, 0, STRING("s_tobira"), LW(0), 0, 0)
     RETURN
@@ -562,7 +562,7 @@ static NpcSetupInfo npc_data[] = {
 };
 
 /** Second NPC setup of the car, used by variants b and c and by the second-visit inits: Toron and the madam. */
-NpcSetupInfo npc_data_2[] = {
+static NpcSetupInfo npc_data_2[] = {
     {
         "トロン", // name (Zip Toad)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
@@ -613,7 +613,7 @@ EVT_END()
  * each says a line (stg6_rsh_248 to 252), then the story advances to STG6_49_00_TRAIN_ARRIVAL
  * and the map changes to pik_00 with an iris fade.
  */
-EVT_BEGIN(evt_pikary_arrival)
+static EVT_BEGIN(evt_pikary_arrival)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -100, 0, 0)
     CALL(evt_npc_set_position, STRING("車掌"), 0, 0, 0)
     CALL(evt_npc_set_position, STRING("コック"), 30, 0, 10)
@@ -1065,7 +1065,7 @@ static BeroEntry bero_data_c_return[] = {
 };
 
 /** Replacement exit used when the train stands at Rogueport: s_bero leads to gor_04. */
-BeroEntry gor_bero[] = {
+static BeroEntry gor_bero[] = {
     {
         "s_bero", // hitName
         1, // type

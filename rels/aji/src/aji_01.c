@@ -39,7 +39,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(get_password);
+static USER_FUNC(get_password);
 static USER_FUNC(peach_evt_toumei);
 static USER_FUNC(peach_set_pose);
 
@@ -55,25 +55,25 @@ static EvtWord n1_door_open[22];
 static EvtWord n1_door_close[22];
 static EvtWord n2_door_open[22];
 static EvtWord n2_door_close[22];
-EvtWord n3_door_open[22];
-EvtWord n3_door_close[22];
-EvtWord n4_door_open[22];
-EvtWord n4_door_close[22];
-EvtWord w3_door_open[22];
-EvtWord w3_door_close[22];
+static EvtWord n3_door_open[22];
+static EvtWord n3_door_close[22];
+static EvtWord n4_door_open[22];
+static EvtWord n4_door_close[22];
+static EvtWord w3_door_open[22];
+static EvtWord w3_door_close[22];
 static EvtWord e3_door_open[22];
 static EvtWord e3_door_close[22];
-EvtWord w4_door_open[22];
-EvtWord w4_door_close[22];
-EvtWord e4_door_open[22];
-EvtWord e4_door_close[22];
-EvtWord w5_door_open[22];
-EvtWord w5_door_close[22];
-EvtWord e5_door_open[22];
-EvtWord e5_door_close[22];
+static EvtWord w4_door_open[22];
+static EvtWord w4_door_close[22];
+static EvtWord e4_door_open[22];
+static EvtWord e4_door_close[22];
+static EvtWord w5_door_open[22];
+static EvtWord w5_door_close[22];
+static EvtWord e5_door_open[22];
+static EvtWord e5_door_close[22];
 static BeroEntry bero_entry_data[15];
-BeroEntry e_bero_5_peach[2];
-s32 elv_key1[2];
+static BeroEntry e_bero_5_peach[2];
+static s32 elv_key1[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord elv_unlock1[];
@@ -81,7 +81,7 @@ extern EvtWord elv_unlock1[];
 EvtWord elv_unlock1[131];
 #endif
 
-s32 elv_key2[2];
+static s32 elv_key2[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord elv_unlock2[];
@@ -89,38 +89,38 @@ extern EvtWord elv_unlock2[];
 EvtWord elv_unlock2[131];
 #endif
 
-EvtWord ele1_door_open[139];
-EvtWord ele1_door_close[139];
+static EvtWord ele1_door_open[139];
+static EvtWord ele1_door_close[139];
 
 #if VERSION >= VERSION_US
-EvtWord ele_1[607];
+static EvtWord ele_1[607];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord ele_1[591];
+static EvtWord ele_1[591];
 #else
-EvtWord ele_1[595];
+static EvtWord ele_1[595];
 #endif
 #endif
 
-EvtWord ele2_door_open[139];
-EvtWord ele2_door_close[139];
+static EvtWord ele2_door_open[139];
+static EvtWord ele2_door_close[139];
 
 #if VERSION >= VERSION_US
-EvtWord ele_2[634];
+static EvtWord ele_2[634];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord ele_2[618];
+static EvtWord ele_2[618];
 #else
-EvtWord ele_2[622];
+static EvtWord ele_2[622];
 #endif
 #endif
 
 static EvtWord evt_elv_init[271];
-EvtWord key_lock[14];
+static EvtWord key_lock[14];
 EvtWord last_key_lock[36];
 EvtWord last_elv_lock[36];
-EvtWord evt_key_init[242];
-EvtWord evt_aikotoba[188];
+static EvtWord evt_key_init[242];
+static EvtWord evt_aikotoba[188];
 static EvtWord peach_evt_stg1[32];
 static EvtWord peach_evt_stg1_1[41];
 EvtWord peach_evt_stg1_2[106];
@@ -129,18 +129,18 @@ static EvtWord peach_evt_stg3[25];
 static EvtWord peach_evt_stg5[51];
 static EvtWord peach_evt_stg5_1[46];
 static EvtWord peach_evt_door_stop[14];
-EvtWord peach_evt_ele_2[505];
-EvtWord peach_evt_ele_init[177];
-EvtWord peach_evt_key_init[178];
-EvtWord peach_evt_init[365];
+static EvtWord peach_evt_ele_2[505];
+static EvtWord peach_evt_ele_init[177];
+static EvtWord peach_evt_key_init[178];
+static EvtWord peach_evt_init[365];
 static EvtWord teshita1_init[42];
-EvtWord teshita1_talk[14];
+static EvtWord teshita1_talk[14];
 static EvtWord teshita2_init[51];
-EvtWord teshita2_talk[14];
-EvtWord teshita2_regl[35];
+static EvtWord teshita2_talk[14];
+static EvtWord teshita2_regl[35];
 static EvtWord teshita3_init[46];
-EvtWord teshita3_talk[14];
-EvtWord teshita3_regl[35];
+static EvtWord teshita3_talk[14];
+static EvtWord teshita3_regl[35];
 static NpcSetupInfo npcEnt[4];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -342,7 +342,7 @@ EVT_END()
  * the two halves in opposite directions; the bero door animation calls it with the door's opening progress in
  * LW(0).
  */
-EVT_BEGIN(n3_door_open)
+static EVT_BEGIN(n3_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door8_2"), LW(0), 0, 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -354,7 +354,7 @@ EVT_END()
  * Closing step of door n3: the same slide as n3_door_open (S_door8_1/S_door8_2 along X, scaled 0.166),
  * driven by the interpolated value in LW(0).
  */
-EVT_BEGIN(n3_door_close)
+static EVT_BEGIN(n3_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door8_2"), LW(0), 0, 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -366,7 +366,7 @@ EVT_END()
  * Slides the double door n4 (S_door9_1 and S_door9_2) sideways along X by LW(0) times 0.166,
  * the two halves in opposite directions; door animation of the n4 exit.
  */
-EVT_BEGIN(n4_door_open)
+static EVT_BEGIN(n4_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door9_2"), LW(0), 0, 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -375,7 +375,7 @@ EVT_BEGIN(n4_door_open)
 EVT_END()
 
 /** Closing step of door n4 (S_door9_1/S_door9_2 along X); the same slide as n4_door_open. */
-EVT_BEGIN(n4_door_close)
+static EVT_BEGIN(n4_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door9_2"), LW(0), 0, 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -387,7 +387,7 @@ EVT_END()
  * Slides the double door w3 (S_door5_1 and S_door5_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the w3 exit.
  */
-EVT_BEGIN(w3_door_open)
+static EVT_BEGIN(w3_door_open)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -400,7 +400,7 @@ EVT_BEGIN(w3_door_open)
 EVT_END()
 
 /** Closing step of door w3 (S_door5_1/S_door5_2 along Z); the same slide as w3_door_open. */
-EVT_BEGIN(w3_door_close)
+static EVT_BEGIN(w3_door_close)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -450,7 +450,7 @@ EVT_END()
  * Slides the double door w4 (S_door11_1 and S_door11_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the w4 exit.
  */
-EVT_BEGIN(w4_door_open)
+static EVT_BEGIN(w4_door_open)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -463,7 +463,7 @@ EVT_BEGIN(w4_door_open)
 EVT_END()
 
 /** Closing step of door w4 (S_door11_1/S_door11_2 along Z); the same slide as w4_door_open. */
-EVT_BEGIN(w4_door_close)
+static EVT_BEGIN(w4_door_close)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -479,7 +479,7 @@ EVT_END()
  * Slides the double door e4 (S_door12_1 and S_door12_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the e4 exit.
  */
-EVT_BEGIN(e4_door_open)
+static EVT_BEGIN(e4_door_open)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -492,7 +492,7 @@ EVT_BEGIN(e4_door_open)
 EVT_END()
 
 /** Closing step of door e4 (S_door12_1/S_door12_2 along Z); the same slide as e4_door_open. */
-EVT_BEGIN(e4_door_close)
+static EVT_BEGIN(e4_door_close)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -508,7 +508,7 @@ EVT_END()
  * Slides the double door w5 (S_door13_1 and S_door13_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the w5 exit.
  */
-EVT_BEGIN(w5_door_open)
+static EVT_BEGIN(w5_door_open)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -521,7 +521,7 @@ EVT_BEGIN(w5_door_open)
 EVT_END()
 
 /** Closing step of door w5 (S_door13_1/S_door13_2 along Z); the same slide as w5_door_open. */
-EVT_BEGIN(w5_door_close)
+static EVT_BEGIN(w5_door_close)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -537,7 +537,7 @@ EVT_END()
  * Slides the double door e5 (S_door14_1 and S_door14_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the e5 exit, also called directly by peach_evt_stg1_2.
  */
-EVT_BEGIN(e5_door_open)
+static EVT_BEGIN(e5_door_open)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -550,7 +550,7 @@ EVT_BEGIN(e5_door_open)
 EVT_END()
 
 /** Closing step of door e5 (S_door14_1/S_door14_2 along Z); the same slide as e5_door_open. */
-EVT_BEGIN(e5_door_close)
+static EVT_BEGIN(e5_door_close)
 #if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
@@ -828,7 +828,7 @@ static BeroEntry bero_entry_data[] = {
  * Replacement for the east door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads on
  * to aji_17 (w_bero).
  */
-BeroEntry e_bero_5_peach[] = {
+static BeroEntry e_bero_5_peach[] = {
     {
         "e_bero_5", // hitName
         0, 0, // type..sfxId
@@ -849,7 +849,7 @@ BeroEntry e_bero_5_peach[] = {
 /**
  * Key item the player can choose in the item menu to unlock the first card-key elevator: the Elevator Key.
  */
-s32 elv_key1[] = {
+static s32 elv_key1[] = {
     ITEM_ELEVATOR_KEY_0x1B, -1,
 };
 
@@ -898,7 +898,7 @@ EVT_BEGIN(elv_unlock1)
 EVT_END()
 
 /** Key item the player can choose to unlock the second elevator: the second Elevator Key. */
-s32 elv_key2[] = {
+static s32 elv_key2[] = {
     ITEM_ELEVATOR_KEY_0x1C, -1,
 };
 
@@ -950,7 +950,7 @@ EVT_END()
  * the floor's door pair swings open (500 ms), then the cabin door ee1_door1/2 after 300 ms,
  * each with its elevator sound.
  */
-EVT_BEGIN(ele1_door_open)
+static EVT_BEGIN(ele1_door_open)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(6), STRING("e1_1_door1"))
@@ -1002,7 +1002,7 @@ EVT_END()
  * Closes the doors of elevator 1 on floor LW(0) (0 to 2):
  * the cabin door ee1_door1/2 swings shut first, then the floor's door pair after 300 ms.
  */
-EVT_BEGIN(ele1_door_close)
+static EVT_BEGIN(ele1_door_close)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(6), STRING("e1_1_door1"))
@@ -1056,7 +1056,7 @@ EVT_END()
  * and the cabin ere1_m (hit area A_ere1_m) rides to the chosen floor with the doors opening and closing.
  * GW(0) remembers the floor the cabin is on.
  */
-EVT_BEGIN(ele_1)
+static EVT_BEGIN(ele_1)
     // Mario stops and waits for his partner to finish what it is doing.
     SET_VALUE(LW(5), LW(0))
     CALL(evt_mario_key_onoff, 0)
@@ -1287,7 +1287,7 @@ EVT_END()
  * Opens the doors of elevator 2 on floor LW(0) (2 to 4):
  * the floor's door pair, then the cabin door ee2_door1/2 after 300 ms; the same animation as ele1_door_open.
  */
-EVT_BEGIN(ele2_door_open)
+static EVT_BEGIN(ele2_door_open)
     SWITCH(LW(0))
         CASE_EQUAL(2)
         SET_VALUE(LW(6), STRING("e2_4_door1"))
@@ -1336,7 +1336,7 @@ EVT_BEGIN(ele2_door_open)
 EVT_END()
 
 /** Closes the doors of elevator 2 on floor LW(0) (2 to 4); the mirror of ele2_door_open. */
-EVT_BEGIN(ele2_door_close)
+static EVT_BEGIN(ele2_door_close)
     SWITCH(LW(0))
         CASE_EQUAL(2)
         SET_VALUE(LW(6), STRING("e2_4_door1"))
@@ -1388,7 +1388,7 @@ EVT_END()
  * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
  * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
  */
-EVT_BEGIN(ele_2)
+static EVT_BEGIN(ele_2)
     SET_VALUE(LW(5), LW(0))
 
     // Without the second Elevator Key the elevator only asks for it.
@@ -1686,7 +1686,7 @@ static EVT_BEGIN(evt_elv_init)
 EVT_END()
 
 /** Case script of the locked exit e_bero_5 before Lord Crump is beaten: shows stg7_aji_71. */
-EVT_BEGIN(key_lock)
+static EVT_BEGIN(key_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_71"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -1733,7 +1733,7 @@ EVT_END()
  * and in the stretch after Crump's defeat the north and the side doors get last_key_lock;
  * each locked exit has its bero case switched off.
  */
-EVT_BEGIN(evt_key_init)
+static EVT_BEGIN(evt_key_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero_5"), 0, PTR(key_lock), 0)
         SET_VALUE(LW(0), STRING("e_bero_5"))
@@ -1796,7 +1796,7 @@ EVT_END()
  * A match opens the door (STG7_12_PASSWORD_ENTRY, bero case switched on, text stg7_aji_70);
  * otherwise stg7_aji_69 is shown.
  */
-EVT_BEGIN(evt_aikotoba)
+static EVT_BEGIN(evt_aikotoba)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_68"), 0, 0)
     CALL(evt_paper_entry, STRING("OFF_d_roll"))
@@ -2040,7 +2040,7 @@ EVT_END()
  * in chapter 5 TEC sends her away from Grodus's room to the green-lamp room (218).
  * GW(1) records the cabin's floor.
  */
-EVT_BEGIN(peach_evt_ele_2)
+static EVT_BEGIN(peach_evt_ele_2)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(9), LW(1))
 
@@ -2212,7 +2212,7 @@ EVT_END()
  * (STG5_44_PEACH_TECS_REQUEST_2 or not), puts the cabin on floor 4 (GW(1)) and attaches peach_evt_ele_2
  * or peach_evt_door_stop to the key and door areas.
  */
-EVT_BEGIN(peach_evt_ele_init)
+static EVT_BEGIN(peach_evt_ele_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
@@ -2267,7 +2267,7 @@ EVT_END()
  * LF(0) and LF(1) mark the two errand periods in which n_bero_4 and n_bero_1 are usable;
  * the other doors get their red lights and peach_evt_door_stop, and their bero cases are switched off.
  */
-EVT_BEGIN(peach_evt_key_init)
+static EVT_BEGIN(peach_evt_key_init)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_PEACH_THE_SECRET_WEAPON)
@@ -2325,7 +2325,7 @@ EVT_END()
  * peach_evt_stg1_2, peach_evt_stg3, peach_evt_stg3_1, or the guard at the potion puzzle stage),
  * closing the doors she may not use.
  */
-EVT_BEGIN(peach_evt_init)
+static EVT_BEGIN(peach_evt_init)
     SET_VALUE(LW(15), 0)
 
     // Continue only when the playable character is already Peach; restore the uniform when its flag is set.
@@ -2474,7 +2474,7 @@ static EVT_BEGIN(teshita1_init)
 EVT_END()
 
 /** Talk script of the X-Naut guard "me" in Peach's section; one line, peach_aji_138. */
-EVT_BEGIN(teshita1_talk)
+static EVT_BEGIN(teshita1_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_138"), 0, STRING("me"))
     CALL(evt_mario_key_onoff, 1)
@@ -2500,7 +2500,7 @@ static EVT_BEGIN(teshita2_init)
 EVT_END()
 
 /** Talk script of the X-Naut guard 手下２ in Peach's section; one line, peach_aji_139. */
-EVT_BEGIN(teshita2_talk)
+static EVT_BEGIN(teshita2_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_139"), 0, STRING("手下２"))
     CALL(evt_mario_key_onoff, 1)
@@ -2508,7 +2508,7 @@ EVT_BEGIN(teshita2_talk)
 EVT_END()
 
 /** Patrol loop of the guard "me": walks between x = 950 and -950 at z = -15, forever. */
-EVT_BEGIN(teshita2_regl)
+static EVT_BEGIN(teshita2_regl)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), 950, -15, 0, 30, 0)
         WAIT_MS(300)
@@ -2544,7 +2544,7 @@ static EVT_BEGIN(teshita3_init)
 EVT_END()
 
 /** Talk script of the X-Naut guard 手下３ in Peach's section; one line, peach_aji_140. */
-EVT_BEGIN(teshita3_talk)
+static EVT_BEGIN(teshita3_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_140"), 0, STRING("手下３"))
     CALL(evt_mario_key_onoff, 1)
@@ -2552,7 +2552,7 @@ EVT_BEGIN(teshita3_talk)
 EVT_END()
 
 /** Patrol loop of the third guard: the same back-and-forth walk as teshita2_regl, forever. */
-EVT_BEGIN(teshita3_regl)
+static EVT_BEGIN(teshita3_regl)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), -950, 20, 0, 30, 0)
         WAIT_MS(300)
@@ -2671,7 +2671,7 @@ EVT_BEGIN(aji_01_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(get_password) {
+static USER_FUNC(get_password) {
     EvtWord* args = event->args;
 
     // Compare against the localized message text rather than a hard-coded password.

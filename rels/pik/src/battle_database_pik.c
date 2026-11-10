@@ -9,47 +9,47 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-BattleStageObjectData pik_btlobject_data[2];
-BattleStageData pik_btlstage_data[1];
-BattleUnitSetup btlparty_pik_pik_06_01_off_1[2];
-BattleGroupSetup btlgrp_pik_pik_06_01_off_1;
-BattleUnitSetup btlparty_pik_pik_06_02_off_1[3];
-BattleGroupSetup btlgrp_pik_pik_06_02_off_1;
-BattleUnitSetup btlparty_pik_pik_06_03_off_1[1];
-BattleGroupSetup btlgrp_pik_pik_06_03_off_1;
-BattleUnitSetup btlparty_pik_pik_06_04_off_1[2];
-BattleGroupSetup btlgrp_pik_pik_06_04_off_1;
-BattleUnitSetup btlparty_pik_pik_06_05_off_1[2];
-BattleGroupSetup btlgrp_pik_pik_06_05_off_1;
-BattleUnitSetup btlparty_pik_pik_06_06_off_1[4];
-BattleGroupSetup btlgrp_pik_pik_06_06_off_1;
-BattleUnitSetup btlparty_pik_pik_06_07_off_1[1];
-BattleGroupSetup btlgrp_pik_pik_06_07_off_1;
-BattleUnitSetup btlparty_pik_pik_06_08_off_1[3];
-BattleGroupSetup btlgrp_pik_pik_06_08_off_1;
-BattleUnitSetup btlparty_pik_pik_06_09_off_1[4];
-BattleGroupSetup btlgrp_pik_pik_06_09_off_1;
-NpcBattleSelect btlgrpsel_pik_btlno_pik_test1_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_01_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_02_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_03_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_04_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_05_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_06_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_07_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_08_off[2];
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[2];
+static BattleStageObjectData pik_btlobject_data[2];
+static BattleStageData pik_btlstage_data[1];
+static BattleUnitSetup btlparty_pik_pik_06_01_off_1[2];
+static BattleGroupSetup btlgrp_pik_pik_06_01_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_02_off_1[3];
+static BattleGroupSetup btlgrp_pik_pik_06_02_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_03_off_1[1];
+static BattleGroupSetup btlgrp_pik_pik_06_03_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_04_off_1[2];
+static BattleGroupSetup btlgrp_pik_pik_06_04_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_05_off_1[2];
+static BattleGroupSetup btlgrp_pik_pik_06_05_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_06_off_1[4];
+static BattleGroupSetup btlgrp_pik_pik_06_06_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_07_off_1[1];
+static BattleGroupSetup btlgrp_pik_pik_06_07_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_08_off_1[3];
+static BattleGroupSetup btlgrp_pik_pik_06_08_off_1;
+static BattleUnitSetup btlparty_pik_pik_06_09_off_1[4];
+static BattleGroupSetup btlgrp_pik_pik_06_09_off_1;
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_test1_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_01_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_02_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_03_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_04_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_05_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_06_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_07_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_08_off[2];
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[2];
 NpcSetupBattleInfo btlsetup_pik_tbl[11];
 NpcTerritoryInfo btl_pik_setup_no_tbl[11];
 
 /** Scenery props of the Poshley Heights battle stage (stg_06_4) with their positions. */
-BattleStageObjectData pik_btlobject_data[] = {
+static BattleStageObjectData pik_btlobject_data[] = {
     {"C", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
     {"A2", 2, STAGE_LAYER_A2, {0.0f, 0.0f, -74.0f}, 0, 60, {0}},
 };
 
 /** The Poshley Heights battle stage (bti_01 backdrop, stg_06_4 scenery). */
-BattleStageData pik_btlstage_data[] = {
+static BattleStageData pik_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_06_4", // specificStageDataDir
@@ -62,7 +62,7 @@ BattleStageData pik_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_pik_pik_06_01_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_01_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -85,7 +85,7 @@ BattleUnitSetup btlparty_pik_pik_06_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_01_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_01_off_1 = {
     2, // numEnemies
     btlparty_pik_pik_06_01_off_1, // enemyData
     25, // heldItemWeight
@@ -96,7 +96,7 @@ BattleGroupSetup btlgrp_pik_pik_06_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -129,7 +129,7 @@ BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_02_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_02_off_1 = {
     3, // numEnemies
     btlparty_pik_pik_06_02_off_1, // enemyData
     25, // heldItemWeight
@@ -140,7 +140,7 @@ BattleGroupSetup btlgrp_pik_pik_06_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_03_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_03_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -153,7 +153,7 @@ BattleUnitSetup btlparty_pik_pik_06_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_03_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_03_off_1 = {
     1, // numEnemies
     btlparty_pik_pik_06_03_off_1, // enemyData
     25, // heldItemWeight
@@ -164,7 +164,7 @@ BattleGroupSetup btlgrp_pik_pik_06_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_04_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_04_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -187,7 +187,7 @@ BattleUnitSetup btlparty_pik_pik_06_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_04_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_04_off_1 = {
     2, // numEnemies
     btlparty_pik_pik_06_04_off_1, // enemyData
     25, // heldItemWeight
@@ -198,7 +198,7 @@ BattleGroupSetup btlgrp_pik_pik_06_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_05_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_05_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -221,7 +221,7 @@ BattleUnitSetup btlparty_pik_pik_06_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_05_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_05_off_1 = {
     2, // numEnemies
     btlparty_pik_pik_06_05_off_1, // enemyData
     25, // heldItemWeight
@@ -232,7 +232,7 @@ BattleGroupSetup btlgrp_pik_pik_06_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -275,7 +275,7 @@ BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_06_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_06_off_1 = {
     4, // numEnemies
     btlparty_pik_pik_06_06_off_1, // enemyData
     25, // heldItemWeight
@@ -286,7 +286,7 @@ BattleGroupSetup btlgrp_pik_pik_06_06_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_07_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_07_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -299,7 +299,7 @@ BattleUnitSetup btlparty_pik_pik_06_07_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_07_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_07_off_1 = {
     1, // numEnemies
     btlparty_pik_pik_06_07_off_1, // enemyData
     25, // heldItemWeight
@@ -310,7 +310,7 @@ BattleGroupSetup btlgrp_pik_pik_06_07_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -343,7 +343,7 @@ BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_08_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_08_off_1 = {
     3, // numEnemies
     btlparty_pik_pik_06_08_off_1, // enemyData
     25, // heldItemWeight
@@ -354,7 +354,7 @@ BattleGroupSetup btlgrp_pik_pik_06_08_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
+static BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
     {
         &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -397,7 +397,7 @@ BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_pik_pik_06_09_off_1 = {
+static BattleGroupSetup btlgrp_pik_pik_06_09_off_1 = {
     4, // numEnemies
     btlparty_pik_pik_06_09_off_1, // enemyData
     25, // heldItemWeight
@@ -408,52 +408,52 @@ BattleGroupSetup btlgrp_pik_pik_06_09_off_1 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_test1_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_test1_off[] = {
     {50, &btlgrp_pik_pik_06_01_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_01_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_01_off[] = {
     {20, &btlgrp_pik_pik_06_01_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_02_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_02_off[] = {
     {20, &btlgrp_pik_pik_06_02_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_03_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_03_off[] = {
     {20, &btlgrp_pik_pik_06_03_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_04_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_04_off[] = {
     {20, &btlgrp_pik_pik_06_04_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_05_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_05_off[] = {
     {20, &btlgrp_pik_pik_06_05_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_06_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_06_off[] = {
     {20, &btlgrp_pik_pik_06_06_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_07_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_07_off[] = {
     {20, &btlgrp_pik_pik_06_07_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_08_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_08_off[] = {
     {20, &btlgrp_pik_pik_06_08_off_1, pik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[] = {
+static NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[] = {
     {20, &btlgrp_pik_pik_06_09_off_1, pik_btlstage_data},
     {0},
 };

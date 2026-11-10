@@ -37,26 +37,26 @@
 #include "driver/seqdrv.h"
 #include "tou.h"
 
-USER_FUNC(kemuri_stop);
+static USER_FUNC(kemuri_stop);
 static USER_FUNC(make_list);
-USER_FUNC(memoryRY);
+static USER_FUNC(memoryRY);
 
 static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
-EvtWord _1_door_open[12];
-EvtWord _1_door_close[12];
-EvtWord _2_door_open[12];
-EvtWord _2_door_close[12];
-EvtWord _3_door_open[12];
-EvtWord _3_door_close[12];
-EvtWord _4_door_open[12];
-EvtWord _4_door_close[12];
-EvtWord _5_door_open[12];
-EvtWord _5_door_close[12];
-EvtWord _6_door_open[12];
-EvtWord _6_door_close[12];
-EvtWord _7_door_open[12];
-EvtWord _7_door_close[12];
+static EvtWord _1_door_open[12];
+static EvtWord _1_door_close[12];
+static EvtWord _2_door_open[12];
+static EvtWord _2_door_close[12];
+static EvtWord _3_door_open[12];
+static EvtWord _3_door_close[12];
+static EvtWord _4_door_open[12];
+static EvtWord _4_door_close[12];
+static EvtWord _5_door_open[12];
+static EvtWord _5_door_close[12];
+static EvtWord _6_door_open[12];
+static EvtWord _6_door_close[12];
+static EvtWord _7_door_open[12];
+static EvtWord _7_door_close[12];
 static EvtWord e_door_open[12];
 static EvtWord e_door_close[12];
 static EvtWord n1_door_open[22];
@@ -71,11 +71,11 @@ extern EvtWord move_g[];
 EvtWord move_g[233];
 #endif
 
-EvtWord move_g_1_dokimasen[25];
+static EvtWord move_g_1_dokimasen[25];
 EvtWord init_g_1[59];
-EvtWord move_g_1_dokimasu[51];
-EvtWord talk_g_1[90];
-EvtWord move_g_1[52];
+static EvtWord move_g_1_dokimasu[51];
+static EvtWord talk_g_1[90];
+static EvtWord move_g_1[52];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord init_g_2[];
@@ -83,11 +83,11 @@ extern EvtWord init_g_2[];
 EvtWord init_g_2[26];
 #endif
 
-EvtWord talk_g_2[59];
-EvtWord move_g_2[56];
-EvtWord init_g_3[30];
-EvtWord talk_g_3[39];
-EvtWord move_g_3[37];
+static EvtWord talk_g_2[59];
+static EvtWord move_g_2[56];
+static EvtWord init_g_3[30];
+static EvtWord talk_g_3[39];
+static EvtWord move_g_3[37];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord move_g_4_dokimasen[];
@@ -103,26 +103,26 @@ extern EvtWord talk_g_4[];
 EvtWord talk_g_4[271];
 #endif
 
-EvtWord move_g_4[81];
-EvtWord init_g_5[2];
-EvtWord talk_g_5[2];
-EvtWord move_g_5[2];
-EvtWord init_g_6[19];
-EvtWord talk_g_6[31];
-EvtWord move_g_6[30];
-EvtWord init_g_7[8];
-EvtWord talk_g_7[28];
-EvtWord move_g_7[2];
-EvtWord init_g_8[8];
-EvtWord talk_g_8[39];
-EvtWord move_g_8[2];
-EvtWord init_g_9[8];
-EvtWord talk_g_9[47];
-EvtWord move_g_9[11];
-EvtWord init_g_10[25];
-EvtWord talk_g_10[25];
-EvtWord init_g_11[29];
-EvtWord talk_g_11[25];
+static EvtWord move_g_4[81];
+static EvtWord init_g_5[2];
+static EvtWord talk_g_5[2];
+static EvtWord move_g_5[2];
+static EvtWord init_g_6[19];
+static EvtWord talk_g_6[31];
+static EvtWord move_g_6[30];
+static EvtWord init_g_7[8];
+static EvtWord talk_g_7[28];
+static EvtWord move_g_7[2];
+static EvtWord init_g_8[8];
+static EvtWord talk_g_8[39];
+static EvtWord move_g_8[2];
+static EvtWord init_g_9[8];
+static EvtWord talk_g_9[47];
+static EvtWord move_g_9[11];
+static EvtWord init_g_10[25];
+static EvtWord talk_g_10[25];
+static EvtWord init_g_11[29];
+static EvtWord talk_g_11[25];
 static EvtWord init_champ[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -133,7 +133,7 @@ static EvtWord init_brots[58];
 
 static EvtWord talk_brots[149];
 static NpcSetupInfo npcEnt[16];
-EvtWord evt_drop[33];
+static EvtWord evt_drop[33];
 EvtWord evt_gans[145];
 static EvtWord evt_kinoshikowa[193];
 EvtWord evt_kinoshikowa2[161];
@@ -154,9 +154,9 @@ static EvtWord evt_chk[23];
 
 static EvtWord evt_lock[14];
 EvtWord evt_souko_talk[272];
-EvtWord evt_bred_nigeru[116];
-EvtWord boss_msg[14];
-EvtWord out_from_tou_10_re[22];
+static EvtWord evt_bred_nigeru[116];
+static EvtWord boss_msg[14];
+static EvtWord out_from_tou_10_re[22];
 
 #if VERSION >= VERSION_US
 EvtWord tou_04_init_evt[652];
@@ -172,7 +172,7 @@ EvtWord tou_04_init_evt[668];
  * Script helper: remembers the calling NPC's current facing direction in npc->savedDirection,
  * so it can turn back after talking.
  */
-USER_FUNC(memoryRY) {
+static USER_FUNC(memoryRY) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
 
     npc->savedDirection = npc->direction;
@@ -200,98 +200,98 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 /** Swings door_1 open (bero animation callback for the corridor's first door). */
-EVT_BEGIN(_1_door_open)
+static EVT_BEGIN(_1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_1 closed. */
-EVT_BEGIN(_1_door_close)
+static EVT_BEGIN(_1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_2 open. */
-EVT_BEGIN(_2_door_open)
+static EVT_BEGIN(_2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_2 closed. */
-EVT_BEGIN(_2_door_close)
+static EVT_BEGIN(_2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_3 open. */
-EVT_BEGIN(_3_door_open)
+static EVT_BEGIN(_3_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_3 closed. */
-EVT_BEGIN(_3_door_close)
+static EVT_BEGIN(_3_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_4 open. */
-EVT_BEGIN(_4_door_open)
+static EVT_BEGIN(_4_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_4 closed. */
-EVT_BEGIN(_4_door_close)
+static EVT_BEGIN(_4_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_5 open. */
-EVT_BEGIN(_5_door_open)
+static EVT_BEGIN(_5_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_5 closed. */
-EVT_BEGIN(_5_door_close)
+static EVT_BEGIN(_5_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_6 open. */
-EVT_BEGIN(_6_door_open)
+static EVT_BEGIN(_6_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_6"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_6 closed. */
-EVT_BEGIN(_6_door_close)
+static EVT_BEGIN(_6_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_6"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_7 open. */
-EVT_BEGIN(_7_door_open)
+static EVT_BEGIN(_7_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_7"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings door_7 closed. */
-EVT_BEGIN(_7_door_close)
+static EVT_BEGIN(_7_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_7"), 0, LW(0), 0)
     RETURN
@@ -653,7 +653,7 @@ EVT_BEGIN(move_g)
 EVT_END()
 
 /** Guard 1 refuses to move: he is placed at (-580, 0, 350), then walks to (-580, 300) once the door entry transition is done. */
-EVT_BEGIN(move_g_1_dokimasen)
+static EVT_BEGIN(move_g_1_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -580, 0, 350)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_key_onoff, 0)
@@ -690,7 +690,7 @@ EVT_END()
  * Guard 1 steps aside ("I'll move"): he walks out of the doorway and Mario can pass;
  * story set to STG3_20_02_BACK_TO_THE_MINORS.
  */
-EVT_BEGIN(move_g_1_dokimasu)
+static EVT_BEGIN(move_g_1_dokimasu)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
     IF_INT_LESS(LW(2), LW(12))
@@ -717,7 +717,7 @@ EVT_END()
  * else stg3_tou_39 again), he waves a minor leaguer (rank above 10) in (stg3_tou_95)
  * and turns a major leaguer away (stg3_tou_96).
  */
-EVT_BEGIN(talk_g_1)
+static EVT_BEGIN(talk_g_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
         CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
@@ -750,7 +750,7 @@ EVT_BEGIN(talk_g_1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(move_g_1)
+static EVT_BEGIN(move_g_1)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         RETURN
     END_IF
@@ -797,7 +797,7 @@ EVT_END()
  * Talk script of guard 2: lines before the first match, during Grubba's plans,
  * and the champion opening scene (Mario pose change, stg3_tou_423_01/02).
  */
-EVT_BEGIN(talk_g_2)
+static EVT_BEGIN(talk_g_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
         CALL(evt_msg_print, 0, STRING("stg3_tou_38"), 0, 0)
@@ -824,7 +824,7 @@ EVT_END()
  * during STG3_21_1ST_MATCH_WITH_RAWK_HAWK before the champion's opening scene,
  * and during STG3_31_GRUBBAS_PLANS; otherwise he does nothing.
  */
-EVT_BEGIN(move_g_2)
+static EVT_BEGIN(move_g_2)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(move_g)
@@ -859,7 +859,7 @@ EVT_END()
  * NPC init for guard 3: placed at (-620, 0, -300) while the majors or tou_11 escort flag is set,
  * otherwise at his post at (-580, 0, -300).
  */
-EVT_BEGIN(init_g_3)
+static EVT_BEGIN(init_g_3)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         CALL(evt_npc_set_position, STRING("me"), -620, 0, -300)
         RETURN
@@ -873,7 +873,7 @@ EVT_BEGIN(init_g_3)
 EVT_END()
 
 /** Talk script of guard 3 (stg3_tou_99, 98, 99_01, 40). */
-EVT_BEGIN(talk_g_3)
+static EVT_BEGIN(talk_g_3)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(1)
@@ -894,7 +894,7 @@ EVT_END()
  * Otherwise he steps out of Mario's way (move_g) when Mario is in the majors (rank 1 to 10),
  * or is the champion (rank 0) while Jolene's escort to the champion's room is pending.
  */
-EVT_BEGIN(move_g_3)
+static EVT_BEGIN(move_g_3)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         RETURN
     END_IF
@@ -1102,7 +1102,7 @@ EVT_END()
  * At STG3_30_04_AIR_DUCT_EXIT, on entry through s_bero_5 from the office,
  * he starts at (-400, 0, -530) and waits for the door entry transition to finish before walking back in front of the door.
  */
-EVT_BEGIN(move_g_4)
+static EVT_BEGIN(move_g_4)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         SET_VALUE(LW(0), 3)
         CALL_CHILD(move_g)
@@ -1137,17 +1137,17 @@ EVT_BEGIN(move_g_4)
 EVT_END()
 
 /** NPC init for guard 5 (empty). */
-EVT_BEGIN(init_g_5)
+static EVT_BEGIN(init_g_5)
     RETURN
 EVT_END()
 
 /** Talk script of guard 5 (unused; empty). */
-EVT_BEGIN(talk_g_5)
+static EVT_BEGIN(talk_g_5)
     RETURN
 EVT_END()
 
 /** Movement script of guard 5 (empty). */
-EVT_BEGIN(move_g_5)
+static EVT_BEGIN(move_g_5)
     RETURN
 EVT_END()
 
@@ -1155,7 +1155,7 @@ EVT_END()
  * NPC init for guard 6: placed at (350, 0, -560) while the champion's room escort flag is set,
  * otherwise at his post at (350, 0, -530).
  */
-EVT_BEGIN(init_g_6)
+static EVT_BEGIN(init_g_6)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         CALL(evt_npc_set_position, STRING("me"), 350, 0, -560)
         RETURN
@@ -1164,7 +1164,7 @@ EVT_BEGIN(init_g_6)
     RETURN
 EVT_END()
 
-EVT_BEGIN(talk_g_6)
+static EVT_BEGIN(talk_g_6)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(1)
@@ -1183,7 +1183,7 @@ EVT_END()
  * otherwise he steps out of Mario's way (move_g) when Mario is the champion (rank 0) or
  * while Grubba's escort is pending.
  */
-EVT_BEGIN(move_g_6)
+static EVT_BEGIN(move_g_6)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         RETURN
     END_IF
@@ -1202,13 +1202,13 @@ EVT_BEGIN(move_g_6)
 EVT_END()
 
 /** NPC init for guard 7: placed at (580, 0, -300). */
-EVT_BEGIN(init_g_7)
+static EVT_BEGIN(init_g_7)
     CALL(evt_npc_set_position, STRING("me"), 580, 0, -300)
     RETURN
 EVT_END()
 
 /** Talk script of guard 7: lines before the first match and during Grubba's plans (stg3_tou_40, 100_01, 100). */
-EVT_BEGIN(talk_g_7)
+static EVT_BEGIN(talk_g_7)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
         CALL(evt_msg_print, 0, STRING("stg3_tou_40"), 0, 0)
@@ -1221,18 +1221,18 @@ EVT_BEGIN(talk_g_7)
 EVT_END()
 
 /** Movement script of guard 7 (empty). */
-EVT_BEGIN(move_g_7)
+static EVT_BEGIN(move_g_7)
     RETURN
 EVT_END()
 
 /** NPC init for guard 8: placed at (520, 0, 0). */
-EVT_BEGIN(init_g_8)
+static EVT_BEGIN(init_g_8)
     CALL(evt_npc_set_position, STRING("me"), 520, 0, 0)
     RETURN
 EVT_END()
 
 /** Talk script of guard 8: lines before the first match and the champion opening scene (stg3_tou_423_03, 94). */
-EVT_BEGIN(talk_g_8)
+static EVT_BEGIN(talk_g_8)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
         CALL(evt_msg_print, 0, STRING("stg3_tou_38"), 0, 0)
@@ -1249,12 +1249,12 @@ EVT_BEGIN(talk_g_8)
 EVT_END()
 
 /** Movement script of guard 8 (empty). */
-EVT_BEGIN(move_g_8)
+static EVT_BEGIN(move_g_8)
     RETURN
 EVT_END()
 
 /** NPC init for guard 9: placed at (580, 0, 300). */
-EVT_BEGIN(init_g_9)
+static EVT_BEGIN(init_g_9)
     CALL(evt_npc_set_position, STRING("me"), 580, 0, 300)
     RETURN
 EVT_END()
@@ -1263,7 +1263,7 @@ EVT_END()
  * Talk script of guard 9: lines before the first match, during Grubba's plans,
  * and after Mario re-enters the league.
  */
-EVT_BEGIN(talk_g_9)
+static EVT_BEGIN(talk_g_9)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
         CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
@@ -1281,7 +1281,7 @@ EVT_BEGIN(talk_g_9)
     RETURN
 EVT_END()
 
-EVT_BEGIN(move_g_9)
+static EVT_BEGIN(move_g_9)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
         SET_VALUE(LW(0), 8)
         CALL_CHILD(move_g)
@@ -1294,7 +1294,7 @@ EVT_END()
  * before the champion's opening scene and during STG3_31_GRUBBAS_PLANS;
  * otherwise his position is left alone.
  */
-EVT_BEGIN(init_g_10)
+static EVT_BEGIN(init_g_10)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -1306,7 +1306,7 @@ EVT_BEGIN(init_g_10)
     RETURN
 EVT_END()
 
-EVT_BEGIN(talk_g_10)
+static EVT_BEGIN(talk_g_10)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -1323,7 +1323,7 @@ EVT_END()
  * before the champion's opening scene and during STG3_31_GRUBBAS_PLANS (otherwise his position is left
  * alone), then turned to face 0 degrees.
  */
-EVT_BEGIN(init_g_11)
+static EVT_BEGIN(init_g_11)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -1336,7 +1336,7 @@ EVT_BEGIN(init_g_11)
     RETURN
 EVT_END()
 
-EVT_BEGIN(talk_g_11)
+static EVT_BEGIN(talk_g_11)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -1668,7 +1668,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /** Plays the dripping-water animation (anm_mizu) with a water-drop sound in the corridor. */
-EVT_BEGIN(evt_drop)
+static EVT_BEGIN(evt_drop)
     LOOP(0)
         CALL(evt_sub_random, 5000, LW(0))
         ADD(LW(0), 1000)
@@ -1681,7 +1681,7 @@ EVT_BEGIN(evt_drop)
     RETURN
 EVT_END()
 
-USER_FUNC(kemuri_stop) {
+static USER_FUNC(kemuri_stop) {
     return EVT_RETURN_DONE;
 }
 
@@ -2425,7 +2425,7 @@ EVT_END()
  * and dashes off down the corridor; the partner wonders if he sent the threatening letters (stg3_tou_297_27_01)
  * and the story advances to STG3_20_06_RAWK_HAWKS_WARNING.
  */
-EVT_BEGIN(evt_bred_nigeru)
+static EVT_BEGIN(evt_bred_nigeru)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_status_onoff, 1, STRING("チャンピョン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_position, STRING("チャンピョン"), -550, 0, -400)
@@ -2457,7 +2457,7 @@ EVT_BEGIN(evt_bred_nigeru)
 EVT_END()
 
 /** Prints the locked-door notice stg3_tou_462_01 with controls locked. */
-EVT_BEGIN(boss_msg)
+static EVT_BEGIN(boss_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_462_01"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -2469,7 +2469,7 @@ EVT_END()
  * rank 10: guard 1 starts at (-590, 0, 350)
  * and walks back to (-590, 300) in front of the door once the door entry transition is done.
  */
-EVT_BEGIN(out_from_tou_10_re)
+static EVT_BEGIN(out_from_tou_10_re)
     CALL(evt_npc_set_position, STRING("ガードマン１"), -590, 0, 350)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)

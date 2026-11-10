@@ -29,7 +29,7 @@ static BattleUnitKindPart parts_christine[1];
 static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[42];
-EvtWord damage_event_christine[22];
+static EvtWord damage_event_christine[22];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_christine[126];
@@ -230,7 +230,7 @@ EVT_END()
  * if the hit defeats her (damage result DAMAGE_RESULT_DEATH) it sets GW(20) to 1
  * so the fake Mario's scripts know the partner double is down, then runs the default damage handling.
  */
-EVT_BEGIN(damage_event_christine)
+static EVT_BEGIN(damage_event_christine)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)

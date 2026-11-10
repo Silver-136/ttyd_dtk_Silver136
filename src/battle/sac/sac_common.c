@@ -18,9 +18,9 @@
 
 static s32 count;
 s32 count2;
-s32 handBeatEnable;
-s32 cheerEnable;
-u8 volPer;
+static s32 handBeatEnable;
+static s32 cheerEnable;
+static u8 volPer;
 
 /**
  * Opening camera of every special move: homes the battle camera on Mario and sets zoom 300,
@@ -107,7 +107,7 @@ EVT_BEGIN(sac_mario_back_home)
 EVT_END()
 
 /** Per-enemy script of sac_enemy_slide_go: slides the unit 480 units to the right (off stage) at speed 5. */
-EVT_BEGIN(enemy_slide_go_evt)
+static EVT_BEGIN(enemy_slide_go_evt)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(0), 480)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))

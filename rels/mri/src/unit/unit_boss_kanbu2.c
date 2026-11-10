@@ -20,7 +20,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_kanbu2_attack;
+static BattleWeapon weapon_kanbu2_attack;
 static EvtWord init_event[37];
 static EvtWord damage_event[10];
 static EvtWord dead_event[26];
@@ -130,7 +130,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of Lord Crump (attack): targets one unit for 2 damage; used by attack_event. */
-BattleWeapon weapon_kanbu2_attack = {
+static BattleWeapon weapon_kanbu2_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

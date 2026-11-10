@@ -49,17 +49,17 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_gundan_zako_group2_attack;
-BattleWeapon weapon_gundan_zako_group2_yusuri_attack;
+static BattleWeapon weapon_gundan_zako_group2_attack;
+static BattleWeapon weapon_gundan_zako_group2_yusuri_attack;
 static EvtWord init_event[21];
 static EvtWord damage_event[129];
 static EvtWord dead_event[136];
 static EvtWord attack_event[32];
-EvtWord fall_attack_event[93];
+static EvtWord fall_attack_event[93];
 static EvtWord shake_attack_event[281];
 static EvtWord hit_check_event[34];
-EvtWord hit_check_event2[7];
-EvtWord hit_check_event_sub[123];
+static EvtWord hit_check_event2[7];
+static EvtWord hit_check_event_sub[123];
 static EvtWord wait_event[6];
 
 /**
@@ -173,7 +173,7 @@ static BattleUnitKindPart parts[] = {
  * Weapon of X-Nauts (attack): targets one unit for 1 damage; used by fall_attack_event,
  * hit_check_event_sub.
  */
-BattleWeapon weapon_gundan_zako_group2_attack = {
+static BattleWeapon weapon_gundan_zako_group2_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -216,7 +216,7 @@ BattleWeapon weapon_gundan_zako_group2_attack = {
 /**
  * Weapon of X-Nauts (yusuri attack): targets every unit for 4 damage; used by shake_attack_event.
  */
-BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
+static BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -381,7 +381,7 @@ EVT_END()
  * Group 2's fall attack: picks one target and the 25 X-Nauts hop along the ceiling until above it
  * and drop onto it one by one (zakogun_attack2), while hit_check_event deals the hits.
  */
-EVT_BEGIN(fall_attack_event)
+static EVT_BEGIN(fall_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_LANDED, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group2_attack))
@@ -967,7 +967,7 @@ static EVT_BEGIN(hit_check_event)
 EVT_END()
 
 /** Hit check of group 2's shaking attack: one last hit (LW(15) = 1) on the current target through hit_check_event_sub. */
-EVT_BEGIN(hit_check_event2)
+static EVT_BEGIN(hit_check_event2)
     SET_VALUE(LW(15), 1)
     CALL_CHILD(hit_check_event_sub)
     RETURN
@@ -978,7 +978,7 @@ EVT_END()
  * or applies the hit with the action-command defence (the last hit when LW(15) is 1).
  * In the fall attack the first landed hit sets UNIT_WORK_HIT_LANDED, after which the last hit skips the dodge check.
  */
-EVT_BEGIN(hit_check_event_sub)
+static EVT_BEGIN(hit_check_event_sub)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_group2_attack))
         IF_INT_EQUAL(LW(15), 1)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_LANDED, LW(0))

@@ -41,28 +41,28 @@ void kuti_callback(s32 type, void** work);
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
-EvtWord sekizou_kaiten[81];
-EvtWord sekizou_kaiten2[56];
+static EvtWord sekizou_kaiten[81];
+static EvtWord sekizou_kaiten2[56];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord sekizou_talk[69];
+static EvtWord sekizou_talk[69];
 #else
-EvtWord sekizou_talk[2];
+static EvtWord sekizou_talk[2];
 #endif
 
 EvtWord evt_item[5];
 static EvtWord evt_down_snd[116];
 static EvtWord evt_up_snd_[12];
 static EvtWord evt_up_snd__[76];
-EvtWord offscreen_to_kuizu[127];
+static EvtWord offscreen_to_kuizu[127];
 static EvtWord offscreen_to_normal[121];
-QuizEntry kuizu_data[7];
+static QuizEntry kuizu_data[7];
 
 #if VERSION >= VERSION_JP
 EvtWord UNK_0x00022a90[46];
 #endif
 
-EvtWord quiz_ok[19];
+static EvtWord quiz_ok[19];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord quiz_ng[];
@@ -76,16 +76,16 @@ EvtWord UNK_0x00022c3c[66];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord kuizu_sekizou[980];
+static EvtWord kuizu_sekizou[980];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord kuizu_sekizou[874];
+static EvtWord kuizu_sekizou[874];
 #else
-EvtWord kuizu_sekizou[920];
+static EvtWord kuizu_sekizou[920];
 #endif
 #endif
 
-EvtWord sekizou_init[47];
+static EvtWord sekizou_init[47];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_04_init_evt[];
@@ -154,7 +154,7 @@ static BeroEntry bero_entry_data[] = {
  * Turns the quiz statue's head (map object LW(2)) around its Y axis from LW(0) degrees to -50 over LW(1) ms with
  * the rotation sound SFX_STG7_DSN_ROUND1, then back to 0 over half a second with a quake sound.
  */
-EVT_BEGIN(sekizou_kaiten)
+static EVT_BEGIN(sekizou_kaiten)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_ROUND1"), LW(10), LW(11), LW(12), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(0), -50, LW(1))
@@ -183,7 +183,7 @@ EVT_END()
  * Turns the statue's head back from LW(0) degrees to 0 over LW(1) ms with the rotation sound
  * SFX_STG7_DSN_ROUND1 and ends with the quake sound SFX_STG7_QUAKE2; used between questions and at the end.
  */
-EVT_BEGIN(sekizou_kaiten2)
+static EVT_BEGIN(sekizou_kaiten2)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_ROUND1"), LW(10), LW(11), LW(12), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(0), 0, LW(1))
@@ -201,7 +201,7 @@ EVT_BEGIN(sekizou_kaiten2)
 EVT_END()
 
 #if VERSION >= VERSION_JP
-EVT_BEGIN(sekizou_talk)
+static EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()
 #endif
@@ -211,7 +211,7 @@ EVT_END()
  * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
  * while its text is shown (it is spawned next to every statue message).
  */
-EVT_BEGIN(sekizou_talk)
+static EVT_BEGIN(sekizou_talk)
     LOOP(3)
         CALL(evt_sub_intpl_msec_init, 11, 0, 70, 100)
         LABEL(0)
@@ -357,7 +357,7 @@ EVT_END()
  * shows the quiz set (S_kuizu) with the answer lamps,
  * moves Mario and the partner onto it and plays the transition animation.
  */
-EVT_BEGIN(offscreen_to_kuizu)
+static EVT_BEGIN(offscreen_to_kuizu)
     CALL(evt_paper_entry, STRING("OFF_d_pazu"))
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_pazu"))
@@ -428,7 +428,7 @@ EVT_END()
  * The seven quiz questions of the stone statue: for each, the map animation, the question and choice text,
  * and the number of the correct choice.
  */
-QuizEntry kuizu_data[] = {
+static QuizEntry kuizu_data[] = {
     {"anm_1mon", "stg7_aji_06", "stg7_aji_07", 2},
     {"anm_2mon", "stg7_aji_08", "stg7_aji_09", 3},
     {"anm_3mon", "stg7_aji_10", "stg7_aji_11", 1},
@@ -455,7 +455,7 @@ EVT_END()
  * Marks a right answer on the quiz set: shows the lamp object dennshoku,
  * hides dennshoku_2 and plays the map animation anm_seikai (seikai = correct answer).
  */
-EVT_BEGIN(quiz_ok)
+static EVT_BEGIN(quiz_ok)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_JP
@@ -528,7 +528,7 @@ EVT_END()
  * two X-Yux (バリアーン１/２) drop in for battle 15 and ends the loop after the fight. Both exits create the
  * elevator key and set STG7_13_QUIZ_CLEARED.
  */
-EVT_BEGIN(kuizu_sekizou)
+static EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
@@ -946,7 +946,7 @@ EVT_END()
  * Initial state of the quiz statue: eyes (me_mae) shown,
  * the quiz set hidden below the floor and the quiz case script attached to a_sekizou_1_a.
  */
-EVT_BEGIN(sekizou_init)
+static EVT_BEGIN(sekizou_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)

@@ -49,26 +49,26 @@ EvtWord evt_rsh_konarikin_irai_party_talk[85];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord evt_allow_kamotsu[77];
+static EvtWord evt_allow_kamotsu[77];
 #else
-EvtWord evt_allow_kamotsu[73];
+static EvtWord evt_allow_kamotsu[73];
 #endif
 
-EvtWord evt_mario_chuumoku[10];
-EvtWord evt_party_chuumoku[11];
+static EvtWord evt_mario_chuumoku[10];
+static EvtWord evt_party_chuumoku[11];
 
 #if VERSION >= VERSION_US
-EvtWord evt_shorui_funshitu[362];
+static EvtWord evt_shorui_funshitu[362];
 #else
-EvtWord evt_shorui_funshitu[352];
+static EvtWord evt_shorui_funshitu[352];
 #endif
 
 static s32 item_tbl[2];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord evt_daijisouna_kami[206];
+static EvtWord evt_daijisouna_kami[206];
 #else
-EvtWord evt_daijisouna_kami[208];
+static EvtWord evt_daijisouna_kami[208];
 #endif
 
 EvtWord evt_syasyou_auto_talk[27];
@@ -85,18 +85,18 @@ static EvtWord talk_syashou[367];
 #endif
 #endif
 
-EvtWord talk_sarary_repeat[43];
+static EvtWord talk_sarary_repeat[43];
 static EvtWord init_sarary[55];
 static EvtWord talk_sarary[72];
-EvtWord talk_papa_mama[167];
-EvtWord talk_papa_repeat[40];
+static EvtWord talk_papa_mama[167];
+static EvtWord talk_papa_repeat[40];
 static EvtWord init_papa[46];
 static EvtWord talk_papa[49];
-EvtWord talk_mama_repeat[40];
+static EvtWord talk_mama_repeat[40];
 static EvtWord init_mama[37];
 static EvtWord talk_mama[57];
 static EvtWord init_konari[46];
-s32 item_tbl3[2];
+static s32 item_tbl3[2];
 
 #if VERSION >= VERSION_US
 static EvtWord talk_konari[265];
@@ -108,7 +108,7 @@ static EvtWord talk_konari[219];
 #endif
 #endif
 
-EvtWord talk_powan_repeat[43];
+static EvtWord talk_powan_repeat[43];
 static EvtWord init_powan[64];
 static EvtWord talk_powan[204];
 static NpcSetupInfo npc_data[7];
@@ -147,9 +147,9 @@ EvtWord evt_narikin_room[87];
 EvtWord evt_powan_room[83];
 
 #if VERSION >= VERSION_US
-EvtWord rsh_04_init_evt[214];
+static EvtWord rsh_04_init_evt[214];
 #else
-EvtWord rsh_04_init_evt[201];
+static EvtWord rsh_04_init_evt[201];
 #endif
 
 EvtWord rsh_04_a_init_evt[96];
@@ -391,7 +391,7 @@ EVT_END()
  * Mario walks up, raises a hand, the conductor speaks (stg6_rsh_126, 127) and walks away,
  * the story advances to STG6_16_THE_BAGGAGE_CAR and the baggage car door (bero case) is switched on.
  */
-EVT_BEGIN(evt_allow_kamotsu)
+static EVT_BEGIN(evt_allow_kamotsu)
 #if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_NO_HIT)
 #endif
@@ -423,7 +423,7 @@ EVT_END()
  * Helper loop for the lost documents scene: keeps turning Mario to face Detective Pennington every frame
  * (chuumoku means "pay attention").
  */
-EVT_BEGIN(evt_mario_chuumoku)
+static EVT_BEGIN(evt_mario_chuumoku)
     LOOP(0)
         CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
         WAIT_FRAMES(1)
@@ -432,7 +432,7 @@ EVT_BEGIN(evt_mario_chuumoku)
 EVT_END()
 
 /** Helper loop for the lost documents scene: keeps turning the partner to face Detective Pennington every frame. */
-EVT_BEGIN(evt_party_chuumoku)
+static EVT_BEGIN(evt_party_chuumoku)
     LOOP(0)
         CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         WAIT_FRAMES(1)
@@ -447,7 +447,7 @@ EVT_END()
  * the screen blurs as the mystery deepens and the story advances to STG6_22_DOCUMENT.
  */
 // Each timed speech signals GF(0); the main movement waits for it before starting the next speech.
-EVT_BEGIN(evt_shorui_funshitu)
+static EVT_BEGIN(evt_shorui_funshitu)
     // The lost documents scene: Pennington's theme plays and he questions the salaryman.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
     CALL(evt_cam3d_evt_set, 220, 130, 250, 220, 55, -180, 500, EASING_SINE_IN_OUT)
@@ -576,7 +576,7 @@ static s32 item_tbl[] = {
  * and the story advances to STG6_24_A_VITAL_CLUE.
  */
 // Cancelling leaves the clue unresolved; accepting displays a temporary paper without consuming the pouch item.
-EVT_BEGIN(evt_daijisouna_kami)
+static EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_cam3d_evt_set, 220, 107, 165, 220, 45, -180, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))
@@ -838,7 +838,7 @@ EVT_END()
  * Overheard background line of the salaryman (stg6_rsh_165_01) shown in a repeating balloon
  * while Mario stands in cabin 3 on day 2 without talking to anybody; started by evt_powan_room.
  */
-EVT_BEGIN(talk_sarary_repeat)
+static EVT_BEGIN(talk_sarary_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
@@ -909,7 +909,7 @@ EVT_END()
  * and Bub asks a yes/no question (stg6_rsh_94_yn) that moves the story to STG6_09_BUBS_REQUEST (accepted)
  * or to STG6_08_BUB when declined (after writing STG6_07_SYLVIA).
  */
-EVT_BEGIN(talk_papa_mama)
+static EVT_BEGIN(talk_papa_mama)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_cam3d_evt_set, -220, 105, 186, -220, 40, -183, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -962,7 +962,7 @@ EVT_END()
  * Overheard background line of Papa Narikin (stg6_rsh_85_01) shown in a repeating balloon
  * while Mario stands in cabin 5 without talking to anybody; started by evt_narikin_room.
  */
-EVT_BEGIN(talk_papa_repeat)
+static EVT_BEGIN(talk_papa_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
@@ -1020,7 +1020,7 @@ EVT_END()
  * Overheard background line of Mama Narikin (stg6_rsh_85_02),
  * shown alongside talk_papa_repeat while Mario stands in cabin 5.
  */
-EVT_BEGIN(talk_mama_repeat)
+static EVT_BEGIN(talk_mama_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
@@ -1095,7 +1095,7 @@ static EVT_BEGIN(init_konari)
 EVT_END()
 
 /** Items the player may hand over for the autograph: the Autograph only, ended by -1. */
-s32 item_tbl3[] = {
+static s32 item_tbl3[] = {
     ITEM_AUTOGRAPH, -1,
 };
 
@@ -1202,7 +1202,7 @@ EVT_END()
  * Overheard background line of Detective Pennington (stg6_rsh_165_02) shown in a repeating balloon beside the
  * salaryman's while Mario stands in cabin 3; started by evt_powan_room.
  */
-EVT_BEGIN(talk_powan_repeat)
+static EVT_BEGIN(talk_powan_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
@@ -1586,7 +1586,7 @@ EVT_END()
  * scenery, the three cabin doors, the NPCs, the baggage car door (open only while the story needs it),
  * the shelf signs, the cabin watchers (evt_narikin_room, evt_powan_room), and the music for the story stage.
  */
-EVT_BEGIN(rsh_04_init_evt)
+static EVT_BEGIN(rsh_04_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)

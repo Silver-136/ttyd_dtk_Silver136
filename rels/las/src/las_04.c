@@ -74,12 +74,12 @@ typedef struct FirebarWork {
 } FirebarWork;
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
-void firebar_disp(CameraId camera, void* param);
+static void firebar_disp(CameraId camera, void* param);
 
-USER_FUNC(coin_entry);
-USER_FUNC(firebar_disp_evt);
+static USER_FUNC(coin_entry);
+static USER_FUNC(firebar_disp_evt);
 USER_FUNC(firebar_entry);
-void firebar_cb(FirebarWork* wp, s32 type);
+static void firebar_cb(FirebarWork* wp, s32 type);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
@@ -87,8 +87,8 @@ static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 EvtWord firebar_coin[68];
-FirebarSetup firebardesc[7];
-EvtWord firebar_evt[102];
+static FirebarSetup firebardesc[7];
+static EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -227,7 +227,7 @@ EVT_END()
  * Fire bars of the hall: each entry gives the number of fireballs, their start position, spacing and size,
  * the turning speed and the callback for hits.
  */
-FirebarSetup firebardesc[] = {
+static FirebarSetup firebardesc[] = {
     {
         0, // type
         5, // count
@@ -317,7 +317,7 @@ FirebarSetup firebardesc[] = {
  * the first five bars are the spinning ones, then two sliding bars (types 1) are launched,
  * one after another 2 seconds apart, and the first is launched again.
  */
-EVT_BEGIN(firebar_evt)
+static EVT_BEGIN(firebar_evt)
     BEGIN_INLINE_EVENT_GET_ID(LW(0))
         CALL(firebar_entry, PTR(firebardesc))
     END_INLINE_EVENT
@@ -379,7 +379,7 @@ EVT_BEGIN(firebar_evt)
     RETURN
 EVT_END()
 
-s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
+static s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     MarioWork* mario = marioGetPtr();
     f32 dx;
     f32 dz;
@@ -410,7 +410,7 @@ s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
  * Checks the whole fire bar (an extended rectangular strip from the first to the last ball) against Mario;
  * returns 1 on a hit. Same invulnerability and Vivian exceptions as _firebar_hitCheck.
  */
-s32 _firebar_hitCheck2(FirebarWork* wp) {
+static s32 _firebar_hitCheck2(FirebarWork* wp) {
     FirebarBall* balls = wp->balls;
     MarioWork* mario = marioGetPtr();
     Vec rel;
@@ -464,7 +464,7 @@ s32 _firebar_hitCheck2(FirebarWork* wp) {
  * and tests for a hit (callback type 2) or for Mario passing over the bar (callback type 1, counted in
  * hitCount).
  */
-void _firebar_rot(FirebarWork* wp) {
+static void _firebar_rot(FirebarWork* wp) {
     FirebarBall* ball = wp->balls;
     MarioWork* mario = marioGetPtr();
     s32 hit;
@@ -532,7 +532,7 @@ void _firebar_rot(FirebarWork* wp) {
  * it grows in, slides along X until the end X, shrinks away and restarts;
  * places the balls in a row along Z and runs the same hit and jump-over tests as the rotating bar.
  */
-void _firebar_trans(FirebarWork* wp) {
+static void _firebar_trans(FirebarWork* wp) {
     FirebarBall* ball = wp->balls;
     MarioWork* mario = marioGetPtr();
     s32 hit;
@@ -737,7 +737,7 @@ USER_FUNC(firebar_entry) {
  * queues shadows under each ball (pulsing with shadowAngle) and the draw callback for the bar each frame;
  * finishes once the bar event is gone.
  */
-USER_FUNC(firebar_disp_evt) {
+static USER_FUNC(firebar_disp_evt) {
     FirebarWork* wp;
     FirebarBall* ball;
     f32 a;
@@ -762,7 +762,7 @@ USER_FUNC(firebar_disp_evt) {
  * Draw callback of a fire bar: draws every ball pose three times (the three layers of the flame) at the ball's
  * position.
  */
-void firebar_disp(CameraId camera, void* param) {
+static void firebar_disp(CameraId camera, void* param) {
     FirebarWork* wp = param;
     FirebarBall* ball = wp->balls;
     Mtx mtx;
@@ -780,7 +780,7 @@ void firebar_disp(CameraId camera, void* param) {
  * Script helper: spawns a bouncing coin at (args[0], args[1], args[2]) launched in direction args[3] with a
  * custom launch (speed 70, upward 550, five bounces).
  */
-USER_FUNC(coin_entry) {
+static USER_FUNC(coin_entry) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);
@@ -804,7 +804,7 @@ USER_FUNC(coin_entry) {
  * and starts firebar_coin at its position.
  * Type 2 (hit): records Mario's height for the fall return and gives him spike-style damage.
  */
-void firebar_cb(FirebarWork* wp, s32 type) {
+static void firebar_cb(FirebarWork* wp, s32 type) {
     MarioWork* mario = marioGetPtr();
     EventEntry* evt;
 

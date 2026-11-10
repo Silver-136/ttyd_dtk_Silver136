@@ -30,9 +30,9 @@
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
 
-USER_FUNC(kemuri_move);
+static USER_FUNC(kemuri_move);
 static USER_FUNC(kpa_hikousen_yure);
-USER_FUNC(time_shift);
+static USER_FUNC(time_shift);
 static USER_FUNC(npc_set_pos);
 
 static EvtWord evt_tou_balloon[85];
@@ -45,10 +45,10 @@ extern EvtWord evt_to_tou[];
 EvtWord evt_to_tou[293];
 #endif
 
-EvtWord evt_pos_keep[39];
+static EvtWord evt_pos_keep[39];
 EvtWord evt_to_gor[247];
-const char* kemuri_name[5];
-EvtWord tou_00_koopa_evt[678];
+static const char* kemuri_name[5];
+static EvtWord tou_00_koopa_evt[678];
 static EvtWord hkoopa_init[7];
 static NpcSetupInfo npcEnt[2];
 EvtWord evt_skip[43];
@@ -57,7 +57,7 @@ EvtWord tou_00_init_evt[76];
 /**
  * Script helper: moves the 3D camera's start time back 2 s and the event's saved time back 3.5 s,
  */
-USER_FUNC(time_shift) {
+static USER_FUNC(time_shift) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 
     cam->startTimeA += OSMillisecondsToTicks((OSTime)-2000);
@@ -257,7 +257,7 @@ EVT_END()
 
 /** Loop that places Mario and his partner relative to gondora_2 while it moves. */
 // The second lookup supplies the position used below; the first lookup is retained.
-EVT_BEGIN(evt_pos_keep)
+static EVT_BEGIN(evt_pos_keep)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING("gondora_1"), LW(0), LW(1), LW(2))
         CALL(evt_mapobj_get_position, STRING("gondora_2"), LW(0), LW(1), LW(2))
@@ -349,7 +349,7 @@ static USER_FUNC(npc_set_pos) {
 }
 
 /** Names of the five smoke puffs that pour out of Bowser's failing airship in tou_00_koopa_evt. */
-const char* kemuri_name[] = {
+static const char* kemuri_name[] = {
     "kosyo01",
     "kosyo02",
     "kosyo03",
@@ -371,7 +371,7 @@ static USER_FUNC(kpa_hikousen_yure) {
  * Bowser's flying fortress passes over Glitzville with the sky scrolling.
  * Bowser talks (kpa_stg4_008, kpa_stg4_009) and the script then changes map to muj_20.
  */
-EVT_BEGIN(tou_00_koopa_evt)
+static EVT_BEGIN(tou_00_koopa_evt)
     // Mario is hidden, the airship is placed off to the left and the sky starts scrolling past.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -623,7 +623,7 @@ EVT_END()
 
 /** Script helper: args[0] = smoke effect name, args[1] = distance; shifts that smoke puff along x after the first call. */
 // Follow the named effect until it disappears; the first call waits without moving it.
-USER_FUNC(kemuri_move) {
+static USER_FUNC(kemuri_move) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 dy = evtGetFloat(event, args[1]);

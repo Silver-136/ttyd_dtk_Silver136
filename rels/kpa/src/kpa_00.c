@@ -20,8 +20,8 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-EvtWord kpa_00_first_evt[61];
-EvtWord kpa_00_fly_evt[380];
+static EvtWord kpa_00_first_evt[61];
+static EvtWord kpa_00_fly_evt[380];
 static NpcSetupInfo npcEnt[3];
 EvtWord kpa_00_init_evt[24];
 
@@ -30,7 +30,7 @@ EvtWord kpa_00_init_evt[24];
  * then the game moves on to kpa_01.
  * Runs at the start of the first interlude (story progress STG1_19_PEACH_TEC).
  */
-EVT_BEGIN(kpa_00_first_evt)
+static EVT_BEGIN(kpa_00_first_evt)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_kill_party, 0)
@@ -57,7 +57,7 @@ EVT_END()
  * The story advances to STG1_19_02_BOWSER_CASTLE_INT, saving is offered,
  * and play returns to Petalburg (nok_01).
  */
-EVT_BEGIN(kpa_00_fly_evt)
+static EVT_BEGIN(kpa_00_fly_evt)
     // Cutscene start: controls are off and Mario is moved out of sight; Bowser's airship and Kammy are placed
     // small and far away.
     CALL(evt_mario_key_onoff, 0)

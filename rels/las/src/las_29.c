@@ -65,71 +65,71 @@ typedef struct HikariList27 {
 } HikariList27;
 #define HIKARI_DATA ((HikariData*)&hikari_data)
 
-USER_FUNC(add_vy);
-USER_FUNC(all_hikari_change_kuro);
-USER_FUNC(all_hikari_onoff);
-USER_FUNC(b_peach_thunder);
-USER_FUNC(hikari_change);
-USER_FUNC(hikari_onoff);
-USER_FUNC(hikari_se);
-USER_FUNC(hikari_set_scale);
-USER_FUNC(make_koe_label);
-USER_FUNC(make_koe_pos);
-USER_FUNC(pcharge_entry);
-USER_FUNC(pcharge_set_pos);
-USER_FUNC(radiation_entry);
-USER_FUNC(rou_hikari_front_onoff);
+static USER_FUNC(add_vy);
+static USER_FUNC(all_hikari_change_kuro);
+static USER_FUNC(all_hikari_onoff);
+static USER_FUNC(b_peach_thunder);
+static USER_FUNC(hikari_change);
+static USER_FUNC(hikari_onoff);
+static USER_FUNC(hikari_se);
+static USER_FUNC(hikari_set_scale);
+static USER_FUNC(make_koe_label);
+static USER_FUNC(make_koe_pos);
+static USER_FUNC(pcharge_entry);
+static USER_FUNC(pcharge_set_pos);
+static USER_FUNC(radiation_entry);
+static USER_FUNC(rou_hikari_front_onoff);
 static USER_FUNC(rousoku_init);
-USER_FUNC(slowturnoff_check);
+static USER_FUNC(slowturnoff_check);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(mist_add_vy);
-USER_FUNC(make_mist_name);
-USER_FUNC(eff_b_peach_mist);
-USER_FUNC(eff_b_peach_ripple);
-USER_FUNC(radiation_set_pos);
+static USER_FUNC(mist_add_vy);
+static USER_FUNC(make_mist_name);
+static USER_FUNC(eff_b_peach_mist);
+static USER_FUNC(eff_b_peach_ripple);
+static USER_FUNC(radiation_set_pos);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
 static EvtWord syuryo_init[16];
-EvtWord q_kage_init[10];
+static EvtWord q_kage_init[10];
 static NpcSetupInfo npcEnt[8];
-HikariList40 hikari_data;
-HikariList27 hikari_data_2;
+static HikariList40 hikari_data;
+static HikariList27 hikari_data_2;
 EvtWord hikari_off_evt[42];
 EvtWord hikari_on_evt[63];
-EvtWord flush_on[106];
-EvtWord flush_off[106];
-EvtWord last_evt_1[1078];
+static EvtWord flush_on[106];
+static EvtWord flush_off[106];
+static EvtWord last_evt_1[1078];
 
 #if VERSION >= VERSION_US
 EvtWord last_evt_2[358];
 EvtWord last_evt_3[1349];
-EvtWord b_peach_fuwafuwa[39];
-EvtWord last_evt_3_1[524];
-EvtWord koe_evt[78];
-EvtWord majo_kyorokyoro[84];
-EvtWord last_evt_3_2[1837];
+static EvtWord b_peach_fuwafuwa[39];
+static EvtWord last_evt_3_1[524];
+static EvtWord koe_evt[78];
+static EvtWord majo_kyorokyoro[84];
+static EvtWord last_evt_3_2[1837];
 #else
 EvtWord last_evt_2[383];
-EvtWord last_evt_3_npc_entry[29];
+static EvtWord last_evt_3_npc_entry[29];
 #if VERSION == VERSION_DEMO_JP
 EvtWord last_evt_3[1376];
 #else
 EvtWord last_evt_3[1379];
 #endif
-EvtWord b_peach_fuwafuwa[39];
-EvtWord last_evt_3_1[540];
-EvtWord koe_evt[65];
-EvtWord majo_kyorokyoro[84];
-EvtWord last_evt_3_2[1821];
+static EvtWord b_peach_fuwafuwa[39];
+static EvtWord last_evt_3_1[540];
+static EvtWord koe_evt[65];
+static EvtWord majo_kyorokyoro[84];
+static EvtWord last_evt_3_2[1821];
 #endif
 
-EvtWord last_evt_4[1836];
+static EvtWord last_evt_4[1836];
 static EvtWord shuryolight_init[14];
-EvtWord shuryolight_delete[20];
+static EvtWord shuryolight_delete[20];
 
 #if VERSION >= VERSION_US
 EvtWord las_29_init_evt[180];
@@ -204,7 +204,7 @@ static EVT_BEGIN(syuryo_init)
 EVT_END()
 
 /** Init event of the Shadow Queen's NPC (影の女王): turns off the paper billboard and faces her to Y rotation 90. */
-EVT_BEGIN(q_kage_init)
+static EVT_BEGIN(q_kage_init)
     CALL(evt_npc_pera_onoff, STRING("me"), 0)
     CALL(evt_npc_set_ry, STRING("me"), 90)
     RETURN
@@ -284,7 +284,7 @@ static NpcSetupInfo npcEnt[] = {
  * The 40 candles of the chamber (their positions and ids), sorted by X so hikari_onoff can light and
  * snuff them in waves.
  */
-HikariList40 hikari_data = {
+static HikariList40 hikari_data = {
     {
         {324, 38},
         {294, 20},
@@ -333,7 +333,7 @@ HikariList40 hikari_data = {
 /**
  * The 27 candles of the second set (their positions and ids), sorted by X, lit and snuffed by hikari_onoff.
  */
-HikariList27 hikari_data_2 = {
+static HikariList27 hikari_data_2 = {
     {
         {325, 49},
         {295, 41},
@@ -419,7 +419,7 @@ EVT_BEGIN(hikari_on_evt)
     RETURN
 EVT_END()
 
-void _hikariEntry(const char* name, s32 type, f32 scale) {
+static void _hikariEntry(const char* name, s32 type, f32 scale) {
     Vec pos;
     EffectEntry* eff;
 
@@ -452,7 +452,7 @@ static USER_FUNC(rousoku_init) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(rou_hikari_front_onoff) {
+static USER_FUNC(rou_hikari_front_onoff) {
     char name[8];
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -476,7 +476,7 @@ USER_FUNC(rou_hikari_front_onoff) {
 }
 
 /** Script helper: sets the flame scale of candle hi<args[0]> to args[1]. */
-USER_FUNC(hikari_set_scale) {
+static USER_FUNC(hikari_set_scale) {
     char name[8];
     EvtWord* args = event->args;
     s32 n = evtGetValue(event, args[0]);
@@ -494,7 +494,7 @@ USER_FUNC(hikari_set_scale) {
  * Script helper: replaces candle hi<args[0]>'s fire effect with a fresh one of the normal (args[1] nonzero)
  * or dark flame type, at scale 0.
  */
-USER_FUNC(hikari_change) {
+static USER_FUNC(hikari_change) {
     char name[8];
     EvtWord* args = event->args;
     s32 n = evtGetValue(event, args[0]);
@@ -510,7 +510,7 @@ USER_FUNC(hikari_change) {
  * Script helper: plays the sound of candle args[0] being lit or put out (args[1] nonzero = out,
  * args[2] nonzero = dark variant) at the candle's position.
  */
-USER_FUNC(hikari_se) {
+static USER_FUNC(hikari_se) {
     char name[8];
     Vec pos;
     EvtWord* args = event->args;
@@ -543,7 +543,7 @@ USER_FUNC(hikari_se) {
  * it starts one event per candle until the keys fall to the limit
  * and returns in args[5] the index it stopped at (-1 if the table was already at its end).
  */
-USER_FUNC(hikari_onoff) {
+static USER_FUNC(hikari_onoff) {
     EvtWord* args = event->args;
     HikariData* tbl = (HikariData*)args[0];
     s32 val = evtGetValue(event, args[1]);
@@ -575,7 +575,7 @@ USER_FUNC(hikari_onoff) {
  * Script helper: turns every candle from index args[0] of the hall table to the end,
  * plus candles hi39..hi66 except hi64 and hi66, into dark-flame candles at scale 0.5.
  */
-USER_FUNC(all_hikari_change_kuro) {
+static USER_FUNC(all_hikari_change_kuro) {
     char name[8];
     s32 idx = evtGetValue(event, event->args[0]);
     s32 i;
@@ -627,7 +627,7 @@ void map_color_tev(MapTevCallbackInfo* info) {
 }
 
 /** Script helper: sets the flame scale of all 66 candles to 0 (args[0] nonzero) or 0.5. */
-USER_FUNC(all_hikari_onoff) {
+static USER_FUNC(all_hikari_onoff) {
     char name[16];
     f32 scale = evtGetValue(event, event->args[0]) ? 0.0f : 0.5f;
     s32 i;
@@ -646,7 +646,7 @@ USER_FUNC(all_hikari_onoff) {
  * Script helper: creates a pink-white thunder effect (N64 style) from above the point (args[0], args[1],
  * args[2]) down to that point. Used by the possessed Peach's lightning.
  */
-USER_FUNC(b_peach_thunder) {
+static USER_FUNC(b_peach_thunder) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -667,7 +667,7 @@ USER_FUNC(b_peach_thunder) {
  * when text starts (types 0 and
  * 3) and back to her idle pose when it ends (types 1 and 2).
  */
-void b_peach_msgcb(s32 type, void* param) {
+static void b_peach_msgcb(s32 type, void* param) {
     switch (type) {
         case 0:
         case 3:
@@ -685,7 +685,7 @@ void b_peach_msgcb(s32 type, void* param) {
  * args[0] picks the phase (0 starts upward, 1 starts downward) and args[1] the step number;
  * it nudges her Y offset by an eased amount each call.
  */
-USER_FUNC(add_vy) {
+static USER_FUNC(add_vy) {
     EvtWord* args = event->args;
     s32 dir = evtGetValue(event, args[0]);
     s32 n = evtGetValue(event, args[1]);
@@ -702,7 +702,7 @@ USER_FUNC(add_vy) {
 }
 
 /** Script helper: creates a named radiation effect at args[1..3] with scale args[4]; the effect name is args[0]. */
-USER_FUNC(radiation_entry) {
+static USER_FUNC(radiation_entry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -715,7 +715,7 @@ USER_FUNC(radiation_entry) {
 }
 
 /** Script helper: moves the named radiation effect args[0] to (args[1], args[2], args[3]). */
-USER_FUNC(radiation_set_pos) {
+static USER_FUNC(radiation_set_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -733,7 +733,7 @@ USER_FUNC(radiation_set_pos) {
  * Script helper: creates a named power-charge effect (Pokopi pcharge, N64 style) at args[1..3];
  * the effect name is args[0].
  */
-USER_FUNC(pcharge_entry) {
+static USER_FUNC(pcharge_entry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -745,7 +745,7 @@ USER_FUNC(pcharge_entry) {
 }
 
 /** Script helper: moves the named power-charge effect args[0] to (args[1], args[2], args[3]). */
-USER_FUNC(pcharge_set_pos) {
+static USER_FUNC(pcharge_set_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -843,7 +843,7 @@ static USER_FUNC(starstone_set_ry) {
  * Script helper: builds the message label "stg8_las_148_74_NN" for the voice number args[0] (wrapping to the
  * first voice if the number is 18 and Ms. Mowz has not joined) and returns it in args[1].
  */
-USER_FUNC(make_koe_label) {
+static USER_FUNC(make_koe_label) {
     static char name[32];
     EvtWord* args = event->args;
     s32 n = evtGetValue(event, args[0]);
@@ -861,7 +861,7 @@ USER_FUNC(make_koe_label) {
  * Script helper: picks a random screen position within about 200 by 190 units of the centre
  * where the next cheering voice message bubble appears; returns X, Y and Z (0) in args[0..2].
  */
-USER_FUNC(make_koe_pos) {
+static USER_FUNC(make_koe_pos) {
     EvtWord* args = event->args;
     s32 a = ((rand() >> 1) % 41) * 10;
     s32 b = ((rand() >> 1) % 33) * 10;
@@ -885,12 +885,12 @@ USER_FUNC(make_koe_pos) {
 }
 
 /** Script helper: blocks while the NPC named args[0] is still doing an instant turn. */
-USER_FUNC(slowturnoff_check) {
+static USER_FUNC(slowturnoff_check) {
     return (npcNameToPtr((const char*)evtGetValue(event, event->args[0]))->flags & NPC_FLAG_INSTANT_TURN) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 /** Script helper: creates a ripple effect on the floor under the Shadow Queen (possessing Peach). */
-USER_FUNC(eff_b_peach_ripple) {
+static USER_FUNC(eff_b_peach_ripple) {
     NpcEntry* npc = npcNameToPtr("\203u\203\211\203b\203N\203s\201[\203`");
 
     effRippleSetRxRz(effRippleEntry(3, npc->position.x, 30.0f + npc->position.y, npc->position.z), 0.0f, 176.0f);
@@ -898,7 +898,7 @@ USER_FUNC(eff_b_peach_ripple) {
 }
 
 /** Script helper: puffs a mist effect beside Peach's NPC, 20 units away on the side facing away from the camera. */
-USER_FUNC(eff_b_peach_mist) {
+static USER_FUNC(eff_b_peach_mist) {
     NpcEntry* npc = npcNameToPtr("\203s\201[\203`\225P");
     f32 s;
     f32 angle;
@@ -918,7 +918,7 @@ USER_FUNC(eff_b_peach_mist) {
 }
 
 /** Script helper: builds the effect name "mist<args[0]>" and returns it in args[1]. */
-USER_FUNC(make_mist_name) {
+static USER_FUNC(make_mist_name) {
     static char name[8];
     EvtWord* args = event->args;
 
@@ -928,7 +928,7 @@ USER_FUNC(make_mist_name) {
 }
 
 /** Script helper: adds args[0] to the Y position of the ten mist effects "mist0..9". */
-USER_FUNC(mist_add_vy) {
+static USER_FUNC(mist_add_vy) {
     char name[16];
     f32 vy = evtGetFloat(event, event->args[0]);
     s32 i;
@@ -945,7 +945,7 @@ USER_FUNC(mist_add_vy) {
  * hides Grodus, turns the hall models into flat-colour objects without fog,
  * and shrinks all candle flames to nothing.
  */
-EVT_BEGIN(flush_on)
+static EVT_BEGIN(flush_on)
     CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), NPC_FLAG_NO_DRAW)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_hakahuta"), MAP_OBJ_TEV_CALLBACK(1))
@@ -971,7 +971,7 @@ EVT_END()
  * Event script: undoes flush_on: shows Grodus and the hall models again with their normal drawing and fog
  * and relights the candles.
  */
-EVT_BEGIN(flush_off)
+static EVT_BEGIN(flush_off)
     CALL(evt_npc_flag_onoff, 0, STRING("シュリョー"), NPC_FLAG_NO_DRAW)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_rou"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hakahuta"), MAP_OBJ_TEV_CALLBACK_MASK)
@@ -999,7 +999,7 @@ EVT_END()
  * Grodus appears and reveals the Shadow Queen's sealed form with flashes of white and the witch music,
  * and the party is taken to gor_01 (sekai_yami1).
  */
-EVT_BEGIN(last_evt_1)
+static EVT_BEGIN(last_evt_1)
     // Mario and his partner walk in through the west door and it closes behind them.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1427,7 +1427,7 @@ EVT_BEGIN(last_evt_2)
 EVT_END()
 
 #if VERSION < VERSION_US  // JP and JP demo only (US and PAL dropped it)
-EVT_BEGIN(last_evt_3_npc_entry)
+static EVT_BEGIN(last_evt_3_npc_entry)
     CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario")) // stand-in Mario swapped in at the bad-ending choice (JP)
     CALL(evt_npc_set_tribe, STRING("にせマリオ"), STRING("にせマリオ"))
     CALL(evt_npc_set_position, STRING("にせマリオ"), 0, -1000, 0)
@@ -1849,7 +1849,7 @@ EVT_END()
  * Event script: makes the Shadow Queen (possessing Peach) float up and down forever in two 60-step
  * phases, pausing while GF(2) is set.
  */
-EVT_BEGIN(b_peach_fuwafuwa)
+static EVT_BEGIN(b_peach_fuwafuwa)
     LOOP(0)
         SET_VALUE(LW(0), 0)
         LOOP(60)
@@ -1874,7 +1874,7 @@ EVT_END()
  * The Shadow Queen (possessing Peach) hovers and speaks, then the map changes to gor_01 ("minnnanokoe", the
  * voices of everyone) to continue with last_evt_3_2.
  */
-EVT_BEGIN(last_evt_3_1)
+static EVT_BEGIN(last_evt_3_1)
     // The defeated Shadow Queen hovers over the floor.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2038,7 +2038,7 @@ EVT_END()
  * him, at least 300 ms apart, cycling through the voice messages stg8_las_148_74_NN.
  * After each spawn it waits until fewer than six voice messages remain active.
  */
-EVT_BEGIN(koe_evt)
+static EVT_BEGIN(koe_evt)
     SET_VALUE(LW(0), 1)
     LOOP(0)
         CALL(make_koe_label, LW(0), LW(1))
@@ -2077,7 +2077,7 @@ EVT_END()
  * Event script: makes Beldam, Marilyn and Doopliss look around nervously:
  * each turns around every 2 to 3 seconds at random.
  */
-EVT_BEGIN(majo_kyorokyoro)
+static EVT_BEGIN(majo_kyorokyoro)
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(evt_sub_random, 5, LW(0))
@@ -2122,7 +2122,7 @@ EVT_END()
  * angered, and the second fight with her (battle 17) follows;
  * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
  */
-EVT_BEGIN(last_evt_3_2)
+static EVT_BEGIN(last_evt_3_2)
     // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2626,7 +2626,7 @@ EVT_END()
  * Peach and Professor Frankly (クリハカセ) talk to Mario and a chest appears;
  * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
  */
-EVT_BEGIN(last_evt_4)
+static EVT_BEGIN(last_evt_4)
     // The Shadow Queen is beaten: the music stops; she, the Sirens and Mario's partner speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
@@ -3179,7 +3179,7 @@ static EVT_BEGIN(shuryolight_init)
 EVT_END()
 
 /** Event script: if Sir Grodus's NPC exists, waits briefly and removes him and his light effect. */
-EVT_BEGIN(shuryolight_delete)
+static EVT_BEGIN(shuryolight_delete)
     CALL(evt_npc_check, STRING("シュリョー"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_seq_wait, SEQ_GAME)

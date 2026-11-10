@@ -36,7 +36,7 @@ typedef struct FireScaleKey {
  * Looping 200-frame flicker of the flame's size (frame, scale between 0.95 and 1.1) for flame types 3 and 8;
  * read by effFireMain.
  */
-FireScaleKey scale1[] = {
+static FireScaleKey scale1[] = {
     { 0, 1.0f },     { 20, 1.1f },    { 30, 1.0f },    { 45, 1.05f },   { 60, 0.95f },
     { 70, 1.05f },   { 80, 1.025f },  { 100, 1.1f },   { 120, 1.0f },   { 130, 1.025f },
     { 160, 0.95f },  { 180, 1.025f }, { 200, 1.0f },

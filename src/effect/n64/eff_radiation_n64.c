@@ -15,7 +15,7 @@ static void effRadiationMain(EffectEntry* effect);
 static void effRadiationDisp(CameraId cameraId, void* param);
 
 /** 150x20 quad, starting at the centre and reaching outward, drawn for each ray of types 0-1. */
-effN64Vtx size150x20_tex32x32[] = {
+static effN64Vtx size150x20_tex32x32[] = {
     {0, 10, 0, 0, 0, 255, 255, 255, 255},
     {0, -10, 0, 1024, 0, 255, 255, 255, 255},
     {150, -10, 0, 1024, 1024, 255, 255, 255, 255},
@@ -23,7 +23,7 @@ effN64Vtx size150x20_tex32x32[] = {
 };
 
 /** Three vertices: the centre (opaque white) and two 300 units out at y +-20 (alpha 0), drawn for each ray of the other types. */
-effN64Vtx size300x40_tex32x32[] = {
+static effN64Vtx size300x40_tex32x32[] = {
     {0, 0, 0, 16, 0, 255, 255, 255, 255},
     {300, 20, 0, 0, 1024, 235, 255, 245, 0},
     {300, -20, 0, 1024, 1024, 235, 255, 245, 0},
@@ -33,7 +33,7 @@ effN64Vtx size300x40_tex32x32[] = {
  * Fixed pose of each of the 16 spinning rays, five numbers per ray: X, Y and Z tilt in degrees,
  * an unused value and the Z spin speed in tenths of a degree per frame.
  */
-s32 r_data[] = {
+static s32 r_data[] = {
     0, -20, 0, 1, 18,
     -10, -60, 45, -1, 4,
     -20, -20, 90, 1, 1,

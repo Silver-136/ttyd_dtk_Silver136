@@ -19,8 +19,8 @@
 
 static EvtWord n2_close[12];
 static EvtWord n2_open[12];
-EvtWord n1_close[12];
-EvtWord n1_open[12];
+static EvtWord n1_close[12];
+static EvtWord n1_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
 
@@ -53,14 +53,14 @@ static EVT_BEGIN(n2_open)
 EVT_END()
 
 /** Door animation callback for the door00 door's closing: rotates it by -0.444 times the value in LW(0). */
-EVT_BEGIN(n1_close)
+static EVT_BEGIN(n1_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Door animation callback for the door00 door's opening: rotates it by 0.444 times the value in LW(0). */
-EVT_BEGIN(n1_open)
+static EVT_BEGIN(n1_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00"), 0, LW(0), 0)
     RETURN

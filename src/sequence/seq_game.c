@@ -14,7 +14,7 @@ static OSTime none_key;
 
 /** .sdata */
 //.sdata
-EVT_BEGIN(maku_spread)
+static EVT_BEGIN(maku_spread)
     WAIT_MS(2000)
     CALL(evt_fade_entry, TITLE_SCREEN_CURTAIN_LEAVE_GRADUAL2, 0, 0, 0, 0)
     RETURN

@@ -13,7 +13,7 @@
 #include "libc_decls.h"
 
 //.sbss
-WindowEntry* WinObjects;
+static WindowEntry* WinObjects;
 GXTexObj* wakuTexObj;
 
 // msgWindow.tpl texture indices (light/dark pairs)

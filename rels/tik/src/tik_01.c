@@ -30,11 +30,11 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-EvtWord lecture_badge_after_00_evt[34];
-EvtWord dokan_2_in_evt[22];
+static EvtWord lecture_badge_after_00_evt[34];
+static EvtWord dokan_2_in_evt[22];
 static BeroEntry bero_entry_data[12];
-EvtWord ashioto[35];
-EvtWord gorotuki_sanninngumi[694];
+static EvtWord ashioto[35];
+static EvtWord gorotuki_sanninngumi[694];
 EvtWord wall_bomb00[139];
 EvtWord wall_bomb01[140];
 static EvtWord mobj_box00[34];
@@ -49,7 +49,7 @@ EvtWord tik_01_init_evt[208];
  * Short scene after Goombella's badge lecture: Mario's partner walks to (-375, -105),
  * turns left and says lecture_badge_after_00, a reminder to equip a badge.
  */
-EVT_BEGIN(lecture_badge_after_00_evt)
+static EVT_BEGIN(lecture_badge_after_00_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
@@ -66,7 +66,7 @@ EVT_END()
  * During the badge tutorial (STG0_17_BADGE_TUTORIAL up to the Blooper battle),
  * if he has no badge equipped yet, it plays lecture_badge_after_00_evt. Returns 0 in LW(0).
  */
-EVT_BEGIN(dokan_2_in_evt)
+static EVT_BEGIN(dokan_2_in_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG0_19_BLOOPER_BATTLE)
             CALL(evt_pouch_get_equipbadgecnt, LW(0))
@@ -264,7 +264,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-EVT_BEGIN(ashioto)
+static EVT_BEGIN(ashioto)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("クリボー１"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_KURI_MOVE1L"), LW(0), LW(1), LW(2), 0)
@@ -284,7 +284,7 @@ EVT_END()
  * After the fight they run away off the left edge, the partner comments (mac_0_094),
  * story progress is set to STG0_11_3_GOOMBA_GOONS, the a_rec collision group is switched off and the music returns.
  */
-EVT_BEGIN(gorotuki_sanninngumi)
+static EVT_BEGIN(gorotuki_sanninngumi)
     // The three Goombas wait on the ledge until Mario walks past X = -100.
     CALL(evt_npc_set_position, STRING("クリボー１"), 110, 75, 65)
     CALL(evt_npc_set_position, STRING("クリボー２"), 140, 95, 35)

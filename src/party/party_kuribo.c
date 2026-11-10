@@ -24,7 +24,7 @@
 #endif
 
 //.sbss
-u32 msg_ep; // cleared by kuribo_init; nothing reads it
+static u32 msg_ep; // cleared by kuribo_init; nothing reads it
 
 /**
  * TRUE while Goombella is the active partner and her Tattle ability is in use;
@@ -235,7 +235,7 @@ void kuribo_init_800C23B4(PartyEntry* party) {
  * Field Tattle event: runs pre_kurio_use, prints the chosen message in Goombella's party speech balloon,
  * then post_kurio_use. Started by kuribo_use with LW(0) set to the NPC Mario faces, if any.
  */
-EVT_BEGIN(kurio_msg_evt)
+static EVT_BEGIN(kurio_msg_evt)
     CALL(pre_kurio_use)
     IF_INT_EQUAL(LW(0), 0)
         CALL(post_kurio_use)

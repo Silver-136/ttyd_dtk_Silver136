@@ -21,7 +21,7 @@
 
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 PouchData* mpp_gap;
-PouchData* mpp;
+static PouchData* mpp;
 
 /**
  * Max HP of each partner by partner id (row) and HP level
@@ -29,12 +29,12 @@ PouchData* mpp;
  */
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-s16 _party_max_hp_table[8][4] = {
+static s16 _party_max_hp_table[8][4] = {
 #else
-s16 _party_max_hp_table[9][4] = {
+static s16 _party_max_hp_table[9][4] = {
 #endif
 #else
-s16 _party_max_hp_table[8][4] = {
+static s16 _party_max_hp_table[8][4] = {
 #endif
 
     {0, 0, 0, 0},

@@ -89,7 +89,7 @@ static void zoomOff(void) {
 }
 
 /** Paper airplane animation for each of Mario's colours (marioGetColor). */
-const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
+static const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
 
 /** Stops the plane's looping flight sound if it is playing. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.

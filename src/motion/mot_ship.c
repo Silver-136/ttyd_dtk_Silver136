@@ -56,7 +56,7 @@ typedef struct MotShipWork {
 
 /** Tuning values of Mario's paper boat: water drag and slowing, drift rates, the speed limit (2.0) that also caps the whirlpool push. */
 #if VERSION <= VERSION_DEMO_JP
-f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
+static f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
 
 /**
@@ -78,7 +78,7 @@ EVT_END()
  * Plays SFX_MARIO_SHIP2 four times, 12 frames apart,
  * at the position in LW(0..2) while Mario folds back from the boat at a dock.
  */
-EVT_BEGIN(sound_evt2)
+static EVT_BEGIN(sound_evt2)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_SHIP2"), LW(0), LW(1), LW(2), 0)
     WAIT_FRAMES(12)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_SHIP2"), LW(0), LW(1), LW(2), 0)
@@ -91,10 +91,10 @@ EVT_END()
 
 /** Tuning values of Mario's paper boat: water drag and slowing, drift rates, the speed limit (2.0) that also caps the whirlpool push. */
 #if VERSION >= VERSION_JP
-f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
+static f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
 
-const char* paper_ship[4] = {"p_hune", "p_hune_g", "p_hune_y", "p_hune_v"};
+static const char* paper_ship[4] = {"p_hune", "p_hune_g", "p_hune_y", "p_hune_v"};
 
 s32 getHarborType(HitEntry* hit);
 

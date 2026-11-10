@@ -161,7 +161,7 @@ static inline void __ull2dec(decimal* result, unsigned long long val) {
     result->exp = result->sig.length - 1;
 }
 
-void __timesdec(decimal* result, const decimal* x, const decimal* y) {
+static void __timesdec(decimal* result, const decimal* x, const decimal* y) {
     unsigned long accumulator = 0;
     unsigned char mantissa[SIGDIGLEN * 2];
     int i = x->sig.length + y->sig.length - 1;
@@ -257,7 +257,7 @@ static inline void __str2dec(decimal* d, const char* s, short exp) {
     }
 }
 
-void __two_exp(decimal* result, long exp) {
+static void __two_exp(decimal* result, long exp) {
     switch (exp) {
     case -64:
         __str2dec(result, "542101086242752217003726400434970855712890625", -20);
@@ -342,7 +342,7 @@ void __two_exp(decimal* result, long exp) {
     }
 }
 
-BOOL __equals_dec(const decimal* x, const decimal* y) {
+static BOOL __equals_dec(const decimal* x, const decimal* y) {
     if (x->sig.text[0] == 0)
         return y->sig.text[0] == 0;
     if (y->sig.text[0] == 0)
@@ -415,7 +415,7 @@ static inline BOOL __less_dec(const decimal* x, const decimal* y) {
     return x->exp < y->exp;
 }
 
-void __minus_dec(decimal* z, const decimal* x, const decimal* y) {
+static void __minus_dec(decimal* z, const decimal* x, const decimal* y) {
     int zlen, dexp;
     unsigned char *ib, *i, *ie;
     unsigned char const *jb, *j, *jn;
@@ -515,7 +515,7 @@ done:
     z->sig.length = (unsigned char)(i - ib + 1);
 }
 
-void __num2dec_internal(decimal* d, double x) {
+static void __num2dec_internal(decimal* d, double x) {
     char sign = (char)(signbit(x) != 0);
 
     if (x == 0) {

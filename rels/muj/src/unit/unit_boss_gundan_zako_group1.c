@@ -37,14 +37,14 @@
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 void zakogun_ext_main1(void);
-void zakogun_ext_disp(CameraId camera, void* param);
+static void zakogun_ext_disp(CameraId camera, void* param);
 
 USER_FUNC(zakogun_attack1);
-USER_FUNC(zakogun_end_sukima);
-USER_FUNC(zakogun_start_sukima);
+static USER_FUNC(zakogun_end_sukima);
+static USER_FUNC(zakogun_start_sukima);
 USER_FUNC(zakogun_dead1);
-void zakogun_ext_main(void);
-void zakogun_ext_init(void);
+static void zakogun_ext_main(void);
+static void zakogun_ext_init(void);
 
 BattleUnitKind unit_boss_gundan_zako_group1;
 static BattleUnitDefense defence;
@@ -53,7 +53,7 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
 static BattleDataEntry data_table[4];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_gundan_zako_group1_attack;
+static BattleWeapon weapon_gundan_zako_group1_attack;
 static EvtWord init_event[44];
 static EvtWord damage_event[134];
 EvtWord damage_event_kaiten_hammer[30];
@@ -61,7 +61,7 @@ static EvtWord dead_event[138];
 static EvtWord attack_event[85];
 static EvtWord hit_check_event[95];
 static EvtWord wait_event[6];
-ExtTexInfo zakogun_ext_entry_data[49];
+static ExtTexInfo zakogun_ext_entry_data[49];
 EvtWord zakogun_entry[19];
 
 /** Script helper: stores the battle unit id args[0] that the X-Naut horde is aiming at (work->targetId). */
@@ -264,7 +264,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of X-Nauts (attack): targets one unit for 5 damage; used by attack_event. */
-BattleWeapon weapon_gundan_zako_group1_attack = {
+static BattleWeapon weapon_gundan_zako_group1_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -525,7 +525,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-ExtTexInfo zakogun_ext_entry_data[] = {
+static ExtTexInfo zakogun_ext_entry_data[] = {
     {"c_zako_n", "S_1", 0.0f},
     {"c_zako_n", "S_1", 2.0f},
     {"c_zako_n", "S_1", 4.0f},
@@ -588,7 +588,7 @@ EVT_BEGIN(zakogun_entry)
     RETURN
 EVT_END()
 
-void zakogun_ext_init(void) {
+static void zakogun_ext_init(void) {
     u8* flags = &_battleWorkPointer->stageObjectWork.flags;
     BattleStageObject* body;
     BattleStageObject* wire;
@@ -605,7 +605,7 @@ void zakogun_ext_init(void) {
 }
 
 /** Main callback of the horde extended draw: runs the update for the current formation (group 1, 2 or 3). */
-void zakogun_ext_main(void) {
+static void zakogun_ext_main(void) {
     switch (work->flag) {
         case 0:
             zakogun_ext_main1();
@@ -621,7 +621,7 @@ void zakogun_ext_main(void) {
 }
 
 /** Draw callback of the horde: loads render mode, vertices, textures and TEV then draws all the extended poses. */
-void zakogun_ext_disp(CameraId camera, void* param) {
+static void zakogun_ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -1272,7 +1272,7 @@ USER_FUNC(zakogun_escape1) {
  * Script helper (sukima, an opening): holds each X-Naut of group 1 whose state is outside 80 to 89 still at its formation spot,
  * shaking it from side to side (state 96) when args[0] is 1 or just holding it (state 95) otherwise.
  */
-USER_FUNC(zakogun_start_sukima) {
+static USER_FUNC(zakogun_start_sukima) {
     s32 mode = evtGetValue(event, event->args[0]);
     s32 i;
 
@@ -1291,7 +1291,7 @@ USER_FUNC(zakogun_start_sukima) {
 }
 
 /** Script helper: returns each X-Naut of group 1 whose state is outside 80 to 89 to the normal formation state (20). */
-USER_FUNC(zakogun_end_sukima) {
+static USER_FUNC(zakogun_end_sukima) {
     s32 i;
 
     for (i = 0; i < 6; i++) {

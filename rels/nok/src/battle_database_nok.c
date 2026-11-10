@@ -11,16 +11,16 @@
 
 extern BattleUnitKind unit_act_mario;
 
-BattleStageObjectData nok_btlobject_data[10];
-BattleStageData nok_btlstage_data[1];
-BattleUnitSetup btlparty_nok_hei_ep[1];
+static BattleStageObjectData nok_btlobject_data[10];
+static BattleStageData nok_btlstage_data[1];
+static BattleUnitSetup btlparty_nok_hei_ep[1];
 BattleGroupSetup btlgrp_nok_hei_ep;
-NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[2];
+static NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[2];
 NpcSetupBattleInfo btlsetup_nok_tbl[2];
 NpcTerritoryInfo btl_nok_setup_no_tbl[2];
 
 /** Scenery props of the Petalburg battle stage (stg_04_0): rocks and grass tufts with their positions. */
-BattleStageObjectData nok_btlobject_data[] = {
+static BattleStageObjectData nok_btlobject_data[] = {
     {"ki_1", 2, STAGE_LAYER_A1, {-100.0f, 0.0f, -30.0f}, 0, 60, {0}},
     {"isi_A", 2, STAGE_LAYER_A1, {150.0f, 0.0f, -30.0f}, 10, 50, {0}},
     {"isi_B", 2, STAGE_LAYER_A1, {50.0f, 0.0f, -34.0f}, 20, 40, {0}},
@@ -34,7 +34,7 @@ BattleStageObjectData nok_btlobject_data[] = {
 };
 
 /** The Petalburg battle stage (bti_01 backdrop, stg_04_0 scenery) used by the epilogue stage-play fight. */
-BattleStageData nok_btlstage_data[] = {
+static BattleStageData nok_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_04_0", // specificStageDataDir
@@ -48,7 +48,7 @@ BattleStageData nok_btlstage_data[] = {
 };
 
 /** Enemy of the epilogue stage play: the play's Mario (unit_act_mario). */
-BattleUnitSetup btlparty_nok_hei_ep[] = {
+static BattleUnitSetup btlparty_nok_hei_ep[] = {
     {
         &unit_act_mario, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -72,7 +72,7 @@ BattleGroupSetup btlgrp_nok_hei_ep = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[] = {
+static NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[] = {
     {50, &btlgrp_nok_hei_ep, nok_btlstage_data},
     {0},
 };

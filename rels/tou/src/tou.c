@@ -135,7 +135,7 @@ typedef struct GansWork {
     s32 alpha;
     s32 ready;
 } GansWork;
-GansWork* gans_wp;
+static GansWork* gans_wp;
 static s32 champion_belt_onoff;
 
 static USER_FUNC(evt_rankingReInit);
@@ -150,7 +150,7 @@ static USER_FUNC(getYoshiColor);
 static USER_FUNC(tou_champion_belt_onoff);
 USER_FUNC(tou_champion_belt);
 static f32 camGetRy(void);
-void monitor_tev(MapTevCallbackInfo* info);
+static void monitor_tev(MapTevCallbackInfo* info);
 static USER_FUNC(evt_tou_set_rule_result);
 static USER_FUNC(evt_tou_set_ranking_win_lose);
 static USER_FUNC(evt_tou_get_fighter_battle_msg);
@@ -159,7 +159,7 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-const char* lockerDt[46];
+static const char* lockerDt[46];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_close[];
@@ -172,15 +172,15 @@ EvtWord evt_tou_locker_init[109];
 EvtWord evt_tou_monitor_on[18];
 EvtWord evt_tou_monitor_off[18];
 EvtWord evt_tou_monitor_init[69];
-EvtWord talk_gardman_doku[18];
-EvtWord dummy_party_msg_pkr[10];
-EvtWord dummy_party_msg_pnk[10];
-EvtWord dummy_party_msg_yos[10];
-EvtWord dummy_party_msg_win[10];
-EvtWord party_npc_replace[139];
+static EvtWord talk_gardman_doku[18];
+static EvtWord dummy_party_msg_pkr[10];
+static EvtWord dummy_party_msg_pnk[10];
+static EvtWord dummy_party_msg_yos[10];
+static EvtWord dummy_party_msg_win[10];
+static EvtWord party_npc_replace[139];
 static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
-EvtWord evt_tamago_byebye[160];
+static EvtWord evt_tamago_byebye[160];
 EvtWord talk_gardman[191];
 
 #if VERSION == VERSION_DEMO_JP
@@ -201,7 +201,7 @@ extern EvtWord evt_tou_match_make_default[];
 EvtWord evt_tou_match_make_default[303];
 #endif
 
-EvtWord evt_talk_doku_cake[14];
+static EvtWord evt_talk_doku_cake[14];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_eat_doku_cake[];
@@ -213,7 +213,7 @@ EvtWord evt_doku_cake[234];
 
 EvtWord evt_michel_1[39];
 EvtWord evt_michel_2[42];
-EvtWord evt_michel_3_sub[97];
+static EvtWord evt_michel_3_sub[97];
 EvtWord evt_michel_3[256];
 EvtWord evt_michel_4[312];
 EvtWord evt_michel_5[42];
@@ -226,7 +226,7 @@ EvtWord evt_michel_8[606];
 EvtWord evt_michel_8[VERSION_PICK(620, 616)];
 #endif
 
-EvtWord evt_michel_9[40];
+static EvtWord evt_michel_9[40];
 EvtWord evt_mail_1[157];
 EvtWord evt_mail_2[154];
 
@@ -243,8 +243,8 @@ static EvtWord evt_koopa_after[5];
 EvtWord evt_mail_3[157];
 EvtWord evt_mail_4[151];
 EvtWord evt_mail_5[157];
-EvtWord evt_tamago_hello[41];
-EvtWord evt_tamago_hello2[75];
+static EvtWord evt_tamago_hello[41];
+static EvtWord evt_tamago_hello2[75];
 EvtWord evt_tou_ranking_msg[62];
 
 #if VERSION == VERSION_DEMO_JP
@@ -1134,7 +1134,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     }
 }
 
-const char* lockerDt[] = {
+static const char* lockerDt[] = {
     "R_door_1",
     "a_door_1",
     "a_door_1_omote",
@@ -1424,7 +1424,7 @@ USER_FUNC(tou_mario_keyoff_check) {
  * or Jolene (キノシコワ) after Chapter 3's story point, into a 128x128 texture with its own camera,
  * so the screen mesh can show him.
  */
-void gans_tex(CameraId cameraId, void* param) {
+static void gans_tex(CameraId cameraId, void* param) {
     GansWork* wp = param;
     CameraEntry saved;
     Mtx44 projMtx;
@@ -1527,7 +1527,7 @@ EVT_BEGIN(evt_tou_monitor_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(talk_gardman_doku)
+static EVT_BEGIN(talk_gardman_doku)
     CALL(evt_npc_get_position, STRING("ガードマン"), LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(2), 100)
         CALL(evt_msg_print, 0, STRING("stg3_tou_304"), 0, STRING("ガードマン"))
@@ -1536,28 +1536,28 @@ EVT_BEGIN(talk_gardman_doku)
 EVT_END()
 
 /** Talk script of Goombella's stand-in NPC: her line, then the guard's remark. */
-EVT_BEGIN(dummy_party_msg_pkr)
+static EVT_BEGIN(dummy_party_msg_pkr)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_kur"), 0, STRING("me"))
     CALL_CHILD(talk_gardman_doku)
     RETURN
 EVT_END()
 
 /** Talk script of Koops' stand-in NPC: his line, then the guard's remark. */
-EVT_BEGIN(dummy_party_msg_pnk)
+static EVT_BEGIN(dummy_party_msg_pnk)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_nok"), 0, STRING("me"))
     CALL_CHILD(talk_gardman_doku)
     RETURN
 EVT_END()
 
 /** Talk script of Yoshi's stand-in NPC: his line, then the guard's remark. */
-EVT_BEGIN(dummy_party_msg_yos)
+static EVT_BEGIN(dummy_party_msg_yos)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_yos"), 0, STRING("me"))
     CALL_CHILD(talk_gardman_doku)
     RETURN
 EVT_END()
 
 /** Talk script of Flurrie's stand-in NPC (Windy in the data names): her line, then the guard's remark. */
-EVT_BEGIN(dummy_party_msg_win)
+static EVT_BEGIN(dummy_party_msg_win)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_win"), 0, STRING("me"))
     CALL_CHILD(talk_gardman_doku)
     RETURN
@@ -1569,7 +1569,7 @@ EVT_END()
  * and parks the real partner offscreen.
  */
 // Keep a talkable NPC proxy at the partner position while hiding and stopping the actual party actor.
-EVT_BEGIN(party_npc_replace)
+static EVT_BEGIN(party_npc_replace)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_get_party, LW(3))
     SWITCH(LW(3))
@@ -1704,7 +1704,7 @@ EVT_END()
  * Mini-Yoshi egg scene (story stage 12 to 19): the egg Yoshi NPC takes the partner's place,
  * Yoshi leaves the party, and the egg hops away in squashing jumps.
  */
-EVT_BEGIN(evt_tamago_byebye)
+static EVT_BEGIN(evt_tamago_byebye)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_check, STRING("たまご"), LW(10))
     IF_INT_EQUAL(LW(10), 0)
@@ -2346,7 +2346,7 @@ EVT_BEGIN(evt_tou_match_make_default)
 EVT_END()
 
 /** Talk script of the poison cake: Mario gets a message (stg3_tou_307_04). */
-EVT_BEGIN(evt_talk_doku_cake)
+static EVT_BEGIN(evt_talk_doku_cake)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_307_04"), 0, STRING("me"))
     CALL(evt_mario_key_onoff, 1)
@@ -2558,7 +2558,7 @@ EVT_BEGIN(evt_michel_2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_michel_3_sub)
+static EVT_BEGIN(evt_michel_3_sub)
     SET_VALUE(LW(3), LW(0))
     CALL(evt_npc_move_position, LW(3), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
@@ -2791,7 +2791,7 @@ USER_FUNC(make_monitor) {
  * TEV callback for the monitor screen: replaces the screen's color stages with the live texture,
  * blended by the work alpha, once the texture has been rendered at least once.
  */
-void monitor_tev(MapTevCallbackInfo* info) {
+static void monitor_tev(MapTevCallbackInfo* info) {
     if (gans_wp->ready) {
         GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         GXLoadTexObj(smartTexObj(&gans_wp->tex, &gans_wp->buf->address), GX_TEXMAP1);
@@ -3228,7 +3228,7 @@ EVT_BEGIN(evt_michel_8)
 EVT_END()
 
 /** The ポグ NPC's line (stg3_tou_255_01; tou_10 calls him Poku) with a camera move, then he walks off. */
-EVT_BEGIN(evt_michel_9)
+static EVT_BEGIN(evt_michel_9)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("ポグ"), 0, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_255_01"), 0, STRING("ポグ"))
@@ -3604,7 +3604,7 @@ EVT_BEGIN(evt_mail_5)
 EVT_END()
 
 /** Mini-Yoshi egg arrives: spawns the egg NPC near Mario and takes the Yoshi partner off the field. */
-EVT_BEGIN(evt_tamago_hello)
+static EVT_BEGIN(evt_tamago_hello)
     CALL(evt_npc_check, STRING("たまご"), LW(10))
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_npc_entry, STRING("たまご"), STRING("c_babyyoshi"))
@@ -3619,7 +3619,7 @@ EVT_BEGIN(evt_tamago_hello)
 EVT_END()
 
 /** Mini-Yoshi egg hops three times and then hatches back into the Yoshi partner. */
-EVT_BEGIN(evt_tamago_hello2)
+static EVT_BEGIN(evt_tamago_hello2)
     LOOP(3)
         CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
         CALL(evt_sub_random, 200, LW(3))

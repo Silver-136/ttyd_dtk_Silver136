@@ -106,13 +106,13 @@ static USER_FUNC(x_flag_set);
 static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-EvtWord vivian_party_lecture_init[43];
-EvtWord vivian_party_lecture[VERSION_PICK(196, 198)];
+static EvtWord vivian_party_lecture_init[43];
+static EvtWord vivian_party_lecture[VERSION_PICK(196, 198)];
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[474];
 EvtWord roll_majin_lecture_init[26];
-EvtWord roll_majin_lecture_sub01[29];
-EvtWord roll_majin_lecture_sub02[65];
+static EvtWord roll_majin_lecture_sub01[29];
+static EvtWord roll_majin_lecture_sub02[65];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord roll_majin_lecture[];
@@ -737,7 +737,7 @@ static USER_FUNC(bgm_start_wait) {
  * Vivian lecture setup: faces Mario east, frames him and the incoming partner with a 1-second camera move,
  * and slides the partner 1 second into the shot, facing east.
  */
-EVT_BEGIN(vivian_party_lecture_init)
+static EVT_BEGIN(vivian_party_lecture_init)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 40)
@@ -759,7 +759,7 @@ EVT_END()
  * and the last message explains Shade Fist (sets enemies on fire) and Veil (hide to avoid damage)
  * before she strikes a pose (PTR_O_1).
  */
-EVT_BEGIN(vivian_party_lecture)
+static EVT_BEGIN(vivian_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_12_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_12_1"), 0, 0)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(105.0f), FLOAT(597.0f), FLOAT(0.0f), FLOAT(63.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
@@ -990,7 +990,7 @@ EVT_BEGIN(roll_majin_lecture_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(roll_majin_lecture_sub01)
+static EVT_BEGIN(roll_majin_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
     CALL(lecture_button_set_icon_id, 1, ICON_STICK_NEUTRAL)
@@ -1003,7 +1003,7 @@ EVT_BEGIN(roll_majin_lecture_sub01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(roll_majin_lecture_sub02)
+static EVT_BEGIN(roll_majin_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)
     CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R_PRESSED)

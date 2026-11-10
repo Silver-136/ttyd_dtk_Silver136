@@ -26,7 +26,7 @@ static BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWork
 static BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 static BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 
-IconDispTableEntry _disp_table[0x17] = {
+static IconDispTableEntry _disp_table[0x17] = {
 #if VERSION >= VERSION_US
     {STATUS_SLEEP, _bsi_default_turn, 22, 1},
     {STATUS_POISON, _bsi_default_turn, 20, 1},

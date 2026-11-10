@@ -45,8 +45,8 @@ EvtWord gesso_right_arm_damage_event[93];
 #endif
 
 static EvtWord phase_event[2];
-BattleWeapon weapon_gesso_right_arm_front_attack;
-BattleWeapon weapon_gesso_right_arm_rear_attack;
+static BattleWeapon weapon_gesso_right_arm_front_attack;
+static BattleWeapon weapon_gesso_right_arm_rear_attack;
 static EvtWord attack_event[273];
 static EvtWord wait_event[6];
 EvtWord gesso_arm_dead_event[130];
@@ -265,7 +265,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /** Weapon of the R. Tentacle's front swat: 1 damage. */
-BattleWeapon weapon_gesso_right_arm_front_attack = {
+static BattleWeapon weapon_gesso_right_arm_front_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -302,7 +302,7 @@ BattleWeapon weapon_gesso_right_arm_front_attack = {
 };
 
 /** Weapon of the R. Tentacle's rear swat: 1 damage. */
-BattleWeapon weapon_gesso_right_arm_rear_attack = {
+static BattleWeapon weapon_gesso_right_arm_rear_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

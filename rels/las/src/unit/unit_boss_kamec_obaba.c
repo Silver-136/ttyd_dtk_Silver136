@@ -25,17 +25,17 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(eff_magic_support);
+static USER_FUNC(eff_magic_support);
 static USER_FUNC(eff_magic_get_posX);
 static USER_FUNC(eff_magic);
 static USER_FUNC(eff_staff);
 
-BattleWeapon weapon_kamec_obaba_attack_magic;
-BattleWeapon weapon_kamec_obaba_dekadeka_magic;
-BattleWeapon weapon_kamec_obaba_biribiri_magic;
-BattleWeapon weapon_kamec_obaba_katikati_magic;
-BattleWeapon weapon_kamec_obaba_trans_magic;
-BattleWeapon weapon_kamec_obaba_recover_magic;
+static BattleWeapon weapon_kamec_obaba_attack_magic;
+static BattleWeapon weapon_kamec_obaba_dekadeka_magic;
+static BattleWeapon weapon_kamec_obaba_biribiri_magic;
+static BattleWeapon weapon_kamec_obaba_katikati_magic;
+static BattleWeapon weapon_kamec_obaba_trans_magic;
+static BattleWeapon weapon_kamec_obaba_recover_magic;
 BattleUnitKind unit_boss_kamec_obaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -59,8 +59,8 @@ static EvtWord magic_common_event1[27];
 static EvtWord magic_common_event2[16];
 static EvtWord start_avoid[26];
 static EvtWord attack_magic_event[269];
-EvtWord magic_select_pri_obaba[52];
-EvtWord magic_select_pri_koopa[52];
+static EvtWord magic_select_pri_obaba[52];
+static EvtWord magic_select_pri_koopa[52];
 static EvtWord dekadeka_magic_event[73];
 static EvtWord katikati_magic_event[4];
 static EvtWord biribiri_magic_event[4];
@@ -69,7 +69,7 @@ static EvtWord recover_magic_event[90];
 static EvtWord wait_event[6];
 
 /** Weapon of Kammy Koopa's magic blast: damage 5. */
-BattleWeapon weapon_kamec_obaba_attack_magic = {
+static BattleWeapon weapon_kamec_obaba_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -106,7 +106,7 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
 };
 
 /** Weapon of Kammy Koopa's spell that makes a unit huge: inflicts a size change. */
-BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
+static BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -145,7 +145,7 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
 };
 
 /** Weapon of Kammy Koopa's spell that electrifies a unit: inflicts Electrified. */
-BattleWeapon weapon_kamec_obaba_biribiri_magic = {
+static BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -184,7 +184,7 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
 };
 
 /** Weapon of Kammy Koopa's spell that raises Defense: inflicts a defense change. */
-BattleWeapon weapon_kamec_obaba_katikati_magic = {
+static BattleWeapon weapon_kamec_obaba_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -224,7 +224,7 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
 };
 
 /** Weapon of Kammy Koopa's spell that turns a unit invisible: inflicts Invisible. */
-BattleWeapon weapon_kamec_obaba_trans_magic = {
+static BattleWeapon weapon_kamec_obaba_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -262,7 +262,7 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
 };
 
 /** Weapon of Kammy Koopa's healing spell. */
-BattleWeapon weapon_kamec_obaba_recover_magic = {
+static BattleWeapon weapon_kamec_obaba_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -1117,7 +1117,7 @@ EVT_END()
  * and Kammy herself (-2, eligible while GW(11) is 0) weight 75.
  * Returns the target unit in LW(3) and the part 1 in LW(4).
  */
-EVT_BEGIN(magic_select_pri_obaba)
+static EVT_BEGIN(magic_select_pri_obaba)
     SET_VALUE(LW(5), 0)
     SET_VALUE(LW(6), 0)
     IF_INT_EQUAL(GW(10), 0)
@@ -1145,7 +1145,7 @@ EVT_END()
  * Bowser (GW(8)) has weight 75 and Kammy herself (-2) weight 25, each only while GW(10) / GW(11) is 0.
  * Returns the target unit in LW(3) and the part 1 in LW(4).
  */
-EVT_BEGIN(magic_select_pri_koopa)
+static EVT_BEGIN(magic_select_pri_koopa)
     SET_VALUE(LW(5), 0)
     SET_VALUE(LW(6), 0)
     IF_INT_EQUAL(GW(10), 0)
@@ -1256,7 +1256,7 @@ static EVT_BEGIN(recover_magic_event)
     RETURN
 EVT_END()
 
-USER_FUNC(eff_magic_support) {
+static USER_FUNC(eff_magic_support) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     s32 type = evtGetValue(event, args[1]);

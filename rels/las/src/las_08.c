@@ -18,8 +18,8 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(hi_onoff);
-USER_FUNC(mugen_kairou_get_list);
+static USER_FUNC(hi_onoff);
+static USER_FUNC(mugen_kairou_get_list);
 
 static EvtWord w1_door_close[22];
 static EvtWord w1_door_open[22];
@@ -32,13 +32,13 @@ static EvtWord e2_door_open[22];
 static EvtWord door_matigai_evt[15];
 EvtWord door_seikai_evt[19];
 static BeroEntry bero_entry_data[5];
-BeroEntry e_bero_1_matigai[1];
-BeroEntry e_bero_1_seikai[1];
-BeroEntry e_bero_2_seikai[1];
-const char* taimatu_data[16];
-EvtWord hikari_anim[52];
-EvtWord taimatu_evt[18];
-s32 mugen_kairou_list[7];
+static BeroEntry e_bero_1_matigai[1];
+static BeroEntry e_bero_1_seikai[1];
+static BeroEntry e_bero_2_seikai[1];
+static const char* taimatu_data[16];
+static EvtWord hikari_anim[52];
+static EvtWord taimatu_evt[18];
+static s32 mugen_kairou_list[7];
 EvtWord mugen_kairou_init[96];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -260,7 +260,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Exit of las_08: east door e_bero_1 to las_07 (w_bero_1). */
-BeroEntry e_bero_1_matigai[] = {
+static BeroEntry e_bero_1_matigai[] = {
     {
         "e_bero_1", // hitName
         1, // type
@@ -282,7 +282,7 @@ BeroEntry e_bero_1_matigai[] = {
 };
 
 /** Exit of las_08: east door e_bero_1 to las_08 (w_bero_1). */
-BeroEntry e_bero_1_seikai[] = {
+static BeroEntry e_bero_1_seikai[] = {
     {
         "e_bero_1", // hitName
         1, // type
@@ -304,7 +304,7 @@ BeroEntry e_bero_1_seikai[] = {
 };
 
 /** Exit of las_08: east door e_bero_2 to las_08 (w_bero_2). */
-BeroEntry e_bero_2_seikai[] = {
+static BeroEntry e_bero_2_seikai[] = {
     {
         "e_bero_2", // hitName
         1, // type
@@ -325,7 +325,7 @@ BeroEntry e_bero_2_seikai[] = {
     },
 };
 
-const char* taimatu_data[] = {
+static const char* taimatu_data[] = {
     "S_hikari_01",
     "A_hi_01",
     "S_hikari_02",
@@ -348,7 +348,7 @@ const char* taimatu_data[] = {
  * Event script: pulses the eight torch flames of the corridor,
  * scaling their light map objects with a sine wave (0.6 to 1.0) forever.
  */
-EVT_BEGIN(hikari_anim)
+static EVT_BEGIN(hikari_anim)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     SET_VALUE(LW(0), 0)
@@ -374,7 +374,7 @@ EVT_END()
  * Event script: hides the eight torch map objects of the corridor,
  * then starts hikari_anim to make the lit torches flicker.
  */
-EVT_BEGIN(taimatu_evt)
+static EVT_BEGIN(taimatu_evt)
     SET_INT_READ_ADDR(PTR(&taimatu_data))
     LOOP(8)
         READ_INT2(LW(0), LW(1))
@@ -388,7 +388,7 @@ EVT_END()
  * Which door is right in each of the seven rounds of the endless corridor: 7 means door e_bero_1 and 3 means
  * e_bero_2.
  */
-s32 mugen_kairou_list[] = {
+static s32 mugen_kairou_list[] = {
     7, 7, 3, 3, 7, 3, 7,
 };
 
@@ -453,7 +453,7 @@ EVT_BEGIN(las_08_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(hi_onoff) {
+static USER_FUNC(hi_onoff) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     s32 on = evtGetValue(event, args[1]);
@@ -475,7 +475,7 @@ USER_FUNC(hi_onoff) {
  * Script helper: reads entry args[0] of mugen_kairou_list into args[1] (7 or 3: which door the current round
  * expects).
  */
-USER_FUNC(mugen_kairou_get_list) {
+static USER_FUNC(mugen_kairou_get_list) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 

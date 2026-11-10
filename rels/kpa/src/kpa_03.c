@@ -14,7 +14,7 @@
 #include "driver/seqdrv.h"
 
 static EvtWord kpa_act_stg2_mobj[209];
-EvtWord kpa_act_stg2_item[85];
+static EvtWord kpa_act_stg2_item[85];
 static EvtWord kpa_fall[41];
 EvtWord kairyu_evt[38];
 
@@ -58,7 +58,7 @@ static EvtWord kpa_act_stg2_mobj[] = {
 };
 
 /** Coins Bowser can collect in side-scrolling stage 2, as x and y positions. */
-EvtWord kpa_act_stg2_item[] = {
+static EvtWord kpa_act_stg2_item[] = {
     KPA_ITEM(-1050.0f, 212.5f), KPA_ITEM(-1000.0f, 212.5f), KPA_ITEM(-875.0f, 12.5f),
     KPA_ITEM(-875.0f, 62.5f), KPA_ITEM(-825.0f, 12.5f), KPA_ITEM(-825.0f, 62.5f), KPA_ITEM(-775.0f, 12.5f),
     KPA_ITEM(-775.0f, 62.5f), KPA_ITEM(125.0f, 0.0f), KPA_ITEM(175.0f, 0.0f), KPA_ITEM(225.0f, 0.0f),

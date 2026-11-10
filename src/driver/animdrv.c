@@ -30,7 +30,7 @@ static void materialProc(s32 shapeId, s32 xluStage);
 #define TESTHEAP_SIZE (u32)(1.5 * 1024 * 1024)
 
 //.data
-u8 _vivihimoData[3][0x400] ATTRIBUTE_ALIGN(32) = {
+static u8 _vivihimoData[3][0x400] ATTRIBUTE_ALIGN(32) = {
     0x00, 0x00, 0x00, 0x00, 0x3F, 0x4C, 0xCC, 0xCD, 0x3F, 0x99, 0x99, 0x9A, 0x3F, 0x4C, 0xCC, 0xCD,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3F, 0x4C, 0xCC, 0xCD, 0x3F, 0x33, 0x33, 0x33,
     0x3F, 0x00, 0x00, 0x00, 0x3F, 0x33, 0x33, 0x33, 0x3E, 0xCC, 0xCC, 0xCD, 0x3F, 0x33, 0x33, 0x33,
@@ -318,7 +318,7 @@ void* vivihimoData[4] = {
 /** Points at the animation driver's work (files, textures, pose pool, scratch buffers). */
 #if VERSION <= VERSION_DEMO_JP
 AnimationWork work;
-Mtx g_modeling_mtx_stack[32];
+static Mtx g_modeling_mtx_stack[32];
 #endif
 
 static AnimationWork* wp = &work;
@@ -327,8 +327,8 @@ static AnimationWork* wp = &work;
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 s32 anim_unused_sbss;
 //.sbss
-Mtx* g_modeling_mtx;
-s32 g_modeling_mtx_lv;
+static Mtx* g_modeling_mtx;
+static s32 g_modeling_mtx_lv;
 
 // local declarations
 void animPoseRefresh(void);
@@ -4048,4 +4048,4 @@ const char* animPoseGetGroupName(s32 poseId, s32 group) {
 // tanfTbl in .bss.
 f32 tanfTbl[0xB2];
 AnimationWork work;
-Mtx g_modeling_mtx_stack[32];
+static Mtx g_modeling_mtx_stack[32];

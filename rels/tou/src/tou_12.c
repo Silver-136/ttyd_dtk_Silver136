@@ -28,10 +28,10 @@ static BeroEntry bero_data[2];
 static EvtWord evt_kinoshikowa[111];
 static EvtWord evt_block_broken[57];
 static EvtWord init_michel[22];
-EvtWord init_michel_dummy[12];
+static EvtWord init_michel_dummy[12];
 static EvtWord talk_michel[8];
 static EvtWord init_brots[35];
-EvtWord init_brots_dummy[12];
+static EvtWord init_brots_dummy[12];
 static EvtWord talk_brots[91];
 static EvtWord init_kinoshikowa[2];
 static EvtWord talk_kinoshikowa[2];
@@ -168,7 +168,7 @@ EVT_END()
  * before STG3_32_BOSS_BATTLE it is placed at (175, 0, -20), where the flattened Michel lies,
  * so talking there reaches him.
  */
-EVT_BEGIN(init_michel_dummy)
+static EVT_BEGIN(init_michel_dummy)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("マイケルダミー"), 175, 0, -20)
     END_IF
@@ -199,7 +199,7 @@ EVT_END()
  * before STG3_32_BOSS_BATTLE it is placed at (125, 4, -60), next to where the flattened Brots lies,
  * so talking there reaches him.
  */
-EVT_BEGIN(init_brots_dummy)
+static EVT_BEGIN(init_brots_dummy)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("ブロッツダミー"), 125, 4, -60)
     END_IF

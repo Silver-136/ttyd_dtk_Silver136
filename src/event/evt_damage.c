@@ -30,7 +30,7 @@ EVT_BEGIN(evt_gazigazi_entry)
 EVT_END()
 
 /** Plays the bite sound at LW(0..2) and loops the biting animation until evt_gazigazi_appear deletes it. */
-EVT_BEGIN(evt_gazigazi_anim_loop)
+static EVT_BEGIN(evt_gazigazi_anim_loop)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_GAJIGAJI1"), LW(0), LW(1), LW(2), 0)
     LOOP(0)
         CALL(evt_npc_set_anim, STRING(GAZIGAZI), STRING("GAZ_A_1"))

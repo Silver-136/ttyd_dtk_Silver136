@@ -187,8 +187,8 @@ static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
 static NpcSetupInfo npc_data[3];
-EvtWord evt_ghost_diary[5];
-EvtWord evt_ghost_diary_read[53];
+static EvtWord evt_ghost_diary[5];
+static EvtWord evt_ghost_diary_read[53];
 /* shelf access table: hit, msg; a NULL hit ends it */
 typedef struct ShelfMsg {
     const char* hit;
@@ -202,7 +202,7 @@ static ShelfMsgTbl6 access_tbl;
 static EvtWord evt_access[14];
 static EvtWord evt_access2[47];
 static EvtWord evt_access_entry[31];
-EvtWord rsh_05_init_evt[96];
+static EvtWord rsh_05_init_evt[96];
 EvtWord rsh_05_a_init_evt[103];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -2019,7 +2019,7 @@ static NpcSetupInfo npc_data[] = {
 };
 
 /** Pickup event of the Ragged Diary lying in the car: advances the story to STG6_17_GHOST_DIARY. */
-EVT_BEGIN(evt_ghost_diary)
+static EVT_BEGIN(evt_ghost_diary)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)
     RETURN
 EVT_END()
@@ -2029,7 +2029,7 @@ EVT_END()
  * Each accepted prompt shows the next page (stg6_rsh_131 to 133); after the third page comes the ghost's remark
  * (stg6_rsh_134). Declining a prompt ends the reading.
  */
-EVT_BEGIN(evt_ghost_diary_read)
+static EVT_BEGIN(evt_ghost_diary_read)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_130"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_rsh_130_yn"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2109,7 +2109,7 @@ EVT_END()
  * Shared map init for rsh_05 on the first trip:
  * scenery, shelf signs and the Power Punch bottle (bin_2) trigger, and the music for the story stage.
  */
-EVT_BEGIN(rsh_05_init_evt)
+static EVT_BEGIN(rsh_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_DEFAULT

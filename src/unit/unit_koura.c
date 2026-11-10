@@ -16,8 +16,8 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[5];
-PoseTableEntry pose_table_crack_lv1[5];
-PoseTableEntry pose_table_crack_lv2[5];
+static PoseTableEntry pose_table_crack_lv1[5];
+static PoseTableEntry pose_table_crack_lv2[5];
 static BattleUnitKindPart parts[2];
 static EvtWord init_event[46];
 
@@ -29,7 +29,7 @@ static EvtWord phase_event[38];
 
 EvtWord koura_open[72];
 EvtWord koura_close[79];
-EvtWord damage_core[92];
+static EvtWord damage_core[92];
 EvtWord pose_tbl_reset[58];
 static EvtWord dead_event[243];
 EvtWord destroy_event[47];
@@ -151,7 +151,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /** Poses of the cracked shell (HP 4-6), used once damage_core or pose_tbl_reset notice the damage. */
-PoseTableEntry pose_table_crack_lv1[] = {
+static PoseTableEntry pose_table_crack_lv1[] = {
     {POSE_TYPE_NORMAL, "PKO_S_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_2"},
     {POSE_TYPE_DAMAGE, "PKO_D_2"},
@@ -160,7 +160,7 @@ PoseTableEntry pose_table_crack_lv1[] = {
 };
 
 /** Poses of the badly cracked shell (HP 3 or less). */
-PoseTableEntry pose_table_crack_lv2[] = {
+static PoseTableEntry pose_table_crack_lv2[] = {
     {POSE_TYPE_NORMAL, "PKO_S_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_3"},
     {POSE_TYPE_DAMAGE, "PKO_D_3"},
@@ -315,7 +315,7 @@ EVT_END()
  * cracked or badly cracked pose table from the shell's HP (above 6, 4-6, 3 or less),
  * plays the crack sound when the stage changes, and records the stage in unit work 3.
  */
-EVT_BEGIN(damage_core)
+static EVT_BEGIN(damage_core)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_CRACK, LW(1))
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
     SWITCH(LW(0))

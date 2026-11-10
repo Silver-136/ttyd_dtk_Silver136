@@ -61,20 +61,20 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
-EvtWord evt_snd_stop[12];
+static EvtWord evt_snd_stop[12];
 static EvtWord evt_haikei_in[16];
 static BeroEntry bero_entry_data[15];
 static const char* name_tbl[13];
-const char* name_tbl2[6];
-EvtWord move_left_right[128];
+static const char* name_tbl2[6];
+static EvtWord move_left_right[128];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord move_up_down[128];
+static EvtWord move_up_down[128];
 #else
-EvtWord move_up_down[226];
+static EvtWord move_up_down[226];
 #endif
 
-EvtWord move_r[84];
+static EvtWord move_r[84];
 /* moving-floor gimmick read by shikake_init: hit, mapobj, two motion params, time; a NULL mapobj ends the table */
 typedef struct ShikakeMove {
     const char* hit;
@@ -87,18 +87,18 @@ typedef struct ShikakeMoveTbl7 {
     ShikakeMove rows[7];
     const char* end[2];
 } ShikakeMoveTbl7;
-ShikakeMoveTbl7 left_right_tbl;
+static ShikakeMoveTbl7 left_right_tbl;
 typedef struct ShikakeMoveTbl6 {
     ShikakeMove rows[6];
     const char* end[2];
 } ShikakeMoveTbl6;
-ShikakeMoveTbl6 up_down_tbl;
+static ShikakeMoveTbl6 up_down_tbl;
 typedef struct ShikakeMoveTbl15 {
     ShikakeMove rows[15];
     const char* end[2];
 } ShikakeMoveTbl15;
-ShikakeMoveTbl15 r_tbl;
-EvtWord shikake_init[66];
+static ShikakeMoveTbl15 r_tbl;
+static EvtWord shikake_init[66];
 static EvtWord evt_sw[134];
 static EvtWord evt_hari[70];
 static EvtWord evt_ramp[68];
@@ -209,7 +209,7 @@ EVT_END()
  * Script that silences the conveyor sound handle in GW(11) once the story has reached
  * STG7_17_CONVEYOR_BELT; returns LW(0) = 0.
  */
-EVT_BEGIN(evt_snd_stop)
+static EVT_BEGIN(evt_snd_stop)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
         CALL(evt_snd_sfxoff, GW(11))
     END_IF
@@ -484,7 +484,7 @@ static const char* name_tbl[] = {
 };
 
 /** Hit areas of the clockwork (zenmai) platform groups. */
-const char* name_tbl2[] = {
+static const char* name_tbl2[] = {
     "A_zenmai1",
     "A_zenmai2",
     "A_zenmai3",
@@ -607,7 +607,7 @@ static USER_FUNC(mario_chk) {
  * and forth between the two positions, pausing 300 ms at each end and then waiting while GF(0) is set
  * (evt_sw raises it during the staircase-reveal cutscene).
  */
-EVT_BEGIN(move_left_right)
+static EVT_BEGIN(move_left_right)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
     SET_VALUE(LW(7), LW(2))
@@ -665,7 +665,7 @@ EVT_END()
  * Script for one platform of up_down_tbl: binds the hit area to the map object
  * and moves it between two heights over the row's time.
  */
-EVT_BEGIN(move_up_down)
+static EVT_BEGIN(move_up_down)
     // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
@@ -788,7 +788,7 @@ EVT_END()
  * and turns it between two angles over the row's time, again and again; while GF(0) is set
  * (evt_sw raises it during the staircase-reveal cutscene) it stops mid-swing and waits.
  */
-EVT_BEGIN(move_r)
+static EVT_BEGIN(move_r)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
     SET_VALUE(LW(7), LW(2))
@@ -830,7 +830,7 @@ EVT_END()
  * The platforms that slide sideways: for each, the hit area, the map object, the two end positions and the
  * travel time.
  */
-ShikakeMoveTbl7 left_right_tbl = {
+static ShikakeMoveTbl7 left_right_tbl = {
     {
         {"A_ugoku_1", "S_ugoku_1", 0, -150, 3000},
         {"A_ugoku_3", "S_ugoku_3", 0, 100, 1500},
@@ -847,7 +847,7 @@ ShikakeMoveTbl7 left_right_tbl = {
  * The platforms that move up and down: hit area, map object, the two end positions and the travel time of
  * each.
  */
-ShikakeMoveTbl6 up_down_tbl = {
+static ShikakeMoveTbl6 up_down_tbl = {
     {
         {"A_ugoku_2", "S_ugoku_2", 0, -150, 2800},
         {"A_ugoku_h_4", "S_ugoku_h_4", 0, 100, 3000},
@@ -867,7 +867,7 @@ ShikakeMoveTbl6 up_down_tbl = {
  * The clockwork (zenmai) platforms that rotate: hit area, map object, the two angles and the swing time of
  * each.
  */
-ShikakeMoveTbl15 r_tbl = {
+static ShikakeMoveTbl15 r_tbl = {
     {
         {"A_zenmai1", "S_zenmai1", 0, 360, 6000},
         {"A_zenmai2", "S_zenmai2", 0, -360, 6000},
@@ -892,7 +892,7 @@ ShikakeMoveTbl15 r_tbl = {
  * Starts all the moving platforms of the room: reads left_right_tbl,
  * up_down_tbl and r_tbl and spawns move_left_right, move_up_down and move_r for each row.
  */
-EVT_BEGIN(shikake_init)
+static EVT_BEGIN(shikake_init)
     SET_VALUE(GF(0), 0)
     SET_INT_READ_ADDR(PTR(&left_right_tbl))
     LOOP(0)

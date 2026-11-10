@@ -37,14 +37,14 @@
 #include <dolphin/pad.h>
 
 static USER_FUNC(getYoshiColor);
-USER_FUNC(vivian_away);
+static USER_FUNC(vivian_away);
 
 static EvtWord s_close[12];
 static EvtWord s_open[12];
 static BeroEntry bero_entry_data[2];
-EvtWord ranperu_toujou[338];
-EvtWord starstone_jump_se[15];
-EvtWord irekawatta_mario_init[67];
+static EvtWord ranperu_toujou[338];
+static EvtWord starstone_jump_se[15];
+static EvtWord irekawatta_mario_init[67];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord irekawatta_mario[];
@@ -52,9 +52,9 @@ extern EvtWord irekawatta_mario[];
 EvtWord irekawatta_mario[495];
 #endif
 
-EvtWord yoshi_color[65];
-EvtWord ranperu_lastbattle[378];
-EvtWord hontonosugata_mario_init[125];
+static EvtWord yoshi_color[65];
+static EvtWord ranperu_lastbattle[378];
+static EvtWord hontonosugata_mario_init[125];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord hontonosugata_mario[];
@@ -62,8 +62,8 @@ extern EvtWord hontonosugata_mario[];
 EvtWord hontonosugata_mario[948];
 #endif
 
-EvtWord ranperu_init[20];
-EvtWord nisemario_init[22];
+static EvtWord ranperu_init[20];
+static EvtWord nisemario_init[22];
 static NpcSetupInfo npcEnt[7];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -123,7 +123,7 @@ static BeroEntry bero_entry_data[] = {
  * and the first Doopliss battle starts.
  * Afterwards the Mario-swap scene (irekawatta_mario) runs and the story becomes "Doopliss battle".
  */
-EVT_BEGIN(ranperu_toujou)
+static EVT_BEGIN(ranperu_toujou)
     // Mario and his partner turn to face Doopliss, who is on the stairs above.
     CALL(evt_mario_normalize)
     WAIT_MS(500)
@@ -227,7 +227,7 @@ EVT_END()
  * Plays the Star Stone jump sound at the Ruby Star's position;
  * used for each bounce as Doopliss tosses the Ruby Star.
  */
-EVT_BEGIN(starstone_jump_se)
+static EVT_BEGIN(starstone_jump_se)
     CALL(evt_item_get_position, STRING("rubystar"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_STARSTONE_JUMP1"), LW(0), LW(1), LW(2), 0)
     RETURN
@@ -238,7 +238,7 @@ EVT_END()
  * Mario's partner stops, the shadow-Mario tint comes on,
  * Doopliss is moved off screen and the fake Mario NPC takes his place at (-8, 670, 41), Mario at (80, 670, 50).
  */
-EVT_BEGIN(irekawatta_mario_init)
+static EVT_BEGIN(irekawatta_mario_init)
     CALL(evt_party_stop, 0)
     CALL(evt_kagemario_change, 1)
     CALL(evt_npc_set_position, STRING("ランペル"), 0, -1000, 0)
@@ -419,7 +419,7 @@ EVT_BEGIN(irekawatta_mario)
 EVT_END()
 
 /** Re-creates the Yoshi NPC with the sprite of the player's chosen Yoshi colour (c_babyyoshi to c_babyyoshi7). */
-EVT_BEGIN(yoshi_color)
+static EVT_BEGIN(yoshi_color)
     CALL(evt_npc_delete, STRING("ヨッシー"))
     CALL(getYoshiColor, LW(0))
     SWITCH(LW(0))
@@ -452,7 +452,7 @@ EVT_END()
  * side (vivian_away; the fake Mario mocks the quarrel), then Mario fights the fake Mario (the second Doopliss
  * battle) and the story becomes "Doopliss battle 2".
  */
-EVT_BEGIN(ranperu_lastbattle)
+static EVT_BEGIN(ranperu_lastbattle)
     // Doopliss is parked off screen, Mario freezes, and Vivian joins if no partner is with him.
     CALL(evt_npc_set_position, STRING("ランペル"), 0, -1000, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -558,7 +558,7 @@ EVT_END()
  * Sets the stage after the second battle: positions the fake Mario, Doopliss and the partners in a row,
  * puts Vivian's poses back to normal and Mario and his partner at the left.
  */
-EVT_BEGIN(hontonosugata_mario_init)
+static EVT_BEGIN(hontonosugata_mario_init)
     CALL(evt_jin_vivian_pose_set, 1, STRING("PTR_S_1"))
     CALL(evt_jin_vivian_pose_set, 7, STRING("PTR_T_1"))
     CALL(evt_npc_set_position, STRING("ランペル"), -15, 670, 41)
@@ -862,7 +862,7 @@ EVT_END()
  * Init script of Doopliss (Rampell): stands at (110, 695, -85) before the first battle,
  * afterwards parked off screen.
  */
-EVT_BEGIN(ranperu_init)
+static EVT_BEGIN(ranperu_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_npc_set_position, STRING("me"), 110, 695, -85)
@@ -876,7 +876,7 @@ EVT_END()
  * Init script of the fake Mario: stands at (-8, 670, 81) during the "Doopliss battle" step,
  * otherwise parked off screen.
  */
-EVT_BEGIN(nisemario_init)
+static EVT_BEGIN(nisemario_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_npc_set_position, STRING("me"), -8, 670, 81)
@@ -1084,7 +1084,7 @@ static USER_FUNC(getYoshiColor) {
 }
 
 /** Script helper: sets a flag in Vivian's party data so she is treated as having left the party. */
-USER_FUNC(vivian_away) {
+static USER_FUNC(vivian_away) {
     pouchGetPtr()->partyData[PARTY_VIVIAN].flags |= 2;
     return EVT_RETURN_DONE;
 }

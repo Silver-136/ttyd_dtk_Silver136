@@ -35,7 +35,7 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(bonbaba_wait_landon);
+static USER_FUNC(bonbaba_wait_landon);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
@@ -48,7 +48,7 @@ extern EvtWord bonbaba_evt[];
 EvtWord bonbaba_evt[819];
 #endif
 
-EvtWord bonbaba_init[62];
+static EvtWord bonbaba_init[62];
 static NpcSetupInfo npcEnt[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -390,7 +390,7 @@ EVT_END()
  * after the fight, until the body is cleared, he lies collapsed in the middle of the room, intangible,
  * in his defeated pose.
  */
-EVT_BEGIN(bonbaba_init)
+static EVT_BEGIN(bonbaba_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG8_03_THE_PALACE_GARDEN)
         CALL(evt_npc_set_position, STRING("me"), 100, 10, 45)
@@ -410,7 +410,7 @@ EVT_BEGIN(bonbaba_init)
     RETURN
 EVT_END()
 
-USER_FUNC(bonbaba_wait_landon) {
+static USER_FUNC(bonbaba_wait_landon) {
     // ボンババ
     return npcNameToPtr("ボンババ")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

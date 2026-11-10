@@ -56,19 +56,19 @@ void* puniGetPunigp(void);
 void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
 static u8* bp;
 
-USER_FUNC(akari_charge_entry);
-USER_FUNC(bossrobot);
-USER_FUNC(elder_talk_sub_fadeoff);
+static USER_FUNC(akari_charge_entry);
+static USER_FUNC(bossrobot);
+static USER_FUNC(elder_talk_sub_fadeoff);
 USER_FUNC(elder_talk_sub_punicheck);
 static USER_FUNC(evtflash);
-USER_FUNC(evt_countdown_stop);
+static USER_FUNC(evt_countdown_stop);
 
 static EvtWord guide_init[29];
 static EvtWord guide_talk[20];
 static EvtWord rival_init[30];
 static EvtWord rival_talk[8];
 static EvtWord elder_init[39];
-s32 puni_return_data[204];
+static s32 puni_return_data[204];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord puni_return[];
@@ -76,8 +76,8 @@ extern EvtWord puni_return[];
 EvtWord puni_return[99];
 #endif
 
-EvtWord elder_talk_sub[376];
-s32 irai_item_tbl[2];
+static EvtWord elder_talk_sub[376];
+static s32 irai_item_tbl[2];
 static s32 iri_17_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -86,7 +86,7 @@ static EvtWord elder_talk[173];
 static EvtWord elder_talk[177];
 #endif
 
-EvtWord puni_1_init[24];
+static EvtWord puni_1_init[24];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord puni_1_talk[];
@@ -94,20 +94,20 @@ extern EvtWord puni_1_talk[];
 EvtWord puni_1_talk[43];
 #endif
 
-EvtWord puni_2_init[24];
-EvtWord puni_2_talk[20];
-EvtWord puni_init[9];
+static EvtWord puni_2_init[24];
+static EvtWord puni_2_talk[20];
+static EvtWord puni_init[9];
 static EvtWord baba_init[9];
 static EvtWord baba_talk[8];
 static EvtWord sister_init[31];
-EvtWord sister_jump[48];
+static EvtWord sister_jump[48];
 static EvtWord sister_talk[230];
 static NpcSetupInfo npcEnt[9];
-EvtWord bero_00_doa_close[10];
-EvtWord bero_00_doa_open[10];
+static EvtWord bero_00_doa_close[10];
+static EvtWord bero_00_doa_open[10];
 static EvtWord bero_01_doa_close[10];
 static EvtWord bero_01_doa_open[10];
-EvtWord out_mri_event[5];
+static EvtWord out_mri_event[5];
 static BeroEntry bero_entry_data[4];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -119,17 +119,17 @@ EvtWord bigtree_firstbattle[734];
 EvtWord meet_rival[2247];
 EvtWord rival_nakama[1137];
 EvtWord elder_kaisetsu[206];
-EvtWord puni_taiki[119];
-s32 puni_position[102];
-EvtWord boss_battle_init[215];
+static EvtWord puni_taiki[119];
+static s32 puni_position[102];
+static EvtWord boss_battle_init[215];
 EvtWord dai3kanbu_suikomare[];
-EvtWord boss_robot_pera[34];
-EvtWord boss_robot_pera_after[19];
-EvtWord boss_battle[1224];
-EvtWord starstone_item[19];
-EvtWord boss_robot_electro[43];
-EvtWord boss_robot_kemuri[49];
-EvtWord boss_battle_win_init[49];
+static EvtWord boss_robot_pera[34];
+static EvtWord boss_robot_pera_after[19];
+static EvtWord boss_battle[1224];
+static EvtWord starstone_item[19];
+static EvtWord boss_robot_electro[43];
+static EvtWord boss_robot_kemuri[49];
+static EvtWord boss_battle_win_init[49];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord boss_battle_win[];
@@ -138,14 +138,14 @@ EvtWord boss_battle_win[1493];
 #endif
 
 static EvtWord door_switch_init[17];
-EvtWord ueki_puni_nigeru[100];
-EvtWord evt_ueki_01[18];
+static EvtWord ueki_puni_nigeru[100];
+static EvtWord evt_ueki_01[18];
 static EvtWord evt_ueki_02[24];
 EvtWord evt_ueki_03[49];
 static EvtWord evt_ueki_08[8];
 static KusaAccess ueki_access_data[5];
 EvtWord puni_mario_wait[49];
-EvtWord mri_01_koopa_first_evt[400];
+static EvtWord mri_01_koopa_first_evt[400];
 EvtWord mri_01_koopa_second_evt[682];
 EvtWord mri_01_init_evt[464];
 
@@ -255,7 +255,7 @@ USER_FUNC(elder_talk_sub_punicheck) {
 }
 
 /** Sets whether Punies follow the map's blend colour (args[0] = 0) or are drawn without it (args[0] = 1). */
-USER_FUNC(elder_talk_sub_fadeoff) {
+static USER_FUNC(elder_talk_sub_fadeoff) {
     puniFadeOff(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
@@ -329,7 +329,7 @@ static EVT_BEGIN(elder_init)
 EVT_END()
 
 /** Grid of (x, z) spots in the village where returning Punies are put back, filled column by column. */
-s32 puni_return_data[] = {
+static s32 puni_return_data[] = {
     200, 0, 200, 10, 200, 20, 200, 30,
     200, 40, 200, 50, 200, 60, 200, 70,
     200, 80, 200, 90, 210, 90, 210, 80,
@@ -425,7 +425,7 @@ EVT_END()
  * then reports that everyone has gathered. The "I love you" choice freezes the Punies and unfreezes them
  * (and restores the camera) at its end.
  */
-EVT_BEGIN(elder_talk_sub)
+static EVT_BEGIN(elder_talk_sub)
     // The Elder asks what Mario wants and offers three choices: just saying hi, lost Punies, or "I love you".
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_22"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("stg2_mri_e15_22_sel"))
@@ -545,7 +545,7 @@ EVT_BEGIN(elder_talk_sub)
 EVT_END()
 
 /** Item list for the key window of Trouble Center job 10: only the Life Shroom (-1 ends the list). */
-s32 irai_item_tbl[] = {
+static s32 irai_item_tbl[] = {
     151, -1,
 };
 
@@ -632,7 +632,7 @@ static EVT_BEGIN(elder_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(puni_1_init)
+static EVT_BEGIN(puni_1_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -676,7 +676,7 @@ EVT_BEGIN(puni_1_talk)
 EVT_END()
 
 /** Init for the second villager Puni NPC (same placement rules as puni_1_init). */
-EVT_BEGIN(puni_2_init)
+static EVT_BEGIN(puni_2_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -689,7 +689,7 @@ EVT_BEGIN(puni_2_init)
 EVT_END()
 
 /** Talk script of the second villager Puni: one line before the finale and a different one afterwards. */
-EVT_BEGIN(puni_2_talk)
+static EVT_BEGIN(puni_2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_017"), 0, STRING("me"))
@@ -700,7 +700,7 @@ EVT_BEGIN(puni_2_talk)
 EVT_END()
 
 /** Init for the generic villager Puni NPCs; runs the shared NPC init and enables facing the movement direction. */
-EVT_BEGIN(puni_init)
+static EVT_BEGIN(puni_init)
     CALL_CHILD(npc_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
@@ -742,7 +742,7 @@ EVT_END()
  * Makes the sister Puni hop in place over and over with the Puni jump sound, until the talk script sets GF(11).
  * GF(10) is set while she hops.
  */
-EVT_BEGIN(sister_jump)
+static EVT_BEGIN(sister_jump)
     SET_VALUE(GF(10), 1)
     SET_VALUE(GF(11), 0)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -930,7 +930,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /** Closing animation of the west door (to mri_00), played after Mario enters the village. */
-EVT_BEGIN(bero_00_doa_close)
+static EVT_BEGIN(bero_00_doa_close)
     SET_VALUE(LW(9), 1)
     SET_VALUE(LW(10), STRING("S_doa_l_a"))
     SPAWN_EVENT(evt_mri_door_close)
@@ -938,7 +938,7 @@ EVT_BEGIN(bero_00_doa_close)
 EVT_END()
 
 /** Opening animation of the west door (to mri_00), played when Mario leaves through it. */
-EVT_BEGIN(bero_00_doa_open)
+static EVT_BEGIN(bero_00_doa_open)
     SET_VALUE(LW(9), 1)
     SET_VALUE(LW(10), STRING("S_doa_l_a"))
     SPAWN_EVENT(evt_mri_door_open)
@@ -962,7 +962,7 @@ static EVT_BEGIN(bero_01_doa_open)
 EVT_END()
 
 /** Exit script of the west door; returns 0 so the map change goes ahead. */
-EVT_BEGIN(out_mri_event)
+static EVT_BEGIN(out_mri_event)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -2182,7 +2182,7 @@ EVT_BEGIN(elder_kaisetsu)
     RETURN
 EVT_END()
 
-void bossrobot_batu(CameraId camera, void* param) {
+static void bossrobot_batu(CameraId camera, void* param) {
     u8* alpha = param;
     NpcEntry* robot = npcNameToPtr("\203{\203X\203\215\203{\203b\203g");
     NpcEntry* batu = npcNameToPtr("\203{\203X\203\215\203{\203b\203g\203o\203c");
@@ -2219,7 +2219,7 @@ void bossrobot_batu(CameraId camera, void* param) {
  * On its first call it allocates the alpha byte, turns on world-matrix evaluation for the robot's pose
  * and fills its world matrices with a translation 1000 units down until the pose computes them.
  */
-USER_FUNC(bossrobot) {
+static USER_FUNC(bossrobot) {
     u8 alpha = evtGetValue(event, event->args[0]);
     NpcEntry* robot = npcNameToPtr("\203{\203X\203\215\203{\203b\203g");
     NpcEntry* batu = npcNameToPtr("\203{\203X\203\215\203{\203b\203g\203o\203c");
@@ -2251,7 +2251,7 @@ USER_FUNC(bossrobot) {
 }
 
 /** Stops the bomb countdown timer. */
-USER_FUNC(evt_countdown_stop) {
+static USER_FUNC(evt_countdown_stop) {
     countDownStop();
     return EVT_RETURN_DONE;
 }
@@ -2260,7 +2260,7 @@ USER_FUNC(evt_countdown_stop) {
  * Spawns the N64-style charge-up light effect at x, y, z (args[0] to args[2]) with the color args[3] to args[5],
  * scale args[6] and the effect time args[7].
  */
-USER_FUNC(akari_charge_entry) {
+static USER_FUNC(akari_charge_entry) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -2294,7 +2294,7 @@ void mri_stg3_012_cb(s32 type, void* param) {
 }
 
 /** Places the Punies 5 to 13 at fixed idle spots in the village (with the collision and not-in-party flags cleared). */
-EVT_BEGIN(puni_taiki)
+static EVT_BEGIN(puni_taiki)
     CALL(evt_puni_init_puni, 5, 14, -55, 0, 20, 0)
     CALL(evt_puni_flag_onoff, 5, 0, PUNI_FLAG_COLLIDE | PUNI_FLAG_NOT_IN_PARTY)
     CALL(evt_puni_init_puni, 6, 14, -40, 0, 93, 0)
@@ -2317,7 +2317,7 @@ EVT_BEGIN(puni_taiki)
 EVT_END()
 
 /** Packed positions of the Punies in the Elder's room for the thank-you scene, one 32-bit value per Puni. */
-s32 puni_position[] = {
+static s32 puni_position[] = {
     19267575, 23724122, 25100278, 19857429, 20774962, 24182781, 21037044, 23789617,
     25100278, 17956936, 18415731, 18153523, 19136593, 24051726, 22151142, 20840431,
     19136500, 20709482, 19922987, 22413292, 22020198, 21561381, 22282199, 22741005,
@@ -2337,7 +2337,7 @@ s32 puni_position[] = {
  * Creates the NPCs of the boss scene: the third-force executive (Lord Crump),
  * the Magnus von Grapple robot with its cross and circle parts, five X-Naut grunts and a dummy.
  */
-EVT_BEGIN(boss_battle_init)
+static EVT_BEGIN(boss_battle_init)
     CALL(evt_npc_entry, STRING("第三勢力幹部"), STRING("c_kanbu_ibt")) // Lord Crump
     CALL(evt_npc_set_tribe, STRING("第三勢力幹部"), STRING("第三勢力幹部"))
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 0, -1000, 0)
@@ -2433,7 +2433,7 @@ EVT_END()
  * Starts the X-Naut paper animation: loads the OFF_d_xten paper,
  * captures it full screen into the "img" image and plays A_1.
  */
-EVT_BEGIN(boss_robot_pera)
+static EVT_BEGIN(boss_robot_pera)
     CALL(evt_paper_entry, STRING("OFF_d_xten"))
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_xten"))
@@ -2445,7 +2445,7 @@ EVT_BEGIN(boss_robot_pera)
 EVT_END()
 
 /** Waits for the X-Naut paper animation to end, then releases the capture, image and paper. */
-EVT_BEGIN(boss_robot_pera_after)
+static EVT_BEGIN(boss_robot_pera_after)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_free_capture, STRING("img"), 0)
     CALL(evt_img_onoff, STRING("img"), 0)
@@ -2459,7 +2459,7 @@ EVT_END()
  * Crump gloats and stops the time bomb's countdown, then the Magnus von Grapple lands.
  * Mario then fights it (battle info 20). Sets the story to STG2_24_BOSS_BATTLE, then runs boss_battle_win.
  */
-EVT_BEGIN(boss_battle)
+static EVT_BEGIN(boss_battle)
     CALL(evt_npc_set_position, STRING("プニ族長老"), -320, 0, 30)
     CALL(evt_npc_set_ry, STRING("プニ族長老"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族長老"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -2796,7 +2796,7 @@ EVT_END()
  * Keeps a Star Stone item on top of an NPC: copies the position of the NPC named in LW(8) onto the item in LW(9)
  * every frame.
  */
-EVT_BEGIN(starstone_item)
+static EVT_BEGIN(starstone_item)
     LOOP(0)
         CALL(evt_npc_get_position, LW(8), LW(0), LW(1), LW(2))
         CALL(evt_item_set_position, LW(9), LW(0), LW(1), LW(2))
@@ -2809,7 +2809,7 @@ EVT_END()
  * Boss robot damage effect: electric charge effects and crackling sounds at the NPC in LW(10),
  * forever until the event is deleted.
  */
-EVT_BEGIN(boss_robot_electro)
+static EVT_BEGIN(boss_robot_electro)
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -2830,7 +2830,7 @@ EVT_END()
  * Boss robot damage effect: smoke puffs and explosion sounds at the NPC in LW(10),
  * forever until the event is deleted.
  */
-EVT_BEGIN(boss_robot_kemuri)
+static EVT_BEGIN(boss_robot_kemuri)
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -2848,7 +2848,7 @@ EVT_BEGIN(boss_robot_kemuri)
 EVT_END()
 
 /** Places the cast for the boss-win scene: Mario, his partner, the Puni elder and the robot. */
-EVT_BEGIN(boss_battle_win_init)
+static EVT_BEGIN(boss_battle_win_init)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -3342,7 +3342,7 @@ EVT_END()
  * The Puni NPC "プニ族" speaks its line while hidden at a planter (x in LW(0), z in LW(1), message key in LW(2)),
  * then appears, hops and runs off.
  */
-EVT_BEGIN(ueki_puni_nigeru)
+static EVT_BEGIN(ueki_puni_nigeru)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_position, STRING("プニ族"), LW(0), 0, LW(1))
@@ -3370,7 +3370,7 @@ EVT_BEGIN(ueki_puni_nigeru)
 EVT_END()
 
 /** Planter hit script 1: during Bowser's visit the rival Puni speaks a line from a planter. */
-EVT_BEGIN(evt_ueki_01)
+static EVT_BEGIN(evt_ueki_01)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("kpa_stg3_005"), 0, STRING("ライバル"))
@@ -3461,7 +3461,7 @@ EVT_BEGIN(puni_mario_wait)
     RETURN
 EVT_END()
 
-EVT_BEGIN(mri_01_koopa_first_evt)
+static EVT_BEGIN(mri_01_koopa_first_evt)
     // Bowser and Kammy arrive in the village; the room's exits are disabled.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -415, 0, 30)

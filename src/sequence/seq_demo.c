@@ -145,18 +145,18 @@ typedef struct SeqDemoWork {
 static SeqDemoWork work;
 #endif
 
-THPSimple SimpleControl;
-s32 WorkBuffer[16];
-s16 SoundBuffer[2][SAMPLES_PER_AUDIO_FRAME * 2] ATTRIBUTE_ALIGN(32);
+static THPSimple SimpleControl;
+static s32 WorkBuffer[16];
+static s16 SoundBuffer[2][SAMPLES_PER_AUDIO_FRAME * 2] ATTRIBUTE_ALIGN(32);
 
 //.sbss
-s32 SoundBufferIndex;
-s16* LastAudioBuffer;
-s16* CurAudioBuffer;
-f32 _vp[GX_VIEWPORT_SZ];
-f32 _pm[GX_PROJECTION_SZ];
-s32 AudioSystem;
-AIDCallback OldAIDCallback;
+static s32 SoundBufferIndex;
+static s16* LastAudioBuffer;
+static s16* CurAudioBuffer;
+static f32 _vp[GX_VIEWPORT_SZ];
+static f32 _pm[GX_PROJECTION_SZ];
+static s32 AudioSystem;
+static AIDCallback OldAIDCallback;
 BOOL Initialized;
 
 // Forward Declarations

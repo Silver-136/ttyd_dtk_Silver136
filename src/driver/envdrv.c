@@ -24,7 +24,7 @@ static void envGlare(EnvironmentGlare* glare);
 //.data
 
 /** Glare pattern for filter type 1: the screen copy added back 16 times, up to 7 pixels off in a cross: a star glow. */
-EnvironmentGlare envGlare0 = {
+static EnvironmentGlare envGlare0 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1, 5.25f, 16,
     {
         {-1.0f, 0.0f}, {-3.0f, 0.0f}, {-5.0f, 0.0f}, {-7.0f, 0.0f},
@@ -35,7 +35,7 @@ EnvironmentGlare envGlare0 = {
 };
 
 /** Glare pattern for filter type 2: the screen copy added back 8 times in a small ring around each pixel, a soft glow. */
-EnvironmentGlare envGlare1 = {
+static EnvironmentGlare envGlare1 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 8,
     {
         {-1.41419994831f, -1.41419994831f}, {0.0f, -1.0f}, {1.41419994831f, -1.41419994831f}, {-1.0f, 0.0f},
@@ -44,7 +44,7 @@ EnvironmentGlare envGlare1 = {
 };
 
 /** Glare pattern for filter type 3: the screen copy added back 52 times over a filled diamond: a strong bloom. */
-EnvironmentGlare envGlare2 = {
+static EnvironmentGlare envGlare2 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_4, 3.5f, 52,
     {
         {0.0f, -5.0f}, {-1.0f, -4.0f}, {0.0f, -4.0f}, {1.0f, -4.0f},
@@ -64,7 +64,7 @@ EnvironmentGlare envGlare2 = {
 };
 
 /** Glare pattern for filter type 4: the screen copy added back 16 times on a diamond ring 3 to 4 pixels out, a halo. */
-EnvironmentGlare envGlare3 = {
+static EnvironmentGlare envGlare3 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 16,
     {
         {0.0f, -4.0f}, {-1.0f, -3.0f}, {1.0f, -3.0f}, {-2.0f, -2.0f},
@@ -78,9 +78,9 @@ EnvironmentGlare envGlare3 = {
 static EnvironmentWork work[2];
 
 //.sbss
-TEXPalette* env_tpl = NULL;
+static TEXPalette* env_tpl = NULL;
 /** Set once env.tpl has finished loading and is unpacked; cleared by envInit. */
-s32 tpl_ok = 0;
+static s32 tpl_ok = 0;
 
 // local prototypes
 static void envDisp_DepthOfField(void);

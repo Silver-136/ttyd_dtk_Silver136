@@ -214,10 +214,10 @@ static inline f32 moa_cosx(f32 x) {
     return a;
 }
 
-void moamoa_joint_position(Moamoa* moa, Vec* out);
+static void moamoa_joint_position(Moamoa* moa, Vec* out);
 
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall);
+static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall);
 static s32 ramp_r(EventEntry* event, BOOL isFirstCall);
 static void resha_tev(MapTevCallbackInfo* info);
 
@@ -254,10 +254,10 @@ EvtWord evt_resha_init[13];
 
 static BeroEntry bero_data_a[2];
 static EvtWord evt_moamoa_init[187];
-EvtWord evt_great_moamoa[737];
-const char* pose_name[8];
-EvtWord moamoa_debug[230];
-EvtWord rsh_06_init_evt[84];
+static EvtWord evt_great_moamoa[737];
+static const char* pose_name[8];
+static EvtWord moamoa_debug[230];
+static EvtWord rsh_06_init_evt[84];
 EvtWord rsh_06_a_init_evt[32];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -623,7 +623,7 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
  * initializes its stored joint positions below the scene, sets up the chains of Moamoa along the bones
  * and divides the swarm among them. Gives some chains the models of the swallowed passengers (kinds 2 to 9).
  */
-void evalOn(void) {
+static void evalOn(void) {
     NpcEntry* npc = npcNameToPtr("base");
     AnimationPose* anim;
     Moamoa* moa;
@@ -1543,7 +1543,7 @@ static void ext_moamoa_dispent(void) {
  * a point along the bone chain of its group, interpolated by its order in the chain,
  * taken from the base model's joint positions.
  */
-void moamoa_joint_position(Moamoa* moa, Vec* out) {
+static void moamoa_joint_position(Moamoa* moa, Vec* out) {
     NpcEntry* npc = npcNameToPtr("base");
     AnimationPose* anim = animPoseGetAnimPosePtr(npc->poseId);
     f32 t;
@@ -2362,7 +2362,7 @@ EVT_END()
  * the battle starts with the "base" NPC and, after the fight, the Smorg falls apart (evt_moamoa_blow),
  * the story advances to STG6_48_SMORG_MIASMA and the map changes to rsh_01_a.
  */
-EVT_BEGIN(evt_great_moamoa)
+static EVT_BEGIN(evt_great_moamoa)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_NO_PUSH)
@@ -2553,12 +2553,12 @@ EVT_BEGIN(evt_great_moamoa)
 EVT_END()
 
 /** Animation names the Smorg debug leftover cycles through when a button is pressed. */
-const char* pose_name[] = {
+static const char* pose_name[] = {
     "Z_1", "H_1", "S_1", "U_1", "H_2", "S_2", "P_1",
     "S_3",
 };
 
-EVT_BEGIN(moamoa_debug)
+static EVT_BEGIN(moamoa_debug)
     CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
     CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
     CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
@@ -2622,7 +2622,7 @@ EVT_END()
  * Shared map init for rsh_06 on the first trip:
  * starts the train-exterior scene and the music and ambience for the story stage.
  */
-EVT_BEGIN(rsh_06_init_evt)
+static EVT_BEGIN(rsh_06_init_evt)
     CALL_CHILD(evt_resha_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_02_A_CASE_OF_LOST_STEW, STG6_04_GRILLING_HEFF_T)
@@ -2730,7 +2730,7 @@ static void resha_tev(MapTevCallbackInfo* info) {
  * Script helper: blocks until the current animation of the base NPC (the giant Smorg model)
  * has played through once.
  */
-s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
+static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("base");
 
     if (animPoseGetLoopTimes(npc->poseId) >= 1.0f) {

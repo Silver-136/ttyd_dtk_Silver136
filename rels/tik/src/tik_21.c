@@ -19,7 +19,7 @@
 #include "driver/itemdrv.h"
 
 static BeroEntry bero_entry_data[2];
-EvtWord hari_trap[107];
+static EvtWord hari_trap[107];
 static HitDamageReturn hitDmgRetPoints[3];
 static EvtWord mobj_box00[34];
 EvtWord tik_21_init_evt[35];
@@ -51,7 +51,7 @@ static BeroEntry bero_entry_data[] = {
  * drops them again in 300 ms and waits about two seconds before repeating.
  * The trap sounds are SFX_MOBJ_FLOOR_TRAP1 and 2.
  */
-EVT_BEGIN(hari_trap)
+static EVT_BEGIN(hari_trap)
     CALL(evt_hit_bind_mapobj, STRING("a_toge"), STRING("s_toge"))
     LOOP(0)
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("a_yuka"), HIT_ATTR_SPIKES)

@@ -19,11 +19,11 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-u16 toge_flag;
+static u16 toge_flag;
 
-USER_FUNC(get_toge_name);
-USER_FUNC(toge_check_flag);
-USER_FUNC(toge_flag_onoff);
+static USER_FUNC(get_toge_name);
+static USER_FUNC(toge_check_flag);
+static USER_FUNC(toge_flag_onoff);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
@@ -31,9 +31,9 @@ static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 static HitDamageReturn dmgRetPoint[3];
-const char* toge_data[18];
-EvtWord toge_evt_sub[121];
-EvtWord toge_evt[86];
+static const char* toge_data[18];
+static EvtWord toge_evt_sub[121];
+static EvtWord toge_evt[86];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_03_init_evt[];
@@ -144,7 +144,7 @@ static HitDamageReturn dmgRetPoint[] = {
     {0},
 };
 
-const char* toge_data[] = {
+static const char* toge_data[] = {
     "S_toge_01",
     "A_toge_01",
     "S_toge_02",
@@ -170,7 +170,7 @@ const char* toge_data[] = {
  * If its busy bit is clear it sets the bit, pops the spikes up 30 units in 150 ms, holds them for a second,
  * retracts them over 400 ms and clears the bit. Does nothing if that trap is already active.
  */
-EVT_BEGIN(toge_evt_sub)
+static EVT_BEGIN(toge_evt_sub)
     SET_VALUE(LW(2), LW(0))
     CALL(get_toge_name, LW(2), LW(3), LW(4))
     CALL(toge_check_flag, LW(2), LW(0))
@@ -213,7 +213,7 @@ EVT_END()
  * then every frame checks whether Mario is within 90 units of one of the 9 traps (unless he is in motion 32)
  * and spawns toge_evt_sub for it.
  */
-EVT_BEGIN(toge_evt)
+static EVT_BEGIN(toge_evt)
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
     CALL_CHILD(evt_gazigazi_entry)
     SET_INT_READ_ADDR(PTR(&toge_data))
@@ -265,7 +265,7 @@ EVT_BEGIN(las_03_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(get_toge_name) {
+static USER_FUNC(get_toge_name) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)toge_data[idx * 2]);
@@ -277,7 +277,7 @@ USER_FUNC(get_toge_name) {
  * Script helper: returns in args[1] whether bit args[0] (a trap index) of toge_flag is set,
  * that is whether that spike trap is currently active.
  */
-USER_FUNC(toge_check_flag) {
+static USER_FUNC(toge_check_flag) {
     EvtWord* args = event->args;
     s32 bit = evtGetValue(event, args[0]);
 
@@ -289,7 +289,7 @@ USER_FUNC(toge_check_flag) {
  * Script helper: sets (args[1] nonzero) or clears the bit args[0] in toge_flag,
  * marking one spike trap as active or idle.
  */
-USER_FUNC(toge_flag_onoff) {
+static USER_FUNC(toge_flag_onoff) {
     EvtWord* args = event->args;
     s32 bit = evtGetValue(event, args[0]);
     s32 on = evtGetValue(event, args[1]);

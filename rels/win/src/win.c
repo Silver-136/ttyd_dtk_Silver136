@@ -27,7 +27,7 @@ EvtWord evt_win_door_open_pure[84];
 EvtWord evt_win_door_open[16];
 EvtWord evt_win_door_close_pure[66];
 EvtWord evt_win_door_close[41];
-EvtWord _tree_anime[106];
+static EvtWord _tree_anime[106];
 EvtWord win_tree_entry[25];
 EvtWord win_puni_walk_se[20];
 
@@ -134,7 +134,7 @@ EVT_END()
  * Hammer reaction of a Boggly Woods tree: plays the hit-tree and falling-leaves sounds at the tree
  * and shakes its trunk (LW(2)) and leaves (LW(3)) back and forth.
  */
-EVT_BEGIN(_tree_anime)
+static EVT_BEGIN(_tree_anime)
     CALL(evt_mapobj_get_position, LW(2), LW(4), LW(5), LW(6))
     CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1"), LW(4), LW(5), LW(6), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1_LEAVES1"), LW(4), LW(5), LW(6), 0)

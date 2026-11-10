@@ -21,7 +21,7 @@ struct MapAllocEntry {
 #if VERSION <= VERSION_DEMO_JP
 extern SmartWork smartWork;
 #else
-SmartWork smartWork;
+static SmartWork smartWork;
 #endif
 
 //.sdata
@@ -60,7 +60,7 @@ void* mapalloc_base_ptr;
 #define MAPBASE ((MapAllocEntry*)base_)
 #else
 #if VERSION <= VERSION_DEMO_JP
-SmartWork smartWork;
+static SmartWork smartWork;
 #endif
 void* mapalloc_base_ptr;
 u32 mapalloc_size;

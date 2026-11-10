@@ -42,8 +42,8 @@ static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_rampell_attack;
-EvtWord rampell_zoom[19];
-EvtWord to_faker_mario[339];
+static EvtWord rampell_zoom[19];
+static EvtWord to_faker_mario[339];
 static EvtWord init_event[61];
 static EvtWord damage_event[10];
 static EvtWord dead_event[74];
@@ -308,7 +308,7 @@ static BattleWeapon weapon_rampell_attack = {
  * Camera move used in Doopliss' transformation:
  * puts the battle camera on a close view of Doopliss's side of the stage (x 90, free camera mode) and waits 37 frames.
  */
-EVT_BEGIN(rampell_zoom)
+static EVT_BEGIN(rampell_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 90, 65, 332, 90, 30, -340, 30, 11)
     WAIT_FRAMES(37)
@@ -322,7 +322,7 @@ EVT_END()
  * raised to 10 HP if below, rises from the floor and speaks again (stg4_jin_08_03).
  */
 // Replace this unit with the Mario-copy setup, preserving HP unless it is below the 10 HP minimum.
-EVT_BEGIN(to_faker_mario)
+static EVT_BEGIN(to_faker_mario)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, 2)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)

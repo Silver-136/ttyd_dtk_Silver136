@@ -41,24 +41,24 @@ static PoseTableEntry pose_table_weak[9];
 
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
-BattleWeapon weapon_zonbaba_fumituke_attack;
-BattleWeapon weapon_zonbaba_kamituki_attack;
-BattleWeapon weapon_zonbaba_cold_attack;
-BattleWeapon weapon_zonbaba_confuze_attack;
-BattleWeapon weapon_zonbaba_sleep_attack;
-BattleWeapon weapon_zonbaba_minimini_attack;
-BattleWeapon weapon_zonbaba_recover;
+static BattleWeapon weapon_zonbaba_fumituke_attack;
+static BattleWeapon weapon_zonbaba_kamituki_attack;
+static BattleWeapon weapon_zonbaba_cold_attack;
+static BattleWeapon weapon_zonbaba_confuze_attack;
+static BattleWeapon weapon_zonbaba_sleep_attack;
+static BattleWeapon weapon_zonbaba_minimini_attack;
+static BattleWeapon weapon_zonbaba_recover;
 static EvtWord battle_entry_event[357];
 static EvtWord init_event[58];
 static EvtWord damage_event[10];
-EvtWord zonbaba_damage_sub_event[45];
+static EvtWord zonbaba_damage_sub_event[45];
 static EvtWord dead_event[264];
 static EvtWord phase_event[94];
 static EvtWord fumituke_attack_event[356];
 static EvtWord kamituki_attack_event[141];
-EvtWord breath1_attack_event[315];
-EvtWord breath2_attack_event[320];
-EvtWord recover_event[88];
+static EvtWord breath1_attack_event[315];
+static EvtWord breath2_attack_event[320];
+static EvtWord recover_event[88];
 static EvtWord attack_event[282];
 static EvtWord wait_event[6];
 
@@ -226,7 +226,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Attack data for Bonetail's stomp: 8 damage. */
-BattleWeapon weapon_zonbaba_fumituke_attack = {
+static BattleWeapon weapon_zonbaba_fumituke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -268,7 +268,7 @@ BattleWeapon weapon_zonbaba_fumituke_attack = {
 };
 
 /** Attack data for Bonetail's bite: 8 damage. */
-BattleWeapon weapon_zonbaba_kamituki_attack = {
+static BattleWeapon weapon_zonbaba_kamituki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -308,7 +308,7 @@ BattleWeapon weapon_zonbaba_kamituki_attack = {
 };
 
 /** Attack data for Bonetail's freezing breath: 8 damage, 30% Freeze. */
-BattleWeapon weapon_zonbaba_cold_attack = {
+static BattleWeapon weapon_zonbaba_cold_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -351,7 +351,7 @@ BattleWeapon weapon_zonbaba_cold_attack = {
 };
 
 /** Attack data for Bonetail's confusing breath: 8 damage, 30% Confusion. */
-BattleWeapon weapon_zonbaba_confuze_attack = {
+static BattleWeapon weapon_zonbaba_confuze_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -394,7 +394,7 @@ BattleWeapon weapon_zonbaba_confuze_attack = {
 };
 
 /** Attack data for Bonetail's sleep breath: 8 damage, 30% Sleep. */
-BattleWeapon weapon_zonbaba_sleep_attack = {
+static BattleWeapon weapon_zonbaba_sleep_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -437,7 +437,7 @@ BattleWeapon weapon_zonbaba_sleep_attack = {
 };
 
 /** Attack data for Bonetail's shrinking breath: 8 damage, 30% size change. */
-BattleWeapon weapon_zonbaba_minimini_attack = {
+static BattleWeapon weapon_zonbaba_minimini_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -480,7 +480,7 @@ BattleWeapon weapon_zonbaba_minimini_attack = {
 };
 
 /** Attack data for Bonetail's self-heal: no damage. */
-BattleWeapon weapon_zonbaba_recover = {
+static BattleWeapon weapon_zonbaba_recover = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -655,7 +655,7 @@ EVT_END()
  * Hit reaction of Bonetail: plays pose GNB_D_2 when the damaged part is part 1,
  * otherwise GNB_D_1. A miss (zero damage) plays a miss sound at the hit spot. Lasts one second.
  */
-EVT_BEGIN(zonbaba_damage_sub_event)
+static EVT_BEGIN(zonbaba_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     IF_INT_EQUAL(LW(11), 1)
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_2"))
@@ -960,7 +960,7 @@ EVT_END()
  * confusion, sleep or tiny), then checks each target in turn for avoidance or damage,
  * and the Action Command defence.
  */
-EVT_BEGIN(breath1_attack_event)
+static EVT_BEGIN(breath1_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1061,7 +1061,7 @@ EVT_END()
  * the same breath effects and per-target damage checks as breath1_attack_event,
  * but with a different wind-up (the neck rises first, 1.8 s before the breath).
  */
-EVT_BEGIN(breath2_attack_event)
+static EVT_BEGIN(breath2_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1157,7 +1157,7 @@ EVT_BEGIN(breath2_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(recover_event)
+static EVT_BEGIN(recover_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)

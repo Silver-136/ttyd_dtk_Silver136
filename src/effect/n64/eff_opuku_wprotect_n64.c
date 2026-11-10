@@ -184,7 +184,7 @@ static void effOpukuWprotectMain(EffectEntry* effect) {
  * The water shield's 40-vertex box (position, texture coordinate, per-vertex grey or tinted colour),
  * drawn with every vertex above the base (y != 0) jittering every frame.
  */
-PointData point_data[40] = {
+static PointData point_data[40] = {
     {25, 4, -25, 1025, 72, 176, 176, 176},
     {22, 0, -22, 963, 0, 176, 176, 176},
     {-22, 0, -22, 61, 0, 176, 176, 176},

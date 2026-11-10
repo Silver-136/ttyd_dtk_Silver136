@@ -91,7 +91,7 @@ static u8 cube_dl_top[64] ATTRIBUTE_ALIGN(32) = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
+static u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80,
     0x00,
     0x04,
@@ -105,7 +105,7 @@ u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x01,
     0x00,
 };
-u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
+static u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
     0x98,
     0x00,
     0x0A,
@@ -197,29 +197,29 @@ static f32 vertex_tbl[180] ATTRIBUTE_ALIGN(32) = {
 };
 
 //.bss
-CharShadowWork char_shadow_work;
-ProjShadowWork proj_shadow_work;
-DepthShadowWork depth_shadow_work;
+static CharShadowWork char_shadow_work;
+static ProjShadowWork proj_shadow_work;
+static DepthShadowWork depth_shadow_work;
 
 //.sbss
-GXTexObj rampTex8;
-GXTexObj rampTex16;
-f32 tmp_vp[6];
-u32 tmp_sci[4];
-Mtx tmp_view;
+static GXTexObj rampTex8;
+static GXTexObj rampTex16;
+static f32 tmp_vp[6];
+static u32 tmp_sci[4];
+static Mtx tmp_view;
 
 //.sdata
-CharShadowWork* cswp = &char_shadow_work;
-ProjShadowWork* pswp = &proj_shadow_work;
-DepthShadowWork* dswp = &depth_shadow_work;
+static CharShadowWork* cswp = &char_shadow_work;
+static ProjShadowWork* pswp = &proj_shadow_work;
+static DepthShadowWork* dswp = &depth_shadow_work;
 /** Side lengths of the square shadow textures (400, 256, 128, 64 pixels) that a shadow config picks from. */
-u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
+static u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
 
 #if VERSION >= VERSION_JP
-u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
+static u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A, 0x01, 0x3B, 0x01, 0x00,
 };
-u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
+static u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
     0x98, 0x00, 0x0A, 0x35, 0x02, 0x38, 0x01, 0x36, 0x02, 0x39, 0x01, 0x37,
     0x02, 0x3A, 0x01, 0x38, 0x02, 0x3B, 0x01, 0x39, 0x02, 0x38, 0x01, 0x00,
 };
@@ -231,7 +231,7 @@ static GXColor color_tbl[3] ATTRIBUTE_ALIGN(32) = {
 GXColor color_tbl_nodecay[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x6E}, {0x00, 0x00, 0x00, 0x6E}, {0x00, 0x00, 0x00, 0x6E},
 };
-GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
+static GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x8E}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x16},
 };
 

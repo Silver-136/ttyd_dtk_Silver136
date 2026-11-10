@@ -58,7 +58,7 @@ static u8 inta_tex[32] ATTRIBUTE_ALIGN(32) = {
     0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0,
 };
 
-USER_FUNC(screen_evt_func);
+static USER_FUNC(screen_evt_func);
 
 /**
  * Started by tou_gamen_screen_tev_init: calls screen_evt_func from an inline event,
@@ -938,7 +938,7 @@ static void screen_capture(CameraId camId, void* param) {
 }
 
 /** Script helper with no arguments: queues screen_capture for this frame. */
-USER_FUNC(screen_evt_func) {
+static USER_FUNC(screen_evt_func) {
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, screen_capture, NULL);
     return 0;
 }

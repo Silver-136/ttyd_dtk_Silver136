@@ -27,21 +27,21 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(toge_enter_func00);
+static USER_FUNC(toge_enter_func00);
 
-EvtWord toge_1_init[17];
-EvtWord toge_1_talk[44];
-EvtWord toge_2_init[17];
-EvtWord toge_2_talk[44];
-EvtWord toge_3_init[17];
-EvtWord toge_3_talk[44];
-EvtWord toge_4_init[17];
-EvtWord toge_4_talk[44];
-EvtWord toge_5_init[17];
-EvtWord toge_5_regl[19];
-EvtWord toge_5_talk[44];
-EvtWord toge_6_init[17];
-EvtWord toge_6_talk[44];
+static EvtWord toge_1_init[17];
+static EvtWord toge_1_talk[44];
+static EvtWord toge_2_init[17];
+static EvtWord toge_2_talk[44];
+static EvtWord toge_3_init[17];
+static EvtWord toge_3_talk[44];
+static EvtWord toge_4_init[17];
+static EvtWord toge_4_talk[44];
+static EvtWord toge_5_init[17];
+static EvtWord toge_5_regl[19];
+static EvtWord toge_5_talk[44];
+static EvtWord toge_6_init[17];
+static EvtWord toge_6_talk[44];
 static NpcSetupInfo npcEnt[7];
 static EvtWord patolight_sound_off[15];
 static BeroEntry bero_entry_data[3];
@@ -60,7 +60,7 @@ EvtWord mri_08_init_evt[190];
  * Init of Jabbi villager 1: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-220, 0, 110).
  */
-EVT_BEGIN(toge_1_init)
+static EVT_BEGIN(toge_1_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -74,7 +74,7 @@ EVT_END()
  * Talk script of Jabbi villager 1: a message with no speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_1_talk)
+static EVT_BEGIN(toge_1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -92,7 +92,7 @@ EVT_END()
  * Init of Jabbi villager 2: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-75, 0, -100).
  */
-EVT_BEGIN(toge_2_init)
+static EVT_BEGIN(toge_2_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -106,7 +106,7 @@ EVT_END()
  * Talk script of Jabbi villager 2: a message with no speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_2_talk)
+static EVT_BEGIN(toge_2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -124,7 +124,7 @@ EVT_END()
  * Init of Jabbi villager 3: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (70, 0, 80).
  */
-EVT_BEGIN(toge_3_init)
+static EVT_BEGIN(toge_3_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -138,7 +138,7 @@ EVT_END()
  * Talk script of Jabbi villager 3: a message with no speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_3_talk)
+static EVT_BEGIN(toge_3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -156,7 +156,7 @@ EVT_END()
  * Init of Jabbi villager 4: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (180, 0, 60).
  */
-EVT_BEGIN(toge_4_init)
+static EVT_BEGIN(toge_4_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -170,7 +170,7 @@ EVT_END()
  * Talk script of Jabbi villager 4: a message with no speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_4_talk)
+static EVT_BEGIN(toge_4_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -188,7 +188,7 @@ EVT_END()
  * Init of Jabbi villager 5: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-70, 0, -35).
  */
-EVT_BEGIN(toge_5_init)
+static EVT_BEGIN(toge_5_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -202,7 +202,7 @@ EVT_END()
  * Regular script of Jabbi villager 5: has it wander back
  * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
-EVT_BEGIN(toge_5_regl)
+static EVT_BEGIN(toge_5_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -213,7 +213,7 @@ EVT_END()
  * Talk script of Jabbi villager 5: a message with no speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_5_talk)
+static EVT_BEGIN(toge_5_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -231,7 +231,7 @@ EVT_END()
  * Init of Jabbi villager 6: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (300, 0, -60).
  */
-EVT_BEGIN(toge_6_init)
+static EVT_BEGIN(toge_6_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -245,7 +245,7 @@ EVT_END()
  * Talk script of Jabbi villager 6: a message with no speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_6_talk)
+static EVT_BEGIN(toge_6_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -390,7 +390,7 @@ static BeroEntry bero_entry_data[] = {
  * Script helper that lines up three Jabbi chains (slots 110 to 112, 113 to 115, 116 to 119) at (450, 0, 0) with
  * togeMakeRetsu (no script calls it).
  */
-USER_FUNC(toge_enter_func00) {
+static USER_FUNC(toge_enter_func00) {
     Vec pos = {450.0f, 0.0f, 0.0f};
 
     togeMakeRetsu(&pos, 0x6E, 0x6F, 0x70);

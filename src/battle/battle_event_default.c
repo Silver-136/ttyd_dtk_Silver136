@@ -29,12 +29,12 @@
 static USER_FUNC(_anime_load);
 static USER_FUNC(_anime_load_wait);
 USER_FUNC(_backfire);
-USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all);
-USER_FUNC(_check_pose_stay);
-USER_FUNC(_get_escape_rate);
-USER_FUNC(_get_flower_suitoru_point);
-USER_FUNC(_get_heart_suitoru_point);
-USER_FUNC(_set_escape_ac_hlp_msg);
+static USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all);
+static USER_FUNC(_check_pose_stay);
+static USER_FUNC(_get_escape_rate);
+static USER_FUNC(_get_flower_suitoru_point);
+static USER_FUNC(_get_heart_suitoru_point);
+static USER_FUNC(_set_escape_ac_hlp_msg);
 USER_FUNC(btlevtcmd_audience_code_escape);
 USER_FUNC(btlevtcmd_audience_code_escape_fail);
 USER_FUNC(btlevtcmd_audience_code_escape_success);
@@ -51,7 +51,7 @@ EvtWord btldefaultevt_Appeal[114];
 EvtWord btldefaultevt_Appeal[145];
 #endif
 
-EvtWord _Defence_core[81];
+static EvtWord _Defence_core[81];
 EvtWord btldefaultevt_Escape[657];
 EvtWord btldefaultevt_Confuse[19];
 EvtWord btldefaultevt_CantMoveZeroGravity[44];
@@ -747,7 +747,7 @@ EVT_END()
  * Shared Defend action (LW(12) = the defend weapon):
  * pays the cost, spins the unit twice, marks it as defending, shows the "defend" message and returns to waiting.
  */
-EVT_BEGIN(_Defence_core)
+static EVT_BEGIN(_Defence_core)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1156,7 +1156,7 @@ static USER_FUNC(_anime_load_wait) {
  * Script: sets args[0] to 1 when the active unit is Mario
  * and the partner switch costs his turn (no Quick Change, or he is confused).
  */
-USER_FUNC(_check_pose_stay) {
+static USER_FUNC(_check_pose_stay) {
     BattleWork* wp = _battleWorkPointer;
     s32 out = event->args[0];
     BattleUnit* unit;
@@ -1197,7 +1197,7 @@ USER_FUNC(btlevtcmd_audience_code_escape_fail) {
 }
 
 /** Script: resets the moveColorLv shading of Mario and the partner to full brightness before the escape. */
-USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
+static USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
 
@@ -1211,14 +1211,14 @@ USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
 }
 
 /** Script: shows the escape action command's help text. */
-USER_FUNC(_set_escape_ac_hlp_msg) {
+static USER_FUNC(_set_escape_ac_hlp_msg) {
     BattleAcHelpSetHelp("msg_ac_escape");
     BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     return EVT_RETURN_DONE;
 }
 
 /** Script: returns in args[0] the enemy group's run rate, which sets the escape gauge. */
-USER_FUNC(_get_escape_rate) {
+static USER_FUNC(_get_escape_rate) {
     BattleWork* wp = _battleWorkPointer;
     evtSetValue(event, event->args[0],
                 wp->fbatInfo->setup->groupSetup->enemyData->unitKindParams->runRate);
@@ -1229,7 +1229,7 @@ USER_FUNC(_get_escape_rate) {
  * Script: returns in args[1] the HP the unit args[0] regains from HP Drain:
  * its equipped power, capped at its damage dealt.
  */
-USER_FUNC(_get_heart_suitoru_point) {
+static USER_FUNC(_get_heart_suitoru_point) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = *args++;
@@ -1254,7 +1254,7 @@ USER_FUNC(_get_heart_suitoru_point) {
  * Script: returns in args[1] the FP the unit args[0] regains from FP Drain:
  * its equipped power, capped at its damage dealt.
  */
-USER_FUNC(_get_flower_suitoru_point) {
+static USER_FUNC(_get_flower_suitoru_point) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = *args++;

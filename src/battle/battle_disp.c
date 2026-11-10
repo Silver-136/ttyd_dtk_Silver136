@@ -29,7 +29,7 @@
 #include "battle/unit_work.h"
 
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
-s32 _status_pose_table[] = {
+static s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
 #if VERSION <= VERSION_DEMO_JP
     STATUS_SLEEP,

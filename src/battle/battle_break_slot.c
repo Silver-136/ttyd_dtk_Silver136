@@ -35,8 +35,8 @@ static void item_appear_force(BreakSlotReel* reel, s32 item);
 
 /** Card textures (small and big reels) by card number; the early demos' battle texture ids. */
 #if VERSION <= VERSION_DEMO_JP
-u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
-u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
+static u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
+static u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
 #endif
 
 /** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
@@ -145,7 +145,7 @@ BattleWeapon weapon_doku_kinoko = {
 };
 
 /** Weapon for the second half of the Poison Mushroom BINGO!: halves Mario's FP a second after the HP hit. */
-BattleWeapon weapon_doku_kinoko_fp = {
+static BattleWeapon weapon_doku_kinoko_fp = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -200,8 +200,8 @@ EVT_END()
 
 // US and later battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
 #if VERSION >= VERSION_JP
-u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
-u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
+static u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
+static u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
 #endif
 
 /** BINGO! with three Stars: no script work; the Star Power refill and sound are done by BattleBreakSlot_Main. */

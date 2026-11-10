@@ -23,15 +23,15 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(peach_chk_aftershower);
-USER_FUNC(peach_set_pos);
+static USER_FUNC(peach_chk_aftershower);
+static USER_FUNC(peach_set_pos);
 
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[2];
-EvtWord peach_evt_yuge[43];
+static EvtWord peach_evt_yuge[43];
 EvtWord peach_evt_syawa_main[798];
-EvtWord peach_evt_syawa_init[63];
+static EvtWord peach_evt_syawa_init[63];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_15_init_evt[];
@@ -92,7 +92,7 @@ static BeroEntry bero_entry_data[] = {
  * Puffs steam (kemuri_test type 1) at random spots above the bath every 0.7 seconds while Peach is bathing.
  * The emission loop runs until the shower scene deletes the event.
  */
-EVT_BEGIN(peach_evt_yuge)
+static EVT_BEGIN(peach_evt_yuge)
     LOOP(0)
         CALL(evt_sub_random, 38, LW(0))
         SUBTRACT(LW(0), 19)
@@ -106,7 +106,7 @@ EVT_BEGIN(peach_evt_yuge)
     RETURN
 EVT_END()
 
-USER_FUNC(peach_set_pos) {
+static USER_FUNC(peach_set_pos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -379,7 +379,7 @@ EVT_BEGIN(peach_evt_syawa_main)
     RETURN
 EVT_END()
 
-EVT_BEGIN(peach_evt_syawa_init)
+static EVT_BEGIN(peach_evt_syawa_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_scale, 1, STRING("S_syawa"), 0, 1, 1)
@@ -427,7 +427,7 @@ EVT_BEGIN(aji_15_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(peach_chk_aftershower) {
+static USER_FUNC(peach_chk_aftershower) {
     EvtWord* args = event->args;
 
     if (marioGetPtr()->peachFlags & PEACH_FLAG_AFTERSHOWER) {

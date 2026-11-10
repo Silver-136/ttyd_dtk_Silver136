@@ -19,7 +19,7 @@
 #include "driver/npcdrv.h"
 
 static BeroEntry bero_entry_data[3];
-EvtWord evt_ki_6[20];
+static EvtWord evt_ki_6[20];
 static TreeAccess ki_data[8];
 static EvtWord evt_kusa_1[20];
 static KusaAccess kusa_data[16];
@@ -63,7 +63,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Reward script for tree ki_6: if the coin has not been collected yet, a Coin falls out when Mario hits the tree. */
-EVT_BEGIN(evt_ki_6)
+static EVT_BEGIN(evt_ki_6)
     CALL(evt_item_delete_check, STRING("item_ki_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_ki_6"), ITEM_COIN, 192, 92, -120, ITEM_TYPE_FALL_NO_PICKUP, GSWF_HEI_02_COIN_TREE, 0)

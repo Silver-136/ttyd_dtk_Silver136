@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 /** 16x16 quad lying flat on the water surface, scaled up into each ripple ring. */
-effN64Vtx size16x16_tex32x32_0_vtx[] = {
+static effN64Vtx size16x16_tex32x32_0_vtx[] = {
     {-8, 0, -8, 0, 0, 0, 0, 0, 255},
     {8, 0, -8, 1024, 0, 0, 0, 0, 255},
     {8, 0, 8, 1024, 1024, 0, 0, 0, 255},

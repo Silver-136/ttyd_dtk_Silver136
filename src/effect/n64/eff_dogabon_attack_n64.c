@@ -52,14 +52,14 @@ static void effDogabonAttackDisp(CameraId cameraId, void* param);
 static u8 scale_data[7] = {94, 92, 100, 105, 107, 105, 100};
 
 /** Piece size (in percent) as it grows in over eight frames. */
-u8 scale_data_2[8] = {20, 40, 58, 73, 85, 92, 97, 100};
+static u8 scale_data_2[8] = {20, 40, 58, 73, 85, 92, 97, 100};
 
 /** Progress (in percent) of a piece flying from its outer spot (radius 120) in to its inner spot (radius 15), easing in over 15 frames. */
-u8 move_data_1[15] = {0, 2, 5, 9, 14, 20, 27, 35, 44, 54, 64, 74, 84, 94, 100};
+static u8 move_data_1[15] = {0, 2, 5, 9, 14, 20, 27, 35, 44, 54, 64, 74, 84, 94, 100};
 /** Progress (in percent) of a piece on the miss (hazure) path: it flies past its inner spot to 145% over 20 frames. */
-u8 move_data_hazure[20] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 109, 117, 124, 130, 135, 139, 142, 144, 145};
+static u8 move_data_hazure[20] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 109, 117, 124, 130, 135, 139, 142, 144, 145};
 /** Swirl factor (in percent) over the 70-frame twist: it rises to 145% and back twice; the radius is 15 divided by its square. */
-u8 move_data_2[70] = {
+static u8 move_data_2[70] = {
     100, 100, 100, 100, 100, 100, 100, 100, 101, 102, 102, 103, 103, 104, 104, 104, 107, 107,
     110, 110, 118, 118, 126, 126, 134, 142, 145, 145, 145, 142, 134, 126, 126, 118, 118, 110,
     110, 105, 105, 105, 102, 103, 103, 104, 104, 104, 107, 107, 110, 110, 118, 118, 126, 126,
@@ -67,7 +67,7 @@ u8 move_data_2[70] = {
 /** Height offset of each of the 25 pieces, rising from -5 to 5 along the spiral. */
 static s8 y_data[] = {-5, -5, -5, -4, -4, -4, -3, -3, -2, -2, -1, -1, 0, 0, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 5};
 /** 12x12 quad each of the 25 pieces is drawn with. */
-effN64Vtx size12x12_tex32x32_vtx[] = {
+static effN64Vtx size12x12_tex32x32_vtx[] = {
     {-6, -6, 0, 0, 0, 0, 0, 0, 255},
     {6, -6, 0, 1024, 0, 0, 0, 0, 255},
     {6, 6, 0, 1024, 1024, 0, 0, 0, 255},

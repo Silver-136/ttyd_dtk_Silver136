@@ -21,8 +21,8 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-EvtWord n_bero_in[25];
-EvtWord n_bero_out[12];
+static EvtWord n_bero_in[25];
+static EvtWord n_bero_out[12];
 static BeroEntry bero_entry_data[6];
 
 #if VERSION >= VERSION_US
@@ -42,7 +42,7 @@ EvtWord moo_02_init_evt[132];
  * Bero-in script of the north entry (n_bero): hides the partner,
  * places Mario at the bero position and registers the exit triggers (bero_case_entry); returns 1 in LW(0).
  */
-EVT_BEGIN(n_bero_in)
+static EVT_BEGIN(n_bero_in)
     CALL(evt_mario_bgmode_on)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_cam_y_off)
@@ -57,7 +57,7 @@ EVT_END()
  * Bero-out script of the north exit (n_bero): takes control from Mario
  * and changes the map to aji_19 (the X-Naut Fortress), entering at w_bero.
  */
-EVT_BEGIN(n_bero_out)
+static EVT_BEGIN(n_bero_out)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_mapchange, STRING("aji_19"), STRING("w_bero"))
     SET_VALUE(LW(0), 1)

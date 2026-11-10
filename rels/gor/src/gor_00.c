@@ -66,8 +66,8 @@
 #include "driver/msgdrv.h"
 #include "driver/seqdrv.h"
 
-void suifu100taikikan_seq01(NanNPC* npc);
-void suifu100taikikan_seq00(NanNPC* npc);
+static void suifu100taikikan_seq01(NanNPC* npc);
+static void suifu100taikikan_seq00(NanNPC* npc);
 #include "cam_kaiten.h"
 #include <dolphin/pad.h>
 static u8* _ap;
@@ -78,7 +78,7 @@ static KaitenParam* ckpw;
 /** Returns its f32 argument unchanged. */
 static inline f32 fid(f32 x) { return x; }
 void gundan1000tai_seq01(NanNPC* npc);
-void gundan1000tai_seq00(NanNPC* npc);
+static void gundan1000tai_seq00(NanNPC* npc);
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
@@ -88,29 +88,29 @@ static USER_FUNC(cam_kaiten_set_direct);
 static USER_FUNC(cam_kaiten_set_para);
 static USER_FUNC(delete_itemsel_table);
 static USER_FUNC(fune_eff);
-USER_FUNC(fune_yure_func);
-USER_FUNC(fune_yure_func_init);
-USER_FUNC(funechange_func);
-USER_FUNC(funeflag_load);
-USER_FUNC(funeflag_reset);
-USER_FUNC(funeflag_save);
+static USER_FUNC(fune_yure_func);
+static USER_FUNC(fune_yure_func_init);
+static USER_FUNC(funechange_func);
+static USER_FUNC(funeflag_load);
+static USER_FUNC(funeflag_reset);
+static USER_FUNC(funeflag_save);
 static USER_FUNC(get_yoshi_color);
-USER_FUNC(gor_ship_puka_func);
-USER_FUNC(gundan1000tai_areacheck);
-USER_FUNC(gundan1000tai_circle_pos_func);
-USER_FUNC(gundan1000tai_init);
+static USER_FUNC(gor_ship_puka_func);
+static USER_FUNC(gundan1000tai_areacheck);
+static USER_FUNC(gundan1000tai_circle_pos_func);
+static USER_FUNC(gundan1000tai_init);
 USER_FUNC(gundan1000tai_totsuend);
-USER_FUNC(gundan1000tai_totsugeki);
-USER_FUNC(hosei_mario_pos);
-USER_FUNC(hosei_party_pos);
+static USER_FUNC(gundan1000tai_totsugeki);
+static USER_FUNC(hosei_mario_pos);
+static USER_FUNC(hosei_party_pos);
 static USER_FUNC(make_itemsel_table);
 static USER_FUNC(scale_func);
-USER_FUNC(suifu100taikikan_away);
-USER_FUNC(suifu100taikikan_init);
+static USER_FUNC(suifu100taikikan_away);
+static USER_FUNC(suifu100taikikan_init);
 USER_FUNC(npc_all_delete);
 void gor_stg4_018_cb(s32 type, smartEntry* smart);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
-f32 lineardec_type(s32 step, s32 total, f32 start, f32 end);
+static f32 lineardec_type(s32 step, s32 total, f32 start, f32 end);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 #if VERSION >= VERSION_US
@@ -121,10 +121,10 @@ static void alpha_tev(MapTevCallbackInfo* info);
 #define SAVE_EVT evt_memcard_save
 #endif
 
-ExtTexInfo nannpc_entry_data[41];
+static ExtTexInfo nannpc_entry_data[41];
 static s16 dai3_animtbl[VERSION_PICK(42, 82)];
-s16 dai3_run_animtbl[VERSION_PICK(22, 42)];
-EvtWord no00_custom[48];
+static s16 dai3_run_animtbl[VERSION_PICK(22, 42)];
+static EvtWord no00_custom[48];
 static BeroEntry bero_entry_data[2];
 static EvtWord mony_init[18];
 
@@ -153,44 +153,44 @@ static EvtWord marco_talk[362];
 static EvtWord marco_talk[364];
 #endif
 
-EvtWord garawaru_urouro2[25];
+static EvtWord garawaru_urouro2[25];
 static EvtWord garawaru_init[74];
 EvtWord garawaru_regl[60];
 static EvtWord garawaru_talk[77];
 static EvtWord megane_init[18];
-EvtWord megane_regl[2];
+static EvtWord megane_regl[2];
 static EvtWord megane_talk[14];
 static EvtWord odoodo_init[61];
-EvtWord odoodo_regl[29];
+static EvtWord odoodo_regl[29];
 static EvtWord odoodo_talk[108];
-EvtWord odoodo_ani_urouro[31];
-EvtWord odoodo_ani_init[17];
-EvtWord odoodo_ani_regl[9];
-EvtWord odoodo_ani_talk[37];
+static EvtWord odoodo_ani_urouro[31];
+static EvtWord odoodo_ani_init[17];
+static EvtWord odoodo_ani_regl[9];
+static EvtWord odoodo_ani_talk[37];
 static EvtWord suifu_a_init[36];
-EvtWord suifu_a_regl[28];
+static EvtWord suifu_a_regl[28];
 static EvtWord suifu_a_talk[116];
-EvtWord suifu_b_init[48];
-EvtWord suifu_b_regl[29];
-EvtWord suifu_b_talk[116];
+static EvtWord suifu_b_init[48];
+static EvtWord suifu_b_regl[29];
+static EvtWord suifu_b_talk[116];
 static EvtWord suifu_d_init[14];
 static EvtWord suifu_d_talk[8];
-EvtWord suifubomb_a_urouro2[31];
-EvtWord suifubomb_a_init[53];
-EvtWord suifubomb_a_regl[30];
+static EvtWord suifubomb_a_urouro2[31];
+static EvtWord suifubomb_a_init[53];
+static EvtWord suifubomb_a_regl[30];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord suifubomb_a_talk[224];
+static EvtWord suifubomb_a_talk[224];
 #else
-EvtWord suifubomb_a_talk[VERSION_PICK(226, 218)];
+static EvtWord suifubomb_a_talk[VERSION_PICK(226, 218)];
 #endif
 
-EvtWord suifubomb_b_urouro2[27];
-EvtWord suifubomb_b_init[39];
+static EvtWord suifubomb_b_urouro2[27];
+static EvtWord suifubomb_b_init[39];
 EvtWord suifubomb_b_regl[60];
-EvtWord suifubomb_b_talk[116];
-EvtWord suifubomb_c_init[14];
-EvtWord suifubomb_c_talk[8];
+static EvtWord suifubomb_b_talk[116];
+static EvtWord suifubomb_c_init[14];
+static EvtWord suifubomb_c_talk[8];
 static EvtWord sanders_init[42];
 static EvtWord sanders_talk[8];
 static EvtWord korutesu_init[19];
@@ -202,7 +202,7 @@ extern EvtWord tentyou_init[];
 EvtWord tentyou_init[36];
 #endif
 
-EvtWord tentyou_talk[14];
+static EvtWord tentyou_talk[14];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord tenin_init[];
@@ -210,11 +210,11 @@ extern EvtWord tenin_init[];
 EvtWord tenin_init[36];
 #endif
 
-EvtWord tenin_talk[14];
+static EvtWord tenin_talk[14];
 static EvtWord borodo2_init[42];
 static EvtWord borodo2_escape[43];
 static EvtWord borodo2_talk[13];
-EvtWord mokorim_init[28];
+static EvtWord mokorim_init[28];
 
 #if VERSION == VERSION_DEMO_JP
 EvtWord mokorim_talk[521];
@@ -227,19 +227,19 @@ static EvtWord luigi_init[18];
 static EvtWord luigi_talk[4];
 static NpcSetupInfo luigiEnt[2];
 static EvtWord luigi_npcEnt[30];
-EvtWord rakgan_init[12];
-EvtWord rakgan_talk[8];
-NpcSetupInfo rakganEnt[2];
+static EvtWord rakgan_init[12];
+static EvtWord rakgan_talk[8];
+static NpcSetupInfo rakganEnt[2];
 static NpcSetupInfo npcEnt[17];
-EvtWord ship_a_kaji_animation[51];
-EvtWord ship_a_wakka_animation[56];
-EvtWord ship_a_entotsu_animation[56];
-EvtWord ship_a_neji_animation[56];
-EvtWord ship_a_yure_animation[56];
-EvtWord ship_a_animation[132];
+static EvtWord ship_a_kaji_animation[51];
+static EvtWord ship_a_wakka_animation[56];
+static EvtWord ship_a_entotsu_animation[56];
+static EvtWord ship_a_neji_animation[56];
+static EvtWord ship_a_yure_animation[56];
+static EvtWord ship_a_animation[132];
 static EvtWord ship_pera[119];
-EvtWord enter_gorotsuki_town_init[58];
-EvtWord christine_osoware_setup[82];
+static EvtWord enter_gorotsuki_town_init[58];
+static EvtWord christine_osoware_setup[82];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord enter_gorotsuki_town[];
@@ -256,18 +256,18 @@ EvtWord gundan1000tai_beforebattle[524];
 #endif
 
 static EvtWord _kemuri_sub[56];
-EvtWord gundan1000tai_kemuri[VERSION_PICK(20, 16)];
-EvtWord gundan1000tai_zaza_se[61];
-EvtWord gundan1000tai_jump_se[19];
-EvtWord gundan1000tai_yure[22];
-EvtWord gundan1000tai_afterbattle[1201];
+static EvtWord gundan1000tai_kemuri[VERSION_PICK(20, 16)];
+static EvtWord gundan1000tai_zaza_se[61];
+static EvtWord gundan1000tai_jump_se[19];
+static EvtWord gundan1000tai_yure[22];
+static EvtWord gundan1000tai_afterbattle[1201];
 EvtWord mony_peton_after[37];
-EvtWord shukko_event_move_ship_se00[20];
-EvtWord shukko_event_move_ship_se01[20];
-const char* shukko_npc_list[10];
-EvtWord shukko_event_move_ship[223];
-EvtWord shukko_event[498];
-ExtTexInfo nannpc_entry_data01[41];
+static EvtWord shukko_event_move_ship_se00[20];
+static EvtWord shukko_event_move_ship_se01[20];
+static const char* shukko_npc_list[10];
+static EvtWord shukko_event_move_ship[223];
+static EvtWord shukko_event[498];
+static ExtTexInfo nannpc_entry_data01[41];
 static s16 suifu_animtbl[42];
 static s16 suifu_run_animtbl[22];
 Vec suifu100kaidanDOWN[];
@@ -301,13 +301,13 @@ static EvtWord peach_mail[209];
 #endif
 
 f32 gor_ship_puka_data[];
-EvtWord gor_ship_puka[21];
-EvtWord gor_muj_ship_sub[53];
+static EvtWord gor_ship_puka[21];
+static EvtWord gor_muj_ship_sub[53];
 static EvtWord option_ship_mario[139];
-EvtWord gor_muj_ship_init[42];
-EvtWord gor_muj_ship_pera[115];
-EvtWord gor_muj_ship_start[258];
-EvtWord tsumini[212];
+static EvtWord gor_muj_ship_init[42];
+static EvtWord gor_muj_ship_pera[115];
+static EvtWord gor_muj_ship_start[258];
+static EvtWord tsumini[212];
 static HitDamageReturn dmgRetPoint[VERSION_PICK(4, 6)];
 static EvtWord mobj_box00[34];
 
@@ -317,12 +317,12 @@ static EvtWord epilogue_npc_entry[365];
 static EvtWord epilogue_npc_entry[340];
 #endif
 
-EvtWord punio_kinoko[22];
-EvtWord puniko_kinoko[22];
+static EvtWord punio_kinoko[22];
+static EvtWord puniko_kinoko[22];
 static EvtWord epilogue_evt[1520];
-EvtWord epilogue_npc_entry2[30];
+static EvtWord epilogue_npc_entry2[30];
 static EvtWord epilogue_evt2[74];
-EvtWord return_gorotsuki_town_init[25];
+static EvtWord return_gorotsuki_town_init[25];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord return_gorotsuki_town[];
@@ -340,7 +340,7 @@ EvtWord gor_00_init_evt[VERSION_PICK(537, 540)];
  * Sprite entries for the harbor crowd (evt_nannpc_init): the c_zako_n model with its S_1 and R_1
  * animations, one entry per animation phase offset.
  */
-ExtTexInfo nannpc_entry_data[] = {
+static ExtTexInfo nannpc_entry_data[] = {
     {"c_zako_n", "S_1", 0.0f},
     {"c_zako_n", "S_1", 2.0f},
     {"c_zako_n", "S_1", 4.0f},
@@ -408,7 +408,7 @@ static s16 dai3_animtbl[] = {
 };
 
 /** Animation frame table for the harbor crowd while it runs. */
-s16 dai3_run_animtbl[] = {
+static s16 dai3_run_animtbl[] = {
 #if VERSION >= VERSION_US
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
@@ -429,7 +429,7 @@ s16 dai3_run_animtbl[] = {
  * walks him 80 units back and hides him and his partner before the map change, and returns 1 in LW(0);
  * at any other time it returns 0 and the exit works normally.
  */
-EVT_BEGIN(no00_custom)
+static EVT_BEGIN(no00_custom)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED)
@@ -858,7 +858,7 @@ EVT_END()
  * Loops forever: the rough sailor (Garawaru) paces between x=450 and x=-200 along the pier,
  * waiting 1.2 seconds at each end.
  */
-EVT_BEGIN(garawaru_urouro2)
+static EVT_BEGIN(garawaru_urouro2)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), 450, -200, 0, FLOAT(40.0f), 0)
         WAIT_MS(1200)
@@ -973,7 +973,7 @@ static EVT_BEGIN(megane_init)
 EVT_END()
 
 /** Regular event of the bespectacled sailor: empty, he stays where his init event put him. */
-EVT_BEGIN(megane_regl)
+static EVT_BEGIN(megane_regl)
     RETURN
 EVT_END()
 
@@ -1016,7 +1016,7 @@ EVT_END()
  * From Chapter 1 on he wanders around his spot with urouro_main_func (radius 100, speed 30),
  * except during Chapter 4's Flavio scene and at the Chapter 5 departure.
  */
-EVT_BEGIN(odoodo_regl)
+static EVT_BEGIN(odoodo_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_EQUAL(STG5_58_FAIR_WINDS)
@@ -1068,7 +1068,7 @@ EVT_END()
  * Loops forever: the nervous sailor's elder brother paces between x=450 and x=-200 along the pier,
  * turning around after a second at each end.
  */
-EVT_BEGIN(odoodo_ani_urouro)
+static EVT_BEGIN(odoodo_ani_urouro)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), 450, -200, 0, FLOAT(40.0f), 0)
         WAIT_MS(1000)
@@ -1084,7 +1084,7 @@ EVT_END()
  * Init event of the nervous sailor's elder brother:
  * from the Chapter 5 dock step on he stands at (-200, 15, -200) facing right.
  */
-EVT_BEGIN(odoodo_ani_init)
+static EVT_BEGIN(odoodo_ani_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
         CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -1097,7 +1097,7 @@ EVT_END()
  * Regular event of the nervous sailor's elder brother:
  * from the Chapter 5 departure on he paces the pier (odoodo_ani_urouro).
  */
-EVT_BEGIN(odoodo_ani_regl)
+static EVT_BEGIN(odoodo_ani_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
         CALL_CHILD(odoodo_ani_urouro)
@@ -1109,7 +1109,7 @@ EVT_END()
  * Talk event of the nervous sailor's elder brother, who only appears after Chapter 5:
  * one line per later story stage (gor_00_07_09 to gor_00_07_12).
  */
-EVT_BEGIN(odoodo_ani_talk)
+static EVT_BEGIN(odoodo_ani_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
         CALL(evt_msg_print, 0, STRING("gor_00_07_09"), 0, STRING("me"))
@@ -1145,7 +1145,7 @@ EVT_END()
  * Regular event of sailor A: wanders around his spot with urouro_main_func (radius 100, speed 30),
  * except during Chapter 4's Flavio scene and at the Chapter 5 departure.
  */
-EVT_BEGIN(suifu_a_regl)
+static EVT_BEGIN(suifu_a_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_EQUAL(STG5_58_FAIR_WINDS)
@@ -1199,7 +1199,7 @@ EVT_END()
  * Init event of sailor B: hidden below the map before Goombella joins,
  * at (-191, 15, 36) during the Bowser interlude (Chapter 4), otherwise at (0, 15, -300).
  */
-EVT_BEGIN(suifu_b_init)
+static EVT_BEGIN(suifu_b_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -1220,7 +1220,7 @@ EVT_END()
  * Regular event of sailor B: from Chapter 1 on he wanders around his spot with urouro_main_func,
  * except during Chapter 4's Flavio scene and at the Chapter 5 departure.
  */
-EVT_BEGIN(suifu_b_regl)
+static EVT_BEGIN(suifu_b_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_EQUAL(STG5_58_FAIR_WINDS)
@@ -1233,7 +1233,7 @@ EVT_BEGIN(suifu_b_regl)
 EVT_END()
 
 /** Talk event of sailor B: one line per story stage (gor_00_04_01 to gor_00_04_12). */
-EVT_BEGIN(suifu_b_talk)
+static EVT_BEGIN(suifu_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         CALL(evt_msg_print, 0, STRING("gor_00_04_01"), 0, STRING("me"))
@@ -1286,7 +1286,7 @@ EVT_END()
  * Loops forever: sailor Bob-omb A walks along x=-215 between z=215 and z=-150,
  * turning around after 0.8 seconds at each end.
  */
-EVT_BEGIN(suifubomb_a_urouro2)
+static EVT_BEGIN(suifubomb_a_urouro2)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), -215, 215, 0, FLOAT(40.0f), 0)
         WAIT_MS(800)
@@ -1302,7 +1302,7 @@ EVT_END()
  * Init event of sailor Bob-omb A: places him on the pier by story stage (at (-160, 15, 207) during the Bowser
  * interlude).
  */
-EVT_BEGIN(suifubomb_a_init)
+static EVT_BEGIN(suifubomb_a_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
@@ -1324,7 +1324,7 @@ EVT_END()
  * Regular event of sailor Bob-omb A: before Goombella joins he wanders around his spot,
  * during the Flavio scene he stays put, otherwise he paces the pier (suifubomb_a_urouro2).
  */
-EVT_BEGIN(suifubomb_a_regl)
+static EVT_BEGIN(suifubomb_a_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1337,7 +1337,7 @@ EVT_BEGIN(suifubomb_a_regl)
     RETURN
 EVT_END()
 
-EVT_BEGIN(suifubomb_a_talk)
+static EVT_BEGIN(suifubomb_a_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IM_HUNGRY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_06_001"), 0, STRING("me"))
@@ -1414,7 +1414,7 @@ EVT_BEGIN(suifubomb_a_talk)
 EVT_END()
 
 /** Loops forever: sailor Bob-omb B walks along z=-350 between x=175 and x=-250, pausing a second at each end. */
-EVT_BEGIN(suifubomb_b_urouro2)
+static EVT_BEGIN(suifubomb_b_urouro2)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), 175, -350, 0, FLOAT(40.0f), 0)
         WAIT_MS(1000)
@@ -1429,7 +1429,7 @@ EVT_END()
  * Init event of sailor Bob-omb B: places him at (-250, 15, -350) facing right;
  * during the Bowser interlude he is hidden below the map.
  */
-EVT_BEGIN(suifubomb_b_init)
+static EVT_BEGIN(suifubomb_b_init)
     CALL(evt_npc_set_position, STRING("me"), -250, 15, -350)
     CALL(evt_npc_set_ry, STRING("me"), 90)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1476,7 +1476,7 @@ EVT_BEGIN(suifubomb_b_regl)
 EVT_END()
 
 /** Talk event of sailor Bob-omb B: one line per story stage (gor_00_02_01 to gor_00_02_12). */
-EVT_BEGIN(suifubomb_b_talk)
+static EVT_BEGIN(suifubomb_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         CALL(evt_msg_print, 0, STRING("gor_00_02_01"), 0, STRING("me"))
@@ -1511,7 +1511,7 @@ EVT_BEGIN(suifubomb_b_talk)
 EVT_END()
 
 /** Init event of sailor Bob-omb C: only present during Chapter 4's Flavio scene, standing at (140, 15, 200). */
-EVT_BEGIN(suifubomb_c_init)
+static EVT_BEGIN(suifubomb_c_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_npc_set_position, STRING("me"), 140, 15, 200)
@@ -1520,7 +1520,7 @@ EVT_BEGIN(suifubomb_c_init)
 EVT_END()
 
 /** Talk event of sailor Bob-omb C during Chapter 4's Flavio scene (mac_4_028). */
-EVT_BEGIN(suifubomb_c_talk)
+static EVT_BEGIN(suifubomb_c_talk)
     CALL(evt_msg_print, 0, STRING("mac_4_028"), 0, STRING("me"))
     RETURN
 EVT_END()
@@ -1605,7 +1605,7 @@ EVT_BEGIN(tentyou_init)
 EVT_END()
 
 /** Talk event of the shop manager during Chapter 4's Flavio scene (mac_4_029_01). */
-EVT_BEGIN(tentyou_talk)
+static EVT_BEGIN(tentyou_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_msg_print, 0, STRING("mac_4_029_01"), 0, STRING("me"))
@@ -1633,7 +1633,7 @@ EVT_BEGIN(tenin_init)
 EVT_END()
 
 /** Talk event of the shop clerk during Chapter 4's Flavio scene (mac_4_029_02). */
-EVT_BEGIN(tenin_talk)
+static EVT_BEGIN(tenin_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_msg_print, 0, STRING("mac_4_029_02"), 0, STRING("me"))
@@ -1690,7 +1690,7 @@ EVT_END()
  * from the pedestal step of the prologue to the end of Chapter 3 and again
  * from STG6_56_ROGUEPORT_STATION on he stands at (525, 15, -270) facing left.
  */
-EVT_BEGIN(mokorim_init)
+static EVT_BEGIN(mokorim_init)
     CALL_CHILD(npc_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
@@ -1981,20 +1981,20 @@ static EVT_BEGIN(luigi_npcEnt)
 EVT_END()
 
 /** Init event of the second NPC beside Luigi (model "c_lp_pansy"): places her at (460, 15, -210) facing left. */
-EVT_BEGIN(rakgan_init)
+static EVT_BEGIN(rakgan_init)
     CALL(evt_npc_set_position, STRING("me"), 460, 15, -210)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
     RETURN
 EVT_END()
 
 /** Talk event of the second NPC beside Luigi: a single line (luigi_npc_04). */
-EVT_BEGIN(rakgan_talk)
+static EVT_BEGIN(rakgan_talk)
     CALL(evt_msg_print, 0, STRING("luigi_npc_04"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** NPC setup of the second figure beside Luigi at the harbor (model c_lp_pansy). */
-NpcSetupInfo rakganEnt[] = {
+static NpcSetupInfo rakganEnt[] = {
     {
         "ラクガン", // name (Hayzee, Luigi's Dayzee friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
@@ -2219,7 +2219,7 @@ static NpcSetupInfo npcEnt[] = {
  * Loops forever, easing the angle in GW(0) between 5 and -5 degrees over 2 seconds each way.
  * ship_a_animation applies it to the ship part "S_f_drin" (guess: the rudder or helm).
  */
-EVT_BEGIN(ship_a_kaji_animation)
+static EVT_BEGIN(ship_a_kaji_animation)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 5, -5, 2000)
         LOOP(0)
@@ -2248,7 +2248,7 @@ EVT_END()
  * while the ship is moving (GF(0) is clear) and ramps down when it stops; GF(4) pauses it.
  * Drives the ship's side wheels "S_f_wa_l" and "S_f_wa_r".
  */
-EVT_BEGIN(ship_a_wakka_animation)
+static EVT_BEGIN(ship_a_wakka_animation)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)
         IF_INT_EQUAL(GF(4), 0)
@@ -2277,7 +2277,7 @@ EVT_BEGIN(ship_a_wakka_animation)
 EVT_END()
 
 /** Same speed ramp as ship_a_wakka_animation but advancing GW(2); drives the chimney "S_f_en01". */
-EVT_BEGIN(ship_a_entotsu_animation)
+static EVT_BEGIN(ship_a_entotsu_animation)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)
         IF_INT_EQUAL(GF(4), 0)
@@ -2306,7 +2306,7 @@ EVT_BEGIN(ship_a_entotsu_animation)
 EVT_END()
 
 /** Same speed ramp as ship_a_wakka_animation but advancing GW(3); drives the screw "S_skr". */
-EVT_BEGIN(ship_a_neji_animation)
+static EVT_BEGIN(ship_a_neji_animation)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)
         IF_INT_EQUAL(GF(4), 0)
@@ -2338,7 +2338,7 @@ EVT_END()
  * Loops forever, rocking the ship: fune_yure_func moves the roll angle GW(5) back
  * and forth between -GW(6) and +GW(6), pausing while GF(4) is set.
  */
-EVT_BEGIN(ship_a_yure_animation)
+static EVT_BEGIN(ship_a_yure_animation)
     CALL(fune_yure_func_init, FLOAT(0.0f))
     LOOP(0)
         SET_FLOAT_VALUE(LW(6), GW(6))
@@ -2372,7 +2372,7 @@ EVT_END()
  * screw and rocking animations, then every frame moves and rotates the hull and wake
  * and the moving parts from the GW values.
  */
-EVT_BEGIN(ship_a_animation)
+static EVT_BEGIN(ship_a_animation)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_a"), 1, 1)
@@ -2443,7 +2443,7 @@ EVT_END()
  * Spawns the four NPCs of the opening ambush (Goombella as "Christine", Lord Crump and two X-Naut grunts)
  * and parks them below the map at y=-1000.
  */
-EVT_BEGIN(enter_gorotsuki_town_init)
+static EVT_BEGIN(enter_gorotsuki_town_init)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr")) // Goombella
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_entry, STRING("第三勢力幹部"), STRING("c_kanbu_ibt")) // Lord Crump
@@ -2463,7 +2463,7 @@ EVT_END()
  * Puts Goombella (Christine), Lord Crump and the two grunts at their starting spots on the pier for the ambush
  * scene, with wall collision off.
  */
-EVT_BEGIN(christine_osoware_setup)
+static EVT_BEGIN(christine_osoware_setup)
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 175, 15, -300)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -3025,7 +3025,7 @@ EVT_END()
  * Loops forever, spawning smoke puffs with an explosion-like sound (_kemuri_sub, one per round,
  * three in JP and the early demos) at random spots in the harbor every 200 to 400 ms, for the X-Naut army's charge.
  */
-EVT_BEGIN(gundan1000tai_kemuri)
+static EVT_BEGIN(gundan1000tai_kemuri)
     LOOP(0)
         SPAWN_EVENT(_kemuri_sub)
 #if VERSION < VERSION_US
@@ -3039,7 +3039,7 @@ EVT_BEGIN(gundan1000tai_kemuri)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gundan1000tai_zaza_se)
+static EVT_BEGIN(gundan1000tai_zaza_se)
     BEGIN_INLINE_EVENT
         LOOP(10)
             CALL(gundan1000tai_circle_pos_func, LW(0), LW(1), LW(2))
@@ -3066,7 +3066,7 @@ EVT_BEGIN(gundan1000tai_zaza_se)
 EVT_END()
 
 /** Loops forever, playing the X-Naut jump attack sound every 200 ms from a random point in the army's circle. */
-EVT_BEGIN(gundan1000tai_jump_se)
+static EVT_BEGIN(gundan1000tai_jump_se)
     LOOP(0)
         CALL(gundan1000tai_circle_pos_func, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_3RD_ATTACK2"), LW(0), LW(1), LW(2), 0)
@@ -3079,7 +3079,7 @@ EVT_END()
  * Loops forever, shaking the camera for half a second at random intervals of 0.5 to 5 seconds,
  * for the thudding army.
  */
-EVT_BEGIN(gundan1000tai_yure)
+static EVT_BEGIN(gundan1000tai_yure)
     LOOP(0)
         BEGIN_INLINE_EVENT
             CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
@@ -3102,7 +3102,7 @@ EVT_END()
  * and the story becomes STG0_06_1000_X_NAUTS_AFTER before the map changes to gor_01.
  * If LW(0) is 1 on entry it repositions everyone first (used when started directly).
  */
-EVT_BEGIN(gundan1000tai_afterbattle)
+static EVT_BEGIN(gundan1000tai_afterbattle)
     // If started directly, place Mario and the X-Nauts after the fight.
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_key_onoff, 0)
@@ -3436,7 +3436,7 @@ EVT_END()
  * Plays the ship's engine sound ("SFX_STG4_SHIP_MOVE1") at the departing ship "S_fune_c" every 2 seconds,
  * six times.
  */
-EVT_BEGIN(shukko_event_move_ship_se00)
+static EVT_BEGIN(shukko_event_move_ship_se00)
     LOOP(6)
         WAIT_MS(2000)
         CALL(evt_mapobj_get_position, STRING("S_fune_c"), LW(0), LW(1), LW(2))
@@ -3449,7 +3449,7 @@ EVT_END()
  * Plays the ship's mast creaking sound ("SFX_STG4_SHIP_MAST1") at the departing ship "S_fune_c" every 1.4
  * seconds, eight times.
  */
-EVT_BEGIN(shukko_event_move_ship_se01)
+static EVT_BEGIN(shukko_event_move_ship_se01)
     LOOP(8)
         WAIT_MS(1400)
         CALL(evt_mapobj_get_position, STRING("S_fune_c"), LW(0), LW(1), LW(2))
@@ -3459,7 +3459,7 @@ EVT_BEGIN(shukko_event_move_ship_se01)
 EVT_END()
 
 /** Names of the NPCs on the pier that take part in the departure scene (flagged while the ship pulls away). */
-const char* shukko_npc_list[] = {
+static const char* shukko_npc_list[] = {
     "ガラの悪い水夫",
     "マルコ",
     "水夫Ｄ",
@@ -3478,7 +3478,7 @@ const char* shukko_npc_list[] = {
  * first a slow 100 units over 6 seconds, then on to x=600 (700 in the US and later).
  * Mario and the partner are carried along by the movement.
  */
-EVT_BEGIN(shukko_event_move_ship)
+static EVT_BEGIN(shukko_event_move_ship)
     SPAWN_EVENT(shukko_event_move_ship_se00)
     SPAWN_EVENT(shukko_event_move_ship_se01)
     CALL(evt_mapobj_get_position, STRING("S_fune_c"), LW(0), LW(1), LW(2))
@@ -3557,7 +3557,7 @@ EVT_END()
  * the story becomes STG4_END_OFF_TO_THE_KEYS
  * and the game goes on to the Chapter 5 sail ("sys_01"/"stg_5").
  */
-EVT_BEGIN(shukko_event)
+static EVT_BEGIN(shukko_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_WALLS_DISABLED)
     CALL(evt_party_flg_onoff, 0, PARTY_FLAG_DISABLE_FRONT_WALL_CHK, 1)
@@ -3703,7 +3703,7 @@ EVT_END()
  * Sprite entries for the crowd of 100 sailors (evt_nannpc_init): the c_boro_k model with its S_1 and R_1 animations,
  * one entry per animation phase offset.
  */
-ExtTexInfo nannpc_entry_data01[] = {
+static ExtTexInfo nannpc_entry_data01[] = {
     {"c_boro_k", "S_1", 0.0f},
     {"c_boro_k", "S_1", 2.0f},
     {"c_boro_k", "S_1", 4.0f},
@@ -3801,7 +3801,7 @@ static USER_FUNC(alpha_set_func) {
  * starts at full speed and slows down linearly toward the end (the last 20% of the steps decelerate).
  * Returns the value between start and end for the given step.
  */
-f32 lineardec_type(s32 step, s32 total, f32 start, f32 end) {
+static f32 lineardec_type(s32 step, s32 total, f32 start, f32 end) {
     f32 cur;
     f32 speed;
     f32 sum;
@@ -3910,7 +3910,7 @@ static USER_FUNC(delete_itemsel_table) {
 }
 
 /** Sets the starting angle (args[0]) of the ship's rocking in LW float 0. */
-USER_FUNC(fune_yure_func_init) {
+static USER_FUNC(fune_yure_func_init) {
     event->lwDataF[0] = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
@@ -3922,7 +3922,7 @@ USER_FUNC(fune_yure_func_init) {
  * writes it to args[2] and returns 1 in args[3]
  * when the end of the swing is reached (or when the amplitude is 0).
  */
-USER_FUNC(fune_yure_func) {
+static USER_FUNC(fune_yure_func) {
     EvtWord* args = event->args;
     s32 dir = evtGetValue(event, args[0]);
     f32 amp = evtGetFloat(event, args[1]);
@@ -3958,7 +3958,7 @@ USER_FUNC(fune_yure_func) {
  * Picks a random point on the ellipse (x about +/-0.9 * radius, z about -300 +/- 0.5 * radius,
  * radius 120 to 300) around the X-Naut army and stores it in pos. Not used by the scripts.
  */
-void geundan1000tai_circle_pos(Vec* pos) {
+static void geundan1000tai_circle_pos(Vec* pos) {
     f32 s;
     f32 angle;
     f32 radius;
@@ -3978,7 +3978,7 @@ void geundan1000tai_circle_pos(Vec* pos) {
  * Script version of geundan1000tai_circle_pos: returns a random point on the army's ellipse in args[0] to
  * args[2], used as the source position for the army's sound effects.
  */
-USER_FUNC(gundan1000tai_circle_pos_func) {
+static USER_FUNC(gundan1000tai_circle_pos_func) {
     f32 radius;
     f32 s;
     f32 c;
@@ -4001,7 +4001,7 @@ USER_FUNC(gundan1000tai_circle_pos_func) {
  * and a start at the edge of the screen (to the left if the destination is left of the center,
  * otherwise to the right), and starts their run behaviour (gundan1000tai_seq00).
  */
-USER_FUNC(gundan1000tai_init) {
+static USER_FUNC(gundan1000tai_init) {
     f32 startRad;
     f32 angle;
     f32 s;
@@ -4045,7 +4045,7 @@ USER_FUNC(gundan1000tai_init) {
 }
 
 /** Starts the charge: switches every crowd extra to gundan1000tai_seq01. */
-USER_FUNC(gundan1000tai_totsugeki) {
+static USER_FUNC(gundan1000tai_totsugeki) {
     s32 i;
     NanNPC* npc;
     NanNPCWork* wp = nanNPCWork;
@@ -4063,7 +4063,7 @@ USER_FUNC(gundan1000tai_totsugeki) {
  * depending on where they stand: 16 left of x=60, 4 up to x=80, 2 up to x=100, 1 up to x=120,
  * and 0 if they are higher than y=70 or further to the right.
  */
-USER_FUNC(gundan1000tai_areacheck) {
+static USER_FUNC(gundan1000tai_areacheck) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(1);
@@ -4116,7 +4116,7 @@ USER_FUNC(gundan1000tai_totsuend) {
  * waits a staggered random delay, runs to its destination at a random speed with the run animation,
  * then idles and keeps its position as base.
  */
-void gundan1000tai_seq00(NanNPC* npc) {
+static void gundan1000tai_seq00(NanNPC* npc) {
     MarioWork* mario = marioGetPtr();
     s32 wait;
     f32 dist;
@@ -4474,7 +4474,7 @@ static USER_FUNC(cam_kaiten_set_para) {
 }
 
 /** Moves Mario by (args[0], args[1], args[2]) relative to where he is, so he keeps standing on the moving ship. */
-USER_FUNC(hosei_mario_pos) {
+static USER_FUNC(hosei_mario_pos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -4491,7 +4491,7 @@ USER_FUNC(hosei_mario_pos) {
  * Moves the active partner by (args[0], args[1], args[2]) relative to where it is,
  * so it keeps standing on the moving ship. Does nothing if there is no partner out.
  */
-USER_FUNC(hosei_party_pos) {
+static USER_FUNC(hosei_party_pos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -4508,7 +4508,7 @@ USER_FUNC(hosei_party_pos) {
 }
 
 /** Scatters the sailor crowd extras (the 100 waiting sailors) randomly on the pier at x -100 to 34 and z 190 to 240. */
-USER_FUNC(suifu100taikikan_init) {
+static USER_FUNC(suifu100taikikan_init) {
     s32 i;
     NanNPC* npc;
     NanNPCWork* wp = nanNPCWork;
@@ -4525,7 +4525,7 @@ USER_FUNC(suifu100taikikan_init) {
 }
 
 /** Sends the sailor crowd extras off on their walk to the stairs (suifu100taikikan_seq01). */
-USER_FUNC(suifu100taikikan_away) {
+static USER_FUNC(suifu100taikikan_away) {
     s32 i;
     NanNPC* npc;
     NanNPCWork* wp = nanNPCWork;
@@ -4543,7 +4543,7 @@ USER_FUNC(suifu100taikikan_away) {
  * Idle behaviour of a waiting sailor extra: just keeps its state at 0 so it stands
  * where suifu100taikikan_init put it.
  */
-void suifu100taikikan_seq00(NanNPC* npc) {
+static void suifu100taikikan_seq00(NanNPC* npc) {
     npc->state = 0;
 }
 
@@ -4552,7 +4552,7 @@ void suifu100taikikan_seq00(NanNPC* npc) {
  * walks a fixed route in order (left along the pier, around the back, over to the right, down and up the stairs,
  * back to the center and out of sight), moving in straight lines at a random speed, then hides below the map.
  */
-void suifu100taikikan_seq01(NanNPC* npc) {
+static void suifu100taikikan_seq01(NanNPC* npc) {
     Vec v;
     Vec d;
     s32 elapsed;
@@ -5464,7 +5464,7 @@ f32 gor_ship_puka_data[] = {
  * Loops forever, bobbing the ship up and down: samples gor_ship_puka_data with a rising index every 130 ms,
  * scaled by LW(1), and writes it to the variable named by LW(0) (the ship's height offset).
  */
-EVT_BEGIN(gor_ship_puka)
+static EVT_BEGIN(gor_ship_puka)
     SET_VALUE(LW(10), 0)
     LOOP(0)
         CALL(gor_ship_puka_func, LW(10), LW(1), LW(11))
@@ -5479,7 +5479,7 @@ EVT_END()
  * Loops forever, applying the ship position (GW(13), GW(14)) and heading (GW(15)) to "S_fune_b"
  * and its bound collision "A_fune_b" every frame. The wake "S_c_hikinami" follows x at y=0, with its heading offset by 180 degrees.
  */
-EVT_BEGIN(gor_muj_ship_sub)
+static EVT_BEGIN(gor_muj_ship_sub)
     LOOP(0)
         SET_FLOAT_VALUE(LW(0), GW(13))
         SET_FLOAT_VALUE(LW(1), GW(14))
@@ -5545,7 +5545,7 @@ EVT_END()
  * shows the ship and its collision, sets its position to x=-25,
  * spawns the follow-ship event and the bobbing (gor_ship_puka).
  */
-EVT_BEGIN(gor_muj_ship_init)
+static EVT_BEGIN(gor_muj_ship_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_b"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
@@ -5564,7 +5564,7 @@ EVT_END()
  * Flips the Keelhaul ship over like a sheet of paper (the capture/paper-turn effect, "OFF_d_kaiten") with the
  * paper- turn sound, switching its heading to 180 degrees; the ship appears to turn around.
  */
-EVT_BEGIN(gor_muj_ship_pera)
+static EVT_BEGIN(gor_muj_ship_pera)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_kaiten"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
@@ -5665,7 +5665,7 @@ static USER_FUNC(fune_eff) {
  * Looks up the bobbing table: args[0] is the step, args[1] a scale;
  * returns gor_ship_puka_data[step & 15] * scale in args[2].
  */
-USER_FUNC(gor_ship_puka_func) {
+static USER_FUNC(gor_ship_puka_func) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     f32 f = evtGetFloat(event, args[1]);
@@ -5694,7 +5694,7 @@ static USER_FUNC(scale_func) {
 }
 
 /** Saves whether the ships "S_fune_b" and "S_fune_c" are hidden into LW(8) and LW(9). */
-USER_FUNC(funeflag_save) {
+static USER_FUNC(funeflag_save) {
     MapObject* b = mapGetMapObj("S_fune_b");
     MapObject* c = mapGetMapObj("S_fune_c");
     event->lwData[8] = b->flags & MAP_OBJ_FLAG_HIDDEN;
@@ -5703,14 +5703,14 @@ USER_FUNC(funeflag_save) {
 }
 
 /** Hides the ships "S_fune_b" and "S_fune_c" (sets the hide flag on their groups). */
-USER_FUNC(funeflag_reset) {
+static USER_FUNC(funeflag_reset) {
     mapGrpFlagOn("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
 }
 
 /** Restores the hide state of the ships "S_fune_b" and "S_fune_c" saved in LW(8) and LW(9) by funeflag_save. */
-USER_FUNC(funeflag_load) {
+static USER_FUNC(funeflag_load) {
     mapGrpFlagOff("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn("S_fune_b", event->lwData[8]);
     mapGrpFlagOff("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
@@ -5719,7 +5719,7 @@ USER_FUNC(funeflag_load) {
 }
 
 /** Returns in args[0] whether Mario is currently switching ships (marioShipChanging). */
-USER_FUNC(funechange_func) {
+static USER_FUNC(funechange_func) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], marioShipChanging());
     return EVT_RETURN_DONE;
@@ -5765,7 +5765,7 @@ USER_FUNC(npc_all_delete) {
  * shrinks Mario, the partners and Cortez out of sight, flips the ship over like paper, bobs it,
  * fades in its wake and slides it 800 units out of the harbor in 10 seconds before changing to the map muj_20.
  */
-EVT_BEGIN(gor_muj_ship_start)
+static EVT_BEGIN(gor_muj_ship_start)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_c_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
@@ -5863,7 +5863,7 @@ EVT_END()
  * (Flavio's crew from STG4_32 to the end of chapter 4, otherwise Cortez), and restores them when he is inside.
  * It ends once GF(13) is set (korutesu_talk, sailing to Keelhaul Key).
  */
-EVT_BEGIN(tsumini)
+static EVT_BEGIN(tsumini)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ni_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ni_03"), 1, 0)
@@ -6088,7 +6088,7 @@ static EVT_BEGIN(epilogue_npc_entry)
 EVT_END()
 
 /** Loops forever, keeping the mushroom item "punio_kino" 15 units above Punio as he walks. */
-EVT_BEGIN(punio_kinoko)
+static EVT_BEGIN(punio_kinoko)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("プニオ"), LW(0), LW(1), LW(2))
         ADD_FLOAT(LW(1), FLOAT(15.0f))
@@ -6099,7 +6099,7 @@ EVT_BEGIN(punio_kinoko)
 EVT_END()
 
 /** Loops forever, keeping the mushroom item "puniko_kino" 15 units above the Puni sister (Puniko) as she walks. */
-EVT_BEGIN(puniko_kinoko)
+static EVT_BEGIN(puniko_kinoko)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("プニコ"), LW(0), LW(1), LW(2))
         ADD_FLOAT(LW(1), FLOAT(15.0f))
@@ -6557,7 +6557,7 @@ EVT_END()
  * Spawns Goombella ("Christine") at (0, 15, 220) for the second epilogue scene (arrival from "epilogue2"),
  * with wall collision off.
  */
-EVT_BEGIN(epilogue_npc_entry2)
+static EVT_BEGIN(epilogue_npc_entry2)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 0, 15, 220)
@@ -6590,7 +6590,7 @@ static EVT_BEGIN(epilogue_evt2)
 EVT_END()
 
 /** Spawns Goombella ("Christine") on the dock at (175, 15, 225), facing left, for the post-credits return scene. */
-EVT_BEGIN(return_gorotsuki_town_init)
+static EVT_BEGIN(return_gorotsuki_town_init)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_AUTO_MOVE_ANIM)

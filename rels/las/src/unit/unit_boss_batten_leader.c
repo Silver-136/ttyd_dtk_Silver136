@@ -47,56 +47,56 @@
 #define UNIT_WORK_SATELLITE 9         // first of four satellite unit ids (slots 9-12, -1 = empty): sub_call_satellite fills them, player_before_phase_event packs them, check_satellite clears dead ones
 #define UNIT_WORK_SATELLITE_SPLINE 13 // first of four SatelliteSpline* move works (slots 13-16, one per satellite slot; 0 when the move ends); see the BUG note in battenSatelliteTo_Init
 
-Vec nowv;
-f32 maer;
+static Vec nowv;
+static f32 maer;
 static s32 xlw[16];
-s32 xlw2[16];
-char xmemo[20];
-EventEntry* xevt;
-void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
+static s32 xlw2[16];
+static char xmemo[20];
+static EventEntry* xevt;
+static void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
 
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btl_hitoffsetx);
 USER_FUNC(btlevtcmd_AnimeGetPose);
-USER_FUNC(datastrcopy);
+static USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);
-USER_FUNC(enzan_lw_load2);
+static USER_FUNC(enzan_lw_load2);
 static USER_FUNC(enzan_lw_save);
-USER_FUNC(enzan_lw_save2);
-USER_FUNC(pose_check_evt_run);
-USER_FUNC(pose_check_evt_stop);
+static USER_FUNC(enzan_lw_save2);
+static USER_FUNC(pose_check_evt_run);
+static USER_FUNC(pose_check_evt_stop);
 USER_FUNC(_hp_gauge_flag_on);
-USER_FUNC(battenSatelliteToOutside);
-USER_FUNC(battenSatelliteToInside);
-USER_FUNC(battleGetBattenSatelliteInitPos);
-USER_FUNC(check_satellite);
+static USER_FUNC(battenSatelliteToOutside);
+static USER_FUNC(battenSatelliteToInside);
+static USER_FUNC(battleGetBattenSatelliteInitPos);
+static USER_FUNC(check_satellite);
 static USER_FUNC(eff_staff);
-USER_FUNC(evt_eff_firechange00);
-USER_FUNC(evt_eff_barriersizechange);
-USER_FUNC(evt_eff_colorchange00);
-USER_FUNC(evt_eff_pokopi_thunder);
+static USER_FUNC(evt_eff_firechange00);
+static USER_FUNC(evt_eff_barriersizechange);
+static USER_FUNC(evt_eff_colorchange00);
+static USER_FUNC(evt_eff_pokopi_thunder);
 extern BattleUnitKind unit_boss_batten_satellite;
 
-EvtWord batten_leader_zoom[34];
+static EvtWord batten_leader_zoom[34];
 static EvtWord mario_party_zoom[34];
-BattleWeapon weapon_batten_leader_thunder;
-BattleWeapon weapon_batten_leader_fire;
-BattleWeapon weapon_batten_leader_ice;
-BattleWeapon weapon_batten_leader_shikaeshi;
-BattleWeapon weapon_batten_leader_yokeyoke;
-BattleWeapon weapon_batten_leader_stop;
+static BattleWeapon weapon_batten_leader_thunder;
+static BattleWeapon weapon_batten_leader_fire;
+static BattleWeapon weapon_batten_leader_ice;
+static BattleWeapon weapon_batten_leader_shikaeshi;
+static BattleWeapon weapon_batten_leader_yokeyoke;
+static BattleWeapon weapon_batten_leader_stop;
 BattleUnitKind unit_boss_batten_leader;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
-BattleUnitDefenseAttr defence_attr_muteki;
+static BattleUnitDefenseAttr defence_attr_muteki;
 static StatusVulnerability regist;
-u8 defencecopy[5] __attribute__((aligned(4)));
+static u8 defencecopy[5] __attribute__((aligned(4)));
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[7];
-EvtWord hakai_snd_event[9];
-BattleUnitSetup entry_batten_satellite;
+static EvtWord hakai_snd_event[9];
+static BattleUnitSetup entry_batten_satellite;
 
 /* light blink sequence read by the light event: {mapobj name, frames} steps, then a NULL name */
 typedef struct LightStep {
@@ -119,33 +119,33 @@ typedef struct LightSeq4 {
     LightStep steps[4];
     const char* end;
 } LightSeq4;
-LightSeq3 btl_shuryolight_pow_normal;
-LightSeq1 btl_shuryolight_pow_tenmetu2;
-LightSeq2 btl_shuryolight_pow_tenmetu;
-LightSeq4 btl_shuryolight_head_1_normal;
-LightSeq4 btl_shuryolight_head_2_normal;
-LightSeq4 btl_shuryolight_head_3_normal;
-LightSeq4 btl_shuryolight_head_1_quick;
-LightSeq4 btl_shuryolight_head_2_quick;
-LightSeq4 btl_shuryolight_head_3_quick;
-LightSeq2 btl_shuryolight_head_1_random;
-LightSeq2 btl_shuryolight_head_2_random;
-LightSeq2 btl_shuryolight_head_3_random;
-LightSeq1 btl_shuryolight_head_1_tenmetu;
-LightSeq1 btl_shuryolight_head_2_tenmetu;
-LightSeq1 btl_shuryolight_head_3_tenmetu;
-LightSeq1 btl_shuryolight_head_1_off;
-LightSeq1 btl_shuryolight_head_2_off;
-LightSeq1 btl_shuryolight_head_3_off;
-LightSeq1 btl_shuryolight_head_1_on;
-LightSeq1 btl_shuryolight_head_2_on;
-LightSeq1 btl_shuryolight_head_3_on;
-LightSeq4 btl_shuryolight_rod_normal;
-LightSeq1 btl_shuryolight_rod_off;
-EvtWord light_anim_rtn[488];
-EvtWord light_rod_anim_rtn[122];
-EvtWord light_pose_change[314];
-EvtWord maiframeanimcheck[21];
+static LightSeq3 btl_shuryolight_pow_normal;
+static LightSeq1 btl_shuryolight_pow_tenmetu2;
+static LightSeq2 btl_shuryolight_pow_tenmetu;
+static LightSeq4 btl_shuryolight_head_1_normal;
+static LightSeq4 btl_shuryolight_head_2_normal;
+static LightSeq4 btl_shuryolight_head_3_normal;
+static LightSeq4 btl_shuryolight_head_1_quick;
+static LightSeq4 btl_shuryolight_head_2_quick;
+static LightSeq4 btl_shuryolight_head_3_quick;
+static LightSeq2 btl_shuryolight_head_1_random;
+static LightSeq2 btl_shuryolight_head_2_random;
+static LightSeq2 btl_shuryolight_head_3_random;
+static LightSeq1 btl_shuryolight_head_1_tenmetu;
+static LightSeq1 btl_shuryolight_head_2_tenmetu;
+static LightSeq1 btl_shuryolight_head_3_tenmetu;
+static LightSeq1 btl_shuryolight_head_1_off;
+static LightSeq1 btl_shuryolight_head_2_off;
+static LightSeq1 btl_shuryolight_head_3_off;
+static LightSeq1 btl_shuryolight_head_1_on;
+static LightSeq1 btl_shuryolight_head_2_on;
+static LightSeq1 btl_shuryolight_head_3_on;
+static LightSeq4 btl_shuryolight_rod_normal;
+static LightSeq1 btl_shuryolight_rod_off;
+static EvtWord light_anim_rtn[488];
+static EvtWord light_rod_anim_rtn[122];
+static EvtWord light_pose_change[314];
+static EvtWord maiframeanimcheck[21];
 static EvtWord init_event[149];
 static EvtWord entry_event[94];
 static EvtWord damage_event[47];
@@ -157,7 +157,7 @@ EvtWord damage_sub_event[148];
 #endif
 
 static EvtWord phase_event[28];
-EvtWord monster_before_phase_event[195];
+static EvtWord monster_before_phase_event[195];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[126];
@@ -187,15 +187,15 @@ static Vec splineTableOut4_3[5];
 static Vec splineTableOut4_4[5];
 static EvtWord satellite_blur_on[42];
 static EvtWord satellite_blur_off[29];
-EvtWord sub_call_satellite[87];
-EvtWord player_before_phase_event[170];
+static EvtWord sub_call_satellite[87];
+static EvtWord player_before_phase_event[170];
 static EvtWord attack_event[141];
-EvtWord batten_leader_thunder_attack_event[377];
-EvtWord batten_leader_fire_attack_event[376];
-EvtWord batten_leader_ice_attack_event[321];
-EvtWord batten_leader_shikaeshi_attack_event[176];
-EvtWord batten_leader_yokeyoke_attack_event[176];
-EvtWord batten_leader_stop_attack_event[328];
+static EvtWord batten_leader_thunder_attack_event[377];
+static EvtWord batten_leader_fire_attack_event[376];
+static EvtWord batten_leader_ice_attack_event[321];
+static EvtWord batten_leader_shikaeshi_attack_event[176];
+static EvtWord batten_leader_yokeyoke_attack_event[176];
+static EvtWord batten_leader_stop_attack_event[328];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[15];
@@ -209,7 +209,7 @@ static EvtWord wait_event[16];
  * LW(0) selects the timing: with 2 the move is instant, otherwise it takes 30 frames,
  * and with 1 the script waits 600 ms after it.
  */
-EVT_BEGIN(batten_leader_zoom)
+static EVT_BEGIN(batten_leader_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
@@ -242,7 +242,7 @@ static EVT_BEGIN(mario_party_zoom)
 EVT_END()
 
 /** Weapon of Grodus's thunder spell: damage 7. */
-BattleWeapon weapon_batten_leader_thunder = {
+static BattleWeapon weapon_batten_leader_thunder = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -283,7 +283,7 @@ BattleWeapon weapon_batten_leader_thunder = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-BattleWeapon weapon_batten_leader_fire = {
+static BattleWeapon weapon_batten_leader_fire = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -331,7 +331,7 @@ BattleWeapon weapon_batten_leader_fire = {
 };
 
 /** Weapon of Grodus's ice spell: damage 5; inflicts Frozen (30%). */
-BattleWeapon weapon_batten_leader_ice = {
+static BattleWeapon weapon_batten_leader_ice = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -376,7 +376,7 @@ BattleWeapon weapon_batten_leader_ice = {
 };
 
 /** Weapon of Grodus's shikaeshi support spell. */
-BattleWeapon weapon_batten_leader_shikaeshi = {
+static BattleWeapon weapon_batten_leader_shikaeshi = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -413,7 +413,7 @@ BattleWeapon weapon_batten_leader_shikaeshi = {
 };
 
 /** Weapon of Grodus's spell that makes a unit dodgy: inflicts Dodgy. */
-BattleWeapon weapon_batten_leader_yokeyoke = {
+static BattleWeapon weapon_batten_leader_yokeyoke = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -451,7 +451,7 @@ BattleWeapon weapon_batten_leader_yokeyoke = {
 };
 
 /** Weapon of Grodus's spell that freezes its target in time: inflicts Stop (30%). */
-BattleWeapon weapon_batten_leader_stop = {
+static BattleWeapon weapon_batten_leader_stop = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -592,7 +592,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Damage modifiers of Grodus while invincible per element (normal, fire, ice, explosion, electric): normal:
  * immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-BattleUnitDefenseAttr defence_attr_muteki = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
+static BattleUnitDefenseAttr defence_attr_muteki = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {30, 30, 30, 100, 30, 100, 100, 30, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 1};
@@ -623,7 +623,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-u8 defencecopy[5] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense
+static u8 defencecopy[5] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense
     1, 1, 1, 1, 1,
 };
 
@@ -700,12 +700,12 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Event script: plays the sound of Grodus's barrier breaking (SFX_BOSS_SRYO_BARRIER_BREAK1). */
-EVT_BEGIN(hakai_snd_event)
+static EVT_BEGIN(hakai_snd_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_BARRIER_BREAK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     RETURN
 EVT_END()
 
-USER_FUNC(evt_eff_pokopi_thunder) {
+static USER_FUNC(evt_eff_pokopi_thunder) {
     f32 top;
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -724,7 +724,7 @@ USER_FUNC(evt_eff_pokopi_thunder) {
  * Script helper: recolours the cloud effect named args[0] to white fading to yellow and lifts it 65 units up
  * and 10 units forward; used for Grodus's lightning cloud.
  */
-USER_FUNC(evt_eff_colorchange00) {
+static USER_FUNC(evt_eff_colorchange00) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
     ((EffCloudN64Work*)eff->userdata)->r = 255;
@@ -740,7 +740,7 @@ USER_FUNC(evt_eff_colorchange00) {
 }
 
 /** Script helper: sets the scale of Grodus's barrier effect named args[0] to args[1]. */
-USER_FUNC(evt_eff_barriersizechange) {
+static USER_FUNC(evt_eff_barriersizechange) {
     EvtWord* args = event->args;
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
 
@@ -755,7 +755,7 @@ USER_FUNC(evt_eff_barriersizechange) {
  * otherwise it then flies off to the left edge (X -270) and is deleted.
  * Used for the fireballs of Grodus's fire spell.
  */
-USER_FUNC(evt_eff_firechange00) {
+static USER_FUNC(evt_eff_firechange00) {
     Mtx m;
     Vec target;
     Vec pos;
@@ -878,7 +878,7 @@ static USER_FUNC(eff_staff) {
  * once a satellite is gone the barrier shatters (with glass effects and a break sound)
  * and his normal-element defence is recalculated from its stored value plus the number of satellites left.
  */
-USER_FUNC(check_satellite) {
+static USER_FUNC(check_satellite) {
     s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BattleUnitPart* part;
@@ -983,7 +983,7 @@ USER_FUNC(check_satellite) {
  * when args[1] satellites surround the unit args[0], from a fixed layout for 1 to 4 satellites.
  * The offsets go to the variables args[3..5].
  */
-USER_FUNC(battleGetBattenSatelliteInitPos) {
+static USER_FUNC(battleGetBattenSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 num;
@@ -1041,7 +1041,7 @@ USER_FUNC(battleGetBattenSatelliteInitPos) {
 }
 
 /** Setup used to spawn one of Grodus's satellites: unit kind, alliance, position and turn phase. */
-BattleUnitSetup entry_batten_satellite = {
+static BattleUnitSetup entry_batten_satellite = {
     &unit_boss_batten_satellite, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -1053,80 +1053,80 @@ BattleUnitSetup entry_batten_satellite = {
 };
 
 /** Lamp sequence of Grodus's power lamp: a steady cycle of its lit and dim animations. */
-LightSeq3 btl_shuryolight_pow_normal = {{{"L_1B", -2}, {"L_1A", 80}, {"L_1B", 80}}, NULL};
+static LightSeq3 btl_shuryolight_pow_normal = {{{"L_1B", -2}, {"L_1A", 80}, {"L_1B", 80}}, NULL};
 
 /** Lamp sequence of Grodus's power lamp: blinking. */
-LightSeq1 btl_shuryolight_pow_tenmetu2 = {{{"L_4E", 0}}, NULL};
+static LightSeq1 btl_shuryolight_pow_tenmetu2 = {{{"L_4E", 0}}, NULL};
 
 /** Lamp sequence of Grodus's power lamp: blinking. */
-LightSeq2 btl_shuryolight_pow_tenmetu = {{{"L_1B", -3}, {"L_1A", 200}}, NULL};
+static LightSeq2 btl_shuryolight_pow_tenmetu = {{{"L_1B", -3}, {"L_1A", 200}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 1: a steady cycle of its lit and dim animations. */
-LightSeq4 btl_shuryolight_head_1_normal = {{{"L_4A", 400}, {"L_4A", 400}, {"L_4B", 400}, {"L_4A", 400}}, NULL};
+static LightSeq4 btl_shuryolight_head_1_normal = {{{"L_4A", 400}, {"L_4A", 400}, {"L_4B", 400}, {"L_4A", 400}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 2: a steady cycle of its lit and dim animations. */
-LightSeq4 btl_shuryolight_head_2_normal = {{{"L_3A", 400}, {"L_3B", 400}, {"L_3A", 400}, {"L_3A", 400}}, NULL};
+static LightSeq4 btl_shuryolight_head_2_normal = {{{"L_3A", 400}, {"L_3B", 400}, {"L_3A", 400}, {"L_3A", 400}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 3: a steady cycle of its lit and dim animations. */
-LightSeq4 btl_shuryolight_head_3_normal = {{{"L_2B", 400}, {"L_2A", 400}, {"L_2A", 400}, {"L_2A", 400}}, NULL};
+static LightSeq4 btl_shuryolight_head_3_normal = {{{"L_2B", 400}, {"L_2A", 400}, {"L_2A", 400}, {"L_2A", 400}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 1: a fast cycle. */
-LightSeq4 btl_shuryolight_head_1_quick = {{{"L_4A", 200}, {"L_4A", 200}, {"L_4B", 200}, {"L_4A", 200}}, NULL};
+static LightSeq4 btl_shuryolight_head_1_quick = {{{"L_4A", 200}, {"L_4A", 200}, {"L_4B", 200}, {"L_4A", 200}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 2: a fast cycle. */
-LightSeq4 btl_shuryolight_head_2_quick = {{{"L_3A", 200}, {"L_3B", 200}, {"L_3A", 200}, {"L_3A", 200}}, NULL};
+static LightSeq4 btl_shuryolight_head_2_quick = {{{"L_3A", 200}, {"L_3B", 200}, {"L_3A", 200}, {"L_3A", 200}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 3: a fast cycle. */
-LightSeq4 btl_shuryolight_head_3_quick = {{{"L_2B", 200}, {"L_2A", 200}, {"L_2A", 200}, {"L_2A", 200}}, NULL};
+static LightSeq4 btl_shuryolight_head_3_quick = {{{"L_2B", 200}, {"L_2A", 200}, {"L_2A", 200}, {"L_2A", 200}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 1: random flicker. */
-LightSeq2 btl_shuryolight_head_1_random = {{{"L_4A", -4}, {"L_4B", -4}}, NULL};
+static LightSeq2 btl_shuryolight_head_1_random = {{{"L_4A", -4}, {"L_4B", -4}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 2: random flicker. */
-LightSeq2 btl_shuryolight_head_2_random = {{{"L_3A", -4}, {"L_3B", -4}}, NULL};
+static LightSeq2 btl_shuryolight_head_2_random = {{{"L_3A", -4}, {"L_3B", -4}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 3: random flicker. */
-LightSeq2 btl_shuryolight_head_3_random = {{{"L_2B", -4}, {"L_2A", -4}}, NULL};
+static LightSeq2 btl_shuryolight_head_3_random = {{{"L_2B", -4}, {"L_2A", -4}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 1: blinking. */
-LightSeq1 btl_shuryolight_head_1_tenmetu = {{{"L_4E", 0}}, NULL};
+static LightSeq1 btl_shuryolight_head_1_tenmetu = {{{"L_4E", 0}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 2: blinking. */
-LightSeq1 btl_shuryolight_head_2_tenmetu = {{{"L_3E", 0}}, NULL};
+static LightSeq1 btl_shuryolight_head_2_tenmetu = {{{"L_3E", 0}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 3: blinking. */
-LightSeq1 btl_shuryolight_head_3_tenmetu = {{{"L_2E", 0}}, NULL};
+static LightSeq1 btl_shuryolight_head_3_tenmetu = {{{"L_2E", 0}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 1: dark. */
-LightSeq1 btl_shuryolight_head_1_off = {{{"L_4A", -1}}, NULL};
+static LightSeq1 btl_shuryolight_head_1_off = {{{"L_4A", -1}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 2: dark. */
-LightSeq1 btl_shuryolight_head_2_off = {{{"L_3A", -1}}, NULL};
+static LightSeq1 btl_shuryolight_head_2_off = {{{"L_3A", -1}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 3: dark. */
-LightSeq1 btl_shuryolight_head_3_off = {{{"L_2A", -1}}, NULL};
+static LightSeq1 btl_shuryolight_head_3_off = {{{"L_2A", -1}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 1: lit. */
-LightSeq1 btl_shuryolight_head_1_on = {{{"L_4B", -1}}, NULL};
+static LightSeq1 btl_shuryolight_head_1_on = {{{"L_4B", -1}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 2: lit. */
-LightSeq1 btl_shuryolight_head_2_on = {{{"L_3B", -1}}, NULL};
+static LightSeq1 btl_shuryolight_head_2_on = {{{"L_3B", -1}}, NULL};
 
 /** Lamp sequence of Grodus's head lamp 3: lit. */
-LightSeq1 btl_shuryolight_head_3_on = {{{"L_2B", -1}}, NULL};
+static LightSeq1 btl_shuryolight_head_3_on = {{{"L_2B", -1}}, NULL};
 
 /** Lamp sequence of Grodus's staff lamp: a steady cycle of its lit and dim animations. */
-LightSeq4 btl_shuryolight_rod_normal = {{{"L_3C", 0}, {"L_3B", 1000}, {"L_3D", 0}, {"L_3A", 1000}}, NULL};
+static LightSeq4 btl_shuryolight_rod_normal = {{{"L_3C", 0}, {"L_3B", 1000}, {"L_3D", 0}, {"L_3A", 1000}}, NULL};
 
 /** Lamp sequence of Grodus's staff lamp: dark. */
-LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
+static LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
 
 /**
  * Event script: animates Grodus's lamp parts from sequence tables (pointers in LW(5..8),
  * a list of animation names with durations; durations are in ms, 0 waits for the animation to end, -1 ends,
  * -2 blinks randomly, -3 and -4 are random waits). The three head tables run in sibling events; the power table runs in the main event.
  */
-EVT_BEGIN(light_anim_rtn)
+static EVT_BEGIN(light_anim_rtn)
     // First head lamp (part 4): play the animation sequence given in LW(6) over and over.
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(6))
@@ -1340,7 +1340,7 @@ EVT_BEGIN(light_anim_rtn)
 EVT_END()
 
 /** Event script: animates the staff lamp from the sequence table in LW(9), the same format as light_anim_rtn. */
-EVT_BEGIN(light_rod_anim_rtn)
+static EVT_BEGIN(light_rod_anim_rtn)
     SET_INT_READ_ADDR(LW(9))
     LOOP(0)
         READ_INT(LW(1))
@@ -1398,7 +1398,7 @@ EVT_END()
  * For the casting poses A_1B, A_1C and A_2 the head lamps use their blinking sequences and the power lamp its normal sequence;
  * other poses select their own normal, quick, random, lit, dark or blinking sequences; restarts the lamp events accordingly.
  */
-EVT_BEGIN(light_pose_change)
+static EVT_BEGIN(light_pose_change)
     CALL(enzan_lw_save2)
     CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(0))
 
@@ -1530,7 +1530,7 @@ EVT_END()
  * Event script: watches Grodus's body animation every frame and runs light_pose_change whenever it changes,
  * so his lamps follow his pose.
  */
-EVT_BEGIN(maiframeanimcheck)
+static EVT_BEGIN(maiframeanimcheck)
     LOOP(0)
         CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(1))
         IF_STR_NOT_EQUAL(LW(0), LW(1))
@@ -1735,7 +1735,7 @@ EVT_END()
  * At 75 percent HP or less he stops and speaks (stg8_las_66); at 50 percent he says stg8_las_67;
  * at 25 percent he sets his wobbly pose table (pose_table_furafura) and says stg8_las_68.
  */
-EVT_BEGIN(monster_before_phase_event)
+static EVT_BEGIN(monster_before_phase_event)
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(0)
@@ -2114,7 +2114,7 @@ static EVT_BEGIN(satellite_blur_off)
     RETURN
 EVT_END()
 
-EVT_BEGIN(sub_call_satellite)
+static EVT_BEGIN(sub_call_satellite)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(4))
     SET_VALUE(LW(1), 9)
     SET_VALUE(LW(5), 0)
@@ -2145,7 +2145,7 @@ EVT_BEGIN(sub_call_satellite)
     RETURN
 EVT_END()
 
-EVT_BEGIN(player_before_phase_event)
+static EVT_BEGIN(player_before_phase_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
@@ -2269,7 +2269,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(batten_leader_thunder_attack_event)
+static EVT_BEGIN(batten_leader_thunder_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(170)
@@ -2387,7 +2387,7 @@ EVT_BEGIN(batten_leader_thunder_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(batten_leader_fire_attack_event)
+static EVT_BEGIN(batten_leader_fire_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(170)
@@ -2510,7 +2510,7 @@ EVT_BEGIN(batten_leader_fire_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(batten_leader_ice_attack_event)
+static EVT_BEGIN(batten_leader_ice_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(170)
@@ -2605,7 +2605,7 @@ EVT_BEGIN(batten_leader_ice_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(batten_leader_shikaeshi_attack_event)
+static EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(170)
@@ -2652,7 +2652,7 @@ EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(batten_leader_yokeyoke_attack_event)
+static EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(170)
@@ -2699,7 +2699,7 @@ EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(batten_leader_stop_attack_event)
+static EVT_BEGIN(batten_leader_stop_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(170)
@@ -2854,7 +2854,7 @@ static USER_FUNC(enzan_lw_load) {
 }
 
 /** Script helper: saves LW(0..15) into a second static array xlw2 (a separate slot from enzan_lw_save). */
-USER_FUNC(enzan_lw_save2) {
+static USER_FUNC(enzan_lw_save2) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
@@ -2864,7 +2864,7 @@ USER_FUNC(enzan_lw_save2) {
 }
 
 /** Script helper: restores LW(0..15) from the second array saved by enzan_lw_save2. */
-USER_FUNC(enzan_lw_load2) {
+static USER_FUNC(enzan_lw_load2) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
@@ -2874,7 +2874,7 @@ USER_FUNC(enzan_lw_load2) {
 }
 
 /** Script helper: copies the string args[0] (at most 16 characters) into the static buffer xmemo. */
-USER_FUNC(datastrcopy) {
+static USER_FUNC(datastrcopy) {
     s8* s = (s8*)evtGetValue(event, event->args[0]);
     s32 i;
 
@@ -2889,7 +2889,7 @@ USER_FUNC(datastrcopy) {
  * Script helper: starts maiframeanimcheck as a new event for this unit,
  * storing it in xevt and giving it the xmemo buffer to compare poses against.
  */
-USER_FUNC(pose_check_evt_run) {
+static USER_FUNC(pose_check_evt_run) {
     xevt = evtEntryType(maiframeanimcheck, event->priority, 0, event->type);
     xevt->unitId = event->unitId;
     xevt->ownerNPC = event->ownerNPC;
@@ -2901,7 +2901,7 @@ USER_FUNC(pose_check_evt_run) {
 }
 
 /** Script helper: stops the pose-watching event that pose_check_evt_run started. */
-USER_FUNC(pose_check_evt_stop) {
+static USER_FUNC(pose_check_evt_stop) {
     evtDeleteID(xevt->eventId);
     return EVT_RETURN_DONE;
 }
@@ -2955,7 +2955,7 @@ static USER_FUNC(_set_draw_callback) {
  * Display callback for Grodus: when the pose group being drawn is one of his five lamp locators (locator6, 9, 8,
  * 7, 5), draws the matching lamp part's plane shape at that locator.
  */
-void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
+static void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnitPart* part = userdata;
     BattleUnit* unit;
     s32 poseId;
@@ -3039,7 +3039,7 @@ USER_FUNC(_hp_gauge_flag_on) {
  * allocates a 5-point spline from table, remembers the table on the satellite's body part,
  * and returns TRUE (FALSE if that satellite slot is empty).
  */
-u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
+static u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     SatelliteSpline* sp;
 
     // BUG: allocates before the empty-slot test, so an empty slot returns without freeing sp (it stays in the
@@ -3065,7 +3065,7 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
  * moving over 60 frames relative to the unit's position and facing, and frees the spline when finished.
  * Returns TRUE while it is still moving.
  */
-u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
+static u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     SatelliteSpline* sp;
     BattleUnit* sat;
     Vec upos;
@@ -3101,7 +3101,7 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
  * Script helper: pulls the satellites in to Grodus along the "in" splines paired with the "out" splines they
  * left by; blocks until all have arrived.
  */
-USER_FUNC(battenSatelliteToInside) {
+static USER_FUNC(battenSatelliteToInside) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 num = evtGetValue(event, args[1]);
@@ -3162,7 +3162,7 @@ USER_FUNC(battenSatelliteToInside) {
  * Script helper: sends args[1] satellites out from Grodus to their outer positions along the "out" splines for
  * that many satellites; blocks until all have arrived.
  */
-USER_FUNC(battenSatelliteToOutside) {
+static USER_FUNC(battenSatelliteToOutside) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 num = evtGetValue(event, args[1]);

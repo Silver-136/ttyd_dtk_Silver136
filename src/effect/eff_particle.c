@@ -54,7 +54,7 @@ typedef struct ParticleWork {
  * Spark (hibana) colour by remaining life, indexed by life / 8:
  * a particle fades from white through yellow to a dark, transparent orange as it dies.
  */
-GXColor hibana_col[32] = {
+static GXColor hibana_col[32] = {
     {0x5F, 0x28, 0x00, 0x00},
     {0x69, 0x35, 0x00, 0x08},
     {0x73, 0x42, 0x00, 0x10},

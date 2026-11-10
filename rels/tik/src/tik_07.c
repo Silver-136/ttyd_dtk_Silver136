@@ -27,8 +27,8 @@
 #include "driver/itemdrv.h"
 #include <dolphin/pad.h>
 
-EvtWord bero_00_open_door[12];
-EvtWord bero_00_close_door[12];
+static EvtWord bero_00_open_door[12];
+static EvtWord bero_00_close_door[12];
 static BeroEntry bero_entry_data[8];
 static BeroEntry bero_entry_data2[2];
 EvtWord tik_07_down_evt[];
@@ -37,13 +37,13 @@ static EvtWord evt_block[8];
 static EvtWord mobj_box00[34];
 EvtWord tik_07_init_evt[323];
 
-EVT_BEGIN(bero_00_open_door)
+static EVT_BEGIN(bero_00_open_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
-EVT_BEGIN(bero_00_close_door)
+static EVT_BEGIN(bero_00_close_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN

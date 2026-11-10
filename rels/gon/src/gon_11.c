@@ -59,11 +59,11 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(const char* name, s32 shadowId, const char* offName, s32 allocMode, s32 x, s32 y, s32 w, s32 h);
 
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_iri_16_cloud_ent);
-USER_FUNC(evt_iri_16_cloud_init);
+static USER_FUNC(evt_iri_16_cloud_ent);
+static USER_FUNC(evt_iri_16_cloud_init);
 static USER_FUNC(gonbaba_wait_landon);
 
-EvtWord evt_sound[8];
+static EvtWord evt_sound[8];
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[2];
@@ -81,9 +81,9 @@ EvtWord gonbaba_event[1410];
 static const char* capturemap[2];
 static Vec v_list[8];
 static EvtWord evt_cloud_main_evt[4];
-EvtWord iri_16_box_evt[33];
-EvtWord iri_16_cloud_evt[36];
-EvtWord iri_16_touch_evt[2];
+static EvtWord iri_16_box_evt[33];
+static EvtWord iri_16_cloud_evt[36];
+static EvtWord iri_16_touch_evt[2];
 static EvtWord iri_16_init[57];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -93,7 +93,7 @@ EvtWord gon_11_init_evt[101];
 #endif
 
 /** Exit event of the lair door: fades out the cutscene music on channel 1 and returns 0 to the door code. */
-EVT_BEGIN(evt_sound)
+static EVT_BEGIN(evt_sound)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     SET_VALUE(LW(0), 0)
     RETURN
@@ -986,7 +986,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     return 0;
 }
 
-USER_FUNC(evt_iri_16_cloud_init) {
+static USER_FUNC(evt_iri_16_cloud_init) {
     s32 i;
 
     cloud = _mapAlloc(sizeof(CloudRoomWork) * 16);
@@ -1004,7 +1004,7 @@ USER_FUNC(evt_iri_16_cloud_init) {
  * args[1] the hit object name, args[2] the script to run when it has been blown away.
  * Starts evt_cloud_main for it.
  */
-USER_FUNC(evt_iri_16_cloud_ent) {
+static USER_FUNC(evt_iri_16_cloud_ent) {
     EvtWord* args = event->args;
     char** groups;
     char* hitName;
@@ -1049,7 +1049,7 @@ USER_FUNC(evt_iri_16_cloud_ent) {
  * Opens the chest that appears after the cloud is gone
  * and gives Mario the Attack FX B key item (the Trouble Center request 16 reward item).
  */
-EVT_BEGIN(iri_16_box_evt)
+static EVT_BEGIN(iri_16_box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("mb"), ITEM_ATTACK_FX_B_KEY_ITEM, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -1064,7 +1064,7 @@ EVT_END()
  * End event of the request-16 cloud: places the chest (box), switches off the cloud's hit area,
  * plays the success jingle and sets GSWF_TROUBLE_WORK(1).
  */
-EVT_BEGIN(iri_16_cloud_evt)
+static EVT_BEGIN(iri_16_cloud_evt)
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
     CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -1077,7 +1077,7 @@ EVT_BEGIN(iri_16_cloud_evt)
 EVT_END()
 
 /** Case event on the request-16 cloud (front-A); does nothing. */
-EVT_BEGIN(iri_16_touch_evt)
+static EVT_BEGIN(iri_16_touch_evt)
     RETURN
 EVT_END()
 

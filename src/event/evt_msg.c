@@ -180,12 +180,12 @@ USER_FUNC(evt_msg_print) {
  * Message label suffix of each partner, indexed by partner id (0 none, 1 Goombella, 2 Koops, 3 Bobbery, 4 Yoshi,
  * 5 Flurrie, 6 Vivian, 7 Ms. Mowz, then the extra ids).
  */
-const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv", "_chu", "_jug", "_tel", "_lui"};
+static const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv", "_chu", "_jug", "_tel", "_lui"};
 /**
  * Message label suffix of each partner battle unit, indexed by unit kind minus 0xE0
  * (Goombella, Koops, Yoshi, Flurrie, Vivian, Bobbery, Ms. Mowz).
  */
-const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};
+static const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};
 
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"

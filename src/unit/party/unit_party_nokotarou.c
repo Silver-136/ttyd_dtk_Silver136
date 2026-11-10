@@ -42,9 +42,9 @@
 #define PARTS_WORK_EFFECT_END 2   // part 1: 1 makes _tsuranuki_effect_control delete the charge effect and finish (it clears the flag)
 
 static USER_FUNC(_check_guard_koura);
-USER_FUNC(_tsuranuki_effect_control);
-USER_FUNC(_color_lv_set);
-USER_FUNC(_check_mario_move_count);
+static USER_FUNC(_tsuranuki_effect_control);
+static USER_FUNC(_color_lv_set);
+static USER_FUNC(_check_mario_move_count);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_nokotarou_stay[26];
@@ -56,7 +56,7 @@ static BattleDataEntry data_table[11];
 static BattleDataEntry data_table[12];
 #endif
 
-BattleUnitKindPart unitpartsdata_Party_Nokotarou[1];
+static BattleUnitKindPart unitpartsdata_Party_Nokotarou[1];
 BattleUnitKind unitdata_Party_Nokotarou;
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[78];
@@ -73,25 +73,25 @@ static EvtWord _change_koura_pose_fast[78];
 static EvtWord _restore_koura_pose[47];
 static EvtWord _koura_rotate_start[199];
 static EvtWord _koura_rotate_stop[13];
-EvtWord partyNokotarouAttack_FirstAttack[236];
+static EvtWord partyNokotarouAttack_FirstAttack[236];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partyNokotarouAttack_NormalAttack[769];
-EvtWord partyNokotarouAttack_SyubibinKoura[667];
+static EvtWord partyNokotarouAttack_NormalAttack[769];
+static EvtWord partyNokotarouAttack_SyubibinKoura[667];
 #else
-EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
-EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
+static EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
+static EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
 #endif
 
 EvtWord partyNokotarouAttack_KouraGuard[];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partyNokotarouAttack_TsuranukiKoura[901];
+static EvtWord partyNokotarouAttack_TsuranukiKoura[901];
 #else
-EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
+static EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
 #endif
 
-EvtWord nokotarou_appeal_event[34];
+static EvtWord nokotarou_appeal_event[34];
 static EvtWord party_win_reaction[16];
 static EvtWord attack_audience_event[263];
 
@@ -106,7 +106,7 @@ static StatusVulnerability regist;
 static EvtWord damage_event[10];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
-BattleUnitSetup entry_koura;
+static BattleUnitSetup entry_koura;
 
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
@@ -204,7 +204,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Koops's single body part: model c_pnk with his defence, element and pose tables; shelled, so it flips. */
-BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
+static BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
     {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
 };
 
@@ -734,7 +734,7 @@ EVT_END()
  * Koops's first strike, used when he hits an enemy in the field to start the battle:
  * he spins in his shell from offstage into the first-attack target, bounces back and returns home.
  */
-EVT_BEGIN(partyNokotarouAttack_FirstAttack)
+static EVT_BEGIN(partyNokotarouAttack_FirstAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -796,7 +796,7 @@ EVT_END()
  * Koops's Shell Toss: he spins in his shell along the ground into the front enemy,
  * the action command (charging the spin) setting the damage, then bounces back home.
  */
-EVT_BEGIN(partyNokotarouAttack_NormalAttack)
+static EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1078,7 +1078,7 @@ EVT_END()
  * Koops's Power Shell: he spins in his shell and sweeps through every enemy on the ground,
  * the action command deciding the damage, then returns home.
  */
-EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
+static EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1333,7 +1333,7 @@ EVT_END()
  * Mario is hidden and untargetable inside it; if he still has a move, the shell opens again.
  */
 #if VERSION <= VERSION_DEMO_JP
-BattleUnitSetup entry_koura = {
+static BattleUnitSetup entry_koura = {
     &unit_koura, // unitKindParams
     ALLIANCE_PLAYER, // alliance
     {0}, // pad_05
@@ -1642,7 +1642,7 @@ EVT_END()
  * Koops's Shell Slam: he charges a spin with the action command (_tsuranuki_effect_control grows the effect with
  * the charge level) and slams through every ground enemy, ignoring defence, then returns home.
  */
-EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
+static EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -1943,7 +1943,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     RETURN
 EVT_END()
 
-EVT_BEGIN(nokotarou_appeal_event)
+static EVT_BEGIN(nokotarou_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2104,7 +2104,7 @@ EVT_END()
  * player, placed off screen until the move positions it.
  */
 #if VERSION >= VERSION_JP
-BattleUnitSetup entry_koura = {
+static BattleUnitSetup entry_koura = {
     &unit_koura, // unitKindParams
     ALLIANCE_PLAYER, // alliance
     {0}, // pad_05
@@ -2162,7 +2162,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
  * Returns Mario's moves remaining this turn in args[0];
  * Shell Shield opens the new shell right away when he still has a move.
  */
-USER_FUNC(_check_mario_move_count) {
+static USER_FUNC(_check_mario_move_count) {
     s32 index = event->args[0];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
 
@@ -2176,7 +2176,7 @@ USER_FUNC(_check_mario_move_count) {
  * Shell Shield saves Mario's value and sets it to 255; its restore call sits after LABEL(99), which the always-true
  * branch returns before reaching.
  */
-USER_FUNC(_color_lv_set) {
+static USER_FUNC(_color_lv_set) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -2200,7 +2200,7 @@ USER_FUNC(_color_lv_set) {
  * spawns it on the first call, follows the unit, and eases its size toward the charge level in part work[1];
  * part work[2] set ends it and deletes the effect.
  */
-USER_FUNC(_tsuranuki_effect_control) {
+static USER_FUNC(_tsuranuki_effect_control) {
     BattleWork* wp;
     BattleUnit* unit;
     BattleUnitPart* part;

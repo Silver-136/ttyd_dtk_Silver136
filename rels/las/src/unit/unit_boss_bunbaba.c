@@ -38,23 +38,23 @@ static PoseTableEntry pose_table[9];
 
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
-BattleWeapon weapon_bunbaba_fumituke_attack;
-BattleWeapon weapon_bunbaba_kamituki_attack;
-BattleWeapon weapon_bunbaba_poison_attack;
-BattleWeapon weapon_bunbaba_eq_attack;
-BattleWeapon weapon_bunbaba_charge;
-BattleWeapon weapon_bunbaba_mega_attack;
+static BattleWeapon weapon_bunbaba_fumituke_attack;
+static BattleWeapon weapon_bunbaba_kamituki_attack;
+static BattleWeapon weapon_bunbaba_poison_attack;
+static BattleWeapon weapon_bunbaba_eq_attack;
+static BattleWeapon weapon_bunbaba_charge;
+static BattleWeapon weapon_bunbaba_mega_attack;
 static EvtWord battle_entry_event[360];
 static EvtWord init_event[53];
 static EvtWord damage_event[10];
-EvtWord bunbaba_damage_sub_event[45];
+static EvtWord bunbaba_damage_sub_event[45];
 static EvtWord dead_event[264];
 static EvtWord phase_event[160];
 static EvtWord fumituke_attack_event[356];
 static EvtWord kamituki_attack_event[141];
-EvtWord eq_attack_event[177];
-EvtWord poison_attack_event[261];
-EvtWord mega_attack_event[256];
+static EvtWord eq_attack_event[177];
+static EvtWord poison_attack_event[261];
+static EvtWord mega_attack_event[256];
 static EvtWord charge_event[55];
 static EvtWord attack_event[237];
 static EvtWord wait_event[6];
@@ -212,7 +212,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of Gloomtail's stomp: damage 8. */
-BattleWeapon weapon_bunbaba_fumituke_attack = {
+static BattleWeapon weapon_bunbaba_fumituke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -254,7 +254,7 @@ BattleWeapon weapon_bunbaba_fumituke_attack = {
 };
 
 /** Weapon of Gloomtail's bite: damage 8. */
-BattleWeapon weapon_bunbaba_kamituki_attack = {
+static BattleWeapon weapon_bunbaba_kamituki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -294,7 +294,7 @@ BattleWeapon weapon_bunbaba_kamituki_attack = {
 };
 
 /** Weapon of Gloomtail's poison breath: damage 8; inflicts Poison (50%). */
-BattleWeapon weapon_bunbaba_poison_attack = {
+static BattleWeapon weapon_bunbaba_poison_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -337,7 +337,7 @@ BattleWeapon weapon_bunbaba_poison_attack = {
 };
 
 /** Weapon of Gloomtail's earthquake: damage 10. */
-BattleWeapon weapon_bunbaba_eq_attack = {
+static BattleWeapon weapon_bunbaba_eq_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -377,7 +377,7 @@ BattleWeapon weapon_bunbaba_eq_attack = {
 };
 
 /** Weapon of Gloomtail's charge-up. */
-BattleWeapon weapon_bunbaba_charge = {
+static BattleWeapon weapon_bunbaba_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -413,7 +413,7 @@ BattleWeapon weapon_bunbaba_charge = {
 };
 
 /** Weapon of Gloomtail's Mega Breath: damage 8. */
-BattleWeapon weapon_bunbaba_mega_attack = {
+static BattleWeapon weapon_bunbaba_mega_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -587,7 +587,7 @@ EVT_END()
  * plays the pain animation on part 1 (GNB_D_2 when part 1 was hit, GNB_D_1 otherwise) and,
  * if the hit did no damage, a miss sound at the hit position.
  */
-EVT_BEGIN(bunbaba_damage_sub_event)
+static EVT_BEGIN(bunbaba_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     IF_INT_EQUAL(LW(11), 1)
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_2"))
@@ -897,7 +897,7 @@ EVT_END()
  * a stomp that shakes the stage and checks hits against the sampled targets;
  * the damage is checked once the animation reaches the impact.
  */
-EVT_BEGIN(eq_attack_event)
+static EVT_BEGIN(eq_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -967,7 +967,7 @@ EVT_END()
  * Event script: Gloomtail's poison breath (weapon_bunbaba_poison_attack):
  * raises his neck (GNB_A2_1 and GNB_A2_3) and breathes poison at the chosen targets.
  */
-EVT_BEGIN(poison_attack_event)
+static EVT_BEGIN(poison_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1059,7 +1059,7 @@ EVT_END()
  * follows the separate charge step (SFX_BOSS_GNB_CHARGE1) and breathes fire at the chosen targets;
  * attack_event follows the first scripted Mega Breath with a message.
  */
-EVT_BEGIN(mega_attack_event)
+static EVT_BEGIN(mega_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))

@@ -26,10 +26,10 @@ static EvtWord n_open[12];
 static EvtWord w_close[12];
 static EvtWord w_open[12];
 static BeroEntry bero_data[4];
-EvtWord grass_open_1[14];
-EvtWord grass_open_2[23];
+static EvtWord grass_open_1[14];
+static EvtWord grass_open_2[23];
 EvtWord evt_boots[42];
-EvtWord evt_elvkey[5];
+static EvtWord evt_elvkey[5];
 static EvtWord evt_head[38];
 EvtWord eki_05_init_evt[];
 
@@ -134,7 +134,7 @@ static BeroEntry bero_data[] = {
  * Case event on the first glass panel (a_garasu_1):
  * if the glass case is open (GF(0) is 1), plays the closing animation anm_nata and clears GF(0).
  */
-EVT_BEGIN(grass_open_1)
+static EVT_BEGIN(grass_open_1)
     IF_INT_EQUAL(GF(0), 1)
         CALL(evt_map_playanim, STRING("anm_nata"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 0)
@@ -146,7 +146,7 @@ EVT_END()
  * Case event on the second glass panel (a_garasu_2):
  * toggles the glass case, playing anm_tana to open it (GF(0) = 1) or anm_nata to close it (GF(0) = 0).
  */
-EVT_BEGIN(grass_open_2)
+static EVT_BEGIN(grass_open_2)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_map_playanim, STRING("anm_tana"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 1)
@@ -177,7 +177,7 @@ EVT_BEGIN(evt_boots)
 EVT_END()
 
 /** Runs when Mario picks up the Elevator Key: sets the story to STG6_37_ELEVATOR_KEY. */
-EVT_BEGIN(evt_elvkey)
+static EVT_BEGIN(evt_elvkey)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_37_ELEVATOR_KEY)
     RETURN
 EVT_END()

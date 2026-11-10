@@ -56,22 +56,22 @@ EvtWord powerdownya_face_left[16];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord powerdownya_mario_level_rtn[639];
-EvtWord powerdownya_party_lank_rtn[963];
+static EvtWord powerdownya_mario_level_rtn[639];
+static EvtWord powerdownya_party_lank_rtn[963];
 EvtWord powerdownya_table_talk[105];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord powerdownya_mario_level_rtn[613];
-EvtWord powerdownya_party_lank_rtn[896];
+static EvtWord powerdownya_mario_level_rtn[613];
+static EvtWord powerdownya_party_lank_rtn[896];
 #else
-EvtWord powerdownya_mario_level_rtn[616];
-EvtWord powerdownya_party_lank_rtn[937];
+static EvtWord powerdownya_mario_level_rtn[616];
+static EvtWord powerdownya_party_lank_rtn[937];
 #endif
 EvtWord powerdownya_table_talk[84];
 #endif
 
-EvtWord powerdownya_direct_talk[8];
-EvtWord powerdownya_init[10];
+static EvtWord powerdownya_direct_talk[8];
+static EvtWord powerdownya_init[10];
 static NpcSetupInfo npcEnt[2];
 static BeroEntry bero_entry_data[2];
 EvtWord tik_11_init_evt[31];
@@ -299,7 +299,7 @@ EVT_END()
  * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
-EVT_BEGIN(powerdownya_mario_level_rtn)
+static EVT_BEGIN(powerdownya_mario_level_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
@@ -530,7 +530,7 @@ EVT_END()
  * lowers the other's by one and says it is
  * finished (powerdown_13).
  */
-EVT_BEGIN(powerdownya_party_lank_rtn)
+static EVT_BEGIN(powerdownya_party_lank_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
@@ -904,13 +904,13 @@ EVT_BEGIN(powerdownya_table_talk)
 EVT_END()
 
 /** Talk script for Chet Rippo when spoken to directly instead of at the counter; he says powerdown_14. */
-EVT_BEGIN(powerdownya_direct_talk)
+static EVT_BEGIN(powerdownya_direct_talk)
     CALL(evt_msg_print, 0, STRING("powerdown_14"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Init script for Chet Rippo (パワーダウン屋). Registers the counter talk on the A_power_down hit area. */
-EVT_BEGIN(powerdownya_init)
+static EVT_BEGIN(powerdownya_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_power_down"), 0, PTR(powerdownya_table_talk), 0)
     RETURN
 EVT_END()

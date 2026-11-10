@@ -38,7 +38,7 @@
 #include "mario/mario.h"
 #include <dolphin/pad.h>
 
-void gans_msg_callback(s32 type, void** work);
+static void gans_msg_callback(s32 type, void** work);
 
 static EvtWord evt_dakuto[90];
 static EvtWord n_door_open[12];
@@ -75,8 +75,8 @@ static EvtWord evt_1st_leagu[456];
 static EvtWord evt_1st_leagu[467];
 #endif
 
-EvtWord evt_nozoki_msg[33];
-EvtWord evt_nozoki[769];
+static EvtWord evt_nozoki_msg[33];
+static EvtWord evt_nozoki[769];
 EvtWord evt_sensyu_reentry[293];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -1132,7 +1132,7 @@ static EVT_BEGIN(evt_1st_leagu)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_nozoki_msg)
+static EVT_BEGIN(evt_nozoki_msg)
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -50, 100, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_03"), 0, 0)
@@ -1157,7 +1157,7 @@ EVT_END()
  * the panel closes, the partner sums up (326) and the story advances to STG3_20_12_JOLENES_SECRET.
  * On later visits Mario just looks until A is pressed.
  */
-EVT_BEGIN(evt_nozoki)
+static EVT_BEGIN(evt_nozoki)
     // Mario freezes in place; the first time, Grubba and Jolene are placed in the office below.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1638,7 +1638,7 @@ EVT_BEGIN(tou_05_init_evt)
 EVT_END()
 
 // Type-2 page notifications advance the counter used by the synchronized Mario reaction.
-void gans_msg_callback(s32 type, void** work) {
+static void gans_msg_callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
     if (type == 2) {
         evtSetValue(evt, GW(10), evtGetValue(evt, GW(10)) + 1);

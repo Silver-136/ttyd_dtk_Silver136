@@ -40,7 +40,7 @@
 // Ride teardown clears the plane, boat and bellows ride flags.
 enum { PARTY_RIDE_CLEAR_MASK = PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | PARTY_FLAG_IS_RIDING_JABARA };
 
-PartyEntry* partyPtrTbl[2];
+static PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
 s32 partyCtrlNo;
 

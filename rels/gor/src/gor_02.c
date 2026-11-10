@@ -80,43 +80,43 @@ typedef struct DoorColorWork {
     GXColor color;
     GXColor color2;
 } DoorColorWork;
-DoorColorWork* _door;
+static DoorColorWork* _door;
 static u8* _ap;
 static s32 xlw[16];
-s32* iri_13_item_tbl;
-char* camstring;
+static s32* iri_13_item_tbl;
+static char* camstring;
 
-USER_FUNC(_door_color2_main_func);
-USER_FUNC(_door_color_init_func);
-USER_FUNC(_door_color_main_func);
+static USER_FUNC(_door_color2_main_func);
+static USER_FUNC(_door_color_init_func);
+static USER_FUNC(_door_color_main_func);
 static USER_FUNC(bgScrollControll);
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(camera_front_check);
-USER_FUNC(camera_move_check);
+static USER_FUNC(camera_front_check);
+static USER_FUNC(camera_move_check);
 static USER_FUNC(effect_stardust);
 static USER_FUNC(enzan_cam_turn_keisan_f);
 static USER_FUNC(enzan_lw_load);
 static USER_FUNC(enzan_lw_save);
 static USER_FUNC(evt_StatusClose);
 static USER_FUNC(evt_StatusOpen);
-USER_FUNC(evt_gor_door_in_info);
-USER_FUNC(evt_gor_door_out_info);
+static USER_FUNC(evt_gor_door_in_info);
+static USER_FUNC(evt_gor_door_out_info);
 USER_FUNC(evt_set_bgtpl);
-USER_FUNC(get_camcurve);
-USER_FUNC(get_camcurve_init);
-USER_FUNC(iri_13_free_item_tbl);
-USER_FUNC(iri_13_make_item_tbl);
-USER_FUNC(iri_13_update_item_tbl);
+static USER_FUNC(get_camcurve);
+static USER_FUNC(get_camcurve_init);
+static USER_FUNC(iri_13_free_item_tbl);
+static USER_FUNC(iri_13_make_item_tbl);
+static USER_FUNC(iri_13_update_item_tbl);
 USER_FUNC(lecture);
 USER_FUNC(monosiri_check);
-USER_FUNC(monosiri_on);
+static USER_FUNC(monosiri_on);
 static USER_FUNC(set_depthPlaneOffset);
-USER_FUNC(set_talk_memory_ry);
+static USER_FUNC(set_talk_memory_ry);
 static USER_FUNC(setmertn);
-USER_FUNC(status_gauge_force_off);
-USER_FUNC(stonechangertn);
+static USER_FUNC(status_gauge_force_off);
+static USER_FUNC(stonechangertn);
 USER_FUNC(get_mario_dir_target);
-void kuragarisan_msgcb(s32 type, void* param);
+static void kuragarisan_msgcb(s32 type, void* param);
 static USER_FUNC(enzan_set_f_i);
 static USER_FUNC(enzan_set_i_f);
 static USER_FUNC(enzan_cam_turn_keisan);
@@ -133,7 +133,7 @@ static void alpha_tev(MapTevCallbackInfo* info);
  * Map TEV callback that multiplies the previous colour and alpha by the door colour (the first colour set by
  * _door_color_main_func). Installed by the door darkening scripts.
  */
-void _door_color_tev(MapTevCallbackInfo* info) {
+static void _door_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
     DoorColorWork* door = _door;
 
@@ -147,7 +147,7 @@ void _door_color_tev(MapTevCallbackInfo* info) {
 }
 
 /** Same as _door_color_tev for the second door colour set by _door_color2_main_func. */
-void _door_color2_tev(MapTevCallbackInfo* info) {
+static void _door_color2_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
     DoorColorWork* door = _door;
 
@@ -161,7 +161,7 @@ void _door_color2_tev(MapTevCallbackInfo* info) {
 }
 
 /** Allocates the door tint state and sets both colours to opaque white. Run once from the map init. */
-USER_FUNC(_door_color_init_func) {
+static USER_FUNC(_door_color_init_func) {
     _door = _mapAlloc(sizeof(DoorColorWork));
     _door->color.r = 255;
     _door->color.g = 255;
@@ -175,7 +175,7 @@ USER_FUNC(_door_color_init_func) {
 }
 
 /** Sets the first door tint colour from args[0] to args[3] (red, green, blue, alpha). */
-USER_FUNC(_door_color_main_func) {
+static USER_FUNC(_door_color_main_func) {
     EvtWord* args = event->args;
     DoorColorWork* door = _door;
 
@@ -187,7 +187,7 @@ USER_FUNC(_door_color_main_func) {
 }
 
 /** Sets the second door tint colour from args[0] to args[3] (red, green, blue, alpha). */
-USER_FUNC(_door_color2_main_func) {
+static USER_FUNC(_door_color2_main_func) {
     EvtWord* args = event->args;
     DoorColorWork* door = _door;
 
@@ -220,7 +220,7 @@ EvtWord gor_02_hitobj_off[27];
 EvtWord gor_02_hitobj_on[54];
 #endif
 
-EvtWord gor_02_event_00[18];
+static EvtWord gor_02_event_00[18];
 EvtWord gor_02_event_01[30];
 static BeroEntry bero_entry_data[3];
 
@@ -231,12 +231,12 @@ EvtWord powerupya_party_lank_rtn[786];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord powerupya_party_rtn[170];
+static EvtWord powerupya_party_rtn[170];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord powerupya_party_rtn[152];
+static EvtWord powerupya_party_rtn[152];
 #else
-EvtWord powerupya_party_rtn[167];
+static EvtWord powerupya_party_rtn[167];
 #endif
 #endif
 
@@ -247,9 +247,9 @@ EvtWord powerupya_table_talk[91];
 #endif
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord powerupya_direct_talk[103];
+static EvtWord powerupya_direct_talk[103];
 #else
-EvtWord powerupya_direct_talk[96];
+static EvtWord powerupya_direct_talk[96];
 #endif
 
 #if VERSION >= VERSION_JP
@@ -264,7 +264,7 @@ extern EvtWord powerupya_orb_use[];
 #endif
 
 EvtWord mapball_init[19];
-EvtWord powerupya_init[58];
+static EvtWord powerupya_init[58];
 
 #if VERSION >= VERSION_US
 EvtWord johoyaperfect_talk[169];
@@ -284,11 +284,11 @@ static EvtWord kurihakase_talk[418];
 static EvtWord kurihakase_talk[421];
 #endif
 
-EvtWord oyabun_init[7];
+static EvtWord oyabun_init[7];
 EvtWord oyabun_talk[364];
 EvtWord tozokudan1_init[36];
 EvtWord tozokudan1_talk[285];
-EvtWord tozokudan2_init[24];
+static EvtWord tozokudan2_init[24];
 static s32 key_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -297,9 +297,9 @@ static EvtWord evt_chk[21];
 static EvtWord evt_chk[23];
 #endif
 
-EvtWord tozokudan2_house_door[139];
-EvtWord mario_yokeru[127];
-EvtWord evt_unlock_mario[78];
+static EvtWord tozokudan2_house_door[139];
+static EvtWord mario_yokeru[127];
+static EvtWord evt_unlock_mario[78];
 static EvtWord evt_unlock[6];
 EvtWord evt_unlock_npc[97];
 
@@ -309,7 +309,7 @@ extern EvtWord tozokudan2_talk[];
 EvtWord tozokudan2_talk[121];
 #endif
 
-EvtWord tozokudan3_init[17];
+static EvtWord tozokudan3_init[17];
 EvtWord tozokudan3_talk[22];
 EvtWord sanders_open_door[56];
 static EvtWord sanders_init[37];
@@ -320,8 +320,8 @@ static EvtWord sanders_talk[580];
 static EvtWord sanders_talk[574];
 #endif
 
-EvtWord kuribo4_init[13];
-EvtWord kuribo4_regl[19];
+static EvtWord kuribo4_init[13];
+static EvtWord kuribo4_regl[19];
 static s32 item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -330,19 +330,19 @@ extern EvtWord kuribo4_talk[];
 EvtWord kuribo4_talk[276];
 #endif
 
-EvtWord chusan3_init[2];
-EvtWord chusan3_talk[76];
-EvtWord roten3_init[2];
-EvtWord roten3_talk[174];
-EvtWord borodo1_init[26];
-EvtWord borodo1_regl[26];
-EvtWord borodo1_talk[76];
+static EvtWord chusan3_init[2];
+static EvtWord chusan3_talk[76];
+static EvtWord roten3_init[2];
+static EvtWord roten3_talk[174];
+static EvtWord borodo1_init[26];
+static EvtWord borodo1_regl[26];
+static EvtWord borodo1_talk[76];
 static EvtWord borodo2_init[35];
 static EvtWord borodo2_escape[51];
 static EvtWord borodo2_talk[100];
-EvtWord kuragarisan_init[7];
-EvtWord kuragarisan_write_name[435];
-EvtWord kuragarisan_talk[108];
+static EvtWord kuragarisan_init[7];
+static EvtWord kuragarisan_write_name[435];
+static EvtWord kuragarisan_talk[108];
 static EvtWord luigi_init[18];
 static EvtWord luigi_talk[4];
 static NpcSetupInfo npcEnt[16];
@@ -361,7 +361,7 @@ static EvtWord evt_door_01_close[85];
 
 static DoorParam door_data_01;
 static EvtWord evt_door_02_00[12];
-EvtWord evt_door_02_01[12];
+static EvtWord evt_door_02_01[12];
 static EvtWord evt_wall_02[15];
 static const char* door_data_02_npc[2];
 
@@ -374,9 +374,9 @@ EvtWord evt_door_02_close[76];
 #endif
 
 static DoorParam door_data_02;
-EvtWord evt_door_02_entry[64];
+static EvtWord evt_door_02_entry[64];
 static EvtWord evt_door_03_00[12];
-EvtWord evt_door_03_01[12];
+static EvtWord evt_door_03_01[12];
 static EvtWord evt_wall_03[15];
 static const char* door_data_03_npc[2];
 static const char* door_data_03_mobj[2];
@@ -398,8 +398,8 @@ static EvtWord evt_door_03_open[14];
 #endif
 
 static DoorParam door_data_03;
-EvtWord evt_door_sanders_open[27];
-EvtWord evt_door_sanders_close[27];
+static EvtWord evt_door_sanders_open[27];
+static EvtWord evt_door_sanders_close[27];
 static EvtWord evt_door_03_entry[64];
 static EvtWord evt_door_03_caseopen[51];
 
@@ -409,10 +409,10 @@ extern EvtWord evt_door_03_roll_open[];
 EvtWord evt_door_03_roll_open[163];
 #endif
 
-EvtWord evt_door_03_roll_close[12];
-EvtWord evt_wall_03_roll[15];
+static EvtWord evt_door_03_roll_close[12];
+static EvtWord evt_wall_03_roll[15];
 static DoorParam door_data_03_roll;
-EvtWord evt_door_03_roll_entry[20];
+static EvtWord evt_door_03_roll_entry[20];
 static EvtWord evt_door_04_00[12];
 static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[38];
@@ -433,13 +433,13 @@ static EvtWord evt_door_04_close[16];
 static const char* door_data_04_npc[2];
 static const char* door_data_04_item[4];
 static DoorParam door_data_04;
-EvtWord evt_door_04_junbi[20];
-EvtWord evt_door_04_00_ura[12];
-EvtWord evt_door_04_01_ura[12];
-EvtWord evt_wall_04_ura[21];
-DoorParam door_data_04_ura;
-EvtWord evt_door_05_00[12];
-EvtWord evt_wall_05[28];
+static EvtWord evt_door_04_junbi[20];
+static EvtWord evt_door_04_00_ura[12];
+static EvtWord evt_door_04_01_ura[12];
+static EvtWord evt_wall_04_ura[21];
+static DoorParam door_data_04_ura;
+static EvtWord evt_door_05_00[12];
+static EvtWord evt_wall_05[28];
 const char* door_data_05_npc[4];
 const char* door_data_05_npc_01[3];
 
@@ -451,14 +451,14 @@ EvtWord evt_door_05_open[14];
 EvtWord evt_door_05_close[23];
 #endif
 
-DoorParam door_data_05;
-EvtWord evt_door_06_00[12];
-EvtWord evt_wall_06_00[62];
-EvtWord evt_wall_06_01[59];
-EvtWord evt_wall_06_02[62];
-EvtWord evt_wall_06[12];
-const char* door_data_06_npc[2];
-const char* door_data_06_npc_01[1];
+static DoorParam door_data_05;
+static EvtWord evt_door_06_00[12];
+static EvtWord evt_wall_06_00[62];
+static EvtWord evt_wall_06_01[59];
+static EvtWord evt_wall_06_02[62];
+static EvtWord evt_wall_06[12];
+static const char* door_data_06_npc[2];
+static const char* door_data_06_npc_01[1];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_door_06_open[];
@@ -468,55 +468,55 @@ EvtWord evt_door_06_open[14];
 EvtWord evt_door_06_close[16];
 #endif
 
-DoorParam door_data_06;
-EvtWord evt_gor_door_open_sanders[80];
-EvtWord evt_gor_door_open_sub[44];
-EvtWord evt_gor_door_dark_sub[200];
-EvtWord evt_gor_door_open[82];
-EvtWord evt_gor_door_close_sanders[80];
-EvtWord evt_gor_door_close_sub[31];
-EvtWord evt_gor_door_light_sub[194];
-EvtWord evt_gor_door_close[66];
-EvtWord evt_gor_offscren_door_entry[26];
+static DoorParam door_data_06;
+static EvtWord evt_gor_door_open_sanders[80];
+static EvtWord evt_gor_door_open_sub[44];
+static EvtWord evt_gor_door_dark_sub[200];
+static EvtWord evt_gor_door_open[82];
+static EvtWord evt_gor_door_close_sanders[80];
+static EvtWord evt_gor_door_close_sub[31];
+static EvtWord evt_gor_door_light_sub[194];
+static EvtWord evt_gor_door_close[66];
+static EvtWord evt_gor_offscren_door_entry[26];
 static EvtWord mario_kirimomi_event[67];
-EvtWord cam_yurasu_event[8];
+static EvtWord cam_yurasu_event[8];
 EvtWord steel_coin[386];
-EvtWord kurihakase_first_talk[787];
-EvtWord kurihakase_wall_remove[257];
-EvtWord kurihakase_lecture[286];
-EvtWord kurihakase_door[84];
+static EvtWord kurihakase_first_talk[787];
+static EvtWord kurihakase_wall_remove[257];
+static EvtWord kurihakase_lecture[286];
+static EvtWord kurihakase_door[84];
 
 #if VERSION >= VERSION_US
-EvtWord kurihakase_lecture_badge[282];
+static EvtWord kurihakase_lecture_badge[282];
 #else
-EvtWord kurihakase_lecture_badge[272];
+static EvtWord kurihakase_lecture_badge[272];
 #endif
 
-EvtWord Mario_Party_position[33];
-EvtWord book_open[42];
-EvtWord book_close[42];
-EvtWord book_center_init[22];
+static EvtWord Mario_Party_position[33];
+static EvtWord book_open[42];
+static EvtWord book_close[42];
+static EvtWord book_center_init[22];
 EvtWord epigraphy_map[];
 
 #if VERSION >= VERSION_US
-EvtWord epigraphy_map_after_stage1[258];
-EvtWord epigraphy_map_after_stage2[400];
+static EvtWord epigraphy_map_after_stage1[258];
+static EvtWord epigraphy_map_after_stage2[400];
 EvtWord epigraphy_map_after_stage3[368];
-EvtWord epigraphy_map_after_stage4[297];
-EvtWord epigraphy_map_after_stage5[225];
+static EvtWord epigraphy_map_after_stage4[297];
+static EvtWord epigraphy_map_after_stage5[225];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord epigraphy_map_after_stage1[246];
-EvtWord epigraphy_map_after_stage2[388];
+static EvtWord epigraphy_map_after_stage1[246];
+static EvtWord epigraphy_map_after_stage2[388];
 EvtWord epigraphy_map_after_stage3[356];
-EvtWord epigraphy_map_after_stage4[285];
-EvtWord epigraphy_map_after_stage5[213];
+static EvtWord epigraphy_map_after_stage4[285];
+static EvtWord epigraphy_map_after_stage5[213];
 #else
-EvtWord epigraphy_map_after_stage1[251];
-EvtWord epigraphy_map_after_stage2[393];
+static EvtWord epigraphy_map_after_stage1[251];
+static EvtWord epigraphy_map_after_stage2[393];
 EvtWord epigraphy_map_after_stage3[361];
-EvtWord epigraphy_map_after_stage4[290];
-EvtWord epigraphy_map_after_stage5[218];
+static EvtWord epigraphy_map_after_stage4[290];
+static EvtWord epigraphy_map_after_stage5[218];
 #endif
 #endif
 
@@ -532,46 +532,46 @@ static HitDamageReturn hitDmgRetPoints[13];
 static EvtWord gor_goki1_urouro[116];
 static EvtWord gor_goki2_urouro[109];
 static EvtWord mobj_box01[34];
-s32 stg0_list[1];
-s32 stg1_list[4];
+static s32 stg0_list[1];
+static s32 stg1_list[4];
 
 #if VERSION <= VERSION_DEMO_JP
-s32 stg2_list[3];
+static s32 stg2_list[3];
 #else
-s32 stg2_list[4];
+static s32 stg2_list[4];
 #endif
 
-s32 stg3_list[1];
+static s32 stg3_list[1];
 
 #if VERSION <= VERSION_DEMO_JP
-s32 stg4_list[1];
-s32 stg5_list[3];
+static s32 stg4_list[1];
+static s32 stg5_list[3];
 #else
-s32 stg5_list[2];
+static s32 stg5_list[2];
 #endif
 
-s32 stg6_list[1];
+static s32 stg6_list[1];
 
 #if VERSION <= VERSION_DEMO_JP
-s32 stg7_list[9];
-s32 stg8_list[9];
+static s32 stg7_list[9];
+static s32 stg8_list[9];
 MonosiriFollow follow[9];
 #else
-s32 stg7_list[6];
-s32 stg8_list[10];
+static s32 stg7_list[6];
+static s32 stg8_list[10];
 MonosiriFollow follow[8];
 #endif
 
-EvtWord evt_monosiri[39];
-EvtWord evt_monosiri_follow[18];
+static EvtWord evt_monosiri[39];
+static EvtWord evt_monosiri_follow[18];
 EvtWord evt_cloud[10];
-EvtWord iri_19_init[20];
+static EvtWord iri_19_init[20];
 static EvtWord epilogue_npc_entry[40];
 static EvtWord epilogue_evt_sub[56];
 static EvtWord epilogue_evt[101];
 EvtWord dearu_event[13];
-EvtWord front_wall_keshi[27];
-EvtWord tobiori_check[48];
+static EvtWord front_wall_keshi[27];
+static EvtWord tobiori_check[48];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord gor_02_init_evt[];
@@ -624,7 +624,7 @@ EVT_END()
  * while the story is at STG0_07_GOOMBELLA_JOINS it locks Mario's controls,
  * starts steel_coin and returns 1 in LW(0); otherwise returns 0.
  */
-EVT_BEGIN(gor_02_event_00)
+static EVT_BEGIN(gor_02_event_00)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
         SET_VALUE(LW(0), 0)
         RETURN
@@ -1133,7 +1133,7 @@ EVT_END()
  * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
  * and loops until Mario stops or has fewer than 3 sprites; JP and later also stop automatically when no partner can be raised.
  */
-EVT_BEGIN(powerupya_party_rtn)
+static EVT_BEGIN(powerupya_party_rtn)
     CALL(evt_win_coin_on, COIN_WINDOW_SHINE_SPRITES, LW(12))
     LOOP(0)
         CALL(evt_party_set_dir_pos, 0, -362, -200)
@@ -1259,7 +1259,7 @@ EVT_END()
  * Shop-door animation of JP and later: reveals the interior, swings the door open and shut,
  * then hides the interior again.
  */
-EVT_BEGIN(powerupya_direct_talk)
+static EVT_BEGIN(powerupya_direct_talk)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("S_ie_01_doa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
@@ -1509,7 +1509,7 @@ EVT_BEGIN(powerupya_orb_use)
  * In the early demos, Merlon takes the Up Arrow in this talk event and changes the shop's blue crystal to red.
  * This talk event has the name that JP and later give to the door animation.
  */
-EVT_BEGIN(powerupya_direct_talk)
+static EVT_BEGIN(powerupya_direct_talk)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
             CALL(evt_msg_print, 0, STRING("powerup_ev_01"), 0, STRING("me"))
@@ -1633,7 +1633,7 @@ EVT_END()
  * when Mario speaks to him at "A_power_up", and while the Up Arrow portent is pending lines up Merlon
  * and the shop door for the scene.
  */
-EVT_BEGIN(powerupya_init)
+static EVT_BEGIN(powerupya_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_power_up"), 0, PTR(powerupya_table_talk), 0)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
@@ -1971,7 +1971,7 @@ static EVT_BEGIN(kurihakase_talk)
 EVT_END()
 
 /** Init event of the bandit gang's boss ("盗賊団親分"): lets him walk through walls. */
-EVT_BEGIN(oyabun_init)
+static EVT_BEGIN(oyabun_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
@@ -2213,7 +2213,7 @@ EVT_END()
  * Init event of the thief at the house with the lock (Trouble Center job 1):
  * at (445, 0, 120) while the job is active, otherwise at (10, 0, -460).
  */
-EVT_BEGIN(tozokudan2_init)
+static EVT_BEGIN(tozokudan2_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
         CALL(evt_npc_set_position, STRING("me"), 445, 0, 120)
@@ -2252,7 +2252,7 @@ EVT_END()
  * Animation of the thief's house door (door_data_06) opening to about 108 degrees
  * and closing again over about a second, with door sounds, hiding the interior when finished.
  */
-EVT_BEGIN(tozokudan2_house_door)
+static EVT_BEGIN(tozokudan2_house_door)
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2308,7 +2308,7 @@ EVT_END()
  * Moves Mario to x=415 or x=480 over 300 ms, keeping his z, and moves the partners to the same side with z offsets,
  * when they stand in the thief's path as he jumps down; picks the side by Mario's x relative to the thief.
  */
-EVT_BEGIN(mario_yokeru)
+static EVT_BEGIN(mario_yokeru)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("盗賊団２"), LW(10), LW(11), LW(12))
     SET_VALUE(LW(3), LW(10))
@@ -2351,7 +2351,7 @@ EVT_BEGIN(mario_yokeru)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_unlock_mario)
+static EVT_BEGIN(evt_unlock_mario)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("盗賊団２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("irai_01_03"), 0, STRING("盗賊団２"))
@@ -2467,7 +2467,7 @@ EVT_BEGIN(tozokudan2_talk)
 EVT_END()
 
 /** Init event of the gang member at the back door of the Trouble Center: stands at (220, 0, -185) facing right. */
-EVT_BEGIN(tozokudan3_init)
+static EVT_BEGIN(tozokudan3_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("me"), 220, 0, -185)
     CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -2715,14 +2715,14 @@ static EVT_BEGIN(sanders_talk)
 EVT_END()
 
 /** Init event of the fourth Goomba villager: placed at (-370, 0, 130). */
-EVT_BEGIN(kuribo4_init)
+static EVT_BEGIN(kuribo4_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("me"), -370, 0, 130)
     RETURN
 EVT_END()
 
 /** Regular event of the fourth Goomba villager: wanders around his post using urouro_main_func. */
-EVT_BEGIN(kuribo4_regl)
+static EVT_BEGIN(kuribo4_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(70.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -2849,11 +2849,11 @@ EVT_BEGIN(kuribo4_talk)
 EVT_END()
 
 /** Init event of the third Chusan: empty. */
-EVT_BEGIN(chusan3_init)
+static EVT_BEGIN(chusan3_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(chusan3_talk)
+static EVT_BEGIN(chusan3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_msg_print, 0, STRING("gor_02_031_00"), 0, STRING("me"))
@@ -2878,11 +2878,11 @@ EVT_BEGIN(chusan3_talk)
 EVT_END()
 
 /** Init event of the third street-stall seller: empty. */
-EVT_BEGIN(roten3_init)
+static EVT_BEGIN(roten3_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(roten3_talk)
+static EVT_BEGIN(roten3_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PRICE_ADJUSTMENT)
         SET_VALUE(LW(1), 0)
         SET_VALUE(LW(2), 0)
@@ -2943,7 +2943,7 @@ EVT_END()
  * Init event of the first 'borodo' villager: stands at (90, 0, 150),
  * or at (475, 0, 275) (550 in earlier releases) between Chapters 4 and 5.
  */
-EVT_BEGIN(borodo1_init)
+static EVT_BEGIN(borodo1_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_43_X_NAUTS_RETREAT)
@@ -2962,7 +2962,7 @@ EVT_END()
  * Regular event of the first 'borodo' villager:
  * wanders around his post, except during Chapter 4 to 5 when he stays put.
  */
-EVT_BEGIN(borodo1_regl)
+static EVT_BEGIN(borodo1_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_43_X_NAUTS_RETREAT)
         CASE_DEFAULT
@@ -2973,7 +2973,7 @@ EVT_BEGIN(borodo1_regl)
     RETURN
 EVT_END()
 
-EVT_BEGIN(borodo1_talk)
+static EVT_BEGIN(borodo1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_msg_print, 0, STRING("gor_02_033_00"), 0, STRING("me"))
@@ -3065,7 +3065,7 @@ static EVT_BEGIN(borodo2_talk)
 EVT_END()
 
 /** Init event of Kuragarisan (Darkly): lets him walk through walls. */
-EVT_BEGIN(kuragarisan_init)
+static EVT_BEGIN(kuragarisan_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
@@ -3079,7 +3079,7 @@ EVT_END()
  * A_1C, mac_3_011 to 019; with Yoshi his chosen name goes into his line). The partner's walk to him times out
  * after 10 seconds. The story then becomes STG3_52_DARKLY.
  */
-EVT_BEGIN(kuragarisan_write_name)
+static EVT_BEGIN(kuragarisan_write_name)
     // The partner is moved to the left and walks over to Mario while Darkly looks on.
     CALL(evt_npc_get_position, STRING("me"), LW(13), LW(14), LW(15))
     CALL(evt_npc_get_dir, STRING("me"), LW(12))
@@ -3224,7 +3224,7 @@ EVT_END()
  * At STG3_51_FRANKLYS_HOUSE_STG_3, once Mario has reached the Twilight Town pipe,
  * he runs kuragarisan_write_name; otherwise a line per story stage (gor_02_034_00 to _10).
  */
-EVT_BEGIN(kuragarisan_talk)
+static EVT_BEGIN(kuragarisan_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_51_FRANKLYS_HOUSE_STG_3)
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
@@ -3602,7 +3602,7 @@ EVT_END()
  * Door-out callback for the Professor Frankly house door (door_data_02):
  * rotates "S_i02_doa" about X by half the value in LW(0) as it swings open from the inside.
  */
-EVT_BEGIN(evt_door_02_01)
+static EVT_BEGIN(evt_door_02_01)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_i02_doa"), LW(0), 0, 0)
     RETURN
@@ -3749,7 +3749,7 @@ static DoorParam door_data_02 = {
  * collision named in its parameters, then registers the case events that run evt_door_close (inside) and
  * evt_door_open (outside) when Mario presses A in front of the door.
  */
-EVT_BEGIN(evt_door_02_entry)
+static EVT_BEGIN(evt_door_02_entry)
     CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
@@ -3783,7 +3783,7 @@ EVT_END()
  * Door-out callback for house 03 (Bobbery's house, door_data_03):
  * rotates "S_ie_03_doam" about X by half the value in LW(0) as it swings open from the inside.
  */
-EVT_BEGIN(evt_door_03_01)
+static EVT_BEGIN(evt_door_03_01)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_03_doam"), LW(0), 0, 0)
     RETURN
@@ -3934,7 +3934,7 @@ static DoorParam door_data_03 = {
  * if Sanders has not opened the door yet (GSWF_GOR_BOBBERY_DOOR_UNLOCKED is 0) shows gor_02_012 and stays shut;
  * otherwise runs the normal evt_door_open.
  */
-EVT_BEGIN(evt_door_sanders_open)
+static EVT_BEGIN(evt_door_sanders_open)
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -3950,7 +3950,7 @@ EVT_END()
  * Door-close handler for house 03: shows gor_02_012 while the door was never opened by Sanders;
  * otherwise runs the normal evt_door_close.
  */
-EVT_BEGIN(evt_door_sanders_close)
+static EVT_BEGIN(evt_door_sanders_close)
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -4088,7 +4088,7 @@ EVT_END()
  * Close callback for the roll-in entrance of house 03:
  * dips the music and ambience and low-passes it again (no door animation).
  */
-EVT_BEGIN(evt_door_03_roll_close)
+static EVT_BEGIN(evt_door_03_roll_close)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -4096,7 +4096,7 @@ EVT_BEGIN(evt_door_03_roll_close)
 EVT_END()
 
 /** Wall callback for the roll-in entrance of house 03: tilts the wall "S_ie_03B" open by LW(2) degrees. */
-EVT_BEGIN(evt_wall_03_roll)
+static EVT_BEGIN(evt_wall_03_roll)
     SET_FLOAT_VALUE(LW(2), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_03B"), LW(2), 0, 0)
@@ -4132,7 +4132,7 @@ static DoorParam door_data_03_roll = {
  * Entry for the roll-in entrance of house 03:
  * registers the stand-on case event (evt_door_03_caseopen) that opens it when Mario steps on the spot in front.
  */
-EVT_BEGIN(evt_door_03_roll_entry)
+static EVT_BEGIN(evt_door_03_roll_entry)
     CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
@@ -4248,7 +4248,7 @@ static DoorParam door_data_04 = {
  * Message shown when the Trouble Center's door is tried while the shop is not ready (an out-of-office notice, gor_02_035):
  * locks the controls for the line, then frees them.
  */
-EVT_BEGIN(evt_door_04_junbi)
+static EVT_BEGIN(evt_door_04_junbi)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("gor_02_035"), 0, 0)
@@ -4260,7 +4260,7 @@ EVT_END()
  * Door-in callback for the Trouble Center's back door (door_data_04_ura):
  * rotates "S_ie_04_doa_02" about Y by approximately 0.6 times the value in LW(0).
  */
-EVT_BEGIN(evt_door_04_00_ura)
+static EVT_BEGIN(evt_door_04_00_ura)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5996094f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_04_doa_02"), 0, LW(0), 0)
     RETURN
@@ -4270,14 +4270,14 @@ EVT_END()
  * Door-out callback for the Trouble Center's back door (door_data_04_ura):
  * rotates "S_ie_04_doa_02" about X by half the value in LW(0).
  */
-EVT_BEGIN(evt_door_04_01_ura)
+static EVT_BEGIN(evt_door_04_01_ura)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_04_doa_02"), LW(0), 0, 0)
     RETURN
 EVT_END()
 
 /** Wall callback for the back of the Trouble Center: tilts the wall "S_ie_04_ura_B" open by LW(3) degrees. */
-EVT_BEGIN(evt_wall_04_ura)
+static EVT_BEGIN(evt_wall_04_ura)
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(0.5f))
@@ -4287,7 +4287,7 @@ EVT_BEGIN(evt_wall_04_ura)
 EVT_END()
 
 /** Back door of house 04, usable once Flurrie has blown the wall cover away. */
-DoorParam door_data_04_ura = {
+static DoorParam door_data_04_ura = {
     0, // flags
     3, // type
     1, // se
@@ -4309,14 +4309,14 @@ DoorParam door_data_04_ura = {
 };
 
 /** Door callback for house 05 (door_data_05): rotates "S_ie_05_doa" about Y by approximately 0.6 times LW(0). */
-EVT_BEGIN(evt_door_05_00)
+static EVT_BEGIN(evt_door_05_00)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5996094f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_05_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Wall callback for house 05: tilts "S_ie_05sB" by LW(2) degrees and "S_ie_05uB" by LW(3) degrees open. */
-EVT_BEGIN(evt_wall_05)
+static EVT_BEGIN(evt_wall_05)
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(-1.0f))
@@ -4375,7 +4375,7 @@ EVT_END()
  * Door of house 05, the bandit boss's house:
  * its door and wall pieces, hit areas and the entry script (there is no exit script).
  */
-DoorParam door_data_05 = {
+static DoorParam door_data_05 = {
     0, // flags
     3, // type
     1, // se
@@ -4396,7 +4396,7 @@ DoorParam door_data_05 = {
 };
 
 /** Door callback for house 06, the thief's house (door_data_06): rotates "S_ie_06_doa" about Y by approximately 0.6 times LW(0). */
-EVT_BEGIN(evt_door_06_00)
+static EVT_BEGIN(evt_door_06_00)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5996094f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_06_doa"), 0, LW(0), 0)
     RETURN
@@ -4407,7 +4407,7 @@ EVT_END()
  * 180 degrees about z over half a second with SFX_HOUSE_DOWN1, folding that wall piece away to show the inside;
  * when it closes it waits 200 ms and swings it back.
  */
-EVT_BEGIN(evt_wall_06_00)
+static EVT_BEGIN(evt_wall_06_00)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
         ELSE
@@ -4437,7 +4437,7 @@ EVT_END()
  * Wall piece 1 of house 06: swings "S_i06nB" down by 180 degrees (or back up) over half a second with a thump,
  * 100 ms after piece 0 when opening, but 100 ms before it when closing.
  */
-EVT_BEGIN(evt_wall_06_01)
+static EVT_BEGIN(evt_wall_06_01)
     BEGIN_INLINE_EVENT
         WAIT_MS(100)
         CALL(evt_mapobj_get_position, STRING("S_i06nB"), LW(0), LW(1), LW(2))
@@ -4465,7 +4465,7 @@ EVT_END()
  * Wall piece 2 of house 06: swings "S_i06oB" down by 180 degrees (or back up) over half a second with a thump,
  * 100 ms after piece 1 when opening, but 100 ms before it when closing.
  */
-EVT_BEGIN(evt_wall_06_02)
+static EVT_BEGIN(evt_wall_06_02)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(200)
@@ -4492,7 +4492,7 @@ EVT_BEGIN(evt_wall_06_02)
 EVT_END()
 
 /** Wall callback for house 06: spawns the three wall pieces (evt_wall_06_00 to 02) together. */
-EVT_BEGIN(evt_wall_06)
+static EVT_BEGIN(evt_wall_06)
     IF_INT_EQUAL(LW(6), 0)
         SPAWN_EVENT(evt_wall_06_00)
         SPAWN_EVENT(evt_wall_06_01)
@@ -4502,13 +4502,13 @@ EVT_BEGIN(evt_wall_06)
 EVT_END()
 
 /** NPCs shown inside house 06 (the thief's locked house): one gang member. */
-const char* door_data_06_npc[] = {
+static const char* door_data_06_npc[] = {
     "盗賊団２",
     NULL,
 };
 
 /** Empty NPC list of house 06, used when nobody is inside. */
-const char* door_data_06_npc_01[] = {
+static const char* door_data_06_npc_01[] = {
     NULL,
 };
 
@@ -4541,7 +4541,7 @@ EVT_END()
  * Door of house 06, the thief's locked house (Trouble Center job 1):
  * its door and wall pieces, hit areas and the entry script.
  */
-DoorParam door_data_06 = {
+static DoorParam door_data_06 = {
     2, // flags
     3, // type
     1, // se
@@ -4567,7 +4567,7 @@ DoorParam door_data_06 = {
  * used when Sanders walks out through it after reading Scarlette's
  * letter (mac_4_080 to 082) and as the first part of evt_gor_door_open_sub.
  */
-EVT_BEGIN(evt_gor_door_open_sanders)
+static EVT_BEGIN(evt_gor_door_open_sanders)
     CALL(evt_mapobj_get_position, STRING("S_ie_03_doao"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 100, 500)
@@ -4599,7 +4599,7 @@ EVT_END()
  * plays evt_gor_door_open_sanders, waits
  * half a second, then tips "S_ie_03_doao" 90 degrees about x over half a second and plays SFX_DOOR_DOWN1.
  */
-EVT_BEGIN(evt_gor_door_open_sub)
+static EVT_BEGIN(evt_gor_door_open_sub)
     CALL_CHILD(evt_gor_door_open_sanders)
     WAIT_MS(500)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 90, 500)
@@ -4707,7 +4707,7 @@ static USER_FUNC(setmertn) {
  * Swaps the crystal on the shop's floor: for the name "S_i01_sui_ao" shows the blue one,
  * for "S_i01_sui_aka" shows the red one (the other is hidden).
  */
-USER_FUNC(stonechangertn) {
+static USER_FUNC(stonechangertn) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
 
     if (!strcmp(name, "S_i01_sui_ao")) {
@@ -4735,13 +4735,13 @@ USER_FUNC(get_mario_dir_target) {
 #endif
 
 /** Forces the HP/FP/coin status window off the screen. */
-USER_FUNC(status_gauge_force_off) {
+static USER_FUNC(status_gauge_force_off) {
     statusWinForceOff();
     return EVT_RETURN_DONE;
 }
 
 /** Sets Sanders's remembered facing (the direction he turns back to after talking) to 270 degrees. */
-USER_FUNC(set_talk_memory_ry) {
+static USER_FUNC(set_talk_memory_ry) {
     NpcEntry* npc = npcNameToPtr("\203T\203\223\203_\201[\203X");
 
     npc->savedDirection = 270.0f;
@@ -4752,7 +4752,7 @@ USER_FUNC(set_talk_memory_ry) {
  * Trouble Center job 13: allocates a list with room for as many Battle Trunks (item 0x6B) as Mario carries,
  * plus a -1 end mark.
  */
-USER_FUNC(iri_13_make_item_tbl) {
+static USER_FUNC(iri_13_make_item_tbl) {
     s32 count = pouchCheckItem(ITEM_BATTLE_TRUNKS);
 
     if (count > 0) {
@@ -4765,7 +4765,7 @@ USER_FUNC(iri_13_make_item_tbl) {
  * Trouble Center job 13: rebuilds the Battle Trunks list for the item select window
  * and returns its pointer in args[0] and the count in args[1].
  */
-USER_FUNC(iri_13_update_item_tbl) {
+static USER_FUNC(iri_13_update_item_tbl) {
     EvtWord* args = event->args;
     s32 count = pouchCheckItem(ITEM_BATTLE_TRUNKS);
     s32 i;
@@ -4782,7 +4782,7 @@ USER_FUNC(iri_13_update_item_tbl) {
 }
 
 /** Trouble Center job 13: frees the Battle Trunks list and clears the pointer. */
-USER_FUNC(iri_13_free_item_tbl) {
+static USER_FUNC(iri_13_free_item_tbl) {
     _mapFree(iri_13_item_tbl);
     iri_13_item_tbl = NULL;
     return EVT_RETURN_DONE;
@@ -4792,7 +4792,7 @@ USER_FUNC(iri_13_free_item_tbl) {
  * Message callback for Kuragarisan's text: on callback 3, while the current page index is 1,
  * it turns him to face 90 degrees.
  */
-void kuragarisan_msgcb(s32 type, void* param) {
+static void kuragarisan_msgcb(s32 type, void* param) {
     u8* msg = *(u8**)param;
     NpcEntry* npc;
 
@@ -4810,7 +4810,7 @@ void kuragarisan_msgcb(s32 type, void* param) {
  * Returns in args[0] to args[2] the in-position of Sanders's secret door ("S_ie_03_doao")
  * computed by door_position_sub.
  */
-USER_FUNC(evt_gor_door_in_info) {
+static USER_FUNC(evt_gor_door_in_info) {
     EvtWord* args = event->args;
     Vec outPos = {0.0f, 0.0f, 0.0f};
     Vec inPos = {0.0f, 0.0f, 0.0f};
@@ -4826,7 +4826,7 @@ USER_FUNC(evt_gor_door_in_info) {
  * Returns in args[0] to args[2] the out-position of Sanders's secret door ("S_ie_03_doao")
  * computed by door_position_sub.
  */
-USER_FUNC(evt_gor_door_out_info) {
+static USER_FUNC(evt_gor_door_out_info) {
     EvtWord* args = event->args;
     Vec outPos = {0.0f, 0.0f, 0.0f};
     Vec inPos = {0.0f, 0.0f, 0.0f};
@@ -4921,7 +4921,7 @@ USER_FUNC(monosiri_check) {
 }
 
 /** Marks tattle entry args[0] as learned and returns in args[1] the pointer to its message. */
-USER_FUNC(monosiri_on) {
+static USER_FUNC(monosiri_on) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     TattleEntry* tattle = battleGetUnitMonosiriPtr(id);
@@ -4935,7 +4935,7 @@ USER_FUNC(monosiri_on) {
  * Returns in args[0] whether the 3D camera is facing the front of the house (yaw below 90 or at least 270 degrees),
  * 1 for yes. US and later return 0 when Mario is west of x=-300.
  */
-USER_FUNC(camera_front_check) {
+static USER_FUNC(camera_front_check) {
     EvtWord* args = event->args;
     f32 angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
 
@@ -4958,7 +4958,7 @@ USER_FUNC(camera_front_check) {
 }
 
 /** Allocates the 256-byte buffer that remembers the previous camera road name. */
-USER_FUNC(get_camcurve_init) {
+static USER_FUNC(get_camcurve_init) {
     camstring = _mapAlloc(0x100);
     camstring[0] = '\0';
     return EVT_RETURN_DONE;
@@ -4968,7 +4968,7 @@ USER_FUNC(get_camcurve_init) {
  * Returns in args[0] 1 when the tracked camera road changes from the remembered upper road "C_ue" to the ground road
  * "C_ground_ok", else 0; remembers the road name for the next call.
  */
-USER_FUNC(get_camcurve) {
+static USER_FUNC(get_camcurve) {
     EvtWord* args = event->args;
     CamRoadWork* road = camRoadGetWorkPtr();
     s32 ret = 0;
@@ -4987,7 +4987,7 @@ USER_FUNC(get_camcurve) {
  * Blocks (returns not-done) for every frame the camera yaw has changed since the last call;
  * returns done when the camera has held still.
  */
-USER_FUNC(camera_move_check) {
+static USER_FUNC(camera_move_check) {
     f32 angle;
 
     if (isFirstCall) {
@@ -5007,7 +5007,7 @@ USER_FUNC(camera_move_check) {
  * colour out over 0.3 seconds, hides them,
  * folds the divider "S_i03_sikiri_mC" away by 90 degrees and fades it out too.
  */
-EVT_BEGIN(evt_gor_door_dark_sub)
+static EVT_BEGIN(evt_gor_door_dark_sub)
     CALL(evt_map_set_tevcallback, 1, PTR(_door_color_tev))
     CALL(evt_map_set_tevcallback, 2, PTR(_door_color2_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_del_mC"), MAP_OBJ_TEV_CALLBACK(1))
@@ -5071,7 +5071,7 @@ EVT_END()
  * walks Mario and his partners from the in-position to the out-position of the door
  * and moves the 3D camera along with him, then frees the controls and letterbox.
  */
-EVT_BEGIN(evt_gor_door_open)
+static EVT_BEGIN(evt_gor_door_open)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(GF(0), 1)
@@ -5104,7 +5104,7 @@ EVT_END()
  * Animation of Sanders's door ("S_ie_03_doao") opening to 100 degrees with a door sound
  * and swinging back to shut with a closing thump.
  */
-EVT_BEGIN(evt_gor_door_close_sanders)
+static EVT_BEGIN(evt_gor_door_close_sanders)
     CALL(evt_mapobj_get_position, STRING("S_ie_03_doao"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 100, 500)
@@ -5137,7 +5137,7 @@ EVT_END()
  * from 90 degrees to 0 about x over half a second, then plays the swing of Sanders's door
  * (evt_gor_door_close_sanders).
  */
-EVT_BEGIN(evt_gor_door_close_sub)
+static EVT_BEGIN(evt_gor_door_close_sub)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 90, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -5158,7 +5158,7 @@ EVT_END()
  * and Sanders's NPC colour back up to full over 0.3 seconds,
  * then removes the TEV callbacks and puts the pieces back in the display list.
  */
-EVT_BEGIN(evt_gor_door_light_sub)
+static EVT_BEGIN(evt_gor_door_light_sub)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 300)
         LOOP(0)
@@ -5223,7 +5223,7 @@ EVT_END()
  * walks Mario and his partners to the in-position of the door while the 3D camera follows,
  * then frees the controls.
  */
-EVT_BEGIN(evt_gor_door_close)
+static EVT_BEGIN(evt_gor_door_close)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(GF(0), 1)
@@ -5253,7 +5253,7 @@ EVT_END()
  * initialises the door tint state (_door_color_init_func) and registers evt_gor_door_open
  * and evt_gor_door_close as the front-facing case events of the two doors.
  */
-EVT_BEGIN(evt_gor_offscren_door_entry)
+static EVT_BEGIN(evt_gor_offscren_door_entry)
     CALL(_door_color_init_func)
     SET_VALUE(LW(4), STRING("A_ie_03_doa_02"))
     SET_VALUE(LW(6), STRING("A_ie_03_doa_04"))
@@ -5294,7 +5294,7 @@ static EVT_BEGIN(mario_kirimomi_event)
 EVT_END()
 
 /** Shakes the camera briefly (0.1 second) for the bump in steel_coin. */
-EVT_BEGIN(cam_yurasu_event)
+static EVT_BEGIN(cam_yurasu_event)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 100)
     RETURN
 EVT_END()
@@ -5433,7 +5433,7 @@ EVT_END()
  * and sends them off to find the Thousand-Year Door pedestal. Ends by setting STG0_09_PROF_FRANKLY.
  * Frankly's talk uses the mac_0_066 to mac_0_082 lines.
  */
-EVT_BEGIN(kurihakase_first_talk)
+static EVT_BEGIN(kurihakase_first_talk)
     // Setup: Frankly is placed in his house and the door finishes closing behind Mario and the partner.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -115, 0, -225)
@@ -5651,7 +5651,7 @@ EVT_END()
  * (OFF_d_saku, fence sounds), opening the pipe down under the city (mac_0_084). Then it sets
  * STG0_10_REMOVING_THE_FENCE and spawns kurihakase_lecture.
  */
-EVT_BEGIN(kurihakase_wall_remove)
+static EVT_BEGIN(kurihakase_wall_remove)
     CALL(evt_door_end_wait)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
@@ -5721,7 +5721,7 @@ EVT_END()
  * asks whether Mario knows Action Commands (mac_0_084_02), lets Goombella chip in,
  * and sets STG0_10_01_FRANKLYS_TUTORIAL. If he says he knows them and declines practice, he skips the lesson.
  */
-EVT_BEGIN(kurihakase_lecture)
+static EVT_BEGIN(kurihakase_lecture)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SET_FLOAT_VALUE(LW(3), LW(0))
     SET_FLOAT_VALUE(LW(4), LW(1))
@@ -5803,7 +5803,7 @@ EVT_END()
  * again; kurihakase_lecture_badge plays it as Frankly comes out with the Power Smash badge
  * and as he goes back in.
  */
-EVT_BEGIN(kurihakase_door)
+static EVT_BEGIN(kurihakase_door)
     CALL(evt_mapobj_get_position, STRING("S_i02_doa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 104, 500)
@@ -5835,7 +5835,7 @@ EVT_END()
  * Frankly gives Mario a Power Smash badge, asks whether he wants a lesson on badges (mac_0_121_02 to 05)
  * and runs the lecture window (lecture) if he does, then sets STG0_17_BADGE_TUTORIAL.
  */
-EVT_BEGIN(kurihakase_lecture_badge)
+static EVT_BEGIN(kurihakase_lecture_badge)
     // Mario and the partner wait after leaving the house; Mario looks around.
     CALL(evt_door_end_wait)
     SET_VALUE(GF(0), 1)
@@ -5938,7 +5938,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     RETURN
 EVT_END()
 
-EVT_BEGIN(Mario_Party_position)
+static EVT_BEGIN(Mario_Party_position)
     CALL(evt_mario_set_pos, -190, 0, -215)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_pos, 0, -225, 0, -215)
@@ -5950,7 +5950,7 @@ EVT_BEGIN(Mario_Party_position)
 EVT_END()
 
 /** Opens the book on Frankly's table ("S_open_book_r" turns 180 degrees) with its sound; used by the epigraphy scenes. */
-EVT_BEGIN(book_open)
+static EVT_BEGIN(book_open)
     CALL(evt_mapobj_get_position, STRING("S_open_book_r"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_OPEN_BOOK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 360, 180, 500)
@@ -5967,7 +5967,7 @@ EVT_BEGIN(book_open)
 EVT_END()
 
 /** Closes the book on Frankly's table ("S_open_book_r" turns back) with its sound; used by the epigraphy scenes. */
-EVT_BEGIN(book_close)
+static EVT_BEGIN(book_close)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 360, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -5988,7 +5988,7 @@ EVT_END()
  * the after-stage-3
  * and after-stage-6 epigraphy scenes run it before book_open.
  */
-EVT_BEGIN(book_center_init)
+static EVT_BEGIN(book_center_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("S_open_book"), -15, 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING("S_open_book_r"), 0, 0, 0)
@@ -6203,7 +6203,7 @@ EVT_END()
  * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
  * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
  */
-EVT_BEGIN(epigraphy_map_after_stage1)
+static EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -6274,7 +6274,7 @@ EVT_END()
  * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
  * he deciphers the map for the next star (mac_2_002_01 to mac_2_011) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
  */
-EVT_BEGIN(epigraphy_map_after_stage2)
+static EVT_BEGIN(epigraphy_map_after_stage2)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6510,7 +6510,7 @@ EVT_END()
  * the map points to Keelhaul Key
  * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
  */
-EVT_BEGIN(epigraphy_map_after_stage4)
+static EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -6588,7 +6588,7 @@ EVT_END()
  * It sets
  * STG5_61_FRANKLYS_HOUSE_STG_5.
  */
-EVT_BEGIN(epigraphy_map_after_stage5)
+static EVT_BEGIN(epigraphy_map_after_stage5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -6890,17 +6890,17 @@ static EVT_BEGIN(mobj_box01)
 EVT_END()
 
 /** Prologue enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg0_list[] = {
+static s32 stg0_list[] = {
     8,
 };
 
 /** Chapter 1 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg1_list[] = {
+static s32 stg1_list[] = {
     18, 20, 22, 23,
 };
 
 /** Chapter 2 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg2_list[] = {
+static s32 stg2_list[] = {
 #if VERSION <= VERSION_DEMO_JP
     29, 30, 34,
 #else
@@ -6909,33 +6909,33 @@ s32 stg2_list[] = {
 };
 
 /** Chapter 3 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg3_list[] = {
+static s32 stg3_list[] = {
     65,
 };
 
 /** Demo Chapter 4 or (JP and later) Chapter 5 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 #if VERSION <= VERSION_DEMO_JP
-s32 stg4_list[] = {
+static s32 stg4_list[] = {
     76,
 #else
-s32 stg5_list[] = {
+static s32 stg5_list[] = {
     93, 99,
 #endif
 };
 
 #if VERSION <= VERSION_DEMO_JP
-s32 stg5_list[] = {
+static s32 stg5_list[] = {
     93, 94, 99,
 };
 #endif
 
 /** Chapter 6 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg6_list[] = {
+static s32 stg6_list[] = {
     107,
 };
 
 /** Chapter 7 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg7_list[] = {
+static s32 stg7_list[] = {
 #if VERSION <= VERSION_DEMO_JP
     114, 115, 116, 117, 118, 28, 120, 119, 121,
 #else
@@ -6944,7 +6944,7 @@ s32 stg7_list[] = {
 };
 
 /** Chapter 8 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
-s32 stg8_list[] = {
+static s32 stg8_list[] = {
 #if VERSION <= VERSION_DEMO_JP
     131, 132, 133, 134, 135, 144, 146, 147,
     150,
@@ -6988,7 +6988,7 @@ MonosiriFollow follow[] = {
  * shows the next tattle Mario can still learn (monosiri_follow_00), marks it as learned,
  * and removes the note "S_i02_memo" when none are left.
  */
-EVT_BEGIN(evt_monosiri)
+static EVT_BEGIN(evt_monosiri)
     CALL(evt_mario_key_onoff, 0)
     CALL(monosiri_check, LW(0), LW(1))
     CALL(monosiri_on, LW(1), LW(2))
@@ -7006,7 +7006,7 @@ EVT_END()
  * Map-init helper that sets up the A-press case event for the wastebasket in Frankly's house (evt_monosiri)
  * while monosiri_check still finds a tattle Mario can learn at the current story stage.
  */
-EVT_BEGIN(evt_monosiri_follow)
+static EVT_BEGIN(evt_monosiri_follow)
     CALL(monosiri_check, LW(0), LW(1))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_i02_gomibako"), 0, PTR(evt_monosiri), 0)
@@ -7026,7 +7026,7 @@ EVT_END()
  * places the Wedding Ring on the ground in the east side,
  * at (525, 0, 160) in US and later and at (-65, 120, 196) in earlier releases.
  */
-EVT_BEGIN(iri_19_init)
+static EVT_BEGIN(iri_19_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
 #if VERSION >= VERSION_US
@@ -7122,7 +7122,7 @@ EVT_END()
  * Loops forever hiding the outer wall "S_gai_kabe_mae"
  * when the camera looks at it from the front (camera_front_check) and showing it otherwise.
  */
-EVT_BEGIN(front_wall_keshi)
+static EVT_BEGIN(front_wall_keshi)
     LOOP(0)
         CALL(camera_front_check, LF(0))
         IF_INT_EQUAL(LF(0), 1)
@@ -7139,7 +7139,7 @@ EVT_END()
  * Loops forever: when the tracked camera road changes from the upper road to the ground one and Mario is at x >= 370,
  * hides the house 05 exterior "S_ie_05_soto" until the camera has finished turning, then shows it again.
  */
-EVT_BEGIN(tobiori_check)
+static EVT_BEGIN(tobiori_check)
     CALL(get_camcurve_init)
     LOOP(0)
         LOOP(0)

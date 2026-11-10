@@ -9,9 +9,9 @@ int __read_console(__file_handle handle, unsigned char* buffer, size_t* count, v
 int __write_console(__file_handle handle, unsigned char* buffer, size_t* count, void* ref_con);
 int __close_console(__file_handle handle);
 
-unsigned char stdin_buff[console_buff_size];
-unsigned char stdout_buff[console_buff_size];
-unsigned char stderr_buff[console_buff_size];
+static unsigned char stdin_buff[console_buff_size];
+static unsigned char stdout_buff[console_buff_size];
+static unsigned char stderr_buff[console_buff_size];
 
 /* stdin, stdout and stderr; the fourth entry stays zero-filled and ends the next_file_struct list. */
 FILE __files[_STATIC_FILES] = {

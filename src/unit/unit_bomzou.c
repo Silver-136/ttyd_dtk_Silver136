@@ -22,7 +22,7 @@ static PoseTableEntry pose_table_3[4];
 static PoseTableEntry pose_table_2[4];
 static PoseTableEntry pose_table_1[4];
 BattleUnitKind unit_bomzou;
-BattleWeapon weapon_bomzou_explosion;
+static BattleWeapon weapon_bomzou_explosion;
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[70];
 static EvtWord phase_event[67];
@@ -161,7 +161,7 @@ BattleUnitKind unit_bomzou = {
  * The bomb's blast: 3 damage with the explosion element to every enemy in range, ignoring guarding,
  * able to shatter frozen enemies; used by explosion_event.
  */
-BattleWeapon weapon_bomzou_explosion = {
+static BattleWeapon weapon_bomzou_explosion = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

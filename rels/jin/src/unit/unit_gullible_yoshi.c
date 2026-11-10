@@ -22,7 +22,7 @@ static StatusVulnerability regist_yoshi;
 static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[24];
-EvtWord damage_event_yoshi[22];
+static EvtWord damage_event_yoshi[22];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_yoshi[156];
@@ -200,7 +200,7 @@ EVT_END()
  * if the hit defeats him (damage result DAMAGE_RESULT_DEATH) it sets GW(20) to 1
  * so the fake Mario's scripts know the partner double is down, then runs the default damage handling.
  */
-EVT_BEGIN(damage_event_yoshi)
+static EVT_BEGIN(damage_event_yoshi)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)

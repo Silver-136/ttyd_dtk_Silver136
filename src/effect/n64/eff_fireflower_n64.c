@@ -41,7 +41,7 @@ static s8 scale_data[] = "27<AFKPUZ_dgigd";
  * Small red 4x4 spark quad, drawn only for a spark of type 0;
  * every spark is spawned with type 1, so it goes unused.
  */
-effN64Vtx size4x4_tex4x4_vtx[] = {
+static effN64Vtx size4x4_tex4x4_vtx[] = {
     {-2, -2, 0, 0, 0, 255, 0, 0, 255},
     {2, -2, 0, 512, 0, 255, 0, 0, 255},
     {2, 2, 0, 512, 512, 255, 0, 0, 255},

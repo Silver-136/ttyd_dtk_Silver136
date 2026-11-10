@@ -1583,21 +1583,21 @@ void winWazaGX(WindowWork* wp, s32 a, f32 x, f32 y, f32 w, f32 h) {
 }
 
 /** Sort options (Z) of the Items list: by name or by type. */
-WinSortData sort_1[] = {
+static WinSortData sort_1[] = {
     {"msg_menu_sort_aiueo", sort_1_1_func},
     {"msg_menu_sort_kind", sort_1_2_func},
     {NULL, NULL},
 };
 
 /** Sort options of the Important Items list: by name or by type. */
-WinSortData sort_2[] = {
+static WinSortData sort_2[] = {
     {"msg_menu_sort_aiueo", sort_2_1_func},
     {"msg_menu_sort_kind", sort_2_2_func},
     {NULL, NULL},
 };
 
 /** Sort options of the full badge list: by name, by type or by BP cost. */
-WinSortData sort_3[] = {
+static WinSortData sort_3[] = {
     {"msg_menu_sort_aiueo", sort_3_1_func},
     {"msg_menu_sort_kind", sort_3_2_func},
     {"msg_menu_sort_bp", sort_3_3_func},
@@ -1605,7 +1605,7 @@ WinSortData sort_3[] = {
 };
 
 /** Sort options of the equipped badge list: by name, by type or by BP cost. */
-WinSortData sort_4[] = {
+static WinSortData sort_4[] = {
     {"msg_menu_sort_aiueo", sort_4_1_func},
     {"msg_menu_sort_kind", sort_4_2_func},
     {"msg_menu_sort_bp", sort_4_3_func},
@@ -1613,7 +1613,7 @@ WinSortData sort_4[] = {
 };
 
 /** Sort options of the Journal's badge log: by name, by type or by BP cost. */
-WinSortData sort_5[] = {
+static WinSortData sort_5[] = {
     {"msg_menu_sort_aiueo", sort_5_1_func},
     {"msg_menu_sort_kind", sort_5_2_func},
     {"msg_menu_sort_bp", sort_5_3_func},
@@ -1621,7 +1621,7 @@ WinSortData sort_5[] = {
 };
 
 /** Sort options of the Journal's recipe log: by name or by type. */
-WinSortData sort_6[] = {
+static WinSortData sort_6[] = {
     {"msg_menu_sort_aiueo", sort_6_1_func},
     {"msg_menu_sort_kind", sort_6_2_func},
     {NULL, NULL},
@@ -1647,7 +1647,7 @@ u8 enemy_monoshiri_sort_table[] = {
 #else
 
 /** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
-WinSortData sort_7[] = {
+static WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
     {"msg_menu_sort_place", sort_7_2_func},
     {"msg_menu_sort_aiueo", sort_7_3_func},
@@ -1655,12 +1655,12 @@ WinSortData sort_7[] = {
 };
 
 /** Sort options of the mail list: by name or by number. */
-WinSortData sort_8[] = {
+static WinSortData sort_8[] = {
     {"msg_menu_sort_aiueo", sort_8_1_func},
     {"msg_menu_sort_number", sort_8_2_func},
     {NULL, NULL},
 };
-WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
+static WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
 #endif
 
 /** Items list by name (pouchSortItem 0, reversed 7), then rebuilds the Important Items list (winMakeSkipList). */
@@ -2287,18 +2287,18 @@ u32 placeNo(const char* place) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-WinSortData sort_7[] = {
+static WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
     {"msg_menu_sort_place", sort_7_2_func},
     {"msg_menu_sort_aiueo", sort_7_3_func},
     {NULL, NULL},
 };
-WinSortData sort_8[] = {
+static WinSortData sort_8[] = {
     {"msg_menu_sort_aiueo", sort_8_1_func},
     {"msg_menu_sort_number", sort_8_2_func},
     {NULL, NULL},
 };
-WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
+static WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
 #endif
 
 /** qqsort compare for the Tattle Log by where the enemy is found (placeNo of its locationTag). */

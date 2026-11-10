@@ -24,12 +24,12 @@
 #include "evt/evt_bero.h"
 #include "driver/seqdrv.h"
 
-void water_tev(MapTevCallbackInfo* info);
+static void water_tev(MapTevCallbackInfo* info);
 
 static EvtWord bero_in_event[11];
 static BeroEntry bero_entry_data[3];
 static EvtWord back_light[35];
-EvtWord totsunyu_event[46];
+static EvtWord totsunyu_event[46];
 EvtWord dou_00_init_evt[61];
 
 /**
@@ -100,7 +100,7 @@ static EVT_BEGIN(back_light)
     RETURN
 EVT_END()
 
-EVT_BEGIN(totsunyu_event)
+static EVT_BEGIN(totsunyu_event)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -140,6 +140,6 @@ EVT_BEGIN(dou_00_init_evt)
     RETURN
 EVT_END()
 
-void water_tev(MapTevCallbackInfo* info) {
+static void water_tev(MapTevCallbackInfo* info) {
     envSetWater(info);
 }

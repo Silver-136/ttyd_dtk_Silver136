@@ -18,76 +18,76 @@ extern BattleUnitKind unit_barriern;
 extern BattleUnitKind unit_barriern_custom;
 extern BattleUnitKind unit_barriern_z;
 
-BattleStageObjectData aji_btlobject_data[27];
-BattleStageData aji_btlstage_data[7];
-BattleUnitSetup btlparty_aji_aji_mbmkII[1];
-BattleGroupSetup btlgrp_aji_aji_mbmkII;
-BattleUnitSetup btlparty_aji_aji_zako[2];
-BattleGroupSetup btlgrp_aji_aji_zako;
-BattleUnitSetup btlparty_aji_aji_01_01_off_1[2];
-BattleGroupSetup btlgrp_aji_aji_01_01_off_1;
-BattleUnitSetup btlparty_aji_aji_01_02_off_1[3];
-BattleGroupSetup btlgrp_aji_aji_01_02_off_1;
-BattleUnitSetup btlparty_aji_aji_01_03_off_1[4];
-BattleGroupSetup btlgrp_aji_aji_01_03_off_1;
-BattleUnitSetup btlparty_aji_aji_01_04_off_1[2];
-BattleGroupSetup btlgrp_aji_aji_01_04_off_1;
-BattleUnitSetup btlparty_aji_aji_01_05_off_1[2];
-BattleGroupSetup btlgrp_aji_aji_01_05_off_1;
-BattleUnitSetup btlparty_aji_aji_01_06_off_1[4];
-BattleGroupSetup btlgrp_aji_aji_01_06_off_1;
-BattleUnitSetup btlparty_aji_aji_01_07_off_1[3];
-BattleGroupSetup btlgrp_aji_aji_01_07_off_1;
-BattleUnitSetup btlparty_aji_aji_01_08_off_1[4];
-BattleGroupSetup btlgrp_aji_aji_01_08_off_1;
-BattleUnitSetup btlparty_aji_aji_04_01_off_1[2];
-BattleGroupSetup btlgrp_aji_aji_04_01_off_1;
-BattleUnitSetup btlparty_aji_aji_06_01_off_1[2];
-BattleGroupSetup btlgrp_aji_aji_06_01_off_1;
-BattleUnitSetup btlparty_aji_aji_08_01_off_1[3];
-BattleGroupSetup btlgrp_aji_aji_08_01_off_1;
-BattleUnitSetup btlparty_aji_aji_09_01_off_1[5];
-BattleGroupSetup btlgrp_aji_aji_09_01_off_1;
-BattleUnitSetup btlparty_aji_aji_10_01_off_1[1];
-BattleGroupSetup btlgrp_aji_aji_10_01_off_1;
-BattleUnitSetup btlparty_aji_aji_13_01_off_1[4];
-BattleGroupSetup btlgrp_aji_aji_13_01_off_1;
-BattleUnitSetup btlparty_aji_aji_13_02_off_1[2];
-BattleGroupSetup btlgrp_aji_aji_13_02_off_1;
-BattleUnitSetup btlparty_aji_aji_15_01_off_1[1];
-BattleGroupSetup btlgrp_aji_aji_15_01_off_1;
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test1_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test2_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test3_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test4_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test5_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_mbmkii_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_00_00_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_02_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_03_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_04_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_05_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_06_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_07_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_08_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_04_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_06_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_08_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_09_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_10_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_13_01_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_13_02_off[2];
-NpcBattleSelect btlgrpsel_aji_btlno_aji_15_01_off[2];
+static BattleStageObjectData aji_btlobject_data[27];
+static BattleStageData aji_btlstage_data[7];
+static BattleUnitSetup btlparty_aji_aji_mbmkII[1];
+static BattleGroupSetup btlgrp_aji_aji_mbmkII;
+static BattleUnitSetup btlparty_aji_aji_zako[2];
+static BattleGroupSetup btlgrp_aji_aji_zako;
+static BattleUnitSetup btlparty_aji_aji_01_01_off_1[2];
+static BattleGroupSetup btlgrp_aji_aji_01_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_02_off_1[3];
+static BattleGroupSetup btlgrp_aji_aji_01_02_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_03_off_1[4];
+static BattleGroupSetup btlgrp_aji_aji_01_03_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_04_off_1[2];
+static BattleGroupSetup btlgrp_aji_aji_01_04_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_05_off_1[2];
+static BattleGroupSetup btlgrp_aji_aji_01_05_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_06_off_1[4];
+static BattleGroupSetup btlgrp_aji_aji_01_06_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_07_off_1[3];
+static BattleGroupSetup btlgrp_aji_aji_01_07_off_1;
+static BattleUnitSetup btlparty_aji_aji_01_08_off_1[4];
+static BattleGroupSetup btlgrp_aji_aji_01_08_off_1;
+static BattleUnitSetup btlparty_aji_aji_04_01_off_1[2];
+static BattleGroupSetup btlgrp_aji_aji_04_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_06_01_off_1[2];
+static BattleGroupSetup btlgrp_aji_aji_06_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_08_01_off_1[3];
+static BattleGroupSetup btlgrp_aji_aji_08_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_09_01_off_1[5];
+static BattleGroupSetup btlgrp_aji_aji_09_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_10_01_off_1[1];
+static BattleGroupSetup btlgrp_aji_aji_10_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_13_01_off_1[4];
+static BattleGroupSetup btlgrp_aji_aji_13_01_off_1;
+static BattleUnitSetup btlparty_aji_aji_13_02_off_1[2];
+static BattleGroupSetup btlgrp_aji_aji_13_02_off_1;
+static BattleUnitSetup btlparty_aji_aji_15_01_off_1[1];
+static BattleGroupSetup btlgrp_aji_aji_15_01_off_1;
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test1_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test2_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test3_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test4_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test5_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_mbmkii_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_00_00_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_02_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_03_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_04_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_05_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_06_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_07_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_08_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_04_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_06_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_08_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_09_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_10_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_13_01_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_13_02_off[2];
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_15_01_off[2];
 NpcSetupBattleInfo btlsetup_aji_tbl[24];
 NpcTerritoryInfo btl_aji_setup_no_tbl[24];
-EvtWord bgset_aji_space_event[35];
+static EvtWord bgset_aji_space_event[35];
 
 /**
  * Scenery objects of the fortress battle arenas (electric pylons, backdrops and floor pieces), shared by the
  * stages below.
  */
-BattleStageObjectData aji_btlobject_data[] = {
+static BattleStageObjectData aji_btlobject_data[] = {
     {"dentou_01", 2, STAGE_LAYER_A1, {144.0f, 0.0f, -54.0f}, 0, 60, {0}},
     {"dentou_02", 2, STAGE_LAYER_A1, {64.0f, 0.0f, -47.0f}, 10, 50, {0}},
     {"dentou_03", 2, STAGE_LAYER_A1, {-64.0f, 0.0f, -47.0f}, 20, 40, {0}},
@@ -118,7 +118,7 @@ BattleStageObjectData aji_btlobject_data[] = {
 };
 
 /** The seven battle arenas of the X-Naut Fortress, each with its model folders and the objects it uses. */
-BattleStageData aji_btlstage_data[] = {
+static BattleStageData aji_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_07_5", // specificStageDataDir
@@ -193,7 +193,7 @@ BattleStageData aji_btlstage_data[] = {
 };
 
 /** Enemy of the boss fight in the boss room: Magnus von Grapple 2.0. */
-BattleUnitSetup btlparty_aji_aji_mbmkII[] = {
+static BattleUnitSetup btlparty_aji_aji_mbmkII[] = {
     {
         &unit_boss_magnum_battender_mkII, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -207,7 +207,7 @@ BattleUnitSetup btlparty_aji_aji_mbmkII[] = {
 };
 
 /** Fight group for the Magnus von Grapple 2.0 boss fight, with its drop weights. */
-BattleGroupSetup btlgrp_aji_aji_mbmkII = {
+static BattleGroupSetup btlgrp_aji_aji_mbmkII = {
     1, // numEnemies
     btlparty_aji_aji_mbmkII, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -218,7 +218,7 @@ BattleGroupSetup btlgrp_aji_aji_mbmkII = {
 };
 
 /** Enemies of the generic fortress group, used by the debug battle entries: 2 Elite X-Naut. */
-BattleUnitSetup btlparty_aji_aji_zako[] = {
+static BattleUnitSetup btlparty_aji_aji_zako[] = {
     {
         &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -244,7 +244,7 @@ BattleUnitSetup btlparty_aji_aji_zako[] = {
 /**
  * Fight group for the generic fortress group: its enemy party with the item, heart and flower drop weights.
  */
-BattleGroupSetup btlgrp_aji_aji_zako = {
+static BattleGroupSetup btlgrp_aji_aji_zako = {
     2, // numEnemies
     btlparty_aji_aji_zako, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -254,7 +254,7 @@ BattleGroupSetup btlgrp_aji_aji_zako = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_01_off_1[] = {
     {
         &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -277,7 +277,7 @@ BattleUnitSetup btlparty_aji_aji_01_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_01_off_1 = {
     2, // numEnemies
     btlparty_aji_aji_01_01_off_1, // enemyData
     25, // heldItemWeight
@@ -288,7 +288,7 @@ BattleGroupSetup btlgrp_aji_aji_01_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -321,7 +321,7 @@ BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_02_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_02_off_1 = {
     3, // numEnemies
     btlparty_aji_aji_01_02_off_1, // enemyData
     25, // heldItemWeight
@@ -332,7 +332,7 @@ BattleGroupSetup btlgrp_aji_aji_01_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
     {
         &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -375,7 +375,7 @@ BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_03_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_03_off_1 = {
     4, // numEnemies
     btlparty_aji_aji_01_03_off_1, // enemyData
     25, // heldItemWeight
@@ -386,7 +386,7 @@ BattleGroupSetup btlgrp_aji_aji_01_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_04_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_04_off_1[] = {
     {
         &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -409,7 +409,7 @@ BattleUnitSetup btlparty_aji_aji_01_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_04_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_04_off_1 = {
     2, // numEnemies
     btlparty_aji_aji_01_04_off_1, // enemyData
     25, // heldItemWeight
@@ -420,7 +420,7 @@ BattleGroupSetup btlgrp_aji_aji_01_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_05_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_05_off_1[] = {
     {
         &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -443,7 +443,7 @@ BattleUnitSetup btlparty_aji_aji_01_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_05_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_05_off_1 = {
     2, // numEnemies
     btlparty_aji_aji_01_05_off_1, // enemyData
     25, // heldItemWeight
@@ -454,7 +454,7 @@ BattleGroupSetup btlgrp_aji_aji_01_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
     {
         &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -497,7 +497,7 @@ BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_06_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_06_off_1 = {
     4, // numEnemies
     btlparty_aji_aji_01_06_off_1, // enemyData
     25, // heldItemWeight
@@ -508,7 +508,7 @@ BattleGroupSetup btlgrp_aji_aji_01_06_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -553,7 +553,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_07_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_07_off_1 = {
     3, // numEnemies
     btlparty_aji_aji_01_07_off_1, // enemyData
     25, // heldItemWeight
@@ -564,7 +564,7 @@ BattleGroupSetup btlgrp_aji_aji_01_07_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -607,7 +607,7 @@ BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_01_08_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_01_08_off_1 = {
     4, // numEnemies
     btlparty_aji_aji_01_08_off_1, // enemyData
     25, // heldItemWeight
@@ -618,7 +618,7 @@ BattleGroupSetup btlgrp_aji_aji_01_08_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
     {
         &unit_barriern_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -649,7 +649,7 @@ BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_04_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_04_01_off_1 = {
     2, // numEnemies
     btlparty_aji_aji_04_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -659,7 +659,7 @@ BattleGroupSetup btlgrp_aji_aji_04_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_06_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_06_01_off_1[] = {
     {
         &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -682,7 +682,7 @@ BattleUnitSetup btlparty_aji_aji_06_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_06_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_06_01_off_1 = {
     2, // numEnemies
     btlparty_aji_aji_06_01_off_1, // enemyData
     25, // heldItemWeight
@@ -693,7 +693,7 @@ BattleGroupSetup btlgrp_aji_aji_06_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
     {
         &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -738,7 +738,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_08_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_08_01_off_1 = {
     3, // numEnemies
     btlparty_aji_aji_08_01_off_1, // enemyData
     25, // heldItemWeight
@@ -749,7 +749,7 @@ BattleGroupSetup btlgrp_aji_aji_08_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -802,7 +802,7 @@ BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_09_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_09_01_off_1 = {
     5, // numEnemies
     btlparty_aji_aji_09_01_off_1, // enemyData
     25, // heldItemWeight
@@ -813,7 +813,7 @@ BattleGroupSetup btlgrp_aji_aji_09_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_10_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_10_01_off_1[] = {
     {
         &unit_barriern_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -826,7 +826,7 @@ BattleUnitSetup btlparty_aji_aji_10_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_10_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_10_01_off_1 = {
     1, // numEnemies
     btlparty_aji_aji_10_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -836,7 +836,7 @@ BattleGroupSetup btlgrp_aji_aji_10_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
     {
         &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -879,7 +879,7 @@ BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_13_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_13_01_off_1 = {
     4, // numEnemies
     btlparty_aji_aji_13_01_off_1, // enemyData
     25, // heldItemWeight
@@ -890,7 +890,7 @@ BattleGroupSetup btlgrp_aji_aji_13_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
     {
         &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -921,7 +921,7 @@ BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_13_02_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_13_02_off_1 = {
     2, // numEnemies
     btlparty_aji_aji_13_02_off_1, // enemyData
     25, // heldItemWeight
@@ -932,7 +932,7 @@ BattleGroupSetup btlgrp_aji_aji_13_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_aji_aji_15_01_off_1[] = {
+static BattleUnitSetup btlparty_aji_aji_15_01_off_1[] = {
     {
         &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -945,7 +945,7 @@ BattleUnitSetup btlparty_aji_aji_15_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_aji_aji_15_01_off_1 = {
+static BattleGroupSetup btlgrp_aji_aji_15_01_off_1 = {
     1, // numEnemies
     btlparty_aji_aji_15_01_off_1, // enemyData
     25, // heldItemWeight
@@ -957,139 +957,139 @@ BattleGroupSetup btlgrp_aji_aji_15_01_off_1 = {
 };
 
 /** Debug battle entry 1: fights the generic fortress group. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test1_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test1_off[] = {
     {50, &btlgrp_aji_aji_zako, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Debug battle entry 2: fights the generic fortress group. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test2_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test2_off[] = {
     {50, &btlgrp_aji_aji_zako, &aji_btlstage_data[4]},
     {0},
 };
 
 /** Debug battle entry 3: fights the generic fortress group. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test3_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test3_off[] = {
     {50, &btlgrp_aji_aji_zako, &aji_btlstage_data[5]},
     {0},
 };
 
 /** Debug battle entry 4: fights the generic fortress group. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test4_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test4_off[] = {
     {50, &btlgrp_aji_aji_zako, aji_btlstage_data},
     {0},
 };
 
 /** Debug battle entry 5: fights the generic fortress group. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_test5_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_test5_off[] = {
     {50, &btlgrp_aji_aji_zako, &aji_btlstage_data[6]},
     {0},
 };
 
 /** Selects the boss fight against Magnus von Grapple 2.0 and its arena. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_mbmkii_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_mbmkii_off[] = {
     {50, &btlgrp_aji_aji_mbmkII, &aji_btlstage_data[5]},
     {0},
 };
 
 /** Selects the generic fortress group for the elite X-Naut encounters. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_00_00_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_00_00_off[] = {
     {50, &btlgrp_aji_aji_zako, &aji_btlstage_data[6]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_01_off[] = {
     {20, &btlgrp_aji_aji_01_01_off_1, &aji_btlstage_data[6]},
     {0},
 };
 
 /** Selects the group and arena for fight 2 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_02_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_02_off[] = {
     {20, &btlgrp_aji_aji_01_02_off_1, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Selects the group and arena for fight 3 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_03_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_03_off[] = {
     {20, &btlgrp_aji_aji_01_03_off_1, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Selects the group and arena for fight 4 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_04_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_04_off[] = {
     {20, &btlgrp_aji_aji_01_04_off_1, &aji_btlstage_data[2]},
     {0},
 };
 
 /** Selects the group and arena for fight 5 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_05_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_05_off[] = {
     {20, &btlgrp_aji_aji_01_05_off_1, &aji_btlstage_data[2]},
     {0},
 };
 
 /** Selects the group and arena for fight 6 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_06_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_06_off[] = {
     {20, &btlgrp_aji_aji_01_06_off_1, &aji_btlstage_data[2]},
     {0},
 };
 
 /** Selects the group and arena for fight 7 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_07_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_07_off[] = {
     {20, &btlgrp_aji_aji_01_07_off_1, &aji_btlstage_data[3]},
     {0},
 };
 
 /** Selects the group and arena for fight 8 in aji_01. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_01_08_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_01_08_off[] = {
     {20, &btlgrp_aji_aji_01_08_off_1, &aji_btlstage_data[3]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_04. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_04_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_04_01_off[] = {
     {20, &btlgrp_aji_aji_04_01_off_1, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_06. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_06_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_06_01_off[] = {
     {20, &btlgrp_aji_aji_06_01_off_1, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_08. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_08_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_08_01_off[] = {
     {20, &btlgrp_aji_aji_08_01_off_1, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_09. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_09_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_09_01_off[] = {
     {20, &btlgrp_aji_aji_09_01_off_1, &aji_btlstage_data[1]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_10. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_10_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_10_01_off[] = {
     {20, &btlgrp_aji_aji_10_01_off_1, aji_btlstage_data},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_13. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_13_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_13_01_off[] = {
     {20, &btlgrp_aji_aji_13_01_off_1, &aji_btlstage_data[4]},
     {0},
 };
 
 /** Selects the group and arena for fight 2 in aji_13. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_13_02_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_13_02_off[] = {
     {20, &btlgrp_aji_aji_13_02_off_1, &aji_btlstage_data[4]},
     {0},
 };
 
 /** Selects the group and arena for fight 1 in aji_15. */
-NpcBattleSelect btlgrpsel_aji_btlno_aji_15_01_off[] = {
+static NpcBattleSelect btlgrpsel_aji_btlno_aji_15_01_off[] = {
     {20, &btlgrp_aji_aji_15_01_off_1, &aji_btlstage_data[1]},
     {0},
 };
@@ -1360,7 +1360,7 @@ NpcTerritoryInfo btl_aji_setup_no_tbl[] = {
     {0},
 };
 
-EVT_BEGIN(bgset_aji_space_event)
+static EVT_BEGIN(bgset_aji_space_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)

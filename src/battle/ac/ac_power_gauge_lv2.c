@@ -29,7 +29,7 @@ typedef struct PGLv2Work {
  * and how fast holding during a wrong window drains it (100 rising to 130).
  */
 static s32 _power_table[] = {300, 200, 150, 100, 80, 60, 40};
-s32 _power_table2[] = {100, 100, 100, 100, 110, 120, 130};
+static s32 _power_table2[] = {100, 100, 100, 100, 110, 120, 130};
 
 static void actionCommandDisp(f32 x, f32 y);
 

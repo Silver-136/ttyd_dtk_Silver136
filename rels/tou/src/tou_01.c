@@ -68,9 +68,9 @@ typedef struct TouShadowWork {
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(delete_npc_regl_evt);
-USER_FUNC(eff_sleep_off);
-USER_FUNC(eff_sleep_on);
-USER_FUNC(make_shadow);
+static USER_FUNC(eff_sleep_off);
+static USER_FUNC(eff_sleep_on);
+static USER_FUNC(make_shadow);
 static USER_FUNC(mario_chk);
 static USER_FUNC(proj_mtx);
 static USER_FUNC(proj_off);
@@ -78,7 +78,7 @@ static USER_FUNC(proj_on);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(yami_oowareru_check);
+static USER_FUNC(yami_oowareru_check);
 
 #if VERSION >= VERSION_US
 USER_FUNC(tou_01_kanban_moji_flag_sync);
@@ -93,27 +93,27 @@ static BeroEntry bero_data[2];
 static EvtWord evt_door[15];
 static EvtWord evt_door2[12];
 static EvtWord evt_wall[22];
-EvtWord evt_door_1_open[12];
-EvtWord evt_door_1_close[14];
+static EvtWord evt_door_1_open[12];
+static EvtWord evt_door_1_close[14];
 static const char* mise_npc[2];
 static DoorParam door_1;
 static EvtWord evt_door_2[12];
 static EvtWord evt_door2_2[12];
-EvtWord evt_sakaba_1[26];
-EvtWord evt_sakaba_2[26];
-EvtWord evt_sakaba_3[26];
-EvtWord evt_sakaba_4[29];
+static EvtWord evt_sakaba_1[26];
+static EvtWord evt_sakaba_2[26];
+static EvtWord evt_sakaba_3[26];
+static EvtWord evt_sakaba_4[29];
 
 #if VERSION >= VERSION_US
-EvtWord evt_wall2[38];
+static EvtWord evt_wall2[38];
 #else
-EvtWord evt_wall2[19];
+static EvtWord evt_wall2[19];
 #endif
 
-const char* sakaba_npc[7];
-const char* sakaba_item[2];
-EvtWord evt_door_2_open[12];
-EvtWord evt_door_2_close[14];
+static const char* sakaba_npc[7];
+static const char* sakaba_item[2];
+static EvtWord evt_door_2_open[12];
+static EvtWord evt_door_2_close[14];
 static DoorParam door_2;
 static EvtWord evt_kanban[51];
 static EvtWord evt_kanban2[175];
@@ -128,15 +128,15 @@ extern EvtWord evt_hotdog[];
 EvtWord evt_hotdog[86];
 #endif
 
-EvtWord evt_ship_shadow[91];
-EvtWord init_hikuu[12];
-EvtWord talk_hikuu[84];
-EvtWord init_sakaba[8];
+static EvtWord evt_ship_shadow[91];
+static EvtWord init_hikuu[12];
+static EvtWord talk_hikuu[84];
+static EvtWord init_sakaba[8];
 EvtWord talk_sakaba[369];
-EvtWord init_mise[12];
-EvtWord talk_mise[2];
-EvtWord init_hot[13];
-EvtWord talk_hot[21];
+static EvtWord init_mise[12];
+static EvtWord talk_mise[2];
+static EvtWord init_hot[13];
+static EvtWord talk_hot[21];
 static EvtWord init_papa[20];
 static EvtWord talk_papa[78];
 static EvtWord init_mama[20];
@@ -144,25 +144,25 @@ static EvtWord talk_mama[78];
 static EvtWord init_konari[20];
 static EvtWord talk_konari[78];
 static EvtWord talk_musume[132];
-EvtWord init_musume_1[14];
-EvtWord talk_musume_1[4];
-EvtWord init_musume_2[14];
-EvtWord talk_musume_2[4];
-EvtWord init_musume_3[14];
-EvtWord talk_musume_3[4];
-EvtWord init_kino_1[13];
-EvtWord reg_kino_1[31];
-EvtWord talk_kino_1[112];
-EvtWord init_kino_2[8];
-EvtWord talk_kino_2[112];
-EvtWord init_roten_1[8];
-EvtWord talk_roten_1[112];
-EvtWord init_roten_2[8];
-EvtWord talk_roten_2[112];
-EvtWord init_jugem_1[8];
-EvtWord talk_jugem_1[112];
-EvtWord init_jugem_2[12];
-EvtWord talk_jugem_2[112];
+static EvtWord init_musume_1[14];
+static EvtWord talk_musume_1[4];
+static EvtWord init_musume_2[14];
+static EvtWord talk_musume_2[4];
+static EvtWord init_musume_3[14];
+static EvtWord talk_musume_3[4];
+static EvtWord init_kino_1[13];
+static EvtWord reg_kino_1[31];
+static EvtWord talk_kino_1[112];
+static EvtWord init_kino_2[8];
+static EvtWord talk_kino_2[112];
+static EvtWord init_roten_1[8];
+static EvtWord talk_roten_1[112];
+static EvtWord init_roten_2[8];
+static EvtWord talk_roten_2[112];
+static EvtWord init_jugem_1[8];
+static EvtWord talk_jugem_1[112];
+static EvtWord init_jugem_2[12];
+static EvtWord talk_jugem_2[112];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord init_bijyo[];
@@ -170,11 +170,11 @@ extern EvtWord init_bijyo[];
 EvtWord init_bijyo[40];
 #endif
 
-EvtWord talk_bijyo[112];
+static EvtWord talk_bijyo[112];
 static EvtWord init_kiza[21];
 static EvtWord talk_kiza[60];
 static EvtWord init_sarary[12];
-EvtWord select_number[44];
+static EvtWord select_number[44];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_sarary[478];
@@ -190,14 +190,14 @@ extern EvtWord evt_uron[];
 EvtWord evt_uron[195];
 #endif
 
-EvtWord evt_tamago_sleep[56];
+static EvtWord evt_tamago_sleep[56];
 EvtWord dummy[2];
-EvtWord hot_move_evt[66];
-EvtWord hot_move_evt2[24];
-EvtWord evt_oyaji_move[60];
+static EvtWord hot_move_evt[66];
+static EvtWord hot_move_evt2[24];
+static EvtWord evt_oyaji_move[60];
 static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
-s32 yoshi_data[30];
+static s32 yoshi_data[30];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_tamago_move[];
@@ -209,8 +209,8 @@ EvtWord evt_tamago[100];
 EvtWord talk_tamago[321];
 #endif
 
-EvtWord evt_gondora_updown[143];
-EvtWord evt_gondora_mon[62];
+static EvtWord evt_gondora_updown[143];
+static EvtWord evt_gondora_mon[62];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_gondora[];
@@ -220,8 +220,8 @@ EvtWord evt_gondora[169];
 EvtWord evt_gondora2[200];
 #endif
 
-EvtWord evt_search_light[82];
-EvtWord evt_dummy_sw[178];
+static EvtWord evt_search_light[82];
+static EvtWord evt_dummy_sw[178];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_peach_after[];
@@ -247,7 +247,7 @@ extern EvtWord evt_telbox[];
 EvtWord evt_telbox[124];
 #endif
 
-EvtWord evt_mail[175];
+static EvtWord evt_mail[175];
 static EvtWord evt_key[7];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -375,7 +375,7 @@ EVT_END()
  * Open callback (evtOpen) of door_1, the shop door: dips the music and ambience to 50 and low-pass filters the
  * ambience (800).
  */
-EVT_BEGIN(evt_door_1_open)
+static EVT_BEGIN(evt_door_1_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -383,7 +383,7 @@ EVT_BEGIN(evt_door_1_open)
 EVT_END()
 
 /** Close callback (evtClose) of door_1: resumes the music and ambience from the dip and removes the filter. */
-EVT_BEGIN(evt_door_1_close)
+static EVT_BEGIN(evt_door_1_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -438,7 +438,7 @@ static EVT_BEGIN(evt_door2_2)
 EVT_END()
 
 /** Folds down the first outer wall panel (sak_soto_1) of the tavern with a collapsing sound. */
-EVT_BEGIN(evt_sakaba_1)
+static EVT_BEGIN(evt_sakaba_1)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_1"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(10), LW(11), LW(12), 0)
@@ -448,7 +448,7 @@ EVT_BEGIN(evt_sakaba_1)
 EVT_END()
 
 /** Folds down the second outer wall panel (sak_soto_2) of the tavern. */
-EVT_BEGIN(evt_sakaba_2)
+static EVT_BEGIN(evt_sakaba_2)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_2"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(10), LW(11), LW(12), 0)
@@ -458,7 +458,7 @@ EVT_BEGIN(evt_sakaba_2)
 EVT_END()
 
 /** Folds down the third outer wall panel (sak_soto_3) of the tavern. */
-EVT_BEGIN(evt_sakaba_3)
+static EVT_BEGIN(evt_sakaba_3)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_3"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(10), LW(11), LW(12), 0)
@@ -468,7 +468,7 @@ EVT_BEGIN(evt_sakaba_3)
 EVT_END()
 
 /** Folds down the fourth outer wall panel (sak_soto_4) of the tavern. */
-EVT_BEGIN(evt_sakaba_4)
+static EVT_BEGIN(evt_sakaba_4)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_4"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(10), LW(11), LW(12), 0)
@@ -482,7 +482,7 @@ EVT_END()
  * Runs four tavern panel scripts: US and PAL use 4,1,2,3 for LW(1) == 0 and 3,2,1,4 otherwise,
  * 150 ms apart. JP and both demos always use 1,2,3,4, 100 ms apart.
  */
-EVT_BEGIN(evt_wall2)
+static EVT_BEGIN(evt_wall2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
 #if VERSION >= VERSION_US
     IF_INT_EQUAL(LW(1), 0)
@@ -515,7 +515,7 @@ EVT_BEGIN(evt_wall2)
 EVT_END()
 
 /** NPCs inside the tavern, shown only while its front is open: the keeper and his customers. */
-const char* sakaba_npc[] = {
+static const char* sakaba_npc[] = {
     "酒場店主",
     "美女",
     "ロテン2",
@@ -526,7 +526,7 @@ const char* sakaba_npc[] = {
 };
 
 /** Item inside the tavern, shown with it: the Star Piece item_03. */
-const char* sakaba_item[] = {
+static const char* sakaba_item[] = {
     "item_03",
     NULL,
 };
@@ -535,7 +535,7 @@ const char* sakaba_item[] = {
  * Open callback (evtOpen) of door_2, the tavern (sakaba) door: dips the music and ambience to 50 and low-pass
  * filters the ambience (800).
  */
-EVT_BEGIN(evt_door_2_open)
+static EVT_BEGIN(evt_door_2_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -543,7 +543,7 @@ EVT_BEGIN(evt_door_2_open)
 EVT_END()
 
 /** Close callback (evtClose) of door_2: resumes the music and ambience from the dip and removes the filter. */
-EVT_BEGIN(evt_door_2_close)
+static EVT_BEGIN(evt_door_2_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -789,7 +789,7 @@ static USER_FUNC(proj_on) {
  * the source for the blimp shadow projected on the plaza.
  */
 // Render the sphere into the projected shadow texture, restoring viewport, projection and scissor afterward.
-void make_shadow_disp(CameraId camera, void* param) {
+static void make_shadow_disp(CameraId camera, void* param) {
     TouShadowWork* wp = param;
     Mtx44 proj;
     Mtx view;
@@ -843,7 +843,7 @@ void make_shadow_disp(CameraId camera, void* param) {
 }
 
 /** Script helper: allocates the shadow texture and queues make_shadow_disp every frame; blocks forever as the owner. */
-USER_FUNC(make_shadow) {
+static USER_FUNC(make_shadow) {
     TouShadowWork* wp;
 
     if (isFirstCall) {
@@ -888,7 +888,7 @@ static USER_FUNC(proj_mtx) {
 }
 
 /** Sets up the blimp shadow: marks the ground, gondola and "den" map objects as projected-texture receivers. */
-EVT_BEGIN(evt_ship_shadow)
+static EVT_BEGIN(evt_ship_shadow)
     CALL(proj_on)
     BEGIN_INLINE_EVENT
         SET_TYPE(0)
@@ -918,7 +918,7 @@ EVT_BEGIN(evt_ship_shadow)
 EVT_END()
 
 /** NPC init for the blimp (飛空船), which also talks as its operator: puts it at (100, 0, 430) facing 270. */
-EVT_BEGIN(init_hikuu)
+static EVT_BEGIN(init_hikuu)
     CALL(evt_npc_set_position, STRING("me"), 100, 0, 430)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
@@ -928,7 +928,7 @@ EVT_END()
  * Talk script of the blimp operator: offers a ride back to Rogueport (stg3_tou_00 with yes/no);
  * on yes Mario shows the Blimp Ticket (stg3_tou_01) and the scene continues, on no he stays (stg3_tou_02).
  */
-EVT_BEGIN(talk_hikuu)
+static EVT_BEGIN(talk_hikuu)
     CALL(evt_msg_print, 0, STRING("stg3_tou_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg3_tou_00_yn"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -957,7 +957,7 @@ EVT_BEGIN(talk_hikuu)
 EVT_END()
 
 /** NPC init for the tavern keeper: places him at (650, 10, 12). */
-EVT_BEGIN(init_sakaba)
+static EVT_BEGIN(init_sakaba)
     CALL(evt_npc_set_position, STRING("me"), 650, 10, 12)
     RETURN
 EVT_END()
@@ -1094,19 +1094,19 @@ EVT_BEGIN(talk_sakaba)
 EVT_END()
 
 /** NPC init for the shop NPC: places it at (-600, 10, 140), facing 200. */
-EVT_BEGIN(init_mise)
+static EVT_BEGIN(init_mise)
     CALL(evt_npc_set_position, STRING("me"), -600, 10, 140)
     CALL(evt_npc_set_ry, STRING("me"), 200)
     RETURN
 EVT_END()
 
 /** Talk script of the shop clerk (店員): empty. */
-EVT_BEGIN(talk_mise)
+static EVT_BEGIN(talk_mise)
     RETURN
 EVT_END()
 
 /** NPC init for the hot dog vendor: shadowless at (-400, 20, -125). */
-EVT_BEGIN(init_hot)
+static EVT_BEGIN(init_hot)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("me"), -400, 20, -125)
     RETURN
@@ -1116,7 +1116,7 @@ EVT_END()
  * Talk script of the hot dog vendor NPC (the counter itself is evt_hotdog):
  * one line before STG3_11_RUNAWAY_EGG and another until STG3_12_THE_MINI_YOSHI_EGG, then nothing.
  */
-EVT_BEGIN(talk_hot)
+static EVT_BEGIN(talk_hot)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_11_RUNAWAY_EGG)
         CALL(evt_msg_print, 0, STRING("stg3_tou_243"), 0, 0)
@@ -1306,7 +1306,7 @@ static EVT_BEGIN(talk_musume)
 EVT_END()
 
 /** NPC init for the first girl: stands at (300, 10, -150) between Glitzville's arrival and the boss battle. */
-EVT_BEGIN(init_musume_1)
+static EVT_BEGIN(init_musume_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("me"), 300, 10, -150)
@@ -1315,13 +1315,13 @@ EVT_BEGIN(init_musume_1)
 EVT_END()
 
 /** Talk script of the first girl. */
-EVT_BEGIN(talk_musume_1)
+static EVT_BEGIN(talk_musume_1)
     CALL_CHILD(talk_musume)
     RETURN
 EVT_END()
 
 /** NPC init for the second girl: stands at (330, 10, -180) between arrival and the boss battle. */
-EVT_BEGIN(init_musume_2)
+static EVT_BEGIN(init_musume_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("me"), 330, 10, -180)
@@ -1330,13 +1330,13 @@ EVT_BEGIN(init_musume_2)
 EVT_END()
 
 /** Talk script of the second girl. */
-EVT_BEGIN(talk_musume_2)
+static EVT_BEGIN(talk_musume_2)
     CALL_CHILD(talk_musume)
     RETURN
 EVT_END()
 
 /** NPC init for the third girl: stands at (370, 10, -140) between arrival and the boss battle. */
-EVT_BEGIN(init_musume_3)
+static EVT_BEGIN(init_musume_3)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("me"), 370, 10, -140)
@@ -1345,20 +1345,20 @@ EVT_BEGIN(init_musume_3)
 EVT_END()
 
 /** Talk script of the third girl. */
-EVT_BEGIN(talk_musume_3)
+static EVT_BEGIN(talk_musume_3)
     CALL_CHILD(talk_musume)
     RETURN
 EVT_END()
 
 /** NPC init for the first Toad: placed at (-350, 0, 75); NPC_STATUS_FACE_MOVE_DIR set. */
-EVT_BEGIN(init_kino_1)
+static EVT_BEGIN(init_kino_1)
     CALL(evt_npc_set_position, STRING("me"), -350, 0, 75)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 /** Regular (idle) script of the first Toad: paces back and forth along x between -350 and 350. */
-EVT_BEGIN(reg_kino_1)
+static EVT_BEGIN(reg_kino_1)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), -350, 75, 0, FLOAT(48.0f), 0)
         WAIT_MS(1000)
@@ -1370,7 +1370,7 @@ EVT_BEGIN(reg_kino_1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(talk_kino_1)
+static EVT_BEGIN(talk_kino_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_04_01"), 0, 0)
@@ -1411,13 +1411,13 @@ EVT_BEGIN(talk_kino_1)
 EVT_END()
 
 /** NPC init for the second Toad: placed at (-450, 0, 625). */
-EVT_BEGIN(init_kino_2)
+static EVT_BEGIN(init_kino_2)
     CALL(evt_npc_set_position, STRING("me"), -450, 0, 625)
     RETURN
 EVT_END()
 
 /** Talk script of the second Toad: story-dependent spectator lines, like talk_kino_1. */
-EVT_BEGIN(talk_kino_2)
+static EVT_BEGIN(talk_kino_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_05_01"), 0, 0)
@@ -1458,13 +1458,13 @@ EVT_BEGIN(talk_kino_2)
 EVT_END()
 
 /** NPC init for the first stall vendor (ロテン1): placed at (350, 0, 700). */
-EVT_BEGIN(init_roten_1)
+static EVT_BEGIN(init_roten_1)
     CALL(evt_npc_set_position, STRING("ロテン1"), 350, 0, 700)
     RETURN
 EVT_END()
 
 /** Talk script of the first stall vendor: story-dependent lines, like talk_kino_1. */
-EVT_BEGIN(talk_roten_1)
+static EVT_BEGIN(talk_roten_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_06_01"), 0, 0)
@@ -1505,13 +1505,13 @@ EVT_BEGIN(talk_roten_1)
 EVT_END()
 
 /** NPC init for the second stall vendor: placed at (725, 10, 40). */
-EVT_BEGIN(init_roten_2)
+static EVT_BEGIN(init_roten_2)
     CALL(evt_npc_set_position, STRING("me"), 725, 10, 40)
     RETURN
 EVT_END()
 
 /** Talk script of the second stall vendor: story-dependent lines, like talk_kino_1. */
-EVT_BEGIN(talk_roten_2)
+static EVT_BEGIN(talk_roten_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_14_01"), 0, 0)
@@ -1552,13 +1552,13 @@ EVT_BEGIN(talk_roten_2)
 EVT_END()
 
 /** NPC init for the first Lakitu (jugem): placed at (-400, 0, 625). */
-EVT_BEGIN(init_jugem_1)
+static EVT_BEGIN(init_jugem_1)
     CALL(evt_npc_set_position, STRING("me"), -400, 0, 625)
     RETURN
 EVT_END()
 
 /** Talk script of the first Lakitu: story-dependent spectator lines, like talk_kino_1. */
-EVT_BEGIN(talk_jugem_1)
+static EVT_BEGIN(talk_jugem_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_07_01"), 0, 0)
@@ -1599,14 +1599,14 @@ EVT_BEGIN(talk_jugem_1)
 EVT_END()
 
 /** NPC init for the second Lakitu: placed at (700, 10, 105), facing 340. */
-EVT_BEGIN(init_jugem_2)
+static EVT_BEGIN(init_jugem_2)
     CALL(evt_npc_set_position, STRING("me"), 700, 10, 105)
     CALL(evt_npc_set_ry, STRING("me"), 340)
     RETURN
 EVT_END()
 
 /** Talk script of the second Lakitu: story-dependent spectator lines, like talk_kino_1. */
-EVT_BEGIN(talk_jugem_2)
+static EVT_BEGIN(talk_jugem_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_13_01"), 0, 0)
@@ -1675,7 +1675,7 @@ EVT_BEGIN(init_bijyo)
 EVT_END()
 
 /** Talk script of the beauty: story-dependent spectator lines, like talk_kino_1. */
-EVT_BEGIN(talk_bijyo)
+static EVT_BEGIN(talk_bijyo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_01_11_01"), 0, 0)
@@ -1768,7 +1768,7 @@ EVT_END()
  * job 24).
  */
 // The sixth option switches pages; the other five options select digits 0..4 or 5..9.
-EVT_BEGIN(select_number)
+static EVT_BEGIN(select_number)
     SET_VALUE(LW(15), 0)
     LOOP(0)
         IF_INT_EQUAL(LW(15), 0)
@@ -2272,7 +2272,7 @@ EVT_BEGIN(evt_uron)
     RETURN
 EVT_END()
 
-USER_FUNC(eff_sleep_on) {
+static USER_FUNC(eff_sleep_on) {
     EffectEntry* eff = effNameToPtr("eff_sleep");
     NpcEntry* npc = npcNameToPtr_NoAssert("\202\275\202\334\202\262");
 
@@ -2284,7 +2284,7 @@ USER_FUNC(eff_sleep_on) {
 }
 
 /** Script helper: requests deletion of the named sleep effect. */
-USER_FUNC(eff_sleep_off) {
+static USER_FUNC(eff_sleep_off) {
     EffectEntry* eff = effNameToPtr("eff_sleep");
 
     if (eff != NULL) {
@@ -2329,7 +2329,7 @@ static USER_FUNC(rankingReset) {
  * Idle loop of the egg NPC: while the story is at STG3_11_RUNAWAY_EGG it pulses its scale between 100%
  * and 120% to look like it breathes in its sleep.
  */
-EVT_BEGIN(evt_tamago_sleep)
+static EVT_BEGIN(evt_tamago_sleep)
     LOOP(0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
             WAIT_FRAMES(1)
@@ -2359,7 +2359,7 @@ EVT_BEGIN(dummy)
 EVT_END()
 
 /** The hot dog vendor's regular (move) script, installed with evt_npc_change_interrupt type 1: repeatedly moves one tenth of the X/Z distance toward the egg. */
-EVT_BEGIN(hot_move_evt)
+static EVT_BEGIN(hot_move_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("ホットドッグ"), NPC_STATUS_FACE_MOVE_DIR)
@@ -2380,7 +2380,7 @@ EVT_BEGIN(hot_move_evt)
 EVT_END()
 
 /** The hot dog vendor's regular script variant: moves to (-288, -110) and faces the egg. */
-EVT_BEGIN(hot_move_evt2)
+static EVT_BEGIN(hot_move_evt2)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_move_position, STRING("ホットドッグ"), -288, -110, 0, FLOAT(60.0f), 1)
@@ -2392,7 +2392,7 @@ EVT_END()
  * Hot dog vendor ("oyaji", old man) walks across the plaza to the egg, speaking stg3_tou_242,
  * and then restarts his regular script.
  */
-EVT_BEGIN(evt_oyaji_move)
+static EVT_BEGIN(evt_oyaji_move)
     WAIT_MS(1000)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("ホットドッグ"), NPC_STATUS_FACE_MOVE_DIR)
@@ -2493,7 +2493,7 @@ static EVT_BEGIN(evt_tamago_scale2)
 EVT_END()
 
 /** The ten points (x, y, z) the runaway egg hops between around the plaza in evt_tamago_move. */
-s32 yoshi_data[] = {
+static s32 yoshi_data[] = {
     -340, 0, 60, -285, 0, 0, -245, 0,
     40, -295, 0, 115, -330, 0, 185, -375,
     0, 85, -430, 10, 70, -440, 10, 100,
@@ -2750,7 +2750,7 @@ EVT_END()
  * Only when LW(2) == 1 are Mario and the main partner moved with it.
  */
 // LW(0)/LW(1) are lift heights; LW(2) selects whether Mario and the main partner move with the platform.
-EVT_BEGIN(evt_gondora_updown)
+static EVT_BEGIN(evt_gondora_updown)
     SET_VALUE(LW(3), LW(0))
     SET_VALUE(LW(4), LW(1))
     IF_INT_EQUAL(LW(2), 1)
@@ -2793,7 +2793,7 @@ EVT_BEGIN(evt_gondora_updown)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_gondora_mon)
+static EVT_BEGIN(evt_gondora_mon)
     SET_VALUE(LW(3), LW(0))
     SET_VALUE(LW(4), LW(1))
     CALL(evt_mapobj_get_position, STRING("g_mon"), LW(10), LW(11), LW(12))
@@ -2939,7 +2939,7 @@ EVT_BEGIN(evt_gondora2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_search_light)
+static EVT_BEGIN(evt_search_light)
     SET_VALUE(LW(8), LW(0))
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -50, 50, 3000)
@@ -2970,7 +2970,7 @@ EVT_BEGIN(evt_search_light)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_dummy_sw)
+static EVT_BEGIN(evt_dummy_sw)
     SET_VALUE(GF(10), 1)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
@@ -3396,7 +3396,7 @@ EVT_BEGIN(evt_telbox)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_mail)
+static EVT_BEGIN(evt_mail)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), -675)
@@ -3502,7 +3502,7 @@ static USER_FUNC(delete_npc_regl_evt) {
  * sets args[3] to TRUE when the point is behind the darkness cutoff for the current camera yaw.
  */
 // Block until this point lies behind the camera-oriented darkness boundary.
-USER_FUNC(yami_oowareru_check) {
+static USER_FUNC(yami_oowareru_check) {
     EvtWord* args = event->args;
     f32 limit = evtGetFloat(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);

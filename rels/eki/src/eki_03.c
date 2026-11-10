@@ -38,7 +38,7 @@ static EvtWord w1_open[12];
 static EvtWord w2_close[12];
 static EvtWord w2_open[12];
 static BeroEntry bero_data[3];
-EvtWord evt_poster[10];
+static EvtWord evt_poster[10];
 static EvtWord evt_chk[74];
 static EvtWord evt_poster_1[7];
 static EvtWord evt_poster_2[7];
@@ -157,7 +157,7 @@ static BeroEntry bero_data[] = {
  * Advances the story to STG6_33_BLOW_THE_POSTER and switches on the door to eki_04 (bero_case_switch_on with
  * LW(0) = 1, w_bero_2). No script in this module refers to it.
  */
-EVT_BEGIN(evt_poster)
+static EVT_BEGIN(evt_poster)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(bero_case_switch_on)

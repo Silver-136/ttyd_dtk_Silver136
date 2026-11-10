@@ -17,7 +17,7 @@
 #include "pmario_sound.h"
 
 static BeroEntry bero_entry_data[2];
-EvtWord jin_09_jumpstand[21];
+static EvtWord jin_09_jumpstand[21];
 EvtWord jin_09_init_evt[214];
 
 /** Doors of this room: the east exit (e_bero) to jin_10. */
@@ -42,7 +42,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Script for the red jump stand: Mario is launched up in an arc by the stand. */
-EVT_BEGIN(jin_09_jumpstand)
+static EVT_BEGIN(jin_09_jumpstand)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_jump_jumpstand, 0, 0, 0, -10, 700, 0, 50, 0, 0, 1800, 1)
     CALL(evt_mario_key_onoff, 1)

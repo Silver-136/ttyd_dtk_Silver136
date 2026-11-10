@@ -39,7 +39,7 @@ enum {
  * Frames allowed to let go of the stick after the last light, by difficulty (80 at the easiest down to 5).
  * Used by Mario's hammer attacks and Frankly's battle lesson.
  */
-s32 ac_stickkeepleft_ok_frame[7] = {80, 70, 60, 40, 20, 10, 5};
+static s32 ac_stickkeepleft_ok_frame[7] = {80, 70, 60, 40, 20, 10, 5};
 
 static void actionCommandDisp(f32 x, f32 y, s32 unused);
 

@@ -26,7 +26,7 @@ BattleUnitKind unit_boss_cortez_saber;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
-BattleWeapon weapon_cortez_saber_float_attack;
+static BattleWeapon weapon_cortez_saber_float_attack;
 
 #if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[4];
@@ -134,7 +134,7 @@ static StatusVulnerability regist = {
 /**
  * Weapon of Cortez Sabre (float attack): targets one unit for 3 damage; used by attack_event.
  */
-BattleWeapon weapon_cortez_saber_float_attack = {
+static BattleWeapon weapon_cortez_saber_float_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

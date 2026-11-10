@@ -48,15 +48,15 @@ static EvtWord rival_init[2];
 static EvtWord rival_talk[8];
 static NpcSetupInfo npcEnt[4];
 static KusaAccess ueki_access_data[4];
-s16 trap_position[204];
-EvtWord trap_main[122];
+static s16 trap_position[204];
+static EvtWord trap_main[122];
 
 #if VERSION >= VERSION_JP
 EvtWord trap_restore[59];
 #endif
 
-EvtWord wana_kemuri[130];
-EvtWord wana_offscreen[219];
+static EvtWord wana_kemuri[130];
+static EvtWord wana_offscreen[219];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord trap_event[];
@@ -235,7 +235,7 @@ static KusaAccess ueki_access_data[] = {
 };
 
 /** Scattered (x, z) spots, as pairs of 16-bit values, where the caged Punies are placed. */
-s16 trap_position[] = {
+static s16 trap_position[] = {
     69, -22, 70, -9, 64, -11, 46, -34,
     39, -45, 56, -31, 64, -15, 39, -6,
     68, -25, 62, -28, 31, -19, 35, -9,
@@ -269,7 +269,7 @@ s16 trap_position[] = {
  * puts every Puni that was caught (trap index 1) back inside the trap at a preset position, and moves Punio,
  * his sister and the rival Puni NPCs to the cage with the Puni of the same slot.
  */
-EVT_BEGIN(trap_main)
+static EVT_BEGIN(trap_main)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)
     SET_VALUE(LW(11), 0)
@@ -332,7 +332,7 @@ EVT_END()
 #endif
 
 /** Dust puffs along the base of the trap cage at eight fixed positions when it drops. */
-EVT_BEGIN(wana_kemuri)
+static EVT_BEGIN(wana_kemuri)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, -18, 25, 76, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, 5, 10, 70, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, 23, 23, 77, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
@@ -349,7 +349,7 @@ EVT_END()
  * dust and a camera shake, then the pipe (S_dokan1) pops out of the floor next to it with its appearing sounds.
  * Both are played as captured paper animations, and the solid cage and pipe replace them at the end.
  */
-EVT_BEGIN(wana_offscreen)
+static EVT_BEGIN(wana_offscreen)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_batan"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)

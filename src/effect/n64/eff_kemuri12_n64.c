@@ -17,7 +17,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
 };
 
 /** Lava (yougan) smoke mesh with two extra quads behind the front one, used by type 1 and types above 2. */
-effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
+static effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
     {-16, -16, 15, 0, 0, 0, 0, 0, 255},
     {16, -16, 15, -1024, 0, 0, 0, 0, 255},
     {16, 16, 15, -1024, 1024, 0, 0, 0, 255},

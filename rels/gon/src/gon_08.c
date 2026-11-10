@@ -56,15 +56,15 @@ static EvtWord evt_chk[23];
 #endif
 
 static EvtWord evt_unlock[10];
-EvtWord nokkosu_init[16];
+static EvtWord nokkosu_init[16];
 
 #if VERSION >= VERSION_US
-EvtWord nokkosu_talk[226];
+static EvtWord nokkosu_talk[226];
 #else
 #if VERSION <= VERSION_DEMO_JP
-EvtWord nokkosu_talk[115];
+static EvtWord nokkosu_talk[115];
 #else
-EvtWord nokkosu_talk[157];
+static EvtWord nokkosu_talk[157];
 #endif
 #endif
 
@@ -497,7 +497,7 @@ EVT_END()
  * when that request is active he is placed on the high ledge (y 500) and faces right;
  * otherwise he stays where the map put him.
  */
-EVT_BEGIN(nokkosu_init)
+static EVT_BEGIN(nokkosu_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TRY_TO_FIND_ME)
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_position, STRING("me"), -185, 500, -165)
@@ -509,7 +509,7 @@ EVT_BEGIN(nokkosu_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(nokkosu_talk)
+static EVT_BEGIN(nokkosu_talk)
     // Koopook is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 

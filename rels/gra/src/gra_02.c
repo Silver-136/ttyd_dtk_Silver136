@@ -24,14 +24,14 @@
 
 static USER_FUNC(booboo_main);
 
-EvtWord shopmaster_pig_init[14];
-EvtWord shopmaster_talk[33];
+static EvtWord shopmaster_pig_init[14];
+static EvtWord shopmaster_talk[33];
 static EvtWord urouro_move[24];
 static NpcSetupInfo npcEnt[2];
-EvtWord w_bero_2_in[5];
+static EvtWord w_bero_2_in[5];
 static BeroEntry bero_entry_data[5];
-EvtWord gra02_get_key[5];
-EvtWord gra02_straw_blow_evt[23];
+static EvtWord gra02_get_key[5];
+static EvtWord gra02_straw_blow_evt[23];
 static const char* booboo_name[1];
 EvtWord gra_02_init_evt[86];
 
@@ -39,7 +39,7 @@ EvtWord gra_02_init_evt[86];
  * Init event of the pig shopkeeper NPC: before the Doopliss battle (STG4_10_DOOPLISS_BATTLE) he stays
  * where he is; from then on he is moved out of sight to y -2000.
  */
-EVT_BEGIN(shopmaster_pig_init)
+static EVT_BEGIN(shopmaster_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_DEFAULT
@@ -52,7 +52,7 @@ EVT_END()
  * Talk event of the pig shopkeeper (the shop owner Doopliss turned into a pig):
  * before the Doopliss battle he oinks and says stg4_gra_17, afterwards stg4_gra_18.
  */
-EVT_BEGIN(shopmaster_talk)
+static EVT_BEGIN(shopmaster_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -94,7 +94,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /** Enter event of the w_bero_2 door: just returns 0 in LW(0), so the door acts as a plain transition. */
-EVT_BEGIN(w_bero_2_in)
+static EVT_BEGIN(w_bero_2_in)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -170,7 +170,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Pickup callback of the Shop Key lying on the ground: advances the story to STG4_03_SHOP_KEY. */
-EVT_BEGIN(gra02_get_key)
+static EVT_BEGIN(gra02_get_key)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_03_SHOP_KEY)
     RETURN
 EVT_END()
@@ -179,7 +179,7 @@ EVT_END()
  * Callback run when Flurrie's wind has blown the straw off the hut:
  * plays a short success jingle over the music and advances the story to STG4_05_STRAW_TEPEE.
  */
-EVT_BEGIN(gra02_straw_blow_evt)
+static EVT_BEGIN(gra02_straw_blow_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))

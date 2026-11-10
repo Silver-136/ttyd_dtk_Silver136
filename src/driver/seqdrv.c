@@ -6,14 +6,14 @@
 #include <string.h> // memset prototype
 
 //.sdata
-SequenceType now_seq = SEQ_UNDEFINED;
-SequenceType next_seq = SEQ_UNDEFINED;
-SequenceType prev_seq = SEQ_UNDEFINED;
+static SequenceType now_seq = SEQ_UNDEFINED;
+static SequenceType next_seq = SEQ_UNDEFINED;
+static SequenceType prev_seq = SEQ_UNDEFINED;
 
 //.sbss
-SequenceWork seqWork;
-const char* next_p1;
-const char* next_p0;
+static SequenceWork seqWork;
+static const char* next_p1;
+static const char* next_p0;
 
 /**
  * Clears the sequence work and marks the current, next and previous sequences undefined;

@@ -31,7 +31,7 @@ typedef struct EffIceWork {
  * Keyframes of the ice block's root joint: it grows from its base to full size by frame 14, wobbles
  * until frame 22, then tips slightly to one side and holds.
  */
-MayaHermitKey ice_effHermit_0[] = {
+static MayaHermitKey ice_effHermit_0[] = {
     {
         0, // time
         {
@@ -126,7 +126,7 @@ MayaHermitKey ice_effHermit_0[] = {
  * Keyframes of ice shard 1 (top-left quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies up and left, spinning a full turn about Y, and shrinks away.
  */
-MayaHermitKey ice_effHermit_1[] = {
+static MayaHermitKey ice_effHermit_1[] = {
     {
         0, // time
         {
@@ -172,7 +172,7 @@ MayaHermitKey ice_effHermit_1[] = {
  * Keyframes of ice shard 2 (top-left quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies down and left, spinning a full turn about Z, and shrinks away.
  */
-MayaHermitKey ice_effHermit_2[] = {
+static MayaHermitKey ice_effHermit_2[] = {
     {
         0, // time
         {
@@ -218,7 +218,7 @@ MayaHermitKey ice_effHermit_2[] = {
  * Keyframes of ice shard 3 (top-left quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies up and left, spinning a full turn about Y, and shrinks away.
  */
-MayaHermitKey ice_effHermit_3[] = {
+static MayaHermitKey ice_effHermit_3[] = {
     {
         0, // time
         {
@@ -264,7 +264,7 @@ MayaHermitKey ice_effHermit_3[] = {
  * Keyframes of ice shard 4 (top-left quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies up and left, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_4[] = {
+static MayaHermitKey ice_effHermit_4[] = {
     {
         0, // time
         {
@@ -310,7 +310,7 @@ MayaHermitKey ice_effHermit_4[] = {
  * Keyframes of ice shard 5 (top-right quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies to the right, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_5[] = {
+static MayaHermitKey ice_effHermit_5[] = {
     {
         0, // time
         {
@@ -356,7 +356,7 @@ MayaHermitKey ice_effHermit_5[] = {
  * Keyframes of ice shard 6 (top-right quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies up and right, spinning a full turn about Z, and shrinks away.
  */
-MayaHermitKey ice_effHermit_6[] = {
+static MayaHermitKey ice_effHermit_6[] = {
     {
         0, // time
         {
@@ -402,7 +402,7 @@ MayaHermitKey ice_effHermit_6[] = {
  * Keyframes of ice shard 7 (top-right quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies to the right, spinning a full turn about Y, and shrinks away.
  */
-MayaHermitKey ice_effHermit_7[] = {
+static MayaHermitKey ice_effHermit_7[] = {
     {
         0, // time
         {
@@ -448,7 +448,7 @@ MayaHermitKey ice_effHermit_7[] = {
  * Keyframes of ice shard 8 (top-right quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies up and right, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_8[] = {
+static MayaHermitKey ice_effHermit_8[] = {
     {
         0, // time
         {
@@ -494,7 +494,7 @@ MayaHermitKey ice_effHermit_8[] = {
  * Keyframes of ice shard 9 (bottom-left quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies down and left, spinning a full turn about Z, and shrinks away.
  */
-MayaHermitKey ice_effHermit_9[] = {
+static MayaHermitKey ice_effHermit_9[] = {
     {
         0, // time
         {
@@ -540,7 +540,7 @@ MayaHermitKey ice_effHermit_9[] = {
  * Keyframes of ice shard 10 (bottom-left quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies down and left, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_10[] = {
+static MayaHermitKey ice_effHermit_10[] = {
     {
         0, // time
         {
@@ -586,7 +586,7 @@ MayaHermitKey ice_effHermit_10[] = {
  * Keyframes of ice shard 11 (bottom-left quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies down, spinning a full turn about Y, and shrinks away.
  */
-MayaHermitKey ice_effHermit_11[] = {
+static MayaHermitKey ice_effHermit_11[] = {
     {
         0, // time
         {
@@ -632,7 +632,7 @@ MayaHermitKey ice_effHermit_11[] = {
  * Keyframes of ice shard 12 (bottom-left quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies down, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_12[] = {
+static MayaHermitKey ice_effHermit_12[] = {
     {
         0, // time
         {
@@ -678,7 +678,7 @@ MayaHermitKey ice_effHermit_12[] = {
  * Keyframes of ice shard 13 (bottom-right quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies down and right, spinning a full turn about Z, and shrinks away.
  */
-MayaHermitKey ice_effHermit_13[] = {
+static MayaHermitKey ice_effHermit_13[] = {
     {
         0, // time
         {
@@ -724,7 +724,7 @@ MayaHermitKey ice_effHermit_13[] = {
  * Keyframes of ice shard 14 (bottom-right quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies down and right, spinning a full turn about Y, and shrinks away.
  */
-MayaHermitKey ice_effHermit_14[] = {
+static MayaHermitKey ice_effHermit_14[] = {
     {
         0, // time
         {
@@ -770,7 +770,7 @@ MayaHermitKey ice_effHermit_14[] = {
  * Keyframes of ice shard 15 (bottom-right quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies up and right, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_15[] = {
+static MayaHermitKey ice_effHermit_15[] = {
     {
         0, // time
         {
@@ -816,7 +816,7 @@ MayaHermitKey ice_effHermit_15[] = {
  * Keyframes of ice shard 16 (bottom-right quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies up, spinning a full turn about X, and shrinks away.
  */
-MayaHermitKey ice_effHermit_16[] = {
+static MayaHermitKey ice_effHermit_16[] = {
     {
         0, // time
         {
@@ -862,7 +862,7 @@ MayaHermitKey ice_effHermit_16[] = {
  * Keyframes of the block's translucent frost overlay, just in front of the shards: shown until the ice
  * breaks at frame 99, then gone.
  */
-MayaHermitKey ice_effHermit_17[] = {
+static MayaHermitKey ice_effHermit_17[] = {
     {
         0, // time
         {
@@ -905,7 +905,7 @@ MayaHermitKey ice_effHermit_17[] = {
 #endif
 
 /** Joints of the ice block animation: the root, the 16 face shards and the frost overlay. */
-MayaPoly ice_effAnimRST[] = {
+static MayaPoly ice_effAnimRST[] = {
     {8, ice_effHermit_0, 0, NULL},
     {3, ice_effHermit_1, 1, &ice_effFaceDt_pPlane1},
     {3, ice_effHermit_2, 1, &ice_effFaceDt_pPlane2},
@@ -931,12 +931,12 @@ MayaPoly ice_effAnimRST[] = {
 #endif
 
 /** Joint list of the ice block animation. */
-MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};
+static MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};
 /**
  * The ice block animation (119 frames), played by effIceMain: it runs to frame 90 and holds there
  * until the freeze ends, then plays on through the shatter.
  */
-MayaAnimData ice_effAnimDt = { { 0 }, 119.0f, &ice_effAnimRSTDt };
+static MayaAnimData ice_effAnimDt = { { 0 }, 119.0f, &ice_effAnimRSTDt };
 
 static void effIceMain(EffectEntry* effect);
 static void effIceDisp(CameraId cameraId, void* param);

@@ -44,16 +44,16 @@
 #define UNIT_WORK_JUMP_FRAMES_LEFT 2 // frames left in the jump (counted down by a sibling loop); the stylish AC window starts when more than 15 are left
 #define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success changes it by 24 per frame for 15 frames (-24 when FACE_DIR_TOWARD_UNIT gives >= 0, else +24)
 
-USER_FUNC(_dictionary);
+static USER_FUNC(_dictionary);
 USER_FUNC(_set_hustle);
-USER_FUNC(_monosiri_flag_on);
-USER_FUNC(btlevtcmd_get_monosiri_msg_no);
+static USER_FUNC(_monosiri_flag_on);
+static USER_FUNC(btlevtcmd_get_monosiri_msg_no);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 static USER_FUNC(krb_get_dir);
 
 PoseTableEntry pose_table_christine_stay[25];
 static BattleDataEntry data_table[8];
-BattleUnitKindPart unitpartsdata_Party_Christine[1];
+static BattleUnitKindPart unitpartsdata_Party_Christine[1];
 BattleUnitKind unitdata_Party_Christine;
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[51];
@@ -62,23 +62,23 @@ BattleWeapon partyWeapon_ChristineNormalAttack;
 BattleWeapon partyWeapon_ChristineMonosiri;
 BattleWeapon partyWeapon_ChristineRenzokuAttack;
 BattleWeapon partyWeapon_ChristineKiss;
-EvtWord partyChristineAttack_NormalAttack[824];
-EvtWord christine_dictionary_event[26];
-EvtWord partyChristineAttack_Monosiri[397];
+static EvtWord partyChristineAttack_NormalAttack[824];
+static EvtWord christine_dictionary_event[26];
+static EvtWord partyChristineAttack_Monosiri[397];
 
 #if VERSION >= VERSION_US
-EvtWord partyChristineAttack_RenzokuAttack[1078];
+static EvtWord partyChristineAttack_RenzokuAttack[1078];
 #else
-EvtWord partyChristineAttack_RenzokuAttack[1071];
+static EvtWord partyChristineAttack_RenzokuAttack[1071];
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partyChristineAttack_Kiss[442];
+static EvtWord partyChristineAttack_Kiss[442];
 #else
-EvtWord partyChristineAttack_Kiss[546];
+static EvtWord partyChristineAttack_Kiss[546];
 #endif
 
-EvtWord christine_appeal_event[71];
+static EvtWord christine_appeal_event[71];
 static EvtWord party_win_reaction[14];
 static EvtWord attack_audience_event[392];
 static BattleUnitDefense defence;
@@ -143,7 +143,7 @@ PoseTableEntry pose_table_christine_stay[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-PoseTableEntry pose_table_dictionary_page[] = {
+static PoseTableEntry pose_table_dictionary_page[] = {
     {POSE_TYPE_NORMAL, "ZYO_Z_1"},
     {31, "ZYO_Z_1"},
     {POSE_TYPE_DAMAGE, "ZYO_Z_1"},
@@ -168,7 +168,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Goombella's single body part: model c_pkr with her defence, element and pose tables. */
-BattleUnitKindPart unitpartsdata_Party_Christine[] = {
+static BattleUnitKindPart unitpartsdata_Party_Christine[] = {
     {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_christine_stay},
 };
 
@@ -465,7 +465,7 @@ BattleWeapon partyWeapon_ChristineKiss = {
  * headbonking again for each successful action command press,
  * then lands with an optional stylish and returns home.
  */
-EVT_BEGIN(partyChristineAttack_NormalAttack)
+static EVT_BEGIN(partyChristineAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -727,7 +727,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     RETURN
 EVT_END()
 
-EVT_BEGIN(christine_dictionary_event)
+static EVT_BEGIN(christine_dictionary_event)
     LABEL(0)
     CALL(_dictionary, LW(3), LW(4))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
@@ -743,7 +743,7 @@ EVT_END()
  * Goombella's Tattle: after the action command she reads the target, opens its tattle card,
  * says its tattle line, and marks the enemy as tattled so its HP shows from then on.
  */
-EVT_BEGIN(partyChristineAttack_Monosiri)
+static EVT_BEGIN(partyChristineAttack_Monosiri)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -862,7 +862,7 @@ EVT_END()
  * Goombella's Multibonk: like Headbonk, but she keeps bouncing on the same enemy for as long as the action
  * command is timed right.
  */
-EVT_BEGIN(partyChristineAttack_RenzokuAttack)
+static EVT_BEGIN(partyChristineAttack_RenzokuAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1165,7 +1165,7 @@ EVT_END()
  * with a successful action command he gets another move this turn (_set_hustle and the quick-change
  * announcement). Ends with an optional stylish.
  */
-EVT_BEGIN(partyChristineAttack_Kiss)
+static EVT_BEGIN(partyChristineAttack_Kiss)
     // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1380,7 +1380,7 @@ EVT_END()
  * Goombella's Appeal (data tag 5): appeal pose and sound, a kiss effect towards the audience,
  * then the audience is fired up.
  */
-EVT_BEGIN(christine_appeal_event)
+static EVT_BEGIN(christine_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1630,7 +1630,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
  * Returns in args[2] the battle tattle message tag of the unit kind of unit args[0].
  * args[1] (the part) is read but not used.
  */
-USER_FUNC(btlevtcmd_get_monosiri_msg_no) {
+static USER_FUNC(btlevtcmd_get_monosiri_msg_no) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 id, index;
@@ -1647,14 +1647,14 @@ USER_FUNC(btlevtcmd_get_monosiri_msg_no) {
  * Records that the unit kind of unit args[0] has been tattled,
  * which unlocks its HP display and its Tattle Log entry.
  */
-USER_FUNC(_monosiri_flag_on) {
+static USER_FUNC(_monosiri_flag_on) {
     s32 id = evtGetValue(event, event->args[0]);
 
     battleSetUnitMonosiriFlag(BattleGetUnitPtr(_battleWorkPointer, id)->currentKind);
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(_dictionary) {
+static USER_FUNC(_dictionary) {
     EvtWord* args = event->args;
     s32 selfId;
     s32 state;

@@ -93,16 +93,16 @@ typedef struct YuuNpcWork {
 } YuuNpcWork;
 static YuuNpcWork* yuunpc_wp;
 f32 yuusintbl[450];
-s32 chusan_mov_tbl[28];
-s32 chusan_act_tbl[8];
+static s32 chusan_mov_tbl[28];
+static s32 chusan_act_tbl[8];
 MiniGameWork* yuunpc_yuuminigame4_ptr;
 
-ExtTexInfo ext_yuunpc_minigame1_data[6];
-ExtTexInfo ext_yuunpc_minigame2_data[6];
-ExtTexInfo ext_yuunpc_minigame3_data[6];
-ExtTexInfo ext_yuunpc_minigame4_data[78];
-s32 chusan_mov_tbl[28];
-s32 chusan_act_tbl[8];
+static ExtTexInfo ext_yuunpc_minigame1_data[6];
+static ExtTexInfo ext_yuunpc_minigame2_data[6];
+static ExtTexInfo ext_yuunpc_minigame3_data[6];
+static ExtTexInfo ext_yuunpc_minigame4_data[78];
+static s32 chusan_mov_tbl[28];
+static s32 chusan_act_tbl[8];
 EvtWord evt_yuunpc_minigame1[69];
 EvtWord evt_yuunpc_minigame2[69];
 EvtWord evt_yuunpc_minigame3[69];
@@ -182,7 +182,7 @@ signed char hitdata[] = "0000000000000000000000000016171819111213141511222311020
  * Sprite poses of the Plane Mode audience: standing Toadette, Roten, Lakitu and Toad (c_kinopiko, c_roten,
  * c_jugemu, c_kinopio). evt_yuunpc_minigame1 registers it as the crowd's ext data.
  */
-ExtTexInfo ext_yuunpc_minigame1_data[] = {
+static ExtTexInfo ext_yuunpc_minigame1_data[] = {
     {"c_kinopiko", "KNF_S_1", 0.0f},
     {"c_roten", "S_1", 0.0f},
     {"c_jugemu", "JGM_S_1", 0.0f},
@@ -192,7 +192,7 @@ ExtTexInfo ext_yuunpc_minigame1_data[] = {
 };
 
 /** Sprite poses of the Boat Mode audience, the same four standing spectators as Plane Mode. */
-ExtTexInfo ext_yuunpc_minigame2_data[] = {
+static ExtTexInfo ext_yuunpc_minigame2_data[] = {
     {"c_kinopiko", "KNF_S_1", 0.0f},
     {"c_roten", "S_1", 0.0f},
     {"c_jugemu", "JGM_S_1", 0.0f},
@@ -202,7 +202,7 @@ ExtTexInfo ext_yuunpc_minigame2_data[] = {
 };
 
 /** Sprite poses of the Tube Mode audience, the same four standing spectators as Plane Mode. */
-ExtTexInfo ext_yuunpc_minigame3_data[] = {
+static ExtTexInfo ext_yuunpc_minigame3_data[] = {
     {"c_kinopiko", "KNF_S_1", 0.0f},
     {"c_roten", "S_1", 0.0f},
     {"c_jugemu", "JGM_S_1", 0.0f},
@@ -211,7 +211,7 @@ ExtTexInfo ext_yuunpc_minigame3_data[] = {
     {0},
 };
 
-ExtTexInfo ext_yuunpc_minigame4_data[] = {
+static ExtTexInfo ext_yuunpc_minigame4_data[] = {
     {"c_kinopiko", "KNF_S_1", 0.0f},
     {"c_roten", "S_1", 0.0f},
     {"c_jugemu", "JGM_S_1", 0.0f},
@@ -296,7 +296,7 @@ ExtTexInfo ext_yuunpc_minigame4_data[] = {
  * Idle animation of the tyusan's standing pose, 224 frames in blocks of 8: a 1 marks the blocks where
  * he plays the chusan_act_tbl frame sequence, a 0 those where he holds still (yuunpc_pose_sub).
  */
-s32 chusan_mov_tbl[] = {
+static s32 chusan_mov_tbl[] = {
     0, 0, 0, 0, 0, 0, 1, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 1, 1, 0, 0, 1, 1,
@@ -304,7 +304,7 @@ s32 chusan_mov_tbl[] = {
 };
 
 /** Standing-pose texture frame offsets the tyusan steps through within each moving 8-frame block. */
-s32 chusan_act_tbl[] = {
+static s32 chusan_act_tbl[] = {
     1, 2, 3, 3, 3, 2, 1, 0,
 };
 
@@ -314,7 +314,7 @@ s32 chusan_act_tbl[] = {
  * and hit[6][72] is a 6 by 72 grid of 50-unit cells holding the floor height,
  * with cells marked in the string set to -500 (holes).
  */
-void yuunpc_maphit_init(void) {
+static void yuunpc_maphit_init(void) {
     signed char key[3] = "■";
     s32 i;
     s32 j;
@@ -346,7 +346,7 @@ void yuunpc_maphit_init(void) {
  * frames, and the entries after the first terminator become frame-timed poses with explicit frame counts.
  * Also finds the "c_tyusan" CHU_S_1 pose and gives it 224 frames.
  */
-void yuunpc_pose_init(ExtTexInfo* data) {
+static void yuunpc_pose_init(ExtTexInfo* data) {
     char name[32];
     char anim[32];
     s32 n = 0;
@@ -402,7 +402,7 @@ void yuunpc_pose_init(ExtTexInfo* data) {
 }
 
 /** Returns the index in the pose table of the pose with this character name and animation name, or -1 if none. */
-s32 yuunpc_pose_check(const char* name, const char* anim) {
+static s32 yuunpc_pose_check(const char* name, const char* anim) {
     YuuNpcPose* pose = yuunpc_wp->pose;
     s32 i;
 
@@ -471,7 +471,7 @@ static inline void pose_change_inl(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
  * keeping the current phase when only the speed of the same pose changes.
  * For NPCs that have a real NPC entry it also restarts their animation.
  */
-void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
+static void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
     YuuNpcPose* cur = &yuunpc_wp->pose[npc->poseId];
     YuuNpcPose* pose = &yuunpc_wp->pose[id];
 
@@ -518,7 +518,7 @@ void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
  * Switches an NPC to the pose named by name and anim,
  * starting at a random frame so the crowd does not animate in step.
  */
-void yuunpc_pose_change2(YuuNpc* npc, const char* name, const char* anim, f32 speed) {
+static void yuunpc_pose_change2(YuuNpc* npc, const char* name, const char* anim, f32 speed) {
     pose_change_inl(npc, yuunpc_pose_check(name, anim), speed, rand() / 32767.0f);
 }
 
@@ -526,7 +526,7 @@ void yuunpc_pose_change2(YuuNpc* npc, const char* name, const char* anim, f32 sp
  * Sets the frame at which the named pose is held while the NPC is in the air (the pose's jump value);
  * does nothing if the pose does not exist.
  */
-void yuunpc_set_jump_pose(const char* name, const char* anim, f32 jump) {
+static void yuunpc_set_jump_pose(const char* name, const char* anim, f32 jump) {
     s32 id = yuunpc_pose_check(name, anim);
 
     if (id >= 0) {
@@ -540,7 +540,7 @@ void yuunpc_set_jump_pose(const char* name, const char* anim, f32 jump) {
  * either as the texture frame of a sprite NPC or as the local time of a real NPC's animation,
  * copying position and facing. Returns the animation phase t (0 to 1).
  */
-f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
+static f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
     YuuNpcPose* pose = &yuunpc_wp->pose[npc->poseId];
     f32 t;
     f32 a;
@@ -598,7 +598,7 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
  * and places one sprite NPC per ext slot in rows of 5 on the stands, each a random Toad, Toadette,
  * Roten or Lakitu (c_kinopio, c_kinopiko, c_roten, c_jugemu) spectator facing left or right.
  */
-void ext_yuunpc_minigame1_init(void) {
+static void ext_yuunpc_minigame1_init(void) {
     f32 ytbl[5] = {260.0f, 220.0f, 180.0f, 140.0f, 100.0f};
     f32 ztbl[8] = {-7.0f, -1.0f, 5.0f, -5.0f, 1.0f, 7.0f, -3.0f, 3.0f};
     s32 i;
@@ -657,7 +657,7 @@ void ext_yuunpc_minigame1_init(void) {
  * moves them below the floor where the stands have gaps,
  * and occasionally turns them to face the camera (or away from it); then updates each pose.
  */
-void yuunpc_pose_minigame1_main(void) {
+static void yuunpc_pose_minigame1_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
@@ -713,7 +713,7 @@ void yuunpc_pose_minigame1_main(void) {
 }
 
 /** Init callback of the Boat Mode crowd: like the Plane Mode crowd but in rows of 4 on the Boat Mode stands. */
-void ext_yuunpc_minigame2_init(void) {
+static void ext_yuunpc_minigame2_init(void) {
     f32 ytbl[4] = {170.0f, 130.0f, 90.0f, 50.0f};
     f32 ztbl[8] = {-7.0f, -1.0f, 5.0f, -5.0f, 1.0f, 7.0f, -3.0f, 3.0f};
     s32 i;
@@ -772,7 +772,7 @@ void ext_yuunpc_minigame2_init(void) {
  * moves them below the floor where the stands have gaps, occasionally turns them toward the camera,
  * and updates each pose.
  */
-void yuunpc_pose_minigame2_main(void) {
+static void yuunpc_pose_minigame2_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
@@ -839,7 +839,7 @@ void yuunpc_pose_minigame2_main(void) {
  * Init callback of the Tube Mode crowd: rows of 4 spectators on the Tube Mode stands,
  * each a random spectator type facing left or right.
  */
-void ext_yuunpc_minigame3_init(void) {
+static void ext_yuunpc_minigame3_init(void) {
     f32 ytbl[4] = {200.0f, 160.0f, 120.0f, 80.0f};
     f32 ztbl[8] = {-7.0f, -1.0f, 5.0f, -5.0f, 1.0f, 7.0f, -3.0f, 3.0f};
     s32 i;
@@ -898,7 +898,7 @@ void ext_yuunpc_minigame3_init(void) {
  * moves them below the floor where the stands have gaps, occasionally turns them toward the camera,
  * and updates each pose.
  */
-void yuunpc_pose_minigame3_main(void) {
+static void yuunpc_pose_minigame3_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
@@ -974,7 +974,7 @@ static inline s32 yuunpc_hit_get(f32 x, const f32* zp) {
  * sliding it along cell edges if it would walk into a higher wall.
  * Returns -1 when the NPC steps out over a drop (so it should start falling), else 0.
  */
-s32 hitcheck(YuuNpc* npc) {
+static s32 hitcheck(YuuNpc* npc) {
     Vec v;
     Vec p;
     f32 x, z;
@@ -1050,7 +1050,7 @@ s32 hitcheck(YuuNpc* npc) {
  * Applies gravity to a racing NPC (0.533 per frame, terminal speed 16.7)
  * and lands it on the floor height under it. Returns -1 when it lands, else 0.
  */
-s32 fallcheck(YuuNpc* npc) {
+static s32 fallcheck(YuuNpc* npc) {
     s32 out = 0;
     s32 h;
     f32 y;
@@ -1083,7 +1083,7 @@ s32 fallcheck(YuuNpc* npc) {
  * when it has reached its final goal point (within one step of movement);
  * reaching an intermediate destination just switches the target to the goal. Otherwise 0.
  */
-s32 goalincheck(YuuNpc* npc) {
+static s32 goalincheck(YuuNpc* npc) {
     f32 r = npc->speed;
     f32 dz = npc->pos.z - npc->dest.z;
     f32 dx = npc->pos.x - npc->dest.x;
@@ -1431,7 +1431,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
 }
 
 /** Init callback of the Paper Mode crowd: allocates the NPC work area and calls ext_yuunpc_minigame4_init_sub. */
-void ext_yuunpc_minigame4_init(void) {
+static void ext_yuunpc_minigame4_init(void) {
     yuunpc_wp = _mapAlloc(sizeof(YuuNpcWork));
     memset(yuunpc_wp, 0, sizeof(YuuNpcWork));
     yuunpc_wp->numNpc = extGetPoseNum();
@@ -2295,7 +2295,7 @@ void yuunpc_pose_minigame4_main(void) {
 }
 
 /** Draw callback that renders all ext sprites (the crowd and racers) with the ext driver. */
-void yuunpc_disp(CameraId camera, void* param) {
+static void yuunpc_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -2305,27 +2305,27 @@ void yuunpc_disp(CameraId camera, void* param) {
 }
 
 /** Queues yuunpc_disp for drawing. */
-void ext_yuunpc_dispent(void) {
+static void ext_yuunpc_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, yuunpc_disp, NULL);
 }
 
 /** Per-frame callback of the Plane Mode crowd ext; forwards to yuunpc_pose_minigame1_main. */
-void ext_yuunpc_minigame1_main(void) {
+static void ext_yuunpc_minigame1_main(void) {
     yuunpc_pose_minigame1_main();
 }
 
 /** Per-frame callback of the Boat Mode crowd ext; forwards to yuunpc_pose_minigame2_main. */
-void ext_yuunpc_minigame2_main(void) {
+static void ext_yuunpc_minigame2_main(void) {
     yuunpc_pose_minigame2_main();
 }
 
 /** Per-frame callback of the Tube Mode crowd ext; forwards to yuunpc_pose_minigame3_main. */
-void ext_yuunpc_minigame3_main(void) {
+static void ext_yuunpc_minigame3_main(void) {
     yuunpc_pose_minigame3_main();
 }
 
 /** Per-frame callback of the Paper Mode crowd ext; forwards to yuunpc_pose_minigame4_main. */
-void ext_yuunpc_minigame4_main(void) {
+static void ext_yuunpc_minigame4_main(void) {
     yuunpc_pose_minigame4_main();
 }
 

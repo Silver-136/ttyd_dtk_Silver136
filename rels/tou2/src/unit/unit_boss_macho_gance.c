@@ -36,7 +36,7 @@ static USER_FUNC(x_flag_add);
 static USER_FUNC(x_flag_set);
 static USER_FUNC(wariai_enzan_0f);
 static USER_FUNC(wariai_enzan_0);
-USER_FUNC(wariai_enzan_1f_intpl_w);
+static USER_FUNC(wariai_enzan_1f_intpl_w);
 static USER_FUNC(wariai_enzan_1f_intpl);
 static USER_FUNC(wariai_enzan_1f);
 static USER_FUNC(wariai_enzan_1);
@@ -55,21 +55,21 @@ static BattleDataEntry data_table[15];
 #endif
 
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_gance_macho_speed;
-BattleWeapon weapon_gance_build_up;
-BattleWeapon weapon_gance_body;
-BattleWeapon weapon_gance_footwork;
-BattleWeapon weapon_gance_attack;
-BattleWeapon weapon_gance_posing;
-BattleWeapon weapon_gance_rariat_attack;
-BattleWeapon weapon_gance_body_attack;
-EvtWord macho_gance_zoom[65];
-EvtWord macho_gance_blur_zoom[46];
+static BattleWeapon weapon_gance_macho_speed;
+static BattleWeapon weapon_gance_build_up;
+static BattleWeapon weapon_gance_body;
+static BattleWeapon weapon_gance_footwork;
+static BattleWeapon weapon_gance_attack;
+static BattleWeapon weapon_gance_posing;
+static BattleWeapon weapon_gance_rariat_attack;
+static BattleWeapon weapon_gance_body_attack;
+static EvtWord macho_gance_zoom[65];
+static EvtWord macho_gance_blur_zoom[46];
 static EvtWord mario_party_zoom[34];
 static EvtWord init_event[79];
 static EvtWord entry_event[62];
 static EvtWord damage_event[97];
-EvtWord base_size_change[99];
+static EvtWord base_size_change[99];
 static EvtWord phase_event[482];
 static EvtWord dead_event[64];
 
@@ -78,14 +78,14 @@ EvtWord macho_gance_damage_event[238];
 #endif
 
 static EvtWord attack_event[151];
-EvtWord gance_macho_speed_attack_event[119];
-EvtWord gance_build_up_attack_event[119];
-EvtWord gance_body_attack_event[126];
-EvtWord gance_footwork_attack_event[119];
-EvtWord gance_attack_attack_event[541];
-EvtWord gance_posing_attack_event[129];
-EvtWord gance_rariat_attack_attack_event[446];
-EvtWord gance_body_attack_attack_event[515];
+static EvtWord gance_macho_speed_attack_event[119];
+static EvtWord gance_build_up_attack_event[119];
+static EvtWord gance_body_attack_event[126];
+static EvtWord gance_footwork_attack_event[119];
+static EvtWord gance_attack_attack_event[541];
+static EvtWord gance_posing_attack_event[129];
+static EvtWord gance_rariat_attack_attack_event[446];
+static EvtWord gance_body_attack_attack_event[515];
 static EvtWord wait_event[6];
 
 /**
@@ -256,7 +256,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of Macho Grubba's Macho Speed (shout stg3_tou_471_01): no HP damage; Fast for 4 turns on himself. */
-BattleWeapon weapon_gance_macho_speed = {
+static BattleWeapon weapon_gance_macho_speed = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -294,7 +294,7 @@ BattleWeapon weapon_gance_macho_speed = {
 };
 
 /** Weapon of Macho Grubba's Macho build-up (shout stg3_tou_471_03): no HP damage; attack +3 for 1 turn. */
-BattleWeapon weapon_gance_build_up = {
+static BattleWeapon weapon_gance_build_up = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -333,7 +333,7 @@ BattleWeapon weapon_gance_build_up = {
 };
 
 /** Weapon of Macho Grubba's Macho Body (shout stg3_tou_471_05): no HP damage; defence +3 for 2 turns. */
-BattleWeapon weapon_gance_body = {
+static BattleWeapon weapon_gance_body = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -373,7 +373,7 @@ BattleWeapon weapon_gance_body = {
 };
 
 /** Weapon of Macho Grubba's Macho Footwork (shout stg3_tou_471_07): no HP damage; Dodgy for 2 turns. */
-BattleWeapon weapon_gance_footwork = {
+static BattleWeapon weapon_gance_footwork = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -411,7 +411,7 @@ BattleWeapon weapon_gance_footwork = {
 };
 
 /** Weapon of Macho Grubba's hip drop: 4 damage, jump-type contact attack. */
-BattleWeapon weapon_gance_attack = {
+static BattleWeapon weapon_gance_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -448,7 +448,7 @@ BattleWeapon weapon_gance_attack = {
 };
 
 /** Weapon of Macho Grubba's Macho charge (named posing in the code; shout stg3_tou_471_09): charge +4. */
-BattleWeapon weapon_gance_posing = {
+static BattleWeapon weapon_gance_posing = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -485,7 +485,7 @@ BattleWeapon weapon_gance_posing = {
 };
 
 /** Weapon of Macho Grubba's lariat: 4 damage. */
-BattleWeapon weapon_gance_rariat_attack = {
+static BattleWeapon weapon_gance_rariat_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -522,7 +522,7 @@ BattleWeapon weapon_gance_rariat_attack = {
 };
 
 /** Weapon of Macho Grubba's Macho Body Press (shout stg3_tou_471_13): 4 damage, jump-type contact attack. */
-BattleWeapon weapon_gance_body_attack = {
+static BattleWeapon weapon_gance_body_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -563,7 +563,7 @@ BattleWeapon weapon_gance_body_attack = {
  * Battle camera move to frame Macho Grubba: LW(0) = 2 snaps instantly, anything else moves in over 30 frames;
  * the framing depends on how big he currently is. LW(0) = 1 also waits 600 ms for the camera to settle.
  */
-EVT_BEGIN(macho_gance_zoom)
+static EVT_BEGIN(macho_gance_zoom)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(2))
     MULTIPLY_FLOAT(LW(2), FLOAT(10.0f))
     CALL(btlevtcmd_GetUnitWorkFloat, UNIT_ID_SELF, UNIT_WORK_BASE_SCALE, LW(1))
@@ -589,7 +589,7 @@ EVT_END()
  * Same idea as macho_gance_zoom but with a screen blur:
  * moves the camera close to Macho Grubba and starts a radial blur; LW(0) = 1 waits 900 ms.
  */
-EVT_BEGIN(macho_gance_blur_zoom)
+static EVT_BEGIN(macho_gance_blur_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 48)
@@ -727,7 +727,7 @@ EVT_END()
  * the hit offset becomes (26, 77, 0) times (ratio - 1), the hit cursor offset (25, 81, 0) times (ratio - 1),
  * and the HP gauge offset is multiplied by the ratio. phase_event uses it when he swells to 1.3 times his size.
  */
-EVT_BEGIN(base_size_change)
+static EVT_BEGIN(base_size_change)
     CALL(btlevtcmd_GetUnitWorkFloat, UNIT_ID_SELF, UNIT_WORK_BASE_SCALE, LW(1))
     CALL(btlevtcmd_SetUnitWorkFloat, UNIT_ID_SELF, UNIT_WORK_BASE_SCALE, LW(0))
     DIVIDE_FLOAT(LW(0), LW(1))
@@ -1120,7 +1120,7 @@ EVT_END()
  * used whenever he is not Fast: he flexes, poses in a flare of light, pays the cost,
  * sets unit work 2 to 1 (so damage_event restores the camera afterwards) and applies the weapon to himself.
  */
-EVT_BEGIN(gance_macho_speed_attack_event)
+static EVT_BEGIN(gance_macho_speed_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1154,7 +1154,7 @@ EVT_END()
  * he flexes and poses in a flare of light, sets unit work 2 to 2 (so damage_event restores the camera
  * afterwards) and applies the weapon to himself.
  */
-EVT_BEGIN(gance_build_up_attack_event)
+static EVT_BEGIN(gance_build_up_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1188,7 +1188,7 @@ EVT_END()
  * he flexes and poses twice in a flare of light,
  * sets unit work 2 to 3 (so damage_event restores the camera afterwards) and applies the weapon to himself.
  */
-EVT_BEGIN(gance_body_attack_event)
+static EVT_BEGIN(gance_body_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1224,7 +1224,7 @@ EVT_END()
  * he flexes and poses in a flare of light, sets unit work 2 to 4 (so damage_event restores the camera
  * afterwards) and applies the weapon to himself.
  */
-EVT_BEGIN(gance_footwork_attack_event)
+static EVT_BEGIN(gance_footwork_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1258,7 +1258,7 @@ EVT_END()
  * he poses in a flare of light, walks 250 units back from his home spot, runs back to it,
  * jumps from there onto the target and lands with a hip drop that hits once, bounces off, and walks back home.
  */
-EVT_BEGIN(gance_attack_attack_event)
+static EVT_BEGIN(gance_attack_attack_event)
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1425,7 +1425,7 @@ EVT_END()
  * he flexes and pumps his fists in a flare of light,
  * sets unit work 2 to 6 (so damage_event restores the camera afterwards) and applies the weapon to himself.
  */
-EVT_BEGIN(gance_posing_attack_event)
+static EVT_BEGIN(gance_posing_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1463,7 +1463,7 @@ EVT_END()
  * he poses in a flare of light, then charges across the party with his arm out,
  * hitting each selected target once as he reaches it, and walks back home.
  */
-EVT_BEGIN(gance_rariat_attack_attack_event)
+static EVT_BEGIN(gance_rariat_attack_attack_event)
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1618,7 +1618,7 @@ EVT_END()
  * he poses, spins around, leaps at the target rolling forward in the air
  * and lands on it with a hip drop that hits once, bounces off, and walks back home.
  */
-EVT_BEGIN(gance_body_attack_attack_event)
+static EVT_BEGIN(gance_body_attack_attack_event)
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1860,7 +1860,7 @@ static USER_FUNC(wariai_enzan_0) {
  * The mirrored branch of the second curve takes its mode from args[5] rather than args[6].
  * Not called in this unit.
  */
-USER_FUNC(wariai_enzan_1f_intpl_w) {
+static USER_FUNC(wariai_enzan_1f_intpl_w) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
     f32 b = evtGetFloat(event, args[1]);

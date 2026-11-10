@@ -19,7 +19,7 @@
 #include "dolphin/mtx.h"
 #include "evt/evt_bero.h"
 
-USER_FUNC(hit_move);
+static USER_FUNC(hit_move);
 
 static EvtWord s_close[12];
 static EvtWord s_open[12];
@@ -75,7 +75,7 @@ static BeroEntry bero_data[] = {
  * while Mario stands on a rotating contraption piece (a hit object flagged 0x30),
  * carries him around with it by turning the piece's rotation since the last frame into mario->floorMove.
  */
-USER_FUNC(hit_move) {
+static USER_FUNC(hit_move) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit = mario->hitobjStandOn;
     Mtx rot;

@@ -505,7 +505,7 @@ struct {
     0,
 };
 
-const u16 dspMixerCyclesMain[16] = {
+static const u16 dspMixerCyclesMain[16] = {
     0, 760, 760, 1470, 760, 1520, 1520, 2230, 0, 1265, 1265, 2470, 1265, 2530, 2530, 3735,
 };
 

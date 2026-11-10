@@ -33,7 +33,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-BeroEntry bero_bluejail[1];
+static BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -60,12 +60,12 @@ static EvtWord breakyuka_init[17];
 
 static EvtWord breakyuka_main[9];
 static KusaAccess ueki_access_data[6];
-EvtWord slot00_event[52];
-EvtWord slot01_event[52];
-EvtWord slot02_event[52];
-EvtWord slot03_event[52];
-EvtWord slot_event[66];
-EvtWord get_blue_jail_key[143];
+static EvtWord slot00_event[52];
+static EvtWord slot01_event[52];
+static EvtWord slot02_event[52];
+static EvtWord slot03_event[52];
+static EvtWord slot_event[66];
+static EvtWord get_blue_jail_key[143];
 
 #if VERSION >= VERSION_US
 EvtWord mri_09_init_evt[230];
@@ -78,7 +78,7 @@ EvtWord mri_09_init_evt[228];
 #endif
 
 /** Exit of mri_09: west road w_bero to mri_03. */
-BeroEntry bero_bluejail[] = {
+static BeroEntry bero_bluejail[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
@@ -329,7 +329,7 @@ static KusaAccess ueki_access_data[] = {
  * Hit script of red switch 0: while the puzzle is not solved,
  * each hit turns the first panel (GW(0)) by 90 degrees over half a second.
  */
-EVT_BEGIN(slot00_event)
+static EVT_BEGIN(slot00_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
@@ -354,7 +354,7 @@ EVT_BEGIN(slot00_event)
 EVT_END()
 
 /** Hit script of red switch 1: turns the second panel (GW(1)) by 90 degrees over half a second. */
-EVT_BEGIN(slot01_event)
+static EVT_BEGIN(slot01_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
@@ -379,7 +379,7 @@ EVT_BEGIN(slot01_event)
 EVT_END()
 
 /** Hit script of red switch 2: turns the third panel (GW(2)) by 90 degrees over half a second. */
-EVT_BEGIN(slot02_event)
+static EVT_BEGIN(slot02_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
@@ -404,7 +404,7 @@ EVT_BEGIN(slot02_event)
 EVT_END()
 
 /** Hit script of red switch 3: turns the fourth panel (GW(3)) by 90 degrees over half a second. */
-EVT_BEGIN(slot03_event)
+static EVT_BEGIN(slot03_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
@@ -433,7 +433,7 @@ EVT_END()
  * keeps their rotation up to date and starts wall_roll
  * when the panels show the correct pattern (270, 180, 0, 90).
  */
-EVT_BEGIN(slot_event)
+static EVT_BEGIN(slot_event)
     SET_VALUE(GW(0), 0)
 #if VERSION >= VERSION_US
     SET_VALUE(GW(1), 90)
@@ -470,7 +470,7 @@ EVT_END()
  * Chest script for the Blue Key: Mario opens the chest and receives the Blue Key, Punio comments,
  * and the west exit is changed to lead to the blue cell. Sets the story to STG2_18_JABBLE.
  */
-EVT_BEGIN(get_blue_jail_key)
+static EVT_BEGIN(get_blue_jail_key)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_BLUE_KEY, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)

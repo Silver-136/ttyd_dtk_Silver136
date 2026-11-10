@@ -36,7 +36,7 @@ static void effButterflyMain(EffectEntry* effect);
 static void effButterflyDisp(CameraId cameraId, void* param);
 
 /** Butterfly wing poses: one six-vertex set per bob step, with the wing tips rising set by set so the wings flap. */
-effN64Vtx but_02_v[] = {
+static effN64Vtx but_02_v[] = {
     {0, 0, 250, 0, 2048, 255, 255, 255, 255},
     {318, 31, 250, 1024, 2048, 255, 255, 255, 255},
     {318, 31, -254, 1024, 0, 255, 255, 255, 255},

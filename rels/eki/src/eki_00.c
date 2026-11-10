@@ -182,7 +182,7 @@ static EvtWord evt_origami[198];
 static EvtWord evt_moamoa_init[29];
 static EvtWord evt_meet_moamoa[215];
 static EvtWord evt_moamoa_escape[47];
-EvtWord evt_elv_rumble[60];
+static EvtWord evt_elv_rumble[60];
 static EvtWord evt_elv_init[49];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -201,7 +201,7 @@ extern EvtWord evt_elv[];
 EvtWord evt_elv[61];
 #endif
 
-EvtWord evt_elv_nomsg[14];
+static EvtWord evt_elv_nomsg[14];
 static EvtWord evt_head[42];
 static EvtWord evt_kanban[14];
 EvtWord eki_00_init_evt[99];
@@ -1674,7 +1674,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     RETURN
 EVT_END()
 
-s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
+static s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     u8 r = evtGetValue(event, args[1]);
@@ -1692,7 +1692,7 @@ s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
  * and again near the end of the ride animation (anm_ere_1 going down, anm_ere_2 going up),
  * timed from the animation length.
  */
-EVT_BEGIN(evt_elv_rumble)
+static EVT_BEGIN(evt_elv_rumble)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_map_checkanim, STRING("anm_ere_1"), LW(0), LW(1))
     ELSE
@@ -2126,7 +2126,7 @@ EVT_END()
  * Case event on the elevator switch while Mario does not have the key yet:
  * prints the message stg6_eki_06 (there is a hole for the Elevator Key, but Mario does not have it).
  */
-EVT_BEGIN(evt_elv_nomsg)
+static EVT_BEGIN(evt_elv_nomsg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg6_eki_06"), 0, 0)
     CALL(evt_mario_key_onoff, 1)

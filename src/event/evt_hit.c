@@ -7,7 +7,7 @@
 #include "memory.h"
 #include <string.h>
 
-HitDamageReturn* hitDmgretPtr;
+static HitDamageReturn* hitDmgretPtr;
 
 /**
  * Enables (args[2] nonzero) or disables the collision of hit object args[0],

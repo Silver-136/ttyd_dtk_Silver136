@@ -29,7 +29,7 @@
 
 static s32 ssf;
 
-USER_FUNC(puni_get_id);
+static USER_FUNC(puni_get_id);
 static USER_FUNC(ss_check);
 static USER_FUNC(ss_set);
 
@@ -44,8 +44,8 @@ EvtWord water_shikake[312];
 #endif
 
 EvtWord bar_shikake[7];
-EvtWord bar_shikake_up[7];
-EvtWord switch_up_down[106];
+static EvtWord bar_shikake_up[7];
+static EvtWord switch_up_down[106];
 static HitDamageReturn hitDmgRetPoints[5];
 static EvtWord mobj_box00[34];
 EvtWord mri_16_init_evt[282];
@@ -75,7 +75,7 @@ static USER_FUNC(ss_set) {
 }
 
 /** Returns in args[1] the index stored in the Puni data of the slot args[0]. */
-USER_FUNC(puni_get_id) {
+static USER_FUNC(puni_get_id) {
     s32 offset;
     EvtWord* args = event->args;
     PuniData* puni;
@@ -338,7 +338,7 @@ EVT_BEGIN(bar_shikake)
 EVT_END()
 
 /** Hit script of the bar switch when Mario gets off it: sets the bar-switch state to 2 so the bar rises again. */
-EVT_BEGIN(bar_shikake_up)
+static EVT_BEGIN(bar_shikake_up)
     DEBUG_PUT_MSG(STRING("のらなかったとき"))
     CALL(ss_set, 2)
     RETURN
@@ -349,7 +349,7 @@ EVT_END()
  * and lets it rise back (state 2), moving the blue switch box (mobj00) with it
  * until the water switch is pressed.
  */
-EVT_BEGIN(switch_up_down)
+static EVT_BEGIN(switch_up_down)
     SET_FLOAT_VALUE(LW(2), FLOAT(0.0f))
     IF_INT_EQUAL(GSWF_MRI_16_WATER_SWITCH_PRESSED, 0)
         CALL(evt_mobj_get_y_position, STRING("mobj00"), LW(3))

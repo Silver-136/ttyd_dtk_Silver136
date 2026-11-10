@@ -35,10 +35,10 @@ static f32 offset_tbl[] = {
 };
 
 //.sbss
-DispEntry* currentWorkPtr;
-s32 entry_n;
-DispEntry** pSortWork;
-DispEntry* pDispWork;
+static DispEntry* currentWorkPtr;
+static s32 entry_n;
+static DispEntry** pSortWork;
+static DispEntry* pDispWork;
 
 // local prototypes
 static s32 _sort(const void* sortA, const void* sortB);

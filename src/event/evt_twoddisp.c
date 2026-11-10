@@ -25,8 +25,8 @@ typedef struct TwodEntry {
     u8 pad[0x34 - 0x2C];
 } TwodEntry;
 
-TwodEntry* twodPtr;
-s32 twodID;
+static TwodEntry* twodPtr;
+static s32 twodID;
 
 /**
  * Draws every visible 2D overlay entry: an icon, or (id top bit set) a text string with a black shadow,

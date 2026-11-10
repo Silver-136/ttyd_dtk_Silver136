@@ -79,19 +79,19 @@ static u32 moamoa_rand_prev;
 static u32 moamoa_rand_cur;
 #endif
 
-void moamoa_mainUnitIdClear(void);
+static void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
-USER_FUNC(moamoa1_on);
-void moamoa_draw(CameraId cameraId, void* param);
+static USER_FUNC(moamoa1_on);
+static void moamoa_draw(CameraId cameraId, void* param);
 
-USER_FUNC(moamoa_on);
-USER_FUNC(moamoa_set_bodyScale);
+static USER_FUNC(moamoa_on);
+static USER_FUNC(moamoa_set_bodyScale);
 static void ext_moamoa_main(void);
 static void ext_moamoa_init(void);
-USER_FUNC(moamoa2_on);
-USER_FUNC(moamoa_bomb);
-USER_FUNC(moamoa_guruguru);
-USER_FUNC(evt_moamoa_mainUnitIdClear);
+static USER_FUNC(moamoa2_on);
+static USER_FUNC(moamoa_bomb);
+static USER_FUNC(moamoa_guruguru);
+static USER_FUNC(evt_moamoa_mainUnitIdClear);
 extern BattleUnitKind unit_boss_moamoa_mouth;
 extern BattleUnitKind unit_boss_moamoa_tentacle_a;
 extern BattleUnitKind unit_boss_moamoa_tentacle_b;
@@ -107,18 +107,18 @@ PoseTableEntry moamoa1_pose_table[4];
 PoseTableEntry moamoa1_weakness_pose_table[4];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
-BattleUnitSetup entry_boss_moamoa_tentacle_a;
-BattleUnitSetup entry_boss_moamoa_tentacle_b;
-BattleUnitSetup entry_boss_moamoa_tentacle_c;
-BattleUnitSetup entry_boss_moamoa_mouth;
-BattleWeapon weapon_moamoa_tsunami_attack;
-EvtWord moamoa_zoom[34];
+static BattleUnitSetup entry_boss_moamoa_tentacle_a;
+static BattleUnitSetup entry_boss_moamoa_tentacle_b;
+static BattleUnitSetup entry_boss_moamoa_tentacle_c;
+static BattleUnitSetup entry_boss_moamoa_mouth;
+static BattleWeapon weapon_moamoa_tsunami_attack;
+static EvtWord moamoa_zoom[34];
 static EvtWord mario_party_zoom[34];
 static EvtWord init_event[159];
 static EvtWord damage_event[10];
-const char* MOAMOA_TAIJOU[4];
+static const char* MOAMOA_TAIJOU[4];
 static EvtWord dead_event[349];
-const char* moamoa2_change_tbl[7];
+static const char* moamoa2_change_tbl[7];
 EvtWord moamoa_tentacl_on[208];
 EvtWord moamoa_mouth_on[132];
 static EvtWord phase_event[159];
@@ -126,7 +126,7 @@ static EvtWord attack_event[19];
 static EvtWord wait_event[6];
 static ExtTexInfo ext_moamoa_data[89];
 static EvtWord evt_moamoa[151];
-EvtWord MOAMOA_SET_BODYSCALE[4];
+static EvtWord MOAMOA_SET_BODYSCALE[4];
 
 /**
  * Script helper for the Smorg boss's tentacle and mouth units:
@@ -154,7 +154,7 @@ USER_FUNC(boss_moamoa_check_zenei_kouei) {
  * Script helper: forgets the Smorg main body's unit id in the swarm work area (wp->unitId = -1),
  * so ext_moamoa_main stops placing the swarm on the body and runs its swirl branch once the boss is dead.
  */
-USER_FUNC(evt_moamoa_mainUnitIdClear) {
+static USER_FUNC(evt_moamoa_mainUnitIdClear) {
     moamoa_mainUnitIdClear();
     return 2;
 }
@@ -193,7 +193,7 @@ f32 moamoa_randf(f32 min, f32 max) {
  * Clears the Smorg main body's unit id in the swarm work area (wp->unitId = -1).
  * Called from evt_moamoa_mainUnitIdClear.
  */
-void moamoa_mainUnitIdClear(void) {
+static void moamoa_mainUnitIdClear(void) {
     wp->unitId = -1;
 }
 
@@ -362,7 +362,7 @@ static BattleUnitKindPart parts[] = {
 /**
  * Spawn setup for Smorg's tentacle A: starts off-screen on the enemy side; the main body moves it into place.
  */
-BattleUnitSetup entry_boss_moamoa_tentacle_a = {
+static BattleUnitSetup entry_boss_moamoa_tentacle_a = {
     &unit_boss_moamoa_tentacle_a, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -376,7 +376,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_a = {
 /**
  * Spawn setup for Smorg's tentacle B: starts off-screen on the enemy side; the main body moves it into place.
  */
-BattleUnitSetup entry_boss_moamoa_tentacle_b = {
+static BattleUnitSetup entry_boss_moamoa_tentacle_b = {
     &unit_boss_moamoa_tentacle_b, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -390,7 +390,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_b = {
 /**
  * Spawn setup for Smorg's tentacle C: starts off-screen on the enemy side; the main body moves it into place.
  */
-BattleUnitSetup entry_boss_moamoa_tentacle_c = {
+static BattleUnitSetup entry_boss_moamoa_tentacle_c = {
     &unit_boss_moamoa_tentacle_c, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -405,7 +405,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_c = {
  * Spawn setup for Smorg's mouth: starts off-screen on the enemy side;
  * the main body moves it onto its own position.
  */
-BattleUnitSetup entry_boss_moamoa_mouth = {
+static BattleUnitSetup entry_boss_moamoa_mouth = {
     &unit_boss_moamoa_mouth, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -417,7 +417,7 @@ BattleUnitSetup entry_boss_moamoa_mouth = {
 };
 
 /** Weapon of the Smorg's tsunami: 0 damage. */
-BattleWeapon weapon_moamoa_tsunami_attack = {
+static BattleWeapon weapon_moamoa_tsunami_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -462,7 +462,7 @@ BattleWeapon weapon_moamoa_tsunami_attack = {
  * LW(0) selects the speed: 1 waits 600 ms after starting the move, 2 jumps there in a single frame,
  * anything else takes 30 frames.
  */
-EVT_BEGIN(moamoa_zoom)
+static EVT_BEGIN(moamoa_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
@@ -553,7 +553,7 @@ EVT_END()
  * Animation names (S_1_2, then L_1_4; NULL separates steps) Smorg's body plays, in order,
  * during its defeat sequence.
  */
-const char* MOAMOA_TAIJOU[] = {
+static const char* MOAMOA_TAIJOU[] = {
     "S_1_2",
     NULL,
     "L_1_4",
@@ -673,7 +673,7 @@ EVT_END()
 /**
  * Animation names (L_2_1, L_2_3, L_2_4, L_2_5, then S_2) Smorg's mouth plays in order while it changes into its second form.
  */
-const char* moamoa2_change_tbl[] = {
+static const char* moamoa2_change_tbl[] = {
     "L_2_1",
     "L_2_3",
     NULL,
@@ -967,7 +967,7 @@ static ExtTexInfo ext_moamoa_data[] = {
  * Script helper used at the Smorg's death: collects the Moamoa that are above ground, finds their center,
  * and gives each a starting angle (22.4 degrees apart) so they can swirl (guruguru) around it.
  */
-USER_FUNC(moamoa_guruguru) {
+static USER_FUNC(moamoa_guruguru) {
     s32 i;
     ExtMoamoa* elem;
     ExtdrvPose* pose;
@@ -1022,7 +1022,7 @@ USER_FUNC(moamoa_guruguru) {
  * and finishes (returns done) once at most nine Moamoa remain above -200,
  * so the swarm scatters like an explosion.
  */
-USER_FUNC(moamoa_bomb) {
+static USER_FUNC(moamoa_bomb) {
     ExtdrvPose* p2;
     ExtMoamoa* e2;
     s32 k;
@@ -1099,7 +1099,7 @@ USER_FUNC(moamoa_bomb) {
  * and assigns each Moamoa's chain to the tentacle it belongs to (chains 0 to 4, 5 to 9 and 10 to 14)
  * or to the main body, recording which unit's work slot owns it.
  */
-USER_FUNC(moamoa1_on) {
+static USER_FUNC(moamoa1_on) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
     s32 i;
     BattleUnitPart* part;
@@ -1155,7 +1155,7 @@ USER_FUNC(moamoa1_on) {
  * Looks up the mouth pose (unit work 6), hides its joints,
  * and assigns the Moamoa of chains 15 to 29 to the mouth and all others to the main body.
  */
-USER_FUNC(moamoa2_on) {
+static USER_FUNC(moamoa2_on) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
     ExtMoamoa* elem;
     AnimationPose* ap;
@@ -1197,7 +1197,7 @@ USER_FUNC(moamoa2_on) {
  * sets up the bone chains and the animation groups from ext_moamoa_data,
  * and attaches the chains to the tentacles (moamoa1_on); types 1 to 9 select alternate Moamoa and passenger models.
  */
-USER_FUNC(moamoa_on) {
+static USER_FUNC(moamoa_on) {
     s32 i;
     ExtMoamoa* elem;
     ExtTexInfo* d;
@@ -1362,7 +1362,7 @@ static EVT_BEGIN(evt_moamoa)
     RETURN
 EVT_END()
 
-void moamoa_pose(ExtMoamoa* elem) {
+static void moamoa_pose(ExtMoamoa* elem) {
     static const char* group_tbl[][2] = {
         {"c_n_moa_a", "S_1"},
         {"c_n_moa_b", "S_1"},
@@ -1419,7 +1419,7 @@ static void ext_moamoa_init(void) {
  * Event run beside the main body's script: calls moamoa_set_bodyScale to resize the body Moamoa as tentacles
  * and mouth are lost.
  */
-EVT_BEGIN(MOAMOA_SET_BODYSCALE)
+static EVT_BEGIN(MOAMOA_SET_BODYSCALE)
     CALL(moamoa_set_bodyScale)
     RETURN
 EVT_END()
@@ -1546,7 +1546,7 @@ static void ext_moamoa_main(void) {
 }
 
 /** Draw callback of the boss swarm: loads the ext driver state and draws all sprites. */
-void moamoa_draw(CameraId cameraId, void* param) {
+static void moamoa_draw(CameraId cameraId, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -1562,7 +1562,7 @@ void moamoa_draw(CameraId cameraId, void* param) {
  * a missing mouth counts 3). Removes the effect if the main body no longer exists.
  */
 // Missing mouth contributes three, each missing tentacle one; the target scale follows their sum.
-USER_FUNC(moamoa_set_bodyScale) {
+static USER_FUNC(moamoa_set_bodyScale) {
     BattleUnit* unit;
     s32 n;
 

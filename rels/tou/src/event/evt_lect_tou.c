@@ -109,7 +109,7 @@ static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-EvtWord yoshi_party_lecture_init[43];
+static EvtWord yoshi_party_lecture_init[43];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord yoshi_party_lecture[];
@@ -120,8 +120,8 @@ EvtWord yoshi_party_lecture[271];
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[474];
 EvtWord hammer_lv2_juyoitem_lecture_init[104];
-EvtWord hammer_lv2_juyoitem_lecture_sub01[29];
-EvtWord hammer_lv2_juyoitem_lecture_sub02[65];
+static EvtWord hammer_lv2_juyoitem_lecture_sub01[29];
+static EvtWord hammer_lv2_juyoitem_lecture_sub02[65];
 EvtWord hammer_lv2_juyoitem_lecture[682];
 EvtWord all_juyoitem_lecture_rel[252];
 
@@ -473,7 +473,7 @@ static USER_FUNC(effitemget_busaiku) {
  * Sets up the Yoshi lecture: Mario faces right, the camera is placed relative to him,
  * and the partner is positioned and turned for the demonstration.
  */
-EVT_BEGIN(yoshi_party_lecture_init)
+static EVT_BEGIN(yoshi_party_lecture_init)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 40)
@@ -786,7 +786,7 @@ EVT_END()
  * Super Hammer tutorial prompt, part 1: button 0 (B, blinking) bright and button 1 dimmed;
  * animates button 0's icon between two frames every 300 ms until the script is stopped.
  */
-EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub01)
+static EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
     CALL(lecture_button_set_icon_id, 1, ICON_STICK_NEUTRAL)
@@ -799,7 +799,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub02)
+static EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)
     CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_B_PRESSED)

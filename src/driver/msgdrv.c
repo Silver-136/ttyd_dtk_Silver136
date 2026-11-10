@@ -60,7 +60,7 @@ typedef struct MsgIcon {
 } MsgIcon;
 
 //.data
-MsgIcon msgIcon[] = {
+static MsgIcon msgIcon[] = {
     {"PAD_A", ICON_BUTTON_A},
     {"PAD_B", ICON_BUTTON_B},
     {"STICK_LEFT", ICON_STICK_LEFT},
@@ -83,7 +83,7 @@ MsgIcon msgIcon[] = {
 
 /** Sound effects of the message windows by window type: the sound when it opens, then the one when it closes. */
 #if VERSION >= VERSION_JP
-s32 msgWindowOpen_SE_Data[] = {
+static s32 msgWindowOpen_SE_Data[] = {
     PSND_SFX_WINDOW_NORMAL_OPEN1, PSND_SFX_WINDOW_NORMAL_CLOSE1, PSND_SFX_WINDOW_WHISPER_OPEN1, PSND_SFX_WINDOW_WHISPER_CLOSE1, PSND_SFX_WINDOW_SIGNBOARD_OPEN1, PSND_SFX_WINDOW_SIGNBOARD_CLOSE1, PSND_SFX_WINDOW_SYSTEM_OPEN1, PSND_SFX_WINDOW_SYSTEM_CLOSE1,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
     0x24, 0x25, 0x26, 0x27, 0x1E, 0x1F, -1, -1
@@ -91,24 +91,24 @@ s32 msgWindowOpen_SE_Data[] = {
 #endif
 
 //.sbss
-MessageWork msgWork;
+static MessageWork msgWork;
 
 #if VERSION <= VERSION_DEMO_JP
 static smartEntry dummySmartList;
 #endif
 
-BOOL msgSEflag; // msgSEInit and related functions are unused
-void* msgSortDvdData;
+static BOOL msgSEflag; // msgSEInit and related functions are unused
+static void* msgSortDvdData;
 
 //.sdata
-MessageWork* msgw = &msgWork;
+static MessageWork* msgw = &msgWork;
 
 #if VERSION <= VERSION_DEMO_JP
 static char NoMessage[] = "";
-const char* ErrMessage[VERSION_PICK(2, 7)] = {
+static const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
 #else
-const char* ErrMessage[VERSION_PICK(2, 7)] = {
+static const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
 #if VERSION >= VERSION_US
     R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU
@@ -116,19 +116,19 @@ const char* ErrMessage[VERSION_PICK(2, 7)] = {
 #endif
 
 };
-const char* paperPoseTbl[6] = {
+static const char* paperPoseTbl[6] = {
     "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
     "PM_F_3B", "PM_C_1B", "PM_C_2B"
 };
 #if VERSION >= VERSION_US
-const char* language_dir[7] = {"msg/JP", "msg/US", "msg/DE", "msg/FR", "msg/SP", "msg/IT", "msg/US"};
+static const char* language_dir[7] = {"msg/JP", "msg/US", "msg/DE", "msg/FR", "msg/SP", "msg/IT", "msg/US"};
 #else
-const char* language_dir[2] = {"msg", "emsg"};
+static const char* language_dir[2] = {"msg", "emsg"};
 #endif
 
 // local prototypes
 #if VERSION <= VERSION_DEMO_JP
-s32 msgWindowOpen_SE_Data[] = {
+static s32 msgWindowOpen_SE_Data[] = {
     0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
     0x24, 0x25, 0x26, 0x27, 0x1E, 0x1F, -1, -1

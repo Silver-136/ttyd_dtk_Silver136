@@ -107,13 +107,13 @@ typedef struct DekaWork {
 } DekaWork;
 
 static DekaWork* get_ptr(void);
-USER_FUNC(get_result);
+static USER_FUNC(get_result);
 static USER_FUNC(star_stone_attack);
-USER_FUNC(get_ride_pos);
+static USER_FUNC(get_ride_pos);
 static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
 static USER_FUNC(start_game);
-USER_FUNC(wait_star_stone_take_on);
+static USER_FUNC(wait_star_stone_take_on);
 static void create_timing(void);
 static void yuka_disp(CameraId cam, void* param);
 static void yuka_capture(CameraId cam, void* param);
@@ -865,7 +865,7 @@ static void main_enemy_sub(BattleUnit* unit, s32* n) {
 }
 
 /** Deletes the Crystal Star effect and its dust at the end of the move. */
-USER_FUNC(end_deka) {
+static USER_FUNC(end_deka) {
     DekaWork* w = get_ptr();
 
     effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);
@@ -1411,7 +1411,7 @@ u32 weaponGetPower_Deka(BattleUnit* attacker, BattleWeapon* weapon, BattleUnit* 
 }
 
 /** Waits until the Crystal Star has settled where Mario and the partner can jump onto it. */
-USER_FUNC(wait_star_stone_take_on) {
+static USER_FUNC(wait_star_stone_take_on) {
     return get_ptr()->starState == 4 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
@@ -1438,7 +1438,7 @@ static USER_FUNC(star_stone_appear) {
  * Riding spot on top of the Crystal Star, scaled with its size:
  * args[0] 0 = Mario's (right of centre), 1 = the partner's (left); the x, y and z go to args[1] to args[3].
  */
-USER_FUNC(get_ride_pos) {
+static USER_FUNC(get_ride_pos) {
     DekaWork* w = get_ptr();
     EvtWord* args = event->args;
 
@@ -1468,7 +1468,7 @@ static USER_FUNC(star_stone_attack) {
 }
 
 /** Returns the number of rounds cleared (0 to 5) in args[0]. */
-USER_FUNC(get_result) {
+static USER_FUNC(get_result) {
     DekaWork* w = get_ptr();
     evtSetValue(event, event->args[0], w->result);
     return EVT_RETURN_DONE;

@@ -30,10 +30,10 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static EvtWord door03_close[12];
 static EvtWord door03_open[12];
-EvtWord door04_close[22];
-EvtWord door04_open[22];
-EvtWord door05_close[12];
-EvtWord door05_open[12];
+static EvtWord door04_close[22];
+static EvtWord door04_open[22];
+static EvtWord door05_close[12];
+static EvtWord door05_open[12];
 static BeroEntry bero_entry_data[7];
 static EvtWord init_0[37];
 
@@ -59,7 +59,7 @@ EvtWord main_1[491];
 #endif
 #endif
 
-s32 key_tbl00[2];
+static s32 key_tbl00[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_chk00[];
@@ -68,7 +68,7 @@ EvtWord evt_chk00[23];
 #endif
 
 static EvtWord evt_unlock00[10];
-s32 key_tbl01[2];
+static s32 key_tbl01[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_chk01[];
@@ -144,7 +144,7 @@ EVT_END()
  * Door animation for the double door (door04_1 and door04_2) in gon_05: LW(0) is the interpolated angle;
  * the two leaves rotate opposite ways to close.
  */
-EVT_BEGIN(door04_close)
+static EVT_BEGIN(door04_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door04_1"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -153,7 +153,7 @@ EVT_BEGIN(door04_close)
 EVT_END()
 
 /** Door animation that opens the double door door04_1 and door04_2 in gon_05 (the reverse of door04_close). */
-EVT_BEGIN(door04_open)
+static EVT_BEGIN(door04_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door04_1"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -162,14 +162,14 @@ EVT_BEGIN(door04_open)
 EVT_END()
 
 /** Door animation that closes the single door door_05 in gon_05. */
-EVT_BEGIN(door05_close)
+static EVT_BEGIN(door05_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_05"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Door animation that opens the single door door_05 in gon_05. */
-EVT_BEGIN(door05_open)
+static EVT_BEGIN(door05_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_05"), 0, LW(0), 0)
     RETURN
@@ -817,7 +817,7 @@ EVT_BEGIN(main_1)
 EVT_END()
 
 /** Items offered in the item menu at the first lock: only the Castle Key (0x0C). */
-s32 key_tbl00[] = {
+static s32 key_tbl00[] = {
     ITEM_CASTLE_KEY_0x0C, -1,
 };
 
@@ -852,7 +852,7 @@ static EVT_BEGIN(evt_unlock00)
 EVT_END()
 
 /** Items offered in the item menu at the second lock: only the Castle Key (0x0E). */
-s32 key_tbl01[] = {
+static s32 key_tbl01[] = {
     ITEM_CASTLE_KEY_0x0E, -1,
 };
 

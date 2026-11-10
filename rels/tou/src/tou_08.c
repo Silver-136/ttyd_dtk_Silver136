@@ -39,7 +39,7 @@
 #include <dolphin/pad.h>
 
 static USER_FUNC(get_yoshi_color);
-USER_FUNC(icon_off);
+static USER_FUNC(icon_off);
 USER_FUNC(tou_08_belt_camid);
 
 static EvtWord evt_toile[42];
@@ -48,17 +48,17 @@ static EvtWord n_door_close[12];
 static EvtWord toile_in[13];
 static EvtWord toile_out[35];
 static BeroEntry bero_data[3];
-EvtWord init_togenoko[12];
-EvtWord talk_togenoko[136];
-EvtWord init_togemet[12];
-EvtWord talk_togemet[136];
-EvtWord init_hammerbros[12];
-EvtWord talk_hammerbros[136];
+static EvtWord init_togenoko[12];
+static EvtWord talk_togenoko[136];
+static EvtWord init_togemet[12];
+static EvtWord talk_togemet[136];
+static EvtWord init_hammerbros[12];
+static EvtWord talk_hammerbros[136];
 static EvtWord init_uranoko[12];
 static EvtWord talk_uranoko[136];
 static NpcSetupInfo npcEnt[7];
 static EvtWord evt_sensyu[70];
-EvtWord evt_1st_sub[107];
+static EvtWord evt_1st_sub[107];
 static EvtWord evt_1st_leagu[747];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -67,7 +67,7 @@ extern EvtWord evt_toile_door[];
 EvtWord evt_toile_door[236];
 #endif
 
-EvtWord evt_toile_door2[136];
+static EvtWord evt_toile_door2[136];
 
 #if VERSION >= VERSION_US
 EvtWord evt_champion_win[290];
@@ -190,7 +190,7 @@ static BeroEntry bero_data[] = {
 };
 
 /** NPC init for the Koopatrol (togenoko) fighter in the locker room: placed at (90, 0, -50) facing 270. */
-EVT_BEGIN(init_togenoko)
+static EVT_BEGIN(init_togenoko)
     CALL(evt_npc_set_position, STRING("me"), 90, 0, -50)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
@@ -200,7 +200,7 @@ EVT_END()
  * Talk script of the Koopatrol fighter:
  * story-dependent locker-room lines (the first Rawk Hawk match, the rematch stages).
  */
-EVT_BEGIN(talk_togenoko)
+static EVT_BEGIN(talk_togenoko)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
             IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -246,14 +246,14 @@ EVT_BEGIN(talk_togenoko)
 EVT_END()
 
 /** NPC init for the Spike Top fighter (togemet): placed at (120, 0, 80) facing 270. */
-EVT_BEGIN(init_togemet)
+static EVT_BEGIN(init_togemet)
     CALL(evt_npc_set_position, STRING("トゲメット"), 120, 0, 80)
     CALL(evt_npc_set_ry, STRING("トゲメット"), 270)
     RETURN
 EVT_END()
 
 /** Talk script of the Spike Top fighter: story-dependent locker-room lines. */
-EVT_BEGIN(talk_togemet)
+static EVT_BEGIN(talk_togemet)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
             IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -299,14 +299,14 @@ EVT_BEGIN(talk_togemet)
 EVT_END()
 
 /** NPC init for the Hammer Bro fighter: placed at (-115, 0, 115) facing 90. */
-EVT_BEGIN(init_hammerbros)
+static EVT_BEGIN(init_hammerbros)
     CALL(evt_npc_set_position, STRING("ハンマーブロス"), -115, 0, 115)
     CALL(evt_npc_set_ry, STRING("ハンマーブロス"), 90)
     RETURN
 EVT_END()
 
 /** Talk script of the Hammer Bro fighter: story-dependent locker-room lines. */
-EVT_BEGIN(talk_hammerbros)
+static EVT_BEGIN(talk_hammerbros)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
             IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -501,7 +501,7 @@ EVT_END()
  * opens it (callback angle 180 for Jolene, 260 for anyone else) with the door sounds, walks out and is parked off-map,
  * and the door closes.
  */
-EVT_BEGIN(evt_1st_sub)
+static EVT_BEGIN(evt_1st_sub)
     SET_VALUE(LW(8), LW(0))
     CALL(evt_npc_flag_onoff, 1, LW(8), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, LW(8), 0, -130, 0, FLOAT(80.0f), 1)
@@ -878,7 +878,7 @@ EVT_BEGIN(evt_toile_door)
 EVT_END()
 
 /** Restroom door from inside: opens door_2 with a wood-door sound, walks the party out and shuts it. */
-EVT_BEGIN(evt_toile_door2)
+static EVT_BEGIN(evt_toile_door2)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1014,7 +1014,7 @@ USER_FUNC(tou_08_belt_camid) {
 #endif
 
 /** Script helper: hides the belt item's icon. */
-USER_FUNC(icon_off) {
+static USER_FUNC(icon_off) {
     iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
 }

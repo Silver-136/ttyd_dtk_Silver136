@@ -18,7 +18,7 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(get_hosi_name);
+static USER_FUNC(get_hosi_name);
 
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
@@ -29,16 +29,16 @@ static const char* haguruma_kage[12];
 static const char* haguruma_kage2[5];
 static EvtWord haguruma_evt[194];
 static EvtWord dai_evt[13];
-const char* hosi_name[14];
+static const char* hosi_name[14];
 EvtWord hosi_sw_check[303];
 EvtWord hosi_onoff[69];
-EvtWord hosi_02_sw_evt[15];
-EvtWord hosi_03_sw_evt[15];
-EvtWord hosi_04_sw_evt[15];
-EvtWord hosi_05_sw_evt[15];
-EvtWord hosi_06_sw_evt[15];
-EvtWord hosi_07_sw_evt[15];
-EvtWord hosi_08_sw_evt[15];
+static EvtWord hosi_02_sw_evt[15];
+static EvtWord hosi_03_sw_evt[15];
+static EvtWord hosi_04_sw_evt[15];
+static EvtWord hosi_05_sw_evt[15];
+static EvtWord hosi_06_sw_evt[15];
+static EvtWord hosi_07_sw_evt[15];
+static EvtWord hosi_08_sw_evt[15];
 EvtWord hosi_init[175];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -262,7 +262,7 @@ static EVT_BEGIN(dai_evt)
     RETURN
 EVT_END()
 
-const char* hosi_name[] = {
+static const char* hosi_name[] = {
     "S_hosi_02a",
     "S_hosi_02b",
     "S_hosi_03a",
@@ -413,7 +413,7 @@ EVT_BEGIN(hosi_onoff)
 EVT_END()
 
 /** Event script: red switch for star 2. Toggles the star (LSWF_LAS_20_STAR_02_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_02_sw_evt)
+static EVT_BEGIN(hosi_02_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_02a"))
     SET_VALUE(LW(1), STRING("S_hosi_02b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_02_LIT)
@@ -423,7 +423,7 @@ EVT_BEGIN(hosi_02_sw_evt)
 EVT_END()
 
 /** Event script: red switch for star 3. Toggles the star (LSWF_LAS_20_STAR_03_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_03_sw_evt)
+static EVT_BEGIN(hosi_03_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_03a"))
     SET_VALUE(LW(1), STRING("S_hosi_03b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_03_LIT)
@@ -433,7 +433,7 @@ EVT_BEGIN(hosi_03_sw_evt)
 EVT_END()
 
 /** Event script: red switch for star 4. Toggles the star (LSWF_LAS_20_STAR_04_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_04_sw_evt)
+static EVT_BEGIN(hosi_04_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_04a"))
     SET_VALUE(LW(1), STRING("S_hosi_04b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_04_LIT)
@@ -443,7 +443,7 @@ EVT_BEGIN(hosi_04_sw_evt)
 EVT_END()
 
 /** Event script: red switch for star 5. Toggles the star (LSWF_LAS_20_STAR_05_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_05_sw_evt)
+static EVT_BEGIN(hosi_05_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_05a"))
     SET_VALUE(LW(1), STRING("S_hosi_05b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_05_LIT)
@@ -453,7 +453,7 @@ EVT_BEGIN(hosi_05_sw_evt)
 EVT_END()
 
 /** Event script: red switch for star 6. Toggles the star (LSWF_LAS_20_STAR_06_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_06_sw_evt)
+static EVT_BEGIN(hosi_06_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_06a"))
     SET_VALUE(LW(1), STRING("S_hosi_06b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_06_LIT)
@@ -463,7 +463,7 @@ EVT_BEGIN(hosi_06_sw_evt)
 EVT_END()
 
 /** Event script: red switch for star 7. Toggles the star (LSWF_LAS_20_STAR_07_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_07_sw_evt)
+static EVT_BEGIN(hosi_07_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_07a"))
     SET_VALUE(LW(1), STRING("S_hosi_07b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_07_LIT)
@@ -473,7 +473,7 @@ EVT_BEGIN(hosi_07_sw_evt)
 EVT_END()
 
 /** Event script: red switch for star 8. Toggles the star (LSWF_LAS_20_STAR_08_LIT) and then checks the puzzle. */
-EVT_BEGIN(hosi_08_sw_evt)
+static EVT_BEGIN(hosi_08_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_08a"))
     SET_VALUE(LW(1), STRING("S_hosi_08b"))
     SET_RAW_VALUE(LW(2), LSWF_LAS_20_STAR_08_LIT)
@@ -548,7 +548,7 @@ EVT_BEGIN(las_20_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(get_hosi_name) {
+static USER_FUNC(get_hosi_name) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     evtSetValue(event, args[1], (EvtWord)hosi_name[idx * 2]);

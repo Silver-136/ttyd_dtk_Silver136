@@ -40,31 +40,31 @@ typedef struct EntryMgr {
     EntryMgrEntry* entries;
 } EntryMgr;
 
-USER_FUNC(dou_namiatari_check);
-USER_FUNC(evt_sub_entrymgr_check);
-USER_FUNC(evt_sub_entrymgr_delete);
-USER_FUNC(evt_sub_entrymgr_entry);
-USER_FUNC(evt_sub_entrymgr_getreg);
-USER_FUNC(evt_sub_entrymgr_init);
-USER_FUNC(evt_sub_entrymgr_setreg);
-USER_FUNC(nami_running_func);
-USER_FUNC(nami_running_init_func);
-USER_FUNC(namiyoke_fail_stop);
-USER_FUNC(namiyoke_se_check);
-USER_FUNC(namiyoke_set_mapobj);
+static USER_FUNC(dou_namiatari_check);
+static USER_FUNC(evt_sub_entrymgr_check);
+static USER_FUNC(evt_sub_entrymgr_delete);
+static USER_FUNC(evt_sub_entrymgr_entry);
+static USER_FUNC(evt_sub_entrymgr_getreg);
+static USER_FUNC(evt_sub_entrymgr_init);
+static USER_FUNC(evt_sub_entrymgr_setreg);
+static USER_FUNC(nami_running_func);
+static USER_FUNC(nami_running_init_func);
+static USER_FUNC(namiyoke_fail_stop);
+static USER_FUNC(namiyoke_se_check);
+static USER_FUNC(namiyoke_set_mapobj);
 
 static BeroEntry bero_entry_data[5];
-const char* namiyoke_mapobj[15];
-EvtWord nami_running[72];
-EvtWord namiyoke_fail_kaiten[34];
-EvtWord namiyoke_fail_shizumu[49];
-EvtWord namiyoke_fail_recover[190];
-EvtWord namiyoke_fail[142];
-EvtWord namiyoke_atari_check[21];
-EvtWord namiyoke_main[135];
-EvtWord namiyoke_init[97];
-EvtWord namiyoke_se[100];
-EvtWord namiyoke_check[34];
+static const char* namiyoke_mapobj[15];
+static EvtWord nami_running[72];
+static EvtWord namiyoke_fail_kaiten[34];
+static EvtWord namiyoke_fail_shizumu[49];
+static EvtWord namiyoke_fail_recover[190];
+static EvtWord namiyoke_fail[142];
+static EvtWord namiyoke_atari_check[21];
+static EvtWord namiyoke_main[135];
+static EvtWord namiyoke_init[97];
+static EvtWord namiyoke_se[100];
+static EvtWord namiyoke_check[34];
 static EvtWord yari_trap_sub[107];
 static EvtWord yari_trap[11];
 static EvtWord dou_puka_event_main0[60];
@@ -143,7 +143,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Map objects of the 15 waves that are moved along their lanes by the wave script. */
-const char* namiyoke_mapobj[] = {
+static const char* namiyoke_mapobj[] = {
     "S_nami1",
     "S_nami2",
     "S_nami3",
@@ -168,7 +168,7 @@ const char* namiyoke_mapobj[] = {
  * until it reaches the end, and sets GW(0) to 1 if it touches Mario on the way.
  * Frees the slot and parks the wave object under the map at the end.
  */
-EVT_BEGIN(nami_running)
+static EVT_BEGIN(nami_running)
     CALL(evt_sub_entrymgr_entry, LW(9), LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -194,7 +194,7 @@ EVT_BEGIN(nami_running)
 EVT_END()
 
 /** Failure animation, part 1: spins Mario's facing three full turns (1080 degrees) over one second. */
-EVT_BEGIN(namiyoke_fail_kaiten)
+static EVT_BEGIN(namiyoke_fail_kaiten)
     CALL(evt_mario_get_dispdir, LW(0))
     SET_VALUE(LW(1), LW(0))
     ADD(LW(1), 1080)
@@ -214,7 +214,7 @@ EVT_END()
  * Failure animation, part 2: takes control away from Mario
  * and sinks him 100 units below the water over four seconds.
  */
-EVT_BEGIN(namiyoke_fail_shizumu)
+static EVT_BEGIN(namiyoke_fail_shizumu)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_SHIP_SINK1"), LW(0), LW(1), LW(2), 0)
@@ -235,7 +235,7 @@ EVT_END()
  * Failure animation, part 3: Mario bobs back up at (-660, 0, 100), the start of the wave room, from 100 below,
  * with three smaller bounces (-10, -5, -1) as he settles.
  */
-EVT_BEGIN(namiyoke_fail_recover)
+static EVT_BEGIN(namiyoke_fail_recover)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_SHIP_FLOAT1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -100, 0, 800)
@@ -309,7 +309,7 @@ EVT_END()
  * puts him back at the start (-660,
  * 100) with a ripple effect and the camera pulled to the start, and gives control back.
  */
-EVT_BEGIN(namiyoke_fail)
+static EVT_BEGIN(namiyoke_fail)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(namiyoke_fail_stop)
@@ -344,7 +344,7 @@ EVT_BEGIN(namiyoke_fail)
 EVT_END()
 
 /** Watches GW(0) forever; whenever a wave sets it to 1 (touching Mario), runs the failure sequence and clears it. */
-EVT_BEGIN(namiyoke_atari_check)
+static EVT_BEGIN(namiyoke_atari_check)
     SET_VALUE(GW(0), 0)
     LOOP(0)
         IF_INT_EQUAL(GW(0), 1)
@@ -362,7 +362,7 @@ EVT_END()
  * only from the sixth wave on), then forever one new wave every 1.5 to 2 seconds at the far end (X = 1040) in one
  * of four lanes (Z = -125, -50, 25, 100), up to 15 at once.
  */
-EVT_BEGIN(namiyoke_main)
+static EVT_BEGIN(namiyoke_main)
     SET_VALUE(LW(10), 0)
     LOOP(0)
         ADD(LW(10), 1)
@@ -426,7 +426,7 @@ EVT_END()
  * Parks all 15 wave objects below the map (y = -1000) and switches off their hit areas
  * so the waves start out of sight.
  */
-EVT_BEGIN(namiyoke_init)
+static EVT_BEGIN(namiyoke_init)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(namiyoke_set_mapobj, LW(0), 0, -1000, 0)
@@ -458,7 +458,7 @@ EVT_END()
  * the 15 wave slots (namiyoke_se_check) and starts SFX_STG5_MINIGAME_WAVE1 there or moves it there;
  * it stops the sound when no wave is active. The first start passes the wave's x as its z position too.
  */
-EVT_BEGIN(namiyoke_se)
+static EVT_BEGIN(namiyoke_se)
     SET_VALUE(LW(12), 0)
     LOOP(0)
         SET_VALUE(LW(10), 0)
@@ -503,7 +503,7 @@ EVT_END()
  * and starts the wave setup, the wave spawner and the wave sound.
  * The collision watcher is started only when entering from w_bero_1 or e_bero.
  */
-EVT_BEGIN(namiyoke_check)
+static EVT_BEGIN(namiyoke_check)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         SET_VALUE(GSW_STORY_PROGRESS, STG5_29_WAVE_DODGING)
     END_IF
@@ -644,7 +644,7 @@ EVT_BEGIN(dou_10_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(namiyoke_se_check) {
+static USER_FUNC(namiyoke_se_check) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
     f32 x = evtGetFloat(event, args[0]);
@@ -665,7 +665,7 @@ USER_FUNC(namiyoke_se_check) {
 }
 
 /** Script helper: stops Mario's boat immediately (marioShipForceStop). */
-USER_FUNC(namiyoke_fail_stop) {
+static USER_FUNC(namiyoke_fail_stop) {
     marioShipForceStop();
     return EVT_RETURN_DONE;
 }
@@ -675,7 +675,7 @@ USER_FUNC(namiyoke_fail_stop) {
  * The hit box is 30 wide and deep plus margins of 20 in X and 10 in Z,
  * shrinking while the wave sinks (y between -5 and -45); a wave lower than -45 never hits.
  */
-USER_FUNC(dou_namiatari_check) {
+static USER_FUNC(dou_namiatari_check) {
     // Waves at Y <= -45 are inactive; between -45 and -5 their X/Z extents grow linearly.
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -717,7 +717,7 @@ USER_FUNC(dou_namiatari_check) {
  * Writes the position to args[0..2] and sets LW(15) to 1 once the wave has finished its run (X < 0, or < -540 in
  * the lanes Z = 25 and 100).
  */
-USER_FUNC(nami_running_func) {
+static USER_FUNC(nami_running_func) {
     f32* lwf = event->lwDataF;
     EvtWord* args = event->args;
     f32 s;
@@ -766,7 +766,7 @@ USER_FUNC(nami_running_func) {
 }
 
 /** Script helper: copies the start position of a wave (LW(11) to LW(13)) into its working floats. */
-USER_FUNC(nami_running_init_func) {
+static USER_FUNC(nami_running_init_func) {
     f32* lwf = event->lwDataF;
 
     lwf[6] = event->lwData[11];
@@ -775,7 +775,7 @@ USER_FUNC(nami_running_init_func) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(namiyoke_set_mapobj) {
+static USER_FUNC(namiyoke_set_mapobj) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -787,7 +787,7 @@ USER_FUNC(namiyoke_set_mapobj) {
 }
 
 /** Script helper (wave table): args[0] is the table; copies the three floats stored with id args[1] into args[2..4]. */
-USER_FUNC(evt_sub_entrymgr_getreg) {
+static USER_FUNC(evt_sub_entrymgr_getreg) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
     EntryMgrEntry* e = mgr->entries;
@@ -808,7 +808,7 @@ USER_FUNC(evt_sub_entrymgr_getreg) {
 }
 
 /** Script helper (wave table): args[0] is the table; stores the floats args[2..4] with id args[1]. */
-USER_FUNC(evt_sub_entrymgr_setreg) {
+static USER_FUNC(evt_sub_entrymgr_setreg) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
     EntryMgrEntry* e = mgr->entries;
@@ -830,7 +830,7 @@ USER_FUNC(evt_sub_entrymgr_setreg) {
 }
 
 /** Script helper (wave table): sets args[2] to 1 if id args[1] is in use in the table args[0], else 0. */
-USER_FUNC(evt_sub_entrymgr_check) {
+static USER_FUNC(evt_sub_entrymgr_check) {
     // BUG: an unused entry does not advance e, so later entries are not checked.
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
@@ -853,7 +853,7 @@ USER_FUNC(evt_sub_entrymgr_check) {
 }
 
 /** Script helper (wave table): frees the slot with id args[1] in the table args[0]; args[2] is 1 if it was found. */
-USER_FUNC(evt_sub_entrymgr_delete) {
+static USER_FUNC(evt_sub_entrymgr_delete) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
     EntryMgrEntry* e = mgr->entries;
@@ -877,7 +877,7 @@ USER_FUNC(evt_sub_entrymgr_delete) {
  * Script helper (wave table): claims the first free slot in the table args[0] for id args[1];
  * args[2] is 1 on success and 0 if the table is full.
  */
-USER_FUNC(evt_sub_entrymgr_entry) {
+static USER_FUNC(evt_sub_entrymgr_entry) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
     EntryMgrEntry* e = mgr->entries;
@@ -901,7 +901,7 @@ USER_FUNC(evt_sub_entrymgr_entry) {
  * Script helper (wave table): allocates a table of args[1] slots from the map heap, zeroed,
  * and returns its address in args[0].
  */
-USER_FUNC(evt_sub_entrymgr_init) {
+static USER_FUNC(evt_sub_entrymgr_init) {
     EvtWord* args = event->args;
     EntryMgr* mgr = _mapAlloc(sizeof(EntryMgr));
 

@@ -21,7 +21,7 @@ BattleUnitKind unit_boss_cortez_sword;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
-BattleWeapon weapon_cortez_sword_float_attack;
+static BattleWeapon weapon_cortez_sword_float_attack;
 
 #if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[4];
@@ -29,7 +29,7 @@ static PoseTableEntry pose_table[4];
 static PoseTableEntry pose_table[6];
 #endif
 
-PoseTableEntry pose_table_otitabuki[4];
+static PoseTableEntry pose_table_otitabuki[4];
 static PoseTableEntry pose_table_break[4];
 static BattleDataEntry data_table[21];
 static BattleUnitKindPart parts[1];
@@ -145,7 +145,7 @@ static StatusVulnerability regist = {
 /**
  * Weapon of Cortez Sword (float attack): targets one unit for 2 damage; used by attack_event.
  */
-BattleWeapon weapon_cortez_sword_float_attack = {
+static BattleWeapon weapon_cortez_sword_float_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -193,7 +193,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /** Pose table with only the lying pose KRT_Z_1; no script references it. */
-PoseTableEntry pose_table_otitabuki[] = {
+static PoseTableEntry pose_table_otitabuki[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE, "KRT_Z_1"},

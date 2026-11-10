@@ -13,22 +13,22 @@
 extern BattleUnitKind unit_boss_kanbu1;
 extern BattleUnitKind unit_lecture_christine;
 
-BattleStageObjectData gor_btlobject_data[6];
-BattleStageData gor_btlstage_data[2];
-BattleUnitSetup btlparty_gor_gor_00_01_off_1[1];
-BattleGroupSetup btlgrp_gor_gor_00_01_off_1;
-BattleUnitSetup btlparty_gor_gor_02_ac_lecture[1];
-BattleGroupSetup btlgrp_gor_gor_02_ac_lecture;
-BattleUnitSetup btlparty_gor_gor_02_sac_lecture[1];
-BattleGroupSetup btlgrp_gor_gor_02_sac_lecture;
-BattleUnitSetup btlparty_gor_gor_02_01_off_1[1];
-BattleGroupSetup btlgrp_gor_gor_02_01_off_1;
-NpcBattleSelect btlgrpsel_gor_btlno_gor_test1_off[2];
-NpcBattleSelect btlgrpsel_gor_btlno_gor_test2_off[2];
-NpcBattleSelect btlgrpsel_gor_btlno_gor_00_01_off[2];
-NpcBattleSelect btlgrpsel_gor_btlno_gor_02_aclec_off[2];
-NpcBattleSelect btlgrpsel_gor_btlno_gor_02_saclec_off[2];
-NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[2];
+static BattleStageObjectData gor_btlobject_data[6];
+static BattleStageData gor_btlstage_data[2];
+static BattleUnitSetup btlparty_gor_gor_00_01_off_1[1];
+static BattleGroupSetup btlgrp_gor_gor_00_01_off_1;
+static BattleUnitSetup btlparty_gor_gor_02_ac_lecture[1];
+static BattleGroupSetup btlgrp_gor_gor_02_ac_lecture;
+static BattleUnitSetup btlparty_gor_gor_02_sac_lecture[1];
+static BattleGroupSetup btlgrp_gor_gor_02_sac_lecture;
+static BattleUnitSetup btlparty_gor_gor_02_01_off_1[1];
+static BattleGroupSetup btlgrp_gor_gor_02_01_off_1;
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_test1_off[2];
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_test2_off[2];
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_00_01_off[2];
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_02_aclec_off[2];
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_02_saclec_off[2];
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[2];
 NpcSetupBattleInfo btlsetup_gor_tbl[7];
 NpcTerritoryInfo btl_gor_setup_no_tbl[7];
 
@@ -36,7 +36,7 @@ NpcTerritoryInfo btl_gor_setup_no_tbl[7];
  * Props of the Rogueport battle stage: each entry names a model of the backdrop and where it stands, the last
  * entries being the background layers.
  */
-BattleStageObjectData gor_btlobject_data[] = {
+static BattleStageObjectData gor_btlobject_data[] = {
     {"A1", 2, STAGE_LAYER_A1, {33.0f, 0.0f, -48.0f}, 0, 60, {0}},
     {"A2", 2, STAGE_LAYER_A2, {0.0f, 0.0f, 71.0f}, 0, 60, {0}},
     {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
@@ -49,7 +49,7 @@ BattleStageObjectData gor_btlobject_data[] = {
  * Battle stage of Rogueport: the stage model directories, the props above, the backdrop weapons and the
  * background event that runs during the fight.
  */
-BattleStageData gor_btlstage_data[] = {
+static BattleStageData gor_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_00_0", // specificStageDataDir
@@ -72,7 +72,7 @@ BattleStageData gor_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_gor_gor_00_01_off_1[] = {
+static BattleUnitSetup btlparty_gor_gor_00_01_off_1[] = {
     {
         &unit_boss_kanbu1, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -85,7 +85,7 @@ BattleUnitSetup btlparty_gor_gor_00_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_gor_gor_00_01_off_1 = {
+static BattleGroupSetup btlgrp_gor_gor_00_01_off_1 = {
     1, // numEnemies
     btlparty_gor_gor_00_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -95,7 +95,7 @@ BattleGroupSetup btlgrp_gor_gor_00_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_gor_gor_02_ac_lecture[] = {
+static BattleUnitSetup btlparty_gor_gor_02_ac_lecture[] = {
     {
         &unit_lecture_christine, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -108,7 +108,7 @@ BattleUnitSetup btlparty_gor_gor_02_ac_lecture[] = {
     },
 };
 
-BattleGroupSetup btlgrp_gor_gor_02_ac_lecture = {
+static BattleGroupSetup btlgrp_gor_gor_02_ac_lecture = {
     1, // numEnemies
     btlparty_gor_gor_02_ac_lecture, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -118,7 +118,7 @@ BattleGroupSetup btlgrp_gor_gor_02_ac_lecture = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_gor_gor_02_sac_lecture[] = {
+static BattleUnitSetup btlparty_gor_gor_02_sac_lecture[] = {
     {
         &unit_lecture_frankli_sac, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -131,7 +131,7 @@ BattleUnitSetup btlparty_gor_gor_02_sac_lecture[] = {
     },
 };
 
-BattleGroupSetup btlgrp_gor_gor_02_sac_lecture = {
+static BattleGroupSetup btlgrp_gor_gor_02_sac_lecture = {
     1, // numEnemies
     btlparty_gor_gor_02_sac_lecture, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -141,7 +141,7 @@ BattleGroupSetup btlgrp_gor_gor_02_sac_lecture = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_gor_gor_02_01_off_1[] = {
+static BattleUnitSetup btlparty_gor_gor_02_01_off_1[] = {
     {
         &unit_monban, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -154,7 +154,7 @@ BattleUnitSetup btlparty_gor_gor_02_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_gor_gor_02_01_off_1 = {
+static BattleGroupSetup btlgrp_gor_gor_02_01_off_1 = {
     1, // numEnemies
     btlparty_gor_gor_02_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -164,32 +164,32 @@ BattleGroupSetup btlgrp_gor_gor_02_01_off_1 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_gor_btlno_gor_test1_off[] = {
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_test1_off[] = {
     {50, &btlgrp_gor_gor_02_01_off_1, gor_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_gor_btlno_gor_test2_off[] = {
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_test2_off[] = {
     {50, &btlgrp_gor_gor_02_01_off_1, &gor_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_gor_btlno_gor_00_01_off[] = {
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_00_01_off[] = {
     {50, &btlgrp_gor_gor_00_01_off_1, gor_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_gor_btlno_gor_02_aclec_off[] = {
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_02_aclec_off[] = {
     {50, &btlgrp_gor_gor_02_ac_lecture, &gor_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_gor_btlno_gor_02_saclec_off[] = {
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_02_saclec_off[] = {
     {50, &btlgrp_gor_gor_02_sac_lecture, &gor_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[] = {
+static NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[] = {
     {50, &btlgrp_gor_gor_02_01_off_1, &gor_btlstage_data[1]},
     {0},
 };

@@ -86,7 +86,7 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 /** Animation names of the coloured switch blocks, in the order mobj_switch_float_blk steps through them. */
-const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
+static const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 
 // FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
 // Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
@@ -1903,7 +1903,7 @@ USER_FUNC(evt_mobj_lock_unlock) {
 }
 
 /** Lock swing and unlock sounds at the position LW(0)-LW(2), started as the lock opens. */
-EVT_BEGIN(evt_lock_sound)
+static EVT_BEGIN(evt_lock_sound)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_LOCK_SWING1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
@@ -2109,7 +2109,7 @@ USER_FUNC(evt_mobj_lock) {
 }
 
 /** Opening sounds for the normal and grey treasure chests at LW(0)-LW(2). */
-EVT_BEGIN(evt_box_sound1)
+static EVT_BEGIN(evt_box_sound1)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_TREASURE_BOX_SWING1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
@@ -2117,7 +2117,7 @@ EVT_BEGIN(evt_box_sound1)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_box_sound2)
+static EVT_BEGIN(evt_box_sound2)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_TREASURE_BOX_SWING2"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
@@ -2125,7 +2125,7 @@ EVT_BEGIN(evt_box_sound2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_box_sound3)
+static EVT_BEGIN(evt_box_sound3)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLACKBOX_SWING1"), LW(0), LW(1), LW(2), LW(15))
     WAIT_MS(200)
@@ -5255,7 +5255,7 @@ EVT_END()
  * shows the score, slides him and the flag down to the ground, then moves the camera on and hands control back.
  * Run by mobj_koopa_pole_evt with the score in LW(0).
  */
-EVT_BEGIN(kpa_pole)
+static EVT_BEGIN(kpa_pole)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -5367,7 +5367,7 @@ EVT_BEGIN(kpa_pole)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kpa_pole_move)
+static EVT_BEGIN(kpa_pole_move)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_mario_key_onoff, 0)

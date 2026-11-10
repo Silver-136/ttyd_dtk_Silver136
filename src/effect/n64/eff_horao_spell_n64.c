@@ -39,7 +39,7 @@ static u8 colg[17] = {0xAA, 0xA0, 0x96, 0x8C, 0x82, 0x78, 0x82, 0x8C, 0x96, 0xA0
 /** Blue of the ribbon colour on each of the 17 steps (always full). */
 static u8 colb[17] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 /** Template points of a glow ribbon: top and bottom vertex pairs that are copied and swayed each frame. */
-effN64Vtx horao_spell_vtx[] = {
+static effN64Vtx horao_spell_vtx[] = {
     {0, -8, 0, 0, 0, 0, 0, 0, 0},
     {0, 8, 0, 0, 1024, 0, 0, 0, 0},
     {0, -8, 0, 512, 0, 0, 0, 0, 50},

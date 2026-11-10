@@ -62,9 +62,9 @@ static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, 
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_mri_cloud_ent);
+static USER_FUNC(evt_mri_cloud_ent);
 USER_FUNC(evt_mri_cloud_init);
-USER_FUNC(get_puni_pos);
+static USER_FUNC(get_puni_pos);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
@@ -72,10 +72,10 @@ static USER_FUNC(sysflag);
 static USER_FUNC(yami_view);
 
 static s16 puni_rand_position[196];
-EvtWord mario_see_you_init[54];
+static EvtWord mario_see_you_init[54];
 static f32 spline_dt[24];
 EvtWord seal_bigtree[213];
-EvtWord seal_bigtree2[143];
+static EvtWord seal_bigtree2[143];
 static EvtWord guide_init[72];
 static EvtWord guide_talk[29];
 static EvtWord rival_init[21];
@@ -101,13 +101,13 @@ static EvtWord first_time_w_bero[18];
 EvtWord out_ne_bero[44];
 static EvtWord out_w_bero[12];
 EvtWord out_dokan_1[30];
-BeroEntry bero_lostitem[1];
+static BeroEntry bero_lostitem[1];
 static BeroEntry bero_entry_data[4];
-EvtWord first_bigtree[99];
+static EvtWord first_bigtree[99];
 static const char* capturemap[4];
 static EvtWord evt_cloud_main_evt[4];
-f32 guide_move_data[15];
-EvtWord open_bigtree[446];
+static f32 guide_move_data[15];
+static EvtWord open_bigtree[446];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord mario_see_you[];
@@ -115,9 +115,9 @@ extern EvtWord mario_see_you[];
 EvtWord mario_see_you[210];
 #endif
 
-EvtWord puni_set[59];
+static EvtWord puni_set[59];
 static EvtWord sekai_yami_npc[59];
-EvtWord sekai_yami_puni[70];
+static EvtWord sekai_yami_puni[70];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord sekai_yami_evt[286];
@@ -243,7 +243,7 @@ static s16 puni_rand_position[] = {
  * Places the Punies (slots 5 to 102) at the scripted spots from puni_rand_position for the thank-you scene.
  * Each one is an idle Puni that can chatter.
  */
-EVT_BEGIN(mario_see_you_init)
+static EVT_BEGIN(mario_see_you_init)
     SET_VALUE(LW(10), 5)
     SET_VALUE(LW(11), 0)
     SET_INT_READ_ADDR(PTR(puni_rand_position))
@@ -338,7 +338,7 @@ EVT_END()
  * at his spot; the west exit gets the lost-item exit.
  * Sets the story to STG2_03_02_SEALED_ENTRANCE_2.
  */
-EVT_BEGIN(seal_bigtree2)
+static EVT_BEGIN(seal_bigtree2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -788,7 +788,7 @@ EVT_BEGIN(out_dokan_1)
 EVT_END()
 
 /** Exit of mri_00: west road w_bero to win_03. */
-BeroEntry bero_lostitem[] = {
+static BeroEntry bero_lostitem[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
@@ -871,7 +871,7 @@ static BeroEntry bero_entry_data[] = {
  * the camera pans over the tree, the area name title appears and Mario walks in.
  * Sets the story to STG2_03_THE_GREAT_TREE.
  */
-EVT_BEGIN(first_bigtree)
+static EVT_BEGIN(first_bigtree)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -1096,7 +1096,7 @@ USER_FUNC(evt_mri_cloud_init) {
  * Arguments: array of map group names, name of the hit area, script run when the cloud is gone.
  * Starts evt_cloud_main_evt for the cloud.
  */
-USER_FUNC(evt_mri_cloud_ent) {
+static USER_FUNC(evt_mri_cloud_ent) {
     EvtWord* args = event->args;
     char** groups;
     char* hitName;
@@ -1147,7 +1147,7 @@ EVT_END()
  * Five control points (x, y, z) of the path followed in open_bigtree, the cutscene after the clouds are
  * blown off the tree.
  */
-f32 guide_move_data[] = {
+static f32 guide_move_data[] = {
     46.053036f, 145.50023f, -145.69612f, 84.1548f, 145.50023f, -166.70631f, 99.65739f, 143.0f,
     -188.3354f, 130.73201f, 155.65002f, -185.70927f, 160.16298f, 165.45027f, -184.42146f,
 };
@@ -1157,7 +1157,7 @@ f32 guide_move_data[] = {
  * the hidden door part is shown, Punio jumps in, Mario and Flurrie talk, and the secret door (S_doa) opens.
  * Sets the story to STG2_10_SECRET_ENTRANCE_REVEALED and enables the northeast door.
  */
-EVT_BEGIN(open_bigtree)
+static EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
 
     // The music pauses and a success jingle plays as the clouds clear and the controls are taken.
@@ -1374,7 +1374,7 @@ static USER_FUNC(anim_tevcallback) {
  * Picks a position in the Puni crowd grid for a Puni index (args[0]):
  * 15 per row, 20 units apart, with a random scatter. Returns x in args[1] and z in args[2].
  */
-USER_FUNC(get_puni_pos) {
+static USER_FUNC(get_puni_pos) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 x;
@@ -1425,7 +1425,7 @@ static USER_FUNC(starstone_set_ry) {
 }
 
 /** Fills the crowd of Punies (slots 5 to 102) at positions from get_puni_pos and faces each left or right at random. */
-EVT_BEGIN(puni_set)
+static EVT_BEGIN(puni_set)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), 0)
     LOOP(0)
@@ -1481,7 +1481,7 @@ EVT_END()
  * once the dark-view sweep position GW(0) reaches the Puni's x position it shows a surprised speech bubble
  * and keeps turning around now and then.
  */
-EVT_BEGIN(sekai_yami_puni)
+static EVT_BEGIN(sekai_yami_puni)
     LOOP(0)
         CALL(evt_puni_get_position, LW(0), LW(1), LW(2), LW(3))
         IF_INT_GREATER_OR_EQUAL(GW(0), LW(1))

@@ -45,7 +45,7 @@ static void magic2_2_line_dl(void);
 static void magic2_4_dl(void);
 
 /** Type 0 mesh: a 12-sided tube of long streaks reaching 2000 units deep. */
-effN64Vtx stg_magic2_2_line_v[] = {
+static effN64Vtx stg_magic2_2_line_v[] = {
     {-87, 50, 0, 5461, 2048, 255, 255, 255, 0},
     {-87, 50, -2000, 5461, 0, 255, 255, 255, 255},
     {-50, 87, -2000, 4779, 0, 255, 255, 255, 255},
@@ -75,7 +75,7 @@ effN64Vtx stg_magic2_2_line_v[] = {
 };
 
 /** Type 1 mesh: a 12-sided short ring, 50 units deep. */
-effN64Vtx stg_magic2_1_v[] = {
+static effN64Vtx stg_magic2_1_v[] = {
     {-87, 50, 0, 5461, 512, 255, 255, 255, 255},
     {-87, 50, -50, 5461, 0, 255, 255, 255, 255},
     {-50, 87, -50, 4779, 0, 255, 255, 255, 255},

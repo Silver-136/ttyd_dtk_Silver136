@@ -9,57 +9,57 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-BattleStageObjectData eki_btlobject_data[24];
-BattleStageData eki_btlstage_data[4];
-BattleUnitSetup btlparty_eki_eki_06_01_off_1[3];
-BattleGroupSetup btlgrp_eki_eki_06_01_off_1;
-BattleUnitSetup btlparty_eki_eki_02_01_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_02_01_off_1;
-BattleUnitSetup btlparty_eki_eki_02_02_off_1[3];
-BattleGroupSetup btlgrp_eki_eki_02_02_off_1;
-BattleUnitSetup btlparty_eki_eki_02_03_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_02_03_off_1;
-BattleUnitSetup btlparty_eki_eki_03_01_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_03_01_off_1;
-BattleUnitSetup btlparty_eki_eki_03_02_off_1[3];
-BattleGroupSetup btlgrp_eki_eki_03_02_off_1;
-BattleUnitSetup btlparty_eki_eki_03_03_off_1[3];
-BattleGroupSetup btlgrp_eki_eki_03_03_off_1;
-BattleUnitSetup btlparty_eki_eki_03_05_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_03_05_off_1;
-BattleUnitSetup btlparty_eki_eki_03_07_off_1[4];
-BattleGroupSetup btlgrp_eki_eki_03_07_off_1;
-BattleUnitSetup btlparty_eki_eki_04_01_off_1[3];
-BattleGroupSetup btlgrp_eki_eki_04_01_off_1;
-BattleUnitSetup btlparty_eki_eki_04_02_off_1[3];
-BattleGroupSetup btlgrp_eki_eki_04_02_off_1;
-BattleUnitSetup btlparty_eki_eki_04_06_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_04_06_off_1;
-BattleUnitSetup btlparty_eki_eki_04_03_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_04_03_off_1;
-BattleUnitSetup btlparty_eki_eki_04_04_off_1[4];
-BattleGroupSetup btlgrp_eki_eki_04_04_off_1;
-BattleUnitSetup btlparty_eki_eki_04_05_off_1[2];
-BattleGroupSetup btlgrp_eki_eki_04_05_off_1;
-NpcBattleSelect btlgrpsel_eki_btlno_eki_test1_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_test2_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_test3_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_06_01_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_06_02_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_02_01_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_02_02_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_02_03_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_01_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_02_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_03_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_06_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_08_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_01_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_02_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_06_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_03_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_04_off[2];
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_05_off[2];
+static BattleStageObjectData eki_btlobject_data[24];
+static BattleStageData eki_btlstage_data[4];
+static BattleUnitSetup btlparty_eki_eki_06_01_off_1[3];
+static BattleGroupSetup btlgrp_eki_eki_06_01_off_1;
+static BattleUnitSetup btlparty_eki_eki_02_01_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_02_01_off_1;
+static BattleUnitSetup btlparty_eki_eki_02_02_off_1[3];
+static BattleGroupSetup btlgrp_eki_eki_02_02_off_1;
+static BattleUnitSetup btlparty_eki_eki_02_03_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_02_03_off_1;
+static BattleUnitSetup btlparty_eki_eki_03_01_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_03_01_off_1;
+static BattleUnitSetup btlparty_eki_eki_03_02_off_1[3];
+static BattleGroupSetup btlgrp_eki_eki_03_02_off_1;
+static BattleUnitSetup btlparty_eki_eki_03_03_off_1[3];
+static BattleGroupSetup btlgrp_eki_eki_03_03_off_1;
+static BattleUnitSetup btlparty_eki_eki_03_05_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_03_05_off_1;
+static BattleUnitSetup btlparty_eki_eki_03_07_off_1[4];
+static BattleGroupSetup btlgrp_eki_eki_03_07_off_1;
+static BattleUnitSetup btlparty_eki_eki_04_01_off_1[3];
+static BattleGroupSetup btlgrp_eki_eki_04_01_off_1;
+static BattleUnitSetup btlparty_eki_eki_04_02_off_1[3];
+static BattleGroupSetup btlgrp_eki_eki_04_02_off_1;
+static BattleUnitSetup btlparty_eki_eki_04_06_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_04_06_off_1;
+static BattleUnitSetup btlparty_eki_eki_04_03_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_04_03_off_1;
+static BattleUnitSetup btlparty_eki_eki_04_04_off_1[4];
+static BattleGroupSetup btlgrp_eki_eki_04_04_off_1;
+static BattleUnitSetup btlparty_eki_eki_04_05_off_1[2];
+static BattleGroupSetup btlgrp_eki_eki_04_05_off_1;
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_test1_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_test2_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_test3_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_06_01_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_06_02_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_02_01_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_02_02_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_02_03_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_01_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_02_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_03_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_06_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_08_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_01_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_02_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_06_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_03_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_04_off[2];
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_05_off[2];
 NpcSetupBattleInfo btlsetup_eki_tbl[20];
 NpcTerritoryInfo btl_eki_setup_no_tbl[20];
 
@@ -67,7 +67,7 @@ NpcTerritoryInfo btl_eki_setup_no_tbl[20];
  * Props of the Riverside Station battle stage: each entry names a model of the backdrop and where it stands,
  * the last entries being the background layers.
  */
-BattleStageObjectData eki_btlobject_data[] = {
+static BattleStageObjectData eki_btlobject_data[] = {
     {"lamp_01", 2, STAGE_LAYER_A1, {-116.0f, 0.0f, -59.0f}, 0, 60, {0}},
     {"lamp_02", 2, STAGE_LAYER_A1, {116.0f, 0.0f, -59.0f}, 10, 50, {0}},
     {"lamp_03", 2, STAGE_LAYER_A1, {0.0f, 0.0f, -59.0f}, 20, 40, {0}},
@@ -98,7 +98,7 @@ BattleStageObjectData eki_btlobject_data[] = {
  * Battle stage of Riverside Station: the stage model directories, the props above, the backdrop weapons and
  * the background event that runs during the fight.
  */
-BattleStageData eki_btlstage_data[] = {
+static BattleStageData eki_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_06_1", // specificStageDataDir
@@ -147,7 +147,7 @@ BattleStageData eki_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
     {
         &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -180,7 +180,7 @@ BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_06_01_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_06_01_off_1 = {
     3, // numEnemies
     btlparty_eki_eki_06_01_off_1, // enemyData
     25, // heldItemWeight
@@ -191,7 +191,7 @@ BattleGroupSetup btlgrp_eki_eki_06_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
     {
         &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -214,7 +214,7 @@ BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_02_01_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_02_01_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_02_01_off_1, // enemyData
     25, // heldItemWeight
@@ -225,7 +225,7 @@ BattleGroupSetup btlgrp_eki_eki_02_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
     {
         &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -258,7 +258,7 @@ BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_02_02_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_02_02_off_1 = {
     3, // numEnemies
     btlparty_eki_eki_02_02_off_1, // enemyData
     25, // heldItemWeight
@@ -269,7 +269,7 @@ BattleGroupSetup btlgrp_eki_eki_02_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
     {
         &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -292,7 +292,7 @@ BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_02_03_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_02_03_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_02_03_off_1, // enemyData
     25, // heldItemWeight
@@ -303,7 +303,7 @@ BattleGroupSetup btlgrp_eki_eki_02_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
     {
         &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -326,7 +326,7 @@ BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_03_01_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_03_01_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_03_01_off_1, // enemyData
     25, // heldItemWeight
@@ -337,7 +337,7 @@ BattleGroupSetup btlgrp_eki_eki_03_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
     {
         &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -370,7 +370,7 @@ BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_03_02_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_03_02_off_1 = {
     3, // numEnemies
     btlparty_eki_eki_03_02_off_1, // enemyData
     25, // heldItemWeight
@@ -381,7 +381,7 @@ BattleGroupSetup btlgrp_eki_eki_03_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
     {
         &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -414,7 +414,7 @@ BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_03_03_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_03_03_off_1 = {
     3, // numEnemies
     btlparty_eki_eki_03_03_off_1, // enemyData
     25, // heldItemWeight
@@ -425,7 +425,7 @@ BattleGroupSetup btlgrp_eki_eki_03_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
     {
         &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -448,7 +448,7 @@ BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_03_05_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_03_05_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_03_05_off_1, // enemyData
     25, // heldItemWeight
@@ -459,7 +459,7 @@ BattleGroupSetup btlgrp_eki_eki_03_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     {
         &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -502,7 +502,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_03_07_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_03_07_off_1 = {
     4, // numEnemies
     btlparty_eki_eki_03_07_off_1, // enemyData
     25, // heldItemWeight
@@ -513,7 +513,7 @@ BattleGroupSetup btlgrp_eki_eki_03_07_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
     {
         &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -546,7 +546,7 @@ BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_04_01_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_04_01_off_1 = {
     3, // numEnemies
     btlparty_eki_eki_04_01_off_1, // enemyData
     25, // heldItemWeight
@@ -557,7 +557,7 @@ BattleGroupSetup btlgrp_eki_eki_04_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
     {
         &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -590,7 +590,7 @@ BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_04_02_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_04_02_off_1 = {
     3, // numEnemies
     btlparty_eki_eki_04_02_off_1, // enemyData
     25, // heldItemWeight
@@ -601,7 +601,7 @@ BattleGroupSetup btlgrp_eki_eki_04_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
     {
         &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -624,7 +624,7 @@ BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_04_06_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_04_06_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_04_06_off_1, // enemyData
     25, // heldItemWeight
@@ -635,7 +635,7 @@ BattleGroupSetup btlgrp_eki_eki_04_06_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
     {
         &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -658,7 +658,7 @@ BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_04_03_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_04_03_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_04_03_off_1, // enemyData
     25, // heldItemWeight
@@ -669,7 +669,7 @@ BattleGroupSetup btlgrp_eki_eki_04_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     {
         &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -712,7 +712,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_04_04_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_04_04_off_1 = {
     4, // numEnemies
     btlparty_eki_eki_04_04_off_1, // enemyData
     25, // heldItemWeight
@@ -723,7 +723,7 @@ BattleGroupSetup btlgrp_eki_eki_04_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
+static BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
     {
         &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -746,7 +746,7 @@ BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_eki_eki_04_05_off_1 = {
+static BattleGroupSetup btlgrp_eki_eki_04_05_off_1 = {
     2, // numEnemies
     btlparty_eki_eki_04_05_off_1, // enemyData
     25, // heldItemWeight
@@ -757,97 +757,97 @@ BattleGroupSetup btlgrp_eki_eki_04_05_off_1 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_test1_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_test1_off[] = {
     {50, &btlgrp_eki_eki_06_01_off_1, eki_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_test2_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_test2_off[] = {
     {50, &btlgrp_eki_eki_06_01_off_1, &eki_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_test3_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_test3_off[] = {
     {50, &btlgrp_eki_eki_06_01_off_1, &eki_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_06_01_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_06_01_off[] = {
     {50, &btlgrp_eki_eki_06_01_off_1, eki_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_06_02_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_06_02_off[] = {
     {50, &btlgrp_eki_eki_06_01_off_1, eki_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_02_01_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_02_01_off[] = {
     {20, &btlgrp_eki_eki_02_01_off_1, &eki_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_02_02_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_02_02_off[] = {
     {20, &btlgrp_eki_eki_02_02_off_1, &eki_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_02_03_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_02_03_off[] = {
     {20, &btlgrp_eki_eki_02_03_off_1, &eki_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_01_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_01_off[] = {
     {20, &btlgrp_eki_eki_03_01_off_1, &eki_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_02_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_02_off[] = {
     {20, &btlgrp_eki_eki_03_02_off_1, &eki_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_03_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_03_off[] = {
     {20, &btlgrp_eki_eki_03_03_off_1, &eki_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_06_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_06_off[] = {
     {20, &btlgrp_eki_eki_03_05_off_1, &eki_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_03_08_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_03_08_off[] = {
     {20, &btlgrp_eki_eki_03_07_off_1, &eki_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_01_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_01_off[] = {
     {20, &btlgrp_eki_eki_04_01_off_1, &eki_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_02_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_02_off[] = {
     {20, &btlgrp_eki_eki_04_02_off_1, &eki_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_06_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_06_off[] = {
     {20, &btlgrp_eki_eki_04_06_off_1, &eki_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_03_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_03_off[] = {
     {20, &btlgrp_eki_eki_04_03_off_1, &eki_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_04_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_04_off[] = {
     {20, &btlgrp_eki_eki_04_04_off_1, &eki_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_eki_btlno_eki_04_05_off[] = {
+static NpcBattleSelect btlgrpsel_eki_btlno_eki_04_05_off[] = {
     {20, &btlgrp_eki_eki_04_05_off_1, &eki_btlstage_data[1]},
     {0},
 };

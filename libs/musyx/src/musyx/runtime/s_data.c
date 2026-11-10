@@ -59,7 +59,7 @@ static MEM_DATA* GetLayerAddr(u16 id, POOL_DATA* pool) {
   return pool == NULL ? NULL : GetPoolAddr(id, (MEM_DATA*)((u8*)pool + pool->layerOff));
 }
 
-void InsertData(u16 id, void* data, u8 dataType, u32 remove) {
+static void InsertData(u16 id, void* data, u8 dataType, u32 remove) {
   MEM_DATA* m;
 
   switch (dataType) {

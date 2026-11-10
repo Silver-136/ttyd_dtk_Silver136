@@ -35,7 +35,7 @@ static EvtWord s_door_open[22];
 static EvtWord s_door_close[22];
 static BeroEntry bero_entry_data[2];
 EvtWord tensou_ride[245];
-EvtWord tensou_switch[62];
+static EvtWord tensou_switch[62];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_tensou2[];
@@ -221,7 +221,7 @@ EVT_END()
  * presses the switch (SFX_STG7_SWITCH_WARP1), plays the teleporter's start-up animation anm_saisho and the beam,
  * and attaches tensou_ride to the pad A_tensou.
  */
-EVT_BEGIN(tensou_switch)
+static EVT_BEGIN(tensou_switch)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("sui__1"), LW(0), LW(1), LW(2))

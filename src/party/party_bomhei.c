@@ -42,7 +42,7 @@ s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 
 #endif
 
 /** Camera shake of 600 ms (camera 4), run when Bobbery's blast hits a bomb rock (chkBreakable). */
-EVT_BEGIN(longQuake_evt)
+static EVT_BEGIN(longQuake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(15.0f / 1024.0f), FLOAT(15.0f / 1024.0f), 600)
     RETURN
 EVT_END()

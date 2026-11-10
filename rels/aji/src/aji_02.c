@@ -31,9 +31,9 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(all_flag_off);
-USER_FUNC(hikaru_off_func);
-USER_FUNC(hikaru_on_func);
+static USER_FUNC(all_flag_off);
+static USER_FUNC(hikaru_off_func);
+static USER_FUNC(hikaru_on_func);
 static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
@@ -41,14 +41,14 @@ static USER_FUNC(loop_onoff);
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
-u8 root_0[10];
-u8 root_1[14];
-u8 root_2[15];
+static u8 root_0[10];
+static u8 root_1[14];
+static u8 root_2[15];
 typedef struct RootRoute {
     u8* panels;
     s32 count;
 } RootRoute;
-RootRoute root_data[3];
+static RootRoute root_data[3];
 static EvtWord hikaru_on[4];
 static EvtWord hikaru_off[4];
 EvtWord hikaru_yuka[28];
@@ -121,19 +121,19 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** First safe route across the electrified floor, as panel numbers. */
-u8 root_0[] = {
+static u8 root_0[] = {
     10, 9, 8, 7, 6, 5, 4, 3,
     2, 1,
 };
 
 /** Second safe route across the electrified floor, as panel numbers. */
-u8 root_1[] = {
+static u8 root_1[] = {
     21, 8, 7, 6, 20, 19, 18, 17,
     16, 15, 14, 13, 12, 11,
 };
 
 /** Third safe route across the electrified floor, as panel numbers. */
-u8 root_2[] = {
+static u8 root_2[] = {
     30, 29, 28, 27, 26, 17, 18, 19,
     20, 6, 5, 25, 24, 23, 22,
 };
@@ -142,7 +142,7 @@ u8 root_2[] = {
  * The three routes (panel list and length), one of which the game picks to show the way across the
  * electrified floor.
  */
-RootRoute root_data[] = {
+static RootRoute root_data[] = {
     {root_0, 10},
     {root_1, 14},
     {root_2, 15},
@@ -456,7 +456,7 @@ static USER_FUNC(loop_onoff) {
     return EVT_RETURN_BLOCK;
 }
 
-USER_FUNC(all_flag_off) {
+static USER_FUNC(all_flag_off) {
     char name[64];
     s32 i;
 
@@ -471,7 +471,7 @@ USER_FUNC(all_flag_off) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(hikaru_on_func) {
+static USER_FUNC(hikaru_on_func) {
     char name[64];
     s32 idx = evtGetValue(event, GW(10));
 
@@ -509,7 +509,7 @@ USER_FUNC(hikaru_on_func) {
 }
 
 // Hide both visual sets without changing the panel collision attributes.
-USER_FUNC(hikaru_off_func) {
+static USER_FUNC(hikaru_off_func) {
     char name[64];
     s32 i;
 

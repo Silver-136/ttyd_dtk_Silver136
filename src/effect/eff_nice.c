@@ -14,7 +14,7 @@
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
 
-const char* anim_jp[] = {
+static const char* anim_jp[] = {
     "EFF_nice",
     "EFF_good",
     "EFF_great",
@@ -23,7 +23,7 @@ const char* anim_jp[] = {
     NULL,
     "EFF_lucky"
 };
-const char* anim_us[] = {
+static const char* anim_us[] = {
     "EFF_nice_us",
     "EFF_good_us",
     "EFF_great_us",
@@ -75,8 +75,8 @@ const char** anim_tbl[6] = { anim_jp, anim_us, anim_lang3, anim_lang4, anim_lang
  * Letter textures spelling the Stylish text (type 7) in each language, drawn left to right;
  * -1 leaves a gap.
  */
-s16 acrobat_jp[] = {151, 152, 153, 154, 155, 156, 157};
-s16 acrobat_us[] = {161, 162, 163, 164, 165, 161, 166, 167};
+static s16 acrobat_jp[] = {151, 152, 153, 154, 155, 156, 157};
+static s16 acrobat_us[] = {161, 162, 163, 164, 165, 161, 166, 167};
 s16 acrobat_lang3[] = {157, 158, 158, 159, 160};
 s16 acrobat_lang4[] = {163, 164, 165, 166, 167, 168};
 s16 acrobat_lang5[] = {166, 167, 168, 166, 169, 166, 170, 171, 166};
@@ -86,14 +86,14 @@ typedef struct AcrobatSet {
     s32 count;
 } AcrobatSet;
 /** Stylish letter list and letter count for each language, read by acrobatMain and the type 7 draw. */
-AcrobatSet acrobat_tbl[6] = { { acrobat_jp, 7 }, { acrobat_us, 8 }, { acrobat_lang3, 5 }, { acrobat_lang4, 6 }, { acrobat_lang5, 9 }, { acrobat_lang6, 10 } };
+static AcrobatSet acrobat_tbl[6] = { { acrobat_jp, 7 }, { acrobat_us, 8 }, { acrobat_lang3, 5 }, { acrobat_lang4, 6 }, { acrobat_lang5, 9 }, { acrobat_lang6, 10 } };
 #else
 static const char** anim_tbl[2] = { anim_jp, anim_us };
 /** Letter textures spelling the Stylish text (type 7) in each language, drawn left to right. */
-s32 acrobat_jp[] = {179, 180, 181, 182, 183, 184, 185};
-s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; // includes nonexistent textures
+static s32 acrobat_jp[] = {179, 180, 181, 182, 183, 184, 185};
+static s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; // includes nonexistent textures
 /** Stylish letter list for each language, read by the type 7 draw (the letter count is fixed in effNiceEntry). */
-s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
+static s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
 #endif
 
 static void effNiceMain(EffectEntry* effect);

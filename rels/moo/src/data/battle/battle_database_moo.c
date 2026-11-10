@@ -15,78 +15,78 @@
 static USER_FUNC(_space_rotate);
 extern BattleUnitKind unit_barriern_z;
 
-BattleStageObjectData moo_btlobject_data[5];
-BattleStageData moo_btlstage_data[1];
-BattleUnitSetup btlparty_moo_moo_00_01_off_1[3];
-BattleGroupSetup btlgrp_moo_moo_00_01_off_1;
-BattleUnitSetup btlparty_moo_moo_01_01_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_01_01_off_1;
-BattleUnitSetup btlparty_moo_moo_01_02_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_01_02_off_1;
-BattleUnitSetup btlparty_moo_moo_01_02_off_2[3];
-BattleGroupSetup btlgrp_moo_moo_01_02_off_2;
-BattleUnitSetup btlparty_moo_moo_01_03_off_1[3];
-BattleGroupSetup btlgrp_moo_moo_01_03_off_1;
-BattleUnitSetup btlparty_moo_moo_01_04_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_01_04_off_1;
-BattleUnitSetup btlparty_moo_moo_01_04_off_2[3];
-BattleGroupSetup btlgrp_moo_moo_01_04_off_2;
-BattleUnitSetup btlparty_moo_moo_01_04_off_3[4];
-BattleGroupSetup btlgrp_moo_moo_01_04_off_3;
-BattleUnitSetup btlparty_moo_moo_01_05_off_1[4];
-BattleGroupSetup btlgrp_moo_moo_01_05_off_1;
-BattleUnitSetup btlparty_moo_moo_02_01_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_02_01_off_1;
-BattleUnitSetup btlparty_moo_moo_02_02_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_02_02_off_1;
-BattleUnitSetup btlparty_moo_moo_02_03_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_02_03_off_1;
-BattleUnitSetup btlparty_moo_moo_02_04_off_1[3];
-BattleGroupSetup btlgrp_moo_moo_02_04_off_1;
-BattleUnitSetup btlparty_moo_moo_02_05_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_02_05_off_1;
-BattleUnitSetup btlparty_moo_moo_05_01_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_05_01_off_1;
-BattleUnitSetup btlparty_moo_moo_05_01_off_2[3];
-BattleGroupSetup btlgrp_moo_moo_05_01_off_2;
-BattleUnitSetup btlparty_moo_moo_05_01_off_3[4];
-BattleGroupSetup btlgrp_moo_moo_05_01_off_3;
-BattleUnitSetup btlparty_moo_moo_05_02_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_05_02_off_1;
-BattleUnitSetup btlparty_moo_moo_05_03_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_05_03_off_1;
-BattleUnitSetup btlparty_moo_moo_05_03_off_2[3];
-BattleGroupSetup btlgrp_moo_moo_05_03_off_2;
-BattleUnitSetup btlparty_moo_moo_05_04_off_1[3];
-BattleGroupSetup btlgrp_moo_moo_05_04_off_1;
-BattleUnitSetup btlparty_moo_moo_05_05_off_1[2];
-BattleGroupSetup btlgrp_moo_moo_05_05_off_1;
-BattleUnitSetup btlparty_moo_moo_05_05_off_2[3];
-BattleGroupSetup btlgrp_moo_moo_05_05_off_2;
-BattleUnitSetup btlparty_moo_moo_05_05_off_3[4];
-BattleGroupSetup btlgrp_moo_moo_05_05_off_3;
-NpcBattleSelect btlgrpsel_moo_btlno_moo_test1_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_01_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_02_off[3];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_03_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_04_off[4];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_05_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_01_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_02_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_03_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_04_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_05_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_01_off[4];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_02_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_03_off[3];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_04_off[2];
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_05_off[4];
+static BattleStageObjectData moo_btlobject_data[5];
+static BattleStageData moo_btlstage_data[1];
+static BattleUnitSetup btlparty_moo_moo_00_01_off_1[3];
+static BattleGroupSetup btlgrp_moo_moo_00_01_off_1;
+static BattleUnitSetup btlparty_moo_moo_01_01_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_01_01_off_1;
+static BattleUnitSetup btlparty_moo_moo_01_02_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_01_02_off_1;
+static BattleUnitSetup btlparty_moo_moo_01_02_off_2[3];
+static BattleGroupSetup btlgrp_moo_moo_01_02_off_2;
+static BattleUnitSetup btlparty_moo_moo_01_03_off_1[3];
+static BattleGroupSetup btlgrp_moo_moo_01_03_off_1;
+static BattleUnitSetup btlparty_moo_moo_01_04_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_01_04_off_1;
+static BattleUnitSetup btlparty_moo_moo_01_04_off_2[3];
+static BattleGroupSetup btlgrp_moo_moo_01_04_off_2;
+static BattleUnitSetup btlparty_moo_moo_01_04_off_3[4];
+static BattleGroupSetup btlgrp_moo_moo_01_04_off_3;
+static BattleUnitSetup btlparty_moo_moo_01_05_off_1[4];
+static BattleGroupSetup btlgrp_moo_moo_01_05_off_1;
+static BattleUnitSetup btlparty_moo_moo_02_01_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_02_01_off_1;
+static BattleUnitSetup btlparty_moo_moo_02_02_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_02_02_off_1;
+static BattleUnitSetup btlparty_moo_moo_02_03_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_02_03_off_1;
+static BattleUnitSetup btlparty_moo_moo_02_04_off_1[3];
+static BattleGroupSetup btlgrp_moo_moo_02_04_off_1;
+static BattleUnitSetup btlparty_moo_moo_02_05_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_02_05_off_1;
+static BattleUnitSetup btlparty_moo_moo_05_01_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_05_01_off_1;
+static BattleUnitSetup btlparty_moo_moo_05_01_off_2[3];
+static BattleGroupSetup btlgrp_moo_moo_05_01_off_2;
+static BattleUnitSetup btlparty_moo_moo_05_01_off_3[4];
+static BattleGroupSetup btlgrp_moo_moo_05_01_off_3;
+static BattleUnitSetup btlparty_moo_moo_05_02_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_05_02_off_1;
+static BattleUnitSetup btlparty_moo_moo_05_03_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_05_03_off_1;
+static BattleUnitSetup btlparty_moo_moo_05_03_off_2[3];
+static BattleGroupSetup btlgrp_moo_moo_05_03_off_2;
+static BattleUnitSetup btlparty_moo_moo_05_04_off_1[3];
+static BattleGroupSetup btlgrp_moo_moo_05_04_off_1;
+static BattleUnitSetup btlparty_moo_moo_05_05_off_1[2];
+static BattleGroupSetup btlgrp_moo_moo_05_05_off_1;
+static BattleUnitSetup btlparty_moo_moo_05_05_off_2[3];
+static BattleGroupSetup btlgrp_moo_moo_05_05_off_2;
+static BattleUnitSetup btlparty_moo_moo_05_05_off_3[4];
+static BattleGroupSetup btlgrp_moo_moo_05_05_off_3;
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_test1_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_01_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_02_off[3];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_03_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_04_off[4];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_05_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_01_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_02_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_03_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_04_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_05_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_01_off[4];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_02_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_03_off[3];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_04_off[2];
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_05_off[4];
 NpcSetupBattleInfo btlsetup_moo_tbl[17];
 NpcTerritoryInfo btl_moo_setup_no_tbl[17];
-EvtWord bgset_moo_space_event[35];
+static EvtWord bgset_moo_space_event[35];
 
 /** Scenery pieces of the Moon battle stage; moo_btlstage_data points into this array. */
-BattleStageObjectData moo_btlobject_data[] = {
+static BattleStageObjectData moo_btlobject_data[] = {
     {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
     {"space", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
     {"star_01", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
@@ -95,7 +95,7 @@ BattleStageObjectData moo_btlobject_data[] = {
 };
 
 /** The battle stage used for fights on the Moon: its backdrop folder and scenery pieces. */
-BattleStageData moo_btlstage_data[] = {
+static BattleStageData moo_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_07_4", // specificStageDataDir
@@ -109,7 +109,7 @@ BattleStageData moo_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_moo_moo_00_01_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_00_01_off_1[] = {
     {
         &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -142,7 +142,7 @@ BattleUnitSetup btlparty_moo_moo_00_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_00_01_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_00_01_off_1 = {
     3, // numEnemies
     btlparty_moo_moo_00_01_off_1, // enemyData
     25, // heldItemWeight
@@ -153,7 +153,7 @@ BattleGroupSetup btlgrp_moo_moo_00_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_01_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_01_01_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -176,7 +176,7 @@ BattleUnitSetup btlparty_moo_moo_01_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_01_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_01_01_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_01_01_off_1, // enemyData
     25, // heldItemWeight
@@ -187,7 +187,7 @@ BattleGroupSetup btlgrp_moo_moo_01_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_02_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_01_02_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -210,7 +210,7 @@ BattleUnitSetup btlparty_moo_moo_01_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_02_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_01_02_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_01_02_off_1, // enemyData
     25, // heldItemWeight
@@ -221,7 +221,7 @@ BattleGroupSetup btlgrp_moo_moo_01_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_02_off_2[] = {
+static BattleUnitSetup btlparty_moo_moo_01_02_off_2[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -254,7 +254,7 @@ BattleUnitSetup btlparty_moo_moo_01_02_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_02_off_2 = {
+static BattleGroupSetup btlgrp_moo_moo_01_02_off_2 = {
     3, // numEnemies
     btlparty_moo_moo_01_02_off_2, // enemyData
     25, // heldItemWeight
@@ -265,7 +265,7 @@ BattleGroupSetup btlgrp_moo_moo_01_02_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_03_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_01_03_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -298,7 +298,7 @@ BattleUnitSetup btlparty_moo_moo_01_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_03_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_01_03_off_1 = {
     3, // numEnemies
     btlparty_moo_moo_01_03_off_1, // enemyData
     25, // heldItemWeight
@@ -309,7 +309,7 @@ BattleGroupSetup btlgrp_moo_moo_01_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_04_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_01_04_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -332,7 +332,7 @@ BattleUnitSetup btlparty_moo_moo_01_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_04_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_01_04_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_01_04_off_1, // enemyData
     25, // heldItemWeight
@@ -343,7 +343,7 @@ BattleGroupSetup btlgrp_moo_moo_01_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_04_off_2[] = {
+static BattleUnitSetup btlparty_moo_moo_01_04_off_2[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -376,7 +376,7 @@ BattleUnitSetup btlparty_moo_moo_01_04_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_04_off_2 = {
+static BattleGroupSetup btlgrp_moo_moo_01_04_off_2 = {
     3, // numEnemies
     btlparty_moo_moo_01_04_off_2, // enemyData
     25, // heldItemWeight
@@ -387,7 +387,7 @@ BattleGroupSetup btlgrp_moo_moo_01_04_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_04_off_3[] = {
+static BattleUnitSetup btlparty_moo_moo_01_04_off_3[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -430,7 +430,7 @@ BattleUnitSetup btlparty_moo_moo_01_04_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_04_off_3 = {
+static BattleGroupSetup btlgrp_moo_moo_01_04_off_3 = {
     4, // numEnemies
     btlparty_moo_moo_01_04_off_3, // enemyData
     25, // heldItemWeight
@@ -441,7 +441,7 @@ BattleGroupSetup btlgrp_moo_moo_01_04_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_01_05_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_01_05_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -484,7 +484,7 @@ BattleUnitSetup btlparty_moo_moo_01_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_01_05_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_01_05_off_1 = {
     4, // numEnemies
     btlparty_moo_moo_01_05_off_1, // enemyData
     25, // heldItemWeight
@@ -495,7 +495,7 @@ BattleGroupSetup btlgrp_moo_moo_01_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_02_01_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_02_01_off_1[] = {
     {
         &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -526,7 +526,7 @@ BattleUnitSetup btlparty_moo_moo_02_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_02_01_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_02_01_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_02_01_off_1, // enemyData
     25, // heldItemWeight
@@ -537,7 +537,7 @@ BattleGroupSetup btlgrp_moo_moo_02_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_02_02_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_02_02_off_1[] = {
     {
         &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -560,7 +560,7 @@ BattleUnitSetup btlparty_moo_moo_02_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_02_02_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_02_02_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_02_02_off_1, // enemyData
     25, // heldItemWeight
@@ -571,7 +571,7 @@ BattleGroupSetup btlgrp_moo_moo_02_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_02_03_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_02_03_off_1[] = {
     {
         &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -602,7 +602,7 @@ BattleUnitSetup btlparty_moo_moo_02_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_02_03_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_02_03_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_02_03_off_1, // enemyData
     25, // heldItemWeight
@@ -613,7 +613,7 @@ BattleGroupSetup btlgrp_moo_moo_02_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_02_04_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_02_04_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -646,7 +646,7 @@ BattleUnitSetup btlparty_moo_moo_02_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_02_04_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_02_04_off_1 = {
     3, // numEnemies
     btlparty_moo_moo_02_04_off_1, // enemyData
     25, // heldItemWeight
@@ -657,7 +657,7 @@ BattleGroupSetup btlgrp_moo_moo_02_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_02_05_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_02_05_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -680,7 +680,7 @@ BattleUnitSetup btlparty_moo_moo_02_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_02_05_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_02_05_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_02_05_off_1, // enemyData
     25, // heldItemWeight
@@ -691,7 +691,7 @@ BattleGroupSetup btlgrp_moo_moo_02_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_01_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_05_01_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -714,7 +714,7 @@ BattleUnitSetup btlparty_moo_moo_05_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_01_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_05_01_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_05_01_off_1, // enemyData
     25, // heldItemWeight
@@ -725,7 +725,7 @@ BattleGroupSetup btlgrp_moo_moo_05_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_01_off_2[] = {
+static BattleUnitSetup btlparty_moo_moo_05_01_off_2[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -758,7 +758,7 @@ BattleUnitSetup btlparty_moo_moo_05_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_01_off_2 = {
+static BattleGroupSetup btlgrp_moo_moo_05_01_off_2 = {
     3, // numEnemies
     btlparty_moo_moo_05_01_off_2, // enemyData
     25, // heldItemWeight
@@ -769,7 +769,7 @@ BattleGroupSetup btlgrp_moo_moo_05_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_01_off_3[] = {
+static BattleUnitSetup btlparty_moo_moo_05_01_off_3[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -812,7 +812,7 @@ BattleUnitSetup btlparty_moo_moo_05_01_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_01_off_3 = {
+static BattleGroupSetup btlgrp_moo_moo_05_01_off_3 = {
     4, // numEnemies
     btlparty_moo_moo_05_01_off_3, // enemyData
     25, // heldItemWeight
@@ -823,7 +823,7 @@ BattleGroupSetup btlgrp_moo_moo_05_01_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_02_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_05_02_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -846,7 +846,7 @@ BattleUnitSetup btlparty_moo_moo_05_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_02_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_05_02_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_05_02_off_1, // enemyData
     25, // heldItemWeight
@@ -857,7 +857,7 @@ BattleGroupSetup btlgrp_moo_moo_05_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_03_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_05_03_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -880,7 +880,7 @@ BattleUnitSetup btlparty_moo_moo_05_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_03_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_05_03_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_05_03_off_1, // enemyData
     25, // heldItemWeight
@@ -891,7 +891,7 @@ BattleGroupSetup btlgrp_moo_moo_05_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_03_off_2[] = {
+static BattleUnitSetup btlparty_moo_moo_05_03_off_2[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -924,7 +924,7 @@ BattleUnitSetup btlparty_moo_moo_05_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_03_off_2 = {
+static BattleGroupSetup btlgrp_moo_moo_05_03_off_2 = {
     3, // numEnemies
     btlparty_moo_moo_05_03_off_2, // enemyData
     25, // heldItemWeight
@@ -935,7 +935,7 @@ BattleGroupSetup btlgrp_moo_moo_05_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_04_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_05_04_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -968,7 +968,7 @@ BattleUnitSetup btlparty_moo_moo_05_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_04_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_05_04_off_1 = {
     3, // numEnemies
     btlparty_moo_moo_05_04_off_1, // enemyData
     25, // heldItemWeight
@@ -979,7 +979,7 @@ BattleGroupSetup btlgrp_moo_moo_05_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_05_off_1[] = {
+static BattleUnitSetup btlparty_moo_moo_05_05_off_1[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1002,7 +1002,7 @@ BattleUnitSetup btlparty_moo_moo_05_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_05_off_1 = {
+static BattleGroupSetup btlgrp_moo_moo_05_05_off_1 = {
     2, // numEnemies
     btlparty_moo_moo_05_05_off_1, // enemyData
     25, // heldItemWeight
@@ -1013,7 +1013,7 @@ BattleGroupSetup btlgrp_moo_moo_05_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_05_off_2[] = {
+static BattleUnitSetup btlparty_moo_moo_05_05_off_2[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1046,7 +1046,7 @@ BattleUnitSetup btlparty_moo_moo_05_05_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_05_off_2 = {
+static BattleGroupSetup btlgrp_moo_moo_05_05_off_2 = {
     3, // numEnemies
     btlparty_moo_moo_05_05_off_2, // enemyData
     25, // heldItemWeight
@@ -1057,7 +1057,7 @@ BattleGroupSetup btlgrp_moo_moo_05_05_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_moo_moo_05_05_off_3[] = {
+static BattleUnitSetup btlparty_moo_moo_05_05_off_3[] = {
     {
         &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1100,7 +1100,7 @@ BattleUnitSetup btlparty_moo_moo_05_05_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_moo_moo_05_05_off_3 = {
+static BattleGroupSetup btlgrp_moo_moo_05_05_off_3 = {
     4, // numEnemies
     btlparty_moo_moo_05_05_off_3, // enemyData
     25, // heldItemWeight
@@ -1111,88 +1111,88 @@ BattleGroupSetup btlgrp_moo_moo_05_05_off_3 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_test1_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_test1_off[] = {
     {50, &btlgrp_moo_moo_00_01_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_01_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_01_off[] = {
     {10, &btlgrp_moo_moo_01_01_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_02_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_02_off[] = {
     {10, &btlgrp_moo_moo_01_02_off_1, moo_btlstage_data},
     {10, &btlgrp_moo_moo_01_02_off_2, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_03_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_03_off[] = {
     {10, &btlgrp_moo_moo_01_03_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_04_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_04_off[] = {
     {10, &btlgrp_moo_moo_01_04_off_1, moo_btlstage_data},
     {10, &btlgrp_moo_moo_01_04_off_2, moo_btlstage_data},
     {5, &btlgrp_moo_moo_01_04_off_3, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_01_05_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_01_05_off[] = {
     {5, &btlgrp_moo_moo_01_05_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_01_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_01_off[] = {
     {20, &btlgrp_moo_moo_02_01_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_02_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_02_off[] = {
     {20, &btlgrp_moo_moo_02_02_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_03_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_03_off[] = {
     {20, &btlgrp_moo_moo_02_03_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_04_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_04_off[] = {
     {20, &btlgrp_moo_moo_02_04_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_02_05_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_02_05_off[] = {
     {20, &btlgrp_moo_moo_02_05_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_01_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_01_off[] = {
     {10, &btlgrp_moo_moo_05_01_off_1, moo_btlstage_data},
     {10, &btlgrp_moo_moo_05_01_off_2, moo_btlstage_data},
     {5, &btlgrp_moo_moo_05_01_off_3, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_02_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_02_off[] = {
     {20, &btlgrp_moo_moo_05_02_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_03_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_03_off[] = {
     {10, &btlgrp_moo_moo_05_03_off_1, moo_btlstage_data},
     {10, &btlgrp_moo_moo_05_03_off_2, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_04_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_04_off[] = {
     {20, &btlgrp_moo_moo_05_04_off_1, moo_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_moo_btlno_moo_05_05_off[] = {
+static NpcBattleSelect btlgrpsel_moo_btlno_moo_05_05_off[] = {
     {10, &btlgrp_moo_moo_05_05_off_1, moo_btlstage_data},
     {10, &btlgrp_moo_moo_05_05_off_2, moo_btlstage_data},
     {5, &btlgrp_moo_moo_05_05_off_3, moo_btlstage_data},
@@ -1392,7 +1392,7 @@ NpcTerritoryInfo btl_moo_setup_no_tbl[] = {
  * It rotates the three star objects of the stage (star_01, star_02, star_03) about Z once every 7500,
  * 6750 and 6000 frames, forever.
  */
-EVT_BEGIN(bgset_moo_space_event)
+static EVT_BEGIN(bgset_moo_space_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)

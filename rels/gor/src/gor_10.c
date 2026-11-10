@@ -46,9 +46,9 @@ static s32 view_trg;
 static TegamiWork* wp;
 static void draw(CameraId camera, void* param);
 
-USER_FUNC(cam_yure);
+static USER_FUNC(cam_yure);
 static USER_FUNC(depth);
-USER_FUNC(mabuta);
+static USER_FUNC(mabuta);
 USER_FUNC(tegami);
 
 /**
@@ -176,7 +176,7 @@ extern EvtWord tegami_init_evt[];
 EvtWord tegami_init_evt[78];
 #endif
 
-EvtWord evt_mezame[226];
+static EvtWord evt_mezame[226];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord mezame_init_evt[];
@@ -223,7 +223,7 @@ EVT_BEGIN(tegami_init_evt)
     RETURN
 EVT_END()
 
-void mabutaDisp(CameraId camera, void* param) {
+static void mabutaDisp(CameraId camera, void* param) {
     f32 h = evtGetFloat(NULL, GW(1));
     CameraEntry* cam = camGetPtr(camera);
 
@@ -254,7 +254,7 @@ void mabutaDisp(CameraId camera, void* param) {
 }
 
 /** Script helper that queues mabutaDisp every frame (priority 1100). Never finishes. */
-USER_FUNC(mabuta) {
+static USER_FUNC(mabuta) {
     dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, mabutaDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
@@ -264,7 +264,7 @@ USER_FUNC(mabuta) {
  * nudges the 3D camera's vertical view offset with a slow sine
  * and plays a ship creak when it falls below its start height after rising above it. Never finishes.
  */
-USER_FUNC(cam_yure) {
+static USER_FUNC(cam_yure) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 s;
 
@@ -290,7 +290,7 @@ USER_FUNC(cam_yure) {
  * snoring, the first lines (mac_0_012 and mac_0_013), the eyelids open and blink while the blur clears,
  * the last line mac_0_013_01, then the map changes to gor_00 (Rogueport).
  */
-EVT_BEGIN(evt_mezame)
+static EVT_BEGIN(evt_mezame)
     // Mario is asleep aboard the ship to Rogueport; the screen fades in.
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)

@@ -17,11 +17,11 @@ typedef struct IwaMoveWork {
     EventEntry* event;
     EvtWord* script;
 } IwaMoveWork;
-IwaMoveWork iwamove;
+static IwaMoveWork iwamove;
 
-USER_FUNC(evt_iwamove_main);
+static USER_FUNC(evt_iwamove_main);
 
-EvtWord evt_iwamove_main_evt[4];
+static EvtWord evt_iwamove_main_evt[4];
 
 /**
  * Starts the boulder push watcher: stores the script in args[0] (run when the push is done)
@@ -48,7 +48,7 @@ USER_FUNC(evt_iwamove_init) {
  * shows the status window and counts 80 frames of holding right on the stick; releasing early restores control;
  * after 80 frames it starts the given script. Never finishes by itself.
  */
-USER_FUNC(evt_iwamove_main) {
+static USER_FUNC(evt_iwamove_main) {
     IwaMoveWork* wk = (IwaMoveWork*)event->lwData[0];
     MarioWork* mario = marioGetPtr();
 
@@ -95,7 +95,7 @@ USER_FUNC(evt_iwamove_main) {
 }
 
 /** Wrapper that runs evt_iwamove_main. */
-EVT_BEGIN(evt_iwamove_main_evt)
+static EVT_BEGIN(evt_iwamove_main_evt)
     CALL(evt_iwamove_main)
     RETURN
 EVT_END()

@@ -49,7 +49,7 @@
 // external prototypes
 
 // local prototypes
-USER_FUNC(_set_haikei_entry_scale);
+static USER_FUNC(_set_haikei_entry_scale);
 static void battleMakePhaseEvtTable(BattleWork* wp);
 static void btlseqPhaseFirstProcess(BattleWork* wp);
 static void btlseqTurnFirstProcess(BattleWork* wp);
@@ -58,13 +58,13 @@ static BOOL BattlePhaseEndCheck(void);
 static void btlseqMove(BattleWork* wp);
 static void btlseqPhase(BattleWork* wp);
 static void _rule_disp(CameraId cameraId, void* param);
-USER_FUNC(_set_effect_luck);
+static USER_FUNC(_set_effect_luck);
 
 /**
  * Lucky Start event, started by btlseqFirstAct when any living unit wears the badge:
  * applies the random luck status at once (_set_effect_luck) and holds the battle start for at least 60 frames.
  */
-EVT_BEGIN(nanika_luck_event)
+static EVT_BEGIN(nanika_luck_event)
     BEGIN_SIBLING_EVENT_GET_ID(PTR(0xfe363c8f))
         WAIT_FRAMES(60)
     END_SIBLING_EVENT
@@ -569,7 +569,7 @@ static void btlseqFirstAct(BattleWork* wp) {
  * applies one random status from its weapon (Electrified, Dodgy, HP Regen or FP Regen, 3 turns) with
  * SFX_SYSTEM_LUCKY1 and a Nice sparkle by the unit. No script arguments; run by nanika_luck_event.
  */
-USER_FUNC(_set_effect_luck) {
+static USER_FUNC(_set_effect_luck) {
     BattleWork* wp = _battleWorkPointer;
     // the four statuses Lucky Start chooses from; one is kept at random per unit
     BattleWeapon weapon = {
@@ -2812,7 +2812,7 @@ static void _mapobj_data_touch_scale(s32 layer) {
  * then pops each in with a squash-and-stretch (A1 over frames 15-40, A2 over 20-45) together with the stage
  * objects on that layer. No script arguments; blocks until both are done.
  */
-USER_FUNC(_set_haikei_entry_scale) {
+static USER_FUNC(_set_haikei_entry_scale) {
     BattleWork* wp = _battleWorkPointer;
     BOOL busy = FALSE;
     f32 sx, sy;

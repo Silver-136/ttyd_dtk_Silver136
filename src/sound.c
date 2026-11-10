@@ -19,19 +19,19 @@
 
 //.bss
 #if VERSION <= VERSION_DEMO_JP
-u32 aramMemArray[8];
+static u32 aramMemArray[8];
 #endif
 
-SND_AUX_REVERBHI revH;
-SND_AUX_REVERBSTD revS;
-SND_AUX_CHORUS cho;
-SND_AUX_DELAY dly;
+static SND_AUX_REVERBHI revH;
+static SND_AUX_REVERBSTD revS;
+static SND_AUX_CHORUS cho;
+static SND_AUX_DELAY dly;
 #define SS_LOAD_BUFFER_SIZE 0x8000 // bytes in each stream load buffer, the size of one DVD/ARAM read
 
 SoundWork sound;
 
 //.sbss
-u32 aramMemArray[8];
+static u32 aramMemArray[8];
 
 /** Returns the shared 256-byte buffer the loaders build file paths in. */
 static inline char* _ssGetStr(void) {
@@ -1725,7 +1725,7 @@ static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo) {
 }
 
 /** Step sizes of the streamed-music DPCM decoder (ssDecodeDPCM): each 4-bit delta is scaled by one of them. */
-s16 dtbl[16] = {0x0001, 0x0007, 0x0018, 0x003B, 0x0053, 0x006F, 0x00EC, 0x022B,
+static s16 dtbl[16] = {0x0001, 0x0007, 0x0018, 0x003B, 0x0053, 0x006F, 0x00EC, 0x022B,
                 0x02E6, 0x0375, 0x041C, 0x08AD, 0x0CD5, 0x1150, 0x1B32, 0x2454};
 
 /**

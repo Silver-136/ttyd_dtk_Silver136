@@ -47,24 +47,24 @@ static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
 static USER_FUNC(test_glare);
-USER_FUNC(tokei);
+static USER_FUNC(tokei);
 static void sun_tev(MapTevCallbackInfo* info);
 
 static EvtWord n_2_door_open[22];
 static EvtWord n_2_door_close[22];
 static BeroEntry bero_data[3];
-BeroEntry bero_data_nidome[2];
+static BeroEntry bero_data_nidome[2];
 EvtWord evt_carry_up_bridge[92];
-EvtWord init_powan_toron_konari_papa_gurume[23];
+static EvtWord init_powan_toron_konari_papa_gurume[23];
 static EvtWord talk_powan[8];
 static EvtWord talk_toron[8];
 static EvtWord talk_gurume[8];
 static EvtWord talk_papa[8];
 static EvtWord talk_konari[8];
-EvtWord init_ekiin1[2];
-EvtWord talk_ekiin1[32];
-EvtWord init_ekiin2[13];
-EvtWord talk_ekiin2[28];
+static EvtWord init_ekiin1[2];
+static EvtWord talk_ekiin1[32];
+static EvtWord init_ekiin2[13];
+static EvtWord talk_ekiin2[28];
 static NpcSetupInfo npc_data[9];
 EvtWord evt_bridge_down[144];
 static s32 key_tbl[2];
@@ -76,10 +76,10 @@ static EvtWord evt_chk[23];
 #endif
 
 static EvtWord evt_lock[10];
-EvtWord evt_train_door[13];
+static EvtWord evt_train_door[13];
 static EvtWord evt_train[262];
 EvtWord evt_train_nidome[307];
-EvtWord evt_hom_touchaku[460];
+static EvtWord evt_hom_touchaku[460];
 EvtWord evt_hom_touchaku_nidome[56];
 
 #if VERSION >= VERSION_US
@@ -161,7 +161,7 @@ static BeroEntry bero_data[] = {
 };
 
 /** Doors of this room: the north exit (n_bero_1) to rsh_01_b (Excess Express). */
-BeroEntry bero_data_nidome[] = {
+static BeroEntry bero_data_nidome[] = {
     {
         "n_bero_1", // hitName
         1, // type
@@ -222,7 +222,7 @@ EVT_END()
  * removes the NPC from the map once the drawbridge is down (story STG6_42_DRAWBRIDGE_DOWN),
  * and the fake Zip Toad once the station has been reached (story STG6_27_RIVERSIDE_STATION).
  */
-EVT_BEGIN(init_powan_toron_konari_papa_gurume)
+static EVT_BEGIN(init_powan_toron_konari_papa_gurume)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
@@ -264,7 +264,7 @@ static EVT_BEGIN(talk_konari)
 EVT_END()
 
 /** Init script of station attendant 1; does nothing. */
-EVT_BEGIN(init_ekiin1)
+static EVT_BEGIN(init_ekiin1)
     RETURN
 EVT_END()
 
@@ -272,7 +272,7 @@ EVT_END()
  * Talk script of station attendant 1: before the key is obtained, runs evt_carry_up_bridge;
  * then gives the drawbridge, waiting-for-the-train and after-departure lines by story progress.
  */
-EVT_BEGIN(talk_ekiin1)
+static EVT_BEGIN(talk_ekiin1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_28_STATION_KEY_OBTAINED)
         CALL_CHILD(evt_carry_up_bridge)
@@ -290,7 +290,7 @@ EVT_END()
  * Init script of station attendant 2: once the drawbridge is down (story STG6_42_DRAWBRIDGE_DOWN),
  * moves him to the gate at (-865, 80, 100).
  */
-EVT_BEGIN(init_ekiin2)
+static EVT_BEGIN(init_ekiin2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_npc_set_position, STRING("me"), -865, 80, 100)
@@ -302,7 +302,7 @@ EVT_END()
  * Talk script of station attendant 2 (at the ticket gate):
  * different lines before the drawbridge is down, while waiting for the conductor, and afterwards.
  */
-EVT_BEGIN(talk_ekiin2)
+static EVT_BEGIN(talk_ekiin2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_msg_print, 0, STRING("stg6_eki_03"), 0, 0)
@@ -493,7 +493,7 @@ EVT_END()
  * Exit event of the train door: returns 1 in LW(0) only while the story is at "Drawbridge down",
  * so the door can be used just then.
  */
-EVT_BEGIN(evt_train_door)
+static EVT_BEGIN(evt_train_door)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
         SET_VALUE(LW(0), 0)
         RETURN
@@ -679,7 +679,7 @@ EVT_END()
  * the Excess Express pulls in, the doors open, the fake Zip Toad and Pennington step off, the fake turns into
  * Doopliss, who speaks and hops away, the story becomes "Riverside Station" and the map changes to rsh_02_b.
  */
-EVT_BEGIN(evt_hom_touchaku)
+static EVT_BEGIN(evt_hom_touchaku)
     // The party is hidden and the platform NPCs are moved off screen.
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_cont_onoff, 0)
@@ -1033,7 +1033,7 @@ static USER_FUNC(test_glare) {
  * Script helper: sets the hour and minute hand rotation of the station clock (LW(0) and LW(1)) from the
  * console's real-time clock.
  */
-USER_FUNC(tokei) {
+static USER_FUNC(tokei) {
     s32 min;
     OSCalendarTime time;
     u32 sec;

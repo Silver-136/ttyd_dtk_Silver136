@@ -42,36 +42,36 @@
 
 PoseTableEntry pose_table_chuchurina_stay[24];
 static BattleDataEntry data_table[8];
-BattleUnitKindPart unitpartsdata_Party_Chuchurina[4];
+static BattleUnitKindPart unitpartsdata_Party_Chuchurina[4];
 BattleUnitKind unitdata_Party_Chuchurina;
 static EvtWord battle_entry_event[59];
 static EvtWord init_event[48];
 static EvtWord damage_event[16];
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft;
-BattleWeapon partyWeapon_ChuchurinaNormalAttackRight;
+static BattleWeapon partyWeapon_ChuchurinaNormalAttackRight;
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast;
-BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast;
+static BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast;
 BattleWeapon partyWeapon_ChuchurinaMadowaseAttack;
 BattleWeapon partyWeapon_ChuchurinaItemSteal;
 BattleWeapon partyWeapon_ChuchurinaKiss;
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partyChuchurinaAttack_NormalAttack[1578];
-EvtWord partyChuchurinaAttack_MadowaseAttack[2030];
+static EvtWord partyChuchurinaAttack_NormalAttack[1578];
+static EvtWord partyChuchurinaAttack_MadowaseAttack[2030];
 #else
-EvtWord partyChuchurinaAttack_NormalAttack[1590];
-EvtWord partyChuchurinaAttack_MadowaseAttack[2020];
+static EvtWord partyChuchurinaAttack_NormalAttack[1590];
+static EvtWord partyChuchurinaAttack_MadowaseAttack[2020];
 #endif
 
-EvtWord partyChuchurinaAttack_ItemSteal[VERSION_PICK(788, 961)];
+static EvtWord partyChuchurinaAttack_ItemSteal[VERSION_PICK(788, 961)];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partyChuchurinaAttack_Kiss[490];
+static EvtWord partyChuchurinaAttack_Kiss[490];
 #else
-EvtWord partyChuchurinaAttack_Kiss[568];
+static EvtWord partyChuchurinaAttack_Kiss[568];
 #endif
 
-EvtWord chuchurina_appeal_event[86];
+static EvtWord chuchurina_appeal_event[86];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[VERSION_PICK(204, 205)];
 static BattleUnitDefense defence;
@@ -81,15 +81,15 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 static EvtWord main_evt[4];
 
-USER_FUNC(_chuchu_make_extra_work_area);
-USER_FUNC(mono_main);
-USER_FUNC(mono_off);
-USER_FUNC(mono_on);
-USER_FUNC(mono_capture_event);
-USER_FUNC(_chuchu_item_steal);
-USER_FUNC(_get_itemsteal_param);
-USER_FUNC(_make_madowase_weapon);
-USER_FUNC(_get_binta_hit_position);
+static USER_FUNC(_chuchu_make_extra_work_area);
+static USER_FUNC(mono_main);
+static USER_FUNC(mono_off);
+static USER_FUNC(mono_on);
+static USER_FUNC(mono_capture_event);
+static USER_FUNC(_chuchu_item_steal);
+static USER_FUNC(_get_itemsteal_param);
+static USER_FUNC(_make_madowase_weapon);
+static USER_FUNC(_get_binta_hit_position);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -166,7 +166,7 @@ static BattleDataEntry data_table[] = {
  * Ms. Mowz's parts, all model c_tyutyu: part 1 is her body; parts 2-4 are hidden, untargetable copies of her
  * that pop out and dash around during Tease.
  */
-BattleUnitKindPart unitpartsdata_Party_Chuchurina[] = {
+static BattleUnitKindPart unitpartsdata_Party_Chuchurina[] = {
     {1, "btl_un_chuchurina", "c_tyutyu", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_chuchurina_stay},
     {2, "btl_un_chuchurina", "c_tyutyu", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_chuchurina_stay},
     {3, "btl_un_chuchurina", "c_tyutyu", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_chuchurina_stay},
@@ -324,7 +324,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
 };
 
 /** Love Slap's slap from the other side (2 damage), alternating with the one above. */
-BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
+static BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
@@ -414,7 +414,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
 };
 
 /** Love Slap's final slap from the other side, its power the command's gauge level. */
-BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
+static BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
@@ -595,7 +595,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
  * and forth, one hit per successful action command press, the last slap using the final-hit weapon;
  * then returns home.
  */
-EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
+static EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1169,7 +1169,7 @@ EVT_END()
  * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
  * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
  */
-EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
+static EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1649,7 +1649,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     RETURN
 EVT_END()
 
-EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
+static EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     // Declare the move and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1948,7 +1948,7 @@ EVT_END()
  * Ms. Mowz's Smooch: she kisses Mario, healing him by an amount the action command builds up,
  * with the recovery effect, then returns home.
  */
-EVT_BEGIN(partyChuchurinaAttack_Kiss)
+static EVT_BEGIN(partyChuchurinaAttack_Kiss)
     // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -2157,7 +2157,7 @@ EVT_END()
  * Ms. Mowz's Appeal (data tag 5): appeal sound and pose, the audience is fired up,
  * then she blows a kiss towards it.
  */
-EVT_BEGIN(chuchurina_appeal_event)
+static EVT_BEGIN(chuchurina_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
@@ -2314,13 +2314,13 @@ static EVT_BEGIN(main_evt)
 EVT_END()
 #endif
 
-s32 mono_alpha;
+static s32 mono_alpha;
 
 /**
  * Allocates a spare BattleWeapon in the running unit's countersetWeapon slot,
  * which Tease later fills with its per-use copy (_make_madowase_weapon). Run from init_event.
  */
-USER_FUNC(_chuchu_make_extra_work_area) {
+static USER_FUNC(_chuchu_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
@@ -2392,7 +2392,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
  * its position plus its bintaHitOffset (scaled by its size, X mirrored by its facing).
  * args[0] and args[2] (the part) are read but not used.
  */
-USER_FUNC(_get_binta_hit_position) {
+static USER_FUNC(_get_binta_hit_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* target;
@@ -2424,7 +2424,7 @@ USER_FUNC(_get_binta_hit_position) {
  * sets its dizzy chance to args[1] (the Tease action command output),
  * and writes the copy's address back into args[0].
  */
-USER_FUNC(_make_madowase_weapon) {
+static USER_FUNC(_make_madowase_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -2450,7 +2450,7 @@ USER_FUNC(_make_madowase_weapon) {
  * args[1] gets the success rate, 80 at normal difficulty and 20 lower per level above (minimum 5);
  * args[2] gets 100 minus the target's itemStealParam.
  */
-USER_FUNC(_get_itemsteal_param) {
+static USER_FUNC(_get_itemsteal_param) {
     BattleWork* wp;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -2478,7 +2478,7 @@ USER_FUNC(_get_itemsteal_param) {
  * clears the item from the field battle setup and unequips it if it was a badge.
  * Returns the item in args[1], or 0 when nothing is stolen.
  */
-USER_FUNC(_chuchu_item_steal) {
+static USER_FUNC(_chuchu_item_steal) {
     ItemDropData* table;
     BattleWork* wp;
     s32 acResult;
@@ -2649,7 +2649,7 @@ static void mono_disp(CameraId camId, void* payload) {
  * Registers mono_disp for the running unit every frame;
  * never returns, so Kiss Thief runs it in a spawned event and deletes that event when the effect ends.
  */
-USER_FUNC(mono_main) {
+static USER_FUNC(mono_main) {
     BattleUnit* unit;
     s32 id;
 
@@ -2660,7 +2660,7 @@ USER_FUNC(mono_main) {
 }
 
 /** Queues mono_capture for this frame to grab the screen for Kiss Thief's greyscale effect. */
-USER_FUNC(mono_capture_event) {
+static USER_FUNC(mono_capture_event) {
     BattleUnit* unit;
     s32 id;
 
@@ -2672,7 +2672,7 @@ USER_FUNC(mono_capture_event) {
 }
 
 /** Fades Kiss Thief's greyscale overlay in: raises mono_alpha from 0 by 10 a frame until it reaches 255. */
-USER_FUNC(mono_on) {
+static USER_FUNC(mono_on) {
     if (isFirstCall) {
         mono_alpha = 0;
     }
@@ -2685,7 +2685,7 @@ USER_FUNC(mono_on) {
 }
 
 /** Fades Kiss Thief's greyscale overlay out by 10 a frame; at 0 it frees the captured screen texture. */
-USER_FUNC(mono_off) {
+static USER_FUNC(mono_off) {
     BattleUnit* unit;
     s32 id;
 

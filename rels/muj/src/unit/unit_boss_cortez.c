@@ -41,14 +41,14 @@ typedef struct CortezWork {
     Vec srcPos[100];
     Vec dstPos[100];
 } CortezWork;
-BattleUnitSetup entry_honeduka;
+static BattleUnitSetup entry_honeduka;
 
 USER_FUNC(_cortez_check_drain_audience);
-USER_FUNC(_make_cortez_work_area);
+static USER_FUNC(_make_cortez_work_area);
 static USER_FUNC(_check_zenei_kouei);
-USER_FUNC(_cortez_recovery_audience);
-USER_FUNC(_cortez_drain_energy);
-USER_FUNC(_cortez_collect_energy);
+static USER_FUNC(_cortez_recovery_audience);
+static USER_FUNC(_cortez_drain_energy);
+static USER_FUNC(_cortez_collect_energy);
 USER_FUNC(_cortez_get_sfx_vol);
 extern EvtWord cortez_weapon_get_home_height[];
 extern EvtWord cortez_weapon_set_formation_attribute[];
@@ -59,61 +59,61 @@ extern BattleUnitKind unit_boss_cortez_sword;
 
 BattleUnitKind unit_boss_cortez;
 static StatusVulnerability regist;
-BattleUnitDefense defence_mode1;
-BattleUnitDefenseAttr defence_attr_mode1;
-BattleUnitDefense defence_mode2_upper_head;
-BattleUnitDefenseAttr defence_attr_mode2_upper_head;
-BattleUnitDefense defence_mode2_upper_rib_open;
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open;
-BattleUnitDefense defence_mode2_upper_rib_close;
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close;
-BattleUnitDefense defence_mode2_middle_head;
-BattleUnitDefenseAttr defence_attr_mode2_middle_head;
-BattleUnitDefense defence_mode2_middle_rib_open;
-BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open;
-BattleUnitDefense defence_mode2_middle_rib_close;
-BattleUnitDefenseAttr defence_attr_mode2_middle_rib_close;
-BattleUnitDefense defence_mode2_lower_head;
-BattleUnitDefenseAttr defence_attr_mode2_lower_head;
-BattleUnitDefense defence_mode2_lower_rib_open;
-BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open;
-BattleUnitDefense defence_mode2_lower_rib_close;
-BattleUnitDefenseAttr defence_attr_mode2_lower_rib_close;
-BattleUnitDefense defence_mode3;
-BattleUnitDefenseAttr defence_attr_mode3;
-BattleUnitDefense defence_honeduka;
-BattleUnitDefenseAttr defence_honeduka_attr;
-BattleWeapon weapon_cortez_normal_front_attack;
-BattleWeapon weapon_cortez_normal_rear_attack;
-BattleWeapon weapon_cortez_midaregiri_attack;
-BattleWeapon weapon_cortez_mode2_head_attack;
-BattleWeapon weapon_cortez_mode2_charge;
-BattleWeapon weapon_cortez_mode2_bone_attack;
-BattleWeapon weapon_cortez_mode3_kamitsuki_attack;
+static BattleUnitDefense defence_mode1;
+static BattleUnitDefenseAttr defence_attr_mode1;
+static BattleUnitDefense defence_mode2_upper_head;
+static BattleUnitDefenseAttr defence_attr_mode2_upper_head;
+static BattleUnitDefense defence_mode2_upper_rib_open;
+static BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open;
+static BattleUnitDefense defence_mode2_upper_rib_close;
+static BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close;
+static BattleUnitDefense defence_mode2_middle_head;
+static BattleUnitDefenseAttr defence_attr_mode2_middle_head;
+static BattleUnitDefense defence_mode2_middle_rib_open;
+static BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open;
+static BattleUnitDefense defence_mode2_middle_rib_close;
+static BattleUnitDefenseAttr defence_attr_mode2_middle_rib_close;
+static BattleUnitDefense defence_mode2_lower_head;
+static BattleUnitDefenseAttr defence_attr_mode2_lower_head;
+static BattleUnitDefense defence_mode2_lower_rib_open;
+static BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open;
+static BattleUnitDefense defence_mode2_lower_rib_close;
+static BattleUnitDefenseAttr defence_attr_mode2_lower_rib_close;
+static BattleUnitDefense defence_mode3;
+static BattleUnitDefenseAttr defence_attr_mode3;
+static BattleUnitDefense defence_honeduka;
+static BattleUnitDefenseAttr defence_honeduka_attr;
+static BattleWeapon weapon_cortez_normal_front_attack;
+static BattleWeapon weapon_cortez_normal_rear_attack;
+static BattleWeapon weapon_cortez_midaregiri_attack;
+static BattleWeapon weapon_cortez_mode2_head_attack;
+static BattleWeapon weapon_cortez_mode2_charge;
+static BattleWeapon weapon_cortez_mode2_bone_attack;
+static BattleWeapon weapon_cortez_mode3_kamitsuki_attack;
 static PoseSoundTiming pose_sound_timing_table[73];
 PoseTableEntry pose_table_mode_1[10];
-PoseTableEntry pose_table_mode_1_hone[10];
-PoseTableEntry pose_table_mode_2_normal[4];
-PoseTableEntry pose_table_mode_2_upper_normal[4];
-PoseTableEntry pose_table_mode_2_upper_normal_counter[4];
-PoseTableEntry pose_table_mode_2_upper_charge[4];
-PoseTableEntry pose_table_mode_2_upper_charge_counter[4];
-PoseTableEntry pose_table_mode_2_middle_normal[4];
-PoseTableEntry pose_table_mode_2_middle_normal_counter[4];
-PoseTableEntry pose_table_mode_2_middle_charge[4];
-PoseTableEntry pose_table_mode_2_middle_charge_counter[4];
-PoseTableEntry pose_table_mode_2_lower_normal[4];
-PoseTableEntry pose_table_mode_2_lower_normal_counter[4];
-PoseTableEntry pose_table_mode_2_lower_charge[4];
-PoseTableEntry pose_table_mode_2_lower_charge_counter[4];
-PoseTableEntry pose_table_fly_bone[4];
+static PoseTableEntry pose_table_mode_1_hone[10];
+static PoseTableEntry pose_table_mode_2_normal[4];
+static PoseTableEntry pose_table_mode_2_upper_normal[4];
+static PoseTableEntry pose_table_mode_2_upper_normal_counter[4];
+static PoseTableEntry pose_table_mode_2_upper_charge[4];
+static PoseTableEntry pose_table_mode_2_upper_charge_counter[4];
+static PoseTableEntry pose_table_mode_2_middle_normal[4];
+static PoseTableEntry pose_table_mode_2_middle_normal_counter[4];
+static PoseTableEntry pose_table_mode_2_middle_charge[4];
+static PoseTableEntry pose_table_mode_2_middle_charge_counter[4];
+static PoseTableEntry pose_table_mode_2_lower_normal[4];
+static PoseTableEntry pose_table_mode_2_lower_normal_counter[4];
+static PoseTableEntry pose_table_mode_2_lower_charge[4];
+static PoseTableEntry pose_table_mode_2_lower_charge_counter[4];
+static PoseTableEntry pose_table_fly_bone[4];
 PoseTableEntry pose_table_mode_3[12];
-PoseTableEntry pose_table_honeduka[4];
+static PoseTableEntry pose_table_honeduka[4];
 static BattleDataEntry data_table[7];
 static BattleUnitKindPart parts[19];
 static EvtWord init_event[260];
 static EvtWord damage_event[70];
-EvtWord cortez_ac_counter_damage_event[98];
+static EvtWord cortez_ac_counter_damage_event[98];
 static EvtWord avoid_thorn_event[89];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -122,13 +122,13 @@ static EvtWord phase_event[184];
 static EvtWord phase_event[196];
 #endif
 
-EvtWord attack_event_mode1[44];
-EvtWord attack_event_mode2[47];
-EvtWord at2_head_bat_event[202];
+static EvtWord attack_event_mode1[44];
+static EvtWord attack_event_mode2[47];
+static EvtWord at2_head_bat_event[202];
 EvtWord at2_hone_charge_event[146];
 EvtWord at2_hone_rain_attack_event[605];
-EvtWord _bone_rain_event[114];
-EvtWord attack_event_mode3[52];
+static EvtWord _bone_rain_event[114];
+static EvtWord attack_event_mode3[52];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord attack_audience_event[198];
@@ -136,15 +136,15 @@ static EvtWord attack_audience_event[198];
 static EvtWord attack_audience_event[247];
 #endif
 
-EvtWord at3_kamitsuki_attack[264];
+static EvtWord at3_kamitsuki_attack[264];
 EvtWord at1_normal_attack[205];
 EvtWord at1_midaregiri_attack[251];
 static EvtWord wait_event[6];
-BattleUnitSetup entry_claw;
-BattleUnitSetup entry_rapier;
-BattleUnitSetup entry_sword;
-BattleUnitSetup entry_saber;
-EvtWord cortez_reset_pose_table[450];
+static BattleUnitSetup entry_claw;
+static BattleUnitSetup entry_rapier;
+static BattleUnitSetup entry_sword;
+static BattleUnitSetup entry_saber;
+static EvtWord cortez_reset_pose_table[450];
 static EvtWord cortez_damage_sub_event[153];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -243,127 +243,127 @@ static StatusVulnerability regist = {
 #endif
 
 /** Defence of Cortez's bone pile and its flying bones (parts 3 to 19): 1 against every kind of hit. */
-BattleUnitDefense defence_mode1 = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense defence_mode1 = {{1, 1, 1, 1, 1}};
 
 /**
  * Defence attributes of Cortez's bone pile and its flying bones (parts 3 to 19): none,
  * every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode1 = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr defence_attr_mode1 = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of Cortez's head (part 1) in his second form, upper stance: 1 against every kind of hit. */
-BattleUnitDefense defence_mode2_upper_head = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense defence_mode2_upper_head = {{1, 1, 1, 1, 1}};
 
 /**
  * Defence attributes of Cortez's head (part 1) in his second form, upper stance: none,
  * every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_head = {0};
+static BattleUnitDefenseAttr defence_attr_mode2_upper_head = {0};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs open in his second form, upper stance: 0
  * against every kind of hit.
  */
-BattleUnitDefense defence_mode2_upper_rib_open = {0};
+static BattleUnitDefense defence_mode2_upper_rib_open = {0};
 
 /**
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, upper stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
+static BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, upper stance: 3
  * against every kind of hit.
  */
-BattleUnitDefense defence_mode2_upper_rib_close = {{3, 3, 3, 3, 3}};
+static BattleUnitDefense defence_mode2_upper_rib_close = {{3, 3, 3, 3, 3}};
 
 /**
  * Defence attributes of Cortez's rib cage (part 2) with the ribs closed in his second form, upper stance:
  * none, every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of Cortez's head (part 1) in his second form, middle stance: 1 against every kind of hit. */
-BattleUnitDefense defence_mode2_middle_head = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense defence_mode2_middle_head = {{1, 1, 1, 1, 1}};
 
 /**
  * Defence attributes of Cortez's head (part 1) in his second form, middle stance: none,
  * every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_middle_head = {0};
+static BattleUnitDefenseAttr defence_attr_mode2_middle_head = {0};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs open in his second form, middle stance: 0
  * against every kind of hit.
  */
-BattleUnitDefense defence_mode2_middle_rib_open = {0};
+static BattleUnitDefense defence_mode2_middle_rib_open = {0};
 
 /**
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, middle stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
+static BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, middle stance: 3
  * against every kind of hit.
  */
-BattleUnitDefense defence_mode2_middle_rib_close = {{3, 3, 3, 3, 3}};
+static BattleUnitDefense defence_mode2_middle_rib_close = {{3, 3, 3, 3, 3}};
 
 /**
  * Defence attributes of Cortez's rib cage (part 2) with the ribs closed in his second form, middle stance:
  * none, every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_middle_rib_close = {0};
+static BattleUnitDefenseAttr defence_attr_mode2_middle_rib_close = {0};
 
 /** Defence of Cortez's head (part 1) in his second form, lower stance: 1 against every kind of hit. */
-BattleUnitDefense defence_mode2_lower_head = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense defence_mode2_lower_head = {{1, 1, 1, 1, 1}};
 
 /**
  * Defence attributes of Cortez's head (part 1) in his second form, lower stance: none,
  * every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_lower_head = {0};
+static BattleUnitDefenseAttr defence_attr_mode2_lower_head = {0};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs open in his second form, lower stance: 0
  * against every kind of hit.
  */
-BattleUnitDefense defence_mode2_lower_rib_open = {0};
+static BattleUnitDefense defence_mode2_lower_rib_open = {0};
 
 /**
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, lower stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
+static BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, lower stance: 3
  * against every kind of hit.
  */
-BattleUnitDefense defence_mode2_lower_rib_close = {{3, 3, 3, 3, 3}};
+static BattleUnitDefense defence_mode2_lower_rib_close = {{3, 3, 3, 3, 3}};
 
 /**
  * Defence attributes of Cortez's rib cage (part 2) with the ribs closed in his second form, lower stance:
  * none, every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_lower_rib_close = {0};
+static BattleUnitDefenseAttr defence_attr_mode2_lower_rib_close = {0};
 
 /** Defence of Cortez in his final form: 1 against every kind of hit. */
-BattleUnitDefense defence_mode3 = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense defence_mode3 = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of Cortez in his final form: none, every element hits it normally. */
-BattleUnitDefenseAttr defence_attr_mode3 = {0};
+static BattleUnitDefenseAttr defence_attr_mode3 = {0};
 
 /** Defence of Cortez's body in his first form (part 1): 1 against every kind of hit. */
-BattleUnitDefense defence_honeduka = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense defence_honeduka = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of Cortez's body in his first form (part 1): none, every element hits it normally. */
-BattleUnitDefenseAttr defence_honeduka_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr defence_honeduka_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Weapon of Cortez (normal front attack): targets one unit for 4 damage; used by at1_normal_attack. */
-BattleWeapon weapon_cortez_normal_front_attack = {
+static BattleWeapon weapon_cortez_normal_front_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -404,7 +404,7 @@ BattleWeapon weapon_cortez_normal_front_attack = {
 };
 
 /** Weapon of Cortez (normal rear attack): targets one unit for 4 damage; used by at1_normal_attack. */
-BattleWeapon weapon_cortez_normal_rear_attack = {
+static BattleWeapon weapon_cortez_normal_rear_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -445,7 +445,7 @@ BattleWeapon weapon_cortez_normal_rear_attack = {
 };
 
 /** Weapon of Cortez (midaregiri attack): targets one unit for 2 damage; used by at1_midaregiri_attack. */
-BattleWeapon weapon_cortez_midaregiri_attack = {
+static BattleWeapon weapon_cortez_midaregiri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -486,7 +486,7 @@ BattleWeapon weapon_cortez_midaregiri_attack = {
 };
 
 /** Weapon of Cortez (mode2 head attack): targets one unit for 4 damage; used by at2_head_bat_event. */
-BattleWeapon weapon_cortez_mode2_head_attack = {
+static BattleWeapon weapon_cortez_mode2_head_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -526,7 +526,7 @@ BattleWeapon weapon_cortez_mode2_head_attack = {
  * Weapon of Cortez (mode2 charge): no damage, a charge of 4; at2_hone_charge_event applies it to Cortez
  * himself.
  */
-BattleWeapon weapon_cortez_mode2_charge = {
+static BattleWeapon weapon_cortez_mode2_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -565,7 +565,7 @@ BattleWeapon weapon_cortez_mode2_charge = {
  * Weapon of Cortez (mode2 bone attack): targets every unit for 4 damage;
  * used by at2_hone_rain_attack_event.
  */
-BattleWeapon weapon_cortez_mode2_bone_attack = {
+static BattleWeapon weapon_cortez_mode2_bone_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -606,7 +606,7 @@ BattleWeapon weapon_cortez_mode2_bone_attack = {
 };
 
 /** Weapon of Cortez (mode3 kamitsuki attack): targets one unit for 4 damage; used by at3_kamitsuki_attack. */
-BattleWeapon weapon_cortez_mode3_kamitsuki_attack = {
+static BattleWeapon weapon_cortez_mode3_kamitsuki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -758,7 +758,7 @@ PoseTableEntry pose_table_mode_1[] = {
 };
 
 /** Poses of Cortez (part 1) in his first form, set by damage_event when the bone pile (part 4) is hit. */
-PoseTableEntry pose_table_mode_1_hone[] = {
+static PoseTableEntry pose_table_mode_1_hone[] = {
     {POSE_TYPE_SLEEP, "KRT_N_1"},
     {POSE_TYPE_CONFUSE, "KRT_K_1"},
 #if VERSION <= VERSION_DEMO_JP
@@ -779,7 +779,7 @@ PoseTableEntry pose_table_mode_1_hone[] = {
 };
 
 /** Poses of Cortez in his second form (the same poses as the upper stance, ribs closed); no script here sets it. */
-PoseTableEntry pose_table_mode_2_normal[] = {
+static PoseTableEntry pose_table_mode_2_normal[] = {
     {POSE_TYPE_NORMAL, "KRT_1S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_1"},
     {POSE_TYPE_DAMAGE, "KRT_1D_1"},
@@ -787,7 +787,7 @@ PoseTableEntry pose_table_mode_2_normal[] = {
 };
 
 /** Poses of Cortez in his second form, upper stance, ribs closed. */
-PoseTableEntry pose_table_mode_2_upper_normal[] = {
+static PoseTableEntry pose_table_mode_2_upper_normal[] = {
     {POSE_TYPE_NORMAL, "KRT_1S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_1"},
     {POSE_TYPE_DAMAGE, "KRT_1D_1"},
@@ -795,7 +795,7 @@ PoseTableEntry pose_table_mode_2_upper_normal[] = {
 };
 
 /** Poses of Cortez in his second form, upper stance, ribs open. */
-PoseTableEntry pose_table_mode_2_upper_normal_counter[] = {
+static PoseTableEntry pose_table_mode_2_upper_normal_counter[] = {
     {POSE_TYPE_NORMAL, "KRT_1S2_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S2_1"},
     {POSE_TYPE_DAMAGE, "KRT_1D2_1"},
@@ -803,7 +803,7 @@ PoseTableEntry pose_table_mode_2_upper_normal_counter[] = {
 };
 
 /** Poses of Cortez in his second form, upper stance, ribs closed, bone rain charged. */
-PoseTableEntry pose_table_mode_2_upper_charge[] = {
+static PoseTableEntry pose_table_mode_2_upper_charge[] = {
     {POSE_TYPE_NORMAL, "KRT_1S_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_2"},
     {POSE_TYPE_DAMAGE, "KRT_1D_2"},
@@ -811,7 +811,7 @@ PoseTableEntry pose_table_mode_2_upper_charge[] = {
 };
 
 /** Poses of Cortez in his second form, upper stance, ribs open, bone rain charged. */
-PoseTableEntry pose_table_mode_2_upper_charge_counter[] = {
+static PoseTableEntry pose_table_mode_2_upper_charge_counter[] = {
     {POSE_TYPE_NORMAL, "KRT_1S2_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S2_2"},
     {POSE_TYPE_DAMAGE, "KRT_1D2_2"},
@@ -819,7 +819,7 @@ PoseTableEntry pose_table_mode_2_upper_charge_counter[] = {
 };
 
 /** Poses of Cortez in his second form, middle stance, ribs closed. */
-PoseTableEntry pose_table_mode_2_middle_normal[] = {
+static PoseTableEntry pose_table_mode_2_middle_normal[] = {
     {POSE_TYPE_NORMAL, "KRT_2S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S_1"},
     {POSE_TYPE_DAMAGE, "KRT_2D_1"},
@@ -827,7 +827,7 @@ PoseTableEntry pose_table_mode_2_middle_normal[] = {
 };
 
 /** Poses of Cortez in his second form, middle stance, ribs open. */
-PoseTableEntry pose_table_mode_2_middle_normal_counter[] = {
+static PoseTableEntry pose_table_mode_2_middle_normal_counter[] = {
     {POSE_TYPE_NORMAL, "KRT_2S2_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S2_1"},
     {POSE_TYPE_DAMAGE, "KRT_2D2_1"},
@@ -835,7 +835,7 @@ PoseTableEntry pose_table_mode_2_middle_normal_counter[] = {
 };
 
 /** Poses of Cortez in his second form, middle stance, ribs closed, bone rain charged. */
-PoseTableEntry pose_table_mode_2_middle_charge[] = {
+static PoseTableEntry pose_table_mode_2_middle_charge[] = {
     {POSE_TYPE_NORMAL, "KRT_2S_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S_2"},
     {POSE_TYPE_DAMAGE, "KRT_2D_2"},
@@ -843,7 +843,7 @@ PoseTableEntry pose_table_mode_2_middle_charge[] = {
 };
 
 /** Poses of Cortez in his second form, middle stance, ribs open, bone rain charged. */
-PoseTableEntry pose_table_mode_2_middle_charge_counter[] = {
+static PoseTableEntry pose_table_mode_2_middle_charge_counter[] = {
     {POSE_TYPE_NORMAL, "KRT_2S2_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S2_2"},
     {POSE_TYPE_DAMAGE, "KRT_2D2_2"},
@@ -851,7 +851,7 @@ PoseTableEntry pose_table_mode_2_middle_charge_counter[] = {
 };
 
 /** Poses of Cortez in his second form, lower stance, ribs closed. */
-PoseTableEntry pose_table_mode_2_lower_normal[] = {
+static PoseTableEntry pose_table_mode_2_lower_normal[] = {
     {POSE_TYPE_NORMAL, "KRT_3S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S_1"},
     {POSE_TYPE_DAMAGE, "KRT_3D_2"},
@@ -859,7 +859,7 @@ PoseTableEntry pose_table_mode_2_lower_normal[] = {
 };
 
 /** Poses of Cortez in his second form, lower stance, ribs open. */
-PoseTableEntry pose_table_mode_2_lower_normal_counter[] = {
+static PoseTableEntry pose_table_mode_2_lower_normal_counter[] = {
     {POSE_TYPE_NORMAL, "KRT_3S3_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S3_1"},
     {POSE_TYPE_DAMAGE, "KRT_3D3_2"},
@@ -867,7 +867,7 @@ PoseTableEntry pose_table_mode_2_lower_normal_counter[] = {
 };
 
 /** Poses of Cortez in his second form, lower stance, ribs closed, bone rain charged. */
-PoseTableEntry pose_table_mode_2_lower_charge[] = {
+static PoseTableEntry pose_table_mode_2_lower_charge[] = {
     {POSE_TYPE_NORMAL, "KRT_3S_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S_2"},
     {POSE_TYPE_DAMAGE, "KRT_3D_2"},
@@ -875,7 +875,7 @@ PoseTableEntry pose_table_mode_2_lower_charge[] = {
 };
 
 /** Poses of Cortez in his second form, lower stance, ribs open, bone rain charged. */
-PoseTableEntry pose_table_mode_2_lower_charge_counter[] = {
+static PoseTableEntry pose_table_mode_2_lower_charge_counter[] = {
     {POSE_TYPE_NORMAL, "KRT_3S3_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S3_2"},
     {POSE_TYPE_DAMAGE, "KRT_3D3_2"},
@@ -883,7 +883,7 @@ PoseTableEntry pose_table_mode_2_lower_charge_counter[] = {
 };
 
 /** Poses of the bones Cortez throws in the bone rain (parts 5 to 19). */
-PoseTableEntry pose_table_fly_bone[] = {
+static PoseTableEntry pose_table_fly_bone[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE, "KRT_Z_1"},
@@ -916,7 +916,7 @@ PoseTableEntry pose_table_mode_3[] = {
 };
 
 /** Poses of Cortez's bone pile (part 4). */
-PoseTableEntry pose_table_honeduka[] = {
+static PoseTableEntry pose_table_honeduka[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE, "KRT_Z_1"},
@@ -1076,7 +1076,7 @@ EVT_END()
  * In the final form he recovers into his idle pose after a short recoil;
  * fatal damage without revival returns there, otherwise he dives back to his home position.
  */
-EVT_BEGIN(cortez_ac_counter_damage_event)
+static EVT_BEGIN(cortez_ac_counter_damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     IF_INT_LESS(LW(0), 4)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
@@ -1236,7 +1236,7 @@ EVT_END()
  * picks between the normal sword stab (at1_normal_attack)
  * and the flurry slash (at1_midaregiri_attack) from a counter in unit work 6 so the order cycles.
  */
-EVT_BEGIN(attack_event_mode1)
+static EVT_BEGIN(attack_event_mode1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_ATTACK_CYCLE, LW(0))
     IF_INT_LESS(LW(0), 3)
         SET_VALUE(LW(1), LW(0))
@@ -1265,7 +1265,7 @@ EVT_END()
  * otherwise he chooses between the charge (25) and the head-bat attack (at2_head_bat_event, 75) by weighted
  * lots.
  */
-EVT_BEGIN(attack_event_mode2)
+static EVT_BEGIN(attack_event_mode2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(at2_hone_rain_attack_event)
@@ -1289,7 +1289,7 @@ EVT_BEGIN(attack_event_mode2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(at2_head_bat_event)
+static EVT_BEGIN(at2_head_bat_event)
     SET_VALUE(LW(12), PTR(&weapon_cortez_mode2_head_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
@@ -1617,7 +1617,7 @@ EVT_END()
  * One falling bone of the bone rain: uses a random flight duration, picks a random start around Cortez,
  * flies to a random spot around the target and spins as it falls, then lands and hides its part.
  */
-EVT_BEGIN(_bone_rain_event)
+static EVT_BEGIN(_bone_rain_event)
     CALL(evt_sub_random, 20, LW(10))
     ADD(LW(10), 20)
     BEGIN_INLINE_EVENT
@@ -1656,7 +1656,7 @@ EVT_END()
  * he may first drain the audience (attack_audience_event) when his HP is low,
  * and otherwise bites the target (at3_kamitsuki_attack).
  */
-EVT_BEGIN(attack_event_mode3)
+static EVT_BEGIN(attack_event_mode3)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_AUDIENCE_ATTACK_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(1))
@@ -1765,7 +1765,7 @@ EVT_END()
  * Cortez's biting attack (mode 3, kamitsuki): lunges at a target with a spinning dive and bite sounds,
  * and chomps for the weapon's damage.
  */
-EVT_BEGIN(at3_kamitsuki_attack)
+static EVT_BEGIN(at3_kamitsuki_attack)
     SET_VALUE(LW(12), PTR(&weapon_cortez_mode3_kamitsuki_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
@@ -2030,7 +2030,7 @@ EVT_END()
  * Spawn setup for Cortez Hook (unit_boss_cortez_claw): enemy side, placed off-screen at first;
  * used by init_event.
  */
-BattleUnitSetup entry_claw = {
+static BattleUnitSetup entry_claw = {
     &unit_boss_cortez_claw, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -2045,7 +2045,7 @@ BattleUnitSetup entry_claw = {
  * Spawn setup for Cortez Rapier (unit_boss_cortez_rapier): enemy side, placed off-screen at first;
  * used by init_event.
  */
-BattleUnitSetup entry_rapier = {
+static BattleUnitSetup entry_rapier = {
     &unit_boss_cortez_rapier, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -2060,7 +2060,7 @@ BattleUnitSetup entry_rapier = {
  * Spawn setup for Cortez Sword (unit_boss_cortez_sword): enemy side, placed off-screen at first;
  * used by init_event.
  */
-BattleUnitSetup entry_sword = {
+static BattleUnitSetup entry_sword = {
     &unit_boss_cortez_sword, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -2075,7 +2075,7 @@ BattleUnitSetup entry_sword = {
  * Spawn setup for Cortez Sabre (unit_boss_cortez_saber): enemy side, placed off-screen at first;
  * used by init_event.
  */
-BattleUnitSetup entry_saber = {
+static BattleUnitSetup entry_saber = {
     &unit_boss_cortez_saber, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -2092,7 +2092,7 @@ BattleUnitSetup entry_saber = {
  * whether the ribs are open (unit work 11) and whether the bone rain is charged (unit work 10), after a form,
  * stance or rib change.
  */
-EVT_BEGIN(cortez_reset_pose_table)
+static EVT_BEGIN(cortez_reset_pose_table)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
         // First form: his plain pose table.
@@ -2767,7 +2767,7 @@ static USER_FUNC(_check_zenei_kouei) {
  * resets the 100 audience seat markers and immediately proceeds to delete each occupied seat's audience member
  * and subtract it from the audience target count.
  */
-USER_FUNC(_cortez_recovery_audience) {
+static USER_FUNC(_cortez_recovery_audience) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, *args++);
@@ -2830,7 +2830,7 @@ USER_FUNC(_cortez_recovery_audience) {
  * Script helper: removes every spirit effect Cortez's audience drain created
  * and writes the number of audience members he collected (work->count) to args[1].
  */
-USER_FUNC(_cortez_drain_energy) {
+static USER_FUNC(_cortez_drain_energy) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -2856,7 +2856,7 @@ USER_FUNC(_cortez_drain_energy) {
  * sends a spirit effect from each seat to Cortez and a cloud at his position,
  * then tips each member back by 90 degrees over 30 frames.
  */
-USER_FUNC(_cortez_collect_energy) {
+static USER_FUNC(_cortez_collect_energy) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, *args++);
@@ -2996,7 +2996,7 @@ USER_FUNC(_cortez_get_sfx_vol) {
  * Script helper: allocates Cortez's work area (CortezWork, used to track the audience drain)
  * and stores it in the unit's countersetWeapon pointer.
  */
-USER_FUNC(_make_cortez_work_area) {
+static USER_FUNC(_make_cortez_work_area) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;

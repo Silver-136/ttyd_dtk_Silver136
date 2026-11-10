@@ -36,7 +36,7 @@ typedef struct EffRubbleN64Work {
  * Shaded meshes of the three rubble chunk shapes (hahen, "fragment"): a small cube for types 2 and 5,
  * a low wedge from vertex 23 for types 1 and 4, and a faceted rock from vertex 28 for types 0 and 3.
  */
-effN64Vtx stg_hahen_v[58] = {
+static effN64Vtx stg_hahen_v[58] = {
     {3, 3, -3, 0, 0, 50, 50, 50, 255},
     {-3, -3, -3, -579, 0, 50, 50, 50, 255},
     {-3, 3, 3, -290, -502, 50, 50, 50, 255},

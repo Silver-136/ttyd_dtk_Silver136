@@ -42,22 +42,22 @@
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
 USER_FUNC(geso_set_checkpose);
-USER_FUNC(hokori_color_func);
-USER_FUNC(mario_hosei_all);
-USER_FUNC(ripple_scale_func);
-USER_FUNC(tik_npc_buruburu);
+static USER_FUNC(hokori_color_func);
+static USER_FUNC(mario_hosei_all);
+static USER_FUNC(ripple_scale_func);
+static USER_FUNC(tik_npc_buruburu);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static BeroEntry bero_entry_data[7];
 static BeroEntry bero_entry_data2[2];
-EvtWord geso_init[2];
-EvtWord geso_talk[8];
-EvtWord geso_dead[7];
+static EvtWord geso_init[2];
+static EvtWord geso_talk[8];
+static EvtWord geso_dead[7];
 static NpcSetupInfo npcEnt[2];
-EvtWord ukishima_move[134];
+static EvtWord ukishima_move[134];
 char geso_checkpose[];
 static EvtWord ukishima_apper[294];
-EvtWord geso_battle[676];
+static EvtWord geso_battle[676];
 static EvtWord wall_bomb[142];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -77,7 +77,7 @@ EvtWord tik_02_init_evt[207];
  */
 
 // Alternate the offset every period milliseconds; zero duration keeps shaking until the event is stopped.
-USER_FUNC(tik_npc_buruburu) {
+static USER_FUNC(tik_npc_buruburu) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     NpcEntry* npc = evtNpcNameToPtr(event, name);
@@ -189,7 +189,7 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
  * args[0] is the platform's hit name and args[1] the platform's X movement this frame;
  * each of the three that is standing on that hit group gets the movement added as floor movement.
  */
-USER_FUNC(mario_hosei_all) {
+static USER_FUNC(mario_hosei_all) {
     EvtWord* args = event->args;
     HitEntry* hit = hitNameToPtr((const char*)evtGetValue(event, args[0]));
     f32 floorDeltaX = evtGetFloat(event, args[1]);
@@ -210,7 +210,7 @@ USER_FUNC(mario_hosei_all) {
 }
 
 /** Script helper. Sets the vertical scale (scaleY) of the named N64-style ripple effect to the float args[1]. */
-USER_FUNC(ripple_scale_func) {
+static USER_FUNC(ripple_scale_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 scale = evtGetFloat(event, args[1]);
@@ -220,7 +220,7 @@ USER_FUNC(ripple_scale_func) {
 }
 
 /** Script helper. Tints the named dust (hokori) effect a dull grey-brown (RGB 0x70, 0x58, 0x58). */
-USER_FUNC(hokori_color_func) {
+static USER_FUNC(hokori_color_func) {
     EffectEntry* effect = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
     ((EffHokoriN64Work*)effect->userdata)->r = 0x70;
@@ -371,18 +371,18 @@ static BeroEntry bero_entry_data2[] = {
 };
 
 /** Init script for the Blooper (geso, ゲッソー) NPC; does nothing. */
-EVT_BEGIN(geso_init)
+static EVT_BEGIN(geso_init)
     RETURN
 EVT_END()
 
 /** Talk script for the Blooper; says mac_0_124. */
-EVT_BEGIN(geso_talk)
+static EVT_BEGIN(geso_talk)
     CALL(evt_msg_print, 0, STRING("mac_0_124"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** Dead event of the Blooper's tentacle: clears GF(0) to unblock the cutscene, then waits a second. */
-EVT_BEGIN(geso_dead)
+static EVT_BEGIN(geso_dead)
     SET_VALUE(GF(0), 0)
     WAIT_MS(1000)
     RETURN
@@ -412,7 +412,7 @@ static NpcSetupInfo npcEnt[] = {
  * Arguments in LW: [4] map object, [5] hit name, [6] and [7] the two end X positions,
  * [8] and [9] the move and rest times in ms. Plays the island-move sound on each pass.
  */
-EVT_BEGIN(ukishima_move)
+static EVT_BEGIN(ukishima_move)
     CALL(evt_hit_bind_mapobj, LW(5), LW(4))
     SET_FLOAT_VALUE(LW(2), LW(6))
     LOOP(0)
@@ -605,7 +605,7 @@ EVT_END()
  * The road of islands then appears (ukishima_apper),
  * story progress is set to STG0_19_BLOOPER_BATTLE and the sewer music returns.
  */
-EVT_BEGIN(geso_battle)
+static EVT_BEGIN(geso_battle)
     // The Blooper waits under the walkway and its tentacle lies across it; the scene waits until Mario hits it.
     CALL(evt_npc_set_position, STRING("ゲッソー"), -385, -60, 0)
     CALL(evt_npc_set_anim, STRING("ゲッソー"), STRING("GSO_S_1"))

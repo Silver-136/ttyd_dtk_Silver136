@@ -26,12 +26,12 @@
 
 static s32 lock;
 
-USER_FUNC(sw_entry);
+static USER_FUNC(sw_entry);
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_data[3];
-EvtWord evt_box_open[115];
+static EvtWord evt_box_open[115];
 EvtWord evt_sw_complete[272];
 EvtWord eki_06_init_evt[132];
 
@@ -100,7 +100,7 @@ static BeroEntry bero_data[] = {
  * and creates the three counting switches (MOBJ_eki_06_su1 to su3) it reveals,
  * and advances the story to STG6_34_3_BLUE_BLOCKS. Does nothing when that step has already been reached.
  */
-EVT_BEGIN(evt_box_open)
+static EVT_BEGIN(evt_box_open)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
         RETURN
     END_IF
@@ -213,7 +213,7 @@ EVT_BEGIN(evt_sw_complete)
 EVT_END()
 
 // The three switch counters target 1, 10 and 3 hits. A counter resets one hit past its target.
-void sw_cntup(MapObjectEntry* mobj) {
+static void sw_cntup(MapObjectEntry* mobj) {
     if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {
         evtSetValue(NULL, GW(0), evtGetValue(NULL, GW(0)) + 1);
     } else if (strcmp(mobj->name, "MOBJ_eki_06_su2") == 0) {
@@ -224,7 +224,7 @@ void sw_cntup(MapObjectEntry* mobj) {
 }
 
 /** Returns the hit counter (GW(0) to GW(2)) of the counting switch named by mobj, or 0 for any other object. */
-s32 sw_cnt(MapObjectEntry* mobj) {
+static s32 sw_cnt(MapObjectEntry* mobj) {
     if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {
         return evtGetValue(NULL, GW(0));
     }
@@ -242,7 +242,7 @@ s32 sw_cnt(MapObjectEntry* mobj) {
  * clears MOBJ_FLAG_NO_SHADOW on all three switches; the ones one hit past their target count (2, 11 and 4 hits)
  * get a new pose (ANIM_5 / ANIM_7) and their counters cleared.
  */
-void sw_reset(void) {
+static void sw_reset(void) {
     MapObjectEntry* mobj;
 
     mobj = mobjNameToPtr("MOBJ_eki_06_su1");
@@ -280,7 +280,7 @@ void sw_reset(void) {
  * 10 and 3 times (evt_sw_complete is then started), otherwise the switch pops back up,
  * and an overcount resets only counters one hit past their targets.
  */
-s32 sw_main(MapObjectEntry* mobj) {
+static s32 sw_main(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 2:
             break;
@@ -370,7 +370,7 @@ s32 sw_main(MapObjectEntry* mobj) {
  * and spawns it as a map object at (args[1], args[2], args[3]) with sw_main as its per-frame function.
  * Blocks until the model has finished loading.
  */
-USER_FUNC(sw_entry) {
+static USER_FUNC(sw_entry) {
     EvtWord* args = event->args;
     const char* name;
     f32 x, y, z;

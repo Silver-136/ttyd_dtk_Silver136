@@ -133,8 +133,8 @@ extern EvtWord hammer_lv3_juyoitem_lecture_init[];
 EvtWord hammer_lv3_juyoitem_lecture_init[107];
 #endif
 
-EvtWord hammer_lv3_juyoitem_lecture_sub01[29];
-EvtWord hammer_lv3_juyoitem_lecture_sub02[65];
+static EvtWord hammer_lv3_juyoitem_lecture_sub01[29];
+static EvtWord hammer_lv3_juyoitem_lecture_sub02[65];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord hammer_lv3_juyoitem_lecture[];
@@ -860,7 +860,7 @@ EVT_END()
  * Button prompt animation for the Ultra Hammer lecture, step one:
  * the first prompt is bright and flashes between two icons while the second is dimmed.
  */
-EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub01)
+static EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
     CALL(lecture_button_set_icon_id, 1, ICON_STICK_NEUTRAL)
@@ -877,7 +877,7 @@ EVT_END()
  * Button prompt animation for the Ultra Hammer lecture, step two:
  * the second prompt is bright and cycles through the eight direction icons while the first is dimmed.
  */
-EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub02)
+static EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)
     CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_B_PRESSED)

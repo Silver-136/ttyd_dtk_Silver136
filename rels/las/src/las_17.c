@@ -29,9 +29,9 @@ static EvtWord e_door_open[12];
 static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
 static EvtWord switch_evt[46];
-EvtWord enemy1_dead_evt[11];
-EvtWord enemy2_dead_evt[11];
-EvtWord enemy3_dead_evt[11];
+static EvtWord enemy1_dead_evt[11];
+static EvtWord enemy2_dead_evt[11];
+static EvtWord enemy3_dead_evt[11];
 EvtWord enemy4_dead_evt[102];
 static EvtWord hint_plate[24];
 
@@ -111,7 +111,7 @@ static EVT_BEGIN(switch_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(enemy1_dead_evt)
+static EVT_BEGIN(enemy1_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 0)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 1)
@@ -119,7 +119,7 @@ EVT_BEGIN(enemy1_dead_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(enemy2_dead_evt)
+static EVT_BEGIN(enemy2_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 1)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 2)
@@ -127,7 +127,7 @@ EVT_BEGIN(enemy2_dead_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(enemy3_dead_evt)
+static EVT_BEGIN(enemy3_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 2)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 3)

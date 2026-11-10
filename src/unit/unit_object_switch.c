@@ -11,7 +11,7 @@
 #include "evt/evt_map.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(_rumble_switch);
+static USER_FUNC(_rumble_switch);
 
 static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
@@ -175,7 +175,7 @@ static s32 _data[] = {
  * adds one entry of the _data offset table to its height each frame for 34 frames,
  * a decaying up-and-down wobble. Run from damage_event.
  */
-USER_FUNC(_rumble_switch) {
+static USER_FUNC(_rumble_switch) {
     BattleUnit* unit;
     BattleStageObject* object;
     s32 id;

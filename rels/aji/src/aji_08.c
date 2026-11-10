@@ -23,16 +23,16 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(camAtY);
-USER_FUNC(slit_chk);
+static USER_FUNC(camAtY);
+static USER_FUNC(slit_chk);
 
 static EvtWord s_door_open[22];
 static EvtWord s_door_close[22];
-EvtWord evt_slit0[15];
-EvtWord evt_slit1[15];
-EvtWord evt_slit2[15];
+static EvtWord evt_slit0[15];
+static EvtWord evt_slit1[15];
+static EvtWord evt_slit2[15];
 static BeroEntry bero_entry_data[5];
-EvtWord heya_tenura_onoff[68];
+static EvtWord heya_tenura_onoff[68];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_08_init_evt[];
@@ -70,7 +70,7 @@ EVT_END()
  * Exit event of the ceiling slit s_bero_2: locks the controls
  * and changes the map to aji_06 (the potion laboratory), entering as "tenjo" (from the ceiling).
  */
-EVT_BEGIN(evt_slit0)
+static EVT_BEGIN(evt_slit0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_bero_mapchange, STRING("aji_06"), STRING("tenjo"))
@@ -82,7 +82,7 @@ EVT_END()
  * Exit event of the ceiling slit with exitEvent evt_slit1:
  * the map changes to aji_07 (the teleporter room), entering as "tenjo".
  */
-EVT_BEGIN(evt_slit1)
+static EVT_BEGIN(evt_slit1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_bero_mapchange, STRING("aji_07"), STRING("tenjo"))
@@ -91,7 +91,7 @@ EVT_BEGIN(evt_slit1)
 EVT_END()
 
 /** Exit event of the ceiling slit with exitEvent evt_slit2: the map changes to aji_09, entering as "tenjo". */
-EVT_BEGIN(evt_slit2)
+static EVT_BEGIN(evt_slit2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_bero_mapchange, STRING("aji_09"), STRING("tenjo"))
@@ -178,7 +178,7 @@ static BeroEntry bero_entry_data[] = {
  * while the camera target is at y = 180 or higher the roof S_tenura is shown and the room S_heya hidden,
  * otherwise the other way round. Runs forever.
  */
-EVT_BEGIN(heya_tenura_onoff)
+static EVT_BEGIN(heya_tenura_onoff)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
@@ -253,7 +253,7 @@ EVT_BEGIN(aji_08_init_evt)
 EVT_END()
 
 // Return the camera target height as an integer event value, truncating its fractional part.
-USER_FUNC(camAtY) {
+static USER_FUNC(camAtY) {
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], camGetPtr(CAMERA_3D)->cameraAt.y);
@@ -265,7 +265,7 @@ USER_FUNC(camAtY) {
  * 160 and 169), then switches off the 3D camera control and suspends the event whose ID is in LW(0),
  * the roof-swap script heya_tenura_onoff. Blocks until then.
  */
-USER_FUNC(slit_chk) {
+static USER_FUNC(slit_chk) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {

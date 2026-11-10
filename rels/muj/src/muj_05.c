@@ -39,15 +39,15 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-s32* command_work;
+static s32* command_work;
 
-USER_FUNC(evt_dokuroiwa_command_check);
-USER_FUNC(evt_dokuroiwa_command_clear);
-USER_FUNC(evt_dokuroiwa_command_init);
-USER_FUNC(evt_dokuroiwa_command_set);
+static USER_FUNC(evt_dokuroiwa_command_check);
+static USER_FUNC(evt_dokuroiwa_command_clear);
+static USER_FUNC(evt_dokuroiwa_command_init);
+static USER_FUNC(evt_dokuroiwa_command_set);
 
-EvtWord sanders_rotate[28];
-EvtWord sanders_nakama_sub[13];
+static EvtWord sanders_rotate[28];
+static EvtWord sanders_nakama_sub[13];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord sanders_nakama[];
@@ -57,7 +57,7 @@ EvtWord sanders_nakama[173];
 
 static EvtWord sanders_init[51];
 static s32 itemsel_table01[2];
-EvtWord sanders_talk_sub[70];
+static EvtWord sanders_talk_sub[70];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord sanders_talk[170];
@@ -69,22 +69,22 @@ static EvtWord marco_init[24];
 static EvtWord marco_talk[146];
 static EvtWord erumosu_regl[4];
 EvtWord erumosu_a_dead[23];
-EvtWord erumosu_b_dead[12];
+static EvtWord erumosu_b_dead[12];
 static NpcSetupInfo npcEnt[5];
-NpcSetupInfo npcEnt_after[3];
+static NpcSetupInfo npcEnt_after[3];
 static BeroEntry bero_entry_data[3];
-EvtWord hammer_sub[27];
-EvtWord hammer_event[10];
-EvtWord sanders_kyushutsu_sub[250];
-EvtWord erumosu_guruguru[13];
-EvtWord erumosu_guruguru_dir[11];
+static EvtWord hammer_sub[27];
+static EvtWord hammer_event[10];
+static EvtWord sanders_kyushutsu_sub[250];
+static EvtWord erumosu_guruguru[13];
+static EvtWord erumosu_guruguru_dir[11];
 EvtWord sanders_kyushutsu[63];
-EvtWord marco_hanauta[2];
-EvtWord marco_and_jewel[84];
-EvtWord blueeye_flush[78];
-EvtWord redeye_flush[78];
-EvtWord dokuroiwa_flush[51];
-s32 command_seikai[7];
+static EvtWord marco_hanauta[2];
+static EvtWord marco_and_jewel[84];
+static EvtWord blueeye_flush[78];
+static EvtWord redeye_flush[78];
+static EvtWord dokuroiwa_flush[51];
+static s32 command_seikai[7];
 static s32 itemsel_table[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -93,24 +93,24 @@ extern EvtWord dokuroiwa_touch[];
 EvtWord dokuroiwa_touch[127];
 #endif
 
-EvtWord case_event_entry[45];
-EvtWord case_event_delete[42];
-EvtWord penalty_event[187];
+static EvtWord case_event_entry[45];
+static EvtWord case_event_delete[42];
+static EvtWord penalty_event[187];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
 EvtWord answer_event[125];
-EvtWord iwa01_hammer[73];
-EvtWord iwa01_ride_a[20];
-EvtWord iwa02_ride[66];
-EvtWord iwa02_hammer[20];
-EvtWord iwa02_ride_a[28];
-EvtWord iwa02_nonride_a[5];
+static EvtWord iwa01_hammer[73];
+static EvtWord iwa01_ride_a[20];
+static EvtWord iwa02_ride[66];
+static EvtWord iwa02_hammer[20];
+static EvtWord iwa02_ride_a[28];
+static EvtWord iwa02_nonride_a[5];
 static EvtWord bombwall_bomb[143];
 EvtWord dokuroiwa_bomb[309];
 EvtWord dokuroiwa_init[123];
 EvtWord muj_05_first[26];
-EvtWord yure_yashi_ha1[180];
-EvtWord yure_yashi[88];
+static EvtWord yure_yashi_ha1[180];
+static EvtWord yure_yashi[88];
 static EvtWord evt_kusa_1[20];
 static TreeAccess tree_tbl[6];
 static KusaAccess kusa_tbl[8];
@@ -121,7 +121,7 @@ EvtWord muj_05_init_evt[146];
  * correct sequence (command_seikai).
  * Writes 0 to args[0] at the first empty slot, 1 at the first mismatch encountered before it, and 2 if all seven match.
  */
-USER_FUNC(evt_dokuroiwa_command_check) {
+static USER_FUNC(evt_dokuroiwa_command_check) {
     s32 result;
     s32 i;
     EvtWord* args = event->args;
@@ -151,7 +151,7 @@ USER_FUNC(evt_dokuroiwa_command_check) {
  * Script helper: records one eye strike of the skull rock puzzle:
  * args[0] is the slot (0 to 6), args[1] the eye hit (1 = blue, 2 = red).
  */
-USER_FUNC(evt_dokuroiwa_command_set) {
+static USER_FUNC(evt_dokuroiwa_command_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 
@@ -163,20 +163,20 @@ USER_FUNC(evt_dokuroiwa_command_set) {
 }
 
 /** Script helper: clears the seven recorded eye strikes so the puzzle starts over. */
-USER_FUNC(evt_dokuroiwa_command_clear) {
+static USER_FUNC(evt_dokuroiwa_command_clear) {
     memset(command_work, 0, 7 * sizeof(s32));
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: allocates the seven-word eye strike buffer from map memory and clears it. */
-USER_FUNC(evt_dokuroiwa_command_init) {
+static USER_FUNC(evt_dokuroiwa_command_init) {
     command_work = _mapAlloc(7 * sizeof(s32));
     memset(command_work, 0, 7 * sizeof(s32));
     return EVT_RETURN_DONE;
 }
 
 /** Turns the NPC in LW(10) from LW(1) to LW(2) degrees over LW(3) ms; Bobbery uses it to look around while he talks. */
-EVT_BEGIN(sanders_rotate)
+static EVT_BEGIN(sanders_rotate)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(1), LW(2), LW(3))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -193,7 +193,7 @@ EVT_END()
  * Runs the partner lecture for Admiral Bobbery (all_party_lecture) when he joins,
  * then sends the partner back out running.
  */
-EVT_BEGIN(sanders_nakama_sub)
+static EVT_BEGIN(sanders_nakama_sub)
     SET_VALUE(LW(8), STRING("me"))
     SET_VALUE(LW(9), 3)
     CALL_CHILD(all_party_lecture)
@@ -294,7 +294,7 @@ static s32 itemsel_table01[] = {
  * Bobbery's talk after being offered Chuckola Cola (from STG5_15_RUNAWAY_SAILORS):
  * he falls asleep to the music-box tune (stg5_muj_45, 46) and the story moves to STG5_18_BOBBERY_RESCUE_2.
  */
-EVT_BEGIN(sanders_talk_sub)
+static EVT_BEGIN(sanders_talk_sub)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg5_muj_45"), 0, STRING("me"))
@@ -462,7 +462,7 @@ EVT_BEGIN(erumosu_a_dead)
 EVT_END()
 
 /** Death event of the second Ember (Elmos B): stops its circling events. */
-EVT_BEGIN(erumosu_b_dead)
+static EVT_BEGIN(erumosu_b_dead)
     DELETE_EVENT(GW(1))
     DELETE_EVENT(GW(3))
     CALL(evt_npc_set_position, STRING("エルモス２"), 0, -1000, 0)
@@ -533,7 +533,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /** NPCs of the skull rock once the Embers have been beaten: Bobbery and Flavio. */
-NpcSetupInfo npcEnt_after[] = {
+static NpcSetupInfo npcEnt_after[] = {
     {
         "サンダース", // name (Admiral Bobbery)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
@@ -599,7 +599,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Hammering the tree A_ki_02_01: sways the palm (S_treeA_05) and plays its map animation. */
-EVT_BEGIN(hammer_sub)
+static EVT_BEGIN(hammer_sub)
     CALL(evt_mapobj_get_position, STRING("S_treeA_05"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_TREE_SHAKE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_LEAF_SHAKE1"), LW(0), LW(1), LW(2), 0)
@@ -608,7 +608,7 @@ EVT_BEGIN(hammer_sub)
 EVT_END()
 
 /** Registers hammer_sub as the hammer case event of the tree A_ki_02_01. */
-EVT_BEGIN(hammer_event)
+static EVT_BEGIN(hammer_event)
     CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_ki_02_01"), 0, PTR(hammer_sub), 0)
     RETURN
 EVT_END()
@@ -618,7 +618,7 @@ EVT_END()
  * Bobbery cries out in pain (stg5_muj_33_01); later dialogue thanks Mario (stg5_muj_34_01).
  * The party walks to his side and the story advances.
  */
-EVT_BEGIN(sanders_kyushutsu_sub)
+static EVT_BEGIN(sanders_kyushutsu_sub)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_15_RUNAWAY_SAILORS)
@@ -698,7 +698,7 @@ EVT_BEGIN(sanders_kyushutsu_sub)
 EVT_END()
 
 /** Makes an Ember circle around the point (-115, -15) at 5 degrees per frame, in three-second muj_npc_guruguru calls repeated until the event is deleted. */
-EVT_BEGIN(erumosu_guruguru)
+static EVT_BEGIN(erumosu_guruguru)
     LOOP(0)
         CALL(muj_npc_guruguru, LW(0), -115, -15, 1, FLOAT(-5.0f), 3000)
     END_LOOP
@@ -706,7 +706,7 @@ EVT_BEGIN(erumosu_guruguru)
 EVT_END()
 
 /** Keeps the Ember in LW(0) facing Bobbery (Sanders) while it circles. */
-EVT_BEGIN(erumosu_guruguru_dir)
+static EVT_BEGIN(erumosu_guruguru_dir)
     LOOP(0)
         CALL(evt_set_dir_to_target, LW(0), STRING("サンダース"))
         WAIT_FRAMES(1)
@@ -742,7 +742,7 @@ EVT_END()
  * Flavio's humming event (hanauta), tracked in GW(2) and deleted when he is talked to;
  * its body is only RETURN, so it does nothing.
  */
-EVT_BEGIN(marco_hanauta)
+static EVT_BEGIN(marco_hanauta)
     RETURN
 EVT_END()
 
@@ -753,7 +753,7 @@ EVT_END()
  * walks back to (279, -67) and stays there as an NPC;
  * he leaves the party and the story moves to STG5_18_03_MARCOS_JEWEL.
  */
-EVT_BEGIN(marco_and_jewel)
+static EVT_BEGIN(marco_and_jewel)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), 500)
@@ -781,7 +781,7 @@ EVT_BEGIN(marco_and_jewel)
 EVT_END()
 
 /** Flashes the blue eye of the skull rock (S_hige_iwa03_me) with a sparkle effect at two points beside it. */
-EVT_BEGIN(blueeye_flush)
+static EVT_BEGIN(blueeye_flush)
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa03_me"), LW(0), LW(1), LW(2))
     ADD(LW(0), -12)
     ADD(LW(1), 2)
@@ -798,7 +798,7 @@ EVT_BEGIN(blueeye_flush)
 EVT_END()
 
 /** Flashes the red eye of the skull rock (S_hige_iwa02_me) with a sparkle effect at two points beside it. */
-EVT_BEGIN(redeye_flush)
+static EVT_BEGIN(redeye_flush)
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa02_me"), LW(0), LW(1), LW(2))
     ADD(LW(0), -12)
     ADD(LW(1), 2)
@@ -818,7 +818,7 @@ EVT_END()
  * Flashes the skull rock's face (S_dkr_iwa02) with random jitter and a hagetaka flush effect;
  * answer_event spawns it five times.
  */
-EVT_BEGIN(dokuroiwa_flush)
+static EVT_BEGIN(dokuroiwa_flush)
     CALL(evt_mapobj_get_position, STRING("S_dkr_iwa02"), LW(0), LW(1), LW(2))
     ADD(LW(0), 0)
     ADD(LW(2), 20)
@@ -832,7 +832,7 @@ EVT_BEGIN(dokuroiwa_flush)
 EVT_END()
 
 /** The correct sequence of the seven eye strikes on the skull rock, in order. */
-s32 command_seikai[] = {
+static s32 command_seikai[] = {
     2, 2, 2, 1, 1, 1, 1,
 };
 
@@ -903,7 +903,7 @@ EVT_END()
  * Registers the hammer, jump-from-A and stand-on case events on the two eye rocks (A_iwa01 and A_iwa_atari),
  * saving their ids in GW(5) to GW(9).
  */
-EVT_BEGIN(case_event_entry)
+static EVT_BEGIN(case_event_entry)
     SET_VALUE(GF(10), 0)
     CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_iwa01"), 0, PTR(iwa01_hammer), GW(5))
     CALL(evt_run_case_evt, CASE_JUMP_FROM_A, 1, STRING("A_iwa01"), 0, PTR(iwa01_ride_a), GW(6))
@@ -914,7 +914,7 @@ EVT_BEGIN(case_event_entry)
 EVT_END()
 
 /** Removes the case events registered by case_event_entry whose ids are still in GW(5) to GW(9). */
-EVT_BEGIN(case_event_delete)
+static EVT_BEGIN(case_event_delete)
     IF_INT_NOT_EQUAL(GW(5), -1)
         CALL(evt_del_case_evt, 0, GW(5))
     END_IF
@@ -940,7 +940,7 @@ EVT_END()
  * Afterwards they are hidden, the sequence is reset, GW(12) is set so Flavio comments on the failure,
  * the humming restarts and the case events are registered again.
  */
-EVT_BEGIN(penalty_event)
+static EVT_BEGIN(penalty_event)
     CALL(evt_mario_key_onoff, 0)
     DELETE_EVENT(GW(2))
     CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
@@ -1074,7 +1074,7 @@ EVT_END()
  * flashes the blue eye and records a blue strike (1), then checks the sequence:
  * a wrong one starts penalty_event, a complete one starts answer_event.
  */
-EVT_BEGIN(iwa01_hammer)
+static EVT_BEGIN(iwa01_hammer)
     IF_INT_EQUAL(GF(10), 1)
         RETURN
     END_IF
@@ -1105,7 +1105,7 @@ EVT_BEGIN(iwa01_hammer)
 EVT_END()
 
 /** A pressed on the first air frame after jumping off the big blue-eye rock (CASE_JUMP_FROM_A): plays the rock jump sound while the Skull Gem is placed. */
-EVT_BEGIN(iwa01_ride_a)
+static EVT_BEGIN(iwa01_ride_a)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
@@ -1119,7 +1119,7 @@ EVT_END()
  * once per landing (GW(13)), flashes the red eye and records a red strike (2),
  * then checks the sequence like iwa01_hammer.
  */
-EVT_BEGIN(iwa02_ride)
+static EVT_BEGIN(iwa02_ride)
     CALL(evt_mario_chk_hipbump, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -1151,7 +1151,7 @@ EVT_BEGIN(iwa02_ride)
 EVT_END()
 
 /** Hammering the small red-eye rock: plays the small rock hit sound while the Skull Gem is placed. */
-EVT_BEGIN(iwa02_hammer)
+static EVT_BEGIN(iwa02_hammer)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
@@ -1165,7 +1165,7 @@ EVT_END()
  * evt_mario_chk_hipbump reports a hip bump:
  * plays the small rock jump sound while the Skull Gem is placed.
  */
-EVT_BEGIN(iwa02_ride_a)
+static EVT_BEGIN(iwa02_ride_a)
     CALL(evt_mario_chk_hipbump, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -1179,7 +1179,7 @@ EVT_BEGIN(iwa02_ride_a)
 EVT_END()
 
 /** Clears GW(13) when Mario leaves the red-eye rock, so the next ground pound counts as a new strike. */
-EVT_BEGIN(iwa02_nonride_a)
+static EVT_BEGIN(iwa02_nonride_a)
     SET_VALUE(GW(13), 0)
     RETURN
 EVT_END()
@@ -1382,7 +1382,7 @@ EVT_BEGIN(muj_05_first)
 EVT_END()
 
 /** Sways the leaves of the palm tree (S_treeA_05) back and forth, spawned by yure_yashi. */
-EVT_BEGIN(yure_yashi_ha1)
+static EVT_BEGIN(yure_yashi_ha1)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 2, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -1436,7 +1436,7 @@ EVT_END()
  * Sways the palm tree (S_treeA_05) and its leaves repeatedly before STG5_15_RUNAWAY_SAILORS;
  * it returns once that story stage is reached.
  */
-EVT_BEGIN(yure_yashi)
+static EVT_BEGIN(yure_yashi)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING("S_treeA_05"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_TREE_SHAKE2"), LW(0), LW(1), LW(2), 0)

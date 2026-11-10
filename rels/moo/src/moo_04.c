@@ -33,7 +33,7 @@ static USER_FUNC(mario_kirimomi);
 static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
 static EvtWord mario_fly[168];
-EvtWord kanbu_fly[198];
+static EvtWord kanbu_fly[198];
 static NpcSetupInfo npcEnt[2];
 static EvtWord epilogue_evt[64];
 EvtWord moo_04_init_evt[220];
@@ -137,7 +137,7 @@ EVT_END()
  * a flash (wangflush) lights up and the map changes back to aji_14 at "tuzuki",
  * where the aftermath sets that story progress.
  */
-EVT_BEGIN(kanbu_fly)
+static EVT_BEGIN(kanbu_fly)
     WAIT_MS(2000)
     CALL(evt_npc_set_position, STRING("幹部"), 25, 75, -70)
     CALL(evt_npc_set_scale, STRING("幹部"), FLOAT(0.2998047f), FLOAT(0.2998047f), FLOAT(0.2998047f))

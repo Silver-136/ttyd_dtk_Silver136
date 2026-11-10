@@ -83,13 +83,13 @@ EvtWord evt_train2[287];
 
 static EvtWord peach_mail[235];
 static BeroEntry bero_entry_data[5];
-EvtWord hikosenkakari_init[5];
-EvtWord hikosenkakari_init_ship[16];
-EvtWord hikosenkakari_talk[211];
-EvtWord ekiin_init[28];
-EvtWord ekiin_talk[188];
-EvtWord jugemu_a_init[13];
-EvtWord jugemu_a_talk[68];
+static EvtWord hikosenkakari_init[5];
+static EvtWord hikosenkakari_init_ship[16];
+static EvtWord hikosenkakari_talk[211];
+static EvtWord ekiin_init[28];
+static EvtWord ekiin_talk[188];
+static EvtWord jugemu_a_init[13];
+static EvtWord jugemu_a_talk[68];
 static EvtWord kinopiko_b_init[8];
 static EvtWord kinopiko_b_talk[68];
 static EvtWord baba_init[7];
@@ -98,14 +98,14 @@ static EvtWord luigi_init[18];
 static EvtWord luigi_talk[4];
 static NpcSetupInfo luigiEnt[2];
 static EvtWord luigi_npcEnt[30];
-EvtWord scream_init[12];
-EvtWord scream_talk[8];
-NpcSetupInfo screamEnt[2];
+static EvtWord scream_init[12];
+static EvtWord scream_talk[8];
+static NpcSetupInfo screamEnt[2];
 static NpcSetupInfo npcEnt[7];
-EvtWord evt_hikousen[224];
+static EvtWord evt_hikousen[224];
 static EvtWord evt_wing[97];
-EvtWord evt_hikousen_return[490];
-EvtWord gor_04_koopa_evt[1123];
+static EvtWord evt_hikousen_return[490];
+static EvtWord gor_04_koopa_evt[1123];
 
 #if VERSION >= VERSION_US
 EvtWord gor_04_init_evt[255];
@@ -1225,7 +1225,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Init event of the blimp ticket attendant NPC: clears GF(10), so the booth is staffed on a normal visit. */
-EVT_BEGIN(hikosenkakari_init)
+static EVT_BEGIN(hikosenkakari_init)
     SET_VALUE(GF(10), 0)
     RETURN
 EVT_END()
@@ -1235,7 +1235,7 @@ EVT_END()
  * places the attendant at the platform's edge, turns off the ticket-booth collision (A_tousenbo)
  * and sets GF(10).
  */
-EVT_BEGIN(hikosenkakari_init_ship)
+static EVT_BEGIN(hikosenkakari_init_ship)
     CALL(evt_npc_set_position, STRING("飛行船係員"), 315, 0, 160)
     CALL(evt_hitobj_onoff, STRING("A_tousenbo"), 1, 0)
     SET_VALUE(GF(10), 1)
@@ -1250,7 +1250,7 @@ EVT_END()
  * and the booth collision A_tousenbo is switched off (GF(10) set); no gives hikou_03.
  * While GF(10) is set he only says hikou_06.
  */
-EVT_BEGIN(hikosenkakari_talk)
+static EVT_BEGIN(hikosenkakari_talk)
     IF_INT_EQUAL(GF(10), 1)
         CALL(evt_msg_print, 0, STRING("hikou_06"), 0, STRING("me"))
         RETURN
@@ -1320,7 +1320,7 @@ EVT_END()
  * Init event of the station attendant (ekiin): when Mario arrives from the train or from the n_bero door,
  * puts the attendant at the platform spot (-400, 80, 100).
  */
-EVT_BEGIN(ekiin_init)
+static EVT_BEGIN(ekiin_init)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("resha_return"))
         CALL(evt_npc_set_position, STRING("me"), -400, 80, 100)
@@ -1338,7 +1338,7 @@ EVT_END()
  * the music fades out and the attendant steps aside before evt_train starts the ride; no gives train_02.
  * Says train_06 when Mario has just arrived on the return trip.
  */
-EVT_BEGIN(ekiin_talk)
+static EVT_BEGIN(ekiin_talk)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("resha_return"))
         CALL(evt_msg_print, 0, STRING("train_06"), 0, STRING("me"))
@@ -1395,7 +1395,7 @@ EVT_BEGIN(ekiin_talk)
     RETURN
 EVT_END()
 
-EVT_BEGIN(jugemu_a_init)
+static EVT_BEGIN(jugemu_a_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         RETURN
     END_IF
@@ -1407,7 +1407,7 @@ EVT_END()
  * Talk event of the Lakitu NPC: chapter-dependent small talk (gor_04_000 to gor_04_007) chosen by how far the
  * story has progressed, from chapter 1 up to after the Shadow Queen.
  */
-EVT_BEGIN(jugemu_a_talk)
+static EVT_BEGIN(jugemu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
         CALL(evt_msg_print, 0, STRING("gor_04_000"), 0, STRING("me"))
@@ -1525,20 +1525,20 @@ static EVT_BEGIN(luigi_npcEnt)
 EVT_END()
 
 /** Init event of Luigi's companion (ス・クリーミ) NPC: puts him at (105, 0, 120) facing camera-left. */
-EVT_BEGIN(scream_init)
+static EVT_BEGIN(scream_init)
     CALL(evt_npc_set_position, STRING("me"), 105, 0, 120)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
     RETURN
 EVT_END()
 
 /** Talk event of Luigi's companion (ス・クリーミ): says luigi_npc_05. */
-EVT_BEGIN(scream_talk)
+static EVT_BEGIN(scream_talk)
     CALL(evt_msg_print, 0, STRING("luigi_npc_05"), 0, STRING("me"))
     RETURN
 EVT_END()
 
 /** NPC setup of Screamy, Luigi's companion at the station. */
-NpcSetupInfo screamEnt[] = {
+static NpcSetupInfo screamEnt[] = {
     {
         "ス・クリーミ", // name (Screamy, Luigi's friend)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
@@ -1636,7 +1636,7 @@ static NpcSetupInfo npcEnt[] = {
  * then the screen changes to tou_20 (first trip, before STG3_00_WELCOME_TO_GLITZVILLE) or tou_00
  * after a 10 second ride.
  */
-EVT_BEGIN(evt_hikousen)
+static EVT_BEGIN(evt_hikousen)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_AIRSHIP1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
@@ -1756,7 +1756,7 @@ EVT_END()
  * the gondola comes down over 3 seconds with Mario aboard, and Mario walks off it.
  * Sets the city music back to the Rogueport tune.
  */
-EVT_BEGIN(evt_hikousen_return)
+static EVT_BEGIN(evt_hikousen_return)
     SPAWN_EVENT(hikosenkakari_init_ship)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1908,7 +1908,7 @@ EVT_END()
  * great secret, and asks the blimp attendant for tickets; he flees, Bowser flies off on his own (飛クッパ, "I'll be
  * riding THIS") and Kammy is left behind (kpa_stg4_000 to 006). The map then changes to tou_00 (Glitzville).
  */
-EVT_BEGIN(gor_04_koopa_evt)
+static EVT_BEGIN(gor_04_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 425, 250, 340, 425, 214, 112, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pos, 75, 0, 154)

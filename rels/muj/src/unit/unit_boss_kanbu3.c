@@ -42,14 +42,14 @@ static BattleUnitDefense defence_guard;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleDataEntry data_table[3];
-BattleDataEntry data_table2[2];
+static BattleDataEntry data_table2[2];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_kanbu3_attack;
-BattleWeapon weapon_kanbu3_charge;
-BattleUnitSetup entry_kenkyu;
-BattleUnitSetup entry_group1;
-BattleUnitSetup entry_group2;
-BattleUnitSetup entry_group3;
+static BattleWeapon weapon_kanbu3_attack;
+static BattleWeapon weapon_kanbu3_charge;
+static BattleUnitSetup entry_kenkyu;
+static BattleUnitSetup entry_group1;
+static BattleUnitSetup entry_group2;
+static BattleUnitSetup entry_group3;
 static EvtWord init_event[59];
 static EvtWord entry_event[45];
 
@@ -66,11 +66,11 @@ static EvtWord dead_event[402];
 #endif
 
 static EvtWord phase_event[55];
-EvtWord call_event[284];
+static EvtWord call_event[284];
 static EvtWord attack_event[136];
 static EvtWord guard_event[56];
 static EvtWord guard_cancel_event[69];
-EvtWord no_event[27];
+static EvtWord no_event[27];
 static EvtWord charge_event[71];
 static EvtWord wait_event[6];
 static PoseTableEntry pose_table[18];
@@ -178,7 +178,7 @@ static BattleDataEntry data_table[] = {
  * Event table Lord Crump switches to after his first defeat: it no longer has the defeat script,
  * so the next defeat ends the battle.
  */
-BattleDataEntry data_table2[] = {
+static BattleDataEntry data_table2[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
@@ -189,7 +189,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of Lord Crump (attack): targets one unit for 3 damage; used by attack_event. */
-BattleWeapon weapon_kanbu3_attack = {
+static BattleWeapon weapon_kanbu3_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -226,7 +226,7 @@ BattleWeapon weapon_kanbu3_attack = {
 };
 
 /** Weapon of Lord Crump (charge): targets one unit; used by charge_event. */
-BattleWeapon weapon_kanbu3_charge = {
+static BattleWeapon weapon_kanbu3_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -262,7 +262,7 @@ BattleWeapon weapon_kanbu3_charge = {
 };
 
 /** Spawn setup for the X-Naut PhD (unit_gundan_zako_magician): enemy side, placed off-screen at first. */
-BattleUnitSetup entry_kenkyu = {
+static BattleUnitSetup entry_kenkyu = {
     &unit_gundan_zako_magician, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -277,7 +277,7 @@ BattleUnitSetup entry_kenkyu = {
  * Spawn setup for X-Nauts (unit_boss_gundan_zako_group1): enemy side, placed off-screen at first;
  * used by call_event.
  */
-BattleUnitSetup entry_group1 = {
+static BattleUnitSetup entry_group1 = {
     &unit_boss_gundan_zako_group1, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -292,7 +292,7 @@ BattleUnitSetup entry_group1 = {
  * Spawn setup for X-Nauts (unit_boss_gundan_zako_group2): enemy side, placed off-screen at first;
  * used by damage_event, call_event.
  */
-BattleUnitSetup entry_group2 = {
+static BattleUnitSetup entry_group2 = {
     &unit_boss_gundan_zako_group2, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -307,7 +307,7 @@ BattleUnitSetup entry_group2 = {
  * Spawn setup for X-Nauts (unit_boss_gundan_zako_group3): enemy side, placed off-screen at first;
  * used by dead_event, call_event.
  */
-BattleUnitSetup entry_group3 = {
+static BattleUnitSetup entry_group3 = {
     &unit_boss_gundan_zako_group3, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -656,7 +656,7 @@ EVT_END()
  * he plays the call sound and pose (C_1; C_2 when calling group 2) and brings in horde group 1, 2 or 3 according to
  * UNIT_WORK_GROUP; LW(0) returns 1 when he called, 0 when a group was already there.
  */
-EVT_BEGIN(call_event)
+static EVT_BEGIN(call_event)
     // If no X-Naut group is on the stage yet, Lord Crump waves them in.
     CALL(check_exist_group, LW(15))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
@@ -875,7 +875,7 @@ EVT_END()
  * Lord Crump's idle event for turns without an action:
  * aims the battle camera at him and zooms in to 200, then returns the camera to its default mode.
  */
-EVT_BEGIN(no_event)
+static EVT_BEGIN(no_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

@@ -60,12 +60,12 @@ typedef struct TargetWork {
 } TargetWork;
 extern EvtWord aud_hit_event[];
 EffectEntry* eff_tor;
-s32 torCount;
+static s32 torCount;
 EffectEntry* eff_jet[2];
-s32 jetCount;
+static s32 jetCount;
 static s32* list;
-EffectEntry* eff_suikomi;
-s32 screamId;
+static EffectEntry* eff_suikomi;
+static s32 screamId;
 
 #if VERSION >= VERSION_JP
 s32 scream_fade_timer;
@@ -73,8 +73,8 @@ u8 scream_fade_start_vol;
 u8 scream_fade_vol;
 #endif
 
-TargetWork* wp_target;
-s32 targetSoundId;
+static TargetWork* wp_target;
+static s32 targetSoundId;
 static EffectEntry* eff_charge;
 static ArmWork* work[2];
 
@@ -82,20 +82,20 @@ static USER_FUNC(arm_check);
 static USER_FUNC(arm_end);
 static USER_FUNC(arm_init);
 static USER_FUNC(arm_main);
-USER_FUNC(get_aud_num);
+static USER_FUNC(get_aud_num);
 static USER_FUNC(waku_main);
 static USER_FUNC(arm_init2);
 static USER_FUNC(eff_dead_delete);
 static USER_FUNC(eff_dead);
-USER_FUNC(aud_target_mark);
-USER_FUNC(aud_fire_no_hit);
-USER_FUNC(aud_fire_hit);
+static USER_FUNC(aud_target_mark);
+static USER_FUNC(aud_fire_no_hit);
+static USER_FUNC(aud_fire_hit);
 USER_FUNC(aud_scream_fadeout);
 USER_FUNC(aud_suikomi);
-USER_FUNC(aud_jet_end);
-USER_FUNC(aud_jet);
-USER_FUNC(drill_jet);
-USER_FUNC(drill_tor);
+static USER_FUNC(aud_jet_end);
+static USER_FUNC(aud_jet);
+static USER_FUNC(drill_jet);
+static USER_FUNC(drill_tor);
 
 BattleUnitKind unit_boss_magnum_battender_mkII;
 static BattleUnitDefense defence;
@@ -105,12 +105,12 @@ static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_no_arm[16];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[4];
-BattleWeapon weapon_batten_drill_attack;
-BattleWeapon weapon_batten_boomerang_attack;
-BattleWeapon weapon_batten_aud_attack;
+static BattleWeapon weapon_batten_drill_attack;
+static BattleWeapon weapon_batten_boomerang_attack;
+static BattleWeapon weapon_batten_aud_attack;
 static BattleUnitSetup entry_rocket_punch;
 EvtWord aud_hit_event[24];
-EvtWord aud_no_hit_event[16];
+static EvtWord aud_no_hit_event[16];
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
@@ -123,8 +123,8 @@ static EvtWord dead_event[234];
 
 static EvtWord entry_event[78];
 static EvtWord attack_event[320];
-EvtWord drill_attack_event[392];
-EvtWord boomerang_attack_event[324];
+static EvtWord drill_attack_event[392];
+static EvtWord boomerang_attack_event[324];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord aud_attack_event[];
@@ -132,7 +132,7 @@ extern EvtWord aud_attack_event[];
 EvtWord aud_attack_event[823];
 #endif
 
-EvtWord aud_attack_event_sub[139];
+static EvtWord aud_attack_event_sub[139];
 static EvtWord arm_bunri_event[199];
 static EvtWord arm_return_event[151];
 static EvtWord wait_event[6];
@@ -342,7 +342,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon data for Magnus von Grapple 2.0's drill attack: 6 damage, a jump-type hit, one target. */
-BattleWeapon weapon_batten_drill_attack = {
+static BattleWeapon weapon_batten_drill_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -383,7 +383,7 @@ BattleWeapon weapon_batten_drill_attack = {
 };
 
 /** Weapon data for Magnus von Grapple 2.0's boomerang: 6 damage, every target. */
-BattleWeapon weapon_batten_boomerang_attack = {
+static BattleWeapon weapon_batten_boomerang_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -424,7 +424,7 @@ BattleWeapon weapon_batten_boomerang_attack = {
 };
 
 /** Weapon data for Magnus von Grapple 2.0's audience attack: 3 damage, one target. */
-BattleWeapon weapon_batten_aud_attack = {
+static BattleWeapon weapon_batten_aud_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -493,7 +493,7 @@ EVT_END()
  * Event run on a thrown audience member that missed:
  * moves it over LW(5) frames to the miss position, deletes it and lowers the audience size by one.
  */
-EVT_BEGIN(aud_no_hit_event)
+static EVT_BEGIN(aud_no_hit_event)
     CALL(evt_audience_move_position_frame, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_audience_delete, LW(0))
     CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
@@ -570,7 +570,7 @@ static USER_FUNC(arm_check) {
  * following the unit's X and Z and staying 240 units below it (only while it is below 300 high),
  * then deletes it.
  */
-USER_FUNC(drill_tor) {
+static USER_FUNC(drill_tor) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     f32 x;
@@ -598,7 +598,7 @@ USER_FUNC(drill_tor) {
  * Script function that plays the drill attack's jet flames at two points next to the unit args[0] for 90 frames,
  * then deletes them.
  */
-USER_FUNC(drill_jet) {
+static USER_FUNC(drill_jet) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     f32 x;
@@ -635,7 +635,7 @@ USER_FUNC(drill_jet) {
  * Script function that shows the two jet flames of the audience-attack pod at fixed offsets from the unit
  * args[0], tilted 20 degrees, until aud_jet_end sets jetCount to 1.
  */
-USER_FUNC(aud_jet) {
+static USER_FUNC(aud_jet) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     Mtx mtx;
@@ -673,13 +673,13 @@ USER_FUNC(aud_jet) {
 }
 
 /** Script function: tells aud_jet to end by setting jetCount to 1. */
-USER_FUNC(aud_jet_end) {
+static USER_FUNC(aud_jet_end) {
     jetCount = 1;
     return EVT_RETURN_DONE;
 }
 
 /** Script function: returns the current number of audience members in args[0]. */
-USER_FUNC(get_aud_num) {
+static USER_FUNC(get_aud_num) {
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], BattleAudience_GetAudienceNum());
@@ -802,14 +802,14 @@ USER_FUNC(aud_scream_fadeout) {
 #endif
 
 /** Returns the position of the boss's pod, 10 units right of and 78 above the unit, for the audience cannon. */
-void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z) {
+static void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z) {
     BtlUnit_GetPos(unit, x, y, z);
     *x += 10.0f;
     *y += 78.0f;
 }
 
 /** Starts the smoke puff (kemuri_test effect) at the pod's muzzle for each audience shot. */
-void aud_fire_eff(f32 x, f32 y, f32 z) {
+static void aud_fire_eff(f32 x, f32 y, f32 z) {
     effKemuTestSetRxRz(effKemuTestEntry(11, x - 50.0f, 20.0f + y, 50.0f + z, 0.75f), 40.0f, 110.0f);
 }
 
@@ -818,7 +818,7 @@ void aud_fire_eff(f32 x, f32 y, f32 z) {
  * args[2] the first of the sucked-in members, list[start]):
  * each flies a throwing arc to the target's hit position with aud_hit_event; used when the shot hits.
  */
-USER_FUNC(aud_fire_hit) {
+static USER_FUNC(aud_fire_hit) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     s32 target = BattleTransID(event, evtGetValue(event, args[1]));
@@ -871,7 +871,7 @@ USER_FUNC(aud_fire_hit) {
  * Script function: like aud_fire_hit but for a shot that misses:
  * the audience members fly past the target to x = -275 (aud_hit_event).
  */
-USER_FUNC(aud_fire_no_hit) {
+static USER_FUNC(aud_fire_no_hit) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     s32 target = BattleTransID(event, evtGetValue(event, args[1]));
@@ -922,7 +922,7 @@ USER_FUNC(aud_fire_no_hit) {
  * args[2]: the reticle swoops in over 60, 40 and 20 frames with SFX_BOSS_MBTN_SEARCH1 and
  * then locks on with SFX_BOSS_MBTN_LOCKON1.
  */
-USER_FUNC(aud_target_mark) {
+static USER_FUNC(aud_target_mark) {
     EvtWord* args = event->args;
     f32 x = evtGetValue(event, args[0]);
     f32 y = evtGetValue(event, args[1]);
@@ -1363,7 +1363,7 @@ EVT_END()
  * through the floor with a camera shake, deals the damage with the usual dodge and guard checks,
  * then reappears at the right edge and walks home.
  */
-EVT_BEGIN(drill_attack_event)
+static EVT_BEGIN(drill_attack_event)
     // Choose a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_drill_attack))
@@ -1511,7 +1511,7 @@ EVT_BEGIN(drill_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(boomerang_attack_event)
+static EVT_BEGIN(boomerang_attack_event)
     // Choose a target; the boomerang flies across every target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_boomerang_attack))
@@ -1885,7 +1885,7 @@ EVT_BEGIN(aud_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(aud_attack_event_sub)
+static EVT_BEGIN(aud_attack_event_sub)
     IF_INT_EQUAL(LW(10), 9)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_HIT, LW(0))
         IF_INT_EQUAL(LW(0), 1)

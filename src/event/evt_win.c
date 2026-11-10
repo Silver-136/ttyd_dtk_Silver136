@@ -152,7 +152,7 @@ static s16* mario_status_point_table[3];
 s32 unitwin_coin_se_wait;
 static UnitWinWork* _wp;
 
-USER_FUNC(evt_unitwin_main_func);
+static USER_FUNC(evt_unitwin_main_func);
 
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(select_func);
@@ -195,7 +195,7 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(select_evt)
+static EVT_BEGIN(select_evt)
     CALL(select_func)
     RETURN
 EVT_END()
@@ -1177,7 +1177,7 @@ USER_FUNC(unitwin_window_select_func) {
  * Unit-window update loop: counts the name/description timer down
  * and queues evt_unitwin_disp_func for drawing, until evt_unitwin_free asks it to stop.
  */
-USER_FUNC(evt_unitwin_main_func) {
+static USER_FUNC(evt_unitwin_main_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     if (wp->flags2 & UNITWIN_FREE_REQUEST) {
         wp->flags2 |= UNITWIN_FREE_OK;

@@ -33,7 +33,7 @@ static USER_FUNC(thunder_main);
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[2];
-const char* hit_list[50];
+static const char* hit_list[50];
 static EvtWord evt_box[89];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[40];
@@ -102,7 +102,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Hit areas of the electrified floor panels in the order the lit route visits them (some panels appear twice). */
-const char* hit_list[] = {
+static const char* hit_list[] = {
     "A_hikaru_01",
     "A_hikaru_02",
     "A_hikaru_03",

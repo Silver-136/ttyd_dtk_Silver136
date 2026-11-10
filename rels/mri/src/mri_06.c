@@ -30,31 +30,31 @@
 
 static EvtWord rival_init[21];
 static EvtWord rival_talk[20];
-EvtWord puni_6_init[21];
-EvtWord puni_6_talk[20];
-EvtWord puni_7_init[21];
-EvtWord puni_7_talk[20];
-EvtWord puni_8_init[17];
-EvtWord puni_8_talk[20];
-EvtWord puni_9_init[21];
-EvtWord puni_9_talk[20];
-EvtWord puni_10_init[17];
-EvtWord puni_10_regl[19];
-EvtWord puni_10_talk[20];
-EvtWord puni_11_init[17];
-EvtWord puni_11_regl[19];
-EvtWord puni_11_talk[20];
+static EvtWord puni_6_init[21];
+static EvtWord puni_6_talk[20];
+static EvtWord puni_7_init[21];
+static EvtWord puni_7_talk[20];
+static EvtWord puni_8_init[17];
+static EvtWord puni_8_talk[20];
+static EvtWord puni_9_init[21];
+static EvtWord puni_9_talk[20];
+static EvtWord puni_10_init[17];
+static EvtWord puni_10_regl[19];
+static EvtWord puni_10_talk[20];
+static EvtWord puni_11_init[17];
+static EvtWord puni_11_regl[19];
+static EvtWord puni_11_talk[20];
 static NpcSetupInfo npcEnt[8];
 static EvtWord bero_s_doa_close[10];
 static EvtWord bero_s_doa_open[10];
 static BeroEntry bero_entry_data[8];
 static EvtWord door_switch_init[17];
-EvtWord ueki_evt_02[20];
+static EvtWord ueki_evt_02[20];
 static KusaAccess ueki_access_data[7];
-EvtWord paiders_a[84];
-EvtWord paiders_b[86];
+static EvtWord paiders_a[84];
+static EvtWord paiders_b[86];
 static EvtWord puni_lose[82];
-EvtWord apper_toge[252];
+static EvtWord apper_toge[252];
 static EvtWord cloud_wind_event[5];
 EvtWord mri_06_init_evt[207];
 
@@ -88,7 +88,7 @@ EVT_END()
  * Init of villager Puni 6: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (390, 0, -35) and sets its facing.
  */
-EVT_BEGIN(puni_6_init)
+static EVT_BEGIN(puni_6_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -100,7 +100,7 @@ EVT_BEGIN(puni_6_init)
 EVT_END()
 
 /** Talk script of villager Puni 6: one line until the chapter 8 finale is over and another after it. */
-EVT_BEGIN(puni_6_talk)
+static EVT_BEGIN(puni_6_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_022"), 0, STRING("me"))
@@ -114,7 +114,7 @@ EVT_END()
  * Init of villager Puni 7: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-350, -310, 100).
  */
-EVT_BEGIN(puni_7_init)
+static EVT_BEGIN(puni_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -126,7 +126,7 @@ EVT_BEGIN(puni_7_init)
 EVT_END()
 
 /** Talk script of villager Puni 7: one line until the chapter 8 finale is over and another after it. */
-EVT_BEGIN(puni_7_talk)
+static EVT_BEGIN(puni_7_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_023"), 0, STRING("me"))
@@ -140,7 +140,7 @@ EVT_END()
  * Init of villager Puni 8: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-380, 0, 10).
  */
-EVT_BEGIN(puni_8_init)
+static EVT_BEGIN(puni_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -151,7 +151,7 @@ EVT_BEGIN(puni_8_init)
 EVT_END()
 
 /** Talk script of villager Puni 8: one line until the chapter 8 finale is over and another after it. */
-EVT_BEGIN(puni_8_talk)
+static EVT_BEGIN(puni_8_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_024"), 0, STRING("me"))
@@ -165,7 +165,7 @@ EVT_END()
  * Init of villager Puni 9: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (330, -310, 45) and sets its facing.
  */
-EVT_BEGIN(puni_9_init)
+static EVT_BEGIN(puni_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -177,7 +177,7 @@ EVT_BEGIN(puni_9_init)
 EVT_END()
 
 /** Talk script of villager Puni 9: one line until the chapter 8 finale is over and another after it. */
-EVT_BEGIN(puni_9_talk)
+static EVT_BEGIN(puni_9_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_025"), 0, STRING("me"))
@@ -191,7 +191,7 @@ EVT_END()
  * Init of villager Puni 10: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-120, -310, 50).
  */
-EVT_BEGIN(puni_10_init)
+static EVT_BEGIN(puni_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -205,7 +205,7 @@ EVT_END()
  * Regular script of villager Puni 10: has it wander back
  * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
-EVT_BEGIN(puni_10_regl)
+static EVT_BEGIN(puni_10_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -213,7 +213,7 @@ EVT_BEGIN(puni_10_regl)
 EVT_END()
 
 /** Talk script of villager Puni 10: one line until the chapter 8 finale is over and another after it. */
-EVT_BEGIN(puni_10_talk)
+static EVT_BEGIN(puni_10_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_026"), 0, STRING("me"))
@@ -227,7 +227,7 @@ EVT_END()
  * Init of villager Puni 11: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-190, -310, 125).
  */
-EVT_BEGIN(puni_11_init)
+static EVT_BEGIN(puni_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -241,7 +241,7 @@ EVT_END()
  * Regular script of villager Puni 11: has it wander back
  * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
-EVT_BEGIN(puni_11_regl)
+static EVT_BEGIN(puni_11_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -249,7 +249,7 @@ EVT_BEGIN(puni_11_regl)
 EVT_END()
 
 /** Talk script of villager Puni 11: one line until the chapter 8 finale is over and another after it. */
-EVT_BEGIN(puni_11_talk)
+static EVT_BEGIN(puni_11_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_027"), 0, STRING("me"))
@@ -498,7 +498,7 @@ static EVT_BEGIN(door_switch_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(ueki_evt_02)
+static EVT_BEGIN(ueki_evt_02)
     CALL(evt_item_delete_check, STRING("item_ueki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_ueki02"), ITEM_STAR_PIECE, -95, -310, -52, ITEM_TYPE_GROUND, GSWF_STARPIECE_47, 0)
@@ -525,7 +525,7 @@ static KusaAccess ueki_access_data[] = {
  * every few seconds it drops down to the floor on a thread, becomes targetable while down, then climbs back up.
  * It starts at (75, 130, 40).
  */
-EVT_BEGIN(paiders_a)
+static EVT_BEGIN(paiders_a)
     SET_VALUE(LW(0), STRING("パイダースA"))
     SET_VALUE(LW(1), 75)
     SET_VALUE(LW(2), 130)
@@ -552,7 +552,7 @@ EVT_END()
  * Script of the second Piders (spider): the same drop and climb pattern as the first,
  * starting at (-235, 130, 60) after an initial two-second delay, but waiting down for three seconds instead of two.
  */
-EVT_BEGIN(paiders_b)
+static EVT_BEGIN(paiders_b)
     SET_VALUE(LW(0), STRING("パイダースB"))
     SET_VALUE(LW(1), -235)
     SET_VALUE(LW(2), 130)
@@ -615,7 +615,7 @@ EVT_END()
  * Cutscene when Mario enters mri_06 during story STG2_16_THE_PUNI_ELDERS_POWERS: a Jabbi runs across the room and away;
  * Punio ("ガイドsp") then runs up and rejoins the party. Sets the story to STG2_17_BUBBLES.
  */
-EVT_BEGIN(apper_toge)
+static EVT_BEGIN(apper_toge)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(10), STRING("トゲ族"))
     SET_VALUE(LW(11), STRING("ガイドsp"))

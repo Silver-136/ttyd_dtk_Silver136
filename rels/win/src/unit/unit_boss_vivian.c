@@ -35,8 +35,8 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_vivian_kagenuke_attack1;
-BattleWeapon weapon_vivian_flame_attack1;
+static BattleWeapon weapon_vivian_kagenuke_attack1;
+static BattleWeapon weapon_vivian_flame_attack1;
 static BattleUnitSetup entry_marilyn;
 static BattleUnitSetup entry_majolyne;
 static EvtWord vivian_down[19];
@@ -55,7 +55,7 @@ static EvtWord kagenuke_attack_event[207];
 static EvtWord kagenuke_attack_event[204];
 #endif
 
-EvtWord flame_attack_event[185];
+static EvtWord flame_attack_event[185];
 
 #if VERSION >= VERSION_US
 static EvtWord wait_event[7];
@@ -183,7 +183,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Vivian's shadow-slip strike: 1 damage to one opposing target, guardable. */
-BattleWeapon weapon_vivian_kagenuke_attack1 = {
+static BattleWeapon weapon_vivian_kagenuke_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -222,7 +222,7 @@ BattleWeapon weapon_vivian_kagenuke_attack1 = {
 /**
  * Vivian's flame: 1 fire-element damage to every opposing target, ignoring defense and impossible to guard.
  */
-BattleWeapon weapon_vivian_flame_attack1 = {
+static BattleWeapon weapon_vivian_flame_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -662,7 +662,7 @@ EVT_END()
  * she raises her hands with the magic sound, then smoke appears on each target in turn before its hit check;
  * with no valid targets it ends (or flusters her when confused).
  */
-EVT_BEGIN(flame_attack_event)
+static EVT_BEGIN(flame_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))

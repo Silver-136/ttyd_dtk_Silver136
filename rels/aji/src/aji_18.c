@@ -27,7 +27,7 @@
 #include "aji.h"
 #include "driver/seqdrv.h"
 
-s32 key_list[4];
+static s32 key_list[4];
 
 static USER_FUNC(make_list);
 static USER_FUNC(sysflag);
@@ -44,7 +44,7 @@ extern EvtWord evt_machine[];
 EvtWord evt_machine[266];
 #endif
 
-EvtWord key_lock_koujyou[14];
+static EvtWord key_lock_koujyou[14];
 static EvtWord evt_koopa_after[118];
 
 #if VERSION >= VERSION_US
@@ -277,7 +277,7 @@ EVT_BEGIN(evt_machine)
 EVT_END()
 
 /** Case script of the exit e_bero while the factory door is locked: shows the locked-door text stg7_aji_67_02. */
-EVT_BEGIN(key_lock_koujyou)
+static EVT_BEGIN(key_lock_koujyou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_67_02"), 0, 0)
     CALL(evt_mario_key_onoff, 1)

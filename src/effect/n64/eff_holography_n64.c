@@ -23,13 +23,13 @@ typedef struct EffHolographyN64Work {
 } EffHolographyN64Work;
 
 /** Flicker of the Fright Mask hologram: alpha over a 16-frame cycle, dipping to invisible and back. */
-u8 xlu_data[16] = {255, 255, 220, 190, 160, 120, 80, 40, 0, 0, 40, 80, 120, 160, 190, 220};
+static u8 xlu_data[16] = {255, 255, 220, 190, 160, 120, 80, 40, 0, 0, 40, 80, 120, 160, 190, 220};
 
 /**
  * The hologram ribbon's 55 unfurl poses, 22 vertices (ten segments) each;
  * drawn from the last pose back to the first.
  */
-effN64Vtx ach_01_v[55][22] = {
+static effN64Vtx ach_01_v[55][22] = {
     {
         {-639, 1280, 0, 0, 0, 0, 0, 120, 255},
         {-639, 1152, 0, 0, 102, 0, 0, 120, 255},

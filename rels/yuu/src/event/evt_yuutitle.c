@@ -25,7 +25,7 @@ typedef struct YuuTitleWork {
 } YuuTitleWork;
 static YuuTitleWork* _wp;
 
-USER_FUNC(evt_yuutitle_main_func);
+static USER_FUNC(evt_yuutitle_main_func);
 
 static EvtWord main_evt[4];
 
@@ -33,7 +33,7 @@ static EvtWord main_evt[4];
  * Draws the minigame title text: it slides in from 200 units off its target and scales up
  * while fading in over about 43 frames, then draws centred with a white outline.
  */
-void evt_yuutitle_disp_func(CameraId camera, void* param) {
+static void evt_yuutitle_disp_func(CameraId camera, void* param) {
     YuuTitleWork* wp = param;
     f32 scale = 2.0f;
     f32 halfWidth;
@@ -64,7 +64,7 @@ void evt_yuutitle_disp_func(CameraId camera, void* param) {
  * Body of the title event: queues the draw callback each frame until the free request flag is set,
  * then marks itself stopped.
  */
-USER_FUNC(evt_yuutitle_main_func) {
+static USER_FUNC(evt_yuutitle_main_func) {
     YuuTitleWork* wp = (YuuTitleWork*)event->lwData[0];
 
     if (wp->flags & 1) {

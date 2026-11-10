@@ -11,24 +11,24 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
-USER_FUNC(_set_destroy_flag);
-USER_FUNC(_set_offset);
+static USER_FUNC(_set_destroy_flag);
+static USER_FUNC(_set_offset);
 extern BattleUnitKind unit_boss_moamoa;
 
-BattleStageObjectData rsh_btlobject_data[7];
-BattleStageData rsh_btlstage_data[1];
-BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[1];
-BattleGroupSetup btlgrp_rsh_rsh_06_01_off_1;
-NpcBattleSelect btlgrpsel_rsh_btlno_rsh_test1_off[2];
-NpcBattleSelect btlgrpsel_rsh_btlno_rsh_06_01_off[2];
+static BattleStageObjectData rsh_btlobject_data[7];
+static BattleStageData rsh_btlstage_data[1];
+static BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[1];
+static BattleGroupSetup btlgrp_rsh_rsh_06_01_off_1;
+static NpcBattleSelect btlgrpsel_rsh_btlno_rsh_test1_off[2];
+static NpcBattleSelect btlgrpsel_rsh_btlno_rsh_06_01_off[2];
 NpcSetupBattleInfo btlsetup_rsh_tbl[3];
 NpcTerritoryInfo btl_rsh_setup_no_tbl[3];
-EvtWord bgset_rsh_bg_event[30];
+static EvtWord bgset_rsh_bg_event[30];
 
 /**
  * Scenery props of the Excess Express battle stage (stg_06_0): rocks and scenery hills with their positions.
  */
-BattleStageObjectData rsh_btlobject_data[] = {
+static BattleStageObjectData rsh_btlobject_data[] = {
     {"r_mae", 2, STAGE_LAYER_A2, {170.0f, 0.0f, -50.0f}, 0, 60, {0}},
     {"r_oku", 2, STAGE_LAYER_A2, {170.0f, -1000.0f, -50.0f}, 10, 50, {0}},
     {"l_mae", 2, STAGE_LAYER_A2, {-170.0f, 0.0f, -50.0f}, 20, 40, {0}},
@@ -41,7 +41,7 @@ BattleStageObjectData rsh_btlobject_data[] = {
 /**
  * The Excess Express battle stage (bti_01 backdrop, stg_06_0 scenery) with its scrolling background script.
  */
-BattleStageData rsh_btlstage_data[] = {
+static BattleStageData rsh_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_06_0", // specificStageDataDir
@@ -55,7 +55,7 @@ BattleStageData rsh_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[] = {
+static BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[] = {
     {
         &unit_boss_moamoa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -68,7 +68,7 @@ BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_rsh_rsh_06_01_off_1 = {
+static BattleGroupSetup btlgrp_rsh_rsh_06_01_off_1 = {
     1, // numEnemies
     btlparty_rsh_rsh_06_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -79,12 +79,12 @@ BattleGroupSetup btlgrp_rsh_rsh_06_01_off_1 = {
 };
 
 // Test and story selectors share the boss party and stage; setup flags/music differ below.
-NpcBattleSelect btlgrpsel_rsh_btlno_rsh_test1_off[] = {
+static NpcBattleSelect btlgrpsel_rsh_btlno_rsh_test1_off[] = {
     {50, &btlgrp_rsh_rsh_06_01_off_1, rsh_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_rsh_btlno_rsh_06_01_off[] = {
+static NpcBattleSelect btlgrpsel_rsh_btlno_rsh_06_01_off[] = {
     {50, &btlgrp_rsh_rsh_06_01_off_1, rsh_btlstage_data},
     {0},
 };
@@ -130,7 +130,7 @@ NpcTerritoryInfo btl_rsh_setup_no_tbl[] = {
  * and scrolls the two rock mountains (iwayama_1, iwayama_2) sideways forever, with a different phase for each,
  * to fake the train moving past them.
  */
-EVT_BEGIN(bgset_rsh_bg_event)
+static EVT_BEGIN(bgset_rsh_bg_event)
     CALL(_set_destroy_flag)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 200)
@@ -143,7 +143,7 @@ EVT_BEGIN(bgset_rsh_bg_event)
 EVT_END()
 
 // Write the current linear offset before decrementing; total..0 is an inclusive cycle.
-USER_FUNC(_set_offset) {
+static USER_FUNC(_set_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 outVar = args[1];
@@ -166,7 +166,7 @@ USER_FUNC(_set_offset) {
  * Script helper: sets flag 8 in the battle stage object work so the stage objects are destroyed
  * when the battle ends.
  */
-USER_FUNC(_set_destroy_flag) {
+static USER_FUNC(_set_destroy_flag) {
     _battleWorkPointer->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     return EVT_RETURN_DONE;
 }

@@ -13,10 +13,10 @@
 static LightWork work[2];
 
 //.bss
-LightEntry paperLight3D;
-LightEntry paperLight3DImg;
+static LightEntry paperLight3D;
+static LightEntry paperLight3DImg;
 LightEntry paperCraft;
-LightEntry booLight;
+static LightEntry booLight;
 
 // Field (group 0) or battle (group 1) light work. A macro: as an inline function the object changes.
 #define lightGetWork() (mapGetActiveGroup() == 1 ? &work[1] : &work[0])

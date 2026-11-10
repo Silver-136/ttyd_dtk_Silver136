@@ -17,148 +17,148 @@
 static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_boss_gesso;
 
-BattleStageObjectData tik_btlobject_data[20];
-BattleStageData tik_btlstage_data[4];
-BattleUnitSetup btlparty_tik_tik_gesso[1];
-BattleGroupSetup btlgrp_tik_tik_gesso;
-BattleUnitSetup btlparty_tik_tik_01_01_off_1[4];
-BattleGroupSetup btlgrp_tik_tik_01_01_off_1;
-BattleUnitSetup btlparty_tik_tik_01_02_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_01_02_off_1;
-BattleUnitSetup btlparty_tik_tik_04_01_off_1[1];
-BattleGroupSetup btlgrp_tik_tik_04_01_off_1;
-BattleUnitSetup btlparty_tik_tik_04_01_on_1[1];
-BattleGroupSetup btlgrp_tik_tik_04_01_on_1;
-BattleUnitSetup btlparty_tik_tik_04_01_on_2[2];
-BattleGroupSetup btlgrp_tik_tik_04_01_on_2;
-BattleUnitSetup btlparty_tik_tik_04_02_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_04_02_off_1;
-BattleUnitSetup btlparty_tik_tik_04_02_on_1[2];
-BattleGroupSetup btlgrp_tik_tik_04_02_on_1;
-BattleUnitSetup btlparty_tik_tik_04_02_on_2[3];
-BattleGroupSetup btlgrp_tik_tik_04_02_on_2;
-BattleUnitSetup btlparty_tik_tik_04_03_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_04_03_off_1;
-BattleUnitSetup btlparty_tik_tik_04_03_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_04_03_off_2;
-BattleUnitSetup btlparty_tik_tik_04_03_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_04_03_off_3;
-BattleUnitSetup btlparty_tik_tik_04_04_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_04_04_off_1;
-BattleUnitSetup btlparty_tik_tik_04_04_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_04_04_off_2;
-BattleUnitSetup btlparty_tik_tik_04_04_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_04_04_off_3;
-BattleUnitSetup btlparty_tik_tik_07_01_off_1[3];
-BattleGroupSetup btlgrp_tik_tik_07_01_off_1;
-BattleUnitSetup btlparty_tik_tik_07_01_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_07_01_off_2;
-BattleUnitSetup btlparty_tik_tik_07_02_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_07_02_off_1;
-BattleUnitSetup btlparty_tik_tik_07_02_off_2[3];
-BattleGroupSetup btlgrp_tik_tik_07_02_off_2;
-BattleUnitSetup btlparty_tik_tik_07_03_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_07_03_off_1;
-BattleUnitSetup btlparty_tik_tik_07_03_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_07_03_off_2;
-BattleUnitSetup btlparty_tik_tik_07_03_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_07_03_off_3;
-BattleUnitSetup btlparty_tik_tik_07_04_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_07_04_off_1;
-BattleUnitSetup btlparty_tik_tik_07_04_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_07_04_off_2;
-BattleUnitSetup btlparty_tik_tik_07_04_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_07_04_off_3;
-BattleUnitSetup btlparty_tik_tik_15_01_off_1[1];
-BattleGroupSetup btlgrp_tik_tik_15_01_off_1;
-BattleUnitSetup btlparty_tik_tik_15_02_off_1[1];
-BattleGroupSetup btlgrp_tik_tik_15_02_off_1;
-BattleUnitSetup btlparty_tik_tik_15_03_off_1[1];
-BattleGroupSetup btlgrp_tik_tik_15_03_off_1;
-BattleUnitSetup btlparty_tik_tik_15_04_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_15_04_off_1;
-BattleUnitSetup btlparty_tik_tik_15_04_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_15_04_off_2;
-BattleUnitSetup btlparty_tik_tik_15_04_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_15_04_off_3;
-BattleUnitSetup btlparty_tik_tik_15_05_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_15_05_off_1;
-BattleUnitSetup btlparty_tik_tik_15_05_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_15_05_off_2;
-BattleUnitSetup btlparty_tik_tik_15_05_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_15_05_off_3;
-BattleUnitSetup btlparty_tik_tik_18_01_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_18_01_off_1;
-BattleUnitSetup btlparty_tik_tik_18_01_off_2[3];
-BattleGroupSetup btlgrp_tik_tik_18_01_off_2;
-BattleUnitSetup btlparty_tik_tik_18_02_off_1[4];
-BattleGroupSetup btlgrp_tik_tik_18_02_off_1;
-BattleUnitSetup btlparty_tik_tik_18_02_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_18_02_off_2;
-BattleUnitSetup btlparty_tik_tik_18_03_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_18_03_off_1;
-BattleUnitSetup btlparty_tik_tik_18_03_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_18_03_off_2;
-BattleUnitSetup btlparty_tik_tik_18_03_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_18_03_off_3;
-BattleUnitSetup btlparty_tik_tik_18_04_off_1[2];
-BattleGroupSetup btlgrp_tik_tik_18_04_off_1;
-BattleUnitSetup btlparty_tik_tik_18_04_off_2[2];
-BattleGroupSetup btlgrp_tik_tik_18_04_off_2;
-BattleUnitSetup btlparty_tik_tik_18_04_off_3[2];
-BattleGroupSetup btlgrp_tik_tik_18_04_off_3;
-BattleUnitSetup btlparty_tik_tik_20_01_off_1[5];
-BattleGroupSetup btlgrp_tik_tik_20_01_off_1;
-BattleUnitSetup btlparty_tik_tik_20_02_off_1[4];
-BattleGroupSetup btlgrp_tik_tik_20_02_off_1;
-BattleUnitSetup btlparty_tik_tik_20_03_off_1[3];
-BattleGroupSetup btlgrp_tik_tik_20_03_off_1;
-BattleUnitSetup btlparty_tik_tik_20_04_off_1[4];
-BattleGroupSetup btlgrp_tik_tik_20_04_off_1;
-BattleUnitSetup btlparty_tik_tik_20_05_off_1[5];
-BattleGroupSetup btlgrp_tik_tik_20_05_off_1;
-BattleUnitSetup btlparty_tik_tik_20_06_off_1[5];
-BattleGroupSetup btlgrp_tik_tik_20_06_off_1;
-NpcBattleSelect btlgrpsel_tik_btlno_tik_test1_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_test2_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_test3_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_gesso_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_01_01_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_01_02_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_on[3];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_on[3];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_03_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_04_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_01_off[3];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_02_off[3];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_03_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_04_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_01_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_02_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_03_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_04_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_05_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_01_off[3];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_02_off[3];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_03_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_04_off[4];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_01_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_02_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_03_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_04_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_05_off[2];
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_06_off[2];
+static BattleStageObjectData tik_btlobject_data[20];
+static BattleStageData tik_btlstage_data[4];
+static BattleUnitSetup btlparty_tik_tik_gesso[1];
+static BattleGroupSetup btlgrp_tik_tik_gesso;
+static BattleUnitSetup btlparty_tik_tik_01_01_off_1[4];
+static BattleGroupSetup btlgrp_tik_tik_01_01_off_1;
+static BattleUnitSetup btlparty_tik_tik_01_02_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_01_02_off_1;
+static BattleUnitSetup btlparty_tik_tik_04_01_off_1[1];
+static BattleGroupSetup btlgrp_tik_tik_04_01_off_1;
+static BattleUnitSetup btlparty_tik_tik_04_01_on_1[1];
+static BattleGroupSetup btlgrp_tik_tik_04_01_on_1;
+static BattleUnitSetup btlparty_tik_tik_04_01_on_2[2];
+static BattleGroupSetup btlgrp_tik_tik_04_01_on_2;
+static BattleUnitSetup btlparty_tik_tik_04_02_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_04_02_off_1;
+static BattleUnitSetup btlparty_tik_tik_04_02_on_1[2];
+static BattleGroupSetup btlgrp_tik_tik_04_02_on_1;
+static BattleUnitSetup btlparty_tik_tik_04_02_on_2[3];
+static BattleGroupSetup btlgrp_tik_tik_04_02_on_2;
+static BattleUnitSetup btlparty_tik_tik_04_03_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_04_03_off_1;
+static BattleUnitSetup btlparty_tik_tik_04_03_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_04_03_off_2;
+static BattleUnitSetup btlparty_tik_tik_04_03_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_04_03_off_3;
+static BattleUnitSetup btlparty_tik_tik_04_04_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_04_04_off_1;
+static BattleUnitSetup btlparty_tik_tik_04_04_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_04_04_off_2;
+static BattleUnitSetup btlparty_tik_tik_04_04_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_04_04_off_3;
+static BattleUnitSetup btlparty_tik_tik_07_01_off_1[3];
+static BattleGroupSetup btlgrp_tik_tik_07_01_off_1;
+static BattleUnitSetup btlparty_tik_tik_07_01_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_07_01_off_2;
+static BattleUnitSetup btlparty_tik_tik_07_02_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_07_02_off_1;
+static BattleUnitSetup btlparty_tik_tik_07_02_off_2[3];
+static BattleGroupSetup btlgrp_tik_tik_07_02_off_2;
+static BattleUnitSetup btlparty_tik_tik_07_03_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_07_03_off_1;
+static BattleUnitSetup btlparty_tik_tik_07_03_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_07_03_off_2;
+static BattleUnitSetup btlparty_tik_tik_07_03_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_07_03_off_3;
+static BattleUnitSetup btlparty_tik_tik_07_04_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_07_04_off_1;
+static BattleUnitSetup btlparty_tik_tik_07_04_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_07_04_off_2;
+static BattleUnitSetup btlparty_tik_tik_07_04_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_07_04_off_3;
+static BattleUnitSetup btlparty_tik_tik_15_01_off_1[1];
+static BattleGroupSetup btlgrp_tik_tik_15_01_off_1;
+static BattleUnitSetup btlparty_tik_tik_15_02_off_1[1];
+static BattleGroupSetup btlgrp_tik_tik_15_02_off_1;
+static BattleUnitSetup btlparty_tik_tik_15_03_off_1[1];
+static BattleGroupSetup btlgrp_tik_tik_15_03_off_1;
+static BattleUnitSetup btlparty_tik_tik_15_04_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_15_04_off_1;
+static BattleUnitSetup btlparty_tik_tik_15_04_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_15_04_off_2;
+static BattleUnitSetup btlparty_tik_tik_15_04_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_15_04_off_3;
+static BattleUnitSetup btlparty_tik_tik_15_05_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_15_05_off_1;
+static BattleUnitSetup btlparty_tik_tik_15_05_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_15_05_off_2;
+static BattleUnitSetup btlparty_tik_tik_15_05_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_15_05_off_3;
+static BattleUnitSetup btlparty_tik_tik_18_01_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_18_01_off_1;
+static BattleUnitSetup btlparty_tik_tik_18_01_off_2[3];
+static BattleGroupSetup btlgrp_tik_tik_18_01_off_2;
+static BattleUnitSetup btlparty_tik_tik_18_02_off_1[4];
+static BattleGroupSetup btlgrp_tik_tik_18_02_off_1;
+static BattleUnitSetup btlparty_tik_tik_18_02_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_18_02_off_2;
+static BattleUnitSetup btlparty_tik_tik_18_03_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_18_03_off_1;
+static BattleUnitSetup btlparty_tik_tik_18_03_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_18_03_off_2;
+static BattleUnitSetup btlparty_tik_tik_18_03_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_18_03_off_3;
+static BattleUnitSetup btlparty_tik_tik_18_04_off_1[2];
+static BattleGroupSetup btlgrp_tik_tik_18_04_off_1;
+static BattleUnitSetup btlparty_tik_tik_18_04_off_2[2];
+static BattleGroupSetup btlgrp_tik_tik_18_04_off_2;
+static BattleUnitSetup btlparty_tik_tik_18_04_off_3[2];
+static BattleGroupSetup btlgrp_tik_tik_18_04_off_3;
+static BattleUnitSetup btlparty_tik_tik_20_01_off_1[5];
+static BattleGroupSetup btlgrp_tik_tik_20_01_off_1;
+static BattleUnitSetup btlparty_tik_tik_20_02_off_1[4];
+static BattleGroupSetup btlgrp_tik_tik_20_02_off_1;
+static BattleUnitSetup btlparty_tik_tik_20_03_off_1[3];
+static BattleGroupSetup btlgrp_tik_tik_20_03_off_1;
+static BattleUnitSetup btlparty_tik_tik_20_04_off_1[4];
+static BattleGroupSetup btlgrp_tik_tik_20_04_off_1;
+static BattleUnitSetup btlparty_tik_tik_20_05_off_1[5];
+static BattleGroupSetup btlgrp_tik_tik_20_05_off_1;
+static BattleUnitSetup btlparty_tik_tik_20_06_off_1[5];
+static BattleGroupSetup btlgrp_tik_tik_20_06_off_1;
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_test1_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_test2_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_test3_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_gesso_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_01_01_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_01_02_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_on[3];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_on[3];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_03_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_04_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_01_off[3];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_02_off[3];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_03_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_04_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_01_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_02_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_03_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_04_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_05_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_01_off[3];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_02_off[3];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_03_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_04_off[4];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_01_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_02_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_03_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_04_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_05_off[2];
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_06_off[2];
 NpcSetupBattleInfo btlsetup_tik_tbl[30];
 NpcTerritoryInfo btl_tik_setup_no_tbl[30];
-EvtWord bgset_tik_wave_event[59];
+static EvtWord bgset_tik_wave_event[59];
 
 /**
  * Scenery props of the Rogueport Sewers battle stages (stg_00_1, stg_00_2 and stg_00_3), in order, with their
  * positions.
  */
-BattleStageObjectData tik_btlobject_data[] = {
+static BattleStageObjectData tik_btlobject_data[] = {
     {"isi_2", 2, STAGE_LAYER_A1, {-150.0f, 0.0f, -23.0f}, 10, 50, {0}},
     {"isi_3", 2, STAGE_LAYER_A1, {-60.0f, 0.0f, -54.0f}, 20, 40, {0}},
     {"isi_4", 2, STAGE_LAYER_A1, {176.0f, 0.0f, -62.0f}, 30, 30, {0}},
@@ -185,7 +185,7 @@ BattleStageObjectData tik_btlobject_data[] = {
  * The four Rogueport Sewers battle stages, each with its slice of tik_btlobject_data and the wave background
  * script.
  */
-BattleStageData tik_btlstage_data[] = {
+static BattleStageData tik_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_00_2", // specificStageDataDir
@@ -231,7 +231,7 @@ BattleStageData tik_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_tik_tik_gesso[] = {
+static BattleUnitSetup btlparty_tik_tik_gesso[] = {
     {
         &unit_boss_gesso, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -244,7 +244,7 @@ BattleUnitSetup btlparty_tik_tik_gesso[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_gesso = {
+static BattleGroupSetup btlgrp_tik_tik_gesso = {
     1, // numEnemies
     btlparty_tik_tik_gesso, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -254,7 +254,7 @@ BattleGroupSetup btlgrp_tik_tik_gesso = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_01_01_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_01_01_off_1[] = {
     {
         &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -297,7 +297,7 @@ BattleUnitSetup btlparty_tik_tik_01_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_01_01_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_01_01_off_1 = {
     4, // numEnemies
     btlparty_tik_tik_01_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -307,7 +307,7 @@ BattleGroupSetup btlgrp_tik_tik_01_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_01_02_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_01_02_off_1[] = {
     {
         &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -330,7 +330,7 @@ BattleUnitSetup btlparty_tik_tik_01_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_01_02_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_01_02_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_01_02_off_1, // enemyData
     25, // heldItemWeight
@@ -341,7 +341,7 @@ BattleGroupSetup btlgrp_tik_tik_01_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_01_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_04_01_off_1[] = {
     {
         &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -354,7 +354,7 @@ BattleUnitSetup btlparty_tik_tik_04_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_01_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_04_01_off_1 = {
     1, // numEnemies
     btlparty_tik_tik_04_01_off_1, // enemyData
     25, // heldItemWeight
@@ -365,7 +365,7 @@ BattleGroupSetup btlgrp_tik_tik_04_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_01_on_1[] = {
+static BattleUnitSetup btlparty_tik_tik_04_01_on_1[] = {
     {
         &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -378,7 +378,7 @@ BattleUnitSetup btlparty_tik_tik_04_01_on_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_01_on_1 = {
+static BattleGroupSetup btlgrp_tik_tik_04_01_on_1 = {
     1, // numEnemies
     btlparty_tik_tik_04_01_on_1, // enemyData
     25, // heldItemWeight
@@ -389,7 +389,7 @@ BattleGroupSetup btlgrp_tik_tik_04_01_on_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_01_on_2[] = {
+static BattleUnitSetup btlparty_tik_tik_04_01_on_2[] = {
     {
         &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -412,7 +412,7 @@ BattleUnitSetup btlparty_tik_tik_04_01_on_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_01_on_2 = {
+static BattleGroupSetup btlgrp_tik_tik_04_01_on_2 = {
     2, // numEnemies
     btlparty_tik_tik_04_01_on_2, // enemyData
     25, // heldItemWeight
@@ -423,7 +423,7 @@ BattleGroupSetup btlgrp_tik_tik_04_01_on_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_02_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_04_02_off_1[] = {
     {
         &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -446,7 +446,7 @@ BattleUnitSetup btlparty_tik_tik_04_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_02_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_04_02_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_04_02_off_1, // enemyData
     25, // heldItemWeight
@@ -457,7 +457,7 @@ BattleGroupSetup btlgrp_tik_tik_04_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_02_on_1[] = {
+static BattleUnitSetup btlparty_tik_tik_04_02_on_1[] = {
     {
         &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -480,7 +480,7 @@ BattleUnitSetup btlparty_tik_tik_04_02_on_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_02_on_1 = {
+static BattleGroupSetup btlgrp_tik_tik_04_02_on_1 = {
     2, // numEnemies
     btlparty_tik_tik_04_02_on_1, // enemyData
     25, // heldItemWeight
@@ -491,7 +491,7 @@ BattleGroupSetup btlgrp_tik_tik_04_02_on_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_02_on_2[] = {
+static BattleUnitSetup btlparty_tik_tik_04_02_on_2[] = {
     {
         &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -524,7 +524,7 @@ BattleUnitSetup btlparty_tik_tik_04_02_on_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_02_on_2 = {
+static BattleGroupSetup btlgrp_tik_tik_04_02_on_2 = {
     3, // numEnemies
     btlparty_tik_tik_04_02_on_2, // enemyData
     25, // heldItemWeight
@@ -535,7 +535,7 @@ BattleGroupSetup btlgrp_tik_tik_04_02_on_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_03_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_04_03_off_1[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -558,7 +558,7 @@ BattleUnitSetup btlparty_tik_tik_04_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_03_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_04_03_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_04_03_off_1, // enemyData
     25, // heldItemWeight
@@ -569,7 +569,7 @@ BattleGroupSetup btlgrp_tik_tik_04_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_03_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_04_03_off_2[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -592,7 +592,7 @@ BattleUnitSetup btlparty_tik_tik_04_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_03_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_04_03_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_04_03_off_2, // enemyData
     25, // heldItemWeight
@@ -603,7 +603,7 @@ BattleGroupSetup btlgrp_tik_tik_04_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_03_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_04_03_off_3[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -626,7 +626,7 @@ BattleUnitSetup btlparty_tik_tik_04_03_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_03_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_04_03_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_04_03_off_3, // enemyData
     25, // heldItemWeight
@@ -637,7 +637,7 @@ BattleGroupSetup btlgrp_tik_tik_04_03_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_04_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_04_04_off_1[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -660,7 +660,7 @@ BattleUnitSetup btlparty_tik_tik_04_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_04_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_04_04_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_04_04_off_1, // enemyData
     25, // heldItemWeight
@@ -671,7 +671,7 @@ BattleGroupSetup btlgrp_tik_tik_04_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_04_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_04_04_off_2[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -694,7 +694,7 @@ BattleUnitSetup btlparty_tik_tik_04_04_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_04_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_04_04_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_04_04_off_2, // enemyData
     25, // heldItemWeight
@@ -705,7 +705,7 @@ BattleGroupSetup btlgrp_tik_tik_04_04_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_04_04_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_04_04_off_3[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -728,7 +728,7 @@ BattleUnitSetup btlparty_tik_tik_04_04_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_04_04_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_04_04_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_04_04_off_3, // enemyData
     25, // heldItemWeight
@@ -739,7 +739,7 @@ BattleGroupSetup btlgrp_tik_tik_04_04_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_01_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_07_01_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -772,7 +772,7 @@ BattleUnitSetup btlparty_tik_tik_07_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_01_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_07_01_off_1 = {
     3, // numEnemies
     btlparty_tik_tik_07_01_off_1, // enemyData
     25, // heldItemWeight
@@ -783,7 +783,7 @@ BattleGroupSetup btlgrp_tik_tik_07_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_01_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_07_01_off_2[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -806,7 +806,7 @@ BattleUnitSetup btlparty_tik_tik_07_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_01_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_07_01_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_07_01_off_2, // enemyData
     25, // heldItemWeight
@@ -817,7 +817,7 @@ BattleGroupSetup btlgrp_tik_tik_07_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_02_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_07_02_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -840,7 +840,7 @@ BattleUnitSetup btlparty_tik_tik_07_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_02_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_07_02_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_07_02_off_1, // enemyData
     25, // heldItemWeight
@@ -851,7 +851,7 @@ BattleGroupSetup btlgrp_tik_tik_07_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_02_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_07_02_off_2[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -884,7 +884,7 @@ BattleUnitSetup btlparty_tik_tik_07_02_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_02_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_07_02_off_2 = {
     3, // numEnemies
     btlparty_tik_tik_07_02_off_2, // enemyData
     25, // heldItemWeight
@@ -895,7 +895,7 @@ BattleGroupSetup btlgrp_tik_tik_07_02_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_03_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_07_03_off_1[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -918,7 +918,7 @@ BattleUnitSetup btlparty_tik_tik_07_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_03_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_07_03_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_07_03_off_1, // enemyData
     25, // heldItemWeight
@@ -929,7 +929,7 @@ BattleGroupSetup btlgrp_tik_tik_07_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_03_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_07_03_off_2[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -952,7 +952,7 @@ BattleUnitSetup btlparty_tik_tik_07_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_03_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_07_03_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_07_03_off_2, // enemyData
     25, // heldItemWeight
@@ -963,7 +963,7 @@ BattleGroupSetup btlgrp_tik_tik_07_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_03_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_07_03_off_3[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -986,7 +986,7 @@ BattleUnitSetup btlparty_tik_tik_07_03_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_03_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_07_03_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_07_03_off_3, // enemyData
     25, // heldItemWeight
@@ -997,7 +997,7 @@ BattleGroupSetup btlgrp_tik_tik_07_03_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_04_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_07_04_off_1[] = {
     {
         &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1020,7 +1020,7 @@ BattleUnitSetup btlparty_tik_tik_07_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_04_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_07_04_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_07_04_off_1, // enemyData
     25, // heldItemWeight
@@ -1031,7 +1031,7 @@ BattleGroupSetup btlgrp_tik_tik_07_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_04_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_07_04_off_2[] = {
     {
         &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1054,7 +1054,7 @@ BattleUnitSetup btlparty_tik_tik_07_04_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_04_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_07_04_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_07_04_off_2, // enemyData
     25, // heldItemWeight
@@ -1065,7 +1065,7 @@ BattleGroupSetup btlgrp_tik_tik_07_04_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_07_04_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_07_04_off_3[] = {
     {
         &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1088,7 +1088,7 @@ BattleUnitSetup btlparty_tik_tik_07_04_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_07_04_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_07_04_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_07_04_off_3, // enemyData
     25, // heldItemWeight
@@ -1099,7 +1099,7 @@ BattleGroupSetup btlgrp_tik_tik_07_04_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_01_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_15_01_off_1[] = {
     {
         &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1112,7 +1112,7 @@ BattleUnitSetup btlparty_tik_tik_15_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_01_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_15_01_off_1 = {
     1, // numEnemies
     btlparty_tik_tik_15_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1123,7 +1123,7 @@ BattleGroupSetup btlgrp_tik_tik_15_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_02_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_15_02_off_1[] = {
     {
         &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1136,7 +1136,7 @@ BattleUnitSetup btlparty_tik_tik_15_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_02_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_15_02_off_1 = {
     1, // numEnemies
     btlparty_tik_tik_15_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1147,7 +1147,7 @@ BattleGroupSetup btlgrp_tik_tik_15_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_03_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_15_03_off_1[] = {
     {
         &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1160,7 +1160,7 @@ BattleUnitSetup btlparty_tik_tik_15_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_03_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_15_03_off_1 = {
     1, // numEnemies
     btlparty_tik_tik_15_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1171,7 +1171,7 @@ BattleGroupSetup btlgrp_tik_tik_15_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_04_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_15_04_off_1[] = {
     {
         &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1194,7 +1194,7 @@ BattleUnitSetup btlparty_tik_tik_15_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_04_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_15_04_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_15_04_off_1, // enemyData
     25, // heldItemWeight
@@ -1205,7 +1205,7 @@ BattleGroupSetup btlgrp_tik_tik_15_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_04_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_15_04_off_2[] = {
     {
         &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1228,7 +1228,7 @@ BattleUnitSetup btlparty_tik_tik_15_04_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_04_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_15_04_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_15_04_off_2, // enemyData
     25, // heldItemWeight
@@ -1239,7 +1239,7 @@ BattleGroupSetup btlgrp_tik_tik_15_04_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_04_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_15_04_off_3[] = {
     {
         &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1262,7 +1262,7 @@ BattleUnitSetup btlparty_tik_tik_15_04_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_04_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_15_04_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_15_04_off_3, // enemyData
     25, // heldItemWeight
@@ -1273,7 +1273,7 @@ BattleGroupSetup btlgrp_tik_tik_15_04_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_05_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_15_05_off_1[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1296,7 +1296,7 @@ BattleUnitSetup btlparty_tik_tik_15_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_05_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_15_05_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_15_05_off_1, // enemyData
     25, // heldItemWeight
@@ -1307,7 +1307,7 @@ BattleGroupSetup btlgrp_tik_tik_15_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_05_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_15_05_off_2[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1330,7 +1330,7 @@ BattleUnitSetup btlparty_tik_tik_15_05_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_05_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_15_05_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_15_05_off_2, // enemyData
     25, // heldItemWeight
@@ -1341,7 +1341,7 @@ BattleGroupSetup btlgrp_tik_tik_15_05_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_15_05_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_15_05_off_3[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1364,7 +1364,7 @@ BattleUnitSetup btlparty_tik_tik_15_05_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_15_05_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_15_05_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_15_05_off_3, // enemyData
     25, // heldItemWeight
@@ -1375,7 +1375,7 @@ BattleGroupSetup btlgrp_tik_tik_15_05_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_01_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_18_01_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1398,7 +1398,7 @@ BattleUnitSetup btlparty_tik_tik_18_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_01_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_18_01_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_18_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1409,7 +1409,7 @@ BattleGroupSetup btlgrp_tik_tik_18_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_01_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_18_01_off_2[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1442,7 +1442,7 @@ BattleUnitSetup btlparty_tik_tik_18_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_01_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_18_01_off_2 = {
     3, // numEnemies
     btlparty_tik_tik_18_01_off_2, // enemyData
     25, // heldItemWeight
@@ -1453,7 +1453,7 @@ BattleGroupSetup btlgrp_tik_tik_18_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_02_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_18_02_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1496,7 +1496,7 @@ BattleUnitSetup btlparty_tik_tik_18_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_02_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_18_02_off_1 = {
     4, // numEnemies
     btlparty_tik_tik_18_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1507,7 +1507,7 @@ BattleGroupSetup btlgrp_tik_tik_18_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_02_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_18_02_off_2[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1530,7 +1530,7 @@ BattleUnitSetup btlparty_tik_tik_18_02_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_02_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_18_02_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_18_02_off_2, // enemyData
     25, // heldItemWeight
@@ -1541,7 +1541,7 @@ BattleGroupSetup btlgrp_tik_tik_18_02_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_03_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_18_03_off_1[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1564,7 +1564,7 @@ BattleUnitSetup btlparty_tik_tik_18_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_03_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_18_03_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_18_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1575,7 +1575,7 @@ BattleGroupSetup btlgrp_tik_tik_18_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_03_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_18_03_off_2[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1598,7 +1598,7 @@ BattleUnitSetup btlparty_tik_tik_18_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_03_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_18_03_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_18_03_off_2, // enemyData
     25, // heldItemWeight
@@ -1609,7 +1609,7 @@ BattleGroupSetup btlgrp_tik_tik_18_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_03_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_18_03_off_3[] = {
     {
         &unit_kamec, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1632,7 +1632,7 @@ BattleUnitSetup btlparty_tik_tik_18_03_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_03_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_18_03_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_18_03_off_3, // enemyData
     25, // heldItemWeight
@@ -1643,7 +1643,7 @@ BattleGroupSetup btlgrp_tik_tik_18_03_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_04_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_18_04_off_1[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1666,7 +1666,7 @@ BattleUnitSetup btlparty_tik_tik_18_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_04_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_18_04_off_1 = {
     2, // numEnemies
     btlparty_tik_tik_18_04_off_1, // enemyData
     25, // heldItemWeight
@@ -1677,7 +1677,7 @@ BattleGroupSetup btlgrp_tik_tik_18_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_04_off_2[] = {
+static BattleUnitSetup btlparty_tik_tik_18_04_off_2[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1700,7 +1700,7 @@ BattleUnitSetup btlparty_tik_tik_18_04_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_04_off_2 = {
+static BattleGroupSetup btlgrp_tik_tik_18_04_off_2 = {
     2, // numEnemies
     btlparty_tik_tik_18_04_off_2, // enemyData
     25, // heldItemWeight
@@ -1711,7 +1711,7 @@ BattleGroupSetup btlgrp_tik_tik_18_04_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_18_04_off_3[] = {
+static BattleUnitSetup btlparty_tik_tik_18_04_off_3[] = {
     {
         &unit_togenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1734,7 +1734,7 @@ BattleUnitSetup btlparty_tik_tik_18_04_off_3[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_18_04_off_3 = {
+static BattleGroupSetup btlgrp_tik_tik_18_04_off_3 = {
     2, // numEnemies
     btlparty_tik_tik_18_04_off_3, // enemyData
     25, // heldItemWeight
@@ -1745,7 +1745,7 @@ BattleGroupSetup btlgrp_tik_tik_18_04_off_3 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_20_01_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_20_01_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1798,7 +1798,7 @@ BattleUnitSetup btlparty_tik_tik_20_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_20_01_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_20_01_off_1 = {
     5, // numEnemies
     btlparty_tik_tik_20_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1809,7 +1809,7 @@ BattleGroupSetup btlgrp_tik_tik_20_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_20_02_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_20_02_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1852,7 +1852,7 @@ BattleUnitSetup btlparty_tik_tik_20_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_20_02_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_20_02_off_1 = {
     4, // numEnemies
     btlparty_tik_tik_20_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1863,7 +1863,7 @@ BattleGroupSetup btlgrp_tik_tik_20_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_20_03_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_20_03_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1896,7 +1896,7 @@ BattleUnitSetup btlparty_tik_tik_20_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_20_03_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_20_03_off_1 = {
     3, // numEnemies
     btlparty_tik_tik_20_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1907,7 +1907,7 @@ BattleGroupSetup btlgrp_tik_tik_20_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_20_04_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_20_04_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1950,7 +1950,7 @@ BattleUnitSetup btlparty_tik_tik_20_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_20_04_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_20_04_off_1 = {
     4, // numEnemies
     btlparty_tik_tik_20_04_off_1, // enemyData
     25, // heldItemWeight
@@ -1961,7 +1961,7 @@ BattleGroupSetup btlgrp_tik_tik_20_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_20_05_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_20_05_off_1[] = {
     {
         &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2014,7 +2014,7 @@ BattleUnitSetup btlparty_tik_tik_20_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_20_05_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_20_05_off_1 = {
     5, // numEnemies
     btlparty_tik_tik_20_05_off_1, // enemyData
     25, // heldItemWeight
@@ -2025,7 +2025,7 @@ BattleGroupSetup btlgrp_tik_tik_20_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_tik_tik_20_06_off_1[] = {
+static BattleUnitSetup btlparty_tik_tik_20_06_off_1[] = {
     {
         &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2078,7 +2078,7 @@ BattleUnitSetup btlparty_tik_tik_20_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_tik_tik_20_06_off_1 = {
+static BattleGroupSetup btlgrp_tik_tik_20_06_off_1 = {
     5, // numEnemies
     btlparty_tik_tik_20_06_off_1, // enemyData
     25, // heldItemWeight
@@ -2089,179 +2089,179 @@ BattleGroupSetup btlgrp_tik_tik_20_06_off_1 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_test1_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_test1_off[] = {
     {50, &btlgrp_tik_tik_01_01_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_test2_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_test2_off[] = {
     {50, &btlgrp_tik_tik_01_01_off_1, tik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_test3_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_test3_off[] = {
     {50, &btlgrp_tik_tik_01_01_off_1, &tik_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_gesso_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_gesso_off[] = {
     {50, &btlgrp_tik_tik_gesso, tik_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_01_01_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_01_01_off[] = {
     {50, &btlgrp_tik_tik_01_01_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_01_02_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_01_02_off[] = {
     {50, &btlgrp_tik_tik_01_02_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_on[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_on[] = {
     {20, &btlgrp_tik_tik_04_01_on_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_04_01_on_2, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_01_off[] = {
     {20, &btlgrp_tik_tik_04_01_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_on[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_on[] = {
     {20, &btlgrp_tik_tik_04_02_on_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_04_02_on_2, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_02_off[] = {
     {20, &btlgrp_tik_tik_04_02_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_03_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_03_off[] = {
     {20, &btlgrp_tik_tik_04_03_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_04_03_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_04_03_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_04_04_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_04_04_off[] = {
     {20, &btlgrp_tik_tik_04_04_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_04_04_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_04_04_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_01_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_01_off[] = {
     {20, &btlgrp_tik_tik_07_01_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_07_01_off_2, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_02_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_02_off[] = {
     {20, &btlgrp_tik_tik_07_02_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_07_02_off_2, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_03_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_03_off[] = {
     {20, &btlgrp_tik_tik_07_03_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_07_03_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_07_03_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_07_04_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_07_04_off[] = {
     {20, &btlgrp_tik_tik_07_04_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_07_04_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_07_04_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_01_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_01_off[] = {
     {20, &btlgrp_tik_tik_15_01_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_02_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_02_off[] = {
     {20, &btlgrp_tik_tik_15_02_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_03_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_03_off[] = {
     {20, &btlgrp_tik_tik_15_03_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_04_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_04_off[] = {
     {20, &btlgrp_tik_tik_15_04_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_15_04_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_15_04_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_15_05_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_15_05_off[] = {
     {20, &btlgrp_tik_tik_15_05_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_15_05_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_15_05_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_01_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_01_off[] = {
     {20, &btlgrp_tik_tik_18_01_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_18_01_off_2, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_02_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_02_off[] = {
     {20, &btlgrp_tik_tik_18_02_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_18_02_off_2, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_03_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_03_off[] = {
     {20, &btlgrp_tik_tik_18_03_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_18_03_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_18_03_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_18_04_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_18_04_off[] = {
     {20, &btlgrp_tik_tik_18_04_off_1, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_18_04_off_2, &tik_btlstage_data[3]},
     {20, &btlgrp_tik_tik_18_04_off_3, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_01_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_01_off[] = {
     {20, &btlgrp_tik_tik_20_01_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_02_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_02_off[] = {
     {20, &btlgrp_tik_tik_20_02_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_03_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_03_off[] = {
     {20, &btlgrp_tik_tik_20_03_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_04_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_04_off[] = {
     {20, &btlgrp_tik_tik_20_04_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_05_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_05_off[] = {
     {20, &btlgrp_tik_tik_20_05_off_1, &tik_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_tik_btlno_tik_20_06_off[] = {
+static NpcBattleSelect btlgrpsel_tik_btlno_tik_20_06_off[] = {
     {20, &btlgrp_tik_tik_20_06_off_1, &tik_btlstage_data[3]},
     {0},
 };
@@ -2644,7 +2644,7 @@ static USER_FUNC(_wave_offset) {
  * so the water in the background rolls.
  */
 // Advance independent horizontal and vertical phases for each of the three animated wave objects.
-EVT_BEGIN(bgset_tik_wave_event)
+static EVT_BEGIN(bgset_tik_wave_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)

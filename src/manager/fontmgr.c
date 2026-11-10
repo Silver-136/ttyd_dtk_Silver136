@@ -27,12 +27,12 @@ typedef struct FontWidthBlock {
 } FontWidthBlock;
 
 //.sdata
-GXColor fontColTbl[3] = {
+static GXColor fontColTbl[3] = {
     {0x1E, 0x14, 0x14, 0xFF},
     {0xDC, 0xDC, 0xDC, 0xFF},
     {0xB4, 0x78, 0x14, 0xFF}
 };
-s32 charspace[VERSION_PICK(2, 7)] = {
+static s32 charspace[VERSION_PICK(2, 7)] = {
     4, 2,
 #if VERSION >= VERSION_US
     2, 2, 2, 2, 2
@@ -40,17 +40,17 @@ s32 charspace[VERSION_PICK(2, 7)] = {
 };
 
 #if VERSION >= VERSION_US
-const char* fontname[7] = {"papermarioset_JPN", "papermarioset_US", "papermarioset_EU", "papermarioset_EU",
+static const char* fontname[7] = {"papermarioset_JPN", "papermarioset_US", "papermarioset_EU", "papermarioset_EU",
     "papermarioset_EU", "papermarioset_EU", "papermarioset_US"};
 #else
-const char* fontname[2] = {"papermarioset_JPN", "popjoyB22"};
+static const char* fontname[2] = {"papermarioset_JPN", "popjoyB22"};
 #endif
 
 //.sbss
-Vec fontScale;
-GXColor fontColor;
-u8 fontAlpha;
-BOOL fontEdge;
+static Vec fontScale;
+static GXColor fontColor;
+static u8 fontAlpha;
+static BOOL fontEdge;
 BinaryFontInfo* pfi; // pointer to font info
 BinaryFontGlyph* blockGlyph;
 GXTexObj fgTexObj;

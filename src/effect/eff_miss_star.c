@@ -28,7 +28,7 @@ typedef struct EffMissStarWork {
  * Launch directions of the miss stars, fanning from straight up round the side to straight down;
  * the caller's index picks the first and each star takes the next one. Only entries 0-7 are read (index % 8).
  */
-Vec spd_tbl[15] = {
+static Vec spd_tbl[15] = {
     { 0.0f, 4.5f, 0.0f },  { 1.0f, 4.0f, 0.0f },  { 2.0f, 3.0f, 0.0f },
     { 3.0f, 2.0f, 0.0f },  { 3.5f, 1.0f, 0.0f },  { 4.0f, 0.0f, 0.0f },
     { 4.5f, 0.0f, 0.0f },  { 5.0f, 0.0f, 0.0f },  { 4.5f, 0.0f, 0.0f },

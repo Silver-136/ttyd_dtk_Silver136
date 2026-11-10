@@ -33,43 +33,43 @@
 #include "win/win_root.h"
 #include "driver/mapdrv.h"
 
-BattleWeapon* chri_waza[4] = {
+static BattleWeapon* chri_waza[4] = {
     &partyWeapon_ChristineNormalAttack,
     &partyWeapon_ChristineMonosiri,
     &partyWeapon_ChristineRenzokuAttack,
     &partyWeapon_ChristineKiss,
 };
-BattleWeapon* noko_waza[4] = {
+static BattleWeapon* noko_waza[4] = {
     &partyWeapon_NokotarouKouraAttack,
     &partyWeapon_NokotarouSyubibinKoura,
     &partyWeapon_NokotarouKouraGuard,
     &partyWeapon_NokotarouTsuranukiKoura,
 };
-BattleWeapon* cloud_waza[4] = {
+static BattleWeapon* cloud_waza[4] = {
     &partyWeapon_ClaudaNormalAttack,
     &partyWeapon_ClaudaBreathAttack,
     &partyWeapon_ClaudaPredationAttack,
     &partyWeapon_ClaudaKumogakureAttack,
 };
-BattleWeapon* yoshi_waza[4] = {
+static BattleWeapon* yoshi_waza[4] = {
     &partyWeapon_YoshiNormalAttack,
     &partyWeapon_YoshiNomikomi_Shot,
     &partyWeapon_YoshiEggAttack_Minimini,
     &partyWeapon_YoshiCallGuard,
 };
-BattleWeapon* vivi_waza[4] = {
+static BattleWeapon* vivi_waza[4] = {
     &partyWeapon_VivianNormalAttack,
     &partyWeapon_VivianShadowGuard,
     &partyWeapon_VivianMagicalPowder,
     &partyWeapon_VivianCharmKissAttack,
 };
-BattleWeapon* sand_waza[4] = {
+static BattleWeapon* sand_waza[4] = {
     &partyWeapon_SandersNormalAttack,
     &partyWeapon_SandersTimeBombSet,
     &partyWeapon_SandersCounterSet,
     &partyWeapon_SandersSuperBombAttack,
 };
-BattleWeapon* chu_waza[4] = {
+static BattleWeapon* chu_waza[4] = {
     &partyWeapon_ChuchurinaNormalAttackLeft,
     &partyWeapon_ChuchurinaItemSteal,
     &partyWeapon_ChuchurinaMadowaseAttack,

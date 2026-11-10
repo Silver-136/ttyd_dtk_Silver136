@@ -34,7 +34,7 @@ typedef struct RubWork {
     s16 hist[21];   // 0x3C
 } RubWork;
 
-RubWork rubwork;
+static RubWork rubwork;
 
 /**
  * Handles falling to y <= -2000: background mode enters the bottomless motion.

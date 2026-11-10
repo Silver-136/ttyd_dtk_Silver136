@@ -26,8 +26,8 @@
 #include "party.h"
 #include <dolphin/pad.h>
 
-EvtWord evt_dokan1_message[52];
-EvtWord evt_dokan1[11];
+static EvtWord evt_dokan1_message[52];
+static EvtWord evt_dokan1[11];
 static BeroEntry bero_entry_data[6];
 EvtWord guide_bigtree[336];
 
@@ -37,7 +37,7 @@ static EvtWord peach_mail[242];
 static EvtWord peach_mail[257];
 #endif
 
-EvtWord ki_data_evt_03[20];
+static EvtWord ki_data_evt_03[20];
 static TreeAccess tree_access_data[5];
 EvtWord win_01_init_evt[46];
 
@@ -47,7 +47,7 @@ EvtWord win_01_init_evt[46];
  * and says Flurrie's place is straight ahead (stg2_win_e04_01),
  * and the story becomes STG2_03_05_TO_FLURRIES_PLACE.
  */
-EVT_BEGIN(evt_dokan1_message)
+static EVT_BEGIN(evt_dokan1_message)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
@@ -69,7 +69,7 @@ EVT_END()
  * Enter script of the "dokan1" pipe: if the story is at STG2_03_04_SHES_LOST_HER_PRECIOUS it starts
  * evt_dokan1_message; returns LW(0) = 0.
  */
-EVT_BEGIN(evt_dokan1)
+static EVT_BEGIN(evt_dokan1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_04_SHES_LOST_HER_PRECIOUS)
         SPAWN_EVENT(evt_dokan1_message)
     END_IF
@@ -366,7 +366,7 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
-EVT_BEGIN(ki_data_evt_03)
+static EVT_BEGIN(ki_data_evt_03)
     CALL(evt_item_delete_check, STRING("item_ki03"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_ki03"), ITEM_COIN, 312, 106, -122, ITEM_TYPE_FALL_NO_PICKUP, GSWF_WIN_01_COIN_TREE, 0)

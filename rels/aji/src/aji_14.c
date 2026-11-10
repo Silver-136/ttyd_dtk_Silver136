@@ -34,7 +34,7 @@ USER_FUNC(waku);
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
-EvtWord evt_robot_waku[34];
+static EvtWord evt_robot_waku[34];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_boss[778];
@@ -42,7 +42,7 @@ static EvtWord evt_boss[778];
 static EvtWord evt_boss[797];
 #endif
 
-EvtWord evt_boss2[147];
+static EvtWord evt_boss2[147];
 static NpcSetupInfo npcEnt[3];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -174,7 +174,7 @@ USER_FUNC(waku) {
  * Creates the two frame NPCs 枠 and 枠２ (model c_mb_robo_2a, no shadow, animation L_1)
  * and starts waku, which keeps them on the locator17 bone of the robots ロボット and ロボット２.
  */
-EVT_BEGIN(evt_robot_waku)
+static EVT_BEGIN(evt_robot_waku)
     CALL(evt_npc_entry, STRING("枠"), STRING("c_mb_robo_2a")) // frame part (c_mb_robo_2a) kept on the robot's bone
     CALL(evt_npc_flag_onoff, 1, STRING("枠"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_anim, STRING("枠"), STRING("L_1"))
@@ -418,7 +418,7 @@ EVT_END()
  * the story becomes STG7_20_LORD_CRUMP_DEFEATED
  * and evt_sub_starstone gives Mario the Crystal Star (chapter 7).
  */
-EVT_BEGIN(evt_boss2)
+static EVT_BEGIN(evt_boss2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -100, 0, 0)

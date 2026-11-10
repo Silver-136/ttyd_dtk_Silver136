@@ -19,9 +19,9 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-f32 dou_normal_puka_data[16];
+static f32 dou_normal_puka_data[16];
 EvtWord dou_normal_puka[19];
-EvtWord dou_puka_event_sub[54];
+static EvtWord dou_puka_event_sub[54];
 EvtWord dou_puka_event[40];
 EvtWord dou_mario_pos_osreport[4];
 
@@ -29,7 +29,7 @@ EvtWord dou_mario_pos_osreport[4];
  * Up-and-down offsets, in 16 steps, that make a Pirate's Grotto platform bob on the water; one step is
  * applied every 130 ms.
  */
-f32 dou_normal_puka_data[] = {
+static f32 dou_normal_puka_data[] = {
     -0.0f, -0.5f, -1.0f, -1.5f, -2.0f, -2.2f, -2.5f, -2.7f,
     -2.7f, -2.7f, -2.5f, -2.2f, -2.0f, -1.5f, -1.0f, -0.5f,
 };
@@ -55,7 +55,7 @@ EVT_END()
  * One dip of a floating platform: sinks the offset in LW(6) to LW(2) over 300 ms, holds for LW(3) ms,
  * then rises back to 0 over 300 ms. The debug messages are "sink" and "float" in Japanese.
  */
-EVT_BEGIN(dou_puka_event_sub)
+static EVT_BEGIN(dou_puka_event_sub)
     DEBUG_PUT_MSG(STRING("しずむ"))
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, LW(2), 300)
     LOOP(0)

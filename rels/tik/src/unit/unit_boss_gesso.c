@@ -24,10 +24,10 @@
 #include "battle/battle_damage.h"
 
 #if VERSION < VERSION_US
-USER_FUNC(_test_rtn);
+static USER_FUNC(_test_rtn);
 #endif
 
-USER_FUNC(_ikasumi_effect);
+static USER_FUNC(_ikasumi_effect);
 extern BattleUnitKind unit_boss_gesso_left_arm;
 extern BattleUnitKind unit_boss_gesso_right_arm;
 
@@ -35,9 +35,9 @@ BattleUnitKind unit_boss_gesso;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
-BattleUnitDefense defence_ceil;
-BattleUnitDefenseAttr defence_attr_ceil;
-StatusVulnerability regist_ceil;
+static BattleUnitDefense defence_ceil;
+static BattleUnitDefenseAttr defence_attr_ceil;
+static StatusVulnerability regist_ceil;
 BattleUnitDefense gesso_defence_turn;
 BattleUnitDefenseAttr gesso_defence_attr_turn;
 StatusVulnerability gesso_regist_turn;
@@ -48,15 +48,15 @@ static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 
 #if VERSION < VERSION_US
-EvtWord test_event[4];
+static EvtWord test_event[4];
 static EvtWord battle_entry_event[315];
 #else
 static EvtWord battle_entry_event[313];
 #endif
 
 static EvtWord init_event[121];
-BattleUnitSetup entry_gesso_left_arm_entry_data;
-BattleUnitSetup entry_gesso_right_arm_entry_data;
+static BattleUnitSetup entry_gesso_left_arm_entry_data;
+static BattleUnitSetup entry_gesso_right_arm_entry_data;
 static EvtWord damage_event[34];
 
 #if VERSION >= VERSION_US
@@ -66,7 +66,7 @@ static EvtWord phase_event[488];
 #endif
 
 static EvtWord attack_event[48];
-BattleWeapon weapon_gesso_ikasumi_attack;
+static BattleWeapon weapon_gesso_ikasumi_attack;
 EvtWord gesso_ikasumi_attack[193];
 static EvtWord wait_event[6];
 EvtWord dead_subevent[48];
@@ -159,13 +159,13 @@ static StatusVulnerability regist = {
 };
 
 /** Defence of the Blooper (ceiling): 2 damage points off every hit. */
-BattleUnitDefense defence_ceil = {{2, 2, 2, 2, 2}};
+static BattleUnitDefense defence_ceil = {{2, 2, 2, 2, 2}};
 
 /** Element reactions of the Blooper (ceiling): no special reaction to any element. */
-BattleUnitDefenseAttr defence_attr_ceil = {0};
+static BattleUnitDefenseAttr defence_attr_ceil = {0};
 
 /** Status vulnerability of the Blooper (ceiling): all zero, immune to every status. */
-StatusVulnerability regist_ceil = {0};
+static StatusVulnerability regist_ceil = {0};
 
 /** Defence the right arm's script sets on a part (original name, JP demo map). */
 BattleUnitDefense gesso_defence_turn = {{0, 0, 0, 0, 0}};
@@ -275,7 +275,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION < VERSION_US
-EVT_BEGIN(test_event)
+static EVT_BEGIN(test_event)
     CALL(_test_rtn)
     RETURN
 EVT_END()
@@ -401,7 +401,7 @@ EVT_END()
  * Spawn setup for the Blooper's left tentacle (L. Tentacle):
  * starts off-screen on the enemy side until the Blooper moves it into place.
  */
-BattleUnitSetup entry_gesso_left_arm_entry_data = {
+static BattleUnitSetup entry_gesso_left_arm_entry_data = {
     &unit_boss_gesso_left_arm, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -416,7 +416,7 @@ BattleUnitSetup entry_gesso_left_arm_entry_data = {
  * Spawn setup for the Blooper's right tentacle (R. Tentacle):
  * starts off-screen on the enemy side until the Blooper moves it into place.
  */
-BattleUnitSetup entry_gesso_right_arm_entry_data = {
+static BattleUnitSetup entry_gesso_right_arm_entry_data = {
     &unit_boss_gesso_right_arm, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -633,7 +633,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Weapon of the Blooper's ink: 1 damage. */
-BattleWeapon weapon_gesso_ikasumi_attack = {
+static BattleWeapon weapon_gesso_ikasumi_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -744,7 +744,7 @@ EVT_BEGIN(gesso_ikasumi_attack)
     RETURN
 EVT_END()
 
-USER_FUNC(_ikasumi_effect) {
+static USER_FUNC(_ikasumi_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -774,7 +774,7 @@ USER_FUNC(_ikasumi_effect) {
  * Lets the d-pad select the Blooper or one of its two tentacles,
  * then resizes the unit with the buttons and moves it with the sticks, every frame.
  */
-USER_FUNC(_test_rtn) {
+static USER_FUNC(_test_rtn) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit;

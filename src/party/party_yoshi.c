@@ -42,7 +42,7 @@ static f32 yoshiSignTbl[16] = {
 static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 #endif
 
-f32 ofs_PYS_S_2[52] = {
+static f32 ofs_PYS_S_2[52] = {
     0.0f, -0.011f, -0.042f, -0.087f, -0.142f, -0.202f, -0.262f, -0.317f, -0.362f, -0.393f, -0.404f, -0.404f, -0.404f,
     -0.404f, -0.404f, -0.387f, -0.341f, -0.276f, -0.202f, -0.128f, -0.063f, -0.017f, 0.0f, 0.0f, 0.0f, 0.0f,
     0.0f, -0.011f, -0.042f, -0.087f, -0.142f, -0.202f, -0.262f, -0.317f, -0.362f, -0.393f, -0.404f, -0.404f, -0.404f,
@@ -53,8 +53,8 @@ f32 ofs_PYS_S_2[52] = {
 static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 #endif
 
-f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.555f, 0.38f};
-f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
+static f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.555f, 0.38f};
+static f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
 // Yoshi's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
@@ -77,9 +77,9 @@ static inline void yoshiSyncMario(MarioWork* mario, PartyEntry* party) {
     mario->displayDirectionTarget = party->displayDirectionTarget;
 }
 
-f32 evt_yoshi_spd;
-s32 evt_yoshi_frm;
-f32 jumpheight;
+static f32 evt_yoshi_spd;
+static s32 evt_yoshi_frm;
+static f32 jumpheight;
 
 static void inertia(PartyEntry* party);
 static void searchGround(PartyEntry* party);

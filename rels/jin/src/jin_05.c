@@ -17,7 +17,7 @@
 
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];
-EvtWord item_box_00[34];
+static EvtWord item_box_00[34];
 static EvtWord mobj_box01[34];
 EvtWord jin_05_init_evt[63];
 
@@ -60,7 +60,7 @@ static BeroEntry bero_entry_data[] = {
  * Chest script for mobj_box00: freezes Mario, makes the Cookbook appear from the chest
  * and gives it to him once the lid has opened.
  */
-EVT_BEGIN(item_box_00)
+static EVT_BEGIN(item_box_00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("_item00"), ITEM_COOKBOOK, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)

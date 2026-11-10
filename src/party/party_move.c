@@ -35,9 +35,9 @@ static void walkMain(PartyEntry* party);
 static s32 partyMoveMain(PartyEntry* party, s32 hosei);
 static void flyMain(PartyEntry* party);
 
-Footmark footmarkBuf[2][80];
-s32 writeId[2];
-s32 readId[2];
+static Footmark footmarkBuf[2][80];
+static s32 writeId[2];
+static s32 readId[2];
 
 /**
  * Map objects a partner must not stand on when following Mario:

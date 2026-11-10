@@ -35,11 +35,11 @@ static BeroEntry bero_entry_data[5];
 #endif
 
 static EvtWord puni_walk_se[20];
-EvtWord puni_soguu_1[102];
-EvtWord puni_soguu_2[146];
+static EvtWord puni_soguu_1[102];
+static EvtWord puni_soguu_2[146];
 EvtWord plane_tobashi_check[87];
 EvtWord tik04_wall_blow_evt[5];
-EvtWord kaidan_pera[122];
+static EvtWord kaidan_pera[122];
 EvtWord tik_04_switch_evt[41];
 static EvtWord mobj_box00[34];
 EvtWord tik_04_init_evt[220];
@@ -181,7 +181,7 @@ EVT_END()
  * When Mario walks past X = -275 a speech-bubble appears over the Puni,
  * he runs away off screen and story progress is set to STG0_12_PUNI_ENCOUNTER.
  */
-EVT_BEGIN(puni_soguu_1)
+static EVT_BEGIN(puni_soguu_1)
     CALL(evt_npc_set_position, STRING("ガイド"), -155, 25, -80)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -219,7 +219,7 @@ EVT_END()
  * The same chase-off as puni_soguu_1; afterwards the partner remarks (mac_1_011)
  * and story progress is set to STG1_32_PUNI_ENCOUNTER_2.
  */
-EVT_BEGIN(puni_soguu_2)
+static EVT_BEGIN(puni_soguu_2)
     CALL(evt_npc_set_position, STRING("ガイド"), -155, 25, -80)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -316,7 +316,7 @@ EVT_END()
  * and the real stairs (dai_6) are shown, with a step-appear sound.
  */
 // Animate the captured scenery, then detach all three objects before releasing the capture.
-EVT_BEGIN(kaidan_pera)
+static EVT_BEGIN(kaidan_pera)
     CALL(evt_paper_entry, STRING("OFF_d_meku"))
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_meku"))

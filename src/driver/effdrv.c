@@ -248,7 +248,7 @@ static EffectWork work;
 
 //.sdata
 static EffectWork* wp = &work;
-const char* prefix_tbl[] = {
+static const char* prefix_tbl[] = {
     "jp", "us",
 #if VERSION >= VERSION_US
     "ge", "fr", "sp", "it", "du"

@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 /** Tall 16x32 dust puff, alternating with the square one for types 0-1. */
-effN64Vtx size16x32_tex32x64_vtx[] = {
+static effN64Vtx size16x32_tex32x64_vtx[] = {
     {-8, -32, 0, 0, 1024, 0, 0, 0, 255},
     {8, -32, 0, 1024, 1024, 0, 0, 0, 255},
     {8, 0, 0, 1024, 3040, 0, 0, 0, 255},

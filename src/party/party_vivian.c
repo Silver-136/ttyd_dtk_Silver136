@@ -25,7 +25,7 @@
 #define vivian_init_801809C0 vivian_init
 #endif
 
-s32 vivian_cancel_req;
+static s32 vivian_cancel_req;
 
 #if VERSION >= VERSION_JP
 #pragma explicit_zero_data on

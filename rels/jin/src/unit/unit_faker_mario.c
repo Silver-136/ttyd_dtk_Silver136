@@ -46,9 +46,9 @@ typedef struct FakerParam {
 
 static USER_FUNC(_anime_load);
 static USER_FUNC(_anime_load_wait);
-USER_FUNC(_gullible_party_info_init);
-USER_FUNC(_load_param);
-USER_FUNC(_save_param);
+static USER_FUNC(_gullible_party_info_init);
+static USER_FUNC(_load_param);
+static USER_FUNC(_save_param);
 
 #if VERSION >= VERSION_US
 USER_FUNC(faker_mario_sync_max_moves);
@@ -72,27 +72,27 @@ static BattleWeapon weapon_masao_jump;
 static BattleWeapon weapon_masao_hammer;
 static BattleWeapon weapon_masao_kururin_jump;
 static BattleWeapon weapon_masao_kaiten_hammer;
-BattleUnitSetup entry_gullible_christine;
-BattleUnitSetup entry_gullible_nokotarou;
-BattleUnitSetup entry_gullible_clauda;
-BattleUnitSetup entry_gullible_yoshi;
+static BattleUnitSetup entry_gullible_christine;
+static BattleUnitSetup entry_gullible_nokotarou;
+static BattleUnitSetup entry_gullible_clauda;
+static BattleUnitSetup entry_gullible_yoshi;
 static EvtWord mario_zoom[19];
 static EvtWord enemy_zoom[19];
 static EvtWord fmario_zoom[19];
 static EvtWord gparty_zoom[19];
 static EvtWord init_event_fmario[189];
-EvtWord fmario_entry_event[24];
-EvtWord dead_event_fmario_down[53];
+static EvtWord fmario_entry_event[24];
+static EvtWord dead_event_fmario_down[53];
 static EvtWord dead_event_fmario[198];
 static EvtWord damage_event_fmario[22];
-EvtWord phase_event_fmario[VERSION_PICK(400, 403)];
+static EvtWord phase_event_fmario[VERSION_PICK(400, 403)];
 static EvtWord attack_event_fmario[60];
 static EvtWord jump_attack_voice[36];
 static EvtWord marioAttackEvent_NormalJump[344];
 static EvtWord marioAttackEvent_KururinJump[469];
 static EvtWord marioAttackEvent_NormalHammer[299];
 static EvtWord marioAttackEvent_KaitenHammer[299];
-EvtWord party_change_event[196];
+static EvtWord party_change_event[196];
 static EvtWord wait_event_fmario[6];
 
 /**
@@ -162,7 +162,7 @@ static USER_FUNC(_anime_load) {
  * and (US and later) disabled commands of the party member unit args[1] into the fake Mario's table,
  * so they are kept while that partner is swapped out.
  */
-USER_FUNC(_save_param) {
+static USER_FUNC(_save_param) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id1 = evtGetValue(event, args[0]);
@@ -205,7 +205,7 @@ USER_FUNC(_save_param) {
  * status and (US and later) disabled commands of the party member unit args[1] from the fake Mario's table
  * when the partner is swapped back in.
  */
-USER_FUNC(_load_param) {
+static USER_FUNC(_load_param) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id1 = evtGetValue(event, args[0]);
@@ -530,7 +530,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
 };
 
 /** Setup entry that adds the Goombella double to Doopliss's battle. */
-BattleUnitSetup entry_gullible_christine = {
+static BattleUnitSetup entry_gullible_christine = {
     &unit_gullible_christine, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -542,7 +542,7 @@ BattleUnitSetup entry_gullible_christine = {
 };
 
 /** Setup entry that adds the Koops double to Doopliss's battle. */
-BattleUnitSetup entry_gullible_nokotarou = {
+static BattleUnitSetup entry_gullible_nokotarou = {
     &unit_gullible_nokotarou, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -554,7 +554,7 @@ BattleUnitSetup entry_gullible_nokotarou = {
 };
 
 /** Setup entry that adds the Flurrie double to Doopliss's battle. */
-BattleUnitSetup entry_gullible_clauda = {
+static BattleUnitSetup entry_gullible_clauda = {
     &unit_gullible_clauda, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -566,7 +566,7 @@ BattleUnitSetup entry_gullible_clauda = {
 };
 
 /** Setup entry that adds the Yoshi double to Doopliss's battle. */
-BattleUnitSetup entry_gullible_yoshi = {
+static BattleUnitSetup entry_gullible_yoshi = {
     &unit_gullible_yoshi, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -691,7 +691,7 @@ EVT_END()
  * Entrance script of the fake Mario in the second Doopliss battle:
  * the status window hides, the camera zooms in and the fake Mario speaks (stg4_jin_22).
  */
-EVT_BEGIN(fmario_entry_event)
+static EVT_BEGIN(fmario_entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     WAIT_MS(2000)
     CALL_CHILD(fmario_zoom)
@@ -706,7 +706,7 @@ EVT_END()
  * Defeat sequence of the fake Mario in the second battle:
  * he says stg4_jin_26_05, staggers (EM_K_1) and then falls over with a thud (EM_D_2).
  */
-EVT_BEGIN(dead_event_fmario_down)
+static EVT_BEGIN(dead_event_fmario_down)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_S_1"))
     WAIT_MS(300)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("EM_T_1"))
@@ -823,7 +823,7 @@ EVT_END()
  * (stg4_jin_26_kur, _nok, _win or _yos; skipped once a double has been beaten), below 50% he complains
  * (stg4_jin_26_01), below 25% he says he is nearly beaten (stg4_jin_26_02).
  */
-EVT_BEGIN(phase_event_fmario)
+static EVT_BEGIN(phase_event_fmario)
     // Before the player's phase on turn 3: Vivian makes her choice.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1473,7 +1473,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
 EVT_END()
 
 // Advance to the next staged partner; indices outside 0..3 return without spawning.
-EVT_BEGIN(party_change_event)
+static EVT_BEGIN(party_change_event)
     ADD(GW(18), 1)
     IF_INT_GREATER(GW(18), 4)
         RETURN
@@ -1535,7 +1535,7 @@ EVT_BEGIN(party_change_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_gullible_party_info_init) {
+static USER_FUNC(_gullible_party_info_init) {
     PouchData* pouch = pouchGetPtr();
     s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

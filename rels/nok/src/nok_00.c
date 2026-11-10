@@ -52,23 +52,23 @@ typedef struct PosterWork {
     s32 shape;
 } PosterWork;
 PosterWork* poster;
-void draw_poster(void* userdata, s32 group, Mtx* modeling);
+static void draw_poster(void* userdata, s32 group, Mtx* modeling);
 
-USER_FUNC(pposter_init);
-USER_FUNC(pposter_nok_on);
+static USER_FUNC(pposter_init);
+static USER_FUNC(pposter_nok_on);
 
-EvtWord nokonoko_A_init[27];
-EvtWord nokonoko_A_regl[2];
+static EvtWord nokonoko_A_init[27];
+static EvtWord nokonoko_A_regl[2];
 EvtWord nokonoko_A_talk[55];
-EvtWord nokonoko_B_init[12];
-EvtWord nokonoko_B_regl[19];
-EvtWord nokonoko_B_talk[44];
-EvtWord nokonoko_B_damage[18];
-EvtWord nokonoko_C_regl[19];
-EvtWord nokonoko_C_talk[44];
-EvtWord nokonoko_D_talk[52];
-s32 iri_15_item_tbl1[2];
-s32 iri_15_item_tbl2[2];
+static EvtWord nokonoko_B_init[12];
+static EvtWord nokonoko_B_regl[19];
+static EvtWord nokonoko_B_talk[44];
+static EvtWord nokonoko_B_damage[18];
+static EvtWord nokonoko_C_regl[19];
+static EvtWord nokonoko_C_talk[44];
+static EvtWord nokonoko_D_talk[52];
+static s32 iri_15_item_tbl1[2];
+static s32 iri_15_item_tbl2[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord nokonoko_F_talk[];
@@ -84,7 +84,7 @@ static EvtWord kizayarou_init[38];
 static NpcSetupInfo npcEnt[10];
 static BeroEntry bero_entry_data[3];
 static const char* yado_npc[2];
-const char* yado_map[2];
+static const char* yado_map[2];
 static HouseParam yado_data;
 static const char* mise_npc[2];
 static HouseParam mise_data;
@@ -104,7 +104,7 @@ EvtWord first_time_camera[195];
 #endif
 
 static HitDamageReturn hitDmgRetPoints[10];
-EvtWord nok_00_koopa_npc_entry[35];
+static EvtWord nok_00_koopa_npc_entry[35];
 EvtWord nok_00_koopa_evt[1250];
 EvtWord nok_00_init_evt[205];
 
@@ -129,7 +129,7 @@ void nok_stg2_013_cb(s32 type, void** work) {
  * Makes the poster visible: sets bit 0 of the PosterWork flags,
  * which draw_poster checks before drawing the Peach poster onto the Koopa's locator.
  */
-USER_FUNC(pposter_nok_on) {
+static USER_FUNC(pposter_nok_on) {
     poster->flags |= 1;
     return EVT_RETURN_DONE;
 }
@@ -139,7 +139,7 @@ USER_FUNC(pposter_nok_on) {
  * turns on the move and talk animations and puts him at his post by the gate once the first visit is over;
  * during the Bowser cutscene (STG2_25_04) he stands near the shop doors.
  */
-EVT_BEGIN(nokonoko_A_init)
+static EVT_BEGIN(nokonoko_A_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
         CALL(evt_npc_set_position, STRING("me"), -350, 0, 65)
@@ -151,7 +151,7 @@ EVT_BEGIN(nokonoko_A_init)
 EVT_END()
 
 /** Regular script for Koopa A; he does nothing on his own. */
-EVT_BEGIN(nokonoko_A_regl)
+static EVT_BEGIN(nokonoko_A_regl)
     RETURN
 EVT_END()
 
@@ -183,7 +183,7 @@ EVT_END()
  * Init script written for Koopa B: talk pose off and flagged as an enemy NPC (see nokonoko_B_damage).
  * Not used: Koopa B's entry in npcEnt has npc_init_evt as its init event.
  */
-EVT_BEGIN(nokonoko_B_init)
+static EVT_BEGIN(nokonoko_B_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     RETURN
@@ -193,7 +193,7 @@ EVT_END()
  * Regular script for Koopa B: he wanders at random within 100 units of where he stands,
  * at speed 30 (urouro_init_func and urouro_main_func).
  */
-EVT_BEGIN(nokonoko_B_regl)
+static EVT_BEGIN(nokonoko_B_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -204,7 +204,7 @@ EVT_END()
  * Talk script for Koopa B: story-progress dependent dialogue,
  * one line per stretch of the story up to the end of chapter 8, and a final line afterwards.
  */
-EVT_BEGIN(nokonoko_B_talk)
+static EVT_BEGIN(nokonoko_B_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_04"), 0, 0)
@@ -225,7 +225,7 @@ EVT_END()
  * he plays a startled animation and says "Eek, don't touch me!",
  * then waits 200 ms before going back to his idle animation.
  */
-EVT_BEGIN(nokonoko_B_damage)
+static EVT_BEGIN(nokonoko_B_damage)
     CALL(evt_npc_set_anim, STRING("me"), STRING("KNP_O_1"))
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("イャーン　さわらないで！！<key>"), 0, 0)
     WAIT_MS(200)
@@ -234,7 +234,7 @@ EVT_BEGIN(nokonoko_B_damage)
 EVT_END()
 
 /** Regular script for Koopa C: wanders at random within 100 units of his spot, like Koopa B. */
-EVT_BEGIN(nokonoko_C_regl)
+static EVT_BEGIN(nokonoko_C_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -242,7 +242,7 @@ EVT_BEGIN(nokonoko_C_regl)
 EVT_END()
 
 /** Talk script for Koopa C: story-progress dependent dialogue, same schedule as Koopa B. */
-EVT_BEGIN(nokonoko_C_talk)
+static EVT_BEGIN(nokonoko_C_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_06"), 0, 0)
@@ -262,7 +262,7 @@ EVT_END()
  * Talk script for Koopa D: story-progress dependent dialogue.
  * Before Frankly's house is reached he asks a yes/no question and then continues with a follow-up line.
  */
-EVT_BEGIN(nokonoko_D_talk)
+static EVT_BEGIN(nokonoko_D_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         CALL(evt_msg_print, 0, STRING("stg1_nok_08"), 0, 0)
@@ -284,14 +284,14 @@ EVT_END()
  * Item list with the Hot Dog only, ended by -1 (Trouble Center request 15). No script in this module uses it:
  * nokonoko_F_talk lets Mario pick from all his items (SELECT_TYPE_ITEM).
  */
-s32 iri_15_item_tbl1[] = {
+static s32 iri_15_item_tbl1[] = {
     ITEM_HOT_DOG, -1,
 };
 
 /**
  * Item list with the Mousse Cake only, ended by -1 (request 15). No script in this module uses it either.
  */
-s32 iri_15_item_tbl2[] = {
+static s32 iri_15_item_tbl2[] = {
     ITEM_MOUSSE_CAKE, -1,
 };
 
@@ -661,7 +661,7 @@ static const char* yado_npc[] = {
 };
 
 /** Map group whose bounding-box culling is off while Mario is inside the inn: its outside front S_yad_mae. */
-const char* yado_map[] = {
+static const char* yado_map[] = {
     "S_yad_mae",
     NULL,
 };
@@ -875,7 +875,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
  * Creates the "poster" NPC (model c_p_peach, the Peach poster) used in the Bowser interlude:
  * intangible, placed just in front of the S_ie_mad02 wall object, and then hooks it up with pposter_init.
  */
-EVT_BEGIN(nok_00_koopa_npc_entry)
+static EVT_BEGIN(nok_00_koopa_npc_entry)
     CALL(evt_npc_entry, STRING("poster"), STRING("c_p_peach")) // a Princess Peach poster (Bowser interlude prop)
     CALL(evt_npc_pera_onoff, STRING("poster"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("poster"), NPC_FLAG_NO_HIT)
@@ -1283,7 +1283,7 @@ EVT_BEGIN(nok_00_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(pposter_init) {
+static USER_FUNC(pposter_init) {
     NpcEntry* npc;
 
     poster = _mapAlloc(sizeof(PosterWork));
@@ -1301,7 +1301,7 @@ USER_FUNC(pposter_init) {
  * Display callback of the Koopa A model: when the group drawn is the poster's locator
  * and the poster has been switched on, draws the poster's plane shape there.
  */
-void draw_poster(void* userdata, s32 group, Mtx* modeling) {
+static void draw_poster(void* userdata, s32 group, Mtx* modeling) {
     NpcEntry* npc = npcNameToPtr("poster");
 
     if (group != poster->group || !(poster->flags & 1)) {

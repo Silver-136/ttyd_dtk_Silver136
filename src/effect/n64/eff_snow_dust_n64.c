@@ -32,7 +32,7 @@ static u8 a_data[] = {
 };
 
 /** 8x8 quad drawn for each type 1 snowflake. */
-effN64Vtx size8x8_tex64x64_vtx[] = {
+static effN64Vtx size8x8_tex64x64_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
     {4, -4, 0, 2048, 0, 0, 0, 0, 255},
     {4, 4, 0, 2048, 2048, 0, 0, 0, 255},
@@ -40,7 +40,7 @@ effN64Vtx size8x8_tex64x64_vtx[] = {
 };
 
 /** 4x4 quad drawn for each type 0 and type 6 snowflake. */
-effN64Vtx size4x4_tex64x64_vtx[] = {
+static effN64Vtx size4x4_tex64x64_vtx[] = {
     {-2, -2, 0, 0, 0, 0, 0, 0, 255},
     {2, -2, 0, 2048, 0, 0, 0, 0, 255},
     {2, 2, 0, 2048, 2048, 0, 0, 0, 255},

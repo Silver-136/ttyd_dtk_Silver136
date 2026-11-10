@@ -71,13 +71,13 @@ static seq_e3_work* wp = &work;
  * starts at and where its box sits on screen.
  */
 #if VERSION >= VERSION_US
-seq_e3_entry e3_tbl[4] = {
+static seq_e3_entry e3_tbl[4] = {
     { 3, -140.0f, 100.0f },
     { 23, 140.0f, 100.0f },
     { 35, -140.0f, -100.0f },
     { 96, 140.0f, -100.0f },
 #else
-seq_e3_entry e3_tbl[3] = {
+static seq_e3_entry e3_tbl[3] = {
     { 23, -140.0f, 100.0f },
     { 35, 140.0f, 100.0f },
     { 96, 0.0f, -100.0f },

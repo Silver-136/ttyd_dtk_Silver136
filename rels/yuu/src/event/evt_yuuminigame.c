@@ -13,11 +13,11 @@
 #include "yuu.h"
 
 static s32 dataadr[32];
-s32 stackt[4];
-s32 stackp;
-void evt_yuuminigame_disp_func(CameraId camera, void* param);
+static s32 stackt[4];
+static s32 stackp;
+static void evt_yuuminigame_disp_func(CameraId camera, void* param);
 
-USER_FUNC(evt_yuuminigame_main_func);
+static USER_FUNC(evt_yuuminigame_main_func);
 USER_FUNC(evt_yuuminigame_free);
 
 static EvtWord main_evt[4];
@@ -187,7 +187,7 @@ USER_FUNC(evt_yuuminigame_alloc) {
  * unless a sub event (start or end script) is still running, queues the draw callback,
  * and stops once the quit flag is set.
  */
-USER_FUNC(evt_yuuminigame_main_func) {
+static USER_FUNC(evt_yuuminigame_main_func) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
 
     if (wp->flags & 1) {
@@ -207,7 +207,7 @@ disp:
 }
 
 /** 2D draw callback that forwards to the current minigame's own disp callback. */
-void evt_yuuminigame_disp_func(CameraId camera, void* param) {
+static void evt_yuuminigame_disp_func(CameraId camera, void* param) {
     ((MiniGameWork*)param)->disp(camera, param);
 }
 

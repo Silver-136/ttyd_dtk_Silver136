@@ -40,22 +40,22 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(bgm_wait_stop);
+static USER_FUNC(bgm_wait_stop);
 USER_FUNC(toron_check);
-void yuurei_callback(s32 type, void* param);
-void powan_callback(s32 type, void* param);
+static void yuurei_callback(s32 type, void* param);
+static void powan_callback(s32 type, void* param);
 
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
-EvtWord evt_powan_msg[36];
+static EvtWord evt_powan_msg[36];
 EvtWord evt_nabe[247];
 static EvtWord init_gurume[38];
 static EvtWord talk_gurume[176];
 static EvtWord talk_powan[2];
 EvtWord init_yuurei[250];
 static EvtWord evt_shake[39];
-EvtWord evt_shake2[6];
+static EvtWord evt_shake2[6];
 static s32 item_tbl2[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -73,8 +73,8 @@ static const char* door_4[7];
 static const char* door_5[7];
 EvtWord evt_1day_end[68];
 EvtWord evt_2day_end[68];
-EvtWord evt_normal_yado[119];
-EvtWord evt_bed[22];
+static EvtWord evt_normal_yado[119];
+static EvtWord evt_bed[22];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_toron_catch[];
@@ -91,12 +91,12 @@ EvtWord evt_toron_catch2[359];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord evt_toron_appear[437];
+static EvtWord evt_toron_appear[437];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord evt_toron_appear[408];
+static EvtWord evt_toron_appear[408];
 #else
-EvtWord evt_toron_appear[414];
+static EvtWord evt_toron_appear[414];
 #endif
 #endif
 
@@ -116,7 +116,7 @@ static EvtWord evt_access_entry[21];
 static EvtWord evt_access_entry[62];
 #endif
 
-EvtWord rsh_02_init_evt[247];
+static EvtWord rsh_02_init_evt[247];
 
 #if VERSION >= VERSION_US
 EvtWord rsh_02_a_init_evt[687];
@@ -284,7 +284,7 @@ static BeroEntry bero_data_c[] = {
  * Detective Pennington plays A_1, Mario gives a question-mark balloon, and the gourmet Toad turns to Mario.
  * Started from powan_callback.
  */
-EVT_BEGIN(evt_powan_msg)
+static EVT_BEGIN(evt_powan_msg)
     CALL(evt_npc_set_anim, STRING("ポワン探偵"), STRING("A_1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_QUESTION1_2"), LW(0), LW(1), LW(2), 0)
@@ -570,7 +570,7 @@ EVT_END()
  * Stops the camera shake: resets the 3D camera event (evt_cam3d_evt_off).
  * Second half of the shake in the ghost's first speech.
  */
-EVT_BEGIN(evt_shake2)
+static EVT_BEGIN(evt_shake2)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     RETURN
 EVT_END()
@@ -934,7 +934,7 @@ EVT_BEGIN(evt_1day_end)
 EVT_END()
 
 // When armed, the first type-3 notification starts shaking and the second stops that event.
-void yuurei_callback(s32 type, void* param) {
+static void yuurei_callback(s32 type, void* param) {
     EventEntry* ev = (*(MsgWinData**)param)->event;
 
     if (ev->lwData[13] != 0 && type == 3) {
@@ -954,7 +954,7 @@ void yuurei_callback(s32 type, void* param) {
  */
 
 // Start the reaction on the second type-3 notification (the counter starts at zero).
-void powan_callback(s32 type, void* param) {
+static void powan_callback(s32 type, void* param) {
     MsgWinData* work = *(MsgWinData**)param;
 
     if (type == 3) {
@@ -970,7 +970,7 @@ void powan_callback(s32 type, void* param) {
     }
 }
 
-USER_FUNC(bgm_wait_stop) {
+static USER_FUNC(bgm_wait_stop) {
     psndSetFlag(PSND_FLAG_BGM_WAIT_0);
     return EVT_RETURN_DONE;
 }
@@ -1009,7 +1009,7 @@ EVT_END()
  * fully restores HP/FP of Mario and the party, repositions the partners at the foot of the bed,
  * fades back in and prints the wake-up message (stg6_yado_01).
  */
-EVT_BEGIN(evt_normal_yado)
+static EVT_BEGIN(evt_normal_yado)
     CALL(evt_msg_print, 0, STRING("stg6_yado_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_yado_00_yn"))
     CALL(evt_msg_continue)
@@ -1047,7 +1047,7 @@ EVT_END()
  * Trigger on the bed in cabin 3-5: locks input and runs evt_1day_end at STG6_19_GIVE_BLANKET,
  * evt_2day_end at STG6_43_CONDUCTOR_APPEARS, and evt_normal_yado otherwise.
  */
-EVT_BEGIN(evt_bed)
+static EVT_BEGIN(evt_bed)
     CALL(evt_mario_key_onoff, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG6_19_GIVE_BLANKET)
@@ -1294,7 +1294,7 @@ EVT_END()
  * and taunts him (stg6_rsh_181), the story moves to STG6_25_ZIP_TOAD_APPEARS, the chase music starts and
  * evt_toron_catch is spawned.
  */
-EVT_BEGIN(evt_toron_appear)
+static EVT_BEGIN(evt_toron_appear)
     LABEL(100)
     CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
@@ -1570,7 +1570,7 @@ EVT_END()
  * the bed (from STG6_01_THE_CONDUCTOR on, except at STG6_25_ZIP_TOAD_APPEARS),
  * the shelf signs, and the music for the story stage.
  */
-EVT_BEGIN(rsh_02_init_evt)
+static EVT_BEGIN(rsh_02_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)

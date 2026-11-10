@@ -18,7 +18,7 @@
 #include "driver/camdrv.h"
 
 NanNPCWork* nanNPCWork;
-char makestring[16];
+static char makestring[16];
 
 #if VERSION <= VERSION_DEMO_JP
 /**

@@ -42,11 +42,11 @@
 #include "senkaron.h"
 
 Senkaron* senkaron;
-s32 senkaronAttackStartFlag;
-s32 senkaronEscapeFlag;
-s32 senkaronMesPushingFlag;
-s32 marioPushedFlag;
-s32 marioHammerFrame;
+static s32 senkaronAttackStartFlag;
+static s32 senkaronEscapeFlag;
+static s32 senkaronMesPushingFlag;
+static s32 marioPushedFlag;
+static s32 marioHammerFrame;
 static f32 randf(f32 min, f32 max);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
@@ -57,7 +57,7 @@ static USER_FUNC(senkaronFlagOnMesPushing);
 static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
 USER_FUNC(leader_touch_check);
-void nokotaro_callback(s32 type);
+static void nokotaro_callback(s32 type);
 static void senkaron_ext_init(void);
 static void senkaron_ext_main(void);
 static void senkaron_ext_dispent(void);
@@ -68,7 +68,7 @@ static EvtWord door01_open[12];
 static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
-const char* nokotaro_pose[2];
+static const char* nokotaro_pose[2];
 EvtWord tegami_event[305];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -79,17 +79,17 @@ static EvtWord senkaron_event[579];
 
 static EvtWord key_get[5];
 EvtWord gon_03_init_evt[256];
-EvtWord richard_init_event[29];
-EvtWord richard_regl_event[2];
-EvtWord richard_talk_event[53];
-EvtWord leaderkaron_init_event[44];
-EvtWord leaderkaron_talk_event[40];
+static EvtWord richard_init_event[29];
+static EvtWord richard_regl_event[2];
+static EvtWord richard_talk_event[53];
+static EvtWord leaderkaron_init_event[44];
+static EvtWord leaderkaron_talk_event[40];
 static ExtTexInfo senkaron_ext_entry_data[26];
-EvtWord senkarondummy_init_event[8];
-EvtWord senkarondummy_regl_event[2];
-EvtWord senkarondummy_talk_event[2];
-EvtWord senkaron_entry_event[9];
-EvtWord senkaron_escape_event[4];
+static EvtWord senkarondummy_init_event[8];
+static EvtWord senkarondummy_regl_event[2];
+static EvtWord senkarondummy_talk_event[2];
+static EvtWord senkaron_entry_event[9];
+static EvtWord senkaron_escape_event[4];
 
 /** NPC setup of gon_03: the Dull Bones dummy, Richard and the leader of the bone enemies. */
 static NpcSetupInfo npcEnt[] = {
@@ -211,7 +211,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Poses Koops (Nokotaro, the partner) switches between during the hall scene. */
-const char* nokotaro_pose[] = {
+static const char* nokotaro_pose[] = {
     "PNK_L_1",
     "PNK_L_2",
 };
@@ -637,7 +637,7 @@ EVT_END()
  * NPC init for Richard, a Dull Bones in the hall:
  * places him at the middle of the room, plays his idle animation and stops him from turning toward Mario.
  */
-EVT_BEGIN(richard_init_event)
+static EVT_BEGIN(richard_init_event)
     CALL(evt_npc_set_position, STRING("リチャード"), 0, 0, -100)
     CALL(evt_npc_set_width, STRING("リチャード"), FLOAT(30.0f))
     CALL(evt_npc_set_anim, STRING("リチャード"), STRING("KRN_Z_2"))
@@ -648,7 +648,7 @@ EVT_BEGIN(richard_init_event)
 EVT_END()
 
 /** NPC regular event for Richard; does nothing. */
-EVT_BEGIN(richard_regl_event)
+static EVT_BEGIN(richard_regl_event)
     RETURN
 EVT_END()
 
@@ -656,7 +656,7 @@ EVT_END()
  * Talk event for Richard: when Mario talks to him, a speakerless message (stg1_gon_09_01) offers to read the
  * letter he holds (yes/no stg1_gon_09_01_yn) and, on the yes answer, shows the letter (stg1_gon_09_02). Does nothing while the swarm scene is running (GW(15) is 1).
  */
-EVT_BEGIN(richard_talk_event)
+static EVT_BEGIN(richard_talk_event)
     IF_INT_EQUAL(GW(15), 1)
         RETURN
     END_IF
@@ -679,7 +679,7 @@ EVT_END()
  * NPC init for the Dull Bones leader (リーダー): places him at the east end of the room
  * until the swarm scene has been done, afterwards he is moved off the map.
  */
-EVT_BEGIN(leaderkaron_init_event)
+static EVT_BEGIN(leaderkaron_init_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
         CALL(evt_npc_set_position, STRING("リーダー"), 380, 0, 10)
@@ -698,7 +698,7 @@ EVT_END()
  * Talk event for the Dull Bones leader: plays the bone-rattling sound and, the first time, starts senkaron_event,
  * the swarm of Dull Bones that rain from the ceiling and push Mario back toward the entrance.
  */
-EVT_BEGIN(leaderkaron_talk_event)
+static EVT_BEGIN(leaderkaron_talk_event)
     BEGIN_INLINE_EVENT
         LOOP(10)
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -749,18 +749,18 @@ static ExtTexInfo senkaron_ext_entry_data[] = {
 };
 
 /** NPC init for the placeholder Dull Bones (カロン1): moves it far below the map. */
-EVT_BEGIN(senkarondummy_init_event)
+static EVT_BEGIN(senkarondummy_init_event)
     CALL(evt_npc_set_position, STRING("カロン1"), 0, -1000, 0)
     RETURN
 EVT_END()
 
 /** NPC regular event for the placeholder Dull Bones; does nothing. */
-EVT_BEGIN(senkarondummy_regl_event)
+static EVT_BEGIN(senkarondummy_regl_event)
     RETURN
 EVT_END()
 
 /** Talk event for the placeholder Dull Bones; does nothing. */
-EVT_BEGIN(senkarondummy_talk_event)
+static EVT_BEGIN(senkarondummy_talk_event)
     RETURN
 EVT_END()
 
@@ -768,18 +768,18 @@ EVT_END()
  * Registers the Dull Bones swarm: an ext-pose object of 1000 Dull Bones (senkaron) with its init,
  * per-frame and draw callbacks.
  */
-EVT_BEGIN(senkaron_entry_event)
+static EVT_BEGIN(senkaron_entry_event)
     CALL(evt_ext_entry, 1000, PTR(senkaron_ext_entry_data), PTR(senkaron_ext_init), PTR(senkaron_ext_main), PTR(senkaron_ext_dispent))
     RETURN
 EVT_END()
 
 /** Tells the swarm to run away (sets senkaronEscapeFlag) after the leader has been beaten. */
-EVT_BEGIN(senkaron_escape_event)
+static EVT_BEGIN(senkaron_escape_event)
     CALL(senkaronToEscape)
     RETURN
 EVT_END()
 
-void nokotaro_callback(s32 type) {
+static void nokotaro_callback(s32 type) {
     PartyEntry* party = partyGetPtr(partyCtrlNo);
 
     switch (type) {

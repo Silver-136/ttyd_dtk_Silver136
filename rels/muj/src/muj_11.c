@@ -21,7 +21,7 @@ static EvtWord w_open[12];
 static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_entry_data[3];
-EvtWord warning_event[38];
+static EvtWord warning_event[38];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord muj_11_init_evt[];
@@ -114,7 +114,7 @@ static BeroEntry bero_entry_data[] = {
  * Cortez's warning (STG5_31_FOUR_EYES): when Mario enters the corridor a spoken narration (stg5_dou_20)
  * warns of the danger ahead and the story becomes STG5_32_CORTEZS_WARNING.
  */
-EVT_BEGIN(warning_event)
+static EVT_BEGIN(warning_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)

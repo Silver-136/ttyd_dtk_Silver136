@@ -26,7 +26,7 @@ PiantaParlorWork* yuwp;
 EvtWord* yuu_window_evt;
 #endif
 
-EVT_BEGIN(minigame_end)
+static EVT_BEGIN(minigame_end)
     SET_VALUE(GW(0), 2)
     SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
     CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
@@ -43,7 +43,7 @@ EVT_END()
  * JP and later first freeze Mario in place and run the minigame's own window script (evtYuuSetWindowEvt);
  * then it asks whether to quit and runs minigame_end on the first choice, then flags it closed.
  */
-EVT_BEGIN(window_open)
+static EVT_BEGIN(window_open)
 #if VERSION >= VERSION_JP
     CALL(evt_mario_cont_onoff, 0)
     BEGIN_SIBLING_EVENT

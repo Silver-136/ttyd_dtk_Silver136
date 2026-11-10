@@ -44,19 +44,19 @@
 
 static USER_FUNC(_get_mario_hammer_lv);
 
-USER_FUNC(_battle_majinai_effect);
-USER_FUNC(_majinai_powerup_check);
-USER_FUNC(_paper_light_off);
+static USER_FUNC(_battle_majinai_effect);
+static USER_FUNC(_majinai_powerup_check);
+static USER_FUNC(_paper_light_off);
 USER_FUNC(_fire_wave);
 USER_FUNC(_mario_fire_ball_controll);
-USER_FUNC(_kaiten_hammer_acrobat_rotate);
-USER_FUNC(_hammer_star_effect);
+static USER_FUNC(_kaiten_hammer_acrobat_rotate);
+static USER_FUNC(_hammer_star_effect);
 USER_FUNC(_record_renzoku_count);
-USER_FUNC(_tatsumaki_effect);
-USER_FUNC(_wait_jyabara_hit_iron_frame);
-USER_FUNC(_bgset_iron_frame_check);
-USER_FUNC(_jump_star_effect);
-USER_FUNC(_whirlwind_effect);
+static USER_FUNC(_tatsumaki_effect);
+static USER_FUNC(_wait_jyabara_hit_iron_frame);
+static USER_FUNC(_bgset_iron_frame_check);
+static USER_FUNC(_jump_star_effect);
+static USER_FUNC(_whirlwind_effect);
 
 extern BattleWeapon marioWeapon_KururinJump2;
 extern BattleWeapon marioWeapon_JyabaraJumpFailed;
@@ -74,7 +74,7 @@ BattleWeapon* superActionTable[18];
 static EvtWord marioAttackEvent_NormalJump[VERSION_PICK(889, 963)];
 static EvtWord marioAttackEvent_KururinJump[1210];
 EvtWord marioAttackEvent_JyabaraJump[];
-EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
+static EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
 
 #if VERSION <= VERSION_DEMO_JP
 EvtWord marioAttackEvent_TatsumakiJump[1661];
@@ -83,41 +83,41 @@ EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
 #endif
 
 EvtWord marioAttackEvent_RenzokuJump[840];
-EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
+static EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord marioAttackEvent_NormalHammer_Core[1312];
+static EvtWord marioAttackEvent_NormalHammer_Core[1312];
 #else
-EvtWord marioAttackEvent_NormalHammer_Core[VERSION_PICK(1326, 1333)];
+static EvtWord marioAttackEvent_NormalHammer_Core[VERSION_PICK(1326, 1333)];
 #endif
 
 static EvtWord marioAttackEvent_KaitenHammer[1060];
-EvtWord marioAttackEvent_FirstAttackKaitenHammer[19];
-EvtWord marioAttackEvent_JishinHammer[VERSION_PICK(834, 845)];
-EvtWord marioAttackEvent_UltraJishinHammer[665];
-EvtWord marioAttackEvent_HammerRotate[25];
-EvtWord marioAttackEvent_HammerNageru[VERSION_PICK(446, 457)];
+static EvtWord marioAttackEvent_FirstAttackKaitenHammer[19];
+static EvtWord marioAttackEvent_JishinHammer[VERSION_PICK(834, 845)];
+static EvtWord marioAttackEvent_UltraJishinHammer[665];
+static EvtWord marioAttackEvent_HammerRotate[25];
+static EvtWord marioAttackEvent_HammerNageru[VERSION_PICK(446, 457)];
 EvtWord marioAttackEvent_HammerNageru_object[VERSION_PICK(240, 247)];
-EvtWord marioAttackEvent_FireNaguri[702];
-EvtWord marioAttackEvent_FireNaguri_object[374];
-EvtWord _NormalCharge_core[103];
+static EvtWord marioAttackEvent_FireNaguri[702];
+static EvtWord marioAttackEvent_FireNaguri_object[374];
+static EvtWord _NormalCharge_core[103];
 EvtWord _SuperCharge_core[103];
-EvtWord marioAttackEvent_GatsunJump[7];
-EvtWord marioAttackEvent_DokanJump[7];
-EvtWord marioAttackEvent_MiniminiFumi[4];
-EvtWord marioAttackEvent_NemuraseFumi[4];
-EvtWord marioAttackEvent_FunyafunyaJump[4];
+static EvtWord marioAttackEvent_GatsunJump[7];
+static EvtWord marioAttackEvent_DokanJump[7];
+static EvtWord marioAttackEvent_MiniminiFumi[4];
+static EvtWord marioAttackEvent_NemuraseFumi[4];
+static EvtWord marioAttackEvent_FunyafunyaJump[4];
 static EvtWord marioAttackEvent_NormalHammer[7];
-EvtWord marioAttackEvent_GatsunHammer[7];
-EvtWord marioAttackEvent_IceNaguri[7];
-EvtWord marioAttackEvent_TsuranukiHammer[7];
+static EvtWord marioAttackEvent_GatsunHammer[7];
+static EvtWord marioAttackEvent_IceNaguri[7];
+static EvtWord marioAttackEvent_TsuranukiHammer[7];
 EvtWord marioAttackEvent_NormalCharge[7];
 EvtWord marioAttackEvent_NormalChargeP[7];
 EvtWord marioAttackEvent_SuperCharge[7];
 EvtWord marioAttackEvent_SuperChargeP[7];
-EvtWord marioAttackEvent_MajinaiPowerUpCheck[35];
+static EvtWord marioAttackEvent_MajinaiPowerUpCheck[35];
 EvtWord marioAttackEvent_MajinaiJump[43];
-EvtWord _MajinaiPoseReset[14];
+static EvtWord _MajinaiPoseReset[14];
 EvtWord marioAttackEvent_MajinaiDefenceUp[29];
 EvtWord marioAttackEvent_MajinaiExpUp[27];
 
@@ -3368,7 +3368,7 @@ EVT_END()
  * the caller puts the badge's weapon in LW(12) and this runs the approach, the single timed stomp,
  * the damage and the return to Mario's home position.
  */
-EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
+static EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
     // if due, and the Action Command set up.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -3559,12 +3559,12 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(marioAttackEvent_GatsunJump)
+static EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
-EVT_BEGIN(marioAttackEvent_DokanJump)
+static EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
@@ -4136,7 +4136,7 @@ EVT_END()
 
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(marioAttackEvent_MiniminiFumi)
+static EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
@@ -4144,7 +4144,7 @@ EVT_END()
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(marioAttackEvent_NemuraseFumi)
+static EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
@@ -4152,7 +4152,7 @@ EVT_END()
 
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
+static EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
@@ -4433,7 +4433,7 @@ EVT_END()
  * Multibounce badge attack: Mario bounces from enemy to enemy across the field, one timed press per stomp,
  * until a press fails or every target has been hit.
  */
-EVT_BEGIN(marioAttackEvent_TugiTugiJump)
+static EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     // The attack is declared on every enemy, starting with the first target; the badge's FP cost is paid,
     // Merlee's attack charm used if due, and the Action Command set up.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -4693,7 +4693,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
-EVT_BEGIN(marioAttackEvent_GatsunHammer)
+static EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
@@ -4702,12 +4702,12 @@ EVT_END()
 
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(marioAttackEvent_IceNaguri)
+static EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
-EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
+static EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
@@ -4719,7 +4719,7 @@ EVT_END()
  * Also runs as Mario's first strike (battle flag 2) with marioDefaultWeapon_Hammer.
  * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
  */
-EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
+static EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // On a First Strike Mario starts 250 units behind his home spot; on a normal turn the attack is declared,
     // FP are paid and Merlee's charm is checked.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -5554,7 +5554,7 @@ EVT_END()
  * picks the first-strike weapon for Ultra Hammer (hammer level 3) or Super Hammer,
  * then runs the spinning hammer attack.
  */
-EVT_BEGIN(marioAttackEvent_FirstAttackKaitenHammer)
+static EVT_BEGIN(marioAttackEvent_FirstAttackKaitenHammer)
     CALL(_get_mario_hammer_lv, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 3)
         SET_VALUE(LW(12), PTR(&marioDefaultWeapon_FirstAttackKaitenHammer))
@@ -5566,7 +5566,7 @@ EVT_BEGIN(marioAttackEvent_FirstAttackKaitenHammer)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marioAttackEvent_JishinHammer)
+static EVT_BEGIN(marioAttackEvent_JishinHammer)
     // The attack is declared on every enemy, FP are paid, Merlee's charm is checked and the hold-and-release
     // Action Command is set up.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -5879,7 +5879,7 @@ EVT_END()
  * and the stronger weapon.
  * No map, chest or shop in the tree gives ITEM_MEGA_QUAKE, so it is unreachable without hacking the pouch.
  */
-EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
+static EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     // The attack is declared on every enemy, FP are paid, Merlee's charm is checked and the hold-and-release
     // Action Command is set up.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -6125,7 +6125,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marioAttackEvent_HammerRotate)
+static EVT_BEGIN(marioAttackEvent_HammerRotate)
     SET_VALUE(LW(0), -25)
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 3, 0, 12, 0)
     LABEL(0)
@@ -6135,7 +6135,7 @@ EVT_BEGIN(marioAttackEvent_HammerRotate)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marioAttackEvent_HammerNageru)
+static EVT_BEGIN(marioAttackEvent_HammerNageru)
     // The attack is declared on the chosen enemy, FP are paid, Merlee's charm is checked and the hold-and-release
     // Action Command is set up.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -6353,7 +6353,7 @@ EVT_END()
 static const char battle_mario_nullstr[4] = "";
 extern const f32 battle_mario_one;
 
-EVT_BEGIN(marioAttackEvent_FireNaguri)
+static EVT_BEGIN(marioAttackEvent_FireNaguri)
     // The attack is declared on every enemy, FP are paid, Merlee's charm is checked and the Action Command is set
     // up.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -6577,7 +6577,7 @@ EVT_END()
  * The fireball (Mario's part 3) of Fire Drive: travels along the stage floor to each target in turn,
  * burning them with fire pillars (_fire_wave), or rolls off the stage edge when no target is left.
  */
-EVT_BEGIN(marioAttackEvent_FireNaguri_object)
+static EVT_BEGIN(marioAttackEvent_FireNaguri_object)
     // No enemy is left to target: the fireball rolls off past the stage edge.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -6711,7 +6711,7 @@ EVT_END()
  * Charge and Charge P: the user poses, spins, and gains the attack boost of the weapon in LW(12),
  * with the charge sound and crystal sparkle; no action command.
  */
-EVT_BEGIN(_NormalCharge_core)
+static EVT_BEGIN(_NormalCharge_core)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -6796,13 +6796,13 @@ EVT_BEGIN(_SuperCharge_core)
 EVT_END()
 
 #if VERSION >= VERSION_JP
-EVT_BEGIN(marioAttackEvent_GatsunJump)
+static EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marioAttackEvent_DokanJump)
+static EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
@@ -6811,7 +6811,7 @@ EVT_END()
 
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(marioAttackEvent_MiniminiFumi)
+static EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
@@ -6819,7 +6819,7 @@ EVT_END()
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(marioAttackEvent_NemuraseFumi)
+static EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
@@ -6827,7 +6827,7 @@ EVT_END()
 
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
+static EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(marioAttackEvent_NormalJump)
     RETURN
 EVT_END()
@@ -6838,7 +6838,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marioAttackEvent_GatsunHammer)
+static EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
@@ -6847,13 +6847,13 @@ EVT_END()
 
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(marioAttackEvent_IceNaguri)
+static EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
+static EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
@@ -6903,7 +6903,7 @@ static const Vec majinai_effect_pos = {0.0f, 10.0f, 0.0f};
  * uses it up with the Merlee sparkle, a hop and the "power up" banner.
  * JP and earlier show the banner for 60 frames instead of the 180-frame banner of US and later that A or B closes.
  */
-EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
+static EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
     CALL(_majinai_powerup_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -6938,7 +6938,7 @@ EVT_BEGIN(marioAttackEvent_MajinaiJump)
 EVT_END()
 
 /** Puts Mario back in his idle stance after a Merlee charm, if he can act. */
-EVT_BEGIN(_MajinaiPoseReset)
+static EVT_BEGIN(_MajinaiPoseReset)
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -6993,7 +6993,7 @@ static USER_FUNC(_get_mario_hammer_lv) {
 }
 
 /** Spawns the N64-style whirlwind effect around unit args[0] for args[1] frames; used by the spinning hammer attack. */
-USER_FUNC(_whirlwind_effect) {
+static USER_FUNC(_whirlwind_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -7015,7 +7015,7 @@ USER_FUNC(_whirlwind_effect) {
  * Over 25 frames, emits growing energy stars (effect type args[1]) rising behind unit args[0];
  * the charge-up sparkle of the jump attacks.
  */
-USER_FUNC(_jump_star_effect) {
+static USER_FUNC(_jump_star_effect) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -7059,7 +7059,7 @@ USER_FUNC(_jump_star_effect) {
 }
 
 /** Sets args[0] to 1 while the stage's overhead iron frame is still there, 0 once it is gone; Spring Jump checks it. */
-USER_FUNC(_bgset_iron_frame_check) {
+static USER_FUNC(_bgset_iron_frame_check) {
     s32 ret = *event->args;
     if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
         evtSetValue(event, ret, 0);
@@ -7073,7 +7073,7 @@ USER_FUNC(_bgset_iron_frame_check) {
  * Blocks until the top of unit args[0] reaches height 130 (the iron frame), then pins it there;
  * the Spring Jump collision with the frame.
  */
-USER_FUNC(_wait_jyabara_hit_iron_frame) {
+static USER_FUNC(_wait_jyabara_hit_iron_frame) {
     BattleUnit* unit;
     f32 pos[3];
     s32 id = evtGetValue(event, *event->args);
@@ -7090,7 +7090,7 @@ USER_FUNC(_wait_jyabara_hit_iron_frame) {
  * Tornado Jump's twister: two Kammy-style tornado effects spiralling out to 80 units from unit args[0] over 90
  * frames, with the tornado sound following them.
  */
-USER_FUNC(_tatsumaki_effect) {
+static USER_FUNC(_tatsumaki_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* ud = event->userWork;
     BattleUnit* unit;
@@ -7203,7 +7203,7 @@ USER_FUNC(mario_get_renzoku_count_max) {
  * Over 12 frames, emits energy stars (effect type args[1]) in an arc around the hammer head of unit args[0];
  * the charge sparkle of the hammer attacks.
  */
-USER_FUNC(_hammer_star_effect) {
+static USER_FUNC(_hammer_star_effect) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -7243,7 +7243,7 @@ USER_FUNC(_hammer_star_effect) {
  * switching part args[1] to animation args[3] once 270 degrees or less of the turn are left;
  * the acrobatic spin of the spinning hammer.
  */
-USER_FUNC(_kaiten_hammer_acrobat_rotate) {
+static USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     BattleUnit* unit;
     BattleUnitPart* part;
     EvtWord* args = event->args;
@@ -7329,7 +7329,7 @@ USER_FUNC(_fire_wave) {
  * Sets args[0] to 1 and uses up the charm if Merlee's next charm is the attack boost (merleeNextCurseType 1),
  * else 0.
  */
-USER_FUNC(_majinai_powerup_check) {
+static USER_FUNC(_majinai_powerup_check) {
     BattleWork* wp = _battleWorkPointer;
     s32 ret = *event->args;
     if (pouchGetPtr()->merleeNextCurseType != MAJINAI_POWER_UP) {
@@ -7344,7 +7344,7 @@ USER_FUNC(_majinai_powerup_check) {
 }
 
 /** Plays Merlee's charm sparkle (mjef_coinup) and blocks until it finishes. */
-USER_FUNC(_battle_majinai_effect) {
+static USER_FUNC(_battle_majinai_effect) {
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     if (isFirstCall) {
         Vec v = majinai_effect_pos;
@@ -7358,7 +7358,7 @@ USER_FUNC(_battle_majinai_effect) {
 }
 
 /** Turns off paper lighting on part args[1] of unit args[0]; used by the spinning hammer attack. */
-USER_FUNC(_paper_light_off) {
+static USER_FUNC(_paper_light_off) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 part;

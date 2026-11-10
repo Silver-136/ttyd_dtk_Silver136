@@ -17,7 +17,7 @@
 #include "driver/itemdrv.h"
 
 static BeroEntry bero_entry_data[2];
-EvtWord item_get03[34];
+static EvtWord item_get03[34];
 static EvtWord switch_evt[68];
 EvtWord gon_13_init_evt[56];
 
@@ -43,7 +43,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Runs when Mario opens the chest mobj_box04: shows the Up Arrow coming out and gives it to him. */
-EVT_BEGIN(item_get03)
+static EVT_BEGIN(item_get03)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box04"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_UP_ARROW, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)

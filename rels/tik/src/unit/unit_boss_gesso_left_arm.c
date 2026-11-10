@@ -37,7 +37,7 @@ EvtWord gesso_left_arm_damage_event[93];
 #endif
 
 static EvtWord phase_event[2];
-BattleWeapon weapon_gesso_left_arm_attack;
+static BattleWeapon weapon_gesso_left_arm_attack;
 static EvtWord attack_event[171];
 static EvtWord wait_event[6];
 
@@ -252,7 +252,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /** Weapon of the L. Tentacle's swat: 1 damage. */
-BattleWeapon weapon_gesso_left_arm_attack = {
+static BattleWeapon weapon_gesso_left_arm_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

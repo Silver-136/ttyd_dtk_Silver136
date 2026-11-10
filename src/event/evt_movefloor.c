@@ -614,7 +614,7 @@ USER_FUNC(evt_moving_floor_delete) {
  * Spawned by moving_floor: waits until Mario takes a loading zone to another area,
  * then stops and halts the floor's sound. Skipped in the yuu (Pianta Parlor) area.
  */
-EVT_BEGIN(moving_floor_bero_check)
+static EVT_BEGIN(moving_floor_bero_check)
     CALL(evt_sub_get_areaname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("yuu"))
         RETURN

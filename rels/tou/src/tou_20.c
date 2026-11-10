@@ -18,9 +18,9 @@
 #include "party.h"
 
 static EvtWord evt_tou_balloon[85];
-EvtWord evt_anim[66];
+static EvtWord evt_anim[66];
 static f32 spline_dt[9];
-EvtWord evt_anim2[147];
+static EvtWord evt_anim2[147];
 EvtWord tou_20_init_evt[223];
 
 /**
@@ -60,7 +60,7 @@ EVT_END()
  * and after 14 seconds the blimp sounds stop and the map changes to the chapter title screen sys_01 (entrance
  * stg_3).
  */
-EVT_BEGIN(evt_anim)
+static EVT_BEGIN(evt_anim)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tou_enkei1"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 0)
@@ -94,7 +94,7 @@ static f32 spline_dt[] = {
  * the blimp (Hikousen) appears after 2 seconds and flies along the spline path spline_dt for 10 seconds
  * while bobbing up and down, and 20 seconds after it appears (22 seconds in) the blimp sounds stop and the map changes to tou_00.
  */
-EVT_BEGIN(evt_anim2)
+static EVT_BEGIN(evt_anim2)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("Hikousen"), MAP_OBJ_FLAG_HIDDEN)

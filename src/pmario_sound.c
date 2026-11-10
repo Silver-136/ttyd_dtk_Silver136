@@ -8996,11 +8996,11 @@ static f32 angleABTBL[] = {
 
 //.bss
 PaperSoundBGM psbgm[2];
-PaperSoundEffect pssfx[40];
+static PaperSoundEffect pssfx[40];
 PaperSoundEnv psenv[16];
 PaperSoundWork psnd;
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
-u8 _buf[0x80];
+static u8 _buf[0x80];
 
 //.sdata
 #if VERSION >= VERSION_JP
@@ -9008,8 +9008,8 @@ s32 silent_tbl[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 #endif
 
 //.sbss
-BOOL init_f = 0;
-BOOL _psndPushGroup_trg = 0;
+static BOOL init_f = 0;
+static BOOL _psndPushGroup_trg = 0;
 
 // defined below; psndMain calls them first
 static void psndBGMMain(void);

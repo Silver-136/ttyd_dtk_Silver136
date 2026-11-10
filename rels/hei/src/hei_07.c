@@ -33,27 +33,27 @@
 #include "evt/evt_bero.h"
 #include "driver/npcdrv.h"
 
-USER_FUNC(mario_set_dir);
+static USER_FUNC(mario_set_dir);
 static void callback(s32 type, void** work);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord npc_jump[53];
-EvtWord dokan_shake[8];
-EvtWord dokan_shake2[20];
-EvtWord sekizou_move[136];
-EvtWord animation_wait[46];
+static EvtWord dokan_shake[8];
+static EvtWord dokan_shake2[20];
+static EvtWord sekizou_move[136];
+static EvtWord animation_wait[46];
 static EvtWord shake_evt[52];
-EvtWord seikai_anime[46];
-EvtWord seikai_anime_stop[19];
-EvtWord fuseikai_anime[21];
-EvtWord fuseikai_anime_stop[19];
+static EvtWord seikai_anime[46];
+static EvtWord seikai_anime_stop[19];
+static EvtWord fuseikai_anime[21];
+static EvtWord fuseikai_anime_stop[19];
 static EvtWord evt_down_snd[116];
 static EvtWord evt_up_snd_[12];
 static EvtWord evt_up_snd__[76];
-EvtWord offscreen_to_quiz[101];
+static EvtWord offscreen_to_quiz[101];
 static EvtWord offscreen_to_normal[100];
-QuizEntry quiz_data[8];
-EvtWord a_sekizou_1[1018];
+static QuizEntry quiz_data[8];
+static EvtWord a_sekizou_1[1018];
 EvtWord hei_07_init_evt[114];
 
 /** Doors of this room: the west exit (w_bero) to hei_06 and the pipe (dokan) to hei_10. */
@@ -117,13 +117,13 @@ EVT_END()
  * Sets off a continuous camera shake (amplitude 0.002, no end);
  * run as an event and deleted when the statue has finished moving.
  */
-EVT_BEGIN(dokan_shake)
+static EVT_BEGIN(dokan_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 0)
     RETURN
 EVT_END()
 
 /** Fades the camera shake out at the end of the statue's movement: three 500 ms shakes at 0.001, 0.001, then 0. */
-EVT_BEGIN(dokan_shake2)
+static EVT_BEGIN(dokan_shake2)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0f), 500)
@@ -134,7 +134,7 @@ EVT_END()
  * Cutscene after the quiz is won: the stone statue's base (DAIZA1) slides away with quake and rumble sounds
  * and camera shake, a pipe rises out of the floor, and the "dokan" exit is enabled.
  */
-EVT_BEGIN(sekizou_move)
+static EVT_BEGIN(sekizou_move)
     SPAWN_EVENT_GET_ID(PTR(dokan_shake), LW(10))
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
         CALL(evt_snd_sfxon, STRING("SFX_STG1_QUAKE1"), GW(15))
@@ -181,7 +181,7 @@ EVT_END()
  * Plays the map animation named in LW(0) and waits for its full length; for the two statue-rotation animations,
  * a parallel event plays the quake sound near the end.
  */
-EVT_BEGIN(animation_wait)
+static EVT_BEGIN(animation_wait)
     CALL(evt_map_playanim, LW(0), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, LW(0), LW(1), LW(2))
     BEGIN_INLINE_EVENT
@@ -227,7 +227,7 @@ EVT_END()
  * Right-answer reaction: confetti above Mario, the lights stay in their idle state (dennshoku shown, dennshoku_2
  * hidden) and the "anm_seikai" animation starts.
  */
-EVT_BEGIN(seikai_anime)
+static EVT_BEGIN(seikai_anime)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 150)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 160, 0, 0, 0, 0, 0, 0, 0)
@@ -239,7 +239,7 @@ EVT_BEGIN(seikai_anime)
 EVT_END()
 
 /** Stops the right-answer animation and turns the lights back to their idle state. */
-EVT_BEGIN(seikai_anime_stop)
+static EVT_BEGIN(seikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_ONCE, 0)
@@ -247,7 +247,7 @@ EVT_BEGIN(seikai_anime_stop)
 EVT_END()
 
 /** Wrong-answer reaction: the lights switch to dennshoku_2 and the "anm_fuseikai" animation starts. */
-EVT_BEGIN(fuseikai_anime)
+static EVT_BEGIN(fuseikai_anime)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_LOOP, 0)
@@ -256,7 +256,7 @@ EVT_BEGIN(fuseikai_anime)
 EVT_END()
 
 /** Stops the wrong-answer animation and turns the lights back to their idle state. */
-EVT_BEGIN(fuseikai_anime_stop)
+static EVT_BEGIN(fuseikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_ONCE, 0)
@@ -371,7 +371,7 @@ EVT_END()
  * swaps the room to its quiz state (hei_07_2), puts Mario and the partner in their quiz places
  * and plays the image's paper animation A_1 over the new room with the transition sounds.
  */
-EVT_BEGIN(offscreen_to_quiz)
+static EVT_BEGIN(offscreen_to_quiz)
     CALL(evt_paper_entry, STRING("OFF_d_pazu"))
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_pazu"))
@@ -439,7 +439,7 @@ EVT_END()
  * The eight questions of the quiz statue in Shhwonk Fortress: for each, the statue animation, the question
  * message, the answer choices message and the number of the correct choice.
  */
-QuizEntry quiz_data[] = {
+static QuizEntry quiz_data[] = {
     {"anm_1mon", "stg1_hei_23", "stg1_hei_q_01", 0},
     {"anm_2mon", "stg1_hei_24", "stg1_hei_q_02", 2},
     {"anm_3mon", "stg1_hei_25", "stg1_hei_q_03", 3},
@@ -457,7 +457,7 @@ QuizEntry quiz_data[] = {
  * on no it goes back to sleep. Five right, or three wrong and the fight against four Clefts that follows,
  * move the statue's base and set the story to STG1_06_QUIZ.
  */
-EVT_BEGIN(a_sekizou_1)
+static EVT_BEGIN(a_sekizou_1)
     // Mario freezes and the music stops.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -893,7 +893,7 @@ static void callback(s32 type, void** work) {
  * Script helper: turns Mario over args[1] frames toward the direction args[0] (degrees) by the shortest way
  * round, using his move direction.
  */
-USER_FUNC(mario_set_dir) {
+static USER_FUNC(mario_set_dir) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
 

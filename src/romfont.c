@@ -26,7 +26,7 @@ static RomFontWork* wp = &work;
 
 //.rodata string, .sdata table
 #if VERSION >= VERSION_US
-const char* msg_jp[21] = {
+static const char* msg_jp[21] = {
     "\203v\203\215\203O\203\214\203b\203V\203u\203\202\201[\203h\202\305\225\\\216\246\202\265\202\334\202\267\202\251\201H",
     "\202\315\201@\202\242\201@\201@\201@\201@\201@\201@\202\242\202\242\202\246",
     "\201y\201@\201@\201@\201@\201z",
@@ -50,7 +50,7 @@ const char* msg_jp[21] = {
     NULL,
 };
 
-const char* msg_us[21] = {
+static const char* msg_us[21] = {
 #if VERSION >= VERSION_DEMO_EU
     "Would you like to display\nin progressive scan mode?",
 #else
@@ -210,9 +210,9 @@ const char* msg_it[21] = {
 static const char** msg_tbl[6] = { msg_jp, msg_us, msg_ge, msg_fr, msg_sp, msg_it };
 #else
 #if VERSION <= VERSION_DEMO_JP
-const char* msg_jp[9] = {
+static const char* msg_jp[9] = {
 #else
-const char* msg_jp[10] = {
+static const char* msg_jp[10] = {
 #endif
     "プログレッシブモードで表示しますか？",
     "は　い　　　　　　いいえ",
@@ -228,7 +228,7 @@ const char* msg_jp[10] = {
     NULL
 };
 
-const char* msg_us[9] = {
+static const char* msg_us[9] = {
     "Would you like to display in progressive scan mode?",
     "Yes              N o",
     "[    ]",

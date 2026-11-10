@@ -52,7 +52,7 @@ void dou10_yoko_yari3(void* p);
 
 //.data
 #if VERSION >= VERSION_JP
-const char* dotMarioPose[4][6] = {
+static const char* dotMarioPose[4][6] = {
     {"Z_1", "S_1", "W_1", "R_1", "U_1", "J_1"},
     {"Z_15", "S_2", "W_15", "R_15", "U_2", "J_2"},
     {"Z_17", "S_3", "W_17", "R_17", "U_3", "J_3"},
@@ -61,7 +61,7 @@ const char* dotMarioPose[4][6] = {
 #endif
 
 //.sdata
-const char* marioAnimeGroupData[4][3] = {
+static const char* marioAnimeGroupData[4][3] = {
     {"a_mario", "a_mario_r", "e_mario"},
     {"a_mario_l", "a_mario_lr", "e_mario_l"},
     {"a_mario_w", "a_mario_wr", "e_mario_w"},
@@ -69,7 +69,7 @@ const char* marioAnimeGroupData[4][3] = {
 };
 
 //.bss
-Vec blurPos[8];
+static Vec blurPos[8];
 
 //.sbss
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
@@ -80,7 +80,7 @@ MarioWork* mp;
 Vec R_last_position;
 #endif
 
-s32 blurPosId;
+static s32 blurPosId;
 
 // local prototypes
 static const char* toRearPose(const char* name);
@@ -1790,7 +1790,7 @@ void marioChgEvtPose(const char* name) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-const char* dotMarioPose[4][6] = {
+static const char* dotMarioPose[4][6] = {
     {"Z_1", "S_1", "W_1", "R_1", "U_1", "J_1"},
     {"Z_15", "S_2", "W_15", "R_15", "U_2", "J_2"},
     {"Z_17", "S_3", "W_17", "R_17", "U_3", "J_3"},

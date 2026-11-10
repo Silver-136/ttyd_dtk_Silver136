@@ -37,10 +37,10 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(suifu_option_func);
-USER_FUNC(suifu_option_init_func);
+static USER_FUNC(suifu_option_func);
+static USER_FUNC(suifu_option_init_func);
 static USER_FUNC(tornade_alpha_func);
-void elmosalpha_func(NanNPC* npc);
+static void elmosalpha_func(NanNPC* npc);
 
 static EvtWord megane_init[18];
 static EvtWord megane_talk[8];
@@ -50,7 +50,7 @@ static EvtWord e_open[12];
 static EvtWord door_custom[53];
 static EvtWord bero_in_event[80];
 static BeroEntry bero_entry_data[3];
-EvtWord nazo_event[178];
+static EvtWord nazo_event[178];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord oidasare_event[];
@@ -58,7 +58,7 @@ extern EvtWord oidasare_event[];
 EvtWord oidasare_event[156];
 #endif
 
-ExtTexInfo test_ext_entry_data[31];
+static ExtTexInfo test_ext_entry_data[31];
 
 #if VERSION <= VERSION_DEMO_JP
 static s16 suifu_animtbl[41];
@@ -68,13 +68,13 @@ static s16 suifu_animtbl[42];
 static s16 elmos_animtbl[22];
 #endif
 
-s32 senin_event_suifupos[380];
-s32 senin_event_erumospos[180];
+static s32 senin_event_suifupos[380];
+static s32 senin_event_erumospos[180];
 
 #if VERSION >= VERSION_US
-EvtWord senin_event[282];
+static EvtWord senin_event[282];
 #else
-EvtWord senin_event[374];
+static EvtWord senin_event[374];
 #endif
 
 static EvtWord dai3_shurai_after[46];
@@ -107,7 +107,7 @@ static USER_FUNC(tornade_alpha_func) {
  * Script helper: moves the whole crowd of 95 sailors (mass NPCs) up or down to their base height plus args[0],
  * so they bob with the ship (called from senin_event with the ship bobbing value).
  */
-USER_FUNC(suifu_option_func) {
+static USER_FUNC(suifu_option_func) {
     f32 y = evtGetFloat(event, event->args[0]);
     NanNPCWork* wp = nanNPCWork;
     s32 i;
@@ -123,7 +123,7 @@ USER_FUNC(suifu_option_func) {
  * Script helper: remembers the current positions of the 95 crowd sailors as their base positions for
  * suifu_option_func.
  */
-USER_FUNC(suifu_option_init_func) {
+static USER_FUNC(suifu_option_init_func) {
     NanNPCWork* wp = nanNPCWork;
     s32 i;
 
@@ -299,7 +299,7 @@ static BeroEntry bero_entry_data[] = {
  * then the bespectacled sailor speaks (stg5_dou_19_00_00, stg5_dou_19), walks off,
  * and the story becomes STG5_31_FOUR_EYES.
  */
-EVT_BEGIN(nazo_event)
+static EVT_BEGIN(nazo_event)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_mario_get_name_hitobj_ride, LW(3))
@@ -396,7 +396,7 @@ EVT_END()
  * Mass-NPC figure table of the crowd on the hidden dock: model, animation set and start offset of each sailor
  * (c_boro_k) and Ember (c_elmos).
  */
-ExtTexInfo test_ext_entry_data[] = {
+static ExtTexInfo test_ext_entry_data[] = {
     {"c_boro_k", "S_1", 0.0f},
     {"c_boro_k", "S_1", 2.0f},
     {"c_boro_k", "S_1", 4.0f},
@@ -456,7 +456,7 @@ static s16 elmos_animtbl[] = {
 };
 
 /** Positions (x, y, z, facing) of the 95 sailors on the hidden dock, placed by senin_event. */
-s32 senin_event_suifupos[] = {
+static s32 senin_event_suifupos[] = {
     8, 120, -206, 269, -17, 120, -283, 270,
     21, 120, -308, 270, 33, 120, -308, 270,
     -17, 120, -295, 270, -6, 120, -220, 270,
@@ -508,7 +508,7 @@ s32 senin_event_suifupos[] = {
 };
 
 /** Positions (x, y, z) of the 60 Embers around the hidden dock, placed by senin_event. */
-s32 senin_event_erumospos[] = {
+static s32 senin_event_erumospos[] = {
     -128, 167, -132, -121, 191, -133, -117, 157,
     -93, -112, 145, -78, -114, 167, -79, -143,
     145, -160, -153, 144, -192, -182, 145, -230,
@@ -540,7 +540,7 @@ s32 senin_event_erumospos[] = {
  * (invisible, alpha 0) and the named sailors, Francesca and Frankie. Versions before US play the Cortez scene here too
  * (US and PAL: korutesu_appear_event).
  */
-EVT_BEGIN(senin_event)
+static EVT_BEGIN(senin_event)
     // The crew gathers: Mario loses control and the dock crowd is placed.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_nannpc_init, PTR(test_ext_entry_data), 0, 0, 0, 155)
@@ -847,7 +847,7 @@ EVT_BEGIN(muj_10_init_evt)
     RETURN
 EVT_END()
 
-void elmosalpha_func(NanNPC* npc) {
+static void elmosalpha_func(NanNPC* npc) {
     s32 elapsed;
 
     switch (npc->state) {

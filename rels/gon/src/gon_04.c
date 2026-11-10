@@ -44,7 +44,7 @@ static EvtWord e1_door_open[12];
 static EvtWord e3_door_close[12];
 static EvtWord e3_door_open[12];
 static BeroEntry bero_entry_data[6];
-EvtWord evt_gon_04flowblock_updown1_init[37];
+static EvtWord evt_gon_04flowblock_updown1_init[37];
 
 #if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown1[465];
@@ -56,7 +56,7 @@ EvtWord evt_gon_04flowblock_updown1[491];
 #endif
 #endif
 
-EvtWord evt_gon_04flowblock_updown2_init[37];
+static EvtWord evt_gon_04flowblock_updown2_init[37];
 
 #if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown2[465];
@@ -68,15 +68,15 @@ EvtWord evt_gon_04flowblock_updown2[491];
 #endif
 #endif
 
-KemuriPos kemuri_pos1[5];
-KemuriPos kemuri_pos2[5];
-EvtWord evt_kaidan_pera_anime[203];
+static KemuriPos kemuri_pos1[5];
+static KemuriPos kemuri_pos2[5];
+static EvtWord evt_kaidan_pera_anime[203];
 EvtWord evt_kaidan_pera_init[29];
 EvtWord evt_kaidan_pera[214];
-EvtWord evt_hashi_pera[209];
+static EvtWord evt_hashi_pera[209];
 EvtWord evt_hashi_pera0[16];
 EvtWord evt_hashi_pera1[16];
-EvtWord evt_hashi[50];
+static EvtWord evt_hashi[50];
 static s32 key_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -270,7 +270,7 @@ static BeroEntry bero_entry_data[] = {
  * while LSWF_GON_04_FLOAT_BLOCK_1_MOVED is clear (the raised state) it moves the block 225 units up so it starts where it was left.
  * The IF_INT_EQUAL(1, 0) arm, which reads the flag the other way round, never runs.
  */
-EVT_BEGIN(evt_gon_04flowblock_updown1_init)
+static EVT_BEGIN(evt_gon_04flowblock_updown1_init)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(5))
@@ -532,7 +532,7 @@ EVT_END()
  * Map-init helper for the second floating block (mobj_fltbl02):
  * moves it 200 units up if its saved state LSWF_GON_04_FLOAT_BLOCK_2_MOVED says it was raised.
  */
-EVT_BEGIN(evt_gon_04flowblock_updown2_init)
+static EVT_BEGIN(evt_gon_04flowblock_updown2_init)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(5))
@@ -790,7 +790,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
 EVT_END()
 
 /** Positions (x, y) where dust puffs rise when the first folding stairs land. */
-KemuriPos kemuri_pos1[] = {
+static KemuriPos kemuri_pos1[] = {
     {150, 20},
     {130, 55},
     {120, 100},
@@ -799,7 +799,7 @@ KemuriPos kemuri_pos1[] = {
 };
 
 /** Positions (x, y) where dust puffs rise when the second folding stairs land. */
-KemuriPos kemuri_pos2[] = {
+static KemuriPos kemuri_pos2[] = {
     {315, 75},
     {270, 30},
     {380, 100},
@@ -812,7 +812,7 @@ KemuriPos kemuri_pos2[] = {
  * the offscreen paper animation of the folding stairs, the step sounds,
  * a camera shake and a few puffs of dust where the stairs land.
  */
-EVT_BEGIN(evt_kaidan_pera_anime)
+static EVT_BEGIN(evt_kaidan_pera_anime)
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_gon_04_2"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
@@ -960,7 +960,7 @@ EVT_END()
  * 1 the left bridge tuuro_01): waits for any partner action to end, shows a camera shot of the gap,
  * animates the bridge model with a captured image and its sound, then turns the bridge's hit area on.
  */
-EVT_BEGIN(evt_hashi_pera)
+static EVT_BEGIN(evt_hashi_pera)
     CALL(evt_mario_key_onoff, 0)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -1056,7 +1056,7 @@ EVT_END()
  * STG1_14_PAPER_BRIDGE_RIGHT or STG1_14_01_PAPER_BRIDGE_LEFT) it hides it,
  * turns its hit area off and places the blue switch that unfolds it.
  */
-EVT_BEGIN(evt_hashi)
+static EVT_BEGIN(evt_hashi)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_14_PAPER_BRIDGE_RIGHT)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_02"), 0, 0)

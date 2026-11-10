@@ -45,13 +45,13 @@ static GameOverWork work;
 static GameOverWork* wp = &work;
 
 /** Height of each GAME OVER letter per frame as it drops from 200 units and bounces to rest (_fall_char). */
-s32 fall_data[] = {
+static s32 fall_data[] = {
     200, 170, 140, 110, 80, 50, 20, 10, 26, 29, 30, 29, 26,
     10, 0, 12, 15, 16, 15, 11, 6, 0, 4, 3, 1, 0,
 };
 
 /** The shorter drop and bounce of the last GAME OVER letter, height per frame. */
-s32 fall_data2[] = {
+static s32 fall_data2[] = {
     200, 170, 140, 110, 80, 50, 20, 0, 12, 15, 16, 15, 11, 6, 0, 4, 3, 1, 0,
 };
 
@@ -59,7 +59,7 @@ s32 fall_data2[] = {
  * Drops the GAME OVER letter map object named in LW(0) from 200 units up,
  * bouncing it to rest over 26 frames using the heights in fall_data.
  */
-EVT_BEGIN(_fall_char)
+static EVT_BEGIN(_fall_char)
     SET_INT_READ_ADDR(PTR(fall_data))
     LOOP(26)
         READ_INT(LW(1))
@@ -70,7 +70,7 @@ EVT_BEGIN(_fall_char)
 EVT_END()
 
 /** Same as _fall_char for the last letter, with the shorter fall_data2 bounce (19 frames). */
-EVT_BEGIN(_fall_char_last)
+static EVT_BEGIN(_fall_char_last)
     SET_INT_READ_ADDR(PTR(fall_data2))
     LOOP(19)
         READ_INT(LW(1))
@@ -80,7 +80,7 @@ EVT_BEGIN(_fall_char_last)
     RETURN
 EVT_END()
 
-EVT_BEGIN(fall_gameover)
+static EVT_BEGIN(fall_gameover)
     SET_VALUE(LW(0), STRING("g"))
     SPAWN_EVENT(_fall_char)
 #if VERSION >= VERSION_US
@@ -201,7 +201,7 @@ EVT_END()
  * hides the letters of the other language, sets the camera,
  * plays the dust animation and runs the falling-letters script.
  */
-EVT_BEGIN(evt_gameover)
+static EVT_BEGIN(evt_gameover)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_cont_onoff, 0)

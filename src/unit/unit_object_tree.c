@@ -10,8 +10,8 @@
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
 
-USER_FUNC(_rumble_tree);
-USER_FUNC(_turn_tree);
+static USER_FUNC(_rumble_tree);
+static USER_FUNC(_turn_tree);
 
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
@@ -229,7 +229,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_rumble_tree) {
+static USER_FUNC(_rumble_tree) {
     BattleUnit* unit;
     BattleStageObject* object;
     s32 id;
@@ -256,7 +256,7 @@ USER_FUNC(_rumble_tree) {
  * Tilts the tree's stage object (the running unit) about X by 3 degrees a frame up to 90 over 30 frames,
  * then snaps it back upright. Run from damage_event after _rumble_tree.
  */
-USER_FUNC(_turn_tree) {
+static USER_FUNC(_turn_tree) {
     BattleUnit* unit;
     BattleStageObject* object;
     s32 id;

@@ -92,8 +92,8 @@ static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-EvtWord cloud_party_lecture_init[43];
-EvtWord cloud_party_lecture[117];
+static EvtWord cloud_party_lecture_init[43];
+static EvtWord cloud_party_lecture[117];
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[474];
 
@@ -452,7 +452,7 @@ static USER_FUNC(effitemget_busaiku) {
 }
 
 /** Flurrie lecture setup: moves the camera to frame Mario and the incoming partner with a 1-second move. */
-EVT_BEGIN(cloud_party_lecture_init)
+static EVT_BEGIN(cloud_party_lecture_init)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 40)
@@ -471,7 +471,7 @@ EVT_END()
  * then she steps back beside Mario as the camera pulls out and the text adds her Body Slam
  * and Gale Force battle moves.
  */
-EVT_BEGIN(cloud_party_lecture)
+static EVT_BEGIN(cloud_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_07_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_07_1"), 0, 0)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(90.0f), FLOAT(505.0f), FLOAT(10.0f), FLOAT(35.0f), FLOAT(-115.0f), 1000, EASING_LINEAR)

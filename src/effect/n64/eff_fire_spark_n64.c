@@ -40,7 +40,7 @@ static f32 scale_data[30] = {
 };
 
 /** Camera-facing 4x4 spark sprite. */
-effN64Vtx size4x4_tex32x32_vtx[] = {
+static effN64Vtx size4x4_tex32x32_vtx[] = {
     {-2, -2, 0, 0, 0, 0, 0, 0, 255},
     {2, -2, 0, 1024, 0, 0, 0, 0, 255},
     {2, 2, 0, 1024, 1024, 0, 0, 0, 255},

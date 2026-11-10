@@ -75,12 +75,12 @@ static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_02_icon_monte_entry);
 USER_FUNC(yuu_02_cam_shift_reset);
-USER_FUNC(yuu_roll_reset);
-USER_FUNC(yuuminigame3_opening_chk);
-USER_FUNC(yuuminigame3_opening_on_off);
-USER_FUNC(yuuminigame3_roll_fix_off);
-USER_FUNC(yuuminigame3_roll_fix_on);
-USER_FUNC(yuuminigame3_set_phase);
+static USER_FUNC(yuu_roll_reset);
+static USER_FUNC(yuuminigame3_opening_chk);
+static USER_FUNC(yuuminigame3_opening_on_off);
+static USER_FUNC(yuuminigame3_roll_fix_off);
+static USER_FUNC(yuuminigame3_roll_fix_on);
+static USER_FUNC(yuuminigame3_set_phase);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
 USER_FUNC(yuu_02_icon_monte_onoff);
 
@@ -101,9 +101,9 @@ EvtWord yuu_02_jumpret[164];
 
 EvtWord yuu_02_kaijo_init[12];
 EvtWord yuu_02_kaijo_init2[12];
-EvtWord minigame03_main[33];
-EvtWord minigame03_start_cam[40];
-EvtWord minigame03_start_cam_cancel[17];
+static EvtWord minigame03_main[33];
+static EvtWord minigame03_start_cam[40];
+static EvtWord minigame03_start_cam_cancel[17];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord minigame03_start[];
@@ -113,7 +113,7 @@ EvtWord minigame03_start[193];
 EvtWord minigame03_end[217];
 #endif
 
-EvtWord s_en1_turn[30];
+static EvtWord s_en1_turn[30];
 
 #if VERSION >= VERSION_US
 EvtWord yuu_02_init_evt[262];
@@ -507,7 +507,7 @@ static USER_FUNC(re_fall_rtn) {
 }
 
 /** args[0] = minigame work pointer, args[1] = new phase for the Tube Mode state machine. */
-USER_FUNC(yuuminigame3_set_phase) {
+static USER_FUNC(yuuminigame3_set_phase) {
     EvtWord* args = event->args;
     RollWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -516,13 +516,13 @@ USER_FUNC(yuuminigame3_set_phase) {
 }
 
 /** Script call that prevents Mario from unrolling during the course (marioRollFixOn). */
-USER_FUNC(yuuminigame3_roll_fix_on) {
+static USER_FUNC(yuuminigame3_roll_fix_on) {
     marioRollFixOn();
     return EVT_RETURN_DONE;
 }
 
 /** Counterpart of yuuminigame3_roll_fix_on; currently does nothing. */
-USER_FUNC(yuuminigame3_roll_fix_off) {
+static USER_FUNC(yuuminigame3_roll_fix_off) {
     return EVT_RETURN_DONE;
 }
 
@@ -530,7 +530,7 @@ USER_FUNC(yuuminigame3_roll_fix_off) {
  * args[0] = minigame work pointer, args[1] = on/off.
  * Sets or clears the "opening cutscene pending" bit (flags bit 0).
  */
-USER_FUNC(yuuminigame3_opening_on_off) {
+static USER_FUNC(yuuminigame3_opening_on_off) {
     EvtWord* args = event->args;
     RollWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -546,7 +546,7 @@ USER_FUNC(yuuminigame3_opening_on_off) {
  * args[0] = minigame work pointer, args[1] = output.
  * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
  */
-USER_FUNC(yuuminigame3_opening_chk) {
+static USER_FUNC(yuuminigame3_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
@@ -636,7 +636,7 @@ void yuuminigame_disp_3roll(CameraId camera, void* param) {
  * Script call that resets Mario's tube rolling speed and clears the roll event flag,
  * used after he is put back on the course.
  */
-USER_FUNC(yuu_roll_reset) {
+static USER_FUNC(yuu_roll_reset) {
     marioResetRollSpd();
     clrRollEvtFlag();
     return EVT_RETURN_DONE;
@@ -799,7 +799,7 @@ EVT_END()
  * Set-up for minigame 3 (Tube Mode): freezes Mario's controls, allocates the minigame work area,
  * dismisses the partners, starts the crowd sound and sets phase 1.
  */
-EVT_BEGIN(minigame03_main)
+static EVT_BEGIN(minigame03_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(yuu_02_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 2)
@@ -816,7 +816,7 @@ EVT_END()
  * Opening cutscene of Tube Mode: pans the 3D camera across the course,
  * then shows the "menu_title_minigame3" title card.
  */
-EVT_BEGIN(minigame03_start_cam)
+static EVT_BEGIN(minigame03_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1600.0f), FLOAT(573.0f), FLOAT(1333.0f), FLOAT(-1600.0f), FLOAT(12.0f), FLOAT(-89.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -841,7 +841,7 @@ EVT_END()
  * Cleans up when the player skips the opening camera:
  * frees the title card, turns off the event camera and puts Mario at the start spot.
  */
-EVT_BEGIN(minigame03_start_cam_cancel)
+static EVT_BEGIN(minigame03_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
@@ -1016,7 +1016,7 @@ EVT_BEGIN(minigame03_end)
 EVT_END()
 
 /** Spins the map object "S_en1" (a rotating part of the Tube Mode set) around Y forever at 0.75 degrees per frame. */
-EVT_BEGIN(s_en1_turn)
+static EVT_BEGIN(s_en1_turn)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(1), FLOAT(0.75f))
     LOOP(0)

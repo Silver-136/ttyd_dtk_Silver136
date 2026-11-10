@@ -55,7 +55,7 @@ static BattleWeapon weapon_koopa_hip_attack;
 static BattleWeapon weapon_koopa_bite_attack;
 static BattleWeapon weapon_koopa_critical_bite_attack;
 static BattleWeapon weapon_koopa_fire_attack;
-BattleUnitSetup entry_kamec_obaba;
+static BattleUnitSetup entry_kamec_obaba;
 static EvtWord koopa_zoom[25];
 static EvtWord kamec_obaba_zoom[40];
 static EvtWord init_event[124];
@@ -69,8 +69,8 @@ static EvtWord hip_attack_event[VERSION_PICK(431, 432)];
 static EvtWord bite_attack_event[278];
 static EvtWord critical_bite_attack_event[261];
 static EvtWord fire_attack_event[356];
-EvtWord first_mario_damage_check[33];
-EvtWord first_mario_damage_event[114];
+static EvtWord first_mario_damage_check[33];
+static EvtWord first_mario_damage_event[114];
 static EvtWord wait_event[6];
 static const char* cmd_disable_string[5];
 
@@ -394,7 +394,7 @@ static BattleWeapon weapon_koopa_fire_attack = {
 };
 
 /** Setup used to spawn Kammy Koopa: unit kind, alliance, position and turn phase. */
-BattleUnitSetup entry_kamec_obaba = {
+static BattleUnitSetup entry_kamec_obaba = {
     &unit_boss_kamec_obaba, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -1165,7 +1165,7 @@ EVT_END()
  * when the damage dealt to that Mario target is nonzero it sets work[1] to 1,
  * flagging that Bowser has hurt Mario for the first time.
  */
-EVT_BEGIN(first_mario_damage_check)
+static EVT_BEGIN(first_mario_damage_check)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_KIND, LW(0))
@@ -1184,7 +1184,7 @@ EVT_END()
  * The camera zooms on Bowser, who laughs and speaks (stg8_las_98), then on Kammy Koopa,
  * who adds a line (stg8_las_99) if she is still in the battle (GW(11) is 0).
  */
-EVT_BEGIN(first_mario_damage_event)
+static EVT_BEGIN(first_mario_damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK, 2)

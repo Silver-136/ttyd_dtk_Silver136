@@ -43,7 +43,7 @@ typedef struct KpaGameWork {
     u8 lives;
     u8 time;
 } KpaGameWork;
-KpaGameWork* kwp;
+static KpaGameWork* kwp;
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
 // IconFlags.ICON_FLAG_2D. icondrv.h cannot be included: its iconDispGx takes the scale last, and with it the calls
 // below compile differently (the original evaluates the scale first), so the prototype above stays.
@@ -76,7 +76,7 @@ EvtWord kpa_dead[168];
 EvtWord kpa_fall_sub[37];
 EvtWord kpa_bgm_change[180];
 EvtWord kpa_stage_start[168];
-u16 numeric_id[10];
+static u16 numeric_id[10];
 EvtWord kpa_status_main_evt[9];
 EvtWord kpa_time[88];
 EvtWord kpa_stage_clear[35];
@@ -566,7 +566,7 @@ EVT_END()
  * Icon ids of the digits 0 to 9 (ten u16 values packed into five words), used to draw the score,
  * stage and time numbers of the Bowser interlude HUD.
  */
-u16 numeric_id[] = {
+static u16 numeric_id[] = {
 #if VERSION >= VERSION_US
     0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB, 0x1ED, 0x1EF, 0x1F1, 0x1F3,
 #else
@@ -661,7 +661,7 @@ USER_FUNC(kpa_muteki_check) {
  * the stage number, the try counter (leading zero dropped) and the three-digit time.
  * US and later use different icon ids for the labels and the digits.
  */
-void kpa_status_disp(CameraId camera, void* param) {
+static void kpa_status_disp(CameraId camera, void* param) {
     Vec pos;
     s32 digit[6];
     s32 i;
@@ -814,7 +814,7 @@ USER_FUNC(kpa_pole_hitoff) {
  * Draw callback that prints the large stage-clear text in the middle of the screen (the Japanese "goal in"
  * caption).
  */
-void kpa_stageclear_disp(CameraId camera, void* param) {
+static void kpa_stageclear_disp(CameraId camera, void* param) {
     FontDrawStart();
     FontDrawScale(2.0f);
     FontDrawEdge();

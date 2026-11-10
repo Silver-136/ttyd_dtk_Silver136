@@ -273,7 +273,7 @@ __declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
 #endif
 
 /** Fallback audience attack for units without their own: hit the member holding the item and resume. */
-EVT_BEGIN(btlataudevtDummy)
+static EVT_BEGIN(btlataudevtDummy)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     CALL(_attack_aud, LW(3), 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

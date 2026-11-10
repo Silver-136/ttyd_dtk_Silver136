@@ -64,7 +64,7 @@
 
 //.bss
 GlobalWork marioSt;
-OSThread DvdCheckThread;
+static OSThread DvdCheckThread;
 
 //.sdata
 GlobalWork* gp = &marioSt;
@@ -77,7 +77,7 @@ s32 _mariostSystemLevel;
 BOOL R_bReset; // before DvdCheckTreadOn: .sbss is emitted in reverse
 #endif
 
-BOOL DvdCheckTreadOn;
+static BOOL DvdCheckTreadOn;
 
 //.data
 #if VERSION == VERSION_DEMO_US_2

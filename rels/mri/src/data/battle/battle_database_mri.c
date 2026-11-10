@@ -15,69 +15,69 @@
 
 extern BattleUnitKind unit_barriern;
 
-BattleStageObjectData mri_btlobject_data[43];
-BattleStageData mri_btlstage_data[4];
-BattleUnitSetup btlparty_mri_mri_01_01[2];
-BattleGroupSetup btlgrp_mri_mri_01_01;
-BattleUnitSetup btlparty_mri_mri_04_01[1];
-BattleGroupSetup btlgrp_mri_mri_04_01;
-BattleUnitSetup btlparty_mri_mri_05_01[2];
-BattleGroupSetup btlgrp_mri_mri_05_01;
-BattleUnitSetup btlparty_mri_mri_06_2F_02[3];
-BattleGroupSetup btlgrp_mri_mri_06_2F_02;
-BattleUnitSetup btlparty_mri_mri_06_2F_03[4];
-BattleGroupSetup btlgrp_mri_mri_06_2F_03;
-BattleUnitSetup btlparty_mri_mri_12_01[2];
-BattleGroupSetup btlgrp_mri_mri_12_01;
-BattleUnitSetup btlparty_mri_mri_12_02[4];
-BattleGroupSetup btlgrp_mri_mri_12_02;
-BattleUnitSetup btlparty_mri_mri_15_01[2];
-BattleGroupSetup btlgrp_mri_mri_15_01;
-BattleUnitSetup btlparty_mri_mri_17_01[2];
-BattleGroupSetup btlgrp_mri_mri_17_01;
-BattleUnitSetup btlparty_mri_mri_18_02[3];
-BattleGroupSetup btlgrp_mri_mri_18_02;
-BattleUnitSetup btlparty_mri_mri_18_03[3];
-BattleGroupSetup btlgrp_mri_mri_18_03;
-BattleUnitSetup btlparty_mri_mri_19_01[2];
-BattleGroupSetup btlgrp_mri_mri_19_01;
-BattleUnitSetup btlparty_mri_mri_19_02[2];
-BattleGroupSetup btlgrp_mri_mri_19_02;
-BattleUnitSetup btlparty_mri_mri_19_04[4];
-BattleGroupSetup btlgrp_mri_mri_19_04;
-BattleUnitSetup btlparty_mri_mri_20_02[2];
-BattleGroupSetup btlgrp_mri_mri_20_02;
-BattleUnitSetup btlparty_mri_mri_20_03[3];
-BattleGroupSetup btlgrp_mri_mri_20_03;
-BattleUnitSetup btlparty_mri_mri_mb[1];
-BattleGroupSetup btlgrp_mri_mri_mb;
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test1_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test2_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test3_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test4_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_01_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_04_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_05_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_02_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_03_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_12_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_12_02_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_15_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_17_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_18_02_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_18_03_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_19_01_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_19_02_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_19_04_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_20_02_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_20_03_off[2];
-NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[2];
+static BattleStageObjectData mri_btlobject_data[43];
+static BattleStageData mri_btlstage_data[4];
+static BattleUnitSetup btlparty_mri_mri_01_01[2];
+static BattleGroupSetup btlgrp_mri_mri_01_01;
+static BattleUnitSetup btlparty_mri_mri_04_01[1];
+static BattleGroupSetup btlgrp_mri_mri_04_01;
+static BattleUnitSetup btlparty_mri_mri_05_01[2];
+static BattleGroupSetup btlgrp_mri_mri_05_01;
+static BattleUnitSetup btlparty_mri_mri_06_2F_02[3];
+static BattleGroupSetup btlgrp_mri_mri_06_2F_02;
+static BattleUnitSetup btlparty_mri_mri_06_2F_03[4];
+static BattleGroupSetup btlgrp_mri_mri_06_2F_03;
+static BattleUnitSetup btlparty_mri_mri_12_01[2];
+static BattleGroupSetup btlgrp_mri_mri_12_01;
+static BattleUnitSetup btlparty_mri_mri_12_02[4];
+static BattleGroupSetup btlgrp_mri_mri_12_02;
+static BattleUnitSetup btlparty_mri_mri_15_01[2];
+static BattleGroupSetup btlgrp_mri_mri_15_01;
+static BattleUnitSetup btlparty_mri_mri_17_01[2];
+static BattleGroupSetup btlgrp_mri_mri_17_01;
+static BattleUnitSetup btlparty_mri_mri_18_02[3];
+static BattleGroupSetup btlgrp_mri_mri_18_02;
+static BattleUnitSetup btlparty_mri_mri_18_03[3];
+static BattleGroupSetup btlgrp_mri_mri_18_03;
+static BattleUnitSetup btlparty_mri_mri_19_01[2];
+static BattleGroupSetup btlgrp_mri_mri_19_01;
+static BattleUnitSetup btlparty_mri_mri_19_02[2];
+static BattleGroupSetup btlgrp_mri_mri_19_02;
+static BattleUnitSetup btlparty_mri_mri_19_04[4];
+static BattleGroupSetup btlgrp_mri_mri_19_04;
+static BattleUnitSetup btlparty_mri_mri_20_02[2];
+static BattleGroupSetup btlgrp_mri_mri_20_02;
+static BattleUnitSetup btlparty_mri_mri_20_03[3];
+static BattleGroupSetup btlgrp_mri_mri_20_03;
+static BattleUnitSetup btlparty_mri_mri_mb[1];
+static BattleGroupSetup btlgrp_mri_mri_mb;
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test1_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test2_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test3_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test4_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_01_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_04_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_05_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_02_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_03_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_12_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_12_02_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_15_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_17_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_18_02_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_18_03_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_19_01_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_19_02_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_19_04_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_20_02_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_20_03_off[2];
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[2];
 NpcSetupBattleInfo btlsetup_mri_tbl[22];
 NpcTerritoryInfo btl_mri_setup_no_tbl[22];
 EvtWord stg_02_1_init_evt[8];
 
 /** Scenery pieces of the Great Tree battle stages; mri_btlstage_data entries point into this array. */
-BattleStageObjectData mri_btlobject_data[] = {
+static BattleStageObjectData mri_btlobject_data[] = {
     {"S_isk_01", 2, STAGE_LAYER_A1, {19.0f, 0.0f, -55.0f}, 0, 60, {0}},
     {"S_ueki_01", 2, STAGE_LAYER_A2, {-188.0f, 0.0f, 48.0f}, 0, 60, {0}},
     {"S_ueki_02", 2, STAGE_LAYER_A2, {-147.0f, 0.0f, -52.0f}, 0, 60, {0}},
@@ -124,7 +124,7 @@ BattleStageObjectData mri_btlobject_data[] = {
 };
 
 /** Battle stages of the Great Tree: backdrop folders, scenery pieces and background scripts. */
-BattleStageData mri_btlstage_data[] = {
+static BattleStageData mri_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_02_1", // specificStageDataDir
@@ -179,7 +179,7 @@ BattleStageData mri_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_mri_mri_01_01[] = {
+static BattleUnitSetup btlparty_mri_mri_01_01[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -202,7 +202,7 @@ BattleUnitSetup btlparty_mri_mri_01_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_01_01 = {
+static BattleGroupSetup btlgrp_mri_mri_01_01 = {
     2, // numEnemies
     btlparty_mri_mri_01_01, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -212,7 +212,7 @@ BattleGroupSetup btlgrp_mri_mri_01_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_04_01[] = {
+static BattleUnitSetup btlparty_mri_mri_04_01[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -225,7 +225,7 @@ BattleUnitSetup btlparty_mri_mri_04_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_04_01 = {
+static BattleGroupSetup btlgrp_mri_mri_04_01 = {
     1, // numEnemies
     btlparty_mri_mri_04_01, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -235,7 +235,7 @@ BattleGroupSetup btlgrp_mri_mri_04_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_05_01[] = {
+static BattleUnitSetup btlparty_mri_mri_05_01[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -258,7 +258,7 @@ BattleUnitSetup btlparty_mri_mri_05_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_05_01 = {
+static BattleGroupSetup btlgrp_mri_mri_05_01 = {
     2, // numEnemies
     btlparty_mri_mri_05_01, // enemyData
     25, // heldItemWeight
@@ -269,7 +269,7 @@ BattleGroupSetup btlgrp_mri_mri_05_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_06_2F_02[] = {
+static BattleUnitSetup btlparty_mri_mri_06_2F_02[] = {
     {
         &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -302,7 +302,7 @@ BattleUnitSetup btlparty_mri_mri_06_2F_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_06_2F_02 = {
+static BattleGroupSetup btlgrp_mri_mri_06_2F_02 = {
     3, // numEnemies
     btlparty_mri_mri_06_2F_02, // enemyData
     25, // heldItemWeight
@@ -313,7 +313,7 @@ BattleGroupSetup btlgrp_mri_mri_06_2F_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_06_2F_03[] = {
+static BattleUnitSetup btlparty_mri_mri_06_2F_03[] = {
     {
         &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -356,7 +356,7 @@ BattleUnitSetup btlparty_mri_mri_06_2F_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_06_2F_03 = {
+static BattleGroupSetup btlgrp_mri_mri_06_2F_03 = {
     4, // numEnemies
     btlparty_mri_mri_06_2F_03, // enemyData
     25, // heldItemWeight
@@ -367,7 +367,7 @@ BattleGroupSetup btlgrp_mri_mri_06_2F_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_12_01[] = {
+static BattleUnitSetup btlparty_mri_mri_12_01[] = {
     {
         &unit_monochrome_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -390,7 +390,7 @@ BattleUnitSetup btlparty_mri_mri_12_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_12_01 = {
+static BattleGroupSetup btlgrp_mri_mri_12_01 = {
     2, // numEnemies
     btlparty_mri_mri_12_01, // enemyData
     25, // heldItemWeight
@@ -401,7 +401,7 @@ BattleGroupSetup btlgrp_mri_mri_12_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_12_02[] = {
+static BattleUnitSetup btlparty_mri_mri_12_02[] = {
     {
         &unit_monochrome_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -444,7 +444,7 @@ BattleUnitSetup btlparty_mri_mri_12_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_12_02 = {
+static BattleGroupSetup btlgrp_mri_mri_12_02 = {
     4, // numEnemies
     btlparty_mri_mri_12_02, // enemyData
     25, // heldItemWeight
@@ -455,7 +455,7 @@ BattleGroupSetup btlgrp_mri_mri_12_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_15_01[] = {
+static BattleUnitSetup btlparty_mri_mri_15_01[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -478,7 +478,7 @@ BattleUnitSetup btlparty_mri_mri_15_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_15_01 = {
+static BattleGroupSetup btlgrp_mri_mri_15_01 = {
     2, // numEnemies
     btlparty_mri_mri_15_01, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -488,7 +488,7 @@ BattleGroupSetup btlgrp_mri_mri_15_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_17_01[] = {
+static BattleUnitSetup btlparty_mri_mri_17_01[] = {
     {
         &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -511,7 +511,7 @@ BattleUnitSetup btlparty_mri_mri_17_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_17_01 = {
+static BattleGroupSetup btlgrp_mri_mri_17_01 = {
     2, // numEnemies
     btlparty_mri_mri_17_01, // enemyData
     25, // heldItemWeight
@@ -522,7 +522,7 @@ BattleGroupSetup btlgrp_mri_mri_17_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_18_02[] = {
+static BattleUnitSetup btlparty_mri_mri_18_02[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -555,7 +555,7 @@ BattleUnitSetup btlparty_mri_mri_18_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_18_02 = {
+static BattleGroupSetup btlgrp_mri_mri_18_02 = {
     3, // numEnemies
     btlparty_mri_mri_18_02, // enemyData
     25, // heldItemWeight
@@ -566,7 +566,7 @@ BattleGroupSetup btlgrp_mri_mri_18_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_18_03[] = {
+static BattleUnitSetup btlparty_mri_mri_18_03[] = {
     {
         &unit_barriern, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -611,7 +611,7 @@ BattleUnitSetup btlparty_mri_mri_18_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_18_03 = {
+static BattleGroupSetup btlgrp_mri_mri_18_03 = {
     3, // numEnemies
     btlparty_mri_mri_18_03, // enemyData
     25, // heldItemWeight
@@ -622,7 +622,7 @@ BattleGroupSetup btlgrp_mri_mri_18_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_19_01[] = {
+static BattleUnitSetup btlparty_mri_mri_19_01[] = {
     {
         &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -645,7 +645,7 @@ BattleUnitSetup btlparty_mri_mri_19_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_19_01 = {
+static BattleGroupSetup btlgrp_mri_mri_19_01 = {
     2, // numEnemies
     btlparty_mri_mri_19_01, // enemyData
     25, // heldItemWeight
@@ -656,7 +656,7 @@ BattleGroupSetup btlgrp_mri_mri_19_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_19_02[] = {
+static BattleUnitSetup btlparty_mri_mri_19_02[] = {
     {
         &unit_monochrome_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -679,7 +679,7 @@ BattleUnitSetup btlparty_mri_mri_19_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_19_02 = {
+static BattleGroupSetup btlgrp_mri_mri_19_02 = {
     2, // numEnemies
     btlparty_mri_mri_19_02, // enemyData
     25, // heldItemWeight
@@ -690,7 +690,7 @@ BattleGroupSetup btlgrp_mri_mri_19_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_19_04[] = {
+static BattleUnitSetup btlparty_mri_mri_19_04[] = {
     {
         &unit_monochrome_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -733,7 +733,7 @@ BattleUnitSetup btlparty_mri_mri_19_04[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_19_04 = {
+static BattleGroupSetup btlgrp_mri_mri_19_04 = {
     4, // numEnemies
     btlparty_mri_mri_19_04, // enemyData
     25, // heldItemWeight
@@ -744,7 +744,7 @@ BattleGroupSetup btlgrp_mri_mri_19_04 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_20_02[] = {
+static BattleUnitSetup btlparty_mri_mri_20_02[] = {
     {
         &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -767,7 +767,7 @@ BattleUnitSetup btlparty_mri_mri_20_02[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_20_02 = {
+static BattleGroupSetup btlgrp_mri_mri_20_02 = {
     2, // numEnemies
     btlparty_mri_mri_20_02, // enemyData
     25, // heldItemWeight
@@ -778,7 +778,7 @@ BattleGroupSetup btlgrp_mri_mri_20_02 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_20_03[] = {
+static BattleUnitSetup btlparty_mri_mri_20_03[] = {
     {
         &unit_barriern, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -815,7 +815,7 @@ BattleUnitSetup btlparty_mri_mri_20_03[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_20_03 = {
+static BattleGroupSetup btlgrp_mri_mri_20_03 = {
     3, // numEnemies
     btlparty_mri_mri_20_03, // enemyData
     25, // heldItemWeight
@@ -826,7 +826,7 @@ BattleGroupSetup btlgrp_mri_mri_20_03 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_mri_mri_mb[] = {
+static BattleUnitSetup btlparty_mri_mri_mb[] = {
     {
         &unit_boss_magnum_battender, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -839,7 +839,7 @@ BattleUnitSetup btlparty_mri_mri_mb[] = {
     },
 };
 
-BattleGroupSetup btlgrp_mri_mri_mb = {
+static BattleGroupSetup btlgrp_mri_mri_mb = {
     1, // numEnemies
     btlparty_mri_mri_mb, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -849,107 +849,107 @@ BattleGroupSetup btlgrp_mri_mri_mb = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test1_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test1_off[] = {
     {50, &btlgrp_mri_mri_01_01, mri_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test2_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test2_off[] = {
     {50, &btlgrp_mri_mri_01_01, &mri_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test3_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test3_off[] = {
     {50, &btlgrp_mri_mri_01_01, &mri_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_test4_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_test4_off[] = {
     {50, &btlgrp_mri_mri_01_01, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_01_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_01_01_off[] = {
     {10, &btlgrp_mri_mri_01_01, mri_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_04_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_04_01_off[] = {
     {10, &btlgrp_mri_mri_04_01, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_05_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_05_01_off[] = {
     {10, &btlgrp_mri_mri_05_01, &mri_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_02_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_02_off[] = {
     {10, &btlgrp_mri_mri_06_2F_02, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_03_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_06_2f_03_off[] = {
     {10, &btlgrp_mri_mri_06_2F_03, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_12_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_12_01_off[] = {
     {10, &btlgrp_mri_mri_12_01, &mri_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_12_02_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_12_02_off[] = {
     {10, &btlgrp_mri_mri_12_02, &mri_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_15_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_15_01_off[] = {
     {10, &btlgrp_mri_mri_15_01, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_17_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_17_01_off[] = {
     {10, &btlgrp_mri_mri_17_01, &mri_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_18_02_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_18_02_off[] = {
     {10, &btlgrp_mri_mri_18_02, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_18_03_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_18_03_off[] = {
     {10, &btlgrp_mri_mri_18_03, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_19_01_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_19_01_off[] = {
     {10, &btlgrp_mri_mri_19_01, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_19_02_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_19_02_off[] = {
     {10, &btlgrp_mri_mri_19_02, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_19_04_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_19_04_off[] = {
     {10, &btlgrp_mri_mri_19_04, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_20_02_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_20_02_off[] = {
     {10, &btlgrp_mri_mri_20_02, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_20_03_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_20_03_off[] = {
     {10, &btlgrp_mri_mri_20_03, &mri_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[] = {
+static NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[] = {
     {10, &btlgrp_mri_mri_mb, mri_btlstage_data},
     {0},
 };

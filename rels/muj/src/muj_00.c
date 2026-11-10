@@ -66,7 +66,7 @@ typedef struct OrbitData {
     f32 angle;
     f32 dist;
 } OrbitData;
-OrbitData* _op;
+static OrbitData* _op;
 // Advance actor i by d degrees around (cx, cz), using the caller's t, rad, r and x.
 #define ORBIT(i, p)           \
     op[i].angle += d;         \
@@ -77,7 +77,7 @@ OrbitData* _op;
     t = r * cosf_l(rad) + cz; \
     p.x = x;                  \
     p.z = t
-TobiWork* Tobidat;
+static TobiWork* Tobidat;
 
 /**
  * Sine of an angle in radians, narrowed to f32;
@@ -95,42 +95,42 @@ static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 
 /** Declarations of the script helpers defined below. */
-USER_FUNC(cam_test_func);
-USER_FUNC(cam_test_init_func);
-USER_FUNC(dai3_butai_main_func);
-USER_FUNC(kaizoku_main_func);
-USER_FUNC(koburon_get_encount_info);
-USER_FUNC(mario_main_func);
-USER_FUNC(mario_main_init_func);
-USER_FUNC(mario_main_setup_func);
+static USER_FUNC(cam_test_func);
+static USER_FUNC(cam_test_init_func);
+static USER_FUNC(dai3_butai_main_func);
+static USER_FUNC(kaizoku_main_func);
+static USER_FUNC(koburon_get_encount_info);
+static USER_FUNC(mario_main_func);
+static USER_FUNC(mario_main_init_func);
+static USER_FUNC(mario_main_setup_func);
 static USER_FUNC(scale_func);
-USER_FUNC(ship_rotate);
-USER_FUNC(ship_rotate_rev);
-USER_FUNC(tobikakaru_end);
-USER_FUNC(tobikakaru_init);
+static USER_FUNC(ship_rotate);
+static USER_FUNC(ship_rotate_rev);
+static USER_FUNC(tobikakaru_end);
+static USER_FUNC(tobikakaru_init);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];
 
 #if VERSION <= VERSION_DEMO_JP
 static s16 suifu_animtbl[41];
-s16 suifu_animtbl_run[21];
+static s16 suifu_animtbl_run[21];
 static s16 elmos_animtbl[21];
 static s16 dai3_animtbl[41];
-s16 dai3_animtbl_run[21];
+static s16 dai3_animtbl_run[21];
 #else
 static s16 suifu_animtbl[42];
-s16 suifu_animtbl_run[22];
+static s16 suifu_animtbl_run[22];
 static s16 elmos_animtbl[22];
 static s16 dai3_animtbl[42];
-s16 dai3_animtbl_run[22];
+static s16 dai3_animtbl_run[22];
 #endif
 
 static EvtWord nannpc_mode_setup[98];
 static EvtWord back_dark[27];
 static EvtWord back_light[27];
-EvtWord suifu_dark[36];
-EvtWord nannpc_light[36];
+static EvtWord suifu_dark[36];
+static EvtWord nannpc_light[36];
 static EvtWord garawaru_init[14];
 static EvtWord garawaru_talk[8];
 static EvtWord marco_init[2];
@@ -182,8 +182,8 @@ extern EvtWord mujinto_hyochaku[];
 EvtWord mujinto_hyochaku[297];
 #endif
 
-s32 suifu_random_setup[380];
-EvtWord suifu_random_sub[123];
+static s32 suifu_random_setup[380];
+static EvtWord suifu_random_sub[123];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord tama_shoot[];
@@ -191,63 +191,63 @@ extern EvtWord tama_shoot[];
 EvtWord tama_shoot[69];
 #endif
 
-EvtWord npc_kyorokyoro[39];
-EvtWord dai3_shurai_sub[1112];
+static EvtWord npc_kyorokyoro[39];
+static EvtWord dai3_shurai_sub[1112];
 EvtWord dai3_shurai[53];
 static EvtWord dai3_shurai_after[68];
-s32 kaizoku_vs_dai3_suifupos[380];
-s32 kaizoku_vs_dai3_elmospos[400];
-EvtWord iwapera_offscreen[56];
-EvtWord iwapera_offscreen_end[29];
-EvtWord dai3_kurukuru[80];
-s32 kaizoku_vs_dai3_dai3pos[300];
-EvtWord dai3_butai_setup[69];
-EvtWord dai3_butai_main[19];
-EvtWord dai3_kanbu_setup[2];
-EvtWord dai3_kanbu_main[80];
-EvtWord kaizoku_setup[160];
-EvtWord kaizoku_main[19];
-EvtWord mario_main_init[4];
-EvtWord mario_main[82];
-EvtWord mario_main2[82];
-EvtWord kaizoku_move_every[24];
-EvtWord dai3_move_every[33];
-f32 dai3_spline_dt[27];
-f32 kaizoku_spline_dt[30];
-EvtWord kaizoku_move_trace_se[46];
-EvtWord kaizoku_move_trace[130];
-EvtWord dai3_move_trace_se[46];
-EvtWord dai3_move_trace[99];
+static s32 kaizoku_vs_dai3_suifupos[380];
+static s32 kaizoku_vs_dai3_elmospos[400];
+static EvtWord iwapera_offscreen[56];
+static EvtWord iwapera_offscreen_end[29];
+static EvtWord dai3_kurukuru[80];
+static s32 kaizoku_vs_dai3_dai3pos[300];
+static EvtWord dai3_butai_setup[69];
+static EvtWord dai3_butai_main[19];
+static EvtWord dai3_kanbu_setup[2];
+static EvtWord dai3_kanbu_main[80];
+static EvtWord kaizoku_setup[160];
+static EvtWord kaizoku_main[19];
+static EvtWord mario_main_init[4];
+static EvtWord mario_main[82];
+static EvtWord mario_main2[82];
+static EvtWord kaizoku_move_every[24];
+static EvtWord dai3_move_every[33];
+static f32 dai3_spline_dt[27];
+static f32 kaizoku_spline_dt[30];
+static EvtWord kaizoku_move_trace_se[46];
+static EvtWord kaizoku_move_trace[130];
+static EvtWord dai3_move_trace_se[46];
+static EvtWord dai3_move_trace[99];
 static EvtWord _kemuri_sub[56];
-EvtWord tobikakari_kemuri[18];
-EvtWord cam_dai3_vs_kaizoku[58];
+static EvtWord tobikakari_kemuri[18];
+static EvtWord cam_dai3_vs_kaizoku[58];
 EvtWord kaizoku_vs_dai3[];
-EvtWord senin_kansei[125];
-f32 dai3_taisan_spline_dt00[9];
-f32 dai3_taisan_spline_dt01[9];
-EvtWord nameraka_rotate[48];
-EvtWord dai3_taisan_move_trace00[69];
-EvtWord dai3_taisan_move_trace01[69];
+static EvtWord senin_kansei[125];
+static f32 dai3_taisan_spline_dt00[9];
+static f32 dai3_taisan_spline_dt01[9];
+static EvtWord nameraka_rotate[48];
+static EvtWord dai3_taisan_move_trace00[69];
+static EvtWord dai3_taisan_move_trace01[69];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord dai3_beat_back[199];
+static EvtWord dai3_beat_back[199];
 #else
-EvtWord dai3_beat_back[194];
+static EvtWord dai3_beat_back[194];
 #endif
 
-s32 leave_island_suifupos[380];
-EvtWord move_ship_se00[20];
-EvtWord move_ship_se01[20];
-EvtWord option_ship_npc[130];
-EvtWord option_ship_korutesu[46];
-EvtWord option_ship_marco[49];
+static s32 leave_island_suifupos[380];
+static EvtWord move_ship_se00[20];
+static EvtWord move_ship_se01[20];
+static EvtWord option_ship_npc[130];
+static EvtWord option_ship_korutesu[46];
+static EvtWord option_ship_marco[49];
 static EvtWord option_ship_mario[84];
-EvtWord option_ship_main[30];
-EvtWord leave_island[765];
-EvtWord muj_gor_ship_sub[33];
+static EvtWord option_ship_main[30];
+static EvtWord leave_island[765];
+static EvtWord muj_gor_ship_sub[33];
 static EvtWord muj_gor_ship[53];
 static EvtWord ship_pera[115];
-EvtWord muj_gor_ship_start[245];
+static EvtWord muj_gor_ship_start[245];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord into_muj_ship[];
@@ -255,8 +255,8 @@ extern EvtWord into_muj_ship[];
 EvtWord into_muj_ship[173];
 #endif
 
-EvtWord mony_peton_boarding_sub[67];
-EvtWord mony_peton_boarding[115];
+static EvtWord mony_peton_boarding_sub[67];
+static EvtWord mony_peton_boarding[115];
 static HitDamageReturn hitDmgRetPoints[8];
 
 #if VERSION >= VERSION_US
@@ -302,7 +302,7 @@ static USER_FUNC(alpha_set_func) {
  * Script helper: writes how the Whacka was hit (fbat->hitKind of the last field battle: which jump,
  * hammer or other attack hit it) to args[0]; koburon_dead uses it to pick its death line.
  */
-USER_FUNC(koburon_get_encount_info) {
+static USER_FUNC(koburon_get_encount_info) {
     s32 arg = event->args[0];
     FieldBattleData* fbat = fbatGetPointer();
 
@@ -316,7 +316,7 @@ USER_FUNC(koburon_get_encount_info) {
  * then clears its per-frame function,
  * so the crowd on the beach looks restless.
  */
-void suifu_kyorokyoro(NanNPC* npc) {
+static void suifu_kyorokyoro(NanNPC* npc) {
     switch (npc->state) {
         case 0:
             npc->startTime = gp->renderTime;
@@ -364,7 +364,7 @@ void suifu_kyorokyoro(NanNPC* npc) {
 }
 
 /** Initialises a mass-NPC sailor: state 0 and suifu_kyorokyoro as its per-frame function. */
-void suifu_kyorokyoro_init(NanNPC* npc) {
+static void suifu_kyorokyoro_init(NanNPC* npc) {
     npc->state = 0;
     npc->func = suifu_kyorokyoro;
 }
@@ -398,7 +398,7 @@ static USER_FUNC(tama_shoot_kemuri) {
  * adds the turn from angle args[0] to args[1] to each NPC's orbit angle
  * and places it on its circle around the ship centre (args[2], args[3]).
  */
-USER_FUNC(dai3_butai_main_func) {
+static USER_FUNC(dai3_butai_main_func) {
     s32 d;
     EvtWord* args = event->args;
     f32 a = evtGetValue(event, args[0]);
@@ -433,7 +433,7 @@ USER_FUNC(dai3_butai_main_func) {
  * Script helper that does the same for the pirate ship's crowd (mass NPCs 10 to 104 and 105 to 204):
  * rotates each NPC's orbit by args[1] minus args[0] around the centre (args[2], args[3]).
  */
-USER_FUNC(kaizoku_main_func) {
+static USER_FUNC(kaizoku_main_func) {
     EvtWord* args = event->args;
     f32 a = evtGetValue(event, args[0]);
     f32 b = evtGetValue(event, args[1]);
@@ -477,7 +477,7 @@ USER_FUNC(kaizoku_main_func) {
  * Script helper: allocates the 0x40-byte buffer that mario_main_setup_func fills with the orbit data of Mario,
  * his partner and six named NPCs.
  */
-USER_FUNC(mario_main_init_func) {
+static USER_FUNC(mario_main_init_func) {
     _op = _mapAlloc(8 * sizeof(OrbitData));
     return EVT_RETURN_DONE;
 }
@@ -487,7 +487,7 @@ USER_FUNC(mario_main_init_func) {
  * his partner and the six NPCs on the ship (Flavio, Cortez, Francesca, Garawaru, Frankie, Odoodo),
  * so mario_main_func can swing them around as the pirate ship turns.
  */
-USER_FUNC(mario_main_setup_func) {
+static USER_FUNC(mario_main_setup_func) {
     EvtWord* args = event->args;
     f32 cx = evtGetValue(event, args[0]);
     f32 cz = evtGetValue(event, args[1]);
@@ -525,7 +525,7 @@ USER_FUNC(mario_main_setup_func) {
  * args[2], args[3] the pivot): moves Mario, his partner and the six NPCs along their recorded orbits
  * so they stay on the deck.
  */
-USER_FUNC(mario_main_func) {
+static USER_FUNC(mario_main_func) {
     EvtWord* args;
     OrbitData* op;
     MarioWork* mario;
@@ -582,7 +582,7 @@ USER_FUNC(mario_main_func) {
  * Picks a random mass NPC for a jumping sailor to land on:
  * indices 205 to 304 for types 0 and 1, otherwise 10 to 104 or 105 to 204 at random.
  */
-NanNPC* random_choice_target(s32 type) {
+static NanNPC* random_choice_target(s32 type) {
     NanNPCWork* wp = nanNPCWork;
     s32 idx;
 
@@ -608,7 +608,7 @@ NanNPC* random_choice_target(s32 type) {
  * wait a random time, hop in a parabola onto a random member of the other crowd (random_choice_target), wait, then hop back to their home spot;
  * states 20 to 22 are the hop and the waits.
  */
-void tobikakari_seq00(NanNPC* npc) {
+static void tobikakari_seq00(NanNPC* npc) {
     TobiWork* work = npc->tobi;
     NanNPC* target;
     s32 r;
@@ -689,7 +689,7 @@ void tobikakari_seq00(NanNPC* npc) {
  * and gives mass NPCs 10 to 304 the tobikakari_seq00 behaviour;
  * running animation tables are assigned to ranges 10..104 and 205..304.
  */
-USER_FUNC(tobikakaru_init) {
+static USER_FUNC(tobikakaru_init) {
     NanNPCWork* wp = nanNPCWork;
     TobiWork* p;
     s32 i;
@@ -734,7 +734,7 @@ USER_FUNC(tobikakaru_init) {
  * Script helper: ends the jumping crowd, removing the per-frame functions of mass NPCs 10 to 304
  * and restoring normal animation tables for ranges 10..104 and 205..304.
  */
-USER_FUNC(tobikakaru_end) {
+static USER_FUNC(tobikakaru_end) {
     NanNPCWork* wp = nanNPCWork;
     NanNPC* npc;
     s32 i;
@@ -760,7 +760,7 @@ USER_FUNC(tobikakaru_end) {
  * Script helper: turns two map points (x1, z1) and (x2, z2) into the heading (angle minus 90 degrees) a ship
  * should face when moving between them; written to args[4].
  */
-USER_FUNC(ship_rotate) {
+static USER_FUNC(ship_rotate) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
     f32 z1 = evtGetFloat(event, args[1]);
@@ -774,7 +774,7 @@ USER_FUNC(ship_rotate) {
 }
 
 /** Like ship_rotate but the result is turned a further 180 degrees, for a ship that sails stern first. */
-USER_FUNC(ship_rotate_rev) {
+static USER_FUNC(ship_rotate_rev) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
     f32 z1 = evtGetFloat(event, args[1]);
@@ -792,7 +792,7 @@ USER_FUNC(ship_rotate_rev) {
  * Script helper for the battle camera: given a ship position (args[0], args[1]) computes the angle (args[2])
  * and distance (args[3]) from it to the camera centre at (70, 110, 0).
  */
-USER_FUNC(cam_test_init_func) {
+static USER_FUNC(cam_test_init_func) {
     EvtWord* args = event->args;
     Vec b;
     Vec a;
@@ -815,7 +815,7 @@ USER_FUNC(cam_test_init_func) {
  * and distance (args[2], args[3]) around the centre (70, 110, 0) writes the camera x and z to args[0]
  * and args[1].
  */
-USER_FUNC(cam_test_func) {
+static USER_FUNC(cam_test_func) {
     EvtWord* args = event->args;
     s32* p0 = args++;
     s32* p1 = args++;
@@ -915,7 +915,7 @@ static s16 suifu_animtbl[] = {
 };
 
 /** Frame sequence of the running sailors of the crowd (the jumping fight), ended by -1. */
-s16 suifu_animtbl_run[] = {
+static s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
 #if VERSION <= VERSION_DEMO_JP
@@ -951,7 +951,7 @@ static s16 dai3_animtbl[] = {
 };
 
 /** Running frame sequence of the X-Naut ship's crowd, ended by -1. */
-s16 dai3_animtbl_run[] = {
+static s16 dai3_animtbl_run[] = {
     48, 48, 49, 49, 50, 50, 51, 51,
     52, 52, 53, 53, 54, 54, 55, 55,
 #if VERSION <= VERSION_DEMO_JP
@@ -1036,7 +1036,7 @@ EVT_END()
  * Fades the sailor crowd (mass NPCs 10 to 104) to black over LW(10) ms by setting their colour;
  * the opposite of nannpc_light.
  */
-EVT_BEGIN(suifu_dark)
+static EVT_BEGIN(suifu_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, LW(10))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1057,7 +1057,7 @@ EVT_END()
  * Fades all 305 mass NPCs (0 to 304) back from black to normal colour.
  * This also restores the sailor tint changed by suifu_dark.
  */
-EVT_BEGIN(nannpc_light)
+static EVT_BEGIN(nannpc_light)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, LW(10))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1800,7 +1800,7 @@ EVT_BEGIN(mujinto_hyochaku)
 EVT_END()
 
 /** Standing spots (x, y, z, facing) of the 95 sailors of the beach crowd, placed by suifu_random_sub. */
-s32 suifu_random_setup[] = {
+static s32 suifu_random_setup[] = {
     1289, 35, -419, 270, 1214, 35, -335, 90,
     1264, 35, -358, 270, 1306, 35, -462, 90,
     1273, 35, -431, 270, 1153, 35, -500, 90,
@@ -1856,7 +1856,7 @@ s32 suifu_random_setup[] = {
  * reads x, y, z and facing for each from suifu_random_setup, gives them their size and shadow,
  * and installs nanNPCOption for their crowd movement.
  */
-EVT_BEGIN(suifu_random_sub)
+static EVT_BEGIN(suifu_random_sub)
     CALL(evt_nannpc_set_subfunc, 2, PTR(nanNPCOption))
     SET_VALUE(LW(0), 10)
     SET_INT_READ_ADDR(PTR(suifu_random_setup))
@@ -1924,7 +1924,7 @@ EVT_END()
  * Makes the NPC named in LW(0) look around: waits random times
  * and flips its facing (evt_npc_reverse_ry) twice, then faces it left (ry 270), as nervous sailors do.
  */
-EVT_BEGIN(npc_kyorokyoro)
+static EVT_BEGIN(npc_kyorokyoro)
     CALL(evt_sub_random, 1000, LW(10))
     ADD(LW(10), 100)
     WAIT_MS(LW(10))
@@ -1946,7 +1946,7 @@ EVT_END()
  * Flavio and the sailors greet Mario (stg5_muj_95, 96) and panic once the cannons fire,
  * Mario and his partner are positioned for the scene; the story advances to STG5_40_TRUE_IDENTITY and control returns.
  */
-EVT_BEGIN(dai3_shurai_sub)
+static EVT_BEGIN(dai3_shurai_sub)
     // Mario loses control and waits for his partner; the sailors are moved onto the pier.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -2316,7 +2316,7 @@ EVT_END()
  * Positions (x, y, z, facing) of the 95 sailors on the pirate ship during the pirates versus X-Nauts fight,
  * relative to the ship.
  */
-s32 kaizoku_vs_dai3_suifupos[] = {
+static s32 kaizoku_vs_dai3_suifupos[] = {
     -88, 115, -6, 270, -87, 115, 15, 270,
     -92, 115, 34, 270, -104, 115, 76, 270,
     -110, 115, 66, 270, -84, 115, 75, 270,
@@ -2371,7 +2371,7 @@ s32 kaizoku_vs_dai3_suifupos[] = {
  * Positions (x, y, z, facing) of the 100 c_elmos figures on the pirate ship during the fight, relative to the
  * ship.
  */
-s32 kaizoku_vs_dai3_elmospos[] = {
+static s32 kaizoku_vs_dai3_elmospos[] = {
     51, 165, 25, 270, 34, 112, -63, 270,
     37, 158, 67, 270, 24, 191, 69, 270,
     28, 228, -49, 270, 33, 201, -32, 270,
@@ -2428,7 +2428,7 @@ s32 kaizoku_vs_dai3_elmospos[] = {
  * Starts the rock-wall transition: captures the "S_iwa_before" rock into an off-screen image
  * and plays the paper-fold animation A_1 so it can be swapped for the broken rock.
  */
-EVT_BEGIN(iwapera_offscreen)
+static EVT_BEGIN(iwapera_offscreen)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_yabu"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
@@ -2446,7 +2446,7 @@ EVT_END()
  * Ends the rock-wall transition: waits for the paper animation,
  * frees the captured image and off-screen buffer and shows the "S_iwa_after" (broken) rock.
  */
-EVT_BEGIN(iwapera_offscreen_end)
+static EVT_BEGIN(iwapera_offscreen_end)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_img_onoff, STRING("capture_img"), 0)
@@ -2461,7 +2461,7 @@ EVT_END()
  * The X-Naut ship's impact at the end of its approach: plays the impact sound, shakes the camera,
  * swings the ship's heading (GW(1)) by 15 degrees and moves its centre x (GW(2)) by -80 over one second.
  */
-EVT_BEGIN(dai3_kurukuru)
+static EVT_BEGIN(dai3_kurukuru)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_IMPACT1"), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 500)
@@ -2502,7 +2502,7 @@ EVT_END()
  * Positions (x, y, z) of the X-Naut ship's crowd (mass NPCs 205 to 304) around the ship centre, used by
  * dai3_butai_setup.
  */
-s32 kaizoku_vs_dai3_dai3pos[] = {
+static s32 kaizoku_vs_dai3_dai3pos[] = {
     107, 159, -120, 10, 245, -57, 8, 152,
     40, 100, 164, -87, 3, 121, -28, -13,
     130, -5, 106, 212, -59, -14, 186, -87,
@@ -2548,7 +2548,7 @@ s32 kaizoku_vs_dai3_dai3pos[] = {
  * and records each one's angle and distance from the ship centre GW(2), GW(3),
  * so dai3_butai_main_func can rotate them with the ship.
  */
-EVT_BEGIN(dai3_butai_setup)
+static EVT_BEGIN(dai3_butai_setup)
     SET_VALUE(LW(0), 205)
     SET_INT_READ_ADDR(PTR(kaizoku_vs_dai3_dai3pos))
     LOOP(100)
@@ -2574,7 +2574,7 @@ EVT_END()
  * Loop that keeps the X-Naut ship's crowd attached to the ship each frame (dai3_butai_main_func with the ship
  * heading in GW(1) and centre GW(2), GW(3)).
  */
-EVT_BEGIN(dai3_butai_main)
+static EVT_BEGIN(dai3_butai_main)
     SET_VALUE(LW(10), GW(1))
     LOOP(0)
         CALL(dai3_butai_main_func, LW(10), GW(1), GW(2), GW(3))
@@ -2585,7 +2585,7 @@ EVT_BEGIN(dai3_butai_main)
 EVT_END()
 
 /** Setup of Lord Crump on the X-Naut ship (empty; he is positioned by dai3_kanbu_main). */
-EVT_BEGIN(dai3_kanbu_setup)
+static EVT_BEGIN(dai3_kanbu_setup)
     RETURN
 EVT_END()
 
@@ -2593,7 +2593,7 @@ EVT_END()
  * Loop that places Lord Crump (dai3_kanbu) relative to the X-Naut ship each frame,
  * from its distance and angle to the ship centre (GW(2), GW(3)).
  */
-EVT_BEGIN(dai3_kanbu_main)
+static EVT_BEGIN(dai3_kanbu_main)
     CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(1), LW(2), LW(3))
     CALL(evt_sub_get_dir, GW(2), GW(3), LW(1), LW(3), GW(10))
     CALL(evt_sub_get_dist, GW(2), GW(3), LW(1), LW(3), GW(11))
@@ -2623,7 +2623,7 @@ EVT_END()
  * kaizoku_vs_dai3_elmospos, faces the partners left,
  * and records each member's angle and distance from the pirate ship's centre (GW(5), GW(6)).
  */
-EVT_BEGIN(kaizoku_setup)
+static EVT_BEGIN(kaizoku_setup)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 270, -1)
     CALL(evt_party_set_dir, 1, 270, -1)
@@ -2673,7 +2673,7 @@ EVT_END()
  * Loop that keeps the pirate ship's crowd attached to the pirate ship each frame (kaizoku_main_func with heading
  * GW(4) and centre GW(5), GW(6)).
  */
-EVT_BEGIN(kaizoku_main)
+static EVT_BEGIN(kaizoku_main)
     SET_VALUE(LW(10), GW(4))
     LOOP(0)
         CALL(kaizoku_main_func, LW(10), GW(4), GW(5), GW(6))
@@ -2684,7 +2684,7 @@ EVT_BEGIN(kaizoku_main)
 EVT_END()
 
 /** Allocates the orbit buffer for Mario and the deck NPCs (mario_main_init_func). */
-EVT_BEGIN(mario_main_init)
+static EVT_BEGIN(mario_main_init)
     CALL(mario_main_init_func)
     RETURN
 EVT_END()
@@ -2693,7 +2693,7 @@ EVT_END()
  * Loop that carries Mario, his partner and the deck NPCs around with the pirate ship as it turns,
  * using mario_main_setup_func once and then mario_main_func each frame.
  */
-EVT_BEGIN(mario_main)
+static EVT_BEGIN(mario_main)
     CALL(evt_mario_set_pos, 20, 40, 10)
     CALL(evt_party_set_pos, 0, 10, 40, -65)
     CALL(evt_npc_set_position, STRING("マルコ"), 20, 40, -35)
@@ -2719,7 +2719,7 @@ EVT_END()
  * Variant of mario_main used in the later scene (dai3_beat_back) where the pirate ship pivots about GW(5),
  * GW(6).
  */
-EVT_BEGIN(mario_main2)
+static EVT_BEGIN(mario_main2)
     CALL(evt_mario_set_pos, 20, 40, 10)
     CALL(evt_party_set_pos, 0, 10, 40, -25)
     CALL(evt_npc_set_position, STRING("マルコ"), -3, 40, -69)
@@ -2745,7 +2745,7 @@ EVT_END()
  * Per-frame loop that moves the pirate ship map object S_b to (GW(5), GW(6)),
  * rotates it to heading GW(4) and updates its hit box A_b.
  */
-EVT_BEGIN(kaizoku_move_every)
+static EVT_BEGIN(kaizoku_move_every)
     LOOP(0)
         CALL(evt_mapobj_trans, 1, STRING("S_b"), GW(5), 0, GW(6))
         CALL(evt_mapobj_rotate, 1, STRING("S_b"), 0, GW(4), 0)
@@ -2759,7 +2759,7 @@ EVT_END()
  * Per-frame loop that moves the X-Naut ship map object S_c to (GW(2), GW(3)),
  * rotates it to heading GW(1) and updates its hit box A_c.
  */
-EVT_BEGIN(dai3_move_every)
+static EVT_BEGIN(dai3_move_every)
     LOOP(0)
         CALL(evt_mapobj_trans, 1, STRING("S_c"), GW(2), 0, GW(3))
         CALL(evt_mapobj_rotate, 1, STRING("S_c"), 0, GW(1), 0)
@@ -2773,7 +2773,7 @@ EVT_BEGIN(dai3_move_every)
 EVT_END()
 
 /** Spline points (x, y, z) of the X-Naut ship's approach path, followed by dai3_move_trace. */
-f32 dai3_spline_dt[] = {
+static f32 dai3_spline_dt[] = {
     -1200.0f, 0.0f, -0.0f, -1100.5623f, 0.0f, -8.453464f, -293.84833f, 0.0f,
     399.23074f, 34.78095f, 0.0f, 432.56693f, 421.29593f, 0.0f, 248.42857f, 461.67648f,
     0.0f, 165.65f, 415.21323f, 0.0f, -397.27994f, -330.27072f, 0.0f, -496.12314f,
@@ -2783,7 +2783,7 @@ f32 dai3_spline_dt[] = {
 /**
  * Spline points (x, y, z) of the pirate ship's sailing path toward the shore, followed by kaizoku_move_trace.
  */
-f32 kaizoku_spline_dt[] = {
+static f32 kaizoku_spline_dt[] = {
     -35.35443f, 0.0f, -1842.3301f, -144.56525f, 0.0f, -833.1615f, -259.41003f, 0.0f,
     -703.04047f, -643.16766f, 0.0f, -279.92737f, -441.1687f, 0.0f, 463.3269f, 122.979614f,
     0.0f, 678.0878f, 398.20316f, 0.0f, 594.73975f, 606.0688f, 0.0f, 63.382736f,
@@ -2794,7 +2794,7 @@ f32 kaizoku_spline_dt[] = {
  * Plays the pirate ship's moving sound, positioned on S_b and sized by distance,
  * until GF(10) clears; then stops the sound and deletes its position-following event.
  */
-EVT_BEGIN(kaizoku_move_trace_se)
+static EVT_BEGIN(kaizoku_move_trace_se)
     CALL(evt_mapobj_get_position, STRING("S_b"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOR_SHIP_MOVE1"), LW(10), LW(11), LW(12), LW(13))
     CALL(evt_snd_sfx_dist, LW(13), 30)
@@ -2816,7 +2816,7 @@ EVT_END()
  * samples the spline, stores the position in GW(5), GW(6),
  * turns the ship to face its heading and ends when the spline is finished.
  */
-EVT_BEGIN(kaizoku_move_trace)
+static EVT_BEGIN(kaizoku_move_trace)
     SET_FLOAT_VALUE(LW(5), GW(5))
     SET_FLOAT_VALUE(LW(6), GW(6))
     SET_VALUE(LW(8), 0)
@@ -2871,7 +2871,7 @@ EVT_END()
  * Plays the X-Naut ship's moving sound, initially positioned on S_c but then following S_b,
  * with audible-distance parameter 30; when GF(11) clears, stops the sound and deletes its position-following event.
  */
-EVT_BEGIN(dai3_move_trace_se)
+static EVT_BEGIN(dai3_move_trace_se)
     CALL(evt_mapobj_get_position, STRING("S_c"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_3RD_SHIP_MOVE1"), LW(10), LW(11), LW(12), LW(13))
     CALL(evt_snd_sfx_dist, LW(13), 30)
@@ -2892,7 +2892,7 @@ EVT_END()
  * Sails the X-Naut ship along the dai3_spline_dt spline:
  * samples the spline into GW(2), GW(3), turns the ship to face its heading and frees the spline when it ends.
  */
-EVT_BEGIN(dai3_move_trace)
+static EVT_BEGIN(dai3_move_trace)
     SET_FLOAT_VALUE(LW(5), GW(2))
     SET_FLOAT_VALUE(LW(6), GW(3))
     SET_VALUE(LW(8), 0)
@@ -2954,7 +2954,7 @@ EVT_END()
  * Spawns smoke puffs at random spots during the jumping fight (two _kemuri_sub events, then a random
  * 200 to 400 ms delay).
  */
-EVT_BEGIN(tobikakari_kemuri)
+static EVT_BEGIN(tobikakari_kemuri)
     LOOP(0)
         SPAWN_EVENT(_kemuri_sub)
         SPAWN_EVENT(_kemuri_sub)
@@ -2969,7 +2969,7 @@ EVT_END()
  * Orbits the camera slowly (0.27 degrees per frame) around the two ships during the pirates versus X-Nauts
  * fight, using cam_test_init_func and cam_test_func.
  */
-EVT_BEGIN(cam_dai3_vs_kaizoku)
+static EVT_BEGIN(cam_dai3_vs_kaizoku)
     SET_VALUE(LW(0), 70)
     SET_VALUE(LW(1), 1400)
     CALL(cam_test_init_func, LW(0), LW(1), LW(2), LW(3))
@@ -3185,7 +3185,7 @@ EVT_END()
  * small speakerless balloons pop up in turn around the pirate ship's position (GW(5), GW(6)), repeating until
  * the event is deleted. Spawned just before the story becomes STG5_43_X_NAUTS_RETREAT.
  */
-EVT_BEGIN(senin_kansei)
+static EVT_BEGIN(senin_kansei)
     LOOP(0)
         WAIT_MS(400)
         SET_VALUE(LW(0), GW(5))
@@ -3230,13 +3230,13 @@ EVT_BEGIN(senin_kansei)
 EVT_END()
 
 /** Spline points of the short first leg of the X-Naut ship's retreat. */
-f32 dai3_taisan_spline_dt00[] = {
+static f32 dai3_taisan_spline_dt00[] = {
     -416.0f, 0.0f, -334.0f, -413.67612f, 0.0f, -365.46518f, -411.63168f, 0.0f,
     -404.80673f,
 };
 
 /** Spline points of the X-Naut ship's sail away (taisan, retreat) after the fight. */
-f32 dai3_taisan_spline_dt01[] = {
+static f32 dai3_taisan_spline_dt01[] = {
     -416.0f, 0.0f, -334.0f, -839.007f, 0.0f, -339.86542f, -1018.9882f, 0.0f,
     -346.33777f,
 };
@@ -3245,7 +3245,7 @@ f32 dai3_taisan_spline_dt01[] = {
  * Slowly turns the X-Naut ship's heading (GW(1)) toward the target heading GW(7) one degree per frame,
  * so it swings round smoothly as it retreats.
  */
-EVT_BEGIN(nameraka_rotate)
+static EVT_BEGIN(nameraka_rotate)
     LOOP(0)
         IF_FLOAT_NOT_EQUAL(GW(1), GW(7))
             IF_FLOAT_GREATER_OR_EQUAL(GW(1), GW(7))
@@ -3273,7 +3273,7 @@ EVT_END()
  * Unreferenced (nothing spawns it): would back the X-Naut ship stern first (ship_rotate_rev) about 70 units
  * along the short spline dai3_taisan_spline_dt00, updating its centre GW(2), GW(3).
  */
-EVT_BEGIN(dai3_taisan_move_trace00)
+static EVT_BEGIN(dai3_taisan_move_trace00)
     SET_FLOAT_VALUE(LW(5), GW(2))
     SET_FLOAT_VALUE(LW(6), GW(3))
     CALL(evt_sub_spline_init, 1, 0, PTR(dai3_taisan_spline_dt00), 3, 0, LW(0))
@@ -3304,7 +3304,7 @@ EVT_END()
  * Sails the X-Naut ship away (taisan, retreat) about 600 units along dai3_taisan_spline_dt01,
  * spawned right after the officer's sore-loser line (stg5_muj_125).
  */
-EVT_BEGIN(dai3_taisan_move_trace01)
+static EVT_BEGIN(dai3_taisan_move_trace01)
     SET_FLOAT_VALUE(LW(5), GW(2))
     SET_FLOAT_VALUE(LW(6), GW(3))
     CALL(evt_sub_spline_init, 1, 0, PTR(dai3_taisan_spline_dt01), 3, 0, LW(0))
@@ -3337,7 +3337,7 @@ EVT_END()
  * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
  * the game offers a save and the map changes to aji_10.
  */
-EVT_BEGIN(dai3_beat_back)
+static EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_cont_onoff, 1)
@@ -3414,7 +3414,7 @@ EVT_BEGIN(dai3_beat_back)
 EVT_END()
 
 /** Positions (x, y, z, facing) of the 95 sailors aboard the ship when the crew leaves Keelhaul Key. */
-s32 leave_island_suifupos[] = {
+static s32 leave_island_suifupos[] = {
     565, 77, -606, 90, 574, 77, -612, 90,
     590, 77, -618, 90, 590, 77, -605, 90,
     592, 77, -585, 90, 607, 77, -584, 90,
@@ -3469,7 +3469,7 @@ s32 leave_island_suifupos[] = {
  * Plays the pirate ship's move sound (SFX_STG5_SHIP_KOL_MOVE1) at ship S_b every 2 s, 5 times, as it leaves
  * (leave_island).
  */
-EVT_BEGIN(move_ship_se00)
+static EVT_BEGIN(move_ship_se00)
     LOOP(5)
         WAIT_MS(2000)
         CALL(evt_mapobj_get_position, STRING("S_b"), LW(0), LW(1), LW(2))
@@ -3482,7 +3482,7 @@ EVT_END()
  * Plays the ship's mast sound (SFX_STG5_SHIP_KOL_MAST1) at ship S_b every 1.4 s, 7 times; spawned with
  * move_ship_se00.
  */
-EVT_BEGIN(move_ship_se01)
+static EVT_BEGIN(move_ship_se01)
     LOOP(7)
         WAIT_MS(1400)
         CALL(evt_mapobj_get_position, STRING("S_b"), LW(0), LW(1), LW(2))
@@ -3495,7 +3495,7 @@ EVT_END()
  * Moves the crowd of sailors (mass NPCs) along with the ship while it sails off,
  * adding the ship's per-frame displacement (GW(0), GW(1)) to each position.
  */
-EVT_BEGIN(option_ship_npc)
+static EVT_BEGIN(option_ship_npc)
     SET_FLOAT_VALUE(LW(10), GW(0))
     SET_FLOAT_VALUE(LW(11), GW(1))
     LOOP(0)
@@ -3535,7 +3535,7 @@ EVT_BEGIN(option_ship_npc)
 EVT_END()
 
 /** Moves Cortez along with the departing ship horizontally by the ship's per-frame X displacement (GW(0)). */
-EVT_BEGIN(option_ship_korutesu)
+static EVT_BEGIN(option_ship_korutesu)
     SET_FLOAT_VALUE(LW(10), GW(0))
     SET_FLOAT_VALUE(LW(11), GW(1))
     LOOP(0)
@@ -3557,7 +3557,7 @@ EVT_END()
  * Moves Flavio along with the departing ship by the ship's per-frame displacement (GW(0), GW(1)),
  * so he rides the deck.
  */
-EVT_BEGIN(option_ship_marco)
+static EVT_BEGIN(option_ship_marco)
     SET_FLOAT_VALUE(LW(10), GW(0))
     SET_FLOAT_VALUE(LW(11), GW(1))
     LOOP(0)
@@ -3608,7 +3608,7 @@ static EVT_BEGIN(option_ship_mario)
 EVT_END()
 
 /** Loop that moves the pirate ship and its hit box as the ship departs, from the position GW(0), GW(1). */
-EVT_BEGIN(option_ship_main)
+static EVT_BEGIN(option_ship_main)
     LOOP(0)
         SET_VALUE(LW(0), GW(0))
         SET_VALUE(LW(1), GW(1))
@@ -3625,7 +3625,7 @@ EVT_END()
  * Cortez, Flavio, Francesca, Frankie and the sailors talk (stg5_muj_133 to 143),
  * Mario and his partner jump aboard and the ship sails away.
  */
-EVT_BEGIN(leave_island)
+static EVT_BEGIN(leave_island)
     // The crew gathers aboard the ship on the beach; the music stops.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
@@ -3833,7 +3833,7 @@ EVT_END()
  * Sub-event of the Rogueport ship departure: every frame moves the pirate ship S_b to the position in GW(0),
  * GW(1) with heading GW(2) and updates its hit box A_b.
  */
-EVT_BEGIN(muj_gor_ship_sub)
+static EVT_BEGIN(muj_gor_ship_sub)
     LOOP(0)
         SET_FLOAT_VALUE(LW(0), GW(0))
         SET_FLOAT_VALUE(LW(1), GW(1))
@@ -3924,7 +3924,7 @@ static USER_FUNC(scale_func) {
  * plays the ghost ship music, scales Mario, partners and the pirate NPCs,
  * makes the ship fly off the water while the water alpha fades, then changes to muj_20 (the ship's deck).
  */
-EVT_BEGIN(muj_gor_ship_start)
+static EVT_BEGIN(muj_gor_ship_start)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 0, 500)
@@ -4070,7 +4070,7 @@ EVT_BEGIN(into_muj_ship)
 EVT_END()
 
 /** Moves the NPCs on the ship by the ship's displacement (GW(0), GW(1)) while Francesca and Frankie board. */
-EVT_BEGIN(mony_peton_boarding_sub)
+static EVT_BEGIN(mony_peton_boarding_sub)
     SET_FLOAT_VALUE(LW(10), GW(0))
     SET_FLOAT_VALUE(LW(11), GW(1))
     LOOP(0)
@@ -4099,7 +4099,7 @@ EVT_END()
  * and Francesca urges her father to hold on (stg5_muj_145, 146)
  * and the story becomes STG5_64_02_F_F_SAIL_OFF.
  */
-EVT_BEGIN(mony_peton_boarding)
+static EVT_BEGIN(mony_peton_boarding)
     SET_VALUE(LW(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_01_WEDDING_RING_DELIVERY)
         SET_VALUE(LW(0), 1)

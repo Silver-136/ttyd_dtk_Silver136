@@ -35,12 +35,12 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
-EvtWord w_bero_in_evt[15];
+static EvtWord w_bero_in_evt[15];
 static BeroEntry bero_entry_data[3];
 static BeroEntry bero_peach_data[2];
-EvtWord evt_last_mail_init[62];
-EvtWord evt_last_mail[56];
-EvtWord peach_evt_door_open[41];
+static EvtWord evt_last_mail_init[62];
+static EvtWord evt_last_mail[56];
+static EvtWord peach_evt_door_open[41];
 static EvtWord peach_evt_stg1[97];
 static EvtWord peach_evt_stg1_1[86];
 EvtWord peach_evt_stg2_1[103];
@@ -111,7 +111,7 @@ EVT_END()
  * Enter event of the west door w_bero: if the player is Peach,
  * resets her to the normal condition (evt_peach_set_condition 0), and sets LW(0) = 0 so the entry proceeds.
  */
-EVT_BEGIN(w_bero_in_evt)
+static EVT_BEGIN(w_bero_in_evt)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_peach_set_condition, 0)
@@ -189,7 +189,7 @@ static BeroEntry bero_peach_data[] = {
  * Mario and the partner are placed on the left,
  * Peach uses paper animation P_Z_7 in the middle, soft focus is enabled and evt_last_mail starts.
  */
-EVT_BEGIN(evt_last_mail_init)
+static EVT_BEGIN(evt_last_mail_init)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -211,7 +211,7 @@ EVT_END()
  * Plays the Last Mail scene: the camera pans across the room for five seconds,
  * Peach fades away over two seconds, the text stg7_aji_58 appears and the map changes to aji_17.
  */
-EVT_BEGIN(evt_last_mail)
+static EVT_BEGIN(evt_last_mail)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, -100, 80, 285, -100, 40, -13, 5000, EASING_LINEAR)
     WAIT_MS(2500)
@@ -234,7 +234,7 @@ EVT_END()
  * Opens the east door e_bero for Peach with bero_open_door_play_se,
  * driving e_door_open's sliding leaves with values 0 to 180 over half a second.
  */
-EVT_BEGIN(peach_evt_door_open)
+static EVT_BEGIN(peach_evt_door_open)
     CALL(evt_cam3d_evt_set, 35, 114, 334, 157, 54, 17, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     WAIT_MS(1000)

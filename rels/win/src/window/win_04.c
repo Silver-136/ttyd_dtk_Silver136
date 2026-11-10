@@ -59,25 +59,25 @@ typedef struct FlowerWork {
 } FlowerWork;
 static s32 ssf[3];
 
-USER_FUNC(evt_flower);
-USER_FUNC(evt_flower_end);
-USER_FUNC(evt_flower_end_main);
-USER_FUNC(evt_flower_init);
-USER_FUNC(fade_alpha);
-USER_FUNC(flower_pos_report);
-USER_FUNC(ss_ch_check);
-USER_FUNC(ss_ch_set);
+static USER_FUNC(evt_flower);
+static USER_FUNC(evt_flower_end);
+static USER_FUNC(evt_flower_end_main);
+static USER_FUNC(evt_flower_init);
+static USER_FUNC(fade_alpha);
+static USER_FUNC(flower_pos_report);
+static USER_FUNC(ss_ch_check);
+static USER_FUNC(ss_ch_set);
 static f32 randf(f32 min, f32 max);
-void mirror_ball(void* param);
+static void mirror_ball(void* param);
 
-EvtWord win_04w_door_open[10];
-EvtWord win_04w_door_close[10];
-EvtWord win_04e_door_open[10];
-EvtWord win_04e_door_close[10];
+static EvtWord win_04w_door_open[10];
+static EvtWord win_04w_door_close[10];
+static EvtWord win_04e_door_open[10];
+static EvtWord win_04e_door_close[10];
 static EvtWord out_w_bero[12];
-BeroEntry bero_witchtrio[1];
+static BeroEntry bero_witchtrio[1];
 static BeroEntry bero_entry_data[3];
-EvtWord meet_clouda[76];
+static EvtWord meet_clouda[76];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord meet_clouda2[];
@@ -85,7 +85,7 @@ extern EvtWord meet_clouda2[];
 EvtWord meet_clouda2[139];
 #endif
 
-EvtWord clouda_inai[17];
+static EvtWord clouda_inai[17];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord clouda_irai[];
@@ -93,12 +93,12 @@ extern EvtWord clouda_irai[];
 EvtWord clouda_irai[444];
 #endif
 
-EvtWord clouda_irai_ato[20];
-EvtWord mirror_trans[35];
-EvtWord mirror_rotate[41];
-EvtWord mario_move_wait[63];
-EvtWord dummy1_jump[26];
-EvtWord dummy2_jump[32];
+static EvtWord clouda_irai_ato[20];
+static EvtWord mirror_trans[35];
+static EvtWord mirror_rotate[41];
+static EvtWord mario_move_wait[63];
+static EvtWord dummy1_jump[26];
+static EvtWord dummy2_jump[32];
 static s32 item_list[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -107,13 +107,13 @@ extern EvtWord clouda_nakama[];
 EvtWord clouda_nakama[1556];
 #endif
 
-EvtWord touch_door[39];
-EvtWord mirror_ball_event[18];
+static EvtWord touch_door[39];
+static EvtWord mirror_ball_event[18];
 static u32 texture_0[1248];
-Vec rose_table_direct[55];
-f32 rose_table[120];
-EvtWord flower_event[28];
-EvtWord flower_disp_pos[21];
+static Vec rose_table_direct[55];
+static f32 rose_table[120];
+static EvtWord flower_event[28];
+static EvtWord flower_disp_pos[21];
 static EvtWord cloud_toujou[95];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -126,7 +126,7 @@ EvtWord win_04_init_evt[94];
  * Door-open callback for the west bero exit: names the door map objects "S_doa_w_l" and "S_doa_w_r"
  * and runs the shared evt_win_door_open.
  */
-EVT_BEGIN(win_04w_door_open)
+static EVT_BEGIN(win_04w_door_open)
     SET_VALUE(LW(8), STRING("S_doa_w_l"))
     SET_VALUE(LW(9), STRING("S_doa_w_r"))
     SPAWN_EVENT(evt_win_door_open)
@@ -137,7 +137,7 @@ EVT_END()
  * Door-close callback for the west bero exit: names the door map objects "S_doa_w_l" and "S_doa_w_r"
  * and runs the shared evt_win_door_close.
  */
-EVT_BEGIN(win_04w_door_close)
+static EVT_BEGIN(win_04w_door_close)
     SET_VALUE(LW(8), STRING("S_doa_w_l"))
     SET_VALUE(LW(9), STRING("S_doa_w_r"))
     SPAWN_EVENT(evt_win_door_close)
@@ -148,7 +148,7 @@ EVT_END()
  * Door-open callback for the east bero exit: names the door map objects "S_doa_e_l" and "S_doa_e_r"
  * and runs the shared evt_win_door_open.
  */
-EVT_BEGIN(win_04e_door_open)
+static EVT_BEGIN(win_04e_door_open)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SPAWN_EVENT(evt_win_door_open)
@@ -159,7 +159,7 @@ EVT_END()
  * Door-close callback for the east bero exit: names the door map objects "S_doa_e_l" and "S_doa_e_r"
  * and runs the shared evt_win_door_close.
  */
-EVT_BEGIN(win_04e_door_close)
+static EVT_BEGIN(win_04e_door_close)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SPAWN_EVENT(evt_win_door_close)
@@ -181,7 +181,7 @@ EVT_END()
  * Replacement for the west door, swapped in once Flurrie has asked for her necklace: it leads to win_00
  * with an iris wipe, where the Sirens' sketch scene (witchtrio_picture) plays.
  */
-BeroEntry bero_witchtrio[] = {
+static BeroEntry bero_witchtrio[] = {
     {
         "w_bero", // hitName
         1, // type
@@ -249,7 +249,7 @@ static BeroEntry bero_entry_data[] = {
  * the camera looks over the room and Punio guesses she went for a walk (stg2_win_e05_00_00, 01).
  * The story becomes STG2_05_A_SHY_FLURRIE and meet_clouda2 starts.
  */
-EVT_BEGIN(meet_clouda)
+static EVT_BEGIN(meet_clouda)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
@@ -357,7 +357,7 @@ EVT_END()
  * a system message says the door won't budge (stg2_win_e04_03)
  * and the partner thinks the place is deserted (stg2_win_e04_04).
  */
-EVT_BEGIN(clouda_inai)
+static EVT_BEGIN(clouda_inai)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_03"), 0, 0)
     CALL(evt_msg_print_party, STRING("stg2_win_e04_04"))
@@ -502,7 +502,7 @@ EVT_END()
  * Door script after Flurrie's request: speaks "stg2_win_e05_19" from the door
  * while Mario still has not found her necklace.
  */
-EVT_BEGIN(clouda_irai_ato)
+static EVT_BEGIN(clouda_irai_ato)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_19"), 0, 0)
@@ -515,7 +515,7 @@ EVT_END()
  * from 0 to -100 over 1.5 seconds,
  * with the SFX_STG2_CRAUD_LIGHT2 sound playing at (170, 50, 10).
  */
-EVT_BEGIN(mirror_trans)
+static EVT_BEGIN(mirror_trans)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CRAUD_LIGHT2"), 170, 50, 10, LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -100, 1500)
     LOOP(0)
@@ -534,7 +534,7 @@ EVT_END()
  * Endless loop that spins the mirror ball ("S_mirre") 360 degrees every 6 seconds
  * while keeping its height from GW(1).
  */
-EVT_BEGIN(mirror_rotate)
+static EVT_BEGIN(mirror_rotate)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 360, 6000)
         LOOP(0)
@@ -555,7 +555,7 @@ EVT_END()
  * Waits until Mario's position has stayed the same for two frames in a row;
  * clouda_nakama uses it so the scene continues once his walk has ended.
  */
-EVT_BEGIN(mario_move_wait)
+static EVT_BEGIN(mario_move_wait)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SET_VALUE(LW(6), 0)
     LOOP(0)
@@ -589,7 +589,7 @@ EVT_END()
  * hops the hidden helper NPC "dummy1" (whose position the partner follows) from LW(0..2)
  * to 90 units left and 30 back, then sets ssf[0] to 1 so the scene knows the hop is over.
  */
-EVT_BEGIN(dummy1_jump)
+static EVT_BEGIN(dummy1_jump)
     CALL(evt_npc_set_position, STRING("dummy1"), LW(0), LW(1), LW(2))
     ADD(LW(0), -90)
     ADD(LW(2), -30)
@@ -602,7 +602,7 @@ EVT_END()
  * The same for Punio: hops the hidden helper NPC "dummy2" from Punio's position to 90 units left and 30 forward,
  * then sets ssf[1] to 1.
  */
-EVT_BEGIN(dummy2_jump)
+static EVT_BEGIN(dummy2_jump)
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("dummy2"), LW(0), LW(1), LW(2))
     ADD(LW(0), -90)
@@ -612,7 +612,7 @@ EVT_BEGIN(dummy2_jump)
     RETURN
 EVT_END()
 
-USER_FUNC(ss_ch_check) {
+static USER_FUNC(ss_ch_check) {
     u64 out; // FAKE: reorders the args[1] load
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -623,7 +623,7 @@ USER_FUNC(ss_ch_check) {
 }
 
 /** Script helper: sets ssf[args[0]] to args[1]; used by clouda_nakama and the helper hop scripts. */
-USER_FUNC(ss_ch_set) {
+static USER_FUNC(ss_ch_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 
@@ -635,7 +635,7 @@ USER_FUNC(ss_ch_set) {
  * Script helper: covers the screen with a 2D black fade of color (args[0], args[1], args[2]) and alpha args[3],
  * without animating.
  */
-USER_FUNC(fade_alpha) {
+static USER_FUNC(fade_alpha) {
     EvtWord* args = event->args;
     s32 r = evtGetValue(event, args[0]);
     s32 g = evtGetValue(event, args[1]);
@@ -1112,7 +1112,7 @@ EVT_END()
  * Front-door case script: depending on story progress it runs clouda_inai, clouda_irai, clouda_irai_ato,
  * or (after the Sirens' defeat) either asks for the necklace or starts the joining scene clouda_nakama.
  */
-EVT_BEGIN(touch_door)
+static EVT_BEGIN(touch_door)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_05_01_FLURRIE_LIVING_ROOM)
         CALL_CHILD(clouda_inai)
@@ -1138,7 +1138,7 @@ EVT_END()
  * Sets map TEV callback 1 to mirror_ball, assigns it to the map object "S_mirre"
  * and turns off its prebuilt display lists so the callback's extra shine stage is used.
  */
-EVT_BEGIN(mirror_ball_event)
+static EVT_BEGIN(mirror_ball_event)
     CALL(evt_map_set_tevcallback, 1, PTR(mirror_ball))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mirre"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mirre"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -1309,7 +1309,7 @@ static u32 texture_0[] = {
  * Rose petals of Flurrie's entrance: the screen position (x, y) and final size (z) of each of the 55 flowers
  * that evt_flower grows in flower_event.
  */
-Vec rose_table_direct[] = {
+static Vec rose_table_direct[] = {
     {-196.61f, 223.94f, 0.78f},
     {-141.56f, 219.43f, 0.76f},
     {-73.39f, 236.15f, 0.7f},
@@ -1371,7 +1371,7 @@ Vec rose_table_direct[] = {
  * Another layout of rose petals: 60 (x, y) screen positions in rows along the edges of the screen.
  * Nothing reads it; the petals use rose_table_direct.
  */
-f32 rose_table[] = {
+static f32 rose_table[] = {
     -186.66667f, 230.0f, -133.33334f, 230.0f, -80.0f, 230.0f, -26.666672f, 230.0f,
     26.666656f, 230.0f, 80.0f, 230.0f, 133.33334f, 230.0f, 186.66666f, 230.0f,
     -186.66667f, -220.0f, -133.33334f, -220.0f, -80.0f, -220.0f, -26.666672f, -220.0f,
@@ -1393,7 +1393,7 @@ f32 rose_table[] = {
  * Rose-petal effect: allocates 55 flowers, ticks them until GW(0) is set to 1, then fades them out;
  * spawned during Flurrie's joining scene.
  */
-EVT_BEGIN(flower_event)
+static EVT_BEGIN(flower_event)
     SET_VALUE(GW(0), 0)
     CALL(evt_flower_init)
     LOOP(0)
@@ -1411,7 +1411,7 @@ EVT_BEGIN(flower_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(flower_disp_pos)
+static EVT_BEGIN(flower_disp_pos)
     LOOP(0)
         WAIT_FRAMES(1)
         CALL(evt_key_get_button, 0, LW(0))
@@ -1424,7 +1424,7 @@ EVT_BEGIN(flower_disp_pos)
     RETURN
 EVT_END()
 
-void mirror_ball(void* param) {
+static void mirror_ball(void* param) {
     envAddTev(10, param);
 }
 
@@ -1432,7 +1432,7 @@ void mirror_ball(void* param) {
  * 2D draw callback for the falling rose petals:
  * blends each of the 55 flowers' texture at its position, scale and alpha.
  */
-void flower_disp(CameraId camera, void* param) {
+static void flower_disp(CameraId camera, void* param) {
     // rose_table_direct stores screen x/y and target scale in Vec.z, not depth.
     FlowerWork* wp = param;
     CameraEntry* cam = camGetPtr(camera);
@@ -1563,7 +1563,7 @@ static f32 randf(f32 min, f32 max) {
 }
 
 /** Script helper: allocates the rose-petal work area (55 flowers) and stores it in LW(10). */
-USER_FUNC(evt_flower_init) {
+static USER_FUNC(evt_flower_init) {
     FlowerWork* wp = _mapAlloc(sizeof(FlowerWork));
 
     wp->count = 55;
@@ -1577,7 +1577,7 @@ USER_FUNC(evt_flower_init) {
  * after a random delay (0 to 99 frames) at its rose_table_direct position,
  * grows by 0.08 a frame to its target scale while fading in by 20 alpha a frame, and all are drawn in 2D.
  */
-USER_FUNC(evt_flower) {
+static USER_FUNC(evt_flower) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     Flower* fl = wp->flowers;
     s32 i;
@@ -1616,7 +1616,7 @@ USER_FUNC(evt_flower) {
 }
 
 /** Script helper: resets all flowers' states so they start fading. */
-USER_FUNC(evt_flower_end) {
+static USER_FUNC(evt_flower_end) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     Flower* fl = wp->flowers;
     s32 i;
@@ -1628,7 +1628,7 @@ USER_FUNC(evt_flower_end) {
 }
 
 /** Script helper: fades the flowers' alpha by 10 per frame until they are gone, drawing them each frame. */
-USER_FUNC(evt_flower_end_main) {
+static USER_FUNC(evt_flower_end_main) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     Flower* fl = wp->flowers;
     s32 i;
@@ -1651,7 +1651,7 @@ USER_FUNC(evt_flower_end_main) {
 }
 
 /** Loops over the flowers doing nothing; only flower_disp_pos calls it. Guess: its debug output was compiled out. */
-USER_FUNC(flower_pos_report) {
+static USER_FUNC(flower_pos_report) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     s32 i;
 

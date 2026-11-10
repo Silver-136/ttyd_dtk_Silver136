@@ -35,13 +35,13 @@ static USER_FUNC(cam_kaiten_get_para);
 static USER_FUNC(cam_kaiten_init);
 static USER_FUNC(cam_kaiten_set_direct);
 static USER_FUNC(cam_kaiten_set_para);
-USER_FUNC(camps25);
-USER_FUNC(camps30);
+static USER_FUNC(camps25);
+static USER_FUNC(camps30);
 
 static EvtWord first_evt_dokan[18];
 static BeroEntry bero_entry_data[3];
-EvtWord welcome_wonderforest_init[6];
-EvtWord welcome_wonderforest[260];
+static EvtWord welcome_wonderforest_init[6];
+static EvtWord welcome_wonderforest[260];
 EvtWord win_06_init_evt[82];
 
 /**
@@ -102,12 +102,12 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /** Starts the Chapter 2 arrival scene with the letterbox bars on. */
-EVT_BEGIN(welcome_wonderforest_init)
+static EVT_BEGIN(welcome_wonderforest_init)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     RETURN
 EVT_END()
 
-EVT_BEGIN(welcome_wonderforest)
+static EVT_BEGIN(welcome_wonderforest)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -362,7 +362,7 @@ static USER_FUNC(cam_kaiten_init) {
 }
 
 /** Script helper: sets the 3D camera's vertical field of view to 25 degrees. */
-USER_FUNC(camps25) {
+static USER_FUNC(camps25) {
     f32 fovY = 25.0f;
 
     camGetPtr(CAMERA_3D)->fovY = fovY;
@@ -370,7 +370,7 @@ USER_FUNC(camps25) {
 }
 
 /** Script helper: sets the 3D camera's vertical field of view to 30 degrees. */
-USER_FUNC(camps30) {
+static USER_FUNC(camps30) {
     f32 fovY = 30.0f;
 
     camGetPtr(CAMERA_3D)->fovY = fovY;

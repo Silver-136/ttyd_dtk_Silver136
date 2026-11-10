@@ -92,7 +92,7 @@ static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-EvtWord sanders_party_lecture_init[48];
+static EvtWord sanders_party_lecture_init[48];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord sanders_party_lecture[];
@@ -469,7 +469,7 @@ static USER_FUNC(effitemget_busaiku) {
  * Sets up Bobbery's lecture: puts Mario at (90, 0, 0) facing right, frames the camera on him,
  * moves Bobbery next to Mario over one second and turns him to face right.
  */
-EVT_BEGIN(sanders_party_lecture_init)
+static EVT_BEGIN(sanders_party_lecture_init)
     CALL(evt_mario_set_pos, 90, 0, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

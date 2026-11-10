@@ -26,18 +26,18 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-EvtWord toge_7_init[17];
-EvtWord toge_7_talk[44];
-EvtWord toge_8_init[17];
-EvtWord toge_8_talk[44];
-EvtWord toge_9_init[17];
-EvtWord toge_9_talk[44];
-EvtWord toge_10_init[17];
-EvtWord toge_10_regl[19];
-EvtWord toge_10_talk[44];
-EvtWord toge_11_init[17];
-EvtWord toge_11_regl[19];
-EvtWord toge_11_talk[44];
+static EvtWord toge_7_init[17];
+static EvtWord toge_7_talk[44];
+static EvtWord toge_8_init[17];
+static EvtWord toge_8_talk[44];
+static EvtWord toge_9_init[17];
+static EvtWord toge_9_talk[44];
+static EvtWord toge_10_init[17];
+static EvtWord toge_10_regl[19];
+static EvtWord toge_10_talk[44];
+static EvtWord toge_11_init[17];
+static EvtWord toge_11_regl[19];
+static EvtWord toge_11_talk[44];
 static NpcSetupInfo npcEnt[6];
 static EvtWord patolight_sound_off[15];
 static BeroEntry bero_entry_data[3];
@@ -45,7 +45,7 @@ static EvtWord puni_win_offscreen[104];
 static EvtWord puni_win[219];
 static EvtWord puni_lose[86];
 static EvtWord puni_winlose_check[44];
-EvtWord toge_enter_sub[51];
+static EvtWord toge_enter_sub[51];
 static EvtWord toge_enter[50];
 static EvtWord puni_vs_toge_battlewait[36];
 static EvtWord puni_vs_toge_init[86];
@@ -57,7 +57,7 @@ EvtWord mri_11_init_evt[192];
  * Init of Jabbi villager 7: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-220, 0, 110).
  */
-EVT_BEGIN(toge_7_init)
+static EVT_BEGIN(toge_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -71,7 +71,7 @@ EVT_END()
  * Talk script of Jabbi villager 7: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_7_talk)
+static EVT_BEGIN(toge_7_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -89,7 +89,7 @@ EVT_END()
  * Init of Jabbi villager 8: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-75, 0, -100).
  */
-EVT_BEGIN(toge_8_init)
+static EVT_BEGIN(toge_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -103,7 +103,7 @@ EVT_END()
  * Talk script of Jabbi villager 8: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_8_talk)
+static EVT_BEGIN(toge_8_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -121,7 +121,7 @@ EVT_END()
  * Init of Jabbi villager 9: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (70, 0, 80).
  */
-EVT_BEGIN(toge_9_init)
+static EVT_BEGIN(toge_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -135,7 +135,7 @@ EVT_END()
  * Talk script of Jabbi villager 9: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_9_talk)
+static EVT_BEGIN(toge_9_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -153,7 +153,7 @@ EVT_END()
  * Init of Jabbi villager 10: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (180, 0, 60).
  */
-EVT_BEGIN(toge_10_init)
+static EVT_BEGIN(toge_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -167,7 +167,7 @@ EVT_END()
  * Regular script of Jabbi villager 10: has it wander back
  * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
-EVT_BEGIN(toge_10_regl)
+static EVT_BEGIN(toge_10_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -178,7 +178,7 @@ EVT_END()
  * Talk script of Jabbi villager 10: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_10_talk)
+static EVT_BEGIN(toge_10_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -196,7 +196,7 @@ EVT_END()
  * Init of Jabbi villager 11: once the chapter 2 finale has been played
  * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-70, 0, -35).
  */
-EVT_BEGIN(toge_11_init)
+static EVT_BEGIN(toge_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
@@ -210,7 +210,7 @@ EVT_END()
  * Regular script of Jabbi villager 11: has it wander back
  * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
-EVT_BEGIN(toge_11_regl)
+static EVT_BEGIN(toge_11_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -221,7 +221,7 @@ EVT_END()
  * Talk script of Jabbi villager 11: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
-EVT_BEGIN(toge_11_talk)
+static EVT_BEGIN(toge_11_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -511,7 +511,7 @@ EVT_END()
  * after it (LW(10)+1 to LW(10)+4) appear at x=-450 and walk in as a line to x=-200, bending along z (LW(12)),
  * then the chain is released to move on its own.
  */
-EVT_BEGIN(toge_enter_sub)
+static EVT_BEGIN(toge_enter_sub)
     SET_VALUE(LW(13), LW(10))
     ADD(LW(13), 1)
     SET_VALUE(LW(14), LW(10))

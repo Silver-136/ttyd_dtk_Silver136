@@ -12,8 +12,8 @@
 #include "evt/evt_cam.h"
 #include "driver/seqdrv.h"
 
-EvtWord kpa_act_stg1_mobj[151];
-EvtWord kpa_act_stg1_item[31];
+static EvtWord kpa_act_stg1_mobj[151];
+static EvtWord kpa_act_stg1_item[31];
 static EvtWord kpa_fall[41];
 static EvtWord kpa_goal[38];
 static NpcSetupInfo npcEnt[1];
@@ -23,7 +23,7 @@ EvtWord kpa_02_init_evt[36];
  * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 1,
  * ending at the goal pole.
  */
-EvtWord kpa_act_stg1_mobj[] = {
+static EvtWord kpa_act_stg1_mobj[] = {
     KPA_OBJ_BRICK_2(-1225.0f, 125.0f), KPA_OBJ_BRICK_2(-1100.0f, 125.0f), KPA_OBJ_OJAMA_BLK(-1050.0f, 125.0f),
     KPA_OBJ_BRICK_2(-1000.0f, 125.0f), KPA_OBJ_BRICK_2(-1000.0f, 275.0f), KPA_OBJ_BRICK_2(-950.0f, 125.0f),
     KPA_OBJ_BRICK_2(-900.0f, 125.0f), KPA_OBJ_DOKAN_0(-750.0f, 0.0f),
@@ -45,7 +45,7 @@ EvtWord kpa_act_stg1_mobj[] = {
 };
 
 /** Coins Bowser can collect in side-scrolling stage 1, as x and y positions. */
-EvtWord kpa_act_stg1_item[] = {
+static EvtWord kpa_act_stg1_item[] = {
     KPA_ITEM(-687.5f, 112.5f), KPA_ITEM(-650.0f, 112.5f), KPA_ITEM(-500.0f, 137.5f),
     KPA_ITEM(-462.5f, 137.5f), KPA_ITEM(-225.0f, 62.5f), KPA_ITEM(-187.5f, 62.5f), KPA_ITEM(150.0f, 125.0f),
     KPA_ITEM(187.5f, 125.0f), KPA_ITEM(325.0f, 162.5f), KPA_ITEM(362.5f, 162.5f), KPA_ITEM_END,

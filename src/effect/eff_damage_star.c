@@ -56,7 +56,7 @@ static u8 color_rotation_data[] = {
  * Keyframes of the damage star's parent joint: it slides in from the left with a small bob and settles
  * slightly to the side of the hit over 65 frames.
  */
-MayaHermitKey damageStar_effHermit_0[] = {
+static MayaHermitKey damageStar_effHermit_0[] = {
     {
         0, // time
         {
@@ -140,7 +140,7 @@ MayaHermitKey damageStar_effHermit_0[] = {
  * Keyframes of the damage star itself: it pops in with a squash and stretch, tips over around frame 40,
  * then shrinks to nothing by frame 65. The damage number is drawn on this joint.
  */
-MayaHermitKey damageStar_effHermit_1[] = {
+static MayaHermitKey damageStar_effHermit_1[] = {
     {
         0, // time
         {
@@ -254,24 +254,24 @@ MayaHermitKey damageStar_effHermit_1[] = {
 };
 
 /** The damage star's square face: four corners with texture coordinates. */
-s16 damageStar_effFace_pPlane168_0[] = {
+static s16 damageStar_effFace_pPlane168_0[] = {
     4, // vertex count
     -1024, -1024, 0, 0, 512,
     1024, -1024, 0, 512, 512,
     1024, 1024, 0, 512, 0,
     -1024, 1024, 0, 0, 0,
 };
-s16* damageStar_effFaceDt_pPlane168 = damageStar_effFace_pPlane168_0;
+static s16* damageStar_effFaceDt_pPlane168 = damageStar_effFace_pPlane168_0;
 /** The two star joints and their keyframes; only the second joint has a face to draw. */
-MayaPoly damageStar_effAnimRST[] = {
+static MayaPoly damageStar_effAnimRST[] = {
     {7, damageStar_effHermit_0, 0, NULL},
     {10, damageStar_effHermit_1, 1, &damageStar_effFaceDt_pPlane168},
 };
 
 /** Joint list of the damage star animation. */
-MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
+static MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
 /** The damage star animation (65 frames), started by effDamageStarEntry and positioning the number. */
-MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
+static MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
 
 static void effDamageStarMain(EffectEntry* effect);
 static void effDamageStarDisp(CameraId cameraId, void* payload);

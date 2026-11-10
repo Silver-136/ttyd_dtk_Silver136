@@ -78,7 +78,7 @@ typedef struct FanWork {
     s32 sfxId;
     u8 vol;
 } FanWork;
-FanWork* fan_wp;
+static FanWork* fan_wp;
 static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
 static f32 randf(f32 min, f32 max);
@@ -88,7 +88,7 @@ static void pose_main(void);
 
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_init(EventEntry* event, BOOL isFirstCall);
-s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
+static s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
@@ -100,22 +100,22 @@ EvtWord n_1_door_open[22];
 EvtWord n_1_door_close[22];
 static EvtWord n_2_door_open[22];
 static EvtWord n_2_door_close[22];
-EvtWord n_3_door_open[12];
-EvtWord n_3_door_close[12];
-EvtWord n_4_door_open[12];
-EvtWord n_4_door_close[12];
+static EvtWord n_3_door_open[12];
+static EvtWord n_3_door_close[12];
+static EvtWord n_4_door_open[12];
+static EvtWord n_4_door_close[12];
 static BeroEntry bero_data[6];
 EvtWord evt_move_g[63];
-EvtWord init_gard1[39];
-EvtWord talk_gard1[70];
-EvtWord init_gard2[39];
-EvtWord talk_gard2[70];
+static EvtWord init_gard1[39];
+static EvtWord talk_gard1[70];
+static EvtWord init_gard2[39];
+static EvtWord talk_gard2[70];
 static EvtWord init_madam[39];
 static EvtWord talk_madam[67];
-EvtWord init_repo[8];
-EvtWord talk_repo[112];
-EvtWord init_cam1[8];
-EvtWord talk_cam1[112];
+static EvtWord init_repo[8];
+static EvtWord talk_repo[112];
+static EvtWord init_cam1[8];
+static EvtWord talk_cam1[112];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord init_cam2[];
@@ -123,32 +123,32 @@ extern EvtWord init_cam2[];
 EvtWord init_cam2[19];
 #endif
 
-EvtWord talk_cam2[112];
-EvtWord init_kino4[13];
-EvtWord reg_kino4[31];
-EvtWord talk_kino4[112];
-EvtWord init_kino5[8];
+static EvtWord talk_cam2[112];
+static EvtWord init_kino4[13];
+static EvtWord reg_kino4[31];
+static EvtWord talk_kino4[112];
+static EvtWord init_kino5[8];
 EvtWord talk_kino5[];
-EvtWord init_kinopiko[8];
-EvtWord talk_kinopiko[112];
-EvtWord init_kinopio_f[8];
-EvtWord talk_kinopio_f[112];
-EvtWord init_chu[20];
-EvtWord talk_chu[67];
+static EvtWord init_kinopiko[8];
+static EvtWord talk_kinopiko[112];
+static EvtWord init_kinopio_f[8];
+static EvtWord talk_kinopio_f[112];
+static EvtWord init_chu[20];
+static EvtWord talk_chu[67];
 static EvtWord init_champ[32];
 s32 move_pos[26];
-EvtWord move_champ[155];
-EvtWord talk_champ[34];
-EvtWord init_shikowa[32];
-EvtWord talk_shikowa[13];
+static EvtWord move_champ[155];
+static EvtWord talk_champ[34];
+static EvtWord init_shikowa[32];
+static EvtWord talk_shikowa[13];
 static EvtWord init_uranoko[32];
 static EvtWord talk_uranoko[13];
-EvtWord init_ironA[38];
-EvtWord talk_ironA[13];
-EvtWord init_ironB[38];
-EvtWord talk_ironB[13];
-EvtWord init_borodo[32];
-EvtWord talk_borodo[13];
+static EvtWord init_ironA[38];
+static EvtWord talk_ironA[13];
+static EvtWord init_ironB[38];
+static EvtWord talk_ironB[13];
+static EvtWord init_borodo[32];
+static EvtWord talk_borodo[13];
 static NpcSetupInfo npcEnt[17];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -157,7 +157,7 @@ extern EvtWord evt_tougi2[];
 EvtWord evt_tougi2[285];
 #endif
 
-ExtTexInfo ext_fan_data[28];
+static ExtTexInfo ext_fan_data[28];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord mario_momikucha_msg[];
@@ -352,28 +352,28 @@ static EVT_BEGIN(n_2_door_close)
 EVT_END()
 
 /** Swings open the lobby door door_4. */
-EVT_BEGIN(n_3_door_open)
+static EVT_BEGIN(n_3_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings the lobby door door_4 closed again. */
-EVT_BEGIN(n_3_door_close)
+static EVT_BEGIN(n_3_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings open the lobby door door_5. */
-EVT_BEGIN(n_4_door_open)
+static EVT_BEGIN(n_4_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
 /** Swings the lobby door door_5 closed again. */
-EVT_BEGIN(n_4_door_close)
+static EVT_BEGIN(n_4_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_5"), 0, LW(0), 0)
     RETURN
@@ -503,7 +503,7 @@ EVT_END()
  * NPC init for the left guard: stands at x = -470 until the guards step aside, then at -530;
  * at or after STG3_33_06_BOWSER_TREASURE, GSWF_TOU_02_GUARD_STEPPED_ASIDE selects between those positions.
  */
-EVT_BEGIN(init_gard1)
+static EVT_BEGIN(init_gard1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_02_THE_GUARD_BACKS_OFF)
         CALL(evt_npc_set_position, STRING("me"), -470, 0, -185)
@@ -524,7 +524,7 @@ EVT_END()
  * steps aside, then up to STG3_33_06_BOWSER_TREASURE; afterwards GSWF_TOU_LEFT_AFTER_CHAPTER and
  * GSWF_TOU_02_GUARD_STEPPED_ASIDE choose the line).
  */
-EVT_BEGIN(talk_gard1)
+static EVT_BEGIN(talk_gard1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
         CALL(evt_msg_print, 0, STRING("stg3_tou_24"), 0, 0)
@@ -551,7 +551,7 @@ EVT_BEGIN(talk_gard1)
 EVT_END()
 
 /** NPC init for the right guard: stands at x = 470 until the guards step aside, then at 530. */
-EVT_BEGIN(init_gard2)
+static EVT_BEGIN(init_gard2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_02_THE_GUARD_BACKS_OFF)
         CALL(evt_npc_set_position, STRING("me"), 470, 0, -185)
@@ -568,7 +568,7 @@ EVT_BEGIN(init_gard2)
 EVT_END()
 
 /** Talk script of the right guard: same lines as talk_gard1. */
-EVT_BEGIN(talk_gard2)
+static EVT_BEGIN(talk_gard2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
         CALL(evt_msg_print, 0, STRING("stg3_tou_24"), 0, 0)
@@ -645,7 +645,7 @@ static EVT_BEGIN(talk_madam)
 EVT_END()
 
 /** NPC init for the reporter: stands at (-100, 0, -25). */
-EVT_BEGIN(init_repo)
+static EVT_BEGIN(init_repo)
     CALL(evt_npc_set_position, STRING("me"), -100, 0, -25)
     RETURN
 EVT_END()
@@ -654,7 +654,7 @@ EVT_END()
  * Talk script of the reporter: story-dependent lines (before Gonzales, until the boss battle,
  * then at or after STG3_32_BOSS_BATTLE, with rematch flags selecting further lines).
  */
-EVT_BEGIN(talk_repo)
+static EVT_BEGIN(talk_repo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_02_01"), 0, 0)
@@ -695,13 +695,13 @@ EVT_BEGIN(talk_repo)
 EVT_END()
 
 /** NPC init for the first camera operator: stands at (-150, 0, 0). */
-EVT_BEGIN(init_cam1)
+static EVT_BEGIN(init_cam1)
     CALL(evt_npc_set_position, STRING("me"), -150, 0, 0)
     RETURN
 EVT_END()
 
 /** Talk script of the first camera operator: story-dependent lines. */
-EVT_BEGIN(talk_cam1)
+static EVT_BEGIN(talk_cam1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_03_01"), 0, 0)
@@ -756,7 +756,7 @@ EVT_BEGIN(init_cam2)
 EVT_END()
 
 /** Talk script of the second camera operator: story-dependent lines. */
-EVT_BEGIN(talk_cam2)
+static EVT_BEGIN(talk_cam2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_04_01"), 0, 0)
@@ -797,14 +797,14 @@ EVT_BEGIN(talk_cam2)
 EVT_END()
 
 /** NPC init for the fourth Toad: placed at (-350, 0, 75). */
-EVT_BEGIN(init_kino4)
+static EVT_BEGIN(init_kino4)
     CALL(evt_npc_set_position, STRING("me"), -350, 0, 75)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 /** Regular (idle) script of the fourth Toad: paces between x = -350 and 350. */
-EVT_BEGIN(reg_kino4)
+static EVT_BEGIN(reg_kino4)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), -350, 75, 0, FLOAT(48.0f), 0)
         WAIT_MS(1000)
@@ -817,7 +817,7 @@ EVT_BEGIN(reg_kino4)
 EVT_END()
 
 /** Talk script of the fourth Toad: story-dependent lines. */
-EVT_BEGIN(talk_kino4)
+static EVT_BEGIN(talk_kino4)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_05_01"), 0, 0)
@@ -858,7 +858,7 @@ EVT_BEGIN(talk_kino4)
 EVT_END()
 
 /** NPC init for the fifth Toad: placed at (-520, 0, 25). */
-EVT_BEGIN(init_kino5)
+static EVT_BEGIN(init_kino5)
     CALL(evt_npc_set_position, STRING("me"), -520, 0, 25)
     RETURN
 EVT_END()
@@ -978,13 +978,13 @@ EVT_BEGIN(talk_kino5)
 EVT_END()
 
 /** NPC init for キノピコ: placed at (-490, 0, 25). */
-EVT_BEGIN(init_kinopiko)
+static EVT_BEGIN(init_kinopiko)
     CALL(evt_npc_set_position, STRING("me"), -490, 0, 25)
     RETURN
 EVT_END()
 
 /** Talk script of キノピコ: story-dependent lines. */
-EVT_BEGIN(talk_kinopiko)
+static EVT_BEGIN(talk_kinopiko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_07_01"), 0, 0)
@@ -1026,13 +1026,13 @@ EVT_BEGIN(talk_kinopiko)
 EVT_END()
 
 /** NPC init for the female Toad: placed at (100, 0, 0). */
-EVT_BEGIN(init_kinopio_f)
+static EVT_BEGIN(init_kinopio_f)
     CALL(evt_npc_set_position, STRING("\203L\203m\203s\203I\217\227"), 100, 0, 0)
     RETURN
 EVT_END()
 
 /** Talk script of the female Toad: story-dependent lines. */
-EVT_BEGIN(talk_kinopio_f)
+static EVT_BEGIN(talk_kinopio_f)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_08_01"), 0, 0)
@@ -1076,7 +1076,7 @@ EVT_END()
  * NPC init for chu: placed at (245, 0, 125) before STG3_20_08_MS_MOWZ in demos
  * or STG3_20_05_MAJORS_4TH_PL in retail; otherwise placed at y = -1000.
  */
-EVT_BEGIN(init_chu)
+static EVT_BEGIN(init_chu)
 #if VERSION <= VERSION_DEMO_JP
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_20_08_MS_MOWZ)
@@ -1093,7 +1093,7 @@ EVT_BEGIN(init_chu)
 EVT_END()
 
 /** Talk script of the mouse (chu): story-dependent lines. */
-EVT_BEGIN(talk_chu)
+static EVT_BEGIN(talk_chu)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_10_01"), 0, 0)
@@ -1150,7 +1150,7 @@ s32 move_pos[] = {
  * 2 to 7 s a fan's cry (stg3_tou_182 to 189 and 186_01, in turn) pops up with its tail at a random spot near
  * him; it ends once fewer than 10 fans are left. It steps through move_pos but discards the values it reads.
  */
-EVT_BEGIN(move_champ)
+static EVT_BEGIN(move_champ)
     SET_VALUE(LW(10), 0)
     LOOP(0)
         SET_INT_READ_ADDR(PTR(move_pos))
@@ -1204,7 +1204,7 @@ EVT_BEGIN(move_champ)
 EVT_END()
 
 /** Champion talk: before STG3_33_06_BOWSER_TREASURE, stg3_tou_190_01 if the fan count is zero, otherwise stg3_tou_190; later stg3_tou_479_02. */
-EVT_BEGIN(talk_champ)
+static EVT_BEGIN(talk_champ)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_end_count, LW(0))
@@ -1223,7 +1223,7 @@ EVT_END()
  * NPC init for キノシコワ: at STG3_33_06_BOWSER_TREASURE (after the Bowser interlude, before
  * Mario leaves Glitzville) she is placed at (-25, 0, 75) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
-EVT_BEGIN(init_shikowa)
+static EVT_BEGIN(init_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
@@ -1239,7 +1239,7 @@ EVT_BEGIN(init_shikowa)
 EVT_END()
 
 /** Talk script of キノシコワ: stg3_tou_479_01 at STG3_33_06_BOWSER_TREASURE; otherwise nothing. */
-EVT_BEGIN(talk_shikowa)
+static EVT_BEGIN(talk_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_msg_print, 0, STRING("stg3_tou_479_01"), 0, STRING("me"))
@@ -1283,7 +1283,7 @@ EVT_END()
  * NPC init for アイアンＡ: scaled 1.5 in x and y, and at
  * STG3_33_06_BOWSER_TREASURE placed at (-30, 0, -50) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
-EVT_BEGIN(init_ironA)
+static EVT_BEGIN(init_ironA)
     CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1300,7 +1300,7 @@ EVT_BEGIN(init_ironA)
 EVT_END()
 
 /** Talk script of アイアンＡ: stg3_tou_479_04 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
-EVT_BEGIN(talk_ironA)
+static EVT_BEGIN(talk_ironA)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_msg_print, 0, STRING("stg3_tou_479_04"), 0, STRING("me"))
@@ -1312,7 +1312,7 @@ EVT_END()
  * NPC init for アイアンＢ: scaled 1.5 in x and y, and at
  * STG3_33_06_BOWSER_TREASURE placed at (-60, 0, -25) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
-EVT_BEGIN(init_ironB)
+static EVT_BEGIN(init_ironB)
     CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1329,7 +1329,7 @@ EVT_BEGIN(init_ironB)
 EVT_END()
 
 /** Talk script of アイアンＢ: stg3_tou_479_05 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
-EVT_BEGIN(talk_ironB)
+static EVT_BEGIN(talk_ironB)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_msg_print, 0, STRING("stg3_tou_479_05"), 0, STRING("me"))
@@ -1338,7 +1338,7 @@ EVT_BEGIN(talk_ironB)
 EVT_END()
 
 /** NPC init for ボロドー: placed at (-100, 0, 100) in the late Chapter 3 scene. */
-EVT_BEGIN(init_borodo)
+static EVT_BEGIN(init_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
@@ -1354,7 +1354,7 @@ EVT_BEGIN(init_borodo)
 EVT_END()
 
 /** Talk script of ボロドー in the late Chapter 3 scene (stg3_tou_479_06). */
-EVT_BEGIN(talk_borodo)
+static EVT_BEGIN(talk_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_msg_print, 0, STRING("stg3_tou_479_06"), 0, STRING("me"))
@@ -1675,7 +1675,7 @@ EVT_END()
  * Texture frames of the lobby fan crowd sprites: c_kinopio, c_kinopiko and c_jugemu walk cycles,
  * grouped into animations by pose_init and registered with evt_ext_entry.
  */
-ExtTexInfo ext_fan_data[] = {
+static ExtTexInfo ext_fan_data[] = {
     {"c_kinopio", "KNP_W_1", 2.0f},
     {"c_kinopio", "KNP_W_1", 6.0f},
     {"c_kinopio", "KNP_W_1", 10.0f},
@@ -1767,7 +1767,7 @@ void ext_fan_init(void) {
 }
 
 /** Display callback of the fan crowd: loads render mode, vertices, textures and TEV, and draws all fan sprites. */
-void fan_disp(CameraId camera, void* param) {
+static void fan_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -2378,7 +2378,7 @@ s32 check_hammer(Fan* fan) {
 #pragma opt_propagation reset
 
 /** Script helper: args[0] receives the walking-fan count; retail excludes flagged anchors, demos include the hidden Mario anchor. */
-s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
+static s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
     evtSetValue(event, event->args[0], fan_wp->count);
     return EVT_RETURN_DONE;
 }

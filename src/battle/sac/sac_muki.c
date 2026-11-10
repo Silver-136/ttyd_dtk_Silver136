@@ -97,7 +97,7 @@ static void main_cursor(void);
  * 3-turn Attack or Defense boost of the points earned in the minigame.
  */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(nice_event_pow)
+static EVT_BEGIN(nice_event_pow)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
     RETURN
 EVT_END()
@@ -142,13 +142,13 @@ static BattleWeapon weapon = {
 };
 
 #if VERSION >= VERSION_JP
-EVT_BEGIN(nice_event_pow)
+static EVT_BEGIN(nice_event_pow)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
     RETURN
 EVT_END()
 #endif
 
-USER_FUNC(main_muki) {
+static USER_FUNC(main_muki) {
     MukiWork* w = get_ptr();
     EvtWord* args = event->args;
     s32 i;
@@ -724,7 +724,7 @@ static void main_star(void) {
 }
 
 /** Cleanup when the move ends: deletes the star and the grid icon effects. */
-USER_FUNC(end_muki) {
+static USER_FUNC(end_muki) {
     MukiWork* w = get_ptr();
     s32 i;
 

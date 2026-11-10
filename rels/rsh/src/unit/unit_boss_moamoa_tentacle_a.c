@@ -32,10 +32,10 @@ static EvtWord dead_event[115];
 static EvtWord phase_event[2];
 static EvtWord attack_event[21];
 static EvtWord evt_attack_other_arm[81];
-const char* A_of_A_Attack_front[10];
-const char* A_of_A_Attack_back[10];
-const char* B_of_A_Attack[6];
-const char* C_of_A_Attack[6];
+static const char* A_of_A_Attack_front[10];
+static const char* A_of_A_Attack_back[10];
+static const char* B_of_A_Attack[6];
+static const char* C_of_A_Attack[6];
 static EvtWord evt_attack[387];
 static EvtWord wait_event[32];
 
@@ -348,7 +348,7 @@ EVT_END()
 /**
  * Animation names tentacle A plays, in order, for its swing when the target stands in front (x of -120 or more).
  */
-const char* A_of_A_Attack_front[] = {
+static const char* A_of_A_Attack_front[] = {
     "M_1A_1",
     "A_1A_1",
     "A_1A_2",
@@ -362,7 +362,7 @@ const char* A_of_A_Attack_front[] = {
 };
 
 /** Animation names tentacle A plays, in order, for its swing when the target stands toward the back. */
-const char* A_of_A_Attack_back[] = {
+static const char* A_of_A_Attack_back[] = {
     "M_1A_1",
     "A_1A_5",
     "A_1A_6",
@@ -376,7 +376,7 @@ const char* A_of_A_Attack_back[] = {
 };
 
 /** Animation names tentacle B plays, in order, while tentacle A attacks (B follows along). */
-const char* B_of_A_Attack[] = {
+static const char* B_of_A_Attack[] = {
     "M_1B_1",
     "S_1B_2",
     NULL,
@@ -386,7 +386,7 @@ const char* B_of_A_Attack[] = {
 };
 
 /** Animation names tentacle C plays, in order, while tentacle A attacks (C follows along). */
-const char* C_of_A_Attack[] = {
+static const char* C_of_A_Attack[] = {
     "M_1C_1",
     "S_1C_2",
     NULL,

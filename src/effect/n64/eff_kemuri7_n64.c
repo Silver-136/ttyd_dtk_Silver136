@@ -33,7 +33,7 @@ typedef struct EffKemuri7N64Work {
 } EffKemuri7N64Work;
 
 /** Flat 10x10 snow footprint quad lying on the ground. */
-effN64Vtx foot_vtx[] = {
+static effN64Vtx foot_vtx[] = {
     {-5, 0, -5, 0, 1024, 0, 0, 0, 255},
     {5, 0, -5, 1024, 1024, 0, 0, 0, 255},
     {5, 0, 5, 1024, 0, 0, 0, 0, 255},

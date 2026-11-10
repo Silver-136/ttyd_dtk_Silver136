@@ -26,15 +26,15 @@ static void camLetterBox(void);
 #define HALF_FOVY_RAD_F 0.21816615760326385
 
 //.bss
-CameraEntry* camPtrTbl[CAMERA_MAX];
+static CameraEntry* camPtrTbl[CAMERA_MAX];
 
 //.sdata
-Vec camPtDefault = { 0.0f, 0.0f, 1000.0f };
-Vec camAtDefault = { 0.0f, 0.0f, 0.0f };
-Vec camUpDefault = { 0.0f, 1.0f, 0.0f };
+static Vec camPtDefault = { 0.0f, 0.0f, 1000.0f };
+static Vec camAtDefault = { 0.0f, 0.0f, 0.0f };
+static Vec camUpDefault = { 0.0f, 1.0f, 0.0f };
 
 //.sbss
-CameraId currentCamNo;
+static CameraId currentCamNo;
 
 // forward declarations
 CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 near, f32 far, f32 nearZ, f32 farZ,

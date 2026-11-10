@@ -54,21 +54,21 @@ typedef struct GonbabaProj {
     smartEntry* tex;
 } GonbabaProj;
 
-USER_FUNC(cam_test);
-USER_FUNC(dist_check);
-USER_FUNC(make_gonbaba_projection_evt);
+static USER_FUNC(cam_test);
+static USER_FUNC(dist_check);
+static USER_FUNC(make_gonbaba_projection_evt);
 static USER_FUNC(proj_mtx);
 static USER_FUNC(proj_off);
 static USER_FUNC(proj_on);
 USER_FUNC(shake);
-USER_FUNC(shake_reset);
+static USER_FUNC(shake_reset);
 USER_FUNC(hei_00_mario_keyoff_check);
-USER_FUNC(cam_test2);
+static USER_FUNC(cam_test2);
 
-EvtWord make_proj_evt[4];
-EvtWord evt_gonbaba_shadow[161];
+static EvtWord make_proj_evt[4];
+static EvtWord evt_gonbaba_shadow[161];
 static EvtWord first_evt[197];
-EvtWord gonbaba_evt[447];
+static EvtWord gonbaba_evt[447];
 static EvtWord first_evt_dokan[18];
 static BeroEntry bero_entry_data[6];
 static BeroEntry e3_bero[2];
@@ -80,33 +80,33 @@ EvtWord evt_snd[234];
 extern EvtWord moji_msg[];
 static EvtWord switch_evt[303];
 static EvtWord dokan_evt[335];
-EvtWord setting_sun_stone[43];
+static EvtWord setting_sun_stone[43];
 static s32 itemsel_table00[2];
 extern EvtWord sun_stone_set_event[];
-EvtWord setting_moon_stone[43];
+static EvtWord setting_moon_stone[43];
 static s32 itemsel_table01[2];
 extern EvtWord moon_stone_set_event[];
 #else
 EvtWord moji_msg[22];
 static EvtWord switch_evt[303];
 static EvtWord dokan_evt[345];
-EvtWord setting_sun_stone[43];
+static EvtWord setting_sun_stone[43];
 static s32 itemsel_table00[2];
 EvtWord sun_stone_set_event[68];
-EvtWord setting_moon_stone[43];
+static EvtWord setting_moon_stone[43];
 static s32 itemsel_table01[2];
 EvtWord moon_stone_set_event[68];
 #endif
 
 static EvtWord ki_data_evt_01[20];
-EvtWord ki_data_evt_02[20];
+static EvtWord ki_data_evt_02[20];
 static TreeAccess ki_data[4];
 static NpcSetupInfo npcEnt[2];
 
 #if VERSION >= VERSION_US
-EvtWord hei_00_koopa_evt[272];
+static EvtWord hei_00_koopa_evt[272];
 #else
-EvtWord hei_00_koopa_evt[269];
+static EvtWord hei_00_koopa_evt[269];
 #endif
 
 static EvtWord epilogue_npc_entry[30];
@@ -141,7 +141,7 @@ static USER_FUNC(proj_off) {
  * Display callback for the Hooktail shadow: renders the hidden shadow NPC (Hooktail, seen from straight above)
  * into a 608x480 texture that the map then projects onto the ground, then restores the caller's view and GX state.
  */
-void make_gonbaba_projection(CameraId camera, void* param) {
+static void make_gonbaba_projection(CameraId camera, void* param) {
     GonbabaProj* wp = param;
     CameraEntry saved;
     Mtx44 proj;
@@ -186,7 +186,7 @@ void make_gonbaba_projection(CameraId camera, void* param) {
  * Script helper: every frame until the event is deleted, allocates the shadow texture
  * and registers make_gonbaba_projection as a shadow-camera draw callback (the work struct is allocated once).
  */
-USER_FUNC(make_gonbaba_projection_evt) {
+static USER_FUNC(make_gonbaba_projection_evt) {
     GonbabaProj* wp;
 
     if (isFirstCall) {
@@ -257,7 +257,7 @@ USER_FUNC(shake) {
 }
 
 /** Script helper: puts the camera's z view offset back to 0 after the flyover shake. */
-USER_FUNC(shake_reset) {
+static USER_FUNC(shake_reset) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
     camera->viewOffset.z = 0.0f;
@@ -268,7 +268,7 @@ USER_FUNC(shake_reset) {
  * Starts the Hooktail shadow capture; run as a separate event by evt_gonbaba_shadow so the texture exists
  * while the shadow moves.
  */
-EVT_BEGIN(make_proj_evt)
+static EVT_BEGIN(make_proj_evt)
     CALL(make_gonbaba_projection_evt)
     RETURN
 EVT_END()
@@ -278,7 +278,7 @@ EVT_END()
  * values), shakes the camera and projects the dragon's shadow over the map and the characters,
  * then restores the normal map objects.
  */
-EVT_BEGIN(evt_gonbaba_shadow)
+static EVT_BEGIN(evt_gonbaba_shadow)
     SPAWN_EVENT_GET_ID(PTR(make_proj_evt), LW(9))
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)
@@ -338,7 +338,7 @@ EVT_BEGIN(evt_gonbaba_shadow)
     RETURN
 EVT_END()
 
-USER_FUNC(cam_test) {
+static USER_FUNC(cam_test) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     CameraEntry* camera = camGetPtr(CAMERA_3D);
@@ -363,7 +363,7 @@ USER_FUNC(cam_test) {
  * Script helper: same as cam_test but with the camera 270 units back and a higher road camera;
  * used at the end of the flyover.
  */
-USER_FUNC(cam_test2) {
+static USER_FUNC(cam_test2) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     CameraEntry* camera = camGetPtr(CAMERA_3D);
@@ -454,7 +454,7 @@ EVT_END()
  * Hooktail's sprite flies in from the back and out again, and the partner comments.
  * Sets the story progress to "The Shadow of Hooktail".
  */
-EVT_BEGIN(gonbaba_evt)
+static EVT_BEGIN(gonbaba_evt)
     // Waits until Mario walks east of x=-100.
     LABEL(1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -819,7 +819,7 @@ EVT_BEGIN(evt_snd)
 EVT_END()
 
 // Report whether the current partner is within 100 units of the pipe's fixed reference point.
-USER_FUNC(dist_check) {
+static USER_FUNC(dist_check) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     Vec pos = {150.0f, 25.0f, 0.0f};
@@ -1076,7 +1076,7 @@ USER_FUNC(hei_00_mario_keyoff_check) {
  * Map-init script: if the Sun Stone has already been placed, hides its empty socket and shows the stone model;
  * when the Moon Stone is placed as well, its pillar (isi_4, with collision) and the stone stand 80 units to the left.
  */
-EVT_BEGIN(setting_sun_stone)
+static EVT_BEGIN(setting_sun_stone)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
@@ -1130,7 +1130,7 @@ EVT_END()
  * Map-init script: if the Moon Stone has already been placed, hides its empty socket and shows the stone model;
  * when the Sun Stone is placed as well, its pillar (isi_3, with collision) and the stone stand 80 units to the right.
  */
-EVT_BEGIN(setting_moon_stone)
+static EVT_BEGIN(setting_moon_stone)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
@@ -1192,7 +1192,7 @@ EVT_END()
  * Reward script for the second tree (ki_02): if the item has not been taken yet,
  * drops a Mushroom from it when Mario hits the tree.
  */
-EVT_BEGIN(ki_data_evt_02)
+static EVT_BEGIN(ki_data_evt_02)
     CALL(evt_item_delete_check, STRING("item_ki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_ki02"), ITEM_MUSHROOM, -408, 139, -127, ITEM_TYPE_FALL_NO_PICKUP, GSWF_HEI_00_MUSHROOM_TREE, 0)
@@ -1231,7 +1231,7 @@ static NpcSetupInfo npcEnt[] = {
  * town ahead (kpa_stg2_000..003), the story moves to STG2_25_03_BOWSER_MEADOWS, Bowser laughs and walks
  * off with Kammy, and the map changes to kpa_02.
  */
-EVT_BEGIN(hei_00_koopa_evt)
+static EVT_BEGIN(hei_00_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -312, 75, -50)
     CALL(evt_mario_set_dir, 90, 0, 0)

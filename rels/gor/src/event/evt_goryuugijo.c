@@ -12,9 +12,9 @@
 #include "string.h"
 #include "driver/dispdrv.h"
 
-void evt_goryuugijo_disp_func(CameraId camera, void* param);
+static void evt_goryuugijo_disp_func(CameraId camera, void* param);
 
-USER_FUNC(evt_goryuugijo_main_func);
+static USER_FUNC(evt_goryuugijo_main_func);
 USER_FUNC(eff_call_yuugijo);
 USER_FUNC(evt_goryuugijo_free);
 
@@ -101,7 +101,7 @@ USER_FUNC(evt_goryuugijo_alloc) {
  * stops when the quit flag is set, otherwise runs the game's main function unless a sub-event is still running,
  * and queues the 2D draw (priority 1000). Never finishes by itself.
  */
-USER_FUNC(evt_goryuugijo_main_func) {
+static USER_FUNC(evt_goryuugijo_main_func) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
 
     if (wp->flags & 1) {
@@ -121,7 +121,7 @@ disp:
 }
 
 /** Draw callback of a hall minigame: forwards to the game's own disp function. */
-void evt_goryuugijo_disp_func(CameraId camera, void* param) {
+static void evt_goryuugijo_disp_func(CameraId camera, void* param) {
     ((MiniGameWork*)param)->disp(camera, param);
 }
 

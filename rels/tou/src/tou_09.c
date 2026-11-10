@@ -27,7 +27,7 @@ static EvtWord toile_in[11];
 static EvtWord toile_out[35];
 static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
-EvtWord evt_in[68];
+static EvtWord evt_in[68];
 static BeroEntry bero_data[4];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -107,7 +107,7 @@ EVT_END()
  * it swings shut with the closing sound after 0.5 s while Mario walks in to (-160, 130)
  * and the partner to (-180, 120). It sets LW(0) = 1, which tells the entrance code to skip its own walk-in.
  */
-EVT_BEGIN(evt_in)
+static EVT_BEGIN(evt_in)
     CALL(evt_mario_set_pos, -235, 12, 135)
     CALL(evt_party_set_pos, 0, -235, 12, 120)
     CALL(evt_party_set_dir, 0, 90, 0)

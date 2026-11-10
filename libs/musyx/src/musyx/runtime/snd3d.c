@@ -17,7 +17,7 @@ static u32 snd_used_studios;
 static u8 snd_base_studio;
 static u8 snd_max_studios;
 static u8 s3dUseMaxVoices;
-u8 s3dUseLegacyLogic;
+static u8 s3dUseLegacyLogic;
 extern void (*s3dOcclusionCallback)(struct SND_EMITTER*, SND_FVECTOR*, SND_FVECTOR*, void*, SND_FVECTOR*, SND_FVECTOR*, f32*, f32*);
 
 // Not reconstructed (this game does not link them): UpdateRoomDistances, CheckRoomStatus, sndAddRoom, sndRemoveRoom,
@@ -441,7 +441,7 @@ static inline void AddRunningEmitter(SND_EMITTER* em, f32 vol) {
   runList[runListNum++].vol = vol;
 }
 
-bool AddStartingEmitter(SND_EMITTER* em, f32 vol, f32 xPan, f32 yPan, f32 zPan, f32 pitch, f32 occl) {
+static bool AddStartingEmitter(SND_EMITTER* em, f32 vol, f32 xPan, f32 yPan, f32 zPan, f32 pitch, f32 occl) {
   long i;
   START_LIST* sl;
 
@@ -494,7 +494,7 @@ bool AddStartingEmitter(SND_EMITTER* em, f32 vol, f32 xPan, f32 yPan, f32 zPan, 
 }
 
 int synthCheckFXRealloc(unsigned short fid);
-void StartContinousEmitters() {
+static void StartContinousEmitters() {
   f32 dv;
 
   if (s3dUseLegacyLogic) {
@@ -612,7 +612,7 @@ void StartContinousEmitters() {
   }
 }
 
-START_LIST startListNum[64];
+static START_LIST startListNum[64];
 
 void s3dHandle() {
 

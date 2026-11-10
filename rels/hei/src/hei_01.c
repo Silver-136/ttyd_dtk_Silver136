@@ -42,7 +42,7 @@
 
 static USER_FUNC(set_dir);
 
-EvtWord bero_out_event[5];
+static EvtWord bero_out_event[5];
 static BeroEntry bero_entry_data[5];
 static EvtWord evt_kusa_2[20];
 static EvtWord evt_kusa_4[20];
@@ -50,22 +50,22 @@ static EvtWord evt_kusa_7[20];
 static KusaAccess kusa_data[7];
 EvtWord kusa_dokan[59];
 static const char* name_tbl[25];
-EvtWord bridge_evt_02[192];
-EvtWord bridge_evt[30];
+static EvtWord bridge_evt_02[192];
+static EvtWord bridge_evt[30];
 
 #if VERSION >= VERSION_US
-EvtWord nokotaro_get[73];
+static EvtWord nokotaro_get[73];
 #else
-EvtWord nokotaro_get[55];
+static EvtWord nokotaro_get[55];
 #endif
 
-EvtWord nokotaro_kanyu[40];
+static EvtWord nokotaro_kanyu[40];
 EvtWord nokotaro_nakama[276];
 static EvtWord nokotarou_init[7];
-EvtWord nokotarou_reg[2];
-EvtWord nokotarou_talk_2[34];
+static EvtWord nokotarou_reg[2];
+static EvtWord nokotarou_talk_2[34];
 static EvtWord nokotarou_talk[4];
-EvtWord nokorin_pose[57];
+static EvtWord nokorin_pose[57];
 EvtWord evt_nokorin[869];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[3];
@@ -89,7 +89,7 @@ EvtWord hei_01_init_evt[148];
 #endif
 
 /** Exit event for the map's exits: just returns 0 in LW(0) so the exit proceeds. */
-EVT_BEGIN(bero_out_event)
+static EVT_BEGIN(bero_out_event)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -263,7 +263,7 @@ static const char* name_tbl[] = {
  * until the bridge is across the gap.
  */
 // GW0 advances through the 25 bridge pieces; each flip captures the previous and next scene.
-EVT_BEGIN(bridge_evt_02)
+static EVT_BEGIN(bridge_evt_02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -15, 150, 500, -15, 45, 85, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -325,7 +325,7 @@ EVT_END()
  * Blue switch (bg_switch) script: after the switch is pressed, flips the bridge across (bridge_evt_02),
  * enables its collision and sets the story to "The Flip Bridge".
  */
-EVT_BEGIN(bridge_evt)
+static EVT_BEGIN(bridge_evt)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     BEGIN_INLINE_EVENT
@@ -344,7 +344,7 @@ EVT_END()
  * Koops joins: Koops speaks his line, the camera frames him,
  * Mario and Koops are introduced through the partner lecture and the story progress becomes "Koops Joins".
  */
-EVT_BEGIN(nokotaro_get)
+static EVT_BEGIN(nokotaro_get)
     CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_anim, STRING("ノコタロウ"), STRING("PNK_Y_2"))
     CALL(evt_msg_print_add, 0, STRING("stg1_hei_07"))
@@ -375,7 +375,7 @@ EVT_END()
  * Koops asks Mario to join: a two-way question; the first answer calls nokotaro_get,
  * the second leads to another prompt whose first answer ends with stg1_hei_11 and whose second calls nokotaro_get.
  */
-EVT_BEGIN(nokotaro_kanyu)
+static EVT_BEGIN(nokotaro_kanyu)
     CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno1"))
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     IF_INT_EQUAL(LW(0), 0)
@@ -486,7 +486,7 @@ static EVT_BEGIN(nokotarou_init)
 EVT_END()
 
 /** Empty regular-event script for Koops; the NPC does nothing between conversations. */
-EVT_BEGIN(nokotarou_reg)
+static EVT_BEGIN(nokotarou_reg)
     RETURN
 EVT_END()
 
@@ -494,7 +494,7 @@ EVT_END()
  * Talk script for Koops while he waits here: runs the join prompts (nokotaro_kanyu) with Mario frozen;
  * afterwards field battles resume if he joined, otherwise the partner starts following Mario again.
  */
-EVT_BEGIN(nokotarou_talk_2)
+static EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_stop_for_event)
@@ -520,7 +520,7 @@ EVT_END()
  * Spin script for Koopie Koo (ノコリン): plays her rolling sound, stops the walk animation and leaves an event
  * rotating her 30 degrees per frame; a second later she takes pose A_1 and the sound stops.
  */
-EVT_BEGIN(nokorin_pose)
+static EVT_BEGIN(nokorin_pose)
     CALL(evt_npc_get_position, STRING("ノコリン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_NOKORIN_MOVE1"), LW(0), LW(1), LW(2), LW(3))
     CALL(evt_npc_flag_onoff, 0, STRING("ノコリン"), NPC_FLAG_AUTO_MOVE_ANIM)

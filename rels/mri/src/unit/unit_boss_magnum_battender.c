@@ -56,7 +56,7 @@ static USER_FUNC(arm_main);
 static USER_FUNC(waku_main);
 static USER_FUNC(eff_dead);
 static USER_FUNC(eff_dead_delete);
-USER_FUNC(eff_hokori);
+static USER_FUNC(eff_hokori);
 static USER_FUNC(arm_init2);
 
 BattleUnitKind unit_boss_magnum_battender;
@@ -67,8 +67,8 @@ static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_no_arm[16];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[3];
-BattleWeapon weapon_batten_stamp_attack;
-BattleWeapon weapon_batten_shake_attack;
+static BattleWeapon weapon_batten_stamp_attack;
+static BattleWeapon weapon_batten_shake_attack;
 static BattleUnitSetup entry_rocket_punch;
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
@@ -82,7 +82,7 @@ static EvtWord dead_event[234];
 
 static EvtWord entry_event[78];
 static EvtWord attack_event[150];
-EvtWord stamp_attack_event[352];
+static EvtWord stamp_attack_event[352];
 static EvtWord shake_attack_event[324];
 static EvtWord arm_bunri_event[199];
 static EvtWord arm_return_event[151];
@@ -354,7 +354,7 @@ static USER_FUNC(arm_check) {
 }
 
 /** Weapon of Magnus (batten stamp attack): targets one unit for 2 damage; used by stamp_attack_event. */
-BattleWeapon weapon_batten_stamp_attack = {
+static BattleWeapon weapon_batten_stamp_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -395,7 +395,7 @@ BattleWeapon weapon_batten_stamp_attack = {
  * Weapon of Magnus (batten shake attack): targets every unit for 2 damage, ignores Defense;
  * used by shake_attack_event.
  */
-BattleWeapon weapon_batten_shake_attack = {
+static BattleWeapon weapon_batten_shake_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -557,7 +557,7 @@ static USER_FUNC(eff_dead_delete) {
  * Creates a white dust puff (a vapor effect fading to black) at x, y,
  * z (args[0] to args[2]) with the lifetime given in args[3].
  */
-USER_FUNC(eff_hokori) {
+static USER_FUNC(eff_hokori) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -764,7 +764,7 @@ EVT_END()
  * moves to x = -50, lifts a leg with the sounds and poses MGN_A2_1 to A2_4, and stamps the target;
  * the damage and result checks follow and he steps back to his place.
  */
-EVT_BEGIN(stamp_attack_event)
+static EVT_BEGIN(stamp_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_stamp_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_batten_stamp_attack), LW(3), LW(4))

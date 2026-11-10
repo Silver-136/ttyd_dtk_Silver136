@@ -65,17 +65,17 @@ static void moamoa_pose_change(MoamoaSprite* moa, const char* model, const char*
 static void moamoa_pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_moamoa_set_one);
-USER_FUNC(evt_moamoa_set_seq_all);
+static USER_FUNC(evt_moamoa_set_one);
+static USER_FUNC(evt_moamoa_set_seq_all);
 
-ExtTexInfo moamoa_data[81];
+static ExtTexInfo moamoa_data[81];
 static EvtWord evt_moamoa[324];
 EvtWord evt_rsh_moamoa_on_window[46];
 static BeroEntry bero_data_a[2];
 static BeroEntry bero_data_b[2];
 static BeroEntry bero_data_c[2];
-EvtWord evt_handle[107];
-EvtWord regu_unten[210];
+static EvtWord evt_handle[107];
+static EvtWord regu_unten[210];
 static EvtWord init_unten[17];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -88,12 +88,12 @@ static NpcSetupInfo npc_data[2];
 static const char* access_tbl[5];
 static EvtWord evt_access[14];
 static EvtWord evt_access_entry[23];
-EvtWord rsh_00_init_evt[194];
+static EvtWord rsh_00_init_evt[194];
 EvtWord rsh_00_a_init_evt[51];
 EvtWord rsh_00_b_init_evt[11];
 static const char* window_tbl[5];
 EvtWord rsh_00_c_init_evt[16];
-EvtWord rsh_00_init_evt_nidome[164];
+static EvtWord rsh_00_init_evt_nidome[164];
 EvtWord rsh_00_a_init_evt_nidome[11];
 EvtWord rsh_00_b_init_evt_nidome[11];
 EvtWord rsh_00_c_init_evt_nidome[16];
@@ -102,7 +102,7 @@ EvtWord rsh_00_c_init_evt_nidome[16];
  * Figure table of the Smorg (moamoa) effect at the cab window: models c_n_moa_a and c_n_moa_b with one animation offset per
  * entry.
  */
-ExtTexInfo moamoa_data[] = {
+static ExtTexInfo moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
     {"c_n_moa_a", "S_1", 1.0f},
     {"c_n_moa_a", "S_1", 2.0f},
@@ -299,7 +299,7 @@ static f32 randf(f32 min, f32 max) {
  * or the carriage (rsh_00 versus rsh_03 versus other cars), hidden below the floor at y = -1000,
  * with a yaw for the sprites that will climb in from the side.
  */
-void moamoa_init(void) {
+static void moamoa_init(void) {
     s32 i;
     ExtdrvPose* pose;
     MoamoaSprite* moa;
@@ -408,7 +408,7 @@ static void ext_disp(CameraId camera, void* param) {
  * then advances the animations.
  */
 // States: 0 hidden, 1 start delay, 2 wait, 3 emerge, 4 hold the final position.
-void moamoa_main(void) {
+static void moamoa_main(void) {
     s32 i;
     ExtdrvPose* pose;
     MoamoaSprite* moa;
@@ -462,7 +462,7 @@ void moamoa_main(void) {
 }
 
 /** Registers ext_disp with the display list on the 3D camera each frame. */
-void moamoa_dispent(void) {
+static void moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
 }
 
@@ -471,7 +471,7 @@ void moamoa_dispent(void) {
  * and puts it straight into the pop-up state (3); the first time it also turns the sprite to face sideways.
  */
 // Set one emergence target without resetting its timer or animation pose.
-USER_FUNC(evt_moamoa_set_one) {
+static USER_FUNC(evt_moamoa_set_one) {
     EvtWord* args = event->args;
     MoamoaSprite* moa;
     s32 idx = evtGetValue(event, args[0]);
@@ -495,7 +495,7 @@ USER_FUNC(evt_moamoa_set_one) {
  * Script helper: forces every Smorg sprite into the state args[0] (1 starts the random appear sequence,
  * 4 shows them all at their spots).
  */
-USER_FUNC(evt_moamoa_set_seq_all) {
+static USER_FUNC(evt_moamoa_set_seq_all) {
     s32 seq = evtGetValue(event, event->args[0]);
     s32 i;
     MoamoaSprite* moa;
@@ -691,7 +691,7 @@ static BeroEntry bero_data_c[] = {
  * spins handoru_1 and handoru_2 in opposite directions and slides handoru_3 back and forth,
  * driving the shaking controls during the Smorg attack.
  */
-EVT_BEGIN(evt_handle)
+static EVT_BEGIN(evt_handle)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_46_ENGINEER)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_49_POSHLEY_HEIGHTS)
@@ -742,7 +742,7 @@ EVT_END()
  * It does nothing during the stages where the train is stopped or the driver is busy.
  */
 // Randomly animate one control per iteration; the three empty day-3 tests do not gate those actions.
-EVT_BEGIN(regu_unten)
+static EVT_BEGIN(regu_unten)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 0)
     SET_VALUE(LW(4), 0)
@@ -1008,7 +1008,7 @@ EVT_END()
  * the signboards, the handle animation, the save block and the Star Piece spinning-floor panel,
  * and starts the music and ambience for the current story stage.
  */
-EVT_BEGIN(rsh_00_init_evt)
+static EVT_BEGIN(rsh_00_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)
@@ -1124,7 +1124,7 @@ EVT_BEGIN(rsh_00_c_init_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(rsh_00_init_evt_nidome)
+static EVT_BEGIN(rsh_00_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)

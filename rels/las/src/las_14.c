@@ -47,8 +47,8 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h);
 
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_las_cloud_ent);
-USER_FUNC(evt_las_cloud_init);
+static USER_FUNC(evt_las_cloud_ent);
+static USER_FUNC(evt_las_cloud_init);
 
 static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];
@@ -58,7 +58,7 @@ static const char* capturemap[3];
 static Vec v_list[8];
 static EvtWord evt_cloud_main_evt[4];
 static EvtWord cloud_evt[35];
-EvtWord touch_evt[2];
+static EvtWord touch_evt[2];
 static EvtWord hint_plate[14];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -292,7 +292,7 @@ static EVT_BEGIN(cloud_evt)
 EVT_END()
 
 /** A-button handler (facing the cloud hit area); empty. */
-EVT_BEGIN(touch_evt)
+static EVT_BEGIN(touch_evt)
     RETURN
 EVT_END()
 
@@ -491,7 +491,7 @@ static USER_FUNC(evt_cloud_main) {
     return EVT_RETURN_BLOCK;
 }
 
-USER_FUNC(evt_las_cloud_init) {
+static USER_FUNC(evt_las_cloud_init) {
     s32 i;
 
     cloud = _mapAlloc(sizeof(CloudRoomWork) * 16);
@@ -509,7 +509,7 @@ USER_FUNC(evt_las_cloud_init) {
  * args[0] is the list of map groups to capture, args[1] the cloud's hit object name,
  * args[2] the event to run when the cloud has been blown away; starts evt_cloud_main_evt for it.
  */
-USER_FUNC(evt_las_cloud_ent) {
+static USER_FUNC(evt_las_cloud_ent) {
     EvtWord* args = event->args;
     char** groups;
     char* hitName;

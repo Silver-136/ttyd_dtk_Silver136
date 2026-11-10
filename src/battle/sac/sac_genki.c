@@ -125,15 +125,15 @@ typedef struct GenkiWork {
     GenkiStar star[7]; // 0x510
 } GenkiWork;
 
-USER_FUNC(recover_cmd_disable);
-USER_FUNC(star_appear);
-USER_FUNC(status_on);
-USER_FUNC(get_score);
+static USER_FUNC(recover_cmd_disable);
+static USER_FUNC(star_appear);
+static USER_FUNC(status_on);
+static USER_FUNC(get_score);
 static s32 object_get_num(void);
 static void object_entry(void);
 static void weapon_entry(void);
-USER_FUNC(main_genki);
-USER_FUNC(end_genki);
+static USER_FUNC(main_genki);
+static USER_FUNC(end_genki);
 static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
 static USER_FUNC(start_game);
@@ -156,7 +156,7 @@ static GenkiWork* get_ptr(void);
  * args[1] the mode (0 Sweet Treat, 1 Sweet Feast).
  * The first call clears the work, sets the 900-frame time limit and makes the effects; it never finishes itself.
  */
-USER_FUNC(main_genki) {
+static USER_FUNC(main_genki) {
     GenkiWork* w = get_ptr();
     s32 i;
     s32 j;
@@ -983,7 +983,7 @@ static void main_star1(void) {
 }
 
 /** Cleanup when the move ends: deletes the star, shot and score effects and frees the shuffled item deck. */
-USER_FUNC(end_genki) {
+static USER_FUNC(end_genki) {
     GenkiWork* w = get_ptr();
     GenkiStar* s;
     GenkiWeapon* wp;
@@ -1474,7 +1474,7 @@ static USER_FUNC(wait_game_end) {
 }
 
 /** Returns the three scores to the script: args[0] Mario's HP, args[1] the partner's HP, args[2] FP. */
-USER_FUNC(get_score) {
+static USER_FUNC(get_score) {
     GenkiWork* w = get_ptr();
     EvtWord* args = event->args;
     evtSetValue(event, args[0], w->marioHp);
@@ -1484,13 +1484,13 @@ USER_FUNC(get_score) {
 }
 
 /** Opens the HP / FP status window again for the healing that follows. */
-USER_FUNC(status_on) {
+static USER_FUNC(status_on) {
     statusWinOpen();
     return 2;
 }
 
 /** Starts the seven Sweet Treat stars rising out of Mario (main_star0). */
-USER_FUNC(star_appear) {
+static USER_FUNC(star_appear) {
     GenkiWork* w = get_ptr();
     s32 i;
     for (i = 0; i < 7; i++) {
@@ -1513,7 +1513,7 @@ static USER_FUNC(star_stone_appear) {
  * Clears the turns left on the command blocks set by Bowser's command-blocking attacks (US and later keep two of
  * them on the partner unit); part of status_recover_evt's cure.
  */
-USER_FUNC(recover_cmd_disable) {
+static USER_FUNC(recover_cmd_disable) {
     BattleWork* w = _battleWorkPointer;
     BattleUnit* party;
     w->commandDisabled[0] = 0;

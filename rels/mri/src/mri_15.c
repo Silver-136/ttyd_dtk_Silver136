@@ -29,10 +29,10 @@ EvtWord evt_dokan[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord door_switch_init[17];
 static EvtWord door_switch[59];
-EvtWord dai3_escape[32];
-EvtWord dai3_battle_init[66];
+static EvtWord dai3_escape[32];
+static EvtWord dai3_battle_init[66];
 EvtWord dai3_battle[140];
-EvtWord ueki_evt_01[20];
+static EvtWord ueki_evt_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_15_init_evt[156];
 
@@ -134,7 +134,7 @@ EVT_END()
  * Lord Crump flees the room: the west door closes behind him and he runs out of the left side,
  * then is parked out of sight.
  */
-EVT_BEGIN(dai3_escape)
+static EVT_BEGIN(dai3_escape)
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
@@ -149,7 +149,7 @@ EVT_BEGIN(dai3_escape)
 EVT_END()
 
 /** Positions the two X-Naut grunts and, if he has not left yet, Lord Crump for the fight in this room. */
-EVT_BEGIN(dai3_battle_init)
+static EVT_BEGIN(dai3_battle_init)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ａ"), -119, 0, 29)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ａ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -225,7 +225,7 @@ EVT_BEGIN(dai3_battle)
     RETURN
 EVT_END()
 
-EVT_BEGIN(ueki_evt_01)
+static EVT_BEGIN(ueki_evt_01)
     CALL(evt_item_delete_check, STRING("item_ueki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_ueki01"), ITEM_STAR_PIECE, -37, 0, 96, ITEM_TYPE_GROUND, GSWF_STARPIECE_49, 0)

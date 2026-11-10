@@ -19,8 +19,8 @@ typedef struct HimoWork {
 } HimoWork;
 
 s8 Pos[6] ATTRIBUTE_ALIGN(32) = { 1, 0, 0, -1, 0, 0 };
-s8 Nrm[3] ATTRIBUTE_ALIGN(32) = { 0, 0, 127 };
-u8 Col[4] ATTRIBUTE_ALIGN(32) = { 0xFF, 0xFF, 0xFF, 0xFF };
+static s8 Nrm[3] ATTRIBUTE_ALIGN(32) = { 0, 0, 127 };
+static u8 Col[4] ATTRIBUTE_ALIGN(32) = { 0xFF, 0xFF, 0xFF, 0xFF };
 
 static void vivihimoDisp(CameraId camId, HimoWork* w);
 

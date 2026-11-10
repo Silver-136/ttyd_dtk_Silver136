@@ -22,10 +22,10 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 
-USER_FUNC(camera_curve_off);
-USER_FUNC(camera_curve_on);
+static USER_FUNC(camera_curve_off);
+static USER_FUNC(camera_curve_on);
 
-EvtWord gra_05_in_01[5];
+static EvtWord gra_05_in_01[5];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord gra_05_out_01[];
@@ -33,7 +33,7 @@ extern EvtWord gra_05_out_01[];
 EvtWord gra_05_out_01[149];
 #endif
 
-EvtWord gra_05_in_02[5];
+static EvtWord gra_05_in_02[5];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord gra_05_out_02[];
@@ -52,14 +52,14 @@ static EvtWord out_evt2[150];
 #endif
 
 static BeroEntry bero_entry_data[7];
-EvtWord gra_05_futa_open_evt[28];
-EvtWord evt_gra_05iwa_move_init[31];
-EvtWord evt_gra_05iwa_move_evt[186];
-EvtWord evt_break_floor[7];
+static EvtWord gra_05_futa_open_evt[28];
+static EvtWord evt_gra_05iwa_move_init[31];
+static EvtWord evt_gra_05iwa_move_evt[186];
+static EvtWord evt_break_floor[7];
 static const char* fukitobashi_tbl[4];
 EvtWord gra_05_init_evt[108];
 
-EVT_BEGIN(gra_05_in_01)
+static EVT_BEGIN(gra_05_in_01)
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()
@@ -128,7 +128,7 @@ EVT_BEGIN(gra_05_out_01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gra_05_in_02)
+static EVT_BEGIN(gra_05_in_02)
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()
@@ -439,7 +439,7 @@ static BeroEntry bero_entry_data[] = {
  * Callback run when Flurrie's wind has blown the lid (A_futa) off the hole:
  * plays a jingle, switches the lid's collision off and advances the story to STG4_06_01_BLOW_THE_FLOOR.
  */
-EVT_BEGIN(gra_05_futa_open_evt)
+static EVT_BEGIN(gra_05_futa_open_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
@@ -457,7 +457,7 @@ EVT_END()
  * binds its collision to the model and, if the story is already at STG4_07_TRICK_ROCK,
  * puts it in its pushed position (120 units over) and hides the lid.
  */
-EVT_BEGIN(evt_gra_05iwa_move_init)
+static EVT_BEGIN(evt_gra_05iwa_move_init)
     CALL(evt_hit_bind_mapobj, STRING("A_iwa"), STRING("S_iwa"))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_07_TRICK_ROCK)
         CALL(evt_mapobj_trans, 0, STRING("S_iwa"), FLOAT(120.0f), 0, 0)
@@ -473,7 +473,7 @@ EVT_END()
  * the boulder slides 120 units sideways over 3 seconds with dust puffs and camera shake, carrying Mario along,
  * then the story is set to STG4_07_TRICK_ROCK.
  */
-EVT_BEGIN(evt_gra_05iwa_move_evt)
+static EVT_BEGIN(evt_gra_05iwa_move_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("S_iwa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_MOVE_ROCK1"), LW(0), LW(1), LW(2), LW(9))
@@ -529,7 +529,7 @@ EVT_END()
  * Callback of the breaking floor: advances the story to STG4_06_02_THROUGH_THE_HOLE
  * and turns the camera curve on.
  */
-EVT_BEGIN(evt_break_floor)
+static EVT_BEGIN(evt_break_floor)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_06_02_THROUGH_THE_HOLE)
     CALL(camera_curve_on)
     RETURN
@@ -579,13 +579,13 @@ EVT_BEGIN(gra_05_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(camera_curve_off) {
+static USER_FUNC(camera_curve_off) {
     camRoadCurveOff("|MarioSt_CameraRoad|curve2");
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: turns the camera road curve "curve2" back on. */
-USER_FUNC(camera_curve_on) {
+static USER_FUNC(camera_curve_on) {
     camRoadCurveOn("|MarioSt_CameraRoad|curve2");
     return EVT_RETURN_DONE;
 }

@@ -78,7 +78,7 @@ void dspResumeCallback() {
 }
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 3)
-void dspDoneCallback() { OSWakeupThread(&salWaitForDSPThreadQueue); }
+static void dspDoneCallback() { OSWakeupThread(&salWaitForDSPThreadQueue); }
 #endif
 
 u32 salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {

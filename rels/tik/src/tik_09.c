@@ -12,7 +12,7 @@
 #include "pmario_sound.h"
 
 static BeroEntry bero_entry_data[3];
-EvtWord evt_tik09_dokan[51];
+static EvtWord evt_tik09_dokan[51];
 EvtWord tik_09_init_evt[36];
 
 /** Doors of this room: the pipes to tik_10 and to tik_06. */
@@ -59,7 +59,7 @@ static BeroEntry bero_entry_data[] = {
  * after 1.5 seconds it slides up 30 units over 100 frames, moving its hit area with it.
  */
 // Start the pipe at zero offset, then raise it while updating its bound collision each step.
-EVT_BEGIN(evt_tik09_dokan)
+static EVT_BEGIN(evt_tik09_dokan)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
     CALL(evt_mapobj_trans, 0, STRING("dokan_1_s"), 0, 0, 0)
     CALL(evt_hit_bind_update, STRING("a_dokan_1"))

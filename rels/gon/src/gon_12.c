@@ -40,11 +40,11 @@ static EvtWord chuchurina_sogu[598];
 static EvtWord chuchurina_sogu[610];
 #endif
 
-EvtWord chuchurina_talk[2];
+static EvtWord chuchurina_talk[2];
 static NpcSetupInfo npcEnt[2];
 static EvtWord item_get00[37];
-EvtWord item_get01[34];
-EvtWord item_get02[34];
+static EvtWord item_get01[34];
+static EvtWord item_get02[34];
 EvtWord gon_12_init_evt[93];
 
 /**
@@ -287,7 +287,7 @@ static EVT_BEGIN(chuchurina_sogu)
 EVT_END()
 
 /** Talk event for Ms. Mowz in gon_12; empty (her first meeting with Mario is the scripted scene chuchurina_sogu). */
-EVT_BEGIN(chuchurina_talk)
+static EVT_BEGIN(chuchurina_talk)
     RETURN
 EVT_END()
 
@@ -324,7 +324,7 @@ static EVT_BEGIN(item_get00)
 EVT_END()
 
 /** Runs when Mario opens the chest mobj_box01: shows the Mushroom coming out and gives it to him. */
-EVT_BEGIN(item_get01)
+static EVT_BEGIN(item_get01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_MUSHROOM, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
@@ -336,7 +336,7 @@ EVT_BEGIN(item_get01)
 EVT_END()
 
 /** Runs when Mario opens the chest mobj_box02: shows the Honey Syrup coming out and gives it to him. */
-EVT_BEGIN(item_get02)
+static EVT_BEGIN(item_get02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box02"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item02"), ITEM_HONEY_SYRUP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)

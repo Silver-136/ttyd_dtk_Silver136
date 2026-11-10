@@ -154,7 +154,7 @@ static inline int Block_empty(Block* ths) {
     return SubBlock_is_free(sb) && SubBlock_size(sb) == Block_size(ths) - 24;
 }
 
-void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void* ptr) {
+static void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void* ptr) {
     SubBlock* sb = SubBlock_from_pointer(ptr);
     Block* bp = SubBlock_block(sb);
 

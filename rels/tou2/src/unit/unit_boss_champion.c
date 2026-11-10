@@ -32,30 +32,30 @@
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_FALL_EVENT 0 // part 1, slots 0-9 (index = drop number): event id of each falling object's hit event in roof_shake_attack_event, 0 once waited on
 
-USER_FUNC(check_ceil);
-USER_FUNC(init_ceil);
+static USER_FUNC(check_ceil);
+static USER_FUNC(init_ceil);
 USER_FUNC(eff_fall_hit_wait);
 USER_FUNC(eff_fall_entry);
 static USER_FUNC(down_ceil);
-USER_FUNC(ceil_exist);
+static USER_FUNC(ceil_exist);
 
 BattleUnitKind unit_boss_champion;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
-PoseTableEntry pose_table_roof[18];
+static PoseTableEntry pose_table_roof[18];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_champion_drop_kick_attack;
-BattleWeapon weapon_champion_screw_attack;
-BattleWeapon weapon_champion_flying_chop_attack;
-BattleWeapon weapon_champion_foot_stamp_attack;
-BattleWeapon weapon_champion_healing;
-BattleWeapon weapon_champion_roof_shake_attack;
-BattleWeapon weapon_champion_roof_shake_last_attack;
-EvtWord to_ceiling[103];
-EvtWord to_floor[95];
+static BattleWeapon weapon_champion_drop_kick_attack;
+static BattleWeapon weapon_champion_screw_attack;
+static BattleWeapon weapon_champion_flying_chop_attack;
+static BattleWeapon weapon_champion_foot_stamp_attack;
+static BattleWeapon weapon_champion_healing;
+static BattleWeapon weapon_champion_roof_shake_attack;
+static BattleWeapon weapon_champion_roof_shake_last_attack;
+static EvtWord to_ceiling[103];
+static EvtWord to_floor[95];
 static EvtWord init_event[52];
 static EvtWord entry_event[354];
 static EvtWord damage_event[75];
@@ -63,11 +63,11 @@ static EvtWord ceil_fall_ready_event[8];
 static EvtWord dead_event[90];
 static EvtWord phase_event[450];
 static EvtWord attack_event[221];
-EvtWord drop_kick_attack_event[299];
-EvtWord screw_attack_event[295];
-EvtWord flying_chop_attack_event[326];
-EvtWord foot_stamp_attack_event[467];
-EvtWord healing_event[209];
+static EvtWord drop_kick_attack_event[299];
+static EvtWord screw_attack_event[295];
+static EvtWord flying_chop_attack_event[326];
+static EvtWord foot_stamp_attack_event[467];
+static EvtWord healing_event[209];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord roof_shake_attack_event[];
@@ -81,7 +81,7 @@ static EvtWord wait_event[6];
  * Script helper: arg0 receives 1 if the iron frame hanging from the arena ceiling (the stage object Rawk Hawk
  * grabs) is still there, 0 once it has been removed.
  */
-USER_FUNC(ceil_exist) {
+static USER_FUNC(ceil_exist) {
     EvtWord* args = event->args;
 
     if (_battleWorkPointer->stageObjectWork.flags & 0x20) {
@@ -230,7 +230,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-PoseTableEntry pose_table_roof[] = {
+static PoseTableEntry pose_table_roof[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_STOP, "Y_2"},
     {POSE_TYPE_FREEZE, "Y_2"},
@@ -266,7 +266,7 @@ static BattleUnitKindPart parts[] = {
  * Script helper that removes the iron frame from the ceiling at the start of the fight:
  * moves its body and wire up to y=250 and marks the frame as gone.
  */
-USER_FUNC(init_ceil) {
+static USER_FUNC(init_ceil) {
     u8* ceil = &_battleWorkPointer->stageObjectWork.flags;
     BattleStageObject* body = BattleSearchObjectPtr("if_body");
     BattleStageObject* wire = BattleSearchObjectPtr("if_wire");
@@ -278,7 +278,7 @@ USER_FUNC(init_ceil) {
 }
 
 /** Weapon of Rawk Hawk's Drop Kick: 4 damage, hammer-type contact attack. */
-BattleWeapon weapon_champion_drop_kick_attack = {
+static BattleWeapon weapon_champion_drop_kick_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -315,7 +315,7 @@ BattleWeapon weapon_champion_drop_kick_attack = {
 };
 
 /** Weapon of Rawk Hawk's Screw Attack: 4 damage, jump-type contact attack. */
-BattleWeapon weapon_champion_screw_attack = {
+static BattleWeapon weapon_champion_screw_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -352,7 +352,7 @@ BattleWeapon weapon_champion_screw_attack = {
 };
 
 /** Weapon of Rawk Hawk's Flying Chop: 6 damage, jump-type contact attack. */
-BattleWeapon weapon_champion_flying_chop_attack = {
+static BattleWeapon weapon_champion_flying_chop_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -389,7 +389,7 @@ BattleWeapon weapon_champion_flying_chop_attack = {
 };
 
 /** Weapon of Rawk Hawk's Foot Stamp: 3 damage, jump-type contact attack. */
-BattleWeapon weapon_champion_foot_stamp_attack = {
+static BattleWeapon weapon_champion_foot_stamp_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -426,7 +426,7 @@ BattleWeapon weapon_champion_foot_stamp_attack = {
 };
 
 /** Weapon of Rawk Hawk's healing move: its power value is 5. */
-BattleWeapon weapon_champion_healing = {
+static BattleWeapon weapon_champion_healing = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -462,7 +462,7 @@ BattleWeapon weapon_champion_healing = {
 };
 
 /** Weapon of Rawk Hawk's Roof Shake: 1 damage. */
-BattleWeapon weapon_champion_roof_shake_attack = {
+static BattleWeapon weapon_champion_roof_shake_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -503,7 +503,7 @@ BattleWeapon weapon_champion_roof_shake_attack = {
 };
 
 /** Weapon of Rawk Hawk's final Roof Shake: no HP damage. */
-BattleWeapon weapon_champion_roof_shake_last_attack = {
+static BattleWeapon weapon_champion_roof_shake_last_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -553,7 +553,7 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
  * switches to the roof pose table, becomes untargetable by ground attacks and shifts the hit
  * and cursor offsets for the hanging body.
  */
-EVT_BEGIN(to_ceiling)
+static EVT_BEGIN(to_ceiling)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1D"))
@@ -580,7 +580,7 @@ EVT_END()
  * Rawk Hawk drops from the ceiling back to the floor with a landing shake and restores the ground pose table
  * and hit offsets.
  */
-EVT_BEGIN(to_floor)
+static EVT_BEGIN(to_floor)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_2"))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, LW(2))
@@ -1072,7 +1072,7 @@ EVT_END()
  * hammer-like, action command level 3): he runs to 150 units in front of the target,
  * leaps at it with a kick and hits it once, then hops back and jumps home.
  */
-EVT_BEGIN(drop_kick_attack_event)
+static EVT_BEGIN(drop_kick_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1159,7 +1159,7 @@ EVT_END()
  * bouncing from one to the next and hitting each once until a miss ends the attack (the guard result is taken on the first),
  * then hops back and jumps home.
  */
-EVT_BEGIN(screw_attack_event)
+static EVT_BEGIN(screw_attack_event)
     // Choose the targets; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1265,7 +1265,7 @@ EVT_END()
  * jump-like): he leaps up and back toward the camera,
  * then dives down onto the target with the chop and hits it once, then hops back and jumps home.
  */
-EVT_BEGIN(flying_chop_attack_event)
+static EVT_BEGIN(flying_chop_attack_event)
     // Choose a target; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1369,7 +1369,7 @@ EVT_BEGIN(flying_chop_attack_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(foot_stamp_attack_event)
+static EVT_BEGIN(foot_stamp_attack_event)
     // Choose a target; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1501,7 +1501,7 @@ EVT_END()
  * he shakes the ceiling three times, a Mushroom (item 148) icon drops in front of him,
  * he eats it and recovers 5 HP with the recovery sparkle.
  */
-EVT_BEGIN(healing_event)
+static EVT_BEGIN(healing_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1584,7 +1584,7 @@ static USER_FUNC(down_ceil) {
 }
 
 /** Script helper: LW(1) receives non-zero when the iron frame is gone from the ceiling. */
-USER_FUNC(check_ceil) {
+static USER_FUNC(check_ceil) {
     event->lwData[1] = _battleWorkPointer->stageObjectWork.flags & 0x20;
     return EVT_RETURN_DONE;
 }

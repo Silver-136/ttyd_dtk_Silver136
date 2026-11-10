@@ -53,26 +53,26 @@ static USER_FUNC(nice_effect_shrink);
 
 static USER_FUNC(yami_view);
 
-EvtWord evt_ie1_door_1[12];
-EvtWord evt_ie1_wall[12];
-const char* ie1_npc[2];
-EvtWord evt_ie1_door_open[12];
-EvtWord evt_ie1_door_close[14];
-DoorParam ie1_door;
-EvtWord evt_ie2_door_1[12];
-EvtWord evt_ie2_wall[12];
-const char* ie2_npc[2];
-EvtWord evt_ie2_door_open[12];
-EvtWord evt_ie2_door_close[14];
-DoorParam ie2_door;
-EvtWord evt_ie3_door_1[12];
-EvtWord evt_ie3_door_2[12];
-EvtWord evt_ie3_wall[12];
-const char* ie3_npc[3];
-EvtWord evt_ie3_door_open[12];
-EvtWord evt_ie3_door_close[14];
-const char* ie3_item[2];
-DoorParam ie3_door;
+static EvtWord evt_ie1_door_1[12];
+static EvtWord evt_ie1_wall[12];
+static const char* ie1_npc[2];
+static EvtWord evt_ie1_door_open[12];
+static EvtWord evt_ie1_door_close[14];
+static DoorParam ie1_door;
+static EvtWord evt_ie2_door_1[12];
+static EvtWord evt_ie2_wall[12];
+static const char* ie2_npc[2];
+static EvtWord evt_ie2_door_open[12];
+static EvtWord evt_ie2_door_close[14];
+static DoorParam ie2_door;
+static EvtWord evt_ie3_door_1[12];
+static EvtWord evt_ie3_door_2[12];
+static EvtWord evt_ie3_wall[12];
+static const char* ie3_npc[3];
+static EvtWord evt_ie3_door_open[12];
+static EvtWord evt_ie3_door_close[14];
+static const char* ie3_item[2];
+static DoorParam ie3_door;
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_kime_pose[52];
 static EvtWord evt_taihou[190];
@@ -98,7 +98,7 @@ static EvtWord talk_murabito_f[44];
 static EvtWord init_murabito_g[17];
 static EvtWord talk_murabito_g[81];
 static EvtWord init_murabito_h[2];
-s32 iri_26_item_tbl[2];
+static s32 iri_26_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_murabito_h[149];
@@ -108,8 +108,8 @@ static EvtWord talk_murabito_h[151];
 
 static EvtWord init_murabito_i[2];
 static EvtWord talk_murabito_i[44];
-EvtWord init_tenin[8];
-EvtWord talk_tenin[2];
+static EvtWord init_tenin[8];
+static EvtWord talk_tenin[2];
 static EvtWord init_white[83];
 EvtWord mario_jump[];
 
@@ -119,7 +119,7 @@ EvtWord mario_jump_tail[6];
 #endif
 #endif
 
-s32 iri_25_item_tbl[2];
+static s32 iri_25_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_white[115];
@@ -127,7 +127,7 @@ static EvtWord talk_white[115];
 static EvtWord talk_white[117];
 #endif
 
-EvtWord iri_25_white_bed[363];
+static EvtWord iri_25_white_bed[363];
 EvtWord evt_white_bed[505];
 static EvtWord kiza_talk[28];
 static EvtWord kiza_entry[30];
@@ -156,7 +156,7 @@ EvtWord bom_02_init_evt[312];
  * Door callback for the inn door (ie1): LW(0) is the opening angle;
  * scales it by 0.444 and turns S_ie1_door around the Y axis.
  */
-EVT_BEGIN(evt_ie1_door_1)
+static EVT_BEGIN(evt_ie1_door_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie1_door"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
     RETURN
@@ -166,14 +166,14 @@ EVT_END()
  * Door callback for the inn: LW(0) is the door angle;
  * scales and negates it to tilt the front wall object S_ie1_kai out of the way.
  */
-EVT_BEGIN(evt_ie1_wall)
+static EVT_BEGIN(evt_ie1_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.6660156f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie1_kai"), FLOAT(0.0f), FLOAT(0.0f), LW(0))
     RETURN
 EVT_END()
 
 /** Actors that stay in view during the inn door scenes: the innkeeper. */
-const char* ie1_npc[] = {
+static const char* ie1_npc[] = {
     "宿店員",
     NULL,
 };
@@ -182,7 +182,7 @@ const char* ie1_npc[] = {
  * Runs when the inn door opens: dips the music and ambience to half
  * and muffles the ambience with a low-pass filter.
  */
-EVT_BEGIN(evt_ie1_door_open)
+static EVT_BEGIN(evt_ie1_door_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -190,7 +190,7 @@ EVT_BEGIN(evt_ie1_door_open)
 EVT_END()
 
 /** Runs when the inn door closes: brings the music and ambience back to full volume and removes the low-pass filter. */
-EVT_BEGIN(evt_ie1_door_close)
+static EVT_BEGIN(evt_ie1_door_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -198,7 +198,7 @@ EVT_BEGIN(evt_ie1_door_close)
 EVT_END()
 
 /** The inn door, with the map objects it swaps and its open and close handlers. */
-DoorParam ie1_door = {
+static DoorParam ie1_door = {
     0, // flags
     3, // type
     1, // se
@@ -222,7 +222,7 @@ DoorParam ie1_door = {
  * Door callback for the shop door (ie2): LW(0) is the opening angle;
  * scales it and turns S_ie2_door around the Y axis.
  */
-EVT_BEGIN(evt_ie2_door_1)
+static EVT_BEGIN(evt_ie2_door_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie2_door"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
     RETURN
@@ -232,14 +232,14 @@ EVT_END()
  * Door callback for the shop: LW(0) is the door angle;
  * scales it by 0.5 to tilt the front wall object S_ie2_kai.
  */
-EVT_BEGIN(evt_ie2_wall)
+static EVT_BEGIN(evt_ie2_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie2_kai"), FLOAT(0.0f), FLOAT(0.0f), LW(0))
     RETURN
 EVT_END()
 
 /** Actors that stay in view during the shop door scenes: the shop clerk. */
-const char* ie2_npc[] = {
+static const char* ie2_npc[] = {
     "店員",
     NULL,
 };
@@ -248,7 +248,7 @@ const char* ie2_npc[] = {
  * Runs when the shop door opens: dips the music and ambience to half
  * and muffles the ambience with a low-pass filter.
  */
-EVT_BEGIN(evt_ie2_door_open)
+static EVT_BEGIN(evt_ie2_door_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -259,7 +259,7 @@ EVT_END()
  * Runs when the shop door closes: brings the music and ambience back to full volume
  * and removes the low-pass filter.
  */
-EVT_BEGIN(evt_ie2_door_close)
+static EVT_BEGIN(evt_ie2_door_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -267,7 +267,7 @@ EVT_BEGIN(evt_ie2_door_close)
 EVT_END()
 
 /** The shop door, with the map objects it swaps and its open and close handlers. */
-DoorParam ie2_door = {
+static DoorParam ie2_door = {
     0, // flags
     3, // type
     1, // se
@@ -291,14 +291,14 @@ DoorParam ie2_door = {
  * Door callback for the third house's inside swing (ie3, General White's house): LW(0) is the opening angle;
  * scales it and turns S_ie3_door around the Y axis.
  */
-EVT_BEGIN(evt_ie3_door_1)
+static EVT_BEGIN(evt_ie3_door_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie3_door"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
     RETURN
 EVT_END()
 
 /** Door callback for the third house's outside swing: LW(0) is the angle, halved and applied to S_ie3_door. */
-EVT_BEGIN(evt_ie3_door_2)
+static EVT_BEGIN(evt_ie3_door_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie3_door"), FLOAT(0.0f), FLOAT(0.0f), LW(0))
     RETURN
@@ -308,14 +308,14 @@ EVT_END()
  * Door callback for the third house: LW(0) is the door angle;
  * scales and negates it to tilt the front wall object S_ie3_kai.
  */
-EVT_BEGIN(evt_ie3_wall)
+static EVT_BEGIN(evt_ie3_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie3_kai"), FLOAT(0.0f), FLOAT(0.0f), LW(0))
     RETURN
 EVT_END()
 
 /** Actors that stay in view during General White's door scenes: White and villager G. */
-const char* ie3_npc[] = {
+static const char* ie3_npc[] = {
     "ホワイト",
     "ボムヘイG",
     NULL,
@@ -325,7 +325,7 @@ const char* ie3_npc[] = {
  * Runs when the third house's door opens: dips the music and ambience to half
  * and muffles the ambience with a low-pass filter.
  */
-EVT_BEGIN(evt_ie3_door_open)
+static EVT_BEGIN(evt_ie3_door_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -336,7 +336,7 @@ EVT_END()
  * Runs when the third house's door closes: brings the music and ambience back to full volume
  * and removes the low-pass filter.
  */
-EVT_BEGIN(evt_ie3_door_close)
+static EVT_BEGIN(evt_ie3_door_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -344,13 +344,13 @@ EVT_BEGIN(evt_ie3_door_close)
 EVT_END()
 
 /** Items kept in view during General White's door scenes. */
-const char* ie3_item[] = {
+static const char* ie3_item[] = {
     "item_00",
     NULL,
 };
 
 /** General White's house door, with the map objects it swaps and its open and close handlers. */
-DoorParam ie3_door = {
+static DoorParam ie3_door = {
     0, // flags
     3, // type
     1, // se
@@ -898,7 +898,7 @@ static EVT_BEGIN(init_murabito_h)
 EVT_END()
 
 /** Item the player can hand over in the item menu for Trouble Center job 26: the Honey Candy. */
-s32 iri_26_item_tbl[] = {
+static s32 iri_26_item_tbl[] = {
     ITEM_HONEY_CANDY, -1,
 };
 
@@ -978,7 +978,7 @@ static EVT_BEGIN(talk_murabito_i)
 EVT_END()
 
 /** Init for the shop clerk: places the clerk at (125, 30, -450). */
-EVT_BEGIN(init_tenin)
+static EVT_BEGIN(init_tenin)
     CALL(evt_npc_set_position, STRING("me"), 125, 30, -450)
     RETURN
 EVT_END()
@@ -987,7 +987,7 @@ EVT_END()
  * Talk script for the shop clerk: empty; the shop menu itself is handled by the shop system registered in the
  * map init.
  */
-EVT_BEGIN(talk_tenin)
+static EVT_BEGIN(talk_tenin)
     RETURN
 EVT_END()
 
@@ -1117,7 +1117,7 @@ EvtWord mario_jump_tail[] = {
 #endif
 
 /** Item the player can hand over in the item menu for Trouble Center job 25: the Package. */
-s32 iri_25_item_tbl[] = {
+static s32 iri_25_item_tbl[] = {
     ITEM_PACKAGE, -1,
 };
 
@@ -1179,7 +1179,7 @@ EVT_END()
  * after eleven pairs of bed bounces General White wakes (irai_25_14 to 17) and
  * then takes the package via talk_white (GSWF_TROUBLE_WORK_5). Saying no ends it early.
  */
-EVT_BEGIN(iri_25_white_bed)
+static EVT_BEGIN(iri_25_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
 

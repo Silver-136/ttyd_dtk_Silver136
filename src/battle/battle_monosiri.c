@@ -13,7 +13,7 @@
 #endif
 
 //.data
-TattleEntry monosiriMessageTable[] = {
+static TattleEntry monosiriMessageTable[] = {
     {NULL, NULL, NULL, NULL, NULL, NULL}, // 0x0 (0)
     {"btl_un_kuriboo", "btl_hlp_kuriboo", "menu_enemy_001", "c_kuribo", "KUR_Z_2", "menu_monosiri_nara"}, // 0x1 (1)
     {"btl_un_patakuri", "btl_hlp_patakuri", "menu_enemy_003", "c_kuribo", "PTK_Z_2", "menu_monosiri_nara"}, // 0x2 (2)
@@ -293,7 +293,7 @@ TattleEntry monosiriMessageTable[] = {
  * The Tattle groups: units that count as one enemy for Tattle, so Tattling one marks the whole group
  * (battleSetUnitMonosiriFlag). Ends with NULL.
  */
-BattleUnitType* battle_monosiri_same_tbl[] = {
+static BattleUnitType* battle_monosiri_same_tbl[] = {
     same_tbl_gesso,
     same_tbl_gesso_arm_l,
     same_tbl_gesso_arm_r,

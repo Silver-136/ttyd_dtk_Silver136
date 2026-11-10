@@ -60,14 +60,14 @@ typedef struct MarcoShip {
     s32 field_0x14;
     OSTime time;
 } MarcoShip;
-MarcoShip* marcoship;
+static MarcoShip* marcoship;
 typedef struct MapAnimRate {
     f32 fune;
     f32 funeTarget;
     f32 nami;
     f32 namiTarget;
 } MapAnimRate;
-MapAnimRate mapAnimRate;
+static MapAnimRate mapAnimRate;
 static u8* _ap;
 typedef struct MujLogoWork {
     FileEntry* tpl;
@@ -80,48 +80,48 @@ static void draw(CameraId camera, void* param);
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
-USER_FUNC(elmos1000tai_init);
+static USER_FUNC(elmos1000tai_init);
 static USER_FUNC(fune_eff);
-USER_FUNC(kaizoku_fune_eff);
+static USER_FUNC(kaizoku_fune_eff);
 USER_FUNC(logo);
-USER_FUNC(marcoship_shizumu_func);
-USER_FUNC(marcoship_yure_func);
-USER_FUNC(marcoship_yure_init_func);
-USER_FUNC(mist_func);
-USER_FUNC(splash_eff);
+static USER_FUNC(marcoship_shizumu_func);
+static USER_FUNC(marcoship_yure_func);
+static USER_FUNC(marcoship_yure_init_func);
+static USER_FUNC(mist_func);
+static USER_FUNC(splash_eff);
 USER_FUNC(fune_curve_pos);
-USER_FUNC(urouro_func);
-USER_FUNC(urouro_fuwafuwa_func);
+static USER_FUNC(urouro_func);
+static USER_FUNC(urouro_fuwafuwa_func);
 static void pressStartGX(MujLogoWork* wp, s32 alpha, f32 x, f32 y);
-void elmos1000tai_seq00(NanNPC* npc);
-USER_FUNC(elmos1000tai_start);
+static void elmos1000tai_seq00(NanNPC* npc);
+static USER_FUNC(elmos1000tai_start);
 static void alpha_tev(MapTevCallbackInfo* info);
-USER_FUNC(evt_set_nami_anim_rate);
-USER_FUNC(evt_set_fune_anim_rate);
-USER_FUNC(evt_map_anim_rate);
-USER_FUNC(marcoship_stop_wait_func);
-USER_FUNC(marcoship_stop_func);
+static USER_FUNC(evt_set_nami_anim_rate);
+static USER_FUNC(evt_set_fune_anim_rate);
+static USER_FUNC(evt_map_anim_rate);
+static USER_FUNC(marcoship_stop_wait_func);
+static USER_FUNC(marcoship_stop_func);
 
-EvtWord hiru_yoru_event[46];
-EvtWord yoru_hiru_event[46];
+static EvtWord hiru_yoru_event[46];
+static EvtWord yoru_hiru_event[46];
 EvtWord urouro[61];
-EvtWord urouro_fuwafuwa[35];
-EvtWord buruburu[23];
-EvtWord fuwafuwa[15];
-EvtWord kirimomi[29];
-EvtWord marco_ship_yure[29];
-EvtWord moya_effect01[52];
-EvtWord moya_effect02[52];
-EvtWord moya_effect03[52];
-EvtWord moya_effect04[52];
-EvtWord moya_effect05[52];
-EvtWord nami_alpha[41];
-EvtWord moonout_effect[53];
-EvtWord moya_effect[19];
-EvtWord _kakushuku[32];
-EvtWord elmos_a_kakushuku[63];
-EvtWord elmos_a_kaku[13];
-EvtWord elmos_a_shuku[13];
+static EvtWord urouro_fuwafuwa[35];
+static EvtWord buruburu[23];
+static EvtWord fuwafuwa[15];
+static EvtWord kirimomi[29];
+static EvtWord marco_ship_yure[29];
+static EvtWord moya_effect01[52];
+static EvtWord moya_effect02[52];
+static EvtWord moya_effect03[52];
+static EvtWord moya_effect04[52];
+static EvtWord moya_effect05[52];
+static EvtWord nami_alpha[41];
+static EvtWord moonout_effect[53];
+static EvtWord moya_effect[19];
+static EvtWord _kakushuku[32];
+static EvtWord elmos_a_kakushuku[63];
+static EvtWord elmos_a_kaku[13];
+static EvtWord elmos_a_shuku[13];
 static ExtTexInfo ext_entry_data[21];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -131,13 +131,13 @@ static s16 elmos_animtbl[22];
 #endif
 
 static EvtWord nannpc_mode_setup[35];
-s32 mist_pos[91];
-EvtWord mist_setup[45];
-EvtWord marcoship_shizumu[156];
+static s32 mist_pos[91];
+static EvtWord mist_setup[45];
+static EvtWord marcoship_shizumu[156];
 EvtWord onryo_event[];
-EvtWord muj_20_koopa_evt[133];
-EvtWord kaizoku_hata[65];
-EvtWord gor_muj_ship[195];
+static EvtWord muj_20_koopa_evt[133];
+static EvtWord kaizoku_hata[65];
+static EvtWord gor_muj_ship[195];
 static EvtWord muj_gor_ship[195];
 EvtWord anm_kaji[61];
 EvtWord anm_wakka[40];
@@ -152,7 +152,7 @@ static EvtWord evt_prologue[182];
 #endif
 
 static EvtWord epilogue_npc_entry[25];
-EvtWord fune_move[136];
+static EvtWord fune_move[136];
 static EvtWord epilogue_evt[97];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -165,7 +165,7 @@ EvtWord muj_20_init_evt[362];
  * Day turns to night: plays the "hiru_yoru" map animation (sky, lights and sea colours) at 4x speed
  * and slows it down in steps until it finishes. Used on the ship voyages.
  */
-EVT_BEGIN(hiru_yoru_event)
+static EVT_BEGIN(hiru_yoru_event)
     CALL(evt_map_playanim, STRING("hiru_yoru"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_map_set_playrate, STRING("hiru_yoru"), FLOAT(4.0f))
@@ -187,7 +187,7 @@ EVT_BEGIN(hiru_yoru_event)
 EVT_END()
 
 /** Night turns to day: the same slowdown (second step 100 ms instead of 200 ms) applied to the "yoru_hiru" map animation. */
-EVT_BEGIN(yoru_hiru_event)
+static EVT_BEGIN(yoru_hiru_event)
     CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_map_set_playrate, STRING("yoru_hiru"), FLOAT(4.0f))
@@ -208,7 +208,7 @@ EVT_BEGIN(yoru_hiru_event)
     RETURN
 EVT_END()
 
-USER_FUNC(urouro_func) {
+static USER_FUNC(urouro_func) {
     int t;
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -255,7 +255,7 @@ USER_FUNC(urouro_func) {
  * Script helper like urouro_func but in 3D (start and end x, y, z, args[1] to args[6]) with a floating wobble
  * taken from a 32-entry sine table; used for the Embers drifting on the deck.
  */
-USER_FUNC(urouro_fuwafuwa_func) {
+static USER_FUNC(urouro_fuwafuwa_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 sx = evtGetValue(event, args[1]);
@@ -328,7 +328,7 @@ EVT_BEGIN(urouro)
     RETURN
 EVT_END()
 
-USER_FUNC(marcoship_yure_init_func) {
+static USER_FUNC(marcoship_yure_init_func) {
     MarcoShip* ms;
 
     marcoship = ms = _mapAlloc(sizeof(MarcoShip));
@@ -346,7 +346,7 @@ USER_FUNC(marcoship_yure_init_func) {
  * and a "stopped" flag in args[1].
  * It rolls to the limit, pauses 500 ms and swings back; once told to stop it settles at 0 degrees.
  */
-USER_FUNC(marcoship_yure_func) {
+static USER_FUNC(marcoship_yure_func) {
     MarcoShip* ms = marcoship;
     EvtWord* args = event->args;
 
@@ -395,13 +395,13 @@ USER_FUNC(marcoship_yure_func) {
 }
 
 /** Script helper: asks the ship rocking to stop (settle at level) at the next zero crossing. */
-USER_FUNC(marcoship_stop_func) {
+static USER_FUNC(marcoship_stop_func) {
     marcoship->state = 2;
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: blocks until the ship rocking has settled level (marcoship->stopped). */
-USER_FUNC(marcoship_stop_wait_func) {
+static USER_FUNC(marcoship_stop_wait_func) {
     return marcoship->stopped ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
@@ -410,7 +410,7 @@ USER_FUNC(marcoship_stop_wait_func) {
  * and sea animations ("fune", "fune_01" and "nami", "nami_02") toward their target rates by at most 0.005 per
  * frame; runs forever (always blocks).
  */
-USER_FUNC(evt_map_anim_rate) {
+static USER_FUNC(evt_map_anim_rate) {
     MapAnimRate* rate = &mapAnimRate;
     f32 d;
 
@@ -442,13 +442,13 @@ USER_FUNC(evt_map_anim_rate) {
 }
 
 /** Script helper: sets the target speed of the ship animations (fune and fune_01) for evt_map_anim_rate. */
-USER_FUNC(evt_set_fune_anim_rate) {
+static USER_FUNC(evt_set_fune_anim_rate) {
     mapAnimRate.funeTarget = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: sets the target speed of the wave animations (nami and nami_02) for evt_map_anim_rate. */
-USER_FUNC(evt_set_nami_anim_rate) {
+static USER_FUNC(evt_set_nami_anim_rate) {
     mapAnimRate.namiTarget = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
@@ -457,7 +457,7 @@ USER_FUNC(evt_set_nami_anim_rate) {
  * Makes the NPC in LW(0) float back and forth between two 3D deck points (LW(11) to LW(13) and LW(1) to LW(3))
  * forever; used for the Embers.
  */
-EVT_BEGIN(urouro_fuwafuwa)
+static EVT_BEGIN(urouro_fuwafuwa)
     CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
     LOOP(0)
         CALL(urouro_fuwafuwa_func, LW(0), LW(11), LW(12), LW(13), LW(1), LW(2), LW(3), LW(4), LW(5), EASING_LINEAR)
@@ -466,7 +466,7 @@ EVT_BEGIN(urouro_fuwafuwa)
     RETURN
 EVT_END()
 
-EVT_BEGIN(buruburu)
+static EVT_BEGIN(buruburu)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_sub_random, 200, LW(10))
     ADD(LW(10), 100)
@@ -475,7 +475,7 @@ EVT_BEGIN(buruburu)
     RETURN
 EVT_END()
 
-EVT_BEGIN(fuwafuwa)
+static EVT_BEGIN(fuwafuwa)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
         CALL(muj_npc_fuwafuwa, LW(0), 0, 10000)
@@ -483,7 +483,7 @@ EVT_BEGIN(fuwafuwa)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kirimomi)
+static EVT_BEGIN(kirimomi)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 360, 500)
         LOOP(0)
@@ -498,7 +498,7 @@ EVT_BEGIN(kirimomi)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marco_ship_yure)
+static EVT_BEGIN(marco_ship_yure)
     CALL(marcoship_yure_init_func)
     CALL(evt_hit_bind_mapobj, STRING("A_a1"), STRING("S_a1"))
     LOOP(0)
@@ -512,7 +512,7 @@ EVT_BEGIN(marco_ship_yure)
     RETURN
 EVT_END()
 
-EVT_BEGIN(moya_effect01)
+static EVT_BEGIN(moya_effect01)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
@@ -530,7 +530,7 @@ EVT_BEGIN(moya_effect01)
     RETURN
 EVT_END()
 
-EVT_BEGIN(moya_effect02)
+static EVT_BEGIN(moya_effect02)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
@@ -548,7 +548,7 @@ EVT_BEGIN(moya_effect02)
     RETURN
 EVT_END()
 
-EVT_BEGIN(moya_effect03)
+static EVT_BEGIN(moya_effect03)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
@@ -566,7 +566,7 @@ EVT_BEGIN(moya_effect03)
     RETURN
 EVT_END()
 
-EVT_BEGIN(moya_effect04)
+static EVT_BEGIN(moya_effect04)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
@@ -584,7 +584,7 @@ EVT_BEGIN(moya_effect04)
     RETURN
 EVT_END()
 
-EVT_BEGIN(moya_effect05)
+static EVT_BEGIN(moya_effect05)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_05"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_05"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
@@ -632,7 +632,7 @@ static USER_FUNC(alpha_set_func) {
  * Script helper: scatters the mass-NPC Embers (1000 of them, nanNPCWork) over an ellipse in front of the camera,
  * invisible (alpha 0), at random angles and distances for the ghost fleet.
  */
-USER_FUNC(elmos1000tai_init) {
+static USER_FUNC(elmos1000tai_init) {
     NanNPCWork* wp = nanNPCWork;
     s32 i;
     NanNPC* npc;
@@ -677,7 +677,7 @@ USER_FUNC(elmos1000tai_init) {
 }
 
 /** Script helper: starts the scattered Embers fading in by giving each one the elmos1000tai_seq00 behaviour. */
-USER_FUNC(elmos1000tai_start) {
+static USER_FUNC(elmos1000tai_start) {
     s32 i;
     NanNPC* npc;
     NanNPCWork* wp;
@@ -696,7 +696,7 @@ USER_FUNC(elmos1000tai_start) {
  * Per-frame behaviour of one Ember in the fleet:
  * waits a random time (longer for ones far away), fades its alpha from 0 to 255 over 500 ms, then stays visible.
  */
-void elmos1000tai_seq00(NanNPC* npc) {
+static void elmos1000tai_seq00(NanNPC* npc) {
     s32 t;
 
     switch (npc->state) {
@@ -729,7 +729,7 @@ void elmos1000tai_seq00(NanNPC* npc) {
  * Script helper that places a drifting mist effect near (args[0], args[1], args[2]) with a random offset of up
  * to 75 units, then requests its deletion after a random 3 to 4 second wait.
  */
-USER_FUNC(mist_func) {
+static USER_FUNC(mist_func) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -768,7 +768,7 @@ USER_FUNC(mist_func) {
 }
 
 /** Script helper: moves the sinking ship (map object S_a1) to height args[0]. */
-USER_FUNC(marcoship_shizumu_func) {
+static USER_FUNC(marcoship_shizumu_func) {
     f32 y = evtGetFloat(event, event->args[0]);
 
     mapObjTranslate("S_a1", 0.0f, y, 0.0f);
@@ -776,7 +776,7 @@ USER_FUNC(marcoship_shizumu_func) {
 }
 
 /** Script helper: spawns a splash effect (scale 3) at (args[0], args[1], args[2]). */
-USER_FUNC(splash_eff) {
+static USER_FUNC(splash_eff) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -790,7 +790,7 @@ USER_FUNC(splash_eff) {
  * Script helper, one per frame: keeps a wake effect (funemizu) at the bow of the pirate ship S_b,
  * sized and angled by how fast and which way the ship is moving. Always blocks.
  */
-USER_FUNC(kaizoku_fune_eff) {
+static USER_FUNC(kaizoku_fune_eff) {
     EffectEntry* eff;
     Vec pos;
     f32 oldX, oldZ, speed, angle, dir;
@@ -831,7 +831,7 @@ USER_FUNC(kaizoku_fune_eff) {
  * Fades the foam layer of the sea (S_umi_l_siro_b) from opaque to clear over 500 ms through the water alpha
  * callback.
  */
-EVT_BEGIN(nami_alpha)
+static EVT_BEGIN(nami_alpha)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_TEV_CALLBACK(1))
@@ -852,7 +852,7 @@ EVT_END()
  * Fades the sky models S_hai02 and S_hai03_moon (the moon) from opaque to clear over 1.5 seconds through
  * alpha_tev; moya_effect starts it together with the five mist banks.
  */
-EVT_BEGIN(moonout_effect)
+static EVT_BEGIN(moonout_effect)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_hai02"), MAP_OBJ_TEV_CALLBACK(1))
@@ -872,7 +872,7 @@ EVT_BEGIN(moonout_effect)
 EVT_END()
 
 /** Starts all five mist banks (moya_effect01 to 05) and the "onryou" (ghost) map animation. */
-EVT_BEGIN(moya_effect)
+static EVT_BEGIN(moya_effect)
     SPAWN_EVENT(moya_effect01)
     SPAWN_EVENT(moya_effect02)
     SPAWN_EVENT(moya_effect03)
@@ -884,7 +884,7 @@ EVT_BEGIN(moya_effect)
 EVT_END()
 
 /** Scales the Ember Elmos A from LW(0) to LW(1) percent over LW(2) ms; helper of the grow and shrink scripts. */
-EVT_BEGIN(_kakushuku)
+static EVT_BEGIN(_kakushuku)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(0), LW(1), LW(2))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -900,7 +900,7 @@ EVT_BEGIN(_kakushuku)
 EVT_END()
 
 /** Makes Elmos A throb: shrinks and grows its size repeatedly until GF(10) is cleared, then clears GF(11). */
-EVT_BEGIN(elmos_a_kakushuku)
+static EVT_BEGIN(elmos_a_kakushuku)
     SET_VALUE(LW(0), 100)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 150)
@@ -930,7 +930,7 @@ EVT_BEGIN(elmos_a_kakushuku)
 EVT_END()
 
 /** Grows Elmos A from 0 to 100 percent over 150 ms. */
-EVT_BEGIN(elmos_a_kaku)
+static EVT_BEGIN(elmos_a_kaku)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 100)
     SET_VALUE(LW(2), 150)
@@ -939,7 +939,7 @@ EVT_BEGIN(elmos_a_kaku)
 EVT_END()
 
 /** Shrinks Elmos A from 100 to 0 percent over 150 ms. */
-EVT_BEGIN(elmos_a_shuku)
+static EVT_BEGIN(elmos_a_shuku)
     SET_VALUE(LW(0), 100)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 150)
@@ -1006,7 +1006,7 @@ static EVT_BEGIN(nannpc_mode_setup)
 EVT_END()
 
 /** Positions (x, y, z) of the mist clouds drifting around the ship, ended by -10000. */
-s32 mist_pos[] = {
+static s32 mist_pos[] = {
     -400, 30, -200, -400, 30, -400, -400, 30,
     -600, -400, 30, -800, -400, 30, -1000, -400,
     30, -1200, -200, 30, -200, -200, 30, -400,
@@ -1025,7 +1025,7 @@ s32 mist_pos[] = {
  * Spawns the mist clouds: walks the mist_pos table until the -10000 terminator
  * and starts mist_func at each position, then repeats.
  */
-EVT_BEGIN(mist_setup)
+static EVT_BEGIN(mist_setup)
     LOOP(0)
         SET_VALUE(LW(10), 0)
         LOOP(0)
@@ -1048,7 +1048,7 @@ EVT_BEGIN(mist_setup)
     RETURN
 EVT_END()
 
-EVT_BEGIN(marcoship_shizumu)
+static EVT_BEGIN(marcoship_shizumu)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_QUAKE1"), LW(10))
     SET_FLOAT_VALUE(LW(2), FLOAT(0.0f))
     CALL(evt_hit_bind_mapobj, STRING("A_a1"), STRING("S_a1"))
@@ -1640,7 +1640,7 @@ EVT_BEGIN(onryo_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(muj_20_koopa_evt)
+static EVT_BEGIN(muj_20_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_npc_set_position, STRING("飛クッパ"), 0, 500, -700)
@@ -1688,7 +1688,7 @@ EVT_BEGIN(muj_20_koopa_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kaizoku_hata)
+static EVT_BEGIN(kaizoku_hata)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 2500)
         LOOP(0)
@@ -1716,7 +1716,7 @@ EVT_BEGIN(kaizoku_hata)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gor_muj_ship)
+static EVT_BEGIN(gor_muj_ship)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -2263,7 +2263,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
-EVT_BEGIN(fune_move)
+static EVT_BEGIN(fune_move)
     BEGIN_INLINE_EVENT
         CALL(kaizoku_fune_eff)
     END_INLINE_EVENT

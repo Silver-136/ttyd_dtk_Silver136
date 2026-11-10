@@ -23,8 +23,8 @@ EffectEntry* hi_fire_eff[6];
 s8 hi_fire_end_flag[4];
 #endif
 
-USER_FUNC(_gear_rotate);
-USER_FUNC(check_battle_end);
+static USER_FUNC(_gear_rotate);
+static USER_FUNC(check_battle_end);
 USER_FUNC(hi_fire_end);
 USER_FUNC(hi_fire_main);
 extern BattleUnitKind unit_black_karon;
@@ -34,189 +34,189 @@ extern BattleUnitKind unit_boss_rampell_las;
 extern BattleUnitKind unit_red_honenoko;
 extern BattleUnitKind unit_super_killer_cannon;
 
-BattleStageObjectData las_btlobject_data[38];
-BattleStageData las_btlstage_data[10];
-BattleUnitSetup btlparty_las_las_05_01[5];
-BattleGroupSetup btlgrp_las_las_05_01;
-BattleUnitSetup btlparty_las_las_17_01_off_1[1];
-BattleGroupSetup btlgrp_las_las_17_01_off_1;
-BattleUnitSetup btlparty_las_las_17_02_off_1[1];
-BattleGroupSetup btlgrp_las_las_17_02_off_1;
-BattleUnitSetup btlparty_las_las_17_03_off_1[1];
-BattleGroupSetup btlgrp_las_las_17_03_off_1;
-BattleUnitSetup btlparty_las_las_17_04_off_1[1];
-BattleGroupSetup btlgrp_las_las_17_04_off_1;
-BattleUnitSetup btlparty_las_las_09_rampell[1];
-BattleGroupSetup btlgrp_las_las_09_rampell;
-BattleUnitSetup btlparty_las_las_bunbaba[1];
-BattleGroupSetup btlgrp_las_las_bunbaba;
-BattleUnitSetup btlparty_las_las_28_batten_leader[1];
-BattleGroupSetup btlgrp_las_las_28_batten_leader;
-BattleUnitSetup btlparty_las_las_28_koopa[1];
-BattleGroupSetup btlgrp_las_las_28_koopa;
-BattleUnitSetup btlparty_las_las_29_black_peach_1[1];
-BattleGroupSetup btlgrp_las_las_29_black_peach_1;
-BattleUnitSetup btlparty_las_las_29_black_peach_2[1];
-BattleGroupSetup btlgrp_las_las_29_black_peach_2;
-BattleUnitSetup btlparty_las_las_01_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_01_01_off_1;
-BattleUnitSetup btlparty_las_las_01_02_off_1[3];
-BattleGroupSetup btlgrp_las_las_01_02_off_1;
-BattleUnitSetup btlparty_las_las_01_03_off_1[4];
-BattleGroupSetup btlgrp_las_las_01_03_off_1;
-BattleUnitSetup btlparty_las_las_01_01_off_2[2];
-BattleGroupSetup btlgrp_las_las_01_01_off_2;
-BattleUnitSetup btlparty_las_las_01_02_off_2[3];
-BattleGroupSetup btlgrp_las_las_01_02_off_2;
-BattleUnitSetup btlparty_las_las_01_03_off_2[4];
-BattleGroupSetup btlgrp_las_las_01_03_off_2;
-BattleUnitSetup btlparty_las_las_02_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_02_01_off_1;
-BattleUnitSetup btlparty_las_las_02_02_off_1[3];
-BattleGroupSetup btlgrp_las_las_02_02_off_1;
-BattleUnitSetup btlparty_las_las_02_03_off_1[3];
-BattleGroupSetup btlgrp_las_las_02_03_off_1;
-BattleUnitSetup btlparty_las_las_02_04_off_1[4];
-BattleGroupSetup btlgrp_las_las_02_04_off_1;
-BattleUnitSetup btlparty_las_las_02_05_off_1[2];
-BattleGroupSetup btlgrp_las_las_02_05_off_1;
-BattleUnitSetup btlparty_las_las_02_06_off_1[2];
-BattleGroupSetup btlgrp_las_las_02_06_off_1;
-BattleUnitSetup btlparty_las_las_02_99_off_1[2];
-BattleGroupSetup btlgrp_las_las_02_99_off_1;
-BattleUnitSetup btlparty_las_las_03_01_off_1[1];
-BattleGroupSetup btlgrp_las_las_03_01_off_1;
-BattleUnitSetup btlparty_las_las_03_02_off_1[1];
-BattleGroupSetup btlgrp_las_las_03_02_off_1;
-BattleUnitSetup btlparty_las_las_03_03_off_1[1];
-BattleGroupSetup btlgrp_las_las_03_03_off_1;
-BattleUnitSetup btlparty_las_las_03_01_off_2[1];
-BattleGroupSetup btlgrp_las_las_03_01_off_2;
-BattleUnitSetup btlparty_las_las_03_02_off_2[1];
-BattleGroupSetup btlgrp_las_las_03_02_off_2;
-BattleUnitSetup btlparty_las_las_03_03_off_2[1];
-BattleGroupSetup btlgrp_las_las_03_03_off_2;
-BattleUnitSetup btlparty_las_las_04_01_off_1[1];
-BattleGroupSetup btlgrp_las_las_04_01_off_1;
-BattleUnitSetup btlparty_las_las_06_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_06_01_off_1;
-BattleUnitSetup btlparty_las_las_06_02_off_1[2];
-BattleGroupSetup btlgrp_las_las_06_02_off_1;
-BattleUnitSetup btlparty_las_las_06_03_off_1[2];
-BattleGroupSetup btlgrp_las_las_06_03_off_1;
-BattleUnitSetup btlparty_las_las_06_04_off_1[4];
-BattleGroupSetup btlgrp_las_las_06_04_off_1;
-BattleUnitSetup btlparty_las_las_06_05_off_1[2];
-BattleGroupSetup btlgrp_las_las_06_05_off_1;
-BattleUnitSetup btlparty_las_las_06_06_off_1[2];
-BattleGroupSetup btlgrp_las_las_06_06_off_1;
-BattleUnitSetup btlparty_las_las_06_99_off_1[2];
-BattleGroupSetup btlgrp_las_las_06_99_off_1;
-BattleUnitSetup btlparty_las_las_07_01_off_1[3];
-BattleGroupSetup btlgrp_las_las_07_01_off_1;
-BattleUnitSetup btlparty_las_las_07_02_off_1[3];
-BattleGroupSetup btlgrp_las_las_07_02_off_1;
-BattleUnitSetup btlparty_las_las_07_03_off_1[3];
-BattleGroupSetup btlgrp_las_las_07_03_off_1;
-BattleUnitSetup btlparty_las_las_09_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_09_01_off_1;
-BattleUnitSetup btlparty_las_las_09_02_off_1[3];
-BattleGroupSetup btlgrp_las_las_09_02_off_1;
-BattleUnitSetup btlparty_las_las_19_01_off_1[1];
-BattleGroupSetup btlgrp_las_las_19_01_off_1;
-BattleUnitSetup btlparty_las_las_19_02_off_1[2];
-BattleGroupSetup btlgrp_las_las_19_02_off_1;
-BattleUnitSetup btlparty_las_las_19_03_off_1[3];
-BattleGroupSetup btlgrp_las_las_19_03_off_1;
-BattleUnitSetup btlparty_las_las_20_01_off_1[1];
-BattleGroupSetup btlgrp_las_las_20_01_off_1;
-BattleUnitSetup btlparty_las_las_21_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_21_01_off_1;
-BattleUnitSetup btlparty_las_las_21_02_off_1[2];
-BattleGroupSetup btlgrp_las_las_21_02_off_1;
-BattleUnitSetup btlparty_las_las_22_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_22_01_off_1;
-BattleUnitSetup btlparty_las_las_22_02_off_1[4];
-BattleGroupSetup btlgrp_las_las_22_02_off_1;
-BattleUnitSetup btlparty_las_las_22_03_off_1[2];
-BattleGroupSetup btlgrp_las_las_22_03_off_1;
-BattleUnitSetup btlparty_las_las_24_01_off_1[2];
-BattleGroupSetup btlgrp_las_las_24_01_off_1;
-BattleUnitSetup btlparty_las_las_25_01_off_1[1];
-BattleGroupSetup btlgrp_las_las_25_01_off_1;
-BattleUnitSetup btlparty_las_las_25_02_off_1[3];
-BattleGroupSetup btlgrp_las_las_25_02_off_1;
-BattleUnitSetup btlparty_las_las_25_03_off_1[4];
-BattleGroupSetup btlgrp_las_las_25_03_off_1;
-BattleUnitSetup btlparty_las_las_25_04_off_1[2];
-BattleGroupSetup btlgrp_las_las_25_04_off_1;
-BattleUnitSetup btlparty_las_las_25_05_off_1[3];
-BattleGroupSetup btlgrp_las_las_25_05_off_1;
-BattleUnitSetup btlparty_las_las_25_06_off_1[3];
-BattleGroupSetup btlgrp_las_las_25_06_off_1;
-NpcBattleSelect btlgrpsel_las_btlno_las_test1_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_test2_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_test3_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_test4_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_test5_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_test6_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_test7_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_05_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_09_rampell_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_17_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_17_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_17_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_17_04_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_28_koopa_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_bunbaba_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_28_batten_leader_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_1_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_2_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_01_01_off[3];
-NpcBattleSelect btlgrpsel_las_btlno_las_01_02_off[3];
-NpcBattleSelect btlgrpsel_las_btlno_las_01_03_off[3];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_04_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_05_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_06_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_02_99_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_03_01_off[3];
-NpcBattleSelect btlgrpsel_las_btlno_las_03_02_off[3];
-NpcBattleSelect btlgrpsel_las_btlno_las_03_03_off[3];
-NpcBattleSelect btlgrpsel_las_btlno_las_04_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_04_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_05_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_06_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_06_99_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_07_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_07_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_07_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_09_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_09_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_19_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_19_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_19_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_20_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_21_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_21_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_22_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_22_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_22_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_24_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_25_01_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_25_02_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_25_03_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_25_04_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_25_05_off[2];
-NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[2];
+static BattleStageObjectData las_btlobject_data[38];
+static BattleStageData las_btlstage_data[10];
+static BattleUnitSetup btlparty_las_las_05_01[5];
+static BattleGroupSetup btlgrp_las_las_05_01;
+static BattleUnitSetup btlparty_las_las_17_01_off_1[1];
+static BattleGroupSetup btlgrp_las_las_17_01_off_1;
+static BattleUnitSetup btlparty_las_las_17_02_off_1[1];
+static BattleGroupSetup btlgrp_las_las_17_02_off_1;
+static BattleUnitSetup btlparty_las_las_17_03_off_1[1];
+static BattleGroupSetup btlgrp_las_las_17_03_off_1;
+static BattleUnitSetup btlparty_las_las_17_04_off_1[1];
+static BattleGroupSetup btlgrp_las_las_17_04_off_1;
+static BattleUnitSetup btlparty_las_las_09_rampell[1];
+static BattleGroupSetup btlgrp_las_las_09_rampell;
+static BattleUnitSetup btlparty_las_las_bunbaba[1];
+static BattleGroupSetup btlgrp_las_las_bunbaba;
+static BattleUnitSetup btlparty_las_las_28_batten_leader[1];
+static BattleGroupSetup btlgrp_las_las_28_batten_leader;
+static BattleUnitSetup btlparty_las_las_28_koopa[1];
+static BattleGroupSetup btlgrp_las_las_28_koopa;
+static BattleUnitSetup btlparty_las_las_29_black_peach_1[1];
+static BattleGroupSetup btlgrp_las_las_29_black_peach_1;
+static BattleUnitSetup btlparty_las_las_29_black_peach_2[1];
+static BattleGroupSetup btlgrp_las_las_29_black_peach_2;
+static BattleUnitSetup btlparty_las_las_01_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_01_01_off_1;
+static BattleUnitSetup btlparty_las_las_01_02_off_1[3];
+static BattleGroupSetup btlgrp_las_las_01_02_off_1;
+static BattleUnitSetup btlparty_las_las_01_03_off_1[4];
+static BattleGroupSetup btlgrp_las_las_01_03_off_1;
+static BattleUnitSetup btlparty_las_las_01_01_off_2[2];
+static BattleGroupSetup btlgrp_las_las_01_01_off_2;
+static BattleUnitSetup btlparty_las_las_01_02_off_2[3];
+static BattleGroupSetup btlgrp_las_las_01_02_off_2;
+static BattleUnitSetup btlparty_las_las_01_03_off_2[4];
+static BattleGroupSetup btlgrp_las_las_01_03_off_2;
+static BattleUnitSetup btlparty_las_las_02_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_02_01_off_1;
+static BattleUnitSetup btlparty_las_las_02_02_off_1[3];
+static BattleGroupSetup btlgrp_las_las_02_02_off_1;
+static BattleUnitSetup btlparty_las_las_02_03_off_1[3];
+static BattleGroupSetup btlgrp_las_las_02_03_off_1;
+static BattleUnitSetup btlparty_las_las_02_04_off_1[4];
+static BattleGroupSetup btlgrp_las_las_02_04_off_1;
+static BattleUnitSetup btlparty_las_las_02_05_off_1[2];
+static BattleGroupSetup btlgrp_las_las_02_05_off_1;
+static BattleUnitSetup btlparty_las_las_02_06_off_1[2];
+static BattleGroupSetup btlgrp_las_las_02_06_off_1;
+static BattleUnitSetup btlparty_las_las_02_99_off_1[2];
+static BattleGroupSetup btlgrp_las_las_02_99_off_1;
+static BattleUnitSetup btlparty_las_las_03_01_off_1[1];
+static BattleGroupSetup btlgrp_las_las_03_01_off_1;
+static BattleUnitSetup btlparty_las_las_03_02_off_1[1];
+static BattleGroupSetup btlgrp_las_las_03_02_off_1;
+static BattleUnitSetup btlparty_las_las_03_03_off_1[1];
+static BattleGroupSetup btlgrp_las_las_03_03_off_1;
+static BattleUnitSetup btlparty_las_las_03_01_off_2[1];
+static BattleGroupSetup btlgrp_las_las_03_01_off_2;
+static BattleUnitSetup btlparty_las_las_03_02_off_2[1];
+static BattleGroupSetup btlgrp_las_las_03_02_off_2;
+static BattleUnitSetup btlparty_las_las_03_03_off_2[1];
+static BattleGroupSetup btlgrp_las_las_03_03_off_2;
+static BattleUnitSetup btlparty_las_las_04_01_off_1[1];
+static BattleGroupSetup btlgrp_las_las_04_01_off_1;
+static BattleUnitSetup btlparty_las_las_06_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_06_01_off_1;
+static BattleUnitSetup btlparty_las_las_06_02_off_1[2];
+static BattleGroupSetup btlgrp_las_las_06_02_off_1;
+static BattleUnitSetup btlparty_las_las_06_03_off_1[2];
+static BattleGroupSetup btlgrp_las_las_06_03_off_1;
+static BattleUnitSetup btlparty_las_las_06_04_off_1[4];
+static BattleGroupSetup btlgrp_las_las_06_04_off_1;
+static BattleUnitSetup btlparty_las_las_06_05_off_1[2];
+static BattleGroupSetup btlgrp_las_las_06_05_off_1;
+static BattleUnitSetup btlparty_las_las_06_06_off_1[2];
+static BattleGroupSetup btlgrp_las_las_06_06_off_1;
+static BattleUnitSetup btlparty_las_las_06_99_off_1[2];
+static BattleGroupSetup btlgrp_las_las_06_99_off_1;
+static BattleUnitSetup btlparty_las_las_07_01_off_1[3];
+static BattleGroupSetup btlgrp_las_las_07_01_off_1;
+static BattleUnitSetup btlparty_las_las_07_02_off_1[3];
+static BattleGroupSetup btlgrp_las_las_07_02_off_1;
+static BattleUnitSetup btlparty_las_las_07_03_off_1[3];
+static BattleGroupSetup btlgrp_las_las_07_03_off_1;
+static BattleUnitSetup btlparty_las_las_09_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_09_01_off_1;
+static BattleUnitSetup btlparty_las_las_09_02_off_1[3];
+static BattleGroupSetup btlgrp_las_las_09_02_off_1;
+static BattleUnitSetup btlparty_las_las_19_01_off_1[1];
+static BattleGroupSetup btlgrp_las_las_19_01_off_1;
+static BattleUnitSetup btlparty_las_las_19_02_off_1[2];
+static BattleGroupSetup btlgrp_las_las_19_02_off_1;
+static BattleUnitSetup btlparty_las_las_19_03_off_1[3];
+static BattleGroupSetup btlgrp_las_las_19_03_off_1;
+static BattleUnitSetup btlparty_las_las_20_01_off_1[1];
+static BattleGroupSetup btlgrp_las_las_20_01_off_1;
+static BattleUnitSetup btlparty_las_las_21_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_21_01_off_1;
+static BattleUnitSetup btlparty_las_las_21_02_off_1[2];
+static BattleGroupSetup btlgrp_las_las_21_02_off_1;
+static BattleUnitSetup btlparty_las_las_22_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_22_01_off_1;
+static BattleUnitSetup btlparty_las_las_22_02_off_1[4];
+static BattleGroupSetup btlgrp_las_las_22_02_off_1;
+static BattleUnitSetup btlparty_las_las_22_03_off_1[2];
+static BattleGroupSetup btlgrp_las_las_22_03_off_1;
+static BattleUnitSetup btlparty_las_las_24_01_off_1[2];
+static BattleGroupSetup btlgrp_las_las_24_01_off_1;
+static BattleUnitSetup btlparty_las_las_25_01_off_1[1];
+static BattleGroupSetup btlgrp_las_las_25_01_off_1;
+static BattleUnitSetup btlparty_las_las_25_02_off_1[3];
+static BattleGroupSetup btlgrp_las_las_25_02_off_1;
+static BattleUnitSetup btlparty_las_las_25_03_off_1[4];
+static BattleGroupSetup btlgrp_las_las_25_03_off_1;
+static BattleUnitSetup btlparty_las_las_25_04_off_1[2];
+static BattleGroupSetup btlgrp_las_las_25_04_off_1;
+static BattleUnitSetup btlparty_las_las_25_05_off_1[3];
+static BattleGroupSetup btlgrp_las_las_25_05_off_1;
+static BattleUnitSetup btlparty_las_las_25_06_off_1[3];
+static BattleGroupSetup btlgrp_las_las_25_06_off_1;
+static NpcBattleSelect btlgrpsel_las_btlno_las_test1_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_test2_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_test3_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_test4_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_test5_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_test6_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_test7_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_05_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_09_rampell_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_04_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_28_koopa_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_bunbaba_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_28_batten_leader_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_1_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_2_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_01_01_off[3];
+static NpcBattleSelect btlgrpsel_las_btlno_las_01_02_off[3];
+static NpcBattleSelect btlgrpsel_las_btlno_las_01_03_off[3];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_04_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_05_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_06_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_99_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_03_01_off[3];
+static NpcBattleSelect btlgrpsel_las_btlno_las_03_02_off[3];
+static NpcBattleSelect btlgrpsel_las_btlno_las_03_03_off[3];
+static NpcBattleSelect btlgrpsel_las_btlno_las_04_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_04_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_05_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_06_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_99_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_07_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_07_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_07_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_09_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_09_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_19_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_19_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_19_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_20_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_21_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_21_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_22_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_22_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_22_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_24_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_01_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_02_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_03_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_04_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_05_off[2];
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[2];
 NpcSetupBattleInfo btlsetup_las_tbl[61];
 NpcTerritoryInfo btl_las_setup_no_tbl[61];
-EvtWord bgset_las_gear_event[38];
+static EvtWord bgset_las_gear_event[38];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord stg_08_1_init_sub_event[];
@@ -227,9 +227,9 @@ EvtWord stg_08_1_init_sub_event[97];
 EvtWord stg_08_1_init_event[4];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord stg_08_6_init_sub_event[154];
+static EvtWord stg_08_6_init_sub_event[154];
 #else
-EvtWord stg_08_6_init_sub_event[46];
+static EvtWord stg_08_6_init_sub_event[46];
 #endif
 
 EvtWord stg_08_6_init_event[4];
@@ -251,7 +251,7 @@ USER_FUNC(hi_fire_end) {
  * (floor, wall, rotating gears, pedestals, corridor segments); las_btlstage_data entries point into this
  * array.
  */
-BattleStageObjectData las_btlobject_data[] = {
+static BattleStageObjectData las_btlobject_data[] = {
     {"A1", 2, STAGE_LAYER_A1, {93.0f, 0.0f, -64.0f}, 0, 60, {0}},
     {"B", 2, STAGE_LAYER_B, {0}, 0, 60, {0}},
     {"C_kabe", 2, STAGE_LAYER_C, {0}, 0, 60, {0}},
@@ -296,7 +296,7 @@ BattleStageObjectData las_btlobject_data[] = {
  * Battle stages of the Palace of Shadow: the backdrop folders, the pieces from las_btlobject_data and the
  * background hit and event scripts (the gear-room backdrop rotates its gears).
  */
-BattleStageData las_btlstage_data[] = {
+static BattleStageData las_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_08_5", // specificStageDataDir
@@ -406,7 +406,7 @@ BattleStageData las_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_las_las_05_01[] = {
+static BattleUnitSetup btlparty_las_las_05_01[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -459,7 +459,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_05_01 = {
+static BattleGroupSetup btlgrp_las_las_05_01 = {
     5, // numEnemies
     btlparty_las_las_05_01, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -469,7 +469,7 @@ BattleGroupSetup btlgrp_las_las_05_01 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_17_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_17_01_off_1[] = {
     {
         &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -482,7 +482,7 @@ BattleUnitSetup btlparty_las_las_17_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_17_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_17_01_off_1 = {
     1, // numEnemies
     btlparty_las_las_17_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -492,7 +492,7 @@ BattleGroupSetup btlgrp_las_las_17_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_17_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_17_02_off_1[] = {
     {
         &unit_red_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -505,7 +505,7 @@ BattleUnitSetup btlparty_las_las_17_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_17_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_17_02_off_1 = {
     1, // numEnemies
     btlparty_las_las_17_02_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -515,7 +515,7 @@ BattleGroupSetup btlgrp_las_las_17_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_17_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_17_03_off_1[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -528,7 +528,7 @@ BattleUnitSetup btlparty_las_las_17_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_17_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_17_03_off_1 = {
     1, // numEnemies
     btlparty_las_las_17_03_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -538,7 +538,7 @@ BattleGroupSetup btlgrp_las_las_17_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_17_04_off_1[] = {
+static BattleUnitSetup btlparty_las_las_17_04_off_1[] = {
     {
         &unit_black_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -551,7 +551,7 @@ BattleUnitSetup btlparty_las_las_17_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_17_04_off_1 = {
+static BattleGroupSetup btlgrp_las_las_17_04_off_1 = {
     1, // numEnemies
     btlparty_las_las_17_04_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -561,7 +561,7 @@ BattleGroupSetup btlgrp_las_las_17_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_09_rampell[] = {
+static BattleUnitSetup btlparty_las_las_09_rampell[] = {
     {
         &unit_boss_rampell_las, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -574,7 +574,7 @@ BattleUnitSetup btlparty_las_las_09_rampell[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_09_rampell = {
+static BattleGroupSetup btlgrp_las_las_09_rampell = {
     1, // numEnemies
     btlparty_las_las_09_rampell, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -584,7 +584,7 @@ BattleGroupSetup btlgrp_las_las_09_rampell = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_bunbaba[] = {
+static BattleUnitSetup btlparty_las_las_bunbaba[] = {
     {
         &unit_boss_bunbaba, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -597,7 +597,7 @@ BattleUnitSetup btlparty_las_las_bunbaba[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_bunbaba = {
+static BattleGroupSetup btlgrp_las_las_bunbaba = {
     1, // numEnemies
     btlparty_las_las_bunbaba, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -607,7 +607,7 @@ BattleGroupSetup btlgrp_las_las_bunbaba = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_28_batten_leader[] = {
+static BattleUnitSetup btlparty_las_las_28_batten_leader[] = {
     {
         &unit_boss_batten_leader, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -620,7 +620,7 @@ BattleUnitSetup btlparty_las_las_28_batten_leader[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_28_batten_leader = {
+static BattleGroupSetup btlgrp_las_las_28_batten_leader = {
     1, // numEnemies
     btlparty_las_las_28_batten_leader, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -630,7 +630,7 @@ BattleGroupSetup btlgrp_las_las_28_batten_leader = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_28_koopa[] = {
+static BattleUnitSetup btlparty_las_las_28_koopa[] = {
     {
         &unit_boss_koopa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -643,7 +643,7 @@ BattleUnitSetup btlparty_las_las_28_koopa[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_28_koopa = {
+static BattleGroupSetup btlgrp_las_las_28_koopa = {
     1, // numEnemies
     btlparty_las_las_28_koopa, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -653,7 +653,7 @@ BattleGroupSetup btlgrp_las_las_28_koopa = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_29_black_peach_1[] = {
+static BattleUnitSetup btlparty_las_las_29_black_peach_1[] = {
     {
         &unit_boss_black_peach, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -666,7 +666,7 @@ BattleUnitSetup btlparty_las_las_29_black_peach_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_29_black_peach_1 = {
+static BattleGroupSetup btlgrp_las_las_29_black_peach_1 = {
     1, // numEnemies
     btlparty_las_las_29_black_peach_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -676,7 +676,7 @@ BattleGroupSetup btlgrp_las_las_29_black_peach_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_29_black_peach_2[] = {
+static BattleUnitSetup btlparty_las_las_29_black_peach_2[] = {
     {
         &unit_boss_black_peach, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -689,7 +689,7 @@ BattleUnitSetup btlparty_las_las_29_black_peach_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_29_black_peach_2 = {
+static BattleGroupSetup btlgrp_las_las_29_black_peach_2 = {
     1, // numEnemies
     btlparty_las_las_29_black_peach_2, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -699,7 +699,7 @@ BattleGroupSetup btlgrp_las_las_29_black_peach_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_01_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_01_01_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -722,7 +722,7 @@ BattleUnitSetup btlparty_las_las_01_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_01_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_01_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_01_01_off_1, // enemyData
     25, // heldItemWeight
@@ -733,7 +733,7 @@ BattleGroupSetup btlgrp_las_las_01_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -766,7 +766,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_01_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_01_02_off_1 = {
     3, // numEnemies
     btlparty_las_las_01_02_off_1, // enemyData
     25, // heldItemWeight
@@ -777,7 +777,7 @@ BattleGroupSetup btlgrp_las_las_01_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -820,7 +820,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_01_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_01_03_off_1 = {
     4, // numEnemies
     btlparty_las_las_01_03_off_1, // enemyData
     25, // heldItemWeight
@@ -831,7 +831,7 @@ BattleGroupSetup btlgrp_las_las_01_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_01_01_off_2[] = {
+static BattleUnitSetup btlparty_las_las_01_01_off_2[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -854,7 +854,7 @@ BattleUnitSetup btlparty_las_las_01_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_01_01_off_2 = {
+static BattleGroupSetup btlgrp_las_las_01_01_off_2 = {
     2, // numEnemies
     btlparty_las_las_01_01_off_2, // enemyData
     25, // heldItemWeight
@@ -865,7 +865,7 @@ BattleGroupSetup btlgrp_las_las_01_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
+static BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -898,7 +898,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_01_02_off_2 = {
+static BattleGroupSetup btlgrp_las_las_01_02_off_2 = {
     3, // numEnemies
     btlparty_las_las_01_02_off_2, // enemyData
     25, // heldItemWeight
@@ -909,7 +909,7 @@ BattleGroupSetup btlgrp_las_las_01_02_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
+static BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -952,7 +952,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_01_03_off_2 = {
+static BattleGroupSetup btlgrp_las_las_01_03_off_2 = {
     4, // numEnemies
     btlparty_las_las_01_03_off_2, // enemyData
     25, // heldItemWeight
@@ -963,7 +963,7 @@ BattleGroupSetup btlgrp_las_las_01_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_01_off_1[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -986,7 +986,7 @@ BattleUnitSetup btlparty_las_las_02_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_02_01_off_1, // enemyData
     25, // heldItemWeight
@@ -997,7 +997,7 @@ BattleGroupSetup btlgrp_las_las_02_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1030,7 +1030,7 @@ BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_02_off_1 = {
     3, // numEnemies
     btlparty_las_las_02_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1041,7 +1041,7 @@ BattleGroupSetup btlgrp_las_las_02_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1074,7 +1074,7 @@ BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_03_off_1 = {
     3, // numEnemies
     btlparty_las_las_02_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1085,7 +1085,7 @@ BattleGroupSetup btlgrp_las_las_02_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1128,7 +1128,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_04_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_04_off_1 = {
     4, // numEnemies
     btlparty_las_las_02_04_off_1, // enemyData
     25, // heldItemWeight
@@ -1139,7 +1139,7 @@ BattleGroupSetup btlgrp_las_las_02_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_05_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_05_off_1[] = {
     {
         &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1162,7 +1162,7 @@ BattleUnitSetup btlparty_las_las_02_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_05_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_05_off_1 = {
     2, // numEnemies
     btlparty_las_las_02_05_off_1, // enemyData
     25, // heldItemWeight
@@ -1173,7 +1173,7 @@ BattleGroupSetup btlgrp_las_las_02_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_06_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_06_off_1[] = {
     {
         &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1196,7 +1196,7 @@ BattleUnitSetup btlparty_las_las_02_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_06_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_06_off_1 = {
     2, // numEnemies
     btlparty_las_las_02_06_off_1, // enemyData
     25, // heldItemWeight
@@ -1207,7 +1207,7 @@ BattleGroupSetup btlgrp_las_las_02_06_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_02_99_off_1[] = {
+static BattleUnitSetup btlparty_las_las_02_99_off_1[] = {
     {
         &unit_super_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1230,7 +1230,7 @@ BattleUnitSetup btlparty_las_las_02_99_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_02_99_off_1 = {
+static BattleGroupSetup btlgrp_las_las_02_99_off_1 = {
     2, // numEnemies
     btlparty_las_las_02_99_off_1, // enemyData
     25, // heldItemWeight
@@ -1241,7 +1241,7 @@ BattleGroupSetup btlgrp_las_las_02_99_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_03_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_03_01_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1254,7 +1254,7 @@ BattleUnitSetup btlparty_las_las_03_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_03_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_03_01_off_1 = {
     1, // numEnemies
     btlparty_las_las_03_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1265,7 +1265,7 @@ BattleGroupSetup btlgrp_las_las_03_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_03_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_03_02_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1278,7 +1278,7 @@ BattleUnitSetup btlparty_las_las_03_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_03_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_03_02_off_1 = {
     1, // numEnemies
     btlparty_las_las_03_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1289,7 +1289,7 @@ BattleGroupSetup btlgrp_las_las_03_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_03_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_03_03_off_1[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1302,7 +1302,7 @@ BattleUnitSetup btlparty_las_las_03_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_03_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_03_03_off_1 = {
     1, // numEnemies
     btlparty_las_las_03_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1313,7 +1313,7 @@ BattleGroupSetup btlgrp_las_las_03_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_03_01_off_2[] = {
+static BattleUnitSetup btlparty_las_las_03_01_off_2[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1326,7 +1326,7 @@ BattleUnitSetup btlparty_las_las_03_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_03_01_off_2 = {
+static BattleGroupSetup btlgrp_las_las_03_01_off_2 = {
     1, // numEnemies
     btlparty_las_las_03_01_off_2, // enemyData
     25, // heldItemWeight
@@ -1337,7 +1337,7 @@ BattleGroupSetup btlgrp_las_las_03_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_03_02_off_2[] = {
+static BattleUnitSetup btlparty_las_las_03_02_off_2[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1350,7 +1350,7 @@ BattleUnitSetup btlparty_las_las_03_02_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_03_02_off_2 = {
+static BattleGroupSetup btlgrp_las_las_03_02_off_2 = {
     1, // numEnemies
     btlparty_las_las_03_02_off_2, // enemyData
     25, // heldItemWeight
@@ -1361,7 +1361,7 @@ BattleGroupSetup btlgrp_las_las_03_02_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_03_03_off_2[] = {
+static BattleUnitSetup btlparty_las_las_03_03_off_2[] = {
     {
         &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1374,7 +1374,7 @@ BattleUnitSetup btlparty_las_las_03_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_03_03_off_2 = {
+static BattleGroupSetup btlgrp_las_las_03_03_off_2 = {
     1, // numEnemies
     btlparty_las_las_03_03_off_2, // enemyData
     25, // heldItemWeight
@@ -1385,7 +1385,7 @@ BattleGroupSetup btlgrp_las_las_03_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_04_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_04_01_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1398,7 +1398,7 @@ BattleUnitSetup btlparty_las_las_04_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_04_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_04_01_off_1 = {
     1, // numEnemies
     btlparty_las_las_04_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1409,7 +1409,7 @@ BattleGroupSetup btlgrp_las_las_04_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_01_off_1[] = {
     {
         &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1432,7 +1432,7 @@ BattleUnitSetup btlparty_las_las_06_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_06_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1443,7 +1443,7 @@ BattleGroupSetup btlgrp_las_las_06_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_02_off_1[] = {
     {
         &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1466,7 +1466,7 @@ BattleUnitSetup btlparty_las_las_06_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_02_off_1 = {
     2, // numEnemies
     btlparty_las_las_06_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1477,7 +1477,7 @@ BattleGroupSetup btlgrp_las_las_06_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_03_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1500,7 +1500,7 @@ BattleUnitSetup btlparty_las_las_06_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_03_off_1 = {
     2, // numEnemies
     btlparty_las_las_06_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1511,7 +1511,7 @@ BattleGroupSetup btlgrp_las_las_06_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1554,7 +1554,7 @@ BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_04_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_04_off_1 = {
     4, // numEnemies
     btlparty_las_las_06_04_off_1, // enemyData
     25, // heldItemWeight
@@ -1565,7 +1565,7 @@ BattleGroupSetup btlgrp_las_las_06_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_05_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_05_off_1[] = {
     {
         &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1588,7 +1588,7 @@ BattleUnitSetup btlparty_las_las_06_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_05_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_05_off_1 = {
     2, // numEnemies
     btlparty_las_las_06_05_off_1, // enemyData
     25, // heldItemWeight
@@ -1599,7 +1599,7 @@ BattleGroupSetup btlgrp_las_las_06_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_06_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_06_off_1[] = {
     {
         &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1622,7 +1622,7 @@ BattleUnitSetup btlparty_las_las_06_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_06_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_06_off_1 = {
     2, // numEnemies
     btlparty_las_las_06_06_off_1, // enemyData
     25, // heldItemWeight
@@ -1633,7 +1633,7 @@ BattleGroupSetup btlgrp_las_las_06_06_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_06_99_off_1[] = {
+static BattleUnitSetup btlparty_las_las_06_99_off_1[] = {
     {
         &unit_super_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1656,7 +1656,7 @@ BattleUnitSetup btlparty_las_las_06_99_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_06_99_off_1 = {
+static BattleGroupSetup btlgrp_las_las_06_99_off_1 = {
     2, // numEnemies
     btlparty_las_las_06_99_off_1, // enemyData
     25, // heldItemWeight
@@ -1667,7 +1667,7 @@ BattleGroupSetup btlgrp_las_las_06_99_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1700,7 +1700,7 @@ BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_07_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_07_01_off_1 = {
     3, // numEnemies
     btlparty_las_las_07_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1711,7 +1711,7 @@ BattleGroupSetup btlgrp_las_las_07_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1744,7 +1744,7 @@ BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_07_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_07_02_off_1 = {
     3, // numEnemies
     btlparty_las_las_07_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1755,7 +1755,7 @@ BattleGroupSetup btlgrp_las_las_07_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
     {
         &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1788,7 +1788,7 @@ BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_07_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_07_03_off_1 = {
     3, // numEnemies
     btlparty_las_las_07_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1799,7 +1799,7 @@ BattleGroupSetup btlgrp_las_las_07_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_09_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_09_01_off_1[] = {
     {
         &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1822,7 +1822,7 @@ BattleUnitSetup btlparty_las_las_09_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_09_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_09_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_09_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1833,7 +1833,7 @@ BattleGroupSetup btlgrp_las_las_09_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
     {
         &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1866,7 +1866,7 @@ BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_09_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_09_02_off_1 = {
     3, // numEnemies
     btlparty_las_las_09_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1877,7 +1877,7 @@ BattleGroupSetup btlgrp_las_las_09_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_19_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_19_01_off_1[] = {
     {
         &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1890,7 +1890,7 @@ BattleUnitSetup btlparty_las_las_19_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_19_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_19_01_off_1 = {
     1, // numEnemies
     btlparty_las_las_19_01_off_1, // enemyData
     25, // heldItemWeight
@@ -1901,7 +1901,7 @@ BattleGroupSetup btlgrp_las_las_19_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_19_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_19_02_off_1[] = {
     {
         &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1924,7 +1924,7 @@ BattleUnitSetup btlparty_las_las_19_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_19_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_19_02_off_1 = {
     2, // numEnemies
     btlparty_las_las_19_02_off_1, // enemyData
     25, // heldItemWeight
@@ -1935,7 +1935,7 @@ BattleGroupSetup btlgrp_las_las_19_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
     {
         &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1968,7 +1968,7 @@ BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_19_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_19_03_off_1 = {
     3, // numEnemies
     btlparty_las_las_19_03_off_1, // enemyData
     25, // heldItemWeight
@@ -1979,7 +1979,7 @@ BattleGroupSetup btlgrp_las_las_19_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_20_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_20_01_off_1[] = {
     {
         &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -1992,7 +1992,7 @@ BattleUnitSetup btlparty_las_las_20_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_20_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_20_01_off_1 = {
     1, // numEnemies
     btlparty_las_las_20_01_off_1, // enemyData
     25, // heldItemWeight
@@ -2003,7 +2003,7 @@ BattleGroupSetup btlgrp_las_las_20_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_21_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_21_01_off_1[] = {
     {
         &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2026,7 +2026,7 @@ BattleUnitSetup btlparty_las_las_21_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_21_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_21_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_21_01_off_1, // enemyData
     25, // heldItemWeight
@@ -2037,7 +2037,7 @@ BattleGroupSetup btlgrp_las_las_21_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_21_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_21_02_off_1[] = {
     {
         &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2060,7 +2060,7 @@ BattleUnitSetup btlparty_las_las_21_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_21_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_21_02_off_1 = {
     2, // numEnemies
     btlparty_las_las_21_02_off_1, // enemyData
     25, // heldItemWeight
@@ -2071,7 +2071,7 @@ BattleGroupSetup btlgrp_las_las_21_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_22_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_22_01_off_1[] = {
     {
         &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2094,7 +2094,7 @@ BattleUnitSetup btlparty_las_las_22_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_22_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_22_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_22_01_off_1, // enemyData
     25, // heldItemWeight
@@ -2105,7 +2105,7 @@ BattleGroupSetup btlgrp_las_las_22_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2148,7 +2148,7 @@ BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_22_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_22_02_off_1 = {
     4, // numEnemies
     btlparty_las_las_22_02_off_1, // enemyData
     25, // heldItemWeight
@@ -2159,7 +2159,7 @@ BattleGroupSetup btlgrp_las_las_22_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
     {
         &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2182,7 +2182,7 @@ BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_22_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_22_03_off_1 = {
     2, // numEnemies
     btlparty_las_las_22_03_off_1, // enemyData
     25, // heldItemWeight
@@ -2193,7 +2193,7 @@ BattleGroupSetup btlgrp_las_las_22_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
     {
         &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2216,7 +2216,7 @@ BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_24_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_24_01_off_1 = {
     2, // numEnemies
     btlparty_las_las_24_01_off_1, // enemyData
     25, // heldItemWeight
@@ -2227,7 +2227,7 @@ BattleGroupSetup btlgrp_las_las_24_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_25_01_off_1[] = {
+static BattleUnitSetup btlparty_las_las_25_01_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2240,7 +2240,7 @@ BattleUnitSetup btlparty_las_las_25_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_25_01_off_1 = {
+static BattleGroupSetup btlgrp_las_las_25_01_off_1 = {
     1, // numEnemies
     btlparty_las_las_25_01_off_1, // enemyData
     25, // heldItemWeight
@@ -2251,7 +2251,7 @@ BattleGroupSetup btlgrp_las_las_25_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
+static BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2284,7 +2284,7 @@ BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_25_02_off_1 = {
+static BattleGroupSetup btlgrp_las_las_25_02_off_1 = {
     3, // numEnemies
     btlparty_las_las_25_02_off_1, // enemyData
     25, // heldItemWeight
@@ -2295,7 +2295,7 @@ BattleGroupSetup btlgrp_las_las_25_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
+static BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2338,7 +2338,7 @@ BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_25_03_off_1 = {
+static BattleGroupSetup btlgrp_las_las_25_03_off_1 = {
     4, // numEnemies
     btlparty_las_las_25_03_off_1, // enemyData
     25, // heldItemWeight
@@ -2349,7 +2349,7 @@ BattleGroupSetup btlgrp_las_las_25_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_25_04_off_1[] = {
+static BattleUnitSetup btlparty_las_las_25_04_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2372,7 +2372,7 @@ BattleUnitSetup btlparty_las_las_25_04_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_25_04_off_1 = {
+static BattleGroupSetup btlgrp_las_las_25_04_off_1 = {
     2, // numEnemies
     btlparty_las_las_25_04_off_1, // enemyData
     25, // heldItemWeight
@@ -2383,7 +2383,7 @@ BattleGroupSetup btlgrp_las_las_25_04_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
+static BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2416,7 +2416,7 @@ BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_25_05_off_1 = {
+static BattleGroupSetup btlgrp_las_las_25_05_off_1 = {
     3, // numEnemies
     btlparty_las_las_25_05_off_1, // enemyData
     25, // heldItemWeight
@@ -2427,7 +2427,7 @@ BattleGroupSetup btlgrp_las_las_25_05_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
+static BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
     {
         &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -2460,7 +2460,7 @@ BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_las_las_25_06_off_1 = {
+static BattleGroupSetup btlgrp_las_las_25_06_off_1 = {
     3, // numEnemies
     btlparty_las_las_25_06_off_1, // enemyData
     25, // heldItemWeight
@@ -2471,308 +2471,308 @@ BattleGroupSetup btlgrp_las_las_25_06_off_1 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test1_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test1_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test2_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test2_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test3_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test3_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test4_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test4_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[9]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test5_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test5_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[5]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test6_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test6_off[] = {
     {50, &btlgrp_las_las_05_01, las_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_test7_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_test7_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[7]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_05_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_05_01_off[] = {
     {50, &btlgrp_las_las_05_01, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_09_rampell_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_09_rampell_off[] = {
     {50, &btlgrp_las_las_09_rampell, &las_btlstage_data[9]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_17_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_01_off[] = {
     {50, &btlgrp_las_las_17_01_off_1, &las_btlstage_data[6]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_17_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_02_off[] = {
     {50, &btlgrp_las_las_17_02_off_1, &las_btlstage_data[6]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_17_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_03_off[] = {
     {50, &btlgrp_las_las_17_03_off_1, &las_btlstage_data[6]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_17_04_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_17_04_off[] = {
     {50, &btlgrp_las_las_17_04_off_1, &las_btlstage_data[6]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_28_koopa_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_28_koopa_off[] = {
     {50, &btlgrp_las_las_28_koopa, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_bunbaba_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_bunbaba_off[] = {
     {50, &btlgrp_las_las_bunbaba, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_28_batten_leader_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_28_batten_leader_off[] = {
     {50, &btlgrp_las_las_28_batten_leader, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_1_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_1_off[] = {
     {50, &btlgrp_las_las_29_black_peach_1, &las_btlstage_data[7]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_2_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_29_black_peach_2_off[] = {
     {50, &btlgrp_las_las_29_black_peach_2, &las_btlstage_data[7]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_01_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_01_01_off[] = {
     {20, &btlgrp_las_las_01_01_off_1, &las_btlstage_data[1]},
     {0, &btlgrp_las_las_01_01_off_2, &las_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_01_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_01_02_off[] = {
     {20, &btlgrp_las_las_01_02_off_1, &las_btlstage_data[1]},
     {0, &btlgrp_las_las_01_02_off_2, &las_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_01_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_01_03_off[] = {
     {20, &btlgrp_las_las_01_03_off_1, &las_btlstage_data[1]},
     {0, &btlgrp_las_las_01_03_off_2, &las_btlstage_data[2]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_01_off[] = {
     {20, &btlgrp_las_las_02_01_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_02_off[] = {
     {20, &btlgrp_las_las_02_02_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_03_off[] = {
     {20, &btlgrp_las_las_02_03_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_04_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_04_off[] = {
     {20, &btlgrp_las_las_02_04_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_05_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_05_off[] = {
     {20, &btlgrp_las_las_02_05_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_06_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_06_off[] = {
     {20, &btlgrp_las_las_02_06_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_02_99_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_02_99_off[] = {
     {20, &btlgrp_las_las_02_99_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_03_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_03_01_off[] = {
     {20, &btlgrp_las_las_03_01_off_1, &las_btlstage_data[3]},
     {0, &btlgrp_las_las_03_01_off_2, &las_btlstage_data[4]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_03_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_03_02_off[] = {
     {20, &btlgrp_las_las_03_02_off_1, &las_btlstage_data[3]},
     {0, &btlgrp_las_las_03_02_off_2, &las_btlstage_data[4]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_03_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_03_03_off[] = {
     {20, &btlgrp_las_las_03_03_off_1, &las_btlstage_data[3]},
     {0, &btlgrp_las_las_03_03_off_2, &las_btlstage_data[4]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_04_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_04_01_off[] = {
     {20, &btlgrp_las_las_04_01_off_1, &las_btlstage_data[1]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_01_off[] = {
     {20, &btlgrp_las_las_06_01_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_02_off[] = {
     {20, &btlgrp_las_las_06_02_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_03_off[] = {
     {20, &btlgrp_las_las_06_03_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_04_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_04_off[] = {
     {20, &btlgrp_las_las_06_04_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_05_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_05_off[] = {
     {20, &btlgrp_las_las_06_05_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_06_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_06_off[] = {
     {20, &btlgrp_las_las_06_06_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_06_99_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_06_99_off[] = {
     {20, &btlgrp_las_las_06_99_off_1, &las_btlstage_data[8]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_07_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_07_01_off[] = {
     {20, &btlgrp_las_las_07_01_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_07_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_07_02_off[] = {
     {20, &btlgrp_las_las_07_02_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_07_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_07_03_off[] = {
     {20, &btlgrp_las_las_07_03_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_09_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_09_01_off[] = {
     {20, &btlgrp_las_las_09_01_off_1, &las_btlstage_data[9]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_09_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_09_02_off[] = {
     {20, &btlgrp_las_las_09_02_off_1, &las_btlstage_data[9]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_19_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_19_01_off[] = {
     {20, &btlgrp_las_las_19_01_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_19_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_19_02_off[] = {
     {20, &btlgrp_las_las_19_02_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_19_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_19_03_off[] = {
     {20, &btlgrp_las_las_19_03_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_20_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_20_01_off[] = {
     {20, &btlgrp_las_las_20_01_off_1, las_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_21_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_21_01_off[] = {
     {20, &btlgrp_las_las_21_01_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_21_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_21_02_off[] = {
     {20, &btlgrp_las_las_21_02_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_22_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_22_01_off[] = {
     {20, &btlgrp_las_las_22_01_off_1, las_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_22_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_22_02_off[] = {
     {20, &btlgrp_las_las_22_02_off_1, las_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_22_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_22_03_off[] = {
     {20, &btlgrp_las_las_22_03_off_1, las_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_24_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_24_01_off[] = {
     {20, &btlgrp_las_las_24_01_off_1, las_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_25_01_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_01_off[] = {
     {20, &btlgrp_las_las_25_01_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_25_02_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_02_off[] = {
     {20, &btlgrp_las_las_25_02_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_25_03_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_03_off[] = {
     {20, &btlgrp_las_las_25_03_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_25_04_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_04_off[] = {
     {20, &btlgrp_las_las_25_04_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_25_05_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_05_off[] = {
     {20, &btlgrp_las_las_25_05_off_1, &las_btlstage_data[3]},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[] = {
+static NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[] = {
     {20, &btlgrp_las_las_25_06_off_1, &las_btlstage_data[3]},
     {0},
 };
@@ -3466,7 +3466,7 @@ NpcTerritoryInfo btl_las_setup_no_tbl[] = {
     {0},
 };
 
-EVT_BEGIN(bgset_las_gear_event)
+static EVT_BEGIN(bgset_las_gear_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
@@ -3513,7 +3513,7 @@ EVT_END()
  * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
  * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
  */
-EVT_BEGIN(stg_08_6_init_sub_event)
+static EVT_BEGIN(stg_08_6_init_sub_event)
     BEGIN_SIBLING_EVENT
         CALL(hi_fire_main)
     END_SIBLING_EVENT
@@ -3572,7 +3572,7 @@ USER_FUNC(hi_fire_main) {
  * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
  * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
  */
-EVT_BEGIN(stg_08_6_init_sub_event)
+static EVT_BEGIN(stg_08_6_init_sub_event)
     CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi2"), LW(0), LW(1), LW(2))
@@ -3597,7 +3597,7 @@ EVT_END()
 #endif
 
 /** Script helper: blocks until the battle sequence has ended. */
-USER_FUNC(check_battle_end) {
+static USER_FUNC(check_battle_end) {
     return battleSeqEndCheck() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
@@ -3606,7 +3606,7 @@ USER_FUNC(check_battle_end) {
  * the counter is in the variable args[2], the full turn takes args[3] frames and args[4] is the step (+1 or -1);
  * the counter wraps around.
  */
-USER_FUNC(_gear_rotate) {
+static USER_FUNC(_gear_rotate) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);
     const char* name2 = (const char*)evtGetValue(event, args[1]);

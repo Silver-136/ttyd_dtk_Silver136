@@ -37,7 +37,7 @@
 //.sbss, NOTE: all are reversed because of -inline deferred
 s32 BeroEXEC;
 s32 BeroNUM, BeroNOWNUM;
-s32 BeroCAM; // pipe camera handshake: bero_case_exec_pipe_sub pokes it and polls it (POKE_INT / PEEK_INT)
+static s32 BeroCAM; // pipe camera handshake: bero_case_exec_pipe_sub pokes it and polls it (POKE_INT / PEEK_INT)
 f32 BeroOX, BeroOY, BeroOZ; // offset position
 f32 BeroSX, BeroSY, BeroSZ; // start position
 f32 BeroEX, BeroEY, BeroEZ; // end position
@@ -48,7 +48,7 @@ extern Vec BeroPT, BeroAT;
 Vec BeroPT, BeroAT;
 #endif
 
-BOOL BeroMarioGO;
+static BOOL BeroMarioGO;
 
 /**
  * Stand-in entrance for an arrival with no entrance name: no hit object, normal type,
@@ -1056,7 +1056,7 @@ EVT_BEGIN(bero_play_out_anime)
 EVT_END()
 
 // LW(4): the exit's BeroEntry.type, LW(5): its direction kind
-USER_FUNC(bero_set_disp_position_pipe) {
+static USER_FUNC(bero_set_disp_position_pipe) {
     switch (event->lwData[5]) {
         case 2: case 6:
             if (!(event->lwData[4] & BERO_TYPE_BG_MODE)) {

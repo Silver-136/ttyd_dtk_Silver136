@@ -41,34 +41,34 @@
 #include "pik.h"
 
 static USER_FUNC(get_starstone_pos);
-USER_FUNC(get_starstone_seq);
+static USER_FUNC(get_starstone_seq);
 USER_FUNC(hoshi);
-USER_FUNC(hoshi_delete);
-USER_FUNC(hoshi_jump);
-USER_FUNC(hoshi_r);
-USER_FUNC(reset_stone_cam);
+static USER_FUNC(hoshi_delete);
+static USER_FUNC(hoshi_jump);
+static USER_FUNC(hoshi_r);
+static USER_FUNC(reset_stone_cam);
 static USER_FUNC(set_starstone_pos);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_fall);
 static USER_FUNC(stone_bg);
 static USER_FUNC(npc_set_pos);
 
-EvtWord haikei_on[24];
-EvtWord haikei_off[28];
-EvtWord evt_return_sub[99];
-EvtWord evt_return[13];
-EvtWord evt_go[7];
+static EvtWord haikei_on[24];
+static EvtWord haikei_off[28];
+static EvtWord evt_return_sub[99];
+static EvtWord evt_return[13];
+static EvtWord evt_go[7];
 static EvtWord s_door_open[22];
 static EvtWord s_door_close[22];
 static BeroEntry bero_data[5];
-EvtWord out_room[12];
-BeroEntry s_bero_peach[1];
+static EvtWord out_room[12];
+static BeroEntry s_bero_peach[1];
 static EvtWord init_powan[30];
 static EvtWord talk_powan[53];
-EvtWord init_majo[17];
-EvtWord init_mari[17];
-EvtWord init_ramp[17];
-EvtWord patakuri_init[7];
+static EvtWord init_majo[17];
+static EvtWord init_mari[17];
+static EvtWord init_ramp[17];
+static EvtWord patakuri_init[7];
 static EvtWord baba_init[7];
 static NpcSetupInfo npc_data[7];
 
@@ -79,16 +79,16 @@ EvtWord evt_garnet[562];
 #endif
 
 static EvtWord evt_sw[89];
-EvtWord evt_kaiga[14];
+static EvtWord evt_kaiga[14];
 static EvtWord evt_daiza[27];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord pik_02_koopa_evt[1245];
+static EvtWord pik_02_koopa_evt[1245];
 #else
-EvtWord pik_02_koopa_evt[1256];
+static EvtWord pik_02_koopa_evt[1256];
 #endif
 
-EvtWord nise_starstone_init[18];
+static EvtWord nise_starstone_init[18];
 
 #if VERSION >= VERSION_US
 EvtWord pik_02_init_evt[172];
@@ -105,7 +105,7 @@ EvtWord pik_02_init_evt[166];
  * turns the hit objects a_E_yuka, h_bero and h_dokan on and removes the painting's case event (GW(10)).
  * Returns 0 in LW(0) (no override).
  */
-EVT_BEGIN(haikei_on)
+static EVT_BEGIN(haikei_on)
     CALL(evt_hitobj_onoff, STRING("a_E_yuka"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("h_bero"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("h_dokan"), 1, 1)
@@ -120,7 +120,7 @@ EVT_END()
  * Run as the enter event of s_bero (both door versions), by evt_return when Mario comes back up the pipe,
  * and by the map init before the theft scene.
  */
-EVT_BEGIN(haikei_off)
+static EVT_BEGIN(haikei_off)
     CALL(evt_hitobj_onoff, STRING("a_E_yuka"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("h_bero"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("h_dokan"), 1, 0)
@@ -134,7 +134,7 @@ EVT_END()
  * Mario and the partner walk up to Pennington, who speaks (stg6_pik_21),
  * the story becomes STG6_54_WELCOME_BACK, and the s_bero exit is redirected to aji_10 (s_bero_peach).
  */
-EVT_BEGIN(evt_return_sub)
+static EVT_BEGIN(evt_return_sub)
     CALL(evt_mario_wait_movable)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(300)
@@ -173,7 +173,7 @@ EVT_END()
  * Enter event of the dokan pipe (Mario coming back up from h_dokan): at STG6_53_THE_REAL_GARNET_STAR it
  * spawns evt_return_sub, and then always switches the back room off (haikei_off).
  */
-EVT_BEGIN(evt_return)
+static EVT_BEGIN(evt_return)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         SPAWN_EVENT(evt_return_sub)
     END_IF
@@ -186,7 +186,7 @@ EVT_END()
  * Exit event of the dokan pipe, whose destination is h_dokan on this same map: switches the back room on
  * (haikei_on) so the hidden room is solid when Mario arrives.
  */
-EVT_BEGIN(evt_go)
+static EVT_BEGIN(evt_go)
     CALL_CHILD(haikei_on)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -292,7 +292,7 @@ static BeroEntry bero_data[] = {
  * Exit event for the redirected s_bero door (s_bero_peach, STG6_54 and later):
  * fades the music and ambience out over 2 seconds and stops all sound effects.
  */
-EVT_BEGIN(out_room)
+static EVT_BEGIN(out_room)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfx_all_stop)
@@ -300,7 +300,7 @@ EVT_BEGIN(out_room)
 EVT_END()
 
 /** Doors and exits of pik_02: s_bero to aji_10 (X-Naut Fortress). */
-BeroEntry s_bero_peach[] = {
+static BeroEntry s_bero_peach[] = {
     {
         "s_bero", // hitName
         1, // type
@@ -367,7 +367,7 @@ EVT_END()
  * Init for Beldam (マジョリン): until the surprise-guests scene (STG6_51) she stands by the altar at (-35, 10,
  * -950) facing east.
  */
-EVT_BEGIN(init_majo)
+static EVT_BEGIN(init_majo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_51_3_SURPRISE_GUESTS)
         CALL(evt_npc_set_position, STRING("me"), -35, 10, -950)
@@ -377,7 +377,7 @@ EVT_BEGIN(init_majo)
 EVT_END()
 
 /** Init for Marilyn (マリリン): until the surprise-guests scene she stands by the altar at (30, 10, -950) facing west. */
-EVT_BEGIN(init_mari)
+static EVT_BEGIN(init_mari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_51_3_SURPRISE_GUESTS)
         CALL(evt_npc_set_position, STRING("me"), 30, 10, -950)
@@ -387,7 +387,7 @@ EVT_BEGIN(init_mari)
 EVT_END()
 
 /** Init for Doopliss (ランペル): until the surprise-guests scene he stands at (20, 10, -910) facing west. */
-EVT_BEGIN(init_ramp)
+static EVT_BEGIN(init_ramp)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_51_3_SURPRISE_GUESTS)
         CALL(evt_npc_set_position, STRING("me"), 20, 10, -910)
@@ -400,7 +400,7 @@ EVT_END()
  * Init for the Paragoomba NPC (パタクリ, Patakuri): turns on NPC_STATUS_FACE_MOVE_DIR so he faces his movement direction;
  * he is only placed on screen by the Bowser interlude.
  */
-EVT_BEGIN(patakuri_init)
+static EVT_BEGIN(patakuri_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
@@ -505,13 +505,13 @@ USER_FUNC(hoshi) {
 }
 
 /** Script helper: soft-deletes the star effect whose pointer is in LW(10) (made by the hoshi helper). */
-USER_FUNC(hoshi_delete) {
+static USER_FUNC(hoshi_delete) {
     effSoftDelete((EffectEntry*)event->lwData[10]);
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: sets the Y rotation of the star effect in LW(10) to args[0] (degrees). */
-USER_FUNC(hoshi_r) {
+static USER_FUNC(hoshi_r) {
     EffectEntry* eff = (EffectEntry*)event->lwData[10];
 
     ((EffStarStoneWork*)eff->userdata)->rot.y = evtGetValue(event, event->args[0]);
@@ -523,7 +523,7 @@ USER_FUNC(hoshi_r) {
  * position plus 50 in y) in a parabola, moving 0.5 units per frame horizontally with gravity 0.1;
  * returns when it arrives. t, vy and speed are kept between frames in the event's userdata.
  */
-USER_FUNC(hoshi_jump) {
+static USER_FUNC(hoshi_jump) {
     f32* pos = (f32*)((EffectEntry*)event->lwData[10])->userdata + 2;
     NpcEntry* npc = npcNameToPtr("\203}\203W\203\207\203\212\203\223");
     f32 vy;
@@ -568,7 +568,7 @@ USER_FUNC(hoshi_jump) {
 }
 
 /** Script helper: reads the state of the star effect named args[0] into the variable args[1]. */
-USER_FUNC(get_starstone_seq) {
+static USER_FUNC(get_starstone_seq) {
     EvtWord* args = event->args;
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
 
@@ -646,7 +646,7 @@ static USER_FUNC(stone_bg) {
 }
 
 /** Script helper: moves the fake star "nise" back to camera 4. */
-USER_FUNC(reset_stone_cam) {
+static USER_FUNC(reset_stone_cam) {
     EffectEntry* eff = effNameToPtr("nise");
 
     ((EffStarStoneWork*)eff->userdata)->cam = CAMERA_3D;
@@ -848,7 +848,7 @@ static EVT_BEGIN(evt_sw)
 EVT_END()
 
 /** Case event for the painting on the wall (a_kaiga): prints the stg6_pik_24 message. */
-EVT_BEGIN(evt_kaiga)
+static EVT_BEGIN(evt_kaiga)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg6_pik_24"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -883,7 +883,7 @@ EVT_END()
  * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, saving is offered and the
  * map changes to aji_18.
  */
-EVT_BEGIN(pik_02_koopa_evt)
+static EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
@@ -1228,7 +1228,7 @@ EVT_END()
  * Puts the fake Garnet Star ("nisemono") back on the altar when the Thousand-Year Door has been opened
  * but Bowser has not yet taken the star (STG6_70 up to STG7_25_00).
  */
-EVT_BEGIN(nise_starstone_init)
+static EVT_BEGIN(nise_starstone_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_70_THOUSAND_YEAR_DOOR)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
             CALL(starstone_entry, STRING("nisemono"), 5, 0, 57, -955, 1)

@@ -27,9 +27,9 @@
 #include "las.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(get_mobj_seq);
-USER_FUNC(switch_alpha_off);
-USER_FUNC(switch_set_alpha);
+static USER_FUNC(get_mobj_seq);
+static USER_FUNC(switch_alpha_off);
+static USER_FUNC(switch_set_alpha);
 
 static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];
@@ -99,7 +99,7 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(switch_set_alpha) {
+static USER_FUNC(switch_set_alpha) {
     s32 alpha = evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("switch");
 
@@ -120,7 +120,7 @@ USER_FUNC(switch_set_alpha) {
  * Script helper: restores the map object "switch" to fully opaque with its shadow
  * and turns the evt colour override off.
  */
-USER_FUNC(switch_alpha_off) {
+static USER_FUNC(switch_alpha_off) {
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("switch");
 
     if (mobj == NULL) {
@@ -173,7 +173,7 @@ EVT_BEGIN(vivian_check)
     RETURN
 EVT_END()
 
-USER_FUNC(get_mobj_seq) {
+static USER_FUNC(get_mobj_seq) {
     EvtWord* args = event->args;
     MapObjectEntry* mobj = mobjNameToPtrNoAssert((const char*)evtGetValue(event, args[0]));
 

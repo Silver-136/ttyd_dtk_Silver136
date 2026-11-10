@@ -40,7 +40,7 @@ extern int mbtowc(unsigned short*, const char*, unsigned long);
 #define sc_isspace(c) (__ctype_map[(unsigned char)(c)] & __whitespace)
 #define tst_char_map(map, ch) (map[(unsigned char)(ch) >> 3] & (1 << ((ch) & 7)))
 
-int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg);
+static int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg);
 int __StringRead(void* arg, int ch, int behavior);
 
 int sscanf(const char* buffer, const char* format, ...) {
@@ -80,7 +80,7 @@ int __StringRead(void* arg, int ch, int behavior) {
     return 0;
 }
 
-int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg) {
+static int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg) {
     char* arg_ptr;
     int num_chars;
     int chars_read;

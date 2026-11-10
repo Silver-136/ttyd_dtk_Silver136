@@ -27,20 +27,20 @@ static void kpaSwimMove(void);
  * Bowser's walk and dash speeds per power-up level in 3D stages (kpa_walk, kpa_dash), then the walk animation
  * rates stored with them (all 0), then the scale-flicker steps of the power-up and power-down motions.
  */
-f32 _walkSpdTbl[4] = {0.6f, 1.4f, 1.4f, 1.4f};
-f32 _dashSpdTbl[4] = {1.2f, 2.0f, 2.0f, 2.0f};
+static f32 _walkSpdTbl[4] = {0.6f, 1.4f, 1.4f, 1.4f};
+static f32 _dashSpdTbl[4] = {1.2f, 2.0f, 2.0f, 2.0f};
 s32 _rateTbl[4] = {0, 0, 0, 0};
-s32 _rateTbl2[4] = {0, 0, 0, 0};
-f32 scaleDt[9] = {1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 2.0f, 4.0f, 3.0f, 5.0f};
+static s32 _rateTbl2[4] = {0, 0, 0, 0};
+static f32 scaleDt[9] = {1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 2.0f, 4.0f, 3.0f, 5.0f};
 
 /** Small 30 ms camera shake when big or giant Bowser lands (quake_kpaLandOn). */
-EVT_BEGIN(quake_kpaLandOn_evt)
+static EVT_BEGIN(quake_kpaLandOn_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 30)
     RETURN
 EVT_END()
 
 /** Stronger 60 ms camera shake for Bowser's ground pound landing. */
-EVT_BEGIN(quake_kpaHipAttack_evt)
+static EVT_BEGIN(quake_kpaHipAttack_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 60)
     RETURN
 EVT_END()

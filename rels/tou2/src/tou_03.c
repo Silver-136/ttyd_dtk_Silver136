@@ -84,14 +84,14 @@ typedef struct KyakuWork {
 } KyakuWork;
 // Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
 static s32 tou_03_bss_0xC;
-KyakuWork* kyaku_wp;
+static KyakuWork* kyaku_wp;
 static ScreenWork* screen_wp;
-s32 gans_alpha;
+static s32 gans_alpha;
 static void pose_init(void);
 static void pose_change(Kyaku* kyaku, const char* name, const char* anim);
 
-s32 burst_chain(EventEntry* event, BOOL isFirstCall);
-s32 confupose(EventEntry* event, BOOL isFirstCall);
+static s32 burst_chain(EventEntry* event, BOOL isFirstCall);
+static s32 confupose(EventEntry* event, BOOL isFirstCall);
 s32 evt_bero_exec_wait(EventEntry* event, BOOL isFirstCall);
 s32 evt_bero_get_entername(EventEntry* event, BOOL isFirstCall);
 s32 evt_bero_get_info(EventEntry* event, BOOL isFirstCall);
@@ -205,20 +205,20 @@ s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_set_ranking_win_lose(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_set_rule_result(EventEntry* event, BOOL isFirstCall);
 static s32 screen_evt(EventEntry* event, BOOL isFirstCall);
-s32 snd_sfx_stop(EventEntry* event, BOOL isFirstCall);
-s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall);
+static s32 snd_sfx_stop(EventEntry* event, BOOL isFirstCall);
+static s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall);
 s32 tou_champion_belt(EventEntry* event, BOOL isFirstCall);
 s32 tou_champion_belt_onoff(EventEntry* event, BOOL isFirstCall);
-s32 tribe_chk(EventEntry* event, BOOL isFirstCall);
-void ext_kyaku_dispent(void);
-void ext_kyaku_main(void);
+static s32 tribe_chk(EventEntry* event, BOOL isFirstCall);
+static void ext_kyaku_dispent(void);
+static void ext_kyaku_main(void);
 
-ExtTexInfo ext_kyaku_data[51];
+static ExtTexInfo ext_kyaku_data[51];
 EvtWord x[1];
-EvtWord evt_kyaku[138];
+static EvtWord evt_kyaku[138];
 static s32 inta_tex[8];
-EvtWord open_main[53];
-EvtWord close_main[37];
+static EvtWord open_main[53];
+static EvtWord close_main[37];
 static EvtWord w_door_open[22];
 static EvtWord w_door_close[22];
 static EvtWord w_open[5];
@@ -227,19 +227,19 @@ static EvtWord e_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_open[5];
 static EvtWord e_close[5];
-EvtWord s1_door_open[22];
-EvtWord s1_door_close[22];
-EvtWord s1_door_open2[19];
+static EvtWord s1_door_open[22];
+static EvtWord s1_door_close[22];
+static EvtWord s1_door_open2[19];
 static EvtWord s1_open[18];
 static EvtWord s1_close[17];
-EvtWord s2_door_open[22];
-EvtWord s2_door_close[22];
-EvtWord s2_door_open2[19];
+static EvtWord s2_door_open[22];
+static EvtWord s2_door_close[22];
+static EvtWord s2_door_open2[19];
 static EvtWord s2_open[18];
 static EvtWord s2_close[17];
 static BeroEntry bero_data[5];
 EvtWord evt_tougi[777];
-EvtWord init_kinosikowa[13];
+static EvtWord init_kinosikowa[13];
 static NpcSetupInfo npcEnt[5];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -263,7 +263,7 @@ EvtWord evt_random_battle[VERSION_PICK(335, 338)];
 #endif
 
 EvtWord evt_random_battle2[VERSION_PICK(317, 326)];
-EvtWord evt_teki_nyuujyou[107];
+static EvtWord evt_teki_nyuujyou[107];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_teki_nyuujyou_default[];
@@ -271,8 +271,8 @@ extern EvtWord evt_teki_nyuujyou_default[];
 EvtWord evt_teki_nyuujyou_default[183];
 #endif
 
-EvtWord burst_chain_entry[289];
-EvtWord burst_wangwang[69];
+static EvtWord burst_chain_entry[289];
+static EvtWord burst_wangwang[69];
 EvtWord evt_match[VERSION_PICK(362, 381)];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -306,7 +306,7 @@ EvtWord evt_champ_win[335];
 EvtWord evt_champ_lose[];
 EvtWord evt_default_opening[];
 EvtWord evt_default_win[];
-EvtWord evt_default_lose[VERSION_PICK(137, 138)];
+static EvtWord evt_default_lose[VERSION_PICK(137, 138)];
 
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_champion[358];
@@ -315,9 +315,9 @@ static EvtWord evt_champion[VERSION_PICK(365, 376)];
 #endif
 
 EvtWord evt_champion2[VERSION_PICK(178, 189)];
-const char* block_data[9];
+static const char* block_data[9];
 static EvtWord evt_shake[39];
-EvtWord evt_boss_stone[63];
+static EvtWord evt_boss_stone[63];
 
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_boss[1901];
@@ -331,14 +331,14 @@ extern EvtWord evt_watch_match[];
 EvtWord evt_watch_match[515];
 #endif
 
-EvtWord evt_kyaku_1[56];
-EvtWord evt_kyaku_2[56];
-EvtWord evt_kyaku_3[56];
-EvtWord evt_kyaku_4[88];
-EvtWord evt_kyaku_5[56];
-EvtWord evt_kyaku_6[56];
-EvtWord evt_kyaku_7[56];
-EvtWord evt_kyaku_8[88];
+static EvtWord evt_kyaku_1[56];
+static EvtWord evt_kyaku_2[56];
+static EvtWord evt_kyaku_3[56];
+static EvtWord evt_kyaku_4[88];
+static EvtWord evt_kyaku_5[56];
+static EvtWord evt_kyaku_6[56];
+static EvtWord evt_kyaku_7[56];
+static EvtWord evt_kyaku_8[88];
 
 #if VERSION >= VERSION_US
 EvtWord evt_kyaku_check[];
@@ -352,7 +352,7 @@ EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
  * spectators.
  * evt_kyaku registers it with the billboard driver and pose_init groups the frames into animations.
  */
-ExtTexInfo ext_kyaku_data[] = {
+static ExtTexInfo ext_kyaku_data[] = {
     {"c_kinopio", "KNP_S_1", 0.0f},
     {"c_kinopio", "KNP_S_1", 10.0f},
     {"c_kinopio", "KNP_S_1", 20.0f},
@@ -502,7 +502,7 @@ static void pose_change(Kyaku* kyaku, const char* name, const char* anim) {
 }
 
 /** Seeds the arena's private random number generator used to scatter the audience. */
-void __tou_srand(u32 seed) {
+static void __tou_srand(u32 seed) {
     x[0] = seed;
 }
 
@@ -510,7 +510,7 @@ void __tou_srand(u32 seed) {
  * Linear congruential random generator returning 0..32767;
  * a fixed seed keeps the crowd placement reproducible.
  */
-u32 __tou_rand(void) {
+static u32 __tou_rand(void) {
     x[0] = x[0] * 1103515245 + 12345;
     return ((u32)x[0] >> 16) & 0x7FFF;
 }
@@ -530,7 +530,7 @@ static f32 randf(f32 min, f32 max) {
  * hides spectators with z > 350 unless the entrance is s_bero_2,
  * and gives each a random animation (Toad, female Toad, vendor Toad or Lakitu).
  */
-void ext_kyaku_init(void) {
+static void ext_kyaku_init(void) {
     s32 far;
     s32 i;
     ExtdrvPose* pose;
@@ -629,7 +629,7 @@ void ext_kyaku_init(void) {
  * kyaku4 Lakitu), with their positions selected by whether the entrance is s_bero_2,
  * and registers the crowd billboard set with the extdrv drawer.
  */
-EVT_BEGIN(evt_kyaku)
+static EVT_BEGIN(evt_kyaku)
     CALL(evt_npc_entry, STRING("kyaku1"), STRING("c_kinopio")) // a Toad spectator in the arena crowd
     CALL(evt_npc_entry, STRING("kyaku2"), STRING("c_kinopiko")) // a Toad woman spectator in the arena crowd
     CALL(evt_npc_entry, STRING("kyaku3"), STRING("c_roten")) // a stall-keeper spectator in the arena crowd
@@ -672,7 +672,7 @@ static s32 inta_tex[] __attribute__((aligned(32))) = {
  * waits for the door transition, swings the two door map objects named in LW(8)
  * and LW(9) from 0 to 90 degrees over 500 ms and plays the door-fall sound at Mario.
  */
-EVT_BEGIN(open_main)
+static EVT_BEGIN(open_main)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
     LABEL(0)
@@ -693,7 +693,7 @@ EVT_END()
  * Door-close animation shared by the two south doors:
  * swings the map objects named in LW(8) and LW(9) from 90 back to 0 degrees over 500 ms.
  */
-EVT_BEGIN(close_main)
+static EVT_BEGIN(close_main)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -796,7 +796,7 @@ EVT_END()
  * Door callback for door_2 (the s_bero_1 exit to the Glitz Pit lobby):
  * LW(0) is the swing angle, applied to door_2_a and mirrored on door_2_b.
  */
-EVT_BEGIN(s1_door_open)
+static EVT_BEGIN(s1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2_a"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -805,7 +805,7 @@ EVT_BEGIN(s1_door_open)
 EVT_END()
 
 /** Opposite swing of s1_door_open for door_2_a and door_2_b. */
-EVT_BEGIN(s1_door_close)
+static EVT_BEGIN(s1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2_a"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -817,7 +817,7 @@ EVT_END()
  * Variant of the door_2 swing that rotates both leaves about the other axis by half of LW(0);
  * used by evt_tougi for the final closing flap.
  */
-EVT_BEGIN(s1_door_open2)
+static EVT_BEGIN(s1_door_open2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2_a"), LW(0), 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING("door_2_b"), LW(0), 0, 0)
@@ -860,7 +860,7 @@ EVT_END()
  * Door callback for door_3 (the s_bero_2 balcony exit):
  * LW(0) is the swing angle, applied to door_3_a and mirrored on door_3_b.
  */
-EVT_BEGIN(s2_door_open)
+static EVT_BEGIN(s2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3_a"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -869,7 +869,7 @@ EVT_BEGIN(s2_door_open)
 EVT_END()
 
 /** Opposite swing of s2_door_open for door_3_a and door_3_b. */
-EVT_BEGIN(s2_door_close)
+static EVT_BEGIN(s2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3_a"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -881,7 +881,7 @@ EVT_END()
  * Variant of the door_3 swing that rotates both leaves by half of LW(0);
  * used by evt_tougi for the final closing flap.
  */
-EVT_BEGIN(s2_door_open2)
+static EVT_BEGIN(s2_door_open2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3_a"), LW(0), 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING("door_3_b"), LW(0), 0, 0)
@@ -1224,7 +1224,7 @@ EVT_END()
  * After the Rogueport return story point she is switched to her microphone variant
  * and kept in her idle animation.
  */
-EVT_BEGIN(init_kinosikowa)
+static EVT_BEGIN(init_kinosikowa)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_tribe, STRING("\203L\203m\203V\203R\203\217"), STRING("\203L\203m\203V\203R\203\217\201i\203}\203C\203N\201j"))
         CALL(evt_npc_set_stay_anim, STRING("\203L\203m\203V\203R\203\217"))
@@ -1907,7 +1907,7 @@ EVT_END()
  * It walks in from the east, waits, hops up three steps and stops at its place.
  * Used for the Iron Cleft-type opening (see evt_shinemon_opening).
  */
-EVT_BEGIN(evt_teki_nyuujyou)
+static EVT_BEGIN(evt_teki_nyuujyou)
     SWITCH(LW(1))
         CASE_EQUAL(0)
         SET_VALUE(LW(3), 70)
@@ -2004,7 +2004,7 @@ EVT_END()
  * Five link NPCs are spawned with the Burst Wanwan model
  * and burst_chain pulls them along behind the head every frame.
  */
-EVT_BEGIN(burst_chain_entry)
+static EVT_BEGIN(burst_chain_entry)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 1
@@ -2082,7 +2082,7 @@ EVT_END()
  * Forever loop that makes the Burst Wanwan named in LW(0) hop around its spot in random directions,
  * landing with a thud sound each time.
  */
-EVT_BEGIN(burst_wangwang)
+static EVT_BEGIN(burst_wangwang)
     SET_VALUE(LW(10), LW(0))
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     LOOP(0)
@@ -3761,7 +3761,7 @@ EVT_END()
  * Scene after losing an ordinary match: Mario and partner are hurt, confetti falls,
  * the announcer names the winning team, and the opponent speaks its victory line.
  */
-EVT_BEGIN(evt_default_lose)
+static EVT_BEGIN(evt_default_lose)
     CALL(evt_cam3d_evt_set, 0, 220, 533, 0, 125, -8, 0, EASING_LINEAR)
     CALL_CHILD(evt_damage_pose)
     WAIT_FRAMES(1)
@@ -4044,7 +4044,7 @@ EVT_BEGIN(evt_champion2)
     RETURN
 EVT_END()
 
-void kyaku_disp(CameraId camera, void* param) {
+static void kyaku_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -4054,12 +4054,12 @@ void kyaku_disp(CameraId camera, void* param) {
 }
 
 /** Per-frame callback of the crowd billboard set: just runs pose_main. */
-void ext_kyaku_main(void) {
+static void ext_kyaku_main(void) {
     pose_main();
 }
 
 /** Display callback of the crowd billboard set: queues kyaku_disp on the 3D camera. */
-void ext_kyaku_dispent(void) {
+static void ext_kyaku_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kyaku_disp, NULL);
 }
 
@@ -4079,7 +4079,7 @@ static void screen_capture(CameraId cameraId, void* param) {
  * Script helper that allocates the big arena monitor's work area, texture buffers and noise texture;
  * the monitor starts in static mode during STG3_31_GRUBBAS_PLANS.
  */
-s32 screen_init(EventEntry* event, BOOL isFirstCall) {
+static s32 screen_init(EventEntry* event, BOOL isFirstCall) {
     u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I4, GX_FALSE, 0);
 
     screen_wp = _mapAlloc(sizeof(ScreenWork));
@@ -4121,7 +4121,7 @@ void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType func, GXTexGenSrc src, u32 
  * It draws the captured frame (or, in Grubba's finale, changing static noise) with scan-line texture.
  * In live-picture mode it can choose new zoom or pan targets every 200 ready draws.
  */
-void screen_tev(MapTevCallbackInfo* info) {
+static void screen_tev(MapTevCallbackInfo* info) {
     GXTexObj tex;
     Mtx mtx;
     Mtx scale;
@@ -4235,7 +4235,7 @@ void screen_tev(MapTevCallbackInfo* info) {
 }
 
 /** Script helper: arg0 = NPC name, arg1 = tribe name (Japanese); arg2 receives 1 if the NPC's tribe matches, else 0. */
-s32 tribe_chk(EventEntry* event, BOOL isFirstCall) {
+static s32 tribe_chk(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     const char* tribe = (const char*)evtGetValue(event, args[1]);
@@ -4253,7 +4253,7 @@ s32 tribe_chk(EventEntry* event, BOOL isFirstCall) {
  * number): link 0 follows the head; each next link sags 3 units and is adjusted using a 10-unit separation
  * before its height is clamped to the floor.
  */
-s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
+static s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 id = evtGetValue(event, args[1]);
@@ -4292,13 +4292,13 @@ s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper that stops the map's sound effects (psndMapChange) before leaving the ring. */
-s32 snd_sfx_stop(EventEntry* event, BOOL isFirstCall) {
+static s32 snd_sfx_stop(EventEntry* event, BOOL isFirstCall) {
     psndMapChange();
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: arg0 = NPC name; arg1 receives that NPC tribe's confused animation name. */
-s32 confupose(EventEntry* event, BOOL isFirstCall) {
+static s32 confupose(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, args[0]));
 
@@ -4377,7 +4377,7 @@ static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, 
 }
 
 /** Script helper: makes the Star Stone item jump to the position in arg0..arg2 (speed 1, gravity 0.5). */
-s32 item_jump(EventEntry* event, BOOL isFirstCall) {
+static s32 item_jump(EventEntry* event, BOOL isFirstCall) {
     return item_jump_sub(event, isFirstCall, 1.0f, 0.5f);
 }
 
@@ -4385,7 +4385,7 @@ s32 item_jump(EventEntry* event, BOOL isFirstCall) {
  * The nine ring blocks of the arena (block_1 to block_9);
  * after Grubba's machine starts, evt_boss watches each one and plays the falling sound when it starts to move.
  */
-const char* block_data[] = {
+static const char* block_data[] = {
     "block_1", "block_2", "block_3", "block_4", "block_5", "block_6", "block_7", "block_8",
     "block_9",
 };
@@ -4408,7 +4408,7 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_boss_stone)
+static EVT_BEGIN(evt_boss_stone)
     SET_VALUE(LW(10), 0)
     CALL(evt_item_entry, STRING("stone"), ITEM_GOLD_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     LOOP(0)
@@ -4430,7 +4430,7 @@ EVT_BEGIN(evt_boss_stone)
     RETURN
 EVT_END()
 
-s32 getY(EventEntry* event, BOOL isFirstCall) {
+static s32 getY(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("\203K\203\223\203X");
     MapObject* obj = mapGetMapObj("block_5");
     Vec pos;
@@ -4448,7 +4448,7 @@ s32 getY(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: arg0 = 0 mutes, 1 enables the humming sound flag of the "stone" item's star-stone effect. */
-s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall) {
+static s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall) {
     s32 flag = evtGetValue(event, event->args[0]);
     EffectEntry* eff = itemNameToPtr("stone")->effect;
 
@@ -4464,7 +4464,7 @@ s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: sets the rotation (arg0, degrees) of the "stone" item's star-stone effect. */
-s32 evt_boss_stone_r(EventEntry* event, BOOL isFirstCall) {
+static s32 evt_boss_stone_r(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     EffectEntry* eff = itemNameToPtr("stone")->effect;
 
@@ -4476,7 +4476,7 @@ s32 evt_boss_stone_r(EventEntry* event, BOOL isFirstCall) {
  * Script helper (blocks forever) that keeps the two charge effects eff_1
  * and eff_2 hovering 15 units above the "stone" item.
  */
-s32 eff_pos(EventEntry* event, BOOL isFirstCall) {
+static s32 eff_pos(EventEntry* event, BOOL isFirstCall) {
     ItemEntry* item = itemNameToPtr("stone");
     EffectEntry* eff1 = effNameToPtr("eff_1");
     EffectEntry* eff2 = effNameToPtr("eff_2");
@@ -4531,7 +4531,7 @@ static void callback(MapTevCallbackInfo* info) {
  * Script helper that fades Grubba to white: attaches the TEV callback to his model
  * and raises gans_alpha by 5 per frame until it reaches 255.
  */
-s32 gans_white_on(EventEntry* event, BOOL isFirstCall) {
+static s32 gans_white_on(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("\203K\203\223\203X");
 
     if (isFirstCall) {
@@ -4548,7 +4548,7 @@ s32 gans_white_on(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper that removes the white-out TEV callback from Grubba's model. */
-s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
+static s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("\203K\203\223\203X");
 
     mapSetTevCallback(12, NULL);
@@ -5498,7 +5498,7 @@ EVT_END()
  * The line depends on story progress and the player's rank (before the Gonzales story point, rank over 10,
  * rank 1 to 10, or champion).
  */
-EVT_BEGIN(evt_kyaku_1)
+static EVT_BEGIN(evt_kyaku_1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku1"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku1"))
@@ -5521,7 +5521,7 @@ EVT_BEGIN(evt_kyaku_1)
 EVT_END()
 
 /** Talk script of audience female Toad kyaku2, with different lines by story progress and the player's rank. */
-EVT_BEGIN(evt_kyaku_2)
+static EVT_BEGIN(evt_kyaku_2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku2"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku2"))
@@ -5544,7 +5544,7 @@ EVT_BEGIN(evt_kyaku_2)
 EVT_END()
 
 /** Talk script of audience vendor Toad kyaku3, with different lines by story progress and the player's rank. */
-EVT_BEGIN(evt_kyaku_3)
+static EVT_BEGIN(evt_kyaku_3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku3"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku3"))
@@ -5570,7 +5570,7 @@ EVT_END()
  * Talk script of the Lakitu spectator kyaku4: a line by story and rank, then a three-way choice
  * that gets the same answer whichever Mario picks.
  */
-EVT_BEGIN(evt_kyaku_4)
+static EVT_BEGIN(evt_kyaku_4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku4"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku4"))
@@ -5604,7 +5604,7 @@ EVT_END()
  * Second talk script for a Toad spectator (kyaku1 slot),
  * with different lines by story progress and the player's rank.
  */
-EVT_BEGIN(evt_kyaku_5)
+static EVT_BEGIN(evt_kyaku_5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku1"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku1"))
@@ -5630,7 +5630,7 @@ EVT_END()
  * Second talk script for the female Toad spectator (kyaku2 slot),
  * with different lines by story progress and the player's rank.
  */
-EVT_BEGIN(evt_kyaku_6)
+static EVT_BEGIN(evt_kyaku_6)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku2"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku2"))
@@ -5656,7 +5656,7 @@ EVT_END()
  * Second talk script for the vendor Toad spectator (kyaku3 slot),
  * with different lines by story progress and the player's rank.
  */
-EVT_BEGIN(evt_kyaku_7)
+static EVT_BEGIN(evt_kyaku_7)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku3"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku3"))
@@ -5682,7 +5682,7 @@ EVT_END()
  * Second talk script for the Lakitu spectator (kyaku4 slot):
  * a line by story and rank followed by a choice and a reply.
  */
-EVT_BEGIN(evt_kyaku_8)
+static EVT_BEGIN(evt_kyaku_8)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku4"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("kyaku4"))

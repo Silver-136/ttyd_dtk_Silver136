@@ -27,10 +27,10 @@ static EvtWord e1_door_open[22];
 static EvtWord e2_door_close[22];
 static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[5];
-const char* mapgrp_name_1[18];
-const char* mapgrp_name_2[5];
+static const char* mapgrp_name_1[18];
+static const char* mapgrp_name_2[5];
 static EvtWord cam_shake[8];
-EvtWord change_map_evt[359];
+static EvtWord change_map_evt[359];
 static EvtWord switch1_evt[13];
 static EvtWord switch2_evt[13];
 static EvtWord cloud_evt[5];
@@ -201,7 +201,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-const char* mapgrp_name_1[] = {
+static const char* mapgrp_name_1[] = {
     "S_kai_02",
     "S_kai_03",
     "S_kai_04",
@@ -223,7 +223,7 @@ const char* mapgrp_name_1[] = {
 };
 
 /** The last five staircase pieces (S_kai_20..24); no script reads this table. */
-const char* mapgrp_name_2[] = {
+static const char* mapgrp_name_2[] = {
     "S_kai_20",
     "S_kai_21",
     "S_kai_22",
@@ -237,7 +237,7 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
-EVT_BEGIN(change_map_evt)
+static EVT_BEGIN(change_map_evt)
     // Mario and his partner are hidden under the floor and the camera starts at the staircase.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

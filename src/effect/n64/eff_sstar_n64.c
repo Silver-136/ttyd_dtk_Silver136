@@ -48,7 +48,7 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
 };
 
 /** Glow diamond (256 units across) around the star: clear corners fading in to a solid centre vertex. */
-effN64Vtx size128x128_tex32x32_vtx[] = {
+static effN64Vtx size128x128_tex32x32_vtx[] = {
     {-128, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -128, 0, 1024, 0, 255, 255, 255, 0},
     {128, 0, 0, 1024, 1024, 255, 255, 255, 0},
@@ -60,7 +60,7 @@ effN64Vtx size128x128_tex32x32_vtx[] = {
  * Template for the star's dust trail: five pairs of top and bottom points, widening along the trail,
  * copied into the work and placed by five of the eight stored frame matrices (3 to 7 frames back).
  */
-effN64Vtx shooting_dust_vtx[10] = {
+static effN64Vtx shooting_dust_vtx[10] = {
     {0, 8, 0, 0, 0, 0, 0, 0, 191},
     {0, -8, 0, 0, 2048, 0, 0, 0, 191},
     {0, 9, 0, 512, 0, 0, 0, 0, 191},

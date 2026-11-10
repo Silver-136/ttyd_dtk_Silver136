@@ -48,29 +48,29 @@ static void _disp_escape_wall_message(CameraId camera, void* param);
 static void _nozzle_type_init(void);
 static s32 _get_nozzle_attack_index(u8 index);
 static void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src);
-USER_FUNC(_object_fall_attack);
-USER_FUNC(_object_fall_wait);
-USER_FUNC(_nozzle_work_get_weapon_address);
-USER_FUNC(_nozzle_work_attack_set);
-USER_FUNC(_nozzle_work_effect);
-USER_FUNC(_nozzle_work_wait);
-USER_FUNC(_fall_frame_delete);
-USER_FUNC(_fall_frame);
-USER_FUNC(_fall_frame_wait_unit_ready);
-USER_FUNC(_fall_frame_wait);
+static USER_FUNC(_object_fall_attack);
+static USER_FUNC(_object_fall_wait);
+static USER_FUNC(_nozzle_work_get_weapon_address);
+static USER_FUNC(_nozzle_work_attack_set);
+static USER_FUNC(_nozzle_work_effect);
+static USER_FUNC(_nozzle_work_wait);
+static USER_FUNC(_fall_frame_delete);
+static USER_FUNC(_fall_frame);
+static USER_FUNC(_fall_frame_wait_unit_ready);
+static USER_FUNC(_fall_frame_wait);
 
 #if VERSION < VERSION_US
-USER_FUNC(_announce_wall_message);
+static USER_FUNC(_announce_wall_message);
 #endif
 
-USER_FUNC(_nozzle_turn);
-USER_FUNC(_set_mobj_shake);
-USER_FUNC(_bgset_audience_bgset_access);
-USER_FUNC(_bgset_kemuri_effect);
+static USER_FUNC(_nozzle_turn);
+static USER_FUNC(_set_mobj_shake);
+static USER_FUNC(_bgset_audience_bgset_access);
+static USER_FUNC(_bgset_kemuri_effect);
 USER_FUNC(_get_bgset_attack_data);
 USER_FUNC(_mobj_destroy);
-USER_FUNC(_mobj_set_alpha);
-USER_FUNC(_set_mobj_rotate_x);
+static USER_FUNC(_mobj_set_alpha);
+static USER_FUNC(_set_mobj_rotate_x);
 
 extern BattleStageNozzleData battle_stage_nozzle_data[];
 extern BattleStageFallObjectData battle_stage_fall_object_data[];
@@ -533,7 +533,7 @@ void BattleStage_DestroyB(void) {
  * Base weapon of a nozzle spray aimed at Mario's side (it skips enemies):
  * _nozzle_work_attack_set starts from it and adds the nozzle type's weapon once per nozzle pointing that way.
  */
-BattleWeaponData _nozzle_at_base_mario = {{
+static BattleWeaponData _nozzle_at_base_mario = {{
     NULL, 0, // name..icon
     {0}, // pad_06
     0, // itemId
@@ -566,7 +566,7 @@ BattleWeaponData _nozzle_at_base_mario = {{
 }};
 
 /** Base weapon of a nozzle spray aimed at the enemy side (it skips Mario and his partner), used the same way. */
-BattleWeaponData _nozzle_at_base_monster = {{
+static BattleWeaponData _nozzle_at_base_monster = {{
     NULL, 0, // name..icon
     {0}, // pad_06
     0, // itemId
@@ -2749,7 +2749,7 @@ EVT_END()
 #endif
 #endif
 
-USER_FUNC(_set_mobj_rotate_x) {
+static USER_FUNC(_set_mobj_rotate_x) {
     const char* fall1;
     const char* fall3;
     BattleWork* wp;
@@ -2856,7 +2856,7 @@ EVT_BEGIN(_nozzle_work_event_1)
 EVT_END()
 #endif
 
-USER_FUNC(_mobj_set_alpha) {
+static USER_FUNC(_mobj_set_alpha) {
     EvtWord* args = event->args;
     s32 layer = evtGetValue(event, args[0]);
     u8 alpha = evtGetValue(event, args[1]);
@@ -2957,7 +2957,7 @@ USER_FUNC(_get_bgset_attack_data) {
 }
 
 /** Puffs dust (kemuri) in front of each piece of the fallen layer args[0] and plays its landing sound. */
-USER_FUNC(_bgset_kemuri_effect) {
+static USER_FUNC(_bgset_kemuri_effect) {
     s32 layer;
     const char* sfxA1;
     const char* sfxA2;
@@ -3006,7 +3006,7 @@ USER_FUNC(_bgset_kemuri_effect) {
 }
 
 /** Gives the audience its reaction to a falling background set (BattleAudience_Case_HaikeiSet, haikei = background). */
-USER_FUNC(_bgset_audience_bgset_access) {
+static USER_FUNC(_bgset_audience_bgset_access) {
     BattleAudience_Case_HaikeiSet();
     return EVT_RETURN_DONE;
 }
@@ -3041,7 +3041,7 @@ USER_FUNC(_set_mobj_shake_init) {
  * Wobbles the A1/A2 pieces of layer args[0] each frame until all other battle events,
  * nozzle work and the iron frame fall are finished; layer B just waits.
  */
-USER_FUNC(_set_mobj_shake) {
+static USER_FUNC(_set_mobj_shake) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3143,7 +3143,7 @@ static void _Nozzle_Change_Check(u8 index, u8* rate) {
  * an upright nozzle first tips its head down to -80 degrees,
  * and the head swings from the old yaw to the new one (45, 0 or -45) over 30 frames. Stores the new direction.
  */
-USER_FUNC(_nozzle_turn) {
+static USER_FUNC(_nozzle_turn) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
     s32 index = event->unitId;
     const char* name;
@@ -3244,7 +3244,7 @@ void BattleStage_WallCloseCheck(void) {
 }
 
 #if VERSION < VERSION_US
-USER_FUNC(_announce_wall_message) {
+static USER_FUNC(_announce_wall_message) {
     if (isFirstCall) {
         event->userdata[0] = 60;
     }
@@ -3290,7 +3290,7 @@ void BattleStage_IronFrameFallCheck(void) {
 }
 
 /** Waits until all battle events (except the background set ones) and any nozzle work are over, then yields a frame. */
-USER_FUNC(_fall_frame_wait) {
+static USER_FUNC(_fall_frame_wait) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
 
@@ -3310,7 +3310,7 @@ USER_FUNC(_fall_frame_wait) {
  * Runs each living unit's ceiling-fall script (btlevtcmd_SetEventCeilFall) and waits for all of them to end.
  * JP and later skip units with the instant-kill status.
  */
-USER_FUNC(_fall_frame_wait_unit_ready) {
+static USER_FUNC(_fall_frame_wait_unit_ready) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     EventEntry* evt;
@@ -3352,7 +3352,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
  * Drops the iron frame (if_body) from its height to the floor over 60 frames,
  * then returns in args[0] the rank's falling-object table, whose first member is the frame's weapon.
  */
-USER_FUNC(_fall_frame) {
+static USER_FUNC(_fall_frame) {
     BattleWork* wp;
     s32 arg = event->args[0];
     BattleStageObject* body;
@@ -3375,7 +3375,7 @@ USER_FUNC(_fall_frame) {
 }
 
 /** Fades the fallen iron frame out over 51 frames and clears fallFrameEvtId. */
-USER_FUNC(_fall_frame_delete) {
+static USER_FUNC(_fall_frame_delete) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
 
@@ -3445,7 +3445,7 @@ static void _nozzle_type_init(void) {
 }
 
 /** Waits until other battle events (except background set ones) are over and no nozzle is still turning. */
-USER_FUNC(_nozzle_work_wait) {
+static USER_FUNC(_nozzle_work_wait) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
     int i;
@@ -3483,7 +3483,7 @@ static f32 _get_nozzle_dir(s32 index) {
  * Type 0 with args[0] set instead starts a dry-ice fog lasting two turns.
  * Returns 1 in args[1] once done if something fired, 0 at once if not or if the battle is already decided.
  */
-USER_FUNC(_nozzle_work_effect) {
+static USER_FUNC(_nozzle_work_effect) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
     EvtWord* args = event->args;
@@ -3681,7 +3681,7 @@ BOOL BattleFogForceStop(void) {
  * and adds the nozzle type's weapon once for every nozzle aimed at that side.
  * A side no nozzle hits keeps a NULL weapon.
  */
-USER_FUNC(_nozzle_work_attack_set) {
+static USER_FUNC(_nozzle_work_attack_set) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
     s32 index;
@@ -3828,7 +3828,7 @@ static void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* s
 }
 
 /** Returns in args[1] the nozzle weapon for side args[0] (0 Mario's side, 1 enemies), or 0 if no nozzle hits it. */
-USER_FUNC(_nozzle_work_get_weapon_address) {
+static USER_FUNC(_nozzle_work_get_weapon_address) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
     EvtWord* args = event->args;
@@ -3858,7 +3858,7 @@ s32 BattleStage_ObjectFallCheck(void) {
 }
 
 /** Waits until other battle events, nozzle work, the iron frame fall and any background set fall are all over. */
-USER_FUNC(_object_fall_wait) {
+static USER_FUNC(_object_fall_wait) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
 
@@ -3915,7 +3915,7 @@ typedef struct FallObjectWork {
  * at a random audience member, then waits for the effect to land and deals the damage (guard check, dodges,
  * Superguard and lucky reactions). Returns 1 in args[0] if it fell on the audience.
  */
-USER_FUNC(_object_fall_attack) {
+static USER_FUNC(_object_fall_attack) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageFallObjectData* fd = wp->stageObjectWork.fallObjectData;
     const char* sfxNormal;

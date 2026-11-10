@@ -19,7 +19,7 @@
  * twelve sideways offsets of the bolt's points,
  * then twelve ribbon widths, one per point. Used by types 0 and 2.
  */
-u8 yuragi_data[11][24] = {
+static u8 yuragi_data[11][24] = {
     {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 9, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0},
     {35, 5, 25, 5, 0, 25, 35, 5, 15, 0, 0, 0, 10, 13, 15, 12, 11, 13, 10, 12, 5, 1, 0, 0},
@@ -34,7 +34,7 @@ u8 yuragi_data[11][24] = {
 };
 
 /** The wobble frames used by type 1, a looser bolt with wider swings. */
-u8 yuragi_data2[11][24] = {
+static u8 yuragi_data2[11][24] = {
     {25, 25, 25, 5, 25, 5, 25, 25, 5, 25, 25, 25, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {15, 15, 15, 25, 15, 15, 5, 25, 25, 15, 25, 25, 4, 4, 4, 4, 4, 3, 2, 1, 0, 0, 0, 0},
     {25, 25, 25, 5, 15, 25, 5, 5, 15, 5, 5, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 0, 0},

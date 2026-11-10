@@ -133,7 +133,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 };
 
 /** A tall 6x22 quad standing on its origin; nothing in this effect draws it. */
-effN64Vtx size6x22_tex32x32_vtx[] = {
+static effN64Vtx size6x22_tex32x32_vtx[] = {
     {-3, 0, 0, 0, 0, 255, 255, 255, 255},
     {3, 0, 0, 1024, 0, 255, 255, 255, 255},
     {3, 22, 0, 1024, 1024, 255, 255, 255, 255},

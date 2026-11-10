@@ -26,14 +26,14 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
-EvtWord door_dummy[2];
+static EvtWord door_dummy[2];
 static BeroEntry bero_entry_data[4];
 static const char* haguruma_hontai[13];
 static const char* haguruma_hontai2[7];
 static const char* haguruma_kage[11];
 static const char* haguruma_kage2[6];
 static EvtWord haguruma_evt[194];
-EvtWord kaitendai_evt[312];
+static EvtWord kaitendai_evt[312];
 static EvtWord dai_evt[13];
 static s32 key_tbl[2];
 static EvtWord key_evt[5];
@@ -106,7 +106,7 @@ static EVT_BEGIN(e_door_open)
 EVT_END()
 
 /** Door animation script that does nothing. */
-EVT_BEGIN(door_dummy)
+static EVT_BEGIN(door_dummy)
     RETURN
 EVT_END()
 
@@ -293,7 +293,7 @@ EVT_END()
  * and explicitly carries Mario and the partner standing on the four smaller platforms by adding each platform's
  * movement each frame.
  */
-EVT_BEGIN(kaitendai_evt)
+static EVT_BEGIN(kaitendai_evt)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(1), FLOAT(0.009765625f))
     CALL(evt_hit_bind_mapobj, STRING("A_hgm_dai"), STRING("S_hgm_dai"))

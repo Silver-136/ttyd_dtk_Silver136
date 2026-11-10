@@ -57,7 +57,7 @@ void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 unsigned long strlen(const char* s);
 static BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
-USER_FUNC(_get_msg);
+static USER_FUNC(_get_msg);
 void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_WeaponSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_OperationMenuDisp(CameraId camId, void* param);
@@ -82,17 +82,17 @@ static s32 _btlcmd_MakePartyTable(BattleWork* wp);
 static void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type);
 
 /** Jump badges listed in Mario's Jump menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
-s32 _jump_badge_table[8] = {ITEM_POWER_JUMP, ITEM_MULTIBOUNCE, ITEM_SHRINK_STOMP, ITEM_SLEEPY_STOMP, ITEM_SOFT_STOMP, ITEM_TORNADO_JUMP, ITEM_POWER_BOUNCE, ITEM_MEGA_JUMP};
+static s32 _jump_badge_table[8] = {ITEM_POWER_JUMP, ITEM_MULTIBOUNCE, ITEM_SHRINK_STOMP, ITEM_SLEEPY_STOMP, ITEM_SOFT_STOMP, ITEM_TORNADO_JUMP, ITEM_POWER_BOUNCE, ITEM_MEGA_JUMP};
 
 /** Hammer badges listed in Mario's Hammer menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
-s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_THROW, ITEM_HEAD_RATTLE, ITEM_ICE_SMASH, ITEM_FIRE_DRIVE, ITEM_QUAKE_HAMMER, ITEM_MEGA_SMASH, ITEM_MEGA_QUAKE};
+static s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_THROW, ITEM_HEAD_RATTLE, ITEM_ICE_SMASH, ITEM_FIRE_DRIVE, ITEM_QUAKE_HAMMER, ITEM_MEGA_SMASH, ITEM_MEGA_QUAKE};
 
 /**
  * Started by BattleCommandInput when the player picks a greyed-out command:
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(_btl_cmd_error_msg_event)
+static EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
     RETURN
@@ -682,7 +682,7 @@ static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
  * Partner list for the battle's change-partner menu: unit kind, name, menu icon and help message for each partner
  * (entry 0 empty). _btlcmd_MakePartyTable lists the ones Mario has; _battleGetPartyIcon reads the icons.
  */
-BattleCheckPartyEntry _checkPartyTable[8] = {
+static BattleCheckPartyEntry _checkPartyTable[8] = {
     {0, NULL, 0, NULL},
     {UNIT_GOOMBELLA, "btl_cmd_pt_christine", ICON_PARTY_GOOMBELLA, "btl_hlp_cmd_operation_party1"},
     {UNIT_KOOPS, "btl_cmd_pt_nokotarou", ICON_PARTY_KOOPS, "btl_hlp_cmd_operation_party2"},
@@ -698,7 +698,7 @@ BattleCheckPartyEntry _checkPartyTable[8] = {
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(_btl_cmd_error_msg_event)
+static EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
     RETURN
@@ -3131,7 +3131,7 @@ static BOOL BattleCommandAttackAudienceCheck(void) {
 // FAKE: auto_inline on for _get_msg alone in this -inline noauto file: as an auto-inline candidate it gets the
 // front end's simple optimizer pass, which gives the target's string base register; without it r5/r6 swap
 #pragma auto_inline on
-USER_FUNC(_get_msg) {
+static USER_FUNC(_get_msg) {
     s32 index = event->args[0];
     BattleWork* wp = _battleWorkPointer;
     const char* msg;

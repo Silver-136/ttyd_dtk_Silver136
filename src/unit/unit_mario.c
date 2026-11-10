@@ -24,9 +24,9 @@
 #include "unit/unit_mario.h"
 #include "battle/unit_work.h"
 
-USER_FUNC(_get_local_frame);
+static USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
-USER_FUNC(_mario_super_emblem_anim_set);
+static USER_FUNC(_mario_super_emblem_anim_set);
 
 #if VERSION <= VERSION_DEMO_JP
 PoseTableEntry pose_table_mario_stay[32];
@@ -34,39 +34,39 @@ PoseTableEntry pose_table_mario_stay[32];
 PoseTableEntry pose_table_mario_stay[34];
 #endif
 
-BattleDataEntry data_table_mario[10];
+static BattleDataEntry data_table_mario[10];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
-PoseTableEntry pose_table_object[3];
-BattleUnitKindPart unitpartsdata_Mario[3];
+static PoseTableEntry pose_table_object[3];
+static BattleUnitKindPart unitpartsdata_Mario[3];
 BattleUnitKind unitdata_Mario;
 static EvtWord battle_entry_event[73];
 EvtWord mario_ride_btl_entry_event[120];
 static EvtWord init_event[75];
 
 #if VERSION >= VERSION_US
-EvtWord mario_dead_event[67];
+static EvtWord mario_dead_event[67];
 #else
-EvtWord mario_dead_event[57];
+static EvtWord mario_dead_event[57];
 #endif
 
-EvtWord mario_emergency_revival_event[130];
+static EvtWord mario_emergency_revival_event[130];
 EvtWord mario_appeal_event[30];
 static EvtWord attack_audience_event[15];
-EvtWord btlataudevtMarioJump[237];
+static EvtWord btlataudevtMarioJump[237];
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord btlataudevtMarioHammer[309];
+static EvtWord btlataudevtMarioHammer[309];
 #else
-EvtWord btlataudevtMarioHammer[356];
+static EvtWord btlataudevtMarioHammer[356];
 #endif
 
 static PoseSoundTiming pose_sound_timing_table[2];
 static EvtWord damage_event[10];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
-EvtWord mario_win_reaction[9];
+static EvtWord mario_win_reaction[9];
 
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
@@ -141,7 +141,7 @@ PoseTableEntry pose_table_mario_stay[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-PoseTableEntry pose_table_object[] = {
+static PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_NORMAL, "KRN_H_1"},
     {POSE_TYPE_DAMAGE, "KRN_H_1"},
     {POSE_TYPE_ACTION, "KRN_H_1"},
@@ -153,7 +153,7 @@ PoseTableEntry pose_table_object[] = {
  * death, the victory pose, the readied jump attack, the Yoshi-riding battle entry
  * and the spin when he superguards an attack.
  */
-BattleDataEntry data_table_mario[] = {
+static BattleDataEntry data_table_mario[] = {
     {UNIT_DATA_APPEAL_EVENT, mario_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -202,7 +202,7 @@ static StatusVulnerability regist = {
 
 /** Pose table for Mario's two hidden helper parts (2 and 3): the hidden KRN_H_1 animation for every pose. */
 #if VERSION >= VERSION_JP
-PoseTableEntry pose_table_object[] = {
+static PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_NORMAL, "KRN_H_1"},
     {POSE_TYPE_DAMAGE, "KRN_H_1"},
     {POSE_TYPE_ACTION, "KRN_H_1"},
@@ -213,7 +213,7 @@ PoseTableEntry pose_table_object[] = {
  * Mario's battle parts: part 1 is his visible, targetable body; parts 2 and 3 are hidden,
  * untargetable world-position parts on the same model.
  */
-BattleUnitKindPart unitpartsdata_Mario[] = {
+static BattleUnitKindPart unitpartsdata_Mario[] = {
     {1, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_mario_stay},
     {2, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_object},
     {3, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_object},
@@ -377,7 +377,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_get_local_frame) {
+static USER_FUNC(_get_local_frame) {
     EvtWord* args = event->args;
     s32 index = args[0];
     BattleUnitPart* part;
@@ -460,7 +460,7 @@ static USER_FUNC(_mario_makkuro_set) {
  * b_mario_w or b_mario_wl model when the L Emblem, W Emblem or both are equipped.
  * Blocks until the model has loaded; does nothing with neither badge.
  */
-USER_FUNC(_mario_super_emblem_anim_set) {
+static USER_FUNC(_mario_super_emblem_anim_set) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnitPart* part;
@@ -555,7 +555,7 @@ EVT_END()
  * and the unit is killed about four seconds later.
  * US and later also lock the camera's height and reset its offset.
  */
-EVT_BEGIN(mario_dead_event)
+static EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
 #if VERSION >= VERSION_US
     CALL(evt_btl_camera_nomove_y_onoff, 1, 0)
@@ -583,7 +583,7 @@ EVT_END()
  * its icon shows above him, his statuses clear and he recovers 10 HP with the recovery effect
  * before jumping back up.
  */
-EVT_BEGIN(mario_emergency_revival_event)
+static EVT_BEGIN(mario_emergency_revival_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, LW(10), LW(11), STRING("M_I_S"))
     WAIT_MS(2066)
@@ -630,7 +630,7 @@ EVT_BEGIN(mario_appeal_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(mario_win_reaction)
+static EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)
     RETURN
@@ -656,7 +656,7 @@ EVT_END()
  * stomps the audience member picked by _get_attack_aud_no (the camera follows),
  * then leaves offstage and walks back home. Picked at random against btlataudevtMarioHammer.
  */
-EVT_BEGIN(btlataudevtMarioJump)
+static EVT_BEGIN(btlataudevtMarioJump)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
@@ -718,7 +718,7 @@ EVT_END()
  * using the swing poses and sounds of his current hammer level, then returns home.
  * JP and later add a follow-through pose and walk him back through the audience area.
  */
-EVT_BEGIN(btlataudevtMarioHammer)
+static EVT_BEGIN(btlataudevtMarioHammer)
     // Mario runs off the side of the stage.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(3), EVT_NULLPTR, EVT_NULLPTR)
@@ -888,7 +888,7 @@ EVT_END()
  * run for Mario and the partner when the battle is won and experience is handed out.
  */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(mario_win_reaction)
+static EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)
     RETURN

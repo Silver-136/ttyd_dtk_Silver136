@@ -54,48 +54,48 @@ typedef struct IraiWork {
     u8 pad_6B4[0x416C - 0x6B4]; // 0x6B4, never accessed (irai_init_func allocates and clears the whole 0x416C bytes)
 #endif
 } IraiWork;
-void irai_window_disp(CameraId camera, void* param);
+static void irai_window_disp(CameraId camera, void* param);
 
-USER_FUNC(irai_cancel_func);
-USER_FUNC(irai_check_func);
-USER_FUNC(irai_end_func);
-USER_FUNC(irai_init_func);
-USER_FUNC(irai_main_func);
-USER_FUNC(irai_start_func);
+static USER_FUNC(irai_cancel_func);
+static USER_FUNC(irai_check_func);
+static USER_FUNC(irai_end_func);
+static USER_FUNC(irai_init_func);
+static USER_FUNC(irai_main_func);
+static USER_FUNC(irai_start_func);
 
 const char* irai_msg_client[30];
 const char* irai_msg_contents[30];
-const char* irai_msg_exposition[30];
+static const char* irai_msg_exposition[30];
 const char* irai_msg_kakunin[30];
-const char* irai_msg_hikiukechu[30];
-s32 irai_item_data01[2];
-s32 irai_item_data02[2];
-s32 irai_item_data13[2];
-s32 irai_item_data16[2];
-s32 irai_item_data17[2];
-s32 irai_item_data19[2];
-s32 irai_item_data23[2];
-s32 irai_item_data25[2];
-s32 irai_item_data29[2];
-s32 irai_item_null[1];
+static const char* irai_msg_hikiukechu[30];
+static s32 irai_item_data01[2];
+static s32 irai_item_data02[2];
+static s32 irai_item_data13[2];
+static s32 irai_item_data16[2];
+static s32 irai_item_data17[2];
+static s32 irai_item_data19[2];
+static s32 irai_item_data23[2];
+static s32 irai_item_data25[2];
+static s32 irai_item_data29[2];
+static s32 irai_item_null[1];
 s32* irai_item_table[30];
-EvtWord irai_start_event_null[2];
-EvtWord irai_start_event01[13];
-EvtWord irai_start_event04[8];
-EvtWord* irai_start_event[30];
-EvtWord irai_end_event_null[2];
-EvtWord irai_end_event01[13];
-EvtWord irai_end_event04[8];
+static EvtWord irai_start_event_null[2];
+static EvtWord irai_start_event01[13];
+static EvtWord irai_start_event04[8];
+static EvtWord* irai_start_event[30];
+static EvtWord irai_end_event_null[2];
+static EvtWord irai_end_event01[13];
+static EvtWord irai_end_event04[8];
 
 #if VERSION >= VERSION_US
 EvtWord irai_end_event19[15];
 #endif
 
-EvtWord* irai_end_event[30];
+static EvtWord* irai_end_event[30];
 EvtWord gor_irai_init[18];
-EvtWord gor_irai_lecture[40];
-EvtWord gor_irai_main[VERSION_PICK(105, 126)];
-EvtWord gor_irai_tenshu_main[VERSION_PICK(258, 261)];
+static EvtWord gor_irai_lecture[40];
+static EvtWord gor_irai_main[VERSION_PICK(105, 126)];
+static EvtWord gor_irai_tenshu_main[VERSION_PICK(258, 261)];
 
 /** Message keys of the client names, one for each Trouble Center job. */
 const char* irai_msg_client[] = {
@@ -117,7 +117,7 @@ const char* irai_msg_contents[] = {
 };
 
 /** Message keys of the help text that explains a job. */
-const char* irai_msg_exposition[] = {
+static const char* irai_msg_exposition[] = {
     "irai_help_01",
     "irai_help_02",
     "irai_help_03",
@@ -158,7 +158,7 @@ const char* irai_msg_kakunin[] = {
 };
 
 /** Message keys shown when a job has already been taken. */
-const char* irai_msg_hikiukechu[] = {
+static const char* irai_msg_hikiukechu[] = {
     "irai_13",
     "irai_14",
     "irai_15",
@@ -192,52 +192,52 @@ const char* irai_msg_hikiukechu[] = {
 };
 
 /** Item the player hands over to finish Trouble Center job 1: the House Key. */
-s32 irai_item_data01[] = {
+static s32 irai_item_data01[] = {
     ITEM_HOUSE_KEY, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 2: the Box. */
-s32 irai_item_data02[] = {
+static s32 irai_item_data02[] = {
     ITEM_BOX, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 13: the Battle Trunks. */
-s32 irai_item_data13[] = {
+static s32 irai_item_data13[] = {
     ITEM_BATTLE_TRUNKS, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 16: Attack FX B. */
-s32 irai_item_data16[] = {
+static s32 irai_item_data16[] = {
     ITEM_ATTACK_FX_B_KEY_ITEM, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 17: the Routing Slip. */
-s32 irai_item_data17[] = {
+static s32 irai_item_data17[] = {
     ITEM_ROUTING_SLIP, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 19: the Wedding Ring. */
-s32 irai_item_data19[] = {
+static s32 irai_item_data19[] = {
     ITEM_WEDDING_RING, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 23: the Wrestling Mag. */
-s32 irai_item_data23[] = {
+static s32 irai_item_data23[] = {
     ITEM_WRESTLING_MAG, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 25: the Package. */
-s32 irai_item_data25[] = {
+static s32 irai_item_data25[] = {
     ITEM_PACKAGE, -1,
 };
 
 /** Item the player hands over to finish Trouble Center job 29: the Present. */
-s32 irai_item_data29[] = {
+static s32 irai_item_data29[] = {
     ITEM_PRESENT, -1,
 };
 
 /** Empty item list for the Trouble Center jobs that ask for no item. */
-s32 irai_item_null[] = {
+static s32 irai_item_null[] = {
     -1,
 };
 
@@ -254,24 +254,24 @@ s32* irai_item_table[] = {
  * Start event of a Trouble Center request that needs no setup on taking it (the default entry of
  * irai_start_event): does nothing.
  */
-EVT_BEGIN(irai_start_event_null)
+static EVT_BEGIN(irai_start_event_null)
     RETURN
 EVT_END()
 
-EVT_BEGIN(irai_start_event01)
+static EVT_BEGIN(irai_start_event01)
     CALL(evt_npc_set_position, STRING("盗賊団２"), 445, 0, 120)
     CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))
     RETURN
 EVT_END()
 
 /** Start event of Trouble 4: moves the ボロドー２ NPC (the second copy of Borodo) to (-475, 0, -180). */
-EVT_BEGIN(irai_start_event04)
+static EVT_BEGIN(irai_start_event04)
     CALL(evt_npc_set_position, STRING("ボロドー２"), -475, 0, -180)
     RETURN
 EVT_END()
 
 /** Start scripts for each Trouble Center job, run when the job is taken; most do nothing. */
-EvtWord* irai_start_event[] = {
+static EvtWord* irai_start_event[] = {
     irai_start_event01, irai_start_event_null, irai_start_event_null, irai_start_event04, irai_start_event_null,
     irai_start_event_null, irai_start_event_null, irai_start_event_null, irai_start_event_null,
     irai_start_event_null, irai_start_event_null, irai_start_event_null, irai_start_event_null,
@@ -286,7 +286,7 @@ EvtWord* irai_start_event[] = {
  * End event of a Trouble Center request that needs no cleanup when it is cancelled
  * (the default entry of irai_end_event): does nothing.
  */
-EVT_BEGIN(irai_end_event_null)
+static EVT_BEGIN(irai_end_event_null)
     RETURN
 EVT_END()
 
@@ -294,14 +294,14 @@ EVT_END()
  * End event of Trouble 1: puts the 盗賊団２ NPC back at (10, 0, -460)
  * and restores the door parameter in GW(11) to the normal door data.
  */
-EVT_BEGIN(irai_end_event01)
+static EVT_BEGIN(irai_end_event01)
     CALL(evt_npc_set_position, STRING("盗賊団２"), 10, 0, -460)
     CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc))
     RETURN
 EVT_END()
 
 /** End event of Trouble 4: puts the ボロドー２ NPC at (-475, 0, -180). */
-EVT_BEGIN(irai_end_event04)
+static EVT_BEGIN(irai_end_event04)
     CALL(evt_npc_set_position, STRING("ボロドー２"), -475, 0, -180)
     RETURN
 EVT_END()
@@ -322,7 +322,7 @@ EVT_END()
 #endif
 
 /** End scripts for each Trouble Center job, run when it is cancelled at the counter; most do nothing. */
-EvtWord* irai_end_event[] = {
+static EvtWord* irai_end_event[] = {
     irai_end_event01, irai_end_event_null, irai_end_event_null, irai_end_event04, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
 #if VERSION >= VERSION_US
@@ -344,7 +344,7 @@ EVT_BEGIN(gor_irai_init)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gor_irai_lecture)
+static EVT_BEGIN(gor_irai_lecture)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
     CALL(evt_msg_print, 0, STRING("irai_00"), 0, 0)
@@ -359,7 +359,7 @@ EVT_BEGIN(gor_irai_lecture)
     RETURN
 EVT_END()
 
-EVT_BEGIN(gor_irai_main)
+static EVT_BEGIN(gor_irai_main)
     IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
@@ -419,7 +419,7 @@ EVT_END()
  * or lets Mario cancel it for 30 coins (irai_09 to irai_12, which clears its flags,
  * takes back its items and runs its end event).
  */
-EVT_BEGIN(gor_irai_tenshu_main)
+static EVT_BEGIN(gor_irai_tenshu_main)
     // Count how many of the 30 trouble requests are solved.
     SET_VALUE(LW(0), GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY))
     ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_SAFE_DELIVERY))
@@ -537,7 +537,7 @@ EVT_BEGIN(gor_irai_tenshu_main)
     RETURN
 EVT_END()
 
-void irai_flag_clear(void) {
+static void irai_flag_clear(void) {
     s32 i;
 
     for (i = GSWF_TROUBLE_WORK(0); i <= GSWF_TROUBLE_WORK(16); i++) {
@@ -549,7 +549,7 @@ void irai_flag_clear(void) {
 }
 
 /** Empty loops over the request work flags and bytes; the debug print they once contained is gone. */
-void irai_flag_disp(void) {
+static void irai_flag_disp(void) {
     s32 i;
 
     for (i = GSWF_TROUBLE_WORK(0); i <= GSWF_TROUBLE_WORK(16); i++) {
@@ -559,7 +559,7 @@ void irai_flag_disp(void) {
 }
 
 /** Script helper that starts a request: clears its working flags. */
-USER_FUNC(irai_start_func) {
+static USER_FUNC(irai_start_func) {
     irai_flag_clear();
     return EVT_RETURN_DONE;
 }
@@ -573,7 +573,7 @@ static inline s32 irai_get_no(EventEntry* event) {
  * Script helper that cancels request args[0]: clears the working flags
  * and removes every copy of each of its items (irai_item_table) from Mario's pouch.
  */
-USER_FUNC(irai_cancel_func) {
+static USER_FUNC(irai_cancel_func) {
     s32 no = irai_get_no(event);
     s32* items;
     ItemType item;
@@ -602,7 +602,7 @@ USER_FUNC(irai_cancel_func) {
  * start, then 3 more at story progress 56, 112, 164 and 215, 2 at 261, 1 at 281, and 3 more at 339, 373 and 401),
  * copies each request's client and contents text, and stores the work block in LW(10).
  */
-USER_FUNC(irai_init_func) {
+static USER_FUNC(irai_init_func) {
     IraiWork* wp;
     s32 seq;
     s32 n;
@@ -693,7 +693,7 @@ USER_FUNC(irai_init_func) {
  * the stick moves the cursor and L and R page through the list.
  * Finishes with LW(0) set to the chosen request number, or -1 if cancelled.
  */
-USER_FUNC(irai_main_func) {
+static USER_FUNC(irai_main_func) {
     IraiWork* wp = (IraiWork*)event->lwData[10];
     s32 prev;
     s32 n;
@@ -847,7 +847,7 @@ USER_FUNC(irai_main_func) {
  * LW(12) is the confirmation message irai_msg_kakunin for the request in LW(0) and LW(11) the request number,
  * or 0 and -1 when the window was cancelled.
  */
-USER_FUNC(irai_check_func) {
+static USER_FUNC(irai_check_func) {
     if (event->lwData[0] != -1) {
         event->lwData[12] = (EvtWord)irai_msg_kakunin[event->lwData[0] - 1];
         event->lwData[11] = event->lwData[0];
@@ -859,7 +859,7 @@ USER_FUNC(irai_check_func) {
 }
 
 /** Script helper that frees the request window's work block (LW(10)). */
-USER_FUNC(irai_end_func) {
+static USER_FUNC(irai_end_func) {
     _mapFree((void*)event->lwData[10]);
     return EVT_RETURN_DONE;
 }
@@ -896,7 +896,7 @@ USER_FUNC(irai_end_func) {
  * the list of requests (client and contents columns) clipped to the window,
  * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
  */
-void irai_window_disp(CameraId camera, void* param) {
+static void irai_window_disp(CameraId camera, void* param) {
 #else
 /**
  * Adds an integer to a float; kept as a separate function
@@ -914,7 +914,7 @@ static inline f32 iraiAddI(f32 a, s32 b) {
  * the list of requests (client and contents columns) clipped to the window,
  * with texts drawn at fixed positions; solved requests are grey and the active one is red.
  */
-void irai_window_disp(CameraId camera, void* param) {
+static void irai_window_disp(CameraId camera, void* param) {
     f32 negX;
 #endif
 

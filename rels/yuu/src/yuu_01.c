@@ -79,14 +79,14 @@ static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_01_cam_shift_reset);
-USER_FUNC(yuuminigame2_get_name);
-USER_FUNC(yuuminigame2_opening_chk);
-USER_FUNC(yuuminigame2_opening_on_off);
-USER_FUNC(yuuminigame2_set_phase);
+static USER_FUNC(yuuminigame2_get_name);
+static USER_FUNC(yuuminigame2_opening_chk);
+static USER_FUNC(yuuminigame2_opening_on_off);
+static USER_FUNC(yuuminigame2_set_phase);
 static BOOL get_monte_check(Vec* a, Vec* b);
 
 const char* s_nametbl[21];
-const char* a2_nametbl[21];
+static const char* a2_nametbl[21];
 const char* a_nametbl[21];
 s32 turn_tbl[22];
 s32 hoko_tbl[22];
@@ -94,9 +94,9 @@ static MonteTable montetable[6];
 static EvtWord minigame_view_monte[4];
 EvtWord yuu_01_kaijo_init[12];
 EvtWord yuu_01_kaijo_init2[12];
-EvtWord minigame02_main[37];
-EvtWord minigame02_start_cam[40];
-EvtWord minigame02_start_cam_cancel[17];
+static EvtWord minigame02_main[37];
+static EvtWord minigame02_start_cam[40];
+static EvtWord minigame02_start_cam_cancel[17];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord minigame02_start[];
@@ -119,7 +119,7 @@ const char* s_nametbl[] = {
 };
 
 /** Unused: a second list of Boat Mode hazard collision names (map polygons for the whirlpools). */
-const char* a2_nametbl[] = {
+static const char* a2_nametbl[] = {
     NULL,
     "polySurface439_q00000",
     "polySurface439_q00001",
@@ -211,7 +211,7 @@ EVT_END()
  * Set-up for minigame 2 (Boat Mode): freezes Mario's controls, allocates the minigame work area,
  * dismisses the partners, starts the crowd and boat-water sounds and sets phase 1.
  */
-EVT_BEGIN(minigame02_main)
+static EVT_BEGIN(minigame02_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(yuu_01_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 1)
@@ -229,7 +229,7 @@ EVT_END()
  * Opening cutscene of Boat Mode: pans the 3D camera along the river,
  * then shows the "menu_title_minigame2" title card.
  */
-EVT_BEGIN(minigame02_start_cam)
+static EVT_BEGIN(minigame02_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-560.0f), FLOAT(565.0f), FLOAT(1185.0f), FLOAT(-560.0f), FLOAT(75.0f), FLOAT(155.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -254,7 +254,7 @@ EVT_END()
  * Cleans up when the player skips the opening camera:
  * frees the title card, turns off the event camera and puts Mario at the start spot.
  */
-EVT_BEGIN(minigame02_start_cam_cancel)
+static EVT_BEGIN(minigame02_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
@@ -1085,7 +1085,7 @@ void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall) {
  * args[0] = minigame work pointer, args[1] = output.
  * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
  */
-USER_FUNC(yuuminigame2_opening_chk) {
+static USER_FUNC(yuuminigame2_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
@@ -1101,7 +1101,7 @@ USER_FUNC(yuuminigame2_opening_chk) {
  * args[0] = minigame work pointer, args[1] = on/off.
  * Sets or clears the "opening cutscene pending" bit (flags bit 0).
  */
-USER_FUNC(yuuminigame2_opening_on_off) {
+static USER_FUNC(yuuminigame2_opening_on_off) {
     EvtWord* args = event->args;
     FuneWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -1117,7 +1117,7 @@ USER_FUNC(yuuminigame2_opening_on_off) {
  * args[0] = index into the whirlpool/barrel tables;
  * returns the map object name in args[1], the hit object name in args[2] and the turn angle in args[3].
  */
-USER_FUNC(yuuminigame2_get_name) {
+static USER_FUNC(yuuminigame2_get_name) {
     EvtWord* args = event->args;
     s32 i = evtGetValue(event, args[0]);
 
@@ -1128,7 +1128,7 @@ USER_FUNC(yuuminigame2_get_name) {
 }
 
 /** args[0] = minigame work pointer, args[1] = new phase for the Boat Mode state machine. */
-USER_FUNC(yuuminigame2_set_phase) {
+static USER_FUNC(yuuminigame2_set_phase) {
     EvtWord* args = event->args;
     FuneWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 

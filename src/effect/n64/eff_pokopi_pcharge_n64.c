@@ -15,7 +15,7 @@
  * Number of effect records for each type: one header plus the charge streaks of the ring.
  * vx_data: distance from the centre added to every streak's position along its ray, for each type.
  */
-u8 n_data[13] = {11, 11, 11, 11, 17, 11, 11, 21, 21, 21, 21, 21, 21};
+static u8 n_data[13] = {11, 11, 11, 11, 17, 11, 11, 21, 21, 21, 21, 21, 21};
 
 static u8 vx_data[13] = {20, 5, 20, 20, 10, 20, 20, 8, 8, 8, 1, 1, 1};
 

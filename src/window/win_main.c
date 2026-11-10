@@ -51,16 +51,16 @@ USER_FUNC(cam_r);
 USER_FUNC(lecture_key_mask_off);
 USER_FUNC(wait);
 USER_FUNC(all_party_slit_off);
-USER_FUNC(party_color);
+static USER_FUNC(party_color);
 USER_FUNC(famicom_check);
-USER_FUNC(itemUseFunc2);
+static USER_FUNC(itemUseFunc2);
 EvtWord evt_lecture_msg[];
 EvtWord evt_item_use[];
 EvtWord evt_diary_read[];
 
 //.sbss
 static s32 cnt;
-TEXPalette* winTexTpl;
+static TEXPalette* winTexTpl;
 static WindowWork* wp;
 
 // local prototypes
@@ -528,7 +528,7 @@ void winDvdClose(void) {
     wp->res = NULL;
 }
 
-EVT_BEGIN(kime_pose)
+static EVT_BEGIN(kime_pose)
 #if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -556,7 +556,7 @@ EVT_BEGIN(kime_pose)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kime_pose2)
+static EVT_BEGIN(kime_pose2)
 #if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -599,7 +599,7 @@ EVT_END()
  * The 8-bit (Famicom-style) version of the partner item poses, used while Mario is in his 8-bit form;
  * Yoshi's pose depends on his color (party_color).
  */
-EVT_BEGIN(kime_pose_famicom)
+static EVT_BEGIN(kime_pose_famicom)
 #if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1002,7 +1002,7 @@ USER_FUNC(itemUseFunc) {
 #if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(itemUseFunc2) {
 #else
-USER_FUNC(itemUseFunc2) {
+static USER_FUNC(itemUseFunc2) {
 #endif
     statusWinForceOff();
     return EVT_RETURN_DONE;
@@ -1028,7 +1028,7 @@ USER_FUNC(famicom_check) {
 #if VERSION == VERSION_DEMO_US_1
 static USER_FUNC(party_color) {
 #else
-USER_FUNC(party_color) {
+static USER_FUNC(party_color) {
 #endif
     EvtWord* args = event->args;
 

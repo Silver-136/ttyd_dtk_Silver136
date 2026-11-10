@@ -40,7 +40,7 @@ static void effThunderDisp(CameraId cameraId, void* payload);
  * The lightning bolt mesh (inazuma, "lightning"): several jagged bolt shapes,
  * of which each type draws its own set of triangles.
  */
-effN64Vtx Ncube_inazuma_v[] = {
+static effN64Vtx Ncube_inazuma_v[] = {
     {-85, -102, 0, 3887, 2048, 255, 255, 255, 255},
     {-135, -138, 0, 4053, 1024, 255, 255, 255, 255},
     {-97, -213, 0, 5496, 1024, 255, 255, 255, 255},

@@ -53,18 +53,18 @@ static EvtWord first_evt[208];
 static EvtWord first_evt[210];
 #endif
 
-EvtWord bomb_wanwan[149];
+static EvtWord bomb_wanwan[149];
 EvtWord bomb_wanwan1_evt[27];
 EvtWord bomb_wanwan2_evt[27];
 EvtWord switch_1_evt[279];
 EvtWord switch_2_evt[280];
-EvtWord goikkou_talk[31];
-EvtWord majyorin_init[12];
+static EvtWord goikkou_talk[31];
+static EvtWord majyorin_init[12];
 static EvtWord maririn_init[12];
-EvtWord ranpel_init[12];
+static EvtWord ranpel_init[12];
 static NpcSetupInfo npcEnt[4];
-EvtWord majyorin_evt_npc_entry[26];
-EvtWord majyorin_evt_main[652];
+static EvtWord majyorin_evt_npc_entry[26];
+static EvtWord majyorin_evt_main[652];
 EvtWord majyorin_evt[55];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -433,7 +433,7 @@ EVT_END()
  * plays the paper "OFF_d_bom_ver2" break animation,
  * removes the statue's hit area and plays a short success jingle.
  */
-EVT_BEGIN(bomb_wanwan)
+static EVT_BEGIN(bomb_wanwan)
     SET_VALUE(LW(14), LW(0))
     SET_VALUE(LW(15), LW(1))
     BEGIN_INLINE_EVENT
@@ -746,7 +746,7 @@ EVT_END()
  * Talk event of the dazed Shadow Sirens after the battle:
  * Beldam, Marilyn and Doopliss each say a line, then the partner comments.
  */
-EVT_BEGIN(goikkou_talk)
+static EVT_BEGIN(goikkou_talk)
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_27"), 0, STRING("マジョリン"))
     CALL(evt_msg_print, 0, STRING("stg8_las_28"), 0, STRING("マリリン"))
@@ -761,7 +761,7 @@ EVT_END()
  * Init event of Beldam (Majolyne): clears her stop-for-event flag and sets status bit 2,
  * which makes her turn to face the way she moves (the evt_npc move commands check it).
  */
-EVT_BEGIN(majyorin_init)
+static EVT_BEGIN(majyorin_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
@@ -778,7 +778,7 @@ static EVT_BEGIN(maririn_init)
 EVT_END()
 
 /** Init event of Doopliss (Rampell): same as Beldam's (clears the stop-for-event flag, turns to face the way he moves). */
-EVT_BEGIN(ranpel_init)
+static EVT_BEGIN(ranpel_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
@@ -823,7 +823,7 @@ static NpcSetupInfo npcEnt[] = {
  * Event script: creates the NPC "にせ" with the Professor Frankly (Kurihakase) model, hidden below the floor.
  * In the cutscene it plays the fake professor who turns out to be Doopliss.
  */
-EVT_BEGIN(majyorin_evt_npc_entry)
+static EVT_BEGIN(majyorin_evt_npc_entry)
     CALL(evt_npc_entry, STRING("にせ"), STRING("c_kuri_h")) // Doopliss disguised as Professor Frankly
     CALL(evt_npc_set_tribe, STRING("にせ"), STRING("クリハカセ"))
     CALL(evt_npc_flag_onoff, 1, STRING("にせ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -832,7 +832,7 @@ EVT_BEGIN(majyorin_evt_npc_entry)
     RETURN
 EVT_END()
 
-EVT_BEGIN(majyorin_evt_main)
+static EVT_BEGIN(majyorin_evt_main)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_landon)

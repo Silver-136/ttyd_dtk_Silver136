@@ -11,17 +11,17 @@
 
 //.bss
 static EventWork work[2];
-s32 priTbl[0x100];
-s32 priIDTbl[0x100];
+static s32 priTbl[0x100];
+static s32 priIDTbl[0x100];
 
 //.sbss
 s32 evtMax;
-s32 priTblNum;
-BOOL runMainF;
+static s32 priTblNum;
+static BOOL runMainF;
 
 //.sdata
-s32 evtID = 1;
-f32 evtSpd = 1.0f;
+static s32 evtID = 1;
+static f32 evtSpd = 1.0f;
 
 /**
  * The event pool in use: battles run their scripts in a second pool of 256 entries (with its own GW/GF

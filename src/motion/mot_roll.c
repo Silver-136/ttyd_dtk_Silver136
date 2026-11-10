@@ -39,7 +39,7 @@ s32 roll_flyout_flag2;
  * Tuning values of Mario's paper tube rolling: top speed, slowing, the slope push (180 or 140
  * by which way he rolls across the tilt), and the speed factor on slopes.
  */
-f32 rollData[] = {3.0f, -0.05f, -0.5f, 0.5f, 7.0f, 180.0f, 140.0f, 10.0f, 1.2f, 2.0f, 0.8f};
+static f32 rollData[] = {3.0f, -0.05f, -0.5f, 0.5f, 7.0f, 180.0f, 140.0f, 10.0f, 1.2f, 2.0f, 0.8f};
 
 /** Truncates x to one decimal place (toward zero). */
 static inline f32 trunc10(f32 x) {

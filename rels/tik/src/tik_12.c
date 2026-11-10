@@ -32,12 +32,12 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(effect_stardust);
-USER_FUNC(majinaisi_ryokin_kaisu);
+static USER_FUNC(majinaisi_ryokin_kaisu);
 static USER_FUNC(setmertn);
 
 s32 majinaisi_ryokin_kaisu_tbl[6];
 static BeroEntry bero_entry_data[2];
-EvtWord suisyou_kirakira[30];
+static EvtWord suisyou_kirakira[30];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord majinaisi_table_talk[];
@@ -45,7 +45,7 @@ extern EvtWord majinaisi_table_talk[];
 EvtWord majinaisi_table_talk[877];
 #endif
 
-s32 iri_14_item_tbl[2];
+static s32 iri_14_item_tbl[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord majinaisi_direct_talk[];
@@ -53,7 +53,7 @@ extern EvtWord majinaisi_direct_talk[];
 EvtWord majinaisi_direct_talk[108];
 #endif
 
-EvtWord majinaisi_init[10];
+static EvtWord majinaisi_init[10];
 static NpcSetupInfo npcEnt[2];
 EvtWord tik_12_init_evt[58];
 
@@ -90,7 +90,7 @@ static BeroEntry bero_entry_data[] = {
  * Lens-flare sparkle on Merlee's crystal ball: spawns a lensflare effect at the "uranai" object,
  * 15 units above and 20 in front of it.
  */
-EVT_BEGIN(suisyou_kirakira)
+static EVT_BEGIN(suisyou_kirakira)
     CALL(evt_mapobj_get_position, STRING("uranai"), LW(0), LW(1), LW(2))
     ADD(LW(1), 15)
     ADD(LW(2), 20)
@@ -382,7 +382,7 @@ EVT_BEGIN(majinaisi_table_talk)
 EVT_END()
 
 /** Items Merlee accepts for Trouble Center request 14: Cake Mix (-1 ends the list). */
-s32 iri_14_item_tbl[] = {
+static s32 iri_14_item_tbl[] = {
     ITEM_CAKE_MIX, -1,
 };
 
@@ -432,7 +432,7 @@ EVT_BEGIN(majinaisi_direct_talk)
 EVT_END()
 
 /** Init script for Merlee (まじない師). Registers the table talk on the a_majinai hit area. */
-EVT_BEGIN(majinaisi_init)
+static EVT_BEGIN(majinaisi_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_majinai"), 0, PTR(majinaisi_table_talk), 0)
     RETURN
 EVT_END()
@@ -507,7 +507,7 @@ static USER_FUNC(setmertn) {
  * returns the fee in args[1] and the charm's number of uses in args[2] from majinaisi_ryokin_kaisu_tbl.
  */
 // Each selection indexes a pair: coin price followed by the number of uses.
-USER_FUNC(majinaisi_ryokin_kaisu) {
+static USER_FUNC(majinaisi_ryokin_kaisu) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     evtSetValue(event, args[1], majinaisi_ryokin_kaisu_tbl[idx * 2]);

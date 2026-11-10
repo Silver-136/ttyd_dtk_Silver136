@@ -38,7 +38,7 @@ extern TRKState gTRKState;
 static u32 TRK_ISR_OFFSETS[15] = {0x100, 0x200, 0x300, 0x400, 0x500, 0x600, 0x700, 0x800,
                                   0x900, 0xC00, 0xD00, 0xF00, 0x1300, 0x1400, 0x1700};
 
-u32 lc_base;
+static u32 lc_base;
 
 asm void InitMetroTRK(void) {
     nofralloc

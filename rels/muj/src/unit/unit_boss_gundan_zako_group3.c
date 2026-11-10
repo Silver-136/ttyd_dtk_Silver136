@@ -38,7 +38,7 @@ USER_FUNC(zakogun_dead3);
 USER_FUNC(zakogun_attack3_3);
 USER_FUNC(zakogun_attack3_2);
 USER_FUNC(zakogun_attack3_1);
-USER_FUNC(zakogun_kanbu_on_ball);
+static USER_FUNC(zakogun_kanbu_on_ball);
 
 BattleUnitKind unit_boss_gundan_zako_group3;
 static BattleUnitDefense defence;
@@ -47,7 +47,7 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_gundan_zako_group3_attack;
+static BattleWeapon weapon_gundan_zako_group3_attack;
 static EvtWord init_event[21];
 static EvtWord damage_event[129];
 static EvtWord dead_event[136];
@@ -62,7 +62,7 @@ static EvtWord hit_check_event[119];
 static EvtWord wait_event[6];
 
 /** Script helper: puts the horde leader on top of the formation centre, 45 units above it. */
-USER_FUNC(zakogun_kanbu_on_ball) {
+static USER_FUNC(zakogun_kanbu_on_ball) {
     BattleUnit* kanbu = BattleGetUnitPtr(_battleWorkPointer, zakogun_get_kanbu_id());
     BtlUnit_SetPos(kanbu, work->pos.x, 45.0f + work->pos.y, work->pos.z);
     return EVT_RETURN_DONE;
@@ -217,7 +217,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Weapon of X-Nauts (attack): targets one unit for 5 damage; used by attack_event. */
-BattleWeapon weapon_gundan_zako_group3_attack = {
+static BattleWeapon weapon_gundan_zako_group3_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

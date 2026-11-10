@@ -22,10 +22,10 @@ typedef struct KpaScore {
 #define KPA_SCORE_PER_COIN 500
 #define KPA_SCORE_PICKUP_CAP 10000
 
-KpaScore* ksdp;
-USER_FUNC(kpa_score_disp_main);
+static KpaScore* ksdp;
+static USER_FUNC(kpa_score_disp_main);
 /** Endless loop that runs kpa_score_disp_main once a frame, keeping the Super Bowser score popups moving. */
-EVT_BEGIN(kpa_score_disp_evt)
+static EVT_BEGIN(kpa_score_disp_evt)
     LOOP(0)
         CALL(kpa_score_disp_main)
         WAIT_FRAMES(1)
@@ -53,7 +53,7 @@ static void kpaScoreDisp(CameraId cameraId, void* param) {
  * Script helper run every frame by kpa_score_disp_evt:
  * floats each active score popup up one unit, counts down its 30-frame timer and queues kpaScoreDisp.
  */
-USER_FUNC(kpa_score_disp_main) {
+static USER_FUNC(kpa_score_disp_main) {
     s32 i;
     for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
         if (ksdp[i].timer != 0) {

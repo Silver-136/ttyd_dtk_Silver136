@@ -47,10 +47,10 @@ static EvtWord chuchurina_sogu[812];
 static EvtWord chuchurina_sogu[814];
 #endif
 
-EvtWord black_shadow[341];
+static EvtWord black_shadow[341];
 static EvtWord evt_ueki_02[20];
 static KusaAccess ueki_access_data[5];
-EvtWord item_mri_04[34];
+static EvtWord item_mri_04[34];
 EvtWord mri_04_init_evt[178];
 
 /**
@@ -400,7 +400,7 @@ EVT_END()
  * Ms. Mowz, shown as a dark silhouette, leaps in and knocks out an X-Naut grunt with a strike
  * and a camera shake. Sets the story to STG2_12_01_A_DARK_FIGURE and returns to mri_03.
  */
-EVT_BEGIN(black_shadow)
+static EVT_BEGIN(black_shadow)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -505,7 +505,7 @@ static KusaAccess ueki_access_data[] = {
  * Script run when Mario opens the chest in this room:
  * shows the Ultra Shroom coming out of mobj_box00 and gives it to Mario.
  */
-EVT_BEGIN(item_mri_04)
+static EVT_BEGIN(item_mri_04)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)

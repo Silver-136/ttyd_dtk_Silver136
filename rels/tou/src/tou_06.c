@@ -44,20 +44,20 @@
 
 s32* tbl;
 
-USER_FUNC(free_tbl);
+static USER_FUNC(free_tbl);
 static USER_FUNC(get_pos);
-USER_FUNC(iri_13_make_name);
-USER_FUNC(make_tbl);
+static USER_FUNC(iri_13_make_name);
+static USER_FUNC(make_tbl);
 
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 static BeroEntry bero_data[3];
-EvtWord evt_ana[9];
-EvtWord evt_kontena[21];
+static EvtWord evt_ana[9];
+static EvtWord evt_kontena[21];
 EvtWord evt_kaidan[91];
-const char* cloud_kontena2_list[5];
+static const char* cloud_kontena2_list[5];
 EvtWord evt_kontena2[23];
 static EvtWord evt_block_broken[5];
 static s32 key_tbl[2];
@@ -77,8 +77,8 @@ EvtWord evt_chuchu[626];
 #endif
 
 static s32 list[75];
-EvtWord iri_13_pants_00_evt[5];
-EvtWord iri_13_init[124];
+static EvtWord iri_13_pants_00_evt[5];
+static EvtWord iri_13_init[124];
 static NpcSetupInfo npcEnt[2];
 static EvtWord mobj_box00[34];
 EvtWord tou_06_init_evt[];
@@ -168,7 +168,7 @@ static BeroEntry bero_data[] = {
  * Mario steps on the hole in the floor: controls lock
  * and he falls into tou_05 (Grubba's office) through the "fall" entrance.
  */
-EVT_BEGIN(evt_ana)
+static EVT_BEGIN(evt_ana)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_mapchange, STRING("tou_05"), STRING("fall"))
     RETURN
@@ -178,7 +178,7 @@ EVT_END()
  * Flurrie's gust blows the storage containers (kontena) away:
  * a success jingle plays and the story advances to STG3_20_09_BLOWING_CONTAINERS.
  */
-EVT_BEGIN(evt_kontena)
+static EVT_BEGIN(evt_kontena)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
@@ -220,7 +220,7 @@ EVT_BEGIN(evt_kaidan)
 EVT_END()
 
 /** Map objects of the second, labelled container, which Flurrie's gust blows away together (evt_kontena2). */
-const char* cloud_kontena2_list[] = {
+static const char* cloud_kontena2_list[] = {
     "kontena_2",
     "fuda_1",
     "fuda_2",
@@ -497,7 +497,7 @@ static s32 list[] = {
 };
 
 /** Trouble Center job 13 pickup handler: sets GSWF_TROUBLE_WORK_3 when the Battle Trunks are collected. */
-EVT_BEGIN(iri_13_pants_00_evt)
+static EVT_BEGIN(iri_13_pants_00_evt)
     SET_VALUE(GSWF_TROUBLE_WORK(3), 1)
     RETURN
 EVT_END()
@@ -510,7 +510,7 @@ EVT_END()
  * if any trunks were placed; the buzz loop does not recheck pickups.
  * While GSWF_TROUBLE_WORK_3 is unset, spot 0 comes first and its trunks run iri_13_pants_00_evt when picked up.
  */
-EVT_BEGIN(iri_13_init)
+static EVT_BEGIN(iri_13_init)
     IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
         RETURN
     END_IF
@@ -792,7 +792,7 @@ EVT_BEGIN(tou_06_init_evt)
 EVT_END()
 
 // The returned pointer uses one shared buffer; callers consume the name before requesting the next.
-USER_FUNC(iri_13_make_name) {
+static USER_FUNC(iri_13_make_name) {
     static char name[8];
     EvtWord* args = event->args;
 
@@ -802,7 +802,7 @@ USER_FUNC(iri_13_make_name) {
 }
 
 /** Script helper: frees the shuffled location table made by make_tbl. */
-USER_FUNC(free_tbl) {
+static USER_FUNC(free_tbl) {
     _mapFree(tbl);
     tbl = NULL;
     return EVT_RETURN_DONE;
@@ -824,7 +824,7 @@ static USER_FUNC(get_pos) {
 /** Script helper: builds a shuffled table of the 25 candidate locations for the Battle Trunks. */
 
 // Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
-USER_FUNC(make_tbl) {
+static USER_FUNC(make_tbl) {
     s32 i;
     s32 a;
     s32 b;

@@ -10,9 +10,9 @@
 #include "evt/evt_snd.h"
 #include "pmario_sound.h"
 
-BeroEntry bero_data_a_nidome[2];
-BeroEntry bero_data_b_nidome[2];
-BeroEntry bero_data_c_nidome[2];
+static BeroEntry bero_data_a_nidome[2];
+static BeroEntry bero_data_b_nidome[2];
+static BeroEntry bero_data_c_nidome[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_08_a_init_evt[];
@@ -20,7 +20,7 @@ extern EvtWord rsh_08_a_init_evt[];
 EvtWord rsh_08_a_init_evt[72];
 #endif
 
-BeroEntry bero_data_a_nidome[] = {
+static BeroEntry bero_data_a_nidome[] = {
     {
         "e_bero", // hitName
         1, // type
@@ -42,7 +42,7 @@ BeroEntry bero_data_a_nidome[] = {
     {0},
 };
 
-BeroEntry bero_data_b_nidome[] = {
+static BeroEntry bero_data_b_nidome[] = {
     {
         "e_bero", // hitName
         1, // type
@@ -64,7 +64,7 @@ BeroEntry bero_data_b_nidome[] = {
     {0},
 };
 
-BeroEntry bero_data_c_nidome[] = {
+static BeroEntry bero_data_c_nidome[] = {
     {
         "e_bero", // hitName
         1, // type

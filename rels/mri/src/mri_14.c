@@ -40,34 +40,34 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_npc_set_anim_localtime);
+static USER_FUNC(evt_npc_set_anim_localtime);
 static USER_FUNC(evtflash);
-USER_FUNC(starstone_rotate_func);
+static USER_FUNC(starstone_rotate_func);
 
 static EvtWord first_time_w_bero[60];
 static BeroEntry bero_entry_data[3];
-EvtWord npc_rotate[28];
-EvtWord kanbu_urouro[75];
+static EvtWord npc_rotate[28];
+static EvtWord kanbu_urouro[75];
 EvtWord dai3_kanbu[192];
-EvtWord flash_and_wait[16];
-EvtWord flash2_and_wait[26];
-EvtWord starstone_rotate[6];
-EvtWord starstone_rotate_exec[13];
+static EvtWord flash_and_wait[16];
+static EvtWord flash2_and_wait[26];
+static EvtWord starstone_rotate[6];
+static EvtWord starstone_rotate_exec[13];
 static EvtWord starstone_fuwafuwa[71];
-EvtWord npc_dokan[209];
+static EvtWord npc_dokan[209];
 static EvtWord punipuni_mario_halt[33];
 
 #if VERSION >= VERSION_US
-EvtWord time_bomb[931];
+static EvtWord time_bomb[931];
 #else
 #if VERSION <= VERSION_DEMO_JP
-EvtWord time_bomb[938];
+static EvtWord time_bomb[938];
 #else
-EvtWord time_bomb[937];
+static EvtWord time_bomb[937];
 #endif
 #endif
 
-EvtWord bomb_check[14];
+static EvtWord bomb_check[14];
 static EvtWord yuka_move[96];
 static EvtWord yuka_check[116];
 static KusaAccess ueki_access_data[7];
@@ -196,7 +196,7 @@ static BeroEntry bero_entry_data[] = {
  * Spins the NPC named in LW(10) around its y axis.
  * LW(1) and LW(2) are the start and end angles and LW(3) the time in ms; used to turn Lord Crump around.
  */
-EVT_BEGIN(npc_rotate)
+static EVT_BEGIN(npc_rotate)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(1), LW(2), LW(3))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -213,7 +213,7 @@ EVT_END()
  * Makes Lord Crump pace back and forth along z=-215 between x=30 and x=120 while the rest of the scene plays,
  * until GF(0) is set and he stops at x=75. Clears GF(1) when it ends.
  */
-EVT_BEGIN(kanbu_urouro)
+static EVT_BEGIN(kanbu_urouro)
     CALL(evt_npc_set_ry, LW(10), 270)
     WAIT_MS(200)
     CALL(evt_npc_move_position, LW(10), 30, -215, 0, FLOAT(90.0f), 0)
@@ -294,7 +294,7 @@ EVT_BEGIN(dai3_kanbu)
 EVT_END()
 
 /** Flashes the screen once with the light sound after GF(0) is clear; GF(0) is held set during the flash. */
-EVT_BEGIN(flash_and_wait)
+static EVT_BEGIN(flash_and_wait)
     WAIT_WHILE(GF(0))
     SET_VALUE(GF(0), 1)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_LIGHT1"), 0)
@@ -303,7 +303,7 @@ EVT_BEGIN(flash_and_wait)
     RETURN
 EVT_END()
 
-USER_FUNC(starstone_rotate_func) {
+static USER_FUNC(starstone_rotate_func) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
     f32 angle = evtGetValue(event, args[1]);
@@ -316,7 +316,7 @@ USER_FUNC(starstone_rotate_func) {
  * Sets the animation time of the NPC named in args[0] to the float in args[1],
  * to pose a paper animation frame by frame.
  */
-USER_FUNC(evt_npc_set_anim_localtime) {
+static USER_FUNC(evt_npc_set_anim_localtime) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 time = evtGetFloat(event, args[1]);
@@ -326,7 +326,7 @@ USER_FUNC(evt_npc_set_anim_localtime) {
 }
 
 /** Flashes the screen twice in a row with the light sound after GF(0) is clear; GF(0) is held set meanwhile. */
-EVT_BEGIN(flash2_and_wait)
+static EVT_BEGIN(flash2_and_wait)
     WAIT_WHILE(GF(0))
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
@@ -341,13 +341,13 @@ EVT_BEGIN(flash2_and_wait)
 EVT_END()
 
 /** Rotates the Crystal Star item named in LW(0) to the angle held in GW(10). */
-EVT_BEGIN(starstone_rotate)
+static EVT_BEGIN(starstone_rotate)
     CALL(starstone_rotate_func, LW(0), GW(10))
     RETURN
 EVT_END()
 
 /** Loops forever adding 6 degrees per frame to the rotation angle GW(10), so the Crystal Star spins. */
-EVT_BEGIN(starstone_rotate_exec)
+static EVT_BEGIN(starstone_rotate_exec)
     LOOP(0)
         ADD(GW(10), 6)
         MODULO(GW(10), 360)
@@ -388,7 +388,7 @@ EVT_END()
  * Plays Lord Crump's pipe trip: turns the NPC LW(10) into the paper pipe model p_dokan_x
  * and flips through its frames (PM_D_1A and PM_D_1B), as if he were sucked into a pipe.
  */
-EVT_BEGIN(npc_dokan)
+static EVT_BEGIN(npc_dokan)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_paper, LW(10), STRING("p_dokan_x"))
         CALL(evt_npc_set_paper_anim, LW(10), STRING("PM_D_1A"))
@@ -487,7 +487,7 @@ EVT_END()
  * sets a time bomb that switches on the countdown and flees through a pipe, and the party reacts.
  * Sets the story to STG2_23_TIME_BOMB_ACTIVATED.
  */
-EVT_BEGIN(time_bomb)
+static EVT_BEGIN(time_bomb)
     // Controls off, the music fades out and the room begins to shake.
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
@@ -748,7 +748,7 @@ EVT_END()
  * Waits until the floor counter GW(0) reaches zero (enough Punies stand on the plate) and
  * then starts the time bomb scene.
  */
-EVT_BEGIN(bomb_check)
+static EVT_BEGIN(bomb_check)
     LOOP(0)
         IF_INT_EQUAL(GW(0), 0)
             BREAK_LOOP

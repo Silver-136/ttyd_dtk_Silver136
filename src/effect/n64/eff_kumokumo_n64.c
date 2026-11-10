@@ -13,7 +13,7 @@
 #include "system.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 
-s16 cloud_vertex_tbl[] __attribute__((aligned(32))) = {
+static s16 cloud_vertex_tbl[] __attribute__((aligned(32))) = {
     25023, 2076, 0, 27200, 6605, 0,
     27743, 12288, 0, 26383, 16490, 0,
     24751, 17685, 0, 22303, -522, 0,
@@ -33,7 +33,7 @@ s16 cloud_vertex_tbl[] __attribute__((aligned(32))) = {
     0, 0, 0, 0, 351, 0,
     0, 788, 0,
 };
-s16 cloud_texcoord0_tbl[] __attribute__((aligned(32))) = {
+static s16 cloud_texcoord0_tbl[] __attribute__((aligned(32))) = {
     0, -13107, 4096, -13107, 4096, -16383, 0, -16383,
     8192, -13107, 8192, -16383, 12288, -13107, 12288, -16383,
     16384, -13107, 16384, -16383, 0, -10649, 4096, -10649,
@@ -44,7 +44,7 @@ s16 cloud_texcoord0_tbl[] __attribute__((aligned(32))) = {
     12288, -3276, 16384, -3276, 0, 0, 4096, 0,
     8192, 0, 12288, 0, 16384, 0,
 };
-s16 cloud_texcoord1_tbl[] __attribute__((aligned(32))) = {
+static s16 cloud_texcoord1_tbl[] __attribute__((aligned(32))) = {
     0, -13107, 4096, -13107, 4096, -16383, 0, -16383,
     8192, -13107, 8192, -16383, 12288, -13107, 12288, -16383,
     16384, -13107, 16384, -16383, 0, -10649, 4096, -10649,
@@ -57,23 +57,23 @@ s16 cloud_texcoord1_tbl[] __attribute__((aligned(32))) = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
+static GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
 };
 #endif
 
 /* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/color/texcoord0/texcoord1 indices, 32-byte padded), drawn with GXCallDisplayList */
-u32 cloud_dl_0_0[] __attribute__((aligned(32))) = {0x98000E1E, 0x00001E1E, 0x1F00001F, 0x1F190001, 0x19191A00, 0x031A1A14, 0x00011414, 0x15000315, 0x150F0001, 0x0F0F1000, 0x0310100A, 0x00010A0A, 0x0B00030B, 0x0B050000, 0x00000600, 0x01010100, 0x00000303, 0x01000002, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-u32 cloud_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00001F1F, 0x20000020, 0x201A0003, 0x1A1A1B00, 0x041B1B15, 0x00031515, 0x16000416, 0x16100003, 0x10101100, 0x0411110B, 0x00030B0B, 0x0C00040C, 0x0C060001, 0x01010700, 0x02040401, 0x00000202, 0x02000005, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-u32 cloud_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00002020, 0x21000021, 0x211B0004, 0x1B1B1C00, 0x031C1C16, 0x00041616, 0x17000317, 0x17110004, 0x11111200, 0x0312120C, 0x00040C0C, 0x0D00030D, 0x0D070002, 0x04040800, 0x01060602, 0x00000505, 0x03000007, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-u32 cloud_dl_0_3[] __attribute__((aligned(32))) = {0x98000E21, 0x00002121, 0x22000022, 0x221C0003, 0x1C1C1D00, 0x011D1D17, 0x00031717, 0x18000118, 0x18120003, 0x12121300, 0x0113130D, 0x00030D0D, 0x0E00010E, 0x0E080001, 0x06060900, 0x00080803, 0x00000707, 0x04000009, 0x09000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 cloud_dl_0_0[] __attribute__((aligned(32))) = {0x98000E1E, 0x00001E1E, 0x1F00001F, 0x1F190001, 0x19191A00, 0x031A1A14, 0x00011414, 0x15000315, 0x150F0001, 0x0F0F1000, 0x0310100A, 0x00010A0A, 0x0B00030B, 0x0B050000, 0x00000600, 0x01010100, 0x00000303, 0x01000002, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 cloud_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00001F1F, 0x20000020, 0x201A0003, 0x1A1A1B00, 0x041B1B15, 0x00031515, 0x16000416, 0x16100003, 0x10101100, 0x0411110B, 0x00030B0B, 0x0C00040C, 0x0C060001, 0x01010700, 0x02040401, 0x00000202, 0x02000005, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 cloud_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00002020, 0x21000021, 0x211B0004, 0x1B1B1C00, 0x031C1C16, 0x00041616, 0x17000317, 0x17110004, 0x11111200, 0x0312120C, 0x00040C0C, 0x0D00030D, 0x0D070002, 0x04040800, 0x01060602, 0x00000505, 0x03000007, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 cloud_dl_0_3[] __attribute__((aligned(32))) = {0x98000E21, 0x00002121, 0x22000022, 0x221C0003, 0x1C1C1D00, 0x011D1D17, 0x00031717, 0x18000118, 0x18120003, 0x12121300, 0x0113130D, 0x00030D0D, 0x0E00010E, 0x0E080001, 0x06060900, 0x00080803, 0x00000707, 0x04000009, 0x09000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 
 #if VERSION <= VERSION_DEMO_JP
-void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
+static void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
 #endif
 
-s16 batten_vertex_tbl[] __attribute__((aligned(32))) = {
+static s16 batten_vertex_tbl[] __attribute__((aligned(32))) = {
     -14192, -15455, 0, -8515, -16128, 0,
     0, -16800, 0, 8515, -16128, 0,
     14192, -15455, 0, -10866, -12768, 0,
@@ -93,7 +93,7 @@ s16 batten_vertex_tbl[] __attribute__((aligned(32))) = {
     0, 0, 0, 2571, 0, 0,
     4285, 0, 0,
 };
-s16 batten_texcoord0_tbl[] __attribute__((aligned(32))) = {
+static s16 batten_texcoord0_tbl[] __attribute__((aligned(32))) = {
     0, 10922, 4096, 10922, 4096, 12288, 0, 12288,
     8192, 10922, 8192, 12288, 12288, 10922, 12288, 12288,
     16384, 10922, 16384, 12288, 0, 9557, 4096, 9557,
@@ -104,7 +104,7 @@ s16 batten_texcoord0_tbl[] __attribute__((aligned(32))) = {
     12288, 5461, 16384, 5461, 0, 4096, 4096, 4096,
     8192, 4096, 12288, 4096, 16384, 4096,
 };
-s16 batten_texcoord1_tbl[] __attribute__((aligned(32))) = {
+static s16 batten_texcoord1_tbl[] __attribute__((aligned(32))) = {
     0, 10922, 4096, 10922, 4096, 12288, 0, 12288,
     8192, 10922, 8192, 12288, 12288, 10922, 12288, 12288,
     16384, 10922, 16384, 12288, 0, 9557, 4096, 9557,
@@ -117,23 +117,23 @@ s16 batten_texcoord1_tbl[] __attribute__((aligned(32))) = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
+static GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 0}, {255, 255, 255, 153},
     {255, 255, 255, 127}, {255, 255, 255, 204},
 };
 #endif
 
 /* GX display lists (GX_TRIANGLESTRIP 0x98 with u8 position/normal/color/texcoord0/texcoord1 indices, 32-byte padded), drawn with GXCallDisplayList */
-u32 batten_dl_0_0[] __attribute__((aligned(32))) = {0x98000E1E, 0x00021E1E, 0x1F00021F, 0x1F190000, 0x19191A00, 0x041A1A14, 0x00001414, 0x15000415, 0x150F0000, 0x0F0F1000, 0x0410100A, 0x00000A0A, 0x0B00040B, 0x0B050000, 0x00000600, 0x01010100, 0x00020303, 0x01000202, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-u32 batten_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00021F1F, 0x20000220, 0x201A0004, 0x1A1A1B00, 0x051B1B15, 0x00041515, 0x16000516, 0x16100004, 0x10101100, 0x0511110B, 0x00040B0B, 0x0C00050C, 0x0C060001, 0x01010700, 0x03040401, 0x00020202, 0x02000205, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-u32 batten_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00022020, 0x21000221, 0x211B0005, 0x1B1B1C00, 0x041C1C16, 0x00051616, 0x17000417, 0x17110005, 0x11111200, 0x0412120C, 0x00050C0C, 0x0D00040D, 0x0D070003, 0x04040800, 0x01060602, 0x00020505, 0x03000207, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-u32 batten_dl_0_3[] __attribute__((aligned(32))) = {0x98000E21, 0x00022121, 0x22000222, 0x221C0004, 0x1C1C1D00, 0x001D1D17, 0x00041717, 0x18000018, 0x18120004, 0x12121300, 0x0013130D, 0x00040D0D, 0x0E00000E, 0x0E080001, 0x06060900, 0x00080803, 0x00020707, 0x04000209, 0x09000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
-s8 cloud_normal_tbl[] __attribute__((aligned(32))) = {
+static u32 batten_dl_0_0[] __attribute__((aligned(32))) = {0x98000E1E, 0x00021E1E, 0x1F00021F, 0x1F190000, 0x19191A00, 0x041A1A14, 0x00001414, 0x15000415, 0x150F0000, 0x0F0F1000, 0x0410100A, 0x00000A0A, 0x0B00040B, 0x0B050000, 0x00000600, 0x01010100, 0x00020303, 0x01000202, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 batten_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00021F1F, 0x20000220, 0x201A0004, 0x1A1A1B00, 0x051B1B15, 0x00041515, 0x16000516, 0x16100004, 0x10101100, 0x0511110B, 0x00040B0B, 0x0C00050C, 0x0C060001, 0x01010700, 0x03040401, 0x00020202, 0x02000205, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 batten_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00022020, 0x21000221, 0x211B0005, 0x1B1B1C00, 0x041C1C16, 0x00051616, 0x17000417, 0x17110005, 0x11111200, 0x0412120C, 0x00050C0C, 0x0D00040D, 0x0D070003, 0x04040800, 0x01060602, 0x00020505, 0x03000207, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static u32 batten_dl_0_3[] __attribute__((aligned(32))) = {0x98000E21, 0x00022121, 0x22000222, 0x221C0004, 0x1C1C1D00, 0x001D1D17, 0x00041717, 0x18000018, 0x18120004, 0x12121300, 0x0013130D, 0x00040D0D, 0x0E00000E, 0x0E080001, 0x06060900, 0x00080803, 0x00020707, 0x04000209, 0x09000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+static s8 cloud_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64,
 };
 
 #if VERSION >= VERSION_JP
-GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
+static GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
 };
@@ -141,18 +141,18 @@ GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
 
 /** The round cloud model's four display lists. */
 #if VERSION >= VERSION_JP
-void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
+static void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
 #endif
 
 /** Size in 32-byte units of each of the round cloud model's four display lists. */
 #if VERSION >= VERSION_JP
-u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
-s8 batten_normal_tbl[] __attribute__((aligned(32))) = {
+static u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
+static s8 batten_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
-GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
+static GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 0}, {255, 255, 255, 153},
     {255, 255, 255, 127}, {255, 255, 255, 204},
 };
@@ -160,15 +160,15 @@ GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
 
 /** Size in 32-byte units of each of the round cloud model's four display lists. */
 #if VERSION <= VERSION_DEMO_JP
-u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
-s8 batten_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
+static u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
+static s8 batten_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 #endif
 
-void* batten_dl_0_tbl[] = {batten_dl_0_0, batten_dl_0_1, batten_dl_0_2, batten_dl_0_3};
+static void* batten_dl_0_tbl[] = {batten_dl_0_0, batten_dl_0_1, batten_dl_0_2, batten_dl_0_3};
 /** Size in 32-byte units of each of the X-shaped (batten) cloud model's four display lists. */
-u8 batten_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
+static u8 batten_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 /** Extra Z rotation in degrees of a cloud puff over its 31-frame cycle, swinging up to about 185. */
-u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61, 0x6B, 0x74, 0x7D, 0x86, 0x8F, 0x97, 0x9F, 0xA6, 0xAD, 0xB4, 0xB8, 0xB9, 0xB9, 0xB6, 0xB4, 0xB1, 0xAE, 0xAE, 0xAF, 0xB4};
+static u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61, 0x6B, 0x74, 0x7D, 0x86, 0x8F, 0x97, 0x9F, 0xA6, 0xAD, 0xB4, 0xB8, 0xB9, 0xB9, 0xB6, 0xB4, 0xB1, 0xAE, 0xAE, 0xAF, 0xB4};
 
 static void effKumokumoMain(EffectEntry* effect);
 static void effKumokumoDisp(CameraId cameraId, void* param);

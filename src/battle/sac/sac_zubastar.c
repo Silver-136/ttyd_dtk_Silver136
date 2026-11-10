@@ -142,7 +142,7 @@ static USER_FUNC(star_stone_appear) {
 }
 
 /** Waits until the star has reached its place at the top of the screen. */
-USER_FUNC(wait_star_stone_up) {
+static USER_FUNC(wait_star_stone_up) {
     return GetZubaStarPtr()->star.state == 4 ? 2 : 0;
 }
 
@@ -404,7 +404,7 @@ static void zubastar_disp2D(CameraId cam, void* param);
  * cheers the audience by its size and slashes three lines across the screen, which split the screen pieces.
  * A failed round or the fifth cut ends the game.
  */
-USER_FUNC(zubastar_main) {
+static USER_FUNC(zubastar_main) {
     ZubaStarWork* w = GetZubaStarPtr();
     Vec pts[4] = {{0.0f, 240.0f, 0.0f}, {304.0f, 240.0f, 0.0f}, {304.0f, -240.0f, 0.0f}, {0.0f, -240.0f, 0.0f}};
     s32 audience = BattleAudience_GetAudienceNum();
@@ -833,7 +833,7 @@ static void zubastar_capture(CameraId cam, void* param);
  * then throws every screen piece off the bottom with its own spin and arc (with a sound) and draws them;
  * finishes once all pieces have fallen.
  */
-USER_FUNC(zubastar_bomb) {
+static USER_FUNC(zubastar_bomb) {
     ZubaStarWork* w = GetZubaStarPtr();
     const char* sfx;
     s32 i;
@@ -908,13 +908,13 @@ USER_FUNC(zubastar_bomb) {
 }
 
 /** Clears the Supernova work at the start of the move. */
-USER_FUNC(zubastar_init) {
+static USER_FUNC(zubastar_init) {
     memset(GetZubaStarPtr(), 0, sizeof(ZubaStarWork));
     return 2;
 }
 
 /** Frees the star effect and its stardust, every screen piece and the screen capture at the end of the move. */
-USER_FUNC(zubastar_end) {
+static USER_FUNC(zubastar_end) {
     ZubaStarWork* w = GetZubaStarPtr();
     s32 i;
     effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);

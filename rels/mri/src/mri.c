@@ -111,7 +111,7 @@ EvtWord evt_mri_door_naname_open_pure[52];
 EvtWord evt_mri_door_naname_open[10];
 EvtWord evt_mri_door_naname_close_pure[61];
 EvtWord evt_mri_door_naname_close[10];
-EvtWord _ueki_anime[64];
+static EvtWord _ueki_anime[64];
 EvtWord mri_ueki_entry[32];
 EvtWord mri_puni_save[6];
 s32 mri_itemsel_table[2];
@@ -359,7 +359,7 @@ USER_FUNC(evt_mri_door_naname_func) {
  * rustles the map object in LW(2) left and right with a grass sound,
  * then spawns the follow-up script in LW(10) if there is one.
  */
-EVT_BEGIN(_ueki_anime)
+static EVT_BEGIN(_ueki_anime)
     CALL(evt_mapobj_get_position, LW(2), LW(4), LW(5), LW(6))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(4), LW(5), LW(6), 0)
     CALL(evt_mapobj_trans, 1, LW(2), 2, 0, 0)

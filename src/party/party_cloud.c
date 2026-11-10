@@ -29,7 +29,7 @@ typedef enum CloudUseState {
     CLOUD_USE_CLEANUP = 20,
 } CloudUseState;
 
-Vec cloud_at;
+static Vec cloud_at;
 
 #include "driver/hitdrv.h"
 #include "driver/effdrv.h"

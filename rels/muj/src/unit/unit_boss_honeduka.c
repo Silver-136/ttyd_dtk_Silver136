@@ -21,7 +21,7 @@ static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
-EvtWord honeduka_damage_sub_event[14];
+static EvtWord honeduka_damage_sub_event[14];
 static EvtWord wait_event[6];
 
 /**
@@ -163,7 +163,7 @@ EVT_END()
  * mode2_honeduka_damage_event (data tag 70 on the early demos, 71 later;
  * the tag number differs by version), then returns to waiting.
  */
-EVT_BEGIN(honeduka_damage_sub_event)
+static EVT_BEGIN(honeduka_damage_sub_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OWNER, LW(3))
 #if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_RunDataEventChild, LW(3), 70)

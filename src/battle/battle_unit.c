@@ -25,7 +25,7 @@
  * Items an enemy can use in battle (attack, status and healing items; 0 ends the list). Besides badges, only
  * these pass BtlUnit_EnemyItemCanUseCheck, which decides whether an enemy may be given an item.
  */
-s32 _enemy_can_use_item_table[] = {
+static s32 _enemy_can_use_item_table[] = {
     ITEM_THUNDER_BOLT, ITEM_FIRE_FLOWER, ITEM_POW_BLOCK, ITEM_THUNDER_RAGE, ITEM_SHOOTING_STAR, ITEM_ICE_STORM,
     ITEM_EARTH_QUAKE, ITEM_HP_DRAIN_ITEM, ITEM_SLEEPY_SHEEP, ITEM_STOPWATCH, ITEM_DIZZY_DIAL, ITEM_MINI_MR_MINI,
     ITEM_MR_SOFTENER, ITEM_RUIN_POWDER, ITEM_POWER_PUNCH, ITEM_COURAGE_SHELL, ITEM_BOOS_SHEET, ITEM_VOLT_SHROOM,

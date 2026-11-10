@@ -39,9 +39,9 @@ static BattleWeapon weapon_majolyne_kagenuke_attack1;
 static BattleWeapon weapon_majolyne_blizzard_attack1;
 static BattleWeapon weapon_majolyne_powder_attack1;
 static BattleWeapon weapon_majolyne_powder_attack2;
-BattleWeapon weapon_majolyne_powder_attack3;
-BattleWeapon weapon_majolyne_powder_attack4;
-BattleWeapon weapon_majolyne_powder_attack5;
+static BattleWeapon weapon_majolyne_powder_attack3;
+static BattleWeapon weapon_majolyne_powder_attack4;
+static BattleWeapon weapon_majolyne_powder_attack5;
 static EvtWord majolyne_down[19];
 static EvtWord majolyne_up[27];
 static EvtWord majo3_zoom[25];
@@ -363,7 +363,7 @@ static BattleWeapon weapon_majolyne_powder_attack2 = {
 };
 
 /** Weapon of Beldam's poison powder: inflicts Poison. */
-BattleWeapon weapon_majolyne_powder_attack3 = {
+static BattleWeapon weapon_majolyne_powder_attack3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -407,7 +407,7 @@ BattleWeapon weapon_majolyne_powder_attack3 = {
 };
 
 /** Weapon of Beldam's powder that slows its target: inflicts Slow. */
-BattleWeapon weapon_majolyne_powder_attack4 = {
+static BattleWeapon weapon_majolyne_powder_attack4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -451,7 +451,7 @@ BattleWeapon weapon_majolyne_powder_attack4 = {
 };
 
 /** Weapon of Beldam's powder that speeds its target up: inflicts Fast. */
-BattleWeapon weapon_majolyne_powder_attack5 = {
+static BattleWeapon weapon_majolyne_powder_attack5 = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description

@@ -104,7 +104,7 @@ s32 mario_status_max_table[] = {200, 200, 99};
 #endif
 
 //.data
-WinMgrDesc select_desc[] = {
+static WinMgrDesc select_desc[] = {
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp},
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3},
@@ -116,26 +116,26 @@ WinMgrDesc select_desc[] = {
 };
 
 /** Windows of the partner selection menu: the list, the side window and the help box. */
-WinMgrDesc select_party_desc[] = {
+static WinMgrDesc select_party_desc[] = {
     {0, 4, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_party},
     {2, 0, 8, -280, 120, 240, 69, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3_party},
 };
 
 /** Windows of the Mario status selection menu (HP, FP, BP): the list, the side window and the help box. */
-WinMgrDesc select_mario_desc[] = {
+static WinMgrDesc select_mario_desc[] = {
     {0, 5, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_mario},
     {2, 0, 8, -280, 120, 240, 69, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3_mario},
 };
 
 /** Windows of the menu type drawn by select_disp_luigi: the list and the side window (no help box). */
-WinMgrDesc select_luigi_desc[] = {
+static WinMgrDesc select_luigi_desc[] = {
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_luigi},
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
 };
 
-WinMgrDesc select_johoya_perfect_desc[] = {
+static WinMgrDesc select_johoya_perfect_desc[] = {
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_luigi},
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
 };
@@ -144,7 +144,7 @@ WinMgrDesc select_johoya_perfect_desc[] = {
  * Window set (count and descriptors) of each selection menu type,
  * indexed by the type passed to winMgrSelectEntry.
  */
-WinMgrSelectTbl select_desc_tbl[] = {
+static WinMgrSelectTbl select_desc_tbl[] = {
     {3, select_desc},
     {3, select_desc},
     {3, select_desc},

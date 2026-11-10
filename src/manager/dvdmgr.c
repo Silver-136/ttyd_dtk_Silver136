@@ -15,9 +15,9 @@ OSThread dvdmgr_thread;
 static u8 stack[0x4000];
 
 //.sbss
-DVDEntry* dvdq;
+static DVDEntry* dvdq;
 static DVDMgrCallback _callback;
-BOOL dvdmgr_thread_on;
+static BOOL dvdmgr_thread_on;
 
 /** Body of the DVD manager thread: services the read queue once and yields, forever. */
 static void* proc_main(void* param) {

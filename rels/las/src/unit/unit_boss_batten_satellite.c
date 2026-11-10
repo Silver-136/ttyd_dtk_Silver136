@@ -17,7 +17,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-s32 bts_x_flag_data;
+static s32 bts_x_flag_data;
 
 USER_FUNC(bts_x_flag_get);
 static USER_FUNC(bts_wariai_enzan_0f);
@@ -27,14 +27,14 @@ static USER_FUNC(bts_wariai_enzan_1f_intpl);
 static USER_FUNC(bts_wariai_enzan_1f);
 static USER_FUNC(bts_wariai_enzan_1);
 
-BattleWeapon weapon_batten_satellite_attack;
+static BattleWeapon weapon_batten_satellite_attack;
 BattleUnitKind unit_boss_batten_satellite;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[15];
-EvtWord dmg_counter_event[149];
+static EvtWord dmg_counter_event[149];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[30];
 static EvtWord entry_event[2];
@@ -42,11 +42,11 @@ static EvtWord damage_event[10];
 static EvtWord phase_event[2];
 static EvtWord dead_event[2];
 static EvtWord attack_event[10];
-EvtWord batten_satellite_attack_attack_event[304];
+static EvtWord batten_satellite_attack_attack_event[304];
 static EvtWord wait_event[6];
 
 /** Weapon of Grodus X's attack: damage 4. */
-BattleWeapon weapon_batten_satellite_attack = {
+static BattleWeapon weapon_batten_satellite_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -261,7 +261,7 @@ static BattleDataEntry data_table[] = {
  * (damage pose) alongside, and with fall acceleration 1 is knocked 25 back and 25 up over 10 frames.
  * Unless the hit knocked it out (without a revival), it then flies back home over 42 frames.
  */
-EVT_BEGIN(dmg_counter_event)
+static EVT_BEGIN(dmg_counter_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     SWITCH(LW(0))
         CASE_EQUAL(43)
@@ -370,7 +370,7 @@ EVT_END()
  * It plays pose F_1, picks a target, declares the attack and pays its cost,
  * and plays SFX_BOSS_SATELLITE_ATTACK1; if no target was found it ends, flustered if confused.
  */
-EVT_BEGIN(batten_satellite_attack_attack_event)
+static EVT_BEGIN(batten_satellite_attack_attack_event)
     // The satellite shows its F_1 pose and looks for a target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
     WAIT_MS(400)

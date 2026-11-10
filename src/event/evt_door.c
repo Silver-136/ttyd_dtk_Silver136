@@ -52,23 +52,23 @@ typedef struct HouseWork {
     Vec out;                // 0x10
 } HouseWork;
 
-s32 DoorFLAG;
-s32 door_mapflag;
+static s32 DoorFLAG;
+static s32 door_mapflag;
 
 EvtWord door_open_se[151];
 EvtWord door_close_se[151];
 EvtWord door_down_se[33];
 EvtWord house_open_se[32];
-EvtWord evt_dark[34];
-EvtWord evt_dark2[34];
+static EvtWord evt_dark[34];
+static EvtWord evt_dark2[34];
 static EvtWord evt_light[30];
-EvtWord evt_light2[30];
+static EvtWord evt_light2[30];
 EvtWord door_up_se[2];
 EvtWord house_close_se[4];
-EvtWord in_houseanim[80];
-EvtWord out_houseanim[72];
-EvtWord in_dooranim[134];
-EvtWord out_dooranim[121];
+static EvtWord in_houseanim[80];
+static EvtWord out_houseanim[72];
+static EvtWord in_dooranim[134];
+static EvtWord out_dooranim[121];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord house_in[];
@@ -288,7 +288,7 @@ EVT_BEGIN(house_close_se)
 EVT_END()
 #endif
 
-EVT_BEGIN(evt_dark)
+static EVT_BEGIN(evt_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -302,7 +302,7 @@ EVT_BEGIN(evt_dark)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_dark2)
+static EVT_BEGIN(evt_dark2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -330,7 +330,7 @@ static EVT_BEGIN(evt_light)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_light2)
+static EVT_BEGIN(evt_light2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -355,7 +355,7 @@ EVT_BEGIN(house_close_se)
 EVT_END()
 #endif
 
-EVT_BEGIN(in_houseanim)
+static EVT_BEGIN(in_houseanim)
     WAIT_MS(500)
     CALL(animation, LW(10), LW(0), LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -381,7 +381,7 @@ EVT_BEGIN(in_houseanim)
     RETURN
 EVT_END()
 
-EVT_BEGIN(out_houseanim)
+static EVT_BEGIN(out_houseanim)
     CALL(animation, LW(10), LW(0), LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         BEGIN_INLINE_EVENT
@@ -406,7 +406,7 @@ EVT_BEGIN(out_houseanim)
     RETURN
 EVT_END()
 
-EVT_BEGIN(in_dooranim)
+static EVT_BEGIN(in_dooranim)
     CALL(door_group, LW(10), LW(9))
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, LW(9), LW(2), LW(3), LW(4))
@@ -446,7 +446,7 @@ EVT_BEGIN(in_dooranim)
     RETURN
 EVT_END()
 
-EVT_BEGIN(out_dooranim)
+static EVT_BEGIN(out_dooranim)
     CALL(door_group, LW(10), LW(9))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)

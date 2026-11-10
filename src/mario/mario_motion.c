@@ -81,7 +81,7 @@ BOOL marioCreviceWallChk(Vec pos);
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs
  * each frame, an unused slot and the cleanup run when Mario leaves the motion; marioMotion calls through it.
  */
-MarioMotTblEntry marioMotTbl[] = {
+static MarioMotTblEntry marioMotTbl[] = {
     {mot_stay, NULL, mot_stay_post},
     {mot_walk, NULL, NULL},
     {mot_dash, NULL, NULL},

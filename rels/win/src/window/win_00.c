@@ -33,16 +33,16 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(item_check_necklace_exist);
-USER_FUNC(win_item_move_3d_position);
-USER_FUNC(mariowalk_wait);
+static USER_FUNC(item_check_necklace_exist);
+static USER_FUNC(win_item_move_3d_position);
+static USER_FUNC(mariowalk_wait);
 
 static EvtWord vivian_init[37];
 static EvtWord vivian_talk[8];
 static EvtWord maririn_init[19];
-EvtWord maririn_talk[8];
-EvtWord majorin_init[19];
-EvtWord majorin_talk[8];
+static EvtWord maririn_talk[8];
+static EvtWord majorin_init[19];
+static EvtWord majorin_talk[8];
 static EvtWord fabio_init[21];
 static EvtWord fabio_talk[26];
 static EvtWord kizayarou_regl[19];
@@ -50,20 +50,20 @@ static EvtWord kizayarou_talk[8];
 static EvtWord kizayarou_init[38];
 static NpcSetupInfo npcEnt[5];
 static BeroEntry bero_entry_data[3];
-EvtWord witchtrio_momeru[880];
-EvtWord majorin_have_picture[25];
+static EvtWord witchtrio_momeru[880];
+static EvtWord majorin_have_picture[25];
 EvtWord witchtrio_picture[533];
-EvtWord mario_vs_witchtrio[554];
-EvtWord get_necklace[115];
-EvtWord witchtrio_lose_item[19];
-EvtWord witchtrio_mess_vivi[8];
-EvtWord witchtrio_mess_mari[8];
+static EvtWord mario_vs_witchtrio[554];
+static EvtWord get_necklace[115];
+static EvtWord witchtrio_lose_item[19];
+static EvtWord witchtrio_mess_vivi[8];
+static EvtWord witchtrio_mess_mari[8];
 EvtWord witchtrio_lose[563];
 static EvtWord ki_data_evt_01[20];
 static TreeAccess tree_access_data[10];
-EvtWord iri_28_enemy_all_dead[148];
-EvtWord iri_28_enemy_dead[13];
-EvtWord iri_28_init[60];
+static EvtWord iri_28_enemy_all_dead[148];
+static EvtWord iri_28_enemy_dead[13];
+static EvtWord iri_28_init[60];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord win_00_init_evt[];
@@ -110,7 +110,7 @@ static EVT_BEGIN(maririn_init)
 EVT_END()
 
 /** Talk script of Marilyn, standing in the Boggly Woods clearing: one line, "stg2_win_e01_17". */
-EVT_BEGIN(maririn_talk)
+static EVT_BEGIN(maririn_talk)
     CALL(evt_msg_print, 0, STRING("stg2_win_e01_17"), 0, STRING("me"))
     RETURN
 EVT_END()
@@ -120,7 +120,7 @@ EVT_END()
  * clears her battle-info flag and, during the Shadow Sirens' first appearance (STG2_01 to STG2_07),
  * moves her to (-455, 0, -30).
  */
-EVT_BEGIN(majorin_init)
+static EVT_BEGIN(majorin_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_01_A_SIREN_ARGUMENT, STG2_07_MARIO_VS_SHADOW_SIRENS)
@@ -130,7 +130,7 @@ EVT_BEGIN(majorin_init)
 EVT_END()
 
 /** Talk script of Beldam: one line, "stg2_win_e01_16". */
-EVT_BEGIN(majorin_talk)
+static EVT_BEGIN(majorin_talk)
     CALL(evt_msg_print, 0, STRING("stg2_win_e01_16"), 0, STRING("me"))
     RETURN
 EVT_END()
@@ -296,7 +296,7 @@ static BeroEntry bero_entry_data[] = {
  * and Beldam snatches the necklace as punishment, leaving Vivian in tears (stg2_win_e01_00 to 14).
  * The story becomes STG2_01_A_SIREN_ARGUMENT.
  */
-EVT_BEGIN(witchtrio_momeru)
+static EVT_BEGIN(witchtrio_momeru)
     // The three Sirens stand in the clearing, turned toward each other.
     CALL(evt_npc_set_position, STRING("ビビアン"), -535, 0, -30)
     CALL(evt_npc_set_position, STRING("マリリン"), -495, 0, -60)
@@ -537,7 +537,7 @@ EVT_END()
  * Background loop that keeps the "picture" item (the Mario poster) glued to Beldam's position,
  * 20 units above her, while she holds it.
  */
-EVT_BEGIN(majorin_have_picture)
+static EVT_BEGIN(majorin_have_picture)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("マジョリン"), LW(0), LW(1), LW(2))
         ADD(LW(1), 20)
@@ -681,7 +681,7 @@ EVT_END()
  * Then the fight starts (Beldam's battle info 4);
  * afterwards the story becomes STG2_07_MARIO_VS_SHADOW_SIRENS and witchtrio_lose starts.
  */
-EVT_BEGIN(mario_vs_witchtrio)
+static EVT_BEGIN(mario_vs_witchtrio)
     // The Sirens wait here until Mario walks west past x -325.
     CALL(evt_npc_set_ry, STRING("マジョリン"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -840,7 +840,7 @@ EVT_BEGIN(mario_vs_witchtrio)
     RETURN
 EVT_END()
 
-EVT_BEGIN(get_necklace)
+static EVT_BEGIN(get_necklace)
     CALL(item_check_necklace_exist)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
@@ -883,7 +883,7 @@ EVT_END()
  * Background loop that keeps the "necklace" item at the position of the hidden stand-in NPC ("ダミー", model c_majyorin)
  * while it bounces along the ground after Beldam flees.
  */
-EVT_BEGIN(witchtrio_lose_item)
+static EVT_BEGIN(witchtrio_lose_item)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("ダミー"), LW(0), LW(1), LW(2))
         CALL(evt_item_set_position, STRING("necklace"), LW(0), LW(1), LW(2))
@@ -893,13 +893,13 @@ EVT_BEGIN(witchtrio_lose_item)
 EVT_END()
 
 /** Message helper: Vivian says "stg2_win_e08_02". */
-EVT_BEGIN(witchtrio_mess_vivi)
+static EVT_BEGIN(witchtrio_mess_vivi)
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_02"), 0, STRING("ビビアン"))
     RETURN
 EVT_END()
 
 /** Message helper: Marilyn says "stg2_win_e08_01". */
-EVT_BEGIN(witchtrio_mess_mari)
+static EVT_BEGIN(witchtrio_mess_mari)
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_01"), 0, STRING("マリリン"))
     RETURN
 EVT_END()
@@ -1062,7 +1062,7 @@ static TreeAccess tree_access_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
-EVT_BEGIN(iri_28_enemy_all_dead)
+static EVT_BEGIN(iri_28_enemy_all_dead)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
     WAIT_MS(1000)
@@ -1108,7 +1108,7 @@ EVT_END()
  * Per-enemy death handler for trouble 28: runs the normal enemy death event,
  * counts the kill in GSW_TROUBLE_WORK_FIRST and starts iri_28_enemy_all_dead when the count reaches 3.
  */
-EVT_BEGIN(iri_28_enemy_dead)
+static EVT_BEGIN(iri_28_enemy_dead)
     CALL_CHILD(enemy_common_dead_event)
     ADD(GSW_TROUBLE_WORK(0), 1)
     IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 3)
@@ -1117,7 +1117,7 @@ EVT_BEGIN(iri_28_enemy_dead)
     RETURN
 EVT_END()
 
-EVT_BEGIN(iri_28_init)
+static EVT_BEGIN(iri_28_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
         SET_VALUE(GSW_TROUBLE_WORK(0), 0)
 #if VERSION <= VERSION_DEMO_JP
@@ -1205,7 +1205,7 @@ EVT_BEGIN(win_00_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(mariowalk_wait) {
+static USER_FUNC(mariowalk_wait) {
     return !(marioGetPtr()->flags & MARIO_FLAG_FORCED_MOVEMENT);
 }
 
@@ -1213,7 +1213,7 @@ USER_FUNC(mariowalk_wait) {
  * Script helper: slides the named item (args[0]) from its current position to (args[1], args[2], args[3]) over
  * args[4] ms using interpolation mode args[5], plus a y offset args[6]; blocks until done.
  */
-USER_FUNC(win_item_move_3d_position) {
+static USER_FUNC(win_item_move_3d_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
     f32 x = evtGetValue(event, args[1]);
@@ -1251,7 +1251,7 @@ USER_FUNC(win_item_move_3d_position) {
  * Script helper: blocks while the "necklace" item exists and is still in use,
  * so scenes wait until it has been picked up or removed.
  */
-USER_FUNC(item_check_necklace_exist) {
+static USER_FUNC(item_check_necklace_exist) {
     ItemEntry* item = itemNameToPtr("necklace");
 
     if (item != NULL && itemFlag(item, ITEM_FLAG_ACTIVE)) {

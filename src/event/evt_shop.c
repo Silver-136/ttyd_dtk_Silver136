@@ -43,7 +43,7 @@
 
 //.sbss
 static ShopWork* _wp;
-char mapname[16];
+static char mapname[16];
 
 static void list_disp(WinMgrEntry* entry);
 static void title_disp(WinMgrEntry* entry);
@@ -62,8 +62,8 @@ static USER_FUNC(get_value);
  */
 
 static WinMgrDesc window_desc[3];
-ShopPoint shopPointList[11];
-WinMgrDesc list_desc[3];
+static ShopPoint shopPointList[11];
+static WinMgrDesc list_desc[3];
 static EvtWord buy_evt[VERSION_PICK(326, 366)];
 EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
@@ -98,7 +98,7 @@ static WinMgrDesc window_desc[] = {
  * and 300 Gold Bar x3 (the point count then resets). Ends with -1.
  * Read by the prize checks and the Shop Prizes list.
  */
-ShopPoint shopPointList[] = {
+static ShopPoint shopPointList[] = {
     {10, ITEM_MUSHROOM},
     {20, ITEM_ICE_STORM},
     {30, ITEM_SUPER_SHROOM},
@@ -116,7 +116,7 @@ ShopPoint shopPointList[] = {
  * Windows of the Shop Prizes list ("Just checking points..."): the title,
  * the prize list and the shop point count.
  */
-WinMgrDesc list_desc[] = {
+static WinMgrDesc list_desc[] = {
     {0, 0, 8, -280, 160, 210, 80, {0x2B, 0xA4, 0xFF, 0xFF}, NULL, title_disp},
     {0, 3, 8, -60, 160, 340, 300, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, list_disp},
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, point_disp},

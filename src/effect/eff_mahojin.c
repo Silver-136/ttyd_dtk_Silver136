@@ -14,7 +14,7 @@
 static void effMahojinMain(EffectEntry* effect);
 static void effMahojinDisp(CameraId cameraId, void* payload);
 
-s32 mahojin_rate;
+static s32 mahojin_rate;
 
 /**
  * Animation names for the seven star pieces around the magic circle, three per piece:

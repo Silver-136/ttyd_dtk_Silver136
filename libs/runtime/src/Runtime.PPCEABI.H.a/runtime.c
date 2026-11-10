@@ -105,7 +105,7 @@ done:
     blr
 }
 
-asm void __save_fpr(void) {
+static asm void __save_fpr(void) {
     nofralloc
 entry _savefpr_14
     stfd f14, -0x90(r11)
@@ -146,7 +146,7 @@ entry _savefpr_31
     blr
 }
 
-asm void __restore_fpr(void) {
+static asm void __restore_fpr(void) {
     nofralloc
 entry _restfpr_14
     lfd f14, -0x90(r11)
@@ -187,7 +187,7 @@ entry _restfpr_31
     blr
 }
 
-asm void __save_gpr(void) {
+static asm void __save_gpr(void) {
     nofralloc
 entry _savegpr_14
     stw r14, -0x48(r11)
@@ -228,7 +228,7 @@ entry _savegpr_31
     blr
 }
 
-asm void __restore_gpr(void) {
+static asm void __restore_gpr(void) {
     nofralloc
 entry _restgpr_14
     lwz r14, -0x48(r11)

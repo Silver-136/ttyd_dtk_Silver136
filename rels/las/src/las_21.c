@@ -23,7 +23,7 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(set_mobj_y_position);
+static USER_FUNC(set_mobj_y_position);
 static USER_FUNC(set_party_y_pos);
 
 static EvtWord w_door_close[22];
@@ -34,9 +34,9 @@ static EvtWord e2_door_close[22];
 static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[5];
 static BeroEntry w_bero_mapchg[1];
-EvtWord floatblk_stop_se[47];
-EvtWord floatblk_shake[27];
-EvtWord floatblk_evt[336];
+static EvtWord floatblk_stop_se[47];
+static EvtWord floatblk_shake[27];
+static EvtWord floatblk_evt[336];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord floatblk21_1_evt[];
@@ -234,7 +234,7 @@ static BeroEntry w_bero_mapchg[] = {
  * Event script: plays the stop sound of a floating block (LW(15)) when it reaches its end height;
  * playback tests the descending flag LF(1), not the big-block flag computed in LF(0).
  */
-EVT_BEGIN(floatblk_stop_se)
+static EVT_BEGIN(floatblk_stop_se)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
     CALL(evt_mobj_get_kindname, LW(15), LW(3))
     SET_VALUE(LF(0), 0)
@@ -257,7 +257,7 @@ EVT_END()
  * Event script: shakes the camera for a moment (strength easing from 0.01 down to 0.003)
  * when a floating block starts moving and when it lands after descending.
  */
-EVT_BEGIN(floatblk_shake)
+static EVT_BEGIN(floatblk_shake)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
@@ -276,7 +276,7 @@ EVT_END()
  * applies carry offsets to Mario and the partner standing on it while descending,
  * reverses if one of them hits its underside while it is coming down, and shakes the camera when it lands.
  */
-EVT_BEGIN(floatblk_evt)
+static EVT_BEGIN(floatblk_evt)
     SET_VALUE(LW(15), LW(0))
     SET_VALUE(LW(14), LW(1))
     SET_VALUE(LW(13), LW(2))
@@ -562,7 +562,7 @@ static USER_FUNC(set_party_y_pos) {
 }
 
 /** Script helper: sets the Y of the map object named args[0] to args[1] and recomputes its matrix. */
-USER_FUNC(set_mobj_y_position) {
+static USER_FUNC(set_mobj_y_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);

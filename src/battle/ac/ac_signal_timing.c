@@ -60,10 +60,10 @@ typedef enum SignalTimingOutput {
  * and the frames a signal stays answerable by difficulty (the second table when params[1] is 1).
  * Used by Vivian's Shade Fist, Flurrie's Dodgy Fog and Bobbery's Hold Fast.
  */
-u32 _button_table_4dir[4] = {BATTLE_PAD_STICK_UP, BATTLE_PAD_STICK_DOWN, BATTLE_PAD_STICK_LEFT, BATTLE_PAD_STICK_RIGHT};
-u32 _button_table_abxy[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
-s32 ac_signaltiming_ok_frame_range[7] = {20, 16, 12, 10, 6, 4, 2};
-s32 ac_signaltiming_ok_frame_range_2[7] = {30, 30, 30, 30, 25, 20, 15};
+static u32 _button_table_4dir[4] = {BATTLE_PAD_STICK_UP, BATTLE_PAD_STICK_DOWN, BATTLE_PAD_STICK_LEFT, BATTLE_PAD_STICK_RIGHT};
+static u32 _button_table_abxy[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
+static s32 ac_signaltiming_ok_frame_range[7] = {20, 16, 12, 10, 6, 4, 2};
+static s32 ac_signaltiming_ok_frame_range_2[7] = {30, 30, 30, 30, 25, 20, 15};
 
 static void actionCommandDisp(f32 x, f32 y);
 

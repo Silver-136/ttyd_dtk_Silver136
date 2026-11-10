@@ -32,7 +32,7 @@ static EvtWord out_evt2[110];
 #endif
 
 static BeroEntry bero_entry_data[5];
-EvtWord gra_04_tree_open_evt[41];
+static EvtWord gra_04_tree_open_evt[41];
 static const char* fukitobashi_tbl[6];
 EvtWord gra_04_init_evt[64];
 
@@ -238,7 +238,7 @@ static BeroEntry bero_entry_data[] = {
  * plays a short jingle, waits until Mario's partner is no longer in use,
  * opens the w_bero_1 exit and advances the story to STG4_06_TREE_TRUNK.
  */
-EVT_BEGIN(gra_04_tree_open_evt)
+static EVT_BEGIN(gra_04_tree_open_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))

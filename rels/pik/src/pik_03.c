@@ -24,8 +24,8 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-EvtWord bero_in[45];
-EvtWord bero_out[53];
+static EvtWord bero_in[45];
+static EvtWord bero_out[53];
 static BeroEntry bero_data[2];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -41,7 +41,7 @@ EvtWord pik_03_init_evt[113];
  * places Mario and the partner at the entrance and walks them forward into the room with the letter box off,
  * then turns on the case events for the entrance. Returns 1 in LW(0).
  */
-EVT_BEGIN(bero_in)
+static EVT_BEGIN(bero_in)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, 660)
@@ -64,7 +64,7 @@ EVT_END()
  * walks Mario back out of the room and changes map to pik_02 at h_bero while the partner follows.
  * Returns 1 in LW(0).
  */
-EVT_BEGIN(bero_out)
+static EVT_BEGIN(bero_out)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_yoshi_ride, 0, 0)

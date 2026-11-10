@@ -60,27 +60,27 @@ typedef struct SenkaronWork {
     s32 hammerFrame;
     Senkaron* sk;
 } SenkaronWork;
-SenkaronWork* skwp;
+static SenkaronWork* skwp;
 static f32 randf(f32 min, f32 max);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
-USER_FUNC(chk_mario_ctrloff);
-USER_FUNC(get_mario_y_pos);
-USER_FUNC(get_party_y_pos);
-USER_FUNC(kurokaron_flag_check);
-USER_FUNC(kurokaron_get_move_pos);
-USER_FUNC(kurokaron_move_position);
+static USER_FUNC(chk_mario_ctrloff);
+static USER_FUNC(get_mario_y_pos);
+static USER_FUNC(get_party_y_pos);
+static USER_FUNC(kurokaron_flag_check);
+static USER_FUNC(kurokaron_get_move_pos);
+static USER_FUNC(kurokaron_move_position);
 static USER_FUNC(make_name);
-USER_FUNC(mario_land_on);
+static USER_FUNC(mario_land_on);
 USER_FUNC(party_hit);
-USER_FUNC(party_land_on);
+static USER_FUNC(party_land_on);
 static USER_FUNC(senkaronAttackStart);
 static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);
 static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
-USER_FUNC(set_mario_y_pos);
+static USER_FUNC(set_mario_y_pos);
 static USER_FUNC(set_party_y_pos);
 static void senkaron_ext_dispent(void);
 static void senkaron_ext_main(void);
@@ -91,12 +91,12 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
-EvtWord kurokaron_move[103];
+static EvtWord kurokaron_move[103];
 static ExtTexInfo senkaron_ext_entry_data[26];
 s32 move_check_list[20];
 static EvtWord senkaron_event[917];
-EvtWord kurokaron_init[29];
-EvtWord kurokaron_talk[13];
+static EvtWord kurokaron_init[29];
+static EvtWord kurokaron_talk[13];
 static NpcSetupInfo npcEnt[3];
 static EvtWord key_evt[5];
 static s32 key_tbl[2];
@@ -120,7 +120,7 @@ EvtWord las_05_init_evt[63];
  * Script helper: returns in args[1] the bits of kurokaron_move_flag selected by the mask args[0] (bit 2 is "Dark
  * Bones is running from Mario").
  */
-USER_FUNC(kurokaron_flag_check) {
+static USER_FUNC(kurokaron_flag_check) {
     EvtWord* args = event->args;
     s32 mask = evtGetValue(event, args[0]);
 
@@ -132,7 +132,7 @@ USER_FUNC(kurokaron_flag_check) {
  * Script helper: returns in args[0] and args[1] the X
  * and Z of the current waypoint of Dark Bones' patrol (kurokaron_move_list[kurokaron_move_index]).
  */
-USER_FUNC(kurokaron_get_move_pos) {
+static USER_FUNC(kurokaron_get_move_pos) {
     EvtWord* args = event->args;
 
     evtSetFloat(event, args[0], kurokaron_move_list[kurokaron_move_index][0]);
@@ -147,7 +147,7 @@ USER_FUNC(kurokaron_get_move_pos) {
  * if the current heading would run toward Mario.
  * Known quirk: when no point qualifies and the current one is not worse, the result stays uninitialised.
  */
-s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
+static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
     s32 cand[6];
     f32 base;
     f32 diff;
@@ -229,7 +229,7 @@ u16 kurokaron_run_cnt = 0;
  * if Mario is within 100 units it moves directly away from him (or along the edge),
  * otherwise it picks a new waypoint once via _kurokaron_run_away. Returns 1 when a new waypoint was chosen.
  */
-s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario) {
+static s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario) {
     static s32 flag = 0;
     static s32 count = 0;
     f32 angle;
@@ -289,7 +289,7 @@ s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario) {
  * Advances Dark Bones' patrol index to the next waypoint,
  * forward or backward around the six points depending on kurokaron_move_flag bit 1.
  */
-void _kurokaron_next_move_index(void) {
+static void _kurokaron_next_move_index(void) {
     if (kurokaron_move_flag & 1) {
         if (kurokaron_move_index == 0) {
             kurokaron_move_index = 5;
@@ -309,7 +309,7 @@ void _kurokaron_next_move_index(void) {
  * and finishes when the waypoint is reached; it also plays footsteps.
  * Returns EVT_RETURN_DONE when a new waypoint is needed.
  */
-USER_FUNC(kurokaron_move_position) {
+static USER_FUNC(kurokaron_move_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -468,7 +468,7 @@ static void senkaron_ext_init(void) {
  * Marks bones that overlap in the same floor cell (sk.area) by setting flag 2 on the one farther from Mario,
  * so crowded bones get pushed apart.
  */
-void move_check(ExtdrvPose* pose, s32 idx) {
+static void move_check(ExtdrvPose* pose, s32 idx) {
     MarioWork* mario;
     Senkaron* sk;
     ExtdrvPose* pose2;
@@ -501,7 +501,7 @@ void move_check(ExtdrvPose* pose, s32 idx) {
 }
 
 /** Converts a bone's position to its floor cell index (40 unit cells, 29.5 per row) and stores it in sk[i].area. */
-void calc_area(s32 i, f32 x, f32 z) {
+static void calc_area(s32 i, f32 x, f32 z) {
     f32 fx = x - -570.0f;
     f32 fz = z - -270.0f;
     u16 iz;
@@ -518,7 +518,7 @@ void calc_area(s32 i, f32 x, f32 z) {
  * Checks whether the active partner (Koops shelling, Bobbery, or Flurrie's gale) hits a bone at (x, z);
  * returns 1 and writes the push direction (+1 or -1 in X) to *dir.
  */
-s32 party_hit_check(f32 x, f32 z, f32* dir) {
+static s32 party_hit_check(f32 x, f32 z, f32* dir) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     s32 hit = 0;
     s32 active = 0;
@@ -685,7 +685,7 @@ f32 kurokaron_move_list[6][2] = {
  * After 60 seconds (six ten-second periods) he gets slower
  * and waits longer between runs (speed GW(0) 70 to 50 and waits GW(1) 200 to 300).
  */
-EVT_BEGIN(kurokaron_move)
+static EVT_BEGIN(kurokaron_move)
     SET_VALUE(LW(3), 0)
     SET_FLOAT_VALUE(GW(0), FLOAT(70.0f))
     SET_VALUE(GW(1), 200)
@@ -1510,7 +1510,7 @@ static EVT_BEGIN(senkaron_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(kurokaron_init)
+static EVT_BEGIN(kurokaron_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_set_position, STRING("me"), 570, 0, 0)
         CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -1555,7 +1555,7 @@ static USER_FUNC(senkaronGetMarioPushedFlag) {
 }
 
 /** Script helper: returns Mario's Y position in args[0]. */
-USER_FUNC(get_mario_y_pos) {
+static USER_FUNC(get_mario_y_pos) {
     EvtWord* args = event->args;
 
     evtSetFloat(event, args[0], marioGetPtr()->position.y);
@@ -1563,7 +1563,7 @@ USER_FUNC(get_mario_y_pos) {
 }
 
 /** Script helper: sets Mario's Y position to args[0]. */
-USER_FUNC(set_mario_y_pos) {
+static USER_FUNC(set_mario_y_pos) {
     EvtWord* args = event->args;
     f32 y = evtGetFloat(event, args[0]);
 
@@ -1572,7 +1572,7 @@ USER_FUNC(set_mario_y_pos) {
 }
 
 /** Script helper: returns the active partner's Y position in args[0]. */
-USER_FUNC(get_party_y_pos) {
+static USER_FUNC(get_party_y_pos) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(partyCtrlNo);
 
@@ -1595,7 +1595,7 @@ static USER_FUNC(set_party_y_pos) {
 }
 
 /** Script helper: puts Mario on the floor if he is below Y 0. */
-USER_FUNC(mario_land_on) {
+static USER_FUNC(mario_land_on) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->position.y < 0.0f) {
@@ -1605,7 +1605,7 @@ USER_FUNC(mario_land_on) {
 }
 
 /** Script helper: puts the active partner on the floor if it is below Y 0. */
-USER_FUNC(party_land_on) {
+static USER_FUNC(party_land_on) {
     PartyEntry* party = partyGetPtr(partyCtrlNo);
 
     if (party != NULL && party->position.y < 0.0f) {
@@ -1615,7 +1615,7 @@ USER_FUNC(party_land_on) {
 }
 
 /** Script helper: returns in args[0] whether Mario's controls are currently off. */
-USER_FUNC(chk_mario_ctrloff) {
+static USER_FUNC(chk_mario_ctrloff) {
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], marioCtrlOffChk());
@@ -1646,7 +1646,7 @@ USER_FUNC(party_hit) {
  * and Dark Bones hunts Mario, and disables the talk interrupt on the NPC "me"
  * while the story is at the start of the Palace.
  */
-EVT_BEGIN(kurokaron_talk)
+static EVT_BEGIN(kurokaron_talk)
     SPAWN_EVENT(senkaron_event)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)

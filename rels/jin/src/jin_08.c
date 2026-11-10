@@ -29,12 +29,12 @@
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];
-EvtWord evt_roll_in[41];
+static EvtWord evt_roll_in[41];
 static BeroEntry bero_entry_data[3];
 static EvtWord evt_open[73];
 EvtWord evt_open_kagi[73];
 static EvtWord evt_unlock[11];
-EvtWord oumu_init[2];
+static EvtWord oumu_init[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord oumu_talk[];
@@ -83,7 +83,7 @@ EVT_END()
  * Exit-event style script that no door entry of this room uses (e_bero_2 has no exit event): Mario moves
  * 50 units west three times at decreasing speed; returns 1 in LW(0).
  */
-EVT_BEGIN(evt_roll_in)
+static EVT_BEGIN(evt_roll_in)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), -50)
@@ -207,7 +207,7 @@ static EVT_BEGIN(evt_unlock)
 EVT_END()
 
 /** Init script of the parrot (oumu) NPC; empty. */
-EVT_BEGIN(oumu_init)
+static EVT_BEGIN(oumu_init)
     RETURN
 EVT_END()
 

@@ -72,7 +72,7 @@ typedef struct SightWork {
     s32 count1;
     s32 count2;
 } SightWork;
-SightWork* sight_wp;
+static SightWork* sight_wp;
 // make_name's sprintf buffer.
 static char name[64];
 typedef struct BomAnim {
@@ -213,17 +213,17 @@ static s32 starstone_set_pos(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(starstone_set_pos);
 static s32 starstone_set_ry(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(starstone_set_ry);
-s32 taihou_r(EventEntry* event, BOOL isFirstCall);
+static s32 taihou_r(EventEntry* event, BOOL isFirstCall);
 static s32 yami_view(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(yami_view);
 static void ext_dispent(void);
 static void ext_main(void);
 static void ext_init(void);
 
-EvtWord evt_door_1[12];
+static EvtWord evt_door_1[12];
 static EvtWord evt_door_2[12];
 static EvtWord evt_wall[12];
-const char* door_npc[4];
+static const char* door_npc[4];
 static EvtWord door_open[9];
 static EvtWord door_close[10];
 DoorParam door;
@@ -239,9 +239,9 @@ EvtWord evt_bom_01_karakara[123];
 
 static ExtTexInfo ext_data[31];
 EvtWord evt_bom1000[15];
-EvtWord gamen_shake[8];
-EvtWord gamen_shake2[26];
-EvtWord mario_tobideru[54];
+static EvtWord gamen_shake[8];
+static EvtWord gamen_shake2[26];
+static EvtWord mario_tobideru[54];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord mario_shot[];
@@ -249,17 +249,17 @@ extern EvtWord mario_shot[];
 EvtWord mario_shot[160];
 #endif
 
-EvtWord effect_delete[11];
+static EvtWord effect_delete[11];
 static EvtWord mario_kemuri[29];
-EvtWord evt_depth[4];
-EvtWord cam_outside[48];
-EvtWord cam_inside[52];
-EvtWord cam_inside2[52];
+static EvtWord evt_depth[4];
+static EvtWord cam_outside[48];
+static EvtWord cam_inside[52];
+static EvtWord cam_inside2[52];
 static EvtWord party_damage_pose[52];
-EvtWord effect_1[84];
-EvtWord open_hatch[83];
+static EvtWord effect_1[84];
+static EvtWord open_hatch[83];
 static f32 spline_dt[9];
-const char* oh_data[8];
+static const char* oh_data[8];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_taihou[2440];
@@ -269,14 +269,14 @@ static EvtWord evt_taihou[2446];
 
 static EvtWord init_soncho[13];
 static EvtWord talk_soncho[24];
-EvtWord init_nitoro[8];
-EvtWord talk_nitoro[44];
-EvtWord init_pentrit[8];
-EvtWord talk_pentrit[44];
-EvtWord init_surary[8];
-EvtWord talk_surary[44];
-EvtWord init_murabito_d[8];
-EvtWord talk_murabito_d[44];
+static EvtWord init_nitoro[8];
+static EvtWord talk_nitoro[44];
+static EvtWord init_pentrit[8];
+static EvtWord talk_pentrit[44];
+static EvtWord init_surary[8];
+static EvtWord talk_surary[44];
+static EvtWord init_murabito_d[8];
+static EvtWord talk_murabito_d[44];
 static EvtWord init_murabito_e[8];
 static EvtWord talk_murabito_e[28];
 static EvtWord init_murabito_f[8];
@@ -294,7 +294,7 @@ static EvtWord musume_a_entry[26];
 static EvtWord musume_b_entry[26];
 static EvtWord musume_c_entry[26];
 static NpcSetupInfo npcEnt[7];
-EvtWord bom1000_minnnanokoe[21];
+static EvtWord bom1000_minnnanokoe[21];
 
 #if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2)
 static EvtWord minnnanokoe_evt[466];
@@ -310,7 +310,7 @@ EvtWord bom_01_init_evt[189];
  * scaled by (sx, sy) and rotated by rot degrees; a negative scale mirrors it.
  * Texture 0 is drawn in black with inverse texture alpha.
  */
-void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot) {
+static void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     Mtx trans;
     Mtx rotm;
@@ -368,7 +368,7 @@ void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot) {
  * Draws a number from the sight texture file one digit at a time, right-aligned:
  * digits glyphs starting at (x, y), at the given scale; the sign is ignored.
  */
-void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale) {
+static void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale) {
     GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
     GXTexObj obj;
     s32 i;
@@ -395,7 +395,7 @@ void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale) {
  * output (sound.samples), and running number readouts made from the render time and retrace count.
  * sight queues it only while the direction is not 5 (idle).
  */
-void disp_sight(CameraId camera, void* param) {
+static void disp_sight(CameraId camera, void* param) {
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
     s32 i;
@@ -551,7 +551,7 @@ s32 sight(EventEntry* event, BOOL isFirstCall) {
  * Script helper: sets the sight overlay's direction state to args[0] (0 to 3 are the arrows, 4 none lit,
  * 5 idle and hidden, 6 shut the overlay down).
  */
-s32 sight_dir(EventEntry* event, BOOL isFirstCall) {
+static s32 sight_dir(EventEntry* event, BOOL isFirstCall) {
     sight_wp->dir = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
@@ -560,7 +560,7 @@ s32 sight_dir(EventEntry* event, BOOL isFirstCall) {
  * Script helper: args[0] switches the bits in args[1] on
  * or off in the crowd work flags (bit 0 hides the crowd and mutes the Bob-omb hop sounds).
  */
-s32 bom_flag(EventEntry* event, BOOL isFirstCall) {
+static s32 bom_flag(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
     s32 mask = evtGetValue(event, args[1]);
@@ -578,7 +578,7 @@ s32 bom_flag(EventEntry* event, BOOL isFirstCall) {
  * Script helper: puts every crowd Bob-omb (Bom state 127) at a random spot high above the village
  * and switches them to the falling pose S_2, so they drift down as a slow rain of bombs.
  */
-s32 bom_fall(EventEntry* event, BOOL isFirstCall) {
+static s32 bom_fall(EventEntry* event, BOOL isFirstCall) {
     BomWork* wp = lp->address;
     ExtdrvPose* pose = extGetPosePtr();
     s32 i;
@@ -670,7 +670,7 @@ static void pose_change(s32 i, const char* name) {
  * Script helper: fills ext_data with the c_bom_sen (Bob-omb crowd) sprite frames for the cannon scene:
  * ten frames of "R_1" followed by twenty of "S_2".
  */
-s32 make_ext_table(EventEntry* event, BOOL isFirstCall) {
+static s32 make_ext_table(EventEntry* event, BOOL isFirstCall) {
     s32 i;
 
     memset(ext_data, 0, sizeof(ext_data));
@@ -692,7 +692,7 @@ s32 make_ext_table(EventEntry* event, BOOL isFirstCall) {
  * Door callback for the house door: LW(0) is the opening angle;
  * scales it by 0.5546875 and turns the door object s_ie_door around the Y axis.
  */
-EVT_BEGIN(evt_door_1)
+static EVT_BEGIN(evt_door_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
     CALL(evt_mapobj_rotate, 1, STRING("s_ie_door"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
     RETURN
@@ -713,7 +713,7 @@ static EVT_BEGIN(evt_wall)
 EVT_END()
 
 /** Actors that pass through the village house door during its scenes: General White and his crew. */
-const char* door_npc[] = {
+static const char* door_npc[] = {
     /*"ホワイト"*/"\203z\203\217\203C\203g",
     /*"ペントリット"*/"\203y\203\223\203g\203\212\203b\203g",
     /*"スラリー"*/"\203X\203\211\203\212\201[",
@@ -1163,13 +1163,13 @@ EVT_BEGIN(evt_bom1000)
 EVT_END()
 
 /** Small camera shake (amplitude 0.002) used while the floor and the cannon move. */
-EVT_BEGIN(gamen_shake)
+static EVT_BEGIN(gamen_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 0)
     RETURN
 EVT_END()
 
 /** Heavy camera shake that dies down in four steps (0.02, 0.01, 0.005, 0) of 100 each; the cannon's recoil. */
-EVT_BEGIN(gamen_shake2)
+static EVT_BEGIN(gamen_shake2)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 100)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 100)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 100)
@@ -1181,7 +1181,7 @@ EVT_END()
  * Moves Mario up and to the right along a 45 degree line from (400, 780) over 0.3 s,
  * with the partner trailing 30 units behind; Mario flying out of the cannon.
  */
-EVT_BEGIN(mario_tobideru)
+static EVT_BEGIN(mario_tobideru)
     CALL(evt_mario_set_pos, 400, 780, 0)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 400, 300)
     LABEL(0)
@@ -1243,7 +1243,7 @@ EVT_BEGIN(mario_shot)
 EVT_END()
 
 /** Removes the smoke, ripple and particle effects spawned by mario_shot. */
-EVT_BEGIN(effect_delete)
+static EVT_BEGIN(effect_delete)
     CALL(evt_eff_delete, STRING("kemuri"))
     CALL(evt_eff_delete, STRING("ripple"))
     CALL(evt_eff_delete, STRING("particle"))
@@ -1264,7 +1264,7 @@ static EVT_BEGIN(mario_kemuri)
 EVT_END()
 
 /** Starts the depth (screen blur) display; it runs until its script event is deleted. */
-EVT_BEGIN(evt_depth)
+static EVT_BEGIN(evt_depth)
     CALL(depth)
     RETURN
 EVT_END()
@@ -1273,7 +1273,7 @@ EVT_END()
  * Camera/map setup for being outside the house:
  * resets the blend colours, hides the interior (S_ie_naka) and shows the exterior wall.
  */
-EVT_BEGIN(cam_outside)
+static EVT_BEGIN(cam_outside)
     CALL(evt_map_set_blend, 0, 255, 255, 255, 255)
     CALL(evt_map_set_blend, 1, 255, 255, 255, 255)
     CALL(evt_map_blend_off, 0)
@@ -1290,7 +1290,7 @@ EVT_END()
  * sets the camera, darkens the blend colours, opens the door and hides the exterior wall (s_ie_kai)
  * so the inside can be seen.
  */
-EVT_BEGIN(cam_inside)
+static EVT_BEGIN(cam_inside)
     CALL(evt_cam3d_evt_set, -160, 125, -100, 10, 55, -427, 0, EASING_SINE_IN_OUT)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 0)
     CALL(evt_map_set_blend, 1, 0, 0, 0, 0)
@@ -1302,7 +1302,7 @@ EVT_BEGIN(cam_inside)
 EVT_END()
 
 /** Same as cam_inside with a different, closer camera position. */
-EVT_BEGIN(cam_inside2)
+static EVT_BEGIN(cam_inside2)
     CALL(evt_cam3d_evt_set, -93, 104, -250, 9, 62, -447, 0, EASING_SINE_IN_OUT)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 0)
     CALL(evt_map_set_blend, 1, 0, 0, 0, 0)
@@ -1340,7 +1340,7 @@ static EVT_BEGIN(party_damage_pose)
 EVT_END()
 
 /** Rings of dust puffs (kemuri_test) along the edges of a 440 by 440 square on the ground, one every 20 units. */
-EVT_BEGIN(effect_1)
+static EVT_BEGIN(effect_1)
     SET_VALUE(LW(0), -220)
     LOOP(22)
         CALL(evt_eff, 0, STRING("kemuri_test"), 2, LW(0), 5, -220, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
@@ -1360,7 +1360,7 @@ EVT_END()
  * Slides two hatch or shutter objects apart over half a second with a shutter sound and a screen shake.
  * LW(0) and LW(1) name the objects, LW(2) is 0 to slide along Z and anything else along X.
  */
-EVT_BEGIN(open_hatch)
+static EVT_BEGIN(open_hatch)
     CALL(evt_mapobj_get_position, LW(1), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_SHUTTER_OPEN1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
@@ -1393,7 +1393,7 @@ static f32 spline_dt[] = {
 };
 
 /** The cannon crew: each name with the message key of his drill call (stg7_bom_65_a to d). */
-const char* oh_data[] = {
+static const char* oh_data[] = {
     /*"\203j\203g\203\215"*/"\203j\203g\203\215", "stg7_bom_65_a",
     /*"\203y\203\223\203g\203\212\203b\203g"*/"\203y\203\223\203g\203\212\203b\203g", "stg7_bom_65_b",
     /*"\203X\203\211\203\212\201["*/"\203X\203\211\203\212\201[", "stg7_bom_65_c",
@@ -2109,7 +2109,7 @@ static EVT_BEGIN(talk_soncho)
 EVT_END()
 
 /** Init for the Bob-omb Nitoro: places him at (-120, 0, -220). */
-EVT_BEGIN(init_nitoro)
+static EVT_BEGIN(init_nitoro)
     CALL(evt_npc_set_position, STRING("me"), -120, 0, -220)
     RETURN
 EVT_END()
@@ -2118,7 +2118,7 @@ EVT_END()
  * Talk script for Nitoro: his line depends on story progress (an early visit before STG6_71_01,
  * before STG7_04_BACK_ONLINE, before the cannon, until the end of Chapter 8, and afterwards).
  */
-EVT_BEGIN(talk_nitoro)
+static EVT_BEGIN(talk_nitoro)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
         CALL(evt_msg_print, 0, STRING("stg7_bom_02_00"), 0, STRING("me"))
@@ -2135,13 +2135,13 @@ EVT_BEGIN(talk_nitoro)
 EVT_END()
 
 /** Init for the Bob-omb Pentrit: places him at (-150, 0, 130). */
-EVT_BEGIN(init_pentrit)
+static EVT_BEGIN(init_pentrit)
     CALL(evt_npc_set_position, STRING("me"), -150, 0, 130)
     RETURN
 EVT_END()
 
 /** Talk script for Pentrit: five story-progress dependent lines, in the same stages as Nitoro. */
-EVT_BEGIN(talk_pentrit)
+static EVT_BEGIN(talk_pentrit)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
         CALL(evt_msg_print, 0, STRING("stg7_bom_04_00"), 0, STRING("me"))
@@ -2158,13 +2158,13 @@ EVT_BEGIN(talk_pentrit)
 EVT_END()
 
 /** Init for the Bob-omb Surary: places him at a fixed spot in the village. */
-EVT_BEGIN(init_surary)
+static EVT_BEGIN(init_surary)
     CALL(evt_npc_set_position, STRING("me"), 152, 0, -188)
     RETURN
 EVT_END()
 
 /** Talk script for Surary: five story-progress dependent lines, in the same stages as Nitoro. */
-EVT_BEGIN(talk_surary)
+static EVT_BEGIN(talk_surary)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
         CALL(evt_msg_print, 0, STRING("stg7_bom_06_00"), 0, STRING("me"))
@@ -2181,13 +2181,13 @@ EVT_BEGIN(talk_surary)
 EVT_END()
 
 /** Init for the villager Bomb-hei D: places him at a fixed spot. */
-EVT_BEGIN(init_murabito_d)
+static EVT_BEGIN(init_murabito_d)
     CALL(evt_npc_set_position, STRING("me"), 175, 0, 210)
     RETURN
 EVT_END()
 
 /** Talk script for villager D: five story-progress dependent lines, in the same stages as Nitoro. */
-EVT_BEGIN(talk_murabito_d)
+static EVT_BEGIN(talk_murabito_d)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
         CALL(evt_msg_print, 0, STRING("stg7_bom_08_00"), 0, STRING("me"))
@@ -2496,7 +2496,7 @@ static NpcSetupInfo npcEnt[] = {
  * Script helper: tilts the cannon smoke (kemuri) and ripple effects 45 degrees so they leave along the barrel
  * when the cannon fires.
  */
-s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
+static s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
     f32 c = cos(0.7853981852531433);
     f32 s = sin(0.7853981852531433);
     f32 x;
@@ -2615,7 +2615,7 @@ static s32 make_name(EventEntry* event, BOOL isFirstCall) {
  * Script helper: fills ext_data with the c_bom_sen sprite frames for the cheering crowd:
  * ten "S_1" frames followed by twenty "R_1" frames.
  */
-s32 make_ext_table_minnnanokoe(EventEntry* event, BOOL isFirstCall) {
+static s32 make_ext_table_minnnanokoe(EventEntry* event, BOOL isFirstCall) {
     s32 i;
 
     memset(ext_data, 0, sizeof(ext_data));
@@ -2637,7 +2637,7 @@ s32 make_ext_table_minnnanokoe(EventEntry* event, BOOL isFirstCall) {
  * Extension-draw init for the cheering crowd of the final-battle scene:
  * places Bob-ombs in a grid of rows of 14 (30 units wide, 20 deep), all facing the same way in the "S_1" pose.
  */
-void ext_init_minnnanokoe(void) {
+static void ext_init_minnnanokoe(void) {
     s32 i;
     BomWork* wp;
     ExtdrvPose* pose;
@@ -2671,7 +2671,7 @@ void ext_init_minnnanokoe(void) {
  * Makes crowd Bob-omb i hop on the spot to height h over 20 frames,
  * and plays the "bombs together" sound for every fifth one (not during the Shadow Queen story step).
  */
-void jump_minnnanokoe(s32 i, f32 h) {
+static void jump_minnnanokoe(s32 i, f32 h) {
     BomWork* wp = lp->address;
     ExtdrvPose* pose = extGetPosePtr() + i;
 
@@ -2692,7 +2692,7 @@ void jump_minnnanokoe(s32 i, f32 h) {
  * Draw callback for the cheering crowd: draws each Bob-omb with the darkness TEV callback (envSetYami)
  * so they are lit like the stage.
  */
-void ext_disp_minnnanokoe(CameraId camera, void* param) {
+static void ext_disp_minnnanokoe(CameraId camera, void* param) {
     MapTevCallbackInfo yp;
     MapTevCallbackInfo* p = &yp;
     ExtdrvPose* pose = extGetPosePtr();
@@ -2718,7 +2718,7 @@ void ext_disp_minnnanokoe(CameraId camera, void* param) {
 }
 
 /** Queues ext_disp_minnnanokoe for the 3D camera each frame. */
-void ext_dispent_minnnanokoe(void) {
+static void ext_dispent_minnnanokoe(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp_minnnanokoe, NULL);
 }
 
@@ -2727,7 +2727,7 @@ void ext_dispent_minnnanokoe(void) {
  * args[0] and args[1] are updated (row group and a column that moves 4 or 8 places);
  * the chosen Bob-omb's X and Z come back through the next two arguments.
  */
-s32 bom1000_msg(EventEntry* event, BOOL isFirstCall) {
+static s32 bom1000_msg(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32* fa = args;
     s32 flag;
@@ -2757,7 +2757,7 @@ s32 bom1000_msg(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: makes a random crowd Bob-omb hop (height 10), unless it is already mid-hop. */
-s32 bom1000_jump(EventEntry* event, BOOL isFirstCall) {
+static s32 bom1000_jump(EventEntry* event, BOOL isFirstCall) {
     BomWork* wp = lp->address;
     s32 i = rand() % wp->count;
 
@@ -2840,7 +2840,7 @@ static s32 starstone_set_ry(EventEntry* event, BOOL isFirstCall) {
  * Spawns the cheering crowd: builds its frame table, adds a dummy c_bom_sen NPC below the map,
  * and registers 250 sprites with the crowd callbacks.
  */
-EVT_BEGIN(bom1000_minnnanokoe)
+static EVT_BEGIN(bom1000_minnnanokoe)
     CALL(make_ext_table_minnnanokoe)
     CALL(evt_npc_entry, STRING("dummy"), STRING("c_bom_sen"))
     CALL(evt_npc_set_position, STRING("dummy"), 0, -1000, 0)

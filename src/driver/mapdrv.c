@@ -30,13 +30,13 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
 typedef MapEntryAnimData MapAnim;
 
 //.bss
-MapError error_data[32];
+static MapError error_data[32];
 
 //.sbss
-GXColor paper_ambient;
-GXColor paperCraft_ambient;
-GXTexObj projTexObj;
-void* projTexImgRef;
+static GXColor paper_ambient;
+static GXColor paperCraft_ambient;
+static GXTexObj projTexObj;
+static void* projTexImgRef;
 Mtx projMtx;
 BOOL __mapdrv_make_dl;
 
@@ -44,12 +44,12 @@ BOOL __mapdrv_make_dl;
 BOOL disableMapDraw;
 #endif
 
-s32 error_count;
-BOOL error_flag;
-MapObject* current_mp;
-BOOL mapClipOffFlag;
-s32 activeGroup;
-MapWork* mapWork; // allocates two entries
+static s32 error_count;
+static BOOL error_flag;
+static MapObject* current_mp;
+static BOOL mapClipOffFlag;
+static s32 activeGroup;
+static MapWork* mapWork; // allocates two entries
 
 // Implementation forward declarations; definitions retain target order.
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
@@ -2271,10 +2271,10 @@ static void mapDispMapGrp_bbox(CameraId cam, void* payload) {
  */
 const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
 const GXTexMtx texmtx_tbl[10] = {GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9};
-const s32 texfmt_tbl[11] = {4, 5, 6, 14, 0, 1, 2, 3, 8, 9, 10};
-const s32 texwrap_tbl[3] = {GX_CLAMP, GX_REPEAT, GX_MIRROR};
-const s32 palfmt_tbl[2] = {1, 2};
-const GXLightID lightid_tbl[8] = {GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7};
+static const s32 texfmt_tbl[11] = {4, 5, 6, 14, 0, 1, 2, 3, 8, 9, 10};
+static const s32 texwrap_tbl[3] = {GX_CLAMP, GX_REPEAT, GX_MIRROR};
+static const s32 palfmt_tbl[2] = {1, 2};
+static const GXLightID lightid_tbl[8] = {GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7};
 // Macro, not inline: an inline test at the eight sites changes the object.
 #define MAP_CLIP_IN(v) ((v).z > -1.0f && (v).z < 0.0f && (v).x >= -1.0f && (v).x <= 1.0f && (v).y >= -1.0f && (v).y <= 1.0f)
 
@@ -3586,7 +3586,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
 }
 
 /** Vertex formats of map geometry (float positions, normals and texture coordinates, RGBA8 colours). */
-const GXVtxAttrFmtList attr_fmt[12] = {
+static const GXVtxAttrFmtList attr_fmt[12] = {
     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0},
     {GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0},
     {GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0},

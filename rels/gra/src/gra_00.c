@@ -37,14 +37,14 @@
 #include "data_tables.h"
 
 static USER_FUNC(cam_r);
-USER_FUNC(camera_yure);
+static USER_FUNC(camera_yure);
 static USER_FUNC(zoom);
 
-EvtWord evt_yabure_on[56];
-EvtWord evt_yabure_off[5];
-EvtWord evt_nameent[109];
-EvtWord name_seikai[682];
-EvtWord evt_machibuse[VERSION_PICK(666, 694)];
+static EvtWord evt_yabure_on[56];
+static EvtWord evt_yabure_off[5];
+static EvtWord evt_nameent[109];
+static EvtWord name_seikai[682];
+static EvtWord evt_machibuse[VERSION_PICK(666, 694)];
 static BeroEntry bero_entry_data[3];
 static NpcSetupInfo npcEnt[2];
 static TreeAccess tree_tbl[2];
@@ -60,7 +60,7 @@ EvtWord gra_00_init_evt[74];
  * Doopliss's torn-paper entrance: loads the torn-paper cutout (OFF_d_yabu_small) as an image,
  * plays the Doopliss (Lanpel) appear sound, shakes the camera for 20 frames and starts the tear animation.
  */
-EVT_BEGIN(evt_yabure_on)
+static EVT_BEGIN(evt_yabure_on)
     CALL(evt_paper_entry, STRING("OFF_d_yabu_small"))
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF4_LANPEL_APPEAR1"), -145, 270, -25, 0)
     BEGIN_INLINE_EVENT
@@ -78,7 +78,7 @@ EVT_BEGIN(evt_yabure_on)
 EVT_END()
 
 /** Releases the image entry created by evt_yabure_on once the torn-paper effect is finished. */
-EVT_BEGIN(evt_yabure_off)
+static EVT_BEGIN(evt_yabure_off)
     CALL(evt_img_release, STRING("img"))
     RETURN
 EVT_END()
@@ -88,7 +88,7 @@ EVT_END()
  * shows the OFF_d_roll scroll cutout, opens the name-entry window, waits for the player to type a name,
  * plays the entry sounds, then closes everything. The name entered is read back with evt_win_nameent_name.
  */
-EVT_BEGIN(evt_nameent)
+static EVT_BEGIN(evt_nameent)
     CALL(evt_paper_entry, STRING("OFF_d_roll"))
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_roll"))
@@ -127,7 +127,7 @@ EVT_END()
  * Doopliss's (the fake Mario) reaction when the player guessed his name right:
  * he gasps, switches to his surprised pose and talk poses, and the camera is released.
  */
-EVT_BEGIN(name_seikai)
+static EVT_BEGIN(name_seikai)
     // Doopliss gasps and strikes his surprised pose.
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -350,7 +350,7 @@ EVT_END()
  * Every round opens the name-entry screen; only from STG4_13_04_THE_LETTER_P on is the name checked,
  * and a right guess moves the story to STG4_14_NAME_GUESSING.
  */
-EVT_BEGIN(evt_machibuse)
+static EVT_BEGIN(evt_machibuse)
     // Waits until Mario steps into the strip of road where Doopliss ambushes him.
     SET_VALUE(LF(0), 0)
     LOOP(0)
@@ -710,7 +710,7 @@ static USER_FUNC(cam_r) {
  * and turns Mario's controls off at
  * the fourth; at the end of the text (1) it sets GW(1); on a page turn (3) it sets GW(0).
  */
-void msg_callback(s32 type, void* param) {
+static void msg_callback(s32 type, void* param) {
     EventEntry* ev = (*(MsgWinData**)param)->event;
 
     switch (type) {
@@ -761,7 +761,7 @@ static USER_FUNC(zoom) {
  * a three-cycle sine that fades out over the duration,
  * applied as a view offset to both the 3D camera and the 3D image camera. Blocks until the frames are used up.
  */
-USER_FUNC(camera_yure) {
+static USER_FUNC(camera_yure) {
     s32 frames = evtGetValue(event, event->args[0]);
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec v;

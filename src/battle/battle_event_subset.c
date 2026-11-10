@@ -24,11 +24,11 @@
 #include "system.h"
 #include "battle/unit_work.h"
 
-USER_FUNC(_binta_effect);
-USER_FUNC(_check_through_pos);
+static USER_FUNC(_binta_effect);
+static USER_FUNC(_check_through_pos);
 USER_FUNC(_set_hp_gauge_fade_flag);
-USER_FUNC(_check_at_dm_event_wait);
-USER_FUNC(_disable_restore_command_cursor);
+static USER_FUNC(_check_at_dm_event_wait);
+static USER_FUNC(_disable_restore_command_cursor);
 
 #if VERSION >= VERSION_US
 EvtWord subsetevt_dead[612];
@@ -83,8 +83,8 @@ EvtWord subset_ultra_hammer_acrobat_damage_event[63];
 EvtWord subsetevt_confuse_flustered[43];
 EvtWord subsetevt_binta_damage_left[48];
 EvtWord subsetevt_binta_damage_right[48];
-EvtWord subsetevt_binta_damage_left_last[69];
-EvtWord subsetevt_binta_damage_right_last[69];
+static EvtWord subsetevt_binta_damage_left_last[69];
+static EvtWord subsetevt_binta_damage_right_last[69];
 EvtWord subsetevt_status_recovery[48];
 
 #if VERSION >= VERSION_JP
@@ -1570,7 +1570,7 @@ EVT_END()
  * Pattern 23 is the last left slap of Ms. Mowz's Love Slap (partyWeapon_ChuchurinaNormalAttackLeftLast)
  * and of its copy enemyWeapon_ChuchurinaNormalAttackLlast in las.
  */
-EVT_BEGIN(subsetevt_binta_damage_left_last)
+static EVT_BEGIN(subsetevt_binta_damage_left_last)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
     BEGIN_SIBLING_EVENT_GET_ID(LW(0))
@@ -1597,7 +1597,7 @@ EVT_BEGIN(subsetevt_binta_damage_left_last)
 EVT_END()
 
 /** Final slap from the right (pattern 24): the mirror of subsetevt_binta_damage_left_last. */
-EVT_BEGIN(subsetevt_binta_damage_right_last)
+static EVT_BEGIN(subsetevt_binta_damage_right_last)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
     BEGIN_SIBLING_EVENT_GET_ID(LW(0))
@@ -1693,7 +1693,7 @@ EVT_BEGIN(subset_attack_ready_jump_event)
     RETURN
 EVT_END()
 
-USER_FUNC(_disable_restore_command_cursor) {
+static USER_FUNC(_disable_restore_command_cursor) {
     BattleWork* wp = _battleWorkPointer;
     wp->commandMenu.recCommand = 0;
     wp->commandMenu.attackAudience = 0;
@@ -1701,7 +1701,7 @@ USER_FUNC(_disable_restore_command_cursor) {
 }
 
 /** Script: blocks until the unit args[0] has no attack or damage event running. */
-USER_FUNC(_check_at_dm_event_wait) {
+static USER_FUNC(_check_at_dm_event_wait) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;
     BattleUnit* unit;
@@ -1770,7 +1770,7 @@ USER_FUNC(_set_hp_gauge_fade_flag) {
  * or beyond them in the direction the unit args[0] faces;
  * the Ultra Hammer knockback uses it to tell when the flying unit has passed a target.
  */
-USER_FUNC(_check_through_pos) {
+static USER_FUNC(_check_through_pos) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, *args++);
@@ -1808,7 +1808,7 @@ USER_FUNC(_check_through_pos) {
  * Script: starts a 90-frame whirlwind effect at the unit args[0], turning the way of args[1]'s sign;
  * used by the final slaps.
  */
-USER_FUNC(_binta_effect) {
+static USER_FUNC(_binta_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, *args++);

@@ -56,23 +56,23 @@ static void* yuunpc_wp;
 static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_change_plane);
+static USER_FUNC(evt_change_plane);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_00_cam_shift_reset);
-USER_FUNC(yuuminigame1_opening_chk);
-USER_FUNC(yuuminigame1_opening_on_off);
-USER_FUNC(yuuminigame1_set_phase);
+static USER_FUNC(yuuminigame1_opening_chk);
+static USER_FUNC(yuuminigame1_opening_on_off);
+static USER_FUNC(yuuminigame1_set_phase);
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 
 static MonteTable montetable[4];
 static EvtWord minigame_view_monte[4];
 EvtWord yuu_00_kaijo_init[12];
 EvtWord yuu_00_kaijo_init2[12];
-EvtWord light_sub_event[497];
-EvtWord minigame01_main[35];
-EvtWord minigame01_start_cam[40];
-EvtWord minigame01_start_cam_cancel[20];
+static EvtWord light_sub_event[497];
+static EvtWord minigame01_main[35];
+static EvtWord minigame01_start_cam[40];
+static EvtWord minigame01_start_cam_cancel[20];
 
 #if VERSION >= VERSION_US
 EvtWord minigame01_start[1504];
@@ -150,7 +150,7 @@ EVT_END()
  * Runs both pairs of stage spotlights ("light01" / "light_b" and "light02" / "light_c") in background inline events;
  * they sweep and pause in a repeating cycle, then return to rest when GF(0) is cleared.
  */
-EVT_BEGIN(light_sub_event)
+static EVT_BEGIN(light_sub_event)
     SET_VALUE(GF(0), 1)
 
     // The first pair of spotlights (light01, light_b) sweeps back and forth until GF(0) is cleared.
@@ -321,7 +321,7 @@ EVT_END()
  * Set-up for minigame 1 (Plane Mode): freezes Mario's controls, allocates the minigame work area,
  * dismisses the partners, starts the spotlights and the crowd sound, and sets phase 1.
  */
-EVT_BEGIN(minigame01_main)
+static EVT_BEGIN(minigame01_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(yuu_00_kaijo_init)
     CALL(evt_yuuminigame_alloc, LW(0), 0)
@@ -339,7 +339,7 @@ EVT_END()
  * Opening cutscene of Plane Mode: pans the 3D camera across the course,
  * then shows the "menu_title_minigame1" title card for a few seconds.
  */
-EVT_BEGIN(minigame01_start_cam)
+static EVT_BEGIN(minigame01_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1230.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(-1230.0f), FLOAT(160.0f), FLOAT(-10.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -366,7 +366,7 @@ EVT_END()
  * Cleans up when the player skips the opening camera:
  * frees the title card, turns off the event camera and puts Mario back at the start spot.
  */
-EVT_BEGIN(minigame01_start_cam_cancel)
+static EVT_BEGIN(minigame01_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
@@ -1334,7 +1334,7 @@ static USER_FUNC(re_fall_rtn) {
 }
 
 /** Script call that switches Mario's motion to 0x18, the airplane glide motion used in Plane Mode. */
-USER_FUNC(evt_change_plane) {
+static USER_FUNC(evt_change_plane) {
     marioChgMot(MARIO_MOTION_PLANE);
     return EVT_RETURN_DONE;
 }
@@ -1343,7 +1343,7 @@ USER_FUNC(evt_change_plane) {
  * args[0] = minigame work pointer, args[1] = new phase for the Plane Mode state machine (0 idle, 1 start, 2
  * playing, 3 finish).
  */
-USER_FUNC(yuuminigame1_set_phase) {
+static USER_FUNC(yuuminigame1_set_phase) {
     EvtWord* args = event->args;
     HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -1355,7 +1355,7 @@ USER_FUNC(yuuminigame1_set_phase) {
  * args[0] = minigame work pointer, args[1] = on/off.
  * Sets or clears the "opening cutscene pending" bit (flags bit 0).
  */
-USER_FUNC(yuuminigame1_opening_on_off) {
+static USER_FUNC(yuuminigame1_opening_on_off) {
     EvtWord* args = event->args;
     HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
@@ -1371,7 +1371,7 @@ USER_FUNC(yuuminigame1_opening_on_off) {
  * args[0] = minigame work pointer, args[1] = output.
  * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
  */
-USER_FUNC(yuuminigame1_opening_chk) {
+static USER_FUNC(yuuminigame1_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 

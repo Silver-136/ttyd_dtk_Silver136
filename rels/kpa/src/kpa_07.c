@@ -33,15 +33,15 @@
 
 static USER_FUNC(get_starstone_pos);
 static USER_FUNC(set_starstone_pos);
-USER_FUNC(set_starstone_ry);
+static USER_FUNC(set_starstone_ry);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_fall);
-void kpa_stg6_014_cb(s32 type, smartEntry* smart);
-void kpa_stg6_012_1_cb(s32 type, smartEntry* smart);
+static void kpa_stg6_014_cb(s32 type, smartEntry* smart);
+static void kpa_stg6_012_1_cb(s32 type, smartEntry* smart);
 
 static NpcSetupInfo npcEnt[3];
-EvtWord kpa_07_hipattack_eff[149];
-EvtWord kpa_07_evt[1224];
+static EvtWord kpa_07_hipattack_eff[149];
+static EvtWord kpa_07_evt[1224];
 EvtWord kpa_07_init_evt[52];
 
 /** NPCs of the Rawk Hawk scene: Kammy Koopa (ババ), Rawk Hawk (ブレッドハート) and his Champ's Belt (belt). */
@@ -70,7 +70,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /** Effect for the ground-pound hit: a hit spark above the Rawk Hawk NPC and four puffs of smoke around it. */
-EVT_BEGIN(kpa_07_hipattack_eff)
+static EVT_BEGIN(kpa_07_hipattack_eff)
     CALL(evt_npc_get_position, STRING("ブレッドハート"), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     BEGIN_INLINE_EVENT
@@ -112,7 +112,7 @@ EVT_END()
  * The story advances to STG6_55_04_BOWSER_RAWK_HAWK, saving is offered,
  * and play goes to Rogueport (gor_04).
  */
-EVT_BEGIN(kpa_07_evt)
+static EVT_BEGIN(kpa_07_evt)
     // The scene opens on the empty room; Kammy is hidden until she catches up with Bowser.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -249, 0, 0)
@@ -461,7 +461,7 @@ EVT_BEGIN(kpa_07_init_evt)
     RETURN
 EVT_END()
 
-void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
+static void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
     NpcEntry* npc;
 
@@ -486,7 +486,7 @@ void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
 }
 
 /** Message callback for kpa_stg6_012_1: plays Kammy's A_2B animation at the start and her T_1 animation at entry 8. */
-void kpa_stg6_012_1_cb(s32 type, smartEntry* smart) {
+static void kpa_stg6_012_1_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
     switch (type) {
@@ -551,7 +551,7 @@ static USER_FUNC(set_starstone_pos) {
 }
 
 /** Script helper: args[0] = effect name, args[1] = degrees; rotates the star stone about Y. */
-USER_FUNC(set_starstone_ry) {
+static USER_FUNC(set_starstone_ry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 ry = evtGetFloat(event, args[1]);

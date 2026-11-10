@@ -98,8 +98,8 @@ static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord boots_lv3_juyoitem_lecture_init[104];
-EvtWord boots_lv3_juyoitem_lecture_sub01[29];
-EvtWord boots_lv3_juyoitem_lecture_sub02[78];
+static EvtWord boots_lv3_juyoitem_lecture_sub01[29];
+static EvtWord boots_lv3_juyoitem_lecture_sub02[78];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord boots_lv3_juyoitem_lecture[];
@@ -509,7 +509,7 @@ EVT_END()
  * Lecture helper: shows the two button icons (A solid, the stick icon dimmed)
  * and flips the A icon between its pressed and released pictures every 300 ms.
  */
-EVT_BEGIN(boots_lv3_juyoitem_lecture_sub01)
+static EVT_BEGIN(boots_lv3_juyoitem_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
     CALL(lecture_button_set_icon_id, 1, ICON_STICK_NEUTRAL)
@@ -527,7 +527,7 @@ EVT_END()
  * shows the A icon pressed and dimmed and cycles the stick icon around its directions every 15 ms to show
  * where to push; runs until the main lecture script deletes it.
  */
-EVT_BEGIN(boots_lv3_juyoitem_lecture_sub02)
+static EVT_BEGIN(boots_lv3_juyoitem_lecture_sub02)
     CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_A_PRESSED)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(3))

@@ -129,7 +129,7 @@ static EVT_BEGIN(nice_event)
     RETURN
 EVT_END()
 
-USER_FUNC(main_suki) {
+static USER_FUNC(main_suki) {
     SukiWork* w = get_ptr();
     EvtWord* args = event->args;
     f32 posTbl[18] = {
@@ -439,7 +439,7 @@ static void main_star(void) {
 }
 
 /** Deletes the star effect and its stardust at the end of the move. */
-USER_FUNC(end_suki) {
+static USER_FUNC(end_suki) {
     SukiWork* w = get_ptr();
     effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
     effDelete(w->star.eff);
@@ -749,12 +749,12 @@ static USER_FUNC(star_stone_appear) {
 }
 
 /** Waits until the star has reached its place at the top of the screen. */
-USER_FUNC(wait_star_stone_up_end) {
+static USER_FUNC(wait_star_stone_up_end) {
     return get_ptr()->star.state == 4 ? 2 : 0;
 }
 
 /** Returns in args[1..3] the battle-space position of star args[0] (0..5), where its shot starts. */
-USER_FUNC(star_stone_get_attack_point) {
+static USER_FUNC(star_stone_get_attack_point) {
     SukiWork* w = get_ptr();
     EvtWord* args = event->args;
     s32 i = evtGetValue(event, args[0]);
@@ -779,7 +779,7 @@ static USER_FUNC(star_stone_attack) {
 }
 
 /** Waits until the current star shot has finished. */
-USER_FUNC(wait_star_stone_attack_end) {
+static USER_FUNC(wait_star_stone_attack_end) {
     return get_ptr()->star.state == 8 ? 2 : 0;
 }
 
@@ -818,14 +818,14 @@ USER_FUNC(aud_set_draw) {
 }
 
 /** Sets the brightness (0..255) the flash TEV callback draws the stage with, from args[0]. */
-USER_FUNC(flash_update) {
+static USER_FUNC(flash_update) {
     u8 v = evtGetValue(event, event->args[0]);
     get_ptr()->flash = v;
     return 2;
 }
 
 /** Returns in args[1] 1 if the stage has a map object named args[0], else 0. */
-USER_FUNC(exist_map) {
+static USER_FUNC(exist_map) {
     EvtWord* args = event->args;
     if (mapGetMapObj((char*)evtGetValue(event, args[0]))) {
         evtSetValue(event, args[1], 1);
@@ -836,7 +836,7 @@ USER_FUNC(exist_map) {
 }
 
 /** Projects world position args[0..2] to the battle screen and returns x and y in args[3] and args[4]. */
-USER_FUNC(get_screen_point) {
+static USER_FUNC(get_screen_point) {
     EvtWord* args = event->args;
     Vec v;
     v.x = evtGetFloat(event, args[0]);
@@ -849,7 +849,7 @@ USER_FUNC(get_screen_point) {
 }
 
 /** Spawns the crystal shine effect at the star position args[0], args[1] (z 30), drawn on the 3D effect camera. */
-USER_FUNC(eff_crystal) {
+static USER_FUNC(eff_crystal) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -859,7 +859,7 @@ USER_FUNC(eff_crystal) {
 }
 
 /** Returns in args[1] the capture image name of star args[0] ("sac_suki_img0".."5"). */
-USER_FUNC(get_img_name) {
+static USER_FUNC(get_img_name) {
     EvtWord* args = event->args;
     s8 idx = evtGetValue(event, args[0]);
     SukiWork* w = get_ptr();

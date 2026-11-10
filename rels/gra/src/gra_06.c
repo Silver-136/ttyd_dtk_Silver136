@@ -29,8 +29,8 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-EvtWord ne_close[22];
-EvtWord ne_open[22];
+static EvtWord ne_close[22];
+static EvtWord ne_open[22];
 EvtWord gra_06_ido[12];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -39,7 +39,7 @@ extern EvtWord gra_06_ido_in_sub[];
 EvtWord gra_06_ido_in_sub[77];
 #endif
 
-EvtWord gra_06_ido_in[7];
+static EvtWord gra_06_ido_in[7];
 static BeroEntry bero_entry_data[4];
 EvtWord gra_06_saku_open[];
 
@@ -65,7 +65,7 @@ EvtWord gra_06_init_evt[148];
  * Closes the double door (door_L and door_R) of the Creepy Steeple entrance:
  * LW(0) is the door angle, and the two leaves rotate opposite ways.
  */
-EVT_BEGIN(ne_close)
+static EVT_BEGIN(ne_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("door_L"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -74,7 +74,7 @@ EVT_BEGIN(ne_close)
 EVT_END()
 
 /** Opens the double door of the Creepy Steeple entrance, the reverse of ne_close. */
-EVT_BEGIN(ne_open)
+static EVT_BEGIN(ne_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("door_L"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -120,7 +120,7 @@ EVT_BEGIN(gra_06_ido_in_sub)
 EVT_END()
 
 /** Enter event of the hole: spawns gra_06_ido_in_sub and returns 0. */
-EVT_BEGIN(gra_06_ido_in)
+static EVT_BEGIN(gra_06_ido_in)
     SPAWN_EVENT(gra_06_ido_in_sub)
     SET_VALUE(LW(0), 0)
     RETURN

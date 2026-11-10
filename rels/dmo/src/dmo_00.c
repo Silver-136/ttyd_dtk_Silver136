@@ -69,17 +69,17 @@ char buf[0x200];
 static DemoWork* wp;
 
 USER_FUNC(adjust);
-USER_FUNC(book_r);
-USER_FUNC(demo_scale);
-USER_FUNC(demo_winonoff);
-USER_FUNC(eff_cam);
-USER_FUNC(eff_cam1);
+static USER_FUNC(book_r);
+static USER_FUNC(demo_scale);
+static USER_FUNC(demo_winonoff);
+static USER_FUNC(eff_cam);
+static USER_FUNC(eff_cam1);
 USER_FUNC(make_msg);
 static USER_FUNC(next);
-USER_FUNC(demo_draw);
+static USER_FUNC(demo_draw);
 USER_FUNC(demo_init);
 
-EvtWord buttonCheck[32];
+static EvtWord buttonCheck[32];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord demo_evt[];
@@ -88,9 +88,9 @@ EvtWord demo_evt[1489];
 #endif
 
 static EvtWord koushukei_dai[63];
-EvtWord roten_move[25];
-EvtWord kuribo_move[25];
-EvtWord chusan_move[25];
+static EvtWord roten_move[25];
+static EvtWord kuribo_move[25];
+static EvtWord chusan_move[25];
 
 #if VERSION >= VERSION_US
 EvtWord dmo_00_init_evt[268];
@@ -169,7 +169,7 @@ void demo_exit(void) {
  * screen into capBuf once, then again every call while the zoom (fade) is running.
  * Guess: meant to let the last picture be drawn over the zoom.
  */
-void demo_cap(void) {
+static void demo_cap(void) {
     if (wp->page == 4) {
         if (wp->captured == 0) {
             GXSetTexCopySrc(0, 0, 608, 480);
@@ -190,7 +190,7 @@ void demo_cap(void) {
  * Draw callback for the desk: draws the full-screen desk texture (demo.tpl image 0) at the current scale
  * and offset, fading out as the zoom into a picture advances.
  */
-void demo_desk(CameraId cameraId, void* param) {
+static void demo_desk(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXTexObj obj;
     Mtx mtx;
@@ -245,7 +245,7 @@ void demo_desk(CameraId cameraId, void* param) {
  * Draw callback for the storybook picture: once the first page is turned (page is not -1) draws demo.tpl image
  * page+8 as a textured quad, fading it out as the zoom amount (fade) rises.
  */
-void demo_img(CameraId cameraId, void* param) {
+static void demo_img(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry* cam2;
     Mtx mtx;
@@ -326,7 +326,7 @@ void demo_img(CameraId cameraId, void* param) {
  * Draw callback for the storybook: draws the book's textures (demo.tpl images 1 and 2) at the current scale
  * and offset with the cover turned by bookRot, so the book opens as the demo begins.
  */
-void demo_book(CameraId cameraId, void* param) {
+static void demo_book(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXTexObj obj;
     Mtx mtx;
@@ -452,7 +452,7 @@ void demo_book(CameraId cameraId, void* param) {
  * Draw callback for the narration window: fades the text window's background in
  * or out (10 alpha per frame, depending on winOn) and draws it on the 2D camera.
  */
-void demo_window(CameraId cameraId, void* param) {
+static void demo_window(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(cameraId);
     GXTexObj obj;
     Mtx mtx;
@@ -519,7 +519,7 @@ void demo_window(CameraId cameraId, void* param) {
  * Script helper that keeps the demo drawing: queues the desk, book, zoom picture and text window every frame.
  * Never finishes.
  */
-USER_FUNC(demo_draw) {
+static USER_FUNC(demo_draw) {
     dispEntry(CAMERA_3D, 9.0f, DISP_MODE_CUSTOM_LAST, demo_desk, NULL);
     dispEntry(CAMERA_3D, 8.0f, DISP_MODE_CUSTOM_LAST, demo_book, NULL);
     if (wp->fade != 0.0f) {
@@ -530,7 +530,7 @@ USER_FUNC(demo_draw) {
 }
 
 /** Script helper: args[0] switches the narration window on (1) or off (0) so that it fades in or out. */
-USER_FUNC(demo_winonoff) {
+static USER_FUNC(demo_winonoff) {
     EvtWord* args = event->args;
 
     wp->winOn = evtGetValue(event, args[0]);
@@ -541,7 +541,7 @@ USER_FUNC(demo_winonoff) {
  * Script helper: slowly zooms the desk (scale 0.6 to 1.5 over 12 seconds) while the first pages are narrated;
  * finishes at 1.5.
  */
-USER_FUNC(demo_scale) {
+static USER_FUNC(demo_scale) {
     OSTime now = event->lifetime;
     f32 t;
 
@@ -559,7 +559,7 @@ USER_FUNC(demo_scale) {
 }
 
 /** Script helper: args[0] is a float; sets the angle of the book cover. */
-USER_FUNC(book_r) {
+static USER_FUNC(book_r) {
     EvtWord* args = event->args;
 
     wp->bookRot = evtGetFloat(event, args[0]);
@@ -597,14 +597,14 @@ USER_FUNC(adjust) {
 }
 
 /** Moves the two crystal effects to the CAMERA_3D_EFFECTA camera. */
-USER_FUNC(eff_cam) {
+static USER_FUNC(eff_cam) {
     ((s32*)effNameToPtr("eff0")->userdata)[0x38 / 4] = CAMERA_3D_EFFECTA;
     ((s32*)effNameToPtr("eff1")->userdata)[0x38 / 4] = CAMERA_3D_EFFECTA;
     return EVT_RETURN_DONE;
 }
 
 /** The same for the radiation effect. */
-USER_FUNC(eff_cam1) {
+static USER_FUNC(eff_cam1) {
     ((s32*)effNameToPtr("eff2")->userdata)[0x98 / 4] = CAMERA_3D_EFFECTA;
     return EVT_RETURN_DONE;
 }
@@ -638,7 +638,7 @@ static DemoWork* wp = &work;
  * Runs alongside the demo: after the fade finishes, waits for A or Start, then sets GF(10),
  * fades to white and changes to the title screen.
  */
-EVT_BEGIN(buttonCheck)
+static EVT_BEGIN(buttonCheck)
     CALL(evt_fade_end_wait)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
@@ -1148,7 +1148,7 @@ EVT_END()
  * Walking loop for the vendor Roten in the demo scene:
  * walks back and forth between X = 450 and X = -350 at speed 32, waiting a second at each end.
  */
-EVT_BEGIN(roten_move)
+static EVT_BEGIN(roten_move)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("ロテン１"), 450, 150, 0, FLOAT(32.0f), 0)
         WAIT_MS(1000)
@@ -1159,7 +1159,7 @@ EVT_BEGIN(roten_move)
 EVT_END()
 
 /** Wander script for the demo Goomba: starts at the origin and wanders around it with radius 100 at speed 30. */
-EVT_BEGIN(kuribo_move)
+static EVT_BEGIN(kuribo_move)
     CALL(evt_npc_set_position, STRING("クリボー１"), 0, 0, 0)
     CALL(evt_npc_get_position, STRING("クリボー１"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("クリボー１"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -1168,7 +1168,7 @@ EVT_BEGIN(kuribo_move)
 EVT_END()
 
 /** Wander script for the demo Chu-san (mouse): starts at (-175, 100) and wanders around it with radius 100 at speed 30. */
-EVT_BEGIN(chusan_move)
+static EVT_BEGIN(chusan_move)
     CALL(evt_npc_set_position, STRING("チューさん１"), -175, 0, 100)
     CALL(evt_npc_get_position, STRING("チューさん１"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("チューさん１"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)

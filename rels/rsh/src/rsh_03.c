@@ -44,21 +44,21 @@
 #include "data_tables.h"
 
 static char tmp[32];
-Vec camPt;
-Vec camAt;
+static Vec camPt;
+static Vec camAt;
 
 USER_FUNC(fire);
-USER_FUNC(iri_22_make_item_tbl);
+static USER_FUNC(iri_22_make_item_tbl);
 static USER_FUNC(mario_flag);
-USER_FUNC(omiseFukki);
-USER_FUNC(omiseHozon);
+static USER_FUNC(omiseFukki);
+static USER_FUNC(omiseHozon);
 USER_FUNC(npc_alpha_except_tenin);
 
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
-EvtWord init_cook[29];
-s32 item_tbl_cook[2];
+static EvtWord init_cook[29];
+static s32 item_tbl_cook[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_cook_nabe_return[];
@@ -66,36 +66,36 @@ extern EvtWord talk_cook_nabe_return[];
 EvtWord talk_cook_nabe_return[47];
 #endif
 
-s32 iri_22_item_tbl[4];
+static s32 iri_22_item_tbl[4];
 EvtWord talk_cook[];
 static EvtWord init_waitless[29];
-s32 item_tbl_waitless[2];
+static s32 item_tbl_waitless[2];
 
 #if VERSION >= VERSION_US
-EvtWord talk_waitless_pias_return[158];
+static EvtWord talk_waitless_pias_return[158];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord talk_waitless_pias_return[110];
+static EvtWord talk_waitless_pias_return[110];
 #else
-EvtWord talk_waitless_pias_return[112];
+static EvtWord talk_waitless_pias_return[112];
 #endif
 #endif
 
 static EvtWord talk_waitless[268];
-EvtWord move_waitless[49];
+static EvtWord move_waitless[49];
 static NpcSetupInfo npc_data[4];
 static EvtWord talk_toron[20];
 static EvtWord talk_sarary[31];
-EvtWord dir_target[21];
-EvtWord evt_lanch_missing[761];
+static EvtWord dir_target[21];
+static EvtWord evt_lanch_missing[761];
 static EvtWord talk_powan[184];
-NpcSetupInfo npc_data_lunch[7];
+static NpcSetupInfo npc_data_lunch[7];
 static const char* msg_tbl[10];
 
 #if VERSION >= VERSION_US
-EvtWord evt_lunch_talk[113];
+static EvtWord evt_lunch_talk[113];
 #else
-EvtWord evt_lunch_talk[101];
+static EvtWord evt_lunch_talk[101];
 #endif
 
 EvtWord evt_shop_moamoa_talk[59];
@@ -103,8 +103,8 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[18];
 static ShopperData35 shopper_data;
-EvtWord shop_door_open[27];
-EvtWord shop_door_close[31];
+static EvtWord shop_door_open[27];
+static EvtWord shop_door_close[31];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_shop_open[];
@@ -113,16 +113,16 @@ EvtWord evt_shop_open[267];
 #endif
 
 #if VERSION >= VERSION_US
-EvtWord evt_shop_close[420];
+static EvtWord evt_shop_close[420];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord evt_shop_close[294];
+static EvtWord evt_shop_close[294];
 #else
-EvtWord evt_shop_close[317];
+static EvtWord evt_shop_close[317];
 #endif
 #endif
 
-EvtWord evt_shop_door_init[36];
+static EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -135,14 +135,14 @@ static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 #endif
 
-EvtWord rsh_03_init_evt[269];
+static EvtWord rsh_03_init_evt[269];
 
 #if VERSION >= VERSION_US
 EvtWord rsh_03_a_init_evt[141];
 EvtWord rsh_03_b_init_evt[90];
 static const char* window_tbl[5];
 EvtWord rsh_03_c_init_evt[217];
-EvtWord rsh_03_init_evt_nidome[219];
+static EvtWord rsh_03_init_evt_nidome[219];
 EvtWord rsh_03_a_init_evt_nidome[23];
 EvtWord rsh_03_b_init_evt_nidome[11];
 EvtWord rsh_03_c_init_evt_nidome[80];
@@ -152,9 +152,9 @@ EvtWord rsh_03_b_init_evt[11];
 static const char* window_tbl[5];
 EvtWord rsh_03_c_init_evt[71];
 #if VERSION == VERSION_DEMO_JP
-EvtWord rsh_03_init_evt_nidome[139];
+static EvtWord rsh_03_init_evt_nidome[139];
 #else
-EvtWord rsh_03_init_evt_nidome[140];
+static EvtWord rsh_03_init_evt_nidome[140];
 #endif
 EvtWord rsh_03_a_init_evt_nidome[23];
 EvtWord rsh_03_b_init_evt_nidome[11];
@@ -167,7 +167,7 @@ EvtWord rsh_03_c_init_evt_nidome[50];
  * and has not handed over yet (bits 1, 2 and 4 of GSW_TROUBLE_WORK_FIRST).
  * Returns the -1 terminated table address in args[0] and the number of entries in args[1].
  */
-USER_FUNC(iri_22_make_item_tbl) {
+static USER_FUNC(iri_22_make_item_tbl) {
     EvtWord* args = event->args;
     u8 bought;
     s32 n;
@@ -225,7 +225,7 @@ static USER_FUNC(mario_flag) {
  * Script helper: saves the 3D camera's position and look-at point
  * before the shop transition ("omise" is the shop) so omiseFukki can restore it.
  */
-USER_FUNC(omiseHozon) {
+static USER_FUNC(omiseHozon) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 
     camPt = cam->cameraPos;
@@ -234,7 +234,7 @@ USER_FUNC(omiseHozon) {
 }
 
 /** Script helper: sends the 3D camera back to the position saved by omiseHozon, as a 500 ms eased move. */
-USER_FUNC(omiseFukki) {
+static USER_FUNC(omiseFukki) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 
     cam->presetPos = cam->cameraPos;
@@ -376,7 +376,7 @@ static BeroEntry bero_data_c[] = {
  * until the Smorg miasma stage (STG6_45_DAY_3_STARTS to STG6_48_SMORG_MIASMA) and disables gravity
  * when his Y coordinate is negative.
  */
-EVT_BEGIN(init_cook)
+static EVT_BEGIN(init_cook)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_45_DAY_3_STARTS, STG6_48_SMORG_MIASMA)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
@@ -389,7 +389,7 @@ EVT_BEGIN(init_cook)
 EVT_END()
 
 /** Items the player may give the cook when returning his pot: the Galley Pot only, ended by -1. */
-s32 item_tbl_cook[] = {
+static s32 item_tbl_cook[] = {
     ITEM_GALLEY_POT, -1,
 };
 
@@ -415,7 +415,7 @@ EVT_END()
  * Item list for Trouble Center request 22, rebuilt by a script helper each time with the ingredients Mario
  * still has to deliver (Golden Leaf, Mystic Egg, Keel Mango); unused slots stay -1.
  */
-s32 iri_22_item_tbl[] = {
+static s32 iri_22_item_tbl[] = {
     -1, -1, -1, -1,
 };
 
@@ -574,11 +574,11 @@ static EVT_BEGIN(init_waitless)
 EVT_END()
 
 /** Items the player may give the waitress: the Shell Earrings only, ended by -1. */
-s32 item_tbl_waitless[] = {
+static s32 item_tbl_waitless[] = {
     ITEM_SHELL_EARRINGS, -1,
 };
 
-EVT_BEGIN(talk_waitless_pias_return)
+static EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
     DELETE_EVENT(LW(10))
@@ -735,7 +735,7 @@ EVT_END()
  * Regular event of the waitress: returns without pacing from STG6_01_THE_CONDUCTOR until
  * STG6_05_GALLEY_KETTLE_DISCOVERED (exclusive); otherwise she paces back and forth between two points of the dining car at 24 units per second.
  */
-EVT_BEGIN(move_waitless)
+static EVT_BEGIN(move_waitless)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_05_GALLEY_KETTLE_DISCOVERED)
             RETURN
@@ -823,7 +823,7 @@ EVT_END()
  * Helper script: turns the waitress, Toron, the salaryman and Detective Pennington
  * and Mario to face the target NPC whose name is in LW(0). Used during the lunch-missing mystery.
  */
-EVT_BEGIN(dir_target)
+static EVT_BEGIN(dir_target)
     CALL(evt_set_dir_to_target, STRING("ウェイトレス"), LW(0))
     CALL(evt_set_dir_to_target, STRING("トロン"), LW(0))
     CALL(evt_set_dir_to_target, STRING("サラリーマン"), LW(0))
@@ -837,7 +837,7 @@ EVT_END()
  * Pennington questions the cook, the waitress, the salaryman and Toron in turn, each with a reaction jingle,
  * and the case ends with Pennington still puzzled (stg6_rsh_23 onwards).
  */
-EVT_BEGIN(evt_lanch_missing)
+static EVT_BEGIN(evt_lanch_missing)
     SET_VALUE(GF(10), 1)
     CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("トロン"), STRING("ポワン探偵"))
@@ -1112,7 +1112,7 @@ EVT_END()
  * NPCs of the dining car during the missing lunch mystery: the cook, the waitress, Toron, the salaryman, the
  * shop clerk and Pennington.
  */
-NpcSetupInfo npc_data_lunch[] = {
+static NpcSetupInfo npc_data_lunch[] = {
     {
         "コック", // name (Chef Shimi)
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
@@ -1197,7 +1197,7 @@ static const char* msg_tbl[] = {
  * and prints that person's stg6_rsh_18_xx line from msg_tbl unless mario_flag identifies them as the
  * cached last talk target; the message closes if that target matches.
  */
-EVT_BEGIN(evt_lunch_talk)
+static EVT_BEGIN(evt_lunch_talk)
     SET_VALUE(GF(10), 0)
     LOOP(0)
         SET_INT_READ_ADDR(PTR(&msg_tbl))
@@ -1330,7 +1330,7 @@ static ShopperData35 shopper_data = {
 };
 
 /** Plays the sliding open animation of the shop door (mise_door_open) with its sound and waits until it ends. */
-EVT_BEGIN(shop_door_open)
+static EVT_BEGIN(shop_door_open)
     CALL(evt_mapobj_get_position, STRING("S_tobira_omise"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_map_playanim, STRING("mise_door_open"), MAP_ANIM_PLAY_ONCE, 0)
@@ -1343,7 +1343,7 @@ EVT_END()
  * Plays the sliding close animation of the shop door (mise_door_close), with its sound after 300 ms,
  * and waits until it ends.
  */
-EVT_BEGIN(shop_door_close)
+static EVT_BEGIN(shop_door_close)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_mapobj_get_position, STRING("S_tobira_omise"), LW(0), LW(1), LW(2))
@@ -1455,7 +1455,7 @@ EVT_BEGIN(evt_shop_open)
     RETURN
 EVT_END()
 
-EVT_BEGIN(evt_shop_close)
+static EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
@@ -1604,7 +1604,7 @@ USER_FUNC(fire) {
  * and registers the OFF_d_jaba paper;
  * at STG6_19_GIVE_BLANKET and STG6_43_CONDUCTOR_APPEARS (the nights) it keeps the shop closed.
  */
-EVT_BEGIN(evt_shop_door_init)
+static EVT_BEGIN(evt_shop_door_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("omise_masuku"), MAP_OBJ_FLAG_HIDDEN)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(STG6_19_GIVE_BLANKET)
@@ -1713,7 +1713,7 @@ EVT_END()
  * STG6_04_GRILLING_HEFF_T, the normal crew before that and from STG6_05 to STG7_00_START),
  * the shop door and the Smorg shop, the shelf signs, and the music for the story stage.
  */
-EVT_BEGIN(rsh_03_init_evt)
+static EVT_BEGIN(rsh_03_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)
@@ -1979,7 +1979,7 @@ EVT_END()
  * scenery for the outbound or return trip, the dining car NPCs, the shop door and Smorg shop,
  * the random passengers (evt_rsh_03_rnd_npc_entry) and the music for the station the train has reached.
  */
-EVT_BEGIN(rsh_03_init_evt_nidome)
+static EVT_BEGIN(rsh_03_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)

@@ -33,7 +33,7 @@ typedef struct EffWaterDamageN64Work {
 } EffWaterDamageN64Work;
 
 /** Round 8x8 droplet quad; with the wide and tall shapes below it is cycled so each droplet wobbles. */
-effN64Vtx size8x8_tex16x16_0_vtx[] = {
+static effN64Vtx size8x8_tex16x16_0_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
     {4, -4, 0, 512, 0, 0, 0, 0, 255},
     {4, 4, 0, 512, 512, 0, 0, 0, 255},
@@ -41,7 +41,7 @@ effN64Vtx size8x8_tex16x16_0_vtx[] = {
 };
 
 /** Wide, squashed droplet quad used in the wobble cycle. */
-effN64Vtx size8x8_tex16x16_1_vtx[] = {
+static effN64Vtx size8x8_tex16x16_1_vtx[] = {
     {-5, -3, 0, 0, 0, 0, 0, 0, 255},
     {5, -3, 0, 512, 0, 0, 0, 0, 255},
     {5, 3, 0, 512, 512, 0, 0, 0, 255},
@@ -49,7 +49,7 @@ effN64Vtx size8x8_tex16x16_1_vtx[] = {
 };
 
 /** Tall, stretched droplet quad used in the wobble cycle. */
-effN64Vtx size8x8_tex16x16_2_vtx[] = {
+static effN64Vtx size8x8_tex16x16_2_vtx[] = {
     {-3, -5, 0, 0, 0, 0, 0, 0, 255},
     {3, -5, 0, 512, 0, 0, 0, 0, 255},
     {3, 5, 0, 512, 512, 0, 0, 0, 255},

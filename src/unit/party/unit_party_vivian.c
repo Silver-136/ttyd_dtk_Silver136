@@ -34,19 +34,19 @@
 #include "icon_ids.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(_vivian_make_extra_work_area);
-USER_FUNC(_disp_heart_entry_stop_check);
+static USER_FUNC(_vivian_make_extra_work_area);
+static USER_FUNC(_disp_heart_entry_stop_check);
 USER_FUNC(_disp_heart_entry_stop);
 static void _disp_heart(CameraId camera, void* param);
 USER_FUNC(_disp_heart_entry);
-USER_FUNC(_make_kagenuke_weapon);
+static USER_FUNC(_make_kagenuke_weapon);
 USER_FUNC(_get_vivian_attack_position);
-USER_FUNC(_get_move_frame);
+static USER_FUNC(_get_move_frame);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_vivian_stay[24];
 static BattleDataEntry data_table[20];
-BattleUnitKindPart unitpartsdata_Party_Vivian[1];
+static BattleUnitKindPart unitpartsdata_Party_Vivian[1];
 BattleUnitKind unitdata_Party_Vivian;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -63,18 +63,18 @@ BattleWeapon partyWeapon_VivianMagicalPowder;
 BattleWeapon partyWeapon_VivianCharmKissAttack;
 
 #if VERSION <= VERSION_DEMO_JP
-EvtWord partyVivianAttack_NormalAttack[610];
+static EvtWord partyVivianAttack_NormalAttack[610];
 extern EvtWord partyVivianAttack_ShadowGuard[];
 #else
-EvtWord partyVivianAttack_NormalAttack[581];
+static EvtWord partyVivianAttack_NormalAttack[581];
 EvtWord partyVivianAttack_ShadowGuard[430];
 #endif
 
 EvtWord partyVivianAttack_MagicalPowder[VERSION_PICK(442, 448)];
 EvtWord partyVivianAttack_CharmKissAttack[464];
 EvtWord vivian_shadow_tail_event[78];
-EvtWord vivian_counter_damage_event[177];
-EvtWord vivian_appeal_event[80];
+static EvtWord vivian_counter_damage_event[177];
+static EvtWord vivian_appeal_event[80];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[189];
 
@@ -144,7 +144,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Vivian's single battle part: her targetable body (model c_vivian) with her pose table. */
-BattleUnitKindPart unitpartsdata_Party_Vivian[] = {
+static BattleUnitKindPart unitpartsdata_Party_Vivian[] = {
     {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_vivian_stay},
 };
 
@@ -621,7 +621,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
  * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
  * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
  */
-EVT_BEGIN(partyVivianAttack_NormalAttack)
+static EVT_BEGIN(partyVivianAttack_NormalAttack)
     // Pick the target, set up the burn and pay the cost; the camera follows Vivian and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1251,7 +1251,7 @@ EVT_BEGIN(vivian_shadow_tail_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(vivian_counter_damage_event)
+static EVT_BEGIN(vivian_counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SHOW_HP)
     IF_INT_EQUAL(LW(0), DAMAGE_CODE_COUNTER_TOP_SPIKY)
@@ -1290,7 +1290,7 @@ EVT_BEGIN(vivian_counter_damage_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(vivian_appeal_event)
+static EVT_BEGIN(vivian_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_O_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1442,7 +1442,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
  * Allocates a spare BattleWeapon in the running unit's countersetWeapon slot,
  * which Shade Fist fills per use (_make_kagenuke_weapon). Run from init_event.
  */
-USER_FUNC(_vivian_make_extra_work_area) {
+static USER_FUNC(_vivian_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
@@ -1504,7 +1504,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
  * Returns in args[7] how many frames moving from point args[0..2] to args[3..5] takes at speed args[6],
  * capped at 15.
  */
-USER_FUNC(_get_move_frame) {
+static USER_FUNC(_get_move_frame) {
     EvtWord* args = event->args;
     Vec a, b, d;
     f32 speed;
@@ -1577,7 +1577,7 @@ USER_FUNC(_get_vivian_attack_position) {
  * sets its burn duration (burnTime) to args[1] turns, and writes the copy's address back into args[0].
  * Shade Fist always passes 2.
  */
-USER_FUNC(_make_kagenuke_weapon) {
+static USER_FUNC(_make_kagenuke_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1671,7 +1671,7 @@ USER_FUNC(_disp_heart_entry_stop) {
 }
 
 /** Returns in args[0] whether the running event's heart display has been stopped. */
-USER_FUNC(_disp_heart_entry_stop_check) {
+static USER_FUNC(_disp_heart_entry_stop_check) {
     evtSetValue(event, *event->args, event->heart.stop);
     return EVT_RETURN_DONE;
 }

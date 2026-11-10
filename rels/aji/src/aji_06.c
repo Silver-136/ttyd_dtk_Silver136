@@ -48,26 +48,26 @@ s32 g_Kusuri_B;
 s32 g_Kusuri_G;
 s32 g_Kusuri_R;
 
-USER_FUNC(kusuri_color_get);
-USER_FUNC(kusuri_color_init);
-USER_FUNC(kusuri_color_set);
-USER_FUNC(kusuri_color_set_rgb);
-USER_FUNC(kusuri_list_add);
-USER_FUNC(kusuri_list_get_no);
-USER_FUNC(kusuri_list_init);
-USER_FUNC(peach_chg_pose);
+static USER_FUNC(kusuri_color_get);
+static USER_FUNC(kusuri_color_init);
+static USER_FUNC(kusuri_color_set);
+static USER_FUNC(kusuri_color_set_rgb);
+static USER_FUNC(kusuri_list_add);
+static USER_FUNC(kusuri_list_get_no);
+static USER_FUNC(kusuri_list_init);
+static USER_FUNC(peach_chg_pose);
 USER_FUNC(peach_evt_seikai_check);
-USER_FUNC(peach_evt_toumei_onoff);
-USER_FUNC(peach_set_scale);
-USER_FUNC(yuka_anim_reverse_end);
-USER_FUNC(yuka_anim_reverse_play);
-USER_FUNC(yuka_anim_reverse_pause);
-USER_FUNC(yuka_anim_reverse_replay);
-void kusuri_4_color_tev(MapTevCallbackInfo* info);
-void kusuri_3_color_tev(MapTevCallbackInfo* info);
-void kusuri_2_color_tev(MapTevCallbackInfo* info);
-void kusuri_1_color_tev(MapTevCallbackInfo* info);
-void kusuri_naka_color_tev(MapTevCallbackInfo* info);
+static USER_FUNC(peach_evt_toumei_onoff);
+static USER_FUNC(peach_set_scale);
+static USER_FUNC(yuka_anim_reverse_end);
+static USER_FUNC(yuka_anim_reverse_play);
+static USER_FUNC(yuka_anim_reverse_pause);
+static USER_FUNC(yuka_anim_reverse_replay);
+static void kusuri_4_color_tev(MapTevCallbackInfo* info);
+static void kusuri_3_color_tev(MapTevCallbackInfo* info);
+static void kusuri_2_color_tev(MapTevCallbackInfo* info);
+static void kusuri_1_color_tev(MapTevCallbackInfo* info);
+static void kusuri_naka_color_tev(MapTevCallbackInfo* info);
 
 static EvtWord s_door_open[22];
 static EvtWord s_door_close[22];
@@ -79,10 +79,10 @@ GXColor g_Kusuri_Src_Col[4];
 s32 g_Kusuri2_No;
 s32 g_Kusuri3_No;
 s32 g_Kusuri4_No;
-EvtWord peach_evt_kaihei_open[51];
-EvtWord peach_evt_kaihei_open_all[28];
-EvtWord peach_evt_kaihei_close[46];
-EvtWord peach_evt_kaihei_close_all[28];
+static EvtWord peach_evt_kaihei_open[51];
+static EvtWord peach_evt_kaihei_open_all[28];
+static EvtWord peach_evt_kaihei_close[46];
+static EvtWord peach_evt_kaihei_close_all[28];
 s32 kusuri_tyogo_list[8];
 s32 kusuri_list[5];
 s32 kusuri_id[4];
@@ -96,21 +96,21 @@ EvtWord peach_evt_kusuri_select[73];
 EvtWord peach_evt_pick_kusuri[55];
 EvtWord peach_evt_check_all_kusuri_set[72];
 EvtWord peach_evt_kusuri_dasu[141];
-EvtWord peach_evt_seikai_evt[33];
+static EvtWord peach_evt_seikai_evt[33];
 EvtWord peach_evt_kaihei1[187];
 EvtWord peach_evt_kaihei2[174];
 EvtWord peach_evt_kaihei3[174];
 EvtWord peach_evt_kaihei4[174];
 EvtWord peach_evt_stop_renji[15];
-EvtWord peach_evt_pato_on[46];
-EvtWord peach_evt_pato_off[18];
-EvtWord peach_evt_hari_on[100];
-EvtWord peach_evt_hari_off[27];
+static EvtWord peach_evt_pato_on[46];
+static EvtWord peach_evt_pato_off[18];
+static EvtWord peach_evt_hari_on[100];
+static EvtWord peach_evt_hari_off[27];
 EvtWord peach_evt_sugata_modoru[85];
 EvtWord peach_evt_kusuri_nomu[435];
-EvtWord kusuri_color_seiko[52];
-EvtWord kusuri_color_sippai[93];
-s32 peach_evt_bika_move_data[33];
+static EvtWord kusuri_color_seiko[52];
+static EvtWord kusuri_color_sippai[93];
+static s32 peach_evt_bika_move_data[33];
 EvtWord peach_evt_tyogo_sub[432];
 EvtWord peach_evt_tyogo[557];
 EvtWord peach_evt_tyogo_entry[6];
@@ -120,19 +120,19 @@ EvtWord peach_evt_kusuri_ki[19];
 EvtWord peach_evt_kusuri_mid[19];
 EvtWord peach_evt_wait_memo[18];
 EvtWord peach_evt_memo1[20];
-EvtWord peach_evt_memo2[20];
-EvtWord peach_evt_memo3[20];
-EvtWord peach_evt_memo4[20];
+static EvtWord peach_evt_memo2[20];
+static EvtWord peach_evt_memo3[20];
+static EvtWord peach_evt_memo4[20];
 static EvtWord peach_evt_stg5[385];
-EvtWord peach_evt_matigai_kusuri[14];
+static EvtWord peach_evt_matigai_kusuri[14];
 EvtWord peach_evt_tadashii_kusuri[155];
 EvtWord peach_evt_door[75];
 static EvtWord peach_evt_stg5_1[258];
-EvtWord kikai_init[137];
+static EvtWord kikai_init[137];
 static EvtWord evt_memo1[14];
 static EvtWord evt_memo2[14];
-EvtWord evt_memo3[14];
-EvtWord evt_memo4[14];
+static EvtWord evt_memo3[14];
+static EvtWord evt_memo4[14];
 EvtWord aji_06_init_evt[];
 
 /**
@@ -252,7 +252,7 @@ s32 g_Kusuri4_No = 3;
  * Opens one mixing-slot hatch (the map object named in LW(0), S_kaihei1 to 4):
  * slides it down 25 units over 0.8 seconds with SFX_PEACH_MACHINE_OPEN1, unless it is already open.
  */
-EVT_BEGIN(peach_evt_kaihei_open)
+static EVT_BEGIN(peach_evt_kaihei_open)
     SET_VALUE(LW(5), LW(0))
     CALL(evt_mapobj_get_position, LW(5), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 45)
@@ -272,7 +272,7 @@ EVT_BEGIN(peach_evt_kaihei_open)
 EVT_END()
 
 /** Opens all four hatches of the potion machine at once (S_kaihei1 to S_kaihei4). */
-EVT_BEGIN(peach_evt_kaihei_open_all)
+static EVT_BEGIN(peach_evt_kaihei_open_all)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), STRING("S_kaihei1"))
         CALL_CHILD(peach_evt_kaihei_open)
@@ -291,7 +291,7 @@ EVT_BEGIN(peach_evt_kaihei_open_all)
 EVT_END()
 
 /** Closes one mixing-slot hatch (LW(0)): slides it back up 25 units with SFX_PEACH_MACHINE_OPEN1. */
-EVT_BEGIN(peach_evt_kaihei_close)
+static EVT_BEGIN(peach_evt_kaihei_close)
     SET_VALUE(LW(5), LW(0))
     CALL(evt_mapobj_get_position, LW(5), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_MACHINE_OPEN1"), LW(0), LW(1), LW(2), LW(3))
@@ -308,7 +308,7 @@ EVT_BEGIN(peach_evt_kaihei_close)
 EVT_END()
 
 /** Closes all four hatches of the potion machine at once. */
-EVT_BEGIN(peach_evt_kaihei_close_all)
+static EVT_BEGIN(peach_evt_kaihei_close_all)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), STRING("S_kaihei1"))
         CALL_CHILD(peach_evt_kaihei_close)
@@ -507,7 +507,7 @@ EVT_END()
  * Flashes the pair of map objects LW(0) and LW(1) (shown and hidden alternately) three times at 100 ms each;
  * the slot scripts run it on their lamp pair (hika1 and kesu1, ...) after a correct pour.
  */
-EVT_BEGIN(peach_evt_seikai_evt)
+static EVT_BEGIN(peach_evt_seikai_evt)
     LOOP(3)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
@@ -839,7 +839,7 @@ EVT_END()
  * Starts a warning siren: turns the map object named in LW(0) (S_pato1, 2 or 3) around its Y axis at 12 degrees
  * per 30 ms and plays SFX_PEACH_MACHINE_SIREN1. Runs until deleted.
  */
-EVT_BEGIN(peach_evt_pato_on)
+static EVT_BEGIN(peach_evt_pato_on)
     SET_VALUE(LW(15), LW(0))
     CALL(evt_mapobj_get_position, LW(15), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_MACHINE_SIREN1"), LW(0), LW(1), LW(2), GW(4))
@@ -856,7 +856,7 @@ EVT_BEGIN(peach_evt_pato_on)
 EVT_END()
 
 /** Stops the siren named in LW(0): hides it, resets its rotation and stops the siren sound. */
-EVT_BEGIN(peach_evt_pato_off)
+static EVT_BEGIN(peach_evt_pato_off)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_rotate, 0, LW(0), 0, 0, 0)
     CALL(evt_snd_sfxoff, GW(4))
@@ -867,7 +867,7 @@ EVT_END()
  * Rotates the machine's needle (hari) by -130 degrees over 0.5 seconds and keeps it moving back and forth
  * while the machine runs.
  */
-EVT_BEGIN(peach_evt_hari_on)
+static EVT_BEGIN(peach_evt_hari_on)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -130, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -904,7 +904,7 @@ EVT_BEGIN(peach_evt_hari_on)
 EVT_END()
 
 /** Returns the machine's needle (hari) to its rest position. */
-EVT_BEGIN(peach_evt_hari_off)
+static EVT_BEGIN(peach_evt_hari_off)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, -130, 0, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -1080,7 +1080,7 @@ EVT_END()
  * Colour animation of the finished potion for a successful mix:
  * fades the fluid colour back and forth between green and blue-green forever.
  */
-EVT_BEGIN(kusuri_color_seiko)
+static EVT_BEGIN(kusuri_color_seiko)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 255)
     SET_VALUE(LW(2), 0)
@@ -1108,7 +1108,7 @@ EVT_END()
  * fades the fluid colour back and forth between a dimmed version (70 percent) of its current colour
  * and a 30 percent version, forever.
  */
-EVT_BEGIN(kusuri_color_sippai)
+static EVT_BEGIN(kusuri_color_sippai)
     CALL(kusuri_color_get, LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(0))
     SET_VALUE(LW(4), LW(1))
@@ -1147,7 +1147,7 @@ EVT_END()
 /**
  * Route of the beaker along the machine: eight stops, each with a target x, travel time, slot and direction.
  */
-s32 peach_evt_bika_move_data[] = {
+static s32 peach_evt_bika_move_data[] = {
     0, 77, 2310, 0, 0, 141, 1920, 1,
     0, 203, 1860, 2, 0, 141, 1860, 1,
     1, 203, 1860, 2, 0, 77, 3780, 0,
@@ -1603,7 +1603,7 @@ EVT_BEGIN(peach_evt_memo1)
 EVT_END()
 
 /** Peach reads recipe memo 2 (peach_aji_225_2). */
-EVT_BEGIN(peach_evt_memo2)
+static EVT_BEGIN(peach_evt_memo2)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_225_2"), 0, 0)
@@ -1613,7 +1613,7 @@ EVT_BEGIN(peach_evt_memo2)
 EVT_END()
 
 /** Peach reads recipe memo 3 (peach_aji_225_3). */
-EVT_BEGIN(peach_evt_memo3)
+static EVT_BEGIN(peach_evt_memo3)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_225_3"), 0, 0)
@@ -1623,7 +1623,7 @@ EVT_BEGIN(peach_evt_memo3)
 EVT_END()
 
 /** Peach reads recipe memo 4 (peach_aji_225_4). */
-EVT_BEGIN(peach_evt_memo4)
+static EVT_BEGIN(peach_evt_memo4)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_225_4"), 0, 0)
@@ -1716,7 +1716,7 @@ static EVT_BEGIN(peach_evt_stg5)
 EVT_END()
 
 /** Case script of the three wrong potions at the end of the puzzle: shows peach_aji_256. */
-EVT_BEGIN(peach_evt_matigai_kusuri)
+static EVT_BEGIN(peach_evt_matigai_kusuri)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_256"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -1857,7 +1857,7 @@ EVT_END()
  * Initial state of the potion machine: hides the sirens, empties the tubes and the mixing tank,
  * turns the arm and needle to their rest pose and sets the lamp objects hika1 to 4 hidden and kesu1 to 4 shown.
  */
-EVT_BEGIN(kikai_init)
+static EVT_BEGIN(kikai_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_pato1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_pato2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_pato3"), MAP_OBJ_FLAG_HIDDEN)
@@ -1899,7 +1899,7 @@ static EVT_BEGIN(evt_memo2)
 EVT_END()
 
 /** Case script of the wall note A_memo3 (Mario's visit): reads stg7_aji_32_03. */
-EVT_BEGIN(evt_memo3)
+static EVT_BEGIN(evt_memo3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_32_03"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -1907,7 +1907,7 @@ EVT_BEGIN(evt_memo3)
 EVT_END()
 
 /** Case script of the wall note A_memo4 (Mario's visit): reads stg7_aji_32_04. */
-EVT_BEGIN(evt_memo4)
+static EVT_BEGIN(evt_memo4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_32_04"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -2024,19 +2024,19 @@ EVT_BEGIN(aji_06_init_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(yuka_anim_reverse_end) {
+static USER_FUNC(yuka_anim_reverse_end) {
     yuka_anim.flags |= 2;
     return EVT_RETURN_DONE;
 }
 
 /** Script function: pauses the reverse playback of the "yuka" animation. */
-USER_FUNC(yuka_anim_reverse_pause) {
+static USER_FUNC(yuka_anim_reverse_pause) {
     yuka_anim.flags |= 1;
     return EVT_RETURN_DONE;
 }
 
 /** Script function: resumes the reverse playback of the "yuka" animation after a pause. */
-USER_FUNC(yuka_anim_reverse_replay) {
+static USER_FUNC(yuka_anim_reverse_replay) {
     yuka_anim.flags &= ~1;
     return EVT_RETURN_DONE;
 }
@@ -2047,7 +2047,7 @@ USER_FUNC(yuka_anim_reverse_replay) {
  * Each frame it subtracts the elapsed time times the animation speed from the animation frame
  * and wraps around at the start. Blocks until yuka_anim_reverse_end.
  */
-USER_FUNC(yuka_anim_reverse_play) {
+static USER_FUNC(yuka_anim_reverse_play) {
     f32 frame;
     f32 dt;
 
@@ -2078,13 +2078,13 @@ USER_FUNC(yuka_anim_reverse_play) {
 }
 
 /** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
-USER_FUNC(peach_chg_pose) {
+static USER_FUNC(peach_chg_pose) {
     marioChgPose((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
 /** Script function: args[0] = 1 makes Peach invisible by setting Mario's scale to 0 on all axes; 0 restores scale 1. */
-USER_FUNC(peach_evt_toumei_onoff) {
+static USER_FUNC(peach_evt_toumei_onoff) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
 
@@ -2104,7 +2104,7 @@ USER_FUNC(peach_evt_toumei_onoff) {
  * Script function: sets Peach's size to the float in args[0] (Mario's scale on x, y and z),
  * scaling her collision box (20 by 47 units at scale 1) with it.
  */
-USER_FUNC(peach_set_scale) {
+static USER_FUNC(peach_set_scale) {
     f32 scale = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
 
@@ -2137,7 +2137,7 @@ USER_FUNC(peach_evt_seikai_check) {
  * Script function: converts an item ID in args[0] (red 102, blue 101, orange 103, green 104,
  * the table kusuri_id) into its potion number 1 to 4 and returns it in args[1].
  */
-USER_FUNC(kusuri_list_get_no) {
+static USER_FUNC(kusuri_list_get_no) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 i;
@@ -2149,7 +2149,7 @@ USER_FUNC(kusuri_list_get_no) {
 }
 
 /** Script function: appends the item ID of potion number args[0] (1 to 4) to the potion menu list kusuri_list. */
-USER_FUNC(kusuri_list_add) {
+static USER_FUNC(kusuri_list_add) {
     s32 no = evtGetValue(event, event->args[0]);
     s32 i;
 
@@ -2160,7 +2160,7 @@ USER_FUNC(kusuri_list_add) {
 }
 
 /** Script function: clears the potion menu list (kusuri_list) to empty (-1 entries). */
-USER_FUNC(kusuri_list_init) {
+static USER_FUNC(kusuri_list_init) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
@@ -2169,7 +2169,7 @@ USER_FUNC(kusuri_list_init) {
     return EVT_RETURN_DONE;
 }
 
-void kusuri_4_color_tev(MapTevCallbackInfo* info) {
+static void kusuri_4_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
     GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -2182,7 +2182,7 @@ void kusuri_4_color_tev(MapTevCallbackInfo* info) {
 }
 
 /** Texture-environment callback for the third potion tube: the same as kusuri_4_color_tev with its own colour. */
-void kusuri_3_color_tev(MapTevCallbackInfo* info) {
+static void kusuri_3_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
     GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -2195,7 +2195,7 @@ void kusuri_3_color_tev(MapTevCallbackInfo* info) {
 }
 
 /** Texture-environment callback for the second potion tube: the same as kusuri_4_color_tev with its own colour. */
-void kusuri_2_color_tev(MapTevCallbackInfo* info) {
+static void kusuri_2_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
     GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -2208,7 +2208,7 @@ void kusuri_2_color_tev(MapTevCallbackInfo* info) {
 }
 
 /** Texture-environment callback for the first potion tube: the same as kusuri_4_color_tev with its own colour. */
-void kusuri_1_color_tev(MapTevCallbackInfo* info) {
+static void kusuri_1_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
     GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -2220,7 +2220,7 @@ void kusuri_1_color_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
-void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
+static void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -2232,7 +2232,7 @@ void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
     info->texMap = 0;
 }
 
-USER_FUNC(kusuri_color_get) {
+static USER_FUNC(kusuri_color_get) {
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], g_Kusuri_Col.r);
@@ -2241,7 +2241,7 @@ USER_FUNC(kusuri_color_get) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(kusuri_color_set_rgb) {
+static USER_FUNC(kusuri_color_set_rgb) {
     EvtWord* args = event->args;
     s32 r = evtGetValue(event, args[0]);
     s32 g = evtGetValue(event, args[1]);
@@ -2258,7 +2258,7 @@ USER_FUNC(kusuri_color_set_rgb) {
  * adds the potion's source colour to what was already mixed,
  * scales the result so the largest channel is 255 and stores the sum when finished. Blocks until the time is up.
  */
-USER_FUNC(kusuri_color_set) {
+static USER_FUNC(kusuri_color_set) {
     EvtWord* args = event->args;
     s32 no = evtGetValue(event, args[0]);
     s32 frames = evtGetValue(event, args[1]);
@@ -2316,7 +2316,7 @@ USER_FUNC(kusuri_color_set) {
 }
 
 /** Script function: resets the tank colour and the accumulated mix to black (0, 0, 0). */
-USER_FUNC(kusuri_color_init) {
+static USER_FUNC(kusuri_color_init) {
     g_Kusuri_Col.r = 0;
     g_Kusuri_Col.g = 0;
     g_Kusuri_Col.b = 0;

@@ -47,7 +47,7 @@ static u8 color_rotation_data[] = {
  * Keyframes of the recovery icon over 79 frames: it grows from nothing while dropping into place,
  * bounces, holds, then dips and shoots upward at the end.
  */
-MayaHermitKey recovery_effHermit_0[] = {
+static MayaHermitKey recovery_effHermit_0[] = {
     {
         0, // time
         {
@@ -170,23 +170,23 @@ static u8 color_rotation_data[] = {
 #endif
 
 /** The recovery icon's square plane that carries the heart or flower texture. */
-s16 recovery_effFace_pPlane2_q007_0[] = {
+static s16 recovery_effFace_pPlane2_q007_0[] = {
     4, // vertex count
     -768, -768, 0, 0, 512,
     768, -768, 0, 512, 512,
     768, 768, 0, 512, 0,
     -768, 768, 0, 0, 0,
 };
-s16* recovery_effFaceDt_pPlane2_q007 = recovery_effFace_pPlane2_q007_0;
+static s16* recovery_effFaceDt_pPlane2_q007 = recovery_effFace_pPlane2_q007_0;
 /** The recovery icon's single animated part: its keyframes and plane. */
-MayaPoly recovery_effAnimRST[] = {
+static MayaPoly recovery_effAnimRST[] = {
     {10, recovery_effHermit_0, 1, &recovery_effFaceDt_pPlane2_q007},
 };
 
 /** Part list of the recovery icon animation. */
-MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
+static MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
 /** Recovery icon animation (79 frames), started by effRecoveryEntry; moves the central icon, its number and label. */
-MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
+static MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
 
 static void effRecoveryMain(EffectEntry* effect);
 static void effRecoveryMain2(EffectEntry* effect);

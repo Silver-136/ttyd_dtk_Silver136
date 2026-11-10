@@ -37,18 +37,18 @@ typedef struct Mri02Switch {
     f32 target;
     f32 pos;
 } Mri02Switch;
-Mri02Switch mri02switch;
+static Mri02Switch mri02switch;
 
-USER_FUNC(getSwitch);
-USER_FUNC(moveSwitch);
-USER_FUNC(setPuniWeight);
+static USER_FUNC(getSwitch);
+static USER_FUNC(moveSwitch);
+static USER_FUNC(setPuniWeight);
 
 static BeroEntry bero_entry_data[4];
 static EvtWord evt_ueki_04[20];
 static KusaAccess ueki_access_data[6];
 EvtWord punipuni_switch[4];
-EvtWord dokan_event[123];
-EvtWord dokan_init[35];
+static EvtWord dokan_event[123];
+static EvtWord dokan_init[35];
 static EvtWord yuka_main[51];
 static EvtWord yuka_move[130];
 static EvtWord punipuni_ball00_init[35];
@@ -145,7 +145,7 @@ static KusaAccess ueki_access_data[] = {
  * Plays the switch-on or switch-off sound when the movement starts and rebinds the S_sui_l collision.
  * Runs as the punipuni_switch script forever.
  */
-USER_FUNC(moveSwitch) {
+static USER_FUNC(moveSwitch) {
     Mri02Switch* sw = &mri02switch;
     f32 delta;
 
@@ -203,13 +203,13 @@ f32 getMri02Yuka(void) {
 }
 
 /** Sets the weight (a negative number, one unit per Puni) that pushes the floor down. */
-USER_FUNC(setPuniWeight) {
+static USER_FUNC(setPuniWeight) {
     mri02switch.weight = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
 /** Returns 1 in args[0] when the weight floor is pressed all the way down (-10), otherwise 0. */
-USER_FUNC(getSwitch) {
+static USER_FUNC(getSwitch) {
     EvtWord* args = event->args;
     s32 on = FALSE;
 
@@ -231,7 +231,7 @@ EVT_END()
  * the pipe (dokan2) rises out of the floor with a quake, the party comments on it, and the Puni pipe is enabled.
  * Sets the story to STG2_16_THE_PUNI_ELDERS_POWERS.
  */
-EVT_BEGIN(dokan_event)
+static EVT_BEGIN(dokan_event)
     WAIT_WHILE(GF(15))
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
@@ -278,7 +278,7 @@ EVT_END()
  * Waits for the weight floor to be pressed while the Puni Orb is on its pedestal,
  * then runs dokan_event to raise the pipe.
  */
-EVT_BEGIN(dokan_init)
+static EVT_BEGIN(dokan_init)
     CALL(evt_hit_bind_mapobj, STRING("A_dokan2"), STRING("S_dokan2"))
     CALL(evt_mapobj_trans, 1, STRING("S_dokan2"), 0, -50, 0)
     CALL(evt_hit_bind_update, STRING("A_dokan2"))

@@ -24,8 +24,8 @@
 #define UNIT_WORK_AC_FAIL_TALKED 2    // 1 once phase_event has shown mac_0_b_t1_002 after a failed action command (_mario_ac_failed_check)
 #define UNIT_WORK_HALF_HP_TALKED 3    // 1 once phase_event has shown mac_0_b_t1_003 at HP <= half of max
 
-USER_FUNC(_mario_ac_failed_check);
-USER_FUNC(_mario_ac_success_check);
+static USER_FUNC(_mario_ac_failed_check);
+static USER_FUNC(_mario_ac_success_check);
 extern BattleUnitKind unit_npc_christine;
 
 BattleUnitKind unit_boss_kanbu1;
@@ -34,8 +34,8 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[1];
-BattleWeapon weapon_kanbu1_attack;
-BattleUnitSetup entry_npc_christine;
+static BattleWeapon weapon_kanbu1_attack;
+static BattleUnitSetup entry_npc_christine;
 static EvtWord init_event[82];
 static EvtWord phase_event[282];
 static EvtWord damage_event[10];
@@ -143,7 +143,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Lord Crump's attack: 1 damage to a single target, a hammer-style hit. */
-BattleWeapon weapon_kanbu1_attack = {
+static BattleWeapon weapon_kanbu1_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -183,7 +183,7 @@ BattleWeapon weapon_kanbu1_attack = {
  * Setup entry that adds Goombella as a unit of Lord Crump's battle
  * (his init script places her at (-140, 0, 5)).
  */
-BattleUnitSetup entry_npc_christine = {
+static BattleUnitSetup entry_npc_christine = {
     &unit_npc_christine, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
@@ -615,13 +615,13 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
-USER_FUNC(_mario_ac_success_check) {
+static USER_FUNC(_mario_ac_success_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAcSuccess);
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: stores in args[0] Mario's cumulative failed-action-command count (the battle work's marioAcFailed). */
-USER_FUNC(_mario_ac_failed_check) {
+static USER_FUNC(_mario_ac_failed_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAcFailed);
     return EVT_RETURN_DONE;
 }

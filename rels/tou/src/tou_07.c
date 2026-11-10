@@ -39,7 +39,7 @@
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
 
-USER_FUNC(mario_recovery);
+static USER_FUNC(mario_recovery);
 static USER_FUNC(paper_off);
 static USER_FUNC(paper_on);
 USER_FUNC(tou_07_snd_on);
@@ -63,7 +63,7 @@ EvtWord evt_champion_re[308];
 #endif
 
 static EvtWord evt_dakuto[39];
-EvtWord evt_dakuto2[44];
+static EvtWord evt_dakuto2[44];
 
 #if VERSION >= VERSION_US
 EvtWord evt_tou_bed[440];
@@ -118,7 +118,7 @@ USER_FUNC(tou_07_snd_off) {
 
 /** Script helper: restores Mario's HP and FP to their maximums (the bed's rest). */
 // Restore HP and FP only; unlike evt_pouch_mario_recovery, this leaves AP unchanged.
-USER_FUNC(mario_recovery) {
+static USER_FUNC(mario_recovery) {
     pouchSetHP(pouchGetMaxHP());
     pouchSetFP(pouchGetMaxFP());
     return EVT_RETURN_DONE;
@@ -595,7 +595,7 @@ EVT_END()
  * the cover rattles (two SFX_STG3_AIRDUCT_SHAKE1 sounds and the anm_futa animation) but stays on;
  * evt_dakuto handles the hit that knocks it off.
  */
-EVT_BEGIN(evt_dakuto2)
+static EVT_BEGIN(evt_dakuto2)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT

@@ -32,29 +32,29 @@ typedef struct GaugeKey {
 } GaugeKey;
 
 #if VERSION <= VERSION_DEMO_JP
-GaugeKey _table_0[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_1[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_2[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_0[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_1[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_2[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
 #else
-GaugeKey _table_0[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_1[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_2[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_0[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_1[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_2[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 #endif
 
 /**
  * Gauge curve keys {frame, value, flag; -1 ends it} for params[7] level 3 (read by _GetGaugeDecValue);
  * the same in every version.
  */
-GaugeKey _table_3[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_3[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 
 #if VERSION <= VERSION_DEMO_JP
-GaugeKey _table_4[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_5[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_6[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_4[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_5[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_6[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
 #else
-GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
-GaugeKey _table_6[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+static GaugeKey _table_6[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 #endif
 
 static void actionCommandDisp(f32 x, f32 y);

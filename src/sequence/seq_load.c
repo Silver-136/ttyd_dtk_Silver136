@@ -116,7 +116,7 @@ EVT_END()
  * Panels of the file select menu: the four save files, then the delete, copy and back buttons and the sound
  * and rumble buttons; each with its position, offsets and the panel the cursor moves to up, down, left, right.
  */
-WinDt win_dt[9] = {
+static WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {8, 3, 0, 0}},
     {-140.0f, -65.0f, -120.0f, 60.0f, 11, 0, {0, 4, 3, 3}},
@@ -129,7 +129,7 @@ WinDt win_dt[9] = {
 };
 
 /** Cursor layout while choosing a file to delete or copy from: the four files and the bottom buttons. */
-WinDt win_dt2[7] = {
+static WinDt win_dt2[7] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {6, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {6, 3, 0, 0}},
     {-140.0f, -65.0f, -120.0f, 60.0f, 11, 0, {0, 6, 3, 3}},
@@ -140,7 +140,7 @@ WinDt win_dt2[7] = {
 };
 
 /** Cursor layout while choosing the file to copy to: only the four save files. */
-WinDt win_dt3[4] = {
+static WinDt win_dt3[4] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {2, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {3, 3, 0, 0}},
     {-140.0f, -65.0f, -120.0f, 60.0f, 11, 0, {0, 0, 3, 3}},

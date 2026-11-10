@@ -54,17 +54,17 @@ s32 se_data[] = {
 };
 
 /** Light camera shake at the impact frame of every swing with the plain Hammer (level 1). */
-EVT_BEGIN(lv1quake_evt)
+static EVT_BEGIN(lv1quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
     RETURN
 EVT_END()
 
-EVT_BEGIN(lv2quake_evt)
+static EVT_BEGIN(lv2quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
     RETURN
 EVT_END()
 
-EVT_BEGIN(lv3quake_evt)
+static EVT_BEGIN(lv3quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 140)
     RETURN
 EVT_END()

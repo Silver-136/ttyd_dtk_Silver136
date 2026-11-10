@@ -19,16 +19,16 @@ enum { FILE_ENTRY_CAPACITY = 0x400 };
 
 //.bss
 #if VERSION <= VERSION_DEMO_JP
-FileManagerWork fileWork;
+static FileManagerWork fileWork;
 #endif
 
-char _filename[0x400]; // for fileAllocf/fileAsyncf vsprintf
+static char _filename[0x400]; // for fileAllocf/fileAsyncf vsprintf
 
 //.sbss
-FileManagerWork fileWork;
+static FileManagerWork fileWork;
 
 //.sdata
-FileManagerWork* afp = &fileWork;
+static FileManagerWork* afp = &fileWork;
 
 // local prototypes
 static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));

@@ -42,15 +42,15 @@ static char name[8];
 
 static USER_FUNC(eff_guruguru);
 static USER_FUNC(make_name);
-USER_FUNC(syuryo_baria);
-USER_FUNC(syuryo_baria_recalc_pos);
+static USER_FUNC(syuryo_baria);
+static USER_FUNC(syuryo_baria_recalc_pos);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord syuryo_init[30];
-EvtWord koopa_init[7];
-EvtWord koopa_talk[8];
+static EvtWord koopa_init[7];
+static EvtWord koopa_talk[8];
 static EvtWord baba_init[7];
 static EvtWord baba_talk[8];
 static NpcSetupInfo npcEnt[5];
@@ -61,7 +61,7 @@ static EvtWord first_evt[168];
 static EvtWord first_evt[170];
 #endif
 
-EvtWord syuryo_thunder[419];
+static EvtWord syuryo_thunder[419];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord syuryo_evt[];
@@ -69,7 +69,7 @@ extern EvtWord syuryo_evt[];
 EvtWord syuryo_evt[1254];
 #endif
 
-EvtWord gareki_fall[45];
+static EvtWord gareki_fall[45];
 EvtWord koopa_evt[1671];
 static EvtWord shuryolight_init[18];
 static EvtWord shan_init[46];
@@ -84,7 +84,7 @@ EvtWord las_28_init_evt[238];
  * Script helper: creates the glowing barrier ("baria", the Shuryo effect at double scale) around Princess
  * Peach's NPC so she is shown held inside it.
  */
-USER_FUNC(syuryo_baria) {
+static USER_FUNC(syuryo_baria) {
     // ピーチ単
     NpcEntry* npc = npcNameToPtr("ピーチ姫");
     EffectEntry* eff = effSyuryouEntry(1, 1000, npc->position.x, npc->position.y - 8.0f, 10.0f + npc->position.z);
@@ -177,13 +177,13 @@ static EVT_BEGIN(syuryo_init)
 EVT_END()
 
 /** Init event of Bowser (クッパ): sets status bit 2, so he turns to face the way he moves. */
-EVT_BEGIN(koopa_init)
+static EVT_BEGIN(koopa_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 /** Talk event of Bowser after the fight; prints stg8_las_107. */
-EVT_BEGIN(koopa_talk)
+static EVT_BEGIN(koopa_talk)
     CALL(evt_msg_print, 0, STRING("stg8_las_107"), 0, STRING("me"))
     RETURN
 EVT_END()
@@ -308,7 +308,7 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
-USER_FUNC(syuryo_baria_recalc_pos) {
+static USER_FUNC(syuryo_baria_recalc_pos) {
     // ピーチ単
     NpcEntry* npc = npcNameToPtr("ピーチ姫");
     static const Vec base = {0.0f, -8.0f, 10.0f};
@@ -332,7 +332,7 @@ USER_FUNC(syuryo_baria_recalc_pos) {
  * hit effects on both, a thunder effect between them, camera shake,
  * then Mario and the partner fall into their hurt poses.
  */
-EVT_BEGIN(syuryo_thunder)
+static EVT_BEGIN(syuryo_thunder)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 
     // Grodus's lightning strikes: hit effects on Mario and his partner, then a bolt between them with thunder
@@ -837,7 +837,7 @@ static USER_FUNC(eff_guruguru) {
  * Event script: a chunk of ceiling rubble (map object LW(0)) falls from 350 units up over LW(3) ms;
  * LW(1) and LW(2) are its landing parameters.
  */
-EVT_BEGIN(gareki_fall)
+static EVT_BEGIN(gareki_fall)
     SET_VALUE(LW(7), LW(0))
     SET_VALUE(LW(8), LW(1))
     SET_VALUE(LW(9), LW(2))

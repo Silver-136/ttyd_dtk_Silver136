@@ -39,14 +39,14 @@ static void effStageClearDisp(CameraId cameraId, void* payload);
 #if VERSION < VERSION_US
 #if VERSION <= VERSION_DEMO_JP
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
-s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
+static s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
 #endif
 static s32 tex_us[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA0, 0x9E, 0xA3, 0xA0, 0xA4, 0xA5};
 s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xAD, 0xAA, 0xAE, 0xAF};
 #if VERSION <= VERSION_DEMO_JP
 static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
-s32 shake_dt[] = {2, 6, 2, 0, -1};
-s32 shake_dt2[] = {12, 36, 12, 0, -1};
+static s32 shake_dt[] = {2, 6, 2, 0, -1};
+static s32 shake_dt2[] = {12, 36, 12, 0, -1};
 #endif
 #endif
 
@@ -65,7 +65,7 @@ EVT_END()
 /** Letter textures of the stage-clear banner for each language, each with a matching shadow list; -1 is a gap. */
 #if VERSION >= VERSION_US
 static s16 tex_jp[] = {128, 129, 130, 131, 132, 133, 134, 135};
-s16 tex_shadow_jp[] = {136, 137, 138, 139, 140, 141, 142, 143};
+static s16 tex_shadow_jp[] = {136, 137, 138, 139, 140, 141, 142, 143};
 static s16 tex_us[] = {132, 133, 134, -1, 135, 136, -1, 137, 138, 139, 140, 141, 132, 142};
 static s16 tex_shadow_us[] = {143, 144, 145, -1, 146, 147, -1, 148, 149, 150, 151, 152, 143, 153};
 static s16 tex_lang3[] = {130, 131, 132, 133, 134, 135, 136, 137, 135, 138, 139, 135};
@@ -100,7 +100,7 @@ EVT_END()
 #else
 #if VERSION >= VERSION_JP
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
-s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
+static s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
 #endif
 /** Banner letters and shadows, Japanese then English (indexed by language * 2). */
 #if VERSION >= VERSION_JP
@@ -112,12 +112,12 @@ static u32 niji_tbl[] = {0xAC, 0xB0};
 
 /** Shake pattern handed to an ordinary letter's camera-shake event in LW 0; evt_shake does not read it. */
 #if VERSION >= VERSION_JP
-s32 shake_dt[] = {2, 6, 2, 0, -1};
+static s32 shake_dt[] = {2, 6, 2, 0, -1};
 #endif
 
 /** Stronger shake pattern handed to the last letter's shake event; also unread. */
 #if VERSION >= VERSION_JP
-s32 shake_dt2[] = {12, 36, 12, 0, -1};
+static s32 shake_dt2[] = {12, 36, 12, 0, -1};
 #endif
 
 /** Size percentages per frame as a banner letter pops in: it overshoots to 120% and settles near 100%. */

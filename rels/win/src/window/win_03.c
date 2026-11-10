@@ -33,12 +33,12 @@
 #include "driver/seqdrv.h"
 #include "driver/npcdrv.h"
 
-USER_FUNC(camera_action);
+static USER_FUNC(camera_action);
 
-EvtWord clouda_house_in[12];
-EvtWord clouda_house_out[19];
-EvtWord cloud_out[12];
-EvtWord cloud_in[12];
+static EvtWord clouda_house_in[12];
+static EvtWord clouda_house_out[19];
+static EvtWord cloud_out[12];
+static EvtWord cloud_in[12];
 static BeroEntry bero_entry_data[5];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -48,10 +48,10 @@ EvtWord lookat_house[45];
 #endif
 
 static EvtWord cloud_toujou[76];
-EvtWord cloud_lostitem[215];
-EvtWord tree_evt_01[20];
+static EvtWord cloud_lostitem[215];
+static EvtWord tree_evt_01[20];
 static TreeAccess tree_access_data[5];
-EvtWord dummy_event[4];
+static EvtWord dummy_event[4];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord win_03_init_evt[];
@@ -63,7 +63,7 @@ EvtWord win_03_init_evt[108];
  * Bero-style script that nothing in the tree references: locks Mario's keys
  * and changes the map to win_04 at its "w_bero" entry (Flurrie's house interior); returns LW(0) = 1.
  */
-EVT_BEGIN(clouda_house_in)
+static EVT_BEGIN(clouda_house_in)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_mapchange, STRING("win_04"), STRING("w_bero"))
     SET_VALUE(LW(0), 1)
@@ -77,7 +77,7 @@ EVT_END()
  * returns LW(0) = 1.
  * Guess: an unused variant for coming out of Flurrie's house.
  */
-EVT_BEGIN(clouda_house_out)
+static EVT_BEGIN(clouda_house_out)
     CALL(evt_mario_bgmode_on)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_cam_y_off)
@@ -88,14 +88,14 @@ EVT_BEGIN(clouda_house_out)
 EVT_END()
 
 /** Enter script of the "n_bero" entry (Mario arrives back from Flurrie's house): plays the wooden door-shut sound at her door (306, 23, -448); returns LW(0) = 0. */
-EVT_BEGIN(cloud_out)
+static EVT_BEGIN(cloud_out)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_WOOD2"), 306, 23, -448, 0)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
 
 /** Exit script of the "n_bero" entry (Mario leaves for Flurrie's house): plays the wooden door-open sound at her door (306, 23, -448); returns LW(0) = 0. */
-EVT_BEGIN(cloud_in)
+static EVT_BEGIN(cloud_in)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD3"), 306, 23, -448, 0)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -200,7 +200,7 @@ EVT_BEGIN(lookat_house)
     RETURN
 EVT_END()
 
-USER_FUNC(camera_action) {
+static USER_FUNC(camera_action) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec pos = {290.0f, 150.0f, 491.0f};
     Vec at = {290.0f, 90.0f, -6.0f};
@@ -281,7 +281,7 @@ EVT_END()
  * a voice wails that something is gone (stg2_win_e04_00_05),
  * the story becomes STG2_03_04_SHES_LOST_HER_PRECIOUS and the map changes to win_01 ("n_bero").
  */
-EVT_BEGIN(cloud_lostitem)
+static EVT_BEGIN(cloud_lostitem)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -338,7 +338,7 @@ EVT_BEGIN(cloud_lostitem)
     RETURN
 EVT_END()
 
-EVT_BEGIN(tree_evt_01)
+static EVT_BEGIN(tree_evt_01)
     CALL(evt_item_delete_check, STRING("item_tree01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_item_entry, STRING("item_tree01"), ITEM_STAR_PIECE, -333, 72, -24, ITEM_TYPE_GROUND, GSWF_STARPIECE_42, 0)
@@ -359,7 +359,7 @@ static TreeAccess tree_access_data[] = {
  * Case script the init script registers for pressing A while standing on "n_bero":
  * it only ends the case event, so pressing A there does nothing.
  */
-EVT_BEGIN(dummy_event)
+static EVT_BEGIN(dummy_event)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()

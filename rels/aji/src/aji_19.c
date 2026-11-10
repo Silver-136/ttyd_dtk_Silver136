@@ -35,7 +35,7 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
-EvtWord evt_hajimete[33];
+static EvtWord evt_hajimete[33];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_19_init_evt[];
@@ -157,7 +157,7 @@ static BeroEntry bero_entry_data[] = {
  * the partner comments (stg7_aji_00_00_01), the story becomes STG7_07_01_INSIDE_THE_BUILDING
  * and telop 15 is requested.
  */
-EVT_BEGIN(evt_hajimete)
+static EVT_BEGIN(evt_hajimete)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)

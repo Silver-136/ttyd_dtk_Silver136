@@ -47,7 +47,7 @@ void envSetYami(MapTevCallbackInfo* info);
  * this one is the idle loop
  * (the walk, run, damage, down, roll, stray, jump and wander sequences below follow the same layout).
  */
-u16 puni_nom_patern_data[] = {
+static u16 puni_nom_patern_data[] = {
     0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,    21, 22, 23, 24,
     25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 0,  1,  2,  3,  4,  5,     6,  7,  8,  9,
     10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,    31, 32, 33, 34,
@@ -59,54 +59,54 @@ u16 puni_nom_patern_data[] = {
  * The remaining Puni action sequences: walking, running, damaged, knocked down, rolling, stray (hagure),
  * jumping up, jumping down and wandering.
  */
-u16 puni_wlk_patern_data[] = {
+static u16 puni_wlk_patern_data[] = {
     52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 65535,
 };
-u16 puni_run_patern_data[] = { 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 65535 };
-u16 puni_dmg_patern_data[] = { 72, 65535 };
-u16 puni_dwn_patern_data[] = { 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 65535 };
-u16 puni_rol_patern_data[] = { 83, 65535 };
-u16 puni_hag_patern_data[] = { 0, 65535 };
-u16 puni_jpu_patern_data[] = { 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 65534 };
-u16 puni_jpd_patern_data[] = { 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 65534 };
-u16 puni_wan_patern_data[] = { 104, 105, 106, 107, 108, 109, 110, 111, 65534 };
+static u16 puni_run_patern_data[] = { 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 65535 };
+static u16 puni_dmg_patern_data[] = { 72, 65535 };
+static u16 puni_dwn_patern_data[] = { 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 65535 };
+static u16 puni_rol_patern_data[] = { 83, 65535 };
+static u16 puni_hag_patern_data[] = { 0, 65535 };
+static u16 puni_jpu_patern_data[] = { 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 65534 };
+static u16 puni_jpd_patern_data[] = { 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 65534 };
+static u16 puni_wan_patern_data[] = { 104, 105, 106, 107, 108, 109, 110, 111, 65534 };
 /**
  * The ten Puni action sequences in the order of the animation sets
  * (idle, walk, run, damage, down, roll, stray, jump up, jump down, wander); registered with
  * puniAnimationInit_inl.
  */
-u16* puni_patern_table[] = { puni_nom_patern_data, puni_wlk_patern_data, puni_run_patern_data, puni_dmg_patern_data,
+static u16* puni_patern_table[] = { puni_nom_patern_data, puni_wlk_patern_data, puni_run_patern_data, puni_dmg_patern_data,
                              puni_dwn_patern_data, puni_rol_patern_data, puni_hag_patern_data, puni_jpu_patern_data,
                              puni_jpd_patern_data, puni_wan_patern_data };
 
 /**
  * Animation frame sequences of the Jabbi (toge): the idle loop, which has 24 frames.
  */
-u16 toge_nom_patern_data[25] = {
+static u16 toge_nom_patern_data[25] = {
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 65535,
 };
 
 /**
  * The remaining Jabbi action sequences: walking, running, damaged, knocked down, rolling and stray (hagure).
  */
-u16 toge_wlk_patern_data[] = { 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 65535 };
-u16 toge_run_patern_data[] = { 108, 110, 112, 114, 116, 118, 65535 };
-u16 toge_dmg_patern_data[] = { 120, 65535 };
-u16 toge_dwn_patern_data[] = { 121, 122, 123, 124, 125, 126, 127, 128, 65535 };
-u16 toge_rol_patern_data[] = { 129, 65535 };
-u16 toge_hag_patern_data[] = { 0, 65535 };
+static u16 toge_wlk_patern_data[] = { 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 65535 };
+static u16 toge_run_patern_data[] = { 108, 110, 112, 114, 116, 118, 65535 };
+static u16 toge_dmg_patern_data[] = { 120, 65535 };
+static u16 toge_dwn_patern_data[] = { 121, 122, 123, 124, 125, 126, 127, 128, 65535 };
+static u16 toge_rol_patern_data[] = { 129, 65535 };
+static u16 toge_hag_patern_data[] = { 0, 65535 };
 /**
  * The ten Jabbi action sequences in the same order as puni_patern_table
  * (the stray sequence stands in for the last four).
  */
-u16* toge_patern_table[] = { toge_nom_patern_data, toge_wlk_patern_data, toge_run_patern_data, toge_dmg_patern_data,
+static u16* toge_patern_table[] = { toge_nom_patern_data, toge_wlk_patern_data, toge_run_patern_data, toge_dmg_patern_data,
                              toge_dwn_patern_data, toge_rol_patern_data, toge_hag_patern_data, toge_hag_patern_data,
                              toge_hag_patern_data, toge_hag_patern_data };
 
 //.bss
 PuniData* Punidat;
-PuniWork* Punigp;
-PuniTexInfo* Punitex;
+static PuniWork* Punigp;
+static PuniTexInfo* Punitex;
 PuniMap* Punimap;
 
 /**
@@ -172,7 +172,7 @@ void evt_icon_disp_func(CameraId camId, void* param) {
     }
 }
 
-PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* group, const char* anim, f32 frame) {
+static PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* group, const char* anim, f32 frame) {
     s32 i;
 
     for (i = 0; i < count; i++) {
@@ -222,7 +222,7 @@ USER_FUNC(evt_make_texbuf) {
  * Counts the frames of an animation pattern (a list of frame numbers ended by -1 or -2) into *count
  * and stores the terminating value in *end.
  */
-void puniAnimCount(s16* pattern, s16* count, s16* end) {
+static void puniAnimCount(s16* pattern, s16* count, s16* end) {
     s16 n = 0;
     s32 i = 0;
 
@@ -245,7 +245,7 @@ void puniAnimCount(s16* pattern, s16* count, s16* end) {
  * Registers the ten animation patterns of the Puni (a[]) and of the Jabbi (b[]) with their frame counts
  * and terminator values in Punigp->anim[0] and [1].
  */
-void puniAnimationInit(s16** a, s16** b) {
+static void puniAnimationInit(s16** a, s16** b) {
     PuniAnimSet* s0 = &Punigp->anim[0];
     PuniAnimSet* s1 = &Punigp->anim[1];
     s32 j;
@@ -280,7 +280,7 @@ void puniAnimationInit(s16** a, s16** b) {
  * W_1 walk, R_1 run, D_1/D_2 damage and down, F_1 fall, Z_1, J_1A/J_1B jump, B_1) for the guide, the sister,
  * the little Jabbi and the rival.
  */
-void puniAnimationInit2(void) {
+static void puniAnimationInit2(void) {
     char (*n)[16];
     n = (char (*)[16])&Punigp->animNames[0];
     strcpy(n[0], "S_1");
@@ -336,7 +336,7 @@ void puniAnimationInit2(void) {
  * position and rotation instead and parks the draw pose out of view.
  * Inactive or hidden Punies are moved to y=-1000.
  */
-void puniAnimation(PuniData* p, PunidrvPose* t) {
+static void puniAnimation(PuniData* p, PunidrvPose* t) {
     NpcEntry* npc;
     char* names;
     PuniAnimSet* set;
@@ -460,7 +460,7 @@ void puniAnimation(PuniData* p, PunidrvPose* t) {
  * pos runs from start to start + 20; over the first 10 units the height falls from base + 10 to base,
  * then it stays at base.
  */
-f32 _chukanhosei(f32 a, f32 b, f32 c) {
+static f32 _chukanhosei(f32 a, f32 b, f32 c) {
     f32 t = (20.0f + b - a) / 20.0f;
     if (t > 0.5f) {
         t = (t - 0.5f) / 0.5f;
@@ -471,7 +471,7 @@ f32 _chukanhosei(f32 a, f32 b, f32 c) {
 }
 
 /** Whether (px, pz) lies in the square of half-width r around (x, z). */
-BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
+static BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
     BOOL ret = TRUE;
     if (x - r > px) {
         ret = FALSE;
@@ -505,7 +505,7 @@ BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
  * on the stair slope east of x=200 it follows 10-unit steps down from 100 to 0 along z;
  * on the central area it is level at 0.
  */
-void _ymode_mri_09(PuniData* p) {
+static void _ymode_mri_09(PuniData* p) {
     float floorY;
     floorY = 0.0f;
     if (p->pos.x <= 400.0f && p->pos.x > 200.0f && p->pos.y <= 100.0f && p->pos.y >= floorY) {
@@ -547,7 +547,7 @@ void _ymode_mri_09(PuniData* p) {
  * the ramp from y=-320 down to y=-400 along x, with PUNI_FLAG2_ON_SLOPE set while on it.
  * A Puni leaving the ramp sideways is put back at its previous position so it cannot step over the ramp edge.
  */
-void _ymode_mri_16_00(PuniData* p) {
+static void _ymode_mri_16_00(PuniData* p) {
     u32 old = p->flags2;
     p->flags2 &= ~PUNI_FLAG2_ON_SLOPE;
     if (p->pos.y <= -200.0f && p->pos.y >= -400.0f) {
@@ -586,7 +586,7 @@ void _ymode_mri_16_00(PuniData* p) {
  * the ramp from y=80 down to y=0 along x, with PUNI_FLAG2_ON_SLOPE set while on it,
  * and the edge check that stops a Puni stepping off the ramp sideways.
  */
-void _ymode_mri_16_01(PuniData* p) {
+static void _ymode_mri_16_01(PuniData* p) {
     u32 old = p->flags2;
     f32 bz;
     p->flags2 &= ~PUNI_FLAG2_ON_SLOPE;
@@ -649,7 +649,7 @@ void _ymode_mri_16_01(PuniData* p) {
  * mri_12 and mri_17 (until it breaks, the breakable floor raises the Puni 6 units), and the ramps of mri_16.
  * In height modes 2 to 6 it never lets a Puni jump more than 11 units in one frame.
  */
-void puniSetYPosition(PuniData* p) {
+static void puniSetYPosition(PuniData* p) {
     if (p->flags & PUNI_FLAG_PUNI) {
         BOOL _aok;
         f32 _ax, _az;
@@ -731,7 +731,7 @@ u8 puniMapdata_MRI_16[] = {
 };
 
 /** Converts a world position in mri_06 into a maze block (column bx 1 to 11, row bz 1 to 3); -1 outside the room. */
-void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz) {
+static void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz) {
     if (x <= -420.0) {
         *bx = -1;
     } else if (x <= -350.0) {
@@ -773,7 +773,7 @@ void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz) {
 }
 
 /** Gives the centre of the mri_06 maze block (bx, bz) as a world x and z; -1000 for an invalid block. */
-void puniMapdata_MRI_06_getpos(s32 bx, s32 bz, f32* x, f32* z) {
+static void puniMapdata_MRI_06_getpos(s32 bx, s32 bz, f32* x, f32* z) {
     switch (bx) {
         case 1:
             *x = -375.0f;
@@ -829,7 +829,7 @@ void puniMapdata_MRI_06_getpos(s32 bx, s32 bz, f32* x, f32* z) {
 }
 
 /** Converts a world position in mri_09 into a maze block (column bx 1 to 5, row bz 1 to 4); -1 outside the room. */
-void puniMapdata_MRI_09_getidx(f32 x, f32 z, s32* bx, s32* bz) {
+static void puniMapdata_MRI_09_getidx(f32 x, f32 z, s32* bx, s32* bz) {
     if (x <= -300.0) {
         *bx = -1;
     } else if (x <= -200.0) {
@@ -861,7 +861,7 @@ void puniMapdata_MRI_09_getidx(f32 x, f32 z, s32* bx, s32* bz) {
 }
 
 /** Gives the centre of the mri_09 maze block (bx, bz) as a world x and z; -1000 for an invalid block. */
-void puniMapdata_MRI_09_getpos(s32 bx, s32 bz, f32* x, f32* z) {
+static void puniMapdata_MRI_09_getpos(s32 bx, s32 bz, f32* x, f32* z) {
     switch (bx) {
         case 1:
             *x = -250.0f;
@@ -902,7 +902,7 @@ void puniMapdata_MRI_09_getpos(s32 bx, s32 bz, f32* x, f32* z) {
 }
 
 /** Converts a world position in mri_16 into a maze block (column bx 1 to 9, row bz 1 to 7); -1 outside the room. */
-void puniMapdata_MRI_16_getidx(f32 x, f32 z, s32* bx, s32* bz) {
+static void puniMapdata_MRI_16_getidx(f32 x, f32 z, s32* bx, s32* bz) {
     if (x <= -350.0) {
         *bx = -1;
     } else if (x <= -200.0) {
@@ -948,7 +948,7 @@ void puniMapdata_MRI_16_getidx(f32 x, f32 z, s32* bx, s32* bz) {
 }
 
 /** Gives the centre of the mri_16 maze block (bx, bz) as a world x and z; -1000 for an invalid block. */
-void puniMapdata_MRI_16_getpos(s32 bx, s32 bz, f32* x, f32* z) {
+static void puniMapdata_MRI_16_getpos(s32 bx, s32 bz, f32* x, f32* z) {
     switch (bx) {
         case 1: *x = -220.0f; break;
         case 2: *x = -175.0f; break;
@@ -980,7 +980,7 @@ void puniMapdata_MRI_16_getpos(s32 bx, s32 bz, f32* x, f32* z) {
  * This function has no direct callers: the compiler inlines it into puniMapFindbuff,
  * puniModeParent and puniModeSearch.
  */
-void puniMapPos2Blk(Vec* pos, s32* blk) {
+static void puniMapPos2Blk(Vec* pos, s32* blk) {
     switch (Punigp->mapKind) {
         case 0:
             break;
@@ -997,7 +997,7 @@ void puniMapPos2Blk(Vec* pos, s32* blk) {
 }
 
 /** World x/z of the centre of a maze block (the inverse of puniMapPos2Blk); out-of-range blocks give -1000. */
-void puniMapBlk2Pos(s32 bx, s32 bz, f32* x, f32* z) {
+static void puniMapBlk2Pos(s32 bx, s32 bz, f32* x, f32* z) {
     switch (Punigp->mapKind) {
         case 0:
             break;
@@ -1031,7 +1031,7 @@ void puniMapBlk2Pos(s32 bx, s32 bz, f32* x, f32* z) {
  * Reads the maze entry for block (x, y) from Punimap->data;
  * an entry whose distance byte is 0 (not yet reached) is returned as 0xFFFF.
  */
-u16 puniMapGetInfo(s32 x, s32 y) {
+static u16 puniMapGetInfo(s32 x, s32 y) {
     u16 v = Punimap->data[x + y * Punimap->width];
     if (!(v & 0xFF)) {
         v |= 0xFFFF;
@@ -1040,7 +1040,7 @@ u16 puniMapGetInfo(s32 x, s32 y) {
 }
 
 /** Allocates and clears the maze map record (Punimap) for the current map. */
-void puniMapInit(void) {
+static void puniMapInit(void) {
     Punimap = _mapAlloc(sizeof(PuniMap));
     memset(Punimap, 0, sizeof(PuniMap));
 }
@@ -1052,7 +1052,7 @@ void puniMapInit(void) {
  * (puniMapFindbuff copies twice the table, reading past it), and the memcpy below copies src onto itself,
  * so data stays uninitialised until puniMapFindbuff fills it.
  */
-void puniMapDataSet(s32 w, s32 h, void* src, f32 x, f32 z) {
+static void puniMapDataSet(s32 w, s32 h, void* src, f32 x, f32 z) {
     Punimap->x = x;
     Punimap->z = z;
     if (src == NULL) {
@@ -1075,7 +1075,7 @@ void puniMapDataSet(s32 w, s32 h, void* src, f32 x, f32 z) {
  * then repeatedly gives each neighbouring block (within one height step) the distance plus one,
  * until nothing changes. Does nothing when no maze is loaded or pos is outside the maze's height range.
  */
-void puniMapFindbuff(Vec pos) {
+static void puniMapFindbuff(Vec pos) {
     f32 px, pz;
     s32 bx, bz;
     u16* d;
@@ -1154,7 +1154,7 @@ void puniMapFindbuff(Vec pos) {
  * only targets within 32 units of its height count.
  * Results go to massTarget and awayTarget (-1 for none) with the squared distances.
  */
-void puniTargetSearch(PuniData* p) {
+static void puniTargetSearch(PuniData* p) {
     s32 i;
     PuniTarget* t = Punigp->targets;
     f32 d;
@@ -1288,13 +1288,13 @@ static f32 randf(f32 min, f32 max) {
 }
 
 /** Random integer from min to max, both inclusive, from rand(). */
-s32 randi(s32 min, s32 max) {
+static s32 randi(s32 min, s32 max) {
     s32 r = rand() % (max - min + 1);
     return r + min;
 }
 
 /** Seeds the Puni fight's own random generator (Punigp->seed0 and seed1). */
-void qrndseed(s32 seed) {
+static void qrndseed(s32 seed) {
     Punigp->seed0 = seed + 0x3A3B01F9;
     Punigp->seed1 = 0x21708331;
 }
@@ -1303,7 +1303,7 @@ void qrndseed(s32 seed) {
  * Advances the Puni fight's own random generator and returns a number from 0 to n-1.
  * The Puni battles use this instead of rand().
  */
-s32 qrnd(s32 n) {
+static s32 qrnd(s32 n) {
     s32 v;
     Punigp->seed0 += Punigp->seed1 + 0x1733AF91;
     Punigp->seed1 += Punigp->seed0 + 0x21273F9C;
@@ -1312,7 +1312,7 @@ s32 qrnd(s32 n) {
 }
 
 /** Deletes the effect attached to a Puni (if any) and clears the pointer. */
-void puniDeleteEffect(PuniData* p) {
+static void puniDeleteEffect(PuniData* p) {
     if (p->effect) {
         effDelete(p->effect);
         p->effect = NULL;
@@ -1323,7 +1323,7 @@ void puniDeleteEffect(PuniData* p) {
  * Lowers the depth number of every Puni below p in its follow chain by one, recursively.
  * Used when a Puni leaves the chain.
  */
-void _daime_change(PuniData* p) {
+static void _daime_change(PuniData* p) {
     if (p->child1) {
         p->child1->depth--;
         _daime_change(p->child1);
@@ -1391,7 +1391,7 @@ void PuniDokuritsu(PuniData* p) {
 }
 
 /** Walks up the parent links to the head of the follow chain and returns it. */
-PuniData* PuniSakanobori(PuniData* p) {
+static PuniData* PuniSakanobori(PuniData* p) {
     while (p->parent != NULL) {
         p = p->parent;
     }
@@ -1402,7 +1402,7 @@ PuniData* PuniSakanobori(PuniData* p) {
  * Sends all the Punies behind p in the follow chain astray:
  * each descendant goes to the hagure (lost) mode and is detached from the chain.
  */
-void PuniChildHagure(PuniData *p) {
+static void PuniChildHagure(PuniData *p) {
     if (p->child1 != NULL) {
         PuniData *c = p->child1;
         c->mode = PUNI_MODE_HAGURE;
@@ -1452,7 +1452,7 @@ BOOL searchParent(PuniData* p) {
 }
 
 /** TRUE when Mario is within 150 units of the Puni, the range at which it joins him. */
-BOOL searchMario(PuniData* p) {
+static BOOL searchMario(PuniData* p) {
     return p->marioDist < 150.0f;
 }
 
@@ -1465,7 +1465,7 @@ static const Vec puni_fall_dir = {0.0f, -1.0f, 0.0f};
  * 2 if it is inside a band but there is no floor within 3 units below it,
  * and 0 if it is in a band with a floor beneath (all is well); callers put it back for 1 and 2.
  */
-s32 puniPositionCheck(PuniData* p) {
+static s32 puniPositionCheck(PuniData* p) {
     f32* r = &Punigp->stuckTop0;
     s32 in = 0;
     Vec pos;
@@ -1501,7 +1501,7 @@ s32 puniPositionCheck(PuniData* p) {
  * Puts a Puni that fell out of the map back at the recovery position (Punigp->recoverPos) with a one-unit random
  * jitter, setting its previous position to the new one.
  */
-void puniPositionRecover(PuniData* p) {
+static void puniPositionRecover(PuniData* p) {
     p->pos = Punigp->recoverPos;
     p->pos.x += randf(0.0f, 2.0f) - 1.0f;
     p->pos.z += randf(0.0f, 2.0f) - 1.0f;
@@ -1927,14 +1927,14 @@ static void puniMoveNormal(PuniData* p) {
 }
 #endif
 /** Moves a Puni by its velocity with no collision at all. */
-void puniMoveSimple(PuniData* p) {
+static void puniMoveSimple(PuniData* p) {
     if (PSVECMag(&p->vel)) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     }
 }
 
 /** Calls the Puni's own move function (moveFunc), if it has one. */
-void puniMoveCustom(PuniData* p) {
+static void puniMoveCustom(PuniData* p) {
     if (p->moveFunc) {
         p->moveFunc(p);
     }
@@ -1947,7 +1947,7 @@ void puniMoveCustom(PuniData* p) {
  * is flagged for knockback and goes to PUNI_MODE_DAMAGE. A dizzy Jabbi always loses.
  * Both are marked attacked for this frame.
  */
-void puniParaAttack(PuniData* a, PuniData* b) {
+static void puniParaAttack(PuniData* a, PuniData* b) {
     s16 x, y, r;
     s32 c;
     if (b->attacked == 0 && b->mode == PUNI_MODE_DAMAGE) {
@@ -1999,7 +1999,7 @@ void puniParaAttack(PuniData* a, PuniData* b) {
 }
 
 /** Applies the pending damage to a Puni's hp; at 0 it is flagged defeated and killed. */
-void puniParaDamage(PuniData* p) {
+static void puniParaDamage(PuniData* p) {
     p->hp -= p->damage;
     if (p->hp <= 0) {
         p->hp = 0;
@@ -2012,7 +2012,7 @@ void puniParaDamage(PuniData* p) {
  * Regenerates a resting Puni: while it moves, is blown or dizzy the regen timer is reset;
  * otherwise every regenInterval frames it recovers regen hp and gets the healed marker.
  */
-void puniParaRecover(PuniData* p) {
+static void puniParaRecover(PuniData* p) {
     static PuniData* debug;
     s16 old;
 
@@ -2039,17 +2039,17 @@ void puniParaRecover(PuniData* p) {
 }
 
 /** TRUE when the Puni is at 30 percent hp or less. */
-BOOL puniParaDangerCheck(PuniData* p) {
+static BOOL puniParaDangerCheck(PuniData* p) {
     return p->hp * 100 / p->maxHp <= 30;
 }
 
 /** TRUE when the Puni is at 80 percent hp or more. */
-BOOL puniParaSelfCheck(PuniData* p) {
+static BOOL puniParaSelfCheck(PuniData* p) {
     return p->hp * 100 / p->maxHp >= 80;
 }
 
 /** TRUE when the Puni is at full hp. */
-BOOL puniParaRecoverCheck(PuniData* p) {
+static BOOL puniParaRecoverCheck(PuniData* p) {
     return p->hp >= p->maxHp;
 }
 
@@ -2071,7 +2071,7 @@ static inline s32 qrnd_abs_reload(s32 n) {
  * Returns a random living, active Puni among count slots starting at start (starting point from qrnd),
  * or NULL when none is left.
  */
-PuniData* puniSearchRandom(s32 start, s32 count) {
+static PuniData* puniSearchRandom(s32 start, s32 count) {
     s32 idx = qrnd_abs_reload(count - 1) + start;
     s32 i = 0;
     PuniData* p;
@@ -2094,12 +2094,12 @@ PuniData* puniSearchRandom(s32 start, s32 count) {
 }
 
 /** Random living Puni (slots 1 to 102). */
-PuniData* puniSearchRandom_Mikata(void) {
+static PuniData* puniSearchRandom_Mikata(void) {
     return puniSearchRandom(1, PUNI_ALLY_LAST);
 }
 
 /** Random living Jabbi (slots 110 to 209). */
-PuniData* puniSearchRandom_Teki(void) {
+static PuniData* puniSearchRandom_Teki(void) {
     return puniSearchRandom(PUNI_ENEMY_FIRST, 100);
 }
 
@@ -2107,7 +2107,7 @@ PuniData* puniSearchRandom_Teki(void) {
  * Nearest active, living fighter among count slots from start that is not already knocked back or blown away;
  * returns it only if its squared distance to self is under maxDist, else NULL.
  */
-PuniData* searchBattle(PuniData* self, s32 start, s32 count, f32 maxDist) {
+static PuniData* searchBattle(PuniData* self, s32 start, s32 count, f32 maxDist) {
     s32 i;
     PuniData* q;
     f32 minDist = 1000000.0f;
@@ -2133,7 +2133,7 @@ PuniData* searchBattle(PuniData* self, s32 start, s32 count, f32 maxDist) {
  * Nearest living Puni (slots 1 to 102) within 50 units (squared distance under 2500) of self that is not knocked
  * back or blown away, or NULL.
  */
-PuniData* searchMikata(PuniData* self) {
+static PuniData* searchMikata(PuniData* self) {
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
     PuniData* q = &Punidat[1];
@@ -2158,7 +2158,7 @@ PuniData* searchMikata(PuniData* self) {
  * Nearest living Jabbi within 50 units (squared distance under 2500) of self that is not knocked back
  * or blown away, or NULL.
  */
-PuniData* searchTeki(PuniData* self) {
+static PuniData* searchTeki(PuniData* self) {
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
     PuniData* q = &Punidat[PUNI_ENEMY_FIRST];
@@ -2180,7 +2180,7 @@ PuniData* searchTeki(PuniData* self) {
 }
 
 /** Nearest living Puni to self at any distance under 1000 units (squared 1000000), or NULL. */
-PuniData* searchBattleMikata(PuniData* self) {
+static PuniData* searchBattleMikata(PuniData* self) {
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
     PuniData* q = &Punidat[1];
@@ -2256,7 +2256,7 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
 }
 
 /** Nearest living Jabbi to self at any distance under 1000 units, or NULL. */
-PuniData* searchBattleTeki(PuniData* self) {
+static PuniData* searchBattleTeki(PuniData* self) {
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
     PuniData* q = &Punidat[PUNI_ENEMY_FIRST];
@@ -2281,7 +2281,7 @@ PuniData* searchBattleTeki(PuniData* self) {
  * Every fourth frame (staggered by the Puni's index) picks the nearest living opponent as the Puni's target:
  * a Jabbi for a Puni, a Puni for a Jabbi.
  */
-void puniSearch(PuniData* p) {
+static void puniSearch(PuniData* p) {
     if ((s32)(gp->retraceCount & 3) == (*( s16*)( &p->index) & 3)) {
         if (p->flags & PUNI_FLAG_PUNI) {
             p->target = searchBattleTeki_inl(p);
@@ -2296,7 +2296,7 @@ void puniSearch(PuniData* p) {
  * following or scripted Puni or Jabbi that has an opponent in range leaves its chain
  * and switches to PUNI_MODE_ATTACK against it.
  */
-void puniModeChangeAttack(void) {
+static void puniModeChangeAttack(void) {
     s32 i;
     PuniData* p = &Punidat[1];
     PuniData* f;
@@ -2334,7 +2334,7 @@ void puniModeChangeAttack(void) {
  * Flee start (allMode 2): when a flee target is near (Pider spider), every idle, joining, following,
  * gathering or lost Puni leaves its chain and switches to the away-jump.
  */
-void puniModeChangeAway(void) {
+static void puniModeChangeAway(void) {
     s32 i;
     PuniData* p = &Punidat[1];
 
@@ -2371,7 +2371,7 @@ static const Vec puni_fallchk_dir = {0.0f, -1.0f, 0.0f};
  * Puni (slots 1 to 102) that have no floor within 2 units under them leave their chain,
  * lose their velocity and switch to PUNI_MODE_FALL.
  */
-void puniModeChangeFallCheck(void) {
+static void puniModeChangeFallCheck(void) {
     Vec dir;
     Vec pos;
     Vec nrm;
@@ -2409,7 +2409,7 @@ void puniModeChangeFallCheck(void) {
  * Re-collects lost Punies: every Puni in the hagure (lost) mode that is within 30 units of self
  * and at about its height joins again, recursively picking up Punies near those.
  */
-void puniFukki(PuniData* self) {
+static void puniFukki(PuniData* self) {
     s32 i;
     PuniData* p = &Punidat[1];
 
@@ -2425,7 +2425,7 @@ void puniFukki(PuniData* self) {
 }
 
 /** Runs the group commands requested through Punigp->allMode: 2 starts the flee, 3 starts the battle. */
-void puniModeALLCheck(void) {
+static void puniModeALLCheck(void) {
     switch (Punigp->allMode) {
         case 2:
             puniModeChangeAway();
@@ -2440,7 +2440,7 @@ void puniModeALLCheck(void) {
 }
 
 /** Ends the flee command after one frame and remembers the current allMode for the next frame. */
-void puniModeALLEndCheck(void) {
+static void puniModeALLEndCheck(void) {
     switch (Punigp->allMode) {
         case 1:
             break;
@@ -2459,7 +2459,7 @@ void puniModeALLEndCheck(void) {
  * Idle mode: a Puni blown by Flurrie's breath (breath power over 10) goes to the wind mode;
  * one with Mario within 150 units joins him.
  */
-void puniModeNormal(PuniData* p) {
+static void puniModeNormal(PuniData* p) {
     if (p->breathPower > 10.0f) {
         p->prevMode = p->mode;
         PuniDokuritsu(p);
@@ -2475,7 +2475,7 @@ void puniModeNormal(PuniData* p) {
  * Joining mode: finds a place in the follow chain (searchParent),
  * turns into a follower of that parent and starts with the walking animation.
  */
-void puniModeParentpre(PuniData* p) {
+static void puniModeParentpre(PuniData* p) {
     Vec v;
 
     searchParent(p);
@@ -2496,7 +2496,7 @@ void puniModeParentpre(PuniData* p) {
  * It switches to the wind, flee, gather or maze-search modes when those apply and
  * otherwise steps toward its parent when too far.
  */
-void puniModeParent(PuniData* p) {
+static void puniModeParent(PuniData* p) {
     Vec v;
     s32 bx, bz;
     s32 flag;
@@ -2622,7 +2622,7 @@ void puniModeParent(PuniData* p) {
  * preferring the direction given by bits of the block entry, and rejoins once within two blocks.
  * A Puni with no way back becomes lost.
  */
-void puniModeSearch(PuniData* p) {
+static void puniModeSearch(PuniData* p) {
     static u16 takasa;
     static u16 move;
     static u16 find;
@@ -2906,7 +2906,7 @@ void puniModeMass(PuniData* p) {
  * Flee jump: the Puni hops up (200 ms jump arc with the Puni or little-Jabbi jump sound) and
  * then goes to the away mode.
  */
-void puniModeAwayjump(PuniData* p) {
+static void puniModeAwayjump(PuniData* p) {
     u32 t;
 
     switch (p->modeStep) {
@@ -2957,7 +2957,7 @@ static const Vec puni_away_zero0 = {0.0f, 0.0f, 0.0f};
  * Returns 1 and sets the wall push direction when it hits a wall with attribute 0x4 (HIT_ATTR_NPC_ONLY),
  * 2 for any other wall (step 10), 0 when nothing was hit.
  */
-int puniModeAway_sub(PuniData* p) {
+static int puniModeAway_sub(PuniData* p) {
     Vec dir;
     Vec start;
     f32 mag = PSVECMag(&p->vel);
@@ -2995,7 +2995,7 @@ int puniModeAway_sub(PuniData* p) {
  * Flee mode: runs from the nearest flee target (a Pider spider), steering away from it with wall avoidance,
  * until the target is gone, then rejoins Mario.
  */
-void puniModeAway(PuniData* p) {
+static void puniModeAway(PuniData* p) {
     Vec sub;
     Vec start;
     f32 nz, ny, nx, hz, hy, hx, dist;
@@ -3066,7 +3066,7 @@ void puniModeAway(PuniData* p) {
  * and when within the target's follow range starts a fight exchange with puniParaAttack.
  * Switches to the wind mode if Flurrie's breath hits it.
  */
-void puniModeAttack(PuniData* p) {
+static void puniModeAttack(PuniData* p) {
     Vec d;
     switch (p->modeStep) {
         case 0:
@@ -3105,7 +3105,7 @@ void puniModeAttack(PuniData* p) {
  * A Puni down to 30 percent hp or less flees (escape mode), otherwise it goes back to idle;
  * at 0 hp it is defeated and killed.
  */
-void puniModeDamage(PuniData* p) {
+static void puniModeDamage(PuniData* p) {
     Vec d;
     switch (p->modeStep) {
         case 0:
@@ -3167,7 +3167,7 @@ void puniModeDamage(PuniData* p) {
  * Afterwards it returns to its earlier mode or to escape mode when its hp is low.
  * A Puni goes straight to the afterwards step.
  */
-void puniModePiyori(PuniData* p) {
+static void puniModePiyori(PuniData* p) {
     if (p->breathPower > 10.0f) {
         p->prevMode = p->mode;
         PuniDokuritsu(p);
@@ -3227,7 +3227,7 @@ void puniModePiyori(PuniData* p) {
  * until it is 120 units away (then it rests in recover mode), or until its hp is back to 80 percent (then idle).
  * Flurrie's breath switches it to the wind mode.
  */
-void puniModeEscape(PuniData* p) {
+static void puniModeEscape(PuniData* p) {
     Vec d;
     f32 dist;
 
@@ -3289,7 +3289,7 @@ void puniModeEscape(PuniData* p) {
  * then rests until hp is 80 percent (back to idle);
  * an opponent coming within 80 units sends it back to escape mode and the wind takes it to wind mode.
  */
-void puniModeRecover(PuniData* p) {
+static void puniModeRecover(PuniData* p) {
     int r;
 
     switch (p->modeStep) {
@@ -3347,7 +3347,7 @@ static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
         case 0:
             psndSFXOn_3D(sfx, &p->pos);
 #else
-void puniModeDead(PuniData* p) {
+static void puniModeDead(PuniData* p) {
     switch (p->modeStep) {
         case 0:
             psndSFXOn_3D("SFX_STG2_FIGHT_TOGE3", &p->pos);
@@ -3366,7 +3366,7 @@ void puniModeDead(PuniData* p) {
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 #if VERSION <= VERSION_DEMO_JP
-void puniModeDead(PuniData* p) {
+static void puniModeDead(PuniData* p) {
     puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
 }
 #endif
@@ -3376,7 +3376,7 @@ void puniModeDead(PuniData* p) {
  * returns 1 for a wall that pushes it out (attribute 0x4, HIT_ATTR_NPC_ONLY; remembers the push direction and goes to step 3),
  * 2 for any other wall hit (step 10; also for any hit while all Punies fight) and 0 if nothing was hit.
  */
-int puniModeWind_sub(PuniData* p) {
+static int puniModeWind_sub(PuniData* p) {
     Vec dir;
     Vec start;
     f32 mag = PSVECMag(&p->vel);
@@ -3422,7 +3422,7 @@ int puniModeWind_sub(PuniData* p) {
  * Spins a Puni that is blown by the wind (10 degrees a frame),
  * clockwise or not depending on which side it is facing and which side of Mario it is on.
  */
-void puniModeWind_kaiten(PuniData* p) {
+static void puniModeWind_kaiten(PuniData* p) {
     BOOL dir;
     if (p->dir < 180.0f) {
         dir = p->modeVar0;
@@ -3449,7 +3449,7 @@ static const Vec puni_fall_dir;
  * it is pushed off walls and falls if it ends over no floor.
  * When the breath stops it goes back to join Mario (or to dizzy mode during a battle).
  */
-void puniModeWind(PuniData* p) {
+static void puniModeWind(PuniData* p) {
     MarioWork* mario = marioGetPtr();
     f32 hz, hy, hx;
     f32 nz, ny, nx;
@@ -3713,7 +3713,7 @@ void puniModeFall(PuniData* p) {
  * Waits (30 to 230 frames) with a balloon effect over the Puni before starting to ride an updraft;
  * its draw pose (p->npc is a pose view) then gets flag 4, which hides its shadow.
  */
-void puniModePreupdraft(PuniData* p) {
+static void puniModePreupdraft(PuniData* p) {
     Vec pos;
 
     switch (p->modeStep) {
@@ -3741,7 +3741,7 @@ static const Vec puni_fall_dir;
  * When it hits a wall (other than the pushing kind) or rises above y=0 the bubble pops
  * and it goes to the wonder mode.
  */
-void puniModeUpdraft(PuniData *p) {
+static void puniModeUpdraft(PuniData *p) {
     MarioWork *mario = marioGetPtr();
     Vec d;
     Vec save;
@@ -3962,7 +3962,7 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
  * Funbari mode ("holding on"): the Puni that came down from the bubble moves toward the gather target with one hop
  * for 68 frames, then falls back to the floor (at once when no gather target is on).
  */
-void puniModeFunbari(PuniData* p) {
+static void puniModeFunbari(PuniData* p) {
     Vec start;
     Vec s2;
     Vec d2;
@@ -4042,7 +4042,7 @@ void puniModeFunbari(PuniData* p) {
  * Water mode: the Puni is hidden for 1 second, then reappears
  * and is tossed out of the water in a short arc (300 ms) away from where it fell in, and is then lost (hagure).
  */
-void puniModeWater(PuniData* p) {
+static void puniModeWater(PuniData* p) {
     Vec d;
     u32 t;
     f32 x;
@@ -4096,7 +4096,7 @@ void puniModeWater(PuniData* p) {
  * Lost-start mode: checks whether the Puni has fallen outside the map and puts it back at the recovery position
  * if so, then goes to the hagure mode.
  */
-void puniModePrehagure(PuniData* p) {
+static void puniModePrehagure(PuniData* p) {
     Vec nrm;
     Vec hit;
     Vec dir;
@@ -4242,7 +4242,7 @@ void puniModeHagure(PuniData* p) {
 }
 
 /** Pedestal mode: the Puni walks toward a point (moveStart) and, once within 10 units, becomes lost (hagure) again. */
-void puniModeDodai(PuniData* p) {
+static void puniModeDodai(PuniData* p) {
     Vec v;
 
     switch (p->modeStep) {
@@ -4270,7 +4270,7 @@ void puniModeDodai(PuniData* p) {
  * Frees a trapped Puni from its stand-in: for the guide, the sister and the rival, shows the Puni again,
  * makes it collide and moves the stand-in NPC away.
  */
-void puniModeTrap_sub(PuniData* p) {
+static void puniModeTrap_sub(PuniData* p) {
     NpcEntry* n;
     if (p->flags & PUNI_FLAG_NPC_GUIDE) {
         n = npcNameToPtr("\203K\203C\203h");
@@ -4326,7 +4326,7 @@ void puniModeTrap_sub(PuniData* p) {
  * Trapped mode: the Puni is caught in the cage trap of mri_17; the guide, sister or rival NPC stands in for it.
  * Flurrie's breath or a gather target frees it again.
  */
-void puniModeTrap(PuniData* p) {
+static void puniModeTrap(PuniData* p) {
     NpcEntry* n;
     if (p->modeStep == 0) {
         p->flags |= PUNI_FLAG_COLLIDE;
@@ -4362,7 +4362,7 @@ void puniModeTrap(PuniData* p) {
  * Starts the scale-up when a Puni walks in through a left or right loading zone:
  * resets the delay counter, scale 0 and sets flag 4 on its draw pose (p->npc is a pose view; hides its shadow).
  */
-void puniModeEnterSubInit(PuniData* p) {
+static void puniModeEnterSubInit(PuniData* p) {
     if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0 = 0;
         p->scale = 0.0f;
@@ -4374,7 +4374,7 @@ void puniModeEnterSubInit(PuniData* p) {
  * Scale-up step for a Puni entering through a left or right loading zone:
  * after 10 frames it grows by 0.1 a frame up to full size.
  */
-void puniModeEnterSub(PuniData* p) {
+static void puniModeEnterSub(PuniData* p) {
     if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0++;
         if (p->modeVar0 >= 10) {
@@ -4391,7 +4391,7 @@ void puniModeEnterSub(PuniData* p) {
  * starting after a delay (200 ms, 700 ms for the down pipe, plus a random 0 to 500),
  * walks to its entry point and then joins the follow chain behind Mario.
  */
-void puniModeEnter(PuniData* p) {
+static void puniModeEnter(PuniData* p) {
     Vec d;
     u32 t;
     switch (p->modeStep) {
@@ -4455,7 +4455,7 @@ void puniModeEnter(PuniData* p) {
 }
 
 /** Starts the shrink-out when a Puni walks out through a left or right loading zone. */
-void puniModeExitSubInit(PuniData* p) {
+static void puniModeExitSubInit(PuniData* p) {
     if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0 = 0;
         p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
@@ -4466,7 +4466,7 @@ void puniModeExitSubInit(PuniData* p) {
  * Shrink-out step for a Puni leaving through a left or right loading zone:
  * after 10 frames it shrinks by 0.3 a frame down to zero.
  */
-void puniModeExitSub(PuniData* p) {
+static void puniModeExitSub(PuniData* p) {
     if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0++;
         if (p->modeVar0 >= 10) {
@@ -4482,7 +4482,7 @@ void puniModeExitSub(PuniData* p) {
  * Exiting mode: a Puni walks to the near end of the loading zone (beroStart),
  * then to the far end (beroEnd) while shrinking, and is then parked below the map and turned inert.
  */
-void puniModeExit(PuniData* p) {
+static void puniModeExit(PuniData* p) {
     Vec d;
     switch (p->modeStep) {
         case 0:
@@ -4546,7 +4546,7 @@ void puniModeExit(PuniData* p) {
  * Point mode: the same walk as the exit mode (to beroStart then beroEnd) but without scaling;
  * the Puni ends parked below the map, inert. Used by scripts to walk the crowd across a room.
  */
-void puniModePoint(PuniData* p) {
+static void puniModePoint(PuniData* p) {
     Vec d;
     switch (p->modeStep) {
         case 0:
@@ -4584,7 +4584,7 @@ void puniModePoint(PuniData* p) {
 }
 
 /** Pipe mode: hides the Puni and stops it; used while the crowd is inside a pipe. */
-void puniModeDokan(PuniData* p) {
+static void puniModeDokan(PuniData* p) {
     p->modeStep = 0;
     p->flags |= PUNI_FLAG_HIDDEN;
     p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
@@ -4598,7 +4598,7 @@ void puniModeDokan(PuniData* p) {
  * Custom mode: calls the Puni's own mode function (modeFunc), if it has one.
  * Scripts use it with PUNI_MODE_FUNC for scripted behaviors.
  */
-void puniModeCustom(PuniData* p) {
+static void puniModeCustom(PuniData* p) {
     if (p->modeFunc) {
         p->modeFunc(p);
     }
@@ -4659,7 +4659,7 @@ static f32 shadow_coord[8] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f };
  * Draw callback for one Puni's shadow: a dark translucent shadow quad (texture 0x2C) placed under the pose,
  * at the floor height when the pose has a shadow height; skipped for poses with flag 4.
  */
-void puni_puni_shadow_disp(CameraId camId, void* param) {
+static void puni_puni_shadow_disp(CameraId camId, void* param) {
     static Mtx shadow_mt = { { 10.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 10.0f, 0.0f, 0.1f }, { 0.0f, 0.0f, 10.0f, 0.0f } };
     GXColor color;
     GXTexObj obj;
@@ -4707,7 +4707,7 @@ void puni_puni_shadow_disp(CameraId camId, void* param) {
  * makes Punidat[0] the stand-in for Mario and clears the other 210 slots with default speed 3,
  * follow range 10 and an empty pose each, shows the counter and allocates the maze record.
  */
-void puni_puni_init(void) {
+static void puni_puni_init(void) {
     s32 i;
     PuniData* p;
     MarioWork* mario;
@@ -5314,7 +5314,7 @@ void puniCollideAll(void) {
  * keeps the little Jabbi's own looping sound following slot 3;
  * and switches the Jabbi marching loop (levels 1 to 3 by count). Also resets the per-frame fight sound counters.
  */
-void puniSound(void) {
+static void puniSound(void) {
     int i;
     PuniData *p;
     PuniData *d;
@@ -5834,7 +5834,7 @@ void puni_puni_main(void) {
  * Queues the draw callbacks of the Puni system for the frame:
  * the Puni models, one shadow per Puni pose and the status icons.
  */
-void puni_puni_dispent(void) {
+static void puni_puni_dispent(void) {
     PunidrvPose* pose;
     s32 i;
     Vec v;
@@ -6002,7 +6002,7 @@ USER_FUNC(evt_puni_main) {
 }
 
 /** Returns whichever of the map's four floor heights (Punigp->posY) is closest to y. */
-f32 puni_init_posy(f32 y) {
+static f32 puni_init_posy(f32 y) {
     f32 best = Punigp->posY[0];
     f32 d = __fabs(y - best);
     f32 d2;
@@ -6029,7 +6029,7 @@ f32 puni_init_posy(f32 y) {
  * hp 60, attack 20, defense 10, regen 10 per second, hit rate 50 (70 when guarding), radius 6 by 2 by 3;
  * no parent or children yet.
  */
-void puni_init_para(PuniData* p, f32 x, f32 y, f32 z) {
+static void puni_init_para(PuniData* p, f32 x, f32 y, f32 z) {
     p->modeStep = 0;
     p->anim = 0;
     p->prevAnim = 1000;
@@ -6063,7 +6063,7 @@ void puni_init_para(PuniData* p, f32 x, f32 y, f32 z) {
  * Sets a new Jabbi up as an enemy at x, y, z with the same stats as a Puni:
  * hp 60, attack 20, defense 10, collision on.
  */
-void toge_init_para(PuniData* p, f32 x, f32 y, f32 z) {
+static void toge_init_para(PuniData* p, f32 x, f32 y, f32 z) {
     p->anim = 0;
     p->modeStep = 0;
     p->prevAnim = 1000;
@@ -6203,7 +6203,7 @@ static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
  * Debug listing: formats a line per Puni (following Mario, lost in some map with its position, not yet joined,
  * caught in a trap, or waiting at the cell in mri_03) into a buffer; the text is never shown.
  */
-s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
+static s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
     char buf[256];
     s32 i;
     for (i = 1; i <= PUNI_ALLY_LAST; i++) {
@@ -6449,7 +6449,7 @@ USER_FUNC(evt_puni_setup) {
  * args[1] to args[3] give the centre (x, y, z).
  * Each Jabbi is placed at a random spot within 50 units in x and 120 in z, with the stats of toge_init_para.
  */
-s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall) {
+static s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall) {
     EvtWord *args = event->args;
     s32 end = 1;
     s32 kind = evtGetValue(event, args[0]);
@@ -6514,7 +6514,7 @@ s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall) {
  * if the two points coincide in x and z it is moved to the start point.
  * Returns TRUE when it moved the Puni, FALSE if a wall is in the way.
  */
-BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
+static BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
     Vec start;
     Vec dir;
     Vec hit;
@@ -6551,7 +6551,7 @@ static inline s32 puniFloor(f32 v) {
  * Finds a stray Puni's resting spot: for Puni in the falling, bubble or water modes it is parked below the map,
  * otherwise it snaps to the first of the four whole grid points around its position that has a clear line to it.
  */
-void puniHagurePos(PuniData* p) {
+static void puniHagurePos(PuniData* p) {
     Vec cur;
     Vec a;
     Vec c;
@@ -7526,7 +7526,7 @@ USER_FUNC(evt_target_set_soko) {
 }
 
 /** Returns the first string of the name table passed in; used to read an NPC tribe's Japanese name. */
-const char* npcGetTribeName(const char** name) {
+static const char* npcGetTribeName(const char** name) {
     return *name;
 }
 
@@ -7537,7 +7537,7 @@ static const Vec puni_fall_dir;
  * snapped to the nearest floor height within 50 units, flagged to repel the crowd.
  * Targets of NPCs that are not near any floor are left off.
  */
-s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
+static s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
     s32 k;
     s32 count;
     NpcEntry *npc;

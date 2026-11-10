@@ -84,101 +84,101 @@ typedef struct QueenConnect {
     u8 locatorWork[0x40 - 0xC];
     s32 idx[2];
 } QueenConnect;
-ExtTexInfo hand_data[32];
-HandWork* hand_wp;
+static ExtTexInfo hand_data[32];
+static HandWork* hand_wp;
 u8* lightGetPaperCraft(void);
 
-USER_FUNC(eff_queen_set_alpha_evt);
-USER_FUNC(make_pattern);
+static USER_FUNC(eff_queen_set_alpha_evt);
+static USER_FUNC(make_pattern);
 USER_FUNC(peach_hand1000_dark_drag_1_evt);
-USER_FUNC(peach_talk_synchro_shadow_head_evt);
-USER_FUNC(queen_drain);
-USER_FUNC(queen_get_aud_num);
-USER_FUNC(queen_hand_small_1000hand_1_evt);
+static USER_FUNC(peach_talk_synchro_shadow_head_evt);
+static USER_FUNC(queen_drain);
+static USER_FUNC(queen_get_aud_num);
+static USER_FUNC(queen_hand_small_1000hand_1_evt);
 USER_FUNC(queen_hand_small_1000hand_2_evt);
-USER_FUNC(queen_hand_small_1000hand_set_offset_evt);
-USER_FUNC(queen_hand_small_dead_evt);
+static USER_FUNC(queen_hand_small_1000hand_set_offset_evt);
+static USER_FUNC(queen_hand_small_dead_evt);
 USER_FUNC(queen_hand_small_drag_1_evt);
-USER_FUNC(queen_hand_small_drag_2_evt);
+static USER_FUNC(queen_hand_small_drag_2_evt);
 USER_FUNC(queen_hand_small_drag_3_evt);
 USER_FUNC(queen_hand_small_entry_evt);
-USER_FUNC(queen_hp_drain_1_evt);
+static USER_FUNC(queen_hp_drain_1_evt);
 USER_FUNC(queen_hp_drain_2_evt);
-USER_FUNC(queen_hp_drain_3_evt);
-USER_FUNC(queen_hp_drain_4_evt);
+static USER_FUNC(queen_hp_drain_3_evt);
+static USER_FUNC(queen_hp_drain_4_evt);
 USER_FUNC(queen_hp_drain_5_evt);
-USER_FUNC(queen_kankyaku_delete_evt);
-USER_FUNC(queen_thunder);
-USER_FUNC(shadow_queen_connect);
+static USER_FUNC(queen_kankyaku_delete_evt);
+static USER_FUNC(queen_thunder);
+static USER_FUNC(shadow_queen_connect);
 USER_FUNC(slot_init);
 USER_FUNC(queen_break_slot_flag2_on);
-USER_FUNC(queen_hand_small_drag_4_evt);
-USER_FUNC(peach_shock_evt);
-USER_FUNC(change_pose);
-void hand_main(void);
-void hand_draw(CameraId cameraId, void* param);
+static USER_FUNC(queen_hand_small_drag_4_evt);
+static USER_FUNC(peach_shock_evt);
+static USER_FUNC(change_pose);
+static void hand_main(void);
+static void hand_draw(CameraId cameraId, void* param);
 static void hand_init(void);
 static void pose_main(void);
 static void pose_init(void);
 
 BattleUnitKind unit_boss_black_peach;
-BattleUnitDefense peach_defence;
-BattleUnitDefenseAttr peach_defence_attr;
-StatusVulnerability peach_regist;
-PoseTableEntry peach_pose_table[18];
-BattleDataEntry peach_data_table[2];
-BattleUnitKindPart peach_parts[7];
-BattleWeapon weapon_peach_black_thunder_attack;
-BattleWeapon weapon_peach_black_energy_attack;
-BattleWeapon weapon_peach_drain_attack;
-BattleWeapon weapon_peach_dark_drag_attack;
-BattleWeapon weapon_peach_dark_drag_last_attack;
-BattleWeapon weapon_peach_dark_charge_attack;
-BattleWeapon weapon_peach_black_wave_attack;
-BattleWeapon weapon_peach_black_sigh_attack;
-BattleWeapon weapon_peach_black_temptation_attack;
-BattleWeapon weapon_peach_black_poison_attack;
-BattleWeapon weapon_peach_black_press_attack;
-BattleWeapon weapon_peach_black_1000hand_attack;
+static BattleUnitDefense peach_defence;
+static BattleUnitDefenseAttr peach_defence_attr;
+static StatusVulnerability peach_regist;
+static PoseTableEntry peach_pose_table[18];
+static BattleDataEntry peach_data_table[2];
+static BattleUnitKindPart peach_parts[7];
+static BattleWeapon weapon_peach_black_thunder_attack;
+static BattleWeapon weapon_peach_black_energy_attack;
+static BattleWeapon weapon_peach_drain_attack;
+static BattleWeapon weapon_peach_dark_drag_attack;
+static BattleWeapon weapon_peach_dark_drag_last_attack;
+static BattleWeapon weapon_peach_dark_charge_attack;
+static BattleWeapon weapon_peach_black_wave_attack;
+static BattleWeapon weapon_peach_black_sigh_attack;
+static BattleWeapon weapon_peach_black_temptation_attack;
+static BattleWeapon weapon_peach_black_poison_attack;
+static BattleWeapon weapon_peach_black_press_attack;
+static BattleWeapon weapon_peach_black_1000hand_attack;
 BattleUnitKind unit_boss_shadow_queen;
-BattleUnitDefense queen_defence;
-BattleUnitDefenseAttr queen_defence_attr;
-StatusVulnerability queen_regist;
-BattleUnitDefense queen_muteki_defence;
-BattleUnitDefenseAttr queen_muteki_defence_attr;
-StatusVulnerability queen_muteki_regist;
-PoseTableEntry queen_pose_table[18];
-PoseTableEntry queen_hand_pose_table[4];
-BattleDataEntry queen_data_table[2];
-BattleUnitKindPart queen_parts[5];
-f32 hair_offset[36];
-EvtWord shadow_queen_1000[25];
+static BattleUnitDefense queen_defence;
+static BattleUnitDefenseAttr queen_defence_attr;
+static StatusVulnerability queen_regist;
+static BattleUnitDefense queen_muteki_defence;
+static BattleUnitDefenseAttr queen_muteki_defence_attr;
+static StatusVulnerability queen_muteki_regist;
+static PoseTableEntry queen_pose_table[18];
+static PoseTableEntry queen_hand_pose_table[4];
+static BattleDataEntry queen_data_table[2];
+static BattleUnitKindPart queen_parts[5];
+static f32 hair_offset[36];
+static EvtWord shadow_queen_1000[25];
 BattleUnitKind unit_boss_shadow_hand_1;
-BattleUnitDefense queen_hand_1_defence;
-BattleUnitDefenseAttr queen_hand_1_defence_attr;
-StatusVulnerability queen_hand_1_regist;
-PoseTableEntry queen_hand_1_pose_table[8];
-BattleDataEntry queen_hand_1_data_table[2];
-BattleUnitKindPart queen_hand_1_parts[1];
+static BattleUnitDefense queen_hand_1_defence;
+static BattleUnitDefenseAttr queen_hand_1_defence_attr;
+static StatusVulnerability queen_hand_1_regist;
+static PoseTableEntry queen_hand_1_pose_table[8];
+static BattleDataEntry queen_hand_1_data_table[2];
+static BattleUnitKindPart queen_hand_1_parts[1];
 BattleUnitKind unit_boss_shadow_hand_2;
-BattleUnitDefense queen_hand_2_defence;
-BattleUnitDefenseAttr queen_hand_2_defence_attr;
-StatusVulnerability queen_hand_2_regist;
-PoseTableEntry queen_hand_2_pose_table[8];
-BattleDataEntry queen_hand_2_data_table[2];
-BattleUnitKindPart queen_hand_2_parts[1];
+static BattleUnitDefense queen_hand_2_defence;
+static BattleUnitDefenseAttr queen_hand_2_defence_attr;
+static StatusVulnerability queen_hand_2_regist;
+static PoseTableEntry queen_hand_2_pose_table[8];
+static BattleDataEntry queen_hand_2_data_table[2];
+static BattleUnitKindPart queen_hand_2_parts[1];
 BattleUnitKind unit_boss_shadow_hand_small;
-BattleUnitDefense queen_hand_small_defence;
-BattleUnitDefenseAttr queen_hand_small_defence_attr;
-StatusVulnerability queen_hand_small_regist;
-PoseTableEntry queen_hand_small_pose_table[8];
-BattleDataEntry queen_hand_small_data_table[2];
-BattleUnitKindPart queen_hand_small_parts[1];
-BattleUnitSetup entry_shadow_queen;
-BattleUnitSetup entry_shadow_hand_1;
-BattleUnitSetup entry_shadow_hand_2;
-BattleUnitSetup entry_shadow_hand_small;
-EvtWord peach_init_event[170];
+static BattleUnitDefense queen_hand_small_defence;
+static BattleUnitDefenseAttr queen_hand_small_defence_attr;
+static StatusVulnerability queen_hand_small_regist;
+static PoseTableEntry queen_hand_small_pose_table[8];
+static BattleDataEntry queen_hand_small_data_table[2];
+static BattleUnitKindPart queen_hand_small_parts[1];
+static BattleUnitSetup entry_shadow_queen;
+static BattleUnitSetup entry_shadow_hand_1;
+static BattleUnitSetup entry_shadow_hand_2;
+static BattleUnitSetup entry_shadow_hand_small;
+static EvtWord peach_init_event[170];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord peach_entry_event[];
@@ -189,10 +189,10 @@ EvtWord peach_damage_event[17];
 #endif
 
 EvtWord peach_change_evt[556];
-EvtWord peach_phase_event[46];
-EvtWord peach_dead_event[11];
-EvtWord peack_attack_black_thunder[147];
-EvtWord peack_attack_black_energy[125];
+static EvtWord peach_phase_event[46];
+static EvtWord peach_dead_event[11];
+static EvtWord peack_attack_black_thunder[147];
+static EvtWord peack_attack_black_energy[125];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord peack_attack_dark_drag[];
@@ -200,13 +200,13 @@ extern EvtWord peack_attack_dark_drag[];
 EvtWord peack_attack_dark_drag[525];
 #endif
 
-EvtWord peack_attack_drain[526];
-EvtWord peach_attack_event[85];
-EvtWord peach_wait_event[6];
-EvtWord queen_init_event[225];
-EvtWord queen_first_attack_message_evt[55];
-EvtWord queen_next_attack_message_evt[55];
-EvtWord queen_last_attack_message_evt[56];
+static EvtWord peack_attack_drain[526];
+static EvtWord peach_attack_event[85];
+static EvtWord peach_wait_event[6];
+static EvtWord queen_init_event[225];
+static EvtWord queen_first_attack_message_evt[55];
+static EvtWord queen_next_attack_message_evt[55];
+static EvtWord queen_last_attack_message_evt[56];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_change_hand_small_evt[];
@@ -218,7 +218,7 @@ EvtWord queen_change_hand_big_evt[90];
 EvtWord queen_hand_big_life_check_evt[75];
 #endif
 
-EvtWord queen_hand_small_life_check_evt[40];
+static EvtWord queen_hand_small_life_check_evt[40];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_hp_drain_evt[];
@@ -226,20 +226,20 @@ extern EvtWord queen_hp_drain_evt[];
 EvtWord queen_hp_drain_evt[316];
 #endif
 
-EvtWord queen_hp_drain_evt_miss[41];
-EvtWord queen_first_damage_evt[74];
-EvtWord queen_2_hp_msg_evt[39];
-EvtWord queen_4_hp_msg_evt[39];
+static EvtWord queen_hp_drain_evt_miss[41];
+static EvtWord queen_first_damage_evt[74];
+static EvtWord queen_2_hp_msg_evt[39];
+static EvtWord queen_4_hp_msg_evt[39];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord queen_dead_hp_msg_evt[24];
+static EvtWord queen_dead_hp_msg_evt[24];
 #else
-EvtWord queen_dead_hp_msg_evt[88];
+static EvtWord queen_dead_hp_msg_evt[88];
 #endif
 
-EvtWord queen_phase_event[208];
-EvtWord queen_attack_black_thunder[197];
-EvtWord queen_attack_charge[166];
+static EvtWord queen_phase_event[208];
+static EvtWord queen_attack_black_thunder[197];
+static EvtWord queen_attack_charge[166];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_attack_black_wave[];
@@ -255,7 +255,7 @@ EvtWord queen_attack_bress2[276];
 EvtWord queen_attack_bress3[278];
 #endif
 
-EvtWord queen_attack_event[163];
+static EvtWord queen_attack_event[163];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_damage_event[];
@@ -265,13 +265,13 @@ EvtWord queen_damage_event[63];
 EvtWord queen_dead_event[347];
 #endif
 
-EvtWord queen_wait_event[10];
-EvtWord queen_entry_event[62];
-EvtWord queen_hand_1_init_event[107];
-EvtWord queen_hand_1_press_attack[343];
-EvtWord queen_hand_1_drain_attack[408];
-EvtWord queen_hand_1_attack_event[41];
-EvtWord queen_hand_1_damage_event[24];
+static EvtWord queen_wait_event[10];
+static EvtWord queen_entry_event[62];
+static EvtWord queen_hand_1_init_event[107];
+static EvtWord queen_hand_1_press_attack[343];
+static EvtWord queen_hand_1_drain_attack[408];
+static EvtWord queen_hand_1_attack_event[41];
+static EvtWord queen_hand_1_damage_event[24];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_hand_1_dead_event[];
@@ -279,10 +279,10 @@ extern EvtWord queen_hand_1_dead_event[];
 EvtWord queen_hand_1_dead_event[41];
 #endif
 
-EvtWord queen_hand_1_wait_event[6];
-EvtWord queen_hand_2_init_event[113];
-EvtWord queen_hand_2_attack_event[41];
-EvtWord queen_hand_2_damage_event[24];
+static EvtWord queen_hand_1_wait_event[6];
+static EvtWord queen_hand_2_init_event[113];
+static EvtWord queen_hand_2_attack_event[41];
+static EvtWord queen_hand_2_damage_event[24];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_hand_2_dead_event[];
@@ -290,18 +290,18 @@ extern EvtWord queen_hand_2_dead_event[];
 EvtWord queen_hand_2_dead_event[41];
 #endif
 
-EvtWord queen_hand_2_wait_event[6];
-EvtWord queen_hand_small_init_event[96];
+static EvtWord queen_hand_2_wait_event[6];
+static EvtWord queen_hand_small_init_event[96];
 EvtWord queen_hand_small_drag_attack[];
 
 #if VERSION == VERSION_DEMO_JP
-EvtWord queen_hand_small_1000hand_attack[254];
+static EvtWord queen_hand_small_1000hand_attack[254];
 #else
-EvtWord queen_hand_small_1000hand_attack[VERSION_PICK(266, 274)];
+static EvtWord queen_hand_small_1000hand_attack[VERSION_PICK(266, 274)];
 #endif
 
-EvtWord queen_hand_small_attack_event[35];
-EvtWord queen_hand_small_damage_event[48];
+static EvtWord queen_hand_small_attack_event[35];
+static EvtWord queen_hand_small_damage_event[48];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord queen_hand_small_dead_event[];
@@ -309,7 +309,7 @@ extern EvtWord queen_hand_small_dead_event[];
 EvtWord queen_hand_small_dead_event[32];
 #endif
 
-EvtWord queen_hand_small_wait_event[6];
+static EvtWord queen_hand_small_wait_event[6];
 
 /**
  * Unit data of the Shadow Queen (possessing Peach), the first phase of the final fight, in the Palace of
@@ -368,18 +368,18 @@ BattleUnitKind unit_boss_black_peach = {
  * Defence of the Shadow Queen (possessing Peach) against each element (normal, fire, ice, explosion,
  * electric): base defence is 0 against each element.
  */
-BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
+static BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
 
 /**
  * Damage modifiers of the Shadow Queen (possessing Peach) per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr peach_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr peach_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability peach_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 0};
+static StatusVulnerability peach_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 0};
 #else
-StatusVulnerability peach_regist = {
+static StatusVulnerability peach_regist = {
     30, // sleep
     30, // stop
     30, // dizzy
@@ -409,7 +409,7 @@ StatusVulnerability peach_regist = {
  * Pose table of the Shadow Queen (possessing Peach): animation names for each pose type (idle, walk, hurt,
  * attack and so on).
  */
-PoseTableEntry peach_pose_table[] = {
+static PoseTableEntry peach_pose_table[] = {
     {POSE_TYPE_SLEEP, "KRT_N_1"},
     {POSE_TYPE_STOP, "KRT_Z_1"},
     {POSE_TYPE_FREEZE, "KRT_Z_1"},
@@ -433,7 +433,7 @@ PoseTableEntry peach_pose_table[] = {
 /**
  * Data table of the Shadow Queen (possessing Peach), looked up by tag: only her defeat event.
  */
-BattleDataEntry peach_data_table[] = {
+static BattleDataEntry peach_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, peach_dead_event},
     {0, NULL},
 };
@@ -441,7 +441,7 @@ BattleDataEntry peach_data_table[] = {
 /**
  * Parts of the Shadow Queen (possessing Peach): 7 parts with their hit boxes, defence tables and pose tables.
  */
-BattleUnitKindPart peach_parts[] = {
+static BattleUnitKindPart peach_parts[] = {
     {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, -2.0f, 44.0f, 0.0f, -2.0f, 44.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
     {2, "btl_un_shadow_queen", "c_q_kage_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kNoTranslucentLook | kNotTargetable | kHidden | kNoShadow, 0, peach_pose_table},
     {3, "btl_un_shadow_queen", "c_q_kage_f", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kNoTranslucentLook | kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, peach_pose_table},
@@ -452,7 +452,7 @@ BattleUnitKindPart peach_parts[] = {
 };
 
 /** Weapon of the Shadow Queen's black thunder: damage 7. */
-BattleWeapon weapon_peach_black_thunder_attack = {
+static BattleWeapon weapon_peach_black_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -497,7 +497,7 @@ BattleWeapon weapon_peach_black_thunder_attack = {
  * Weapon of the Shadow Queen's energy move that changes attack and defence:
  * inflicts an attack change, a defense change.
  */
-BattleWeapon weapon_peach_black_energy_attack = {
+static BattleWeapon weapon_peach_black_energy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -544,7 +544,7 @@ BattleWeapon weapon_peach_black_energy_attack = {
 };
 
 /** Weapon of the possessed Peach's life drain: damage 7. */
-BattleWeapon weapon_peach_drain_attack = {
+static BattleWeapon weapon_peach_drain_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -585,7 +585,7 @@ BattleWeapon weapon_peach_drain_attack = {
 };
 
 /** Weapon of the dark drag, in which the hands drag at the target: damage 3. */
-BattleWeapon weapon_peach_dark_drag_attack = {
+static BattleWeapon weapon_peach_dark_drag_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -621,7 +621,7 @@ BattleWeapon weapon_peach_dark_drag_attack = {
 };
 
 /** Weapon of the last hit of the dark drag. */
-BattleWeapon weapon_peach_dark_drag_last_attack = {
+static BattleWeapon weapon_peach_dark_drag_last_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -666,7 +666,7 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
 };
 
 /** Weapon of the possessed Peach's charge-up. */
-BattleWeapon weapon_peach_dark_charge_attack = {
+static BattleWeapon weapon_peach_dark_charge_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -702,7 +702,7 @@ BattleWeapon weapon_peach_dark_charge_attack = {
 };
 
 /** Weapon of the Shadow Queen's wave of dark energy over the party: damage 7. */
-BattleWeapon weapon_peach_black_wave_attack = {
+static BattleWeapon weapon_peach_black_wave_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -742,7 +742,7 @@ BattleWeapon weapon_peach_black_wave_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-BattleWeapon weapon_peach_black_sigh_attack = {
+static BattleWeapon weapon_peach_black_sigh_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -788,7 +788,7 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-BattleWeapon weapon_peach_black_temptation_attack = {
+static BattleWeapon weapon_peach_black_temptation_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -835,7 +835,7 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-BattleWeapon weapon_peach_black_poison_attack = {
+static BattleWeapon weapon_peach_black_poison_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -883,7 +883,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
 };
 
 /** Weapon of the big hand's press: damage 7. */
-BattleWeapon weapon_peach_black_press_attack = {
+static BattleWeapon weapon_peach_black_press_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -924,7 +924,7 @@ BattleWeapon weapon_peach_black_press_attack = {
 };
 
 /** Weapon of the small hand's thousand-hands attack: damage 3. */
-BattleWeapon weapon_peach_black_1000hand_attack = {
+static BattleWeapon weapon_peach_black_1000hand_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -1046,18 +1046,18 @@ BattleUnitKind unit_boss_shadow_queen = {
  * Defence of the Shadow Queen against each element (normal, fire, ice, explosion, electric):
  * base defence is 1 against every element.
  */
-BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
+static BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
 
 /**
  * Damage modifiers of the Shadow Queen per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr queen_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability queen_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 0, 100, 0, 100, 30, 30, 0, 0, 100, 30, 0, 0, 0};
+static StatusVulnerability queen_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 0, 100, 0, 100, 30, 30, 0, 0, 100, 30, 0, 0, 0};
 #else
-StatusVulnerability queen_regist = {
+static StatusVulnerability queen_regist = {
     30, // sleep
     30, // stop
     30, // dizzy
@@ -1087,24 +1087,24 @@ StatusVulnerability queen_regist = {
  * Defence of the Shadow Queen while she is invincible:
  * defence 99 against every kind of hit, so no attack does damage.
  */
-BattleUnitDefense queen_muteki_defence = {{99, 99, 99, 99, 99}};
+static BattleUnitDefense queen_muteki_defence = {{99, 99, 99, 99, 99}};
 
 /**
  * Damage modifiers of the Shadow Queen while she is invincible per element (normal, fire, ice, explosion,
  * electric): normal: immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-BattleUnitDefenseAttr queen_muteki_defence_attr = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
+static BattleUnitDefenseAttr queen_muteki_defence_attr = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Shadow Queen while she is invincible:
  * every multiplier is 0, so no status takes hold.
  */
-StatusVulnerability queen_muteki_regist = {0};
+static StatusVulnerability queen_muteki_regist = {0};
 
 /**
  * Pose table of the Shadow Queen: animation names for each pose type (idle, walk, hurt, attack and so on).
  */
-PoseTableEntry queen_pose_table[] = {
+static PoseTableEntry queen_pose_table[] = {
     {POSE_TYPE_SLEEP, "KRT_S_1"},
     {POSE_TYPE_STOP, "KRT_S_1"},
     {POSE_TYPE_FREEZE, "KRT_S_1"},
@@ -1129,7 +1129,7 @@ PoseTableEntry queen_pose_table[] = {
  * Pose table of the Shadow Queen's big hands: animation names for each pose type (idle, walk, hurt, attack
  * and so on).
  */
-PoseTableEntry queen_hand_pose_table[] = {
+static PoseTableEntry queen_hand_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
     {POSE_TYPE_DAMAGE, "KRT_S_1"},
@@ -1139,13 +1139,13 @@ PoseTableEntry queen_hand_pose_table[] = {
 /**
  * Data table of the Shadow Queen, looked up by tag: only her defeat event.
  */
-BattleDataEntry queen_data_table[] = {
+static BattleDataEntry queen_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, queen_dead_event},
     {0, NULL},
 };
 
 /** Parts of the Shadow Queen: 5 parts with their hit boxes, defence tables and pose tables. */
-BattleUnitKindPart queen_parts[] = {
+static BattleUnitKindPart queen_parts[] = {
 #if VERSION <= VERSION_DEMO_JP
     {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
 #else
@@ -1161,7 +1161,7 @@ BattleUnitKindPart queen_parts[] = {
  * Unused table of 36 offsets named hair_offset in the symbol map;
  * the Shadow Queen's unit code does not read it.
  */
-f32 hair_offset[] = {
+static f32 hair_offset[] = {
     -13.0f, 63.0f, 5.0f, 57.0f, -24.0f, -40.0f, -10.0f, 61.0f,
     -7.0f, 24.0f, 17.0f, -16.0f, -10.0f, 60.0f, -9.0f, -27.0f,
     29.0f, 7.0f, -4.0f, 63.0f, -5.0f, 21.0f, -3.0f, 14.0f,
@@ -1185,7 +1185,7 @@ inline void hand_light_init(void) {
  * It creates a hidden helper NPC "dummy" to read the animation,
  * builds the pattern table with make_pattern and registers the ext drawing callbacks (hand_init, hand_main).
  */
-EVT_BEGIN(shadow_queen_1000)
+static EVT_BEGIN(shadow_queen_1000)
     CALL(evt_npc_entry, STRING("dummy"), STRING("c_s_hand")) // hidden helper holding the Shadow Queen's small-hand anim
     CALL(evt_npc_set_anim, STRING("dummy"), STRING("KRT_S_1"))
     CALL(evt_npc_set_position, STRING("dummy"), 0, -1000, 0)
@@ -1272,18 +1272,18 @@ BattleUnitKind unit_boss_shadow_hand_1 = {
  * Defence of the Shadow Queen's first big hand against each element (normal, fire, ice, explosion,
  * electric): base defence is 0 against each element.
  */
-BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
+static BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
 
 /**
  * Damage modifiers of the Shadow Queen's first big hand per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_1_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr queen_hand_1_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability queen_hand_1_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
+static StatusVulnerability queen_hand_1_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
 #else
-StatusVulnerability queen_hand_1_regist = {
+static StatusVulnerability queen_hand_1_regist = {
     30, // sleep
     30, // stop
     30, // dizzy
@@ -1313,7 +1313,7 @@ StatusVulnerability queen_hand_1_regist = {
  * Pose table of the Shadow Queen's first big hand:
  * animation names for each pose type (idle, walk, hurt, attack and so on).
  */
-PoseTableEntry queen_hand_1_pose_table[] = {
+static PoseTableEntry queen_hand_1_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRT_Q_1"},
@@ -1328,7 +1328,7 @@ PoseTableEntry queen_hand_1_pose_table[] = {
  * Data table of the Shadow Queen's first big hand, looked up by tag: only its defeat event
  * (tag 50 in the early demos).
  */
-BattleDataEntry queen_hand_1_data_table[] = {
+static BattleDataEntry queen_hand_1_data_table[] = {
 #if VERSION <= VERSION_DEMO_JP
     {50, queen_hand_1_dead_event},
 #else
@@ -1340,7 +1340,7 @@ BattleDataEntry queen_hand_1_data_table[] = {
 /**
  * Part of the Shadow Queen's first big hand: its one body part with hit box, defence tables and pose table.
  */
-BattleUnitKindPart queen_hand_1_parts[] = {
+static BattleUnitKindPart queen_hand_1_parts[] = {
     {1, "btl_un_shadow_hand_big_1", "c_b_hand", 0.0f, 0.0f, 0.0f, 16.0f, 47.0f, 30.0f, 16.0f, 47.0f, 30.0f, 41, 61, 255, &queen_hand_1_defence, &queen_hand_1_defence_attr, kMainPart | kGuardTargetPart | kNoTranslucentLook | kNotTargetable | kHidden | kNoShadow, 0, queen_hand_1_pose_table},
 };
 
@@ -1422,18 +1422,18 @@ BattleUnitKind unit_boss_shadow_hand_2 = {
  * Defence of the Shadow Queen's second big hand against each element (normal, fire, ice, explosion,
  * electric): base defence is 0 against each element.
  */
-BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
+static BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
 
 /**
  * Damage modifiers of the Shadow Queen's second big hand per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_2_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr queen_hand_2_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability queen_hand_2_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
+static StatusVulnerability queen_hand_2_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
 #else
-StatusVulnerability queen_hand_2_regist = {
+static StatusVulnerability queen_hand_2_regist = {
     30, // sleep
     30, // stop
     30, // dizzy
@@ -1463,7 +1463,7 @@ StatusVulnerability queen_hand_2_regist = {
  * Pose table of the Shadow Queen's second big hand:
  * animation names for each pose type (idle, walk, hurt, attack and so on).
  */
-PoseTableEntry queen_hand_2_pose_table[] = {
+static PoseTableEntry queen_hand_2_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRT_Q_1"},
@@ -1478,7 +1478,7 @@ PoseTableEntry queen_hand_2_pose_table[] = {
  * Data table of the Shadow Queen's second big hand, looked up by tag: only its defeat event
  * (tag 50 in the early demos).
  */
-BattleDataEntry queen_hand_2_data_table[] = {
+static BattleDataEntry queen_hand_2_data_table[] = {
 #if VERSION <= VERSION_DEMO_JP
     {50, queen_hand_2_dead_event},
 #else
@@ -1490,7 +1490,7 @@ BattleDataEntry queen_hand_2_data_table[] = {
 /**
  * Part of the Shadow Queen's second big hand: its one body part with hit box, defence tables and pose table.
  */
-BattleUnitKindPart queen_hand_2_parts[] = {
+static BattleUnitKindPart queen_hand_2_parts[] = {
     {1, "btl_un_shadow_hand_big_2", "c_b_hand", 0.0f, 0.0f, 0.0f, 28.0f, 56.0f, 20.0f, 28.0f, 56.0f, 20.0f, 41, 61, 255, &queen_hand_2_defence, &queen_hand_2_defence_attr, kMainPart | kGuardTargetPart | kNoTranslucentLook | kNotTargetable | kHidden | kNoShadow, 0, queen_hand_2_pose_table},
 };
 
@@ -1572,18 +1572,18 @@ BattleUnitKind unit_boss_shadow_hand_small = {
  * Defence of the Shadow Queen's small hand against each element (normal, fire, ice, explosion, electric):
  * base defence is 0 against each element.
  */
-BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
+static BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
 
 /**
  * Damage modifiers of the Shadow Queen's small hand per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_small_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
+static BattleUnitDefenseAttr queen_hand_small_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_JP
-StatusVulnerability queen_hand_small_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
+static StatusVulnerability queen_hand_small_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
 #else
-StatusVulnerability queen_hand_small_regist = {
+static StatusVulnerability queen_hand_small_regist = {
     30, // sleep
     30, // stop
     30, // dizzy
@@ -1613,7 +1613,7 @@ StatusVulnerability queen_hand_small_regist = {
  * Pose table of the Shadow Queen's small hand: animation names for each pose type (idle, walk, hurt, attack
  * and so on).
  */
-PoseTableEntry queen_hand_small_pose_table[] = {
+static PoseTableEntry queen_hand_small_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRT_S_1"},
@@ -1628,7 +1628,7 @@ PoseTableEntry queen_hand_small_pose_table[] = {
  * Data table of the Shadow Queen's small hand, looked up by tag: only its defeat event
  * (tag 50 in the early demos).
  */
-BattleDataEntry queen_hand_small_data_table[] = {
+static BattleDataEntry queen_hand_small_data_table[] = {
 #if VERSION <= VERSION_DEMO_JP
     {50, queen_hand_small_dead_event},
 #else
@@ -1638,12 +1638,12 @@ BattleDataEntry queen_hand_small_data_table[] = {
 };
 
 /** Part of the Shadow Queen's small hand: its one body part with hit box, defence tables and pose table. */
-BattleUnitKindPart queen_hand_small_parts[] = {
+static BattleUnitKindPart queen_hand_small_parts[] = {
     {1, "btl_un_shadow_hand_small", "c_b_hand", 0.0f, 0.0f, 0.0f, 70.0f, 18.0f, 0.0f, 70.0f, 18.0f, 0.0f, 188, 40, 255, &queen_hand_small_defence, &queen_hand_small_defence_attr, kMainPart | kGuardTargetPart | kNoTranslucentLook | kHidden | kNoShadow, 0, queen_hand_small_pose_table},
 };
 
 /** Setup used to spawn the Shadow Queen: unit kind, alliance, position and turn phase. */
-BattleUnitSetup entry_shadow_queen = {
+static BattleUnitSetup entry_shadow_queen = {
     &unit_boss_shadow_queen, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -1655,7 +1655,7 @@ BattleUnitSetup entry_shadow_queen = {
 };
 
 /** Setup used to spawn the Shadow Queen's first big hand: unit kind, alliance, position and turn phase. */
-BattleUnitSetup entry_shadow_hand_1 = {
+static BattleUnitSetup entry_shadow_hand_1 = {
     &unit_boss_shadow_hand_1, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -1667,7 +1667,7 @@ BattleUnitSetup entry_shadow_hand_1 = {
 };
 
 /** Setup used to spawn the Shadow Queen's second big hand: unit kind, alliance, position and turn phase. */
-BattleUnitSetup entry_shadow_hand_2 = {
+static BattleUnitSetup entry_shadow_hand_2 = {
     &unit_boss_shadow_hand_2, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -1679,7 +1679,7 @@ BattleUnitSetup entry_shadow_hand_2 = {
 };
 
 /** Setup used to spawn the Shadow Queen's small hand: unit kind, alliance, position and turn phase. */
-BattleUnitSetup entry_shadow_hand_small = {
+static BattleUnitSetup entry_shadow_hand_small = {
     &unit_boss_shadow_hand_small, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
@@ -1695,7 +1695,7 @@ BattleUnitSetup entry_shadow_hand_small = {
  * connects her shadow head and hand parts to her pose, starts the hand swarm, and plays the idle animation.
  * With a nonzero setup work[0], it instead spawns the Shadow Queen unit and hides the Peach unit.
  */
-EVT_BEGIN(peach_init_event)
+static EVT_BEGIN(peach_init_event)
     SET_VALUE(GW(8), -1)
     SET_VALUE(GW(9), -1)
     SET_VALUE(GW(10), -1)
@@ -1943,7 +1943,7 @@ EVT_END()
  * Phase event of the Shadow Queen (possessing Peach): after the player's phase (skipped when work[0] is 4)
  * runs peach_change_evt once her HP is below 90 (112 before US).
  */
-EVT_BEGIN(peach_phase_event)
+static EVT_BEGIN(peach_phase_event)
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
@@ -1973,7 +1973,7 @@ EVT_END()
  * Dead event of the Shadow Queen (possessing Peach): instead of dying she runs peach_change_evt and changes
  * into her true form.
  */
-EVT_BEGIN(peach_dead_event)
+static EVT_BEGIN(peach_dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL_CHILD(peach_change_evt)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1985,7 +1985,7 @@ EVT_END()
  * Event script: the possessed Peach's black thunder attack (weapon_peach_black_thunder_attack) on a sampled
  * target: a pose and a thunder strike with the damage check.
  */
-EVT_BEGIN(peack_attack_black_thunder)
+static EVT_BEGIN(peack_attack_black_thunder)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_peach_black_thunder_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_thunder_attack), LW(3), LW(4))
@@ -2045,7 +2045,7 @@ EVT_END()
  * Event script: the possessed Peach's black energy move (weapon_peach_black_energy_attack):
  * she charges (charge effect, KRT_A_2) and the attack is paid for and checked against herself, a self-buff.
  */
-EVT_BEGIN(peack_attack_black_energy)
+static EVT_BEGIN(peack_attack_black_energy)
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(subsetevt_confuse_flustered)
@@ -2247,7 +2247,7 @@ EVT_END()
  * Event script: the possessed Peach's drain attack (weapon_peach_drain_attack):
  * a hand grabs the target and she recovers HP equal to the damage dealt, with the recovery effect.
  */
-EVT_BEGIN(peack_attack_drain)
+static EVT_BEGIN(peack_attack_drain)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
     // Pick a target for the attack; a confused unit that has none flusters.
@@ -2417,7 +2417,7 @@ EVT_END()
  * Attack event of the Shadow Queen (possessing Peach): opens with thunder, black energy and dark drag,
  * then picks an attack with a random draw.
  */
-EVT_BEGIN(peach_attack_event)
+static EVT_BEGIN(peach_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -2453,7 +2453,7 @@ EVT_BEGIN(peach_attack_event)
 EVT_END()
 
 /** Wait event of the Shadow Queen (possessing Peach): plays her idle pose from the pose table. */
-EVT_BEGIN(peach_wait_event)
+static EVT_BEGIN(peach_wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
@@ -2463,7 +2463,7 @@ EVT_END()
  * sets the shared state in global words (GW(11) form, GW(12) attack counter, GW(8)/GW(9) the two big hands,
  * GW(10) the small hand, GW(13) the queen), spawns the two big hands and starts the queen's mist.
  */
-EVT_BEGIN(queen_init_event)
+static EVT_BEGIN(queen_init_event)
     CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(queen_wait_event))
@@ -2526,7 +2526,7 @@ EVT_BEGIN(queen_init_event)
 EVT_END()
 
 /** Event script: the Shadow Queen's first attack message (stg8_las_142); sets the attack counter GW(12) to 100. */
-EVT_BEGIN(queen_first_attack_message_evt)
+static EVT_BEGIN(queen_first_attack_message_evt)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -2549,7 +2549,7 @@ EVT_BEGIN(queen_first_attack_message_evt)
 EVT_END()
 
 /** Event script: the Shadow Queen's second attack message (stg8_las_143); sets the attack counter GW(12) to 200. */
-EVT_BEGIN(queen_next_attack_message_evt)
+static EVT_BEGIN(queen_next_attack_message_evt)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 1)
         RETURN
@@ -2575,7 +2575,7 @@ EVT_END()
  * Event script: the Shadow Queen's last attack message from the partner (stg8_las_145);
  * sets the attack counter GW(12) to 300.
  */
-EVT_BEGIN(queen_last_attack_message_evt)
+static EVT_BEGIN(queen_last_attack_message_evt)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         RETURN
@@ -2751,7 +2751,7 @@ EVT_BEGIN(queen_hand_big_life_check_evt)
 EVT_END()
 
 /** Event script: respawns the small hand unit (GW(10)) if it has been destroyed. */
-EVT_BEGIN(queen_hand_small_life_check_evt)
+static EVT_BEGIN(queen_hand_small_life_check_evt)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
@@ -2892,7 +2892,7 @@ EVT_END()
  * Event script: the HP drain scene when no audience is left to drain (queen_get_aud_num below 1):
  * she says stg8_las_144 and the form is set to 2 without healing.
  */
-EVT_BEGIN(queen_hp_drain_evt_miss)
+static EVT_BEGIN(queen_hp_drain_evt_miss)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 #if VERSION <= VERSION_DEMO_JP
@@ -2914,7 +2914,7 @@ EVT_END()
  * Event script: the queen's reaction the first time she is damaged (stg8_las_163,
  * the partner's stg8_las_164, then the queen's stg8_las_165).
  */
-EVT_BEGIN(queen_first_damage_evt)
+static EVT_BEGIN(queen_first_damage_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(800)
@@ -2941,7 +2941,7 @@ EVT_BEGIN(queen_first_damage_evt)
 EVT_END()
 
 /** Event script: the queen's line when her HP falls to the second threshold (stg8_las_166). */
-EVT_BEGIN(queen_2_hp_msg_evt)
+static EVT_BEGIN(queen_2_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 #if VERSION <= VERSION_DEMO_JP
@@ -2959,7 +2959,7 @@ EVT_BEGIN(queen_2_hp_msg_evt)
 EVT_END()
 
 /** Event script: the queen's line when her HP falls to the fourth threshold (stg8_las_167). */
-EVT_BEGIN(queen_4_hp_msg_evt)
+static EVT_BEGIN(queen_4_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 #if VERSION <= VERSION_DEMO_JP
@@ -2978,7 +2978,7 @@ EVT_END()
 
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
 #if VERSION >= VERSION_JP
-EVT_BEGIN(queen_dead_hp_msg_evt)
+static EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
@@ -3007,7 +3007,7 @@ EVT_END()
 
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
 #if VERSION <= VERSION_DEMO_JP
-EVT_BEGIN(queen_dead_hp_msg_evt)
+static EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_MS(250)
@@ -3024,7 +3024,7 @@ EVT_END()
  * runs the applicable story messages as her HP drops, and decides when the HP drain or the hands swap happens;
  * at the enemy phase it advances the form.
  */
-EVT_BEGIN(queen_phase_event)
+static EVT_BEGIN(queen_phase_event)
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
@@ -3123,7 +3123,7 @@ EVT_END()
  * Event script: the Shadow Queen's black thunder attack (weapon_peach_black_thunder_attack):
  * calls lightning down on the target with queen_thunder and checks the damage.
  */
-EVT_BEGIN(queen_attack_black_thunder)
+static EVT_BEGIN(queen_attack_black_thunder)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_peach_black_thunder_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_thunder_attack), LW(3), LW(4))
@@ -3188,7 +3188,7 @@ EVT_BEGIN(queen_attack_black_thunder)
 EVT_END()
 
 /** Event script: the Shadow Queen's dark charge (weapon_peach_dark_charge_attack): a self-targeted charge move. */
-EVT_BEGIN(queen_attack_charge)
+static EVT_BEGIN(queen_attack_charge)
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(subsetevt_confuse_flustered)
@@ -3787,7 +3787,7 @@ EVT_END()
  * Attack event of the Shadow Queen: runs the opening attacks set by the current form and work[0],
  * then chooses later attacks with weighted draws (btlevtcmd_DrawLots).
  */
-EVT_BEGIN(queen_attack_event)
+static EVT_BEGIN(queen_attack_event)
     IF_INT_EQUAL(GW(11), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
         SWITCH(LW(0))
@@ -4016,7 +4016,7 @@ EVT_BEGIN(queen_dead_event)
 EVT_END()
 
 /** Wait event of the Shadow Queen: selects her poses from the pose tables. */
-EVT_BEGIN(queen_wait_event)
+static EVT_BEGIN(queen_wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 3)
     RETURN
@@ -4026,7 +4026,7 @@ EVT_END()
  * Entry event of the Shadow Queen: hides the status window,
  * the partner says stg8_las_161 and she says stg8_las_162 when she first appears.
  */
-EVT_BEGIN(queen_entry_event)
+static EVT_BEGIN(queen_entry_event)
     WAIT_MS(2000)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -4050,7 +4050,7 @@ EVT_BEGIN(queen_entry_event)
 EVT_END()
 
 /** Init event of the first big hand: sets its event handlers and pose. */
-EVT_BEGIN(queen_hand_1_init_event)
+static EVT_BEGIN(queen_hand_1_init_event)
     CALL(btlevtcmd_SetBaseRotate, UNIT_ID_SELF, 0, 315, 0)
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHidden)
@@ -4084,7 +4084,7 @@ EVT_END()
  * Event script: the first big hand's press attack (weapon_peach_black_press_attack):
  * it slams down on the chosen target.
  */
-EVT_BEGIN(queen_hand_1_press_attack)
+static EVT_BEGIN(queen_hand_1_press_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
     // Pick a target for the attack; a confused unit that has none flusters.
@@ -4207,7 +4207,7 @@ EVT_BEGIN(queen_hand_1_press_attack)
 EVT_END()
 
 /** Event script: the first big hand's drain attack (weapon_peach_drain_attack): grabs the target and drains HP. */
-EVT_BEGIN(queen_hand_1_drain_attack)
+static EVT_BEGIN(queen_hand_1_drain_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
     // Pick a target for the attack; a confused unit that has none flusters.
@@ -4348,7 +4348,7 @@ EVT_BEGIN(queen_hand_1_drain_attack)
 EVT_END()
 
 /** Attack event of the first big hand: picks the press or the drain attack. */
-EVT_BEGIN(queen_hand_1_attack_event)
+static EVT_BEGIN(queen_hand_1_attack_event)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
@@ -4372,7 +4372,7 @@ EVT_BEGIN(queen_hand_1_attack_event)
 EVT_END()
 
 /** Damage event of the first big hand: marks the first damage (GW(18)), counts the hit in GW(12), then default damage handling. */
-EVT_BEGIN(queen_hand_1_damage_event)
+static EVT_BEGIN(queen_hand_1_damage_event)
     IF_INT_EQUAL(GW(18), 0)
         SET_VALUE(GW(18), 1)
     END_IF
@@ -4407,13 +4407,13 @@ EVT_BEGIN(queen_hand_1_dead_event)
 EVT_END()
 
 /** Wait event of the first big hand: plays its idle pose. */
-EVT_BEGIN(queen_hand_1_wait_event)
+static EVT_BEGIN(queen_hand_1_wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
 /** Init event of the second big hand: sets its event handlers and pose. */
-EVT_BEGIN(queen_hand_2_init_event)
+static EVT_BEGIN(queen_hand_2_init_event)
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(-1.0996094f), FLOAT(1.0996094f), FLOAT(1.0996094f))
     CALL(btlevtcmd_SetBaseRotate, UNIT_ID_SELF, 0, 315, 0)
     BEGIN_INLINE_EVENT
@@ -4445,7 +4445,7 @@ EVT_BEGIN(queen_hand_2_init_event)
 EVT_END()
 
 /** Attack event of the second big hand. */
-EVT_BEGIN(queen_hand_2_attack_event)
+static EVT_BEGIN(queen_hand_2_attack_event)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
@@ -4469,7 +4469,7 @@ EVT_BEGIN(queen_hand_2_attack_event)
 EVT_END()
 
 /** Damage event of the second big hand: marks the first damage (GW(18)), counts the hit in GW(12), then default damage handling. */
-EVT_BEGIN(queen_hand_2_damage_event)
+static EVT_BEGIN(queen_hand_2_damage_event)
     IF_INT_EQUAL(GW(18), 0)
         SET_VALUE(GW(18), 1)
     END_IF
@@ -4504,13 +4504,13 @@ EVT_BEGIN(queen_hand_2_dead_event)
 EVT_END()
 
 /** Wait event of the second big hand: plays its idle pose. */
-EVT_BEGIN(queen_hand_2_wait_event)
+static EVT_BEGIN(queen_hand_2_wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
 /** Init event of the small hand unit (the swarm that replaces the big hands). */
-EVT_BEGIN(queen_hand_small_init_event)
+static EVT_BEGIN(queen_hand_small_init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(queen_hand_small_wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(queen_hand_small_attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(queen_hand_small_damage_event))
@@ -4671,7 +4671,7 @@ EVT_END()
  * Event script: the small hand's thousand-hands attack (weapon_peach_black_1000hand_attack):
  * the swarm of c_s_hand poses sweeps across while the one chosen target is hit four times.
  */
-EVT_BEGIN(queen_hand_small_1000hand_attack)
+static EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_peach_black_1000hand_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_1000hand_attack), LW(3), LW(4))
@@ -4784,7 +4784,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
 EVT_END()
 
 /** Attack event of the small hand: picks the thousand-hands or the drag attack. */
-EVT_BEGIN(queen_hand_small_attack_event)
+static EVT_BEGIN(queen_hand_small_attack_event)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
@@ -4809,7 +4809,7 @@ EVT_END()
  * Damage event of the small hand: marks the first damage (GW(18)), counts the hit in GW(12), shakes the swarm,
  * then default damage handling.
  */
-EVT_BEGIN(queen_hand_small_damage_event)
+static EVT_BEGIN(queen_hand_small_damage_event)
     IF_INT_EQUAL(GW(18), 0)
         SET_VALUE(GW(18), 1)
     END_IF
@@ -4851,12 +4851,12 @@ EVT_BEGIN(queen_hand_small_dead_event)
 EVT_END()
 
 /** Wait event of the small hand: plays its idle pose. */
-EVT_BEGIN(queen_hand_small_wait_event)
+static EVT_BEGIN(queen_hand_small_wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
-USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
+static USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);
@@ -4941,7 +4941,7 @@ USER_FUNC(queen_hand_small_1000hand_2_evt) {
  * for 200 frames the hands move left along X in a wave, bobbing on a cosine,
  * with columns starting one after another.
  */
-USER_FUNC(queen_hand_small_1000hand_1_evt) {
+static USER_FUNC(queen_hand_small_1000hand_1_evt) {
     s32 i;
     HandElem* elem;
     f32 c;
@@ -5079,7 +5079,7 @@ USER_FUNC(queen_hand_small_drag_1_evt) {
  * Script helper (runs until done) that starts the drag attack (before drag_1):
  * sinks the swarm below the floor (y from 0 to -80) and hides it.
  */
-USER_FUNC(queen_hand_small_drag_2_evt) {
+static USER_FUNC(queen_hand_small_drag_2_evt) {
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5173,7 +5173,7 @@ USER_FUNC(queen_hand_small_drag_3_evt) {
 }
 
 /** Script helper (runs until done): sinks the swarm back below the floor and hides it; no script here calls it. */
-USER_FUNC(queen_hand_small_drag_4_evt) {
+static USER_FUNC(queen_hand_small_drag_4_evt) {
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5212,7 +5212,7 @@ USER_FUNC(queen_hand_small_drag_4_evt) {
  * Script helper (runs until done): sinks the swarm of small hands under the floor (y 0 to -80) and hides it;
  * used when the small hand unit dies.
  */
-USER_FUNC(queen_hand_small_dead_evt) {
+static USER_FUNC(queen_hand_small_dead_evt) {
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5319,7 +5319,7 @@ USER_FUNC(slot_init) {
 }
 
 /** Script helper: creates a dark shock effect at (args[0], args[1], args[2]) with random pale colours. */
-USER_FUNC(peach_shock_evt) {
+static USER_FUNC(peach_shock_evt) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);
@@ -5401,7 +5401,7 @@ USER_FUNC(queen_hp_drain_5_evt) {
  * Script helper (runs until done): the audience part of the HP drain:
  * sets the audience members' animation, sinks them 80 units while they are pulled down, then deletes them.
  */
-USER_FUNC(queen_hp_drain_4_evt) {
+static USER_FUNC(queen_hp_drain_4_evt) {
     s32 i;
     f32 x, y, z;
 
@@ -5444,7 +5444,7 @@ USER_FUNC(queen_hp_drain_4_evt) {
 }
 
 /** Script helper (runs until done): lowers the hand swarm from y -30 to -110 under the floor during the HP drain. */
-USER_FUNC(queen_hp_drain_3_evt) {
+static USER_FUNC(queen_hp_drain_3_evt) {
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5545,7 +5545,7 @@ USER_FUNC(queen_hp_drain_2_evt) {
  * Script helper (runs until done): sinks the hand swarm from y 0 to -80 under the floor at the start of the HP
  * drain.
  */
-USER_FUNC(queen_hp_drain_1_evt) {
+static USER_FUNC(queen_hp_drain_1_evt) {
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5581,7 +5581,7 @@ USER_FUNC(queen_hp_drain_1_evt) {
 }
 
 /** Script helper: returns in args[0] how many audience members are in the stands. */
-USER_FUNC(queen_get_aud_num) {
+static USER_FUNC(queen_get_aud_num) {
     EvtWord* args = event->args;
 
     BattleAudience_GetAudienceNum();
@@ -5590,7 +5590,7 @@ USER_FUNC(queen_get_aud_num) {
 }
 
 /** Script helper: deletes system-controlled audience members and reduces the temporary extra count by one for each. */
-USER_FUNC(queen_kankyaku_delete_evt) {
+static USER_FUNC(queen_kankyaku_delete_evt) {
     s32 i;
 
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
@@ -5684,7 +5684,7 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
 }
 
 /** Script helper: sets maxAlpha of the queen effect "m_q2" to args[0]. */
-USER_FUNC(eff_queen_set_alpha_evt) {
+static USER_FUNC(eff_queen_set_alpha_evt) {
     s32 alpha = evtGetValue(event, *event->args);
 
     ((s32*)effNameToPtr("m_q2")->userdata)[10] = alpha;
@@ -5703,7 +5703,7 @@ USER_FUNC(queen_break_slot_flag2_on) {
  * Script helper: plays the drain sound at (args[0], args[1], args[2]) with a stardust effect,
  * called three times while the possessed Peach or a big hand drains one target.
  */
-USER_FUNC(queen_drain) {
+static USER_FUNC(queen_drain) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -5722,7 +5722,7 @@ USER_FUNC(queen_drain) {
  * Script helper: calls a lightning strike down at X/Z (args[0], args[2]), with sound at (args[0], args[1], args[2]):
  * a sound, a pink pokopi thunder bolt with a ground shock, and a camera shake.
  */
-USER_FUNC(queen_thunder) {
+static USER_FUNC(queen_thunder) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
@@ -5753,7 +5753,7 @@ USER_FUNC(queen_thunder) {
 }
 
 /** Script helper: switches the animation index of every hand in the swarm to args[0]. */
-USER_FUNC(change_pose) {
+static USER_FUNC(change_pose) {
     s32 anim = evtGetValue(event, *event->args);
     s32 i;
     HandElem* elem;
@@ -5807,13 +5807,13 @@ inline void hand_pose_inl(void) {
  * Ext update callback of the hand swarm: advances every hand's animation and position (inlined hand_pose_inl),
  * then queues the draw callback.
  */
-void hand_main(void) {
+static void hand_main(void) {
     hand_pose_inl();
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, hand_draw, NULL);
 }
 
 /** Draw callback of the hand swarm: loads the ext render mode, vertex, texture and TEV set-up and draws all hands. */
-void hand_draw(CameraId cameraId, void* param) {
+static void hand_draw(CameraId cameraId, void* param) {
     extLoadRenderMode();
     extLoadVertex();
     extLoadTexture();
@@ -5930,7 +5930,7 @@ static void pose_init(void) {
  * Script helper: fills hand_data with one entry per third frame of the KRT_S_1 animation of the helper NPC
  * "dummy" (the small-hand model c_s_hand).
  */
-USER_FUNC(make_pattern) {
+static USER_FUNC(make_pattern) {
     ExtTexInfo* d = hand_data;
     NpcEntry* npc = npcNameToPtr("dummy");
     AnimData* data;
@@ -5948,7 +5948,7 @@ USER_FUNC(make_pattern) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(peach_talk_synchro_shadow_head_evt) {
+static USER_FUNC(peach_talk_synchro_shadow_head_evt) {
     BattleUnitPart* part;
 
     part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
@@ -5991,7 +5991,7 @@ USER_FUNC(peach_talk_synchro_shadow_head_evt) {
  * and cape parts (parts 3, 4 and 5) on the world positions of the locators of her body poses;
  * sets their display Z offsets.
  */
-USER_FUNC(shadow_queen_connect) {
+static USER_FUNC(shadow_queen_connect) {
     QueenConnect* wk;
     Vec* wpos;
     BattleUnitPart* part;

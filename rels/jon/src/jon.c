@@ -54,13 +54,13 @@
 #include "jon.h"
 #include "driver/seqdrv.h"
 
-void raster_disp(CameraId cameraId, void* param);
+static void raster_disp(CameraId cameraId, void* param);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
 static USER_FUNC(gonbaba_wait_landon);
-void iri_12_msgcb(s32 type, void* param);
+static void iri_12_msgcb(s32 type, void* param);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
@@ -76,32 +76,32 @@ EvtWord jon_init_evt[391];
 #endif
 
 u8 enemy_100[100];
-NpcSetupInfo npcEnt_kuriboo[2];
-NpcSetupInfo npcEnt_patakuri[2];
-NpcSetupInfo npcEnt_hannya[2];
-NpcSetupInfo npcEnt_chorobon[2];
-NpcSetupInfo npcEnt_sinnosuke[2];
-NpcSetupInfo npcEnt_sinemon[2];
-NpcSetupInfo npcEnt_nokonoko[2];
-NpcSetupInfo npcEnt_patapata[2];
-NpcSetupInfo npcEnt_met[2];
-NpcSetupInfo npcEnt_patamet[2];
-NpcSetupInfo npcEnt_sambo[2];
-NpcSetupInfo npcEnt_honenoko[2];
-NpcSetupInfo npcEnt_karon[2];
-NpcSetupInfo npcEnt_dokugassun[2];
-NpcSetupInfo npcEnt_piders[2];
-NpcSetupInfo npcEnt_teresa[2];
-NpcSetupInfo npcEnt_hbom[2];
-NpcSetupInfo npcEnt_bubble[2];
+static NpcSetupInfo npcEnt_kuriboo[2];
+static NpcSetupInfo npcEnt_patakuri[2];
+static NpcSetupInfo npcEnt_hannya[2];
+static NpcSetupInfo npcEnt_chorobon[2];
+static NpcSetupInfo npcEnt_sinnosuke[2];
+static NpcSetupInfo npcEnt_sinemon[2];
+static NpcSetupInfo npcEnt_nokonoko[2];
+static NpcSetupInfo npcEnt_patapata[2];
+static NpcSetupInfo npcEnt_met[2];
+static NpcSetupInfo npcEnt_patamet[2];
+static NpcSetupInfo npcEnt_sambo[2];
+static NpcSetupInfo npcEnt_honenoko[2];
+static NpcSetupInfo npcEnt_karon[2];
+static NpcSetupInfo npcEnt_dokugassun[2];
+static NpcSetupInfo npcEnt_piders[2];
+static NpcSetupInfo npcEnt_teresa[2];
+static NpcSetupInfo npcEnt_hbom[2];
+static NpcSetupInfo npcEnt_bubble[2];
 NpcSetupInfo npcEnt_wanwan[2];
-NpcSetupInfo npcEnt_mahoon[2];
-NpcSetupInfo npcEnt_pakkun[2];
-NpcSetupInfo npcEnt_togenoko[2];
-NpcSetupInfo npcEnt_basabasa2[2];
-NpcSetupInfo npcEnt_togedaruma[2];
-NpcSetupInfo npcEnt_pansy[2];
-NpcSetupInfo npcEnt_zonbaba[2];
+static NpcSetupInfo npcEnt_mahoon[2];
+static NpcSetupInfo npcEnt_pakkun[2];
+static NpcSetupInfo npcEnt_togenoko[2];
+static NpcSetupInfo npcEnt_basabasa2[2];
+static NpcSetupInfo npcEnt_togedaruma[2];
+static NpcSetupInfo npcEnt_pansy[2];
+static NpcSetupInfo npcEnt_zonbaba[2];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord enemy_setup[];
@@ -112,7 +112,7 @@ EvtWord enemy_setup[1055];
 s32 treasure_tbl[10];
 EvtWord evt_open_box[46];
 static EvtWord move_event[55];
-EvtWord get_map_name[111];
+static EvtWord get_map_name[111];
 
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_idouya[];
@@ -120,61 +120,61 @@ extern EvtWord talk_idouya[];
 EvtWord talk_idouya[141];
 #endif
 
-NpcSetupInfo npcEnt_idouya[2];
-EvtWord idouya_setup[38];
+static NpcSetupInfo npcEnt_idouya[2];
+static EvtWord idouya_setup[38];
 
 #if VERSION >= VERSION_US
-EvtWord talk_gyousyou[219];
+static EvtWord talk_gyousyou[219];
 #else
 #if VERSION == VERSION_DEMO_JP
-EvtWord talk_gyousyou[186];
+static EvtWord talk_gyousyou[186];
 #else
-EvtWord talk_gyousyou[207];
+static EvtWord talk_gyousyou[207];
 #endif
 #endif
 
-NpcSetupInfo npcEnt_gyousyou[2];
-EvtWord gyousyou_setup[47];
-EvtWord shikake_setup[117];
-EvtWord dokan_open[74];
-EvtWord dokan_open2[70];
+static NpcSetupInfo npcEnt_gyousyou[2];
+static EvtWord gyousyou_setup[47];
+static EvtWord shikake_setup[117];
+static EvtWord dokan_open[74];
+static EvtWord dokan_open2[70];
 static EvtWord evt_kanban[25];
 static EvtWord evt_kanban2[20];
-EvtWord floor_inc[10];
-EvtWord floor_clear[8];
-BeroEntry bero_boss[3];
-EvtWord setup_boss[9];
-BeroEntry bero_return[4];
-BeroEntry bero_return2[2];
-BeroEntry bero_return3[2];
+static EvtWord floor_inc[10];
+static EvtWord floor_clear[8];
+static BeroEntry bero_boss[3];
+static EvtWord setup_boss[9];
+static BeroEntry bero_return[4];
+static BeroEntry bero_return2[2];
+static BeroEntry bero_return3[2];
 EvtWord setup_return[190];
-BeroEntry bero_prev_return[3];
-BeroEntry bero_prev_return2[2];
-BeroEntry bero_prev_return3[2];
-BeroEntry bero_prev_return4[2];
-EvtWord setup_prev_return[69];
-BeroEntry bero_normal[3];
-BeroEntry bero_normal2[2];
-BeroEntry bero_normal3[2];
-EvtWord setup_normal[53];
-EvtWord iri_12_dokan_in_sub[202];
-EvtWord iri_12_dokan_in[16];
-EvtWord iri_12_makkino_return_dokan[193];
-EvtWord iri_12_makkino_return[31];
-EvtWord iri_12_makkino_return_b100[42];
-EvtWord iri_12_makkino_return_zonbaba[44];
-EvtWord iri_12_makkino_move_dokan_side[94];
-EvtWord iri_12_enemy_dead_event[18];
-EvtWord iri_12_makkino_urouro[25];
-EvtWord iri_12_makkino_buruburu[44];
+static BeroEntry bero_prev_return[3];
+static BeroEntry bero_prev_return2[2];
+static BeroEntry bero_prev_return3[2];
+static BeroEntry bero_prev_return4[2];
+static EvtWord setup_prev_return[69];
+static BeroEntry bero_normal[3];
+static BeroEntry bero_normal2[2];
+static BeroEntry bero_normal3[2];
+static EvtWord setup_normal[53];
+static EvtWord iri_12_dokan_in_sub[202];
+static EvtWord iri_12_dokan_in[16];
+static EvtWord iri_12_makkino_return_dokan[193];
+static EvtWord iri_12_makkino_return[31];
+static EvtWord iri_12_makkino_return_b100[42];
+static EvtWord iri_12_makkino_return_zonbaba[44];
+static EvtWord iri_12_makkino_move_dokan_side[94];
+static EvtWord iri_12_enemy_dead_event[18];
+static EvtWord iri_12_makkino_urouro[25];
+static EvtWord iri_12_makkino_buruburu[44];
 EvtWord iri_12_makkino_okiru[33];
 static EvtWord iri_12_makkino_talk[55];
-EvtWord iri_12_makkino_fall[79];
+static EvtWord iri_12_makkino_fall[79];
 EvtWord iri_12_makkino_fall_return[71];
-EvtWord iri_12_init_fall[38];
+static EvtWord iri_12_init_fall[38];
 static EvtWord iri_12_init[65];
-EvtWord evt_iri_30_touch_rakugaki[14];
-EvtWord evt_iri_30_bomb_rakugaki[154];
+static EvtWord evt_iri_30_touch_rakugaki[14];
+static EvtWord evt_iri_30_bomb_rakugaki[154];
 static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
@@ -361,7 +361,7 @@ u8 enemy_100[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Goomba that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_kuriboo[] = {
+static NpcSetupInfo npcEnt_kuriboo[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Goomba family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -394,7 +394,7 @@ NpcSetupInfo npcEnt_kuriboo[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Paragoomba that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_patakuri[] = {
+static NpcSetupInfo npcEnt_patakuri[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Paragoomba family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -427,7 +427,7 @@ NpcSetupInfo npcEnt_patakuri[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Spania that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_hannya[] = {
+static NpcSetupInfo npcEnt_hannya[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Spania family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -460,7 +460,7 @@ NpcSetupInfo npcEnt_hannya[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Fuzzy that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_chorobon[] = {
+static NpcSetupInfo npcEnt_chorobon[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Fuzzy family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -493,7 +493,7 @@ NpcSetupInfo npcEnt_chorobon[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Bald Cleft that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_sinnosuke[] = {
+static NpcSetupInfo npcEnt_sinnosuke[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Bald Cleft family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -526,7 +526,7 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Moon Cleft that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_sinemon[] = {
+static NpcSetupInfo npcEnt_sinemon[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Moon Cleft family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -559,7 +559,7 @@ NpcSetupInfo npcEnt_sinemon[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Koopa Troopa that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_nokonoko[] = {
+static NpcSetupInfo npcEnt_nokonoko[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Koopa Troopa family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -592,7 +592,7 @@ NpcSetupInfo npcEnt_nokonoko[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Paratroopa that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_patapata[] = {
+static NpcSetupInfo npcEnt_patapata[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Paratroopa family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -625,7 +625,7 @@ NpcSetupInfo npcEnt_patapata[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Buzzy Beetle that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_met[] = {
+static NpcSetupInfo npcEnt_met[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Buzzy Beetle family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -658,7 +658,7 @@ NpcSetupInfo npcEnt_met[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Parabuzzy that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_patamet[] = {
+static NpcSetupInfo npcEnt_patamet[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Parabuzzy family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -691,7 +691,7 @@ NpcSetupInfo npcEnt_patamet[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Pokey that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_sambo[] = {
+static NpcSetupInfo npcEnt_sambo[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Pokey family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -724,7 +724,7 @@ NpcSetupInfo npcEnt_sambo[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Dull Bones that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_honenoko[] = {
+static NpcSetupInfo npcEnt_honenoko[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Dull Bones family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -757,7 +757,7 @@ NpcSetupInfo npcEnt_honenoko[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Dry Bones that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_karon[] = {
+static NpcSetupInfo npcEnt_karon[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Dry Bones family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -790,7 +790,7 @@ NpcSetupInfo npcEnt_karon[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Poison Puff that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_dokugassun[] = {
+static NpcSetupInfo npcEnt_dokugassun[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Poison Puff family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -823,7 +823,7 @@ NpcSetupInfo npcEnt_dokugassun[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Pider that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_piders[] = {
+static NpcSetupInfo npcEnt_piders[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Pider family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -855,7 +855,7 @@ NpcSetupInfo npcEnt_piders[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Boo that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_teresa[] = {
+static NpcSetupInfo npcEnt_teresa[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Boo family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -888,7 +888,7 @@ NpcSetupInfo npcEnt_teresa[] = {
  * Floor enemy setup of the Pit of 100 Trials for the Bob-omb species, a wandering enemy that starts a
  * battle on contact (picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_hbom[] = {
+static NpcSetupInfo npcEnt_hbom[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Bob-omb family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -921,7 +921,7 @@ NpcSetupInfo npcEnt_hbom[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Lava Bubble that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_bubble[] = {
+static NpcSetupInfo npcEnt_bubble[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Lava Bubble family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -986,7 +986,7 @@ NpcSetupInfo npcEnt_wanwan[] = {
  * Floor enemy setup of the Pit of 100 Trials for the Wizzerd species, a wandering enemy that starts a
  * battle on contact (picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_mahoon[] = {
+static NpcSetupInfo npcEnt_mahoon[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Wizzerd family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1019,7 +1019,7 @@ NpcSetupInfo npcEnt_mahoon[] = {
  * Floor enemy setup of the Pit of 100 Trials for the Piranha Plant species, a wandering enemy that
  * starts a battle on contact (picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_pakkun[] = {
+static NpcSetupInfo npcEnt_pakkun[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Piranha Plant family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1052,7 +1052,7 @@ NpcSetupInfo npcEnt_pakkun[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Koopatrol that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_togenoko[] = {
+static NpcSetupInfo npcEnt_togenoko[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Koopatrol family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1085,7 +1085,7 @@ NpcSetupInfo npcEnt_togenoko[] = {
  * Floor enemy setup of the Pit of 100 Trials for the Swooper species, a wandering enemy that starts a
  * battle on contact (picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_basabasa2[] = {
+static NpcSetupInfo npcEnt_basabasa2[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Swooper family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1118,7 +1118,7 @@ NpcSetupInfo npcEnt_basabasa2[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Bristle that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_togedaruma[] = {
+static NpcSetupInfo npcEnt_togedaruma[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Bristle family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1151,7 +1151,7 @@ NpcSetupInfo npcEnt_togedaruma[] = {
  * Floor enemy setup of the Pit of 100 Trials: a wandering Crazee Dayzee that starts a battle on contact
  * (the species picked by enemy_info from enemy_100).
  */
-NpcSetupInfo npcEnt_pansy[] = {
+static NpcSetupInfo npcEnt_pansy[] = {
     {
         "敵", // name (Pit of 100 Trials floor enemy (Crazee Dayzee family))
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1184,7 +1184,7 @@ NpcSetupInfo npcEnt_pansy[] = {
  * Setup of Bonetail, the boss of floor 100 of the Pit of 100 Trials; his first appearance runs
  * zonbaba_first_event.
  */
-NpcSetupInfo npcEnt_zonbaba[] = {
+static NpcSetupInfo npcEnt_zonbaba[] = {
     {
         "敵", // name (Bonetail, the floor-100 boss of the Pit)
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1640,7 +1640,7 @@ static EVT_BEGIN(move_event)
     RETURN
 EVT_END()
 
-EVT_BEGIN(get_map_name)
+static EVT_BEGIN(get_map_name)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
     SWITCH(LW(0))
@@ -1782,7 +1782,7 @@ EVT_END()
  * The mover (idouya) that may stand on a floor (see idouya_setup) and, for a fee, takes Mario 2 or 5 floors down or
  * back to Rogueport; talk_idouya handles the conversation.
  */
-NpcSetupInfo npcEnt_idouya[] = {
+static NpcSetupInfo npcEnt_idouya[] = {
     {
         "移動屋", // name (a Mover)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1801,7 +1801,7 @@ NpcSetupInfo npcEnt_idouya[] = {
  * Gives each floor a 5% chance of a mover Puni (c_pjoho model) standing at x = -100.
  * Never from floor 96 on (which includes floor 100).
  */
-EVT_BEGIN(idouya_setup)
+static EVT_BEGIN(idouya_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         RETURN
     END_IF
@@ -1828,7 +1828,7 @@ EVT_END()
  * name and the price in the opposite order, and US and later build the price message of the items below id 240 from a
  * format string for them.
  */
-EVT_BEGIN(talk_gyousyou)
+static EVT_BEGIN(talk_gyousyou)
     // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
@@ -1955,7 +1955,7 @@ EVT_END()
  * The traveling trader (gyousyou) of the Pit of 100 Trials, who sells items to Mario; talk_gyousyou runs the
  * shop.
  */
-NpcSetupInfo npcEnt_gyousyou[] = {
+static NpcSetupInfo npcEnt_gyousyou[] = {
     {
         "行商人", // name (Charlieton)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
@@ -1971,7 +1971,7 @@ NpcSetupInfo npcEnt_gyousyou[] = {
 };
 
 /** Gives each rest-room floor (every 10th except 100) a 33% chance of a peddler (c_botta model) standing at x = 100. */
-EVT_BEGIN(gyousyou_setup)
+static EVT_BEGIN(gyousyou_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         RETURN
     END_IF
@@ -2001,7 +2001,7 @@ EVT_END()
  * no ally change, no hammer,
  * no jump, or double coins after the battle.
  */
-EVT_BEGIN(shikake_setup)
+static EVT_BEGIN(shikake_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         RETURN
     END_IF
@@ -2052,7 +2052,7 @@ EVT_END()
  * Spawned from enemy_setup, and in the JP version on also run by the blue float switch ("idou_sw") that jon_init_evt
  * puts on floors where the mover stands.
  */
-EVT_BEGIN(dokan_open)
+static EVT_BEGIN(dokan_open)
 #if VERSION <= VERSION_DEMO_JP
     WAIT_MS(1000)
     CALL(evt_mario_key_onoff, 0)
@@ -2091,7 +2091,7 @@ EVT_END()
  * Variant used in rest rooms: pressing the blue float switch ("sw") raises the exit pipe a_dokan_3 the same way
  * after a 0.4 s pause.
  */
-EVT_BEGIN(dokan_open2)
+static EVT_BEGIN(dokan_open2)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(400)
     SET_VALUE(LW(2), STRING("a_dokan_3"))
@@ -2139,14 +2139,14 @@ static EVT_BEGIN(evt_kanban2)
     RETURN
 EVT_END()
 
-EVT_BEGIN(floor_inc)
+static EVT_BEGIN(floor_inc)
     SPAWN_EVENT(iri_12_dokan_in)
     ADD(GSW_PIT_FLOOR, 1)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
 
-EVT_BEGIN(floor_clear)
+static EVT_BEGIN(floor_clear)
     SET_VALUE(GSW_PIT_FLOOR, 0)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -2156,7 +2156,7 @@ EVT_END()
  * Pipes of floor 100: the entrance pipe at the top (dokan_2, filled in by script) and the exit pipe to
  * Rogueport (tik_06).
  */
-BeroEntry bero_boss[] = {
+static BeroEntry bero_boss[] = {
     {
         "dokan_2", // hitName
         2, // type
@@ -2196,7 +2196,7 @@ BeroEntry bero_boss[] = {
  * Floor 100 pipes: registers the entry pipe (dokan_2)
  * and the exit pipe to Rogueport (dokan_1 to tik_06, which resets the floor counter).
  */
-EVT_BEGIN(setup_boss)
+static EVT_BEGIN(setup_boss)
     SET_VALUE(LW(0), PTR(bero_boss))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
@@ -2207,7 +2207,7 @@ EVT_END()
  * Pipes of a rest-room floor: the entrance above (dokan_2, set by script), the exit to Rogueport (tik_06)
  * and the pipe down to the next floor map (jon_00).
  */
-BeroEntry bero_return[] = {
+static BeroEntry bero_return[] = {
     {
         "dokan_2", // hitName
         2, // type
@@ -2261,7 +2261,7 @@ BeroEntry bero_return[] = {
 };
 
 /** Replacement for the rest-room floor pipe down (dokan_3) on floors 50 to 70: it leads to jon_01. */
-BeroEntry bero_return2[] = {
+static BeroEntry bero_return2[] = {
     {
         "dokan_3", // hitName
         2, // type
@@ -2283,7 +2283,7 @@ BeroEntry bero_return2[] = {
 };
 
 /** Replacement for the rest-room floor pipe down (dokan_3) above floor 70 (floors 80 and 90): it leads to jon_02. */
-BeroEntry bero_return3[] = {
+static BeroEntry bero_return3[] = {
     {
         "dokan_3", // hitName
         2, // type
@@ -2362,7 +2362,7 @@ EVT_END()
  * Pipes of the floor before a rest room: the entrance above (dokan_2, set by script) and the pipe down to
  * jon_03.
  */
-BeroEntry bero_prev_return[] = {
+static BeroEntry bero_prev_return[] = {
     {
         "dokan_2", // hitName
         2, // type
@@ -2399,7 +2399,7 @@ BeroEntry bero_prev_return[] = {
 };
 
 /** Replacement for the pipe down (dokan_1) of the floor before a rest room on floors 49, 59 and 69: it leads to jon_04. */
-BeroEntry bero_prev_return2[] = {
+static BeroEntry bero_prev_return2[] = {
     {
         "dokan_1", // hitName
         2, // type
@@ -2423,7 +2423,7 @@ BeroEntry bero_prev_return2[] = {
 /**
  * Replacement for the pipe down (dokan_1) of the floor before a rest room on floors 79 and 89: it leads to jon_05.
  */
-BeroEntry bero_prev_return3[] = {
+static BeroEntry bero_prev_return3[] = {
     {
         "dokan_1", // hitName
         2, // type
@@ -2447,7 +2447,7 @@ BeroEntry bero_prev_return3[] = {
 /**
  * Replacement for the pipe down (dokan_1) of the floor before floor 100 (floor 99): it leads to jon_06.
  */
-BeroEntry bero_prev_return4[] = {
+static BeroEntry bero_prev_return4[] = {
     {
         "dokan_1", // hitName
         2, // type
@@ -2473,7 +2473,7 @@ BeroEntry bero_prev_return4[] = {
  * and sends exit pipe dokan_1 to the rest-room map for that stretch:
  * jon_03 up to floor 48, jon_04 for floors 49-69, jon_05 for floors 70-98 and jon_06 (Bonetail) for floor 99.
  */
-EVT_BEGIN(setup_prev_return)
+static EVT_BEGIN(setup_prev_return)
     SET_VALUE(LW(0), PTR(bero_prev_return))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
@@ -2504,7 +2504,7 @@ EVT_BEGIN(setup_prev_return)
 EVT_END()
 
 /** Pipes of an ordinary floor: the entrance above (dokan_2, set by script) and the pipe down to jon_00. */
-BeroEntry bero_normal[] = {
+static BeroEntry bero_normal[] = {
     {
         "dokan_2", // hitName
         2, // type
@@ -2541,7 +2541,7 @@ BeroEntry bero_normal[] = {
 };
 
 /** Replacement for the pipe down (dokan_1) of an ordinary floor on floors 50 to 80: it leads to jon_01. */
-BeroEntry bero_normal2[] = {
+static BeroEntry bero_normal2[] = {
     {
         "dokan_1", // hitName
         2, // type
@@ -2563,7 +2563,7 @@ BeroEntry bero_normal2[] = {
 };
 
 /** Replacement for the pipe down (dokan_1) of an ordinary floor above floor 80: it leads to jon_02. */
-BeroEntry bero_normal3[] = {
+static BeroEntry bero_normal3[] = {
     {
         "dokan_1", // hitName
         2, // type
@@ -2588,7 +2588,7 @@ BeroEntry bero_normal3[] = {
  * Setup for ordinary floors: registers the pipes and points exit pipe dokan_1 at the next map of the stretch:
  * jon_00 up to floor 49, jon_01 for floors 50-80 and jon_02 beyond.
  */
-EVT_BEGIN(setup_normal)
+static EVT_BEGIN(setup_normal)
     SET_VALUE(LW(0), PTR(bero_normal))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
@@ -2617,7 +2617,7 @@ EVT_END()
  * when Mario enters a pipe with the sailor following, he hops in too, spinning and shrinking as a paper model,
  * and sinks into the pipe.
  */
-EVT_BEGIN(iri_12_dokan_in_sub)
+static EVT_BEGIN(iri_12_dokan_in_sub)
     LOOP(0)
         CALL(evt_npc_get_unitwork, STRING("マッキノ"), 0, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -2697,7 +2697,7 @@ EVT_BEGIN(iri_12_dokan_in_sub)
     RETURN
 EVT_END()
 
-EVT_BEGIN(iri_12_dokan_in)
+static EVT_BEGIN(iri_12_dokan_in)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
@@ -2713,7 +2713,7 @@ EVT_END()
  * he turns into a paper model, walks into the pipe to the side spinning and shrinking,
  * and is moved far below the map.
  */
-EVT_BEGIN(iri_12_makkino_return_dokan)
+static EVT_BEGIN(iri_12_makkino_return_dokan)
     CALL(evt_npc_set_ry, STRING("マッキノ"), 90)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("マッキノ"))
@@ -2776,7 +2776,7 @@ EVT_BEGIN(iri_12_makkino_return_dokan)
 EVT_END()
 
 /** Sailor's farewell at a rest room: he walks over, thanks Mario (irai_12_011) and leaves through the pipe. */
-EVT_BEGIN(iri_12_makkino_return)
+static EVT_BEGIN(iri_12_makkino_return)
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), 72, 0, 0, 120, 4)
     CALL(evt_msg_print, 0, STRING("irai_12_011"), 0, STRING("マッキノ"))
@@ -2789,7 +2789,7 @@ EVT_END()
  * Sailor's farewell on floor 100 after Bonetail:
  * he walks over, thanks Mario (irai_12_011), controls return, and he leaves through the pipe.
  */
-EVT_BEGIN(iri_12_makkino_return_b100)
+static EVT_BEGIN(iri_12_makkino_return_b100)
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), -205, -75, 0, 120, 4)
     CALL(evt_msg_print, 0, STRING("irai_12_011"), 0, STRING("マッキノ"))
@@ -2804,7 +2804,7 @@ EVT_END()
  * Sailor's farewell when Bonetail falls while the job is running:
  * he walks up, thanks Mario (irai_12_011), then leaves through the pipe.
  */
-EVT_BEGIN(iri_12_makkino_return_zonbaba)
+static EVT_BEGIN(iri_12_makkino_return_zonbaba)
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("マッキノ"), -337, -124, 0, 120, 4)
@@ -2820,7 +2820,7 @@ EVT_END()
  * Moves the sailor to the side of the exit pipe (x = -40), stopping his own movement script first.
  * If Mario stands in the way he is nudged aside. Afterwards the sailor talks again (iri_12_makkino_talk).
  */
-EVT_BEGIN(iri_12_makkino_move_dokan_side)
+static EVT_BEGIN(iri_12_makkino_move_dokan_side)
     CALL(evt_npc_set_unitwork, STRING("マッキノ"), 0, 1)
     CALL(evt_npc_get_reglid, STRING("マッキノ"), LW(0))
     DELETE_EVENT(LW(0))
@@ -2853,7 +2853,7 @@ EVT_END()
  * Death hook of the floor's enemy: while job 12 is on and the sailor follows Mario,
  * wait 0.8 s and send the sailor to the pipe (iri_12_makkino_move_dokan_side).
  */
-EVT_BEGIN(iri_12_enemy_dead_event)
+static EVT_BEGIN(iri_12_enemy_dead_event)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
@@ -2866,7 +2866,7 @@ EVT_BEGIN(iri_12_enemy_dead_event)
 EVT_END()
 
 /** Sailor's nervous pacing while an enemy is still alive: walks back and forth between x = -175 and x = -73 forever. */
-EVT_BEGIN(iri_12_makkino_urouro)
+static EVT_BEGIN(iri_12_makkino_urouro)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("マッキノ"), -175, 109, 0, 120, 4)
         WAIT_FRAMES(1)
@@ -2877,7 +2877,7 @@ EVT_BEGIN(iri_12_makkino_urouro)
 EVT_END()
 
 /** Sailor trembling in fear on floor 100 before Bonetail is beaten: walks to x = -440, then shakes sideways forever. */
-EVT_BEGIN(iri_12_makkino_buruburu)
+static EVT_BEGIN(iri_12_makkino_buruburu)
     CALL(evt_npc_move_position, STRING("マッキノ"), -440, -124, 0, 120, 4)
     CALL(evt_npc_get_position, STRING("マッキノ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 1)
@@ -2940,7 +2940,7 @@ EVT_END()
  * appears at the pipe start, lands, and either walks to the pipe side (no enemy) or paces nervously
  * until the enemy is beaten. Re-enables his talk script.
  */
-EVT_BEGIN(iri_12_makkino_fall)
+static EVT_BEGIN(iri_12_makkino_fall)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_MARIO_MOVING)
     CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
@@ -3001,7 +3001,7 @@ EVT_END()
  * and starts the drop-in script for a rest room (iri_12_makkino_fall_return)
  * or an ordinary floor (iri_12_makkino_fall).
  */
-EVT_BEGIN(iri_12_init_fall)
+static EVT_BEGIN(iri_12_init_fall)
     CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k")) // Pine T. Sr.
     CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -3048,7 +3048,7 @@ EVT_END()
  * Examining the graffiti wall on floor 50 (Trouble Center job 30):
  * a short message (irai_30_007), then control is returned.
  */
-EVT_BEGIN(evt_iri_30_touch_rakugaki)
+static EVT_BEGIN(evt_iri_30_touch_rakugaki)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("irai_30_007"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -3061,7 +3061,7 @@ EVT_END()
  * captures the wall into an offscreen image and animates it away,
  * swapping the "before" objects for the "after" ones. Sets GSWF_TROUBLE_WORK(1).
  */
-EVT_BEGIN(evt_iri_30_bomb_rakugaki)
+static EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     CALL(evt_msg_close, STRING("irai_30_007"))
     CALL(evt_del_case_evt, 1, LW(15))
     BEGIN_INLINE_EVENT
@@ -3403,7 +3403,7 @@ static USER_FUNC(gonbaba_wait_landon) {
  * starts iri_12_makkino_okiru (マッキノ wakes up) when the message turns to its second page (type 3 = page
  * advanced).
  */
-void iri_12_msgcb(s32 type, void* param) {
+static void iri_12_msgcb(s32 type, void* param) {
     u8* msg = *(u8**)param;
 
     if (type == 3 && *(u16*)(msg + 8) == 1) {
@@ -3560,7 +3560,7 @@ inline s32 ia8_ofs(s32 x, s32 y) {
  * and draws it back through a 64x64 sine-wave indirect texture (amplitude capped at 127),
  * producing the wavy distortion.
  */
-void raster_disp(CameraId cameraId, void* param) {
+static void raster_disp(CameraId cameraId, void* param) {
     EventEntry* event = param;
     CameraEntry* cam = camGetPtr(cameraId);
     f32 amp = event->lwDataF[0];

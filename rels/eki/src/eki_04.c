@@ -19,7 +19,7 @@ static EvtWord e_open[12];
 static EvtWord s_close[12];
 static EvtWord s_open[12];
 static BeroEntry bero_data[3];
-EvtWord evt_jump[21];
+static EvtWord evt_jump[21];
 EvtWord eki_04_init_evt[66];
 
 /**
@@ -108,7 +108,7 @@ static BeroEntry bero_data[] = {
  * launches him with a high jump (evt_mario_jump_jumpstand) from the stand at (360, -900, 70) up to (300, 700, 75)
  * (to (310, -900, 65) instead when he falls onto the stand from high above), and then gives control back.
  */
-EVT_BEGIN(evt_jump)
+static EVT_BEGIN(evt_jump)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_jump_jumpstand, 360, -900, 70, 300, 700, 75, 310, -900, 65, 6000, 1)
     CALL(evt_mario_key_onoff, 1)

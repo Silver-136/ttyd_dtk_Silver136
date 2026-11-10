@@ -26,8 +26,8 @@
 
 static EvtWord oshimodo_event[32];
 static BeroEntry bero_entry_data[5];
-EvtWord iri_12_kino_makkino_talk[284];
-EvtWord iri_12_kino_talk[36];
+static EvtWord iri_12_kino_makkino_talk[284];
+static EvtWord iri_12_kino_talk[36];
 static EvtWord iri_12_makkino_talk[7];
 static EvtWord iri_12_init[85];
 static EvtWord evt_kanban[16];
@@ -133,7 +133,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-EVT_BEGIN(iri_12_kino_makkino_talk)
+static EVT_BEGIN(iri_12_kino_makkino_talk)
     CALL(evt_set_dir_to_target, STRING("キーノ"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("マッキノ"), STRING("mario"))
     WAIT_FRAMES(1)
@@ -205,7 +205,7 @@ EVT_END()
  * Before Makkino has arrived (GSWF_TROUBLE_WORK(2) = 0) it says irai_12_001_1 the first time
  * and irai_12_001_2 afterwards; once Makkino stands beside her it starts the final conversation with LW(0) = 0.
  */
-EVT_BEGIN(iri_12_kino_talk)
+static EVT_BEGIN(iri_12_kino_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)

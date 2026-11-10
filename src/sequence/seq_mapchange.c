@@ -42,19 +42,19 @@
 #include "evt/evt_save_flags.h"
 
 //.sbss
-char _next_area[0x20];
-char _next_map[0x20];
-char _next_bero[0x20];
+static char _next_area[0x20];
+static char _next_map[0x20];
+static char _next_bero[0x20];
 
 /** Started after loading a save: waits for SEQ_GAME and for the fade to end, then gives Mario back key input. */
-EVT_BEGIN(key_off)
+static EVT_BEGIN(key_off)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
-u8 rel_bss[0xF10];
+static u8 rel_bss[0xF10];
 void _load(const char* prevMapName, const char* newMapName, const char* beroName);
 
 static const char mc_tou[4];

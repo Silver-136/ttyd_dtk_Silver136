@@ -10,46 +10,46 @@
 #include "driver/npcdrv.h"
 #include "eff/n64/eff_snowfall_n64.h"
 
-USER_FUNC(_snow_control);
+static USER_FUNC(_snow_control);
 
-BattleStageObjectData bom_btlobject_data[11];
-BattleStageData bom_btlstage_data[1];
-BattleUnitSetup btlparty_bom_bom_00_01_off_1[1];
-BattleGroupSetup btlgrp_bom_bom_00_01_off_1;
-BattleUnitSetup btlparty_bom_bom_03_01_off_1[2];
-BattleGroupSetup btlgrp_bom_bom_03_01_off_1;
-BattleUnitSetup btlparty_bom_bom_03_01_off_2[3];
-BattleGroupSetup btlgrp_bom_bom_03_01_off_2;
-BattleUnitSetup btlparty_bom_bom_03_03_off_1[2];
-BattleGroupSetup btlgrp_bom_bom_03_03_off_1;
-BattleUnitSetup btlparty_bom_bom_03_03_off_2[3];
-BattleGroupSetup btlgrp_bom_bom_03_03_off_2;
-BattleUnitSetup btlparty_bom_bom_04_01_off_1[2];
-BattleGroupSetup btlgrp_bom_bom_04_01_off_1;
-BattleUnitSetup btlparty_bom_bom_04_01_off_2[3];
-BattleGroupSetup btlgrp_bom_bom_04_01_off_2;
-BattleUnitSetup btlparty_bom_bom_04_02_off_1[2];
-BattleGroupSetup btlgrp_bom_bom_04_02_off_1;
-BattleUnitSetup btlparty_bom_bom_04_02_off_2[3];
-BattleGroupSetup btlgrp_bom_bom_04_02_off_2;
-BattleUnitSetup btlparty_bom_bom_04_03_off_1[4];
-BattleGroupSetup btlgrp_bom_bom_04_03_off_1;
-NpcBattleSelect btlgrpsel_bom_btlno_bom_test1_off[2];
-NpcBattleSelect btlgrpsel_bom_btlno_bom_03_01_off[3];
-NpcBattleSelect btlgrpsel_bom_btlno_bom_03_02_off[3];
-NpcBattleSelect btlgrpsel_bom_btlno_bom_03_03_off[3];
-NpcBattleSelect btlgrpsel_bom_btlno_bom_04_01_off[3];
-NpcBattleSelect btlgrpsel_bom_btlno_bom_04_02_off[3];
-NpcBattleSelect btlgrpsel_bom_btlno_bom_04_03_off[2];
+static BattleStageObjectData bom_btlobject_data[11];
+static BattleStageData bom_btlstage_data[1];
+static BattleUnitSetup btlparty_bom_bom_00_01_off_1[1];
+static BattleGroupSetup btlgrp_bom_bom_00_01_off_1;
+static BattleUnitSetup btlparty_bom_bom_03_01_off_1[2];
+static BattleGroupSetup btlgrp_bom_bom_03_01_off_1;
+static BattleUnitSetup btlparty_bom_bom_03_01_off_2[3];
+static BattleGroupSetup btlgrp_bom_bom_03_01_off_2;
+static BattleUnitSetup btlparty_bom_bom_03_03_off_1[2];
+static BattleGroupSetup btlgrp_bom_bom_03_03_off_1;
+static BattleUnitSetup btlparty_bom_bom_03_03_off_2[3];
+static BattleGroupSetup btlgrp_bom_bom_03_03_off_2;
+static BattleUnitSetup btlparty_bom_bom_04_01_off_1[2];
+static BattleGroupSetup btlgrp_bom_bom_04_01_off_1;
+static BattleUnitSetup btlparty_bom_bom_04_01_off_2[3];
+static BattleGroupSetup btlgrp_bom_bom_04_01_off_2;
+static BattleUnitSetup btlparty_bom_bom_04_02_off_1[2];
+static BattleGroupSetup btlgrp_bom_bom_04_02_off_1;
+static BattleUnitSetup btlparty_bom_bom_04_02_off_2[3];
+static BattleGroupSetup btlgrp_bom_bom_04_02_off_2;
+static BattleUnitSetup btlparty_bom_bom_04_03_off_1[4];
+static BattleGroupSetup btlgrp_bom_bom_04_03_off_1;
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_test1_off[2];
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_03_01_off[3];
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_03_02_off[3];
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_03_03_off[3];
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_04_01_off[3];
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_04_02_off[3];
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_04_03_off[2];
 NpcSetupBattleInfo btlsetup_bom_tbl[8];
 NpcTerritoryInfo btl_bom_setup_no_tbl[8];
-EvtWord bgset_bom_snow_event[4];
+static EvtWord bgset_bom_snow_event[4];
 
 /**
  * Props of the Fahr Outpost battle stage: each entry names a model of the backdrop and where it stands, the
  * last entries being the background layers.
  */
-BattleStageObjectData bom_btlobject_data[] = {
+static BattleStageObjectData bom_btlobject_data[] = {
     {"yuki_front", 2, STAGE_LAYER_A2, {0.0f, 0.0f, 76.0f}, 0, 60, {0}},
     {"yuki_back", 2, STAGE_LAYER_A2, {0.0f, 0.0f, -40.0f}, 10, 50, {0}},
     {"kusa_01", 2, STAGE_LAYER_A2, {-167.0f, 0.0f, -21.0f}, 20, 40, {0}},
@@ -67,7 +67,7 @@ BattleStageObjectData bom_btlobject_data[] = {
  * Battle stage of Fahr Outpost: the stage model directories, the props above, the backdrop weapons and the
  * background event that runs during the fight.
  */
-BattleStageData bom_btlstage_data[] = {
+static BattleStageData bom_btlstage_data[] = {
     {
         "bti_01", // globalStageDataDir
         "stg_07_0", // specificStageDataDir
@@ -84,7 +84,7 @@ BattleStageData bom_btlstage_data[] = {
     },
 };
 
-BattleUnitSetup btlparty_bom_bom_00_01_off_1[] = {
+static BattleUnitSetup btlparty_bom_bom_00_01_off_1[] = {
     {
         &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -97,7 +97,7 @@ BattleUnitSetup btlparty_bom_bom_00_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_00_01_off_1 = {
+static BattleGroupSetup btlgrp_bom_bom_00_01_off_1 = {
     1, // numEnemies
     btlparty_bom_bom_00_01_off_1, // enemyData
     0, 0, // heldItemWeight..randomItemWeight
@@ -107,7 +107,7 @@ BattleGroupSetup btlgrp_bom_bom_00_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_03_01_off_1[] = {
+static BattleUnitSetup btlparty_bom_bom_03_01_off_1[] = {
     {
         &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -130,7 +130,7 @@ BattleUnitSetup btlparty_bom_bom_03_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_03_01_off_1 = {
+static BattleGroupSetup btlgrp_bom_bom_03_01_off_1 = {
     2, // numEnemies
     btlparty_bom_bom_03_01_off_1, // enemyData
     25, // heldItemWeight
@@ -141,7 +141,7 @@ BattleGroupSetup btlgrp_bom_bom_03_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_03_01_off_2[] = {
+static BattleUnitSetup btlparty_bom_bom_03_01_off_2[] = {
     {
         &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -174,7 +174,7 @@ BattleUnitSetup btlparty_bom_bom_03_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_03_01_off_2 = {
+static BattleGroupSetup btlgrp_bom_bom_03_01_off_2 = {
     3, // numEnemies
     btlparty_bom_bom_03_01_off_2, // enemyData
     25, // heldItemWeight
@@ -185,7 +185,7 @@ BattleGroupSetup btlgrp_bom_bom_03_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_03_03_off_1[] = {
+static BattleUnitSetup btlparty_bom_bom_03_03_off_1[] = {
     {
         &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -208,7 +208,7 @@ BattleUnitSetup btlparty_bom_bom_03_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_03_03_off_1 = {
+static BattleGroupSetup btlgrp_bom_bom_03_03_off_1 = {
     2, // numEnemies
     btlparty_bom_bom_03_03_off_1, // enemyData
     25, // heldItemWeight
@@ -219,7 +219,7 @@ BattleGroupSetup btlgrp_bom_bom_03_03_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_03_03_off_2[] = {
+static BattleUnitSetup btlparty_bom_bom_03_03_off_2[] = {
     {
         &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -252,7 +252,7 @@ BattleUnitSetup btlparty_bom_bom_03_03_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_03_03_off_2 = {
+static BattleGroupSetup btlgrp_bom_bom_03_03_off_2 = {
     3, // numEnemies
     btlparty_bom_bom_03_03_off_2, // enemyData
     25, // heldItemWeight
@@ -263,7 +263,7 @@ BattleGroupSetup btlgrp_bom_bom_03_03_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_04_01_off_1[] = {
+static BattleUnitSetup btlparty_bom_bom_04_01_off_1[] = {
     {
         &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -286,7 +286,7 @@ BattleUnitSetup btlparty_bom_bom_04_01_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_04_01_off_1 = {
+static BattleGroupSetup btlgrp_bom_bom_04_01_off_1 = {
     2, // numEnemies
     btlparty_bom_bom_04_01_off_1, // enemyData
     25, // heldItemWeight
@@ -297,7 +297,7 @@ BattleGroupSetup btlgrp_bom_bom_04_01_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_04_01_off_2[] = {
+static BattleUnitSetup btlparty_bom_bom_04_01_off_2[] = {
     {
         &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -330,7 +330,7 @@ BattleUnitSetup btlparty_bom_bom_04_01_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_04_01_off_2 = {
+static BattleGroupSetup btlgrp_bom_bom_04_01_off_2 = {
     3, // numEnemies
     btlparty_bom_bom_04_01_off_2, // enemyData
     25, // heldItemWeight
@@ -341,7 +341,7 @@ BattleGroupSetup btlgrp_bom_bom_04_01_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_04_02_off_1[] = {
+static BattleUnitSetup btlparty_bom_bom_04_02_off_1[] = {
     {
         &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -364,7 +364,7 @@ BattleUnitSetup btlparty_bom_bom_04_02_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_04_02_off_1 = {
+static BattleGroupSetup btlgrp_bom_bom_04_02_off_1 = {
     2, // numEnemies
     btlparty_bom_bom_04_02_off_1, // enemyData
     25, // heldItemWeight
@@ -375,7 +375,7 @@ BattleGroupSetup btlgrp_bom_bom_04_02_off_1 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_04_02_off_2[] = {
+static BattleUnitSetup btlparty_bom_bom_04_02_off_2[] = {
     {
         &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -408,7 +408,7 @@ BattleUnitSetup btlparty_bom_bom_04_02_off_2[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_04_02_off_2 = {
+static BattleGroupSetup btlgrp_bom_bom_04_02_off_2 = {
     3, // numEnemies
     btlparty_bom_bom_04_02_off_2, // enemyData
     25, // heldItemWeight
@@ -419,7 +419,7 @@ BattleGroupSetup btlgrp_bom_bom_04_02_off_2 = {
     5, // reserved_1C
 };
 
-BattleUnitSetup btlparty_bom_bom_04_03_off_1[] = {
+static BattleUnitSetup btlparty_bom_bom_04_03_off_1[] = {
     {
         &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
@@ -462,7 +462,7 @@ BattleUnitSetup btlparty_bom_bom_04_03_off_1[] = {
     },
 };
 
-BattleGroupSetup btlgrp_bom_bom_04_03_off_1 = {
+static BattleGroupSetup btlgrp_bom_bom_04_03_off_1 = {
     4, // numEnemies
     btlparty_bom_bom_04_03_off_1, // enemyData
     25, // heldItemWeight
@@ -473,42 +473,42 @@ BattleGroupSetup btlgrp_bom_bom_04_03_off_1 = {
     5, // reserved_1C
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_test1_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_test1_off[] = {
     {50, &btlgrp_bom_bom_00_01_off_1, bom_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_03_01_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_03_01_off[] = {
     {20, &btlgrp_bom_bom_03_01_off_1, bom_btlstage_data},
     {10, &btlgrp_bom_bom_03_01_off_2, bom_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_03_02_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_03_02_off[] = {
     {10, &btlgrp_bom_bom_03_01_off_1, bom_btlstage_data},
     {20, &btlgrp_bom_bom_03_01_off_2, bom_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_03_03_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_03_03_off[] = {
     {10, &btlgrp_bom_bom_03_03_off_1, bom_btlstage_data},
     {10, &btlgrp_bom_bom_03_03_off_2, bom_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_04_01_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_04_01_off[] = {
     {10, &btlgrp_bom_bom_04_01_off_1, bom_btlstage_data},
     {10, &btlgrp_bom_bom_04_01_off_2, bom_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_04_02_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_04_02_off[] = {
     {10, &btlgrp_bom_bom_04_02_off_1, bom_btlstage_data},
     {10, &btlgrp_bom_bom_04_02_off_2, bom_btlstage_data},
     {0},
 };
 
-NpcBattleSelect btlgrpsel_bom_btlno_bom_04_03_off[] = {
+static NpcBattleSelect btlgrpsel_bom_btlno_bom_04_03_off[] = {
     {10, &btlgrp_bom_bom_04_03_off_1, bom_btlstage_data},
     {0},
 };
@@ -603,12 +603,12 @@ NpcTerritoryInfo btl_bom_setup_no_tbl[] = {
 };
 
 /** Background event of the Fahr Outpost battle stage: starts the snowfall effect for the whole battle. */
-EVT_BEGIN(bgset_bom_snow_event)
+static EVT_BEGIN(bgset_bom_snow_event)
     CALL(_snow_control)
     RETURN
 EVT_END()
 
-USER_FUNC(_snow_control) {
+static USER_FUNC(_snow_control) {
     if (isFirstCall) {
         effSnowfallN64Entry(0, 64);
     }

@@ -484,7 +484,7 @@ static f32 shadow_vtx[56] ATTRIBUTE_ALIGN(32) = {
     -0.707108f, 0.0f, 0.707105f,
 };
 
-GXColor shadow_col[8] ATTRIBUTE_ALIGN(32) = {
+static GXColor shadow_col[8] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x80},
 };
 
