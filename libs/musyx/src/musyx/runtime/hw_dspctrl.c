@@ -1828,9 +1828,3 @@ void salHandleAuxProcessing() {
     }
   }
 }
-
-
-#pragma force_active on
-__declspec(section ".rodata") const u32 gap_04_80302924_rodata[1] = {0};
-__declspec(section ".data") u32 gap_05_803BA894_data[1] = {0};
-#pragma force_active reset
