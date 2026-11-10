@@ -93,7 +93,6 @@ static USER_FUNC(stone_bg);
 static void coingetDisp(WinMgrEntry* entry);
 
 #if VERSION < VERSION_US
-s32 evt_sub_mail_event_end[1];
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
@@ -1347,12 +1346,7 @@ EVT_BEGIN(mail_evt_pik_00)
     RETURN
 EVT_END()
 
-#if VERSION >= VERSION_US
 EVT_BEGIN(evt_sub_mail_event)
-#else
-EvtWord evt_sub_mail_event[] = {
-#endif
-
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)
         RETURN
@@ -1430,22 +1424,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     RETURN
-#if VERSION >= VERSION_US
 EVT_END()
-#else
-};
-#endif
-
-#pragma force_active on
-
-#if VERSION < VERSION_US
-// FAKE: placed in .data; without it the object changes
-__declspec(section ".data") s32 evt_sub_mail_event_end[] = {
-    1,
-};
-#endif
-
-#pragma force_active reset
 
 /**
  * Starts a frame-counted interpolation in the calling script:
