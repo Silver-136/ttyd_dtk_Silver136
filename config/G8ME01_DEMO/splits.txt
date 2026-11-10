@@ -2262,7 +2262,7 @@ effect/eff_minigame.c:
 	.text       start:0x80218930 end:0x80219C60
 	.rodata     start:0x802FB540 end:0x802FB570
 	.data       start:0x803B28F8 end:0x803B2A80
-	.sdata      start:0x80415310 end:0x80415328
+	.sdata      start:0x80415310 end:0x80415340
 	.sdata2     start:0x8041CE90 end:0x8041CEE8
 	.sbss2      start:0x8041EE28 end:0x8041EE30
 

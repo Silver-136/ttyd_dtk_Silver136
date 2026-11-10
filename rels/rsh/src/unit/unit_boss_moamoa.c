@@ -99,7 +99,7 @@ extern BattleUnitKind unit_boss_moamoa_tentacle_c;
 
 BattleUnitKind unit_boss_moamoa;
 BattleUnitDefense moamoa_defence;
-s32 moamoa_defence_no_parts[2];
+BattleUnitDefense moamoa_defence_no_parts;
 BattleUnitDefense moamoa2_defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -287,9 +287,7 @@ BattleUnitDefense moamoa_defence = {{2, 2, 2, 2, 2}};
 /**
  * Zero base-defence table for the exposed main body's part when its attacking parts are gone.
  */
-s32 moamoa_defence_no_parts[] = {
-    0, 0,
-};
+BattleUnitDefense moamoa_defence_no_parts = {{0, 0, 0, 0, 0}};
 
 /** Defence of the Smorg: 1 damage points off every hit. */
 BattleUnitDefense moamoa2_defence = {{1, 1, 1, 1, 1}};

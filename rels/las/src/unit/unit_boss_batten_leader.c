@@ -90,7 +90,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 BattleUnitDefenseAttr defence_attr_muteki;
 static StatusVulnerability regist;
-u8 defencecopy[8] __attribute__((aligned(4)));
+u8 defencecopy[5] __attribute__((aligned(4)));
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
 static BattleDataEntry data_table[3];
@@ -623,8 +623,8 @@ static StatusVulnerability regist = {
 };
 #endif
 
-u8 defencecopy[8] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense, padded to 8
-    1, 1, 1, 1, 1, 0, 0, 0,
+u8 defencecopy[5] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense
+    1, 1, 1, 1, 1,
 };
 
 /** Pose table of Grodus: animation names for each pose type (idle, walk, hurt, attack and so on). */

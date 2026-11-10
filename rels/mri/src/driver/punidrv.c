@@ -116,7 +116,7 @@ void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), voi
                void (*mainFunc2)(void)) {
     static f32 Normals[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f};
     static GXColor Colors[] = {{0xFF, 0xFF, 0xFF, 0xFF}};
-    static f32 UVs[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f};
+    static f32 UVs[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
     PunidrvWork* wp = work;
     PunidrvTexInfo* info;
     s32 texNum;

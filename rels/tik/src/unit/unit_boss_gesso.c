@@ -38,9 +38,9 @@ static StatusVulnerability regist;
 BattleUnitDefense defence_ceil;
 BattleUnitDefenseAttr defence_attr_ceil;
 StatusVulnerability regist_ceil;
-s32 R_defence_turn[2];
-s32 R_defence_attr_turn[2];
-s32 R_regist_turn[6];
+BattleUnitDefense gesso_defence_turn;
+BattleUnitDefenseAttr gesso_defence_attr_turn;
+StatusVulnerability gesso_regist_turn;
 static PoseTableEntry pose_table[11];
 static PoseTableEntry pose_table_ceil[12];
 PoseTableEntry gesso_pose_table_turn[10];
@@ -167,21 +167,44 @@ BattleUnitDefenseAttr defence_attr_ceil = {0};
 /** Status vulnerability of the Blooper (ceiling): all zero, immune to every status. */
 StatusVulnerability regist_ceil = {0};
 
-s32 R_defence_turn[] = {
-    0, 0,
-};
+/** Defence the right arm's script sets on a part (original name, JP demo map). */
+BattleUnitDefense gesso_defence_turn = {{0, 0, 0, 0, 0}};
 
-s32 R_defence_attr_turn[] = {
-    0, 0,
-};
+/** Element reactions the right arm's script sets on a part (original name, JP demo map). */
+BattleUnitDefenseAttr gesso_defence_attr_turn = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-s32 R_regist_turn[] = {
+/**
+ * Status vulnerability the right arm's script sets on a part (original name, JP demo map).
+ * From JP on the same values as regist; all zero in the early demos.
+ */
 #if VERSION <= VERSION_DEMO_JP
-    0, 0, 0, 0, 0, 0,
+StatusVulnerability gesso_regist_turn = {0};
 #else
-    1684300900, 1684300900, 1684300900, 1684300800, 6579200, 0,
-#endif
+StatusVulnerability gesso_regist_turn = {
+    100, // sleep
+    100, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    100, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GSO_N2_1"},

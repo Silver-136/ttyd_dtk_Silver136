@@ -20,9 +20,9 @@
 #include "battle/battle_damage.h"
 
 static USER_FUNC(_check_zenei_kouei);
-extern s32 R_defence_attr_turn[];
-extern s32 R_defence_turn[];
-extern s32 R_regist_turn[];
+extern BattleUnitDefenseAttr gesso_defence_attr_turn;
+extern BattleUnitDefense gesso_defence_turn;
+extern StatusVulnerability gesso_regist_turn;
 extern PoseTableEntry gesso_pose_table_turn[];
 
 BattleUnitKind unit_boss_gesso_right_arm;
@@ -555,9 +555,9 @@ EVT_BEGIN(gesso_fall_check)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(3), 1, PTR(gesso_pose_table_turn))
     CALL(btlevtcmd_SetHpGaugeOffset, LW(3), 0, 0)
     CALL(btlevtcmd_SetStatusIconOffset, LW(3), 46, 118)
-    CALL(btlevtcmd_SetPartsDefenceTable, LW(3), 1, PTR(R_defence_turn))
-    CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(3), 1, PTR(R_defence_attr_turn))
-    CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(R_regist_turn))
+    CALL(btlevtcmd_SetPartsDefenceTable, LW(3), 1, PTR(&gesso_defence_turn))
+    CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(3), 1, PTR(&gesso_defence_attr_turn))
+    CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&gesso_regist_turn))
     CALL(btlevtcmd_SetHitOffset, LW(3), 1, -15, -90, 0)
 
     // BUG: sets the icon offset of UNIT_ID_SELF (the dying tentacle running this) instead of the body LW(3),

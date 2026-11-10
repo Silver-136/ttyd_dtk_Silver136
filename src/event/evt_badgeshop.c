@@ -137,9 +137,7 @@ s32 badge_bteresa_table_nedan[] = {
     400, 200, 100, 50,
     800, 600, 400, 200,
     1600, 900, 500, 300,
-    9999, 999, 599, 399,
-    0
-};
+    9999, 999, 599, 399};
 #endif
 
 BadgeShopWork badgeshopwork;

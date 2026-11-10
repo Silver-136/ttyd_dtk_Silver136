@@ -48,21 +48,9 @@ PoseTableEntry pose_table_vivian_stay[24];
 static BattleDataEntry data_table[20];
 BattleUnitKindPart unitpartsdata_Party_Vivian[1];
 BattleUnitKind unitdata_Party_Vivian;
-typedef struct {
-    BattleUnitDefense d;
-    u8 pad[3];
-} VivDef;
-typedef struct {
-    BattleUnitDefenseAttr d;
-    u8 pad[3];
-} VivDefAttr;
-typedef struct {
-    StatusVulnerability d;
-    u8 pad[2];
-} VivRegist;
-static VivDef defence;
-static VivDefAttr defence_attr;
-static VivRegist regist;
+static BattleUnitDefense defence;
+static BattleUnitDefenseAttr defence_attr;
+static StatusVulnerability regist;
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 static EvtWord battle_entry_event[59];
@@ -91,7 +79,7 @@ static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[189];
 
 #if VERSION <= VERSION_DEMO_JP
-static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
+static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 #endif
 
 /**
@@ -157,7 +145,7 @@ static BattleDataEntry data_table[] = {
 
 /** Vivian's single battle part: her targetable body (model c_vivian) with her pose table. */
 BattleUnitKindPart unitpartsdata_Party_Vivian[] = {
-    {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence.d, &defence_attr.d, kMainPart | kGuardTargetPart, 0, pose_table_vivian_stay},
+    {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_vivian_stay},
 };
 
 /**
@@ -205,7 +193,7 @@ BattleUnitKind unitdata_Party_Vivian = {
     "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     kFloating | kUnitNoHpGauge, // attributeFlags
-    &regist.d, // statusVulnerability
+    &regist, // statusVulnerability
     1, // numParts
     unitpartsdata_Party_Vivian, // parts
     init_event, // initEventCode
@@ -213,14 +201,14 @@ BattleUnitKind unitdata_Party_Vivian = {
 };
 
 /** Vivian's defence: 0 against every element. */
-static VivDef defence = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
+static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Vivian's defence attributes: normal (0) against every element, no weakness or immunity. */
-static VivDefAttr defence_attr = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Vivian's status chances: 100 for every status (badges lower them in battle). */
 #if VERSION >= VERSION_JP
-static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
+static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 #endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */

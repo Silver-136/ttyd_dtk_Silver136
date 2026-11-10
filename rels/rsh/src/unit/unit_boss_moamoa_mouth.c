@@ -15,7 +15,7 @@
 #include "unit_boss_moamoa.h"
 
 extern PoseTableEntry moamoa1_weakness_pose_table[];
-extern s32 moamoa_defence_no_parts[];
+extern BattleUnitDefense moamoa_defence_no_parts;
 
 BattleUnitKind unit_boss_moamoa_mouth;
 static BattleUnitDefense defence;
@@ -259,7 +259,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(1))
     CALL(btlevtcmd_SetUnitWork, LW(1), MOAMOA_UNIT_WORK_MOUTH, -1)
-    CALL(btlevtcmd_SetPartsDefenceTable, LW(1), 1, PTR(moamoa_defence_no_parts))
+    CALL(btlevtcmd_SetPartsDefenceTable, LW(1), 1, PTR(&moamoa_defence_no_parts))
     CALL(btlevtcmd_OffPartsAttribute, LW(1), 1, kImmuneToDamageAndStatus)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(1), 1, PTR(moamoa1_weakness_pose_table))
     CALL(btlevtcmd_SetHitOffset, LW(1), 1, 0, 32, 0)

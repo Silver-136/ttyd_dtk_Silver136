@@ -659,7 +659,7 @@ static void SortVoices(DSPvoice** voices, long l, long r) {
 }
 
 void salBuildCommandList(s16* dest, u32 nsDelay) {
-  static const u16 pbOffsets[10] = {10, 12, 24, 14, 16, 26, 18, 20, 22}; // nine used (loop i < 9), the tenth is 0
+  static const u16 pbOffsets[9] = {10, 12, 24, 14, 16, 26, 18, 20, 22}; // nine used (loop i < 9), the tenth is 0
   static DSPvoice* voices[64]; // filled per studio with no bound check: more than 64 voices would overrun it
 
   u8 s;

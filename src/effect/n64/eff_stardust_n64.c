@@ -39,7 +39,7 @@ static u8 color_rotation_data[] = {
 static u8 speed_data[] = {0x1E, 0x3C, 0x50, 0x5F, 0x64, 0x68, 0x6A};
 
 /** Size in percent over a sparkle's 7-frame burst, written as characters ('d' is 100). */
-static u8 scale_data[] = "<Zdhjlm";
+static u8 scale_data[7] = "<Zdhjlm";
 
 /**
  * Eight 16x16 quads, one per 22x22 cell of the sparkle strip, that each sparkle steps through as it twinkles.

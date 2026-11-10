@@ -37,7 +37,7 @@ typedef struct EffSnowmanN64Work {
  */
 static s8 jump_hscale_data[] = {100, 90, 82, 76, 72, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 /** Width in percent over the 27-frame landing squash, written as characters ('d' is 100). */
-static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";
+static u8 land_hscale_data[27] = "dZRLHFJYdlnlf`_`ceddddddddd";
 
 /** Width in percent over the long spinning hop: it narrows to 70 and holds there, then widens as it takes off. */
 static u8 jump2_hscale_data[] = {100, 90, 82, 76, 72, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
