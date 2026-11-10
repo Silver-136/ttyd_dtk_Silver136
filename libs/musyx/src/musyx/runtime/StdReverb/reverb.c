@@ -245,8 +245,8 @@ static void DoCrossTalk(s32* a, s32* b, f32 start, f32 end) {
 
 #ifdef __MWERKS__
 /* clang-format off */
-// The retail map names this function U_HandleReverb (the JP demo map: HandleReverb)
-static asm void U_HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
+// Name from the JP demo map (HandleReverb, local in reverb.o; the community retail maps call it U_HandleReverb).
+static asm void HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
   nofralloc
   stwu r1, -0xc0(r1)
   stmw r14, 0x8(r1)
@@ -603,7 +603,7 @@ done:
 }
 /* clang-format on */
 #else
-static void U_HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
+static void HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
   // Non-MWCC builds: no C form of this kernel exists; the game uses the assembly above
 }
 #endif
@@ -616,13 +616,13 @@ void ReverbHICallback(s32* left, s32* right, s32* surround, SND_AUX_REVERBHI* re
       if (rev->rv.crosstalk != 0.f) {
         DoCrossTalk(left, right, rev->rv.crosstalk * 0.5f, 1.f - (rev->rv.crosstalk * 0.5f));
       }
-      U_HandleReverb(left, rev, 0);
+      HandleReverb(left, rev, 0);
       break;
     case 1:
-      U_HandleReverb(right, rev, 1);
+      HandleReverb(right, rev, 1);
       break;
     case 2:
-      U_HandleReverb(surround, rev, 2);
+      HandleReverb(surround, rev, 2);
       break;
     }
   }

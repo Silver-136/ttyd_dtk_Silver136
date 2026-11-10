@@ -280,7 +280,7 @@ EvtWord wanwan_init_event_sub[64];
 #define ZAKO_ENTRY_FALL 2
 
 #if VERSION >= VERSION_JP
-EvtWord zakoM2D_find_event[179];
+EvtWord zakoM2D_find_throw_event[179];
 #endif
 
 /**
@@ -5136,9 +5136,9 @@ EVT_END()
 /**
  * Throws the X-Naut PhD's bottle in an arc toward Mario (LW(10) is his distance;
  * from 200 on it lands a fixed 100 units ahead), where it shatters into glass and fire with sounds and smoke.
- * Spawned by zakoM2D_find_start_event outside the early demos.
+ * Spawned by zakoM2D_find_event outside the early demos.
  */
-EVT_BEGIN(zakoM2D_find_event)
+EVT_BEGIN(zakoM2D_find_throw_event)
     CALL(evt_npc_set_anim, STRING("slave_0"), STRING("B_1"))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_facedirection_add, STRING("me"), LW(0), 10)
@@ -5178,7 +5178,9 @@ EVT_BEGIN(zakoM2D_find_event)
 EVT_END()
 #endif
 
-EVT_BEGIN(zakoM2D_find_start_event)
+// Original name from the JP demo map, where this find script still holds the throw itself (split out from JP on
+// into zakoM2D_find_throw_event, a descriptive name).
+EVT_BEGIN(zakoM2D_find_event)
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -5235,7 +5237,7 @@ EVT_BEGIN(zakoM2D_find_start_event)
         CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)
     END_INLINE_EVENT
 #else
-    SPAWN_EVENT(zakoM2D_find_event)
+    SPAWN_EVENT(zakoM2D_find_throw_event)
 #endif
     WAIT_FRAMES(100)
     CALL(evt_npc_return_interrupt, STRING("me"))

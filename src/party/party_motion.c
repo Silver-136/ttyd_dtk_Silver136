@@ -717,7 +717,7 @@ void partyWalkChkGnd(PartyEntry* party) {
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
-void partyChgWalkPose(PartyEntry* party, f32 spd) {
+void partyMoveAnime(PartyEntry* party, f32 spd) {
     if (spd >= 1.25f) {
         partyChgPoseId(party, PARTY_POSE_RUN);
         partyWalkSe(party, 1);
@@ -1251,7 +1251,7 @@ found:
         }
     }
     if (party->moveSpeed) {
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
     } else if (!(fm->flag & FOOTMARK_FLAG_SLIT)) {
         partyChgMot(party, PARTY_MOTION_STAY);
     }
@@ -1776,7 +1776,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
     }
     if (party->moveSpeed) {
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
     } else if (!(fm->flag & FOOTMARK_FLAG_SLIT)) {
         partyChgMot(party, PARTY_MOTION_STAY);
 #else
@@ -1809,7 +1809,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
     }
     if (party->moveSpeed) {
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
     } else {
         partyChgMot(party, PARTY_MOTION_STAY);
     }
@@ -2141,7 +2141,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         distABf(party->position.x, party->position.z, x, z);
         partyForceSetSpd(party, (party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET) ? 3.6f : 2.0f);
         partyMoveCheckWall(party);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         if (party->hitobjFront) {
             x = party->position.x;
             z = party->position.z;
@@ -2330,7 +2330,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
         partyForceSetSpd(party, sp);
         partyMoveCheckWall(party);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         hit = partyBehindGround(party);
         party->hitobjStandOn = hit;
         if (!hit) {
@@ -2430,7 +2430,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
         party->position.x = pos.x;
         party->position.z = pos.z;
         party->position.y += 0.05f * (party->moveTarget.y - party->position.y);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         return;
     }
     party->moveFrames = 0;
@@ -2541,7 +2541,7 @@ void party_motion_beside_mario(PartyEntry* party) {
         }
         partyForceSetSpd(party, sp);
         partyMoveCheckWall(party);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         hit = partyBehindGround(party);
         party->hitobjStandOn = hit;
         if (!hit) {
@@ -4238,7 +4238,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
     }
     if (party->moveSpeed) {
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
     } else {
         partyChgMot(party, PARTY_MOTION_STAY);
     }
@@ -4550,7 +4550,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         }
         party->moveSpeed = spd;
         partyMoveCheckWall(party);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         if (party->hitobjFront) {
             x = party->position.x;
             z = party->position.z;
@@ -4719,7 +4719,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
         party->moveSpeed = spd;
         partyMoveCheckWall(party);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         hit = _partySearchGround(party, &gy, &sp, 10.0f, 0.0f);
         if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
@@ -4859,7 +4859,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
         party->position.x = v.x;
         party->position.z = v.z;
         party->position.y += 0.05f * (ty - party->position.y);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
     } else {
         party->moveFrames = 0;
         partyChgMoveMode(party, 1);
@@ -4961,7 +4961,7 @@ void party_motion_beside_mario(PartyEntry* party) {
         }
         party->moveSpeed = spd;
         partyMoveCheckWall(party);
-        partyChgWalkPose(party, party->moveSpeed);
+        partyMoveAnime(party, party->moveSpeed);
         hit = _partySearchGround(party, &y, &sp, 10.0f, 0.0f);
         if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;

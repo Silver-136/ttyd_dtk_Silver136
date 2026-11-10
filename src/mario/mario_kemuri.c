@@ -24,13 +24,13 @@ extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c)
 
 static void kemuri(void);
 static void kemuri_mugi(void);
-void mario_kemuri_landon(void);
+void kemuri_water(void);
 
 /**
  * Per-frame footstep effects for the player character,
  * run from marioMain and from Peach's and Bowser's main loops.
  * Picks by the floor's hit attribute: 0x1000 floors use kemuri_mugi,
- * water (0x100) splashes via mario_kemuri_landon,
+ * water (0x100) splashes via kemuri_water,
  * 0x100000 floors leave the N64-style kemuri7 puffs while walking,
  * and other floors get the normal dust from kemuri (not for Peach).
  * Nothing in tube mode, while entering a pipe or at a raised system level.
@@ -60,7 +60,7 @@ void mario_kemuri(void) {
                 if (attr & HIT_ATTR_GRASS) {
                     kemuri_mugi();
                 } else if (attr & HIT_ATTR_SHALLOW_WATER) {
-                    mario_kemuri_landon();
+                    kemuri_water();
                 } else if (attr & HIT_ATTR_SNOW) {
                     mario = marioGetPtr();
                     if (mario->currMotionId != MARIO_MOTION_DASH && mario->currMotionId != MARIO_MOTION_WALK) {
@@ -103,9 +103,9 @@ void mario_simple_kemuri(void) {
  * a 0x1000-floor effect, a water splash, or a dust puff, depending on the floor.
  * Skipped once if MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI is set, which it clears.
  */
-
-// Descriptive name (not in the symbol maps); placeholder unk_80130374, JP 0x80130374. See docs/NAME_PROVENANCE.md.
-void mario_land_kemuri(void) {
+// Original name from the JP demo map, where mot_jabara calls it; there the water splash below is the stripped
+// kemuri_water (0x1a4, inlined everywhere).
+void mario_kemuri_landon(void) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit = mario->hitobjStandOn;
     u32 attr;
@@ -119,7 +119,7 @@ void mario_land_kemuri(void) {
             if (attr & HIT_ATTR_GRASS) {
                 kemuri_mugi();
             } else if (attr & HIT_ATTR_SHALLOW_WATER) {
-                mario_kemuri_landon();
+                kemuri_water();
             } else {
                 eff = effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
                 if (mario->flags & MARIO_FLAG_BG_MODE) {
@@ -134,7 +134,7 @@ void mario_land_kemuri(void) {
 static inline
 #endif
 
-void mario_kemuri_landon(void) {
+void kemuri_water(void) {
     static s32 cnt = 0;
     static s32 cnt2 = 10;
     MarioWork* mario = marioGetPtr();

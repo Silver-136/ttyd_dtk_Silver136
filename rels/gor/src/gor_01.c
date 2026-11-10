@@ -367,7 +367,7 @@ SimpleRecipe R_simple_recipe_table[26];
 CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
 #endif
 
-s32 R_mystery_cook_list[20];
+s32 naniga_okorukana_list[20];
 s32 special_cook_list[16];
 EvtWord cooking_evt_sub[284];
 s32 iri_18_item_tbl[2];
@@ -6682,7 +6682,7 @@ CookRecipe R_cookbook_recipe_table[] = {
 };
 #endif
 
-s32 R_mystery_cook_list[] = {
+s32 naniga_okorukana_list[] = {
     ITEM_FIRE_FLOWER,
     ITEM_TASTY_TONIC,
     ITEM_FRESH_JUICE,
@@ -6860,7 +6860,7 @@ s32 naniga_okorukana_cook(void) {
     s32 r = rand() % 100;
 
     if (r < 50) {
-        return R_mystery_cook_list[(s32)((u32)(r * 20) / 50.0f)];
+        return naniga_okorukana_list[(s32)((u32)(r * 20) / 50.0f)];
     }
     return ITEM_MISTAKE;
 }

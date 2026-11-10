@@ -49,7 +49,7 @@
 #define HALF_F float_0p5_8041dc98
 USER_FUNC(cam_r);
 USER_FUNC(lecture_key_mask_off);
-USER_FUNC(lecture_step_wait);
+USER_FUNC(wait);
 USER_FUNC(all_party_slit_off);
 USER_FUNC(party_color);
 USER_FUNC(famicom_check);
@@ -832,42 +832,42 @@ EVT_END()
 EVT_BEGIN(evt_lecture_msg)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_badge_00"), 0, 0)
-    CALL(lecture_step_wait, 1)
+    CALL(wait, 1)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_01"), 0, 0)
-    CALL(lecture_step_wait, 2)
+    CALL(wait, 2)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
 #if VERSION <= VERSION_DEMO_JP
-    CALL(lecture_step_wait, 5)
+    CALL(wait, 5)
 #else
 #if VERSION >= VERSION_US
     WAIT_MS(500)
-    CALL(lecture_step_wait, 3)
+    CALL(wait, 3)
     WAIT_MS(500)
-    CALL(lecture_step_wait, 4)
+    CALL(wait, 4)
     WAIT_MS(500)
 #endif
-    CALL(lecture_step_wait, 5)
+    CALL(wait, 5)
 #if VERSION >= VERSION_US
     WAIT_MS(500)
 #endif
 #endif
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_03"), 0, 0)
-    CALL(lecture_step_wait, 6)
+    CALL(wait, 6)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_04"), 0, 0)
-    CALL(lecture_step_wait, 7)
+    CALL(wait, 7)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_05"), 0, 0)
-    CALL(lecture_step_wait, 8)
+    CALL(wait, 8)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_06"), 0, 0)
-    CALL(lecture_step_wait, 9)
+    CALL(wait, 9)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
-    CALL(lecture_step_wait, 10)
+    CALL(wait, 10)
     CALL(evt_msg_continue)
 #if VERSION <= VERSION_DEMO_JP
     WAIT_MS(500)
@@ -1653,12 +1653,12 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
  * the early demos do not change that flag here.
  */
 #if VERSION <= VERSION_DEMO_JP
-static USER_FUNC(lecture_step_wait) {
+static USER_FUNC(wait) {
     s32 n = evtGetValue(event, event->args[0]);
 #else
 
-// Descriptive name (not in the symbol maps); placeholder unk_80175eb0, JP 0x80175EB0. See docs/NAME_PROVENANCE.md.
-USER_FUNC(lecture_step_wait) {
+// Original name from the JP demo map (wait, local in win_main.o).
+USER_FUNC(wait) {
     s32 n = evtGetValue(event, event->args[0]);
 
     if (isFirstCall) {

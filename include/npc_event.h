@@ -201,7 +201,7 @@ extern EvtWord zako2D_find_event[];
 extern EvtWord zako2D_init_event[];
 extern EvtWord zako2D_move_event[];
 extern EvtWord zakoM2D_dead_event[];
-extern EvtWord zakoM2D_find_start_event[];
+extern EvtWord zakoM2D_find_event[];
 extern EvtWord zakoM2D_init_event[];
 extern EvtWord zakoM2D_move_event[];
 extern EvtWord zakowiz_blow_event[];

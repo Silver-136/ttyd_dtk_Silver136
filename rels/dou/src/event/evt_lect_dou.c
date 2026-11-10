@@ -66,8 +66,8 @@ static USER_FUNC(dai_moveti_get);
 static USER_FUNC(dai_moveti_set);
 static USER_FUNC(evtflash);
 static USER_FUNC(lect_map_cam_chg);
-static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_status_on);
+static USER_FUNC(lect_status_off);
 static USER_FUNC(lecture_button_flag_on_off);
 static USER_FUNC(lecture_button_rtn);
 static USER_FUNC(lecture_button_seq_wait);
@@ -143,14 +143,14 @@ static USER_FUNC(lect_mario_ido_sum) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Script helper: lifts the force-close of the status window set by lect_status_off. */
-static USER_FUNC(lect_status_on) {
+/** Script helper: forcibly closes the status window (HP and FP display) so it stays out of the lecture. */
+static USER_FUNC(lect_status_off) {
     statusWinForceClose();
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: forcibly closes the status window (HP and FP display) so it stays out of the lecture. */
-static USER_FUNC(lect_status_off) {
+/** Script helper: lifts the force-close of the status window set by lect_status_off. */
+static USER_FUNC(lect_status_on) {
     statusWinForceCloseClear();
     return EVT_RETURN_DONE;
 }
@@ -756,7 +756,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
         LOOP(0)
-            CALL(lect_status_on)
+            CALL(lect_status_off)
             WAIT_FRAMES(1)
             CALL(evt_mario_get_motion, LW(3))
             IF_INT_EQUAL(LW(3), 25)
@@ -765,7 +765,7 @@ EVT_BEGIN(ship_majin_lecture)
         END_LOOP
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
-        CALL(lect_status_off)
+        CALL(lect_status_on)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_STICK)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
         CALL(evt_mario_set_enable_key, 0)
@@ -845,7 +845,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
         LOOP(0)
-            CALL(lect_status_on)
+            CALL(lect_status_off)
             CALL(evt_mario_get_motion, LW(3))
             IF_INT_NOT_EQUAL(LW(3), 25)
                 BREAK_LOOP
@@ -854,7 +854,7 @@ EVT_BEGIN(ship_majin_lecture)
         END_LOOP
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
-        CALL(lect_status_off)
+        CALL(lect_status_on)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_STICK)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
         CALL(evt_mario_set_enable_key, 0)

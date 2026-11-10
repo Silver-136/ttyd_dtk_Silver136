@@ -966,9 +966,10 @@ void partyChgStayPose(PartyEntry* party) {
 }
 #endif
 
-// Descriptive name (not in the symbol maps); placeholder unk_800c8f24, JP 0x800C8F24. See docs/NAME_PROVENANCE.md.
+// Name from the JP demo map, where the smaller first form of this function (same arguments and callers) is
+// partyMoveAnime in party_motion.o; from JP on it lives here.
 #if VERSION >= VERSION_JP
-void partyChgWalkPose(PartyEntry* party, f32 spd) {
+void partyMoveAnime(PartyEntry* party, f32 spd) {
     f32 a;
     f32 b;
 
@@ -1784,7 +1785,7 @@ void partyForceWalk(PartyEntry* party) {
                 partyPrevRunMode(party);
                 break;
             }
-            partyChgWalkPose(party, party->moveSpeed);
+            partyMoveAnime(party, party->moveSpeed);
             pos = party->position;
             if (partySearchFrontWall(party, &pos, party->moveSpeed, party->targetDir)) {
                 partyChgMot(party, PARTY_MOTION_JUMP);

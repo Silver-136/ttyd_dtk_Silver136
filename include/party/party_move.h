@@ -37,7 +37,7 @@ void party_move_mode_walk(PartyEntry* party);
 void partyPlaySfxPartyLanding1(PartyEntry* party);
 void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyChgStayPose(PartyEntry* party);
-void partyChgWalkPose(PartyEntry* party, f32 spd);
+void partyMoveAnime(PartyEntry* party, f32 spd);
 void partyChkWall(PartyEntry* party);
 void partyClearFootmark2(void);
 void partyFlyMain(PartyEntry* party);

@@ -85,7 +85,7 @@ typedef enum UnitWinFlags {
 // UnitWinWork.mode. 2 and up are set only by unitwin_window_select_func, which no script calls.
 typedef enum UnitWinMode {
     UNITWIN_MODE_IDLE = 0,
-    UNITWIN_MODE_GOODS_EVENT = 1,                  // a goods entry's event runs (evt_unitwin_select_func)
+    UNITWIN_MODE_GOODS_EVENT = 1,                  // a goods entry's event runs (select_func)
     UNITWIN_MODE_ITEM_SELL_UNUSED = 2,             // pouchHaveItem, sell_price
     UNITWIN_MODE_ITEM_STORE_UNUSED = 3,            // pouchHaveItem, no price, msg_window_select_3
     UNITWIN_MODE_ITEM_RETRIEVE_UNUSED = 4,         // pouchKeepItem
@@ -155,9 +155,9 @@ static UnitWinWork* _wp;
 USER_FUNC(evt_unitwin_main_func);
 
 #if VERSION <= VERSION_DEMO_JP
-static USER_FUNC(evt_unitwin_select_func);
+static USER_FUNC(select_func);
 #else
-USER_FUNC(evt_unitwin_select_func);
+USER_FUNC(select_func);
 #endif
 
 static void evt_unitwin_disp_func(CameraId cameraId, void* param);
@@ -196,7 +196,7 @@ static EVT_BEGIN(main_evt)
 EVT_END()
 
 EVT_BEGIN(select_evt)
-    CALL(evt_unitwin_select_func)
+    CALL(select_func)
     RETURN
 EVT_END()
 
@@ -508,7 +508,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
  * and waits for that script before restoring Mario's keys.
  */
 #if VERSION <= VERSION_DEMO_JP
-static USER_FUNC(evt_unitwin_select_func) {
+static USER_FUNC(select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     if (wp->mode == UNITWIN_MODE_IDLE) {
         wp->goodsIdx = event->lwData[1];
@@ -602,8 +602,8 @@ static inline void unitWinClose(UnitWinWork* wp) {
     }
 }
 
-// Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
-USER_FUNC(evt_unitwin_select_func) {
+// Original name from the JP demo map (select_func, local in evt_win.o).
+USER_FUNC(select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     s32 found = FALSE;
     MarioWork* mario = marioGetPtr();

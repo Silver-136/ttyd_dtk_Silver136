@@ -445,7 +445,7 @@ void mot_jabara(void) {
                 mario->jumpSnapY = -0.015f;
             }
             if (mario->hammerChargeLv == 3) {
-                mario_land_kemuri();
+                mario_kemuri_landon();
             }
             mario->hitobjJumpFrom = mario->hitobjStandOn;
             mario->hitobjStandOn = NULL;

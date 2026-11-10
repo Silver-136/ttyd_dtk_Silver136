@@ -121,7 +121,7 @@ static struct {
 }};
 
 #if VERSION <= VERSION_DEMO_JP
-static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
+static s32 dat_ry[] = {0, 40, 55, 190, 20, 130, 270, 300};
 #endif
 
 /** 16x16 quad drawn for the central blob and for every blob in the spray streams. */
@@ -141,7 +141,7 @@ effN64Vtx size6x22_tex32x32_vtx[] = {
 };
 
 #if VERSION >= VERSION_JP
-static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
+static s32 dat_ry[] = {0, 40, 55, 190, 20, 130, 270, 300};
 #endif
 
 static void effOpukuJetwMain(EffectEntry* effect);
@@ -301,7 +301,7 @@ static void effOpukuJetwDisp(CameraId cameraId, void* payload) {
                     // Scale and alpha come from tbl[idx] (the first group) for every group; only position and rotation use the group's own rows.
                     PSMTXScale(scale, 0.01f * (f32)tbl[idx].sx, 0.01f * (f32)tbl[idx].sy, 1.0f);
                     PSMTXConcat(mtx, scale, mtx);
-                    PSMTXRotRad(rot, 'z', 0.017453292f * ((f32)ptr[idx].rot + (f32)jetw_ry_tbl[(j + i) & 7]));
+                    PSMTXRotRad(rot, 'z', 0.017453292f * ((f32)ptr[idx].rot + (f32)dat_ry[(j + i) & 7]));
                     PSMTXConcat(mtx, rot, mtx);
                     PSMTXConcat(mtx2, mtx, mtx);
                     GXLoadPosMtxImm(mtx, GX_PNMTX0);

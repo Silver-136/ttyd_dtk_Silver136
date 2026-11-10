@@ -36,7 +36,7 @@ typedef struct CookRecipe {
     const char* out;
 } CookRecipe;
 extern CookRecipe R_cookbook_recipe_table[];
-extern s32 R_mystery_cook_list[];
+extern s32 naniga_okorukana_list[];
 /* one-ingredient recipes (cook_chk): result without the Cookbook, result2 once Mario has it (trouble
  * TROUBLE_SEEKING_LEGENDARY_BOOK solved) */
 typedef struct SimpleRecipe {

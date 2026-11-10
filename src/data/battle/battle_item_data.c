@@ -127,7 +127,7 @@ EvtWord ItemEvent_Attiike_Shisshi[167];
 BattleWeapon ItemWeaponData_Attiike_Shisshi;
 EvtWord ItemEvent_Naniga_Okorukana[207];
 BattleWeapon ItemWeaponData_Naniga_Okorukana;
-static s32 R_mystery_item_table[14];
+static s32 _item_table[14];
 BattleWeapon ItemWeaponData_Shikaeshino_Kona;
 BattleWeapon ItemWeaponData_Kameno_Noroi;
 EvtWord ItemEvent_RecoveryAndStatus[246];
@@ -3235,7 +3235,7 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-static s32 R_mystery_item_table[] = {
+static s32 _item_table[] = {
     ITEM_MUSHROOM,
     ITEM_HONEY_SYRUP,
     ITEM_JAMMIN_JELLY,
@@ -4784,10 +4784,10 @@ USER_FUNC(_naniga_okorukana_check) {
         }
     }
     if (isFirstCall) {
-        for (i = 0; R_mystery_item_table[i] != 0; i++) {
+        for (i = 0; _item_table[i] != 0; i++) {
         }
-        item = R_mystery_item_table[irand(i)];
-        event->userdata[0] = (EvtWord)effNanigaEntry(0, pos.x, pos.y, pos.z, R_mystery_item_table, item);
+        item = _item_table[irand(i)];
+        event->userdata[0] = (EvtWord)effNanigaEntry(0, pos.x, pos.y, pos.z, _item_table, item);
         effSetName((EffectEntry*)event->userdata[0], "effNaniga");
         evtSetValue(event, out, item);
 #if VERSION >= VERSION_JP

@@ -463,7 +463,7 @@ NpcAiInfo npc_ai_type_table[] = {
     {"２Ｄ軍団ザコ降下", NPC_FLAG_2D, zako2D_init_event, zako2D_move_event, enemy_2d_common_dead_event, zako2D_find_event, NULL, NULL, NULL}, // 2D X-Naut dropping in
     {"２Ｄ軍団ザコ降下地点", NPC_FLAG_2D, fall2D_init_event, fall2D_regl_event, NULL, NULL, NULL, NULL, NULL}, // 2D X-Naut drop point
     {"２Ｄゲッソー", NPC_FLAG_2D, gesso2D_init_event, gesso2D_move_event, enemy_2d_common_dead_event, NULL, NULL, NULL, NULL}, // 2D Blooper
-    {"2D軍団ザコ研究員", NPC_FLAG_2D, zakoM2D_init_event, zakoM2D_move_event, zakoM2D_dead_event, zakoM2D_find_start_event, NULL, NULL, NULL}, // 2D X-Naut PhD
+    {"2D軍団ザコ研究員", NPC_FLAG_2D, zakoM2D_init_event, zakoM2D_move_event, zakoM2D_dead_event, zakoM2D_find_event, NULL, NULL, NULL}, // 2D X-Naut PhD
     {"イベント用汎用うろうろ", 0, npc_urouro_init_event, npc_urouro_move_event, NULL, NULL, NULL, NULL, NULL}, // lit. "general wandering, for events"
     {NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
 };

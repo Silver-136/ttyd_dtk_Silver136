@@ -708,7 +708,7 @@ EVT_BEGIN(evt_rsh_window)
     RETURN
 EVT_END()
 
-static const s32 rsh_texmtx_tbl[] = {
+static const s32 texmtx_tbl[] = {
     GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9,
 };
 
@@ -1883,8 +1883,8 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
                       x1 - gp->fbWidth / 2, gp->efbHeight / 2.0f / t, 0.5f, 0.5f, 0.4f, 0.6f);
     PSMTXConcat(mtx, camGetCurPtr()->view, mtx);
     PSMTXConcat(mtx, info->mtx, mtx);
-    GXSetTexCoordGen2(texCoord, GX_TG_MTX3x4, GX_TG_POS, rsh_texmtx_tbl[texMap], GX_FALSE, GX_PTIDENTITY);
-    GXLoadTexMtxImm(mtx, rsh_texmtx_tbl[texMap], GX_MTX3x4);
+    GXSetTexCoordGen2(texCoord, GX_TG_MTX3x4, GX_TG_POS, texmtx_tbl[texMap], GX_FALSE, GX_PTIDENTITY);
+    GXLoadTexMtxImm(mtx, texmtx_tbl[texMap], GX_MTX3x4);
     GXLoadTexObj(&tex, texMap);
     GXSetTevOrder(tevStage, texCoord, texMap, GX_COLOR_NULL);
     GXSetTevColorOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
