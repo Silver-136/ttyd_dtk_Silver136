@@ -338,15 +338,12 @@ driver/arcdrv.c:
 	.bss        start:0x803D8470 end:0x803D8510
 
 sequence/seq_gameover.c:
-	.text       start:0x80077A5C end:0x80077EC4
+	.text       start:0x80077A5C end:0x80077F88
 	.rodata     start:0x802C4948 end:0x802C4970
 	.data       start:0x8030AD90 end:0x8030B348
 	.sdata      start:0x80410370 end:0x80410378
 	.sbss       start:0x804187A0 end:0x804187A8
 	.sdata2     start:0x8041A350 end:0x8041A3C8
-
-event/evt_snd.c:
-	.text       start:0x80077EC4 end:0x80077F88
 
 event/evt_bero.c:
 	.text       start:0x80077F88 end:0x8007A244
@@ -1021,10 +1018,13 @@ motion/mot_dokan.c:
 	.sdata2     start:0x8041CD80 end:0x8041CDC0
 
 party/party_motion.c:
-	.text       start:0x80145DC4 end:0x8014CD30
+	.text       start:0x80145DC4 end:0x8014C488
 	.rodata     start:0x802F3E40 end:0x802F3FE8
 	.sbss       start:0x804189E8 end:0x804189F8
 	.sdata2     start:0x8041CDC0 end:0x8041CED8
+
+event/evt_snd.c:
+	.text       start:0x8014C488 end:0x8014CD30
 
 manager/arammgr.c:
 	.text       start:0x8014CD30 end:0x8014D338

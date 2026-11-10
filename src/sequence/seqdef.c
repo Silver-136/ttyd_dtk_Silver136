@@ -2,7 +2,6 @@
 
 #include "version.h"
 #include "driver/seqdrv.h"
-#include "evt/evt_snd.h"
 #include "seq/seq_logo.h"
 #include "seq/seq_title.h"
 #include "seq/seq_game.h"

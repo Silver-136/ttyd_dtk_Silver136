@@ -990,10 +990,13 @@ motion/mot_dokan.c:
 	.sdata2     start:0x80418920 end:0x80418950
 
 party/party_motion.c:
-	.text       start:0x80142598 end:0x801486AC
+	.text       start:0x80142598 end:0x80147E84
 	.rodata     start:0x802EF4E0 end:0x802EF610
 	.sbss       start:0x80415448 end:0x80415450
 	.sdata2     start:0x80418950 end:0x80418A38
+
+event/evt_snd.c:
+	.text       start:0x80147E84 end:0x801486AC
 
 manager/arammgr.c:
 	.text       start:0x801486AC end:0x80148CB4
