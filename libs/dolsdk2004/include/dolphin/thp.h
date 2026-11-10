@@ -72,14 +72,6 @@ s32 THPVideoDecode(void* file, void* tileY, void* tileU, void* tileV,
                    void* work);
 u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
 
-s32 __THPAudioGetNewSample(THPAudioDecodeInfo*);
-void __THPAudioInitialize(THPAudioDecodeInfo*, u8*);
-
-void __THPSetupBuffers(void);
-void __THPHuffGenerateSizeTable(void);
-void __THPHuffGenerateCodeTable(void);
-void __THPHuffGenerateDecoderTables(u8 tabIndex);
-void __THPRestartDefinition(void);
 static void __THPDecompressYUV(void*, void*, void*);
 void __THPGQRRestore(void);
 void __THPInverseDCTNoYPos(THPCoeff*, u32);

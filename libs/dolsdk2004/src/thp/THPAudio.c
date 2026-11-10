@@ -1,5 +1,8 @@
 #include <dolphin/thp.h>
 
+static s32 __THPAudioGetNewSample(THPAudioDecodeInfo*);
+static void __THPAudioInitialize(THPAudioDecodeInfo*, u8*);
+
 u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 {
     THPAudioRecordHeader* header;

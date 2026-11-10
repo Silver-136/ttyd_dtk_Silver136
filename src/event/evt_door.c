@@ -32,6 +32,11 @@
 #include "system.h"
 #include "driver/casedrv.h"
 
+#if VERSION <= VERSION_DEMO_JP
+static USER_FUNC(snd_door_in);
+static USER_FUNC(snd_door_out);
+#endif
+
 static USER_FUNC(npc_hide_onoff);
 static USER_FUNC(get_noclip_map);
 static USER_FUNC(npc_light);

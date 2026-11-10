@@ -47,8 +47,10 @@ __declspec(section ".init") static void __check_pad3(void);
 __declspec(section ".init") static void __set_debug_bba(void);
 __declspec(section ".init") static u8 __get_debug_bba(void);
 
-static void __init_registers(void);
-static void __init_data(void);
+__declspec(section ".init") static void __copy_rom_section(void* dst, const void* src, unsigned long size);
+__declspec(section ".init") static void __init_bss_section(void* dst, unsigned long size);
+__declspec(section ".init") static void __init_registers(void);
+__declspec(section ".init") static void __init_data(void);
 
 static void __check_pad3(void) {
     if ((Pad3Button & 0xEEF) == 0xEEF) {

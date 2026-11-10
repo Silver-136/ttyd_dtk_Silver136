@@ -2,6 +2,12 @@
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 
+static void __THPSetupBuffers(void);
+static void __THPHuffGenerateSizeTable(void);
+static void __THPHuffGenerateCodeTable(void);
+static void __THPHuffGenerateDecoderTables(u8 tabIndex);
+static void __THPRestartDefinition(void);
+
 static u8 __THPReadFrameHeader(void);
 static u8 __THPReadScaneHeader(void);
 static u8 __THPReadQuantizationTable(void);

@@ -305,7 +305,9 @@ void winReInit(void);
 BOOL winCheck(void);
 void winOpenEnable(void);
 void winOpenDisable(void);
+#if VERSION >= VERSION_JP
 USER_FUNC(itemUseFunc);
+#endif
 
 void winMain(void);
 

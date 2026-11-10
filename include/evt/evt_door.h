@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include <dolphin/types.h>
 
@@ -32,8 +33,10 @@ typedef enum DoorParamKind {
 #define DOOR_OPT_NO_MARIO_MOVE 0x8     // closing does not walk Mario and the partner
 #define DOOR_OPT_POS_FROM_MARIO 0x10   // the walk target is measured from Mario
 
+#if VERSION >= VERSION_JP
 USER_FUNC(snd_door_in);
 USER_FUNC(snd_door_out);
+#endif
 
 extern EvtWord door_close_se[];
 extern EvtWord door_dark[];

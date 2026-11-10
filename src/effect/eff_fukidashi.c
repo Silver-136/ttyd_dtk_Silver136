@@ -28,11 +28,11 @@
 static void effFukidashiMain(EffectEntry* effect);
 static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect);
 
-extern u8 moja_model_dl_0_1[], moja_model_dl_0_2[], moja_model_dl_0_3[], moja_model_dl_0_4[],
-    moja_model_dl_0_5[], moja_model_dl_0_6[], moja_model_dl_0_7[], moja_model_dl_0_8[],
-    moja_model_dl_0_9[], moja_model_dl_0_10[], moja_model_dl_0_11[], moja_model_dl_0_12[],
-    moja_model_dl_0_13[], moja_model_dl_0_14[], moja_model_dl_0_15[], moja_model_dl_0_16[],
-    moja_model_dl_0_17[], moja_model_dl_0_18[], moja_model_dl_0_19[], moja_model_dl_0_20[];
+static u8 moja_model_dl_0_1[32], moja_model_dl_0_2[32], moja_model_dl_0_3[32], moja_model_dl_0_4[32],
+    moja_model_dl_0_5[32], moja_model_dl_0_6[32], moja_model_dl_0_7[32], moja_model_dl_0_8[32],
+    moja_model_dl_0_9[32], moja_model_dl_0_10[32], moja_model_dl_0_11[32], moja_model_dl_0_12[32],
+    moja_model_dl_0_13[32], moja_model_dl_0_14[32], moja_model_dl_0_15[32], moja_model_dl_0_16[32],
+    moja_model_dl_0_17[32], moja_model_dl_0_18[32], moja_model_dl_0_19[32], moja_model_dl_0_20[32];
 
 #if VERSION >= VERSION_JP
     s8 anim_data_tenten[] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, -1};

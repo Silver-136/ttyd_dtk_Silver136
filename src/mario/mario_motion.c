@@ -63,6 +63,7 @@ static void mot_kaze(void);
 
 #if VERSION <= VERSION_DEMO_JP
 static void mot_bottomless(void);
+static void mot_cloud(void);
 static void mot_cloud_post(void);
 #else
 static void mot_bottomless(void);

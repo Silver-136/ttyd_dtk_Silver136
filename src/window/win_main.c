@@ -54,6 +54,9 @@ USER_FUNC(all_party_slit_off);
 static USER_FUNC(party_color);
 static USER_FUNC(famicom_check);
 static USER_FUNC(itemUseFunc2);
+#if VERSION <= VERSION_DEMO_JP
+static USER_FUNC(itemUseFunc);
+#endif
 EvtWord evt_lecture_msg[];
 EvtWord evt_item_use[];
 EvtWord evt_diary_read[];
