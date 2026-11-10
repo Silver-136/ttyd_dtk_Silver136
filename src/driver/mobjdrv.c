@@ -1246,8 +1246,9 @@ MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
     pos = _pos;
 
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
             continue;
+        }
 
         VECSubtract(&entry->position, &pos, &dist);
         mag = VECMag(&dist);

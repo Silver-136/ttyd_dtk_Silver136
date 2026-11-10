@@ -1149,8 +1149,9 @@ static void driveParty(PartyEntry* party) {
             break;
         case 1:
 #if VERSION <= VERSION_DEMO_JP
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
+            }
             if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 partyChgPoseId(party, PARTY_POSE_STAND);

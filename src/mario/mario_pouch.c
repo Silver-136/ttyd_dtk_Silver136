@@ -531,8 +531,9 @@ BOOL pouchRemoveItem(ItemType type) {
  */
 static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) {
     table1[i] = ITEM_NULL;
-    if (table2 != 0)
+    if (table2 != 0) {
         table2[i] = ITEM_NULL;
+    }
     for (; i < maximum - 1; i++) {
         table1[i] = table1[i + 1];
         table1[i + 1] = ITEM_NULL;

@@ -4650,8 +4650,9 @@ USER_FUNC(zakoEntryDokan) {
     {
         const char* hn = hitGetName(marioGetPtr()->hitobjStandOn);
 #if VERSION <= VERSION_DEMO_JP
-        if (hn && !strcmp(hn, pipeHitName))
+        if (hn && !strcmp(hn, pipeHitName)) {
             return EVT_RETURN_DONE;
+        }
 #else
         if (hn && !strcmp(hn, pipeHitName)) {
             return EVT_RETURN_DONE;

@@ -60,8 +60,9 @@ static void __DEMOInitVI(void) {
     DemoCurrentBuffer = DemoFrameBuffer2;
     VIFlush();
     VIWaitForRetrace();
-    if (rmode->viTVmode & 1)
+    if (rmode->viTVmode & 1) {
         VIWaitForRetrace();
+    }
 }
 
 /**

@@ -340,11 +340,16 @@ static void btlseqFirstAct(BattleWork* wp) {
                     goto done_fa;
             }
             switch (type) {
-                case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
+                case FIRST_ATTACK_JUMP:
+                case FIRST_ATTACK_SPIN_JUMP:
+                case FIRST_ATTACK_JUMP_UNUSED:
                     wp->ruleDispTimer = 10;
                     break;
-                case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
-                case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
+                case FIRST_ATTACK_HAMMER:
+                case FIRST_ATTACK_SPIN_HAMMER:
+                case FIRST_ATTACK_ULTRA_HAMMER:
+                case FIRST_ATTACK_SHELL:
+                case FIRST_ATTACK_BOMB:
                     wp->ruleDispTimer = 0;
                     break;
                 default:
@@ -378,8 +383,12 @@ static void btlseqFirstAct(BattleWork* wp) {
                 a->attackEventId = evt->eventId;
             }
             switch (type) {
-                case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
-                case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
+                case FIRST_ATTACK_JUMP:
+                case FIRST_ATTACK_SPIN_JUMP:
+                case FIRST_ATTACK_JUMP_UNUSED:
+                case FIRST_ATTACK_HAMMER:
+                case FIRST_ATTACK_SPIN_HAMMER:
+                case FIRST_ATTACK_ULTRA_HAMMER:
                     unit = BattleGetPartyPtr(wp);
                     if (unit) {
                         evt = evtEntry(unit->entryEventCode, 10, 0);
@@ -387,7 +396,8 @@ static void btlseqFirstAct(BattleWork* wp) {
                         evt->unitId = unit->unitId;
                     }
                     break;
-                case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
+                case FIRST_ATTACK_SHELL:
+                case FIRST_ATTACK_BOMB:
                     unit = BattleGetMarioPtr(wp);
                     if (unit) {
                         evt = evtEntry(unit->entryEventCode, 10, 0);

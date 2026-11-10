@@ -602,7 +602,13 @@ void itemMain(void) {
 
         if (entry->flags & ITEM_FLAG_ACTIVE) {
             switch (entry->itemId) {
-                case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+                case ITEM_DIAMOND_STAR:
+                case ITEM_EMERALD_STAR:
+                case ITEM_GOLD_STAR:
+                case ITEM_RUBY_STAR:
+                case ITEM_SAPPHIRE_STAR:
+                case ITEM_GARNET_STAR:
+                case ITEM_CRYSTAL_STAR:
                     if (!(entry->flags2 & ITEM_FLAG2_HIDDEN)) {
                         ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.y = 16.0f + entry->position.y;
@@ -836,7 +842,13 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
 
     switch (entry->itemId) {
-        case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+        case ITEM_DIAMOND_STAR:
+        case ITEM_EMERALD_STAR:
+        case ITEM_GOLD_STAR:
+        case ITEM_RUBY_STAR:
+        case ITEM_SAPPHIRE_STAR:
+        case ITEM_GARNET_STAR:
+        case ITEM_CRYSTAL_STAR:
             entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
             break;
         default:
@@ -856,7 +868,10 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     entry->bounceFactor = entry->gravityScale = 1.0f;
     entry->baseTime = gp->renderTime;
     switch (entry->itemId) {
-        case ITEM_COIN: case ITEM_PIANTA_TOKEN: case ITEM_HEART: case ITEM_FLOWER:
+        case ITEM_COIN:
+        case ITEM_PIANTA_TOKEN:
+        case ITEM_HEART:
+        case ITEM_FLOWER:
             entry->flags |= ITEM_FLAG_QUICK_GET;
             break;
     }
@@ -949,7 +964,13 @@ void itemDelete(const char* name) {
             itemCheckBadge(entry);
 #endif
             switch (entry->itemId) {
-                case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+                case ITEM_DIAMOND_STAR:
+                case ITEM_EMERALD_STAR:
+                case ITEM_GOLD_STAR:
+                case ITEM_RUBY_STAR:
+                case ITEM_SAPPHIRE_STAR:
+                case ITEM_GARNET_STAR:
+                case ITEM_CRYSTAL_STAR:
                     effSoftDelete(entry->effect);
                     break;
                 default:
@@ -1050,25 +1071,33 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     pos = makeVecByValue2(x, y, z);
     for (; i < wp->count; i++, entry++) {
 #if VERSION <= VERSION_DEMO_JP
-        if (!(entry->flags & ITEM_FLAG_ACTIVE))
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             continue;
+        }
         if (entry->flags & ITEM_FLAG_NO_TOUCH_GET)
         continue;
-        if (entry->flags2 & ITEM_FLAG2_CARRIED)
+        if (entry->flags2 & ITEM_FLAG2_CARRIED) {
             continue;
-        if (entry->mode == ITEM_MODE_GET)
+        }
+        if (entry->mode == ITEM_MODE_GET) {
             continue;
+        }
 #else
-        if (!(entry->flags & ITEM_FLAG_ACTIVE))
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             continue;
-        if (entry->flags2 & ITEM_FLAG2_CARRIED)
+        }
+        if (entry->flags2 & ITEM_FLAG2_CARRIED) {
             continue;
-        if (entry->flags2 & ITEM_FLAG2_SUNK)
+        }
+        if (entry->flags2 & ITEM_FLAG2_SUNK) {
             continue;
-        if (entry->mode == ITEM_MODE_GET)
+        }
+        if (entry->mode == ITEM_MODE_GET) {
             continue;
-        if (entry->flags2 & ITEM_FLAG2_NO_PARTNER)
+        }
+        if (entry->flags2 & ITEM_FLAG2_NO_PARTNER) {
             continue;
+        }
 #endif
         {
             f32 iz, iy, ix;
@@ -1931,7 +1960,13 @@ static void itemseq_Bound(ItemEntry* entry) {
                     case ITEM_STAR_PIECE:
                         psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
                         break;
-                    case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+                    case ITEM_DIAMOND_STAR:
+                    case ITEM_EMERALD_STAR:
+                    case ITEM_GOLD_STAR:
+                    case ITEM_RUBY_STAR:
+                    case ITEM_SAPPHIRE_STAR:
+                    case ITEM_GARNET_STAR:
+                    case ITEM_CRYSTAL_STAR:
                         psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
                         break;
                     default:

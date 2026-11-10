@@ -406,19 +406,24 @@ void winLogInit(WindowWork* w) {
         }
     }
 #if VERSION <= VERSION_DEMO_JP
-    if (!strncmp(gp->currentMapName, "hom", 3))
+    if (!strncmp(gp->currentMapName, "hom", 3)) {
         area = "eki";
-    if (!strncmp(gp->currentMapName, "jon", 3))
+    }
+    if (!strncmp(gp->currentMapName, "jon", 3)) {
         area = "tik";
-    if (!strcmp(gp->currentMapName, "gra_06"))
+    }
+    if (!strcmp(gp->currentMapName, "gra_06")) {
         area = "jin";
+    }
     {
         for (k = 0; k < 93; k++) {
-            if (!area || !strcmp(area, tubuDt[k].map))
+            if (!area || !strcmp(area, tubuDt[k].map)) {
                 break;
+            }
         }
-        if (k < 93)
+        if (k < 93) {
             w->log.mapIdx = k;
+        }
     }
 #else
     if (!strncmp(gp->currentMapName, "hom", 3)) area = "eki";
@@ -683,8 +688,9 @@ s32 winLogMain(WindowWork* w) {
             break;
         case 10:
 #if VERSION <= VERSION_DEMO_JP
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U)
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) {
                     break;
+            }
             if (!w->mapRes) {
                 w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
 #else
@@ -764,8 +770,9 @@ s32 winLogMain(WindowWork* w) {
 #if VERSION <= VERSION_DEMO_JP
             for (k = 0; k < 0x5D; k++) {
                 t = &tubuDt[k];
-                if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->progress)
+                if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->progress) {
                     break;
+                }
                 {
 #else
             for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
@@ -1341,8 +1348,9 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
 #if VERSION <= VERSION_DEMO_JP
-            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->progress)
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->progress) {
                 break;
+            }
             {
 #else
             if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->progress || tubuCheck(t->type)) {
@@ -1484,8 +1492,9 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         s32 id;
         id = w->log.enemy[w->log.enemyPage * 16 + i].id;
         te = battleGetUnitMonosiriPtr(id);
-        if (w->log.enemyPage * 16 + i >= w->log.enemyNum)
+        if (w->log.enemyPage * 16 + i >= w->log.enemyNum) {
             break;
+        }
         if (swGet(id + GSWF_TATTLE_BASE)) {
             {
 #else
@@ -1582,12 +1591,14 @@ void monosiriMain(MonosiriWork* m) {
     const char* lang[2] = {"jp", "us"};
     GXTexObj tex;
     TattleEntry* t;
-    if (!m)
+    if (!m) {
         return;
+    }
     switch (m->state) {
         case 0:
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U)
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) {
                 break;
+            }
             if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
             break;
             m->winTpl = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);

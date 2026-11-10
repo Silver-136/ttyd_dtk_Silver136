@@ -665,8 +665,9 @@ static void imgShadowDisp(CameraId camId, void* param) {
         if (objs[i] != NULL) {
 #if VERSION <= VERSION_DEMO_JP
             mp[i] = &mtxs[i];
-            if (first == -1)
+            if (first == -1) {
                 first = i;
+            }
 #else
             mp[i] = mtxs[i];
             if (first == -1) first = i;

@@ -10998,10 +10998,12 @@ static inline void psndENVApply(PaperSoundEnv* e) {
         }
     }
     lpf = 0;
-    if (psnd.envId[0] == e->id)
+    if (psnd.envId[0] == e->id) {
         lpf = psnd.envLpf[0];
-    if (psnd.envId[1] == e->id)
+    }
+    if (psnd.envId[1] == e->id) {
         lpf = psnd.envLpf[1];
+    }
     id = e->sfx;
     if (id != -1) {
         sfx = &pssfx[id & 0xFF];
@@ -11101,8 +11103,9 @@ static void psndENVMain(void) {
 #if VERSION <= VERSION_DEMO_JP
                     if (e->sfx != 0xFFFFFFFF) {
                         PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                        if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
+                        if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START)) {
                             break;
+                        }
                     }
 
                     // The early demos do not restart a finished type-1 ambient sound: it stays in its last state.
@@ -11181,8 +11184,9 @@ static void psndENVMain(void) {
 #if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < 16; i++) {
         ent = &psenv[i];
-        if (ent->id == 0 || ent->sfx == 0xFFFFFFFF)
+        if (ent->id == 0 || ent->sfx == 0xFFFFFFFF) {
             continue;
+        }
         switch (ent->type) {
             case 0:
                 switch (ent->state) {
@@ -11215,8 +11219,9 @@ static void psndENVMain(void) {
             if (psnd.envId[i] != 0) {
                 if (psnd.fade[i].state == 1) {
                     (psnd.fade[i].timeMax)++;
-                    if (psnd.fade[i].timeMax >= psnd.fade[i].time)
+                    if (psnd.fade[i].timeMax >= psnd.fade[i].time) {
                         psnd.fade[i].state = 0;
+                    }
                 }
                 if (psnd.fade[i].state == 2) {
                     (psnd.fade[i].timeMax)--;
@@ -11225,10 +11230,12 @@ static void psndENVMain(void) {
                         psnd.fade[i].state = 0;
                     }
                 }
-                if (psnd.fade[i].state == 4 && psnd.fade[i].timeMax > 0)
+                if (psnd.fade[i].state == 4 && psnd.fade[i].timeMax > 0) {
                     (psnd.fade[i].timeMax)--;
-                if (psnd.fade[i].dipState == PSND_DIP_STATE_DOWN && psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100)
+                }
+                if (psnd.fade[i].dipState == PSND_DIP_STATE_DOWN && psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100) {
                     (psnd.fade[i].dipTime)--;
+                }
                 if (psnd.fade[i].dipState == PSND_DIP_STATE_UP) {
                     if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax)
                         (psnd.fade[i].dipTime)++;
@@ -11317,8 +11324,9 @@ static void psndENVMain(void) {
                 }
             }
 #if VERSION <= VERSION_DEMO_JP
-            if (psnd.envLpf[i] < psnd.envFreq[i])
+            if (psnd.envLpf[i] < psnd.envFreq[i]) {
                 psnd.envLpf[i] += 100;
+            }
             if (psnd.envLpf[i] > psnd.envFreq[i]) {
                 psnd.envLpf[i] -= 1000;
                 if (psnd.envLpf[i] < psnd.envFreq[i])
@@ -11406,8 +11414,9 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
                 goto end;
             }
 #if VERSION <= VERSION_DEMO_JP
-            if (cur == id)
+            if (cur == id) {
                 goto end;
+            }
 #else
             if (cur == id && fade->state != PSND_FADE_STATE_OUT) {
                 goto end;
@@ -11419,10 +11428,12 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
     }
     for (;; list++) {
 #if VERSION <= VERSION_DEMO_JP
-        if (list->id == PSENV_COUNT)
+        if (list->id == PSENV_COUNT) {
             break;
-        if (list->id != id)
+        }
+        if (list->id != id) {
             continue;
+        }
 #else
         if (list->id == PSENV_COUNT) {
             break;

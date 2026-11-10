@@ -644,13 +644,18 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit*
         }
     }
     switch (wp->fbatInfo->firstAttack) {
-        case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
-        case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
+        case FIRST_ATTACK_JUMP:
+        case FIRST_ATTACK_SPIN_JUMP:
+        case FIRST_ATTACK_JUMP_UNUSED:
+        case FIRST_ATTACK_HAMMER:
+        case FIRST_ATTACK_SPIN_HAMMER:
+        case FIRST_ATTACK_ULTRA_HAMMER:
             tmp = BattleGetMarioPtr(wp);
             other = found;
             found = tmp;
             break;
-        case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
+        case FIRST_ATTACK_SHELL:
+        case FIRST_ATTACK_BOMB:
             tmp = BattleGetPartnerPtr(wp, BattleGetMarioPtr(wp));
             other = found;
             found = tmp;

@@ -1195,14 +1195,18 @@ static void scissor_disp_control(CameraId camera, void* param) {
     GXSetChanMatColor(4, (GXColor){0xFF, 0x00, 0x00, 0xFF});
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit == NULL)
+        if (unit == NULL) {
             continue;
-        if (BtlUnit_GetBelong(unit) != 1)
+        }
+        if (BtlUnit_GetBelong(unit) != 1) {
             continue;
-        if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))
+        }
+        if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             continue;
-        if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & kNotTargetable)
+        }
+        if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & kNotTargetable) {
             continue;
+        }
         if (unit->attributeFlags & kCeiling) {
             sign = -1.0f;
         } else {

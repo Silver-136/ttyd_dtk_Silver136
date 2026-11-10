@@ -401,8 +401,9 @@ USER_FUNC(yuugijou_add_montemedal) {
     s32 immediate = evtGetValue(event, args[0]);
 #if VERSION <= VERSION_DEMO_JP
     yuwp->tokens += evtGetValue(event, args[1]);
-    if (immediate != 0)
+    if (immediate != 0) {
         yuwp->dispTokens = yuwp->tokens;
+    }
 #else
     s32 sum = yuwp->tokens + evtGetValue(event, args[1]);
     if (sum < 99999) {

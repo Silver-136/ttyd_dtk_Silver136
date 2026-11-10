@@ -174,7 +174,19 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         case FADE_IN_BLACK_3D:
         case FADE_OUT_BLACK_3D:
 #else
-        case 0x1: case 0x2: case 0x3: case 0x4: case 0x5: case 0x6: case 0x9: case 0xA: case 0xB: case 0xC: case 0xD: case 0xE: case 0xF:
+        case 0x1:
+        case 0x2:
+        case 0x3:
+        case 0x4:
+        case 0x5:
+        case 0x6:
+        case 0x9:
+        case 0xA:
+        case 0xB:
+        case 0xC:
+        case 0xD:
+        case 0xE:
+        case 0xF:
 #endif
             id = 0;
             entry = &wp->entries[0];
@@ -182,14 +194,38 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
 #if VERSION >= VERSION_JP
             entry->delayFrames = 0;
             switch (type) {
-                case 1: case 3: case 5: case 9: case 11: case 14:
+                case 1:
+                case 3:
+                case 5:
+                case 9:
+                case 11:
+                case 14:
                     if (duration) {
                         entry->delayFrames = 2;
                     }
                     break;
             }
             break;
-        case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33:
+        case FADE_CURTAIN_UP_DOWN_A1:
+        case 0x17:
+        case 0x18:
+        case 0x19:
+        case 0x1A:
+        case 0x1B:
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x1F:
+        case 0x20:
+        case 0x21:
+        case 0x22:
+        case 0x23:
+        case 0x24:
+        case 0x25:
+        case 0x26:
+        case 0x27:
+        case 0x28:
+        case 0x33:
 #else
                     break;
             case FADE_CURTAIN_UP_DOWN_A1:
@@ -226,7 +262,14 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         case FADE_PIPE_RIGHT_A1:
         case FADE_PIPE_RIGHT_A2:
 #else
-        case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
+        case 0x29:
+        case 0x2A:
+        case 0x2B:
+        case 0x2C:
+        case 0x2D:
+        case 0x2E:
+        case 0x2F:
+        case 0x30:
 #endif
             id = 2;
             entry = &wp->entries[2];
@@ -247,7 +290,19 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         case FADE_STORY_PEACH_A2:
         case FADE_STORY_BOWSER_A2:
 #else
-        case 0x31: case 0x32: case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3A: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
+        case 0x31:
+        case 0x32:
+        case 0x34:
+        case 0x35:
+        case 0x36:
+        case 0x37:
+        case 0x38:
+        case 0x39:
+        case 0x3A:
+        case 0x3B:
+        case 0x3C:
+        case 0x3D:
+        case 0x3E:
 #endif
             id = 3;
             entry = &wp->entries[3];
@@ -259,7 +314,11 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
                 case FADE_STORY_PEACH_A3:
                 case FADE_STORY_BOWSER_A3:
 #else
-                case 0x32: case 0x35: case 0x36: case 0x38: case 0x3A:
+                case 0x32:
+                case 0x35:
+                case 0x36:
+                case 0x38:
+                case 0x3A:
 #endif
                     fadeReset(0);
                     break;
@@ -269,7 +328,8 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         case FADE_CURTAIN_SIDES_A1_TOP:
         case FADE_CURTAIN_SIDES_A2_TOP:
 #else
-        case 0x3F: case 0x40:
+        case 0x3F:
+        case 0x40:
 #endif
             id = 4;
             entry = &wp->entries[4];
@@ -580,7 +640,12 @@ void fadeMain(void) {
             case FADE_IN_BLACK_2D:
             case FADE_IN_BLACK_3D:
 #else
-            case 1: case 3: case 5: case 9: case 11: case 14:
+            case 1:
+            case 3:
+            case 5:
+            case 9:
+            case 11:
+            case 14:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -627,7 +692,13 @@ void fadeMain(void) {
             case FADE_COVER_BLACK_2D:
             case FADE_OUT_BLACK_3D:
 #else
-            case 2: case 4: case 6: case 10: case 12: case 13: case 15:
+            case 2:
+            case 4:
+            case 6:
+            case 10:
+            case 12:
+            case 13:
+            case 15:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -669,7 +740,14 @@ void fadeMain(void) {
             case FADE_PIPE_RIGHT_A1:
             case FADE_PIPE_RIGHT_A2:
 #else
-            case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
+            case 0x29:
+            case 0x2A:
+            case 0x2B:
+            case 0x2C:
+            case 0x2D:
+            case 0x2E:
+            case 0x2F:
+            case 0x30:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -757,7 +835,10 @@ void fadeMain(void) {
                                 case FADE_PIPE_LEFT_A2:
                                 case FADE_PIPE_RIGHT_A2:
 #else
-                                case 0x2A: case 0x2C: case 0x2E: case 0x30:
+                                case 0x2A:
+                                case 0x2C:
+                                case 0x2E:
+                                case 0x30:
 #endif
                                     imgRelease(entry->image, entry->imageType);
                                     animPaperPoseRelease(entry->paperPoseId);
@@ -780,7 +861,14 @@ void fadeMain(void) {
             case FADE_STORY_PEACH_A2:
             case FADE_STORY_BOWSER_A2:
 #else
-            case 0x31: case 0x34: case 0x37: case 0x39: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
+            case 0x31:
+            case 0x34:
+            case 0x37:
+            case 0x39:
+            case 0x3B:
+            case 0x3C:
+            case 0x3D:
+            case 0x3E:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -811,7 +899,9 @@ void fadeMain(void) {
                             case FADE_STORY_PEACH_A1:
                             case FADE_STORY_BOWSER_A1:
 #else
-                            case 0x37: case 0x39: case 0x3B:
+                            case 0x37:
+                            case 0x39:
+                            case 0x3B:
 #endif
                                 fadeCapture("fImg_peron", NULL, 2);
                                 entry->image->camId = CAMERA_FADE2;
@@ -827,7 +917,9 @@ void fadeMain(void) {
                             case FADE_STORY_PEACH_A2:
                             case FADE_STORY_BOWSER_A2:
 #else
-                            case 0x3C: case 0x3D: case 0x3E:
+                            case 0x3C:
+                            case 0x3D:
+                            case 0x3E:
 #endif
                                 fadeCapture("fImg_peron", NULL, 2);
                                 entry->image->camId = CAMERA_FADE;
@@ -850,7 +942,12 @@ void fadeMain(void) {
                                 case FADE_STORY_PEACH_A2:
                                 case FADE_STORY_BOWSER_A2:
 #else
-                                case 0x37: case 0x39: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
+                                case 0x37:
+                                case 0x39:
+                                case 0x3B:
+                                case 0x3C:
+                                case 0x3D:
+                                case 0x3E:
 #endif
                                     entry->image->animTime = animTimeGetTime(entry->imageType);
                                     entry->image->animName = "A_2";
@@ -877,7 +974,11 @@ void fadeMain(void) {
             case FADE_STORY_PEACH_A3:
             case FADE_STORY_BOWSER_A3:
 #else
-            case 0x32: case 0x35: case 0x36: case 0x38: case 0x3A:
+            case 0x32:
+            case 0x35:
+            case 0x36:
+            case 0x38:
+            case 0x3A:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -893,7 +994,9 @@ void fadeMain(void) {
                             case FADE_STORY_BOWSER_A3:
                                 psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY2"));
 #else
-                            case 0x36: case 0x38: case 0x3A:
+                            case 0x36:
+                            case 0x38:
+                            case 0x3A:
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY2 | PSND_SFX_KEEP));
 #endif
                                 break;
@@ -902,7 +1005,8 @@ void fadeMain(void) {
                             case FADE_PAGE_FLIP_A1_OFFSCREEN:
                                 psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
 #else
-                            case 0x32: case 0x35:
+                            case 0x32:
+                            case 0x35:
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF3_MAP_CHANGE1 | PSND_SFX_KEEP));
 #endif
                                 break;
@@ -1004,8 +1108,24 @@ void fadeMain(void) {
             case FADE_CURTAIN_SIDES_A1_TOP:
             case FADE_CURTAIN_SIDES_A2_TOP:
 #else
-            case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20:
-            case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x28: case 0x33: case 0x3F: case 0x40:
+            case 0x18:
+            case 0x19:
+            case 0x1A:
+            case 0x1B:
+            case 0x1C:
+            case 0x1D:
+            case 0x1E:
+            case 0x1F:
+            case 0x20:
+            case 0x22:
+            case 0x23:
+            case 0x24:
+            case 0x25:
+            case 0x26:
+            case 0x28:
+            case 0x33:
+            case 0x3F:
+            case 0x40:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -1032,16 +1152,22 @@ void fadeMain(void) {
                             case FADE_CURTAIN_CENTER_A2:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
 #else
-                            case 0x18: case 0x1B: case 0x3F:
+                            case 0x18:
+                            case 0x1B:
+                            case 0x3F:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE1 | PSND_SFX_KEEP));
                                 break;
-                            case 0x19: case 0x1C: case 0x40:
+                            case 0x19:
+                            case 0x1C:
+                            case 0x40:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE2 | PSND_SFX_KEEP));
                                 break;
-                            case 0x1D: case 0x23:
+                            case 0x1D:
+                            case 0x23:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_UP1 | PSND_SFX_KEEP));
                                 break;
-                            case 0x1E: case 0x24:
+                            case 0x1E:
+                            case 0x24:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_DOWN1 | PSND_SFX_KEEP));
 #endif
                                 break;
@@ -1105,7 +1231,8 @@ void fadeMain(void) {
             case FADE_CURTAIN_LEAVE_3D:
             case FADE_CURTAIN_LEAVE:
 #else
-            case 0x21: case 0x27:
+            case 0x21:
+            case 0x27:
 #endif
                 switch (entry->state) {
                     case 0:
@@ -1170,17 +1297,47 @@ void fadeMain(void) {
             case FADE_STORY_PEACH_A2:
             case FADE_STORY_BOWSER_A2:
 #else
-            case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
+            case FADE_CURTAIN_UP_DOWN_A1:
+            case 0x17:
+            case 0x23:
+            case 0x24:
+            case 0x25:
+            case 0x26:
+            case 0x27:
+            case 0x28:
                 dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
-            case 0x1B: case 0x1C: case 0x3F: case 0x40:
+            case 0x1B:
+            case 0x1C:
+            case 0x3F:
+            case 0x40:
                 dispEntry(CAMERA_FADE2, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
-            case 0x18: case 0x19: case 0x1A: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x33:
+            case 0x18:
+            case 0x19:
+            case 0x1A:
+            case 0x1D:
+            case 0x1E:
+            case 0x1F:
+            case 0x20:
+            case 0x21:
+            case 0x22:
+            case 0x33:
                 dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
-            case 0x31: case 0x32: case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3A:
-            case 0x3B: case 0x3C: case 0x3D: case 0x3E:
+            case 0x31:
+            case 0x32:
+            case 0x34:
+            case 0x35:
+            case 0x36:
+            case 0x37:
+            case 0x38:
+            case 0x39:
+            case 0x3A:
+            case 0x3B:
+            case 0x3C:
+            case 0x3D:
+            case 0x3E:
 #endif
                 if (entry->paperPoseId >= 0 && entry->callback) {
                     dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_OPAQUE, entry->callback, entry->offparam);
@@ -1191,7 +1348,9 @@ void fadeMain(void) {
             case FADE_OUT_BLACK_2D:
             case FADE_COVER_BLACK_2D:
 #else
-            case 0xB: case 0xC: case 0xD:
+            case 0xB:
+            case 0xC:
+            case 0xD:
 #endif
                 dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, disp_texture, wp);
                 break;
@@ -1201,7 +1360,10 @@ void fadeMain(void) {
             case FADE_IN_BLACK_3D:
             case FADE_OUT_BLACK_3D:
 #else
-            case 5: case 6: case 0xE: case 0xF:
+            case 5:
+            case 6:
+            case 0xE:
+            case 0xF:
 #endif
                 dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, disp_texture, wp);
                 break;
@@ -1215,7 +1377,14 @@ void fadeMain(void) {
             case FADE_PIPE_RIGHT_A1:
             case FADE_PIPE_RIGHT_A2:
 #else
-            case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
+            case 0x29:
+            case 0x2A:
+            case 0x2B:
+            case 0x2C:
+            case 0x2D:
+            case 0x2E:
+            case 0x2F:
+            case 0x30:
 #endif
                 break;
             default:

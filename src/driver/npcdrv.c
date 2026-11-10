@@ -2743,8 +2743,9 @@ void* fbatHitCheck(u32 flags, void* result) {
                 f32 f;
                 f32 x, y, z;
                 f32 reach, swingAngle;
-                if (mario->currMotionId != MARIO_MOTION_HAMMER)
+                if (mario->currMotionId != MARIO_MOTION_HAMMER) {
                     break;
+                }
                 reach = 1.5f * mario->wPlayerCollisionBox.x;
 
                 // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
@@ -2763,31 +2764,42 @@ void* fbatHitCheck(u32 flags, void* result) {
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
-                    if (npc == NULL)
+                    if (npc == NULL) {
                         continue;
-                    if (!(npc->flags & NPC_FLAG_READY))
-                        continue;
-                    if (flags & FBAT_CHECK_ENEMY) {
-                        if (!(npc->flags & NPC_FLAG_ENEMY))
-                            continue;
-                    } else {
-                        if (npc->flags & NPC_FLAG_ENEMY)
-                            continue;
                     }
-                    if (soft && !(npc->reactionFlags & NPC_REACTION_HAMMER))
+                    if (!(npc->flags & NPC_FLAG_READY)) {
                         continue;
-                    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
+                    }
+                    if (flags & FBAT_CHECK_ENEMY) {
+                        if (!(npc->flags & NPC_FLAG_ENEMY)) {
+                            continue;
+                        }
+                    } else {
+                        if (npc->flags & NPC_FLAG_ENEMY) {
+                            continue;
+                        }
+                    }
+                    if (soft && !(npc->reactionFlags & NPC_REACTION_HAMMER)) {
                         continue;
-                    if (npc->flags & NPC_FLAG_NO_HIT)
+                    }
+                    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) {
                         continue;
-                    if (npc->flags & NPC_FLAG_2D)
+                    }
+                    if (npc->flags & NPC_FLAG_NO_HIT) {
                         continue;
-                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)
+                    }
+                    if (npc->flags & NPC_FLAG_2D) {
                         continue;
-                    if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f))
+                    }
+                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) {
                         continue;
-                    if (dist >= res.dist)
+                    }
+                    if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f)) {
                         continue;
+                    }
+                    if (dist >= res.dist) {
+                        continue;
+                    }
 #else
                 _getHammerPoint(v, r, angle, &x, &y, &z);
                 npc = wp->entries;
@@ -2835,48 +2847,63 @@ void* fbatHitCheck(u32 flags, void* result) {
     if (flags & FBAT_CHECK_SPIN_HAMMER) {
         while (hit == NULL) {
 #if VERSION <= VERSION_DEMO_JP
-            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0)
+            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) {
                 break;
-            if (!npcCheckEnableTouchMario(npc))
+            }
+            if (!npcCheckEnableTouchMario(npc)) {
                 break;
+            }
             if (flags & FBAT_CHECK_CURRENT) {
                 f32 reach, swingAngle;
                 f32 x, y, z;
-                if (mario->currMotionId != MARIO_MOTION_HAMMER_2)
+                if (mario->currMotionId != MARIO_MOTION_HAMMER_2) {
                     break;
+                }
                 swingAngle = marioGetAngleKaitenHammer();
-                if (swingAngle < 0.0f)
+                if (swingAngle < 0.0f) {
                     break;
+                }
                 reach = 1.5f * mario->wPlayerCollisionBox.x;
                 _getKaitenHammerPoint(swingAngle, reach, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
                     // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
-                    if (npc == NULL)
+                    if (npc == NULL) {
                         continue;
-                    if (!(npc->flags & NPC_FLAG_READY))
-                        continue;
-                    if (flags & FBAT_CHECK_ENEMY) {
-                        if (!(npc->flags & NPC_FLAG_ENEMY))
-                            continue;
-                    } else {
-                        if (npc->flags & NPC_FLAG_ENEMY)
-                            continue;
                     }
-                    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & NPC_REACTION_HAMMER))
+                    if (!(npc->flags & NPC_FLAG_READY)) {
                         continue;
-                    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
+                    }
+                    if (flags & FBAT_CHECK_ENEMY) {
+                        if (!(npc->flags & NPC_FLAG_ENEMY)) {
+                            continue;
+                        }
+                    } else {
+                        if (npc->flags & NPC_FLAG_ENEMY) {
+                            continue;
+                        }
+                    }
+                    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & NPC_REACTION_HAMMER)) {
                         continue;
-                    if (npc->flags & NPC_FLAG_NO_HIT)
+                    }
+                    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) {
                         continue;
-                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)
+                    }
+                    if (npc->flags & NPC_FLAG_NO_HIT) {
                         continue;
-                    if (npc->flags & NPC_FLAG_2D)
+                    }
+                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) {
                         continue;
-                    if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f))
+                    }
+                    if (npc->flags & NPC_FLAG_2D) {
                         continue;
-                    if (dist >= res.dist)
+                    }
+                    if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f)) {
                         continue;
+                    }
+                    if (dist >= res.dist) {
+                        continue;
+                    }
 #else
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!npcCheckEnableTouchMario(npc)) break;

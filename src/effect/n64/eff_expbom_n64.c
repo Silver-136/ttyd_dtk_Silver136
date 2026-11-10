@@ -170,11 +170,13 @@ static void effExpBomDisp(CameraId camId, void* param) {
     PSMTXConcat(camera->view, base, base);
 #if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < effect->count; i++, data++) {
-        if (data->lifeLeft < 0 || data->startDelay >= 0)
+        if (data->lifeLeft < 0 || data->startDelay >= 0) {
                 continue;
+        }
         n = data->lifeLeft;
-        if (n > 16)
+        if (n > 16) {
             n = 16;
+        }
         PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
         PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
         PSMTXRotRad(rot, 'z', 0.017453292f * bom_ry[i]);

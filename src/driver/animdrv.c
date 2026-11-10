@@ -1088,8 +1088,9 @@ static inline f32 apmMul(f32 a, f32 b) {
  * and calling the helpers from the later versions' animPoseMain changes theirs.
  */
 static inline void apmCopy4(void* src, void* dst, s32 count, s32 size) {
-    if (count != 0)
+    if (count != 0) {
         memcpy_as4(dst, src, count * size);
+    }
 }
 
 /** Copies count bytes of a frame buffer when there are any (demo animPoseMain helper). */
@@ -1104,8 +1105,9 @@ static inline void apmCopy(void* src, void* dst, s32 count) {
  * when there are any (demo animPoseMain helper).
  */
 static inline void apmCopyTo(void* dst, void* src, s32 count, s32 size) {
-    if (count != 0)
+    if (count != 0) {
         memcpy_as4(dst, src, count * size);
+    }
 }
 #endif
 
@@ -1289,8 +1291,9 @@ void animPoseMain(s32 poseId) {
             apmCopy(file->groupVisibility, pose->bufferGroupVisibility, nC);
             apmCopy4((u8*)file->nodeData, (u8*)pose->bufferNode, nD, 4);
             apmCopy4((u8*)file->texAnimEntries, (u8*)pose->bufferTexAnimEntries, nE, sizeof(AnimTexMtx));
-            if (pose->lastFrameZero == -1)
+            if (pose->lastFrameZero == -1) {
                 pose->lastFrameZero = 0;
+            }
             s = 0.0625f;
             for (k = 0; k <= frame; k++) {
                 kf = &anim->keyframes[k];

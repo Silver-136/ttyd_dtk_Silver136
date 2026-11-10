@@ -1060,15 +1060,18 @@ EVT_END()
 // LW(4): the exit's BeroEntry.type, LW(5): its direction kind
 static USER_FUNC(bero_set_disp_position_pipe) {
     switch (event->lwData[5]) {
-        case 2: case 6:
+        case 2:
+        case 6:
             if (!(event->lwData[4] & BERO_TYPE_BG_MODE)) {
                 marioGetPtr()->dispOfs.y += 3.0f;
                 marioGetPtr()->dispOfs.z -= 15.0f;
             }
             break;
-        case 7: case 10000:
+        case 7:
+        case 10000:
             break;
-        case 8: case 9:
+        case 8:
+        case 9:
             if (!(event->lwData[4] & BERO_TYPE_BG_MODE)) {
                 marioGetPtr()->dispOfs.z -= 13.0f;
             } else {

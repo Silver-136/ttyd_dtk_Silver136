@@ -436,8 +436,9 @@ void BattleAudience_PerAct(void) {
         BattleAudienceCheer(2);
     }
 #if VERSION <= VERSION_DEMO_JP
-    if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL)
+    if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) {
         return;
+    }
     audience->stylishTotal += audience->numStylishCommandsThisAttack;
     if (audience->stylishTotal > 100) {
         audience->stylishTotal = 100;
@@ -496,22 +497,27 @@ void BattleAudience_PerAct(void) {
         if (audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) {
 #if VERSION <= VERSION_DEMO_JP
             audience->acStreak++;
-            if (audience->acStreak > 2)
+            if (audience->acStreak > 2) {
                 audience->acStreak = 2;
+            }
             delta = audience->impendingBonuses->stylishCommandMultiplier * (audience->acStreak * 2);
 #else
             delta = audience->impendingBonuses->stylishCommandMultiplier * (audience->numStylishCommandsThisAttack * 2);
 #endif
             total += delta;
 #if VERSION <= VERSION_DEMO_JP
-            if (delta >= 30.0f)
+            if (delta >= 30.0f) {
                 BattleAudienceAddPhaseEvtList(0);
-            if (delta >= 40.0f)
+            }
+            if (delta >= 40.0f) {
                 BattleAudienceAddPhaseEvtList(3);
-            if (delta >= 25.0f)
+            }
+            if (delta >= 25.0f) {
                 BattleAudienceAddPhaseEvtList(8);
-            if (delta >= 20.0f)
+            }
+            if (delta >= 20.0f) {
                 BattleAudienceAddPhaseEvtList(13);
+            }
         }
     }
     if (audience->impendingBonuses && (audience->flags & AUDIENCE_FLAG_STYLISH_MISSED)) {
@@ -565,16 +571,21 @@ u8 BattleAudience_CheckReaction(void) {
 static u8 check_exe_phase_evt_status(BattleAudienceMember* member) {
     u8 status = member->status;
 
-    if (status == AUDIENCE_STATUS_SLEEP)
+    if (status == AUDIENCE_STATUS_SLEEP) {
         return FALSE;
-    if (status == AUDIENCE_STATUS_ESCAPE)
+    }
+    if (status == AUDIENCE_STATUS_ESCAPE) {
         return FALSE;
-    if (status == AUDIENCE_STATUS_ENTER)
+    }
+    if (status == AUDIENCE_STATUS_ENTER) {
         return FALSE;
-    if (status == 21)
+    }
+    if (status == 21) {
         return FALSE;
-    if (status == 22)
+    }
+    if (status == 22) {
         return FALSE;
+    }
     if (member->flags & AUDIENCE_MEMBER_FLAG_FRONT_CENTER) {
         return TRUE;
     }
@@ -1377,13 +1388,17 @@ static void BattleAudienceSettingAudience(void) {
     }
 
     switch (rec->mode) {
-        case 0: case 1:
+        case 0:
+        case 1:
             audience->addedAudienceCount = 0.0f;
             break;
         case 4:
             audience->addedAudienceCount = 0.5f * audience->targetAudienceCount;
             break;
-        case 2: case 3: case 5: case 6:
+        case 2:
+        case 3:
+        case 5:
+        case 6:
             audience->addedAudienceCount = (f32)audience->maxAudience - audience->targetAudienceCount;
             break;
     }
@@ -1722,10 +1737,12 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
     u8 ust;
 
 #if VERSION <= VERSION_DEMO_JP
-    if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL)
+    if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) {
         return FALSE;
-    if (audience_kind[member->type].itemTable->type == 0)
+    }
+    if (audience_kind[member->type].itemTable->type == 0) {
         return FALSE;
+    }
     if (!(u8)BattleAudience_GetExist(index))
     return FALSE;
 #else
@@ -2657,8 +2674,9 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
             flip ^= 1;
         }
 #if VERSION <= VERSION_DEMO_JP
-        if (flip == 1)
+        if (flip == 1) {
             off += 4;
+        }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         AUD_POS(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
         GXWGFifo.u8 = cr;
