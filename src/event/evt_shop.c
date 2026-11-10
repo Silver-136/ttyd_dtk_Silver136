@@ -66,7 +66,7 @@ static ShopPoint shopPointList[11];
 static WinMgrDesc list_desc[3];
 static EvtWord buy_evt[VERSION_PICK(326, 366)];
 EvtWord shopper_talk_evt[];
-EvtWord first_shopping_evt[86];
+static EvtWord first_shopping_evt[86];
 
 #if VERSION <= VERSION_DEMO_JP
 static EvtWord sell_evt[193];
@@ -124,7 +124,6 @@ static WinMgrDesc list_desc[] = {
 
 static EvtWord buy_evt[];
 static EvtWord evt_shoplist[10];
-EvtWord first_shopping_evt[];
 EvtWord keep_evt[];
 static EvtWord main_evt[];
 EvtWord point_evt[];
@@ -1349,7 +1348,7 @@ EVT_BEGIN(shopper_talk_evt)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-EVT_BEGIN(first_shopping_evt)
+static EVT_BEGIN(first_shopping_evt)
     CALL(shopper_name, LW(9))
     CALL(evt_set_dir_to_target, LW(9), STRING("mario"))
     CALL(evt_mario_set_dir_npc, LW(9))

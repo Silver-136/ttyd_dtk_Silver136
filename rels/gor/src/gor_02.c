@@ -555,11 +555,11 @@ static s32 stg6_list[1];
 #if VERSION <= VERSION_DEMO_JP
 static s32 stg7_list[9];
 static s32 stg8_list[9];
-MonosiriFollow follow[9];
+static MonosiriFollow follow[9];
 #else
 static s32 stg7_list[6];
 static s32 stg8_list[10];
-MonosiriFollow follow[8];
+static MonosiriFollow follow[8];
 #endif
 
 static EvtWord evt_monosiri[39];
@@ -6958,7 +6958,7 @@ static s32 stg8_list[] = {
  * Frankly's notes table for the wastebasket:
  * from each story step on, the chapter list of enemy Tattles Mario can still learn, with the list's length.
  */
-MonosiriFollow follow[] = {
+static MonosiriFollow follow[] = {
     {23, stg0_list, 1},
     {56, stg1_list, 4},
 #if VERSION <= VERSION_DEMO_JP

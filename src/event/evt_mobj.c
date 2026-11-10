@@ -136,7 +136,7 @@ EVT_END()
 // ---- entry, delete and property functions ----
 
 #if VERSION <= VERSION_DEMO_JP
-extern EvtWord kpa_powerup_evt[];
+static EvtWord kpa_powerup_evt[7];
 static EvtWord evt_fire[8];
 #endif
 
@@ -5245,7 +5245,7 @@ static USER_FUNC(kpa_clear_jump_data) {
 
 #if VERSION <= VERSION_DEMO_JP
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
-EVT_BEGIN(kpa_powerup_evt)
+static EVT_BEGIN(kpa_powerup_evt)
     CALL(kpa_powerup, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()

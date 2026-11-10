@@ -228,7 +228,7 @@ static EvtWord evt_wall[12];
 static const char* door_npc[4];
 static EvtWord door_open[9];
 static EvtWord door_close[10];
-DoorParam door;
+static DoorParam door;
 static BeroEntry bero_entry_data[3];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -737,7 +737,7 @@ static EVT_BEGIN(door_close)
 EVT_END()
 
 /** The village house door on the square, with the map objects it swaps and its open and close handlers. */
-DoorParam door = {
+static DoorParam door = {
     0, // flags
     3, // type
     1, // se
@@ -959,7 +959,7 @@ static void ext_disp(CameraId camera, void* param) {
  * computes the flight time and vertical speed, faces the target
  * and plays the "bombs together" sound for every 20th one. next is the state it takes on landing.
  */
-void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
+static void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     BomWork* wp = lp->address;
     ExtdrvPose* pose = extGetPosePtr() + i;
     f32 dy;

@@ -191,7 +191,7 @@ EvtWord evt_uron[195];
 #endif
 
 static EvtWord evt_tamago_sleep[56];
-EvtWord dummy[2];
+static EvtWord dummy[2];
 static EvtWord hot_move_evt[66];
 static EvtWord hot_move_evt2[24];
 static EvtWord evt_oyaji_move[60];
@@ -2354,7 +2354,7 @@ static EVT_BEGIN(evt_tamago_sleep)
 EVT_END()
 
 /** Empty script (just RETURN). */
-EVT_BEGIN(dummy)
+static EVT_BEGIN(dummy)
     RETURN
 EVT_END()
 

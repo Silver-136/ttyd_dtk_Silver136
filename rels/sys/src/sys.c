@@ -70,7 +70,7 @@ static SysWork* g_wp;
 
 static USER_FUNC(bg);
 USER_FUNC(display);
-USER_FUNC(init);
+static USER_FUNC(init);
 
 #if VERSION >= VERSION_US
 USER_FUNC(sys_01_start_end_wait);
@@ -1507,7 +1507,7 @@ static USER_FUNC(bg) {
 }
 
 /** Script helper: placeholder that does nothing. */
-USER_FUNC(init) {
+static USER_FUNC(init) {
     return EVT_RETURN_DONE;
 }
 

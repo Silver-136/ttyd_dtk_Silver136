@@ -19,7 +19,7 @@ static u8 snd_base_studio;
 static u8 snd_max_studios;
 static u8 s3dUseMaxVoices;
 static u8 s3dUseLegacyLogic;
-extern void (*s3dOcclusionCallback)(struct SND_EMITTER*, SND_FVECTOR*, SND_FVECTOR*, void*, SND_FVECTOR*, SND_FVECTOR*, f32*, f32*);
+static void (*s3dOcclusionCallback)(struct SND_EMITTER*, SND_FVECTOR*, SND_FVECTOR*, void*, SND_FVECTOR*, SND_FVECTOR*, f32*, f32*);
 
 // Not reconstructed (this game does not link them): UpdateRoomDistances, CheckRoomStatus, sndAddRoom, sndRemoveRoom,
 // sndUpdateRoom, AddListener2Room, RemoveListenerFromRoom, CalcDoorParameters, CheckDoorStatus, sndAddDoor,
@@ -392,7 +392,7 @@ extern START_LIST startListNum[64]; // size: 0x700
 static u8 startListNumnum;          // size: 0x1
 
 static u8 runListNum;               // size: 0x1
-void (*s3dOcclusionCallback)(struct SND_EMITTER*, SND_FVECTOR*, SND_FVECTOR*, void*, SND_FVECTOR*, SND_FVECTOR*, f32*, f32*);
+static void (*s3dOcclusionCallback)(struct SND_EMITTER*, SND_FVECTOR*, SND_FVECTOR*, void*, SND_FVECTOR*, SND_FVECTOR*, f32*, f32*) = NULL;
 
 static inline void ClearStartList() {
   startGroupNum = 0;

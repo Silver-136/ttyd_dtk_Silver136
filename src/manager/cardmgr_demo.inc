@@ -20,7 +20,7 @@ static CardWork* wp;
 #define CARD_FLAG_SERIAL 0x4000
 
 //.sdata
-const char* version = VERSION_PICK("009", "010");
+static const char* version = VERSION_PICK("009", "010");
 
 // local prototypes
 static inline void check_sum(CardSaveSlot* save);

@@ -18,10 +18,10 @@ static MapData tst_nakayama = { "tst_nakayama", NULL };
 static MapData tst_item_00 = { "tst_item_00", NULL };
 
 /** Guess: Battle stage test maps (bti); relSetEvtAddr fills in each init script when the REL loads. */
-MapData bti_01 = { "bti_01", NULL };
-MapData bti_02 = { "bti_02", NULL };
-MapData bti_03 = { "bti_03", NULL };
-MapData bti_04 = { "bti_04", NULL };
+static MapData bti_01 = { "bti_01", NULL };
+static MapData bti_02 = { "bti_02", NULL };
+static MapData bti_03 = { "bti_03", NULL };
+static MapData bti_04 = { "bti_04", NULL };
 
 /** Guess: Battle background test maps (stg); relSetEvtAddr fills in each init script when the REL loads. */
 static MapData stg_01_0 = { "stg_01_0", NULL };
@@ -31,7 +31,7 @@ static MapData stg_01_3 = { "stg_01_3", NULL };
 static MapData stg_01_4 = { "stg_01_4", NULL };
 
 /** Maps of Mario's house (aaa); relSetEvtAddr fills in each init script when the REL loads. */
-MapData aaa_00 = { "aaa_00", NULL };
+static MapData aaa_00 = { "aaa_00", NULL };
 
 /** Maps of Rogueport (gor); relSetEvtAddr fills in each init script when the REL loads. */
 static MapData gor_00 = { "gor_00", NULL };
@@ -44,11 +44,11 @@ static MapData gor_11 = { "gor_11", NULL };
 static MapData gor_12 = { "gor_12", NULL };
 
 /** Maps of the Rogueport Sewers (tik); relSetEvtAddr fills in each init script when the REL loads. */
-MapData tik_00 = { "tik_00", NULL };
-MapData tik_01 = { "tik_01", NULL };
-MapData tik_02 = { "tik_02", NULL };
-MapData tik_03 = { "tik_03", NULL };
-MapData tik_04 = { "tik_04", NULL };
+static MapData tik_00 = { "tik_00", NULL };
+static MapData tik_01 = { "tik_01", NULL };
+static MapData tik_02 = { "tik_02", NULL };
+static MapData tik_03 = { "tik_03", NULL };
+static MapData tik_04 = { "tik_04", NULL };
 static MapData tik_05 = { "tik_05", NULL };
 static MapData tik_06 = { "tik_06", NULL };
 static MapData tik_07 = { "tik_07", NULL };
@@ -65,11 +65,11 @@ static MapData tik_20 = { "tik_20", NULL };
 static MapData tik_21 = { "tik_21", NULL };
 
 /** Maps of Fahr Outpost (bom); relSetEvtAddr fills in each init script when the REL loads. */
-MapData bom_00 = { "bom_00", NULL };
-MapData bom_01 = { "bom_01", NULL };
-MapData bom_02 = { "bom_02", NULL };
-MapData bom_03 = { "bom_03", NULL };
-MapData bom_04 = { "bom_04", NULL };
+static MapData bom_00 = { "bom_00", NULL };
+static MapData bom_01 = { "bom_01", NULL };
+static MapData bom_02 = { "bom_02", NULL };
+static MapData bom_03 = { "bom_03", NULL };
+static MapData bom_04 = { "bom_04", NULL };
 
 /** Maps of the Moon (moo); relSetEvtAddr fills in each init script when the REL loads. */
 static MapData moo_00 = { "moo_00", NULL };
@@ -82,13 +82,13 @@ static MapData moo_06 = { "moo_06", NULL };
 static MapData moo_07 = { "moo_07", NULL };
 
 /** Maps of the X-Naut Fortress (aji); relSetEvtAddr fills in each init script when the REL loads. */
-MapData aji_00 = { "aji_00", NULL };
-MapData aji_01 = { "aji_01", NULL };
-MapData aji_02 = { "aji_02", NULL };
-MapData aji_03 = { "aji_03", NULL };
-MapData aji_04 = { "aji_04", NULL };
-MapData aji_05 = { "aji_05", NULL };
-MapData aji_06 = { "aji_06", NULL };
+static MapData aji_00 = { "aji_00", NULL };
+static MapData aji_01 = { "aji_01", NULL };
+static MapData aji_02 = { "aji_02", NULL };
+static MapData aji_03 = { "aji_03", NULL };
+static MapData aji_04 = { "aji_04", NULL };
+static MapData aji_05 = { "aji_05", NULL };
+static MapData aji_06 = { "aji_06", NULL };
 static MapData aji_07 = { "aji_07", NULL };
 static MapData aji_08 = { "aji_08", NULL };
 static MapData aji_09 = { "aji_09", NULL };
@@ -121,8 +121,8 @@ static MapData gon_13 = { "gon_13", NULL };
 static MapData gon_bt00 = { "gon_bt00", NULL };
 
 /** Maps of Petalburg (nok); relSetEvtAddr fills in each init script when the REL loads. */
-MapData nok_00 = { "nok_00", NULL };
-MapData nok_01 = { "nok_01", NULL };
+static MapData nok_00 = { "nok_00", NULL };
+static MapData nok_01 = { "nok_01", NULL };
 
 /** Maps of Petal Meadows (hei); relSetEvtAddr fills in each init script when the REL loads. */
 static MapData hei_00 = { "hei_00", NULL };
@@ -171,12 +171,12 @@ static MapData dou_12 = { "dou_12", NULL };
 static MapData dou_13 = { "dou_13", NULL };
 
 /** Maps of the Excess Express (rsh); relSetEvtAddr fills in each init script when the REL loads. */
-MapData rsh_00_a = { "rsh_00_a", NULL };
-MapData rsh_00_b = { "rsh_00_b", NULL };
-MapData rsh_00_c = { "rsh_00_c", NULL };
-MapData rsh_01_a = { "rsh_01_a", NULL };
-MapData rsh_01_b = { "rsh_01_b", NULL };
-MapData rsh_01_c = { "rsh_01_c", NULL };
+static MapData rsh_00_a = { "rsh_00_a", NULL };
+static MapData rsh_00_b = { "rsh_00_b", NULL };
+static MapData rsh_00_c = { "rsh_00_c", NULL };
+static MapData rsh_01_a = { "rsh_01_a", NULL };
+static MapData rsh_01_b = { "rsh_01_b", NULL };
+static MapData rsh_01_c = { "rsh_01_c", NULL };
 static MapData rsh_02_a = { "rsh_02_a", NULL };
 static MapData rsh_02_b = { "rsh_02_b", NULL };
 static MapData rsh_02_c = { "rsh_02_c", NULL };
@@ -194,17 +194,17 @@ static MapData rsh_07_c = { "rsh_07_c", NULL };
 static MapData rsh_08_a = { "rsh_08_a", NULL };
 
 /** Maps of Poshley Heights (pik); relSetEvtAddr fills in each init script when the REL loads. */
-MapData pik_00 = { "pik_00", NULL };
-MapData pik_01 = { "pik_01", NULL };
-MapData pik_02 = { "pik_02", NULL };
-MapData pik_03 = { "pik_03", NULL };
-MapData pik_04 = { "pik_04", NULL };
+static MapData pik_00 = { "pik_00", NULL };
+static MapData pik_01 = { "pik_01", NULL };
+static MapData pik_02 = { "pik_02", NULL };
+static MapData pik_03 = { "pik_03", NULL };
+static MapData pik_04 = { "pik_04", NULL };
 
 /** Riverside Station platform maps (hom); relSetEvtAddr fills in each init script when the REL loads. */
-MapData hom_00 = { "hom_00", NULL };
-MapData hom_10 = { "hom_10", NULL };
-MapData hom_11 = { "hom_11", NULL };
-MapData hom_12 = { "hom_12", NULL };
+static MapData hom_00 = { "hom_00", NULL };
+static MapData hom_10 = { "hom_10", NULL };
+static MapData hom_11 = { "hom_11", NULL };
+static MapData hom_12 = { "hom_12", NULL };
 
 /** Maps of Riverside Station (eki); relSetEvtAddr fills in each init script when the REL loads. */
 static MapData eki_00 = { "eki_00", NULL };
@@ -225,12 +225,12 @@ static MapData win_05 = { "win_05", NULL };
 static MapData win_06 = { "win_06", NULL };
 
 /** Maps of the Great Tree (mri); relSetEvtAddr fills in each init script when the REL loads. */
-MapData mri_00 = { "mri_00", NULL };
-MapData mri_01 = { "mri_01", NULL };
-MapData mri_02 = { "mri_02", NULL };
-MapData mri_03 = { "mri_03", NULL };
-MapData mri_04 = { "mri_04", NULL };
-MapData mri_05 = { "mri_05", NULL };
+static MapData mri_00 = { "mri_00", NULL };
+static MapData mri_01 = { "mri_01", NULL };
+static MapData mri_02 = { "mri_02", NULL };
+static MapData mri_03 = { "mri_03", NULL };
+static MapData mri_04 = { "mri_04", NULL };
+static MapData mri_05 = { "mri_05", NULL };
 static MapData mri_06 = { "mri_06", NULL };
 static MapData mri_07 = { "mri_07", NULL };
 static MapData mri_08 = { "mri_08", NULL };
@@ -248,8 +248,8 @@ static MapData mri_19 = { "mri_19", NULL };
 static MapData mri_20 = { "mri_20", NULL };
 
 /** Maps of Twilight Town (usu); relSetEvtAddr fills in each init script when the REL loads. */
-MapData usu_00 = { "usu_00", NULL };
-MapData usu_01 = { "usu_01", NULL };
+static MapData usu_00 = { "usu_00", NULL };
+static MapData usu_01 = { "usu_01", NULL };
 
 /** Maps of Twilight Trail (gra); relSetEvtAddr fills in each init script when the REL loads. */
 static MapData gra_00 = { "gra_00", NULL };
@@ -344,25 +344,25 @@ static MapData jon_05 = { "jon_05", NULL };
 static MapData jon_06 = { "jon_06", NULL };
 
 /** Maps of the Pianta Parlor minigames (yuu); relSetEvtAddr fills in each init script when the REL loads. */
-MapData yuu_00 = { "yuu_00", NULL };
-MapData yuu_01 = { "yuu_01", NULL };
-MapData yuu_02 = { "yuu_02", NULL };
-MapData yuu_03 = { "yuu_03", NULL };
+static MapData yuu_00 = { "yuu_00", NULL };
+static MapData yuu_01 = { "yuu_01", NULL };
+static MapData yuu_02 = { "yuu_02", NULL };
+static MapData yuu_03 = { "yuu_03", NULL };
 
 /** Maps of the quiz minigame (qiz); relSetEvtAddr fills in each init script when the REL loads. */
-MapData qiz_00 = { "qiz_00", NULL };
+static MapData qiz_00 = { "qiz_00", NULL };
 
 /** Maps of the system maps (sys); relSetEvtAddr fills in each init script when the REL loads. */
-MapData sys_00 = { "sys_00", NULL };
-MapData sys_01 = { "sys_01", NULL };
+static MapData sys_00 = { "sys_00", NULL };
+static MapData sys_01 = { "sys_01", NULL };
 
-MapData dmo_00 = { "dmo_00", NULL };
+static MapData dmo_00 = { "dmo_00", NULL };
 
 /** Maps of the story digest (dig); relSetEvtAddr fills in each init script when the REL loads. */
-MapData dig_00 = { "dig_00", NULL };
+static MapData dig_00 = { "dig_00", NULL };
 
 /** Maps of the ending (end); relSetEvtAddr fills in each init script when the REL loads. */
-MapData end_00 = { "end_00", NULL };
+static MapData end_00 = { "end_00", NULL };
 
 /** Area "tst" (テスト用): developer test maps; relSetBtlAddr fills in its battle setup tables. */
 static AreaData area_kwb = { "tst",

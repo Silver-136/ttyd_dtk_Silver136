@@ -215,7 +215,7 @@ static void ext_kyaku_dispent(void);
 static void ext_kyaku_main(void);
 
 static ExtTexInfo ext_kyaku_data[51];
-EvtWord x[1];
+static EvtWord x[1];
 static EvtWord evt_kyaku[138];
 static s32 inta_tex[8];
 static EvtWord open_main[53];
@@ -407,7 +407,7 @@ static ExtTexInfo ext_kyaku_data[] = {
     {0},
 };
 
-EVT_BEGIN(x)
+static EVT_BEGIN(x)
 EVT_END()
 
 static s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {

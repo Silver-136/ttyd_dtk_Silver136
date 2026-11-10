@@ -90,7 +90,7 @@ static KaitenParam* ckp0;
 static KaitenParam* ckp1;
 static KaitenParam* ckpw;
 static BrokenWork broken_work;
-s32 select;
+static s32 select;
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);

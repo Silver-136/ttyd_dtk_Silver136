@@ -117,7 +117,7 @@ typedef struct GMonte {
 } GMonte;
 static s32 dataadr[8];
 static GMonte* monte_p;
-NpcEntry* npc;
+static NpcEntry* npc;
 static EffectEntry* eff;
 static s32 xlw[16];
 static char* exchange_msgp;
