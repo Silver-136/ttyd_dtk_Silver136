@@ -2859,8 +2859,11 @@ Runtime.PPCEABI.H.a/global_destructor_chain.c:
 	.sbss       start:0x8042B778 end:0x8042B780
 
 Runtime.PPCEABI.H.a/runtime.c:
-	.text       start:0x80268440 end:0x80268E84
+	.text       start:0x80268440 end:0x80268C70
 	.rodata     start:0x8030F6C0 end:0x8030F6D8
+
+Runtime.PPCEABI.H.a/Gecko_setjmp.c:
+	.text       start:0x80268C70 end:0x80268E84
 
 Runtime.PPCEABI.H.a/GCN_mem_alloc.c:
 	.text       start:0x80268E84 end:0x80268F3C

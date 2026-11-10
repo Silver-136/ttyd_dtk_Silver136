@@ -1039,6 +1039,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "Runtime.PPCEABI.H.a/__va_arg.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "Runtime.PPCEABI.H.a/global_destructor_chain.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "Runtime.PPCEABI.H.a/runtime.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "Runtime.PPCEABI.H.a/Gecko_setjmp.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "Runtime.PPCEABI.H.a/GCN_mem_alloc.c", extra_cflags=["-str reuse,nopool,readonly"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "Runtime.PPCEABI.H.a/__mem.c"),
         ],
