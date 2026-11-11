@@ -474,7 +474,7 @@ void partyWalkChkGnd(PartyEntry* party) {
         party->damageHit = hit;
     }
     if (partyChkNoStandMobj(hit)) {
-        partyGetAppearPos5(party, hit, &party->moveTarget);
+        partyGetFrontPos(party, hit, &party->moveTarget);
         party->trigFlags |= PARTY_TRIG_JUMP_TARGET_SET;
         party->moveTarget.y = party->position.y;
         partyChgMot(party, PARTY_MOTION_JUMP);
@@ -1003,7 +1003,7 @@ found:
             break;
         }
         if (partyChkNoStandMobj(hit)) {
-            partyGetAppearPos5(party, hit, &party->moveTarget);
+            partyGetFrontPos(party, hit, &party->moveTarget);
             party->trigFlags |= PARTY_TRIG_JUMP_TARGET_SET;
             partyChgMot(party, PARTY_MOTION_JUMP);
             break;

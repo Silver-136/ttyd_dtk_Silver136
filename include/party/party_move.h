@@ -66,7 +66,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 BOOL partyGetAppearPos2(PartyEntry* party, Vec* out);
 BOOL partyGetAppearPos3(PartyEntry* party, Vec* out);
 BOOL partyGetAppearPos4(PartyEntry* party, Vec* out);
-BOOL partyGetAppearPos5(PartyEntry* party, struct HitEntry* hit, Vec* out);
+BOOL partyGetFrontPos(PartyEntry* party, struct HitEntry* hit, Vec* out);
 f32 partyGetTargetDist3D(s32 id, Vec* p);
 
 f32 partyUpdMoveSpd(PartyEntry* party);

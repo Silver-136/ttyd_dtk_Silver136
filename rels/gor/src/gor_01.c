@@ -2312,7 +2312,7 @@ static EVT_BEGIN(bottakuru_talk)
         CALL(evt_msg_print, 0, STRING("bottakuru_03"), 0, STRING("me"))
         RETURN
 #else
-    CALL(U_evt_badgeShop_get_special_zaiko, LW(0))
+    CALL(evt_badgeShop_get_special_zaiko, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_16"), 0, STRING("me"))
         RETURN
@@ -2444,7 +2444,7 @@ static EVT_BEGIN(bottakuru_talk)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_09"))
         RETURN
 #else
-    CALL(U_evt_badgeShop_get_special_zaiko, LW(0))
+    CALL(evt_badgeShop_get_special_zaiko, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_15"))
         RETURN

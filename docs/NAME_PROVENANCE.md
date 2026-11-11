@@ -354,6 +354,8 @@ this file.
 | `setupErrorHandler` | src/error_handler.c |
 | `systemErrorHandler` | src/error_handler.c |
 | `evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos` | src/event/evt_bero.c |
+| `evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry` | src/event/evt_bero.c (added 2026-11-11: `N_` in the community US map) |
+| `_partyChgRunMode` | src/party.c (added 2026-11-11: `N_` in the community US map) |
 | `evt_img_set_z` | src/event/evt_img.c |
 | `cameraman_on` | src/event/evt_kinopio.c |
 | `evt_mapdisp_onoff` | src/event/evt_map.c |
@@ -394,6 +396,32 @@ this file.
 | `compare_func4_1_r` | src/window/win_root.c |
 | `compare_func4_2` | src/window/win_root.c |
 | `compare_func4_2_r` | src/window/win_root.c |
+
+## Functions added after the JP demo (2026-11-11)
+
+These functions first appear in US, PAL or a September 2004 demo, so no original map can name them; the names
+were chosen when the code was decompiled and are not original. Found by
+cleanup_tools/unsourced_fn_names.py (config names that neither the JP demo maps nor this file mention). Not listed:
+the PAL tst REL's GLU tessellator (`glu*`, `KillFace`, `MakeEdge`, `SweepEvent`, ...: the SGI GLU library's own
+function names) and `strupr` (a C library name).
+
+| Unit | Names |
+| --- | --- |
+| main | `BattleAudience_NoUsedFCHaitiRandCenter`, `BattleAudience_NoUsedFCHaitiRandFull`, `batSpotEnd`, `evtMsgFmtInt`, `evtMsgFmtStr`, `evt_msg_fmt_int`, `evt_msg_fmt_str`, `evt_sub_get_framerate`, `evt_sub_scale_by_fps`, `partyChkBetweenWalls`, `partyChkWallAround`, `partySlitReset`, `select_comp_bteresa`, `winFontSetEdgeWidth`, `winFontSetRWidth`, `winFontSetWidth`, `evt_fbat_trans_floor_position_wide` |
+| aji | `wait_move_end_50hz` |
+| bom | `nice_effect_shrink` |
+| gor | `gor_yuuranking_draw_msg_fit_center`, `gor_yuuranking_draw_msg_fit_right` |
+| gra | `faker_mario_gra_sync_max_moves` |
+| jin | `boss_rampell_sync_max_moves`, `faker_mario_sync_max_moves` |
+| kpa | `kpa_cancel_attack_mode` |
+| las | `boss_rampell_las_sync_max_moves`, `las_24_adjust_for_framerate` |
+| pik | `pik_00_statuswin_force_off` |
+| rsh | `moamoa_randf`, `moamoa_srand` |
+| sys | `sys_01_msg_tex_capture_func`, `sys_01_start_end_wait` |
+| tou | `tou_01_kanban_moji_flag_sync`, `tou_07_mario_keyoff_check`, `tou_10_mario_talk_end_wait`, `tou_mario_talk_end_wait` |
+| tou2 | `GXEnd_`, `GXPosition3f32_` (out-of-line copies of the SDK inlines `GXEnd` and `GXPosition3f32`) |
+| tst (PAL) | `_gundan_part_update`, `_intpl_last_step`, `_set_yoshi_anim_speed`, `_set_yoshi_anim_time`, `_yoshi_slide_ac_check`, `_yoshi_slide_distance`, `hatty_main`, `make_item_name`, `nokotarou_follow_test`, `powan_rider_follow`, `powan_set_post_battle_event`, `powan_set_post_battle_mode`, `tess_test`, `tess_test_begin`, `tess_test_capture`, `tess_test_combine`, `tess_test_cross`, `tess_test_disp`, `tess_test_disp_entry`, `tess_test_draw`, `tess_test_edge_flag`, `tess_test_end`, `tess_test_end_polygon`, `tess_test_error`, `tess_test_line_disp`, `tess_test_run`, `tess_test_vertex`, `tst_mobj_koopa_on` |
+| yuu | `yuuminigame1_floor_chk`, `yuuminigame1_floor_on_off`, `yuuranking_draw_msg_fit_center`, `yuuranking_draw_msg_fit_right` |
 
 ## Invented names for objects the original left unnamed
 

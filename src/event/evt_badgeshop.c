@@ -722,7 +722,7 @@ USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt) {
 }
 
 #if VERSION >= VERSION_JP
-USER_FUNC(U_evt_badgeShop_get_special_zaiko) {
+USER_FUNC(evt_badgeShop_get_special_zaiko) {
     EvtWord* args = event->args;
     s16 badge;
     s32 count;

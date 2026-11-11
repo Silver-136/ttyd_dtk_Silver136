@@ -1027,7 +1027,7 @@ void partySetDispDirToMario(PartyEntry* party) {
 
 /**
  * TRUE when hit belongs to a map object a partner must not stand on (the objNames list: chests, jump stands,
- * Save and Heart Blocks, switches). party_motion.c then hops the partner off it (partyGetAppearPos5).
+ * Save and Heart Blocks, switches). party_motion.c then hops the partner off it (partyGetFrontPos).
  * Descriptive name (not in the symbol maps); placeholder unk_800c8dd0, JP 0x800C8DD0. See docs/NAME_PROVENANCE.md.
  */
 #if VERSION >= VERSION_JP
@@ -2519,8 +2519,13 @@ static void partyMoveStrippedPool(f32* f) {
 #endif
 }
 
+/**
+ * JP and later: finds a spot 50 units from the map object the partner stands on (hit), trying the partner's
+ * direction first and then 30-degree steps to each side, with no wall in the way and no water hazard below.
+ * The JP demo map lists partyGetFrontPos as unused in this place (just before partyGetAppearPos4).
+ */
 #if VERSION >= VERSION_JP
-BOOL partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out) {
+BOOL partyGetFrontPos(PartyEntry* party, HitEntry* hit, Vec* out) {
     s32 angles[12] = {0, 30, -30, 60, -60, 90, -90, 120, -120, 150, -150, 180};
     Vec pos;
     Vec dir;
