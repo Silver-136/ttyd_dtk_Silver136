@@ -1987,6 +1987,11 @@ void party_motion_behind_mario(PartyEntry* party) {
         party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
         party->trigFlags &= ~PARTY_TRIG_BEHIND_DIR_SET;
         party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
+        // BUG (JP and the early demos, fixed in US by these clears here and in party_motion_behind_mario_fly):
+        // evt_mario_party_door_move sets PARTY_TRIG_DOOR_MOVE and never clears it (only evt_mario_party_bero_move
+        // does), so after a door the partner keeps the door behaviour: Flurrie and Vivian stop 8 units from Mario
+        // instead of 30, JP skips the wall-push correction in party_move.c, the appear spot is searched with the
+        // door angle tables, and a wall-stuck partner is moved with partyGetAppearPos4.
 #if VERSION >= VERSION_US
         party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
 #endif
@@ -2215,6 +2220,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
     party->trigFlags &= ~PARTY_TRIG_BEHIND_DIR_SET;
     party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
+    // BUG (JP and the early demos): PARTY_TRIG_DOOR_MOVE stays set after a door; see party_motion_behind_mario.
 #if VERSION >= VERSION_US
     party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
 #endif
